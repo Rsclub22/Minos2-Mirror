@@ -50,7 +50,7 @@ MinVersion=0,6.1
 UninstallDisplayIcon={app}\Bin\{#MainBinaryName}
 
 ChangesAssociations = yes
-
+AlwaysShowDirOnReadyPage=yes
 [Dirs]
 Name: {code:GetLogsDir}; Check: not LogsDirExists; Flags: uninsneveruninstall; Permissions: users-modify
 
@@ -119,12 +119,11 @@ begin
   LogsDirPage.Values[0] := GetDefaultLogsDirectory();
 end;
 
-function NextButtonClick(CurPageID: Integer): Boolean;
+procedure CurPageChanged(CurPageID: Integer);
 begin
-  if CurPageID = wpSelectDir then
+Log('CurPageChanged: CurPageId is ' + IntToStr(CurPageId) + ' LogsDirPage is ' + IntToStr(LogsDirPage.ID));
+  if CurPageID = LogsDirPage.ID then
     LogsDirPage.Values[0] := GetIniString('Default', 'Log Directory', GetDefaultLogsDirectory(), GetIniFilename());
-    
-    result := true;
 end;
  
 function LogsDirExists(): Boolean;
