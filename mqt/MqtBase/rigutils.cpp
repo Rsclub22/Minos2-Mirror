@@ -65,3 +65,19 @@ QString convertFreqToStr(double frequency)
     return QString::number(frequency,'f', 0);
 
 }
+
+
+double convertStrToFreq(QString frequency)
+{
+    bool ok = false;
+    double f = 0.0;
+    f = frequency.toDouble(&ok);
+    if (ok)
+    {
+        return f;
+    }
+    else
+    {
+        return -1.0;
+    }
+}

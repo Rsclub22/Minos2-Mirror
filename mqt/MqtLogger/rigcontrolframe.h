@@ -107,6 +107,7 @@ public:
 signals:
     void sendFreqControl(QString);
     void noRadioSendFreq(QString);
+    void noRadioSendMode(QString);
     void sendModeToControl(QString);
 
 
@@ -116,11 +117,13 @@ private slots:
     void freqLineEditInFocus();
     void radioBandFreq(int index);
     void noRadioSetFreq(QString);
+    void noRadioSetMode(QString m);
     void freqEditSelected();
     void freqPlusShortCut_clicked(bool);
     void freqNegShortCut_clicked(bool);
     void freqPlus_ShortCut();
     void freqNeg_ShortCut();
+
 
 public slots:
     void changeRadioFreq();
@@ -173,6 +176,7 @@ private:
     void initRigFrame(QWidget *parent);
     void initPassBandRadioButtons();
     void noRadioSendOutFreq(QString f);
+    void noRadioSendOutMode(QString m);
 
     void initRunMemoryButton();
     void loadRunButtonLabels();
@@ -187,6 +191,8 @@ private:
     QString calcNewFreq(double incFreq);
 
     int calcMinosMode(QString mode);
+
+    void freqPlusMinusButton(double freq);
 
 };
 class FreqLineEdit : public QLineEdit

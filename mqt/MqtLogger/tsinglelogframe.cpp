@@ -738,8 +738,7 @@ void TSingleLogFrame::on_SetMode(QString m)
             ui->FKHRigControlFrame->setMode(m);
             ui->GJVQSOLogFrame->modeSentFromRig(m);
         }
-
-        if ( this == LogContainer->getCurrentLogFrame() )
+        else if ( this == LogContainer->getCurrentLogFrame() )
         {
             ui->FKHRigControlFrame->setMode(m);
             ui->GJVQSOLogFrame->modeSentFromRig(m);
@@ -759,7 +758,6 @@ void TSingleLogFrame::on_SetFreq(QString f)
             ui->FKHRigControlFrame->setFreq(f);
             ui->GJVQSOLogFrame->setFreq(f);
         }
-
         else if ( this == LogContainer->getCurrentLogFrame() )
         {
             ui->FKHRigControlFrame->setFreq(f);
@@ -771,6 +769,11 @@ void TSingleLogFrame::on_SetFreq(QString f)
 void TSingleLogFrame::on_NoRadioSetFreq(QString f)
 {
     ui->GJVQSOLogFrame->setFreq(f);
+}
+
+void TSingleLogFrame::on_NoRadioSetMode(QString m)
+{
+    ui->GJVQSOLogFrame->modeSentFromRig(m);
 }
 
 void TSingleLogFrame::on_RadioLoaded()

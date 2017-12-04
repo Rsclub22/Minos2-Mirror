@@ -41,6 +41,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     , curVfoFrq(0)
     , curTransVertFrq(0)
     , rRitFreq(0)
+    , radioIndex(0)
 
 {
 
@@ -274,8 +275,10 @@ void RigControlMainWindow::upDateRadio()
     //int retCode = 0;
     logMessage(QString("UpdateRadio: Index Selected = %1").arg(QString::number(ui->selectRadioBox->currentIndex())));
 
-    int radioIndex = ui->selectRadioBox->currentIndex();
-    if (radioIndex > 0)
+    int ridx = 0;
+    radioIndex = ui->selectRadioBox->currentIndex();
+    ridx = radioIndex;
+    if (ridx > 0)
     {
         if (radio->get_serialConnected())
         {
@@ -284,8 +287,8 @@ void RigControlMainWindow::upDateRadio()
         }
 
 
-        radioIndex -= 1;
-        if (selectRig->availRadios[radioIndex].radioModelNumber == 0)
+        ridx -= 1;
+        if (selectRig->availRadios[ridx].radioModelNumber == 0)
         {
             closeRadio();
             QMessageBox::critical(this, tr("Radio Error"), "Please configure a radio name and model");
@@ -293,30 +296,30 @@ void RigControlMainWindow::upDateRadio()
         }
 
 
-        selectRig->currentRadio.radioName = selectRig->availRadios[radioIndex].radioName;
-        selectRig->currentRadio.radioNumber = selectRig->availRadios[radioIndex].radioNumber;
-        selectRig->currentRadio.radioMfg_Name = selectRig->availRadios[radioIndex].radioMfg_Name;
-        selectRig->currentRadio.radioModel = selectRig->availRadios[radioIndex].radioModel;
-        selectRig->currentRadio.radioModelNumber = selectRig->availRadios[radioIndex].radioModelNumber;
-        selectRig->currentRadio.civAddress = selectRig->availRadios[radioIndex].civAddress;
-        selectRig->currentRadio.portType = selectRig->availRadios[radioIndex].portType;
-        selectRig->currentRadio.networkAdd = selectRig->availRadios[radioIndex].networkAdd;
-        selectRig->currentRadio.networkPort = selectRig->availRadios[radioIndex].networkPort;
-        selectRig->currentRadio.comport = selectRig->availRadios[radioIndex].comport;
-        selectRig->currentRadio.baudrate = selectRig->availRadios[radioIndex].baudrate;
-        selectRig->currentRadio.databits = selectRig->availRadios[radioIndex].databits;
-        selectRig->currentRadio.stopbits = selectRig->availRadios[radioIndex].stopbits;
-        selectRig->currentRadio.parity = selectRig->availRadios[radioIndex].parity;
-        selectRig->currentRadio.handshake = selectRig->availRadios[radioIndex].handshake;
-        selectRig->currentRadio.transVertEnable = selectRig->availRadios[radioIndex].transVertEnable;
+        selectRig->currentRadio.radioName = selectRig->availRadios[ridx].radioName;
+        selectRig->currentRadio.radioNumber = selectRig->availRadios[ridx].radioNumber;
+        selectRig->currentRadio.radioMfg_Name = selectRig->availRadios[ridx].radioMfg_Name;
+        selectRig->currentRadio.radioModel = selectRig->availRadios[ridx].radioModel;
+        selectRig->currentRadio.radioModelNumber = selectRig->availRadios[ridx].radioModelNumber;
+        selectRig->currentRadio.civAddress = selectRig->availRadios[ridx].civAddress;
+        selectRig->currentRadio.portType = selectRig->availRadios[ridx].portType;
+        selectRig->currentRadio.networkAdd = selectRig->availRadios[ridx].networkAdd;
+        selectRig->currentRadio.networkPort = selectRig->availRadios[ridx].networkPort;
+        selectRig->currentRadio.comport = selectRig->availRadios[ridx].comport;
+        selectRig->currentRadio.baudrate = selectRig->availRadios[ridx].baudrate;
+        selectRig->currentRadio.databits = selectRig->availRadios[ridx].databits;
+        selectRig->currentRadio.stopbits = selectRig->availRadios[ridx].stopbits;
+        selectRig->currentRadio.parity = selectRig->availRadios[ridx].parity;
+        selectRig->currentRadio.handshake = selectRig->availRadios[ridx].handshake;
+        selectRig->currentRadio.transVertEnable = selectRig->availRadios[ridx].transVertEnable;
 
         // only show transvert freq box is enabled
         setTransVertDisplayVisible(selectRig->currentRadio.transVertEnable);
         sendTransVertStatus(selectRig->currentRadio.transVertEnable);   // send to logger
-        selectRig->currentRadio.transVertNegative = selectRig->availRadios[radioIndex].transVertNegative;
-        selectRig->currentRadio.transVertOffset = selectRig->availRadios[radioIndex].transVertOffset;
-        selectRig->currentRadio.transVertOffsetStr = selectRig->availRadios[radioIndex].transVertOffsetStr;
-        selectRig->currentRadio.mgmMode = selectRig->availRadios[radioIndex].mgmMode;
+        selectRig->currentRadio.transVertNegative = selectRig->availRadios[ridx].transVertNegative;
+        selectRig->currentRadio.transVertOffset = selectRig->availRadios[ridx].transVertOffset;
+        selectRig->currentRadio.transVertOffsetStr = selectRig->availRadios[ridx].transVertOffsetStr;
+        selectRig->currentRadio.mgmMode = selectRig->availRadios[ridx].mgmMode;
 
         selectRig->saveCurrentRadio();
 
@@ -482,10 +485,16 @@ void RigControlMainWindow::openRadio()
 void RigControlMainWindow::closeRadio()
 {
 
-    showStatusMessage("Disconnected");
-    sendStatusToLogDisConnected();
-    logMessage(QString("Radio Closed"));
-    radio->closeRig();
+    if (radio->get_serialConnected())
+    {
+       radio->closeRig();
+
+       showStatusMessage("Disconnected");
+       sendStatusToLogDisConnected();
+       logMessage(QString("Radio Closed"));
+    }
+
+
 }
 
 

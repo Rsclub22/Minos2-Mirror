@@ -112,7 +112,9 @@ void RotControlFrame::getBrgFrmQSOLog(QString brg)
 
 QString RotControlFrame::getBrgTxtFrmFrame()
 {
-    return ui->BrgSt->text();
+    QString brg = ui->BrgSt->text();
+    traceMsg(QString("Bearing from Bearing Edit Box = %1").arg(brg));
+    return brg;
 }
 
 void RotControlFrame::setBrgFromRigFrmMemory(QString brg)
@@ -645,5 +647,5 @@ void RotControlFrame::setRotatorMinAzimuth(const QString &s)
 
 void RotControlFrame::traceMsg(QString msg)
 {
-    trace(QString("Rotcontrol: %1 - %2").arg(antennaName).arg( msg));
+    trace(QString("RotcontrolFrame: %1 - %2").arg(antennaName).arg( msg));
 }

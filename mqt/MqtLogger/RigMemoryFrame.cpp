@@ -270,7 +270,7 @@ void RigMemoryFrame::memoryUpdate(int buttonNumber)
 
 void RigMemoryFrame::traceMsg(QString msg)
 {
-    trace("Rigcontrol: " + msg);
+    trace("RigMemoryFrame: " + msg);
 }
 
 RigMemoryButton::RigMemoryButton(QWidget *parent, RigMemoryFrame *rcf, int no)

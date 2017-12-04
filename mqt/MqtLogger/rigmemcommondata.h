@@ -132,7 +132,7 @@ public:
     QString callsign;
     QString freq;
     QString mode;
-QString locator;
+    QString locator;
     int bearing = 0;
     QString time = "00:00";
 

@@ -16,4 +16,6 @@ QString convertFreqStrDisp(QString frequency);
 
 QString convertFreqToStr(double frequency);
 
+double convertStrToFreq(QString frequency);
+
 #endif // RIGUTILS_H

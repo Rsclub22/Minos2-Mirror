@@ -78,6 +78,7 @@ public:
     void doNextContactDetailsOnLeftClick(bool keepSizes);
 
     void on_NoRadioSetFreq(QString);
+    void on_NoRadioSetMode(QString);
 
     void transferDetails(memoryData::memData &m);
     void getDetails(memoryData::memData &m);

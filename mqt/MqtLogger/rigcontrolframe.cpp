@@ -127,6 +127,7 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
     // when no radio is connected
     connect(this, SIGNAL(noRadioSendFreq(QString)), this, SLOT(noRadioSetFreq(QString)));
+    connect(this, SIGNAL(noRadioSendMode(QString)), this, SLOT(noRadioSetMode(QString)));
 
     for (int i = 0; i < bandSelData::bandNames.count(); i++)
     {
@@ -189,34 +190,41 @@ void RigControlFrame::changeRadioFreq()
     traceMsg(QString("Change Radio Freq"));
 
     QString newfreq = ui->freqInput->text().trimmed().remove('.');
-    if (newfreq != lastFreq)
+    double f = convertStrToFreq(newfreq);
+    if (f != -1.0)
     {
-        lastFreq = newfreq;
-        if (checkValidFreq(lastFreq))
+        if (f != 0)
         {
-            if (lastFreq.count() >=4)
+            newfreq.remove( QRegExp("^[0]*")); //remove periods and leading zeros
+        }
+
+        if (newfreq != lastFreq)
+        {
+            lastFreq = newfreq;
+            if (checkValidFreq(lastFreq))
             {
-                if (isRadioLoaded())
+                if (lastFreq.count() >=4)
                 {
-                    if (radioConnected && !radioError)
+                    if (isRadioLoaded())
                     {
-                        sendFreq(lastFreq);
+                        if (radioConnected && !radioError)
+                        {
+                            sendFreq(lastFreq);
+                        }
+                        else if (!radioConnected && radioName.trimmed() == "No Radio")
+                        {
+                            noRadioSendOutFreq(lastFreq);
+                        }
                     }
 
                 }
-                else
-                {
-                    noRadioSendOutFreq(lastFreq);
-                }
 
             }
-
+            else
+            {
+                ui->freqInput->setText(QString("%1 %2 %3").arg("<font color='Red'>").arg(lastFreq).arg("</font>"));
+            }
         }
-        else
-        {
-            ui->freqInput->setText(QString("%1 %2 %3").arg("<font color='Red'>").arg(lastFreq).arg("</font>"));
-        }
-
     }
 }
 
@@ -261,10 +269,11 @@ void RigControlFrame::radioBandFreq(int index)
                 {
                     sendFreq(f);
                 }
-            }
-            else
-            {
-                noRadioSendOutFreq(f);
+                else if (!radioConnected && radioName.trimmed() == "No Radio")
+                {
+                     noRadioSendOutFreq(f);
+                }
+
             }
        }
 
@@ -277,16 +286,13 @@ void RigControlFrame::sendFreq(QString f)
 
 
     bool ok = false;
-    //QString sf = f.remove('.');
-//    if (curFreq != f)
-//    {
+
     double df = f.toDouble(&ok);
     if (ok && df > 0.0)
     {
 
      emit sendFreqControl(f);
     }
-//    }
 }
 
 
@@ -294,7 +300,7 @@ void RigControlFrame::sendFreq(QString f)
 
 void RigControlFrame::noRadioSendOutFreq(QString f)
 {
-    traceMsg(QString("No Radio Send Freq to Radio = %1").arg(f));
+    traceMsg(QString("No Radio Send Freq to rigcontrolframe and qsologframe = %1").arg(f));
     // update rigframe
     emit noRadioSendFreq(f);
     // update logger
@@ -302,6 +308,18 @@ void RigControlFrame::noRadioSendOutFreq(QString f)
     tslf->on_NoRadioSetFreq(f);
 }
 
+
+void RigControlFrame::noRadioSendOutMode(QString m)
+{
+    traceMsg(QString("No Radio Send Mode to to rigcontrolframe and qsologframe = %1").arg(m));
+    QString mode = m + ": "; //create mode message, mgm mode is space
+    // update rigframe
+    emit noRadioSendMode(mode);
+    // update logger
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    tslf->on_NoRadioSetMode(mode);
+
+}
 
 void RigControlFrame::on_ContestPageChanged(QString freq, QString mode)
 {
@@ -386,6 +404,7 @@ void RigControlFrame::freqEditSelected()
 
 void RigControlFrame::transferDetails(memoryData::memData &m)
 {
+    traceMsg(QString("Memory Read: Memory Freq = %1, CurFreq = %2, Mode = %3, CurMode = %4").arg(m.freq).arg(curFreq).arg(m.mode).arg(curMode));
     if (isRadioLoaded())
     {
         if (radioConnected && !radioError)
@@ -394,21 +413,24 @@ void RigControlFrame::transferDetails(memoryData::memData &m)
             //if (m.freq.remove('.') != curFreq.remove('.'))
             if (m.freq != curFreq)
             {
-
+                traceMsg(QString("Memory Read: Send Freq"));
                 sendFreq(m.freq);
             }
 
             if (m.mode != curMode)
             {
+                traceMsg(QString("Memory Read: Send Mode"));
                 sendModeToRadio(m.mode);
             }
 
         }
+        else if (!radioConnected && radioName.trimmed() == "No Radio")
+        {
+            noRadioSendOutFreq(m.freq);
+            noRadioSendOutMode(m.mode);
+        }
     }
-    else
-    {
-        noRadioSendOutFreq(m.freq);
-    }
+
 }
 
 
@@ -433,6 +455,27 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
     logData.bearing = tslf->getBearingFrmQSOLog();
     // load log data into memory
 }
+
+
+void RigControlFrame::noRadioSetMode(QString m)
+{
+    QString mode = m;
+    QStringList ml = m.split(':');
+    if (ml.count() != 2)
+    {
+        return;
+    }
+
+    if (ml[0] == hamlibData::MGM)
+    {
+        ml[1] = "N/A";
+        mode = ml[0] + ml[1];
+    }
+
+    setMode(mode);
+
+}
+
 
 
 
@@ -473,7 +516,7 @@ void RigControlFrame::setMode(QString m)
 
 void RigControlFrame::sendModeToRadio(QString m)
 {
-    traceMsg(QString("Send Mode to Radio - Mode = %1").arg(m));
+    traceMsg(QString("Send Mode to Radio = %1").arg(m));
     emit sendModeToControl(QString("%1").arg(m));
 
 }
@@ -642,16 +685,9 @@ void RigControlFrame::freqNeg_ShortCut()
 
 void RigControlFrame::freqPlusShortCut_clicked(bool /*click*/)
 {
-    if (isRadioLoaded() && radioConnected && !radioError)
-    {
-        QString freq = calcNewFreq(5000.0);
-        if (freq != "")
-        {
-            ui->freqInput->setText(freq);
-            emit sendFreqControl(freq);
-        }
 
-    }
+    freqPlusMinusButton(5000.0);
+
 }
 
 
@@ -659,15 +695,33 @@ void RigControlFrame::freqPlusShortCut_clicked(bool /*click*/)
 void RigControlFrame::freqNegShortCut_clicked(bool /*click*/)
 {
 
-    if (isRadioLoaded() && radioConnected && !radioError)
+    freqPlusMinusButton(-5000.0);
+
+}
+
+
+void RigControlFrame::freqPlusMinusButton(double f)
+{
+
+    if (isRadioLoaded())
     {
-        QString freq = calcNewFreq(-5000.0);
-       if (freq != "")
-       {
+        QString freq = calcNewFreq(f);
+        if (freq != "")
+        {
            ui->freqInput->setText(freq);
-           emit sendFreqControl(freq);
-       }
+
+           if (radioConnected && !radioError)
+           {
+
+               emit sendFreqControl(freq);
+           }
+           else if (!radioConnected && radioName.trimmed() == "No Radio")
+           {
+               noRadioSendOutFreq(freq);
+           }
+        }
     }
+
 }
 
 
@@ -760,13 +814,14 @@ void RigControlFrame::runButReadActSel(int buttonNumber)
             }
 
         }
+        else if (!radioConnected && radioName.trimmed() == "No Radio")
+        {
+            noRadioSendOutFreq(m.freq);
+        }
     }
-    else
-    {
-        noRadioSendOutFreq(m.freq);
-    }
-
 }
+
+
 
 void RigControlFrame::runButWriteActSel(int buttonNumber)
 {

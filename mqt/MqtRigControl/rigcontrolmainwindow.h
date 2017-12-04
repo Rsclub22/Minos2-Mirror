@@ -59,6 +59,7 @@ private:
     RigControl  *radio;
     QString appName = "";
     QLabel *status;
+    int radioIndex;
     QTimer *pollTimer;
     class QTimer LogTimer;
     int pollTime;

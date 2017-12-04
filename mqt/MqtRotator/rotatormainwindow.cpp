@@ -460,11 +460,11 @@ void RotatorMainWindow::openRotator()
         }
         else if (rig_port_e(selectRotator->currentAntenna.portType == RIG_PORT_NETWORK || rig_port_e(selectRotator->currentAntenna.portType == RIG_PORT_UDP_NETWORK)))
         {
-            showStatusMessage(QString("Connected to: %1 - %2, %3").arg(selectRotator->currentAntenna.antennaName, selectRotator->currentAntenna.rotatorModel, selectRotator->currentAntenna.networkAdd + ":" + selectRotator->currentAntenna.networkPort));
+            showStatusMessage(QString("Connected to: %1 - %2, %3").arg(selectRotator->currentAntenna.antennaName).arg(selectRotator->currentAntenna.rotatorModel).arg(selectRotator->currentAntenna.networkAdd + ":" + selectRotator->currentAntenna.networkPort));
         }
         else if (rig_port_e(selectRotator->currentAntenna.portType) == RIG_PORT_NONE)
         {
-                showStatusMessage(QString("Connected to: %1 - %2").arg(selectRotator->currentAntenna.antennaName, selectRotator->currentAntenna.rotatorModel));
+                showStatusMessage(QString("Connected to: %1 - %2").arg(selectRotator->currentAntenna.antennaName).arg(selectRotator->currentAntenna.rotatorModel));
         }
 
         //sendStatusToLogConnected();
@@ -668,7 +668,7 @@ void RotatorMainWindow::displayBearing(int bearing)
         {
             ol = "0";
         }
-        QString s = QString("%1:%2:%3").arg(QString::number(displayBearing),QString::number(rotatorBearing), ol);
+        QString s = QString("%1:%2:%3").arg(QString::number(displayBearing)).arg(QString::number(rotatorBearing).arg(ol));
         msg->publishBearing(s);
     }
 
