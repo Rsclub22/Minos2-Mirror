@@ -181,9 +181,9 @@ private:
     QString ssQsoFrameBlue = " #qsoFrame { border: 2px solid blue; }";
     QString ssRed = "color:red";
 
-    QString ssDtgWhite = "QLineEdit { background-color: white ; border-width: 1px ; border-color: black ; color: black ; }";
-    QString ssDtgWhiteNoFrame = "QLineEdit { background-color: white ; border : none ; color: black ; }";
-    QString ssDtgRed = "QLineEdit { background-color: white ; border: none ; color: red ; }";
+    QString ssDtgWhite = "QDateTimeEdit { background-color: white ; border-width: 1px ; border-color: black ; color: black ; }";
+    QString ssDtgWhiteNoFrame = "QDateTimeEdit { background-color: white ; border : none ; color: black ; }";
+    QString ssDtgRed = "QDateTimeEdit { background-color: white ; border: none ; color: red ; }";
 
     QString ssLineEditGreyBackground = "QLineEdit { background-color: silver ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ;}";
     QString ssLineEditOK = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ; }";

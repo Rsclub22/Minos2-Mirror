@@ -1968,7 +1968,10 @@ void QSOLogFrame::logCurrentContact( )
          if ( mShowYesNoMessage( this, "Do you want to enter the missing contacts later?" ) )
          {
              dtg ctTime(screenContact.time);
-             QSharedPointer<BaseContact> pct = contest->pcontactAt(contest->getContactCount() - 1);
+             QSharedPointer<BaseContact> pct;
+
+             if (contest->getContactCount() > 0)
+                pct = contest->pcontactAt(contest->getContactCount() - 1);
              if ( pct )
              {
                 ctTime = pct->time;
