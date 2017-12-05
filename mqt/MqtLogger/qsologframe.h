@@ -50,6 +50,7 @@ public:
     virtual void refreshOps();
     virtual void refreshOps(ScreenContact &screenContact);
     virtual void updateQSOTime(bool fromTimer = false);
+    void setDtgSection();
     virtual void updateQSODisplay();
     virtual void closeContest();
 
@@ -102,7 +103,6 @@ private:
     BaseContestLog * contest;
     bool overstrike;
     QWidget *current;
-    bool updateTimeAllowed;
     bool valid( validTypes command );
     void doAutofill( );
     void fillRst(QLineEdit *rIl, QString &rep, const QString &mode );
@@ -111,7 +111,7 @@ private:
     virtual void showScreenContactTime( );
     virtual void getScreenRigData();
     virtual void getscreenRotatorData();
-    bool checkAndLogEntry(bool checkDTG );
+    bool checkAndLogEntry( );
     Ui::QSOLogFrame *ui;
 
     bool edit;
@@ -183,7 +183,8 @@ private:
 
     QString ssDtgWhite = "QDateTimeEdit { background-color: white ; border-width: 1px ; border-color: black ; color: black ; }";
     QString ssDtgWhiteNoFrame = "QDateTimeEdit { background-color: white ; border : none ; color: black ; }";
-    QString ssDtgRed = "QDateTimeEdit { background-color: white ; border: none ; color: red ; }";
+    QString ssDtgRedNoFrame = "QDateTimeEdit { background-color: white ; border: none ; color: red ; }";
+    QString ssDtgRed = "QDateTimeEdit { background-color: white ; border-width: 1px ; border-color: red ; color: red ; }";
 
     QString ssLineEditGreyBackground = "QLineEdit { background-color: silver ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ;}";
     QString ssLineEditOK = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ; }";

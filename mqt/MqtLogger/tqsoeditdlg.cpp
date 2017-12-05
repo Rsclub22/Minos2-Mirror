@@ -15,11 +15,11 @@ class QSOHistoryNode
       {}
 };
 //---------------------------------------------------------------------------
-TQSOEditDlg::TQSOEditDlg(QWidget *parent, bool catchup, bool unfilled )
+TQSOEditDlg::TQSOEditDlg(QWidget *parent, bool unfilled )
     :QDialog(parent),
     ui(new Ui::TQSOEditDlg),
     firstContact( 0 ), contest( 0 ),
-    catchup(catchup), unfilled(unfilled)
+    unfilled(unfilled)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -71,13 +71,6 @@ int TQSOEditDlg::exec()
     ui->matchTreesFrame->setContest(contest);
 
     int ret = QDialog::exec();
-
-    if (catchup)
-    {
-       LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-       ct->removeContact(ui->GJVQSOEditFrame->selectedContact );
-       ct->maxSerial--;
-    }
 
     MinosLoggerEvents::SendAfterLogContact(contest);
 

@@ -440,7 +440,7 @@ void TSingleLogFrame::on_QSOTable_doubleClicked(const QModelIndex &index)
 }
 void TSingleLogFrame::EditContact( QSharedPointer<BaseContact> lct )
 {
-   TQSOEditDlg qdlg( this, false, false );
+   TQSOEditDlg qdlg( this, false );
    qdlg.selectContact( contest, lct );
 
    qdlg.exec();
@@ -597,7 +597,7 @@ void TSingleLogFrame::goNextUnfilled()
    QSharedPointer<BaseContact> nuc = contest->findNextUnfilledContact( );
    if ( nuc )
    {
-      TQSOEditDlg qdlg(this, false, true );
+      TQSOEditDlg qdlg(this, true );
       qdlg.setContest( contest );
       qdlg.setFirstContact( nuc );
       qdlg.exec();

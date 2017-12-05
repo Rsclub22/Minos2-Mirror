@@ -19,7 +19,7 @@ class TQSOEditDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit TQSOEditDlg( QWidget* Owner, bool catchup, bool unfilled );
+    explicit TQSOEditDlg( QWidget* Owner, bool unfilled );
 
     ~TQSOEditDlg();
 
@@ -32,7 +32,6 @@ private:
 
     BaseContestLog * contest;
     QSharedPointer<BaseContact> firstContact;
-    bool catchup;
     bool unfilled;
     void refreshOps( ScreenContact &screenContact );
     void keyPressEvent( QKeyEvent* event );

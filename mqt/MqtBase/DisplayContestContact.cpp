@@ -80,19 +80,16 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
 }
 // used to test if anything has changed
 
-bool DisplayContestContact::ne( const ScreenContact &mct, bool checkDTG ) const
+bool DisplayContestContact::ne(const ScreenContact &mct) const
 {
    QString ne_temp_date = mct.time.getDate( DTGDISP );
    QString ne_temp_time = mct.time.getTime( DTGDISP );
 
-   if (checkDTG)
-   {
-      if ( strcmpsp( ne_temp_date, time.getDate( DTGDISP ) ) )
-         return true; // i.e. not equal
+    if ( strcmpsp( ne_temp_date, time.getDate( DTGDISP ) ) )
+     return true; // i.e. not equal
 
-      if ( strcmpsp( ne_temp_time, time.getTime( DTGDISP ) ) )
-         return true; // i.e. not equal
-   }
+    if ( strcmpsp( ne_temp_time, time.getTime( DTGDISP ) ) )
+     return true; // i.e. not equal
 
    if ( strcmpsp( mct.cs.fullCall.getValue(), cs.fullCall.getValue() ) )
       return true; // i.e. not equal
