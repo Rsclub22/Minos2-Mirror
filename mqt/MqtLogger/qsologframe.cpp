@@ -811,7 +811,9 @@ void QSOLogFrame::on_RSTRXEdit_textChanged(const QString &/*arg1*/)
 
 void QSOLogFrame::mouseDoubleClickEvent(QObject *w)
 {
-    // How to find what was double clicked?
+    // Don't let the dtg be changed when the contest is protected
+    if (contest->isReadOnly())
+        return;
 
     if (w == ui->SerTXEdit)
     {
