@@ -10,8 +10,8 @@
 
 #include "BandList.h"
 #include "LoggerContest.h"
-//#include "MultDisp.h"
 #include "MinosTestImport.h"
+#include "rigutils.h"
 
 ContestContact::ContestContact( LoggerContestLog * ct, bool time_now ) : DisplayContestContact( ct, time_now )
 {}
@@ -440,6 +440,16 @@ QString ContestContact::getADIFLine()
 
    outstr += makeADIFField( "BAND", cb );
 
+   QString freq = frequency.getValue();
+   if (!freq.isEmpty())
+   {
+       QString newfreq = freq.trimmed().remove('.');
+       double dfreq = convertStrToFreq(newfreq);
+       dfreq = dfreq/1000000.0;  // MHz
+
+       freq = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
+       outstr += makeADIFField("FREQ", freq);
+   }
 
    QString smode = mode.getValue().toUpper();
    if (  smode.compare( hamlibData::CW ) == 0 )
