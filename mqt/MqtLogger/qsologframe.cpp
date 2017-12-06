@@ -344,17 +344,6 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
         widgetStyles[ui->SerTXEdit] = ssLineEditGreyBackground;
     }
 
-    if (!unfilled)
-    {
-        ui->timeEdit->setEnabled(false);
-        ui->dateEdit->setEnabled(false);
-        ui->dateEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
-        ui->timeEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
-    }
-    else
-    {
-        setDtgSection();
-    }
     updateQSODisplay();
     refreshOps();
 
@@ -400,6 +389,21 @@ void QSOLogFrame::setTimeStyles()
             oldTimeOK = true;
         }
     }
+    else
+    {
+        if (!unfilled)
+        {
+            ui->timeEdit->setEnabled(false);
+            ui->dateEdit->setEnabled(false);
+            ui->dateEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
+            ui->timeEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
+        }
+        else
+        {
+            setDtgSection();
+        }
+
+    }
 }
 
 void QSOLogFrame::setXferEnabled(bool s)
@@ -422,11 +426,6 @@ void QSOLogFrame::on_CatchupButton_clicked()
         widgetStyles[ui->CatchupButton] = "";
         ui->CatchupButton->setText("Catch-up (Post Entry)");
 
-        ui->timeEdit->setEnabled(false);
-        ui->dateEdit->setEnabled(false);
-        ui->dateEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
-        ui->timeEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
-
         oldTimeOK = true;
     }
     else
@@ -436,18 +435,6 @@ void QSOLogFrame::on_CatchupButton_clicked()
         widgetStyles[ui->CatchupButton] = "background-color : coral;";
         ui->CatchupButton->setText("End Catch-up");
 
-        ui->dateEdit->setEnabled(true);
-        ui->timeEdit->setEnabled(true);
-
-        ui->dateEdit->setStyleSheet(ssDtgWhite);
-        ui->timeEdit->setStyleSheet(ssDtgWhite);
-        widgetStyles[ui->dateEdit] = ssDtgWhite;
-        widgetStyles[ui->timeEdit] = ssDtgWhite;
-
-        ui->dateEdit->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
-        ui->timeEdit->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
-
-        setDtgSection();
     }
     // set the screencontact dtg as not entered
     screenContact.time.setDate(QString(), DTGLOG);
@@ -1004,17 +991,6 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
    }
    ui->SerTXEdit->setReadOnly(!edit);
 
-/*
-   if (edit || catchup)
-   {
-       ui->timeEdit->setEnabled(true);
-       ui->dateEdit->setEnabled(true);
-
-       ui->dateEdit->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
-       ui->timeEdit->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
-
-   }
-   */
    if ( current == ui->LocEdit )
    {
       // do any required character substitutions, but only when we have a full
