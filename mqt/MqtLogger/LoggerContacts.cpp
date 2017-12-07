@@ -472,8 +472,10 @@ QString ContestContact::getADIFLine()
 
    outstr += makeADIFField( "RST_SENT", reps.getValue() );
    outstr += makeADIFField( "STX", serials.getValue() );
+   outstr += makeADIFField( "STX_STRING", serials.getValue() );
    outstr += makeADIFField( "RST_RCVD", repr.getValue() );
    outstr += makeADIFField( "SRX", serialr.getValue() );
+   outstr += makeADIFField( "SRX_STRING", serialr.getValue() );
 
    outstr += makeADIFField( "GRIDSQUARE", loc.loc.getValue() );
    if ( districtMult )

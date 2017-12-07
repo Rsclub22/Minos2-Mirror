@@ -947,7 +947,7 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
    // ADIF format file entry
    // OP header
    // and EOH
-   QString header = "Exported by G0GJV VHF LoggerContestLog logging system\r\n\r\n";
+   QString header = QString("Exported by Minos VHF logging system Version ") + STRINGVERSION  + " " + PRERELEASETYPE + "\r\n\r\n";
 
    header += QString( "From file " ) + cfileName + "\r\n\r\n";
 
