@@ -91,7 +91,7 @@ void TStatsDispFrame::reInitialiseStats()
    if ( ct->locMult.getValue() )
       ltot += ct->nlocs;
 
-   ct->updateStats(ct->statsPeriod1.getValue(), ct->statsPeriod2.getValue());
+   ct->updateStats(ct->statsPeriod1.getValue() * 60, ct->statsPeriod2.getValue() * 60);
    int nvalid = ct->getValidQSOs();
    if (nvalid)
    {
