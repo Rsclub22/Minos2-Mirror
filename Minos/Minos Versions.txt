@@ -1,4 +1,8 @@
 ==================================================================
+2.0.0  13/12/2017
+
+First full Qt release; Qt 5.92. 32 bit MinGW.
+==================================================================
 1.7.0 
 Honour options properly for logs and lists directories
 MGM added as a mode
