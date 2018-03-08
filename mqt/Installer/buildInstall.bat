@@ -19,7 +19,7 @@ REM go up from the batch file directory to the "root"
 set MROOT=%~dp0..\..
 cd %MROOT%
 
-git pull origin master
+git pull origin
 
 if not exist build mkdir build
 cd build
