@@ -46,7 +46,7 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(RotBearingChanged(int,BaseContestLog*)), this, SLOT(onRotBearingChanged(int,BaseContestLog*)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
 
     reloadColumns();
 
@@ -65,6 +65,7 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     ui->flushMemoriesButton->setFocusPolicy(Qt::NoFocus);
 
     newAction = new QAction("&New", this);
+    bearingAction = new QAction("&Set Bearing", this);
     readAction = new QAction("&Read", this);
     writeAction = new QAction("&Write",this);
     editAction = new QAction("&Edit", this);
@@ -74,6 +75,7 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     clearWorkedAction = new QAction("Clear Wor&ked",this);
 
     memoryMenu->addAction(newAction);
+    memoryMenu->addAction(bearingAction);
     memoryMenu->addAction(readAction);
     memoryMenu->addAction(writeAction);
     memoryMenu->addAction(editAction);
@@ -85,6 +87,7 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     connect(memoryMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
 
     connect( newAction, SIGNAL( triggered() ), this, SLOT(on_newMemoryButton_clicked()) );
+    connect( bearingAction, SIGNAL( triggered() ), this, SLOT(bearingActionSelected()) );
     connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
     connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()) );
     connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()) );
@@ -110,10 +113,20 @@ void RigMemoryFrame::onMenuShow()
 {
     int buttonNumber = getSelectedLine();
 
+    bearingAction->setEnabled(buttonNumber >= 0);
     readAction->setEnabled(buttonNumber >= 0);
     writeAction->setEnabled(buttonNumber >= 0);
     editAction->setEnabled(buttonNumber >= 0);
     clearAction->setEnabled(buttonNumber >= 0);
+}
+void RigMemoryFrame::on_rigMemTable_doubleClicked(const QModelIndex &/*index*/)
+{
+    editActionSelected();
+}
+
+void RigMemoryFrame::on_rigMemTable_clicked(const QModelIndex &/*index*/)
+{
+    bearingActionSelected();
 }
 
 void RigMemoryFrame::on_rigMemTable_customContextMenuRequested( const QPoint &pos )
@@ -129,7 +142,6 @@ void RigMemoryFrame::rigMemTable_Hdr_customContextMenuRequested( const QPoint &p
     if (logrow >= 0)
     {
         QModelIndex nidx = proxyModel.index( logrow, 0 );
-        QModelIndex sourceIndex = proxyModel.mapToSource(nidx);
 
         ui->rigMemTable->setCurrentIndex(nidx);
     }
@@ -208,16 +220,26 @@ void RigMemoryFrame::doMemoryUpdates()
 */
     model.reset();
     reloadColumns();
+    on_AfterLogContact(ct);
 }
 
 void RigMemoryFrame::checkTimerTimer()
 {
     if (!isVisible())
+    {
+        lastVisible = false;
         return;
+    }
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (!ct || !tslf)
         return;
+
+    if (!lastVisible)
+    {
+        lastVisible = true;
+        doTimer = true;
+    }
 
     memoryData::memData logData;
     tslf->getCurrentDetails(logData);
@@ -298,8 +320,8 @@ void RigMemoryFrame::checkTimerTimer()
                 colour = Qt::blue;
             }
         }
-        headerVal[m.callsign].text = ht;
-        headerVal[m.callsign].colour = colour;
+        headerVal[buttonNumber].text = ht;
+        headerVal[buttonNumber].colour = colour;
     }
     if (firstMatch >= 0)
     {
@@ -383,7 +405,6 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
                   }
               }
           }
-          //sendUpdateMemories();
       }
 }
 
@@ -400,6 +421,17 @@ int RigMemoryFrame::getSelectedLine()
     return buttonNumber;
 }
 
+void RigMemoryFrame::bearingActionSelected()
+{
+    int buttonNumber = getSelectedLine();
+    if (buttonNumber < 0)
+        return;
+
+    traceMsg(QString("Memory Bearing Selected = %1").arg(QString::number(buttonNumber +1)));
+    memoryData::memData m = ct->getRigMemoryData(buttonNumber);
+
+    MinosLoggerEvents::SendBrgStrToRot(QString::number(m.bearing));
+}
 void RigMemoryFrame::readActionSelected()
 {
     int buttonNumber = getSelectedLine();
@@ -591,11 +623,14 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
                 break;
             case ermFreq:
                 {
-                    QString newfreq = m.freq.trimmed().remove('.');
-                    double dfreq = convertStrToFreq(newfreq);
-                    dfreq = dfreq/1000000.0;  // MHz
+                    if (!m.freq.isEmpty())
+                    {
+                        QString newfreq = m.freq.trimmed().remove('.');
+                        double dfreq = convertStrToFreq(newfreq);
+                        dfreq = dfreq/1000000.0;  // MHz
 
-                    disp = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
+                        disp = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
+                    }
                     break;
                 }
             case ermTime:
@@ -636,12 +671,12 @@ QVariant RigMemoryGridModel::headerData( int section, Qt::Orientation orientatio
             if (c)
             {
                 memoryData::memData m = c->getRigMemoryData(section);
-                disp = frame->headerVal[m.callsign].text;
+                disp = frame->headerVal[section].text;
                 if (disp.isEmpty())
                 {
                     // This appears to be the line that defines the width
                     // of the vertical header
-                    disp = "  " + m.callsign + "  ";
+                    disp = "     " + m.callsign + "    ";
                 }
             }
             return disp;
@@ -652,7 +687,7 @@ QVariant RigMemoryGridModel::headerData( int section, Qt::Orientation orientatio
             if (c)
             {
                 memoryData::memData m = c->getRigMemoryData(section);
-                QColor colour = frame->headerVal[m.callsign].colour;
+                QColor colour = frame->headerVal[section].colour;
                 return colour;
             }
         }
@@ -720,3 +755,4 @@ bool RigMemorySortFilterProxyModel::lessThan(const QModelIndex &left,
 
     return ws1 < ws2;
 }
+

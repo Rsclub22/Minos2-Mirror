@@ -52,6 +52,7 @@ void TSessionManager::parseSessions()
     QStringList sessions = tlc->getSessions();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
 
+    preloadBundle.startGroup();
     for ( int i = 0; i < sessions.size(); i++ )
     {
         QString sessName = sessions[i];
@@ -81,6 +82,7 @@ void TSessionManager::parseSessions()
            }
        }
     }
+    preloadBundle.endGroup();
 }
 void TSessionManager::writeSessions()
 {

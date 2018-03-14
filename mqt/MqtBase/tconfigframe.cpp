@@ -36,7 +36,7 @@ void TConfigFrame::initialise(QWidget *p, ConfigCloseCallBack ccb, bool showAuto
     for (int i = 0; i <  minosConfig->elelist.size(); i++)
     {
         QSharedPointer<RunConfigElement> c = minosConfig->elelist[i];
-        if (c->name.compare("<Deleted>", Qt::CaseInsensitive) == 0)
+        if (c->deleted)
             continue;
 
         ConfigElementFrame *cef = new ConfigElementFrame(false);

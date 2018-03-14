@@ -430,13 +430,13 @@ void RigControlFrame::transferDetails(memoryData::memData &m)
         {
             ui->freqInput->clearFocus();
             //if (m.freq.remove('.') != curFreq.remove('.'))
-            if (m.freq != curFreq)
+            if (!m.freq.isEmpty() &&m.freq != curFreq)
             {
                 traceMsg(QString("Memory Read: Send Freq"));
                 sendFreq(m.freq);
             }
 
-            if (m.mode != curMode)
+            if (!m.mode.isEmpty() && m.mode != curMode)
             {
                 traceMsg(QString("Memory Read: Send Mode"));
                 sendModeToRadio(m.mode);
@@ -445,8 +445,10 @@ void RigControlFrame::transferDetails(memoryData::memData &m)
         }
         else if (!radioConnected && radioName.trimmed() == NORADIO)
         {
-            noRadioSendOutFreq(m.freq);
-            noRadioSendOutMode(m.mode);
+            if (!m.freq.isEmpty())
+                noRadioSendOutFreq(m.freq);
+            if (!m.mode.isEmpty())
+                noRadioSendOutMode(m.mode);
         }
     }
 
@@ -553,8 +555,13 @@ void RigControlFrame::setRadioName(QString name)
         return;
     }
     QString radNam = extractRadioName(name);   // remove mode if appended
-    ui->radioNameSel->setCurrentText(extractRadioName(radNam));
-    radioName = radNam;
+
+    int index = ui->radioNameSel->findText(radNam, Qt::MatchFixedString);
+    if (index >= 0)
+        ui->radioNameSel->setCurrentIndex(index);
+    else
+        ui->radioNameSel->setCurrentText(extractRadioName(radNam));
+    radioName = ui->radioNameSel->currentText();
 
     if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {

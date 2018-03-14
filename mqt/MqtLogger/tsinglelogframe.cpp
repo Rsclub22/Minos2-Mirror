@@ -21,7 +21,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     ui(new Ui::TSingleLogFrame),
     contest( contest ),
     splittersChanged(false),
-    curFreq( 0 ), oldFreq( 0 ),
+    curFreq( 0 ),
     freqUpDateCnt(0), modeUpDateCnt(0),
     lastStanzaCount( 0 ),
     rotatorLoaded(false),

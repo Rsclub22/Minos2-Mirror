@@ -384,6 +384,7 @@ void MinosTestExport::exportRigMemory(QSharedPointer<QFile> expfd, int memno )
         st->addMember(mem.getValue().freq, "freq");
         st->addMember(mem.getValue().mode, "mode");
         st->addMember(mem.getValue().locator, "locator");
+        st->addMember(mem.getValue().bearing, "bearing");
         st->addMember(mem.getValue().time, "time");
         st->addMember(mem.getValue().worked, "worked");
 

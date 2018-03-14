@@ -551,8 +551,13 @@ void RotControlFrame::setRotatorState(const QString &s)
 void RotControlFrame::setRotatorAntennaName(const QString &s)
 {
    traceMsg("Set Antenna Name = " + s);
-   ui->antennaName->setCurrentText(s);
-   antennaName = s;
+   int index = ui->antennaName->findText(s, Qt::MatchFixedString);
+   if (index >= 0)
+       ui->antennaName->setCurrentIndex(index);
+   else
+       ui->antennaName->setCurrentText(s);
+
+   antennaName = ui->antennaName->currentText();
    if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
    {
         emit selectRotator(s);

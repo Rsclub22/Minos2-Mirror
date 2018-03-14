@@ -36,8 +36,6 @@ SOURCES += \
     mwin.cpp \
     ScreenContact.cpp \
     validators.cpp \
-    MMessageDialog.cpp \
-    MShowMessageDlg.cpp \
     DisplayContestContact.cpp \
     TreeUtils.cpp \
     minossplitter.cpp \
@@ -74,8 +72,6 @@ HEADERS += \
     ProfileEnums.h \
     ScreenContact.h \
     validators.h \
-    MMessageDialog.h \
-    MShowMessageDlg.h \
     DisplayContestContact.h \
     TreeUtils.h \
     minossplitter.h \
@@ -95,6 +91,7 @@ HEADERS += \
     MatchCollection.h \
     rigutils.h \
     minostablewidget.h
+
 unix {
     target.path = /usr/lib
     INSTALLS += target

@@ -30,7 +30,7 @@ MinosServer *MinosServer::getMinosServer()
 
 MinosServer::MinosServer()
 {
-    serverName = MinosConfig::getThisServerName();
+    serverName = MinosConfig::getMinosConfig()->getThisServerName();
 }
 
 MinosServer::~MinosServer()

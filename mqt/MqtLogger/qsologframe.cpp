@@ -633,17 +633,14 @@ void QSOLogFrame::on_GJVOKButton_clicked()
         {
            // If Uri mode then continue to the next...
            QSharedPointer<BaseContact> nuc = contest->findNextUnfilledContact( );
-           selectEntryForEdit(nuc);
-
-           bool stillUnfilled = screenContact.contactFlags & TO_BE_ENTERED;
-
-           if (!stillUnfilled)
+           if (nuc)
            {
-                emit QSOFrameCancelled();
+               selectEntryForEdit(nuc);
+               selectField( 0 );             // make sure we move off the "Log" default button
            }
            else
            {
-                selectField( 0 );             // make sure we move off the "Log" default button
+               emit QSOFrameCancelled();
            }
         }
     }
@@ -1109,18 +1106,6 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
       valid( cmCheckValid ); // make sure all single and cross field
       doAutofill();           // should only be time to be filled
    }
-
-   // make sure the mode button shows the correct "flip" value
-
-   if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
-   {
-      ui->ModeButton->setText(oldMode);
-   }
-   else
-   {
-      ui->ModeButton->setText(hamlibData::CW);
-   }
-
 }
     //---------------------------------------------------------------------------
 void QSOLogFrame::setScoreText( int dist, bool partial, bool xband )
@@ -1504,7 +1489,7 @@ void QSOLogFrame::contactValid( void )
 
          QString prefix = vcct->ctryMult->basePrefix;
          TContestApp::getContestApp() ->locsBundle.openSection(prefix);
-         if (TContestApp::getContestApp() ->locsBundle.isSectionPresent() )
+         if (TContestApp::getContestApp() ->locsBundle.isCurrSectionPresent() )
          {
             TContestApp::getContestApp() ->locsBundle.getBoolProfile( sloc, LocOK, false );
             if (!LocOK)
@@ -1583,6 +1568,9 @@ void QSOLogFrame::setMode(QString m)
 {
 
     QString myOldMode = ui->ModeComboBoxGJV->currentText();
+
+    if (myOldMode == m)
+        return;         // all is OK
 
     ui->ModeComboBoxGJV->setCurrentText(m);
     mode = m;
@@ -1716,6 +1704,11 @@ void QSOLogFrame::updateQSODisplay()
 
    ui->InsertBeforeButton->setEnabled(notProtected);
    ui->InsertAfterButton->setEnabled(notProtected);
+
+   bool mgm = contest->MGMContestRules.getValue();
+
+   ui->ModeComboBoxGJV->setEnabled(!mgm);
+   ui->ModeButton->setEnabled(!mgm);
 
    on_FontChanged();    // do all style sheets again
 
@@ -1871,8 +1864,11 @@ void QSOLogFrame::modeSentFromRig(QString m)
     {
         if (mode == hamlibData::supModeList[i])
         {
-            QString oldmode = ui->ModeComboBoxGJV->currentText();
-            if (mode != ui->ModeComboBoxGJV->currentText())
+            oldMode = ui->ModeComboBoxGJV->currentText();
+            if (mode == ui->ModeComboBoxGJV->currentText())
+            {
+                return;
+            }
             {
                 // set index to new mode
                 ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText(mode));
@@ -1881,7 +1877,7 @@ void QSOLogFrame::modeSentFromRig(QString m)
             // ensure flip mode is shown on mode button
             if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
             {
-               ui->ModeButton->setText(oldmode);
+               ui->ModeButton->setText(oldMode);
             }
             else
             {
@@ -2401,6 +2397,9 @@ void QSOLogFrame::on_InsertAfterButton_clicked()
 void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
 {
 
+    if (ui->ModeComboBoxGJV->currentText() == mode)
+        return;
+    oldMode = mode;
     if (index < hamlibData::supModeList.count())
     {
         mode = hamlibData::supModeList[index];
@@ -2422,11 +2421,6 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
     {
        ui->ModeButton->setText(hamlibData::CW);
     }
-
-    oldMode = ui->ModeComboBoxGJV->currentText();
-
-
-
 }
 
 void QSOLogFrame::on_ValidateError (int mess_no )

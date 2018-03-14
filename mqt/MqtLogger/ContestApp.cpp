@@ -126,6 +126,7 @@ bool TContestApp::initialise()
     loggerBundle.setProfile( BundleFile::bundleFiles[ epLOGGERPROFILE ] );
     loggerBundle.openSection( "Default" );
 
+    loggerBundle.startGroup();
     //----------------------------------
     QString preloadfile;
     loggerBundle.getStringProfile( elpPreloadFile, preloadfile );
@@ -185,7 +186,7 @@ bool TContestApp::initialise()
 
     locsBundle.setProfile( BundleFile::bundleFiles[ epLOCSQUARESPROFILE ] );
     //----------------------------------
-
+    loggerBundle.endGroup();
 
     initClock();
     TMatchThread::InitialiseMatchThread();
@@ -571,7 +572,7 @@ void TContestApp::setDisplayColumnWidth( const QString &key, int val )
    {
       if ( val < 0 )
       {
-         displayBundle.setStringProfile( key, 0 );
+         displayBundle.setIntProfile( key, 0 );
       }
       else
       {

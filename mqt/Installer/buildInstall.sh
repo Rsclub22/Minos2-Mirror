@@ -1,6 +1,9 @@
 #!/bin/bash
 
-cd ~/Minos2
+#cd ~/Minos2
+SCRIPT=$(readlink -f $0)
+DIR=$(echo ${SCRIPT%/*}/../..)
+cd $DIR
 
 git pull origin master
 
@@ -33,31 +36,31 @@ echo $OSTYPE
 
 if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 
-	cp -r ~/Minos2/build/MqtAppStarter/MqtAppStarter.app Bin
-	cp -r ~/Minos2/build/MqtChat/MqtChat.app Bin
-	cp -r ~/Minos2/build/MqtControl/MqtControl.app Bin
-	cp -r ~/Minos2/build/MqtKeyer/MqtKeyer.app Bin
-	cp -r ~/Minos2/build/MqtLogger/MqtLogger.app Bin
-	cp -r ~/Minos2/build/MqtMonitor/MqtMonitor.app Bin
-	cp -r ~/Minos2/build/MqtRigControl/MqtRigControl.app Bin
-	cp -r ~/Minos2/build/MqtRotator/MqtRotator.app Bin
-	cp -r ~/Minos2/build/MqtServer/MqtServer.app Bin
+	cp -r ../Minos2/build/MqtAppStarter/MqtAppStarter.app Bin
+	cp -r ../Minos2/build/MqtChat/MqtChat.app Bin
+	cp -r ../Minos2/build/MqtControl/MqtControl.app Bin
+	cp -r ../Minos2/build/MqtKeyer/MqtKeyer.app Bin
+	cp -r ../Minos2/build/MqtLogger/MqtLogger.app Bin
+	cp -r ../Minos2/build/MqtMonitor/MqtMonitor.app Bin
+	cp -r ../Minos2/build/MqtRigControl/MqtRigControl.app Bin
+	cp -r ../Minos2/build/MqtRotator/MqtRotator.app Bin
+	cp -r ../Minos2/build/MqtServer/MqtServer.app Bin
 
 else
-	cp ~/Minos2/build/MqtAppStarter Bin
-	cp ~/Minos2/build/MqtChat/MqtChat Bin
-	cp ~/Minos2/build/MqtControl/MqtControl Bin
-	cp ~/Minos2/build/MqtKeyer/MqtKeyer Bin
-	cp ~/Minos2/build/MqtLogger/MqtLogger Bin
-	cp ~/Minos2/build/MqtMonitor/MqtMonitor Bin
-	cp ~/Minos2/build/MqtRigControl/MqtRigControl Bin
-	cp ~/Minos2/build/MqtRotator/MqtRotator Bin
-	cp ~/Minos2/build/MqtServer/MqtServer Bin
+	cp ../Minos2/build/MqtAppStarter/MqtAppStarter Bin
+	cp ../Minos2/build/MqtChat/MqtChat Bin
+	cp ../Minos2/build/MqtControl/MqtControl Bin
+	cp ../Minos2/build/MqtKeyer/MqtKeyer Bin
+	cp ../Minos2/build/MqtLogger/MqtLogger Bin
+	cp ../Minos2/build/MqtMonitor/MqtMonitor Bin
+	cp ../Minos2/build/MqtRigControl/MqtRigControl Bin
+	cp ../Minos2/build/MqtRotator/MqtRotator Bin
+	cp ../Minos2/build/MqtServer/MqtServer Bin
 fi
 
-cp -r ~/Minos2/mqt/ControlFiles/Configuration/* ./Configuration
-cp -r ~/Minos2/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
-cp -r ~/Minos2/mqt/Installer/Minos.sh . 
+cp -r ../Minos2/mqt/ControlFiles/Configuration/* ./Configuration
+cp -r ../Minos2/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
+cp -r ../Minos2/mqt/Installer/Minos.sh . 
 
 cd Configuration
 

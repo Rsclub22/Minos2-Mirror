@@ -114,7 +114,7 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
             }
             if (publisherServer == "localhost")
             {
-                publisherServer == MinosConfig::getThisServerName();
+                publisherServer == MinosConfig::getMinosConfig()->getThisServerName();
             }
             publisherProgram = p[0];
             state = static_cast<PublishState>(stemp);

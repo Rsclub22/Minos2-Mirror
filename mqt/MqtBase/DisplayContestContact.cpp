@@ -161,8 +161,8 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
       return true; // i.e. not equal
 
 
-   if ( ( mct.contactScore != contactScore.getValue() ) && ( contactScore.getValue() != -1 ) )
-      return true;	// not equal
+//   if ( ( mct.contactScore != contactScore.getValue() ) && ( contactScore.getValue() != -1 ) )
+//      return true;	// not equal
 
    return false;  // i.e. equal
 }

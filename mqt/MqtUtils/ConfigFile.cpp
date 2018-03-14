@@ -1,7 +1,6 @@
 #include "mqtUtils_pch.h"
 
 #include <QTimer>
-#include <QSettings>
 #include <QHostInfo>
 #include <QSharedPointer>
 #include "fileutils.h"
@@ -33,11 +32,11 @@ QString MinosConfig::getConfigIniName()
 {
     return "./Configuration/MinosConfig.ini";
 }
-/*static*/
+
 QString MinosConfig::getThisServerName()
 {
-    QSettings config(getConfigIniName(), QSettings::IniFormat);
-    QString serverName = config.value( "Settings/ServerName", QHostInfo::localHostName() ).toString().trimmed();
+    QString serverName;
+    config.getPrivateProfileString( "Settings", "ServerName", QHostInfo::localHostName(), serverName );
 
     if ( serverName.size() == 0 )
     {
@@ -53,31 +52,28 @@ void MinosConfig::cleanElementsOnCancel()
         QSharedPointer<RunConfigElement> ele = (*i);
         if (ele->newElement)
         {
-            ele->name = "<Deleted>";
+            ele->deleted = true;
         }
     }
 }
 
 //---------------------------------------------------------------------------
-bool RunConfigElement::initialise( QSettings &config, QString sect )
+bool RunConfigElement::initialise(INIFile &config, QString sect )
 {
     // config should refer to ./Configuration/MinosConfig.ini
 
     name = sect;
 
-    commandLine = config.value( sect + "/Program", "" ).toString().trimmed();
-    server = config.value( sect + "/Server", "localhost" ).toString().trimmed();
-    params = config.value( sect + "/Params", "" ).toString().trimmed();
-    rundir = config.value( sect + "/Directory", "" ).toString().trimmed();
-    remoteApp = config.value(sect + "/RemoteApp", name).toString().trimmed();
-    showAdvanced = config.value(sect + "/ShowAdvanced", false).toBool();
-    rEnabled = config.value(sect + "/Enabled", false).toBool();
-    hideApp = config.value(sect + "/HideApp", false).toBool();
-    QString S = config.value( sect + "/RunType", RunLocal ) .toString().trimmed();
-
-    runType = S;
-
-    appType = config.value( sect + "/AppType", QString() ) .toString().trimmed();
+    config.getPrivateProfileString(sect, "Program", "", commandLine);
+    config.getPrivateProfileString( sect, "Server", "localhost", server );
+    config.getPrivateProfileString( sect, "Params", "", params );
+    config.getPrivateProfileString( sect, "Directory", "", rundir );
+    config.getPrivateProfileString( sect, "RemoteApp", "", remoteApp);
+    showAdvanced = config.getPrivateProfileBool(sect, "ShowAdvanced", false);
+    rEnabled = config.getPrivateProfileBool(sect, "Enabled", false);
+    hideApp = config.getPrivateProfileBool(sect, "HideApp", false);
+    config.getPrivateProfileString( sect, "RunType",  RunLocal, runType );
+    config.getPrivateProfileString( sect, "AppType",  "", appType );
 
     AppConfigElement ace = MinosConfig::getMinosConfig()->getAppConfigElement(appType);
     requires = ace.requires;
@@ -86,7 +82,7 @@ bool RunConfigElement::initialise( QSettings &config, QString sect )
 
     return true;
 }
-void RunConfigElement::save(QSettings &config)
+void RunConfigElement::save(INIFile &config)
 {
     newElement = false;
 
@@ -95,18 +91,23 @@ void RunConfigElement::save(QSettings &config)
         name = appType;
     }
 
-    if (name.compare("<Deleted>", Qt::CaseInsensitive) != 0)
+    if (!deleted)
     {
-        config.setValue(name + "/Program", commandLine);
-        config.setValue(name + "/Params", params);
-        config.setValue(name + "/Directory", rundir);
-        config.setValue(name + "/Server", server);
-        config.setValue(name + "/RemoteApp", remoteApp);
-        config.setValue(name + "/RunType", runType);
-        config.setValue(name + "/AppType", appType);
-        config.setValue(name + "/ShowAdvanced", showAdvanced);
-        config.setValue(name + "/Enabled", rEnabled);
-        config.setValue(name + "/HideApp", hideApp);
+        config.writePrivateProfileString(name, "Program", commandLine);
+        config.writePrivateProfileString(name, "Params", params);
+        config.writePrivateProfileString(name, "Directory", rundir);
+        config.writePrivateProfileString(name, "Server", server);
+        config.writePrivateProfileString(name, "RemoteApp", remoteApp);
+        config.writePrivateProfileString(name, "RunType", runType);
+        config.writePrivateProfileString(name, "AppType", appType);
+        config.writePrivateProfileBool(name, "ShowAdvanced", showAdvanced);
+        config.writePrivateProfileBool(name, "Enabled", rEnabled);
+        config.writePrivateProfileBool(name, "HideApp", hideApp);
+    }
+    else
+    {
+        // what was the old name?
+        config.writePrivateProfileString(name, "", "");
     }
 }
 Connectable RunConfigElement::connectable()
@@ -122,7 +123,7 @@ Connectable RunConfigElement::connectable()
     }
     else
     {
-        res.serverName = MinosConfig::getThisServerName();
+        res.serverName = MinosConfig::getMinosConfig()->getThisServerName();
         res.remoteAppName = name;
     }
     return res;
@@ -130,7 +131,7 @@ Connectable RunConfigElement::connectable()
 
 void RunConfigElement::createProcess()
 {
-    if (name.compare("<Deleted>", Qt::CaseInsensitive) == 0)
+    if (deleted)
         return;
     if (rEnabled && runType == RunLocal && !runner)
     {
@@ -250,28 +251,29 @@ void RunConfigElement::on_readyReadStandardOutput()
 
 //---------------------------------------------------------------------------
 MinosConfig::MinosConfig( )
-    : QObject( 0 ), autoStart(false)
+    : QObject( 0 ), autoStart(false), config(getConfigIniName())
 {
 }
 void MinosConfig::initialise()
 {
     buildAppConfigList();
-    QSettings config(getConfigIniName(), QSettings::IniFormat);
-    QStringList lsect = config.childGroups();
+    config.startGroup();
+
+    QStringList lsect = config.getSections();
 
     for ( int i = 0; i < lsect.count(); i++ )
     {
         QString sect = lsect[ i ].trimmed();
         if ( sect.compare("Settings", Qt::CaseInsensitive ) == 0)
         {
-            thisServerName = config.value( "Settings/ServerName", "" ).toString().trimmed();
+            config.getPrivateProfileString( "Settings", "ServerName", "", thisServerName );
 
             if ( thisServerName.size() == 0 )
             {
                 QString h = QHostInfo::localHostName();
                 thisServerName = h;
             }
-            autoStart = config.value( "Settings/AutoStart", false ).toBool();
+            autoStart = config.getPrivateProfileBool( "Settings", "AutoStart", false );
         }
         else
         {
@@ -282,6 +284,7 @@ void MinosConfig::initialise()
             }
         }
     }
+    config.endGroup();
 }
 
 //---------------------------------------------------------------------------
@@ -299,28 +302,19 @@ bool configSort( const QSharedPointer<RunConfigElement> c1, const QSharedPointer
 }
 void MinosConfig::saveAll()
 {
+    config.startGroup();
+    QVector <QSharedPointer<RunConfigElement> > newList = elelist;
+    qSort(newList.begin(), newList.end(), configSort);
+    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = newList.begin(); i != newList.end(); i++ )
     {
-        QSettings config(getConfigIniName(), QSettings::IniFormat);
-
-        config.clear();
-        config.sync();
+        (*i)->save(config);
     }
-    {
-        QVector <QSharedPointer<RunConfigElement> > newList = elelist;
-        qSort(newList.begin(), newList.end(), configSort);
-        QSettings config(getConfigIniName(), QSettings::IniFormat);
-        for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = newList.begin(); i != newList.end(); i++ )
-        {
-            (*i)->save(config);
-        }
-        config.setValue("Settings/ServerName", thisServerName);
-        config.setValue( "Settings/AutoStart", autoStart );
+    config.writePrivateProfileString("Settings", "ServerName", thisServerName);
+    config.writePrivateProfileBool( "Settings", "AutoStart", autoStart );
 
-        config.sync();
-    }
-    #ifdef Q_OS_UNIX
-    sync();         // as just turning machine off can clear the ini file
-    #endif
+    config.writePrivateProfileString( "", "", "" );    // flush
+    config.endGroup();
+
 }
 void MinosConfig::start()
 {
@@ -387,7 +381,7 @@ QStringList MinosConfig::getAppTypes()
 }
 void MinosConfig::buildAppConfigList()
 {
-    QSettings appConfig("./Configuration/AppConfig.ini", QSettings::IniFormat);
+    INIFile appConfig("./Configuration/AppConfig.ini");
     /*
 [BandMap]
 Path=./mqtBandMap
@@ -396,22 +390,25 @@ Requires=Server
 Server=false
 
    */
-    QStringList apps = appConfig.childGroups();
+    appConfig.startGroup();
+
+    QStringList apps = appConfig.getSections();
     for (int i = 0; i < apps.size(); i++)
     {
-        if (appConfig.value(apps[i] + "/Enabled", false).toBool())  // only include those elements we are allowed to as possibilities
+        if (appConfig.getPrivateProfileBool(apps[i], "Enabled", false))  // only include those elements we are allowed to as possibilities
         {
             AppConfigElement ac;
 
             ac.appType = apps[i].trimmed();
-            ac.appPath = appConfig.value(apps[i] + "/Path").toString().trimmed();
+            appConfig.getPrivateProfileString(apps[i], "Path", "", ac.appPath);
 #ifdef Q_OS_WIN
             ac.appPath += ".exe";
 #endif
-            ac.server = appConfig.value(apps[i] + "/Server", false).toBool();
-            ac.defaultHide = appConfig.value(apps[i] + "/HideApp", false).toBool();
+            ac.server = appConfig.getPrivateProfileBool(apps[i], "Server", false);
+            ac.defaultHide = appConfig.getPrivateProfileBool(apps[i], "HideApp", false);
 
-            QString whereString = appConfig.value(apps[i] + "/Where", "Remote,Local").toString();
+            QString whereString;
+            appConfig.getPrivateProfileString(apps[i], "Where", "Remote,Local", whereString);
             if (whereString.contains("local", Qt::CaseInsensitive))
             {
                 ac.localOK = true;
@@ -431,7 +428,9 @@ Server=false
 
 
             // NB using comma in value give a string list! Single value will also go to list if desired
-            ac.requires = appConfig.value(apps[i] + "/Requires").toStringList();
+            QString reqs;
+            appConfig.getPrivateProfileString(apps[i], "Requires",  "", reqs);
+            ac.requires = reqs.split(',', QString::SkipEmptyParts);
 
             for(auto& str : ac.requires)    // trim all elements of leading and trailing spaces
                 str = str.trimmed();
@@ -439,7 +438,7 @@ Server=false
             appConfigList.append(ac);
         }
     }
-
+    appConfig.endGroup();
 }
 QString MinosConfig::checkConfig()
 {
@@ -450,7 +449,7 @@ QString MinosConfig::checkConfig()
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
     {
         QSharedPointer<RunConfigElement> ele = (*i);
-        if (ele->name.compare("<Deleted>", Qt::CaseInsensitive) == 0)
+        if (ele->deleted)
             continue;
         if (ele->rEnabled)
         {
@@ -476,7 +475,7 @@ QString MinosConfig::checkConfig()
     {
         QSharedPointer<RunConfigElement> ele = (*i);
 
-        if (ele->name.compare("<Deleted>", Qt::CaseInsensitive) == 0)
+        if (ele->deleted)
             continue;
 
         if (ele->rEnabled)
@@ -496,7 +495,7 @@ QString MinosConfig::checkConfig()
                     bool reqFound = false;
                     for ( QVector <QSharedPointer<RunConfigElement> >::iterator j = elelist.begin(); j != elelist.end(); j++ )
                     {
-                        if ((*j)->name.compare("<Deleted>", Qt::CaseInsensitive) == 0)
+                        if ((*j)->deleted)
                             continue;
                         if ((*j)->appType == req && (*j)->rEnabled && (*j)->runType == RunLocal)
                         {

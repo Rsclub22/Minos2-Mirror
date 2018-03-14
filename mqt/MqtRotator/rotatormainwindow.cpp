@@ -345,7 +345,17 @@ void RotatorMainWindow::onLoggerSelectAntenna(QString s)
 
     logMessage(QString("Received Select Antenna %1 from Logger").arg(s));
     QString oldAntenna = ui->selectAntennaBox->currentText();
-    ui->selectAntennaBox->setCurrentText(s);
+    int index = ui->selectAntennaBox->findText(s, Qt::MatchFixedString);
+    if (index >= 0)
+    {
+        ui->selectAntennaBox->setCurrentIndex(index);
+    }
+    else
+    {
+        ui->selectAntennaBox->setCurrentText(s);
+    }
+    s = ui->selectAntennaBox->currentText();
+
     if (!s.isEmpty() && s == oldAntenna)
     {
         refreshAntenna();

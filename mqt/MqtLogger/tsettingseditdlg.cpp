@@ -114,6 +114,7 @@ void TSettingsEditDlg::showDetails()
    int offset = ui->SectionsList->currentRow();
    if ( offset >= 0 || currSectionOnly)
    {
+       bundle->startGroup();
        // sections are all i = aaaaaaa
        QVector<int> entries = bundle->getBundleEntries();
 
@@ -148,6 +149,7 @@ void TSettingsEditDlg::showDetails()
           ui->OptionsTable->setItem(i, 0, it);
        }
        ui->OptionsTable->setVerticalHeaderLabels(labels);
+       bundle->endGroup();
    }
 }
 void TSettingsEditDlg::getDetails()

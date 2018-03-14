@@ -19,9 +19,10 @@
     
 ======================================================================================*/
 
-#include "base_pch.h"
+#include "mqtUtils_pch.h"
 #include <QSpacerItem>
 #include <QGridLayout>
+#include <QMessageBox>
 
 //---------------------------------------------------------------------------
 void mShowMessage( const QString &mess, QWidget *Owner )

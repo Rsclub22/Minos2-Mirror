@@ -79,7 +79,14 @@ void ConfigElementFrame::setElement(QSharedPointer<RunConfigElement> c)
     ui->appTypeCombo->setCurrentText(at);
     inhibitIndexChange = false;
 
-    ui->elementNameEdit->setText(c->name);
+    if (c->deleted)
+    {
+        ui->elementNameEdit->setText("<Deleted>");
+    }
+    else
+    {
+        ui->elementNameEdit->setText(c->name);
+    }
     ui->programNameEdit->setText(c->commandLine);
     ui->homeDirectoryEdit->setText(c->rundir);
     ui->parametersEdit->setText(c->params);
@@ -116,7 +123,15 @@ void ConfigElementFrame::saveElement()
 
         configElement->appType = ui->appTypeCombo->currentText();
 
-        configElement->name = ui->elementNameEdit->text().trimmed();
+        QString c = ui->elementNameEdit->text().trimmed();
+        if (c.compare("<Deleted>", Qt::CaseInsensitive) == 0)
+        {
+            configElement->deleted = true;
+        }
+        else
+        {
+            configElement->name = c;
+        }
         configElement->rundir = ui->homeDirectoryEdit->text().trimmed();
         configElement->commandLine = ui->programNameEdit->text().trimmed();
         configElement->params = ui->parametersEdit->text().trimmed();

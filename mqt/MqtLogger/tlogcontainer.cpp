@@ -64,7 +64,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     statusBar() ->addWidget( sblabel2, 2 );
 
     subscribeApps();
-    QString station = MinosConfig::getThisServerName();
+    QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 }
 TLogContainer::~TLogContainer()
@@ -1306,6 +1306,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
 
     BaseContestLog *ct = 0;
 
+    preloadBundle.startGroup();
     preloadBundle.openSection(sessName);
     QStringList slotlst = preloadBundle.getProfileEntries();
     if (slotlst.count())
@@ -1352,6 +1353,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     sessionsMenu = ui->menuLogs->addMenu("Contest Sets");
     updateSessionActions();
 
+    preloadBundle.endGroup();
     return ct;
 }
 void TLogContainer::getCurrSession()
@@ -1406,6 +1408,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
 void TLogContainer::preloadLists( )
 {
     // get all the keys
+    TContestApp::getContestApp() ->listsPreloadBundle.startGroup();
     QStringList slotlst = TContestApp::getContestApp() ->listsPreloadBundle.getProfileEntries();
     QStringList pathlst;
     for ( int i = 0; i < slotlst.count(); i++ )
@@ -1425,6 +1428,7 @@ void TLogContainer::preloadLists( )
             addListSlot( pathlst[ i ], slotno, true );
         }
     }
+    TContestApp::getContestApp() ->listsPreloadBundle.endGroup();
 }
 
 void TLogContainer::addListSlot( const QString &fname, int slotno, bool preload )

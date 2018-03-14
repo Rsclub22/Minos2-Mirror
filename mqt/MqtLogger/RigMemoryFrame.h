@@ -64,7 +64,7 @@ public:
     explicit RigMemoryFrame(QWidget *parent = 0);
     ~RigMemoryFrame();
 
-    QMap<QString, HeaderData> headerVal;
+    QMap<int, HeaderData> headerVal;
 
     void setContest( BaseContestLog *ct );
 
@@ -91,6 +91,7 @@ private slots:
     void rigMemTable_Hdr_customContextMenuRequested( const QPoint &pos );
 
     void readActionSelected();
+    void bearingActionSelected();
     void editActionSelected();
     void writeActionSelected();
     void clearActionSelected();
@@ -99,18 +100,24 @@ private slots:
 
     void onMenuShow();
 
+    void on_rigMemTable_doubleClicked(const QModelIndex &index);
+
+    void on_rigMemTable_clicked(const QModelIndex &index);
+
 private:
     Ui::RigMemoryFrame *ui;
     LoggerContestLog *ct = 0;
     bool suppressSendUpdate = false;
     QString lastRigFreq;
     int lastBearing = 0;
+    bool lastVisible = false;
     bool doTimer = false;
 
     QMenu* memoryMenu;
 
-    QAction *newAction;
+    QAction* newAction;
     QAction* readAction;
+    QAction* bearingAction;
     QAction* writeAction;
     QAction* editAction;
     QAction* clearAction;

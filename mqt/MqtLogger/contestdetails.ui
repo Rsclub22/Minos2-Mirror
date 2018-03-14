@@ -31,7 +31,7 @@
         <x>0</x>
         <y>0</y>
         <width>544</width>
-        <height>539</height>
+        <height>540</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -699,7 +699,7 @@
            <item>
             <widget class="QCheckBox" name="MGMCheckBox">
              <property name="text">
-              <string>MGM Contest Rules</string>
+              <string>RSGB MGM Contest Rules</string>
              </property>
             </widget>
            </item>

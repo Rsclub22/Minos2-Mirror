@@ -129,7 +129,8 @@ public:
                 && mode.compare(rhs.mode, Qt::CaseInsensitive) == 0
                 && locator.compare(rhs.locator, Qt::CaseInsensitive) == 0
                 && worked == rhs.worked
-                && time.compare(rhs.time, Qt::CaseInsensitive) == 0)
+                && time.compare(rhs.time, Qt::CaseInsensitive) == 0
+                && bearing == rhs.bearing)
 
         {
             return true;

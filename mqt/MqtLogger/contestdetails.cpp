@@ -1117,6 +1117,17 @@ void ContestDetails::enableControls()
    ui->BonusComboBox->setEnabled(!protectedChecked);
 
    ui->MGMCheckBox->setEnabled(!protectedChecked);
+
+   if (!protectedChecked)
+   {
+       bool mgm = ui->MGMCheckBox->isChecked();
+       ui->ScoreGroupBox->setEnabled(!mgm);
+       ui->BonusComboBox->setEnabled(!mgm);
+       ui->LocatorGroupBox->setEnabled(!mgm);
+       ui->FieldsGroupBox->setEnabled(!mgm);
+       ui->MultGroupBox->setEnabled(!mgm);
+       ui->ModeComboBox->setEnabled(!mgm);
+   }
 }
 //---------------------------------------------------------------------------
 
@@ -1397,4 +1408,5 @@ void ContestDetails::on_MGMCheckBox_stateChanged(int)
 
         noMultRipple = false;
     }
+    enableControls();
 }

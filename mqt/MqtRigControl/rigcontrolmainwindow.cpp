@@ -753,8 +753,17 @@ void RigControlMainWindow::refreshRadio()
 
         QString oldRadio = ui->selectRadioBox->currentText();
 
-        ui->selectRadioBox->setCurrentText(s);
+        int index = ui->selectRadioBox->findText(s, Qt::MatchFixedString);
+        if (index >= 0)
+        {
+            ui->selectRadioBox->setCurrentIndex(index);
+        }
+        else
+        {
+            ui->selectRadioBox->setCurrentText(s);
+        }
 
+        s = ui->selectRadioBox->currentText();
         if (!s.isEmpty() && s == oldRadio)
         {
             refreshRadio();

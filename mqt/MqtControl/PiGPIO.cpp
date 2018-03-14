@@ -1,6 +1,4 @@
 #include "base_pch.h"
-
-#include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <stdio.h>

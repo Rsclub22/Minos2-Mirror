@@ -63,7 +63,7 @@ void RigMemDialog::onFreqEditFinish()
         }
 
     }
-    if (!validateFreqTxtInput(f))
+    if (!f.isEmpty() && !validateFreqTxtInput(f))
     {
         // error
         QMessageBox msgBox;
@@ -86,18 +86,37 @@ void RigMemDialog::setLogData(memoryData::memData* ldata, int buttonNumber, Logg
     ui->callSignLineEdit->setText(ldata->callsign);
     ui->locatorLineEdit->setText(ldata->locator);
 
-    double lon = 0.0;
-    double lat = 0.0;
-    int lres = lonlat( ldata->locator, lon, lat );
-    if ( lres == LOC_OK )
+    int brg = ldata->bearing;
+    if (!ldata->locator.isEmpty())
     {
-        int brg;
-        double dist;
-        ct->disbear( lon, lat, dist, brg );
-        ui->bearingLineEdit->setText(QString::number(brg));
+        double lon = 0.0;
+        double lat = 0.0;
+        int lres = lonlat( ldata->locator, lon, lat );
+        if ( lres == LOC_OK )
+        {
+            double dist;
+            ct->disbear( lon, lat, dist, brg );
+        }
     }
 
-    ui->freqLineEdit->setText(convertFreqStrDispSingle(ldata->freq).remove( QRegExp("0+$"))); //remove trailing zeros);
+    if (brg == COMPASS_ERROR)
+    {
+        ui->bearingLineEdit->setText("000");
+    }
+    else
+    {
+        QString number = QString("%1").arg(brg, 3, 10, QChar('0'));
+        ui->bearingLineEdit->setText(number);
+    }
+
+    if (ldata->freq.isEmpty())
+    {
+        ui->freqLineEdit->setText("");
+    }
+    else
+    {
+        ui->freqLineEdit->setText(convertFreqStrDispSingle(ldata->freq).remove( QRegExp("0+$"))); //remove trailing zeros);
+    }
 
     ui->timeLineEdit->setText(ldata->time);
 }
@@ -112,9 +131,9 @@ void RigMemDialog::on_okButton_clicked()
 
     //QString f = convertSinglePeriodFreqToMultiPeriod(ui->freqLineEdit->text());
     QString f = ui->freqLineEdit->text().remove( QRegExp("^[0]*")); //remove periods and leading zeros
-    if (f == "")
+    if (f.isEmpty())
     {
-        logData->freq = "00000000000";
+        logData->freq = f;
     }
     else
     {

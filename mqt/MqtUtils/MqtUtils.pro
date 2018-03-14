@@ -25,7 +25,10 @@ SOURCES += \
     MLogFile.cpp \
     MTrace.cpp \
     LogEvents.cpp \
-    singleapplication.cpp
+    singleapplication.cpp \
+    INIFile.cpp \
+    MMessageDialog.cpp \
+    MShowMessageDlg.cpp
 
 HEADERS += \
     fileutils.h \
@@ -36,7 +39,10 @@ HEADERS += \
     MTrace.h \
     LogEvents.h \
     mqtUtils_pch.h \
-    singleapplication.h
+    singleapplication.h \
+    INIFile.h \
+    MMessageDialog.h \
+    MShowMessageDlg.h
 unix {
     target.path = /usr/lib
     INSTALLS += target

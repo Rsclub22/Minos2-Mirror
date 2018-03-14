@@ -99,11 +99,8 @@ private:
     int lastStanzaCount;
 
     long long curFreq;
-    long long oldFreq;
     QString sCurFreq;
-    QString sOldFreq;
     QString sCurMode;
-    QString sOldMode;
 
     int freqUpDateCnt;
     int modeUpDateCnt;

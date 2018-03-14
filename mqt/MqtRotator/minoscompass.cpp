@@ -64,8 +64,6 @@ void MinosCompass::upDateDial()
 */
 void MinosCompass::paintEvent(QPaintEvent *)
 {
-
-
     static const QPoint needleFront[3] = {
         QPoint(7, 0),
         QPoint(-7, 0),
@@ -80,29 +78,27 @@ void MinosCompass::paintEvent(QPaintEvent *)
 
 
     QColor tenDegreeMarkerColor(127, 0, 127);
-
     QColor twoDegreeMarkerColor(0, 127, 127, 191);
 
-
     QColor needleFrontColor("red");
-
     QColor needleBackColor("gray");
-
-
 
     int side = qMin(width(), height());
 
     QPainter painter(this);
-
-    painter.setRenderHint(QPainter::Antialiasing);
 
     painter.translate(width() / 2, height() / 2);
 
     painter.scale(side / 200.0, side / 200.0);
 
 
+    QFont dialfont = dynamic_cast<QWidget *>(parent())->font();
+    qreal dps = dialfont.pointSizeF();
+    dialfont.setPointSizeF(dps * 250.0 / side );
+    painter.setFont(dialfont);
 
     painter.setPen(Qt::NoPen);
+    painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
 
 
     // paint ten degree markers
@@ -147,24 +143,31 @@ void MinosCompass::paintEvent(QPaintEvent *)
     QString degLegends = " ,30,60, ,120,150, ,210,240, ,300,330";
     int degreeRotate[] = {30,30,30,30,30,30,30,30,30,30,30,30};
     QStringList legendsList = degLegends.split(",");
-    QRect textRect1(-8, -90, 20,15);
+
+    QRect tr = painter.fontMetrics().boundingRect("XXX");
+    tr.adjust(-tr.width()/2, -75, -tr.width()/2, -75);
+//    QRect textRect1(-8, -90, 20,15);
 
     for (int j = 0; j < 12; j++)
     {
-        painter.drawText(textRect1,legendsList.value(j));
+        painter.drawText(tr, Qt::AlignCenter,legendsList.value(j));
+//        painter.drawText(textRect1,legendsList.value(j));
         painter.rotate(degreeRotate[j]);
     }
 
     QString dirLegends = "N,E,S,W";
     QStringList dirLegendsList = dirLegends.split(",");
 
-    QRect textRect2(-3, -90, 15,15);
+    QRect tr2 = painter.fontMetrics().boundingRect("XXX");
+    tr2.adjust(-tr.width()/2, -75, -tr.width()/2, -75);
+//    QRect textRect2(-3, -90, 15,15);
 //    QFont textFont();
 //    textFont.setWeight( QFont::Bold );
 //   painter.setfont(textFont);
     for (int j = 0; j < 4; j++)
     {
-        painter.drawText(textRect2,dirLegendsList.value(j));
+        painter.drawText(tr2, Qt::AlignCenter,dirLegendsList.value(j));
+//        painter.drawText(textRect2,dirLegendsList.value(j));
         painter.rotate(90);
     }
 
