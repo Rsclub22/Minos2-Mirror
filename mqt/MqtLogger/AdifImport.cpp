@@ -8,16 +8,19 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "logger_pch.h"
 #include <ctype.h>
-
+#include "rigutils.h"
 #include "LoggerContest.h"
 #include "AdifImport.h"
 
 //====================================================================
 ADIFImport::ADIFImport(LoggerContestLog * c, QSharedPointer<QFile> adifContestFile ) :
-      aqso( 0 ), next_block( 1 ),
-      acontest( c ), adifContestFile( adifContestFile ),
-      offset( -1 ), limit( -1 )
-{}
+    offset( -1 )
+    , limit( -1 )
+    , adifContestFile( adifContestFile )
+    , acontest( c )
+{
+    next_block = acontest->getNextBlock();
+}
 ADIFImport::~ADIFImport()
 {
 }
@@ -101,6 +104,38 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
       {
          strcpysp( temp, FieldContent, FieldLength );
          aqso->extraText.setInitialValue( temp );
+      }
+      if ( Fieldname.toUpper() == "FREQ" )
+      {
+          strcpysp( temp, FieldContent, FieldLength );
+
+          double freq = convertStrToFreq(temp);
+          QString sfreq = QString::number(freq, 'f', 6); //MHz to 6 decimal places
+          aqso->frequency.setInitialValue(sfreq);
+   }
+
+      if ( Fieldname.toUpper() == "MODE" )
+      {
+          strcpysp( temp, FieldContent, FieldLength );
+
+          temp = temp.toUpper();
+          if (temp == "CW")
+          {
+              aqso->mode.setInitialValue(hamlibData::CW);
+          }
+          else if (temp == "USB")
+          {
+              aqso->mode.setInitialValue(hamlibData::USB);
+          }
+          else if (temp == "FM")
+          {
+              aqso->mode.setInitialValue(hamlibData::FM);
+          }
+          else
+          {
+              aqso->mode.setInitialValue(hamlibData::MGM);
+              aqso->comments.setInitialValue(temp);
+          }
       }
    }
 }
@@ -201,7 +236,7 @@ bool ADIFImport::executeImport()
          }
          while ( InChar != '>' );
 
-         if ( qEOH == "EOH" )
+         if ( qEOH.toUpper() == "EOH" )
          {
             inHeader = false;
          }

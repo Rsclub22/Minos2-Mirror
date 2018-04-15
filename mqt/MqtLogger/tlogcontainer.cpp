@@ -22,6 +22,7 @@
 #include "SendRPCDM.h"
 #include "MatchTreesFrame.h"
 #include "enqdlg.h"
+#include "AdifImport.h"
 
 TLogContainer *LogContainer = 0;
 
@@ -261,6 +262,9 @@ void TLogContainer::setupMenus()
     MakeEntryAction = newAction("Produce Entry/Export File...", ui->menuFile, SLOT(MakeEntryActionExecute()));
     ui->menuFile->addSeparator();
 
+    AppendAdifAction = newAction("Append ADIF file to contest...", ui->menuFile, SLOT(AppendAdifActionExecute()));
+    ui->menuFile->addSeparator();
+
     ListOpenAction = newAction("Open &Archive List...", ui->menuFile, SLOT(ListOpenActionExecute()));
     ManageListsAction = newAction("&Manage Archive Lists...", ui->menuFile, SLOT(ManageListsActionExecute()));
     ui->menuFile->addSeparator();
@@ -302,6 +306,9 @@ void TLogContainer::setupMenus()
 
     TabPopup.addAction(ContestDetailsAction);
     TabPopup.addAction(MakeEntryAction);
+    TabPopup.addSeparator();
+
+    TabPopup.addAction(AppendAdifAction);
     TabPopup.addSeparator();
 
     TabPopup.addAction(GoToSerialAction);
@@ -356,6 +363,7 @@ void TLogContainer::enableActions()
    GoToSerialAction->setEnabled(f);
    NextUnfilledAction->setEnabled(f);
    MakeEntryAction->setEnabled(f);
+   AppendAdifAction->setEnabled(f);
 
    ManageListsAction->setEnabled( TContestApp::getContestApp() ->getOccupiedListSlotCount() > 0 );
 
@@ -783,6 +791,58 @@ void TLogContainer::ExitClearActionExecute()
     // and exit
     close();
 }
+void TLogContainer::AppendAdifActionExecute()
+{
+    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+
+    if (!ct)
+        return;
+
+    QString InitialDir = getDefaultDirectory( false );
+
+    QFileInfo qf(InitialDir);
+
+    InitialDir = qf.canonicalFilePath();
+
+    QString Filter = "ADIF files (*.adi);;"
+                     "All Files (*.*)" ;
+
+    QString fname = QFileDialog::getOpenFileName( this,
+                       "Open ADIF for append",
+                       InitialDir,  // dir
+                       Filter
+                       );
+
+    QIODevice::OpenMode om = QIODevice::ReadOnly;
+
+    QSharedPointer<QFile> adifFile(new QFile(fname));
+
+    if (!adifFile->open(om))
+    {
+       QString lerr = adifFile->errorString();
+       QString emess = "Failed to open ADIF file " + fname + " : " + lerr;
+       MinosParameters::getMinosParameters() ->mshowMessage( emess );
+       return;
+    }
+
+    if (! ADIFImport::doImportADIFLog(dynamic_cast<LoggerContestLog *>(ct),  adifFile ))
+    {
+        MinosParameters::getMinosParameters() ->mshowMessage( "Failed to append " + fname );
+    }
+    ct->scanContest();
+    ct->validateLoc();
+    for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+    {
+       i->wt->commonSave(i->wt);
+    }
+    ct->commonSave( false );
+    MinosLoggerEvents::SendAfterLogContact(ct);
+    TSingleLogFrame * tslf = LogContainer ->findContest( ct );
+
+    tslf->showQSOs();
+
+}
+
 void TLogContainer::MakeEntryActionExecute()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
