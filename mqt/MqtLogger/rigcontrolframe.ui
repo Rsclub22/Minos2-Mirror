@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>131</height>
+    <width>556</width>
+    <height>152</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
   <property name="frameShadow">
    <enum>QFrame::Raised</enum>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_8">
      <item>
@@ -66,76 +66,9 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>&amp;Freq:</string>
-            </property>
-            <property name="buddy">
-             <cstring>freqInput</cstring>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="FreqLineEdit" name="freqInput">
-            <property name="font">
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="focusPolicy">
-             <enum>Qt::ClickFocus</enum>
-            </property>
-            <property name="inputMask">
-             <string>99.999.999.999</string>
-            </property>
-            <property name="text">
-             <string>00.000.000.000</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <item>
-             <widget class="QLabel" name="TxVertLabel">
-              <property name="text">
-               <string>TxVert:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="txvertStat">
-              <property name="text">
-               <string>..</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QToolButton" name="freqDown">
               <property name="focusPolicy">
@@ -147,17 +80,26 @@
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+             <widget class="FreqLineEdit" name="freqInput">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
+              <property name="focusPolicy">
+               <enum>Qt::ClickFocus</enum>
               </property>
-             </spacer>
+              <property name="inputMask">
+               <string>99.999.999.999</string>
+              </property>
+              <property name="text">
+               <string>00.000.000.000</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QToolButton" name="freqUp">
@@ -168,6 +110,51 @@
                <string>+5</string>
               </property>
              </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QToolButton" name="RitButton">
+              <property name="text">
+               <string>RIT</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="RitLineEdit" name="RitEdit">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="inputMask">
+               <string>x9.99</string>
+              </property>
+              <property name="text">
+               <string>+0.00</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <widget class="QLabel" name="TxVertLabel">
+                <property name="text">
+                 <string>TxVert:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="txvertStat">
+                <property name="text">
+                 <string>..</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
              <spacer name="horizontalSpacer_4">
@@ -322,6 +309,11 @@
  <customwidgets>
   <customwidget>
    <class>FreqLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>rigcontrolframe.h</header>
+  </customwidget>
+  <customwidget>
+   <class>RitLineEdit</class>
    <extends>QLineEdit</extends>
    <header>rigcontrolframe.h</header>
   </customwidget>

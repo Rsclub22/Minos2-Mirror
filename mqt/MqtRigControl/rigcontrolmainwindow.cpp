@@ -350,7 +350,7 @@ void RigControlMainWindow::upDateRadio()
         ridx = radioIndex;
         if (ridx > -1 && ridx < setupRadio->numAvailRadios)  // find radio and update current radio pointer
         {
-            // found antenna, updatea currentAntenna pointer to select antennadata
+            // found antenna, update currentAntenna  to selected antennadata
             scatParams::copyRig(setupRadio->availRadioData[ridx], setupRadio->currentRadio);
             setupRadio->currentRadio.radioNumber = QString::number(ridx);           // save radio number
 
@@ -400,27 +400,24 @@ void RigControlMainWindow::upDateRadio()
             {
                 ui->radioNameDisp->setText(setupRadio->currentRadio.radioName);
 
-                if (setupRadio->currentRadio.radioModelNumber != 135) // don't send USB if Ft991
+                if (radio->get_serialConnected())
                 {
-                    if (radio->get_serialConnected())
+                    if (appName.count() > 0)
                     {
-                        if (appName.count() > 0)
-                        {
-                            logMessage(QString("Update Radio: Logger Set Mode to %1").arg(selRadioMode));
-                            loggerSetMode(selRadioMode);
-                        }
-                        else
-                        {
+                        logMessage(QString("Update Radio: Logger Set Mode to %1").arg(selRadioMode));
+                        loggerSetMode(selRadioMode);
+                    }
+                    else
+                    {
 
-                            logMessage(QString("Update Radio: Set Mode USB Standalone"));
-                            // initialise rig state
+                        logMessage(QString("Update Radio: Set Mode USB Standalone"));
+                        // initialise rig state
 
-                            slogMode = "USB";
-                            // set mode
-                            logMode = radio->convertQStrMode("USB");
-                            setMode("USB", RIG_VFO_CURR);
+                        slogMode = "USB";
+                        // set mode
+                        logMode = radio->convertQStrMode("USB");
+                        setMode("USB", RIG_VFO_CURR);
 
-                        }
                     }
                 }
 
@@ -430,6 +427,7 @@ void RigControlMainWindow::upDateRadio()
                     writeWindowTitle(appName);
                     sendStatusToLogConnected();
                     sendBandListLogger();
+                    sendRitEnableStatusLogger();
                     dumpRadioToTraceLog();
 
                 }
@@ -479,11 +477,8 @@ void RigControlMainWindow::refreshRadio()
     {
         if (radio->get_serialConnected())
         {
-            if (setupRadio->currentRadio.radioModelNumber != 135) // don't send USB if Ft991
-            {
-                logMessage(QString("Refresh Radio: Logger Set Mode to %1").arg(selRadioMode));
-                loggerSetMode(selRadioMode);
-            }
+            logMessage(QString("Refresh Radio: Logger Set Mode to %1").arg(selRadioMode));
+            loggerSetMode(selRadioMode);
             writeWindowTitle(appName);
             sendStatusToLogConnected();
             dumpRadioToTraceLog();
@@ -595,6 +590,11 @@ void RigControlMainWindow::closeRadio()
     if (radio->get_serialConnected())
     {
         radio->closeRig();
+    }
+    if (serialTVSw != nullptr)
+    {
+        serialTVSw->closeComport();
+        serialTVSw = nullptr;
     }
 
     showStatusMessage("Disconnected");
@@ -1370,18 +1370,20 @@ void RigControlMainWindow::sendModeToLog(QString mode)
 
 void RigControlMainWindow::sendTransVertStatus(bool status)
 {
-    QString flag;
+    //QString flag;
     if (appName.length() > 0)
     {
-        if (status)
+        /*if (status)
         {
             flag = TXVERT_ON;
         }
         else
         {
             flag = TXVERT_OFF;
-        }
-        logMessage(QString("Send Transvert Status to logger = %1").arg(flag));
+        }*/
+        QString f = "";
+        status  ? f = "True" : f = "False";
+        logMessage(QString("Send Transvert Status to logger = %1").arg(f));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setTransverterStatus(psname, status);
 
@@ -1417,6 +1419,36 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
         serialTVSw->sendTVSwMessage(msg);
     }
 }
+
+
+void RigControlMainWindow::sendRitEnableStatusLogger()
+{
+    if (!setupRadio->currentRadio.ritAvail)
+    {
+        sendRitEnableStatus(setupRadio->currentRadio.ritAvail); // turn off rit in logger if not available
+    }
+    else
+    {
+        sendRitEnableStatus(setupRadio->currentRadio.ritEnable);
+    }
+
+}
+
+
+void RigControlMainWindow::sendRitEnableStatus(bool status)
+{
+
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send Rit Enable Status to logger = %1").arg(status  ? "True" : "False"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setRitEnableStatus(psname, status);
+
+    }
+}
+
+
+
 
 void RigControlMainWindow::onLaunchSetup()
 {
@@ -1459,9 +1491,7 @@ void RigControlMainWindow::aboutRigConfig()
         msg.append(QString("Stop bits = %1\n").arg(QString::number(setupRadio->currentRadio.stopbits)));
         msg.append(QString("Parity = %1\n").arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]));
         msg.append(QString("Handshake = %1\n").arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]));
-        QString f = "";
-        setupRadio->currentRadio.transVertEnable ? f = "True" : f = "False";
-        msg.append(QString("TransVert Enable = %1\n").arg(f));
+        msg.append(QString("TransVert Enable = %1\n").arg(setupRadio->currentRadio.transVertEnable ? "True" : "False"));
         msg.append(QString("Number of TransVerters = %1\n").arg(setupRadio->currentRadio.numTransverters));
 
         for (int i = 0; i < setupRadio->currentRadio.numTransverters; i++)
@@ -1471,14 +1501,11 @@ void RigControlMainWindow::aboutRigConfig()
             msg.append(QString("Transverter Band = %1\n").arg(setupRadio->currentRadio.transVertSettings[i]->band));
             msg.append(QString("Transverter Offset = %1\n").arg(setupRadio->currentRadio.transVertSettings[i]->transVertOffsetStr));
             msg.append(QString("Transverter Switch num = %1\n").arg(setupRadio->currentRadio.transVertSettings[i]->transSwitchNum));
-            setupRadio->currentRadio.enableTransSwitch  ? f = "True" : f = "False";
-            msg.append(QString("Transverter Switch enable = %1\n").arg(f));
+            msg.append(QString("Transverter Switch enable = %1\n").arg(setupRadio->currentRadio.enableTransSwitch  ? "True" : "False"));
         }
-        msg.append(QString("Use RX Passband = %1\n").arg(f));
-        supRitFlag ? f = "True" : f = "False";
-        msg.append(QString("Radio Supports RIT = %1\n").arg(f));
-        ui->actionTraceLog->isChecked() ? f = "True" : f = "False";
-        msg.append(QString("Tracelog = %1\n").arg(f));
+        msg.append(QString("Radio Supports RIT = %1\n").arg(setupRadio->currentRadio.ritAvail ? "True" : "False"));
+        msg.append(QString("Rit Enable On = %1\n").arg(setupRadio->currentRadio.ritEnable  ? "True" : "False"));
+        msg.append(QString("Tracelog = %1\n").arg(ui->actionTraceLog->isChecked() ? "True" : "False"));
     }
     else
     {
@@ -1521,9 +1548,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         trace(QString("Parity = %1").arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]));
         trace(QString("Handshake = %1").arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]));
         trace(QString("MGM mode ").arg(setupRadio->currentRadio.mgmMode));
-        QString f = "";
-        setupRadio->currentRadio.transVertEnable ? f = "True" : f = "False";
-        trace(QString("TransVert Enable = %1").arg(f));
+        trace(QString("TransVert Enable = %1").arg(setupRadio->currentRadio.transVertEnable ? "True" : "False"));
         trace(QString("Number of TransVerters = %1").arg(setupRadio->currentRadio.numTransverters));
         for (int i = 0; i < setupRadio->currentRadio.numTransverters; i++)
         {
@@ -1532,16 +1557,11 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             trace(QString("Transverter Band = %1").arg(setupRadio->currentRadio.transVertSettings[i]->band));
             trace(QString("Transverter Offset = %1").arg(setupRadio->currentRadio.transVertSettings[i]->transVertOffsetStr));
             trace(QString("Transverter Switch num = %1").arg(setupRadio->currentRadio.transVertSettings[i]->transSwitchNum));
-            setupRadio->currentRadio.enableTransSwitch  ? f = "True" : f = "False";
-            trace(QString("Transverter Switch enable = %1").arg(f));
+            trace(QString("Transverter Switch enable = %1").arg(setupRadio->currentRadio.enableTransSwitch  ? "True" : "False"));
         }
-
-        trace(QString("Use RX Passband = %1").arg(f));
-        supRitFlag ? f = "True" : f = "False";
-        trace(QString("Radio Supports RIT = %1").arg(f));
-
-        ui->actionTraceLog->isChecked() ? f = "True" : f = "False";
-        trace(QString("Tracelog = %1").arg(f));
+        trace(QString("Radio Supports RIT = %1").arg( setupRadio->currentRadio.ritAvail ? "True" : "False"));
+        trace(QString("Rit Enable On = %1").arg(setupRadio->currentRadio.ritEnable  ? "True" : "False"));
+        trace(QString("Tracelog = %1").arg(ui->actionTraceLog->isChecked() ? "True" : "False"));
 
     }
     else

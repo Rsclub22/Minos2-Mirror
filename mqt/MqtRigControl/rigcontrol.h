@@ -124,6 +124,8 @@ public:
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
+      dest.ritAvail = srce->ritAvail;
+      dest.ritEnable = srce->ritEnable;
       dest.radioSupBands = srce->radioSupBands;
       dest.radioTransSupBands = srce->radioTransSupBands;
       dest.transVertEnable = srce->transVertEnable;
@@ -179,6 +181,8 @@ public:
   QString mgmMode = "USB";
   ptt_type_t pttType;
   bool antSwitchAvail = false;
+  bool ritAvail = false;
+  bool ritEnable = false;
   bool transVertEnable  = false;
   QStringList transVertNames;
   int numTransverters = 0;

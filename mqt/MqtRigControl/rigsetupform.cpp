@@ -67,7 +67,7 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     connect(ui->enableTransVert, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSelected(bool)));
     connect(ui->mgmBox, SIGNAL(activated(int)), this, SLOT(mgmModeSelected()));
     connect(ui->CIVlineEdit, SIGNAL(editingFinished()), this, SLOT(civAddressFinished()));
-
+    connect(ui->RITEnable, SIGNAL(stateChanged(int)), this, SLOT(ritEnableSelected(int)));
     // transvert
     connect(ui->enableTransVertSw, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSwSel(bool)));
     connect(ui->locTvConChk, SIGNAL(clicked(bool)), this, SLOT(localTransVertSwSel(bool)));
@@ -168,9 +168,22 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             }
         }
 
+        // does this radio support rit?
+        int retCode = 0;
+        bool ritAvail = false;
+        radioData->ritAvail = false;
+        ritEnableVisible(ritAvail);
+        retCode = radio->supportRit(radioData->radioModelNumber, &ritAvail);
+        if (retCode >= 0)
+        {
+            radioData->ritAvail = ritAvail;
+            ritEnableVisible(ritAvail);
+        }
+
+
         // does this radio support antenna sw?
         bool antSwFlg = false;
-        int retCode = 0;
+        retCode = 0;
         retCode = radio->supportAntSw(radioData->radioModelNumber, &antSwFlg);
         for (int i = 0; i < radioData->numTransverters; i++)
         {
@@ -647,6 +660,31 @@ void RigSetupForm::pollIntervalVisible(bool s)
     ui->pollIntervalLbl->setVisible(s);
 }
 
+/************************* Rit Enable ********************************/
+
+void RigSetupForm::ritEnableSelected(int /*state*/)
+{
+    bool checked = ui->RITEnable->isChecked();
+    if (radioData->ritEnable != ui->RITEnable->isChecked())
+    {
+        radioData->ritEnable = checked;
+        radioValueChanged = true;
+
+    }
+}
+
+
+void RigSetupForm::setRitEnableChkd(bool enable)
+{
+    ui->RITEnable->setChecked(enable);
+
+}
+
+
+void RigSetupForm::ritEnableVisible(bool v)
+{
+    ui->RITEnable->setVisible(v);
+}
 
 
 /************************** TransVert Enable *************************/

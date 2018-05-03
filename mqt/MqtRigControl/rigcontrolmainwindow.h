@@ -94,9 +94,9 @@ private:
     bool mgmModeFlag = false;
     shortfreq_t rRitFreq = 0;
     QString sRitFreq;
-    bool supRitFlag = false;
 
-    SerialTVSwitch *serialTVSw;
+
+    SerialTVSwitch *serialTVSw = nullptr;
 
 
     QString geoStr;         // geometry registry location
@@ -146,6 +146,9 @@ private:
     void sendErrorMessageToLogger(QString errMsg);
     void sendFreqToLog(freq_t freq);
     void sendModeToLog(QString mode);
+    void sendRitEnableStatus(bool status);
+    void sendRitEnableStatusLogger();
+
     //void sendRxPbFlagToLog();
 
     void setMode(QString mode, vfo_t vfo);
@@ -197,6 +200,7 @@ private slots:
     void setupBandFreq();
     void selectRadio();
     void onLaunchSetup();
+
 
 signals:
 

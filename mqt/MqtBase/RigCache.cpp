@@ -184,6 +184,7 @@ void RigCache::setMode(const PubSubName &name, const QString &mode)
 {
     rigStates[name].setMode(mode);
 }
+
 void RigCache::setTransverterOffset(const PubSubName &name, double transverterOffset)
 {
     rigDetails[name].setTransverterOffset(transverterOffset);
@@ -199,6 +200,14 @@ void RigCache::setTransverterStatus(const PubSubName &name, bool transverterStat
 void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {
     rigDetails[name].setBandList(bands);
+}
+void RigCache::setRitFreq(const PubSubName &name, double freq)
+{
+    rigStates[name].setRitFreq(freq);
+}
+void RigCache::setRitEnableStatus(const PubSubName &name, bool ritEnableStatus)
+{
+    rigDetails[name].setRitEnableStatus(ritEnableStatus);
 }
 
 void RigCache::publishState()

@@ -26,7 +26,9 @@ bool RigState::isDirty() const
     return  _status.isDirty() ||
             _selected.isDirty() ||
             _freq.isDirty() ||
-            _mode.isDirty();
+            _mode.isDirty() ||
+            _ritFreq.isDirty() ||
+            _ritEnableStatus.isDirty();
 }
 void RigState::clearDirty()
 {
@@ -34,6 +36,8 @@ void RigState::clearDirty()
     _selected.clearDirty();
     _freq.clearDirty();
     _mode.clearDirty();
+    _ritFreq.clearDirty();
+    _ritEnableStatus.clearDirty();
 
 }
 void RigState::setDirty()
@@ -42,6 +46,9 @@ void RigState::setDirty()
     _selected.setDirty();
     _freq.setDirty();
     _mode.setDirty();
+    _ritFreq.setDirty();
+    _ritEnableStatus.setDirty();
+
 
 }
 void RigState::setSelected(const QString &selected)
@@ -53,7 +60,14 @@ void RigState::setFreq(double freq)
 {
     _freq.setValue(freq);
 }
-
+void RigState::setRitFreq(double freq)
+{
+    _ritFreq.setValue(freq);
+}
+void RigState::setRitEnableStatus(const QString &status)
+{
+    _ritEnableStatus.setValue(status);
+}
 void RigState::setMode(const QString &mode)
 {
     _mode.setValue(mode);
@@ -71,6 +85,8 @@ QString RigState::pack() const
     jv.insert(rpcConstants::rigControlStatus, status().getValue());
     jv.insert(rpcConstants::rigControlFreq, freq().getValue());
     jv.insert(rpcConstants::rigControlMode, mode().getValue());
+    jv.insert(rpcConstants::rigControlRitFreq, ritFreq().getValue());
+    jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
 
     QJsonDocument json(jv);
 
@@ -88,6 +104,8 @@ void RigState::unpack(QString s)
         _status.setValue(json.object().value(rpcConstants::rigControlStatus).toString());
         _freq.setValue(json.object().value(rpcConstants::rigControlFreq).toDouble());
         _mode.setValue(json.object().value(rpcConstants::rigControlMode).toString());
+        _ritFreq.setValue(json.object().value(rpcConstants::rigControlRitFreq).toDouble());
+        _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toString());
     }
     else
     {
@@ -113,4 +131,15 @@ MinosItem<double> RigState::freq() const
 MinosStringItem<QString> RigState::mode() const
 {
     return _mode;
+}
+
+
+MinosItem<double> RigState::ritFreq() const
+{
+    return _ritFreq;
+}
+
+MinosStringItem<QString> RigState::ritEnableStatus() const
+{
+    return _ritEnableStatus;
 }

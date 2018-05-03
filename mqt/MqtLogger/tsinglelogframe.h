@@ -139,7 +139,9 @@ private slots:
     void on_SetMode(QString);
     void on_SetFreq(QString);
     void on_SetRadioStatus(QString);
-    void on_SetRadioTxVertState(QString s);
+    //void on_SetRadioTxVertState(QString s);
+    void on_SetRadioTxVertState(bool s);
+    void on_SetRitEnableState(bool s);
 
     void on_RotatorLoaded();
     void on_RotatorList(QString);
@@ -158,7 +160,9 @@ private slots:
     void sendRotator(rpcConstants::RotateDirection direction, int angle );
     void sendRotatorPreset(QString);
     void sendRadioFreq(QString);
+    void sendRadioRitFreq(QString freq);
     void sendRadioMode(QString);
+    void sendRadioRitStatus(QString status);
 
     void sendSelectRadio(const QString &, const QString &mode);
     void sendSelectRotator(const QString &);

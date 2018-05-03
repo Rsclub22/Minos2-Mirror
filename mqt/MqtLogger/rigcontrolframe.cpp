@@ -41,6 +41,8 @@ static QKeySequence runButShiftShortCut[] {
 
 };
 
+const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; padding: 3px;\n");
+const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; padding: 3px;\n");
 
 
 RigControlFrame::RigControlFrame(QWidget *parent):
@@ -53,6 +55,9 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     , freqEditOn(false)
     , curFreq(memDefData::DEFAULT_FREQ)
     , curMode("")
+    , ritEnable(false)
+    , ritOn(false)
+    , curRit("0.00")
     , radioName(NORADIO)
     , radioState("None")
 {
@@ -119,9 +124,15 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
     ui->modelbl->setText(" ");
 
+    // main freq tuning
     //connect(ui->freqInput, SIGNAL(lostFocus()), this, SLOT(exitFreqEdit()));
     connect(ui->freqInput, SIGNAL(freqEditReturn()), this, SLOT(returnChangeRadioFreq()));
-    connect(ui->freqInput, SIGNAL(newFreq()), this, SLOT(changeRadioFreq()));
+    connect(ui->freqInput, SIGNAL(newFreq()), this, SLOT(changeMainRadioFreq()));
+
+    // rit freq tuning
+    connect(ui->RitButton, SIGNAL(clicked(bool)), this, SLOT(ritButtonSelected()));
+    connect(ui->RitEdit, SIGNAL(newFreq(QString)), this, SLOT(changeRitRadioFreq(QString)));
+
 
     // when no radio is connected
     connect(this, SIGNAL(noRadioSendFreq(QString)), this, SLOT(noRadioSetFreq(QString)));
@@ -199,9 +210,56 @@ void RigControlFrame::setFreq(QString f)
 }
 
 
-void RigControlFrame::changeRadioFreq()
+void RigControlFrame::changeRitRadioFreq(QString freq)
 {
-    traceMsg(QString("Change Radio Freq"));
+    traceMsg(QString("Change Rit Freq = %1").arg(freq));
+    if (ritEnable && ritOn)
+    {
+        emit sendRitFreq(freq);
+    }
+
+
+}
+
+void RigControlFrame::ritButtonSelected()
+{
+    static bool status = false;
+    traceMsg(QString("Rit Button Pressed"));
+    status = !status;
+    if (status)
+    {
+        ritOn = status;
+        showRitButOn();
+
+    }
+    else
+    {
+        changeRitRadioFreq("0000");  // turns off rit in hamlib
+        ritOn = status;
+        showRitButOff();
+
+    }
+
+}
+
+
+void RigControlFrame::showRitButOn()
+{
+    //ui->Rotate->setPalette(*redText);
+    ui->RitButton->setStyleSheet(RIT_BUTTON_ON_STYLE);
+    ui->RitButton->setText("RIT");
+}
+
+void RigControlFrame::showRitButOff()
+{
+    //ui->Rotate->setPalette(*blackText);
+    ui->RitButton->setStyleSheet(RIT_BUTTON_OFF_STYLE);
+    ui->RitButton->setText("RIT");
+}
+
+void RigControlFrame::changeMainRadioFreq()
+{
+    traceMsg(QString("Change Main Radio Freq"));
 
     QString newfreq = ui->freqInput->text().trimmed().remove('.');
     double f = convertStrToFreq(newfreq);
@@ -262,7 +320,7 @@ bool RigControlFrame::checkValidFreq(QString freq)
 
 void RigControlFrame::returnChangeRadioFreq()
 {
-    changeRadioFreq();
+    changeMainRadioFreq();
     exitFreqEdit();
 }
 
@@ -383,6 +441,14 @@ void RigControlFrame::exitFreqEdit()
     ui->freqInput->clearFocus();
 }
 
+void RigControlFrame::exitRitFreqEdit()
+{
+    traceMsg(QString("Exit Rit Edit Freq"));
+    //freqEditOn = false;
+    //setFreq(curFreq);
+    ritFreqLineEditFrameColour(false);
+    ui->RitEdit->clearFocus();
+}
 
 
 
@@ -394,6 +460,19 @@ void RigControlFrame::freqEditSelected()
     if (len > 5)
     {
        ui->freqInput->setCursorPosition(len - 5);
+    }
+
+
+}
+
+void RigControlFrame::freqRitEditSelected()
+{
+    traceMsg(QString("Freq Rit Edit Selected"));
+    ui->RitEdit->setFocus();
+    int len = ui->RitEdit->text().length();
+    if (len > 5)
+    {
+       ui->RitEdit->setCursorPosition(len - 5);
     }
 
 
@@ -683,23 +762,20 @@ void RigControlFrame::setRadioState(QString s)
 }
 
 
-void RigControlFrame::setRadioTxVertState(QString s)
+void RigControlFrame::setRadioTxVertState(bool s)
 {
-    if (s == TXVERT_ON)
-    {
-        ui->txvertStat->setVisible(true);
-        ui->TxVertLabel->setVisible(true);
-        ui->txvertStat->setText("On");
-    }
-    else
-    {
-        ui->txvertStat->setVisible(false);
-        ui->TxVertLabel->setVisible(false);
-    }
-
-
+    ui->txvertStat->setVisible(s);
+    ui->TxVertLabel->setVisible(s);
+    ui->txvertStat->setText("On");
+    ui->txvertStat->setVisible(s);
 }
 
+
+void RigControlFrame::setRitEnableState(bool s)
+{
+    ui->RitButton->setVisible(s);
+    ui->RitEdit->setVisible(s);
+}
 
 bool RigControlFrame::checkRadioState()
 {
@@ -776,6 +852,25 @@ void RigControlFrame::freqLineEditFrameColour(bool status)
     }
 
 }
+
+
+void RigControlFrame::ritFreqLineEditFrameColour(bool status)
+{
+    int curPos = ui->RitEdit->cursorPosition();
+    if (status)
+    {
+        ui->RitEdit->setStyleSheet("border: 1px solid red");
+        // restore cursor selection
+        ui->RitEdit->setSelection(curPos, 1);
+    }
+    else
+    {
+        ui->RitEdit->setStyleSheet("border: 1px solid black");
+
+    }
+
+}
+
 
 void RigControlFrame::freqPlus_ShortCut()
 {
@@ -1258,3 +1353,167 @@ void FreqLineEdit::changeFreq(bool direction)
    }
 }
 
+
+
+/****************************************** Rit Line Edit *********************************/
+
+
+
+RitLineEdit::RitLineEdit(QWidget *parent):
+    QLineEdit(parent)
+{
+
+}
+
+
+RitLineEdit::~RitLineEdit()
+{
+
+
+}
+
+
+
+void RitLineEdit::changeFreq(bool direction)
+{
+    static const double tuningData[] = {0.0, 1000.0, 0.0, 100.0, 10.0};  // 0 is either +/- position or . position in display
+
+    bool ok = false;
+    QString sfreq = text();
+    int sfreqLen = sfreq.length();
+    int pos = cursorPosition();
+    if (pos <= 0 || pos >= sfreqLen)
+    {
+        return;
+    }
+    const double tuneStep = tuningData[pos];
+
+
+    sfreq = sfreq.trimmed();
+
+
+    double freq = sfreq.toDouble(&ok) * 1000;
+
+    if (ok)
+    {
+        if (direction)
+        {
+            freq += tuneStep;
+            if (freq >= 10000)
+            {
+                freq -= tuneStep;
+            }
+        }
+        else
+        {
+            freq -= tuneStep;
+            if (freq <= -10000)
+            {
+                freq += tuneStep;
+            }
+        }
+
+        // display rit freq
+        sfreq = convertRitFreqToStr(freq);
+        trace(QString("Change Rit Freq: Rit Tuning = %1").arg(sfreq));
+        setText(sfreq);
+
+        // send to radio
+        sfreq = sfreq.append('0').remove('.');
+        emit newFreq(sfreq);
+
+        setCursorPosition(pos);
+   }
+}
+
+
+
+QString RitLineEdit::convertRitFreqToStr(double freq)
+{
+
+    bool negNum = false;
+    if (freq == 0.0)
+    {
+        return QString("+0.00");
+    }
+
+    QString rfreq = convertFreqToStr(freq);
+
+
+    if (rfreq[0] == '-')
+    {
+        negNum = true;
+        rfreq = rfreq.remove('-');
+    }
+
+    if (rfreq.count() == 2)
+    {
+        rfreq = QString("0.0" + rfreq).left(4);
+    }
+    if (rfreq.count() == 3)
+    {
+        rfreq = QString("0." + rfreq).left(4);
+    }
+    if (rfreq.count() == 4)
+    {
+        rfreq = rfreq.insert(1, '.').left(4);
+    }
+
+    if (negNum)
+    {
+        rfreq = rfreq.prepend('-');
+    }
+    else
+    {
+        rfreq = rfreq.prepend('+');
+    }
+
+
+    return rfreq;
+
+}
+
+
+
+
+void RitLineEdit::wheelEvent(QWheelEvent *event)
+{
+    int numDegrees = event->delta() / 8;
+    int numTicks = numDegrees / 15;
+
+    if (numTicks == 1)
+    {
+       changeFreq(true);
+    }
+    else
+    {
+        changeFreq(false);
+    }
+
+    event->accept();
+}
+
+
+void RitLineEdit::keyPressEvent(QKeyEvent *event)
+{
+
+    if(event->key() == Qt::Key_Up)
+    {
+        changeFreq(true);
+    }
+    else if(event->key() == Qt::Key_Down)
+    {
+        changeFreq(false);
+
+    }
+    else if (event->key() == Qt::Key_Return)
+    {
+        emit freqEditReturn();
+        return;
+    }
+    else
+    {
+        // default handler for event
+        QLineEdit::keyPressEvent(event);
+    }
+}

@@ -20,12 +20,14 @@ class RigDetails: public PubSubValue
     MinosItem<double> _transverterOffset;
     MinosItem<int> _transverterSwitch;
     MinosItem<bool> _transverterStatus;
+    MinosItem<bool> _ritEnableStatus;
     MinosStringItem<QString> _bandList;
 
 public:
     RigDetails();
     RigDetails(QString s);
-    RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &sel);
+    //RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &sel), bool &ritst;
+    RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &sel, const bool &ritst);
 
     bool isDirty() const;
     void clearDirty();
@@ -38,6 +40,7 @@ public:
     MinosItem<double> transverterOffset() const;
     MinosItem<int> transverterSwitch() const;
     MinosItem<bool> transverterStatus() const;
+    MinosItem<bool> ritEnableStatus() const;
     MinosStringItem<QString> bandList() const;
 
     void setSelected(const QString &selected);
@@ -45,6 +48,7 @@ public:
     void setTransverterSwitch(int transverterSwitch);
     void setTransverterStatus(bool transverterStatus);
     void setBandList(const QString &bandList);
+    void setRitEnableStatus(bool ritEnableStatus);
 };
 
 

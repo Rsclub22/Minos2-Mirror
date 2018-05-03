@@ -105,6 +105,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(ui->FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
 
     connect(ui->FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
+    connect(ui->FKHRigControlFrame, SIGNAL(sendRitFreq(QString)), this, SLOT(sendRadioRitFreq(QString)));
+    connect(ui->FKHRigControlFrame, SIGNAL(ritStatus(QString)), this, SLOT(sendRadioRitStatus(QString)));
     connect(ui->FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(ui->GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
@@ -888,11 +890,19 @@ void TSingleLogFrame::on_SetRadioStatus(QString s)
 }
 
 
-void TSingleLogFrame::on_SetRadioTxVertState(QString s)
+void TSingleLogFrame::on_SetRadioTxVertState(bool s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         ui->FKHRigControlFrame->setRadioTxVertState(s);
+    }
+}
+
+void TSingleLogFrame::on_SetRitEnableState(bool s)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        ui->FKHRigControlFrame->setRitEnableState(s);
     }
 }
 
@@ -908,6 +918,26 @@ void TSingleLogFrame::sendRadioFreq(QString freq)
         LogContainer->sendDM->sendRigControlFreq(this, freq);
     }
 }
+
+void TSingleLogFrame::sendRadioRitFreq(QString freq)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigControlRitFreq(this, freq);
+    }
+}
+
+
+void TSingleLogFrame::sendRadioRitStatus(QString status)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigControlRitStatus(this, status);
+    }
+}
+
 
 void TSingleLogFrame::sendRadioMode(QString mode)
 {

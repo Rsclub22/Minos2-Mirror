@@ -43,8 +43,10 @@ public:
     void setTransverterSwitch(const PubSubName &name, int transverterSwitch);
     void setTransverterStatus(const PubSubName &name, bool transverterStatus);
     void setBandList(const PubSubName &name, const QString &bands);
-
+    void setRitFreq(const PubSubName &name, double freq);
+    void setRitEnableStatus(const PubSubName &name, bool ritEnableStatus);
     void addRigList(const QString &s);
+
     QVector<PubSubName> getRigList()
     {
         return rigList;

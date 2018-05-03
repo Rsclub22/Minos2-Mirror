@@ -97,7 +97,9 @@ public:
     void setFreq(QString);
     void setRadioName(QString, QString mode);
     void setRadioState(QString);
-    void setRadioTxVertState(QString s);
+    //void setRadioTxVertState(QString s);
+    void setRadioTxVertState(bool s);
+    void setRitEnableState(bool s);
 
     bool isRadioLoaded();
 
@@ -117,6 +119,7 @@ public:
     void on_ContestPageChanged();
 
 
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -124,6 +127,7 @@ signals:
     void noRadioSendFreq(QString);
     void noRadioSendMode(QString);
     void sendModeToControl(QString);
+    void sendRitFreq(QString);
 
 
 private slots:
@@ -138,12 +142,16 @@ private slots:
     void freqNegShortCut_clicked(bool);
     void freqPlus_ShortCut();
     void freqNeg_ShortCut();
-
-
+    void changeMainRadioFreq();
+    void changeRitRadioFreq(QString);
     void on_radioNameSel_activated(const QString &arg1);
 
+
+    void exitRitFreqEdit();
+    void freqRitEditSelected();
+    void ritButtonSelected();
 public slots:
-    void changeRadioFreq();
+
 
     void returnChangeRadioFreq();
 
@@ -178,6 +186,10 @@ private:
     QString curFreq;
     QString curMode;
 
+    bool ritEnable;
+    bool ritOn;
+    QString curRit;
+
     QStringList listOfRadios;
     QString radioName;
     QString rigAppName;
@@ -190,6 +202,8 @@ private:
     void sendModeToRadio(QString);
     void freqLineEditBkgnd(bool status);
     void freqLineEditFrameColour(bool status);
+
+    void ritFreqLineEditFrameColour(bool status);
 
     void initRigFrame(QWidget *parent);
     void initPassBandRadioButtons();
@@ -213,6 +227,8 @@ private:
     void freqPlusMinusButton(double freq);
 
 
+    void showRitButOn();
+    void showRitButOff();
 };
 
 
@@ -239,5 +255,35 @@ private:
     void keyPressEvent(QKeyEvent *event);
 
 } ;
+
+
+
+class RitLineEdit : public QLineEdit
+{
+    Q_OBJECT
+
+public:
+
+    RitLineEdit(QWidget *parent);
+    ~RitLineEdit();
+    void changeFreq(bool direction);
+
+signals:
+    void receivedFocus() ;
+    void lostFocus();
+    void newFreq(QString);
+    void freqEditReturn();
+private:
+
+
+    void wheelEvent(QWheelEvent *event);
+    void keyPressEvent(QKeyEvent *event);
+
+
+
+
+    QString convertRitFreqToStr(double freq);
+} ;
+
 
 #endif // RIGCONTROLFRAME_H

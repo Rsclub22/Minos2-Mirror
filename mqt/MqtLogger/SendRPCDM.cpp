@@ -246,6 +246,45 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 
     rpc.queueCall( rigSelected );
 }
+
+
+
+void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
+{
+    PubSubName rigSelected = rigCache.getSelected();
+    rigCache.setFreq(rigSelected, convertStrToFreq(freq));
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+    st->addMember( freq, rpcConstants::rigControlRitFreq );
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+}
+
+
+void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf,const QString &status)
+{
+    PubSubName rigSelected = rigCache.getSelected();
+    rigCache.setMode(rigSelected, status);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+    st->addMember( status, rpcConstants::rigRitOnOff );
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+}
+
+
+
+
+
+
 void TSendDM::sendRotatorPreset(QString s)
 {
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
@@ -354,8 +393,13 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                             }
                             if (selDetail.transverterStatus().isDirty())
                             {
-                                trace(QString("SendRPC Rig set transverter status ") + (selDetail.transverterStatus().getValue()?TXVERT_ON:TXVERT_OFF));
-                                tslf->on_SetRadioTxVertState( selDetail.transverterStatus().getValue()?TXVERT_ON:TXVERT_OFF );
+                                trace(QString("SendRPC Rig set transverter status ") + (selDetail.transverterStatus().getValue() ? " True" : " False"));
+                                tslf->on_SetRadioTxVertState( selDetail.transverterStatus().getValue() );
+                            }
+                            if (selDetail.ritEnableStatus().isDirty())
+                            {
+                                trace(QString("SendRPC Rig set ritEnable status ") + (selDetail.ritEnableStatus().getValue() ? " True" : " False"));
+                                tslf->on_SetRitEnableState( selDetail.ritEnableStatus().getValue());
                             }
                             selDetail.clearDirty();
 

@@ -70,6 +70,8 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         QSharedPointer<RPCParam> psMode;
         QSharedPointer<RPCParam> psName;
         QSharedPointer<RPCParam> psSelect;
+        QSharedPointer<RPCParam> psRitFreq;
+        QSharedPointer<RPCParam> psRitStatus;
 
         RPCArgs *args = mro->getCallArgs();
         if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psFreq ))
@@ -121,6 +123,29 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 // here you handle what the logger has sent to us
                 trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
                 emit (setMode(mode));
+            }
+        }
+        if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psRitFreq ))
+        {
+            QString ritFreq;
+
+
+            if ( psRitFreq->getString( ritFreq ) )
+            {
+                // here you handle what the logger has sent to us
+                trace(QString("Rig RPC: Rit Freq Command From Logger = %1").arg(ritFreq));
+                emit (setRitFreq(ritFreq));
+            }
+        }
+        else if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psRitStatus ) )
+        {
+            QString ritStatus;
+
+            if ( psRitStatus->getString( ritStatus ) )
+            {
+                // here you handle what the logger has sent to us
+                trace(QString("Rig RPC: Rit Status Command From Logger = %1").arg(ritStatus));
+                emit (setRitStatus(ritStatus));
             }
         }
     }
