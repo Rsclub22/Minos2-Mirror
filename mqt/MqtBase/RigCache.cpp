@@ -209,6 +209,10 @@ void RigCache::setRitEnableStatus(const PubSubName &name, bool ritEnableStatus)
 {
     rigDetails[name].setRitEnableStatus(ritEnableStatus);
 }
+void RigCache::setRitOnOffStatus(const PubSubName &name, bool status)
+{
+    rigDetails[name].setRitOnOffStatus(status);
+}
 
 void RigCache::publishState()
 {

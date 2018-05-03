@@ -45,6 +45,7 @@ public:
     void setBandList(const PubSubName &name, const QString &bands);
     void setRitFreq(const PubSubName &name, double freq);
     void setRitEnableStatus(const PubSubName &name, bool ritEnableStatus);
+    void setRitOnOffStatus(const PubSubName &name, bool status);
     void addRigList(const QString &s);
 
     QVector<PubSubName> getRigList()

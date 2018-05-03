@@ -126,7 +126,7 @@ static const QString rigControlTxVertStatus = QT_TR_NOOP("TransVertStatus");
 static const QString rigControlTxVertOffsetFreq = QT_TR_NOOP("TransVertOffSetFreq");
 static const QString rigControlTxVertSwitch   = QT_TR_NOOP("TransVertSwitch");
 static const QString rigControlRitFreq        = QT_TR_NOOP("RitFrequency");
-static const QString rigRitOnOff              = QT_TR_NOOP("RitOnOff");
+static const QString rigRitOnOffStatus            = QT_TR_NOOP("RitOnOffStatus");
 static const QString rigRitEnableStatus       = QT_TR_NOOP("RitEnableStatus");
 }
 #endif // RPCCOMMANDRCONSTANTS_H

@@ -230,6 +230,7 @@ void RigControlFrame::ritButtonSelected()
     {
         ritOn = status;
         showRitButOn();
+        emit ritStatus(status);
 
     }
     else
@@ -237,6 +238,7 @@ void RigControlFrame::ritButtonSelected()
         changeRitRadioFreq("0000");  // turns off rit in hamlib
         ritOn = status;
         showRitButOff();
+        emit ritStatus(status);
 
     }
 

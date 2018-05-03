@@ -265,16 +265,16 @@ void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
 }
 
 
-void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf,const QString &status)
+void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
 {
     PubSubName rigSelected = rigCache.getSelected();
-    rigCache.setMode(rigSelected, status);
+    rigCache.setRitEnableStatus(rigSelected, status);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
-    st->addMember( status, rpcConstants::rigRitOnOff );
+    st->addMember( status, rpcConstants::rigRitOnOffStatus);
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );

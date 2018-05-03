@@ -125,7 +125,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 emit (setMode(mode));
             }
         }
-        if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psRitFreq ))
+        if ( args->getStructArgMember( 0, rpcConstants::rigControlRitFreq, psRitFreq ))
         {
             QString ritFreq;
 
@@ -137,7 +137,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 emit (setRitFreq(ritFreq));
             }
         }
-        else if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psRitStatus ) )
+        else if ( args->getStructArgMember( 0, rpcConstants::rigRitOnOffStatus, psRitStatus ) )
         {
             QString ritStatus;
 

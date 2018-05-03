@@ -162,7 +162,7 @@ private slots:
     void sendRadioFreq(QString);
     void sendRadioRitFreq(QString freq);
     void sendRadioMode(QString);
-    void sendRadioRitStatus(QString status);
+    void sendRadioRitStatus(bool status);
 
     void sendSelectRadio(const QString &, const QString &mode);
     void sendSelectRotator(const QString &);

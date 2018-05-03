@@ -57,7 +57,7 @@ class TSendDM : public QObject
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);
       void sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq);
-      void sendRigControlRitStatus(TSingleLogFrame *tslf,const QString &status);
+      void sendRigControlRitStatus(TSingleLogFrame *tslf,const bool &status);
 
       QStringList rotators();
       QStringList rigs();

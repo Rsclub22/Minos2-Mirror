@@ -107,7 +107,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
     sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
 
-    enableRitDisplay(false);
+    setRitDisplayVisible(false);
 
     if (appName.length() > 0)
     {
@@ -427,6 +427,14 @@ void RigControlMainWindow::upDateRadio()
                     writeWindowTitle(appName);
                     sendStatusToLogConnected();
                     sendBandListLogger();
+                    if (setupRadio->currentRadio.ritAvail && setupRadio->currentRadio.ritEnable)
+                    {
+                        setRitDisplayVisible(true);
+                    }
+                    else
+                    {
+                        setRitDisplayVisible(false);
+                    }
                     sendRitEnableStatusLogger();
                     dumpRadioToTraceLog();
 
@@ -1108,7 +1116,7 @@ int RigControlMainWindow::getMinosModeIndex(QString mode)
     return index;
 }
 
-void RigControlMainWindow::enableRitDisplay(bool state)
+void RigControlMainWindow::setRitDisplayVisible(bool state)
 {
     ui->ritLbl->setVisible(state);
     ui->ritFreq->setVisible(state);

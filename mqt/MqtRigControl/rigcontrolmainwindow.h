@@ -157,7 +157,7 @@ private:
 
     void chkRadioMgmModeChanged();
     void dumpRadioToTraceLog();
-    void enableRitDisplay(bool state);
+    void setRitDisplayVisible(bool state);
     int getRitFreq(vfo_t vfo);
     int setRitFreq(vfo_t vfo, shortfreq_t ritFreq);
     void cmdLockOn();

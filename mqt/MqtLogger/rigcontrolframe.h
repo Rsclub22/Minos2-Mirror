@@ -60,6 +60,7 @@ signals:
     void clearActionSelected(int);
     void selectRadio(QString);
 
+
 };
 
 class quickBandSelData
@@ -128,7 +129,7 @@ signals:
     void noRadioSendMode(QString);
     void sendModeToControl(QString);
     void sendRitFreq(QString);
-
+    void ritStatus(bool);
 
 private slots:
     void on_FontChanged();
