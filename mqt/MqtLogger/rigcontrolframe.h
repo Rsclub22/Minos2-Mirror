@@ -281,9 +281,6 @@ private:
     void keyPressEvent(QKeyEvent *event);
 
 
-
-
-    QString convertRitFreqToStr(double freq);
 } ;
 
 

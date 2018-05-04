@@ -7,13 +7,15 @@ RigState::RigState()
     qRegisterMetaType< RigState > ( "RigState" );
     _freq.setInitialValue(0.0);
 }
-RigState::RigState(const QString &status, const QString &sel, int f, const QString &m)
+RigState::RigState(const QString &status, const QString &sel, int f, const QString &m, double ritf, QString &rites)
     :PubSubValue(RigStateType)
 {
     _status.setValue(status);
     _selected.setValue(sel);
     _freq.setValue(f);
     _mode.setValue(m);
+    _ritFreq.setValue(ritf);
+    _ritEnableStatus.setValue(rites);
 }
 RigState::RigState(QString s)
     :PubSubValue(RigStateType)

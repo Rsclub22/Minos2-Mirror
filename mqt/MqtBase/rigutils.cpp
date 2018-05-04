@@ -425,3 +425,55 @@ QString convertSinglePeriodFreqToMultiPeriod(QString f)
 
 }
 
+
+
+
+
+QString convertRitFreqToStr(double freq)
+{
+
+    bool negNum = false;
+    if (freq == 0.0)
+    {
+        return QString("+0.00");
+    }
+
+    QString rfreq = convertFreqToStr(freq);
+
+
+    if (rfreq[0] == '-')
+    {
+        negNum = true;
+        rfreq = rfreq.remove('-');
+    }
+
+    if (rfreq.count() == 2)
+    {
+        rfreq = QString("0.0" + rfreq).left(4);
+    }
+    if (rfreq.count() == 3)
+    {
+        rfreq = QString("0." + rfreq).left(4);
+    }
+    if (rfreq.count() == 4)
+    {
+        rfreq = rfreq.insert(1, '.').left(4);
+    }
+
+    if (negNum)
+    {
+        rfreq = rfreq.prepend('-');
+    }
+    else
+    {
+        rfreq = rfreq.prepend('+');
+    }
+
+
+    return rfreq;
+
+}
+
+
+
+

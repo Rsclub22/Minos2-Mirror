@@ -25,8 +25,8 @@ class RigState: public PubSubValue
 public:
     RigState();
     RigState(QString s);
-    RigState(const QString &status, const QString &sel, int f, const QString &m);
-
+    //RigState(const QString &status, const QString &sel, int f, const QString &m);
+    RigState(const QString &status, const QString &sel, int f, const QString &m, double ritF, QString &rites);
 
     bool isDirty() const;
     void clearDirty();

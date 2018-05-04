@@ -179,6 +179,8 @@ private:
     void loadBands();
 
     void sendTransVertSwitchToComPort(const QString &swNum);
+    void sendRitFreqLogger(double ritFreq);
+
 private slots:
 
     void onStdInRead(QString);
@@ -202,6 +204,7 @@ private slots:
     void onLaunchSetup();
 
 
+    void setRitFreqStr(QString ritFreq);
 signals:
 
 

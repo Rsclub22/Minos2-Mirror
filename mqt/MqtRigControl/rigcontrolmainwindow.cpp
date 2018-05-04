@@ -229,6 +229,7 @@ void RigControlMainWindow::initActionsConnections()
 
     // Message from Logger
     connect(msg, SIGNAL(setFreq(QString)), this, SLOT(loggerSetFreq(QString)));
+    connect(msg, SIGNAL(setRitFreq(QString)), this, SLOT(setRitFreqStr(QString)));
     connect(msg, SIGNAL(setMode(QString)), this, SLOT(loggerSetMode(QString)));
     connect(msg, SIGNAL(selectLoggerRadio(PubSubName, QString)), this, SLOT(onSelectRadio(PubSubName, QString)));
 
@@ -688,20 +689,20 @@ void RigControlMainWindow::getRadioInfo()
 
 
 
-    /*
-            if (supRitFlag)
-            {
-                logMessage((QString("Get RIT")));
-                retCode = getRitFreq(RIG_VFO_CURR);
-                if (retCode < 0)
-                {
-                    // error
-                    logMessage(QString("Get radioInfo: Get RIT error").arg(QString::number(retCode)));
-                    hamlibError(retCode, "Request RIT");
-                }
-            }
 
-    */
+    if (radio->get_serialConnected() && setupRadio->currentRadio.ritEnable && setupRadio->currentRadio.ritEnable)
+    {
+        logMessage((QString("Get RIT")));
+        retCode = getRitFreq(RIG_VFO_CURR);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get RIT error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request RIT");
+        }
+    }
+
+
     msg->rigCache.publish();
 }
 
@@ -1138,6 +1139,24 @@ int RigControlMainWindow::getRitFreq(vfo_t vfo)
 }
 
 
+void RigControlMainWindow::setRitFreqStr(QString ritFreq)
+{
+    if (setupRadio->currentRadio.ritEnable)
+    {
+        int retCode = 0;
+        shortfreq_t rFreq = ritFreq.toLong();
+        retCode = setRitFreq(RIG_VFO_CURR, rFreq);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Set RIT freq error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Set RIT Freq.");
+        }
+    }
+}
+
+
+
 int RigControlMainWindow::setRitFreq(vfo_t vfo, shortfreq_t ritFreq)
 {
     int retCode = 0;
@@ -1147,6 +1166,17 @@ int RigControlMainWindow::setRitFreq(vfo_t vfo, shortfreq_t ritFreq)
     cmdLockOff();
     return retCode;
 
+}
+
+void RigControlMainWindow::sendRitFreqLogger(double ritFreq)
+{
+    if (appName.length() > 0)
+    {
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setRitFreq(psname, ritFreq);
+        logMessage(QString("Send Rit freq to logger = %1 psn=%2").arg(convertRitFreqToStr(ritFreq)).arg(psname.toString()));
+
+    }
 }
 
 void RigControlMainWindow::displayPassband(pbwidth_t width)

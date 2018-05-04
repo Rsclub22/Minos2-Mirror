@@ -32,4 +32,7 @@ bool valInputFreq(QString f, QString errMsg);
 
 QString convertSinglePeriodFreqToMultiPeriod(QString f);
 QString convertFreqToFullDigit(QString f);
+
+QString convertRitFreqToStr(double freq);
+
 #endif // RIGUTILS_H
