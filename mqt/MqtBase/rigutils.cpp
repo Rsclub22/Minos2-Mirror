@@ -451,11 +451,11 @@ QString convertRitFreqToStr(double freq)
     {
         rfreq = QString("0.0" + rfreq).left(4);
     }
-    if (rfreq.count() == 3)
+    else if (rfreq.count() == 3)
     {
         rfreq = QString("0." + rfreq).left(4);
     }
-    if (rfreq.count() == 4)
+    else if (rfreq.count() == 4)
     {
         rfreq = rfreq.insert(1, '.').left(4);
     }

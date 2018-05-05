@@ -139,9 +139,9 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         }
         else if ( args->getStructArgMember( 0, rpcConstants::rigRitOnOffStatus, psRitStatus ) )
         {
-            QString ritStatus;
+            bool ritStatus;
 
-            if ( psRitStatus->getString( ritStatus ) )
+            if ( psRitStatus->getBoolean( ritStatus ) )
             {
                 // here you handle what the logger has sent to us
                 trace(QString("Rig RPC: Rit Status Command From Logger = %1").arg(ritStatus));

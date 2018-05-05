@@ -76,6 +76,7 @@ private:
     rmode_t logMode;
     QString selTvBand;      // selected band from radio
     QString transVertSwNum;
+    bool logRitOn;
 
     const int PASSBAND_NOCHANGE = -1;
 
@@ -181,6 +182,10 @@ private:
     void sendTransVertSwitchToComPort(const QString &swNum);
     void sendRitFreqLogger(double ritFreq);
 
+    void setRitEnableDisplayVisible(bool s);
+    void setRitOnOffDisplayVisible(bool s);
+    void setRitOnOffDisplay(bool s);
+    void setRitEnableDisplay(bool s);
 private slots:
 
     void onStdInRead(QString);
@@ -205,6 +210,7 @@ private slots:
 
 
     void setRitFreqStr(QString ritFreq);
+    void setRitLogStatus(bool status);
 signals:
 
 

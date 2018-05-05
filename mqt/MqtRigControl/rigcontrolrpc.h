@@ -39,7 +39,7 @@ signals:
     void setMode(QString);
     void selectLoggerRadio(PubSubName, QString);
     void setRitFreq(QString);
-    void setRitStatus(QString);
+    void setRitStatus(bool);
 
 private slots:
     void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from );

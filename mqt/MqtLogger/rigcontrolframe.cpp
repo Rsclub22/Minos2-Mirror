@@ -777,6 +777,7 @@ void RigControlFrame::setRitEnableState(bool s)
 {
     ui->RitButton->setVisible(s);
     ui->RitEdit->setVisible(s);
+    ritEnable = s;
 }
 
 bool RigControlFrame::checkRadioState()

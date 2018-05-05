@@ -107,7 +107,12 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
     sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
 
-    setRitDisplayVisible(false);
+    logRitOn = false;
+    setRitOnOffDisplayVisible(logRitOn);
+    setRitOnOffDisplay(logRitOn);
+
+
+
 
     if (appName.length() > 0)
     {
@@ -230,6 +235,7 @@ void RigControlMainWindow::initActionsConnections()
     // Message from Logger
     connect(msg, SIGNAL(setFreq(QString)), this, SLOT(loggerSetFreq(QString)));
     connect(msg, SIGNAL(setRitFreq(QString)), this, SLOT(setRitFreqStr(QString)));
+    connect(msg, SIGNAL(setRitStatus(bool)), this, SLOT(setRitLogStatus(bool)));
     connect(msg, SIGNAL(setMode(QString)), this, SLOT(loggerSetMode(QString)));
     connect(msg, SIGNAL(selectLoggerRadio(PubSubName, QString)), this, SLOT(onSelectRadio(PubSubName, QString)));
 
@@ -431,10 +437,12 @@ void RigControlMainWindow::upDateRadio()
                     if (setupRadio->currentRadio.ritAvail && setupRadio->currentRadio.ritEnable)
                     {
                         setRitDisplayVisible(true);
+                        setRitOnOffDisplayVisible(true);
                     }
                     else
                     {
                         setRitDisplayVisible(false);
+                        setRitOnOffDisplayVisible(false);
                     }
                     sendRitEnableStatusLogger();
                     dumpRadioToTraceLog();
@@ -1132,8 +1140,7 @@ int RigControlMainWindow::getRitFreq(vfo_t vfo)
     retCode = radio->getRit(vfo, &rRitFreq);
     if (retCode == RIG_OK)
     {
-        sRitFreq = QString::number(rRitFreq);
-        ui->ritFreq->setText(sRitFreq);
+        ui->ritFreq->setText(convertRitFreqToStr(rRitFreq));
     }
     return retCode;
 }
@@ -1178,6 +1185,12 @@ void RigControlMainWindow::sendRitFreqLogger(double ritFreq)
 
     }
 }
+
+void RigControlMainWindow::setRitLogStatus(bool status)
+{
+    logRitOn = status;
+    setRitOnOffDisplay(logRitOn);
+ }
 
 void RigControlMainWindow::displayPassband(pbwidth_t width)
 {
@@ -1486,7 +1499,25 @@ void RigControlMainWindow::sendRitEnableStatus(bool status)
 }
 
 
+void RigControlMainWindow::setRitOnOffDisplayVisible(bool s)
+{
+    ui->RitOnOffLbl->setVisible(s);
+    ui->RitOnffStatLbl->setVisible(s);
+}
 
+void RigControlMainWindow::setRitOnOffDisplay(bool s)
+{
+    if (s)
+    {
+        ui->RitOnffStatLbl->setText("On");
+    }
+    else
+    {
+        {
+            ui->RitOnffStatLbl->setText("Off");
+        }
+    }
+}
 
 void RigControlMainWindow::onLaunchSetup()
 {
