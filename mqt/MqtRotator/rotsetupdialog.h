@@ -124,6 +124,7 @@ private:
     void loadSettingsToTab(int tabNum);
     void getAvailAntenna(int antNum, QSettings &config);
     void initSetup();
+    void closeEvent(QCloseEvent *event) override;
 };
 
 #endif // SETUPDIALOG_H

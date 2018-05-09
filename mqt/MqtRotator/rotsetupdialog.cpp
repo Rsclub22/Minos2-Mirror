@@ -252,11 +252,21 @@ void RotSetupDialog::setTabToCurrentAntenna()
 }
 
 
+
+
+
 void RotSetupDialog::saveButtonPushed()
 {
 
     saveSettings();
 
+}
+
+
+void RotSetupDialog::closeEvent (QCloseEvent *event)
+{
+    cancelButtonPushed();
+    QWidget::closeEvent(event);
 }
 
 

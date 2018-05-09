@@ -433,9 +433,11 @@ int RigSetupDialog::comportAvial(int radioNum, QString comport)
 
 
 
-
-
-
+void RigSetupDialog::closeEvent (QCloseEvent *event)
+{
+    cancelButtonPushed();
+    QWidget::closeEvent(event);
+}
 
 void RigSetupDialog::saveButtonPushed()
 {
