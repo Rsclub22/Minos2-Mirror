@@ -68,6 +68,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     initRunMemoryButton();
 
+    showRitButOff();
+
     mgmLabelVisible(false);
 
     ui->txvertStat->setVisible(false);
@@ -231,6 +233,8 @@ void RigControlFrame::ritButtonSelected()
         ritOn = status;
         showRitButOn();
         emit ritStatus(status);
+        // send current rit freq to radio
+        changeRitRadioFreq(ui->RitEdit->text().append('0').remove('.'));
 
     }
     else
@@ -243,6 +247,9 @@ void RigControlFrame::ritButtonSelected()
     }
 
 }
+
+
+
 
 
 void RigControlFrame::showRitButOn()
