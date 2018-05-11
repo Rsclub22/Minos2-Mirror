@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>464</width>
+    <width>480</width>
     <height>151</height>
    </rect>
   </property>
@@ -193,7 +193,7 @@
                <enum>QFrame::NoFrame</enum>
               </property>
               <property name="text">
-               <string>0000</string>
+               <string>000 </string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>

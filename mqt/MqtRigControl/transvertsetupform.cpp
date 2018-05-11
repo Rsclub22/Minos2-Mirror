@@ -151,37 +151,12 @@ void TransVertSetupForm::calcOffset()
     // check target freq in band
     if (transVertData->targetFreq >= transVertData->fLow && transVertData->targetFreq <= transVertData->fHigh)
     {
-        /*
-
-        // calculate offset
-        if (transVertData->transVertNegative)
-        {
-           transVertData->transVertOffset =  transVertData->radioFreq - transVertData->targetFreq;
-        }
-        else
-        {
-            transVertData->transVertOffset = transVertData->targetFreq - transVertData->radioFreq;
-
-        }
-        */
-
         transVertData->transVertOffset = transVertData->targetFreq - transVertData->radioFreq;
-
         transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
+
         // display
         ui->offsetFreq->setText(transVertData->transVertOffsetStr);
 
-        /*
-        // check for negative offset
-        if (transVertData->radioFreq > transVertData->targetFreq)
-        {
-            transVertData->transVertNegative = true;
-        }
-        else
-        {
-            transVertData->transVertNegative = false;
-        }
-        */
         transVertOffsetOk = true;
         transVertValueChanged = true;
     }
@@ -193,9 +168,6 @@ void TransVertSetupForm::calcOffset()
         ui->targetFreq->setFocus();
         return;
     }
-
-
-
 
 }
 

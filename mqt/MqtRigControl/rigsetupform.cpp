@@ -1171,6 +1171,7 @@ void RigSetupForm::removeTransVerter()
     ui->transVertTab->removeTab(currentIndex);
     radioData->transVertNames.removeAt(currentIndex);
     radioData->transVertSettings.removeAt(currentIndex);
+    transVertTab.removeAt(currentIndex);
     radioData->numTransverters--;
     removedTransVertTabs.append(currentName);
 
