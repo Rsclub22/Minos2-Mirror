@@ -275,15 +275,11 @@ void RigSetupDialog::addRadio()
     // add the new radio
     int tabNum = numAvailRadios;
     addTab(tabNum, radioName);
-    addedRadioTabs.append(radioName);   // track added radios until save
     numAvailRadios++;
     radioTab[tabNum]->setupRadioModel(radioModel);
 
-    //loadSettingsToTab(tabNum);
-    //radioTab[tabNum]->radioValueChanged = true;
-    //saveRadio(tabNum);
     ui->radioTab->setCurrentIndex(tabNum);
-    //radioTab[tabNum]->setEnableRigDataEntry(false);
+
     emit radioTabChanged();
 
 }
@@ -334,12 +330,6 @@ void RigSetupDialog::removeRadio()
     ui->radioTab->removeTab(currentIndex);
     availRadioData.remove(currentIndex);
     availRadios.removeAt(currentIndex);
-    removeRadioTabs.append(currentName);            // save old name for deletion
-    // remove from availantenna file
-    //QString fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
-    //QSettings config(fileName, QSettings::IniFormat);
-    //config.remove(currentName);   // remove all keys for this group
-
     numAvailRadios--;
 
     emit radioTabChanged();
@@ -378,13 +368,8 @@ void RigSetupDialog::editRadioName()
             {
                 availRadioData[i]->radioName = text;  // update with new name
                 availRadios[i] = text;
-                renameRadioTabs.append(oldName);
-                // remove from availantenna file
-                //QString fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
-                //QSettings config(fileName, QSettings::IniFormat);
-                //config.remove(radioName);   // remove all keys for this group
-
-                saveRadio(tabNum);
+                radioTab[i]->radioNameChanged = true;
+                radioTab[i]->radioValueChanged = true;
 
             }
         }
@@ -393,10 +378,6 @@ void RigSetupDialog::editRadioName()
     {
         return;
     }
-
-
-    emit radioTabChanged();
-
 
 }
 
@@ -460,11 +441,8 @@ void RigSetupDialog::cancelButtonPushed()
         }
     }
 
-    if (addedRadioTabs.count() > 0 || removeRadioTabs.count() > 0 || renameRadioTabs.count() > 0 || change)
+    if (change)
     {
-        addedRadioTabs.clear();
-        removeRadioTabs.clear();
-        renameRadioTabs.clear();
         availRadios.clear();
         numAvailRadios = 0;
         availRadioData.clear();
@@ -507,47 +485,35 @@ void RigSetupDialog::saveSettings()
 
     QString fileNameTransVert;
 
-    addedRadioTabs.clear();
 
     QString fileNameRadio;
     fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
     QSettings configRadio(fileNameRadio, QSettings::IniFormat);
 
-    if (removeRadioTabs.count() > 0)
+    // get current list of saved radios, remove those that no longer exist
+    QStringList savedRadioNames = configRadio.childGroups();
+    int v = savedRadioNames.indexOf("Version");   // the section name
+    savedRadioNames.removeAt(v);
+
+    if (savedRadioNames.count() > 0)
     {
-        for (int i = 0; i < removeRadioTabs.count(); i++)
+        for (int i = 0; i < savedRadioNames.count(); i++)
         {
-            configRadio.beginGroup(removeRadioTabs[i]);
-            configRadio.remove("");   // remove all keys for this group
-            configRadio.endGroup();
-            fileNameTransVert = TRANSVERT_PATH_LOGGER + removeRadioTabs[i] + FILENAME_TRANSVERT_RADIOS;
-            if (QFile::exists(fileNameTransVert))
+            if (!availRadios.contains(savedRadioNames[i]))
             {
-                QFile::remove(fileNameTransVert);
+                configRadio.beginGroup(savedRadioNames[i]);        // entry no longer exists
+                configRadio.remove("");      // remove all keys for this group
+                configRadio.endGroup();
+                // remove transverters for this radio
+                fileNameTransVert = TRANSVERT_PATH_LOGGER + savedRadioNames[i] + FILENAME_TRANSVERT_RADIOS;
+                if (QFile::exists(fileNameTransVert))
+                {
+                    QFile::remove(fileNameTransVert);
+                }
             }
-
         }
-        removeRadioTabs.clear();
-
     }
 
-    if (renameRadioTabs.count() > 0)
-    {
-        for (int i = 0; i < renameRadioTabs.count(); i++)
-        {
-            configRadio.beginGroup(renameRadioTabs[i]);
-            configRadio.remove("");   // remove all keys for this group
-            configRadio.endGroup();
-            fileNameTransVert = TRANSVERT_PATH_LOGGER + renameRadioTabs[i] + FILENAME_TRANSVERT_RADIOS;
-            if (QFile::exists(fileNameTransVert))
-            {
-                QFile::remove(fileNameTransVert);
-            }
-
-        }
-        renameRadioTabs.clear();
-
-    }
 
 
     bool currRadioChanged = false;

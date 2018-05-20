@@ -284,11 +284,9 @@ void RotSetupDialog::cancelButtonPushed()
         }
     }
 
-    if (/*addedAntennaTabs.count() > 0 || removeAntennaTabs.count() > 0 || renameAntennaTabs.count() > 0 ||*/ change)
+    if (change)
     {
-        //addedAntennaTabs.clear();
-        //removeAntennaTabs.clear();
-        //renameAntennaTabs.clear();
+
         availAntennas.clear();
         numAvailAntennas = 0;
         availAntData.clear();
@@ -309,43 +307,35 @@ void RotSetupDialog::saveSettings()
     bool antennaNameChg = false;
     bool currentAntennaChanged = false;
 
-   // addedAntennaTabs.clear();
-
     QString fileName;
     fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
     QSettings config(fileName, QSettings::IniFormat);
-/*
-    for (int i = 0; i < removeAntennaTabs.count(); i++)
+
+    // get current list of saved antennas
+    QStringList savedAntNames = config.childGroups();
+    int v = savedAntNames.indexOf("Version");   // the section name
+    savedAntNames.removeAt(v);
+
+    if (savedAntNames.count() > 0)
     {
-        config.beginGroup(removeAntennaTabs[i]);
-        config.remove("");      // remove all keys for this group
-        config.endGroup();
+        for (int i = 0; i < savedAntNames.count(); i++)
+        {
+            if (!availAntennas.contains(savedAntNames[i]))
+            {
+                config.beginGroup(savedAntNames[i]);        // entry no longer exists
+                config.remove("");      // remove all keys for this group
+                config.endGroup();
+            }
+        }
     }
 
-    removeAntennaTabs.clear();
-*/
 
-/*
-    for (int i = 0; i < renameAntennaTabs.count(); i++)
-    {
-        config.beginGroup(renameAntennaTabs[i]);
-        config.remove("");   // remove all keys for this group
-        config.endGroup();
-    }
-    renameAntennaTabs.clear();
-*/
-
-    config.clear(); // clear everything
-
-    // and rewrite it
-
-    config.setValue("Version/version", "1");
 
 
     for (int i = 0; i < numAvailAntennas; i++)
     {
 
- //       if (antennaTab[i]->antennaValueChanged)
+        if (antennaTab[i]->antennaValueChanged)
         {
             config.beginGroup(availAntData[i]->antennaName);
             if (currentAntennaName == availAntData[i]->antennaName)
@@ -388,7 +378,7 @@ void RotSetupDialog::saveSettings()
             config.setValue("netAddress", availAntData[i]->networkAdd);
             config.setValue("netPort", availAntData[i]->networkPort);
             config.endGroup();
-//            antennaTab[i]->antennaValueChanged = false;
+            antennaTab[i]->antennaValueChanged = false;
 
         }
 
@@ -646,13 +636,12 @@ void RotSetupDialog::addAntenna()
   // add the new antenna
   int tabNum = numAvailAntennas;
   addTab(tabNum, antName);
-  //addedAntennaTabs.append(antName);
   numAvailAntennas++;
   antennaTab[tabNum]->setupRotatorModel(rotModel);
   //loadSettingsToTab(tabNum);
   //saveAntenna(tabNum);
   ui->antennaTab->setCurrentIndex(tabNum);
-  emit antennaTabChanged();
+  //emit antennaTabChanged();
 
 
 }
@@ -702,14 +691,9 @@ void RotSetupDialog::removeAntenna()
     ui->antennaTab->removeTab(currentIndex);
     availAntData.remove(currentIndex);
     availAntennas.removeAt(currentIndex);
-    // remove from availantenna file
-    //QString fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
-    //QSettings config(fileName, QSettings::IniFormat);
-    //config.remove(currentName);   // remove the whole section
-
     numAvailAntennas--;
 
-    emit antennaTabChanged();
+    //emit antennaTabChanged();
 
 
 
@@ -720,6 +704,7 @@ void RotSetupDialog::editAntennaName()
 {
     int tabNum = ui->antennaTab->currentIndex();
     QString antName = ui->antennaTab->tabText(tabNum);
+    QString oldName = antName;
     if (currentAntennaName == antName)
     {
         // can't change current antennaName
@@ -742,16 +727,8 @@ void RotSetupDialog::editAntennaName()
             {
                 availAntData[i]->antennaName = text;  // update with new name
                 availAntennas[i] = text;
-                // remove from availantenna file
-                //QString fileName;
-                //fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
-                //QSettings config(fileName, QSettings::IniFormat);
-                //config.beginGroup(antName);
-                //config.remove("");   // remove all keys for this group
-                //config.endGroup();
-
-                //saveAntenna(tabNum);
-
+                antennaTab[i]->antennaNameChanged = true;
+                antennaTab[i]->antennaValueChanged = true;
             }
         }
     }
@@ -760,10 +737,7 @@ void RotSetupDialog::editAntennaName()
         return;
     }
 
-
-    emit antennaTabChanged();
-
-
+    //emit antennaTabChanged();
 }
 
 

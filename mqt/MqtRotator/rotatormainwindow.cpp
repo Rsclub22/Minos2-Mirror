@@ -913,8 +913,17 @@ void RotatorMainWindow::upDateAntenna()
             openRotator();
             offSetDisplay->setText(QString::number(setupAntenna->currentAntenna.antennaOffset));
 
-       // don't display overlap if rotator doesn't support or user turned off overlap
+            // don't display overlap if rotator doesn't support or user turned off overlap
             toggleOverLapDisplay(setupAntenna->currentAntenna.overRunFlag);
+
+            if (setupAntenna->currentAntenna.simCwCcwCmd && !setupAntenna->currentAntenna.supportCwCcwCmd)           // want to use simCwCccwCmd?
+            {
+                cwCCWControlVisible(setupAntenna->currentAntenna.simCwCcwCmd);
+            }
+            else if (setupAntenna->currentAntenna.supportCwCcwCmd)
+            {
+                cwCCWControlVisible(true);
+            }
 
             dumpRotatorToTraceLog();
 
@@ -926,6 +935,7 @@ void RotatorMainWindow::upDateAntenna()
             {
                 sendStatusToLogDisConnected();
             }
+
             rotatorBearing = 9999;      // force display update
            // update logger
            if (appName.length() > 0)
@@ -1677,6 +1687,8 @@ void RotatorMainWindow::rot_right_button_off()
     ui->rot_right_button->setStyleSheet(BUTTON_OFF_STYLE);
     ui->rot_right_button->setText("(CW) Right");
 }
+
+
 
 void RotatorMainWindow::stop_button_on()
 {

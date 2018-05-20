@@ -57,10 +57,6 @@ public:
     QStringList availAntennas;
     int numAvailAntennas;
 
-    //QStringList addedAntennaTabs;     // tracked edited data
-    //QStringList removeAntennaTabs;
-    //QStringList renameAntennaTabs;   // old antenna names
-
 
     QString getCurrentAntenna() const;
     int getRotatorId(QString rotator);
