@@ -60,9 +60,9 @@ int RotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
     int retCode = 0;
     ROT *my_rot;
     my_rot = rot_init(rotNumber);
-    if (!my_rot == 0)
+    if (my_rot != nullptr)
     {
-            if (my_rot->caps->move == 0)
+            if (my_rot->caps->move == nullptr)
             {
                 *flag = false;
             }
@@ -83,7 +83,7 @@ int RotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
     int retCode = 0;
     ROT *my_rot;
     my_rot = rot_init(rotNumber);
-    if (!my_rot == 0)
+    if (my_rot != nullptr)
     {
         *maxRot = int(my_rot->caps->max_az);
         *minRot = int(my_rot->caps->min_az);
@@ -121,19 +121,7 @@ int RotControl::init(srotParams &selectedAntenna)
         return retcode = -14;
     }
 
-    /*   remove
-    // get rotator parameters
-    curRotParams.antennaName = selectedAntenna.antennaName;
-    curRotParams.baudrate =  selectedAntenna.baudrate;
-    curRotParams.antennaOffset = selectedAntenna.antennaOffset;
-    //rotParams.comport =
-    curRotParams.databits = selectedAntenna.databits;
-    curRotParams.stopbits = selectedAntenna.stopbits;
-    curRotParams.parity = getSerialParityCode(selectedAntenna.parity);
-    curRotParams.handshake = getSerialHandshakeCode(selectedAntenna.handshake);
-    curRotParams.serial_rate_max = my_rot->caps->serial_rate_max;
-    curRotParams.serial_rate_min = my_rot->caps->serial_rate_min;
-    */
+
 
     // load rotator params to open
     if (rig_port_e(selectedAntenna.portType) == RIG_PORT_SERIAL)
@@ -161,13 +149,7 @@ int RotControl::init(srotParams &selectedAntenna)
 
         set_serialConnected(true);
 
-        /* remove
-        // update rotator specific parameters
-        curRotParams.max_azimuth = my_rot->caps->max_az;
-        curRotParams.min_azimuth = my_rot->caps->min_az;
-        curRotParams.serial_rate_max = my_rot->caps->serial_rate_max;
-        curRotParams.serial_rate_min = my_rot->caps->serial_rate_min;
-        */
+
     }
     else
     {
@@ -204,7 +186,7 @@ void RotControl::getRotatorList()
     {
         capsList.clear();
         rot_load_all_backends();
-        rot_list_foreach(collect,0);
+        rot_list_foreach(collect, nullptr);
         qSort(capsList.begin(),capsList.end(),model_Sort);
         rotatorlistLoaded=true;
     }
@@ -249,7 +231,7 @@ int RotControl::getPortType(int rotNumber, rig_port_e *portType)
     int retCode = 0;
     ROT *my_rot;
     my_rot = rot_init(rotNumber);
-    if (!my_rot == 0)
+    if (my_rot != nullptr)
     {
         *portType = my_rot->caps->port_type;
         return retCode;
@@ -275,10 +257,6 @@ int RotControl::getModelInfo(QString rotModel, int *rotModelNumber, QString *rot
         }
 
         *rotModelNumber = number;
-
-        //modelInfo = modelInfo[1].split(',');
-        //if (modelInfo.length() > 0)
-
         *rotMfgName = modelInfo[1].trimmed();
         *rotModelName = modelInfo[2].trimmed();
         return 0;
@@ -291,92 +269,6 @@ int RotControl::getModelInfo(QString rotModel, int *rotModelNumber, QString *rot
 }
 
 
-
-
-/*
-
-int RotControl::getModelNumber(int idx)
-{
-    if(idx<0) return 0;
-    return capsList.at(idx)->rot_model;
-}
-
-const char * RotControl::getMfg_Name(int idx)
-{
-
-    if(idx<0) return 0;
-    return capsList.at(idx)->mfg_name;
-}
-
-
-
-
-const char * RotControl::getModel_Name(int idx)
-{
-
-    if(idx<0) return 0;
-    return capsList.at(idx)->model_name;
-}
-
-
-int RotControl::getRotatorModelIndex()
-{
-    int i;
-    QString t=curRotParams.rotatorModel;
-    t=t.remove(0,5);
-    t=t.simplified();
-    QStringList sl=t.split(",");
-    if(sl.count()==1) sl.append("");
-    for(i=0;i<capsList.count();i++)
-    {
-        if((capsList.at(i)->mfg_name==sl.at(0)) && (capsList.at(i)->model_name==sl.at(1)))
-        {
-            return i;
-        }
-    }
-    return -1;
-}
-
-
-
-
-
-azimuth_t RotControl::getMinAzimuth()
-{
-    return curRotParams.min_azimuth;
-}
-
-
-
-
-azimuth_t RotControl::getMaxAzimuth()
-{
-
-    return curRotParams.max_azimuth;
-}
-
-elevation_t RotControl::getMinElevation()
-{
-    return curRotParams.min_elevation;
-}
-
-
-elevation_t RotControl::getMaxElevation()
-{
-    return curRotParams.max_elevation;
-}
-
-int RotControl::getMaxBaudRate()
-{
-    return curRotParams.serial_rate_max;
-}
-
-
-int RotControl::getMinBaudRate()
-{
-    return curRotParams.serial_rate_min;
-}
-*/
 
 // stop azimuth rotation
 

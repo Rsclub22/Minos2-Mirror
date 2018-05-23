@@ -1800,6 +1800,19 @@ void RotatorMainWindow::sendStatusToLogError()
     sendStatusLogger();
 }
 
+
+void RotatorMainWindow::sendStatusToLogCwCcwCmdEnable(bool status)
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send CwCcwCmd Enable Status to logger = %1").arg(status  ? "True" : "False"));
+        PubSubName psname(setupAntenna->currentAntenna.antennaName);
+        msg->rotCache.setCwCcwCmdEnableStatus(psname, status);
+
+    }
+ }
+
+
 void RotatorMainWindow::sleepFor(qint64 milliseconds)
 {
     qint64 timeToExitFunction = QDateTime::currentMSecsSinceEpoch()+milliseconds;
