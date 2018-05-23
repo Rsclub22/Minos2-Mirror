@@ -61,6 +61,7 @@ public:
 
     void setMinAzimuth(const PubSubName &name, int minaz);
     void setMaxAzimuth(const PubSubName &name, int maxaz);
+    void setCwCcwCmdEnable(const PubSubName &name, bool cwCcwCmdEnable);
 
     void setRotatorPresets(const PubSubName &name, const QString &p);
     QString getRotatorPresets(const PubSubName &name);

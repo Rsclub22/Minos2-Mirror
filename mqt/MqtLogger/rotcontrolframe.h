@@ -65,8 +65,7 @@ public:
     void on_ContestPageChanged();
 
 
-
-
+    void setCwCcwCmdEnable(bool s);
 
 private:
 
@@ -88,6 +87,7 @@ private:
     bool rot_left_button_status;
     bool rot_right_button_status;
     bool rotConnected = false;
+    bool supportCwCcwCmd = true;
     bool rotError = false;
 
     QString lastConnectStat;
@@ -121,6 +121,7 @@ private:
     void saveRotPresetButton(RotPresetData &editData);
     void setRotPresetButData(int buttonNumber, RotPresetData &editData);
     void rotPresetButtonUpdate(int buttonNumber, RotPresetData &editData);
+    void setCwCcW_Items_Visible(bool visible);
 signals:
     void selectRotator(QString);
     void sendRotator(rpcConstants::RotateDirection direction, int angle );

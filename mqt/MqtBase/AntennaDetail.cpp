@@ -5,28 +5,32 @@ AntennaDetail::AntennaDetail(): PubSubValue(AntennaDetailType)
 {
     _maxAzimuth.setInitialValue(0);
     _minAzimuth.setInitialValue(0);
+    _cwCcwCmdEnable.setInitialValue(false);
 }
 AntennaDetail::AntennaDetail(QString s):PubSubValue(AntennaDetailType)
 {
     qRegisterMetaType< AntennaDetail > ( "AntennaDetail" );
     _maxAzimuth.setInitialValue(0);
     _minAzimuth.setInitialValue(0);
+    _cwCcwCmdEnable.setInitialValue(false);
     unpack(s);
 }
 bool AntennaDetail::isDirty() const
 {
-    return (_selected.isDirty() || _minAzimuth.isDirty() || _maxAzimuth.isDirty());
+    return (_selected.isDirty() || _minAzimuth.isDirty() || _maxAzimuth.isDirty() || _cwCcwCmdEnable.isDirty());
 }
 void AntennaDetail::clearDirty()
 {
     _minAzimuth.clearDirty();
     _maxAzimuth.clearDirty();
+    _cwCcwCmdEnable.clearDirty();
     _selected.clearDirty();
 }
 void AntennaDetail::setDirty()
 {
     _minAzimuth.setDirty();
     _maxAzimuth.setDirty();
+    _cwCcwCmdEnable.setDirty();
     _selected.setDirty();
 }
 QString AntennaDetail::pack() const
@@ -36,6 +40,7 @@ QString AntennaDetail::pack() const
     jv.insert(rpcConstants::selected, selected().getValue());
     jv.insert(rpcConstants::rotatorMinAzimuth, minAzimuth().getValue());
     jv.insert(rpcConstants::rotatorMaxAzimuth, maxAzimuth().getValue());
+    jv.insert(rpcConstants::rotCwCcwCmdEnable, cwCcwCmdEnable().getValue());
 
     QJsonDocument json(jv);
 
@@ -52,6 +57,7 @@ void AntennaDetail::unpack(QString s)
         _selected.setValue(json.object().value(rpcConstants::selected).toString());
         _minAzimuth.setValue(json.object().value(rpcConstants::rotatorMinAzimuth).toInt());
         _maxAzimuth.setValue(json.object().value(rpcConstants::rotatorMaxAzimuth).toInt());
+        _cwCcwCmdEnable.setValue(json.object().value(rpcConstants::rotCwCcwCmdEnable).toBool());
     }
     else
     {
@@ -69,6 +75,10 @@ void AntennaDetail::setMaxAzimuth(int maxAzimuth)
 {
     _maxAzimuth.setValue(maxAzimuth);
 }
+void AntennaDetail::setCwCcwCmdEnable(bool cwCcwCmdEnable)
+{
+    _cwCcwCmdEnable.setValue(cwCcwCmdEnable);
+}
 void AntennaDetail::setSelected(const QString &selected)
 {
     _selected.setValue(selected);
@@ -83,6 +93,10 @@ MinosItem<int> AntennaDetail::minAzimuth() const
 MinosItem<int> AntennaDetail::maxAzimuth() const
 {
     return _maxAzimuth;
+}
+MinosItem<bool> AntennaDetail::cwCcwCmdEnable()  const
+{
+    return _cwCcwCmdEnable;
 }
 MinosStringItem<QString> AntennaDetail::selected() const
 {

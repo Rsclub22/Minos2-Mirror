@@ -1071,6 +1071,14 @@ void TSingleLogFrame::on_RotatorMinAzimuth(QString s)
     }
 }
 
+void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        ui->FKHRotControlFrame->setCwCcwCmdEnable(s);
+    }
+}
+
 void TSingleLogFrame::sendRotator(rpcConstants::RotateDirection direction, int angle )
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
