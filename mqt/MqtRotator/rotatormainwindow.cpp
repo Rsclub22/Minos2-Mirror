@@ -916,13 +916,17 @@ void RotatorMainWindow::upDateAntenna()
             // don't display overlap if rotator doesn't support or user turned off overlap
             toggleOverLapDisplay(setupAntenna->currentAntenna.overRunFlag);
 
-            if (setupAntenna->currentAntenna.simCwCcwCmd && !setupAntenna->currentAntenna.supportCwCcwCmd)           // want to use simCwCccwCmd?
-            {
-                cwCCWControlVisible(setupAntenna->currentAntenna.simCwCcwCmd);
-            }
-            else if (setupAntenna->currentAntenna.supportCwCcwCmd)
+           // for test ******************************************************************************************
+            //setupAntenna->currentAntenna.supportCwCcwCmd = false;
+           // setupAntenna->currentAntenna.simCwCcwCmd = false;
+
+            if (setupAntenna->currentAntenna.supportCwCcwCmd)           // want to use simCwCccwCmd?
             {
                 cwCCWControlVisible(true);
+            }
+            else
+            {
+                cwCCWControlVisible(setupAntenna->currentAntenna.simCwCcwCmd);
             }
 
             dumpRotatorToTraceLog();
@@ -942,10 +946,17 @@ void RotatorMainWindow::upDateAntenna()
            {
                sendStatusToLogStop();
                PubSubName psname(setupAntenna->currentAntennaName);
-               trace(QString("send to logger - maxAzimuth = %1, minAzimuth = %2, supportCwCcwCmd = %3").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)).arg(QString::number(setupAntenna->currentAntenna.min_azimuth)).arg(setupAntenna->currentAntenna.supportCwCcwCmd  ? "True" : "False"));
+               trace(QString("Update Antenna - send to logger - maxAzimuth = %1, minAzimuth = %2, simulate CwCcwCmd = %3").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)).arg(QString::number(setupAntenna->currentAntenna.min_azimuth)).arg(setupAntenna->currentAntenna.supportCwCcwCmd  ? "True" : "False"));
                msg->rotatorCache.setMaxAzimuth(psname, setupAntenna->currentAntenna.max_azimuth);
-               msg->rotatorCache.setMinAzimuth(psname, setupAntenna->currentAntenna.min_azimuth);
-               msg->rotatorCache.setCwCcwCmdEnable(psname, setupAntenna->currentAntenna.supportCwCcwCmd);
+               if (setupAntenna->currentAntenna.supportCwCcwCmd)           // want to use simCwCccwCmd?
+               {
+                   msg->rotatorCache.setCwCcwCmdEnable(psname, true);
+               }
+               else
+               {
+                   msg->rotatorCache.setCwCcwCmdEnable(psname, setupAntenna->currentAntenna.simCwCcwCmd);
+               }
+
            }
         }
     }
@@ -965,7 +976,12 @@ void RotatorMainWindow::upDateAntenna()
             writeWindowTitle(appName);
         }
     }
-    msg->rotatorCache.publish();
+
+    if (appName.length() > 0)
+    {
+        msg->rotatorCache.publish();
+    }
+
 }
 void RotatorMainWindow::refreshAntenna()
 {
