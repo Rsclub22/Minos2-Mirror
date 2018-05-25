@@ -123,6 +123,7 @@ private:
     QAction *AnalyseMinosLogAction;
     QAction *CorrectDateTimeAction;
     QAction *NumberAuxiliaryAction;
+    QAction *ScreenConfigAction;
     QAction *ShowOperatorsAction;
     QAction *OptionsAction;
     QAction *FontEditAcceptAction;
@@ -210,6 +211,7 @@ private slots:
     void onTabMoved(int, int);
 
     void AuxDisplayAction();
+    void doScreenConfigAction();
 public slots:
     void onArgsReceived(QString conarg);
 

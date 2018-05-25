@@ -22,6 +22,7 @@
 #include "MatchTreesFrame.h"
 #include "enqdlg.h"
 #include "AdifImport.h"
+#include "ScreenConfig.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -311,6 +312,7 @@ void TLogContainer::setupMenus()
 
     ui->menuTools->addSeparator();
     NumberAuxiliaryAction = newAction("Number of Auxiliary Displays...", ui->menuTools, SLOT(AuxDisplayAction()));
+    ScreenConfigAction = newAction("Configure Screen Layout...", ui->menuTools, SLOT(doScreenConfigAction()));
 
     // end of tools manu
 
@@ -1044,6 +1046,11 @@ void TLogContainer::AuxDisplayAction()
 
     TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpAuxWindows, num );
     emit setAuxWindows();
+}
+void TLogContainer::doScreenConfigAction()
+{
+    ScreenConfig sc(this);
+    sc.exec();
 }
 void TLogContainer::StartConfigActionExecute()
 {

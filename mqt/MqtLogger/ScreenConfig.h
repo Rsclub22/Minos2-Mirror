@@ -1,0 +1,41 @@
+#ifndef SCREENCONFIG_H
+#define SCREENCONFIG_H
+
+#include <QDialog>
+#include <QVBoxLayout>
+
+class ScreenConfigRow;
+namespace Ui {
+class ScreenConfig;
+}
+
+class ScreenConfig : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit ScreenConfig(QWidget *parent = nullptr);
+    ~ScreenConfig();
+
+    void addBefore(ScreenConfigRow *r);
+    void remove(ScreenConfigRow *r);
+    void addAfter(ScreenConfigRow *r);
+public slots:
+    void reject();
+    void accept();
+private slots:
+    void on_OKButton_clicked();
+
+    void on_applyButton_clicked();
+
+    void on_cancelButton_clicked();
+
+    void on_addRowButton_clicked();
+
+private:
+    Ui::ScreenConfig *ui;
+    QVBoxLayout *vbl;
+    void doCloseEvent();
+};
+
+#endif // SCREENCONFIG_H

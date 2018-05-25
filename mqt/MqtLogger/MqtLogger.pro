@@ -74,7 +74,11 @@ SOURCES += main.cpp \
     MatchTreesFrame.cpp \
     runbuttondialog.cpp \
     RigMemoryFrame.cpp \
-    locTreeFrame.cpp
+    locTreeFrame.cpp \
+    ScreenConfig.cpp \
+    ScreenConfigElement.cpp \
+    ScreenConfigRow.cpp \
+    ScreenConfigFile.cpp
 
 HEADERS  += \
     tlogcontainer.h \
@@ -119,7 +123,11 @@ HEADERS  += \
     MatchTreesFrame.h \
     RigMemoryFrame.h \
     locTreeFrame.h \
-    runbuttondialog.h
+    runbuttondialog.h \
+    ScreenConfig.h \
+    ScreenConfigElement.h \
+    ScreenConfigRow.h \
+    ScreenConfigFile.h
 
 FORMS    += tlogcontainer.ui \
     contestdetails.ui \
@@ -152,7 +160,10 @@ FORMS    += tlogcontainer.ui \
     RigMemoryFrame.ui \
     locTreeFrame.ui \
     presetbuttondialog.ui \
-    runbuttondialog.ui
+    runbuttondialog.ui \
+    ScreenConfig.ui \
+    ScreenConfigElement.ui \
+    ScreenConfigRow.ui
 
 
 DISTFILES += \
