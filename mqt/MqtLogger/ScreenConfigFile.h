@@ -10,6 +10,7 @@ enum SCType
     sctRigControl,
     sctRotControl,
     sctQSOEdit,
+    sctNextQSODetails,
     sctThisMatch,
     sctOtherMatch,
     sctArchiveMatch,
@@ -18,7 +19,7 @@ enum SCType
 class SCElement
 {
 public:
-    SCType type;
+    QString type;
 };
 
 class SCRow
@@ -26,12 +27,24 @@ class SCRow
 public:
     QVector<SCElement> elements;
 };
+
+class SC
+{
+public:
+    QString name;
+    QVector<SCRow> rows;
+};
 class ScreenConfigFile
 {
 public:
     ScreenConfigFile();
+    bool loadFile();
+    bool dumpFile();
 
-    QVector <SCRow> rows;
+    QMap <QString, SC> configs;
+private:
+    bool readFile(QString s);
+    bool writeFile(QString s);
 };
 
 #endif // SCREENCONFIGFILE_H

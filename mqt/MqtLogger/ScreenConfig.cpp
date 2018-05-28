@@ -1,6 +1,7 @@
 #include "base_pch.h"
 #include <QScrollBar>
 
+#include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
 #include "ScreenConfigRow.h"
 
@@ -22,28 +23,25 @@ ScreenConfig::ScreenConfig(QWidget *parent) :
     vbl->setMargin(1);
     ui->scrollAreaWidgetContents->setLayout(vbl);
 
-//    ScreenConfigRow *baserow = new ScreenConfigRow(parent, this);
-//    vbl->addWidget(baserow);
+    // create the screen contents based on the config
 
-//    elementFrames.clear();
-//    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    scf.loadFile();
 
-//    int offset = 0;
-//    for (int i = 0; i <  minosConfig->elelist.size(); i++)
-//    {
-//        QSharedPointer<RunConfigElement> c = minosConfig->elelist[i];
-//        if (c->deleted)
-//            continue;
+    curConfigName = "default";
 
-//        ConfigElementFrame *cef = new ConfigElementFrame(false);
+    SC sc = scf.configs[curConfigName];
 
-        // set alternating background
-
-//        vbl->addWidget(cef);
-
-//        cef->setElement(c);
-//        elementFrames.append(cef);
-//    }
+    for (int j = 0; j < sc.rows.count(); j++)
+    {
+        ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
+        vbl->insertWidget( j, baseRow);
+       for (int k = 0; k < sc.rows[j].elements.count(); k++)
+       {
+           ScreenConfigElement *e = new ScreenConfigElement(this, baseRow);
+           e->setType(sc.rows[j].elements[k].type);
+           baseRow->vbl->insertWidget(k, e);
+       }
+    }
 }
 
 ScreenConfig::~ScreenConfig()
@@ -65,14 +63,55 @@ void ScreenConfig::accept()
     doCloseEvent();
     QDialog::accept();
 }
+SC ScreenConfig::getConfig()
+{
+    SC sc;
+    sc.name = curConfigName;
+
+    for (int i = 0; i < vbl->count(); i++)
+    {
+        QWidget *w = vbl->itemAt(i)->widget();
+        ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+        if (row)
+        {
+            SCRow scrow;
+            for (int j = 0; j < row->vbl->count(); j++)
+            {
+                w = row->vbl->itemAt(j)->widget();
+                ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
+                if (ele)
+                {
+                    SCElement scele;
+                    scele.type = ele->getType();
+                    scrow.elements.append(scele);
+
+                }
+            }
+            sc.rows.append(scrow);
+        }
+    }
+    return sc;
+}
 void ScreenConfig::on_OKButton_clicked()
 {
+    // analyse and apply the new layout
+    on_applyButton_clicked();
+
+    // and write it back
+    scf.dumpFile();
     close();
 }
 
 void ScreenConfig::on_applyButton_clicked()
 {
+    // First, analyse the screen layout into a config object
 
+    SC sc = getConfig();
+
+    // replace it in the config map
+    scf.configs[curConfigName] = sc;
+
+    // and apply it to the open logs
 }
 
 void ScreenConfig::on_cancelButton_clicked()

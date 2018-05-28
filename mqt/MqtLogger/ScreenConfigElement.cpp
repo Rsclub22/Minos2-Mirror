@@ -18,6 +18,7 @@ static QVector <SCTypeOption> options =
     {sctRigControl, "Rig", "Rig Control"},
     {sctRotControl, "Rot", "Rotator Contro;"},
     {sctQSOEdit, "QSO", "QSO Edit"},
+    {sctNextQSODetails, "Crib", "Next QSO details"},
     {sctThisMatch, "This", "This Contest Matches"},
     {sctOtherMatch, "Other", "Other Contest Matches" },
     {sctArchiveMatch, "Arch", "Archive List Matches" },
@@ -29,10 +30,7 @@ ScreenConfigElement::ScreenConfigElement(QWidget *parent, ScreenConfigRow *paren
   , ui(new Ui::ScreenConfigElement)
   , parentRow(parentrow)
 {
-    static int elecount = 0;
     ui->setupUi(this);
-
-    ui->countLabel->setText(QString::number(elecount++));
 
     int i = 0;
     foreach(const SCTypeOption &opt, options)
@@ -46,7 +44,14 @@ ScreenConfigElement::~ScreenConfigElement()
 {
     delete ui;
 }
-
+void ScreenConfigElement::setType(QString t)
+{
+    ui->elementTypeCombo->setCurrentText(t);
+}
+QString ScreenConfigElement::getType()
+{
+    return ui->elementTypeCombo->currentText();
+}
 void ScreenConfigElement::on_elementTypeCombo_activated(const QString &arg1)
 {
 

@@ -16,6 +16,9 @@ public:
     explicit ScreenConfigElement(QWidget *parent, ScreenConfigRow *parentrow);
     ~ScreenConfigElement();
 
+    void setType(QString);
+    QString getType();
+
 private slots:
     void on_elementTypeCombo_activated(const QString &arg1);
 

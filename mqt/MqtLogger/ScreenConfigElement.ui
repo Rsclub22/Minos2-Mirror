@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>98</width>
-    <height>124</height>
+    <width>114</width>
+    <height>69</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,32 +18,29 @@
     <widget class="QComboBox" name="elementTypeCombo"/>
    </item>
    <item>
-    <widget class="QLabel" name="countLabel">
-     <property name="text">
-      <string>-1</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="addLeftButton">
-     <property name="text">
-      <string>Add Left</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="addRightButton">
-     <property name="text">
-      <string>Add Right</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="removeButton">
-     <property name="text">
-      <string>Remove</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QToolButton" name="addLeftButton">
+       <property name="text">
+        <string>&lt;-</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="removeButton">
+       <property name="text">
+        <string>Del</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="addRightButton">
+       <property name="text">
+        <string>-&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

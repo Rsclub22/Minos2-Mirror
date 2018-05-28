@@ -16,31 +16,6 @@ ScreenConfigRow::ScreenConfigRow(QWidget *parent, ScreenConfig *parentc) :
     vbl = new QHBoxLayout(ui->scrollAreaWidgetContents);
     vbl->setMargin(1);
     ui->scrollAreaWidgetContents->setLayout(vbl);
-
- //   ScreenConfigElement *baseElement = new ScreenConfigElement(parentWidget(), this);
- //   vbl->addWidget(baseElement);
-
-
-//    elementFrames.clear();
-//    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
-
-//    int offset = 0;
-//    for (int i = 0; i <  minosConfig->elelist.size(); i++)
-//    {
-//        QSharedPointer<RunConfigElement> c = minosConfig->elelist[i];
-//        if (c->deleted)
-//            continue;
-
-//        ConfigElementFrame *cef = new ConfigElementFrame(false);
-
-        // set alternating background
-
-//        vbl->addWidget(cef);
-
-//        cef->setElement(c);
-//        elementFrames.append(cef);
-//    }
-
 }
 
 ScreenConfigRow::~ScreenConfigRow()

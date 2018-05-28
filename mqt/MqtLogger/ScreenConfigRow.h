@@ -19,6 +19,8 @@ public:
     explicit ScreenConfigRow(QWidget *parent, ScreenConfig *parentc);
     ~ScreenConfigRow();
 
+    QHBoxLayout *vbl = nullptr;
+
     void addLeft(ScreenConfigElement *e);
     void remove(ScreenConfigElement *e);
     void addRight(ScreenConfigElement *e);
@@ -31,7 +33,6 @@ private slots:
 
 private:
     Ui::ScreenConfigRow *ui;
-    QHBoxLayout *vbl;
     ScreenConfig *parentDialog;
 
 };

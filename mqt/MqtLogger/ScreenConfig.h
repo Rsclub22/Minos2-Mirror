@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QVBoxLayout>
 
+#include "ScreenConfigFile.h"
+
 class ScreenConfigRow;
 namespace Ui {
 class ScreenConfig;
@@ -35,7 +37,11 @@ private slots:
 private:
     Ui::ScreenConfig *ui;
     QVBoxLayout *vbl;
+    ScreenConfigFile scf;
+    QString curConfigName;
+
     void doCloseEvent();
+    SC getConfig();
 };
 
 #endif // SCREENCONFIG_H
