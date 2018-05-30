@@ -14,6 +14,7 @@
 #include "profiles.h"
 //---------------------------------------------------------------------------
 class TMatchThread;
+class LoggerContestLog;
 class ContestSlot
 {
    public:

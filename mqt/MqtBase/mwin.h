@@ -41,6 +41,8 @@
 #define ERR_NOLOC 30
 #define ERR_LOC_RANGE 31
 
+enum MatchType {ThisMatch, OtherMatch, ArchiveMatch};
+
 enum ExportType {EREG1TEST, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
 
 // control block for repeated actions on contest contacts

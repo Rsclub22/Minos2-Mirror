@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 
 #include "TClockFrame.h"
 #include "ui_TClockFrame.h"

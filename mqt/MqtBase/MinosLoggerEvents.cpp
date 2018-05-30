@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 
 MinosLoggerEvents MinosLoggerEvents::mle;
 //---------------------------------------------------------------------------
@@ -204,5 +205,20 @@ void MinosLoggerEvents::sendRotBearingChanged(int f, BaseContestLog *c)
 void MinosLoggerEvents::SendBrgStrToRot(QString bearing)
 {
     emit mle.BrgStrToRot(bearing);
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::sendXferEnabled(bool s, BaseContestLog *c, QString basename)
+{
+    emit mle.XferEnabled(s, c, basename);
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::sendXferPressed(BaseContestLog *c, QString basename)
+{
+    emit mle.XferPressed(c, basename);
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::sendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected)
+{
+    emit mle.MatchTreeSelected(m, c, basename, selected);
 }
 //---------------------------------------------------------------------------

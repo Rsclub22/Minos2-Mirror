@@ -2,6 +2,7 @@
 #define STACKEDINFOFRAME_H
 
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 
 namespace Ui {
 class StackedInfoFrame;

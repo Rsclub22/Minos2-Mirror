@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 
 #include <QFontDialog>
 //#include <QFileDialog>
@@ -19,7 +20,7 @@
 #include "StartConfig.h"
 #include "ConfigFile.h"
 #include "SendRPCDM.h"
-#include "MatchTreesFrame.h"
+#include "MatchTreeFrame.h"
 #include "enqdlg.h"
 #include "AdifImport.h"
 #include "ScreenConfig.h"
@@ -1145,16 +1146,13 @@ void TLogContainer::on_ContestPageControl_customContextMenuRequested(const QPoin
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
     QObject *w = qa->widgetAt(globalPos);
 
-    QTreeView *qtv = nullptr;
     while (w)
     {
-        MatchTreesFrame *mtf = dynamic_cast<MatchTreesFrame *>(w);
-        if (!qtv && !mtf)
-            qtv = dynamic_cast<QTreeView *>(w);
+        MatchTreeFrame *mtf = dynamic_cast<MatchTreeFrame *>(w);
 
         if (mtf)
         {
-            mtf->doCustomContextMenuRequested(qtv);
+            mtf->doCustomContextMenuRequested();
             break;
         }
 

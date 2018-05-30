@@ -4,6 +4,7 @@
 #include "base_pch.h"
 #include "rigmemcommondata.h"
 
+class LoggerContestLog;
 namespace Ui {
 class RigMemoryFrame;
 }

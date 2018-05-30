@@ -200,7 +200,6 @@ signals:
     void QSOFrameCancelled();
     //void sendRotator(rpcConstants::RotateDirection direction, int angle );
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
-    void xferPressed();
     void sendModeControl(QString);
 
 private slots:
@@ -235,7 +234,7 @@ private slots:
 
     void on_FreqEditFinished();
 public slots:
-    void setXferEnabled(bool);
+    void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 
 };
 

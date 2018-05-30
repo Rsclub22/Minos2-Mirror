@@ -55,13 +55,64 @@
        <enum>QFrame::Raised</enum>
       </property>
      </widget>
-     <widget class="MatchTreesFrame" name="matchTreesFrame">
+     <widget class="QFrame" name="matchFrame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="archiveSplitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="MatchThisFrame" name="thisMatchFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+         <widget class="MatchOtherFrame" name="otherMatchFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+         <widget class="MatchArchiveFrame" name="archiveMatchFrame">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
@@ -69,21 +120,33 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QSOLogFrame</class>
-   <extends>QFrame</extends>
-   <header>qsologframe.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>MinosSplitter</class>
    <extends>QSplitter</extends>
    <header>minossplitter.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>MatchTreesFrame</class>
+   <class>QSOLogFrame</class>
    <extends>QFrame</extends>
-   <header>MatchTreesFrame.h</header>
+   <header>qsologframe.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MatchThisFrame</class>
+   <extends>QFrame</extends>
+   <header>MatchThisFrame.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MatchArchiveFrame</class>
+   <extends>QFrame</extends>
+   <header>MatchArchiveFrame.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MatchOtherFrame</class>
+   <extends>QFrame</extends>
+   <header>MatchOtherFrame.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

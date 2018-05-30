@@ -6,6 +6,10 @@
 #include "ConfigFile.h"
 #include "rotatorcommon.h"
 #include "rigmemcommondata.h"
+#include "MatchTreeFrame.h"
+#include "MatchThisFrame.h"
+#include "MatchOtherFrame.h"
+#include "MatchArchiveFrame.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -20,6 +24,7 @@ class BaseContact;
 class ContactList;
 class ListContact;
 class FocusWatcher;
+class MatchTreeFrame;
 
 // We may need to define our own validation controls with valid methods
 // for each needed type...
@@ -91,6 +96,9 @@ public:
     void getDetails(memoryData::memData &m);
     void getCurrentDetails(memoryData::memData &m);
 
+public slots:
+    void onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent *);
+    void onArchiveTreeFocused(QObject *, bool in, QFocusEvent *);
 private:
     QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
@@ -99,6 +107,11 @@ private:
 
     int lastStanzaCount;
 
+    MatchTreeFrame *xferTree = nullptr;
+
+    FocusWatcher *OtherMatchTreeFW = nullptr;
+    FocusWatcher *ArchiveMatchTreeFW = nullptr;
+
     void transferDetails( MatchTreeItem *MatchTreeIndex );
 
     void keyPressEvent( QKeyEvent* event );
@@ -106,9 +119,14 @@ private:
     void restoreColumns();
 
     void doSetAuxWindows(bool saveSplitter);
+    MatchTreeItem *getXferItem();
+
 private slots:
     void on_ContestPageChanged();
-    void on_XferPressed();
+    void on_XferPressed(BaseContestLog *c, QString basename);
+    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &selected);
+
+    void on_MatchStarting(BaseContestLog*);
     void NextContactDetailsTimerTimer();
     void PublishTimerTimer();
     void HideTimerTimer();
@@ -171,6 +189,8 @@ private slots:
     void on_ControlSplitter_splitterMoved(int pos, int index);
 
     void setAuxWindows();
+
+    void on_archiveSplitter_splitterMoved(int pos, int index);
 
 };
 

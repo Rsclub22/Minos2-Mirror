@@ -5,6 +5,8 @@
 
 class QTreeWidgetItem;
 class MatchTreeItem;
+class MatchTreeFrame;
+class FocusWatcher;
 
 namespace Ui {
 class TQSOEditDlg;
@@ -29,6 +31,11 @@ private:
     BaseContestLog * contest;
     QSharedPointer<BaseContact> firstContact;
     bool unfilled;
+
+    MatchTreeFrame *xferTree = nullptr;
+    FocusWatcher *OtherMatchTreeFW = nullptr;
+    FocusWatcher *ArchiveMatchTreeFW = nullptr;
+
     void refreshOps( ScreenContact &screenContact );
     void keyPressEvent( QKeyEvent* event ) override;
     void addTreeRoot(QSharedPointer<BaseContact> lct);
@@ -37,8 +44,8 @@ private:
     void transferDetails(MatchTreeItem *MatchTreeIndex );
     void getSplitters();
 
-
- public: 		// User declarations
+    MatchTreeItem *getXferItem();
+public: 		// User declarations
     void selectContact(BaseContestLog * contest, QSharedPointer<BaseContact> lct );
     void setContest( BaseContestLog * c )
     {
@@ -52,11 +59,19 @@ private slots:
     void on_editSplitter_splitterMoved(int pos, int index);
     void on_EditFrameCancelled();
     void on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *contest);
-    void onXferPressed();
+    void onXferPressed(BaseContestLog *, QString);
+    void on_MatchStarting(BaseContestLog*);
 
-public Q_SLOTS:
+    void on_archiveSplitter_splitterMoved(int pos, int index);
+    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &selected);
+    void onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent *);
+    void onArchiveTreeFocused(QObject *, bool in, QFocusEvent *);
+
+public slots:
     virtual void accept() override;
     virtual void reject() override;
+
+
 };
 
 #endif // TQSOEDITDLG_H

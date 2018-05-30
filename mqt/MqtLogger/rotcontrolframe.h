@@ -19,6 +19,7 @@
 #define ROTCONTROLFRAME_H
 
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 #include <QShortcut>
 #include "rotatorcommon.h"
 #include "rotpresetbutton.h"

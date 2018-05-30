@@ -9,6 +9,7 @@
 //---------------------------------------------------------------------------
 
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 
 ErrEntry errDefs[] =
    {

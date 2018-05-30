@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 
 #include "ContestApp.h"
 #include "LoggerContest.h"
@@ -408,15 +409,18 @@ void QSOLogFrame::setTimeStyles()
     }
 }
 
-void QSOLogFrame::setXferEnabled(bool s)
+void QSOLogFrame::setXferEnabled(bool s, BaseContestLog *c, QString b)
 {
-    ui->MatchXferButton->setEnabled(s);
-    QString ss;
-    if (s)
-        ss = ssRed;
+    if (contest == c && b == baseName)
+    {
+        ui->MatchXferButton->setEnabled(s);
+        QString ss;
+        if (s)
+            ss = ssRed;
 
-    ui->MatchXferButton->setStyleSheet(ss);
-    widgetStyles[ui->MatchXferButton] = ss;
+        ui->MatchXferButton->setStyleSheet(ss);
+        widgetStyles[ui->MatchXferButton] = ss;
+    }
 }
 
 void QSOLogFrame::on_CatchupButton_clicked()
@@ -785,7 +789,7 @@ void QSOLogFrame::on_GJVCancelButton_clicked()
 
 void QSOLogFrame::on_MatchXferButton_clicked()
 {
-    emit xferPressed();;
+    MinosLoggerEvents::sendXferPressed(contest, baseName);
 }
 /*
 void QSOLogFrame::on_BandMapButton_clicked()
@@ -875,7 +879,7 @@ void QSOLogFrame::setActiveControl( int *Key )
          *Key = 0;
          break;
    case Qt::Key_F12:
-         emit xferPressed();
+       MinosLoggerEvents::sendXferPressed(contest, baseName);
          *Key = 0;
          break;
    }

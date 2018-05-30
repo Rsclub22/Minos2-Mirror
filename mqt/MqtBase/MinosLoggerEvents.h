@@ -68,6 +68,10 @@ signals:
    void RigFreqChanged(QString, BaseContestLog *);
    void RotBearingChanged(int, BaseContestLog *);
 
+   void XferEnabled(bool s, BaseContestLog *c, QString basename);
+   void XferPressed(BaseContestLog *c, QString basename);
+   void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
+
    void FontChanged();
 public:
    static MinosLoggerEvents mle;
@@ -116,6 +120,10 @@ public:
 
     static void sendRigFreqChanged(QString f, BaseContestLog *c);
     static void sendRotBearingChanged(int f, BaseContestLog *c);
+
+    static void sendXferEnabled(bool s, BaseContestLog *c, QString basename);
+    static void sendXferPressed(BaseContestLog *c, QString basename);
+    static void sendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
 };
 //---------------------------------------------------------------------------
 #endif

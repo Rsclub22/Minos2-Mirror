@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 
 #include "LoggerContest.h"
 #include "ContestApp.h"

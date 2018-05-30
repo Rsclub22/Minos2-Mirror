@@ -1,4 +1,7 @@
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
+
+#include "MatchTreeFrame.h"
 
 #include "tqsoeditdlg.h"
 #include "ui_tqsoeditdlg.h"
@@ -34,17 +37,31 @@ TQSOEditDlg::TQSOEditDlg(QWidget *parent, bool unfilled )
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    ui->matchTreesFrame->setBaseName("Edit");
+    ui->thisMatchFrame->initialise();
+    ui->otherMatchFrame->initialise();
+    ui->archiveMatchFrame->initialise();
+
+    OtherMatchTreeFW = new FocusWatcher(ui->otherMatchFrame->getTreeView());
+    connect(OtherMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onOtherMatchTreeFocused(QObject *, bool, QFocusEvent *)));
+    ArchiveMatchTreeFW = new FocusWatcher(ui->archiveMatchFrame->getTreeView());
+    connect(ArchiveMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onArchiveTreeFocused(QObject *, bool, QFocusEvent *)));
+
+    ui->thisMatchFrame->setBaseName("Edit");
+    ui->otherMatchFrame->setBaseName("Edit");
+    ui->archiveMatchFrame->setBaseName("Edit");
+
     ui->GJVQSOEditFrame->setAsEdit(true, "Edit");
     getSplitters();
 
     connect(ui->GJVQSOEditFrame, SIGNAL(QSOFrameCancelled()), this, SLOT(on_EditFrameCancelled()));
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)), this, SLOT(on_AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)));
-    connect(ui->GJVQSOEditFrame, SIGNAL(xferPressed()), this, SLOT(onXferPressed()));
-    connect(ui->matchTreesFrame, SIGNAL(xferPressed()), this, SLOT(onXferPressed()));
-    connect(ui->matchTreesFrame, SIGNAL(setXferEnabled(bool)), ui->GJVQSOEditFrame, SLOT(setXferEnabled(bool)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(XferPressed(BaseContestLog *, QString)), this, SLOT(onXferPressed(BaseContestLog *, QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(XferEnabled(bool, BaseContestLog *, QString)), ui->GJVQSOEditFrame, SLOT(setXferEnabled(bool, BaseContestLog *, QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
+            this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
 
-    ui->GJVQSOEditFrame->setXferEnabled(false);
+    ui->GJVQSOEditFrame->setXferEnabled(false, contest, "Edit");
 }
 TQSOEditDlg::~TQSOEditDlg()
 {
@@ -67,7 +84,9 @@ int TQSOEditDlg::exec()
     }
     firstContact.reset();
 
-    ui->matchTreesFrame->setContest(contest);
+    ui->thisMatchFrame->setContest(contest);
+    ui->otherMatchFrame->setContest(contest);
+    ui->archiveMatchFrame->setContest(contest);
 
     int ret = QDialog::exec();
 
@@ -76,6 +95,36 @@ int TQSOEditDlg::exec()
     return ret;
 }
 
+void TQSOEditDlg::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * )
+{
+    if (!in)
+    {
+        ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
+        ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+        return;
+    }
+
+    xferTree = ui->otherMatchFrame;
+    ui->otherMatchFrame->setCurrentModel(true);
+    ui->archiveMatchFrame->setCurrentModel(false);
+
+    ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
+}
+void TQSOEditDlg::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
+{
+    if (!in)
+    {
+        ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
+        ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+        return;
+    }
+
+    xferTree = ui->archiveMatchFrame;
+    ui->archiveMatchFrame->setCurrentModel(true);
+    ui->otherMatchFrame->setCurrentModel(false);
+
+     ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+}
 //---------------------------------------------------------------------------
 void TQSOEditDlg::keyPressEvent( QKeyEvent* event )
 {
@@ -94,7 +143,9 @@ void TQSOEditDlg::getSplitters()
     ui->editSplitter->restoreState(state);
     ui->editSplitter->setHandleWidth(splitterHandleWidth);
 
-    ui->matchTreesFrame->getSplitters();
+    state = settings.value("Log/ArchiveSplitter/state").toByteArray();
+    ui->archiveSplitter->restoreState(state);
+    ui->archiveSplitter->setHandleWidth(splitterHandleWidth);
 }
 void TQSOEditDlg::on_editSplitter_splitterMoved(int, int)
 {
@@ -165,13 +216,51 @@ void TQSOEditDlg::accept()
     doCloseEvent();
     QDialog::accept();
 }
-void TQSOEditDlg::onXferPressed()
+void TQSOEditDlg::on_MatchStarting(BaseContestLog *ct)
+{
+      // clear down match trees
+    if (contest == ct)
+    {
+      xferTree = nullptr;
+
+      ui->thisMatchFrame->treeClickIndex = QModelIndex();
+      ui->otherMatchFrame->treeClickIndex = QModelIndex();
+      ui->archiveMatchFrame->treeClickIndex = QModelIndex();
+
+      ui->GJVQSOEditFrame->setXferEnabled(false, contest, "Edit");
+    }
+}
+
+MatchTreeItem * TQSOEditDlg::getXferItem()
 {
    // transfer from current match
-   if (!contest || contest->isReadOnly() )
+
+   // copy relevant parts of match contact to screen contact
+   if (ui->archiveMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr || ui->archiveMatchFrame == xferTree) )
+   {
+      MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(ui->archiveMatchFrame->treeClickIndex.internalPointer());
+
+      return MatchTreeIndex;
+
+   }
+   else
+   {
+      if (ui->otherMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr || ui->otherMatchFrame == xferTree) )
+      {
+         MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * > (ui->otherMatchFrame->treeClickIndex.internalPointer());
+
+         return  MatchTreeIndex;
+      }
+   }
+   return nullptr;
+}
+void TQSOEditDlg::onXferPressed(BaseContestLog *c, QString b)
+{
+   // transfer from current match
+   if (!contest || contest->isReadOnly() || c != contest || b != "Edit" )
       return ;
 
-   MatchTreeItem *mi = ui->matchTreesFrame->getXferItem();
+   MatchTreeItem *mi = getXferItem();
 
    if (mi)
        transferDetails(mi);
@@ -205,4 +294,32 @@ void TQSOEditDlg::transferDetails(MatchTreeItem *MatchTreeIndex )
            }
        }
    }
+}
+
+void TQSOEditDlg::on_archiveSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QByteArray state = ui->archiveSplitter->saveState();
+    QSettings settings;
+    settings.setValue("Edit/ArchiveSplitter/state", state);
+    MinosLoggerEvents::SendSplittersChanged();
+}
+void TQSOEditDlg::MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &/*selected*/)
+{
+    if (contest == c && basename == "Edit")
+    {
+        switch (m)
+        {
+        case ThisMatch:
+            //xferTree =  ui->thisMatchFrame;
+            break;
+
+        case OtherMatch:
+            xferTree = ui->otherMatchFrame;
+            break;
+
+        case ArchiveMatch:
+            xferTree = ui->archiveMatchFrame;
+            break;
+        }
+    }
 }

@@ -19,6 +19,7 @@
 #define RIGCONTROLFRAME_H
 
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 #include <QShortcut>
 #include "RPCCommandConstants.h"
 #include "rigmemcommondata.h"

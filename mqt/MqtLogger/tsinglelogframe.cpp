@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 
 #include "ContestApp.h"
 #include "MatchThread.h"
@@ -11,7 +12,7 @@
 #include "focuswatcher.h"
 #include "htmldelegate.h"
 #include "enqdlg.h"
-#include "MatchTreesFrame.h"
+#include "MatchTreeFrame.h"
 #include "rigmemdialog.h"
 #include "rigutils.h"
 #include "LoggerContest.h"
@@ -40,7 +41,19 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     ui->GJVQSOLogFrame->setAsEdit(false, "Log");
 
-    ui->matchTreesFrame->setBaseName("Log");
+    ui->thisMatchFrame->initialise();
+    ui->otherMatchFrame->initialise();
+    ui->archiveMatchFrame->initialise();
+
+    OtherMatchTreeFW = new FocusWatcher(ui->otherMatchFrame->getTreeView());
+    connect(OtherMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onOtherMatchTreeFocused(QObject *, bool, QFocusEvent *)));
+    ArchiveMatchTreeFW = new FocusWatcher(ui->archiveMatchFrame->getTreeView());
+    connect(ArchiveMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onArchiveTreeFocused(QObject *, bool, QFocusEvent *)));
+
+
+    ui->thisMatchFrame->setBaseName("Log");
+    ui->otherMatchFrame->setBaseName("Log");
+    ui->archiveMatchFrame->setBaseName("Log");
 
     ui->ControlSplitter->setVisible(false);
 
@@ -74,6 +87,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)), this, SLOT(on_AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)));
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)));
     connect(&MinosLoggerEvents::mle, SIGNAL(setMemory(BaseContestLog *, QString, QString)), this, SLOT(on_SetMemory(BaseContestLog *, QString, QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
 
     doNextContactDetailsOnLeftClick( true);  // but the sizes are zero...
 
@@ -85,11 +99,14 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(NextUnfilled(BaseContestLog*)), this, SLOT(on_NextUnfilled(BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(GoToSerial(BaseContestLog*)), this, SLOT(on_GoToSerial(BaseContestLog*)));
 
-    connect(ui->GJVQSOLogFrame, SIGNAL(xferPressed()), this, SLOT(on_XferPressed()));
-    connect(ui->matchTreesFrame, SIGNAL(xferPressed()), this, SLOT(on_XferPressed()));
-    connect(ui->matchTreesFrame, SIGNAL(editContact(QSharedPointer<BaseContact>)), this, SLOT(EditContact(QSharedPointer<BaseContact>)));
-    connect(ui->matchTreesFrame, SIGNAL(setXferEnabled(bool)), ui->GJVQSOLogFrame, SLOT(setXferEnabled(bool)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(XferPressed(BaseContestLog *, QString)), this, SLOT(on_XferPressed(BaseContestLog *, QString)));
+    connect(ui->thisMatchFrame, SIGNAL(editContact(QSharedPointer<BaseContact>)), this, SLOT(EditContact(QSharedPointer<BaseContact>)));
 
+    connect(&MinosLoggerEvents::mle, SIGNAL(XferEnabled(bool, BaseContestLog *, QString)), ui->GJVQSOLogFrame, SLOT(setXferEnabled(bool, BaseContestLog *, QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
+            this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
+
+    ui->GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
 
     // BandMap Updates
 
@@ -188,7 +205,11 @@ void TSingleLogFrame::closeContest()
     {
        RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
        qsoModel.initialise(nullptr);
-       ui->matchTreesFrame->setContest(nullptr);
+
+       ui->thisMatchFrame->setContest(nullptr);
+       ui->otherMatchFrame->setContest(nullptr);
+       ui->archiveMatchFrame->setContest(nullptr);
+
        MinosLoggerEvents::sendSetStackContest(nullptr);
        ui->FKHRigControlFrame->setContest(nullptr);
        ui->FKHRotControlFrame->setContest(nullptr);
@@ -205,7 +226,9 @@ void TSingleLogFrame::restoreColumns()
     state = settings.value("QSOTable/state").toByteArray();
     ui->QSOTable->horizontalHeader()->restoreState(state);
 
-    ui->matchTreesFrame->restoreColumns();
+    ui->thisMatchFrame->restoreColumns();
+    ui->otherMatchFrame->restoreColumns();
+    ui->archiveMatchFrame->restoreColumns();
 
     logColumnsChanged = false;
 
@@ -237,7 +260,9 @@ void TSingleLogFrame::on_ContestPageChanged ()
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     trace("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
     TContestApp::getContestApp() ->setCurrentContest( ct );
-    ui->matchTreesFrame->setContest(ct);
+    ui->thisMatchFrame->setContest(ct);
+    ui->otherMatchFrame->setContest(ct);
+    ui->archiveMatchFrame->setContest(ct);
     MinosLoggerEvents::sendSetStackContest(ct);
 
     if ( logColumnsChanged )
@@ -257,7 +282,6 @@ void TSingleLogFrame::on_ContestPageChanged ()
     ui->GJVQSOLogFrame->selectField(nullptr);
     ui->GJVQSOLogFrame->logTabChanged();
 
-//    MultDispFrame->setContest( contest );
     doNextContactDetailsOnLeftClick( false );
     MinosLoggerEvents::SendShowOperators();
 
@@ -413,16 +437,109 @@ void TSingleLogFrame::updateQSODisplay()
 {
    ui->GJVQSOLogFrame->updateQSODisplay();
 }
-void TSingleLogFrame::on_XferPressed()
+
+void TSingleLogFrame::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * )
+{
+    if (!in)
+    {
+        ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
+        ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+        return;
+    }
+
+    xferTree = ui->otherMatchFrame;
+    ui->otherMatchFrame->setCurrentModel(true);
+    ui->archiveMatchFrame->setCurrentModel(false);
+
+    ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
+    ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+}
+
+void TSingleLogFrame::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
+{
+    if (!in)
+    {
+        ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
+        ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+        return;
+    }
+
+    xferTree = ui->archiveMatchFrame;
+    ui->archiveMatchFrame->setCurrentModel( true);
+    ui->otherMatchFrame->setCurrentModel(false);
+
+    ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
+    ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+}
+void TSingleLogFrame::on_MatchStarting(BaseContestLog *ct)
+{
+      // clear down match trees
+    if (contest == ct)
+    {
+      xferTree = nullptr;
+
+      ui->thisMatchFrame->treeClickIndex = QModelIndex();
+      ui->otherMatchFrame->treeClickIndex = QModelIndex();
+      ui->archiveMatchFrame->treeClickIndex = QModelIndex();
+
+      ui->GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
+    }
+}
+
+MatchTreeItem * TSingleLogFrame::getXferItem()
 {
    // transfer from current match
-   if (!contest || contest->isReadOnly() )
+
+   // copy relevant parts of match contact to screen contact
+   if ( ui->archiveMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  ui->archiveMatchFrame == xferTree ) )
+   {
+      MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(ui->archiveMatchFrame->treeClickIndex.internalPointer());
+
+      return MatchTreeIndex;
+
+   }
+   else
+   {
+      if ( ui->otherMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr || ui->otherMatchFrame == xferTree) )
+      {
+         MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * > (ui->otherMatchFrame->treeClickIndex.internalPointer());
+
+         return  MatchTreeIndex;
+      }
+   }
+   return nullptr;
+}
+void TSingleLogFrame::on_XferPressed(BaseContestLog *c, QString basename)
+{
+   // transfer from current match
+   if (!contest || contest->isReadOnly() || c != contest || basename != "Log" )
       return ;
 
-   MatchTreeItem *mi = ui->matchTreesFrame->getXferItem();
+   MatchTreeItem *mi = getXferItem();
 
    transferDetails(mi);
 }
+void TSingleLogFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &/*selected*/)
+{
+    if (contest == c && basename == "Log")
+    {
+        switch (m)
+        {
+        case ThisMatch:
+            //xferTree =  ui->thisMatchFrame;
+            break;
+
+        case OtherMatch:
+            xferTree = ui->otherMatchFrame;
+            break;
+
+        case ArchiveMatch:
+            xferTree = ui->archiveMatchFrame;
+            break;
+        }
+    }
+}
+
 //==============================================================================
 void TSingleLogFrame::transferDetails(MatchTreeItem *MatchTreeIndex )
 {
@@ -587,7 +704,10 @@ void TSingleLogFrame::getSplitters()
     ui->ControlSplitter->restoreState(state);
     ui->ControlSplitter->setHandleWidth(splitterHandleWidth);
 
-    ui->matchTreesFrame->getSplitters();
+    state = settings.value("Log/ArchiveSplitter/state").toByteArray();
+    ui->archiveSplitter->restoreState(state);
+    ui->archiveSplitter->setHandleWidth(splitterHandleWidth);
+
 }
 void TSingleLogFrame::onSplittersChanged()
 {
@@ -1081,4 +1201,12 @@ void TSingleLogFrame::sendRotatorPreset(QString s )
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
         LogContainer->sendDM->sendRotatorPreset(s);
+}
+
+void TSingleLogFrame::on_archiveSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QByteArray state = ui->archiveSplitter->saveState();
+    QSettings settings;
+    settings.setValue("Log/ArchiveSplitter/state", state);
+    MinosLoggerEvents::SendSplittersChanged();
 }

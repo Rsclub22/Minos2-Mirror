@@ -71,14 +71,17 @@ SOURCES += main.cpp \
     rigmemdialog.cpp \
     LocCalcFrame.cpp \
     StackedInfoFrame.cpp \
-    MatchTreesFrame.cpp \
     runbuttondialog.cpp \
     RigMemoryFrame.cpp \
     locTreeFrame.cpp \
     ScreenConfig.cpp \
     ScreenConfigElement.cpp \
     ScreenConfigRow.cpp \
-    ScreenConfigFile.cpp
+    ScreenConfigFile.cpp \
+    MatchTreeFrame.cpp \
+    MatchArchiveFrame.cpp \
+    MatchOtherFrame.cpp \
+    MatchThisFrame.cpp
 
 HEADERS  += \
     tlogcontainer.h \
@@ -120,14 +123,17 @@ HEADERS  += \
     rigmemdialog.h \
     LocCalcFrame.h \
     StackedInfoFrame.h \
-    MatchTreesFrame.h \
     RigMemoryFrame.h \
     locTreeFrame.h \
     runbuttondialog.h \
     ScreenConfig.h \
     ScreenConfigElement.h \
     ScreenConfigRow.h \
-    ScreenConfigFile.h
+    ScreenConfigFile.h \
+    MatchTreeFrame.h \
+    MatchArchiveFrame.h \
+    MatchOtherFrame.h \
+    MatchThisFrame.h
 
 FORMS    += tlogcontainer.ui \
     contestdetails.ui \
@@ -156,14 +162,14 @@ FORMS    += tlogcontainer.ui \
     rotcontrolframe.ui \
     LocCalcFrame.ui \
     StackedInfoFrame.ui \
-    MatchTreesFrame.ui \
     RigMemoryFrame.ui \
     locTreeFrame.ui \
     presetbuttondialog.ui \
     runbuttondialog.ui \
     ScreenConfig.ui \
     ScreenConfigElement.ui \
-    ScreenConfigRow.ui
+    ScreenConfigRow.ui \
+    MatchTreeFrame.ui
 
 
 DISTFILES += \
