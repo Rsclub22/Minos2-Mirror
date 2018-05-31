@@ -195,9 +195,9 @@ void MinosTestExport::exportStation(QSharedPointer<QFile> expfd )
         st->addMember(ct->radioName.getValue().toString(), "radioName");
         dirty = true;
    }
-   if (ct->rotatorName.isDirty())
+   if (ct->antennaName.isDirty())
    {
-        st->addMember( ct->rotatorName.getValue().toString(), "rotatorName");
+        st->addMember( ct->antennaName.getValue().toString(), "rotatorName");
         dirty = true;
    }
 

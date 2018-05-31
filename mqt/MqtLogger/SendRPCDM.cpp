@@ -451,6 +451,11 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                                     trace(QString("SendRPC Rotator set minAzimuth %1").arg(selDetail.minAzimuth().getValue()));
                                     tslf->on_RotatorMinAzimuth(QString::number(selDetail.minAzimuth().getValue()));
                                 }
+                                if (selDetail.cwCcwCmdEnable().isDirty())
+                                {
+                                    trace(QString("SendRPC Rotator set cwCcwCmdEnable %1").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False"));
+                                    tslf->on_cwCcwCmdEnable(selDetail.cwCcwCmdEnable().getValue());
+                                }
                                 selDetail.clearDirty();
 
                                 if (rotatorCache.rotatorPresetsIsDirty(rotSelected))

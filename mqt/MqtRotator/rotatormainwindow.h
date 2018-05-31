@@ -279,6 +279,7 @@ private:
     void sendPresetListLogger();
     void cwCCWControlVisible(bool visible);
     void savePreset(RotPresetData &editData);
+
 };
 
 #endif // ROTATORMAINWINDOW_H

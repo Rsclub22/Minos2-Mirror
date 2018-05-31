@@ -533,7 +533,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
     updateQSODisplay();
 
     LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
-    LogContainer->sendDM->invalidateRotatorCache(ct->radioName.getValue());
+    LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
 
 }
 void TSingleLogFrame::doNextContactDetailsOnLeftClick(bool /*keepSizes*/ )
@@ -1244,6 +1244,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
             else
             {
                 LogContainer->sendDM->changeRigSelectionTo(radName, mode, ct->uuid);  // send message including mode if it has been appended.
+                LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             }
 
 
@@ -1265,16 +1266,17 @@ void TSingleLogFrame::sendSelectRotator(const QString &s)
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
         if (ct && !contest->isProtected())
         {
-            // log frame doesn't record the rotator name
+            // log frame doesn't record the antenna name
 
-            if (s != ct->rotatorName.getValue().toString())
+            if (s != ct->antennaName.getValue().toString())
             {
-                ct->rotatorName.setValue(s);
+                ct->antennaName.setValue(s);
                 ct->commonSave(false);
 
                 //FKHRotControlFrame->setRotatorAntennaName(s);
             }
-            LogContainer->sendDM->changeRotatorSelectionTo(ct->rotatorName.getValue(), ct->uuid);
+            LogContainer->sendDM->changeRotatorSelectionTo(ct->antennaName.getValue(), ct->uuid);
+            LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
         }
     }
 
@@ -1347,6 +1349,14 @@ void TSingleLogFrame::on_RotatorMinAzimuth(QString s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorMinAzimuth(s);
+    }
+}
+
+void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+       FKHRotControlFrame->setCwCcwCmdEnable(s);
     }
 }
 

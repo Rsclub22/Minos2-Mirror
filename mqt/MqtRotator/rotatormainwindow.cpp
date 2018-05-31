@@ -913,8 +913,21 @@ void RotatorMainWindow::upDateAntenna()
             openRotator();
             offSetDisplay->setText(QString::number(setupAntenna->currentAntenna.antennaOffset));
 
-       // don't display overlap if rotator doesn't support or user turned off overlap
+            // don't display overlap if rotator doesn't support or user turned off overlap
             toggleOverLapDisplay(setupAntenna->currentAntenna.overRunFlag);
+
+           // for test ******************************************************************************************
+            //setupAntenna->currentAntenna.supportCwCcwCmd = false;
+           // setupAntenna->currentAntenna.simCwCcwCmd = false;
+
+            if (setupAntenna->currentAntenna.supportCwCcwCmd)           // want to use simCwCccwCmd?
+            {
+                cwCCWControlVisible(true);
+            }
+            else
+            {
+                cwCCWControlVisible(setupAntenna->currentAntenna.simCwCcwCmd);
+            }
 
             dumpRotatorToTraceLog();
 
@@ -926,14 +939,24 @@ void RotatorMainWindow::upDateAntenna()
             {
                 sendStatusToLogDisConnected();
             }
+
             rotatorBearing = 9999;      // force display update
            // update logger
            if (appName.length() > 0)
            {
                sendStatusToLogStop();
                PubSubName psname(setupAntenna->currentAntennaName);
+               trace(QString("Update Antenna - send to logger - maxAzimuth = %1, minAzimuth = %2, simulate CwCcwCmd = %3").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)).arg(QString::number(setupAntenna->currentAntenna.min_azimuth)).arg(setupAntenna->currentAntenna.supportCwCcwCmd  ? "True" : "False"));
                msg->rotatorCache.setMaxAzimuth(psname, setupAntenna->currentAntenna.max_azimuth);
-               msg->rotatorCache.setMinAzimuth(psname, setupAntenna->currentAntenna.min_azimuth);
+               if (setupAntenna->currentAntenna.supportCwCcwCmd)           // want to use simCwCccwCmd?
+               {
+                   msg->rotatorCache.setCwCcwCmdEnable(psname, true);
+               }
+               else
+               {
+                   msg->rotatorCache.setCwCcwCmdEnable(psname, setupAntenna->currentAntenna.simCwCcwCmd);
+               }
+
            }
         }
     }
@@ -953,7 +976,12 @@ void RotatorMainWindow::upDateAntenna()
             writeWindowTitle(appName);
         }
     }
-    msg->rotatorCache.publish();
+
+    if (appName.length() > 0)
+    {
+        msg->rotatorCache.publish();
+    }
+
 }
 void RotatorMainWindow::refreshAntenna()
 {
@@ -1678,6 +1706,8 @@ void RotatorMainWindow::rot_right_button_off()
     ui->rot_right_button->setText("(CW) Right");
 }
 
+
+
 void RotatorMainWindow::stop_button_on()
 {
 
@@ -1787,6 +1817,9 @@ void RotatorMainWindow::sendStatusToLogError()
     statusMsg = ROT_STATUS_ERROR;
     sendStatusLogger();
 }
+
+
+
 
 void RotatorMainWindow::sleepFor(qint64 milliseconds)
 {
@@ -2152,17 +2185,12 @@ void RotatorMainWindow::aboutRotatorConfig()
     msg.append(QString("Current Max Azimuth = %1\n").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)));
     msg.append(QString("Current Min Azimuth = %1\n").arg(QString::number(setupAntenna->currentAntenna.min_azimuth)));
     msg.append(QString("South Stop Type = %1\n").arg(southStopNames[setupAntenna->currentAntenna.southStopType]));
-    QString f;
-    overLapActiveflag ? f = "True" : f = "False";
-    msg.append(QString("Overrun flag = %1\n").arg(f));
-    setupAntenna->currentAntenna.supportCwCcwCmd ? f = "True" : f = "False";
-    msg.append(QString("Support CW and CCW Commands = %1\n").arg(f));
-    setupAntenna->currentAntenna.simCwCcwCmd ? f = "True" : f = "False";
-    msg.append(QString("Simulate CW and CCW Commands selected = %1\n").arg(f));
+    msg.append(QString("Overrun flag = %1\n").arg(overLapActiveflag ? "True" : "False"));
+    msg.append(QString("Support CW and CCW Commands = %1\n").arg(setupAntenna->currentAntenna.supportCwCcwCmd ? "True" : "False"));
+    msg.append(QString("Simulate CW and CCW Commands selected = %1\n").arg(setupAntenna->currentAntenna.simCwCcwCmd ? "True" : "False"));
     msg.append(QString("Rotator Max Baudrate = %1\n").arg(QString::number(setupAntenna->currentAntenna.maxBaudRate)));
     msg.append(QString("Rotator Min Baud rate = %1\n").arg(QString::number(setupAntenna->currentAntenna.minBaudRate)));
-    ui->actionTraceLog->isChecked() ? f = "True" : f = "False";
-    msg.append(QString("Tracelog = %1\n").arg(f));
+    msg.append(QString("Tracelog = %1\n").arg(ui->actionTraceLog->isChecked() ? "True" : "False"));
 
 
 
@@ -2201,17 +2229,11 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
     trace(QString("Current Max Azimuth = %1").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)));
     trace(QString("Current Min Azimuth = %1").arg(QString::number(setupAntenna->currentAntenna.min_azimuth)));
     trace(QString("South Stop Type = %1\n").arg(southStopNames[setupAntenna->currentAntenna.southStopType]));
-
-    QString f;
-    overLapActiveflag ? f = "True" : f = "False";
-    trace(QString("Overrun flag = %1").arg(f));
-    setupAntenna->currentAntenna.supportCwCcwCmd ? f = "True" : f = "False";
-    trace(QString("Support CW and CCW Commands = %1").arg(f));
-    setupAntenna->currentAntenna.simCwCcwCmd ? f = "True" : f = "False";
-    trace(QString("Simulate CW and CCW Commands selected = %1").arg(f));
+    trace(QString("Overrun flag = %1").arg(overLapActiveflag ? "True" : "False"));
+    trace(QString("Support CW and CCW Commands = %1").arg(setupAntenna->currentAntenna.supportCwCcwCmd ? "True" : "False"));
+    trace(QString("Simulate CW and CCW Commands selected = %1").arg(setupAntenna->currentAntenna.simCwCcwCmd ? "True" : "False"));
     trace(QString("Rotator Max Baudrate = %1").arg(QString::number(setupAntenna->currentAntenna.maxBaudRate)));
     trace(QString("Rotator Min Baud rate = %1").arg(QString::number(setupAntenna->currentAntenna.minBaudRate)));
-    ui->actionTraceLog->isChecked() ? f = "True" : f = "False";
-    trace(QString("Tracelog = %1").arg(f));
+    trace(QString("Tracelog = %1").arg(ui->actionTraceLog->isChecked() ? "True" : "False"));
 
 }

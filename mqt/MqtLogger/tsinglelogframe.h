@@ -192,6 +192,7 @@ private slots:
     void on_RotatorBearing(QString);
     void on_RotatorMaxAzimuth(QString);
     void on_RotatorMinAzimuth(QString);
+    void on_cwCcwCmdEnable(bool);
 
     void sendKeyerPlay( int fno );
     void sendKeyerRecord( int fno );

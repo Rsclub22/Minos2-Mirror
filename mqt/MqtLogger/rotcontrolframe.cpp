@@ -58,6 +58,7 @@ RotControlFrame::RotControlFrame(QWidget *parent):
     rot_left_button_off();
     rot_right_button_off();
     showTurnButOff();
+    setCwCcW_Items_Visible(supportCwCcwCmd);   // init visible
     traceMsg("RotControlFrame Started");
 
 }
@@ -443,7 +444,7 @@ void RotControlFrame::setRotatorList(QString s)
     ui->antennaName->addItems(rots);
 
     if (ct && !ct->isProtected())
-        setRotatorAntennaName(ct->rotatorName.getValue().toString());
+        setRotatorAntennaName(ct->antennaName.getValue().toString());
         //ui->antennaName->setCurrentText(ct->rotatorName.getValue());
 
 }
@@ -586,7 +587,7 @@ void RotControlFrame::on_ContestPageChanged()
 {
     // send rotator select to rotator app
 
-    emit selectRotator(ct->rotatorName.getValue().toString());
+    emit selectRotator(ct->antennaName.getValue().toString());
 }
 
 void RotControlFrame::setRotatorBearing(const QString &s)
@@ -688,8 +689,19 @@ void RotControlFrame::setRotatorMinAzimuth(const QString &s)
 }
 
 
+void RotControlFrame::setCwCcwCmdEnable(bool s)
+{
+    supportCwCcwCmd = s;
+    setCwCcW_Items_Visible(s);
+}
 
-
+void RotControlFrame::setCwCcW_Items_Visible(bool visible)
+{
+    ui->nudgeLeft->setVisible(visible);
+    ui->nudgeRight->setVisible(visible);
+    ui->RotateLeft->setVisible(visible);
+    ui->RotateRight->setVisible(visible);
+}
 
 void RotControlFrame::traceMsg(QString msg)
 {

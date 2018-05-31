@@ -59,7 +59,7 @@ void LoggerContestLog::clearDirty()
    entAGL.clearDirty();
    entASL.clearDirty();
    radioName.clearDirty();
-   rotatorName.clearDirty();
+   antennaName.clearDirty();
    ops1.clearDirty();
    ops2.clearDirty();
    entCondx1.clearDirty();
@@ -120,7 +120,7 @@ void LoggerContestLog::setDirty()
    entAGL.setDirty();
    entASL.setDirty();
    radioName.setDirty();
-   rotatorName.setDirty();
+   antennaName.setDirty();
    sectionList.setDirty();
    ops1.setDirty();
    ops2.setDirty();
@@ -431,7 +431,7 @@ void LoggerContestLog::setINIDetails()
       stationBundle.getStringProfile( espRadioName, s );
       radioName.setValue( PubSubName(s) );
       stationBundle.getStringProfile( espRotatorName, s );
-      rotatorName.setValue(PubSubName(s));
+      antennaName.setValue(PubSubName(s));
       stationBundle.endGroup();
    }
 }
@@ -1504,7 +1504,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                   if (mt->getStructArgMemberValue("radioName", s))
                     radioName.setValue(PubSubName(s));
                   if (mt->getStructArgMemberValue("rotatorName", s))
-                    rotatorName.setValue(PubSubName(s));
+                    antennaName.setValue(PubSubName(s));
                }
 			   else
 				  if ( methodName == "MinosLogOperators" )

@@ -665,7 +665,7 @@ void RigSetupForm::pollIntervalVisible(bool s)
 void RigSetupForm::ritEnableSelected(int /*state*/)
 {
     bool checked = ui->RITEnable->isChecked();
-    if (radioData->ritEnable != ui->RITEnable->isChecked())
+    if (radioData->ritEnable != checked)
     {
         radioData->ritEnable = checked;
         radioValueChanged = true;
@@ -693,7 +693,7 @@ void RigSetupForm::ritEnableVisible(bool v)
 void RigSetupForm::enableTransVertSelected(bool /*flag*/)
 {
     bool checked = ui->enableTransVert->isChecked();
-    if(radioData->transVertEnable != ui->enableTransVert->isChecked())
+    if(radioData->transVertEnable != checked)
     {
         radioData->transVertEnable = checked;
         transVertTabEnable(checked);

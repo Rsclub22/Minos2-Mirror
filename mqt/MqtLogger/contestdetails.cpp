@@ -1041,7 +1041,7 @@ QWidget * ContestDetails::getDetails( )
     if (LogContainer->sendDM->radioLoaded)
         contest->radioName.setValue(PubSubName(ui->radioNameEdit->currentText().trimmed().remove(':')));
     if (LogContainer->sendDM->rotatorLoaded)
-        contest->rotatorName.setValue(PubSubName(ui->antennaNameEdit->currentText()));
+        contest->antennaName.setValue(PubSubName(ui->antennaNameEdit->currentText()));
 
     contest->currentMode.setValue(ui->ModeComboBox->currentText());
 
@@ -1420,7 +1420,7 @@ void ContestDetails::on_RotatorList(QString /*s*/)
     ui->antennaNameEdit->clear();
     ui->antennaNameEdit->addItem("");
     ui->antennaNameEdit->addItems( LogContainer->sendDM->rotators());
-    ui->antennaNameEdit->setCurrentText(contest->rotatorName.getValue().toString());
+    ui->antennaNameEdit->setCurrentText(contest->antennaName.getValue().toString());
 }
 void ContestDetails::on_SetRadioList(QString /*s*/)
 {

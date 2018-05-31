@@ -59,13 +59,7 @@ public:
 
     QVector<BandDetail*> bands;
 
-    QStringList addedRadioTabs;     // tracked edited data
-    QStringList removeRadioTabs;
-    QStringList renameRadioTabs;   // old radio names
-
-
     int getRadioId(QString rotator);
-
 
     void readCurrentRadio();
     QString getRadioComPort(QString);
