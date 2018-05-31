@@ -267,7 +267,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
     updateQSODisplay();
 
     LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
-    LogContainer->sendDM->invalidateRotatorCache(ct->radioName.getValue());
+    LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
 
 }
 void TSingleLogFrame::doNextContactDetailsOnLeftClick(bool keepSizes )
@@ -986,16 +986,17 @@ void TSingleLogFrame::sendSelectRotator(const QString &s)
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
         if (ct && !contest->isProtected())
         {
-            // log frame doesn't record the rotator name
+            // log frame doesn't record the antenna name
 
-            if (s != ct->rotatorName.getValue().toString())
+            if (s != ct->antennaName.getValue().toString())
             {
-                ct->rotatorName.setValue(s);
+                ct->antennaName.setValue(s);
                 ct->commonSave(false);
 
                 //ui->FKHRotControlFrame->setRotatorAntennaName(s);
             }
-            LogContainer->sendDM->changeRotatorSelectionTo(ct->rotatorName.getValue(), ct->uuid);
+            LogContainer->sendDM->changeRotatorSelectionTo(ct->antennaName.getValue(), ct->uuid);
+            LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
         }
     }
 

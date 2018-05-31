@@ -83,7 +83,7 @@ class LoggerContestLog : public BaseContestLog
       MinosStringItem<QString> stationBundleName;
 
       MinosItem<PubSubName> radioName;
-      MinosItem<PubSubName> rotatorName;
+      MinosItem<PubSubName> antennaName;
 
       MinosStringItem<QString> VHFContestName;
 
