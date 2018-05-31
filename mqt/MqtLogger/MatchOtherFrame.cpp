@@ -1,7 +1,6 @@
 #include "ContestApp.h"
 #include "MinosLoggerEvents.h"
 #include "MatchOtherFrame.h"
-#include "ui_MatchOtherFrame.h"
 
 MatchOtherFrame::MatchOtherFrame(QWidget *parent) :
     MatchTreeFrame(parent)

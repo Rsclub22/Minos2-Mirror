@@ -2,7 +2,6 @@
 #include "MinosLoggerEvents.h"
 
 #include "MatchThisFrame.h"
-#include "ui_MatchThisFrame.h"
 
 MatchThisFrame::MatchThisFrame(QWidget *parent) :
     MatchTreeFrame (parent)
