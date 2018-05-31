@@ -37,6 +37,9 @@
 #include <QTableWidgetItem>
 #include <QTreeView>
 #include <QToolButton>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QVBoxLayout>
 
 #include <QDebug>
 template <class itemtype >inline bool operator < (const MapWrapper<itemtype> &key1, const MapWrapper<itemtype> &key2)
@@ -50,6 +53,7 @@ template <class itemtype >inline bool operator == (const MapWrapper<itemtype> &k
     return key1.wt.data() == key2.wt.data();
 }
 
+#include "minossplitter.h"
 
 #include <math.h>
 #include <time.h>
@@ -70,7 +74,6 @@ template <class itemtype >inline bool operator == (const MapWrapper<itemtype> &k
 #include "MatchContact.h"
 #include "ListContact.h"
 #include "MatchCollection.h"
-//#include "MinosLoggerEvents.h"
 #include "validators.h"
 
 #include "rigcontrolcommonconstants.h"

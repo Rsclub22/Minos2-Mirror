@@ -17,6 +17,19 @@
 #include "rigutils.h"
 #include "LoggerContest.h"
 
+#include "ScreenConfigFile.h"
+#include "ScreenConfigElement.h"
+#include "ScreenConfigRow.h"
+#include "ScreenConfig.h"
+
+#include "MatchArchiveFrame.h"
+#include "MatchOtherFrame.h"
+#include "MatchThisFrame.h"
+#include "minossplitter.h"
+#include "qsologframe.h"
+#include "rigcontrolframe.h"
+#include "rotcontrolframe.h"
+
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
 
@@ -32,47 +45,47 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     lastStanzaCount( 0 )
 
 {
-    ui->setupUi(this);
-
-    doSetAuxWindows(false);
-
-    ui->FKHRigControlFrame->setContest(contest);
-    ui->FKHRotControlFrame->setContest(contest);
-
-    ui->GJVQSOLogFrame->setAsEdit(false, "Log");
-
-    ui->thisMatchFrame->initialise();
-    ui->otherMatchFrame->initialise();
-    ui->archiveMatchFrame->initialise();
-
-    OtherMatchTreeFW = new FocusWatcher(ui->otherMatchFrame->getTreeView());
-    connect(OtherMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onOtherMatchTreeFocused(QObject *, bool, QFocusEvent *)));
-    ArchiveMatchTreeFW = new FocusWatcher(ui->archiveMatchFrame->getTreeView());
-    connect(ArchiveMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onArchiveTreeFocused(QObject *, bool, QFocusEvent *)));
-
-
-    ui->thisMatchFrame->setBaseName("Log");
-    ui->otherMatchFrame->setBaseName("Log");
-    ui->archiveMatchFrame->setBaseName("Log");
-
-    ui->ControlSplitter->setVisible(false);
-
 #ifdef Q_OS_ANDROID
     splitterHandleWidth = 20;
 #else
     splitterHandleWidth = 6;
 #endif
 
-    qsoModel.initialise(contest);
-    ui->QSOTable->setModel(&qsoModel);
-    ui->QSOTable->setItemDelegate( new HtmlDelegate );
+    ui->setupUi(this);
 
-    ui->QSOTable->resizeColumnsToContents();
-    ui->QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    buildScreenLayout();
+
+    //doSetAuxWindows(false);
+
+    FKHRigControlFrame->setContest(contest);
+    FKHRotControlFrame->setContest(contest);
+
+    GJVQSOLogFrame->setAsEdit(false, "Log");
+
+    thisMatchFrame->initialise();
+    otherMatchFrame->initialise();
+    archiveMatchFrame->initialise();
+
+    OtherMatchTreeFW = new FocusWatcher(otherMatchFrame->getTreeView());
+    connect(OtherMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onOtherMatchTreeFocused(QObject *, bool, QFocusEvent *)));
+    ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
+    connect(ArchiveMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onArchiveTreeFocused(QObject *, bool, QFocusEvent *)));
+
+
+    thisMatchFrame->setBaseName("Log");
+    otherMatchFrame->setBaseName("Log");
+    archiveMatchFrame->setBaseName("Log");
+
+    qsoModel.initialise(contest);
+    QSOTable->setModel(&qsoModel);
+    QSOTable->setItemDelegate( new HtmlDelegate );
+
+    QSOTable->resizeColumnsToContents();
+    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     restoreColumns();
 
-    ui->GJVQSOLogFrame->initialise( contest );
+    GJVQSOLogFrame->initialise( contest );
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ContestPageChanged()), this, SLOT(on_ContestPageChanged()));
 
@@ -89,7 +102,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(setMemory(BaseContestLog *, QString, QString)), this, SLOT(on_SetMemory(BaseContestLog *, QString, QString)));
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
 
-    doNextContactDetailsOnLeftClick( true);  // but the sizes are zero...
+    //doNextContactDetailsOnLeftClick( true);  // but the sizes are zero...
 
     getSplitters();
 
@@ -100,13 +113,13 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(GoToSerial(BaseContestLog*)), this, SLOT(on_GoToSerial(BaseContestLog*)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(XferPressed(BaseContestLog *, QString)), this, SLOT(on_XferPressed(BaseContestLog *, QString)));
-    connect(ui->thisMatchFrame, SIGNAL(editContact(QSharedPointer<BaseContact>)), this, SLOT(EditContact(QSharedPointer<BaseContact>)));
+    connect(thisMatchFrame, SIGNAL(editContact(QSharedPointer<BaseContact>)), this, SLOT(EditContact(QSharedPointer<BaseContact>)));
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(XferEnabled(bool, BaseContestLog *, QString)), ui->GJVQSOLogFrame, SLOT(setXferEnabled(bool, BaseContestLog *, QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(XferEnabled(bool, BaseContestLog *, QString)), GJVQSOLogFrame, SLOT(setXferEnabled(bool, BaseContestLog *, QString)));
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
             this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
 
-    ui->GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
+    GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
 
     // BandMap Updates
 
@@ -119,13 +132,13 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer->sendDM, SIGNAL(setRadioList(QString)), this, SLOT(on_SetRadioList(QString)));
 
     // To rig controller
-    connect(ui->FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
+    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
 
-    connect(ui->FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
-    connect(ui->FKHRigControlFrame, SIGNAL(sendRitFreq(QString)), this, SLOT(sendRadioRitFreq(QString)));
-    connect(ui->FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
-    connect(ui->FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
-    connect(ui->GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
+    connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
+    connect(FKHRigControlFrame, SIGNAL(sendRitFreq(QString)), this, SLOT(sendRadioRitFreq(QString)));
+    connect(FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
+    connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
+    connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
     // Rotator updates
     // From rotator controller
@@ -133,15 +146,16 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer->sendDM, SIGNAL(RotatorList(QString)), this, SLOT(on_RotatorList(QString)));
 
     // To rotator controller
-    connect(ui->FKHRotControlFrame, SIGNAL(sendRotator(rpcConstants::RotateDirection , int  )), this, SLOT(sendRotator(rpcConstants::RotateDirection , int  )));
-    connect(ui->FKHRotControlFrame, SIGNAL(sendRotatorPreset(QString)), this, SLOT(sendRotatorPreset(QString)));
-    connect(ui->FKHRotControlFrame, SIGNAL(selectRotator(QString)), this, SLOT(sendSelectRotator(QString)));
+    connect(FKHRotControlFrame, SIGNAL(sendRotator(rpcConstants::RotateDirection , int  )), this, SLOT(sendRotator(rpcConstants::RotateDirection , int  )));
+    connect(FKHRotControlFrame, SIGNAL(sendRotatorPreset(QString)), this, SLOT(sendRotatorPreset(QString)));
+    connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), this, SLOT(sendSelectRotator(QString)));
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
 
-    connect( ui->QSOTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+    connect( QSOTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
+    connect(QSOTable, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onQSOTable_doubleClicked(const QModelIndex &)));
 
     connect(LogContainer, SIGNAL(sendKeyerPlay( int )), this, SLOT(sendKeyerPlay(int)));
     connect(LogContainer, SIGNAL(sendKeyerRecord( int)), this, SLOT(sendKeyerRecord(int)));
@@ -152,14 +166,10 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer, SIGNAL(setAuxWindows()), this, SLOT(setAuxWindows()));
 
 /*
-    connect(ui->FKHBandMapFrame, SIGNAL(sendBandMap( QString, QString, QString, QString, QString )),
+    connect(FKHBandMapFrame, SIGNAL(sendBandMap( QString, QString, QString, QString, QString )),
             this, SLOT(sendBandMap(QString,QString,QString,QString,QString)));
 */
-    ui->logFrameSplitter->setStretchFactor(0, 1);
-    ui->logFrameSplitter->setStretchFactor(1, 0);
-    ui->logFrameSplitter->setStretchFactor(2, 0);
-    ui->logFrameSplitter->setStretchFactor(3, 1);
-    ui->logFrameSplitter->setChildrenCollapsible(false);
+
 }
 
 TSingleLogFrame::~TSingleLogFrame()
@@ -169,10 +179,242 @@ TSingleLogFrame::~TSingleLogFrame()
     ui = nullptr;
     contest = nullptr;
 }
+void TSingleLogFrame::buildScreenLayout()
+{
+    ScreenConfigFile scf;
+    if (!scf.loadFile())
+    {
+        mShowMessage("Invalid or missing screen configurations", this);
+        exit(1);
+    }
 
+    // create component frames, parentless
+
+    QSOTable = new QTableView(this);
+    QSOTable->setObjectName(QStringLiteral("QSOTable"));
+    QSOTable->setFocusPolicy(Qt::ClickFocus);
+    QSOTable->setFrameShape(QFrame::NoFrame);
+    QSOTable->setFrameShadow(QFrame::Plain);
+    QSOTable->setLineWidth(1);
+    QSOTable->setMidLineWidth(1);
+    QSOTable->setEditTriggers(QAbstractItemView::EditKeyPressed);
+    QSOTable->setAlternatingRowColors(true);
+    QSOTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    QSOTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    QSOTable->setWordWrap(false);
+    QSOTable->setCornerButtonEnabled(false);
+    QSOTable->horizontalHeader()->setHighlightSections(false);
+    QSOTable->horizontalHeader()->setStretchLastSection(true);
+    QSOTable->verticalHeader()->setVisible(false);
+
+    QSOTable->setVisible(false);
+
+    GJVQSOLogFrame = new QSOLogFrame(this);
+    GJVQSOLogFrame->setObjectName(QStringLiteral("GJVQSOLogFrame"));
+    QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    sizePolicy2.setHorizontalStretch(6);
+    sizePolicy2.setVerticalStretch(0);
+    sizePolicy2.setHeightForWidth(GJVQSOLogFrame->sizePolicy().hasHeightForWidth());
+    GJVQSOLogFrame->setSizePolicy(sizePolicy2);
+    GJVQSOLogFrame->setFrameShape(QFrame::NoFrame);
+    GJVQSOLogFrame->setFrameShadow(QFrame::Plain);
+    GJVQSOLogFrame->setLineWidth(2);
+    GJVQSOLogFrame->setMidLineWidth(2);
+
+    GJVQSOLogFrame->setVisible(false);
+
+    FKHRigControlFrame = new RigControlFrame(this);
+    FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
+    QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    sizePolicy1.setHorizontalStretch(0);
+    sizePolicy1.setVerticalStretch(0);
+    sizePolicy1.setHeightForWidth(FKHRigControlFrame->sizePolicy().hasHeightForWidth());
+    FKHRigControlFrame->setSizePolicy(sizePolicy1);
+    FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
+    FKHRigControlFrame->setFrameShadow(QFrame::Raised);
+
+    FKHRigControlFrame->setVisible(false);
+
+    FKHRotControlFrame = new RotControlFrame(this);
+    FKHRotControlFrame->setObjectName(QStringLiteral("FKHRotControlFrame"));
+    sizePolicy1.setHeightForWidth(FKHRotControlFrame->sizePolicy().hasHeightForWidth());
+    FKHRotControlFrame->setSizePolicy(sizePolicy1);
+    FKHRotControlFrame->setFrameShape(QFrame::StyledPanel);
+    FKHRotControlFrame->setFrameShadow(QFrame::Raised);
+
+    FKHRotControlFrame->setVisible(false);
+
+    CribSheet = new QFrame(this);
+    CribSheet->setObjectName(QStringLiteral("CribSheet"));
+    QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    sizePolicy3.setHorizontalStretch(1);
+    sizePolicy3.setVerticalStretch(0);
+    sizePolicy3.setHeightForWidth(CribSheet->sizePolicy().hasHeightForWidth());
+    CribSheet->setSizePolicy(sizePolicy3);
+    CribSheet->setFrameShape(QFrame::NoFrame);
+    CribSheet->setFrameShadow(QFrame::Plain);
+    CribSheet->setLineWidth(1);
+    CribSheet->setMidLineWidth(1);
+    QVBoxLayout *verticalLayout_5 = new QVBoxLayout(CribSheet);
+    verticalLayout_5->setSpacing(0);
+    verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+    verticalLayout_5->setContentsMargins(10, 0, 5, 0);
+    NextContactDetailsLabel = new QLabel(CribSheet);
+    NextContactDetailsLabel->setObjectName(QStringLiteral("NextContactDetailsLabel"));
+    sizePolicy1.setHeightForWidth(NextContactDetailsLabel->sizePolicy().hasHeightForWidth());
+    NextContactDetailsLabel->setSizePolicy(sizePolicy1);
+    NextContactDetailsLabel->setFrameShape(QFrame::NoFrame);
+    NextContactDetailsLabel->setLineWidth(2);
+    NextContactDetailsLabel->setMidLineWidth(2);
+    NextContactDetailsLabel->setTextFormat(Qt::RichText);
+    NextContactDetailsLabel->setWordWrap(true);
+    verticalLayout_5->addWidget(NextContactDetailsLabel);
+
+    CribSheet->setVisible(false);
+
+    thisMatchFrame = new MatchThisFrame(this);
+    thisMatchFrame->setObjectName(QStringLiteral("thisMatchFrame"));
+    thisMatchFrame->setFrameShape(QFrame::StyledPanel);
+    thisMatchFrame->setFrameShadow(QFrame::Raised);
+    sizePolicy1.setHeightForWidth(thisMatchFrame->sizePolicy().hasHeightForWidth());
+    thisMatchFrame->setSizePolicy(sizePolicy1);
+
+    thisMatchFrame->setVisible(false);
+
+    otherMatchFrame = new MatchOtherFrame(this);
+    otherMatchFrame->setObjectName(QStringLiteral("otherMatchFrame"));
+    otherMatchFrame->setFrameShape(QFrame::StyledPanel);
+    otherMatchFrame->setFrameShadow(QFrame::Raised);
+    sizePolicy1.setHeightForWidth(otherMatchFrame->sizePolicy().hasHeightForWidth());
+    otherMatchFrame->setSizePolicy(sizePolicy1);
+
+    otherMatchFrame->setVisible(false);
+
+    archiveMatchFrame = new MatchArchiveFrame(this);
+    archiveMatchFrame->setObjectName(QStringLiteral("archiveMatchFrame"));
+    archiveMatchFrame->setFrameShape(QFrame::StyledPanel);
+    archiveMatchFrame->setFrameShadow(QFrame::Raised);
+    sizePolicy1.setHeightForWidth(archiveMatchFrame->sizePolicy().hasHeightForWidth());
+    archiveMatchFrame->setSizePolicy(sizePolicy1);
+
+    archiveMatchFrame->setVisible(false);
+
+    // set frame to Vertical Layout, insert LogFrameSplitter
+    verticalLayout = new QVBoxLayout(this);
+    verticalLayout->setSpacing(0);
+    verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+    verticalLayout->setContentsMargins(0, 0, 0, 0);
+
+    logFrameSplitter = new MinosSplitter(this);
+    logFrameSplitter->setObjectName(QStringLiteral("logFrameSplitter"));
+    logFrameSplitter->setOrientation(Qt::Vertical);
+    logFrameSplitter->setChildrenCollapsible(false);
+
+    connect(logFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
+
+    QString curConfigName = "default";
+
+    SC sc = scf.configs[curConfigName];
+
+    int auxInstance = 0;
+    for (int j = 0; j < sc.rows.count(); j++)
+    {
+        // insert horizontal splitter in LogFrameSplitter
+        MinosSplitter *hs = new MinosSplitter(logFrameSplitter);
+        hs->setObjectName("row" + QString::number(j) + "splitter");
+        QSizePolicy sizePolicy;
+        sizePolicy.setHeightForWidth(hs->sizePolicy().hasHeightForWidth());
+        hs->setSizePolicy(sizePolicy);
+        hs->setOrientation(Qt::Horizontal);
+        hs->setChildrenCollapsible(false);
+        rowSplitters.push_back(hs);
+
+        for (int k = 0; k < sc.rows[j].elements.count(); k++)
+        {
+            QString type = sc.rows[j].elements[k].type;
+            // insert correct widget type in horizontal splitter
+
+            foreach(const SCTypeOption &opt, scoptions)
+            {
+                if (opt.s == type)
+                {
+                    switch (opt.type)
+                    {
+                    case sctNone:
+                    {
+                        break;
+                    }
+                    case sctAux:
+                    {
+                        LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
+                        StackedInfoFrame *f = new StackedInfoFrame(rowSplitters[j], auxInstance++);
+                        f->setContest(ct);
+                        rowSplitters[j]->addWidget(f);
+                        f->setVisible(true);
+                        break;
+                    }
+                    case sctLog:
+                    {
+                        QSOTable->setParent(rowSplitters[j]);
+                        rowSplitters[j]->addWidget(QSOTable);
+                        QSOTable->setVisible(true);
+                        break;
+                    }
+                    case sctRigControl:
+                    {
+                        rowSplitters[j]->addWidget(FKHRigControlFrame);
+                        break;
+                    }
+                    case sctRotControl:
+                    {
+                        rowSplitters[j]->addWidget(FKHRotControlFrame);
+                        break;
+                    }
+                    case sctQSOEdit:
+                    {
+                        rowSplitters[j]->addWidget(GJVQSOLogFrame);
+                        GJVQSOLogFrame->setVisible(true);
+                        break;
+                    }
+                    case sctNextQSODetails:
+                    {
+                        rowSplitters[j]->addWidget(CribSheet);
+                        CribSheet->setVisible(true);
+                        break;
+                    }
+                    case sctThisMatch:
+                    {
+                        rowSplitters[j]->addWidget(thisMatchFrame);
+                        thisMatchFrame->setVisible(true);
+                        break;
+                    }
+                    case sctOtherMatch:
+                    {
+                        rowSplitters[j]->addWidget(otherMatchFrame);
+                        otherMatchFrame->setVisible(true);
+                        break;
+                    }
+                    case sctArchiveMatch:
+                    {
+                        rowSplitters[j]->addWidget(archiveMatchFrame);
+                        archiveMatchFrame->setVisible(true);
+                        break;
+                    }
+                    case sctChat:
+                    {
+                        break;
+                    }
+
+                    }
+                }
+            }
+         }
+    }
+    verticalLayout->addWidget(logFrameSplitter);
+}
 void TSingleLogFrame::keyPressEvent( QKeyEvent* event )
 {
-    ui->GJVQSOLogFrame->doKeyPressEvent(event);
+    GJVQSOLogFrame->doKeyPressEvent(event);
 }
 QString TSingleLogFrame::makeEntry( bool saveMinos )
 {
@@ -206,15 +448,15 @@ void TSingleLogFrame::closeContest()
        RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
        qsoModel.initialise(nullptr);
 
-       ui->thisMatchFrame->setContest(nullptr);
-       ui->otherMatchFrame->setContest(nullptr);
-       ui->archiveMatchFrame->setContest(nullptr);
+       thisMatchFrame->setContest(nullptr);
+       otherMatchFrame->setContest(nullptr);
+       archiveMatchFrame->setContest(nullptr);
 
        MinosLoggerEvents::sendSetStackContest(nullptr);
-       ui->FKHRigControlFrame->setContest(nullptr);
-       ui->FKHRotControlFrame->setContest(nullptr);
+       FKHRigControlFrame->setContest(nullptr);
+       FKHRotControlFrame->setContest(nullptr);
        TContestApp::getContestApp() ->closeFile( contest );
-       ui->GJVQSOLogFrame->closeContest();
+       GJVQSOLogFrame->closeContest();
        contest = nullptr;
     }
 }
@@ -224,11 +466,11 @@ void TSingleLogFrame::restoreColumns()
     QByteArray state;
 
     state = settings.value("QSOTable/state").toByteArray();
-    ui->QSOTable->horizontalHeader()->restoreState(state);
+    QSOTable->horizontalHeader()->restoreState(state);
 
-    ui->thisMatchFrame->restoreColumns();
-    ui->otherMatchFrame->restoreColumns();
-    ui->archiveMatchFrame->restoreColumns();
+    thisMatchFrame->restoreColumns();
+    otherMatchFrame->restoreColumns();
+    archiveMatchFrame->restoreColumns();
 
     logColumnsChanged = false;
 
@@ -241,8 +483,8 @@ void TSingleLogFrame::showQSOs()
 
    restoreColumns();
 
-   ui->GJVQSOLogFrame->clearCurrentField();
-   ui->GJVQSOLogFrame->startNextEntry();
+   GJVQSOLogFrame->clearCurrentField();
+   GJVQSOLogFrame->startNextEntry();
 
 }
 void TSingleLogFrame::on_ContestPageChanged ()
@@ -253,21 +495,21 @@ void TSingleLogFrame::on_ContestPageChanged ()
     if ( this != LogContainer->getCurrentLogFrame() )
     {
 
-       ui->GJVQSOLogFrame->savePartial();  // we kill it on (re) entry, so not needed
+       GJVQSOLogFrame->savePartial();  // we kill it on (re) entry, so not needed
        return ;
     }
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     trace("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
     TContestApp::getContestApp() ->setCurrentContest( ct );
-    ui->thisMatchFrame->setContest(ct);
-    ui->otherMatchFrame->setContest(ct);
-    ui->archiveMatchFrame->setContest(ct);
+    thisMatchFrame->setContest(ct);
+    otherMatchFrame->setContest(ct);
+    archiveMatchFrame->setContest(ct);
     MinosLoggerEvents::sendSetStackContest(ct);
 
     if ( logColumnsChanged )
     {
-       ui->GJVQSOLogFrame->killPartial();
+       GJVQSOLogFrame->killPartial();
        showQSOs();             // this does a restorePartial
        logColumnsChanged = false;
     }
@@ -279,14 +521,14 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     refreshMults();
 
-    ui->GJVQSOLogFrame->selectField(nullptr);
-    ui->GJVQSOLogFrame->logTabChanged();
+    GJVQSOLogFrame->selectField(nullptr);
+    GJVQSOLogFrame->logTabChanged();
 
-    doNextContactDetailsOnLeftClick( false );
+    //doNextContactDetailsOnLeftClick( false );
     MinosLoggerEvents::SendShowOperators();
 
-    ui->FKHRigControlFrame->on_ContestPageChanged();
-    ui->FKHRotControlFrame->on_ContestPageChanged();
+    FKHRigControlFrame->on_ContestPageChanged();
+    FKHRotControlFrame->on_ContestPageChanged();
 
     updateQSODisplay();
 
@@ -294,71 +536,17 @@ void TSingleLogFrame::on_ContestPageChanged ()
     LogContainer->sendDM->invalidateRotatorCache(ct->radioName.getValue());
 
 }
-void TSingleLogFrame::doNextContactDetailsOnLeftClick(bool keepSizes )
+void TSingleLogFrame::doNextContactDetailsOnLeftClick(bool /*keepSizes*/ )
 {
-    QList<int> sizes = ui->CribSplitter->sizes();
-
-    bool isOnLeft = (ui->CribSplitter->widget(0) == ui->CribSheet);
-
-    bool conleft = LogContainer->isNextContactDetailsOnLeft();
-
-    if (conleft)
-    {
-        ui->CribSplitter->insertWidget(0, ui->CribSheet);
-    }
-    else
-    {
-        ui->CribSplitter->insertWidget(1, ui->CribSheet);
-    }
-
-    bool nowOnLeft = (ui->CribSplitter->widget(0) == ui->CribSheet);
-    if (isOnLeft != nowOnLeft)
-    {
-        //they have flipped
-        std::reverse(sizes.begin(), sizes.end());
-    }
-    if (!keepSizes)
-    {
-        ui->CribSplitter->setSizes(sizes);
-        on_CribSplitter_splitterMoved(0, 0);    // preserve the splitter position
-    }
+    mShowMessage("Please use the screen configuuration tool for this", nullptr);
 }
 void TSingleLogFrame::setAuxWindows()
 {
     doSetAuxWindows(true);
 }
-void TSingleLogFrame::doSetAuxWindows(bool saveSplitter)
+void TSingleLogFrame::doSetAuxWindows(bool /*saveSplitter*/)
 {
-    int num;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAuxWindows, num );
-
-    // correct the numbers...
-
-    if (auxFrames.size() > num)
-    {
-        for (int i = auxFrames.size(); i > num; i--)
-        {
-            StackedInfoFrame *f = auxFrames[auxFrames.size() - 1];
-            auxFrames.pop_back();
-            f->setParent(nullptr);
-            f->setVisible(false);
-            delete f;
-        }
-    }
-    if (auxFrames.size() < num)
-    {
-        for (int i = auxFrames.size(); i < num; i++)
-        {
-            LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-            StackedInfoFrame *f = new StackedInfoFrame(nullptr, i);
-            f->setContest(ct);
-            auxFrames.push_back(f);
-            ui->MultSplitter->addWidget(f);
-        }
-    }
-    if (saveSplitter)
-        on_MultSplitter_splitterMoved(0, 0);
-
+    mShowMessage("Please use the screen configuuration tool for this", nullptr);
 }
 void TSingleLogFrame::NextContactDetailsTimerTimer( )
 {
@@ -374,7 +562,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         }
         if ( contest->isReadOnly() )
         {
-            ui->NextContactDetailsLabel->setText( "<b><center><nobr><p><big>"
+            NextContactDetailsLabel->setText( "<b><center><nobr><p><big>"
                                                   + cb + "</p><h1>"
                                                   + contest->mycall.fullCall.getValue() + "<br>"
                                                   + contest->myloc.loc.getValue() + "<br>"
@@ -388,7 +576,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
             {
                 locBuff = "<br>" + contest->location.getValue();
             }
-            ui->NextContactDetailsLabel->setText( "<b><center><nobr><p><big>"
+            NextContactDetailsLabel->setText( "<b><center><nobr><p><big>"
                                                   + cb + "</p><h1>"
                                                   + contest->mycall.fullCall.getValue() + "<br>"
                                                   + snBuff + "<br>"
@@ -421,12 +609,14 @@ void TSingleLogFrame::HideTimerTimer(  )
 
     bool controlsLoaded = isBandMapLoaded() || isRadioLoaded() || isRotatorLoaded();
 
-    ui->ControlSplitter->setVisible(controlsLoaded && !contest->isReadOnly());
+//    ControlSplitter->setVisible(controlsLoaded && !contest->isReadOnly());
 
     if (controlsLoaded && !contest->isReadOnly())
     {
-        ui->FKHRigControlFrame->setVisible(isRadioLoaded());
-        ui->FKHRotControlFrame->setVisible(isRotatorLoaded());
+        if (FKHRigControlFrame->parent() != this)
+            FKHRigControlFrame->setVisible(isRadioLoaded());
+        if (FKHRotControlFrame->parent() != this)
+            FKHRotControlFrame->setVisible(isRotatorLoaded());
     }
 }
 void TSingleLogFrame::on_NextContactDetailsOnLeft()
@@ -435,41 +625,41 @@ void TSingleLogFrame::on_NextContactDetailsOnLeft()
 }
 void TSingleLogFrame::updateQSODisplay()
 {
-   ui->GJVQSOLogFrame->updateQSODisplay();
+   GJVQSOLogFrame->updateQSODisplay();
 }
 
 void TSingleLogFrame::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * )
 {
     if (!in)
     {
-        ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
-        ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+        archiveMatchFrame->getTreeView()->viewport()->repaint();
+        otherMatchFrame->getTreeView()->viewport()->repaint();
         return;
     }
 
-    xferTree = ui->otherMatchFrame;
-    ui->otherMatchFrame->setCurrentModel(true);
-    ui->archiveMatchFrame->setCurrentModel(false);
+    xferTree = otherMatchFrame;
+    otherMatchFrame->setCurrentModel(true);
+    archiveMatchFrame->setCurrentModel(false);
 
-    ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
-    ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+    archiveMatchFrame->getTreeView()->viewport()->repaint();
+    otherMatchFrame->getTreeView()->viewport()->repaint();
 }
 
 void TSingleLogFrame::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
 {
     if (!in)
     {
-        ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
-        ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+        archiveMatchFrame->getTreeView()->viewport()->repaint();
+        otherMatchFrame->getTreeView()->viewport()->repaint();
         return;
     }
 
-    xferTree = ui->archiveMatchFrame;
-    ui->archiveMatchFrame->setCurrentModel( true);
-    ui->otherMatchFrame->setCurrentModel(false);
+    xferTree = archiveMatchFrame;
+    archiveMatchFrame->setCurrentModel( true);
+    otherMatchFrame->setCurrentModel(false);
 
-    ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
-    ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+    archiveMatchFrame->getTreeView()->viewport()->repaint();
+    otherMatchFrame->getTreeView()->viewport()->repaint();
 }
 void TSingleLogFrame::on_MatchStarting(BaseContestLog *ct)
 {
@@ -478,11 +668,11 @@ void TSingleLogFrame::on_MatchStarting(BaseContestLog *ct)
     {
       xferTree = nullptr;
 
-      ui->thisMatchFrame->treeClickIndex = QModelIndex();
-      ui->otherMatchFrame->treeClickIndex = QModelIndex();
-      ui->archiveMatchFrame->treeClickIndex = QModelIndex();
+      thisMatchFrame->treeClickIndex = QModelIndex();
+      otherMatchFrame->treeClickIndex = QModelIndex();
+      archiveMatchFrame->treeClickIndex = QModelIndex();
 
-      ui->GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
+      GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
     }
 }
 
@@ -491,18 +681,18 @@ MatchTreeItem * TSingleLogFrame::getXferItem()
    // transfer from current match
 
    // copy relevant parts of match contact to screen contact
-   if ( ui->archiveMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  ui->archiveMatchFrame == xferTree ) )
+   if ( archiveMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  archiveMatchFrame == xferTree ) )
    {
-      MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(ui->archiveMatchFrame->treeClickIndex.internalPointer());
+      MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(archiveMatchFrame->treeClickIndex.internalPointer());
 
       return MatchTreeIndex;
 
    }
    else
    {
-      if ( ui->otherMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr || ui->otherMatchFrame == xferTree) )
+      if ( otherMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr || otherMatchFrame == xferTree) )
       {
-         MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * > (ui->otherMatchFrame->treeClickIndex.internalPointer());
+         MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * > (otherMatchFrame->treeClickIndex.internalPointer());
 
          return  MatchTreeIndex;
       }
@@ -526,15 +716,15 @@ void TSingleLogFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString 
         switch (m)
         {
         case ThisMatch:
-            //xferTree =  ui->thisMatchFrame;
+            //xferTree =  thisMatchFrame;
             break;
 
         case OtherMatch:
-            xferTree = ui->otherMatchFrame;
+            xferTree = otherMatchFrame;
             break;
 
         case ArchiveMatch:
-            xferTree = ui->archiveMatchFrame;
+            xferTree = archiveMatchFrame;
             break;
         }
     }
@@ -557,7 +747,7 @@ void TSingleLogFrame::transferDetails(MatchTreeItem *MatchTreeIndex )
        if ( bct )
        {
           BaseContestLog *matct = mc->getContactLog();
-          ui->GJVQSOLogFrame->transferDetails( bct, matct );
+          GJVQSOLogFrame->transferDetails( bct, matct );
        }
        else
        {
@@ -565,7 +755,7 @@ void TSingleLogFrame::transferDetails(MatchTreeItem *MatchTreeIndex )
            if (lct)
            {
                ContactList *matct = mc->getContactList();
-               ui->GJVQSOLogFrame->transferDetails( lct, matct );
+               GJVQSOLogFrame->transferDetails( lct, matct );
            }
        }
    }
@@ -576,17 +766,17 @@ void TSingleLogFrame::transferDetails(memoryData::memData &m )
     {
        return ;
     }
-    ui->GJVQSOLogFrame->transferDetails( m.callsign, m.locator );
-    ui->FKHRigControlFrame->transferDetails(m);
+    GJVQSOLogFrame->transferDetails( m.callsign, m.locator );
+    FKHRigControlFrame->transferDetails(m);
 }
 void TSingleLogFrame::getDetails(memoryData::memData &m)
 {
-    ui->FKHRigControlFrame->getDetails(m);
+    FKHRigControlFrame->getDetails(m);
 }
 void TSingleLogFrame::getCurrentDetails(memoryData::memData &m)
 {
-    ui->FKHRigControlFrame->getRigDetails(m);
-    ui->FKHRotControlFrame->getRotDetails(m);
+    FKHRigControlFrame->getRigDetails(m);
+    FKHRotControlFrame->getRotDetails(m);
 }
 //---------------------------------------------------------------------------
 
@@ -597,7 +787,7 @@ void TSingleLogFrame::QSOTreeSelectContact( QSharedPointer<BaseContact> lct )
       EditContact( lct );
    }
 }
-void TSingleLogFrame::on_QSOTable_doubleClicked(const QModelIndex &index)
+void TSingleLogFrame::onQSOTable_doubleClicked(const QModelIndex &index)
 {
     QSOTreeSelectContact(contest->pcontactAt( index.row() ));
 }
@@ -610,24 +800,24 @@ void TSingleLogFrame::EditContact( QSharedPointer<BaseContact> lct )
 
    contest->scanContest();
 
-   ui->GJVQSOLogFrame->refreshOps();
+   GJVQSOLogFrame->refreshOps();
    refreshMults();
-   ui->GJVQSOLogFrame->startNextEntry();
+   GJVQSOLogFrame->startNextEntry();
 
 }
 //---------------------------------------------------------------------------
 ScreenContact &TSingleLogFrame::getScreenEntry()
 {
-    ui->GJVQSOLogFrame->getScreenEntry();
+    GJVQSOLogFrame->getScreenEntry();
 
-    ui->GJVQSOLogFrame->calcLoc();
+    GJVQSOLogFrame->calcLoc();
 
-    return ui->GJVQSOLogFrame->screenContact;
+    return GJVQSOLogFrame->screenContact;
 }
 //---------------------------------------------------------------------------
 int TSingleLogFrame::getBearingFrmQSOLog()
 {
-    return ui->FKHRotControlFrame->getAngle(ui->GJVQSOLogFrame->getBearing());
+    return FKHRotControlFrame->getAngle(GJVQSOLogFrame->getBearing());
 }
 //---------------------------------------------------------------------------
 
@@ -642,12 +832,12 @@ void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, Bas
 {
     if (ct == contest && !lct)
     {
-        ui->QSOTable->scrollToBottom();
-        int row = ui->QSOTable->model()->rowCount() - 1;
+        QSOTable->scrollToBottom();
+        int row = QSOTable->model()->rowCount() - 1;
         if (row >= 0)
         {
-            QModelIndex index = ui->QSOTable->model()->index( row, 0 );
-            ui->QSOTable->setCurrentIndex(index);
+            QModelIndex index = QSOTable->model()->index( row, 0 );
+            QSOTable->setCurrentIndex(index);
         }
     }
 }
@@ -681,76 +871,45 @@ void TSingleLogFrame::getSplitters()
     QByteArray state;
 
     state = settings.value("logFrameSplitter/state").toByteArray();
-    ui->logFrameSplitter->restoreState(state);
-    ui->logFrameSplitter->setHandleWidth(splitterHandleWidth);
+    logFrameSplitter->restoreState(state);
 
     // and reset some of the saved state
-    ui->logFrameSplitter->setStretchFactor(0, 1);
-    ui->logFrameSplitter->setStretchFactor(1, 0);
-    ui->logFrameSplitter->setStretchFactor(2, 0);
-    ui->logFrameSplitter->setStretchFactor(3, 1);
-    ui->logFrameSplitter->setChildrenCollapsible(false);
 
+    logFrameSplitter->setChildrenCollapsible(false);
+    logFrameSplitter->setHandleWidth(splitterHandleWidth);
 
-    state = settings.value("CribSplitter/state").toByteArray();
-    ui->CribSplitter->restoreState(state);
-    ui->CribSplitter->setHandleWidth(splitterHandleWidth);
-
-    state = settings.value("MultSplitter/state").toByteArray();
-    ui->MultSplitter->restoreState(state);
-    ui->MultSplitter->setHandleWidth(splitterHandleWidth);
-
-    state = settings.value("ControlSplitter/state").toByteArray();
-    ui->ControlSplitter->restoreState(state);
-    ui->ControlSplitter->setHandleWidth(splitterHandleWidth);
-
-    state = settings.value("Log/ArchiveSplitter/state").toByteArray();
-    ui->archiveSplitter->restoreState(state);
-    ui->archiveSplitter->setHandleWidth(splitterHandleWidth);
-
+    foreach(MinosSplitter *s, rowSplitters)
+    {
+        QString name = s->objectName();
+        state = settings.value(name + "/state", state).toByteArray();
+        s->restoreState(state);
+        s->setHandleWidth(splitterHandleWidth);
+    }
 }
 void TSingleLogFrame::onSplittersChanged()
 {
     splittersChanged = true;
 }
-
-void TSingleLogFrame::on_logFrameSplitter_splitterMoved(int /*pos*/, int /*index*/)
+void TSingleLogFrame::onSplitterMoved(int /*pos*/, int /*index*/)
 {
-    QByteArray state = ui->logFrameSplitter->saveState();
+    QByteArray state = logFrameSplitter->saveState();
     QSettings settings;
     settings.setValue("logFrameSplitter/state", state);
-    MinosLoggerEvents::SendSplittersChanged();
-}
 
-void TSingleLogFrame::on_CribSplitter_splitterMoved(int /*pos*/, int /*index*/)
-{
-    QByteArray state = ui->CribSplitter->saveState();
-    QSettings settings;
-    settings.setValue("CribSplitter/state", state);
-    MinosLoggerEvents::SendSplittersChanged();
-}
-
-void TSingleLogFrame::on_MultSplitter_splitterMoved(int /*pos*/, int /*index*/)
-{
-    QByteArray state = ui->MultSplitter->saveState();
-    QSettings settings;
-    settings.setValue("MultSplitter/state", state);
-    MinosLoggerEvents::SendSplittersChanged();
-}
-
-void TSingleLogFrame::on_ControlSplitter_splitterMoved(int /*pos*/, int /*index*/)
-{
-    QByteArray state = ui->ControlSplitter->saveState();
-    QSettings settings;
-    settings.setValue("ControlSplitter/state", state);
-    MinosLoggerEvents::SendSplittersChanged();
+    foreach(MinosSplitter *s, rowSplitters)
+    {
+        state = s->saveState();
+        QString name = s->objectName();
+        settings.setValue(name + "/state", state);
+        MinosLoggerEvents::SendSplittersChanged();
+    }
 }
 void TSingleLogFrame::on_sectionResized(int, int, int)
 {
     QSettings settings;
     QByteArray state;
 
-    state = ui->QSOTable->horizontalHeader()->saveState();
+    state = QSOTable->horizontalHeader()->saveState();
     settings.setValue("QSOTable/state", state);
 
     MinosLoggerEvents::SendLogColumnsChanged();
@@ -770,7 +929,7 @@ void TSingleLogFrame::goNextUnfilled()
       qdlg.exec();
       contest->scanContest();
       refreshMults();
-      ui->GJVQSOLogFrame->startNextEntry();
+      GJVQSOLogFrame->startNextEntry();
    }
    else
    {
@@ -871,7 +1030,7 @@ void TSingleLogFrame::on_SetMemory(BaseContestLog *c, QString call, QString loc)
 void TSingleLogFrame::on_KeyerLoaded()
 {
    keyerLoaded = true;
-   ui->GJVQSOLogFrame->setKeyerLoaded();
+   GJVQSOLogFrame->setKeyerLoaded();
 }
 bool TSingleLogFrame::isKeyerLoaded()
 {
@@ -923,7 +1082,7 @@ void TSingleLogFrame::sendKeyerStop()
 void TSingleLogFrame::on_BandMapLoaded()
 {
    bandMapLoaded = true;
-   ui->GJVQSOLogFrame->setBandMapLoaded();
+   GJVQSOLogFrame->setBandMapLoaded();
 }
 
 bool TSingleLogFrame::isBandMapLoaded()
@@ -942,8 +1101,8 @@ void TSingleLogFrame::on_SetMode(QString m)
         if ( this == LogContainer->getCurrentLogFrame() )
         {
             sCurMode = m;
-            ui->FKHRigControlFrame->setMode(m);
-            ui->GJVQSOLogFrame->modeSentFromRig(m);
+            FKHRigControlFrame->setMode(m);
+            GJVQSOLogFrame->modeSentFromRig(m);
         }
     }
 }
@@ -956,8 +1115,8 @@ void TSingleLogFrame::on_SetFreq(QString f)
         if ( this == LogContainer->getCurrentLogFrame() )
         {
             sCurFreq = f;
-            ui->FKHRigControlFrame->setFreq(f);
-            ui->GJVQSOLogFrame->setFreq(f);
+            FKHRigControlFrame->setFreq(f);
+            GJVQSOLogFrame->setFreq(f);
             MinosLoggerEvents::sendRigFreqChanged(f, contest);
         }
     }
@@ -967,7 +1126,7 @@ void TSingleLogFrame::on_NoRadioSetFreq(QString f)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        ui->GJVQSOLogFrame->setFreq(f);
+        GJVQSOLogFrame->setFreq(f);
     }
 }
 
@@ -975,37 +1134,37 @@ void TSingleLogFrame::on_NoRadioSetMode(QString m)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        ui->GJVQSOLogFrame->modeSentFromRig(m);
+        GJVQSOLogFrame->modeSentFromRig(m);
     }
 }
 
 void TSingleLogFrame::on_RadioLoaded()
 {
-    ui->FKHRigControlFrame->setRadioLoaded();
-    ui->GJVQSOLogFrame->setRadioLoaded();
+    FKHRigControlFrame->setRadioLoaded();
+    GJVQSOLogFrame->setRadioLoaded();
 }
 
 bool TSingleLogFrame::isRadioLoaded()
 {
-   return ui->FKHRigControlFrame->isRadioLoaded();
+   return FKHRigControlFrame->isRadioLoaded();
 }
 
 void TSingleLogFrame::on_SetRadioList(QString s)
 {
-    ui->FKHRigControlFrame->setRadioList(s);
+    FKHRigControlFrame->setRadioList(s);
 }
 
 void TSingleLogFrame::on_SetBandList(QString s)
 {
-    ui->FKHRigControlFrame->setBandList(s);
+    FKHRigControlFrame->setBandList(s);
 }
 
 void TSingleLogFrame::on_SetRadioStatus(QString s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        ui->FKHRigControlFrame->setRadioState(s);
-        ui->GJVQSOLogFrame->setRadioState(s);
+        FKHRigControlFrame->setRadioState(s);
+        GJVQSOLogFrame->setRadioState(s);
     }
 }
 
@@ -1014,7 +1173,7 @@ void TSingleLogFrame::on_SetRadioTxVertState(bool s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        ui->FKHRigControlFrame->setRadioTxVertState(s);
+        FKHRigControlFrame->setRadioTxVertState(s);
     }
 }
 
@@ -1022,7 +1181,7 @@ void TSingleLogFrame::on_SetRitEnableState(bool s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        ui->FKHRigControlFrame->setRitEnableState(s);
+        FKHRigControlFrame->setRitEnableState(s);
     }
 }
 
@@ -1077,10 +1236,10 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
         if (ct && !ct->isProtected())
         {
             // make sure log frame has correct name for radio
-            if (radName != ui->GJVQSOLogFrame->getRadioName())
+            if (radName != GJVQSOLogFrame->getRadioName())
             {
-               ui->GJVQSOLogFrame->setRadioName(radName);
-               ui->FKHRigControlFrame->setRadioName(radName, mode);
+               GJVQSOLogFrame->setRadioName(radName);
+               FKHRigControlFrame->setRadioName(radName, mode);
             }
             else
             {
@@ -1113,7 +1272,7 @@ void TSingleLogFrame::sendSelectRotator(const QString &s)
                 ct->rotatorName.setValue(s);
                 ct->commonSave(false);
 
-                //ui->FKHRotControlFrame->setRotatorAntennaName(s);
+                //FKHRotControlFrame->setRotatorAntennaName(s);
             }
             LogContainer->sendDM->changeRotatorSelectionTo(ct->rotatorName.getValue(), ct->uuid);
         }
@@ -1138,8 +1297,8 @@ void TSingleLogFrame::sendRadioPassBandState(int state)
 void TSingleLogFrame::on_RotatorLoaded()
 {
    rotatorLoaded = true;
-   ui->FKHRotControlFrame->setRotatorLoaded();
-   ui->GJVQSOLogFrame->setRotatorLoaded();
+   FKHRotControlFrame->setRotatorLoaded();
+   GJVQSOLogFrame->setRotatorLoaded();
 }
 
 bool TSingleLogFrame::isRotatorLoaded()
@@ -1148,12 +1307,12 @@ bool TSingleLogFrame::isRotatorLoaded()
 }
 void TSingleLogFrame::on_RotatorList(QString s)
 {
-    ui->FKHRotControlFrame->setRotatorList(s);
+    FKHRotControlFrame->setRotatorList(s);
 }
 
 void TSingleLogFrame::on_RotatorPresetList(QString s)
 {
-    ui->FKHRotControlFrame->setRotatorPresetList(s);
+    FKHRotControlFrame->setRotatorPresetList(s);
 }
 
 
@@ -1161,7 +1320,7 @@ void TSingleLogFrame::on_RotatorStatus(QString s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        ui->FKHRotControlFrame->setRotatorState(s);
+        FKHRotControlFrame->setRotatorState(s);
     }
 }
 
@@ -1169,8 +1328,8 @@ void TSingleLogFrame::on_RotatorBearing(QString s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        ui->FKHRotControlFrame->setRotatorBearing(s);
-        ui->GJVQSOLogFrame->setRotatorBearing(s);
+        FKHRotControlFrame->setRotatorBearing(s);
+        GJVQSOLogFrame->setRotatorBearing(s);
     }
 }
 
@@ -1179,7 +1338,7 @@ void TSingleLogFrame::on_RotatorMaxAzimuth(QString s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        ui->FKHRotControlFrame->setRotatorMaxAzimuth(s);
+        FKHRotControlFrame->setRotatorMaxAzimuth(s);
     }
 }
 
@@ -1187,7 +1346,7 @@ void TSingleLogFrame::on_RotatorMinAzimuth(QString s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        ui->FKHRotControlFrame->setRotatorMinAzimuth(s);
+        FKHRotControlFrame->setRotatorMinAzimuth(s);
     }
 }
 
@@ -1203,10 +1362,3 @@ void TSingleLogFrame::sendRotatorPreset(QString s )
         LogContainer->sendDM->sendRotatorPreset(s);
 }
 
-void TSingleLogFrame::on_archiveSplitter_splitterMoved(int /*pos*/, int /*index*/)
-{
-    QByteArray state = ui->archiveSplitter->saveState();
-    QSettings settings;
-    settings.setValue("Log/ArchiveSplitter/state", state);
-    MinosLoggerEvents::SendSplittersChanged();
-}

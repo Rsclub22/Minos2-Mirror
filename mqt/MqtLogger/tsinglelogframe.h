@@ -2,6 +2,7 @@
 #define TSINGLELOGFRAME_H
 
 #include "base_pch.h"
+
 #include "StackedInfoFrame.h"
 #include "ConfigFile.h"
 #include "rotatorcommon.h"
@@ -10,6 +11,10 @@
 #include "MatchThisFrame.h"
 #include "MatchOtherFrame.h"
 #include "MatchArchiveFrame.h"
+
+#include "qsologframe.h"
+#include "rigcontrolframe.h"
+#include "rotcontrolframe.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -40,6 +45,23 @@ class TSingleLogFrame : public QFrame
     Q_OBJECT
 
     Ui::TSingleLogFrame *ui;
+
+    QVBoxLayout *verticalLayout = nullptr;
+    MinosSplitter *logFrameSplitter = nullptr;
+
+    QTableView *QSOTable;
+    RigControlFrame *FKHRigControlFrame = nullptr;
+    RotControlFrame *FKHRotControlFrame = nullptr;
+    QFrame *CribSheet= nullptr;
+    QLabel *NextContactDetailsLabel;
+
+    QSOLogFrame *GJVQSOLogFrame = nullptr;
+    MatchThisFrame *thisMatchFrame = nullptr;
+    MatchOtherFrame *otherMatchFrame = nullptr;
+    MatchArchiveFrame *archiveMatchFrame = nullptr;
+
+    QVector <MinosSplitter *> rowSplitters;
+
 public:
     explicit TSingleLogFrame(QWidget *parent, BaseContestLog *contest);
     ~TSingleLogFrame();
@@ -96,11 +118,9 @@ public:
     void getDetails(memoryData::memData &m);
     void getCurrentDetails(memoryData::memData &m);
 
-public slots:
-    void onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent *);
-    void onArchiveTreeFocused(QObject *, bool in, QFocusEvent *);
+
 private:
-    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
+//    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
     QSOGridModel qsoModel;
     int splitterHandleWidth;
@@ -121,8 +141,15 @@ private:
     void doSetAuxWindows(bool saveSplitter);
     MatchTreeItem *getXferItem();
 
+    void buildScreenLayout();
 private slots:
+    void onQSOTable_doubleClicked(const QModelIndex &index);
+
+    void setAuxWindows();
     void on_ContestPageChanged();
+    void onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent *);
+    void onArchiveTreeFocused(QObject *, bool in, QFocusEvent *);
+
     void on_XferPressed(BaseContestLog *c, QString basename);
     void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &selected);
 
@@ -131,7 +158,7 @@ private slots:
     void PublishTimerTimer();
     void HideTimerTimer();
     void on_MakeEntry(BaseContestLog*);
-    void on_QSOTable_doubleClicked(const QModelIndex &index);
+
     void on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *contest);
     void on_AfterLogContact( BaseContestLog *ct);
     void on_NextContactDetailsOnLeft();
@@ -141,9 +168,6 @@ private slots:
 
     void onLogColumnsChanged();
     void onSplittersChanged();
-    void on_logFrameSplitter_splitterMoved(int pos, int index);
-    void on_CribSplitter_splitterMoved(int pos, int index);
-    void on_MultSplitter_splitterMoved(int pos, int index);
     void on_sectionResized(int, int, int);
     void EditContact(QSharedPointer<BaseContact> lct );
 
@@ -184,14 +208,7 @@ private slots:
 
     void sendSelectRadio(const QString &, const QString &mode);
     void sendSelectRotator(const QString &);
-
-
-    void on_ControlSplitter_splitterMoved(int pos, int index);
-
-    void setAuxWindows();
-
-    void on_archiveSplitter_splitterMoved(int pos, int index);
-
+    void onSplitterMoved(int, int);
 };
 
 #endif // TSINGLELOGFRAME_H

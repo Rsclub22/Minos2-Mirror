@@ -3,14 +3,7 @@
 #include "ScreenConfigElement.h"
 #include "ui_ScreenConfigElement.h"
 
-class SCTypeOption
-{
-public:
-    SCType type;
-    QString s;
-    QString hint;
-};
-static QVector <SCTypeOption> options =
+QVector <SCTypeOption> scoptions =
 {
     {sctNone, "None", "Not in use"},
     {sctAux, "Aux", "Auxiiary Display"},
@@ -33,7 +26,7 @@ ScreenConfigElement::ScreenConfigElement(QWidget *parent, ScreenConfigRow *paren
     ui->setupUi(this);
 
     int i = 0;
-    foreach(const SCTypeOption &opt, options)
+    foreach(const SCTypeOption &opt, scoptions)
     {
         ui->elementTypeCombo->addItem(opt.s, opt.type);
         ui->elementTypeCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );

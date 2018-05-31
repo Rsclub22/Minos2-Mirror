@@ -2,7 +2,18 @@
 #define SCREENCONFIGELEMENT_H
 
 #include <QFrame>
+#include "ScreenConfigFile.h"
+
 class ScreenConfigRow;
+class SCTypeOption
+{
+public:
+    SCType type;
+    QString s;
+    QString hint;
+};
+extern QVector <SCTypeOption> scoptions;
+
 
 namespace Ui {
 class ScreenConfigElement;
