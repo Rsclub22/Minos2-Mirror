@@ -965,6 +965,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
             else
             {
                 LogContainer->sendDM->changeRigSelectionTo(radName, mode, ct->uuid);  // send message including mode if it has been appended.
+                LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             }
 
 
