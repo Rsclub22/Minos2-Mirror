@@ -58,6 +58,7 @@ public:
     void getCurrSession();
     QStringList getSessions();
     void updateSessionActions();
+    void closeSession();
     void selectSession(QString sessName);
 
     SetMemoryAction *setMemoryAction;

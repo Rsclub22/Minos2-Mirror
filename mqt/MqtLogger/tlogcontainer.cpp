@@ -1363,6 +1363,20 @@ void TLogContainer::selectSession()
         selectSession(selText);
     }
 }
+void TLogContainer::closeSession()
+{
+    TContestApp *app = TContestApp::getContestApp();
+    app->suppressWritePreload = true;
+
+    // first, close all current slots, but don't write preload
+    while ( ui->ContestPageControl->count())
+    {
+       // Keep closing the current (and hence visible) contest
+       // DO add to MRU (Is that right?)
+       closeSlot(0, true );
+    }
+    app->suppressWritePreload = false;
+}
 void TLogContainer::selectSession(QString sessName)
 {
     TContestApp *app = TContestApp::getContestApp();

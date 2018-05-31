@@ -1,6 +1,9 @@
 #include "base_pch.h"
 #include <QScrollBar>
 
+#include "ContestApp.h"
+#include "tlogcontainer.h"
+
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
 #include "ScreenConfigRow.h"
@@ -97,8 +100,6 @@ void ScreenConfig::on_OKButton_clicked()
     // analyse and apply the new layout
     on_applyButton_clicked();
 
-    // and write it back
-    scf.dumpFile();
     close();
 }
 
@@ -111,7 +112,28 @@ void ScreenConfig::on_applyButton_clicked()
     // replace it in the config map
     scf.configs[curConfigName] = sc;
 
+
+    // write it back, or the screen redraw doesn't work
+    scf.dumpFile();
+
     // and apply it to the open logs
+    TContestApp *app = TContestApp::getContestApp();
+    QString sessName = app->currSession;
+
+    LogContainer->closeSession();
+
+    // clear old splitter settings
+    QSettings settings;
+    settings.remove("logFrameSplitter");
+
+    for (int i = 0; i < sc.rows.count(); i++)
+    {
+        QString name = "row" + QString::number(i) + "splitter";
+
+        settings.remove(name);
+    }
+
+    LogContainer->selectSession(sessName);
 }
 
 void ScreenConfig::on_cancelButton_clicked()
