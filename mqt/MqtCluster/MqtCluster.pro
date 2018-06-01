@@ -24,14 +24,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 win32:LIBS += -lWs2_32
 
-SOURCES +=\
+SOURCES += main.cpp\
+        clustermainwindow.cpp \
+    qttelnet.cpp \
+    setupdialog.cpp \
+    cluster.cpp
+
+    qttelnet.cpp
+
+HEADERS  += clustermainwindow.h \
+    qttelnet.h \
+    setupdialog.h \
+    cluster.h
 
 
 
-HEADERS  += \
-
-
-
-
-FORMS    += \
-
+FORMS    += clustermainwindow.ui \
+    setupdialog.ui
