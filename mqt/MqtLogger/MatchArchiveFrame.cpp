@@ -1,10 +1,6 @@
 #include "ContestApp.h"
 #include "MinosLoggerEvents.h"
 #include "MatchArchiveFrame.h"
-<<<<<<< HEAD
-//#include "ui_MatchArchiveFrame.h"
-=======
->>>>>>> 4609e2ea8b15f2a87a33843780a610f5575e7a1c
 
 MatchArchiveFrame::MatchArchiveFrame(QWidget *parent) :
     MatchTreeFrame(parent)
