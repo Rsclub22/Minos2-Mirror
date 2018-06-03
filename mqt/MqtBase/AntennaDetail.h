@@ -4,23 +4,22 @@
 
 const QString AntennaDetailType("AntennaDetail");
 
-
 class AntennaDetail: public PubSubValue
 {
     MinosItem<int> _minAzimuth;
     MinosItem<int> _maxAzimuth;
     MinosItem<bool> _cwCcwCmdEnable;
-    MinosStringItem<QString> _selected;
+    CacheSelection _selected;
 public:
     AntennaDetail();
     AntennaDetail(QString s);
-    AntennaDetail(int minA, int maxA, const QString &sel, bool cwCcwCmdEnable):
+    AntennaDetail(int minA, int maxA, const QString loggerUuid, const QString &sel, bool cwCcwCmdEnable):
         PubSubValue(AntennaDetailType)
     {
           _minAzimuth.setValue(minA);
           _maxAzimuth.setValue(maxA);
           _cwCcwCmdEnable.setValue(cwCcwCmdEnable);
-          _selected.setValue(sel);
+          _selected.setSelection(loggerUuid, sel);
     }
 
     bool isDirty() const;
@@ -33,11 +32,11 @@ public:
     MinosItem<int> minAzimuth() const;
     MinosItem<int> maxAzimuth() const;
     MinosItem<bool> cwCcwCmdEnable() const;
-    MinosStringItem<QString> selected() const;
+    MinosStringItem<QString> selected(QString loggerUuid) const;
     void setMinAzimuth(int minAzimuth);
     void setMaxAzimuth(int maxAzimuth);
     void setCwCcwCmdEnable(bool cwCcwCmdEnable);
-    void setSelected(const QString &selected);
+    void setSelected(const QString &loggeruuid, const QString &selected);
 };
 
 #endif // ANTENNADETAIL_H

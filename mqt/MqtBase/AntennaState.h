@@ -8,11 +8,11 @@ class AntennaState: public PubSubValue
 {
     MinosStringItem<QString> _bearing;
     MinosStringItem<QString> _status;
-    MinosStringItem<QString> _selected;
+    CacheSelection _selected;
 public:
     AntennaState();
     AntennaState(QString);
-    AntennaState(const QString &st, const QString &sel, const QString &b);
+    AntennaState(const QString &st, const QString &loggeruuid, const QString &sel, const QString &b);
 
     virtual QString pack() const;
     virtual void unpack(QString);
@@ -22,10 +22,10 @@ public:
 
     MinosStringItem<QString> bearing() const;
     MinosStringItem<QString> status() const;
-    MinosStringItem<QString> selected() const;
+    MinosStringItem<QString> selected(QString loggerUuid) const;
     void setBearing(const QString &bearing);
     void setStatus(const QString &status);
-    void setSelected(const QString &selected);
+    void setSelected(const QString &loggeruuid, const QString &selected);
 };
 
 #endif // ANTENNASTATE_H

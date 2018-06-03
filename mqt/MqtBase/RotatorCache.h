@@ -53,9 +53,9 @@ public:
     void setDetail(const PubSubName &name, const AntennaDetail &detail);
     void setState(const PubSubName &name, const AntennaState &state);
 
-    PubSubName getSelected();
+    PubSubName getSelected(QString loggerUuid);
 
-    void setSelected(const PubSubName &name, const QString &sel);
+    void setSelected(const PubSubName &name, const QString &loggeruuid, const QString &sel);
     void setStatus(const PubSubName &name, const QString &state);
     void setBearing(const PubSubName &name, const QString &bearing);
 

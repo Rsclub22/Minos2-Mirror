@@ -16,11 +16,11 @@
 #include "rigcontrolmainwindow.h"
 #include "rigcontrolrpc.h"
 
-RigControlRpc *rigControlRpc;
+//RigControlRpc *rigControlRpc;
 
 RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), parent(parent)
 {
-    rigControlRpc = this;
+//    rigControlRpc = this;
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::rigControlApp);
 
@@ -69,6 +69,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         QSharedPointer<RPCParam> psFreq;
         QSharedPointer<RPCParam> psMode;
         QSharedPointer<RPCParam> psName;
+        QSharedPointer<RPCParam> psLoggerUuid;
         QSharedPointer<RPCParam> psSelect;
         QSharedPointer<RPCParam> psRitFreq;
         QSharedPointer<RPCParam> psRitStatus;
@@ -102,12 +103,14 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                     }
                 }
                 QString sel;
-                if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect ) )
+                QString loggeruuid;
+                if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect )
+                     && args->getStructArgMember( 0, rpcConstants::loggerUuid, psLoggerUuid ))
                 {
-                    if ( psSelect->getString( sel ) )
-                    {
-                        // here you handle what the logger has sent to us
-                        rigCache.setSelected(psn, sel);
+                     if ( psSelect->getString( sel ) && psLoggerUuid->getString( loggeruuid) )
+                     {
+                                        // here you handle what the logger has sent to us
+                        rigCache.setSelected(psn, loggeruuid, sel);
                         trace(QString("Rig RPC: select Command From Logger = %1 psn=%2, sel=%3").arg(sel).arg(psn.toString()).arg(sel));
                     }
                 }

@@ -37,7 +37,7 @@ QString AntennaDetail::pack() const
 {
     QJsonObject jv;
 
-    jv.insert(rpcConstants::selected, selected().getValue());
+    jv.insert(rpcConstants::selected, _selected.pack());
     jv.insert(rpcConstants::rotatorMinAzimuth, minAzimuth().getValue());
     jv.insert(rpcConstants::rotatorMaxAzimuth, maxAzimuth().getValue());
     jv.insert(rpcConstants::rotCwCcwCmdEnable, cwCcwCmdEnable().getValue());
@@ -54,7 +54,8 @@ void AntennaDetail::unpack(QString s)
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
     if (!err.error)
     {
-        _selected.setValue(json.object().value(rpcConstants::selected).toString());
+        QJsonValue selobj = json.object().value(rpcConstants::selected);
+        _selected.unpack(selobj);
         _minAzimuth.setValue(json.object().value(rpcConstants::rotatorMinAzimuth).toInt());
         _maxAzimuth.setValue(json.object().value(rpcConstants::rotatorMaxAzimuth).toInt());
         _cwCcwCmdEnable.setValue(json.object().value(rpcConstants::rotCwCcwCmdEnable).toBool());
@@ -79,9 +80,9 @@ void AntennaDetail::setCwCcwCmdEnable(bool cwCcwCmdEnable)
 {
     _cwCcwCmdEnable.setValue(cwCcwCmdEnable);
 }
-void AntennaDetail::setSelected(const QString &selected)
+void AntennaDetail::setSelected(const QString &loggeruuid, const QString &selected)
 {
-    _selected.setValue(selected);
+    _selected.setSelection(loggeruuid,selected);
 }
 
 
@@ -98,9 +99,9 @@ MinosItem<bool> AntennaDetail::cwCcwCmdEnable()  const
 {
     return _cwCcwCmdEnable;
 }
-MinosStringItem<QString> AntennaDetail::selected() const
+MinosStringItem<QString> AntennaDetail::selected(QString loggerUuid) const
 {
-    return _selected;
+    return _selected.selected(loggerUuid);
 }
 
 

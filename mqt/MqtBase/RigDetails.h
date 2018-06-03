@@ -16,7 +16,7 @@
 const QString RigDetailsType("RigDetails");
 class RigDetails: public PubSubValue
 {
-    MinosStringItem<QString> _selected;
+    CacheSelection _selected;
     MinosItem<double> _transverterOffset;
     MinosItem<int> _transverterSwitch;
     MinosItem<bool> _transverterStatus;
@@ -28,7 +28,7 @@ public:
     RigDetails();
     RigDetails(QString s);
     //RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &sel), bool &ritst;
-    RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &sel, const bool &ritst, const bool &ritonoff);
+    RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &loggeruuid, const QString &sel, const bool &ritst, const bool &ritonoff);
 
     bool isDirty() const;
     void clearDirty();
@@ -37,7 +37,7 @@ public:
     virtual QString pack() const;
     virtual void unpack(QString);
 
-    MinosStringItem<QString> selected() const;
+    MinosStringItem<QString> selected(QString loggerUuid) const;
     MinosItem<double> transverterOffset() const;
     MinosItem<int> transverterSwitch() const;
     MinosItem<bool> transverterStatus() const;
@@ -45,7 +45,7 @@ public:
     MinosItem<bool> ritOnOffStatus() const;
     MinosStringItem<QString> bandList() const;
 
-    void setSelected(const QString &selected);
+    void setSelected(const QString &loggeruuid, const QString &selected);
     void setTransverterOffset(double transverterOffset);
     void setTransverterSwitch(int transverterSwitch);
     void setTransverterStatus(bool transverterStatus);

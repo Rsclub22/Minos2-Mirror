@@ -29,6 +29,8 @@ class TSendDM : public QObject
 
       PubSubName keyerApp;
 
+      QString loggerUuid;
+
    public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();

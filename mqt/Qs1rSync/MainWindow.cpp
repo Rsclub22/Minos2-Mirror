@@ -278,7 +278,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 rigCache.addRigList(an.getValue());
             }
         }
-        rigSelected = rigCache.getSelected();
+        rigSelected = rigCache.getSelected("");
         if (!rigSelected.isEmpty())
         {
             RigState &selState = rigCache.getState(rigSelected);

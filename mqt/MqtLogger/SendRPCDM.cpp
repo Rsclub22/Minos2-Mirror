@@ -17,6 +17,7 @@
 TSendDM::TSendDM(QWidget* Owner )
     : QObject( Owner )
 {
+    loggerUuid = makeUuid();
     MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
@@ -49,6 +50,8 @@ void TSendDM::sendKeyerPlay( TSingleLogFrame *tslf, int fno )
         QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::keyerPlayFile ));
         QSharedPointer<RPCParam>iValue(new RPCIntParam( fno ));
         QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+        st->addMember( logger, rpcConstants::loggerUuid );
         st->addMember( select, rpcConstants::selected );
         st->addMember( sName, rpcConstants::paramName );
         st->addMember( iValue, rpcConstants::paramValue );
@@ -65,6 +68,8 @@ void TSendDM::sendKeyerRecord( TSingleLogFrame *tslf, int fno )
         QSharedPointer<RPCParam>sName(new RPCStringParam( "RecordFile" ));
         QSharedPointer<RPCParam>iValue(new RPCIntParam( fno ));
         QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+        st->addMember( logger, rpcConstants::loggerUuid );
         st->addMember( select, rpcConstants::selected );
         st->addMember( sName, rpcConstants::paramName );
         st->addMember( iValue, rpcConstants::paramValue );
@@ -82,6 +87,8 @@ void TSendDM::sendKeyerTone(TSingleLogFrame *tslf)
         QSharedPointer<RPCParam>sName(new RPCStringParam( "Tone" ));
         QSharedPointer<RPCParam>iValue(new RPCIntParam( 0 ));
         QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+        st->addMember( logger, rpcConstants::loggerUuid );
         st->addMember( select, rpcConstants::selected );
         st->addMember( sName, rpcConstants::paramName );
         st->addMember( iValue, rpcConstants::paramValue );
@@ -98,6 +105,8 @@ void TSendDM::sendKeyerTwoTone(TSingleLogFrame *tslf)
         QSharedPointer<RPCParam>sName(new RPCStringParam( "TwoTone" ));
         QSharedPointer<RPCParam>iValue(new RPCIntParam( 0 ));
         QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+        st->addMember( logger, rpcConstants::loggerUuid );
         st->addMember( select, rpcConstants::selected );
         st->addMember( sName, rpcConstants::paramName );
         st->addMember( iValue, rpcConstants::paramValue );
@@ -114,6 +123,8 @@ void TSendDM::sendKeyerStop(TSingleLogFrame *tslf)
         QSharedPointer<RPCParam>sName(new RPCStringParam( "Stop" ));
         QSharedPointer<RPCParam>iValue(new RPCIntParam( 0 ));
         QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+        st->addMember( logger, rpcConstants::loggerUuid );
         st->addMember( select, rpcConstants::selected );
         st->addMember( sName, rpcConstants::paramName );
         st->addMember( iValue, rpcConstants::paramValue );
@@ -128,6 +139,7 @@ void TSendDM::sendBandMap(  TSingleLogFrame * tslf, const QString &freq, const Q
    RPCGeneralClient rpc(rpcConstants::bandmapMethod);
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+   st->addMember( loggerUuid, rpcConstants::loggerUuid );
    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
    //st->addMember( rpcConstants::bandmapApp, rpcConstants::bandmapParamName );
    st->addMember( freq, rpcConstants::bandmapParamFreq );
@@ -145,13 +157,15 @@ void TSendDM::sendRotator(TSingleLogFrame *tslf, rpcConstants::RotateDirection d
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
     st->addMember( static_cast<int> (direction), rpcConstants::rotatorParamDirection );
     st->addMember( angle, rpcConstants::rotatorParamAngle );
     rpc.getCallArgs() ->addParam( st );
 
-    PubSubName rotSelected = rotatorCache.getSelected();
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
     rpc.queueCall( rotSelected );
 }
 void TSendDM::changeRotatorSelectionTo(const PubSubName &name, const QString &uuid)
@@ -159,9 +173,9 @@ void TSendDM::changeRotatorSelectionTo(const PubSubName &name, const QString &uu
     // we should de-select the cached uuid on all rotator apps
     trace(QString("Change rotator selection to %1 %2").arg(name.toString()).arg(uuid));
 
-    PubSubName selected = rotatorCache.getSelected();
+    PubSubName selected = rotatorCache.getSelected(loggerUuid);
 
-    rotatorCache.setSelected(name, uuid);
+    rotatorCache.setSelected(name, loggerUuid, uuid);
 
     if (!selected.isEmpty() && selected != name)
         sendRotatorSelection(selected, "");
@@ -174,8 +188,12 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+
     QSharedPointer<RPCParam>select(new RPCStringParam(uuid ));
     st->addMember( select, rpcConstants::selected );
+
     st->addMember( s.toString(), rpcConstants::rotatorAntennaName );
     rpc.getCallArgs() ->addParam( st );
 
@@ -188,7 +206,7 @@ void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &mode, 
 
     trace(QString("Change rig selection to %1 %2 %3").arg(name.toString()).arg(mode).arg(uuid));
 
-    PubSubName selected = rigCache.getSelected();
+    PubSubName selected = rigCache.getSelected(loggerUuid);
 
     if (!selected.isEmpty() && selected != name)
     {
@@ -201,13 +219,16 @@ void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &mode, 
 }
 void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const QString &uuid)
 {
-    rigCache.setSelected(s, uuid);
+    rigCache.setSelected(s, loggerUuid, uuid);
     rigCache.setMode(s, mode);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
     QSharedPointer<RPCParam>select(new RPCStringParam(uuid ));
     st->addMember( select, rpcConstants::selected );
+
     st->addMember( s.toString(), rpcConstants::rigControlRadioName );
     st->addMember( mode, rpcConstants::rigControlMode );
     rpc.getCallArgs() ->addParam( st );
@@ -218,13 +239,17 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const Q
 
 void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
 {
-    PubSubName rigSelected = rigCache.getSelected();
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setFreq(rigSelected, convertStrToFreq(freq));
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
+
     st->addMember( freq, rpcConstants::rigControlFreq );
     rpc.getCallArgs() ->addParam( st );
 
@@ -234,11 +259,13 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
 
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 {
-    PubSubName rigSelected = rigCache.getSelected();
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setMode(rigSelected, mode);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
     st->addMember( mode, rpcConstants::rigControlMode );
@@ -251,11 +278,13 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 
 void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
 {
-    PubSubName rigSelected = rigCache.getSelected();
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setFreq(rigSelected, convertStrToFreq(freq));
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
     st->addMember( freq, rpcConstants::rigControlRitFreq );
@@ -267,11 +296,13 @@ void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
 
 void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
 {
-    PubSubName rigSelected = rigCache.getSelected();
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setRitEnableStatus(rigSelected, status);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
     st->addMember( status, rpcConstants::rigRitOnOffStatus);
@@ -293,7 +324,7 @@ void TSendDM::sendRotatorPreset(QString s)
     st->addMember( s, rpcConstants::rotPreset );
     rpc.getCallArgs() ->addParam( st );
 
-    PubSubName rotSelected = rotatorCache.getSelected();
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
     rpc.queueCall( rotSelected );
 }
 //---------------------------------------------------------------------------
@@ -348,13 +379,13 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
 
         QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
         {
-            PubSubName rigSelected = rigCache.getSelected();
+            PubSubName rigSelected = rigCache.getSelected(loggerUuid);
             if (!rigSelected.isEmpty())
             {
                 RigState &selState = rigCache.getState(rigSelected);
-                QString selStateUuid = selState.selected().getValue();
+                QString selStateUuid = selState.selected(loggerUuid).getValue();
                 RigDetails &selDetail = rigCache.getDetails(rigSelected);
-                QString selDetailsUuid = selDetail.selected().getValue();
+                QString selDetailsUuid = selDetail.selected(loggerUuid).getValue();
                 if (!selStateUuid.isEmpty())
                 {
 
@@ -408,13 +439,13 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 }
             }
             {
-                PubSubName rotSelected = rotatorCache.getSelected();
+                PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
                 if (!rotSelected.isEmpty())
                 {
                     AntennaState &selState = rotatorCache.getState(rotSelected);
-                    QString selStateUuid = selState.selected().getValue();
+                    QString selStateUuid = selState.selected(loggerUuid).getValue();
                     AntennaDetail &selDetail = rotatorCache.getDetails(rotSelected);
-                    QString selDetailUuid = selState.selected().getValue();
+                    QString selDetailUuid = selState.selected(loggerUuid).getValue();
                     if (!selStateUuid.isEmpty())
                     {
                         for (int i = 0; i < frames.size(); i++)

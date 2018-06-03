@@ -16,11 +16,11 @@
 #include "rotatormainwindow.h"
 #include "rotatorRpc.h"
 
-RotatorRpc *rotatorRpc;
+//RotatorRpc *rotatorRpc;
 
 RotatorRpc::RotatorRpc(RotatorMainWindow *parent) : QObject(parent), parent(parent)
 {
-    rotatorRpc = this;
+//    rotatorRpc = this;
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::rotatorApp);
 
@@ -72,6 +72,7 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
         QSharedPointer<RPCParam> psAngle;
         QSharedPointer<RPCParam> psAntName;
         QSharedPointer<RPCParam> psSelect;
+        QSharedPointer<RPCParam> psLoggerUuid;
         QSharedPointer<RPCParam> psRotPreset;
         RPCArgs *args = mro->getCallArgs();
         if ( args->getStructArgMember( 0, rpcConstants::rotatorParamDirection, psDirection )
@@ -94,13 +95,15 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
             {
                 PubSubName psn(name);
                 QString sel;
-                if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect ) )
+                QString loggeruuid;
+                if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect )
+                     && args->getStructArgMember( 0, rpcConstants::loggerUuid, psLoggerUuid ))
                 {
-                     if ( psSelect->getString( sel ) )
+                     if ( psSelect->getString( sel ) && psLoggerUuid->getString( loggeruuid) )
                      {
                          // here you handle what the logger has sent to us
                         trace(QString("Rig RPC: select Command From Logger = %1").arg(sel));
-                        rotatorCache.setSelected(psn, sel);
+                        rotatorCache.setSelected(psn, loggeruuid, sel);
                      }
                 }
                 emit selectAntennaFromLog(psn);

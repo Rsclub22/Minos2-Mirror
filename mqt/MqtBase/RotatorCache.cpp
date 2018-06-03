@@ -178,41 +178,41 @@ void RotatorCache::setState(const PubSubName &name, const AntennaState &state)
     rotStates[name] = state;
 }
 
-void RotatorCache::setSelected(const PubSubName &name, const QString &sel)
+void RotatorCache::setSelected(const PubSubName &name, const QString &loggeruuid, const QString &sel)
 {
     for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
     {
         if (i.key() == name)
         {
-            i.value().setSelected(sel);
+            i.value().setSelected( loggeruuid, sel);
             trace("selecting rotator state " + i.key().toString() + "  " + sel);
         }
-        else if (!i.value().selected().getValue().isEmpty())
+        else if (!i.value().selected(loggeruuid).getValue().isEmpty())
         {
             trace("de-selecting rotator state " + i.key().toString());
-            i.value().setSelected("");
+            i.value().setSelected("", "");
         }
     }
     for(QMap<PubSubName, AntennaDetail>::iterator i = rotDetails.begin(); i != rotDetails.end(); i++ )
     {
         if (i.key() == name)
         {
-            i.value().setSelected(sel);
+            i.value().setSelected(loggeruuid, sel);
             trace("selecting rotator detail " + i.key().toString() + "  " + sel);
         }
-        else if (!i.value().selected().getValue().isEmpty())
+        else if (!i.value().selected(loggeruuid).getValue().isEmpty())
         {
             trace("de-selecting rotator detail " + i.key().toString());
-            i.value().setSelected("");
+            i.value().setSelected("", "");
         }
     }
 }
-PubSubName RotatorCache::getSelected()
+PubSubName RotatorCache::getSelected(QString loggerUuid)
 {
 
     for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
     {
-        if (!i.value().selected().getValue().isEmpty())
+        if (!i.value().selected(loggerUuid).getValue().isEmpty())
         {
             PubSubName psn = i.key();
             return psn;

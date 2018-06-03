@@ -130,40 +130,40 @@ void RigCache::setDetails(const PubSubName &name, const RigDetails &details)
     rigDetails[name] = details;
 }
 
-void RigCache::setSelected(const PubSubName &name, const QString &sel)
+void RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, const QString &sel)
 {
     for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
     {
         if (i.key() == name)
         {
-            i.value().setSelected(sel);
+            i.value().setSelected(loggeruuid, sel);
             trace("selecting rig state " + i.key().toString() + "  " + sel);
         }
-        else if (!i.value().selected().getValue().isEmpty())
+        else if (!i.value().selected(loggeruuid).getValue().isEmpty())
         {
             trace("de-selecting rig state " + i.key().toString());
-            i.value().setSelected("");
+            i.value().setSelected("", "");
         }
     }
     for(QMap<PubSubName, RigDetails>::iterator i = rigDetails.begin(); i != rigDetails.end(); i++ )
     {
         if (i.key() == name)
         {
-            i.value().setSelected(sel);
+            i.value().setSelected(loggeruuid, sel);
             trace("selecting rig details " + i.key().toString() + "  " + sel);
         }
-        else if (!i.value().selected().getValue().isEmpty())
+        else if (!i.value().selected(loggeruuid).getValue().isEmpty())
         {
             trace("de-selecting rig details " + i.key().toString());
-            i.value().setSelected("");
+            i.value().setSelected("", "");
         }
     }
 }
-PubSubName RigCache::getSelected()
+PubSubName RigCache::getSelected(QString loggerUuid)
 {
     for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
     {
-        if (!i.value().selected().getValue().isEmpty())
+        if (!i.value().selected(loggerUuid).getValue().isEmpty())
         {
             PubSubName psn = i.key();
             return psn;
