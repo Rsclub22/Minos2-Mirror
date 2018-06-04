@@ -75,17 +75,32 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
         QSharedPointer<RPCParam> psLoggerUuid;
         QSharedPointer<RPCParam> psRotPreset;
         RPCArgs *args = mro->getCallArgs();
+
+        QString sel;
+        QString loggeruuid;
+        if ( args->getStructArgMember( 0, rpcConstants::loggerUuid, psLoggerUuid ))
+        {
+            psLoggerUuid->getString( loggeruuid);
+        }
+        if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect ))
+        {
+            psSelect->getString( sel );
+
+        }
         if ( args->getStructArgMember( 0, rpcConstants::rotatorParamDirection, psDirection )
              && args->getStructArgMember( 0, rpcConstants::rotatorParamAngle, psAngle ) )
         {
             int direction;
             int angle;
 
-            if ( psDirection->getInt( direction ) && psAngle->getInt( angle ) )
+            if (rotatorCache.getSelectedContest(loggeruuid) == sel)
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rot RPC: Direction = %1, Angle = %2").arg(QString::number(direction), QString::number(angle)));
-                emit (setRotation(direction, angle));
+                if ( psDirection->getInt( direction ) && psAngle->getInt( angle ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rot RPC: Direction = %1, Angle = %2").arg(QString::number(direction), QString::number(angle)));
+                    emit (setRotation(direction, angle));
+                }
             }
         }
         else if (args->getStructArgMember(0, rpcConstants::rotatorAntennaName, psAntName))
@@ -94,17 +109,16 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
             if (psAntName->getString(name))
             {
                 PubSubName psn(name);
-                QString sel;
-                QString loggeruuid;
-                if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect )
-                     && args->getStructArgMember( 0, rpcConstants::loggerUuid, psLoggerUuid ))
+
+                if ( !sel.isEmpty() && !loggeruuid.isEmpty() )
                 {
-                     if ( psSelect->getString( sel ) && psLoggerUuid->getString( loggeruuid) )
-                     {
-                         // here you handle what the logger has sent to us
+                    PubSubName selected = rotatorCache.getSelected("");
+                    if (selected.isEmpty() || selected.key() == name)
+                    {
+                     // here you handle what the logger has sent to us
                         trace(QString("Rig RPC: select Command From Logger = %1").arg(sel));
                         rotatorCache.setSelected(psn, loggeruuid, sel);
-                     }
+                    }
                 }
                 emit selectAntennaFromLog(psn);
             }
@@ -114,9 +128,12 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
             QString rotPreset;
             if (psRotPreset->getString(rotPreset))
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rig RPC: rotPreset Command From Logger = %1").arg(rotPreset));
-                emit setRotPreset(rotPreset);
+                if (!rotatorCache.getSelected(loggeruuid).isEmpty())
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: rotPreset Command From Logger = %1").arg(rotPreset));
+                    emit setRotPreset(rotPreset);
+                }
             }
         }
     }

@@ -207,6 +207,15 @@ void RotatorCache::setSelected(const PubSubName &name, const QString &loggeruuid
         }
     }
 }
+QString RotatorCache::getSelectedContest(QString loggerUuid)
+{
+    for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
+    {
+        if (!i.value().selected(loggerUuid).getValue().isEmpty())
+            return i.value().selected(loggerUuid).getValue();
+    }
+    return QString();
+}
 PubSubName RotatorCache::getSelected(QString loggerUuid)
 {
 

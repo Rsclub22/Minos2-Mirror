@@ -71,7 +71,21 @@ void CacheSelection::unpack(const QJsonValue &json)
 
 MinosStringItem<QString> CacheSelection::selected(const QString loggerUuid) const
 {
-    return _selected[loggerUuid];
+    if (loggerUuid.isEmpty())
+    {
+        QMapIterator<QString, MinosStringItem<QString> > iter(_selected);
+        if (iter.hasNext())
+        {
+            iter.next();
+            return iter.value();    // first contest that is selected
+        }
+    }
+    else
+    {
+        return _selected[loggerUuid];
+    }
+    MinosStringItem<QString> s;
+    return s;
 }
 
 void CacheSelection::setSelection(const QString loggerUuid, QString s)

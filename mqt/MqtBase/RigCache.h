@@ -52,6 +52,7 @@ public:
     {
         return rigList;
     }
+    QString getSelectedContest(QString loggerUuid);
 };
 
 #endif // RIGCACHE_H

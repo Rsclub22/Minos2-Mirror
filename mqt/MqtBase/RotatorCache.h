@@ -54,6 +54,7 @@ public:
     void setState(const PubSubName &name, const AntennaState &state);
 
     PubSubName getSelected(QString loggerUuid);
+    QString getSelectedContest(QString loggerUuid);
 
     void setSelected(const PubSubName &name, const QString &loggeruuid, const QString &sel);
     void setStatus(const PubSubName &name, const QString &state);

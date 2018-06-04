@@ -171,6 +171,16 @@ PubSubName RigCache::getSelected(QString loggerUuid)
     }
     return PubSubName();
 }
+QString RigCache::getSelectedContest(QString loggerUuid)
+{
+    for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
+    {
+        if (!i.value().selected(loggerUuid).getValue().isEmpty())
+            return i.value().selected(loggerUuid).getValue();
+    }
+    return QString();
+}
+
 void RigCache::setStatus(const PubSubName &name, const QString &status)
 {
     rigStates[name].setStatus(status);

@@ -75,16 +75,30 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         QSharedPointer<RPCParam> psRitStatus;
 
         RPCArgs *args = mro->getCallArgs();
+
+        QString sel;
+        QString loggeruuid;
+        if ( args->getStructArgMember( 0, rpcConstants::loggerUuid, psLoggerUuid ))
+        {
+            psLoggerUuid->getString( loggeruuid);
+        }
+        if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect ))
+        {
+            psSelect->getString( sel );
+
+        }
+
         if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psFreq ))
         {
-            QString freq;
-
-
-            if ( psFreq->getString( freq ) )
+            if (rigCache.getSelectedContest(loggeruuid) == sel)
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rig RPC: Freq Command From Logger = %1").arg(freq));
-                emit (setFreq(freq));
+                QString freq;
+                if ( psFreq->getString( freq ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Freq Command From Logger = %1").arg(freq));
+                    emit (setFreq(freq));
+                }
             }
         }
         else if (args->getStructArgMember(0, rpcConstants::rigControlRadioName, psName))
@@ -93,62 +107,66 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
             if (psName->getString(name))
             {
                 PubSubName psn(name);
-                QString mode;
-                if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psMode ) )
+                if ( !sel.isEmpty() && !loggeruuid.isEmpty() )
                 {
-                    if ( psMode->getString( mode ) )
+                    PubSubName selected = rigCache.getSelected("");
+                    if (selected.isEmpty() || selected.key() == name)
                     {
+                        QString mode;
+                        if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psMode ) )
+                        {
+                            if ( psMode->getString( mode ) )
+                            {
+                                // here you handle what the logger has sent to us
+                                trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
+                            }
+                        }
                         // here you handle what the logger has sent to us
-                        trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
-                    }
-                }
-                QString sel;
-                QString loggeruuid;
-                if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect )
-                     && args->getStructArgMember( 0, rpcConstants::loggerUuid, psLoggerUuid ))
-                {
-                     if ( psSelect->getString( sel ) && psLoggerUuid->getString( loggeruuid) )
-                     {
-                                        // here you handle what the logger has sent to us
                         rigCache.setSelected(psn, loggeruuid, sel);
                         trace(QString("Rig RPC: select Command From Logger = %1 psn=%2, sel=%3").arg(sel).arg(psn.toString()).arg(sel));
+
+                        emit selectLoggerRadio(psn, mode);
                     }
                 }
-                emit selectLoggerRadio(psn, mode);
             }
         }
         else if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psMode ) )
         {
-            QString mode;
-
-            if ( psMode->getString( mode ) )
+            if (rigCache.getSelectedContest(loggeruuid) == sel)
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
-                emit (setMode(mode));
+                QString mode;
+                if ( psMode->getString( mode ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
+                    emit (setMode(mode));
+                }
             }
         }
         if ( args->getStructArgMember( 0, rpcConstants::rigControlRitFreq, psRitFreq ))
         {
-            QString ritFreq;
-
-
-            if ( psRitFreq->getString( ritFreq ) )
+            if (rigCache.getSelectedContest(loggeruuid) == sel)
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rig RPC: Rit Freq Command From Logger = %1").arg(ritFreq));
-                emit (setRitFreq(ritFreq));
+                QString ritFreq;
+                if ( psRitFreq->getString( ritFreq ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Rit Freq Command From Logger = %1").arg(ritFreq));
+                    emit (setRitFreq(ritFreq));
+                }
             }
         }
         else if ( args->getStructArgMember( 0, rpcConstants::rigRitOnOffStatus, psRitStatus ) )
         {
-            bool ritStatus;
-
-            if ( psRitStatus->getBoolean( ritStatus ) )
+            if (rigCache.getSelectedContest(loggeruuid) == sel)
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rig RPC: Rit Status Command From Logger = %1").arg(ritStatus));
-                emit (setRitStatus(ritStatus));
+                bool ritStatus;
+                if ( psRitStatus->getBoolean( ritStatus ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Rit Status Command From Logger = %1").arg(ritStatus));
+                    emit (setRitStatus(ritStatus));
+                }
             }
         }
     }

@@ -321,6 +321,9 @@ void TSendDM::sendRotatorPreset(QString s)
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+
     st->addMember( s, rpcConstants::rotPreset );
     rpc.getCallArgs() ->addParam( st );
 
