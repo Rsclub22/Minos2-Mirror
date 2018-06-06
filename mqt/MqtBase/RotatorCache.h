@@ -73,6 +73,7 @@ public:
         return rotList;
     }
 
+    bool rotatorPresetsClearDirty();
 };
 
 #endif // ROTATORCACHE_H

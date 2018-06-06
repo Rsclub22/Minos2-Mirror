@@ -168,6 +168,13 @@ bool RotatorCache::rotatorPresetsIsDirty(const PubSubName &name)
     return rotPresets[n].isDirty();
 
 }
+bool RotatorCache::rotatorPresetsClearDirty()
+{
+    for(QMap<PubSubName, MinosStringItem<QString> >::iterator i = rotPresets.begin(); i != rotPresets.end(); i++ )
+    {
+        i->clearDirty();
+    }
+}
 
 void RotatorCache::setDetail(const PubSubName &name, const AntennaDetail &detail)
 {

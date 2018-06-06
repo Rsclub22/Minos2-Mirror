@@ -105,6 +105,7 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
         }
         else if (args->getStructArgMember(0, rpcConstants::rotatorAntennaName, psAntName))
         {
+            // how do we handle deselecting the rotator? Or is it automatic?
             QString name;
             if (psAntName->getString(name))
             {
@@ -118,9 +119,13 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
                      // here you handle what the logger has sent to us
                         trace(QString("Rig RPC: select Command From Logger = %1").arg(sel));
                         rotatorCache.setSelected(psn, loggeruuid, sel);
+                        emit selectAntennaFromLog(psn);
                     }
                 }
-                emit selectAntennaFromLog(psn);
+                else
+                {
+                    // reply with failure and the current selection
+                }
             }
         }
         else if (args->getStructArgMember(0, rpcConstants::rotPreset, psRotPreset))

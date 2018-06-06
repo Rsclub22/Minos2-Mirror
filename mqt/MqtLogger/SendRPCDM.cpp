@@ -497,6 +497,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                                     trace("SendRPC Rotator set presets " + rotatorCache.getRotatorPresets(rotSelected));
                                     tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
                                 }
+                                rotatorCache.rotatorPresetsClearDirty();
                                 break;
                             }
                         }

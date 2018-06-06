@@ -106,6 +106,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
             QString name;
             if (psName->getString(name))
             {
+                // how do we handle deselecting the radio - or is it automatic?
                 PubSubName psn(name);
                 if ( !sel.isEmpty() && !loggeruuid.isEmpty() )
                 {
@@ -126,6 +127,10 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                         trace(QString("Rig RPC: select Command From Logger = %1 psn=%2, sel=%3").arg(sel).arg(psn.toString()).arg(sel));
 
                         emit selectLoggerRadio(psn, mode);
+                    }
+                    else
+                    {
+                        // reply with failure and the current selection
                     }
                 }
             }
