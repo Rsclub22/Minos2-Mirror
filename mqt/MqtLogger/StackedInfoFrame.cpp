@@ -22,16 +22,9 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     QFrame(parent),
     ui(new Ui::StackedInfoFrame),
     stackInstance(instance),
-    contest(nullptr),
-    filterClickEnabled(false)
+    contest(nullptr)
 {
     ui->setupUi(this);
-
-#ifdef Q_OS_ANDROID
-    splitterHandleWidth = 20;
-#else
-    splitterHandleWidth = 6;
-#endif
 
     QStringList infoList =
     {
@@ -88,8 +81,7 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
     {
         contest = ct;
 
-        initFilters();
-
+        ui->MultFilters->setContest(contest);
         ui->dxccFrame->setContest(contest);
         ui->districtFrame->setContest(contest);
         ui->StatsFrame->setContest(contest);
@@ -118,7 +110,7 @@ void StackedInfoFrame::on_ScrollToDistrict( const QString &qth, BaseContestLog *
         QSharedPointer<DistrictEntry> dist = MultLists::getMultLists() ->searchDistrict( qth );
         if ( dist )
         {
-           int district_ind = MultLists::getMultLists() ->getDistListIndexOf( dist );
+            int district_ind = MultLists::getMultLists() ->getDistListIndexOf( dist );
            ui->districtFrame->scrollToDistrict( district_ind, true );
         }
     }
@@ -178,43 +170,13 @@ void StackedInfoFrame::on_FontChanged()
     refreshMults(contest);
 }
 
-void StackedInfoFrame::initFilters()
-{
-   filterClickEnabled = false;  // stop them being saved while we are setting up
 
-   if (contest)
-   {
-       contlist[ 0 ].allow = contest->showContinentEU.getValue();
-       contlist[ 1 ].allow = contest->showContinentAS.getValue();
-       contlist[ 2 ].allow = contest->showContinentAF.getValue();
-       contlist[ 3 ].allow = contest->showContinentOC.getValue();
-       contlist[ 4 ].allow = contest->showContinentSA.getValue();
-       contlist[ 5 ].allow = contest->showContinentNA.getValue();
-
-       ui->ContEU->setChecked(contlist[ 0 ].allow);
-       ui->ContAS->setChecked(contlist[ 1 ].allow);
-       ui->ContAF->setChecked(contlist[ 2 ].allow);
-       ui->ContOC->setChecked(contlist[ 3 ].allow);
-       ui->ContSA->setChecked(contlist[ 4 ].allow);
-       ui->ContNA->setChecked(contlist[ 5 ].allow);
-       ui->WorkedCB->setChecked(contest->showWorked.getValue());
-       ui->UnworkedCB->setChecked(contest->showUnworked.getValue());
-    }
-   filterClickEnabled = true;
-}
-void StackedInfoFrame::filtersChanged()
-{
-    if (contest)
-    {
-        MinosLoggerEvents::sendFiltersChanged(contest);
-    }
-}
 
 void StackedInfoFrame::onFiltersChanged(BaseContestLog *ct)
 {
     if (contest && ct == contest)
     {
-        initFilters();
+        ui->MultFilters->initFilters();
         ui->dxccFrame->reInitialiseCountries();
         ui->districtFrame->reInitialiseDistricts();
         ui->locFrame->reInitialiseLocators();
@@ -222,70 +184,6 @@ void StackedInfoFrame::onFiltersChanged(BaseContestLog *ct)
         ui->StatsFrame->reInitialiseStats();
         //ui->rigMemFrame->reInitialiseMemories();
     }
-}
-void StackedInfoFrame::saveFilters()
-{
-    if ( filterClickEnabled )
-    {
-        contlist[ 0 ].allow = ui->ContEU->isChecked();
-        contlist[ 1 ].allow = ui->ContAS->isChecked();
-        contlist[ 2 ].allow = ui->ContAF->isChecked();
-        contlist[ 3 ].allow = ui->ContOC->isChecked();
-        contlist[ 4 ].allow = ui->ContSA->isChecked();
-        contlist[ 5 ].allow = ui->ContNA->isChecked();
-        contest->showWorked.setValue(ui->WorkedCB->isChecked());
-        contest->showUnworked.setValue(ui->UnworkedCB->isChecked());
-
-        contest->showContinentEU.setValue(contlist[ 0 ].allow);
-        contest->showContinentAS.setValue(contlist[ 1 ].allow);
-        contest->showContinentAF.setValue(contlist[ 2 ].allow);
-        contest->showContinentOC.setValue(contlist[ 3 ].allow);
-        contest->showContinentSA.setValue(contlist[ 4 ].allow);
-        contest->showContinentNA.setValue(contlist[ 5 ].allow);
-
-        contest->commonSave(false);
-        filtersChanged();
-    }
-}
-
-void StackedInfoFrame::on_WorkedCB_clicked()
-{
-    saveFilters();
-}
-
-void StackedInfoFrame::on_UnworkedCB_clicked()
-{
-    saveFilters();
-}
-
-void StackedInfoFrame::on_ContEU_clicked()
-{
-    saveFilters();
-}
-
-void StackedInfoFrame::on_ContOC_clicked()
-{
-    saveFilters();
-}
-
-void StackedInfoFrame::on_ContAS_clicked()
-{
-    saveFilters();
-}
-
-void StackedInfoFrame::on_ContSA_clicked()
-{
-    saveFilters();
-}
-
-void StackedInfoFrame::on_ContAF_clicked()
-{
-    saveFilters();
-}
-
-void StackedInfoFrame::on_ContNA_clicked()
-{
-    saveFilters();
 }
 void StackedInfoFrame::on_StackedMults_currentChanged(int /*arg1*/)
 {

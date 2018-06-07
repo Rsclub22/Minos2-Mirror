@@ -47,7 +47,7 @@ class TSingleLogFrame : public QFrame
     Ui::TSingleLogFrame *ui;
 
     QVBoxLayout *verticalLayout = nullptr;
-    MinosSplitter *logFrameSplitter = nullptr;
+    MinosSplitter *singleLogFrameSplitter = nullptr;
 
     QTableView *QSOTable;
     RigControlFrame *FKHRigControlFrame = nullptr;

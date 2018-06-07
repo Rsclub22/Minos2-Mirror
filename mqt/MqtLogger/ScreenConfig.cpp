@@ -124,14 +124,7 @@ void ScreenConfig::on_applyButton_clicked()
 
     // clear old splitter settings
     QSettings settings;
-    settings.remove("logFrameSplitter");
-
-    for (int i = 0; i < sc.rows.count(); i++)
-    {
-        QString name = "row" + QString::number(i) + "splitter";
-
-        settings.remove(name);
-    }
+    settings.remove("Splitters");
 
     LogContainer->selectSession(sessName);
 }
