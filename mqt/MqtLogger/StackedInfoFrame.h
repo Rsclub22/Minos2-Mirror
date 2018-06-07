@@ -2,7 +2,14 @@
 #define STACKEDINFOFRAME_H
 
 #include "base_pch.h"
-#include "MinosLoggerEvents.h"
+#include "RigMemoryFrame.h"
+#include "TClockFrame.h"
+#include "districtframe.h"
+#include "dxccframe.h"
+#include "locTreeFrame.h"
+#include "locframe.h"
+#include "tstatsdispframe.h"
+#include "FilterFrame.h"
 
 namespace Ui {
 class StackedInfoFrame;
@@ -24,6 +31,17 @@ private:
     int stackInstance = 0;
 
     LoggerContestLog *contest;
+
+    TClockFrame *clockFrame = nullptr;
+    DXCCFrame *dxccFrame = nullptr;
+    DistrictFrame *districtFrame = nullptr;
+    FilterFrame *filterFrame = nullptr;
+    RigMemoryFrame *rigMemFrame = nullptr;
+    LocFrame *locFrame = nullptr;
+    LocTreeFrame *locTreeFrame = nullptr;
+    TStatsDispFrame *statsFrame = nullptr;
+
+    QFrame *currStackFrame = nullptr;
 
 private slots:
     void on_ScrollToDistrict( const QString &qth, BaseContestLog* );

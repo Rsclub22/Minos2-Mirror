@@ -57,7 +57,79 @@ StackedInfoFrame::~StackedInfoFrame()
 
 void StackedInfoFrame::on_infoCombo_currentIndexChanged(int arg1)
 {
-    ui->StackedMults-> setCurrentIndex(arg1);
+    if (currStackFrame)
+    {
+        layout()->removeWidget(currStackFrame);
+        currStackFrame->deleteLater();
+        currStackFrame = nullptr;
+    }
+
+    clockFrame = nullptr;
+    dxccFrame = nullptr;
+    districtFrame = nullptr;
+    filterFrame = nullptr;
+    rigMemFrame = nullptr;
+    locFrame = nullptr;
+    locTreeFrame = nullptr;
+    statsFrame = nullptr;
+
+    switch ( arg1 )
+    {
+    case 0:
+        clockFrame = new TClockFrame(this);
+        currStackFrame = clockFrame;
+        layout()->addWidget(currStackFrame);
+        clockFrame->setContest(contest);
+        break;
+    case 1:
+        dxccFrame = new DXCCFrame(this);
+        currStackFrame = dxccFrame;
+        layout()->addWidget(currStackFrame);
+        dxccFrame->setContest(contest);
+        break;
+    case 2:
+//    "District",
+        districtFrame = new DistrictFrame(this);
+        currStackFrame = districtFrame;
+        layout()->addWidget(districtFrame);
+        districtFrame->setContest(contest);
+        break;
+    case 3:
+//    "Filter",
+        filterFrame = new FilterFrame(this);
+        currStackFrame = filterFrame;
+        layout()->addWidget(filterFrame);
+        filterFrame->setContest(contest);
+        break;
+    case 4:
+//    "Memories",
+        rigMemFrame = new RigMemoryFrame(this);
+        currStackFrame = rigMemFrame;
+        layout()->addWidget(rigMemFrame);
+        rigMemFrame->setContest(contest);
+        break;
+    case 5:
+//    "Locator Map",
+        locFrame = new LocFrame(this);
+        currStackFrame = locFrame;
+        layout()->addWidget(locFrame);
+        locFrame->setContest(contest);
+        break;
+    case 6:
+//    "Locator Tree",
+        locTreeFrame = new LocTreeFrame(this);
+        currStackFrame = locTreeFrame;
+        layout()->addWidget(locTreeFrame);
+        locTreeFrame->setContest(contest);
+        break;
+    case 7:
+//    "Stats"
+        statsFrame = new TStatsDispFrame(this);
+        currStackFrame = statsFrame;
+        layout()->addWidget(statsFrame);
+        statsFrame->setContest(contest);
+        break;
+    }
     if (contest)
     {
         if (contest)
@@ -81,14 +153,22 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
     {
         contest = ct;
 
-        ui->MultFilters->setContest(contest);
-        ui->dxccFrame->setContest(contest);
-        ui->districtFrame->setContest(contest);
-        ui->StatsFrame->setContest(contest);
-        ui->locFrame->setContest(contest);
-        ui->locTreeFrame->setContest(contest);
-        ui->clockFrame->setContest(contest);
-        ui->rigMemFrame->setContest(contest);
+        if (filterFrame)
+            filterFrame->setContest(contest);
+        if (dxccFrame)
+            dxccFrame->setContest(contest);
+        if (districtFrame)
+            districtFrame->setContest(contest);
+        if (statsFrame)
+            statsFrame->setContest(contest);
+        if (locFrame)
+            locFrame->setContest(contest);
+        if (locTreeFrame)
+            locTreeFrame->setContest(contest);
+        if (clockFrame)
+            clockFrame->setContest(contest);
+        if (rigMemFrame)
+            rigMemFrame->setContest(contest);
 
         if (contest)
         {
@@ -105,20 +185,20 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
 }
 void StackedInfoFrame::on_ScrollToDistrict( const QString &qth, BaseContestLog *c )
 {
-    if (contest && contest == c)
+    if (contest && contest == c && districtFrame)
     {
         QSharedPointer<DistrictEntry> dist = MultLists::getMultLists() ->searchDistrict( qth );
         if ( dist )
         {
             int district_ind = MultLists::getMultLists() ->getDistListIndexOf( dist );
-           ui->districtFrame->scrollToDistrict( district_ind, true );
+           districtFrame->scrollToDistrict( district_ind, true );
         }
     }
 }
 
 void StackedInfoFrame::on_ScrollToCountry( const QString &csCs, BaseContestLog *c )
 {
-    if (contest && contest == c)
+    if (contest && contest == c && dxccFrame)
     {
         Callsign cs( csCs );
         cs.validate( );	// we don't use the result
@@ -127,7 +207,7 @@ void StackedInfoFrame::on_ScrollToCountry( const QString &csCs, BaseContestLog *
         if ( ctryMult )
         {
            int ctry_ind = MultLists::getMultLists() ->getCtryListIndexOf( ctryMult );
-           ui->dxccFrame->scrollToCountry( ctry_ind, true );
+           dxccFrame->scrollToCountry( ctry_ind, true );
         }
     }
 }
@@ -140,28 +220,30 @@ void StackedInfoFrame::refreshMults(LoggerContestLog *ct)
 }
 void StackedInfoFrame::onUpdateStats(BaseContestLog *ct)
 {
-    if (contest == ct)
+    if (contest == ct && statsFrame)
     {
-        ui->StatsFrame->reInitialiseStats();
+        statsFrame->reInitialiseStats();
     }
 }
 void StackedInfoFrame::onUpdateMemories(BaseContestLog *ct)
 {
-    if (contest == ct)
+    if (contest == ct && rigMemFrame)
     {
-        ui->rigMemFrame->doMemoryUpdates();
+        rigMemFrame->doMemoryUpdates();
     }
 }
 void StackedInfoFrame::onRefreshMults(BaseContestLog *ct)
 {
     if (contest == ct)
     {
-        ui->locFrame->reInitialiseLocators();
-        ui->locTreeFrame->reInitialiseLocators();
-        ui->dxccFrame->reInitialiseCountries();
-        ui->districtFrame->reInitialiseDistricts();
-        //ui->rigMemFrame->reInitialiseMemories();
-        //ui->rigMemFrame->doMemoryUpdates();
+        if (locFrame)
+            locFrame->reInitialiseLocators();
+        if (locTreeFrame)
+            locTreeFrame->reInitialiseLocators();
+        if (dxccFrame)
+            dxccFrame->reInitialiseCountries();
+        if (districtFrame)
+            districtFrame->reInitialiseDistricts();
     }
 }
 
@@ -176,16 +258,22 @@ void StackedInfoFrame::onFiltersChanged(BaseContestLog *ct)
 {
     if (contest && ct == contest)
     {
-        ui->MultFilters->initFilters();
-        ui->dxccFrame->reInitialiseCountries();
-        ui->districtFrame->reInitialiseDistricts();
-        ui->locFrame->reInitialiseLocators();
-        ui->locTreeFrame->reInitialiseLocators();
-        ui->StatsFrame->reInitialiseStats();
-        //ui->rigMemFrame->reInitialiseMemories();
+        if (filterFrame)
+            filterFrame->initFilters();
+        if (dxccFrame)
+            dxccFrame->reInitialiseCountries();
+        if (districtFrame)
+            districtFrame->reInitialiseDistricts();
+        if (locFrame)
+            locFrame->reInitialiseLocators();
+        if (locTreeFrame)
+            locTreeFrame->reInitialiseLocators();
+        if (statsFrame)
+            statsFrame->reInitialiseStats();
     }
 }
 void StackedInfoFrame::on_StackedMults_currentChanged(int /*arg1*/)
 {
-    ui->StatsFrame->reInitialiseStats();
+    if (statsFrame)
+        statsFrame->reInitialiseStats();
 }
