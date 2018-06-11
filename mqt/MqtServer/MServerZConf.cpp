@@ -21,7 +21,7 @@
 #include "MServerPubSub.h"
 
 
-TZConf *TZConf::ZConf = 0;
+TZConf *TZConf::ZConf = nullptr;
 QVector<Server *> serverList;
 
 //---------------------------------------------------------------------------

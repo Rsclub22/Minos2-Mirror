@@ -210,6 +210,11 @@ bool RotatorCache::setSelected(const PubSubName &name, const QString &loggeruuid
         selOK = true;
         trace ("selection OK; current selection empty");
     }
+    else if (psnSelected == name)
+    {
+        selOK = true;
+        trace ("selection OK; selecting current rotator");
+    }
     else if ((loggers.size() == 0) || (loggers.size() == 1 && loggers[0] == loggeruuid))
     {
         selOK = true;
