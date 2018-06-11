@@ -730,7 +730,7 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
 
     setupRadio->currentRadioName = s.key();
 
-    if (!s.isEmpty() && s == oldRadio)
+    if (!s.isEmpty() && s.key() == oldRadio)
     {
         refreshRadio();
     }

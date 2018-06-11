@@ -11,11 +11,12 @@
 #include <crtdbg.h>
 #endif // _MSC_VER
 
-void myMessageOutput(QtMsgType type,
-                     const QMessageLogContext &context,
-                     const QString &msg)
+void myMessageOutput(QtMsgType /*type*/,
+                     const QMessageLogContext &/*context*/,
+                     const QString &/*msg*/)
 {
-    int a = 0;
+    int a;
+    a = 0;
 }
 
 #if defined(_MSC_VER)

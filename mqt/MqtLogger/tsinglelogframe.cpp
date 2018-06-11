@@ -29,6 +29,7 @@
 #include "qsologframe.h"
 #include "rigcontrolframe.h"
 #include "rotcontrolframe.h"
+#include "RotPresets.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -145,8 +146,10 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     // To rotator controller
     connect(FKHRotControlFrame, SIGNAL(sendRotator(rpcConstants::RotateDirection , int  )), this, SLOT(sendRotator(rpcConstants::RotateDirection , int  )));
-    connect(FKHRotControlFrame, SIGNAL(sendRotatorPreset(QString)), this, SLOT(sendRotatorPreset(QString)));
+    connect(rotPresets, SIGNAL(sendRotatorPreset(QString)), this, SLOT(sendRotatorPreset(QString)));
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), this, SLOT(sendSelectRotator(QString)));
+    connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), rotPresets, SLOT(selectRotator(QString)));
+    connect(rotPresets, SIGNAL(presetTurn(QString)), this, SLOT(presetTurn(QString)));
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
@@ -241,6 +244,10 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRotControlFrame->setFrameShadow(QFrame::Raised);
 
     FKHRotControlFrame->setVisible(false);
+
+    rotPresets = new RotPresets(this);
+    rotPresets->setObjectName(QStringLiteral("rotPresets"));
+    rotPresets->setVisible(false);
 
     CribSheet = new QFrame(this);
     CribSheet->setObjectName(QStringLiteral("CribSheet"));
@@ -368,6 +375,11 @@ void TSingleLogFrame::buildScreenLayout()
                     case sctRotControl:
                     {
                         rowSplitters[j]->addWidget(FKHRotControlFrame);
+                        break;
+                    }
+                    case sctRotPresets:
+                    {
+                        rowSplitters[j]->addWidget(rotPresets);
                         break;
                     }
                     case sctQSOEdit:
@@ -634,6 +646,8 @@ void TSingleLogFrame::HideTimerTimer(  )
             FKHRigControlFrame->setVisible(isRadioLoaded());
         if (FKHRotControlFrame->parent() != this)
             FKHRotControlFrame->setVisible(isRotatorLoaded());
+        if (rotPresets->parent() != this)
+            rotPresets->setVisible(isRotatorLoaded());
     }
 }
 void TSingleLogFrame::on_NextContactDetailsOnLeft()
@@ -1332,7 +1346,7 @@ void TSingleLogFrame::on_RotatorList(QString s)
 
 void TSingleLogFrame::on_RotatorPresetList(QString s)
 {
-    FKHRotControlFrame->setRotatorPresetList(s);
+    rotPresets->setRotatorPresetList(s);
 }
 
 
@@ -1390,3 +1404,8 @@ void TSingleLogFrame::sendRotatorPreset(QString s )
         LogContainer->sendDM->sendRotatorPreset(s);
 }
 
+void TSingleLogFrame::presetTurn(QString b)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+        FKHRotControlFrame->presetTurn(b);
+}

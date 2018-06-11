@@ -289,7 +289,7 @@ void RotatorMainWindow::onLoggerSelectAntenna(PubSubName s)
     setupAntenna->currentAntennaName = s.key();
     setupAntenna->saveCurrentAntenna();
 
-    if (!s.isEmpty() && s == oldAntenna)
+    if (!s.isEmpty() && s.key() == oldAntenna)
     {
         refreshAntenna();
     }

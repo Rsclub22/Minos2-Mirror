@@ -26,6 +26,8 @@ public:
     void setBearing(const QString &bearing);
     void setStatus(const QString &status);
     void setSelected(const QString &loggeruuid, const QString &selected);
+    QStringList getSelectedLoggers();
+    QString getSelectedContest(QString loggerid);
 };
 
 #endif // ANTENNASTATE_H

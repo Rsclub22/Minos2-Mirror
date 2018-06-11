@@ -15,6 +15,7 @@
 #include "qsologframe.h"
 #include "rigcontrolframe.h"
 #include "rotcontrolframe.h"
+#include "RotPresets.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -52,6 +53,8 @@ class TSingleLogFrame : public QFrame
     QTableView *QSOTable;
     RigControlFrame *FKHRigControlFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
+    RotPresets *rotPresets = nullptr;
+
     QFrame *CribSheet= nullptr;
     QLabel *NextContactDetailsLabel;
 
@@ -193,6 +196,7 @@ private slots:
     void on_RotatorMaxAzimuth(QString);
     void on_RotatorMinAzimuth(QString);
     void on_cwCcwCmdEnable(bool);
+    void presetTurn(QString);
 
     void sendKeyerPlay( int fno );
     void sendKeyerRecord( int fno );

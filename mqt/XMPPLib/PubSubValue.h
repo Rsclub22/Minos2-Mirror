@@ -29,6 +29,7 @@ private:
     QString _server;
     QString _appName;
     QString _key;
+    bool operator== ( const QString& rhs ) const ;   // not implemented
 public:
     PubSubName();
     PubSubName(const QString &);

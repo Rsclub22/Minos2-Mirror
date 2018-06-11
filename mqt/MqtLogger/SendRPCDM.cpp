@@ -175,12 +175,14 @@ void TSendDM::changeRotatorSelectionTo(const PubSubName &name, const QString &uu
 
     PubSubName selected = rotatorCache.getSelected(loggerUuid);
 
-    rotatorCache.setSelected(name, loggerUuid, uuid);
-
+    rotatorCache.setSelected(selected, loggerUuid, ""); // deselect the old one
     if (!selected.isEmpty() && selected != name)
         sendRotatorSelection(selected, "");
-    sendRotatorSelection(name, uuid);
 
+    if (!name.isEmpty() && rotatorCache.setSelected(name, loggerUuid, uuid))
+    {
+        sendRotatorSelection(name, uuid);
+    }
     //emit RotatorList(rotators().join(":"));
 }
 void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
@@ -492,15 +494,14 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                                 }
                                 selDetail.clearDirty();
 
-                                if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
-                                {
-                                    trace("SendRPC Rotator set presets " + rotatorCache.getRotatorPresets(rotSelected));
-                                    tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
-                                }
-                                rotatorCache.rotatorPresetsClearDirty();
-                                break;
+                            }
+                            if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
+                            {
+                                trace("SendRPC Rotator set presets " + rotatorCache.getRotatorPresets(rotSelected));
+                                tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
                             }
                         }
+                        rotatorCache.rotatorPresetsClearDirty();
                     }
                 }
             }

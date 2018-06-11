@@ -82,7 +82,8 @@ SOURCES += main.cpp \
     MatchArchiveFrame.cpp \
     MatchOtherFrame.cpp \
     MatchThisFrame.cpp \
-    FilterFrame.cpp
+    FilterFrame.cpp \
+    RotPresets.cpp
 
 HEADERS  += \
     tlogcontainer.h \
@@ -135,7 +136,8 @@ HEADERS  += \
     MatchArchiveFrame.h \
     MatchOtherFrame.h \
     MatchThisFrame.h \
-    FilterFrame.h
+    FilterFrame.h \
+    RotPresets.h
 
 FORMS    += tlogcontainer.ui \
     contestdetails.ui \
@@ -172,7 +174,8 @@ FORMS    += tlogcontainer.ui \
     ScreenConfigElement.ui \
     ScreenConfigRow.ui \
     MatchTreeFrame.ui \
-    FilterFrame.ui
+    FilterFrame.ui \
+    RotPresets.ui
 
 
 DISTFILES += \

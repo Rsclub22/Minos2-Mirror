@@ -53,10 +53,12 @@ public:
     void setDetail(const PubSubName &name, const AntennaDetail &detail);
     void setState(const PubSubName &name, const AntennaState &state);
 
-    PubSubName getSelected(QString loggerUuid);
-    QString getSelectedContest(QString loggerUuid);
+    PubSubName getSelected(QString logger);
+    PubSubName getSelectedAntenna(PubSubName psn);
+    QStringList getSelectedLoggers(PubSubName psn);
+    QString getSelectedContest(PubSubName psn, QString loggerid);
 
-    void setSelected(const PubSubName &name, const QString &loggeruuid, const QString &sel);
+    bool setSelected(const PubSubName &name, const QString &loggeruuid, const QString &contestuuid);
     void setStatus(const PubSubName &name, const QString &state);
     void setBearing(const PubSubName &name, const QString &bearing);
 
@@ -73,7 +75,7 @@ public:
         return rotList;
     }
 
-    bool rotatorPresetsClearDirty();
+    void rotatorPresetsClearDirty();
 };
 
 #endif // ROTATORCACHE_H

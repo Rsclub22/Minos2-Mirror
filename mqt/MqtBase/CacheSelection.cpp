@@ -90,7 +90,38 @@ MinosStringItem<QString> CacheSelection::selected(const QString loggerUuid) cons
 
 void CacheSelection::setSelection(const QString loggerUuid, QString s)
 {
-    MinosStringItem<QString> m;
-    m.setValue(s);
-    _selected[loggerUuid] = m;
+    if (s.isEmpty())
+    {
+        _selected.remove(loggerUuid);
+    }
+    else
+    {
+        MinosStringItem<QString> m;
+        m.setValue(s);
+        _selected[loggerUuid] = m;
+    }
+}
+QStringList CacheSelection::getSelectedLoggers()
+{
+    QStringList loggers;
+    QMapIterator<QString, MinosStringItem<QString> > iter(_selected);
+    if (iter.hasNext())
+    {
+        iter.next();
+        loggers.append( iter.key());
+    }
+    return loggers;
+}
+
+QString CacheSelection::getSelectedContest(QString loggerid)
+{
+    QString contest;
+    QMapIterator<QString, MinosStringItem<QString> > iter(_selected);
+    if (iter.hasNext())
+    {
+        iter.next();
+        if (iter.key() == loggerid)
+            return iter.value().getValue();
+    }
+    return contest;
 }

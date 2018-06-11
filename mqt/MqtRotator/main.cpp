@@ -22,11 +22,13 @@
 
 #include "AppStartup.h"
 
-void myMessageOutput(QtMsgType type,
-                     const QMessageLogContext &context,
-                     const QString &msg)
+void myMessageOutput(QtMsgType /*type*/,
+                     const QMessageLogContext &/*context*/,
+                     const QString &/*msg*/)
 {
-    int a = 0;
+    int a;
+    Q_UNUSED(a);
+    a = 0;
 }
 
 int main(int argc, char *argv[])

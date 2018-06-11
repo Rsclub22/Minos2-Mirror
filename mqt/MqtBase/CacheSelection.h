@@ -6,6 +6,7 @@
 class CacheSelection
 {
     QMap<QString, MinosStringItem<QString> > _selected; // map of contests by logger (uuids)
+
 public:
     CacheSelection();
     ~CacheSelection();
@@ -16,6 +17,8 @@ public:
     void unpack(const QJsonValue &json);
     MinosStringItem<QString> selected(const QString loggerUuid) const;
     void setSelection(const QString loggerUuid, QString s);
+    QStringList getSelectedLoggers();
+    QString getSelectedContest(QString loggerid);
 };
 
 #endif // CACHESELECTION_H

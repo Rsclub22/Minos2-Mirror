@@ -93,3 +93,12 @@ MinosStringItem<QString> AntennaState::selected(QString loggerUuid) const
     return _selected.selected(loggerUuid);
 }
 
+QStringList AntennaState::getSelectedLoggers()
+{
+    return _selected.getSelectedLoggers();
+}
+
+QString AntennaState::getSelectedContest(QString loggerid)
+{
+    return _selected.getSelectedContest(loggerid);
+}
