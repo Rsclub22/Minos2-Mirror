@@ -13,7 +13,6 @@
 BaseContestLog::BaseContestLog( )
 {
    uuid = makeUuid();
-   trace(uuid);
    bearingOffset.setValue(0);
    currentMode.setValue( "USB" );
 

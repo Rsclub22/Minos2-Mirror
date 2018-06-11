@@ -18,6 +18,8 @@ TSendDM::TSendDM(QWidget* Owner )
     : QObject( Owner )
 {
     loggerUuid = makeUuid();
+    trace("logger uuid is " + loggerUuid);
+
     MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));

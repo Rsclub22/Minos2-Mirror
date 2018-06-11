@@ -506,6 +506,9 @@ LoggerContestLog * TContestApp::openFile( const QString &fn, bool newFile, int s
 {
    LoggerContestLog * contest = new LoggerContestLog();
 
+   trace(QString("contest uuid for %1 is %2").arg(fn).arg(contest->uuid));
+
+
    if ( !contest->initialise( fn, newFile, slotno ) )    // this adds it to the slot
    {
       closeFile( contest );
