@@ -119,10 +119,7 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
                 PubSubName psn(name);
                 if (rotatorCache.setSelected(psn, loggeruuid, selContest))
                 {
-                    if (selContest.isEmpty())
-                    {
-                        psn = PubSubName();
-                    }
+                    psn = rotatorCache.getSelectedAntenna(psn);
                     emit selectAntennaFromLog(psn);
                 }
                 else

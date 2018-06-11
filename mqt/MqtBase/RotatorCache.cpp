@@ -230,7 +230,7 @@ bool RotatorCache::setSelected(const PubSubName &name, const QString &loggeruuid
 
     if (selOK)
     {
-        trace("selecting rotator " + name.toString() + "  " + contestuuid);
+        trace("selecting rotator " + name.toString()+ " logger " + loggeruuid + " contest " + contestuuid);
         rotStates[name].setSelected(loggeruuid, contestuuid);
         rotDetails[name].setSelected(loggeruuid, contestuuid);
     }
