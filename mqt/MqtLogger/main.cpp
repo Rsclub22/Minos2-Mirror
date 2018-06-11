@@ -16,6 +16,7 @@ void myMessageOutput(QtMsgType /*type*/,
                      const QString &/*msg*/)
 {
     int a;
+    Q_UNUSED(a);
     a = 0;
 }
 

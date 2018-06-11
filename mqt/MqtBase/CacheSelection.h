@@ -6,7 +6,7 @@
 class CacheSelection
 {
     QMap<QString, MinosStringItem<QString> > _selected; // map of contests by logger (uuids)
-
+    bool dirty;
 public:
     CacheSelection();
     ~CacheSelection();

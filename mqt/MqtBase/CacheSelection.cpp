@@ -8,6 +8,8 @@ CacheSelection::~CacheSelection()
 
 bool CacheSelection::isDirty() const
 {
+    if (dirty)
+        return true;
     QMapIterator<QString, MinosStringItem<QString> > iter(_selected);
     while(iter.hasNext())
     {
@@ -20,16 +22,12 @@ bool CacheSelection::isDirty() const
 
 void CacheSelection::setDirty()
 {
-    QMapIterator<QString, MinosStringItem<QString> > iter(_selected);
-    while(iter.hasNext())
-    {
-        iter.next();
-        _selected[iter.key()].setDirty();
-    }
+    dirty = true;
 }
 
 void CacheSelection::clearDirty()
 {
+    dirty = false;
     QMapIterator<QString, MinosStringItem<QString> > iter(_selected);
     while(iter.hasNext())
     {
@@ -56,17 +54,31 @@ QJsonValue CacheSelection::pack() const
 
 void CacheSelection::unpack(const QJsonValue &json)
 {
-    QJsonArray namearray = json.toArray();
-    for (int i = 0; i < namearray.count(); i++)
+    // When a selection disappears, we need to do the same
+
+    QVector<QString> notSelected; // map of contests by logger (uuids)
+    QMapIterator<QString, MinosStringItem<QString> > iter(_selected);
+    if (iter.hasNext())
     {
-        QJsonObject selstruct = namearray[i].toObject();
+        iter.next();
+        notSelected.push_back(iter.key());
+    }
+    QJsonArray selarray = json.toArray();
+    for (int i = 0; i < selarray.count(); i++)
+    {
+        QJsonObject selstruct = selarray[i].toObject();
         QString logger = selstruct.value("logger").toString();
         QString contest = selstruct.value("contest").toString();
-        MinosStringItem<QString> s;
-        s.setValue(contest);
-        _selected[logger] = s;
+        _selected[logger].setValue(contest);
+
+        notSelected.removeOne(logger);
     }
 
+    for (int i = 0; i < notSelected.count(); i++)
+    {
+        _selected.remove(notSelected[i]);
+        setDirty();
+    }
 }
 
 MinosStringItem<QString> CacheSelection::selected(const QString loggerUuid) const
@@ -93,6 +105,7 @@ void CacheSelection::setSelection(const QString loggerUuid, QString s)
     if (s.isEmpty())
     {
         _selected.remove(loggerUuid);
+        setDirty();
     }
     else
     {
