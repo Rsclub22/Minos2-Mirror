@@ -191,7 +191,7 @@ void RotatorCache::setState(const PubSubName &name, const AntennaState &state)
 bool RotatorCache::setSelected(const PubSubName &name, const QString &loggeruuid, const QString &contestuuid)
 {
     PubSubName psnSelected = getSelectedAntenna(name);
-    QStringList loggers = getSelectedLoggers(name);
+    QStringList loggers = getSelectedLoggers(psnSelected);
     bool selOK = false;
 
     if (contestuuid.isEmpty())
