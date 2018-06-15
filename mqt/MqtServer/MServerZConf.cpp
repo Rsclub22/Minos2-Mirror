@@ -325,6 +325,11 @@ bool UDPSocket::setup(QNetworkInterface &iface, QNetworkAddressEntry &addr)
                 UPNP_PORT,
                 QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
                 );
+
+    if (res)
+    {
+        qus->setSocketOption(QAbstractSocket::MulticastTtlOption, QVariant(4));
+    }
     trace(QString("UDP bind returns ") + (res?"true":"false") + " on " + addr.ip().toString() + (res?"":(" error " + qus->errorString())));
     return res;
 }
