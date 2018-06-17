@@ -23,7 +23,6 @@ public:
         publishDetails();
     }
 
-    QString getStateString(const PubSubName &name) const;
     void setStateString(const AnalysePubSubNotify & an);
     QString getDetailsString(const PubSubName &name) const;
     void setDetailsString(const AnalysePubSubNotify & an);
@@ -32,10 +31,13 @@ public:
     void setDetails(const PubSubName &name, const RigDetails &details);
 
     PubSubName getSelected(QString loggerUuid);
+    QString getSelectedContest(PubSubName psn, QString loggerUuid);
+    QStringList getSelectedLoggers(PubSubName psn);
+    PubSubName getSelectedRadio(PubSubName psn);
 
     RigState &getState(const PubSubName &p);
     RigDetails &getDetails(const PubSubName &p);
-    void setSelected(const PubSubName &name, const QString &loggeruuid, const QString &selected);
+    bool setSelected(const PubSubName &name, const QString &loggeruuid, const QString &selected);
     void setStatus(const PubSubName &name, const QString &status);
     void setFreq(const PubSubName &name, double freq);
     void setMode(const PubSubName &name, const QString &mode);
@@ -52,7 +54,6 @@ public:
     {
         return rigList;
     }
-    QString getSelectedContest(QString loggerUuid);
 };
 
 #endif // RIGCACHE_H

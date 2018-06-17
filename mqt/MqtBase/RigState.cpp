@@ -146,3 +146,11 @@ MinosStringItem<QString> RigState::ritEnableStatus() const
 {
     return _ritEnableStatus;
 }
+QStringList RigState::getSelectedLoggers()
+{
+    return _selected.getSelectedLoggers();
+}
+QString RigState::getSelectedContest(QString loggerid)
+{
+    return _selected.getSelectedContest(loggerid);
+}

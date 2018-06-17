@@ -120,11 +120,6 @@ void RotatorCache::setDetailString(const AnalysePubSubNotify & an)
     AntennaDetail &ad = rotDetails[PubSubName(an)];
     ad.unpack(an.getValue());
 }
-QString RotatorCache::getStateString(const PubSubName &name) const
-{
-    QString val = rotStates[name].pack();
-    return val;
-}
 void RotatorCache::setStateString(const AnalysePubSubNotify &an)
 {
     AntennaState &as = rotStates[PubSubName(an)];

@@ -4,11 +4,7 @@ RigCache::RigCache()
 {
 
 }
-QString RigCache::getStateString(const PubSubName &name) const
-{
-    QString val = rigStates[name].pack();
-    return val;
-}
+
 void RigCache::invalidate()
 {
     for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
@@ -130,34 +126,53 @@ void RigCache::setDetails(const PubSubName &name, const RigDetails &details)
     rigDetails[name] = details;
 }
 
-void RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, const QString &sel)
+bool RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, const QString &contestuuid)
 {
-    for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
+    PubSubName psnSelected = getSelectedRadio(name);
+    QStringList loggers = getSelectedLoggers(psnSelected);
+    bool selOK = false;
+
+    if (contestuuid.isEmpty())
     {
-        if (i.key() == name)
-        {
-            i.value().setSelected(loggeruuid, sel);
-            trace("selecting rig state " + i.key().toString() + "  " + sel);
-        }
-        else if (!i.value().selected(loggeruuid).getValue().isEmpty())
-        {
-            trace("de-selecting rig state " + i.key().toString());
-            i.value().setSelected("", "");
-        }
+        // de-select this contest/logger in name
+        trace("deselecting radio; always OK");
+        selOK = true;
     }
-    for(QMap<PubSubName, RigDetails>::iterator i = rigDetails.begin(); i != rigDetails.end(); i++ )
+    else if (name.isEmpty())
     {
-        if (i.key() == name)
-        {
-            i.value().setSelected(loggeruuid, sel);
-            trace("selecting rig details " + i.key().toString() + "  " + sel);
-        }
-        else if (!i.value().selected(loggeruuid).getValue().isEmpty())
-        {
-            trace("de-selecting rig details " + i.key().toString());
-            i.value().setSelected("", "");
-        }
+        selOK = true;
+        trace ("selection OK; name empty");
     }
+    else if (psnSelected.isEmpty())
+    {
+        selOK = true;
+        trace ("selection OK; current selection empty");
+    }
+    else if (psnSelected == name)
+    {
+        selOK = true;
+        trace ("selection OK; selecting current rotator");
+    }
+    else if ((loggers.size() == 0) || (loggers.size() == 1 && loggers[0] == loggeruuid))
+    {
+        selOK = true;
+        trace ("selection OK; selection for this logger");
+
+    }
+    else
+    {
+        trace (QString("selection NOT OK; name %1 psnselected %2 loggers %3 ")
+               .arg(name.toString()).arg(psnSelected.toString()).arg(loggers.join(";")));
+
+    }
+
+    if (selOK)
+    {
+        trace("selecting radio " + name.toString()+ " logger " + loggeruuid + " contest " + contestuuid);
+        rigStates[name].setSelected(loggeruuid, contestuuid);
+        rigDetails[name].setSelected(loggeruuid, contestuuid);
+    }
+    return selOK;
 }
 PubSubName RigCache::getSelected(QString loggerUuid)
 {
@@ -171,16 +186,38 @@ PubSubName RigCache::getSelected(QString loggerUuid)
     }
     return PubSubName();
 }
-QString RigCache::getSelectedContest(QString loggerUuid)
+QString RigCache::getSelectedContest(PubSubName psn, QString loggerUuid)
 {
     for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
     {
-        if (!i.value().selected(loggerUuid).getValue().isEmpty())
-            return i.value().selected(loggerUuid).getValue();
+        if (i.value().getSelectedLoggers().count() > 0
+                && i.key().server() == psn.server()
+                && i.key().appName() == psn.appName())
+        {
+            return i.value().selected(loggerUuid).getValue(); // antenna selected on this app
+        }
     }
     return QString();
 }
-
+QStringList RigCache::getSelectedLoggers(PubSubName psn)
+{
+    RigState &s = rigStates[psn];
+    QStringList loggers = s.getSelectedLoggers();
+    return loggers;
+}
+PubSubName RigCache::getSelectedRadio(PubSubName psn)
+{
+    for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
+    {
+        if (i.value().getSelectedLoggers().count() > 0
+                && i.key().server() == psn.server()
+                && i.key().appName() == psn.appName())
+        {
+            return i.key(); // antenna selected on this app
+        }
+    }
+    return PubSubName();
+}
 void RigCache::setStatus(const PubSubName &name, const QString &status)
 {
     rigStates[name].setStatus(status);

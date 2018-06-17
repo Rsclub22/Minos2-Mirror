@@ -48,6 +48,10 @@ public:
     void setStatus(const QString &status);
     void setRitFreq(double freq);
     void setRitEnableStatus(const QString &status);
+
+    QStringList getSelectedLoggers();
+    QString getSelectedContest(QString loggerid);
+
 };
 
 #endif // RIGSTATE_H

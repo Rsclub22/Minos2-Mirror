@@ -43,7 +43,6 @@ public:
     QString getDetailString(const PubSubName &name) const;
     void setDetailString(const AnalysePubSubNotify &an);
 
-    QString getStateString(const PubSubName &name) const;
     void setStateString(const AnalysePubSubNotify & an);
 
     QString getPresetsString(const PubSubName &name) const;
