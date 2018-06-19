@@ -112,7 +112,6 @@ public:
     bool getStanza( unsigned int stanza, QString &stanzaData );
 
     void goNextUnfilled();
-    void doNextContactDetailsOnLeftClick(bool keepSizes);
 
     void on_NoRadioSetFreq(QString);
     void on_NoRadioSetMode(QString);
@@ -141,14 +140,12 @@ private:
 
     void restoreColumns();
 
-    void doSetAuxWindows(bool saveSplitter);
     MatchTreeItem *getXferItem();
 
     void buildScreenLayout();
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
-    void setAuxWindows();
     void on_ContestPageChanged();
     void onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent *);
     void onArchiveTreeFocused(QObject *, bool in, QFocusEvent *);
@@ -164,7 +161,6 @@ private slots:
 
     void on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *contest);
     void on_AfterLogContact( BaseContestLog *ct);
-    void on_NextContactDetailsOnLeft();
     void on_NextUnfilled(BaseContestLog*);
     void on_GoToSerial(BaseContestLog*);
     void on_SetMemory(BaseContestLog *, QString, QString);

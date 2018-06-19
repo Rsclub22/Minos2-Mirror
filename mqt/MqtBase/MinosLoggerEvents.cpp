@@ -47,11 +47,6 @@ void MinosLoggerEvents::SendAfterSelectContact(QSharedPointer<BaseContact> lct, 
     emit mle.AfterSelectContact(lct, c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendNextContactDetailsOnLeft()
-{
-    emit mle.NextContactDetailsOnLeft();
-}
-//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendContestDetails(BaseContestLog *c)
 {
     emit mle.ContestDetails(c);

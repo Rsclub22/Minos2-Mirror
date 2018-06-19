@@ -31,7 +31,6 @@ signals:
    void ReportOverstrike(bool ov, BaseContestLog *c);
    void AfterLogContact(BaseContestLog *ct);
    void AfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
-   void NextContactDetailsOnLeft();
    void ContestDetails(BaseContestLog *);
    void GoToSerial(BaseContestLog *);
    void MakeEntry(BaseContestLog *);
@@ -83,7 +82,6 @@ public:
    static void SendReportOverstrike(bool ov, BaseContestLog *c);
    static void SendAfterLogContact(BaseContestLog *ct);
    static void SendAfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
-   static void SendNextContactDetailsOnLeft();
    static void SendContestDetails(BaseContestLog *);
    static void SendGoToSerial(BaseContestLog *);
    static void SendMakeEntry(BaseContestLog *);

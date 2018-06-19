@@ -312,7 +312,6 @@ void TLogContainer::setupMenus()
     CorrectDateTimeAction = newAction("Correct Date/Time", ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
 
     ui->menuTools->addSeparator();
-    NumberAuxiliaryAction = newAction("Number of Auxiliary Displays...", ui->menuTools, SLOT(AuxDisplayAction()));
     ScreenConfigAction = newAction("Configure Screen Layout...", ui->menuTools, SLOT(doScreenConfigAction()));
 
     // end of tools manu
@@ -338,7 +337,6 @@ void TLogContainer::setupMenus()
     TabPopup.addAction(NextUnfilledAction);
     TabPopup.addSeparator();
 
-    NextContactDetailsOnLeftAction = newCheckableAction("&Next Contact Details On Left", &TabPopup, SLOT(NextContactDetailsOnLeftActionExecute()));
     ShowOperatorsAction = newCheckableAction("Show Operators", &TabPopup, SLOT(ShowOperatorsActionExecute()));
     TabPopup.addSeparator();
 
@@ -380,8 +378,6 @@ void TLogContainer::enableActions()
    CloseAllAction->setEnabled(f);
    CloseAllButAction->setEnabled(f);
 
-   NextContactDetailsOnLeftAction->setEnabled(true);
-
    ContestDetailsAction->setEnabled(f);
    GoToSerialAction->setEnabled(f);
    NextUnfilledAction->setEnabled(f);
@@ -389,8 +385,6 @@ void TLogContainer::enableActions()
    AppendAdifAction->setEnabled(f);
 
    ManageListsAction->setEnabled( TContestApp::getContestApp() ->getOccupiedListSlotCount() > 0 );
-
-   NextContactDetailsOnLeftAction->setChecked(isNextContactDetailsOnLeft());
 
    if ( ui->ContestPageControl->currentIndex() >= 0 )
    {
@@ -404,12 +398,6 @@ void TLogContainer::enableActions()
       ShiftTabRightAction->setEnabled(false);
    }
 
-}
-bool TLogContainer::isNextContactDetailsOnLeft()
-{
-   bool ncdol;
-   TContestApp::getContestApp() ->displayBundle.getBoolProfile( edpNextContactDetailsOnLeft, ncdol );
-   return ncdol;
 }
 
 bool TLogContainer::isShowOperators()
@@ -984,16 +972,6 @@ void TLogContainer::NextUnfilledActionExecute()
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
     MinosLoggerEvents::SendNextUnfilled(ct);
 }
-
-void TLogContainer::NextContactDetailsOnLeftActionExecute()
-{
-    bool ncdol = !isNextContactDetailsOnLeft();
-    NextContactDetailsOnLeftAction->setChecked(ncdol);
-    TContestApp::getContestApp() ->displayBundle.setBoolProfile( edpNextContactDetailsOnLeft, ncdol );
-    TContestApp::getContestApp() ->displayBundle.flushProfile();
-
-    MinosLoggerEvents::SendNextContactDetailsOnLeft();
-}
 void TLogContainer::KeyerToneActionExecute()
 {
     emit sendKeyerTone( );
@@ -1036,18 +1014,7 @@ void TLogContainer::menuLogsActionExecute()
         selectTab(i);
     }
 }
-void TLogContainer::AuxDisplayAction()
-{
-    int num;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAuxWindows, num );
 
-    int minaux = 0;
-    if ( !enquireDialog( this, "Please give number of auxiliary windows wanted.", num, minaux, 4 ) )
-       return ;
-
-    TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpAuxWindows, num );
-    emit setAuxWindows();
-}
 void TLogContainer::doScreenConfigAction()
 {
     ScreenConfig sc(this);

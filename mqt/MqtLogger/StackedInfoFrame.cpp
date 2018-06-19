@@ -134,14 +134,8 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int arg1)
     {
         if (contest)
         {
-            if (stackInstance == 0)
-                contest->currentStackItem.setValue(ui->infoCombo->currentText());
-            else if (stackInstance == 1)
-                contest->currentStack1Item.setValue(ui->infoCombo->currentText());
-            else if (stackInstance == 2)
-                contest->currentStack2Item.setValue(ui->infoCombo->currentText());
-            else if (stackInstance == 3)
-                contest->currentStack3Item.setValue(ui->infoCombo->currentText());
+            if (stackInstance < STACKITEMS)
+                contest->currentStackItems[stackInstance].setValue(ui->infoCombo->currentText());
         }
         contest->commonSave(false);
     }
@@ -172,14 +166,8 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
 
         if (contest)
         {
-            if (stackInstance == 0)
-                ui->infoCombo->setCurrentText(contest->currentStackItem.getValue());   // start up on the clock - useful outside the contest!
-            else if (stackInstance == 1)
-                ui->infoCombo->setCurrentText(contest->currentStack1Item.getValue());   // start up on the clock - useful outside the contest!
-            else if (stackInstance == 2)
-                ui->infoCombo->setCurrentText(contest->currentStack2Item.getValue());   // start up on the clock - useful outside the contest!
-            else if (stackInstance == 3)
-                ui->infoCombo->setCurrentText(contest->currentStack3Item.getValue());   // start up on the clock - useful outside the contest!
+            if (stackInstance < STACKITEMS)
+                ui->infoCombo->setCurrentText(contest->currentStackItems[stackInstance].getValue());   // start up on the clock - useful outside the contest!
         }
     }
 }

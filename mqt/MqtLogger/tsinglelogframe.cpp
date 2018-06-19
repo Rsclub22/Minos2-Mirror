@@ -103,11 +103,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(setMemory(BaseContestLog *, QString, QString)), this, SLOT(on_SetMemory(BaseContestLog *, QString, QString)));
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
 
-    //doNextContactDetailsOnLeftClick( true);  // but the sizes are zero...
-
     connect(&MinosLoggerEvents::mle, SIGNAL(LogColumnsChanged()), this, SLOT(onLogColumnsChanged()));
     connect(&MinosLoggerEvents::mle, SIGNAL(SplittersChanged()), this, SLOT(onSplittersChanged()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(NextContactDetailsOnLeft()), this, SLOT(on_NextContactDetailsOnLeft()));
     connect(&MinosLoggerEvents::mle, SIGNAL(NextUnfilled(BaseContestLog*)), this, SLOT(on_NextUnfilled(BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(GoToSerial(BaseContestLog*)), this, SLOT(on_GoToSerial(BaseContestLog*)));
 
@@ -553,7 +550,6 @@ void TSingleLogFrame::on_ContestPageChanged ()
     GJVQSOLogFrame->selectField(nullptr);
     GJVQSOLogFrame->logTabChanged();
 
-    //doNextContactDetailsOnLeftClick( false );
     MinosLoggerEvents::SendShowOperators();
 
     FKHRigControlFrame->on_ContestPageChanged();
@@ -565,18 +561,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
     LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
 
 }
-void TSingleLogFrame::doNextContactDetailsOnLeftClick(bool /*keepSizes*/ )
-{
-    mShowMessage("Please use the screen configuuration tool for this", nullptr);
-}
-void TSingleLogFrame::setAuxWindows()
-{
-    doSetAuxWindows(true);
-}
-void TSingleLogFrame::doSetAuxWindows(bool /*saveSplitter*/)
-{
-    mShowMessage("Please use the screen configuuration tool for this", nullptr);
-}
+
 void TSingleLogFrame::NextContactDetailsTimerTimer( )
 {
     if ( contest )
@@ -650,10 +635,7 @@ void TSingleLogFrame::HideTimerTimer(  )
             rotPresets->setVisible(isRotatorLoaded());
     }
 }
-void TSingleLogFrame::on_NextContactDetailsOnLeft()
-{
-    doNextContactDetailsOnLeftClick(false);
-}
+
 void TSingleLogFrame::updateQSODisplay()
 {
    GJVQSOLogFrame->updateQSODisplay();
