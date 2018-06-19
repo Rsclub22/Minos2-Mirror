@@ -184,6 +184,45 @@ void ScreenConfig::addAfter(ScreenConfigRow *r)
     baseRow->addLeft(nullptr);
 }
 
+bool ScreenConfig::checkOk(ScreenConfigElement *e)
+{
+    int auxCount = 0;
+    QString etype = e->getType();
+    for (int i = 0; i < vbl->count(); i++)
+    {
+        QWidget *w = vbl->itemAt(i)->widget();
+        ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+        if (row)
+        {
+            for (int j = 0; j < row->vbl->count(); j++)
+            {
+                w = row->vbl->itemAt(j)->widget();
+                ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
+                if (ele && ele != e)
+                {
+                    QString type = ele->getType();
+                    if (type == etype)
+                    {
+                        if (type == getScreenTypeString(sctAux))
+                        {
+                            auxCount++;
+                        }
+                        else
+                        {
+                            ele->setType(getScreenTypeString(sctNone));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (etype != getScreenTypeString(sctAux) || auxCount < STACKITEMS)
+    {
+        return true;
+    }
+    return false;
+}
+
 void ScreenConfig::on_addRowButton_clicked()
 {
     QLayoutItem *last = nullptr;

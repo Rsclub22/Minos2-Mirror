@@ -3,22 +3,40 @@
 #include "ScreenConfigElement.h"
 #include "ui_ScreenConfigElement.h"
 
-QVector <SCTypeOption> scoptions =
+static QVector <SCTypeOption> scoptions =
 {
     {sctNone, "None", "Not in use"},
-    {sctAux, "Aux", "Auxiiary Display"},
-    {sctLog, "Log", "QSO Log List"},
-    {sctRigControl, "Rig", "Rig Control"},
-    {sctRotControl, "Rot", "Rotator Control"},
-    {sctRotPresets, "RotP", "Rotator Presets"},
-    {sctQSOEdit, "QSO", "QSO Edit"},
-    {sctNextQSODetails, "Crib", "Next QSO details"},
-    {sctThisMatch, "This", "This Contest Matches"},
-    {sctOtherMatch, "Other", "Other Contest Matches" },
-    {sctArchiveMatch, "Arch", "Archive List Matches" },
-    {sctChat, "Chat", "Chat Display"}
+    {sctAux, "Auxiliary", "Auxiiary Display"},
+    {sctLog, "Log List", "QSO Log List"},
+    {sctRigControl, "Rig Control", "Rig Control"},
+    {sctRotControl, "Rotator Control", "Rotator Control"},
+    {sctRotPresets, "Rotator Presets", "Rotator Presets"},
+    {sctQSOEdit, "QSO Edit", "QSO Edit"},
+    {sctNextQSODetails, "Next QSO Details", "Next QSO details"},
+    {sctThisMatch, "This Contest Match", "This Contest Matches"},
+    {sctOtherMatch, "Other Contest Match", "Other Contest Matches" },
+    {sctArchiveMatch, "Archive Match", "Archive List Matches" },
+    {sctChat, "Chat Display", "Chat Display"}
 };
+SCType getScreenType(QString s)
+{
+    foreach(const SCTypeOption &opt, scoptions)
+    {
+        if (opt.s == s)
+            return opt.type;
+    }
+    return sctNone;
+}
+QString getScreenTypeString(SCType s)
+{
+    foreach(const SCTypeOption &opt, scoptions)
+    {
+        if (opt.type == s)
+            return opt.s;
+    }
+    return getScreenTypeString(sctNone);
 
+}
 ScreenConfigElement::ScreenConfigElement(QWidget *parent, ScreenConfigRow *parentrow) :
     QFrame(parent)
   , ui(new Ui::ScreenConfigElement)
@@ -46,9 +64,19 @@ QString ScreenConfigElement::getType()
 {
     return ui->elementTypeCombo->currentText();
 }
-void ScreenConfigElement::on_elementTypeCombo_activated(const QString &arg1)
+void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
 {
+    // if not aux, check only one of the type - make the other one "none"
 
+    // if aux, check no more than STACKITEMS - 1 - if more, make this one "none"
+    // can we disable "aux" when there are already enough?
+
+    // https://stackoverflow.com/questions/38915001/disable-specific-items-in-qcombobox
+
+    if (!parentRow->checkOk(this))
+    {
+        setType(getScreenTypeString(sctNextQSODetails));
+    }
 }
 
 void ScreenConfigElement::on_addLeftButton_clicked()

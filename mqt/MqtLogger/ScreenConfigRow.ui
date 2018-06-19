@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Frame</string>
   </property>
+  <property name="frameShape">
+   <enum>QFrame::WinPanel</enum>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QScrollArea" name="scrollArea">
@@ -24,8 +27,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>380</width>
-        <height>250</height>
+        <width>376</width>
+        <height>246</height>
        </rect>
       </property>
      </widget>
@@ -36,7 +39,7 @@
      <item>
       <widget class="QPushButton" name="addBeforeButton">
        <property name="text">
-        <string>Add Before</string>
+        <string>Add Row Before</string>
        </property>
       </widget>
      </item>
@@ -56,7 +59,7 @@
      <item>
       <widget class="QPushButton" name="removeButton">
        <property name="text">
-        <string>Remove</string>
+        <string>Remove This Row</string>
        </property>
       </widget>
      </item>
@@ -76,7 +79,7 @@
      <item>
       <widget class="QPushButton" name="addAfterButton">
        <property name="text">
-        <string>Add After</string>
+        <string>Add Row After</string>
        </property>
       </widget>
      </item>

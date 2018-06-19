@@ -24,6 +24,8 @@ public:
     void addLeft(ScreenConfigElement *e);
     void remove(ScreenConfigElement *e);
     void addRight(ScreenConfigElement *e);
+
+    bool checkOk(ScreenConfigElement *e);
 private slots:
     void on_addBeforeButton_clicked();
 

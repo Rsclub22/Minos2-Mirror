@@ -7,6 +7,7 @@
 #include "ScreenConfigFile.h"
 
 class ScreenConfigRow;
+class ScreenConfigElement;
 namespace Ui {
 class ScreenConfig;
 }
@@ -22,6 +23,9 @@ public:
     void addBefore(ScreenConfigRow *r);
     void remove(ScreenConfigRow *r);
     void addAfter(ScreenConfigRow *r);
+
+    bool checkOk(ScreenConfigElement *e);
+
 public slots:
     void reject();
     void accept();

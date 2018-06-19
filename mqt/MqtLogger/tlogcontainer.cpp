@@ -302,6 +302,7 @@ void TLogContainer::setupMenus()
 // end of search menu
 
     startConfigAction = newAction("Startup Apps Configuration", ui->menuTools, SLOT(StartConfigActionExecute()));
+    ScreenConfigAction = newAction("Configure Screen Layout...", ui->menuTools, SLOT(doScreenConfigAction()));
     ui->menuTools->addSeparator();
     LocCalcAction = newAction("Locator Calculator", ui->menuTools, SLOT(LocCalcActionExecute()));
 //    AnalyseMinosLogAction = newAction("Analyse Minos Log", ui->menuTools, SLOT(AnalyseMinosLogActionExecute()));
@@ -310,9 +311,6 @@ void TLogContainer::setupMenus()
     FontEditAcceptAction = newAction("Select &Font...", ui->menuTools, SLOT(FontEditAcceptActionExecute()));
     ReportAutofillAction = newCheckableAction("Signal Report AutoFill", ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction("Correct Date/Time", ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
-
-    ui->menuTools->addSeparator();
-    ScreenConfigAction = newAction("Configure Screen Layout...", ui->menuTools, SLOT(doScreenConfigAction()));
 
     // end of tools manu
 
