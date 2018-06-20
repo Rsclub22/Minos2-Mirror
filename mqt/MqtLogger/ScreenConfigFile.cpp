@@ -46,7 +46,7 @@ bool ScreenConfigFile::readFile(QString f)
     QString s;
     if (jf.open(QIODevice::ReadOnly))
     {
-        QString s = jf.readAll();
+        s = jf.readAll();
     }
     else
     {
