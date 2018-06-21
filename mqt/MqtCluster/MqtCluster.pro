@@ -28,14 +28,16 @@ SOURCES += main.cpp\
         clustermainwindow.cpp \
     qttelnet.cpp \
     setupdialog.cpp \
-    cluster.cpp
+    cluster.cpp \
+    clusternodelistmodel.cpp
 
     qttelnet.cpp
 
 HEADERS  += clustermainwindow.h \
     qttelnet.h \
     setupdialog.h \
-    cluster.h
+    cluster.h \
+    clusternodelistmodel.h
 
 
 
