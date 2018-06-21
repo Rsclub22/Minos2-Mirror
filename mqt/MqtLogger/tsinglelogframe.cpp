@@ -30,6 +30,7 @@
 #include "rigcontrolframe.h"
 #include "rotcontrolframe.h"
 #include "RotPresets.h"
+#include "ChatFrame.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -301,6 +302,15 @@ void TSingleLogFrame::buildScreenLayout()
 
     archiveMatchFrame->setVisible(false);
 
+    chatFrame = new ChatFrame(this);
+    chatFrame->setObjectName(QStringLiteral("chatFrame"));
+    chatFrame->setFrameShape(QFrame::StyledPanel);
+    chatFrame->setFrameShadow(QFrame::Raised);
+    //    sizePolicy1.setHeightForWidth(archiveMatchFrame->sizePolicy().hasHeightForWidth());
+    //    archiveMatchFrame->setSizePolicy(sizePolicy1);
+
+    chatFrame->setVisible(false);
+
     // set frame to Vertical Layout, insert LogFrameSplitter
     verticalLayout = new QVBoxLayout(this);
     verticalLayout->setSpacing(0);
@@ -407,6 +417,8 @@ void TSingleLogFrame::buildScreenLayout()
                 }
                 case sctChat:
                 {
+                    rowSplitters[j]->addWidget(chatFrame);
+                    chatFrame->setVisible(true);
                     break;
                 }
 

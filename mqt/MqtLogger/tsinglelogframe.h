@@ -31,6 +31,8 @@ class ContactList;
 class ListContact;
 class FocusWatcher;
 class MatchTreeFrame;
+class ChatFrame;
+
 
 // We may need to define our own validation controls with valid methods
 // for each needed type...
@@ -62,6 +64,8 @@ class TSingleLogFrame : public QFrame
     MatchThisFrame *thisMatchFrame = nullptr;
     MatchOtherFrame *otherMatchFrame = nullptr;
     MatchArchiveFrame *archiveMatchFrame = nullptr;
+
+    ChatFrame *chatFrame = nullptr;
 
     QVector <MinosSplitter *> rowSplitters;
 

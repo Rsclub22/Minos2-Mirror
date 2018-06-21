@@ -67,7 +67,8 @@ SOURCES += \
     rotpresetbutton.cpp \
     rotpresetdialog.cpp \
     serialcomms.cpp \
-    CacheSelection.cpp
+    CacheSelection.cpp \
+    ChatFrame.cpp
 
 HEADERS += \
     BandList.h \
@@ -120,7 +121,8 @@ HEADERS += \
     rotpresetdialog.h \
     focuswatcher.h \
     serialcomms.h \
-    CacheSelection.h
+    CacheSelection.h \
+    ChatFrame.h
 
 unix {
     target.path = /usr/lib
@@ -135,4 +137,5 @@ FORMS += \
     tconfigframe.ui \
     StartConfig.ui \
     ConfigElementFrame.ui \
-    rotpresetdialog.ui
+    rotpresetdialog.ui \
+    ChatFrame.ui
