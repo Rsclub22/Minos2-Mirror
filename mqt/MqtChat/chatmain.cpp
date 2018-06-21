@@ -8,9 +8,12 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    // force the app BEFORE constructing the ui - which will
+    // initialise it through the chat server
+    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::chatApp, false);    // DO NOT use the environment variable - use "Chat" everywhere
+
     ui->setupUi(this);
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::chatApp, false);    // DO NOT use the environment variable - use "Chat" everywhere
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
 
