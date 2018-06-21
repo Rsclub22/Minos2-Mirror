@@ -16,6 +16,8 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
+    connect(&CloseTimer, SIGNAL(timeout()), this, SLOT(CloseTimerTimer()));
+    CloseTimer.start(100);
 
     QSettings settings;
     QByteArray geometry = settings.value("geometry").toByteArray();
@@ -35,6 +37,18 @@ void TMinosChatForm::onStdInRead(QString cmd)
         setShowServers(true);
     if (cmd.indexOf("HideServers", Qt::CaseInsensitive) >= 0)
         setShowServers(false);
+}
+void TMinosChatForm::CloseTimerTimer(  )
+{
+   static bool closed = false;
+   if ( !closed )
+   {
+      if ( checkCloseEvent() )
+      {
+         closed = true;
+         close();
+      }
+   }
 }
 
 //---------------------------------------------------------------------------

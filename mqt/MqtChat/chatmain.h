@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "base_pch.h"
+#include "ChatServer.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,7 +18,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-
+    QTimer CloseTimer;
     StdInReader stdinReader;
 
     virtual void closeEvent(QCloseEvent *event) override;
@@ -27,6 +28,7 @@ private:
 
 private slots:
     void onStdInRead(QString);
+    void CloseTimerTimer();
 };
 
 #endif // MAINWINDOW_H

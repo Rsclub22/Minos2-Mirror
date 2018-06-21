@@ -68,7 +68,8 @@ SOURCES += \
     rotpresetdialog.cpp \
     serialcomms.cpp \
     CacheSelection.cpp \
-    ChatFrame.cpp
+    ChatFrame.cpp \
+    ChatServer.cpp
 
 HEADERS += \
     BandList.h \
@@ -122,7 +123,8 @@ HEADERS += \
     focuswatcher.h \
     serialcomms.h \
     CacheSelection.h \
-    ChatFrame.h
+    ChatFrame.h \
+    ChatServer.h
 
 unix {
     target.path = /usr/lib
