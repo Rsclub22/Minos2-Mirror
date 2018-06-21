@@ -10,6 +10,7 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::chatApp, false);    // DO NOT use the environment variable - use "Chat" everywhere
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
 
