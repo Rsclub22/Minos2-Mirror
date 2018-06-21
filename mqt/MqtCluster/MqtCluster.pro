@@ -3,6 +3,8 @@
 # Project created by QtCreator 2017-09-10T22:05:15
 #
 #-------------------------------------------------
+include($$PWD/../mqt.pri)
+include($$PWD/../mqtapplibs.pri)
 
 QT       += core gui network
 
