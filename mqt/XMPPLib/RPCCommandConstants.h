@@ -55,6 +55,7 @@ static const QString SendChatMessage    = QT_TR_NOOP("SendChatMessage");
 static const QString ChatResult         = QT_TR_NOOP("ChatResult");
 static const QString ChatCategory       = QT_TR_NOOP("MinosChat");
 static const QString ChatServer         = QT_TR_NOOP("MinosChatServer");
+static const QString ChatServerFrequency= QT_TR_NOOP("MinosChatServerFrequency");
 
 // Keyer
 static const QString keyerApp           = QT_TR_NOOP("Keyer");

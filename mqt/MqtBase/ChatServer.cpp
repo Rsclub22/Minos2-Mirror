@@ -1,4 +1,5 @@
 #include "MinosRPC.h"
+#include "MinosLoggerEvents.h"
 
 #include "ChatServer.h"
 
@@ -35,6 +36,7 @@ ChatServer::ChatServer()
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
 
     rpc->subscribe(rpcConstants::LocalStationCategory);
 }
@@ -64,34 +66,52 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         if ( an.getCategory() == rpcConstants::ChatCategory )
         {
             trace( QString(stateIndicator[an.getState()]) + " " + an.getKey() + " " + an.getValue() );
-            QVector<Server>::iterator stat;
-            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+
+            if (an.getKey() == rpcConstants::ChatServer)
             {
-                if ((*stat).name == an.getPublisherServer())
+                QVector<Server>::iterator stat;
+                for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
                 {
-                    if ((*stat).state != an.getState())
+                    if ((*stat).name == an.getPublisherServer())
                     {
-                        (*stat).state = an.getState();
-                        QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
-                        addChat( mess );
-                        syncstat = true;
+                        if ((*stat).state != an.getState())
+                        {
+                            (*stat).state = an.getState();
+                            QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
+                            addChat( mess );
+                            syncstat = true;
+                        }
+                        break;
                     }
-                    break;
+                }
+                if ( stat == serverList.end() )
+                {
+                    // We have received notification from a previously unknown station - so report on it
+                    Server s;
+                    s.name = an.getPublisherServer();
+                    s.state = an.getState();
+                    s.app = an.getValue();
+                    serverList.push_back( s );
+                    QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
+                    addChat( mess );
+                    syncstat = true;
                 }
             }
-
-            if ( stat == serverList.end() )
+            else if (an.getKey() == rpcConstants::ChatServerFrequency)
             {
-                // We have received notification from a previously unknown station - so report on it
-                Server s;
-                s.name = an.getPublisherServer();
-                s.ip = an.getValue();
-                s.state = an.getState();
-                s.app = an.getValue();
-                serverList.push_back( s );
-                QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
-                addChat( mess );
-                syncstat = true;
+                QVector<Server>::iterator stat;
+                for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+                {
+                    if ((*stat).name == an.getPublisherServer())
+                    {
+                        if ((*stat).freq != an.getValue())
+                        {
+                            (*stat).freq = an.getValue();
+                            syncstat = true;
+                        }
+                        break;
+                    }
+                }
             }
         }
     }
@@ -167,4 +187,8 @@ void ChatServer::sendMessage(QString mess)
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( (*i).app );
     }
+}
+void ChatServer::onRigFreqChanged(QString f, BaseContestLog */*c*/)
+{
+    RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServerFrequency, f, psPublished);
 }

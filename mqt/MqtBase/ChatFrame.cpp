@@ -23,7 +23,7 @@ void ChatFrame::ChatServerList(QVector<Server> serverList)
     ui->StationList->clear();
     for ( QVector<Server>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = stateIndicator[(*i).state] + " " + (*i).name;
+        QString state = stateIndicator[(*i).state] + " " + (*i).name + "\r\n" + (*i).freq;
         ui->StationList->addItem( state );
     }
 }
@@ -54,8 +54,9 @@ void ChatFrame::keyPressEvent( QKeyEvent* event )
     {
         ui->SendButton->clicked();
     }
-    if (Key == Qt::Key_Escape)
+    else
     {
-        ui->ChatEdit->clear();
+        // default handler for event
+        QFrame::keyPressEvent(event);
     }
 }
