@@ -605,6 +605,11 @@ int Callsign::validate( )
    {
       syn->getDupPrefix( prefix2 );
    }
+   else
+   {
+       valRes = ERR_INVCS;
+       return valRes;
+   }
 
    // CountryEntry *findCtryPrefix (in contacts.cpp) does get the country by
    // stripping back the full call (or prefix/suffix as appropriate)
@@ -614,6 +619,7 @@ int Callsign::validate( )
    if ( ( prefix.length() == 0 ) || ( prefix2.length() == 0 ) || ( body.length() == 0 ) )   	// suffix can be null
    {
       valRes = ERR_INVCS;
+      return valRes;
    }
 
    // And also want to look for
@@ -624,6 +630,7 @@ int Callsign::validate( )
       if (!body[i].isLetter())
       {
          valRes = ERR_INVCS;
+         return valRes;
       }
    }
    return valRes ;
