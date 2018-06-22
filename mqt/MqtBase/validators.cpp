@@ -281,17 +281,21 @@ bool Validator::validNumber( const QString &str, bool trailingAlphaAllowed)
             {
                if ( sz >= 3 )
                {
-                  if ( strchr( " 987654321A", t[ 2 ].toLatin1() ) )
-                  {
-                     picvalid = true;
-                  }
+//                  if ( strchr( " 987654321A", t[ 2 ].toLatin1() ) )
+//                  {
+//                     picvalid = true;
+//                  }
                   if (sz >= 4)
                   {
                       picvalid = false;
                   }
-                  if (t[2] !=  ' ' && t[2] != 'A' && t[2] != '9')
+                  else if (t[2] == '0' || (t[2] !=  ' ' && !t[2].isLetterOrNumber( )))
                   {
                       picvalid = false;
+                  }
+                  else
+                  {
+                      picvalid = true;
                   }
                }
                else
