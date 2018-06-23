@@ -40,7 +40,7 @@ void TClockFrame::RecheckTimerTimer(  )
    if (!timeOK)
        colour = HtmlFontColour(Qt::red);
    else
-       colour = HtmlFontColour(Qt::green);
+       colour = HtmlFontColour(Qt::blue);
 
 
    ui->clockLabel ->setText("<b><center><nobr><p><big><h1>"
