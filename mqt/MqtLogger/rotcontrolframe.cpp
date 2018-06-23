@@ -707,4 +707,16 @@ void RotControlFrame::presetTurn(QString b)
     ui->BrgSt->setText(b);
     ui->BrgSt->setFocus();
 }
+void RotControlFrame::checkConnection()
+{
+    QString loggerUuid = LogContainer->sendDM->getLoggerUuid();
+    PubSubName rotSelected = LogContainer->sendDM->getSelectedRot(loggerUuid);
 
+    if (rotSelected.isEmpty())
+    {
+        // clear the rot selection
+
+        ui->antennaName->setCurrentText("");
+        setRotatorState(ROT_STATUS_DISCONNECTED);
+    }
+}

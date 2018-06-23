@@ -116,9 +116,9 @@ void RigState::unpack(QString s)
     }
 
 }
-MinosStringItem<QString> RigState::selected(QString loggerUuid) const
+MinosStringItem<QString> RigState::getSelectedContest(QString loggerUuid) const
 {
-    return _selected.selected(loggerUuid);
+    return _selected.getSelectedContest(loggerUuid);
 }
 MinosStringItem<QString> RigState::status() const
 {
@@ -150,7 +150,4 @@ QStringList RigState::getSelectedLoggers()
 {
     return _selected.getSelectedLoggers();
 }
-QString RigState::getSelectedContest(QString loggerid)
-{
-    return _selected.getSelectedContest(loggerid);
-}
+

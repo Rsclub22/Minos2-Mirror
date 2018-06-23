@@ -22,12 +22,11 @@ public:
 
     MinosStringItem<QString> bearing() const;
     MinosStringItem<QString> status() const;
-    MinosStringItem<QString> selected(QString loggerUuid) const;
+    MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     void setBearing(const QString &bearing);
     void setStatus(const QString &status);
     void setSelected(const QString &loggeruuid, const QString &selected);
     QStringList getSelectedLoggers();
-    QString getSelectedContest(QString loggerid);
 };
 
 #endif // ANTENNASTATE_H

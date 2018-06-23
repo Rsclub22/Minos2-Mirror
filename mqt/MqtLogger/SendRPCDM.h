@@ -42,6 +42,13 @@ class TSendDM : public QObject
       void invalidateRigCache(const PubSubName &name);
       void invalidateRotatorCache(const PubSubName &name);
 
+      QString getLoggerUuid()
+      {
+          return loggerUuid;
+      }
+      PubSubName getSelectedRig(QString loggerUuid);
+      PubSubName getSelectedRot(QString loggerUuid);
+
       void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
       void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
       void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );

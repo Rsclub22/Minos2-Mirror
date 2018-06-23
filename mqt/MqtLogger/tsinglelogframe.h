@@ -124,7 +124,7 @@ public:
     void getDetails(memoryData::memData &m);
     void getCurrentDetails(memoryData::memData &m);
 
-
+    void checkConnections();
 private:
 //    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;

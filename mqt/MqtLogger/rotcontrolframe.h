@@ -64,6 +64,7 @@ public:
 
     void setCwCcwCmdEnable(bool s);
 
+    void checkConnection();
 private:
 
     QShortcut *nudgeRight1;

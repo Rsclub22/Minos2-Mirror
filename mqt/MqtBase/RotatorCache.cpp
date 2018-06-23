@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "rotatorcommon.h"
 #include "RotatorCache.h"
 
 RotatorCache::RotatorCache()
@@ -228,6 +229,10 @@ bool RotatorCache::setSelected(const PubSubName &name, const QString &loggeruuid
         trace("selecting rotator " + name.toString()+ " logger " + loggeruuid + " contest " + contestuuid);
         rotStates[name].setSelected(loggeruuid, contestuuid);
         rotDetails[name].setSelected(loggeruuid, contestuuid);
+        if (contestuuid.isEmpty())
+        {
+            rotStates[name].setStatus(ROT_STATUS_DISCONNECTED);
+        }
     }
     return selOK;
 }
@@ -235,7 +240,7 @@ PubSubName RotatorCache::getSelected(QString logger)
 {
     for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
     {
-        if (!i.value().selected(logger).getValue().isEmpty())
+        if (!i.value().getSelectedContest(logger).getValue().isEmpty())
         {
             PubSubName psn = i.key();
             return psn;
@@ -251,7 +256,7 @@ QString RotatorCache::getSelectedContest(PubSubName psn, QString loggerid)
                 && i.key().server() == psn.server()
                 && i.key().appName() == psn.appName())
         {
-            return i.value().selected(loggerid).getValue(); // antenna selected on this app
+            return i.value().getSelectedContest(loggerid).getValue(); // antenna selected on this app
         }
     }
     return QString();

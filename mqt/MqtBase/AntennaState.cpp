@@ -88,9 +88,9 @@ MinosStringItem<QString> AntennaState::bearing() const
     return _bearing;
 }
 
-MinosStringItem<QString> AntennaState::selected(QString loggerUuid) const
+MinosStringItem<QString> AntennaState::getSelectedContest(QString loggerUuid) const
 {
-    return _selected.selected(loggerUuid);
+    return _selected.getSelectedContest(loggerUuid);
 }
 
 QStringList AntennaState::getSelectedLoggers()
@@ -98,7 +98,3 @@ QStringList AntennaState::getSelectedLoggers()
     return _selected.getSelectedLoggers();
 }
 
-QString AntennaState::getSelectedContest(QString loggerid)
-{
-    return _selected.getSelectedContest(loggerid);
-}

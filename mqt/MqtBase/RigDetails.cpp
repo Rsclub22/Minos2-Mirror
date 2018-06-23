@@ -132,9 +132,9 @@ void RigDetails::unpack(QString s)
     }
 
 }
-MinosStringItem<QString> RigDetails::selected(QString loggerUuid) const
+MinosStringItem<QString> RigDetails::getSelectedContest(QString loggerUuid) const
 {
-    return _selected.selected(loggerUuid);
+    return _selected.getSelectedContest(loggerUuid);
 }
 MinosItem<double> RigDetails::transverterOffset() const
 {

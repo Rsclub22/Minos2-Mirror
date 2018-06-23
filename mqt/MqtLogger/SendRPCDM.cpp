@@ -8,6 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "base_pch.h"
+#include <QHostInfo>
+
 
 #include "SendRPCDM.h"
 #include "tsinglelogframe.h"
@@ -17,7 +19,8 @@
 TSendDM::TSendDM(QWidget* Owner )
     : QObject( Owner )
 {
-    loggerUuid = makeUuid();
+    QString h = QHostInfo::localHostName();
+    loggerUuid = /*makeUuid()*/h;
     trace("logger uuid is " + loggerUuid);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
@@ -40,6 +43,14 @@ void TSendDM::invalidateRigCache(const PubSubName &name)
 void TSendDM::invalidateRotatorCache(const PubSubName &name)
 {
     rotatorCache.invalidate(name);
+}
+PubSubName TSendDM::getSelectedRig(QString loggerUuid)
+{
+    return rigCache.getSelected(loggerUuid);
+}
+PubSubName TSendDM::getSelectedRot(QString loggerUuid)
+{
+    return rotatorCache.getSelected(loggerUuid);
 }
 
 //---------------------------------------------------------------------------
@@ -390,9 +401,9 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             if (!rigSelected.isEmpty())
             {
                 RigState &selState = rigCache.getState(rigSelected);
-                QString selStateUuid = selState.selected(loggerUuid).getValue();
+                QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
                 RigDetails &selDetail = rigCache.getDetails(rigSelected);
-                QString selDetailsUuid = selDetail.selected(loggerUuid).getValue();
+                QString selDetailsUuid = selDetail.getSelectedContest(loggerUuid).getValue();
                 if (!selStateUuid.isEmpty())
                 {
 
@@ -450,9 +461,9 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 if (!rotSelected.isEmpty())
                 {
                     AntennaState &selState = rotatorCache.getState(rotSelected);
-                    QString selStateUuid = selState.selected(loggerUuid).getValue();
+                    QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
                     AntennaDetail &selDetail = rotatorCache.getDetails(rotSelected);
-                    QString selDetailUuid = selState.selected(loggerUuid).getValue();
+                    QString selDetailUuid = selState.getSelectedContest(loggerUuid).getValue();
                     if (!selStateUuid.isEmpty())
                     {
                         for (int i = 0; i < frames.size(); i++)
@@ -536,6 +547,8 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             */
         }
     }
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    tslf->checkConnections();
 }
 //---------------------------------------------------------------------------
 void TSendDM::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )

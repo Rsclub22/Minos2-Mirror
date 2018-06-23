@@ -7,12 +7,16 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
+#include <QHostInfo>
+
 #include "Calendar.h"
 #include "CalendarList.h"
 
 BaseContestLog::BaseContestLog( )
 {
-   uuid = makeUuid();
+    static int inst = 0;
+    QString h = QHostInfo::localHostName();
+   uuid = /*makeUuid()*/ h + "_" + QString::number(inst++);
    bearingOffset.setValue(0);
    currentMode.setValue( "USB" );
 

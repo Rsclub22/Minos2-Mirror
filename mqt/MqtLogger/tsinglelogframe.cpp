@@ -1112,6 +1112,16 @@ bool TSingleLogFrame::isBandMapLoaded()
 }
 
 //---------------------------------------------------------------------------
+void TSingleLogFrame::checkConnections()
+{
+    // check on rig and rotator connections
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        FKHRigControlFrame->checkConnection();
+        FKHRotControlFrame->checkConnection();
+    }
+}
+//---------------------------------------------------------------------------
 
 // RigControl
 

@@ -32,7 +32,7 @@ public:
     MinosItem<int> minAzimuth() const;
     MinosItem<int> maxAzimuth() const;
     MinosItem<bool> cwCcwCmdEnable() const;
-    MinosStringItem<QString> selected(QString loggerUuid) const;
+    MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     void setMinAzimuth(int minAzimuth);
     void setMaxAzimuth(int maxAzimuth);
     void setCwCcwCmdEnable(bool cwCcwCmdEnable);

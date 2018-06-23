@@ -81,7 +81,7 @@ void CacheSelection::unpack(const QJsonValue &json)
     }
 }
 
-MinosStringItem<QString> CacheSelection::selected(const QString loggerUuid) const
+MinosStringItem<QString> CacheSelection::getSelectedContest(const QString loggerUuid) const
 {
     if (loggerUuid.isEmpty())
     {
@@ -126,15 +126,4 @@ QStringList CacheSelection::getSelectedLoggers()
     return loggers;
 }
 
-QString CacheSelection::getSelectedContest(QString loggerid)
-{
-    QString contest;
-    QMapIterator<QString, MinosStringItem<QString> > iter(_selected);
-    if (iter.hasNext())
-    {
-        iter.next();
-        if (iter.key() == loggerid)
-            return iter.value().getValue();
-    }
-    return contest;
-}
+

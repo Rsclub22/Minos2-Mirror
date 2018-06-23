@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "rigcommon.h"
 #include "RigCache.h"
 RigCache::RigCache()
 {
@@ -171,6 +172,10 @@ bool RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, co
         trace("selecting radio " + name.toString()+ " logger " + loggeruuid + " contest " + contestuuid);
         rigStates[name].setSelected(loggeruuid, contestuuid);
         rigDetails[name].setSelected(loggeruuid, contestuuid);
+        if (contestuuid.isEmpty())
+        {
+            rigStates[name].setStatus(RIG_STATUS_DISCONNECTED);
+        }
     }
     return selOK;
 }
@@ -178,7 +183,7 @@ PubSubName RigCache::getSelected(QString loggerUuid)
 {
     for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
     {
-        if (!i.value().selected(loggerUuid).getValue().isEmpty())
+        if (!i.value().getSelectedContest(loggerUuid).getValue().isEmpty())
         {
             PubSubName psn = i.key();
             return psn;
@@ -194,7 +199,7 @@ QString RigCache::getSelectedContest(PubSubName psn, QString loggerUuid)
                 && i.key().server() == psn.server()
                 && i.key().appName() == psn.appName())
         {
-            return i.value().selected(loggerUuid).getValue(); // antenna selected on this app
+            return i.value().getSelectedContest(loggerUuid).getValue(); // antenna selected on this app
         }
     }
     return QString();

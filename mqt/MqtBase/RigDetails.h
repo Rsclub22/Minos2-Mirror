@@ -37,7 +37,7 @@ public:
     virtual QString pack() const;
     virtual void unpack(QString);
 
-    MinosStringItem<QString> selected(QString loggerUuid) const;
+    MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     MinosItem<double> transverterOffset() const;
     MinosItem<int> transverterSwitch() const;
     MinosItem<bool> transverterStatus() const;

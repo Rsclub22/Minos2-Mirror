@@ -99,9 +99,9 @@ MinosItem<bool> AntennaDetail::cwCcwCmdEnable()  const
 {
     return _cwCcwCmdEnable;
 }
-MinosStringItem<QString> AntennaDetail::selected(QString loggerUuid) const
+MinosStringItem<QString> AntennaDetail::getSelectedContest(QString loggerUuid) const
 {
-    return _selected.selected(loggerUuid);
+    return _selected.getSelectedContest(loggerUuid);
 }
 
 

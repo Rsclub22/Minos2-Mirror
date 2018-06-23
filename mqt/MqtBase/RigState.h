@@ -35,7 +35,7 @@ public:
     virtual QString pack() const;
     virtual void unpack(QString);
 
-    MinosStringItem<QString> selected(QString loggerUuid) const;
+    MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     MinosStringItem<QString> status() const;
     MinosItem<double> freq() const;
     MinosStringItem<QString> mode() const;
@@ -50,8 +50,6 @@ public:
     void setRitEnableStatus(const QString &status);
 
     QStringList getSelectedLoggers();
-    QString getSelectedContest(QString loggerid);
-
 };
 
 #endif // RIGSTATE_H

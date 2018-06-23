@@ -1135,7 +1135,18 @@ QString RigControlFrame::extractKhz(QString f)
 
 }
 
+void RigControlFrame::checkConnection()
+{
+    QString loggerUuid = LogContainer->sendDM->getLoggerUuid();
+    PubSubName rigSelected = LogContainer->sendDM->getSelectedRig(loggerUuid);
+    if (rigSelected.isEmpty() && !ui->radioNameSel->currentText().isEmpty())
+    {
+        // clear the rig selection
 
+        ui->radioNameSel->setCurrentText("");
+        setRadioState(RIG_STATUS_DISCONNECTED);
+    }
+}
 
 
 memoryData::memData RigControlFrame::getRunMemoryData(int memoryNumber)
