@@ -14,7 +14,7 @@
    <string>GroupBox</string>
   </property>
   <property name="title">
-   <string>Quick Presets</string>
+   <string>Quick Rotator Presets</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
