@@ -170,11 +170,14 @@ bool RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, co
     if (selOK)
     {
         trace("selecting radio " + name.toString()+ " logger " + loggeruuid + " contest " + contestuuid);
-        rigStates[name].setSelected(loggeruuid, contestuuid);
-        rigDetails[name].setSelected(loggeruuid, contestuuid);
-        if (contestuuid.isEmpty())
+        if (!name.isEmpty())
         {
-            rigStates[name].setStatus(RIG_STATUS_DISCONNECTED);
+            rigStates[name].setSelected(loggeruuid, contestuuid);
+            rigDetails[name].setSelected(loggeruuid, contestuuid);
+            if (contestuuid.isEmpty())
+            {
+                rigStates[name].setStatus(RIG_STATUS_DISCONNECTED);
+            }
         }
     }
     return selOK;
