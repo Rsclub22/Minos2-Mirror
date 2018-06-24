@@ -548,7 +548,8 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
         }
     }
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    tslf->checkConnections();
+    if (tslf)
+        tslf->checkConnections();
 }
 //---------------------------------------------------------------------------
 void TSendDM::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
