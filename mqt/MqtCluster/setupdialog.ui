@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterSetUpTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="PersonalTab">
       <attribute name="title">
@@ -99,20 +99,20 @@
       <widget class="QTableView" name="ListClustersView">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>50</y>
-         <width>401</width>
-         <height>221</height>
+         <width>451</width>
+         <height>261</height>
         </rect>
        </property>
       </widget>
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>120</x>
+         <x>190</x>
          <y>10</y>
          <width>239</width>
-         <height>25</height>
+         <height>31</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_5">

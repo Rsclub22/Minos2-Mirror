@@ -47,11 +47,12 @@ private slots:
     void connectionEstab();
     void connectionError(QAbstractSocket::SocketError);
     void messageRx(QString msg);
-    void logIn();
+    void logIn(const QString callsign, const QString password);
     void sendText();
     void parseDX(QString txt);
-    void checkedLoggedIn(QString msg);
+    void checkedLoggedIn(QString msg, QString nodeName);
     void onLaunchSetup();
+    void connectToNode(const QString &nodeName);
 private:
     Ui::ClusterMainWindow *ui;
     QtTelnet* client;
@@ -59,9 +60,18 @@ private:
 
     SetupDialog *setupCluster;
 
-    QStringList clusterSiteNames;
-    int numClusterSites;
-    QVector<ClusterAddress*> availClusters;
+
+    QString currentNodeName;
+    QString currentAddress;
+    QString currentPort;
+    QString currentPassword;
+
+    QString currentUserCallsign;
+    QString currentUserName;
+    QString currentUserQTH;
+    QString currentUserLocator;
+
+
 
     QStringList dxMsg;
     QString dxCall;
@@ -73,10 +83,12 @@ private:
 
     bool loginStart;
     bool loginSuccess;
+    bool nodeConnected;
+
     void txText(QString msg);
     int upackSpot(QString txt);
-    bool getClusterAddresses();
-    void loadNodesSelectBox();
+    void loadNodesSelectBox(QStringList listOfNodes);
+    ;
 };
 
 #endif // CLUSTERMAINWINDOW_H

@@ -37,9 +37,7 @@ SetupDialog::SetupDialog(QWidget *parent) :
 
     connect(clusterListModel, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(clusterListDataChanged(QStandardItem*)));
 
-    QList<QString>* datalist = getClusterInfo("GB7MBC");
-    QList<QString>* nameList = getListOfClusterNames();
-    int a = 0;
+
 
 }
 
@@ -64,10 +62,17 @@ void SetupDialog::cancelButtonPushed()
     if (listDataChanged)
     {
         // load back the data to model
-        clusterListModel->clear();
+        clusterListModel->clear();      // also clears rows and columns
+
         QString fileName = CLUSTER_NODE_LIST_FILE;
         QSettings settings(fileName, QSettings::IniFormat);
         QStringList availNodeNames = settings.childGroups();
+        clusterListModel->setRowCount(availNodeNames.count());      // restore model row and col
+        clusterListModel->setColumnCount(ClusterListNumCols);
+        clusterListModel->setHeaderData(NameColNum, Qt::Horizontal, QObject::tr("Name"));
+        clusterListModel->setHeaderData(AddressColNum, Qt::Horizontal, QObject::tr("Address"));
+        clusterListModel->setHeaderData(PortColNum, Qt::Horizontal, QObject::tr("Port"));
+        clusterListModel->setHeaderData(PasswdColNum, Qt::Horizontal, QObject::tr("Password"));
         loadSettingsToModel(availNodeNames, settings);
     }
 
@@ -134,7 +139,7 @@ void SetupDialog::savePersonel()
         locator = ui->locatorEdit->text().trimmed();
         qth = ui->qthEdit->text().trimmed();
 
-        QString fileName = CLUSTER_PERSONAL_FILE;
+        QString fileName = CLUSTER_SETTINGS_FILE;
 
         QSettings config(fileName, QSettings::IniFormat);
 
@@ -153,7 +158,7 @@ void SetupDialog::readPersonel()
 {
     // need to check for no ini file...*************
 
-    QString fileName = CLUSTER_PERSONAL_FILE;
+    QString fileName = CLUSTER_SETTINGS_FILE;
 
 
     QSettings config(fileName, QSettings::IniFormat);
@@ -168,6 +173,34 @@ void SetupDialog::readPersonel()
     config.endGroup();
 
 }
+
+
+void SetupDialog::saveCurrentNodeName(QString nodeName)
+{
+    QString fileName = CLUSTER_SETTINGS_FILE;
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("CurrentNodeName");
+    config.setValue("currentNodeName", nodeName);
+    config.endGroup();
+}
+
+
+QString SetupDialog::getCurrentNodeName()
+{
+    QString fileName = CLUSTER_SETTINGS_FILE;
+
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("CurrentNodeName");
+    QString currentNodeName = config.value("currentNodeName", "").toString();
+    config.endGroup();
+
+    return  currentNodeName;
+}
+
 
 
 void SetupDialog::loadPersonelToSetupTab()
@@ -332,7 +365,7 @@ bool SetupDialog::doesClusterNameExist(QString clusterName)
 }
 
 // gets connection info from datamodel
-QList<QString>* SetupDialog::getClusterInfo(QString clusterName)
+QStringList SetupDialog::getClusterInfo(QString clusterName)
 {
     clusterInfo.clear();
     QList<QStandardItem*> foundLst;
@@ -352,11 +385,11 @@ QList<QString>* SetupDialog::getClusterInfo(QString clusterName)
 
 
 
-    return &clusterInfo;
+    return clusterInfo;
 }
 
 
-QList<QString>* SetupDialog::getListOfClusterNames()
+QStringList SetupDialog::getListOfClusterNames()
 {
 
     clusterNameList.clear();
@@ -365,6 +398,6 @@ QList<QString>* SetupDialog::getListOfClusterNames()
         clusterNameList.append(clusterListModel->item(row, 0)->text());
     }
 
-    return &clusterNameList;
+    return clusterNameList;
 
 }

@@ -18,7 +18,7 @@ namespace Ui {
 class SetupDialog;
 }
 
-const QString CLUSTER_PERSONAL_FILE = "./Configuration/Cluster/personal.ini";
+const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.ini";
 const QString CLUSTER_NODE_LIST_FILE = "./Configuration/Cluster/ClusterSites.ini";
 
 const int ClusterListNumCols = 4;
@@ -43,13 +43,17 @@ public:
 
 
     bool doesClusterNameExist(QString nodeName);
-    QList<QString> *getClusterInfo(QString clusterName);
-    QList<QString> *getListOfClusterNames();
+    QStringList getClusterInfo(QString clusterName);
+    QStringList getListOfClusterNames();
 
-    QList<QString> clusterInfo;
-    QList<QString> clusterNameList;
+    QStringList clusterInfo;
+    QStringList clusterNameList;
 
 
+
+    void saveCurrentNodeName(QString nodeName);
+public slots:
+    QString getCurrentNodeName();
 private slots:
 
 

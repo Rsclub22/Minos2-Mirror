@@ -9,7 +9,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ClusterMainWindow),
     loginStart(false),
-    loginSuccess(false)
+    loginSuccess(false),
+    nodeConnected(false)
 {
     ui->setupUi(this);
 
@@ -18,19 +19,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
 
-
-    // get list of clusters
-    getClusterAddresses();
-    loadNodesSelectBox();
-
-
-
-    // QRegExp logPrompt("(login:)");
-   // client->setLoginPattern(logPrompt);
-    client->login("m0dgb", "");
-
-
     connect(ui->actionSetup, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
+
+    connect(ui->nodeCb, SIGNAL(activated(const QString &nodeName)), this, SLOT(connectToNode(const QString &nodeName)));
 
     connect(client, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
     connect(client, SIGNAL(loginRequired()), this, SLOT(logIn()));
@@ -39,7 +30,59 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(client, SIGNAL(message(QString)), this, SLOT(parseDX(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
 //    connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
-    client->connectToHost("gb7mbc.spoo.org", 8000);
+
+    // get list of clusters
+    loadNodesSelectBox(setupCluster->getListOfClusterNames());
+
+    // get user data
+    currentUserCallsign  = setupCluster->getUserCallsign();
+    currentUserName = setupCluster->getUserName();
+    currentUserLocator = setupCluster->getUserLocator();
+    currentUserQTH = setupCluster->getUserQth();
+
+    // get current node from file
+    currentNodeName = setupCluster->getCurrentNodeName();
+    if (setupCluster->doesClusterNameExist(currentNodeName))
+    {
+        ui->nodeCb->setCurrentText(currentNodeName);
+        // get current node data
+        QStringList nd = setupCluster->getClusterInfo(currentNodeName);
+        currentNodeName = nd[0];
+        currentAddress = nd[1];
+        currentPort = nd[3];
+        currentPassword = nd[4];
+
+
+        client->login(currentUserCallsign, currentPassword);
+        client->connectToHost(currentAddress, currentPort.toUShort());
+        txText("set/echo enable");
+        txText(dxCluster->setNameMsg(currentUserName));
+        txText(dxCluster->setQthMsg(currentUserQTH));
+        txText(dxCluster->setQraMsg(currentUserLocator));
+
+    }
+
+
+
+
+    // QRegExp logPrompt("(login:)");
+   // client->setLoginPattern(logPrompt);
+   // client->login("m0dgb", "");
+
+/*
+    connect(ui->actionSetup, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
+
+    connect(ui->nodeCb, SIGNAL(activated(const QString &nodeName)), this, SLOT(connectToNode(const QString &nodeName)));
+
+    connect(client, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
+    connect(client, SIGNAL(loginRequired()), this, SLOT(logIn()));
+    connect(client, SIGNAL(connectionError(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
+    connect(client, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
+    connect(client, SIGNAL(message(QString)), this, SLOT(parseDX(QString)));
+    connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
+//    connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
+*/
+    //client->connectToHost("gb7mbc.spoo.org", 8000);
 
 //    txText("set/echo enable");
 //    txText(dxCluster->setNameMsg("david"));
@@ -64,6 +107,33 @@ void ClusterMainWindow::onLaunchSetup()
 }
 
 
+void ClusterMainWindow::connectToNode(const QString &nodeName)
+{
+    QString selNodeName = nodeName;
+
+    if (nodeName.isEmpty() && nodeConnected)
+    {
+        disconnectNode();
+        currentNode = "";
+        currentAddress = "";
+        currentPort = "";
+        currentPassword = "";
+        saveCurrentNode(currentNode);
+    }
+    else
+    {
+        if (currentNode == nodeName)
+        {
+            // reconnect
+            disconnectNode();
+            connectNode(currentCallsign, currentPassword, currentNode, currentAddress, currentPort);
+        }
+    }
+
+
+
+}
+
 void ClusterMainWindow::connectionEstab()
 {
     qDebug() << "connection established";
@@ -82,18 +152,18 @@ void ClusterMainWindow::messageRx(QString msg)
     ui->textWindow->appendPlainText(msg.remove('\x07'));
 }
 
-void ClusterMainWindow::logIn()
+void ClusterMainWindow::logIn(const QString callsign, const QString password)
 {
     qDebug() << "send logon message\n";
-    client->login("m0dgb\r\n", "");
+    client->login(QString("%1\r\n").arg(callsign), password);
     loginStart = true;
 
 }
 
 
-void ClusterMainWindow::checkedLoggedIn(QString msg)
+void ClusterMainWindow::checkedLoggedIn(QString msg, QString nodeName)
 {
-    QString endOfMsg = "GB7MBC>\r\n";
+    QString endOfMsg = QString("%1>\r\n").arg(nodeName);
 
     if (loginStart && !loginSuccess)
     {
@@ -101,9 +171,9 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
         {
             loginSuccess = true;
             txText("set/echo enable\n");
-            txText(dxCluster->setNameMsg("David"));
-            txText(dxCluster->setQthMsg("Uxbridge"));
-            txText(dxCluster->setQraMsg("IO91SN"));
+            txText(dxCluster->setNameMsg(currentName));
+            txText(dxCluster->setQthMsg(currentQTH));
+            txText(dxCluster->setQraMsg(currentLocator));
         }
 
     }
@@ -210,43 +280,9 @@ int ClusterMainWindow::upackSpot(QString txt)
 }
 
 
-void ClusterMainWindow::loadNodesSelectBox()
+void ClusterMainWindow::loadNodesSelectBox(QStringList listOfNodes)
 {
     ui->nodeCb->addItem("");
-    for (int i = 0; i < numClusterSites; i++)
-    {
-        ui->nodeCb->addItem(availClusters[i]->name);
-    }
+    ui->nodeCb->addItems(listOfNodes);
 }
 
-
-bool ClusterMainWindow::getClusterAddresses()
-{
-
-    QString fileName;
-    fileName = CLUSTER_PATH + CLUSTER_SITES ;
-    QSettings  config(fileName, QSettings::IniFormat);
-
-    clusterSiteNames = config.childGroups();
-
-    numClusterSites = clusterSiteNames.count();
-
-    if (numClusterSites != 0)
-    {
-        availClusters.clear();
-        for (int i = 0; i < numClusterSites; i++)
-        {
-            config.beginGroup(clusterSiteNames[i]);
-            availClusters.append(new ClusterAddress(clusterSiteNames[i],
-                                                    config.value("address", "").toString(),
-                                                    config.value("port", "").toString(),
-                                                    config.value("password", "").toString()));
-            config.endGroup();
-        }
-        return true;
-    }
-
-    return false;
-
-
-}
