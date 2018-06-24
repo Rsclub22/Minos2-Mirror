@@ -49,12 +49,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
         QStringList nd = setupCluster->getClusterInfo(currentNodeName);
         currentNodeName = nd[0];
         currentAddress = nd[1];
-        currentPort = nd[3];
-        currentPassword = nd[4];
+        currentPort = nd[2];
+        currentPassword = nd[3];
 
-
-        client->login(currentUserCallsign, currentPassword);
+        QRegExp logPrompt("(login:)");
+        client->setLoginPattern(logPrompt);
         client->connectToHost(currentAddress, currentPort.toUShort());
+        client->login(currentUserCallsign, currentPassword);
         txText("set/echo enable");
         txText(dxCluster->setNameMsg(currentUserName));
         txText(dxCluster->setQthMsg(currentUserQTH));
@@ -113,26 +114,28 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
 
     if (nodeName.isEmpty() && nodeConnected)
     {
-        disconnectNode();
-        currentNode = "";
+        //disconnectNode();
+       // currentNode = "";
         currentAddress = "";
         currentPort = "";
         currentPassword = "";
-        saveCurrentNode(currentNode);
+        //saveCurrentNode(currentNode);
     }
     else
     {
-        if (currentNode == nodeName)
-        {
+        //if (currentNode == nodeName)
+       // {
             // reconnect
-            disconnectNode();
-            connectNode(currentCallsign, currentPassword, currentNode, currentAddress, currentPort);
-        }
+      //      disconnectNode();
+     //       connectNode(currentCallsign, currentPassword, currentNode, currentAddress, currentPort);
+       // }
     }
 
 
 
 }
+
+
 
 void ClusterMainWindow::connectionEstab()
 {
@@ -171,9 +174,9 @@ void ClusterMainWindow::checkedLoggedIn(QString msg, QString nodeName)
         {
             loginSuccess = true;
             txText("set/echo enable\n");
-            txText(dxCluster->setNameMsg(currentName));
-            txText(dxCluster->setQthMsg(currentQTH));
-            txText(dxCluster->setQraMsg(currentLocator));
+            txText(dxCluster->setNameMsg(currentUserName));
+            txText(dxCluster->setQthMsg(currentUserLocator));
+            txText(dxCluster->setQraMsg(currentUserQTH));
         }
 
     }
