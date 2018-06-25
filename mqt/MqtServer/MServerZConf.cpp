@@ -23,7 +23,19 @@
 
 TZConf *TZConf::ZConf = nullptr;
 QVector<Server *> serverList;
-
+//---------------------------------------------------------------------------
+static quint16 toQUint16 ( const QString &s, int def )
+{
+    int num = def;
+    if ( !s.isEmpty() )
+    {
+        bool ok;
+        int i = s.toInt(&ok);
+        if (ok)
+            num = i;
+    }
+    return static_cast<quint16>(num);
+}
 //---------------------------------------------------------------------------
 TZConf::TZConf( )
       : waitNameReply( false )
@@ -151,6 +163,8 @@ void TZConf::onTimeout()
       sendBeaconResponse = false;
    }
    rxSocket->onTimeout();
+
+   readServerList();
 }
 
 
@@ -183,7 +197,7 @@ Server *findStation( const QString s )
          return ( *i );
       }
    }
-   return 0;
+   return nullptr;
 }
 void TZConf::ServerScan()
 {
@@ -193,6 +207,48 @@ void TZConf::ServerScan()
       MinosServerListener::getListener() ->checkServerConnected( ( *i ), false );
       trace("Server scan - checked " + (*i)->station);
    }
+}
+void TZConf::readServerList()
+{
+   trace("Reading Server List File");
+   // Read the server override file
+   QSettings servers(GetCurrentDir() + "/Configuration/Servers.ini", QSettings::IniFormat);
+   QStringList sl = servers.allKeys();
+
+   for ( int i = 0; i < sl.count(); i++ )
+   {
+      servers.beginGroup(sl[i]);
+
+      QString uuid = servers.value( "Uuid" ).toString();
+      QString host = servers.value( "Host" ).toString();
+      QString station = servers.value( "Station" ).toString();
+      QString port = servers.value( "Port" ).toString();
+
+
+      if ( host.size() == 0 )
+      {
+         if ( station.size() == 0 )
+         {
+            continue;
+         }
+         host = station;
+      }
+      else
+         if ( station.size() == 0 )
+         {
+            station = host;
+         }
+
+      if ( port.size() == 0 )
+      {
+         port = QString::number(MinosServerPort);
+      }
+
+      zcPublishServer( uuid, station, host, toQUint16(port, MinosServerPort ) );
+
+   }
+   ServerScan();
+   trace("Finished reading Server List File");
 }
 
 //---------------------------------------------------------------------------
@@ -206,7 +262,7 @@ void TZConf::ServerScan()
 // when they have subscribed to stations.
 
 Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
-                              const QString &hosttarget, int PortAsNumber )
+                              const QString &hosttarget, quint16 PortAsNumber )
 {
     trace( "zcPublishServer Host " + hosttarget + " Station " + name +
            " Port " + QString::number( PortAsNumber ) + " uuid " + uuid  );
@@ -266,10 +322,10 @@ QString TZConf::getZConfString(bool beaconreq)
 Server *TZConf::processZConfString(const QString &message, const QString &recvHost, bool &sendBeaconResponse)
 {
     sendBeaconResponse = false;
-    Server *srv = 0;
+    Server *srv = nullptr;
     TiXmlDocument xdoc;
     TIXML_STRING smessage = message.toStdString();// allowed conversion through TIXML_STRING
-    xdoc.Parse( smessage.c_str(), 0 );
+    xdoc.Parse( smessage.c_str(), nullptr );
     TiXmlElement * tix = xdoc.RootElement();
     if ( tix && checkElementName( tix, "minosServer" ) )
     {
@@ -281,10 +337,7 @@ Server *TZConf::processZConfString(const QString &message, const QString &recvHo
 
         // publish what came in - possibly we should publish the XML string
         // against the UUID?
-        bool ok;
-        iPort = port.toInt(&ok);
-        if (!ok)
-            iPort = MinosServerPort;
+        iPort = toQUint16(port, MinosServerPort);
         srv = zcPublishServer( UUID, station, recvHost, iPort );
         if ( request.size() && UUID != getServerId())
         {
@@ -298,6 +351,24 @@ Server *TZConf::processZConfString(const QString &message, const QString &recvHo
     }
     return srv;
 }
+//==============================================================================
+
+Server::Server( const QString &uuid, const QString &h, const QString &s, quint16 p )
+    :
+      uuid(uuid),
+      host( h ),
+      station( s ),
+      port( p ),
+      local( false )
+{}
+Server::Server( const QString &s )
+    :
+      station( s ),
+      port( static_cast<quint16>(-1) ),
+      local( false )
+{}
+Server::~Server()
+{}
 //==============================================================================
 
 UDPSocket::UDPSocket()
