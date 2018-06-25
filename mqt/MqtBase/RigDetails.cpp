@@ -12,14 +12,14 @@ RigDetails::RigDetails()
     _ritEnableStatus.setInitialValue(false);
     _ritOnOffStatus.setInitialValue(false);
 }
-RigDetails::RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &sel, const bool &ritst, const bool &ritonoff)
+RigDetails::RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &loggeruuid, const QString &sel, const bool &ritst, const bool &ritonoff)
     :PubSubValue(RigDetailsType)
 {
     _transverterOffset.setValue(tvo);
     _transverterSwitch.setValue(tvsw);
     _transverterStatus.setValue(tvst);
     _bandList.setValue(blist);
-    _selected.setValue(sel);
+    _selected.setSelection(loggeruuid, sel);
     _ritEnableStatus.setValue(ritst);
     _ritOnOffStatus.setValue(ritonoff);
 }
@@ -61,9 +61,9 @@ void RigDetails::setDirty()
     _ritOnOffStatus.setDirty();
 }
 
-void RigDetails::setSelected(const QString &selected)
+void RigDetails::setSelected(const QString &loggeruuid, const QString &selected)
 {
-    _selected.setValue(selected);
+    _selected.setSelection(loggeruuid, selected);
 }
 void RigDetails::setTransverterOffset(double transverterOffset)
 {
@@ -97,7 +97,7 @@ QString RigDetails::pack() const
 {
     QJsonObject jv;
 
-    jv.insert(rpcConstants::selected, selected().getValue());
+    jv.insert(rpcConstants::selected, _selected.pack());
     jv.insert(rpcConstants::rigControlTxVertOffsetFreq, transverterOffset().getValue());
     jv.insert(rpcConstants::rigControlTxVertSwitch, transverterSwitch().getValue());
     jv.insert(rpcConstants::rigControlTxVertStatus, transverterStatus().getValue());
@@ -117,7 +117,8 @@ void RigDetails::unpack(QString s)
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
     if (!err.error)
     {
-        _selected.setValue(json.object().value(rpcConstants::selected).toString());
+        QJsonValue selobj = json.object().value(rpcConstants::selected);
+        _selected.unpack(selobj);
         _transverterOffset.setValue(json.object().value(rpcConstants::rigControlTxVertOffsetFreq).toDouble());
         _transverterSwitch.setValue(json.object().value(rpcConstants::rigControlTxVertSwitch).toInt());
         _transverterStatus.setValue(json.object().value(rpcConstants::rigControlTxVertStatus).toBool());
@@ -131,9 +132,9 @@ void RigDetails::unpack(QString s)
     }
 
 }
-MinosStringItem<QString> RigDetails::selected() const
+MinosStringItem<QString> RigDetails::getSelectedContest(QString loggerUuid) const
 {
-    return _selected;
+    return _selected.getSelectedContest(loggerUuid);
 }
 MinosItem<double> RigDetails::transverterOffset() const
 {

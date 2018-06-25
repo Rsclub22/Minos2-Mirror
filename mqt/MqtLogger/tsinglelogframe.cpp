@@ -29,6 +29,8 @@
 #include "qsologframe.h"
 #include "rigcontrolframe.h"
 #include "rotcontrolframe.h"
+#include "RotPresets.h"
+#include "ChatFrame.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -102,13 +104,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(setMemory(BaseContestLog *, QString, QString)), this, SLOT(on_SetMemory(BaseContestLog *, QString, QString)));
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
 
-    //doNextContactDetailsOnLeftClick( true);  // but the sizes are zero...
-
-    getSplitters();
-
     connect(&MinosLoggerEvents::mle, SIGNAL(LogColumnsChanged()), this, SLOT(onLogColumnsChanged()));
     connect(&MinosLoggerEvents::mle, SIGNAL(SplittersChanged()), this, SLOT(onSplittersChanged()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(NextContactDetailsOnLeft()), this, SLOT(on_NextContactDetailsOnLeft()));
     connect(&MinosLoggerEvents::mle, SIGNAL(NextUnfilled(BaseContestLog*)), this, SLOT(on_NextUnfilled(BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(GoToSerial(BaseContestLog*)), this, SLOT(on_GoToSerial(BaseContestLog*)));
 
@@ -147,8 +144,10 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     // To rotator controller
     connect(FKHRotControlFrame, SIGNAL(sendRotator(rpcConstants::RotateDirection , int  )), this, SLOT(sendRotator(rpcConstants::RotateDirection , int  )));
-    connect(FKHRotControlFrame, SIGNAL(sendRotatorPreset(QString)), this, SLOT(sendRotatorPreset(QString)));
+    connect(rotPresets, SIGNAL(sendRotatorPreset(QString)), this, SLOT(sendRotatorPreset(QString)));
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), this, SLOT(sendSelectRotator(QString)));
+    connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), rotPresets, SLOT(selectRotator(QString)));
+    connect(rotPresets, SIGNAL(presetTurn(QString)), this, SLOT(presetTurn(QString)));
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
@@ -211,11 +210,11 @@ void TSingleLogFrame::buildScreenLayout()
 
     GJVQSOLogFrame = new QSOLogFrame(this);
     GJVQSOLogFrame->setObjectName(QStringLiteral("GJVQSOLogFrame"));
-    QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    sizePolicy2.setHorizontalStretch(6);
-    sizePolicy2.setVerticalStretch(0);
-    sizePolicy2.setHeightForWidth(GJVQSOLogFrame->sizePolicy().hasHeightForWidth());
-    GJVQSOLogFrame->setSizePolicy(sizePolicy2);
+    //    QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //    sizePolicy2.setHorizontalStretch(6);
+    //    sizePolicy2.setVerticalStretch(0);
+    //    sizePolicy2.setHeightForWidth(GJVQSOLogFrame->sizePolicy().hasHeightForWidth());
+    //    GJVQSOLogFrame->setSizePolicy(sizePolicy2);
     GJVQSOLogFrame->setFrameShape(QFrame::NoFrame);
     GJVQSOLogFrame->setFrameShadow(QFrame::Plain);
     GJVQSOLogFrame->setLineWidth(2);
@@ -225,11 +224,11 @@ void TSingleLogFrame::buildScreenLayout()
 
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
-    QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    sizePolicy1.setHorizontalStretch(0);
-    sizePolicy1.setVerticalStretch(0);
-    sizePolicy1.setHeightForWidth(FKHRigControlFrame->sizePolicy().hasHeightForWidth());
-    FKHRigControlFrame->setSizePolicy(sizePolicy1);
+    //    QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //    sizePolicy1.setHorizontalStretch(0);
+    //    sizePolicy1.setVerticalStretch(0);
+    //    sizePolicy1.setHeightForWidth(FKHRigControlFrame->sizePolicy().hasHeightForWidth());
+    //    FKHRigControlFrame->setSizePolicy(sizePolicy1);
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
 
@@ -237,20 +236,24 @@ void TSingleLogFrame::buildScreenLayout()
 
     FKHRotControlFrame = new RotControlFrame(this);
     FKHRotControlFrame->setObjectName(QStringLiteral("FKHRotControlFrame"));
-    sizePolicy1.setHeightForWidth(FKHRotControlFrame->sizePolicy().hasHeightForWidth());
-    FKHRotControlFrame->setSizePolicy(sizePolicy1);
+    //    sizePolicy1.setHeightForWidth(FKHRotControlFrame->sizePolicy().hasHeightForWidth());
+    //    FKHRotControlFrame->setSizePolicy(sizePolicy1);
     FKHRotControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRotControlFrame->setFrameShadow(QFrame::Raised);
 
     FKHRotControlFrame->setVisible(false);
 
+    rotPresets = new RotPresets(this);
+    rotPresets->setObjectName(QStringLiteral("rotPresets"));
+    rotPresets->setVisible(false);
+
     CribSheet = new QFrame(this);
     CribSheet->setObjectName(QStringLiteral("CribSheet"));
-    QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    sizePolicy3.setHorizontalStretch(1);
-    sizePolicy3.setVerticalStretch(0);
-    sizePolicy3.setHeightForWidth(CribSheet->sizePolicy().hasHeightForWidth());
-    CribSheet->setSizePolicy(sizePolicy3);
+    //    QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //    sizePolicy3.setHorizontalStretch(1);
+    //    sizePolicy3.setVerticalStretch(0);
+    //    sizePolicy3.setHeightForWidth(CribSheet->sizePolicy().hasHeightForWidth());
+    //    CribSheet->setSizePolicy(sizePolicy3);
     CribSheet->setFrameShape(QFrame::NoFrame);
     CribSheet->setFrameShadow(QFrame::Plain);
     CribSheet->setLineWidth(1);
@@ -261,8 +264,8 @@ void TSingleLogFrame::buildScreenLayout()
     verticalLayout_5->setContentsMargins(10, 0, 5, 0);
     NextContactDetailsLabel = new QLabel(CribSheet);
     NextContactDetailsLabel->setObjectName(QStringLiteral("NextContactDetailsLabel"));
-    sizePolicy1.setHeightForWidth(NextContactDetailsLabel->sizePolicy().hasHeightForWidth());
-    NextContactDetailsLabel->setSizePolicy(sizePolicy1);
+    //    sizePolicy1.setHeightForWidth(NextContactDetailsLabel->sizePolicy().hasHeightForWidth());
+    //    NextContactDetailsLabel->setSizePolicy(sizePolicy1);
     NextContactDetailsLabel->setFrameShape(QFrame::NoFrame);
     NextContactDetailsLabel->setLineWidth(2);
     NextContactDetailsLabel->setMidLineWidth(2);
@@ -276,8 +279,8 @@ void TSingleLogFrame::buildScreenLayout()
     thisMatchFrame->setObjectName(QStringLiteral("thisMatchFrame"));
     thisMatchFrame->setFrameShape(QFrame::StyledPanel);
     thisMatchFrame->setFrameShadow(QFrame::Raised);
-    sizePolicy1.setHeightForWidth(thisMatchFrame->sizePolicy().hasHeightForWidth());
-    thisMatchFrame->setSizePolicy(sizePolicy1);
+    //    sizePolicy1.setHeightForWidth(thisMatchFrame->sizePolicy().hasHeightForWidth());
+    //    thisMatchFrame->setSizePolicy(sizePolicy1);
 
     thisMatchFrame->setVisible(false);
 
@@ -285,8 +288,8 @@ void TSingleLogFrame::buildScreenLayout()
     otherMatchFrame->setObjectName(QStringLiteral("otherMatchFrame"));
     otherMatchFrame->setFrameShape(QFrame::StyledPanel);
     otherMatchFrame->setFrameShadow(QFrame::Raised);
-    sizePolicy1.setHeightForWidth(otherMatchFrame->sizePolicy().hasHeightForWidth());
-    otherMatchFrame->setSizePolicy(sizePolicy1);
+    //    sizePolicy1.setHeightForWidth(otherMatchFrame->sizePolicy().hasHeightForWidth());
+    //    otherMatchFrame->setSizePolicy(sizePolicy1);
 
     otherMatchFrame->setVisible(false);
 
@@ -294,10 +297,19 @@ void TSingleLogFrame::buildScreenLayout()
     archiveMatchFrame->setObjectName(QStringLiteral("archiveMatchFrame"));
     archiveMatchFrame->setFrameShape(QFrame::StyledPanel);
     archiveMatchFrame->setFrameShadow(QFrame::Raised);
-    sizePolicy1.setHeightForWidth(archiveMatchFrame->sizePolicy().hasHeightForWidth());
-    archiveMatchFrame->setSizePolicy(sizePolicy1);
+    //    sizePolicy1.setHeightForWidth(archiveMatchFrame->sizePolicy().hasHeightForWidth());
+    //    archiveMatchFrame->setSizePolicy(sizePolicy1);
 
     archiveMatchFrame->setVisible(false);
+
+    chatFrame = new ChatFrame(this);
+    chatFrame->setObjectName(QStringLiteral("chatFrame"));
+    chatFrame->setFrameShape(QFrame::StyledPanel);
+    chatFrame->setFrameShadow(QFrame::Raised);
+    //    sizePolicy1.setHeightForWidth(archiveMatchFrame->sizePolicy().hasHeightForWidth());
+    //    archiveMatchFrame->setSizePolicy(sizePolicy1);
+
+    chatFrame->setVisible(false);
 
     // set frame to Vertical Layout, insert LogFrameSplitter
     verticalLayout = new QVBoxLayout(this);
@@ -305,12 +317,12 @@ void TSingleLogFrame::buildScreenLayout()
     verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
     verticalLayout->setContentsMargins(0, 0, 0, 0);
 
-    logFrameSplitter = new MinosSplitter(this);
-    logFrameSplitter->setObjectName(QStringLiteral("logFrameSplitter"));
-    logFrameSplitter->setOrientation(Qt::Vertical);
-    logFrameSplitter->setChildrenCollapsible(false);
+    singleLogFrameSplitter = new MinosSplitter(this);
+    singleLogFrameSplitter->setObjectName(QStringLiteral("singleLogFrameSplitter"));
+    singleLogFrameSplitter->setOrientation(Qt::Vertical);
+    singleLogFrameSplitter->setChildrenCollapsible(false);
 
-    connect(logFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
+    connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
 
     QString curConfigName = "default";
 
@@ -319,98 +331,119 @@ void TSingleLogFrame::buildScreenLayout()
     int auxInstance = 0;
     for (int j = 0; j < sc.rows.count(); j++)
     {
-        // insert horizontal splitter in LogFrameSplitter
-        MinosSplitter *hs = new MinosSplitter(logFrameSplitter);
-        hs->setObjectName("row" + QString::number(j) + "splitter");
-        QSizePolicy sizePolicy;
-        sizePolicy.setHeightForWidth(hs->sizePolicy().hasHeightForWidth());
-        hs->setSizePolicy(sizePolicy);
-        hs->setOrientation(Qt::Horizontal);
-        hs->setChildrenCollapsible(false);
-        rowSplitters.push_back(hs);
-
-        for (int k = 0; k < sc.rows[j].elements.count(); k++)
+        if (sc.rows[j].elements.count())
         {
-            QString type = sc.rows[j].elements[k].type;
-            // insert correct widget type in horizontal splitter
+            // insert horizontal splitter in LogFrameSplitter
+            MinosSplitter *hs = new MinosSplitter(singleLogFrameSplitter);
+            hs->setObjectName("row" + QString::number(j) + "splitter");
+            QSizePolicy sizePolicy;
+            sizePolicy.setHeightForWidth(hs->sizePolicy().hasHeightForWidth());
+            hs->setSizePolicy(sizePolicy);
+            hs->setOrientation(Qt::Horizontal);
+            hs->setChildrenCollapsible(false);
+            rowSplitters.push_back(hs);
 
-            foreach(const SCTypeOption &opt, scoptions)
+            for (int k = 0; k < sc.rows[j].elements.count(); k++)
             {
-                if (opt.s == type)
-                {
-                    switch (opt.type)
-                    {
-                    case sctNone:
-                    {
-                        break;
-                    }
-                    case sctAux:
-                    {
-                        LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-                        StackedInfoFrame *f = new StackedInfoFrame(rowSplitters[j], auxInstance++);
-                        f->setContest(ct);
-                        rowSplitters[j]->addWidget(f);
-                        f->setVisible(true);
-                        break;
-                    }
-                    case sctLog:
-                    {
-                        QSOTable->setParent(rowSplitters[j]);
-                        rowSplitters[j]->addWidget(QSOTable);
-                        QSOTable->setVisible(true);
-                        break;
-                    }
-                    case sctRigControl:
-                    {
-                        rowSplitters[j]->addWidget(FKHRigControlFrame);
-                        break;
-                    }
-                    case sctRotControl:
-                    {
-                        rowSplitters[j]->addWidget(FKHRotControlFrame);
-                        break;
-                    }
-                    case sctQSOEdit:
-                    {
-                        rowSplitters[j]->addWidget(GJVQSOLogFrame);
-                        GJVQSOLogFrame->setVisible(true);
-                        break;
-                    }
-                    case sctNextQSODetails:
-                    {
-                        rowSplitters[j]->addWidget(CribSheet);
-                        CribSheet->setVisible(true);
-                        break;
-                    }
-                    case sctThisMatch:
-                    {
-                        rowSplitters[j]->addWidget(thisMatchFrame);
-                        thisMatchFrame->setVisible(true);
-                        break;
-                    }
-                    case sctOtherMatch:
-                    {
-                        rowSplitters[j]->addWidget(otherMatchFrame);
-                        otherMatchFrame->setVisible(true);
-                        break;
-                    }
-                    case sctArchiveMatch:
-                    {
-                        rowSplitters[j]->addWidget(archiveMatchFrame);
-                        archiveMatchFrame->setVisible(true);
-                        break;
-                    }
-                    case sctChat:
-                    {
-                        break;
-                    }
+                QString type = sc.rows[j].elements[k].type;
+                // insert correct widget type in horizontal splitter
 
-                    }
+                switch (getScreenType(type))
+                {
+                case sctNone:
+                {
+                    break;
+                }
+                case sctAux:
+                {
+                    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
+                    StackedInfoFrame *f = new StackedInfoFrame(rowSplitters[j], auxInstance++);
+                    f->setContest(ct);
+                    rowSplitters[j]->addWidget(f);
+                    f->setVisible(true);
+                    break;
+                }
+                case sctLog:
+                {
+                    QSOTable->setParent(rowSplitters[j]);
+                    rowSplitters[j]->addWidget(QSOTable);
+                    QSOTable->setVisible(true);
+                    break;
+                }
+                case sctRigControl:
+                {
+                    rowSplitters[j]->addWidget(FKHRigControlFrame);
+                    break;
+                }
+                case sctRotControl:
+                {
+                    rowSplitters[j]->addWidget(FKHRotControlFrame);
+                    break;
+                }
+                case sctRotPresets:
+                {
+                    rowSplitters[j]->addWidget(rotPresets);
+                    break;
+                }
+                case sctQSOEdit:
+                {
+                    rowSplitters[j]->addWidget(GJVQSOLogFrame);
+                    GJVQSOLogFrame->setVisible(true);
+                    break;
+                }
+                case sctNextQSODetails:
+                {
+                    rowSplitters[j]->addWidget(CribSheet);
+                    CribSheet->setVisible(true);
+                    break;
+                }
+                case sctThisMatch:
+                {
+                    rowSplitters[j]->addWidget(thisMatchFrame);
+                    thisMatchFrame->setVisible(true);
+                    break;
+                }
+                case sctOtherMatch:
+                {
+                    rowSplitters[j]->addWidget(otherMatchFrame);
+                    otherMatchFrame->setVisible(true);
+                    break;
+                }
+                case sctArchiveMatch:
+                {
+                    rowSplitters[j]->addWidget(archiveMatchFrame);
+                    archiveMatchFrame->setVisible(true);
+                    break;
+                }
+                case sctChat:
+                {
+                    rowSplitters[j]->addWidget(chatFrame);
+                    chatFrame->setVisible(true);
+                    break;
+                }
+
                 }
             }
-         }
+        }
     }
-    verticalLayout->addWidget(logFrameSplitter);
+    verticalLayout->addWidget(singleLogFrameSplitter);
+
+    getSplitters();
+
+    // and force matters that may have been saved
+
+    for (int i = 0; i < singleLogFrameSplitter->count(); i++)
+    {
+        singleLogFrameSplitter->setStretchFactor(i, 0);
+    }
+    for (int i = 0; i < rowSplitters.count(); i++)
+    {
+        for (int j = 0; j < rowSplitters[i]->count(); j++)
+        {
+            rowSplitters[i]->setStretchFactor(j, 0);
+        }
+        connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
+    }
 }
 void TSingleLogFrame::keyPressEvent( QKeyEvent* event )
 {
@@ -524,7 +557,6 @@ void TSingleLogFrame::on_ContestPageChanged ()
     GJVQSOLogFrame->selectField(nullptr);
     GJVQSOLogFrame->logTabChanged();
 
-    //doNextContactDetailsOnLeftClick( false );
     MinosLoggerEvents::SendShowOperators();
 
     FKHRigControlFrame->on_ContestPageChanged();
@@ -536,18 +568,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
     LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
 
 }
-void TSingleLogFrame::doNextContactDetailsOnLeftClick(bool /*keepSizes*/ )
-{
-    mShowMessage("Please use the screen configuuration tool for this", nullptr);
-}
-void TSingleLogFrame::setAuxWindows()
-{
-    doSetAuxWindows(true);
-}
-void TSingleLogFrame::doSetAuxWindows(bool /*saveSplitter*/)
-{
-    mShowMessage("Please use the screen configuuration tool for this", nullptr);
-}
+
 void TSingleLogFrame::NextContactDetailsTimerTimer( )
 {
     if ( contest )
@@ -617,12 +638,11 @@ void TSingleLogFrame::HideTimerTimer(  )
             FKHRigControlFrame->setVisible(isRadioLoaded());
         if (FKHRotControlFrame->parent() != this)
             FKHRotControlFrame->setVisible(isRotatorLoaded());
+        if (rotPresets->parent() != this)
+            rotPresets->setVisible(isRotatorLoaded());
     }
 }
-void TSingleLogFrame::on_NextContactDetailsOnLeft()
-{
-    doNextContactDetailsOnLeftClick(false);
-}
+
 void TSingleLogFrame::updateQSODisplay()
 {
    GJVQSOLogFrame->updateQSODisplay();
@@ -870,20 +890,21 @@ void TSingleLogFrame::getSplitters()
     QSettings settings;
     QByteArray state;
 
-    state = settings.value("logFrameSplitter/state").toByteArray();
-    logFrameSplitter->restoreState(state);
+    state = settings.value("Splitters/singleLogFrameSplitter/state").toByteArray();
+    singleLogFrameSplitter->restoreState(state);
 
     // and reset some of the saved state
 
-    logFrameSplitter->setChildrenCollapsible(false);
-    logFrameSplitter->setHandleWidth(splitterHandleWidth);
+    singleLogFrameSplitter->setChildrenCollapsible(false);
+    singleLogFrameSplitter->setHandleWidth(splitterHandleWidth);
 
     foreach(MinosSplitter *s, rowSplitters)
     {
         QString name = s->objectName();
-        state = settings.value(name + "/state", state).toByteArray();
+        state = settings.value("Splitters/" + name + "/state", state).toByteArray();
         s->restoreState(state);
         s->setHandleWidth(splitterHandleWidth);
+        s->setChildrenCollapsible(false);
     }
 }
 void TSingleLogFrame::onSplittersChanged()
@@ -892,15 +913,15 @@ void TSingleLogFrame::onSplittersChanged()
 }
 void TSingleLogFrame::onSplitterMoved(int /*pos*/, int /*index*/)
 {
-    QByteArray state = logFrameSplitter->saveState();
+    QByteArray state = singleLogFrameSplitter->saveState();
     QSettings settings;
-    settings.setValue("logFrameSplitter/state", state);
+    settings.setValue("Splitters/singleLogFrameSplitter/state", state);
 
     foreach(MinosSplitter *s, rowSplitters)
     {
         state = s->saveState();
         QString name = s->objectName();
-        settings.setValue(name + "/state", state);
+        settings.setValue("Splitters/" + name + "/state", state);
         MinosLoggerEvents::SendSplittersChanged();
     }
 }
@@ -1090,6 +1111,18 @@ bool TSingleLogFrame::isBandMapLoaded()
    return bandMapLoaded;
 }
 
+//---------------------------------------------------------------------------
+void TSingleLogFrame::checkConnections()
+{
+    // check on rig and rotator connections
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        if (FKHRigControlFrame)
+            FKHRigControlFrame->checkConnection();
+        if (FKHRotControlFrame)
+            FKHRotControlFrame->checkConnection();
+    }
+}
 //---------------------------------------------------------------------------
 
 // RigControl
@@ -1314,7 +1347,7 @@ void TSingleLogFrame::on_RotatorList(QString s)
 
 void TSingleLogFrame::on_RotatorPresetList(QString s)
 {
-    FKHRotControlFrame->setRotatorPresetList(s);
+    rotPresets->setRotatorPresetList(s);
 }
 
 
@@ -1372,3 +1405,8 @@ void TSingleLogFrame::sendRotatorPreset(QString s )
         LogContainer->sendDM->sendRotatorPreset(s);
 }
 
+void TSingleLogFrame::presetTurn(QString b)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+        FKHRotControlFrame->presetTurn(b);
+}

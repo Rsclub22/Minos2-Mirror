@@ -14,6 +14,7 @@ static const QString serverNotify       = QT_TR_NOOP("Minos:PubSub:ServerNotify"
 static const QString clientNotify       = QT_TR_NOOP("Minos:PubSub:ClientNotify");
 
 static const QString selected           = QT_TR_NOOP("Selected");
+static const QString loggerUuid           = QT_TR_NOOP("logger");
 
 static const QString paramName          = QT_TR_NOOP("Name");
 static const QString paramValue          = QT_TR_NOOP("Value");
@@ -54,6 +55,7 @@ static const QString SendChatMessage    = QT_TR_NOOP("SendChatMessage");
 static const QString ChatResult         = QT_TR_NOOP("ChatResult");
 static const QString ChatCategory       = QT_TR_NOOP("MinosChat");
 static const QString ChatServer         = QT_TR_NOOP("MinosChatServer");
+static const QString ChatServerFrequency= QT_TR_NOOP("MinosChatServerFrequency");
 
 // Keyer
 static const QString keyerApp           = QT_TR_NOOP("Keyer");

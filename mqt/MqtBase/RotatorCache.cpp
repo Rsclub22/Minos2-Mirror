@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "rotatorcommon.h"
 #include "RotatorCache.h"
 
 RotatorCache::RotatorCache()
@@ -25,7 +26,10 @@ void RotatorCache::invalidate(const PubSubName &name)
 {
     rotStates[name].setDirty();
     rotDetails[name].setDirty();
-    rotPresets[name].setDirty();
+
+    PubSubName n(name);
+    n.setKey("");
+    rotPresets[n].setDirty();
 }
 void RotatorCache::addRotList(const QString &s)
 {
@@ -117,11 +121,6 @@ void RotatorCache::setDetailString(const AnalysePubSubNotify & an)
     AntennaDetail &ad = rotDetails[PubSubName(an)];
     ad.unpack(an.getValue());
 }
-QString RotatorCache::getStateString(const PubSubName &name) const
-{
-    QString val = rotStates[name].pack();
-    return val;
-}
 void RotatorCache::setStateString(const AnalysePubSubNotify &an)
 {
     AntennaState &as = rotStates[PubSubName(an)];
@@ -168,6 +167,13 @@ bool RotatorCache::rotatorPresetsIsDirty(const PubSubName &name)
     return rotPresets[n].isDirty();
 
 }
+void RotatorCache::rotatorPresetsClearDirty()
+{
+    for(QMap<PubSubName, MinosStringItem<QString> >::iterator i = rotPresets.begin(); i != rotPresets.end(); i++ )
+    {
+        i->clearDirty();
+    }
+}
 
 void RotatorCache::setDetail(const PubSubName &name, const AntennaDetail &detail)
 {
@@ -178,44 +184,101 @@ void RotatorCache::setState(const PubSubName &name, const AntennaState &state)
     rotStates[name] = state;
 }
 
-void RotatorCache::setSelected(const PubSubName &name, const QString &sel)
+bool RotatorCache::setSelected(const PubSubName &name, const QString &loggeruuid, const QString &contestuuid)
 {
-    for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
-    {
-        if (i.key() == name)
-        {
-            i.value().setSelected(sel);
-            trace("selecting rotator state " + i.key().toString() + "  " + sel);
-        }
-        else if (!i.value().selected().getValue().isEmpty())
-        {
-            trace("de-selecting rotator state " + i.key().toString());
-            i.value().setSelected("");
-        }
-    }
-    for(QMap<PubSubName, AntennaDetail>::iterator i = rotDetails.begin(); i != rotDetails.end(); i++ )
-    {
-        if (i.key() == name)
-        {
-            i.value().setSelected(sel);
-            trace("selecting rotator detail " + i.key().toString() + "  " + sel);
-        }
-        else if (!i.value().selected().getValue().isEmpty())
-        {
-            trace("de-selecting rotator detail " + i.key().toString());
-            i.value().setSelected("");
-        }
-    }
-}
-PubSubName RotatorCache::getSelected()
-{
+    PubSubName psnSelected = getSelectedAntenna(name);
+    QStringList loggers = getSelectedLoggers(psnSelected);
+    bool selOK = false;
 
+    if (contestuuid.isEmpty())
+    {
+        // de-select this contest/logger in name
+        trace("deselecting rotator; always OK");
+        selOK = true;
+    }
+    else if (name.isEmpty())
+    {
+        selOK = true;
+        trace ("selection OK; name empty");
+    }
+    else if (psnSelected.isEmpty())
+    {
+        selOK = true;
+        trace ("selection OK; current selection empty");
+    }
+    else if (psnSelected == name)
+    {
+        selOK = true;
+        trace ("selection OK; selecting current rotator");
+    }
+    else if ((loggers.size() == 0) || (loggers.size() == 1 && loggers[0] == loggeruuid))
+    {
+        selOK = true;
+        trace ("selection OK; selection for this logger");
+
+    }
+    else
+    {
+        trace (QString("selection NOT OK; name %1 psnselected %2 loggers %3 ")
+               .arg(name.toString()).arg(psnSelected.toString()).arg(loggers.join(";")));
+
+    }
+
+    if (selOK)
+    {
+        trace("selecting rotator " + name.toString()+ " logger " + loggeruuid + " contest " + contestuuid);
+        if (!name.isEmpty())
+        {
+            rotStates[name].setSelected(loggeruuid, contestuuid);
+            rotDetails[name].setSelected(loggeruuid, contestuuid);
+            if (contestuuid.isEmpty())
+            {
+                rotStates[name].setStatus(ROT_STATUS_DISCONNECTED);
+            }
+        }
+    }
+    return selOK;
+}
+PubSubName RotatorCache::getSelected(QString logger)
+{
     for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
     {
-        if (!i.value().selected().getValue().isEmpty())
+        if (!i.value().getSelectedContest(logger).getValue().isEmpty())
         {
             PubSubName psn = i.key();
             return psn;
+        }
+    }
+    return PubSubName();
+}
+QString RotatorCache::getSelectedContest(PubSubName psn, QString loggerid)
+{
+    for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
+    {
+        if (i.value().getSelectedLoggers().count() > 0
+                && i.key().server() == psn.server()
+                && i.key().appName() == psn.appName())
+        {
+            return i.value().getSelectedContest(loggerid).getValue(); // antenna selected on this app
+        }
+    }
+    return QString();
+}
+QStringList RotatorCache::getSelectedLoggers(PubSubName psn)
+{
+    AntennaState &s = rotStates[psn];
+    QStringList loggers = s.getSelectedLoggers();
+    return loggers;
+}
+PubSubName RotatorCache::getSelectedAntenna(PubSubName psn)
+{
+    for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
+    {
+        if (i.value().getSelectedLoggers().count() > 0
+                && i.key().server() == psn.server()
+                && i.key().appName() == psn.appName())
+        {
+            return i.key(); // antenna selected on this app
         }
     }
     return PubSubName();

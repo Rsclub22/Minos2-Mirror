@@ -29,6 +29,8 @@ class TSendDM : public QObject
 
       PubSubName keyerApp;
 
+      QString loggerUuid;
+
    public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();
@@ -39,6 +41,13 @@ class TSendDM : public QObject
       void invalidateCache();
       void invalidateRigCache(const PubSubName &name);
       void invalidateRotatorCache(const PubSubName &name);
+
+      QString getLoggerUuid()
+      {
+          return loggerUuid;
+      }
+      PubSubName getSelectedRig(QString loggerUuid);
+      PubSubName getSelectedRot(QString loggerUuid);
 
       void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
       void sendKeyerRecord(TSingleLogFrame *tslf, int fno );

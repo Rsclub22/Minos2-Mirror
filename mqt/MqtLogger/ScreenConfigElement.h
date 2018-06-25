@@ -12,8 +12,9 @@ public:
     QString s;
     QString hint;
 };
-extern QVector <SCTypeOption> scoptions;
 
+SCType getScreenType(QString s);
+QString getScreenTypeString(SCType s);
 
 namespace Ui {
 class ScreenConfigElement;

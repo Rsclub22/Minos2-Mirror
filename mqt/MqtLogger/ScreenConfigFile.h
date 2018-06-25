@@ -9,6 +9,7 @@ enum SCType
     sctLog,
     sctRigControl,
     sctRotControl,
+    sctRotPresets,
     sctQSOEdit,
     sctNextQSODetails,
     sctThisMatch,

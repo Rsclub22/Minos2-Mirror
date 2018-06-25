@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>690</width>
-    <height>247</height>
+    <width>755</width>
+    <height>253</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -58,6 +58,9 @@
           <property name="focusPolicy">
            <enum>Qt::ClickFocus</enum>
           </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -76,6 +79,9 @@
           <property name="focusPolicy">
            <enum>Qt::ClickFocus</enum>
           </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -93,6 +99,9 @@
          <widget class="QLineEdit" name="rotatorHeadingEdit">
           <property name="focusPolicy">
            <enum>Qt::ClickFocus</enum>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -441,6 +450,9 @@ to</string>
           <property name="inputMask">
            <string/>
           </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -467,6 +479,9 @@ to</string>
          <widget class="QLineEdit" name="RSTTXEdit">
           <property name="inputMask">
            <string/>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -498,6 +513,9 @@ to</string>
           <property name="inputMask">
            <string/>
           </property>
+          <property name="clearButtonEnabled">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -524,6 +542,9 @@ to</string>
          <widget class="QLineEdit" name="RSTRXEdit">
           <property name="inputMask">
            <string/>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -552,6 +573,9 @@ to</string>
           <property name="inputMask">
            <string/>
           </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -578,6 +602,9 @@ to</string>
          <widget class="QLineEdit" name="LocEdit">
           <property name="inputMask">
            <string/>
+          </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -606,6 +633,9 @@ to</string>
           <property name="inputMask">
            <string/>
           </property>
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -626,6 +656,9 @@ to</string>
       <widget class="QLineEdit" name="CommentsEdit">
        <property name="inputMask">
         <string/>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

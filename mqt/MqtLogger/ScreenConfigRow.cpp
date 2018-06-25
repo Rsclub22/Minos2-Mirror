@@ -91,3 +91,8 @@ void ScreenConfigRow::addRight(ScreenConfigElement *e)
     vbl->insertWidget( pos + 1, baseElement);
 
 }
+
+bool ScreenConfigRow::checkOk(ScreenConfigElement *e)
+{
+    return parentDialog->checkOk(e);
+}

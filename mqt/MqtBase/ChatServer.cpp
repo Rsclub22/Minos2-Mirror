@@ -1,0 +1,194 @@
+#include "MinosRPC.h"
+#include "MinosLoggerEvents.h"
+
+#include "ChatServer.h"
+
+static bool syncstat = false;
+static QVector<QString> chatQueue;
+QString stateIndicator[] =
+{
+    "Available",
+    "NotAvailable",
+    "NoContact"
+};
+QString stateList[] =
+{
+   "Available",
+   "Not Available",
+   "No Contact"
+};
+
+ChatServer *ChatServer::chatServer = nullptr;
+ChatServer *ChatServer::getChatServer()
+{
+    if (!chatServer)
+    {
+        chatServer = new ChatServer();
+    }
+    return chatServer;
+}
+ChatServer::ChatServer()
+{
+    connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
+    SyncTimer.start(100);
+
+    MinosRPC *rpc = MinosRPC::getMinosRPC();    // DO NOT use the environment variable - use "Chat" everywhere
+
+    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
+
+    rpc->subscribe(rpcConstants::LocalStationCategory);
+}
+
+ChatServer::~ChatServer()
+{
+}
+void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
+{
+    AnalysePubSubNotify an( err, mro );
+
+    if ( an.getOK() )
+    {
+        if ( an.getCategory() == rpcConstants::LocalStationCategory)
+        {
+            QString s = an.getKey();
+            QString a = MinosRPC::getMinosRPC()->getAppName();
+            RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServer, a + "@" + s, psPublished);
+            RPCPubSub::subscribe(rpcConstants::StationCategory);
+        }
+        if (an.getCategory() == rpcConstants::StationCategory)
+        {
+            QString key = an.getKey();
+            RPCPubSub::subscribeRemote(key, rpcConstants::ChatCategory);
+        }
+
+        if ( an.getCategory() == rpcConstants::ChatCategory )
+        {
+            trace( QString(stateIndicator[an.getState()]) + " " + an.getKey() + " " + an.getValue() );
+
+            if (an.getKey() == rpcConstants::ChatServer)
+            {
+                QVector<Server>::iterator stat;
+                for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+                {
+                    if ((*stat).name == an.getPublisherServer())
+                    {
+                        if ((*stat).state != an.getState())
+                        {
+                            (*stat).state = an.getState();
+                            QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
+                            addChat( mess );
+                            syncstat = true;
+                        }
+                        break;
+                    }
+                }
+                if ( stat == serverList.end() )
+                {
+                    // We have received notification from a previously unknown station - so report on it
+                    Server s;
+                    s.name = an.getPublisherServer();
+                    s.state = an.getState();
+                    s.app = an.getValue();
+                    serverList.push_back( s );
+                    QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
+                    addChat( mess );
+                    syncstat = true;
+                }
+            }
+            else if (an.getKey() == rpcConstants::ChatServerFrequency)
+            {
+                QVector<Server>::iterator stat;
+                for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+                {
+                    if ((*stat).name == an.getPublisherServer())
+                    {
+                        if ((*stat).freq != an.getValue())
+                        {
+                            (*stat).freq = an.getValue();
+                            syncstat = true;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------
+void ChatServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+{
+    trace( "chat callback from " + from + ( err ? ":Error" : ":Normal" ) );
+
+    // Should we use QMap to give a list of name/value pairs?
+    // BUT the value isn't always the same type - should it be?
+    // We could use QVariant, of course...
+
+    if ( !err )
+    {
+        RPCArgs *args = mro->getCallArgs();
+
+        if (args)
+        {
+            QSharedPointer<RPCParam> psMess;
+            if (args->getStructArgMember(0, rpcConstants::SendChatMessage, psMess))
+            {
+                QString pmess;
+                if (psMess->getString(pmess))
+                {
+                    // add to chat window
+                    QString mess = from + " : " + pmess;
+                    addChat( mess );
+                }
+            }
+        }
+    }
+}
+void ChatServer::SyncTimerTimer(  )
+{
+    syncStations();
+    syncChat();
+}
+
+//---------------------------------------------------------------------------
+void ChatServer::syncStations()
+{
+    if ( syncstat )
+    {
+        syncstat = false;
+
+        emit ChatServerList(serverList);
+    }
+}
+void ChatServer::addChat(const QString &mess)
+{
+    QDateTime dt = QDateTime::currentDateTime();
+    QString sdt = dt.toString( "HH:mm:ss " ) + mess;
+    chatQueue.push_back(sdt);
+}
+void ChatServer::syncChat()
+{
+    if (chatQueue.count())
+    {
+        emit ChatMessages(chatQueue);
+        chatQueue.clear();
+    }
+}
+//---------------------------------------------------------------------------
+void ChatServer::sendMessage(QString mess)
+{
+    // We need to send the message to all connected stations
+    for ( QVector<Server>::iterator i = serverList.begin(); i != serverList.end(); i++ )
+    {
+        RPCGeneralClient rpc(rpcConstants::chatMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( mess, rpcConstants::SendChatMessage );
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( (*i).app );
+    }
+}
+void ChatServer::onRigFreqChanged(QString f, BaseContestLog */*c*/)
+{
+    RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServerFrequency, f, psPublished);
+}

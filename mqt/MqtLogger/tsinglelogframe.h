@@ -15,6 +15,7 @@
 #include "qsologframe.h"
 #include "rigcontrolframe.h"
 #include "rotcontrolframe.h"
+#include "RotPresets.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -30,6 +31,8 @@ class ContactList;
 class ListContact;
 class FocusWatcher;
 class MatchTreeFrame;
+class ChatFrame;
+
 
 // We may need to define our own validation controls with valid methods
 // for each needed type...
@@ -47,11 +50,13 @@ class TSingleLogFrame : public QFrame
     Ui::TSingleLogFrame *ui;
 
     QVBoxLayout *verticalLayout = nullptr;
-    MinosSplitter *logFrameSplitter = nullptr;
+    MinosSplitter *singleLogFrameSplitter = nullptr;
 
     QTableView *QSOTable;
     RigControlFrame *FKHRigControlFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
+    RotPresets *rotPresets = nullptr;
+
     QFrame *CribSheet= nullptr;
     QLabel *NextContactDetailsLabel;
 
@@ -59,6 +64,8 @@ class TSingleLogFrame : public QFrame
     MatchThisFrame *thisMatchFrame = nullptr;
     MatchOtherFrame *otherMatchFrame = nullptr;
     MatchArchiveFrame *archiveMatchFrame = nullptr;
+
+    ChatFrame *chatFrame = nullptr;
 
     QVector <MinosSplitter *> rowSplitters;
 
@@ -109,7 +116,6 @@ public:
     bool getStanza( unsigned int stanza, QString &stanzaData );
 
     void goNextUnfilled();
-    void doNextContactDetailsOnLeftClick(bool keepSizes);
 
     void on_NoRadioSetFreq(QString);
     void on_NoRadioSetMode(QString);
@@ -118,7 +124,7 @@ public:
     void getDetails(memoryData::memData &m);
     void getCurrentDetails(memoryData::memData &m);
 
-
+    void checkConnections();
 private:
 //    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
@@ -138,14 +144,12 @@ private:
 
     void restoreColumns();
 
-    void doSetAuxWindows(bool saveSplitter);
     MatchTreeItem *getXferItem();
 
     void buildScreenLayout();
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
-    void setAuxWindows();
     void on_ContestPageChanged();
     void onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent *);
     void onArchiveTreeFocused(QObject *, bool in, QFocusEvent *);
@@ -161,7 +165,6 @@ private slots:
 
     void on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *contest);
     void on_AfterLogContact( BaseContestLog *ct);
-    void on_NextContactDetailsOnLeft();
     void on_NextUnfilled(BaseContestLog*);
     void on_GoToSerial(BaseContestLog*);
     void on_SetMemory(BaseContestLog *, QString, QString);
@@ -193,6 +196,7 @@ private slots:
     void on_RotatorMaxAzimuth(QString);
     void on_RotatorMinAzimuth(QString);
     void on_cwCcwCmdEnable(bool);
+    void presetTurn(QString);
 
     void sendKeyerPlay( int fno );
     void sendKeyerRecord( int fno );

@@ -523,6 +523,7 @@ void QSOLogFrame::on_GJVOKButton_clicked()
        return;
     }
     ui->SerTXEdit->setReadOnly(!edit);
+    ui->SerTXEdit->setClearButtonEnabled(edit);
 
     getScreenEntry(); // make sure it is saved
 
@@ -692,6 +693,7 @@ void QSOLogFrame::on_GJVForceButton_clicked()
        return;
     }
     ui->SerTXEdit->setReadOnly(!edit);
+    ui->SerTXEdit->setClearButtonEnabled(edit);
 
     if (dlgForced())
         emit QSOFrameCancelled();
@@ -766,6 +768,7 @@ void QSOLogFrame::doGJVCancelButton_clicked()
     else
     {
         ui->SerTXEdit->setReadOnly(!edit);
+        ui->SerTXEdit->setClearButtonEnabled(edit);
 
         ScreenContact *temp = nullptr;
         if ( !partialContact )
@@ -834,6 +837,7 @@ void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
     if (w == ui->SerTXEdit)
     {
         ui->SerTXEdit->setReadOnly(false);
+        ui->SerTXEdit->setClearButtonEnabled(true);
     }
     if (edit && (w == ui->timeEdit || w == ui->dateEdit))
     {
@@ -998,6 +1002,7 @@ void QSOLogFrame::showScreenEntry( )
          selectField( nullptr );
 
       ui->SerTXEdit->setReadOnly(!edit);
+      ui->SerTXEdit->setClearButtonEnabled(edit);
       MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
    }
 }
@@ -1035,6 +1040,7 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
       return;
    }
    ui->SerTXEdit->setReadOnly(!edit);
+   ui->SerTXEdit->setClearButtonEnabled(edit);
 
    if ( current == ui->LocEdit )
    {
@@ -2274,6 +2280,7 @@ void QSOLogFrame::selectEntryForEdit( QSharedPointer<BaseContact> slct )
    ui->SecondOpComboBox->setCurrentText(screenContact.op2);
    sortUnfilledCatchupTime();
    ui->SerTXEdit->setReadOnly(!edit);
+   ui->SerTXEdit->setClearButtonEnabled(edit);
 
    int tne = screenContact.time.notEntered(); // partial dtg will give +fe
    // full dtg gives -ve, none gives 0

@@ -160,7 +160,7 @@ RigControlMainWindow::~RigControlMainWindow()
 
 void RigControlMainWindow::logMessage( QString s )
 {
-    if (ui->actionTraceLog->isChecked())
+    if (ui->actionTrace_Log->isChecked())
         trace( s );
 }
 
@@ -221,7 +221,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio()));
     connect(ui->actionSetup_Radios, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
     connect(ui->actionSetup_Band_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
-    connect(ui->actionTraceLog, SIGNAL(changed()), this, SLOT(saveTraceLogFlag()));
+    connect(ui->actionTrace_Log, SIGNAL(changed()), this, SLOT(saveTraceLogFlag()));
 
     connect(pollTimer, SIGNAL(timeout()), this, SLOT(getRadioInfo()));
 
@@ -456,30 +456,33 @@ void RigControlMainWindow::upDateRadio()
 
             }
         }
-        else
-        {   // no radio selected
-            trace("No radio selected");
-            ui->radioNameDisp->setText("");
-            closeRadio();
-            writeWindowTitle(appName);
-        }
+    }
+    else
+    {   // no radio selected
+        trace("No radio selected");
+        ui->radioNameDisp->setText("");
+        closeRadio();
+        writeWindowTitle(appName);
+    }
 
-        msg->rigCache.publish();
 
-
-        if (radio->get_serialConnected())
+    if (radio->get_serialConnected())
+    {
+        if (setupRadio->currentRadio.pollInterval == "0.5")
         {
-            if (setupRadio->currentRadio.pollInterval == "0.5")
-            {
-                pollTime = 500;
-            }
-            else
-            {
-                pollTime = 1000 * setupRadio->currentRadio.pollInterval.toInt();
-            }
-
-            pollTimer->start(pollTime);             // start timer to send poll radio
+            pollTime = 500;
         }
+        else
+        {
+            pollTime = 1000 * setupRadio->currentRadio.pollInterval.toInt();
+        }
+
+        pollTimer->start(pollTime);             // start timer to send poll radio
+    }
+
+    if (appName.length() > 0)
+    {
+        msg->rigCache.publish();
     }
 }
 
@@ -730,7 +733,7 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
 
     setupRadio->currentRadioName = s.key();
 
-    if (!s.isEmpty() && s == oldRadio)
+    if (!s.isEmpty() && s.key() == oldRadio)
     {
         refreshRadio();
     }
@@ -1269,7 +1272,7 @@ void RigControlMainWindow::readTraceLogFlag()
     config.beginGroup("TraceLog");
 
 
-    ui->actionTraceLog->setChecked(config.value("TraceLog", false).toBool());
+    ui->actionTrace_Log->setChecked(config.value("TraceLog", false).toBool());
 
     config.endGroup();
 }
@@ -1289,10 +1292,10 @@ void RigControlMainWindow::saveTraceLogFlag()
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("TraceLog");
 
-    config.setValue("TraceLog", ui->actionTraceLog->isChecked());
+    config.setValue("TraceLog", ui->actionTrace_Log->isChecked());
 
     config.endGroup();
-    trace("Tracelog Changed = " + QString::number(ui->actionTraceLog->isChecked()));
+    trace("Tracelog Changed in " + fileName + " = " + QString::number(ui->actionTrace_Log->isChecked()));
 }
 
 void RigControlMainWindow::about()
@@ -1574,7 +1577,7 @@ void RigControlMainWindow::aboutRigConfig()
         }
         msg.append(QString("Radio Supports RIT = %1\n").arg(setupRadio->currentRadio.ritAvail ? "True" : "False"));
         msg.append(QString("Rit Enable On = %1\n").arg(setupRadio->currentRadio.ritEnable  ? "True" : "False"));
-        msg.append(QString("Tracelog = %1\n").arg(ui->actionTraceLog->isChecked() ? "True" : "False"));
+        msg.append(QString("Tracelog = %1\n").arg(ui->actionTrace_Log->isChecked() ? "True" : "False"));
     }
     else
     {
@@ -1630,7 +1633,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         }
         trace(QString("Radio Supports RIT = %1").arg( setupRadio->currentRadio.ritAvail ? "True" : "False"));
         trace(QString("Rit Enable On = %1").arg(setupRadio->currentRadio.ritEnable  ? "True" : "False"));
-        trace(QString("Tracelog = %1").arg(ui->actionTraceLog->isChecked() ? "True" : "False"));
+        trace(QString("Tracelog = %1").arg(ui->actionTrace_Log->isChecked() ? "True" : "False"));
 
     }
     else

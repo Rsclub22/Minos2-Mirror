@@ -4,11 +4,11 @@
 AntennaState::AntennaState():PubSubValue(AntennaStateType)
 {
 }
-AntennaState::AntennaState(const QString &st, const QString &sel, const QString &b):PubSubValue(AntennaStateType)
+AntennaState::AntennaState(const QString &st, const QString &loggeruuid, const QString &sel, const QString &b):PubSubValue(AntennaStateType)
 {
     _bearing.setValue(b);
     _status.setValue(st);
-    _selected.setValue(sel);
+    _selected.setSelection(loggeruuid, sel);
 }
 AntennaState::AntennaState(QString s):PubSubValue(AntennaStateType)
 {
@@ -36,7 +36,7 @@ QString AntennaState::pack() const
 {
     QJsonObject jv;
 
-    jv.insert(rpcConstants::selected, selected().getValue());
+    jv.insert(rpcConstants::selected, _selected.pack());
     jv.insert(rpcConstants::rotatorStatus, status().getValue());
     jv.insert(rpcConstants::rotatorBearing, bearing().getValue());
 
@@ -52,7 +52,8 @@ void AntennaState::unpack(QString s)
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
     if (!err.error)
     {
-        _selected.setValue(json.object().value(rpcConstants::selected).toString());
+        QJsonValue selobj = json.object().value(rpcConstants::selected);
+        _selected.unpack(selobj);
         _bearing.setValue(json.object().value(rpcConstants::rotatorBearing).toString());
         _status.setValue(json.object().value(rpcConstants::rotatorStatus).toString());
     }
@@ -72,9 +73,9 @@ void AntennaState::setStatus(const QString &status)
     _status.setValue(status);
 }
 
-void AntennaState::setSelected(const QString &selected)
+void AntennaState::setSelected(const QString &loggeruuid, const QString &selected)
 {
-    _selected.setValue(selected);
+    _selected.setSelection(loggeruuid, selected);
 }
 
 MinosStringItem<QString> AntennaState::status() const
@@ -87,8 +88,13 @@ MinosStringItem<QString> AntennaState::bearing() const
     return _bearing;
 }
 
-MinosStringItem<QString> AntennaState::selected() const
+MinosStringItem<QString> AntennaState::getSelectedContest(QString loggerUuid) const
 {
-    return _selected;
+    return _selected.getSelectedContest(loggerUuid);
+}
+
+QStringList AntennaState::getSelectedLoggers()
+{
+    return _selected.getSelectedLoggers();
 }
 

@@ -45,6 +45,8 @@ enum MatchType {ThisMatch, OtherMatch, ArchiveMatch};
 
 enum ExportType {EREG1TEST, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
 
+#define STACKITEMS 10
+
 // control block for repeated actions on contest contacts
 class GJVParams
 {
@@ -156,6 +158,7 @@ public:
        MinosItem<QString>::val = t;
     }
 };
+
 //---------------------------------------------------------------------------
 enum DTG {DTGLOG, DTGDISP, DTGReg1Test, DTGFULL, DTGPRINT, DTGACCURATE};
 class dtg

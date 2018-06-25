@@ -30,7 +30,6 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
                      edpShowContinentSA, edpShowContinentNA,
                      edpShowWorked, edpShowUnworked,
                      edpStackFrame,
-                     edpNextContactDetailsOnLeft,
                      edpShowOperators,
                      edpEditor, edpStatisticsPeriod1, edpStatisticsPeriod2
                     };

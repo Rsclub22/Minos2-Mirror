@@ -51,7 +51,6 @@ public:
     QString getDefaultDirectory( bool IsList );
 
     bool isShowOperators();
-    bool isNextContactDetailsOnLeft();
 
     void setCaption( QString );
 
@@ -123,7 +122,6 @@ private:
     QAction *LocCalcAction;
     QAction *AnalyseMinosLogAction;
     QAction *CorrectDateTimeAction;
-    QAction *NumberAuxiliaryAction;
     QAction *ScreenConfigAction;
     QAction *ShowOperatorsAction;
     QAction *OptionsAction;
@@ -132,8 +130,6 @@ private:
 
     QAction *GoToSerialAction;
     QAction *NextUnfilledAction;
-
-    QAction *NextContactDetailsOnLeftAction;
 
     QAction *KeyerToneAction;
     QAction *KeyerTwoToneAction;
@@ -190,8 +186,6 @@ private slots:
     void GoToSerialActionExecute();
     void NextUnfilledActionExecute();
 
-    void NextContactDetailsOnLeftActionExecute();
-
     void KeyerToneActionExecute();
     void KeyerTwoToneActionExecute();
     void KeyerStopActionExecute();
@@ -211,7 +205,6 @@ private slots:
     void on_ReportOverstrike(bool , BaseContestLog * );
     void onTabMoved(int, int);
 
-    void AuxDisplayAction();
     void doScreenConfigAction();
 public slots:
     void onArgsReceived(QString conarg);

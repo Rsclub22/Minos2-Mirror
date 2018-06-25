@@ -289,7 +289,7 @@ void RotatorMainWindow::onLoggerSelectAntenna(PubSubName s)
     setupAntenna->currentAntennaName = s.key();
     setupAntenna->saveCurrentAntenna();
 
-    if (!s.isEmpty() && s == oldAntenna)
+    if (!s.isEmpty() && s.key() == oldAntenna)
     {
         refreshAntenna();
     }
@@ -2127,20 +2127,18 @@ void RotatorMainWindow:: savePreset(RotPresetData& editData)
 
 void RotatorMainWindow::refreshPresetLabels()
 {
-
     readPresets();
     if (rotPresets.count() > 0)
     {
         for (int i = 0; i < rotPresets.count(); i++)
         {
-           if (rotPresets[i]->name != "" || rotPresets[i]->name != presetButton[i]->getText())
-           {
-               RotPresetData d = RotPresetData(i, rotPresets[i]->name, rotPresets[i]->bearing);
-               rotPresetButtonUpdate(i, d);
+            if (rotPresets[i]->name != "" || rotPresets[i]->name != presetButton[i]->getText())
+            {
+                RotPresetData d = RotPresetData(i, rotPresets[i]->name, rotPresets[i]->bearing);
+                rotPresetButtonUpdate(i, d);
                 //presetButton[i]->setShortcut(presetShortCut[i]);     // restore the shortcut
-    }
+            }
         }
-
     }
     sendPresetListLogger();
 

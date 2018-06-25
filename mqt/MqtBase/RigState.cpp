@@ -7,11 +7,11 @@ RigState::RigState()
     qRegisterMetaType< RigState > ( "RigState" );
     _freq.setInitialValue(0.0);
 }
-RigState::RigState(const QString &status, const QString &sel, int f, const QString &m, double ritf, QString &rites)
+RigState::RigState(const QString &status, const QString &loggeruuid, const QString &sel, int f, const QString &m, double ritf, QString &rites)
     :PubSubValue(RigStateType)
 {
     _status.setValue(status);
-    _selected.setValue(sel);
+    _selected.setSelection(loggeruuid, sel);
     _freq.setValue(f);
     _mode.setValue(m);
     _ritFreq.setValue(ritf);
@@ -53,9 +53,9 @@ void RigState::setDirty()
 
 
 }
-void RigState::setSelected(const QString &selected)
+void RigState::setSelected(const QString &loggeruuid, const QString &selected)
 {
-    _selected.setValue(selected);
+    _selected.setSelection(loggeruuid, selected);
 }
 
 void RigState::setFreq(double freq)
@@ -83,7 +83,7 @@ QString RigState::pack() const
 {
     QJsonObject jv;
 
-    jv.insert(rpcConstants::selected, selected().getValue());
+    jv.insert(rpcConstants::selected, _selected.pack());
     jv.insert(rpcConstants::rigControlStatus, status().getValue());
     jv.insert(rpcConstants::rigControlFreq, freq().getValue());
     jv.insert(rpcConstants::rigControlMode, mode().getValue());
@@ -102,7 +102,8 @@ void RigState::unpack(QString s)
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
     if (!err.error)
     {
-        _selected.setValue(json.object().value(rpcConstants::selected).toString());
+        QJsonValue selobj = json.object().value(rpcConstants::selected);
+        _selected.unpack(selobj);
         _status.setValue(json.object().value(rpcConstants::rigControlStatus).toString());
         _freq.setValue(json.object().value(rpcConstants::rigControlFreq).toDouble());
         _mode.setValue(json.object().value(rpcConstants::rigControlMode).toString());
@@ -115,9 +116,9 @@ void RigState::unpack(QString s)
     }
 
 }
-MinosStringItem<QString> RigState::selected() const
+MinosStringItem<QString> RigState::getSelectedContest(QString loggerUuid) const
 {
-    return _selected;
+    return _selected.getSelectedContest(loggerUuid);
 }
 MinosStringItem<QString> RigState::status() const
 {
@@ -145,3 +146,8 @@ MinosStringItem<QString> RigState::ritEnableStatus() const
 {
     return _ritEnableStatus;
 }
+QStringList RigState::getSelectedLoggers()
+{
+    return _selected.getSelectedLoggers();
+}
+

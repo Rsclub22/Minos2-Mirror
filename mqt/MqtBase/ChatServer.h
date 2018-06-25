@@ -1,0 +1,47 @@
+#ifndef CHATSERVER_H
+#define CHATSERVER_H
+#include "base_pch.h"
+
+extern QString stateIndicator[];
+extern QString stateList[];
+
+class Server
+{
+public:
+    QString name;
+    QString app;
+    QString freq;
+    PublishState state;
+};
+class ChatServer : public QObject
+{
+    Q_OBJECT
+
+public:
+    explicit ChatServer();
+    virtual ~ChatServer();
+    static ChatServer *getChatServer();
+
+    void sendMessage(QString mess);
+private:
+    static ChatServer *chatServer;
+    QVector<Server> serverList;
+    QTimer SyncTimer;
+
+    void addChat(const QString &mess);
+    void syncChat();
+    void syncStations();
+
+private slots:
+    void SyncTimerTimer( );
+
+    void onRigFreqChanged(QString /*f*/, BaseContestLog *c);
+    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from );
+    void on_notify( bool err, QSharedPointer<MinosRPCObj>, const QString &from );
+signals:
+    void ChatServerList(QVector<Server>);
+    void ChatMessages(QVector<QString>);
+};
+
+
+#endif // CHATSERVER_H

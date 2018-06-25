@@ -124,14 +124,7 @@ void ScreenConfig::on_applyButton_clicked()
 
     // clear old splitter settings
     QSettings settings;
-    settings.remove("logFrameSplitter");
-
-    for (int i = 0; i < sc.rows.count(); i++)
-    {
-        QString name = "row" + QString::number(i) + "splitter";
-
-        settings.remove(name);
-    }
+    settings.remove("Splitters");
 
     LogContainer->selectSession(sessName);
 }
@@ -189,6 +182,45 @@ void ScreenConfig::addAfter(ScreenConfigRow *r)
     ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
     vbl->insertWidget( pos + 1, baseRow);
     baseRow->addLeft(nullptr);
+}
+
+bool ScreenConfig::checkOk(ScreenConfigElement *e)
+{
+    int auxCount = 0;
+    QString etype = e->getType();
+    for (int i = 0; i < vbl->count(); i++)
+    {
+        QWidget *w = vbl->itemAt(i)->widget();
+        ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+        if (row)
+        {
+            for (int j = 0; j < row->vbl->count(); j++)
+            {
+                w = row->vbl->itemAt(j)->widget();
+                ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
+                if (ele && ele != e)
+                {
+                    QString type = ele->getType();
+                    if (type == etype)
+                    {
+                        if (type == getScreenTypeString(sctAux))
+                        {
+                            auxCount++;
+                        }
+                        else
+                        {
+                            ele->setType(getScreenTypeString(sctNone));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    if (etype != getScreenTypeString(sctAux) || auxCount < STACKITEMS)
+    {
+        return true;
+    }
+    return false;
 }
 
 void ScreenConfig::on_addRowButton_clicked()

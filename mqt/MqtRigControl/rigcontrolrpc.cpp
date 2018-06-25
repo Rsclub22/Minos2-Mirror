@@ -16,11 +16,11 @@
 #include "rigcontrolmainwindow.h"
 #include "rigcontrolrpc.h"
 
-RigControlRpc *rigControlRpc;
+//RigControlRpc *rigControlRpc;
 
 RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), parent(parent)
 {
-    rigControlRpc = this;
+//    rigControlRpc = this;
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::rigControlApp);
 
@@ -69,21 +69,38 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         QSharedPointer<RPCParam> psFreq;
         QSharedPointer<RPCParam> psMode;
         QSharedPointer<RPCParam> psName;
+        QSharedPointer<RPCParam> psLoggerUuid;
         QSharedPointer<RPCParam> psSelect;
         QSharedPointer<RPCParam> psRitFreq;
         QSharedPointer<RPCParam> psRitStatus;
 
         RPCArgs *args = mro->getCallArgs();
+
+        QString selContest;
+        QString loggeruuid;
+        if ( args->getStructArgMember( 0, rpcConstants::loggerUuid, psLoggerUuid ))
+        {
+            psLoggerUuid->getString( loggeruuid);
+        }
+        if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect ))
+        {
+            psSelect->getString( selContest );
+
+        }
+
         if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psFreq ))
         {
-            QString freq;
-
-
-            if ( psFreq->getString( freq ) )
+            PubSubName psn("test"); // just uses server/appname
+            QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+            if (cursel == selContest)
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rig RPC: Freq Command From Logger = %1").arg(freq));
-                emit (setFreq(freq));
+                QString freq;
+                if ( psFreq->getString( freq ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Freq Command From Logger = %1").arg(freq));
+                    emit (setFreq(freq));
+                }
             }
         }
         else if (args->getStructArgMember(0, rpcConstants::rigControlRadioName, psName))
@@ -91,61 +108,72 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
             QString name;
             if (psName->getString(name))
             {
+                trace(QString("Rig RPC: select Command for radio = %1").arg(name));
                 PubSubName psn(name);
-                QString mode;
-                if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psMode ) )
+
+                if (rigCache.setSelected(psn, loggeruuid, selContest))
                 {
-                    if ( psMode->getString( mode ) )
+                    QString mode;
+                    if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psMode ) )
                     {
-                        // here you handle what the logger has sent to us
-                        trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
+                        if ( psMode->getString( mode ) )
+                        {
+                            // here you handle what the logger has sent to us
+                            trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
+                        }
                     }
+                    psn = rigCache.getSelectedRadio(psn);
+                    emit selectLoggerRadio(psn, mode);
                 }
-                QString sel;
-                if ( args->getStructArgMember( 0, rpcConstants::selected, psSelect ) )
+                else
                 {
-                    if ( psSelect->getString( sel ) )
-                    {
-                        // here you handle what the logger has sent to us
-                        rigCache.setSelected(psn, sel);
-                        trace(QString("Rig RPC: select Command From Logger = %1 psn=%2, sel=%3").arg(sel).arg(psn.toString()).arg(sel));
-                    }
+                    // reply with failure and the current selection
                 }
-                emit selectLoggerRadio(psn, mode);
             }
         }
         else if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psMode ) )
         {
-            QString mode;
-
-            if ( psMode->getString( mode ) )
+            PubSubName psn("test"); // just uses server/appname
+            QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+            if (cursel == selContest)
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
-                emit (setMode(mode));
+                QString mode;
+                if ( psMode->getString( mode ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
+                    emit (setMode(mode));
+                }
             }
         }
         if ( args->getStructArgMember( 0, rpcConstants::rigControlRitFreq, psRitFreq ))
         {
-            QString ritFreq;
-
-
-            if ( psRitFreq->getString( ritFreq ) )
+            PubSubName psn("test"); // just uses server/appname
+            QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+            if (cursel == selContest)
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rig RPC: Rit Freq Command From Logger = %1").arg(ritFreq));
-                emit (setRitFreq(ritFreq));
+                QString ritFreq;
+                if ( psRitFreq->getString( ritFreq ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Rit Freq Command From Logger = %1").arg(ritFreq));
+                    emit (setRitFreq(ritFreq));
+                }
             }
         }
         else if ( args->getStructArgMember( 0, rpcConstants::rigRitOnOffStatus, psRitStatus ) )
         {
-            bool ritStatus;
-
-            if ( psRitStatus->getBoolean( ritStatus ) )
+            PubSubName psn("test"); // just uses server/appname
+            QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+            if (cursel == selContest)
             {
-                // here you handle what the logger has sent to us
-                trace(QString("Rig RPC: Rit Status Command From Logger = %1").arg(ritStatus));
-                emit (setRitStatus(ritStatus));
+                bool ritStatus;
+                if ( psRitStatus->getBoolean( ritStatus ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Rit Status Command From Logger = %1").arg(ritStatus));
+                    emit (setRitStatus(ritStatus));
+                }
             }
         }
     }

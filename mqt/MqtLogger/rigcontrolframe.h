@@ -116,12 +116,9 @@ public:
     QString getStrPassBandState(QString mode);
     int getIntPassBandState(QString mode);
     bool checkRadioState();
-
-
     void on_ContestPageChanged();
 
-
-
+    void checkConnection();
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);

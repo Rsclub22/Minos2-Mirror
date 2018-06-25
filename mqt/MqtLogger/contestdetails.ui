@@ -95,7 +95,11 @@
                 <number>2</number>
                </property>
                <item>
-                <widget class="QLineEdit" name="ContestNameSelected"/>
+                <widget class="QLineEdit" name="ContestNameSelected">
+                 <property name="clearButtonEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
                </item>
                <item>
                 <widget class="QPushButton" name="VHFCalendarButton">
@@ -239,7 +243,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="ContestNameEdit"/>
+              <widget class="QLineEdit" name="ContestNameEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -320,7 +328,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="CallsignEdit"/>
+            <widget class="QLineEdit" name="CallsignEdit">
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -334,7 +346,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="LocatorEdit"/>
+            <widget class="QLineEdit" name="LocatorEdit">
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -348,7 +364,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="ExchangeEdit"/>
+            <widget class="QLineEdit" name="ExchangeEdit">
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -362,7 +382,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="PowerEdit"/>
+            <widget class="QLineEdit" name="PowerEdit">
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -659,7 +683,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="AntOffsetEdit"/>
+              <widget class="QLineEdit" name="AntOffsetEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>

@@ -7,40 +7,24 @@
 #include <QJsonParseError>
 
 #include "ScreenConfigFile.h"
-
+#include "ScreenConfigElement.h"
 /*
-[
-    {
-        "name": "default",
-        "rows": [
-            [
-                {
-                    "type": "Log"
-                },
-                {
-                    "type": "Aux"
-                }
-            ],
-            [
-                 {
-                    "type": "QSO"
-                },
-                {
-                    "type": "Crib"
-                }
-            ],
-            [
-                 {
-                    "type": "Rot"
-                },
-                 {
-                    "type": "Rig"
-                }
-            ]
-       ]
-    }
-]
+[{"name": "default",
+"rows":[
+[{"type": "Log"},{"type": "Aux"}],
+[{"type": "Rig"},{"type": "Rot"},{"type": "RotP"}],
+[{"type": "QSO"},{"type": "Crib"}],
+[{"type": "This"},{"type": "Other"},{"type": "Arch"}]
+]}]
 */
+static QString defaultConfig = "[{\"name\": \"default\","
+        "\"rows\":["
+        "[{\"type\": \"%1\"},{\"type\": \"%2\"}],"
+        "[{\"type\": \"%3\"},{\"type\": \"%4\"},{\"type\": \"%5\"}],"
+        "[{\"type\": \"%6\"},{\"type\": \"%7\"}],"
+        "[{\"type\": \"%8\"},{\"type\": \"%9\"},{\"type\": \"%10\"}]"
+        "]}]";
+
 ScreenConfigFile::ScreenConfigFile()
 {
 }
@@ -48,8 +32,7 @@ bool ScreenConfigFile::loadFile()
 {
     bool ret = false;
     ret = readFile("./Configuration/ScreenConfigs.json");
-    if (!ret)
-        ret = readFile("./Configuration/DefaultScreen.json");
+
     return ret;
 }
 bool ScreenConfigFile::dumpFile()
@@ -60,12 +43,25 @@ bool ScreenConfigFile::readFile(QString f)
 {
     QJsonParseError err;
     QFile jf(f);
-    if (!jf.open(QIODevice::ReadOnly))
+    QString s;
+    if (jf.open(QIODevice::ReadOnly))
+    {
+        s = jf.readAll();
+    }
+    else
     {
         trace("Failed to open " + f );
-        return false;
+        s = defaultConfig.arg(getScreenTypeString(sctLog))
+                .arg(getScreenTypeString(sctAux))
+                .arg(getScreenTypeString(sctRigControl))
+                .arg(getScreenTypeString(sctRotControl))
+                .arg(getScreenTypeString(sctRotPresets))
+                .arg(getScreenTypeString(sctQSOEdit))
+                .arg(getScreenTypeString(sctNextQSODetails))
+                .arg(getScreenTypeString(sctThisMatch))
+                .arg(getScreenTypeString(sctOtherMatch))
+                .arg(getScreenTypeString(sctArchiveMatch));
     }
-    QString s = jf.readAll();
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
     if (!err.error)
     {

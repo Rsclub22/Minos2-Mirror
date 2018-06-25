@@ -128,10 +128,7 @@ class LoggerContestLog : public BaseContestLog
       MinosItem<bool> showContinentNA;
       MinosItem<bool> showWorked;
       MinosItem<bool> showUnworked;
-      MinosStringItem<QString> currentStackItem;
-      MinosStringItem<QString> currentStack1Item;
-      MinosStringItem<QString> currentStack2Item;
-      MinosStringItem<QString> currentStack3Item;
+      MinosStringItem<QString> currentStackItems[STACKITEMS];
 
       void saveRunMemory(int memno, const memoryData::memData &mem);
       void saveRigMemory(int memno, const memoryData::memData &mem);
