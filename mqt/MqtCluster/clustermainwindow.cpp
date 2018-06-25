@@ -19,6 +19,12 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
 
+    dxSpotView = new QTableView();
+    rawClusterDataView = new QPlainTextEdit();
+
+    ui->clusterViewsTab->addTab(dxSpotView, "DX Spots");
+    ui->clusterViewsTab->addTab(rawClusterDataView, "Raw Data");
+
     connect(ui->actionSetup, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
 
     connect(ui->nodeCb, SIGNAL(activated(const QString &nodeName)), this, SLOT(connectToNode(const QString &nodeName)));
@@ -29,7 +35,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(client, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(parseDX(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
-//    connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
+    connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
 
     // get list of clusters
     loadNodesSelectBox(setupCluster->getListOfClusterNames());
@@ -52,48 +58,12 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
         currentPort = nd[2];
         currentPassword = nd[3];
 
-        QRegExp logPrompt("(login:)");
-        client->setLoginPattern(logPrompt);
+
         client->connectToHost(currentAddress, currentPort.toUShort());
-        client->login(currentUserCallsign, currentPassword);
-        txText("set/echo enable");
-        txText(dxCluster->setNameMsg(currentUserName));
-        txText(dxCluster->setQthMsg(currentUserQTH));
-        txText(dxCluster->setQraMsg(currentUserLocator));
 
     }
-
-
-
-
-    // QRegExp logPrompt("(login:)");
-   // client->setLoginPattern(logPrompt);
-   // client->login("m0dgb", "");
-
-/*
-    connect(ui->actionSetup, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
-
-    connect(ui->nodeCb, SIGNAL(activated(const QString &nodeName)), this, SLOT(connectToNode(const QString &nodeName)));
-
-    connect(client, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
-    connect(client, SIGNAL(loginRequired()), this, SLOT(logIn()));
-    connect(client, SIGNAL(connectionError(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
-    connect(client, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
-    connect(client, SIGNAL(message(QString)), this, SLOT(parseDX(QString)));
-    connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
-//    connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
-*/
-    //client->connectToHost("gb7mbc.spoo.org", 8000);
-
-//    txText("set/echo enable");
-//    txText(dxCluster->setNameMsg("david"));
-//    txText(dxCluster->setQthMsg("Uxbridge"));
-//   txText(dxCluster->setQraMsg("IO91SN"));
-
-
-
-
 }
+
 
 ClusterMainWindow::~ClusterMainWindow()
 {
@@ -149,24 +119,29 @@ void ClusterMainWindow::connectionError(QAbstractSocket::SocketError error)
     qDebug() << "connection failed ";
 }
 
-void ClusterMainWindow::messageRx(QString msg)
-{
-    //qDebug() << msg;
-    ui->textWindow->appendPlainText(msg.remove('\x07'));
-}
 
-void ClusterMainWindow::logIn(const QString callsign, const QString password)
+
+void ClusterMainWindow::logIn()
 {
     qDebug() << "send logon message\n";
-    client->login(QString("%1\r\n").arg(callsign), password);
+    client->login(QString("%1\r\n").arg(currentUserCallsign), currentPassword);
     loginStart = true;
 
 }
 
 
-void ClusterMainWindow::checkedLoggedIn(QString msg, QString nodeName)
+// ********** handle rx messages *********** //
+
+
+void ClusterMainWindow::messageRx(QString msg)
 {
-    QString endOfMsg = QString("%1>\r\n").arg(nodeName);
+    //qDebug() << msg;
+    rawClusterDataView->appendPlainText(msg.remove('\x07'));
+}
+
+void ClusterMainWindow::checkedLoggedIn(QString msg)
+{
+    QString endOfMsg = QString(">\r\n");
 
     if (loginStart && !loginSuccess)
     {
@@ -175,8 +150,8 @@ void ClusterMainWindow::checkedLoggedIn(QString msg, QString nodeName)
             loginSuccess = true;
             txText("set/echo enable\n");
             txText(dxCluster->setNameMsg(currentUserName));
-            txText(dxCluster->setQthMsg(currentUserLocator));
-            txText(dxCluster->setQraMsg(currentUserQTH));
+            txText(dxCluster->setQthMsg(currentUserQTH));
+            txText(dxCluster->setQraMsg(currentUserLocator));
         }
 
     }
@@ -185,32 +160,27 @@ void ClusterMainWindow::checkedLoggedIn(QString msg, QString nodeName)
 }
 
 
-void ClusterMainWindow::sendText()
-{
-    client->sendData(ui->sendLine->text()+'\n');
-    ui->sendLine->clear();
-}
-
-
-void ClusterMainWindow::txText(QString msg)
-{
-    client->sendData(msg);
-}
 
 
 void ClusterMainWindow::parseDX(QString txt)
 {
-    int retCode = upackSpot(txt);
-    if (retCode == 0)
+    if (loginSuccess)
     {
-        qDebug() << QString("Dx de %1 %2 %3 %4 %5 %6").arg(dxCall).arg(dxFreq).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment);
-    }
-    else
-    {
-        qDebug() << QString("Error unpacking spot");
-    }
+        int retCode = upackSpot(txt);
+
+        switch(retCode)
+        {
+            case 0:
+            qDebug() << QString("DX de %1 %2 %3 %4 %5 %6").arg(dxCall).arg(dxFreq).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment);
+            break;
+            case -1:
+            qDebug() << QString("Error unpacking spot");
+            break;
 
 
+        }
+
+    }
 }
 
 
@@ -227,60 +197,78 @@ int ClusterMainWindow::upackSpot(QString txt)
     dxLocator = "";
 
     txt.remove('\x07');
-    if (txt.contains("DX de"))
+    if (!txt.contains("DX de"))
     {
-        dxMsg = txt.split(QRegExp("\\s+"));
-        dxCall = dxMsg[2].remove(':');
-        dxFreq = dxMsg[3];
-        spotCall = dxMsg[4];
-        // find time
-        for (int i = 4; i < dxMsg.count(); i++)
-        {
-            QRegularExpression re("\\d\\d\\d\\dZ");
-            QRegularExpressionMatch match = re.match(dxMsg[i]);
-            if (match.hasMatch())
-            {
-                spotTime = dxMsg[i].remove('Z');
-                timePos = i;
-                break;
-            }
-        }
-
-        if (spotTime == "")
-        {
-            //error
-            return -1;
-        }
-
-        // look for locator
-        if (dxMsg[timePos + 1] == "")
-        {
-            dxLocator = "";
-        }
-        else
-        {
-            dxLocator = dxMsg[timePos + 1];
-        }
-        // reassemble the comment
-        for (int i = 5; i < timePos; i++)
-        {
-            if (dxMsg[i] != "")
-            {
-                spotComment += dxMsg[i] + " ";
-            }
-        }
-
-
-
-
+        return -2;
     }
-    else
+
+    dxMsg = txt.split(QRegExp("\\s+"));
+    dxCall = dxMsg[2].remove(':');
+    dxFreq = dxMsg[3];
+    spotCall = dxMsg[4];
+    // find time
+    for (int i = 4; i < dxMsg.count(); i++)
     {
+        QRegularExpression re("\\d\\d\\d\\dZ");
+        QRegularExpressionMatch match = re.match(dxMsg[i]);
+        if (match.hasMatch())
+        {
+            spotTime = dxMsg[i].remove('Z');
+            timePos = i;
+            break;
+        }
+    }
+
+    if (spotTime == "")
+    {
+        //error
         return -1;
     }
 
+    // look for locator
+    if (dxMsg[timePos + 1] == "")
+    {
+        dxLocator = "";
+    }
+    else
+    {
+        dxLocator = dxMsg[timePos + 1];
+    }
+    // reassemble the comment
+    for (int i = 5; i < timePos; i++)
+    {
+        if (dxMsg[i] != "")
+        {
+            spotComment += dxMsg[i] + " ";
+        }
+    }
+
+
     return 0;
 }
+
+
+
+
+// ************* Send text *************************************************
+
+void ClusterMainWindow::sendText()
+{
+    client->sendData(ui->sendLine->text()+'\n');
+    ui->sendLine->clear();
+}
+
+
+void ClusterMainWindow::txText(QString msg)
+{
+    client->sendData(msg);
+}
+
+
+
+
+
+
 
 
 void ClusterMainWindow::loadNodesSelectBox(QStringList listOfNodes)

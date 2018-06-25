@@ -6,79 +6,48 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>524</width>
-    <height>300</height>
+    <width>561</width>
+    <height>399</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>ClusterMainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Cluster Node</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="nodeCb"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>Band Filter</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="bandFilterCb"/>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-       </layout>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Cluster Node</string>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QPlainTextEdit" name="textWindow"/>
+       <widget class="QComboBox" name="nodeCb"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>258</width>
+          <height>28</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QLogTabWidget" name="clusterViewsTab">
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QLineEdit" name="sendLine"/>
@@ -90,7 +59,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>524</width>
+     <width>561</width>
      <height>21</height>
     </rect>
    </property>
@@ -124,6 +93,14 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QLogTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>qlogtabwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

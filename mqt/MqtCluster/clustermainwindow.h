@@ -2,6 +2,7 @@
 #define CLUSTERMAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPlainTextEdit>
 #include "qttelnet.h"
 #include "cluster.h"
 #include "setupdialog.h"
@@ -47,16 +48,20 @@ private slots:
     void connectionEstab();
     void connectionError(QAbstractSocket::SocketError);
     void messageRx(QString msg);
-    void logIn(const QString callsign, const QString password);
     void sendText();
     void parseDX(QString txt);
-    void checkedLoggedIn(QString msg, QString nodeName);
+    void checkedLoggedIn(QString msg);
     void onLaunchSetup();
     void connectToNode(const QString &nodeName);
+    void logIn();
+
 private:
     Ui::ClusterMainWindow *ui;
     QtTelnet* client;
     Cluster* dxCluster;
+
+    QTableView* dxSpotView;
+    QPlainTextEdit* rawClusterDataView;
 
     SetupDialog *setupCluster;
 
@@ -88,7 +93,7 @@ private:
     void txText(QString msg);
     int upackSpot(QString txt);
     void loadNodesSelectBox(QStringList listOfNodes);
-    ;
+
 };
 
 #endif // CLUSTERMAINWINDOW_H
