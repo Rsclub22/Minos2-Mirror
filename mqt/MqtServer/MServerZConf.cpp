@@ -153,7 +153,11 @@ void TZConf::startZConf(const QString &name)
 }
 void TZConf::onTimeout()
 {
-   // this should be on a timer
+    if (lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval)
+    {
+        readServerList();
+    }
+
    if (sendBeaconResponse || lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval )
    {
       trace(QString("Timeout: Sending beacon, sendBeaconResponse = ") + (sendBeaconResponse?"true":"false"));
@@ -163,8 +167,6 @@ void TZConf::onTimeout()
       sendBeaconResponse = false;
    }
    rxSocket->onTimeout();
-
-   readServerList();
 }
 
 
@@ -213,7 +215,7 @@ void TZConf::readServerList()
    trace("Reading Server List File");
    // Read the server override file
    QSettings servers(GetCurrentDir() + "/Configuration/Servers.ini", QSettings::IniFormat);
-   QStringList sl = servers.allKeys();
+   QStringList sl = servers.childGroups();
 
    for ( int i = 0; i < sl.count(); i++ )
    {
