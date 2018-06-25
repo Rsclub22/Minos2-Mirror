@@ -3,6 +3,9 @@
 #include "MinosLink.h"
 #include "clientThread.h"
 #include "serverThread.h"
+#include "MServerZConf.h"
+#include "MServer.h"
+#include "MServerPubSub.h"
 
 #include "servermain.h"
 #include "ui_servermain.h"
@@ -10,7 +13,7 @@
 extern int GetSubscribedCount();
 extern int GetPublishedCount();
 
-ServerMain *MinosMainForm = 0;
+ServerMain *MinosMainForm = nullptr;
 
 bool closeApp = false;
 

@@ -3,9 +3,11 @@
 #include "minoslistener.h"
 #include "clientThread.h"
 #include "serverThread.h"
+#include "MServerZConf.h"
+#include "MServer.h"
 
-MinosServerListener *MinosServerListener::MSL = 0;
-MinosClientListener *MinosClientListener::MCL = 0;
+MinosServerListener *MinosServerListener::MSL = nullptr;
+MinosClientListener *MinosClientListener::MCL = nullptr;
 
 //=============================================================================
 void xperror( int test_val, QString s, bool endit = true )
@@ -31,7 +33,7 @@ MinosListener::~MinosListener()
    clearSockets();
 }
 //-----------------------------------------------------------------------------
-bool MinosListener::initialise( QString type, int port )
+bool MinosListener::initialise( QString type, quint16 port )
 {
     QHostAddress::SpecialAddress addr = QHostAddress::Any;
 
@@ -65,7 +67,7 @@ int MinosListener::getConnectionCount()
 // Predicate function for remove_if
 bool nosock( MinosCommonConnection *ip )
 {
-   if ( ip == 0 )
+   if ( ip == nullptr )
       return true;
    else
       return false;
@@ -92,7 +94,7 @@ void MinosListener::on_timeout()
             MinosCommonConnection *mcc = (*i);
             mcc->closeDown();
             delete mcc;
-            *i = 0;
+            *i = nullptr;
             clearup = true;
         }
     }
@@ -201,7 +203,7 @@ void MinosServerListener::checkServerConnected( Server *srv, bool force )
 
 void MinosServerListener::closeDown()
 {
-   MSL = 0;
+   MSL = nullptr;
 }
 //==============================================================================
 //==============================================================================
@@ -211,7 +213,7 @@ MinosClientListener::MinosClientListener()
 }
 MinosClientListener::~MinosClientListener()
 {
-   MCL = 0;
+   MCL = nullptr;
 }
 //==============================================================================
 MinosCommonConnection *MinosClientListener::makeConnection(QTcpSocket *s)

@@ -38,18 +38,12 @@ class Server
       QString uuid;
       QString host;
       QString station;
-      int port;
+      quint16 port;
       bool local;
 
-      Server( const QString &uuid, const QString &h, const QString &s, int p )
-            : local( false ),
-            uuid(uuid), host( h ), station( s ), port( p )
-      {}
-      Server( const QString &s )
-            : local( false ),
-            station( s ), port( -1 )
-      {}
-      virtual ~Server(){}
+      Server( const QString &uuid, const QString &h, const QString &s, quint16 p );
+      Server( const QString &s );
+      virtual ~Server();
 };
 extern QVector<Server *> serverList;
 extern Server *findStation( const QString s );
@@ -80,7 +74,7 @@ class TZConf: public QObject
    private:  	// User declarations
 
       static Server *zcPublishServer(const QString &uuid, const QString &name,
-                        const QString &hosttarget, int PortAsNumber );
+                        const QString &hosttarget, quint16 PortAsNumber );
       bool waitNameReply;
       QString localName;
 
@@ -89,18 +83,17 @@ class TZConf: public QObject
       QSharedPointer<MCReadSocket> rxSocket;
 
       QTimer beaconTimer;
-      int iPort;
+      quint16 iPort;
 
       bool sendMessage(bool beaconReq );
+      void readServerList();
 
       static TZConf *ZConf;
 
       unsigned int beaconInterval;   // once a minute
       QDateTime lastTick;
 
-
-
-   public:  		// User declarations
+public:  		// User declarations
 
       TZConf( );
       virtual ~TZConf( );

@@ -8,9 +8,14 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include "minos_pch.h"
+#include "PubSubServer.h"
 
 QVector<RPCServerSubscriber *> serverSubscribeList;
 
+RPCServerPubSub::RPCServerPubSub( const QString &call, TRPCFunctor *cb ) : RPCPubSub( call, cb )
+{}
+RPCServerPubSub::~RPCServerPubSub()
+{}
 /*static*/
 void RPCServerPubSub::initialisePubSub( TRPCFunctor *notifycb )
 {
@@ -42,7 +47,7 @@ void RPCServerPubSub::close( )
    for ( QVector<RPCServerSubscriber *>::iterator i = serverSubscribeList.begin(); i != serverSubscribeList.end(); i++ )
    {
       delete ( *i );
-      ( *i ) = 0;
+      ( *i ) = nullptr;
    }
    serverSubscribeList.clear();
 }
@@ -54,7 +59,7 @@ bool RPCServerSubscriber::isRemoteEqual( const QString &pServer, const QString &
 }
 void RPCServerSubscriber::testAndSubscribe( const QString &server, const QString &category )
 {
-   RPCServerSubscriber * sub = 0;
+   RPCServerSubscriber * sub = nullptr;
    for ( QVector<RPCServerSubscriber *>::iterator i = serverSubscribeList.begin(); i != serverSubscribeList.end(); i++ )
    {
       if ( ( *i ) ->isRemoteEqual( server, category ) )
@@ -75,7 +80,7 @@ void RPCServerSubscriber::testAndSubscribe( const QString &server, const QString
 // causes the server to resubscribe to the remote server
 void RPCServerSubscriber::serverReSubscribe()
 {
-   RPCServerSubscribeClient rsc( 0 );
+   RPCServerSubscribeClient rsc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
    QSharedPointer<RPCParam>sServer(new RPCStringParam( server ));
    QSharedPointer<RPCParam>sCat(new RPCStringParam( category ));

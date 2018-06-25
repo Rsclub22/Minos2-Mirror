@@ -15,8 +15,9 @@
 #include "MinosLink.h"
 #include "clientThread.h"
 #include "serverThread.h"
+#include "MServer.h"
 
-MinosServer *MinosServer::singleton = 0;
+MinosServer *MinosServer::singleton = nullptr;
 /*static*/
 MinosServer *MinosServer::getMinosServer()
 {

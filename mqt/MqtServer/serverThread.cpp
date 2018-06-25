@@ -12,10 +12,15 @@
 #include "MinosLink.h"
 #include "clientThread.h"
 #include "serverThread.h"
+#include "PubSubServer.h"
+#include "MServerZConf.h"
+#include "MServer.h"
+#include "MServerPubSub.h"
+
 
 //==============================================================================
 //==============================================================================
-MinosServerConnection::MinosServerConnection() : srv( 0 ), resubscribed( false )
+MinosServerConnection::MinosServerConnection() : srv( nullptr ), resubscribed( false )
 {}
 void MinosServerConnection::initialise()
 {

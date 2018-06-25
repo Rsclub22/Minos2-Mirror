@@ -25,8 +25,8 @@ class ServerMain : public QMainWindow
     QTimer ScanTimer;
 
 public:
-    explicit ServerMain(QWidget *parent = 0);
-    ~ServerMain();
+    explicit ServerMain(QWidget *parent = nullptr);
+    ~ServerMain() override;
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
