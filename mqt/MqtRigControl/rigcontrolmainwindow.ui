@@ -418,7 +418,7 @@
      <x>0</x>
      <y>0</y>
      <width>677</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuConfigure">
@@ -457,19 +457,6 @@
    </property>
    <property name="text">
     <string>Setup Radios</string>
-   </property>
-  </action>
-  <action name="actionTraceLog">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Setup Band Freq</string>
-   </property>
-  </action>
-  <action name="actionHelp">
-   <property name="text">
-    <string>Help</string>
    </property>
   </action>
   <action name="actionAbout">
