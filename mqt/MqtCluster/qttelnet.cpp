@@ -354,9 +354,9 @@ QByteArray QtTelnetAuthNull::authStep(const QByteArray &data)
     if (data.size() < 2 || data[1] != Common::SEND)
         return QByteArray();
 
-    char buf[8] = {Common::IAC, Common::SB, Common::Authentication,
+    char buf[8] = {static_cast<char>(Common::IAC), static_cast<char>(Common::SB), Common::Authentication,
                    Common::IS, Auth::AUTHNULL, 0, // CLIENT|ONE-WAY
-                   Common::IAC, Common::SE};
+                   static_cast<char>(Common::IAC), static_cast<char>(Common::SE)};
     setState(AuthSuccess);
     return QByteArray(buf, sizeof(buf));
 }

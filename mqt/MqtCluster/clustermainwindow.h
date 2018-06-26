@@ -2,10 +2,13 @@
 #define CLUSTERMAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
 #include <QPlainTextEdit>
+#include "mqtUtils_pch.h"
 #include "qttelnet.h"
 #include "cluster.h"
 #include "setupdialog.h"
+#include "dxspotdatamodel.h"
 
 namespace Ui {
 class ClusterMainWindow;
@@ -55,11 +58,18 @@ private slots:
     void connectToNode(const QString &nodeName);
     void logIn();
 
+    void on_sectionResized(int, int, int);
+    void LogTimerTimer();
+
 private:
     Ui::ClusterMainWindow *ui;
+    StdInReader stdinReader;
+    class QTimer LogTimer;
+
     QtTelnet* client;
     Cluster* dxCluster;
 
+    DxSpotDataModel* dxSpotDataModel;
     QTableView* dxSpotView;
     QPlainTextEdit* rawClusterDataView;
 
@@ -90,10 +100,16 @@ private:
     bool loginSuccess;
     bool nodeConnected;
 
+    QString geoStr;         // geometry registry location
+
+
     void txText(QString msg);
     int upackSpot(QString txt);
     void loadNodesSelectBox(QStringList listOfNodes);
 
+    void restoreDxSpotViewColumns();
+
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // CLUSTERMAINWINDOW_H

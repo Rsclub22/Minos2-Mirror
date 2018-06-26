@@ -3,14 +3,15 @@
 
 #include <QAbstractTableModel>
 
-const int dxSpotColCount = 4;
+const int dxSpotColCount = 6;
 
-class dxSpotDataModel : public QAbstractTableModel
+class DxSpotDataModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    explicit dxSpotDataModel(QObject *parent = nullptr);
+    explicit DxSpotDataModel(QObject *parent = nullptr);
+
 
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -22,15 +23,18 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     // Add data:
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+    bool insertRows(int row, int count, const QModelIndex &index = QModelIndex()) override;
     bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+    QStringList rowData;
 
 private:
-    QList<QStringList>* dxSpotData;
+    QList<QStringList> dxSpotData;
+
+
 };
 
 #endif // DXSPOTDATAMODEL_H

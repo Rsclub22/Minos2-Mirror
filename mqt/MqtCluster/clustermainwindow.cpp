@@ -14,12 +14,40 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    stdinReader.start();
+
+    createCloseEvent();
+
+    connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
+    LogTimer.start(100);
+
+    setWindowTitle("Minos Cluster Server");
+
+    QSettings settings;
+    geoStr = QString("clusterServer/geometry");
+    QByteArray geometry = settings.value(geoStr).toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
     setupCluster = new SetupDialog();
 
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
 
+    dxSpotDataModel = new DxSpotDataModel();
     dxSpotView = new QTableView();
+    dxSpotView->setModel(dxSpotDataModel);
+    dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+    restoreDxSpotViewColumns();
+    dxSpotView->resizeRowsToContents();
+    //dxSpotView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sectionResized(int, int , int)));
+
+
+
     rawClusterDataView = new QPlainTextEdit();
 
     ui->clusterViewsTab->addTab(dxSpotView, "DX Spots");
@@ -77,6 +105,25 @@ void ClusterMainWindow::onLaunchSetup()
     setupCluster->exec();
 }
 
+
+void ClusterMainWindow::on_sectionResized(int, int, int)
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = dxSpotView->horizontalHeader()->saveState();
+    settings.setValue("dxSpotView/state", state);
+
+}
+
+void ClusterMainWindow::restoreDxSpotViewColumns()
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("dxSpotView/state").toByteArray();
+    dxSpotView->horizontalHeader()->restoreState(state);
+}
 
 void ClusterMainWindow::connectToNode(const QString &nodeName)
 {
@@ -168,16 +215,17 @@ void ClusterMainWindow::parseDX(QString txt)
     {
         int retCode = upackSpot(txt);
 
-        switch(retCode)
+        if (retCode >= 0)
         {
-            case 0:
             qDebug() << QString("DX de %1 %2 %3 %4 %5 %6").arg(dxCall).arg(dxFreq).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment);
-            break;
-            case -1:
+            // Display
+            dxSpotDataModel->rowData = QStringList {spotTime, dxFreq, dxCall, dxLocator, spotCall, spotComment };
+            //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+            dxSpotDataModel->insertRows(0, 1);
+        }
+        else if (retCode < 0)
+        {
             qDebug() << QString("Error unpacking spot");
-            break;
-
-
         }
 
     }
@@ -277,3 +325,42 @@ void ClusterMainWindow::loadNodesSelectBox(QStringList listOfNodes)
     ui->nodeCb->addItems(listOfNodes);
 }
 
+
+void ClusterMainWindow::LogTimerTimer()
+{
+    bool show = getShowServers();
+    if ( !isVisible() && show )
+    {
+        setVisible(true);
+    }
+    if ( isVisible() && !show )
+    {
+        setVisible(false);
+    }
+
+    static bool closed = false;
+    if ( !closed )
+    {
+        if ( checkCloseEvent() )
+        {
+            closed = true;
+            close();
+        }
+    }
+}
+
+
+
+void ClusterMainWindow::closeEvent(QCloseEvent *event)
+{
+
+    LogTimer.stop();
+
+
+    // and tidy up all loose ends
+
+    QSettings settings;
+    settings.setValue(geoStr, saveGeometry());
+    trace("Minos Cluster Server Closing");
+    QWidget::closeEvent(event);
+}

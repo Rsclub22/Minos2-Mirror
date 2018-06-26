@@ -1,40 +1,50 @@
 #include "dxspotdatamodel.h"
 
-dxSpotDataModel::dxSpotDataModel(QObject *parent)
+DxSpotDataModel::DxSpotDataModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
+
+    dxSpotData = QList<QStringList>(); // create an empty list
 }
 
-QVariant dxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
              return QVariant();
 
          if (orientation == Qt::Horizontal) {
              switch (section) {
-                 case 0:
-                     return tr("Name");
+                case 0:
+                    return tr("Time");
+                case 1:
+                    return tr("Freq");
+                case 2:
+                    return tr("Dx");
+                case 3:
+                    return tr("Loc");
+                case 4:
+                    return tr("Spotter");
+                case 5:
+                    return tr("Comment");
 
-                 case 1:
-                     return tr("Address");
-
-                 default:
-                     return QVariant();
+                default:
+                  return QVariant();
              }
          }
          return QVariant();
 }
 
-int dxSpotDataModel::rowCount(const QModelIndex &parent) const
+int DxSpotDataModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
     {
         return 0;
     }
-    return dxSpotData->size();
+
+    return dxSpotData.count();
 }
 
-int dxSpotDataModel::columnCount(const QModelIndex &parent) const
+int DxSpotDataModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
     {
@@ -43,20 +53,25 @@ int dxSpotDataModel::columnCount(const QModelIndex &parent) const
     return dxSpotColCount;
 }
 
-QVariant dxSpotDataModel::data(const QModelIndex &index, int role) const
+
+
+
+QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
     {
         return QVariant();
     }
 
-    if (index.row() >= dxSpotData->size() || index.row() < 0)
+    if (index.row() >= dxSpotData.size() || index.row() < 0)
     {
              return QVariant();
     }
     if (role == Qt::DisplayRole)
     {
-         QStringList dxSpot = dxSpotData->at(index.row());
+        int r = index.row();
+        int c = index.column();
+        QStringList dxSpot = dxSpotData.at(index.row());
 
          if (dxSpot.size() > 0)
              return dxSpot[index.column()];
@@ -65,30 +80,46 @@ QVariant dxSpotDataModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool dxSpotDataModel::insertRows(int row, int count, const QModelIndex &parent)
+bool DxSpotDataModel::insertRows(int row, int count, const QModelIndex &index)
 {
-    beginInsertRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
+    Q_UNUSED(index);
+    int _row = row;
+    beginInsertRows(QModelIndex(), row, row + count - 1);
+    for (int i = 0; i < count; i++)
+    {
+        dxSpotData.insert(_row, rowData);
+    }
     endInsertRows();
+    return true;
 }
-
-bool dxSpotDataModel::insertColumns(int column, int count, const QModelIndex &parent)
+// not used......
+bool DxSpotDataModel::insertColumns(int column, int count, const QModelIndex &parent)
 {
     beginInsertColumns(parent, column, column + count - 1);
     // FIXME: Implement me!
     endInsertColumns();
+    return true;
 }
 
-bool dxSpotDataModel::removeRows(int row, int count, const QModelIndex &parent)
+bool DxSpotDataModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, row, row + count - 1);
-    // FIXME: Implement me!
+    for (int row=0; row < count; ++row)
+    {
+             dxSpotData.removeAt(row);
+    }
     endRemoveRows();
+    return true;
 }
 
-bool dxSpotDataModel::removeColumns(int column, int count, const QModelIndex &parent)
+// not used.....
+bool DxSpotDataModel::removeColumns(int column, int count, const QModelIndex &parent)
 {
     beginRemoveColumns(parent, column, column + count - 1);
     // FIXME: Implement me!
     endRemoveColumns();
+    return true;
 }
+
+
+
