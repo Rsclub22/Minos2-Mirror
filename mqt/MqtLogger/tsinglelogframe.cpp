@@ -1,4 +1,6 @@
 #include "base_pch.h"
+#include <QScrollArea>
+
 #include "MinosLoggerEvents.h"
 
 #include "ContestApp.h"
@@ -213,11 +215,7 @@ void TSingleLogFrame::buildScreenLayout()
     GJVQSOLogFrame = new QSOLogFrame(this);
     GJVQSOLogFrame->setFont(cf);
     GJVQSOLogFrame->setObjectName(QStringLiteral("GJVQSOLogFrame"));
-    //    QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //    sizePolicy2.setHorizontalStretch(6);
-    //    sizePolicy2.setVerticalStretch(0);
-    //    sizePolicy2.setHeightForWidth(GJVQSOLogFrame->sizePolicy().hasHeightForWidth());
-    //    GJVQSOLogFrame->setSizePolicy(sizePolicy2);
+
     GJVQSOLogFrame->setFrameShape(QFrame::NoFrame);
     GJVQSOLogFrame->setFrameShadow(QFrame::Plain);
     GJVQSOLogFrame->setLineWidth(2);
@@ -228,11 +226,6 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setFont(cf);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
-    //    QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //    sizePolicy1.setHorizontalStretch(0);
-    //    sizePolicy1.setVerticalStretch(0);
-    //    sizePolicy1.setHeightForWidth(FKHRigControlFrame->sizePolicy().hasHeightForWidth());
-    //    FKHRigControlFrame->setSizePolicy(sizePolicy1);
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
 
@@ -242,8 +235,6 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRotControlFrame->setFont(cf);
 
     FKHRotControlFrame->setObjectName(QStringLiteral("FKHRotControlFrame"));
-    //    sizePolicy1.setHeightForWidth(FKHRotControlFrame->sizePolicy().hasHeightForWidth());
-    //    FKHRotControlFrame->setSizePolicy(sizePolicy1);
     FKHRotControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRotControlFrame->setFrameShadow(QFrame::Raised);
 
@@ -259,11 +250,7 @@ void TSingleLogFrame::buildScreenLayout()
     CribSheet->setFont(cf);
 
     CribSheet->setObjectName(QStringLiteral("CribSheet"));
-    //    QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    //    sizePolicy3.setHorizontalStretch(1);
-    //    sizePolicy3.setVerticalStretch(0);
-    //    sizePolicy3.setHeightForWidth(CribSheet->sizePolicy().hasHeightForWidth());
-    //    CribSheet->setSizePolicy(sizePolicy3);
+
     CribSheet->setFrameShape(QFrame::NoFrame);
     CribSheet->setFrameShadow(QFrame::Plain);
     CribSheet->setLineWidth(1);
@@ -274,8 +261,6 @@ void TSingleLogFrame::buildScreenLayout()
     verticalLayout_5->setContentsMargins(10, 0, 5, 0);
     NextContactDetailsLabel = new QLabel(CribSheet);
     NextContactDetailsLabel->setObjectName(QStringLiteral("NextContactDetailsLabel"));
-    //    sizePolicy1.setHeightForWidth(NextContactDetailsLabel->sizePolicy().hasHeightForWidth());
-    //    NextContactDetailsLabel->setSizePolicy(sizePolicy1);
     NextContactDetailsLabel->setFrameShape(QFrame::NoFrame);
     NextContactDetailsLabel->setLineWidth(2);
     NextContactDetailsLabel->setMidLineWidth(2);
@@ -291,8 +276,6 @@ void TSingleLogFrame::buildScreenLayout()
     thisMatchFrame->setObjectName(QStringLiteral("thisMatchFrame"));
     thisMatchFrame->setFrameShape(QFrame::StyledPanel);
     thisMatchFrame->setFrameShadow(QFrame::Raised);
-    //    sizePolicy1.setHeightForWidth(thisMatchFrame->sizePolicy().hasHeightForWidth());
-    //    thisMatchFrame->setSizePolicy(sizePolicy1);
 
     thisMatchFrame->setVisible(false);
 
@@ -302,8 +285,6 @@ void TSingleLogFrame::buildScreenLayout()
     otherMatchFrame->setObjectName(QStringLiteral("otherMatchFrame"));
     otherMatchFrame->setFrameShape(QFrame::StyledPanel);
     otherMatchFrame->setFrameShadow(QFrame::Raised);
-    //    sizePolicy1.setHeightForWidth(otherMatchFrame->sizePolicy().hasHeightForWidth());
-    //    otherMatchFrame->setSizePolicy(sizePolicy1);
 
     otherMatchFrame->setVisible(false);
 
@@ -313,8 +294,6 @@ void TSingleLogFrame::buildScreenLayout()
     archiveMatchFrame->setObjectName(QStringLiteral("archiveMatchFrame"));
     archiveMatchFrame->setFrameShape(QFrame::StyledPanel);
     archiveMatchFrame->setFrameShadow(QFrame::Raised);
-    //    sizePolicy1.setHeightForWidth(archiveMatchFrame->sizePolicy().hasHeightForWidth());
-    //    archiveMatchFrame->setSizePolicy(sizePolicy1);
 
     archiveMatchFrame->setVisible(false);
 
@@ -322,8 +301,6 @@ void TSingleLogFrame::buildScreenLayout()
     chatFrame->setObjectName(QStringLiteral("chatFrame"));
     chatFrame->setFrameShape(QFrame::StyledPanel);
     chatFrame->setFrameShadow(QFrame::Raised);
-    //    sizePolicy1.setHeightForWidth(archiveMatchFrame->sizePolicy().hasHeightForWidth());
-    //    archiveMatchFrame->setSizePolicy(sizePolicy1);
 
     chatFrame->setVisible(false);
 
@@ -354,9 +331,6 @@ void TSingleLogFrame::buildScreenLayout()
             // insert horizontal splitter in LogFrameSplitter
             MinosSplitter *hs = new MinosSplitter(singleLogFrameSplitter);
             hs->setObjectName("row" + QString::number(j) + "splitter");
-            QSizePolicy sizePolicy;
-            sizePolicy.setHeightForWidth(hs->sizePolicy().hasHeightForWidth());
-            hs->setSizePolicy(sizePolicy);
             hs->setOrientation(Qt::Horizontal);
             hs->setChildrenCollapsible(false);
             rowSplitters.push_back(hs);
@@ -364,6 +338,13 @@ void TSingleLogFrame::buildScreenLayout()
             for (int k = 0; k < sc.rows[j].elements.count(); k++)
             {
                 QString type = sc.rows[j].elements[k].type;
+                if (getScreenType(type) == sctNone)
+                    continue;
+
+                QScrollArea *elementScrollArea = new QScrollArea();
+                elementScrollArea->setWidgetResizable(true);
+                rowSplitters[j]->addWidget(elementScrollArea);
+
                 // insert correct widget type in horizontal splitter
 
                 switch (getScreenType(type))
@@ -375,74 +356,76 @@ void TSingleLogFrame::buildScreenLayout()
                 case sctAux:
                 {
                     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-                    StackedInfoFrame *f = new StackedInfoFrame(rowSplitters[j], auxInstance++);
+                    StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
                     f->setFont(cf);
 
                     f->setContest(ct);
-                    rowSplitters[j]->addWidget(f);
+                    elementScrollArea->setWidget(f);
                     f->setVisible(true);
                     break;
                 }
                 case sctLog:
                 {
                     QSOTable->setParent(rowSplitters[j]);
-                    rowSplitters[j]->addWidget(QSOTable);
+                    elementScrollArea->setWidget(QSOTable);
                     QSOTable->setVisible(true);
                     break;
                 }
                 case sctRigControl:
                 {
-                    rowSplitters[j]->addWidget(FKHRigControlFrame);
+                    elementScrollArea->setWidget(FKHRigControlFrame);
                     break;
                 }
                 case sctRotControl:
                 {
-                    rowSplitters[j]->addWidget(FKHRotControlFrame);
+                    elementScrollArea->setWidget(FKHRotControlFrame);
                     break;
                 }
                 case sctRotPresets:
                 {
-                    rowSplitters[j]->addWidget(rotPresets);
+                    elementScrollArea->setWidget(rotPresets);
                     break;
                 }
                 case sctQSOEdit:
                 {
-                    rowSplitters[j]->addWidget(GJVQSOLogFrame);
+                    elementScrollArea->setWidget(GJVQSOLogFrame);
                     GJVQSOLogFrame->setVisible(true);
                     break;
                 }
                 case sctNextQSODetails:
                 {
-                    rowSplitters[j]->addWidget(CribSheet);
+                    elementScrollArea->setWidget(CribSheet);
                     CribSheet->setVisible(true);
                     break;
                 }
                 case sctThisMatch:
                 {
-                    rowSplitters[j]->addWidget(thisMatchFrame);
+                    elementScrollArea->setWidget(thisMatchFrame);
                     thisMatchFrame->setVisible(true);
                     break;
                 }
                 case sctOtherMatch:
                 {
-                    rowSplitters[j]->addWidget(otherMatchFrame);
+                    elementScrollArea->setWidget(otherMatchFrame);
                     otherMatchFrame->setVisible(true);
                     break;
                 }
                 case sctArchiveMatch:
                 {
-                    rowSplitters[j]->addWidget(archiveMatchFrame);
+                    elementScrollArea->setWidget(archiveMatchFrame);
                     archiveMatchFrame->setVisible(true);
                     break;
                 }
                 case sctChat:
                 {
-                    rowSplitters[j]->addWidget(chatFrame);
+                    elementScrollArea->setWidget(chatFrame);
                     chatFrame->setVisible(true);
                     break;
                 }
 
                 }
+                elementScrollArea->setMinimumSize(QSize(10, 10));
+
             }
         }
     }
