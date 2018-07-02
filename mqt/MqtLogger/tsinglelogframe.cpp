@@ -186,10 +186,12 @@ void TSingleLogFrame::buildScreenLayout()
         mShowMessage("Invalid or missing screen configurations", this);
         exit(1);
     }
+    QFont cf = QApplication::font();
 
     // create component frames, parentless
 
     QSOTable = new QTableView(this);
+    QSOTable->setFont(cf);
     QSOTable->setObjectName(QStringLiteral("QSOTable"));
     QSOTable->setFocusPolicy(Qt::ClickFocus);
     QSOTable->setFrameShape(QFrame::NoFrame);
@@ -209,6 +211,7 @@ void TSingleLogFrame::buildScreenLayout()
     QSOTable->setVisible(false);
 
     GJVQSOLogFrame = new QSOLogFrame(this);
+    GJVQSOLogFrame->setFont(cf);
     GJVQSOLogFrame->setObjectName(QStringLiteral("GJVQSOLogFrame"));
     //    QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
     //    sizePolicy2.setHorizontalStretch(6);
@@ -223,6 +226,7 @@ void TSingleLogFrame::buildScreenLayout()
     GJVQSOLogFrame->setVisible(false);
 
     FKHRigControlFrame = new RigControlFrame(this);
+    FKHRigControlFrame->setFont(cf);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     //    QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
     //    sizePolicy1.setHorizontalStretch(0);
@@ -235,6 +239,8 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRigControlFrame->setVisible(false);
 
     FKHRotControlFrame = new RotControlFrame(this);
+    FKHRotControlFrame->setFont(cf);
+
     FKHRotControlFrame->setObjectName(QStringLiteral("FKHRotControlFrame"));
     //    sizePolicy1.setHeightForWidth(FKHRotControlFrame->sizePolicy().hasHeightForWidth());
     //    FKHRotControlFrame->setSizePolicy(sizePolicy1);
@@ -244,10 +250,14 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRotControlFrame->setVisible(false);
 
     rotPresets = new RotPresets(this);
+    rotPresets->setFont(cf);
+
     rotPresets->setObjectName(QStringLiteral("rotPresets"));
     rotPresets->setVisible(false);
 
     CribSheet = new QFrame(this);
+    CribSheet->setFont(cf);
+
     CribSheet->setObjectName(QStringLiteral("CribSheet"));
     //    QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Expanding);
     //    sizePolicy3.setHorizontalStretch(1);
@@ -276,6 +286,8 @@ void TSingleLogFrame::buildScreenLayout()
     CribSheet->setVisible(false);
 
     thisMatchFrame = new MatchThisFrame(this);
+    thisMatchFrame->setFont(cf);
+
     thisMatchFrame->setObjectName(QStringLiteral("thisMatchFrame"));
     thisMatchFrame->setFrameShape(QFrame::StyledPanel);
     thisMatchFrame->setFrameShadow(QFrame::Raised);
@@ -285,6 +297,8 @@ void TSingleLogFrame::buildScreenLayout()
     thisMatchFrame->setVisible(false);
 
     otherMatchFrame = new MatchOtherFrame(this);
+    otherMatchFrame->setFont(cf);
+
     otherMatchFrame->setObjectName(QStringLiteral("otherMatchFrame"));
     otherMatchFrame->setFrameShape(QFrame::StyledPanel);
     otherMatchFrame->setFrameShadow(QFrame::Raised);
@@ -294,6 +308,8 @@ void TSingleLogFrame::buildScreenLayout()
     otherMatchFrame->setVisible(false);
 
     archiveMatchFrame = new MatchArchiveFrame(this);
+    archiveMatchFrame->setFont(cf);
+
     archiveMatchFrame->setObjectName(QStringLiteral("archiveMatchFrame"));
     archiveMatchFrame->setFrameShape(QFrame::StyledPanel);
     archiveMatchFrame->setFrameShadow(QFrame::Raised);
@@ -318,6 +334,8 @@ void TSingleLogFrame::buildScreenLayout()
     verticalLayout->setContentsMargins(0, 0, 0, 0);
 
     singleLogFrameSplitter = new MinosSplitter(this);
+    singleLogFrameSplitter->setFont(cf);
+
     singleLogFrameSplitter->setObjectName(QStringLiteral("singleLogFrameSplitter"));
     singleLogFrameSplitter->setOrientation(Qt::Vertical);
     singleLogFrameSplitter->setChildrenCollapsible(false);
@@ -358,6 +376,8 @@ void TSingleLogFrame::buildScreenLayout()
                 {
                     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
                     StackedInfoFrame *f = new StackedInfoFrame(rowSplitters[j], auxInstance++);
+                    f->setFont(cf);
+
                     f->setContest(ct);
                     rowSplitters[j]->addWidget(f);
                     f->setVisible(true);
