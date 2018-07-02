@@ -71,7 +71,8 @@ void CacheSelection::unpack(const QJsonValue &json)
         QString contest = selstruct.value("contest").toString();
         _selected[logger].setValue(contest);
 
-        notSelected.removeOne(logger);
+        int n = notSelected.indexOf(logger);
+        notSelected.remove(n);
     }
 
     for (int i = 0; i < notSelected.count(); i++)
