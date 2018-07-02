@@ -559,9 +559,8 @@ int Callsign::validate( )
    // suffix and prefix are set up
 
    f = spt;
-   int j = 0;
 
-   while ( isdigit( *f ) && ( j < BITLENGTH ) )     // leading digits (2 of 2E0...)
+   while ( isdigit( *f ) && ( prefix2.length() < BITLENGTH ) )     // leading digits (2 of 2E0...)
    {
       prefix2 += *f++;
    }
@@ -577,8 +576,6 @@ int Callsign::validate( )
          prefix2 += *f++;
       }
    }
-
-   j = 0;
 
    while ( isdigit( *f ) && ( number.length() < NUMBITLENGTH ) )     // central number (0 of 2E0)
       number += *f++;

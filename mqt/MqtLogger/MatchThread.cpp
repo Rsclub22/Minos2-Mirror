@@ -1378,7 +1378,7 @@ bool ListMatcher::idleMatch( int limit )
                {
                   // ContestLog is valid, if it is a list set first part
                   QSharedPointer<ListSlot> cs = TContestApp::getContestApp() ->listSlotList[ contestIndex ];
-                  ccon = cs->slot;
+                  ccon = cs->slot;  // not used as we return true below
                }
             }
             return true;

@@ -952,7 +952,7 @@ QString RigControlFrame::calcNewFreq(double incFreq)
         bandOk = blist.findBand(freq, bi);
         if (!bandOk)
         {
-            freq -= incFreq;
+            freq -= incFreq;    // never used...
         }
         else
         {
