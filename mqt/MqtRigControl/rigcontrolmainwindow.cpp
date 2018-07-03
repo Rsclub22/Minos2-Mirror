@@ -391,9 +391,6 @@ void RigControlMainWindow::upDateRadio()
             sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);                                 // turn off transVerter Sw
             sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
 
-
-
-
             //setupRadio->currentRadio.transVertNegative = setupRadio->availRadioData[ridx]->transVertNegative;
             //setupRadio->currentRadio.transVertOffset = setupRadio->availRadioData[ridx]->transVertOffset;
             //setupRadio->currentRadio.transVertOffsetStr = setupRadio->availRadioData[ridx]->transVertOffsetStr;
@@ -831,6 +828,8 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
                 // now calculate the freq
                 f = f - setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset;
                 logMessage(QString("SetFreq: Transvert Enabled Freq = %1").arg(QString::number(f)));
+
+                sendTransVertOffsetToLogger(tvNum);
 
 
             }
