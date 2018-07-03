@@ -59,6 +59,9 @@ void MatchTreeFrame::restoreColumns()
 
     state = settings.value(baseName + "/" + getTreeName() + "/state").toByteArray();
     ui->matchTree->header()->restoreState(state);
+    QFont cf = QApplication::font();
+    ui->matchTree->header()->setFont(cf);
+
 }
 void MatchTreeFrame::setCurrentModel(bool s)
 {

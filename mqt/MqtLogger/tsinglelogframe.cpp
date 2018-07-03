@@ -188,12 +188,10 @@ void TSingleLogFrame::buildScreenLayout()
         mShowMessage("Invalid or missing screen configurations", this);
         exit(1);
     }
-    QFont cf = QApplication::font();
 
     // create component frames, parentless
 
     QSOTable = new QTableView(this);
-    QSOTable->setFont(cf);
     QSOTable->setObjectName(QStringLiteral("QSOTable"));
     QSOTable->setFocusPolicy(Qt::ClickFocus);
     QSOTable->setFrameShape(QFrame::NoFrame);
@@ -213,7 +211,6 @@ void TSingleLogFrame::buildScreenLayout()
     QSOTable->setVisible(false);
 
     GJVQSOLogFrame = new QSOLogFrame(this);
-    GJVQSOLogFrame->setFont(cf);
     GJVQSOLogFrame->setObjectName(QStringLiteral("GJVQSOLogFrame"));
 
     GJVQSOLogFrame->setFrameShape(QFrame::NoFrame);
@@ -224,7 +221,6 @@ void TSingleLogFrame::buildScreenLayout()
     GJVQSOLogFrame->setVisible(false);
 
     FKHRigControlFrame = new RigControlFrame(this);
-    FKHRigControlFrame->setFont(cf);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
@@ -232,7 +228,6 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRigControlFrame->setVisible(false);
 
     FKHRotControlFrame = new RotControlFrame(this);
-    FKHRotControlFrame->setFont(cf);
 
     FKHRotControlFrame->setObjectName(QStringLiteral("FKHRotControlFrame"));
     FKHRotControlFrame->setFrameShape(QFrame::StyledPanel);
@@ -241,13 +236,11 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRotControlFrame->setVisible(false);
 
     rotPresets = new RotPresets(this);
-    rotPresets->setFont(cf);
 
     rotPresets->setObjectName(QStringLiteral("rotPresets"));
     rotPresets->setVisible(false);
 
     CribSheet = new QFrame(this);
-    CribSheet->setFont(cf);
 
     CribSheet->setObjectName(QStringLiteral("CribSheet"));
 
@@ -271,7 +264,6 @@ void TSingleLogFrame::buildScreenLayout()
     CribSheet->setVisible(false);
 
     thisMatchFrame = new MatchThisFrame(this);
-    thisMatchFrame->setFont(cf);
 
     thisMatchFrame->setObjectName(QStringLiteral("thisMatchFrame"));
     thisMatchFrame->setFrameShape(QFrame::StyledPanel);
@@ -280,7 +272,6 @@ void TSingleLogFrame::buildScreenLayout()
     thisMatchFrame->setVisible(false);
 
     otherMatchFrame = new MatchOtherFrame(this);
-    otherMatchFrame->setFont(cf);
 
     otherMatchFrame->setObjectName(QStringLiteral("otherMatchFrame"));
     otherMatchFrame->setFrameShape(QFrame::StyledPanel);
@@ -289,7 +280,6 @@ void TSingleLogFrame::buildScreenLayout()
     otherMatchFrame->setVisible(false);
 
     archiveMatchFrame = new MatchArchiveFrame(this);
-    archiveMatchFrame->setFont(cf);
 
     archiveMatchFrame->setObjectName(QStringLiteral("archiveMatchFrame"));
     archiveMatchFrame->setFrameShape(QFrame::StyledPanel);
@@ -311,7 +301,6 @@ void TSingleLogFrame::buildScreenLayout()
     verticalLayout->setContentsMargins(0, 0, 0, 0);
 
     singleLogFrameSplitter = new MinosSplitter(this);
-    singleLogFrameSplitter->setFont(cf);
 
     singleLogFrameSplitter->setObjectName(QStringLiteral("singleLogFrameSplitter"));
     singleLogFrameSplitter->setOrientation(Qt::Vertical);
@@ -341,9 +330,17 @@ void TSingleLogFrame::buildScreenLayout()
                 if (getScreenType(type) == sctNone)
                     continue;
 
-                QScrollArea *elementScrollArea = new QScrollArea();
-                elementScrollArea->setWidgetResizable(true);
-                rowSplitters[j]->addWidget(elementScrollArea);
+                QScrollArea *elementScrollArea = nullptr;
+                if (getScreenType(type) != sctLog
+                        && getScreenType(type) != sctThisMatch
+                        && getScreenType(type) != sctOtherMatch
+                        && getScreenType(type) != sctArchiveMatch
+                        )
+                {
+                    elementScrollArea = new QScrollArea();
+                    elementScrollArea->setWidgetResizable(true);
+                    rowSplitters[j]->addWidget(elementScrollArea);
+                }
 
                 // insert correct widget type in horizontal splitter
 
@@ -357,7 +354,6 @@ void TSingleLogFrame::buildScreenLayout()
                 {
                     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
                     StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
-                    f->setFont(cf);
 
                     f->setContest(ct);
                     elementScrollArea->setWidget(f);
@@ -367,7 +363,7 @@ void TSingleLogFrame::buildScreenLayout()
                 case sctLog:
                 {
                     QSOTable->setParent(rowSplitters[j]);
-                    elementScrollArea->setWidget(QSOTable);
+                    rowSplitters[j]->addWidget(QSOTable);
                     QSOTable->setVisible(true);
                     break;
                 }
@@ -400,19 +396,19 @@ void TSingleLogFrame::buildScreenLayout()
                 }
                 case sctThisMatch:
                 {
-                    elementScrollArea->setWidget(thisMatchFrame);
+                    rowSplitters[j]->addWidget(thisMatchFrame);
                     thisMatchFrame->setVisible(true);
                     break;
                 }
                 case sctOtherMatch:
                 {
-                    elementScrollArea->setWidget(otherMatchFrame);
+                    rowSplitters[j]->addWidget(otherMatchFrame);
                     otherMatchFrame->setVisible(true);
                     break;
                 }
                 case sctArchiveMatch:
                 {
-                    elementScrollArea->setWidget(archiveMatchFrame);
+                    rowSplitters[j]->addWidget(archiveMatchFrame);
                     archiveMatchFrame->setVisible(true);
                     break;
                 }
@@ -424,7 +420,6 @@ void TSingleLogFrame::buildScreenLayout()
                 }
 
                 }
-                elementScrollArea->setMinimumSize(QSize(10, 10));
 
             }
         }
@@ -507,6 +502,9 @@ void TSingleLogFrame::restoreColumns()
     thisMatchFrame->restoreColumns();
     otherMatchFrame->restoreColumns();
     archiveMatchFrame->restoreColumns();
+
+    QFont cf = QApplication::font();
+    QSOTable->horizontalHeader()->setFont(cf);
 
     logColumnsChanged = false;
 
