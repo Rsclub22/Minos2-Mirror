@@ -244,15 +244,29 @@ void MainWindow::on_transfer12Button_clicked()
 
 void MainWindow::on_transfer21Button_clicked()
 {
-    long freq = fCentre + ftf;
+    long lFreq = fCentre + ftf;
 
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    st->addMember( QString::number(freq + transvertOffset), rpcConstants::rigControlFreq );
-    rpc.getCallArgs() ->addParam( st );
+    QStringList qsl = rigCache.getSelectedLoggers(rigSelected);
+    if (qsl.count())
+    {
+        QString loggerUuid = qsl[0];
 
-    rpc.queueCall( rigSelected);
+        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+        st->addMember( logger, rpcConstants::loggerUuid );
+
+        QString selc = rigCache.getSelectedContest(rigSelected, loggerUuid);
+
+        QSharedPointer<RPCParam>select(new RPCStringParam(selc ));
+        st->addMember( select, rpcConstants::selected );
+
+        st->addMember( convertFreqToStr(lFreq + transvertOffset), rpcConstants::rigControlFreq );
+        rpc.getCallArgs() ->addParam( st );
+
+        rpc.queueCall( rigSelected);
+    }
 }
 
 void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
