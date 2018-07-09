@@ -754,7 +754,7 @@
            <item>
             <widget class="QGroupBox" name="FieldsGroupBox">
              <property name="title">
-              <string>Mandatory Fields</string>
+              <string>Mandatory QSO Fields</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_17">
               <item>
