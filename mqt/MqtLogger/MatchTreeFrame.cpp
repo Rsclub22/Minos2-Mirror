@@ -9,7 +9,8 @@
 
 MatchTreeFrame::MatchTreeFrame(QWidget *parent) :
     QFrame(parent),
-    ui(new Ui::MatchTreeFrame)
+    ui(new Ui::MatchTreeFrame),
+    contest(nullptr)
 {
     ui->setupUi(this);
 

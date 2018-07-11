@@ -147,11 +147,6 @@ void MinosLoggerEvents::SendLocSelect(QString loc, BaseContestLog *c)
     emit mle.LocSelect(loc, c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendSetStackContest(LoggerContestLog *contest)
-{
-    emit mle.setStackContest(contest);
-}
-//---------------------------------------------------------------------------
 void MinosLoggerEvents::sendRefreshStackMults(LoggerContestLog *contest)
 {
     emit mle.refreshStackMults(contest);

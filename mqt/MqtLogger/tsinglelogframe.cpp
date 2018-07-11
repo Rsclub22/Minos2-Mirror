@@ -59,26 +59,10 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     buildScreenLayout();
 
-    //doSetAuxWindows(false);
-
-    FKHRigControlFrame->setContest(contest);
-    FKHRotControlFrame->setContest(contest);
-
-    GJVQSOLogFrame->setAsEdit(false, "Log");
-
-    thisMatchFrame->initialise();
-    otherMatchFrame->initialise();
-    archiveMatchFrame->initialise();
-
     OtherMatchTreeFW = new FocusWatcher(otherMatchFrame->getTreeView());
     connect(OtherMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onOtherMatchTreeFocused(QObject *, bool, QFocusEvent *)));
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
     connect(ArchiveMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onArchiveTreeFocused(QObject *, bool, QFocusEvent *)));
-
-
-    thisMatchFrame->setBaseName("Log");
-    otherMatchFrame->setBaseName("Log");
-    archiveMatchFrame->setBaseName("Log");
 
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);
@@ -89,13 +73,9 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     restoreColumns();
 
-    GJVQSOLogFrame->initialise( contest );
-
     connect(&MinosLoggerEvents::mle, SIGNAL(ContestPageChanged()), this, SLOT(on_ContestPageChanged()));
 
     //connect(&MinosLoggerEvents::mle, SIGNAL(BandMapPressed()), this, SLOT(on_BandMapPressed()));
-
-
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(NextContactDetailsTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(PublishTimerTimer()));
@@ -118,7 +98,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
             this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
 
-    GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
 
     // BandMap Updates
 
@@ -219,6 +198,9 @@ void TSingleLogFrame::buildScreenLayout()
     GJVQSOLogFrame->setMidLineWidth(2);
 
     GJVQSOLogFrame->setVisible(false);
+    GJVQSOLogFrame->setAsEdit(false, "Log");
+    GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
+    GJVQSOLogFrame->initialise( contest );
 
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
@@ -226,6 +208,7 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
 
     FKHRigControlFrame->setVisible(false);
+    FKHRigControlFrame->setContest(contest);
 
     FKHRotControlFrame = new RotControlFrame(this);
 
@@ -234,6 +217,7 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRotControlFrame->setFrameShadow(QFrame::Raised);
 
     FKHRotControlFrame->setVisible(false);
+    FKHRotControlFrame->setContest(contest);
 
     rotPresets = new RotPresets(this);
 
@@ -270,6 +254,8 @@ void TSingleLogFrame::buildScreenLayout()
     thisMatchFrame->setFrameShadow(QFrame::Raised);
 
     thisMatchFrame->setVisible(false);
+    thisMatchFrame->initialise();
+    thisMatchFrame->setBaseName("Log");
 
     otherMatchFrame = new MatchOtherFrame(this);
 
@@ -278,6 +264,8 @@ void TSingleLogFrame::buildScreenLayout()
     otherMatchFrame->setFrameShadow(QFrame::Raised);
 
     otherMatchFrame->setVisible(false);
+    otherMatchFrame->initialise();
+    otherMatchFrame->setBaseName("Log");
 
     archiveMatchFrame = new MatchArchiveFrame(this);
 
@@ -286,6 +274,8 @@ void TSingleLogFrame::buildScreenLayout()
     archiveMatchFrame->setFrameShadow(QFrame::Raised);
 
     archiveMatchFrame->setVisible(false);
+    archiveMatchFrame->initialise();
+    archiveMatchFrame->setBaseName("Log");
 
     chatFrame = new ChatFrame(this);
     chatFrame->setObjectName(QStringLiteral("chatFrame"));
@@ -323,6 +313,7 @@ void TSingleLogFrame::buildScreenLayout()
             hs->setOrientation(Qt::Horizontal);
             hs->setChildrenCollapsible(false);
             rowSplitters.push_back(hs);
+            LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
 
             for (int k = 0; k < sc.rows[j].elements.count(); k++)
             {
@@ -352,7 +343,6 @@ void TSingleLogFrame::buildScreenLayout()
                 }
                 case sctAux:
                 {
-                    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
                     StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
 
                     f->setContest(ct);
@@ -370,16 +360,19 @@ void TSingleLogFrame::buildScreenLayout()
                 case sctRigControl:
                 {
                     elementScrollArea->setWidget(FKHRigControlFrame);
+                    FKHRigControlFrame->setContest(ct);
                     break;
                 }
                 case sctRotControl:
                 {
                     elementScrollArea->setWidget(FKHRotControlFrame);
+                    FKHRotControlFrame->setContest(ct);
                     break;
                 }
                 case sctRotPresets:
                 {
                     elementScrollArea->setWidget(rotPresets);
+                    rotPresets->setContest(ct);
                     break;
                 }
                 case sctQSOEdit:
@@ -398,18 +391,21 @@ void TSingleLogFrame::buildScreenLayout()
                 {
                     rowSplitters[j]->addWidget(thisMatchFrame);
                     thisMatchFrame->setVisible(true);
+                    thisMatchFrame->setContest(ct);
                     break;
                 }
                 case sctOtherMatch:
                 {
                     rowSplitters[j]->addWidget(otherMatchFrame);
                     otherMatchFrame->setVisible(true);
+                    otherMatchFrame->setContest(ct);
                     break;
                 }
                 case sctArchiveMatch:
                 {
                     rowSplitters[j]->addWidget(archiveMatchFrame);
                     archiveMatchFrame->setVisible(true);
+                    archiveMatchFrame->setContest(ct);
                     break;
                 }
                 case sctChat:
@@ -483,9 +479,12 @@ void TSingleLogFrame::closeContest()
        otherMatchFrame->setContest(nullptr);
        archiveMatchFrame->setContest(nullptr);
 
-       MinosLoggerEvents::sendSetStackContest(nullptr);
        FKHRigControlFrame->setContest(nullptr);
        FKHRotControlFrame->setContest(nullptr);
+
+       // Do we need to setContest on all the aux frames as well?
+       // it may be just luck that we get away with it as we wn't be repainting
+
        TContestApp::getContestApp() ->closeFile( contest );
        GJVQSOLogFrame->closeContest();
        contest = nullptr;
@@ -536,10 +535,6 @@ void TSingleLogFrame::on_ContestPageChanged ()
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     trace("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
     TContestApp::getContestApp() ->setCurrentContest( ct );
-    thisMatchFrame->setContest(ct);
-    otherMatchFrame->setContest(ct);
-    archiveMatchFrame->setContest(ct);
-    MinosLoggerEvents::sendSetStackContest(ct);
 
     if ( logColumnsChanged )
     {
@@ -630,8 +625,6 @@ void TSingleLogFrame::HideTimerTimer(  )
         return;
 
     bool controlsLoaded = isBandMapLoaded() || isRadioLoaded() || isRotatorLoaded();
-
-//    ControlSplitter->setVisible(controlsLoaded && !contest->isReadOnly());
 
     if (controlsLoaded && !contest->isReadOnly())
     {

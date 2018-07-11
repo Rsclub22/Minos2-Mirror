@@ -109,8 +109,6 @@ protected:
     void showMatchList(SharedMatchCollection matchCollection );
 
 private slots:
-    virtual void on_MatchStarting(BaseContestLog*){}
-
     virtual void on_matchTreeSelectionChanged(const QItemSelection &, const QItemSelection &){}
 
     virtual void on_matchTree_doubleClicked(const QModelIndex &){}

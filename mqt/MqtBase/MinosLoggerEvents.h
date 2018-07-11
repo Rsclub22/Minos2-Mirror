@@ -54,7 +54,6 @@ signals:
    void CountrySelect(QString cty, BaseContestLog *c);
    void DistrictSelect(QString dist, BaseContestLog *c);
    void LocSelect(QString loc, BaseContestLog *c);
-   void setStackContest(LoggerContestLog *contest);
    void refreshStackMults(LoggerContestLog *contest);
 
    void setMemory(BaseContestLog *, QString call, QString loc);
@@ -104,7 +103,6 @@ public:
    static void SendCountrySelect(QString cty, BaseContestLog *c);
    static void SendDistrictSelect(QString dist, BaseContestLog *c);
    static void SendLocSelect(QString loc, BaseContestLog *c);
-   static void sendSetStackContest(LoggerContestLog *contest);
    static void sendRefreshStackMults(LoggerContestLog *contest);
    static void sendSetMemory(BaseContestLog *, QString call, QString loc);
 

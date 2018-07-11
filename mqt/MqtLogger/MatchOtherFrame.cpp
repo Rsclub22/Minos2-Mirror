@@ -15,14 +15,7 @@ void MatchOtherFrame::initialise()
     MatchTreeFrame::initialise();
     connect(&MinosLoggerEvents::mle, SIGNAL(ReplaceOtherLogList(SharedMatchCollection,BaseContestLog*,QString)), this, SLOT(on_ReplaceOtherLogList(SharedMatchCollection,BaseContestLog*,QString)), Qt::QueuedConnection);
 }
-void MatchOtherFrame::on_MatchStarting(BaseContestLog *ct)
-{
-    // clear down match trees
-    if (contest == ct)
-    {
-        setCurrentModel(false);
-    }
-}
+
 void MatchOtherFrame::showOtherMatchQSOs(SharedMatchCollection matchCollection )
 {
     if (matchCollection->contactCount())

@@ -467,7 +467,10 @@ void QSOLogFrame::MainOpComboBox_Exit()
     if (contest)
      {
         QString op1 = ui->MainOpComboBox->currentText();
-        contest->currentOp1.setValue( op1 );
+        if (!edit)
+        {
+            contest->currentOp1.setValue( op1 );
+        }
         if ( op1.size() )
         {
            contest->oplist.insert( op1, op1 );
@@ -482,7 +485,10 @@ void QSOLogFrame::SecondOpComboBox_Exit()
     if (contest)
     {
        QString op2 = ui->SecondOpComboBox->currentText();
-       contest->currentOp2.setValue( op2 );
+       if (!edit)
+       {
+           contest->currentOp2.setValue( op2 );
+       }
        if ( op2.size() )
        {
           contest->oplist.insert( op2, op2 );
@@ -923,6 +929,9 @@ void QSOLogFrame::getScreenEntry()
 
        //screenContact.frequency = ui->frequencyEdit->text().trimmed();
        screenContact.rotatorHeading = ui->rotatorHeadingEdit->text().trimmed();
+
+       screenContact.op1 = ui->MainOpComboBox->currentText();
+       screenContact.op2 = ui->SecondOpComboBox->currentText();
    }
    screenContact.mode = ui->ModeComboBoxGJV->currentText().trimmed();
    screenContact.contactFlags &= ~NON_SCORING;
@@ -955,7 +964,7 @@ void QSOLogFrame::showScreenEntry( )
       contest->validationPoint = selectedContact?selectedContact->getLogSequence():0;
       ScreenContact temp;
       temp.copyFromArg( screenContact ); // as screen contact gets corrupted by auto changes
-      // op1, op2 in ScreenContact ge corrupted as well
+      // op1, op2 in ScreenContact get corrupted as well
       showScreenContactTime();
       ui->CallsignEdit->setText(temp.cs.fullCall.getValue().trimmed());
       ui->RSTTXEdit->setText(temp.reps.trimmed());
@@ -2276,8 +2285,8 @@ void QSOLogFrame::selectEntryForEdit( QSharedPointer<BaseContact> slct )
    ui->InsertAfterButton->setEnabled(getNextContact() && !contest->isReadOnly());  // dont allow insert after last contact
    ui->InsertBeforeButton->setEnabled(getPriorContact() && !contest->isReadOnly());  // dont allow insert after last contact
 
-   ui->MainOpComboBox->setCurrentText(screenContact.op1);
-   ui->SecondOpComboBox->setCurrentText(screenContact.op2);
+   ui->MainOpComboBox->setCurrentText(slct->op1.getValue());
+   ui->SecondOpComboBox->setCurrentText(slct->op2.getValue());
    sortUnfilledCatchupTime();
    ui->SerTXEdit->setReadOnly(!edit);
    ui->SerTXEdit->setClearButtonEnabled(edit);
