@@ -581,7 +581,7 @@ void TLogContainer::FileNewActionExecute()
     bool repeatDialog = true;
    QString suggestedfName;
    c->mycall.validate();
-   suggestedfName = ( c->mycall.prefix + c->mycall.number + c->mycall.body );
+   suggestedfName = ( c->mycall.locCtryPrefix + c->mycall.number + c->mycall.body );
    suggestedfName += '_';
    if ( c->DTGStart.getValue().size() )
    {

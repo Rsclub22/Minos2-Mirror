@@ -240,8 +240,8 @@ class Callsign
    public:
       MinosStringItem<QString> fullCall; // full call
       // eg for <pe/f0ctt/mm> (g0gjv/p) [F6CTT/RVI/P]
-      QString prefix; // <pe> (g) [/RVI]country of location
-      QString prefix2;  // <f> (g) [F]country of issue
+      QString locCtryPrefix; // <pe> (g) [/RVI]country of location
+      QString dupPrefix;  // <f> (g) [F]country of issue
       QString number; // <0> (0) [6]numeric part
       QString body;  // <ctt> (gjv) [CTT]main body
       QString suffix; // <mm> (p) [P]trailer
@@ -256,6 +256,9 @@ class Callsign
 
       int validate( );
       bool isUK() const;
+private:
+      bool isValidStructure();
+      static bool isValidStructure( const QString &prefix,  const QString &number,  const QString &body );
 };
 //---------------------------------------------------------------------------
 class Locator

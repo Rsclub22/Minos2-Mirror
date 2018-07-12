@@ -134,11 +134,11 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
       		char body[BITLENGTH + 1];  // <ctt> (gjv) [CTT] ?CTT?main body
       		char suffix[TRAILBITLENGTH + 1]; // <mm> (p) [P] ?RVI?trailer
       */
-      if ( cs.prefix != cs.prefix2 )
+      if ( cs.locCtryPrefix != cs.dupPrefix )
       {
          // we have a leading / for a pre-pended prefix, so callsign itself is
          // not relevant
-         csyn = MultLists::getMultLists() ->searchCountrySynonym( cs.prefix );
+         csyn = MultLists::getMultLists() ->searchCountrySynonym( cs.locCtryPrefix );
       }
 
       if ( !csyn )
