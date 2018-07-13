@@ -8,7 +8,7 @@
 #include "tlogcontainer.h"
 
 MatchTreeFrame::MatchTreeFrame(QWidget *parent) :
-    QFrame(parent),
+    QTreeView(parent),
     ui(new Ui::MatchTreeFrame),
     contest(nullptr)
 {
@@ -17,16 +17,16 @@ MatchTreeFrame::MatchTreeFrame(QWidget *parent) :
 }
 void MatchTreeFrame::initialise()
 {
-    ui->matchTree->setModel(getMatchModel());
-    ui->matchTree->header()->setSectionResizeMode(QHeaderView::Interactive);
-    ui->matchTree->setItemDelegate( new HtmlDelegate );
+    setModel(getMatchModel());
+    header()->setSectionResizeMode(QHeaderView::Interactive);
+    setItemDelegate( new HtmlDelegate );
 
-    connect( ui-> matchTree->header(), SIGNAL(sectionResized(int, int , int)),
+    connect( header(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
 
     connect(this, SIGNAL(matchTreeClicked()), this, SLOT(afterMatchTreeClicked()), Qt::QueuedConnection);
 
-    connect(ui->matchTree->selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
+    connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
             this, SLOT(on_matchTreeSelectionChanged(const QItemSelection &, const QItemSelection &)), Qt::UniqueConnection);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
@@ -38,7 +38,7 @@ MatchTreeFrame::~MatchTreeFrame()
 }
 QTreeView *MatchTreeFrame::getTreeView()
 {
-    return ui->matchTree;
+    return this;
 }
 
 
@@ -59,9 +59,9 @@ void MatchTreeFrame::restoreColumns()
     QString treeName = getTreeName();
 
     state = settings.value(baseName + "/" + getTreeName() + "/state").toByteArray();
-    ui->matchTree->header()->restoreState(state);
+    header()->restoreState(state);
     QFont cf = QApplication::font();
-    ui->matchTree->header()->setFont(cf);
+    header()->setFont(cf);
 
 }
 void MatchTreeFrame::setCurrentModel(bool s)
@@ -106,7 +106,7 @@ void MatchTreeFrame::on_sectionResized(int, int, int)
     QByteArray state;
     QString treeName = getTreeName();
 
-    state = ui->matchTree->header()->saveState();
+    state = header()->saveState();
     settings.setValue(baseName + "/" + treeName + "/state", state);
 
     MinosLoggerEvents::SendLogColumnsChanged();

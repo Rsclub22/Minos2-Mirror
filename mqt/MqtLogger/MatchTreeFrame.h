@@ -73,7 +73,7 @@ public:
     int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
 };
 
-class MatchTreeFrame : public QFrame
+class MatchTreeFrame : public QTreeView
 {
     Q_OBJECT
     Ui::MatchTreeFrame *ui;
