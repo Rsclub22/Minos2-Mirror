@@ -372,7 +372,7 @@ void DisplayContestContact::checkContact( )
       letters = sloc.left(2);
       numbers = sloc.mid(2, 2);
 
-      LocSquare *ls = 0;
+      LocSquare *ls = nullptr;
 
       for ( LocSquareIterator i = clp->locs.llist.begin(); i != clp->locs.llist.end(); i++ )
       {

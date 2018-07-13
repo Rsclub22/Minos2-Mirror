@@ -7,8 +7,7 @@
 TEntryOptionsForm::TEntryOptionsForm( QWidget* Owner, LoggerContestLog * cnt, bool saveMinos ):
     QDialog(Owner),
     ui(new Ui::TEntryOptionsForm),
-    ct( cnt ), minosSave( saveMinos ), opsQSOLine1(-1), opsQSOLine2(-1),
-    opsEntryLine1(-1), opsEntryLine2(-1)
+    ct( cnt ), minosSave( saveMinos )
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -71,7 +70,11 @@ TEntryOptionsForm::TEntryOptionsForm( QWidget* Owner, LoggerContestLog * cnt, bo
 
     ui->OptionsScrollBox->setVerticalHeaderLabels(vlabels);
 
-    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->dateRange( DTGDISP )));
+    QTableWidgetItem *dateRangeItem = new QTableWidgetItem(ct->dateRange( DTGDISP ));
+    dateRangeItem->setFlags(dateRangeItem->flags() ^ Qt::ItemIsEditable);
+    dateRangeItem->setBackground(QBrush(Qt::lightGray));
+
+    ui->OptionsScrollBox->setItem(r++, 0, dateRangeItem);
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->name.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->band.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->entrant.getValue()));
@@ -89,13 +92,16 @@ TEntryOptionsForm::TEntryOptionsForm( QWidget* Owner, LoggerContestLog * cnt, bo
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->entASL.getValue()));
 
     getContestOperators();
-    opsQSOLine1 = r;
-    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->opsQSO1));
-    opsQSOLine2 = r;
-    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->opsQSO2));
-    opsEntryLine1 = r;
+    QTableWidgetItem *opsQSOLine1 = new QTableWidgetItem(ct->opsQSO1);
+    opsQSOLine1->setFlags(opsQSOLine1->flags() ^ Qt::ItemIsEditable);
+    opsQSOLine1->setBackground(QBrush(Qt::lightGray));
+    ui->OptionsScrollBox->setItem(r++, 0, opsQSOLine1);
+    QTableWidgetItem *opsQSOLine2 = new QTableWidgetItem(ct->opsQSO2);
+    opsQSOLine2->setFlags(opsQSOLine2->flags() ^ Qt::ItemIsEditable);
+    opsQSOLine2->setBackground(QBrush(Qt::lightGray));
+    ui->OptionsScrollBox->setItem(r++, 0, opsQSOLine2);
+
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->ops1.getValue()));
-    opsEntryLine2 = r;
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->ops2.getValue()));
 
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->entCondx1.getValue()));

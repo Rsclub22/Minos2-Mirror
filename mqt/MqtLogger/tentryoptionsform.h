@@ -39,11 +39,6 @@ private:
     ExportType expformat;
     bool minosSave;
     void getContestOperators();
-    int opsQSOLine1;
-    int opsQSOLine2;
-    int opsEntryLine1;
-    int opsEntryLine2;
-
 };
 
 #endif // TENTRYOPTIONSFORM_H
