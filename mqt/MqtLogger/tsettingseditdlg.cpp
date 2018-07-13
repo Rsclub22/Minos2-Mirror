@@ -22,6 +22,11 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
         restoreGeometry(geometry);
 
     baseTitle = windowTitle();
+
+    ui->NewSectionButton->setText("New " + bundle->getBundle());
+    ui->CopyButton->setText("Copy " + bundle->getBundle());
+    ui->DeleteButton->setText("Delete " + bundle->getBundle());
+    ui->renameButton->setText("Rename " + bundle->getBundle());
 }
 void TSettingsEditDlg::ShowCurrentSectionOnly()
 {
@@ -62,7 +67,7 @@ void TSettingsEditDlg::showSections(QString currSection)
    }
 
 
-   qSort(sections.begin(), sections.end(),// sectionLessThan);
+   qSort(sections.begin(), sections.end(),
              [this](const QString &first, const QString &second) { return sectionLessThan(bundle, first, second); });
    setWindowTitle(baseTitle + " - " + bundle->getBundle() + " for " + bundle->getSection()) ;
 
@@ -90,7 +95,7 @@ void TSettingsEditDlg::showSection()
    }
    else if ( offset >= 0 && offset < sections.size() )
    {
-      qSort(sections.begin(), sections.end(),// sectionLessThan);
+      qSort(sections.begin(), sections.end(),
            [this](const QString &first, const QString &second) { return sectionLessThan(bundle, first, second); });
       QString sect = sections[ offset ];
       bundle->openSection( sect );
@@ -105,9 +110,9 @@ void TSettingsEditDlg::showSection()
    }
 
    ui->NewSectionButton->setEnabled(!currSectionOnly);
-   ui->DeleteButton->setEnabled(currSectionOnly?false:( offset > 0 ));  // ************* >= ?
-   ui->CopyButton->setEnabled(currSectionOnly?false:( offset > 0 )); // ************* >= ?
-   ui->renameButton->setEnabled(currSectionOnly?false:( offset > 0 )); // ************* >= ?
+   ui->DeleteButton->setEnabled(currSectionOnly?false:( offset > 0 ));
+   ui->CopyButton->setEnabled(currSectionOnly?false:( offset > 0 ));
+   ui->renameButton->setEnabled(currSectionOnly?false:( offset > 0 ));
 }
 void TSettingsEditDlg::showDetails()
 {
@@ -133,7 +138,7 @@ void TSettingsEditDlg::showDetails()
            labels.append(label);
 
            QString val;
-           if (bundle->populateDefaultSection() || offset > 0 || currSectionOnly)               // ********** >= ?
+           if (bundle->populateDefaultSection() || offset > 0 || currSectionOnly)
             bundle->getStringProfile( entries[ i ], val );
 
            QTableWidgetItem *it = new QTableWidgetItem(val);
@@ -183,7 +188,7 @@ int nCol = sender()->property("col").toInt();
       */
 
    int offset = ui->SectionsList->currentRow();
-   if (( offset > 0 || currSectionOnly) && ui->OptionsTable->rowCount())  // ************* >= ?
+   if (( offset > 0 || currSectionOnly) && ui->OptionsTable->rowCount())
    {
       QVector<int> entries = bundle->getBundleEntries();
       for ( int r = 0; r < entries.size(); r++ )
@@ -203,7 +208,7 @@ int nCol = sender()->property("col").toInt();
 void TSettingsEditDlg::on_NewSectionButton_clicked()
 {
     getDetails();  // save what is set already
-    QString Value = "new section";
+    QString Value = "new " + bundle->getBundle();
 
     bundle->newSection( Value );
     bundle->openSection( Value );
@@ -218,10 +223,10 @@ void TSettingsEditDlg::on_CopyButton_clicked()
     getDetails();  // save what is set already
 
     int offset = ui->SectionsList->currentRow();
-    if ( offset > 0 && !currSectionOnly) // ************* >= ?
+    if ( offset > 0 && !currSectionOnly)
     {
        QString Value = bundle->getSection();
-       if ( enquireDialog( this, "Please give a name for the new section", Value ) )
+       if ( enquireDialog( this, "Please give a name for the new " + bundle->getBundle(), Value ) )
        {
           getDetails();  // save old section
 
@@ -233,7 +238,7 @@ void TSettingsEditDlg::on_CopyButton_clicked()
           }
           else
           {
-             MinosParameters::getMinosParameters() ->mshowMessage( "Section already exists", this );
+             MinosParameters::getMinosParameters() ->mshowMessage( bundle->getBundle() + " already exists", this );
           }
        }
     }
@@ -248,9 +253,9 @@ void TSettingsEditDlg::on_DeleteButton_clicked()
 
     int offset = ui->SectionsList->currentRow();
     if ( offset == 0 )
-       MinosParameters::getMinosParameters() ->mshowMessage( "You cannot delete the empty section!", this );
+       MinosParameters::getMinosParameters() ->mshowMessage( "You cannot delete the empty " + bundle->getBundle() + "!", this );
     else
-       if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, "Are you sure you want to delete the current section?" ) )
+       if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, "Are you sure you want to delete the current " + bundle->getBundle() + "?" ) )
        {
           bundle->clearProfileSection( true );
           showSections(bundle->getSection());
@@ -264,11 +269,11 @@ void TSettingsEditDlg::on_renameButton_clicked()
 
     int offset = ui->SectionsList->currentRow();
     if ( offset == 0 )
-       MinosParameters::getMinosParameters() ->mshowMessage( "You cannot rename the empty section!", this );
-    else if ( offset > 0 && !currSectionOnly) // ************* >= ?
+       MinosParameters::getMinosParameters() ->mshowMessage( "You cannot rename the empty " + bundle->getBundle() + "!", this );
+    else if ( offset > 0 && !currSectionOnly)
     {
        QString Value = bundle->getSection();
-       if ( enquireDialog( this, "Please give a new name for the section", Value ) )
+       if ( enquireDialog( this, "Please give a new name for the " + bundle->getBundle(), Value ) )
        {
           getDetails();  // save old section
 
@@ -280,7 +285,7 @@ void TSettingsEditDlg::on_renameButton_clicked()
           }
           else
           {
-             MinosParameters::getMinosParameters() ->mshowMessage( "Section already exists", this );
+             MinosParameters::getMinosParameters() ->mshowMessage( bundle->getBundle() + " already exists", this );
           }
        }
     }
