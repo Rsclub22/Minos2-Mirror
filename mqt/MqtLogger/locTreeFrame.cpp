@@ -70,8 +70,9 @@ void LocTreeFrame::reInitialiseLocators()
                     }
                     else
                     {
-                        dispLine += disp + " (" + QString::number(lc->UKLocCount)
-                                    + (lc->nonUKLocCount?("/" + QString::number(lc->nonUKLocCount)):QString("")) + ") ";
+//                        dispLine += disp + " (" + QString::number(lc->UKLocCount)
+//                                    + (lc->nonUKLocCount?("/" + QString::number(lc->nonUKLocCount)):QString("")) + ") ";
+                        dispLine += disp + " (" + QString::number(lc->UKLocCount + lc->nonUKLocCount) + ") ";
                     }
 
                 }
