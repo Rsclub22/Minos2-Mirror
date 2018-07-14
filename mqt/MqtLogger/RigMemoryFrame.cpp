@@ -501,6 +501,7 @@ void RigMemoryFrame::editActionSelected()
 
 void RigMemoryFrame::clearActionSelected()
 {
+
     model.beginResetModel();
     int buttonNumber = getSelectedLine();
     if (buttonNumber < 0)
@@ -516,16 +517,19 @@ void RigMemoryFrame::clearActionSelected()
 }
 void RigMemoryFrame::clearAllActionSelected()
 {
-    model.beginResetModel();
-    int mcount = ct->rigMemories.size();
-    for (int buttonNumber = 0; buttonNumber < mcount; buttonNumber ++)
+    if ( mShowOKCancelMessage( this, "Please confirm deleting all memories") )
     {
-        memoryData::memData mn;
-        setRigMemoryData(buttonNumber, mn);
-    }
-    sendUpdateMemories();
-    model.endResetModel();
 
+        model.beginResetModel();
+        int mcount = ct->rigMemories.size();
+        for (int buttonNumber = 0; buttonNumber < mcount; buttonNumber ++)
+        {
+            memoryData::memData mn;
+            setRigMemoryData(buttonNumber, mn);
+        }
+        sendUpdateMemories();
+        model.endResetModel();
+    }
 }
 void RigMemoryFrame::clearWorkedActionSelected()
 {
