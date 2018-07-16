@@ -100,6 +100,7 @@ private:
     QAction *HelpAboutAction;
 
     QAction *FileOpenAction;
+    QAction *FileImportAction;
     QAction *ListOpenAccept;
     QAction *ContestDetailsAction;
     QAction *FileCloseAction;
@@ -157,6 +158,7 @@ private slots:
     void selectSession();
     void openRecentFile();
     void FileOpenActionExecute();
+    void FileImportActionExecute();
     void ListOpenActionExecute();
     void ManageListsActionExecute();
     void ContestDetailsActionExecute();

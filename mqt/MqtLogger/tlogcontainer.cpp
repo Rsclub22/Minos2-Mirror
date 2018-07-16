@@ -261,6 +261,7 @@ QAction *TLogContainer::newCheckableAction( const QString &text, QMenu *m, const
 void TLogContainer::setupMenus()
 {
     FileOpenAction = newAction("&Open Contest...", ui->menuFile, SLOT(FileOpenActionExecute()));
+    FileImportAction = newAction("&Import Contest...", ui->menuFile, SLOT(FileImportActionExecute()));
     recentFilesMenu = ui->menuFile->addMenu("Reopen Contest");
 
     for (int i = 0; i < MaxRecentFiles; ++i)
@@ -317,6 +318,7 @@ void TLogContainer::setupMenus()
     setMemoryAction = newMemoryAction(QString("Add as new memory..."), &TabPopup, SLOT(onSetMemoryActionExecute()));
 
     TabPopup.addAction(FileOpenAction);
+    TabPopup.addAction(FileImportAction);
     TabPopup.addMenu(recentFilesMenu);
     TabPopup.addAction(FileNewAction);
     TabPopup.addAction(FileCloseAction);
@@ -677,10 +679,6 @@ void TLogContainer::FileOpenActionExecute()
     InitialDir = qf.canonicalFilePath();
 
     QString Filter = "Minos contest files (*.minos *.Minos);;"
-                     "Reg1Test Files (*.edi);;"
-                     "GJV contest files (*.gjv);;"
-                     "RSGB Log Files (*.log);;"
-                     "ADIF Files (*.adi);;"
                      "All Files (*.*)" ;
 
     QStringList fnames = QFileDialog::getOpenFileNames( this,
@@ -703,6 +701,44 @@ void TLogContainer::FileOpenActionExecute()
         }
     }
 }
+void TLogContainer::FileImportActionExecute()
+{
+    // first choose file
+//"Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
+    QString InitialDir = getDefaultDirectory( false );
+
+    QFileInfo qf(InitialDir);
+
+    InitialDir = qf.canonicalFilePath();
+
+    QString Filter = "Use this combo for file types (*.*);;"
+                     "Reg1Test Files (*.edi);;"
+                     "GJV contest files (*.gjv);;"
+                     "RSGB Log Files (*.log);;"
+                     "ADIF Files (*.adi);;"
+                     "All Files (*.*)" ;
+
+    QStringList fnames = QFileDialog::getOpenFileNames( this,
+                       "Import contests",
+                       InitialDir,  // dir
+                       Filter
+                       );
+    for (int i = 0; i < fnames.size(); i++)
+    {
+        QString fname = fnames[i];
+        BaseContestLog *ct = nullptr;
+        if ( !fname.isEmpty() )
+        {
+            ContestDetails pced(this );
+            ct = addSlot( &pced, fname, false, -1 );   // not automatically read only
+            if (ct)
+            {
+                selectContest(ct, QSharedPointer<BaseContact>());
+            }
+        }
+    }
+}
+
 
 void TLogContainer::ContestDetailsActionExecute()
 {
