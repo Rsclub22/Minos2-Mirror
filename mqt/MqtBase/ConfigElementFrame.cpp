@@ -68,6 +68,14 @@ void ConfigElementFrame::setElement(QSharedPointer<RunConfigElement> c)
     {
         c->rEnabled = false;
     }
+    if (ui->rbRunLocally->isChecked())
+    {
+        ui->LocalRemote->setText("Local");
+    }
+    else
+    {
+        ui->LocalRemote->setText(c->server);
+    }
 
 
     ui->enabledCheckbox->setChecked(c->rEnabled);
