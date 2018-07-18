@@ -11,13 +11,12 @@
 #include <crtdbg.h>
 #endif // _MSC_VER
 
-void myMessageOutput(QtMsgType /*type*/,
-                     const QMessageLogContext &/*context*/,
-                     const QString &/*msg*/)
+static QtMessageHandler oldHandler = nullptr;
+void myMessageOutput(QtMsgType type,
+                     const QMessageLogContext &context,
+                     const QString &msg)
 {
-    int a;
-    Q_UNUSED(a);
-    a = 0;
+    oldHandler(type, context, msg);
 }
 
 #if defined(_MSC_VER)
@@ -81,7 +80,8 @@ int main(int argc, char *argv[])
 //    prevHook = _CrtSetReportHook(customReportHook);
 //     _CrtSetBreakAlloc(1312120); // Use this line to break at the nth memory allocation
 #endif
-qInstallMessageHandler(myMessageOutput);
+
+    oldHandler = qInstallMessageHandler(myMessageOutput);
     int appError = 1;
     {
         SingleApplication a( QString("MinosLogger"), argc, argv);

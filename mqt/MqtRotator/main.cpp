@@ -22,18 +22,17 @@
 
 #include "AppStartup.h"
 
-void myMessageOutput(QtMsgType /*type*/,
-                     const QMessageLogContext &/*context*/,
-                     const QString &/*msg*/)
+static QtMessageHandler oldHandler = nullptr;
+void myMessageOutput(QtMsgType type,
+                     const QMessageLogContext &context,
+                     const QString &msg)
 {
-    int a;
-    Q_UNUSED(a);
-    a = 0;
+    oldHandler(type, context, msg);
 }
 
 int main(int argc, char *argv[])
 {
-    qInstallMessageHandler(myMessageOutput);
+    oldHandler = qInstallMessageHandler(myMessageOutput);
 
     QApplication a(argc, argv);
 
