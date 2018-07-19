@@ -23,7 +23,7 @@
 #include "MatchTreeFrame.h"
 #include "enqdlg.h"
 #include "AdifImport.h"
-#include "ScreenConfig.h"
+#include "ScreenConfigManager.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -303,7 +303,7 @@ void TLogContainer::setupMenus()
 // end of search menu
 
     startConfigAction = newAction("Startup Apps Configuration", ui->menuTools, SLOT(StartConfigActionExecute()));
-    ScreenConfigAction = newAction("Configure Screen Layout...", ui->menuTools, SLOT(doScreenConfigAction()));
+    ScreenConfigAction = newAction("Configure Screen Layouts...", ui->menuTools, SLOT(doScreenConfigAction()));
     ui->menuTools->addSeparator();
     LocCalcAction = newAction("Locator Calculator", ui->menuTools, SLOT(LocCalcActionExecute()));
 //    AnalyseMinosLogAction = newAction("Analyse Minos Log", ui->menuTools, SLOT(AnalyseMinosLogActionExecute()));
@@ -1051,7 +1051,7 @@ void TLogContainer::menuLogsActionExecute()
 
 void TLogContainer::doScreenConfigAction()
 {
-    ScreenConfig sc(this);
+    ScreenConfigManager sc(this);
     sc.exec();
 }
 void TLogContainer::StartConfigActionExecute()
@@ -1404,6 +1404,22 @@ void TLogContainer::selectSession(QString sessName)
     app->logsPreloadBundle.flushProfile();
     on_ContestPageControl_currentChanged(-1);
     enableActions();
+}
+
+void TLogContainer::applyScreenLayouts()
+{
+
+    // and apply it to the open logs
+    TContestApp *app = TContestApp::getContestApp();
+    QString sessName = app->currSession;
+
+    closeSession();
+
+    // clear old splitter settings
+    QSettings settings;
+    settings.remove("Splitters");
+
+    selectSession(sessName);
 }
 
 BaseContestLog *TLogContainer::loadSession( QString sessName)

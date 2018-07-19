@@ -143,15 +143,18 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer, SIGNAL(sendKeyerTwoTone()), this, SLOT(sendKeyerTwoTone()));
     connect(LogContainer, SIGNAL(sendKeyerStop()), this, SLOT(sendKeyerStop()));
 
-    connect(LogContainer, SIGNAL(setAuxWindows()), this, SLOT(setAuxWindows()));
-
 /*
     connect(FKHBandMapFrame, SIGNAL(sendBandMap( QString, QString, QString, QString, QString )),
             this, SLOT(sendBandMap(QString,QString,QString,QString,QString)));
 */
 
+    connect(this, SIGNAL(do_repaint()), this, SLOT(on_doRepaint()), Qt::QueuedConnection);
 }
 
+void TSingleLogFrame::on_doRepaint()
+{
+    repaint();
+}
 TSingleLogFrame::~TSingleLogFrame()
 {
     delete ui;
@@ -563,6 +566,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
     LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
     LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
 
+    emit do_repaint();
 }
 
 void TSingleLogFrame::NextContactDetailsTimerTimer( )

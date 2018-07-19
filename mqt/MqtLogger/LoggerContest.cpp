@@ -275,7 +275,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       if (!contestFile->open(om))
       {
          QString lerr = contestFile->errorString();
-         QString emess = "Failed to open LoggerContestLog file " + fn + " : " + lerr;
+         QString emess = "Failed to open Contest file " + fn + " : " + lerr;
          MinosParameters::getMinosParameters() ->mshowMessage( emess );
          return false;
       }
@@ -353,7 +353,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
           if (!contestFile->open(om))
           {
              QString lerr = contestFile->errorString();
-             QString emess = "Failed to create LoggerContestLog file " + fn + " : " + lerr;
+             QString emess = "Failed to create Contest file " + fn + " : " + lerr;
              MinosParameters::getMinosParameters() ->mshowMessage( emess );
              return false;
           }
@@ -764,14 +764,14 @@ bool LoggerContestLog::GJVload( )
    buftostr( temp );
    if ( temp.toInt() != 0 )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "Invalid block 0 in LoggerContestLog file" );
+      MinosParameters::getMinosParameters() ->mshowMessage( "Invalid block 0 in Contest file" );
       return false;
    }
 
    buftostr( temp );
    if ( strnicmp( temp, GJVVERSION, VERLENGTH ) != 0 )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( QString( "Invalid LoggerContestLog file format (" ) + temp + ", " + GJVVERSION + " expected)" );
+      MinosParameters::getMinosParameters() ->mshowMessage( QString( "Invalid Contest file format (" ) + temp + ", " + GJVVERSION + " expected)" );
       return false;
    }
 
@@ -1617,7 +1617,7 @@ bool LoggerContestLog::getStanza( unsigned int stanza, QString &stanzaData )
    bool ret = contestFile.open(QIODevice::ReadOnly);
    if ( !ret )
    {
-      QString emess = "Failed to open LoggerContestLog file for monitoring" + cfileName + " : " + contestFile.errorString();
+      QString emess = "Failed to open Contest file for monitoring" + cfileName + " : " + contestFile.errorString();
       MinosParameters::getMinosParameters() ->mshowMessage( emess );
       return false;
    }

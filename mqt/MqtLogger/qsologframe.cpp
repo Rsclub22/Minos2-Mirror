@@ -1733,7 +1733,7 @@ void QSOLogFrame::updateQSODisplay()
 
    on_FontChanged();    // do all style sheets again
 
-   repaint();
+   //repaint();
 }
 
 //---------------------------------------------------------------------------

@@ -214,6 +214,11 @@ private slots:
     void sendSelectRadio(const QString &, const QString &mode);
     void sendSelectRotator(const QString &);
     void onSplitterMoved(int, int);
+
+    void on_doRepaint();
+
+signals:
+    void do_repaint();
 };
 
 #endif // TSINGLELOGFRAME_H

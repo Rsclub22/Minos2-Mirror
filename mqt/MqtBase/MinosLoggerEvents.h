@@ -54,7 +54,7 @@ signals:
    void CountrySelect(QString cty, BaseContestLog *c);
    void DistrictSelect(QString dist, BaseContestLog *c);
    void LocSelect(QString loc, BaseContestLog *c);
-   void refreshStackMults(LoggerContestLog *contest);
+   void refreshStackMults(BaseContestLog *contest);
 
    void setMemory(BaseContestLog *, QString call, QString loc);
 
@@ -62,7 +62,7 @@ signals:
    void FiltersChanged(BaseContestLog *);
    void UpdateStats(BaseContestLog *);
    void UpdateMemories(BaseContestLog *);
-   void RefreshMults(BaseContestLog *);
+   //void RefreshMults(BaseContestLog *);
    void RigFreqChanged(QString, BaseContestLog *);
    void RotBearingChanged(int, BaseContestLog *);
 
@@ -103,7 +103,7 @@ public:
    static void SendCountrySelect(QString cty, BaseContestLog *c);
    static void SendDistrictSelect(QString dist, BaseContestLog *c);
    static void SendLocSelect(QString loc, BaseContestLog *c);
-   static void sendRefreshStackMults(LoggerContestLog *contest);
+   static void sendRefreshStackMults(BaseContestLog *contest);
    static void sendSetMemory(BaseContestLog *, QString call, QString loc);
 
    static void SendFontChanged();
@@ -112,7 +112,7 @@ public:
    static void sendUpdateStats(BaseContestLog *c );
    static void sendFiltersChanged(BaseContestLog *c );
    static void sendUpdateMemories(BaseContestLog *c );
-   static void sendRefreshMults(BaseContestLog *c );
+//   static void sendRefreshMults(BaseContestLog *c );
 
     static void sendRigFreqChanged(QString f, BaseContestLog *c);
     static void sendRotBearingChanged(int f, BaseContestLog *c);

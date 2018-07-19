@@ -17,12 +17,12 @@
 [{"type": "This"},{"type": "Other"},{"type": "Arch"}]
 ]}]
 */
-static QString defaultConfig = "[{\"name\": \"default\","
+static QString defaultConfig = "[{\"name\": \"%1\","
         "\"rows\":["
-        "[{\"type\": \"%1\"},{\"type\": \"%2\"}],"
-        "[{\"type\": \"%3\"},{\"type\": \"%4\"},{\"type\": \"%5\"}],"
-        "[{\"type\": \"%6\"},{\"type\": \"%7\"}],"
-        "[{\"type\": \"%8\"},{\"type\": \"%9\"},{\"type\": \"%10\"}]"
+        "[{\"type\": \"%2\"},{\"type\": \"%3\"}],"
+        "[{\"type\": \"%4\"},{\"type\": \"%5\"},{\"type\": \"%6\"}],"
+        "[{\"type\": \"%7\"},{\"type\": \"%8\"}],"
+        "[{\"type\": \"%9\"},{\"type\": \"%10\"},{\"type\": \"%11\"}]"
         "]}]";
 
 ScreenConfigFile::ScreenConfigFile()
@@ -51,7 +51,9 @@ bool ScreenConfigFile::readFile(QString f)
     else
     {
         trace("Failed to open " + f );
-        s = defaultConfig.arg(getScreenTypeString(sctLog))
+        s = defaultConfig
+                .arg(defaultLayoutName)
+                .arg(getScreenTypeString(sctLog))
                 .arg(getScreenTypeString(sctAux))
                 .arg(getScreenTypeString(sctRigControl))
                 .arg(getScreenTypeString(sctRotControl))

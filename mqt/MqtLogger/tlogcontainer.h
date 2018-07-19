@@ -60,6 +60,8 @@ public:
     void closeSession();
     void selectSession(QString sessName);
 
+    void applyScreenLayouts();
+
     SetMemoryAction *setMemoryAction;
 private:
     Ui::TLogContainer *ui;

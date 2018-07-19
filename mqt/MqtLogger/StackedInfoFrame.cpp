@@ -45,9 +45,8 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     connect(&MinosLoggerEvents::mle, SIGNAL(FiltersChanged(BaseContestLog*)), this, SLOT(onFiltersChanged(BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(UpdateStats(BaseContestLog*)), this, SLOT(onUpdateStats(BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(UpdateMemories(BaseContestLog*)), this, SLOT(onUpdateMemories(BaseContestLog*)), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(RefreshMults(BaseContestLog*)), this, SLOT(onRefreshMults(BaseContestLog*)), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(setStackContest(LoggerContestLog *)), this, SLOT(setContest(LoggerContestLog *)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(refreshStackMults(LoggerContestLog *)), this, SLOT(refreshMults(LoggerContestLog *)));
+    //connect(&MinosLoggerEvents::mle, SIGNAL(RefreshMults(BaseContestLog*)), this, SLOT(onRefreshMults(BaseContestLog*)), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, SIGNAL(refreshStackMults(BaseContestLog *)), this, SLOT(onRefreshStackMults(BaseContestLog *)));
 }
 
 StackedInfoFrame::~StackedInfoFrame()
@@ -199,6 +198,7 @@ void StackedInfoFrame::on_ScrollToCountry( const QString &csCs, BaseContestLog *
         }
     }
 }
+/*
 void StackedInfoFrame::refreshMults(LoggerContestLog *ct)
 {
     if (contest == ct)
@@ -206,6 +206,7 @@ void StackedInfoFrame::refreshMults(LoggerContestLog *ct)
         MinosLoggerEvents::sendRefreshMults(contest);
     }
 }
+*/
 void StackedInfoFrame::onUpdateStats(BaseContestLog *ct)
 {
     if (contest == ct && statsFrame)
@@ -220,7 +221,7 @@ void StackedInfoFrame::onUpdateMemories(BaseContestLog *ct)
         rigMemFrame->doMemoryUpdates();
     }
 }
-void StackedInfoFrame::onRefreshMults(BaseContestLog *ct)
+void StackedInfoFrame::onRefreshStackMults(BaseContestLog *ct)
 {
     if (contest == ct)
     {
@@ -237,7 +238,7 @@ void StackedInfoFrame::onRefreshMults(BaseContestLog *ct)
 
 void StackedInfoFrame::on_FontChanged()
 {
-    refreshMults(contest);
+    //refreshMults(contest);
 }
 
 
@@ -259,9 +260,4 @@ void StackedInfoFrame::onFiltersChanged(BaseContestLog *ct)
         if (statsFrame)
             statsFrame->reInitialiseStats();
     }
-}
-void StackedInfoFrame::on_StackedMults_currentChanged(int /*arg1*/)
-{
-    if (statsFrame)
-        statsFrame->reInitialiseStats();
 }

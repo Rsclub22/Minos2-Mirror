@@ -47,18 +47,17 @@ private slots:
     void on_ScrollToDistrict( const QString &qth, BaseContestLog* );
     void on_ScrollToCountry( const QString &csCs, BaseContestLog* );
 
-    void on_StackedMults_currentChanged(int arg1);
     void on_FontChanged();
     void on_infoCombo_currentIndexChanged(int arg1);
 
     void onFiltersChanged(BaseContestLog *ct);
     void onUpdateStats(BaseContestLog *ct);
     void onUpdateMemories(BaseContestLog *ct);
-    void onRefreshMults(BaseContestLog *ct);
+    void onRefreshStackMults(BaseContestLog *ct);
 
 public slots:
     void setContest(LoggerContestLog *contest);
-    void refreshMults(LoggerContestLog *contest);
+    //void refreshMults(LoggerContestLog *contest);
 };
 
 #endif // STACKEDINFOFRAME_H

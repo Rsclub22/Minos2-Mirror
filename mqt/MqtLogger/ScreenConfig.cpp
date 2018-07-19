@@ -11,9 +11,11 @@
 #include "ScreenConfig.h"
 #include "ui_ScreenConfig.h"
 
-ScreenConfig::ScreenConfig(QWidget *parent) :
+ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curConfigName) :
     QDialog(parent),
-    ui(new Ui::ScreenConfig)
+    ui(new Ui::ScreenConfig),
+    scf(scfp),
+    curConfigName(curConfigName)
 {
     ui->setupUi(this);
 
@@ -27,10 +29,6 @@ ScreenConfig::ScreenConfig(QWidget *parent) :
     ui->scrollAreaWidgetContents->setLayout(vbl);
 
     // create the screen contents based on the config
-
-    scf.loadFile();
-
-    curConfigName = "default";
 
     SC sc = scf.configs[curConfigName];
 
@@ -98,7 +96,10 @@ SC ScreenConfig::getConfig()
 void ScreenConfig::on_OKButton_clicked()
 {
     // analyse and apply the new layout
-    on_applyButton_clicked();
+    SC sc = getConfig();
+
+    // replace it in the config map
+    scf.configs[curConfigName] = sc;
 
     close();
 }
@@ -116,17 +117,7 @@ void ScreenConfig::on_applyButton_clicked()
     // write it back, or the screen redraw doesn't work
     scf.dumpFile();
 
-    // and apply it to the open logs
-    TContestApp *app = TContestApp::getContestApp();
-    QString sessName = app->currSession;
-
-    LogContainer->closeSession();
-
-    // clear old splitter settings
-    QSettings settings;
-    settings.remove("Splitters");
-
-    LogContainer->selectSession(sessName);
+    LogContainer->applyScreenLayouts();
 }
 
 void ScreenConfig::on_cancelButton_clicked()
