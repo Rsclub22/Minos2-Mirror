@@ -71,10 +71,10 @@ bool ScreenConfigFile::readFile(QString f)
         if( json.isArray())
         {
             configs.clear();
-            SC config;
             QJsonArray namearray = json.array();
             for (int i = 0; i < namearray.count(); i++)
             {
+                SC config;
                 QJsonObject namestruct = namearray[i].toObject();
                 QString name = namestruct.value("name").toString();
                 config.name = name;

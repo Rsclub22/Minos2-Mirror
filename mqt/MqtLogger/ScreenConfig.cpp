@@ -11,11 +11,11 @@
 #include "ScreenConfig.h"
 #include "ui_ScreenConfig.h"
 
-ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curConfigName) :
+ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curConfigNamep) :
     QDialog(parent),
     ui(new Ui::ScreenConfig),
     scf(scfp),
-    curConfigName(curConfigName)
+    curConfigName(curConfigNamep)
 {
     ui->setupUi(this);
 

@@ -11,6 +11,8 @@
 #include "tcalendarform.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
+#include "ScreenConfigFile.h"
+
 #include "contestdetails.h"
 #include "ui_contestdetails.h"
 
@@ -372,6 +374,26 @@ void ContestDetails::setDetails(  )
 
    ui->MGMCheckBox->setChecked(contest->MGMContestRules.getValue());
    refreshOps();
+
+   ScreenConfigFile scf;
+   scf.loadFile();
+
+   QString curConfigName = contest->screenLayout.getValue();
+   if (curConfigName.isEmpty())
+       curConfigName = ScreenConfigFile::defaultLayoutName;
+
+   int j = 0;
+   int crow = 0;
+
+   for(QMap<QString, SC>::iterator i = scf.configs.begin(); i != scf.configs.end(); i++ )
+   {
+       if ((*i).name == curConfigName)
+           crow = j;
+       ui->screenLayoutCombo->addItem((*i).name);
+       j++;
+   }
+   ui->screenLayoutCombo->setCurrentIndex(crow);
+
 
    enableControls();
    focusChange(nullptr, false, nullptr);
@@ -1047,6 +1069,8 @@ QWidget * ContestDetails::getDetails( )
 
     contest->validateLoc();
 
+    contest->screenLayout.setValue(ui->screenLayoutCombo->currentText());
+
     return nextD;
 }
 //---------------------------------------------------------------------------
@@ -1165,6 +1189,7 @@ void ContestDetails::on_OKButton_clicked()
           contest->setProtectedSuppressed(temp);
        }
        *inputcontest = *contest;
+
        accept();
     }
 

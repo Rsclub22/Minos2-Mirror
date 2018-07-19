@@ -752,11 +752,12 @@ void TLogContainer::ContestDetailsActionExecute()
 
         if (ct)
         {
+            QString curConfig = ct->screenLayout.getValue();
             ContestDetails pced( this );
 
 
             pced.setDetails( ct );
-            if ( pced.exec() == QDialog::Accepted )
+            if ( pced.exec() == QDialog::Accepted ) // but if we have changed layout... f and ct won't be valid
             {
                 subscribeApps();
                 // and we need to do some re-init on the display
@@ -764,6 +765,11 @@ void TLogContainer::ContestDetailsActionExecute()
                 ct->scanContest();
                 f->refreshMults();
             }
+            if (ct->screenLayout.getValue() != curConfig)
+            {
+                LogContainer->applyScreenLayouts();
+            }
+
         }
     }
 }

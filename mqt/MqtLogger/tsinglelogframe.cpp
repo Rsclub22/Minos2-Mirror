@@ -301,8 +301,12 @@ void TSingleLogFrame::buildScreenLayout()
 
     connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
 
-    QString curConfigName = "default";
-
+    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
+    QString curConfigName = ct->screenLayout.getValue();
+    if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
+    {
+        curConfigName = ScreenConfigFile::defaultLayoutName;
+    }
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;
@@ -316,7 +320,6 @@ void TSingleLogFrame::buildScreenLayout()
             hs->setOrientation(Qt::Horizontal);
             hs->setChildrenCollapsible(false);
             rowSplitters.push_back(hs);
-            LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
 
             for (int k = 0; k < sc.rows[j].elements.count(); k++)
             {
