@@ -118,6 +118,8 @@ class LoggerContestLog : public BaseContestLog
       QVector<MinosItem<memoryData::memData> > runMemories;
       QVector<MinosItem<memoryData::memData> > rigMemories;
 
+      MinosStringItem<QString> screenLayout;
+
       MinosItem<int> statsPeriod1;
       MinosItem<int> statsPeriod2;
       MinosItem<bool> showContinentEU;

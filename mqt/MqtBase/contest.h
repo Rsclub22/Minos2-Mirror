@@ -219,6 +219,7 @@ class BaseContestLog: public BaseLogList
       bool locValid = false;
       bool NonUKloc_mult = false;
       bool UKloc_mult = false;
+      bool bdummy = false;          // improve padding on Windows
       int NonUKloc_multiplier = 0;
       int UKloc_multiplier = 0;
       
@@ -338,6 +339,8 @@ protected:
    {
       return false;
    }
+   short sdummy = 0;        // improve padding on Windows
+   int idummy = 0;          // improve padding on Windows
 
 
 };

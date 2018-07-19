@@ -38,7 +38,7 @@ public:
 class ScreenConfigFile
 {
 public:
-    const QString defaultLayoutName = QString("default");
+    static const QString defaultLayoutName;
 
     ScreenConfigFile();
     bool loadFile();

@@ -11,14 +11,15 @@
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
 #include "ContestApp.h"
-
+#include "ScreenConfigFile.h"
 #include "AdifImport.h"
 #include "reg1test.h"
 #include "printfile.h"
 #include "enqdlg.h"
 #include "MinosTestExport.h"
-#include "LoggerContest.h"
 #include "BandList.h"
+
+#include "LoggerContest.h"
 
 LoggerContestLog::LoggerContestLog( ) : BaseContestLog(),
       minosFile( false ),
@@ -88,6 +89,7 @@ void LoggerContestLog::clearDirty()
        rigMemories[i].clearDirty();
    }
 
+   screenLayout.clearDirty();
    statsPeriod1.clearDirty();
    statsPeriod2.clearDirty();
    showContinentEU.clearDirty();
@@ -149,6 +151,7 @@ void LoggerContestLog::setDirty()
        rigMemories[i].setDirty();
    }
 
+   screenLayout.setDirty();
    statsPeriod1.setDirty();
    statsPeriod2.setDirty();
    showContinentEU.setDirty();
@@ -189,6 +192,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    // open the settings bundle files
    initialiseINI();
 
+   screenLayout.setInitialValue(ScreenConfigFile::defaultLayoutName);
    // preset the stacked info
 
    statsPeriod1.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod1());
@@ -1467,6 +1471,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
    {
       mt->getStructArgMemberValue( "section", entSect );
       mt->getStructArgMemberValue( "sectionList", sectionList );
+      mt->getStructArgMemberValue( "ScreenLayout", screenLayout);
    }
    else
       if ( methodName == "MinosLogMode" )
