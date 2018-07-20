@@ -125,11 +125,13 @@ public:
     void getCurrentDetails(memoryData::memData &m);
 
     void checkConnections();
+    void applyScreenLayout();
 private:
 //    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
     QSOGridModel qsoModel;
     int splitterHandleWidth;
+    QString curScreenLayout;
 
     int lastStanzaCount;
 
@@ -147,6 +149,8 @@ private:
     MatchTreeItem *getXferItem();
 
     void buildScreenLayout();
+    void createScreenComponents();
+    void clearScreenLayout();
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 

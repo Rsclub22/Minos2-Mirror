@@ -759,15 +759,16 @@ void TLogContainer::ContestDetailsActionExecute()
             pced.setDetails( ct );
             if ( pced.exec() == QDialog::Accepted ) // but if we have changed layout... f and ct won't be valid
             {
+                if (ct->screenLayout.getValue() != curConfig)
+                {
+                    f->applyScreenLayout();
+                }
+
                 subscribeApps();
                 // and we need to do some re-init on the display
                 f->updateQSODisplay();
                 ct->scanContest();
                 f->refreshMults();
-            }
-            if (ct->screenLayout.getValue() != curConfig)
-            {
-                LogContainer->applyScreenLayouts();
             }
 
         }
@@ -1414,18 +1415,16 @@ void TLogContainer::selectSession(QString sessName)
 
 void TLogContainer::applyScreenLayouts()
 {
-
-    // and apply it to the open logs
-    TContestApp *app = TContestApp::getContestApp();
-    QString sessName = app->currSession;
-
-    closeSession();
-
     // clear old splitter settings
     QSettings settings;
     settings.remove("Splitters");
 
-    selectSession(sessName);
+    for (int i = 0; i < ui->ContestPageControl->count(); i++)
+    {
+        QWidget *ctab = ui->ContestPageControl->widget(i);
+        TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
+        f->applyScreenLayout();
+    }
 }
 
 BaseContestLog *TLogContainer::loadSession( QString sessName)

@@ -57,6 +57,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     ui->setupUi(this);
 
+    createScreenComponents();
     buildScreenLayout();
 
     OtherMatchTreeFW = new FocusWatcher(otherMatchFrame->getTreeView());
@@ -162,15 +163,8 @@ TSingleLogFrame::~TSingleLogFrame()
     ui = nullptr;
     contest = nullptr;
 }
-void TSingleLogFrame::buildScreenLayout()
+void TSingleLogFrame::createScreenComponents()
 {
-    ScreenConfigFile scf;
-    if (!scf.loadFile())
-    {
-        mShowMessage("Invalid or missing screen configurations", this);
-        exit(1);
-    }
-
     // create component frames, parentless
 
     QSOTable = new QTableView(this);
@@ -301,12 +295,60 @@ void TSingleLogFrame::buildScreenLayout()
 
     connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
 
+}
+void TSingleLogFrame::clearScreenLayout()
+{
+    // clear down the screen elements, but don't delete them - they will be used to rebuild the screen
+    while (singleLogFrameSplitter->count())
+    {
+        MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
+        while(s && s->count())
+        {
+            QWidget *w = s->widget(0);
+            w->hide();
+            w->setParent(this);
+
+            QScrollArea *qsa = dynamic_cast<QScrollArea *>(w);
+            if (qsa)
+            {
+                QWidget *tw = qsa->takeWidget();
+                qsa->deleteLater();
+                QWidget *aux = dynamic_cast<StackedInfoFrame *>(tw);
+                if (aux)
+                {
+                    aux->deleteLater();
+                }
+            }
+        }
+        s->setParent(nullptr);
+        s->deleteLater();
+    }
+    rowSplitters.clear();
+}
+void TSingleLogFrame::applyScreenLayout()
+{
+    hide();
+    clearScreenLayout();
+    buildScreenLayout();
+    show();
+}
+
+void TSingleLogFrame::buildScreenLayout()
+{
+    ScreenConfigFile scf;
+    if (!scf.loadFile())
+    {
+        mShowMessage("Invalid or missing screen configurations", this);
+        exit(1);
+    }
+
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     QString curConfigName = ct->screenLayout.getValue();
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
         curConfigName = ScreenConfigFile::defaultLayoutName;
     }
+    curScreenLayout = curConfigName;
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;
@@ -891,7 +933,7 @@ void TSingleLogFrame::getSplitters()
     QSettings settings;
     QByteArray state;
 
-    state = settings.value("Splitters/singleLogFrameSplitter/state").toByteArray();
+    state = settings.value("Splitters/singleLogFrameSplitter/state/" + curScreenLayout).toByteArray();
     singleLogFrameSplitter->restoreState(state);
 
     // and reset some of the saved state
@@ -902,7 +944,7 @@ void TSingleLogFrame::getSplitters()
     foreach(MinosSplitter *s, rowSplitters)
     {
         QString name = s->objectName();
-        state = settings.value("Splitters/" + name + "/state", state).toByteArray();
+        state = settings.value("Splitters/" + name + "/state/" + curScreenLayout, state).toByteArray();
         s->restoreState(state);
         s->setHandleWidth(splitterHandleWidth);
         s->setChildrenCollapsible(false);
@@ -916,13 +958,13 @@ void TSingleLogFrame::onSplitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = singleLogFrameSplitter->saveState();
     QSettings settings;
-    settings.setValue("Splitters/singleLogFrameSplitter/state", state);
+    settings.setValue("Splitters/singleLogFrameSplitter/state/" + curScreenLayout, state);
 
     foreach(MinosSplitter *s, rowSplitters)
     {
         state = s->saveState();
         QString name = s->objectName();
-        settings.setValue("Splitters/" + name + "/state", state);
+        settings.setValue("Splitters/" + name + "/state/" + curScreenLayout, state);
         MinosLoggerEvents::SendSplittersChanged();
     }
 }
