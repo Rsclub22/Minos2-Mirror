@@ -61,6 +61,7 @@ public:
     void selectSession(QString sessName);
 
     void applyScreenLayouts();
+    void selectLayout(QString layout);
 
     SetMemoryAction *setMemoryAction;
 private:
@@ -71,6 +72,7 @@ private:
 
     QMenu TabPopup;
 
+    QMenu *screenLayoutMenu;
     enum { MaxRecentFiles = 5 };
     QVector<QAction *> recentFileActs;
     QMenu *recentFilesMenu;
@@ -93,6 +95,7 @@ private:
     void selectTab(int t);
 
     QAction *lastSessionSelected;
+    QAction *lastLayoutSelected;
 
     QAction *newAction(const QString &text, QMenu *m, const char *atype );
     SetMemoryAction *newMemoryAction(const QString &text, QMenu *m, const char *atype );
@@ -153,10 +156,12 @@ private:
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
 
+    void updateLayoutsMenu();
 private slots:
     void CancelClick();
     void HelpAboutActionExecute();
 
+    void selectLayout();
     void selectSession();
     void openRecentFile();
     void FileOpenActionExecute();

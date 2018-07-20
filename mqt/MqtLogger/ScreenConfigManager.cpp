@@ -1,6 +1,7 @@
 #include "base_pch.h"
 
 #include "ContestApp.h"
+#include "tsinglelogframe.h"
 #include "tlogcontainer.h"
 #include "enqdlg.h"
 
@@ -19,10 +20,13 @@ ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    scf.loadFile();
 
+    scf.loadFile();
     curConfigName = scf.defaultLayoutName;
 
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf)
+        curConfigName = tslf->getCurScreenLayout();
 }
 int ScreenConfigManager::exec()
 {

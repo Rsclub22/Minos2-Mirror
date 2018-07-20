@@ -37,6 +37,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::TLogContainer)
   , lastSessionSelected(nullptr)
+  , lastLayoutSelected(nullptr)
 {
     ui->setupUi(this);
 
@@ -303,7 +304,10 @@ void TLogContainer::setupMenus()
 // end of search menu
 
     startConfigAction = newAction("Startup Apps Configuration", ui->menuTools, SLOT(StartConfigActionExecute()));
-    ScreenConfigAction = newAction("Configure Screen Layouts...", ui->menuTools, SLOT(doScreenConfigAction()));
+
+    screenLayoutMenu = ui->menuTools->addMenu("Screen Layouts");
+    updateLayoutsMenu();
+
     ui->menuTools->addSeparator();
     LocCalcAction = newAction("Locator Calculator", ui->menuTools, SLOT(LocCalcActionExecute()));
 //    AnalyseMinosLogAction = newAction("Analyse Minos Log", ui->menuTools, SLOT(AnalyseMinosLogActionExecute()));
@@ -1080,6 +1084,8 @@ void TLogContainer::on_ContestPageControl_currentChanged(int index)
     TContestApp::getContestApp() ->writeContestList();
     enableActions();
 
+    updateLayoutsMenu();
+
     ui->menuLogs->clear();
     menuLogsActions.clear();
 
@@ -1299,7 +1305,81 @@ QStringList TLogContainer::getSessions()
     }
     return newSessionList;
 }
+void TLogContainer::updateLayoutsMenu()
+{
+    screenLayoutMenu->clear();
+    ScreenConfigAction = newAction("Configure Screen Layouts...", screenLayoutMenu, SLOT(doScreenConfigAction()));
 
+    screenLayoutMenu->addSeparator();
+
+    QWidget *tw = ui->ContestPageControl->currentWidget();
+    TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
+    QString currentLayout;
+    if (f)
+    {
+        currentLayout = f->getCurScreenLayout();
+
+        ScreenConfigFile scf;
+        scf.loadFile();
+        int j = 0;
+        for(QMap<QString, SC>::iterator i = scf.configs.begin(); i != scf.configs.end(); i++ )
+        {
+            QAction *act =  new QAction(this);
+            act->setText((*i).name);
+            connect(act, SIGNAL(triggered()),
+                    this, SLOT(selectLayout()));
+            act->setCheckable(true);
+
+            screenLayoutMenu->addAction(act);
+
+            if ((*i).name == currentLayout)
+            {
+                act->setChecked(true);
+                lastLayoutSelected = act;
+            }
+
+            j++;
+        }
+    }
+}
+
+void TLogContainer::selectLayout()
+{
+    TWaitCursor wc(this);
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action)
+    {
+        if (lastLayoutSelected)
+            lastLayoutSelected->setChecked(false);
+        action->setChecked(true);
+        lastLayoutSelected = action;
+        QString selText = action->text();
+        selectLayout(selText);
+    }
+}
+void TLogContainer::selectLayout(QString layout)
+{
+    QWidget *tw = ui->ContestPageControl->currentWidget();
+    TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
+    if (f)
+    {
+        f->setCurScreenLayout(layout);
+        f->applyScreenLayout();
+    }
+}
+void TLogContainer::applyScreenLayouts()
+{
+    // clear old splitter settings
+    QSettings settings;
+    settings.remove("Splitters");
+
+    for (int i = 0; i < ui->ContestPageControl->count(); i++)
+    {
+        QWidget *ctab = ui->ContestPageControl->widget(i);
+        TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
+        f->applyScreenLayout();
+    }
+}
 void TLogContainer::updateSessionActions()
 {
     TContestApp *app = TContestApp::getContestApp();
@@ -1411,20 +1491,6 @@ void TLogContainer::selectSession(QString sessName)
     app->logsPreloadBundle.flushProfile();
     on_ContestPageControl_currentChanged(-1);
     enableActions();
-}
-
-void TLogContainer::applyScreenLayouts()
-{
-    // clear old splitter settings
-    QSettings settings;
-    settings.remove("Splitters");
-
-    for (int i = 0; i < ui->ContestPageControl->count(); i++)
-    {
-        QWidget *ctab = ui->ContestPageControl->widget(i);
-        TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
-        f->applyScreenLayout();
-    }
 }
 
 BaseContestLog *TLogContainer::loadSession( QString sessName)

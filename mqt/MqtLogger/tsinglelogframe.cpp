@@ -333,6 +333,17 @@ void TSingleLogFrame::applyScreenLayout()
     show();
 }
 
+QString TSingleLogFrame::getCurScreenLayout() const
+{
+    return curScreenLayout;
+}
+
+void TSingleLogFrame::setCurScreenLayout(const QString &value)
+{
+    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
+    ct->screenLayout.setValue(value);
+}
+
 void TSingleLogFrame::buildScreenLayout()
 {
     ScreenConfigFile scf;

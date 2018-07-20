@@ -126,8 +126,12 @@ public:
 
     void checkConnections();
     void applyScreenLayout();
+    QString getCurScreenLayout() const;
+
+    void setCurScreenLayout(const QString &value);
+
 private:
-//    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
+    //    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
     QSOGridModel qsoModel;
     int splitterHandleWidth;
