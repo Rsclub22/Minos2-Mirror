@@ -324,6 +324,7 @@ void TSingleLogFrame::clearScreenLayout()
         s->deleteLater();
     }
     rowSplitters.clear();
+    repaint();
 }
 void TSingleLogFrame::applyScreenLayout()
 {

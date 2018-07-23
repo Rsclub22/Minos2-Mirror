@@ -47,6 +47,7 @@ private slots:
 
 private:
     Ui::ScreenConfigManager *ui;
+    bool suppressItemSelect = false;
 
     ScreenConfigFile scf;
     QString curConfigName;

@@ -40,7 +40,7 @@ ScreenConfigManager::~ScreenConfigManager()
 }
 void ScreenConfigManager::showDetails()
 {
-
+    suppressItemSelect = true;
     ui->layoutList->clear();
 
     int crow = -1;
@@ -55,6 +55,8 @@ void ScreenConfigManager::showDetails()
     }
     ui->layoutList->setCurrentRow(crow);
     checkEnabled();
+    repaint();
+    suppressItemSelect = false;
 }
 
 void ScreenConfigManager::checkEnabled()
@@ -82,8 +84,11 @@ void ScreenConfigManager::accept()
 }
 void ScreenConfigManager::on_layoutList_itemSelectionChanged()
 {
-    curConfigName = ui->layoutList->currentItem()->text();
-    checkEnabled();
+    if (!suppressItemSelect)
+    {
+        curConfigName = ui->layoutList->currentItem()->text();
+        checkEnabled();
+    }
 }
 
 void ScreenConfigManager::on_layoutList_itemDoubleClicked(QListWidgetItem * /*item*/)
@@ -126,6 +131,7 @@ void ScreenConfigManager::on_newButton_clicked()
     {
         curConfigName = value;
         SC newsc;
+        newsc.name = value;
         scf.configs[curConfigName] = newsc;
         // create empty layout
         showDetails();
