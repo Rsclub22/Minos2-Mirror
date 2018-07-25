@@ -12,9 +12,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-//#include <QSignalMapper>
-
 #include "base_pch.h"
+#include <math.h>
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
@@ -67,6 +66,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     initRigFrame(parent);
 
     initRunMemoryButton();
+    initTuneMemoryButton();
 
     showRitButOff();
 
@@ -182,21 +182,36 @@ void RigControlFrame::noRadioSetFreq(QString f)
     setFreq(f);
 }
 
-void RigControlFrame::setFreq(QString f)
+void RigControlFrame::setFreq(QString freq)
 {
-    if (f == "0")
+    if (freq == "0")
     {
         // this is force an update of freq, ignore
         traceMsg(QString("Force Freq Update Received - Ignore!"));
         return;
     }
-    traceMsg(QString("Set Freq = %1").arg(f));
-    QString freq = f;
+    traceMsg(QString("Set Freq = %1").arg(freq));
+
+    if (tuneButtonMap[0]->freq.isEmpty() && tuneButtonMap[1]->freq.isEmpty())
+    {
+        tuneButtonMap[0]->freq = freq;
+        tuneButtonMap[1]->freq = freq;
+        curTuneButton = tuneButtonMap[0];
+    }
+    else if (curTuneButton && abs(toInt(freq) - toInt(curTuneButton->freq)) <= 1001.0)
+    {
+        curTuneButton->freq = freq;
+    }
+    else
+    {
+        curTuneButton = nullptr;;
+    }
+    updateTuneButtons();
+
     if (lastFreq != freq)
     {
         lastFreq = freq;
     }
-
     if (freq.count() >= 4)
     {
         if (!freqEditOn)
@@ -207,7 +222,7 @@ void RigControlFrame::setFreq(QString f)
         curFreq = freq;
 
     }
-    // an error here
+    // an error here?
 
 }
 
@@ -966,9 +981,6 @@ QString RigControlFrame::calcNewFreq(double incFreq)
 
 }
 
-
-
-
 void RigControlFrame::mgmLabelVisible(bool state)
 {
     ui->mgmbreak->setVisible(state);
@@ -980,15 +992,7 @@ void RigControlFrame::traceMsg(QString msg)
     trace(QString("RigcontrolFrame: %1 - %2 ").arg(radioName).arg(msg));
 }
 
-
-
-
-
-
-
-
 //********************** Run Buttons *******************************
-
 
 void RigControlFrame::initRunMemoryButton()
 {
@@ -1094,13 +1098,75 @@ void RigControlFrame::runButtonUpdate(int buttonNumber)
     memoryData::memData m = getRunMemoryData(buttonNumber);
     QString sc = ((buttonNumber == 0)?QString(" [ "):QString( " ] "));
 
-    runButtonMap[buttonNumber]->memButton->setText("R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + extractKhz(m.freq) + " ");
+    runButtonMap[buttonNumber]->memButton->setText("R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + " ");
     QString tTipStr = "Freq: " + convertFreqStrDisp(m.freq) + "\n"
             + "Mode: " + m.mode + "\n";
 
     runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
 }
+//********************** Tune point Buttons *******************************
 
+
+void RigControlFrame::initTuneMemoryButton()
+{
+    tuneButtonMap[0] = new TuneMemoryButton(ui->TuneButton1, this, 0);
+    tuneButtonMap[1] = new TuneMemoryButton(ui->TuneButton2, this, 1);
+
+    updateTuneButtons();
+}
+
+
+void RigControlFrame::tuneButReadActSel(int buttonNumber)
+{
+    traceMsg(QString("Tune Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
+    curTuneButton = tuneButtonMap[buttonNumber];
+    if (isRadioLoaded())
+    {
+        if (radioConnected && !radioError)
+        {
+            ui->freqInput->clearFocus();
+            if (curTuneButton->freq.remove('.') != curFreq.remove('.'))
+            {
+
+                sendFreq(curTuneButton->freq);
+            }
+        }
+        else if (!radioConnected && radioName.trimmed() == NORADIO)
+        {
+            noRadioSendOutFreq(curTuneButton->freq);
+        }
+    }
+    updateTuneButtons();
+}
+
+
+
+void RigControlFrame::tuneButWriteActSel(int buttonNumber)
+{
+    traceMsg(QString("Tune Button Write Selected = %1").arg(QString::number(buttonNumber + 1)));
+    curTuneButton = tuneButtonMap[buttonNumber];
+    curTuneButton->freq = curFreq;
+    updateTuneButtons();
+}
+
+void RigControlFrame::updateTuneButtons()
+{
+    for (int i = 0; i < tuneButData::NUM_TUNEBUTTONS; i++)
+    {
+        tuneButtonUpdate(i);
+    }
+}
+void RigControlFrame::tuneButtonUpdate(int buttonNumber)
+{
+    QString star = "  ";
+    if (curTuneButton == tuneButtonMap[buttonNumber])
+        star = "*";
+    tuneButtonMap[buttonNumber]->memButton->setText(star + "." + extractKhz(tuneButtonMap[buttonNumber]->freq) + star);
+    QString tTipStr = "Freq: " + convertFreqStrDisp(tuneButtonMap[buttonNumber]->freq);
+
+    tuneButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
+}
+//-----------------------------------------------------------------------------------
 QString RigControlFrame::extractKhz(QString f)
 {
     QString khz = "***";
@@ -1161,7 +1227,6 @@ void RigControlFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
 {
     ct->saveRunMemory(memoryNumber, m);
 }
-
 
 //*******************Run Memory Button *************************//
 
@@ -1232,9 +1297,45 @@ void RunMemoryButton::clearActionSelected()
     emit clearActionSelected(memNo);
 }
 
+//*******************Run Memory Button *************************//
 
+TuneMemoryButton::TuneMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
+{
+    memNo = no;
+    rigControlFrame = rcf;
 
+    memButton = b;
 
+    memoryMenu = new QMenu(memButton);
+
+    memButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    memButton->setPopupMode(QToolButton::MenuButtonPopup);
+    memButton->setFocusPolicy(Qt::NoFocus);
+
+    readAction = new QAction("&Read", memButton);
+    writeAction = new QAction("&Write",memButton);
+    memoryMenu->addAction(readAction);
+    memoryMenu->addAction(writeAction);
+    memButton->setMenu(memoryMenu);
+
+    connect(memButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
+    connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
+    connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()) );
+}
+TuneMemoryButton::~TuneMemoryButton()
+{
+//    delete memButton;
+}
+
+void TuneMemoryButton::readActionSelected()
+{
+    rigControlFrame->tuneButReadActSel(memNo);
+}
+
+void TuneMemoryButton::writeActionSelected()
+{
+    rigControlFrame->tuneButWriteActSel(memNo);
+}
 //*******************Freq Line Edit *************************//
 
 FreqLineEdit::FreqLineEdit(QWidget *parent):
@@ -1493,3 +1594,4 @@ void RitLineEdit::keyPressEvent(QKeyEvent *event)
         QLineEdit::keyPressEvent(event);
     }
 }
+

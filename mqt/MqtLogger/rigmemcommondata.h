@@ -161,8 +161,16 @@ const int NUM_RUNBUTTONS = 2;
 const QStringList runButTitle = {
     "Run 1 ([) ",
     "Run 2 (]) "
+};
+}
+namespace tuneButData {
+
+const int NUM_TUNEBUTTONS = 2;
+
+const QStringList tuneButTitle = {
+    "Tune 1 ",
+    "Tune 2 "
 
 };
-
 }
 #endif // RIGMEMCOMMONDATA_H

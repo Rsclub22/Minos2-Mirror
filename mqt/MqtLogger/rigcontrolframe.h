@@ -59,9 +59,27 @@ private slots:
     void clearActionSelected();
 signals:
     void clearActionSelected(int);
-    void selectRadio(QString);
+};
+class TuneMemoryButton : public QObject
+{
+    Q_OBJECT
 
+public:
+    explicit TuneMemoryButton(QToolButton *b, RigControlFrame *rcf, int no);
+    ~TuneMemoryButton();
 
+    RigControlFrame *rigControlFrame;
+    QToolButton* memButton;
+    QMenu* memoryMenu;
+    QAction* readAction;
+    QAction* writeAction;
+
+    int memNo;
+    QString freq;
+private slots:
+
+    void readActionSelected();
+    void writeActionSelected();
 };
 
 class quickBandSelData
@@ -112,6 +130,9 @@ public:
     void runButWriteActSel(int buttonNumber);
     void runButEditActSel(int buttonNumber);
 
+    void tuneButtonUpdate(int);
+    void tuneButReadActSel(int buttonNumber);
+    void tuneButWriteActSel(int buttonNumber);
 
     QString getStrPassBandState(QString mode);
     int getIntPassBandState(QString mode);
@@ -149,14 +170,10 @@ private slots:
     void exitRitFreqEdit();
     void freqRitEditSelected();
     void ritButtonSelected();
+
 public slots:
-
-
     void returnChangeRadioFreq();
-
     void runButClearActSel(int buttonNumber);
-
-
 private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
@@ -169,6 +186,7 @@ private:
     LoggerContestLog *ct;
 
     QMap<int, RunMemoryButton *> runButtonMap;
+    QMap<int, TuneMemoryButton *> tuneButtonMap;
     QVector<quickBandSelData> listOfBands;
 
 
@@ -198,6 +216,8 @@ private:
 
     QString lastFreq;
 
+    TuneMemoryButton *curTuneButton = nullptr;
+
     void sendModeToRadio(QString);
     void freqLineEditBkgnd(bool status);
     void freqLineEditFrameColour(bool status);
@@ -211,6 +231,9 @@ private:
 
     void initRunMemoryButton();
     void loadRunButtonLabels();
+
+    void initTuneMemoryButton();
+    void updateTuneButtons();
 
     void traceMsg(QString msg);
 
@@ -228,7 +251,6 @@ private:
 
     void showRitButOn();
     void showRitButOff();
-
 };
 
 
