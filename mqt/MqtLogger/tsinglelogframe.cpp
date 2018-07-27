@@ -332,6 +332,7 @@ void TSingleLogFrame::applyScreenLayout()
     clearScreenLayout();
     buildScreenLayout();
     show();
+    onSplitterMoved(-1, -1);
 }
 
 QString TSingleLogFrame::getCurScreenLayout() const
@@ -343,6 +344,7 @@ void TSingleLogFrame::setCurScreenLayout(const QString &value)
 {
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     ct->screenLayout.setValue(value);
+    ct->commonSave(false);
 }
 
 void TSingleLogFrame::buildScreenLayout()
