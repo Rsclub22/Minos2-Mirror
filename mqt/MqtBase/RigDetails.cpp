@@ -12,17 +12,7 @@ RigDetails::RigDetails()
     _ritEnableStatus.setInitialValue(false);
     _ritOnOffStatus.setInitialValue(false);
 }
-RigDetails::RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &loggeruuid, const QString &sel, const bool &ritst, const bool &ritonoff)
-    :PubSubValue(RigDetailsType)
-{
-    _transverterOffset.setValue(tvo);
-    _transverterSwitch.setValue(tvsw);
-    _transverterStatus.setValue(tvst);
-    _bandList.setValue(blist);
-    _selected.setSelection(loggeruuid, sel);
-    _ritEnableStatus.setValue(ritst);
-    _ritOnOffStatus.setValue(ritonoff);
-}
+
 RigDetails::RigDetails(QString s)
     :PubSubValue(RigDetailsType)
 {

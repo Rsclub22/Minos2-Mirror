@@ -4,12 +4,7 @@
 AntennaState::AntennaState():PubSubValue(AntennaStateType)
 {
 }
-AntennaState::AntennaState(const QString &st, const QString &loggeruuid, const QString &sel, const QString &b):PubSubValue(AntennaStateType)
-{
-    _bearing.setValue(b);
-    _status.setValue(st);
-    _selected.setSelection(loggeruuid, sel);
-}
+
 AntennaState::AntennaState(QString s):PubSubValue(AntennaStateType)
 {
     qRegisterMetaType< AntennaState > ( "AntennaState" );

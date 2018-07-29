@@ -27,8 +27,6 @@ class RigDetails: public PubSubValue
 public:
     RigDetails();
     RigDetails(QString s);
-    //RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &sel), bool &ritst;
-    RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &loggeruuid, const QString &sel, const bool &ritst, const bool &ritonoff);
 
     bool isDirty() const;
     void clearDirty();

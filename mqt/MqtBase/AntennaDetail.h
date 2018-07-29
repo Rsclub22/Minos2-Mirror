@@ -13,14 +13,6 @@ class AntennaDetail: public PubSubValue
 public:
     AntennaDetail();
     AntennaDetail(QString s);
-    AntennaDetail(int minA, int maxA, const QString loggerUuid, const QString &sel, bool cwCcwCmdEnable):
-        PubSubValue(AntennaDetailType)
-    {
-          _minAzimuth.setValue(minA);
-          _maxAzimuth.setValue(maxA);
-          _cwCcwCmdEnable.setValue(cwCcwCmdEnable);
-          _selected.setSelection(loggerUuid, sel);
-    }
 
     bool isDirty() const;
     void clearDirty();
