@@ -163,12 +163,16 @@ void ScreenConfigManager::on_deleteButton_clicked()
 
 void ScreenConfigManager::on_renameButton_clicked()
 {
-    SC &sc = scf.configs[curConfigName];
     QString value = curConfigName;
     if (getNewName(value))
     {
+        SC sc = scf.configs[curConfigName];
+        scf.configs.remove(curConfigName);
         curConfigName = value;
         sc.name = curConfigName;
+        scf.configs[curConfigName] = sc;
+
+        // and we need to redo the map
         showDetails();
     }
 }
