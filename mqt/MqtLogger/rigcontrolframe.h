@@ -117,7 +117,7 @@ public:
     void setFreq(QString);
     void setRadioName(QString, QString mode);
     void setRadioState(QString);
-    //void setRadioTxVertState(QString s);
+    void setTpm(int);
     void setRadioTxVertState(bool s);
     void setRitEnableState(bool s);
 

@@ -1,11 +1,13 @@
 #include "base_pch.h"
 #include "RigState.h"
 
+
 RigState::RigState()
     :PubSubValue(RigStateType)
 {
     qRegisterMetaType< RigState > ( "RigState" );
     _freq.setInitialValue(0.0);
+    _tpm.setInitialValue(0);
 }
 
 RigState::RigState(QString s)
@@ -21,7 +23,8 @@ bool RigState::isDirty() const
             _freq.isDirty() ||
             _mode.isDirty() ||
             _ritFreq.isDirty() ||
-            _ritEnableStatus.isDirty();
+            _ritEnableStatus.isDirty() ||
+            _tpm.isDirty();
 }
 void RigState::clearDirty()
 {
@@ -31,7 +34,7 @@ void RigState::clearDirty()
     _mode.clearDirty();
     _ritFreq.clearDirty();
     _ritEnableStatus.clearDirty();
-
+    _tpm.clearDirty();
 }
 void RigState::setDirty()
 {
@@ -41,8 +44,7 @@ void RigState::setDirty()
     _mode.setDirty();
     _ritFreq.setDirty();
     _ritEnableStatus.setDirty();
-
-
+    _tpm.setDirty();
 }
 void RigState::setSelected(const QString &loggeruuid, const QString &selected)
 {
@@ -70,6 +72,10 @@ void RigState::setStatus(const QString &status)
     _status.setValue(status);
 }
 
+void RigState::setTpm(int tpm)
+{
+    _tpm.setValue(tpm);
+}
 QString RigState::pack() const
 {
     QJsonObject jv;
@@ -80,6 +86,7 @@ QString RigState::pack() const
     jv.insert(rpcConstants::rigControlMode, mode().getValue());
     jv.insert(rpcConstants::rigControlRitFreq, ritFreq().getValue());
     jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
+    jv.insert(rpcConstants::rigTpm, tpm().getValue());
 
     QJsonDocument json(jv);
 
@@ -100,6 +107,7 @@ void RigState::unpack(QString s)
         _mode.setValue(json.object().value(rpcConstants::rigControlMode).toString());
         _ritFreq.setValue(json.object().value(rpcConstants::rigControlRitFreq).toDouble());
         _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toString());
+        _tpm.setValue(json.object().value(rpcConstants::rigTpm).toInt());
     }
     else
     {
@@ -136,6 +144,10 @@ MinosItem<double> RigState::ritFreq() const
 MinosStringItem<QString> RigState::ritEnableStatus() const
 {
     return _ritEnableStatus;
+}
+MinosItem<int> RigState::tpm() const
+{
+    return _tpm;
 }
 QStringList RigState::getSelectedLoggers()
 {

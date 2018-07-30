@@ -48,6 +48,7 @@ public:
     void setRitFreq(const PubSubName &name, double freq);
     void setRitEnableStatus(const PubSubName &name, bool ritEnableStatus);
     void setRitOnOffStatus(const PubSubName &name, bool status);
+    void setTpm(const PubSubName &name, int tpm);
     void addRigList(const QString &s);
 
     QVector<PubSubName> getRigList()

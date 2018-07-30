@@ -268,6 +268,10 @@ void RigCache::setRitOnOffStatus(const PubSubName &name, bool status)
 {
     rigDetails[name].setRitOnOffStatus(status);
 }
+void RigCache::setTpm(const PubSubName &name, int tpm)
+{
+    rigStates[name].setTpm(tpm);
+}
 
 void RigCache::publishState()
 {

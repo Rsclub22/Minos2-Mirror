@@ -1257,7 +1257,13 @@ void TSingleLogFrame::on_SetRadioStatus(QString s)
         GJVQSOLogFrame->setRadioState(s);
     }
 }
-
+void TSingleLogFrame::on_SetRadioTpm(int t)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        FKHRigControlFrame->setTpm(t);
+    }
+}
 
 void TSingleLogFrame::on_SetRadioTxVertState(bool s)
 {
@@ -1304,6 +1310,14 @@ void TSingleLogFrame::sendRadioRitStatus(bool status)
     {
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlRitStatus(this, status);
+    }
+}
+void TSingleLogFrame::sendTpm(int t, QString f)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigControlTpm(this, t, f);
     }
 }
 

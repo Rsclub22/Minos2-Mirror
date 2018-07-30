@@ -169,6 +169,7 @@ void RigControlFrame::setRadioLoaded()
     traceMsg(QString("Set Radio Loaded"));
     radioLoaded = true;
     ui->modelbl->setVisible(true);
+    setTpm(1);
 }
 
 bool RigControlFrame::isRadioLoaded()
@@ -198,14 +199,11 @@ void RigControlFrame::setFreq(QString freq)
         tuneButtonMap[1]->freq = freq;
         curTuneButton = tuneButtonMap[0];
     }
-    else if (curTuneButton && abs(toInt(freq) - toInt(curTuneButton->freq)) <= 1001.0)
+    else if (curTuneButton)
     {
         curTuneButton->freq = freq;
     }
-    else
-    {
-        curTuneButton = nullptr;;
-    }
+
     updateTuneButtons();
 
     if (lastFreq != freq)
@@ -749,9 +747,6 @@ void RigControlFrame::setBandList(QString b)
     }
 }
 
-
-
-
 void RigControlFrame::setRadioState(QString s)
 {
     traceMsg(QString("Set RadioState = %1").arg(s));
@@ -784,7 +779,19 @@ void RigControlFrame::setRadioState(QString s)
         radioState = s;
     }
 }
-
+void RigControlFrame::setTpm(int t)
+{
+    // tpm change received from rig control
+    if (t && t <= tuneButData::NUM_TUNEBUTTONS)
+    {
+        curTuneButton = tuneButtonMap[t - 1];
+    }
+    else
+    {
+        curTuneButton = nullptr;
+    }
+    updateTuneButtons();
+}
 
 void RigControlFrame::setRadioTxVertState(bool s)
 {
@@ -1119,6 +1126,7 @@ void RigControlFrame::initTuneMemoryButton()
 void RigControlFrame::tuneButReadActSel(int buttonNumber)
 {
     traceMsg(QString("Tune Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     curTuneButton = tuneButtonMap[buttonNumber];
     if (isRadioLoaded())
     {
@@ -1128,12 +1136,8 @@ void RigControlFrame::tuneButReadActSel(int buttonNumber)
             if (curTuneButton->freq.remove('.') != curFreq.remove('.'))
             {
 
-                sendFreq(curTuneButton->freq);
+                tslf->sendTpm(buttonNumber + 1, curTuneButton->freq);
             }
-        }
-        else if (!radioConnected && radioName.trimmed() == NORADIO)
-        {
-            noRadioSendOutFreq(curTuneButton->freq);
         }
     }
     updateTuneButtons();

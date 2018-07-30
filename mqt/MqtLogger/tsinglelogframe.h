@@ -192,7 +192,7 @@ private slots:
     void on_SetMode(QString);
     void on_SetFreq(QString);
     void on_SetRadioStatus(QString);
-    //void on_SetRadioTxVertState(QString s);
+    void on_SetRadioTpm(int);
     void on_SetRadioTxVertState(bool s);
     void on_SetRitEnableState(bool s);
 
@@ -224,6 +224,8 @@ private slots:
     void onSplitterMoved(int, int);
 
     void on_doRepaint();
+public:
+    void sendTpm(int t, QString f);
 
 signals:
     void do_repaint();

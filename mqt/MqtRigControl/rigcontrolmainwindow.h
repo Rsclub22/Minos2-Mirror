@@ -99,6 +99,7 @@ private:
 
     SerialTVSwitch *serialTVSw = nullptr;
 
+    int tpm = 1;
 
     QString geoStr;         // geometry registry location
 
@@ -149,6 +150,7 @@ private:
     void sendModeToLog(QString mode);
     void sendRitEnableStatus(bool status);
     void sendRitEnableStatusLogger();
+    void sendTpm(int tpm);
 
     //void sendRxPbFlagToLog();
 
@@ -207,7 +209,7 @@ private slots:
     void setupBandFreq();
     void selectRadio();
     void onLaunchSetup();
-
+    void setTpm(int tpm, QString f);
 
     void setRitFreqStr(QString ritFreq);
     void setRitLogStatus(bool status);

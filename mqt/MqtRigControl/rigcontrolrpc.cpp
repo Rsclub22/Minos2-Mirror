@@ -73,6 +73,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         QSharedPointer<RPCParam> psSelect;
         QSharedPointer<RPCParam> psRitFreq;
         QSharedPointer<RPCParam> psRitStatus;
+        QSharedPointer<RPCParam> psTpm;
 
         RPCArgs *args = mro->getCallArgs();
 
@@ -88,7 +89,26 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
 
         }
 
-        if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psFreq ))
+        if ( args->getStructArgMember( 0, rpcConstants::rigTpm, psTpm ) )
+        {
+            if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psFreq ))
+            {
+                PubSubName psn("test"); // just uses server/appname
+                QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+                if (cursel == selContest)
+                {
+                    QString freq;
+                    int t;
+                    if ( psFreq->getString( freq ) && psTpm->getInt( t ) )
+                    {
+                        // here you handle what the logger has sent to us
+                        trace(QString("Rig RPC: Tpm From Logger = %1 freq = %2").arg(t).arg(freq));
+                        emit (setTpm(t, freq));
+                    }
+                }
+            }
+        }
+        else if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psFreq ))
         {
             PubSubName psn("test"); // just uses server/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
