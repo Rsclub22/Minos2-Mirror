@@ -74,7 +74,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     sendDM = new TSendDM(this);
 
-    subscribeApps();
+    sendDM->subscribeApps();
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 }
@@ -83,76 +83,7 @@ TLogContainer::~TLogContainer()
     delete ui;
     delete sendDM;
 }
-void TLogContainer::subscribeApps()
-{
-    /*
-        for each type of interest (i.e. not chat or monitor)
 
-        We need to subscribe to all server names - cf chatserver
-
-    rpc->subscribe(rpcConstants::LocalStationCategory);
-
-        NB we should try to integrate chat and monitor into this part
-
-        look for all config entries
-
-        If local, then we subscribe to it
-
-        if remote and server is empty, then we want all servers as they become available
-        if remote and a named server, then subscribe to that server only
-
-        We need to save all this, and restrict on the app name as well
-
-        So, we need some structures
-
-        ?? key a list by category subscribed - each entry a chain of entries?
-
-        type of app
-        server name
-        app name
-        state
-
-        When we get a LocalStationCategory notification, we need to look down the list
-        and if this servername or server name is blank, then subcribe to the relevant
-        category on this server. Extra subscriptions are harmless(I am pretty certain -
-        maybe they will force a set of notifications).
-
-        When we get an "other category" notification we need to find the relevant entries
-        and check the app name before responding to it.
-
-    */
-    trace("subscribeApps");
-    sendDM->invalidateCache();
-
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
-    MinosConfig *config = MinosConfig::getMinosConfig();
-
-    QStringList servers;
-    servers.append(config->getThisServerName());
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = config->elelist.begin(); i != config->elelist.end(); i++ )
-    {
-        Connectable res = (*i)->connectable();
-        if (res.serverName != "localhost")
-            servers.append(res.serverName);
-    }
-    servers.sort();
-    servers.removeDuplicates();
-
-    for (int i = 0; i < servers.size(); i++)
-    {
-        rpc->subscribeRemote( servers[i], rpcConstants::KeyerCategory );
-//        rpc->subscribeRemote( servers[i], rpcConstants::BandMapCategory );
-
-        rpc->subscribeRemote( servers[i], rpcConstants::RotatorCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rotatorDetailCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rotatorStateCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rotatorPresetsCategory );
-
-        rpc->subscribeRemote( servers[i], rpcConstants::rigControlCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigDetailsCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigStateCategory );
-    }
-}
 
 bool TLogContainer::show(int argc, char *argv[])
 {
@@ -797,18 +728,20 @@ void TLogContainer::ContestDetailsActionExecute()
 
 
             pced.setDetails( ct );
-            if ( pced.exec() == QDialog::Accepted ) // but if we have changed layout... f and ct won't be valid
+            if ( pced.exec() == QDialog::Accepted )
             {
                 if (ct->screenLayout.getValue() != curConfig)
                 {
                     f->applyScreenLayout();
                 }
 
-                subscribeApps();
+                sendDM->subscribeApps();
                 // and we need to do some re-init on the display
                 f->updateQSODisplay();
                 ct->scanContest();
                 f->refreshMults();
+
+                updateLayoutsMenu();
             }
 
         }
@@ -1261,7 +1194,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          f->logColumnsChanged = true;  // also causes show QSOs
          f->splittersChanged = true;
 
-         subscribeApps();
+         sendDM->subscribeApps();
 
          on_ContestPageControl_currentChanged(tno);
 
@@ -1402,6 +1335,7 @@ void TLogContainer::selectLayout(QString layout)
     {
         f->setCurScreenLayout(layout);
         f->applyScreenLayout();
+        updateLayoutsMenu();
     }
 }
 void TLogContainer::applyScreenLayouts()

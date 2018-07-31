@@ -35,6 +35,8 @@ class TSendDM : public QObject
       TSendDM( QWidget* Owner );
       ~TSendDM();
 
+      void subscribeApps();
+
       bool radioLoaded = false;
       bool rotatorLoaded = false;
 
@@ -84,19 +86,9 @@ signals:
 
       void RotatorLoaded();
       void RotatorList(QString);
-      //void RotatorPresetList(QString);
-      //void RotatorState(QString);
-      //void RotatorBearing(QString);
-      //void RotatorMaxAzimuth(QString);
-      //void RotatorMinAzimuth(QString);
 
       void setRadioLoaded();
-      //void setMode(QString);
-      //void setFreq(QString);
-      //void setRadioState(QString);
-      //void setRadioTxVertStatus(QString);
       void setRadioList(QString);
-      //void setBandList(QString);
       void setRadioName(QString);
 
       void setKeyerLoaded();
