@@ -76,7 +76,7 @@ bool RunConfigElement::initialise(INIFile &config, QString sect )
     config.getPrivateProfileString( sect, "AppType",  "", appType );
 
     AppConfigElement ace = MinosConfig::getMinosConfig()->getAppConfigElement(appType);
-    requires = ace.requires;
+    requiresApps = ace.requiresApps;
     localOK = ace.localOK;
     remoteOK = ace.remoteOK;
 
@@ -110,21 +110,21 @@ void RunConfigElement::save(INIFile &config)
         config.writePrivateProfileString(name, "", "");
     }
 }
-Connectable RunConfigElement::connectable()
+QSharedPointer<Connectable> RunConfigElement::connectable()
 {
-    Connectable res;
-    res.appName = name;
-    res.appType = appType;
-    res.runType = runType;
+    QSharedPointer<Connectable> res(new Connectable);
+    res->appName = name;
+    res->appType = appType;
+    res->runType = runType;
     if (runType == ConnectServer)
     {
-        res.serverName = server;
-        res.remoteAppName = remoteApp;
+        res->serverName = server;
+        res->remoteAppName = remoteApp;
     }
     else
     {
-        res.serverName = MinosConfig::getMinosConfig()->getThisServerName();
-        res.remoteAppName = name;
+        res->serverName = MinosConfig::getMinosConfig()->getThisServerName();
+        res->remoteAppName = name;
     }
     return res;
 }
@@ -355,9 +355,9 @@ void MinosConfig::setAutoStart(bool s)
 {
     autoStart = s;
 }
-Connectable MinosConfig::getApp(QString appName)
+QSharedPointer<Connectable> MinosConfig::getApp(QString appName)
 {
-    Connectable res;
+    QSharedPointer<Connectable> res;
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
     {
         if (appName.compare((*i)->name, Qt::CaseInsensitive) == 0)
@@ -432,9 +432,9 @@ Server=false
             // NB using comma in value give a string list! Single value will also go to list if desired
             QString reqs;
             appConfig.getPrivateProfileString(apps[i], "Requires",  "", reqs);
-            ac.requires = reqs.split(',', QString::SkipEmptyParts);
+            ac.requiresApps = reqs.split(',', QString::SkipEmptyParts);
 
-            for(auto& str : ac.requires)    // trim all elements of leading and trailing spaces
+            for(auto& str : ac.requiresApps)    // trim all elements of leading and trailing spaces
                 str = str.trimmed();
 
             appConfigList.append(ac);
@@ -482,10 +482,10 @@ QString MinosConfig::checkConfig()
 
         if (ele->rEnabled)
         {
-            if ( ele->requires.size() > 0 && ele->runType == RunLocal)
+            if ( ele->requiresApps.size() > 0 && ele->runType == RunLocal)
             {
                 // "Requires" elements must be present
-                foreach(QString req, ele->requires)
+                foreach(QString req, ele->requiresApps)
                 {
                     if (req.isEmpty())
                         continue;

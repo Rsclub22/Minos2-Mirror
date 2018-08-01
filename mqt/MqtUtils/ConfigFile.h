@@ -14,7 +14,7 @@ public:
 
     QString appType;
     QString appPath;
-    QStringList requires;
+    QStringList requiresApps;
     bool server = false;
     bool localOK = false;
     bool remoteOK = false;
@@ -38,7 +38,7 @@ class RunConfigElement: public QObject
 {
     Q_OBJECT
 private:  	// User declarations
-    QProcess *runner = 0;
+    QProcess *runner = nullptr;
 public:  		// User declarations
     bool newElement = false;
     bool deleted = false;
@@ -54,7 +54,7 @@ public:  		// User declarations
     QString runType;
     QString appType;
 
-    QStringList requires;
+    QStringList requiresApps;
 
     bool showAdvanced = false;
     bool rEnabled = false;
@@ -67,7 +67,7 @@ public:  		// User declarations
 
     void save(INIFile &);
 
-    Connectable connectable();
+    QSharedPointer<Connectable> connectable();
 
     void createProcess();
     void stopProcess();
@@ -108,7 +108,7 @@ public:  		// User declarations
     QString getThisServerName();
 
     QStringList getAppTypes();
-    Connectable getApp(QString appName);
+    QSharedPointer<Connectable> getApp(QString appName);
     AppConfigElement getAppConfigElement(QString appType);
 
     void cleanElementsOnCancel();

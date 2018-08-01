@@ -26,6 +26,8 @@ class TSendDM : public QObject
    private:  	// User declarations
       RigCache rigCache;
       RotatorCache rotatorCache;
+      QMap<QString,QVector< QSharedPointer<Connectable> > > catMap;
+      QVector<QSharedPointer<Connectable> > connectables;
 
       PubSubName keyerApp;
 

@@ -366,6 +366,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
     AnalysePubSubNotify an( err, mro );
     trace( "Notify callback from " + from + ( err ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherServer());
 
+    // Need to check that the server/app is in the category map; if not, don't pass it on
     if ( an.getOK())
     {
         if ( an.getState() == psPublished)
@@ -406,6 +407,25 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 rotatorLoaded = true;
                 emit RotatorLoaded();
                 emit RotatorList(an.getValue());
+            }
+            else if ( an.getCategory() == rpcConstants::LocalStationCategory)
+            {
+                //localServerName = an.getKey();
+                RPCPubSub::subscribe( rpcConstants::StationCategory );  //want ALL keys - but do it once we know who WE are!
+            }
+            else if ( an.getCategory() == rpcConstants::StationCategory)
+            {
+                QString server = an.getKey();
+                for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
+                {
+                    for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
+                    {
+                        if ((*j)->runType == ConnectServer && (*j)->serverName.isEmpty())
+                        {
+                            RPCPubSub::subscribeRemote(server, i.key());
+                        }
+                    }
+                }
             }
         }
 
@@ -714,32 +734,90 @@ void TSendDM::subscribeApps()
     trace("subscribeApps");
     invalidateCache();
 
+    catMap.clear();
+    connectables.clear();
+
     MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
     MinosConfig *config = MinosConfig::getMinosConfig();
 
-    QStringList servers;
-    servers.append(config->getThisServerName());
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = config->elelist.begin(); i != config->elelist.end(); i++ )
     {
-        Connectable res = (*i)->connectable();
-        if (res.serverName != "localhost")
-            servers.append(res.serverName);
+        if (!(*i)->deleted)
+        {
+            QSharedPointer<Connectable> res = (*i)->connectable();
+            connectables.push_back(res);
+        }
     }
-    servers.sort();
-    servers.removeDuplicates();
 
-    for (int i = 0; i < servers.size(); i++)
+    for ( QVector <QSharedPointer<Connectable> >::iterator i = connectables.begin(); i != connectables.end(); i++ )
     {
-        rpc->subscribeRemote( servers[i], rpcConstants::KeyerCategory );
-//        rpc->subscribeRemote( servers[i], rpcConstants::BandMapCategory );
+        if ((*i)->appType == "None")
+        {
 
-        rpc->subscribeRemote( servers[i], rpcConstants::RotatorCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rotatorDetailCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rotatorStateCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rotatorPresetsCategory );
+        }
+        else if ((*i)->appType == "AppStarter")
+        {
 
-        rpc->subscribeRemote( servers[i], rpcConstants::rigControlCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigDetailsCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigStateCategory );
+        }
+        else if ((*i)->appType == "BandMap")
+        {
+
+        }
+        else if ((*i)->appType == "Chat")
+        {
+
+        }
+        else if ((*i)->appType == "Keyer")
+        {
+            catMap[rpcConstants::KeyerCategory].push_back((*i));
+        }
+        else if ((*i)->appType == "LineControl")
+        {
+
+        }
+        else if ((*i)->appType == "Logger")
+        {
+
+        }
+        else if ((*i)->appType == "Monitor")
+        {
+
+        }
+         else if ((*i)->appType == "Other")
+        {
+
+        }
+        else if ((*i)->appType == "RigControl")
+        {
+            catMap[rpcConstants::rigControlCategory].push_back((*i));
+            catMap[rpcConstants::rigDetailsCategory].push_back((*i));
+            catMap[rpcConstants::rigStateCategory].push_back((*i));
+        }
+        else if ((*i)->appType == "Rotator")
+        {
+            catMap[rpcConstants::RotatorCategory].push_back((*i));
+            catMap[rpcConstants::rotatorDetailCategory].push_back((*i));
+            catMap[rpcConstants::rotatorStateCategory].push_back((*i));
+            catMap[rpcConstants::rotatorPresetsCategory].push_back((*i));
+        }
+        else if ((*i)->appType == "Server")
+        {
+            catMap[rpcConstants::LocalStationCategory].push_back((*i));
+        }
+    }
+
+    for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
+    {
+        for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
+        {
+            if ((*j)->runType == RunLocal)
+            {
+                rpc->subscribeRemote(config->getThisServerName(), i.key());
+            }
+            else if ((*j)->runType == ConnectServer && !(*j)->serverName.isEmpty())
+            {
+                rpc->subscribeRemote((*j)->serverName, i.key());
+            }
+        }
     }
 }

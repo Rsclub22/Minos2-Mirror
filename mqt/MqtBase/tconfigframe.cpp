@@ -41,18 +41,6 @@ void TConfigFrame::initialise(QWidget *p, ConfigCloseCallBack ccb, bool showAuto
 
         ConfigElementFrame *cef = new ConfigElementFrame(false);
 
-        // set alternating background
-/*
-        if (offset++%2)
-        {
-            cef->setStyleSheet("QFrame { background-color: lightBlue; }");
-        }
-        else
-        {
-            cef->setStyleSheet("QFrame { background-color: white; }");
-        }
-        cef->fixComboStyle();
-*/
         vbl->addWidget(cef);
 
         cef->setElement(c);
