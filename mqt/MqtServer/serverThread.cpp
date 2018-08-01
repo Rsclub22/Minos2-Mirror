@@ -164,7 +164,7 @@ void MinosServerConnection::sendKeepAlive( )
         qint64 now = QDateTime::currentMSecsSinceEpoch();
         if (now - lastKeepAlive > resubscribeTimer.interval() * 2 )
         {
-            sendRaw(QString("<keepAlive seq='" + QString::number(seqno++) + "/>").toStdString());
+            sendRaw(QString("<keepAlive seq='" + QString::number(seqno++) + "'/>").toStdString());
             lastKeepAlive = now;
         }
     }
