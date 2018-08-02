@@ -89,7 +89,7 @@ bool ScreenConfigFile::readFile(QString f)
                         QJsonObject ele = elearray[k].toObject();
                         QString eletype = ele.value("type").toString();
                         scele.type = eletype;
-                        trace(QString("Name %1 row %2 ele %3 type %4").arg(name).arg(j).arg(k).arg(eletype));
+//                        trace(QString("Name %1 row %2 ele %3 type %4").arg(name).arg(j).arg(k).arg(eletype));
                         scrow.elements.push_back(scele);
                     }
                     config.rows.push_back(scrow);
