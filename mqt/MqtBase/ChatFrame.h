@@ -16,6 +16,7 @@ class ChatFrame : public QFrame
 public:
     explicit ChatFrame(QWidget *parent = nullptr);
     ~ChatFrame() override;
+    void setStandAlone();
 
 private:
     Ui::ChatFrame *ui;

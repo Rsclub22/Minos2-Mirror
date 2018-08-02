@@ -21,6 +21,12 @@ ChatFrame::~ChatFrame()
 {
     delete ui;
 }
+
+void ChatFrame::setStandAlone()
+{
+    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
+    RPCPubSub::subscribe(rpcConstants::StationCategory);
+}
 void ChatFrame::on_FontChanged()
 {
     QFont cf = QApplication::font();

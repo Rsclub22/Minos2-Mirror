@@ -37,8 +37,6 @@ ChatServer::ChatServer()
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
-
-    rpc->subscribe(rpcConstants::LocalStationCategory);
 }
 
 ChatServer::~ChatServer()
@@ -52,15 +50,40 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
     {
         if ( an.getCategory() == rpcConstants::LocalStationCategory)
         {
-            QString s = an.getKey();
-            QString a = MinosRPC::getMinosRPC()->getAppName();
-            RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServer, a + "@" + s, psPublished);
-            RPCPubSub::subscribe(rpcConstants::StationCategory);
+            QString server = an.getKey();
+            QVector<Server>::iterator stat;
+            bool pubNeeded = true;
+            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+            {
+                if ((*stat).name == server)
+                {
+                    pubNeeded = false;
+                    break;
+                }
+            }
+            if (pubNeeded)
+            {
+                QString a = MinosRPC::getMinosRPC()->getAppName();
+                RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServer, a + "@" + server, psPublished);
+            }
         }
         if (an.getCategory() == rpcConstants::StationCategory)
         {
-            QString key = an.getKey();
-            RPCPubSub::subscribeRemote(key, rpcConstants::ChatCategory);
+            QString server = an.getKey();
+            QVector<Server>::iterator stat;
+            bool subNeeded = true;
+            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+            {
+                if ((*stat).name == server)
+                {
+                    subNeeded = false;
+                    break;
+                }
+            }
+            if (subNeeded)
+            {
+                RPCPubSub::subscribeRemote(server, rpcConstants::ChatCategory);
+            }
         }
 
         if ( an.getCategory() == rpcConstants::ChatCategory )
