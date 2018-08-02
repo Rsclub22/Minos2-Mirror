@@ -28,6 +28,7 @@ class TSendDM : public QObject
       RotatorCache rotatorCache;
       QMap<QString,QVector< QSharedPointer<Connectable> > > catMap;
       QVector<QSharedPointer<Connectable> > connectables;
+      QVector<QString> servers;
 
       PubSubName keyerApp;
 

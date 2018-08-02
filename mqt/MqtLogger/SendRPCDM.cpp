@@ -369,6 +369,50 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
     // Need to check that the server/app is in the category map; if not, don't pass it on
     if ( an.getOK())
     {
+        QString category = an.getCategory();
+        if (category != rpcConstants::LocalStationCategory && category != rpcConstants::StationCategory)
+        {
+            bool notificationOK = false;
+            for ( QVector <QSharedPointer<Connectable> >::iterator j = catMap[category].begin(); j != catMap[category].end(); j++ )
+            {
+                if ((*j)->runType == RunLocal)
+                {
+                    if (an.getPublisherServer() != (*j)->serverName)
+                        continue;
+                    if (an.getPublisherProgram() != (*j)->appName)
+                        continue;
+
+                    notificationOK = true;
+                    break;
+                }
+                else if ((*j)->runType == ConnectServer)
+                {
+                    if ((*j)->serverName.isEmpty())
+                    {
+                        notificationOK = true;
+                        break;
+                    }
+                    else if (an.getPublisherServer() != (*j)->serverName)
+                    {
+                        continue;
+                    }
+                    if ((*j)->remoteAppName.isEmpty())
+                    {
+                        notificationOK = true;
+                        break;
+                    }
+                    else if (an.getPublisherProgram() != (*j)->remoteAppName)
+                        continue;
+
+                    notificationOK = true;
+                    break;
+                }
+            }
+
+            if (!notificationOK)
+                return;
+
+        }
         if ( an.getState() == psPublished)
         {
             trace(QString("SendRPC category %1 key %2").arg(an.getCategory()).arg(an.getKey()));
@@ -411,18 +455,23 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             else if ( an.getCategory() == rpcConstants::LocalStationCategory)
             {
                 //localServerName = an.getKey();
-                RPCPubSub::subscribe( rpcConstants::StationCategory );  //want ALL keys - but do it once we know who WE are!
+//                if (!servers.contains(an.getKey()))
+//                    RPCPubSub::subscribe( rpcConstants::StationCategory );  //want ALL keys - but do it once we know who WE are!
             }
             else if ( an.getCategory() == rpcConstants::StationCategory)
             {
                 QString server = an.getKey();
-                for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
+                if (!servers.contains(server))
                 {
-                    for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
+                    servers.append(server);
+                    for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
                     {
-                        if ((*j)->runType == ConnectServer && (*j)->serverName.isEmpty())
+                        for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
                         {
-                            RPCPubSub::subscribeRemote(server, i.key());
+                            if ((*j)->runType == ConnectServer && (*j)->serverName.isEmpty())
+                            {
+                                RPCPubSub::subscribeRemote(server, i.key());
+                            }
                         }
                     }
                 }
@@ -736,6 +785,7 @@ void TSendDM::subscribeApps()
 
     catMap.clear();
     connectables.clear();
+    servers.clear();
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
     MinosConfig *config = MinosConfig::getMinosConfig();
@@ -753,19 +803,19 @@ void TSendDM::subscribeApps()
     {
         if ((*i)->appType == "None")
         {
-
+            // no action
         }
         else if ((*i)->appType == "AppStarter")
         {
-
+            // no action
         }
         else if ((*i)->appType == "BandMap")
         {
-
+            // no action
         }
         else if ((*i)->appType == "Chat")
         {
-
+            // no action - done in chat server
         }
         else if ((*i)->appType == "Keyer")
         {
@@ -773,19 +823,19 @@ void TSendDM::subscribeApps()
         }
         else if ((*i)->appType == "LineControl")
         {
-
+            // no action except in keyer
         }
         else if ((*i)->appType == "Logger")
         {
-
+            // no action
         }
         else if ((*i)->appType == "Monitor")
         {
-
+            // no action
         }
          else if ((*i)->appType == "Other")
         {
-
+            // no action
         }
         else if ((*i)->appType == "RigControl")
         {
@@ -803,20 +853,25 @@ void TSendDM::subscribeApps()
         else if ((*i)->appType == "Server")
         {
             catMap[rpcConstants::LocalStationCategory].push_back((*i));
+            catMap[rpcConstants::StationCategory].push_back((*i));
         }
     }
 
-    for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
+    if (!servers.contains(config->getThisServerName()))
     {
-        for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
+        servers.append(config->getThisServerName());
+        for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
         {
-            if ((*j)->runType == RunLocal)
+            for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
             {
-                rpc->subscribeRemote(config->getThisServerName(), i.key());
-            }
-            else if ((*j)->runType == ConnectServer && !(*j)->serverName.isEmpty())
-            {
-                rpc->subscribeRemote((*j)->serverName, i.key());
+                if ((*j)->runType == RunLocal)
+                {
+                    rpc->subscribeRemote(config->getThisServerName(), i.key());
+                }
+                else if ((*j)->runType == ConnectServer && !(*j)->serverName.isEmpty())
+                {
+                    rpc->subscribeRemote((*j)->serverName, i.key());
+                }
             }
         }
     }
