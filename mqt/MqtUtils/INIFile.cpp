@@ -320,7 +320,11 @@ void INIFile::endGroup()
 {
     inGroup = false;
 }
-
+void INIFile::clear()
+{
+    sections.clear();
+    fileDirty = true;
+}
 void INIFile::loadINIFile()
 {
     INISection *thisSect;

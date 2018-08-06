@@ -305,6 +305,7 @@ bool configSort( const QSharedPointer<RunConfigElement> c1, const QSharedPointer
 void MinosConfig::saveAll()
 {
     config.startGroup();
+    config.clear();
     QVector <QSharedPointer<RunConfigElement> > newList = elelist;
     qSort(newList.begin(), newList.end(), configSort);
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = newList.begin(); i != newList.end(); i++ )
