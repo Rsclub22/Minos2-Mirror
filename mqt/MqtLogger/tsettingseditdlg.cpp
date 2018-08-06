@@ -17,9 +17,12 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
     initialSection = bundle->getSection();
 
     QSettings settings;
-    QByteArray geometry = settings.value("EntrySettings/geometry").toByteArray();
+    QByteArray geometry = settings.value("EntrySettings/geometry/" + bundle->getBundle()).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
+
+    QByteArray state = settings.value("EntrySettings/SplittterState/" + bundle->getBundle()).toByteArray();
+    ui->splitter->restoreState(state);
 
     baseTitle = windowTitle();
 
@@ -27,6 +30,12 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
     ui->CopyButton->setText("Copy " + bundle->getBundle());
     ui->DeleteButton->setText("Delete " + bundle->getBundle());
     ui->renameButton->setText("Rename " + bundle->getBundle());
+}
+void TSettingsEditDlg::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QSettings settings;
+    QByteArray state = ui->splitter->saveState();
+    settings.setValue("EntrySettings/SplitterState/" + bundle->getBundle(), state);
 }
 void TSettingsEditDlg::ShowCurrentSectionOnly()
 {
@@ -312,7 +321,7 @@ void TSettingsEditDlg::on_SectionsList_itemSelectionChanged()
 void TSettingsEditDlg::doCloseEvent()
 {
     QSettings settings;
-    settings.setValue("EntrySettings/geometry", saveGeometry());
+    settings.setValue("EntrySettings/geometry/" + bundle->getBundle(), saveGeometry());
 }
 void TSettingsEditDlg::reject()
 {
@@ -324,3 +333,4 @@ void TSettingsEditDlg::accept()
     doCloseEvent();
     QDialog::accept();
 }
+
