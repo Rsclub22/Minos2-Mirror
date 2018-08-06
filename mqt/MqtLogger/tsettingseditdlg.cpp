@@ -69,7 +69,6 @@ void TSettingsEditDlg::showSections(QString currSection)
 
    qSort(sections.begin(), sections.end(),
              [this](const QString &first, const QString &second) { return sectionLessThan(bundle, first, second); });
-   setWindowTitle(baseTitle + " - " + bundle->getBundle() + " for " + bundle->getSection()) ;
 
    int offset = 0;
    for ( int i = 0; i < sections.size(); i++ )
@@ -108,6 +107,7 @@ void TSettingsEditDlg::showSection()
       ui->OptionsTable->setVisible(false);
       bundle->openSection( bundle->noneBundle );
    }
+   setWindowTitle(baseTitle + " - " + bundle->getBundle() + " for \"" + bundle->getSection() + "\"") ;
 
    ui->NewSectionButton->setEnabled(!currSectionOnly);
    ui->DeleteButton->setEnabled(currSectionOnly?false:( offset > 0 ));
