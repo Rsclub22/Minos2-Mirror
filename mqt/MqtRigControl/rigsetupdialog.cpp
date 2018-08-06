@@ -256,7 +256,7 @@ void RigSetupDialog::addRadio()
 
     AddRadioDialog getRadioName_Rig(availRadios, radio);
     getRadioName_Rig.setWindowTitle("Add Radio and Radio Model");
-    if (getRadioName_Rig.exec() == !QDialog::Accepted)
+    if (getRadioName_Rig.exec() != QDialog::Accepted)
     {
         return;
     }

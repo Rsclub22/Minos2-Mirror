@@ -1044,7 +1044,7 @@ void RigSetupForm::addTransVerter()
 {
 
     AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
-    if (addTransDialog.exec() == !QDialog::Accepted)
+    if (addTransDialog.exec() != QDialog::Accepted)
     {
         return;
     }
@@ -1198,7 +1198,7 @@ void RigSetupForm::changeBand()
     int tabNum = ui->transVertTab->currentIndex();
 
     AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
-    if (addTransDialog.exec() == !QDialog::Accepted)
+    if (addTransDialog.exec() != QDialog::Accepted)
     {
         return;
     }

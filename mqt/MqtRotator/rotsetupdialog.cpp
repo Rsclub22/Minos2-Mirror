@@ -619,7 +619,7 @@ void RotSetupDialog::addAntenna()
 
     AddAntennaDialog getAntennaName_Rot(availAntennas, rotator);
     getAntennaName_Rot.setWindowTitle("Add Antenna and Rotator Model");
-    if (getAntennaName_Rot.exec() == !QDialog::Accepted)
+    if (getAntennaName_Rot.exec() != QDialog::Accepted)
     {
         return;
     }
