@@ -29,6 +29,7 @@
 #include "ui_tlogcontainer.h"
 
 TLogContainer *LogContainer = nullptr;
+static QString defLayoutText = " (default)";
 
 SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 {}
@@ -1284,10 +1285,11 @@ void TLogContainer::updateLayoutsMenu()
 
     QWidget *tw = ui->ContestPageControl->currentWidget();
     TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
-    QString currentLayout;
     if (f)
     {
-        currentLayout = f->getCurScreenLayout();
+        QString currentLayout = f->getCurScreenLayout();
+        QString defaultLayout;
+        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, defaultLayout );
 
         ScreenConfigFile scf;
         scf.loadFile();
@@ -1295,7 +1297,14 @@ void TLogContainer::updateLayoutsMenu()
         for(QMap<QString, SC>::iterator i = scf.configs.begin(); i != scf.configs.end(); i++ )
         {
             QAction *act =  new QAction(this);
-            act->setText((*i).name);
+            if ((*i).name == defaultLayout)
+            {
+                act->setText((*i).name + defLayoutText);
+            }
+            else
+            {
+                act->setText((*i).name);
+            }
             connect(act, SIGNAL(triggered()),
                     this, SLOT(selectLayout()));
             act->setCheckable(true);
@@ -1324,6 +1333,11 @@ void TLogContainer::selectLayout()
         action->setChecked(true);
         lastLayoutSelected = action;
         QString selText = action->text();
+        if (selText.endsWith(defLayoutText))
+        {
+            selText.chop(defLayoutText.size());
+
+        }
         selectLayout(selText);
     }
 }

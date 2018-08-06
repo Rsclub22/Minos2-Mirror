@@ -9,6 +9,8 @@
 #include "ScreenConfigManager.h"
 #include "ui_ScreenConfigManager.h"
 
+static QString defLayoutText = " (default)";
+
 ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ScreenConfigManager)
@@ -27,6 +29,8 @@ ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
         curConfigName = tslf->getCurScreenLayout();
+
+    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, defaultConfigName );
 }
 int ScreenConfigManager::exec()
 {
@@ -50,7 +54,14 @@ void ScreenConfigManager::showDetails()
     {
         if ((*i).name == curConfigName)
             crow = j;
-        ui->layoutList->addItem((*i).name);
+        if ((*i).name ==  defaultConfigName)
+        {
+            ui->layoutList->addItem((*i).name + defLayoutText);
+        }
+        else
+        {
+            ui->layoutList->addItem((*i).name);
+        }
         j++;
     }
     ui->layoutList->setCurrentRow(crow);
@@ -82,18 +93,27 @@ void ScreenConfigManager::accept()
     doCloseEvent();
     QDialog::accept();
 }
+static QString stripDefaultDecoration(QString s)
+{
+    if (s.endsWith(defLayoutText))
+    {
+        s.chop(defLayoutText.size());
+
+    }
+    return s;
+}
 void ScreenConfigManager::on_layoutList_itemSelectionChanged()
 {
     if (!suppressItemSelect)
     {
-        curConfigName = ui->layoutList->currentItem()->text();
+        curConfigName = stripDefaultDecoration(ui->layoutList->currentItem()->text());
         checkEnabled();
     }
 }
 
 void ScreenConfigManager::on_layoutList_itemDoubleClicked(QListWidgetItem * /*item*/)
 {
-    curConfigName = ui->layoutList->currentItem()->text();
+    curConfigName = stripDefaultDecoration(ui->layoutList->currentItem()->text());
     if (curConfigName == scf.defaultLayoutName)
         return;
 
@@ -194,6 +214,7 @@ void ScreenConfigManager::on_applyButton_clicked()
     // write it back, or the screen redraw doesn't work
     scf.dumpFile();
 
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpCurrentLayout, curConfigName );
     LogContainer->selectLayout(curConfigName);
     LogContainer->applyScreenLayouts();
 }
@@ -201,4 +222,10 @@ void ScreenConfigManager::on_applyButton_clicked()
 void ScreenConfigManager::on_cancelButton_clicked()
 {
     close();
+}
+
+void ScreenConfigManager::on_makeDefaultButton_clicked()
+{
+    defaultConfigName = curConfigName;
+    showDetails();
 }

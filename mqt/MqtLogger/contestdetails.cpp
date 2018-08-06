@@ -284,7 +284,7 @@ void ContestDetails::setDetails(  )
       contest->myloc.loc.setValue( temp );
       contest->validateLoc();
    }
-   ui->LocatorEdit->setText(contest->myloc.loc.getValue());
+   ui->LocatorEdit->setText(contest->myloc.loc.getValue().trimmed());
 
    ui->AllowLoc4CB->setChecked(contest->allowLoc4.getValue());    // bool               // ?? contest
    ui->AllowLoc8CB->setChecked(contest->allowLoc8.getValue());    // bool               // ?? contest

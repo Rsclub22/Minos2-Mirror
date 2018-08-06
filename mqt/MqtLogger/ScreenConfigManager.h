@@ -45,12 +45,15 @@ private slots:
 
     void on_cancelButton_clicked();
 
+    void on_makeDefaultButton_clicked();
+
 private:
     Ui::ScreenConfigManager *ui;
     bool suppressItemSelect = false;
 
     ScreenConfigFile scf;
     QString curConfigName;
+    QString defaultConfigName;
     void showDetails();
     void checkEnabled();
 

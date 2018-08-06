@@ -11,6 +11,7 @@
 #include "MLogFile.h"
 #include "INIFile.h"
 #include "profiles.h"
+#include "ScreenConfigFile.h"
 
 AppSettingsBundle::AppSettingsBundle():
     SettingsBundle()
@@ -71,6 +72,11 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpEditor, "Editor", "Notepad.exe", "", "Default editor", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod1, "Statistics Period 1", 10, "", "Statistics Period 1", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod2, "Statistics Period 2", 60, "", "Statistics Period 2", false ) ) );
+
+        {
+            QString temp = ScreenConfigFile::defaultLayoutName;
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.toUtf8().constData(), "", "hint", false ) ) );
+        }
         break;
     case epENTRYPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepCall, "Call", "", "Call Used", "Call sign used", false ) ) );

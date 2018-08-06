@@ -192,7 +192,6 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    // open the settings bundle files
    initialiseINI();
 
-   screenLayout.setInitialValue(ScreenConfigFile::defaultLayoutName);
    // preset the stacked info
 
    statsPeriod1.setInitialValue(MinosParameters::getMinosParameters() ->getStatsPeriod1());
@@ -218,6 +217,9 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    showUnworked.setInitialValue(bTemp);
 
    QString temp;
+   MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, temp );
+   screenLayout.setInitialValue(temp);
+
    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpStackFrame, temp );
    for (int i = 0; i < STACKITEMS; i++)
    {
