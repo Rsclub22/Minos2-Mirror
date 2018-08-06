@@ -641,7 +641,7 @@ void RotSetupDialog::addAntenna()
   //loadSettingsToTab(tabNum);
   //saveAntenna(tabNum);
   ui->antennaTab->setCurrentIndex(tabNum);
-  //emit antennaTabChanged();
+  emit antennaTabChanged();
 
 
 }
