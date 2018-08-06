@@ -313,6 +313,8 @@ void TSingleLogFrame::clearScreenLayout()
             {
                 QWidget *tw = qsa->takeWidget();
                 qsa->deleteLater();
+                tw->hide();
+                tw->setParent(this);
                 QWidget *aux = dynamic_cast<StackedInfoFrame *>(tw);
                 if (aux)
                 {
