@@ -43,6 +43,7 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
            baseRow->vbl->insertWidget(k, e);
        }
     }
+    ui->addRowButton->setVisible(vbl->count() == 0);
 }
 
 ScreenConfig::~ScreenConfig()
@@ -138,6 +139,7 @@ void ScreenConfig::addBefore(ScreenConfigRow *r)
     ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
     vbl->insertWidget( pos, baseRow);
     baseRow->addLeft(nullptr);
+    ui->addRowButton->setVisible(vbl->count() == 0);
 
 }
 void ScreenConfig::remove(ScreenConfigRow *r)
@@ -158,6 +160,7 @@ void ScreenConfig::remove(ScreenConfigRow *r)
         taken->widget()->deleteLater();
         delete taken;
     }
+    ui->addRowButton->setVisible(vbl->count() == 0);
 }
 void ScreenConfig::addAfter(ScreenConfigRow *r)
 {
@@ -173,6 +176,7 @@ void ScreenConfig::addAfter(ScreenConfigRow *r)
     ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
     vbl->insertWidget( pos + 1, baseRow);
     baseRow->addLeft(nullptr);
+    ui->addRowButton->setVisible(vbl->count() == 0);
 }
 
 bool ScreenConfig::checkOk(ScreenConfigElement *e)
@@ -226,4 +230,5 @@ void ScreenConfig::on_addRowButton_clicked()
     }
 
     addAfter(dynamic_cast<ScreenConfigRow *>(wlast));
+    ui->addRowButton->setVisible(vbl->count() == 0);
 }

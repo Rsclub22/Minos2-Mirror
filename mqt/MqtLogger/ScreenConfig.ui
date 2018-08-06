@@ -79,7 +79,7 @@
      <item>
       <widget class="QPushButton" name="addRowButton">
        <property name="text">
-        <string>Add Row (Below)</string>
+        <string>Add Row</string>
        </property>
       </widget>
      </item>
