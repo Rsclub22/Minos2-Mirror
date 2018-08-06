@@ -378,9 +378,15 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 if ((*j)->runType == RunLocal)
                 {
                     if (an.getPublisherServer() != (*j)->serverName)
+                    {
+                        //trace("RunLocal server " + an.getPublisherServer() + " " + (*j)->serverName);
                         continue;
+                    }
                     if (an.getPublisherProgram() != (*j)->appName)
+                    {
+                        //trace("RunLocal appName " + an.getPublisherProgram() + " " + (*j)->appName);
                         continue;
+                    }
 
                     notificationOK = true;
                     break;
@@ -394,6 +400,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                     }
                     else if (an.getPublisherServer() != (*j)->serverName)
                     {
+                        //trace("ConnectServer server " + an.getPublisherServer() + " " + (*j)->serverName);
                         continue;
                     }
                     if ((*j)->remoteAppName.isEmpty())
@@ -402,7 +409,10 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                         break;
                     }
                     else if (an.getPublisherProgram() != (*j)->remoteAppName)
+                    {
+                        //trace("ConnectServer appName " + an.getPublisherProgram() + " " + (*j)->appName);
                         continue;
+                    }
 
                     notificationOK = true;
                     break;
@@ -442,7 +452,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 rigCache.addRigList(an.getValue());
                 radioLoaded = true;
                 emit setRadioLoaded();
-                emit setRadioList(an.getValue());
+                emit setRadioList();
             }
             else if ( an.getCategory() == rpcConstants::RotatorCategory && an.getKey() == rpcConstants::rotatorList )
             {
@@ -450,7 +460,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 rotatorCache.addRotList(an.getValue());
                 rotatorLoaded = true;
                 emit RotatorLoaded();
-                emit RotatorList(an.getValue());
+                emit RotatorList();
             }
             else if ( an.getCategory() == rpcConstants::LocalStationCategory)
             {

@@ -88,11 +88,10 @@ signals:
       void setBandMapLoaded();
 
       void RotatorLoaded();
-      void RotatorList(QString);
+      void RotatorList();
 
       void setRadioLoaded();
-      void setRadioList(QString);
-      void setRadioName(QString);
+      void setRadioList();
 
       void setKeyerLoaded();
 

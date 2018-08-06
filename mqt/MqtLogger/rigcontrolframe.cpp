@@ -665,10 +665,9 @@ void RigControlFrame::loadMemories()
     loadRunButtonLabels();
 }
 
-void RigControlFrame::setRadioList(QString s)
+void RigControlFrame::setRadioList()
 {
-    listOfRadios.clear();
-    listOfRadios = s.split(":");
+    listOfRadios = LogContainer->sendDM->rigs();
 
     ui->radioNameSel->clear();
     ui->radioNameSel->addItem("");

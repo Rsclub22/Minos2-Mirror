@@ -47,7 +47,7 @@ public:
 
     void setRotatorLoaded();
 
-    void setRotatorList(QString);
+    void setRotatorList();
     void setRotatorState(const QString &s);
     void setRotatorBearing(const QString &s);
     void setRotatorAntennaName(const QString &s);

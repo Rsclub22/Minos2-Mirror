@@ -433,17 +433,18 @@ bool RotControlFrame::isRotatorLoaded()
 {
     return rotatorLoaded;
 }
-void RotControlFrame::setRotatorList(QString s)
+void RotControlFrame::setRotatorList()
 {
-    QStringList rots = s.split(":");
+    QStringList rots = LogContainer->sendDM->rotators();
+
     ui->antennaName->clear();
     ui->antennaName->addItem("");
     ui->antennaName->addItems(rots);
 
     if (ct && !ct->isProtected())
+    {
         setRotatorAntennaName(ct->antennaName.getValue().toString());
-        //ui->antennaName->setCurrentText(ct->rotatorName.getValue());
-
+    }
 }
 
 

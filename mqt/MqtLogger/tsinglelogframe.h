@@ -187,7 +187,7 @@ private slots:
     void on_BandMapLoaded();
 
     void on_RadioLoaded();
-    void on_SetRadioList(QString);
+    void on_SetRadioList();
     void on_SetBandList(QString);
     void on_SetMode(QString);
     void on_SetFreq(QString);
@@ -197,7 +197,7 @@ private slots:
     void on_SetRitEnableState(bool s);
 
     void on_RotatorLoaded();
-    void on_RotatorList(QString);
+    void on_RotatorList();
     void on_RotatorPresetList(QString);
     void on_RotatorStatus(QString);
     void on_RotatorBearing(QString);

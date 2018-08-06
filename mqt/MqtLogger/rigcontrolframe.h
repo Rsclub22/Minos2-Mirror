@@ -111,7 +111,7 @@ public:
 
 
     void setRadioLoaded();
-    void setRadioList(QString);
+    void setRadioList();
     void setBandList(QString);
     void setMode(QString);
     void setFreq(QString);

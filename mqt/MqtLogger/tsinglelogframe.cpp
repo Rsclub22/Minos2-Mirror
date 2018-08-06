@@ -108,7 +108,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     // RigControl Updates
     // From rig controller
     connect(LogContainer->sendDM, SIGNAL(setRadioLoaded()), this, SLOT(on_RadioLoaded()));
-    connect(LogContainer->sendDM, SIGNAL(setRadioList(QString)), this, SLOT(on_SetRadioList(QString)));
+    connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
 
     // To rig controller
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
@@ -122,7 +122,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     // Rotator updates
     // From rotator controller
     connect(LogContainer->sendDM, SIGNAL(RotatorLoaded()), this, SLOT(on_RotatorLoaded()));
-    connect(LogContainer->sendDM, SIGNAL(RotatorList(QString)), this, SLOT(on_RotatorList(QString)));
+    connect(LogContainer->sendDM, SIGNAL(RotatorList()), this, SLOT(on_RotatorList()));
 
     // To rotator controller
     connect(FKHRotControlFrame, SIGNAL(sendRotator(rpcConstants::RotateDirection , int  )), this, SLOT(sendRotator(rpcConstants::RotateDirection , int  )));
@@ -1241,9 +1241,9 @@ bool TSingleLogFrame::isRadioLoaded()
    return FKHRigControlFrame->isRadioLoaded();
 }
 
-void TSingleLogFrame::on_SetRadioList(QString s)
+void TSingleLogFrame::on_SetRadioList()
 {
-    FKHRigControlFrame->setRadioList(s);
+    FKHRigControlFrame->setRadioList();
 }
 
 void TSingleLogFrame::on_SetBandList(QString s)
@@ -1413,9 +1413,9 @@ bool TSingleLogFrame::isRotatorLoaded()
 {
    return rotatorLoaded;
 }
-void TSingleLogFrame::on_RotatorList(QString s)
+void TSingleLogFrame::on_RotatorList()
 {
-    FKHRotControlFrame->setRotatorList(s);
+    FKHRotControlFrame->setRotatorList();
 }
 
 void TSingleLogFrame::on_RotatorPresetList(QString s)
