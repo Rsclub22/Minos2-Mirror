@@ -198,6 +198,7 @@ void RigControlFrame::setFreq(QString freq)
         tuneButtonMap[0]->freq = freq;
         tuneButtonMap[1]->freq = freq;
         curTuneButton = tuneButtonMap[0];
+        trace("curTuneButton initialised to button 1");
     }
     else if (curTuneButton)
     {
@@ -781,12 +782,14 @@ void RigControlFrame::setRadioState(QString s)
 void RigControlFrame::setTpm(int t)
 {
     // tpm change received from rig control
-    if (t && t <= tuneButData::NUM_TUNEBUTTONS)
+    if (t > 0 && t <= tuneButData::NUM_TUNEBUTTONS)
     {
+        trace("Current tune button set to button " + QString::number(t));
         curTuneButton = tuneButtonMap[t - 1];
     }
     else
     {
+        trace("Current tune button set to null");
         curTuneButton = nullptr;
     }
     updateTuneButtons();
