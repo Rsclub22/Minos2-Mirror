@@ -375,6 +375,8 @@ void ContestDetails::setDetails(  )
    ui->MGMCheckBox->setChecked(contest->MGMContestRules.getValue());
    refreshOps();
 
+
+   ui->screenLayoutCombo->clear();
    ScreenConfigFile scf;
    scf.loadFile();
 
