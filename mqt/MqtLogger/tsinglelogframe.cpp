@@ -619,13 +619,16 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     MinosLoggerEvents::SendShowOperators();
 
+    LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+    LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
+
+    LogContainer->sendDM->notifyRigChanges();
+    LogContainer->sendDM->notifyRotChanges();
+
     FKHRigControlFrame->on_ContestPageChanged();
     FKHRotControlFrame->on_ContestPageChanged();
 
     updateQSODisplay();
-
-    LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
-    LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
 
     emit do_repaint();
 }

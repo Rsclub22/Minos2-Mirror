@@ -80,7 +80,12 @@ class TSendDM : public QObject
       const RigState &getRigState(const QString &);
       const RigDetails &getRigDetails(const QString &);
 
-   private slots:
+      void notifyRigChanges();
+
+      
+      void notifyRotChanges();
+
+private slots:
       void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
       void on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
 

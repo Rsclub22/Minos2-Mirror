@@ -75,6 +75,11 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ui->txvertStat->setVisible(false);
     ui->TxVertLabel->setVisible(false);
 
+    bool tpm;
+    TContestApp::getContestApp() ->displayBundle.getBoolProfile( edpShowTPM, tpm );
+
+    ui->tpmBox->setVisible(tpm);
+
     // init memory button data before radio connection
     setRadioName(radioName, "");
 
@@ -166,7 +171,7 @@ void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
 
 void RigControlFrame::setRadioLoaded()
 {
-    traceMsg(QString("Set Radio Loaded"));
+    traceMsg(QString("%1 Set Radio Loaded").arg(ct?ct->uuid:""));
     radioLoaded = true;
     ui->modelbl->setVisible(true);
     setTpm(1);
@@ -193,15 +198,17 @@ void RigControlFrame::setFreq(QString freq)
     }
     traceMsg(QString("Set Freq = %1").arg(freq));
 
-    if (tuneButtonMap[0]->freq.isEmpty() && tuneButtonMap[1]->freq.isEmpty())
+//    if (tuneButtonMap[0]->freq.isEmpty() && tuneButtonMap[1]->freq.isEmpty())
+//    {
+//        tuneButtonMap[0]->freq = freq;
+//        tuneButtonMap[1]->freq = freq;
+//        curTuneButton = tuneButtonMap[0];
+//        trace(QString("curTuneButton initialised to button 1 freq %1").arg(freq));
+//    }
+//    else
+    if (curTuneButton)
     {
-        tuneButtonMap[0]->freq = freq;
-        tuneButtonMap[1]->freq = freq;
-        curTuneButton = tuneButtonMap[0];
-        trace("curTuneButton initialised to button 1");
-    }
-    else if (curTuneButton)
-    {
+        trace(QString("curTuneButton %1 freq set to %2").arg(curTuneButton->memNo).arg(freq));
         curTuneButton->freq = freq;
     }
 
@@ -367,16 +374,13 @@ void RigControlFrame::radioBandFreq(int index)
                 {
                      noRadioSendOutFreq(f);
                 }
-
             }
        }
-
     }
     else
     {
         traceMsg(QString("RigContFrame: Freq the same or index out of range"));
     }
-
 }
 
 void RigControlFrame::sendFreq(QString f)
@@ -632,7 +636,7 @@ void RigControlFrame::sendModeToRadio(QString m)
 
 void RigControlFrame::setRadioName(QString radNam, QString mode)
 {
-    traceMsg(QString("Set RadioName = %1 mode = %2").arg(radNam).arg(mode));
+    traceMsg(QString("Set RadioName = %1 mode = %2 contest %3").arg(radNam).arg(mode).arg(ct?ct->uuid:""));
     if (radNam == NORADIO)
     {
         return;
@@ -736,7 +740,7 @@ void RigControlFrame::setBandList(QString b)
 
                         if (cf > bi.fhigh || cf < bi.flow)
                         {
-                            trace(ct->uuid + " RigControlFrame::setBandList set frequency to default for band " + cb);
+                            trace((ct?ct->uuid:QString()) + " RigControlFrame::setBandList set frequency to default for band " + cb);
                             radioBandFreq(i + 1);
                         }
                         break;
@@ -784,12 +788,12 @@ void RigControlFrame::setTpm(int t)
     // tpm change received from rig control
     if (t > 0 && t <= tuneButData::NUM_TUNEBUTTONS)
     {
-        trace("Current tune button set to button " + QString::number(t));
+        trace(QString("%1 Current tune button set to button %2").arg(ct?ct->uuid:QString()).arg(t));
         curTuneButton = tuneButtonMap[t - 1];
     }
     else
     {
-        trace("Current tune button set to null");
+        trace(QString("%1 Current tune button set to null").arg(ct?ct->uuid:QString()));
         curTuneButton = nullptr;
     }
     updateTuneButtons();

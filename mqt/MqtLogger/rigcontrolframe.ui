@@ -263,7 +263,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="tpmBox">
        <property name="title">
         <string>Tune Freqs</string>
        </property>

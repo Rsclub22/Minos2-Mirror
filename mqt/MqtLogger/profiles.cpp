@@ -77,6 +77,7 @@ BundleFile::BundleFile( PROFILES p )
             QString temp = ScreenConfigFile::defaultLayoutName;
             entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.toUtf8().constData(), "", "hint", false ) ) );
         }
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowTPM, "ShowTPM", false, "", "hint", false ) ) );
         break;
     case epENTRYPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepCall, "Call", "", "Call Used", "Call sign used", false ) ) );

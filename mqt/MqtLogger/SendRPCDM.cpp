@@ -360,6 +360,139 @@ void TSendDM::sendRotatorPreset(QString s)
     rpc.queueCall( rotSelected );
 }
 //---------------------------------------------------------------------------
+void TSendDM::notifyRigChanges()
+{
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    if (!rigSelected.isEmpty())
+    {
+        RigState &selState = rigCache.getState(rigSelected);
+        QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
+        RigDetails &selDetail = rigCache.getDetails(rigSelected);
+        QString selDetailsUuid = selDetail.getSelectedContest(loggerUuid).getValue();
+        if (!selStateUuid.isEmpty())
+        {
+            QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
+            for (int i = 0; i < frames.size(); i++)
+            {
+                TSingleLogFrame *tslf = frames[i];
+                QString frameUuid = tslf->getContest()->uuid;
+
+                if (selStateUuid == frameUuid)
+                {
+                    trace("Rig state distribution for " + selStateUuid);
+                    if (selState.tpm().isDirty())
+                    {
+                        trace("SendRPC Rig set tpm " + QString::number(selState.tpm().getValue()));
+                        tslf->on_SetRadioTpm(selState.tpm().getValue());
+                    }
+                    if (selState.mode().isDirty())
+                    {
+                        trace("SendRPC Rig set mode " + selState.mode().getValue());
+                        tslf->on_SetMode(selState.mode().getValue());
+                    }
+                    if (selState.freq().isDirty())
+                    {
+                        trace("SendRPC Rig set freq " + convertFreqToStr(selState.freq().getValue()));
+                        tslf->on_SetFreq(convertFreqToStr(selState.freq().getValue()));
+                    }
+                    if (selState.status().isDirty())
+                    {
+                        trace("SendRPC Rig set status " + selState.status().getValue());
+                        tslf->on_SetRadioStatus(selState.status().getValue());
+                    }
+                    selState.clearDirty();
+                }
+                if (selDetailsUuid == frameUuid)
+                {
+                    trace("Rig details distribution for " + selDetailsUuid);
+                    if (selDetail.bandList().isDirty())
+                    {
+                        trace("SendRPC Rig set bandList " + selDetail.bandList().getValue());
+                        tslf->on_SetBandList(selDetail.bandList().getValue());
+                    }
+                    if (selDetail.transverterStatus().isDirty())
+                    {
+                        trace(QString("SendRPC Rig set transverter status ") + (selDetail.transverterStatus().getValue() ? " True" : " False"));
+                        tslf->on_SetRadioTxVertState( selDetail.transverterStatus().getValue() );
+                    }
+                    if (selDetail.ritEnableStatus().isDirty())
+                    {
+                        trace(QString("SendRPC Rig set ritEnable status ") + (selDetail.ritEnableStatus().getValue() ? " True" : " False"));
+                        tslf->on_SetRitEnableState( selDetail.ritEnableStatus().getValue());
+                    }
+                    selDetail.clearDirty();
+
+                }
+            }
+        }
+    }
+}
+
+void TSendDM::notifyRotChanges()
+{
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
+    if (!rotSelected.isEmpty())
+    {
+        AntennaState &selState = rotatorCache.getState(rotSelected);
+        QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
+        AntennaDetail &selDetail = rotatorCache.getDetails(rotSelected);
+        QString selDetailUuid = selState.getSelectedContest(loggerUuid).getValue();
+        if (!selStateUuid.isEmpty())
+        {
+            QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
+            for (int i = 0; i < frames.size(); i++)
+            {
+                TSingleLogFrame *tslf = frames[i];
+                QString frameUuid = tslf->getContest()->uuid;
+
+                if (selStateUuid == frameUuid)
+                {
+                    trace("Rotator state distribution for " + selStateUuid);
+
+                    if (selState.bearing().isDirty())
+                    {
+                        trace("SendRPC Rotator set bearing " + selState.bearing().getValue());
+                        tslf->on_RotatorBearing(selState.bearing().getValue());
+                    }
+                    if (selState.status().isDirty())
+                    {
+                        trace("SendRPC Rotator set status " + selState.status().getValue());
+                        tslf->on_RotatorStatus(selState.status().getValue());
+                    }
+                    selState.clearDirty();
+                }
+                if (selDetailUuid == frameUuid)
+                {
+                    trace("Rotator details distribution for " + selDetailUuid);
+                    if (selDetail.maxAzimuth().isDirty())
+                    {
+                        trace(QString("SendRPC Rotator set maxAzimuth %1").arg(selDetail.maxAzimuth().getValue()));
+                        tslf->on_RotatorMaxAzimuth(QString::number(selDetail.maxAzimuth().getValue()));
+                    }
+                    if (selDetail.minAzimuth().isDirty())
+                    {
+                        trace(QString("SendRPC Rotator set minAzimuth %1").arg(selDetail.minAzimuth().getValue()));
+                        tslf->on_RotatorMinAzimuth(QString::number(selDetail.minAzimuth().getValue()));
+                    }
+                    if (selDetail.cwCcwCmdEnable().isDirty())
+                    {
+                        trace(QString("SendRPC Rotator set cwCcwCmdEnable %1").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False"));
+                        tslf->on_cwCcwCmdEnable(selDetail.cwCcwCmdEnable().getValue());
+                    }
+                    selDetail.clearDirty();
+
+                }
+                if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
+                {
+                    trace("SendRPC Rotator set presets " + rotatorCache.getRotatorPresets(rotSelected));
+                    tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
+                }
+            }
+            rotatorCache.rotatorPresetsClearDirty();
+        }
+    }
+}
+
 void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
     // PubSub notifications
@@ -488,135 +621,10 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             }
         }
 
+        notifyRigChanges();
+        notifyRotChanges();
+
         QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-        {
-            PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-            if (!rigSelected.isEmpty())
-            {
-                RigState &selState = rigCache.getState(rigSelected);
-                QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
-                RigDetails &selDetail = rigCache.getDetails(rigSelected);
-                QString selDetailsUuid = selDetail.getSelectedContest(loggerUuid).getValue();
-                if (!selStateUuid.isEmpty())
-                {
-
-                    for (int i = 0; i < frames.size(); i++)
-                    {
-                        TSingleLogFrame *tslf = frames[i];
-                        QString frameUuid = tslf->getContest()->uuid;
-
-                        if (selStateUuid == frameUuid)
-                        {
-                            trace("Rig state distribution for " + selStateUuid);
-                            if (selState.tpm().isDirty())
-                            {
-                                trace("SendRPC Rig set tpm " + QString::number(selState.tpm().getValue()));
-                                tslf->on_SetRadioTpm(selState.tpm().getValue());
-                            }
-                            if (selState.mode().isDirty())
-                            {
-                                trace("SendRPC Rig set mode " + selState.mode().getValue());
-                                tslf->on_SetMode(selState.mode().getValue());
-                            }
-                            if (selState.freq().isDirty())
-                            {
-                                trace("SendRPC Rig set freq " + convertFreqToStr(selState.freq().getValue()));
-                                tslf->on_SetFreq(convertFreqToStr(selState.freq().getValue()));
-                            }
-                            if (selState.status().isDirty())
-                            {
-                                trace("SendRPC Rig set status " + selState.status().getValue());
-                                tslf->on_SetRadioStatus(selState.status().getValue());
-                            }
-                            selState.clearDirty();
-                        }
-                        if (selDetailsUuid == frameUuid)
-                        {
-                            trace("Rig details distribution for " + selDetailsUuid);
-                            if (selDetail.bandList().isDirty())
-                            {
-                                trace("SendRPC Rig set bandList " + selDetail.bandList().getValue());
-                                tslf->on_SetBandList(selDetail.bandList().getValue());
-                            }
-                            if (selDetail.transverterStatus().isDirty())
-                            {
-                                trace(QString("SendRPC Rig set transverter status ") + (selDetail.transverterStatus().getValue() ? " True" : " False"));
-                                tslf->on_SetRadioTxVertState( selDetail.transverterStatus().getValue() );
-                            }
-                            if (selDetail.ritEnableStatus().isDirty())
-                            {
-                                trace(QString("SendRPC Rig set ritEnable status ") + (selDetail.ritEnableStatus().getValue() ? " True" : " False"));
-                                tslf->on_SetRitEnableState( selDetail.ritEnableStatus().getValue());
-                            }
-                            selDetail.clearDirty();
-
-                        }
-                    }
-                }
-            }
-            {
-                PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
-                if (!rotSelected.isEmpty())
-                {
-                    AntennaState &selState = rotatorCache.getState(rotSelected);
-                    QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
-                    AntennaDetail &selDetail = rotatorCache.getDetails(rotSelected);
-                    QString selDetailUuid = selState.getSelectedContest(loggerUuid).getValue();
-                    if (!selStateUuid.isEmpty())
-                    {
-                        for (int i = 0; i < frames.size(); i++)
-                        {
-                            TSingleLogFrame *tslf = frames[i];
-                            QString frameUuid = tslf->getContest()->uuid;
-
-                            if (selStateUuid == frameUuid)
-                            {
-                                trace("Rotator state distribution for " + selStateUuid);
-
-                                if (selState.bearing().isDirty())
-                                {
-                                    trace("SendRPC Rotator set bearing " + selState.bearing().getValue());
-                                    tslf->on_RotatorBearing(selState.bearing().getValue());
-                                }
-                                if (selState.status().isDirty())
-                                {
-                                    trace("SendRPC Rotator set status " + selState.status().getValue());
-                                    tslf->on_RotatorStatus(selState.status().getValue());
-                                }
-                                selState.clearDirty();
-                            }
-                            if (selDetailUuid == frameUuid)
-                            {
-                                trace("Rotator details distribution for " + selDetailUuid);
-                                if (selDetail.maxAzimuth().isDirty())
-                                {
-                                    trace(QString("SendRPC Rotator set maxAzimuth %1").arg(selDetail.maxAzimuth().getValue()));
-                                    tslf->on_RotatorMaxAzimuth(QString::number(selDetail.maxAzimuth().getValue()));
-                                }
-                                if (selDetail.minAzimuth().isDirty())
-                                {
-                                    trace(QString("SendRPC Rotator set minAzimuth %1").arg(selDetail.minAzimuth().getValue()));
-                                    tslf->on_RotatorMinAzimuth(QString::number(selDetail.minAzimuth().getValue()));
-                                }
-                                if (selDetail.cwCcwCmdEnable().isDirty())
-                                {
-                                    trace(QString("SendRPC Rotator set cwCcwCmdEnable %1").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False"));
-                                    tslf->on_cwCcwCmdEnable(selDetail.cwCcwCmdEnable().getValue());
-                                }
-                                selDetail.clearDirty();
-
-                            }
-                            if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
-                            {
-                                trace("SendRPC Rotator set presets " + rotatorCache.getRotatorPresets(rotSelected));
-                                tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
-                            }
-                        }
-                        rotatorCache.rotatorPresetsClearDirty();
-                    }
-                }
-            }
-        }
         for (int i = 0; i < frames.size(); i++)
         {
             //TSingleLogFrame *tslf = frames[i];
