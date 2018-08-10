@@ -2,12 +2,21 @@
 #include <QPalette>
 #include <QApplication>
 #include <QFileDialog>
+#include <QProcessEnvironment>
 
-void appStartup(const QString &appName)
+void appStartup(const QString &pappName)
 {
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QString envAppName = env.value("MQTRPCNAME", "") ;
+
+    if (envAppName.isEmpty())
+    {
+        envAppName = pappName;
+    }
+
     QApplication::setOrganizationName( "Minos2Qt" );
     QApplication::setOrganizationDomain( "g0gjv.org.uk" );
-    QApplication::QCoreApplication::setApplicationName( appName );
+    QApplication::QCoreApplication::setApplicationName( envAppName );
 
     QSettings settings;
     QVariant qfont = settings.value( "font" );
@@ -61,6 +70,6 @@ void appStartup(const QString &appName)
 #endif
     }
 
-    enableTrace( "./TraceLog", appName + "_" );
+    enableTrace( "./TraceLog", envAppName + "_" );
 }
 
