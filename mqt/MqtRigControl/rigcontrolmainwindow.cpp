@@ -428,6 +428,15 @@ void RigControlMainWindow::upDateRadio()
 
                 if (radio->get_serialConnected())
                 {
+                    // test volume
+                    if (radio->supportVolControl())
+                    {
+                        logMessage(QString("radio supports volume control"));
+                        value_t value;
+                        radio->getVolume(RIG_VFO_CURR, &value);
+                        logMessage(QString("volume level = ").arg(QString::number(value.f)));
+                    }
+
 
                     writeWindowTitle(appName);
                     sendStatusToLogConnected();
