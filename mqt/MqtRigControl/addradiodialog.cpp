@@ -10,10 +10,12 @@ AddRadioDialog::AddRadioDialog(QStringList _availRadios, RigControl* rig, QWidge
     availRadios = _availRadios;
 
 
+
     rig->getRigList(ui->radioModel);
-    connect (ui->radioName, SIGNAL(editingFinished()), this, SLOT(editingFinished()));
+    radioModel = ui->radioModel->currentText();
     connect (ui->radioModel, SIGNAL(currentIndexChanged(int)), this, SLOT(radioModelSelect(int)));
-    connect (ui->buttonBox, SIGNAL(accepted()), this, SLOT(accepted()));
+
+
 }
 
 AddRadioDialog::~AddRadioDialog()
@@ -22,22 +24,7 @@ AddRadioDialog::~AddRadioDialog()
 }
 
 
-void AddRadioDialog::editingFinished()
-{
-    if (ui->radioName->text() != "")
-    {
-        if (availRadios.contains(ui->radioName->text()))
-        {
-            QMessageBox msgBox;
-            msgBox.setText("Radio name already exists,\n please use another name");
-            msgBox.exec();
-            ui->radioName->setFocus();
-        }
-    }
 
-    radioName = ui->radioName->text().trimmed();
-
-}
 
 
 void AddRadioDialog::radioModelSelect(int /*index*/)
@@ -48,15 +35,47 @@ void AddRadioDialog::radioModelSelect(int /*index*/)
 }
 
 
-void AddRadioDialog::accepted()
+
+
+// override done function to validate data entry
+
+void AddRadioDialog::done(int r)
 {
-
-    if (radioModel == "")
+    if(QDialog::Accepted == r)  // ok was pressed
     {
-        radioModel = ui->radioModel->currentText();
-    }
+        if (ui->radioName->text() == "")
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Radio Name Empty\nPlease enter a name for the radio");
+            msgBox.exec();
+            ui->radioName->setFocus();
+            return;
+        }
+        else if (availRadios.contains(ui->radioName->text()))
+        {
+            QMessageBox msgBox;
+            msgBox.setModal( true );
+            msgBox.setText("Radio name already exists,\n please use another name");
+            msgBox.exec();
+            return;
+        }
+        else
+        {
+            radioName = ui->radioName->text().trimmed();
+            QDialog::done(r);
+            return;
+        }
 
+    }
+    else    // cancel, close or exc was pressed
+    {
+        QDialog::done(r);
+        return;
+    }
 }
+
+
+
 
 
 
