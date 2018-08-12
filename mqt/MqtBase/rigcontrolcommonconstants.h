@@ -132,4 +132,9 @@ const QStringList bandFreq = { "28170000",
 const char TVSWMSG_START = ':';
 const char TVSWMSG_TERM = '\n';
 
+// these two values should be the same
+// max slider, matches max vol
+const float VOLMULT = 200.0;
+const int SLIDERMAX = 200;
+
 #endif // RIGCONTROLCOMMONCONSTANTS_H

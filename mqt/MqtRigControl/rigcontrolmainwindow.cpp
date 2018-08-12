@@ -248,6 +248,10 @@ void RigControlMainWindow::initActionsConnections()
     // standalone test
     connect(ui->selFreq, SIGNAL(clicked(bool)), this, SLOT(selFreqClicked()));
     connect(ui->freqInputBox, SIGNAL(editingFinished()), this, SLOT(selFreqClicked()));
+
+    connect(ui->volSlider, SIGNAL(sliderReleased()), this, SLOT(setVol()));
+    connect(ui->volSlider, SIGNAL(valueChanged(int)), this, SLOT(setVol(int)));
+
 }
 
 void RigControlMainWindow::setupBandFreq()
@@ -431,10 +435,9 @@ void RigControlMainWindow::upDateRadio()
                     // test volume
                     if (radio->supportVolControl())
                     {
-                        logMessage(QString("radio supports volume control"));
-                        value_t value;
-                        radio->getVolume(RIG_VFO_CURR, &value);
-                        logMessage(QString("volume level = ").arg(QString::number(value.f)));
+                        supVolume = true;
+                        ui->volSlider->setMaximum(SLIDERMAX);
+                        ui->volSlider->setMinimum(0);
                     }
 
 
@@ -720,6 +723,17 @@ void RigControlMainWindow::getRadioInfo()
             // error
             logMessage(QString("Get radioInfo: Get RIT error").arg(QString::number(retCode)));
             hamlibError(retCode, "Request RIT");
+        }
+    }
+
+    if (radio->get_serialConnected() && supVolume)
+    {
+        retCode = getVolume(RIG_VFO_CURR);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request Volume");
         }
     }
 
@@ -1020,6 +1034,8 @@ void RigControlMainWindow::chkRadioMgmModeChanged()
     }
 }
 
+/************************** Mode  *********************************/
+
 
 int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 {
@@ -1158,6 +1174,8 @@ int RigControlMainWindow::getMinosModeIndex(QString mode)
     return index;
 }
 
+/************************** RIT *********************************/
+
 void RigControlMainWindow::setRitDisplayVisible(bool state)
 {
     ui->ritLbl->setVisible(state);
@@ -1224,6 +1242,61 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     logRitOn = status;
     setRitOnOffDisplay(logRitOn);
  }
+
+/************************** Volume *********************************/
+
+
+int RigControlMainWindow::getVolume(vfo_t vfo)
+{
+    int retCode = 0;
+    int vol = 0;
+    value_t value;
+    retCode = radio->getVolume(vfo, &value);
+    value.f = value.f * VOLMULT;
+    vol = qRound(value.f);
+    qDebug() << "get vol = " << vol;
+    if (vol > 200)
+    {
+        vol = 200;
+    }
+    if (vol < 0)
+    {
+        vol = 0;
+    }
+
+    if (vol != curVol)
+    {
+        curVol = vol;
+        ui->volSlider->setValue(curVol);
+    }
+
+
+    return retCode;
+
+}
+
+
+int RigControlMainWindow::setVolume(vfo_t vfo, int level)
+{
+    int retCode = 0;
+    float volLevel = level;
+    volLevel = volLevel/VOLMULT;
+    qDebug() << "level is = " << volLevel;
+    retCode = radio->setVolume(vfo, volLevel);
+    return retCode;
+}
+
+
+void RigControlMainWindow::setVol()
+{
+    int level = ui->volSlider->value();
+    setVolume(RIG_VFO_CURR, level);
+}
+
+void RigControlMainWindow::setVol(int level)
+{
+    setVolume(RIG_VFO_CURR, level);
+}
 
 void RigControlMainWindow::displayPassband(pbwidth_t width)
 {
