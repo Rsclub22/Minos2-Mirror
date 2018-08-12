@@ -239,6 +239,10 @@ void RigCache::setMode(const PubSubName &name, const QString &mode)
 {
     rigStates[name].setMode(mode);
 }
+void RigCache::setVolume(const PubSubName &name, const int level)
+{
+    rigStates[name].setVolume(level);
+}
 
 void RigCache::setTransverterOffset(const PubSubName &name, double transverterOffset)
 {

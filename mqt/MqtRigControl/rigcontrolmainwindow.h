@@ -153,7 +153,7 @@ private:
     void sendRitEnableStatus(bool status);
     void sendRitEnableStatusLogger();
     void sendTpm(int tpm);
-
+    void sendVolToLog(int level);
     //void sendRxPbFlagToLog();
 
     void setMode(QString mode, vfo_t vfo);
@@ -192,6 +192,7 @@ private:
     void setRitEnableDisplay(bool s);
     int getVolume(vfo_t vfo);
     int setVolume(vfo_t vfo, int level);
+
 private slots:
 
     void onStdInRead(QString);
@@ -204,6 +205,7 @@ private slots:
 
     void loggerSetFreq(QString freq);
     void loggerSetMode(QString mode);
+    void loggerSetVolume(int level);
     void currentRadioSettingChanged(QString radioName);
     void updateSelectRadioBox();
     void aboutRigConfig();
@@ -217,8 +219,9 @@ private slots:
 
     void setRitFreqStr(QString ritFreq);
     void setRitLogStatus(bool status);
-    void setVol();
-    void setVol(int level);
+
+
+
 signals:
 
 

@@ -115,6 +115,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
     connect(FKHRigControlFrame, SIGNAL(sendRitFreq(QString)), this, SLOT(sendRadioRitFreq(QString)));
+    connect(FKHRigControlFrame, SIGNAL(sendVolumeRadio(int)), this, SLOT(sendRadioVolume(int)));
     connect(FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
@@ -1233,6 +1234,14 @@ void TSingleLogFrame::on_NoRadioSetMode(QString m)
     }
 }
 
+void TSingleLogFrame::on_SetVolume(int level)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        FKHRigControlFrame->setVolume(level);
+    }
+}
+
 void TSingleLogFrame::on_RadioLoaded()
 {
     FKHRigControlFrame->setRadioLoaded();
@@ -1317,6 +1326,16 @@ void TSingleLogFrame::sendRadioRitStatus(bool status)
         LogContainer->sendDM->sendRigControlRitStatus(this, status);
     }
 }
+
+void TSingleLogFrame::sendRadioVolume(int level)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigControlVolumeLevel(this, level);
+    }
+}
+
 void TSingleLogFrame::sendTpm(int t, QString f)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())

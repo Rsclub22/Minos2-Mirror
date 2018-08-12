@@ -75,6 +75,9 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ui->txvertStat->setVisible(false);
     ui->TxVertLabel->setVisible(false);
 
+    ui->horizontalSlider->setMaximum(SLIDERMAX);
+    ui->horizontalSlider->setMinimum(0);
+
     bool tpm;
     TContestApp::getContestApp() ->displayBundle.getBoolProfile( edpShowTPM, tpm );
 
@@ -147,6 +150,9 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
 
     connect(ui->bandSelCombo, SIGNAL(activated(int)), this, SLOT(radioBandFreq(int)));
+
+    connect(ui->horizontalSlider, SIGNAL(sliderReleased()), this, SLOT(setRadioVol()));
+    connect(ui->horizontalSlider, SIGNAL(valueChanged(int)), this, SLOT(setRadioVol(int)));
 
     if (!isRadioLoaded())
     {
@@ -420,6 +426,25 @@ void RigControlFrame::noRadioSendOutMode(QString m)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     tslf->on_NoRadioSetMode(mode);
 
+}
+
+
+void RigControlFrame::setVolume(int level)
+{
+    ui->horizontalSlider->setValue(level);
+}
+
+
+void RigControlFrame::setRadioVol()
+{
+    int level = ui->horizontalSlider->value();
+    emit sendVolumeRadio(level);
+
+}
+
+void RigControlFrame::setRadioVol(int level)
+{
+    emit sendVolumeRadio(level);
 }
 
 

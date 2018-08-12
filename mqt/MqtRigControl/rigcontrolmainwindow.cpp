@@ -239,6 +239,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, SIGNAL(setMode(QString)), this, SLOT(loggerSetMode(QString)));
     connect(msg, SIGNAL(selectLoggerRadio(PubSubName, QString)), this, SLOT(onSelectRadio(PubSubName, QString)));
     connect(msg, SIGNAL(setTpm(int, QString)), this, SLOT(setTpm(int, QString)));
+    connect(msg, SIGNAL(setVolume(int)), this, SLOT(loggerSetVolume(int)));
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
@@ -249,8 +250,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->selFreq, SIGNAL(clicked(bool)), this, SLOT(selFreqClicked()));
     connect(ui->freqInputBox, SIGNAL(editingFinished()), this, SLOT(selFreqClicked()));
 
-    connect(ui->volSlider, SIGNAL(sliderReleased()), this, SLOT(setVol()));
-    connect(ui->volSlider, SIGNAL(valueChanged(int)), this, SLOT(setVol(int)));
+
 
 }
 
@@ -432,12 +432,12 @@ void RigControlMainWindow::upDateRadio()
 
                 if (radio->get_serialConnected())
                 {
-                    // test volume
+
                     if (radio->supportVolControl())
                     {
                         supVolume = true;
-                        ui->volSlider->setMaximum(SLIDERMAX);
-                        ui->volSlider->setMinimum(0);
+                   //     ui->volSlider->setMaximum(SLIDERMAX);
+                    //    ui->volSlider->setMinimum(0);
                     }
 
 
@@ -1174,6 +1174,13 @@ int RigControlMainWindow::getMinosModeIndex(QString mode)
     return index;
 }
 
+void RigControlMainWindow::loggerSetVolume(int level)
+{
+
+    setVolume(RIG_VFO_CURR, level);
+
+}
+
 /************************** RIT *********************************/
 
 void RigControlMainWindow::setRitDisplayVisible(bool state)
@@ -1267,7 +1274,7 @@ int RigControlMainWindow::getVolume(vfo_t vfo)
     if (vol != curVol)
     {
         curVol = vol;
-        ui->volSlider->setValue(curVol);
+        //ui->volSlider->setValue(curVol);
     }
 
 
@@ -1287,16 +1294,7 @@ int RigControlMainWindow::setVolume(vfo_t vfo, int level)
 }
 
 
-void RigControlMainWindow::setVol()
-{
-    int level = ui->volSlider->value();
-    setVolume(RIG_VFO_CURR, level);
-}
 
-void RigControlMainWindow::setVol(int level)
-{
-    setVolume(RIG_VFO_CURR, level);
-}
 
 void RigControlMainWindow::displayPassband(pbwidth_t width)
 {
@@ -1524,6 +1522,17 @@ void RigControlMainWindow::sendModeToLog(QString mode)
         msg->rigCache.setMode(psname, mode);
     }
 }
+
+void RigControlMainWindow::sendVolToLog(int level)
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send volume to logger = %1").arg(QString::number(level)));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setVolume(psname, level);
+    }
+}
+
 
 void RigControlMainWindow::sendTransVertStatus(bool status)
 {

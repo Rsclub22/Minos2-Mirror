@@ -325,6 +325,25 @@ void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
 
     rpc.queueCall( rigSelected );
 }
+
+
+void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
+{
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setVolume(rigSelected, level);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+    st->addMember( level, rpcConstants::rigVolLevel);
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+}
+
 void TSendDM::sendRigControlTpm(TSingleLogFrame *tslf, int tpm, QString &freq)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
@@ -394,6 +413,11 @@ void TSendDM::notifyRigChanges()
                     {
                         trace("SendRPC Rig set freq " + convertFreqToStr(selState.freq().getValue()));
                         tslf->on_SetFreq(convertFreqToStr(selState.freq().getValue()));
+                    }
+                    if (selState.volLevel().isDirty())
+                    {
+                        trace("SendRPC Rig set volume " + QString::number(selState.volLevel().getValue()));
+                        tslf->on_SetVolume(selState.volLevel().getValue());
                     }
                     if (selState.status().isDirty())
                     {
