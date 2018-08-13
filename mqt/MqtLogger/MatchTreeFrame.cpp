@@ -1,11 +1,16 @@
 #include "base_pch.h"
 #include "MinosLoggerEvents.h"
 #include "ContestApp.h"
-#include "MatchTreeFrame.h"
-#include "ui_MatchTreeFrame.h"
+#include "ListContact.h"
+#include "list.h"
+#include "contest.h"
 #include "htmldelegate.h"
 #include "MatchThread.h"
 #include "tlogcontainer.h"
+#include "cutils.h"
+
+#include "MatchTreeFrame.h"
+#include "ui_MatchTreeFrame.h"
 
 MatchTreeFrame::MatchTreeFrame(QWidget *parent) :
     QTreeView(parent),

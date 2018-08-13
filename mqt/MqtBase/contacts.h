@@ -11,6 +11,7 @@
 #define ContactsH 
 //----------------------------------------------------------------------------
 #include "base_pch.h"
+class MinosTestImport;
 
 // This header covers the structure of contests, logs, etc
 

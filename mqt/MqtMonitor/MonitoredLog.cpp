@@ -1,6 +1,7 @@
+#include "MinosTestImport.h"
 #include "MonitoredContestLog.h"
-#include "MonitoredLog.h"
 #include "MonitoringFrame.h"
+#include "MonitoredLog.h"
 
 MonitoredLog::MonitoredLog()
 {}

@@ -12,7 +12,8 @@
 #ifndef MultsImplH
 #define MultsImplH 
 #include "base_pch.h"
-
+#include "contest.h"
+#include "cutils.h"
 
 template < class itemtype >
 class MultList : public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >

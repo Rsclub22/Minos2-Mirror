@@ -9,7 +9,7 @@
 #include "base_pch.h"
 
 #include "riff.h"
-
+#include "cutils.h"
 #include "keyers.h" 
 #include "sbdriver.h"
 #include "soundsys.h"

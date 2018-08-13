@@ -1,7 +1,9 @@
 #include "base_pch.h"
+#include "contest.h"
+#include "htmldelegate.h"
+#include "cutils.h"
 #include "locTreeFrame.h"
 #include "ui_locTreeFrame.h"
-#include "htmldelegate.h"
 
 LocTreeFrame::LocTreeFrame(QWidget *parent) :
     QFrame(parent),

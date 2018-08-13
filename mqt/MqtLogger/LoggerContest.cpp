@@ -16,8 +16,10 @@
 #include "reg1test.h"
 #include "printfile.h"
 #include "enqdlg.h"
+#include "MinosTestImport.h"
 #include "MinosTestExport.h"
 #include "BandList.h"
+#include "latlong.h"
 
 #include "LoggerContest.h"
 
@@ -784,7 +786,7 @@ bool LoggerContestLog::GJVload( )
    buftostr( band );
    buftostr( name );
    buftostr( temp );
-   mycall = Callsign( strupr( temp ) );
+   mycall = Callsign( temp.toUpper() );
    buftostr( myloc.loc );
    buftostr( location );
 
@@ -1324,7 +1326,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                            {
                               text = text.left(spos ).trimmed();
                            }
-                           mycall.fullCall.setValue( strupr( text ) );
+                           mycall.fullCall.setValue( text.toUpper() );
                            mycall.valRes = CS_NOT_VALIDATED;
                            mycall.validate();
 
@@ -1334,7 +1336,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                                 stemp.toUpper().indexOf( "QTH LOCATOR SENT" ) == 0 )
                            {
                               // yes, contestx DOES say QRH!
-                              myloc.loc.setValue( strupr( text ) );
+                              myloc.loc.setValue( text.toUpper() );
                               validateLoc();
                            }
                            else

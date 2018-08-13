@@ -7,7 +7,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
-
+#include "contest.h"
+#include "ScreenContact.h"
 ScreenContact::ScreenContact() :
     logSequence( 0 ),
     time( false )

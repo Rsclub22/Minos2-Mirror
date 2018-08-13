@@ -1,8 +1,9 @@
 #include "base_pch.h"
-
+#include "contest.h"
+#include "latlong.h"
+#include "cutils.h"
 #include "LocCalcFrame.h"
 #include "ui_LocCalcFrame.h"
-#include "latlong.h"
 
 LocCalcFrame::LocCalcFrame(QWidget *parent) :
     QFrame(parent),

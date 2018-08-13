@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
+#include "BandList.h"
 #include "rigutils.h"
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
@@ -680,7 +681,7 @@ bool ContestContact::GJVload( int diskBlock )
    time.setTime( temp, DTGDISP );
 
    buftostr( temp );
-   cs = Callsign( strupr( temp ) );
+   cs = Callsign( temp.toUpper() );
    cs.valRes = CS_NOT_VALIDATED;
 
    buftostr( temp );

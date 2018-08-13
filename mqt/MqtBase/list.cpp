@@ -7,6 +7,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
+#include "cutils.h"
+#include "contacts.h"
+#include "ListContact.h"
+#include "list.h"
 class CsvReader
 {
     void checkString(QString &temp, QChar character, QList<QStringList> &csv);
@@ -163,7 +167,7 @@ bool ContactList::cslLoad( )
 
               if (parts.size() > 1)
               {
-                  rct->loc.loc.setValue( strupr( parts[ 1 ] ) );
+                  rct->loc.loc.setValue( parts[ 1 ].toUpper() );
                   rct->loc.valRes = LOC_NOT_VALIDATED;
               }
 

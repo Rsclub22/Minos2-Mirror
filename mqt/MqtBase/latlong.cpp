@@ -7,6 +7,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
+#include "cutils.h"
+
+#include "latlong.h"
 
 typedef struct transformelement
 {

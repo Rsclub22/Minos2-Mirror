@@ -4,6 +4,7 @@
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
+#include "ListContact.h"
 #include "tlogcontainer.h"
 #include "tqsoeditdlg.h"
 #include "tforcelogdlg.h"

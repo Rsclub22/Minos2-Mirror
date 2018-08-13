@@ -10,6 +10,7 @@
 
 #include "rotatorcommon.h"
 #include "LoggerContest.h"
+#include "contacts.h"
 #include "MinosTestExport.h"
 
 //==============================================================================

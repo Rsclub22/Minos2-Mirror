@@ -24,6 +24,7 @@
 #include "enqdlg.h"
 #include "AdifImport.h"
 #include "ScreenConfigManager.h"
+#include "MinosTestImport.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"

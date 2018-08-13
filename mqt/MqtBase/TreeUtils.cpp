@@ -7,6 +7,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
+#include "cutils.h"
+#include "contacts.h"
+#include "contest.h"
 #include "TreeUtils.h"
 
 GridColumn QSOTreeColumns[ LOGTREECOLS ] =

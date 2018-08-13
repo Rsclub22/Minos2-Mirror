@@ -8,9 +8,14 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
 #include <QHostInfo>
-
+#include "cutils.h"
 #include "Calendar.h"
 #include "CalendarList.h"
+#include "contacts.h"
+#include "ScreenContact.h"
+#include "MinosTestImport.h"
+
+#include "contest.h"
 
 BaseContestLog::BaseContestLog( )
 {

@@ -7,7 +7,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
-
+#include "contest.h"
+#include "ListContact.h"
 QString ListContact::getField( int ACol, const BaseContestLog *const curcon ) const
 {
    // only used to get fields for main log display

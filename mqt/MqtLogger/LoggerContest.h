@@ -10,10 +10,12 @@
 #ifndef LoggerContestH
 #define LoggerContestH 
 #include "base_pch.h"
+#include "cutils.h"
 //----------------------------------------------------------------------------
 #include "profiles.h"
 #include "rigmemcommondata.h"
 #include "PubSubValue.h"
+#include "contest.h"
 
 class DisplayContestContact;
 struct StanzaPos

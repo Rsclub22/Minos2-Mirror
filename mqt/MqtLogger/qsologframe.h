@@ -2,9 +2,12 @@
 #define QSOLOGFRAME_H
 
 #include "base_pch.h"
-
+#include "contacts.h"
+#include "ScreenContact.h"
 #include "focuswatcher.h"
 #include "validators.h"
+
+class ListContact;
 
 namespace Ui {
 class QSOLogFrame;

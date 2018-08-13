@@ -2,6 +2,7 @@
 #define TQSOEDITDLG_H
 
 #include "base_pch.h"
+#include "contacts.h"
 
 class QTreeWidgetItem;
 class MatchTreeItem;

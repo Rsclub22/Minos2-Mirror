@@ -7,7 +7,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
-
+#include "cutils.h"
+#include "contest.h"
+#include "MinosTestImport.h"
+#include "ScreenContact.h"
+#include "DisplayContestContact.h"
 //==========================================================================
 DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now )
       : BaseContact( ct, time_now ),

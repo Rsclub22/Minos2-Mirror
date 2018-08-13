@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "MatchCollection.h"
 
 TMatchCollection::TMatchCollection( )
 {

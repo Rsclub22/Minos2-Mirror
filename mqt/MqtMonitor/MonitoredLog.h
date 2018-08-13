@@ -3,6 +3,8 @@
 #include "base_pch.h"
 
 class MonitoringFrame;
+class MinosTestImport;
+
 class MonitoredLog
 {
    private:

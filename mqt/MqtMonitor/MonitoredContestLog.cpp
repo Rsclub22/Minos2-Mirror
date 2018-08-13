@@ -1,5 +1,5 @@
 #include "MonitoredContestLog.h"
-
+#include "DisplayContestContact.h"
 //=============================================================================================
 
 MonitoredContestLog::MonitoredContestLog() : BaseContestLog()
