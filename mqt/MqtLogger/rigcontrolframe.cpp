@@ -550,7 +550,7 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
 
     logData.callsign = sc.cs.fullCall.getValue();
     logData.freq = curFreq;
-    logData.locator = sc.loc.loc.getValue();
+    logData.locator = sc.loc.loc.getValue().trimmed();
     logData.mode = curMode;
 
     QStringList dt = dtg( true ).getIsoDTG().split('T');
@@ -560,7 +560,14 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
 
     //logData.bearing = sc.bearing;
 
-    logData.bearing = tslf->getBearingFrmQSOLog();
+    if (sc.loc.loc.getValue().trimmed().isEmpty())
+    {
+        logData.bearing = tslf->getCurrentBearing();
+    }
+    else
+    {
+        logData.bearing = tslf->getBearingFrmQSOLog();
+    }
     // load log data into memory
 }
 void RigControlFrame::getRigDetails(memoryData::memData &m)

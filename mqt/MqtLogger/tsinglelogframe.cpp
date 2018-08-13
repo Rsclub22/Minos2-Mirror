@@ -1,12 +1,5 @@
 #include "base_pch.h"
 #include <QScrollArea>
-//#include "contest.h"
-//#include "list.h"
-//#include "contacts.h"
-//#include "ScreenContact.h"
-//#include "MatchContact.h"
-//#include "ListContact.h"
-//#include "MatchCollection.h"
 #include "MinosLoggerEvents.h"
 
 #include "ContestApp.h"
@@ -906,6 +899,11 @@ ScreenContact &TSingleLogFrame::getScreenEntry()
 int TSingleLogFrame::getBearingFrmQSOLog()
 {
     return FKHRotControlFrame->getAngle(GJVQSOLogFrame->getBearing());
+}
+
+int TSingleLogFrame::getCurrentBearing()
+{
+    return FKHRotControlFrame->getCurrentBearing();
 }
 //---------------------------------------------------------------------------
 

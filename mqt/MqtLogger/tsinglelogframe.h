@@ -86,6 +86,7 @@ public:
 
     ScreenContact &getScreenEntry();
     int getBearingFrmQSOLog();
+    int getCurrentBearing();
 
     void refreshMults();
 

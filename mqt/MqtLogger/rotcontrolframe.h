@@ -54,6 +54,7 @@ public:
     void setRotatorMaxAzimuth(const QString &s);
     void setRotatorMinAzimuth(const QString &s);
     int getAngle(QString);
+    int getCurrentBearing();
 
     QString getBrgTxtFrmFrame();
     void setBrgFromRigFrmMemory(QString Brg);

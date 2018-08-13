@@ -442,6 +442,10 @@ void RigMemoryFrame::readActionSelected()
     // send detail to rotator control frame, locator will give bearing
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     tslf->transferDetails(m);
+    if (m.locator.isEmpty())
+    {
+        bearingActionSelected();
+    }
 
 }
 void RigMemoryFrame::writeMemory(int buttonNumber)

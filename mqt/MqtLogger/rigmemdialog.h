@@ -42,6 +42,7 @@ private slots:
     void on_cancelButton_clicked();
     void onFreqEditFinish();
 
+    void onLocEditFinish();
 private:
     Ui::RigMemDialog *ui;
     memoryData::memData *logData;
