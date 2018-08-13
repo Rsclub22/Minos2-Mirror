@@ -238,6 +238,10 @@ private slots:
     void on_FontChanged();
 
     void on_FreqEditFinished();
+    void on_SerRXEdit_textChanged(const QString &);
+
+    void on_SerTXEdit_textChanged(const QString &);
+
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 

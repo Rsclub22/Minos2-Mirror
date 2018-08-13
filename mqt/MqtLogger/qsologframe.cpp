@@ -844,7 +844,16 @@ void QSOLogFrame::on_RSTRXEdit_textChanged(const QString &/*arg1*/)
 {
     doGJVEditChange( ui->RSTRXEdit );
 }
+void QSOLogFrame::on_SerRXEdit_textChanged(const QString &/*arg1*/)
+{
+    doGJVEditChange( ui->SerRXEdit );
+}
 
+void QSOLogFrame::on_SerTXEdit_textChanged(const QString &/*arg1*/)
+{
+    doGJVEditChange( ui->SerTXEdit );
+
+}
 void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
 {
     // Don't let the dtg be changed when the contest is protected
@@ -1132,7 +1141,7 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
          }
       }
    }
-   if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) )
+   if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit ) )
    {
       getScreenEntry(); // make sure it is saved
       valid( cmCheckValid ); // make sure all single and cross field
@@ -1253,7 +1262,13 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
         if (!edit && (*vcp) == ssIl)
             ss = ssLineEditGreyBackground;
 
-        if (((*vcp)->wc->isEnabled() || ((*vcp) == ssIl && contest->serialMandatoryField.getValue())) && !( *vcp ) ->valid( command, screenContact ) )
+        if (
+                (
+                    (*vcp)->wc->isEnabled()
+                    || ((*vcp) == ssIl && contest->serialMandatoryField.getValue())
+                    )
+                && (!( *vcp ) ->valid( command, screenContact ) || !(*vcp)->tIfValid)
+            )
         {
             QString text = (*vcp)->wc->text().trimmed();
             if (!text.isEmpty())
@@ -1353,7 +1368,7 @@ void QSOLogFrame::selectField( QWidget *v )
         return ;
     }
 
-    if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) )
+    if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit ) )
     {
         valid( cmCheckValid ); // make sure all single and cross field
         doAutofill();
@@ -2526,3 +2541,5 @@ QString QSOLogFrame::getBearing()
 {
     return ui->BrgSt->text();
 }
+
+
