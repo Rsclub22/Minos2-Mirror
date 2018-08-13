@@ -10,6 +10,7 @@ AddAntennaDialog::AddAntennaDialog(QStringList _availAntennas, RotControl* rot, 
     availAntennas = _availAntennas;
 
     rot->getRotatorList(ui->rotatorModel);
+    rotatorModel = ui->rotatorModel->currentText();
     connect (ui->rotatorModel, SIGNAL(currentIndexChanged(int)), this, SLOT(rotatorModelSelect(int)));
 
 }
