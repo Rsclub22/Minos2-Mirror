@@ -393,6 +393,7 @@ void TSingleLogFrame::buildScreenLayout()
                 {
                     elementScrollArea = new QScrollArea();
                     elementScrollArea->setWidgetResizable(true);
+                    elementScrollArea->setFocusPolicy(Qt::NoFocus);
                     rowSplitters[j]->addWidget(elementScrollArea);
                 }
 

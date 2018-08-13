@@ -79,8 +79,10 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     MainOpFW = new FocusWatcher(ui->MainOpComboBox);
     ui->MainOpComboBox->setValidator(new UpperCaseValidator(false));
+    Op1String = ui->OperatorLabel->text();
     SecondOpFW = new FocusWatcher(ui->SecondOpComboBox);
     ui->SecondOpComboBox->setValidator(new UpperCaseValidator(false));
+    Op2String = ui->SecondOpLabel->text();
 
     connect(CallsignFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(RSTTXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
@@ -284,13 +286,21 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
     {
         ui->CommentsLabel->setText(colStr + CommentsLabelString);
     }
-    if (obj == ui->MainOpComboBox && in == false)
+    if (obj == ui->MainOpComboBox)
     {
-        MainOpComboBox_Exit();
+        ui->OperatorLabel->setText(colStr + Op1String);
+        if (in == false)
+        {
+            MainOpComboBox_Exit();
+        }
     }
-    if (obj == ui->SecondOpComboBox && in == false)
+    if (obj == ui->SecondOpComboBox)
     {
-        SecondOpComboBox_Exit();
+        ui->SecondOpLabel->setText(colStr + Op2String);
+        if (in == false)
+        {
+            SecondOpComboBox_Exit();
+        }
     }
 }
 void QSOLogFrame::setAsEdit(bool s, QString b)
@@ -1022,7 +1032,7 @@ void QSOLogFrame::EditControlEnter(QObject *Sender , QFocusEvent *event)
    current = dynamic_cast<QWidget *>(Sender);
    QLineEdit *tle = dynamic_cast<QLineEdit *>(Sender);
 
-   if (event->reason() == Qt::TabFocusReason || event->reason() == Qt::BacktabFocusReason)
+   if (tle && (event->reason() == Qt::TabFocusReason || event->reason() == Qt::BacktabFocusReason) )
    {
        MinosLoggerEvents::SendAfterTabFocusIn(tle);
    }

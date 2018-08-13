@@ -146,7 +146,9 @@ private:
     QString CommentsLabelString;
 
     FocusWatcher *MainOpFW;
+    QString Op1String;
     FocusWatcher *SecondOpFW;
+    QString Op2String;
 
     ErrorList errs;
 
