@@ -26,6 +26,8 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <QProcessEnvironment>
+
+
 #include <QDebug>
 
 
@@ -436,8 +438,12 @@ void RigControlMainWindow::upDateRadio()
                     if (radio->supportVolControl())
                     {
                         supVolume = true;
-                   //     ui->volSlider->setMaximum(SLIDERMAX);
-                    //    ui->volSlider->setMinimum(0);
+
+                    }
+
+                    if (radio->supportSignalStrength())
+                    {
+                        supSignalStrength = true;
                     }
 
 
@@ -690,6 +696,13 @@ void RigControlMainWindow::getRadioInfo()
     {
         logMessage(QString("Get radio frequency"));
         retCode = getAndSendFrequency(RIG_VFO_CURR);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get Freq error %1").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request Freq");
+
+        }
 
     }
 
@@ -735,6 +748,20 @@ void RigControlMainWindow::getRadioInfo()
             logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
             hamlibError(retCode, "Request Volume");
         }
+
+    }
+
+
+    if (radio->get_serialConnected() && supSignalStrength)
+    {
+        retCode = getSignalStrength(RIG_VFO_CURR);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request Volume");
+        }
+
     }
 
 
@@ -1177,7 +1204,7 @@ int RigControlMainWindow::getMinosModeIndex(QString mode)
 void RigControlMainWindow::loggerSetVolume(int level)
 {
 
-    setVolume(RIG_VFO_CURR, level);
+    //setVolume(RIG_VFO_CURR, level);
 
 }
 
@@ -1256,25 +1283,28 @@ void RigControlMainWindow::setRitLogStatus(bool status)
 int RigControlMainWindow::getVolume(vfo_t vfo)
 {
     int retCode = 0;
-    int vol = 0;
     value_t value;
     retCode = radio->getVolume(vfo, &value);
-    value.f = value.f * VOLMULT;
-    vol = qRound(value.f);
-    qDebug() << "get vol = " << vol;
-    if (vol > 200)
+    if (retCode >= 0)
     {
-        vol = 200;
-    }
-    if (vol < 0)
-    {
-        vol = 0;
-    }
+        int vol = 0;
+        value.f = value.f * VOLMULT;
+        vol = qRound(value.f);
+        qDebug() << "get vol = " << vol;
+        if (vol > 200)
+        {
+            vol = 200;
+        }
+        if (vol < 0)
+        {
+            vol = 0;
+        }
 
-    if (vol != curVol)
-    {
-        curVol = vol;
-        //ui->volSlider->setValue(curVol);
+        if (vol != curVol)
+        {
+            curVol = vol;
+            sendVolToLog(curVol);
+        }
     }
 
 
@@ -1294,7 +1324,26 @@ int RigControlMainWindow::setVolume(vfo_t vfo, int level)
 }
 
 
+/******************* Signal Strength **************************/
 
+
+int RigControlMainWindow::getSignalStrength(vfo_t vfo)
+{
+    int retCode = 0;
+    value_t value;
+    retCode = radio->getSignalStrength(vfo, &value);
+    if (retCode >= 0)
+    {
+        if (curSignalStrength != value.i)
+        {
+            curSignalStrength = value.i;
+            qDebug() << "Signal Strength = " << curSignalStrength;
+        }
+    }
+
+    return retCode;
+
+}
 
 void RigControlMainWindow::displayPassband(pbwidth_t width)
 {

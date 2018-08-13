@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>684</width>
-    <height>230</height>
+    <width>740</width>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,6 +19,20 @@
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <item>
+         <widget class="QProgressBar" name="progressBar">
+          <property name="value">
+           <number>24</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="labelsmeter">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QLabel" name="SelectRadioTitle">
           <property name="minimumSize">
@@ -407,7 +421,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>684</width>
+     <width>740</width>
      <height>21</height>
     </rect>
    </property>

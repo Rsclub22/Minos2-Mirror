@@ -284,6 +284,8 @@ public:
     int setVolume(vfo_t vfo, float val);
     int getVolume(vfo_t vfo, value_t *val);
 
+    bool supportSignalStrength();
+    int getSignalStrength(vfo_t vfo, value_t *val);
 
 
 signals:

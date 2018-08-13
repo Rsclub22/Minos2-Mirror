@@ -134,7 +134,7 @@ const char TVSWMSG_TERM = '\n';
 
 // these two values should be the same
 // max slider, matches max vol
-const float VOLMULT = 200.0;
-const int SLIDERMAX = 200;
+const float VOLMULT = 100.0;
+const int SLIDERMAX = 100;
 
 #endif // RIGCONTROLCOMMONCONSTANTS_H

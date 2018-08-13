@@ -391,6 +391,24 @@ int RigControl::getVolume(vfo_t vfo, value_t *val)
     return rigGetLevel(vfo, RIG_LEVEL_AF, val);
 }
 
+
+/*************** Signal Strength Level Control  ********************************/
+
+bool RigControl::supportSignalStrength()
+{
+
+    return rigHasGetLevel(RIG_LEVEL_STRENGTH);
+}
+
+
+
+int RigControl::getSignalStrength(vfo_t vfo, value_t *val)
+{
+    return rigGetLevel(vfo, RIG_LEVEL_STRENGTH, val);
+}
+
+
+
 /*************** Level Control  ********************************/
 
 setting_t RigControl::rigHasGetLevel(setting_t level)

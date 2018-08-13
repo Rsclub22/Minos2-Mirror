@@ -78,6 +78,7 @@ private:
     QString transVertSwNum;
     bool logRitOn;
     bool supVolume = false;     // radio supports volume
+    bool supSignalStrength = false;
 
     const int PASSBAND_NOCHANGE = -1;
 
@@ -97,6 +98,7 @@ private:
     shortfreq_t rRitFreq = 0;
     QString sRitFreq;
     int curVol = 0;
+    int curSignalStrength = 0;
 
 
     SerialTVSwitch *serialTVSw = nullptr;
@@ -193,6 +195,7 @@ private:
     int getVolume(vfo_t vfo);
     int setVolume(vfo_t vfo, int level);
 
+    int getSignalStrength(vfo_t vfo);
 private slots:
 
     void onStdInRead(QString);
