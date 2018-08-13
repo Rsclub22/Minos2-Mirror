@@ -1168,85 +1168,92 @@ void QSOLogFrame::setScoreText( int dist, bool partial, bool xband )
 //---------------------------------------------------------------------------
 void QSOLogFrame::calcLoc( )
 {
-   QString gridref = ui->LocEdit->text().trimmed();
+    QString gridref = ui->LocEdit->text().trimmed();
 
-   if ( gridref.compare(oldloc, Qt::CaseInsensitive ) != 0 )
-   {
-      oldloc = gridref;
-      locValid = true;
-      double latitude;
-      double longitude;
-      double dist;
-      int brg;
+    if ( gridref.compare(oldloc, Qt::CaseInsensitive ) != 0 )
+    {
+        oldloc = gridref;
+        locValid = true;
+        double latitude;
+        double longitude;
+        double dist;
+        int brg = 0;
 
-      int locValres = lonlat( gridref, longitude, latitude );
-      if ( ( locValres ) != LOC_OK )
-         locValid = false;
+        int locValres = lonlat( gridref, longitude, latitude );
+        if ( ( locValres ) != LOC_OK )
+            locValid = false;
 
-      ScreenContact &sct = screenContact;
-      if ( ( sct.contactFlags & MANUAL_SCORE ) &&
-           !( sct.contactFlags & DONT_PRINT ) )
-      {
-         int thisscore = sct.contactScore;
-         setScoreText( thisscore, false, sct.contactFlags & XBAND );
-         ui->BrgSt->setText("MANUAL");
+        ScreenContact &sct = screenContact;
+        if ( ( sct.contactFlags & MANUAL_SCORE ) &&
+             !( sct.contactFlags & DONT_PRINT ) )
+        {
+            int thisscore = sct.contactScore;
+            setScoreText( thisscore, false, sct.contactFlags & XBAND );
+            ui->BrgSt->setText("MANUAL");
 
-      }
-      else
-         if ( ( locValid
-                || ( locValres == LOC_PARTIAL ) )
-              && contest->locValid )
-         {
-            contest->disbear( longitude, latitude, dist, brg );
-
-            if ( locValid )  	// just 4CHAR not enough
+        }
+        else
+            if ( ( locValid
+                   || ( locValres == LOC_PARTIAL ) )
+                 && contest->locValid )
             {
-               sct.bearing = brg;
+                if (contest->MGMContestRules.getValue())
+                {
+                    dist = contest->CalcCentres ( gridref, brg );
+                }
+                else
+                {
+                    contest->disbeara( longitude, latitude, dist, brg );
+                }
 
-               if ( !( sct.contactFlags & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
-               {
-                  sct.contactScore = static_cast<int>(dist);
-               }
+                if ( locValid )  	// just 4CHAR not enough
+                {
+                    sct.bearing = brg;
 
-            }
+                    if ( !( sct.contactFlags & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
+                    {
+                        sct.contactScore = static_cast<int>(dist);
+                    }
 
-            int offset = contest->bearingOffset.getValue();
+                }
 
-            QString rev;
-            if (offset)
-            {
-                rev += "O";
-            }
-            rev += ( MinosParameters::getMinosParameters() ->getMagneticVariation() ) ? "M" : "T" ;
-            int vb = varBrg( brg + offset);
-            if ( TContestApp::getContestApp() ->reverseBearing )
-            {
-               vb = normBrg( vb - 180 );
-               rev += "R";
-            }
-            setScoreText( static_cast< int> ( dist), ( locValres == LOC_PARTIAL ), sct.contactFlags & XBAND );
-            QString brgbuff;
-            const QChar degreeChar(0260); // octal value
-            if ( locValres == LOC_PARTIAL )
-            {
-               brgbuff = QString( "(%1%2%3)").arg(vb).arg(degreeChar).arg(rev );
+                int offset = contest->bearingOffset.getValue();
+
+                QString rev;
+                if (offset)
+                {
+                    rev += "O";
+                }
+                rev += ( MinosParameters::getMinosParameters() ->getMagneticVariation() ) ? "M" : "T" ;
+                int vb = varBrg( brg + offset);
+                if ( TContestApp::getContestApp() ->reverseBearing )
+                {
+                    vb = normBrg( vb - 180 );
+                    rev += "R";
+                }
+                setScoreText( static_cast< int> ( dist), ( locValres == LOC_PARTIAL ), sct.contactFlags & XBAND );
+                QString brgbuff;
+                const QChar degreeChar(0260); // octal value
+                if ( locValres == LOC_PARTIAL )
+                {
+                    brgbuff = QString( "(%1%2%3)").arg(vb).arg(degreeChar).arg(rev );
+                }
+                else
+                {
+                    brgbuff = QString( "%1%2%3").arg(vb).arg(degreeChar).arg(rev );
+                }
+                ui->BrgSt->setText(brgbuff);
+                MinosLoggerEvents::SendBrgStrToRot(brgbuff);
             }
             else
             {
-                brgbuff = QString( "%1%2%3").arg(vb).arg(degreeChar).arg(rev );
+                ui->DistSt->clear();
+                ui->BrgSt->clear();
+                sct.contactScore = -1;
+                sct.bearing = -1;
+                MinosLoggerEvents::SendBrgStrToRot("");
             }
-            ui->BrgSt->setText(brgbuff);
-            MinosLoggerEvents::SendBrgStrToRot(brgbuff);
-         }
-         else
-         {
-           ui->DistSt->clear();
-           ui->BrgSt->clear();
-            sct.contactScore = -1;
-            sct.bearing = -1;
-            MinosLoggerEvents::SendBrgStrToRot("");
-         }
-   }
+    }
 }
 //---------------------------------------------------------------------------
 bool QSOLogFrame::validateControls( validTypes command )   // do control validation

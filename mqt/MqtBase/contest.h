@@ -202,10 +202,15 @@ class BaseContestLog: public BaseLogList
       QString opsQSO2;
 
       int maxSerial = 0;
-      double ode = 0.0;
-      double odn = 0.0;
-      double cosodn  = 0.0;            /* cos of odn */
-      double sinodn  = 0.0;            /* sin of odn */
+      double odea = 0.0;
+      double odna = 0.0;
+      double cosodna  = 0.0;            /* cos of odn */
+      double sinodna  = 0.0;            /* sin of odn */
+
+      double odec = 0.0;
+      double odnc = 0.0;
+      double cosodnc  = 0.0;            /* cos of odn */
+      double sinodnc  = 0.0;            /* sin of odn */
 
       QString cfileName;
       QString publishedName;
@@ -321,9 +326,10 @@ class BaseContestLog: public BaseLogList
 
       // calcs
 
-      void disbear( double lon, double lat, double &dist, int &brg ) const;
+      void disbeara( double lon, double lat, double &dist, int &brg ) const;
+      void disbearc( double lon, double lat, double &dist, int &brg ) const;
       int CalcNearest( const QString &scalcloc );
-      int CalcCentres( const QString &scalcloc );
+      int CalcCentres(const QString &scalcloc , int &brg);
       bool getsdist(const QString &loc, QString &minloc, double &mindist );
       QSharedPointer<BaseContact> getBestDX( );
       QString dateRange( DTG dstyle );

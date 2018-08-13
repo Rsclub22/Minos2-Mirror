@@ -664,7 +664,7 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
             {
                 double dist;
                 int brg;
-                disbear( lon, lat, dist, brg );
+                disbeara( lon, lat, dist, brg );
                 m.bearing = brg;
             }
         }

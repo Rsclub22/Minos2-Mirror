@@ -178,25 +178,23 @@ void BaseContestLog::makeContact( bool timeNow, QSharedPointer<BaseContact>&lct 
 }
 void BaseContestLog::validateLoc( )
 {
-    if (MGMContestRules.getValue())
+    if ( myloc.validate( odea, odna ) == LOC_OK )
     {
-        Locator nloc;
-        nloc.loc.setValue(myloc.loc.getValue().left(4) + "MM");
-        if ( nloc.validate( ode, odn ) == LOC_OK )
-        {
-            cosodn = cos( odn );
-            sinodn = sin( odn );
-            locValid = true;
-            myloc.valRes = LOC_OK;
-        }
-        else
-            locValid = false;
-    }
-    else if ( myloc.validate( ode, odn ) == LOC_OK )
-    {
-        cosodn = cos( odn );
-        sinodn = sin( odn );
+        cosodna = cos( odna );
+        sinodna = sin( odna );
         locValid = true;
+    }
+    else
+        locValid = false;
+
+    Locator nloc;
+    nloc.loc.setValue(myloc.loc.getValue().left(4) + "MM");
+    if ( nloc.validate( odec, odnc ) == LOC_OK )
+    {
+        cosodnc = cos( odnc );
+        sinodnc = sin( odnc );
+        locValid = true;
+        myloc.valRes = LOC_OK;
     }
     else
         locValid = false;
@@ -215,7 +213,7 @@ void BaseContestLog::validateLoc( )
 /* Latitude is NS, Longtitude is EW                                  */
 /*                                                                   */
 /*********************************************************************/
-void BaseContestLog::disbear( double lon, double lat, double &dist, int &brg ) const
+void BaseContestLog::disbeara( double lon, double lat, double &dist, int &brg ) const
 //double lon ;                    /* other stations longtitude */
 //double lat ;                    /* other stations latitude */
 //int *dist ;                     /* resulting distance */
@@ -228,7 +226,7 @@ void BaseContestLog::disbear( double lon, double lat, double &dist, int &brg ) c
       brg = 0;
       return ;
    }
-   if ( almost_equal(lon, ode, 2) && almost_equal(lat, odn, 2) )        /* same square ! */ /* testing doubles for equality! */
+   if ( almost_equal(lon, odea, 2) && almost_equal(lat, odna, 2) )        /* same square ! */ /* testing doubles for equality! */
    {
       // same square - commenced Kilometre, so always 1
       dist = 1;
@@ -238,11 +236,11 @@ void BaseContestLog::disbear( double lon, double lat, double &dist, int &brg ) c
 
    double coslat = cos( lat );                    /* pre-calculate values */
    double sinlat = sin( lat );
-   double coscos = cosodn * coslat ;
+   double coscos = cosodna * coslat ;
 
    // first distance into dx
 
-   double co = cos( ode - lon ) * coscos + sinodn * sinlat ;
+   double co = cos( odea - lon ) * coscos + sinodna * sinlat ;
    double ca = atan( fabs( sqrt( 1.0 - co * co ) / co ) );
    if ( co < 0.0 )
       ca = pi - ca ;
@@ -250,8 +248,62 @@ void BaseContestLog::disbear( double lon, double lat, double &dist, int &brg ) c
 
    // and then the bearing
 
-   double si = sin( lon - ode ) * coscos ;
-   co = sinlat - sinodn * cos( ca );
+   double si = sin( lon - odea ) * coscos ;
+   co = sinlat - sinodna * cos( ca );
+   double az = atan( fabs( si / co ) );
+   if ( co < 0.0 )
+      az = pi - az ;
+   if ( si <  0.0 )
+      az = -az ;
+   if ( az < 0.0 )
+      az = az + 2.0 * pi ;
+
+   az = az / dr ;                      /* convert to degrees */
+   az += 0.5 ;                /* correct angle */
+   dx = ceil( dx );                      // adjust for commenced kilometer
+   dx += 0.5 ;              // make sure double truncates properly back to int
+   dist = dx ;			                  /* return result */
+   if ( static_cast<int>(az) == 0 )                  /* due north */
+      az = 360.00 ;                 	/* so show valid */
+   brg = static_cast< int > (az) ;                   /* and give it back as integer */
+}
+void BaseContestLog::disbearc( double lon, double lat, double &dist, int &brg ) const
+//double lon ;                    /* other stations longtitude */
+//double lat ;                    /* other stations latitude */
+//int *dist ;                     /* resulting distance */
+//int *brg ;                      /* resulting bearing */
+
+{
+   if ( myloc.valRes != LOC_OK )
+   {
+      dist = 1;
+      brg = 0;
+      return ;
+   }
+   if ( almost_equal(lon, odec, 2) && almost_equal(lat, odnc, 2) )        /* same square ! */ /* testing doubles for equality! */
+   {
+      // same square - commenced Kilometre, so always 1
+      dist = 1;
+      brg = 0 ;                       /* or bearing */
+      return ;                         /* just exit */
+   }
+
+   double coslat = cos( lat );                    /* pre-calculate values */
+   double sinlat = sin( lat );
+   double coscos = cosodnc * coslat ;
+
+   // first distance into dx
+
+   double co = cos( odec - lon ) * coscos + sinodnc * sinlat ;
+   double ca = atan( fabs( sqrt( 1.0 - co * co ) / co ) );
+   if ( co < 0.0 )
+      ca = pi - ca ;
+   double dx = 6371.291 * ca ;       /* 6371.291 is approved radius of earth */
+
+   // and then the bearing
+
+   double si = sin( lon - odec ) * coscos ;
+   co = sinlat - sinodnc * cos( ca );
    double az = atan( fabs( si / co ) );
    if ( co < 0.0 )
       az = pi - az ;
@@ -280,7 +332,7 @@ bool BaseContestLog::getsdist( const QString &loc, QString &minloc, double &mind
    int lres = lonlat( loc, lon, lat );
    if ( lres == LOC_OK || lres == LOC_SHORT )
    {
-      disbear( lon, lat, dist, brg );
+      disbeara( lon, lat, dist, brg );
       if ( dist < mindist )
       {
          mindist = dist;
@@ -337,7 +389,7 @@ int BaseContestLog::CalcNearest( const QString &qscalcloc )
    return static_cast<int>(mindist);
 }
 //---------------------------------------------------------------------------
-int BaseContestLog::CalcCentres( const QString &qscalcloc )
+int BaseContestLog::CalcCentres( const QString &qscalcloc, int &brg )
 {
    if ( qscalcloc.length() < 4 )
       return 0;	// only valid 4 or more fig locs
@@ -346,7 +398,6 @@ int BaseContestLog::CalcCentres( const QString &qscalcloc )
 
    QString temploc = qscalcloc.left(4) + "MM";
 
-   int brg;
    double dist = 0.0;
    double lon = 0.0;
    double lat = 0.0;
@@ -354,7 +405,7 @@ int BaseContestLog::CalcCentres( const QString &qscalcloc )
    int lres = lonlat( temploc, lon, lat );
    if (lres == LOC_OK)
    {
-        disbear(lon, lat, dist, brg);
+        disbearc(lon, lat, dist, brg);
    }
    return static_cast<int>(dist);
 }

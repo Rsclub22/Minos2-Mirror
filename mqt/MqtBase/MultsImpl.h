@@ -125,7 +125,7 @@ class MultList : public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >
                   QString brgbuff;
                   int valRes = lonlat( ce->central.loc.getValue(), longitude, latitude );
                   if ( ( valRes == LOC_OK ) && ct ->locValid )
-                     ct ->disbear( longitude, latitude, useScore, useBearing );
+                     ct ->disbeara( longitude, latitude, useScore, useBearing );
                   else
                      brgscoreValid = false;
                   if ( brgscoreValid && ( valRes == LOC_OK ) )
@@ -174,7 +174,7 @@ class MultList : public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >
 
          int valRes = lonlat( ce->central.loc.getValue(), longitude, latitude );
          if ( ( valRes == LOC_OK ) && ct ->locValid )
-            ct ->disbear( longitude, latitude, useScore, useBearing );
+            ct ->disbeara( longitude, latitude, useScore, useBearing );
          else
             brgscoreValid = false;
 

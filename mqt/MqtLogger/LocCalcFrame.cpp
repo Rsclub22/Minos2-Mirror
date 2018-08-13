@@ -73,7 +73,7 @@ void LocCalcFrame::on_CalcButton_clicked()
 
        if ( lonlat( ui->S2Loc->text().toUpper(), longitude, latitude ) == LOC_OK )
        {
-          cnt.disbear( longitude, latitude, dist, brg );
+          cnt.disbeara( longitude, latitude, dist, brg );
           int idist = static_cast<int>(dist);
           Distance = QString::number( idist );
           ui->Distance->setText(QString( "Dist " ) + Distance + " km " + QString::number(brg) + " degrees");

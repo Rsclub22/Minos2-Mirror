@@ -100,7 +100,7 @@ void RigMemDialog::setLogData(memoryData::memData* ldata, int buttonNumber, Logg
         if ( lres == LOC_OK )
         {
             double dist;
-            ct->disbear( lon, lat, dist, brg );
+            ct->disbeara( lon, lat, dist, brg );
         }
     }
 
@@ -181,7 +181,7 @@ void RigMemDialog::onLocEditFinish()
         int brg = 0;
         double dist = 0.0;
 
-        TContestApp::getContestApp()->getCurrentContest()->disbear( longitude, latitude, dist, brg );
+        TContestApp::getContestApp()->getCurrentContest()->disbeara( longitude, latitude, dist, brg );
         ui->bearingLineEdit->setText(QString::number(brg));
     }
 }

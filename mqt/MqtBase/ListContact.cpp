@@ -36,7 +36,7 @@ QString ListContact::getField( int ACol, const BaseContestLog *const curcon ) co
                int brg;
                double dist;
 
-               curcon->disbear( lon, lat, dist, brg );
+               curcon->disbeara( lon, lat, dist, brg );
 
 			   int offset = curcon->bearingOffset.getValue();
                const QChar degreeChar(0260); // octal value
@@ -58,7 +58,7 @@ QString ListContact::getField( int ACol, const BaseContestLog *const curcon ) co
 
             if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
             {
-               curcon->disbear( lon, lat, dist, brg );
+               curcon->disbeara( lon, lat, dist, brg );
             }
             scorebuff = QString( "%1").arg(static_cast<int>(dist) );
             res = scorebuff;

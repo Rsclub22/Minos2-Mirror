@@ -194,7 +194,7 @@ void DisplayContestContact::checkContact( )
 
       if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
       {
-         clp->disbear( lon, lat, dist, brg );
+         clp->disbeara( lon, lat, dist, brg );
          bearing = brg;
       }
    }
@@ -333,7 +333,8 @@ void DisplayContestContact::checkContact( )
    {
        if (contest->MGMContestRules.getValue())
        {
-            dist = clp->CalcCentres ( loc.loc.getValue() );
+           int brg;
+            dist = clp->CalcCentres ( loc.loc.getValue(), brg );
        }
        else if ( loc.loc.getValue().size() == 4 && clp->allowLoc4.getValue() )
        {
@@ -548,21 +549,46 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
                         {
                            // we don't have it worked out already...
-                           double lon = 0.0;
-                           double lat = 0.0;
-                           int brg = 0;
                            double dist;
+                           int brg = 0;
 
-                           if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
-                           {
-                              curcon->disbear( lon, lat, dist, brg );
-                           }
+                           curcon->disbeara( lon, lat, dist, brg );
 						   int offset = curcon->bearingOffset.getValue();
                            const QChar degreeChar(0260); // octal value
                            brgbuff = QString("%1%2").arg( varBrg( brg + offset ), 3 ).arg(degreeChar);
                         }
                      }
                   }
+                  else
+                      if (loc.valRes == LOC_PARTIAL)
+                      {
+                          if ( contest == curcon )
+                          {
+                             // use the existing data
+                             int offset = contest->bearingOffset.getValue();
+                             const QChar degreeChar(0260); // octal value
+                             brgbuff = QString("%1%2").arg( varBrg( bearing + offset ), 3 ).arg(degreeChar);
+                          }
+                          else
+                          {
+                             // rework to come from prime contest loc
+                             double lon = 0.0;
+                             double lat = 0.0;
+                             char llres = lonlat( loc.loc.getValue(), lon, lat );
+                             if ( llres == LOC_OK || llres == LOC_PARTIAL )
+                             {
+                                // we don't have it worked out already...
+                                int brg = 0;
+                                double dist;
+
+                                curcon->disbearc( lon, lat, dist, brg );
+
+                                int offset = curcon->bearingOffset.getValue();
+                                const QChar degreeChar(0260); // octal value
+                                brgbuff = QString("%1%2").arg( varBrg( brg + offset ), 3 ).arg(degreeChar);
+                             }
+                          }
+                      }
 			   }
                res = brgbuff.toStdString().c_str();
 			}
@@ -626,10 +652,14 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         double lat = 0.0;
                         int brg;
                         double dist = 0.0;
-
-                        if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
+                        char llres = lonlat( loc.loc.getValue(), lon, lat );
+                        if ( llres == LOC_OK )
                         {
-                           curcon->disbear( lon, lat, dist, brg );
+                           curcon->disbeara( lon, lat, dist, brg );
+                        }
+                        else if (llres == LOC_PARTIAL)
+                        {
+                            curcon->disbearc( lon, lat, dist, brg );
                         }
                         scorebuff = QString("%1").arg( static_cast< int >  (dist) );
 
