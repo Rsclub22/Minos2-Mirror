@@ -444,7 +444,7 @@ void RigControlFrame::setRadioVol()
 
 void RigControlFrame::setRadioVol(int level)
 {
-    //emit sendVolumeRadio(level);
+    emit sendVolumeRadio(level);
 }
 
 

@@ -196,6 +196,7 @@ private:
     int setVolume(vfo_t vfo, int level);
 
     int getSignalStrength(vfo_t vfo);
+    void displaySignalStrength(int level);
 private slots:
 
     void onStdInRead(QString);
