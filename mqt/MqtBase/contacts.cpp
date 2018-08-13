@@ -210,7 +210,7 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
    else
    {
       // if contest requires a serial
-      makestrings( curcon ->serialField.getValue() );
+      makestrings( curcon ->serialMandatoryField.getValue() );
 
       contactBuffs.qthbuff = extraText.getValue().left( 100 );
 
@@ -255,10 +255,10 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
    next += 1;
    next = placestr( contactBuffs.buff, cs.fullCall.getValue(), next, 11 );
 
-   if ( curcon ->RSTField.getValue() )
+   if ( curcon ->RSTMandatoryField.getValue() )
       next = placestr( contactBuffs.buff, reps.getValue(), next, 3 );
    next = placestr( contactBuffs.buff, contactBuffs.ssbuff, next, -4 );
-   if ( curcon ->RSTField.getValue() )
+   if ( curcon ->RSTMandatoryField.getValue() )
       next = placestr( contactBuffs.buff, repr.getValue(), next + 1, 3 );
    next = placestr( contactBuffs.buff, contactBuffs.srbuff, next, -4 );
 

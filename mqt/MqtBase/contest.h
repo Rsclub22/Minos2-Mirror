@@ -107,9 +107,9 @@ class BaseContestLog: public BaseLogList
       MinosItem<bool> allowLoc4;
       MinosItem<bool> allowLoc8;
 
-      MinosItem<bool> RSTField;
-      MinosItem<bool> serialField;
-      MinosItem<bool> locatorField;
+      MinosItem<bool> RSTMandatoryField;
+      MinosItem<bool> serialMandatoryField;
+      MinosItem<bool> locatorMandatoryField;
 
       MinosStringItem<QString> power;
       MinosStringItem<QString> currentMode;

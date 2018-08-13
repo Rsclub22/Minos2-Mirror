@@ -747,9 +747,9 @@ bool LoggerContestLog::GJVsave( GJVParams &gp )
    opyn( false /*scoreMode == GSPECIAL*/ );
    opyn( allowLoc8 );
 
-   opyn( !RSTField.getValue() );
-   opyn( !serialField.getValue() );
-   opyn( !locatorField.getValue() );
+   opyn( !RSTMandatoryField.getValue() );
+   opyn( !serialMandatoryField.getValue() );
+   opyn( !locatorMandatoryField.getValue() );
 
    strtobuf(); // clear tail
 
@@ -826,9 +826,9 @@ bool LoggerContestLog::GJVload( )
    }
 
    allowLoc8.setValue( inyn() );
-   RSTField.setValue( !inyn() );
-   serialField.setValue( !inyn() );
-   locatorField.setValue( !inyn() );
+   RSTMandatoryField.setValue( !inyn() );
+   serialMandatoryField.setValue( !inyn() );
+   locatorMandatoryField.setValue( !inyn() );
 
    return true;
 

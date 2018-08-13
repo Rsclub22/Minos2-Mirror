@@ -28,9 +28,9 @@ BaseContestLog::BaseContestLog( )
    protectedContest.setValue( false );
   allowLoc8.setValue( false );
   allowLoc4.setValue ( false );
-  RSTField.setValue( true );
-  serialField.setValue( true );
-  locatorField.setValue( true );
+  RSTMandatoryField.setValue( true );
+  serialMandatoryField.setValue( true );
+  locatorMandatoryField.setValue( true );
   otherExchange.setValue( false );
   countryMult.setValue( false );
   nonGCountryMult.setValue( false );
@@ -109,9 +109,9 @@ void BaseContestLog::clearDirty()
    myloc.loc.clearDirty();
    allowLoc4.clearDirty();
    allowLoc8.clearDirty();
-   RSTField.clearDirty();
-   serialField.clearDirty();
-   locatorField.clearDirty();
+   RSTMandatoryField.clearDirty();
+   serialMandatoryField.clearDirty();
+   locatorMandatoryField.clearDirty();
    power.clearDirty();
    currentMode.clearDirty();
    band.clearDirty();
@@ -145,9 +145,9 @@ void BaseContestLog::setDirty()
    myloc.loc.setDirty();
    allowLoc4.setDirty();
    allowLoc8.setDirty();
-   RSTField.setDirty();
-   serialField.setDirty();
-   locatorField.setDirty();
+   RSTMandatoryField.setDirty();
+   serialMandatoryField.setDirty();
+   locatorMandatoryField.setDirty();
    power.setDirty();
    currentMode.setDirty();
    band.setDirty();
@@ -720,7 +720,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
          continue;
       }
 
-     if ( locatorField.getValue() || nct->contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
+     if ( locatorMandatoryField.getValue() || nct->contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
                                                                                 // as it is 1 point.
       {
          int cscore = nct->contactScore.getValue();
@@ -1000,9 +1000,9 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "AllowLoc8", allowLoc8 );
       mt->getStructArgMemberValue( "currentMode", currentMode);
 
-      mt->getStructArgMemberValue( "RSTField", RSTField);
-      mt->getStructArgMemberValue( "serialField", serialField);
-      mt->getStructArgMemberValue( "locatorField", locatorField);
+      mt->getStructArgMemberValue( "RSTField", RSTMandatoryField);
+      mt->getStructArgMemberValue( "serialField", serialMandatoryField);
+      mt->getStructArgMemberValue( "locatorField", locatorMandatoryField);
 
       mt->getStructArgMemberValue( "UKACBonus", usesBonus );
       mt->getStructArgMemberValue("BonusType", bonusType);

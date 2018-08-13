@@ -1243,7 +1243,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
         if (!edit && (*vcp) == ssIl)
             ss = ssLineEditGreyBackground;
 
-        if (((*vcp)->wc->isEnabled() || ((*vcp) == ssIl && contest->serialField.getValue())) && !( *vcp ) ->valid( command, screenContact ) )
+        if (((*vcp)->wc->isEnabled() || ((*vcp) == ssIl && contest->serialMandatoryField.getValue())) && !( *vcp ) ->valid( command, screenContact ) )
         {
             QString text = (*vcp)->wc->text().trimmed();
             if (!text.isEmpty())
@@ -1480,9 +1480,9 @@ void QSOLogFrame::contactValid( )
    int locrep = vcct->loc.validate();
    if ( locrep != 0 )
    {
-      if ( contest->locatorField.getValue() )
+      if ( contest->locatorMandatoryField.getValue() )
          locIl->tIfValid = false;
-      if ( contest->locatorField.getValue() && ( locrep == ERR_NOLOC ) )
+      if ( contest->locatorMandatoryField.getValue() && ( locrep == ERR_NOLOC ) )
       {
          lgTraceerr( ERR_18 );
       }
@@ -1701,12 +1701,12 @@ void QSOLogFrame::updateQSODisplay()
 //      ui->QTHEdit->CharCase = ecNormal;
    }
    bool notProtected = !contest->isReadOnly();
-   ui->RSTTXEdit->setEnabled(notProtected && contest->RSTField.getValue());
-   ui->SerTXEdit->setEnabled(notProtected && contest->serialField.getValue());
-   ui->RSTRXEdit->setEnabled(notProtected && contest->RSTField.getValue());
-   ui->SerRXEdit->setEnabled(notProtected && contest->serialField.getValue());
+   ui->RSTTXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->SerTXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
+   ui->RSTRXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->SerRXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
    //CallsignEdit->Enabled = false; // leave these to allow searching
-   ui->LocEdit->setEnabled(contest->locatorField.getValue());
+   ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());
    ui->CommentsEdit->setEnabled(notProtected);
    ui->ModeComboBoxGJV->setEnabled(notProtected);
    ui->NonScoreCheckBox->setEnabled(notProtected);

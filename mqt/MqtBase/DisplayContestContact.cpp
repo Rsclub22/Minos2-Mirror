@@ -342,7 +342,7 @@ void DisplayContestContact::checkContact( )
        contactScore.setValue( static_cast<int>(dist) );
    }
 
-   if ( !clp->locatorField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
+   if ( !clp->locatorMandatoryField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
       // as it is 1 point.
    {
       int cscore = contactScore.getValue();
@@ -593,7 +593,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                            switch ( contest->scoreMode.getValue() )
                            {
                               case PPKM: 	// needs a valid LOC
-                                 if ( !curcon->locatorField.getValue() )
+                                 if ( !curcon->locatorMandatoryField.getValue() )
                                  {
                                     if ( temp )
                                        scorebuff = "1";

@@ -366,9 +366,9 @@ void ContestDetails::setDetails(  )
    {
       ui->ProtectedOption->setEnabled(false);
    }
-   ui->RSTField->setChecked(contest->RSTField.getValue()) ;   // bool                   // contest
-   ui->SerialField->setChecked(contest->serialField.getValue()) ;   // bool             // contest
-   ui->LocatorField->setChecked(contest->locatorField.getValue()) ;   // bool         // contest
+   ui->RSTField->setChecked(contest->RSTMandatoryField.getValue()) ;   // bool                   // contest
+   ui->SerialField->setChecked(contest->serialMandatoryField.getValue()) ;   // bool             // contest
+   ui->LocatorField->setChecked(contest->locatorMandatoryField.getValue()) ;   // bool         // contest
 
    ui->AntOffsetEdit->setText(QString::number(contest->bearingOffset.getValue()));	// int
 
@@ -437,9 +437,9 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->ContestNameEdit->setText(ic.description);                      // contest
    contest->VHFContestName.setValue(ic.description);
 
-   contest->RSTField.setValue(true);
-   contest->serialField.setValue(true);
-   contest->locatorField.setValue(true);
+   contest->RSTMandatoryField.setValue(true);
+   contest->serialMandatoryField.setValue(true);
+   contest->locatorMandatoryField.setValue(true);
 
    // need to get legal bands from ContestLog
    ui->BandComboBox->clear();
@@ -674,7 +674,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    {
        contest->locMult.setValue( true );
        contest->MGMContestRules.setValue(true);
-       contest->serialField.setValue(false);
+       contest->serialMandatoryField.setValue(false);
        contest->allowLoc4.setValue(true);
        ui->AllowLoc4CB->setChecked(true);
    }
@@ -748,9 +748,9 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    contest->currentMode.setValue(mode);
 
 
-   ui->RSTField->setChecked(contest->RSTField.getValue()) ;
-   ui->SerialField->setChecked(contest->serialField.getValue()) ;
-   ui->LocatorField->setChecked(contest->locatorField.getValue()) ;
+   ui->RSTField->setChecked(contest->RSTMandatoryField.getValue()) ;
+   ui->SerialField->setChecked(contest->serialMandatoryField.getValue()) ;
+   ui->LocatorField->setChecked(contest->locatorMandatoryField.getValue()) ;
 
    contest->scoreMode.setValue( static_cast< SCOREMODE> ( ic.ppKmScoring ? 0 : 1 ) );  // combo
 
@@ -1055,9 +1055,9 @@ QWidget * ContestDetails::getDetails( )
         break;
 
     }
-    contest->RSTField.setValue( ui->RSTField->isChecked() ) ;   // bool
-    contest->serialField.setValue( ui->SerialField->isChecked() ) ;   // bool
-    contest->locatorField.setValue( ui->LocatorField->isChecked() ) ;   // bool
+    contest->RSTMandatoryField.setValue( ui->RSTField->isChecked() ) ;   // bool
+    contest->serialMandatoryField.setValue( ui->SerialField->isChecked() ) ;   // bool
+    contest->locatorMandatoryField.setValue( ui->LocatorField->isChecked() ) ;   // bool
 
     contest->power.setValue( ui->PowerEdit->text() );
     contest->bearingOffset.setValue(ui->AntOffsetEdit->text().toInt());	// int
