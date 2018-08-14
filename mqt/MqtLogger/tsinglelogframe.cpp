@@ -115,7 +115,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
     connect(FKHRigControlFrame, SIGNAL(sendRitFreq(QString)), this, SLOT(sendRadioRitFreq(QString)));
-    connect(FKHRigControlFrame, SIGNAL(sendVolumeRadio(int)), this, SLOT(sendRadioVolume(int)));
+    connect(FKHRigControlFrame, SIGNAL(sendVolumeToRadio(int)), this, SLOT(sendRadioVolume(int)));
     connect(FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));

@@ -244,14 +244,14 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="volumeLabel">
             <property name="text">
              <string>Vol</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QSlider" name="horizontalSlider">
+           <widget class="VolumeSlider" name="volumeSlider">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -346,6 +346,11 @@
    <class>RitLineEdit</class>
    <extends>QLineEdit</extends>
    <header>rigcontrolframe.h</header>
+  </customwidget>
+  <customwidget>
+   <class>VolumeSlider</class>
+   <extends>QSlider</extends>
+   <header>volumeslider.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

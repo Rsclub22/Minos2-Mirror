@@ -23,6 +23,7 @@
 #include "rigutils.h"
 #include "LoggerContest.h"
 #include "rigcontrolframe.h"
+#include "volumeslider.h"
 #include "ui_rigcontrolframe.h"
 
 #define MODE_ERROR "<font color='Red'>Mode Error</font>"
@@ -75,8 +76,6 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ui->txvertStat->setVisible(false);
     ui->TxVertLabel->setVisible(false);
 
-    ui->horizontalSlider->setMaximum(SLIDERMAX);
-    ui->horizontalSlider->setMinimum(0);
 
     bool tpm;
     TContestApp::getContestApp() ->displayBundle.getBoolProfile( edpShowTPM, tpm );
@@ -144,6 +143,9 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     connect(ui->RitEdit, SIGNAL(newFreq(QString)), this, SLOT(changeRitRadioFreq(QString)));
 
 
+    // volume control updates to radio
+    connect(ui->volumeSlider, SIGNAL(sendVolumeRadio(int)), this, SLOT(sendVolumeRadio(int)));
+
     // when no radio is connected
     connect(this, SIGNAL(noRadioSendFreq(QString)), this, SLOT(noRadioSetFreq(QString)));
     connect(this, SIGNAL(noRadioSendMode(QString)), this, SLOT(noRadioSetMode(QString)));
@@ -151,8 +153,7 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
     connect(ui->bandSelCombo, SIGNAL(activated(int)), this, SLOT(radioBandFreq(int)));
 
-    connect(ui->horizontalSlider, SIGNAL(sliderReleased()), this, SLOT(setRadioVol()));
-    connect(ui->horizontalSlider, SIGNAL(valueChanged(int)), this, SLOT(setRadioVol(int)));
+    setVolControlVisible(false);
 
     if (!isRadioLoaded())
     {
@@ -428,24 +429,6 @@ void RigControlFrame::noRadioSendOutMode(QString m)
 
 }
 
-
-void RigControlFrame::setVolume(int level)
-{
-    ui->horizontalSlider->setValue(level);
-}
-
-
-void RigControlFrame::setRadioVol()
-{
-    int level = ui->horizontalSlider->value();
-    emit sendVolumeRadio(level);
-
-}
-
-void RigControlFrame::setRadioVol(int level)
-{
-    emit sendVolumeRadio(level);
-}
 
 
 void RigControlFrame::on_ContestPageChanged()
@@ -808,6 +791,34 @@ void RigControlFrame::setRadioState(QString s)
         radioState = s;
     }
 }
+
+// volume level from radio
+void RigControlFrame::setVolume(int level)
+{
+    if (!ui->volumeSlider->isVisible())
+    {
+        if ((level >= 0) & (level <= SLIDERMAX))
+        {
+             setVolControlVisible(true);
+        }
+    }
+
+    ui->volumeSlider->setVolume(level);
+}
+
+// volume level radio
+void RigControlFrame::sendVolumeRadio(int level)
+{
+    emit sendVolumeToRadio(level);
+}
+
+void RigControlFrame::setVolControlVisible(bool value)
+{
+    ui->volumeSlider->setVisible(value);
+    ui->volumeLabel->setVisible(value);
+}
+
+
 void RigControlFrame::setTpm(int t)
 {
     // tpm change received from rig control

@@ -146,7 +146,7 @@ signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
     void sendFreqControl(QString);
-    void sendVolumeRadio(int);
+    void sendVolumeToRadio(int);
     void noRadioSendFreq(QString);
     void noRadioSendMode(QString);
     void sendModeToControl(QString);
@@ -174,8 +174,9 @@ private slots:
     void freqRitEditSelected();
     void ritButtonSelected();
 
-    void setRadioVol();
-    void setRadioVol(int level);
+    void sendVolumeRadio(int level);
+
+
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -211,6 +212,8 @@ private:
     bool ritEnable;
     bool ritOn;
     QString curRit;
+
+
 
     QStringList listOfRadios;
     QString radioName;
@@ -256,6 +259,8 @@ private:
 
     void showRitButOn();
     void showRitButOff();
+
+    void setVolControlVisible(bool value);
 };
 
 
