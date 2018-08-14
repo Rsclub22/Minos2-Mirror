@@ -280,7 +280,7 @@ public:
 
 signals:
     void frequency_updated(double);
-    void debug_protocol(QString);
+    void debug_protocol(QString, bool);
 
   private:
     hamlib_port_t myport;
