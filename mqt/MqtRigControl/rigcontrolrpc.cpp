@@ -132,7 +132,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
             if (cursel == selContest)
             {
                 int volLevel;
-                if ( psFreq->getInt( volLevel ) )
+                if ( psVolLevel->getInt( volLevel ) )
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Vol Level From Logger = %1").arg(volLevel));

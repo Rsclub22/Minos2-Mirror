@@ -438,7 +438,7 @@ void RigControlFrame::setVolume(int level)
 void RigControlFrame::setRadioVol()
 {
     int level = ui->horizontalSlider->value();
-    //emit sendVolumeRadio(level);
+    emit sendVolumeRadio(level);
 
 }
 

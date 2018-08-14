@@ -1207,7 +1207,7 @@ int RigControlMainWindow::getMinosModeIndex(QString mode)
 void RigControlMainWindow::loggerSetVolume(int level)
 {
 
-    //setVolume(RIG_VFO_CURR, level);
+    setVolume(RIG_VFO_CURR, level);
 
 }
 
