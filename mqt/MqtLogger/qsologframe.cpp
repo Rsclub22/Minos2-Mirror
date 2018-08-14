@@ -1315,6 +1315,26 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                 {
                     // leave as no error except if exchange is wrong??
                 }
+                else if ((*vcp) == srIl)
+                {
+                    if (QApplication::focusWidget () == (*vcp)->wc)
+                    {
+                        QString t = (*vcp)->wc->text();
+                        int val = toInt(t, -1);
+                        if (val == -1)
+                        {
+                            ss = ssLineEditFrRedBkRed;
+                        }
+                        else if (val == 0)
+                        {
+                            ss = ssLineEditFrRedBkWhite;
+                        }
+                    }
+                    else
+                    {
+                        ss = ssLineEditFrRedBkRed;
+                    }
+                }
                 else
                 {
                     ss = ssLineEditFrRedBkRed;
