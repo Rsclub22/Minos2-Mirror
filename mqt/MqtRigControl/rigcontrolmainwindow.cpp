@@ -26,6 +26,8 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <QProcessEnvironment>
+
+
 #include <QDebug>
 
 
@@ -36,6 +38,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
   , ui(new Ui::RigControlMainWindow)
 {
     ui->setupUi(this);
+
+    ui->progressBar->setRange(0, 120);
+    ui->progressBar->setTextVisible(false);
 
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
@@ -239,6 +244,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, SIGNAL(setMode(QString)), this, SLOT(loggerSetMode(QString)));
     connect(msg, SIGNAL(selectLoggerRadio(PubSubName, QString)), this, SLOT(onSelectRadio(PubSubName, QString)));
     connect(msg, SIGNAL(setTpm(int, QString)), this, SLOT(setTpm(int, QString)));
+    connect(msg, SIGNAL(setVolume(int)), this, SLOT(loggerSetVolume(int)));
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
@@ -248,6 +254,9 @@ void RigControlMainWindow::initActionsConnections()
     // standalone test
     connect(ui->selFreq, SIGNAL(clicked(bool)), this, SLOT(selFreqClicked()));
     connect(ui->freqInputBox, SIGNAL(editingFinished()), this, SLOT(selFreqClicked()));
+
+
+
 }
 
 void RigControlMainWindow::setupBandFreq()
@@ -428,6 +437,18 @@ void RigControlMainWindow::upDateRadio()
 
                 if (radio->get_serialConnected())
                 {
+
+                    if (radio->supportVolControl())
+                    {
+                        supVolume = true;
+
+                    }
+
+                    if (radio->supportSignalStrength())
+                    {
+                        supSignalStrength = true;
+                    }
+
 
                     writeWindowTitle(appName);
                     sendStatusToLogConnected();
@@ -678,6 +699,13 @@ void RigControlMainWindow::getRadioInfo()
     {
         logMessage(QString("Get radio frequency"));
         retCode = getAndSendFrequency(RIG_VFO_CURR);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get Freq error %1").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request Freq");
+
+        }
 
     }
 
@@ -712,6 +740,31 @@ void RigControlMainWindow::getRadioInfo()
             logMessage(QString("Get radioInfo: Get RIT error").arg(QString::number(retCode)));
             hamlibError(retCode, "Request RIT");
         }
+    }
+
+    if (radio->get_serialConnected() && supVolume)
+    {
+        retCode = getVolume(RIG_VFO_CURR);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request Volume");
+        }
+
+    }
+
+
+    if (radio->get_serialConnected() && supSignalStrength)
+    {
+        retCode = getSignalStrength(RIG_VFO_CURR);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request Volume");
+        }
+
     }
 
 
@@ -1011,6 +1064,8 @@ void RigControlMainWindow::chkRadioMgmModeChanged()
     }
 }
 
+/************************** Mode  *********************************/
+
 
 int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 {
@@ -1149,6 +1204,15 @@ int RigControlMainWindow::getMinosModeIndex(QString mode)
     return index;
 }
 
+void RigControlMainWindow::loggerSetVolume(int level)
+{
+
+    setVolume(RIG_VFO_CURR, level);
+
+}
+
+/************************** RIT *********************************/
+
 void RigControlMainWindow::setRitDisplayVisible(bool state)
 {
     ui->ritLbl->setVisible(state);
@@ -1215,6 +1279,170 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     logRitOn = status;
     setRitOnOffDisplay(logRitOn);
  }
+
+/************************** Volume *********************************/
+
+
+int RigControlMainWindow::getVolume(vfo_t vfo)
+{
+    int retCode = 0;
+    value_t value;
+    retCode = radio->getVolume(vfo, &value);
+    if (retCode >= 0)
+    {
+        int vol = 0;
+        value.f = value.f * VOLMULT;
+        vol = qRound(value.f);
+        qDebug() << "get vol = " << vol;
+        if (vol > 200)
+        {
+            vol = 200;
+        }
+        if (vol < 0)
+        {
+            vol = 0;
+        }
+
+        if (vol != curVol)
+        {
+            curVol = vol;
+            sendVolToLog(curVol);
+        }
+    }
+
+
+    return retCode;
+
+}
+
+
+int RigControlMainWindow::setVolume(vfo_t vfo, int level)
+{
+    int retCode = 0;
+    float volLevel = level;
+    volLevel = volLevel/VOLMULT;
+    qDebug() << "level is = " << volLevel;
+    retCode = radio->setVolume(vfo, volLevel);
+    return retCode;
+}
+
+
+/******************* Signal Strength **************************/
+
+
+int RigControlMainWindow::getSignalStrength(vfo_t vfo)
+{
+    int retCode = 0;
+    value_t value;
+    retCode = radio->getSignalStrength(vfo, &value);
+    if (retCode >= 0)
+    {
+        if (curSignalStrength != value.i)
+        {
+            curSignalStrength = value.i;
+            qDebug() << "Signal Strength = " << curSignalStrength;
+            displaySignalStrength(curSignalStrength);
+        }
+    }
+
+    return retCode;
+
+}
+
+
+void RigControlMainWindow::displaySignalStrength(int level)
+{
+
+
+    int signal = level + 60;
+    qDebug() << "meter level = "  << signal;
+    ui->progressBar->setValue(signal);
+
+    // display text
+
+    if (level == 60)
+    {
+        ui->labelsmeter->setText("S9+60");
+        return;
+    }
+    else if ((level >= 50) & (level < 60))
+    {
+        ui->labelsmeter->setText("S9+50");
+        return;
+    }
+    else if ((level >= 40) & (level < 50))
+    {
+        ui->labelsmeter->setText("S9+40");
+        return;
+    }
+    else if ((level >= 30) & (level < 40))
+    {
+        ui->labelsmeter->setText("S9+30");
+        return;
+    }
+    else if ((level >= 20) & (level < 30))
+    {
+        ui->labelsmeter->setText("S9+20");
+        return;
+    }
+    else if ((level >= 10) & (level < 20))
+    {
+        ui->labelsmeter->setText("S9+10");
+        return;
+    }
+    else if ((level >= 0) & (level < 10))
+    {
+        ui->labelsmeter->setText("S9   ");
+        return;
+    }
+    else if ((level >= -6) & (level < 0))
+    {
+        ui->labelsmeter->setText("S8   ");
+        return;
+    }
+    else if ((level >= -12) & (level < -6))
+    {
+        ui->labelsmeter->setText("S7   ");
+        return;
+    }
+    else if ((level >= -18) & (level < -12))
+    {
+        ui->labelsmeter->setText("S6   ");
+        return;
+    }
+    else if ((level >= -22) & (level < -18))
+    {
+        ui->labelsmeter->setText("S5   ");
+        return;
+    }
+    else if ((level >= -28) & (level < -22))
+    {
+        ui->labelsmeter->setText("S4   ");
+        return;
+    }
+    else if ((level >= -32) & (level < -28))
+    {
+        ui->labelsmeter->setText("S3   ");
+        return;
+    }
+    else if ((level >= -38) & (level < -32))
+    {
+        ui->labelsmeter->setText("S2   ");
+        return;
+    }
+    else if ((level >= -42) & (level < -38))
+    {
+        ui->labelsmeter->setText("S1   ");
+        return;
+    }
+    else if ((level >= -48) & (level < -42))
+    {
+        ui->labelsmeter->setText(QString::number(level) + "  ");
+    }
+
+
+
+}
 
 void RigControlMainWindow::displayPassband(pbwidth_t width)
 {
@@ -1442,6 +1670,17 @@ void RigControlMainWindow::sendModeToLog(QString mode)
         msg->rigCache.setMode(psname, mode);
     }
 }
+
+void RigControlMainWindow::sendVolToLog(int level)
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send volume to logger = %1").arg(QString::number(level)));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setVolume(psname, level);
+    }
+}
+
 
 void RigControlMainWindow::sendTransVertStatus(bool status)
 {

@@ -77,6 +77,8 @@ private:
     QString selTvBand;      // selected band from radio
     QString transVertSwNum;
     bool logRitOn;
+    bool supVolume = false;     // radio supports volume
+    bool supSignalStrength = false;
 
     const int PASSBAND_NOCHANGE = -1;
 
@@ -95,6 +97,8 @@ private:
     bool mgmModeFlag = false;
     shortfreq_t rRitFreq = 0;
     QString sRitFreq;
+    int curVol = 0;
+    int curSignalStrength = 0;
 
 
     SerialTVSwitch *serialTVSw = nullptr;
@@ -151,7 +155,7 @@ private:
     void sendRitEnableStatus(bool status);
     void sendRitEnableStatusLogger();
     void sendTpm(int tpm);
-
+    void sendVolToLog(int level);
     //void sendRxPbFlagToLog();
 
     void setMode(QString mode, vfo_t vfo);
@@ -188,6 +192,11 @@ private:
     void setRitOnOffDisplayVisible(bool s);
     void setRitOnOffDisplay(bool s);
     void setRitEnableDisplay(bool s);
+    int getVolume(vfo_t vfo);
+    int setVolume(vfo_t vfo, int level);
+
+    int getSignalStrength(vfo_t vfo);
+    void displaySignalStrength(int level);
 private slots:
 
     void onStdInRead(QString);
@@ -200,6 +209,7 @@ private slots:
 
     void loggerSetFreq(QString freq);
     void loggerSetMode(QString mode);
+    void loggerSetVolume(int level);
     void currentRadioSettingChanged(QString radioName);
     void updateSelectRadioBox();
     void aboutRigConfig();
@@ -213,6 +223,9 @@ private slots:
 
     void setRitFreqStr(QString ritFreq);
     void setRitLogStatus(bool status);
+
+
+
 signals:
 
 

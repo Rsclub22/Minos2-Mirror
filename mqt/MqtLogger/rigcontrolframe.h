@@ -114,6 +114,7 @@ public:
     void setRadioList();
     void setBandList(QString);
     void setMode(QString);
+    void setVolume(int level);
     void setFreq(QString);
     void setRadioName(QString, QString mode);
     void setRadioState(QString);
@@ -140,10 +141,12 @@ public:
     void on_ContestPageChanged();
 
     void checkConnection();
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
     void sendFreqControl(QString);
+    void sendVolumeRadio(int);
     void noRadioSendFreq(QString);
     void noRadioSendMode(QString);
     void sendModeToControl(QString);
@@ -171,6 +174,8 @@ private slots:
     void freqRitEditSelected();
     void ritButtonSelected();
 
+    void setRadioVol();
+    void setRadioVol(int level);
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);

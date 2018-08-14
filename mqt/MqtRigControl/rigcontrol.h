@@ -184,6 +184,7 @@ public:
   bool ritAvail = false;
   bool ritEnable = false;
   bool transVertEnable  = false;
+  bool volAvail = false;
   QStringList transVertNames;
   int numTransverters = 0;
   bool enableTransSwitch = false;
@@ -278,6 +279,15 @@ public:
     int setAntSwNum(vfo_t vfo, ant_t antNum);
     int supportAntSw(int rigNumber, bool *antSwFlag);
 
+
+    bool supportVolControl();
+    int setVolume(vfo_t vfo, float val);
+    int getVolume(vfo_t vfo, value_t *val);
+
+    bool supportSignalStrength();
+    int getSignalStrength(vfo_t vfo, value_t *val);
+
+
 signals:
     void frequency_updated(double);
     void debug_protocol(QString);
@@ -329,13 +339,11 @@ signals:
     //double lastFrequency;
     //QStringList xmlModes;
 
+    int rigSetLevel(vfo_t vfo, setting_t level, value_t val);
+    int rigGetLevel(vfo_t vfo, setting_t level, value_t *val);
 
-
-
-
-
-
-
+    setting_t rigHasGetLevel(setting_t level);
+    setting_t rigHasSetLevel(setting_t level);
 };
 
 #endif // RIGCONTROL_H
