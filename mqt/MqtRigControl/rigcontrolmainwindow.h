@@ -206,7 +206,7 @@ private slots:
     void saveTraceLogFlag();
 
     void getRadioInfo();
-    void logMessage(QString s);
+    void logMessage(QString s, bool logAnyway = true);
     void about();
     void LogTimerTimer();
 

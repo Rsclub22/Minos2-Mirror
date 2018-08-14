@@ -164,9 +164,9 @@ RigControlMainWindow::~RigControlMainWindow()
     delete msg;
 }
 
-void RigControlMainWindow::logMessage( QString s )
+void RigControlMainWindow::logMessage( QString s, bool logAnyway )
 {
-    if (ui->actionTrace_Log->isChecked())
+    if (logAnyway || ui->actionTrace_Log->isChecked())
         trace( s );
 }
 
@@ -250,7 +250,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
 
-    connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
+    connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString, bool)));
 
     // standalone test
     connect(ui->selFreq, SIGNAL(clicked(bool)), this, SLOT(selFreqClicked()));
@@ -665,18 +665,18 @@ int RigControlMainWindow::getPolltime()
 void RigControlMainWindow::cmdLockOn()
 {
     cmdLockFlag = true;
-    logMessage(QString("Lockon: Command Lock On"));
+    logMessage(QString("Lockon: Command Lock On"), false);
 }
 
 void RigControlMainWindow::cmdLockOff()
 {
     cmdLockFlag = false;
-    logMessage(QString("Lockoff: Command Lock Off"));
+    logMessage(QString("Lockoff: Command Lock Off"), false);
 }
 
 void RigControlMainWindow::getRadioInfo()
 {
-    logMessage(QString("Request radio info"));
+    logMessage(QString("Request radio info"), false);
     if (cmdLockFlag)
     {
         trace(QString("GetRadioInfo: Command Lock on"));
@@ -687,7 +687,7 @@ void RigControlMainWindow::getRadioInfo()
     int retCode;
     if (radio->get_serialConnected())
     {
-        logMessage(QString("Get radio frequency"));
+        logMessage(QString("Get radio frequency"), false);
         retCode = getAndSendFrequency(RIG_VFO_CURR);
         if (retCode < 0)
         {
@@ -702,7 +702,7 @@ void RigControlMainWindow::getRadioInfo()
     if (radio->get_serialConnected())
     {
 
-        logMessage("Get radio mode");
+        logMessage("Get radio mode", false);
         retCode = getAndSendMode(RIG_VFO_CURR);
         if (retCode < 0)
         {
@@ -713,7 +713,7 @@ void RigControlMainWindow::getRadioInfo()
         }
         else
         {
-            logMessage(QString("Got Mode = %1").arg(radio->convertModeQstr(rmode)));
+            logMessage(QString("Got Mode = %1").arg(radio->convertModeQstr(rmode)), false);
         }
     }
 
@@ -722,7 +722,7 @@ void RigControlMainWindow::getRadioInfo()
 
     if (radio->get_serialConnected() && setupRadio->currentRadio.ritGetAvail && setupRadio->currentRadio.ritEnable)
     {
-        logMessage((QString("Get RIT")));
+        logMessage((QString("Get RIT")), false);
         retCode = getRitFreq(RIG_VFO_CURR);
         if (retCode < 0)
         {
@@ -966,7 +966,7 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
         {
             if (selTvBand != "")
             {
-                logMessage(QString("Get Freq: Transvert enabled"));
+                logMessage(QString("Get Freq: Transvert enabled"), false);
                 // look for supporting transverter
 
                 while (tvNum < setupRadio->currentRadio.numTransverters)
@@ -984,14 +984,14 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
                     logMessage(QString("Transverter %1 name %2 offset %3 rfreq %4").arg(tvNum)
                                .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertName)
                                .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset)
-                               .arg(rfrequency)
+                               .arg(rfrequency), false
                                );
 
                     transVertF = rfrequency + setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset;
-                    logMessage(QString("Get Freq: TransvertF = %1").arg(QString::number(transVertF)));
+                    logMessage(QString("Get Freq: TransvertF = %1").arg(QString::number(transVertF)), false);
                 }
 
-                logMessage(QString("Get Freq: Transvert Freq. = %1").arg(QString::number(transVertF)));
+                logMessage(QString("Get Freq: Transvert Freq. = %1").arg(QString::number(transVertF)), false);
                 curTransVertFrq = transVertF;
                 displayTransVertVfo(transVertF);
 
@@ -999,7 +999,7 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
             else
             {
                 //setTransVertDisplayVisible(false);
-                logMessage(QString("GetFreq: No transvert band set for this freq = %1").arg(QString::number(curVfoFrq)));
+                logMessage(QString("GetFreq: No transvert band set for this freq = %1").arg(QString::number(curVfoFrq)), false);
             }
         }
 
@@ -1069,7 +1069,7 @@ int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 
     if (retCode == RIG_OK)
     {
-        logMessage(QString("Get Mode: From Rx mode = %1, passband = %2").arg(radio->convertModeQstr(rmode)).arg(QString::number(rwidth)));
+        logMessage(QString("Get Mode: From Rx mode = %1, passband = %2").arg(radio->convertModeQstr(rmode)).arg(QString::number(rwidth)), false);
         curMode = rmode;
         sCurMode = radio->convertModeQstr(rmode);
 
@@ -1590,7 +1590,7 @@ void RigControlMainWindow::sendFreqToLog(freq_t freq)
     {
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setFreq(psname, freq);
-        logMessage(QString("Send freq to logger = %1 psn=%2").arg(convertFreqToStr(freq)).arg(psname.toString()));
+        logMessage(QString("Send freq to logger = %1 psn=%2").arg(convertFreqToStr(freq)).arg(psname.toString()), false);
     }
 }
 
@@ -1598,7 +1598,7 @@ void RigControlMainWindow::sendModeToLog(QString mode)
 {
     if (appName.length() > 0)
     {
-        logMessage(QString("Send mode to logger = %1").arg(mode));
+        logMessage(QString("Send mode to logger = %1").arg(mode), false);
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setMode(psname, mode);
     }

@@ -769,7 +769,7 @@ int RigControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const cha
 
     vsprintf (buf, fmt, ap);
     QString s = QString::fromLatin1(buf);
-    emit debug_protocol(s);
+    emit debug_protocol(s, false);
 
     return RIG_OK;
 }
