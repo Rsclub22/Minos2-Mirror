@@ -375,7 +375,8 @@ pbwidth_t RigControl::getPassBand()
 
 bool RigControl::supportVolControl()
 {
-
+    bool get = rigHasGetLevel(RIG_LEVEL_AF);
+    bool set = rigHasSetLevel(RIG_LEVEL_AF);
     return (rigHasGetLevel(RIG_LEVEL_AF) & rigHasSetLevel(RIG_LEVEL_AF));
 }
 

@@ -438,16 +438,9 @@ void RigControlMainWindow::upDateRadio()
                 if (radio->get_serialConnected())
                 {
 
-                    if (radio->supportVolControl())
-                    {
-                        supVolume = true;
+                    supVolume = radio->supportVolControl() ? true : false;
 
-                    }
-
-                    if (radio->supportSignalStrength())
-                    {
-                        supSignalStrength = true;
-                    }
+                    supSignalStrength = radio->supportSignalStrength() ? true : false;
 
 
                     writeWindowTitle(appName);
