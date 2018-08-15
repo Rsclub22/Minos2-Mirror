@@ -1274,73 +1274,76 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                     (*vcp)->wc->isEnabled()
                     || ((*vcp) == ssIl && contest->serialMandatoryField.getValue())
                     )
-                && (!( *vcp ) ->valid( command, screenContact ) || !(*vcp)->tIfValid)
+                && (!( *vcp ) ->valid( command, screenContact ) )
             )
         {
-            QString text = (*vcp)->wc->text().trimmed();
-            if (!text.isEmpty())
+            if (!(*vcp)->tIfValid)
             {
-                if ((*vcp) == csIl)
+                QString text = (*vcp)->wc->text().trimmed();
+                if (!text.isEmpty())
                 {
-                    if ( screenContact.cs.valRes == ERR_DUPCS)
+                    if ((*vcp) == csIl)
                     {
-                        ss = ssLineEditFrRedBkRed;
-                    }
-                    else
-                    {
-                        ss = ssLineEditFrRedBkWhite;
-                    }
-                }
-                else if ((*vcp) == rsIl && text == "5")
-                {
-                    // leave as no error
-                }
-                else if ((*vcp) == rrIl && text == "5")
-                {
-                    // leave as no error
-                }
-                else if ((*vcp) == locIl)
-                {
-                    // leave as no error
-                    if (screenContact.loc.valRes == ERR_LOC_RANGE && screenContact.loc.loc.getValue().size() > 4)
-                    {
-                        ss = ssLineEditFrRedBkRed;
-                    }
-                    else if (screenContact.loc.valRes != LOC_OK)
-                    {
-                        ss = ssLineEditFrRedBkWhite;
-                    }
-                }
-                else if ((*vcp) == qthIl)
-                {
-                    // leave as no error except if exchange is wrong??
-                }
-                else if ((*vcp) == srIl)
-                {
-                    if (QApplication::focusWidget () == (*vcp)->wc)
-                    {
-                        QString t = (*vcp)->wc->text();
-                        int val = toInt(t, -1);
-                        if (val == -1)
+                        if ( screenContact.cs.valRes == ERR_DUPCS)
                         {
                             ss = ssLineEditFrRedBkRed;
                         }
-                        else if (val == 0)
+                        else
                         {
                             ss = ssLineEditFrRedBkWhite;
                         }
                     }
+                    else if ((*vcp) == rsIl && text == "5")
+                    {
+                        // leave as no error
+                    }
+                    else if ((*vcp) == rrIl && text == "5")
+                    {
+                        // leave as no error
+                    }
+                    else if ((*vcp) == locIl)
+                    {
+                        // leave as no error
+                        if (screenContact.loc.valRes == ERR_LOC_RANGE && screenContact.loc.loc.getValue().size() > 4)
+                        {
+                            ss = ssLineEditFrRedBkRed;
+                        }
+                        else if (screenContact.loc.valRes != LOC_OK)
+                        {
+                            ss = ssLineEditFrRedBkWhite;
+                        }
+                    }
+                    else if ((*vcp) == qthIl)
+                    {
+                        // leave as no error except if exchange is wrong??
+                    }
+                    else if ((*vcp) == srIl)
+                    {
+                        if (QApplication::focusWidget () == (*vcp)->wc)
+                        {
+                            QString t = (*vcp)->wc->text();
+                            int val = toInt(t, -1);
+                            if (val == -1)
+                            {
+                                ss = ssLineEditFrRedBkRed;
+                            }
+                            else if (val == 0)
+                            {
+                                ss = ssLineEditFrRedBkWhite;
+                            }
+                        }
+                        else
+                        {
+                            ss = ssLineEditFrRedBkRed;
+                        }
+                    }
                     else
                     {
                         ss = ssLineEditFrRedBkRed;
                     }
                 }
-                else
-                {
-                    ss = ssLineEditFrRedBkRed;
-                }
+                ret = false;
             }
-            ret = false;
         }
 
         if ((*vcp)->wc->isEnabled())
