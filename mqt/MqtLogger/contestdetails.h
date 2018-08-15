@@ -73,8 +73,8 @@ private slots:
    void on_ProtectedOption_clicked();
    void on_BonusComboBox_currentIndexChanged(int index);
    void on_MGMCheckBox_stateChanged(int arg1);
-   void on_RotatorList(QString s);
-   void on_SetRadioList(QString s);
+   void on_RotatorList();
+   void on_SetRadioList();
 };
 
 #endif // CONTESTDETAILS_H

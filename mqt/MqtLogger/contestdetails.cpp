@@ -85,8 +85,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
     connect(PowerEditFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(MainOpComboBoxFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
 
-    connect(LogContainer->sendDM, SIGNAL(setRadioList(QString)), this, SLOT(on_SetRadioList(QString)));
-    connect(LogContainer->sendDM, SIGNAL(RotatorList(QString)), this, SLOT(on_RotatorList(QString)));
+    connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
+    connect(LogContainer->sendDM, SIGNAL(RotatorList()), this, SLOT(on_RotatorList()));
 }
 void ContestDetails::doCloseEvent()
 {
@@ -153,7 +153,7 @@ void ContestDetails::setDetails( LoggerContestLog * pcont )
    if ( !pcont )
       return ;
    inputcontest = pcont;
-   contest = new LoggerContestLog();
+   contest = new LoggerContestLog();    // do we ever delete it again?
    *contest = *pcont;                // is this safe? not with the QSO vector... although it won't get changed!
    sectionList = contest->sectionList.getValue(); // the combo will then be properly set up in setDetails()
    setDetails();
@@ -353,8 +353,8 @@ void ContestDetails::setDetails(  )
 
    ui->PowerEdit->setText(contest->power.getValue());
 
-   on_SetRadioList("");
-    on_RotatorList("");
+   on_SetRadioList();
+   on_RotatorList();
 
    if ( contest->isMinosFile() )
    {
@@ -1442,14 +1442,14 @@ void ContestDetails::on_MGMCheckBox_stateChanged(int)
     }
     enableControls();
 }
-void ContestDetails::on_RotatorList(QString /*s*/)
+void ContestDetails::on_RotatorList()
 {
     ui->antennaNameEdit->clear();
     ui->antennaNameEdit->addItem("");
     ui->antennaNameEdit->addItems( LogContainer->sendDM->rotators());
     ui->antennaNameEdit->setCurrentText(contest->antennaName.getValue().toString());
 }
-void ContestDetails::on_SetRadioList(QString /*s*/)
+void ContestDetails::on_SetRadioList()
 {
     ui->radioNameEdit->clear();
     ui->radioNameEdit->addItem("");
