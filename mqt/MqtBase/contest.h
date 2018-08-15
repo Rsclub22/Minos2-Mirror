@@ -82,7 +82,7 @@ class BaseContestLog: public BaseLogList
       int cslotno = -1;
       int unfilledCount = 0;
 
-      BaseContestLog(const BaseContestLog &);   // I hope a copy constructor
+      //BaseContestLog(const BaseContestLog &);   // I hope a copy constructor
       BaseContestLog();
       virtual ~BaseContestLog();
 
@@ -243,17 +243,17 @@ class BaseContestLog: public BaseLogList
       void loadBonusList();
       int getSquareBonus(QString sloc);
 
-      int *districtWorked = nullptr;
-      int *countryWorked = nullptr;
+      QSharedPointer<int> districtWorked;
+      QSharedPointer<int> countryWorked;
       LocList locs;
 
       int getDistrictsWorked( int item )
       {
-         return districtWorked[ item ];
+         return districtWorked.data()[ item ];
       }
       int getCountriesWorked( int item )
       {
-         return countryWorked[ item ];
+         return countryWorked.data()[ item ];
       }
       int getValidQSOs();
 

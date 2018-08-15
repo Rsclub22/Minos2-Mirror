@@ -44,23 +44,18 @@ BaseContestLog::BaseContestLog( )
   MGMContestRules.setValue(false);
 
    int nc = MultLists::getMultLists() ->getCtryListSize();
-   countryWorked = new int[ nc ];
+   countryWorked =QSharedPointer<int>( new int[ nc ]);
    for ( int i = 0; i < nc; i++ )
-      countryWorked[ i ] = 0;
+      countryWorked.data()[ i ] = 0;
 
    nc = MultLists::getMultLists() ->getDistListSize();
-   districtWorked = new int[ nc ];
+   districtWorked = QSharedPointer<int>(new int[ nc ]);
    for (int i = 0; i < nc; i++ )
-      districtWorked[ i ] = 0;
+      districtWorked.data()[ i ] = 0;
 
 }
 BaseContestLog::~BaseContestLog()
 {
-   delete [] districtWorked;
-   delete [] countryWorked;
-   districtWorked = nullptr;
-   countryWorked = nullptr;
-
    closeFile();
 }
 int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
@@ -633,19 +628,17 @@ void BaseContestLog::scanContest( )
 
    locs.llist.clear();
 
-   delete [] districtWorked;
-   delete [] countryWorked;
-   districtWorked = nullptr;
-   countryWorked = nullptr;
+   districtWorked.clear();
+   countryWorked.clear();
 
    int nc = MultLists::getMultLists() ->getDistListSize();
-   districtWorked = new int[ nc ];
+   districtWorked = QSharedPointer<int>(new int[ nc ]);
    int si = static_cast<int>(sizeof (int));
-   memset( districtWorked, 0, static_cast<size_t>(nc * si) );
+   memset( districtWorked.data(), 0, static_cast<size_t>(nc * si) );
 
    nc = MultLists::getMultLists() ->getCtryListSize();
-   countryWorked = new int[ nc ];
-   memset( countryWorked, 0, static_cast<size_t>(nc * si) );
+   countryWorked = QSharedPointer<int>(new int[ nc ]);
+   memset( countryWorked.data(), 0, static_cast<size_t>(nc * si) );
 
    // set up for the idle loop scan
    // NB we may need to clear e.g. the accumulated score

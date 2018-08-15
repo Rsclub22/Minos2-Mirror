@@ -299,7 +299,7 @@ void DisplayContestContact::checkContact( )
    if ( districtMult )
    {
       if ( districtMult->country1 &&
-           ( ( clp->districtWorked[ districtMult->listOffset ] ) ++ < districtMult->country1->districtLimit() ) )
+           ( ( clp->districtWorked.data()[ districtMult->listOffset ] ) ++ < districtMult->country1->districtLimit() ) )
       {
          clp->ndistrict++;
          if ( clp->districtMult.getValue() )
@@ -312,7 +312,7 @@ void DisplayContestContact::checkContact( )
 
    if ( ctryMult )
    {
-      if ( ( clp->countryWorked[ ctryMult->listOffset ] ) ++ == 0 )
+      if ( ( clp->countryWorked.data()[ ctryMult->listOffset ] ) ++ == 0 )
       {
          if (!clp->nonGCountryMult.getValue() || !cs.isUK())
          {
