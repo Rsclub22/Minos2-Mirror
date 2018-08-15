@@ -26,6 +26,7 @@ struct StanzaPos
 class LoggerContestLog : public BaseContestLog
 {
       friend class MinosTestImport;
+      friend class ContestDetailsTransferObject;
       // a LoggerContestLog is a sorted collection of ContestContact records, sorted by
       // the logSequence field
    private:

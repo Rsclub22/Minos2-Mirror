@@ -85,7 +85,8 @@ SOURCES += \
     TSessionManager.cpp \
     tsettingseditdlg.cpp \
     tsinglelogframe.cpp \
-    tstatsdispframe.cpp
+    tstatsdispframe.cpp \
+    ContestDetailsTransferObject.cpp
 
 HEADERS  += \
     AdifImport.h \
@@ -140,7 +141,8 @@ HEADERS  += \
     TSessionManager.h \
     tsettingseditdlg.h \
     tsinglelogframe.h \
-    tstatsdispframe.h
+    tstatsdispframe.h \
+    ContestDetailsTransferObject.h
 
 FORMS    += \
     contestdetails.ui \

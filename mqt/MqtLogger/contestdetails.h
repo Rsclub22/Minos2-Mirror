@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "tbundleframe.h"
 #include "focuswatcher.h"
+#include "ContestDetailsTransferObject.h"
 
 namespace Ui {
 class ContestDetails;
@@ -24,8 +25,7 @@ private:
     Ui::ContestDetails *ui;
 
 private:   	// User declarations
-//      TCalendarForm *CalendarDlg;
-   LoggerContestLog * contest;
+   QSharedPointer< ContestDetailsTransferObject > contest;
    LoggerContestLog * inputcontest;
    QString sectionList;
    bool saveContestOK;

@@ -19,7 +19,7 @@
 ContestDetails::ContestDetails(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ContestDetails),
-    contest(nullptr), inputcontest(nullptr),
+    inputcontest(nullptr),
     saveContestOK(false), suppressProtectedOnClick(false),
     noMultRipple(false)
 {
@@ -153,8 +153,8 @@ void ContestDetails::setDetails( LoggerContestLog * pcont )
    if ( !pcont )
       return ;
    inputcontest = pcont;
-   contest = new LoggerContestLog();    // do we ever delete it again?
-   *contest = *pcont;                // is this safe? not with the QSO vector... although it won't get changed!
+   contest = QSharedPointer<ContestDetailsTransferObject>(new ContestDetailsTransferObject());
+   contest->getFromContest(pcont);
    sectionList = contest->sectionList.getValue(); // the combo will then be properly set up in setDetails()
    setDetails();
 }
@@ -277,6 +277,7 @@ void ContestDetails::setDetails(  )
    }
 
    contest->validateLoc();
+
    if ( !contest->locValid && contest->myloc.loc.getValue().size() == 0 )
    {
       QString temp;
@@ -945,17 +946,14 @@ QWidget * ContestDetails::getDetails( )
         if (bt == 1)
         {
             contest->bonusType.setValue("B2");
-            contest->loadBonusList();
         }
         else if (bt == 2)
         {
             contest->bonusType.setValue("B4");
-            contest->loadBonusList();
         }
         else if (bt == 3)
         {
             contest->bonusType.setValue("NAC");
-            contest->loadBonusList();
         }
         else
         {
@@ -1183,16 +1181,19 @@ void ContestDetails::on_OKButton_clicked()
     }
     else
     {
-       if (saveContestOK)
-       {
-          bool temp = contest->isProtectedSuppressed();
-          contest->setProtectedSuppressed(true);
-          contest->commonSave( false );
-          contest->setProtectedSuppressed(temp);
-       }
-       *inputcontest = *contest;
+        contest->setToContest(inputcontest);
 
-       accept();
+        inputcontest->loadBonusList();
+
+        if (saveContestOK)
+        {
+            bool temp = inputcontest->isProtectedSuppressed();
+            inputcontest->setProtectedSuppressed(true);
+            inputcontest->commonSave( false );
+            inputcontest->setProtectedSuppressed(temp);
+        }
+
+        accept();
     }
 
 }
@@ -1200,7 +1201,7 @@ void ContestDetails::on_OKButton_clicked()
 void ContestDetails::on_EntDetailButton_clicked()
 {
     getDetails( );   // override from the window
-    TEntryOptionsForm EntryDlg( this, contest, false );
+    TEntryOptionsForm EntryDlg( this, contest, nullptr, false );    // no save back to contest from this route
     if ( EntryDlg.exec() == QDialog::Accepted )
        setDetails( );
 
