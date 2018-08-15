@@ -51,7 +51,7 @@ class TRPCCallback : public TRPCFunctor
 {
    private:
       void ( TClass::*fpt ) ( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );   // pointer to member function
-      TClass* pt2Object;                  // pointer to object
+      TClass* pt2Object = nullptr;                  // pointer to object
 
    public:
 
