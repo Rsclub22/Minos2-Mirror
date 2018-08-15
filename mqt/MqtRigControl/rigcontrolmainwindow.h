@@ -24,6 +24,7 @@
 #include "rigcontrol.h"
 #include "BandList.h"
 #include "serialtvswitch.h"
+#include "smeterbar.h"
 
 class QLabel;
 class QComboBox;

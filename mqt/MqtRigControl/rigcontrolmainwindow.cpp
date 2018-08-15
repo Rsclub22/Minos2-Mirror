@@ -39,8 +39,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->progressBar->setRange(0, 120);
-    ui->progressBar->setTextVisible(false);
+    //ui->progressBar->setRange(0, 120);
+    //ui->progressBar->setTextVisible(false);
 
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
@@ -1349,88 +1349,90 @@ void RigControlMainWindow::displaySignalStrength(int level)
 
     int signal = level + 60;
     qDebug() << "meter level = "  << signal;
-    ui->progressBar->setValue(signal);
+    qreal rSignal = static_cast<qreal>(signal)/static_cast<qreal>(110);
+    qDebug() << "real smeter level = " << rSignal;
+    ui->sMeter->setLevel(rSignal);
 
     // display text
 
     if (level == 60)
     {
-        ui->labelsmeter->setText("S9+60");
+        ui->sMeterLabel->setText("S9+60");
         return;
     }
     else if ((level >= 50) & (level < 60))
     {
-        ui->labelsmeter->setText("S9+50");
+        ui->sMeterLabel->setText("S9+50");
         return;
     }
     else if ((level >= 40) & (level < 50))
     {
-        ui->labelsmeter->setText("S9+40");
+        ui->sMeterLabel->setText("S9+40");
         return;
     }
     else if ((level >= 30) & (level < 40))
     {
-        ui->labelsmeter->setText("S9+30");
+        ui->sMeterLabel->setText("S9+30");
         return;
     }
     else if ((level >= 20) & (level < 30))
     {
-        ui->labelsmeter->setText("S9+20");
+        ui->sMeterLabel->setText("S9+20");
         return;
     }
     else if ((level >= 10) & (level < 20))
     {
-        ui->labelsmeter->setText("S9+10");
+        ui->sMeterLabel->setText("S9+10");
         return;
     }
     else if ((level >= 0) & (level < 10))
     {
-        ui->labelsmeter->setText("S9   ");
+        ui->sMeterLabel->setText("S9   ");
         return;
     }
     else if ((level >= -6) & (level < 0))
     {
-        ui->labelsmeter->setText("S8   ");
+        ui->sMeterLabel->setText("S8   ");
         return;
     }
     else if ((level >= -12) & (level < -6))
     {
-        ui->labelsmeter->setText("S7   ");
+        ui->sMeterLabel->setText("S7   ");
         return;
     }
     else if ((level >= -18) & (level < -12))
     {
-        ui->labelsmeter->setText("S6   ");
+        ui->sMeterLabel->setText("S6   ");
         return;
     }
     else if ((level >= -22) & (level < -18))
     {
-        ui->labelsmeter->setText("S5   ");
+        ui->sMeterLabel->setText("S5   ");
         return;
     }
     else if ((level >= -28) & (level < -22))
     {
-        ui->labelsmeter->setText("S4   ");
+        ui->sMeterLabel->setText("S4   ");
         return;
     }
     else if ((level >= -32) & (level < -28))
     {
-        ui->labelsmeter->setText("S3   ");
+        ui->sMeterLabel->setText("S3   ");
         return;
     }
     else if ((level >= -38) & (level < -32))
     {
-        ui->labelsmeter->setText("S2   ");
+        ui->sMeterLabel->setText("S2   ");
         return;
     }
     else if ((level >= -42) & (level < -38))
     {
-        ui->labelsmeter->setText("S1   ");
+        ui->sMeterLabel->setText("S1   ");
         return;
     }
     else if ((level >= -48) & (level < -42))
     {
-        ui->labelsmeter->setText(QString::number(level) + "  ");
+        ui->sMeterLabel->setText(QString::number(level) + "  ");
     }
 
 
