@@ -20,6 +20,7 @@ class RigDetails: public PubSubValue
     MinosItem<double> _transverterOffset;
     MinosItem<int> _transverterSwitch;
     MinosItem<bool> _transverterStatus;
+    MinosItem<bool> _volumeStatus;
     MinosItem<bool> _ritEnableStatus;
     MinosItem<bool> _ritOnOffStatus;
     MinosStringItem<QString> _bandList;
@@ -39,6 +40,7 @@ public:
     MinosItem<double> transverterOffset() const;
     MinosItem<int> transverterSwitch() const;
     MinosItem<bool> transverterStatus() const;
+    MinosItem<bool> volumeStatus() const;
     MinosItem<bool> ritEnableStatus() const;
     MinosItem<bool> ritOnOffStatus() const;
     MinosStringItem<QString> bandList() const;
@@ -47,6 +49,7 @@ public:
     void setTransverterOffset(double transverterOffset);
     void setTransverterSwitch(int transverterSwitch);
     void setTransverterStatus(bool transverterStatus);
+    void setVolumeStatus(bool volumeStatus);
     void setBandList(const QString &bandList);
     void setRitEnableStatus(bool ritEnableStatus);
     void setRitOnOffStatus(bool status);

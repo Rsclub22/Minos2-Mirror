@@ -1287,6 +1287,15 @@ void TSingleLogFrame::on_SetRadioTxVertState(bool s)
     }
 }
 
+
+void TSingleLogFrame::on_SetRadioVolumeState(bool s)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        FKHRigControlFrame->setRadioVolumeState(s);
+    }
+}
+
 void TSingleLogFrame::on_SetRitEnableState(bool s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )

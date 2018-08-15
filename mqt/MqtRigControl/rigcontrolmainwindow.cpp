@@ -439,9 +439,9 @@ void RigControlMainWindow::upDateRadio()
                 {
 
                     supVolume = radio->supportVolControl() ? true : false;
+                    sendVolStatusToLog(supVolume);
 
                     supSignalStrength = radio->supportSignalStrength() ? true : false;
-
 
                     writeWindowTitle(appName);
                     sendStatusToLogConnected();
@@ -1677,19 +1677,25 @@ void RigControlMainWindow::sendVolToLog(int level)
 }
 
 
+void RigControlMainWindow::sendVolStatusToLog(bool status)
+{
+    if (appName.length() > 0)
+    {
+        QString f = "";
+        status  ? f = "True" : f = "False";
+        logMessage(QString("Send Volume Status to logger = %1").arg(f));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setVolumeStatus(psname, status);
+
+    }
+}
+
+
 void RigControlMainWindow::sendTransVertStatus(bool status)
 {
     //QString flag;
     if (appName.length() > 0)
     {
-        /*if (status)
-        {
-            flag = TXVERT_ON;
-        }
-        else
-        {
-            flag = TXVERT_OFF;
-        }*/
         QString f = "";
         status  ? f = "True" : f = "False";
         logMessage(QString("Send Transvert Status to logger = %1").arg(f));
@@ -1742,12 +1748,7 @@ void RigControlMainWindow::sendRitEnableStatusLogger()
     }
 
 }
-void RigControlMainWindow::sendTpm(int tpm)
-{
-    logMessage(QString("Send Tpm to logger = %1").arg(tpm));
-    PubSubName psname(setupRadio->currentRadio.radioName);
-    msg->rigCache.setTpm(psname, tpm);
-}
+
 
 
 
@@ -1763,7 +1764,12 @@ void RigControlMainWindow::sendRitEnableStatus(bool status)
     }
 }
 
-
+void RigControlMainWindow::sendTpm(int tpm)
+{
+    logMessage(QString("Send Tpm to logger = %1").arg(tpm));
+    PubSubName psname(setupRadio->currentRadio.radioName);
+    msg->rigCache.setTpm(psname, tpm);
+}
 void RigControlMainWindow::setRitOnOffDisplayVisible(bool s)
 {
     ui->RitOnOffLbl->setVisible(s);

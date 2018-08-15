@@ -45,6 +45,7 @@ public:
     void setTransverterOffset(const PubSubName &name, double transverterOffset);
     void setTransverterSwitch(const PubSubName &name, int transverterSwitch);
     void setTransverterStatus(const PubSubName &name, bool transverterStatus);
+    void setVolumeStatus(const PubSubName &name, bool volumeStatus);
     void setBandList(const PubSubName &name, const QString &bands);
     void setRitFreq(const PubSubName &name, double freq);
     void setRitEnableStatus(const PubSubName &name, bool ritEnableStatus);

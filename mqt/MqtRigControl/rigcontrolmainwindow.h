@@ -198,6 +198,8 @@ private:
 
     int getSignalStrength(vfo_t vfo);
     void displaySignalStrength(int level);
+    void sendVolStatusToLog(bool status);
+
 private slots:
 
     void onStdInRead(QString);

@@ -795,13 +795,6 @@ void RigControlFrame::setRadioState(QString s)
 // volume level from radio
 void RigControlFrame::setVolume(int level)
 {
-    if (!ui->volumeSlider->isVisible())
-    {
-        if ((level >= 0) & (level <= SLIDERMAX))
-        {
-             setVolControlVisible(true);
-        }
-    }
 
     ui->volumeSlider->setVolume(level);
 }
@@ -817,6 +810,12 @@ void RigControlFrame::setVolControlVisible(bool value)
     ui->volumeSlider->setVisible(value);
     ui->volumeLabel->setVisible(value);
 }
+
+void RigControlFrame::setRadioVolumeState(bool state)
+{
+    setVolControlVisible(state);
+}
+
 
 
 void RigControlFrame::setTpm(int t)
@@ -842,6 +841,7 @@ void RigControlFrame::setRadioTxVertState(bool s)
     ui->txvertStat->setText("On");
     ui->txvertStat->setVisible(s);
 }
+
 
 
 void RigControlFrame::setRitEnableState(bool s)

@@ -196,6 +196,7 @@ private slots:
     void on_SetRadioTpm(int);
     void on_SetRadioTxVertState(bool s);
     void on_SetRitEnableState(bool s);
+    void on_SetRadioVolumeState(bool s);
 
     void on_RotatorLoaded();
     void on_RotatorList();

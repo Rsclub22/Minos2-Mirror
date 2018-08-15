@@ -439,6 +439,11 @@ void TSendDM::notifyRigChanges()
                         trace(QString("SendRPC Rig set transverter status ") + (selDetail.transverterStatus().getValue() ? " True" : " False"));
                         tslf->on_SetRadioTxVertState( selDetail.transverterStatus().getValue() );
                     }
+                    if (selDetail.volumeStatus().isDirty())
+                    {
+                        trace(QString("SendRPC Rig set volume status ") + (selDetail.volumeStatus().getValue() ? " True" : " False"));
+                        tslf->on_SetRadioVolumeState( selDetail.volumeStatus().getValue() );
+                    }
                     if (selDetail.ritEnableStatus().isDirty())
                     {
                         trace(QString("SendRPC Rig set ritEnable status ") + (selDetail.ritEnableStatus().getValue() ? " True" : " False"));

@@ -256,6 +256,10 @@ void RigCache::setTransverterStatus(const PubSubName &name, bool transverterStat
 {
     rigDetails[name].setTransverterStatus(transverterStatus);
 }
+void RigCache::setVolumeStatus(const PubSubName &name, bool volumeStatus)
+{
+    rigDetails[name].setVolumeStatus(volumeStatus);
+}
 void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {
     rigDetails[name].setBandList(bands);
