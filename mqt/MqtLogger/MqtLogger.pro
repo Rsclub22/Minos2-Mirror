@@ -85,7 +85,9 @@ SOURCES += main.cpp \
     FilterFrame.cpp \
     RotPresets.cpp \
     ScreenConfigManager.cpp \
-    volumeslider.cpp
+    volumeslider.cpp \
+    freqlineedit.cpp \
+    ritlineedit.cpp
 
 HEADERS  += \
     tlogcontainer.h \
@@ -141,7 +143,9 @@ HEADERS  += \
     FilterFrame.h \
     RotPresets.h \
     ScreenConfigManager.h \
-    volumeslider.h
+    volumeslider.h \
+    freqlineedit.h \
+    ritlineedit.h
 
 FORMS    += tlogcontainer.ui \
     contestdetails.ui \

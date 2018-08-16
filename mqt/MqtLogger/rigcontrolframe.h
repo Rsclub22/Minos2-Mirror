@@ -212,6 +212,7 @@ private:
 
     bool ritEnable;
     bool ritOn;
+    bool ritEditOn;
     QString curRit;
 
 
@@ -262,58 +263,11 @@ private:
     void showRitButOff();
 
     void setVolControlVisible(bool value);
+    void ritLineEditInFocus();
 };
 
 
-class FreqLineEdit : public QLineEdit
-{
-    Q_OBJECT
 
-public:
-
-    FreqLineEdit(QWidget *parent);
-    ~FreqLineEdit();
-    void changeFreq(bool direction);
-    //QString convertFreqString(double frequency);
-
-signals:
-    void receivedFocus() ;
-    void lostFocus();
-    void newFreq();
-    void freqEditReturn();
-private:
-
-
-    void wheelEvent(QWheelEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-
-} ;
-
-
-
-class RitLineEdit : public QLineEdit
-{
-    Q_OBJECT
-
-public:
-
-    RitLineEdit(QWidget *parent);
-    ~RitLineEdit();
-    void changeFreq(bool direction);
-
-signals:
-    void receivedFocus() ;
-    void lostFocus();
-    void newFreq(QString);
-    void freqEditReturn();
-private:
-
-
-    void wheelEvent(QWheelEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-
-
-} ;
 
 
 #endif // RIGCONTROLFRAME_H

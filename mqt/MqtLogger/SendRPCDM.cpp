@@ -294,7 +294,7 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setFreq(rigSelected, convertStrToFreq(freq));
+    rigCache.setRitFreq(rigSelected, convertStrToFreq(freq));
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -312,7 +312,7 @@ void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
 void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setRitEnableStatus(rigSelected, status);
+    rigCache.setRitOnOffStatus(rigSelected, status);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
