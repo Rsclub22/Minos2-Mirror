@@ -16,8 +16,10 @@
 #include "reg1test.h"
 #include "printfile.h"
 #include "enqdlg.h"
+#include "MinosTestImport.h"
 #include "MinosTestExport.h"
 #include "BandList.h"
+#include "latlong.h"
 
 #include "LoggerContest.h"
 
@@ -382,65 +384,6 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
 
    return true;
 }
-void LoggerContestLog::setINIDetails()
-{
-   // extras that CAN come from INI file - implements bundle override
-   if ( entryBundle.getSection() != entryBundle.noneBundle )
-   {
-      entryBundle.startGroup();
-      entryBundle.getStringProfile( eepCall, mycall.fullCall );
-      entryBundle.getStringProfile( eepEntrant, entrant );
-      entryBundle.getStringProfile( eepMyName, entName );
-      entryBundle.getStringProfile( eepMyCall, entCall );
-      //   entryBundle.getStringProfile(eepSection, entSect);
-
-      entryBundle.getStringProfile( eepMyAddress1, entAddr1 );
-      entryBundle.getStringProfile( eepMyAddress2, entAddr2 );
-      entryBundle.getStringProfile( eepMyCity, entCity );
-      entryBundle.getStringProfile( eepMyPostCode, entPostCode );
-      entryBundle.getStringProfile( eepMyCountry, entCountry );
-      entryBundle.getStringProfile( eepMyPhone, entPhone );
-      entryBundle.getStringProfile( eepMyEmail, entEMail );
-      //   entryBundle.getStringProfile(eepBand, band);
-      //   entryBundle.getStringProfile(eepSection, entSect);
-      entryBundle.endGroup();
-   }
-
-
-   if ( QTHBundle.getSection() != QTHBundle.noneBundle )
-   {
-      QTHBundle.startGroup();
-      QTHBundle.getStringProfile( eqpLocator, myloc.loc );
-
-      if ( districtMult.getValue() )
-         QTHBundle.getStringProfile( eqpDistrict, location );
-      else
-         if ( otherExchange.getValue() && location.getValue().size() == 0 )
-            QTHBundle.getStringProfile( eqpLocation, location );
-
-      QTHBundle.getStringProfile( eqpStationQTH1, sqth1 );
-      QTHBundle.getStringProfile( eqpStationQTH2, sqth2 );
-	  QTHBundle.getStringProfile( eqpASL, entASL );
-      QTHBundle.endGroup();
-   }
-
-   if ( stationBundle.getSection() != stationBundle.noneBundle )
-   {
-      stationBundle.startGroup();
-	  stationBundle.getStringProfile( espPower, power );
-	  stationBundle.getStringProfile( espTransmitter, entTx );
-	  stationBundle.getStringProfile( espReceiver, entRx );
-	  stationBundle.getStringProfile( espAntenna, entAnt );
-	  stationBundle.getStringProfile( espAGL, entAGL );
-	  stationBundle.getIntProfile(espOffset, bearingOffset);
-      QString s;
-      stationBundle.getStringProfile( espRadioName, s );
-      radioName.setValue( PubSubName(s) );
-      stationBundle.getStringProfile( espRotatorName, s );
-      antennaName.setValue(PubSubName(s));
-      stationBundle.endGroup();
-   }
-}
 
 qint64 LoggerContestLog::readBlock( int bno )
 {
@@ -662,7 +605,7 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
             {
                 double dist;
                 int brg;
-                disbear( lon, lat, dist, brg );
+                disbeara( lon, lat, dist, brg );
                 m.bearing = brg;
             }
         }
@@ -745,9 +688,9 @@ bool LoggerContestLog::GJVsave( GJVParams &gp )
    opyn( false /*scoreMode == GSPECIAL*/ );
    opyn( allowLoc8 );
 
-   opyn( !RSTField.getValue() );
-   opyn( !serialField.getValue() );
-   opyn( !locatorField.getValue() );
+   opyn( !RSTMandatoryField.getValue() );
+   opyn( !serialMandatoryField.getValue() );
+   opyn( !locatorMandatoryField.getValue() );
 
    strtobuf(); // clear tail
 
@@ -784,7 +727,7 @@ bool LoggerContestLog::GJVload( )
    buftostr( band );
    buftostr( name );
    buftostr( temp );
-   mycall = Callsign( strupr( temp ) );
+   mycall = Callsign( temp.toUpper() );
    buftostr( myloc.loc );
    buftostr( location );
 
@@ -824,9 +767,9 @@ bool LoggerContestLog::GJVload( )
    }
 
    allowLoc8.setValue( inyn() );
-   RSTField.setValue( !inyn() );
-   serialField.setValue( !inyn() );
-   locatorField.setValue( !inyn() );
+   RSTMandatoryField.setValue( !inyn() );
+   serialMandatoryField.setValue( !inyn() );
+   locatorMandatoryField.setValue( !inyn() );
 
    return true;
 
@@ -1324,7 +1267,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                            {
                               text = text.left(spos ).trimmed();
                            }
-                           mycall.fullCall.setValue( strupr( text ) );
+                           mycall.fullCall.setValue( text.toUpper() );
                            mycall.valRes = CS_NOT_VALIDATED;
                            mycall.validate();
 
@@ -1334,7 +1277,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                                 stemp.toUpper().indexOf( "QTH LOCATOR SENT" ) == 0 )
                            {
                               // yes, contestx DOES say QRH!
-                              myloc.loc.setValue( strupr( text ) );
+                              myloc.loc.setValue( text.toUpper() );
                               validateLoc();
                            }
                            else

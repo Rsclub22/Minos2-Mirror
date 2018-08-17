@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
+#include "BandList.h"
 #include "rigutils.h"
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
@@ -63,7 +64,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
    }
    else
    {
-      makestrings( clp->serialField.getValue() );
+      makestrings( clp->serialMandatoryField.getValue() );
 
       QString exp_buff;
 
@@ -298,13 +299,13 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
                 sdest += "0";
    sdest += ';';
 
-   if (contest->RSTField.getValue())
+   if (contest->RSTMandatoryField.getValue())
    {
         sdest += reps.getValue();   // TX RST
    }
    sdest += ';';
 
-   if (noSerials || !contest->serialField.getValue())
+   if (noSerials || !contest->serialMandatoryField.getValue())
    {
     // no data
    }
@@ -318,13 +319,13 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    }
    sdest += ';';
 
-   if (contest->RSTField.getValue())
+   if (contest->RSTMandatoryField.getValue())
    {
        sdest += repr.getValue();   // RX RST
    }
    sdest += ';';
 
-   if (noSerials || !contest->serialField.getValue())
+   if (noSerials || !contest->serialMandatoryField.getValue())
    {
     // no data
    }
@@ -350,7 +351,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
          sdest += extraText.getValue();
       }
    sdest += ';';
-   if (contest->locatorField.getValue())
+   if (contest->locatorMandatoryField.getValue())
    {
         sdest += loc.loc.getValue();
    }
@@ -480,21 +481,21 @@ QString ContestContact::getADIFLine()
     }
     outstr += makeADIFField( "CALL", cs.fullCall.getValue() );
 
-    if (contest->RSTField.getValue())
+    if (contest->RSTMandatoryField.getValue())
         outstr += makeADIFField( "RST_SENT", reps.getValue() );
-    if (contest->serialField.getValue())
+    if (contest->serialMandatoryField.getValue())
     {
         outstr += makeADIFField( "STX", serials.getValue() );
         outstr += makeADIFField( "STX_STRING", serials.getValue() );
     }
-    if (contest->RSTField.getValue())
+    if (contest->RSTMandatoryField.getValue())
         outstr += makeADIFField( "RST_RCVD", repr.getValue() );
-    if (contest->serialField.getValue())
+    if (contest->serialMandatoryField.getValue())
     {
         outstr += makeADIFField( "SRX", serialr.getValue() );
         outstr += makeADIFField( "SRX_STRING", serialr.getValue() );
     }
-    if (contest->locatorField.getValue())
+    if (contest->locatorMandatoryField.getValue())
         outstr += makeADIFField( "GRIDSQUARE", loc.loc.getValue() );
     if ( districtMult )
         outstr += makeADIFField( "QTH", districtMult->districtCode );
@@ -680,7 +681,7 @@ bool ContestContact::GJVload( int diskBlock )
    time.setTime( temp, DTGDISP );
 
    buftostr( temp );
-   cs = Callsign( strupr( temp ) );
+   cs = Callsign( temp.toUpper() );
    cs.valRes = CS_NOT_VALIDATED;
 
    buftostr( temp );

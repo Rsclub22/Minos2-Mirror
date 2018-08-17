@@ -11,6 +11,7 @@
 #ifndef MatchContactH
 #define MatchContactH 
 #include "base_pch.h"
+#include "contacts.h"
 //---------------------------------------------------------------------------
 class ListContact;
 class ContactList;

@@ -8,14 +8,15 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
 #include "MinosLoggerEvents.h"
-
+#include "cutils.h"
 #include "ContestApp.h"
 
 #include "MatchContact.h"
 #include "MatchThread.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"
-
+#include "contest.h"
+#include "ListContact.h"
 //---------------------------------------------------------------------------
 TMatchThread *TMatchThread::matchThread = nullptr;
 
@@ -291,7 +292,7 @@ unsigned char matchElement::checkGreater( const QString &s )
    }
 
    strcpysp( match_temp, s, EXTRALENGTH );
-   strupr( match_temp );
+   match_temp = match_temp.toUpper();
 
    int oldlen = rawstr.length();
    int newlen = match_temp.length();

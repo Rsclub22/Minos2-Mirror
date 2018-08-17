@@ -98,6 +98,11 @@ int RotControlFrame::getAngle(QString brgSt)
     return brg;
 }
 
+int RotControlFrame::getCurrentBearing()
+{
+    return currentBearing;
+}
+
 
 void RotControlFrame::getBrgFrmQSOLog(QString brg)
 {

@@ -2,6 +2,8 @@
 #define MATCHTREEFRAME_H
 
 #include "base_pch.h"
+#include "contest.h"
+#include "MatchCollection.h"
 
 namespace Ui {
 class MatchTreeFrame;

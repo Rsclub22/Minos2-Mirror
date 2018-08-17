@@ -4,6 +4,7 @@
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
+#include "ListContact.h"
 #include "tlogcontainer.h"
 #include "tqsoeditdlg.h"
 #include "tforcelogdlg.h"
@@ -78,8 +79,10 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     MainOpFW = new FocusWatcher(ui->MainOpComboBox);
     ui->MainOpComboBox->setValidator(new UpperCaseValidator(false));
+    Op1String = ui->OperatorLabel->text();
     SecondOpFW = new FocusWatcher(ui->SecondOpComboBox);
     ui->SecondOpComboBox->setValidator(new UpperCaseValidator(false));
+    Op2String = ui->SecondOpLabel->text();
 
     connect(CallsignFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(RSTTXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
@@ -283,13 +286,21 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
     {
         ui->CommentsLabel->setText(colStr + CommentsLabelString);
     }
-    if (obj == ui->MainOpComboBox && in == false)
+    if (obj == ui->MainOpComboBox)
     {
-        MainOpComboBox_Exit();
+        ui->OperatorLabel->setText(colStr + Op1String);
+        if (in == false)
+        {
+            MainOpComboBox_Exit();
+        }
     }
-    if (obj == ui->SecondOpComboBox && in == false)
+    if (obj == ui->SecondOpComboBox)
     {
-        SecondOpComboBox_Exit();
+        ui->SecondOpLabel->setText(colStr + Op2String);
+        if (in == false)
+        {
+            SecondOpComboBox_Exit();
+        }
     }
 }
 void QSOLogFrame::setAsEdit(bool s, QString b)
@@ -833,7 +844,16 @@ void QSOLogFrame::on_RSTRXEdit_textChanged(const QString &/*arg1*/)
 {
     doGJVEditChange( ui->RSTRXEdit );
 }
+void QSOLogFrame::on_SerRXEdit_textChanged(const QString &/*arg1*/)
+{
+    doGJVEditChange( ui->SerRXEdit );
+}
 
+void QSOLogFrame::on_SerTXEdit_textChanged(const QString &/*arg1*/)
+{
+    doGJVEditChange( ui->SerTXEdit );
+
+}
 void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
 {
     // Don't let the dtg be changed when the contest is protected
@@ -1021,7 +1041,7 @@ void QSOLogFrame::EditControlEnter(QObject *Sender , QFocusEvent *event)
    current = dynamic_cast<QWidget *>(Sender);
    QLineEdit *tle = dynamic_cast<QLineEdit *>(Sender);
 
-   if (event->reason() == Qt::TabFocusReason || event->reason() == Qt::BacktabFocusReason)
+   if (tle && (event->reason() == Qt::TabFocusReason || event->reason() == Qt::BacktabFocusReason) )
    {
        MinosLoggerEvents::SendAfterTabFocusIn(tle);
    }
@@ -1121,7 +1141,7 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
          }
       }
    }
-   if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) )
+   if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit ) )
    {
       getScreenEntry(); // make sure it is saved
       valid( cmCheckValid ); // make sure all single and cross field
@@ -1148,85 +1168,92 @@ void QSOLogFrame::setScoreText( int dist, bool partial, bool xband )
 //---------------------------------------------------------------------------
 void QSOLogFrame::calcLoc( )
 {
-   QString gridref = ui->LocEdit->text().trimmed();
+    QString gridref = ui->LocEdit->text().trimmed();
 
-   if ( gridref.compare(oldloc, Qt::CaseInsensitive ) != 0 )
-   {
-      oldloc = gridref;
-      locValid = true;
-      double latitude;
-      double longitude;
-      double dist;
-      int brg;
+    if ( gridref.compare(oldloc, Qt::CaseInsensitive ) != 0 )
+    {
+        oldloc = gridref;
+        locValid = true;
+        double latitude;
+        double longitude;
+        double dist;
+        int brg = 0;
 
-      int locValres = lonlat( gridref, longitude, latitude );
-      if ( ( locValres ) != LOC_OK )
-         locValid = false;
+        int locValres = lonlat( gridref, longitude, latitude );
+        if ( ( locValres ) != LOC_OK )
+            locValid = false;
 
-      ScreenContact &sct = screenContact;
-      if ( ( sct.contactFlags & MANUAL_SCORE ) &&
-           !( sct.contactFlags & DONT_PRINT ) )
-      {
-         int thisscore = sct.contactScore;
-         setScoreText( thisscore, false, sct.contactFlags & XBAND );
-         ui->BrgSt->setText("MANUAL");
+        ScreenContact &sct = screenContact;
+        if ( ( sct.contactFlags & MANUAL_SCORE ) &&
+             !( sct.contactFlags & DONT_PRINT ) )
+        {
+            int thisscore = sct.contactScore;
+            setScoreText( thisscore, false, sct.contactFlags & XBAND );
+            ui->BrgSt->setText("MANUAL");
 
-      }
-      else
-         if ( ( locValid
-                || ( locValres == LOC_PARTIAL ) )
-              && contest->locValid )
-         {
-            contest->disbear( longitude, latitude, dist, brg );
-
-            if ( locValid )  	// just 4CHAR not enough
+        }
+        else
+            if ( ( locValid
+                   || ( locValres == LOC_PARTIAL ) )
+                 && contest->locValid )
             {
-               sct.bearing = brg;
+                if (contest->MGMContestRules.getValue())
+                {
+                    dist = contest->CalcCentres ( gridref, brg );
+                }
+                else
+                {
+                    contest->disbeara( longitude, latitude, dist, brg );
+                }
 
-               if ( !( sct.contactFlags & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
-               {
-                  sct.contactScore = static_cast<int>(dist);
-               }
+                if ( locValid )  	// just 4CHAR not enough
+                {
+                    sct.bearing = brg;
 
-            }
+                    if ( !( sct.contactFlags & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
+                    {
+                        sct.contactScore = static_cast<int>(dist);
+                    }
 
-            int offset = contest->bearingOffset.getValue();
+                }
 
-            QString rev;
-            if (offset)
-            {
-                rev += "O";
-            }
-            rev += ( MinosParameters::getMinosParameters() ->getMagneticVariation() ) ? "M" : "T" ;
-            int vb = varBrg( brg + offset);
-            if ( TContestApp::getContestApp() ->reverseBearing )
-            {
-               vb = normBrg( vb - 180 );
-               rev += "R";
-            }
-            setScoreText( static_cast< int> ( dist), ( locValres == LOC_PARTIAL ), sct.contactFlags & XBAND );
-            QString brgbuff;
-            const QChar degreeChar(0260); // octal value
-            if ( locValres == LOC_PARTIAL )
-            {
-               brgbuff = QString( "(%1%2%3)").arg(vb).arg(degreeChar).arg(rev );
+                int offset = contest->bearingOffset.getValue();
+
+                QString rev;
+                if (offset)
+                {
+                    rev += "O";
+                }
+                rev += ( MinosParameters::getMinosParameters() ->getMagneticVariation() ) ? "M" : "T" ;
+                int vb = varBrg( brg + offset);
+                if ( TContestApp::getContestApp() ->reverseBearing )
+                {
+                    vb = normBrg( vb - 180 );
+                    rev += "R";
+                }
+                setScoreText( static_cast< int> ( dist), ( locValres == LOC_PARTIAL ), sct.contactFlags & XBAND );
+                QString brgbuff;
+                const QChar degreeChar(0260); // octal value
+                if ( locValres == LOC_PARTIAL )
+                {
+                    brgbuff = QString( "(%1%2%3)").arg(vb).arg(degreeChar).arg(rev );
+                }
+                else
+                {
+                    brgbuff = QString( "%1%2%3").arg(vb).arg(degreeChar).arg(rev );
+                }
+                ui->BrgSt->setText(brgbuff);
+                MinosLoggerEvents::SendBrgStrToRot(brgbuff);
             }
             else
             {
-                brgbuff = QString( "%1%2%3").arg(vb).arg(degreeChar).arg(rev );
+                ui->DistSt->clear();
+                ui->BrgSt->clear();
+                sct.contactScore = -1;
+                sct.bearing = -1;
+                MinosLoggerEvents::SendBrgStrToRot("");
             }
-            ui->BrgSt->setText(brgbuff);
-            MinosLoggerEvents::SendBrgStrToRot(brgbuff);
-         }
-         else
-         {
-           ui->DistSt->clear();
-           ui->BrgSt->clear();
-            sct.contactScore = -1;
-            sct.bearing = -1;
-            MinosLoggerEvents::SendBrgStrToRot("");
-         }
-   }
+    }
 }
 //---------------------------------------------------------------------------
 bool QSOLogFrame::validateControls( validTypes command )   // do control validation
@@ -1242,52 +1269,81 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
         if (!edit && (*vcp) == ssIl)
             ss = ssLineEditGreyBackground;
 
-        if (((*vcp)->wc->isEnabled() || ((*vcp) == ssIl && contest->serialField.getValue())) && !( *vcp ) ->valid( command, screenContact ) )
+        if (
+                (
+                    (*vcp)->wc->isEnabled()
+                    || ((*vcp) == ssIl && contest->serialMandatoryField.getValue())
+                    )
+                && (!( *vcp ) ->valid( command, screenContact ) )
+            )
         {
-            QString text = (*vcp)->wc->text().trimmed();
-            if (!text.isEmpty())
+            if (!(*vcp)->tIfValid)
             {
-                if ((*vcp) == csIl)
+                QString text = (*vcp)->wc->text().trimmed();
+                if (!text.isEmpty())
                 {
-                    if ( screenContact.cs.valRes == ERR_DUPCS)
+                    if ((*vcp) == csIl)
                     {
-                        ss = ssLineEditFrRedBkRed;
+                        if ( screenContact.cs.valRes == ERR_DUPCS)
+                        {
+                            ss = ssLineEditFrRedBkRed;
+                        }
+                        else
+                        {
+                            ss = ssLineEditFrRedBkWhite;
+                        }
+                    }
+                    else if ((*vcp) == rsIl && text == "5")
+                    {
+                        // leave as no error
+                    }
+                    else if ((*vcp) == rrIl && text == "5")
+                    {
+                        // leave as no error
+                    }
+                    else if ((*vcp) == locIl)
+                    {
+                        // leave as no error
+                        if (screenContact.loc.valRes == ERR_LOC_RANGE && screenContact.loc.loc.getValue().size() > 4)
+                        {
+                            ss = ssLineEditFrRedBkRed;
+                        }
+                        else if (screenContact.loc.valRes != LOC_OK)
+                        {
+                            ss = ssLineEditFrRedBkWhite;
+                        }
+                    }
+                    else if ((*vcp) == qthIl)
+                    {
+                        // leave as no error except if exchange is wrong??
+                    }
+                    else if ((*vcp) == srIl)
+                    {
+                        if (QApplication::focusWidget () == (*vcp)->wc)
+                        {
+                            QString t = (*vcp)->wc->text();
+                            int val = toInt(t, -1);
+                            if (val == -1)
+                            {
+                                ss = ssLineEditFrRedBkRed;
+                            }
+                            else if (val == 0)
+                            {
+                                ss = ssLineEditFrRedBkWhite;
+                            }
+                        }
+                        else
+                        {
+                            ss = ssLineEditFrRedBkRed;
+                        }
                     }
                     else
                     {
-                        ss = ssLineEditFrRedBkWhite;
-                    }
-                }
-                else if ((*vcp) == rsIl && text == "5")
-                {
-                    // leave as no error
-                }
-                else if ((*vcp) == rrIl && text == "5")
-                {
-                    // leave as no error
-                }
-                else if ((*vcp) == locIl)
-                {
-                    // leave as no error
-                    if (screenContact.loc.valRes == ERR_LOC_RANGE && screenContact.loc.loc.getValue().size() > 4)
-                    {
                         ss = ssLineEditFrRedBkRed;
                     }
-                    else if (screenContact.loc.valRes != LOC_OK)
-                    {
-                        ss = ssLineEditFrRedBkWhite;
-                    }
                 }
-                else if ((*vcp) == qthIl)
-                {
-                    // leave as no error except if exchange is wrong??
-                }
-                else
-                {
-                    ss = ssLineEditFrRedBkRed;
-                }
+                ret = false;
             }
-            ret = false;
         }
 
         if ((*vcp)->wc->isEnabled())
@@ -1342,7 +1398,7 @@ void QSOLogFrame::selectField( QWidget *v )
         return ;
     }
 
-    if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) )
+    if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit ) )
     {
         valid( cmCheckValid ); // make sure all single and cross field
         doAutofill();
@@ -1479,9 +1535,9 @@ void QSOLogFrame::contactValid( )
    int locrep = vcct->loc.validate();
    if ( locrep != 0 )
    {
-      if ( contest->locatorField.getValue() )
+      if ( contest->locatorMandatoryField.getValue() )
          locIl->tIfValid = false;
-      if ( contest->locatorField.getValue() && ( locrep == ERR_NOLOC ) )
+      if ( contest->locatorMandatoryField.getValue() && ( locrep == ERR_NOLOC ) )
       {
          lgTraceerr( ERR_18 );
       }
@@ -1700,12 +1756,12 @@ void QSOLogFrame::updateQSODisplay()
 //      ui->QTHEdit->CharCase = ecNormal;
    }
    bool notProtected = !contest->isReadOnly();
-   ui->RSTTXEdit->setEnabled(notProtected && contest->RSTField.getValue());
-   ui->SerTXEdit->setEnabled(notProtected && contest->serialField.getValue());
-   ui->RSTRXEdit->setEnabled(notProtected && contest->RSTField.getValue());
-   ui->SerRXEdit->setEnabled(notProtected && contest->serialField.getValue());
+   ui->RSTTXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->SerTXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
+   ui->RSTRXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->SerRXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
    //CallsignEdit->Enabled = false; // leave these to allow searching
-   ui->LocEdit->setEnabled(contest->locatorField.getValue());
+   ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());
    ui->CommentsEdit->setEnabled(notProtected);
    ui->ModeComboBoxGJV->setEnabled(notProtected);
    ui->NonScoreCheckBox->setEnabled(notProtected);
@@ -2515,3 +2571,5 @@ QString QSOLogFrame::getBearing()
 {
     return ui->BrgSt->text();
 }
+
+

@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
 #include "mults.h"
+#include "cutils.h"
 
 const double dtg::daySecs = 86400.0;	// 24 * 60 * 60
 

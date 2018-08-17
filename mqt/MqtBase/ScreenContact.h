@@ -10,6 +10,7 @@
 #ifndef ScreenContactH
 #define ScreenContactH 
 #include "base_pch.h"
+#include "contacts.h"
 //----------------------------------------------------------------------------
 class ScreenContact
 {

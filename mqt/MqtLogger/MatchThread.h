@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "base_pch.h"
+#include "MatchCollection.h"
 
 #ifndef MatchThreadH
 #define MatchThreadH 

@@ -14,13 +14,16 @@
 
 #include "base_pch.h"
 
-#include "rigmemdialog.h"
-#include "ui_rigmemdialog.h"
 #include "rigmemcommondata.h"
 #include "rigutils.h"
 #include "rigcontrolcommonconstants.h"
 #include "rotatorcommon.h"
 #include "LoggerContest.h"
+#include "tlogcontainer.h"
+#include "ContestApp.h"
+
+#include "rigmemdialog.h"
+#include "ui_rigmemdialog.h"
 
 
 RigMemDialog::RigMemDialog(QWidget *parent) :
@@ -42,6 +45,7 @@ RigMemDialog::RigMemDialog(QWidget *parent) :
     ui->callSignLineEdit->setFocus();
     // validate the input
     connect(ui->freqLineEdit, SIGNAL(editingFinished()), this, SLOT(onFreqEditFinish()));
+    connect(ui->locatorLineEdit, SIGNAL(editingFinished()), this, SLOT(onLocEditFinish()));
 }
 
 RigMemDialog::~RigMemDialog()
@@ -96,7 +100,7 @@ void RigMemDialog::setLogData(memoryData::memData* ldata, int buttonNumber, Logg
         if ( lres == LOC_OK )
         {
             double dist;
-            ct->disbear( lon, lat, dist, brg );
+            ct->disbeara( lon, lat, dist, brg );
         }
     }
 
@@ -164,3 +168,20 @@ void RigMemDialog::on_cancelButton_clicked()
 }
 
 
+
+void RigMemDialog::onLocEditFinish()
+{
+    double latitude;
+    double longitude;
+
+    QString gridref = ui->locatorLineEdit->text();
+    int locValres = lonlat( gridref, longitude, latitude );
+    if ( ( locValres ) == LOC_OK )
+    {
+        int brg = 0;
+        double dist = 0.0;
+
+        TContestApp::getContestApp()->getCurrentContest()->disbeara( longitude, latitude, dist, brg );
+        ui->bearingLineEdit->setText(QString::number(brg));
+    }
+}

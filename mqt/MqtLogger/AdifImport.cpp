@@ -9,6 +9,7 @@
 #include "base_pch.h"
 #include "rigutils.h"
 #include "LoggerContest.h"
+#include "contacts.h"
 #include "AdifImport.h"
 
 //====================================================================

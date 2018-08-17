@@ -10,24 +10,14 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
 #include <QList>
 #include <QDebug>
 #include <QStringList>
 #include "rigcontrol.h"
 #include <hamlib/rig.h>
 
-
-
-
-
-QList<const rig_caps *> capsList;
-bool riglistLoaded=false;
-
-
-
-
+static QList<const rig_caps *> capsList;
+static bool riglistLoaded=false;
 
 int collect(const rig_caps *caps,rig_ptr_t)
 {
@@ -375,8 +365,6 @@ pbwidth_t RigControl::getPassBand()
 
 bool RigControl::supportVolControl()
 {
-    bool get = rigHasGetLevel(RIG_LEVEL_AF);
-    bool set = rigHasSetLevel(RIG_LEVEL_AF);
     return (rigHasGetLevel(RIG_LEVEL_AF) & rigHasSetLevel(RIG_LEVEL_AF));
 }
 
@@ -749,7 +737,7 @@ int RigControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const cha
 
     vsprintf (buf, fmt, ap);
     QString s = QString::fromLatin1(buf);
-    emit debug_protocol(s);
+    emit debug_protocol(s, false);
 
     return RIG_OK;
 }

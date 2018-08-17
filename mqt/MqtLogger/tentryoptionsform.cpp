@@ -1,17 +1,24 @@
 #include "base_pch.h"
 #include "LoggerContest.h"
+#include "ContestDetailsTransferObject.h"
 #include "tentryoptionsform.h"
 #include "ui_tentryoptionsform.h"
 
 
-TEntryOptionsForm::TEntryOptionsForm( QWidget* Owner, LoggerContestLog * cnt, bool saveMinos ):
+TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetailsTransferObject> cnt, LoggerContestLog *inputContest, bool saveMinos ):
     QDialog(Owner),
     ui(new Ui::TEntryOptionsForm),
-    ct( cnt ), minosSave( saveMinos )
+    ct( cnt ), inputContest(inputContest),
+    minosSave( saveMinos )
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    if (!ct && inputContest)
+    {
+        ct = QSharedPointer<ContestDetailsTransferObject>(new ContestDetailsTransferObject);
+        ct->getFromContest(inputContest);
+    }
     if ( !ct )
         return ;
 
@@ -70,7 +77,7 @@ TEntryOptionsForm::TEntryOptionsForm( QWidget* Owner, LoggerContestLog * cnt, bo
 
     ui->OptionsScrollBox->setVerticalHeaderLabels(vlabels);
 
-    QTableWidgetItem *dateRangeItem = new QTableWidgetItem(ct->dateRange( DTGDISP ));
+    QTableWidgetItem *dateRangeItem = new QTableWidgetItem(ct->dateRange);
     dateRangeItem->setFlags(dateRangeItem->flags() ^ Qt::ItemIsEditable);
     dateRangeItem->setBackground(QBrush(Qt::lightGray));
 
@@ -327,7 +334,8 @@ QString TEntryOptionsForm::doFileSave( )
             }
 
 
-            int ret = ct->export_contest( contestFile, expformat, ui->NACSerials->isChecked() );
+            ct->setToContest(inputContest);
+            int ret = inputContest->export_contest( contestFile, expformat, ui->NACSerials->isChecked() );
             contestFile->close();
 
             if ( ret == -1 )

@@ -2,6 +2,7 @@
 #define TENTRYOPTIONSFORM_H
 
 #include "base_pch.h"
+#include "ContestDetailsTransferObject.h"
 
 class LoggerContestLog;
 
@@ -16,7 +17,7 @@ class TEntryOptionsForm : public QDialog
     void doCloseEvent();
 
 public:
-    explicit TEntryOptionsForm( QWidget* Owner, LoggerContestLog * , bool minosSave );
+    explicit TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetailsTransferObject> , LoggerContestLog *inputContest, bool minosSave );
     ~TEntryOptionsForm() override;
 
     QString doFileSave( );
@@ -34,7 +35,8 @@ private:
 
     void FormShow( );
 
-    LoggerContestLog * ct;
+    QSharedPointer<ContestDetailsTransferObject> ct;
+    LoggerContestLog *inputContest = 0;
 
     ExportType expformat;
     bool minosSave;

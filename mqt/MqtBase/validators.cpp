@@ -10,6 +10,7 @@
 
 #include "base_pch.h"
 #include "MinosLoggerEvents.h"
+#include "ScreenContact.h"
 
 ErrEntry errDefs[] =
    {

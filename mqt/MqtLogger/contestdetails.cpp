@@ -19,7 +19,7 @@
 ContestDetails::ContestDetails(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ContestDetails),
-    contest(nullptr), inputcontest(nullptr),
+    inputcontest(nullptr),
     saveContestOK(false), suppressProtectedOnClick(false),
     noMultRipple(false)
 {
@@ -85,8 +85,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
     connect(PowerEditFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(MainOpComboBoxFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
 
-    connect(LogContainer->sendDM, SIGNAL(setRadioList(QString)), this, SLOT(on_SetRadioList(QString)));
-    connect(LogContainer->sendDM, SIGNAL(RotatorList(QString)), this, SLOT(on_RotatorList(QString)));
+    connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
+    connect(LogContainer->sendDM, SIGNAL(RotatorList()), this, SLOT(on_RotatorList()));
 }
 void ContestDetails::doCloseEvent()
 {
@@ -153,8 +153,8 @@ void ContestDetails::setDetails( LoggerContestLog * pcont )
    if ( !pcont )
       return ;
    inputcontest = pcont;
-   contest = new LoggerContestLog();
-   *contest = *pcont;                // is this safe? not with the QSO vector... although it won't get changed!
+   contest = QSharedPointer<ContestDetailsTransferObject>(new ContestDetailsTransferObject());
+   contest->getFromContest(pcont);
    sectionList = contest->sectionList.getValue(); // the combo will then be properly set up in setDetails()
    setDetails();
 }
@@ -277,6 +277,7 @@ void ContestDetails::setDetails(  )
    }
 
    contest->validateLoc();
+
    if ( !contest->locValid && contest->myloc.loc.getValue().size() == 0 )
    {
       QString temp;
@@ -353,8 +354,8 @@ void ContestDetails::setDetails(  )
 
    ui->PowerEdit->setText(contest->power.getValue());
 
-   on_SetRadioList("");
-    on_RotatorList("");
+   on_SetRadioList();
+   on_RotatorList();
 
    if ( contest->isMinosFile() )
    {
@@ -366,9 +367,9 @@ void ContestDetails::setDetails(  )
    {
       ui->ProtectedOption->setEnabled(false);
    }
-   ui->RSTField->setChecked(contest->RSTField.getValue()) ;   // bool                   // contest
-   ui->SerialField->setChecked(contest->serialField.getValue()) ;   // bool             // contest
-   ui->LocatorField->setChecked(contest->locatorField.getValue()) ;   // bool         // contest
+   ui->RSTField->setChecked(contest->RSTMandatoryField.getValue()) ;   // bool                   // contest
+   ui->SerialField->setChecked(contest->serialMandatoryField.getValue()) ;   // bool             // contest
+   ui->LocatorField->setChecked(contest->locatorMandatoryField.getValue()) ;   // bool         // contest
 
    ui->AntOffsetEdit->setText(QString::number(contest->bearingOffset.getValue()));	// int
 
@@ -437,9 +438,9 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->ContestNameEdit->setText(ic.description);                      // contest
    contest->VHFContestName.setValue(ic.description);
 
-   contest->RSTField.setValue(true);
-   contest->serialField.setValue(true);
-   contest->locatorField.setValue(true);
+   contest->RSTMandatoryField.setValue(true);
+   contest->serialMandatoryField.setValue(true);
+   contest->locatorMandatoryField.setValue(true);
 
    // need to get legal bands from ContestLog
    ui->BandComboBox->clear();
@@ -674,7 +675,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    {
        contest->locMult.setValue( true );
        contest->MGMContestRules.setValue(true);
-       contest->serialField.setValue(false);
+       contest->serialMandatoryField.setValue(false);
        contest->allowLoc4.setValue(true);
        ui->AllowLoc4CB->setChecked(true);
    }
@@ -748,9 +749,9 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    contest->currentMode.setValue(mode);
 
 
-   ui->RSTField->setChecked(contest->RSTField.getValue()) ;
-   ui->SerialField->setChecked(contest->serialField.getValue()) ;
-   ui->LocatorField->setChecked(contest->locatorField.getValue()) ;
+   ui->RSTField->setChecked(contest->RSTMandatoryField.getValue()) ;
+   ui->SerialField->setChecked(contest->serialMandatoryField.getValue()) ;
+   ui->LocatorField->setChecked(contest->locatorMandatoryField.getValue()) ;
 
    contest->scoreMode.setValue( static_cast< SCOREMODE> ( ic.ppKmScoring ? 0 : 1 ) );  // combo
 
@@ -945,17 +946,14 @@ QWidget * ContestDetails::getDetails( )
         if (bt == 1)
         {
             contest->bonusType.setValue("B2");
-            contest->loadBonusList();
         }
         else if (bt == 2)
         {
             contest->bonusType.setValue("B4");
-            contest->loadBonusList();
         }
         else if (bt == 3)
         {
             contest->bonusType.setValue("NAC");
-            contest->loadBonusList();
         }
         else
         {
@@ -1055,9 +1053,9 @@ QWidget * ContestDetails::getDetails( )
         break;
 
     }
-    contest->RSTField.setValue( ui->RSTField->isChecked() ) ;   // bool
-    contest->serialField.setValue( ui->SerialField->isChecked() ) ;   // bool
-    contest->locatorField.setValue( ui->LocatorField->isChecked() ) ;   // bool
+    contest->RSTMandatoryField.setValue( ui->RSTField->isChecked() ) ;   // bool
+    contest->serialMandatoryField.setValue( ui->SerialField->isChecked() ) ;   // bool
+    contest->locatorMandatoryField.setValue( ui->LocatorField->isChecked() ) ;   // bool
 
     contest->power.setValue( ui->PowerEdit->text() );
     contest->bearingOffset.setValue(ui->AntOffsetEdit->text().toInt());	// int
@@ -1183,16 +1181,19 @@ void ContestDetails::on_OKButton_clicked()
     }
     else
     {
-       if (saveContestOK)
-       {
-          bool temp = contest->isProtectedSuppressed();
-          contest->setProtectedSuppressed(true);
-          contest->commonSave( false );
-          contest->setProtectedSuppressed(temp);
-       }
-       *inputcontest = *contest;
+        contest->setToContest(inputcontest);
 
-       accept();
+        inputcontest->loadBonusList();
+
+        if (saveContestOK)
+        {
+            bool temp = inputcontest->isProtectedSuppressed();
+            inputcontest->setProtectedSuppressed(true);
+            inputcontest->commonSave( false );
+            inputcontest->setProtectedSuppressed(temp);
+        }
+
+        accept();
     }
 
 }
@@ -1200,7 +1201,7 @@ void ContestDetails::on_OKButton_clicked()
 void ContestDetails::on_EntDetailButton_clicked()
 {
     getDetails( );   // override from the window
-    TEntryOptionsForm EntryDlg( this, contest, false );
+    TEntryOptionsForm EntryDlg( this, contest, nullptr, false );    // no save back to contest from this route
     if ( EntryDlg.exec() == QDialog::Accepted )
        setDetails( );
 
@@ -1442,14 +1443,14 @@ void ContestDetails::on_MGMCheckBox_stateChanged(int)
     }
     enableControls();
 }
-void ContestDetails::on_RotatorList(QString /*s*/)
+void ContestDetails::on_RotatorList()
 {
     ui->antennaNameEdit->clear();
     ui->antennaNameEdit->addItem("");
     ui->antennaNameEdit->addItems( LogContainer->sendDM->rotators());
     ui->antennaNameEdit->setCurrentText(contest->antennaName.getValue().toString());
 }
-void ContestDetails::on_SetRadioList(QString /*s*/)
+void ContestDetails::on_SetRadioList()
 {
     ui->radioNameEdit->clear();
     ui->radioNameEdit->addItem("");

@@ -68,7 +68,7 @@ class MinosItem
 {
    protected:
       bool dirty = false;
-      itemtype val;
+      itemtype val{};                          // C++ 11 default brace initialisation
       itemtype operator = ( const itemtype& ); // make it inaccessible
 
    public:

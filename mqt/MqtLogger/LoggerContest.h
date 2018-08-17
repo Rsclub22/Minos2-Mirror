@@ -10,10 +10,12 @@
 #ifndef LoggerContestH
 #define LoggerContestH 
 #include "base_pch.h"
+#include "cutils.h"
 //----------------------------------------------------------------------------
 #include "profiles.h"
 #include "rigmemcommondata.h"
 #include "PubSubValue.h"
+#include "contest.h"
 
 class DisplayContestContact;
 struct StanzaPos
@@ -24,6 +26,7 @@ struct StanzaPos
 class LoggerContestLog : public BaseContestLog
 {
       friend class MinosTestImport;
+      friend class ContestDetailsTransferObject;
       // a LoggerContestLog is a sorted collection of ContestContact records, sorted by
       // the logSequence field
    private:

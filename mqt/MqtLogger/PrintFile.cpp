@@ -9,7 +9,7 @@
 #include "base_pch.h"
 
 #include "LoggerContest.h"
-
+#include "contacts.h"
 #include "printfile.h"
 
 //==============================================================================

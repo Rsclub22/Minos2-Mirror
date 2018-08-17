@@ -12,6 +12,7 @@
 
 #include "base_pch.h"
 #include "rigutils.h"
+#include "BandList.h"
 #include "freqlineedit.h"
 
 FreqLineEdit::FreqLineEdit(QWidget *parent):

@@ -10,7 +10,6 @@
 
 #ifndef validatorsH
 #define validatorsH 
-// #include "base_pch.h"    / causes clang problems
 
 #include <QLineEdit>
 #include "mwin.h"

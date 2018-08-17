@@ -1,5 +1,6 @@
 #include "ContestApp.h"
 #include "MinosLoggerEvents.h"
+#include "ListContact.h"
 #include "MatchArchiveFrame.h"
 
 MatchArchiveFrame::MatchArchiveFrame(QWidget *parent) :

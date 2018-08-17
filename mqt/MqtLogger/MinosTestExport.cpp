@@ -10,6 +10,7 @@
 
 #include "rotatorcommon.h"
 #include "LoggerContest.h"
+#include "contacts.h"
 #include "MinosTestExport.h"
 
 //==============================================================================
@@ -111,9 +112,9 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->allowLoc8.addIfDirty( st, "AllowLoc8", dirty );
    ct->currentMode.addIfDirty(st, "currentMode", dirty);
 
-   ct->RSTField.addIfDirty(st, "RSTField", dirty);
-   ct->serialField.addIfDirty(st, "serialField", dirty);
-   ct->locatorField.addIfDirty(st, "locatorField", dirty);
+   ct->RSTMandatoryField.addIfDirty(st, "RSTField", dirty);
+   ct->serialMandatoryField.addIfDirty(st, "serialField", dirty);
+   ct->locatorMandatoryField.addIfDirty(st, "locatorField", dirty);
 
    ct->M7Mults.addIfDirty( st, "M7Mults", dirty );
    ct->usesBonus.addIfDirty( st, "UKACBonus", dirty );

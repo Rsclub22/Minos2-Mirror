@@ -10,7 +10,7 @@
 #define MinosLoggerEventsH
 
 #include "base_pch.h"
-
+#include "MatchCollection.h"
 //---------------------------------------------------------------------------
 class BaseContestLog;
 class LoggerContestLog;

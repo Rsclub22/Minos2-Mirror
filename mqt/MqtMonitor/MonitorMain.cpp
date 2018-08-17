@@ -1,5 +1,5 @@
 #include "base_pch.h"
-
+#include "contest.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
 #include "MonitorMain.h"

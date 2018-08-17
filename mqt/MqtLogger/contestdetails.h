@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "tbundleframe.h"
 #include "focuswatcher.h"
+#include "ContestDetailsTransferObject.h"
 
 namespace Ui {
 class ContestDetails;
@@ -24,8 +25,7 @@ private:
     Ui::ContestDetails *ui;
 
 private:   	// User declarations
-//      TCalendarForm *CalendarDlg;
-   LoggerContestLog * contest;
+   QSharedPointer< ContestDetailsTransferObject > contest;
    LoggerContestLog * inputcontest;
    QString sectionList;
    bool saveContestOK;
@@ -73,8 +73,8 @@ private slots:
    void on_ProtectedOption_clicked();
    void on_BonusComboBox_currentIndexChanged(int index);
    void on_MGMCheckBox_stateChanged(int arg1);
-   void on_RotatorList(QString s);
-   void on_SetRadioList(QString s);
+   void on_RotatorList();
+   void on_SetRadioList();
 };
 
 #endif // CONTESTDETAILS_H
