@@ -294,7 +294,7 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setFreq(rigSelected, convertStrToFreq(freq));
+    rigCache.setRitFreq(rigSelected, convertStrToFreq(freq));
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -312,7 +312,7 @@ void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
 void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setRitEnableStatus(rigSelected, status);
+    rigCache.setRitOnOffStatus(rigSelected, status);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -325,6 +325,25 @@ void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
 
     rpc.queueCall( rigSelected );
 }
+
+
+void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
+{
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setVolume(rigSelected, level);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+    st->addMember( level, rpcConstants::rigVolLevel);
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+}
+
 void TSendDM::sendRigControlTpm(TSingleLogFrame *tslf, int tpm, QString &freq)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
@@ -395,6 +414,11 @@ void TSendDM::notifyRigChanges()
                         trace("SendRPC Rig set freq " + convertFreqToStr(selState.freq().getValue()));
                         tslf->on_SetFreq(convertFreqToStr(selState.freq().getValue()));
                     }
+                    if (selState.volLevel().isDirty())
+                    {
+                        trace("SendRPC Rig set volume " + QString::number(selState.volLevel().getValue()));
+                        tslf->on_SetVolume(selState.volLevel().getValue());
+                    }
                     if (selState.status().isDirty())
                     {
                         trace("SendRPC Rig set status " + selState.status().getValue());
@@ -414,6 +438,11 @@ void TSendDM::notifyRigChanges()
                     {
                         trace(QString("SendRPC Rig set transverter status ") + (selDetail.transverterStatus().getValue() ? " True" : " False"));
                         tslf->on_SetRadioTxVertState( selDetail.transverterStatus().getValue() );
+                    }
+                    if (selDetail.volumeStatus().isDirty())
+                    {
+                        trace(QString("SendRPC Rig set volume status ") + (selDetail.volumeStatus().getValue() ? " True" : " False"));
+                        tslf->on_SetRadioVolumeState( selDetail.volumeStatus().getValue() );
                     }
                     if (selDetail.ritEnableStatus().isDirty())
                     {

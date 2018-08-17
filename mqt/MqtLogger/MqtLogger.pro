@@ -35,17 +35,11 @@ INCLUDEPATH += $$PWD/../MqtBandMap
 SOURCES += \
     AdifImport.cpp \
     ContestApp.cpp \
-    contestdetails.cpp \
-    districtframe.cpp \
-    dxccframe.cpp \
-    enqdlg.cpp \
+    ContestDetailsTransferObject.cpp \
     FilterFrame.cpp \
     LocCalcFrame.cpp \
-    locframe.cpp \
-    locTreeFrame.cpp \
     LoggerContacts.cpp \
     LoggerContest.cpp \
-    main.cpp \
     MatchArchiveFrame.cpp \
     MatchOtherFrame.cpp \
     MatchThisFrame.cpp \
@@ -53,15 +47,8 @@ SOURCES += \
     MatchTreeFrame.cpp \
     MinosTestExport.cpp \
     PrintFile.cpp \
-    profiles.cpp \
-    qsologframe.cpp \
-    reg1test.cpp \
-    rigcontrolframe.cpp \
-    rigmemdialog.cpp \
     RigMemoryFrame.cpp \
-    rotcontrolframe.cpp \
     RotPresets.cpp \
-    runbuttondialog.cpp \
     ScreenConfig.cpp \
     ScreenConfigElement.cpp \
     ScreenConfigFile.cpp \
@@ -69,11 +56,28 @@ SOURCES += \
     ScreenConfigRow.cpp \
     SendRPCDM.cpp \
     StackedInfoFrame.cpp \
+    TClockFrame.cpp \
+    TSessionManager.cpp \
+    contestdetails.cpp \
+    districtframe.cpp \
+    dxccframe.cpp \
+    enqdlg.cpp \
+    freqlineedit.cpp \
+    locTreeFrame.cpp \
+    locframe.cpp \
+    main.cpp \
+    profiles.cpp \
+    qsologframe.cpp \
+    reg1test.cpp \
+    rigcontrolframe.cpp \
+    rigmemdialog.cpp \
+    ritlineedit.cpp \
+    rotcontrolframe.cpp \
+    runbuttondialog.cpp \
     taboutbox.cpp \
     tbundleframe.cpp \
     tcalendarform.cpp \
     tclockdlg.cpp \
-    TClockFrame.cpp \
     tentryoptionsform.cpp \
     tforcelogdlg.cpp \
     tloccalcform.cpp \
@@ -82,23 +86,17 @@ SOURCES += \
     tminosbandchooser.cpp \
     tminoshelpform.cpp \
     tqsoeditdlg.cpp \
-    TSessionManager.cpp \
     tsettingseditdlg.cpp \
     tsinglelogframe.cpp \
     tstatsdispframe.cpp \
-    ContestDetailsTransferObject.cpp
+    volumeslider.cpp
 
 HEADERS  += \
     AdifImport.h \
     ContestApp.h \
-    contestdetails.h \
-    districtframe.h \
-    dxccframe.h \
-    enqdlg.h \
+    ContestDetailsTransferObject.h \
     FilterFrame.h \
     LocCalcFrame.h \
-    locframe.h \
-    locTreeFrame.h \
     LoggerContacts.h \
     LoggerContest.h \
     MatchArchiveFrame.h \
@@ -107,17 +105,8 @@ HEADERS  += \
     MatchThread.h \
     MatchTreeFrame.h \
     MinosTestExport.h \
-    printfile.h \
-    profiles.h \
-    qsologframe.h \
-    reg1test.h \
-    rigcontrolframe.h \
-    rigmemcommondata.h \
-    rigmemdialog.h \
     RigMemoryFrame.h \
-    rotcontrolframe.h \
     RotPresets.h \
-    runbuttondialog.h \
     ScreenConfig.h \
     ScreenConfigElement.h \
     ScreenConfigFile.h \
@@ -125,11 +114,29 @@ HEADERS  += \
     ScreenConfigRow.h \
     SendRPCDM.h \
     StackedInfoFrame.h \
+    TClockFrame.h \
+    TSessionManager.h \
+    contestdetails.h \
+    districtframe.h \
+    dxccframe.h \
+    enqdlg.h \
+    freqlineedit.h \
+    locTreeFrame.h \
+    locframe.h \
+    printfile.h \
+    profiles.h \
+    qsologframe.h \
+    reg1test.h \
+    rigcontrolframe.h \
+    rigmemcommondata.h \
+    rigmemdialog.h \
+    ritlineedit.h \
+    rotcontrolframe.h \
+    runbuttondialog.h \
     taboutbox.h \
     tbundleframe.h \
     tcalendarform.h \
     tclockdlg.h \
-    TClockFrame.h \
     tentryoptionsform.h \
     tforcelogdlg.h \
     tloccalcform.h \
@@ -138,11 +145,10 @@ HEADERS  += \
     tminosbandchooser.h \
     tminoshelpform.h \
     tqsoeditdlg.h \
-    TSessionManager.h \
     tsettingseditdlg.h \
     tsinglelogframe.h \
     tstatsdispframe.h \
-    ContestDetailsTransferObject.h
+    volumeslider.h
 
 FORMS    += \
     contestdetails.ui \

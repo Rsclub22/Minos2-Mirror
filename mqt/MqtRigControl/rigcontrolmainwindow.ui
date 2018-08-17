@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>677</width>
-    <height>343</height>
+    <width>661</width>
+    <height>269</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Minos Rig Control</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -401,14 +401,35 @@
      </layout>
     </item>
     <item>
-     <widget class="QFrame" name="frame_2">
-      <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="SmeterBar" name="sMeter" native="true"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="sMeterLabel">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -417,8 +438,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>677</width>
-     <height>25</height>
+     <width>661</width>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuConfigure">
@@ -487,6 +508,14 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>SmeterBar</class>
+   <extends>QWidget</extends>
+   <header>smeterbar.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

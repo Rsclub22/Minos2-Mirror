@@ -239,6 +239,10 @@ void RigCache::setMode(const PubSubName &name, const QString &mode)
 {
     rigStates[name].setMode(mode);
 }
+void RigCache::setVolume(const PubSubName &name, const int level)
+{
+    rigStates[name].setVolume(level);
+}
 
 void RigCache::setTransverterOffset(const PubSubName &name, double transverterOffset)
 {
@@ -251,6 +255,10 @@ void RigCache::setTransverterSwitch(const PubSubName &name, int transverterSwitc
 void RigCache::setTransverterStatus(const PubSubName &name, bool transverterStatus)
 {
     rigDetails[name].setTransverterStatus(transverterStatus);
+}
+void RigCache::setVolumeStatus(const PubSubName &name, bool volumeStatus)
+{
+    rigDetails[name].setVolumeStatus(volumeStatus);
 }
 void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {

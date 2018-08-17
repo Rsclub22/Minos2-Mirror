@@ -9,6 +9,7 @@ RigDetails::RigDetails()
     _transverterOffset.setInitialValue(0.0);
     _transverterSwitch.setInitialValue(0);
     _transverterStatus.setInitialValue(false);
+    _volumeStatus.setInitialValue(false);
     _ritEnableStatus.setInitialValue(false);
     _ritOnOffStatus.setInitialValue(false);
 }
@@ -26,6 +27,7 @@ bool RigDetails::isDirty() const
             _transverterOffset.isDirty() ||
             _transverterSwitch.isDirty() ||
             _transverterStatus.isDirty() ||
+            _volumeStatus.isDirty() ||
             _bandList.isDirty() ||
             _ritEnableStatus.isDirty() ||
             _ritOnOffStatus.isDirty();
@@ -36,6 +38,7 @@ void RigDetails::clearDirty()
     _transverterOffset.clearDirty();
     _transverterSwitch.clearDirty();
     _transverterStatus.clearDirty();
+    _volumeStatus.clearDirty();
     _bandList.clearDirty();
     _ritEnableStatus.clearDirty();
     _ritOnOffStatus.clearDirty();
@@ -46,6 +49,7 @@ void RigDetails::setDirty()
     _transverterOffset.setDirty();
     _transverterSwitch.setDirty();
     _transverterStatus.setDirty();
+    _volumeStatus.setDirty();
     _bandList.setDirty();
     _ritEnableStatus.setDirty();
     _ritOnOffStatus.setDirty();
@@ -70,6 +74,11 @@ void RigDetails::setTransverterStatus(bool transverterStatus)
     _transverterStatus.setValue(transverterStatus);
 }
 
+void RigDetails::setVolumeStatus(bool volumeStatus)
+{
+    _volumeStatus.setValue(volumeStatus);
+}
+
 void RigDetails::setRitEnableStatus(bool ritEnableStatus)
 {
     _ritEnableStatus.setValue(ritEnableStatus);
@@ -91,6 +100,7 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigControlTxVertOffsetFreq, transverterOffset().getValue());
     jv.insert(rpcConstants::rigControlTxVertSwitch, transverterSwitch().getValue());
     jv.insert(rpcConstants::rigControlTxVertStatus, transverterStatus().getValue());
+    jv.insert(rpcConstants::rigVolStatus, volumeStatus().getValue());
     jv.insert(rpcConstants::rigControlBandList, bandList().getValue());
     jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
     jv.insert(rpcConstants::rigRitOnOffStatus , ritOnOffStatus().getValue());
@@ -112,6 +122,7 @@ void RigDetails::unpack(QString s)
         _transverterOffset.setValue(json.object().value(rpcConstants::rigControlTxVertOffsetFreq).toDouble());
         _transverterSwitch.setValue(json.object().value(rpcConstants::rigControlTxVertSwitch).toInt());
         _transverterStatus.setValue(json.object().value(rpcConstants::rigControlTxVertStatus).toBool());
+        _volumeStatus.setValue(json.object().value(rpcConstants::rigVolStatus).toBool());
         _bandList.setValue(json.object().value(rpcConstants::rigControlBandList).toString());
         _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toBool());
         _ritOnOffStatus.setValue(json.object().value(rpcConstants::rigRitOnOffStatus).toBool());
@@ -139,6 +150,10 @@ MinosItem<int> RigDetails::transverterSwitch() const
 MinosItem<bool> RigDetails::transverterStatus() const
 {
     return _transverterStatus;
+}
+MinosItem<bool> RigDetails::volumeStatus() const
+{
+    return _volumeStatus;
 }
 MinosStringItem<QString> RigDetails::bandList() const
 {
