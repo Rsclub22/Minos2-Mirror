@@ -516,7 +516,7 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
       return "";
    }
 
-   TEntryOptionsForm EntryDlg( this, nullptr, ct, saveMinos  );
+   TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos  );
    if ( saveMinos )
    {
       EntryDlg.setWindowTitle("Save imported log as a .minos file");

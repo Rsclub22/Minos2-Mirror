@@ -36,7 +36,7 @@ private:
     void FormShow( );
 
     QSharedPointer<ContestDetailsTransferObject> ct;
-    LoggerContestLog *inputContest = 0;
+    LoggerContestLog *inputContest = nullptr;
 
     ExportType expformat;
     bool minosSave;
