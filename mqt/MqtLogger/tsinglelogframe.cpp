@@ -1,6 +1,5 @@
 #include "base_pch.h"
 #include <QScrollArea>
-
 #include "MinosLoggerEvents.h"
 
 #include "ContestApp.h"
@@ -395,6 +394,7 @@ void TSingleLogFrame::buildScreenLayout()
                 {
                     elementScrollArea = new QScrollArea();
                     elementScrollArea->setWidgetResizable(true);
+                    elementScrollArea->setFocusPolicy(Qt::NoFocus);
                     rowSplitters[j]->addWidget(elementScrollArea);
                 }
 
@@ -515,7 +515,8 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
    {
       return "";
    }
-   TEntryOptionsForm EntryDlg( this, ct, saveMinos  );
+
+   TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos  );
    if ( saveMinos )
    {
       EntryDlg.setWindowTitle("Save imported log as a .minos file");
@@ -901,6 +902,11 @@ ScreenContact &TSingleLogFrame::getScreenEntry()
 int TSingleLogFrame::getBearingFrmQSOLog()
 {
     return FKHRotControlFrame->getAngle(GJVQSOLogFrame->getBearing());
+}
+
+int TSingleLogFrame::getCurrentBearing()
+{
+    return FKHRotControlFrame->getCurrentBearing();
 }
 //---------------------------------------------------------------------------
 
