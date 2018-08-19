@@ -2,7 +2,6 @@
 #define LOCCALCFRAME_H
 
 #include "base_pch.h"
-#include "focuswatcher.h"
 
 namespace Ui {
 class LocCalcFrame;
@@ -29,6 +28,10 @@ private slots:
 
     void on_CancelButton_clicked();
 
+    void on_S1Calc_clicked();
+
+    void on_S2Calc_clicked();
+
 private:
     Ui::LocCalcFrame *ui;
     void doCloseEvent();
@@ -36,15 +39,6 @@ private:
 
     BaseContestLog *contest;
 
-    FocusWatcher *S1LocFW;
-    FocusWatcher *S1LatLongFW;
-    FocusWatcher *S1NGRFW;
-    FocusWatcher *S2LocFW;
-    FocusWatcher *S2LatLongFW;
-    FocusWatcher *S2NGRFW;
-
-public Q_SLOTS:
-    void focusChange(QObject *, bool, QFocusEvent *event);
 };
 
 #endif // LOCCALCFRAME_H
