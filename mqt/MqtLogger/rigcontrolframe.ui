@@ -26,9 +26,9 @@
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
         <widget class="QComboBox" name="radioNameSel">
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
          <property name="sizeAdjustPolicy">
           <enum>QComboBox::AdjustToContents</enum>
          </property>
@@ -139,7 +139,7 @@
              </font>
             </property>
             <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
+             <enum>Qt::ClickFocus</enum>
             </property>
             <property name="inputMask">
              <string>x9.99</string>
@@ -200,6 +200,9 @@
            <widget class="QComboBox" name="bandSelCombo">
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
             </property>
            </widget>
           </item>
