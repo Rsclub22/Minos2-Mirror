@@ -10,14 +10,24 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+
+
 #include <QList>
 #include <QDebug>
 #include <QStringList>
 #include "rigcontrol.h"
 #include <hamlib/rig.h>
 
-static QList<const rig_caps *> capsList;
-static bool riglistLoaded=false;
+
+
+
+
+QList<const rig_caps *> capsList;
+bool riglistLoaded=false;
+
+
+
+
 
 int collect(const rig_caps *caps,rig_ptr_t)
 {
@@ -249,21 +259,43 @@ int RigControl::setRit(vfo_t vfo, shortfreq_t ritfreq)
     return rig_set_rit(my_rig, vfo, ritfreq);
 }
 
-int RigControl::supportRit(int rigNumber, bool *ritFlag)
+int RigControl::supportGetRit(int rigNumber, bool *flag)
 {
     int retCode = RIG_OK;
     RIG *myRig;
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        if (myRig->caps->get_rit == nullptr || myRig->caps->set_rit == nullptr)
-        {
-            *ritFlag = false;
+        if (myRig->caps->get_rit == nullptr)         {
+            *flag = false;
             return retCode;
         }
         else
         {
-            *ritFlag = true;
+            *flag = true;
+            return retCode;
+        }
+    }
+
+    return retCode = -14;
+
+}
+
+
+int RigControl::supportSetRit(int rigNumber, bool *flag)
+{
+    int retCode = RIG_OK;
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        if (myRig->caps->set_rit == nullptr)         {
+            *flag = false;
+            return retCode;
+        }
+        else
+        {
+            *flag = true;
             return retCode;
         }
     }
@@ -737,7 +769,7 @@ int RigControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const cha
 
     vsprintf (buf, fmt, ap);
     QString s = QString::fromLatin1(buf);
-    emit debug_protocol(s, false);
+    emit debug_protocol(s);
 
     return RIG_OK;
 }

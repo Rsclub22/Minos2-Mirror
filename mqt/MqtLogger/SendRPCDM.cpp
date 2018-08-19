@@ -10,7 +10,7 @@
 #include "base_pch.h"
 #include <QHostInfo>
 
-#include "contest.h"
+
 #include "SendRPCDM.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"

@@ -27,7 +27,7 @@
 #include <QMessageBox>
 #include <QProcessEnvironment>
 
-
+#include <QBitArray>
 #include <QDebug>
 
 
@@ -112,6 +112,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
     sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
 
+
     logRitOn = false;
     setRitOnOffDisplayVisible(logRitOn);
     setRitOnOffDisplay(logRitOn);
@@ -163,9 +164,9 @@ RigControlMainWindow::~RigControlMainWindow()
     delete msg;
 }
 
-void RigControlMainWindow::logMessage( QString s, bool logAnyway )
+void RigControlMainWindow::logMessage( QString s )
 {
-    if (logAnyway || ui->actionTrace_Log->isChecked())
+    if (ui->actionTrace_Log->isChecked())
         trace( s );
 }
 
@@ -249,7 +250,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
 
-    connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString, bool)));
+    connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
 
     // standalone test
     connect(ui->selFreq, SIGNAL(clicked(bool)), this, SLOT(selFreqClicked()));
@@ -401,11 +402,6 @@ void RigControlMainWindow::upDateRadio()
             sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);                                 // turn off transVerter Sw
             sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
 
-            //setupRadio->currentRadio.transVertNegative = setupRadio->availRadioData[ridx]->transVertNegative;
-            //setupRadio->currentRadio.transVertOffset = setupRadio->availRadioData[ridx]->transVertOffset;
-            //setupRadio->currentRadio.transVertOffsetStr = setupRadio->availRadioData[ridx]->transVertOffsetStr;
-            //setupRadio->currentRadio.mgmMode = setupRadio->availRadioData[ridx]->mgmMode;
-
             setupRadio->saveCurrentRadio();
 
             openRadio();
@@ -446,7 +442,8 @@ void RigControlMainWindow::upDateRadio()
                     writeWindowTitle(appName);
                     sendStatusToLogConnected();
                     sendBandListLogger();
-                    if (setupRadio->currentRadio.ritAvail && setupRadio->currentRadio.ritEnable)
+
+                    if (setupRadio->currentRadio.ritSetAvail && setupRadio->currentRadio.ritEnable)
                     {
                         setRitDisplayVisible(true);
                         setRitOnOffDisplayVisible(true);
@@ -668,18 +665,18 @@ int RigControlMainWindow::getPolltime()
 void RigControlMainWindow::cmdLockOn()
 {
     cmdLockFlag = true;
-    logMessage(QString("Lockon: Command Lock On"), false);
+    logMessage(QString("Lockon: Command Lock On"));
 }
 
 void RigControlMainWindow::cmdLockOff()
 {
     cmdLockFlag = false;
-    logMessage(QString("Lockoff: Command Lock Off"), false);
+    logMessage(QString("Lockoff: Command Lock Off"));
 }
 
 void RigControlMainWindow::getRadioInfo()
 {
-    logMessage(QString("Request radio info"), false);
+    logMessage(QString("Request radio info"));
     if (cmdLockFlag)
     {
         trace(QString("GetRadioInfo: Command Lock on"));
@@ -690,7 +687,7 @@ void RigControlMainWindow::getRadioInfo()
     int retCode;
     if (radio->get_serialConnected())
     {
-        logMessage(QString("Get radio frequency"), false);
+        logMessage(QString("Get radio frequency"));
         retCode = getAndSendFrequency(RIG_VFO_CURR);
         if (retCode < 0)
         {
@@ -705,7 +702,7 @@ void RigControlMainWindow::getRadioInfo()
     if (radio->get_serialConnected())
     {
 
-        logMessage("Get radio mode", false);
+        logMessage("Get radio mode");
         retCode = getAndSendMode(RIG_VFO_CURR);
         if (retCode < 0)
         {
@@ -716,16 +713,16 @@ void RigControlMainWindow::getRadioInfo()
         }
         else
         {
-            logMessage(QString("Got Mode = %1").arg(radio->convertModeQstr(rmode)), false);
+            logMessage(QString("Got Mode = %1").arg(radio->convertModeQstr(rmode)));
         }
     }
 
 
 
 
-    if (radio->get_serialConnected() && setupRadio->currentRadio.ritEnable && setupRadio->currentRadio.ritEnable)
+    if (radio->get_serialConnected() && setupRadio->currentRadio.ritGetAvail && setupRadio->currentRadio.ritEnable)
     {
-        logMessage((QString("Get RIT")), false);
+        logMessage((QString("Get RIT")));
         retCode = getRitFreq(RIG_VFO_CURR);
         if (retCode < 0)
         {
@@ -969,7 +966,7 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
         {
             if (selTvBand != "")
             {
-                logMessage(QString("Get Freq: Transvert enabled"), false);
+                logMessage(QString("Get Freq: Transvert enabled"));
                 // look for supporting transverter
 
                 while (tvNum < setupRadio->currentRadio.numTransverters)
@@ -987,14 +984,14 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
                     logMessage(QString("Transverter %1 name %2 offset %3 rfreq %4").arg(tvNum)
                                .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertName)
                                .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset)
-                               .arg(rfrequency), false
+                               .arg(rfrequency)
                                );
 
                     transVertF = rfrequency + setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset;
-                    logMessage(QString("Get Freq: TransvertF = %1").arg(QString::number(transVertF)), false);
+                    logMessage(QString("Get Freq: TransvertF = %1").arg(QString::number(transVertF)));
                 }
 
-                logMessage(QString("Get Freq: Transvert Freq. = %1").arg(QString::number(transVertF)), false);
+                logMessage(QString("Get Freq: Transvert Freq. = %1").arg(QString::number(transVertF)));
                 curTransVertFrq = transVertF;
                 displayTransVertVfo(transVertF);
 
@@ -1002,7 +999,7 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
             else
             {
                 //setTransVertDisplayVisible(false);
-                logMessage(QString("GetFreq: No transvert band set for this freq = %1").arg(QString::number(curVfoFrq)), false);
+                logMessage(QString("GetFreq: No transvert band set for this freq = %1").arg(QString::number(curVfoFrq)));
             }
         }
 
@@ -1072,7 +1069,7 @@ int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 
     if (retCode == RIG_OK)
     {
-        logMessage(QString("Get Mode: From Rx mode = %1, passband = %2").arg(radio->convertModeQstr(rmode)).arg(QString::number(rwidth)), false);
+        logMessage(QString("Get Mode: From Rx mode = %1, passband = %2").arg(radio->convertModeQstr(rmode)).arg(QString::number(rwidth)));
         curMode = rmode;
         sCurMode = radio->convertModeQstr(rmode);
 
@@ -1355,85 +1352,23 @@ void RigControlMainWindow::displaySignalStrength(int level)
 
     // display text
 
-    if (level == 60)
+    int i = 0;
+    while(i < 16)
     {
-        ui->sMeterLabel->setText("S9+60");
-        return;
-    }
-    else if ((level >= 50) & (level < 60))
-    {
-        ui->sMeterLabel->setText("S9+50");
-        return;
-    }
-    else if ((level >= 40) & (level < 50))
-    {
-        ui->sMeterLabel->setText("S9+40");
-        return;
-    }
-    else if ((level >= 30) & (level < 40))
-    {
-        ui->sMeterLabel->setText("S9+30");
-        return;
-    }
-    else if ((level >= 20) & (level < 30))
-    {
-        ui->sMeterLabel->setText("S9+20");
-        return;
-    }
-    else if ((level >= 10) & (level < 20))
-    {
-        ui->sMeterLabel->setText("S9+10");
-        return;
-    }
-    else if ((level >= 0) & (level < 10))
-    {
-        ui->sMeterLabel->setText("S9   ");
-        return;
-    }
-    else if ((level >= -6) & (level < 0))
-    {
-        ui->sMeterLabel->setText("S8   ");
-        return;
-    }
-    else if ((level >= -12) & (level < -6))
-    {
-        ui->sMeterLabel->setText("S7   ");
-        return;
-    }
-    else if ((level >= -18) & (level < -12))
-    {
-        ui->sMeterLabel->setText("S6   ");
-        return;
-    }
-    else if ((level >= -22) & (level < -18))
-    {
-        ui->sMeterLabel->setText("S5   ");
-        return;
-    }
-    else if ((level >= -28) & (level < -22))
-    {
-        ui->sMeterLabel->setText("S4   ");
-        return;
-    }
-    else if ((level >= -32) & (level < -28))
-    {
-        ui->sMeterLabel->setText("S3   ");
-        return;
-    }
-    else if ((level >= -38) & (level < -32))
-    {
-        ui->sMeterLabel->setText("S2   ");
-        return;
-    }
-    else if ((level >= -42) & (level < -38))
-    {
-        ui->sMeterLabel->setText("S1   ");
-        return;
-    }
-    else if ((level >= -48) & (level < -42))
-    {
-        ui->sMeterLabel->setText(QString::number(level) + "  ");
-    }
+         if ((level >= SMETERVALUES[i][0]) & (level >= SMETERVALUES[i][1]))
+         {
+             if (i == 15)
+             {
+                 ui->sMeterLabel->setText(QString::number(level) + "  ");
+             }
+             else
+             {
+                 ui->sMeterLabel->setText(SMETERTEXT[i]);
+             }
+             break;
+         }
+         i++;
+     }
 
 
 
@@ -1652,7 +1587,7 @@ void RigControlMainWindow::sendFreqToLog(freq_t freq)
     {
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setFreq(psname, freq);
-        logMessage(QString("Send freq to logger = %1 psn=%2").arg(convertFreqToStr(freq)).arg(psname.toString()), false);
+        logMessage(QString("Send freq to logger = %1 psn=%2").arg(convertFreqToStr(freq)).arg(psname.toString()));
     }
 }
 
@@ -1660,7 +1595,7 @@ void RigControlMainWindow::sendModeToLog(QString mode)
 {
     if (appName.length() > 0)
     {
-        logMessage(QString("Send mode to logger = %1").arg(mode), false);
+        logMessage(QString("Send mode to logger = %1").arg(mode));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setMode(psname, mode);
     }
@@ -1738,13 +1673,13 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
 
 void RigControlMainWindow::sendRitEnableStatusLogger()
 {
-    if (!setupRadio->currentRadio.ritAvail)
+    if (setupRadio->currentRadio.ritSetAvail & setupRadio->currentRadio.ritEnable)
     {
-        sendRitEnableStatus(setupRadio->currentRadio.ritAvail); // turn off rit in logger if not available
+        sendRitEnableStatus(true);
     }
     else
     {
-        sendRitEnableStatus(setupRadio->currentRadio.ritEnable);
+        sendRitEnableStatus(false);
     }
 
 }
@@ -1843,7 +1778,8 @@ void RigControlMainWindow::aboutRigConfig()
             msg.append(QString("Transverter Switch num = %1\n").arg(setupRadio->currentRadio.transVertSettings[i]->transSwitchNum));
             msg.append(QString("Transverter Switch enable = %1\n").arg(setupRadio->currentRadio.enableTransSwitch  ? "True" : "False"));
         }
-        msg.append(QString("Radio Supports RIT = %1\n").arg(setupRadio->currentRadio.ritAvail ? "True" : "False"));
+        msg.append(QString("Radio Supports Get RIT = %1\n").arg(setupRadio->currentRadio.ritGetAvail ? "True" : "False"));
+        msg.append(QString("Radio Supports Set RIT = %1\n").arg(setupRadio->currentRadio.ritSetAvail ? "True" : "False"));
         msg.append(QString("Rit Enable On = %1\n").arg(setupRadio->currentRadio.ritEnable  ? "True" : "False"));
         msg.append(QString("Tracelog = %1\n").arg(ui->actionTrace_Log->isChecked() ? "True" : "False"));
     }
@@ -1899,7 +1835,8 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             trace(QString("Transverter Switch num = %1").arg(setupRadio->currentRadio.transVertSettings[i]->transSwitchNum));
             trace(QString("Transverter Switch enable = %1").arg(setupRadio->currentRadio.enableTransSwitch  ? "True" : "False"));
         }
-        trace(QString("Radio Supports RIT = %1").arg( setupRadio->currentRadio.ritAvail ? "True" : "False"));
+        trace(QString("Radio Supports Get RIT = %1").arg(setupRadio->currentRadio.ritGetAvail ? "True" : "False"));
+        trace(QString("Radio Supports Set RIT = %1").arg(setupRadio->currentRadio.ritSetAvail ? "True" : "False"));
         trace(QString("Rit Enable On = %1").arg(setupRadio->currentRadio.ritEnable  ? "True" : "False"));
         trace(QString("Tracelog = %1").arg(ui->actionTrace_Log->isChecked() ? "True" : "False"));
 

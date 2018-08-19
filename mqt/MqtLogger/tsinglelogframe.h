@@ -32,7 +32,7 @@ class ListContact;
 class FocusWatcher;
 class MatchTreeFrame;
 class ChatFrame;
-class MinosSplitter;
+
 
 // We may need to define our own validation controls with valid methods
 // for each needed type...
@@ -86,7 +86,6 @@ public:
 
     ScreenContact &getScreenEntry();
     int getBearingFrmQSOLog();
-    int getCurrentBearing();
 
     void refreshMults();
 

@@ -28,6 +28,7 @@
 
 class QLabel;
 class QComboBox;
+class QBitArray;
 class RigSetupDialog;
 class RigControl;
 class RigControlRpc;
@@ -80,7 +81,6 @@ private:
     bool logRitOn;
     bool supVolume = false;     // radio supports volume
     bool supSignalStrength = false;
-
     const int PASSBAND_NOCHANGE = -1;
 
     QVector<BandDetail*> bands;
@@ -206,7 +206,7 @@ private slots:
     void saveTraceLogFlag();
 
     void getRadioInfo();
-    void logMessage(QString s, bool logAnyway = true);
+    void logMessage(QString s);
     void about();
     void LogTimerTimer();
 
