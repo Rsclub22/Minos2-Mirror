@@ -2,6 +2,8 @@
 #include <QLocalSocket>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QSettings>
+#include <QThread>
 
 #define TIME_OUT                (500)    // 500ms
 
@@ -78,6 +80,15 @@ void SingleApplication::_newLocalServer() {
             _localServer->listen(_serverName); // Listen again
         }
     }
+}
+
+void SingleApplication::clearRegistry()
+{
+#ifdef Q_OS_WIN
+    QThread::msleep(1000);
+    QSettings reg("HKEY_CURRENT_USER\\Software\\Minos2Qt", QSettings::NativeFormat);
+    reg.clear();
+#endif
 }
 void SingleApplication::sendArgs()
 {
