@@ -57,7 +57,7 @@
            <item>
             <widget class="QRadioButton" name="S1NGRRb">
              <property name="text">
-              <string>(SU 83979 71691)</string>
+              <string>NGR (SU 83979 71691)</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">refformat1</string>
@@ -180,7 +180,7 @@
            <item>
             <widget class="QRadioButton" name="S2NGRRb">
              <property name="text">
-              <string>(SU 83979 71691)</string>
+              <string>NGR (SU 83979 71691)</string>
              </property>
              <attribute name="buttonGroup">
               <string notr="true">refformat2</string>
