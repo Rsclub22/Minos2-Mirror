@@ -152,7 +152,7 @@ bool RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, co
     else if (psnSelected == name)
     {
         selOK = true;
-        trace ("selection OK; selecting current rotator");
+        trace ("selection OK; selecting current radio");
     }
     else if ((loggers.size() == 0) || (loggers.size() == 1 && loggers[0] == loggeruuid))
     {

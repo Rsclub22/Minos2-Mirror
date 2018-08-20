@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
             return appError;
         }
 
-        appStartup("MinosQtLogger");
+        appStartup(rpcConstants::loggerApp);
 
 #ifdef Q_OS_ANDROID
         QString sdCard = getenv("EXTERNAL_STORAGE")+ QString("/uk.org.g0gjv.minos");

@@ -23,7 +23,7 @@ TSendDM::TSendDM(QWidget* Owner )
     loggerUuid = /*makeUuid()*/h;
     trace("logger uuid is " + loggerUuid);
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
 
@@ -834,7 +834,7 @@ void TSendDM::subscribeApps()
     connectables.clear();
     servers.clear();
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     MinosConfig *config = MinosConfig::getMinosConfig();
 
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = config->elelist.begin(); i != config->elelist.end(); i++ )

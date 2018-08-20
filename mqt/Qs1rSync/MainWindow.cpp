@@ -69,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
     SyncTimer.start(100);
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC("Qs1rSync", false);    // DO NOT use the environment variable - use "Chat" everywhere
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), false);    // DO NOT use the environment variable - use "Chat" everywhere
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
@@ -87,6 +87,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     for (int i = 0; i < servers.size(); i++)
     {
+        // this only works for local servers - so OK for me, but...
         rpc->subscribeRemote( servers[i], rpcConstants::rigControlCategory );
         rpc->subscribeRemote( servers[i], rpcConstants::rigDetailsCategory );
         rpc->subscribeRemote( servers[i], rpcConstants::rigStateCategory );
@@ -275,7 +276,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
     trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
     AnalysePubSubNotify an( err, mro );
 
-    if ( an.getOK() && an.getPublisherProgram() == rpcConstants::rigControlApp )
+    if ( an.getOK() )    // won't be true now
     {
         if ( an.getState() == psPublished)
         {
@@ -291,6 +292,8 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
             {
                 rigCache.addRigList(an.getValue());
             }
+            else
+                return;
         }
         rigSelected = rigCache.getSelected("");
         if (!rigSelected.isEmpty())
