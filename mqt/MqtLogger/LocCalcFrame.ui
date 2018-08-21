@@ -77,7 +77,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="S1Grid"/>
+           <widget class="QLineEdit" name="S1Grid">
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QToolButton" name="S1Calc">
@@ -99,6 +103,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="S1Loc">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -117,6 +124,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="S1LatLong">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -135,6 +145,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="S1NGR">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -200,7 +213,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="S2Grid"/>
+           <widget class="QLineEdit" name="S2Grid">
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QToolButton" name="S2Calc">
@@ -222,6 +239,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="S2Loc">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -240,6 +260,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="S2LatLong">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -258,6 +281,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="S2NGR">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -324,7 +350,7 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="refformat1"/>
   <buttongroup name="refformat2"/>
+  <buttongroup name="refformat1"/>
  </buttongroups>
 </ui>

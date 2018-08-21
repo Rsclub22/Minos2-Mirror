@@ -92,7 +92,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="StationIdEdit"/>
+      <widget class="QLineEdit" name="StationIdEdit">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="SetButton">

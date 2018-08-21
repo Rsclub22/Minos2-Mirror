@@ -98,6 +98,9 @@
        <property name="readOnly">
         <bool>false</bool>
        </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -248,7 +251,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="programNameEdit"/>
+              <widget class="QLineEdit" name="programNameEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QToolButton" name="programBrowseButton">
@@ -272,7 +279,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="parametersEdit"/>
+              <widget class="QLineEdit" name="parametersEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -289,7 +300,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="homeDirectoryEdit"/>
+              <widget class="QLineEdit" name="homeDirectoryEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QToolButton" name="homeDirectoryBrowse">
@@ -335,7 +350,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="remoteAppNameEdit"/>
+              <widget class="QLineEdit" name="remoteAppNameEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_3">
@@ -345,7 +364,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="serverNameEdit"/>
+              <widget class="QLineEdit" name="serverNameEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
