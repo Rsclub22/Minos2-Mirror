@@ -109,7 +109,7 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
                 trace("rotate on wrong rotator " + selContest + " instead of " + cursel );
             }
         }
-        else if (args->getStructArgMember(0, rpcConstants::rotatorAntennaName, psAntName))
+        else if (args->getStructArgMember(0, rpcConstants::rotatorSelectAntennaName, psAntName))
         {
             QString name;
             if (psAntName->getString(name))

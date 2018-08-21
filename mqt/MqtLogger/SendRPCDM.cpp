@@ -209,7 +209,7 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
     QSharedPointer<RPCParam>select(new RPCStringParam(uuid ));
     st->addMember( select, rpcConstants::selected );
 
-    st->addMember( s.toString(), rpcConstants::rotatorAntennaName );
+    st->addMember( s.toString(), rpcConstants::rotatorSelectAntennaName );
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( s );
@@ -244,7 +244,7 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const Q
     QSharedPointer<RPCParam>select(new RPCStringParam(uuid ));
     st->addMember( select, rpcConstants::selected );
 
-    st->addMember( s.toString(), rpcConstants::rigControlRadioName );
+    st->addMember( s.toString(), rpcConstants::rigControlSelectRadioName );
     st->addMember( mode, rpcConstants::rigControlMode );
     rpc.getCallArgs() ->addParam( st );
 

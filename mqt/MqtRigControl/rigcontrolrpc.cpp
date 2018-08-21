@@ -140,7 +140,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 }
             }
         }
-        else if (args->getStructArgMember(0, rpcConstants::rigControlRadioName, psName))
+        else if (args->getStructArgMember(0, rpcConstants::rigControlSelectRadioName, psName))
         {
             QString name;
             if (psName->getString(name))

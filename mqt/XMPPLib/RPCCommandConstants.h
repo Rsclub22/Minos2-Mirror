@@ -107,7 +107,7 @@ static const QString rotPreset  = QT_TR_NOOP("RotPreset");
 static const QString rotPresetList  = QT_TR_NOOP("RotPresetList");
 static const QString rotCwCcwCmdEnable = QT_TR_NOOP("RotCwCcwCmdEnable");
 
-static const QString rotatorAntennaName = QT_TR_NOOP("AntennaName");
+static const QString rotatorSelectAntennaName = QT_TR_NOOP("SelectAntennaName");
 static const QString rotatorMaxAzimuth  = QT_TR_NOOP("MaxAzimuth");
 static const QString rotatorMinAzimuth  = QT_TR_NOOP("MinAzimuth");
 
@@ -124,7 +124,7 @@ static const QString rigControlStatus      = QT_TR_NOOP("RigStatus");
 static const QString rigControlErrorMsg    = QT_TR_NOOP("ErrorMsg");
 static const QString rigControlFreq        = QT_TR_NOOP("Frequency");
 static const QString rigControlMode        = QT_TR_NOOP("Mode");
-static const QString rigControlRadioName   = QT_TR_NOOP("RadioName");
+static const QString rigControlSelectRadioName   = QT_TR_NOOP("SelectRadioName");
 static const QString rigControlTxVertStatus = QT_TR_NOOP("TransVertStatus");
 static const QString rigControlTxVertOffsetFreq = QT_TR_NOOP("TransVertOffSetFreq");
 static const QString rigControlTxVertSwitch = QT_TR_NOOP("TransVertSwitch");
