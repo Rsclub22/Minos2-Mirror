@@ -410,60 +410,59 @@ void RigControlMainWindow::upDateRadio()
             {
                 ui->radioNameDisp->setText(setupRadio->currentRadio.radioName);
 
-                if (radio->get_serialConnected())
+
+                if (appName.count() > 0)
                 {
-                    if (appName.count() > 0)
-                    {
-                        logMessage(QString("Update Radio: Logger Set Mode to %1").arg(selRadioMode));
-                        loggerSetMode(selRadioMode);
-                    }
-                    else
-                    {
-
-                        logMessage(QString("Update Radio: Set Mode USB Standalone"));
-                        // initialise rig state
-
-                        slogMode = "USB";
-                        // set mode
-                        logMode = radio->convertQStrMode("USB");
-                        setMode("USB", RIG_VFO_CURR);
-
-                    }
-                }
-
-                if (radio->get_serialConnected())
-                {
-
-                    supVolume = radio->supportVolControl() ? true : false;
-                    sendVolStatusToLog(supVolume);
-
-                    supSignalStrength = radio->supportSignalStrength() ? true : false;
-
-                    writeWindowTitle(appName);
-                    sendStatusToLogConnected();
-                    sendBandListLogger();
-
-                    if (setupRadio->currentRadio.ritSetAvail && setupRadio->currentRadio.ritEnable)
-                    {
-                        setRitDisplayVisible(true);
-                        setRitOnOffDisplayVisible(true);
-                    }
-                    else
-                    {
-                        setRitDisplayVisible(false);
-                        setRitOnOffDisplayVisible(false);
-                    }
-                    sendRitEnableStatusLogger();
-                    dumpRadioToTraceLog();
-
+                    logMessage(QString("Update Radio: Logger Set Mode to %1").arg(selRadioMode));
+                    loggerSetMode(selRadioMode);
                 }
                 else
                 {
-                    trace(QString("#### Radio Failed to connect ####"));
-                    sendStatusToLogDisConnected();
+
+                    logMessage(QString("Update Radio: Set Mode USB Standalone"));
+                    // initialise rig state
+
+                    slogMode = "USB";
+                    // set mode
+                    logMode = radio->convertQStrMode("USB");
+                    setMode("USB", RIG_VFO_CURR);
+
                 }
 
+
+
+
+                supVolume = radio->supportVolControl();
+                qDebug() << "support vol = " << (supVolume ? "True" : "False");
+                sendVolStatusToLog(supVolume);
+
+                supSignalStrength = radio->supportSignalStrength();
+
+                writeWindowTitle(appName);
+                sendStatusToLogConnected();
+                sendBandListLogger();
+
+                if (setupRadio->currentRadio.ritSetAvail && setupRadio->currentRadio.ritEnable)
+                {
+                    setRitDisplayVisible(true);
+                    setRitOnOffDisplayVisible(true);
+                }
+                else
+                {
+                    setRitDisplayVisible(false);
+                    setRitOnOffDisplayVisible(false);
+                }
+                sendRitEnableStatusLogger();
+                dumpRadioToTraceLog();
+
             }
+            else
+            {
+                trace(QString("#### Radio Failed to connect ####"));
+                sendStatusToLogDisConnected();
+            }
+
+
         }
     }
     else
@@ -1283,7 +1282,6 @@ int RigControlMainWindow::getVolume(vfo_t vfo)
         int vol = 0;
         value.f = value.f * VOLMULT;
         vol = qRound(value.f);
-        qDebug() << "get vol = " << vol;
         if (vol > 200)
         {
             vol = 200;
@@ -1311,7 +1309,6 @@ int RigControlMainWindow::setVolume(vfo_t vfo, int level)
     int retCode = 0;
     float volLevel = level;
     volLevel = volLevel/VOLMULT;
-    qDebug() << "level is = " << volLevel;
     retCode = radio->setVolume(vfo, volLevel);
     return retCode;
 }
@@ -1330,7 +1327,6 @@ int RigControlMainWindow::getSignalStrength(vfo_t vfo)
         if (curSignalStrength != value.i)
         {
             curSignalStrength = value.i;
-            qDebug() << "Signal Strength = " << curSignalStrength;
             displaySignalStrength(curSignalStrength);
         }
     }
@@ -1343,21 +1339,19 @@ int RigControlMainWindow::getSignalStrength(vfo_t vfo)
 void RigControlMainWindow::displaySignalStrength(int level)
 {
 
-
     int signal = level + 60;
-    qDebug() << "meter level = "  << signal;
     qreal rSignal = static_cast<qreal>(signal)/static_cast<qreal>(110);
-    qDebug() << "real smeter level = " << rSignal;
+    // display signal bar
     ui->sMeter->setLevel(rSignal);
 
     // display text
 
     int i = 0;
-    while(i < 16)
+    while(i < 17)
     {
-         if ((level >= SMETERVALUES[i][0]) & (level >= SMETERVALUES[i][1]))
+         if ((level >= SMETERVALUES[i][0]) & (level <= SMETERVALUES[i][1]))
          {
-             if (i == 15)
+             if ((i >= 15) & (i <=16))
              {
                  ui->sMeterLabel->setText(QString::number(level) + "  ");
              }

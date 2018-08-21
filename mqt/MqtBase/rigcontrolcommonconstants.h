@@ -145,7 +145,7 @@ const int SLIDERMAX = 100;
 
 
 // S-Meter Constants
-const int SMETERVALUES[16][2] = {
+const int SMETERVALUES[17][2] = {
                                     {60, 61},
                                     {50, 60},
                                     {40, 50},
@@ -162,6 +162,8 @@ const int SMETERVALUES[16][2] = {
                                     {-38, -32},
                                     {-42, -38},
                                     {-48, -42},
+                                    {-54, -48},
+
                                 };
 
 
