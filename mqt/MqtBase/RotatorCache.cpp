@@ -39,7 +39,7 @@ void RotatorCache::addRotList(const QString &s)
     QStringList list = s.split(":");
     if (list.length())
     {
-        // remove all rigs from this app from the rig list
+        // remove all rots from this app from the rot list
         PubSubName lpsn = PubSubName(list[0]);
         QVector<PubSubName> newRotList;
 
@@ -53,7 +53,7 @@ void RotatorCache::addRotList(const QString &s)
     }
     foreach(QString l, list)
     {
-        // add all of the list to rig list
+        // add all of the list to rot list
         PubSubName psn(l);
         if (!rotList.contains(psn))
         {
@@ -61,7 +61,7 @@ void RotatorCache::addRotList(const QString &s)
         }
     }
     {
-        // clear now non-existant rigs from details
+        // clear now non-existant rots from details
         QMap<PubSubName, AntennaDetail> newdets;
         QMap<PubSubName, AntennaDetail>::const_iterator i = rotDetails.constBegin();
         while (i != rotDetails.constEnd())
@@ -75,7 +75,7 @@ void RotatorCache::addRotList(const QString &s)
         rotDetails = newdets;
     }
     {
-        // clear now non-existant rigs from states
+        // clear now non-existant rots from states
         QMap<PubSubName, AntennaState> newstates;
         QMap<PubSubName, AntennaState>::const_iterator j = rotStates.constBegin();
         while (j != rotStates.constEnd())

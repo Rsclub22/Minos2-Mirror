@@ -22,7 +22,7 @@ RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), pa
 {
 //    rigControlRpc = this;
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::rigControlApp);
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));

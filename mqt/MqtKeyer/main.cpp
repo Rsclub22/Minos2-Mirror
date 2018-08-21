@@ -1,12 +1,12 @@
-#include "KeyerMain.h"
-#include <QApplication>
+#include "base_pch.h"
 #include "AppStartup.h"
+#include "KeyerMain.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    appStartup("MinosQtKeyer");
+    appStartup(rpcConstants::keyerApp);
 
     KeyerMain w;
     w.show();

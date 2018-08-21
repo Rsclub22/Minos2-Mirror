@@ -26,17 +26,17 @@ static const QString LocalStationCategory    = QT_TR_NOOP("LocalStation");
 // station name is the key, IP is the value
 
 // Logger
-static const QString loggerApp         = QT_TR_NOOP("Logger");
+static const QString loggerApp         = QT_TR_NOOP("MinosQtLogger");
 static const QString LoggerCategory    = QT_TR_NOOP("MinosLogger");
 
 // Monitor
-static const QString monitorApp         = QT_TR_NOOP("Monitor");
+static const QString monitorApp         = QT_TR_NOOP("mqtMonitor");
 static const QString monitorLogCategory = QT_TR_NOOP("MonitorLog");
 static const QString loggerStanzaRequest = QT_TR_NOOP("Minos:Logger:GetStanza");
 static const QString loggerStanzaResponse = QT_TR_NOOP("Minos:Logger:StanzaReturned");
 
 // bandmap
-static const QString bandmapApp         = QT_TR_NOOP("BandMap");
+static const QString bandmapApp         = QT_TR_NOOP("mqtBandMap");
 static const QString bandmapMethod      = QT_TR_NOOP("Minos:BandMap");
 
 static const QString bandmapParamFreq   = QT_TR_NOOP("Freq");
@@ -49,7 +49,7 @@ static const QString BandMapCategory    = QT_TR_NOOP("BandMap");
 static const QString bandmapKeyLoaded    = QT_TR_NOOP("Loaded");
 
 // Chat
-static const QString chatApp            = QT_TR_NOOP("chat");
+static const QString chatApp            = QT_TR_NOOP("mqtChat");
 static const QString chatMethod         = QT_TR_NOOP("Minos:Chat");
 static const QString SendChatMessage    = QT_TR_NOOP("SendChatMessage");
 static const QString ChatResult         = QT_TR_NOOP("ChatResult");
@@ -58,7 +58,7 @@ static const QString ChatServer         = QT_TR_NOOP("MinosChatServer");
 static const QString ChatServerFrequency= QT_TR_NOOP("MinosChatServerFrequency");
 
 // Keyer
-static const QString keyerApp           = QT_TR_NOOP("Keyer");
+static const QString keyerApp           = QT_TR_NOOP("mqtKeyer");
 static const QString keyerMethod        = QT_TR_NOOP("Minos:KeyerControl");
 static const QString keyerPlayFile      = QT_TR_NOOP("PlayFile");
 static const QString keyerRecordFile    = QT_TR_NOOP("RecordFile");
@@ -70,7 +70,7 @@ static const QString KeyerCategory      = QT_TR_NOOP("Keyer");
 static const QString keyerReport     = QT_TR_NOOP("Report");
 
 // Control
-static const QString controlApp         = QT_TR_NOOP("Control");
+static const QString controlApp         = QT_TR_NOOP("mqtControl");
 static const QString lineControlCategory = QT_TR_NOOP("LineControl");
 
 static const QString controlParamName   = QT_TR_NOOP("Name");
@@ -89,7 +89,7 @@ static const QString lineSet            = QT_TR_NOOP("set");
 
 enum RotateDirection :int {eRotateLeft, eRotateDirect, eRotateRight, eRotateStop};
 
-static const QString rotatorApp         = QT_TR_NOOP("Rotator");
+static const QString rotatorApp         = QT_TR_NOOP("mqtRotator");
 static const QString rotatorMethod      = QT_TR_NOOP("Minos:Rotator");
 static const QString rotatorResult      = QT_TR_NOOP("RotatorResult");
 
@@ -112,7 +112,7 @@ static const QString rotatorMaxAzimuth  = QT_TR_NOOP("MaxAzimuth");
 static const QString rotatorMinAzimuth  = QT_TR_NOOP("MinAzimuth");
 
 // Rig Control
-static const QString rigControlApp         = QT_TR_NOOP("RigControl");
+static const QString rigControlApp         = QT_TR_NOOP("mqtRigControl");
 static const QString rigControlResult      = QT_TR_NOOP("RigControlResult");
 static const QString rigControlMethod      = QT_TR_NOOP("Minos:RigControl");
 static const QString rigControlCategory    = QT_TR_NOOP("RigControl");

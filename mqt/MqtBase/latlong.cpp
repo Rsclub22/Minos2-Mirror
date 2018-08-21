@@ -505,6 +505,12 @@ static int internaltongr( Location *ingrid, Location *outgrid )
 
    outgrid->easting = ingrid->easting + 400000.0;
 
+   if (outgrid->northing < 0.0 || outgrid->northing > 1300000.0)
+       return INVALIDGREF;
+
+   if (outgrid->easting < 0.0 || outgrid->easting > 700000.0)
+       return  INVALIDGREF;
+
    return ( GRIDOK );
 }
 

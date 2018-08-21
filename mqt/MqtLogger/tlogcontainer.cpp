@@ -2,7 +2,6 @@
 #include "MinosLoggerEvents.h"
 
 #include <QFontDialog>
-//#include <QFileDialog>
 
 #include "ContestApp.h"
 #include "LoggerContest.h"
@@ -25,6 +24,7 @@
 #include "AdifImport.h"
 #include "ScreenConfigManager.h"
 #include "MinosTestImport.h"
+#include "singleapplication.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -261,9 +261,10 @@ void TLogContainer::setupMenus()
     ListOpenAction = newAction("Open &Archive List...", ui->menuFile, SLOT(ListOpenActionExecute()));
     ManageListsAction = newAction("&Manage Archive Lists...", ui->menuFile, SLOT(ManageListsActionExecute()));
     ui->menuFile->addSeparator();
-
     OptionsAction = newAction("Options...", ui->menuFile, SLOT(OptionsActionExecute()));
+#ifdef Q_OS_WIN
     ExitClearAction = newAction("E&xit MinosQt and Clear registry", ui->menuFile, SLOT(ExitClearActionExecute()));
+#endif
     ui->menuFile->addSeparator();
     ExitAction = newAction("E&xit MinosQt", ui->menuFile, SLOT(ExitActionExecute()));
 // end of file menu
@@ -800,22 +801,22 @@ void TLogContainer::ExitClearActionExecute()
 {
     // Confirm...
 
-    if (!mShowYesNoMessage(this, "This action will clear registry entries for the Minos V2 Logger.\r\n"
+#ifdef Q_OS_WIN
+    if (!mShowYesNoMessage(this, "This action will clear registry entries for all of the apps within the Minos V2 Logger.\r\n\r\n"
                                   "Please confirm this action by pressing \"Yes\"." ))
     {
        return;
     }
 
-    // clear registry
+    MinosConfig::getMinosConfig() ->stop();
+    SingleApplication *sa = dynamic_cast<SingleApplication *>(QApplication::instance());
 
-    QSettings reg;
-    reg.clear();
+    QObject::connect(sa, SIGNAL(aboutToQuit()), sa, SLOT(clearRegistry()));
 
-    QSettings regOld("G0GJV", "MinosQtLogger");
-    regOld.clear();
-
-    // and exit
     close();
+#else
+    mShowMessage("Clear registry only works under Windows");
+#endif
 }
 void TLogContainer::AppendAdifActionExecute()
 {

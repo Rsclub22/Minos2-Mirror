@@ -4,19 +4,24 @@
 #include <QFileDialog>
 #include <QProcessEnvironment>
 
+static QString appStartupName;
+QString getAppStartupName()
+{
+    return appStartupName;
+}
 void appStartup(const QString &pappName)
 {
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    QString envAppName = env.value("MQTRPCNAME", "") ;
+    appStartupName = env.value("MQTRPCNAME", "") ;
 
-    if (envAppName.isEmpty())
+    if (appStartupName.isEmpty())
     {
-        envAppName = pappName;
+        appStartupName = pappName;
     }
 
     QApplication::setOrganizationName( "Minos2Qt" );
     QApplication::setOrganizationDomain( "g0gjv.org.uk" );
-    QApplication::QCoreApplication::setApplicationName( envAppName );
+    QApplication::QCoreApplication::setApplicationName( appStartupName );
 
     QSettings settings;
     QVariant qfont = settings.value( "font" );
@@ -70,6 +75,6 @@ void appStartup(const QString &pappName)
 #endif
     }
 
-    enableTrace( "./TraceLog", envAppName + "_" );
+    enableTrace( "./TraceLog", appStartupName + "_" );
 }
 
