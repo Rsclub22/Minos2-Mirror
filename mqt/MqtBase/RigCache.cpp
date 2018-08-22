@@ -290,7 +290,10 @@ void RigCache::publishState()
     {
         if (i.value().isDirty())
         {
-            rpc->publish(rpcConstants::rigStateCategory, i.key().toString(), i.value().pack(), psPublished);
+            if (!i.key().isEmpty())
+            {
+                rpc->publish(rpcConstants::rigStateCategory, i.key().toString(), i.value().pack(), psPublished);
+            }
             rigStates[i.key()].clearDirty();
         }
     }
@@ -303,7 +306,10 @@ void RigCache::publishDetails()
     {
         if (i.value().isDirty())
         {
-            rpc->publish(rpcConstants::rigDetailsCategory, i.key().toString(), i.value().pack(), psPublished);
+            if (!i.key().isEmpty())
+            {
+                rpc->publish(rpcConstants::rigDetailsCategory, i.key().toString(), i.value().pack(), psPublished);
+            }
             rigDetails[i.key()].clearDirty();
         }
     }

@@ -324,7 +324,10 @@ void RotatorCache::publishState()
     {
         if (i.value().isDirty())
         {
-            rpc->publish(rpcConstants::rotatorStateCategory, i.key().toString(), i.value().pack(), psPublished);
+            if (!i.key().isEmpty())
+            {
+                rpc->publish(rpcConstants::rotatorStateCategory, i.key().toString(), i.value().pack(), psPublished);
+            }
             rotStates[i.key()].clearDirty();
         }
     }
@@ -337,7 +340,10 @@ void RotatorCache::publishDetails()
     {
         if (i.value().isDirty())
         {
-            rpc->publish(rpcConstants::rotatorDetailCategory, i.key().toString(), i.value().pack(), psPublished);
+            if (!i.key().isEmpty())
+            {
+                rpc->publish(rpcConstants::rotatorDetailCategory, i.key().toString(), i.value().pack(), psPublished);
+            }
             rotDetails[i.key()].clearDirty();
         }
     }
