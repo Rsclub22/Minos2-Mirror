@@ -264,16 +264,23 @@ void RigControlFrame::ritButtonSelected()
     status = !status;
     if (status)
     {
+        traceMsg(QString("Rit Button On"));
         ritOn = status;
         showRitButOn();
         emit ritStatus(status);
         // send current rit freq to radio
         changeRitRadioFreq(ui->RitEdit->text().append('0').remove('.'));
+        ui->RitEdit->setCursorPosition(3);
+        ui->RitEdit->setFocus();
 
     }
     else
     {
+        traceMsg(QString("Rit Button Off"));
         changeRitRadioFreq("0000");  // turns off rit in hamlib
+        QString sfreq = convertRitFreqToStr(0.0);       // set rit display to zero
+        ui->RitEdit->setText(sfreq);
+        ui->RitEdit->clearFocus();
         ritOn = status;
         showRitButOff();
         emit ritStatus(status);
