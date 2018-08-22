@@ -437,7 +437,7 @@ void RotatorMainWindow::openRotator()
     if (rotator->get_serialConnected())
     {
         // get poll interval timer
-       if (setupAntenna->currentAntenna.pollInterval == "0.5")
+       if (setupAntenna->currentAntenna.pollInterval == ROT_DEFAULT_POLLINTERVAL)
        {
            pollTime = 500;
        }

@@ -133,6 +133,8 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
         }
 
         pollIntervalVisible(true);
+
+
         antennaOffSetVisible(true);
 
 

@@ -187,6 +187,8 @@ const QStringList SMETERTEXT = {
                                 };
 
 
+const QString RIG_DEFAULT_POLLINTERVAL = "1";
+const QString ROT_DEFAULT_POLLINTERVAL = "1";
 
 
 #endif // RIGCONTROLCOMMONCONSTANTS_H
