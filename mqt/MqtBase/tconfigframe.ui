@@ -62,7 +62,7 @@
      <item>
       <widget class="QPushButton" name="StartButton">
        <property name="text">
-        <string>Start Apps</string>
+        <string>Save and Start Apps</string>
        </property>
       </widget>
      </item>

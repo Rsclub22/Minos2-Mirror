@@ -103,6 +103,8 @@ public:  		// User declarations
 
     ~MinosConfig();
 
+    void reset();
+
     QVector <QSharedPointer<RunConfigElement> > elelist;
 
     QString getThisServerName();
@@ -111,7 +113,7 @@ public:  		// User declarations
     QSharedPointer<Connectable> getApp(QString appName);
     AppConfigElement getAppConfigElement(QString appType);
 
-    void cleanElementsOnCancel();
+//    void cleanElementsOnCancel();
     void saveAll();
 
     void start();

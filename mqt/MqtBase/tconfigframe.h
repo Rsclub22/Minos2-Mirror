@@ -21,7 +21,6 @@ public:
     void setup(bool started);
 
     void start();
-
 private slots:
     void on_StartButton_clicked();
 
@@ -52,6 +51,8 @@ private:
     QVector<ConfigElementFrame *> elementFrames;
 
     ConfigCloseCallBack closeCb;
+
+    void copyFromScreen();
 
     void saveAll();
 };

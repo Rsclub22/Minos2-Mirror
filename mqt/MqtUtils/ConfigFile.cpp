@@ -45,17 +45,7 @@ QString MinosConfig::getThisServerName()
     }
     return serverName;
 }
-void MinosConfig::cleanElementsOnCancel()
-{
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
-    {
-        QSharedPointer<RunConfigElement> ele = (*i);
-        if (ele->newElement)
-        {
-            ele->deleted = true;
-        }
-    }
-}
+
 
 //---------------------------------------------------------------------------
 bool RunConfigElement::initialise(INIFile &config, QString sect )
@@ -256,6 +246,35 @@ MinosConfig::MinosConfig( )
     , autoStart(false)
 {
 }
+MinosConfig::~MinosConfig()
+{
+   if ( !terminated )
+      stop();
+
+   elelist.clear();
+}
+
+void MinosConfig::reset()
+{
+    // get rid of current config, reload from disc
+    appConfigList.clear();
+    delete thisDM;
+    thisDM = nullptr;
+    getMinosConfig();
+}
+/*
+void MinosConfig::cleanElementsOnCancel()
+{
+    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    {
+        QSharedPointer<RunConfigElement> ele = (*i);
+        if (ele->newElement)
+        {
+            ele->deleted = true;
+        }
+    }
+}
+*/
 void MinosConfig::initialise()
 {
     buildAppConfigList();
@@ -289,14 +308,6 @@ void MinosConfig::initialise()
     config.endGroup();
 }
 
-//---------------------------------------------------------------------------
-MinosConfig::~MinosConfig()
-{
-   if ( !terminated )
-      stop();
-
-   elelist.clear();
-}
 //---------------------------------------------------------------------------
 bool configSort( const QSharedPointer<RunConfigElement> c1, const QSharedPointer<RunConfigElement> c2)
 {

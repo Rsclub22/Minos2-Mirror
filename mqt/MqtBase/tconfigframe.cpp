@@ -75,8 +75,18 @@ void TConfigFrame::setup(bool started)
 }
 void TConfigFrame::on_StartButton_clicked()
 {
-    saveAll();
-    MinosConfig::getMinosConfig() ->start();
+    copyFromScreen();
+    QString reqErrs = MinosConfig::getMinosConfig() ->checkConfig();
+
+    if (reqErrs.isEmpty())
+    {
+        saveAll();
+        MinosConfig::getMinosConfig() ->start();
+    }
+    else
+    {
+        mShowMessage(reqErrs, parent);
+    }
 }
 
 void TConfigFrame::on_StopButton_clicked()
@@ -95,7 +105,7 @@ void TConfigFrame::on_SetButton_clicked()
     MinosConfig::getMinosConfig() ->setThisServerName( coh );
 }
 
-void TConfigFrame::saveAll()
+void TConfigFrame::copyFromScreen()
 {
     for (int i = 0; i < elementFrames.size(); i++)
     {
@@ -104,24 +114,32 @@ void TConfigFrame::saveAll()
 
     on_SetButton_clicked();
     on_autoStartCheckBox_clicked();
+}
+void TConfigFrame::saveAll()
+{
     MinosConfig::getMinosConfig()->saveAll();    // which clears the config file before saving
 }
-
 void TConfigFrame::on_SaveCloseButton_clicked()
 {
-    saveAll();
+    copyFromScreen();
 
     QString reqErrs = MinosConfig::getMinosConfig() ->checkConfig();
 
     if (reqErrs.isEmpty())
+    {
+        saveAll();
         closeCb(parent);
+    }
     else
+    {
         mShowMessage(reqErrs, parent);
+    }
 
 }
 void TConfigFrame::on_CancelButton_clicked()
 {
-    MinosConfig::getMinosConfig() ->cleanElementsOnCancel();
+//    MinosConfig::getMinosConfig() ->cleanElementsOnCancel();
+    MinosConfig::getMinosConfig() ->reset();
     closeCb(parent);
 }
 
