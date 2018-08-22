@@ -107,7 +107,7 @@ void TConfigFrame::saveAll()
     MinosConfig::getMinosConfig()->saveAll();    // which clears the config file before saving
 }
 
-void TConfigFrame::on_OKButton_clicked()
+void TConfigFrame::on_SaveCloseButton_clicked()
 {
     saveAll();
 

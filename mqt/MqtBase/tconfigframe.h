@@ -31,7 +31,7 @@ private slots:
 
     void on_autoStartCheckBox_clicked();
 
-    void on_OKButton_clicked();
+    void on_SaveCloseButton_clicked();
 
     void on_newElementButton_clicked();
 
