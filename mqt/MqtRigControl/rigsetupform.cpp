@@ -169,17 +169,26 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         }
 
         // does this radio support rit?
+        // if radio has only get, then no support
+        // if radio has set, or set and get, then support.
         int retCode = 0;
         bool ritAvail = false;
-        radioData->ritAvail = false;
+        radioData->ritGetAvail = false;
+        radioData->ritSetAvail = false;
         ritEnableVisible(ritAvail);
-        retCode = radio->supportRit(radioData->radioModelNumber, &ritAvail);
+        retCode = radio->supportGetRit(radioData->radioModelNumber, &ritAvail);
         if (retCode >= 0)
         {
-            radioData->ritAvail = ritAvail;
-            ritEnableVisible(ritAvail);
+            radioData->ritGetAvail = ritAvail;
+
         }
 
+        retCode = radio->supportSetRit(radioData->radioModelNumber, &ritAvail);
+        if (retCode >= 0)
+        {
+            radioData->ritSetAvail = ritAvail;
+            ritEnableVisible(ritAvail);
+        }
 
         // does this radio support antenna sw?
         bool antSwFlg = false;

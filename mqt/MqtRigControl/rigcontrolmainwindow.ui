@@ -410,7 +410,7 @@
         <item>
          <widget class="QLabel" name="sMeterLabel">
           <property name="text">
-           <string>TextLabel</string>
+           <string/>
           </property>
          </widget>
         </item>

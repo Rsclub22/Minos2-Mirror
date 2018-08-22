@@ -124,7 +124,8 @@ public:
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
-      dest.ritAvail = srce->ritAvail;
+      dest.ritGetAvail = srce->ritGetAvail;
+      dest.ritSetAvail = srce->ritSetAvail;
       dest.ritEnable = srce->ritEnable;
       dest.radioSupBands = srce->radioSupBands;
       dest.radioTransSupBands = srce->radioTransSupBands;
@@ -181,7 +182,8 @@ public:
   QString mgmMode = "USB";
   ptt_type_t pttType;
   bool antSwitchAvail = false;
-  bool ritAvail = false;
+  bool ritGetAvail = false;
+  bool ritSetAvail = false;
   bool ritEnable = false;
   bool transVertEnable  = false;
   bool volAvail = false;
@@ -268,7 +270,8 @@ public:
     int getModelInfo(QString radioModel, int *radioModelNumber, QString *radioMfgName, QString *radioModelName);
     int getRit(vfo_t vfo, shortfreq_t *ritfreq);
     int setRit(vfo_t vfo, shortfreq_t ritfreq);
-    int supportRit(int rigNumber, bool *ritFlag);
+    int supportGetRit(int rigNumber, bool *flag);
+    int supportSetRit(int rigNumber, bool *flag);
     bool checkFreqValid(freq_t freq, rmode_t mode);
 
 
@@ -288,9 +291,10 @@ public:
     int getSignalStrength(vfo_t vfo, value_t *val);
 
 
+
 signals:
     void frequency_updated(double);
-    void debug_protocol(QString, bool);
+    void debug_protocol(QString);
 
   private:
     hamlib_port_t myport;
