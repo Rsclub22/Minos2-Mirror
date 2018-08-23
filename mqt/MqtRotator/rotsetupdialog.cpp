@@ -460,7 +460,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->rotatorModelName = config.value("rotatorModelName", "").toString();
     availAntData[antNum]->rotatorModelNumber = config.value("rotatorModelNumber", "").toInt();
     availAntData[antNum]->rotatorManufacturer = config.value("rotatorManufacturer", "").toString();
-    availAntData[antNum]->pollInterval = config.value("rotatorPollInterval", "1").toString();
+    availAntData[antNum]->pollInterval = config.value("rotatorPollInterval", ROT_DEFAULT_POLLINTERVAL).toString();
     availAntData[antNum]->rotatorCWEndStop = azimuth_t(config.value("rotatorCWEndStop", 360).toDouble());
     availAntData[antNum]->rotatorCCWEndStop = azimuth_t(config.value("rotatorCCWEndStop", 0).toDouble());
     availAntData[antNum]->rotType = endStop(config.value("rotatorType", int(ROT_0_360)).toInt());
@@ -638,6 +638,7 @@ void RotSetupDialog::addAntenna()
   addTab(tabNum, antName);
   numAvailAntennas++;
   antennaTab[tabNum]->setupRotatorModel(rotModel);
+  antennaTab[tabNum]->setPollInterval(ROT_DEFAULT_POLLINTERVAL);
   //loadSettingsToTab(tabNum);
   //saveAntenna(tabNum);
   ui->antennaTab->setCurrentIndex(tabNum);

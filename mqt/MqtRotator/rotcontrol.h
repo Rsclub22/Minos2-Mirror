@@ -133,7 +133,7 @@ public:
   int rotatorCCWEndStop= COMPASS_MAX360;
   endStop rotType = ROT_0_360;          // actual rotator type
 
-  QString pollInterval = "1";
+  QString pollInterval = ROT_DEFAULT_POLLINTERVAL;
 
   int min_azimuth = 0;                   // working endstops
   int max_azimuth = 0;

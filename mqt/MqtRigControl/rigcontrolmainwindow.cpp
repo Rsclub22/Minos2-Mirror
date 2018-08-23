@@ -476,7 +476,7 @@ void RigControlMainWindow::upDateRadio()
 
     if (radio->get_serialConnected())
     {
-        if (setupRadio->currentRadio.pollInterval == "0.5")
+        if (setupRadio->currentRadio.pollInterval == RIG_DEFAULT_POLLINTERVAL)
         {
             pollTime = 500;
         }
