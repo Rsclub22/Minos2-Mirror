@@ -162,7 +162,7 @@ public:
   QString radioModel;
   QString radioModelName;
   int radioModelNumber = 0;
-  QString pollInterval = "1";
+  QString pollInterval = RIG_DEFAULT_POLLINTERVAL;
   QString civAddress;
   int baudrate = 0; /**<  serial port baudrate*/
   int parity = 0;

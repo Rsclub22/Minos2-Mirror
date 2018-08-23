@@ -264,6 +264,8 @@ private:
 
     void setVolControlVisible(bool value);
     void ritLineEditInFocus();
+    void ritButtonOn();
+    void ritButtonOff();
 };
 
 

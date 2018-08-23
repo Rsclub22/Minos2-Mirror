@@ -446,6 +446,7 @@ void RigControlMainWindow::upDateRadio()
                 {
                     setRitDisplayVisible(true);
                     setRitOnOffDisplayVisible(true);
+                    //setRitFreqStr("0");             // turn off RIT
                 }
                 else
                 {
@@ -1235,6 +1236,14 @@ void RigControlMainWindow::setRitFreqStr(QString ritFreq)
             // error
             logMessage(QString("Set RIT freq error").arg(QString::number(retCode)));
             hamlibError(retCode, "Set RIT Freq.");
+        }
+        else
+        {
+            if (!setupRadio->currentRadio.ritGetAvail)
+            {
+                // get rit is not available, update local rit display
+                ui->ritFreq->setText(convertRitFreqToStr(rFreq));
+            }
         }
     }
 }
