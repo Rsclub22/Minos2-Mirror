@@ -67,7 +67,6 @@ SOURCES += \
     ScreenContact.cpp \
     serialcomms.cpp \
     StartConfig.cpp \
-    tconfigframe.cpp \
     TreeUtils.cpp \
     validators.cpp
 
@@ -121,7 +120,6 @@ HEADERS += \
     ScreenContact.h \
     serialcomms.h \
     StartConfig.h \
-    tconfigframe.h \
     TreeUtils.h \
     validators.h \
     waitcursor.h
@@ -139,5 +137,4 @@ FORMS += \
     ConfigElementFrame.ui \
     minoskeyboard.ui \
     rotpresetdialog.ui \
-    StartConfig.ui \
-    tconfigframe.ui
+    StartConfig.ui

@@ -72,6 +72,10 @@ public:  		// User declarations
     void createProcess();
     void stopProcess();
     void sendCommand(const QString & cmd);
+    bool isRunning()
+    {
+        return runner != nullptr;
+    }
 private slots:
     void	on_started();
     void    on_finished(int, QProcess::ExitStatus exitStatus);
@@ -124,6 +128,7 @@ public:  		// User declarations
     void setAutoStart(bool);
 
     QString checkConfig();
+    bool anyRunning();
 
 };
 //---------------------------------------------------------------------------

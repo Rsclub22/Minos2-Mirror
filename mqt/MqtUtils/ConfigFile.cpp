@@ -160,7 +160,6 @@ void RunConfigElement::createProcess()
         else
             sendCommand("ShowServers");
 
-
     }
 }
 void RunConfigElement::stopProcess()
@@ -539,6 +538,18 @@ QString MinosConfig::checkConfig()
         }
     }
     return reqErrs;
+}
+
+bool MinosConfig::anyRunning()
+{
+    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    {
+       if ( ( *i ) && (*i)->isRunning() )
+       {
+           return true;
+       }
+    }
+    return false;
 }
 AppConfigElement MinosConfig::getAppConfigElement(QString appType)
 {
