@@ -1856,9 +1856,10 @@ void RigControlMainWindow::loadBands()
 {
     BandList &blist = BandList::getBandList();
 
-    for (int i = 5; i < 15; i++)   // just load VHF/UHF bands
+    for (int i = 0; i < blist.bandList.size(); i++)   // just load VHF/UHF bands
     {
-        bands.append(new BandDetail(blist.bandList[i].uk, blist.bandList[i].flow, blist.bandList[i].fhigh));
+        if (blist.bandList[i].getType().compare("VHF", Qt::CaseInsensitive) == 0 || blist.bandList[i].getType().compare("MWave", Qt::CaseInsensitive) == 0)
+            bands.append(new BandDetail(blist.bandList[i].uk, blist.bandList[i].flow, blist.bandList[i].fhigh));
     }
 
 }
