@@ -815,7 +815,7 @@ void TLogContainer::ExitClearActionExecute()
 
     close();
 #else
-    mShowMessage("Clear registry only works under Windows");
+    mShowMessage("Clear registry only works under Windows", this);
 #endif
 }
 void TLogContainer::AppendAdifActionExecute()
