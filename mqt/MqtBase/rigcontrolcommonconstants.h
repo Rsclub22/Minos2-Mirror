@@ -109,24 +109,25 @@ const QString NORADIO = "NoRadio";
 namespace freqPresetData {
 
 
-const int NUMPRESET = 10;
-
-enum bandOffSet {_10M, _6M, _4M, _2M, _70CM, _23CM, _13CM, _9CM, _6CM, _3CM};
 
 
-const QStringList presetBands = (QStringList() << "28 MHz" << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2320 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz");
+enum bandOffSet { _50MHZ, _70MHZ, _144MHZ, _432MHZ, _1296MHZ, _2300MHZ, _2320MHZ,
+                 _3_4GHZ, _5_6GHZ, _10GHZ};
 
 
-const QStringList bandFreq = { "28170000",
-                               "50170000",
+const QStringList presetBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "2320 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
+
+const QStringList bandFreq = { "50170000",
                                "70210000",
-                               "144290000",
-                               "432170000",
-                               "1296210000",
-                               "2320200000",  //13cm
-                               "3400100000", // 9cm
-                               "5760100000", // 6cm
-                              "10368100000"  // 3cm
+                              "144290000",
+                              "432170000",
+                             "1296175000",
+                             "2300200000",            // 2300 GHz
+                             "2320200000",  // 2320 GHz
+                             "3400100000",  // 3.4 GHz
+                             "5760100000",  // 5.6 GHz
+                            "10368100000",  // 10 GHz
+
                               };
 
 

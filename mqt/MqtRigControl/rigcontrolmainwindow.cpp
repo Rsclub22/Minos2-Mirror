@@ -39,8 +39,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //ui->progressBar->setRange(0, 120);
-    //ui->progressBar->setTextVisible(false);
 
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
@@ -368,7 +366,7 @@ void RigControlMainWindow::upDateRadio()
         ridx = radioIndex;
         if (ridx > -1 && ridx < setupRadio->numAvailRadios)  // find radio and update current radio pointer
         {
-            // found antenna, update currentAntenna  to selected antennadata
+            // found radio, update currentRadio  to selected radiodata
             scatParams::copyRig(setupRadio->availRadioData[ridx], setupRadio->currentRadio);
             setupRadio->currentRadio.radioNumber = QString::number(ridx);           // save radio number
 
@@ -1540,6 +1538,10 @@ void RigControlMainWindow::sendBandListLogger()
         logMessage(QString("Send bandlist to logger - %1").arg(bands));
         msg->rigCache.setBandList(psname, bands);
     }
+    else
+    {
+        logMessage(QString("Send bandlist to logger - error radio bandlist empty"));
+    }
     config.endGroup();
 }
 
@@ -1858,11 +1860,19 @@ void RigControlMainWindow::loadBands()
 
     for (int i = 0; i < blist.bandList.size(); i++)   // just load VHF/UHF bands
     {
-        if (blist.bandList[i].getType().compare("VHF", Qt::CaseInsensitive) == 0 || blist.bandList[i].getType().compare("MWave", Qt::CaseInsensitive) == 0)
-            bands.append(new BandDetail(blist.bandList[i].uk, blist.bandList[i].flow, blist.bandList[i].fhigh));
+        if (blist.bandList[i].reg1test != "2,32 GHz" && blist.bandList[i].uk != "24 GHz"
+                && blist.bandList[i].uk != "47 GHz"&& blist.bandList[i].uk != "76 GHz"
+                && blist.bandList[i].uk != "120 GHz" && blist.bandList[i].uk != "134 GHz"
+                && blist.bandList[i].uk != "248 GHz")           // work around to remove a 2300Mhz band with dup UK name and don't use bands > 10GHz (can't support Freq display)
+        {
+            if (blist.bandList[i].getType().compare("VHF", Qt::CaseInsensitive) == 0 || blist.bandList[i].getType().compare("MWave", Qt::CaseInsensitive) == 0)
+                bands.append(new BandDetail(blist.bandList[i].uk, blist.bandList[i].flow, blist.bandList[i].fhigh));
+        }
     }
 
 }
+
+
 
 void delay(int sec)
 {

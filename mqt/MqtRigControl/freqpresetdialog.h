@@ -29,21 +29,7 @@ namespace Ui {
 class FreqPresetDialog;
 }
 
-const int NUNPRESET = 10;
-enum bandOffSet {_10M, _6M, _4M, _2M, _70CM, _23CM, _13CM, _9CM, _6CM, _3CM};
 
-
-const QStringList bandFreq = { "28170000",
-                               "50170000",
-                               "70210000",
-                               "144290000",
-                               "432170000",
-                               "1296210000",
-                               "2320200000",  //13cm
-                               "3400100000", // 9cm
-                               "5760100000", // 6cm
-                              "10368100000"  // 3cm
-                              };
 
 
 class FreqPresetDialog : public QDialog
@@ -61,16 +47,20 @@ public:
 
 
 private slots:
-    void b_10mSelected();
-    void b_6mSelected();
-    void b_4mSelected();
-    void b_2mSelected();
-    void b_70cmSelected();
-    void b_23cmSelected();
-    void b_13cmSelected();
-    void b_9cmSelected();
-    void b_6cmSelected();
-    void b_3cmSelected();
+    //void b_28mhzSelected();
+    void b_50mhzSelected();
+    void b_70mhzSelected();
+    void b_144mhzSelected();
+    void b_432mhzSelected();
+    void b_1296mhzSelected();
+    void b_2300mhzSelected();
+    void b_2320mhzSelected();
+    void b_3_4ghzSelected();
+    void b_5_6ghzSelected();
+    void b_10ghzSelected();
+
+
+
 
     void saveSettings();
     void cancelSettings();
@@ -85,8 +75,8 @@ private:
     bool freqPresetChanged = false;
 
 
-    bool checkInBand(double freq, bandOffSet band);
-    void getFreq(QLineEdit* f_box, bandOffSet band);
+    bool checkInBand(double freq, freqPresetData::bandOffSet band);
+    void getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band);
 
     void loadSettingsToDialog();
 };
