@@ -482,6 +482,27 @@ QString MinosConfig::checkConfig()
 
     //Check that the name is not blank, and only has allowed characters
     //Check that the names aren't duplicates
+    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    {
+        QSharedPointer<RunConfigElement> elei = (*i);
+
+        if (elei->name.contains('[') || elei->name.contains(']'))
+        {
+            reqErrs += elei->name + " contains bad characters [ and/or ]";
+        }
+        for ( QVector <QSharedPointer<RunConfigElement> >::iterator j = i; j != elelist.end(); j++ )
+        {
+            if (j == i)
+                continue;
+
+            QSharedPointer<RunConfigElement> elej = (*j);
+            if (elei->name.compare(elej->name, Qt::CaseInsensitive) == 0)
+            {
+                reqErrs += elei->name + " appears more than once (names are not case sensitive)";
+                break;
+            }
+        }
+    }
 
     // Go through the configured elements, and check that their requirements are also present
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
