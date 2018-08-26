@@ -339,10 +339,11 @@ bool RigSetupForm::findSupRadioBand(const QString band)
 // is this band in the transverter list for this radio
 bool RigSetupForm::findSupTransBand(const QString band)
 {
-    if (radioData->numTransverters > 0)
+    if (radioData->transVertNames.count() > 0)
     {
-        for (int i = 0; i < radioData->numTransverters;i++)
+        for (int i = 0; i < radioData->transVertNames.count();i++)
         {
+
             if (band == radioData->transVertNames[i])
             {
                 return true;
@@ -1123,7 +1124,6 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName)
        //transVertTab[tabNum]->antSwNumVisible(false);
        radioData->antSwitchAvail = false;
     }
-
     buildSupBandList();
     transVertTab[tabNum]->transVertValueChanged = true;
 

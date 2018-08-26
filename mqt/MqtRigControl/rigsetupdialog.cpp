@@ -486,9 +486,7 @@ void RigSetupDialog::saveSettings()
 
     QString fileNameTransVert;
 
-
-    QString fileNameRadio;
-    fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+    QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
     QSettings configRadio(fileNameRadio, QSettings::IniFormat);
 
     // get current list of saved radios, remove those that no longer exist
