@@ -761,6 +761,12 @@ bool model_Sort(const rig_caps *caps1,const rig_caps *caps2)
 }
 
 
+void RigControl::enableTraceComms(bool state)
+{
+    traceComms = state;
+}
+
+
 // which passes the call to this method
 int RigControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const char *fmt, va_list ap)
 {
@@ -769,7 +775,11 @@ int RigControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const cha
 
     vsprintf (buf, fmt, ap);
     QString s = QString::fromLatin1(buf);
-    emit debug_protocol(s, false);
+    if (traceComms)
+    {
+        emit debug_protocol(s);
+    }
+
 
     return RIG_OK;
 }

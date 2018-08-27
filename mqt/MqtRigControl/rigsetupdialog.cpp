@@ -551,6 +551,12 @@ void RigSetupDialog::saveSettings()
 
             if (radioTab[i]->removedTransVertTabs.count() > 0)
             {
+                if (currentRadioName == radioTab[i]->getRadioData()->radioName)
+                {
+                    // settings changed in current radio
+                    currRadioChanged = true;
+                }
+
                 for (int t = 0; t < radioTab[i]->removedTransVertTabs.count(); t++)
                 {
                     QSettings config(fileNameTransVert, QSettings::IniFormat);
@@ -559,10 +565,17 @@ void RigSetupDialog::saveSettings()
                     config.endGroup();
                 }
                 radioTab[i]->removedTransVertTabs.clear();
+                radioTab[i]->buildSupBandList();
             }
 
             if (radioTab[i]->renamedTransVertTabs.count() > 0)
             {
+                if (currentRadioName == radioTab[i]->getRadioData()->radioName)
+                {
+                    // settings changed in current radio
+                    currRadioChanged = true;
+                }
+
                 for (int t = 0; t < radioTab[i]->renamedTransVertTabs.count(); t++)
                 {
                     QSettings config(fileNameTransVert, QSettings::IniFormat);
@@ -571,6 +584,7 @@ void RigSetupDialog::saveSettings()
                     config.endGroup();
                 }
                 radioTab[i]->renamedTransVertTabs.clear();
+                radioTab[i]->buildSupBandList();
             }
 
 
@@ -588,7 +602,7 @@ void RigSetupDialog::saveSettings()
 
                         if (currentRadioName == radioTab[i]->getRadioData()->radioName)
                         {
-                            // settings changed in current antenna
+                            // settings changed in current radio
                             currRadioChanged = true;
                         }
 
@@ -598,14 +612,21 @@ void RigSetupDialog::saveSettings()
                         radioTab[i]->transVertTab[t]->transVertValueChanged = false;
                     }
                 }
+                radioTab[i]->buildSupBandList();
             }
         }
         radioTab[i]->radioValueChanged = false;
     }
+
+    emit radioSettingsSaved();
+
     if (currRadioChanged)
     {
         emit currentRadioSettingChanged(currentRadioName);
     }
+
+
+
 }
 
 

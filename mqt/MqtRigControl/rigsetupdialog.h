@@ -80,6 +80,7 @@ signals:
     void currentRadioSettingChanged(QString);
     void radioTabChanged();
     void transVertNameChanged();
+    void radioSettingsSaved();
 
 private slots:
 
