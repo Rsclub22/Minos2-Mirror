@@ -203,10 +203,10 @@ private:
 private slots:
 
     void onStdInRead(QString);
-    void saveTraceLogFlag();
+    void saveTraceLogFlag(bool);
 
     void getRadioInfo();
-    void logMessage(QString s, bool logAnyway = true);
+    void logMessage(QString s);
     void about();
     void LogTimerTimer();
 

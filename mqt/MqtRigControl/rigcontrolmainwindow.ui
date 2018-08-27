@@ -448,7 +448,7 @@
     </property>
     <addaction name="actionSetup_Radios"/>
     <addaction name="actionSetup_Band_Freq"/>
-    <addaction name="actionTrace_Log"/>
+    <addaction name="actionTraceComms"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -495,7 +495,7 @@
     <string>Setup Band Freq.</string>
    </property>
   </action>
-  <action name="actionTrace_Log">
+  <action name="actionTraceComms">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -503,7 +503,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Trace Log</string>
+    <string>Trace Data Comms</string>
    </property>
   </action>
  </widget>

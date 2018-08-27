@@ -162,9 +162,9 @@ RigControlMainWindow::~RigControlMainWindow()
     delete msg;
 }
 
-void RigControlMainWindow::logMessage( QString s, bool logAnyway )
+void RigControlMainWindow::logMessage( QString s )
 {
-    if (logAnyway || ui->actionTrace_Log->isChecked())
+
         trace( s );
 }
 
@@ -225,7 +225,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio()));
     connect(ui->actionSetup_Radios, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
     connect(ui->actionSetup_Band_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
-    connect(ui->actionTrace_Log, SIGNAL(changed()), this, SLOT(saveTraceLogFlag()));
+    connect(ui->actionTraceComms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
 
     connect(pollTimer, SIGNAL(timeout()), this, SLOT(getRadioInfo()));
 
@@ -248,7 +248,8 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
 
-    connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString, bool)));
+    // Message from rigcontrol
+    connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
 
     // standalone test
     connect(ui->selFreq, SIGNAL(clicked(bool)), this, SLOT(selFreqClicked()));
@@ -663,18 +664,18 @@ int RigControlMainWindow::getPolltime()
 void RigControlMainWindow::cmdLockOn()
 {
     cmdLockFlag = true;
-    logMessage(QString("Lockon: Command Lock On"), false);
+    logMessage(QString("Lockon: Command Lock On"));
 }
 
 void RigControlMainWindow::cmdLockOff()
 {
     cmdLockFlag = false;
-    logMessage(QString("Lockoff: Command Lock Off"), false);
+    logMessage(QString("Lockoff: Command Lock Off"));
 }
 
 void RigControlMainWindow::getRadioInfo()
 {
-    logMessage(QString("Request radio info"), false);
+    logMessage(QString("Request radio info"));
     if (cmdLockFlag)
     {
         trace(QString("GetRadioInfo: Command Lock on"));
@@ -685,7 +686,7 @@ void RigControlMainWindow::getRadioInfo()
     int retCode;
     if (radio->get_serialConnected())
     {
-        logMessage(QString("Get radio frequency"), false);
+        logMessage(QString("Get radio frequency"));
         retCode = getAndSendFrequency(RIG_VFO_CURR);
         if (retCode < 0)
         {
@@ -700,7 +701,7 @@ void RigControlMainWindow::getRadioInfo()
     if (radio->get_serialConnected())
     {
 
-        logMessage("Get radio mode", false);
+        logMessage("Get radio mode");
         retCode = getAndSendMode(RIG_VFO_CURR);
         if (retCode < 0)
         {
@@ -711,7 +712,7 @@ void RigControlMainWindow::getRadioInfo()
         }
         else
         {
-            logMessage(QString("Got Mode = %1").arg(radio->convertModeQstr(rmode)), false);
+            logMessage(QString("Got Mode = %1").arg(radio->convertModeQstr(rmode)));
         }
     }
 
@@ -720,7 +721,7 @@ void RigControlMainWindow::getRadioInfo()
 
     if (radio->get_serialConnected() && setupRadio->currentRadio.ritGetAvail && setupRadio->currentRadio.ritEnable)
     {
-        logMessage((QString("Get RIT")), false);
+        logMessage((QString("Get RIT")));
         retCode = getRitFreq(RIG_VFO_CURR);
         if (retCode < 0)
         {
@@ -964,7 +965,7 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
         {
             if (selTvBand != "")
             {
-                logMessage(QString("Get Freq: Transvert enabled"), false);
+                logMessage(QString("Get Freq: Transvert enabled"));
                 // look for supporting transverter
 
                 while (tvNum < setupRadio->currentRadio.numTransverters)
@@ -982,14 +983,14 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
                     logMessage(QString("Transverter %1 name %2 offset %3 rfreq %4").arg(tvNum)
                                .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertName)
                                .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset)
-                               .arg(rfrequency), false
+                               .arg(rfrequency)
                                );
 
                     transVertF = rfrequency + setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset;
-                    logMessage(QString("Get Freq: TransvertF = %1").arg(QString::number(transVertF)), false);
+                    logMessage(QString("Get Freq: TransvertF = %1").arg(QString::number(transVertF)));
                 }
 
-                logMessage(QString("Get Freq: Transvert Freq. = %1").arg(QString::number(transVertF)), false);
+                logMessage(QString("Get Freq: Transvert Freq. = %1").arg(QString::number(transVertF)));
                 curTransVertFrq = transVertF;
                 displayTransVertVfo(transVertF);
 
@@ -997,7 +998,7 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
             else
             {
                 //setTransVertDisplayVisible(false);
-                logMessage(QString("GetFreq: No transvert band set for this freq = %1").arg(QString::number(curVfoFrq)), false);
+                logMessage(QString("GetFreq: No transvert band set for this freq = %1").arg(QString::number(curVfoFrq)));
             }
         }
 
@@ -1067,7 +1068,7 @@ int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 
     if (retCode == RIG_OK)
     {
-        logMessage(QString("Get Mode: From Rx mode = %1, passband = %2").arg(radio->convertModeQstr(rmode)).arg(QString::number(rwidth)), false);
+        logMessage(QString("Get Mode: From Rx mode = %1, passband = %2").arg(radio->convertModeQstr(rmode)).arg(QString::number(rwidth)));
         curMode = rmode;
         sCurMode = radio->convertModeQstr(rmode);
 
@@ -1450,15 +1451,22 @@ void RigControlMainWindow::readTraceLogFlag()
 
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("TraceLog");
-
-
-    ui->actionTrace_Log->setChecked(config.value("TraceLog", false).toBool());
-
+    bool state = config.value("TraceLog", false).toBool();
     config.endGroup();
+
+    ui->actionTraceComms->setChecked(state);
+    radio->enableTraceComms(state);             // set state of trace hamlib comms
 }
 
-void RigControlMainWindow::saveTraceLogFlag()
+void RigControlMainWindow::saveTraceLogFlag(bool state)
 {
+
+    // set state of hamlib commms tracing
+
+    radio->enableTraceComms(state);
+
+    // save to ini for restart
+
     QString fileName;
     if (appName == "")
     {
@@ -1472,10 +1480,10 @@ void RigControlMainWindow::saveTraceLogFlag()
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("TraceLog");
 
-    config.setValue("TraceLog", ui->actionTrace_Log->isChecked());
+    config.setValue("TraceLog", state);
 
     config.endGroup();
-    trace("Tracelog Changed in " + fileName + " = " + QString::number(ui->actionTrace_Log->isChecked()));
+    trace("Tracelog Changed in " + fileName + " = " + QString::number(state));
 }
 
 void RigControlMainWindow::about()
@@ -1592,7 +1600,7 @@ void RigControlMainWindow::sendFreqToLog(freq_t freq)
     {
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setFreq(psname, freq);
-        logMessage(QString("Send freq to logger = %1 psn=%2").arg(convertFreqToStr(freq)).arg(psname.toString()), false);
+        logMessage(QString("Send freq to logger = %1 psn=%2").arg(convertFreqToStr(freq)).arg(psname.toString()));
     }
 }
 
@@ -1600,7 +1608,7 @@ void RigControlMainWindow::sendModeToLog(QString mode)
 {
     if (appName.length() > 0)
     {
-        logMessage(QString("Send mode to logger = %1").arg(mode), false);
+        logMessage(QString("Send mode to logger = %1").arg(mode));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setMode(psname, mode);
     }
@@ -1786,7 +1794,7 @@ void RigControlMainWindow::aboutRigConfig()
         msg.append(QString("Radio Supports Get RIT = %1\n").arg(setupRadio->currentRadio.ritGetAvail ? "True" : "False"));
         msg.append(QString("Radio Supports Set RIT = %1\n").arg(setupRadio->currentRadio.ritSetAvail ? "True" : "False"));
         msg.append(QString("Rit Enable On = %1\n").arg(setupRadio->currentRadio.ritEnable  ? "True" : "False"));
-        msg.append(QString("Tracelog = %1\n").arg(ui->actionTrace_Log->isChecked() ? "True" : "False"));
+        msg.append(QString("Tracelog = %1\n").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
     }
     else
     {
@@ -1843,7 +1851,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         trace(QString("Radio Supports Get RIT = %1").arg(setupRadio->currentRadio.ritGetAvail ? "True" : "False"));
         trace(QString("Radio Supports Set RIT = %1").arg(setupRadio->currentRadio.ritSetAvail ? "True" : "False"));
         trace(QString("Rit Enable On = %1").arg(setupRadio->currentRadio.ritEnable  ? "True" : "False"));
-        trace(QString("Tracelog = %1").arg(ui->actionTrace_Log->isChecked() ? "True" : "False"));
+        trace(QString("Tracelog = %1").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
 
     }
     else

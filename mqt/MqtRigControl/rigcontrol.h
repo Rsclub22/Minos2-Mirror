@@ -290,11 +290,12 @@ public:
     bool supportSignalStrength();
     int getSignalStrength(vfo_t vfo, value_t *val);
 
+    void enableTraceComms(bool state);
 
 
 signals:
     void frequency_updated(double);
-    void debug_protocol(QString, bool);
+    void debug_protocol(QString);
 
   private:
     hamlib_port_t myport;
@@ -332,6 +333,8 @@ signals:
     rig_model_t myrig_model;
     bool rigControlEnabled;
     bool serialConnected;
+    bool traceComms = false;
+
     void errorMessage(int errorCode,QString command);
     void getRadioList();
 
