@@ -142,7 +142,7 @@ private:
 
     void closeEvent(QCloseEvent *event);
 
-    void sendRadioListLogger();
+
     void sendBandListLogger();
     void sendStatusLogger(const QString &message);
     void sendStatusToLogDisConnected();
@@ -226,6 +226,9 @@ private slots:
 
     void setRitFreqStr(QString ritFreq);
     void setRitLogStatus(bool status);
+
+    void sendRadioListLogger();
+
 
 
 

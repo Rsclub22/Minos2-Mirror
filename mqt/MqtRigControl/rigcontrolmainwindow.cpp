@@ -226,7 +226,8 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->actionSetup_Radios, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
     connect(ui->actionSetup_Band_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
     connect(ui->actionTraceComms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
-
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
+    connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
     connect(pollTimer, SIGNAL(timeout()), this, SLOT(getRadioInfo()));
 
 
@@ -234,6 +235,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(setupRadio, SIGNAL(currentRadioSettingChanged(QString)), this, SLOT(currentRadioSettingChanged(QString)));
     connect(setupRadio, SIGNAL(radioNameChange()), this, SLOT(updateSelectRadioBox()));
     connect(setupRadio, SIGNAL(radioTabChanged()), this, SLOT(updateSelectRadioBox()));
+    connect(setupRadio, SIGNAL(radioSettingsSaved()), this, SLOT(sendRadioListLogger()));
 
 
     // Message from Logger
@@ -245,8 +247,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, SIGNAL(setTpm(int, QString)), this, SLOT(setTpm(int, QString)));
     connect(msg, SIGNAL(setVolume(int)), this, SLOT(loggerSetVolume(int)));
 
-    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
-    connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
+
 
     // Message from rigcontrol
     connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
@@ -1490,6 +1491,9 @@ void RigControlMainWindow::about()
 {
     QMessageBox::about(this, "Minos RigControl", "Minos QT RigControl\nCopyright D Balharrie G8FKH/M0DGB 2017");
 }
+
+
+
 
 void RigControlMainWindow::sendRadioListLogger()
 {
