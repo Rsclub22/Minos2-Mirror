@@ -16,7 +16,6 @@
  <Band type='MWave' flow='2300'   fhigh='2302'   unit='M' wlen='13cm'   UK='2300 MHz' Reg1Test='2,30 GHz' ADIF='13cm'  Cabrillo='2.30G'/>
  <Band type='MWave' flow='2310'   fhigh='2450'   unit='M' wlen='13cm'   UK='2320 MHz' Reg1Test='2,32 GHz' ADIF='13cm'  Cabrillo='2.32G'/>
  <Band type='MWave' flow='3400'   fhigh='3410'   unit='M' wlen='9cm'    UK='3.4 GHz'  Reg1Test='3,4 GHz' ADIF='9cm'    Cabrillo='3.4G'/>
- <Band type='MWave' flow='3400'   fhigh='3475'   unit='M' wlen='9cm'    UK='3.4 GHz'  Reg1Test='3,4 GHz' ADIF='9cm'    Cabrillo='3.4G'/>
  <Band type='MWave' flow='5650'   fhigh='5850'   unit='M' wlen='6cm'    UK='5.6 GHz'  Reg1Test='5,7 GHz' ADIF='6cm'    Cabrillo='5.7G'/>
  <Band type='MWave' flow='10000'  fhigh='10500'  unit='M' wlen='3cm'    UK='10 GHz'   Reg1Test='10 GHz'  ADIF='3cm'    Cabrillo='10G'/>
  <Band type='MWave' flow='24000'  fhigh='24250'  unit='M' wlen='1.25cm' UK='24 GHz'   Reg1Test='24 GHz'  ADIF='1.25cm' Cabrillo='24G'/>
