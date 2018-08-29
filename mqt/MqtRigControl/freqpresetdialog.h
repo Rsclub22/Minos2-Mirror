@@ -54,7 +54,6 @@ private slots:
     void b_432mhzSelected();
     void b_1296mhzSelected();
     void b_2300mhzSelected();
-    void b_2320mhzSelected();
     void b_3_4ghzSelected();
     void b_5_6ghzSelected();
     void b_10ghzSelected();

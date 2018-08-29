@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>369</width>
-    <height>202</height>
+    <width>373</width>
+    <height>211</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,26 +22,12 @@
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout" rowminimumheight="0,0,0,0,0,0,0,0,0,0" columnminimumwidth="0,0,0,0,0">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>50MHz</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
+    <layout class="QGridLayout" name="gridLayout" rowminimumheight="0,0,0,0,0" columnminimumwidth="0,0,0,0,0">
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit_70mhz"/>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>432MHz</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="lineEdit_50mhz"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_4">
@@ -53,9 +39,6 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="lineEdit_50mhz"/>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
@@ -66,8 +49,8 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_70mhz"/>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="lineEdit_1296mhz"/>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_6">
@@ -82,37 +65,8 @@
      <item row="2" column="1">
       <widget class="QLineEdit" name="lineEdit_144mhz"/>
      </item>
-     <item row="4" column="1">
-      <widget class="QLineEdit" name="lineEdit_1296mhz"/>
-     </item>
      <item row="3" column="1">
       <widget class="QLineEdit" name="lineEdit_432mhz"/>
-     </item>
-     <item row="4" column="2">
-      <widget class="QLabel" name="label_12">
-       <property name="text">
-        <string>10GHz</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLabel" name="label_10">
-       <property name="text">
-        <string>5.6GHz</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="4">
-      <widget class="QLineEdit" name="lineEdit_10ghz"/>
-     </item>
-     <item row="3" column="4">
-      <widget class="QLineEdit" name="lineEdit_5_6ghz"/>
      </item>
      <item row="0" column="2">
       <widget class="QLabel" name="label_7">
@@ -127,20 +81,47 @@
      <item row="0" column="4">
       <widget class="QLineEdit" name="lineEdit_2300mhz"/>
      </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_8">
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>2320MHz</string>
+        <string>432MHz</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
-     <item row="1" column="4">
-      <widget class="QLineEdit" name="lineEdit_2320mhz"/>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>50MHz</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLabel" name="label_12">
+       <property name="text">
+        <string>10GHz</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
      <item row="2" column="2">
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>5.6GHz</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
       <widget class="QLabel" name="label_9">
        <property name="text">
         <string>3.4GHz</string>
@@ -150,8 +131,14 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="4">
+     <item row="1" column="4">
       <widget class="QLineEdit" name="lineEdit_3_4ghz"/>
+     </item>
+     <item row="2" column="4">
+      <widget class="QLineEdit" name="lineEdit_5_6ghz"/>
+     </item>
+     <item row="3" column="4">
+      <widget class="QLineEdit" name="lineEdit_10ghz"/>
      </item>
     </layout>
    </item>

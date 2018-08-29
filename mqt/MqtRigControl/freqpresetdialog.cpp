@@ -39,7 +39,6 @@ FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<BandD
 
     connect (ui->lineEdit_1296mhz, SIGNAL(editingFinished()), this, SLOT(b_1296mhzSelected()));
     connect (ui->lineEdit_2300mhz, SIGNAL(editingFinished()), this, SLOT(b_2300mhzSelected()));
-    connect (ui->lineEdit_2320mhz, SIGNAL(editingFinished()), this, SLOT(b_2320mhzSelected()));
     connect (ui->lineEdit_3_4ghz, SIGNAL(editingFinished()), this, SLOT(b_3_4ghzSelected()));
     connect (ui->lineEdit_5_6ghz, SIGNAL(editingFinished()), this, SLOT(b_5_6ghzSelected()));
     connect (ui->lineEdit_10ghz, SIGNAL(editingFinished()), this, SLOT(b_10ghzSelected()));
@@ -97,12 +96,6 @@ void FreqPresetDialog::b_2300mhzSelected()
 {
     getFreq(ui->lineEdit_2300mhz, freqPresetData::_2300MHZ);
 }
-
-void FreqPresetDialog::b_2320mhzSelected()
-{
-    getFreq(ui->lineEdit_2320mhz, freqPresetData::_2320MHZ);
-}
-
 
 
 void FreqPresetDialog::b_3_4ghzSelected()
@@ -191,7 +184,6 @@ void FreqPresetDialog::saveSettings()
     config.setValue("144MHz", presetFreq[freqPresetData::_144MHZ]);
     config.setValue("1296MHz", presetFreq[freqPresetData::_1296MHZ]);
     config.setValue("2300MHz", presetFreq[freqPresetData::_2300MHZ]);
-    config.setValue("2320MHz", presetFreq[freqPresetData::_2320MHZ]);
     config.setValue("3_4GHz", presetFreq[freqPresetData::_3_4GHZ]);
     config.setValue("5_6GHz", presetFreq[freqPresetData::_5_6GHZ]);
     config.setValue("10GHz", presetFreq[freqPresetData::_10GHZ]);
@@ -221,8 +213,6 @@ void FreqPresetDialog::readSettings(QStringList& presetFreq)  // static
     presetFreq.append(config.value("432MHz", freqPresetData::bandFreq[freqPresetData::_432MHZ]).toString());
     presetFreq.append(config.value("1296MHz", freqPresetData::bandFreq[freqPresetData::_1296MHZ]).toString());
     presetFreq.append(config.value("2300MHZ", freqPresetData::bandFreq[freqPresetData::_2300MHZ]).toString());
-    presetFreq.append(config.value("2320MHZ", freqPresetData::bandFreq[freqPresetData::_2320MHZ]).toString());
-
     presetFreq.append(config.value("3_4GHz", freqPresetData::bandFreq[freqPresetData::_3_4GHZ]).toString());
     presetFreq.append(config.value("5_6GHz", freqPresetData::bandFreq[freqPresetData::_5_6GHZ]).toString());
     presetFreq.append(config.value("10GHz", freqPresetData::bandFreq[freqPresetData::_10GHZ]).toString());
@@ -260,7 +250,6 @@ void FreqPresetDialog::loadSettingsToDialog()
     ui->lineEdit_432mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_432MHZ]));
     ui->lineEdit_1296mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_1296MHZ]));
     ui->lineEdit_2300mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_2300MHZ]));
-    ui->lineEdit_2320mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_2320MHZ]));
     ui->lineEdit_3_4ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_3_4GHZ]));
     ui->lineEdit_5_6ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_5_6GHZ]));
     ui->lineEdit_10ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_10GHZ]));
