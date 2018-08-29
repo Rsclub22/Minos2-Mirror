@@ -115,6 +115,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     setRitOnOffDisplayVisible(logRitOn);
     setRitOnOffDisplay(logRitOn);
 
+    initialiseSupportedRadioDisplay();
+
 
 
 
@@ -441,6 +443,8 @@ void RigControlMainWindow::upDateRadio()
                 writeWindowTitle(appName);
                 sendStatusToLogConnected();
                 sendBandListLogger();
+
+                updateSupportedRadioIndicators();
 
                 if (setupRadio->currentRadio.ritSetAvail && setupRadio->currentRadio.ritEnable)
                 {
@@ -1893,6 +1897,128 @@ void delay(int sec)
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
+
+
+/********************************* Supported Radio Display *****************************/
+
+
+
+void RigControlMainWindow::initialiseSupportedRadioDisplay()
+{
+    // table of indicators
+    supRadioInd.append(ui->_50mhz_Indicator);
+    supRadioInd.append(ui->_70mhz_Indicator);
+    supRadioInd.append(ui->_144mhz_Indicator);
+    supRadioInd.append(ui->_432mhz_Indicator);
+    supRadioInd.append(ui->_1296mhz_Indicator);
+    supRadioInd.append(ui->_2300mhz_Indicator);
+    supRadioInd.append(ui->_3_4ghz_Indicator);
+    supRadioInd.append(ui->_5_6ghz_Indicator);
+    supRadioInd.append(ui->_10ghz_Indicator);
+
+    turnOffAllsupRadioIndicators();
+
+}
+
+
+void RigControlMainWindow::updateSupportedRadioIndicators()
+{
+    //turnOffAllsupRadioIndicators();
+    struct indicatorData {
+        indicatorType indicatorState = OFF;
+        int indicatorOffset = 0;
+    };
+
+    indicatorData  displayData;
+    QVector<indicatorData> displayDataList;
+
+    bool foundTransvert = false;
+
+    for (int i = 0; i < setupRadio->currentRadio.radioTransSupBands.count(); i++)
+    {
+        for (int b = 0; b < freqPresetData::presetBands.count(); b++)
+        {
+            if (setupRadio->currentRadio.radioTransSupBands[i] == freqPresetData::presetBands[b])
+            {
+               // found a supported band - check if it is a transverter
+               for (int t = 0; t < setupRadio->currentRadio.transVertSettings.count(); t++)
+               {
+                  if (setupRadio->currentRadio.radioTransSupBands[i] ==  setupRadio->currentRadio.transVertSettings[t]->band)
+                  {
+                      // found a transverter
+                      foundTransvert = true;
+                      break;
+
+                  }
+
+               }
+
+               if (foundTransvert)
+               {
+                   foundTransvert = false;
+                   displayData.indicatorState = TRANSVERT;
+                   displayData.indicatorOffset = b;
+                   displayDataList.append(displayData);
+               }
+               else
+               {
+                   displayData.indicatorState = RADIO;
+                   displayData.indicatorOffset = b;
+                   displayDataList.append(displayData);
+               }
+
+            }
+            else
+            {
+                // band not found
+                displayData.indicatorState = OFF;
+                displayData.indicatorOffset = b;
+                displayDataList.append(displayData);
+
+            }
+        }
+
+    }
+
+
+    // now display the supported bands
+    for (int i = 0; i < displayDataList.count(); i++)
+    {
+        supRadioIndToggle(displayDataList[i].indicatorOffset, displayDataList[i].indicatorState);
+    }
+
+
+}
+
+
+void RigControlMainWindow::turnOffAllsupRadioIndicators()
+{
+
+    for (int i = 0; i < supRadioInd.count(); i++)
+    {
+        supRadioIndToggle(i, OFF);
+    }
+
+}
+
+
+void RigControlMainWindow::supRadioIndToggle(int offset, indicatorType type)
+{
+    if (type == OFF)
+    {
+        supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
+    }
+    else if (type == RADIO)
+    {
+       supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_RADIO_STYLE);
+    }
+    else if (type == TRANSVERT)
+    {
+       supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
+    }
+}
+
+
 
 /*********************************** test *********************************************/
 

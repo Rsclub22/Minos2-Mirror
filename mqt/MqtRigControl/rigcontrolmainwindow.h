@@ -19,6 +19,7 @@
 
 #include <QMainWindow>
 #include <QTimer>
+#include <QVector>
 
 #include "mqtUtils_pch.h"
 #include "rigcontrol.h"
@@ -41,6 +42,14 @@ void delay(int sec);
 namespace Ui {
 class RigControlMainWindow;
 }
+
+enum indicatorType { OFF, RADIO, TRANSVERT};
+
+
+
+
+
+
 
 class RigControlMainWindow : public QMainWindow
 {
@@ -108,6 +117,10 @@ private:
 
     QString geoStr;         // geometry registry location
 
+    QVector<QPushButton*> supRadioInd;
+    const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color:  white ;\n");
+    const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue ; \n");
+    const QString SUP_RADIO_INDICATOR_TRANSVERT_STYLE = QString("background-color: yellow ; \n");
 
 
     void initActionsConnections();
@@ -200,6 +213,10 @@ private:
     void displaySignalStrength(int level);
     void sendVolStatusToLog(bool status);
 
+    void initialiseSupportedRadioDisplay();
+    void supRadioIndToggle(int offset, indicatorType type);
+    void updateSupportedRadioIndicators();
+    void turnOffAllsupRadioIndicators();
 private slots:
 
     void onStdInRead(QString);
