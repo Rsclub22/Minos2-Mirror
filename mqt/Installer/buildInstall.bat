@@ -39,6 +39,7 @@ mkdir installFiles
 cd installFiles
 
 mkdir Configuration
+mkdir Configuration\Radio
 mkdir Lists
 mkdir Logs
 mkdir Bin
@@ -56,6 +57,7 @@ copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
 copy C:\Projects\hamlib-w32-3.1\bin\*.dll Bin
 
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
+xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Radio .\Configuration\Radio
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration
 
 cd Configuration
@@ -63,6 +65,7 @@ cd Configuration
 call powershell.exe "& {Invoke-WebRequest http://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests17.xml -Outfile vhfcontests17.xml}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests18.xml -Outfile vhfcontests18.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests19.xml -Outfile vhfcontests19.xml}"
 
 
 cd ../Bin

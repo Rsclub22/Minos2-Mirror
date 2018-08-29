@@ -28,6 +28,7 @@ mkdir ./minos-runtime
 cd ./minos-runtime
 
 mkdir Configuration
+mkdir Cofiguration/Radio
 mkdir Lists
 mkdir Logs
 mkdir Bin
@@ -59,12 +60,13 @@ else
 fi
 
 cp -r ../Minos2/mqt/ControlFiles/Configuration/* ./Configuration
+cp -r ../Minos2/mqt/ControlFiles/Configuration/Radio/* ./Configuration/Radio
 cp -r ../Minos2/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
 cp -r ../Minos2/mqt/Installer/Minos.sh . 
 
 cd Configuration
 
 wget http://www.country-files.com/cty/cty.dat -O cty.dat
-wget http://www.rsgbcc.org/vhf/vhfcontests16.xml -O vhfcontests16.xml
 wget http://www.rsgbcc.org/vhf/vhfcontests17.xml -O vhfcontests17.xml
 wget http://www.rsgbcc.org/vhf/vhfcontests18.xml -O vhfcontests18.xml
+wget http://www.rsgbcc.org/vhf/vhfcontests19.xml -O vhfcontests19.xml
