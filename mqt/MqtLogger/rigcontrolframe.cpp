@@ -741,6 +741,8 @@ void RigControlFrame::setRadioList()
 }
 
 
+// also sets the freq on the radio according to current contest band selected as active log
+
 void RigControlFrame::setBandList(QString b)
 {
     trace("setBandList " + b);
