@@ -777,11 +777,13 @@ void RigControlFrame::setBandList(QString b)
             //And we want to select the frequency based on the contest band
 
             QString cb = ct->band.getValue().trimmed();
+
             BandList &blist = BandList::getBandList();
             BandInfo bi;
             bool bandOK = blist.findBand(cb, bi);
             if (bandOK)
             {
+
                 for (int i = 0; i < listOfBands.size(); i++)
                 {
                     if (listOfBands[i].band == cb)

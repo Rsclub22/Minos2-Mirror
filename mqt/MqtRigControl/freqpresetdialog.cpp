@@ -203,29 +203,29 @@ void FreqPresetDialog::saveSettings()
 }
 
 
-void FreqPresetDialog::readSettings(QStringList& _presetFreq)  // static
+void FreqPresetDialog::readSettings(QStringList& presetFreq)  // static
 {
 
     QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
 
     QSettings config(fileName, QSettings::IniFormat);
 
-    _presetFreq.clear();
+    presetFreq.clear();
 
     config.beginGroup("FreqPresets");
 
  //   _presetFreq.append(config.value("28MHz", bandFreq[_28MHZ]).toString());
-    _presetFreq.append(config.value("50MHz", freqPresetData::bandFreq[freqPresetData::_50MHZ]).toString());
-    _presetFreq.append(config.value("70MHz", freqPresetData::bandFreq[freqPresetData::_70MHZ]).toString());
-    _presetFreq.append(config.value("144MHz", freqPresetData::bandFreq[freqPresetData::_144MHZ]).toString());
-    _presetFreq.append(config.value("432MHz", freqPresetData::bandFreq[freqPresetData::_432MHZ]).toString());
-    _presetFreq.append(config.value("1296MHz", freqPresetData::bandFreq[freqPresetData::_1296MHZ]).toString());
-    _presetFreq.append(config.value("2300MHZ", freqPresetData::bandFreq[freqPresetData::_2300MHZ]).toString());
-    _presetFreq.append(config.value("2320MHZ", freqPresetData::bandFreq[freqPresetData::_2320MHZ]).toString());
+    presetFreq.append(config.value("50MHz", freqPresetData::bandFreq[freqPresetData::_50MHZ]).toString());
+    presetFreq.append(config.value("70MHz", freqPresetData::bandFreq[freqPresetData::_70MHZ]).toString());
+    presetFreq.append(config.value("144MHz", freqPresetData::bandFreq[freqPresetData::_144MHZ]).toString());
+    presetFreq.append(config.value("432MHz", freqPresetData::bandFreq[freqPresetData::_432MHZ]).toString());
+    presetFreq.append(config.value("1296MHz", freqPresetData::bandFreq[freqPresetData::_1296MHZ]).toString());
+    presetFreq.append(config.value("2300MHZ", freqPresetData::bandFreq[freqPresetData::_2300MHZ]).toString());
+    presetFreq.append(config.value("2320MHZ", freqPresetData::bandFreq[freqPresetData::_2320MHZ]).toString());
 
-    _presetFreq.append(config.value("3_4GHz", freqPresetData::bandFreq[freqPresetData::_3_4GHZ]).toString());
-    _presetFreq.append(config.value("5_6GHz", freqPresetData::bandFreq[freqPresetData::_5_6GHZ]).toString());
-    _presetFreq.append(config.value("10GHz", freqPresetData::bandFreq[freqPresetData::_10GHZ]).toString());
+    presetFreq.append(config.value("3_4GHz", freqPresetData::bandFreq[freqPresetData::_3_4GHZ]).toString());
+    presetFreq.append(config.value("5_6GHz", freqPresetData::bandFreq[freqPresetData::_5_6GHZ]).toString());
+    presetFreq.append(config.value("10GHz", freqPresetData::bandFreq[freqPresetData::_10GHZ]).toString());
 
 
     config.endGroup();
