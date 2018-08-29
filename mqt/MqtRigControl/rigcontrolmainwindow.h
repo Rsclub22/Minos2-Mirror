@@ -43,7 +43,10 @@ namespace Ui {
 class RigControlMainWindow;
 }
 
-enum indicatorType { OFF, RADIO, TRANSVERT};
+namespace displayIndicator {
+    enum indicatorType { OFF, RADIO, TRANSVERT};
+}
+
 
 
 
@@ -214,7 +217,7 @@ private:
     void sendVolStatusToLog(bool status);
 
     void initialiseSupportedRadioDisplay();
-    void supRadioIndToggle(int offset, indicatorType type);
+    void supRadioIndToggle(int offset, displayIndicator::indicatorType type);
     void updateSupportedRadioIndicators();
     void turnOffAllsupRadioIndicators();
 private slots:

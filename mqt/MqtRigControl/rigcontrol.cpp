@@ -113,12 +113,10 @@ int RigControl::init(scatParams &currentRadio)
     retcode = rig_open(my_rig);
     if (retcode >= 0)
     {
-        qDebug() << "rig opened ok";
         set_serialConnected(true);
     }
     else
     {
-        qDebug() << "rig open error";
         set_serialConnected(false);
     }
 

@@ -435,7 +435,7 @@ void RigControlMainWindow::upDateRadio()
 
 
                 supVolume = radio->supportVolControl();
-                qDebug() << "support vol = " << (supVolume ? "True" : "False");
+                //qDebug() << "support vol = " << (supVolume ? "True" : "False");
                 sendVolStatusToLog(supVolume);
 
                 supSignalStrength = radio->supportSignalStrength();
@@ -1923,69 +1923,36 @@ void RigControlMainWindow::initialiseSupportedRadioDisplay()
 
 void RigControlMainWindow::updateSupportedRadioIndicators()
 {
-    //turnOffAllsupRadioIndicators();
-    struct indicatorData {
-        indicatorType indicatorState = OFF;
-        int indicatorOffset = 0;
-    };
-
-    indicatorData  displayData;
-    QVector<indicatorData> displayDataList;
-
-    bool foundTransvert = false;
+    turnOffAllsupRadioIndicators();
 
     for (int i = 0; i < setupRadio->currentRadio.radioTransSupBands.count(); i++)
     {
+
         for (int b = 0; b < freqPresetData::presetBands.count(); b++)
         {
-            if (setupRadio->currentRadio.radioTransSupBands[i] == freqPresetData::presetBands[b])
+           if (setupRadio->currentRadio.radioTransSupBands[i] == freqPresetData::presetBands[b])
             {
-               // found a supported band - check if it is a transverter
-               for (int t = 0; t < setupRadio->currentRadio.transVertSettings.count(); t++)
-               {
-                  if (setupRadio->currentRadio.radioTransSupBands[i] ==  setupRadio->currentRadio.transVertSettings[t]->band)
-                  {
-                      // found a transverter
-                      foundTransvert = true;
-                      break;
+               supRadioIndToggle(b, displayIndicator::RADIO);
+               break;
+           }
+        }
+    }
 
-                  }
-
-               }
-
-               if (foundTransvert)
-               {
-                   foundTransvert = false;
-                   displayData.indicatorState = TRANSVERT;
-                   displayData.indicatorOffset = b;
-                   displayDataList.append(displayData);
-               }
-               else
-               {
-                   displayData.indicatorState = RADIO;
-                   displayData.indicatorOffset = b;
-                   displayDataList.append(displayData);
-               }
-
-            }
-            else
-            {
-                // band not found
-                displayData.indicatorState = OFF;
-                displayData.indicatorOffset = b;
-                displayDataList.append(displayData);
-
+    if (setupRadio->currentRadio.transVertEnable)
+    {
+       for (int i = 0; i < setupRadio->currentRadio.transVertSettings.count(); i++)
+       {
+          for (int b = 0; b < freqPresetData::presetBands.count(); b++)
+          {
+                if (setupRadio->currentRadio.transVertSettings[i]->band == freqPresetData::presetBands[b])
+                {
+                    supRadioIndToggle(b, displayIndicator::TRANSVERT);
+                    break;
+                }
             }
         }
-
     }
 
-
-    // now display the supported bands
-    for (int i = 0; i < displayDataList.count(); i++)
-    {
-        supRadioIndToggle(displayDataList[i].indicatorOffset, displayDataList[i].indicatorState);
-    }
 
 
 }
@@ -1996,23 +1963,23 @@ void RigControlMainWindow::turnOffAllsupRadioIndicators()
 
     for (int i = 0; i < supRadioInd.count(); i++)
     {
-        supRadioIndToggle(i, OFF);
+        supRadioIndToggle(i, displayIndicator::OFF);
     }
 
 }
 
 
-void RigControlMainWindow::supRadioIndToggle(int offset, indicatorType type)
+void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indicatorType type)
 {
-    if (type == OFF)
+    if (type == displayIndicator::OFF)
     {
         supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
     }
-    else if (type == RADIO)
+    else if (type == displayIndicator::RADIO)
     {
        supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_RADIO_STYLE);
     }
-    else if (type == TRANSVERT)
+    else if (type == displayIndicator::TRANSVERT)
     {
        supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
     }
