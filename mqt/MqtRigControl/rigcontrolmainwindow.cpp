@@ -265,12 +265,13 @@ void RigControlMainWindow::initActionsConnections()
 void RigControlMainWindow::setupBandFreq()
 {
 
-    FreqPresetDialog  fPresetDialog(presetFreq, bands, freqPresetChanged);
+    FreqPresetDialog  fPresetDialog(presetFreq, bands, &freqPresetChanged);
 
     fPresetDialog.exec();
 
-    if (!freqPresetChanged)
+    if (freqPresetChanged)
     {
+        fPresetDialog.readSettings(presetFreq);
         logMessage(QString("RigControl: Band Freq Change, send new bandlist to logger"));
         sendBandListLogger();
         freqPresetChanged = false;

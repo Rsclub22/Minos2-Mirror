@@ -19,15 +19,15 @@
 #include "freqpresetdialog.h"
 #include "ui_freqpresetdialog.h"
 
-FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<BandDetail*> _band, bool& _freqPresetChanged, QWidget *parent) :
+FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<BandDetail*> band, bool* _freqPresetChanged, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FreqPresetDialog)
 {
     ui->setupUi(this);
-
-    bands = _band;
+    bands = band;
     presetFreq = _presetFreq;
     freqPresetChanged = _freqPresetChanged;
+
 
     loadSettingsToDialog();
 
@@ -124,7 +124,7 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band
     QString freq = f_box->text().trimmed().remove( QRegExp("^[0]*"));
     if (valInputFreq(freq, RADIO_FREQ_EDIT_ERR_MSG))
     {
-       freq = convertSinglePeriodFreqToFullDigit(freq).remove('.');
+       freq = convertFreqToFullDigit(freq).remove('.');
 
 
        // check in band
@@ -132,7 +132,7 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band
        {
            presetFreq[band] = freq;
            freqChanged = true;
-           freqPresetChanged = true;
+           *freqPresetChanged = true;
        }
     }
 
@@ -193,6 +193,8 @@ void FreqPresetDialog::saveSettings()
     config.endGroup();
 
 
+
+
 }
 
 
@@ -233,7 +235,7 @@ void FreqPresetDialog::cancelSettings()
     }
 
     freqChanged = false;
-    freqPresetChanged = false;
+    *freqPresetChanged = false;
     readSettings(presetFreq);
     loadSettingsToDialog();
 
