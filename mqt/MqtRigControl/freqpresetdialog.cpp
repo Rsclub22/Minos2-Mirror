@@ -182,6 +182,7 @@ void FreqPresetDialog::saveSettings()
     config.setValue("50MHz", presetFreq[freqPresetData::_50MHZ]);
     config.setValue("70MHz", presetFreq[freqPresetData::_70MHZ]);
     config.setValue("144MHz", presetFreq[freqPresetData::_144MHZ]);
+    config.setValue("432MHz", presetFreq[freqPresetData::_432MHZ]);
     config.setValue("1296MHz", presetFreq[freqPresetData::_1296MHZ]);
     config.setValue("2300MHz", presetFreq[freqPresetData::_2300MHZ]);
     config.setValue("3_4GHz", presetFreq[freqPresetData::_3_4GHZ]);
