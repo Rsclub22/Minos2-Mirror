@@ -25,8 +25,12 @@ class SerialTVSwitch: public QObject
 public:
     SerialTVSwitch(QString comport, QObject *parent = nullptr);
 
+    ~SerialTVSwitch();
+
+
     void sendTVSwMessage(QByteArray msg);
     void closeComport();
+
 private:
 
     QSerialPort *sComPort = nullptr;
