@@ -469,8 +469,11 @@ QString MinosConfig::checkConfig()
             eleListSize++;
             if (ele->appType == "Server" && ele->runType == RunLocal )
             {
+                if (serverPresent)
+                {
+                    reqErrs += "More than one server is defined and enabled";
+                }
                 serverPresent = true;
-                break;
             }
         }
     }
@@ -485,6 +488,10 @@ QString MinosConfig::checkConfig()
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
     {
         QSharedPointer<RunConfigElement> elei = (*i);
+        if (elei->deleted)
+        {
+            continue;
+        }
 
         if (elei->name.contains('[') || elei->name.contains(']'))
         {
@@ -496,6 +503,11 @@ QString MinosConfig::checkConfig()
                 continue;
 
             QSharedPointer<RunConfigElement> elej = (*j);
+            if (elej->deleted)
+            {
+                continue;
+            }
+
             if (elei->name.compare(elej->name, Qt::CaseInsensitive) == 0)
             {
                 reqErrs += elei->name + " appears more than once (names are not case sensitive)";
