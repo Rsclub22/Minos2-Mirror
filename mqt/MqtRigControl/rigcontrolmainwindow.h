@@ -44,7 +44,7 @@ class RigControlMainWindow;
 }
 
 namespace displayIndicator {
-    enum indicatorType { OFF, RADIO, TRANSVERT};
+    enum indicatorType { OFF, RADIO, TRANSVERT, TRANSVERT_ON};
 }
 
 
@@ -124,7 +124,7 @@ private:
     const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color:  white ;\n");
     const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue ; \n");
     const QString SUP_RADIO_INDICATOR_TRANSVERT_STYLE = QString("background-color: yellow ; \n");
-
+    const QString SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE = QString("background-color: orange ; \n");
 
     void initActionsConnections();
     void initSelectRadioBox();
@@ -220,6 +220,9 @@ private:
     void supRadioIndToggle(int offset, displayIndicator::indicatorType type);
     void updateSupportedRadioIndicators();
     void turnOffAllsupRadioIndicators();
+    void showActiveTransVertIndicator(QString cb);
+
+
 private slots:
 
     void onStdInRead(QString);

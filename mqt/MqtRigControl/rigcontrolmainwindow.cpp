@@ -870,7 +870,8 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
             {
                 selTvBand = cb;
                 ui->transVertBandDisp->setText(cb);
-                //setTransVertDisplayVisible(true);
+                showActiveTransVertIndicator(cb);
+
                 if (setupRadio->currentRadio.enableTransSwitch)
                 {
                     if (setupRadio->currentRadio.transVertSettings[tvNum]->transSwitchNum != transVertSwNum)
@@ -1922,6 +1923,47 @@ void RigControlMainWindow::initialiseSupportedRadioDisplay()
 }
 
 
+void RigControlMainWindow::showActiveTransVertIndicator(QString cb)
+{
+
+    static QString oldBand = "";
+
+    if (cb != oldBand)
+    {
+        // turn off previous active transverter indicator
+        if (oldBand != "")
+        {
+            for (int i = 0; i < freqPresetData::presetBands.count(); i++)
+            {
+               if (oldBand == freqPresetData::presetBands[i])
+                {
+                   supRadioIndToggle(i, displayIndicator::TRANSVERT);
+                   break;
+               }
+            }
+        }
+
+        // turn on new indicator
+        for (int i = 0; i < freqPresetData::presetBands.count(); i++)
+        {
+           if (cb == freqPresetData::presetBands[i])
+            {
+               supRadioIndToggle(i, displayIndicator::TRANSVERT_ON);
+               oldBand = cb;
+               break;
+           }
+        }
+
+
+
+    }
+
+
+
+}
+
+
+
 void RigControlMainWindow::updateSupportedRadioIndicators()
 {
     turnOffAllsupRadioIndicators();
@@ -1972,6 +2014,7 @@ void RigControlMainWindow::turnOffAllsupRadioIndicators()
 
 void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indicatorType type)
 {
+
     if (type == displayIndicator::OFF)
     {
         supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
@@ -1984,6 +2027,12 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
     {
        supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
     }
+    else if (type == displayIndicator::TRANSVERT_ON)
+    {
+       supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
+    }
+
+
 }
 
 
