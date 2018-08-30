@@ -23,18 +23,28 @@ class SerialTVSwitch: public QObject
 {
     Q_OBJECT
 public:
-    SerialTVSwitch(QString comport, QObject *parent = nullptr);
-
-    ~SerialTVSwitch();
+    SerialTVSwitch(QObject *parent = nullptr);
 
 
-    void sendTVSwMessage(QByteArray msg);
+
+
+    void sendTVSwMessage(const QByteArray &msg);
     void closeComport();
+
+    bool openComport(QString comport);
+
+    QSerialPort::SerialPortError error();
+private slots:
+
+    //void handleError(QSerialPort::SerialPortError error);
+
+
 
 private:
 
     QSerialPort *sComPort = nullptr;
-    SerialComms *tVSwPort = nullptr;
+    QByteArray m_msg;
+
 
 
 };

@@ -83,6 +83,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     setupRadio = new RigSetupDialog(radio, bands);
     setupRadio->setAppName(appName);
 
+
+    serialTVSw = new SerialTVSwitch();     // create local serial sw
+
     if (appName.length() > 0)
     {
         // connected to logger don't show radio selectbox
@@ -346,7 +349,6 @@ void RigControlMainWindow::selectRadio()
 void RigControlMainWindow::setSelectRadioBoxVisible(bool visible)
 {
 
-
     ui->SelectRadioTitle->setVisible(visible);
     ui->selectRadioBox->setVisible(visible);
 }
@@ -363,6 +365,8 @@ void RigControlMainWindow::upDateRadio()
     logMessage(QString("UpdateRadio: Index Selected = %1").arg(QString::number(ui->selectRadioBox->currentIndex())));
 
     pollTimer->stop();      // stop updates
+
+    static QString curTVComPort = "";
 
     int ridx = 0;
     if (setupRadio->currentRadioName != "")
@@ -392,11 +396,31 @@ void RigControlMainWindow::upDateRadio()
                     && setupRadio->currentRadio.enableTransSwitch
                     && setupRadio->currentRadio.enableLocTVSwMsg)
             {
-                if (serialTVSw != nullptr)
+                if (curTVComPort != "")
                 {
                     serialTVSw->closeComport();
+                    curTVComPort = "";
                 }
-                serialTVSw = new SerialTVSwitch(setupRadio->currentRadio.locTVSwComport);
+                if (serialTVSw->openComport(setupRadio->currentRadio.locTVSwComport))
+                {
+                    curTVComPort = setupRadio->currentRadio.locTVSwComport;
+                    logMessage(QString("Local Transvert Switch Comport opened Ok = %1").arg(setupRadio->currentRadio.locTVSwComport));
+                }
+                else
+                {
+                    QSerialPort::SerialPortError serialError = serialTVSw->error();
+                    logMessage(QString("Local Transvert Switch Comport failed to opene = %1").arg(setupRadio->currentRadio.locTVSwComport));
+                }
+
+            }
+            else
+            {
+                if (curTVComPort != "")
+                {
+                    serialTVSw->closeComport();
+                    curTVComPort = "";
+                }
+
             }
 
             // only show transvert freq box is enabled
@@ -1684,6 +1708,7 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
     QByteArray msg = swNum.toUtf8();
     msg.prepend(TVSWMSG_START);
     msg.append(TVSWMSG_TERM);
+
 
     if (setupRadio->currentRadio.transVertEnable
             && setupRadio->currentRadio.enableTransSwitch

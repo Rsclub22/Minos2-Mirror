@@ -11,25 +11,37 @@
 
 
 #include "serialtvswitch.h"
+#include <QSerialPortInfo>
 
-
-SerialTVSwitch::SerialTVSwitch(QString comport, QObject *parent) : QObject(parent)
+SerialTVSwitch::SerialTVSwitch(QObject *parent) : QObject(parent)
 {
-    sComPort = new QSerialPort(comport, parent);
-    // Default to 9600 baud, 8 data, 1 stop, no flow control
-    tVSwPort = new SerialComms(sComPort, parent);
-    tVSwPort->open();
+
 }
 
 
-void SerialTVSwitch::sendTVSwMessage(QByteArray msg)
+void SerialTVSwitch::sendTVSwMessage(const QByteArray &msg)
 {
-    tVSwPort->write(msg);
+    m_msg = msg;
+    sComPort->write(m_msg);
 }
 
+bool SerialTVSwitch::openComport(const QString comport)
+{
+    sComPort = new QSerialPort;
+    sComPort->setPortName(comport);
+    //sComPort->setBaudRate(QSerialPort::Baud9600);
 
+    return sComPort->open(QIODevice::WriteOnly);
+
+}
 
 void SerialTVSwitch::closeComport()
 {
-    tVSwPort->close();
+    sComPort->close();
+    delete sComPort;
+}
+
+QSerialPort::SerialPortError SerialTVSwitch::error()
+{
+    return sComPort->error();
 }
