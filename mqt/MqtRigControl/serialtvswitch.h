@@ -23,14 +23,37 @@ class SerialTVSwitch: public QObject
 {
     Q_OBJECT
 public:
-    SerialTVSwitch(QString comport, QObject *parent = nullptr);
+    SerialTVSwitch(QObject *parent = nullptr);
 
-    void sendTVSwMessage(QByteArray msg);
+
+
+
+    void sendTVSwMessage(const QByteArray &msg);
     void closeComport();
+
+    bool openComport(QString comport);
+    QString error();
+
+
+    bool getOpenFlag();
+private slots:
+
+    //void handleError(QSerialPort::SerialPortError error);
+
+
+
 private:
 
     QSerialPort *sComPort = nullptr;
-    SerialComms *tVSwPort = nullptr;
+    QByteArray m_msg;
+    bool openFlag = false;
+    QStringList comportErrMsgs = { "No Error", "Device Not Found", "Permission Error"
+                                   ,"Open Error", "Parity Error", "Framing Error"
+                                   ,"Break Condition", "Write Error", "Read Error"
+                                   ,"Resource Error", "Unsupported Operation Error"
+                                   ,"Unknown Error", "Timeout Error", "Not Open Error"
+                                  };
+
 
 
 };

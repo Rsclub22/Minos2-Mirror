@@ -83,6 +83,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     setupRadio = new RigSetupDialog(radio, bands);
     setupRadio->setAppName(appName);
 
+
+    serialTVSw = new SerialTVSwitch();     // create local serial sw
+
     if (appName.length() > 0)
     {
         // connected to logger don't show radio selectbox
@@ -346,7 +349,6 @@ void RigControlMainWindow::selectRadio()
 void RigControlMainWindow::setSelectRadioBoxVisible(bool visible)
 {
 
-
     ui->SelectRadioTitle->setVisible(visible);
     ui->selectRadioBox->setVisible(visible);
 }
@@ -363,6 +365,8 @@ void RigControlMainWindow::upDateRadio()
     logMessage(QString("UpdateRadio: Index Selected = %1").arg(QString::number(ui->selectRadioBox->currentIndex())));
 
     pollTimer->stop();      // stop updates
+
+    static QString curTVComPort = "";
 
     int ridx = 0;
     if (setupRadio->currentRadioName != "")
@@ -392,11 +396,32 @@ void RigControlMainWindow::upDateRadio()
                     && setupRadio->currentRadio.enableTransSwitch
                     && setupRadio->currentRadio.enableLocTVSwMsg)
             {
-                if (serialTVSw != nullptr)
+                if (curTVComPort != "")
                 {
                     serialTVSw->closeComport();
+                    curTVComPort = "";
                 }
-                serialTVSw = new SerialTVSwitch(setupRadio->currentRadio.locTVSwComport);
+                if (serialTVSw->openComport(setupRadio->currentRadio.locTVSwComport))
+                {
+                    curTVComPort = setupRadio->currentRadio.locTVSwComport;
+                    logMessage(QString("Local Transvert Switch Comport opened Ok = %1").arg(setupRadio->currentRadio.locTVSwComport));
+                }
+                else
+                {
+
+                    QString errMsg = serialTVSw->error();
+                    logMessage(QString("Local Transvert Switch Comport failed to open = %1 Error = %2").arg(setupRadio->currentRadio.locTVSwComport).arg(errMsg));
+                }
+
+            }
+            else
+            {
+                if (curTVComPort != "")
+                {
+                    serialTVSw->closeComport();
+                    curTVComPort = "";
+                }
+
             }
 
             // only show transvert freq box is enabled
@@ -870,7 +895,8 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
             {
                 selTvBand = cb;
                 ui->transVertBandDisp->setText(cb);
-                //setTransVertDisplayVisible(true);
+                showActiveTransVertIndicator(cb);
+
                 if (setupRadio->currentRadio.enableTransSwitch)
                 {
                     if (setupRadio->currentRadio.transVertSettings[tvNum]->transSwitchNum != transVertSwNum)
@@ -1684,9 +1710,11 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
     msg.prepend(TVSWMSG_START);
     msg.append(TVSWMSG_TERM);
 
+
     if (setupRadio->currentRadio.transVertEnable
             && setupRadio->currentRadio.enableTransSwitch
-            && setupRadio->currentRadio.enableLocTVSwMsg)
+            && setupRadio->currentRadio.enableLocTVSwMsg
+            && serialTVSw->getOpenFlag())      // com port should be open!
     {
         serialTVSw->sendTVSwMessage(msg);
     }
@@ -1922,6 +1950,47 @@ void RigControlMainWindow::initialiseSupportedRadioDisplay()
 }
 
 
+void RigControlMainWindow::showActiveTransVertIndicator(QString cb)
+{
+
+    static QString oldBand = "";
+
+    if (cb != oldBand)
+    {
+        // turn off previous active transverter indicator
+        if (oldBand != "")
+        {
+            for (int i = 0; i < freqPresetData::presetBands.count(); i++)
+            {
+               if (oldBand == freqPresetData::presetBands[i])
+                {
+                   supRadioIndToggle(i, displayIndicator::TRANSVERT);
+                   break;
+               }
+            }
+        }
+
+        // turn on new indicator
+        for (int i = 0; i < freqPresetData::presetBands.count(); i++)
+        {
+           if (cb == freqPresetData::presetBands[i])
+            {
+               supRadioIndToggle(i, displayIndicator::TRANSVERT_ON);
+               oldBand = cb;
+               break;
+           }
+        }
+
+
+
+    }
+
+
+
+}
+
+
+
 void RigControlMainWindow::updateSupportedRadioIndicators()
 {
     turnOffAllsupRadioIndicators();
@@ -1972,6 +2041,7 @@ void RigControlMainWindow::turnOffAllsupRadioIndicators()
 
 void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indicatorType type)
 {
+
     if (type == displayIndicator::OFF)
     {
         supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
@@ -1984,6 +2054,12 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
     {
        supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
     }
+    else if (type == displayIndicator::TRANSVERT_ON)
+    {
+       supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
+    }
+
+
 }
 
 
