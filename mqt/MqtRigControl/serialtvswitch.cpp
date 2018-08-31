@@ -31,7 +31,8 @@ bool SerialTVSwitch::openComport(const QString comport)
     sComPort->setPortName(comport);
     //sComPort->setBaudRate(QSerialPort::Baud9600);
 
-    return sComPort->open(QIODevice::WriteOnly);
+    openFlag = sComPort->open(QIODevice::WriteOnly);
+    return openFlag;
 
 }
 
@@ -41,7 +42,13 @@ void SerialTVSwitch::closeComport()
     delete sComPort;
 }
 
-QSerialPort::SerialPortError SerialTVSwitch::error()
+bool SerialTVSwitch::getOpenFlag()
 {
-    return sComPort->error();
+    return openFlag;
+}
+
+QString SerialTVSwitch::error()
+{
+    QSerialPort::SerialPortError err = sComPort->error();
+    return comportErrMsgs[err];
 }

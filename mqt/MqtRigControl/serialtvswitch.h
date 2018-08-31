@@ -32,8 +32,10 @@ public:
     void closeComport();
 
     bool openComport(QString comport);
+    QString error();
 
-    QSerialPort::SerialPortError error();
+
+    bool getOpenFlag();
 private slots:
 
     //void handleError(QSerialPort::SerialPortError error);
@@ -44,6 +46,13 @@ private:
 
     QSerialPort *sComPort = nullptr;
     QByteArray m_msg;
+    bool openFlag = false;
+    QStringList comportErrMsgs = { "No Error", "Device Not Found", "Permission Error"
+                                   ,"Open Error", "Parity Error", "Framing Error"
+                                   ,"Break Condition", "Write Error", "Read Error"
+                                   ,"Resource Error", "Unsupported Operation Error"
+                                   ,"Unknown Error", "Timeout Error", "Not Open Error"
+                                  };
 
 
 

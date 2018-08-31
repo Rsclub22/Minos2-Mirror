@@ -408,8 +408,9 @@ void RigControlMainWindow::upDateRadio()
                 }
                 else
                 {
-                    QSerialPort::SerialPortError serialError = serialTVSw->error();
-                    logMessage(QString("Local Transvert Switch Comport failed to opene = %1").arg(setupRadio->currentRadio.locTVSwComport));
+
+                    QString errMsg = serialTVSw->error();
+                    logMessage(QString("Local Transvert Switch Comport failed to open = %1 Error = %2").arg(setupRadio->currentRadio.locTVSwComport).arg(errMsg));
                 }
 
             }
@@ -1712,7 +1713,8 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
 
     if (setupRadio->currentRadio.transVertEnable
             && setupRadio->currentRadio.enableTransSwitch
-            && setupRadio->currentRadio.enableLocTVSwMsg)
+            && setupRadio->currentRadio.enableLocTVSwMsg
+            && serialTVSw->getOpenFlag())      // com port should be open!
     {
         serialTVSw->sendTVSwMessage(msg);
     }
