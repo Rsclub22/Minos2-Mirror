@@ -39,7 +39,6 @@ mkdir installFiles
 cd installFiles
 
 mkdir Configuration
-mkdir Configuration\Radio
 mkdir Lists
 mkdir Logs
 mkdir Bin
@@ -57,7 +56,6 @@ copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
 copy C:\Projects\hamlib-w32-3.1\bin\*.dll Bin
 
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
-xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Radio .\Configuration\Radio
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration
 
 cd Configuration

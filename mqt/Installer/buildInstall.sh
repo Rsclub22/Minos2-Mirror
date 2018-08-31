@@ -28,7 +28,6 @@ mkdir ./minos-runtime
 cd ./minos-runtime
 
 mkdir Configuration
-mkdir Cofiguration/Radio
 mkdir Lists
 mkdir Logs
 mkdir Bin
@@ -60,9 +59,8 @@ else
 fi
 
 cp -r ../Minos2/mqt/ControlFiles/Configuration/* ./Configuration
-cp -r ../Minos2/mqt/ControlFiles/Configuration/Radio/* ./Configuration/Radio
-cp -r ../Minos2/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
-cp -r ../Minos2/mqt/Installer/Minos.sh . 
+rm -rf ../Minos2/mqt/ControlFiles/Configuration/WindowsFiles
+cp ../Minos2/mqt/Installer/Minos.sh . 
 
 cd Configuration
 
