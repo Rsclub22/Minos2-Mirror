@@ -38,8 +38,11 @@ bool SerialTVSwitch::openComport(const QString comport)
 
 void SerialTVSwitch::closeComport()
 {
-    sComPort->close();
-    delete sComPort;
+    if (sComPort)
+    {
+        sComPort->close();
+        delete sComPort;
+    }
 }
 
 bool SerialTVSwitch::getOpenFlag()
