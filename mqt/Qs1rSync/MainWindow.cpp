@@ -284,7 +284,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
             {
                 rigCache.setStateString(an);
             }
-            if ( an.getCategory() == rpcConstants::rigDetailsCategory)
+            else if ( an.getCategory() == rpcConstants::rigDetailsCategory)
             {
                 rigCache.setDetailsString(an);
             }
