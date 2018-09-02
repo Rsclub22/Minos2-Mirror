@@ -94,7 +94,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(CommentsFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(MainOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(SecondOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(ui->frequencyEdit, SIGNAL(editingFinished()), this, SLOT(on_FreqEditFinished()));
+    connect(ui->frequencyEdit, SIGNAL(editingFinished()), this, SLOT(on_FreqEditFinished()), Qt::QueuedConnection);
 
     ui->timeEdit->installEventFilter(this);
     ui->dateEdit->installEventFilter(this);
@@ -515,6 +515,10 @@ void QSOLogFrame::on_FreqEditFinished()
     QString f = ui->frequencyEdit->text().trimmed().remove( QRegExp("^[0]*"));
     if (f != "")
     {
+        if (f.count('.') == 0)
+        {
+            f += ".000";
+        }
         if (f.count('.') == 1)
         {
             QStringList fl = f.split('.');

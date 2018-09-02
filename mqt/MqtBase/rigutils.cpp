@@ -393,6 +393,10 @@ QString convertSinglePeriodFreqToMultiPeriod(QString f)
     }
 
     QStringList sl = f.split('.');
+    if (sl.count() == 1)
+    {
+        sl.append("000");
+    }
     if (sl[0].count() > 3)
     {
         retFreq = sl[0].left(sl[0].count()-3) + "." + sl[0].right(3) + ".";
