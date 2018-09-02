@@ -116,6 +116,8 @@ public:
     void setMode(QString);
     void setVolume(int level);
     void setFreq(QString);
+    void setRitFreq(QString);
+    void setRitRadioStatus(bool);
     void setRadioName(QString, QString mode);
     void setRadioState(QString);
     void setTpm(int);

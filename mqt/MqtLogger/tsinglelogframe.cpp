@@ -1224,6 +1224,25 @@ void TSingleLogFrame::on_SetFreq(QString f)
     }
 }
 
+void TSingleLogFrame::on_SetRitFreq(QString f)
+{
+    if (sCurRitFreq != f)
+        if ( this == LogContainer->getCurrentLogFrame() )
+        {
+            sCurRitFreq = f;
+            FKHRigControlFrame->setRitFreq(f);
+        }
+}
+
+void TSingleLogFrame::on_SetRitRadioStatus(bool status)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        FKHRigControlFrame->setRitRadioStatus(status);
+    }
+
+}
+
 void TSingleLogFrame::on_NoRadioSetFreq(QString f)
 {
     if ( this == LogContainer->getCurrentLogFrame() )

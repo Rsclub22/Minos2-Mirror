@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>829</width>
-    <height>305</height>
+    <width>967</width>
+    <height>330</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Minos Rig Control</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_5">
+   <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -612,28 +612,69 @@
             </layout>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <layout class="QHBoxLayout" name="horizontalLayout_19">
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_11">
                <item>
-                <widget class="QLabel" name="RitOnOffLbl">
-                 <property name="text">
-                  <string>RIT:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="RitOnffStatLbl">
-                 <property name="font">
-                  <font>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Off</string>
-                 </property>
-                </widget>
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout_13">
+                     <item>
+                      <widget class="QLabel" name="ritStatusLabel">
+                       <property name="text">
+                        <string>Rit:</string>
+                       </property>
+                       <property name="alignment">
+                        <set>Qt::AlignCenter</set>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="ritStatusInd">
+                       <property name="enabled">
+                        <bool>false</bool>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>16</width>
+                         <height>16</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="ritStatusText">
+                       <property name="font">
+                        <font>
+                         <weight>75</weight>
+                         <bold>true</bold>
+                        </font>
+                       </property>
+                       <property name="text">
+                        <string>Off</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="setRitSpinner"/>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="ritButton">
+                   <property name="text">
+                    <string>RIT</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </item>
@@ -644,8 +685,8 @@
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>40</width>
-                 <height>20</height>
+                 <width>58</width>
+                 <height>37</height>
                 </size>
                </property>
               </spacer>
@@ -697,7 +738,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>829</width>
+     <width>967</width>
      <height>21</height>
     </rect>
    </property>

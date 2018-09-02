@@ -246,6 +246,37 @@ void RigControlFrame::setFreq(QString freq)
 }
 
 
+// for rigcontrol
+
+void RigControlFrame::setRitFreq(QString freq)
+{
+
+    QString sfreq = freq;
+    ui->RitEdit->setText(sfreq);
+
+}
+
+
+void RigControlFrame::setRitRadioStatus(bool status)
+{
+    if (ritOn != status)
+    {
+        if (status)
+        {
+            ritButtonOn();
+
+        }
+        else
+        {
+            ritButtonOff();
+
+        }
+    }
+
+}
+
+// to rigcontrol
+
 void RigControlFrame::changeRitRadioFreq(QString freq)
 {
     traceMsg(QString("Change Rit Freq = %1").arg(freq));
