@@ -1290,7 +1290,7 @@ void RigControlMainWindow::setRitStatusIndicatorsVisible(bool state)
 {
     ui->ritStatusInd->setVisible(state);
     ui->ritStatusLabel->setVisible(state);
-    ui->ritStatusText->setVisible(state);
+    //ui->ritStatusText->setVisible(state);
 
 }
 
@@ -1301,12 +1301,12 @@ void RigControlMainWindow::ritIndicatorToggle(bool state)
     if (state)
     {
         ui->ritStatusInd->setStyleSheet(RIT_STATUS_ON_STYLE);
-        ui->ritStatusText->setText("On");
+        //ui->ritStatusInd->setText("On");
     }
     else
     {
         ui->ritStatusInd->setStyleSheet(RIT_STATUS_OFF_STYLE);
-        ui->ritStatusText->setText("Off");
+        //ui->ritStatusInd->setText("Off");
     }
 }
 
@@ -1375,6 +1375,7 @@ int  RigControlMainWindow::getRitRadioStatus(vfo_t vfo, bool *status)
 {
     cmdLockOn();
     int retCode = radio->getRitState(vfo, status);
+    qDebug() << "rit Status = " << *status;
     cmdLockOff();
     return retCode;
 }
@@ -2183,8 +2184,11 @@ void RigControlMainWindow::incRit()
 
 void RigControlMainWindow::ritbuttontoggle()
 {
-    static bool state = false;
-    state = !state;
+    bool status = !radioRitOn;
     int retCode = 0;
-    retCode = radio->toggleRitState(RIG_VFO_CURR, state);
+    retCode = radio->toggleRitState(RIG_VFO_CURR, status);
+    if (retCode < 0)
+    {
+        qDebug() << "Rit toggle = " << retCode;
+    }
 }

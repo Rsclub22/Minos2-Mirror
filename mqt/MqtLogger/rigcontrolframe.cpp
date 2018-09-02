@@ -43,8 +43,8 @@ static QKeySequence runButShiftShortCut[] {
 
 };
 
-const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; padding: 3px;\n");
-const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; padding: 3px;\n");
+const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ;\n");
+const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ;\n");
 
 
 RigControlFrame::RigControlFrame(QWidget *parent):
@@ -324,9 +324,9 @@ void RigControlFrame::ritButtonOn()
 void RigControlFrame::ritButtonOff()
 {
     traceMsg(QString("Rit Button Off"));
-    changeRitRadioFreq("0000");  // turns off rit in hamlib
-    QString sfreq = convertRitFreqToStr(0.0);       // set rit display to zero
-    ui->RitEdit->setText(sfreq);
+    //changeRitRadioFreq("0000");  // turns off rit in hamlib
+    //QString sfreq = convertRitFreqToStr(0.0);       // set rit display to zero
+    //ui->RitEdit->setText(sfreq);
     ui->RitEdit->clearFocus();
     ritOn = false;
     showRitButOff();
