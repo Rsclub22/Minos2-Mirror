@@ -11,6 +11,7 @@
 #include "base_pch.h"
 #include "MinosLoggerEvents.h"
 #include "ScreenContact.h"
+#include "rigutils.h"
 
 ErrEntry errDefs[] =
    {
@@ -30,7 +31,7 @@ ErrEntry errDefs[] =
       ErrEntry( 8, "Invalid Callsign!" ),         //ERR_13
       ErrEntry( 10, "No RX Serial Number" ),      //ERR_14
       ErrEntry( 15, "Locator probably not within country." ),   //ERR_15
-      ErrEntry( 10, "" ),     //ERR_16
+      ErrEntry( 10, FREQ_EDIT_ERR_MSG ),     //ERR_16
       ErrEntry( 10, "" ),   //ERR_17
       ErrEntry( 20, "No Locator" ),             //ERR_18
       ErrEntry( 2, "!!Loc not AA00AA to RR99XX!!" ),   //ERR_19
@@ -208,6 +209,19 @@ bool Validator::validate(const QString &str, ScreenContact &screenContact )
 
       case vtComments:
          return true;
+
+       case vtFreq:
+       {
+           QString f = str.trimmed().remove( QRegExp("^[0]*"));
+           if (f.isEmpty())
+               return true;
+           if (!validateFreqTxtInput(f))
+           {
+               setError(ERR_16);
+               return false;
+           }
+           return true;
+       }
    }
    return false;
 }

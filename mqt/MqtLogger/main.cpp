@@ -11,13 +11,6 @@
 #include <crtdbg.h>
 #endif // _MSC_VER
 
-static QtMessageHandler oldHandler = nullptr;
-void myMessageOutput(QtMsgType type,
-                     const QMessageLogContext &context,
-                     const QString &msg)
-{
-    oldHandler(type, context, msg);
-}
 
 #if defined(_MSC_VER)
 
@@ -81,7 +74,6 @@ int main(int argc, char *argv[])
 //     _CrtSetBreakAlloc(1312120); // Use this line to break at the nth memory allocation
 #endif
 
-    oldHandler = qInstallMessageHandler(myMessageOutput);
     int appError = 1;
     {
         SingleApplication a( QString("MinosLogger"), argc, argv);

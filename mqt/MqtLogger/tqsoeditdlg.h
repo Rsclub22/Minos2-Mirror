@@ -56,6 +56,10 @@ public: 		// User declarations
     {
        firstContact = c;
     }
+
+protected:
+    virtual void showEvent(QShowEvent *event) override;
+
 private slots:
     void on_editSplitter_splitterMoved(int pos, int index);
     void on_EditFrameCancelled();
@@ -71,7 +75,6 @@ private slots:
 public slots:
     virtual void accept() override;
     virtual void reject() override;
-
 
 };
 

@@ -9,8 +9,41 @@ QString getAppStartupName()
 {
     return appStartupName;
 }
+static QtMessageHandler oldHandler = nullptr;
+void myMessageOutput(QtMsgType type,
+                     const QMessageLogContext &context,
+                     const QString &msg)
+{
+    // catch (and trace) application output before a crash
+    oldHandler(type, context, msg);
+
+    QString mtype;
+    switch (type)
+    {
+    case QtDebugMsg:
+        mtype = "Debug";
+        break;
+    case QtInfoMsg:
+        mtype = "Info";
+        break;
+    case QtWarningMsg:
+        mtype = "Warning";
+        break;
+    case QtCriticalMsg:
+        mtype = "Critical";
+        break;
+    case QtFatalMsg:
+        mtype = "Fatal";
+        break;
+    }
+    QString res = QString("AppMessageHandler (%1, %2 %3:%4): %5").arg(mtype).arg(context.file).arg(context.line).arg(context.function).arg(msg);
+    trace(res);
+}
+
 void appStartup(const QString &pappName)
 {
+    oldHandler = qInstallMessageHandler(myMessageOutput);
+
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appStartupName = env.value("MQTRPCNAME", "") ;
 

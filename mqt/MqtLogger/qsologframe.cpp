@@ -84,6 +84,9 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->SecondOpComboBox->setValidator(new UpperCaseValidator(false));
     Op2String = ui->SecondOpLabel->text();
 
+    freqFW = new FocusWatcher(ui->frequencyEdit);
+    Op2String = ui->freqLabel->text();
+
     connect(CallsignFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(RSTTXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(SerTXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
@@ -94,7 +97,8 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(CommentsFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(MainOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(SecondOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(ui->frequencyEdit, SIGNAL(editingFinished()), this, SLOT(on_FreqEditFinished()));
+    connect(freqFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
+//    connect(ui->frequencyEdit, SIGNAL(editingFinished()), this, SLOT(on_FreqEditFinished()), Qt::QueuedConnection);
 
     ui->timeEdit->installEventFilter(this);
     ui->dateEdit->installEventFilter(this);
@@ -337,6 +341,15 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     cmntIl = new ValidatedControl( ui->CommentsEdit, vtComments );
     vcs.push_back( cmntIl );
 
+    if (edit)
+    {
+        freqIl = new ValidatedControl(ui->frequencyEdit, vtFreq );
+        vcs.push_back( freqIl );
+    }
+    else
+    {
+        freqIl = nullptr;
+    }
 
     ui->BrgSt->clear();
     ui->DistSt->clear();
@@ -509,12 +522,16 @@ void QSOLogFrame::SecondOpComboBox_Exit()
     }
 }
 
-
+/*
 void QSOLogFrame::on_FreqEditFinished()
 {
     QString f = ui->frequencyEdit->text().trimmed().remove( QRegExp("^[0]*"));
     if (f != "")
     {
+        if (f.count('.') == 0)
+        {
+            f += ".000";
+        }
         if (f.count('.') == 1)
         {
             QStringList fl = f.split('.');
@@ -532,7 +549,7 @@ void QSOLogFrame::on_FreqEditFinished()
         }
     }
 }
-
+*/
 void QSOLogFrame::on_GJVOKButton_clicked()
 {
     if ( contest->isReadOnly() )
@@ -599,7 +616,6 @@ void QSOLogFrame::on_GJVOKButton_clicked()
        QWidget *nextf = ( nextInvalid ) ? nextInvalid : firstInvalid;
 
        // but if it is DTG, probably want CS instead (Unless post entry)
-
 
        if ( nextf )
        {
@@ -854,6 +870,11 @@ void QSOLogFrame::on_SerTXEdit_textChanged(const QString &/*arg1*/)
     doGJVEditChange( ui->SerTXEdit );
 
 }
+void QSOLogFrame::on_frequencyEdit_textChanged(const QString &arg1)
+{
+    doGJVEditChange( ui->frequencyEdit );
+
+}
 void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
 {
     // Don't let the dtg be changed when the contest is protected
@@ -1010,7 +1031,7 @@ void QSOLogFrame::showScreenEntry( )
 
               freq = QString::number(dfreq, 'f', 6); //MHz to 6 decimal places
           }
-          ui->frequencyEdit->setText(freq.remove( QRegExp("0+$"))); //remove trailing zeros
+          ui->frequencyEdit->setText(removeTrailingZeroes(freq));
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
       setMode(temp.mode.trimmed());
@@ -1141,7 +1162,9 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
          }
       }
    }
-   if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit ) )
+   if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit )
+        || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit )
+        || ( current == ui->frequencyEdit ))
    {
       getScreenEntry(); // make sure it is saved
       valid( cmCheckValid ); // make sure all single and cross field
@@ -1398,7 +1421,10 @@ void QSOLogFrame::selectField( QWidget *v )
         return ;
     }
 
-    if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit ) || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit ) )
+    if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit )
+         || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit )
+         || (current == ui->frequencyEdit)
+         )
     {
         valid( cmCheckValid ); // make sure all single and cross field
         doAutofill();
@@ -2571,5 +2597,4 @@ QString QSOLogFrame::getBearing()
 {
     return ui->BrgSt->text();
 }
-
 

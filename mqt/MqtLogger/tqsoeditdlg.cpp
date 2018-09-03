@@ -161,6 +161,12 @@ void TQSOEditDlg::selectContact( BaseContestLog * ccontest, QSharedPointer<BaseC
    contest = ccontest;
    firstContact = lct;
 }
+
+void TQSOEditDlg::showEvent(QShowEvent *event)
+{
+    QDialog::showEvent(event);
+    ui->GJVQSOEditFrame->valid(cmCheckValid);
+}
 //---------------------------------------------------------------------------
 void TQSOEditDlg::addTreeRoot(QSharedPointer<BaseContact> lct)
 {

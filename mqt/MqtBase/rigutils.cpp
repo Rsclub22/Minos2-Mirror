@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "base_pch.h"
+#include "rigutils.h"
 
 // add delimiter to string for display
 // input string should just be digits
@@ -265,19 +266,25 @@ QString convertFreqStrDispSingleNoTrailZero(QString sfreq)
 
         }
 
-        // remove trailing zero, apart from after period.
-        QStringList fspl = sfreq.split('.');
-        fspl[1].remove(QRegExp("0+$"));  //remove trailing zeros
-        if (fspl[1].count() == 0)
-        {
-            fspl[1] = "0";    // add back one zero
-        }
-
-        sfreq = fspl[0] + "." + fspl[1];
-
+        sfreq = removeTrailingZeroes(sfreq);
         return sfreq;
 }
 
+QString removeTrailingZeroes(QString sfreq)
+{
+    // remove trailing zero, apart from after period.
+    QStringList fspl = sfreq.split('.');
+    int last = fspl.count() - 1;
+    fspl[last].remove(QRegExp("0+$"));  //remove trailing zeros
+    if (fspl[last].count() == 0)
+    {
+        fspl[last] = "0";    // add back one zero
+    }
+
+    sfreq = fspl.join(".");
+
+    return sfreq;
+}
 
 
 bool validateFreqTxtInput(QString f)
@@ -393,6 +400,10 @@ QString convertSinglePeriodFreqToMultiPeriod(QString f)
     }
 
     QStringList sl = f.split('.');
+    if (sl.count() == 1)
+    {
+        sl.append("000");
+    }
     if (sl[0].count() > 3)
     {
         retFreq = sl[0].left(sl[0].count()-3) + "." + sl[0].right(3) + ".";
