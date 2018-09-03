@@ -26,6 +26,8 @@ QString convertSinglePeriodFreqToFullDigit(QString f);
 
 double convertStrToFreq(QString frequency);
 
+QString removeTrailingZeroes(QString sfreq);
+
 //QString validateFreqTxtInput(QString f, bool* ok);
 bool validateFreqTxtInput(QString f);
 bool valInputFreq(QString f, QString errMsg);

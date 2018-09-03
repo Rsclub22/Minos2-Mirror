@@ -90,7 +90,7 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber)
     }
     else
     {
-        ui->freqLineEdit->setText(convertFreqStrDispSingle(ldata->freq).remove( QRegExp("0+$"))); //remove trailing zeros);
+        ui->freqLineEdit->setText(removeTrailingZeroes(convertFreqStrDispSingle(ldata->freq)));
     }
 
 

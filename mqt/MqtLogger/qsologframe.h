@@ -76,6 +76,7 @@ public:
 
     QString getBearing();
 
+    bool valid( validTypes command );
 
 private:
     ScreenContact *partialContact; // contact being edited on screen
@@ -109,7 +110,6 @@ private:
     BaseContestLog * contest;
     bool overstrike;
     QWidget *current;
-    bool valid( validTypes command );
     void doAutofill( );
     void fillRst(QLineEdit *rIl, QString &rep, const QString &mode );
     virtual void showScreenEntry( );
@@ -147,8 +147,12 @@ private:
 
     FocusWatcher *MainOpFW;
     QString Op1String;
+
     FocusWatcher *SecondOpFW;
     QString Op2String;
+
+    FocusWatcher *freqFW;
+    QString freqString;
 
     ErrorList errs;
 
@@ -157,6 +161,8 @@ private:
     ValidatedControl *locIl;
     ValidatedControl *qthIl;
     ValidatedControl *cmntIl;
+
+    ValidatedControl *freqIl;
 
     bool rotatorLoaded;
     bool isRotatorLoaded();
@@ -237,10 +243,12 @@ private slots:
 
     void on_FontChanged();
 
-    void on_FreqEditFinished();
+//    void on_FreqEditFinished();
     void on_SerRXEdit_textChanged(const QString &);
 
     void on_SerTXEdit_textChanged(const QString &);
+
+    void on_frequencyEdit_textChanged(const QString &arg1);
 
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
