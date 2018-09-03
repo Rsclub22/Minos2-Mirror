@@ -22,18 +22,8 @@
 
 #include "AppStartup.h"
 
-static QtMessageHandler oldHandler = nullptr;
-void myMessageOutput(QtMsgType type,
-                     const QMessageLogContext &context,
-                     const QString &msg)
-{
-    oldHandler(type, context, msg);
-}
-
 int main(int argc, char *argv[])
 {
-    oldHandler = qInstallMessageHandler(myMessageOutput);
-
     QApplication a(argc, argv);
 
     appStartup(rpcConstants::rotatorApp);
