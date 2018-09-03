@@ -375,7 +375,6 @@ void RigControlMainWindow::upDateRadio()
 
     pollTimer->stop();      // stop updates
 
-    static QString curTVComPort = "";
 
     int ridx = 0;
     if (setupRadio->currentRadioName != "")
@@ -405,14 +404,14 @@ void RigControlMainWindow::upDateRadio()
                     && setupRadio->currentRadio.enableTransSwitch
                     && setupRadio->currentRadio.enableLocTVSwMsg)
             {
-                if (curTVComPort != "")
+                if (serialTVSw->getOpenFlag())
                 {
                     serialTVSw->closeComport();
-                    curTVComPort = "";
+
                 }
                 if (serialTVSw->openComport(setupRadio->currentRadio.locTVSwComport))
                 {
-                    curTVComPort = setupRadio->currentRadio.locTVSwComport;
+                    //curTVComPort = setupRadio->currentRadio.locTVSwComport;
                     logMessage(QString("Local Transvert Switch Comport opened Ok = %1").arg(setupRadio->currentRadio.locTVSwComport));
                 }
                 else
@@ -425,10 +424,10 @@ void RigControlMainWindow::upDateRadio()
             }
             else
             {
-                if (curTVComPort != "")
+                if (serialTVSw->getOpenFlag())
                 {
                     serialTVSw->closeComport();
-                    curTVComPort = "";
+
                 }
 
             }
@@ -664,10 +663,9 @@ void RigControlMainWindow::closeRadio()
     {
         radio->closeRig();
     }
-    if (serialTVSw != nullptr)
+    if (serialTVSw->getOpenFlag())
     {
         serialTVSw->closeComport();
-        serialTVSw = nullptr;
     }
 
     showStatusMessage("Disconnected");
