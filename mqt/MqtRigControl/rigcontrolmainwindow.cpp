@@ -245,6 +245,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(pollTimer, SIGNAL(timeout()), this, SLOT(getRadioInfo()));
 
 
+
     // configure antenna dialog
     connect(setupRadio, SIGNAL(currentRadioSettingChanged(QString)), this, SLOT(currentRadioSettingChanged(QString)));
     connect(setupRadio, SIGNAL(radioNameChange()), this, SLOT(updateSelectRadioBox()));
@@ -1287,8 +1288,6 @@ void RigControlMainWindow::setRitFreqDisplayVisible(bool state)
 void RigControlMainWindow::setRitStatusIndicatorsVisible(bool state)
 {
     ui->ritStatusInd->setVisible(state);
-    ui->ritStatusLabel->setVisible(state);
-    //ui->ritStatusText->setVisible(state);
 
 }
 
