@@ -80,7 +80,7 @@ public:
     QString transVertOffsetStr;
     freq_t transVertOffset = 0.0;
     QString antSwitchNum = "0";
-    QString transSwitchNum = "0";
+    QString transSwitchNum = "";
 
 
 };

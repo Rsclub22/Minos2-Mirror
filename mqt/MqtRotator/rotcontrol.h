@@ -223,6 +223,8 @@ public:
 
     int getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName);
 
+    void enableTraceComms(bool state);
+
 signals:
    void bearing_updated(int);
    void request_bearingError(int);
@@ -242,6 +244,8 @@ private:
     bool rotatorlistLoaded=false;
     //srotParams curRotParams;   remove
     int serialP;
+
+    bool traceComms = false;
 
 
 

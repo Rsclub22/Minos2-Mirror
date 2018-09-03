@@ -166,7 +166,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     rotTimeCount = 0;
     RotateTimer.start(200);  // to set timeout for antenna rotating
 
-
+    readTraceLogFlag();
 
     rotlog->getBearingLogConfig();
     readTraceLogFlag();
@@ -210,8 +210,7 @@ RotatorMainWindow::~RotatorMainWindow()
 
 void RotatorMainWindow::logMessage( QString s )
 {
-   if (ui->actionTraceLog->isChecked())
-        trace( s );
+           trace( s );
 }
 
 void RotatorMainWindow::onStdInRead(QString cmd)
@@ -557,7 +556,6 @@ void RotatorMainWindow::initActionsConnections()
 
     connect(ui->selectAntennaBox, SIGNAL(activated(int)), this, SLOT(onSelectAntennaBox()));
     connect(setupAntenna, SIGNAL(antennaNameChange()), this, SLOT(updateSelectAntennaBox()));
-    connect(ui->actionTraceLog, SIGNAL(changed()), this, SLOT(saveTraceLogFlag()));
     connect(ui->turnButton, SIGNAL(clicked(bool)), this, SLOT(rotateToController()));
     connect(ui->bearingEdit, SIGNAL(returnPressed()), this, SLOT(rotateToController()));
     connect(this, SIGNAL(presetRotateTo()), this, SLOT(rotateToController()));
@@ -615,7 +613,8 @@ void RotatorMainWindow::initActionsConnections()
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Rotator_Config, SIGNAL(triggered()), this, SLOT(aboutRotatorConfig()));
-    connect(ui->actionExit , SIGNAL(triggered()), this, SLOT(close()));
+    connect(ui->actionTrace_Data_Comms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
+    //connect(ui->actionExit , SIGNAL(triggered()), this, SLOT(close()));
 
 
 
@@ -1830,37 +1829,7 @@ void RotatorMainWindow::sleepFor(qint64 milliseconds)
 }
 
 
-void RotatorMainWindow::readTraceLogFlag()
-{
 
-    QString fileName;
-        fileName = CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-
-    //QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
-    config.beginGroup("TraceLog");
-
-
-    ui->actionTraceLog->setChecked(config.value("TraceLog", false).toBool());
-
-    config.endGroup();
-}
-
-void RotatorMainWindow::saveTraceLogFlag()
-{
-    QString fileName;
-        fileName = CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-
-
-    //QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
-    config.beginGroup("TraceLog");
-
-    config.setValue("TraceLog", ui->actionTraceLog->isChecked());
-
-    config.endGroup();
-    trace("Tracelog Changed = " + QString::number(ui->actionTraceLog->isChecked()));
-}
 
 
 
@@ -1955,6 +1924,58 @@ void RotatorMainWindow::cwCCWControlVisible(bool visible)
     ui->rot_left_button->setVisible(visible);
     ui->rot_right_button->setVisible(visible);
 }
+
+
+void RotatorMainWindow::readTraceLogFlag()
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_ROTATOR_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
+    }
+
+
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("TraceLog");
+    bool state = config.value("TraceLog", false).toBool();
+    config.endGroup();
+
+    ui->actionTrace_Data_Comms->setChecked(state);
+    rotator->enableTraceComms(state);             // set state of trace hamlib comms
+}
+
+void RotatorMainWindow::saveTraceLogFlag(bool state)
+{
+
+    // set state of hamlib commms tracing
+
+    rotator->enableTraceComms(state);
+
+    // save to ini for restart
+
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_ROTATOR_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
+    }
+
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("TraceLog");
+
+    config.setValue("TraceLog", state);
+
+    config.endGroup();
+    trace("Tracelog Changed in " + fileName + " = " + QString::number(state));
+}
+
 
 
 
