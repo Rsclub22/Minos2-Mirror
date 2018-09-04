@@ -126,7 +126,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     setTransVertDisplayVisible(false);
     sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
-    sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
+    //sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
 
 
     logRitOn = false;
@@ -411,6 +411,7 @@ void RigControlMainWindow::upDateRadio()
                     && setupRadio->currentRadio.enableTransSwitch
                     && setupRadio->currentRadio.enableLocTVSwMsg)
             {
+                selTransVertBandIndicator = "";     // force active tranvert indicator update
                 if (serialTVSw->getOpenFlag())
                 {
                     serialTVSw->closeComport();
@@ -445,6 +446,7 @@ void RigControlMainWindow::upDateRadio()
             sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);                                 // turn off transVerter Sw
             sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
             transVertSwNum = TRANSSW_NUM_DEFAULT;
+            selTransVertBandIndicator = "";     // force active tranvert indicator update
 
             setupRadio->saveCurrentRadio();
 
@@ -1819,7 +1821,7 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
             && setupRadio->currentRadio.enableLocTVSwMsg
             && serialTVSw->getOpenFlag())      // com port should be open!
     {
-        logMessage(QString("Send Transvert Switch Number to Comport = %1, message = %2").arg(setupRadio->currentRadio.locTVSwComport).arg(QString::fromLocal8Bit(msg.append('\x0'))));
+        logMessage(QString("Send Transvert Switch Number to Comport = %1, message = %2").arg(setupRadio->currentRadio.locTVSwComport).arg(QString::fromLocal8Bit(msg)));
         serialTVSw->sendTVSwMessage(msg);
     }
 }
@@ -2039,16 +2041,14 @@ void RigControlMainWindow::initialiseSupportedRadioDisplay()
 void RigControlMainWindow::showActiveTransVertIndicator(QString cb)
 {
 
-    static QString oldBand = "";
-
-    if (cb != oldBand)
+    if (cb != selTransVertBandIndicator)
     {
         // turn off previous active transverter indicator
-        if (oldBand != "")
+        if (selTransVertBandIndicator != "")
         {
             for (int i = 0; i < freqPresetData::presetBands.count(); i++)
             {
-               if (oldBand == freqPresetData::presetBands[i])
+               if (selTransVertBandIndicator == freqPresetData::presetBands[i])
                 {
                    supRadioIndToggle(i, displayIndicator::TRANSVERT);
                    break;
@@ -2062,17 +2062,11 @@ void RigControlMainWindow::showActiveTransVertIndicator(QString cb)
            if (cb == freqPresetData::presetBands[i])
             {
                supRadioIndToggle(i, displayIndicator::TRANSVERT_ON);
-               oldBand = cb;
+               selTransVertBandIndicator = cb;
                break;
            }
         }
-
-
-
     }
-
-
-
 }
 
 
