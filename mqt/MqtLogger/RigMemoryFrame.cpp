@@ -358,7 +358,7 @@ void RigMemoryFrame::on_newMemoryButton_clicked()
 {
     int n = -1;
     int mcount = ct->rigMemories.size();
-    for (int i = 0; i <= mcount; i ++)
+    for (int i = 0; i <= mcount; i ++)  // <= - extra one gets blank
     {
         memoryData::memData m = ct->getRigMemoryData(i);
 

@@ -870,7 +870,7 @@ void QSOLogFrame::on_SerTXEdit_textChanged(const QString &/*arg1*/)
     doGJVEditChange( ui->SerTXEdit );
 
 }
-void QSOLogFrame::on_frequencyEdit_textChanged(const QString &arg1)
+void QSOLogFrame::on_frequencyEdit_textChanged(const QString &/*arg1*/)
 {
     doGJVEditChange( ui->frequencyEdit );
 
