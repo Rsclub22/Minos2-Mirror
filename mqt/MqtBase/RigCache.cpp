@@ -276,8 +276,13 @@ void RigCache::setRitEnableStatus(const PubSubName &name, bool ritEnableStatus)
 }
 void RigCache::setRitOnOffStatus(const PubSubName &name, bool status)
 {
-    rigDetails[name].setRitOnOffStatus(status);
+    rigStates[name].setRitOnOffStatus(status);
 }
+void RigCache::setRadioRitStatus(const PubSubName &name, bool status)
+{
+    rigStates[name].setRitRadioStatus(status);
+}
+
 void RigCache::setTpm(const PubSubName &name, int tpm)
 {
     rigStates[name].setTpm(tpm);

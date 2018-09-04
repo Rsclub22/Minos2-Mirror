@@ -414,6 +414,17 @@ void TSendDM::notifyRigChanges()
                         trace("SendRPC Rig set freq " + convertFreqToStr(selState.freq().getValue()));
                         tslf->on_SetFreq(convertFreqToStr(selState.freq().getValue()));
                     }
+                    if (selState.ritFreq().isDirty())
+                    {
+                        trace("SendRPC Rig set ritFreq " + convertRitFreqToStr(selState.ritFreq().getValue()));
+                        tslf->on_SetRitFreq(convertRitFreqToStr(selState.ritFreq().getValue()));
+                    }
+                    if (selState.ritRadioStatus().isDirty())
+                    {
+                        QString s;
+                        trace("SendRPC Rig set ritRadioStatus " + (s = selState.ritRadioStatus().getValue() ? "On" : "Off"));
+                        tslf->on_SetRitRadioStatus(selState.ritRadioStatus().getValue());
+                    }
                     if (selState.volLevel().isDirty())
                     {
                         trace("SendRPC Rig set volume " + QString::number(selState.volLevel().getValue()));

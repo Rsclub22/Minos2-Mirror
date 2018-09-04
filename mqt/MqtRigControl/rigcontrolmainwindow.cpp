@@ -70,6 +70,15 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         testBoxesVisible(true);
     }
 
+    // rit test
+    ui->setRitSpinner->setRange(-9000, 9000);
+    ui->setRitSpinner->setSingleStep(100);
+    connect(ui->setRitSpinner, SIGNAL(editingFinished()), this, SLOT(incRit()));
+    connect(ui->ritButton, SIGNAL(clicked()), this, SLOT(ritbuttontoggle()));
+    //****************************************************************************************
+
+
+
     QByteArray geometry = settings.value(geoStr).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
@@ -115,8 +124,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
 
     logRitOn = false;
-    setRitOnOffDisplayVisible(logRitOn);
-    setRitOnOffDisplay(logRitOn);
+    setRitFreqDisplayVisible(logRitOn);
+    setRitStatusIndicatorsVisible(logRitOn);
 
     initialiseSupportedRadioDisplay();
 
@@ -366,7 +375,6 @@ void RigControlMainWindow::upDateRadio()
 
     pollTimer->stop();      // stop updates
 
-    static QString curTVComPort = "";
 
     int ridx = 0;
     if (setupRadio->currentRadioName != "")
@@ -396,14 +404,14 @@ void RigControlMainWindow::upDateRadio()
                     && setupRadio->currentRadio.enableTransSwitch
                     && setupRadio->currentRadio.enableLocTVSwMsg)
             {
-                if (curTVComPort != "")
+                if (serialTVSw->getOpenFlag())
                 {
                     serialTVSw->closeComport();
-                    curTVComPort = "";
+
                 }
                 if (serialTVSw->openComport(setupRadio->currentRadio.locTVSwComport))
                 {
-                    curTVComPort = setupRadio->currentRadio.locTVSwComport;
+                    //curTVComPort = setupRadio->currentRadio.locTVSwComport;
                     logMessage(QString("Local Transvert Switch Comport opened Ok = %1").arg(setupRadio->currentRadio.locTVSwComport));
                 }
                 else
@@ -416,10 +424,10 @@ void RigControlMainWindow::upDateRadio()
             }
             else
             {
-                if (curTVComPort != "")
+                if (serialTVSw->getOpenFlag())
                 {
                     serialTVSw->closeComport();
-                    curTVComPort = "";
+
                 }
 
             }
@@ -474,14 +482,16 @@ void RigControlMainWindow::upDateRadio()
 
                 if (setupRadio->currentRadio.ritSetAvail && setupRadio->currentRadio.ritEnable)
                 {
-                    setRitDisplayVisible(true);
-                    setRitOnOffDisplayVisible(true);
+                    setRitFreqDisplayVisible(true);
+                    setRitStatusIndicatorsVisible(true);
+
                     //setRitFreqStr("0");             // turn off RIT
                 }
                 else
                 {
-                    setRitDisplayVisible(false);
-                    setRitOnOffDisplayVisible(false);
+                    setRitFreqDisplayVisible(false);
+                    setRitStatusIndicatorsVisible(false);
+
                 }
                 sendRitEnableStatusLogger();
                 dumpRadioToTraceLog();
@@ -653,10 +663,9 @@ void RigControlMainWindow::closeRadio()
     {
         radio->closeRig();
     }
-    if (serialTVSw != nullptr)
+    if (serialTVSw->getOpenFlag())
     {
         serialTVSw->closeComport();
-        serialTVSw = nullptr;
     }
 
     showStatusMessage("Disconnected");
@@ -752,14 +761,40 @@ void RigControlMainWindow::getRadioInfo()
 
     if (radio->get_serialConnected() && setupRadio->currentRadio.ritGetAvail && setupRadio->currentRadio.ritEnable)
     {
-        logMessage((QString("Get RIT")));
+        logMessage((QString("Poll RIT Info")));
         retCode = getRitFreq(RIG_VFO_CURR);
         if (retCode < 0)
         {
             // error
-            logMessage(QString("Get radioInfo: Get RIT error").arg(QString::number(retCode)));
-            hamlibError(retCode, "Request RIT");
+            logMessage(QString("Get radioInfo: Get RIT Freq error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request RIT Freq");
         }
+        else
+        {
+            logMessage(QString("Get radioInfo: Get RIT Freq = %1").arg(convertRitFreqToStr(rRitFreq)));
+        }
+
+        bool ritStatus = false;
+        retCode = getRitRadioStatus(RIG_VFO_CURR, &ritStatus);
+        if (retCode < 0)
+        {
+            //error
+            logMessage(QString("Get radioInfo: Get RIT state error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request RIT State");
+        }
+        else
+        {
+            if (ritStatus != radioRitOn)
+            {
+                radioRitOn = ritStatus;
+                logMessage(QString("Get radioInfo: Radio Rit Status = %1").arg(radioRitOn ? "On" : "Off"));
+                ritIndicatorToggle(radioRitOn);
+                sendRadioRitStatusLogger(radioRitOn);
+            }
+
+        }
+
+
     }
 
     if (radio->get_serialConnected() && supVolume)
@@ -1234,22 +1269,63 @@ void RigControlMainWindow::loggerSetVolume(int level)
 
 /************************** RIT *********************************/
 
-void RigControlMainWindow::setRitDisplayVisible(bool state)
+void RigControlMainWindow::setRitLogStatus(bool status)
+{
+    logRitOn = status;
+    ritIndicatorToggle(logRitOn);
+ }
+
+
+
+
+void RigControlMainWindow::setRitFreqDisplayVisible(bool state)
 {
     ui->ritLbl->setVisible(state);
     ui->ritFreq->setVisible(state);
 }
+
+void RigControlMainWindow::setRitStatusIndicatorsVisible(bool state)
+{
+    ui->ritStatusInd->setVisible(state);
+    ui->ritStatusLabel->setVisible(state);
+    //ui->ritStatusText->setVisible(state);
+
+}
+
+
+
+void RigControlMainWindow::ritIndicatorToggle(bool state)
+{
+    if (state)
+    {
+        ui->ritStatusInd->setStyleSheet(RIT_STATUS_ON_STYLE);
+        //ui->ritStatusInd->setText("On");
+    }
+    else
+    {
+        ui->ritStatusInd->setStyleSheet(RIT_STATUS_OFF_STYLE);
+        //ui->ritStatusInd->setText("Off");
+    }
+}
+
+
 
 
 int RigControlMainWindow::getRitFreq(vfo_t vfo)
 {
     int retCode = 0;
 
-
+    static shortfreq_t oldRitFreq = 50000;
     retCode = radio->getRit(vfo, &rRitFreq);
     if (retCode == RIG_OK)
     {
-        ui->ritFreq->setText(convertRitFreqToStr(rRitFreq));
+        if (oldRitFreq != rRitFreq)
+        {
+            oldRitFreq = rRitFreq;
+            ui->ritFreq->setText(convertRitFreqToStr(rRitFreq));
+            sendRitFreqLogger(rRitFreq);
+        }
+
     }
     return retCode;
 }
@@ -1292,7 +1368,29 @@ int RigControlMainWindow::setRitFreq(vfo_t vfo, shortfreq_t ritFreq)
 
 }
 
-void RigControlMainWindow::sendRitFreqLogger(double ritFreq)
+
+int  RigControlMainWindow::getRitRadioStatus(vfo_t vfo, bool *status)
+{
+    cmdLockOn();
+    int retCode = radio->getRitState(vfo, status);
+    qDebug() << "rit Status = " << *status;
+    cmdLockOff();
+    return retCode;
+}
+
+
+void RigControlMainWindow::sendRadioRitStatusLogger(bool status)
+{
+    if (appName.length() > 0)
+    {
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setRadioRitStatus(psname, status);
+        logMessage(QString("Send Radio Rit status to logger = %1 psn=%2").arg(status ? "On" : "Off").arg(psname.toString()));
+
+    }
+}
+
+void RigControlMainWindow::sendRitFreqLogger(shortfreq_t ritFreq)
 {
     if (appName.length() > 0)
     {
@@ -1303,11 +1401,7 @@ void RigControlMainWindow::sendRitFreqLogger(double ritFreq)
     }
 }
 
-void RigControlMainWindow::setRitLogStatus(bool status)
-{
-    logRitOn = status;
-    setRitOnOffDisplay(logRitOn);
- }
+
 
 /************************** Volume *********************************/
 
@@ -1639,6 +1733,9 @@ void RigControlMainWindow::sendFreqToLog(freq_t freq)
     }
 }
 
+
+
+
 void RigControlMainWindow::sendModeToLog(QString mode)
 {
     if (appName.length() > 0)
@@ -1755,25 +1852,7 @@ void RigControlMainWindow::sendTpm(int tpm)
     PubSubName psname(setupRadio->currentRadio.radioName);
     msg->rigCache.setTpm(psname, tpm);
 }
-void RigControlMainWindow::setRitOnOffDisplayVisible(bool s)
-{
-    ui->RitOnOffLbl->setVisible(s);
-    ui->RitOnffStatLbl->setVisible(s);
-}
 
-void RigControlMainWindow::setRitOnOffDisplay(bool s)
-{
-    if (s)
-    {
-        ui->RitOnffStatLbl->setText("On");
-    }
-    else
-    {
-        {
-            ui->RitOnffStatLbl->setText("Off");
-        }
-    }
-}
 
 void RigControlMainWindow::onLaunchSetup()
 {
@@ -2083,4 +2162,31 @@ void RigControlMainWindow::testBoxesVisible(bool visible)
 {
     ui->selFreq->setVisible(visible);
     ui->freqInputBox->setVisible(visible);
+}
+
+
+void RigControlMainWindow::incRit()
+{
+    int retCode;
+    bool ok;
+    QString sFreq = ui->setRitSpinner->text();
+    long dFreq = sFreq.toDouble(&ok);
+    retCode = setRitFreq(RIG_VFO_CURR, dFreq);
+    if (retCode < 0)
+    {
+        qDebug()<< "test set rit errror";
+    }
+
+}
+
+
+void RigControlMainWindow::ritbuttontoggle()
+{
+    bool status = !radioRitOn;
+    int retCode = 0;
+    retCode = radio->toggleRitState(RIG_VFO_CURR, status);
+    if (retCode < 0)
+    {
+        qDebug() << "Rit toggle = " << retCode;
+    }
 }

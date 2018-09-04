@@ -20,7 +20,8 @@ class RigState: public PubSubValue
     MinosStringItem<QString> _mode;
     MinosItem<int> _volLevel;
     MinosItem<double> _ritFreq;
-    MinosStringItem<QString> _ritEnableStatus;
+    MinosItem<bool> _ritOnOffStatus;
+    MinosItem<bool> _ritRadioStatus;
     MinosItem<int> _tpm;
 
 public:
@@ -38,7 +39,8 @@ public:
     MinosStringItem<QString> status() const;
     MinosItem<double> freq() const;
     MinosStringItem<QString> mode() const;
-    MinosStringItem<QString> ritEnableStatus() const;
+    MinosItem<bool> ritOnOffStatus() const;
+    MinosItem<bool> ritRadioStatus() const;
     MinosItem<double> ritFreq() const;
     MinosItem<int> volLevel() const;
     MinosItem<int> tpm() const;
@@ -49,7 +51,8 @@ public:
     void setVolume(int level);
     void setStatus(const QString &status);
     void setRitFreq(double freq);
-    void setRitEnableStatus(const QString &status);
+    void setRitOnOffStatus(const bool status);
+    void setRitRadioStatus(const bool status);
     void setTpm(int tpm);
 
     QStringList getSelectedLoggers();

@@ -109,9 +109,9 @@ private:
     QString sCurMode;
     bool mgmModeFlag = false;
     shortfreq_t rRitFreq = 0;
-    QString sRitFreq;
     int curVol = 0;
     int curSignalStrength = 0;
+    bool radioRitOn = false;
 
 
     SerialTVSwitch *serialTVSw = nullptr;
@@ -125,6 +125,8 @@ private:
     const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue ; \n");
     const QString SUP_RADIO_INDICATOR_TRANSVERT_STYLE = QString("background-color: yellow ; \n");
     const QString SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE = QString("background-color: orange ; \n");
+    const QString RIT_STATUS_OFF_STYLE = QString("background-color:  white ;\n");
+    const QString RIT_STATUS_ON_STYLE = QString("background-color:  orange ;\n");
 
     void initActionsConnections();
     void initSelectRadioBox();
@@ -181,7 +183,7 @@ private:
 
     void chkRadioMgmModeChanged();
     void dumpRadioToTraceLog();
-    void setRitDisplayVisible(bool state);
+    void setRitFreqDisplayVisible(bool state);
     int getRitFreq(vfo_t vfo);
     int setRitFreq(vfo_t vfo, shortfreq_t ritFreq);
     void cmdLockOn();
@@ -203,24 +205,33 @@ private:
     void loadBands();
 
     void sendTransVertSwitchToComPort(const QString &swNum);
-    void sendRitFreqLogger(double ritFreq);
+    void sendRitFreqLogger(shortfreq_t ritFreq);
 
     void setRitEnableDisplayVisible(bool s);
     void setRitOnOffDisplayVisible(bool s);
     void setRitOnOffDisplay(bool s);
     void setRitEnableDisplay(bool s);
+    void ritIndicatorToggle(bool state);
+    void setRitStatusIndicatorsVisible(bool state);
+    int  getRitRadioStatus(vfo_t vfo, bool *status);
+    void sendRadioRitStatusLogger(bool status);
+
     int getVolume(vfo_t vfo);
     int setVolume(vfo_t vfo, int level);
+    void sendVolStatusToLog(bool status);
 
     int getSignalStrength(vfo_t vfo);
     void displaySignalStrength(int level);
-    void sendVolStatusToLog(bool status);
+
 
     void initialiseSupportedRadioDisplay();
     void supRadioIndToggle(int offset, displayIndicator::indicatorType type);
     void updateSupportedRadioIndicators();
     void turnOffAllsupRadioIndicators();
     void showActiveTransVertIndicator(QString cb);
+
+
+
 
 
 private slots:
@@ -255,6 +266,8 @@ private slots:
 
 
 
+    void incRit();   // for test.... *************************
+    void ritbuttontoggle();  // for test.... *************************
 signals:
 
 

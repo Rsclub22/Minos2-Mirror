@@ -25,7 +25,8 @@ bool RigState::isDirty() const
             _mode.isDirty() ||
             _volLevel.isDirty() ||
             _ritFreq.isDirty() ||
-            _ritEnableStatus.isDirty() ||
+            _ritOnOffStatus.isDirty() ||
+            _ritRadioStatus.isDirty() ||
             _tpm.isDirty();
 }
 void RigState::clearDirty()
@@ -36,7 +37,8 @@ void RigState::clearDirty()
     _mode.clearDirty();
     _volLevel.clearDirty();
     _ritFreq.clearDirty();
-    _ritEnableStatus.clearDirty();
+    _ritOnOffStatus.clearDirty();
+    _ritRadioStatus.clearDirty();
     _tpm.clearDirty();
 }
 void RigState::setDirty()
@@ -47,7 +49,8 @@ void RigState::setDirty()
     _mode.setDirty();
     _volLevel.setDirty();
     _ritFreq.setDirty();
-    _ritEnableStatus.setDirty();
+    _ritOnOffStatus.setDirty();
+    _ritRadioStatus.setDirty();
     _tpm.setDirty();
 }
 void RigState::setSelected(const QString &loggeruuid, const QString &selected)
@@ -63,9 +66,15 @@ void RigState::setRitFreq(double freq)
 {
     _ritFreq.setValue(freq);
 }
-void RigState::setRitEnableStatus(const QString &status)
+
+void RigState::setRitOnOffStatus(bool status)
 {
-    _ritEnableStatus.setValue(status);
+    _ritOnOffStatus.setValue(status);
+}
+
+void RigState::setRitRadioStatus(const bool status)
+{
+    _ritRadioStatus.setValue(status);
 }
 void RigState::setMode(const QString &mode)
 {
@@ -94,7 +103,8 @@ QString RigState::pack() const
     jv.insert(rpcConstants::rigControlMode, mode().getValue());
     jv.insert(rpcConstants::rigControlRitFreq, ritFreq().getValue());
     jv.insert(rpcConstants::rigVolLevel, volLevel().getValue());
-    jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
+    jv.insert(rpcConstants::rigRitOnOffStatus, ritOnOffStatus().getValue());
+    jv.insert(rpcConstants::rigRitRadioStatus, ritRadioStatus().getValue());
     jv.insert(rpcConstants::rigTpm, tpm().getValue());
 
     QJsonDocument json(jv);
@@ -116,7 +126,8 @@ void RigState::unpack(QString s)
         _mode.setValue(json.object().value(rpcConstants::rigControlMode).toString());
         _volLevel.setValue(json.object().value(rpcConstants::rigVolLevel).toInt());
         _ritFreq.setValue(json.object().value(rpcConstants::rigControlRitFreq).toDouble());
-        _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toString());
+        _ritOnOffStatus.setValue(json.object().value(rpcConstants::rigRitOnOffStatus).toBool());
+        _ritRadioStatus.setValue(json.object().value(rpcConstants::rigRitRadioStatus).toBool());
         _tpm.setValue(json.object().value(rpcConstants::rigTpm).toInt());
     }
     else
@@ -156,10 +167,17 @@ MinosItem<int> RigState::volLevel() const
     return _volLevel;
 }
 
-MinosStringItem<QString> RigState::ritEnableStatus() const
+MinosItem<bool> RigState::ritOnOffStatus() const
 {
-    return _ritEnableStatus;
+    return _ritOnOffStatus;
 }
+
+
+MinosItem<bool> RigState::ritRadioStatus() const
+{
+    return _ritRadioStatus;
+}
+
 MinosItem<int> RigState::tpm() const
 {
     return _tpm;

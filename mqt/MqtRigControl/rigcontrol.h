@@ -80,7 +80,7 @@ public:
     QString transVertOffsetStr;
     freq_t transVertOffset = 0.0;
     QString antSwitchNum = "0";
-    QString transSwitchNum = "0";
+    QString transSwitchNum = "";
 
 
 };
@@ -272,6 +272,11 @@ public:
     int setRit(vfo_t vfo, shortfreq_t ritfreq);
     int supportGetRit(int rigNumber, bool *flag);
     int supportSetRit(int rigNumber, bool *flag);
+    int toggleRitState(vfo_t vfo, bool state);
+    int getRitState(vfo_t vfo, bool *state);
+    bool supportRitOnOff();
+    bool supportGetRitState();
+
     bool checkFreqValid(freq_t freq, rmode_t mode);
 
 
@@ -291,6 +296,11 @@ public:
     int getSignalStrength(vfo_t vfo, value_t *val);
 
     void enableTraceComms(bool state);
+
+    int getPttStatus(vfo_t vfo, ptt_t *pttStatus);
+    int setPtt(vfo_t vfo, ptt_t ptt);
+
+
 
 
 signals:

@@ -93,7 +93,9 @@ public:
     bool logColumnsChanged;
     bool splittersChanged;
 
+    // From rigcontrol
     QString sCurFreq;
+    QString sCurRitFreq;
     QString sCurMode;
 
     bool isBandMapLoaded();
@@ -192,6 +194,8 @@ private slots:
     void on_SetBandList(QString);
     void on_SetMode(QString);
     void on_SetFreq(QString);
+    void on_SetRitFreq(QString);
+    void on_SetRitRadioStatus(bool);
     void on_SetVolume(int level);
     void on_SetRadioStatus(QString);
     void on_SetRadioTpm(int);

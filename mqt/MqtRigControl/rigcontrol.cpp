@@ -259,48 +259,92 @@ int RigControl::setRit(vfo_t vfo, shortfreq_t ritfreq)
 
 int RigControl::supportGetRit(int rigNumber, bool *flag)
 {
-    int retCode = RIG_OK;
     RIG *myRig;
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        if (myRig->caps->get_rit == nullptr)         {
+        if (myRig->caps->get_rit == nullptr)
+        {
             *flag = false;
-            return retCode;
         }
         else
         {
             *flag = true;
-            return retCode;
         }
     }
 
-    return retCode = -14;
+    return -14;
 
 }
 
 
 int RigControl::supportSetRit(int rigNumber, bool *flag)
 {
-    int retCode = RIG_OK;
     RIG *myRig;
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        if (myRig->caps->set_rit == nullptr)         {
+        if (myRig->caps->set_rit == nullptr)
+        {
             *flag = false;
-            return retCode;
+
         }
         else
         {
             *flag = true;
-            return retCode;
+
         }
     }
 
-    return retCode = -14;
+    return -14;
 
 }
+
+
+
+bool RigControl::supportRitOnOff()
+{
+    return  rig_has_set_func(my_rig, RIG_FUNC_RIT);
+
+}
+
+int RigControl::toggleRitState(vfo_t vfo, bool state)
+{
+    return rig_set_func(my_rig, vfo, RIG_FUNC_RIT, state);
+}
+
+int RigControl::getRitState(vfo_t vfo, bool* state)
+{
+    int status = 0;
+    int retCode = RIG_OK;
+    retCode = rig_get_func(my_rig, vfo, RIG_FUNC_RIT, &status);
+    *state = status ? true : false;
+    return retCode;
+}
+
+
+bool RigControl::supportGetRitState()
+{
+    return rig_has_get_func(my_rig, RIG_FUNC_RIT);
+}
+
+/*************** PTT Control  ********************************/
+
+
+
+int  RigControl::getPttStatus(vfo_t vfo, ptt_t *pttStatus)
+{
+    return rig_get_ptt	(my_rig, vfo, pttStatus);
+}
+
+
+int RigControl::setPtt(vfo_t vfo, ptt_t ptt)
+{
+    return rig_set_ptt(my_rig, vfo, ptt);
+}
+
+
+
 
 
 /*************** Passband ********************************/

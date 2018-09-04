@@ -546,7 +546,7 @@
      <x>0</x>
      <y>0</y>
      <width>675</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -554,12 +554,9 @@
      <enum>Qt::DefaultContextMenu</enum>
     </property>
     <property name="title">
-     <string>&amp;File</string>
+     <string/>
     </property>
     <addaction name="separator"/>
-    <addaction name="actionAlways_On_Top"/>
-    <addaction name="separator"/>
-    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu_Configure">
     <property name="contextMenuPolicy">
@@ -632,12 +629,17 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>TraceLog</string>
+    <string>Trace Data Comms</string>
    </property>
   </action>
   <action name="actionAbout_Rotator_Config">
    <property name="text">
     <string>About Rotator Config</string>
+   </property>
+  </action>
+  <action name="actionTrace_Data_Comms">
+   <property name="text">
+    <string>Trace Data Comms</string>
    </property>
   </action>
  </widget>
