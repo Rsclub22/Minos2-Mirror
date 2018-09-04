@@ -70,14 +70,20 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         testBoxesVisible(true);
     }
 
+    ui->ritButton->setVisible(false);
+    ui->setRitSpinner->setVisible(false);
+
+#ifdef RIGCONTROL_TEST
     // rit test
+    ui->ritButton->setVisible(true);
+    ui->setRitSpinner->setVisible(true);
     ui->setRitSpinner->setRange(-9000, 9000);
     ui->setRitSpinner->setSingleStep(100);
     connect(ui->setRitSpinner, SIGNAL(editingFinished()), this, SLOT(incRit()));
     connect(ui->ritButton, SIGNAL(clicked()), this, SLOT(ritbuttontoggle()));
     //****************************************************************************************
 
-
+#endif
 
     QByteArray geometry = settings.value(geoStr).toByteArray();
     if (geometry.size() > 0)
@@ -2163,6 +2169,7 @@ void RigControlMainWindow::testBoxesVisible(bool visible)
     ui->freqInputBox->setVisible(visible);
 }
 
+#ifdef RIGCONTROL_TEST
 
 void RigControlMainWindow::incRit()
 {
@@ -2189,3 +2196,5 @@ void RigControlMainWindow::ritbuttontoggle()
         qDebug() << "Rit toggle = " << retCode;
     }
 }
+
+#endif

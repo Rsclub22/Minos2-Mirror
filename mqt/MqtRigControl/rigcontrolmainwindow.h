@@ -49,7 +49,7 @@ namespace displayIndicator {
 
 
 
-
+//#define RIGCONTROL_TEST
 
 
 
@@ -264,12 +264,12 @@ private slots:
     void sendRadioListLogger();
 
 
-
+#ifdef RIGCONTROL_TEST
 
     void incRit();   // for test.... *************************
     void ritbuttontoggle();  // for test.... *************************
 signals:
-
+#endif
 
 };
 

@@ -302,9 +302,17 @@ int RigControl::supportSetRit(int rigNumber, bool *flag)
 
 
 
-bool RigControl::supportRitOnOff()
+bool RigControl::supportRitOnOff(int rigNumber)
 {
-    return  rig_has_set_func(my_rig, RIG_FUNC_RIT);
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    setting_t state =  rig_has_set_func(myRig, RIG_FUNC_RIT);
+    if (state & RIG_FUNC_RIT)
+    {
+        return true;
+    }
+
+    return false;
 
 }
 
@@ -323,9 +331,17 @@ int RigControl::getRitState(vfo_t vfo, bool* state)
 }
 
 
-bool RigControl::supportGetRitState()
+bool RigControl::supportGetRitState(int rigNumber)
 {
-    return rig_has_get_func(my_rig, RIG_FUNC_RIT);
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    setting_t state = rig_has_get_func(myRig, RIG_FUNC_RIT);
+    if (state & RIG_FUNC_RIT)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 /*************** PTT Control  ********************************/

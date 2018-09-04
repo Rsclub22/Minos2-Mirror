@@ -176,17 +176,22 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         radioData->ritGetAvail = false;
         radioData->ritSetAvail = false;
         ritEnableVisible(ritAvail);
-        retCode = radio->supportGetRit(radioData->radioModelNumber, &ritAvail);
-        if (retCode >= 0)
+        bool supGetRit = false;
+        bool supSetRit = false;
+        bool supGetRitState = false;
+        bool supRitOnOff = false;
+        radio->supportGetRit(radioData->radioModelNumber, &supGetRit);
+
+        radio->supportSetRit(radioData->radioModelNumber, &supSetRit);
+
+        supRitOnOff = radio->supportRitOnOff(radioData->radioModelNumber);
+
+        supGetRitState = radio->supportGetRitState(radioData->radioModelNumber);
+
+        if (supGetRit && supSetRit && supGetRitState && supRitOnOff)
         {
+            ritAvail = true;
             radioData->ritGetAvail = ritAvail;
-
-        }
-
-        retCode = radio->supportSetRit(radioData->radioModelNumber, &ritAvail);
-        if (retCode >= 0)
-        {
-            radioData->ritSetAvail = ritAvail;
             ritEnableVisible(ritAvail);
         }
 

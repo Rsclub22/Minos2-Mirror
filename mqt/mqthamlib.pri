@@ -1,4 +1,4 @@
-!macx: HAMLIBDIR = $$absolute_path(../../hamlib-w32-3.1)
+!macx: HAMLIBDIR = $$absolute_path(../../hamlib-w32-3.3)
 
 macx: HAMLIBDIR = /usr/local
 
