@@ -444,6 +444,7 @@ void RigControlMainWindow::upDateRadio()
             sendTransVertStatus(setupRadio->currentRadio.transVertEnable);   // send to logger
             sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);                                 // turn off transVerter Sw
             sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
+            transVertSwNum = TRANSSW_NUM_DEFAULT;
 
             setupRadio->saveCurrentRadio();
 
@@ -1818,6 +1819,7 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
             && setupRadio->currentRadio.enableLocTVSwMsg
             && serialTVSw->getOpenFlag())      // com port should be open!
     {
+        logMessage(QString("Send Transvert Switch Number to Comport = %1, message = %2").arg(setupRadio->currentRadio.locTVSwComport).arg(QString::fromLocal8Bit(msg.append('\x0'))));
         serialTVSw->sendTVSwMessage(msg);
     }
 }

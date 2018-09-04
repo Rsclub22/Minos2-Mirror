@@ -191,6 +191,7 @@ private:
 
 
 
+    bool radioSupportRit(int radioModelNumber);
 };
 
 #endif // RIGSETUPFORM_H

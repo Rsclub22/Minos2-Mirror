@@ -169,35 +169,15 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         }
 
         // does this radio support rit?
-        // if radio has only get, then no support
-        // if radio has set, or set and get, then support.
-        int retCode = 0;
-        bool ritAvail = false;
-        radioData->ritGetAvail = false;
-        radioData->ritSetAvail = false;
-        ritEnableVisible(ritAvail);
-        bool supGetRit = false;
-        bool supSetRit = false;
-        bool supGetRitState = false;
-        bool supRitOnOff = false;
-        radio->supportGetRit(radioData->radioModelNumber, &supGetRit);
 
-        radio->supportSetRit(radioData->radioModelNumber, &supSetRit);
 
-        supRitOnOff = radio->supportRitOnOff(radioData->radioModelNumber);
+        radioData->ritGetAvail = radioSupportRit(radioData->radioModelNumber);
+        ritEnableVisible(radioData->ritGetAvail);
 
-        supGetRitState = radio->supportGetRitState(radioData->radioModelNumber);
-
-        if (supGetRit && supSetRit && supGetRitState && supRitOnOff)
-        {
-            ritAvail = true;
-            radioData->ritGetAvail = ritAvail;
-            ritEnableVisible(ritAvail);
-        }
 
         // does this radio support antenna sw?
         bool antSwFlg = false;
-        retCode = 0;
+        int retCode = 0;
         retCode = radio->supportAntSw(radioData->radioModelNumber, &antSwFlg);
         for (int i = 0; i < radioData->numTransverters; i++)
         {
@@ -885,6 +865,36 @@ void RigSetupForm::setEnableRigDataEntry(bool enable)
     ui->mgmBox->setEnabled(enable);
     ui->RITEnable->setEnabled(enable);
     ui->enableTransVert->setEnabled(enable);
+
+}
+
+
+bool RigSetupForm::radioSupportRit(int radioModelNumber)
+{
+
+
+    bool ritAvail = false;
+    radioData->ritGetAvail = false;
+    radioData->ritSetAvail = false;
+    ritEnableVisible(ritAvail);
+    bool supGetRit = false;
+    bool supSetRit = false;
+    bool supGetRitState = false;
+    bool supRitOnOff = false;
+    radio->supportGetRit(radioModelNumber, &supGetRit);
+
+    radio->supportSetRit(radioModelNumber, &supSetRit);
+
+    supRitOnOff = radio->supportRitOnOff(radioModelNumber);
+
+    supGetRitState = radio->supportGetRitState(radioModelNumber);
+
+    if (supGetRit && supSetRit && supGetRitState && supRitOnOff)
+    {
+        return true;
+    }
+
+    return false;
 
 }
 
