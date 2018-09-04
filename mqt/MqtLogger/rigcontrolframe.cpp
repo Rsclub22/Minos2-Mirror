@@ -595,7 +595,14 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
     logData.callsign = sc.cs.fullCall.getValue();
     logData.freq = curFreq;
     logData.locator = sc.loc.loc.getValue().trimmed();
-    logData.mode = curMode;
+    if (curMode.isEmpty())
+    {
+        logData.mode = sc.mode;
+    }
+    else
+    {
+        logData.mode = curMode;
+    }
 
     QStringList dt = dtg( true ).getIsoDTG().split('T');
     logData.time = dt[1];
