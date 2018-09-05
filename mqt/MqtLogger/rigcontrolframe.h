@@ -176,8 +176,9 @@ private slots:
     void exitRitFreqEdit();
     void freqRitEditSelected();
     void ritButtonSelected();
-
+    void ritClearButtonSelected(bool state);
     void sendVolumeRadio(int level);
+
 
 
 public slots:

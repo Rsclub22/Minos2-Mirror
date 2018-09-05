@@ -70,14 +70,20 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         testBoxesVisible(true);
     }
 
+    ui->ritButton->setVisible(false);
+    ui->setRitSpinner->setVisible(false);
+
+#ifdef RIGCONTROL_TEST
     // rit test
+    ui->ritButton->setVisible(true);
+    ui->setRitSpinner->setVisible(true);
     ui->setRitSpinner->setRange(-9000, 9000);
     ui->setRitSpinner->setSingleStep(100);
     connect(ui->setRitSpinner, SIGNAL(editingFinished()), this, SLOT(incRit()));
     connect(ui->ritButton, SIGNAL(clicked()), this, SLOT(ritbuttontoggle()));
     //****************************************************************************************
 
-
+#endif
 
     QByteArray geometry = settings.value(geoStr).toByteArray();
     if (geometry.size() > 0)
@@ -120,7 +126,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     setTransVertDisplayVisible(false);
     sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
-    sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
+    //sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
 
 
     logRitOn = false;
@@ -243,6 +249,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
     connect(pollTimer, SIGNAL(timeout()), this, SLOT(getRadioInfo()));
+
 
 
     // configure antenna dialog
@@ -404,6 +411,7 @@ void RigControlMainWindow::upDateRadio()
                     && setupRadio->currentRadio.enableTransSwitch
                     && setupRadio->currentRadio.enableLocTVSwMsg)
             {
+                selTransVertBandIndicator = "";     // force active tranvert indicator update
                 if (serialTVSw->getOpenFlag())
                 {
                     serialTVSw->closeComport();
@@ -437,6 +445,8 @@ void RigControlMainWindow::upDateRadio()
             sendTransVertStatus(setupRadio->currentRadio.transVertEnable);   // send to logger
             sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);                                 // turn off transVerter Sw
             sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
+            transVertSwNum = TRANSSW_NUM_DEFAULT;
+            selTransVertBandIndicator = "";     // force active tranvert indicator update
 
             setupRadio->saveCurrentRadio();
 
@@ -1287,8 +1297,6 @@ void RigControlMainWindow::setRitFreqDisplayVisible(bool state)
 void RigControlMainWindow::setRitStatusIndicatorsVisible(bool state)
 {
     ui->ritStatusInd->setVisible(state);
-    ui->ritStatusLabel->setVisible(state);
-    //ui->ritStatusText->setVisible(state);
 
 }
 
@@ -1813,6 +1821,7 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
             && setupRadio->currentRadio.enableLocTVSwMsg
             && serialTVSw->getOpenFlag())      // com port should be open!
     {
+        logMessage(QString("Send Transvert Switch Number to Comport = %1, message = %2").arg(setupRadio->currentRadio.locTVSwComport).arg(QString::fromLocal8Bit(msg)));
         serialTVSw->sendTVSwMessage(msg);
     }
 }
@@ -2032,16 +2041,14 @@ void RigControlMainWindow::initialiseSupportedRadioDisplay()
 void RigControlMainWindow::showActiveTransVertIndicator(QString cb)
 {
 
-    static QString oldBand = "";
-
-    if (cb != oldBand)
+    if (cb != selTransVertBandIndicator)
     {
         // turn off previous active transverter indicator
-        if (oldBand != "")
+        if (selTransVertBandIndicator != "")
         {
             for (int i = 0; i < freqPresetData::presetBands.count(); i++)
             {
-               if (oldBand == freqPresetData::presetBands[i])
+               if (selTransVertBandIndicator == freqPresetData::presetBands[i])
                 {
                    supRadioIndToggle(i, displayIndicator::TRANSVERT);
                    break;
@@ -2055,17 +2062,11 @@ void RigControlMainWindow::showActiveTransVertIndicator(QString cb)
            if (cb == freqPresetData::presetBands[i])
             {
                supRadioIndToggle(i, displayIndicator::TRANSVERT_ON);
-               oldBand = cb;
+               selTransVertBandIndicator = cb;
                break;
            }
         }
-
-
-
     }
-
-
-
 }
 
 
@@ -2164,6 +2165,7 @@ void RigControlMainWindow::testBoxesVisible(bool visible)
     ui->freqInputBox->setVisible(visible);
 }
 
+#ifdef RIGCONTROL_TEST
 
 void RigControlMainWindow::incRit()
 {
@@ -2190,3 +2192,5 @@ void RigControlMainWindow::ritbuttontoggle()
         qDebug() << "Rit toggle = " << retCode;
     }
 }
+
+#endif

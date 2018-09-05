@@ -274,8 +274,8 @@ public:
     int supportSetRit(int rigNumber, bool *flag);
     int toggleRitState(vfo_t vfo, bool state);
     int getRitState(vfo_t vfo, bool *state);
-    bool supportRitOnOff();
-    bool supportGetRitState();
+    bool supportRitOnOff(int rigNumber);
+    bool supportGetRitState(int rigNumber);
 
     bool checkFreqValid(freq_t freq, rmode_t mode);
 
