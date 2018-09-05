@@ -1803,6 +1803,12 @@ void RigControlMainWindow::sendTransVertOffsetToLogger(int tvNum)
 
 void RigControlMainWindow::sendTransVertSwitchToLogger(const QString &swNum)
 {
+    if (swNum == "")
+    {
+        logMessage(QString("Send Transvert Switch Number to Logger - Switch Number Empty - Nothing Sent"));
+        return;
+    }
+
     logMessage(QString("Send Transvert Switch Number to logger = %1").arg(swNum));
     PubSubName psname(setupRadio->currentRadio.radioName);
     msg->rigCache.setTransverterSwitch(psname, swNum.toInt());
@@ -1811,6 +1817,12 @@ void RigControlMainWindow::sendTransVertSwitchToLogger(const QString &swNum)
 
 void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
 {
+    if (swNum == "")
+    {
+        logMessage(QString("Send Transvert Switch Number to Comport - Switch Number Empty - Nothing Sent"));
+        return;
+    }
+
     QByteArray msg = swNum.toUtf8();
     msg.prepend(TVSWMSG_START);
     msg.append(TVSWMSG_TERM);
