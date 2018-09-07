@@ -486,5 +486,3 @@ QString convertRitFreqToStr(double freq)
 }
 
 
-
-

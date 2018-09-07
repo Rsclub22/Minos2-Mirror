@@ -54,6 +54,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     msg = new RigControlRpc(this);
 
+
+
     QSettings settings;
     geoStr = "geometry";
     if (appName.length() > 0)
