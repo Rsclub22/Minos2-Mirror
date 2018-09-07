@@ -63,6 +63,7 @@ cd Configuration
 call powershell.exe "& {Invoke-WebRequest http://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests17.xml -Outfile vhfcontests17.xml}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests18.xml -Outfile vhfcontests18.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests19.xml -Outfile vhfcontests19.xml}"
 
 
 cd ../Bin

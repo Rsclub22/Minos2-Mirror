@@ -19,7 +19,6 @@ extern void clearBuffer( );
 extern void strtobuf( const QString &str );
 extern void strtobuf( const MinosStringItem<QString> &str );
 extern void strtobuf();
-QString strupr( const QString &s );
 extern int strnicmp(const QString &s1, const QString &s2, int len );
 extern void opyn( bool b );
 void opyn( const MinosItem<bool> &b );

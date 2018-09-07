@@ -80,7 +80,7 @@ public:
     QString transVertOffsetStr;
     freq_t transVertOffset = 0.0;
     QString antSwitchNum = "0";
-    QString transSwitchNum = "0";
+    QString transSwitchNum = "";
 
 
 };
@@ -124,7 +124,8 @@ public:
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
-      dest.ritAvail = srce->ritAvail;
+      dest.ritGetAvail = srce->ritGetAvail;
+      dest.ritSetAvail = srce->ritSetAvail;
       dest.ritEnable = srce->ritEnable;
       dest.radioSupBands = srce->radioSupBands;
       dest.radioTransSupBands = srce->radioTransSupBands;
@@ -161,7 +162,7 @@ public:
   QString radioModel;
   QString radioModelName;
   int radioModelNumber = 0;
-  QString pollInterval = "1";
+  QString pollInterval = RIG_DEFAULT_POLLINTERVAL;
   QString civAddress;
   int baudrate = 0; /**<  serial port baudrate*/
   int parity = 0;
@@ -181,9 +182,11 @@ public:
   QString mgmMode = "USB";
   ptt_type_t pttType;
   bool antSwitchAvail = false;
-  bool ritAvail = false;
+  bool ritGetAvail = false;
+  bool ritSetAvail = false;
   bool ritEnable = false;
   bool transVertEnable  = false;
+  bool volAvail = false;
   QStringList transVertNames;
   int numTransverters = 0;
   bool enableTransSwitch = false;
@@ -267,7 +270,13 @@ public:
     int getModelInfo(QString radioModel, int *radioModelNumber, QString *radioMfgName, QString *radioModelName);
     int getRit(vfo_t vfo, shortfreq_t *ritfreq);
     int setRit(vfo_t vfo, shortfreq_t ritfreq);
-    int supportRit(int rigNumber, bool *ritFlag);
+    int supportGetRit(int rigNumber, bool *flag);
+    int supportSetRit(int rigNumber, bool *flag);
+    int toggleRitState(vfo_t vfo, bool state);
+    int getRitState(vfo_t vfo, bool *state);
+    bool supportRitOnOff();
+    bool supportGetRitState();
+
     bool checkFreqValid(freq_t freq, rmode_t mode);
 
 
@@ -277,6 +286,22 @@ public:
     int getAntSwNum(vfo_t vfo);
     int setAntSwNum(vfo_t vfo, ant_t antNum);
     int supportAntSw(int rigNumber, bool *antSwFlag);
+
+
+    bool supportVolControl();
+    int setVolume(vfo_t vfo, float val);
+    int getVolume(vfo_t vfo, value_t *val);
+
+    bool supportSignalStrength();
+    int getSignalStrength(vfo_t vfo, value_t *val);
+
+    void enableTraceComms(bool state);
+
+    int getPttStatus(vfo_t vfo, ptt_t *pttStatus);
+    int setPtt(vfo_t vfo, ptt_t ptt);
+
+
+
 
 signals:
     void frequency_updated(double);
@@ -318,6 +343,8 @@ signals:
     rig_model_t myrig_model;
     bool rigControlEnabled;
     bool serialConnected;
+    bool traceComms = false;
+
     void errorMessage(int errorCode,QString command);
     void getRadioList();
 
@@ -329,13 +356,11 @@ signals:
     //double lastFrequency;
     //QStringList xmlModes;
 
+    int rigSetLevel(vfo_t vfo, setting_t level, value_t val);
+    int rigGetLevel(vfo_t vfo, setting_t level, value_t *val);
 
-
-
-
-
-
-
+    setting_t rigHasGetLevel(setting_t level);
+    setting_t rigHasSetLevel(setting_t level);
 };
 
 #endif // RIGCONTROL_H

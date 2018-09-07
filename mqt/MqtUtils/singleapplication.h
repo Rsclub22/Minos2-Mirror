@@ -30,6 +30,9 @@ class SingleApplication : public QApplication {
 
     signals:
         void argsReceived(QString);
+
+private slots:
+        void clearRegistry();
 };
 
 #endif // SINGLEAPPLICATION_H

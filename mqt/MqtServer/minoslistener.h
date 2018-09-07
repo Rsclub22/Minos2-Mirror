@@ -36,7 +36,7 @@ class MinosListener:public QObject
       int getConnectionCount();
       MinosListener();
       virtual ~MinosListener();
-      virtual bool initialise( QString type, int port );
+      virtual bool initialise(QString type, quint16 port );
 
       virtual void closeDown() = 0;
 
@@ -64,7 +64,7 @@ class MinosServerListener: public MinosListener
       }
       ~MinosServerListener() override
       {
-         MSL = 0;
+         MSL = nullptr;
       }
       bool sendServer(TiXmlElement *pak );
       void checkServerConnected( Server *s, bool force );

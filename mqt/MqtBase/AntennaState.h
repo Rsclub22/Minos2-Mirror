@@ -12,7 +12,6 @@ class AntennaState: public PubSubValue
 public:
     AntennaState();
     AntennaState(QString);
-    AntennaState(const QString &st, const QString &loggeruuid, const QString &sel, const QString &b);
 
     virtual QString pack() const;
     virtual void unpack(QString);

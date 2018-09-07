@@ -1,5 +1,5 @@
 #include "base_pch.h"
-
+#include "BandList.h"
 #include "Calendar.h"
 
 const QString TypeVHFContest("<VHF from VHFContests.xml>");

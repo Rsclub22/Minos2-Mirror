@@ -16,6 +16,7 @@ class ChatFrame : public QFrame
 public:
     explicit ChatFrame(QWidget *parent = nullptr);
     ~ChatFrame() override;
+    void setStandAlone();
 
 private:
     Ui::ChatFrame *ui;
@@ -26,6 +27,7 @@ private slots:
 
     void ChatServerList(QVector<Server>);
     void ChatMessages(QVector<QString>);
+    void on_FontChanged();
 };
 
 #endif // CHATFRAME_H

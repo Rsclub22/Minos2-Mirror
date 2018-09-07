@@ -15,10 +15,8 @@
 class RPCServerPubSub : public RPCPubSub
 {
    protected:
-      RPCServerPubSub( const QString &call, TRPCFunctor *cb ) : RPCPubSub( call, cb )
-      {}
-      virtual ~RPCServerPubSub()
-      {}
+      RPCServerPubSub( const QString &call, TRPCFunctor *cb );
+      virtual ~RPCServerPubSub();
       virtual QSharedPointer<MinosRPCObj> makeObj() = 0;
    public:
       static void initialisePubSub( TRPCFunctor *notifycb );

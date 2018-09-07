@@ -1,6 +1,6 @@
 #include "base_pch.h"
 #include "MinosLoggerEvents.h"
-
+#include "contest.h"
 #include "MatchTreeFrame.h"
 
 #include "tqsoeditdlg.h"
@@ -160,6 +160,12 @@ void TQSOEditDlg::selectContact( BaseContestLog * ccontest, QSharedPointer<BaseC
    // this is the first call after construction
    contest = ccontest;
    firstContact = lct;
+}
+
+void TQSOEditDlg::showEvent(QShowEvent *event)
+{
+    QDialog::showEvent(event);
+    ui->GJVQSOEditFrame->valid(cmCheckValid);
 }
 //---------------------------------------------------------------------------
 void TQSOEditDlg::addTreeRoot(QSharedPointer<BaseContact> lct)

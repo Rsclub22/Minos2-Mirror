@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    appStartup("MinosQtChat");
+    appStartup(rpcConstants::chatApp);
 
     TMinosChatForm w;
     w.show();

@@ -31,13 +31,13 @@ class MinosServerConnection: public MinosCommonConnection
    public:
       MinosServerConnection();
       virtual void initialise() override;
-      ~MinosServerConnection();
-      virtual bool checkFrom( TiXmlElement *pak );
-      virtual bool isServer()
+      ~MinosServerConnection() override;
+      virtual bool checkFrom( TiXmlElement *pak ) override;
+      virtual bool isServer() override
       {
          return true;
       }
-      virtual void setFromId( MinosId &from, RPCRequest *req );
+      virtual void setFromId( MinosId &from, RPCRequest *req ) override;
 
       virtual void mConnect( Server *srv );
       virtual void sendAction( XStanza *a );

@@ -11,9 +11,11 @@
 #include "ScreenConfig.h"
 #include "ui_ScreenConfig.h"
 
-ScreenConfig::ScreenConfig(QWidget *parent) :
+ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curConfigNamep) :
     QDialog(parent),
-    ui(new Ui::ScreenConfig)
+    ui(new Ui::ScreenConfig),
+    scf(scfp),
+    curConfigName(curConfigNamep)
 {
     ui->setupUi(this);
 
@@ -28,10 +30,6 @@ ScreenConfig::ScreenConfig(QWidget *parent) :
 
     // create the screen contents based on the config
 
-    scf.loadFile();
-
-    curConfigName = "default";
-
     SC sc = scf.configs[curConfigName];
 
     for (int j = 0; j < sc.rows.count(); j++)
@@ -45,6 +43,7 @@ ScreenConfig::ScreenConfig(QWidget *parent) :
            baseRow->vbl->insertWidget(k, e);
        }
     }
+    ui->addRowButton->setVisible(vbl->count() == 0);
 }
 
 ScreenConfig::~ScreenConfig()
@@ -98,7 +97,10 @@ SC ScreenConfig::getConfig()
 void ScreenConfig::on_OKButton_clicked()
 {
     // analyse and apply the new layout
-    on_applyButton_clicked();
+    SC sc = getConfig();
+
+    // replace it in the config map
+    scf.configs[curConfigName] = sc;
 
     close();
 }
@@ -116,17 +118,7 @@ void ScreenConfig::on_applyButton_clicked()
     // write it back, or the screen redraw doesn't work
     scf.dumpFile();
 
-    // and apply it to the open logs
-    TContestApp *app = TContestApp::getContestApp();
-    QString sessName = app->currSession;
-
-    LogContainer->closeSession();
-
-    // clear old splitter settings
-    QSettings settings;
-    settings.remove("Splitters");
-
-    LogContainer->selectSession(sessName);
+    LogContainer->applyScreenLayouts();
 }
 
 void ScreenConfig::on_cancelButton_clicked()
@@ -147,6 +139,7 @@ void ScreenConfig::addBefore(ScreenConfigRow *r)
     ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
     vbl->insertWidget( pos, baseRow);
     baseRow->addLeft(nullptr);
+    ui->addRowButton->setVisible(vbl->count() == 0);
 
 }
 void ScreenConfig::remove(ScreenConfigRow *r)
@@ -167,6 +160,7 @@ void ScreenConfig::remove(ScreenConfigRow *r)
         taken->widget()->deleteLater();
         delete taken;
     }
+    ui->addRowButton->setVisible(vbl->count() == 0);
 }
 void ScreenConfig::addAfter(ScreenConfigRow *r)
 {
@@ -182,6 +176,7 @@ void ScreenConfig::addAfter(ScreenConfigRow *r)
     ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
     vbl->insertWidget( pos + 1, baseRow);
     baseRow->addLeft(nullptr);
+    ui->addRowButton->setVisible(vbl->count() == 0);
 }
 
 bool ScreenConfig::checkOk(ScreenConfigElement *e)
@@ -235,4 +230,5 @@ void ScreenConfig::on_addRowButton_clicked()
     }
 
     addAfter(dynamic_cast<ScreenConfigRow *>(wlast));
+    ui->addRowButton->setVisible(vbl->count() == 0);
 }

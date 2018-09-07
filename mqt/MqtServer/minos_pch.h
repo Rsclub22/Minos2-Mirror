@@ -27,12 +27,6 @@
 #include <QHostInfo>
 #include <QNetworkInterface>
 
-#include "MServer.h"
-#include "MServerZConf.h"
-#include "MServerPubSub.h"
-#include "PubSubServer.h"
-
-
 #endif
 
 

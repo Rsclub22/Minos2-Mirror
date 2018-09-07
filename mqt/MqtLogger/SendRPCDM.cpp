@@ -23,7 +23,7 @@ TSendDM::TSendDM(QWidget* Owner )
     loggerUuid = /*makeUuid()*/h;
     trace("logger uuid is " + loggerUuid);
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
 
@@ -209,7 +209,7 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
     QSharedPointer<RPCParam>select(new RPCStringParam(uuid ));
     st->addMember( select, rpcConstants::selected );
 
-    st->addMember( s.toString(), rpcConstants::rotatorAntennaName );
+    st->addMember( s.toString(), rpcConstants::rotatorSelectAntennaName );
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( s );
@@ -244,7 +244,7 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const Q
     QSharedPointer<RPCParam>select(new RPCStringParam(uuid ));
     st->addMember( select, rpcConstants::selected );
 
-    st->addMember( s.toString(), rpcConstants::rigControlRadioName );
+    st->addMember( s.toString(), rpcConstants::rigControlSelectRadioName );
     st->addMember( mode, rpcConstants::rigControlMode );
     rpc.getCallArgs() ->addParam( st );
 
@@ -294,7 +294,7 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setFreq(rigSelected, convertStrToFreq(freq));
+    rigCache.setRitFreq(rigSelected, convertStrToFreq(freq));
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -312,7 +312,7 @@ void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq)
 void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setRitEnableStatus(rigSelected, status);
+    rigCache.setRitOnOffStatus(rigSelected, status);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -327,9 +327,42 @@ void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
 }
 
 
+void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
+{
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setVolume(rigSelected, level);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+    st->addMember( level, rpcConstants::rigVolLevel);
+    rpc.getCallArgs() ->addParam( st );
 
+    rpc.queueCall( rigSelected );
+}
 
+void TSendDM::sendRigControlTpm(TSingleLogFrame *tslf, int tpm, QString &freq)
+{
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setTpm(rigSelected, tpm);
+    rigCache.setFreq(rigSelected, convertStrToFreq(freq));
+
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+    st->addMember( tpm, rpcConstants::rigTpm);
+    st->addMember( freq, rpcConstants::rigControlFreq );
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+}
 
 void TSendDM::sendRotatorPreset(QString s)
 {
@@ -346,14 +379,223 @@ void TSendDM::sendRotatorPreset(QString s)
     rpc.queueCall( rotSelected );
 }
 //---------------------------------------------------------------------------
+void TSendDM::notifyRigChanges()
+{
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    if (!rigSelected.isEmpty())
+    {
+        RigState &selState = rigCache.getState(rigSelected);
+        QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
+        RigDetails &selDetail = rigCache.getDetails(rigSelected);
+        QString selDetailsUuid = selDetail.getSelectedContest(loggerUuid).getValue();
+        if (!selStateUuid.isEmpty())
+        {
+            QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
+            for (int i = 0; i < frames.size(); i++)
+            {
+                TSingleLogFrame *tslf = frames[i];
+                QString frameUuid = tslf->getContest()->uuid;
+
+                if (selStateUuid == frameUuid)
+                {
+                    trace("Rig state distribution for " + selStateUuid);
+                    if (selState.tpm().isDirty())
+                    {
+                        trace("SendRPC Rig set tpm " + QString::number(selState.tpm().getValue()));
+                        tslf->on_SetRadioTpm(selState.tpm().getValue());
+                    }
+                    if (selState.mode().isDirty())
+                    {
+                        trace("SendRPC Rig set mode " + selState.mode().getValue());
+                        tslf->on_SetMode(selState.mode().getValue());
+                    }
+                    if (selState.freq().isDirty())
+                    {
+                        trace("SendRPC Rig set freq " + convertFreqToStr(selState.freq().getValue()));
+                        tslf->on_SetFreq(convertFreqToStr(selState.freq().getValue()));
+                    }
+                    if (selState.ritFreq().isDirty())
+                    {
+                        trace("SendRPC Rig set ritFreq " + convertRitFreqToStr(selState.ritFreq().getValue()));
+                        tslf->on_SetRitFreq(convertRitFreqToStr(selState.ritFreq().getValue()));
+                    }
+                    if (selState.ritRadioStatus().isDirty())
+                    {
+                        QString s;
+                        trace("SendRPC Rig set ritRadioStatus " + (s = selState.ritRadioStatus().getValue() ? "On" : "Off"));
+                        tslf->on_SetRitRadioStatus(selState.ritRadioStatus().getValue());
+                    }
+                    if (selState.volLevel().isDirty())
+                    {
+                        trace("SendRPC Rig set volume " + QString::number(selState.volLevel().getValue()));
+                        tslf->on_SetVolume(selState.volLevel().getValue());
+                    }
+                    if (selState.status().isDirty())
+                    {
+                        trace("SendRPC Rig set status " + selState.status().getValue());
+                        tslf->on_SetRadioStatus(selState.status().getValue());
+                    }
+                    selState.clearDirty();
+                }
+                if (selDetailsUuid == frameUuid)
+                {
+                    trace("Rig details distribution for " + selDetailsUuid);
+                    if (selDetail.bandList().isDirty())
+                    {
+                        trace("SendRPC Rig set bandList " + selDetail.bandList().getValue());
+                        tslf->on_SetBandList(selDetail.bandList().getValue());
+                    }
+                    if (selDetail.transverterStatus().isDirty())
+                    {
+                        trace(QString("SendRPC Rig set transverter status ") + (selDetail.transverterStatus().getValue() ? " True" : " False"));
+                        tslf->on_SetRadioTxVertState( selDetail.transverterStatus().getValue() );
+                    }
+                    if (selDetail.volumeStatus().isDirty())
+                    {
+                        trace(QString("SendRPC Rig set volume status ") + (selDetail.volumeStatus().getValue() ? " True" : " False"));
+                        tslf->on_SetRadioVolumeState( selDetail.volumeStatus().getValue() );
+                    }
+                    if (selDetail.ritEnableStatus().isDirty())
+                    {
+                        trace(QString("SendRPC Rig set ritEnable status ") + (selDetail.ritEnableStatus().getValue() ? " True" : " False"));
+                        tslf->on_SetRitEnableState( selDetail.ritEnableStatus().getValue());
+                    }
+                    selDetail.clearDirty();
+
+                }
+            }
+        }
+    }
+}
+
+void TSendDM::notifyRotChanges()
+{
+    PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
+    if (!rotSelected.isEmpty())
+    {
+        AntennaState &selState = rotatorCache.getState(rotSelected);
+        QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
+        AntennaDetail &selDetail = rotatorCache.getDetails(rotSelected);
+        QString selDetailUuid = selState.getSelectedContest(loggerUuid).getValue();
+        if (!selStateUuid.isEmpty())
+        {
+            QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
+            for (int i = 0; i < frames.size(); i++)
+            {
+                TSingleLogFrame *tslf = frames[i];
+                QString frameUuid = tslf->getContest()->uuid;
+
+                if (selStateUuid == frameUuid)
+                {
+                    trace("Rotator state distribution for " + selStateUuid);
+
+                    if (selState.bearing().isDirty())
+                    {
+                        trace("SendRPC Rotator set bearing " + selState.bearing().getValue());
+                        tslf->on_RotatorBearing(selState.bearing().getValue());
+                    }
+                    if (selState.status().isDirty())
+                    {
+                        trace("SendRPC Rotator set status " + selState.status().getValue());
+                        tslf->on_RotatorStatus(selState.status().getValue());
+                    }
+                    selState.clearDirty();
+                }
+                if (selDetailUuid == frameUuid)
+                {
+                    trace("Rotator details distribution for " + selDetailUuid);
+                    if (selDetail.maxAzimuth().isDirty())
+                    {
+                        trace(QString("SendRPC Rotator set maxAzimuth %1").arg(selDetail.maxAzimuth().getValue()));
+                        tslf->on_RotatorMaxAzimuth(QString::number(selDetail.maxAzimuth().getValue()));
+                    }
+                    if (selDetail.minAzimuth().isDirty())
+                    {
+                        trace(QString("SendRPC Rotator set minAzimuth %1").arg(selDetail.minAzimuth().getValue()));
+                        tslf->on_RotatorMinAzimuth(QString::number(selDetail.minAzimuth().getValue()));
+                    }
+                    if (selDetail.cwCcwCmdEnable().isDirty())
+                    {
+                        trace(QString("SendRPC Rotator set cwCcwCmdEnable %1").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False"));
+                        tslf->on_cwCcwCmdEnable(selDetail.cwCcwCmdEnable().getValue());
+                    }
+                    selDetail.clearDirty();
+
+                }
+                if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
+                {
+                    trace("SendRPC Rotator set presets " + rotatorCache.getRotatorPresets(rotSelected));
+                    tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
+                }
+            }
+            rotatorCache.rotatorPresetsClearDirty();
+        }
+    }
+}
+
 void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
     // PubSub notifications
     AnalysePubSubNotify an( err, mro );
     trace( "Notify callback from " + from + ( err ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherServer());
 
+    // Need to check that the server/app is in the category map; if not, don't pass it on
     if ( an.getOK())
     {
+        QString category = an.getCategory();
+        if (category != rpcConstants::LocalStationCategory && category != rpcConstants::StationCategory)
+        {
+            bool notificationOK = false;
+            for ( QVector <QSharedPointer<Connectable> >::iterator j = catMap[category].begin(); j != catMap[category].end(); j++ )
+            {
+                if ((*j)->runType == RunLocal)
+                {
+                    if (an.getPublisherServer() != (*j)->serverName)
+                    {
+                        //trace("RunLocal server " + an.getPublisherServer() + " " + (*j)->serverName);
+                        continue;
+                    }
+                    if (an.getPublisherProgram() != (*j)->appName)
+                    {
+                        //trace("RunLocal appName " + an.getPublisherProgram() + " " + (*j)->appName);
+                        continue;
+                    }
+
+                    notificationOK = true;
+                    break;
+                }
+                else if ((*j)->runType == ConnectServer)
+                {
+                    if ((*j)->serverName.isEmpty())
+                    {
+                        notificationOK = true;
+                        break;
+                    }
+                    else if (an.getPublisherServer() != (*j)->serverName)
+                    {
+                        //trace("ConnectServer server " + an.getPublisherServer() + " " + (*j)->serverName);
+                        continue;
+                    }
+                    if ((*j)->remoteAppName.isEmpty())
+                    {
+                        notificationOK = true;
+                        break;
+                    }
+                    else if (an.getPublisherProgram() != (*j)->remoteAppName)
+                    {
+                        //trace("ConnectServer appName " + an.getPublisherProgram() + " " + (*j)->appName);
+                        continue;
+                    }
+
+                    notificationOK = true;
+                    break;
+                }
+            }
+
+            if (!notificationOK)
+                return;
+
+        }
         if ( an.getState() == psPublished)
         {
             trace(QString("SendRPC category %1 key %2").arg(an.getCategory()).arg(an.getKey()));
@@ -383,7 +625,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 rigCache.addRigList(an.getValue());
                 radioLoaded = true;
                 emit setRadioLoaded();
-                emit setRadioList(an.getValue());
+                emit setRadioList();
             }
             else if ( an.getCategory() == rpcConstants::RotatorCategory && an.getKey() == rpcConstants::rotatorList )
             {
@@ -391,134 +633,38 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 rotatorCache.addRotList(an.getValue());
                 rotatorLoaded = true;
                 emit RotatorLoaded();
-                emit RotatorList(an.getValue());
+                emit RotatorList();
+            }
+            else if ( an.getCategory() == rpcConstants::LocalStationCategory)
+            {
+                //localServerName = an.getKey();
+//                if (!servers.contains(an.getKey()))
+//                    RPCPubSub::subscribe( rpcConstants::StationCategory );  //want ALL keys - but do it once we know who WE are!
+            }
+            else if ( an.getCategory() == rpcConstants::StationCategory)
+            {
+                QString server = an.getKey();
+                if (!servers.contains(server))
+                {
+                    servers.append(server);
+                    for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
+                    {
+                        for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
+                        {
+                            if ((*j)->runType == ConnectServer && (*j)->serverName.isEmpty())
+                            {
+                                RPCPubSub::subscribeRemote(server, i.key());
+                            }
+                        }
+                    }
+                }
             }
         }
+
+        notifyRigChanges();
+        notifyRotChanges();
 
         QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-        {
-            PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-            if (!rigSelected.isEmpty())
-            {
-                RigState &selState = rigCache.getState(rigSelected);
-                QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
-                RigDetails &selDetail = rigCache.getDetails(rigSelected);
-                QString selDetailsUuid = selDetail.getSelectedContest(loggerUuid).getValue();
-                if (!selStateUuid.isEmpty())
-                {
-
-                    for (int i = 0; i < frames.size(); i++)
-                    {
-                        TSingleLogFrame *tslf = frames[i];
-                        QString frameUuid = tslf->getContest()->uuid;
-
-                        if (selStateUuid == frameUuid)
-                        {
-                            trace("Rig state distribution for " + selStateUuid);
-                            if (selState.mode().isDirty())
-                            {
-                                trace("SendRPC Rig set mode " + selState.mode().getValue());
-                                tslf->on_SetMode(selState.mode().getValue());
-                            }
-                            if (selState.freq().isDirty())
-                            {
-                                trace("SendRPC Rig set freq " + convertFreqToStr(selState.freq().getValue()));
-                                tslf->on_SetFreq(convertFreqToStr(selState.freq().getValue()));
-                            }
-                            if (selState.status().isDirty())
-                            {
-                                trace("SendRPC Rig set status " + selState.status().getValue());
-                                tslf->on_SetRadioStatus(selState.status().getValue());
-                            }
-                            selState.clearDirty();
-                        }
-                        if (selDetailsUuid == frameUuid)
-                        {
-                            trace("Rig details distribution for " + selDetailsUuid);
-                            if (selDetail.bandList().isDirty())
-                            {
-                                trace("SendRPC Rig set bandList " + selDetail.bandList().getValue());
-                                tslf->on_SetBandList(selDetail.bandList().getValue());
-                            }
-                            if (selDetail.transverterStatus().isDirty())
-                            {
-                                trace(QString("SendRPC Rig set transverter status ") + (selDetail.transverterStatus().getValue() ? " True" : " False"));
-                                tslf->on_SetRadioTxVertState( selDetail.transverterStatus().getValue() );
-                            }
-                            if (selDetail.ritEnableStatus().isDirty())
-                            {
-                                trace(QString("SendRPC Rig set ritEnable status ") + (selDetail.ritEnableStatus().getValue() ? " True" : " False"));
-                                tslf->on_SetRitEnableState( selDetail.ritEnableStatus().getValue());
-                            }
-                            selDetail.clearDirty();
-
-                        }
-                    }
-                }
-            }
-            {
-                PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
-                if (!rotSelected.isEmpty())
-                {
-                    AntennaState &selState = rotatorCache.getState(rotSelected);
-                    QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
-                    AntennaDetail &selDetail = rotatorCache.getDetails(rotSelected);
-                    QString selDetailUuid = selState.getSelectedContest(loggerUuid).getValue();
-                    if (!selStateUuid.isEmpty())
-                    {
-                        for (int i = 0; i < frames.size(); i++)
-                        {
-                            TSingleLogFrame *tslf = frames[i];
-                            QString frameUuid = tslf->getContest()->uuid;
-
-                            if (selStateUuid == frameUuid)
-                            {
-                                trace("Rotator state distribution for " + selStateUuid);
-
-                                if (selState.bearing().isDirty())
-                                {
-                                    trace("SendRPC Rotator set bearing " + selState.bearing().getValue());
-                                    tslf->on_RotatorBearing(selState.bearing().getValue());
-                                }
-                                if (selState.status().isDirty())
-                                {
-                                    trace("SendRPC Rotator set status " + selState.status().getValue());
-                                    tslf->on_RotatorStatus(selState.status().getValue());
-                                }
-                                selState.clearDirty();
-                            }
-                            if (selDetailUuid == frameUuid)
-                            {
-                                trace("Rotator details distribution for " + selDetailUuid);
-                                if (selDetail.maxAzimuth().isDirty())
-                                {
-                                    trace(QString("SendRPC Rotator set maxAzimuth %1").arg(selDetail.maxAzimuth().getValue()));
-                                    tslf->on_RotatorMaxAzimuth(QString::number(selDetail.maxAzimuth().getValue()));
-                                }
-                                if (selDetail.minAzimuth().isDirty())
-                                {
-                                    trace(QString("SendRPC Rotator set minAzimuth %1").arg(selDetail.minAzimuth().getValue()));
-                                    tslf->on_RotatorMinAzimuth(QString::number(selDetail.minAzimuth().getValue()));
-                                }
-                                if (selDetail.cwCcwCmdEnable().isDirty())
-                                {
-                                    trace(QString("SendRPC Rotator set cwCcwCmdEnable %1").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False"));
-                                    tslf->on_cwCcwCmdEnable(selDetail.cwCcwCmdEnable().getValue());
-                                }
-                                selDetail.clearDirty();
-
-                            }
-                            if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
-                            {
-                                trace("SendRPC Rotator set presets " + rotatorCache.getRotatorPresets(rotSelected));
-                                tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
-                            }
-                        }
-                        rotatorCache.rotatorPresetsClearDirty();
-                    }
-                }
-            }
-        }
         for (int i = 0; i < frames.size(); i++)
         {
             //TSingleLogFrame *tslf = frames[i];
@@ -654,3 +800,137 @@ const RigDetails &TSendDM::getRigDetails(const QString &name)
 }
 //---------------------------------------------------------------------------
 
+void TSendDM::subscribeApps()
+{
+    /*
+        for each type of interest (i.e. not chat or monitor)
+
+        We need to subscribe to all server names - cf chatserver
+
+    rpc->subscribe(rpcConstants::LocalStationCategory);
+
+        NB we should try to integrate chat and monitor into this part
+
+        look for all config entries
+
+        If local, then we subscribe to it
+
+        if remote and server is empty, then we want all servers as they become available
+        if remote and a named server, then subscribe to that server only
+
+        We need to save all this, and restrict on the app name as well
+
+        So, we need some structures
+
+        ?? key a list by category subscribed - each entry a chain of entries?
+
+        type of app
+        server name
+        app name
+        state
+
+        When we get a LocalStationCategory notification, we need to look down the list
+        and if this servername or server name is blank, then subcribe to the relevant
+        category on this server. Extra subscriptions are harmless(I am pretty certain -
+        maybe they will force a set of notifications).
+
+        When we get an "other category" notification we need to find the relevant entries
+        and check the app name before responding to it.
+
+    */
+    trace("subscribeApps");
+    invalidateCache();
+
+    catMap.clear();
+    connectables.clear();
+    servers.clear();
+
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+    MinosConfig *config = MinosConfig::getMinosConfig();
+
+    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = config->elelist.begin(); i != config->elelist.end(); i++ )
+    {
+        if (!(*i)->deleted)
+        {
+            QSharedPointer<Connectable> res = (*i)->connectable();
+            connectables.push_back(res);
+        }
+    }
+
+    for ( QVector <QSharedPointer<Connectable> >::iterator i = connectables.begin(); i != connectables.end(); i++ )
+    {
+        if ((*i)->appType == "None")
+        {
+            // no action
+        }
+        else if ((*i)->appType == "AppStarter")
+        {
+            // no action
+        }
+        else if ((*i)->appType == "BandMap")
+        {
+            // no action
+        }
+        else if ((*i)->appType == "Chat")
+        {
+            // no action - done in chat server
+        }
+        else if ((*i)->appType == "Keyer")
+        {
+            catMap[rpcConstants::KeyerCategory].push_back((*i));
+        }
+        else if ((*i)->appType == "LineControl")
+        {
+            // no action except in keyer
+        }
+        else if ((*i)->appType == "Logger")
+        {
+            // no action
+        }
+        else if ((*i)->appType == "Monitor")
+        {
+            // no action
+        }
+         else if ((*i)->appType == "Other")
+        {
+            // no action
+        }
+        else if ((*i)->appType == "RigControl")
+        {
+            catMap[rpcConstants::rigControlCategory].push_back((*i));
+            catMap[rpcConstants::rigDetailsCategory].push_back((*i));
+            catMap[rpcConstants::rigStateCategory].push_back((*i));
+        }
+        else if ((*i)->appType == "Rotator")
+        {
+            catMap[rpcConstants::RotatorCategory].push_back((*i));
+            catMap[rpcConstants::rotatorDetailCategory].push_back((*i));
+            catMap[rpcConstants::rotatorStateCategory].push_back((*i));
+            catMap[rpcConstants::rotatorPresetsCategory].push_back((*i));
+        }
+        else if ((*i)->appType == "Server")
+        {
+            catMap[rpcConstants::LocalStationCategory].push_back((*i));
+            catMap[rpcConstants::StationCategory].push_back((*i));
+        }
+    }
+
+    if (!servers.contains(config->getThisServerName()))
+    {
+        servers.append(config->getThisServerName());
+        for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
+        {
+            for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
+            {
+                if ((*j)->runType == RunLocal)
+                {
+                    rpc->subscribeRemote(config->getThisServerName(), i.key());
+                }
+                else if ((*j)->runType == ConnectServer && !(*j)->serverName.isEmpty())
+                {
+                    rpc->subscribeRemote((*j)->serverName, i.key());
+                }
+            }
+        }
+    }
+}

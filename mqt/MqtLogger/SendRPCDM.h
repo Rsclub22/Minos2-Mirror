@@ -26,6 +26,9 @@ class TSendDM : public QObject
    private:  	// User declarations
       RigCache rigCache;
       RotatorCache rotatorCache;
+      QMap<QString,QVector< QSharedPointer<Connectable> > > catMap;
+      QVector<QSharedPointer<Connectable> > connectables;
+      QVector<QString> servers;
 
       PubSubName keyerApp;
 
@@ -34,6 +37,8 @@ class TSendDM : public QObject
    public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();
+
+      void subscribeApps();
 
       bool radioLoaded = false;
       bool rotatorLoaded = false;
@@ -64,9 +69,11 @@ class TSendDM : public QObject
       void sendRigSelection(const PubSubName &name, const QString &mode, const QString &uuid);
       void sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq);
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
+      void sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level);
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);
       void sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq);
       void sendRigControlRitStatus(TSingleLogFrame *tslf,const bool &status);
+      void sendRigControlTpm(TSingleLogFrame *tslf,int tpm, QString &freq);
 
       QStringList rotators();
       QStringList rigs();
@@ -74,7 +81,12 @@ class TSendDM : public QObject
       const RigState &getRigState(const QString &);
       const RigDetails &getRigDetails(const QString &);
 
-   private slots:
+      void notifyRigChanges();
+
+      
+      void notifyRotChanges();
+
+private slots:
       void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
       void on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
 
@@ -82,21 +94,10 @@ signals:
       void setBandMapLoaded();
 
       void RotatorLoaded();
-      void RotatorList(QString);
-      //void RotatorPresetList(QString);
-      //void RotatorState(QString);
-      //void RotatorBearing(QString);
-      //void RotatorMaxAzimuth(QString);
-      //void RotatorMinAzimuth(QString);
+      void RotatorList();
 
       void setRadioLoaded();
-      //void setMode(QString);
-      //void setFreq(QString);
-      //void setRadioState(QString);
-      //void setRadioTxVertStatus(QString);
-      void setRadioList(QString);
-      //void setBandList(QString);
-      void setRadioName(QString);
+      void setRadioList();
 
       void setKeyerLoaded();
 

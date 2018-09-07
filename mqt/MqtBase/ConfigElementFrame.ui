@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>393</width>
-    <height>231</height>
+    <width>682</width>
+    <height>353</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,6 +36,29 @@
       <widget class="QCheckBox" name="hideAppCheckBox">
        <property name="text">
         <string>Hide when running</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="LocalRemote">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -74,6 +97,9 @@
       <widget class="QLineEdit" name="elementNameEdit">
        <property name="readOnly">
         <bool>false</bool>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -225,7 +251,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="programNameEdit"/>
+              <widget class="QLineEdit" name="programNameEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QToolButton" name="programBrowseButton">
@@ -249,7 +279,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="parametersEdit"/>
+              <widget class="QLineEdit" name="parametersEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -266,7 +300,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="homeDirectoryEdit"/>
+              <widget class="QLineEdit" name="homeDirectoryEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
               <widget class="QToolButton" name="homeDirectoryBrowse">
@@ -288,41 +326,51 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <property name="spacing">
-            <number>4</number>
-           </property>
-           <property name="leftMargin">
-            <number>1</number>
-           </property>
-           <property name="topMargin">
-            <number>1</number>
-           </property>
-           <property name="rightMargin">
-            <number>1</number>
-           </property>
-           <property name="bottomMargin">
-            <number>1</number>
-           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
-            <widget class="QLabel" name="label_6">
+            <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>Remote App Name</string>
+              <string>Leave the app name and/or the server name empty to get information from any app on a server, any server, or any app on any server</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="remoteAppNameEdit"/>
-           </item>
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Remote Server</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="serverNameEdit"/>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Remote App Name</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="remoteAppNameEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Remote Server</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="serverNameEdit">
+               <property name="clearButtonEnabled">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>

@@ -17,13 +17,14 @@
 [{"type": "This"},{"type": "Other"},{"type": "Arch"}]
 ]}]
 */
-static QString defaultConfig = "[{\"name\": \"default\","
+static QString defaultConfig = "[{\"name\": \"%1\","
         "\"rows\":["
-        "[{\"type\": \"%1\"},{\"type\": \"%2\"}],"
-        "[{\"type\": \"%3\"},{\"type\": \"%4\"},{\"type\": \"%5\"}],"
-        "[{\"type\": \"%6\"},{\"type\": \"%7\"}],"
-        "[{\"type\": \"%8\"},{\"type\": \"%9\"},{\"type\": \"%10\"}]"
+        "[{\"type\": \"%2\"},{\"type\": \"%3\"}],"
+        "[{\"type\": \"%4\"},{\"type\": \"%5\"},{\"type\": \"%6\"}],"
+        "[{\"type\": \"%7\"},{\"type\": \"%8\"}],"
+        "[{\"type\": \"%9\"},{\"type\": \"%10\"},{\"type\": \"%11\"}]"
         "]}]";
+const QString ScreenConfigFile::defaultLayoutName = QString("default");
 
 ScreenConfigFile::ScreenConfigFile()
 {
@@ -51,7 +52,9 @@ bool ScreenConfigFile::readFile(QString f)
     else
     {
         trace("Failed to open " + f );
-        s = defaultConfig.arg(getScreenTypeString(sctLog))
+        s = defaultConfig
+                .arg(defaultLayoutName)
+                .arg(getScreenTypeString(sctLog))
                 .arg(getScreenTypeString(sctAux))
                 .arg(getScreenTypeString(sctRigControl))
                 .arg(getScreenTypeString(sctRotControl))
@@ -68,10 +71,10 @@ bool ScreenConfigFile::readFile(QString f)
         if( json.isArray())
         {
             configs.clear();
-            SC config;
             QJsonArray namearray = json.array();
             for (int i = 0; i < namearray.count(); i++)
             {
+                SC config;
                 QJsonObject namestruct = namearray[i].toObject();
                 QString name = namestruct.value("name").toString();
                 config.name = name;
@@ -86,7 +89,7 @@ bool ScreenConfigFile::readFile(QString f)
                         QJsonObject ele = elearray[k].toObject();
                         QString eletype = ele.value("type").toString();
                         scele.type = eletype;
-                        trace(QString("Name %1 row %2 ele %3 type %4").arg(name).arg(j).arg(k).arg(eletype));
+//                        trace(QString("Name %1 row %2 ele %3 type %4").arg(name).arg(j).arg(k).arg(eletype));
                         scrow.elements.push_back(scele);
                     }
                     config.rows.push_back(scrow);

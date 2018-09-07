@@ -11,6 +11,8 @@
 #ifndef DisplayContestContactH
 #define DisplayContestContactH 
 #include "base_pch.h"
+#include "contacts.h"
+class MinosTestImport;
 //----------------------------------------------------------------------------
 class DisplayContestContact: public BaseContact
 {

@@ -2,6 +2,8 @@
 
 #include "ContestApp.h"
 #include "tloccalcform.h"
+#include "contest.h"
+#include "ScreenContact.h"
 #include "tforcelogdlg.h"
 #include "ui_tforcelogdlg.h"
 

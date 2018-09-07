@@ -12,11 +12,14 @@
 #include "MinosLink.h"
 #include "clientThread.h"
 #include "serverThread.h"
+#include "PubSubServer.h"
+#include "MServerPubSub.h"
+#include "MServer.h"
 
 extern bool closeApp;
 
 //---------------------------------------------------------------------------
-TPubSubMain *PubSubMain = 0;
+TPubSubMain *PubSubMain = nullptr;
 //---------------------------------------------------------------------------
 static void makeRPCObjects()
 {
@@ -243,7 +246,7 @@ class PublishedKey: public Published
 void Subscriber::SendTo ( const PublishedKey &pk )
 {
    // Build the stanza, and send it to the subid
-   RPCClientNotifyClient rnc( 0 );
+   RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
    // local - no server
@@ -268,7 +271,7 @@ void Subscriber::SendTo ( const PublishedKey &pk )
 void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 {
    // Build the stanza, and send it to the subid
-   RPCClientNotifyClient rnc( 0 );
+   RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
    // server is remote server name (as published)
@@ -293,13 +296,13 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
 void ServerSubscriber::SendTo ( const PublishedKey &pk )
 {
    // Build the stanza, and send it to the subid
-   RPCServerNotifyClient rnc( 0 );
+   RPCServerNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
    //server is OUR server name
    QSharedPointer<RPCParam>sServer(new RPCStringParam( MinosServer::getMinosServer() ->getServerName() ));
    QSharedPointer<RPCParam>sCategory;
-   PublishedCategory *pc = 0;
+   PublishedCategory *pc = nullptr;
    QString cat;
    try
    {
@@ -347,7 +350,7 @@ QString Published::getPublisherServer()
     if (publisherServer == "localhost")
     {
         QString sname = MinosServer::getMinosServer()->getServerName();
-        publisherServer == sname;
+        publisherServer = sname;
     }
     return publisherServer;
 }
@@ -357,7 +360,7 @@ void Published::clearPublist()
    for ( PublishedCategoryListIterator i = Published::publist.begin(); i != Published::publist.end(); i++ )
    {
       delete ( *i );
-      (*i) = 0;
+      (*i) = nullptr;
    }
    Published::publist.clear();
 }
@@ -381,7 +384,7 @@ int Published::GetPublishedCount()
 }
 bool noCategoryConnection( PublishedCategory *pc )
 {
-   if ( pc == 0 )
+   if ( pc == nullptr )
       return true;
    else
       return false;
@@ -624,26 +627,26 @@ PublishedCategory::~PublishedCategory()
    for ( SubscriberListIterator i = subscribedLocal.begin(); i != subscribedLocal.end(); i++ )
    {
       delete ( *i );
-      (*i) = 0;
+      (*i) = nullptr;
    }
    subscribedLocal.clear();
    for ( RemoteSubscriberListIterator i = subscribedRemote.begin(); i != subscribedRemote.end(); i++ )
    {
       delete ( *i );
-      (*i) = 0;
+      (*i) = nullptr;
    }
    subscribedRemote.clear();
    for ( ServerSubscriberListIterator i = subscribedServer.begin(); i != subscribedServer.end(); i++ )
    {
       delete ( *i );
-      (*i) = 0;
+      (*i) = nullptr;
    }
    subscribedServer.clear();
 
    for ( PublishedKeyListIterator i = pubkeylist.begin(); i != pubkeylist.end(); i++ )
    {
       delete ( *i );
-      (*i) = 0;
+      (*i) = nullptr;
    }
    pubkeylist.clear();
 }
@@ -655,7 +658,7 @@ Subscriber * PublishedCategory::getClientSubscribed( const QString &subId )
       if ( ( *i ) ->getSjid() == subId )
          return ( *i );
    }
-   return 0;
+   return nullptr;
 }
 //---------------------------------------------------------------------------
 RemoteSubscriber * PublishedCategory::getRemoteSubscribed( const QString &subId )
@@ -665,7 +668,7 @@ RemoteSubscriber * PublishedCategory::getRemoteSubscribed( const QString &subId 
       if ( ( *i ) ->getSjid() == subId )
          return ( *i );
    }
-   return 0;
+   return nullptr;
 }
 //---------------------------------------------------------------------------
 ServerSubscriber * PublishedCategory::getServerSubscribed( const QString &subId )
@@ -675,11 +678,15 @@ ServerSubscriber * PublishedCategory::getServerSubscribed( const QString &subId 
       if ( ( *i ) ->getSjid() == subId )
          return ( *i );
    }
-   return 0;
+   return nullptr;
 }
 //---------------------------------------------------------------------------
 PublishedKey::PublishedKey( bool local, const QString &pubId, const QString &svr, PublishedCategory *pcat, const QString &key, PublishState pState ) :
-      Published( pubId, local ), server( svr ), cat( pcat ), key( key ), state ( pState )
+      Published( pubId, local )
+    , server( svr )
+    , key( key )
+    , state ( pState )
+    , cat( pcat )
 {}
 PublishedKey::~PublishedKey()
 {}
@@ -694,7 +701,7 @@ TPubSubMain::~TPubSubMain()
 {
 }
 //---------------------------------------------------------------------------
-const char *stateList[] =
+static const char *stateList[] =
 {
    "P",
    "R",
@@ -881,7 +888,7 @@ void TPubSubMain::serverNotifyCallback(bool err, QSharedPointer<MinosRPCObj> mro
 }
 bool nopub( PublishedKey *ip )
 {
-   if ( ip == 0 )
+   if ( ip == nullptr )
       return true;
    else
       return false;
@@ -901,7 +908,7 @@ void TPubSubMain::revokeClient(const QString &pubId)
             // publish revoke
             TPubSubMain::publish( pubId, (*f)->getCategory(), (*i)->getPubKey(), "", psRevoked );
             delete (*i);
-            (*i) = 0;
+            (*i) = nullptr;
          }
       }
       (*f)->pubkeylist.erase( std::remove_if( (*f)->pubkeylist.begin(), (*f)->pubkeylist.end(), nopub ), (*f)->pubkeylist.end() );
@@ -927,7 +934,7 @@ void TPubSubMain::disconnectServer(const QString &pubId)
    if (publisherServer == "localhost")
    {
         QString sname = MinosServer::getMinosServer()->getServerName();
-        publisherServer == sname;
+        publisherServer = sname;
    }
 
    for ( PublishedCategoryListIterator f = Published::publist.begin(); f != Published::publist.end(); f++ )
@@ -940,7 +947,7 @@ void TPubSubMain::disconnectServer(const QString &pubId)
             // publish revoke
             TPubSubMain::serverPublish( pk->getPubId(), publisherServer, (*f)->getCategory(), pk->getPubKey(), "", psRevoked );
             delete (*i);
-            (*i) = 0;
+            (*i) = nullptr;
          }
       }
       (*f)->pubkeylist.erase( std::remove_if( (*f)->pubkeylist.begin(), (*f)->pubkeylist.end(), nopub ), (*f)->pubkeylist.end() );

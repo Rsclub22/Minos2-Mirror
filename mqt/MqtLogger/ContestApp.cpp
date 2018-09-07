@@ -158,17 +158,17 @@ bool TContestApp::initialise()
 
     QString entfile;
     loggerBundle.getStringProfile( elpEntryFile, entfile );
-    BundleFile::bundleFiles[ epENTRYPROFILE ] ->openProfile( entfile, "Contest Entry details" );
+    BundleFile::bundleFiles[ epENTRYPROFILE ] ->openProfile( entfile, "Contest Entry Details" );
     //----------------------------------
 
     QString qthfile;
     loggerBundle.getStringProfile( elpQTHFile, qthfile );
-    BundleFile::bundleFiles[ epQTHPROFILE ] ->openProfile( qthfile, "QTH details" );
+    BundleFile::bundleFiles[ epQTHPROFILE ] ->openProfile( qthfile, "QTH Details" );
     //----------------------------------
 
     QString stationfile;
     loggerBundle.getStringProfile( elpStationFile, stationfile );
-    BundleFile::bundleFiles[ epSTATIONPROFILE ] ->openProfile( stationfile, "Station details" );
+    BundleFile::bundleFiles[ epSTATIONPROFILE ] ->openProfile( stationfile, "Station Details" );
     //----------------------------------
 
     QString locsfile;

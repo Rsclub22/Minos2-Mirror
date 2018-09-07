@@ -32,7 +32,7 @@ class ListContact;
 class FocusWatcher;
 class MatchTreeFrame;
 class ChatFrame;
-
+class MinosSplitter;
 
 // We may need to define our own validation controls with valid methods
 // for each needed type...
@@ -86,13 +86,16 @@ public:
 
     ScreenContact &getScreenEntry();
     int getBearingFrmQSOLog();
+    int getCurrentBearing();
 
     void refreshMults();
 
     bool logColumnsChanged;
     bool splittersChanged;
 
+    // From rigcontrol
     QString sCurFreq;
+    QString sCurRitFreq;
     QString sCurMode;
 
     bool isBandMapLoaded();
@@ -125,11 +128,17 @@ public:
     void getCurrentDetails(memoryData::memData &m);
 
     void checkConnections();
+    void applyScreenLayout();
+    QString getCurScreenLayout() const;
+
+    void setCurScreenLayout(const QString &value);
+
 private:
-//    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
+    //    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
     QSOGridModel qsoModel;
     int splitterHandleWidth;
+    QString curScreenLayout;
 
     int lastStanzaCount;
 
@@ -147,6 +156,8 @@ private:
     MatchTreeItem *getXferItem();
 
     void buildScreenLayout();
+    void createScreenComponents();
+    void clearScreenLayout();
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
@@ -179,17 +190,21 @@ private slots:
     void on_BandMapLoaded();
 
     void on_RadioLoaded();
-    void on_SetRadioList(QString);
+    void on_SetRadioList();
     void on_SetBandList(QString);
     void on_SetMode(QString);
     void on_SetFreq(QString);
+    void on_SetRitFreq(QString);
+    void on_SetRitRadioStatus(bool);
+    void on_SetVolume(int level);
     void on_SetRadioStatus(QString);
-    //void on_SetRadioTxVertState(QString s);
+    void on_SetRadioTpm(int);
     void on_SetRadioTxVertState(bool s);
     void on_SetRitEnableState(bool s);
+    void on_SetRadioVolumeState(bool s);
 
     void on_RotatorLoaded();
-    void on_RotatorList(QString);
+    void on_RotatorList();
     void on_RotatorPresetList(QString);
     void on_RotatorStatus(QString);
     void on_RotatorBearing(QString);
@@ -214,6 +229,14 @@ private slots:
     void sendSelectRadio(const QString &, const QString &mode);
     void sendSelectRotator(const QString &);
     void onSplitterMoved(int, int);
+
+    void on_doRepaint();
+    void sendRadioVolume(int);
+public:
+    void sendTpm(int t, QString f);
+
+signals:
+    void do_repaint();
 };
 
 #endif // TSINGLELOGFRAME_H

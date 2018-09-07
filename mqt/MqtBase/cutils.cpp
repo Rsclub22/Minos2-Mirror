@@ -9,6 +9,8 @@
 #include "base_pch.h"
 #include "MinosLoggerEvents.h"
 
+#include "cutils.h"
+
 const double pi = 3.141592653 ;  /* pi */
 const double dr = pi / 180.0;      // degree to radian conversion factor
 
@@ -246,11 +248,7 @@ QString makeADIFField( const QString &fieldname, int content )
 {
    return makeADIFField( fieldname, QString::number(content) );
 }
-//=============================================================================
-QString strupr( const QString &s )
-{
-    return s.toUpper();
-}
+
 //=============================================================================
 
 int strnicmp( const QString &s1, const QString &s2, int len )

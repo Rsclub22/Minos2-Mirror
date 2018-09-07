@@ -152,7 +152,8 @@ void TransVertSetupForm::calcOffset()
     if (transVertData->targetFreq >= transVertData->fLow && transVertData->targetFreq <= transVertData->fHigh)
     {
         transVertData->transVertOffset = transVertData->targetFreq - transVertData->radioFreq;
-        transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
+        //transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
+        transVertData->transVertOffsetStr = convertFreqStrDispSingleNoTrailZero(convertFreqToStr(transVertData->transVertOffset));
 
         // display
         ui->offsetFreq->setText(transVertData->transVertOffsetStr);

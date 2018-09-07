@@ -14,7 +14,7 @@ public:
 
     QString appType;
     QString appPath;
-    QStringList requires;
+    QStringList requiresApps;
     bool server = false;
     bool localOK = false;
     bool remoteOK = false;
@@ -38,7 +38,7 @@ class RunConfigElement: public QObject
 {
     Q_OBJECT
 private:  	// User declarations
-    QProcess *runner = 0;
+    QProcess *runner = nullptr;
 public:  		// User declarations
     bool newElement = false;
     bool deleted = false;
@@ -54,7 +54,7 @@ public:  		// User declarations
     QString runType;
     QString appType;
 
-    QStringList requires;
+    QStringList requiresApps;
 
     bool showAdvanced = false;
     bool rEnabled = false;
@@ -67,11 +67,15 @@ public:  		// User declarations
 
     void save(INIFile &);
 
-    Connectable connectable();
+    QSharedPointer<Connectable> connectable();
 
     void createProcess();
     void stopProcess();
     void sendCommand(const QString & cmd);
+    bool isRunning()
+    {
+        return runner != nullptr;
+    }
 private slots:
     void	on_started();
     void    on_finished(int, QProcess::ExitStatus exitStatus);
@@ -103,15 +107,17 @@ public:  		// User declarations
 
     ~MinosConfig();
 
+    void reset();
+
     QVector <QSharedPointer<RunConfigElement> > elelist;
 
     QString getThisServerName();
 
     QStringList getAppTypes();
-    Connectable getApp(QString appName);
+    QSharedPointer<Connectable> getApp(QString appName);
     AppConfigElement getAppConfigElement(QString appType);
 
-    void cleanElementsOnCancel();
+//    void cleanElementsOnCancel();
     void saveAll();
 
     void start();
@@ -122,6 +128,7 @@ public:  		// User declarations
     void setAutoStart(bool);
 
     QString checkConfig();
+    bool anyRunning();
 
 };
 //---------------------------------------------------------------------------

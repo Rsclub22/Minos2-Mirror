@@ -20,8 +20,7 @@ enum LOGGERPROFILE {
    elpEntryFile,
    elpStationFile,
    elpQTHFile,
-   elpAutoFill,
-   elpAuxWindows
+   elpAutoFill
 };
 enum PRELOADPROFILE {eppSession, eppCurrent, eppDefSession};
 
@@ -31,7 +30,9 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
                      edpShowWorked, edpShowUnworked,
                      edpStackFrame,
                      edpShowOperators,
-                     edpEditor, edpStatisticsPeriod1, edpStatisticsPeriod2
+                     edpEditor, edpStatisticsPeriod1, edpStatisticsPeriod2,
+                     edpCurrentLayout,
+                     edpShowTPM
                     };
 enum ENTRYPROFILE {eepCall, eepEntrant, eepMyName, eepMyCall,
                    eepMyAddress1, eepMyAddress2, eepMyCity, eepMyPostCode, eepMyCountry,

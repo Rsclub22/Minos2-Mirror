@@ -4,5 +4,6 @@
 #include <QApplication>
 
 extern void appStartup(const QString &appName);
+QString getAppStartupName();
 
 #endif // APPSTARTUP_H

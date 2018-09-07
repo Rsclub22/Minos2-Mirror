@@ -23,8 +23,8 @@ public:
     virtual QSOMatchGridModel *getMatchModel() override
     {
         return &otherMatchModel;
-    }private slots:
-    virtual void on_MatchStarting(BaseContestLog*) override;
+    }
+private slots:
 
     virtual void on_matchTreeSelectionChanged(const QItemSelection &, const QItemSelection &) override;
 

@@ -38,7 +38,7 @@ ControlMain::ControlMain(QWidget *parent) :
     stdinReader.start();
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::controlApp);
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
 //    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));

@@ -8,9 +8,14 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
 #include <QHostInfo>
-
+#include "cutils.h"
 #include "Calendar.h"
 #include "CalendarList.h"
+#include "contacts.h"
+#include "ScreenContact.h"
+#include "MinosTestImport.h"
+
+#include "contest.h"
 
 BaseContestLog::BaseContestLog( )
 {
@@ -23,9 +28,9 @@ BaseContestLog::BaseContestLog( )
    protectedContest.setValue( false );
   allowLoc8.setValue( false );
   allowLoc4.setValue ( false );
-  RSTField.setValue( true );
-  serialField.setValue( true );
-  locatorField.setValue( true );
+  RSTMandatoryField.setValue( true );
+  serialMandatoryField.setValue( true );
+  locatorMandatoryField.setValue( true );
   otherExchange.setValue( false );
   countryMult.setValue( false );
   nonGCountryMult.setValue( false );
@@ -39,23 +44,18 @@ BaseContestLog::BaseContestLog( )
   MGMContestRules.setValue(false);
 
    int nc = MultLists::getMultLists() ->getCtryListSize();
-   countryWorked = new int[ nc ];
+   countryWorked =QSharedPointer<int>( new int[ nc ]);
    for ( int i = 0; i < nc; i++ )
-      countryWorked[ i ] = 0;
+      countryWorked.data()[ i ] = 0;
 
    nc = MultLists::getMultLists() ->getDistListSize();
-   districtWorked = new int[ nc ];
+   districtWorked = QSharedPointer<int>(new int[ nc ]);
    for (int i = 0; i < nc; i++ )
-      districtWorked[ i ] = 0;
+      districtWorked.data()[ i ] = 0;
 
 }
 BaseContestLog::~BaseContestLog()
 {
-   delete [] districtWorked;
-   delete [] countryWorked;
-   districtWorked = nullptr;
-   countryWorked = nullptr;
-
    closeFile();
 }
 int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
@@ -104,9 +104,9 @@ void BaseContestLog::clearDirty()
    myloc.loc.clearDirty();
    allowLoc4.clearDirty();
    allowLoc8.clearDirty();
-   RSTField.clearDirty();
-   serialField.clearDirty();
-   locatorField.clearDirty();
+   RSTMandatoryField.clearDirty();
+   serialMandatoryField.clearDirty();
+   locatorMandatoryField.clearDirty();
    power.clearDirty();
    currentMode.clearDirty();
    band.clearDirty();
@@ -140,9 +140,9 @@ void BaseContestLog::setDirty()
    myloc.loc.setDirty();
    allowLoc4.setDirty();
    allowLoc8.setDirty();
-   RSTField.setDirty();
-   serialField.setDirty();
-   locatorField.setDirty();
+   RSTMandatoryField.setDirty();
+   serialMandatoryField.setDirty();
+   locatorMandatoryField.setDirty();
    power.setDirty();
    currentMode.setDirty();
    band.setDirty();
@@ -173,25 +173,23 @@ void BaseContestLog::makeContact( bool timeNow, QSharedPointer<BaseContact>&lct 
 }
 void BaseContestLog::validateLoc( )
 {
-    if (MGMContestRules.getValue())
+    if ( myloc.validate( odea, odna ) == LOC_OK )
     {
-        Locator nloc;
-        nloc.loc.setValue(myloc.loc.getValue().left(4) + "MM");
-        if ( nloc.validate( ode, odn ) == LOC_OK )
-        {
-            cosodn = cos( odn );
-            sinodn = sin( odn );
-            locValid = true;
-            myloc.valRes = LOC_OK;
-        }
-        else
-            locValid = false;
-    }
-    else if ( myloc.validate( ode, odn ) == LOC_OK )
-    {
-        cosodn = cos( odn );
-        sinodn = sin( odn );
+        cosodna = cos( odna );
+        sinodna = sin( odna );
         locValid = true;
+    }
+    else
+        locValid = false;
+
+    Locator nloc;
+    nloc.loc.setValue(myloc.loc.getValue().left(4) + "MM");
+    if ( nloc.validate( odec, odnc ) == LOC_OK )
+    {
+        cosodnc = cos( odnc );
+        sinodnc = sin( odnc );
+        locValid = true;
+        myloc.valRes = LOC_OK;
     }
     else
         locValid = false;
@@ -210,7 +208,7 @@ void BaseContestLog::validateLoc( )
 /* Latitude is NS, Longtitude is EW                                  */
 /*                                                                   */
 /*********************************************************************/
-void BaseContestLog::disbear( double lon, double lat, double &dist, int &brg ) const
+void BaseContestLog::disbeara( double lon, double lat, double &dist, int &brg ) const
 //double lon ;                    /* other stations longtitude */
 //double lat ;                    /* other stations latitude */
 //int *dist ;                     /* resulting distance */
@@ -223,7 +221,7 @@ void BaseContestLog::disbear( double lon, double lat, double &dist, int &brg ) c
       brg = 0;
       return ;
    }
-   if ( almost_equal(lon, ode, 2) && almost_equal(lat, odn, 2) )        /* same square ! */ /* testing doubles for equality! */
+   if ( almost_equal(lon, odea, 2) && almost_equal(lat, odna, 2) )        /* same square ! */ /* testing doubles for equality! */
    {
       // same square - commenced Kilometre, so always 1
       dist = 1;
@@ -233,11 +231,11 @@ void BaseContestLog::disbear( double lon, double lat, double &dist, int &brg ) c
 
    double coslat = cos( lat );                    /* pre-calculate values */
    double sinlat = sin( lat );
-   double coscos = cosodn * coslat ;
+   double coscos = cosodna * coslat ;
 
    // first distance into dx
 
-   double co = cos( ode - lon ) * coscos + sinodn * sinlat ;
+   double co = cos( odea - lon ) * coscos + sinodna * sinlat ;
    double ca = atan( fabs( sqrt( 1.0 - co * co ) / co ) );
    if ( co < 0.0 )
       ca = pi - ca ;
@@ -245,8 +243,62 @@ void BaseContestLog::disbear( double lon, double lat, double &dist, int &brg ) c
 
    // and then the bearing
 
-   double si = sin( lon - ode ) * coscos ;
-   co = sinlat - sinodn * cos( ca );
+   double si = sin( lon - odea ) * coscos ;
+   co = sinlat - sinodna * cos( ca );
+   double az = atan( fabs( si / co ) );
+   if ( co < 0.0 )
+      az = pi - az ;
+   if ( si <  0.0 )
+      az = -az ;
+   if ( az < 0.0 )
+      az = az + 2.0 * pi ;
+
+   az = az / dr ;                      /* convert to degrees */
+   az += 0.5 ;                /* correct angle */
+   dx = ceil( dx );                      // adjust for commenced kilometer
+   dx += 0.5 ;              // make sure double truncates properly back to int
+   dist = dx ;			                  /* return result */
+   if ( static_cast<int>(az) == 0 )                  /* due north */
+      az = 360.00 ;                 	/* so show valid */
+   brg = static_cast< int > (az) ;                   /* and give it back as integer */
+}
+void BaseContestLog::disbearc( double lon, double lat, double &dist, int &brg ) const
+//double lon ;                    /* other stations longtitude */
+//double lat ;                    /* other stations latitude */
+//int *dist ;                     /* resulting distance */
+//int *brg ;                      /* resulting bearing */
+
+{
+   if ( myloc.valRes != LOC_OK )
+   {
+      dist = 1;
+      brg = 0;
+      return ;
+   }
+   if ( almost_equal(lon, odec, 2) && almost_equal(lat, odnc, 2) )        /* same square ! */ /* testing doubles for equality! */
+   {
+      // same square - commenced Kilometre, so always 1
+      dist = 1;
+      brg = 0 ;                       /* or bearing */
+      return ;                         /* just exit */
+   }
+
+   double coslat = cos( lat );                    /* pre-calculate values */
+   double sinlat = sin( lat );
+   double coscos = cosodnc * coslat ;
+
+   // first distance into dx
+
+   double co = cos( odec - lon ) * coscos + sinodnc * sinlat ;
+   double ca = atan( fabs( sqrt( 1.0 - co * co ) / co ) );
+   if ( co < 0.0 )
+      ca = pi - ca ;
+   double dx = 6371.291 * ca ;       /* 6371.291 is approved radius of earth */
+
+   // and then the bearing
+
+   double si = sin( lon - odec ) * coscos ;
+   co = sinlat - sinodnc * cos( ca );
    double az = atan( fabs( si / co ) );
    if ( co < 0.0 )
       az = pi - az ;
@@ -275,7 +327,7 @@ bool BaseContestLog::getsdist( const QString &loc, QString &minloc, double &mind
    int lres = lonlat( loc, lon, lat );
    if ( lres == LOC_OK || lres == LOC_SHORT )
    {
-      disbear( lon, lat, dist, brg );
+      disbeara( lon, lat, dist, brg );
       if ( dist < mindist )
       {
          mindist = dist;
@@ -332,7 +384,7 @@ int BaseContestLog::CalcNearest( const QString &qscalcloc )
    return static_cast<int>(mindist);
 }
 //---------------------------------------------------------------------------
-int BaseContestLog::CalcCentres( const QString &qscalcloc )
+int BaseContestLog::CalcCentres( const QString &qscalcloc, int &brg )
 {
    if ( qscalcloc.length() < 4 )
       return 0;	// only valid 4 or more fig locs
@@ -341,7 +393,6 @@ int BaseContestLog::CalcCentres( const QString &qscalcloc )
 
    QString temploc = qscalcloc.left(4) + "MM";
 
-   int brg;
    double dist = 0.0;
    double lon = 0.0;
    double lat = 0.0;
@@ -349,7 +400,7 @@ int BaseContestLog::CalcCentres( const QString &qscalcloc )
    int lres = lonlat( temploc, lon, lat );
    if (lres == LOC_OK)
    {
-        disbear(lon, lat, dist, brg);
+        disbearc(lon, lat, dist, brg);
    }
    return static_cast<int>(dist);
 }
@@ -577,19 +628,17 @@ void BaseContestLog::scanContest( )
 
    locs.llist.clear();
 
-   delete [] districtWorked;
-   delete [] countryWorked;
-   districtWorked = nullptr;
-   countryWorked = nullptr;
+   districtWorked.clear();
+   countryWorked.clear();
 
    int nc = MultLists::getMultLists() ->getDistListSize();
-   districtWorked = new int[ nc ];
+   districtWorked = QSharedPointer<int>(new int[ nc ]);
    int si = static_cast<int>(sizeof (int));
-   memset( districtWorked, 0, static_cast<size_t>(nc * si) );
+   memset( districtWorked.data(), 0, static_cast<size_t>(nc * si) );
 
    nc = MultLists::getMultLists() ->getCtryListSize();
-   countryWorked = new int[ nc ];
-   memset( countryWorked, 0, static_cast<size_t>(nc * si) );
+   countryWorked = QSharedPointer<int>(new int[ nc ]);
+   memset( countryWorked.data(), 0, static_cast<size_t>(nc * si) );
 
    // set up for the idle loop scan
    // NB we may need to clear e.g. the accumulated score
@@ -715,7 +764,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
          continue;
       }
 
-     if ( locatorField.getValue() || nct->contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
+     if ( locatorMandatoryField.getValue() || nct->contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
                                                                                 // as it is 1 point.
       {
          int cscore = nct->contactScore.getValue();
@@ -995,9 +1044,9 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "AllowLoc8", allowLoc8 );
       mt->getStructArgMemberValue( "currentMode", currentMode);
 
-      mt->getStructArgMemberValue( "RSTField", RSTField);
-      mt->getStructArgMemberValue( "serialField", serialField);
-      mt->getStructArgMemberValue( "locatorField", locatorField);
+      mt->getStructArgMemberValue( "RSTField", RSTMandatoryField);
+      mt->getStructArgMemberValue( "serialField", serialMandatoryField);
+      mt->getStructArgMemberValue( "locatorField", locatorMandatoryField);
 
       mt->getStructArgMemberValue( "UKACBonus", usesBonus );
       mt->getStructArgMemberValue("BonusType", bonusType);
@@ -1295,10 +1344,17 @@ QString ContestScore::disp()
     }
     else
     {
+        /*
         buff = QString( "Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10(%11/%12) locators %13 = %14" )
             .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2).arg(brcc3).arg(ndistrict)
             .arg(brcc4).arg(brloc1).arg(nlocs).arg(nGlocs).arg(nonGlocs).arg(brloc2)
-            .arg(totalScore );    }
+            .arg(totalScore );
+        */
+        buff = QString( "Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14" )
+            .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2).arg(brcc3).arg(ndistrict)
+            .arg(brcc4).arg(brloc1).arg(nlocs).arg(brloc2)
+            .arg(totalScore );
+    }
    return buff;
 }
 //====================================================================

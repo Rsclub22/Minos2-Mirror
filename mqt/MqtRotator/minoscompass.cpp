@@ -186,7 +186,7 @@ void MinosCompass::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
         lastPoint = event->pos();
-        qDebug() << "mouse position" << lastPoint;
+        //qDebug() << "mouse position" << lastPoint;
     }
 }
 

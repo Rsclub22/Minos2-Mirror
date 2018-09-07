@@ -1,12 +1,12 @@
-#include "bandmapmainwindow.h"
-#include <QApplication>
+#include "base_pch.h"
 #include "AppStartup.h"
+#include "bandmapmainwindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    appStartup("MinosQtBandmap");
+    appStartup(rpcConstants::bandmapApp);
 
     BandMapMainWindow w;
     w.show();

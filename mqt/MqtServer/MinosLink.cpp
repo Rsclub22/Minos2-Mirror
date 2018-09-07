@@ -15,6 +15,7 @@
 #include "serverThread.h"
 
 #include "minoslistener.h"
+#include "MServer.h"
 
 extern bool closeApp;
 

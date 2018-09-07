@@ -1,8 +1,9 @@
 #include "base_pch.h"
-
+#include "contest.h"
+#include "latlong.h"
+#include "cutils.h"
 #include "LocCalcFrame.h"
 #include "ui_LocCalcFrame.h"
-#include "latlong.h"
 
 LocCalcFrame::LocCalcFrame(QWidget *parent) :
     QFrame(parent),
@@ -11,32 +12,8 @@ LocCalcFrame::LocCalcFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    S1LocFW = new FocusWatcher(ui->S1Loc);
-    ui->S1Loc->setValidator(new UpperCaseValidator(true));
-    ui->S1Loc->installEventFilter(this);
-    connect(S1LocFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-
-    S1LatLongFW = new FocusWatcher(ui->S1LatLong);
-    ui->S1LatLong->installEventFilter(this);
-    connect(S1LatLongFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-
-    S1NGRFW = new FocusWatcher(ui->S1NGR);
-    ui->S1NGR->installEventFilter(this);
-    connect(S1NGRFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-
-    S2LocFW = new FocusWatcher(ui->S2Loc);
-    ui->S2Loc->setValidator(new UpperCaseValidator(true));
-    ui->S2Loc->installEventFilter(this);
-    connect(S2LocFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-
-    S2LatLongFW = new FocusWatcher(ui->S2LatLong);
-    ui->S2LatLong->installEventFilter(this);
-    connect(S2LatLongFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-
-    S2NGRFW = new FocusWatcher(ui->S2NGR);
-    ui->S2NGR->installEventFilter(this);
-    connect(S2NGRFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-
+    ui->S1Grid->setValidator(new UpperCaseValidator(true));
+    ui->S2Grid->setValidator(new UpperCaseValidator(true));
 }
 
 LocCalcFrame::~LocCalcFrame()
@@ -50,13 +27,28 @@ void LocCalcFrame::setContest(BaseContestLog *ct)
 
 void LocCalcFrame::doExec()
 {
-    ui->S1Loc->setText(S1Loc);
-    ui->S2Loc->setText(S2Loc);
+    ui->S1Grid->setText(S1Loc);
+    ui->S2Grid->setText(S2Loc);
+
+    ui->S1LocRb->setChecked(true);
+    ui->S2LocRb->setChecked(true);
+
     on_CalcButton_clicked();
+}
+void LocCalcFrame::on_S1Calc_clicked()
+{
+    handleExit(ui->S1Grid);
+}
+
+void LocCalcFrame::on_S2Calc_clicked()
+{
+    handleExit(ui->S2Grid);
 }
 
 void LocCalcFrame::on_CalcButton_clicked()
 {
+    on_S1Calc_clicked();
+    on_S2Calc_clicked();
     // Now calculate distance to the current contest locator
 
     double dist = 0.0;
@@ -64,19 +56,16 @@ void LocCalcFrame::on_CalcButton_clicked()
     double longitude = 0.0;
     double latitude = 0.0;
 
-    if (handleExit( ui->S1Loc ) && handleExit( ui->S2Loc ) )
-    {
-       BaseContestLog cnt;
-       cnt.myloc.loc.setValue( ui->S1Loc->text().toUpper() );
-       cnt.validateLoc();
+    BaseContestLog cnt;
+    cnt.myloc.loc.setValue( ui->S1Loc->text().toUpper() );
+    cnt.validateLoc();
 
-       if ( lonlat( ui->S2Loc->text().toUpper(), longitude, latitude ) == LOC_OK )
-       {
-          cnt.disbear( longitude, latitude, dist, brg );
-          int idist = static_cast<int>(dist);
-          Distance = QString::number( idist );
-          ui->Distance->setText(QString( "Dist " ) + Distance + " km " + QString::number(brg) + " degrees");
-       }
+    if ( lonlat( ui->S2Loc->text().toUpper(), longitude, latitude ) == LOC_OK )
+    {
+        cnt.disbeara( longitude, latitude, dist, brg );
+        int idist = static_cast<int>(dist);
+        Distance = QString::number( idist );
+        ui->Distance->setText(QString( "Dist " ) + Distance + " km " + QString::number(brg) + " degrees");
     }
 
 }
@@ -95,18 +84,6 @@ void LocCalcFrame::on_CancelButton_clicked()
     dynamic_cast<QDialog *>(parent())->reject();
 }
 
-void LocCalcFrame::focusChange(QObject *obj, bool fIn, QFocusEvent * /*event*/)
-{
-    if (!fIn)
-    {
-        QLineEdit *Edit = dynamic_cast<QLineEdit *>(obj);
-        if (Edit)
-        {
-            handleExit(Edit);
-        }
-    }
-}
-
 bool LocCalcFrame::handleExit( QLineEdit *Edit )
 {
    Location l1, l2;
@@ -116,54 +93,63 @@ bool LocCalcFrame::handleExit( QLineEdit *Edit )
    QLineEdit *geoIl;
    QLineEdit *ngrIl;
 
-   if (Edit == ui->S1Loc)
+   if (Edit == ui->S1Grid)
    {
-         gstyle = LOC;
-         locIl = ui->S1Loc;
-         geoIl = ui->S1LatLong;
-         ngrIl = ui->S1NGR;
+       if (ui->S1LocRb->isChecked())
+       {
+             gstyle = LOC;
+             locIl = ui->S1Loc;
+             geoIl = ui->S1LatLong;
+             ngrIl = ui->S1NGR;
+             ui->S1Loc->setText(ui->S1Grid->text());
+       }
+       else if (ui->S1LatLongRb->isChecked())
+       {
+             gstyle = GEO;
+             locIl = ui->S1Loc;
+             geoIl = ui->S1LatLong;
+             ngrIl = ui->S1NGR;
+             ui->S1LatLong->setText(ui->S1Grid->text());
+       }
+       else if (ui->S1NGRRb->isChecked())
+       {
+             gstyle = NGR;
+             l1.centremeridian = degrad( -2.0 );
+             locIl = ui->S1Loc;
+             geoIl = ui->S1LatLong;
+             ngrIl = ui->S1NGR;
+             ui->S1NGR->setText(ui->S1Grid->text());
+       }
    }
-   else if (Edit == ui->S1LatLong)
+   else if (Edit == ui->S2Grid)
    {
-         gstyle = GEO;
-         locIl = ui->S1Loc;
-         geoIl = ui->S1LatLong;
-         ngrIl = ui->S1NGR;
+       if (ui->S2LocRb->isChecked())
+       {
+             gstyle = LOC;
+             locIl = ui->S2Loc;
+             geoIl = ui->S2LatLong;
+             ngrIl = ui->S2NGR;
+             ui->S2Loc->setText(ui->S2Grid->text());
+       }
+       else if (ui->S2LatLongRb->isChecked())
+       {
+             gstyle = GEO;
+             locIl = ui->S2Loc;
+             geoIl = ui->S2LatLong;
+             ngrIl = ui->S2NGR;
+             ui->S2LatLong->setText(ui->S2Grid->text());
+       }
+       else if (ui->S2NGRRb->isChecked())
+       {
+             gstyle = NGR;
+             locIl = ui->S2Loc;
+             geoIl = ui->S2LatLong;
+             ngrIl = ui->S2NGR;
+             l1.centremeridian = degrad( -2.0 );
+             ui->S2NGR->setText(ui->S2Grid->text());
+       }
    }
-   else if (Edit == ui->S1NGR)
-   {
-         gstyle = NGR;
-         l1.centremeridian = degrad( -2.0 );
-         locIl = ui->S1Loc;
-         geoIl = ui->S1LatLong;
-         ngrIl = ui->S1NGR;
-   }
-   else if (Edit == ui->S2Loc)
-   {
-         gstyle = LOC;
-         locIl = ui->S2Loc;
-         geoIl = ui->S2LatLong;
-         ngrIl = ui->S2NGR;
-   }
-   else if (Edit == ui->S2LatLong)
-   {
-         gstyle = GEO;
-         locIl = ui->S2Loc;
-         geoIl = ui->S2LatLong;
-         ngrIl = ui->S2NGR;
-   }
-   else if (Edit == ui->S2NGR)
-   {
-         gstyle = NGR;
-         locIl = ui->S2Loc;
-         geoIl = ui->S2LatLong;
-         ngrIl = ui->S2NGR;
-         l1.centremeridian = degrad( -2.0 );
-   }
-   else
-   {
-       return false;
-   }
+
 
    l1.gridstyle = gstyle;
    l1.datastring = Edit->text().trimmed().toUpper();
@@ -196,3 +182,4 @@ bool LocCalcFrame::handleExit( QLineEdit *Edit )
    }
    return true;
 }
+

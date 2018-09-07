@@ -2,6 +2,8 @@
 #define MATCHTREEFRAME_H
 
 #include "base_pch.h"
+#include "contest.h"
+#include "MatchCollection.h"
 
 namespace Ui {
 class MatchTreeFrame;
@@ -73,7 +75,7 @@ public:
     int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
 };
 
-class MatchTreeFrame : public QFrame
+class MatchTreeFrame : public QTreeView
 {
     Q_OBJECT
     Ui::MatchTreeFrame *ui;
@@ -109,8 +111,6 @@ protected:
     void showMatchList(SharedMatchCollection matchCollection );
 
 private slots:
-    virtual void on_MatchStarting(BaseContestLog*){}
-
     virtual void on_matchTreeSelectionChanged(const QItemSelection &, const QItemSelection &){}
 
     virtual void on_matchTree_doubleClicked(const QModelIndex &){}

@@ -18,15 +18,15 @@ class RigState: public PubSubValue
     MinosStringItem<QString> _status;
     MinosItem<double> _freq;
     MinosStringItem<QString> _mode;
+    MinosItem<int> _volLevel;
     MinosItem<double> _ritFreq;
-    MinosStringItem<QString> _ritEnableStatus;
-
+    MinosItem<bool> _ritOnOffStatus;
+    MinosItem<bool> _ritRadioStatus;
+    MinosItem<int> _tpm;
 
 public:
     RigState();
     RigState(QString s);
-    //RigState(const QString &status, const QString &sel, int f, const QString &m);
-    RigState(const QString &status, const QString &loggeruuid, const QString &sel, int f, const QString &m, double ritF, QString &rites);
 
     bool isDirty() const;
     void clearDirty();
@@ -39,15 +39,21 @@ public:
     MinosStringItem<QString> status() const;
     MinosItem<double> freq() const;
     MinosStringItem<QString> mode() const;
-    MinosStringItem<QString> ritEnableStatus() const;
+    MinosItem<bool> ritOnOffStatus() const;
+    MinosItem<bool> ritRadioStatus() const;
     MinosItem<double> ritFreq() const;
+    MinosItem<int> volLevel() const;
+    MinosItem<int> tpm() const;
 
     void setSelected(const QString &loggeruuid, const QString &selected);
     void setFreq(double freq);
     void setMode(const QString &mode);
+    void setVolume(int level);
     void setStatus(const QString &status);
     void setRitFreq(double freq);
-    void setRitEnableStatus(const QString &status);
+    void setRitOnOffStatus(const bool status);
+    void setRitRadioStatus(const bool status);
+    void setTpm(int tpm);
 
     QStringList getSelectedLoggers();
 };

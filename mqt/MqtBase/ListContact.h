@@ -10,7 +10,7 @@
 #ifndef ListContactH
 #define ListContactH 
 #include "base_pch.h"
-
+#include "contacts.h"
 //---------------------------------------------------------------------------
 class ListContact
 {

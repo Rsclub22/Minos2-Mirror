@@ -17,7 +17,7 @@ KeyerServer *KS = nullptr;
 //---------------------------------------------------------------------------
 KeyerServer::KeyerServer()
 {
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::keyerApp);
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));

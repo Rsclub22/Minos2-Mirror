@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="ChatFrame" name="frame">
+     <widget class="ChatFrame" name="chatFrame">
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>

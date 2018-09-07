@@ -34,8 +34,6 @@ public:
 
     TSendDM *sendDM;
 
-    void subscribeApps();
-
     void selectContest(BaseContestLog *pc, QSharedPointer<BaseContact> pct );
     bool show(int argc, char *argv[]);
     TSingleLogFrame *getCurrentLogFrame();
@@ -60,6 +58,9 @@ public:
     void closeSession();
     void selectSession(QString sessName);
 
+    void applyScreenLayouts();
+    void selectLayout(QString layout);
+
     SetMemoryAction *setMemoryAction;
 private:
     Ui::TLogContainer *ui;
@@ -69,6 +70,7 @@ private:
 
     QMenu TabPopup;
 
+    QMenu *screenLayoutMenu;
     enum { MaxRecentFiles = 5 };
     QVector<QAction *> recentFileActs;
     QMenu *recentFilesMenu;
@@ -91,6 +93,7 @@ private:
     void selectTab(int t);
 
     QAction *lastSessionSelected;
+    QAction *lastLayoutSelected;
 
     QAction *newAction(const QString &text, QMenu *m, const char *atype );
     SetMemoryAction *newMemoryAction(const QString &text, QMenu *m, const char *atype );
@@ -100,6 +103,7 @@ private:
     QAction *HelpAboutAction;
 
     QAction *FileOpenAction;
+    QAction *FileImportAction;
     QAction *ListOpenAccept;
     QAction *ContestDetailsAction;
     QAction *FileCloseAction;
@@ -150,13 +154,16 @@ private:
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
 
+    void updateLayoutsMenu();
 private slots:
     void CancelClick();
     void HelpAboutActionExecute();
 
+    void selectLayout();
     void selectSession();
     void openRecentFile();
     void FileOpenActionExecute();
+    void FileImportActionExecute();
     void ListOpenActionExecute();
     void ManageListsActionExecute();
     void ContestDetailsActionExecute();

@@ -33,6 +33,9 @@
          <property name="maxLength">
           <number>15</number>
          </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -60,6 +63,9 @@
          </property>
          <property name="text">
           <string/>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -112,6 +118,9 @@
          <property name="cursorPosition">
           <number>0</number>
          </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -133,6 +142,9 @@
          <property name="text">
           <string>000</string>
          </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
@@ -153,6 +165,9 @@
          </property>
          <property name="text">
           <string>00:00</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
          </property>
         </widget>
        </item>

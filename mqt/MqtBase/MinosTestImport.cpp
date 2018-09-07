@@ -8,6 +8,9 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
 #include "TinyUtils.h"
+#include "cutils.h"
+#include "contest.h"
+#include "MinosTestImport.h"
 
 MinosTestImport::MinosTestImport( BaseContestLog * const ct ) : ct( ct )
   , curfpos( 0 )

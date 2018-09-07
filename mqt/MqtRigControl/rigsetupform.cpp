@@ -169,17 +169,26 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         }
 
         // does this radio support rit?
+        // if radio has only get, then no support
+        // if radio has set, or set and get, then support.
         int retCode = 0;
         bool ritAvail = false;
-        radioData->ritAvail = false;
+        radioData->ritGetAvail = false;
+        radioData->ritSetAvail = false;
         ritEnableVisible(ritAvail);
-        retCode = radio->supportRit(radioData->radioModelNumber, &ritAvail);
+        retCode = radio->supportGetRit(radioData->radioModelNumber, &ritAvail);
         if (retCode >= 0)
         {
-            radioData->ritAvail = ritAvail;
-            ritEnableVisible(ritAvail);
+            radioData->ritGetAvail = ritAvail;
+
         }
 
+        retCode = radio->supportSetRit(radioData->radioModelNumber, &ritAvail);
+        if (retCode >= 0)
+        {
+            radioData->ritSetAvail = ritAvail;
+            ritEnableVisible(ritAvail);
+        }
 
         // does this radio support antenna sw?
         bool antSwFlg = false;
@@ -330,10 +339,11 @@ bool RigSetupForm::findSupRadioBand(const QString band)
 // is this band in the transverter list for this radio
 bool RigSetupForm::findSupTransBand(const QString band)
 {
-    if (radioData->numTransverters > 0)
+    if (radioData->transVertNames.count() > 0)
     {
-        for (int i = 0; i < radioData->numTransverters;i++)
+        for (int i = 0; i < radioData->transVertNames.count();i++)
         {
+
             if (band == radioData->transVertNames[i])
             {
                 return true;
@@ -1044,7 +1054,7 @@ void RigSetupForm::addTransVerter()
 {
 
     AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
-    if (addTransDialog.exec() == !QDialog::Accepted)
+    if (addTransDialog.exec() != QDialog::Accepted)
     {
         return;
     }
@@ -1114,7 +1124,6 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName)
        //transVertTab[tabNum]->antSwNumVisible(false);
        radioData->antSwitchAvail = false;
     }
-
     buildSupBandList();
     transVertTab[tabNum]->transVertValueChanged = true;
 
@@ -1198,7 +1207,7 @@ void RigSetupForm::changeBand()
     int tabNum = ui->transVertTab->currentIndex();
 
     AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
-    if (addTransDialog.exec() == !QDialog::Accepted)
+    if (addTransDialog.exec() != QDialog::Accepted)
     {
         return;
     }

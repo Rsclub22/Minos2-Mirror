@@ -1,6 +1,7 @@
 #include "base_pch.h"
 
 #include "ContestApp.h"
+#include "list.h"
 #include "tmanagelistsdlg.h"
 #include "ui_tmanagelistsdlg.h"
 

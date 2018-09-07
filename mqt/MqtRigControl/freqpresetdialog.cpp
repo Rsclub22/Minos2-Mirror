@@ -19,32 +19,35 @@
 #include "freqpresetdialog.h"
 #include "ui_freqpresetdialog.h"
 
-FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<BandDetail*> _band, bool& _freqPresetChanged, QWidget *parent) :
+FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<BandDetail*> band, bool* _freqPresetChanged, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FreqPresetDialog)
 {
     ui->setupUi(this);
-
-    bands = _band;
+    bands = band;
     presetFreq = _presetFreq;
     freqPresetChanged = _freqPresetChanged;
 
+
     loadSettingsToDialog();
 
-    connect (ui->lineEdit_10m, SIGNAL(editingFinished()), this, SLOT(b_10mSelected()));
-    connect (ui->lineEdit_6m, SIGNAL(editingFinished()), this, SLOT(b_6mSelected()));
-    connect (ui->lineEdit_4m, SIGNAL(editingFinished()), this, SLOT(b_4mSelected()));
-    connect (ui->lineEdit_2m, SIGNAL(editingFinished()), this, SLOT(b_2mSelected()));
-    connect (ui->lineEdit_70cm, SIGNAL(editingFinished()), this, SLOT(b_70cmSelected()));
+ //   connect (ui->lineEdit_28mhz, SIGNAL(editingFinished()), this, SLOT(b_28mhzSelected()));
+    connect (ui->lineEdit_50mhz, SIGNAL(editingFinished()), this, SLOT(b_50mhzSelected()));
+    connect (ui->lineEdit_70mhz, SIGNAL(editingFinished()), this, SLOT(b_70mhzSelected()));
+    connect (ui->lineEdit_144mhz, SIGNAL(editingFinished()), this, SLOT(b_144mhzSelected()));
+    connect (ui->lineEdit_432mhz, SIGNAL(editingFinished()), this, SLOT(b_432mhzSelected()));
 
-    connect (ui->lineEdit_23cm, SIGNAL(editingFinished()), this, SLOT(b_23cmSelected()));
-    connect (ui->lineEdit_13cm, SIGNAL(editingFinished()), this, SLOT(b_13cmSelected()));
-    connect (ui->lineEdit_9cm, SIGNAL(editingFinished()), this, SLOT(b_9cmSelected()));
-    connect (ui->lineEdit_6cm, SIGNAL(editingFinished()), this, SLOT(b_6cmSelected()));
-    connect (ui->lineEdit_3cm, SIGNAL(editingFinished()), this, SLOT(b_3cmSelected()));
+    connect (ui->lineEdit_1296mhz, SIGNAL(editingFinished()), this, SLOT(b_1296mhzSelected()));
+    connect (ui->lineEdit_2300mhz, SIGNAL(editingFinished()), this, SLOT(b_2300mhzSelected()));
+    connect (ui->lineEdit_3_4ghz, SIGNAL(editingFinished()), this, SLOT(b_3_4ghzSelected()));
+    connect (ui->lineEdit_5_6ghz, SIGNAL(editingFinished()), this, SLOT(b_5_6ghzSelected()));
+    connect (ui->lineEdit_10ghz, SIGNAL(editingFinished()), this, SLOT(b_10ghzSelected()));
+
 
     connect (ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
     connect (ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelSettings()));
+
+
 
 
 }
@@ -55,71 +58,73 @@ FreqPresetDialog::~FreqPresetDialog()
 }
 
 
-
-void FreqPresetDialog::b_10mSelected()
+/*
+void FreqPresetDialog::b_28mhzSelected()
 {
 
-    getFreq(ui->lineEdit_10m, _10M);
+    getFreq(ui->lineEdit_28mhz, _28MHZ);
 
+}
+*/
+
+void FreqPresetDialog::b_50mhzSelected()
+{
+    getFreq(ui->lineEdit_50mhz, freqPresetData::_50MHZ);
+}
+
+void FreqPresetDialog::b_70mhzSelected()
+{
+    getFreq(ui->lineEdit_70mhz, freqPresetData::_70MHZ);
 }
 
 
-void FreqPresetDialog::b_6mSelected()
+void FreqPresetDialog::b_144mhzSelected()
 {
-    getFreq(ui->lineEdit_6m, _6M);
+    getFreq(ui->lineEdit_144mhz, freqPresetData::_144MHZ);
 }
 
-void FreqPresetDialog::b_4mSelected()
+void FreqPresetDialog::b_432mhzSelected()
 {
-    getFreq(ui->lineEdit_4m, _4M);
+    getFreq(ui->lineEdit_432mhz, freqPresetData::_432MHZ);
+}
+void FreqPresetDialog::b_1296mhzSelected()
+{
+    getFreq(ui->lineEdit_1296mhz, freqPresetData::_1296MHZ);
 }
 
-
-void FreqPresetDialog::b_2mSelected()
+void FreqPresetDialog::b_2300mhzSelected()
 {
-    getFreq(ui->lineEdit_2m, _2M);
-}
-
-void FreqPresetDialog::b_70cmSelected()
-{
-    getFreq(ui->lineEdit_70cm, _70CM);
-}
-void FreqPresetDialog::b_23cmSelected()
-{
-    getFreq(ui->lineEdit_23cm, _23CM);
+    getFreq(ui->lineEdit_2300mhz, freqPresetData::_2300MHZ);
 }
 
 
-void FreqPresetDialog::b_13cmSelected()
+void FreqPresetDialog::b_3_4ghzSelected()
 {
-    getFreq(ui->lineEdit_13cm, _13CM);
-}
-
-void FreqPresetDialog::b_9cmSelected()
-{
-    getFreq(ui->lineEdit_9cm, _9CM);
+    getFreq(ui->lineEdit_3_4ghz, freqPresetData::_3_4GHZ);
 }
 
 
-void FreqPresetDialog::b_6cmSelected()
+void FreqPresetDialog::b_5_6ghzSelected()
 {
-    getFreq(ui->lineEdit_6cm, _6CM);
+    getFreq(ui->lineEdit_5_6ghz, freqPresetData::_5_6GHZ);
 }
 
 
-void FreqPresetDialog::b_3cmSelected()
+void FreqPresetDialog::b_10ghzSelected()
 {
-    getFreq(ui->lineEdit_3cm, _3CM);
+    getFreq(ui->lineEdit_10ghz, freqPresetData::_10GHZ);
 }
 
 
-void FreqPresetDialog::getFreq(QLineEdit* f_box, bandOffSet band)
+
+
+void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band)
 {
 
     QString freq = f_box->text().trimmed().remove( QRegExp("^[0]*"));
     if (valInputFreq(freq, RADIO_FREQ_EDIT_ERR_MSG))
     {
-       freq = convertSinglePeriodFreqToFullDigit(freq).remove('.');
+       freq = convertFreqToFullDigit(freq).remove('.');
 
 
        // check in band
@@ -127,7 +132,7 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, bandOffSet band)
        {
            presetFreq[band] = freq;
            freqChanged = true;
-           freqPresetChanged = true;
+           *freqPresetChanged = true;
        }
     }
 
@@ -138,7 +143,7 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, bandOffSet band)
 
 // check in band
 
-bool FreqPresetDialog::checkInBand(double freq, bandOffSet band)
+bool FreqPresetDialog::checkInBand(double freq, freqPresetData::bandOffSet band)
 {
     if (freq >= bands[band]->fLow && freq <= bands[band]->fHigh)
     {
@@ -168,48 +173,53 @@ void FreqPresetDialog::saveSettings()
 
     freqChanged = false;
 
-    QString fileName;
-    fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
+
+    QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
 
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("FreqPresets");
-    config.setValue("10M", presetFreq[_10M]);
-    config.setValue("6M", presetFreq[_6M]);
-    config.setValue("4M", presetFreq[_4M]);
-    config.setValue("2M", presetFreq[_2M]);
-    config.setValue("70CM", presetFreq[_70CM]);
-    config.setValue("23CM", presetFreq[_23CM]);
-    config.setValue("13CM", presetFreq[_13CM]);
-    config.setValue("9CM", presetFreq[_9CM]);
-    config.setValue("6CM", presetFreq[_6CM]);
-    config.setValue("3CM", presetFreq[_3CM]);
+//    config.setValue("28MHz", presetFreq[_28MHZ]);
+    config.setValue("50MHz", presetFreq[freqPresetData::_50MHZ]);
+    config.setValue("70MHz", presetFreq[freqPresetData::_70MHZ]);
+    config.setValue("144MHz", presetFreq[freqPresetData::_144MHZ]);
+    config.setValue("432MHz", presetFreq[freqPresetData::_432MHZ]);
+    config.setValue("1296MHz", presetFreq[freqPresetData::_1296MHZ]);
+    config.setValue("2300MHz", presetFreq[freqPresetData::_2300MHZ]);
+    config.setValue("3_4GHz", presetFreq[freqPresetData::_3_4GHZ]);
+    config.setValue("5_6GHz", presetFreq[freqPresetData::_5_6GHZ]);
+    config.setValue("10GHz", presetFreq[freqPresetData::_10GHZ]);
+
+
     config.endGroup();
+
+
 
 
 }
 
 
-void FreqPresetDialog::readSettings(QStringList& _presetFreq)  // static
+void FreqPresetDialog::readSettings(QStringList& presetFreq)  // static
 {
-    QString fileName;
-    fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
+
+    QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
 
     QSettings config(fileName, QSettings::IniFormat);
 
-    _presetFreq.clear();
+    presetFreq.clear();
 
     config.beginGroup("FreqPresets");
 
-    _presetFreq.append(config.value("10M", bandFreq[_10M]).toString());
-    _presetFreq.append(config.value("6M", bandFreq[_6M]).toString());
-    _presetFreq.append(config.value("4M", bandFreq[_4M]).toString());
-    _presetFreq.append(config.value("2M", bandFreq[_2M]).toString());
-    _presetFreq.append(config.value("70CM", bandFreq[_70CM]).toString());
-    _presetFreq.append(config.value("23CM", bandFreq[_23CM]).toString());
-    _presetFreq.append(config.value("13CM", bandFreq[_13CM]).toString());
-    _presetFreq.append(config.value("9CM", bandFreq[_9CM]).toString());
-    _presetFreq.append(config.value("6CM", bandFreq[_6CM]).toString());
-    _presetFreq.append(config.value("3CM", bandFreq[_3CM]).toString());
+ //   _presetFreq.append(config.value("28MHz", bandFreq[_28MHZ]).toString());
+    presetFreq.append(config.value("50MHz", freqPresetData::bandFreq[freqPresetData::_50MHZ]).toString());
+    presetFreq.append(config.value("70MHz", freqPresetData::bandFreq[freqPresetData::_70MHZ]).toString());
+    presetFreq.append(config.value("144MHz", freqPresetData::bandFreq[freqPresetData::_144MHZ]).toString());
+    presetFreq.append(config.value("432MHz", freqPresetData::bandFreq[freqPresetData::_432MHZ]).toString());
+    presetFreq.append(config.value("1296MHz", freqPresetData::bandFreq[freqPresetData::_1296MHZ]).toString());
+    presetFreq.append(config.value("2300MHZ", freqPresetData::bandFreq[freqPresetData::_2300MHZ]).toString());
+    presetFreq.append(config.value("3_4GHz", freqPresetData::bandFreq[freqPresetData::_3_4GHZ]).toString());
+    presetFreq.append(config.value("5_6GHz", freqPresetData::bandFreq[freqPresetData::_5_6GHZ]).toString());
+    presetFreq.append(config.value("10GHz", freqPresetData::bandFreq[freqPresetData::_10GHZ]).toString());
+
 
     config.endGroup();
 
@@ -225,7 +235,7 @@ void FreqPresetDialog::cancelSettings()
     }
 
     freqChanged = false;
-    freqPresetChanged = false;
+    *freqPresetChanged = false;
     readSettings(presetFreq);
     loadSettingsToDialog();
 
@@ -236,14 +246,15 @@ void FreqPresetDialog::cancelSettings()
 
 void FreqPresetDialog::loadSettingsToDialog()
 {
-    ui->lineEdit_10m->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_10M]));
-    ui->lineEdit_6m->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_6M]));
-    ui->lineEdit_4m->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_4M]));
-    ui->lineEdit_2m->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_2M]));
-    ui->lineEdit_70cm->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_70CM]));
-    ui->lineEdit_23cm->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_23CM]));
-    ui->lineEdit_13cm->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_13CM]));
-    ui->lineEdit_9cm->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_9CM]));
-    ui->lineEdit_6cm->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_6CM]));
-    ui->lineEdit_3cm->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_3CM]));
+//    ui->lineEdit_28mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_28MHZ]));
+    ui->lineEdit_50mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_50MHZ]));
+    ui->lineEdit_70mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_70MHZ]));
+    ui->lineEdit_144mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_144MHZ]));
+    ui->lineEdit_432mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_432MHZ]));
+    ui->lineEdit_1296mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_1296MHZ]));
+    ui->lineEdit_2300mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_2300MHZ]));
+    ui->lineEdit_3_4ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_3_4GHZ]));
+    ui->lineEdit_5_6ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_5_6GHZ]));
+    ui->lineEdit_10ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_10GHZ]));
+
 }

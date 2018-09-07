@@ -21,17 +21,17 @@ public:
 
 
 private slots:
-    void editingFinished();
+
     void radioModelSelect(int index);
 
-    void accepted();
+
 private:
     Ui::AddRadioDialog *ui;
     QStringList availRadios;
     QString radioName;
     QString radioModel;
 
-
+    void done(int r);   // override done function to validate data entry
 };
 
 #endif // ADDRADIODIALOG_H

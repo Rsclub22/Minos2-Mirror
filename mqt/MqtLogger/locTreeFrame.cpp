@@ -1,7 +1,9 @@
 #include "base_pch.h"
+#include "contest.h"
+#include "htmldelegate.h"
+#include "cutils.h"
 #include "locTreeFrame.h"
 #include "ui_locTreeFrame.h"
-#include "htmldelegate.h"
 
 LocTreeFrame::LocTreeFrame(QWidget *parent) :
     QFrame(parent),
@@ -36,7 +38,10 @@ void LocTreeFrame::reInitialiseLocators()
     for (int k = 0; k < ct->locs.llist.size(); k++)
     {
         QTreeWidgetItem *it = new QTreeWidgetItem(ui->LocTree);
-        QString locStart = ct->locs.itemAt(k) ->loc;
+        QSharedPointer<LocSquare> l = ct->locs.itemAt(k);
+        if (!l)
+            break;
+        QString locStart = l ->loc;
         it->setText(0, locStart);
         it->setExpanded(true);
 
@@ -45,7 +50,7 @@ void LocTreeFrame::reInitialiseLocators()
             QString dispLine;
             for (int i = 0; i < 10; i++)
             {
-                LocCount *lc = ct->locs.itemAt(k) ->map( j * 10 + i );
+                LocCount *lc = l ->map( j * 10 + i );
                 QString disp = QString("%1").arg(j * 10 + i, 2, 10, QChar('0'));
 
                 if ( lc && (lc->UKLocCount || lc->nonUKLocCount))
@@ -70,8 +75,9 @@ void LocTreeFrame::reInitialiseLocators()
                     }
                     else
                     {
-                        dispLine += disp + " (" + QString::number(lc->UKLocCount)
-                                    + (lc->nonUKLocCount?("/" + QString::number(lc->nonUKLocCount)):QString("")) + ") ";
+//                        dispLine += disp + " (" + QString::number(lc->UKLocCount)
+//                                    + (lc->nonUKLocCount?("/" + QString::number(lc->nonUKLocCount)):QString("")) + ") ";
+                        dispLine += disp + " (" + QString::number(lc->UKLocCount + lc->nonUKLocCount) + ") ";
                     }
 
                 }

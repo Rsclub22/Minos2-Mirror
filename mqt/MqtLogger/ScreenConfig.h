@@ -17,8 +17,8 @@ class ScreenConfig : public QDialog
     Q_OBJECT
 
 public:
-    explicit ScreenConfig(QWidget *parent = nullptr);
-    ~ScreenConfig();
+    explicit ScreenConfig(QWidget *parent, ScreenConfigFile &scf, QString curConfigName);
+    ~ScreenConfig() override;
 
     void addBefore(ScreenConfigRow *r);
     void remove(ScreenConfigRow *r);
@@ -27,8 +27,8 @@ public:
     bool checkOk(ScreenConfigElement *e);
 
 public slots:
-    void reject();
-    void accept();
+    void reject() override;
+    void accept() override;
 private slots:
     void on_OKButton_clicked();
 
@@ -41,7 +41,8 @@ private slots:
 private:
     Ui::ScreenConfig *ui;
     QVBoxLayout *vbl;
-    ScreenConfigFile scf;
+
+    ScreenConfigFile &scf;
     QString curConfigName;
 
     void doCloseEvent();

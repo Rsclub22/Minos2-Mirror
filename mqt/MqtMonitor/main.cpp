@@ -6,7 +6,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    appStartup("MinosQtMonitor");
+    appStartup(rpcConstants::monitorApp);
 
     MonitorMain w;
     w.show();

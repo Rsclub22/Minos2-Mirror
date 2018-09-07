@@ -23,8 +23,6 @@ public:
         return &archiveMatchModel;
     }
 private slots:
-    virtual void on_MatchStarting(BaseContestLog*) override;
-
     virtual void on_matchTreeSelectionChanged(const QItemSelection &, const QItemSelection &) override;
 
     virtual void on_matchTree_doubleClicked(const QModelIndex &index) override;

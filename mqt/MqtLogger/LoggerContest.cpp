@@ -11,14 +11,17 @@
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
 #include "ContestApp.h"
-
+#include "ScreenConfigFile.h"
 #include "AdifImport.h"
 #include "reg1test.h"
 #include "printfile.h"
 #include "enqdlg.h"
+#include "MinosTestImport.h"
 #include "MinosTestExport.h"
-#include "LoggerContest.h"
 #include "BandList.h"
+#include "latlong.h"
+
+#include "LoggerContest.h"
 
 LoggerContestLog::LoggerContestLog( ) : BaseContestLog(),
       minosFile( false ),
@@ -88,6 +91,7 @@ void LoggerContestLog::clearDirty()
        rigMemories[i].clearDirty();
    }
 
+   screenLayout.clearDirty();
    statsPeriod1.clearDirty();
    statsPeriod2.clearDirty();
    showContinentEU.clearDirty();
@@ -149,6 +153,7 @@ void LoggerContestLog::setDirty()
        rigMemories[i].setDirty();
    }
 
+   screenLayout.setDirty();
    statsPeriod1.setDirty();
    statsPeriod2.setDirty();
    showContinentEU.setDirty();
@@ -214,6 +219,9 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    showUnworked.setInitialValue(bTemp);
 
    QString temp;
+   MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, temp );
+   screenLayout.setInitialValue(temp);
+
    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpStackFrame, temp );
    for (int i = 0; i < STACKITEMS; i++)
    {
@@ -275,7 +283,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       if (!contestFile->open(om))
       {
          QString lerr = contestFile->errorString();
-         QString emess = "Failed to open LoggerContestLog file " + fn + " : " + lerr;
+         QString emess = "Failed to open Contest file " + fn + " : " + lerr;
          MinosParameters::getMinosParameters() ->mshowMessage( emess );
          return false;
       }
@@ -353,7 +361,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
           if (!contestFile->open(om))
           {
              QString lerr = contestFile->errorString();
-             QString emess = "Failed to create LoggerContestLog file " + fn + " : " + lerr;
+             QString emess = "Failed to create Contest file " + fn + " : " + lerr;
              MinosParameters::getMinosParameters() ->mshowMessage( emess );
              return false;
           }
@@ -375,65 +383,6 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    commonSave( newFile );
 
    return true;
-}
-void LoggerContestLog::setINIDetails()
-{
-   // extras that CAN come from INI file - implements bundle override
-   if ( entryBundle.getSection() != entryBundle.noneBundle )
-   {
-      entryBundle.startGroup();
-      entryBundle.getStringProfile( eepCall, mycall.fullCall );
-      entryBundle.getStringProfile( eepEntrant, entrant );
-      entryBundle.getStringProfile( eepMyName, entName );
-      entryBundle.getStringProfile( eepMyCall, entCall );
-      //   entryBundle.getStringProfile(eepSection, entSect);
-
-      entryBundle.getStringProfile( eepMyAddress1, entAddr1 );
-      entryBundle.getStringProfile( eepMyAddress2, entAddr2 );
-      entryBundle.getStringProfile( eepMyCity, entCity );
-      entryBundle.getStringProfile( eepMyPostCode, entPostCode );
-      entryBundle.getStringProfile( eepMyCountry, entCountry );
-      entryBundle.getStringProfile( eepMyPhone, entPhone );
-      entryBundle.getStringProfile( eepMyEmail, entEMail );
-      //   entryBundle.getStringProfile(eepBand, band);
-      //   entryBundle.getStringProfile(eepSection, entSect);
-      entryBundle.endGroup();
-   }
-
-
-   if ( QTHBundle.getSection() != QTHBundle.noneBundle )
-   {
-      QTHBundle.startGroup();
-      QTHBundle.getStringProfile( eqpLocator, myloc.loc );
-
-      if ( districtMult.getValue() )
-         QTHBundle.getStringProfile( eqpDistrict, location );
-      else
-         if ( otherExchange.getValue() && location.getValue().size() == 0 )
-            QTHBundle.getStringProfile( eqpLocation, location );
-
-      QTHBundle.getStringProfile( eqpStationQTH1, sqth1 );
-      QTHBundle.getStringProfile( eqpStationQTH2, sqth2 );
-	  QTHBundle.getStringProfile( eqpASL, entASL );
-      QTHBundle.endGroup();
-   }
-
-   if ( stationBundle.getSection() != stationBundle.noneBundle )
-   {
-      stationBundle.startGroup();
-	  stationBundle.getStringProfile( espPower, power );
-	  stationBundle.getStringProfile( espTransmitter, entTx );
-	  stationBundle.getStringProfile( espReceiver, entRx );
-	  stationBundle.getStringProfile( espAntenna, entAnt );
-	  stationBundle.getStringProfile( espAGL, entAGL );
-	  stationBundle.getIntProfile(espOffset, bearingOffset);
-      QString s;
-      stationBundle.getStringProfile( espRadioName, s );
-      radioName.setValue( PubSubName(s) );
-      stationBundle.getStringProfile( espRotatorName, s );
-      antennaName.setValue(PubSubName(s));
-      stationBundle.endGroup();
-   }
 }
 
 qint64 LoggerContestLog::readBlock( int bno )
@@ -656,7 +605,7 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
             {
                 double dist;
                 int brg;
-                disbear( lon, lat, dist, brg );
+                disbeara( lon, lat, dist, brg );
                 m.bearing = brg;
             }
         }
@@ -739,9 +688,9 @@ bool LoggerContestLog::GJVsave( GJVParams &gp )
    opyn( false /*scoreMode == GSPECIAL*/ );
    opyn( allowLoc8 );
 
-   opyn( !RSTField.getValue() );
-   opyn( !serialField.getValue() );
-   opyn( !locatorField.getValue() );
+   opyn( !RSTMandatoryField.getValue() );
+   opyn( !serialMandatoryField.getValue() );
+   opyn( !locatorMandatoryField.getValue() );
 
    strtobuf(); // clear tail
 
@@ -764,21 +713,21 @@ bool LoggerContestLog::GJVload( )
    buftostr( temp );
    if ( temp.toInt() != 0 )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "Invalid block 0 in LoggerContestLog file" );
+      MinosParameters::getMinosParameters() ->mshowMessage( "Invalid block 0 in Contest file" );
       return false;
    }
 
    buftostr( temp );
    if ( strnicmp( temp, GJVVERSION, VERLENGTH ) != 0 )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( QString( "Invalid LoggerContestLog file format (" ) + temp + ", " + GJVVERSION + " expected)" );
+      MinosParameters::getMinosParameters() ->mshowMessage( QString( "Invalid Contest file format (" ) + temp + ", " + GJVVERSION + " expected)" );
       return false;
    }
 
    buftostr( band );
    buftostr( name );
    buftostr( temp );
-   mycall = Callsign( strupr( temp ) );
+   mycall = Callsign( temp.toUpper() );
    buftostr( myloc.loc );
    buftostr( location );
 
@@ -818,9 +767,9 @@ bool LoggerContestLog::GJVload( )
    }
 
    allowLoc8.setValue( inyn() );
-   RSTField.setValue( !inyn() );
-   serialField.setValue( !inyn() );
-   locatorField.setValue( !inyn() );
+   RSTMandatoryField.setValue( !inyn() );
+   serialMandatoryField.setValue( !inyn() );
+   locatorMandatoryField.setValue( !inyn() );
 
    return true;
 
@@ -1318,7 +1267,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                            {
                               text = text.left(spos ).trimmed();
                            }
-                           mycall.fullCall.setValue( strupr( text ) );
+                           mycall.fullCall.setValue( text.toUpper() );
                            mycall.valRes = CS_NOT_VALIDATED;
                            mycall.validate();
 
@@ -1328,7 +1277,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                                 stemp.toUpper().indexOf( "QTH LOCATOR SENT" ) == 0 )
                            {
                               // yes, contestx DOES say QRH!
-                              myloc.loc.setValue( strupr( text ) );
+                              myloc.loc.setValue( text.toUpper() );
                               validateLoc();
                            }
                            else
@@ -1467,6 +1416,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
    {
       mt->getStructArgMemberValue( "section", entSect );
       mt->getStructArgMemberValue( "sectionList", sectionList );
+      mt->getStructArgMemberValue( "ScreenLayout", screenLayout);
    }
    else
       if ( methodName == "MinosLogMode" )
@@ -1617,7 +1567,7 @@ bool LoggerContestLog::getStanza( unsigned int stanza, QString &stanzaData )
    bool ret = contestFile.open(QIODevice::ReadOnly);
    if ( !ret )
    {
-      QString emess = "Failed to open LoggerContestLog file for monitoring" + cfileName + " : " + contestFile.errorString();
+      QString emess = "Failed to open Contest file for monitoring" + cfileName + " : " + contestFile.errorString();
       MinosParameters::getMinosParameters() ->mshowMessage( emess );
       return false;
    }

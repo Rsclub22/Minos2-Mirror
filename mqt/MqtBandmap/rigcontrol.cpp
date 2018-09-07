@@ -79,7 +79,7 @@ int RigControl::init(scatParams currentRadio)
 int RigControl::closeRig()
 {
     int retcode;
-    retcode = rig_close(my_rig);
+    /*retcode =*/ rig_close(my_rig);
 
     retcode = rig_cleanup(my_rig);
     set_serialConnected(false);

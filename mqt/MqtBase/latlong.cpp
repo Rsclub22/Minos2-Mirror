@@ -7,6 +7,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
+#include "cutils.h"
+
+#include "latlong.h"
 
 typedef struct transformelement
 {
@@ -501,6 +504,12 @@ static int internaltongr( Location *ingrid, Location *outgrid )
                        - 100000.0;
 
    outgrid->easting = ingrid->easting + 400000.0;
+
+   if (outgrid->northing < 0.0 || outgrid->northing > 1300000.0)
+       return INVALIDGREF;
+
+   if (outgrid->easting < 0.0 || outgrid->easting > 700000.0)
+       return  INVALIDGREF;
 
    return ( GRIDOK );
 }

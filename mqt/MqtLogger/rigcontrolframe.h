@@ -59,9 +59,27 @@ private slots:
     void clearActionSelected();
 signals:
     void clearActionSelected(int);
-    void selectRadio(QString);
+};
+class TuneMemoryButton : public QObject
+{
+    Q_OBJECT
 
+public:
+    explicit TuneMemoryButton(QToolButton *b, RigControlFrame *rcf, int no);
+    ~TuneMemoryButton();
 
+    RigControlFrame *rigControlFrame;
+    QToolButton* memButton;
+    QMenu* memoryMenu;
+    QAction* readAction;
+    QAction* writeAction;
+
+    int memNo;
+    QString freq;
+private slots:
+
+    void readActionSelected();
+    void writeActionSelected();
 };
 
 class quickBandSelData
@@ -93,13 +111,16 @@ public:
 
 
     void setRadioLoaded();
-    void setRadioList(QString);
+    void setRadioList();
     void setBandList(QString);
     void setMode(QString);
+    void setVolume(int level);
     void setFreq(QString);
+    void setRitFreq(QString);
+    void setRitRadioStatus(bool);
     void setRadioName(QString, QString mode);
     void setRadioState(QString);
-    //void setRadioTxVertState(QString s);
+    void setTpm(int);
     void setRadioTxVertState(bool s);
     void setRitEnableState(bool s);
 
@@ -112,6 +133,9 @@ public:
     void runButWriteActSel(int buttonNumber);
     void runButEditActSel(int buttonNumber);
 
+    void tuneButtonUpdate(int);
+    void tuneButReadActSel(int buttonNumber);
+    void tuneButWriteActSel(int buttonNumber);
 
     QString getStrPassBandState(QString mode);
     int getIntPassBandState(QString mode);
@@ -119,10 +143,13 @@ public:
     void on_ContestPageChanged();
 
     void checkConnection();
+
+    void setRadioVolumeState(bool state);
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
     void sendFreqControl(QString);
+    void sendVolumeToRadio(int);
     void noRadioSendFreq(QString);
     void noRadioSendMode(QString);
     void sendModeToControl(QString);
@@ -149,14 +176,13 @@ private slots:
     void exitRitFreqEdit();
     void freqRitEditSelected();
     void ritButtonSelected();
+
+    void sendVolumeRadio(int level);
+
+
 public slots:
-
-
     void returnChangeRadioFreq();
-
     void runButClearActSel(int buttonNumber);
-
-
 private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
@@ -169,6 +195,7 @@ private:
     LoggerContestLog *ct;
 
     QMap<int, RunMemoryButton *> runButtonMap;
+    QMap<int, TuneMemoryButton *> tuneButtonMap;
     QVector<quickBandSelData> listOfBands;
 
 
@@ -187,7 +214,10 @@ private:
 
     bool ritEnable;
     bool ritOn;
+    bool ritEditOn;
     QString curRit;
+
+
 
     QStringList listOfRadios;
     QString radioName;
@@ -197,6 +227,8 @@ private:
 
 
     QString lastFreq;
+
+    TuneMemoryButton *curTuneButton = nullptr;
 
     void sendModeToRadio(QString);
     void freqLineEditBkgnd(bool status);
@@ -211,6 +243,9 @@ private:
 
     void initRunMemoryButton();
     void loadRunButtonLabels();
+
+    void initTuneMemoryButton();
+    void updateTuneButtons();
 
     void traceMsg(QString msg);
 
@@ -229,58 +264,14 @@ private:
     void showRitButOn();
     void showRitButOff();
 
+    void setVolControlVisible(bool value);
+    void ritLineEditInFocus();
+    void ritButtonOn();
+    void ritButtonOff();
 };
 
 
-class FreqLineEdit : public QLineEdit
-{
-    Q_OBJECT
 
-public:
-
-    FreqLineEdit(QWidget *parent);
-    ~FreqLineEdit();
-    void changeFreq(bool direction);
-    //QString convertFreqString(double frequency);
-
-signals:
-    void receivedFocus() ;
-    void lostFocus();
-    void newFreq();
-    void freqEditReturn();
-private:
-
-
-    void wheelEvent(QWheelEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-
-} ;
-
-
-
-class RitLineEdit : public QLineEdit
-{
-    Q_OBJECT
-
-public:
-
-    RitLineEdit(QWidget *parent);
-    ~RitLineEdit();
-    void changeFreq(bool direction);
-
-signals:
-    void receivedFocus() ;
-    void lostFocus();
-    void newFreq(QString);
-    void freqEditReturn();
-private:
-
-
-    void wheelEvent(QWheelEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-
-
-} ;
 
 
 #endif // RIGCONTROLFRAME_H

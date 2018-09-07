@@ -20,12 +20,13 @@
 ======================================================================================*/
 
 #include "base_pch.h"
-
+#include "BandList.h"
+#include "cutils.h"
 //---------------------------------------------------------------------------
 
 void BandInfo::setType ( const QString &t )
 {
-    type = strupr ( t );
+    type = t.toUpper();
 }
 QString BandInfo::getType()
 {

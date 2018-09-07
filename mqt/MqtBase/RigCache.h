@@ -40,14 +40,18 @@ public:
     bool setSelected(const PubSubName &name, const QString &loggeruuid, const QString &selected);
     void setStatus(const PubSubName &name, const QString &status);
     void setFreq(const PubSubName &name, double freq);
+    void setVolume(const PubSubName &name, const int level);
     void setMode(const PubSubName &name, const QString &mode);
     void setTransverterOffset(const PubSubName &name, double transverterOffset);
     void setTransverterSwitch(const PubSubName &name, int transverterSwitch);
     void setTransverterStatus(const PubSubName &name, bool transverterStatus);
+    void setVolumeStatus(const PubSubName &name, bool volumeStatus);
     void setBandList(const PubSubName &name, const QString &bands);
     void setRitFreq(const PubSubName &name, double freq);
     void setRitEnableStatus(const PubSubName &name, bool ritEnableStatus);
     void setRitOnOffStatus(const PubSubName &name, bool status);
+    void setRadioRitStatus(const PubSubName &name, bool status);
+    void setTpm(const PubSubName &name, int tpm);
     void addRigList(const QString &s);
 
     QVector<PubSubName> getRigList()

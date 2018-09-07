@@ -2,10 +2,12 @@
 #define STARTCONFIG_H
 
 #include "base_pch.h"
+#include <QTimer>
 
 namespace Ui {
 class StartConfig;
 }
+class ConfigElementFrame;
 
 class StartConfig : public QDialog
 {
@@ -17,10 +19,44 @@ public:
 
 private:
     Ui::StartConfig *ui;
-    virtual void closeEvent(QCloseEvent *event) override;
+    QTimer runTimer;
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
+
+public Q_SLOTS:
+   virtual void accept() override;
+   virtual void reject() override;
+
+
+public:
+    void setup(bool started);
+
+    void start();
+private slots:
+    void on_StartButton_clicked();
+
+    void on_StopButton_clicked();
+
+    void on_SetButton_clicked();
+
+    void on_autoStartCheckBox_clicked();
+
+    void on_SaveCloseButton_clicked();
+
+    void on_newElementButton_clicked();
+
+    void checkEnabled();
+public slots:
+    void on_CancelButton_clicked();
+
+private:
+    QVector<ConfigElementFrame *> elementFrames;
+
+    void copyFromScreen();
+
+    void saveAll();
+
 };
 
 #endif // STARTCONFIG_H

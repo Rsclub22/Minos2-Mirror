@@ -20,15 +20,17 @@ public:
     QString getRotatorModel();
 
 private slots:
-    void editingFinished();
+
     void rotatorModelSelect(int index);
-    void accepted();
+
 
 private:
     Ui::AddAntennaDialog *ui;
     QStringList availAntennas;
     QString antennaName;
     QString rotatorModel;
+
+    void done(int r);   // override done function to validate data entry
 };
 
 #endif // ADDANTENNADIALOG_H

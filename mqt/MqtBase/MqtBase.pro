@@ -22,109 +22,107 @@ INCLUDEPATH += ../qtcsv/src/include
 PRECOMPILED_HEADER = ../MqtBase/base_pch.h
 
 SOURCES += \
+    AntennaDetail.cpp \
+    AntennaState.cpp \
     BandList.cpp \
+    CacheSelection.cpp \
     calcs.cpp \
+    Calendar.cpp \
+    CalendarList.cpp \
+    ChatFrame.cpp \
+    ChatServer.cpp \
+    ConfigElementFrame.cpp \
     contacts.cpp \
     contest.cpp \
     cutils.cpp \
+    DisplayContestContact.cpp \
+    htmldelegate.cpp \
+    KeyerState.cpp \
     latlong.cpp \
     list.cpp \
     ListContact.cpp \
+    MatchCollection.cpp \
     MatchContact.cpp \
+    minoskeyboard.cpp \
+    MinosLines.cpp \
     MinosLoggerEvents.cpp \
     MinosParameters.cpp \
+    minossplitter.cpp \
+    MinosTableView.cpp \
+    minostablewidget.cpp \
     MinosTestImport.cpp \
     mults.cpp \
     MultsImpl.cpp \
     mwin.cpp \
-    ScreenContact.cpp \
-    validators.cpp \
-    DisplayContestContact.cpp \
-    TreeUtils.cpp \
-    minossplitter.cpp \
-    htmldelegate.cpp \
-    CalendarList.cpp \
     qlogtabwidget.cpp \
-    minoskeyboard.cpp \
-    MinosLines.cpp \
-    Calendar.cpp \
-    tconfigframe.cpp \
-    StartConfig.cpp \
-    MinosTableView.cpp \
-    ConfigElementFrame.cpp \
-    MatchCollection.cpp \
-    rigutils.cpp \
-    rotatorcommon.cpp \
-    minostablewidget.cpp \
-    RigState.cpp \
-    AntennaState.cpp \
-    AntennaDetail.cpp \
-    KeyerState.cpp \
-    RotatorCache.cpp \
     RigCache.cpp \
-    RigDetails.cpp \
     rigcommon.cpp \
+    RigDetails.cpp \
+    RigState.cpp \
+    rigutils.cpp \
+    RotatorCache.cpp \
+    rotatorcommon.cpp \
     rotpresetbutton.cpp \
     rotpresetdialog.cpp \
+    ScreenContact.cpp \
     serialcomms.cpp \
-    CacheSelection.cpp \
-    ChatFrame.cpp \
-    ChatServer.cpp
+    StartConfig.cpp \
+    TreeUtils.cpp \
+    validators.cpp
 
 HEADERS += \
+    AntennaDetail.h \
+    AntennaState.h \
     BandList.h \
     base_pch.h \
+    CacheSelection.h \
     calcs.h \
+    Calendar.h \
+    CalendarList.h \
+    ChatFrame.h \
+    ChatServer.h \
+    ConfigElementFrame.h \
     contacts.h \
     contest.h \
+    cutils.h \
+    DisplayContestContact.h \
+    focuswatcher.h \
+    htmldelegate.h \
+    KeyerState.h \
     latlong.h \
     list.h \
     ListContact.h \
+    MatchCollection.h \
     MatchContact.h \
+    minoskeyboard.h \
+    MinosLines.h \
     MinosLoggerEvents.h \
     MinosParameters.h \
+    minossplitter.h \
+    MinosTableView.h \
+    minostablewidget.h \
     MinosTestImport.h \
     mults.h \
     MultsImpl.h \
     mwin.h \
     ProfileEnums.h \
-    ScreenContact.h \
-    validators.h \
-    DisplayContestContact.h \
-    TreeUtils.h \
-    minossplitter.h \
-    htmldelegate.h \
-    CalendarList.h \
-    cutils.h \
     qlogtabwidget.h \
-    minoskeyboard.h \
-    MinosLines.h \
-    Calendar.h \
-    waitcursor.h \
-    tconfigframe.h \
-    StartConfig.h \
-    MinosTableView.h \
-    ConfigElementFrame.h \
-    rigcontrolcommonconstants.h \
-    MatchCollection.h \
-    rigutils.h \
-    RigState.h \
-    AntennaState.h \
-    AntennaDetail.h \
-    KeyerState.h \
-    RotatorCache.h \
     RigCache.h \
-    RigDetails.h \
-    minostablewidget.h \
-    rotatorcommon.h \
     rigcommon.h \
+    rigcontrolcommonconstants.h \
+    RigDetails.h \
+    RigState.h \
+    rigutils.h \
+    RotatorCache.h \
+    rotatorcommon.h \
     rotpresetbutton.h \
     rotpresetdialog.h \
-    focuswatcher.h \
+    ScreenContact.h \
     serialcomms.h \
-    CacheSelection.h \
-    ChatFrame.h \
-    ChatServer.h
+    StartConfig.h \
+    TreeUtils.h \
+    validators.h \
+    waitcursor.h
 
 unix {
     target.path = /usr/lib
@@ -135,9 +133,8 @@ DISTFILES += \
     MqtBase.pro.autosave
 
 FORMS += \
-    minoskeyboard.ui \
-    tconfigframe.ui \
-    StartConfig.ui \
+    ChatFrame.ui \
     ConfigElementFrame.ui \
+    minoskeyboard.ui \
     rotpresetdialog.ui \
-    ChatFrame.ui
+    StartConfig.ui

@@ -2,7 +2,6 @@
 #include "MinosLoggerEvents.h"
 
 #include <QFontDialog>
-//#include <QFileDialog>
 
 #include "ContestApp.h"
 #include "LoggerContest.h"
@@ -23,12 +22,15 @@
 #include "MatchTreeFrame.h"
 #include "enqdlg.h"
 #include "AdifImport.h"
-#include "ScreenConfig.h"
+#include "ScreenConfigManager.h"
+#include "MinosTestImport.h"
+#include "singleapplication.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
 
 TLogContainer *LogContainer = nullptr;
+static QString defLayoutText = " (default)";
 
 SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 {}
@@ -37,6 +39,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::TLogContainer)
   , lastSessionSelected(nullptr)
+  , lastLayoutSelected(nullptr)
 {
     ui->setupUi(this);
 
@@ -73,7 +76,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     sendDM = new TSendDM(this);
 
-    subscribeApps();
+    sendDM->subscribeApps();
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 }
@@ -82,40 +85,7 @@ TLogContainer::~TLogContainer()
     delete ui;
     delete sendDM;
 }
-void TLogContainer::subscribeApps()
-{
-    trace("subscribeApps");
-    sendDM->invalidateCache();
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::loggerApp);
-    MinosConfig *config = MinosConfig::getMinosConfig();
-
-    QStringList servers;
-    servers.append(config->getThisServerName());
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = config->elelist.begin(); i != config->elelist.end(); i++ )
-    {
-        Connectable res = (*i)->connectable();
-        if (res.serverName != "localhost")
-            servers.append(res.serverName);
-    }
-    servers.sort();
-    servers.removeDuplicates();
-
-    for (int i = 0; i < servers.size(); i++)
-    {
-        rpc->subscribeRemote( servers[i], rpcConstants::KeyerCategory );
-//        rpc->subscribeRemote( servers[i], rpcConstants::BandMapCategory );
-
-        rpc->subscribeRemote( servers[i], rpcConstants::RotatorCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rotatorDetailCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rotatorStateCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rotatorPresetsCategory );
-
-        rpc->subscribeRemote( servers[i], rpcConstants::rigControlCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigDetailsCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigStateCategory );
-    }
-}
 
 bool TLogContainer::show(int argc, char *argv[])
 {
@@ -261,6 +231,7 @@ QAction *TLogContainer::newCheckableAction( const QString &text, QMenu *m, const
 void TLogContainer::setupMenus()
 {
     FileOpenAction = newAction("&Open Contest...", ui->menuFile, SLOT(FileOpenActionExecute()));
+    FileImportAction = newAction("&Import Contest...", ui->menuFile, SLOT(FileImportActionExecute()));
     recentFilesMenu = ui->menuFile->addMenu("Reopen Contest");
 
     for (int i = 0; i < MaxRecentFiles; ++i)
@@ -290,9 +261,10 @@ void TLogContainer::setupMenus()
     ListOpenAction = newAction("Open &Archive List...", ui->menuFile, SLOT(ListOpenActionExecute()));
     ManageListsAction = newAction("&Manage Archive Lists...", ui->menuFile, SLOT(ManageListsActionExecute()));
     ui->menuFile->addSeparator();
-
     OptionsAction = newAction("Options...", ui->menuFile, SLOT(OptionsActionExecute()));
+#ifdef Q_OS_WIN
     ExitClearAction = newAction("E&xit MinosQt and Clear registry", ui->menuFile, SLOT(ExitClearActionExecute()));
+#endif
     ui->menuFile->addSeparator();
     ExitAction = newAction("E&xit MinosQt", ui->menuFile, SLOT(ExitActionExecute()));
 // end of file menu
@@ -302,7 +274,10 @@ void TLogContainer::setupMenus()
 // end of search menu
 
     startConfigAction = newAction("Startup Apps Configuration", ui->menuTools, SLOT(StartConfigActionExecute()));
-    ScreenConfigAction = newAction("Configure Screen Layout...", ui->menuTools, SLOT(doScreenConfigAction()));
+
+    screenLayoutMenu = ui->menuTools->addMenu("Screen Layouts");
+    updateLayoutsMenu();
+
     ui->menuTools->addSeparator();
     LocCalcAction = newAction("Locator Calculator", ui->menuTools, SLOT(LocCalcActionExecute()));
 //    AnalyseMinosLogAction = newAction("Analyse Minos Log", ui->menuTools, SLOT(AnalyseMinosLogActionExecute()));
@@ -317,6 +292,7 @@ void TLogContainer::setupMenus()
     setMemoryAction = newMemoryAction(QString("Add as new memory..."), &TabPopup, SLOT(onSetMemoryActionExecute()));
 
     TabPopup.addAction(FileOpenAction);
+    TabPopup.addAction(FileImportAction);
     TabPopup.addMenu(recentFilesMenu);
     TabPopup.addAction(FileNewAction);
     TabPopup.addAction(FileCloseAction);
@@ -581,7 +557,7 @@ void TLogContainer::FileNewActionExecute()
     bool repeatDialog = true;
    QString suggestedfName;
    c->mycall.validate();
-   suggestedfName = ( c->mycall.prefix + c->mycall.number + c->mycall.body );
+   suggestedfName = ( c->mycall.locCtryPrefix + c->mycall.number + c->mycall.body );
    suggestedfName += '_';
    if ( c->DTGStart.getValue().size() )
    {
@@ -677,10 +653,6 @@ void TLogContainer::FileOpenActionExecute()
     InitialDir = qf.canonicalFilePath();
 
     QString Filter = "Minos contest files (*.minos *.Minos);;"
-                     "Reg1Test Files (*.edi);;"
-                     "GJV contest files (*.gjv);;"
-                     "RSGB Log Files (*.log);;"
-                     "ADIF Files (*.adi);;"
                      "All Files (*.*)" ;
 
     QStringList fnames = QFileDialog::getOpenFileNames( this,
@@ -703,6 +675,44 @@ void TLogContainer::FileOpenActionExecute()
         }
     }
 }
+void TLogContainer::FileImportActionExecute()
+{
+    // first choose file
+//"Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
+    QString InitialDir = getDefaultDirectory( false );
+
+    QFileInfo qf(InitialDir);
+
+    InitialDir = qf.canonicalFilePath();
+
+    QString Filter = "Use this combo for file types (*.*);;"
+                     "Reg1Test Files (*.edi);;"
+                     "GJV contest files (*.gjv);;"
+                     "RSGB Log Files (*.log);;"
+                     "ADIF Files (*.adi);;"
+                     "All Files (*.*)" ;
+
+    QStringList fnames = QFileDialog::getOpenFileNames( this,
+                       "Import contests",
+                       InitialDir,  // dir
+                       Filter
+                       );
+    for (int i = 0; i < fnames.size(); i++)
+    {
+        QString fname = fnames[i];
+        BaseContestLog *ct = nullptr;
+        if ( !fname.isEmpty() )
+        {
+            ContestDetails pced(this );
+            ct = addSlot( &pced, fname, false, -1 );   // not automatically read only
+            if (ct)
+            {
+                selectContest(ct, QSharedPointer<BaseContact>());
+            }
+        }
+    }
+}
+
 
 void TLogContainer::ContestDetailsActionExecute()
 {
@@ -716,18 +726,27 @@ void TLogContainer::ContestDetailsActionExecute()
 
         if (ct)
         {
+            QString curConfig = ct->screenLayout.getValue();
             ContestDetails pced( this );
 
 
             pced.setDetails( ct );
             if ( pced.exec() == QDialog::Accepted )
             {
-                subscribeApps();
+                if (ct->screenLayout.getValue() != curConfig)
+                {
+                    f->applyScreenLayout();
+                }
+
+                sendDM->subscribeApps();
                 // and we need to do some re-init on the display
                 f->updateQSODisplay();
                 ct->scanContest();
                 f->refreshMults();
+
+                updateLayoutsMenu();
             }
+
         }
     }
 }
@@ -782,22 +801,22 @@ void TLogContainer::ExitClearActionExecute()
 {
     // Confirm...
 
-    if (!mShowYesNoMessage(this, "This action will clear registry entries for the Minos V2 Logger.\r\n"
+#ifdef Q_OS_WIN
+    if (!mShowYesNoMessage(this, "This action will clear registry entries for all of the apps within the Minos V2 Logger.\r\n\r\n"
                                   "Please confirm this action by pressing \"Yes\"." ))
     {
        return;
     }
 
-    // clear registry
+    MinosConfig::getMinosConfig() ->stop();
+    SingleApplication *sa = dynamic_cast<SingleApplication *>(QApplication::instance());
 
-    QSettings reg;
-    reg.clear();
+    QObject::connect(sa, SIGNAL(aboutToQuit()), sa, SLOT(clearRegistry()));
 
-    QSettings regOld("G0GJV", "MinosQtLogger");
-    regOld.clear();
-
-    // and exit
     close();
+#else
+    mShowMessage("Clear registry only works under Windows", this);
+#endif
 }
 void TLogContainer::AppendAdifActionExecute()
 {
@@ -1015,8 +1034,9 @@ void TLogContainer::menuLogsActionExecute()
 
 void TLogContainer::doScreenConfigAction()
 {
-    ScreenConfig sc(this);
+    ScreenConfigManager sc(this);
     sc.exec();
+    updateLayoutsMenu();
 }
 void TLogContainer::StartConfigActionExecute()
 {
@@ -1036,6 +1056,8 @@ void TLogContainer::on_ContestPageControl_currentChanged(int index)
 
     TContestApp::getContestApp() ->writeContestList();
     enableActions();
+
+    updateLayoutsMenu();
 
     ui->menuLogs->clear();
     menuLogsActions.clear();
@@ -1175,7 +1197,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          f->logColumnsChanged = true;  // also causes show QSOs
          f->splittersChanged = true;
 
-         subscribeApps();
+         sendDM->subscribeApps();
 
          on_ContestPageControl_currentChanged(tno);
 
@@ -1256,7 +1278,95 @@ QStringList TLogContainer::getSessions()
     }
     return newSessionList;
 }
+void TLogContainer::updateLayoutsMenu()
+{
+    screenLayoutMenu->clear();
+    ScreenConfigAction = newAction("Configure Screen Layouts...", screenLayoutMenu, SLOT(doScreenConfigAction()));
 
+    screenLayoutMenu->addSeparator();
+
+    QWidget *tw = ui->ContestPageControl->currentWidget();
+    TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
+    if (f)
+    {
+        QString currentLayout = f->getCurScreenLayout();
+        QString defaultLayout;
+        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, defaultLayout );
+
+        ScreenConfigFile scf;
+        scf.loadFile();
+        int j = 0;
+        for(QMap<QString, SC>::iterator i = scf.configs.begin(); i != scf.configs.end(); i++ )
+        {
+            QAction *act =  new QAction(this);
+            if ((*i).name == defaultLayout)
+            {
+                act->setText((*i).name + defLayoutText);
+            }
+            else
+            {
+                act->setText((*i).name);
+            }
+            connect(act, SIGNAL(triggered()),
+                    this, SLOT(selectLayout()));
+            act->setCheckable(true);
+
+            screenLayoutMenu->addAction(act);
+
+            if ((*i).name == currentLayout)
+            {
+                act->setChecked(true);
+                lastLayoutSelected = act;
+            }
+
+            j++;
+        }
+    }
+}
+
+void TLogContainer::selectLayout()
+{
+    TWaitCursor wc(this);
+    QAction *action = qobject_cast<QAction *>(sender());
+    if (action)
+    {
+        if (lastLayoutSelected)
+            lastLayoutSelected->setChecked(false);
+        action->setChecked(true);
+        lastLayoutSelected = action;
+        QString selText = action->text();
+        if (selText.endsWith(defLayoutText))
+        {
+            selText.chop(defLayoutText.size());
+
+        }
+        selectLayout(selText);
+    }
+}
+void TLogContainer::selectLayout(QString layout)
+{
+    QWidget *tw = ui->ContestPageControl->currentWidget();
+    TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
+    if (f)
+    {
+        f->setCurScreenLayout(layout);
+        f->applyScreenLayout();
+        updateLayoutsMenu();
+    }
+}
+void TLogContainer::applyScreenLayouts()
+{
+    // clear old splitter settings
+    QSettings settings;
+    settings.remove("Splitters");
+
+    for (int i = 0; i < ui->ContestPageControl->count(); i++)
+    {
+        QWidget *ctab = ui->ContestPageControl->widget(i);
+        TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
+        f->applyScreenLayout();
+    }
+}
 void TLogContainer::updateSessionActions()
 {
     TContestApp *app = TContestApp::getContestApp();

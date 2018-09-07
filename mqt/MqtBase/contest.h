@@ -10,6 +10,7 @@
 #ifndef ContestH
 #define ContestH 
 #include "base_pch.h"
+#include "list.h"
 
 //----------------------------------------------------------------------------
 // This header covers the structure of contests, logs, etc
@@ -81,7 +82,7 @@ class BaseContestLog: public BaseLogList
       int cslotno = -1;
       int unfilledCount = 0;
 
-      BaseContestLog(const BaseContestLog &);   // I hope a copy constructor
+      //BaseContestLog(const BaseContestLog &);   // I hope a copy constructor
       BaseContestLog();
       virtual ~BaseContestLog();
 
@@ -106,9 +107,9 @@ class BaseContestLog: public BaseLogList
       MinosItem<bool> allowLoc4;
       MinosItem<bool> allowLoc8;
 
-      MinosItem<bool> RSTField;
-      MinosItem<bool> serialField;
-      MinosItem<bool> locatorField;
+      MinosItem<bool> RSTMandatoryField;
+      MinosItem<bool> serialMandatoryField;
+      MinosItem<bool> locatorMandatoryField;
 
       MinosStringItem<QString> power;
       MinosStringItem<QString> currentMode;
@@ -201,10 +202,15 @@ class BaseContestLog: public BaseLogList
       QString opsQSO2;
 
       int maxSerial = 0;
-      double ode = 0.0;
-      double odn = 0.0;
-      double cosodn  = 0.0;            /* cos of odn */
-      double sinodn  = 0.0;            /* sin of odn */
+      double odea = 0.0;
+      double odna = 0.0;
+      double cosodna  = 0.0;            /* cos of odn */
+      double sinodna  = 0.0;            /* sin of odn */
+
+      double odec = 0.0;
+      double odnc = 0.0;
+      double cosodnc  = 0.0;            /* cos of odn */
+      double sinodnc  = 0.0;            /* sin of odn */
 
       QString cfileName;
       QString publishedName;
@@ -219,6 +225,7 @@ class BaseContestLog: public BaseLogList
       bool locValid = false;
       bool NonUKloc_mult = false;
       bool UKloc_mult = false;
+      bool bdummy = false;          // improve padding on Windows
       int NonUKloc_multiplier = 0;
       int UKloc_multiplier = 0;
       
@@ -236,17 +243,17 @@ class BaseContestLog: public BaseLogList
       void loadBonusList();
       int getSquareBonus(QString sloc);
 
-      int *districtWorked = nullptr;
-      int *countryWorked = nullptr;
+      QSharedPointer<int> districtWorked;
+      QSharedPointer<int> countryWorked;
       LocList locs;
 
       int getDistrictsWorked( int item )
       {
-         return districtWorked[ item ];
+         return districtWorked.data()[ item ];
       }
       int getCountriesWorked( int item )
       {
-         return countryWorked[ item ];
+         return countryWorked.data()[ item ];
       }
       int getValidQSOs();
 
@@ -319,9 +326,10 @@ class BaseContestLog: public BaseLogList
 
       // calcs
 
-      void disbear( double lon, double lat, double &dist, int &brg ) const;
+      void disbeara( double lon, double lat, double &dist, int &brg ) const;
+      void disbearc( double lon, double lat, double &dist, int &brg ) const;
       int CalcNearest( const QString &scalcloc );
-      int CalcCentres( const QString &scalcloc );
+      int CalcCentres(const QString &scalcloc , int &brg);
       bool getsdist(const QString &loc, QString &minloc, double &mindist );
       QSharedPointer<BaseContact> getBestDX( );
       QString dateRange( DTG dstyle );
@@ -338,6 +346,8 @@ protected:
    {
       return false;
    }
+   short sdummy = 0;        // improve padding on Windows
+   int idummy = 0;          // improve padding on Windows
 
 
 };

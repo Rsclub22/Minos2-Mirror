@@ -10,9 +10,8 @@ AddAntennaDialog::AddAntennaDialog(QStringList _availAntennas, RotControl* rot, 
     availAntennas = _availAntennas;
 
     rot->getRotatorList(ui->rotatorModel);
-    connect (ui->antennaName, SIGNAL(editingFinished()), this, SLOT(editingFinished()));
+    rotatorModel = ui->rotatorModel->currentText();
     connect (ui->rotatorModel, SIGNAL(currentIndexChanged(int)), this, SLOT(rotatorModelSelect(int)));
-    connect (ui->buttonBox, SIGNAL(accepted()), this, SLOT(accepted()));
 
 }
 
@@ -23,22 +22,7 @@ AddAntennaDialog::~AddAntennaDialog()
 
 
 
-void AddAntennaDialog::editingFinished()
-{
-    if (ui->antennaName->text() != "")
-    {
-        if (availAntennas.contains(ui->antennaName->text()))
-        {
-            QMessageBox msgBox;
-            msgBox.setText("Radio name already exists,\n please use another name");
-            msgBox.exec();
-            ui->antennaName->setFocus();
-        }
-    }
 
-    antennaName = ui->antennaName->text().trimmed();
-
-}
 
 
 void AddAntennaDialog::rotatorModelSelect(int /*index*/)
@@ -49,16 +33,42 @@ void AddAntennaDialog::rotatorModelSelect(int /*index*/)
 }
 
 
-void AddAntennaDialog::accepted()
+// override done function to validate data entry
+
+void AddAntennaDialog::done(int r)
 {
-
-    if (rotatorModel == "")
+    if(QDialog::Accepted == r)  // ok was pressed
     {
-        rotatorModel = ui->rotatorModel->currentText();
+        if (ui->antennaName->text() == "")
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Antenna Name Empty\nPlease enter a name for the antenna");
+            msgBox.exec();
+            ui->antennaName->setFocus();
+            return;
+        }
+        else if (availAntennas.contains(ui->antennaName->text()))
+        {
+            QMessageBox msgBox;
+            msgBox.setModal( true );
+            msgBox.setText("Antenna name already exists,\n please use another name");
+            msgBox.exec();
+            return;
+        }
+        else
+        {
+            antennaName = ui->antennaName->text().trimmed();
+            QDialog::done(r);
+            return;
+        }
+
     }
-
+    else    // cancel, close or exc was pressed
+    {
+        QDialog::done(r);
+        return;
+    }
 }
-
 
 
 QString AddAntennaDialog::getAntennaName()

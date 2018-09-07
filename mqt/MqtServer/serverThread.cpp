@@ -12,10 +12,15 @@
 #include "MinosLink.h"
 #include "clientThread.h"
 #include "serverThread.h"
+#include "PubSubServer.h"
+#include "MServerZConf.h"
+#include "MServer.h"
+#include "MServerPubSub.h"
+
 
 //==============================================================================
 //==============================================================================
-MinosServerConnection::MinosServerConnection() : srv( 0 ), resubscribed( false )
+MinosServerConnection::MinosServerConnection() : srv( nullptr ), resubscribed( false )
 {}
 void MinosServerConnection::initialise()
 {
@@ -159,7 +164,7 @@ void MinosServerConnection::sendKeepAlive( )
         qint64 now = QDateTime::currentMSecsSinceEpoch();
         if (now - lastKeepAlive > resubscribeTimer.interval() * 2 )
         {
-            sendRaw(QString("<keepAlive seq='" + QString::number(seqno++) + "/>").toStdString());
+            sendRaw(QString("<keepAlive seq='" + QString::number(seqno++) + "'/>").toStdString());
             lastKeepAlive = now;
         }
     }

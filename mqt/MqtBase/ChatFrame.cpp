@@ -1,4 +1,5 @@
 #include "MinosRPC.h"
+#include "MinosLoggerEvents.h"
 
 #include "ChatFrame.h"
 #include "ui_ChatFrame.h"
@@ -11,12 +12,27 @@ ChatFrame::ChatFrame(QWidget *parent) :
 
     connect (ChatServer::getChatServer(), SIGNAL(ChatServerList(QVector<Server>)), this, SLOT(ChatServerList(QVector<Server>)));
     connect (ChatServer::getChatServer(), SIGNAL(ChatMessages(QVector<QString>)), this, SLOT(ChatMessages(QVector<QString>)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+
+    on_FontChanged();
 }
 
 ChatFrame::~ChatFrame()
 {
     delete ui;
 }
+
+void ChatFrame::setStandAlone()
+{
+    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
+    RPCPubSub::subscribe(rpcConstants::StationCategory);
+}
+void ChatFrame::on_FontChanged()
+{
+    QFont cf = QApplication::font();
+    ui->StationList->setFont(cf);
+}
+
 //---------------------------------------------------------------------------
 void ChatFrame::ChatServerList(QVector<Server> serverList)
 {

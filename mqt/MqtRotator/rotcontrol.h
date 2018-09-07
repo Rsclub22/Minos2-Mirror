@@ -133,7 +133,7 @@ public:
   int rotatorCCWEndStop= COMPASS_MAX360;
   endStop rotType = ROT_0_360;          // actual rotator type
 
-  QString pollInterval = "1";
+  QString pollInterval = ROT_DEFAULT_POLLINTERVAL;
 
   int min_azimuth = 0;                   // working endstops
   int max_azimuth = 0;
@@ -223,6 +223,8 @@ public:
 
     int getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName);
 
+    void enableTraceComms(bool state);
+
 signals:
    void bearing_updated(int);
    void request_bearingError(int);
@@ -242,6 +244,8 @@ private:
     bool rotatorlistLoaded=false;
     //srotParams curRotParams;   remove
     int serialP;
+
+    bool traceComms = false;
 
 
 

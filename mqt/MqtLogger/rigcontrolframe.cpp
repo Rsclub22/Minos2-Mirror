@@ -12,9 +12,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-//#include <QSignalMapper>
-
 #include "base_pch.h"
+#include <math.h>
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
@@ -24,6 +23,9 @@
 #include "rigutils.h"
 #include "LoggerContest.h"
 #include "rigcontrolframe.h"
+#include "volumeslider.h"
+#include "freqlineedit.h"
+#include "ritlineedit.h"
 #include "ui_rigcontrolframe.h"
 
 #define MODE_ERROR "<font color='Red'>Mode Error</font>"
@@ -41,8 +43,8 @@ static QKeySequence runButShiftShortCut[] {
 
 };
 
-const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; padding: 3px;\n");
-const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; padding: 3px;\n");
+const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ;\n");
+const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ;\n");
 
 
 RigControlFrame::RigControlFrame(QWidget *parent):
@@ -57,16 +59,21 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     , curMode("")
     , ritEnable(false)
     , ritOn(false)
+    , ritEditOn(false)
     , curRit("0.00")
     , radioName(NORADIO)
     , radioState("None")
 {
     ui->setupUi(this);
 
+    // allow capture of events from these widgets
     ui->freqInput->installEventFilter(this  );
+    ui->RitEdit->installEventFilter(this  );
+
     initRigFrame(parent);
 
     initRunMemoryButton();
+    initTuneMemoryButton();
 
     showRitButOff();
 
@@ -74,6 +81,12 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     ui->txvertStat->setVisible(false);
     ui->TxVertLabel->setVisible(false);
+
+
+    bool tpm;
+    TContestApp::getContestApp() ->displayBundle.getBoolProfile( edpShowTPM, tpm );
+
+    ui->tpmBox->setVisible(tpm);
 
     // init memory button data before radio connection
     setRadioName(radioName, "");
@@ -136,12 +149,17 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     connect(ui->RitEdit, SIGNAL(newFreq(QString)), this, SLOT(changeRitRadioFreq(QString)));
 
 
+    // volume control updates to radio
+    connect(ui->volumeSlider, SIGNAL(sendVolumeRadio(int)), this, SLOT(sendVolumeRadio(int)));
+
     // when no radio is connected
     connect(this, SIGNAL(noRadioSendFreq(QString)), this, SLOT(noRadioSetFreq(QString)));
     connect(this, SIGNAL(noRadioSendMode(QString)), this, SLOT(noRadioSetMode(QString)));
 
 
     connect(ui->bandSelCombo, SIGNAL(activated(int)), this, SLOT(radioBandFreq(int)));
+
+    setVolControlVisible(false);
 
     if (!isRadioLoaded())
     {
@@ -166,9 +184,10 @@ void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
 
 void RigControlFrame::setRadioLoaded()
 {
-    traceMsg(QString("Set Radio Loaded"));
+    traceMsg(QString("%1 Set Radio Loaded").arg(ct?ct->uuid:""));
     radioLoaded = true;
     ui->modelbl->setVisible(true);
+    setTpm(1);
 }
 
 bool RigControlFrame::isRadioLoaded()
@@ -182,21 +201,36 @@ void RigControlFrame::noRadioSetFreq(QString f)
     setFreq(f);
 }
 
-void RigControlFrame::setFreq(QString f)
+void RigControlFrame::setFreq(QString freq)
 {
-    if (f == "0")
+    if (freq == "0")
     {
         // this is force an update of freq, ignore
         traceMsg(QString("Force Freq Update Received - Ignore!"));
         return;
     }
-    traceMsg(QString("Set Freq = %1").arg(f));
-    QString freq = f;
+    traceMsg(QString("Set Freq = %1").arg(freq));
+
+//    if (tuneButtonMap[0]->freq.isEmpty() && tuneButtonMap[1]->freq.isEmpty())
+//    {
+//        tuneButtonMap[0]->freq = freq;
+//        tuneButtonMap[1]->freq = freq;
+//        curTuneButton = tuneButtonMap[0];
+//        trace(QString("curTuneButton initialised to button 1 freq %1").arg(freq));
+//    }
+//    else
+    if (curTuneButton)
+    {
+        trace(QString("curTuneButton %1 freq set to %2").arg(curTuneButton->memNo).arg(freq));
+        curTuneButton->freq = freq;
+    }
+
+    updateTuneButtons();
+
     if (lastFreq != freq)
     {
         lastFreq = freq;
     }
-
     if (freq.count() >= 4)
     {
         if (!freqEditOn)
@@ -207,10 +241,41 @@ void RigControlFrame::setFreq(QString f)
         curFreq = freq;
 
     }
-    // an error here
+    // an error here?
 
 }
 
+
+// for rigcontrol
+
+void RigControlFrame::setRitFreq(QString freq)
+{
+
+    QString sfreq = freq;
+    ui->RitEdit->setText(sfreq);
+
+}
+
+
+void RigControlFrame::setRitRadioStatus(bool status)
+{
+    if (ritOn != status)
+    {
+        if (status)
+        {
+            ritButtonOn();
+
+        }
+        else
+        {
+            ritButtonOff();
+
+        }
+    }
+
+}
+
+// to rigcontrol
 
 void RigControlFrame::changeRitRadioFreq(QString freq)
 {
@@ -230,25 +295,45 @@ void RigControlFrame::ritButtonSelected()
     status = !status;
     if (status)
     {
-        ritOn = status;
-        showRitButOn();
-        emit ritStatus(status);
-        // send current rit freq to radio
-        changeRitRadioFreq(ui->RitEdit->text().append('0').remove('.'));
+        ritButtonOn();
 
     }
     else
     {
-        changeRitRadioFreq("0000");  // turns off rit in hamlib
-        ritOn = status;
-        showRitButOff();
-        emit ritStatus(status);
+        ritButtonOff();
 
     }
 
 }
 
 
+void RigControlFrame::ritButtonOn()
+{
+    traceMsg(QString("Rit Button On"));
+    ritOn = true;
+    showRitButOn();
+    emit ritStatus(true);
+    // send current rit freq to radio
+    changeRitRadioFreq(ui->RitEdit->text().append('0').remove('.'));
+    ui->RitEdit->setCursorPosition(3);
+    ui->RitEdit->setFocus();
+
+
+}
+
+void RigControlFrame::ritButtonOff()
+{
+    traceMsg(QString("Rit Button Off"));
+    //changeRitRadioFreq("0000");  // turns off rit in hamlib
+    //QString sfreq = convertRitFreqToStr(0.0);       // set rit display to zero
+    //ui->RitEdit->setText(sfreq);
+    ui->RitEdit->clearFocus();
+    ritOn = false;
+    showRitButOff();
+    emit ritStatus(false);
+
+
+}
 
 
 
@@ -353,16 +438,13 @@ void RigControlFrame::radioBandFreq(int index)
                 {
                      noRadioSendOutFreq(f);
                 }
-
             }
        }
-
     }
     else
     {
         traceMsg(QString("RigContFrame: Freq the same or index out of range"));
     }
-
 }
 
 void RigControlFrame::sendFreq(QString f)
@@ -405,6 +487,7 @@ void RigControlFrame::noRadioSendOutMode(QString m)
 }
 
 
+
 void RigControlFrame::on_ContestPageChanged()
 {
     QString radioName = ct->radioName.getValue().toString();
@@ -432,11 +515,21 @@ bool RigControlFrame::eventFilter(QObject *obj, QEvent *event)
 {
    Q_UNUSED(obj)
 
+   if (obj == ui->freqInput)
+   {
+       if (event->type() == QEvent::FocusIn)
+          freqLineEditInFocus();
+       else if (event->type() == QEvent::FocusOut)
+          exitFreqEdit();
+   }
+   else if (obj == ui->RitEdit)
+   {
+       if (event->type() == QEvent::FocusIn)
+          ritLineEditInFocus();
+       else if (event->type() == QEvent::FocusOut)
+          exitRitFreqEdit();
+   }
 
-   if (event->type() == QEvent::FocusIn)
-      freqLineEditInFocus();
-   else if (event->type() == QEvent::FocusOut)
-      exitFreqEdit();
 
    return false;
 }
@@ -532,8 +625,15 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
 
     logData.callsign = sc.cs.fullCall.getValue();
     logData.freq = curFreq;
-    logData.locator = sc.loc.loc.getValue();
-    logData.mode = curMode;
+    logData.locator = sc.loc.loc.getValue().trimmed();
+    if (curMode.isEmpty())
+    {
+        logData.mode = sc.mode;
+    }
+    else
+    {
+        logData.mode = curMode;
+    }
 
     QStringList dt = dtg( true ).getIsoDTG().split('T');
     logData.time = dt[1];
@@ -542,7 +642,14 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
 
     //logData.bearing = sc.bearing;
 
-    logData.bearing = tslf->getBearingFrmQSOLog();
+    if (sc.loc.loc.getValue().trimmed().isEmpty())
+    {
+        logData.bearing = tslf->getCurrentBearing();
+    }
+    else
+    {
+        logData.bearing = tslf->getBearingFrmQSOLog();
+    }
     // load log data into memory
 }
 void RigControlFrame::getRigDetails(memoryData::memData &m)
@@ -618,7 +725,7 @@ void RigControlFrame::sendModeToRadio(QString m)
 
 void RigControlFrame::setRadioName(QString radNam, QString mode)
 {
-    traceMsg(QString("Set RadioName = %1 mode = %2").arg(radNam).arg(mode));
+    traceMsg(QString("Set RadioName = %1 mode = %2 contest %3").arg(radNam).arg(mode).arg(ct?ct->uuid:""));
     if (radNam == NORADIO)
     {
         return;
@@ -652,10 +759,9 @@ void RigControlFrame::loadMemories()
     loadRunButtonLabels();
 }
 
-void RigControlFrame::setRadioList(QString s)
+void RigControlFrame::setRadioList()
 {
-    listOfRadios.clear();
-    listOfRadios = s.split(":");
+    listOfRadios = LogContainer->sendDM->rigs();
 
     ui->radioNameSel->clear();
     ui->radioNameSel->addItem("");
@@ -672,6 +778,8 @@ void RigControlFrame::setRadioList(QString s)
 
 }
 
+
+// also sets the freq on the radio according to current contest band selected as active log
 
 void RigControlFrame::setBandList(QString b)
 {
@@ -707,11 +815,13 @@ void RigControlFrame::setBandList(QString b)
             //And we want to select the frequency based on the contest band
 
             QString cb = ct->band.getValue().trimmed();
+
             BandList &blist = BandList::getBandList();
             BandInfo bi;
             bool bandOK = blist.findBand(cb, bi);
             if (bandOK)
             {
+
                 for (int i = 0; i < listOfBands.size(); i++)
                 {
                     if (listOfBands[i].band == cb)
@@ -723,7 +833,7 @@ void RigControlFrame::setBandList(QString b)
 
                         if (cf > bi.fhigh || cf < bi.flow)
                         {
-                            trace(ct->uuid + " RigControlFrame::setBandList set frequency to default for band " + cb);
+                            trace((ct?ct->uuid:QString()) + " RigControlFrame::setBandList set frequency to default for band " + cb);
                             radioBandFreq(i + 1);
                         }
                         break;
@@ -733,9 +843,6 @@ void RigControlFrame::setBandList(QString b)
         }
     }
 }
-
-
-
 
 void RigControlFrame::setRadioState(QString s)
 {
@@ -770,6 +877,47 @@ void RigControlFrame::setRadioState(QString s)
     }
 }
 
+// volume level from radio
+void RigControlFrame::setVolume(int level)
+{
+
+    ui->volumeSlider->setVolume(level);
+}
+
+// volume level radio
+void RigControlFrame::sendVolumeRadio(int level)
+{
+    emit sendVolumeToRadio(level);
+}
+
+void RigControlFrame::setVolControlVisible(bool value)
+{
+    ui->volumeSlider->setVisible(value);
+    ui->volumeLabel->setVisible(value);
+}
+
+void RigControlFrame::setRadioVolumeState(bool state)
+{
+    setVolControlVisible(state);
+}
+
+
+
+void RigControlFrame::setTpm(int t)
+{
+    // tpm change received from rig control
+    if (t > 0 && t <= tuneButData::NUM_TUNEBUTTONS)
+    {
+        trace(QString("%1 Current tune button set to button %2").arg(ct?ct->uuid:QString()).arg(t));
+        curTuneButton = tuneButtonMap[t - 1];
+    }
+    else
+    {
+        trace(QString("%1 Current tune button set to null").arg(ct?ct->uuid:QString()));
+        curTuneButton = nullptr;
+    }
+    updateTuneButtons();
+}
 
 void RigControlFrame::setRadioTxVertState(bool s)
 {
@@ -780,11 +928,16 @@ void RigControlFrame::setRadioTxVertState(bool s)
 }
 
 
+
 void RigControlFrame::setRitEnableState(bool s)
 {
     ui->RitButton->setVisible(s);
     ui->RitEdit->setVisible(s);
     ritEnable = s;
+    if (s)
+    {
+        ritButtonOff();
+    }
 }
 
 bool RigControlFrame::checkRadioState()
@@ -824,7 +977,13 @@ void RigControlFrame::freqLineEditInFocus()
 }
 
 
-
+void RigControlFrame::ritLineEditInFocus()
+{
+    traceMsg(QString("Rit LineEdit in Focus"));
+    ritEditOn = true;
+    ui->RitEdit->setReadOnly(false);
+    ritFreqLineEditFrameColour(true);
+}
 
 
 void RigControlFrame::freqLineEditBkgnd(bool status)
@@ -952,7 +1111,7 @@ QString RigControlFrame::calcNewFreq(double incFreq)
         bandOk = blist.findBand(freq, bi);
         if (!bandOk)
         {
-            freq -= incFreq;
+            freq -= incFreq;    // never used...
         }
         else
         {
@@ -966,9 +1125,6 @@ QString RigControlFrame::calcNewFreq(double incFreq)
 
 }
 
-
-
-
 void RigControlFrame::mgmLabelVisible(bool state)
 {
     ui->mgmbreak->setVisible(state);
@@ -980,15 +1136,7 @@ void RigControlFrame::traceMsg(QString msg)
     trace(QString("RigcontrolFrame: %1 - %2 ").arg(radioName).arg(msg));
 }
 
-
-
-
-
-
-
-
 //********************** Run Buttons *******************************
-
 
 void RigControlFrame::initRunMemoryButton()
 {
@@ -1094,13 +1242,72 @@ void RigControlFrame::runButtonUpdate(int buttonNumber)
     memoryData::memData m = getRunMemoryData(buttonNumber);
     QString sc = ((buttonNumber == 0)?QString(" [ "):QString( " ] "));
 
-    runButtonMap[buttonNumber]->memButton->setText("R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + extractKhz(m.freq) + " ");
+    runButtonMap[buttonNumber]->memButton->setText("R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + " ");
     QString tTipStr = "Freq: " + convertFreqStrDisp(m.freq) + "\n"
             + "Mode: " + m.mode + "\n";
 
     runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
 }
+//********************** Tune point Buttons *******************************
 
+
+void RigControlFrame::initTuneMemoryButton()
+{
+    tuneButtonMap[0] = new TuneMemoryButton(ui->TuneButton1, this, 0);
+    tuneButtonMap[1] = new TuneMemoryButton(ui->TuneButton2, this, 1);
+
+    updateTuneButtons();
+}
+
+
+void RigControlFrame::tuneButReadActSel(int buttonNumber)
+{
+    traceMsg(QString("Tune Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    curTuneButton = tuneButtonMap[buttonNumber];
+    if (isRadioLoaded())
+    {
+        if (radioConnected && !radioError)
+        {
+            ui->freqInput->clearFocus();
+            if (curTuneButton->freq.remove('.') != curFreq.remove('.'))
+            {
+
+                tslf->sendTpm(buttonNumber + 1, curTuneButton->freq);
+            }
+        }
+    }
+    updateTuneButtons();
+}
+
+
+
+void RigControlFrame::tuneButWriteActSel(int buttonNumber)
+{
+    traceMsg(QString("Tune Button Write Selected = %1").arg(QString::number(buttonNumber + 1)));
+    curTuneButton = tuneButtonMap[buttonNumber];
+    curTuneButton->freq = curFreq;
+    updateTuneButtons();
+}
+
+void RigControlFrame::updateTuneButtons()
+{
+    for (int i = 0; i < tuneButData::NUM_TUNEBUTTONS; i++)
+    {
+        tuneButtonUpdate(i);
+    }
+}
+void RigControlFrame::tuneButtonUpdate(int buttonNumber)
+{
+    QString star = "  ";
+    if (curTuneButton == tuneButtonMap[buttonNumber])
+        star = "*";
+    tuneButtonMap[buttonNumber]->memButton->setText(star + "." + extractKhz(tuneButtonMap[buttonNumber]->freq) + star);
+    QString tTipStr = "Freq: " + convertFreqStrDisp(tuneButtonMap[buttonNumber]->freq);
+
+    tuneButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
+}
+//-----------------------------------------------------------------------------------
 QString RigControlFrame::extractKhz(QString f)
 {
     QString khz = "***";
@@ -1161,7 +1368,6 @@ void RigControlFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
 {
     ct->saveRunMemory(memoryNumber, m);
 }
-
 
 //*******************Run Memory Button *************************//
 
@@ -1232,264 +1438,42 @@ void RunMemoryButton::clearActionSelected()
     emit clearActionSelected(memNo);
 }
 
+//*******************Run Memory Button *************************//
 
-
-
-//*******************Freq Line Edit *************************//
-
-FreqLineEdit::FreqLineEdit(QWidget *parent):
-    QLineEdit(parent)
+TuneMemoryButton::TuneMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
 {
+    memNo = no;
+    rigControlFrame = rcf;
 
+    memButton = b;
+
+    memoryMenu = new QMenu(memButton);
+
+    memButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    memButton->setPopupMode(QToolButton::MenuButtonPopup);
+    memButton->setFocusPolicy(Qt::NoFocus);
+
+    readAction = new QAction("&Read", memButton);
+    writeAction = new QAction("&Write",memButton);
+    memoryMenu->addAction(readAction);
+    memoryMenu->addAction(writeAction);
+    memButton->setMenu(memoryMenu);
+
+    connect(memButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
+    connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
+    connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()) );
+}
+TuneMemoryButton::~TuneMemoryButton()
+{
+//    delete memButton;
 }
 
-
-FreqLineEdit::~FreqLineEdit()
+void TuneMemoryButton::readActionSelected()
 {
-
-
+    rigControlFrame->tuneButReadActSel(memNo);
 }
 
-
-void FreqLineEdit::wheelEvent(QWheelEvent *event)
+void TuneMemoryButton::writeActionSelected()
 {
-    int numDegrees = event->delta() / 8;
-    int numTicks = numDegrees / 15;
-
-    if (numTicks == 1)
-    {
-       changeFreq(true);
-    }
-    else
-    {
-        changeFreq(false);
-    }
-
-    event->accept();
-}
-
-
-void FreqLineEdit::keyPressEvent(QKeyEvent *event)
-{
-
-    if(event->key() == Qt::Key_Up)
-    {
-        changeFreq(true);
-    }
-    else if(event->key() == Qt::Key_Down)
-    {
-        changeFreq(false);
-
-    }
-    else if (event->key() == Qt::Key_Return)
-    {
-        emit freqEditReturn();
-        return;
-    }
-    else
-    {
-        // default handler for event
-        QLineEdit::keyPressEvent(event);
-    }
-}
-
-
-
-void FreqLineEdit::changeFreq(bool direction)
-{
-    static const double tuningData[][14] =
-                                        {
-                                        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                        {10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                        {100, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                        {1000, 0, 100, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                        {10000, 1000, 0, 100, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-                                        {100000, 10000, 1000, 0, 100, 10, 1, 0, 0, 0, 0, 0, 0, 0},
-                                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                        {1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1, 0, 0, 0, 0, 0},
-                                        {10000000, 1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1, 0, 0, 0, 0},
-                                        {100000000, 10000000, 1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1, 0, 0, 0},
-                                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                        {1000000000, 0, 100000000, 10000000, 1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1, 0},
-                                        {10000000000, 1000000000, 0, 100000000, 10000000, 1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1}
-                                        };
-
-
-    BandList &blist = BandList::getBandList();
-    BandInfo bi;
-    bool bandOK = false;
-
-    bool ok = false;
-    QString sfreq = text();
-    int sfreqLen = sfreq.length();
-    int pos = cursorPosition();
-    if (sfreqLen < 0 || sfreqLen > 14 || pos < 0 || pos > sfreqLen)
-    {
-        return;
-    }
-    const double tuneStep = tuningData[sfreqLen - 1][pos];
-
-
-    sfreq = sfreq.trimmed().remove('.');
-
-
-    double freq = sfreq.toDouble(&ok);
-
-    if (ok)
-    {
-        if (direction)
-        {
-            freq += tuneStep;
-            bandOK = blist.findBand(freq, bi);
-            if (!bandOK)
-            {
-                freq -= tuneStep;
-            }
-        }
-        else
-        {
-            freq -= tuneStep;
-            bandOK = blist.findBand(freq, bi);
-            if (!bandOK)
-            {
-                freq += tuneStep;
-            }
-        }
-
-
-        sfreq = convertFreqToStr(freq);
-        trace(QString("Change Freq: Freq Tuning = %1").arg(sfreq));
-        if (bandOK)
-        {
-            setText(convertFreqStrDisp(sfreq));
-            emit newFreq();
-        }
-        else
-        {
-            setText(QString("%1 %2 %3").arg("<font color='Red'>").arg(convertFreqStrDisp(sfreq)).arg("</font>"));
-        }
-
-        setCursorPosition(pos);
-   }
-}
-
-
-
-/****************************************** Rit Line Edit *********************************/
-
-
-
-RitLineEdit::RitLineEdit(QWidget *parent):
-    QLineEdit(parent)
-{
-
-}
-
-
-RitLineEdit::~RitLineEdit()
-{
-
-
-}
-
-
-
-void RitLineEdit::changeFreq(bool direction)
-{
-    static const double tuningData[] = {0.0, 1000.0, 0.0, 100.0, 10.0};  // 0 is either +/- position or . position in display
-
-    bool ok = false;
-    QString sfreq = text();
-    int sfreqLen = sfreq.length();
-    int pos = cursorPosition();
-    if (pos <= 0 || pos >= sfreqLen)
-    {
-        return;
-    }
-    const double tuneStep = tuningData[pos];
-
-
-    sfreq = sfreq.trimmed();
-
-
-    double freq = sfreq.toDouble(&ok) * 1000;
-
-    if (ok)
-    {
-        if (direction)
-        {
-            freq += tuneStep;
-            if (freq >= 10000)
-            {
-                freq -= tuneStep;
-            }
-        }
-        else
-        {
-            freq -= tuneStep;
-            if (freq <= -10000)
-            {
-                freq += tuneStep;
-            }
-        }
-
-        // display rit freq
-        sfreq = convertRitFreqToStr(freq);
-        trace(QString("Change Rit Freq: Rit Tuning = %1").arg(sfreq));
-        setText(sfreq);
-
-        // send to radio
-        sfreq = sfreq.append('0').remove('.');
-        emit newFreq(sfreq);
-
-        setCursorPosition(pos);
-   }
-}
-
-
-
-
-
-
-void RitLineEdit::wheelEvent(QWheelEvent *event)
-{
-    int numDegrees = event->delta() / 8;
-    int numTicks = numDegrees / 15;
-
-    if (numTicks == 1)
-    {
-       changeFreq(true);
-    }
-    else
-    {
-        changeFreq(false);
-    }
-
-    event->accept();
-}
-
-
-void RitLineEdit::keyPressEvent(QKeyEvent *event)
-{
-
-    if(event->key() == Qt::Key_Up)
-    {
-        changeFreq(true);
-    }
-    else if(event->key() == Qt::Key_Down)
-    {
-        changeFreq(false);
-
-    }
-    else if (event->key() == Qt::Key_Return)
-    {
-        emit freqEditReturn();
-        return;
-    }
-    else
-    {
-        // default handler for event
-        QLineEdit::keyPressEvent(event);
-    }
+    rigControlFrame->tuneButWriteActSel(memNo);
 }

@@ -113,12 +113,10 @@ int RigControl::init(scatParams &currentRadio)
     retcode = rig_open(my_rig);
     if (retcode >= 0)
     {
-        qDebug() << "rig opened ok";
         set_serialConnected(true);
     }
     else
     {
-        qDebug() << "rig open error";
         set_serialConnected(false);
     }
 
@@ -259,28 +257,94 @@ int RigControl::setRit(vfo_t vfo, shortfreq_t ritfreq)
     return rig_set_rit(my_rig, vfo, ritfreq);
 }
 
-int RigControl::supportRit(int rigNumber, bool *ritFlag)
+int RigControl::supportGetRit(int rigNumber, bool *flag)
 {
-    int retCode = RIG_OK;
     RIG *myRig;
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        if (myRig->caps->get_rit == nullptr || myRig->caps->set_rit == nullptr)
+        if (myRig->caps->get_rit == nullptr)
         {
-            *ritFlag = false;
-            return retCode;
+            *flag = false;
         }
         else
         {
-            *ritFlag = true;
-            return retCode;
+            *flag = true;
         }
     }
 
-    return retCode = -14;
+    return -14;
 
 }
+
+
+int RigControl::supportSetRit(int rigNumber, bool *flag)
+{
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        if (myRig->caps->set_rit == nullptr)
+        {
+            *flag = false;
+
+        }
+        else
+        {
+            *flag = true;
+
+        }
+    }
+
+    return -14;
+
+}
+
+
+
+bool RigControl::supportRitOnOff()
+{
+    return  rig_has_set_func(my_rig, RIG_FUNC_RIT);
+
+}
+
+int RigControl::toggleRitState(vfo_t vfo, bool state)
+{
+    return rig_set_func(my_rig, vfo, RIG_FUNC_RIT, state);
+}
+
+int RigControl::getRitState(vfo_t vfo, bool* state)
+{
+    int status = 0;
+    int retCode = RIG_OK;
+    retCode = rig_get_func(my_rig, vfo, RIG_FUNC_RIT, &status);
+    *state = status ? true : false;
+    return retCode;
+}
+
+
+bool RigControl::supportGetRitState()
+{
+    return rig_has_get_func(my_rig, RIG_FUNC_RIT);
+}
+
+/*************** PTT Control  ********************************/
+
+
+
+int  RigControl::getPttStatus(vfo_t vfo, ptt_t *pttStatus)
+{
+    return rig_get_ptt	(my_rig, vfo, pttStatus);
+}
+
+
+int RigControl::setPtt(vfo_t vfo, ptt_t ptt)
+{
+    return rig_set_ptt(my_rig, vfo, ptt);
+}
+
+
+
 
 
 /*************** Passband ********************************/
@@ -369,6 +433,71 @@ pbwidth_t RigControl::getPassBand()
 {
     return pbwidth;
 }
+
+
+/*************** Volume Level Control  ********************************/
+
+bool RigControl::supportVolControl()
+{
+    return (rigHasGetLevel(RIG_LEVEL_AF) & rigHasSetLevel(RIG_LEVEL_AF));
+}
+
+int RigControl::setVolume(vfo_t vfo, float val)
+{
+    value_t value;
+    value.f = val;
+    return rigSetLevel(vfo, RIG_LEVEL_AF, value);
+}
+
+int RigControl::getVolume(vfo_t vfo, value_t *val)
+{
+    return rigGetLevel(vfo, RIG_LEVEL_AF, val);
+}
+
+
+/*************** Signal Strength Level Control  ********************************/
+
+bool RigControl::supportSignalStrength()
+{
+
+    return rigHasGetLevel(RIG_LEVEL_STRENGTH);
+}
+
+
+
+int RigControl::getSignalStrength(vfo_t vfo, value_t *val)
+{
+    return rigGetLevel(vfo, RIG_LEVEL_STRENGTH, val);
+}
+
+
+
+/*************** Level Control  ********************************/
+
+setting_t RigControl::rigHasGetLevel(setting_t level)
+{
+    return rig_has_get_level (my_rig, level);
+}
+
+setting_t RigControl::rigHasSetLevel(setting_t level)
+{
+    return rig_has_set_level (my_rig, level);
+}
+
+
+
+
+int RigControl::rigSetLevel(vfo_t vfo, setting_t level, value_t val)
+{
+    return rig_set_level (my_rig, vfo, level, val);
+}
+
+int RigControl::rigGetLevel(vfo_t vfo, setting_t level, value_t *val)
+{
+    return rig_get_level (my_rig, vfo, level, val);
+}
+
+
 
 void RigControl::getRigList()
 {
@@ -674,6 +803,12 @@ bool model_Sort(const rig_caps *caps1,const rig_caps *caps2)
 }
 
 
+void RigControl::enableTraceComms(bool state)
+{
+    traceComms = state;
+}
+
+
 // which passes the call to this method
 int RigControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const char *fmt, va_list ap)
 {
@@ -682,7 +817,11 @@ int RigControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const cha
 
     vsprintf (buf, fmt, ap);
     QString s = QString::fromLatin1(buf);
-    emit debug_protocol(s);
+    if (traceComms)
+    {
+        emit debug_protocol(s);
+    }
+
 
     return RIG_OK;
 }

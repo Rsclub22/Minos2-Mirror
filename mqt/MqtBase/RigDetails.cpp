@@ -9,20 +9,12 @@ RigDetails::RigDetails()
     _transverterOffset.setInitialValue(0.0);
     _transverterSwitch.setInitialValue(0);
     _transverterStatus.setInitialValue(false);
+    _volumeStatus.setInitialValue(false);
     _ritEnableStatus.setInitialValue(false);
-    _ritOnOffStatus.setInitialValue(false);
+
+
 }
-RigDetails::RigDetails(double tvo, int tvsw, bool tvst, const QString &blist, const QString &loggeruuid, const QString &sel, const bool &ritst, const bool &ritonoff)
-    :PubSubValue(RigDetailsType)
-{
-    _transverterOffset.setValue(tvo);
-    _transverterSwitch.setValue(tvsw);
-    _transverterStatus.setValue(tvst);
-    _bandList.setValue(blist);
-    _selected.setSelection(loggeruuid, sel);
-    _ritEnableStatus.setValue(ritst);
-    _ritOnOffStatus.setValue(ritonoff);
-}
+
 RigDetails::RigDetails(QString s)
     :PubSubValue(RigDetailsType)
 {
@@ -36,9 +28,9 @@ bool RigDetails::isDirty() const
             _transverterOffset.isDirty() ||
             _transverterSwitch.isDirty() ||
             _transverterStatus.isDirty() ||
+            _volumeStatus.isDirty() ||
             _bandList.isDirty() ||
-            _ritEnableStatus.isDirty() ||
-            _ritOnOffStatus.isDirty();
+            _ritEnableStatus.isDirty();
 }
 void RigDetails::clearDirty()
 {
@@ -46,9 +38,10 @@ void RigDetails::clearDirty()
     _transverterOffset.clearDirty();
     _transverterSwitch.clearDirty();
     _transverterStatus.clearDirty();
+    _volumeStatus.clearDirty();
     _bandList.clearDirty();
     _ritEnableStatus.clearDirty();
-    _ritOnOffStatus.clearDirty();
+
 }
 void RigDetails::setDirty()
 {
@@ -56,9 +49,10 @@ void RigDetails::setDirty()
     _transverterOffset.setDirty();
     _transverterSwitch.setDirty();
     _transverterStatus.setDirty();
+    _volumeStatus.setDirty();
     _bandList.setDirty();
     _ritEnableStatus.setDirty();
-    _ritOnOffStatus.setDirty();
+
 }
 
 void RigDetails::setSelected(const QString &loggeruuid, const QString &selected)
@@ -80,14 +74,17 @@ void RigDetails::setTransverterStatus(bool transverterStatus)
     _transverterStatus.setValue(transverterStatus);
 }
 
+void RigDetails::setVolumeStatus(bool volumeStatus)
+{
+    _volumeStatus.setValue(volumeStatus);
+}
+
 void RigDetails::setRitEnableStatus(bool ritEnableStatus)
 {
     _ritEnableStatus.setValue(ritEnableStatus);
 }
-void RigDetails::setRitOnOffStatus(bool status)
-{
-    _ritOnOffStatus.setValue(status);
-}
+
+
 void RigDetails::setBandList(const QString &bandList)
 {
     _bandList.setValue( bandList);
@@ -101,9 +98,10 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigControlTxVertOffsetFreq, transverterOffset().getValue());
     jv.insert(rpcConstants::rigControlTxVertSwitch, transverterSwitch().getValue());
     jv.insert(rpcConstants::rigControlTxVertStatus, transverterStatus().getValue());
+    jv.insert(rpcConstants::rigVolStatus, volumeStatus().getValue());
     jv.insert(rpcConstants::rigControlBandList, bandList().getValue());
     jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
-    jv.insert(rpcConstants::rigRitOnOffStatus , ritOnOffStatus().getValue());
+
 
     QJsonDocument json(jv);
 
@@ -122,9 +120,10 @@ void RigDetails::unpack(QString s)
         _transverterOffset.setValue(json.object().value(rpcConstants::rigControlTxVertOffsetFreq).toDouble());
         _transverterSwitch.setValue(json.object().value(rpcConstants::rigControlTxVertSwitch).toInt());
         _transverterStatus.setValue(json.object().value(rpcConstants::rigControlTxVertStatus).toBool());
+        _volumeStatus.setValue(json.object().value(rpcConstants::rigVolStatus).toBool());
         _bandList.setValue(json.object().value(rpcConstants::rigControlBandList).toString());
         _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toBool());
-        _ritOnOffStatus.setValue(json.object().value(rpcConstants::rigRitOnOffStatus).toBool());
+
     }
     else
     {
@@ -150,6 +149,10 @@ MinosItem<bool> RigDetails::transverterStatus() const
 {
     return _transverterStatus;
 }
+MinosItem<bool> RigDetails::volumeStatus() const
+{
+    return _volumeStatus;
+}
 MinosStringItem<QString> RigDetails::bandList() const
 {
     return _bandList;
@@ -158,7 +161,4 @@ MinosItem<bool> RigDetails::ritEnableStatus() const
 {
     return _ritEnableStatus;
 }
-MinosItem<bool> RigDetails::ritOnOffStatus() const
-{
-    return _ritOnOffStatus;
-}
+

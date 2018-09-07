@@ -78,6 +78,8 @@ public:
     void startGroup();
     void endGroup();
 
+    void clear();
+
     INIFile(const QString &name );
     ~INIFile();
 };

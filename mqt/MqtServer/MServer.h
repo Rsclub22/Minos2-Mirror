@@ -35,6 +35,6 @@ class MinosServer
       virtual void dispatchStanza( MinosCommonConnection *il, RPCRequest *a );
 
       MinosServer();
-      ~MinosServer();
+      virtual ~MinosServer();
 };
 #endif

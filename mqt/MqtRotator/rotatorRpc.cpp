@@ -22,7 +22,7 @@ RotatorRpc::RotatorRpc(RotatorMainWindow *parent) : QObject(parent), parent(pare
 {
 //    rotatorRpc = this;
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::rotatorApp);
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
@@ -109,7 +109,7 @@ void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
                 trace("rotate on wrong rotator " + selContest + " instead of " + cursel );
             }
         }
-        else if (args->getStructArgMember(0, rpcConstants::rotatorAntennaName, psAntName))
+        else if (args->getStructArgMember(0, rpcConstants::rotatorSelectAntennaName, psAntName))
         {
             QString name;
             if (psAntName->getString(name))

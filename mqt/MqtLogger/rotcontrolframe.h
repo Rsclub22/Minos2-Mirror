@@ -47,13 +47,14 @@ public:
 
     void setRotatorLoaded();
 
-    void setRotatorList(QString);
+    void setRotatorList();
     void setRotatorState(const QString &s);
     void setRotatorBearing(const QString &s);
     void setRotatorAntennaName(const QString &s);
     void setRotatorMaxAzimuth(const QString &s);
     void setRotatorMinAzimuth(const QString &s);
     int getAngle(QString);
+    int getCurrentBearing();
 
     QString getBrgTxtFrmFrame();
     void setBrgFromRigFrmMemory(QString Brg);

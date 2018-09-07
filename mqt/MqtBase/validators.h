@@ -10,7 +10,6 @@
 
 #ifndef validatorsH
 #define validatorsH 
-// #include "base_pch.h"    / causes clang problems
 
 #include <QLineEdit>
 #include "mwin.h"
@@ -54,7 +53,7 @@ class ErrEntry
       ErrEntry()
             : priority( 0 ), errStr( "" )
       {}
-      ErrEntry( unsigned int c, const char *s )
+      ErrEntry( unsigned int c, QString s )
             : priority( c ), errStr( s )
       {}
 
@@ -100,7 +99,7 @@ typedef ErrorList::iterator ErrorIterator;
 
 enum validTypes { /*cmNone, cmCancel, cmValid,*/ cmCheckValid, cmValidStatus /*, cmReleasedFocus*/};
 enum validatorTypes {vtNone, vtNotEmpty, vtNumeric, vtDate, vtTime, vtCallsign,
-                     vtSN, vtRST, vtLoc, vtQTH, vtComments};
+                     vtSN, vtRST, vtLoc, vtQTH, vtComments, vtFreq};
 
 class Validator
 {

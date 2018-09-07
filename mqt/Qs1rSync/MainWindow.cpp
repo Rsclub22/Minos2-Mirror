@@ -69,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
     SyncTimer.start(100);
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC("Qs1rSync", false);    // DO NOT use the environment variable - use "Chat" everywhere
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), false);    // DO NOT use the environment variable - use "Chat" everywhere
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
@@ -79,14 +79,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QStringList servers;
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = config->elelist.begin(); i != config->elelist.end(); i++ )
     {
-        Connectable res = (*i)->connectable();
-        servers.append(res.serverName);
+        QSharedPointer<Connectable> res = (*i)->connectable();
+        servers.append(res->serverName);
     }
     servers.sort();
     servers.removeDuplicates();
 
     for (int i = 0; i < servers.size(); i++)
     {
+        // this only works for local servers - so OK for me, but...
         rpc->subscribeRemote( servers[i], rpcConstants::rigControlCategory );
         rpc->subscribeRemote( servers[i], rpcConstants::rigDetailsCategory );
         rpc->subscribeRemote( servers[i], rpcConstants::rigStateCategory );
@@ -244,15 +245,29 @@ void MainWindow::on_transfer12Button_clicked()
 
 void MainWindow::on_transfer21Button_clicked()
 {
-    long freq = fCentre + ftf;
+    long lFreq = fCentre + ftf;
 
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    st->addMember( QString::number(freq + transvertOffset), rpcConstants::rigControlFreq );
-    rpc.getCallArgs() ->addParam( st );
+    QStringList qsl = rigCache.getSelectedLoggers(rigSelected);
+    if (qsl.count())
+    {
+        QString loggerUuid = qsl[0];
 
-    rpc.queueCall( rigSelected);
+        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+        st->addMember( logger, rpcConstants::loggerUuid );
+
+        QString selc = rigCache.getSelectedContest(rigSelected, loggerUuid);
+
+        QSharedPointer<RPCParam>select(new RPCStringParam(selc ));
+        st->addMember( select, rpcConstants::selected );
+
+        st->addMember( convertFreqToStr(lFreq + transvertOffset), rpcConstants::rigControlFreq );
+        rpc.getCallArgs() ->addParam( st );
+
+        rpc.queueCall( rigSelected);
+    }
 }
 
 void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
@@ -261,7 +276,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
     trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
     AnalysePubSubNotify an( err, mro );
 
-    if ( an.getOK() && an.getPublisherProgram() == rpcConstants::rigControlApp )
+    if ( an.getOK() )    // won't be true now
     {
         if ( an.getState() == psPublished)
         {
@@ -269,7 +284,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
             {
                 rigCache.setStateString(an);
             }
-            if ( an.getCategory() == rpcConstants::rigDetailsCategory)
+            else if ( an.getCategory() == rpcConstants::rigDetailsCategory)
             {
                 rigCache.setDetailsString(an);
             }
@@ -277,6 +292,8 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
             {
                 rigCache.addRigList(an.getValue());
             }
+            else
+                return;
         }
         rigSelected = rigCache.getSelected("");
         if (!rigSelected.isEmpty())

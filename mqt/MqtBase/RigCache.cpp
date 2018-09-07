@@ -129,6 +129,8 @@ void RigCache::setDetails(const PubSubName &name, const RigDetails &details)
 
 bool RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, const QString &contestuuid)
 {
+    trace("setSelected radio " + name.toString()+ " logger " + loggeruuid + " contest " + contestuuid);
+
     PubSubName psnSelected = getSelectedRadio(name);
     QStringList loggers = getSelectedLoggers(psnSelected);
     bool selOK = false;
@@ -152,7 +154,7 @@ bool RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, co
     else if (psnSelected == name)
     {
         selOK = true;
-        trace ("selection OK; selecting current rotator");
+        trace ("selection OK; selecting current radio");
     }
     else if ((loggers.size() == 0) || (loggers.size() == 1 && loggers[0] == loggeruuid))
     {
@@ -239,6 +241,10 @@ void RigCache::setMode(const PubSubName &name, const QString &mode)
 {
     rigStates[name].setMode(mode);
 }
+void RigCache::setVolume(const PubSubName &name, const int level)
+{
+    rigStates[name].setVolume(level);
+}
 
 void RigCache::setTransverterOffset(const PubSubName &name, double transverterOffset)
 {
@@ -251,6 +257,10 @@ void RigCache::setTransverterSwitch(const PubSubName &name, int transverterSwitc
 void RigCache::setTransverterStatus(const PubSubName &name, bool transverterStatus)
 {
     rigDetails[name].setTransverterStatus(transverterStatus);
+}
+void RigCache::setVolumeStatus(const PubSubName &name, bool volumeStatus)
+{
+    rigDetails[name].setVolumeStatus(volumeStatus);
 }
 void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {
@@ -266,7 +276,16 @@ void RigCache::setRitEnableStatus(const PubSubName &name, bool ritEnableStatus)
 }
 void RigCache::setRitOnOffStatus(const PubSubName &name, bool status)
 {
-    rigDetails[name].setRitOnOffStatus(status);
+    rigStates[name].setRitOnOffStatus(status);
+}
+void RigCache::setRadioRitStatus(const PubSubName &name, bool status)
+{
+    rigStates[name].setRitRadioStatus(status);
+}
+
+void RigCache::setTpm(const PubSubName &name, int tpm)
+{
+    rigStates[name].setTpm(tpm);
 }
 
 void RigCache::publishState()
@@ -276,7 +295,10 @@ void RigCache::publishState()
     {
         if (i.value().isDirty())
         {
-            rpc->publish(rpcConstants::rigStateCategory, i.key().toString(), i.value().pack(), psPublished);
+            if (!i.key().isEmpty())
+            {
+                rpc->publish(rpcConstants::rigStateCategory, i.key().toString(), i.value().pack(), psPublished);
+            }
             rigStates[i.key()].clearDirty();
         }
     }
@@ -289,7 +311,10 @@ void RigCache::publishDetails()
     {
         if (i.value().isDirty())
         {
-            rpc->publish(rpcConstants::rigDetailsCategory, i.key().toString(), i.value().pack(), psPublished);
+            if (!i.key().isEmpty())
+            {
+                rpc->publish(rpcConstants::rigDetailsCategory, i.key().toString(), i.value().pack(), psPublished);
+            }
             rigDetails[i.key()].clearDirty();
         }
     }

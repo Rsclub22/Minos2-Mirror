@@ -32,150 +32,163 @@ INCLUDEPATH += $$PWD/../MqtRigControl
 INCLUDEPATH += $$PWD/../MqtBandMap
 #DEPENDPATH += $$PWD/../MqtBandMap
 
-SOURCES += main.cpp \
-    tlogcontainer.cpp \
-    contestdetails.cpp \
+SOURCES += \
+    AdifImport.cpp \
     ContestApp.cpp \
+    ContestDetailsTransferObject.cpp \
+    FilterFrame.cpp \
+    LocCalcFrame.cpp \
     LoggerContacts.cpp \
     LoggerContest.cpp \
-    profiles.cpp \
-    tsinglelogframe.cpp \
-    tentryoptionsform.cpp \
-    MatchThread.cpp \
-    AdifImport.cpp \
-    enqdlg.cpp \
-    MinosTestExport.cpp \
-    reg1test.cpp \
-    PrintFile.cpp \
-    tbundleframe.cpp \
-    tsettingseditdlg.cpp \
-    tcalendarform.cpp \
-    tminoshelpform.cpp \
-    taboutbox.cpp \
-    tmanagelistsdlg.cpp \
-    tminosbandchooser.cpp \
-    tclockdlg.cpp \
-    tforcelogdlg.cpp \
-    tqsoeditdlg.cpp \
-    tloccalcform.cpp \
-    qsologframe.cpp \
-    tstatsdispframe.cpp \
-    dxccframe.cpp \
-    districtframe.cpp \
-    locframe.cpp \
-    SendRPCDM.cpp \
-    TSessionManager.cpp \
-    TClockFrame.cpp \
-    rigcontrolframe.cpp \
-    rotcontrolframe.cpp \
-    rigmemdialog.cpp \
-    LocCalcFrame.cpp \
-    StackedInfoFrame.cpp \
-    runbuttondialog.cpp \
-    RigMemoryFrame.cpp \
-    locTreeFrame.cpp \
-    ScreenConfig.cpp \
-    ScreenConfigElement.cpp \
-    ScreenConfigRow.cpp \
-    ScreenConfigFile.cpp \
-    MatchTreeFrame.cpp \
     MatchArchiveFrame.cpp \
     MatchOtherFrame.cpp \
     MatchThisFrame.cpp \
-    FilterFrame.cpp \
-    RotPresets.cpp
+    MatchThread.cpp \
+    MatchTreeFrame.cpp \
+    MinosTestExport.cpp \
+    PrintFile.cpp \
+    RigMemoryFrame.cpp \
+    RotPresets.cpp \
+    ScreenConfig.cpp \
+    ScreenConfigElement.cpp \
+    ScreenConfigFile.cpp \
+    ScreenConfigManager.cpp \
+    ScreenConfigRow.cpp \
+    SendRPCDM.cpp \
+    StackedInfoFrame.cpp \
+    TClockFrame.cpp \
+    TSessionManager.cpp \
+    contestdetails.cpp \
+    districtframe.cpp \
+    dxccframe.cpp \
+    enqdlg.cpp \
+    freqlineedit.cpp \
+    locTreeFrame.cpp \
+    locframe.cpp \
+    main.cpp \
+    profiles.cpp \
+    qsologframe.cpp \
+    reg1test.cpp \
+    rigcontrolframe.cpp \
+    rigmemdialog.cpp \
+    ritlineedit.cpp \
+    rotcontrolframe.cpp \
+    runbuttondialog.cpp \
+    taboutbox.cpp \
+    tbundleframe.cpp \
+    tcalendarform.cpp \
+    tclockdlg.cpp \
+    tentryoptionsform.cpp \
+    tforcelogdlg.cpp \
+    tloccalcform.cpp \
+    tlogcontainer.cpp \
+    tmanagelistsdlg.cpp \
+    tminosbandchooser.cpp \
+    tminoshelpform.cpp \
+    tqsoeditdlg.cpp \
+    tsettingseditdlg.cpp \
+    tsinglelogframe.cpp \
+    tstatsdispframe.cpp \
+    volumeslider.cpp
 
 HEADERS  += \
-    tlogcontainer.h \
-    contestdetails.h \
+    AdifImport.h \
     ContestApp.h \
+    ContestDetailsTransferObject.h \
+    FilterFrame.h \
+    LocCalcFrame.h \
     LoggerContacts.h \
     LoggerContest.h \
-    profiles.h \
-    tsinglelogframe.h \
-    tentryoptionsform.h \
-    MatchThread.h \
-    AdifImport.h \
-    enqdlg.h \
-    MinosTestExport.h \
-    reg1test.h \
-    printfile.h \
-    tbundleframe.h \
-    tsettingseditdlg.h \
-    tcalendarform.h \
-    tminoshelpform.h \
-    taboutbox.h \
-    tmanagelistsdlg.h \
-    tminosbandchooser.h \
-    tclockdlg.h \
-    tforcelogdlg.h \
-    tqsoeditdlg.h \
-    tloccalcform.h \
-    qsologframe.h \
-    tstatsdispframe.h \
-    dxccframe.h \
-    districtframe.h \
-    locframe.h \
-    SendRPCDM.h \
-    TSessionManager.h \
-    TClockFrame.h \
-    rigcontrolframe.h \
-    rotcontrolframe.h \
-    rigmemcommondata.h \
-    rigmemdialog.h \
-    LocCalcFrame.h \
-    StackedInfoFrame.h \
-    RigMemoryFrame.h \
-    locTreeFrame.h \
-    runbuttondialog.h \
-    ScreenConfig.h \
-    ScreenConfigElement.h \
-    ScreenConfigRow.h \
-    ScreenConfigFile.h \
-    MatchTreeFrame.h \
     MatchArchiveFrame.h \
     MatchOtherFrame.h \
     MatchThisFrame.h \
-    FilterFrame.h \
-    RotPresets.h
+    MatchThread.h \
+    MatchTreeFrame.h \
+    MinosTestExport.h \
+    RigMemoryFrame.h \
+    RotPresets.h \
+    ScreenConfig.h \
+    ScreenConfigElement.h \
+    ScreenConfigFile.h \
+    ScreenConfigManager.h \
+    ScreenConfigRow.h \
+    SendRPCDM.h \
+    StackedInfoFrame.h \
+    TClockFrame.h \
+    TSessionManager.h \
+    contestdetails.h \
+    districtframe.h \
+    dxccframe.h \
+    enqdlg.h \
+    freqlineedit.h \
+    locTreeFrame.h \
+    locframe.h \
+    printfile.h \
+    profiles.h \
+    qsologframe.h \
+    reg1test.h \
+    rigcontrolframe.h \
+    rigmemcommondata.h \
+    rigmemdialog.h \
+    ritlineedit.h \
+    rotcontrolframe.h \
+    runbuttondialog.h \
+    taboutbox.h \
+    tbundleframe.h \
+    tcalendarform.h \
+    tclockdlg.h \
+    tentryoptionsform.h \
+    tforcelogdlg.h \
+    tloccalcform.h \
+    tlogcontainer.h \
+    tmanagelistsdlg.h \
+    tminosbandchooser.h \
+    tminoshelpform.h \
+    tqsoeditdlg.h \
+    tsettingseditdlg.h \
+    tsinglelogframe.h \
+    tstatsdispframe.h \
+    volumeslider.h
 
-FORMS    += tlogcontainer.ui \
+FORMS    += \
     contestdetails.ui \
-    tsinglelogframe.ui \
-    tentryoptionsform.ui \
-    tbundleframe.ui \
-    tsettingseditdlg.ui \
-    tcalendarform.ui \
-    tminoshelpform.ui \
-    taboutbox.ui \
-    tmanagelistsdlg.ui \
-    tminosbandchooser.ui \
-    tclockdlg.ui \
-    tforcelogdlg.ui \
-    tqsoeditdlg.ui \
-    tloccalcform.ui \
-    qsologframe.ui \
-    tstatsdispframe.ui \
-    dxccframe.ui \
     districtframe.ui \
+    dxccframe.ui \
+    FilterFrame.ui \
+    LocCalcFrame.ui \
     locframe.ui \
-    TSessionManager.ui \
-    TClockFrame.ui \
+    locTreeFrame.ui \
+    MatchTreeFrame.ui \
+    presetbuttondialog.ui \
+    qsologframe.ui \
     rigcontrolframe.ui \
     rigmemdialog.ui \
-    rotcontrolframe.ui \
-    LocCalcFrame.ui \
-    StackedInfoFrame.ui \
     RigMemoryFrame.ui \
-    locTreeFrame.ui \
-    presetbuttondialog.ui \
+    rotcontrolframe.ui \
+    RotPresets.ui \
     runbuttondialog.ui \
     ScreenConfig.ui \
     ScreenConfigElement.ui \
+    ScreenConfigManager.ui \
     ScreenConfigRow.ui \
-    MatchTreeFrame.ui \
-    FilterFrame.ui \
-    RotPresets.ui
+    StackedInfoFrame.ui \
+    taboutbox.ui \
+    tbundleframe.ui \
+    tcalendarform.ui \
+    tclockdlg.ui \
+    TClockFrame.ui \
+    tentryoptionsform.ui \
+    tforcelogdlg.ui \
+    tloccalcform.ui \
+    tlogcontainer.ui \
+    tmanagelistsdlg.ui \
+    tminosbandchooser.ui \
+    tminoshelpform.ui \
+    tqsoeditdlg.ui \
+    TSessionManager.ui \
+    tsettingseditdlg.ui \
+    tsinglelogframe.ui \
+    tstatsdispframe.ui
 
 
 DISTFILES += \

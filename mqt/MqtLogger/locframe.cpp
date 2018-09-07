@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "contest.h"
 #include "locframe.h"
 #include "ui_locframe.h"
 #include "htmldelegate.h"

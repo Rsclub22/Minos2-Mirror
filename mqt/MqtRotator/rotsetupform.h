@@ -31,8 +31,8 @@ public:
     ~rotSetupForm();
 
     srotParams *antennaData;
-    bool antennaValueChanged;
-    bool antennaNameChanged;
+    bool antennaValueChanged = false;
+    bool antennaNameChanged = false;
 
 
 

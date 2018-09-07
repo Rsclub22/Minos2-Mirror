@@ -19,7 +19,6 @@ class ConfigElementFrame : public QFrame
 
     QLinearGradient gradient;
 
-    void checkEnabled();
 protected:
     void paintEvent(QPaintEvent *event);
 public:
@@ -29,6 +28,7 @@ public:
     bool localOK;
     bool remoteOK;
 
+    void checkEnabled();
     void setElement(QSharedPointer<RunConfigElement> configElement);
     void saveElement();
     void setNameFocus();

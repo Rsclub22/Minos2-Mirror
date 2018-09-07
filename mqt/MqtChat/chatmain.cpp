@@ -10,7 +10,7 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
 {
     // force the app BEFORE constructing the ui - which will
     // initialise it through the chat server
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::chatApp, false);    // DO NOT use the environment variable - use "Chat" everywhere
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), false);    // DO NOT use the environment variable - use "Chat" everywhere
     Q_UNUSED(rpc);
 
     ui->setupUi(this);
@@ -28,6 +28,8 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
     QByteArray geometry = settings.value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
+
+    ui->chatFrame->setStandAlone();
 
 }
 

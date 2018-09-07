@@ -1,5 +1,5 @@
 #include "base_pch.h"
-
+#include "contest.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
 #include "MonitorMain.h"
@@ -234,7 +234,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
     monitorTimer->start(100);
 
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC(rpcConstants::monitorApp, true);
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));

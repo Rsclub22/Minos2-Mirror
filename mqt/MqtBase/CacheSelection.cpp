@@ -58,7 +58,7 @@ void CacheSelection::unpack(const QJsonValue &json)
 
     QVector<QString> notSelected; // map of contests by logger (uuids)
     QMapIterator<QString, MinosStringItem<QString> > iter(_selected);
-    if (iter.hasNext())
+    while (iter.hasNext())
     {
         iter.next();
         notSelected.push_back(iter.key());
@@ -71,7 +71,9 @@ void CacheSelection::unpack(const QJsonValue &json)
         QString contest = selstruct.value("contest").toString();
         _selected[logger].setValue(contest);
 
-        notSelected.removeOne(logger);
+        int n = notSelected.indexOf(logger);
+        if (n >= 0)
+            notSelected.remove(n);
     }
 
     for (int i = 0; i < notSelected.count(); i++)

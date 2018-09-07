@@ -1,6 +1,6 @@
 #include "base_pch.h"
 #include "htmldelegate.h"
-
+#include "contest.h"
 #include "MonitorMain.h"
 #include "MonitoringFrame.h"
 #include "ui_MonitoringFrame.h"

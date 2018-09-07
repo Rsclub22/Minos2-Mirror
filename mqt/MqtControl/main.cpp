@@ -1,12 +1,12 @@
-#include "ControlMain.h"
-#include <QApplication>
+#include "base_pch.h"
 #include "AppStartup.h"
+#include "ControlMain.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    appStartup("MinosQtControl");
+    appStartup(rpcConstants::controlApp);
 
     ControlMain w;
     w.show();

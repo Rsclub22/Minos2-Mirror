@@ -2,12 +2,59 @@
 #include <QPalette>
 #include <QApplication>
 #include <QFileDialog>
+#include <QProcessEnvironment>
 
-void appStartup(const QString &appName)
+static QString appStartupName;
+QString getAppStartupName()
 {
+    return appStartupName;
+}
+static QtMessageHandler oldHandler = nullptr;
+void myMessageOutput(QtMsgType type,
+                     const QMessageLogContext &context,
+                     const QString &msg)
+{
+    // catch (and trace) application output before a crash
+    oldHandler(type, context, msg);
+
+    QString mtype;
+    switch (type)
+    {
+    case QtDebugMsg:
+        mtype = "Debug";
+        break;
+    case QtInfoMsg:
+        mtype = "Info";
+        break;
+    case QtWarningMsg:
+        mtype = "Warning";
+        break;
+    case QtCriticalMsg:
+        mtype = "Critical";
+        break;
+    case QtFatalMsg:
+        mtype = "Fatal";
+        break;
+    }
+    QString res = QString("AppMessageHandler (%1, %2 %3:%4): %5").arg(mtype).arg(context.file).arg(context.line).arg(context.function).arg(msg);
+    trace(res);
+}
+
+void appStartup(const QString &pappName)
+{
+    oldHandler = qInstallMessageHandler(myMessageOutput);
+
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    appStartupName = env.value("MQTRPCNAME", "") ;
+
+    if (appStartupName.isEmpty())
+    {
+        appStartupName = pappName;
+    }
+
     QApplication::setOrganizationName( "Minos2Qt" );
     QApplication::setOrganizationDomain( "g0gjv.org.uk" );
-    QApplication::QCoreApplication::setApplicationName( appName );
+    QApplication::QCoreApplication::setApplicationName( appStartupName );
 
     QSettings settings;
     QVariant qfont = settings.value( "font" );
@@ -61,6 +108,6 @@ void appStartup(const QString &appName)
 #endif
     }
 
-    enableTrace( "./TraceLog", appName + "_" );
+    enableTrace( "./TraceLog", appStartupName + "_" );
 }
 

@@ -7,7 +7,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
-
+#include "list.h"
+#include "contest.h"
+#include "MatchContact.h"
 //---------------------------------------------------------------------------
 BaseMatchContest::~BaseMatchContest(){}
 

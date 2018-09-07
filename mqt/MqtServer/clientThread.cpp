@@ -13,6 +13,8 @@
 #include "clientThread.h"
 #include "serverThread.h"
 
+#include "MServerPubSub.h"
+
 //==============================================================================
 
 MinosClientConnection::MinosClientConnection()

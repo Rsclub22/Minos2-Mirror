@@ -217,7 +217,7 @@ private slots:
 
     void rotatingTimer();
     void about();
-    void saveTraceLogFlag();
+    void saveTraceLogFlag(bool);
     void overLapDisplayBox(overlapStat status);
     void currentAntennaSettingChanged(QString);
     void updateSelectAntennaBox();
@@ -251,11 +251,12 @@ private slots:
     void presetClear(int num);
 
 
+
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
 
-    void readTraceLogFlag();
+
 
 
     void toggleOverLapDisplay(bool toggle);
@@ -275,6 +276,7 @@ private:
     int calclRot_0_450_Neg180_540(int targetBearing);
     void dumpRotatorToTraceLog();
     void writeWindowTitle(QString appName);
+    void readTraceLogFlag();
 
     void sendPresetListLogger();
     void cwCCWControlVisible(bool visible);
