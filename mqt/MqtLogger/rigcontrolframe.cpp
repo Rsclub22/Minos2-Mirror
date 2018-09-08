@@ -515,11 +515,11 @@ void RigControlFrame::on_ContestPageChanged()
     QString bandlist = LogContainer->sendDM->getRigDetails(radioName).bandList().getValue();
     setBandList(bandlist);
 
-    QString freq = tslf->sCurFreq;
-    if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
-    {
-        sendFreq(freq);
-    }
+//    QString freq = tslf->sCurFreq;
+//    if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
+//    {
+//        sendFreq(freq);
+//    }
 
 }
 
