@@ -486,7 +486,7 @@ void RigControlMainWindow::upDateRadio()
 
                 writeWindowTitle(appName);
                 sendStatusToLogConnected();
-                sendBandListLogger();
+
 
                 updateSupportedRadioIndicators();
 
@@ -505,6 +505,8 @@ void RigControlMainWindow::upDateRadio()
                 }
                 sendRitEnableStatusLogger();
                 dumpRadioToTraceLog();
+
+                sendBandListLogger();       // here as delay after sending to logger the connected message
 
             }
             else
@@ -680,6 +682,12 @@ void RigControlMainWindow::closeRadio()
 
     showStatusMessage("Disconnected");
     sendStatusToLogDisConnected();
+    displayFreqVfo(0.0);
+    displayTransVertVfo(0.0);
+    ui->transVertBandDisp->setText("");
+    ui->transVertSwNum->setText("");
+    turnOffAllsupRadioIndicators();
+    displaySignalStrength(-54);
     logMessage(QString("Radio Closed"));
 
     msg->rigCache.publish();
@@ -963,6 +971,7 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
                         ui->transVertSwNum->setText(TRANSSW_NUM_DEFAULT);
                         sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
                         sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
+                        updateSupportedRadioIndicators();
                     }
                     logMessage(QString("SetFreq: Transvert Switch not enabled - %1").arg(TRANSSW_NUM_DEFAULT));
                 }
@@ -984,8 +993,10 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
                 ui->transVertBandDisp->setText("");
                 transVertSwNum = TRANSSW_NUM_DEFAULT;
                 ui->transVertSwNum->setText(TRANSSW_NUM_DEFAULT);
+                selTransVertBandIndicator = "";
                 sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
                 sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
+                updateSupportedRadioIndicators();
                 //setTransVertDisplayVisible(true);
             }
 
@@ -1482,6 +1493,10 @@ void RigControlMainWindow::displaySignalStrength(int level)
 {
 
     int signal = level + 60;
+    if (signal > MAX_SMETER_LEVEL || signal < MIN_SMETER_LEVEL)
+    {
+        logMessage(QString("Display Signal Level: SMeter Level out of range %1").arg(level));
+    }
     qreal rSignal = static_cast<qreal>(signal)/static_cast<qreal>(110);
     // display signal bar
     ui->sMeter->setLevel(rSignal);
