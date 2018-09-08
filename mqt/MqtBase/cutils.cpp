@@ -345,7 +345,7 @@ bool containsChars(QString s, const QList<QChar> chars)
 
 // replace with QChar c where a QChar from the QList is found.
 
-void replaceChars(QString &s, const QChar c, const QList<QChar> chars )
+QString replaceChars(QString s, const QChar c, const QList<QChar> chars )
 {
 
     for (auto i : chars)
@@ -356,7 +356,7 @@ void replaceChars(QString &s, const QChar c, const QList<QChar> chars )
 }
 
 // remove any QChars found in the QList from the QString
-void removeChars(QString &s, const QList<QChar> chars)
+QString removeChars(QString s, const QList<QChar> chars)
 {
 
     for (auto i : chars)
