@@ -6,7 +6,7 @@
 include($$PWD/../mqt.pri)
 include($$PWD/../mqtapplibs.pri)
 
-QT       += core gui network
+QT       += core gui network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     qttelnet.cpp \
     setupdialog.cpp \
     cluster.cpp \
-    dxspotdatamodel.cpp
+    dxspotdatamodel.cpp \
+    spotsdatabase.cpp
 
     qttelnet.cpp
 
@@ -39,7 +40,8 @@ HEADERS  += clustermainwindow.h \
     qttelnet.h \
     setupdialog.h \
     cluster.h \
-    dxspotdatamodel.h
+    dxspotdatamodel.h \
+    spotsdatabase.h
 
 
 
