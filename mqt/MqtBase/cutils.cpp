@@ -323,3 +323,46 @@ QValidator::State UpperCaseValidator::validate(QString & input, int & /*pos*/) c
     }
     return Acceptable;
 }
+
+//=======================================================================================
+
+
+// returns true if any of the QChars in the QList are found in QString s
+
+bool containsChars(QString s, const QList<QChar> chars)
+{
+    bool state = false;
+    for (auto i : chars)
+    {
+        state = s.contains(i);
+        if (state)
+            return state;
+    }
+
+    return state;
+
+}
+
+// replace with QChar c where a QChar from the QList is found.
+
+void replaceChars(QString &s, const QChar c, const QList<QChar> chars )
+{
+
+    for (auto i : chars)
+    {
+        s.replace(i, c);
+    }
+
+}
+
+// remove any QChars found in the QList from the QString
+void removeChars(QString &s, const QList<QChar> chars)
+{
+
+    for (auto i : chars)
+    {
+        s.remove(i, Qt::CaseInsensitive);
+    }
+
+}
+
