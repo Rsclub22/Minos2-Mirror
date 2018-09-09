@@ -343,7 +343,7 @@ bool containsChars(QString s, const QList<QChar> chars)
 
 }
 
-// replace with QChar c where a QChar from the QList is found.
+// replace with QChar c when a QChar from the QList is found.
 
 QString replaceChars(QString s, const QChar c, const QList<QChar> chars )
 {
@@ -353,6 +353,8 @@ QString replaceChars(QString s, const QChar c, const QList<QChar> chars )
         s.replace(i, c);
     }
     return s;
+    return s;
+
 }
 
 // remove any QChars found in the QList from the QString
@@ -364,5 +366,7 @@ QString removeChars(QString s, const QList<QChar> chars)
         s.remove(i, Qt::CaseInsensitive);
     }
     return s;
+    return s;
+
 }
 
