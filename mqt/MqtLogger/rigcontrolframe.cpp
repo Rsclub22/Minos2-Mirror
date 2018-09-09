@@ -433,7 +433,7 @@ void RigControlFrame::returnChangeRadioFreq()
 void RigControlFrame::radioBandFreq(int index)
 {
     int idx = index -1;
-
+    setRadioBandWarning("");
     if (idx >= 0 && idx < listOfBands.count())
     {
         QString f = listOfBands[idx].freq;
@@ -515,11 +515,11 @@ void RigControlFrame::on_ContestPageChanged()
     QString bandlist = LogContainer->sendDM->getRigDetails(radioName).bandList().getValue();
     setBandList(bandlist);
 
-//    QString freq = tslf->sCurFreq;
-//    if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
-//    {
-//        sendFreq(freq);
-//    }
+    QString freq = tslf->sCurFreq;
+    if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
+    {
+        sendFreq(freq);
+    }
 
 }
 
@@ -831,19 +831,44 @@ void RigControlFrame::setBandList(QString b)
                 {
                     if (listOfBands[i].band == cb)
                     {
+                        trace(QString("Set band list: found band %1 on radio").arg(cb));
                         ui->bandSelCombo->setCurrentIndex(i + 1);
+
 
                         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
                         double cf = convertStrToFreq(tslf->sCurFreq);
-
-                        if (cf > bi.fhigh || cf < bi.flow)
+                        QString cfstr;
+                        // find band for current freq
+                        for (int i = 0; i < blist.bandList.count(); i++)
                         {
-                            trace((ct?ct->uuid:QString()) + " RigControlFrame::setBandList set frequency to default for band " + cb);
-                            radioBandFreq(i + 1);
+                            if (cf >= blist.bandList[i].flow && cf <= blist.bandList[i].fhigh)
+                            {
+                                cfstr = blist.bandList[i].uk;
+                                break;
+                            }
+
                         }
-                        break;
+
+
+                        if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
+                        {
+                            sendFreq(tslf->sCurFreq);
+                            trace(QString("Set band list: Set previous freq = %1").arg(cf));
+                        }
+                        else
+                        {
+                            sendFreq(listOfBands[i].freq);
+                            trace(QString("Set band list: Set defaut freq = %1").arg(listOfBands[i].freq));
+                        }
+
+                        setRadioBandWarning("");
+
+                        return;
                     }
                 }
+                // warn no band for this radio
+                setRadioBandWarning(QString("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
+                trace(QString("Set band list: %1 Band not found on this radio").arg(cb));
             }
         }
     }
@@ -930,8 +955,13 @@ void RigControlFrame::setRadioTxVertState(bool s)
     ui->TxVertLabel->setVisible(s);
     ui->txvertStat->setText("On");
     ui->txvertStat->setVisible(s);
+
 }
 
+void RigControlFrame::setRadioBandWarning(QString s)
+{
+    ui->bandWarnLabel->setText(s);
+}
 
 
 void RigControlFrame::setRitEnableState(bool s)
