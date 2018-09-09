@@ -352,7 +352,7 @@ QString replaceChars(QString s, const QChar c, const QList<QChar> chars )
     {
         s.replace(i, c);
     }
-
+    return s;
 }
 
 // remove any QChars found in the QList from the QString
@@ -363,6 +363,6 @@ QString removeChars(QString s, const QList<QChar> chars)
     {
         s.remove(i, Qt::CaseInsensitive);
     }
-
+    return s;
 }
 
