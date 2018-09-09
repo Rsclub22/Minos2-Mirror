@@ -166,7 +166,8 @@ const int SMETERVALUES[17][2] = {
 
                                 };
 
-
+const int MAX_SMETER_LEVEL = 61;
+const int MIN_SMETER_LEVEL = -54;
 
 const QStringList SMETERTEXT = {
                                 "S9+60",

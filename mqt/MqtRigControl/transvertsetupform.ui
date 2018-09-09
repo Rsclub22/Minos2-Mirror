@@ -91,7 +91,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="transVertSwNum"/>
+      <widget class="QLineEdit" name="transVertSwNum">
+       <property name="maxLength">
+        <number>20</number>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_3">

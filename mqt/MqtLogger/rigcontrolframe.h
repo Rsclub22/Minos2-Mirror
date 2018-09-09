@@ -269,6 +269,8 @@ private:
     void ritLineEditInFocus();
     void ritButtonOn();
     void ritButtonOff();
+
+    void setRadioBandWarning(QString s);
 };
 
 
