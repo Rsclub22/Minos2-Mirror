@@ -7,16 +7,16 @@ static QVector <SCTypeOption> scoptions =
 {
     {sctNone, "None", "Not in use"},
     {sctAux, "Auxiliary", "Auxiiary Display"},
+    {sctChat, "Chat Display", "Chat Display"},
     {sctLog, "Log List", "QSO Log List"},
+    {sctNextQSODetails, "Next QSO Details", "Next QSO details"},
+    {sctQSOEdit, "QSO Edit", "QSO Edit"},
     {sctRigControl, "Rig Control", "Rig Control"},
     {sctRotControl, "Rotator Control", "Rotator Control"},
     {sctRotPresets, "Rotator Presets", "Rotator Presets"},
-    {sctQSOEdit, "QSO Edit", "QSO Edit"},
-    {sctNextQSODetails, "Next QSO Details", "Next QSO details"},
     {sctThisMatch, "This Contest Match", "This Contest Matches"},
     {sctOtherMatch, "Other Contest Match", "Other Contest Matches" },
-    {sctArchiveMatch, "Archive Match", "Archive List Matches" },
-    {sctChat, "Chat Display", "Chat Display"}
+    {sctArchiveMatch, "Archive Match", "Archive List Matches" }
 };
 SCType getScreenType(QString s)
 {
@@ -47,8 +47,11 @@ ScreenConfigElement::ScreenConfigElement(QWidget *parent, ScreenConfigRow *paren
     int i = 0;
     foreach(const SCTypeOption &opt, scoptions)
     {
-        ui->elementTypeCombo->addItem(opt.s, opt.type);
-        ui->elementTypeCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
+        if (opt.type != sctNone)
+        {
+            ui->elementTypeCombo->addItem(opt.s, opt.type);
+            ui->elementTypeCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
+        }
     }
 }
 
@@ -75,7 +78,7 @@ void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
 
     if (!parentRow->checkOk(this))
     {
-        setType(getScreenTypeString(sctNextQSODetails));
+        setType(getScreenTypeString(sctNone));
     }
 }
 

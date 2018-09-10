@@ -155,6 +155,7 @@ void ScreenConfigManager::on_newButton_clicked()
         scf.configs[curConfigName] = newsc;
         // create empty layout
         showDetails();
+        on_editButton_clicked();
     }
 }
 
@@ -170,12 +171,17 @@ void ScreenConfigManager::on_cloneButton_clicked()
         newsc.name = curConfigName;
         scf.configs[curConfigName] = newsc;
         showDetails();
+        on_editButton_clicked();
     }
 }
 
 void ScreenConfigManager::on_deleteButton_clicked()
 {
     scf.configs.remove(curConfigName);
+    if (curConfigName == defaultConfigName)
+    {
+        defaultConfigName = scf.defaultLayoutName;
+    }
     curConfigName = scf.defaultLayoutName;
     showDetails();
 
@@ -183,6 +189,7 @@ void ScreenConfigManager::on_deleteButton_clicked()
 
 void ScreenConfigManager::on_renameButton_clicked()
 {
+    QString oldName = curConfigName;
     QString value = curConfigName;
     if (getNewName(value))
     {
@@ -191,6 +198,11 @@ void ScreenConfigManager::on_renameButton_clicked()
         curConfigName = value;
         sc.name = curConfigName;
         scf.configs[curConfigName] = sc;
+
+        if (defaultConfigName == oldName)
+        {
+            defaultConfigName = curConfigName;
+        }
 
         // and we need to redo the map
         showDetails();
@@ -206,6 +218,7 @@ void ScreenConfigManager::on_editButton_clicked()
 void ScreenConfigManager::on_OKButton_clicked()
 {
     on_applyButton_clicked();
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpCurrentLayout, defaultConfigName );
     close();
 }
 
@@ -214,7 +227,6 @@ void ScreenConfigManager::on_applyButton_clicked()
     // write it back, or the screen redraw doesn't work
     scf.dumpFile();
 
-    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpCurrentLayout, curConfigName );
     LogContainer->selectLayout(curConfigName);
     LogContainer->applyScreenLayouts();
 }
@@ -227,5 +239,6 @@ void ScreenConfigManager::on_cancelButton_clicked()
 void ScreenConfigManager::on_makeDefaultButton_clicked()
 {
     defaultConfigName = curConfigName;
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpCurrentLayout, curConfigName );
     showDetails();
 }
