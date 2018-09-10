@@ -54,4 +54,4 @@ FORMS    += rigcontrolmainwindow.ui \
     freqpresetdialog.ui \
     addradiodialog.ui
 
-win32: INCLUDEPATH += C:/Projects/hamlib-w32-3.1/include
+#win32: INCLUDEPATH += C:/Projects/hamlib-w32-3.3/include
