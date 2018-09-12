@@ -59,6 +59,7 @@ else
 fi
 
 cp -r ../Minos2/mqt/ControlFiles/Configuration/* ./Configuration
+cp -r ../Minos2/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
 rm -rf ../Minos2/mqt/ControlFiles/Configuration/WindowsFiles
 cp ../Minos2/mqt/Installer/Minos.sh . 
 
