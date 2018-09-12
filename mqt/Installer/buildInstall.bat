@@ -25,14 +25,14 @@ if not exist build mkdir build
 cd build
 
 qmake.exe ..\mqt\mqt.pro
-IF %ERRORLEVEL% EQ 0 goto make
+IF %ERRORLEVEL% == 0 goto make
   echo qmake failed; please fix errors and rebuild
   goto reset
 :make
 
 mingw32-make release
 
-IF %ERRORLEVEL% EQ 0 goto installer
+IF %ERRORLEVEL% == 0 goto installer
   echo mingw32-make failed; please fix errors and rebuild
   goto reset
 :installer
@@ -93,7 +93,7 @@ mkdir Installer
 xcopy /E /F /Y %MROOT%\mqt\Installer .\Installer
 
 C:\"Program Files (x86)\Inno Setup 5\ISCC.exe" Installer\Minos2Install.iss
-IF %ERRORLEVEL% EQ 0 goto reset
+IF %ERRORLEVEL% == 0 goto reset
   echo Inno Setup failed; please fix errors and rebuild
 
 :reset
