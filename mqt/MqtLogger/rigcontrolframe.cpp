@@ -814,7 +814,6 @@ void RigControlFrame::setBandList(QString b)
         if (i >= 0)
             ui->bandSelCombo->setCurrentIndex(i);
 
-
         if (ct == TContestApp::getContestApp() ->getCurrentContest())
         {
             //And we want to select the frequency based on the contest band
@@ -870,9 +869,18 @@ void RigControlFrame::setBandList(QString b)
                 setRadioBandWarning(QString("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
                 trace(QString("Set band list: %1 Band not found on this radio").arg(cb));
             }
-        }
+
+
+         }
+
     }
 }
+
+
+
+
+
+
 
 void RigControlFrame::setRadioState(QString s)
 {

@@ -1402,6 +1402,9 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
             {
                GJVQSOLogFrame->setRadioName(radName);
                FKHRigControlFrame->setRadioName(radName, mode);
+               LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+
+
             }
             else
             {

@@ -145,6 +145,7 @@ public:
     void checkConnection();
 
     void setRadioVolumeState(bool state);
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
