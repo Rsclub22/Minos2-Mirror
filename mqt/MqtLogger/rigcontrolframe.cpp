@@ -512,14 +512,14 @@ void RigControlFrame::on_ContestPageChanged()
     trace(QString("on_ContestPageChanged emit selectRadio %1 %2 ").arg(radioName).arg(mode));
     emit selectRadio(radioName, mode);
 
-    QString bandlist = LogContainer->sendDM->getRigDetails(radioName).bandList().getValue();
-    setBandList(bandlist);
+//    QString bandlist = LogContainer->sendDM->getRigDetails(radioName).bandList().getValue();
+//    setBandList(bandlist);
 
-    QString freq = tslf->sCurFreq;
-    if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
-    {
-        sendFreq(freq);
-    }
+//    QString freq = tslf->sCurFreq;
+//    if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
+//    {
+//        sendFreq(freq);
+//    }
 
 }
 
