@@ -21,7 +21,7 @@ QString getServerId()
 {
    const QString key = "ServerUUID";
 
-   QSettings settings("Minos2Qt", "MinosQtServerUUID");    // override the app settings
+   QSettings settings( GetCurrentDir() + "/Configuration/ServerUUID.ini" , QSettings::IniFormat ) ;
 
    QString uuid = settings.value(key, "").toString();
    if (uuid.size() == 0)
