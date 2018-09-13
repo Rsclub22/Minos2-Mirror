@@ -8,30 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include "XMPP_pch.h"
-#include <QUuid>
 
 static QSharedMemory ServerEvent;
-
-QString makeUuid()
-{
-    QUuid uuid = QUuid::createUuid();
-    return uuid.toString();
-}
-QString getServerId()
-{
-   const QString key = "ServerUUID";
-
-   QSettings settings( GetCurrentDir() + "/Configuration/ServerUUID.ini" , QSettings::IniFormat ) ;
-
-   QString uuid = settings.value(key, "").toString();
-   if (uuid.size() == 0)
-   {
-       uuid = makeUuid();
-       settings.setValue(key, uuid);
-   }
-   return uuid;
-
-}
 
 void makeServerEvent( bool create )
 {

@@ -8,6 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include "minos_pch.h"
+#include <QUuid>
+
 #include "tinyxml.h"
 #include "TinyUtils.h"
 
@@ -35,6 +37,26 @@ static quint16 toQUint16 ( const QString &s, int def )
             num = i;
     }
     return static_cast<quint16>(num);
+}
+static QString makeUuid()
+{
+    QUuid uuid = QUuid::createUuid();
+    return uuid.toString();
+}
+static QString getServerId()
+{
+   const QString key = "ServerUUID";
+
+   QSettings settings ;
+
+   QString uuid = settings.value(key, "").toString();
+   if (uuid.size() == 0)
+   {
+       uuid = makeUuid();
+       settings.setValue(key, uuid);
+   }
+   return uuid;
+
 }
 //---------------------------------------------------------------------------
 TZConf::TZConf( )
