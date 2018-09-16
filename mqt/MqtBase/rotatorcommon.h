@@ -54,13 +54,33 @@ const QString ROTATE_PRESET8 = "Ctrl+8";
 const QString ROTATE_PRESET9 = "Ctrl+9";
 const QString ROTATE_PRESET10 = "Ctrl+0";
 
-const QStringList presetShortCutKeys = {ROTATE_PRESET1, ROTATE_PRESET2,
-                            ROTATE_PRESET3, ROTATE_PRESET4,
-                            ROTATE_PRESET5, ROTATE_PRESET6,
-                            ROTATE_PRESET7, ROTATE_PRESET8,
-                            ROTATE_PRESET9, ROTATE_PRESET10};
+const QStringList presetShortCutKeys = {
+                                            ROTATE_PRESET1, ROTATE_PRESET2,
+                                            ROTATE_PRESET3, ROTATE_PRESET4,
+                                            ROTATE_PRESET5, ROTATE_PRESET6,
+                                            ROTATE_PRESET7, ROTATE_PRESET8,
+                                            ROTATE_PRESET9, ROTATE_PRESET10
+                                        };
 
 
+const QString ROTATE_PRESET_SHIFT1 = "Ctrl+Shift+1";
+const QString ROTATE_PRESET_SHIFT2 = "Ctrl+Shift+2";
+const QString ROTATE_PRESET_SHIFT3 = "Ctrl+Shift+3";
+const QString ROTATE_PRESET_SHIFT4 = "Ctrl+Shift+4";
+const QString ROTATE_PRESET_SHIFT5 = "Ctrl+Shift+5";
+const QString ROTATE_PRESET_SHIFT6 = "Ctrl+Shift+6";
+const QString ROTATE_PRESET_SHIFT7 = "Ctrl+Shift+7";
+const QString ROTATE_PRESET_SHIFT8 = "Ctrl+Shift+8";
+const QString ROTATE_PRESET_SHIFT9 = "Ctrl+Shift+9";
+const QString ROTATE_PRESET_SHIFT0 = "Ctrl+Shift+0";
+
+const QStringList presetShiftShortCutKeys = {
+                                                        ROTATE_PRESET_SHIFT1, ROTATE_PRESET_SHIFT2,
+                                                        ROTATE_PRESET_SHIFT3, ROTATE_PRESET_SHIFT4,
+                                                        ROTATE_PRESET_SHIFT5, ROTATE_PRESET_SHIFT6,
+                                                        ROTATE_PRESET_SHIFT7, ROTATE_PRESET_SHIFT8,
+                                                        ROTATE_PRESET_SHIFT9, ROTATE_PRESET_SHIFT0
+                                             };
 
 const int COMPASS_MAX360 = 360;
 const int COMPASS_HALF = 180;

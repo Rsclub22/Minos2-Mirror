@@ -14,7 +14,7 @@
 
 
 
-RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key)
+RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* shiftkey)
 {
     presetNum = num;
 
@@ -27,7 +27,7 @@ RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key)
     presetButton->setText(QString("%1:").arg(QString::number(presetNum + 1)));
 
     shortKey = key;
-    //shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), memButton);
+    shiftShortKey = shiftkey;
     readAction = new QAction("&Read", presetButton);
     writeAction = new QAction("&Write",presetButton);
     editAction = new QAction("&Edit", presetButton);
@@ -39,7 +39,7 @@ RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key)
     presetButton->setMenu(presetMenu);
 
     connect(shortKey, SIGNAL(activated()), this, SLOT(memoryRecallShortCutSelected()));
-    //connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShortCutSelected()));
+    connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShiftShortCutSelected()));
     connect(presetButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
     connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()));
     connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()));
@@ -61,8 +61,16 @@ void RotPresetButton::memoryRecallShortCutSelected()
     emit presetShortCutRecall();
 }
 
+void RotPresetButton::memoryShiftShortCutSelected()
+{
+   emit presetShiftShortCutRecall();
+}
 
 
+void RotPresetButton::showButtonMenu()
+{
+    presetShortCutSelected();
+}
 
 void RotPresetButton::presetShortCutSelected()
 {
@@ -86,6 +94,8 @@ void RotPresetButton::clearActionSelected()
 {
     emit presetClearAction();
 }
+
+
 
 
 void RotPresetButton::setText(QString t)

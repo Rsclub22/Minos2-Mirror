@@ -48,6 +48,11 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
         shortCutKeyList.append(new QShortcut(QKeySequence(presetShortCutKeys[i]), this));
     }
 
+    for (int i = 0; i < presetShiftShortCutKeys.count(); i++)
+    {
+        shiftShortCutKeyList.append(new QShortcut(QKeySequence(presetShiftShortCutKeys[i]), this));
+    }
+
 
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
@@ -1992,9 +1997,10 @@ void RotatorMainWindow::initPresetButtons()
     for (int i = 0; i < ui_presetbuttons.count(); i++)
     {
 
-        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i]));
+        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i]));
 
         connect(presetButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
         connect(presetButton[i], &RotPresetButton::presetReadAction, [this, i]() {presetRead(i);});
         connect(presetButton[i], &RotPresetButton::presetEditAction, [this, i]() {presetEdit(i);});
         connect(presetButton[i], &RotPresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
@@ -2005,6 +2011,10 @@ void RotatorMainWindow::initPresetButtons()
 
 }
 
+void RotatorMainWindow::showPresetMenu(int buttonNumber)
+{
+    presetButton[buttonNumber]->showButtonMenu();
+}
 
 
 void RotatorMainWindow::presetRead(int buttonNumber)

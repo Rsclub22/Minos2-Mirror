@@ -35,6 +35,7 @@ private:
     QVector<RotPresetData*> rotPresetData;
 
     QList<QShortcut *> shortCutKeyList;
+    QList<QShortcut *> shiftShortCutKeyList;
 
 
     void initPresetButtons();
@@ -52,6 +53,7 @@ private slots:
     void presetEdit(int buttonNumber);
     void presetClear(int buttonNumber);
     void presetWrite(int buttonNumber);
+    void showPresetMenu(int buttonNumber);
 
 public slots:
     void selectRotator(QString);

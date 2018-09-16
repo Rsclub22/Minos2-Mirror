@@ -24,6 +24,11 @@ RotPresets::RotPresets(QWidget *parent) :
         shortCutKeyList.append(new QShortcut(QKeySequence(presetShortCutKeys[i]), parent));
     }
 
+    for (int i = 0; i < presetShiftShortCutKeys.count(); i++)
+    {
+        shiftShortCutKeyList.append(new QShortcut(QKeySequence(presetShiftShortCutKeys[i]), parent));
+    }
+
     initPresetButtons();
 }
 
@@ -76,9 +81,10 @@ void RotPresets::initPresetButtons()
     {
 
         // build array of buttons
-        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i]));
+        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i]));
 
         connect(presetButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
         connect(presetButton[i], &RotPresetButton::presetReadAction, [this, i]() {presetRead(i);});
         connect(presetButton[i], &RotPresetButton::presetEditAction, [this, i]() {presetEdit(i);});
         connect(presetButton[i], &RotPresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
@@ -90,7 +96,10 @@ void RotPresets::initPresetButtons()
 
 
 
-
+void RotPresets::showPresetMenu(int buttonNumber)
+{
+    presetButton[buttonNumber]->showButtonMenu();
+}
 
 
 
