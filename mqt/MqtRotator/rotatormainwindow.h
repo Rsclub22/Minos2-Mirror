@@ -104,6 +104,7 @@ private:
 
     QList<RotPresetButton *> presetButton;
     QVector<RotPresetData*> rotPresets;
+    QList<QShortcut *> shortCutKeyList;
 
     QComboBox *selectAntenna;
     //QPushButton* presetButtons[NUM_PRESETS];
@@ -163,6 +164,8 @@ private:
     QString connectStat;
     QString statusMsg;
     QString activeMsg;
+
+
 
     void openRotator();
     void closeRotator();

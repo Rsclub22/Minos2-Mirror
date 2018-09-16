@@ -71,6 +71,10 @@ private:
     QShortcut *nudgeRight1;
     QShortcut *nudgeRight2;
     QShortcut *nudgeLeft;
+    QShortcut *rotateLeft;
+    QShortcut *rotateRight;
+    QShortcut *turnToBearing;
+    QShortcut *rotateStop;
 
     int maxAzimuth = 0;
     int minAzimuth = 0;
@@ -123,14 +127,15 @@ signals:
 private slots:
 
     void on_Rotate_clicked();
-    void on_RotateLeft_clicked(bool);
-    void on_RotateRight_clicked(bool);
+    void on_RotateLeft_clicked();
+    void on_RotateRight_clicked();
     void on_StopRotate_clicked();
     void getBrgFrmQSOLog(QString);
 
     void on_nudgeLeft_clicked();
     void on_nudgeRight_clicked();
     void on_antennaName_activated(const QString &arg1);
+
 
 };
 

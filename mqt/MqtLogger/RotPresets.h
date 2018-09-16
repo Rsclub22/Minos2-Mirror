@@ -4,6 +4,7 @@
 #include "base_pch.h"
 #include <QShortcut>
 #include <QGroupBox>
+#include <QShortcut>
 #include "MinosLoggerEvents.h"
 #include "rotatorcommon.h"
 #include "rotpresetbutton.h"
@@ -32,6 +33,9 @@ private:
 
     QList<RotPresetButton *> presetButton;
     QVector<RotPresetData*> rotPresetData;
+
+    QList<QShortcut *> shortCutKeyList;
+
 
     void initPresetButtons();
     void saveRotPresetButton(RotPresetData &editData);

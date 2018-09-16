@@ -43,10 +43,19 @@ RotControlFrame::RotControlFrame(QWidget *parent):
     nudgeLeft = new QShortcut(QKeySequence::ZoomOut, parent);   // Ctrl -
     connect(nudgeLeft, SIGNAL(activated()), ui->nudgeLeft, SLOT(click()));
 
-    ui->RotateLeft->setShortcut(QKeySequence(ROTATE_CCW_KEY));
-    ui->RotateRight->setShortcut(QKeySequence(ROTATE_CW_KEY));
-    ui->Rotate->setShortcut(QKeySequence(ROTATE_TURN_KEY));
-    ui->StopRotate->setShortcut(QKeySequence(ROTATE_STOP_KEY));
+    rotateLeft = new QShortcut(QKeySequence(ROTATE_CCW_KEY), parent);
+    connect(rotateLeft, SIGNAL(activated()), this, SLOT(on_RotateLeft_clicked()));
+
+
+    rotateRight = new QShortcut(QKeySequence(ROTATE_CW_KEY), parent);
+    connect(rotateRight, SIGNAL(activated()), this, SLOT(on_RotateRight_clicked()));
+
+    turnToBearing = new QShortcut(QKeySequence(ROTATE_TURN_KEY), parent);
+    connect(turnToBearing, SIGNAL(activated()), this, SLOT(on_Rotate_clicked()));
+
+    rotateStop = new QShortcut(QKeySequence(ROTATE_STOP_KEY), parent);
+    connect(rotateStop, SIGNAL(activated()), this, SLOT(on_StopRotate_clicked()));
+
 
     connect(this, SIGNAL(bearingEditReturn()), this, SLOT(on_Rotate_clicked()));
 
@@ -221,7 +230,7 @@ void RotControlFrame::on_nudgeRight_clicked()
 
 }
 
-void RotControlFrame::on_RotateLeft_clicked(bool /*clicked*/)
+void RotControlFrame::on_RotateLeft_clicked()
 {
 
     if (!rotConnected || rotError)
@@ -266,7 +275,7 @@ void RotControlFrame::on_RotateLeft_clicked(bool /*clicked*/)
 }
 
 
-void RotControlFrame::on_RotateRight_clicked(bool /*toggle*/)
+void RotControlFrame::on_RotateRight_clicked()
 {
 
     if (!rotConnected || rotError)

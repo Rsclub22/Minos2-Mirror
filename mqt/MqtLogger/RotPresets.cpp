@@ -10,11 +10,20 @@
 #include "RotPresets.h"
 #include "ui_RotPresets.h"
 
+
+
+
 RotPresets::RotPresets(QWidget *parent) :
     QGroupBox(parent),
     ui(new Ui::RotPresets)
 {
     ui->setupUi(this);
+
+    for (int i = 0; i < presetShortCutKeys.count(); i++)
+    {
+        shortCutKeyList.append(new QShortcut(QKeySequence(presetShortCutKeys[i]), parent));
+    }
+
     initPresetButtons();
 }
 
@@ -66,17 +75,23 @@ void RotPresets::initPresetButtons()
     for (int i = 0; i < ui_presetbuttons.count(); i++)
     {
 
-        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i));
+        // build array of buttons
+        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i]));
 
+        connect(presetButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
         connect(presetButton[i], &RotPresetButton::presetReadAction, [this, i]() {presetRead(i);});
         connect(presetButton[i], &RotPresetButton::presetEditAction, [this, i]() {presetEdit(i);});
         connect(presetButton[i], &RotPresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
         connect(presetButton[i], &RotPresetButton::presetClearAction, [this, i]() {presetClear(i);});
 
-
     }
-
 }
+
+
+
+
+
+
 
 
 void RotPresets::presetRead(int buttonNumber)

@@ -34,16 +34,33 @@ public:
 const char DEGREE_SYMBOL = '\xB0';
 const int ROTATE_MOVE_TIMEOUT = 5;
 
-//#define NUM_ANTENNAS 5
+
 
 // Rotator Keys
 
 const QString ROTATE_CW_KEY = "Ctrl+r";
 const QString ROTATE_CCW_KEY = "Ctrl+l";
-//#define ROTATE_CW_KEY =  Qt::CTRL + Qt::Key_Right
-//#define ROTATE_CCW_KEY Qt::CTRL + Qt::Key_Left
 const QString ROTATE_STOP_KEY = "Ctrl+s";
 const QString ROTATE_TURN_KEY = "Ctrl+t";
+
+const QString ROTATE_PRESET1 = "Ctrl+1";
+const QString ROTATE_PRESET2 = "Ctrl+2";
+const QString ROTATE_PRESET3 = "Ctrl+3";
+const QString ROTATE_PRESET4 = "Ctrl+4";
+const QString ROTATE_PRESET5 = "Ctrl+5";
+const QString ROTATE_PRESET6 = "Ctrl+6";
+const QString ROTATE_PRESET7 = "Ctrl+7";
+const QString ROTATE_PRESET8 = "Ctrl+8";
+const QString ROTATE_PRESET9 = "Ctrl+9";
+const QString ROTATE_PRESET10 = "Ctrl+0";
+
+const QStringList presetShortCutKeys = {ROTATE_PRESET1, ROTATE_PRESET2,
+                            ROTATE_PRESET3, ROTATE_PRESET4,
+                            ROTATE_PRESET5, ROTATE_PRESET6,
+                            ROTATE_PRESET7, ROTATE_PRESET8,
+                            ROTATE_PRESET9, ROTATE_PRESET10};
+
+
 
 const int COMPASS_MAX360 = 360;
 const int COMPASS_HALF = 180;

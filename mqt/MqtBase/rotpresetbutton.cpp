@@ -13,7 +13,8 @@
 #include "rotpresetbutton.h"
 
 
-RotPresetButton::RotPresetButton(QToolButton *b, int num)
+
+RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key)
 {
     presetNum = num;
 
@@ -25,7 +26,7 @@ RotPresetButton::RotPresetButton(QToolButton *b, int num)
     presetButton->setFocusPolicy(Qt::NoFocus);
     presetButton->setText(QString("%1:").arg(QString::number(presetNum + 1)));
 
-    //shortKey = new QShortcut(QKeySequence(runButShortCut[memNo]), memButton);
+    shortKey = key;
     //shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), memButton);
     readAction = new QAction("&Read", presetButton);
     writeAction = new QAction("&Write",presetButton);
@@ -37,7 +38,7 @@ RotPresetButton::RotPresetButton(QToolButton *b, int num)
     presetMenu->addAction(clearAction);
     presetButton->setMenu(presetMenu);
 
-    //connect(shortKey, SIGNAL(activated()), this, SLOT(readActionSelected()));
+    connect(shortKey, SIGNAL(activated()), this, SLOT(memoryRecallShortCutSelected()));
     //connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShortCutSelected()));
     connect(presetButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
     connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()));
@@ -53,6 +54,15 @@ RotPresetButton::~RotPresetButton()
 {
 //    delete memButton;
 }
+
+
+void RotPresetButton::memoryRecallShortCutSelected()
+{
+    emit presetShortCutRecall();
+}
+
+
+
 
 void RotPresetButton::presetShortCutSelected()
 {

@@ -26,7 +26,7 @@ class RotPresetButton : public QObject
     Q_OBJECT
 
 public:
-    explicit RotPresetButton(QToolButton *b, int num);
+    explicit RotPresetButton(QToolButton *b, int num, QShortcut* key);
 
     ~RotPresetButton();
 
@@ -36,10 +36,12 @@ public:
     QString getText();
 signals:
 
+    void presetShortCutRecall();
     void presetReadAction();
     void presetEditAction();
     void presetWriteAction();
     void presetClearAction();
+
 
 private:
 
@@ -69,6 +71,7 @@ private slots:
 
 
 
+    void memoryRecallShortCutSelected();
 };
 
 
