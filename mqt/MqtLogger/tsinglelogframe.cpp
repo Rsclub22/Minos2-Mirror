@@ -150,11 +150,16 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 */
 
     connect(this, SIGNAL(do_repaint()), this, SLOT(on_doRepaint()), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 }
 
 void TSingleLogFrame::on_doRepaint()
 {
     repaint();
+}
+void TSingleLogFrame::on_FontChanged()
+{
+    applyScreenLayout();
 }
 TSingleLogFrame::~TSingleLogFrame()
 {

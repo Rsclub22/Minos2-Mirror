@@ -75,7 +75,7 @@ BundleFile::BundleFile( PROFILES p )
 
         {
             QString temp = ScreenConfigFile::defaultLayoutName;
-            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.toUtf8().constData(), "", "hint", false ) ) );
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.toUtf8().constData(), ScreenConfigFile::defaultLayoutName.toUtf8(), "hint", false ) ) );
         }
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowTPM, "ShowTPM", false, "", "hint", false ) ) );
         break;

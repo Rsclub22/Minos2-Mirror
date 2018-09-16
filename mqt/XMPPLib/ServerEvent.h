@@ -13,8 +13,6 @@
 #include <QString>
 //---------------------------------------------------------------------------
 
-extern QString makeUuid();
-extern QString getServerId();
 extern void makeServerEvent( bool create );
 extern bool checkServerReady();
 #endif
