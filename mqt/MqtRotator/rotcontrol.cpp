@@ -294,7 +294,7 @@ int RotControl::request_bearing()
 
     if (retCode == RIG_OK)
     {
-        emit bearing_updated(rot_azimuth);
+        emit bearing_updated(static_cast<int>(rot_azimuth));
     }
 
     return retCode;
