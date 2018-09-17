@@ -108,7 +108,7 @@ private:
     rmode_t curMode;
     QString sCurMode;
     bool mgmModeFlag;
-    double rRitFreq;        // converted from hamlib long ritFreq
+    int rRitFreq;        // converted from hamlib long ritFreq
     int curVol;
     int curSignalStrength = 0;
 
@@ -215,7 +215,7 @@ private:
     void loadBands();
 
     void sendTransVertSwitchToComPort(const QString &swNum);
-    void sendRitFreqLogger(double ritFreq);
+    void sendRitFreqLogger(int ritFreq);
 
     void setRitEnableDisplayVisible(bool s);
     void setRitOnOffDisplayVisible(bool s);
@@ -273,7 +273,7 @@ private slots:
     void onLaunchSetup();
     void setTpm(int tpm, QString f);
 
-    void setRitFreqStr(QString ritFreq);
+    void setRitFreq(int ritFreq);
     void setRitLogStatus(bool status);
 
     void sendRadioListLogger();

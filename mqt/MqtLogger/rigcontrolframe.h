@@ -154,7 +154,7 @@ signals:
     void noRadioSendFreq(QString);
     void noRadioSendMode(QString);
     void sendModeToControl(QString);
-    void sendRitFreq(QString);
+    void sendRitFreq(int);
     void ritStatus(bool);
 
 private slots:
@@ -170,7 +170,7 @@ private slots:
     void freqPlus_ShortCut();
     void freqNeg_ShortCut();
     void changeMainRadioFreq();
-    void changeRitRadioFreq(QString);
+    void changeRitRadioFreq(int);
     void on_radioNameSel_activated(const QString &arg1);
 
 

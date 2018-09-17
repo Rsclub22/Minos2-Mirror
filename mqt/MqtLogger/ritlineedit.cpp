@@ -43,7 +43,7 @@ void RitLineEdit::changeFreq(bool direction)
     if (ritOn)
     {
 
-        static const double tuningData[] = {0.0, 1000.0, 0.0, 100.0, 10.0};  // 0 is either +/- position or . position in display
+        static const int tuningData[] = {0, 1000, 0, 100, 10};  // 0 is either +/- position or . position in display
 
         bool ok = false;
         QString sfreq = text();
@@ -53,13 +53,13 @@ void RitLineEdit::changeFreq(bool direction)
         {
             return;
         }
-        const double tuneStep = tuningData[pos];
+        const int tuneStep = tuningData[pos];
 
 
         sfreq = sfreq.trimmed();
 
 
-        double freq = sfreq.toDouble(&ok) * 1000;
+        int freq = sfreq.toInt(&ok) * 1000;
 
         if (ok)
         {
@@ -86,8 +86,8 @@ void RitLineEdit::changeFreq(bool direction)
             setText(sfreq);
 
             // send to radio
-            sfreq = sfreq.append('0').remove('.');
-            emit newFreq(sfreq);
+
+            emit newFreq(freq);
 
             setCursorPosition(pos);
        }

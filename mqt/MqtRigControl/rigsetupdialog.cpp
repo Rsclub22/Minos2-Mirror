@@ -179,7 +179,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
 
     // rit
 
-    if (radioTab[tabNum]->getRadioData()->ritSetAvail)
+    if (radioTab[tabNum]->getRadioData()->ritSupported)
     {
         radioTab[tabNum]->ritEnableVisible(true);
         if (radioTab[tabNum]->getRadioData()->ritEnable)
@@ -653,8 +653,7 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
     config.setValue("netPort", radioTab[radNum]->getRadioData()->networkPort);
     config.setValue("mgmMode", radioTab[radNum]->getRadioData()->mgmMode);
-    config.setValue("ritGetAvail", radioTab[radNum]->getRadioData()->ritGetAvail);
-    config.setValue("ritSetAvail", radioTab[radNum]->getRadioData()->ritSetAvail);
+    config.setValue("ritSupported", radioTab[radNum]->getRadioData()->ritSupported);
     config.setValue("ritEnable", radioTab[radNum]->getRadioData()->ritEnable);
     config.setValue("enableTransVertSw", radioTab[radNum]->getRadioData()->enableTransSwitch);
     config.setValue("locTransSwEnable", radioTab[radNum]->getRadioData()->enableLocTVSwMsg);
@@ -713,8 +712,7 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->networkAdd = config.value("netAddress", "").toString();
     radioTab[radNum]->getRadioData()->networkPort = config.value("netPort", "").toString();
     radioTab[radNum]->getRadioData()->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
-    radioTab[radNum]->getRadioData()->ritGetAvail = config.value("ritGetAvail", false).toBool();
-    radioTab[radNum]->getRadioData()->ritSetAvail = config.value("ritSetAvail", false).toBool();
+    radioTab[radNum]->getRadioData()->ritSupported = config.value("ritSupported", false).toBool();
     radioTab[radNum]->getRadioData()->ritEnable = config.value("ritEnable", false).toBool();
     radioTab[radNum]->getRadioData()->enableTransSwitch = config.value("enableTransVertSw", false).toBool();
     radioTab[radNum]->getRadioData()->enableLocTVSwMsg = config.value("locTransSwEnable", false).toBool();

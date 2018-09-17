@@ -45,7 +45,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
   , curVfoFrq(0.0)
   , curTransVertFrq(0.0)
   , mgmModeFlag(false)
-  , rRitFreq(0.0)
+  , rRitFreq(0)
   , curVol(0)
   , curSignalStrength(0)
   , radioSupGetRit(false)
@@ -279,7 +279,7 @@ void RigControlMainWindow::initActionsConnections()
 
     // Message from Logger
     connect(msg, SIGNAL(setFreq(QString)), this, SLOT(loggerSetFreq(QString)));
-    connect(msg, SIGNAL(setRitFreq(QString)), this, SLOT(setRitFreqStr(QString)));
+    connect(msg, SIGNAL(setRitFreq(int)), this, SLOT(setRitFreq(int)));
     connect(msg, SIGNAL(setRitStatus(bool)), this, SLOT(setRitLogStatus(bool)));
     connect(msg, SIGNAL(setMode(QString)), this, SLOT(loggerSetMode(QString)));
     connect(msg, SIGNAL(selectLoggerRadio(PubSubName, QString)), this, SLOT(onSelectRadio(PubSubName, QString)));
@@ -1393,8 +1393,8 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     {
 
         logMessage(QString("Radio Doesn't support Rit Off/On - Send 0 freq to radio"));
-        setRitFreqStr("9.9");
-        sendRitFreqLogger(9.9);
+        setRitFreq(990);
+        sendRitFreqLogger(990);
 
     }
 
@@ -1475,14 +1475,15 @@ int RigControlMainWindow::getRitFreq(vfo_t vfo)
 {
     int retCode = 0;
     long ritFreq;
-    static long oldritFreq = 50000;
+    static int oldritFreq = 50000;
 
     retCode = radio->getRit(vfo, &ritFreq);
     if (retCode == RIG_OK)
     {
-        if (oldritFreq != ritFreq)
+        int iRitFreq = static_cast<int>(ritFreq);
+        if (oldritFreq != iRitFreq)
         {
-           rRitFreq = static_cast<double>(ritFreq);
+           rRitFreq = iRitFreq;
            ui->ritFreq->setText(convertRitFreqToStr(rRitFreq));
            sendRitFreqLogger(rRitFreq);
         }
@@ -1491,12 +1492,12 @@ int RigControlMainWindow::getRitFreq(vfo_t vfo)
 }
 
 
-void RigControlMainWindow::setRitFreqStr(QString ritFreq)
+void RigControlMainWindow::setRitFreq(int ritFreq)
 {
     if (setupRadio->currentRadio.ritEnable)
     {
         int retCode = 0;
-        shortfreq_t rFreq = ritFreq.toLong();
+        shortfreq_t rFreq = static_cast<long>(ritFreq);
         retCode = setRitFreq(RIG_VFO_CURR, rFreq);
         if (retCode < 0)
         {
@@ -1509,7 +1510,7 @@ void RigControlMainWindow::setRitFreqStr(QString ritFreq)
             if (!radioSupGetRit)
             {
                 // get rit is not available, update local rit display
-                ui->ritFreq->setText(convertRitFreqToStr(rFreq));
+                ui->ritFreq->setText(convertRitFreqToStr(ritFreq));
             }
         }
     }
@@ -1547,7 +1548,7 @@ void RigControlMainWindow::sendRadioRitStatusLogger(bool status)
     }
 }
 
-void RigControlMainWindow::sendRitFreqLogger(double ritFreq)
+void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
 {
     if (appName.length() > 0)
     {

@@ -81,6 +81,14 @@ QString convertFreqToStr(double frequency)
 }
 
 
+QString convertFreqToStr(int frequency)
+{
+
+    return QString::number(frequency, 10);
+
+}
+
+
 double convertStrToFreq(QString frequency)
 {
     bool ok = false;
@@ -440,11 +448,11 @@ QString convertSinglePeriodFreqToMultiPeriod(QString f)
 
 
 
-QString convertRitFreqToStr(double freq)
+QString convertRitFreqToStr(int freq)
 {
 
     bool negNum = false;
-    if (freq == 0.0)
+    if (freq == 0)
     {
         return QString("+0.00");
     }

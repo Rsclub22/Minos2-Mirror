@@ -146,7 +146,7 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
     // rit freq tuning
     connect(ui->RitButton, SIGNAL(clicked(bool)), this, SLOT(ritButtonSelected()));
-    connect(ui->RitEdit, SIGNAL(newFreq(QString)), this, SLOT(changeRitRadioFreq(QString)));
+    connect(ui->RitEdit, SIGNAL(newFreq(int)), this, SLOT(changeRitRadioFreq(int)));
     connect(ui->RitClear, SIGNAL(clicked(bool)), this, SLOT(ritClearButtonSelected(bool)));
 
 
@@ -278,9 +278,9 @@ void RigControlFrame::setRitRadioStatus(bool status)
 
 // to rigcontrol
 
-void RigControlFrame::changeRitRadioFreq(QString freq)
+void RigControlFrame::changeRitRadioFreq(int freq)
 {
-    traceMsg(QString("Change Rit Freq = %1").arg(freq));
+    traceMsg(QString("Change Rit Freq = %1").arg(convertRitFreqToStr(freq)));
     if (ritEnable && ritOn)
     {
         emit sendRitFreq(freq);
@@ -295,8 +295,8 @@ void RigControlFrame::ritClearButtonSelected(bool /*state*/)
 
     if (ritEnable && ritOn)
     {
-        changeRitRadioFreq("0000");  // turns off rit in hamlib
-        QString sfreq = convertRitFreqToStr(0.0);       // set rit display to zero
+        changeRitRadioFreq(0);  // turns off rit in hamlib
+        QString sfreq = convertRitFreqToStr(0);       // set rit display to zero
         ui->RitEdit->setText(sfreq);
     }
 }
