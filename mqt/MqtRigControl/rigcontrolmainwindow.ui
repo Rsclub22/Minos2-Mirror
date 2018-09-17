@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>967</width>
-    <height>302</height>
+    <width>1013</width>
+    <height>326</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -644,9 +644,67 @@
                   <widget class="QSpinBox" name="setRitSpinner"/>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="ritButton">
+                  <widget class="QPushButton" name="testRitButton">
                    <property name="text">
                     <string>RIT</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_14">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                 <item>
+                  <widget class="QLabel" name="GetRitFreqLbl">
+                   <property name="text">
+                    <string>GetRit Freq</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="GetRitFreqInd">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string/>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_7">
+                 <item>
+                  <widget class="QLabel" name="SetRitFreqLbl">
+                   <property name="text">
+                    <string>SetRit Freq</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="SetRitFreqInd">
+                   <property name="enabled">
+                    <bool>false</bool>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16</width>
+                     <height>16</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string/>
                    </property>
                   </widget>
                  </item>
@@ -677,20 +735,16 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <layout class="QHBoxLayout" name="horizontalLayout_16">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="SmeterBar" name="sMeter" native="true"/>
-        </item>
-        <item>
-         <widget class="QLabel" name="sMeterLabel">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="SmeterBar" name="sMeter" native="true"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="sMeterLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="horizontalSpacer_6">
@@ -699,7 +753,7 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+          <width>999</width>
           <height>20</height>
          </size>
         </property>
@@ -714,7 +768,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>967</width>
+     <width>1013</width>
      <height>21</height>
     </rect>
    </property>
