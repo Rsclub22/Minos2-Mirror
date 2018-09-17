@@ -98,7 +98,7 @@ const QString FILENAME_FREQ_PRESETS = "FreqPresets.ini";
 
 // Tooltips
 
-const QString civToolTip = "Leave field blank for default radio CIV,\nor enter in the form 0xnn where nn is the radio CIV address.";
+const QString civToolTip = "Leave field blank for default radio CIV,\nor enter in the form 0xnn or nn, where nn is the radio CIV address in Hex.";
 
 
 

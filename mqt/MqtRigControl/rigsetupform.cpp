@@ -55,6 +55,8 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     fillPollInterValInfo();
     fillMgmModes();
 
+    civSetToolTip();
+
     connect(ui->radioModelBox, SIGNAL(activated(int)), this, SLOT(radioModelSelected()));
     connect(ui->comPortBox, SIGNAL(activated(int)), this, SLOT(comportSelected()));
     connect(ui->comSpeedBox, SIGNAL(activated(int)), this, SLOT(comSpeedSelected()));
@@ -351,35 +353,38 @@ void RigSetupForm::civAddressFinished()
 
     bool Ok;
 
-    ui->CIVlineEdit->setText(ui->CIVlineEdit->text().trimmed());
+    QString civNum = ui->CIVlineEdit->text().trimmed();
 
-    if (!ui->CIVlineEdit->text().isEmpty())
+
+    if (civNum.isEmpty())
     {
-        if (!ui->CIVlineEdit->text().contains('x'))
-        {
-            QMessageBox::critical(this, "CIV Error", QString(ui->CIVlineEdit->text()) + " Is not a valid CIV value\nPlease enter the CIV as a Hex number in the form of 0xnn");
-            ui->CIVlineEdit->setText("");
-        }
-        else
-        {
-            int hexValue = ui->CIVlineEdit->text().toInt(&Ok, 16);
-            if (Ok &&  (hexValue < 0 || hexValue > 255))
-            {
-                QMessageBox::critical(this, "CIV Error", QString(ui->CIVlineEdit->text()) + " CIV number out of range 0 - FF");
-                ui->CIVlineEdit->setText("");
-            }
-        }
+       return;
+    }
+
+    if (!civNum.contains("0x", Qt::CaseInsensitive))
+    {
+
+        civNum.prepend("0x");
+         ui->CIVlineEdit->setText(civNum);
+
+    }
+
+    int hexValue = civNum.toInt(&Ok, 16);
+    if (Ok &&  (hexValue < 0 || hexValue > 255))
+    {
+        QMessageBox::critical(this, "CIV Error", QString(ui->CIVlineEdit->text()) + " CIV number out of range 0 - FF");
+        //ui->CIVlineEdit->setText("");
+        return;
     }
     else
     {
-        ui->CIVlineEdit->setText("");
-    }
+        if (civNum != radioData->civAddress)
+        {
+            radioData->civAddress = civNum;
 
-    if (ui->CIVlineEdit->text() != radioData->civAddress)
-    {
-        radioData->civAddress = ui->CIVlineEdit->text();
-        radioValueChanged = true;
+            radioValueChanged = true;
 
+        }
     }
 
 }
