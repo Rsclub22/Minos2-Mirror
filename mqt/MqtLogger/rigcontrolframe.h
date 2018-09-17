@@ -217,7 +217,7 @@ private:
     bool ritEnable;
     bool ritOn;
     bool ritEditOn;
-    QString curRit;
+    //QString curRit;
 
 
 

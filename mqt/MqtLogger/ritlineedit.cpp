@@ -56,10 +56,10 @@ void RitLineEdit::changeFreq(bool direction)
         const int tuneStep = tuningData[pos];
 
 
-        sfreq = sfreq.trimmed();
+        sfreq = sfreq.trimmed().remove('.');
 
 
-        int freq = sfreq.toInt(&ok) * 1000;
+        int freq = sfreq.toInt(&ok) * 10;
 
         if (ok)
         {

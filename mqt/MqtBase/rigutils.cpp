@@ -452,7 +452,7 @@ QString convertRitFreqToStr(int freq)
 {
 
     bool negNum = false;
-    if (freq == 0)
+    if (freq == 0 && freq <= 9)
     {
         return QString("+0.00");
     }

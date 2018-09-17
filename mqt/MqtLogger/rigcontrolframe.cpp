@@ -60,7 +60,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     , ritEnable(false)
     , ritOn(false)
     , ritEditOn(false)
-    , curRit("0.00")
+    //, curRit("0.00")
     , radioName(NORADIO)
     , radioState("None")
 {
@@ -295,9 +295,11 @@ void RigControlFrame::ritClearButtonSelected(bool /*state*/)
 
     if (ritEnable && ritOn)
     {
+        int pos = ui->RitEdit->cursorPosition();
         changeRitRadioFreq(0);  // turns off rit in hamlib
         QString sfreq = convertRitFreqToStr(0);       // set rit display to zero
         ui->RitEdit->setText(sfreq);
+        ui->RitEdit->setCursorPosition(pos);
     }
 }
 
@@ -321,26 +323,19 @@ void RigControlFrame::ritButtonOn()
 {
     traceMsg(QString("Rit Button On"));
     ritOn = true;
-    ui->RitEdit->setRitOnFlag(true);        // set flag to allow editing of RIT freq
+    //ui->RitEdit->setRitOnFlag(true);        // set flag to allow editing of RIT freq
+    ui->RitEdit->setEnabled(true);
     showRitButOn();
     emit ritStatus(true);
-    // send current rit freq to radio
-    //changeRitRadioFreq(ui->RitEdit->text().append('0').remove('.'));
-    ui->RitEdit->setCursorPosition(3);
-    ui->RitEdit->setFocus();
-
 
 }
 
 void RigControlFrame::ritButtonOff()
 {
     traceMsg(QString("Rit Button Off"));
-    //changeRitRadioFreq("0000");  // turns off rit in hamlib
-    //QString sfreq = convertRitFreqToStr(0.0);       // set rit display to zero
-    //ui->RitEdit->setText(sfreq);
     ui->RitEdit->clearFocus();
     ritOn = false;
-    ui->RitEdit->setRitOnFlag(false);        // set flag to allow prevent editing of RIT freq
+    ui->RitEdit->setEnabled(false);
     showRitButOff();
     emit ritStatus(false);
 
@@ -558,7 +553,8 @@ void RigControlFrame::exitFreqEdit()
 void RigControlFrame::exitRitFreqEdit()
 {
     traceMsg(QString("Exit Rit Edit Freq"));
-    freqEditOn = false;
+    ritEditOn = false;
+    ui->RitEdit->setRitOnFlag(false);        // set flag to allow prevent editing of RIT freq
     //setFreq(curFreq);
     ritFreqLineEditFrameColour(false);
     ui->RitEdit->clearFocus();
@@ -1032,9 +1028,11 @@ void RigControlFrame::freqLineEditInFocus()
 void RigControlFrame::ritLineEditInFocus()
 {
     traceMsg(QString("Rit LineEdit in Focus"));
-    if (ritEditOn)
+    if (ritOn)
     {
+        ritEditOn = true;
         ui->RitEdit->setReadOnly(false);
+        ui->RitEdit->setRitOnFlag(true);        // prevent updates from rigcontrol
         ritFreqLineEditFrameColour(true);
     }
 }
