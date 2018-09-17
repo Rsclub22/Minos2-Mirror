@@ -25,6 +25,7 @@ private Q_SLOTS:
     void testCase1();
 
     void testInt();
+    void testQint64();
     void testBool();
     void testDouble();
     void testString();
@@ -80,6 +81,28 @@ void RPCTestTest::testInt()
    int ires;
 
    bool pOK = xm.getIntArg( 0, ires );
+   QVERIFY(pOK );
+   QTRY_COMPARE( i1, ires );
+}
+void RPCTestTest::testQint64()
+{
+   qint64 i1 = 1;
+
+   RPCArgs * xms = new RPCArgs();
+   xms->addParam( i1 );
+
+   QString pstr = xms->makeParamsString();
+
+   delete xms;
+
+   RPCArgs xm;
+   TIXML_STRING sstr = pstr.toStdString();
+   bool parseOK = xm.parseParams( sstr);
+   QVERIFY( parseOK );
+
+   qint64 ires;
+
+   bool pOK = xm.getQint64Arg( 0, ires );
    QVERIFY(pOK );
    QTRY_COMPARE( i1, ires );
 }
@@ -317,11 +340,14 @@ RPCTestTest::testMultiParam()
    QString s1( "BarPosition" );
    QString s2( "HOVenue" );
    int i1 = 1;
+   qint64 q = 2;
+   qint64 l1 = q << 32;
 
    RPCArgs * xms = new RPCArgs();
    xms->addParam( s1 );
    xms->addParam( s2 );
    xms->addParam( i1 );
+   xms->addParam( l1 );
 
    QString pstr = xms->makeParamsString();
 
@@ -334,6 +360,7 @@ RPCTestTest::testMultiParam()
 
    QString sres;
    int ires;
+   qint64 lres;
 
    bool pOK = xm.getStringArg( 0, sres );
    QVERIFY( true == pOK );
@@ -346,6 +373,10 @@ RPCTestTest::testMultiParam()
    pOK = xm.getIntArg( 2, ires );
    QVERIFY( true == pOK );
    QVERIFY( i1 == ires );
+
+   pOK = xm.getQint64Arg( 3, lres );
+   QVERIFY( true == pOK );
+   QVERIFY( l1 == lres );
 }
 
 void RPCTestTest::testAddParams()
@@ -389,7 +420,7 @@ RPCTestTest::testRequest()
 void RPCTestTest::analyseRequestTest( XStanza *xs )
 {
    RPCRequest * req = dynamic_cast<RPCRequest *>( xs );
-   QVERIFY( req != 0 );
+   QVERIFY( req != nullptr );
 
    // and now analyse req
    QVERIFY( req->methodName == "testRequest" );

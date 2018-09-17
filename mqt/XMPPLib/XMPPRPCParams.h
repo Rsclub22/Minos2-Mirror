@@ -39,14 +39,16 @@ class RPCParam
       virtual bool getElements(int &size );
       virtual bool getElement( int eleno, QSharedPointer<RPCParam> &p );
       virtual bool getBoolean( bool &res );
-      virtual bool getInt( int &res );
+      virtual bool getInt( qint32 &res );
+      virtual bool getQint64( qint64 &res );
       virtual bool getDouble( double &res );
       virtual bool getString( QString &res );
       virtual bool getBase64( QString &res );
       virtual bool getDtg( QString &res );
 
       virtual void addMember( QSharedPointer<RPCParam> , const QString &name );
-      virtual void addMember( int, const QString &name );
+      virtual void addMember( qint32, const QString &name );
+      virtual void addMember( qint64, const QString &name );
       virtual void addMember( bool, const QString &name );
       virtual void addMember( double, const QString &name );
       virtual void addMember( const QString &, const QString &name );
@@ -66,7 +68,8 @@ class RPCParamStruct: public RPCParam
       virtual ~RPCParamStruct() override;
 
       void addMember( QSharedPointer<RPCParam> , const QString &name ) override;
-      void addMember( int, const QString &name)  override;
+      void addMember( qint32, const QString &name)  override;
+      void addMember( qint64, const QString &name)  override;
       void addMember( bool, const QString &name ) override;
       void addMember( double, const QString &name ) override;
       void addMember( const QString &, const QString &name ) override;
@@ -96,7 +99,8 @@ class RPCParamArray: public RPCParam
 
       void addElement( QSharedPointer<RPCParam>  );
 
-      void addElement( int );
+      void addElement( qint32 );
+      void addElement( qint64 );
       void addElement( bool );
       void addElement( double );
       void addElement( const char * );
@@ -118,7 +122,7 @@ class RPCParamArray: public RPCParam
 class RPCIntParam: public RPCParam
 {
    protected:
-      int value;
+      qint32 value;
    public:
       RPCIntParam( int v );
       RPCIntParam( TiXmlElement &sNode );
@@ -128,7 +132,23 @@ class RPCIntParam: public RPCParam
       virtual QString print();
       virtual QString analyse();
 
-      virtual bool getInt( int &res );
+      virtual bool getInt( qint32 &res );
+};
+// long or i8
+class RPCQint64Param: public RPCParam
+{
+   protected:
+      qint64 value;
+   public:
+      RPCQint64Param( qint64 v );
+      RPCQint64Param( TiXmlElement &sNode );
+      RPCQint64Param();
+      virtual ~RPCQint64Param();
+      virtual void addNode( TiXmlElement &node );
+      virtual QString print();
+      virtual QString analyse();
+
+      virtual bool getQint64( qint64 &res );
 };
 
 // boolean
@@ -229,7 +249,8 @@ class RPCArgs
       TIXML_STRING UTF8XML; // pre-built params structure
 
       void addParam( QSharedPointer<RPCParam> );
-      void addParam( int );
+      void addParam( qint32 );
+      void addParam( qint64 );
       void addParam( bool );
       void addParam( double );
       void addParam( const QString & );
@@ -248,7 +269,8 @@ class RPCArgs
       bool getArrayArgElement(int argno, int eleno, QSharedPointer<RPCParam> &res );
 
       bool getBooleanArg(int argno, bool &res );
-      bool getIntArg( int argno, int &res );
+      bool getIntArg( int argno, qint32 &res );
+      bool getQint64Arg( int argno, qint64 &res );
       bool getDoubleArg(int argno, double &res );
       bool getStringArg( int argno, QString &res );
       bool getBase64Arg(int argno, QString &res );
