@@ -78,7 +78,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="networkAddBox"/>
+          <widget class="QLineEdit" name="networkAddBox">
+           <property name="maxLength">
+            <number>15</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -112,7 +116,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="netPortBox"/>
+          <widget class="QLineEdit" name="netPortBox">
+           <property name="inputMask">
+            <string>99999</string>
+           </property>
+           <property name="maxLength">
+            <number>5</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

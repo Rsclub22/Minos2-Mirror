@@ -21,6 +21,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QSerialPortInfo>
 #include <QMessageBox>
+#include <QHostAddress>
 
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
@@ -456,8 +457,19 @@ void rotSetupForm::comNetAddressSelected()
 {
     if (antennaData->networkAdd != ui->netAddressBox->text())
     {
-        antennaData->networkAdd = ui->netAddressBox->text();
-        antennaValueChanged = true;
+        QHostAddress address(ui->netAddressBox->text());
+        if (QAbstractSocket::IPv4Protocol == address.protocol())
+        {
+            antennaData->networkAdd = ui->netAddressBox->text();
+            antennaValueChanged = true;
+        }
+        else
+        {
+           QMessageBox messageBox;
+           QString msg = "Invalid Network Address " + ui->netAddressBox->text();
+           messageBox.critical(this, "Network Address Entry Error", msg);
+           ui->netAddressBox->setFocus();
+        }
 
     }
 
@@ -478,8 +490,18 @@ void rotSetupForm::comNetPortNumSelected()
 {
     if (antennaData->networkPort != ui->netPortBox->text())
     {
-        antennaData->networkPort = ui->netPortBox->text();
-        antennaValueChanged = true;
+        if (ui->netPortBox->text().toInt() >= 1 && ui->netPortBox->text().toInt() <= 65535)
+        {
+            antennaData->networkPort = ui->netPortBox->text();
+            antennaValueChanged = true;
+        }
+        else
+        {
+            QMessageBox messageBox;
+            QString msg = "Invalid Network Port Number " + ui->netPortBox->text();
+            messageBox.critical(this, "Network Port Number out of range", msg);
+            ui->netPortBox->setFocus();
+        }
 
     }
 

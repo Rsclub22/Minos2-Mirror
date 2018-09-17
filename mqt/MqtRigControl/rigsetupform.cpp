@@ -22,6 +22,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QSerialPortInfo>
 #include <QMessageBox>
+#include <QHostAddress>
 #include <QInputDialog>
 
 
@@ -568,8 +569,20 @@ void RigSetupForm::networkAddressSelected()
 {
     if (ui->networkAddBox->text() != radioData->networkAdd)
     {
-        radioData->networkAdd = ui->networkAddBox->text();
-        radioValueChanged = true;
+        QHostAddress address(ui->networkAddBox->text());
+        if (QAbstractSocket::IPv4Protocol == address.protocol())
+        {
+            radioData->networkAdd = ui->networkAddBox->text();
+            radioValueChanged = true;
+        }
+        else
+        {
+           QMessageBox messageBox;
+           QString msg = "Invalid Network Address " + ui->networkAddBox->text();
+           messageBox.critical(this, "Network Address Entry Error", msg);
+           ui->networkAddBox->setFocus();
+        }
+
     }
 }
 
@@ -589,8 +602,19 @@ void RigSetupForm::networkPortSelected()
 {
     if (ui->netPortBox->text() != radioData->networkPort)
     {
-        radioData->networkPort = ui->netPortBox->text();
-        radioValueChanged = true;
+        if (ui->netPortBox->text().toInt() >= 1 && ui->netPortBox->text().toInt() <= 65535)
+        {
+            radioData->networkPort = ui->netPortBox->text();
+            radioValueChanged = true;
+        }
+        else
+        {
+            QMessageBox messageBox;
+            QString msg = "Invalid Network Port Number " + ui->netPortBox->text();
+            messageBox.critical(this, "Network Port Number out of range", msg);
+            ui->netPortBox->setFocus();
+        }
+
     }
 }
 
