@@ -1393,8 +1393,8 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     {
 
         logMessage(QString("Radio Doesn't support Rit Off/On - Send 0 freq to radio"));
-        setRitFreq(990);
-        sendRitFreqLogger(990);
+        setRitFreq(0);
+        sendRitFreqLogger(0);
 
     }
 
@@ -1510,7 +1510,9 @@ void RigControlMainWindow::setRitFreq(int ritFreq)
             if (!radioSupGetRit)
             {
                 // get rit is not available, update local rit display
+                // and send to logger to update logger
                 ui->ritFreq->setText(convertRitFreqToStr(ritFreq));
+                sendRitFreqLogger(ritFreq);
             }
         }
     }

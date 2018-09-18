@@ -247,7 +247,7 @@ void RigControlFrame::setFreq(QString freq)
 }
 
 
-// for rigcontrol
+// from rigcontrol
 
 void RigControlFrame::setRitFreq(QString freq)
 {
@@ -335,6 +335,7 @@ void RigControlFrame::ritButtonOff()
     traceMsg(QString("Rit Button Off"));
     ui->RitEdit->clearFocus();
     ritOn = false;
+    ritEditOn = false;
     ui->RitEdit->setEnabled(false);
     showRitButOff();
     emit ritStatus(false);

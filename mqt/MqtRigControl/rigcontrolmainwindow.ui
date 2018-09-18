@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1013</width>
-    <height>326</height>
+    <width>1011</width>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -735,7 +735,7 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_16">
+     <layout class="QHBoxLayout" name="horizontalLayout_20">
       <item>
        <widget class="SmeterBar" name="sMeter" native="true"/>
       </item>
@@ -753,8 +753,8 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>999</width>
-          <height>20</height>
+          <width>288</width>
+          <height>41</height>
          </size>
         </property>
        </spacer>
@@ -768,7 +768,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1013</width>
+     <width>1011</width>
      <height>21</height>
     </rect>
    </property>
