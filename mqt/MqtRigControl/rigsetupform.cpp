@@ -54,7 +54,7 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     fillHandShakeInfo();
     fillPollInterValInfo();
     fillMgmModes();
-
+    ritEnableVisible(false);
     civSetToolTip();
 
     connect(ui->radioModelBox, SIGNAL(activated(int)), this, SLOT(radioModelSelected()));
@@ -174,8 +174,8 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         // does this radio support rit?
 
 
-        radioData->ritGetAvail = radioSupportRit(radioData->radioModelNumber);
-        ritEnableVisible(radioData->ritGetAvail);
+        radioData->ritSupported = radioSupportRit(radioData->radioModelNumber);
+        ritEnableVisible(radioData->ritSupported);
 
 
         // does this radio support antenna sw?
@@ -353,41 +353,43 @@ void RigSetupForm::civAddressFinished()
 
     bool Ok;
 
-    QString civNum = ui->CIVlineEdit->text().trimmed();
+        QString civNum = ui->CIVlineEdit->text().trimmed();
 
 
-    if (civNum.isEmpty())
-    {
-       return;
-    }
-
-    if (!civNum.contains("0x", Qt::CaseInsensitive))
-    {
-
-        civNum.prepend("0x");
-         ui->CIVlineEdit->setText(civNum);
-
-    }
-
-    int hexValue = civNum.toInt(&Ok, 16);
-    if (Ok &&  (hexValue < 0 || hexValue > 255))
-    {
-        QMessageBox::critical(this, "CIV Error", QString(ui->CIVlineEdit->text()) + " CIV number out of range 0 - FF");
-        //ui->CIVlineEdit->setText("");
-        return;
-    }
-    else
-    {
-        if (civNum != radioData->civAddress)
+        if (civNum.isEmpty())
         {
-            radioData->civAddress = civNum;
+           return;
+        }
 
-            radioValueChanged = true;
+        if (!civNum.contains("0x", Qt::CaseInsensitive))
+        {
+
+            civNum.prepend("0x");
+             ui->CIVlineEdit->setText(civNum);
 
         }
-    }
+
+        int hexValue = civNum.toInt(&Ok, 16);
+        if (Ok &&  (hexValue < 0 || hexValue > 255))
+        {
+            QMessageBox::critical(this, "CIV Error", QString(ui->CIVlineEdit->text()) + " CIV number out of range 0 - FF");
+            //ui->CIVlineEdit->setText("");
+            return;
+        }
+        else
+        {
+            if (civNum != radioData->civAddress)
+            {
+                radioData->civAddress = civNum;
+
+                radioValueChanged = true;
+
+            }
+        }
 
 }
+
+
 
 
 
@@ -573,22 +575,22 @@ int RigSetupForm::comportAvial(QString comport)
 void RigSetupForm::networkAddressSelected()
 {
     if (ui->networkAddBox->text() != radioData->networkAdd)
-    {
-        QHostAddress address(ui->networkAddBox->text());
-        if (QAbstractSocket::IPv4Protocol == address.protocol())
         {
-            radioData->networkAdd = ui->networkAddBox->text();
-            radioValueChanged = true;
-        }
-        else
-        {
-           QMessageBox messageBox;
-           QString msg = "Invalid Network Address " + ui->networkAddBox->text();
-           messageBox.critical(this, "Network Address Entry Error", msg);
-           ui->networkAddBox->setFocus();
-        }
+            QHostAddress address(ui->networkAddBox->text());
+            if (QAbstractSocket::IPv4Protocol == address.protocol())
+            {
+                radioData->networkAdd = ui->networkAddBox->text();
+                radioValueChanged = true;
+            }
+            else
+            {
+               QMessageBox messageBox;
+               QString msg = "Invalid Network Address " + ui->networkAddBox->text();
+               messageBox.critical(this, "Network Address Entry Error", msg);
+               ui->networkAddBox->setFocus();
+            }
 
-    }
+        }
 }
 
 QString RigSetupForm::getNetAddress()
@@ -606,21 +608,21 @@ void RigSetupForm::setNetAddress(QString netAdd)
 void RigSetupForm::networkPortSelected()
 {
     if (ui->netPortBox->text() != radioData->networkPort)
-    {
-        if (ui->netPortBox->text().toInt() >= 1 && ui->netPortBox->text().toInt() <= 65535)
-        {
-            radioData->networkPort = ui->netPortBox->text();
-            radioValueChanged = true;
-        }
-        else
-        {
-            QMessageBox messageBox;
-            QString msg = "Invalid Network Port Number " + ui->netPortBox->text();
-            messageBox.critical(this, "Network Port Number out of range", msg);
-            ui->netPortBox->setFocus();
-        }
+     {
+         if (ui->netPortBox->text().toInt() >= 1 && ui->netPortBox->text().toInt() <= 65535)
+         {
+             radioData->networkPort = ui->netPortBox->text();
+             radioValueChanged = true;
+         }
+         else
+         {
+             QMessageBox messageBox;
+             QString msg = "Invalid Network Port Number " + ui->netPortBox->text();
+             messageBox.critical(this, "Network Port Number out of range", msg);
+             ui->netPortBox->setFocus();
+         }
 
-    }
+     }
 }
 
 QString RigSetupForm::getNetPortNum()
@@ -898,6 +900,8 @@ void RigSetupForm::setEnableRigDataEntry(bool enable)
 }
 
 
+/*
+
 bool RigSetupForm::radioSupportRit(int radioModelNumber)
 {
 
@@ -926,6 +930,22 @@ bool RigSetupForm::radioSupportRit(int radioModelNumber)
     return false;
 
 }
+
+*/
+
+
+bool RigSetupForm::radioSupportRit(int radioModelNumber)
+{
+
+    ritEnableVisible(false);
+
+    return radio->supportSetRit(radioModelNumber);
+
+
+}
+
+
+
 
 
 /*************************** Serial Data Entry Visible ***************/

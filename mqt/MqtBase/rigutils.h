@@ -21,6 +21,7 @@ QString convertFreqStrDispSingle(QString sfreq);
 QString convertFreqStrDispSingleNoTrailZero(QString sfreq);
 
 QString convertFreqToStr(double frequency);
+QString convertFreqToStr(int frequency);
 
 QString convertSinglePeriodFreqToFullDigit(QString f);
 
@@ -35,6 +36,6 @@ bool valInputFreq(QString f, QString errMsg);
 QString convertSinglePeriodFreqToMultiPeriod(QString f);
 QString convertFreqToFullDigit(QString f);
 
-QString convertRitFreqToStr(double freq);
+QString convertRitFreqToStr(int freq);
 
 #endif // RIGUTILS_H

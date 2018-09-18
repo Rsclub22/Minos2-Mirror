@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "rigcontrol.h"
+#include "cutils.h"
 
 namespace Ui {
 class AddRadioDialog;

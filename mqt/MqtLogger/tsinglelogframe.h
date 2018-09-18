@@ -222,7 +222,7 @@ private slots:
     void sendRotator(rpcConstants::RotateDirection direction, int angle );
     void sendRotatorPreset(QString);
     void sendRadioFreq(QString);
-    void sendRadioRitFreq(QString freq);
+    void sendRadioRitFreq(int freq);
     void sendRadioMode(QString);
     void sendRadioRitStatus(bool status);
 

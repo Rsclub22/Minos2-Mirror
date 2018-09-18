@@ -257,7 +257,7 @@ int RigControl::setRit(vfo_t vfo, shortfreq_t ritfreq)
     return rig_set_rit(my_rig, vfo, ritfreq);
 }
 
-int RigControl::supportGetRit(int rigNumber, bool *flag)
+bool RigControl::supportGetRit(int rigNumber)
 {
     RIG *myRig;
     myRig = rig_init(rigNumber);
@@ -265,20 +265,18 @@ int RigControl::supportGetRit(int rigNumber, bool *flag)
     {
         if (myRig->caps->get_rit == nullptr)
         {
-            *flag = false;
+            return false;
         }
         else
         {
-            *flag = true;
+            return true;
         }
     }
-
-    return -14;
 
 }
 
 
-int RigControl::supportSetRit(int rigNumber, bool *flag)
+bool RigControl::supportSetRit(int rigNumber)
 {
     RIG *myRig;
     myRig = rig_init(rigNumber);
@@ -286,18 +284,15 @@ int RigControl::supportSetRit(int rigNumber, bool *flag)
     {
         if (myRig->caps->set_rit == nullptr)
         {
-            *flag = false;
+            return false;
 
         }
         else
         {
-            *flag = true;
+            return true;
 
         }
     }
-
-    return -14;
-
 }
 
 

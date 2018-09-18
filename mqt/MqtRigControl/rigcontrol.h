@@ -124,8 +124,7 @@ public:
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
-      dest.ritGetAvail = srce->ritGetAvail;
-      dest.ritSetAvail = srce->ritSetAvail;
+      dest.ritSupported = srce->ritSupported;
       dest.ritEnable = srce->ritEnable;
       dest.radioSupBands = srce->radioSupBands;
       dest.radioTransSupBands = srce->radioTransSupBands;
@@ -182,8 +181,7 @@ public:
   QString mgmMode = "USB";
   ptt_type_t pttType;
   bool antSwitchAvail = false;
-  bool ritGetAvail = false;
-  bool ritSetAvail = false;
+  bool ritSupported = false;
   bool ritEnable = false;
   bool transVertEnable  = false;
   bool volAvail = false;
@@ -270,8 +268,8 @@ public:
     int getModelInfo(QString radioModel, int *radioModelNumber, QString *radioMfgName, QString *radioModelName);
     int getRit(vfo_t vfo, shortfreq_t *ritfreq);
     int setRit(vfo_t vfo, shortfreq_t ritfreq);
-    int supportGetRit(int rigNumber, bool *flag);
-    int supportSetRit(int rigNumber, bool *flag);
+    bool supportGetRit(int rigNumber);
+    bool supportSetRit(int rigNumber);
     int toggleRitState(vfo_t vfo, bool state);
     int getRitState(vfo_t vfo, bool *state);
     bool supportRitOnOff(int rigNumber);

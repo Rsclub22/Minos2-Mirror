@@ -266,7 +266,7 @@ void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {
     rigDetails[name].setBandList(bands);
 }
-void RigCache::setRitFreq(const PubSubName &name, double freq)
+void RigCache::setRitFreq(const PubSubName &name, int freq)
 {
     rigStates[name].setRitFreq(freq);
 }

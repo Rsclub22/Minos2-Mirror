@@ -189,8 +189,8 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {
-                QString ritFreq;
-                if ( psRitFreq->getString( ritFreq ) )
+                int ritFreq;
+                if ( psRitFreq->getInt( ritFreq ) )
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Rit Freq Command From Logger = %1").arg(ritFreq));
@@ -208,7 +208,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 if ( psRitStatus->getBoolean( ritStatus ) )
                 {
                     // here you handle what the logger has sent to us
-                    trace(QString("Rig RPC: Rit Status Command From Logger = %1").arg(ritStatus));
+                    trace(QString("Rig RPC: Rit Status Command From Logger = %1").arg(ritStatus ? "On" : "Off"));
                     emit (setRitStatus(ritStatus));
                 }
             }

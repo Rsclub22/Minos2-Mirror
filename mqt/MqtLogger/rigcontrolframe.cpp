@@ -60,7 +60,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     , ritEnable(false)
     , ritOn(false)
     , ritEditOn(false)
-    , curRit("0.00")
+    //, curRit("0.00")
     , radioName(NORADIO)
     , radioState("None")
 {
@@ -101,6 +101,14 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     freqNegShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D), parent);
     connect(freqNegShortCut, SIGNAL(activated()), this, SLOT(freqNeg_ShortCut()));
     connect(ui->freqDown, SIGNAL(clicked(bool)), this, SLOT(freqNegShortCut_clicked(bool)));
+
+    // rit key shortcuts
+    ritOnOffShortCut = new QShortcut(QKeySequence("Ctrl+o"), parent);
+    connect(ritOnOffShortCut, SIGNAL(activated()), this, SLOT(ritButtonSelected()));
+    ritClearShortCut = new QShortcut(QKeySequence("Ctrl+k"), parent);
+    connect(ritClearShortCut, SIGNAL(activated()), this, SLOT(ritClearShortCutSelected()));
+    ritFreqEditShortCut = new QShortcut(QKeySequence("Ctrl+i"), parent);
+    connect(ritFreqEditShortCut, SIGNAL(activated()), this, SLOT(ritFreqEditShortCutInFocus()));
 
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
@@ -146,7 +154,7 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
     // rit freq tuning
     connect(ui->RitButton, SIGNAL(clicked(bool)), this, SLOT(ritButtonSelected()));
-    connect(ui->RitEdit, SIGNAL(newFreq(QString)), this, SLOT(changeRitRadioFreq(QString)));
+    connect(ui->RitEdit, SIGNAL(newFreq(int)), this, SLOT(changeRitRadioFreq(int)));
     connect(ui->RitClear, SIGNAL(clicked(bool)), this, SLOT(ritClearButtonSelected(bool)));
 
 
@@ -247,7 +255,7 @@ void RigControlFrame::setFreq(QString freq)
 }
 
 
-// for rigcontrol
+// from rigcontrol
 
 void RigControlFrame::setRitFreq(QString freq)
 {
@@ -278,9 +286,9 @@ void RigControlFrame::setRitRadioStatus(bool status)
 
 // to rigcontrol
 
-void RigControlFrame::changeRitRadioFreq(QString freq)
+void RigControlFrame::changeRitRadioFreq(int freq)
 {
-    traceMsg(QString("Change Rit Freq = %1").arg(freq));
+    traceMsg(QString("Change Rit Freq = %1").arg(convertRitFreqToStr(freq)));
     if (ritEnable && ritOn)
     {
         emit sendRitFreq(freq);
@@ -290,14 +298,23 @@ void RigControlFrame::changeRitRadioFreq(QString freq)
 }
 
 
+void RigControlFrame::ritClearShortCutSelected()
+{
+    ritClearButtonSelected(true);
+}
+
+
+
 void RigControlFrame::ritClearButtonSelected(bool /*state*/)
 {
 
     if (ritEnable && ritOn)
     {
-        changeRitRadioFreq("0000");  // turns off rit in hamlib
-        QString sfreq = convertRitFreqToStr(0.0);       // set rit display to zero
+        int pos = ui->RitEdit->cursorPosition();
+        changeRitRadioFreq(0);  // turns off rit in hamlib
+        QString sfreq = convertRitFreqToStr(0);       // set rit display to zero
         ui->RitEdit->setText(sfreq);
+        ui->RitEdit->setCursorPosition(pos);
     }
 }
 
@@ -321,26 +338,20 @@ void RigControlFrame::ritButtonOn()
 {
     traceMsg(QString("Rit Button On"));
     ritOn = true;
-    ui->RitEdit->setRitOnFlag(true);        // set flag to allow editing of RIT freq
+    //ui->RitEdit->setRitOnFlag(true);        // set flag to allow editing of RIT freq
+    ui->RitEdit->setEnabled(true);
     showRitButOn();
     emit ritStatus(true);
-    // send current rit freq to radio
-    //changeRitRadioFreq(ui->RitEdit->text().append('0').remove('.'));
-    ui->RitEdit->setCursorPosition(3);
-    ui->RitEdit->setFocus();
-
 
 }
 
 void RigControlFrame::ritButtonOff()
 {
     traceMsg(QString("Rit Button Off"));
-    //changeRitRadioFreq("0000");  // turns off rit in hamlib
-    //QString sfreq = convertRitFreqToStr(0.0);       // set rit display to zero
-    //ui->RitEdit->setText(sfreq);
     ui->RitEdit->clearFocus();
     ritOn = false;
-    ui->RitEdit->setRitOnFlag(false);        // set flag to allow prevent editing of RIT freq
+    ritEditOn = false;
+    ui->RitEdit->setEnabled(false);
     showRitButOff();
     emit ritStatus(false);
 
@@ -558,7 +569,8 @@ void RigControlFrame::exitFreqEdit()
 void RigControlFrame::exitRitFreqEdit()
 {
     traceMsg(QString("Exit Rit Edit Freq"));
-    freqEditOn = false;
+    ritEditOn = false;
+    ui->RitEdit->setRitOnFlag(false);        // set flag to allow prevent editing of RIT freq
     //setFreq(curFreq);
     ritFreqLineEditFrameColour(false);
     ui->RitEdit->clearFocus();
@@ -579,18 +591,7 @@ void RigControlFrame::freqEditSelected()
 
 }
 
-void RigControlFrame::freqRitEditSelected()
-{
-    traceMsg(QString("Freq Rit Edit Selected"));
-    ui->RitEdit->setFocus();
-    int len = ui->RitEdit->text().length();
-    if (len > 5)
-    {
-       ui->RitEdit->setCursorPosition(len - 5);
-    }
 
-
-}
 
 
 // this is the routine called from read memory
@@ -1029,12 +1030,22 @@ void RigControlFrame::freqLineEditInFocus()
 }
 
 
+
+void RigControlFrame::ritFreqEditShortCutInFocus()
+{
+    ui->RitEdit->setFocus();
+    ui->RitEdit->setCursorPosition(3);
+}
+
+
 void RigControlFrame::ritLineEditInFocus()
 {
     traceMsg(QString("Rit LineEdit in Focus"));
-    if (ritEditOn)
+    if (ritOn)
     {
+        ritEditOn = true;
         ui->RitEdit->setReadOnly(false);
+        ui->RitEdit->setRitOnFlag(true);        // prevent updates from rigcontrol
         ritFreqLineEditFrameColour(true);
     }
 }

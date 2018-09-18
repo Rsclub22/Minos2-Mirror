@@ -19,14 +19,10 @@
 #include "rotcontrol.h"
 #include "addantennadialog.h"
 
-//#include <QSignalMapper>
 #include <QComboBox>
 #include <QLineEdit>
 #include <QCheckBox>
-//#include <QtSerialPort/QSerialPort>
-//#include <QSerialPortInfo>
 
-//#include <QIntValidator>
 #include <QMessageBox>
 #include <QInputDialog>
 

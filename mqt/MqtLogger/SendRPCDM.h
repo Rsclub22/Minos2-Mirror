@@ -71,7 +71,7 @@ class TSendDM : public QObject
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
       void sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level);
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);
-      void sendRigControlRitFreq(TSingleLogFrame *tslf,const QString &freq);
+      void sendRigControlRitFreq(TSingleLogFrame *tslf, int freq);
       void sendRigControlRitStatus(TSingleLogFrame *tslf,const bool &status);
       void sendRigControlTpm(TSingleLogFrame *tslf,int tpm, QString &freq);
 

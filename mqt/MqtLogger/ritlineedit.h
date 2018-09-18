@@ -19,7 +19,7 @@ public:
 signals:
     void receivedFocus() ;
     void lostFocus();
-    void newFreq(QString);
+    void newFreq(int);
     void freqEditReturn();
 private:
 

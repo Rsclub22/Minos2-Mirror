@@ -113,7 +113,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
-    connect(FKHRigControlFrame, SIGNAL(sendRitFreq(QString)), this, SLOT(sendRadioRitFreq(QString)));
+    connect(FKHRigControlFrame, SIGNAL(sendRitFreq(int)), this, SLOT(sendRadioRitFreq(int)));
     connect(FKHRigControlFrame, SIGNAL(sendVolumeToRadio(int)), this, SLOT(sendRadioVolume(int)));
     connect(FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
@@ -1347,7 +1347,7 @@ void TSingleLogFrame::sendRadioFreq(QString freq)
     }
 }
 
-void TSingleLogFrame::sendRadioRitFreq(QString freq)
+void TSingleLogFrame::sendRadioRitFreq(int freq)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
