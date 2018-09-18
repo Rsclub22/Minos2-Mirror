@@ -15,14 +15,14 @@ cd build
 
 qmake ../mqt/mqt.pro
 retVal=$?
-if [ $retVal -eq 1 ]; then
+if [ $retVal -ne 0 ]; then
     echo "qmake failed; please fix errors and rebuild"
     exit $retVal
 fi
 
 make
 retVal=$?
-if [ $retVal -eq 1 ]; then
+if [ $retVal -ne 0 ]; then
     echo "make failed; please fix errors and rebuild"
     exit $retVal
 fi
