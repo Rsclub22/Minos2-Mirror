@@ -207,6 +207,10 @@ private:
     QShortcut *freqPlusShortCut;
     QShortcut *freqNegShortCut;
 
+    QShortcut *ritOnOffShortCut;
+    QShortcut *ritClearShortCut;
+    QShortcut *ritFreqEditShortCut;
+
     bool radioLoaded;
     bool radioConnected;
     bool radioError;

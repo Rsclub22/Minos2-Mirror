@@ -1,5 +1,6 @@
 #include "addradiodialog.h"
 #include "ui_addradiodialog.h"
+
 #include <QMessageBox>
 
 AddRadioDialog::AddRadioDialog(QStringList _availRadios, RigControl* rig, QWidget *parent) :
@@ -49,6 +50,14 @@ void AddRadioDialog::done(int r)
             msgBox.setText("Radio Name Empty\nPlease enter a name for the radio");
             msgBox.exec();
             ui->radioName->setFocus();
+            return;
+        }
+        else if (containsChars(ui->radioName->text(), illegalChars))
+        {
+            QMessageBox msgBox;
+            msgBox.setModal( true );
+            msgBox.setText("Radio name contains invalid characters,\n please remove non-alpha or non-numeric characters");
+            msgBox.exec();
             return;
         }
         else if (availRadios.contains(ui->radioName->text()))
