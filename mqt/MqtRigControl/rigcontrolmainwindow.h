@@ -49,7 +49,7 @@ namespace displayIndicator {
 
 
 
-#define RIGCONTROL_TEST
+//#define RIGCONTROL_TEST
 
 
 

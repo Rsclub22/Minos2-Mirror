@@ -516,6 +516,7 @@ void RigSetupDialog::saveSettings()
 
 
     bool currRadioChanged = false;
+    bool radioSettingChanged = false;
 
 
     for (int i = 0; i < numAvailRadios; i++)
@@ -537,88 +538,95 @@ void RigSetupDialog::saveSettings()
 
             saveRadioData(i, configRadio);
 
-        }
 
 
-        // now save transvert settings
-        if (radioTab[i]->getRadioData()->transVertEnable)
-        {
 
-            fileNameTransVert = TRANSVERT_PATH_LOGGER + radioTab[i]->getRadioData()->radioName + FILENAME_TRANSVERT_RADIOS;
-            QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
-
-            radioTab[i]->addedTransVertTabs.clear();
-
-            if (radioTab[i]->removedTransVertTabs.count() > 0)
+            // now save transvert settings
+            if (radioTab[i]->getRadioData()->transVertEnable)
             {
-                if (currentRadioName == radioTab[i]->getRadioData()->radioName)
-                {
-                    // settings changed in current radio
-                    currRadioChanged = true;
-                }
 
-                for (int t = 0; t < radioTab[i]->removedTransVertTabs.count(); t++)
-                {
-                    QSettings config(fileNameTransVert, QSettings::IniFormat);
-                    config.beginGroup(radioTab[i]->removedTransVertTabs[t]);
-                    config.remove("");      // remove all keys for this group
-                    config.endGroup();
-                }
-                radioTab[i]->removedTransVertTabs.clear();
-                radioTab[i]->buildSupBandList();
-            }
+                fileNameTransVert = TRANSVERT_PATH_LOGGER + radioTab[i]->getRadioData()->radioName + FILENAME_TRANSVERT_RADIOS;
+                QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
 
-            if (radioTab[i]->renamedTransVertTabs.count() > 0)
-            {
-                if (currentRadioName == radioTab[i]->getRadioData()->radioName)
-                {
-                    // settings changed in current radio
-                    currRadioChanged = true;
-                }
+                radioTab[i]->addedTransVertTabs.clear();
 
-                for (int t = 0; t < radioTab[i]->renamedTransVertTabs.count(); t++)
+                if (radioTab[i]->removedTransVertTabs.count() > 0)
                 {
-                    QSettings config(fileNameTransVert, QSettings::IniFormat);
-                    config.beginGroup(radioTab[i]->renamedTransVertTabs[t]);
-                    config.remove("");      // remove all keys for this group
-                    config.endGroup();
-                }
-                radioTab[i]->renamedTransVertTabs.clear();
-                radioTab[i]->buildSupBandList();
-            }
-
-
-            if (radioTab[i]->getRadioData()->numTransverters > 0)
-            {
-                for (int t = 0; t < radioTab[i]->getRadioData()->numTransverters; t++)
-                {
-                    if (radioTab[i]->transVertTab[t]->transVertValueChanged)
+                    if (currentRadioName == radioTab[i]->getRadioData()->radioName)
                     {
-                        if (radioTab[i]->transVertTab[t]->transVertNameChanged)
-                        {
-                            radioTab[i]->transVertTab[t]->transVertNameChanged = false;
-                            emit transVertNameChanged();
-                        }
-
-                        if (currentRadioName == radioTab[i]->getRadioData()->radioName)
-                        {
-                            // settings changed in current radio
-                            currRadioChanged = true;
-                        }
-
-                        saveTranVerterSetting(i, t, configTransVert);
-
-
-                        radioTab[i]->transVertTab[t]->transVertValueChanged = false;
+                        // settings changed in current radio
+                        currRadioChanged = true;
                     }
+
+                    for (int t = 0; t < radioTab[i]->removedTransVertTabs.count(); t++)
+                    {
+                        QSettings config(fileNameTransVert, QSettings::IniFormat);
+                        config.beginGroup(radioTab[i]->removedTransVertTabs[t]);
+                        config.remove("");      // remove all keys for this group
+                        config.endGroup();
+                    }
+                    radioTab[i]->removedTransVertTabs.clear();
+                    radioTab[i]->buildSupBandList();
                 }
-                radioTab[i]->buildSupBandList();
+
+                if (radioTab[i]->renamedTransVertTabs.count() > 0)
+                {
+                    if (currentRadioName == radioTab[i]->getRadioData()->radioName)
+                    {
+                        // settings changed in current radio
+                        currRadioChanged = true;
+                    }
+
+                    for (int t = 0; t < radioTab[i]->renamedTransVertTabs.count(); t++)
+                    {
+                        QSettings config(fileNameTransVert, QSettings::IniFormat);
+                        config.beginGroup(radioTab[i]->renamedTransVertTabs[t]);
+                        config.remove("");      // remove all keys for this group
+                        config.endGroup();
+                    }
+                    radioTab[i]->renamedTransVertTabs.clear();
+                    radioTab[i]->buildSupBandList();
+                }
+
+
+                if (radioTab[i]->getRadioData()->numTransverters > 0)
+                {
+                    for (int t = 0; t < radioTab[i]->getRadioData()->numTransverters; t++)
+                    {
+                        if (radioTab[i]->transVertTab[t]->transVertValueChanged)
+                        {
+                            if (radioTab[i]->transVertTab[t]->transVertNameChanged)
+                            {
+                                radioTab[i]->transVertTab[t]->transVertNameChanged = false;
+                                emit transVertNameChanged();
+                            }
+
+                            if (currentRadioName == radioTab[i]->getRadioData()->radioName)
+                            {
+                                // settings changed in current radio
+                                currRadioChanged = true;
+                            }
+
+                            saveTranVerterSetting(i, t, configTransVert);
+
+
+                            radioTab[i]->transVertTab[t]->transVertValueChanged = false;
+                        }
+                    }
+                    radioTab[i]->buildSupBandList();
+                }
             }
+            radioTab[i]->radioValueChanged = false;
+            radioSettingChanged = true;
+
         }
-        radioTab[i]->radioValueChanged = false;
     }
 
-    emit radioSettingsSaved();
+    if (radioSettingChanged)
+    {
+       emit radioSettingsSaved();
+    }
+
 
     if (currRadioChanged)
     {
