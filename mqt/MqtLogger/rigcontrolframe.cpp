@@ -102,6 +102,14 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     connect(freqNegShortCut, SIGNAL(activated()), this, SLOT(freqNeg_ShortCut()));
     connect(ui->freqDown, SIGNAL(clicked(bool)), this, SLOT(freqNegShortCut_clicked(bool)));
 
+    // rit key shortcuts
+    ritOnOffShortCut = new QShortcut(QKeySequence("Ctrl+o"), parent);
+    connect(ritOnOffShortCut, SIGNAL(activated()), this, SLOT(ritButtonSelected()));
+    ritClearShortCut = new QShortcut(QKeySequence("Ctrl+k"), parent);
+    connect(ritClearShortCut, SIGNAL(activated()), this, SLOT(ritClearShortCutSelected()));
+    ritFreqEditShortCut = new QShortcut(QKeySequence("Ctrl+i"), parent);
+    connect(ritFreqEditShortCut, SIGNAL(activated()), this, SLOT(ritFreqEditShortCutInFocus()));
+
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
@@ -288,6 +296,13 @@ void RigControlFrame::changeRitRadioFreq(int freq)
 
 
 }
+
+
+void RigControlFrame::ritClearShortCutSelected()
+{
+    ritClearButtonSelected(true);
+}
+
 
 
 void RigControlFrame::ritClearButtonSelected(bool /*state*/)
@@ -576,18 +591,7 @@ void RigControlFrame::freqEditSelected()
 
 }
 
-void RigControlFrame::freqRitEditSelected()
-{
-    traceMsg(QString("Freq Rit Edit Selected"));
-    ui->RitEdit->setFocus();
-    int len = ui->RitEdit->text().length();
-    if (len > 5)
-    {
-       ui->RitEdit->setCursorPosition(len - 5);
-    }
 
-
-}
 
 
 // this is the routine called from read memory
@@ -1023,6 +1027,14 @@ void RigControlFrame::freqLineEditInFocus()
     freqEditOn = true;
     ui->freqInput->setReadOnly(false);
     freqLineEditFrameColour(true);
+}
+
+
+
+void RigControlFrame::ritFreqEditShortCutInFocus()
+{
+    ui->RitEdit->setFocus();
+    ui->RitEdit->setCursorPosition(3);
 }
 
 

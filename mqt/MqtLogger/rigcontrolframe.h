@@ -175,13 +175,14 @@ private slots:
 
 
     void exitRitFreqEdit();
-    void freqRitEditSelected();
     void ritButtonSelected();
     void ritClearButtonSelected(bool state);
+    void ritFreqEditShortCutInFocus();
     void sendVolumeRadio(int level);
 
 
 
+    void ritClearShortCutSelected();
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -240,6 +241,7 @@ private:
     void freqLineEditBkgnd(bool status);
     void freqLineEditFrameColour(bool status);
 
+    void ritLineEditInFocus();
     void ritFreqLineEditFrameColour(bool status);
 
     void initRigFrame(QWidget *parent);
@@ -271,7 +273,7 @@ private:
     void showRitButOff();
 
     void setVolControlVisible(bool value);
-    void ritLineEditInFocus();
+
     void ritButtonOn();
     void ritButtonOff();
 
