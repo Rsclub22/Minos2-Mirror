@@ -23,9 +23,11 @@ void myMessageOutput(QtMsgType type,
     case QtDebugMsg:
         mtype = "Debug";
         break;
+#if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
     case QtInfoMsg:
         mtype = "Info";
         break;
+#endif
     case QtWarningMsg:
         mtype = "Warning";
         break;
