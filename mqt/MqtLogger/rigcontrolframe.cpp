@@ -906,9 +906,11 @@ void RigControlFrame::setRadioState(QString s)
            radioConnected = false;
            radioError = false;
 
-               //curFreq = "00000000000";
-               //ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
-               //ui->freqInput->setText(curFreq);
+           ui->bandWarnLabel->setText("");
+           curFreq = "00000000000";
+           ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
+           ui->freqInput->setText(curFreq);
+           ui->bandSelCombo->clear();
 
 
 
