@@ -19,6 +19,7 @@ RitLineEdit::RitLineEdit(QWidget *parent):
     QLineEdit(parent)
 {
 
+    setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 
@@ -145,3 +146,6 @@ void RitLineEdit::keyPressEvent(QKeyEvent *event)
         QLineEdit::keyPressEvent(event);
     }
 }
+
+
+
