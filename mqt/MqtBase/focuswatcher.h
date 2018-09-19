@@ -14,6 +14,8 @@ public:
       if (parent)
          parent->installEventFilter(this);
    }
+    virtual ~FocusWatcher() override
+    {}
    virtual bool eventFilter(QObject *obj, QEvent *event) override
    {
       Q_UNUSED(obj)

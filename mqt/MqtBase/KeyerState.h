@@ -11,10 +11,10 @@ class KeyerState: public PubSubValue
 public:
     KeyerState(QString s);
     KeyerState(QString st, QString sel):PubSubValue(KeyerStateType), _report(st), _selected(sel){}
-    ~KeyerState();
+    virtual ~KeyerState() override;
 
-    virtual QString pack() const;
-    virtual void unpack(QString);
+    virtual QString pack() const override;
+    virtual void unpack(QString) override;
     QString report() const;
     QString selected() const;
 };

@@ -76,12 +76,16 @@ public:
 class MatchContactList : public BaseMatchContest
 {
 public:
+    virtual ~MatchContactList() override
+    {}
    virtual ContactList *getContactList() const override;
    virtual bool operator<( const BaseMatchContest& rhs ) const override;
 };
 class MatchContactLog : public BaseMatchContest
 {
 public:
+    virtual ~MatchContactLog() override
+    {}
    virtual const BaseContestLog * getContactLog() const override;
    virtual bool operator<( const BaseMatchContest& rhs ) const override;
 };

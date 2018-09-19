@@ -25,7 +25,7 @@ class RotPresetDialog : public QDialog
 
 public:
     explicit RotPresetDialog(int buttonNumber, RotPresetData* _editData, RotPresetData* _curData, QWidget *parent = nullptr);
-    ~RotPresetDialog() override;
+    virtual ~RotPresetDialog() override;
 
     private slots:
         bool bearingEditFinished();

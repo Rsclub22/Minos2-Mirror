@@ -96,6 +96,8 @@ class UpperCaseValidator:public QValidator
     bool makeSignal;
 public:
     UpperCaseValidator(bool makeSignal = false);
-    QValidator::State validate(QString & input, int & /*pos*/) const;
+    virtual ~UpperCaseValidator() override
+    {}
+    QValidator::State validate(QString & input, int & /*pos*/) const override;
 };
 #endif

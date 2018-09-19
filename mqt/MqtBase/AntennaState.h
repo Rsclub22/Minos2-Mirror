@@ -12,9 +12,11 @@ class AntennaState: public PubSubValue
 public:
     AntennaState();
     AntennaState(QString);
+    virtual ~AntennaState() override
+    {}
 
-    virtual QString pack() const;
-    virtual void unpack(QString);
+    virtual QString pack() const override;
+    virtual void unpack(QString) override;
     bool isDirty() const;
     void clearDirty();
     void setDirty();
