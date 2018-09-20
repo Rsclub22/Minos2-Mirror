@@ -79,7 +79,9 @@ signals:
     void radioNameChange();
     void currentRadioSettingChanged(QString);
     void radioTabChanged();
-    void transVertNameChanged();
+    void transVertNameHasChanged();
+    void transVertSettingHasChanged();
+
     void radioSettingsSaved();
 
 private slots:
