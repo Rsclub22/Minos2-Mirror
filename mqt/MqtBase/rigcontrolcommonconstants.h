@@ -64,6 +64,8 @@ namespace hamlibData
                                     "RIG_PORT_PACKET", "RIG_PORT_DTMF", "RIG_PORT_ULTRA", "RIG_PORT_RPC",
                                     "RIG_PORT_PARALLEL, RIG_PORT_USB, RIG_PORT_UDP_NETWORK, RIG_PORT_CM108"};
 
+    const int RIGCTL = 2;               // rigctl model number
+
 
 }
 

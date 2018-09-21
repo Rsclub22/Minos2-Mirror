@@ -254,6 +254,10 @@ private:
     void setRitGetSetFreqIndicatorVisible(bool state);
     void ritSetFreqIndicatorToggle(bool state);
     void ritGetFreqIndicatorToggle(bool state);
+
+    void getRigctldNames();
+    void clrRigctldNames();
+
 private slots:
 
     void onStdInRead(QString);

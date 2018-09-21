@@ -118,10 +118,10 @@
          <item>
           <widget class="QLineEdit" name="netPortBox">
            <property name="inputMask">
-            <string>99999</string>
+            <string/>
            </property>
            <property name="maxLength">
-            <number>5</number>
+            <number>32767</number>
            </property>
           </widget>
          </item>
