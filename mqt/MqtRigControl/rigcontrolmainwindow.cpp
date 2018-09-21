@@ -23,6 +23,7 @@
 #include "rigsetupdialog.h"
 #include "rigcontrolrpc.h"
 #include "rigutils.h"
+#include "rigctldclient.h"
 #include <QTimer>
 #include <QMessageBox>
 #include <QProcessEnvironment>
@@ -185,6 +186,29 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     readTraceLogFlag();
 
     ui->selectRadioBox->clearFocus();
+
+
+    RigCtldClient* daemonClient = new RigCtldClient();
+
+    if (daemonClient->connectToHost("127.0.0.1", 4532))
+    {
+
+        const QByteArray cmd = QString("+\\dump_caps\n").toLatin1();
+        daemonClient->writeData(cmd);
+    }
+
+
+
+    QString radioModelNumber = daemonClient->getRadioModel();
+    QString radioModelName = daemonClient->getRadioModelName();
+    QString radioModelManfact = daemonClient->getRadioManufacturerName();
+
+    daemonClient->disconnectFromHost();
+
+
+
+
+
 
     if (appName.length() == 0)
     {
@@ -467,6 +491,46 @@ void RigControlMainWindow::upDateRadio()
             selTransVertBandIndicator = "";     // force active tranvert indicator update
 
             setupRadio->saveCurrentRadio();
+
+/*
+
+            RigCtldClient *client;
+            client = new RigCtldClient();
+
+            if (!client->connectToHost("127.0.0.1", 4532))
+            {
+                qDebug() << "Rigctld Connect Failed";
+            }
+            else
+            {
+                QByteArray msg = QString("+\\dump_caps\n").toLatin1();
+                if (!client->writeData(msg))
+                {
+                    qDebug() << "Rigctld Send Data Failed";
+                }
+                else
+                {
+                    QEventLoop loop;
+                    QObject::connect( client, SIGNAL( finished() ), &loop, SLOT( quit() ) );
+                    loop.exec();
+                }
+
+                if (client->getRetCode() >=0 && client->checkMsgRecieved())
+                {
+                    rigctld_radioNumber = client->getRadioModel();
+                    rigctld_radioName = client->getRadioModelName();
+                    rigctld_radioMfg = client->getRadioManufacturerName();
+                }
+                else
+                {
+                    qDebug() << QString("Error Getting radioModel from rigctld - error code = %1").arg(client->getRetCode());
+                }
+
+                client->disconnectFromHost();
+            }
+
+
+*/
 
             openRadio();
 
@@ -2321,6 +2385,9 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
 
 
 }
+
+
+
 
 
 

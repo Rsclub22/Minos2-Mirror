@@ -83,6 +83,11 @@ private:
     int pollTime;
     bool rigErrorFlag;
     bool cmdLockFlag;
+    // data from rigctld
+    QString rigctld_radioNumber;
+    QString rigctld_radioName;
+    QString rigctld_radioMfg;
+
     // data from logger
     QString logger_freq;
     QString slogMode;

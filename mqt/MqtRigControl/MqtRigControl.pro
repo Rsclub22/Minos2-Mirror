@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     addradiodialog.cpp \
     rigsetupdialog.cpp \
     serialtvswitch.cpp \
-    smeterbar.cpp
+    smeterbar.cpp \
+    rigctldclient.cpp
 
 HEADERS  += rigcontrolmainwindow.h \
     rigcontrol.h \
@@ -42,7 +43,8 @@ HEADERS  += rigcontrolmainwindow.h \
     addradiodialog.h \
     rigsetupdialog.h \
     serialtvswitch.h \
-    smeterbar.h
+    smeterbar.h \
+    rigctldclient.h
 
 
 
