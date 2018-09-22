@@ -18,7 +18,7 @@
 FreqLineEdit::FreqLineEdit(QWidget *parent):
     QLineEdit(parent)
 {
-
+    setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 
