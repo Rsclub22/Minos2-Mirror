@@ -17,12 +17,26 @@ RigCtldClient::RigCtldClient(QObject *parent) :
 {
     trace(QString("RigCtldClient - Creating Client"));
     socket = new QTcpSocket(this);
-    //socket->open(QIODevice::ReadWrite);
-
     connect(socket, SIGNAL(connected()),this, SLOT(connected()));
     connect(socket, SIGNAL(disconnected()),this, SLOT(disconnected()));
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+
+    recvTimer = new QTimer();
+    connect(recvTimer, SIGNAL(timeout()), this, SLOT(recvTimeout()));
+
+
 }
+
+
+void RigCtldClient::recvTimeout()
+{
+
+    trace(QString("RigCtldClient - Message receive Timeout"));
+    msgComplete = false;
+    retCode = -52;
+    emit finished();
+}
+
 
 bool RigCtldClient::connectToHost(QString host, quint16 port)
 {
@@ -74,6 +88,11 @@ void RigCtldClient::disconnected()
     msg.clear();
 }
 
+void RigCtldClient::startRecvTimer(int time)
+{
+    recvTimer->start(time);
+}
+
 void RigCtldClient::readyRead()
 {
     trace(QString("RigCtldClient - Reading Data"));
@@ -86,7 +105,7 @@ void RigCtldClient::readyRead()
     while (socket->canReadLine())
     {
         line = QString(socket->readLine());
-        qDebug() << line;
+        //qDebug() << line;
         bytes += line.count();
         msg.append(line);
     }

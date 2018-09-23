@@ -473,13 +473,20 @@ void RigControlFrame::radioBandFreq(int index)
 void RigControlFrame::sendFreq(QString f)
 {
 
-
-    bool ok = false;
-
-    double df = f.toDouble(&ok);
-    if (ok && df > 0.0)
+    if (f != NO_BAND_SUPPORT)
     {
-     emit sendFreqControl(f);
+        bool ok = false;
+        double df = f.toDouble(&ok);
+        if (ok && df > 0.0)
+        {
+         emit sendFreqControl(f);
+        }
+
+    }
+    else
+    {
+        // send no band support
+        emit sendFreqControl(f);
     }
 }
 
@@ -876,6 +883,7 @@ void RigControlFrame::setBandList(QString b)
                 // warn no band for this radio
                 setRadioBandWarning(QString("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
                 trace(QString("Set band list: %1 Band not found on this radio").arg(cb));
+                sendFreq(NO_BAND_SUPPORT);
             }
 
 

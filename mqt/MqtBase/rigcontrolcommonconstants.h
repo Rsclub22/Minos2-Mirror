@@ -69,7 +69,7 @@ namespace hamlibData
 
 }
 
-
+const QString NO_BAND_SUPPORT = "???";
 
 const QString TRANSSW_NUM_DEFAULT = "0";
 

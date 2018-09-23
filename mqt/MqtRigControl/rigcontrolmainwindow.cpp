@@ -951,6 +951,13 @@ void RigControlMainWindow::loggerSetFreq(QString freq)
     if (radio->get_serialConnected() && !rigErrorFlag)
     {
         logMessage(QString("new freq %1, old freq %2, old tpm %3").arg(freq).arg(logger_freq).arg(tpm));
+        if (freq == NO_BAND_SUPPORT)
+        {
+            logMessage(QString("loggerSetFreq: No transverter found for this band"));
+            clearTransVertSupport();
+            return;
+        }
+
         double lf = convertStrToFreq(logger_freq);
         double f = convertStrToFreq(freq);
         if (!logger_freq.isEmpty() && std::abs(lf - f) > 1000.1)
@@ -1052,16 +1059,8 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
             {
                 // no transverter found for this band
                 logMessage(QString("SetFreq: No transverter found for this band"));
-                selTvBand = "";
-                displayTransVertVfo(0.0);
-                ui->transVertBandDisp->setText("");
-                transVertSwNum = TRANSSW_NUM_DEFAULT;
-                ui->transVertSwNum->setText(TRANSSW_NUM_DEFAULT);
-                selTransVertBandIndicator = "";
-                sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
-                sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
-                updateSupportedRadioIndicators();
-                //setTransVertDisplayVisible(true);
+                clearTransVertSupport();
+
             }
 
         }
@@ -1099,6 +1098,20 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
     }
 
     cmdLockOff();
+}
+
+
+void RigControlMainWindow::clearTransVertSupport()
+{
+    selTvBand = "";
+    displayTransVertVfo(0.0);
+    ui->transVertBandDisp->setText("");
+    transVertSwNum = TRANSSW_NUM_DEFAULT;
+    ui->transVertSwNum->setText(TRANSSW_NUM_DEFAULT);
+    selTransVertBandIndicator = "";
+    sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
+    sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
+    updateSupportedRadioIndicators();
 }
 
 int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
@@ -1231,6 +1244,7 @@ void RigControlMainWindow::getRigctldNames(QString address, quint16 port)
                     else
                     {
                         logMessage(QString("getRigctldNames - Data sent ok"));
+                        client->startRecvTimer(3000);
                         QEventLoop loop;
                         QObject::connect( client, SIGNAL( finished() ), &loop, SLOT( quit() ) );
                         loop.exec();

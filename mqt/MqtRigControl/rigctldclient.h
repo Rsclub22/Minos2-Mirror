@@ -26,6 +26,8 @@ public:
     int retCode;
     int getRetCode();
 
+    void startRecvTimer(int time);
+
 signals:
     void finished();
 
@@ -38,6 +40,7 @@ private slots:
     void disconnected();
     void readyRead();
 
+    void recvTimeout();
 private:
     QTcpSocket *socket;
     QStringList msg;

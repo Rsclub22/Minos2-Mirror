@@ -263,6 +263,7 @@ private:
     void buildSupBandList(int radioModelNumber);
     bool findSupTransBand(const QString band);
 
+    void clearTransVertSupport();
 private slots:
 
     void onStdInRead(QString);
