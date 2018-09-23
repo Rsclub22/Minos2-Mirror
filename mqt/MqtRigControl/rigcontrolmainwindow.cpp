@@ -525,8 +525,13 @@ void RigControlMainWindow::upDateRadio()
 
                 }
 
+                int modelNumber = setupRadio->currentRadio.radioModelNumber;
+                if (modelNumber == hamlibData::RIGCTL)
+                {
+                    modelNumber = rigctld_radioNumber.toInt();
+                }
 
-
+                buildSupBandList(modelNumber);
 
                 supVolume = radio->supportVolControl();
                 //qDebug() << "support vol = " << (supVolume ? "True" : "False");
@@ -1010,7 +1015,7 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
 
         if (/*cb != selTvBand &&*/ setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters != 0)
         {
-            // BIG delays this way!
+
             // does a transverter support this band?
 
             bool b = false;
@@ -1281,6 +1286,89 @@ void RigControlMainWindow::clrRigctldNames()
 }
 
 
+/******************** Supported Bands on the Current Radio ********/
+
+
+// build the supported band list including transverters
+void RigControlMainWindow::buildSupBandList(int radioModelNumber)
+{
+    // find the bands the radio supports
+    buildSupportedRadioBands(radioModelNumber);
+
+    // merge radio bands and transverter bands
+    setupRadio->currentRadio.radioTransSupBands.clear();
+    if (bands.count() > 0)
+    {
+        for (int i = 0; i < bands.count(); i++)
+        {
+            if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
+            {
+                setupRadio->currentRadio.radioTransSupBands.append(bands[i]->name);
+            }
+        }
+    }
+}
+
+
+// probe radio for supported bands
+void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber)
+{
+
+    setupRadio->currentRadio.radioSupBands.clear();
+
+    RIG *my_rig = rig_init(radioModelNumber);
+    if (my_rig)
+    {
+
+        for (int i = 0; i < bands.count(); i++)
+        {
+            if (radio->chkFreqRange(my_rig, bands[i]->fLow, "USB"))
+            {
+                setupRadio->currentRadio.radioSupBands.append(bands[i]->name);
+            }
+        }
+    }
+
+}
+
+// is this band in the supported band list for this model
+bool RigControlMainWindow::findSupRadioBand(const QString band)
+{
+    if (setupRadio->currentRadio.radioSupBands.count() > 0)
+    {
+        for (int i = 0; i < setupRadio->currentRadio.radioSupBands.count();i++)
+        {
+            if (band == setupRadio->currentRadio.radioSupBands[i])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return false;
+}
+
+// is this band in the transverter list for this radio
+bool RigControlMainWindow::findSupTransBand(const QString band)
+{
+    if (setupRadio->currentRadio.transVertNames.count() > 0)
+    {
+        for (int i = 0; i < setupRadio->currentRadio.transVertNames.count();i++)
+        {
+
+            if (band == setupRadio->currentRadio.transVertNames[i])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return false;
+}
 
 
 /************************** Mode  *********************************/

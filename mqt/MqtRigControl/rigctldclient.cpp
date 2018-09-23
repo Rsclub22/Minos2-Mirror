@@ -1,4 +1,5 @@
 #include "rigctldclient.h"
+#include "base_pch.h"
 #include <QDebug>
 
 /*
@@ -14,6 +15,7 @@ RigCtldClient::RigCtldClient(QObject *parent) :
     ,msgComplete(false)
     ,clientConnected(false)
 {
+    trace(QString("RigCtldClient - Creating Clinet"));
     socket = new QTcpSocket(this);
     //socket->open(QIODevice::ReadWrite);
 
@@ -24,6 +26,7 @@ RigCtldClient::RigCtldClient(QObject *parent) :
 
 bool RigCtldClient::connectToHost(QString host, quint16 port)
 {
+    trace(QString("RigCtldClient - Connecting to Host - %1:%2").arg(host).arg(QString::number(port)));
     socket->connectToHost(host, port);
     return socket->waitForConnected();
 }
@@ -31,22 +34,25 @@ bool RigCtldClient::connectToHost(QString host, quint16 port)
 
 void RigCtldClient::disconnectFromHost()
 {
+    trace(QString("RigCtldClient - Disconnecting from host"));
     socket->disconnectFromHost();
 
 }
 
 bool RigCtldClient::writeData(const QByteArray &data)
 {
-    qDebug() << "sending = " << data;
+
+    trace(QString("RigCtldClient - Sending Data"));
     if(socket->state() == QAbstractSocket::ConnectedState)
     {
         //socket->write(IntToArray(data.size())); //write size of data
         socket->write(data, qstrlen(data)); //write the data itself
-        qDebug() << "data being sent";
+
         return socket->waitForBytesWritten();
     }
     else
     {
+        trace(QString("RigCtldClient - Sending Data failed - Not connected"));
         return false;
     }
 }
@@ -56,36 +62,35 @@ bool RigCtldClient::writeData(const QByteArray &data)
 
 void RigCtldClient::connected()
 {
-    qDebug() << "connected...";
+    trace(QString("RigCtldClient - Connected"));
     clientConnected = true;
 
 }
 
 void RigCtldClient::disconnected()
 {
-    qDebug() << "disconnected...";
+    trace(QString("RigCtldClient - Disconnected"));
     clientConnected = false;
     msg.clear();
 }
 
 void RigCtldClient::readyRead()
 {
-    qDebug() << "reading...";
+    trace(QString("RigCtldClient - Reading Data"));
     msgComplete = false;
     recvTimer = new QTimer(this);
     recvTimer->start(3000);
-
-    // read the data from the socket
-    //qDebug() << socket->readAll();
 
     QString line;
     do
     {
         line = socket->readLine();
+        trace(QString("RigCtldClient - Read Line = %1").arg(line).remove('\n'));
         if (!line.isEmpty())
         {
              msg.append(line);
         }
+        trace(QString("RigCtldClient - Timer Active = %1").arg(recvTimer->isActive() ? "True" :"False"));
 
     }while ((!line.contains("RPRT")) && recvTimer->isActive());
 
@@ -93,14 +98,15 @@ void RigCtldClient::readyRead()
     if (retCode >= 0 && recvTimer->isActive())
     {
         msgComplete = true;
-        qDebug() << "got message ok";
+        trace(QString("RigCtldClient - Message Completed OK"));
     }
     else
     {
         msgComplete = false;
-        qDebug() << "message failed";
+        trace(QString("RigCtldClient - Message Failed"));
     }
 
+    trace(QString("RigCtldClient - Finished Signal"));
     emit finished();
 
 }

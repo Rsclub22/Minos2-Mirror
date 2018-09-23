@@ -258,6 +258,11 @@ private:
     void getRigctldNames();
     void clrRigctldNames();
 
+    bool findSupRadioBand(const QString band);
+    void buildSupportedRadioBands(int radioModelNumber);
+    void buildSupBandList(int radioModelNumber);
+    bool findSupTransBand(const QString band);
+
 private slots:
 
     void onStdInRead(QString);

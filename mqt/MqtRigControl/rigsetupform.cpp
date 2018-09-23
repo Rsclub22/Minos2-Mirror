@@ -235,7 +235,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setLocTVSWComportVisible(false);
          }
 
-        buildSupBandList();
+        //buildSupBandList();
         radioValueChanged = true;
     }
 
@@ -263,86 +263,7 @@ void RigSetupForm::setRadioModel(QString m)
 
 }
 
-// build the supported band list including transverters
-void RigSetupForm::buildSupBandList()
-{
-    // find the bands the radio supports
-    buildSupportedRadioBands(radioData->radioModelNumber);
 
-    // merge radio bands and transverter bands
-    radioData->radioTransSupBands.clear();
-    if (bands.count() > 0)
-    {
-        for (int i = 0; i < bands.count(); i++)
-        {
-            if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
-            {
-                radioData->radioTransSupBands.append(bands[i]->name);
-            }
-        }
-    }
-}
-
-
-// probe radio for supported bands
-void RigSetupForm::buildSupportedRadioBands(int radioModelNumber)
-{
-
-    radioData->radioSupBands.clear();
-
-    RIG *my_rig = rig_init(radioModelNumber);
-    if (my_rig)
-    {
-
-        for (int i = 0; i < bands.count(); i++)
-        {
-            if (radio->chkFreqRange(my_rig, bands[i]->fLow, "USB"))
-            {
-                radioData->radioSupBands.append(bands[i]->name);
-            }
-        }
-    }
-
-}
-
-// is this band in the supported band list for this model
-bool RigSetupForm::findSupRadioBand(const QString band)
-{
-    if (radioData->radioSupBands.count() > 0)
-    {
-        for (int i = 0; i < radioData->radioSupBands.count();i++)
-        {
-            if (band == radioData->radioSupBands[i])
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    return false;
-}
-
-// is this band in the transverter list for this radio
-bool RigSetupForm::findSupTransBand(const QString band)
-{
-    if (radioData->transVertNames.count() > 0)
-    {
-        for (int i = 0; i < radioData->transVertNames.count();i++)
-        {
-
-            if (band == radioData->transVertNames[i])
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    return false;
-}
 
 
 /********************** CIV Entry ***********************/
@@ -1188,7 +1109,7 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName)
        //transVertTab[tabNum]->antSwNumVisible(false);
        radioData->antSwitchAvail = false;
     }
-    buildSupBandList();
+    //buildSupBandList();
     transVertTab[tabNum]->transVertValueChanged = true;
 
 }

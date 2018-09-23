@@ -126,8 +126,8 @@ public:
       dest.antSwitchAvail = srce->antSwitchAvail;
       dest.ritSupported = srce->ritSupported;
       dest.ritEnable = srce->ritEnable;
-      dest.radioSupBands = srce->radioSupBands;
-      dest.radioTransSupBands = srce->radioTransSupBands;
+      //dest.radioSupBands = srce->radioSupBands;
+      //dest.radioTransSupBands = srce->radioTransSupBands;
       dest.transVertEnable = srce->transVertEnable;
       dest.enableTransSwitch = srce->enableTransSwitch;
       dest.enableLocTVSwMsg = srce->enableLocTVSwMsg;

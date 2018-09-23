@@ -244,7 +244,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
         radioTab[tabNum]->setLocTVSWComportVisible(false);
     }
 
-    radioTab[tabNum]->buildSupBandList();
+    //radioTab[tabNum]->buildSupBandList();
 
 }
 
@@ -627,7 +627,7 @@ void RigSetupDialog::saveSettings()
                         radioTab[i]->transVertTab[t]->transVertValueChanged = false;
                     }
                 }
-                radioTab[i]->buildSupBandList();
+                //radioTab[i]->buildSupBandList();
             }
         }
 

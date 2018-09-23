@@ -101,11 +101,11 @@ public:
 
     void setAppName(QString name);
 
-    void buildSupportedRadioBands(int radioModelNumber);
-    void buildSupBandList();
+    //void buildSupportedRadioBands(int radioModelNumber);
+    //void buildSupBandList();
 
-    bool findSupRadioBand(const QString band);
-    bool findSupTransBand(const QString band);
+    //bool findSupRadioBand(const QString band);
+    //bool findSupTransBand(const QString band);
 
 
 
