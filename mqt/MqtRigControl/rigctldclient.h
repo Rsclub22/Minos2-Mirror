@@ -46,6 +46,8 @@ private:
     bool msgComplete;
     bool clientConnected;
 
+    int bytes = 0;
+
     int getErrorCode(QString msg);
 };
 

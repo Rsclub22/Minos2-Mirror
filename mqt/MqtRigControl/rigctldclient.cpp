@@ -15,7 +15,7 @@ RigCtldClient::RigCtldClient(QObject *parent) :
     ,msgComplete(false)
     ,clientConnected(false)
 {
-    trace(QString("RigCtldClient - Creating Clinet"));
+    trace(QString("RigCtldClient - Creating Client"));
     socket = new QTcpSocket(this);
     //socket->open(QIODevice::ReadWrite);
 
@@ -78,32 +78,36 @@ void RigCtldClient::readyRead()
 {
     trace(QString("RigCtldClient - Reading Data"));
     msgComplete = false;
-    recvTimer = new QTimer(this);
-    recvTimer->start(3000);
 
     QString line;
-    do
-    {
-        line = socket->readLine();
-        trace(QString("RigCtldClient - Read Line = %1").arg(line).remove('\n'));
-        if (!line.isEmpty())
-        {
-             msg.append(line);
-        }
-        trace(QString("RigCtldClient - Timer Active = %1").arg(recvTimer->isActive() ? "True" :"False"));
 
-    }while ((!line.contains("RPRT")) && recvTimer->isActive());
+    qint64 byteAvail = socket->bytesAvailable();
+    trace(QString("RigCtldClient - Bytes Available = %1").arg(QString::number(byteAvail)));
+    while (socket->canReadLine())
+    {
+        line = QString(socket->readLine());
+        qDebug() << line;
+        bytes += line.count();
+        msg.append(line);
+    }
+
+    // reached the end of message?
+    if (!line.contains("RPRT"))
+    {
+        // no wait
+        return;
+    }
 
     retCode = getErrorCode(line);
-    if (retCode >= 0 && recvTimer->isActive())
+    if (retCode >= 0)
     {
         msgComplete = true;
-        trace(QString("RigCtldClient - Message Completed OK"));
+        trace(QString("RigCtldClient - Message Completed OK - %1").arg(bytes));
     }
     else
     {
         msgComplete = false;
-        trace(QString("RigCtldClient - Message Failed"));
+        trace(QString("RigCtldClient - Message Failed - %1").arg(bytes));
     }
 
     trace(QString("RigCtldClient - Finished Signal"));

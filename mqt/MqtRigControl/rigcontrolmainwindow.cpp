@@ -188,28 +188,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     ui->selectRadioBox->clearFocus();
 
 
-    RigCtldClient* daemonClient = new RigCtldClient();
-
-    if (daemonClient->connectToHost("127.0.0.1", 4532))
-    {
-
-        const QByteArray cmd = QString("+\\dump_caps\n").toLatin1();
-        daemonClient->writeData(cmd);
-    }
-
-
-
-    QString radioModelNumber = daemonClient->getRadioModel();
-    QString radioModelName = daemonClient->getRadioModelName();
-    QString radioModelManfact = daemonClient->getRadioManufacturerName();
-
-    daemonClient->disconnectFromHost();
-
-
-
-
-
-
     if (appName.length() == 0)
     {
         upDateRadio();
@@ -451,7 +429,7 @@ void RigControlMainWindow::upDateRadio()
 
             if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)     // is it rigctl?
             {
-                getRigctldNames();
+                getRigctldNames(setupRadio->currentRadio.networkAdd, setupRadio->currentRadio.networkPort.toUShort());
             }
 
             // setup local serial transvert switch
@@ -1231,7 +1209,7 @@ void RigControlMainWindow::chkRadioMgmModeChanged()
 /******************** Rigctld *************************************/
 
 
-void RigControlMainWindow::getRigctldNames()
+void RigControlMainWindow::getRigctldNames(QString address, quint16 port)
 {
 
 
@@ -1239,19 +1217,20 @@ void RigControlMainWindow::getRigctldNames()
                 RigCtldClient *client;
                 client = new RigCtldClient();
 
-                if (!client->connectToHost("127.0.0.1", 4532))
+                if (!client->connectToHost(address, port))
                 {
-                    qDebug() << "Rigctld Connect Failed";
+                    logMessage(QString("getRigctldNames - Connect Failed - %1:%2").arg(address).arg(QString::number(port)));
                 }
                 else
                 {
                     QByteArray msg = QString("+\\dump_caps\n").toLatin1();
                     if (!client->writeData(msg))
                     {
-                        qDebug() << "Rigctld Send Data Failed";
+                        logMessage(QString("getRigctldNames - Send Data Failed"));
                     }
                     else
                     {
+                        logMessage(QString("getRigctldNames - Data sent ok"));
                         QEventLoop loop;
                         QObject::connect( client, SIGNAL( finished() ), &loop, SLOT( quit() ) );
                         loop.exec();
@@ -1262,12 +1241,14 @@ void RigControlMainWindow::getRigctldNames()
                         rigctld_radioNumber = client->getRadioModel();
                         rigctld_radioName = client->getRadioModelName();
                         rigctld_radioMfg = client->getRadioManufacturerName();
+                        logMessage(QString("getrigctld - Got names ok - %1 %2 %3").arg(rigctld_radioNumber).arg(rigctld_radioMfg).arg(rigctld_radioName));
                     }
                     else
                     {
-                        qDebug() << QString("Error Getting radioModel from rigctld - error code = %1").arg(client->getRetCode());
+                        logMessage(QString("Error Getting radioModel from rigctld - error code = %1").arg(client->getRetCode()));
                     }
 
+                    logMessage(QString("getRigctldNames - Disconnect from host"));
                     client->disconnectFromHost();
                 }
 

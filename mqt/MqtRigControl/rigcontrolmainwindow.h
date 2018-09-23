@@ -255,7 +255,7 @@ private:
     void ritSetFreqIndicatorToggle(bool state);
     void ritGetFreqIndicatorToggle(bool state);
 
-    void getRigctldNames();
+    void getRigctldNames(QString address, quint16 port);
     void clrRigctldNames();
 
     bool findSupRadioBand(const QString band);
