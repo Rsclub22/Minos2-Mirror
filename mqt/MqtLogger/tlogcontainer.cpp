@@ -954,9 +954,9 @@ void TLogContainer::OptionsActionExecute()
 void TLogContainer::FontEditAcceptActionExecute()
 {
     QString qpa = qgetenv("QT_QPA_PLATFORMTHEME");
-    if (!qpa.isEmpty())
+    if (qpa.compare("qt5ct", Qt::CaseInsensitive) == 0)
     {
-        mShowMessage("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set", this);
+        mShowMessage("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct", this);
         QSettings settings;
         settings.remove( "font");
     }
