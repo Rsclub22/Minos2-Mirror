@@ -246,6 +246,7 @@ class Callsign
       QString body;  // <ctt> (gjv) [CTT]main body
       QString suffix; // <mm> (p) [P]trailer
 
+      QString realCall; // the actual calsign, stripped of decorations
       int valRes;   // current validation result
 
       Callsign( );
