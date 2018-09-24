@@ -269,7 +269,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
     connect(pollTimer, SIGNAL(timeout()), this, SLOT(getRadioInfo()));
-
+    connect(ui->ritEnableChk, SIGNAL(stateChanged(int)), this, SLOT(ritEnableChecked(int)));
 
 
     // configure radio dialog
@@ -430,6 +430,16 @@ void RigControlMainWindow::upDateRadio()
             if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)     // is it rigctl?
             {
                 getRigctldNames(setupRadio->currentRadio.networkAdd, setupRadio->currentRadio.networkPort.toUShort());
+                bool ok = false;
+                int rigNum = rigctld_radioNumber.toInt(&ok, 10);
+                if (ok)
+                {
+                    irigctld_radioNumber = rigNum;
+                }
+                else
+                {
+                    irigctld_radioNumber = 0;
+                }
             }
 
             // setup local serial transvert switch
@@ -503,19 +513,26 @@ void RigControlMainWindow::upDateRadio()
 
                 }
 
+                // build supported band list for this radio
+                // if it is a rigctld model, then use the radio model number connected to rigctld
+
                 int modelNumber = setupRadio->currentRadio.radioModelNumber;
                 if (modelNumber == hamlibData::RIGCTL)
                 {
-                    modelNumber = rigctld_radioNumber.toInt();
+                    modelNumber = irigctld_radioNumber;
                 }
 
                 buildSupBandList(modelNumber);
 
-                supVolume = radio->supportVolControl();
-                //qDebug() << "support vol = " << (supVolume ? "True" : "False");
+                // does the radio support control of volume control
+
+                supVolume = radio->supportVolControl(modelNumber);
+                logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(supVolume ? "True" : "False"));
                 sendVolStatusToLog(supVolume);
 
-                supSignalStrength = radio->supportSignalStrength();
+                // does the radio support signal strength meter
+
+                supSignalStrength = radio->supportSignalStrength(modelNumber);
 
                 writeWindowTitle(appName);
                 sendStatusToLogConnected();
@@ -525,7 +542,7 @@ void RigControlMainWindow::upDateRadio()
 
                 if (setupRadio->currentRadio.ritSupported && setupRadio->currentRadio.ritEnable)
                 {
-                    getRitSupportStatus();
+                    getRitSupportStatus(modelNumber);
                     setRitFreqDisplayVisible(true);
                     setRitStatusIndicatorsVisible(true);
                     setRitGetSetFreqIndicatorVisible(true);
@@ -1525,27 +1542,27 @@ void RigControlMainWindow::clearSupportRitFlags()
     radioRitOn = false;
 }
 
-void RigControlMainWindow::getRitSupportStatus()
+void RigControlMainWindow::getRitSupportStatus(int modelNumber)
 {
 
 
     // Does radio support getting Rit Freq?
-    radioSupGetRit = radio->supportGetRit(setupRadio->currentRadio.radioModelNumber);
+    radioSupGetRit = radio->supportGetRit(modelNumber);
     logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(radioSupGetRit ? "True" : "False"));
 
 
     // Does radio support setting Rit Freq?
-    radioSupSetRit = radio->supportSetRit(setupRadio->currentRadio.radioModelNumber);
+    radioSupSetRit = radio->supportSetRit(modelNumber);
     logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(radioSupSetRit ? "True" : "False"));
 
 
     // Does radio support turning Rit on/off
 
-    radioSupRitOnOff = radio->supportRitOnOff(setupRadio->currentRadio.radioModelNumber);
+    radioSupRitOnOff = radio->supportRitOnOff(modelNumber);
     logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupRitOnOff ? "True" : "False"));
 
     // Does radio support getting Rit on/off state?
-    radioSupGetRitState = radio->supportGetRitState(setupRadio->currentRadio.radioModelNumber);
+    radioSupGetRitState = radio->supportGetRitState(modelNumber);
     logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
 }
 
@@ -1630,6 +1647,7 @@ void RigControlMainWindow::setRitGetSetFreqIndicatorVisible(bool state)
     ui->SetRitFreqLbl->setVisible(state);
     ui->SetRitFreqInd->setVisible(state);
     ui->GetRitFreqInd->setVisible(state);
+    ui->ritEnableChk->setVisible(state);
 }
 
 
@@ -1655,6 +1673,41 @@ void RigControlMainWindow::ritGetFreqIndicatorToggle(bool state)
     else
     {
         ui->GetRitFreqInd->setStyleSheet(RIT_RADIO_GETSETFREQ_INDICATOR_FALSE);
+    }
+}
+
+
+void RigControlMainWindow::saveRitEnableChk(bool state)
+{
+    QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+    QSettings config(fileNameRadio, QSettings::IniFormat);
+    config.beginGroup(setupRadio->currentRadio.radioName);
+    config.setValue("ritEnable", state);
+    config.endGroup();
+}
+
+
+bool RigControlMainWindow::readRitEnableChk()
+{
+    QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+    QSettings config(fileNameRadio, QSettings::IniFormat);
+    config.beginGroup(setupRadio->currentRadio.radioName);
+    bool ritEnableState = config.value("ritEnable", false).toBool();
+    config.endGroup();
+    return ritEnableState;
+}
+
+void RigControlMainWindow::ritEnableChecked(int chkState)
+{
+    setupRadio->currentRadio.ritEnable = false;
+    if (chkState == Qt::Unchecked)
+    {
+        saveRitEnableChk(setupRadio->currentRadio.ritEnable);
+    }
+    else if (chkState == Qt::Checked)
+    {
+        setupRadio->currentRadio.ritEnable = true;
+        saveRitEnableChk(setupRadio->currentRadio.ritEnable);
     }
 }
 

@@ -628,6 +628,13 @@
             </layout>
            </item>
            <item>
+            <widget class="Line" name="line_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_19">
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_11">
@@ -653,6 +660,13 @@
                 </layout>
                </item>
               </layout>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="ritEnableChk">
+               <property name="text">
+                <string>Rit Enable</string>
+               </property>
+              </widget>
              </item>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_14">

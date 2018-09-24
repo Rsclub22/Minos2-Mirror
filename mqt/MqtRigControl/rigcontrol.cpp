@@ -448,9 +448,9 @@ pbwidth_t RigControl::getPassBand()
 
 /*************** Volume Level Control  ********************************/
 
-bool RigControl::supportVolControl()
+bool RigControl::supportVolControl(int rigNumber)
 {
-    return (rigHasGetLevel(RIG_LEVEL_AF) & rigHasSetLevel(RIG_LEVEL_AF));
+    return (rigHasGetLevel(rigNumber, RIG_LEVEL_AF) & rigHasSetLevel(rigNumber, RIG_LEVEL_AF));
 }
 
 int RigControl::setVolume(vfo_t vfo, float val)
@@ -468,10 +468,10 @@ int RigControl::getVolume(vfo_t vfo, value_t *val)
 
 /*************** Signal Strength Level Control  ********************************/
 
-bool RigControl::supportSignalStrength()
+bool RigControl::supportSignalStrength(int modelNumber)
 {
 
-    return rigHasGetLevel(RIG_LEVEL_STRENGTH);
+    return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
 }
 
 
@@ -490,12 +490,41 @@ setting_t RigControl::rigHasGetLevel(setting_t level)
     return rig_has_get_level (my_rig, level);
 }
 
+setting_t RigControl::rigHasGetLevel(int rigNumber, setting_t level)
+{
+
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        return rig_has_get_level (my_rig, level);
+    }
+    else
+    {
+        return 0;
+    }
+
+}
+
 setting_t RigControl::rigHasSetLevel(setting_t level)
 {
     return rig_has_set_level (my_rig, level);
 }
 
+setting_t RigControl::rigHasSetLevel(int rigNumber, setting_t level)
+{
 
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        return rig_has_set_level (my_rig, level);
+    }
+    else
+    {
+        return 0;
+    }
+}
 
 
 int RigControl::rigSetLevel(vfo_t vfo, setting_t level, value_t val)

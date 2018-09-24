@@ -124,8 +124,8 @@ public:
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
-      dest.ritSupported = srce->ritSupported;
-      dest.ritEnable = srce->ritEnable;
+      //dest.ritSupported = srce->ritSupported;
+      //dest.ritEnable = srce->ritEnable;
       //dest.radioSupBands = srce->radioSupBands;
       //dest.radioTransSupBands = srce->radioTransSupBands;
       dest.transVertEnable = srce->transVertEnable;
@@ -286,11 +286,11 @@ public:
     int supportAntSw(int rigNumber, bool *antSwFlag);
 
 
-    bool supportVolControl();
+    bool supportVolControl(int rigNumber);
     int setVolume(vfo_t vfo, float val);
     int getVolume(vfo_t vfo, value_t *val);
 
-    bool supportSignalStrength();
+    bool supportSignalStrength(int modelNumber);
     int getSignalStrength(vfo_t vfo, value_t *val);
 
     void enableTraceComms(bool state);
@@ -358,7 +358,9 @@ signals:
     int rigGetLevel(vfo_t vfo, setting_t level, value_t *val);
 
     setting_t rigHasGetLevel(setting_t level);
+    setting_t rigHasGetLevel(int rigNumber, setting_t level);
     setting_t rigHasSetLevel(setting_t level);
+    setting_t rigHasSetLevel(int rigNumber, setting_t level);
 };
 
 #endif // RIGCONTROL_H

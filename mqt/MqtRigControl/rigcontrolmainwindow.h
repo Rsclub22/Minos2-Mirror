@@ -85,6 +85,7 @@ private:
     bool cmdLockFlag;
     // data from rigctld
     QString rigctld_radioNumber;
+    int irigctld_radioNumber = 0;
     QString rigctld_radioName;
     QString rigctld_radioMfg;
 
@@ -250,10 +251,12 @@ private:
 
 
 
-    void getRitSupportStatus();
+    void getRitSupportStatus(int modelNumber);
     void setRitGetSetFreqIndicatorVisible(bool state);
     void ritSetFreqIndicatorToggle(bool state);
     void ritGetFreqIndicatorToggle(bool state);
+    void saveRitEnableChk(bool state);
+    bool readRitEnableChk();
 
     void getRigctldNames(QString address, quint16 port);
     void clrRigctldNames();
@@ -264,6 +267,7 @@ private:
     bool findSupTransBand(const QString band);
 
     void clearTransVertSupport();
+
 private slots:
 
     void onStdInRead(QString);
@@ -293,6 +297,8 @@ private slots:
 
     void sendRadioListLogger();
 
+    void ritEnableChecked(int state);
+
 
 #ifdef RIGCONTROL_TEST
 
@@ -300,6 +306,7 @@ private slots:
     void ritbuttontoggle();  // for test.... *************************
 signals:
 #endif
+
 
 };
 

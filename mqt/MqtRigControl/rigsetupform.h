@@ -125,8 +125,7 @@ public:
     void setLocTVSwComport(QString p);
 
     void setTransVertSwVisible(bool b);
-    void ritEnableVisible(bool v);
-    void setRitEnableChkd(bool enable);
+
 signals:
     void transVertTabAdded(int);
 
@@ -158,7 +157,7 @@ private slots:
     void enableTransVertSwSel(bool);
     void localTransVertSwSel(bool);
     void locTVComPortSel(int);
-    void ritEnableSelected(int);
+
 private:
 
 

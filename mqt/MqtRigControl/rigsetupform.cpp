@@ -54,7 +54,6 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     fillHandShakeInfo();
     fillPollInterValInfo();
     fillMgmModes();
-    ritEnableVisible(false);
     civSetToolTip();
 
     connect(ui->radioModelBox, SIGNAL(activated(int)), this, SLOT(radioModelSelected()));
@@ -70,7 +69,6 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     connect(ui->enableTransVert, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSelected(bool)));
     connect(ui->mgmBox, SIGNAL(activated(int)), this, SLOT(mgmModeSelected()));
     connect(ui->CIVlineEdit, SIGNAL(editingFinished()), this, SLOT(civAddressFinished()));
-    connect(ui->RITEnable, SIGNAL(stateChanged(int)), this, SLOT(ritEnableSelected(int)));
     // transvert
     connect(ui->enableTransVertSw, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSwSel(bool)));
     connect(ui->locTvConChk, SIGNAL(clicked(bool)), this, SLOT(localTransVertSwSel(bool)));
@@ -171,11 +169,6 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             }
         }
 
-        // does this radio support rit?
-
-
-        radioData->ritSupported = radioSupportRit(radioData->radioModelNumber);
-        ritEnableVisible(radioData->ritSupported);
 
 
         // does this radio support antenna sw?
@@ -607,31 +600,7 @@ void RigSetupForm::pollIntervalVisible(bool s)
     ui->pollIntervalLbl->setVisible(s);
 }
 
-/************************* Rit Enable ********************************/
 
-void RigSetupForm::ritEnableSelected(int /*state*/)
-{
-    bool checked = ui->RITEnable->isChecked();
-    if (radioData->ritEnable != checked)
-    {
-        radioData->ritEnable = checked;
-        radioValueChanged = true;
-
-    }
-}
-
-
-void RigSetupForm::setRitEnableChkd(bool enable)
-{
-    ui->RITEnable->setChecked(enable);
-
-}
-
-
-void RigSetupForm::ritEnableVisible(bool v)
-{
-    ui->RITEnable->setVisible(v);
-}
 
 
 /************************** TransVert Enable *************************/
@@ -815,57 +784,9 @@ void RigSetupForm::setEnableRigDataEntry(bool enable)
     ui->networkAddBox->setEnabled(enable);
     ui->pollInterval->setEnabled(enable);
     ui->mgmBox->setEnabled(enable);
-    ui->RITEnable->setEnabled(enable);
     ui->enableTransVert->setEnabled(enable);
 
 }
-
-
-/*
-
-bool RigSetupForm::radioSupportRit(int radioModelNumber)
-{
-
-
-    bool ritAvail = false;
-    radioData->ritGetAvail = false;
-    radioData->ritSetAvail = false;
-    ritEnableVisible(ritAvail);
-    bool supGetRit = false;
-    bool supSetRit = false;
-    bool supGetRitState = false;
-    bool supRitOnOff = false;
-    radio->supportGetRit(radioModelNumber, &supGetRit);
-
-    radio->supportSetRit(radioModelNumber, &supSetRit);
-
-    supRitOnOff = radio->supportRitOnOff(radioModelNumber);
-
-    supGetRitState = radio->supportGetRitState(radioModelNumber);
-
-    if (supGetRit && supSetRit && supGetRitState && supRitOnOff)
-    {
-        return true;
-    }
-
-    return false;
-
-}
-
-*/
-
-
-bool RigSetupForm::radioSupportRit(int radioModelNumber)
-{
-
-    ritEnableVisible(false);
-
-    return radio->supportSetRit(radioModelNumber);
-
-
-}
-
-
 
 
 
