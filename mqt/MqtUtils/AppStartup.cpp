@@ -58,13 +58,6 @@ void appStartup(const QString &pappName)
     QApplication::setOrganizationDomain( "g0gjv.org.uk" );
     QApplication::QCoreApplication::setApplicationName( appStartupName );
 
-    QSettings settings;
-    QVariant qfont = settings.value( "font" );
-    if ( qfont != QVariant() )
-    {
-        QApplication::setFont( qfont.value<QFont>() );
-    }
-
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
@@ -111,5 +104,15 @@ void appStartup(const QString &pappName)
     }
 
     enableTrace( "./TraceLog", appStartupName + "_" );
+}
+
+void setAppFont()
+{
+    QSettings settings;
+    QVariant qfont = settings.value( "font" );
+    if ( qfont != QVariant() )
+    {
+        QApplication::setFont( qfont.value<QFont>() );
+    }
 }
 
