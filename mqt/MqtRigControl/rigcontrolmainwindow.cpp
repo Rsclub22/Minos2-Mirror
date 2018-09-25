@@ -150,7 +150,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     logRitOn = false;
     setRitFreqDisplayVisible(false);
-    setRitStatusIndicatorsVisible(false);
     setRitGetSetFreqIndicatorVisible(false);
 
     initialiseSupportedRadioDisplay();
@@ -535,9 +534,6 @@ void RigControlMainWindow::upDateRadio()
 
                 supSignalStrength = radio->supportSignalStrength(modelNumber);
 
-                writeWindowTitle(appName);
-                sendStatusToLogConnected();
-
 
                 updateSupportedRadioIndicators();
 
@@ -546,8 +542,11 @@ void RigControlMainWindow::upDateRadio()
                 if (radioSupSetRit)
                 {
 
-                    setRitFreqDisplayVisible(true);
-                    setRitStatusIndicatorsVisible(true);
+                    if (ritEnable)
+                    {
+                        setRitFreqDisplayVisible(true);
+                    }
+
                     setRitGetSetFreqIndicatorVisible(true);
                     ritSetFreqIndicatorToggle(radioSupSetRit);
                     ritGetFreqIndicatorToggle(radioSupGetRit);
@@ -558,12 +557,15 @@ void RigControlMainWindow::upDateRadio()
                 else
                 {
                     setRitFreqDisplayVisible(false);
-                    setRitStatusIndicatorsVisible(false);
                     setRitGetSetFreqIndicatorVisible(false);
                     clearSupportRitFlags();
 
                 }
+
                 sendRitEnableStatusLogger();
+                writeWindowTitle(appName);
+                sendStatusToLogConnected();
+
                 dumpRadioToTraceLog();
 
                 sendBandListLogger();       // here as delay after sending to logger the connected message
@@ -1558,9 +1560,18 @@ void RigControlMainWindow::getRitSupportStatus(int modelNumber)
     // Does radio support setting Rit Freq?
     radioSupSetRit = radio->supportSetRit(modelNumber);
     logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(radioSupSetRit ? "True" : "False"));
-    if (radioSupGetRit)
+    if (radioSupSetRit)
     {
         ritEnable = readRitEnableChk();
+        if (ritEnable)
+        {
+            ui->ritEnableChk->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            ui->ritEnableChk->setCheckState(Qt::Unchecked);
+        }
+
     }
 
     // Does radio support turning Rit on/off
@@ -1623,14 +1634,16 @@ void RigControlMainWindow::setRitFreqDisplayVisible(bool state)
 {
     ui->ritLbl->setVisible(state);
     ui->ritFreq->setVisible(state);
+    ui->ritStatusInd->setVisible(state);
 }
 
+/*
 void RigControlMainWindow::setRitStatusIndicatorsVisible(bool state)
 {
     ui->ritStatusInd->setVisible(state);
 
 }
-
+*/
 
 
 void RigControlMainWindow::ritIndicatorToggle(bool state)
@@ -1710,12 +1723,17 @@ void RigControlMainWindow::ritEnableChecked(int chkState)
     if (chkState == Qt::Unchecked)
     {
         saveRitEnableChk(ritEnable);
+        setRitFreqDisplayVisible(ritEnable);
+
     }
     else if (chkState == Qt::Checked)
     {
         ritEnable = true;
         saveRitEnableChk(ritEnable);
+        setRitFreqDisplayVisible(ritEnable);
     }
+
+    sendRitEnableStatusLogger();
 }
 
 

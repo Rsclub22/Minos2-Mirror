@@ -230,7 +230,7 @@ private:
     void setRitOnOffDisplay(bool s);
     void setRitEnableDisplay(bool s);
     void ritIndicatorToggle(bool state);
-    void setRitStatusIndicatorsVisible(bool state);
+    //void setRitStatusIndicatorsVisible(bool state);
     int  getRitRadioStatus(vfo_t vfo, bool *status);
     void sendRadioRitStatusLogger(bool status);
 
