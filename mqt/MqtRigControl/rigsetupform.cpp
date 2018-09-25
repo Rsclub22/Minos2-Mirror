@@ -1008,7 +1008,7 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName)
          }
     }
     transVertTab.append(new TransVertSetupForm(radioData->transVertSettings[tabNum]));
-    addedTransVertTabs.append(tabName);
+    //addedTransVertTabs.append(tabName);
 
     ui->transVertTab->insertTab(tabNum, transVertTab[tabNum], tabName);
     ui->transVertTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
@@ -1088,7 +1088,7 @@ void RigSetupForm::removeTransVerter()
     radioData->transVertSettings.removeAt(currentIndex);
     transVertTab.removeAt(currentIndex);
     radioData->numTransverters--;
-    removedTransVertTabs.append(currentName);
+    //removedTransVertTabs.append(currentName);
 
 
     //QString fileName = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
@@ -1150,7 +1150,7 @@ void RigSetupForm::changeBand()
              radioData->transVertSettings[tabNum]->fHigh = bands[i]->fHigh;
          }
     }
-    renamedTransVertTabs.append(oldName);
+    //renamedTransVertTabs.append(oldName);
     // remove old entry
     //QString fileName = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
 

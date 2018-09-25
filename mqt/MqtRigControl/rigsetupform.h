@@ -39,9 +39,9 @@ public:
 
     QVector<TransVertSetupForm*> transVertTab;
 
-    QStringList addedTransVertTabs;     // tracked edited data
-    QStringList removedTransVertTabs;
-    QStringList renamedTransVertTabs;   // old radio names
+    //QStringList addedTransVertTabs;     // tracked edited data
+    //QStringList removedTransVertTabs;
+    //QStringList renamedTransVertTabs;   // old radio names
     //QStringList availTransVerters;
     //int numAvailTransVerters;
     void addTransVertTab(int tabNum, QString tabName);

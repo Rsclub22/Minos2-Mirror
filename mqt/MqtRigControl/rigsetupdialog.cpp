@@ -107,6 +107,7 @@ void RigSetupDialog::initSetup()
                 for (int t = 0; t < availRadioData[i]->numTransverters; t++)
                 {
                    radioTab[i]->addTransVertTab(t, radioTab[i]->getRadioData()->transVertNames[t] );
+                   radioTab[i]->transVertTab[t]->transVertValueChanged = false;     // this is an existing tab, clear change flag
                 }
             }
 
@@ -465,6 +466,19 @@ void RigSetupDialog::saveRadio(int i)
 
 void RigSetupDialog::saveSettings()
 {
+/*
+    qDebug() << "enter save \n";
+    for (int i = 0; i < numAvailRadios; i++)
+    {
+        qDebug() << "radio num = " << i;
+        for (int t = 0; t < radioTab[i]->getRadioData()->numTransverters; t++)
+        {
+
+            qDebug() <<  QString("transvert num = %1 - %2").arg(t).arg(radioTab[i]->transVertTab[t]->transVertValueChanged ? "True" : "False");
+        }
+    }
+
+*/
 
     QString fileNameTransVert;
 
@@ -607,13 +621,14 @@ void RigSetupDialog::saveSettings()
 
 
                         radioTab[i]->transVertTab[t]->transVertValueChanged = false;
+                        transVertSettingChanged = true;
                     }
                 }
                 //radioTab[i]->buildSupBandList();
             }
         }
 
-        transVertSettingChanged = true;
+
 
     }
 
