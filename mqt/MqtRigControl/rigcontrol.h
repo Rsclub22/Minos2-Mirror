@@ -181,8 +181,8 @@ public:
   QString mgmMode = "USB";
   ptt_type_t pttType;
   bool antSwitchAvail = false;
-  bool ritSupported = false;
-  bool ritEnable = false;
+  //bool ritSupported = false;
+  //bool ritEnable = false;
   bool transVertEnable  = false;
   bool volAvail = false;
   QStringList transVertNames;

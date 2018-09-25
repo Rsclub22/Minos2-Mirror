@@ -126,6 +126,8 @@ private:
     bool radioSupRitOnOff;
     bool radioRitOn;
 
+    bool ritEnable;         // flag to enable rit
+
 
     SerialTVSwitch *serialTVSw = nullptr;
 
