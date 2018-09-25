@@ -225,13 +225,6 @@
       <widget class="QComboBox" name="mgmBox"/>
      </item>
      <item>
-      <widget class="QCheckBox" name="RITEnable">
-       <property name="text">
-        <string>Enable RIT</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer name="horizontalSpacer_7">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

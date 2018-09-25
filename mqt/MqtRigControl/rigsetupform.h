@@ -101,11 +101,11 @@ public:
 
     void setAppName(QString name);
 
-    void buildSupportedRadioBands(int radioModelNumber);
-    void buildSupBandList();
+    //void buildSupportedRadioBands(int radioModelNumber);
+    //void buildSupBandList();
 
-    bool findSupRadioBand(const QString band);
-    bool findSupTransBand(const QString band);
+    //bool findSupRadioBand(const QString band);
+    //bool findSupTransBand(const QString band);
 
 
 
@@ -125,8 +125,7 @@ public:
     void setLocTVSwComport(QString p);
 
     void setTransVertSwVisible(bool b);
-    void ritEnableVisible(bool v);
-    void setRitEnableChkd(bool enable);
+
 signals:
     void transVertTabAdded(int);
 
@@ -158,7 +157,7 @@ private slots:
     void enableTransVertSwSel(bool);
     void localTransVertSwSel(bool);
     void locTVComPortSel(int);
-    void ritEnableSelected(int);
+
 private:
 
 

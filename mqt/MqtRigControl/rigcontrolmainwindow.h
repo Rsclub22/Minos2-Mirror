@@ -83,6 +83,12 @@ private:
     int pollTime;
     bool rigErrorFlag;
     bool cmdLockFlag;
+    // data from rigctld
+    QString rigctld_radioNumber;
+    int irigctld_radioNumber = 0;
+    QString rigctld_radioName;
+    QString rigctld_radioMfg;
+
     // data from logger
     QString logger_freq;
     QString slogMode;
@@ -119,6 +125,8 @@ private:
     bool radioSupGetRitState;
     bool radioSupRitOnOff;
     bool radioRitOn;
+
+    bool ritEnable;         // flag to enable rit
 
 
     SerialTVSwitch *serialTVSw = nullptr;
@@ -222,7 +230,7 @@ private:
     void setRitOnOffDisplay(bool s);
     void setRitEnableDisplay(bool s);
     void ritIndicatorToggle(bool state);
-    void setRitStatusIndicatorsVisible(bool state);
+    //void setRitStatusIndicatorsVisible(bool state);
     int  getRitRadioStatus(vfo_t vfo, bool *status);
     void sendRadioRitStatusLogger(bool status);
 
@@ -245,10 +253,23 @@ private:
 
 
 
-    void getRitSupportStatus();
+    void getRitSupportStatus(int modelNumber);
     void setRitGetSetFreqIndicatorVisible(bool state);
     void ritSetFreqIndicatorToggle(bool state);
     void ritGetFreqIndicatorToggle(bool state);
+    void saveRitEnableChk(bool state);
+    bool readRitEnableChk();
+
+    void getRigctldNames(QString address, quint16 port);
+    void clrRigctldNames();
+
+    bool findSupRadioBand(const QString band);
+    void buildSupportedRadioBands(int radioModelNumber);
+    void buildSupBandList(int radioModelNumber);
+    bool findSupTransBand(const QString band);
+
+    void clearTransVertSupport();
+
 private slots:
 
     void onStdInRead(QString);
@@ -278,6 +299,8 @@ private slots:
 
     void sendRadioListLogger();
 
+    void ritEnableChecked(int state);
+
 
 #ifdef RIGCONTROL_TEST
 
@@ -285,6 +308,7 @@ private slots:
     void ritbuttontoggle();  // for test.... *************************
 signals:
 #endif
+
 
 };
 

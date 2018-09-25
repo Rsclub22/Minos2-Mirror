@@ -177,24 +177,6 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     }
     radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);
 
-    // rit
-
-    if (radioTab[tabNum]->getRadioData()->ritSupported)
-    {
-        radioTab[tabNum]->ritEnableVisible(true);
-        if (radioTab[tabNum]->getRadioData()->ritEnable)
-        {
-            radioTab[tabNum]->setRitEnableChkd(true);
-        }
-        else
-        {
-            radioTab[tabNum]->setRitEnableChkd(false);
-        }
-    }
-    else
-    {
-        radioTab[tabNum]->ritEnableVisible(false);
-    }
 
 
     // now load transverter settings
@@ -244,7 +226,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
         radioTab[tabNum]->setLocTVSWComportVisible(false);
     }
 
-    radioTab[tabNum]->buildSupBandList();
+    //radioTab[tabNum]->buildSupBandList();
 
 }
 
@@ -627,7 +609,7 @@ void RigSetupDialog::saveSettings()
                         radioTab[i]->transVertTab[t]->transVertValueChanged = false;
                     }
                 }
-                radioTab[i]->buildSupBandList();
+                //radioTab[i]->buildSupBandList();
             }
         }
 
@@ -684,8 +666,6 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
     config.setValue("netPort", radioTab[radNum]->getRadioData()->networkPort);
     config.setValue("mgmMode", radioTab[radNum]->getRadioData()->mgmMode);
-    config.setValue("ritSupported", radioTab[radNum]->getRadioData()->ritSupported);
-    config.setValue("ritEnable", radioTab[radNum]->getRadioData()->ritEnable);
     config.setValue("enableTransVertSw", radioTab[radNum]->getRadioData()->enableTransSwitch);
     config.setValue("locTransSwEnable", radioTab[radNum]->getRadioData()->enableLocTVSwMsg);
     config.setValue("locTransVertSwComport", radioTab[radNum]->getRadioData()->locTVSwComport);
@@ -743,8 +723,6 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->networkAdd = config.value("netAddress", "").toString();
     radioTab[radNum]->getRadioData()->networkPort = config.value("netPort", "").toString();
     radioTab[radNum]->getRadioData()->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
-    radioTab[radNum]->getRadioData()->ritSupported = config.value("ritSupported", false).toBool();
-    radioTab[radNum]->getRadioData()->ritEnable = config.value("ritEnable", false).toBool();
     radioTab[radNum]->getRadioData()->enableTransSwitch = config.value("enableTransVertSw", false).toBool();
     radioTab[radNum]->getRadioData()->enableLocTVSwMsg = config.value("locTransSwEnable", false).toBool();
     radioTab[radNum]->getRadioData()->locTVSwComport = config.value("locTransVertSwComport", "").toString();
