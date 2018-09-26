@@ -20,9 +20,7 @@
 
 
 
-QList<const rot_caps *> capsList;
-bool rotatorlistLoaded=false;
-
+static QList<const rot_caps *> capsList;
 
 int collect(const rot_caps *caps,rig_ptr_t)
 {

@@ -23,9 +23,11 @@ void myMessageOutput(QtMsgType type,
     case QtDebugMsg:
         mtype = "Debug";
         break;
+#if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
     case QtInfoMsg:
         mtype = "Info";
         break;
+#endif
     case QtWarningMsg:
         mtype = "Warning";
         break;
@@ -55,13 +57,6 @@ void appStartup(const QString &pappName)
     QApplication::setOrganizationName( "Minos2Qt" );
     QApplication::setOrganizationDomain( "g0gjv.org.uk" );
     QApplication::QCoreApplication::setApplicationName( appStartupName );
-
-    QSettings settings;
-    QVariant qfont = settings.value( "font" );
-    if ( qfont != QVariant() )
-    {
-        QApplication::setFont( qfont.value<QFont>() );
-    }
 
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
@@ -109,5 +104,15 @@ void appStartup(const QString &pappName)
     }
 
     enableTrace( "./TraceLog", appStartupName + "_" );
+}
+
+void setAppFont()
+{
+    QSettings settings;
+    QVariant qfont = settings.value( "font" );
+    if ( qfont != QVariant() )
+    {
+        QApplication::setFont( qfont.value<QFont>() );
+    }
 }
 

@@ -89,9 +89,9 @@ bool LocCalcFrame::handleExit( QLineEdit *Edit )
    Location l1, l2;
    gridstyle gstyle = NUL;
 
-   QLineEdit *locIl;
-   QLineEdit *geoIl;
-   QLineEdit *ngrIl;
+   QLineEdit *locIl = nullptr;
+   QLineEdit *geoIl = nullptr;
+   QLineEdit *ngrIl = nullptr;
 
    if (Edit == ui->S1Grid)
    {

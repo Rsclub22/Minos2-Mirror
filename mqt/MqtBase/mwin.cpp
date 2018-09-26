@@ -734,6 +734,8 @@ int Callsign::validate( )
     // main CS letters
     body = call.mid(callOffset);
 
+    realCall = dupPrefix + number + body;
+
     for (int i = 0; i < body.count(); i++)
     {
         if (body[i].isDigit())

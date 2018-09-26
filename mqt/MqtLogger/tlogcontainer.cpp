@@ -953,20 +953,30 @@ void TLogContainer::OptionsActionExecute()
 
 void TLogContainer::FontEditAcceptActionExecute()
 {
-    QFont f = font();
-    bool ok;
-    f = QFontDialog::getFont( &ok, f );
-    if (ok)
+    QString qpa = qgetenv("QT_QPA_PLATFORMTHEME");
+    if (qpa.compare("qt5ct", Qt::CaseInsensitive) == 0)
     {
-        QApplication::setFont( f );
-
-        foreach ( QWidget * widget, QApplication::allWidgets() )
-            widget->update();
-
+        mShowMessage("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct", this);
         QSettings settings;
-        settings.setValue( "font", font() );
+        settings.remove( "font");
+    }
+    else
+    {
+        QFont f = font();
+        bool ok;
+        f = QFontDialog::getFont( &ok, f );
+        if (ok)
+        {
+            QApplication::setFont( f );
 
-        MinosLoggerEvents::SendFontChanged();
+            foreach ( QWidget * widget, QApplication::allWidgets() )
+                widget->update();
+
+            QSettings settings;
+            settings.setValue( "font", font() );
+
+            MinosLoggerEvents::SendFontChanged();
+        }
     }
 }
 

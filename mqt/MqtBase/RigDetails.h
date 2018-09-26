@@ -27,13 +27,15 @@ class RigDetails: public PubSubValue
 public:
     RigDetails();
     RigDetails(QString s);
+    virtual ~RigDetails() override
+    {}
 
     bool isDirty() const;
     void clearDirty();
     void setDirty();
 
-    virtual QString pack() const;
-    virtual void unpack(QString);
+    virtual QString pack() const override;
+    virtual void unpack(QString) override;
 
     MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     MinosItem<double> transverterOffset() const;

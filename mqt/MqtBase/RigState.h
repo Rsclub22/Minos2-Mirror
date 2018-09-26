@@ -27,13 +27,15 @@ class RigState: public PubSubValue
 public:
     RigState();
     RigState(QString s);
+    virtual ~RigState() override
+    {}
 
     bool isDirty() const;
     void clearDirty();
     void setDirty();
 
-    virtual QString pack() const;
-    virtual void unpack(QString);
+    virtual QString pack() const override;
+    virtual void unpack(QString) override;
 
     MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     MinosStringItem<QString> status() const;

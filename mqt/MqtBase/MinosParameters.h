@@ -61,7 +61,7 @@ class MinosParametersAdapter : public MinosParameters
    public:
       MinosParametersAdapter()
       {}
-      ~MinosParametersAdapter() override
+      virtual ~MinosParametersAdapter() override
       {}
       virtual bool insertContest( BaseContestLog *p, int sno ) override;
       virtual int getMagneticVariation() override;

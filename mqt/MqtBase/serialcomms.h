@@ -24,6 +24,8 @@ class SerialComms : public QObject
 
 public:
     explicit SerialComms(QSerialPort *serialPort, QObject *parent = nullptr);
+    virtual ~SerialComms() override
+    {}
 
      void write(QByteArray writeData);
      void setMsgTermChar(char c);

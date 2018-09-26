@@ -15,6 +15,8 @@ class QLogTabWidget : public QTabWidget
     Q_OBJECT
 public:
     explicit QLogTabWidget(QWidget *parent = nullptr);
+    virtual ~QLogTabWidget() override
+    {}
 
     //Overridden method from QTabWidget
     QTabBar* tabBar();

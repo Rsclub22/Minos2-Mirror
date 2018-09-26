@@ -6,8 +6,8 @@
 //#include "rotctl_parse.h"
 
 
-QList<const rig_caps *> capsList;
-bool riglistLoaded=false;
+static QList<const rig_caps *> capsList;
+static bool riglistLoaded=false;
 
 
 int collect(const rig_caps *caps,rig_ptr_t)

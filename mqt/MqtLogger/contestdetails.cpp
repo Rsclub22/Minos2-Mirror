@@ -273,7 +273,7 @@ void ContestDetails::setDetails(  )
    ui->CallsignEdit->setText(call);
    if (contest->currentOp1.getValue().size()== 0)
    {
-      contest->currentOp1.setValue( call);
+      contest->currentOp1.setValue( contest->mycall.realCall);
    }
 
    contest->validateLoc();
@@ -1280,8 +1280,10 @@ void ContestDetails::on_CallsignEdit_editingFinished()
 {
     if (ui->MainOpComboBox->currentText().isEmpty())
     {
-       ui->MainOpComboBox->addItem( ( ui->CallsignEdit->text() ) );
-       ui->MainOpComboBox->setCurrentText( ui->CallsignEdit->text());
+       Callsign cs(ui->CallsignEdit->text());
+       cs.validate();
+       ui->MainOpComboBox->addItem( ( cs.realCall ) );
+       ui->MainOpComboBox->setCurrentText( cs.realCall);
     }
 
 }

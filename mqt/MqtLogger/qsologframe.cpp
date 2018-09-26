@@ -2526,6 +2526,17 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
     {
        ui->ModeButton->setText(hamlibData::CW);
     }
+    if (ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
+    {
+        if (ui->RSTTXEdit->text().trimmed() == "5")
+        {
+            ui->RSTTXEdit->clear();
+        }
+        if (ui->RSTRXEdit->text().trimmed() == "5")
+        {
+            ui->RSTRXEdit->clear();
+        }
+    }
 }
 
 void QSOLogFrame::on_ValidateError (int mess_no )

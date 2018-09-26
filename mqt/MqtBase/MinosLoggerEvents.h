@@ -22,6 +22,9 @@ class QLineEdit;
 class MinosLoggerEvents:public QObject
 {
     Q_OBJECT
+public:
+    virtual ~MinosLoggerEvents() override
+    {}
 
 signals:
    void ContestPageChanged();

@@ -4,6 +4,7 @@
 #include <QApplication>
 
 extern void appStartup(const QString &appName);
-QString getAppStartupName();
+extern QString getAppStartupName();
+extern void setAppFont();
 
 #endif // APPSTARTUP_H
