@@ -63,23 +63,23 @@ const QStringList presetShortCutKeys = {
                                         };
 
 
-const QString ROTATE_PRESET_SHIFT1 = "Ctrl+Shift+1";
-const QString ROTATE_PRESET_SHIFT2 = "Ctrl+Shift+2";
-const QString ROTATE_PRESET_SHIFT3 = "Ctrl+Shift+3";
-const QString ROTATE_PRESET_SHIFT4 = "Ctrl+Shift+4";
-const QString ROTATE_PRESET_SHIFT5 = "Ctrl+Shift+5";
-const QString ROTATE_PRESET_SHIFT6 = "Ctrl+Shift+6";
-const QString ROTATE_PRESET_SHIFT7 = "Ctrl+Shift+7";
-const QString ROTATE_PRESET_SHIFT8 = "Ctrl+Shift+8";
-const QString ROTATE_PRESET_SHIFT9 = "Ctrl+Shift+9";
-const QString ROTATE_PRESET_SHIFT0 = "Ctrl+Shift+0";
+const QString ROTATE_PRESET_MENU1 = "Ctrl+Alt+1";
+const QString ROTATE_PRESET_MENU2 = "Ctrl+Alt+2";
+const QString ROTATE_PRESET_MENU3 = "Ctrl+Alt+3";
+const QString ROTATE_PRESET_MENU4 = "Ctrl+Alt+4";
+const QString ROTATE_PRESET_MENU5 = "Ctrl+Alt+5";
+const QString ROTATE_PRESET_MENU6 = "Ctrl+Alt+6";
+const QString ROTATE_PRESET_MENU7 = "Ctrl+Alt+7";
+const QString ROTATE_PRESET_MENU8 = "Ctrl+Alt+8";
+const QString ROTATE_PRESET_MENU9 = "Ctrl+Alt+9";
+const QString ROTATE_PRESET_MENU0 = "Ctrl+Alt+0";
 
-const QStringList presetShiftShortCutKeys = {
-                                                        ROTATE_PRESET_SHIFT1, ROTATE_PRESET_SHIFT2,
-                                                        ROTATE_PRESET_SHIFT3, ROTATE_PRESET_SHIFT4,
-                                                        ROTATE_PRESET_SHIFT5, ROTATE_PRESET_SHIFT6,
-                                                        ROTATE_PRESET_SHIFT7, ROTATE_PRESET_SHIFT8,
-                                                        ROTATE_PRESET_SHIFT9, ROTATE_PRESET_SHIFT0
+const QStringList presetMenuShortCutKeys = {
+                                                        ROTATE_PRESET_MENU1, ROTATE_PRESET_MENU2,
+                                                        ROTATE_PRESET_MENU3, ROTATE_PRESET_MENU4,
+                                                        ROTATE_PRESET_MENU5, ROTATE_PRESET_MENU6,
+                                                        ROTATE_PRESET_MENU7, ROTATE_PRESET_MENU8,
+                                                        ROTATE_PRESET_MENU9, ROTATE_PRESET_MENU0
                                              };
 
 const int COMPASS_MAX360 = 360;

@@ -48,9 +48,9 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
         shortCutKeyList.append(new QShortcut(QKeySequence(presetShortCutKeys[i]), this));
     }
 
-    for (int i = 0; i < presetShiftShortCutKeys.count(); i++)
+    for (int i = 0; i < presetMenuShortCutKeys.count(); i++)
     {
-        shiftShortCutKeyList.append(new QShortcut(QKeySequence(presetShiftShortCutKeys[i]), this));
+        shiftShortCutKeyList.append(new QShortcut(QKeySequence(presetMenuShortCutKeys[i]), this));
     }
 
 
