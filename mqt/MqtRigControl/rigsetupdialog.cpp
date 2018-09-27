@@ -106,8 +106,7 @@ void RigSetupDialog::initSetup()
             {
                 for (int t = 0; t < availRadioData[i]->numTransverters; t++)
                 {
-                   radioTab[i]->addTransVertTab(t, radioTab[i]->getRadioData()->transVertNames[t] );
-                   radioTab[i]->transVertTab[t]->transVertValueChanged = false;     // this is an existing tab, clear change flag
+                   radioTab[i]->addTransVertTab(t, radioTab[i]->getRadioData()->transVertNames[t], false);   // adding and existing tab, set change flag = false
                 }
             }
 

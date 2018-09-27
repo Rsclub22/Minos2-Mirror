@@ -1314,16 +1314,28 @@ void RigControlMainWindow::buildSupBandList(int radioModelNumber)
 
     // merge radio bands and transverter bands
     setupRadio->currentRadio.radioTransSupBands.clear();
-    if (bands.count() > 0)
+    if(setupRadio->currentRadio.transVertEnable)
     {
-        for (int i = 0; i < bands.count(); i++)
+        if (bands.count() > 0)
         {
-            if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
+            for (int i = 0; i < bands.count(); i++)
             {
-                setupRadio->currentRadio.radioTransSupBands.append(bands[i]->name);
+                if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
+                {
+                    setupRadio->currentRadio.radioTransSupBands.append(bands[i]->name);
+                }
             }
         }
     }
+    else
+    {
+        // no transverters enabled, just copy the bands supported by the radio
+        for (int i = 0; i < setupRadio->currentRadio.radioSupBands.count(); i++)
+        {
+            setupRadio->currentRadio.radioTransSupBands.append(setupRadio->currentRadio.radioSupBands[i]);
+        }
+    }
+
 }
 
 

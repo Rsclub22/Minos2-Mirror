@@ -44,7 +44,7 @@ public:
     //QStringList renamedTransVertTabs;   // old radio names
     //QStringList availTransVerters;
     //int numAvailTransVerters;
-    void addTransVertTab(int tabNum, QString tabName);
+    void addTransVertTab(int tabNum, QString tabName, bool tabChanged);
 
     QString getRadioModel();
     void setRadioModel(QString m);

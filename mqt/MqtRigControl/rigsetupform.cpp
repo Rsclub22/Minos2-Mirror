@@ -986,14 +986,14 @@ void RigSetupForm::addTransVerter()
     // add the new transverter
     int tabNum = radioData->numTransverters;
     radioData->transVertNames.append(transVerterName);
-    addTransVertTab(tabNum, transVerterName);
+    addTransVertTab(tabNum, transVerterName, true);
     radioData->numTransverters = tabNum + 1;
     loadTransVertTab(tabNum);
 
 }
 
 
-void RigSetupForm::addTransVertTab(int tabNum, QString tabName)
+void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
 {
     radioData->transVertSettings.append(new TransVertParams());
     radioData->transVertSettings[tabNum]->transVertName = tabName;
@@ -1031,7 +1031,7 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName)
        radioData->antSwitchAvail = false;
     }
     //buildSupBandList();
-    transVertTab[tabNum]->transVertValueChanged = true;
+    transVertTab[tabNum]->transVertValueChanged = tabChanged;
 
 }
 
