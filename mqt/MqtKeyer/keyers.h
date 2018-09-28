@@ -13,7 +13,7 @@
 #include "keyconf.h"
 #include "keyctrl.h"
 #include "keyerlog.h"
-
+#include "sbdriver.h"
 #include <deque>
 
 enum LINEMODES{
@@ -245,6 +245,7 @@ class voiceKeyer: public commonKeyer, public sbKeyer
       virtual bool pttChanged( int state );
       virtual bool L1Changed( int state );
       virtual bool L2Changed( int state );
+      virtual bool L12Changed( int state, sbControls sbc );
       virtual bool linesModeChanged(int lmode);
       virtual bool initialise( const KeyerConfig &keyer, const PortConfig &port );
       virtual void select( bool );

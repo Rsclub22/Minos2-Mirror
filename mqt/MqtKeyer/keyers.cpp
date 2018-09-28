@@ -644,57 +644,29 @@ bool voiceKeyer::pttChanged( int state )
 bool voiceKeyer::L1Changed( int state )
 {
    commonKeyer::L1Changed( state );
-   if ( started && currentKeyer == this )
-   {
-       // Look at linesMode, switch what L1 does accordingly
+   return L12Changed(state, eL1);
 
-      if ( !state && !recPending && !boxRecPending )
-      {
-         // will be CQ1 or dit paddle	 RELEASED
-
-         KeyerAction * ca = KeyerAction::getCurrentAction();
-         if ( !ca || !ca->playingFile( "CQF1.WAV" ) )
-         {
-            KeyerAction::currentAction.clear_after( ca );
-            new PlayAction( "CQF1.WAV", false, kconf.startDelay, kconf.enableAutoRepeat ? kconf.autoRepeatDelay : 0, true, false );
-            KeyerAction::getCurrentAction() ->LxChanged( eL1, state );
-         }
-      }
-      else
-         if ( state )
-         {
-            if ( L2State && L1State )
-            {
-               // use this as reset, as well as start rec sequence
-
-               SoundSystemDriver::getSbDriver() ->stopall();                       // make sure nothing is happening
-               KeyerAction::currentAction.freeAll();	// clear all the chains
-
-               new BoxRecordAction();
-            }
-            else
-               if ( boxRecPending )
-                  KeyerAction::getCurrentAction() ->LxChanged( eL1, state );
-         }
-   }
-   return true;
 }
 bool voiceKeyer::L2Changed( int state )
 {
    commonKeyer::L2Changed( state );
+   return L12Changed(state, eL2);
+}
+bool voiceKeyer::L12Changed( int state, sbControls sbc )
+{
    if ( started && currentKeyer == this )
    {
        // Look at linesMode, switch what L1 does accordingly
 
       if ( !state && !recPending && !boxRecPending )
       {
-         // will be CQ2 or dah paddle
+         QString cqWavFile = (sbc == eL1)?"CQF1.WAV":"CQF2.WAV";
          KeyerAction * ca = KeyerAction::getCurrentAction();
-         if ( !ca || !ca->playingFile( "CQF2.WAV" ) )
+         if ( !ca || !ca->playingFile( cqWavFile ) )
          {
             KeyerAction::currentAction.clear_after( ca );
-            new PlayAction( "CQF2.WAV", false, kconf.startDelay, kconf.enableAutoRepeat ? kconf.autoRepeatDelay : 0, true, false );
-            KeyerAction::getCurrentAction() ->LxChanged( eL2, state );
+            new PlayAction( cqWavFile, false, kconf.startDelay, kconf.enableAutoRepeat ? kconf.autoRepeatDelay : 0, true, false );
+            KeyerAction::getCurrentAction() ->LxChanged( sbc, state );
          }
       }
       else
@@ -711,7 +683,7 @@ bool voiceKeyer::L2Changed( int state )
             }
             else
                if ( boxRecPending )
-                  KeyerAction::getCurrentAction() ->LxChanged( eL2, state );
+                  KeyerAction::getCurrentAction() ->LxChanged( sbc, state );
          }
    }
    return true;
