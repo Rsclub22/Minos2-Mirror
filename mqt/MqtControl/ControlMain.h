@@ -5,6 +5,8 @@
 #include <QMainWindow>
 #include "CommonMonitor.h"
 #include "controlport.h"
+#include "ConfigFile.h"
+#include "RigCache.h"
 
 namespace Ui {
 class ControlMain;
@@ -39,6 +41,16 @@ private:
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
 
+    void subscribeApps();
+
+    RigCache rigCache;
+    QMap<QString,QVector< QSharedPointer<Connectable> > > catMap;
+    QVector<QSharedPointer<Connectable> > connectables;
+    QVector<QString> servers;
+    PubSubName rigSelected;
+
+
+
     StdInReader stdinReader;
     QTimer LogTimer;
     QTimer formShowTimer;
@@ -48,6 +60,7 @@ private slots:
 
     void on_formShown();
     void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from );
+    void on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
     void LogTimerTimer( );
     void linesChangedEvent();
 };
