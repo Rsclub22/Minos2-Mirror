@@ -17,6 +17,7 @@ void SpotsDatabase::databaseConnect()
     if(QSqlDatabase::isDriverAvailable(DRIVER))
     {
         QSqlDatabase db = QSqlDatabase::addDatabase(DRIVER);
+        //db.setDatabaseName(SPOTDB_PATH + SPOTDB_FILENAME);
         db.setDatabaseName(":memory:");
         if(!db.open())
             qDebug() << "ERROR: " << db.lastError();
@@ -31,7 +32,7 @@ void SpotsDatabase::databaseInit()
 {
 
 
-    QSqlQuery query("CREATE TABLE people (id INTEGER PRIMARY KEY, name TEXT)");
+    QSqlQuery query("CREATE TABLE spotDb (id INTEGER PRIMARY KEY, time VARCHAR(10), freq VARCHAR(12), dxCallsign VARCHAR(20), spotterCallsign VARCHAR(20), locator VARCHAR(6), comment VARCHAR(40), spotType INTEGER)");
 
     if(!query.isActive())
         qDebug() << "ERROR: " << query.lastError().text();
@@ -40,18 +41,13 @@ void SpotsDatabase::databaseInit()
 }
 
 
-void SpotsDatabase::databasePopulate()
+void SpotsDatabase::databaseInsert(QString time, QString freq, QString callsign, QString spotterCallsign, QString locator, QString comment, SpotType spotType)
 {
     QSqlQuery query;
 
-        if(!query.exec("INSERT INTO people(name) VALUES('Eddie Guerrero')"))
+        if(!query.exec("INSERT INTO spotDb(name) VALUES(time, freq, callsign, spotterCallsign, locator, comment, spotType)"))
             qWarning() << "MainWindow::DatabasePopulate - ERROR: " << query.lastError().text();
-        if(!query.exec("INSERT INTO people(name) VALUES('Gordon Ramsay')"))
-            qWarning() << "MainWindow::DatabasePopulate - ERROR: " << query.lastError().text();
-        if(!query.exec("INSERT INTO people(name) VALUES('Alan Sugar')"))
-            qWarning() << "MainWindow::DatabasePopulate - ERROR: " << query.lastError().text();
-        if(!query.exec("INSERT INTO people(name) VALUES('Dana Scully')"))
-            qWarning() << "MainWindow::DatabasePopulate - ERROR: " << query.lastError().text();
+
 }
 
 
