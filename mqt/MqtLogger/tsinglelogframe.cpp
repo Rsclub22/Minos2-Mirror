@@ -110,6 +110,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
 
     // To rig controller
+    connect(FKHRigControlFrame, SIGNAL(radioDisconnected()), this, SLOT(invalidateCacheOnDisconnect()));
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
@@ -1425,6 +1426,18 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
             }
         }
 
+    }
+}
+
+void TSingleLogFrame::invalidateCacheOnDisconnect()
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
+        if (ct && !ct->isProtected())
+        {
+            LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+        }
     }
 }
 

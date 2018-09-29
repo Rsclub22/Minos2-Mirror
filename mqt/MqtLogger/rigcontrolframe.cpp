@@ -919,6 +919,7 @@ void RigControlFrame::setRadioState(QString s)
            ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
            ui->freqInput->setText(curFreq);
            ui->bandSelCombo->clear();
+           emit radioDisconnected();
 
 
 

@@ -195,7 +195,7 @@ private:
     void sendVolToLog(int level);
     //void sendRxPbFlagToLog();
 
-    void setMode(QString mode, vfo_t vfo);
+    void setMode(QString mode, vfo_t vfo, int& retCode);
     void displayPassband(pbwidth_t width);
 
 

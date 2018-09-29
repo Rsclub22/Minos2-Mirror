@@ -49,6 +49,9 @@ public:
     QAction* clearAction;
 
     int memNo;
+
+
+
 private slots:
     void memoryUpdate();
 
@@ -59,6 +62,7 @@ private slots:
     void clearActionSelected();
 signals:
     void clearActionSelected(int);
+
 };
 class TuneMemoryButton : public QObject
 {
@@ -156,6 +160,7 @@ signals:
     void sendModeToControl(QString);
     void sendRitFreq(int);
     void ritStatus(bool);
+    void radioDisconnected();
 
 private slots:
     void on_FontChanged();

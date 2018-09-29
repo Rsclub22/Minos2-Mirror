@@ -233,6 +233,7 @@ private slots:
     void on_doRepaint();
     void sendRadioVolume(int);
     void on_FontChanged();
+    void invalidateCacheOnDisconnect();
 public:
     void sendTpm(int t, QString f);
 

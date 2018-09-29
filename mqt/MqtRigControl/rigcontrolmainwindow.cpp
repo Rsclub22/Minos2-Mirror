@@ -490,6 +490,8 @@ void RigControlMainWindow::upDateRadio()
 
             openRadio();
 
+            int retCode = RIG_OK;
+
             if (radio->get_serialConnected())
             {
                 ui->radioNameDisp->setText(setupRadio->currentRadio.radioName);
@@ -509,7 +511,13 @@ void RigControlMainWindow::upDateRadio()
                     slogMode = "USB";
                     // set mode
                     logMode = radio->convertQStrMode("USB");
-                    setMode("USB", RIG_VFO_CURR);
+                    setMode("USB", RIG_VFO_CURR, retCode);
+                    if (retCode < RIG_OK)
+                    {
+                        trace(QString("Update Radio: Set Mode - Radio Failed to connect ####"));
+                        sendStatusToLogDisConnected();
+                        return;
+                    }
 
                 }
 
@@ -1449,7 +1457,7 @@ int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 void RigControlMainWindow::loggerSetMode(QString mode)
 {
     logMessage(QString("Log SetMode:: Mode Recieved from Logger = %1").arg(mode));
-
+    int retCode = RIG_OK;
 
     if (radio->get_serialConnected() && !rigErrorFlag)
     {
@@ -1465,13 +1473,21 @@ void RigControlMainWindow::loggerSetMode(QString mode)
                 logMessage(QString("Log SetMode: Mgm flag is set"));
                 if (curMode !=  radio->convertQStrMode(setupRadio->currentRadio.mgmMode))
                 {
-                    setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR);
+                    setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR, retCode);
+                    if (retCode < RIG_OK)
+                    {
+                        return;
+                    }
                 }
             }
             else
             {
                 mgmModeFlag = true;
-                setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR);
+                setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR, retCode);
+                if (retCode < RIG_OK)
+                {
+                    return;
+                }
                 logMessage((QString("Log SetMode: Set MgmMode Flag, Selected MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
             }
         }
@@ -1479,22 +1495,26 @@ void RigControlMainWindow::loggerSetMode(QString mode)
         {
             mgmModeFlag = false;
             logMessage(QString("Log SetMode: Clear mgmModeFlag, Set mode = %1").arg(mode));
-            setMode(mode, RIG_VFO_CURR);
+            setMode(mode, RIG_VFO_CURR, retCode);
+            if (retCode < RIG_OK)
+            {
+                return;
+            }
         }
     }
     // mode won't have changed yet
     //msg->rigCache.publish();
 }
 
-void RigControlMainWindow::setMode(QString mode, vfo_t vfo)
+void RigControlMainWindow::setMode(QString mode, vfo_t vfo, int& retCode)
 {
-    if (mode == "")
-    {
-        logMessage(QString("SetMode: Mode is blank!"));
-        return;
-    }
+    //if (mode == "")
+    //{
+    //    logMessage(QString("SetMode: Mode is blank!"));
+    //    return;
+    //}
 
-    int retCode = 0;
+    //int retCode = 0;
 
     cmdLockOn();      // lock get radio info
 
