@@ -16,13 +16,13 @@
 #include "sbdriver.h"
 #include <deque>
 
-enum LINEMODES{
+enum LineModes{
     elmNone = 0,
-    elmRecord,
     elmPlayPip,
     elmPlayNoPip,
-    elmTestPlay,
-    elmTones,   //5
+    elmTones,
+    elmRecord,
+    elm5,
     elm6,
     elm7,
     elm8,
@@ -205,7 +205,7 @@ class commonKeyer: public lineMonitor, public timerTicker
       bool L1State = false;
       bool L2State = false;
       bool pttState = false;
-      int linesMode = 0;
+      LineModes linesMode = elmNone;
       virtual void enableQueue( bool /*b*/ )
       {}
       bool boxRecPending = false;

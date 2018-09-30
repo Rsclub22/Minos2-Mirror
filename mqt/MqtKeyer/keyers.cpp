@@ -18,13 +18,14 @@
 
 //==============================================================================
 // ??? add up/down on volume sliders, and reload/save ALSA?
+// match against enum LineModes
 static QStringList lineModeStrings = {
     "None",
-    "Record 1/2",
     "Play 1/2 - Pip",
     "Play 1/2 - No Pip",
-    "Test Play 1/2 - no PTT",
     "Tuning Tones 1/2",
+    "Record 1/2",
+    "Mode 5",
     "Mode 6",
     "Mode 7",
     "Mode 8",
@@ -495,7 +496,7 @@ bool commonKeyer::linesModeChanged( int state )
    {
       trace( "linesModeChanged(" + QString::number( state ) + ")" );
    }
-   linesMode = state;
+   linesMode = static_cast<LineModes>(state);
    return true;
 }
 void commonKeyer::queueFinished()
@@ -657,11 +658,61 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
    if ( started && currentKeyer == this )
    {
        // Look at linesMode, switch what L1 does accordingly
+       KeyerAction * ca = KeyerAction::getCurrentAction();
 
+       if (!ca)
+       {
+           switch (linesMode)
+           {
+           case elmRecord:
+               (new BoxRecordAction()) ->LxChanged( sbc, state );
+               return true;
+
+           case elmPlayPip:
+               setPipEnabled(true);
+               break;
+
+           case elmPlayNoPip:
+               setPipEnabled(false);
+               break;
+
+           case elmTones:
+           {
+               if (sbc  == eL1)
+                   sendTone1();
+               else
+                   sendTone2();
+               return true;
+           }
+           case elmAppsRestartClose:
+               //communicate with appstarter/logger
+               // to do the necessary
+               break;
+           case elmOSRestartClose:
+               //communicate with appstarter/logger
+               // to do the necessary
+
+               // first shutdown all apps, then
+               //systemctl poweroff/reboot
+               break;
+
+           default:
+           case elmNone:
+           case elm6:
+           case elm7:
+           case elm8:
+           case elm9:
+           case elm10:
+           case elm11:
+           case elm12:
+           case elmMGM:
+            return false;
+
+           }
+       }
       if ( !state && !recPending && !boxRecPending )
       {
          QString cqWavFile = (sbc == eL1)?"CQF1.WAV":"CQF2.WAV";
-         KeyerAction * ca = KeyerAction::getCurrentAction();
          if ( !ca || !ca->playingFile( cqWavFile ) )
          {
             KeyerAction::currentAction.clear_after( ca );
