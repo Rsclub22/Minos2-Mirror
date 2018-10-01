@@ -414,7 +414,7 @@ bool UDPSocket::setup(QNetworkInterface &iface, QNetworkAddressEntry &addr)
     //connect(qus.data(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
 
     connect(qus.data(), SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChange(QAbstractSocket::SocketState)));
-    connect(qus.data(), SIGNAL(readyRead(QString, QString )), this, SLOT(onReadyRead(QString, QString)), Qt::QueuedConnection);
+    connect(qus.data(), SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::QueuedConnection);
 
     qui = iface;
     trace("Binding to " + addr.ip().toString());
