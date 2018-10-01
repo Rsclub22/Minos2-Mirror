@@ -208,7 +208,7 @@ void TZConf::onReadyRead(QString datagram, QString sender)
 {
     // from MCReadSocket
 
-    processZConfString(QString(datagram), sender, sendBeaconResponse);
+    processZConfString(datagram, sender, sendBeaconResponse);
 }
 
 //---------------------------------------------------------------------------
@@ -450,10 +450,19 @@ void UDPSocket::onSocketStateChange (QAbstractSocket::SocketState state)
 }
 void UDPSocket::onReadyRead()
 {
-    QNetworkDatagram ndg = qus->receiveDatagram();
-    QString dg = ndg.data();
-    QHostAddress sender = ndg.senderAddress();
-    emit readyRead(dg, sender.toString());
+    while (qus->hasPendingDatagrams())
+    {
+        QNetworkDatagram ndg = qus->receiveDatagram();
+        if (ndg.isValid())
+        {
+            QString dg = ndg.data();
+            QHostAddress sender = ndg.senderAddress();
+
+            trace("Datagram received from " + sender.toString() + " " + dg);
+            if (!dg.isEmpty())
+                emit readyRead(dg, sender.toString());
+        }
+    }
 }
 bool UDPSocket::sendMessage(const QString &mess )
 {
