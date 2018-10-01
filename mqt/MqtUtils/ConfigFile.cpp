@@ -205,7 +205,7 @@ void RunConfigElement::on_finished(int err, QProcess::ExitStatus exitStatus)
         if (stopping)
         {
             stopping = false;
-
+            MinosConfig::getMinosConfig()->checkAllStopped();
         }
         else
         {
@@ -233,8 +233,9 @@ void RunConfigElement::on_readyReadStandardOutput()
 {
     if (runner)
     {
-        QString r = runner->readAllStandardOutput();
-        trace(name + ":stdOut:" + r);
+        QString line = runner->readLine();
+        trace(name + ":stdOut:" + line);
+        emit MinosConfig::getMinosConfig()->stdOutLine(line);
     }
 }
 
@@ -596,4 +597,11 @@ AppConfigElement MinosConfig::getAppConfigElement(QString appType)
         }
     }
     return ace;
+}
+void MinosConfig::checkAllStopped()
+{
+    if (!anyRunning())
+    {
+        emit allStopped();
+    }
 }

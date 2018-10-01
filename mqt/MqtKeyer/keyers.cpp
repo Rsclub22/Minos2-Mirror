@@ -687,11 +687,27 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
            case elmAppsRestartClose:
                //communicate with appstarter/logger
                // to do the necessary
+               if (sbc == eL1)
+               {
+                   std::cout << "!!RestartApps!!" << std::endl;
+               }
+               else
+               {
+                   std::cout << "!!CloseApps!!" << std::endl;
+               }
                break;
            case elmOSRestartClose:
                //communicate with appstarter/logger
                // to do the necessary
 
+               if (sbc == eL1)
+               {
+                   std::cout << "!!RestartOS!!" << std::endl;
+               }
+               else
+               {
+                   std::cout << "!!CloseOS!!" << std::endl;
+               }
                // first shutdown all apps, then
                //systemctl poweroff/reboot
                break;

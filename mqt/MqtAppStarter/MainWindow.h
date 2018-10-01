@@ -24,6 +24,8 @@ private slots:
 
     void on_closeButton_clicked();
 
+    void on_stdOutLine(QString);
+
 private:
     Ui::MainWindow *ui;
     QTimer startTimer;
