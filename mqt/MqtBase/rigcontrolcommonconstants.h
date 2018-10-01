@@ -69,6 +69,9 @@ namespace hamlibData
 
 }
 
+const int OPEN_FAILED = -1;
+const int OPEN_OK = 0;
+
 const QString NO_BAND_SUPPORT = "???";
 
 const QString TRANSSW_NUM_DEFAULT = "0";

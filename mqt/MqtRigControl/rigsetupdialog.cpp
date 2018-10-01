@@ -465,19 +465,7 @@ void RigSetupDialog::saveRadio(int i)
 
 void RigSetupDialog::saveSettings()
 {
-/*
-    qDebug() << "enter save \n";
-    for (int i = 0; i < numAvailRadios; i++)
-    {
-        qDebug() << "radio num = " << i;
-        for (int t = 0; t < radioTab[i]->getRadioData()->numTransverters; t++)
-        {
 
-            qDebug() <<  QString("transvert num = %1 - %2").arg(t).arg(radioTab[i]->transVertTab[t]->transVertValueChanged ? "True" : "False");
-        }
-    }
-
-*/
 
     QString fileNameTransVert;
 

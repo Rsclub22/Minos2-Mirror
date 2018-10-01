@@ -1218,8 +1218,8 @@ void TSingleLogFrame::on_SetMode(QString m)
 void TSingleLogFrame::on_SetFreq(QString f)
 {
 
-    if (sCurFreq != f)
-    {
+    //if (sCurFreq != f)
+    //{
         if ( this == LogContainer->getCurrentLogFrame() )
         {
             sCurFreq = f;
@@ -1227,7 +1227,7 @@ void TSingleLogFrame::on_SetFreq(QString f)
             GJVQSOLogFrame->setFreq(f);
             MinosLoggerEvents::sendRigFreqChanged(f, contest);
         }
-    }
+    //}
 }
 
 void TSingleLogFrame::on_SetRitFreq(QString f)

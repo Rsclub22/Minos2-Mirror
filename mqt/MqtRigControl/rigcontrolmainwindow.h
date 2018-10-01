@@ -128,6 +128,7 @@ private:
 
     bool ritEnable;         // flag to enable rit
 
+    bool radioCommsOK;
 
     SerialTVSwitch *serialTVSw = nullptr;
 
@@ -150,7 +151,7 @@ private:
     void initSelectRadioBox();
     void setSelectRadioBoxVisible(bool visible);
     void setRadioNameLabelVisible(bool visible);
-    void openRadio();
+    int openRadio();
     void closeRadio();
     int getAndSendFrequency(vfo_t vfo);
     int getAndSendMode(vfo_t vfo);
@@ -195,7 +196,7 @@ private:
     void sendVolToLog(int level);
     //void sendRxPbFlagToLog();
 
-    void setMode(QString mode, vfo_t vfo, int& retCode);
+    void setMode(QString mode, vfo_t vfo);
     void displayPassband(pbwidth_t width);
 
 

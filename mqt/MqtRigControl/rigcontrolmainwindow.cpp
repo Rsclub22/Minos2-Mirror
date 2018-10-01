@@ -55,6 +55,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
   , radioSupRitOnOff(false)
   , radioRitOn(false)
   , ritEnable(false)
+  , radioCommsOK(false)
 {
     ui->setupUi(this);
 
@@ -403,6 +404,7 @@ void RigControlMainWindow::upDateRadio()
     pollTimer->stop();      // stop updates
 
     clrRigctldNames();
+    clearSupportRitFlags();
 
     int ridx = 0;
     if (setupRadio->currentRadioName != "")
@@ -415,7 +417,7 @@ void RigControlMainWindow::upDateRadio()
             scatParams::copyRig(setupRadio->availRadioData[ridx], setupRadio->currentRadio);
             setupRadio->currentRadio.radioNumber = QString::number(ridx);           // save radio number
 
-            if (radio->get_serialConnected())
+            if (radioCommsOK)
             {
                 closeRadio();
             }
@@ -427,75 +429,70 @@ void RigControlMainWindow::upDateRadio()
                 return;
             }
 
-            if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)     // is it rigctl?
+
+            if (openRadio() == OPEN_OK)
             {
-                getRigctldNames(setupRadio->currentRadio.networkAdd, setupRadio->currentRadio.networkPort.toUShort());
-                bool ok = false;
-                int rigNum = rigctld_radioNumber.toInt(&ok, 10);
-                if (ok)
+
+                if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)     // is it rigctl?
                 {
-                    irigctld_radioNumber = rigNum;
+                    getRigctldNames(setupRadio->currentRadio.networkAdd, setupRadio->currentRadio.networkPort.toUShort());
+                    bool ok = false;
+                    int rigNum = rigctld_radioNumber.toInt(&ok, 10);
+                    if (ok)
+                    {
+                        irigctld_radioNumber = rigNum;
+                    }
+                    else
+                    {
+                        irigctld_radioNumber = 0;
+                    }
+                }
+
+                // setup local serial transvert switch
+                if (radioCommsOK && setupRadio->currentRadio.transVertEnable
+                        && setupRadio->currentRadio.enableTransSwitch
+                        && setupRadio->currentRadio.enableLocTVSwMsg)
+                {
+                    selTransVertBandIndicator = "";     // force active tranvert indicator update
+                    if (serialTVSw->getOpenFlag())
+                    {
+                        serialTVSw->closeComport();
+
+                    }
+                    if (serialTVSw->openComport(setupRadio->currentRadio.locTVSwComport))
+                    {
+                        //curTVComPort = setupRadio->currentRadio.locTVSwComport;
+                        logMessage(QString("Local Transvert Switch Comport opened Ok = %1").arg(setupRadio->currentRadio.locTVSwComport));
+                    }
+                    else
+                    {
+
+                        QString errMsg = serialTVSw->error();
+                        logMessage(QString("Local Transvert Switch Comport failed to open = %1 Error = %2").arg(setupRadio->currentRadio.locTVSwComport).arg(errMsg));
+                    }
+
                 }
                 else
                 {
-                    irigctld_radioNumber = 0;
-                }
-            }
+                    if (serialTVSw->getOpenFlag())
+                    {
+                        serialTVSw->closeComport();
 
-            // setup local serial transvert switch
-            if (setupRadio->currentRadio.transVertEnable
-                    && setupRadio->currentRadio.enableTransSwitch
-                    && setupRadio->currentRadio.enableLocTVSwMsg)
-            {
+                    }
+
+                }
+
+                // only show transvert freq box is enabled
+                setTransVertDisplayVisible(setupRadio->currentRadio.transVertEnable);
+                sendTransVertStatus(setupRadio->currentRadio.transVertEnable);   // send to logger
+                sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);                                 // turn off transVerter Sw
+                sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
+                transVertSwNum = TRANSSW_NUM_DEFAULT;
                 selTransVertBandIndicator = "";     // force active tranvert indicator update
-                if (serialTVSw->getOpenFlag())
-                {
-                    serialTVSw->closeComport();
 
-                }
-                if (serialTVSw->openComport(setupRadio->currentRadio.locTVSwComport))
-                {
-                    //curTVComPort = setupRadio->currentRadio.locTVSwComport;
-                    logMessage(QString("Local Transvert Switch Comport opened Ok = %1").arg(setupRadio->currentRadio.locTVSwComport));
-                }
-                else
-                {
+                setupRadio->saveCurrentRadio();
 
-                    QString errMsg = serialTVSw->error();
-                    logMessage(QString("Local Transvert Switch Comport failed to open = %1 Error = %2").arg(setupRadio->currentRadio.locTVSwComport).arg(errMsg));
-                }
-
-            }
-            else
-            {
-                if (serialTVSw->getOpenFlag())
-                {
-                    serialTVSw->closeComport();
-
-                }
-
-            }
-
-            // only show transvert freq box is enabled
-            setTransVertDisplayVisible(setupRadio->currentRadio.transVertEnable);
-            sendTransVertStatus(setupRadio->currentRadio.transVertEnable);   // send to logger
-            sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);                                 // turn off transVerter Sw
-            sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
-            transVertSwNum = TRANSSW_NUM_DEFAULT;
-            selTransVertBandIndicator = "";     // force active tranvert indicator update
-
-            setupRadio->saveCurrentRadio();
-
-
-
-            openRadio();
-
-            int retCode = RIG_OK;
-
-            if (radio->get_serialConnected())
-            {
                 ui->radioNameDisp->setText(setupRadio->currentRadio.radioName);
-
 
                 if (appName.count() > 0)
                 {
@@ -511,14 +508,7 @@ void RigControlMainWindow::upDateRadio()
                     slogMode = "USB";
                     // set mode
                     logMode = radio->convertQStrMode("USB");
-                    setMode("USB", RIG_VFO_CURR, retCode);
-                    if (retCode < RIG_OK)
-                    {
-                        trace(QString("Update Radio: Set Mode - Radio Failed to connect ####"));
-                        sendStatusToLogDisConnected();
-                        return;
-                    }
-
+                    setMode("USB", RIG_VFO_CURR);
                 }
 
                 // build supported band list for this radio
@@ -578,6 +568,7 @@ void RigControlMainWindow::upDateRadio()
 
                 sendBandListLogger();       // here as delay after sending to logger the connected message
 
+
             }
             else
             {
@@ -626,7 +617,7 @@ void RigControlMainWindow::refreshRadio()
     ridx = radioIndex;
     if (ridx >= 0)
     {
-        if (radio->get_serialConnected())
+        if (radioCommsOK)
         {
             logMessage(QString("Refresh Radio: Logger Set Mode to %1").arg(selRadioMode));
             loggerSetMode(selRadioMode);
@@ -642,16 +633,17 @@ void RigControlMainWindow::refreshRadio()
 }
 
 
-void RigControlMainWindow::openRadio()
+int RigControlMainWindow::openRadio()
 {
 
     int retCode = 0;
+    radioCommsOK = false;
 
     if (setupRadio->currentRadio.radioName == "")
     {
         logMessage(QString("Open Radio: No radio name!"));
         showStatusMessage("Please select a Radio");
-        return;
+        return OPEN_FAILED;
     }
 
     logMessage(QString("Open Radio: Opening Radio %1 PortType %2").arg(setupRadio->currentRadio.radioName).arg(hamlibData::portTypeList[setupRadio->currentRadio.portType]));
@@ -663,14 +655,14 @@ void RigControlMainWindow::openRadio()
         {
             logMessage(QString("Open Radio: Check comport - defined port %1 not available on computer").arg(setupRadio->currentRadio.comport));
             showStatusMessage(QString("Comport %1 no longer configured on computer?").arg(setupRadio->currentRadio.comport));
-            return;
+            return OPEN_FAILED;
         }
 
         if (setupRadio->currentRadio.comport == "")
         {
             logMessage(QString("Open Radio: No comport"));
             showStatusMessage("Please select a Comport");
-            return;
+            return OPEN_FAILED;
         }
 
     }
@@ -681,7 +673,7 @@ void RigControlMainWindow::openRadio()
         {
             logMessage(QString("Open Radio: No network or Port Number"));
             showStatusMessage("Please enter a network Address and Port Number");
-            return;
+            return OPEN_FAILED;
         }
 
     }
@@ -689,7 +681,7 @@ void RigControlMainWindow::openRadio()
     {
         logMessage(QString("Open Radio: No radio model"));
         showStatusMessage("Please select a radio model");
-        return;
+        return OPEN_FAILED;
     }
 
 
@@ -699,12 +691,43 @@ void RigControlMainWindow::openRadio()
         retCode = radio->init(setupRadio->currentRadio);
         if (retCode < 0)
         {
+            radio->closeRig();
             logMessage(QString("Error Opening Radio Error Code = %1").arg(QString::number(retCode)));
             hamlibError(retCode, "Open Radio");
+            return OPEN_FAILED;
         }
+
     }
 
+
+    // let's see if we can get freq from radio and confirm comms
     if (radio->get_serialConnected())
+    {
+
+        int retCode = RIG_OK;
+        showStatusMessage(QString("Attempting to communicate with radio - %1").arg(setupRadio->currentRadio.radioName));
+        delay(1);
+        retCode = radio->getFrequency(RIG_VFO_CURR, &rfrequency);
+
+
+        if (retCode < RIG_OK)
+        {
+            logMessage(QString("Update Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
+            hamlibError(retCode, "Test Radio Connection\nRequest Frequency from radio\nNo Valid Data Received\nPlease check connections and/or settings");
+            //sendStatusToLogDisConnected();
+            return OPEN_FAILED;
+        }
+        else
+        {
+            radioCommsOK = true;
+        }
+
+    }
+
+
+
+
+    if (radioCommsOK)
     {
         logMessage(QString("Open Radio: Radio Opened %1").arg(setupRadio->currentRadio.radioName));
         showStatusMessage(QString("Radio Opened: %1").arg(setupRadio->currentRadio.radioName));
@@ -738,12 +761,14 @@ void RigControlMainWindow::openRadio()
 
         logMessage(QString("Radio Open Error"));
         showStatusMessage(tr("Radio Open error"));
+        return OPEN_FAILED;
     }
 
     PubSubName psname(setupRadio->currentRadio.radioName);
 
     msg->rigCache.setTpm(psname, 1);
     msg->rigCache.publish();
+    return OPEN_OK;
 }
 
 void RigControlMainWindow::closeRadio()
@@ -753,6 +778,9 @@ void RigControlMainWindow::closeRadio()
     {
         radio->closeRig();
     }
+
+    radioCommsOK = false;
+
     if (serialTVSw->getOpenFlag())
     {
         serialTVSw->closeComport();
@@ -824,7 +852,7 @@ void RigControlMainWindow::getRadioInfo()
     chkRadioMgmModeChanged();
 
     int retCode;
-    if (radio->get_serialConnected())
+    if (radioCommsOK)
     {
         logMessage(QString("Get radio frequency"));
         retCode = getAndSendFrequency(RIG_VFO_CURR);
@@ -838,7 +866,7 @@ void RigControlMainWindow::getRadioInfo()
 
     }
 
-    if (radio->get_serialConnected())
+    if (radioCommsOK)
     {
 
         logMessage("Get radio mode");
@@ -859,7 +887,7 @@ void RigControlMainWindow::getRadioInfo()
 
 
 
-    if (radio->get_serialConnected() && radioSupSetRit && ritEnable)
+    if (radioCommsOK && radioSupSetRit && ritEnable)
     {
         logMessage((QString("Poll RIT Info - Get Rit Freq = %1 - Get Rit State = %2").arg(radioSupGetRit ? "True" : "False").arg(radioSupGetRitState ?  "True" : "False")));
 
@@ -909,7 +937,7 @@ void RigControlMainWindow::getRadioInfo()
 
     }
 
-    if (radio->get_serialConnected() && supVolume)
+    if (radioCommsOK && supVolume)
     {
         retCode = getVolume(RIG_VFO_CURR);
         if (retCode < 0)
@@ -922,7 +950,7 @@ void RigControlMainWindow::getRadioInfo()
     }
 
 
-    if (radio->get_serialConnected() && supSignalStrength)
+    if (radioCommsOK && supSignalStrength)
     {
         retCode = getSignalStrength(RIG_VFO_CURR);
         if (retCode < 0)
@@ -978,7 +1006,7 @@ void RigControlMainWindow::setTpm(int t, QString f)
 void RigControlMainWindow::loggerSetFreq(QString freq)
 {
     logMessage(QString("Recieved Freq from Logger = %1").arg(freq));
-    if (radio->get_serialConnected() && !rigErrorFlag)
+    if (radioCommsOK && !rigErrorFlag)
     {
         logMessage(QString("new freq %1, old freq %2, old tpm %3").arg(freq).arg(logger_freq).arg(tpm));
         if (freq == NO_BAND_SUPPORT)
@@ -1095,7 +1123,7 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
 
         }
 
-        if (radio->get_serialConnected())
+        if (radioCommsOK)
         {
 
             retCode = radio->setFrequency(f, vfo);
@@ -1457,9 +1485,9 @@ int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 void RigControlMainWindow::loggerSetMode(QString mode)
 {
     logMessage(QString("Log SetMode:: Mode Recieved from Logger = %1").arg(mode));
-    int retCode = RIG_OK;
+    //int retCode = RIG_OK;
 
-    if (radio->get_serialConnected() && !rigErrorFlag)
+    if (radioCommsOK && !rigErrorFlag)
     {
         slogMode = mode;
         logMode = radio->convertQStrMode(mode);
@@ -1473,21 +1501,15 @@ void RigControlMainWindow::loggerSetMode(QString mode)
                 logMessage(QString("Log SetMode: Mgm flag is set"));
                 if (curMode !=  radio->convertQStrMode(setupRadio->currentRadio.mgmMode))
                 {
-                    setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR, retCode);
-                    if (retCode < RIG_OK)
-                    {
-                        return;
-                    }
+                    setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR);
+
                 }
             }
             else
             {
                 mgmModeFlag = true;
-                setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR, retCode);
-                if (retCode < RIG_OK)
-                {
-                    return;
-                }
+                setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR);
+
                 logMessage((QString("Log SetMode: Set MgmMode Flag, Selected MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
             }
         }
@@ -1495,18 +1517,15 @@ void RigControlMainWindow::loggerSetMode(QString mode)
         {
             mgmModeFlag = false;
             logMessage(QString("Log SetMode: Clear mgmModeFlag, Set mode = %1").arg(mode));
-            setMode(mode, RIG_VFO_CURR, retCode);
-            if (retCode < RIG_OK)
-            {
-                return;
-            }
+            setMode(mode, RIG_VFO_CURR);
+
         }
     }
     // mode won't have changed yet
     //msg->rigCache.publish();
 }
 
-void RigControlMainWindow::setMode(QString mode, vfo_t vfo, int& retCode)
+void RigControlMainWindow::setMode(QString mode, vfo_t vfo)
 {
     //if (mode == "")
     //{
@@ -1514,14 +1533,14 @@ void RigControlMainWindow::setMode(QString mode, vfo_t vfo, int& retCode)
     //    return;
     //}
 
-    //int retCode = 0;
+    int retCode = 0;
 
     cmdLockOn();      // lock get radio info
 
     mode = mode.left(mode.indexOf(":"));
     rmode_t mCode = radio->convertQStrMode(mode);
 
-    if (radio->get_serialConnected())
+    if (radioCommsOK)
     {
         retCode = radio->setMode(vfo, mCode, PASSBAND_NOCHANGE);
         if (retCode == RIG_OK)
@@ -1628,7 +1647,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     if (radioSupRitOnOff)
     {
         logMessage(QString("Radio Support RIT On/off switching"));
-        if (radio->get_serialConnected())
+        if (radioCommsOK)
         {
             // radio supports turning RIT on and off
             retCode = radio->toggleRitState(RIG_VFO_CURR, logRitOn);
@@ -1648,8 +1667,12 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     {
 
         logMessage(QString("Radio Doesn't support Rit Off/On - Send 0 freq to radio"));
-        setRitFreq(0);
-        sendRitFreqLogger(0);
+        if (radioCommsOK && radioSupSetRit && ritEnable)
+        {
+            setRitFreq(0);
+            sendRitFreqLogger(0);
+        }
+
 
     }
 
@@ -1858,6 +1881,8 @@ void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
 
     }
 }
+
+
 
 
 
