@@ -9,6 +9,7 @@
 //---------------------------------------------------------------------------
 #include "minos_pch.h"
 #include <QUuid>
+#include <QNetworkDatagram>
 
 #include "tinyxml.h"
 #include "TinyUtils.h"
@@ -447,9 +448,12 @@ void UDPSocket::onSocketStateChange (QAbstractSocket::SocketState state)
         }
     }
 }
-void UDPSocket::onReadyRead(QString s1, QString s2)
+void UDPSocket::onReadyRead()
 {
-    emit readyRead(s1, s2);
+    QNetworkDatagram ndg = qus->receiveDatagram();
+    QString dg = ndg.data();
+    QHostAddress sender = ndg.senderAddress();
+    emit readyRead(dg, sender.toString());
 }
 bool UDPSocket::sendMessage(const QString &mess )
 {

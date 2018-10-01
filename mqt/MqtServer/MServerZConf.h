@@ -70,9 +70,9 @@ public:
 private slots:
       void onSocketStateChange(QAbstractSocket::SocketState);
 
-      void onReadyRead(QString s1, QString s2);
+      void onReadyRead();
 signals:
-      void readyRead(QString, QString);
+      void readyRead(QString s1, QString s2);
 };
 class TZConf: public QObject
 {
@@ -124,7 +124,7 @@ public:  		// User declarations
       void publishDisconnect(const QString &name);
       void closeDown();
 private slots:
-      void onReadyRead(QString datagram, QString sender);
+      void onReadyRead(QString s1, QString s2);
       void onTimeout();
 };
 #endif
