@@ -29,6 +29,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QTimer startTimer;
+    QMetaObject::Connection m_connection;
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;

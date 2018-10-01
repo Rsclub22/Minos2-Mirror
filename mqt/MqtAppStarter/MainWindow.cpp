@@ -78,47 +78,49 @@ void MainWindow::start()
 void MainWindow::on_stdOutLine(QString line)
 {
     QStringList l = line.split("!!");
-    if (l.size() == 3 && l[1] != line)  // we have actually split so we have just one command
+    if (l.size() == 3)  // we have actually split so we have just one command
     {
-        QMetaObject::Connection m_connection;
-        if (line == "!!RestartApps!!")
+        if (l[1] == "RestartApps")
         {
-            MinosConfig::getMinosConfig()->stop();
-            //connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped, MinosConfig::getMinosConfig(), &MinosConfig::start);
             m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
-                                   [&m_connection]{
-                                        disconnect(m_connection);
+                                   [this]{
+                                        this->disconnect(m_connection);
+                                        m_connection =  QMetaObject::Connection();
                                         MinosConfig::getMinosConfig()->start();
                                     });
-        }
-        else if (line == "!!CloseApps!!")
-        {
             MinosConfig::getMinosConfig()->stop();
+        }
+        else if (l[1] == "CloseApps")
+        {
             m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
-                                   [this, &m_connection]{
-                                        disconnect(m_connection);
+                                   [this]{
+                                        this-disconnect(m_connection);
+                                        m_connection =  QMetaObject::Connection();
                                         this->close();
                                     });
-        }
-        else if (line == "!!RestartOS!!")
-        {
             MinosConfig::getMinosConfig()->stop();
+        }
+        else if (l[1] == "RestartOS")
+        {
             m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
-                                   [this, &m_connection]{
-                                        disconnect(m_connection);
+                                   [this]{
+                                        this->disconnect(m_connection);
+                                        m_connection =  QMetaObject::Connection();
                                         system("systemctl reboot");
                                         this->close();
                                     });
-        }
-        else if (line == "!!CloseOS!!")
-        {
             MinosConfig::getMinosConfig()->stop();
+        }
+        else if (l[1] == "CloseOS")
+        {
             m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
-                                   [this, &m_connection]{
-                                        disconnect(m_connection);
+                                   [this]{
+                                        this->disconnect(m_connection);
+                                        m_connection =  QMetaObject::Connection();
                                         system("systemctl poweroff");
                                         this->close();
                                     });
+            MinosConfig::getMinosConfig()->stop();
         }
     }
 }
