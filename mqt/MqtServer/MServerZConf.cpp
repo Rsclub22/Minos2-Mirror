@@ -452,16 +452,15 @@ void UDPSocket::onReadyRead()
 {
     while (qus->hasPendingDatagrams())
     {
-        QNetworkDatagram ndg = qus->receiveDatagram();
-        if (ndg.isValid())
-        {
-            QString dg = ndg.data();
-            QHostAddress sender = ndg.senderAddress();
+        char buf[1024];
+        QHostAddress host;
+        quint16 port;
+        qint64 res = qus->readDatagram(buf, 1023, &host, &port);
+        buf[res] = 0;
+        QString dg = QString(buf);
 
-            trace("Datagram received from " + sender.toString() + " " + dg);
-            if (!dg.isEmpty())
-                emit readyRead(dg, sender.toString());
-        }
+        trace("Datagram received from " + host.toString() + " " + dg);
+        emit readyRead(dg, host.toString());
     }
 }
 bool UDPSocket::sendMessage(const QString &mess )
