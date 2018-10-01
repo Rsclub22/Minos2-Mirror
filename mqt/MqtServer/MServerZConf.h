@@ -29,7 +29,10 @@
 #include <QNetworkInterface>
 #include <QDateTime>
 
-#include "mcreadsocket.h"
+//#include "mcreadsocket.h"
+
+#define UPNP_PORT 9999
+#define UPNP_GROUP "239.255.0.1"
 
 //---------------------------------------------------------------------------
 class Server
@@ -67,6 +70,9 @@ public:
 private slots:
       void onSocketStateChange(QAbstractSocket::SocketState);
 
+      void onReadyRead(QString s1, QString s2);
+signals:
+      void readyRead(QString, QString);
 };
 class TZConf: public QObject
 {
@@ -80,7 +86,7 @@ class TZConf: public QObject
 
       QVector<QSharedPointer<UDPSocket> > TxSocks;
 
-      QSharedPointer<MCReadSocket> rxSocket;
+//      QSharedPointer<MCReadSocket> rxSocket;
 
       QTimer beaconTimer;
       quint16 iPort;

@@ -99,11 +99,11 @@ void TZConf::startZConf(const QString &name)
 
     groupAddress = QHostAddress(UPNP_GROUP);
 
-    QSharedPointer<MCReadSocket> mcrs(new MCReadSocket());
-    mcrs->setupRO();
-    rxSocket = mcrs;
+    //QSharedPointer<MCReadSocket> mcrs(new MCReadSocket());
+    //mcrs->setupRO();
+    //rxSocket = mcrs;
 
-    connect(rxSocket.data(), SIGNAL(readyRead(QString, QString )), this, SLOT(onReadyRead(QString, QString)), Qt::QueuedConnection);
+    //connect(rxSocket.data(), SIGNAL(readyRead(QString, QString )), this, SLOT(onReadyRead(QString, QString)), Qt::QueuedConnection);
 
     // Get network interfaces list
 
@@ -133,6 +133,7 @@ void TZConf::startZConf(const QString &name)
                     if (res)
                     {
                         TxSocks.push_back(qus);
+                        connect(qus.data(), SIGNAL(readyRead(QString,QString)), this, SLOT(onReadyRead(QString,QString)));
                     }
                 }
             }
@@ -188,7 +189,7 @@ void TZConf::onTimeout()
       sendMessage( sendBeaconResponse );   // timer requests beaconing, beacon just responds
       sendBeaconResponse = false;
    }
-   rxSocket->onTimeout();
+   //rxSocket->onTimeout();
 }
 
 
@@ -412,13 +413,14 @@ bool UDPSocket::setup(QNetworkInterface &iface, QNetworkAddressEntry &addr)
     //connect(qus.data(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
 
     connect(qus.data(), SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChange(QAbstractSocket::SocketState)));
+    connect(qus.data(), SIGNAL(readyRead(QString, QString )), this, SLOT(onReadyRead(QString, QString)), Qt::QueuedConnection);
 
     qui = iface;
     trace("Binding to " + addr.ip().toString());
     bool res = qus->bind(
                 addr.ip(),//addr.ip(), QHostAddress::AnyIPv4,//TZConf::getZConf()->groupAddress,
                 UPNP_PORT,
-                QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
+                QUdpSocket::DefaultForPlatform//QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
                 );
 
     if (res)
@@ -444,6 +446,10 @@ void UDPSocket::onSocketStateChange (QAbstractSocket::SocketState state)
                   + " on " + qus->localAddress().toString() + " interface :" + ifaceName);
         }
     }
+}
+void UDPSocket::onReadyRead(QString s1, QString s2)
+{
+    emit readyRead(s1, s2);
 }
 bool UDPSocket::sendMessage(const QString &mess )
 {
