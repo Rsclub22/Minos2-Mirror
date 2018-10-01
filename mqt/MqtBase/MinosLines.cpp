@@ -98,6 +98,7 @@ bool LineSet::initialise()
    bool ret = FileMap->Initialise();
    if ( ret )
    {
+       writeSet();
       connect(&checkTimer, SIGNAL(timeout()), this, SLOT(checkTimerTimeout()));
       checkTimer.start(5);
       return readSet();

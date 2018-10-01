@@ -94,7 +94,7 @@ void MainWindow::on_stdOutLine(QString line)
         {
             m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
                                    [this]{
-                                        this-disconnect(m_connection);
+                                        this->disconnect(m_connection);
                                         m_connection =  QMetaObject::Connection();
                                         this->close();
                                     });
