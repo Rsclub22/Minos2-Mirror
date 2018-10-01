@@ -660,33 +660,39 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
        // Look at linesMode, switch what L1 does accordingly
        KeyerAction * ca = KeyerAction::getCurrentAction();
 
-       if (!ca)
+       switch (linesMode)
        {
-           switch (linesMode)
-           {
-           case elmRecord:
-               (new BoxRecordAction()) ->LxChanged( sbc, state );
-               return true;
+       case elmRecord:
+           if (!state && !ca)
+                (new BoxRecordAction()) ->LxChanged( sbc, state );
+           return true;
 
-           case elmPlayPip:
+       case elmPlayPip:
+           if (!state && !ca)
                setPipEnabled(true);
-               break;
+           break;
 
-           case elmPlayNoPip:
+       case elmPlayNoPip:
+           if (!state && !ca)
                setPipEnabled(false);
-               break;
+           break;
 
-           case elmTones:
+       case elmTones:
+       {
+           if (!state && !ca)
            {
                if (sbc  == eL1)
                    sendTone1();
                else
                    sendTone2();
-               return true;
            }
-           case elmAppsRestartClose:
-               //communicate with appstarter/logger
-               // to do the necessary
+           return true;
+       }
+       case elmAppsRestartClose:
+           //communicate with appstarter/logger
+           // to do the necessary
+           if (!state && !ca)
+           {
                if (sbc == eL1)
                {
                    std::cout << "!!RestartApps!!" << std::endl;
@@ -695,11 +701,13 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
                {
                    std::cout << "!!CloseApps!!" << std::endl;
                }
-               break;
-           case elmOSRestartClose:
-               //communicate with appstarter/logger
-               // to do the necessary
-
+           }
+           return true;
+       case elmOSRestartClose:
+           //communicate with appstarter/logger
+           // to do the necessary
+           if (!state && !ca)
+           {
                if (sbc == eL1)
                {
                    std::cout << "!!RestartOS!!" << std::endl;
@@ -708,23 +716,23 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
                {
                    std::cout << "!!CloseOS!!" << std::endl;
                }
-               // first shutdown all apps, then
-               //systemctl poweroff/reboot
-               break;
+           }
+           // first shutdown all apps, then
+           //systemctl poweroff/reboot
+           return true;
 
-           default:
-           case elmNone:
-           case elm6:
-           case elm7:
-           case elm8:
-           case elm9:
-           case elm10:
-           case elm11:
-           case elm12:
-           case elmMGM:
+       default:
+       case elmNone:
+       case elm6:
+       case elm7:
+       case elm8:
+       case elm9:
+       case elm10:
+       case elm11:
+       case elm12:
+       case elmMGM:
             return false;
 
-           }
        }
       if ( !state && !recPending && !boxRecPending )
       {

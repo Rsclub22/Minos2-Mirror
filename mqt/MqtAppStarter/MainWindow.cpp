@@ -75,11 +75,10 @@ void MainWindow::start()
 {
     MinosConfig::getMinosConfig() ->start();
 }
-
 void MainWindow::on_stdOutLine(QString line)
 {
     QStringList l = line.split("!!");
-    if (l.size() == 1 && l[0] != line)  // we have actually split so we have just one command
+    if (l.size() == 3 && l[1] != line)  // we have actually split so we have just one command
     {
         QMetaObject::Connection m_connection;
         if (line == "!!RestartApps!!")
