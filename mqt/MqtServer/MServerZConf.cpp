@@ -244,6 +244,7 @@ void TZConf::readServerList()
    QSettings servers(GetCurrentDir() + "/Configuration/Servers.ini", QSettings::IniFormat);
    QStringList sl = servers.childGroups();
 
+    trace(QString::number(sl.size()) + " child groups");
    for ( int i = 0; i < sl.count(); i++ )
    {
       servers.beginGroup(sl[i]);
@@ -253,6 +254,9 @@ void TZConf::readServerList()
       QString station = servers.value( "Station" ).toString();
       QString port = servers.value( "Port" ).toString();
 
+    servers.endGroup();
+
+    trace(QString::number(i) + " " + sl[i] + " " + uuid + " " + host + " " + station + " " + port);
 
       if ( host.size() == 0 )
       {
