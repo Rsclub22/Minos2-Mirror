@@ -29,8 +29,6 @@
 #include <QNetworkInterface>
 #include <QDateTime>
 
-//#include "mcreadsocket.h"
-
 #define UPNP_PORT 9999
 #define UPNP_GROUP "239.255.0.1"
 
@@ -57,12 +55,12 @@ class UDPSocket: public QObject
     QSharedPointer<QUdpSocket> qus;
     QString ifaceName;
     QNetworkInterface qui;
+    QNetworkAddressEntry qua;
 
 public:
     UDPSocket();
     virtual ~UDPSocket() override;
     bool setup(QNetworkInterface &intr, QNetworkAddressEntry &addr);
-//    bool setupRO(QNetworkInterface &intr, QNetworkAddressEntry &addr);
 
     bool sendMessage(const QString &mess );
 
@@ -85,8 +83,7 @@ class TZConf: public QObject
       QString localName;
 
       QVector<QSharedPointer<UDPSocket> > TxSocks;
-
-//      QSharedPointer<MCReadSocket> rxSocket;
+      QUdpSocket readSocket;
 
       QTimer beaconTimer;
       quint16 iPort;
@@ -125,6 +122,7 @@ public:  		// User declarations
       void closeDown();
 private slots:
       void onReadyRead(QString s1, QString s2);
+      void onReadyRead();
       void onTimeout();
 };
 #endif

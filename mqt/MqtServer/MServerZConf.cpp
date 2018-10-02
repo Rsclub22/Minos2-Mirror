@@ -105,6 +105,8 @@ void TZConf::startZConf(const QString &name)
 
     //connect(rxSocket.data(), SIGNAL(readyRead(QString, QString )), this, SLOT(onReadyRead(QString, QString)), Qt::QueuedConnection);
 
+    readSocket.bind(UPNP_PORT);
+    connect(&readSocket, SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::QueuedConnection);
     // Get network interfaces list
 
     QList<QNetworkInterface> ifaces = QNetworkInterface::allInterfaces();
@@ -178,10 +180,12 @@ void TZConf::onTimeout()
 {
     if (lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval)
     {
+        /*
         for (QVector<QSharedPointer<UDPSocket> >::iterator i = TxSocks.begin(); i != TxSocks.end(); i++)
         {
             (*i)->checkMessages(false);
         }
+        */
         readServerList();
     }
 
@@ -212,6 +216,28 @@ void TZConf::onReadyRead(QString datagram, QString sender)
     // from MCReadSocket
 
     processZConfString(datagram, sender, sendBeaconResponse);
+}
+void TZConf::onReadyRead()
+{
+    QString datagram;
+    QString sender;
+    while (readSocket.hasPendingDatagrams())
+    {
+        QByteArray buf;
+        buf.resize(static_cast<int>(readSocket.pendingDatagramSize()));
+        QHostAddress host;
+        quint16 port;
+        qint64 res = readSocket.readDatagram(buf.data(), buf.size(), &host, &port);
+        QString dg = QString(buf);
+
+        trace("Datagram received from " + host.toString() + " " + dg);
+        if (res > 0)
+        {
+            processZConfString(dg, host.toString(), sendBeaconResponse);
+
+            //emit readyRead(dg, host.toString());
+        }
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -417,18 +443,20 @@ bool UDPSocket::setup(QNetworkInterface &iface, QNetworkAddressEntry &addr)
     ifaceName = iface.humanReadableName();
     qui = iface;
     qus = QSharedPointer<QUdpSocket>(new QUdpSocket);
+    qua = addr;
 
     //connect(qus.data(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
 
-    connect(qus.data(), SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChange(QAbstractSocket::SocketState)));
+    //connect(qus.data(), SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChange(QAbstractSocket::SocketState)));
     connect(qus.data(), SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::QueuedConnection);
 
-    qui = iface;
+    //qui = iface;
+    /*
     trace("Binding to " + addr.ip().toString());
     bool res = qus->bind(
                 addr.ip(),//addr.ip(), QHostAddress::AnyIPv4,//TZConf::getZConf()->groupAddress,
                 UPNP_PORT,
-                /*QUdpSocket::DefaultForPlatform*/QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
+                QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
                 );
 
     if (res)
@@ -436,7 +464,8 @@ bool UDPSocket::setup(QNetworkInterface &iface, QNetworkAddressEntry &addr)
         qus->setSocketOption(QAbstractSocket::MulticastTtlOption, QVariant(4));
     }
     trace(QString("UDP bind returns ") + (res?"true":"false") + " on " + addr.ip().toString() + (res?"":(" error " + qus->errorString())));
-    return res;
+    */
+    return true;
 }
 void UDPSocket::onSocketStateChange (QAbstractSocket::SocketState state)
 {
@@ -485,7 +514,7 @@ bool UDPSocket::sendMessage(const QString &mess )
 {
     QByteArray packet = QByteArray(mess.toStdString().c_str());
 
-    qint64 res = qus->writeDatagram(packet.data(), packet.length(), TZConf::getZConf()->groupAddress, UPNP_PORT);
+    qint64 res = qus->writeDatagram(packet.data(), packet.length(), qua.broadcast(), UPNP_PORT);
 
     QString err = "No error";
     if (res < 0)
