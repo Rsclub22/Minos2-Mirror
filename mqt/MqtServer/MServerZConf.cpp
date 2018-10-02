@@ -178,6 +178,10 @@ void TZConf::onTimeout()
 {
     if (lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval)
     {
+        for (QVector<QSharedPointer<UDPSocket> >::iterator i = TxSocks.begin(); i != TxSocks.end(); i++)
+        {
+            (*i)->checkMessages(false);
+        }
         readServerList();
     }
 
@@ -420,7 +424,7 @@ bool UDPSocket::setup(QNetworkInterface &iface, QNetworkAddressEntry &addr)
     bool res = qus->bind(
                 addr.ip(),//addr.ip(), QHostAddress::AnyIPv4,//TZConf::getZConf()->groupAddress,
                 UPNP_PORT,
-                QUdpSocket::DefaultForPlatform//QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
+                /*QUdpSocket::DefaultForPlatform*/QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
                 );
 
     if (res)
@@ -449,19 +453,30 @@ void UDPSocket::onSocketStateChange (QAbstractSocket::SocketState state)
 }
 void UDPSocket::onReadyRead()
 {
+    trace("void UDPSocket::onReadyRead() ");
+    checkMessages(true);
+}
+void UDPSocket::checkMessages(bool rr)
+{
+    if (!rr)
+    {
+        trace("UDPSocket::checkMessages");
+    }
     while (qus->hasPendingDatagrams())
     {
-        char buf[1024];
+        QByteArray buf;
+        buf.resize(static_cast<int>(qus->pendingDatagramSize()));
         QHostAddress host;
         quint16 port;
-        qint64 res = qus->readDatagram(buf, 1023, &host, &port);
-        buf[res] = 0;
+        qint64 res = qus->readDatagram(buf.data(), buf.size(), &host, &port);
         QString dg = QString(buf);
 
         trace("Datagram received from " + host.toString() + " " + dg);
-        emit readyRead(dg, host.toString());
+        if (res > 0)
+            emit readyRead(dg, host.toString());
     }
 }
+
 bool UDPSocket::sendMessage(const QString &mess )
 {
     QByteArray packet = QByteArray(mess.toStdString().c_str());

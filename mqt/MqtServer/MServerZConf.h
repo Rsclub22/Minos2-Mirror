@@ -66,7 +66,7 @@ public:
 
     bool sendMessage(const QString &mess );
 
-
+    void checkMessages(bool rr);
 private slots:
       void onSocketStateChange(QAbstractSocket::SocketState);
 
