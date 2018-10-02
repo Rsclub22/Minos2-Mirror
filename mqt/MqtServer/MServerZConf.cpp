@@ -466,9 +466,12 @@ bool UDPSocket::sendMessage(const QString &mess )
 {
     QByteArray packet = QByteArray(mess.toStdString().c_str());
 
-    /*int ret =*/ qus->writeDatagram(packet.data(), packet.length(), TZConf::getZConf()->groupAddress, UPNP_PORT);
+    qint64 res = qus->writeDatagram(packet.data(), packet.length(), TZConf::getZConf()->groupAddress, UPNP_PORT);
 
-    trace("send datagram on " + ifaceName
+    QString err = "No error";
+    if (res < 0)
+        err = qus->error();
+    trace("send datagram on " + ifaceName + " result " + err
           + " : " + mess);
 
     return true;
