@@ -9,7 +9,6 @@
 //---------------------------------------------------------------------------
 #include "minos_pch.h"
 #include <QUuid>
-#include <QNetworkDatagram>
 
 #include "tinyxml.h"
 #include "TinyUtils.h"
