@@ -713,7 +713,7 @@ int RigControlMainWindow::openRadio()
         if (retCode < RIG_OK)
         {
             logMessage(QString("Update Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
-            hamlibError(retCode, "Test Radio Connection\nRequest Frequency from radio\nNo Valid Data Received\nPlease check connections and/or settings");
+            hamlibError(retCode, "Test Radio Connection\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require CTS/RTS to be selected in Handshake.");
             //sendStatusToLogDisConnected();
             return OPEN_FAILED;
         }
