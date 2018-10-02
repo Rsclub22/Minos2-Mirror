@@ -186,6 +186,8 @@ void TZConf::onTimeout()
             (*i)->checkMessages(false);
         }
         */
+        trace("TZConf::onTimeout()");
+        onReadyRead();
         readServerList();
     }
 
@@ -219,6 +221,7 @@ void TZConf::onReadyRead(QString datagram, QString sender)
 }
 void TZConf::onReadyRead()
 {
+    trace("TZConf::onReadyRead()");
     QString datagram;
     QString sender;
     while (readSocket.hasPendingDatagrams())
