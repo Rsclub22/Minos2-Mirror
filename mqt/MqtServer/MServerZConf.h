@@ -8,8 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 
-//#include "minos_pch.h"
-
 #ifndef MServerZConfH
 #define MServerZConfH 
 
@@ -63,14 +61,6 @@ public:
     bool setup(QNetworkInterface &intr, QNetworkAddressEntry &addr);
 
     bool sendMessage(const QString &mess );
-
-    void checkMessages(bool rr);
-private slots:
-      void onSocketStateChange(QAbstractSocket::SocketState);
-
-      void onReadyRead();
-signals:
-      void readyRead(QString s1, QString s2);
 };
 class TZConf: public QObject
 {
@@ -79,21 +69,19 @@ class TZConf: public QObject
 
       static Server *zcPublishServer(const QString &uuid, const QString &name,
                         const QString &hosttarget, quint16 PortAsNumber );
-      bool waitNameReply;
       QString localName;
 
       QVector<QSharedPointer<UDPSocket> > TxSocks;
       QUdpSocket readSocket;
 
       QTimer beaconTimer;
-      quint16 iPort;
 
       bool sendMessage(bool beaconReq );
       void readServerList();
 
       static TZConf *ZConf;
 
-      unsigned int beaconInterval;   // once a minute
+      unsigned int beaconInterval = 0;   // once a minute
       QDateTime lastTick;
 
 public:  		// User declarations
@@ -121,7 +109,6 @@ public:  		// User declarations
       void publishDisconnect(const QString &name);
       void closeDown();
 private slots:
-      void onReadyRead(QString s1, QString s2);
       void onReadyRead();
       void onTimeout();
 };
