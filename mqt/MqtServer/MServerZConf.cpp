@@ -62,7 +62,7 @@ static QString getServerId()
 TZConf::TZConf( )
 {
    ZConf = this;
-   sendBeaconResponse = true;
+   sendBeaconResponse = false;  // so we send a true beacon with request
    beaconInterval = 60000;   // once a minute
    lastTick = QDateTime::currentDateTimeUtc().addSecs(-59); // force a beacon soon
 }
@@ -350,7 +350,7 @@ QString TZConf::getZConfString(bool beaconreq)
                + "' UUID='" + Uuid
                + "' name='" + getName()
                + "' port='" + QString::number(MinosServerPort) + "'"
-               + (beaconreq?" request='true'":"")
+               + (beaconreq?"":" request='true'")       // if a beacon response, don't request another beacon
                + " />";
 }
 //==============================================================================
