@@ -89,7 +89,8 @@ SOURCES += \
     tsettingseditdlg.cpp \
     tsinglelogframe.cpp \
     tstatsdispframe.cpp \
-    volumeslider.cpp
+    volumeslider.cpp \
+    clusterframe.cpp
 
 HEADERS  += \
     AdifImport.h \
@@ -148,7 +149,8 @@ HEADERS  += \
     tsettingseditdlg.h \
     tsinglelogframe.h \
     tstatsdispframe.h \
-    volumeslider.h
+    volumeslider.h \
+    clusterframe.h
 
 FORMS    += \
     contestdetails.ui \
