@@ -32,7 +32,7 @@ void SpotsDatabase::databaseInit()
 {
 
 
-    QSqlQuery query("CREATE TABLE spotDb (id INTEGER PRIMARY KEY, time VARCHAR(10), freq VARCHAR(12), dxCallsign VARCHAR(20), spotterCallsign VARCHAR(20), locator VARCHAR(6), comment VARCHAR(40), spotType INTEGER)");
+    QSqlQuery query("CREATE TABLE spotDb (id INTEGER PRIMARY KEY AUTOINCREMENT, time VARCHAR(10), freq VARCHAR(12), dxCallsign VARCHAR(20), spotterCallsign VARCHAR(20), locator VARCHAR(6), comment VARCHAR(40), spotType INTEGER)");
 
     if(!query.isActive())
         qDebug() << "ERROR: " << query.lastError().text();
@@ -41,12 +41,30 @@ void SpotsDatabase::databaseInit()
 }
 
 
-void SpotsDatabase::databaseInsert(QString time, QString freq, QString callsign, QString spotterCallsign, QString locator, QString comment, SpotType spotType)
+bool SpotsDatabase::databaseInsert( QString time, QString freq, QString callsign, QString spotterCallsign, QString locator, QString comment, SpotType spotType)
 {
     QSqlQuery query;
 
-        if(!query.exec("INSERT INTO spotDb(name) VALUES(time, freq, callsign, spotterCallsign, locator, comment, spotType)"))
-            qWarning() << "MainWindow::DatabasePopulate - ERROR: " << query.lastError().text();
+    query.prepare("INSERT INTO spotDb(name) (freq, dxCallsign, spotterCallsign, locator, comment, spotType)"
+                  "VALUES (:time, :callsign, :spotterCallsign, :locator, :comment, :spotType)");
+    query.bindValue(":time", time);
+    query.bindValue(":freq", freq);
+    query.bindValue(":callsign", callsign);
+    query.bindValue("spotterCallsign", spotterCallsign);
+    query.bindValue(":locator", locator);
+    query.bindValue(":comment", comment);
+    query.bindValue(":spotType", spotType);
+    if (query.exec())
+    {
+        qDebug() << "Insert Success " << callsign << " " << spotterCallsign;
+        return true;
+    }
+    else
+    {
+        qDebug() << "insert fail";
+        return false;
+    }
+
 
 }
 

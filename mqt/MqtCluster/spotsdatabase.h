@@ -21,8 +21,8 @@ public:
     void databaseConnect();
     void databaseInit();
     void databaseQuery();
-    void databaseInsert(QString time, QString freq, QString callsign, QString spotterCallsign, QString locator, QString comment, SpotType spotType);
-
+    //bool databaseInsert(int id, QString time, QString freq, QString callsign, QString spotterCallsign, QString locator, QString comment, SpotType spotType);
+    bool databaseInsert( QString time, QString freq, QString callsign, QString spotterCallsign, QString locator, QString comment, SpotType spotType);
 
 
 
