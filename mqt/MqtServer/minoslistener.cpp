@@ -211,6 +211,7 @@ void MinosServerListener::buildTable(QTableWidget *tab)
 {
     tab->clear();
     tab->setRowCount(i_array.count());
+    tab->setColumnCount(1);
     int row = 0;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
