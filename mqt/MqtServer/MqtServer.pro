@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     serverThread.cpp \
     clientThread.cpp \
     servermain.cpp \
-    minoslistener.cpp
+    minoslistener.cpp \
+    ServerDetails.cpp
 
 HEADERS  += \
     minos_pch.h \
@@ -41,8 +42,10 @@ HEADERS  += \
     serverThread.h \
     clientThread.h \
     servermain.h \
-    minoslistener.h
+    minoslistener.h \
+    ServerDetails.h
 
 FORMS    += \
-    servermain.ui
+    servermain.ui \
+    ServerDetails.ui
 

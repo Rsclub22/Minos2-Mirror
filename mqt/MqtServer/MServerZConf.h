@@ -52,7 +52,6 @@ class UDPSocket: public QObject
     Q_OBJECT
     QSharedPointer<QUdpSocket> qus;
     QString ifaceName;
-    QNetworkInterface qui;
     QNetworkAddressEntry qua;
 
 public:
@@ -83,6 +82,7 @@ class TZConf: public QObject
 
       unsigned int beaconInterval = 0;   // once a minute
       QDateTime lastTick;
+      bool sendBeaconResponse;
 
 public:  		// User declarations
 
@@ -101,8 +101,6 @@ public:  		// User declarations
       }
 
       void ServerScan();
-      bool sendBeaconResponse;
-      QHostAddress groupAddress;
 
       QString getZConfString(bool beaconreq);
       Server *processZConfString(const QString &message, const  QString &recvAddress, bool &beaconResponse);

@@ -61,6 +61,12 @@ int MinosListener::getConnectionCount()
 {
     return i_array.size();
 }
+
+MinosCommonConnection *MinosListener::getConnection(int i)
+{
+    return i_array[i];
+}
+
 //==============================================================================
 // Check for activity on the sockets
 
@@ -201,6 +207,19 @@ void MinosServerListener::checkServerConnected( Server *srv, bool force )
    }
 }
 
+void MinosServerListener::buildTable(QTableWidget *tab)
+{
+    tab->clear();
+    tab->setRowCount(i_array.count());
+    int row = 0;
+    for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+    {
+        QString server = (*i)->getClientServer();
+        QTableWidgetItem *s = new QTableWidgetItem(server);
+        tab->setItem(row++, 0, s);
+    }
+}
+
 void MinosServerListener::closeDown()
 {
    MSL = nullptr;
@@ -291,6 +310,20 @@ bool MinosClientListener::sendClient( TiXmlElement *tix )
       }
    }
    return true;   // Either we have dealt with it, or its not useful
+}
+
+void MinosClientListener::buildTable(QTableWidget *tab)
+{
+    tab->clear();
+    tab->setRowCount(i_array.count());
+    tab->setColumnCount(1);
+    int row = 0;
+    for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+    {
+        QString client = (*i)->getClientUser();
+        QTableWidgetItem *s = new QTableWidgetItem(client);
+        tab->setItem(row++, 0, s);
+    }
 }
 void MinosClientListener::closeDown()
 {

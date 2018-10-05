@@ -9,6 +9,7 @@
 #include "minoslistener.h"
 #include "clientThread.h"
 #include "serverThread.h"
+#include "ServerDetails.h"
 
 class TZConf;
 class TPubSubMain;
@@ -39,6 +40,8 @@ private slots:
     void LogTimerTimer( );
     void ScanTimerTimer( );
 
+    void on_showButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     StdInReader stdinReader;
@@ -46,6 +49,8 @@ private:
     QSharedPointer<MinosServerListener> serverListener;
     QSharedPointer<TZConf> ZConf;
     QSharedPointer<TPubSubMain> PubSubMain;
+
+    QSharedPointer<ServerDetails> sd;
 };
 extern ServerMain *MinosMainForm;
 extern bool closeApp;

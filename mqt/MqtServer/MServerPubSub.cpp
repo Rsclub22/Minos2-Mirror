@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include "minos_pch.h"
-
+#include <QHeaderView>
 #include "MinosLink.h"
 #include "clientThread.h"
 #include "serverThread.h"
@@ -20,7 +20,12 @@ extern bool closeApp;
 
 //---------------------------------------------------------------------------
 TPubSubMain *PubSubMain = nullptr;
-//---------------------------------------------------------------------------
+static const char *stateList[] =
+{
+   "P",
+   "R",
+   "NC"
+};//---------------------------------------------------------------------------
 static void makeRPCObjects()
 {
    MinosRPCObj::addServerObj( QSharedPointer<MinosRPCObj>(new RPCPublishServer( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::publishCallback ) ) ) );
@@ -145,6 +150,10 @@ class Published
       static void clearPublist();
       static int GetSubscribedCount();
       static int GetPublishedCount() ;
+
+      static void buildPublishedTree(QTreeWidget *tree);
+      static void buildSubscribedTree(QTreeWidget *tree);
+
       QString getPublisherServer();
 
 };
@@ -382,6 +391,70 @@ int Published::GetPublishedCount()
    }
    return pcount;
 }
+void Published::buildPublishedTree(QTreeWidget *tree)
+{
+    tree->clear();
+    tree->setColumnCount(3);
+    QStringList h = {"key", "state", "value"};
+    tree->setHeaderLabels(h);    for ( PublishedCategoryListIterator i = Published::publist.begin(); i != Published::publist.end(); i++ )
+    {
+        QString cat = (*i)->getCategory();
+        QTreeWidgetItem *catItem = new QTreeWidgetItem(tree);
+        catItem->setText(0, cat);
+        for ( PublishedKeyListIterator j = ( *i ) ->pubkeylist.begin(); j != ( *i ) ->pubkeylist.end(); j++ )
+        {
+           QString key = (*j)->getPubKey();
+           QString value = (*j)->getPubValue();
+           PublishState state = (*j)->getPubState();
+
+           QTreeWidgetItem *keyItem = new QTreeWidgetItem(catItem);
+           keyItem->setText(0, key);
+           keyItem->setText(1, stateList[state]);
+           keyItem->setText(2, value);
+        }
+
+    }
+    tree->expandAll();
+}
+void Published::buildSubscribedTree(QTreeWidget *tree)
+{
+    tree->clear();
+
+    for ( PublishedCategoryListIterator j = Published::publist.begin(); j != Published::publist.end(); j++ )
+    {
+        QString cat = (*j)->getCategory();
+        QTreeWidgetItem *catItem = new QTreeWidgetItem(tree);
+        catItem->setText(0, cat);
+
+        QTreeWidgetItem *stype = new QTreeWidgetItem(catItem);
+        stype->setText(0, "Local");
+        for ( SubscriberListIterator i = (*j)->subscribedLocal.begin(); i != (*j)->subscribedLocal.end(); i++ )
+        {
+            QString sub = (*i)->getSjid();
+            QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
+            subItem->setText(0, sub);
+        }
+        stype = new QTreeWidgetItem(catItem);
+        stype->setText(0, "Server");
+        for ( ServerSubscriberListIterator i = (*j)->subscribedServer.begin(); i != (*j)->subscribedServer.end(); i++ )
+        {
+            QString sub = (*i)->getSjid();
+            QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
+            subItem->setText(0, sub);
+        }
+        stype = new QTreeWidgetItem(catItem);
+        stype->setText(0, "Remote");
+        for ( RemoteSubscriberListIterator i = (*j)->subscribedRemote.begin(); i != (*j)->subscribedRemote.end(); i++ )
+        {
+            QString sub = (*i)->getSjid();
+            QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
+            subItem->setText(0, sub);
+        }
+    }
+
+    tree->expandAll();
+}
+
 bool noCategoryConnection( PublishedCategory *pc )
 {
    if ( pc == nullptr )
@@ -701,12 +774,7 @@ TPubSubMain::~TPubSubMain()
 {
 }
 //---------------------------------------------------------------------------
-static const char *stateList[] =
-{
-   "P",
-   "R",
-   "NC"
-};
+
 bool TPubSubMain::publish( const QString &pubId, const QString &category, const QString &key, const QString &value, PublishState pState )
 {
    if (closeApp)
@@ -733,6 +801,16 @@ int GetPublishedCount()
 {
    return Published::GetPublishedCount();
 }
+
+void buildPublishedTree(QTreeWidget *tree)
+{
+    Published::buildPublishedTree(tree);
+}
+void buildSubscribedTree(QTreeWidget *tree)
+{
+    Published::buildSubscribedTree(tree);
+}
+
 //---------------------------------------------------------------------------
 
 // callback to publish local server - this may get proxied when we have a remote server subscriber

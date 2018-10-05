@@ -93,8 +93,6 @@ void TZConf::startZConf(const QString &name)
 
     localName = name.trimmed();
 
-    groupAddress = QHostAddress(UPNP_GROUP);
-
     // set up the receiver
     readSocket.bind(UPNP_PORT);
     connect(&readSocket, SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::QueuedConnection);
@@ -412,7 +410,6 @@ UDPSocket::~UDPSocket()
 bool UDPSocket::setup(QNetworkInterface &iface, QNetworkAddressEntry &addr)
 {
     ifaceName = iface.humanReadableName();
-    qui = iface;
     qus = QSharedPointer<QUdpSocket>(new QUdpSocket);
     qua = addr;
 

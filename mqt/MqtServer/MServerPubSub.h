@@ -10,8 +10,17 @@
 
 #include "minos_pch.h"
 
+#include <QTreeWidget>
+
 #ifndef MServerPubSubH
 #define MServerPubSubH 
+
+extern int GetSubscribedCount();
+extern int GetPublishedCount();
+
+extern void buildPublishedTree(QTreeWidget *tree);
+extern void buildSubscribedTree(QTreeWidget *tree);
+
 //---------------------------------------------------------------------------
 class MinosRPCObj;
 class TPubSubMain
