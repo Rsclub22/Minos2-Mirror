@@ -14,6 +14,7 @@
 #include <QSettings>
 #include <QDebug>
 #include "clustermainwindow.h"
+#include "clustercommon.h"
 #include "ui_clustermainwindow.h"
 
 #include <QDebug>
@@ -52,13 +53,23 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView = new QTableView();
     dxSpotView->setModel(dxSpotDataModel);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+
     restoreDxSpotViewColumns();
     dxSpotView->resizeRowsToContents();
-    //dxSpotView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    dxSpotView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
 
+    //dxSpotView->resizeColumnsToContents();
+    //qDebug() << "col0 =" << dxSpotView->columnWidth(0);
+    //dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+    //qDebug() << "col0 =" << dxSpotView->columnWidth(0);
+    //dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+    //dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+    //dxSpotView->setColumnWidth(LOC_COL_NUM, LOC_COL_WIDTH);
+    //dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+    //dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
 
     rawClusterDataView = new QPlainTextEdit();

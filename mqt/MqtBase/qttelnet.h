@@ -220,7 +220,7 @@ class QT_QTTELNET_EXPORT QtTelnet : public QObject
     Q_OBJECT
     friend class QtTelnetPrivate;
 public:
-    QtTelnet(QObject *parent = 0);
+    QtTelnet(QObject *parent = nullptr);
     ~QtTelnet();
 
     enum Control { GoAhead, InterruptProcess, AreYouThere, AbortOutput,

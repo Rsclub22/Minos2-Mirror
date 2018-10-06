@@ -394,21 +394,21 @@ public:
     void sendCommand(const char *command, int length);
     void sendCommand(const char operation, const char option);
     void sendString(const QString &str);
-    bool replyNeeded(uchar operation, uchar option);
-    void setMode(uchar operation, uchar option);
-    bool alreadySent(uchar operation, uchar option);
-    void addSent(uchar operation, uchar option);
+    bool replyNeeded(char operation, char option);
+    void setMode(char operation, char option);
+    bool alreadySent(char operation, char option);
+    void addSent(char operation, char option);
     void sendWindowSize();
 
     int  parsePlaintext(const QByteArray &data);
     int parseIAC(const QByteArray &data);
-    bool isOperation(const uchar c);
-    bool isCommand(const uchar c);
+    bool isOperation(const char c);
+    bool isCommand(const char c);
     QByteArray getSubOption(const QByteArray &data);
     void parseSubAuth(const QByteArray &data);
     void parseSubTT(const QByteArray &data);
     void parseSubNAWS(const QByteArray &data);
-    uchar opposite(uchar operation, bool positive);
+    char opposite(char operation, bool positive);
 
     void consume();
 
@@ -430,10 +430,10 @@ public slots:
 };
 
 QtTelnetPrivate::QtTelnetPrivate(QtTelnet *parent)
-    : q(parent), socket(0), notifier(0),
+    : q(parent), socket(nullptr), notifier(nullptr),
       connected(false), nocheckp(false),
       triedlogin(false), triedpass(false), firsttry(true),
-      curauth(0), nullauth(false),
+      curauth(nullptr), nullauth(false),
       loginp("login:\\s*$"), passp("assword:\\s*$")
 {
     setSocket(new QTcpSocket(this));
@@ -468,16 +468,16 @@ void QtTelnetPrivate::setSocket(QTcpSocket *s)
 /*
    Returns the opposite value of the one we pass in.
 */
-uchar QtTelnetPrivate::opposite(uchar operation, bool positive)
+char QtTelnetPrivate::opposite(char operation, bool positive)
 {
-    if (operation == Common::DO)
-        return (positive ? Common::WILL : Common::WONT);
-    else if (operation == Common::DONT) // Not allowed to say WILL
-        return Common::WONT;
-    else if (operation == Common::WILL)
-        return (positive ? Common::DO : Common::DONT);
-    else if (operation == Common::WONT) // Not allowed to say DO
-        return Common::DONT;
+    if (operation == static_cast<char>(Common::DO))
+        return (positive ? static_cast<char>(Common::WILL) : static_cast<char>(Common::WONT));
+    else if (operation == static_cast<char>(Common::DONT)) // Not allowed to say WILL
+        return static_cast<char>(Common::WONT);
+    else if (operation == static_cast<char>(Common::WILL))
+        return (positive ? static_cast<char>(Common::DO) : static_cast<char>(Common::DONT));
+    else if (operation == static_cast<char>(Common::WONT)) // Not allowed to say DO
+        return static_cast<char>(Common::DONT);
     return 0;
 }
 
@@ -500,15 +500,15 @@ void QtTelnetPrivate::consume()
         buffer.push_back(data.mid(currpos));
 }
 
-bool QtTelnetPrivate::isCommand(const uchar c)
+bool QtTelnetPrivate::isCommand(const char c)
 {
-    return (c == Common::DM);
+    return (c == static_cast<char>(Common::DM));
 }
 
-bool QtTelnetPrivate::isOperation(const uchar c)
+bool QtTelnetPrivate::isOperation(const char c)
 {
-    return (c == Common::WILL || c == Common::WONT
-            || c == Common::DO ||c == Common::DONT);
+    return (c == static_cast<char>(Common::WILL) || c == static_cast<char>(Common::WONT)
+            || c == static_cast<char>(Common::DO) ||c == static_cast<char>(Common::DONT));
 }
 
 QByteArray QtTelnetPrivate::getSubOption(const QByteArray &data)
@@ -538,11 +538,12 @@ void QtTelnetPrivate::parseSubTT(const QByteArray &data)
     if (data.size() < 2 || data[1] != Common::SEND)
         return;
 
-    const char c1[4] = { Common::IAC, Common::SB,
+    const char c1[] = { static_cast<char>(Common::IAC), static_cast<char>(Common::SB),
                          Common::TerminalType, Common::IS};
+
     sendCommand(c1, sizeof(c1));
     sendString("UNKNOWN");
-    const char c2[2] = { Common::IAC, Common::SE };
+    const char c2[2] = { static_cast<char>(Common::IAC), static_cast<char>(Common::SE) };
     sendCommand(c2, sizeof(c2));
 }
 
@@ -597,13 +598,13 @@ int QtTelnetPrivate::parseIAC(const QByteArray &data)
     Q_ASSERT(uchar(data.at(0)) == Common::IAC);
 
     if (data.size() >= 3 && isOperation(data[1])) { // IAC, Operation, Option
-        const uchar operation = data[1];
-        const uchar option = data[2];
-        if (operation == Common::WONT && option == Common::Logout) {
+        const char operation = data[1];
+        const char option = data[2];
+        if (operation == static_cast<char>(Common::WONT) && option == static_cast<char>(Common::Logout)) {
             q->close();
             return 3;
         }
-        if (operation == Common::DONT && option == Common::Authentication) {
+        if (operation == static_cast<char>(Common::DONT) && option == static_cast<char>(Common::Authentication)) {
             if (loginp.isEmpty() && passp.isEmpty())
                 emit q->loggedIn();
             nullauth = true;
@@ -698,25 +699,25 @@ int QtTelnetPrivate::parsePlaintext(const QByteArray &data)
     return consumed;
 }
 
-bool QtTelnetPrivate::replyNeeded(uchar operation, uchar option)
+bool QtTelnetPrivate::replyNeeded(char operation, char option)
 {
-    if (operation == Common::DO || operation == Common::DONT) {
+    if (operation == static_cast<char>(Common::DO) || operation == static_cast<char>(Common::DONT)) {
         // RFC854 requires that we don't acknowledge
         // requests to enter a mode we're already in
-        if (operation == Common::DO && modes[option])
+        if (operation == static_cast<char>(Common::DO) && modes[option])
             return false;
-        if (operation == Common::DONT && !modes[option])
+        if (operation == static_cast<char>(Common::DONT) && !modes[option])
             return false;
     }
     return true;
 }
 
-void QtTelnetPrivate::setMode(uchar operation, uchar option)
+void QtTelnetPrivate::setMode(char operation, char option)
 {
-    if (operation != Common::DO && operation != Common::DONT)
+    if (operation != static_cast<char>(Common::DO) && operation != static_cast<char>(Common::DONT))
         return;
 
-    modes[option] = (operation == Common::DO);
+    modes[option] = (operation == static_cast<char>(Common::DO));
     if (option == Common::NAWS && modes[Common::NAWS])
         sendWindowSize();
 }
@@ -730,20 +731,20 @@ void QtTelnetPrivate::sendWindowSize()
 
     short h = htons(windowSize.height());
     short w = htons(windowSize.width());
-    const char c[9] = { Common::IAC, Common::SB, Common::NAWS,
-                        (w & 0x00ff), (w >> 8), (h & 0x00ff), (h >> 8),
-                        Common::IAC, Common::SE };
+    const char c[9] = { static_cast<char>(Common::IAC), static_cast<char>(Common::SB), static_cast<char>(Common::NAWS),
+                        static_cast<char>(w & 0x00ff), static_cast<char>(w >> 8), static_cast<char>(h & 0x00ff), static_cast<char>(h >> 8),
+                        static_cast<char>(Common::IAC), static_cast<char>(Common::SE) };
     sendCommand(c, sizeof(c));
 }
 
-void QtTelnetPrivate::addSent(uchar operation, uchar option)
+void QtTelnetPrivate::addSent(char operation, char option)
 {
-    osent.append(QPair<uchar, uchar>(operation, option));
+    osent.append(QPair<char, char>(operation, option));
 }
 
-bool QtTelnetPrivate::alreadySent(uchar operation, uchar option)
+bool QtTelnetPrivate::alreadySent(char operation, char option)
 {
-    QPair<uchar, uchar> value(operation, option);
+    QPair<char, char> value(operation, option);
     if (osent.contains(value)) {
         osent.removeAll(value);
         return true;
@@ -776,7 +777,7 @@ void QtTelnetPrivate::sendCommand(const QByteArray &command)
 
 void QtTelnetPrivate::sendCommand(const char operation, const char option)
 {
-    const char c[3] = { Common::IAC, operation, option };
+    const char c[3] = { static_cast<char>(Common::IAC), operation, option };
     sendCommand(c, 3);
 }
 
@@ -802,12 +803,12 @@ bool QtTelnetPrivate::allowOption(int /*oper*/, int opt)
 
 void QtTelnetPrivate::sendOptions()
 {
-    sendCommand(Common::WILL, Common::Authentication);
-    sendCommand(Common::DO, Common::SuppressGoAhead);
-    sendCommand(Common::WILL, Common::LineMode);
-    sendCommand(Common::DO, Common::Status);
+    sendCommand(static_cast<char>(Common::WILL), Common::Authentication);
+    sendCommand(static_cast<char>(Common::DO), Common::SuppressGoAhead);
+    sendCommand(static_cast<char>(Common::WILL), Common::LineMode);
+    sendCommand(static_cast<char>(Common::DO), Common::Status);
     if (q->isValidWindowSize())
-        sendCommand(Common::WILL, Common::NAWS);
+        sendCommand(static_cast<char>(Common::WILL), Common::NAWS);
 }
 
 void QtTelnetPrivate::socketConnected()
@@ -830,7 +831,7 @@ void QtTelnetPrivate::socketException(int)
 void QtTelnetPrivate::socketConnectionClosed()
 {
     delete notifier;
-    notifier = 0;
+    notifier = nullptr;
     connected = false;
     emit q->loggedOut();
 }
@@ -937,7 +938,7 @@ void QtTelnet::close()
     if (!d->connected)
         return;
     delete d->notifier;
-    d->notifier = 0;
+    d->notifier = nullptr;
     d->connected = false;
     d->socket->close();
     emit loggedOut();
@@ -955,42 +956,42 @@ void QtTelnet::sendControl(Control ctrl)
     char c;
     switch (ctrl) {
     case InterruptProcess: // Ctrl-C
-        c = Common::IP;
+        c = static_cast<char>(Common::IP);
         sendsync = true;
         break;
     case AbortOutput: // suspend/resume output
-        c = Common::AO;
+        c = static_cast<char>(Common::AO);
         sendsync = true;
         break;
     case Break:
-        c = Common::BRK;
+        c = static_cast<char>(Common::BRK);
         break;
     case Suspend: // Ctrl-Z
-        c = Common::SUSP;
+        c = static_cast<char>(Common::SUSP);
         break;
     case EndOfFile:
-        c = Common::CEOF;
+        c = static_cast<char>(Common::CEOF);
         break;
     case Abort:
-        c = Common::ABORT;
+        c = static_cast<char>(Common::ABORT);
         break;
     case GoAhead:
-        c = Common::GA;
+        c = static_cast<char>(Common::GA);
         break;
     case AreYouThere:
-        c = Common::AYT;
+        c = static_cast<char>(Common::AYT);
         sendsync = true;
         break;
     case EraseCharacter:
-        c = Common::EC;
+        c = static_cast<char>(Common::EC);
         break;
     case EraseLine:
-        c = Common::EL;
+        c = static_cast<char>(Common::EL);
         break;
     default:
         return;
     }
-    const char command[2] = {Common::IAC, c};
+    const char command[2] = {static_cast<char>(Common::IAC), c};
     d->sendCommand(command, sizeof(command));
     if (sendsync)
         sendSync();
@@ -1020,7 +1021,7 @@ void QtTelnet::sendData(const QString &data)
 */
 void QtTelnet::logout()
 {
-    d->sendCommand(Common::DO, Common::Logout);
+    d->sendCommand(static_cast<char>(Common::DO), Common::Logout);
 }
 
 /*!
@@ -1053,9 +1054,9 @@ void QtTelnet::setWindowSize(int width, int height)
     if (wasvalid && isValidWindowSize())
         d->sendWindowSize();
     else if (isValidWindowSize())
-        d->sendCommand(Common::WILL, Common::NAWS);
+        d->sendCommand(static_cast<char>(Common::WILL), Common::NAWS);
     else if (wasvalid)
-        d->sendCommand(Common::WONT, Common::NAWS);
+        d->sendCommand(static_cast<char>(Common::WONT), Common::NAWS);
 }
 
 /*!
@@ -1121,8 +1122,8 @@ void QtTelnet::sendSync()
     d->socket->flush(); // Force the socket to send all the pending data before
                         // sending the SYNC sequence.
     int s = d->socket->socketDescriptor();
-    char tosend = (char)Common::DM;
-    ::send(s, &tosend, 1, MSG_OOB); // Send the DATA MARK as out-of-band
+    char tosend = static_cast<char>(Common::DM);
+    ::send(static_cast<SOCKET>(s), &tosend, 1, MSG_OOB); // Send the DATA MARK as out-of-band
 }
 
 /*!

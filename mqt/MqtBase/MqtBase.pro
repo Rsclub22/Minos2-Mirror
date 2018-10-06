@@ -128,7 +128,8 @@ HEADERS += \
     waitcursor.h \
     dxspotdatamodel.h \
     qttelnet.h \
-    clusterrpc.h
+    clusterrpc.h \
+    clustercommon.h
 
 unix {
     target.path = /usr/lib
