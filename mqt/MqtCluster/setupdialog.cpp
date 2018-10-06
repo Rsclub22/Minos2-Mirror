@@ -1,3 +1,16 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Cluster Server
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+//
+///
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
 #include "setupdialog.h"
 #include "ui_setupdialog.h"
 #include "cutils.h"

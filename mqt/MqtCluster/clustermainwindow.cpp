@@ -1,3 +1,16 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Cluster Server
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+//
+///
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
 #include <QSettings>
 #include <QDebug>
 #include "clustermainwindow.h"
@@ -222,6 +235,7 @@ void ClusterMainWindow::parseDX(QString txt)
             dxSpotDataModel->rowData = QStringList {spotTime, dxFreq, dxCall, dxLocator, spotCall, spotComment };
             //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             dxSpotDataModel->insertRows(0, 1);
+
         }
         else if (retCode < 0)
         {

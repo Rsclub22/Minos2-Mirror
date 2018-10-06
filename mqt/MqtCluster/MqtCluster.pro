@@ -28,19 +28,15 @@ win32:LIBS += -lWs2_32
 
 SOURCES += main.cpp\
         clustermainwindow.cpp \
-    qttelnet.cpp \
     setupdialog.cpp \
     cluster.cpp \
-    dxspotdatamodel.cpp \
     spotsdatabase.cpp
 
-    qttelnet.cpp
+
 
 HEADERS  += clustermainwindow.h \
-    qttelnet.h \
     setupdialog.h \
     cluster.h \
-    dxspotdatamodel.h \
     spotsdatabase.h
 
 

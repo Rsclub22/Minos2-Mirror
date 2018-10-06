@@ -1,3 +1,15 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      DXSpot Data Model
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+//
+///
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef DXSPOTDATAMODEL_H
 #define DXSPOTDATAMODEL_H
 
