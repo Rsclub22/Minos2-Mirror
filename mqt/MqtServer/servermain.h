@@ -38,7 +38,6 @@ private slots:
 
     void on_CloseButton_clicked();
     void LogTimerTimer( );
-    void ScanTimerTimer( );
 
     void on_showButton_clicked();
 

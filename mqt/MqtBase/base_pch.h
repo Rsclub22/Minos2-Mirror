@@ -53,8 +53,6 @@ template <class itemtype >inline bool operator == (const MapWrapper<itemtype> &k
     return key1.wt.data() == key2.wt.data();
 }
 
-//#include "minossplitter.h"
-
 #include <math.h>
 #include <time.h>
 
@@ -63,8 +61,6 @@ template <class itemtype >inline bool operator == (const MapWrapper<itemtype> &k
 #include "ProfileEnums.h"
 #include "mwin.h"
 #include "CacheSelection.h"
-//#include "cutils.h"
-//#include "latlong.h"
 #include "calcs.h"
 
 #include "mults.h"
@@ -72,15 +68,11 @@ template <class itemtype >inline bool operator == (const MapWrapper<itemtype> &k
 #include "validators.h"
 
 #include "rigcontrolcommonconstants.h"
-//#include "MinosTestImport.h"
 
 #include "MShowMessageDlg.h"
 #include "MMessageDialog.h"
 
 #include "TreeUtils.h"
-//#include "DisplayContestContact.h"
-
-//#include "BandList.h"
 #include "PubSubValue.h"
 #include "TinyUtils.h"
 

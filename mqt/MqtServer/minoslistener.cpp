@@ -184,40 +184,26 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
 
 return true;   // don't pass it on - either we have dealt with it, or its not useful
 }
-void MinosServerListener::checkServerConnected( Server *srv, bool force )
-{
-   if ( srv->local )
-   {
-      return ;
-   }
-   {
-       for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
-       {
-          if ( ( *i ) && ( *i ) ->checkServer( srv->station ) )
-          {
-             return ;
-          }
-       }
-   }
-   if (force )
-   {
-      MinosServerConnection * s = new MinosServerConnection();
-      s->mConnect( srv );
-      addListenerSlot( s );
-   }
-}
 
 void MinosServerListener::buildTable(QTableWidget *tab)
 {
     tab->clear();
     tab->setRowCount(i_array.count());
-    tab->setColumnCount(1);
+    tab->setColumnCount(3);
+    QStringList h = {"name", "address", "uuid"};
+    tab->setHorizontalHeaderLabels(h);
     int row = 0;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
-        QString server = (*i)->getClientServer();
+        MinosServerConnection *msc = dynamic_cast<MinosServerConnection *>(*i);
+        QString server = msc->getClientServer();
         QTableWidgetItem *s = new QTableWidgetItem(server);
-        tab->setItem(row++, 0, s);
+        tab->setItem(row, 0, s);
+        s = new QTableWidgetItem(msc->server()->host);
+        tab->setItem(row, 1, s);
+        s = new QTableWidgetItem(msc->server()->uuid);
+        tab->setItem(row, 2, s);
+        row++;
     }
 }
 

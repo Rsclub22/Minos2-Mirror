@@ -69,7 +69,6 @@ class MinosServerListener: public MinosListener
          MSL = nullptr;
       }
       bool sendServer(TiXmlElement *pak );
-      void checkServerConnected( Server *s, bool force );
 
       void buildTable(QTableWidget *tab);
 

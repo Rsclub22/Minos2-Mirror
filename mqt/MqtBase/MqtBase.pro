@@ -97,7 +97,6 @@ HEADERS += \
     MinosLines.h \
     MinosLoggerEvents.h \
     MinosParameters.h \
-    minossplitter.h \
     MinosTableView.h \
     minostablewidget.h \
     MinosTestImport.h \

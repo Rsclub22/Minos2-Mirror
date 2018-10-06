@@ -226,15 +226,7 @@ Server *findStation( const QString s )
    }
    return nullptr;
 }
-void TZConf::ServerScan()
-{
-   for ( QVector<Server *>::iterator i = serverList.begin(); !closeApp && i != serverList.end(); i++ )
-   {
-      trace("Server scan - checking " + (*i)->station);
-      MinosServerListener::getListener() ->checkServerConnected( ( *i ), false );
-      trace("Server scan - checked " + (*i)->station);
-   }
-}
+
 void TZConf::readServerList()
 {
    trace("Reading Server List File");
@@ -280,7 +272,6 @@ void TZConf::readServerList()
       zcPublishServer( uuid, station, host, toQUint16(port, MinosServerPort ) );
 
    }
-   ServerScan();
    //trace("Finished reading Server List File");
 }
 

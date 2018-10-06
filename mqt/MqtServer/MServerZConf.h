@@ -100,8 +100,6 @@ public:  		// User declarations
          return localName;
       }
 
-      void ServerScan();
-
       QString getZConfString(bool beaconreq);
       Server *processZConfString(const QString &message, const  QString &recvAddress, bool &beaconResponse);
       void publishDisconnect(const QString &name);
