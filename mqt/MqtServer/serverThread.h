@@ -41,6 +41,7 @@ class MinosServerConnection: public MinosCommonConnection
       {
           return srv;
       }
+      void setServer(Server *s);
       virtual void setFromId( MinosId &from, RPCRequest *req ) override;
 
       virtual void mConnect( Server *srv );

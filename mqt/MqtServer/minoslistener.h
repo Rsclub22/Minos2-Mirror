@@ -17,6 +17,7 @@
 
 #include "MinosLink.h"
 class Server;
+class MinosServerConnection;
 
 extern bool closeApp;
 
@@ -73,6 +74,8 @@ class MinosServerListener: public MinosListener
       void buildTable(QTableWidget *tab);
 
       void closeDown() override;
+
+      MinosServerConnection *findConnection(const QHostAddress &h);
 };
 //==============================================================================
 class MinosClientListener: public MinosListener

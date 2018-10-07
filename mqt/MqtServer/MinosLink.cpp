@@ -185,7 +185,7 @@ void MinosCommonConnection::on_readyRead()
 {
    // select says we have data, so read it
    // and send the data through the parser
-   trace ( "MinosCommonConnection::on_readyRead called to receive data from " + connectHost );
+   trace ( "MinosCommonConnection::on_readyRead called to receive data from " + connectHost.toString() );
 
    // documntation says this may occasionally fail on Windows
    while (sock->bytesAvailable() > 0)

@@ -23,7 +23,7 @@ MinosClientConnection::MinosClientConnection()
 void MinosClientConnection::initialise()
 {
    QHostAddress h = sock->peerAddress();
-   connectHost = h.toString();
+   connectHost = h;
    connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()));
    connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()));
 }

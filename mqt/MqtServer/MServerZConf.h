@@ -35,17 +35,18 @@ class Server
 {
    public:
       QString uuid;
-      QString host;
+      QHostAddress host;
       QString station;
       quint16 port;
       bool local;
 
-      Server( const QString &uuid, const QString &h, const QString &s, quint16 p );
+      Server( const QString &uuid, const QHostAddress &h, const QString &s, quint16 p );
       Server( const QString &s );
       virtual ~Server();
 };
 extern QVector<Server *> serverList;
 extern Server *findStation( const QString s );
+extern Server *findIp( const QString s );
 
 class UDPSocket: public QObject
 {
@@ -67,7 +68,7 @@ class TZConf: public QObject
    private:  	// User declarations
 
       static Server *zcPublishServer(const QString &uuid, const QString &name,
-                        const QString &hosttarget, quint16 PortAsNumber );
+                        const QHostAddress &host, quint16 PortAsNumber );
       QString localName;
 
       QVector<QSharedPointer<UDPSocket> > TxSocks;
@@ -101,7 +102,7 @@ public:  		// User declarations
       }
 
       QString getZConfString(bool beaconreq);
-      Server *processZConfString(const QString &message, const  QString &recvAddress, bool &beaconResponse);
+      Server *processZConfString(const QString &message, const QHostAddress &host, bool &beaconResponse);
       void publishDisconnect(const QString &name);
       void closeDown();
 private slots:

@@ -51,8 +51,8 @@ bool MinosListener::initialise( QString type, quint16 port )
 void MinosListener::addListenerSlot( MinosCommonConnection *il )
 {
     QHostAddress h = il->sock->peerAddress();
-    il->connectHost = h.toString();
-    trace( "addListenerSlot: from " + il->connectHost );
+    il->connectHost = h;
+    trace( "addListenerSlot: from " + il->connectHost.toString() );
     i_array.push_back( il );
 
     il->initialise();
@@ -201,7 +201,7 @@ void MinosServerListener::buildTable(QTableWidget *tab)
         QString server = msc->getClientServer();
         QTableWidgetItem *s = new QTableWidgetItem(server);
         tab->setItem(row, 0, s);
-        s = new QTableWidgetItem(msc->server()->host);
+        s = new QTableWidgetItem(msc->server()->host.toString());
         tab->setItem(row, 1, s);
         s = new QTableWidgetItem(msc->server()->uuid);
         tab->setItem(row, 2, s);
@@ -211,7 +211,19 @@ void MinosServerListener::buildTable(QTableWidget *tab)
 
 void MinosServerListener::closeDown()
 {
-   MSL = nullptr;
+    MSL = nullptr;
+}
+
+MinosServerConnection *MinosServerListener::findConnection(const QHostAddress &h)
+{
+    for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+    {
+        if (h.isEqual((*i)->connectHost))
+        {
+            return dynamic_cast<MinosServerConnection *>(*i);
+        }
+    }
+    return nullptr;
 }
 //==============================================================================
 //==============================================================================
