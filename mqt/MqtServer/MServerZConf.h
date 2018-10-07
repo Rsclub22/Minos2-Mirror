@@ -28,7 +28,6 @@
 #include <QDateTime>
 
 #define UPNP_PORT 9999
-#define UPNP_GROUP "239.255.0.1"
 
 //---------------------------------------------------------------------------
 class Server
@@ -76,14 +75,15 @@ class TZConf: public QObject
 
       QTimer beaconTimer;
 
-      bool sendMessage(bool beaconReq );
+      bool sendMessage();
       void readServerList();
 
       static TZConf *ZConf;
 
       unsigned int beaconInterval = 0;   // once a minute
+      unsigned int beaconResponseDelay = 0;   // once a minute
       QDateTime lastTick;
-      bool sendBeaconResponse;
+      QDateTime sendBeaconResponse;
 
 public:  		// User declarations
 
@@ -102,7 +102,7 @@ public:  		// User declarations
       }
 
       QString getZConfString(bool beaconreq);
-      Server *processZConfString(const QString &message, const QHostAddress &host, bool &beaconResponse);
+      Server *processZConfString(const QString &message, const QHostAddress &host, QDateTime &beaconResponse);
       void publishDisconnect(const QString &name);
       void closeDown();
 private slots:

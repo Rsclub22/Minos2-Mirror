@@ -62,8 +62,9 @@ static QString getServerId()
 TZConf::TZConf( )
 {
    ZConf = this;
-   sendBeaconResponse = false;  // so we send a true beacon with request
+   sendBeaconResponse = QDateTime();  // so we send a true beacon with request
    beaconInterval = 60000;   // once a minute
+   beaconResponseDelay = 100;
    lastTick = QDateTime::currentDateTimeUtc().addSecs(-59); // force a beacon soon
 }
 TZConf::~TZConf( )
@@ -168,22 +169,27 @@ void TZConf::onTimeout()
         onReadyRead();      // catcher for missed datagrams - don't know why they go missing
     }
 
-   if (sendBeaconResponse || lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval )
+   if (sendBeaconResponse.isValid() || lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval )
    {
-      trace(QString("Timeout: Sending beacon, sendBeaconResponse = ") + (sendBeaconResponse?"true":"false"));
+      trace(QString("Timeout: Sending beacon, sendBeaconResponse = ") + ((sendBeaconResponse.isValid() && sendBeaconResponse.msecsTo(QDateTime::currentDateTime()) > beaconResponseDelay)?"true":"false"));
+      sendMessage( );   // timer requests beaconing, beacon just responds
       lastTick = QDateTime::currentDateTime();
-
-      sendMessage( sendBeaconResponse );   // timer requests beaconing, beacon just responds
-      sendBeaconResponse = false;
    }
 }
 
 
-bool TZConf::sendMessage(bool beaconReq )
+bool TZConf::sendMessage( )
 {
+    bool reqBeacon = false;
+
+    if (sendBeaconResponse.isValid() && sendBeaconResponse.msecsTo(QDateTime::currentDateTime()) > beaconResponseDelay)
+    {
+        sendBeaconResponse = QDateTime();
+        reqBeacon = true;
+    }
     for (QVector<QSharedPointer<UDPSocket> >::iterator i = TxSocks.begin(); i != TxSocks.end(); i++)
     {
-        QString mess = getZConfString(beaconReq);
+        QString mess = getZConfString(reqBeacon);
         (*i)->sendMessage(mess);
     }
    return true;
@@ -368,9 +374,9 @@ QString TZConf::getZConfString(bool beaconreq)
                + " />";
 }
 //==============================================================================
-Server *TZConf::processZConfString(const QString &message, const QHostAddress &host, bool &sendBeaconResponse)
+Server *TZConf::processZConfString(const QString &message, const QHostAddress &host, QDateTime &sendBeaconResponse)
 {
-    sendBeaconResponse = false;
+    sendBeaconResponse = QDateTime();
     Server *srv = nullptr;
     TiXmlDocument xdoc;
     TIXML_STRING smessage = message.toStdString();// allowed conversion through TIXML_STRING
@@ -390,7 +396,7 @@ Server *TZConf::processZConfString(const QString &message, const QHostAddress &h
         srv = zcPublishServer( UUID, station, host, iPort );
         if ( request.size() && UUID != getServerId())
         {
-            sendBeaconResponse = true;   // delay the response, give the other end a chance...
+            sendBeaconResponse = QDateTime::currentDateTime();   // delay the response, give the other end a chance...
         }
     }
     return srv;
