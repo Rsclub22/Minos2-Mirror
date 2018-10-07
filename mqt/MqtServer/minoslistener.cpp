@@ -53,6 +53,10 @@ void MinosListener::addListenerSlot( MinosCommonConnection *il )
     QHostAddress h = il->sock->peerAddress();
     il->connectHost = h;
     trace( "addListenerSlot: from " + il->connectHost.toString() );
+    if (il->connectHost.toString().isEmpty())
+    {
+        trace("xx");
+    }
     i_array.push_back( il );
 
     il->initialise();

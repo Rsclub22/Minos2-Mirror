@@ -196,7 +196,7 @@ bool TZConf::sendMessage( )
     }
     for (QVector<QSharedPointer<UDPSocket> >::iterator i = TxSocks.begin(); i != TxSocks.end(); i++)
     {
-        QString mess = getZConfString(reqBeacon);
+        QString mess = getZConfString(reqBeacon, (*i)->qua.ip().toString());
         (*i)->sendMessage(mess);
     }
    return true;
@@ -206,8 +206,6 @@ bool TZConf::sendMessage( )
 void TZConf::onReadyRead()
 {
     trace("TZConf::onReadyRead()");
-    QString datagram;
-    QString sender;
     while (readSocket.hasPendingDatagrams())
     {
         QByteArray buf;
@@ -368,7 +366,7 @@ void TZConf::publishDisconnect(const QString &name)
    }
 }
 //==============================================================================
-QString TZConf::getZConfString(bool beaconreq)
+QString TZConf::getZConfString(bool beaconreq, const QString &h)
 {
    static int sequence = 0;
    QString Uuid = getServerId();
@@ -376,12 +374,13 @@ QString TZConf::getZConfString(bool beaconreq)
                + "seq='" + QString::number(sequence++)
                + "' UUID='" + Uuid
                + "' name='" + getName()
+               + "' ip='" + h
                + "' port='" + QString::number(MinosServerPort) + "'"
                + (beaconreq?" request='true'":"")
                + " />";
 }
 //==============================================================================
-Server *TZConf::processZConfString(const QString &message, const QHostAddress &host, QDateTime &sendBeaconResponse)
+Server *TZConf::processZConfString(const QString &message, QHostAddress &host, QDateTime &sendBeaconResponse)
 {
     sendBeaconResponse = QDateTime();
     Server *srv = nullptr;
@@ -396,6 +395,11 @@ Server *TZConf::processZConfString(const QString &message, const QHostAddress &h
         QString station = getAttribute( tix, "name" );
         QString port = getAttribute( tix, "port" );
         QString request = getAttribute( tix, "request" );
+        QString ip = getAttribute(tix, "ip");
+        if (host.toString().isEmpty())
+        {
+            host.setAddress(ip);
+        }
 
         // publish what came in
 

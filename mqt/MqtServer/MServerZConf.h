@@ -50,9 +50,6 @@ extern Server *findIp( const QString s );
 class UDPSocket: public QObject
 {
     Q_OBJECT
-    QSharedPointer<QUdpSocket> qus;
-    QString ifaceName;
-    QNetworkAddressEntry qua;
 
 public:
     UDPSocket();
@@ -60,6 +57,9 @@ public:
     bool setup(QNetworkInterface &intr, QNetworkAddressEntry &addr);
 
     bool sendMessage(const QString &mess );
+    QSharedPointer<QUdpSocket> qus;
+    QString ifaceName;
+    QNetworkAddressEntry qua;
 };
 class TZConf: public QObject
 {
@@ -101,8 +101,8 @@ public:  		// User declarations
          return localName;
       }
 
-      QString getZConfString(bool beaconreq);
-      Server *processZConfString(const QString &message, const QHostAddress &host, QDateTime &beaconResponse);
+      QString getZConfString(bool beaconreq, const QString &h);
+      Server *processZConfString(const QString &message, QHostAddress &host, QDateTime &beaconResponse);
       void publishDisconnect(const QString &name);
       void closeDown();
 private slots:

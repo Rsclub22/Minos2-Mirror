@@ -87,7 +87,7 @@ void MinosServerConnection::on_connected()
     trace( QString( "Server: Connected OK to " ) + srv->station + " host " + srv->host.toString() );
     RPCRequest *rpa = new RPCRequest( clientServer, MinosServer::getMinosServer() ->getServerName(), "ServerSetFromId" );   // for our local server, this one MUST have a from
     rpa->addParam( MinosServer::getMinosServer() ->getServerName() );
-    rpa->addParam( TZConf::getZConf()->getZConfString(false ) );
+    rpa->addParam( TZConf::getZConf()->getZConfString(false, connectHost.toString() ) );
     sendAction( rpa );
     delete rpa;
 }
