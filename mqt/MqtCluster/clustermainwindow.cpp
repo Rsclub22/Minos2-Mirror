@@ -12,7 +12,10 @@
 
 
 #include <QSettings>
+#include <QTimer>
+#include <QProcessEnvironment>
 #include <QDebug>
+
 #include "clustermainwindow.h"
 #include "clustercommon.h"
 #include "ui_clustermainwindow.h"
@@ -31,12 +34,17 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
 
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    appName = env.value("MQTRPCNAME", "") ;
+
     createCloseEvent();
 
     connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
     LogTimer.start(100);
 
     setWindowTitle("Minos Cluster Server");
+    status = new QLabel;
+    ui->statusBar->addWidget(status);
 
     QSettings settings;
     geoStr = QString("clusterServer/geometry");
@@ -53,24 +61,26 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView = new QTableView();
     dxSpotView->setModel(dxSpotDataModel);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+    //dxSpotView->setStyleSheet("QHeaderView::section { font: bold; height: 14px }");
 
-    restoreDxSpotViewColumns();
-    dxSpotView->resizeRowsToContents();
-    dxSpotView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    QHeaderView *verticalHeader = dxSpotView->verticalHeader();
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    verticalHeader->setDefaultSectionSize(18);
+
+
+
 
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
 
-    //dxSpotView->resizeColumnsToContents();
-    //qDebug() << "col0 =" << dxSpotView->columnWidth(0);
-    //dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-    //qDebug() << "col0 =" << dxSpotView->columnWidth(0);
-    //dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-    //dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-    //dxSpotView->setColumnWidth(LOC_COL_NUM, LOC_COL_WIDTH);
-    //dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-    //dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+    dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+    dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+    dxSpotView->setColumnWidth(LOC_COL_NUM, LOC_COL_WIDTH);
+    dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+    dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
+    restoreDxSpotViewColumns();
 
     rawClusterDataView = new QPlainTextEdit();
 
@@ -79,11 +89,12 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     connect(ui->actionSetup, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
 
-    connect(ui->nodeCb, SIGNAL(activated(const QString &nodeName)), this, SLOT(connectToNode(const QString &nodeName)));
+    connect(ui->nodeCb, SIGNAL(activated(QString)), this, SLOT(connectToNode(QString)));
 
     connect(client, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
     connect(client, SIGNAL(loginRequired()), this, SLOT(logIn()));
     connect(client, SIGNAL(connectionError(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
+    connect(client, SIGNAL(loggedOut()), this, SLOT(loggedOut()));
     connect(client, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(parseDX(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
@@ -98,22 +109,10 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     currentUserLocator = setupCluster->getUserLocator();
     currentUserQTH = setupCluster->getUserQth();
 
-    // get current node from file
-    currentNodeName = setupCluster->getCurrentNodeName();
-    if (setupCluster->doesClusterNameExist(currentNodeName))
-    {
-        ui->nodeCb->setCurrentText(currentNodeName);
-        // get current node data
-        QStringList nd = setupCluster->getClusterInfo(currentNodeName);
-        currentNodeName = nd[0];
-        currentAddress = nd[1];
-        currentPort = nd[2];
-        currentPassword = nd[3];
+    // get current node from file and then connect to host
+    connectToSelectedHost(setupCluster->getCurrentNodeName());
 
 
-        client->connectToHost(currentAddress, currentPort.toUShort());
-
-    }
 }
 
 
@@ -121,6 +120,11 @@ ClusterMainWindow::~ClusterMainWindow()
 {
     delete ui;
 }
+
+
+
+
+
 
 void ClusterMainWindow::onLaunchSetup()
 {
@@ -155,48 +159,98 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
 
     if (nodeName.isEmpty() && nodeConnected)
     {
-        //disconnectNode();
-       // currentNode = "";
+        disconnectNode();
+        currentNodeName = "";
         currentAddress = "";
         currentPort = "";
         currentPassword = "";
-        //saveCurrentNode(currentNode);
+        setupCluster->saveCurrentNodeName(currentNodeName);
     }
     else
     {
-        //if (currentNode == nodeName)
-       // {
-            // reconnect
-      //      disconnectNode();
-     //       connectNode(currentCallsign, currentPassword, currentNode, currentAddress, currentPort);
-       // }
+        if (currentNodeName == nodeName)
+        {
+            //reconnect
+            disconnectNode();
+            client->connectToHost(currentAddress, currentPort.toUShort());
+        }
+        else
+        {
+            connectToSelectedHost(nodeName);
+        }
+
     }
 
 
 
 }
+
+
+void ClusterMainWindow::connectToSelectedHost(QString nodeName)
+{
+
+    currentNodeName = nodeName;
+
+    if (setupCluster->doesClusterNameExist(currentNodeName))
+    {
+        ui->nodeCb->setCurrentText(currentNodeName);
+        // get current node data
+        QStringList nd = setupCluster->getClusterInfo(currentNodeName);
+        currentNodeName = nd[0];
+        currentAddress = nd[1];
+        currentPort = nd[2];
+        currentPassword = nd[3];
+
+
+        client->connectToHost(currentAddress, currentPort.toUShort());
+
+    }
+
+}
+
+
+
+
+
+
 
 
 
 void ClusterMainWindow::connectionEstab()
 {
-    qDebug() << "connection established";
-
-
+    nodeConnected = true;
+    trace(QString("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort));
 }
 
 void ClusterMainWindow::connectionError(QAbstractSocket::SocketError error)
 {
-    qDebug() << "connection failed ";
+    trace(QString("Connection failed error %1").arg(error));
 }
 
 
 
 void ClusterMainWindow::logIn()
 {
-    qDebug() << "send logon message\n";
+    trace(QString("Login Start - Send logon message\n"));
     client->login(QString("%1\r\n").arg(currentUserCallsign), currentPassword);
     loginStart = true;
+
+}
+
+void ClusterMainWindow::loggedOut()
+{
+    trace(QString("Logged Out of node  %1").arg(currentNodeName));
+    currentNodeName = "";
+    currentAddress = "";
+    currentPort = "";
+    nodeConnected = false;
+
+}
+
+void ClusterMainWindow::disconnectNode()
+{
+    trace(QString("Disconnect Node %1").arg(currentNodeName));
+    client->logout();
 
 }
 
@@ -388,4 +442,14 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
     settings.setValue(geoStr, saveGeometry());
     trace("Minos Cluster Server Closing");
     QWidget::closeEvent(event);
+}
+
+
+void ClusterMainWindow::onStdInRead(QString cmd)
+{
+    trace("Command read from stdin: " + cmd);
+    if (cmd.indexOf("ShowServers", Qt::CaseInsensitive) >= 0)
+        setShowServers(true);
+    if (cmd.indexOf("HideServers", Qt::CaseInsensitive) >= 0)
+        setShowServers(false);
 }

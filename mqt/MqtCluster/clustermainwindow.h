@@ -63,10 +63,15 @@ private slots:
     void on_sectionResized(int, int, int);
     void LogTimerTimer();
 
+    void onStdInRead(QString cmd);
+    void loggedOut();
 private:
     Ui::ClusterMainWindow *ui;
     StdInReader stdinReader;
     class QTimer LogTimer;
+
+    QString appName;
+    QLabel* status;
 
     QtTelnet* client;
     Cluster* dxCluster;
@@ -112,6 +117,8 @@ private:
     void restoreDxSpotViewColumns();
 
     void closeEvent(QCloseEvent *event);
+    void disconnectNode();
+    void connectToSelectedHost(QString nodeName);
 };
 
 #endif // CLUSTERMAINWINDOW_H
