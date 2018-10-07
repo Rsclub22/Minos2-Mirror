@@ -305,6 +305,7 @@ Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
         }
         else
         {
+            trace("Creating MinosServerConnection zcPublishServer for " + name);
             MinosServerConnection *msc = new MinosServerConnection();
             msc->mConnect(s);
             MinosServerListener *msl = MinosServerListener::getListener();

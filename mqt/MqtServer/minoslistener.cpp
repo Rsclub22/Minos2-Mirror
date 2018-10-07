@@ -123,6 +123,7 @@ void MinosListener::clearSockets()
 
 MinosCommonConnection *MinosServerListener::makeConnection(QTcpSocket *s)
 {
+    trace("Creating MinosServerConnection makeConnection");
     MinosServerConnection *c = new MinosServerConnection();
 
     c->sock = QSharedPointer<QTcpSocket>(s);
@@ -167,6 +168,7 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
         if ( srv )
         {
             // set ourselves up to connect
+            trace("Creating MinosServerConnection sendServer for " + to.server);
             MinosServerConnection * s = new MinosServerConnection();
             s->mConnect( srv );
             addListenerSlot( s );
