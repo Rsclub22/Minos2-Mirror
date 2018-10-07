@@ -159,6 +159,13 @@ void TZConf::startZConf(const QString &name)
 }
 void TZConf::onTimeout()
 {
+    static bool firstTime = true;
+    if (firstTime)
+    {
+        sendBeaconResponse = QDateTime::currentDateTime().addSecs(-100);
+        firstTime = false;
+    }
+
     if (lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval)
     {
         readServerList();
