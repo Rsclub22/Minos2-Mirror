@@ -988,7 +988,8 @@ void QtTelnet::sendControl(Control ctrl)
     case EraseLine:
         c = static_cast<char>(Common::EL);
         break;
-    default:
+    //default:
+
         return;
     }
     const char command[2] = {static_cast<char>(Common::IAC), c};
