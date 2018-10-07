@@ -13,6 +13,7 @@
 
 #include <QTcpServer>
 #include <QTimer>
+#include <QTableWidget>
 
 #include "MinosLink.h"
 class Server;
@@ -38,6 +39,7 @@ class MinosListener:public QObject
       virtual ~MinosListener();
       virtual bool initialise(QString type, quint16 port );
 
+      virtual MinosCommonConnection *getConnection(int);
       virtual void closeDown() = 0;
 
 private slots:
@@ -69,6 +71,8 @@ class MinosServerListener: public MinosListener
       bool sendServer(TiXmlElement *pak );
       void checkServerConnected( Server *s, bool force );
 
+      void buildTable(QTableWidget *tab);
+
       void closeDown() override;
 };
 //==============================================================================
@@ -88,6 +92,7 @@ class MinosClientListener: public MinosListener
       MinosClientListener();
       ~MinosClientListener() override;
       bool sendClient(TiXmlElement *pak );
+      void buildTable(QTableWidget *tab);
       virtual void closeDown() override;
 };
 //==============================================================================

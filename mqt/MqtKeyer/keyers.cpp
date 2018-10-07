@@ -18,13 +18,14 @@
 
 //==============================================================================
 // ??? add up/down on volume sliders, and reload/save ALSA?
+// match against enum LineModes
 static QStringList lineModeStrings = {
     "None",
-    "Record 1/2",
     "Play 1/2 - Pip",
     "Play 1/2 - No Pip",
-    "Test Play 1/2 - no PTT",
     "Tuning Tones 1/2",
+    "Record 1/2",
+    "Mode 5",
     "Mode 6",
     "Mode 7",
     "Mode 8",
@@ -495,7 +496,7 @@ bool commonKeyer::linesModeChanged( int state )
    {
       trace( "linesModeChanged(" + QString::number( state ) + ")" );
    }
-   linesMode = state;
+   linesMode = static_cast<LineModes>(state);
    return true;
 }
 void commonKeyer::queueFinished()
@@ -644,57 +645,103 @@ bool voiceKeyer::pttChanged( int state )
 bool voiceKeyer::L1Changed( int state )
 {
    commonKeyer::L1Changed( state );
-   if ( started && currentKeyer == this )
-   {
-       // Look at linesMode, switch what L1 does accordingly
+   return L12Changed(state, eL1);
 
-      if ( !state && !recPending && !boxRecPending )
-      {
-         // will be CQ1 or dit paddle	 RELEASED
-
-         KeyerAction * ca = KeyerAction::getCurrentAction();
-         if ( !ca || !ca->playingFile( "CQF1.WAV" ) )
-         {
-            KeyerAction::currentAction.clear_after( ca );
-            new PlayAction( "CQF1.WAV", false, kconf.startDelay, kconf.enableAutoRepeat ? kconf.autoRepeatDelay : 0, true, false );
-            KeyerAction::getCurrentAction() ->LxChanged( eL1, state );
-         }
-      }
-      else
-         if ( state )
-         {
-            if ( L2State && L1State )
-            {
-               // use this as reset, as well as start rec sequence
-
-               SoundSystemDriver::getSbDriver() ->stopall();                       // make sure nothing is happening
-               KeyerAction::currentAction.freeAll();	// clear all the chains
-
-               new BoxRecordAction();
-            }
-            else
-               if ( boxRecPending )
-                  KeyerAction::getCurrentAction() ->LxChanged( eL1, state );
-         }
-   }
-   return true;
 }
 bool voiceKeyer::L2Changed( int state )
 {
    commonKeyer::L2Changed( state );
+   return L12Changed(state, eL2);
+}
+bool voiceKeyer::L12Changed( int state, sbControls sbc )
+{
    if ( started && currentKeyer == this )
    {
        // Look at linesMode, switch what L1 does accordingly
+       KeyerAction * ca = KeyerAction::getCurrentAction();
 
+       switch (linesMode)
+       {
+       case elmRecord:
+           if (!state && !ca)
+                (new BoxRecordAction()) ->LxChanged( sbc, state );
+           return true;
+
+       case elmPlayPip:
+           if (!state && !ca)
+               setPipEnabled(true);
+           break;
+
+       case elmPlayNoPip:
+           if (!state && !ca)
+               setPipEnabled(false);
+           break;
+
+       case elmTones:
+       {
+           if (!state && !ca)
+           {
+               if (sbc  == eL1)
+                   sendTone1();
+               else
+                   sendTone2();
+           }
+           return true;
+       }
+       case elmAppsRestartClose:
+           //communicate with appstarter/logger
+           // to do the necessary
+           if (!state && !ca)
+           {
+               if (sbc == eL1)
+               {
+                   std::cout << "!!RestartApps!!" << std::endl;
+               }
+               else
+               {
+                   std::cout << "!!CloseApps!!" << std::endl;
+               }
+           }
+           return true;
+       case elmOSRestartClose:
+           //communicate with appstarter/logger
+           // to do the necessary
+           if (!state && !ca)
+           {
+               if (sbc == eL1)
+               {
+                   std::cout << "!!RestartOS!!" << std::endl;
+               }
+               else
+               {
+                   std::cout << "!!CloseOS!!" << std::endl;
+               }
+           }
+           // first shutdown all apps, then
+           //systemctl poweroff/reboot
+           return true;
+
+       default:
+       case elmNone:
+       case elm6:
+       case elm7:
+       case elm8:
+       case elm9:
+       case elm10:
+       case elm11:
+       case elm12:
+       case elmMGM:
+            return false;
+
+       }
       if ( !state && !recPending && !boxRecPending )
       {
-         // will be CQ2 or dah paddle
-         KeyerAction * ca = KeyerAction::getCurrentAction();
-         if ( !ca || !ca->playingFile( "CQF2.WAV" ) )
+         QString cqWavFile = (sbc == eL1)?"CQF1.WAV":"CQF2.WAV";
+         if ( !ca || !ca->playingFile( cqWavFile ) )
          {
             KeyerAction::currentAction.clear_after( ca );
-            new PlayAction( "CQF2.WAV", false, kconf.startDelay, kconf.enableAutoRepeat ? kconf.autoRepeatDelay : 0, true, false );
-            KeyerAction::getCurrentAction() ->LxChanged( eL2, state );
+            new PlayAction( cqWavFile, false, kconf.startDelay, kconf.enableAutoRepeat ? kconf.autoRepeatDelay : 0, true, false );
+            KeyerAction::getCurrentAction() ->LxChanged( sbc, state );
          }
       }
       else
@@ -711,7 +758,7 @@ bool voiceKeyer::L2Changed( int state )
             }
             else
                if ( boxRecPending )
-                  KeyerAction::getCurrentAction() ->LxChanged( eL2, state );
+                  KeyerAction::getCurrentAction() ->LxChanged( sbc, state );
          }
    }
    return true;

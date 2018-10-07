@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(&startTimer, SIGNAL(timeout()), this, SLOT(startTimer_Timeout()));
         startTimer.start(100);
     }
+
+    connect(MinosConfig::getMinosConfig(), SIGNAL(stdOutLine(QString)), this, SLOT(on_stdOutLine(QString)));
 }
 
 MainWindow::~MainWindow()
@@ -72,5 +74,54 @@ void MainWindow::startTimer_Timeout()
 void MainWindow::start()
 {
     MinosConfig::getMinosConfig() ->start();
+}
+void MainWindow::on_stdOutLine(QString line)
+{
+    QStringList l = line.split("!!");
+    if (l.size() == 3)  // we have actually split so we have just one command
+    {
+        if (l[1] == "RestartApps")
+        {
+            m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
+                                   [this]{
+                                        this->disconnect(m_connection);
+                                        m_connection =  QMetaObject::Connection();
+                                        MinosConfig::getMinosConfig()->start();
+                                    });
+            MinosConfig::getMinosConfig()->stop();
+        }
+        else if (l[1] == "CloseApps")
+        {
+            m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
+                                   [this]{
+                                        this->disconnect(m_connection);
+                                        m_connection =  QMetaObject::Connection();
+                                        this->close();
+                                    });
+            MinosConfig::getMinosConfig()->stop();
+        }
+        else if (l[1] == "RestartOS")
+        {
+            m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
+                                   [this]{
+                                        this->disconnect(m_connection);
+                                        m_connection =  QMetaObject::Connection();
+                                        system("systemctl reboot");
+                                        this->close();
+                                    });
+            MinosConfig::getMinosConfig()->stop();
+        }
+        else if (l[1] == "CloseOS")
+        {
+            m_connection = connect(MinosConfig::getMinosConfig(), &MinosConfig::allStopped,
+                                   [this]{
+                                        this->disconnect(m_connection);
+                                        m_connection =  QMetaObject::Connection();
+                                        system("systemctl poweroff");
+                                        this->close();
+                                    });
+            MinosConfig::getMinosConfig()->stop();
+        }
+    }
 }
 

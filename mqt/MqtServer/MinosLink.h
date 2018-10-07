@@ -103,6 +103,10 @@ class MinosCommonConnection: public QObject
       }
       virtual void sendKeepAlive( )
       {}
+      QString getClientServer() const;
+
+      QString getClientUser() const;
+
 private slots:
       void on_readyRead();
       void on_disconnected();

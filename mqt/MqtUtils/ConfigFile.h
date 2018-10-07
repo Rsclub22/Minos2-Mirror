@@ -120,8 +120,6 @@ public:  		// User declarations
 //    void cleanElementsOnCancel();
     void saveAll();
 
-    void start();
-    void stop();
     void setThisServerName( const QString &circle );
 
     bool getAutoStart();
@@ -130,6 +128,14 @@ public:  		// User declarations
     QString checkConfig();
     bool anyRunning();
 
+    void checkAllStopped();
+public slots:
+    void start();
+    void stop();
+
+signals:
+    void    stdOutLine(QString);
+    void    allStopped();
 };
 //---------------------------------------------------------------------------
 

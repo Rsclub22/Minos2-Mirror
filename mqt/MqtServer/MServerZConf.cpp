@@ -60,10 +60,9 @@ static QString getServerId()
 }
 //---------------------------------------------------------------------------
 TZConf::TZConf( )
-      : waitNameReply( false )
 {
    ZConf = this;
-   sendBeaconResponse = false;
+   sendBeaconResponse = false;  // so we send a true beacon with request
    beaconInterval = 60000;   // once a minute
    lastTick = QDateTime::currentDateTimeUtc().addSecs(-59); // force a beacon soon
 }
@@ -82,13 +81,10 @@ void TZConf::closeDown()
 }
 
 /*
- * We seem to need one socket per interface. Our old QT code looped through the interfaces
- * and broadcast (not multicast) on all the IPV4 ones (NB not localhost...)
+ * We need one socket per interface. Loop through the interfaces
+ * and broadcast on all the IPV4 ones (NB not localhost...)
  *
- * It then bound on "any IPV4 address" so one socket managed all the receives
- *
- * BCB code creates a socket per interface, and adds an extra for localhost, binds each for
- * receive, and then loops through them for sending
+ * One socket manages all the receives
  *
  */
 void TZConf::startZConf(const QString &name)
@@ -97,13 +93,9 @@ void TZConf::startZConf(const QString &name)
 
     localName = name.trimmed();
 
-    groupAddress = QHostAddress(UPNP_GROUP);
-
-    QSharedPointer<MCReadSocket> mcrs(new MCReadSocket());
-    mcrs->setupRO();
-    rxSocket = mcrs;
-
-    connect(rxSocket.data(), SIGNAL(readyRead(QString, QString )), this, SLOT(onReadyRead(QString, QString)), Qt::QueuedConnection);
+    // set up the receiver
+    readSocket.bind(UPNP_PORT);
+    connect(&readSocket, SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::QueuedConnection);
 
     // Get network interfaces list
 
@@ -116,7 +108,8 @@ void TZConf::startZConf(const QString &name)
             continue;
         if (!ifaces[i].flags().testFlag(QNetworkInterface::IsRunning))
             continue;
-        // Now get all IP addresses for the current interface
+
+        // Now get all IP addresses for this interface
         QList<QNetworkAddressEntry> addrs = ifaces[i].addressEntries();
 
         // And for any IP address, if it is IPv4 and the interface is active, make a socket
@@ -125,15 +118,13 @@ void TZConf::startZConf(const QString &name)
             if ((addrs[j].ip().protocol() == QAbstractSocket::IPv4Protocol)
                     && !addrs[j].ip().toString().isEmpty())
             {
+                QSharedPointer<UDPSocket> qus(new UDPSocket());
+
+                bool res = qus->setup(ifaces[i], addrs[j]);
+
+                if (res)
                 {
-                    QSharedPointer<UDPSocket> qus(new UDPSocket());
-
-                    bool res = qus->setup(ifaces[i], addrs[j]);
-
-                    if (res)
-                    {
-                        TxSocks.push_back(qus);
-                    }
+                    TxSocks.push_back(qus);
                 }
             }
         }
@@ -145,11 +136,7 @@ void TZConf::startZConf(const QString &name)
 
       UUID is unique to this "machine" (more likely username)
       , and is to allow us to manage
-      station name changes. So where should we keep it?
-      Looks like registry may be favourite; we don't really
-      want two serevrs running on a single machine.
-
-      Actually we can use the GUID as the event name for servers...
+      station name changes.
 
       "request" true asks recipient to beacon immediately
       beacon messages do NOT force recipients to beacon
@@ -164,11 +151,7 @@ void TZConf::startZConf(const QString &name)
       We also need to time out stations which we haven't heard from.
    */
 
-   // and now we go and sit on a select on all the notify sockets
-   // but also remember to beacon occasionally...
-
    connect (&beaconTimer, SIGNAL(timeout()), this, SLOT(onTimeout()));
-
 
    beaconTimer.setInterval(100);
    beaconTimer.start();
@@ -179,6 +162,11 @@ void TZConf::onTimeout()
     {
         readServerList();
     }
+    if (readSocket.hasPendingDatagrams())
+    {
+        trace("TZConf::onTimeout() - datagrams pending");
+        onReadyRead();      // catcher for missed datagrams - don't know why they go missing
+    }
 
    if (sendBeaconResponse || lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval )
    {
@@ -188,7 +176,6 @@ void TZConf::onTimeout()
       sendMessage( sendBeaconResponse );   // timer requests beaconing, beacon just responds
       sendBeaconResponse = false;
    }
-   rxSocket->onTimeout();
 }
 
 
@@ -202,11 +189,27 @@ bool TZConf::sendMessage(bool beaconReq )
    return true;
 }
 
-void TZConf::onReadyRead(QString datagram, QString sender)
-{
-    // from MCReadSocket
 
-    processZConfString(QString(datagram), sender, sendBeaconResponse);
+void TZConf::onReadyRead()
+{
+    trace("TZConf::onReadyRead()");
+    QString datagram;
+    QString sender;
+    while (readSocket.hasPendingDatagrams())
+    {
+        QByteArray buf;
+        buf.resize(static_cast<int>(readSocket.pendingDatagramSize()));
+        QHostAddress host;
+        quint16 port;
+        qint64 res = readSocket.readDatagram(buf.data(), buf.size(), &host, &port);
+        QString dg = QString(buf);
+
+        trace("Datagram received from " + host.toString() + " " + dg);
+        if (res > 0)
+        {
+            processZConfString(dg, host.toString(), sendBeaconResponse);
+        }
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -235,10 +238,13 @@ void TZConf::ServerScan()
 void TZConf::readServerList()
 {
    trace("Reading Server List File");
+
    // Read the server override file
+
    QSettings servers(GetCurrentDir() + "/Configuration/Servers.ini", QSettings::IniFormat);
    QStringList sl = servers.childGroups();
 
+//   trace(QString::number(sl.size()) + " child groups");
    for ( int i = 0; i < sl.count(); i++ )
    {
       servers.beginGroup(sl[i]);
@@ -248,6 +254,9 @@ void TZConf::readServerList()
       QString station = servers.value( "Station" ).toString();
       QString port = servers.value( "Port" ).toString();
 
+    servers.endGroup();
+
+//    trace(QString::number(i) + " " + sl[i] + " " + uuid + " " + host + " " + station + " " + port);
 
       if ( host.size() == 0 )
       {
@@ -272,7 +281,7 @@ void TZConf::readServerList()
 
    }
    ServerScan();
-   trace("Finished reading Server List File");
+   //trace("Finished reading Server List File");
 }
 
 //---------------------------------------------------------------------------
@@ -322,7 +331,7 @@ Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
 }
 void TZConf::publishDisconnect(const QString &name)
 {
-    trace("publishDisconnect");
+   trace("publishDisconnect");
    Server *s = findStation( name );
    if ( s )
    {
@@ -332,14 +341,14 @@ void TZConf::publishDisconnect(const QString &name)
 //==============================================================================
 QString TZConf::getZConfString(bool beaconreq)
 {
-    static int sequence = 0;
+   static int sequence = 0;
    QString Uuid = getServerId();
    return  QString("<minosServer ")
                + "seq='" + QString::number(sequence++)
                + "' UUID='" + Uuid
                + "' name='" + getName()
                + "' port='" + QString::number(MinosServerPort) + "'"
-               + (beaconreq?"":" request='true'")
+               + (beaconreq?"":" request='true'")       // if a beacon response, don't request another beacon
                + " />";
 }
 //==============================================================================
@@ -359,18 +368,13 @@ Server *TZConf::processZConfString(const QString &message, const QString &recvHo
         QString port = getAttribute( tix, "port" );
         QString request = getAttribute( tix, "request" );
 
-        // publish what came in - possibly we should publish the XML string
-        // against the UUID?
-        iPort = toQUint16(port, MinosServerPort);
+        // publish what came in
+
+        quint16 iPort = toQUint16(port, MinosServerPort);
         srv = zcPublishServer( UUID, station, recvHost, iPort );
         if ( request.size() && UUID != getServerId())
         {
             sendBeaconResponse = true;   // delay the response, give the other end a chance...
-            // BUT this means we could try to connect before they will recognise us.
-            // Should we queue the publish until then as well?
-
-            // But the UDP may fail to get there, so we need to be able to cope with new
-            // unadvertised connectors
         }
     }
     return srv;
@@ -406,52 +410,22 @@ UDPSocket::~UDPSocket()
 bool UDPSocket::setup(QNetworkInterface &iface, QNetworkAddressEntry &addr)
 {
     ifaceName = iface.humanReadableName();
-    qui = iface;
     qus = QSharedPointer<QUdpSocket>(new QUdpSocket);
+    qua = addr;
 
-    //connect(qus.data(), SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
-
-    connect(qus.data(), SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(onSocketStateChange(QAbstractSocket::SocketState)));
-
-    qui = iface;
-    trace("Binding to " + addr.ip().toString());
-    bool res = qus->bind(
-                addr.ip(),//addr.ip(), QHostAddress::AnyIPv4,//TZConf::getZConf()->groupAddress,
-                UPNP_PORT,
-                QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint
-                );
-
-    if (res)
-    {
-        qus->setSocketOption(QAbstractSocket::MulticastTtlOption, QVariant(4));
-    }
-    trace(QString("UDP bind returns ") + (res?"true":"false") + " on " + addr.ip().toString() + (res?"":(" error " + qus->errorString())));
-    return res;
+    return true;
 }
-void UDPSocket::onSocketStateChange (QAbstractSocket::SocketState state)
-{
-    if ( state == QAbstractSocket::BoundState )
-    {
-        bool res = qus->joinMulticastGroup(TZConf::getZConf()->groupAddress, qui);
-        if (res)
-        {
-            trace("Bound and set multicast interface " + TZConf::getZConf()->groupAddress.toString()
-                  + " on " + qus->localAddress().toString() + " interface :" + ifaceName);
-        }
-        else
-        {
-            trace("Failed to set multicast interface " + TZConf::getZConf()->groupAddress.toString()
-                  + " on " + qus->localAddress().toString() + " interface :" + ifaceName);
-        }
-    }
-}
+
 bool UDPSocket::sendMessage(const QString &mess )
 {
     QByteArray packet = QByteArray(mess.toStdString().c_str());
 
-    /*int ret =*/ qus->writeDatagram(packet.data(), packet.length(), TZConf::getZConf()->groupAddress, UPNP_PORT);
+    qint64 res = qus->writeDatagram(packet.data(), packet.length(), qua.broadcast(), UPNP_PORT);
 
-    trace("send datagram on " + ifaceName
+    QString err = "No error";
+    if (res < 0)
+        err = qus->error();
+    trace("send datagram on " + ifaceName + " result " + err
           + " : " + mess);
 
     return true;

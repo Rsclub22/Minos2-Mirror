@@ -119,10 +119,20 @@ MinosCommonConnection::MinosCommonConnection()
 }
 MinosCommonConnection::~MinosCommonConnection()
 {}
+QString MinosCommonConnection::getClientServer() const
+{
+    return clientServer;
+}
+
+QString MinosCommonConnection::getClientUser() const
+{
+    return clientUser;
+}
+
 QString MinosCommonConnection::makeJid()
 {
-   QString id;
-   if ( clientUser.length() )
+    QString id;
+    if ( clientUser.length() )
       id = clientUser + "@";
    id += clientServer;
 
