@@ -3,7 +3,7 @@ C:
 setlocal
 
 set QtTools=C:\Qt\Tools\mingw530_32\bin
-set QtKit="C:\Qt\5.10.1\mingw53_32\bin"
+set QtKit="C:\Qt\5.11.2\mingw53_32\bin"
 
 if exist %QtKit% goto kitInstalled
 
@@ -25,8 +25,17 @@ if not exist build mkdir build
 cd build
 
 qmake.exe ..\mqt\mqt.pro
+IF %ERRORLEVEL% == 0 goto make
+  echo qmake failed; please fix errors and rebuild
+  goto reset
+:make
 
 mingw32-make release
+
+IF %ERRORLEVEL% == 0 goto installer
+  echo mingw32-make failed; please fix errors and rebuild
+  goto reset
+:installer
 
 cd \
 if not exist temp mkdir temp
@@ -53,7 +62,7 @@ copy %MROOT%\build\MqtRigControl\release\MqtRigControl.exe Bin
 copy %MROOT%\build\MqtRotator\release\MqtRotator.exe Bin
 copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
 
-copy C:\Projects\hamlib-w32-3.1\bin\*.dll Bin
+copy C:\Projects\hamlib-w32-3.3\bin\*.dll Bin
 
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration
@@ -84,7 +93,10 @@ mkdir Installer
 xcopy /E /F /Y %MROOT%\mqt\Installer .\Installer
 
 C:\"Program Files (x86)\Inno Setup 5\ISCC.exe" Installer\Minos2Install.iss
+IF %ERRORLEVEL% == 0 goto reset
+  echo Inno Setup failed; please fix errors and rebuild
 
+:reset
 
 cd %MROOT%\mqt\Installer
 

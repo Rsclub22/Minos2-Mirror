@@ -104,6 +104,8 @@ private:
 
     QList<RotPresetButton *> presetButton;
     QVector<RotPresetData*> rotPresets;
+    QList<QShortcut *> shortCutKeyList;
+    QList<QShortcut *> shiftShortCutKeyList;
 
     QComboBox *selectAntenna;
     //QPushButton* presetButtons[NUM_PRESETS];
@@ -163,6 +165,8 @@ private:
     QString connectStat;
     QString statusMsg;
     QString activeMsg;
+
+
 
     void openRotator();
     void closeRotator();
@@ -252,6 +256,7 @@ private slots:
 
 
 
+    void showPresetMenu(int buttonNumber);
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);

@@ -34,11 +34,6 @@
 
 // QPushButton:clicked{\n	background-color: red;\n	border-style: outset;\n	border-width: 1px;\n	border-radius: 5px;\n	border-color: black;\n	min-width: 5em;\n	padding: 3px;\n}
 
-static QStringList presetShortCut = {QString("Ctrl+1"),QString("Ctrl+2"),
-                            QString("Ctrl+3"), QString("Ctrl+4"),
-                            QString("Ctrl+5"), QString("Ctrl+6"),
-                            QString("Ctrl+7"), QString("Ctrl+8"),
-                            QString("Ctrl+9"), QString("Ctrl+0")};
 
 
 RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
@@ -47,6 +42,16 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    for (int i = 0; i < presetShortCutKeys.count(); i++)
+    {
+        shortCutKeyList.append(new QShortcut(QKeySequence(presetShortCutKeys[i]), this));
+    }
+
+    for (int i = 0; i < presetMenuShortCutKeys.count(); i++)
+    {
+        shiftShortCutKeyList.append(new QShortcut(QKeySequence(presetMenuShortCutKeys[i]), this));
+    }
 
 
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
@@ -1263,7 +1268,7 @@ int RotatorMainWindow::northCalcTarget(int targetBearing)
         target = calcRotNeg180_180(targetBearing);
 
     }
-    else if (setupAntenna->currentAntenna.endStopType == ROT_0_450 || ROT_NEG180_540)
+    else if (setupAntenna->currentAntenna.endStopType == ROT_0_450 || setupAntenna->currentAntenna.endStopType == ROT_NEG180_540)
     {
         target = calclRot_0_450_Neg180_540(targetBearing);
     }
@@ -1992,8 +1997,10 @@ void RotatorMainWindow::initPresetButtons()
     for (int i = 0; i < ui_presetbuttons.count(); i++)
     {
 
-        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i));
+        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i]));
 
+        connect(presetButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
         connect(presetButton[i], &RotPresetButton::presetReadAction, [this, i]() {presetRead(i);});
         connect(presetButton[i], &RotPresetButton::presetEditAction, [this, i]() {presetEdit(i);});
         connect(presetButton[i], &RotPresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
@@ -2004,6 +2011,10 @@ void RotatorMainWindow::initPresetButtons()
 
 }
 
+void RotatorMainWindow::showPresetMenu(int buttonNumber)
+{
+    presetButton[buttonNumber]->showButtonMenu();
+}
 
 
 void RotatorMainWindow::presetRead(int buttonNumber)

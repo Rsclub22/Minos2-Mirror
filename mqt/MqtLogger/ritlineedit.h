@@ -14,15 +14,16 @@ public:
     RitLineEdit(QWidget *parent);
     ~RitLineEdit();
     void changeFreq(bool direction);
+    void setRitOnFlag(bool state);
 
 signals:
     void receivedFocus() ;
     void lostFocus();
-    void newFreq(QString);
+    void newFreq(int);
     void freqEditReturn();
 private:
 
-
+    bool ritOn = false;
     void wheelEvent(QWheelEvent *event);
     void keyPressEvent(QKeyEvent *event);
 

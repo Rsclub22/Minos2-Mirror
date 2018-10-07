@@ -26,9 +26,12 @@
 
 class HtmlDelegate : public QStyledItemDelegate
 {
+    public:
+        virtual ~HtmlDelegate() override
+        {}
     protected:
-        void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-        QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+        void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
+        QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
 };
 
 #endif // HTMLDELEGATE_H

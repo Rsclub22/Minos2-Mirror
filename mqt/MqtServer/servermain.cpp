@@ -10,9 +10,6 @@
 #include "servermain.h"
 #include "ui_servermain.h"
 
-extern int GetSubscribedCount();
-extern int GetPublishedCount();
-
 ServerMain *MinosMainForm = nullptr;
 
 bool closeApp = false;
@@ -29,7 +26,7 @@ ServerMain::ServerMain(QWidget *parent) :
 
     createCloseEvent();
     QSettings settings;
-    QByteArray geometry = settings.value("geometry").toByteArray();
+    QByteArray geometry = settings.value("geometry/Main").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -166,13 +163,13 @@ void ServerMain::closeEvent(QCloseEvent *event)
 void ServerMain::resizeEvent(QResizeEvent * event)
 {
     QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    settings.setValue("geometry/Main", saveGeometry());
     QWidget::resizeEvent(event);
 }
 void ServerMain::moveEvent(QMoveEvent * event)
 {
     QSettings settings;
-    settings.setValue("geometry", saveGeometry());
+    settings.setValue("geometry/Main", saveGeometry());
     QWidget::moveEvent(event);
 }
 void ServerMain::changeEvent( QEvent* e )
@@ -180,7 +177,18 @@ void ServerMain::changeEvent( QEvent* e )
     if( e->type() == QEvent::WindowStateChange )
     {
         QSettings settings;
-        settings.setValue("geometry", saveGeometry());
+        settings.setValue("geometry/Main", saveGeometry());
     }
 }
 
+
+void ServerMain::on_showButton_clicked()
+{
+    // show all the details
+    if (!sd)
+    {
+        sd = QSharedPointer<ServerDetails>(new ServerDetails(this));
+    }
+    sd->show();
+
+}

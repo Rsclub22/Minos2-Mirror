@@ -47,7 +47,7 @@ public:
     void setTransverterStatus(const PubSubName &name, bool transverterStatus);
     void setVolumeStatus(const PubSubName &name, bool volumeStatus);
     void setBandList(const PubSubName &name, const QString &bands);
-    void setRitFreq(const PubSubName &name, double freq);
+    void setRitFreq(const PubSubName &name, int freq);
     void setRitEnableStatus(const PubSubName &name, bool ritEnableStatus);
     void setRitOnOffStatus(const PubSubName &name, bool status);
     void setRadioRitStatus(const PubSubName &name, bool status);

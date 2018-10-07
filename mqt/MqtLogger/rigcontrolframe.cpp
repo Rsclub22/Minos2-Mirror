@@ -60,7 +60,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     , ritEnable(false)
     , ritOn(false)
     , ritEditOn(false)
-    , curRit("0.00")
+    //, curRit("0.00")
     , radioName(NORADIO)
     , radioState("None")
 {
@@ -101,6 +101,14 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     freqNegShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D), parent);
     connect(freqNegShortCut, SIGNAL(activated()), this, SLOT(freqNeg_ShortCut()));
     connect(ui->freqDown, SIGNAL(clicked(bool)), this, SLOT(freqNegShortCut_clicked(bool)));
+
+    // rit key shortcuts
+    ritOnOffShortCut = new QShortcut(QKeySequence("Ctrl+o"), parent);
+    connect(ritOnOffShortCut, SIGNAL(activated()), this, SLOT(ritButtonSelected()));
+    ritClearShortCut = new QShortcut(QKeySequence("Ctrl+k"), parent);
+    connect(ritClearShortCut, SIGNAL(activated()), this, SLOT(ritClearShortCutSelected()));
+    ritFreqEditShortCut = new QShortcut(QKeySequence("Ctrl+i"), parent);
+    connect(ritFreqEditShortCut, SIGNAL(activated()), this, SLOT(ritFreqEditShortCutInFocus()));
 
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
@@ -146,7 +154,8 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
     // rit freq tuning
     connect(ui->RitButton, SIGNAL(clicked(bool)), this, SLOT(ritButtonSelected()));
-    connect(ui->RitEdit, SIGNAL(newFreq(QString)), this, SLOT(changeRitRadioFreq(QString)));
+    connect(ui->RitEdit, SIGNAL(newFreq(int)), this, SLOT(changeRitRadioFreq(int)));
+    connect(ui->RitClear, SIGNAL(clicked(bool)), this, SLOT(ritClearButtonSelected(bool)));
 
 
     // volume control updates to radio
@@ -246,14 +255,14 @@ void RigControlFrame::setFreq(QString freq)
 }
 
 
-// for rigcontrol
+// from rigcontrol
 
 void RigControlFrame::setRitFreq(QString freq)
 {
-
-    QString sfreq = freq;
-    ui->RitEdit->setText(sfreq);
-
+    if (!ritEditOn)
+    {
+      ui->RitEdit->setText(freq);
+    }
 }
 
 
@@ -277,9 +286,9 @@ void RigControlFrame::setRitRadioStatus(bool status)
 
 // to rigcontrol
 
-void RigControlFrame::changeRitRadioFreq(QString freq)
+void RigControlFrame::changeRitRadioFreq(int freq)
 {
-    traceMsg(QString("Change Rit Freq = %1").arg(freq));
+    traceMsg(QString("Change Rit Freq = %1").arg(convertRitFreqToStr(freq)));
     if (ritEnable && ritOn)
     {
         emit sendRitFreq(freq);
@@ -288,20 +297,38 @@ void RigControlFrame::changeRitRadioFreq(QString freq)
 
 }
 
+
+void RigControlFrame::ritClearShortCutSelected()
+{
+    ritClearButtonSelected(true);
+}
+
+
+
+void RigControlFrame::ritClearButtonSelected(bool /*state*/)
+{
+
+    if (ritEnable && ritOn)
+    {
+        int pos = ui->RitEdit->cursorPosition();
+        changeRitRadioFreq(0);  // turns off rit in hamlib
+        QString sfreq = convertRitFreqToStr(0);       // set rit display to zero
+        ui->RitEdit->setText(sfreq);
+        ui->RitEdit->setCursorPosition(pos);
+    }
+}
+
 void RigControlFrame::ritButtonSelected()
 {
-    static bool status = false;
+
     traceMsg(QString("Rit Button Pressed"));
-    status = !status;
-    if (status)
+    if (!ritOn)
     {
         ritButtonOn();
-
     }
     else
     {
-        ritButtonOff();
-
+       ritButtonOff();
     }
 
 }
@@ -311,24 +338,20 @@ void RigControlFrame::ritButtonOn()
 {
     traceMsg(QString("Rit Button On"));
     ritOn = true;
+    //ui->RitEdit->setRitOnFlag(true);        // set flag to allow editing of RIT freq
+    ui->RitEdit->setEnabled(true);
     showRitButOn();
     emit ritStatus(true);
-    // send current rit freq to radio
-    changeRitRadioFreq(ui->RitEdit->text().append('0').remove('.'));
-    ui->RitEdit->setCursorPosition(3);
-    ui->RitEdit->setFocus();
-
 
 }
 
 void RigControlFrame::ritButtonOff()
 {
     traceMsg(QString("Rit Button Off"));
-    //changeRitRadioFreq("0000");  // turns off rit in hamlib
-    //QString sfreq = convertRitFreqToStr(0.0);       // set rit display to zero
-    //ui->RitEdit->setText(sfreq);
     ui->RitEdit->clearFocus();
     ritOn = false;
+    ritEditOn = false;
+    ui->RitEdit->setEnabled(false);
     showRitButOff();
     emit ritStatus(false);
 
@@ -341,14 +364,14 @@ void RigControlFrame::showRitButOn()
 {
     //ui->Rotate->setPalette(*redText);
     ui->RitButton->setStyleSheet(RIT_BUTTON_ON_STYLE);
-    ui->RitButton->setText("RIT");
+    ui->RitButton->setText("On");
 }
 
 void RigControlFrame::showRitButOff()
 {
     //ui->Rotate->setPalette(*blackText);
     ui->RitButton->setStyleSheet(RIT_BUTTON_OFF_STYLE);
-    ui->RitButton->setText("RIT");
+    ui->RitButton->setText("Off");
 }
 
 void RigControlFrame::changeMainRadioFreq()
@@ -421,7 +444,7 @@ void RigControlFrame::returnChangeRadioFreq()
 void RigControlFrame::radioBandFreq(int index)
 {
     int idx = index -1;
-
+    setRadioBandWarning("");
     if (idx >= 0 && idx < listOfBands.count())
     {
         QString f = listOfBands[idx].freq;
@@ -450,13 +473,20 @@ void RigControlFrame::radioBandFreq(int index)
 void RigControlFrame::sendFreq(QString f)
 {
 
-
-    bool ok = false;
-
-    double df = f.toDouble(&ok);
-    if (ok && df > 0.0)
+    if (f != NO_BAND_SUPPORT)
     {
-     emit sendFreqControl(f);
+        bool ok = false;
+        double df = f.toDouble(&ok);
+        if (ok && df > 0.0)
+        {
+         emit sendFreqControl(f);
+        }
+
+    }
+    else
+    {
+        // send no band support
+        emit sendFreqControl(f);
     }
 }
 
@@ -500,14 +530,14 @@ void RigControlFrame::on_ContestPageChanged()
     trace(QString("on_ContestPageChanged emit selectRadio %1 %2 ").arg(radioName).arg(mode));
     emit selectRadio(radioName, mode);
 
-    QString bandlist = LogContainer->sendDM->getRigDetails(radioName).bandList().getValue();
-    setBandList(bandlist);
+//    QString bandlist = LogContainer->sendDM->getRigDetails(radioName).bandList().getValue();
+//    setBandList(bandlist);
 
-    QString freq = tslf->sCurFreq;
-    if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
-    {
-        sendFreq(freq);
-    }
+//    QString freq = tslf->sCurFreq;
+//    if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
+//    {
+//        sendFreq(freq);
+//    }
 
 }
 
@@ -546,7 +576,8 @@ void RigControlFrame::exitFreqEdit()
 void RigControlFrame::exitRitFreqEdit()
 {
     traceMsg(QString("Exit Rit Edit Freq"));
-    //freqEditOn = false;
+    ritEditOn = false;
+    ui->RitEdit->setRitOnFlag(false);        // set flag to allow prevent editing of RIT freq
     //setFreq(curFreq);
     ritFreqLineEditFrameColour(false);
     ui->RitEdit->clearFocus();
@@ -567,18 +598,7 @@ void RigControlFrame::freqEditSelected()
 
 }
 
-void RigControlFrame::freqRitEditSelected()
-{
-    traceMsg(QString("Freq Rit Edit Selected"));
-    ui->RitEdit->setFocus();
-    int len = ui->RitEdit->text().length();
-    if (len > 5)
-    {
-       ui->RitEdit->setCursorPosition(len - 5);
-    }
 
-
-}
 
 
 // this is the routine called from read memory
@@ -809,7 +829,6 @@ void RigControlFrame::setBandList(QString b)
         if (i >= 0)
             ui->bandSelCombo->setCurrentIndex(i);
 
-
         if (ct == TContestApp::getContestApp() ->getCurrentContest())
         {
             //And we want to select the frequency based on the contest band
@@ -826,23 +845,58 @@ void RigControlFrame::setBandList(QString b)
                 {
                     if (listOfBands[i].band == cb)
                     {
+                        trace(QString("Set band list: found band %1 on radio").arg(cb));
                         ui->bandSelCombo->setCurrentIndex(i + 1);
+
 
                         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
                         double cf = convertStrToFreq(tslf->sCurFreq);
-
-                        if (cf > bi.fhigh || cf < bi.flow)
+                        QString cfstr;
+                        // find band for current freq
+                        for (int i = 0; i < blist.bandList.count(); i++)
                         {
-                            trace((ct?ct->uuid:QString()) + " RigControlFrame::setBandList set frequency to default for band " + cb);
-                            radioBandFreq(i + 1);
+                            if (cf >= blist.bandList[i].flow && cf <= blist.bandList[i].fhigh)
+                            {
+                                cfstr = blist.bandList[i].uk;
+                                break;
+                            }
+
                         }
-                        break;
+
+
+                        if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
+                        {
+                            sendFreq(tslf->sCurFreq);
+                            trace(QString("Set band list: Set previous freq = %1").arg(cf));
+                        }
+                        else
+                        {
+                            sendFreq(listOfBands[i].freq);
+                            trace(QString("Set band list: Set defaut freq = %1").arg(listOfBands[i].freq));
+                        }
+
+                        setRadioBandWarning("");
+
+                        return;
                     }
                 }
+                // warn no band for this radio
+                setRadioBandWarning(QString("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
+                trace(QString("Set band list: %1 Band not found on this radio").arg(cb));
+                sendFreq(NO_BAND_SUPPORT);
             }
-        }
+
+
+         }
+
     }
 }
+
+
+
+
+
+
 
 void RigControlFrame::setRadioState(QString s)
 {
@@ -860,9 +914,12 @@ void RigControlFrame::setRadioState(QString s)
            radioConnected = false;
            radioError = false;
 
-               //curFreq = "00000000000";
-               //ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
-               //ui->freqInput->setText(curFreq);
+           ui->bandWarnLabel->setText("");
+           curFreq = "00000000000";
+           ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
+           ui->freqInput->setText(curFreq);
+           ui->bandSelCombo->clear();
+           emit radioDisconnected();
 
 
 
@@ -925,14 +982,21 @@ void RigControlFrame::setRadioTxVertState(bool s)
     ui->TxVertLabel->setVisible(s);
     ui->txvertStat->setText("On");
     ui->txvertStat->setVisible(s);
+
 }
 
+void RigControlFrame::setRadioBandWarning(QString s)
+{
+    ui->bandWarnLabel->setText(s);
+}
 
 
 void RigControlFrame::setRitEnableState(bool s)
 {
     ui->RitButton->setVisible(s);
     ui->RitEdit->setVisible(s);
+    ui->RitClear->setVisible(s);
+    ui->RitGroupBox->setVisible(s);
     ritEnable = s;
     if (s)
     {
@@ -977,12 +1041,24 @@ void RigControlFrame::freqLineEditInFocus()
 }
 
 
+
+void RigControlFrame::ritFreqEditShortCutInFocus()
+{
+    ui->RitEdit->setFocus();
+    ui->RitEdit->setCursorPosition(3);
+}
+
+
 void RigControlFrame::ritLineEditInFocus()
 {
     traceMsg(QString("Rit LineEdit in Focus"));
-    ritEditOn = true;
-    ui->RitEdit->setReadOnly(false);
-    ritFreqLineEditFrameColour(true);
+    if (ritOn)
+    {
+        ritEditOn = true;
+        ui->RitEdit->setReadOnly(false);
+        ui->RitEdit->setRitOnFlag(true);        // prevent updates from rigcontrol
+        ritFreqLineEditFrameColour(true);
+    }
 }
 
 

@@ -117,7 +117,7 @@ void MinosServerConnection::setFromId( MinosId &id, RPCRequest *req )
          QString message;
          if (req->getStringArg(1, message))
          {
-             bool sb;
+             bool sb;   // ignored response
              srv = TZConf::getZConf()->processZConfString(message, connectHost, sb);
          }
       }

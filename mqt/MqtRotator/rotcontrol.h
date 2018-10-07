@@ -27,11 +27,6 @@
 #include <hamlib/rotator.h>
 #include <hamlib/rig.h>         // for debug
 
-#define MAXCONFLEN 128
-
-extern "C" int write_block(hamlib_port_t *p, const char *txbuffer, size_t count);
-extern "C" int read_block(hamlib_port_t *p, char *rxbuffer, size_t count);
-
 bool model_Sort(const rot_caps *caps1,const rot_caps *caps2);
 int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 

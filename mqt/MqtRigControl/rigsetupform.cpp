@@ -22,6 +22,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QSerialPortInfo>
 #include <QMessageBox>
+#include <QHostAddress>
 #include <QInputDialog>
 
 
@@ -53,6 +54,7 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     fillHandShakeInfo();
     fillPollInterValInfo();
     fillMgmModes();
+    civSetToolTip();
 
     connect(ui->radioModelBox, SIGNAL(activated(int)), this, SLOT(radioModelSelected()));
     connect(ui->comPortBox, SIGNAL(activated(int)), this, SLOT(comportSelected()));
@@ -67,7 +69,6 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     connect(ui->enableTransVert, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSelected(bool)));
     connect(ui->mgmBox, SIGNAL(activated(int)), this, SLOT(mgmModeSelected()));
     connect(ui->CIVlineEdit, SIGNAL(editingFinished()), this, SLOT(civAddressFinished()));
-    connect(ui->RITEnable, SIGNAL(stateChanged(int)), this, SLOT(ritEnableSelected(int)));
     // transvert
     connect(ui->enableTransVertSw, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSwSel(bool)));
     connect(ui->locTvConChk, SIGNAL(clicked(bool)), this, SLOT(localTransVertSwSel(bool)));
@@ -168,31 +169,11 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             }
         }
 
-        // does this radio support rit?
-        // if radio has only get, then no support
-        // if radio has set, or set and get, then support.
-        int retCode = 0;
-        bool ritAvail = false;
-        radioData->ritGetAvail = false;
-        radioData->ritSetAvail = false;
-        ritEnableVisible(ritAvail);
-        retCode = radio->supportGetRit(radioData->radioModelNumber, &ritAvail);
-        if (retCode >= 0)
-        {
-            radioData->ritGetAvail = ritAvail;
 
-        }
-
-        retCode = radio->supportSetRit(radioData->radioModelNumber, &ritAvail);
-        if (retCode >= 0)
-        {
-            radioData->ritSetAvail = ritAvail;
-            ritEnableVisible(ritAvail);
-        }
 
         // does this radio support antenna sw?
         bool antSwFlg = false;
-        retCode = 0;
+        int retCode = 0;
         retCode = radio->supportAntSw(radioData->radioModelNumber, &antSwFlg);
         for (int i = 0; i < radioData->numTransverters; i++)
         {
@@ -247,7 +228,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setLocTVSWComportVisible(false);
          }
 
-        buildSupBandList();
+        //buildSupBandList();
         radioValueChanged = true;
     }
 
@@ -275,86 +256,7 @@ void RigSetupForm::setRadioModel(QString m)
 
 }
 
-// build the supported band list including transverters
-void RigSetupForm::buildSupBandList()
-{
-    // find the bands the radio supports
-    buildSupportedRadioBands(radioData->radioModelNumber);
 
-    // merge radio bands and transverter bands
-    radioData->radioTransSupBands.clear();
-    if (bands.count() > 0)
-    {
-        for (int i = 0; i < bands.count(); i++)
-        {
-            if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
-            {
-                radioData->radioTransSupBands.append(bands[i]->name);
-            }
-        }
-    }
-}
-
-
-// probe radio for supported bands
-void RigSetupForm::buildSupportedRadioBands(int radioModelNumber)
-{
-
-    radioData->radioSupBands.clear();
-
-    RIG *my_rig = rig_init(radioModelNumber);
-    if (my_rig)
-    {
-
-        for (int i = 0; i < bands.count(); i++)
-        {
-            if (radio->chkFreqRange(my_rig, bands[i]->fLow, "USB"))
-            {
-                radioData->radioSupBands.append(bands[i]->name);
-            }
-        }
-    }
-
-}
-
-// is this band in the supported band list for this model
-bool RigSetupForm::findSupRadioBand(const QString band)
-{
-    if (radioData->radioSupBands.count() > 0)
-    {
-        for (int i = 0; i < radioData->radioSupBands.count();i++)
-        {
-            if (band == radioData->radioSupBands[i])
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    return false;
-}
-
-// is this band in the transverter list for this radio
-bool RigSetupForm::findSupTransBand(const QString band)
-{
-    if (radioData->transVertNames.count() > 0)
-    {
-        for (int i = 0; i < radioData->transVertNames.count();i++)
-        {
-
-            if (band == radioData->transVertNames[i])
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    return false;
-}
 
 
 /********************** CIV Entry ***********************/
@@ -365,38 +267,43 @@ void RigSetupForm::civAddressFinished()
 
     bool Ok;
 
-    ui->CIVlineEdit->setText(ui->CIVlineEdit->text().trimmed());
+        QString civNum = ui->CIVlineEdit->text().trimmed();
 
-    if (!ui->CIVlineEdit->text().isEmpty())
-    {
-        if (!ui->CIVlineEdit->text().contains('x'))
+
+        if (civNum.isEmpty())
         {
-            QMessageBox::critical(this, "CIV Error", QString(ui->CIVlineEdit->text()) + " Is not a valid CIV value\nPlease enter the CIV as a Hex number in the form of 0xnn");
-            ui->CIVlineEdit->setText("");
+           return;
+        }
+
+        if (!civNum.contains("0x", Qt::CaseInsensitive))
+        {
+
+            civNum.prepend("0x");
+             ui->CIVlineEdit->setText(civNum);
+
+        }
+
+        int hexValue = civNum.toInt(&Ok, 16);
+        if (Ok &&  (hexValue < 0 || hexValue > 255))
+        {
+            QMessageBox::critical(this, "CIV Error", QString(ui->CIVlineEdit->text()) + " CIV number out of range 0 - FF");
+            //ui->CIVlineEdit->setText("");
+            return;
         }
         else
         {
-            int hexValue = ui->CIVlineEdit->text().toInt(&Ok, 16);
-            if (Ok &&  (hexValue < 0 || hexValue > 255))
+            if (civNum != radioData->civAddress)
             {
-                QMessageBox::critical(this, "CIV Error", QString(ui->CIVlineEdit->text()) + " CIV number out of range 0 - FF");
-                ui->CIVlineEdit->setText("");
+                radioData->civAddress = civNum;
+
+                radioValueChanged = true;
+
             }
         }
-    }
-    else
-    {
-        ui->CIVlineEdit->setText("");
-    }
-
-    if (ui->CIVlineEdit->text() != radioData->civAddress)
-    {
-        radioData->civAddress = ui->CIVlineEdit->text();
-        radioValueChanged = true;
-
-    }
 
 }
+
+
 
 
 
@@ -582,10 +489,22 @@ int RigSetupForm::comportAvial(QString comport)
 void RigSetupForm::networkAddressSelected()
 {
     if (ui->networkAddBox->text() != radioData->networkAdd)
-    {
-        radioData->networkAdd = ui->networkAddBox->text();
-        radioValueChanged = true;
-    }
+        {
+            QHostAddress address(ui->networkAddBox->text());
+            if (QAbstractSocket::IPv4Protocol == address.protocol())
+            {
+                radioData->networkAdd = ui->networkAddBox->text();
+                radioValueChanged = true;
+            }
+            else
+            {
+               QMessageBox messageBox;
+               QString msg = "Invalid Network Address " + ui->networkAddBox->text();
+               messageBox.critical(this, "Network Address Entry Error", msg);
+               ui->networkAddBox->setFocus();
+            }
+
+        }
 }
 
 QString RigSetupForm::getNetAddress()
@@ -603,10 +522,21 @@ void RigSetupForm::setNetAddress(QString netAdd)
 void RigSetupForm::networkPortSelected()
 {
     if (ui->netPortBox->text() != radioData->networkPort)
-    {
-        radioData->networkPort = ui->netPortBox->text();
-        radioValueChanged = true;
-    }
+     {
+         if (ui->netPortBox->text().toInt() >= 1 && ui->netPortBox->text().toInt() <= 65535)
+         {
+             radioData->networkPort = ui->netPortBox->text();
+             radioValueChanged = true;
+         }
+         else
+         {
+             QMessageBox messageBox;
+             QString msg = "Invalid Network Port Number " + ui->netPortBox->text();
+             messageBox.critical(this, "Network Port Number out of range", msg);
+             ui->netPortBox->setFocus();
+         }
+
+     }
 }
 
 QString RigSetupForm::getNetPortNum()
@@ -670,31 +600,7 @@ void RigSetupForm::pollIntervalVisible(bool s)
     ui->pollIntervalLbl->setVisible(s);
 }
 
-/************************* Rit Enable ********************************/
 
-void RigSetupForm::ritEnableSelected(int /*state*/)
-{
-    bool checked = ui->RITEnable->isChecked();
-    if (radioData->ritEnable != checked)
-    {
-        radioData->ritEnable = checked;
-        radioValueChanged = true;
-
-    }
-}
-
-
-void RigSetupForm::setRitEnableChkd(bool enable)
-{
-    ui->RITEnable->setChecked(enable);
-
-}
-
-
-void RigSetupForm::ritEnableVisible(bool v)
-{
-    ui->RITEnable->setVisible(v);
-}
 
 
 /************************** TransVert Enable *************************/
@@ -878,10 +784,10 @@ void RigSetupForm::setEnableRigDataEntry(bool enable)
     ui->networkAddBox->setEnabled(enable);
     ui->pollInterval->setEnabled(enable);
     ui->mgmBox->setEnabled(enable);
-    ui->RITEnable->setEnabled(enable);
     ui->enableTransVert->setEnabled(enable);
 
 }
+
 
 
 /*************************** Serial Data Entry Visible ***************/
@@ -1080,14 +986,14 @@ void RigSetupForm::addTransVerter()
     // add the new transverter
     int tabNum = radioData->numTransverters;
     radioData->transVertNames.append(transVerterName);
-    addTransVertTab(tabNum, transVerterName);
+    addTransVertTab(tabNum, transVerterName, true);
     radioData->numTransverters = tabNum + 1;
     loadTransVertTab(tabNum);
 
 }
 
 
-void RigSetupForm::addTransVertTab(int tabNum, QString tabName)
+void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
 {
     radioData->transVertSettings.append(new TransVertParams());
     radioData->transVertSettings[tabNum]->transVertName = tabName;
@@ -1102,7 +1008,7 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName)
          }
     }
     transVertTab.append(new TransVertSetupForm(radioData->transVertSettings[tabNum]));
-    addedTransVertTabs.append(tabName);
+    //addedTransVertTabs.append(tabName);
 
     ui->transVertTab->insertTab(tabNum, transVertTab[tabNum], tabName);
     ui->transVertTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
@@ -1124,8 +1030,8 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName)
        //transVertTab[tabNum]->antSwNumVisible(false);
        radioData->antSwitchAvail = false;
     }
-    buildSupBandList();
-    transVertTab[tabNum]->transVertValueChanged = true;
+    //buildSupBandList();
+    transVertTab[tabNum]->transVertValueChanged = tabChanged;
 
 }
 
@@ -1182,7 +1088,7 @@ void RigSetupForm::removeTransVerter()
     radioData->transVertSettings.removeAt(currentIndex);
     transVertTab.removeAt(currentIndex);
     radioData->numTransverters--;
-    removedTransVertTabs.append(currentName);
+    //removedTransVertTabs.append(currentName);
 
 
     //QString fileName = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
@@ -1244,7 +1150,7 @@ void RigSetupForm::changeBand()
              radioData->transVertSettings[tabNum]->fHigh = bands[i]->fHigh;
          }
     }
-    renamedTransVertTabs.append(oldName);
+    //renamedTransVertTabs.append(oldName);
     // remove old entry
     //QString fileName = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
 

@@ -18,7 +18,7 @@ class MinosTestImport: public RPCDispatcher
       typedef void ( MinosTestImport::* DispatchCallback ) ( XStanza *stanza ) ;
       DispatchCallback dispatchCallback;
 
-      virtual void dispatchResponse( XStanza *a );
+      virtual void dispatchResponse( XStanza *a ) override;
       void analyseImportLog( XStanza * );
       void analyseImportTest( XStanza * );
    private:
@@ -43,7 +43,7 @@ class MinosTestImport: public RPCDispatcher
       void processLogMinosStanza( RPCRequest *xs );
       MinosTestImport( BaseContestLog * const ct );
       MinosTestImport( );
-      ~MinosTestImport();
+      virtual ~MinosTestImport() override;
 
       void startImportTest();
       int importTestBuffer( const QString &buffer );

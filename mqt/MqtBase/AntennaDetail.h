@@ -13,13 +13,15 @@ class AntennaDetail: public PubSubValue
 public:
     AntennaDetail();
     AntennaDetail(QString s);
+    virtual ~AntennaDetail() override
+    {}
 
     bool isDirty() const;
     void clearDirty();
     void setDirty();
 
-    virtual QString pack() const;
-    virtual void unpack(QString);
+    virtual QString pack() const override;
+    virtual void unpack(QString) override;
 
     MinosItem<int> minAzimuth() const;
     MinosItem<int> maxAzimuth() const;

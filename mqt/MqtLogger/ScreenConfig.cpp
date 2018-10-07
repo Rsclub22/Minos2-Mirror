@@ -32,16 +32,23 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
 
     SC sc = scf.configs[curConfigName];
 
-    for (int j = 0; j < sc.rows.count(); j++)
+    if (sc.rows.count() == 0)
     {
-        ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
-        vbl->insertWidget( j, baseRow);
-       for (int k = 0; k < sc.rows[j].elements.count(); k++)
-       {
-           ScreenConfigElement *e = new ScreenConfigElement(this, baseRow);
-           e->setType(sc.rows[j].elements[k].type);
-           baseRow->vbl->insertWidget(k, e);
-       }
+        on_addRowButton_clicked();
+    }
+    else
+    {
+        for (int j = 0; j < sc.rows.count(); j++)
+        {
+            ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
+            vbl->insertWidget( j, baseRow);
+           for (int k = 0; k < sc.rows[j].elements.count(); k++)
+           {
+               ScreenConfigElement *e = new ScreenConfigElement(this, baseRow);
+               e->setType(sc.rows[j].elements[k].type);
+               baseRow->vbl->insertWidget(k, e);
+           }
+        }
     }
     ui->addRowButton->setVisible(vbl->count() == 0);
 }

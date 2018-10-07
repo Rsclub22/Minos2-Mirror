@@ -8,6 +8,8 @@ class MinosTableView:public QTableView
     QPersistentModelIndex centreCell;
 public:
     MinosTableView(QWidget *parent);
+    virtual ~MinosTableView() override
+    {}
     void scrollTo(const QModelIndex &index, ScrollHint hint) Q_DECL_OVERRIDE;
 
 protected:

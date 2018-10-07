@@ -29,7 +29,8 @@ SOURCES += \
     singleapplication.cpp \
     INIFile.cpp \
     MMessageDialog.cpp \
-    MShowMessageDlg.cpp
+    MShowMessageDlg.cpp \
+    minossplitter.cpp
 
 HEADERS += \
     fileutils.h \
@@ -43,7 +44,9 @@ HEADERS += \
     singleapplication.h \
     INIFile.h \
     MMessageDialog.h \
-    MShowMessageDlg.h
+    MShowMessageDlg.h \
+    minossplitter.h
+
 unix {
     target.path = /usr/lib
     INSTALLS += target

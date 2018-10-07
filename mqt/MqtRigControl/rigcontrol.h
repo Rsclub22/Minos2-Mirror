@@ -22,11 +22,6 @@
 #include <hamlib/rig.h>
 
 
-#define MAXCONFLEN 128
-
-extern "C" int write_block(hamlib_port_t *p, const char *txbuffer, size_t count);
-extern "C" int read_block(hamlib_port_t *p, char *rxbuffer, size_t count);
-
 bool model_Sort(const rig_caps *caps1,const rig_caps *caps2);
 int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 
@@ -124,11 +119,10 @@ public:
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
-      dest.ritGetAvail = srce->ritGetAvail;
-      dest.ritSetAvail = srce->ritSetAvail;
-      dest.ritEnable = srce->ritEnable;
-      dest.radioSupBands = srce->radioSupBands;
-      dest.radioTransSupBands = srce->radioTransSupBands;
+      //dest.ritSupported = srce->ritSupported;
+      //dest.ritEnable = srce->ritEnable;
+      //dest.radioSupBands = srce->radioSupBands;
+      //dest.radioTransSupBands = srce->radioTransSupBands;
       dest.transVertEnable = srce->transVertEnable;
       dest.enableTransSwitch = srce->enableTransSwitch;
       dest.enableLocTVSwMsg = srce->enableLocTVSwMsg;
@@ -182,9 +176,8 @@ public:
   QString mgmMode = "USB";
   ptt_type_t pttType;
   bool antSwitchAvail = false;
-  bool ritGetAvail = false;
-  bool ritSetAvail = false;
-  bool ritEnable = false;
+  //bool ritSupported = false;
+  //bool ritEnable = false;
   bool transVertEnable  = false;
   bool volAvail = false;
   QStringList transVertNames;
@@ -270,12 +263,12 @@ public:
     int getModelInfo(QString radioModel, int *radioModelNumber, QString *radioMfgName, QString *radioModelName);
     int getRit(vfo_t vfo, shortfreq_t *ritfreq);
     int setRit(vfo_t vfo, shortfreq_t ritfreq);
-    int supportGetRit(int rigNumber, bool *flag);
-    int supportSetRit(int rigNumber, bool *flag);
+    bool supportGetRit(int rigNumber);
+    bool supportSetRit(int rigNumber);
     int toggleRitState(vfo_t vfo, bool state);
     int getRitState(vfo_t vfo, bool *state);
-    bool supportRitOnOff();
-    bool supportGetRitState();
+    bool supportRitOnOff(int rigNumber);
+    bool supportGetRitState(int rigNumber);
 
     bool checkFreqValid(freq_t freq, rmode_t mode);
 
@@ -288,11 +281,11 @@ public:
     int supportAntSw(int rigNumber, bool *antSwFlag);
 
 
-    bool supportVolControl();
+    bool supportVolControl(int rigNumber);
     int setVolume(vfo_t vfo, float val);
     int getVolume(vfo_t vfo, value_t *val);
 
-    bool supportSignalStrength();
+    bool supportSignalStrength(int modelNumber);
     int getSignalStrength(vfo_t vfo, value_t *val);
 
     void enableTraceComms(bool state);
@@ -360,7 +353,9 @@ signals:
     int rigGetLevel(vfo_t vfo, setting_t level, value_t *val);
 
     setting_t rigHasGetLevel(setting_t level);
+    setting_t rigHasGetLevel(int rigNumber, setting_t level);
     setting_t rigHasSetLevel(setting_t level);
+    setting_t rigHasSetLevel(int rigNumber, setting_t level);
 };
 
 #endif // RIGCONTROL_H

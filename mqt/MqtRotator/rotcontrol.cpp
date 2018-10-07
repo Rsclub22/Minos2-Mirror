@@ -20,9 +20,7 @@
 
 
 
-QList<const rot_caps *> capsList;
-bool rotatorlistLoaded=false;
-
+static QList<const rot_caps *> capsList;
 
 int collect(const rot_caps *caps,rig_ptr_t)
 {
@@ -294,7 +292,7 @@ int RotControl::request_bearing()
 
     if (retCode == RIG_OK)
     {
-        emit bearing_updated(rot_azimuth);
+        emit bearing_updated(static_cast<int>(rot_azimuth));
     }
 
     return retCode;

@@ -55,28 +55,36 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject */*obj*/, bool fIn, QF
     }
     else
     {
-        if (ui->radioFreq->text().isEmpty() || ui->radioFreq->text() == "0.0")
+        // may need to compare real freq here!
+        if (ui->radioFreq->text().remove('.') != transVertData->radioFreqStr)
         {
-            transVertData->transVertOffset = 0.0;
-            transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
-            // display
-            ui->offsetFreq->setText(transVertData->transVertOffsetStr);
-            return;
+
+            if (ui->radioFreq->text().isEmpty() || ui->radioFreq->text() == "0.0")
+            {
+                transVertData->transVertOffset = 0.0;
+                transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
+                // display
+                ui->offsetFreq->setText(transVertData->transVertOffsetStr);
+                return;
+            }
+            QString txf = ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*"));
+            if (valInputFreq(txf, RADIO_FREQ_EDIT_ERR_MSG))
+            {
+               radioFreqOK = true;
+               if (validateFreqTxtInput(convertFreqToFullDigit(ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*")))))
+               {
+                   targetFreqOK = true;
+                   calcOffset();
+               }
+            }
+            else
+            {
+                ui->radioFreq->setFocus();
+            }
+
+
         }
-        QString txf = ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*"));
-        if (valInputFreq(txf, RADIO_FREQ_EDIT_ERR_MSG))
-        {
-           radioFreqOK = true;
-           if (validateFreqTxtInput(convertFreqToFullDigit(ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*")))))
-           {
-               targetFreqOK = true;
-               calcOffset();
-           }
-        }
-        else
-        {
-            ui->radioFreq->setFocus();
-        }
+
     }
 }
 
@@ -88,29 +96,33 @@ void TransVertSetupForm::targetFreqEditfocusChange(QObject */*obj*/, bool fIn, Q
     }
     else
     {
-        if (ui->targetFreq->text().isEmpty() || ui->targetFreq->text() == "0.0")
+        // may need to compare real freq here!
+        if (ui->targetFreq->text().remove('.') != transVertData->targetFreqStr) // changed?
         {
-            transVertData->transVertOffset = 0.0;
-            transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
-            // display
-            ui->offsetFreq->setText(transVertData->transVertOffsetStr);
-            return;
-        }
-        QString targetf = ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*"));
-        if (valInputFreq(targetf, TARGET_FREQ_EDIT_ERR_MSG))
-        {
-           targetFreqOK = true;
-           if (validateFreqTxtInput(convertFreqToFullDigit(ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*")))))
-           {
-               radioFreqOK = true;
-               calcOffset();
-           }
+            if (ui->targetFreq->text().isEmpty() || ui->targetFreq->text() == "0.0")
+            {
+                transVertData->transVertOffset = 0.0;
+                transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
+                // display
+                ui->offsetFreq->setText(transVertData->transVertOffsetStr);
+                return;
+            }
+            QString targetf = ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*"));
+            if (valInputFreq(targetf, TARGET_FREQ_EDIT_ERR_MSG))
+            {
+               targetFreqOK = true;
+               if (validateFreqTxtInput(convertFreqToFullDigit(ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*")))))
+               {
+                   radioFreqOK = true;
+                   calcOffset();
+               }
 
-        }
-        else
-        {
-            ui->targetFreq->setFocus();
-        }
+            }
+            else
+            {
+                ui->targetFreq->setFocus();
+            }
+         }
     }
 }
 
@@ -130,7 +142,6 @@ void TransVertSetupForm::calcOffset()
         return;
 
     }
-
     radioFreqOK = false;
     targetFreqOK = false;
 

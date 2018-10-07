@@ -64,10 +64,15 @@ namespace hamlibData
                                     "RIG_PORT_PACKET", "RIG_PORT_DTMF", "RIG_PORT_ULTRA", "RIG_PORT_RPC",
                                     "RIG_PORT_PARALLEL, RIG_PORT_USB, RIG_PORT_UDP_NETWORK, RIG_PORT_CM108"};
 
+    const int RIGCTL = 2;               // rigctl model number
+
 
 }
 
+const int OPEN_FAILED = -1;
+const int OPEN_OK = 0;
 
+const QString NO_BAND_SUPPORT = "???";
 
 const QString TRANSSW_NUM_DEFAULT = "0";
 
@@ -98,7 +103,7 @@ const QString FILENAME_FREQ_PRESETS = "FreqPresets.ini";
 
 // Tooltips
 
-const QString civToolTip = "Leave field blank for default radio CIV,\nor enter in the form 0xnn where nn is the radio CIV address.";
+const QString civToolTip = "Leave field blank for default radio CIV,\nor enter in the form 0xnn or nn, where nn is the radio CIV address in Hex.";
 
 
 
@@ -166,7 +171,8 @@ const int SMETERVALUES[17][2] = {
 
                                 };
 
-
+const int MAX_SMETER_LEVEL = 61;
+const int MIN_SMETER_LEVEL = -54;
 
 const QStringList SMETERTEXT = {
                                 "S9+60",

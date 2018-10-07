@@ -45,6 +45,16 @@ extern char diskBuffer[ bsize + 1 ];
 
 extern int buffpt;
 
+const QList<QChar> illegalChars = {QChar('|'), QChar('/'), QChar('\\'), QChar('['), QChar(']'), QChar('&'), QChar(']'), QChar('*'),
+                                   QChar('!'), QChar('^'), QChar('?'), QChar('<'), QChar('>'), QChar('.'), QChar(','), QChar('~'),
+                                   QChar('@'), QChar(':'), QChar(';'), QChar('='), QChar('{'), QChar('}'), QChar('$')};
+
+extern bool containsChars(QString s, const QList<QChar> chars);
+extern QString replaceChars(QString s, const QChar c, const QList<QChar> cChars );
+extern QString removeChars(QString s, const QList<QChar> chars);
+
+
+
 class writer
 {
       QSharedPointer<QFile> expfd;
@@ -86,6 +96,8 @@ class UpperCaseValidator:public QValidator
     bool makeSignal;
 public:
     UpperCaseValidator(bool makeSignal = false);
-    QValidator::State validate(QString & input, int & /*pos*/) const;
+    virtual ~UpperCaseValidator() override
+    {}
+    QValidator::State validate(QString & input, int & /*pos*/) const override;
 };
 #endif

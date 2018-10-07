@@ -110,10 +110,11 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
 
     // To rig controller
+    connect(FKHRigControlFrame, SIGNAL(radioDisconnected()), this, SLOT(invalidateCacheOnDisconnect()));
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
-    connect(FKHRigControlFrame, SIGNAL(sendRitFreq(QString)), this, SLOT(sendRadioRitFreq(QString)));
+    connect(FKHRigControlFrame, SIGNAL(sendRitFreq(int)), this, SLOT(sendRadioRitFreq(int)));
     connect(FKHRigControlFrame, SIGNAL(sendVolumeToRadio(int)), this, SLOT(sendRadioVolume(int)));
     connect(FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
@@ -150,11 +151,16 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 */
 
     connect(this, SIGNAL(do_repaint()), this, SLOT(on_doRepaint()), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 }
 
 void TSingleLogFrame::on_doRepaint()
 {
     repaint();
+}
+void TSingleLogFrame::on_FontChanged()
+{
+    applyScreenLayout();
 }
 TSingleLogFrame::~TSingleLogFrame()
 {
@@ -1212,8 +1218,8 @@ void TSingleLogFrame::on_SetMode(QString m)
 void TSingleLogFrame::on_SetFreq(QString f)
 {
 
-    if (sCurFreq != f)
-    {
+    //if (sCurFreq != f)
+    //{
         if ( this == LogContainer->getCurrentLogFrame() )
         {
             sCurFreq = f;
@@ -1221,7 +1227,7 @@ void TSingleLogFrame::on_SetFreq(QString f)
             GJVQSOLogFrame->setFreq(f);
             MinosLoggerEvents::sendRigFreqChanged(f, contest);
         }
-    }
+    //}
 }
 
 void TSingleLogFrame::on_SetRitFreq(QString f)
@@ -1342,7 +1348,7 @@ void TSingleLogFrame::sendRadioFreq(QString freq)
     }
 }
 
-void TSingleLogFrame::sendRadioRitFreq(QString freq)
+void TSingleLogFrame::sendRadioRitFreq(int freq)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
@@ -1402,6 +1408,9 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
             {
                GJVQSOLogFrame->setRadioName(radName);
                FKHRigControlFrame->setRadioName(radName, mode);
+               LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+
+
             }
             else
             {
@@ -1417,6 +1426,18 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
             }
         }
 
+    }
+}
+
+void TSingleLogFrame::invalidateCacheOnDisconnect()
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
+        if (ct && !ct->isProtected())
+        {
+            LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+        }
     }
 }
 

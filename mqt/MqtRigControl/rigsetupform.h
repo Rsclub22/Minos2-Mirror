@@ -39,12 +39,12 @@ public:
 
     QVector<TransVertSetupForm*> transVertTab;
 
-    QStringList addedTransVertTabs;     // tracked edited data
-    QStringList removedTransVertTabs;
-    QStringList renamedTransVertTabs;   // old radio names
+    //QStringList addedTransVertTabs;     // tracked edited data
+    //QStringList removedTransVertTabs;
+    //QStringList renamedTransVertTabs;   // old radio names
     //QStringList availTransVerters;
     //int numAvailTransVerters;
-    void addTransVertTab(int tabNum, QString tabName);
+    void addTransVertTab(int tabNum, QString tabName, bool tabChanged);
 
     QString getRadioModel();
     void setRadioModel(QString m);
@@ -101,11 +101,11 @@ public:
 
     void setAppName(QString name);
 
-    void buildSupportedRadioBands(int radioModelNumber);
-    void buildSupBandList();
+    //void buildSupportedRadioBands(int radioModelNumber);
+    //void buildSupBandList();
 
-    bool findSupRadioBand(const QString band);
-    bool findSupTransBand(const QString band);
+    //bool findSupRadioBand(const QString band);
+    //bool findSupTransBand(const QString band);
 
 
 
@@ -125,8 +125,7 @@ public:
     void setLocTVSwComport(QString p);
 
     void setTransVertSwVisible(bool b);
-    void ritEnableVisible(bool v);
-    void setRitEnableChkd(bool enable);
+
 signals:
     void transVertTabAdded(int);
 
@@ -158,7 +157,7 @@ private slots:
     void enableTransVertSwSel(bool);
     void localTransVertSwSel(bool);
     void locTVComPortSel(int);
-    void ritEnableSelected(int);
+
 private:
 
 
@@ -191,6 +190,7 @@ private:
 
 
 
+    bool radioSupportRit(int radioModelNumber);
 };
 
 #endif // RIGSETUPFORM_H

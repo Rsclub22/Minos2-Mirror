@@ -47,7 +47,6 @@ SOURCES += \
     MinosLines.cpp \
     MinosLoggerEvents.cpp \
     MinosParameters.cpp \
-    minossplitter.cpp \
     MinosTableView.cpp \
     minostablewidget.cpp \
     MinosTestImport.cpp \

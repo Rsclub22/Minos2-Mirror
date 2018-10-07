@@ -78,7 +78,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="networkAddBox"/>
+          <widget class="QLineEdit" name="networkAddBox">
+           <property name="maxLength">
+            <number>15</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -112,7 +116,14 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="netPortBox"/>
+          <widget class="QLineEdit" name="netPortBox">
+           <property name="inputMask">
+            <string/>
+           </property>
+           <property name="maxLength">
+            <number>32767</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -212,13 +223,6 @@
      </item>
      <item>
       <widget class="QComboBox" name="mgmBox"/>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="RITEnable">
-       <property name="text">
-        <string>Enable RIT</string>
-       </property>
-      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_7">

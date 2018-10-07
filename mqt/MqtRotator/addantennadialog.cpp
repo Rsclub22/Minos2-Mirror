@@ -47,6 +47,14 @@ void AddAntennaDialog::done(int r)
             ui->antennaName->setFocus();
             return;
         }
+        else if (containsChars(ui->antennaName->text(), illegalChars))
+        {
+            QMessageBox msgBox;
+            msgBox.setModal( true );
+            msgBox.setText("Antenna name contains invalid characters,\n please remove non-alpha or non-numeric characters");
+            msgBox.exec();
+            return;
+        }
         else if (availAntennas.contains(ui->antennaName->text()))
         {
             QMessageBox msgBox;

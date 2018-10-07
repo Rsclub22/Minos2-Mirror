@@ -22,8 +22,8 @@
 
 
 
-QList<const rig_caps *> capsList;
-bool riglistLoaded=false;
+static QList<const rig_caps *> capsList;
+static bool riglistLoaded=false;
 
 
 
@@ -257,7 +257,7 @@ int RigControl::setRit(vfo_t vfo, shortfreq_t ritfreq)
     return rig_set_rit(my_rig, vfo, ritfreq);
 }
 
-int RigControl::supportGetRit(int rigNumber, bool *flag)
+bool RigControl::supportGetRit(int rigNumber)
 {
     RIG *myRig;
     myRig = rig_init(rigNumber);
@@ -265,20 +265,18 @@ int RigControl::supportGetRit(int rigNumber, bool *flag)
     {
         if (myRig->caps->get_rit == nullptr)
         {
-            *flag = false;
+            return false;
         }
         else
         {
-            *flag = true;
+            return true;
         }
     }
-
-    return -14;
-
+    return false;
 }
 
 
-int RigControl::supportSetRit(int rigNumber, bool *flag)
+bool RigControl::supportSetRit(int rigNumber)
 {
     RIG *myRig;
     myRig = rig_init(rigNumber);
@@ -286,25 +284,31 @@ int RigControl::supportSetRit(int rigNumber, bool *flag)
     {
         if (myRig->caps->set_rit == nullptr)
         {
-            *flag = false;
+            return false;
 
         }
         else
         {
-            *flag = true;
+            return true;
 
         }
     }
-
-    return -14;
-
+    return false;
 }
 
 
 
-bool RigControl::supportRitOnOff()
+bool RigControl::supportRitOnOff(int rigNumber)
 {
-    return  rig_has_set_func(my_rig, RIG_FUNC_RIT);
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    setting_t state =  rig_has_set_func(myRig, RIG_FUNC_RIT);
+    if (state & RIG_FUNC_RIT)
+    {
+        return true;
+    }
+
+    return false;
 
 }
 
@@ -323,9 +327,17 @@ int RigControl::getRitState(vfo_t vfo, bool* state)
 }
 
 
-bool RigControl::supportGetRitState()
+bool RigControl::supportGetRitState(int rigNumber)
 {
-    return rig_has_get_func(my_rig, RIG_FUNC_RIT);
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    setting_t state = rig_has_get_func(myRig, RIG_FUNC_RIT);
+    if (state & RIG_FUNC_RIT)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 /*************** PTT Control  ********************************/
@@ -437,9 +449,9 @@ pbwidth_t RigControl::getPassBand()
 
 /*************** Volume Level Control  ********************************/
 
-bool RigControl::supportVolControl()
+bool RigControl::supportVolControl(int rigNumber)
 {
-    return (rigHasGetLevel(RIG_LEVEL_AF) & rigHasSetLevel(RIG_LEVEL_AF));
+    return (rigHasGetLevel(rigNumber, RIG_LEVEL_AF) & rigHasSetLevel(rigNumber, RIG_LEVEL_AF));
 }
 
 int RigControl::setVolume(vfo_t vfo, float val)
@@ -457,10 +469,10 @@ int RigControl::getVolume(vfo_t vfo, value_t *val)
 
 /*************** Signal Strength Level Control  ********************************/
 
-bool RigControl::supportSignalStrength()
+bool RigControl::supportSignalStrength(int modelNumber)
 {
 
-    return rigHasGetLevel(RIG_LEVEL_STRENGTH);
+    return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
 }
 
 
@@ -479,12 +491,41 @@ setting_t RigControl::rigHasGetLevel(setting_t level)
     return rig_has_get_level (my_rig, level);
 }
 
+setting_t RigControl::rigHasGetLevel(int rigNumber, setting_t level)
+{
+
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        return rig_has_get_level (my_rig, level);
+    }
+    else
+    {
+        return 0;
+    }
+
+}
+
 setting_t RigControl::rigHasSetLevel(setting_t level)
 {
     return rig_has_set_level (my_rig, level);
 }
 
+setting_t RigControl::rigHasSetLevel(int rigNumber, setting_t level)
+{
 
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        return rig_has_set_level (my_rig, level);
+    }
+    else
+    {
+        return 0;
+    }
+}
 
 
 int RigControl::rigSetLevel(vfo_t vfo, setting_t level, value_t val)

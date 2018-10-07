@@ -49,6 +49,9 @@ public:
     QAction* clearAction;
 
     int memNo;
+
+
+
 private slots:
     void memoryUpdate();
 
@@ -59,6 +62,7 @@ private slots:
     void clearActionSelected();
 signals:
     void clearActionSelected(int);
+
 };
 class TuneMemoryButton : public QObject
 {
@@ -145,6 +149,7 @@ public:
     void checkConnection();
 
     void setRadioVolumeState(bool state);
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -153,8 +158,9 @@ signals:
     void noRadioSendFreq(QString);
     void noRadioSendMode(QString);
     void sendModeToControl(QString);
-    void sendRitFreq(QString);
+    void sendRitFreq(int);
     void ritStatus(bool);
+    void radioDisconnected();
 
 private slots:
     void on_FontChanged();
@@ -169,17 +175,19 @@ private slots:
     void freqPlus_ShortCut();
     void freqNeg_ShortCut();
     void changeMainRadioFreq();
-    void changeRitRadioFreq(QString);
+    void changeRitRadioFreq(int);
     void on_radioNameSel_activated(const QString &arg1);
 
 
     void exitRitFreqEdit();
-    void freqRitEditSelected();
     void ritButtonSelected();
-
+    void ritClearButtonSelected(bool state);
+    void ritFreqEditShortCutInFocus();
     void sendVolumeRadio(int level);
 
 
+
+    void ritClearShortCutSelected();
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -205,6 +213,10 @@ private:
     QShortcut *freqPlusShortCut;
     QShortcut *freqNegShortCut;
 
+    QShortcut *ritOnOffShortCut;
+    QShortcut *ritClearShortCut;
+    QShortcut *ritFreqEditShortCut;
+
     bool radioLoaded;
     bool radioConnected;
     bool radioError;
@@ -215,7 +227,7 @@ private:
     bool ritEnable;
     bool ritOn;
     bool ritEditOn;
-    QString curRit;
+    //QString curRit;
 
 
 
@@ -234,6 +246,7 @@ private:
     void freqLineEditBkgnd(bool status);
     void freqLineEditFrameColour(bool status);
 
+    void ritLineEditInFocus();
     void ritFreqLineEditFrameColour(bool status);
 
     void initRigFrame(QWidget *parent);
@@ -265,9 +278,11 @@ private:
     void showRitButOff();
 
     void setVolControlVisible(bool value);
-    void ritLineEditInFocus();
+
     void ritButtonOn();
     void ritButtonOff();
+
+    void setRadioBandWarning(QString s);
 };
 
 

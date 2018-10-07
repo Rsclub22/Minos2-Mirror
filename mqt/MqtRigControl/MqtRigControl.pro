@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     addradiodialog.cpp \
     rigsetupdialog.cpp \
     serialtvswitch.cpp \
-    smeterbar.cpp
+    smeterbar.cpp \
+    rigctldclient.cpp
 
 HEADERS  += rigcontrolmainwindow.h \
     rigcontrol.h \
@@ -42,7 +43,8 @@ HEADERS  += rigcontrolmainwindow.h \
     addradiodialog.h \
     rigsetupdialog.h \
     serialtvswitch.h \
-    smeterbar.h
+    smeterbar.h \
+    rigctldclient.h
 
 
 
@@ -54,4 +56,4 @@ FORMS    += rigcontrolmainwindow.ui \
     freqpresetdialog.ui \
     addradiodialog.ui
 
-win32: INCLUDEPATH += C:/Projects/hamlib-w32-3.1/include
+#win32: INCLUDEPATH += C:/Projects/hamlib-w32-3.3/include

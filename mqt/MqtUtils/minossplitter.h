@@ -1,7 +1,7 @@
 #ifndef MINOSSPLITTER_H
 #define MINOSSPLITTER_H
 
-#include "base_pch.h"
+#include "mqtUtils_pch.h"
 #include <QSplitterHandle>
 
 class MinosSplitterHandle : public QSplitterHandle
@@ -9,6 +9,8 @@ class MinosSplitterHandle : public QSplitterHandle
     Q_OBJECT
 public:
     MinosSplitterHandle(Qt::Orientation orientation, QSplitter *parent);
+    virtual ~MinosSplitterHandle() override
+    {}
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -27,9 +29,11 @@ private:
    MinosSplitterHandle *myHandle;
 public:
    MinosSplitter(QWidget *parent = nullptr);
+   virtual ~MinosSplitter() override
+   {}
 
 protected:
-   QSplitterHandle *createHandle();
+   virtual QSplitterHandle *createHandle() override;
 
 };
 //============================================================================

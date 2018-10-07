@@ -61,7 +61,10 @@
        <item>
         <widget class="QLineEdit" name="netAddressBox">
          <property name="inputMask">
-          <string>000.000.000.000;_</string>
+          <string/>
+         </property>
+         <property name="maxLength">
+          <number>25</number>
          </property>
         </widget>
        </item>
@@ -95,7 +98,10 @@
        <item>
         <widget class="QLineEdit" name="netPortBox">
          <property name="inputMask">
-          <string>9999</string>
+          <string/>
+         </property>
+         <property name="maxLength">
+          <number>32767</number>
          </property>
         </widget>
        </item>

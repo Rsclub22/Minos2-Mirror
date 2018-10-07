@@ -49,7 +49,7 @@ namespace displayIndicator {
 
 
 
-
+//#define RIGCONTROL_TEST
 
 
 
@@ -77,12 +77,18 @@ private:
     RigControl  *radio;
     QString appName = "";
     QLabel *status;
-    int radioIndex = 0;
+    int radioIndex;
     QTimer *pollTimer;
     class QTimer LogTimer;
     int pollTime;
-    bool rigErrorFlag = false;
-    bool cmdLockFlag = false;
+    bool rigErrorFlag;
+    bool cmdLockFlag;
+    // data from rigctld
+    QString rigctld_radioNumber;
+    int irigctld_radioNumber = 0;
+    QString rigctld_radioName;
+    QString rigctld_radioMfg;
+
     // data from logger
     QString logger_freq;
     QString slogMode;
@@ -91,8 +97,8 @@ private:
     QString selTvBand;      // selected band from radio
     QString transVertSwNum;
     bool logRitOn;
-    bool supVolume = false;     // radio supports volume
-    bool supSignalStrength = false;
+    bool supVolume;     // radio supports volume
+    bool supSignalStrength;
     const int PASSBAND_NOCHANGE = -1;
 
     QVector<BandDetail*> bands;
@@ -103,16 +109,26 @@ private:
     QString sfreq;          // read freq converted to string
     rmode_t rmode;          // read radio mode
     pbwidth_t rwidth;        // read radio rx bw
-    double curVfoFrq = 0;
-    double curTransVertFrq = 0;
+    double curVfoFrq;
+    double curTransVertFrq;
     rmode_t curMode;
     QString sCurMode;
-    bool mgmModeFlag = false;
-    shortfreq_t rRitFreq = 0;
-    int curVol = 0;
+    bool mgmModeFlag;
+    int rRitFreq;        // converted from hamlib long ritFreq
+    int curVol;
     int curSignalStrength = 0;
-    bool radioRitOn = false;
 
+    // rit functions supported by current radio
+
+    bool radioSupGetRit;
+    bool radioSupSetRit;
+    bool radioSupGetRitState;
+    bool radioSupRitOnOff;
+    bool radioRitOn;
+
+    bool ritEnable;         // flag to enable rit
+
+    bool radioCommsOK;
 
     SerialTVSwitch *serialTVSw = nullptr;
 
@@ -121,18 +137,21 @@ private:
     QString geoStr;         // geometry registry location
 
     QVector<QPushButton*> supRadioInd;
-    const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color:  white ;\n");
+    const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color: white ;\n");
     const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue ; \n");
     const QString SUP_RADIO_INDICATOR_TRANSVERT_STYLE = QString("background-color: yellow ; \n");
     const QString SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE = QString("background-color: orange ; \n");
     const QString RIT_STATUS_OFF_STYLE = QString("background-color:  white ;\n");
     const QString RIT_STATUS_ON_STYLE = QString("background-color:  orange ;\n");
+    const QString RIT_RADIO_GETSETFREQ_INDICATOR_FALSE = QString("background-color: white ;\n");
+    const QString RIT_RADIO_GETSETFREQ_INDICATOR_TRUE = QString("background-color: blue ;\n");
+    QString selTransVertBandIndicator = "";
 
     void initActionsConnections();
     void initSelectRadioBox();
     void setSelectRadioBoxVisible(bool visible);
     void setRadioNameLabelVisible(bool visible);
-    void openRadio();
+    int openRadio();
     void closeRadio();
     int getAndSendFrequency(vfo_t vfo);
     int getAndSendMode(vfo_t vfo);
@@ -205,14 +224,14 @@ private:
     void loadBands();
 
     void sendTransVertSwitchToComPort(const QString &swNum);
-    void sendRitFreqLogger(shortfreq_t ritFreq);
+    void sendRitFreqLogger(int ritFreq);
 
     void setRitEnableDisplayVisible(bool s);
     void setRitOnOffDisplayVisible(bool s);
     void setRitOnOffDisplay(bool s);
     void setRitEnableDisplay(bool s);
     void ritIndicatorToggle(bool state);
-    void setRitStatusIndicatorsVisible(bool state);
+    //void setRitStatusIndicatorsVisible(bool state);
     int  getRitRadioStatus(vfo_t vfo, bool *status);
     void sendRadioRitStatusLogger(bool status);
 
@@ -230,9 +249,27 @@ private:
     void turnOffAllsupRadioIndicators();
     void showActiveTransVertIndicator(QString cb);
 
+    void clearSupportRitFlags();
 
 
 
+
+    void getRitSupportStatus(int modelNumber);
+    void setRitGetSetFreqIndicatorVisible(bool state);
+    void ritSetFreqIndicatorToggle(bool state);
+    void ritGetFreqIndicatorToggle(bool state);
+    void saveRitEnableChk(bool state);
+    bool readRitEnableChk();
+
+    void getRigctldNames(QString address, quint16 port);
+    void clrRigctldNames();
+
+    bool findSupRadioBand(const QString band);
+    void buildSupportedRadioBands(int radioModelNumber);
+    void buildSupBandList(int radioModelNumber);
+    bool findSupTransBand(const QString band);
+
+    void clearTransVertSupport();
 
 private slots:
 
@@ -258,17 +295,20 @@ private slots:
     void onLaunchSetup();
     void setTpm(int tpm, QString f);
 
-    void setRitFreqStr(QString ritFreq);
+    void setRitFreq(int ritFreq);
     void setRitLogStatus(bool status);
 
     void sendRadioListLogger();
 
+    void ritEnableChecked(int state);
 
 
+#ifdef RIGCONTROL_TEST
 
     void incRit();   // for test.... *************************
     void ritbuttontoggle();  // for test.... *************************
 signals:
+#endif
 
 
 };
