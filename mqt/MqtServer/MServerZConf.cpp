@@ -370,7 +370,7 @@ QString TZConf::getZConfString(bool beaconreq)
                + "' UUID='" + Uuid
                + "' name='" + getName()
                + "' port='" + QString::number(MinosServerPort) + "'"
-               + (beaconreq?"":" request='true'")       // if a beacon response, don't request another beacon
+               + (beaconreq?" request='true'":"")
                + " />";
 }
 //==============================================================================

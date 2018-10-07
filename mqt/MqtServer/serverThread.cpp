@@ -16,7 +16,7 @@
 #include "MServerZConf.h"
 #include "MServer.h"
 #include "MServerPubSub.h"
-
+#include "minoslistener.h"
 
 //==============================================================================
 //==============================================================================
@@ -87,7 +87,7 @@ void MinosServerConnection::on_connected()
     trace( QString( "Server: Connected OK to " ) + srv->station + " host " + srv->host.toString() );
     RPCRequest *rpa = new RPCRequest( clientServer, MinosServer::getMinosServer() ->getServerName(), "ServerSetFromId" );   // for our local server, this one MUST have a from
     rpa->addParam( MinosServer::getMinosServer() ->getServerName() );
-    rpa->addParam( TZConf::getZConf()->getZConfString(true ) );
+    rpa->addParam( TZConf::getZConf()->getZConfString(false ) );
     sendAction( rpa );
     delete rpa;
 }
@@ -124,6 +124,9 @@ void MinosServerConnection::setFromId( MinosId &id, RPCRequest *req )
          QString message;
          if (req->getStringArg(1, message))
          {
+             MinosServerListener *msl = MinosServerListener::getListener();
+             MinosClientListener *mcl = MinosClientListener::getListener();
+
              QDateTime sb;   // ignored response
              QHostAddress host = connectHost;
              srv = TZConf::getZConf()->processZConfString(message, host, sb);
