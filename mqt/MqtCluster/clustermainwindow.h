@@ -4,11 +4,13 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QPlainTextEdit>
+#include "base_pch.h"
 #include "mqtUtils_pch.h"
 #include "qttelnet.h"
 #include "cluster.h"
 #include "setupdialog.h"
 #include "dxspotdatamodel.h"
+#include "clusterrpc.h"
 
 namespace Ui {
 class ClusterMainWindow;

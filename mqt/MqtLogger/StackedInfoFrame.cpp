@@ -29,6 +29,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     QStringList infoList =
     {
         "Clock",
+        "Cluster",
         "DXCC",
         "District",
         "Filter",
@@ -64,6 +65,7 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int arg1)
     }
 
     clockFrame = nullptr;
+    clusterClientFrame = nullptr;
     dxccFrame = nullptr;
     districtFrame = nullptr;
     filterFrame = nullptr;
@@ -81,47 +83,53 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int arg1)
         clockFrame->setContest(contest);
         break;
     case 1:
+        clusterClientFrame = new ClusterClientFrame(this);
+        currStackFrame = clusterClientFrame;
+        layout()->addWidget(currStackFrame);
+        clusterClientFrame->setContest(contest);
+        break;
+    case 2:
         dxccFrame = new DXCCFrame(this);
         currStackFrame = dxccFrame;
         layout()->addWidget(currStackFrame);
         dxccFrame->setContest(contest);
         break;
-    case 2:
+    case 3:
 //    "District",
         districtFrame = new DistrictFrame(this);
         currStackFrame = districtFrame;
         layout()->addWidget(districtFrame);
         districtFrame->setContest(contest);
         break;
-    case 3:
+    case 4:
 //    "Filter",
         filterFrame = new FilterFrame(this);
         currStackFrame = filterFrame;
         layout()->addWidget(filterFrame);
         filterFrame->setContest(contest);
         break;
-    case 4:
+    case 5:
 //    "Memories",
         rigMemFrame = new RigMemoryFrame(this);
         currStackFrame = rigMemFrame;
         layout()->addWidget(rigMemFrame);
         rigMemFrame->setContest(contest);
         break;
-    case 5:
+    case 6:
 //    "Locator Map",
         locFrame = new LocFrame(this);
         currStackFrame = locFrame;
         layout()->addWidget(locFrame);
         locFrame->setContest(contest);
         break;
-    case 6:
+    case 7:
 //    "Locator Tree",
         locTreeFrame = new LocTreeFrame(this);
         currStackFrame = locTreeFrame;
         layout()->addWidget(locTreeFrame);
         locTreeFrame->setContest(contest);
         break;
-    case 7:
+    case 8:
 //    "Stats"
         statsFrame = new TStatsDispFrame(this);
         currStackFrame = statsFrame;
@@ -162,6 +170,8 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
             clockFrame->setContest(contest);
         if (rigMemFrame)
             rigMemFrame->setContest(contest);
+        if (clusterClientFrame)
+            clusterClientFrame->setContest(contest);
 
         if (contest)
         {

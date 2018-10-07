@@ -68,7 +68,10 @@ SOURCES += \
     serialcomms.cpp \
     StartConfig.cpp \
     TreeUtils.cpp \
-    validators.cpp
+    validators.cpp \
+    dxspotdatamodel.cpp \
+    qttelnet.cpp \
+    clusterrpc.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -122,7 +125,11 @@ HEADERS += \
     StartConfig.h \
     TreeUtils.h \
     validators.h \
-    waitcursor.h
+    waitcursor.h \
+    dxspotdatamodel.h \
+    qttelnet.h \
+    clusterrpc.h \
+    clustercommon.h
 
 unix {
     target.path = /usr/lib
