@@ -230,7 +230,7 @@ Server *findIp( const QHostAddress &h )
 {
    for ( QVector<Server *>::iterator i = serverList.begin(); i != serverList.end(); i++ )
    {
-      if (h.isEqual((*i)->host))
+      if (h.toIPv4Address() == (*i)->host.toIPv4Address())
       {
          return ( *i );
       }

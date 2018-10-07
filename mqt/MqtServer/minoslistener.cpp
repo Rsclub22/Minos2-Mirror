@@ -218,7 +218,7 @@ MinosServerConnection *MinosServerListener::findConnection(const QHostAddress &h
 {
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
-        if (h.isEqual((*i)->connectHost))
+        if (h.toIPv4Address() == (*i)->connectHost.toIPv4Address())
         {
             return dynamic_cast<MinosServerConnection *>(*i);
         }
