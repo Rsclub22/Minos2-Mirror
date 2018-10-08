@@ -89,8 +89,6 @@ void MinosListener::on_newConnection()
 }
 void MinosListener::on_timeout()
 {
-    /*
-      // removing second doesn't work - remote end too likely to remove the "other" link
     if (isServer())
     {
         for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
@@ -101,14 +99,20 @@ void MinosListener::on_timeout()
                 QString hj = (*j)->getClientServer();
                 if (hi == hj)
                 {
-                    (*j)->remove_socket = true;
-                    trace("removing socket for " + (*j)->getClientServer());
+                    quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
+                    quint32 locIP = (*j)->sock->localAddress().toIPv4Address();
+
+                    // make sure only one end does the removal
+                    if (remIP < locIP)
+                    {
+                        (*j)->remove_socket = true;
+                        trace("removing socket for " + (*j)->getClientServer());
+                    }
                 }
             }
         }
 
     }
-    */
     bool clearup = false;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
