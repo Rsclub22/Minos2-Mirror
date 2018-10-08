@@ -63,7 +63,9 @@ TZConf::TZConf( )
 {
    ZConf = this;
    sendBeaconResponse = QDateTime();  // so we send a true beacon with request
-   beaconInterval = 60000;   // once a minute
+   beaconInterval = 1000;
+   maxBeaconInterval = 60000;   // once a minute
+   beaconIncrement = 5000;   // once a minute
    beaconResponseDelay = 100;
    lastTick = QDateTime::currentDateTimeUtc().addSecs(-59); // force a beacon soon
 }
@@ -181,6 +183,8 @@ void TZConf::onTimeout()
       trace(QString("Timeout: Sending beacon, sendBeaconResponse = ") + ((sendBeaconResponse.isValid() && sendBeaconResponse.msecsTo(QDateTime::currentDateTime()) > beaconResponseDelay)?"true":"false"));
       sendMessage( );   // timer requests beaconing, beacon just responds
       lastTick = QDateTime::currentDateTime();
+      beaconInterval += beaconIncrement;
+      beaconInterval = qMin(beaconInterval, maxBeaconInterval);
    }
 }
 

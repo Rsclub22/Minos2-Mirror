@@ -81,6 +81,8 @@ class TZConf: public QObject
       static TZConf *ZConf;
 
       unsigned int beaconInterval = 0;   // once a minute
+      unsigned int beaconIncrement = 0;
+      unsigned int maxBeaconInterval = 0;
       unsigned int beaconResponseDelay = 0;   // once a minute
       QDateTime lastTick;
       QDateTime sendBeaconResponse;
