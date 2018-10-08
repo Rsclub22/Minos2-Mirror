@@ -111,6 +111,8 @@ void TZConf::startZConf(const QString &name)
             continue;
         if (!ifaces[i].flags().testFlag(QNetworkInterface::IsRunning))
             continue;
+        if (ifaces[i].flags().testFlag(QNetworkInterface::IsLoopBack))
+            continue;
 
         // Now get all IP addresses for this interface
         QList<QNetworkAddressEntry> addrs = ifaces[i].addressEntries();
@@ -127,6 +129,7 @@ void TZConf::startZConf(const QString &name)
 
                 if (res)
                 {
+                    trace(QString("iface %1 address %2").arg(ifaces[i].humanReadableName()).arg(addrs[j].ip().toString()));
                     TxSocks.push_back(qus);
                 }
             }
