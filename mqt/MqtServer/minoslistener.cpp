@@ -95,6 +95,8 @@ void MinosListener::on_newConnection()
 }
 void MinosListener::on_timeout()
 {
+    /*
+      // removing second doesn't work - remote end too likely to remove the "other" link
     if (isServer())
     {
         for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
@@ -106,12 +108,13 @@ void MinosListener::on_timeout()
                 if (hi == hj)
                 {
                     (*j)->remove_socket = true;
-                    trace("removing datagram socket for " + (*j)->getClientServer());
+                    trace("removing socket for " + (*j)->getClientServer());
                 }
             }
         }
 
     }
+    */
     bool clearup = false;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
