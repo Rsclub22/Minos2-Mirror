@@ -23,13 +23,14 @@ class MinosServerConnection: public MinosCommonConnection
    private:
       Server *srv;
       bool resubscribed;
+      bool fromDatagram;
 
       QTimer resubscribeTimer;
    protected:
       virtual bool checkLastRx() override;
       qint64 lastKeepAlive = 0;
    public:
-      MinosServerConnection();
+      MinosServerConnection(bool fromDatagram);
       virtual void initialise() override;
       ~MinosServerConnection() override;
       virtual bool checkFrom( TiXmlElement *pak ) override;
@@ -40,6 +41,10 @@ class MinosServerConnection: public MinosCommonConnection
       const Server *server() const
       {
           return srv;
+      }
+      virtual bool isFromDatagram() const override
+      {
+          return fromDatagram;
       }
       void setServer(Server *s);
       virtual void setFromId( MinosId &from, RPCRequest *req ) override;

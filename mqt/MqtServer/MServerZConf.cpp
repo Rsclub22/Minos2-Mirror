@@ -239,9 +239,12 @@ Server *findStation( const QString s )
 }
 Server *findIp( const QHostAddress &h )
 {
+    quint32 ha = h.toIPv4Address();
    for ( QVector<Server *>::iterator i = serverList.begin(); i != serverList.end(); i++ )
    {
-      if (h.toIPv4Address() == (*i)->host.toIPv4Address())
+       quint32 a = (*i)->host.toIPv4Address();
+       trace(QString("findIP comparing %1 with %2").arg(ha).arg(a));
+      if (ha == a)
       {
          return ( *i );
       }
@@ -342,7 +345,7 @@ Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
         {
             // we must have a server connection already
             trace("Creating MinosServerConnection zcPublishServer for " + name);
-            MinosServerConnection *msc = new MinosServerConnection();
+            MinosServerConnection *msc = new MinosServerConnection(true);
             msc->mConnect(s);
             msl->addListenerSlot(msc);
         }
@@ -398,7 +401,12 @@ Server *TZConf::processZConfString(const QString &message, QHostAddress &host, Q
         QString ip = getAttribute(tix, "ip");
         if (host.toString().isEmpty())
         {
+            trace("host address empty, setting it to " + ip);
             host.setAddress(ip);
+        }
+        else
+        {
+            trace("host address is " + host.toString());
         }
 
         // publish what came in

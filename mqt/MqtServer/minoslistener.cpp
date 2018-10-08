@@ -95,6 +95,23 @@ void MinosListener::on_newConnection()
 }
 void MinosListener::on_timeout()
 {
+    if (isServer())
+    {
+        for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+        {
+            QString hi = (*i)->getClientServer();
+            for ( CommonIterator j = i + 1; j != i_array.end(); j++ )
+            {
+                QString hj = (*j)->getClientServer();
+                if (hi == hj)
+                {
+                    (*i)->remove_socket = true;
+                    trace("removing second socket for " + (*j)->getClientServer());
+                }
+            }
+        }
+
+    }
     bool clearup = false;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
@@ -128,7 +145,7 @@ void MinosListener::clearSockets()
 MinosCommonConnection *MinosServerListener::makeConnection(QTcpSocket *s)
 {
     trace("Creating MinosServerConnection makeConnection");
-    MinosServerConnection *c = new MinosServerConnection();
+    MinosServerConnection *c = new MinosServerConnection(false);
 
     c->sock = QSharedPointer<QTcpSocket>(s);
 
@@ -173,7 +190,7 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
         {
             // set ourselves up to connect
             trace("Creating MinosServerConnection sendServer for " + to.server);
-            MinosServerConnection * s = new MinosServerConnection();
+            MinosServerConnection * s = new MinosServerConnection(false);
             s->mConnect( srv );
             addListenerSlot( s );
             // and we need to TRY to resend
@@ -195,8 +212,8 @@ void MinosServerListener::buildTable(QTableWidget *tab)
 {
     tab->clear();
     tab->setRowCount(i_array.count());
-    tab->setColumnCount(3);
-    QStringList h = {"name", "address", "uuid"};
+    tab->setColumnCount(4);
+    QStringList h = {"name", "address", "dg?", "uuid"};
     tab->setHorizontalHeaderLabels(h);
     int row = 0;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
@@ -207,8 +224,10 @@ void MinosServerListener::buildTable(QTableWidget *tab)
         tab->setItem(row, 0, s);
         s = new QTableWidgetItem(msc->server()->host.toString());
         tab->setItem(row, 1, s);
-        s = new QTableWidgetItem(msc->server()->uuid);
+        s = new QTableWidgetItem(msc->isFromDatagram()?"dg":"norm");
         tab->setItem(row, 2, s);
+        s = new QTableWidgetItem(msc->server()->uuid);
+        tab->setItem(row, 3, s);
         row++;
     }
 }

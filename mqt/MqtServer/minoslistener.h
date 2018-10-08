@@ -31,6 +31,8 @@ class MinosListener:public QObject
       QVector<MinosCommonConnection *>i_array;
 
       virtual MinosCommonConnection *makeConnection(QTcpSocket *s) = 0;
+
+      virtual bool isServer() const = 0;
     public:
 
       void clearSockets();
@@ -56,6 +58,10 @@ class MinosServerListener: public MinosListener
       static MinosServerListener *MSL;
    protected:
       virtual MinosCommonConnection *makeConnection(QTcpSocket *s) override;
+      virtual bool isServer() const override
+      {
+          return true;
+      }
    public:
       static MinosServerListener *getListener()
       {
@@ -85,6 +91,10 @@ class MinosClientListener: public MinosListener
       static MinosClientListener *MCL;
    protected:
       virtual MinosCommonConnection *makeConnection(QTcpSocket *s) override;
+      virtual bool isServer() const override
+      {
+          return false;
+      }
 
    public:
       static MinosClientListener *getListener()

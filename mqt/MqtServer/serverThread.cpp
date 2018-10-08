@@ -20,7 +20,7 @@
 
 //==============================================================================
 //==============================================================================
-MinosServerConnection::MinosServerConnection() : srv( nullptr ), resubscribed( false )
+MinosServerConnection::MinosServerConnection(bool fromDatagram) : srv( nullptr ), resubscribed( false ), fromDatagram(fromDatagram)
 {}
 void MinosServerConnection::initialise()
 {

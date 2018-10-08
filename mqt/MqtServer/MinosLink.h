@@ -108,6 +108,12 @@ class MinosCommonConnection: public QObject
 
       QString getClientUser() const;
 
+      virtual bool isFromDatagram() const
+      {
+          return false;
+      }
+
+
 private slots:
       void on_readyRead();
       void on_disconnected();
