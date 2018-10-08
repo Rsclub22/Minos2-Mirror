@@ -70,6 +70,7 @@ void MinosServerConnection::mConnect( Server *psrv )
 {
    srv = psrv;
    clientServer = srv->station;
+   connectHost = srv->host;
 
    trace( QString( "Server: Connecting to " ) + srv->station + " host " + srv->host.toString() );
 

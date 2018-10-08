@@ -50,15 +50,9 @@ bool MinosListener::initialise( QString type, quint16 port )
 
 void MinosListener::addListenerSlot( MinosCommonConnection *il )
 {
-    QHostAddress h = il->sock->peerAddress();
-    il->connectHost = h;
-    trace( "addListenerSlot: from " + il->connectHost.toString() );
-    if (il->connectHost.toString().isEmpty())
-    {
-        trace("xx");
-    }
-    i_array.push_back( il );
+    trace( QString("addListenerSlot: from %1 %2").arg(isServer()?"Server":"Client").arg(il->connectHost.toString() ));
 
+    i_array.push_back( il );
     il->initialise();
 }
 int MinosListener::getConnectionCount()
@@ -151,6 +145,7 @@ MinosCommonConnection *MinosServerListener::makeConnection(QTcpSocket *s)
     MinosServerConnection *c = new MinosServerConnection(false);
 
     c->sock = QSharedPointer<QTcpSocket>(s);
+    c->connectHost = c->sock->peerAddress();
 
     return c;
 }
@@ -266,6 +261,7 @@ MinosCommonConnection *MinosClientListener::makeConnection(QTcpSocket *s)
 {
     MinosClientConnection *c = new MinosClientConnection();
     c->sock = QSharedPointer<QTcpSocket>(s);
+    c->connectHost = c->sock->peerAddress();
 
     return c;
 }
