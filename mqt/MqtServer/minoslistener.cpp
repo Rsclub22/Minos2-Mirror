@@ -105,14 +105,7 @@ void MinosListener::on_timeout()
                 QString hj = (*j)->getClientServer();
                 if (hi == hj)
                 {
-                    if ((*i)->isFromDatagram())
-                    {
-                        (*i)->remove_socket = true;
-                    }
-                    if ((*j)->isFromDatagram())
-                    {
-                        (*j)->remove_socket = true;
-                    }
+                    (*j)->remove_socket = true;
                     trace("removing datagram socket for " + (*j)->getClientServer());
                 }
             }
