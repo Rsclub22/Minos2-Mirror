@@ -23,6 +23,7 @@
 
 #include "htmldelegate.h"
 
+static qreal heightmult = 1.5;
 
 void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption, const QModelIndex &index ) const
 {
@@ -48,6 +49,7 @@ void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption
     //        ctx.palette.setColor(QPalette::Text, option.palette.color(QPalette::Active, QPalette::HighlightedText));
 
     QRect textRect = style->subElementRect( QStyle::SE_ItemViewItemText, &option );
+    textRect.setBottom(textRect.top() + (textRect.bottom() - textRect.top()) / hmult);
     painter->save();
     painter->translate( textRect.topLeft() );
     painter->setClipRect( textRect.translated( -textRect.topLeft() ) );
@@ -64,5 +66,5 @@ QSize HtmlDelegate::sizeHint( const QStyleOptionViewItem &poption, const QModelI
     QTextDocument doc;
     doc.setHtml( option.text );
     doc.setTextWidth( option.rect.width() );
-    return QSize( static_cast<int>(doc.idealWidth() * 1.7), static_cast<int>(doc.size().height()) );
+    return QSize( static_cast<int>(doc.idealWidth() * wmult), static_cast<int>(doc.size().height() * hmult) );
 }

@@ -57,19 +57,13 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     ui->setupUi(this);
 
     createScreenComponents();
+
     buildScreenLayout();
 
     OtherMatchTreeFW = new FocusWatcher(otherMatchFrame->getTreeView());
     connect(OtherMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onOtherMatchTreeFocused(QObject *, bool, QFocusEvent *)));
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
     connect(ArchiveMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onArchiveTreeFocused(QObject *, bool, QFocusEvent *)));
-
-    qsoModel.initialise(contest);
-    QSOTable->setModel(&qsoModel);
-    QSOTable->setItemDelegate( new HtmlDelegate );
-
-    QSOTable->resizeColumnsToContents();
-    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     restoreColumns();
 
@@ -168,7 +162,9 @@ TSingleLogFrame::~TSingleLogFrame()
     ui = nullptr;
     contest = nullptr;
 }
-void TSingleLogFrame::createScreenComponents()
+void TSingleLogFrame::
+
+createScreenComponents()
 {
     // create component frames, parentless
 
@@ -188,6 +184,15 @@ void TSingleLogFrame::createScreenComponents()
     QSOTable->horizontalHeader()->setHighlightSections(false);
     QSOTable->horizontalHeader()->setStretchLastSection(true);
     QSOTable->verticalHeader()->setVisible(false);
+
+    qsoModel.initialise(contest);
+    QSOTable->setModel(&qsoModel);
+
+    QSOTable->setItemDelegate( new HtmlDelegate(1.7, 0.3) );
+
+    QSOTable->resizeColumnsToContents();
+    QSOTable->resizeRowsToContents();       // this is where the sizehint gets called
+    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     QSOTable->setVisible(false);
 

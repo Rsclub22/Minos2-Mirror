@@ -32,7 +32,6 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     ui->setupUi(this);
 
     ui->rigMemTable->setObjectName( "rigMemTable" );
-    ui->rigMemTable->setItemDelegate( new HtmlDelegate );
     ui->rigMemTable->horizontalHeader() ->setSectionsMovable( true );
     ui->rigMemTable->horizontalHeader() ->setSectionsClickable( true );
     ui->rigMemTable->horizontalHeader() ->setSectionResizeMode( QHeaderView::Interactive );
@@ -40,6 +39,10 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
 
     proxyModel.setSourceModel(&model);
     ui->rigMemTable->setModel(&proxyModel);
+
+    ui->rigMemTable->setItemDelegate( new HtmlDelegate(1.7, 0.1) );
+    ui->rigMemTable->resizeColumnsToContents();
+    ui->rigMemTable->resizeRowsToContents();
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
@@ -326,6 +329,7 @@ void RigMemoryFrame::checkTimerTimer()
         scrollIntoView(firstMatch);
     }
     proxyModel.headerDataChanged(Qt::Vertical, 0, model.rowCount() - 1);
+    ui->rigMemTable->resizeRowsToContents();
 }
 void RigMemoryFrame::onRigFreqChanged(QString /*f*/, BaseContestLog *c)
 {
@@ -564,8 +568,9 @@ void RigMemoryFrame::clearWorkedActionSelected()
     model.endResetModel();
 }
 
-void RigMemoryFrame::vsectionClicked(int /*logicalIndex*/)
+void RigMemoryFrame::vsectionClicked(int logicalIndex)
 {
+    ui->rigMemTable->selectRow(logicalIndex);
     readActionSelected();
 }
 

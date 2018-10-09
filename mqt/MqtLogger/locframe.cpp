@@ -110,7 +110,7 @@ LocFrame::LocFrame(QWidget *parent) :
 
     currentCentre = "IO91";
 
-    ui->LocView->setItemDelegate(new HtmlDelegate);
+    ui->LocView->setItemDelegate(new HtmlDelegate(1.0, 1.0));
 
     model = new LocGridModel();
     ui->LocView->setModel(model);

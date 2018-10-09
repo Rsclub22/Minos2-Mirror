@@ -3,7 +3,7 @@
 
 #include "LoggerContest.h"
 #include "ContestApp.h"
-
+#include "htmldelegate.h"
 #include "tsinglelogframe.h"
 #include "districtframe.h"
 #include "ui_districtframe.h"
@@ -31,6 +31,7 @@ DistrictFrame::~DistrictFrame()
 void DistrictFrame::setContest(BaseContestLog *contest)
 {
     model.ct = contest;
+    ui->DistrictTable->setItemDelegate(new HtmlDelegate(1.0, 0.5));
     proxyModel.setSourceModel(&model);
     ui->DistrictTable->setModel(&proxyModel);
     if (contest)
@@ -39,6 +40,7 @@ void DistrictFrame::setContest(BaseContestLog *contest)
         connect( ui->DistrictTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
                  this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     }
+    ui->DistrictTable->resizeRowsToContents();
 }
 void DistrictFrame::reInitialiseDistricts()
 {

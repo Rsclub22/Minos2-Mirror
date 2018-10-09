@@ -24,7 +24,9 @@ void MatchTreeFrame::initialise()
 {
     setModel(getMatchModel());
     header()->setSectionResizeMode(QHeaderView::Interactive);
-    setItemDelegate( new HtmlDelegate );
+    setItemDelegate( new HtmlDelegate(1.7, 0.9) );
+    setUniformRowHeights(true);
+
 
     connect( header(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
