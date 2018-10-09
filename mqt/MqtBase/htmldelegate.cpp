@@ -47,10 +47,16 @@ void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption
     //        ctx.palette.setColor(QPalette::Text, option.palette.color(QPalette::Active, QPalette::HighlightedText));
 
     QRect textRect = style->subElementRect( QStyle::SE_ItemViewItemText, &option );
-    textRect.setBottom(textRect.top() + (textRect.bottom() - textRect.top()) / hmult);
+//    textRect.setBottom(textRect.top() + (textRect.bottom() - textRect.top()) / hmult);
+
+    QRect oldRect = textRect;
+    int oldHeight = textRect.bottom() - textRect.top();
+    int newHeight = static_cast<int>(oldHeight*hmult);
+    textRect.setBottom(textRect.top() + newHeight);
+
     painter->save();
     painter->translate( textRect.topLeft() );
-    painter->setClipRect( textRect.translated( -textRect.topLeft() ) );
+    painter->setClipRect( oldRect.translated( -oldRect.topLeft() ) );
     doc.documentLayout() ->draw( painter, ctx );
     painter->restore();
 }
