@@ -70,7 +70,8 @@ SOURCES += \
     validators.cpp \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
-    clusterrpc.cpp
+    clusterClientServer.cpp \
+    clusterclientframe.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -127,8 +128,9 @@ HEADERS += \
     waitcursor.h \
     dxspotdatamodel.h \
     qttelnet.h \
-    clusterrpc.h \
-    clustercommon.h
+    clustercommon.h \
+    clusterClientServer.h \
+    clusterclientframe.h
 
 unix {
     target.path = /usr/lib
@@ -143,4 +145,5 @@ FORMS += \
     ConfigElementFrame.ui \
     minoskeyboard.ui \
     rotpresetdialog.ui \
-    StartConfig.ui
+    StartConfig.ui \
+    clusterclientframe.ui

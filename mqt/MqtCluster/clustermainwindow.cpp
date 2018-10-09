@@ -18,6 +18,7 @@
 
 #include "clustermainwindow.h"
 #include "clustercommon.h"
+#include "rigutils.h"
 #include "ui_clustermainwindow.h"
 
 #include <QDebug>
@@ -66,8 +67,6 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader->setDefaultSectionSize(18);
-
-
 
 
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
@@ -157,7 +156,7 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
 {
     QString selNodeName = nodeName;
 
-    if (nodeName.isEmpty() && nodeConnected)
+    if ((nodeName.isEmpty() && nodeConnected) || nodeName == "")
     {
         disconnectNode();
         currentNodeName = "";
@@ -250,7 +249,8 @@ void ClusterMainWindow::loggedOut()
 void ClusterMainWindow::disconnectNode()
 {
     trace(QString("Disconnect Node %1").arg(currentNodeName));
-    client->logout();
+    //client->logout();
+    txText(dxCluster->quit());
 
 }
 
@@ -295,9 +295,11 @@ void ClusterMainWindow::parseDX(QString txt)
 
         if (retCode >= 0)
         {
+
             qDebug() << QString("DX de %1 %2 %3 %4 %5 %6").arg(dxCall).arg(dxFreq).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment);
             // Display
-            dxSpotDataModel->rowData = QStringList {spotTime, dxFreq, dxCall, dxLocator, spotCall, spotComment };
+            QString displayFreq = alignFreqRight(dxFreq);
+            dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
             //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             dxSpotDataModel->insertRows(0, 1);
 
@@ -309,6 +311,8 @@ void ClusterMainWindow::parseDX(QString txt)
 
     }
 }
+
+
 
 
 int ClusterMainWindow::upackSpot(QString txt)
@@ -331,7 +335,7 @@ int ClusterMainWindow::upackSpot(QString txt)
 
     dxMsg = txt.split(QRegExp("\\s+"));
     dxCall = dxMsg[2].remove(':');
-    dxFreq = dxMsg[3];
+    dxFreq = convertKhzToMhz(dxMsg[3]);
     spotCall = dxMsg[4];
     // find time
     for (int i = 4; i < dxMsg.count(); i++)

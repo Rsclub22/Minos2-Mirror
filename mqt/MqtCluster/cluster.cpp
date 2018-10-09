@@ -51,4 +51,7 @@ QString Cluster::showDxMsg(QString cmd)
 }
 
 
-
+QString Cluster::quit()
+{
+    return QString("bye\n");
+}

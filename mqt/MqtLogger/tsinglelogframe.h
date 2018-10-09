@@ -32,6 +32,7 @@ class ListContact;
 class FocusWatcher;
 class MatchTreeFrame;
 class ChatFrame;
+class ClusterClientFrame;
 class MinosSplitter;
 
 // We may need to define our own validation controls with valid methods
@@ -66,6 +67,8 @@ class TSingleLogFrame : public QFrame
     MatchArchiveFrame *archiveMatchFrame = nullptr;
 
     ChatFrame *chatFrame = nullptr;
+
+    ClusterClientFrame *clusterFrame = nullptr;
 
     QVector <MinosSplitter *> rowSplitters;
 

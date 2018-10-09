@@ -10,7 +10,7 @@
 #include "cluster.h"
 #include "setupdialog.h"
 #include "dxspotdatamodel.h"
-#include "clusterrpc.h"
+#include "clusterClientServer.h"
 
 namespace Ui {
 class ClusterMainWindow;

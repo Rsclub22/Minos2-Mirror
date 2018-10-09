@@ -13,6 +13,7 @@ public:
     QString setDxGridMsg();
     QString setPageMsg(QString lineNum);
     QString showDxMsg(QString cmd);
+    QString quit();
 };
 
 #endif // CLUSTER_H

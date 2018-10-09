@@ -32,6 +32,8 @@
 #include "rotcontrolframe.h"
 #include "RotPresets.h"
 #include "ChatFrame.h"
+#include "clusterclientframe.h"
+
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -286,6 +288,15 @@ void TSingleLogFrame::createScreenComponents()
     chatFrame->setFrameShadow(QFrame::Raised);
 
     chatFrame->setVisible(false);
+
+    clusterFrame = new ClusterClientFrame(this);
+    clusterFrame->setObjectName(QStringLiteral("clusterFrame"));
+    clusterFrame->setFrameShape(QFrame::StyledPanel);
+    clusterFrame->setFrameShadow(QFrame::Raised);
+
+    clusterFrame->setVisible(false);
+
+
 
     // set frame to Vertical Layout, insert LogFrameSplitter
     verticalLayout = new QVBoxLayout(this);

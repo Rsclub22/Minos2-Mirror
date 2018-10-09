@@ -19,9 +19,9 @@
 #include <QFrame>
 #include "dxspotdatamodel.h"
 #include "base_pch.h"
-#include "clusterrpc.h"
-//#include "MinosLoggerEvents.h"
-#include "LoggerContest.h"
+#include "clusterClientServer.h"
+#include "MinosLoggerEvents.h"
+
 namespace Ui {
     class ClusterClientFrame;
 }
@@ -34,19 +34,28 @@ class ClusterClientFrame : public QFrame
     void traceMsg(QString msg);
 public:
     explicit ClusterClientFrame(QWidget *parent);
+    ~ClusterClientFrame() override;
+    void setStandAlone();
+    void setContest(BaseContestLog *contest);
 
 
-
-    void setContest( BaseContestLog *ct );
 
 
 private:
     Ui::ClusterClientFrame *ui;
-    LoggerContestLog *ct = nullptr;
+    BaseContestLog *contest;
+
 
     DxSpotDataModel* dxSpotDataModel;
     QTableView* dxSpotView;
     void restoreDxSpotViewColumns();
+
+private slots:
+
+
+    void clusterClientServerList(QVector<ClusterServer>);
+    void dxSpots(QVector<QString>);
+    void on_FontChanged();
 };
 
 #endif // CLUSTERCLIENTFRAME_H

@@ -1,35 +1,54 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Cluster Server
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+//
+// Interprocess Control Logic
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2018
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+#include "base_pch.h"
 #include "MinosRPC.h"
 #include "MinosLoggerEvents.h"
 
-#include "ChatServer.h"
+#include "clusterClientServer.h"
 
 static bool syncstat = false;
-static QVector<QString> chatQueue;
-QString stateIndicator[] =
+static QVector<QString> spotQueue;
+
+QString clusterStateIndicator[] =
 {
     "Available",
     "NotAvailable",
     "NoContact"
 };
-QString stateList[] =
+QString clusterStateList[] =
 {
    "Available",
    "Not Available",
    "No Contact"
 };
 
-ChatServer *ChatServer::chatServer = nullptr;
+
+ClusterClientServer *ClusterClientServer::clusterClientServer = nullptr;
 
 
-ChatServer *ChatServer::getChatServer()
+ClusterClientServer *ClusterClientServer::getClusterClientServer()
 {
-    if (!chatServer)
+    if (!clusterClientServer)
     {
-        chatServer = new ChatServer();
+        clusterClientServer = new ClusterClientServer();
     }
-    return chatServer;
+    return clusterClientServer;
 }
-ChatServer::ChatServer()
+
+ClusterClientServer::ClusterClientServer()
 {
     connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
     SyncTimer.start(100);
@@ -38,13 +57,14 @@ ChatServer::ChatServer()
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
+
 }
 
-ChatServer::~ChatServer()
+ClusterClientServer::~ClusterClientServer()
 {
 }
-void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
+
+void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
 {
     AnalysePubSubNotify an( err, mro );
 
@@ -53,7 +73,7 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         if ( an.getCategory() == rpcConstants::LocalStationCategory)
         {
             QString server = an.getKey();
-            QVector<Server>::iterator stat;
+            QVector<ClusterServer>::iterator stat;
             bool pubNeeded = true;
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
@@ -72,7 +92,7 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         if (an.getCategory() == rpcConstants::StationCategory)
         {
             QString server = an.getKey();
-            QVector<Server>::iterator stat;
+            QVector<ClusterServer>::iterator stat;
             bool subNeeded = true;
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
@@ -90,11 +110,11 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
 
         if ( an.getCategory() == rpcConstants::ChatCategory )
         {
-            trace( QString(stateIndicator[an.getState()]) + " " + an.getKey() + " " + an.getValue() );
+            trace( QString(clusterStateIndicator[an.getState()]) + " " + an.getKey() + " " + an.getValue() );
 
             if (an.getKey() == rpcConstants::ChatServer)
             {
-                QVector<Server>::iterator stat;
+                QVector<ClusterServer>::iterator stat;
                 for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
                 {
                     if ((*stat).name == an.getPublisherServer())
@@ -102,8 +122,8 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
                         if ((*stat).state != an.getState())
                         {
                             (*stat).state = an.getState();
-                            QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
-                            addChat( mess );
+                            QString mess = an.getPublisherServer() + " changed state to " + clusterStateList[an.getState()];
+                            addSpotQueue( mess );
                             syncstat = true;
                         }
                         break;
@@ -112,19 +132,19 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
                 if ( stat == serverList.end() )
                 {
                     // We have received notification from a previously unknown station - so report on it
-                    Server s;
+                    ClusterServer s;
                     s.name = an.getPublisherServer();
                     s.state = an.getState();
                     s.app = an.getValue();
                     serverList.push_back( s );
-                    QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
-                    addChat( mess );
+                    QString mess = an.getPublisherServer() + " changed state to " + clusterStateList[an.getState()];
+                    addSpotQueue( mess );
                     syncstat = true;
                 }
             }
             else if (an.getKey() == rpcConstants::ChatServerFrequency)
             {
-                QVector<Server>::iterator stat;
+                QVector<ClusterServer>::iterator stat;
                 for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
                 {
                     if ((*stat).name == an.getPublisherServer())
@@ -142,7 +162,7 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
     }
 }
 //---------------------------------------------------------------------------
-void ChatServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
     trace( "chat callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
@@ -164,56 +184,54 @@ void ChatServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const 
                 {
                     // add to chat window
                     QString mess = from + " : " + pmess;
-                    addChat( mess );
+                    addSpotQueue( mess );
                 }
             }
         }
     }
 }
-void ChatServer::SyncTimerTimer(  )
+void ClusterClientServer::SyncTimerTimer(  )
 {
     syncStations();
     syncChat();
 }
 
 //---------------------------------------------------------------------------
-void ChatServer::syncStations()
+void ClusterClientServer::syncStations()
 {
     if ( syncstat )
     {
         syncstat = false;
 
-        emit ChatServerList(serverList);
+        emit ClusterServerList(serverList);
     }
 }
-void ChatServer::addChat(const QString &mess)
+void ClusterClientServer::addSpotQueue(const QString &spot)
 {
     QDateTime dt = QDateTime::currentDateTime();
-    QString sdt = dt.toString( "HH:mm:ss " ) + mess;
-    chatQueue.push_back(sdt);
+    QString sdt = dt.toString( "HH:mm:ss " ) + spot;
+    spotQueue.push_back(sdt);
 }
-void ChatServer::syncChat()
+void ClusterClientServer::syncChat()
 {
-    if (chatQueue.count())
+    if (spotQueue.count())
     {
-        emit ChatMessages(chatQueue);
-        chatQueue.clear();
+        emit dxSpot(spotQueue);
+        spotQueue.clear();
     }
 }
 //---------------------------------------------------------------------------
-void ChatServer::sendMessage(QString mess)
+void ClusterClientServer::sendDxSpot(QString spot)
 {
     // We need to send the message to all connected stations
-    for ( QVector<Server>::iterator i = serverList.begin(); i != serverList.end(); i++ )
+    for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
         RPCGeneralClient rpc(rpcConstants::chatMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember( mess, rpcConstants::SendChatMessage );
+        st->addMember( spot, rpcConstants::SendChatMessage );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( (*i).app );
     }
 }
-void ChatServer::onRigFreqChanged(QString f, BaseContestLog */*c*/)
-{
-    RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServerFrequency, f, psPublished);
-}
+
+
