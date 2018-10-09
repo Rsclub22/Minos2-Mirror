@@ -23,8 +23,6 @@
 
 #include "htmldelegate.h"
 
-static qreal heightmult = 1.5;
-
 void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption, const QModelIndex &index ) const
 {
     QStyleOptionViewItem option = poption; // kill const

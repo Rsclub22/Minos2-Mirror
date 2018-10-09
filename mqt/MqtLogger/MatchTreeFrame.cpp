@@ -19,6 +19,8 @@ MatchTreeFrame::MatchTreeFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setUniformRowHeights(true);
+
 }
 void MatchTreeFrame::initialise()
 {

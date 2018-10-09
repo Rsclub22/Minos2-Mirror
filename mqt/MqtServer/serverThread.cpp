@@ -125,9 +125,6 @@ void MinosServerConnection::setFromId( MinosId &id, RPCRequest *req )
          QString message;
          if (req->getStringArg(1, message))
          {
-             MinosServerListener *msl = MinosServerListener::getListener();
-             MinosClientListener *mcl = MinosClientListener::getListener();
-
              QDateTime sb;   // ignored response
              QHostAddress host = connectHost;
              srv = TZConf::getZConf()->processZConfString(message, host, sb);
