@@ -67,14 +67,26 @@
      <attribute name="horizontalHeaderVisible">
       <bool>false</bool>
      </attribute>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>5</number>
+     </attribute>
      <attribute name="horizontalHeaderHighlightSections">
       <bool>false</bool>
+     </attribute>
+     <attribute name="horizontalHeaderMinimumSectionSize">
+      <number>5</number>
      </attribute>
      <attribute name="verticalHeaderVisible">
       <bool>false</bool>
      </attribute>
+     <attribute name="verticalHeaderDefaultSectionSize">
+      <number>5</number>
+     </attribute>
      <attribute name="verticalHeaderHighlightSections">
       <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderMinimumSectionSize">
+      <number>5</number>
      </attribute>
     </widget>
    </item>
