@@ -958,6 +958,7 @@ void TSingleLogFrame::refreshMults()
 void TSingleLogFrame::updateTrees()
 {
    qsoModel.reset();
+   QSOTable->resizeRowsToContents();
    refreshMults();
 }
 bool TSingleLogFrame::getStanza( unsigned int stanza, QString &stanzaData )
