@@ -578,7 +578,6 @@ void RigMemoryFrame::scrollIntoView ( int firstMatch )
 {
     QTableView *QGrid = ui->rigMemTable;
 
-    QApplication::processEvents();
     if ( firstMatch >= 0 )
     {
         int row = -1;
@@ -590,6 +589,7 @@ void RigMemoryFrame::scrollIntoView ( int firstMatch )
             if ( sourceIndex.row() == firstMatch )
             {
                 QGrid->setCurrentIndex(nidx);
+                QGrid->scrollTo(nidx);
                 break;
             }
         }
