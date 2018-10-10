@@ -91,7 +91,7 @@ SC ScreenConfig::getConfig()
                 if (ele)
                 {
                     SCElement scele;
-                    scele.type = ele->getType();
+                    scele.type = getScreenType(ele->getType());
                     scrow.elements.append(scele);
 
                 }
@@ -192,14 +192,14 @@ bool ScreenConfig::checkOk(ScreenConfigElement *e)
     QString etype = e->getType();
     for (int i = 0; i < vbl->count(); i++)
     {
-        QWidget *w = vbl->itemAt(i)->widget();
-        ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+        const QWidget *w = vbl->itemAt(i)->widget();
+        const ScreenConfigRow *row = dynamic_cast<const ScreenConfigRow *>(w);
         if (row)
         {
             for (int j = 0; j < row->vbl->count(); j++)
             {
                 w = row->vbl->itemAt(j)->widget();
-                ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
+                const ScreenConfigElement *ele = dynamic_cast<const ScreenConfigElement *>(w);
                 if (ele && ele != e)
                 {
                     QString type = ele->getType();
@@ -211,7 +211,7 @@ bool ScreenConfig::checkOk(ScreenConfigElement *e)
                         }
                         else
                         {
-                            ele->setType(getScreenTypeString(sctNone));
+                            return false;
                         }
                     }
                 }

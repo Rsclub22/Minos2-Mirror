@@ -4,7 +4,6 @@
 
 enum SCType
 {
-    sctNone,
     sctAux,
     sctLog,
     sctRigControl,
@@ -15,12 +14,13 @@ enum SCType
     sctThisMatch,
     sctOtherMatch,
     sctArchiveMatch,
-    sctChat
+    sctChat,
+    sctNone
 };
 class SCElement
 {
 public:
-    QString type;
+    SCType type;
 };
 
 class SCRow

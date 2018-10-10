@@ -391,15 +391,15 @@ void TSingleLogFrame::buildScreenLayout()
 
             for (int k = 0; k < sc.rows[j].elements.count(); k++)
             {
-                QString type = sc.rows[j].elements[k].type;
-                if (getScreenType(type) == sctNone)
+                SCType type = sc.rows[j].elements[k].type;
+                if (type == sctNone)
                     continue;
 
                 QScrollArea *elementScrollArea = nullptr;
-                if (getScreenType(type) != sctLog
-                        && getScreenType(type) != sctThisMatch
-                        && getScreenType(type) != sctOtherMatch
-                        && getScreenType(type) != sctArchiveMatch
+                if (type != sctLog
+                        && type != sctThisMatch
+                        && type != sctOtherMatch
+                        && type != sctArchiveMatch
                         )
                 {
                     elementScrollArea = new QScrollArea();
@@ -410,7 +410,7 @@ void TSingleLogFrame::buildScreenLayout()
 
                 // insert correct widget type in horizontal splitter
 
-                switch (getScreenType(type))
+                switch (type)
                 {
                 case sctNone:
                 {
