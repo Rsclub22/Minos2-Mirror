@@ -79,3 +79,18 @@ wget http://www.country-files.com/cty/cty.dat -O cty.dat
 wget http://www.rsgbcc.org/vhf/vhfcontests17.xml -O vhfcontests17.xml
 wget http://www.rsgbcc.org/vhf/vhfcontests18.xml -O vhfcontests18.xml
 wget http://www.rsgbcc.org/vhf/vhfcontests19.xml -O vhfcontests19.xml
+
+cd ..
+
+read -n 1 -p "Do you want to copy the build to ~/runtime (press y/n)? " ans;
+
+case $ans in
+    y|Y)
+        ;;
+    n|N|*)
+        exit;;
+esac
+
+
+cp -rv Bin ~/runtime
+

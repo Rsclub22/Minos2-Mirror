@@ -762,6 +762,10 @@ int Callsign::validate( )
     {
         valRes = ERR_INVCS;
     }
+    if (fullCall.getValue().right(1) == "/" )
+    {
+        valRes = ERR_INVCS;
+    }
 
     return valRes;
 

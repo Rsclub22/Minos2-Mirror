@@ -62,8 +62,11 @@ static QString getServerId()
 TZConf::TZConf( )
 {
    ZConf = this;
-   sendBeaconResponse = false;  // so we send a true beacon with request
-   beaconInterval = 60000;   // once a minute
+   sendBeaconResponse = QDateTime();  // so we send a true beacon with request
+   beaconInterval = 1000;
+   maxBeaconInterval = 60000;   // once a minute
+   beaconIncrement = 5000;   // once a minute
+   beaconResponseDelay = 100;
    lastTick = QDateTime::currentDateTimeUtc().addSecs(-59); // force a beacon soon
 }
 TZConf::~TZConf( )
@@ -108,6 +111,8 @@ void TZConf::startZConf(const QString &name)
             continue;
         if (!ifaces[i].flags().testFlag(QNetworkInterface::IsRunning))
             continue;
+        if (ifaces[i].flags().testFlag(QNetworkInterface::IsLoopBack))
+            continue;
 
         // Now get all IP addresses for this interface
         QList<QNetworkAddressEntry> addrs = ifaces[i].addressEntries();
@@ -124,6 +129,7 @@ void TZConf::startZConf(const QString &name)
 
                 if (res)
                 {
+                    trace(QString("iface %1 address %2").arg(ifaces[i].humanReadableName()).arg(addrs[j].ip().toString()));
                     TxSocks.push_back(qus);
                 }
             }
@@ -158,6 +164,13 @@ void TZConf::startZConf(const QString &name)
 }
 void TZConf::onTimeout()
 {
+    static bool firstTime = true;
+    if (firstTime)
+    {
+        sendBeaconResponse = QDateTime::currentDateTime().addSecs(-100);
+        firstTime = false;
+    }
+
     if (lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval)
     {
         readServerList();
@@ -168,22 +181,29 @@ void TZConf::onTimeout()
         onReadyRead();      // catcher for missed datagrams - don't know why they go missing
     }
 
-   if (sendBeaconResponse || lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval )
+   if (sendBeaconResponse.isValid() || lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval )
    {
-      trace(QString("Timeout: Sending beacon, sendBeaconResponse = ") + (sendBeaconResponse?"true":"false"));
+      trace(QString("Timeout: Sending beacon, sendBeaconResponse = ") + ((sendBeaconResponse.isValid() && sendBeaconResponse.msecsTo(QDateTime::currentDateTime()) > beaconResponseDelay)?"true":"false"));
+      sendMessage( );   // timer requests beaconing, beacon just responds
       lastTick = QDateTime::currentDateTime();
-
-      sendMessage( sendBeaconResponse );   // timer requests beaconing, beacon just responds
-      sendBeaconResponse = false;
+      beaconInterval += beaconIncrement;
+      beaconInterval = qMin(beaconInterval, maxBeaconInterval);
    }
 }
 
 
-bool TZConf::sendMessage(bool beaconReq )
+bool TZConf::sendMessage( )
 {
+    bool reqBeacon = false;
+
+    if (sendBeaconResponse.isValid() && sendBeaconResponse.msecsTo(QDateTime::currentDateTime()) > beaconResponseDelay)
+    {
+        sendBeaconResponse = QDateTime();
+        reqBeacon = true;
+    }
     for (QVector<QSharedPointer<UDPSocket> >::iterator i = TxSocks.begin(); i != TxSocks.end(); i++)
     {
-        QString mess = getZConfString(beaconReq);
+        QString mess = getZConfString(reqBeacon, (*i)->qua.ip().toString());
         (*i)->sendMessage(mess);
     }
    return true;
@@ -193,8 +213,6 @@ bool TZConf::sendMessage(bool beaconReq )
 void TZConf::onReadyRead()
 {
     trace("TZConf::onReadyRead()");
-    QString datagram;
-    QString sender;
     while (readSocket.hasPendingDatagrams())
     {
         QByteArray buf;
@@ -207,7 +225,7 @@ void TZConf::onReadyRead()
         trace("Datagram received from " + host.toString() + " " + dg);
         if (res > 0)
         {
-            processZConfString(dg, host.toString(), sendBeaconResponse);
+            processZConfString(dg, host, sendBeaconResponse);
         }
     }
 }
@@ -226,15 +244,21 @@ Server *findStation( const QString s )
    }
    return nullptr;
 }
-void TZConf::ServerScan()
+Server *findIp( const QHostAddress &h )
 {
-   for ( QVector<Server *>::iterator i = serverList.begin(); !closeApp && i != serverList.end(); i++ )
+    quint32 ha = h.toIPv4Address();
+   for ( QVector<Server *>::iterator i = serverList.begin(); i != serverList.end(); i++ )
    {
-      trace("Server scan - checking " + (*i)->station);
-      MinosServerListener::getListener() ->checkServerConnected( ( *i ), false );
-      trace("Server scan - checked " + (*i)->station);
+       quint32 a = (*i)->host.toIPv4Address();
+       trace(QString("findIP comparing %1 with %2").arg(ha).arg(a));
+      if (ha == a)
+      {
+         return ( *i );
+      }
    }
+   return nullptr;
 }
+
 void TZConf::readServerList()
 {
    trace("Reading Server List File");
@@ -277,10 +301,11 @@ void TZConf::readServerList()
          port = QString::number(MinosServerPort);
       }
 
-      zcPublishServer( uuid, station, host, toQUint16(port, MinosServerPort ) );
+      QHostAddress ha;
+      ha.setAddress(host);
+      zcPublishServer( uuid, station, ha, toQUint16(port, MinosServerPort ) );
 
    }
-   ServerScan();
    //trace("Finished reading Server List File");
 }
 
@@ -295,37 +320,49 @@ void TZConf::readServerList()
 // when they have subscribed to stations.
 
 Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
-                              const QString &hosttarget, quint16 PortAsNumber )
+                              const QHostAddress &host, quint16 PortAsNumber )
 {
-    trace( "zcPublishServer Host " + hosttarget + " Station " + name +
+    trace( "zcPublishServer Host " + host.toString() + " Station " + name +
            " Port " + QString::number( PortAsNumber ) + " uuid " + uuid  );
+    MinosServerListener *msl = MinosServerListener::getListener();
     Server *s = findStation( name );
     if ( s )
     {
-        trace("Station " + name + " found");
+        trace("Station " + name + " found by name");
     }
-    else
+    if (!s)
+    {
+        s = findIp(host);
+        if (s)
+        {
+            trace("Station " + host.toString() + " found by ip");
+            MinosServerConnection *m = msl->findConnection(host);
+            m->setServer(s);
+        }
+    }
+    if (!s)
     {
         trace("Station " + name + " not found");
-        s = new Server( uuid, hosttarget, name, PortAsNumber );
+        s = new Server( uuid, host, name, PortAsNumber );
         if ( name == getZConf()->getName() )
         {
             s->local = true;
         }
         else
         {
-            MinosServerConnection *msc = new MinosServerConnection();
+            // we must have a server connection already
+            trace("Creating MinosServerConnection zcPublishServer for " + name);
+            MinosServerConnection *msc = new MinosServerConnection(true);
             msc->mConnect(s);
-            MinosServerListener *msl = MinosServerListener::getListener();
             msl->addListenerSlot(msc);
         }
         serverList.push_back( s );
     }
     if ( s->local )
     {
-        PubSubMain->publish( "", rpcConstants::LocalStationCategory, name, hosttarget, psPublished );
+        PubSubMain->publish( "", rpcConstants::LocalStationCategory, name, host.toString(), psPublished );
     }
-    PubSubMain->publish( "", rpcConstants::StationCategory, name, hosttarget, psPublished );
+    PubSubMain->publish( "", rpcConstants::StationCategory, name, host.toString(), psPublished );
     trace("zcPublishServer finished");
     return s;
 }
@@ -335,11 +372,11 @@ void TZConf::publishDisconnect(const QString &name)
    Server *s = findStation( name );
    if ( s )
    {
-      PubSubMain->publish( "", rpcConstants::StationCategory, name, s->host, psNotConnected );
+      PubSubMain->publish( "", rpcConstants::StationCategory, name, s->host.toString(), psNotConnected );
    }
 }
 //==============================================================================
-QString TZConf::getZConfString(bool beaconreq)
+QString TZConf::getZConfString(bool beaconreq, const QString &h)
 {
    static int sequence = 0;
    QString Uuid = getServerId();
@@ -347,14 +384,15 @@ QString TZConf::getZConfString(bool beaconreq)
                + "seq='" + QString::number(sequence++)
                + "' UUID='" + Uuid
                + "' name='" + getName()
+               + "' ip='" + h
                + "' port='" + QString::number(MinosServerPort) + "'"
-               + (beaconreq?"":" request='true'")       // if a beacon response, don't request another beacon
+               + (beaconreq?" request='true'":"")
                + " />";
 }
 //==============================================================================
-Server *TZConf::processZConfString(const QString &message, const QString &recvHost, bool &sendBeaconResponse)
+Server *TZConf::processZConfString(const QString &message, QHostAddress &host, QDateTime &sendBeaconResponse)
 {
-    sendBeaconResponse = false;
+    sendBeaconResponse = QDateTime();
     Server *srv = nullptr;
     TiXmlDocument xdoc;
     TIXML_STRING smessage = message.toStdString();// allowed conversion through TIXML_STRING
@@ -367,21 +405,31 @@ Server *TZConf::processZConfString(const QString &message, const QString &recvHo
         QString station = getAttribute( tix, "name" );
         QString port = getAttribute( tix, "port" );
         QString request = getAttribute( tix, "request" );
+        QString ip = getAttribute(tix, "ip");
+        if (host.toString().isEmpty())
+        {
+            trace("host address empty, setting it to " + ip);
+            host.setAddress(ip);
+        }
+        else
+        {
+            trace("host address is " + host.toString());
+        }
 
         // publish what came in
 
         quint16 iPort = toQUint16(port, MinosServerPort);
-        srv = zcPublishServer( UUID, station, recvHost, iPort );
+        srv = zcPublishServer( UUID, station, host, iPort );
         if ( request.size() && UUID != getServerId())
         {
-            sendBeaconResponse = true;   // delay the response, give the other end a chance...
+            sendBeaconResponse = QDateTime::currentDateTime();   // delay the response, give the other end a chance...
         }
     }
     return srv;
 }
 //==============================================================================
 
-Server::Server( const QString &uuid, const QString &h, const QString &s, quint16 p )
+Server::Server( const QString &uuid, const QHostAddress &h, const QString &s, quint16 p )
     :
       uuid(uuid),
       host( h ),

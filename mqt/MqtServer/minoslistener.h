@@ -17,6 +17,7 @@
 
 #include "MinosLink.h"
 class Server;
+class MinosServerConnection;
 
 extern bool closeApp;
 
@@ -30,6 +31,8 @@ class MinosListener:public QObject
       QVector<MinosCommonConnection *>i_array;
 
       virtual MinosCommonConnection *makeConnection(QTcpSocket *s) = 0;
+
+      virtual bool isServer() const = 0;
     public:
 
       void clearSockets();
@@ -55,6 +58,10 @@ class MinosServerListener: public MinosListener
       static MinosServerListener *MSL;
    protected:
       virtual MinosCommonConnection *makeConnection(QTcpSocket *s) override;
+      virtual bool isServer() const override
+      {
+          return true;
+      }
    public:
       static MinosServerListener *getListener()
       {
@@ -69,11 +76,12 @@ class MinosServerListener: public MinosListener
          MSL = nullptr;
       }
       bool sendServer(TiXmlElement *pak );
-      void checkServerConnected( Server *s, bool force );
 
       void buildTable(QTableWidget *tab);
 
       void closeDown() override;
+
+      MinosServerConnection *findConnection(const QHostAddress &h);
 };
 //==============================================================================
 class MinosClientListener: public MinosListener
@@ -83,6 +91,10 @@ class MinosClientListener: public MinosListener
       static MinosClientListener *MCL;
    protected:
       virtual MinosCommonConnection *makeConnection(QTcpSocket *s) override;
+      virtual bool isServer() const override
+      {
+          return false;
+      }
 
    public:
       static MinosClientListener *getListener()

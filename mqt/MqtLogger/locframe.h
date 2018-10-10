@@ -16,6 +16,8 @@ class LocGridModel: public QAbstractItemModel
         LocGridModel();
         ~LocGridModel() override;
 
+        QString myLoc;
+
         BaseContestLog *ct;
         int rows;
         int cols;

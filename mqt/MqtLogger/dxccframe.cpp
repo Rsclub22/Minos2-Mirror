@@ -4,10 +4,11 @@
 #include "LoggerContest.h"
 #include "ContestApp.h"
 
+#include "tsinglelogframe.h"
+#include "htmldelegate.h"
+
 #include "dxccframe.h"
 #include "ui_dxccframe.h"
-
-#include "tsinglelogframe.h"
 
 extern ContList contlist[ CONTINENTS ];
 
@@ -39,7 +40,9 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
     {
         proxyModel.setSourceModel(&model);
         ui->DXCCTable->setModel(&proxyModel);
+        ui->DXCCTable->setItemDelegate(new HtmlDelegate(2.0, 0.5));
         reInitialiseCountries();
+        ui->DXCCTable->resizeRowsToContents();
         connect( ui->DXCCTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
                  this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     }
@@ -116,7 +119,7 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
         if (role == Qt::DisplayRole)
         {
             QString disp = MultLists::getMultLists() ->getCtryListText( index.row(), CountryTreeColumns[ index.column() ].fieldId, ct );
-            return disp;
+            return disp.trimmed();
         }
         if (role == Qt::TextAlignmentRole)
             return Qt::AlignLeft;
@@ -132,7 +135,7 @@ QVariant DXCCGridModel::headerData( int section, Qt::Orientation orientation,
 
         cell = CountryTreeColumns[section].title;
 
-        return cell;
+        return cell.trimmed();
     }
     if (role == Qt::TextAlignmentRole)
         return Qt::AlignLeft;

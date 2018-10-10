@@ -159,10 +159,16 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
 void MinosCommonConnection::onLog ( const char *data, size_t /*size*/, int is_incoming )
 {
    QString logbuff;
+
    if ( is_incoming )
       logbuff += "RECV";
    else
       logbuff += "SEND";
+
+   if (isFromDatagram())
+   {
+           logbuff += " DG";
+   }
 
    logbuff += "[";
    logbuff += data;
@@ -185,7 +191,9 @@ void MinosCommonConnection::on_readyRead()
 {
    // select says we have data, so read it
    // and send the data through the parser
-   trace ( "MinosCommonConnection::on_readyRead called to receive data from " + connectHost );
+   trace ( QString("MinosCommonConnection::on_readyRead called to receive data from (%1) %2")
+           .arg(isFromDatagram()?"dg":"norm")
+           .arg(connectHost.toString())  );
 
    // documntation says this may occasionally fail on Windows
    while (sock->bytesAvailable() > 0)

@@ -28,8 +28,8 @@ public:
     explicit ScreenConfigElement(QWidget *parent, ScreenConfigRow *parentrow);
     ~ScreenConfigElement();
 
-    void setType(QString);
-    QString getType();
+    void setType(SCType);
+    QString getType() const;
 
 private slots:
     void on_elementTypeCombo_activated(const QString &arg1);
