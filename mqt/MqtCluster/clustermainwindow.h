@@ -9,6 +9,7 @@
 #include "qttelnet.h"
 #include "cluster.h"
 #include "setupdialog.h"
+#include "clusterrpc.h"
 #include "dxspotdatamodel.h"
 #include "clusterClientServer.h"
 
@@ -74,6 +75,7 @@ private:
     QLabel* status;
 
     QtTelnet* client;
+    Clusterrpc* clusterRpc;
     Cluster* dxCluster;
 
     DxSpotDataModel* dxSpotDataModel;

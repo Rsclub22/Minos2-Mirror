@@ -38,6 +38,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
 
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+
     createCloseEvent();
 
     connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
@@ -54,6 +56,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
         restoreGeometry(geometry);
 
     setupCluster = new SetupDialog();
+    clusterRpc = new Clusterrpc();
+
+    clusterRpc->setStandAlone();
 
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
@@ -296,9 +301,10 @@ void ClusterMainWindow::parseDX(QString txt)
         if (retCode >= 0)
         {
 
-            qDebug() << QString("DX de %1 %2 %3 %4 %5 %6").arg(dxCall).arg(dxFreq).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment);
+            trace(QString("Parse DX de %1 %2 %3 %4 %5 %6").arg(dxCall).arg(dxFreq).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment));
             // Display
             QString displayFreq = alignFreqRight(dxFreq);
+            clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6").arg(dxCall).arg(dxFreq).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment));
             dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
             //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             dxSpotDataModel->insertRows(0, 1);
@@ -306,7 +312,7 @@ void ClusterMainWindow::parseDX(QString txt)
         }
         else if (retCode < 0)
         {
-            qDebug() << QString("Error unpacking spot");
+            trace(QString("ParseDx: Error unpacking spot"));
         }
 
     }

@@ -16,6 +16,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    appStartup(rpcConstants::clusterApp);
     ClusterMainWindow w;
     w.show();
 

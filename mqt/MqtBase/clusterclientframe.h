@@ -50,6 +50,7 @@ private:
     QTableView* dxSpotView;
     void restoreDxSpotViewColumns();
 
+    void addDxSpotToTable(QString spot);
 private slots:
 
 

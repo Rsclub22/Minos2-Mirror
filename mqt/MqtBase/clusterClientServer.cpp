@@ -86,7 +86,7 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
             if (pubNeeded)
             {
                 QString a = MinosRPC::getMinosRPC()->getAppName();
-                RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServer, a + "@" + server, psPublished);
+                RPCPubSub::publish(rpcConstants::clusterCategory, rpcConstants::clusterServer, a + "@" + server, psPublished);
             }
         }
         if (an.getCategory() == rpcConstants::StationCategory)
@@ -104,15 +104,15 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
             }
             if (subNeeded)
             {
-                RPCPubSub::subscribeRemote(server, rpcConstants::ChatCategory);
+                RPCPubSub::subscribeRemote(server, rpcConstants::clusterCategory);
             }
         }
 
-        if ( an.getCategory() == rpcConstants::ChatCategory )
+        if ( an.getCategory() == rpcConstants::clusterCategory )
         {
             trace( QString(clusterStateIndicator[an.getState()]) + " " + an.getKey() + " " + an.getValue() );
 
-            if (an.getKey() == rpcConstants::ChatServer)
+            if (an.getKey() == rpcConstants::clusterServer)
             {
                 QVector<ClusterServer>::iterator stat;
                 for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
@@ -142,6 +142,7 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
                     syncstat = true;
                 }
             }
+            /*
             else if (an.getKey() == rpcConstants::ChatServerFrequency)
             {
                 QVector<ClusterServer>::iterator stat;
@@ -158,13 +159,14 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
                     }
                 }
             }
+            */
         }
     }
 }
 //---------------------------------------------------------------------------
 void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-    trace( "chat callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    trace( "cluster callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
     // Should we use QMap to give a list of name/value pairs?
     // BUT the value isn't always the same type - should it be?
@@ -177,7 +179,7 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
         if (args)
         {
             QSharedPointer<RPCParam> psMess;
-            if (args->getStructArgMember(0, rpcConstants::SendChatMessage, psMess))
+            if (args->getStructArgMember(0, rpcConstants::sendClusterSpot, psMess))
             {
                 QString pmess;
                 if (psMess->getString(pmess))
@@ -193,7 +195,7 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
 void ClusterClientServer::SyncTimerTimer(  )
 {
     syncStations();
-    syncChat();
+    syncSpots();
 }
 
 //---------------------------------------------------------------------------
@@ -212,7 +214,7 @@ void ClusterClientServer::addSpotQueue(const QString &spot)
     QString sdt = dt.toString( "HH:mm:ss " ) + spot;
     spotQueue.push_back(sdt);
 }
-void ClusterClientServer::syncChat()
+void ClusterClientServer::syncSpots()
 {
     if (spotQueue.count())
     {
@@ -226,9 +228,9 @@ void ClusterClientServer::sendDxSpot(QString spot)
     // We need to send the message to all connected stations
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        RPCGeneralClient rpc(rpcConstants::chatMethod);
+        RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember( spot, rpcConstants::SendChatMessage );
+        st->addMember( spot, rpcConstants::sendClusterSpot );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( (*i).app );
     }

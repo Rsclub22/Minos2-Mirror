@@ -30,14 +30,16 @@ SOURCES += main.cpp\
         clustermainwindow.cpp \
     setupdialog.cpp \
     cluster.cpp \
-    spotsdatabase.cpp
+    spotsdatabase.cpp \
+    clusterrpc.cpp
 
 
 
 HEADERS  += clustermainwindow.h \
     setupdialog.h \
     cluster.h \
-    spotsdatabase.h
+    spotsdatabase.h \
+    clusterrpc.h
 
 
 

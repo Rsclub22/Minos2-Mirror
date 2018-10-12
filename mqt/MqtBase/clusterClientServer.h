@@ -12,7 +12,6 @@ class ClusterServer
 public:
     QString name;
     QString app;
-    QString freq;
     PublishState state;
 };
 
@@ -37,7 +36,7 @@ private:
     QTimer SyncTimer;
 
    void addSpotQueue(const QString &spot);
-    void syncChat();
+    void syncSpots();
     void syncStations();
 
 

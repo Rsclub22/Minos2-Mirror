@@ -31,14 +31,14 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     on_FontChanged();
 
-    /*
+
     dxSpotDataModel = new DxSpotDataModel();
     dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotDataModel);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
     restoreDxSpotViewColumns();
     dxSpotView->resizeRowsToContents();
-*/
+
 
 }
 
@@ -67,7 +67,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = clusterStateIndicator[(*i).state] + " " + (*i).name + "\r\n" + (*i).freq;
+        QString state = clusterStateIndicator[(*i).state] + " " + (*i).name + "\r\n";
         //ui->StationList->addItem( state );
     }
 }
@@ -77,13 +77,26 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotQueue)
     for ( QVector<QString>::iterator i = spotQueue.begin(); i != spotQueue.end(); i++ )
     {
        //ui->ChatMemo->append( (*i) );
-       trace("syncChat " + (*i));
+       addDxSpotToTable((*i));
+       trace("syncSpots " + (*i));
     }
     spotQueue.clear();
 }
 
 
+void ClusterClientFrame::addDxSpotToTable(QString spot)
+{
+    if (spot.contains("DXSPOT:"))
+    {
+        QStringList spotlist = spot.split(':', QString::KeepEmptyParts);
+        int a = 0;
 
+        //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
+        dxSpotDataModel->rowData = QStringList {spotlist[8], spotlist[5], spotlist[4], spotlist[7], spotlist[6], spotlist[9]};
+        dxSpotDataModel->insertRows(0, 1);
+
+    }
+}
 
 
 void ClusterClientFrame::restoreDxSpotViewColumns()

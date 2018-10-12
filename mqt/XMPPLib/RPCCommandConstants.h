@@ -52,8 +52,9 @@ static const QString bandmapKeyLoaded    = QT_TR_NOOP("Loaded");
 // Cluster
 static const QString clusterApp         = QT_TR_NOOP("mqtCluster");
 static const QString clusterMethod      = QT_TR_NOOP("Minos:Cluster");
-
-static const QString SendClusterSpot    = QT_TR_NOOP("SendClusterSpot");
+static const QString clusterCategory       = QT_TR_NOOP("MinosCluster");
+static const QString clusterServer         = QT_TR_NOOP("MinosClusterServer");
+static const QString sendClusterSpot    = QT_TR_NOOP("SendClusterSpot");
 
 // Chat
 static const QString chatApp            = QT_TR_NOOP("mqtChat");
