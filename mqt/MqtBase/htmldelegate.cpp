@@ -67,8 +67,13 @@ QSize HtmlDelegate::sizeHint( const QStyleOptionViewItem &poption, const QModelI
 
     initStyleOption( &option, index );
 
+    return docSize(option.text);
+}
+
+QSize HtmlDelegate::docSize(QString text) const
+{
     QTextDocument doc;
-    doc.setHtml( option.text );
-    doc.setTextWidth( option.rect.width() );
+    doc.setHtml( text );
+    doc.setTextWidth( -1 );
     return QSize( static_cast<int>(doc.idealWidth() * wmult), static_cast<int>(doc.size().height() * hmult) );
 }

@@ -26,7 +26,7 @@ void MatchTreeFrame::initialise()
 {
     setModel(getMatchModel());
     header()->setSectionResizeMode(QHeaderView::Interactive);
-    setItemDelegate( new HtmlDelegate(1.7, 0.8) );
+    setItemDelegate( new HtmlDelegate(1.0, 1.0) );
     setUniformRowHeights(true);
 
 

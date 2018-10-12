@@ -171,11 +171,7 @@ createScreenComponents()
     QSOTable = new QTableView(this);
     QSOTable->setObjectName(QStringLiteral("QSOTable"));
     QSOTable->setFocusPolicy(Qt::ClickFocus);
-    QSOTable->setFrameShape(QFrame::NoFrame);
-    QSOTable->setFrameShadow(QFrame::Plain);
-    QSOTable->setLineWidth(1);
-    QSOTable->setMidLineWidth(1);
-    QSOTable->setEditTriggers(QAbstractItemView::EditKeyPressed);
+    QSOTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     QSOTable->setAlternatingRowColors(true);
     QSOTable->setSelectionMode(QAbstractItemView::SingleSelection);
     QSOTable->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -184,14 +180,20 @@ createScreenComponents()
     QSOTable->horizontalHeader()->setHighlightSections(false);
     QSOTable->horizontalHeader()->setStretchLastSection(true);
     QSOTable->verticalHeader()->setVisible(false);
+    QSOTable->setCornerButtonEnabled(false);
+    QSOTable->verticalHeader()->setMinimumSectionSize(1);
+    QSOTable->verticalHeader()->setDefaultSectionSize(1);
 
+    delegate = new HtmlDelegate(1.0, 1.0);
+    qsoModel.delegate = delegate;
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);
 
-    QSOTable->setItemDelegate( new HtmlDelegate(1.7, 0.3) );
-
-    QSOTable->resizeColumnsToContents();
+    // the order of the next two lines is critical
+    QSOTable->setItemDelegate( delegate );
     QSOTable->resizeRowsToContents();       // this is where the sizehint gets called
+
+
     QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     QSOTable->setVisible(false);

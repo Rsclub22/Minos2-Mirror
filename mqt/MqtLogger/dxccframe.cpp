@@ -38,9 +38,12 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
     model.ct = contest;
     if (contest)
     {
+        delegate = new HtmlDelegate(1.0, 1.0);
+        model.delegate = delegate;
+
         proxyModel.setSourceModel(&model);
         ui->DXCCTable->setModel(&proxyModel);
-        ui->DXCCTable->setItemDelegate(new HtmlDelegate(2.0, 0.5));
+        ui->DXCCTable->setItemDelegate(delegate);
         reInitialiseCountries();
         ui->DXCCTable->resizeRowsToContents();
         connect( ui->DXCCTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
@@ -138,7 +141,19 @@ QVariant DXCCGridModel::headerData( int section, Qt::Orientation orientation,
         return cell.trimmed();
     }
     if (role == Qt::TextAlignmentRole)
+    {
         return Qt::AlignLeft;
+    }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = data(index(section, 0), Qt::DisplayRole).toString();
+            QSize r = delegate->docSize(s);
+            r.setWidth(0);
+            return r;
+        }
+    }
     return QVariant();
 }
 

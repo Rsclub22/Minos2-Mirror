@@ -40,7 +40,7 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     proxyModel.setSourceModel(&model);
     ui->rigMemTable->setModel(&proxyModel);
 
-    ui->rigMemTable->setItemDelegate( new HtmlDelegate(1.7, 0.1) );
+    ui->rigMemTable->setItemDelegate( new HtmlDelegate(1.0, 1.0) );
     ui->rigMemTable->resizeColumnsToContents();
     ui->rigMemTable->resizeRowsToContents();
 

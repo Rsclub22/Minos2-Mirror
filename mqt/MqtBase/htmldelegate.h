@@ -33,6 +33,7 @@ class HtmlDelegate : public QStyledItemDelegate
         {}
         virtual ~HtmlDelegate() override
         {}
+        QSize docSize(QString text) const;
     protected:
         void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
         QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const override;

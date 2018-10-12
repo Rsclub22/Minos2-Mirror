@@ -14,6 +14,8 @@
 #include <QString>
 #include <QAbstractItemView>
 
+class HtmlDelegate;
+
 class BaseContestLog;
 //---------------------------------------------------------------------------
 enum TAlignment { taLeftJustify, taRightJustify, taCenter };
@@ -52,6 +54,7 @@ class QSOGridModel: public QAbstractItemModel
     public:
         QSOGridModel();
         ~QSOGridModel() Q_DECL_OVERRIDE;
+        HtmlDelegate *delegate = nullptr;
 
         void reset();
         void initialise( BaseContestLog * pcontest );
