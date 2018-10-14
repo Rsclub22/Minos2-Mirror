@@ -38,6 +38,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
 
+    trace(QString("AppName = %1").arg(appName));
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
     createCloseEvent();
