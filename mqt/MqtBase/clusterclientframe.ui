@@ -33,9 +33,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="filtersBut">
        <property name="text">
-        <string>PushButton</string>
+        <string>Filters</string>
        </property>
       </widget>
      </item>

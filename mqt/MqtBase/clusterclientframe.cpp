@@ -14,6 +14,7 @@
 #include "MinosLoggerEvents.h"
 
 #include "clusterclientframe.h"
+
 #include "base_pch.h"
 #include "ui_clusterclientframe.h"
 
@@ -24,10 +25,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 {
 
     ui->setupUi(this);
+    filterSetup = new ClusterClientFilterTab();
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+
+    connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
 
     on_FontChanged();
 
@@ -47,6 +51,14 @@ ClusterClientFrame::~ClusterClientFrame()
 {
     delete ui;
 }
+
+
+void ClusterClientFrame::filterButtonSelected()
+{
+    filterSetup->show();
+
+}
+
 
 
 void ClusterClientFrame::setStandAlone()

@@ -71,7 +71,8 @@ SOURCES += \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
     clusterClientServer.cpp \
-    clusterclientframe.cpp
+    clusterclientframe.cpp \
+    clusterclientfiltertab.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -130,7 +131,8 @@ HEADERS += \
     qttelnet.h \
     clustercommon.h \
     clusterClientServer.h \
-    clusterclientframe.h
+    clusterclientframe.h \
+    clusterclientfiltertab.h
 
 unix {
     target.path = /usr/lib
@@ -146,4 +148,5 @@ FORMS += \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \
-    clusterclientframe.ui
+    clusterclientframe.ui \
+    clusterclientfiltertab.ui

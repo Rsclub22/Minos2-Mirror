@@ -20,6 +20,7 @@
 #include "dxspotdatamodel.h"
 #include "base_pch.h"
 #include "clusterClientServer.h"
+#include "clusterclientfiltertab.h"
 #include "MinosLoggerEvents.h"
 
 namespace Ui {
@@ -44,6 +45,7 @@ public:
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *contest;
+    ClusterClientFilterTab *filterSetup;
 
 
     DxSpotDataModel* dxSpotDataModel;
@@ -57,6 +59,7 @@ private slots:
     void clusterClientServerList(QVector<ClusterServer>);
     void dxSpots(QVector<QString>);
     void on_FontChanged();
+    void filterButtonSelected();
 };
 
 #endif // CLUSTERCLIENTFRAME_H
