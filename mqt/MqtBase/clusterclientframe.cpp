@@ -100,12 +100,18 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
 {
     if (spot.contains("DXSPOT:"))
     {
-        QStringList spotlist = spot.split(':', QString::KeepEmptyParts);
-        int a = 0;
+        QStringList sl = spot.split("DXSPOT:");
+        if (sl.count() == 2)
+        {
+            QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
+            int a = 0;
 
-        //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
-        dxSpotDataModel->rowData = QStringList {spotlist[8], spotlist[5], spotlist[4], spotlist[7], spotlist[6], spotlist[9]};
-        dxSpotDataModel->insertRows(0, 1);
+            //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
+            dxSpotDataModel->rowData = QStringList {spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTCOMMENT]};
+            dxSpotDataModel->insertRows(0, 1);
+
+        }
+
 
     }
 }

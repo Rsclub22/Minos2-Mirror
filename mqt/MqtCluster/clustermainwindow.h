@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QPlainTextEdit>
+#include <QVector>
+#include "BandList.h"
 #include "base_pch.h"
 #include "mqtUtils_pch.h"
 #include "qttelnet.h"
@@ -74,6 +76,8 @@ private:
     QString appName;
     QLabel* status;
 
+    QVector<BandDetail*> bands;
+
     QtTelnet* client;
     Clusterrpc* clusterRpc;
     Cluster* dxCluster;
@@ -100,6 +104,10 @@ private:
     QStringList dxMsg;
     QString dxCall;
     QString dxFreq;
+    QString dxBandStr;
+    QString dxBandMask;
+    QString dxModeStr;
+    QString dxModeMask;
     QString spotCall;
     QString spotComment;
     QString spotTime;
@@ -121,6 +129,7 @@ private:
     void closeEvent(QCloseEvent *event);
     void disconnectNode();
     void connectToSelectedHost(QString nodeName);
+    void getBand(QString freq, QString &band, QString &bandMask);
 };
 
 #endif // CLUSTERMAINWINDOW_H

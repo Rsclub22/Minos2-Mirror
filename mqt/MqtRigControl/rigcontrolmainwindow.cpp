@@ -114,7 +114,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     radio = new RigControl();
     radio->getRigList();
 
-    loadBands();
+    loadVhfAndUpBands(bands);
     FreqPresetDialog::readSettings(presetFreq);
 
     setupRadio = new RigSetupDialog(radio, bands);
@@ -2491,7 +2491,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
 }
 
 /************************** Band Information ***********************************/
-
+/*
 void RigControlMainWindow::loadBands()
 {
     BandList &blist = BandList::getBandList();
@@ -2511,7 +2511,7 @@ void RigControlMainWindow::loadBands()
 
 }
 
-
+*/
 
 void delay(int sec)
 {

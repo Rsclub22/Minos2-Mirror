@@ -12,9 +12,6 @@ namespace Ui {
 class ClusterClientFilterTab;
 }
 
-const unsigned int vhfBandMasks[] = {_50M, _70M, _144M, _432M};
-const unsigned int mWaveBandMasks[] = {_1296M, _2300M, _3_4G, _5_6G, _10G};
-const unsigned int modeMasks[] = {CWMODE, PHONEMODE, RTTYMODE, PSKMODE, MGMMODE};
 
 class ClusterClientFilterTab : public QTabWidget
 {

@@ -25,6 +25,10 @@
 #include "base_pch.h"
 //---------------------------------------------------------------------------
 
+class BandDetail;
+
+void loadVhfAndUpBands(QVector<BandDetail*> &bands);
+
 class BandInfo
 {
         QString type;

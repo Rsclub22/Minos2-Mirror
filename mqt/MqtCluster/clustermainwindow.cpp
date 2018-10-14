@@ -50,6 +50,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     status = new QLabel;
     ui->statusBar->addWidget(status);
 
+    loadVhfAndUpBands(bands);
+
     QSettings settings;
     geoStr = QString("clusterServer/geometry");
     QByteArray geometry = settings.value(geoStr).toByteArray();
@@ -302,10 +304,10 @@ void ClusterMainWindow::parseDX(QString txt)
         if (retCode >= 0)
         {
 
-            trace(QString("Parse DX de %1 %2 %3 %4 %5 %6").arg(dxCall).arg(dxFreq).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment));
+            trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10").arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment));
             // Display
             QString displayFreq = alignFreqRight(dxFreq);
-            clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6").arg(dxCall).arg(dxFreq).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment));
+            clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10").arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment));
             dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
             //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             dxSpotDataModel->insertRows(0, 1);
@@ -329,6 +331,10 @@ int ClusterMainWindow::upackSpot(QString txt)
     // clear spot data
     dxCall = "";
     dxFreq = "";
+    dxBandStr = "";
+    dxBandMask = "";
+    dxModeStr = "";
+    dxModeMask = "";
     spotCall = "";
     spotComment = "";
     spotTime = "";
@@ -343,6 +349,7 @@ int ClusterMainWindow::upackSpot(QString txt)
     dxMsg = txt.split(QRegExp("\\s+"));
     dxCall = dxMsg[2].remove(':');
     dxFreq = convertKhzToMhz(dxMsg[3]);
+    getBand(dxFreq, dxBandStr, dxBandMask);
     spotCall = dxMsg[4];
     // find time
     for (int i = 4; i < dxMsg.count(); i++)
@@ -387,6 +394,20 @@ int ClusterMainWindow::upackSpot(QString txt)
 
 
 
+void ClusterMainWindow::getBand(QString freq, QString &band, QString &bandMask)
+{
+    double f = freq.append("000").remove('.').toDouble();
+
+    for (int i = 0; i < bands.count(); i++)
+    {
+        if (f <= bands[i]->fHigh && f >= bands[i]->fLow)
+        {
+            band = bands[i]->name;
+            bandMask = QString::number(allBandMasks[i]);
+            break;
+        }
+    }
+}
 
 // ************* Send text *************************************************
 
@@ -464,3 +485,6 @@ void ClusterMainWindow::onStdInRead(QString cmd)
     if (cmd.indexOf("HideServers", Qt::CaseInsensitive) >= 0)
         setShowServers(false);
 }
+
+
+

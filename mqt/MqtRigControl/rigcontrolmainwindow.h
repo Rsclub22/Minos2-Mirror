@@ -221,7 +221,7 @@ private:
     void testBoxesVisible(bool visible);
 
     void upDateRadio();
-    void loadBands();
+    //void loadBands();
 
     void sendTransVertSwitchToComPort(const QString &swNum);
     void sendRitFreqLogger(int ritFreq);
