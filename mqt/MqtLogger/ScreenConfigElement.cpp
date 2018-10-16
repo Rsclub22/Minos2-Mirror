@@ -5,7 +5,6 @@
 
 static QVector <SCTypeOption> scoptions =
 {
-    {sctNone, "None", "Not in use"},
     {sctAux, "Auxiliary", "Auxiiary Display"},
     {sctChat, "Chat Display", "Chat Display"},
     {sctLog, "Log List", "QSO Log List"},
@@ -16,7 +15,8 @@ static QVector <SCTypeOption> scoptions =
     {sctRotPresets, "Rotator Presets", "Rotator Presets"},
     {sctThisMatch, "This Contest Match", "This Contest Matches"},
     {sctOtherMatch, "Other Contest Match", "Other Contest Matches" },
-    {sctArchiveMatch, "Archive Match", "Archive List Matches" }
+    {sctArchiveMatch, "Archive Match", "Archive List Matches" },
+    {sctNone, "None", "Not in use"}
 };
 SCType getScreenType(QString s)
 {
@@ -27,11 +27,11 @@ SCType getScreenType(QString s)
     }
     return sctNone;
 }
-QString getScreenTypeString(SCType s)
+QString getScreenTypeString(SCType t)
 {
     foreach(const SCTypeOption &opt, scoptions)
     {
-        if (opt.type == s)
+        if (opt.type == t)
             return opt.s;
     }
     return getScreenTypeString(sctNone);
@@ -44,14 +44,12 @@ ScreenConfigElement::ScreenConfigElement(QWidget *parent, ScreenConfigRow *paren
 {
     ui->setupUi(this);
 
+    ui->elementTypeCombo->clear();
     int i = 0;
     foreach(const SCTypeOption &opt, scoptions)
     {
-        if (opt.type != sctNone)
-        {
-            ui->elementTypeCombo->addItem(opt.s, opt.type);
-            ui->elementTypeCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
-        }
+        ui->elementTypeCombo->addItem(opt.s, opt.type);
+        ui->elementTypeCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
     }
 }
 
@@ -59,11 +57,11 @@ ScreenConfigElement::~ScreenConfigElement()
 {
     delete ui;
 }
-void ScreenConfigElement::setType(QString t)
+void ScreenConfigElement::setType(SCType t)
 {
-    ui->elementTypeCombo->setCurrentText(t);
+    ui->elementTypeCombo->setCurrentText(getScreenTypeString(t));
 }
-QString ScreenConfigElement::getType()
+QString ScreenConfigElement::getType() const
 {
     return ui->elementTypeCombo->currentText();
 }
@@ -78,7 +76,10 @@ void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
 
     if (!parentRow->checkOk(this))
     {
-        setType(getScreenTypeString(sctNone));
+        setType(sctNone);
+//        repaint();
+//        QString t = getType();
+//        mShowMessage(t, this);
     }
 }
 

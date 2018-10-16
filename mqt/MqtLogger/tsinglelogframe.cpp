@@ -59,19 +59,13 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     ui->setupUi(this);
 
     createScreenComponents();
+
     buildScreenLayout();
 
     OtherMatchTreeFW = new FocusWatcher(otherMatchFrame->getTreeView());
     connect(OtherMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onOtherMatchTreeFocused(QObject *, bool, QFocusEvent *)));
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
     connect(ArchiveMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onArchiveTreeFocused(QObject *, bool, QFocusEvent *)));
-
-    qsoModel.initialise(contest);
-    QSOTable->setModel(&qsoModel);
-    QSOTable->setItemDelegate( new HtmlDelegate );
-
-    QSOTable->resizeColumnsToContents();
-    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     restoreColumns();
 
@@ -171,18 +165,16 @@ TSingleLogFrame::~TSingleLogFrame()
     ui = nullptr;
     contest = nullptr;
 }
-void TSingleLogFrame::createScreenComponents()
+void TSingleLogFrame::
+
+createScreenComponents()
 {
     // create component frames, parentless
 
     QSOTable = new QTableView(this);
     QSOTable->setObjectName(QStringLiteral("QSOTable"));
     QSOTable->setFocusPolicy(Qt::ClickFocus);
-    QSOTable->setFrameShape(QFrame::NoFrame);
-    QSOTable->setFrameShadow(QFrame::Plain);
-    QSOTable->setLineWidth(1);
-    QSOTable->setMidLineWidth(1);
-    QSOTable->setEditTriggers(QAbstractItemView::EditKeyPressed);
+    QSOTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     QSOTable->setAlternatingRowColors(true);
     QSOTable->setSelectionMode(QAbstractItemView::SingleSelection);
     QSOTable->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -191,6 +183,21 @@ void TSingleLogFrame::createScreenComponents()
     QSOTable->horizontalHeader()->setHighlightSections(false);
     QSOTable->horizontalHeader()->setStretchLastSection(true);
     QSOTable->verticalHeader()->setVisible(false);
+    QSOTable->setCornerButtonEnabled(false);
+    QSOTable->verticalHeader()->setMinimumSectionSize(1);
+    QSOTable->verticalHeader()->setDefaultSectionSize(1);
+
+    delegate = new HtmlDelegate(1.0, 1.0);
+    qsoModel.delegate = delegate;
+    qsoModel.initialise(contest);
+    QSOTable->setModel(&qsoModel);
+
+    // the order of the next two lines is critical
+    QSOTable->setItemDelegate( delegate );
+    QSOTable->resizeRowsToContents();       // this is where the sizehint gets called
+
+
+    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     QSOTable->setVisible(false);
 
@@ -398,15 +405,15 @@ void TSingleLogFrame::buildScreenLayout()
 
             for (int k = 0; k < sc.rows[j].elements.count(); k++)
             {
-                QString type = sc.rows[j].elements[k].type;
-                if (getScreenType(type) == sctNone)
+                SCType type = sc.rows[j].elements[k].type;
+                if (type == sctNone)
                     continue;
 
                 QScrollArea *elementScrollArea = nullptr;
-                if (getScreenType(type) != sctLog
-                        && getScreenType(type) != sctThisMatch
-                        && getScreenType(type) != sctOtherMatch
-                        && getScreenType(type) != sctArchiveMatch
+                if (type != sctLog
+                        && type != sctThisMatch
+                        && type != sctOtherMatch
+                        && type != sctArchiveMatch
                         )
                 {
                     elementScrollArea = new QScrollArea();
@@ -417,7 +424,7 @@ void TSingleLogFrame::buildScreenLayout()
 
                 // insert correct widget type in horizontal splitter
 
-                switch (getScreenType(type))
+                switch (type)
                 {
                 case sctNone:
                 {
@@ -965,6 +972,7 @@ void TSingleLogFrame::refreshMults()
 void TSingleLogFrame::updateTrees()
 {
    qsoModel.reset();
+   QSOTable->resizeRowsToContents();
    refreshMults();
 }
 bool TSingleLogFrame::getStanza( unsigned int stanza, QString &stanzaData )

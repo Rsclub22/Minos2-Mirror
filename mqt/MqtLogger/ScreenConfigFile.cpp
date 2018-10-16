@@ -88,7 +88,7 @@ bool ScreenConfigFile::readFile(QString f)
                         SCElement scele;
                         QJsonObject ele = elearray[k].toObject();
                         QString eletype = ele.value("type").toString();
-                        scele.type = eletype;
+                        scele.type = getScreenType(eletype);
 //                        trace(QString("Name %1 row %2 ele %3 type %4").arg(name).arg(j).arg(k).arg(eletype));
                         scrow.elements.push_back(scele);
                     }
@@ -132,7 +132,7 @@ bool ScreenConfigFile::writeFile(QString f)
             for (int k = 0; k < i.value().rows[j].elements.count(); k++)
             {
                 QJsonObject scele;
-                scele.insert("type", i.value().rows[j].elements[k].type);
+                scele.insert("type", getScreenTypeString(i.value().rows[j].elements[k].type));
                 scrow.append(scele);
             }
             scrows.append(scrow);

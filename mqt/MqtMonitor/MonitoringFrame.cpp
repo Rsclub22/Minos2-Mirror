@@ -10,9 +10,11 @@ MonitoringFrame::MonitoringFrame(MonitorMain *parent) :
     ui(new Ui::MonitoringFrame)
 {
     ui->setupUi(this);
-    ui->QSOTable->setItemDelegate( new HtmlDelegate );
+    ui->QSOTable->setItemDelegate( new HtmlDelegate(1.0, 1.0) );
 
     ui->QSOTable->resizeColumnsToContents();
+    ui->QSOTable->resizeRowsToContents();
+
     ui->QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     connect( ui->QSOTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));

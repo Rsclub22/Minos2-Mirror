@@ -28,31 +28,28 @@
 #include <QDateTime>
 
 #define UPNP_PORT 9999
-#define UPNP_GROUP "239.255.0.1"
 
 //---------------------------------------------------------------------------
 class Server
 {
    public:
       QString uuid;
-      QString host;
+      QHostAddress host;
       QString station;
       quint16 port;
       bool local;
 
-      Server( const QString &uuid, const QString &h, const QString &s, quint16 p );
+      Server( const QString &uuid, const QHostAddress &h, const QString &s, quint16 p );
       Server( const QString &s );
       virtual ~Server();
 };
 extern QVector<Server *> serverList;
 extern Server *findStation( const QString s );
+extern Server *findIp( const QString s );
 
 class UDPSocket: public QObject
 {
     Q_OBJECT
-    QSharedPointer<QUdpSocket> qus;
-    QString ifaceName;
-    QNetworkAddressEntry qua;
 
 public:
     UDPSocket();
@@ -60,6 +57,9 @@ public:
     bool setup(QNetworkInterface &intr, QNetworkAddressEntry &addr);
 
     bool sendMessage(const QString &mess );
+    QSharedPointer<QUdpSocket> qus;
+    QString ifaceName;
+    QNetworkAddressEntry qua;
 };
 class TZConf: public QObject
 {
@@ -67,7 +67,7 @@ class TZConf: public QObject
    private:  	// User declarations
 
       static Server *zcPublishServer(const QString &uuid, const QString &name,
-                        const QString &hosttarget, quint16 PortAsNumber );
+                        const QHostAddress &host, quint16 PortAsNumber );
       QString localName;
 
       QVector<QSharedPointer<UDPSocket> > TxSocks;
@@ -75,14 +75,17 @@ class TZConf: public QObject
 
       QTimer beaconTimer;
 
-      bool sendMessage(bool beaconReq );
+      bool sendMessage();
       void readServerList();
 
       static TZConf *ZConf;
 
       unsigned int beaconInterval = 0;   // once a minute
+      unsigned int beaconIncrement = 0;
+      unsigned int maxBeaconInterval = 0;
+      unsigned int beaconResponseDelay = 0;   // once a minute
       QDateTime lastTick;
-      bool sendBeaconResponse;
+      QDateTime sendBeaconResponse;
 
 public:  		// User declarations
 
@@ -100,10 +103,8 @@ public:  		// User declarations
          return localName;
       }
 
-      void ServerScan();
-
-      QString getZConfString(bool beaconreq);
-      Server *processZConfString(const QString &message, const  QString &recvAddress, bool &beaconResponse);
+      QString getZConfString(bool beaconreq, const QString &h);
+      Server *processZConfString(const QString &message, QHostAddress &host, QDateTime &beaconResponse);
       void publishDisconnect(const QString &name);
       void closeDown();
 private slots:

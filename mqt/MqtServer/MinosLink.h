@@ -14,6 +14,7 @@
 #include <QObject>
 #include <QString>
 #include <QTcpSocket>
+#include <QHostAddress>
 #include <QSharedPointer>
 
 #include "tinyxml.h"
@@ -70,7 +71,7 @@ class MinosCommonConnection: public QObject
 
       bool remove_socket;
       bool fromIdSet;
-      QString connectHost;
+      QHostAddress connectHost;
 
       MinosCommonConnection();
       virtual void initialise( ) = 0;
@@ -106,6 +107,12 @@ class MinosCommonConnection: public QObject
       QString getClientServer() const;
 
       QString getClientUser() const;
+
+      virtual bool isFromDatagram() const
+      {
+          return false;
+      }
+
 
 private slots:
       void on_readyRead();

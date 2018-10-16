@@ -11,6 +11,7 @@
 #include "contacts.h"
 #include "contest.h"
 #include "TreeUtils.h"
+#include "htmldelegate.h"
 
 GridColumn QSOTreeColumns[ LOGTREECOLS ] =
    {
@@ -138,8 +139,20 @@ QVariant QSOGridModel::headerData( int section, Qt::Orientation orientation,
         QString h = QSOTreeColumns[ section ].title;
         return h;
     }
-    if (role == Qt::TextAlignmentRole)
+    else if (role == Qt::TextAlignmentRole)
+    {
         return Qt::AlignLeft;
+    }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = data(index(section, 0), Qt::DisplayRole).toString();
+            QSize r = delegate->docSize(s);
+            r.setWidth(0);
+            return r;
+        }
+    }
     return QVariant();
 }
 

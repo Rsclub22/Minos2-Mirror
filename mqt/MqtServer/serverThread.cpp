@@ -16,16 +16,16 @@
 #include "MServerZConf.h"
 #include "MServer.h"
 #include "MServerPubSub.h"
-
+#include "minoslistener.h"
 
 //==============================================================================
 //==============================================================================
-MinosServerConnection::MinosServerConnection() : srv( nullptr ), resubscribed( false )
+MinosServerConnection::MinosServerConnection(bool fromDatagram) : srv( nullptr ), resubscribed( false ), fromDatagram(fromDatagram)
 {}
 void MinosServerConnection::initialise()
 {
     QHostAddress h = sock->peerAddress();
-    connectHost = h.toString();
+    connectHost = h;
     connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()));
     connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()));
 
@@ -59,12 +59,20 @@ bool MinosServerConnection::checkFrom( TiXmlElement *tix )
    return true;
 }
 
+void MinosServerConnection::setServer(Server *s)
+{
+    srv = s;
+    clientServer = srv->station;
+    trace( QString( "Server: Connecting to " ) + srv->station + " host " + srv->host.toString() );
+}
+
 void MinosServerConnection::mConnect( Server *psrv )
 {
    srv = psrv;
    clientServer = srv->station;
+   connectHost = srv->host;
 
-   trace( QString( "Server: Connecting to " ) + srv->station + " host " + srv->host );
+   trace( QString( "Server: Connecting to " ) + srv->station + " host " + srv->host.toString() );
 
    // connect to endpoint
    // We need to connect out to the end point - looks much like a client connection!
@@ -77,10 +85,10 @@ void MinosServerConnection::mConnect( Server *psrv )
 }
 void MinosServerConnection::on_connected()
 {
-    trace( QString( "Server: Connected OK to " ) + srv->station + " host " + srv->host );
+    trace( QString( "Server: Connected OK to " ) + srv->station + " host " + srv->host.toString() );
     RPCRequest *rpa = new RPCRequest( clientServer, MinosServer::getMinosServer() ->getServerName(), "ServerSetFromId" );   // for our local server, this one MUST have a from
     rpa->addParam( MinosServer::getMinosServer() ->getServerName() );
-    rpa->addParam( TZConf::getZConf()->getZConfString(true ) );
+    rpa->addParam( TZConf::getZConf()->getZConfString(false, connectHost.toString() ) );
     sendAction( rpa );
     delete rpa;
 }
@@ -117,8 +125,9 @@ void MinosServerConnection::setFromId( MinosId &id, RPCRequest *req )
          QString message;
          if (req->getStringArg(1, message))
          {
-             bool sb;   // ignored response
-             srv = TZConf::getZConf()->processZConfString(message, connectHost, sb);
+             QDateTime sb;   // ignored response
+             QHostAddress host = connectHost;
+             srv = TZConf::getZConf()->processZConfString(message, host, sb);
          }
       }
    }

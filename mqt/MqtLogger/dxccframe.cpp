@@ -4,10 +4,11 @@
 #include "LoggerContest.h"
 #include "ContestApp.h"
 
+#include "tsinglelogframe.h"
+#include "htmldelegate.h"
+
 #include "dxccframe.h"
 #include "ui_dxccframe.h"
-
-#include "tsinglelogframe.h"
 
 extern ContList contlist[ CONTINENTS ];
 
@@ -37,9 +38,14 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
     model.ct = contest;
     if (contest)
     {
+        delegate = new HtmlDelegate(1.0, 1.0);
+        model.delegate = delegate;
+
         proxyModel.setSourceModel(&model);
         ui->DXCCTable->setModel(&proxyModel);
+        ui->DXCCTable->setItemDelegate(delegate);
         reInitialiseCountries();
+        ui->DXCCTable->resizeRowsToContents();
         connect( ui->DXCCTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
                  this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     }
@@ -116,7 +122,7 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
         if (role == Qt::DisplayRole)
         {
             QString disp = MultLists::getMultLists() ->getCtryListText( index.row(), CountryTreeColumns[ index.column() ].fieldId, ct );
-            return disp;
+            return disp.trimmed();
         }
         if (role == Qt::TextAlignmentRole)
             return Qt::AlignLeft;
@@ -132,10 +138,22 @@ QVariant DXCCGridModel::headerData( int section, Qt::Orientation orientation,
 
         cell = CountryTreeColumns[section].title;
 
-        return cell;
+        return cell.trimmed();
     }
     if (role == Qt::TextAlignmentRole)
+    {
         return Qt::AlignLeft;
+    }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = data(index(section, 0), Qt::DisplayRole).toString();
+            QSize r = delegate->docSize(s);
+            r.setWidth(0);
+            return r;
+        }
+    }
     return QVariant();
 }
 

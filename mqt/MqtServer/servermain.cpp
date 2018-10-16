@@ -31,7 +31,6 @@ ServerMain::ServerMain(QWidget *parent) :
         restoreGeometry(geometry);
 
     connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
-    connect(&ScanTimer, SIGNAL(timeout()), this, SLOT(ScanTimerTimer()));
 
     QString sname = MinosServer::getMinosServer()->getServerName();
 
@@ -125,15 +124,6 @@ void ServerMain::LogTimerTimer( )
          on_CloseButton_clicked( );
       }
    }
-}
-void ServerMain::ScanTimerTimer( )
-{
-   // default is every 20 secs
-
-   // scan the server list, and try to connect to all that we know of and we don't
-   // have a server connection for
-   ZConf->ServerScan();
-
 }
 
 void ServerMain::on_CloseButton_clicked()

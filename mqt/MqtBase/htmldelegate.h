@@ -26,9 +26,14 @@
 
 class HtmlDelegate : public QStyledItemDelegate
 {
+        qreal wmult = 1.0;
+        qreal hmult = 1.0;
     public:
+        HtmlDelegate(qreal wmult, qreal hmult):wmult(wmult), hmult(hmult)
+        {}
         virtual ~HtmlDelegate() override
         {}
+        QSize docSize(QString text) const;
     protected:
         void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
         QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const override;

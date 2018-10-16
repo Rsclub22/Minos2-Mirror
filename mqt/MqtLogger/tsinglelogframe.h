@@ -139,6 +139,7 @@ public:
 private:
     //    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
+    HtmlDelegate *delegate = nullptr;
     QSOGridModel qsoModel;
     int splitterHandleWidth;
     QString curScreenLayout;

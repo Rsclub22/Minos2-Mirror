@@ -15,6 +15,9 @@ class LocGridModel: public QAbstractItemModel
     public:
         LocGridModel();
         ~LocGridModel() override;
+        HtmlDelegate *delegate = nullptr;
+
+        QString myLoc;
 
         BaseContestLog *ct;
         int rows;
@@ -28,6 +31,7 @@ class LocGridModel: public QAbstractItemModel
         }
 
         QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const Q_DECL_OVERRIDE;
         QModelIndex index( int row, int column,
                            const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
         QModelIndex parent( const QModelIndex &index ) const Q_DECL_OVERRIDE;
@@ -46,6 +50,7 @@ class LocFrame : public QFrame
 public:
     explicit LocFrame(QWidget *parent = nullptr);
     ~LocFrame();
+    HtmlDelegate *delegate = nullptr;
 
     void reInitialiseLocators();
     void setContest(BaseContestLog *contest);

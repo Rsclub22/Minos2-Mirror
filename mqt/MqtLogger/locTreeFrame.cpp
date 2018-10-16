@@ -11,7 +11,7 @@ LocTreeFrame::LocTreeFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->LocTree->setItemDelegate(new HtmlDelegate);
+    ui->LocTree->setItemDelegate(new HtmlDelegate(1.0, 1.0));
 }
 LocTreeFrame::~LocTreeFrame()
 {

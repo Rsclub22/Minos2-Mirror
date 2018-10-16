@@ -55,9 +55,10 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
             QString server = an.getKey();
             QVector<Server>::iterator stat;
             bool pubNeeded = true;
+            QString a = MinosRPC::getMinosRPC()->getAppName();
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
-                if ((*stat).name == server)
+                if ((*stat).app == a + "@" + server)
                 {
                     pubNeeded = false;
                     break;
@@ -65,8 +66,7 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
             }
             if (pubNeeded)
             {
-                QString a = MinosRPC::getMinosRPC()->getAppName();
-                RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServer, a + "@" + server, psPublished);
+                RPCPubSub::publish(rpcConstants::ChatServer,  a + "@" + server, "", psPublished);
             }
         }
         if (an.getCategory() == rpcConstants::StationCategory)
@@ -76,7 +76,7 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
             bool subNeeded = true;
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
-                if ((*stat).name == server)
+                if ((*stat).serverName == server)
                 {
                     subNeeded = false;
                     break;
@@ -85,49 +85,50 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
             if (subNeeded)
             {
                 RPCPubSub::subscribeRemote(server, rpcConstants::ChatCategory);
+                RPCPubSub::subscribeRemote(server, rpcConstants::ChatServer);
             }
         }
 
-        if ( an.getCategory() == rpcConstants::ChatCategory )
+        if ( an.getCategory() == rpcConstants::ChatServer )
         {
-            trace( QString(stateIndicator[an.getState()]) + " " + an.getKey() + " " + an.getValue() );
-
-            if (an.getKey() == rpcConstants::ChatServer)
+            trace( QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
+            QVector<Server>::iterator stat;
+            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
-                QVector<Server>::iterator stat;
-                for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+                if ((*stat).app == an.getPublisherProgram())
                 {
-                    if ((*stat).name == an.getPublisherServer())
+                    if ((*stat).state != an.getState())
                     {
-                        if ((*stat).state != an.getState())
-                        {
-                            (*stat).state = an.getState();
-                            QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
-                            addChat( mess );
-                            syncstat = true;
-                        }
-                        break;
+                        (*stat).state = an.getState();
+                        QString mess = an.getKey() + " changed state to " + stateList[an.getState()];
+                        addChat( mess );
+                        syncstat = true;
                     }
-                }
-                if ( stat == serverList.end() )
-                {
-                    // We have received notification from a previously unknown station - so report on it
-                    Server s;
-                    s.name = an.getPublisherServer();
-                    s.state = an.getState();
-                    s.app = an.getValue();
-                    serverList.push_back( s );
-                    QString mess = an.getPublisherServer() + " changed state to " + stateList[an.getState()];
-                    addChat( mess );
-                    syncstat = true;
+                    break;
                 }
             }
-            else if (an.getKey() == rpcConstants::ChatServerFrequency)
+            if ( stat == serverList.end() )
+            {
+                // We have received notification from a previously unknown station - so report on it
+                Server s;
+                s.serverName = an.getPublisherServer();
+                s.state = an.getState();
+                s.app = an.getKey();
+                serverList.push_back( s );
+                QString mess = an.getKey() + " changed state to " + stateList[an.getState()];
+                addChat( mess );
+                syncstat = true;
+            }
+        }
+        if ( an.getCategory() == rpcConstants::ChatCategory )
+        {
+            trace( QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() + " " + an.getValue() );
+            if (an.getKey() == rpcConstants::ChatServerFrequency)
             {
                 QVector<Server>::iterator stat;
                 for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
                 {
-                    if ((*stat).name == an.getPublisherServer())
+                    if ((*stat).serverName == an.getPublisherServer())
                     {
                         if ((*stat).freq != an.getValue())
                         {

@@ -3,7 +3,7 @@
 
 #include "LoggerContest.h"
 #include "ContestApp.h"
-
+#include "htmldelegate.h"
 #include "tsinglelogframe.h"
 #include "districtframe.h"
 #include "ui_districtframe.h"
@@ -31,6 +31,9 @@ DistrictFrame::~DistrictFrame()
 void DistrictFrame::setContest(BaseContestLog *contest)
 {
     model.ct = contest;
+    delegate = new HtmlDelegate(1.0, 1.0);
+    model.delegate = delegate;
+    ui->DistrictTable->setItemDelegate(delegate);
     proxyModel.setSourceModel(&model);
     ui->DistrictTable->setModel(&proxyModel);
     if (contest)
@@ -39,6 +42,7 @@ void DistrictFrame::setContest(BaseContestLog *contest)
         connect( ui->DistrictTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
                  this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     }
+    ui->DistrictTable->resizeRowsToContents();
 }
 void DistrictFrame::reInitialiseDistricts()
 {
@@ -128,8 +132,20 @@ QVariant DistrictGridModel::headerData( int section, Qt::Orientation orientation
 
         return cell;
     }
-    if (role == Qt::TextAlignmentRole)
+    else if (role == Qt::TextAlignmentRole)
+    {
         return Qt::AlignLeft;
+    }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = data(index(section, 0), Qt::DisplayRole).toString();
+            QSize r = delegate->docSize(s);
+            r.setWidth(0);
+            return r;
+        }
+    }
     return QVariant();
 }
 

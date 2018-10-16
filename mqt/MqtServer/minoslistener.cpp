@@ -50,11 +50,9 @@ bool MinosListener::initialise( QString type, quint16 port )
 
 void MinosListener::addListenerSlot( MinosCommonConnection *il )
 {
-    QHostAddress h = il->sock->peerAddress();
-    il->connectHost = h.toString();
-    trace( "addListenerSlot: from " + il->connectHost );
-    i_array.push_back( il );
+    trace( QString("addListenerSlot: from %1 %2").arg(isServer()?"Server":"Client").arg(il->connectHost.toString() ));
 
+    i_array.push_back( il );
     il->initialise();
 }
 int MinosListener::getConnectionCount()
@@ -91,6 +89,30 @@ void MinosListener::on_newConnection()
 }
 void MinosListener::on_timeout()
 {
+    if (isServer())
+    {
+        for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+        {
+            QString hi = (*i)->getClientServer();
+            for ( CommonIterator j = i + 1; j != i_array.end(); j++ )
+            {
+                QString hj = (*j)->getClientServer();
+                if (hi == hj)
+                {
+                    quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
+                    quint32 locIP = (*j)->sock->localAddress().toIPv4Address();
+
+                    // make sure only one end does the removal
+                    if (remIP < locIP)
+                    {
+                        (*j)->remove_socket = true;
+                        trace("removing socket for " + (*j)->getClientServer());
+                    }
+                }
+            }
+        }
+
+    }
     bool clearup = false;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
@@ -123,9 +145,11 @@ void MinosListener::clearSockets()
 
 MinosCommonConnection *MinosServerListener::makeConnection(QTcpSocket *s)
 {
-    MinosServerConnection *c = new MinosServerConnection();
+    trace("Creating MinosServerConnection makeConnection");
+    MinosServerConnection *c = new MinosServerConnection(false);
 
     c->sock = QSharedPointer<QTcpSocket>(s);
+    c->connectHost = c->sock->peerAddress();
 
     return c;
 }
@@ -167,7 +191,8 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
         if ( srv )
         {
             // set ourselves up to connect
-            MinosServerConnection * s = new MinosServerConnection();
+            trace("Creating MinosServerConnection sendServer for " + to.server);
+            MinosServerConnection * s = new MinosServerConnection(false);
             s->mConnect( srv );
             addListenerSlot( s );
             // and we need to TRY to resend
@@ -184,46 +209,46 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
 
 return true;   // don't pass it on - either we have dealt with it, or its not useful
 }
-void MinosServerListener::checkServerConnected( Server *srv, bool force )
-{
-   if ( srv->local )
-   {
-      return ;
-   }
-   {
-       for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
-       {
-          if ( ( *i ) && ( *i ) ->checkServer( srv->station ) )
-          {
-             return ;
-          }
-       }
-   }
-   if (force )
-   {
-      MinosServerConnection * s = new MinosServerConnection();
-      s->mConnect( srv );
-      addListenerSlot( s );
-   }
-}
 
 void MinosServerListener::buildTable(QTableWidget *tab)
 {
     tab->clear();
     tab->setRowCount(i_array.count());
-    tab->setColumnCount(1);
+    tab->setColumnCount(4);
+    QStringList h = {"name", "address", "dg?", "uuid"};
+    tab->setHorizontalHeaderLabels(h);
     int row = 0;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
-        QString server = (*i)->getClientServer();
+        MinosServerConnection *msc = dynamic_cast<MinosServerConnection *>(*i);
+        QString server = msc->getClientServer();
         QTableWidgetItem *s = new QTableWidgetItem(server);
-        tab->setItem(row++, 0, s);
+        tab->setItem(row, 0, s);
+        s = new QTableWidgetItem(msc->server()->host.toString());
+        tab->setItem(row, 1, s);
+        s = new QTableWidgetItem(msc->isFromDatagram()?"dg":"norm");
+        tab->setItem(row, 2, s);
+        s = new QTableWidgetItem(msc->server()->uuid);
+        tab->setItem(row, 3, s);
+        row++;
     }
 }
 
 void MinosServerListener::closeDown()
 {
-   MSL = nullptr;
+    MSL = nullptr;
+}
+
+MinosServerConnection *MinosServerListener::findConnection(const QHostAddress &h)
+{
+    for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+    {
+        if (h.toIPv4Address() == (*i)->connectHost.toIPv4Address())
+        {
+            return dynamic_cast<MinosServerConnection *>(*i);
+        }
+    }
+    return nullptr;
 }
 //==============================================================================
 //==============================================================================
@@ -240,6 +265,7 @@ MinosCommonConnection *MinosClientListener::makeConnection(QTcpSocket *s)
 {
     MinosClientConnection *c = new MinosClientConnection();
     c->sock = QSharedPointer<QTcpSocket>(s);
+    c->connectHost = c->sock->peerAddress();
 
     return c;
 }

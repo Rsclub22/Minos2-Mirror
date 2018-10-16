@@ -1,8 +1,10 @@
 #include "base_pch.h"
+#include "cutils.h"
 #include "contest.h"
+#include "htmldelegate.h"
+
 #include "locframe.h"
 #include "ui_locframe.h"
-#include "htmldelegate.h"
 
 static QString lConv(const QString &tlsq, int col, int row)
 {
@@ -110,9 +112,11 @@ LocFrame::LocFrame(QWidget *parent) :
 
     currentCentre = "IO91";
 
-    ui->LocView->setItemDelegate(new HtmlDelegate);
+    delegate = new HtmlDelegate(1.0, 1.0);
+    ui->LocView->setItemDelegate(delegate);
 
     model = new LocGridModel();
+    model->delegate = delegate;
     ui->LocView->setModel(model);
 
     connect(ui->LocView, SIGNAL(minosViewScrolled()), this, SLOT(on_minosViewScrolled()));
@@ -131,6 +135,7 @@ void LocFrame::setContest(BaseContestLog *contest)
     if (ct)
     {
         currentCentre = ct->myloc.loc.getValue().left(4);
+        model->myLoc = currentCentre;
 
         reInitialiseLocators();
     }
@@ -205,17 +210,8 @@ void LocFrame::reInitialiseLocators()
     model->endReset();
 
     // don't resize earlier, or there won't be ANY DATA TO RESIZE TO...
-   // ui->LocView->resizeColumnsToContents();
-   // ui->LocView->resizeRowsToContents();
-
-    // We seem to have to use the application font, as Qt can give info
-    // on the wrong font if we use the widgets font
-    QFontMetricsF fm(QApplication::font());
-    int width=static_cast<int>((fm.width("MM80") * 5)/4.0);
-    int height=static_cast<int>((fm.height() * 6)/4.0);
-
-    ui->LocView->horizontalHeader()->setDefaultSectionSize(width);
-    ui->LocView->verticalHeader()->setDefaultSectionSize(height);
+    ui->LocView->resizeColumnsToContents();
+    ui->LocView->resizeRowsToContents();
 
     for(int i = 0; i < model->rowCount(); i++)
     {
@@ -270,6 +266,11 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
     if (role == Qt::DisplayRole)
     {
         QMap<QString, LocCount * >::const_iterator lci = locMap.find(disp);
+
+        if (disp == myLoc)
+        {
+            disp = HtmlFontColour(Qt::white) + disp;
+        }
         if (lci != locMap.end())
             disp = /*HtmlFontColour(multhighlight) +*/ "<b>" + disp ;
         return disp;
@@ -305,7 +306,20 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
     }
     return QVariant();
 }
-
+QVariant LocGridModel::headerData( int section, Qt::Orientation orientation,
+                     int role ) const
+{
+    if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = data(index(section, 0), Qt::DisplayRole).toString();
+            QSize r = delegate->docSize(s);
+            return r;
+        }
+    }
+    return QVariant();
+}
 QModelIndex LocGridModel::index( int row, int column, const QModelIndex &/*parent*/) const
 {
     if ( row < 0 || row >= rowCount()  )
