@@ -75,9 +75,10 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
             QString server = an.getKey();
             QVector<ClusterServer>::iterator stat;
             bool pubNeeded = true;
+            QString a = MinosRPC::getMinosRPC()->getAppName();
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
-                if ((*stat).name == server)
+                if ((*stat).app == a + "@" + server)
                 {
                     pubNeeded = false;
                     break;
@@ -85,8 +86,7 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
             }
             if (pubNeeded)
             {
-                QString a = MinosRPC::getMinosRPC()->getAppName();
-                RPCPubSub::publish(rpcConstants::clusterCategory, rpcConstants::clusterServer, a + "@" + server, psPublished);
+                RPCPubSub::publish(rpcConstants::clusterServer,  a + "@" + server, "", psPublished);
             }
         }
         if (an.getCategory() == rpcConstants::StationCategory)
@@ -96,7 +96,7 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
             bool subNeeded = true;
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
-                if ((*stat).name == server)
+                if ((*stat).serverName == server)
                 {
                     subNeeded = false;
                     break;
