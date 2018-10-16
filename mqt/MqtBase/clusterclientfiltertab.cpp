@@ -7,10 +7,13 @@ ClusterClientFilterTab::ClusterClientFilterTab(QWidget *parent) :
     QTabWidget(parent)
     ,ui(new Ui::ClusterClientFilterTab)
     ,bandFilterMask(0)
+    ,editBandFilterMask(0)
     ,modeFilterMask(0)
+    ,editModeFilterMask(0)
     ,vhfButtonState(false)
     ,mWaveButtonState(false)
     ,modeButtonState(false)
+    ,filterTabChanged(false)
 {
     ui->setupUi(this);
 
@@ -74,13 +77,84 @@ void ClusterClientFilterTab::initCheckFilterTab()
 
 void ClusterClientFilterTab::filtersAccepted()
 {
+    // copy updated masks with edited values
+    bandFilterMask = editBandFilterMask;
+    modeFilterMask = editModeFilterMask;
     close();
 }
 
 
 void ClusterClientFilterTab::filtersRejected()
 {
+    // restore settings on tab
+    restoreTabSettings();
     close();
+}
+
+
+void ClusterClientFilterTab::restoreTabSettings()
+{
+    loadBandSettings(bandFilterMask);
+    loadModeSettings(modeFilterMask);
+}
+
+
+void ClusterClientFilterTab::closeEvent (QCloseEvent *event)
+{
+    restoreTabSettings();
+    QWidget::closeEvent(event);
+}
+
+void ClusterClientFilterTab::copyBandFilterMaskToEdit()
+{
+    editBandFilterMask = bandFilterMask;
+}
+
+void ClusterClientFilterTab::copyModeFilterMaskToEdit()
+{
+    editModeFilterMask = modeFilterMask;
+}
+
+void ClusterClientFilterTab::loadBandSettings(unsigned int bandMask)
+{
+    for (int i = 0; i < NUM_VHFMASKS; i++)
+    {
+        if (bandMask & vhfBandMasks[i])
+        {
+            vhfChkBoxList[i]->setChecked(true);
+        }
+        else
+        {
+            vhfChkBoxList[i]->setChecked(false);
+        }
+    }
+
+    for (int i = 0; i < NUM_MWAVEMASKS; i++)
+    {
+        if (bandMask & mWaveBandMasks[i])
+        {
+            mWaveChkBoxList[i]->setChecked(true);
+        }
+        else
+        {
+            mWaveChkBoxList[i]->setChecked(false);
+        }
+    }
+}
+
+void ClusterClientFilterTab::loadModeSettings(unsigned int modeMask)
+{
+    for (int i = 0; i < NUM_MODEMASKS; i++)
+    {
+        if (modeMask & modeMasks[i])
+        {
+            modeChkBoxList[i]->setChecked(true);
+        }
+        else
+        {
+            modeChkBoxList[i]->setChecked(false);
+        }
+    }
 }
 
 void ClusterClientFilterTab::vhfButtonSelected()
@@ -144,7 +218,7 @@ void ClusterClientFilterTab::clearAllFilters()
 
 void ClusterClientFilterTab::clearVHFBands()
 {
-    bandFilterMask = bandFilterMask & ~_50M & ~_70M & ~_144M & ~_432M;
+    editBandFilterMask = editBandFilterMask & ~_50M & ~_70M & ~_144M & ~_432M;
     for (int i = 0; i < vhfChkBoxList.count(); i++)
     {
         vhfChkBoxList[i]->setCheckState(Qt::Unchecked);
@@ -153,7 +227,7 @@ void ClusterClientFilterTab::clearVHFBands()
 
 void ClusterClientFilterTab::setVHFBands()
 {
-    bandFilterMask = bandFilterMask | _50M | _70M | _144M | _432M;
+    editBandFilterMask = editBandFilterMask | _50M | _70M | _144M | _432M;
     for (int i = 0; i < vhfChkBoxList.count(); i++)
     {
         vhfChkBoxList[i]->setCheckState(Qt::Checked);
@@ -166,11 +240,11 @@ void ClusterClientFilterTab::vhfChecked(int checkBoxNum)
     {
         if (vhfChkBoxList[checkBoxNum]->checkState() == Qt::Checked)
         {
-            bandFilterMask |= vhfBandMasks[checkBoxNum];
+            editBandFilterMask |= vhfBandMasks[checkBoxNum];
         }
         else if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Unchecked)
         {
-            bandFilterMask &= ~vhfBandMasks[checkBoxNum];
+            editBandFilterMask &= ~vhfBandMasks[checkBoxNum];
         }
     }
 
@@ -180,7 +254,7 @@ void ClusterClientFilterTab::vhfChecked(int checkBoxNum)
 
 void ClusterClientFilterTab::clearMWaveBands()
 {
-    bandFilterMask = bandFilterMask & ~_1296M & ~_2300M & ~_3_4G & ~_5_6G & ~_10G;
+    editBandFilterMask = editBandFilterMask & ~_1296M & ~_2300M & ~_3_4G & ~_5_6G & ~_10G;
     for (int i = 0; i < mWaveChkBoxList.count(); i++)
     {
         mWaveChkBoxList[i]->setCheckState(Qt::Unchecked);
@@ -189,7 +263,7 @@ void ClusterClientFilterTab::clearMWaveBands()
 
 void ClusterClientFilterTab::setMWaveBands()
 {
-    bandFilterMask = bandFilterMask | _1296M | _2300M | _3_4G | _5_6G | _10G;
+    editBandFilterMask = editBandFilterMask | _1296M | _2300M | _3_4G | _5_6G | _10G;
     for (int i = 0; i < mWaveChkBoxList.count(); i++)
     {
         mWaveChkBoxList[i]->setCheckState(Qt::Checked);
@@ -205,11 +279,11 @@ void ClusterClientFilterTab::mWaveChecked(int checkBoxNum)
     {
         if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Checked)
         {
-            bandFilterMask |= mWaveBandMasks[checkBoxNum];
+            editBandFilterMask |= mWaveBandMasks[checkBoxNum];
         }
         else if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Unchecked)
         {
-            bandFilterMask &= ~mWaveBandMasks[checkBoxNum];
+            editBandFilterMask &= ~mWaveBandMasks[checkBoxNum];
         }
     }
 
@@ -217,7 +291,7 @@ void ClusterClientFilterTab::mWaveChecked(int checkBoxNum)
 
 void ClusterClientFilterTab::clearModes()
 {
-    modeFilterMask = modeFilterMask & ~CWMODE & ~PHONEMODE & ~RTTYMODE & ~MGMMODE;
+    editModeFilterMask = editModeFilterMask & ~CWMODE & ~PHONEMODE & ~RTTYMODE & ~MGMMODE;
     for (int i = 0; i <modeChkBoxList.count(); i++)
     {
         modeChkBoxList[i]->setCheckState(Qt::Unchecked);
@@ -226,7 +300,7 @@ void ClusterClientFilterTab::clearModes()
 
 void ClusterClientFilterTab::setModes()
 {
-    modeFilterMask = modeFilterMask | CWMODE | PHONEMODE | RTTYMODE | MGMMODE;
+    editModeFilterMask = editModeFilterMask | CWMODE | PHONEMODE | RTTYMODE | MGMMODE;
     for (int i = 0; i < modeChkBoxList.count(); i++)
     {
         modeChkBoxList[i]->setCheckState(Qt::Checked);
@@ -240,11 +314,11 @@ void ClusterClientFilterTab::modeChecked(int checkBoxNum)
     {
         if (modeChkBoxList[checkBoxNum]->checkState() == Qt::Checked)
         {
-            modeFilterMask |= modeMasks[checkBoxNum];
+           editModeFilterMask |= modeMasks[checkBoxNum];
         }
         else if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Unchecked)
         {
-            modeFilterMask &= ~modeMasks[checkBoxNum];
+            editModeFilterMask &= ~modeMasks[checkBoxNum];
         }
     }
 

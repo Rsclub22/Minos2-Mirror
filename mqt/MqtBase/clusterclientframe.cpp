@@ -55,6 +55,8 @@ ClusterClientFrame::~ClusterClientFrame()
 
 void ClusterClientFrame::filterButtonSelected()
 {
+    filterSetup->copyBandFilterMaskToEdit();
+    filterSetup->copyModeFilterMaskToEdit();
     filterSetup->show();
 
 }
@@ -104,11 +106,18 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
         if (sl.count() == 2)
         {
             QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
-            int a = 0;
 
-            //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
-            dxSpotDataModel->rowData = QStringList {spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTCOMMENT]};
-            dxSpotDataModel->insertRows(0, 1);
+            // check spot against filter setting
+            bool ok;
+            unsigned int spotMask = static_cast<unsigned int>(spotlist[DXBANDMASK].toInt(&ok));
+            if ( filterSetup->getBandFilterMask() & spotMask)
+            {
+                //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
+                dxSpotDataModel->rowData = QStringList {spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTCOMMENT]};
+                dxSpotDataModel->insertRows(0, 1);
+            }
+
+
 
         }
 

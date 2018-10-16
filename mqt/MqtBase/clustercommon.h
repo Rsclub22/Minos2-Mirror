@@ -1,6 +1,7 @@
 #ifndef CLUSTERCOMMON_H
 #define CLUSTERCOMMON_H
 
+#include <QList>
 
 // Band Filter Data
 
@@ -22,10 +23,15 @@ const unsigned int RTTYMODE = 1 << 2;
 const unsigned int PSKMODE = 1 << 3;
 const unsigned int MGMMODE = 1 << 4;
 
-const unsigned int allBandMasks[] = {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
+
 const unsigned int vhfBandMasks[] = {_50M, _70M, _144M, _432M};
+const int NUM_VHFMASKS = 4;
 const unsigned int mWaveBandMasks[] = {_1296M, _2300M, _3_4G, _5_6G, _10G};
+const int NUM_MWAVEMASKS = 5;
+const unsigned int allBandMasks[] = {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
+const int NUM_ALLBANDMASKS = NUM_VHFMASKS + NUM_MWAVEMASKS;
 const unsigned int modeMasks[] = {CWMODE, PHONEMODE, RTTYMODE, PSKMODE, MGMMODE};
+const int NUM_MODEMASKS = 5;
 
 // Spot Offset
 const int DXCALL = 0;

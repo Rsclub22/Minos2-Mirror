@@ -24,6 +24,9 @@ public:
     unsigned int getBandFilterMask();
     unsigned int getModeFilterMask();
 
+    void copyBandFilterMaskToEdit();
+    void copyModeFilterMaskToEdit();
+
 private:
     Ui::ClusterClientFilterTab *ui;
     QList<QCheckBox*> vhfChkBoxList;
@@ -31,11 +34,15 @@ private:
     QList<QCheckBox*> modeChkBoxList;
 
     unsigned int bandFilterMask;
+    unsigned int editBandFilterMask;
     unsigned int modeFilterMask;
+    unsigned int editModeFilterMask;
 
     bool vhfButtonState;
     bool mWaveButtonState;
     bool modeButtonState;
+
+    bool filterTabChanged;
 
     void initCheckFilterTab();
     void clearVHFBands();
@@ -46,6 +53,12 @@ private:
     void setModes();
     void clearAllFilters();
 
+
+    void loadBandSettings(unsigned int bandMask);
+    void loadModeSettings(unsigned int modeMask);
+    void restoreTabSettings();
+
+    void closeEvent(QCloseEvent *event);
 
 private slots:
     void vhfChecked(int checkBoxNum);
