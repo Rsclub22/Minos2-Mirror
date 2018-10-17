@@ -67,7 +67,7 @@ void setLines( bool PTT, bool L1, bool L2 );
 bool getPTT();
 
 void getActionState( QString & );    // returns current keyer action state string
-
+void getTransverterSwitch( QString & );
 void setVUCallBack(VUCallBack cb);
 
 void startRecordDVPFile( int fileno );

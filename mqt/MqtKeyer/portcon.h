@@ -67,11 +67,12 @@ class commonPort : public QObject
       virtual void L1Changed( int state );
       virtual void L2Changed( int state );
       virtual void linesModeChanged(int lmode);
-
+      virtual void transverterSwitchChanged(int s);
       bool lastPTTState = false;
       bool lastL1State = false;
       bool lastL2State = false;
       int lastLinesMode = 0;
+      int lastTransverterSwitch = 0;
 
       virtual int getlinesMode() = 0;
 
@@ -169,6 +170,7 @@ class LineEventsPort: public commonPort
       bool lineL1State = false;
       bool lineL2State = false;
       int linesMode = 0;
+      int transverterSwitch = 0;
       bool closing = false;
    public:
 
