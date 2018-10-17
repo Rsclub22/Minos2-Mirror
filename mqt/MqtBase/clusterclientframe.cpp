@@ -35,13 +35,38 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     on_FontChanged();
 
-
+/*
     dxSpotDataModel = new DxSpotDataModel();
     dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotDataModel);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
     restoreDxSpotViewColumns();
     dxSpotView->resizeRowsToContents();
+*/
+
+    dxSpotDataModel = new DxSpotDataModel();
+    //dxSpotView = new QTableView();
+    dxSpotView = ui->dxSpotView;
+    dxSpotView->setModel(dxSpotDataModel);
+    dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+    //dxSpotView->setStyleSheet("QHeaderView::section { font: bold; height: 14px }");
+
+    QHeaderView *verticalHeader = dxSpotView->verticalHeader();
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    verticalHeader->setDefaultSectionSize(18);
+
+
+    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sectionResized(int, int , int)));
+
+    dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+    dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+    dxSpotView->setColumnWidth(LOC_COL_NUM, LOC_COL_WIDTH);
+    dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+    dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+    restoreDxSpotViewColumns();
 
 
 }
@@ -110,7 +135,8 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
             // check spot against filter setting
             bool ok;
             unsigned int spotMask = static_cast<unsigned int>(spotlist[DXBANDMASK].toInt(&ok));
-            if ( filterSetup->getBandFilterMask() & spotMask)
+            unsigned int filterMask = filterSetup->getBandFilterMask();
+            if ( filterMask & spotMask || filterMask == 0)
             {
                 //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
                 dxSpotDataModel->rowData = QStringList {spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTCOMMENT]};

@@ -31,11 +31,12 @@ void Clusterrpc::clusterClientServerList(QVector<ClusterServer> serverList)
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = clusterStateIndicator[(*i).state] + " " + (*i).name + "\r\n";
+        QString state = clusterStateIndicator[(*i).state] + " " + (*i).app + "\r\n";
         //ui->StationList->addItem( state );
     }
 }
 
+// do we need this? maybe not if we use a common frame.
 void Clusterrpc::dxSpots(QVector<QString> spotQueue)
 {
     for ( QVector<QString>::iterator i = spotQueue.begin(); i != spotQueue.end(); i++ )

@@ -105,50 +105,52 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
             if (subNeeded)
             {
                 RPCPubSub::subscribeRemote(server, rpcConstants::clusterCategory);
+                RPCPubSub::subscribeRemote(server, rpcConstants::clusterServer);
+            }
+        }
+
+        if ( an.getCategory() == rpcConstants::clusterServer )
+        {
+            trace( QString(clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
+            QVector<ClusterServer>::iterator stat;
+            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+            {
+                if ((*stat).app == an.getPublisherProgram())
+                {
+                    if ((*stat).state != an.getState())
+                    {
+                        (*stat).state = an.getState();
+                        QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()];
+                        addSpotQueue( mess );
+                        syncstat = true;
+                    }
+                    break;
+                }
+            }
+            if ( stat == serverList.end() )
+            {
+                // We have received notification from a previously unknown station - so report on it
+                ClusterServer s;
+                s.serverName = an.getPublisherServer();
+                s.state = an.getState();
+                s.app = an.getKey();
+                serverList.push_back( s );
+                QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()];
+                 addSpotQueue( mess );
+                syncstat = true;
             }
         }
 
         if ( an.getCategory() == rpcConstants::clusterCategory )
         {
-            trace( QString(clusterStateIndicator[an.getState()]) + " " + an.getKey() + " " + an.getValue() );
-
-            if (an.getKey() == rpcConstants::clusterServer)
-            {
-                QVector<ClusterServer>::iterator stat;
-                for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
-                {
-                    if ((*stat).name == an.getPublisherServer())
-                    {
-                        if ((*stat).state != an.getState())
-                        {
-                            (*stat).state = an.getState();
-                            QString mess = an.getPublisherServer() + " changed state to " + clusterStateList[an.getState()];
-                            addSpotQueue( mess );
-                            syncstat = true;
-                        }
-                        break;
-                    }
-                }
-                if ( stat == serverList.end() )
-                {
-                    // We have received notification from a previously unknown station - so report on it
-                    ClusterServer s;
-                    s.name = an.getPublisherServer();
-                    s.state = an.getState();
-                    s.app = an.getValue();
-                    serverList.push_back( s );
-                    QString mess = an.getPublisherServer() + " changed state to " + clusterStateList[an.getState()];
-                    addSpotQueue( mess );
-                    syncstat = true;
-                }
-            }
+            trace( QString(clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() + " " + an.getValue() );
             /*
-            else if (an.getKey() == rpcConstants::ChatServerFrequency)
+            if (an.getKey() == rpcConstants::ChatServerFrequency)
             {
                 QVector<ClusterServer>::iterator stat;
                 for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
                 {
-                    if ((*stat).name == an.getPublisherServer())
+                    if ((*stat).serverName == an.getPublisherServer())
                     {
                         if ((*stat).freq != an.getValue())
                         {
@@ -160,6 +162,7 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
                 }
             }
             */
+
         }
     }
 }

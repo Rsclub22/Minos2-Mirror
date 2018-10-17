@@ -10,7 +10,7 @@ extern QString clusterStateList[];
 class ClusterServer
 {
 public:
-    QString name;
+    QString serverName;
     QString app;
     PublishState state;
 };
