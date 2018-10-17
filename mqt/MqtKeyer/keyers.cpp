@@ -509,6 +509,16 @@ bool commonKeyer::linesModeChanged( int state )
    linesMode = static_cast<LineModes>(state);
    return true;
 }
+
+bool commonKeyer::transverterSwitchChanged(int s)
+{
+    if ( sblog )
+    {
+       trace( "transverterSwitchChanged(" + QString::number( s ) + ")" );
+    }
+    transverterSwitch = s;
+    return true;
+}
 void commonKeyer::queueFinished()
 {}
 //==============================================================================

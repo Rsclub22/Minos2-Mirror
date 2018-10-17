@@ -181,6 +181,7 @@ class commonKeyer: public lineMonitor, public timerTicker
       virtual bool L1Changed( int state ) override;
       virtual bool L2Changed( int state ) override;
       virtual bool linesModeChanged(int lmode) override;
+      virtual bool transverterSwitchChanged(int s) override;
 
       virtual void tickEvent() override;       // this will often be an interrupt routine
       virtual bool getInfo( KeyerInfo * ) = 0;

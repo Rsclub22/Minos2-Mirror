@@ -330,8 +330,8 @@ void LineEventsPort::linesChangedEvent()
             (ls->getState("L5")?1:0) * 2 +
             (ls->getState("L6")?1:0) * 1;
 
-    transverterSwitch = (ls->getState("T1")?1:0) * 2 +
-            (ls->getState("T2")?1:0) * 1;
+    transverterSwitch = (ls->getState("T2")?1:0) * 2 +
+            (ls->getState("T1")?1:0) * 1;
 }
 
 bool LineEventsPort::initialisePort()
