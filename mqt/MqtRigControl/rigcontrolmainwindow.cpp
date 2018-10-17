@@ -992,7 +992,7 @@ void RigControlMainWindow::loggerSetFreq(QString freq)
         setFreq(freq, RIG_VFO_CURR);
     }
     // but the rig hasn't updated...
-    //msg->rigCache.publish();
+    msg->rigCache.publish();
 }
 
 
