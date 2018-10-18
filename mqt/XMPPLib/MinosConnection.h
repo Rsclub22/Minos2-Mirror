@@ -20,6 +20,7 @@ extern bool connected;
 bool XMPPInitialise( const QString &myId );
 //---------------------------------------------------------------------------
 
+const int RXBUFFLEN = 4096;
 class MinosAppConnection:public QObject, RPCDispatcher
 {
     Q_OBJECT
@@ -28,11 +29,12 @@ class MinosAppConnection:public QObject, RPCDispatcher
 
       RPCDispatcher *user_data;
       QSharedPointer<QTcpSocket> sock;
+      char rxbuff[ RXBUFFLEN + 1 ];
       TIXML_STRING packetbuff;
 
       QTimer waitConnectTimer;
 
-      void onLog (const TIXML_STRING &data, int is_incoming );
+      void onLog (const TIXML_STRING &data, bool is_incoming );
 
       bool closeConnection();
 

@@ -148,7 +148,7 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
       xmllen = strlen( xmlbuff );
 
       qint64 ret = sock->write ( xmlbuff, xmllen );
-      onLog ( xmlbuff, xmllen, 0 );
+      onLog ( xmlbuff, false );
       delete [] xmlbuff;
 
       if ( ret == -1 )  // QIOdevice::write returned an error.
@@ -156,7 +156,7 @@ bool MinosCommonConnection::sendRaw ( const TIXML_STRING xmlstr )
    }
    return true;
 }
-void MinosCommonConnection::onLog ( const char *data, size_t /*size*/, int is_incoming )
+void MinosCommonConnection::onLog (const char *data, bool is_incoming )
 {
    QString logbuff;
 
@@ -199,7 +199,7 @@ void MinosCommonConnection::on_readyRead()
    while (sock->bytesAvailable() > 0)
    {
 
-       qint64 rxlen = sock->read(rxbuff, 4096 - 1);
+       qint64 rxlen = sock->read(rxbuff, RXBUFFLEN);
        if ( rxlen > 0 )
        {
           rxbuff[ rxlen ] = 0;
@@ -211,34 +211,30 @@ void MinosCommonConnection::on_readyRead()
              size_t ptlen = strlen( &rxbuff[ rxpt ] );
              if ( ptlen )
              {
-                onLog ( &rxbuff[ rxpt ], ptlen, 1 );  // but this ignores the wrapper
+                onLog ( &rxbuff[ rxpt ], true );  // but this ignores the wrapper
                 packetbuff += &rxbuff[ rxpt ];   // which will strip out any nulls
              }
              rxpt += ptlen + 1;
           }
 
-          while ( packetbuff.size() > 2 && packetbuff.left( 2 ) == "&&" )
+          while ( (packetbuff.size() > 2) && packetbuff.substr( 0, 2 ) == "&&" )
           {
-             int packetoffset = packetbuff.indexOf( '<' );
-             if ( packetoffset > 0 )    // length field should always be followed by XML
+             size_t packetoffset = packetbuff.find( '<' );
+             if ( packetoffset != TIXML_STRING::npos )    // length field should always be followed by XML
              {
-                 QStringRef slen = packetbuff.midRef(2, packetoffset - 2);
-                 int packetlen = slen.toInt();
-                if ( (packetlen <= static_cast<int> (packetbuff.size()) - 2) && packetbuff.indexOf( ">&&" ) >= 0 )
-                {
-                   QString packet = packetbuff.mid( packetoffset, packetlen );
-                   int pbsize = packetbuff.size();
-                   int rlen = pbsize - 2 - packetlen - packetoffset;
-                   if (rlen < 0)
-                       rlen = 0;    // try to fix non-utf characters, e.g. degree character
-                   packetbuff = packetbuff.right(  rlen );
+                 char * ec;
+                 int packetlen = strtol( packetbuff.c_str() + 2, &ec, 10 );
+                 if ( *ec == '<' && packetlen <= static_cast<int> (strlen( ec )) + 2 && packetbuff.find( ">&&" ) != std::string::npos )
+                 {
+                     unsigned int upacketlen = static_cast<unsigned int>(packetlen);
+                     TIXML_STRING packet = packetbuff.substr( packetoffset, upacketlen );
+                     packetbuff = packetbuff.substr( packetoffset + upacketlen + 2, strlen( ec + upacketlen ) );
 
-                   if (packet.length())
+                   if (packet.size())
                    {
                        TiXmlBase::SetCondenseWhiteSpace( false );
                        TiXmlDocument xdoc;
-                       TIXML_STRING p = packet.toStdString();
-                       xdoc.Parse( p.c_str(), nullptr );
+                       xdoc.Parse( packet.c_str(), nullptr );
                        if ( xdoc.Error())
                        {
                            trace(QString("parse failed; ") + xdoc.ErrorDesc());
