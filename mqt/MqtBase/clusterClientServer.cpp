@@ -111,7 +111,7 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
 
         if ( an.getCategory() == rpcConstants::clusterServer )
         {
-            trace( QString(clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
+            trace( QString("***" + clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
             QVector<ClusterServer>::iterator stat;
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
@@ -143,7 +143,7 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
 
         if ( an.getCategory() == rpcConstants::clusterCategory )
         {
-            trace( QString(clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() + " " + an.getValue() );
+            trace( QString("!!!!" + clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() + " " + an.getValue() );
             /*
             if (an.getKey() == rpcConstants::ChatServerFrequency)
             {
@@ -174,7 +174,7 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
     // Should we use QMap to give a list of name/value pairs?
     // BUT the value isn't always the same type - should it be?
     // We could use QVariant, of course...
-
+    trace(QString("ClusterClientServer: on_serverCall - Message from %1").arg(from));
     if ( !err )
     {
         RPCArgs *args = mro->getCallArgs();
@@ -187,6 +187,7 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
                 QString pmess;
                 if (psMess->getString(pmess))
                 {
+                    trace(QString("ClusterClientServer: on_serverCall - Message = %1").arg(pmess));
                     // add to chat window
                     QString mess = from + " : " + pmess;
                     addSpotQueue( mess );

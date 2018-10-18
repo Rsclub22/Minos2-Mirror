@@ -63,6 +63,18 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     clusterRpc->setStandAlone();
 
+    // test
+    // get the number of available antennas
+    QString fileName = CLUSTER_PATH + CLUSTER_COMMANDS;
+    QSettings clusterSettings(fileName, QSettings::IniFormat);
+
+    clusterSettings.beginGroup("CommandStrings");
+    QStringList keys = clusterSettings.allKeys();
+    clusterSettings.endGroup();
+    clusterSettings.beginGroup("UserCommandStrings");
+    QStringList keys3 = clusterSettings.allKeys();
+    clusterSettings.endGroup();
+
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
 

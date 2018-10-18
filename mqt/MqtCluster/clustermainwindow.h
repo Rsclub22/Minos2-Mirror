@@ -22,6 +22,7 @@ class ClusterMainWindow;
 
 const QString CLUSTER_PATH = "./Configuration/Cluster/";
 const QString CLUSTER_SITES = "ClusterSites.ini";
+const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
 
 
 class ClusterAddress
