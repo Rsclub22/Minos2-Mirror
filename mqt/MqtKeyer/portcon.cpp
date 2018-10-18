@@ -124,6 +124,11 @@ void commonPort::linesModeChanged( int state )
    for ( my_deque < lineMonitor * >::iterator l = monitors.begin(); l != monitors.end(); l++ )
       ( *l ) ->linesModeChanged( state );
 }
+void commonPort::transverterSwitchChanged(int s)
+{
+    for ( my_deque < lineMonitor * >::iterator l = monitors.begin(); l != monitors.end(); l++ )
+       ( *l ) ->transverterSwitchChanged( s );
+}
 //=============================================================================
 LineCallBack WindowsMonitorPort::WinLineCallback = nullptr;
 bool WindowsMonitorPort::PTTInState = false;
@@ -324,6 +329,9 @@ void LineEventsPort::linesChangedEvent()
             (ls->getState("L4")?1:0) * 4 +
             (ls->getState("L5")?1:0) * 2 +
             (ls->getState("L6")?1:0) * 1;
+
+    transverterSwitch = (ls->getState("T2")?1:0) * 2 +
+            (ls->getState("T1")?1:0) * 1;
 }
 
 bool LineEventsPort::initialisePort()
@@ -383,6 +391,11 @@ void LineEventsPort::checkControls()
    {
        lastLinesMode = linesMode;
        linesModeChanged( lastLinesMode );
+   }
+   if (transverterSwitch != lastTransverterSwitch)
+   {
+       lastTransverterSwitch = transverterSwitch;
+       transverterSwitchChanged(lastTransverterSwitch);
    }
    if ( WinLineCallback )
       ( *WinLineCallback ) ( PTTState, lastPTTState, lastL1State, lastL2State, lastLinesMode );
