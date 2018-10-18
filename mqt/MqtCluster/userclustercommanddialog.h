@@ -1,0 +1,46 @@
+#ifndef USERCLUSTERCOMMANDDIALOG_H
+#define USERCLUSTERCOMMANDDIALOG_H
+
+#include <QDialog>
+
+namespace Ui {
+class userClusterCommandDialog;
+}
+
+class ClusterUserCommandData
+{
+
+public:
+
+    ClusterUserCommandData(int _number, QString _name, QString _cmdString);
+    ClusterUserCommandData();
+
+    int number = 0;
+    QString name;
+    QString cmdString;
+
+};
+
+class userClusterCommandDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit userClusterCommandDialog(QWidget *parent, int buttonNumber, ClusterUserCommandData* _editData, ClusterUserCommandData* _curData);
+    ~userClusterCommandDialog();
+
+private slots:
+    void nameEditFinished();
+    void cmdStringEditFinished();
+    void editAccepted();
+    void editRejected();
+
+private:
+    Ui::userClusterCommandDialog *ui;
+    ClusterUserCommandData *editData;
+    ClusterUserCommandData *curData;
+    bool nameChanged;
+    bool cmdStringChanged;
+};
+
+#endif // USERCLUSTERCOMMANDDIALOG_H

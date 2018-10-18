@@ -14,6 +14,7 @@
 #include "clusterrpc.h"
 #include "dxspotdatamodel.h"
 #include "clusterClientServer.h"
+#include "rotpresetbutton.h"
 
 namespace Ui {
 class ClusterMainWindow;
@@ -23,6 +24,48 @@ class ClusterMainWindow;
 const QString CLUSTER_PATH = "./Configuration/Cluster/";
 const QString CLUSTER_SITES = "ClusterSites.ini";
 const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
+
+
+const QString USER_COMMAND1 = "Ctrl+1";
+const QString USER_COMMAND2 = "Ctrl+2";
+const QString USER_COMMAND3 = "Ctrl+3";
+const QString USER_COMMAND4 = "Ctrl+4";
+const QString USER_COMMAND5 = "Ctrl+5";
+const QString USER_COMMAND6 = "Ctrl+6";
+const QString USER_COMMAND7 = "Ctrl+7";
+const QString USER_COMMAND8 = "Ctrl+8";
+const QString USER_COMMAND9 = "Ctrl+9";
+const QString USER_COMMAND10 = "Ctrl+0";
+
+const QStringList userCommandShortCutKeys = {
+                                            USER_COMMAND1, USER_COMMAND2,
+                                            USER_COMMAND3, USER_COMMAND4,
+                                            USER_COMMAND5, USER_COMMAND6,
+                                            USER_COMMAND7, USER_COMMAND8,
+                                            USER_COMMAND9, USER_COMMAND10
+                                        };
+
+
+const QString USER_COMMAND_MENU1 = "Ctrl+Alt+1";
+const QString USER_COMMAND_MENU2 = "Ctrl+Alt+2";
+const QString USER_COMMAND_MENU3 = "Ctrl+Alt+3";
+const QString USER_COMMAND_MENU4 = "Ctrl+Alt+4";
+const QString USER_COMMAND_MENU5 = "Ctrl+Alt+5";
+const QString USER_COMMAND_MENU6 = "Ctrl+Alt+6";
+const QString USER_COMMAND_MENU7 = "Ctrl+Alt+7";
+const QString USER_COMMAND_MENU8 = "Ctrl+Alt+8";
+const QString USER_COMMAND_MENU9 = "Ctrl+Alt+9";
+const QString USER_COMMAND_MENU10 = "Ctrl+Alt+0";
+
+const QStringList userCommandMenuShortCutKeys = {
+                                                        USER_COMMAND_MENU1, USER_COMMAND_MENU2,
+                                                        USER_COMMAND_MENU3, USER_COMMAND_MENU4,
+                                                        USER_COMMAND_MENU5, USER_COMMAND_MENU6,
+                                                        USER_COMMAND_MENU7, USER_COMMAND_MENU8,
+                                                        USER_COMMAND_MENU9, USER_COMMAND_MENU10
+                                             };
+
+
 
 
 class ClusterAddress
@@ -69,6 +112,11 @@ private slots:
 
     void onStdInRead(QString cmd);
     void loggedOut();
+
+    void showUserCmdButtonMenu(int buttonNumber);
+    void userCmdButtonRead(int buttonNumber);
+    void userCmdButtonEdit(int buttonNumber;
+
 private:
     Ui::ClusterMainWindow *ui;
     StdInReader stdinReader;
@@ -78,6 +126,12 @@ private:
     QLabel* status;
 
     QVector<BandDetail*> bands;
+
+    QList<RotPresetButton *> userCmdButton;
+    QList<QShortcut *> shortCutKeyList;
+    QList<QShortcut *> shiftShortCutKeyList;
+    QStringList startCommands;
+    QStringList userCommands;
 
     QtTelnet* client;
     Clusterrpc* clusterRpc;
@@ -131,6 +185,12 @@ private:
     void disconnectNode();
     void connectToSelectedHost(QString nodeName);
     void getBand(QString freq, QString &band, QString &bandMask);
+
+    void getStartCommands();
+    void getUserCommands();
+
+
+    void initUserCommandButtons();
 };
 
 #endif // CLUSTERMAINWINDOW_H

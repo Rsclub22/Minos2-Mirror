@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     setupdialog.cpp \
     cluster.cpp \
     spotsdatabase.cpp \
-    clusterrpc.cpp
+    clusterrpc.cpp \
+    userclustercommanddialog.cpp
 
 
 
@@ -39,9 +40,11 @@ HEADERS  += clustermainwindow.h \
     setupdialog.h \
     cluster.h \
     spotsdatabase.h \
-    clusterrpc.h
+    clusterrpc.h \
+    userclustercommanddialog.h
 
 
 
 FORMS    += clustermainwindow.ui \
-    setupdialog.ui
+    setupdialog.ui \
+    userclustercommanddialog.ui
