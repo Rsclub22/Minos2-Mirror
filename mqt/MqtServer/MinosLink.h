@@ -46,9 +46,8 @@ class MinosCommonConnection: public QObject
 {
     Q_OBJECT
    private:
-      char rxbuff[ RXBUFFLEN ];
-      QString packetbuff;
-      QString rxBuff;
+      char rxbuff[ RXBUFFLEN + 1 ];
+      TIXML_STRING packetbuff;
 
     protected:
        bool connected;
@@ -59,7 +58,7 @@ class MinosCommonConnection: public QObject
       QString clientUser;       // client name (or empty)
       QString makeJid();        // return the Jabber ID
 
-      void onLog ( const char *data, size_t size, int is_incoming );
+      void onLog (const char *data, bool is_incoming );
       bool sendRaw (const TIXML_STRING xmlstr );
       virtual bool checkLastRx()
       {

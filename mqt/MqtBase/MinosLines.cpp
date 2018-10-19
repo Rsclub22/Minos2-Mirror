@@ -199,7 +199,7 @@ void LineSet::checkTimerTimeout()
     {
        if ( oldMap[i.key()] != i.value() )
        {
-           Log( QString( "checkTimerTimeout emitting lineChanged " ) + FileMap->GetMap() );
+           Log( QString( "checkTimerTimeout emitting lineChanged: key %1 changed full set %2 " ).arg(i.key()).arg(FileMap->GetMap()) );
             emit linesChanged();
             return;
        }

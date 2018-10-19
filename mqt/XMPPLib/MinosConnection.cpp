@@ -129,7 +129,7 @@ bool MinosAppConnection::closeConnection()
     return true;
 }
 //---------------------------------------------------------------------------
-void MinosAppConnection::onLog ( const TIXML_STRING &data, int is_incoming )
+void MinosAppConnection::onLog ( const TIXML_STRING &data, bool is_incoming )
 {
    QString logbuff;
    if ( is_incoming )
@@ -146,9 +146,6 @@ void MinosAppConnection::onLog ( const TIXML_STRING &data, int is_incoming )
 void MinosAppConnection::on_readyRead()
 {
    // read from the connection; buffer until a complete packet received
-
-    const int RXBUFFLEN = 4096;
-    char rxbuff[ RXBUFFLEN + 1 ];
 
     while (sock->bytesAvailable() > 0)
     {
@@ -168,7 +165,7 @@ void MinosAppConnection::on_readyRead()
                 int rxpt = 0;
                 while ( rxpt < rxlen )
                 {
-                    int ptlen = static_cast<int>(strlen( &rxbuff[ rxpt ]) );
+                    size_t ptlen = strlen( &rxbuff[ rxpt ]);
                     if ( ptlen )
                     {
                         onLog( &rxbuff[ rxpt ], true );
@@ -180,7 +177,7 @@ void MinosAppConnection::on_readyRead()
                 while ( packetbuff.size() > 2 && packetbuff.substr( 0, 2 ) == "&&" )
                 {
                     size_t packetoffset = packetbuff.find( '<' );
-                    if ( packetoffset > 0 )    // length field should always be followed by XML
+                    if ( packetoffset != TIXML_STRING::npos )    // length field should always be followed by XML
                     {
                         char * ec;
                         int packetlen = strtol( packetbuff.c_str() + 2, &ec, 10 );
@@ -192,11 +189,6 @@ void MinosAppConnection::on_readyRead()
 
                             if (packet.size())
                             {
-#ifdef TRACE_PACKETS
-
-                                trace( packet.c_str() );
-#endif
-
                                 analyseNode( user_data, packet );
                             }
                             else
