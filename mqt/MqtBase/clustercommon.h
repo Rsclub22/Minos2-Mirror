@@ -67,6 +67,6 @@ const int COMMENT_COL_WIDTH = 170;
 
 const QChar SPOT_DATA_SEPERATOR = ':';
 const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
-const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\");
+const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d");
 
 #endif // CLUSTERCOMMON_H

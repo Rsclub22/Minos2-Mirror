@@ -52,6 +52,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     loadVhfAndUpBands(bands);
 
+
     QSettings settings;
     geoStr = QString("clusterServer/geometry");
     QByteArray geometry = settings.value(geoStr).toByteArray();
@@ -426,9 +427,9 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
 {
     int i = 0;
     QStringList loc;
-    QRegExp fullLocExp = FULL_LOC_EXP;
-    QRegExp partLocExp = PART_LOC_EXP;
-    if (comment.contains('<') && comment.contains('>'))
+    const QRegExp fullLocExp = FULL_LOC_EXP;
+    const QRegExp partLocExp = PART_LOC_EXP;
+     if (comment.contains('<') && comment.contains('>'))
     {
         loc = comment.split('<');
         if (loc[0].contains(fullLocExp))
