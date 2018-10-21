@@ -15,7 +15,7 @@
 
 #include <QAbstractTableModel>
 
-const int dxSpotColCount = 6;
+const int dxSpotColCount = 7;
 
 class DxSpotDataModel : public QAbstractTableModel
 {

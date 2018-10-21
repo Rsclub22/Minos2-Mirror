@@ -62,8 +62,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-    dxSpotView->setColumnWidth(LOC_COL_NUM, LOC_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
     dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+    dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreDxSpotViewColumns();

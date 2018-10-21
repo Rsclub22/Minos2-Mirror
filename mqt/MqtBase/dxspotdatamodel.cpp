@@ -34,10 +34,12 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                 case 2:
                     return tr("Dx");
                 case 3:
-                    return tr("Loc");
+                    return tr("DxLoc");
                 case 4:
                     return tr("Spotter");
                 case 5:
+                    return tr("SpotLoc");
+                case 6:
                     return tr("Comment");
 
                 default:

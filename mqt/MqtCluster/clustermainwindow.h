@@ -170,6 +170,7 @@ private:
     QString spotComment;
     QString spotTime;
     QString dxLocator;
+    QString spotLocator;
 
     bool loginStart;
     bool loginSuccess;
@@ -199,6 +200,7 @@ private:
     void saveRotPresetButton(ClusterUserCommandData &buttonData);
     void saveUserCommandString(int buttonNumber, ClusterUserCommandData &buttonData);
     void readUserCommandStrings();
+    void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment);
 };
 
 #endif // CLUSTERMAINWINDOW_H

@@ -51,18 +51,22 @@ const int SPOTCOMMENT = 9;
 const int TIME_COL_NUM = 0;
 const int FREQ_COL_NUM = 1;
 const int DXSPOT_CALL_COL_NUM = 2;
-const int LOC_COL_NUM = 3;
+const int DXLOC_COL_NUM = 3;
 const int SPOT_CALL_COL_NUM = 4;
-const int COMMENT_COL_NUM = 5;
+const int SPOTLOC_COL_NUM = 5;
+const int COMMENT_COL_NUM = 6;
 
 const int TIME_COL_WIDTH = 40;
 const int FREQ_COL_WIDTH = 80;
 const int DXSPOT_CALL_COL_WIDTH = 80;
-const int LOC_COL_WIDTH = 40;
+const int DXLOC_COL_WIDTH = 60;
 const int SPOT_CALL_COL_WIDTH = 80;
+const int SPOTLOC_COL_WIDTH = 60;
 const int COMMENT_COL_WIDTH = 170;
 
 
-
+const QChar SPOT_DATA_SEPERATOR = ':';
+const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
+const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\");
 
 #endif // CLUSTERCOMMON_H

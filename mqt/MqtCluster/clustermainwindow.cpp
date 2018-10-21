@@ -66,6 +66,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
 
+
     initUserCommandButtons();
     readUserCommandStrings();
     userCommandAllButtonUpdate();
@@ -87,8 +88,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-    dxSpotView->setColumnWidth(LOC_COL_NUM, LOC_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
     dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+    dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreDxSpotViewColumns();
@@ -308,11 +310,12 @@ void ClusterMainWindow::parseDX(QString txt)
         if (retCode >= 0)
         {
 
-            trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10").arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment));
+            trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11")
+            .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotComment));
             // Display
             QString displayFreq = alignFreqRight(dxFreq);
-            clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10").arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotTime).arg(spotComment));
-            dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
+            clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment));
+            dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
             //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             dxSpotDataModel->insertRows(0, 1);
 
@@ -343,6 +346,7 @@ int ClusterMainWindow::upackSpot(QString txt)
     spotComment = "";
     spotTime = "";
     dxLocator = "";
+    spotLocator = "";
 
     txt.remove('\x07');
     if (!txt.contains("DX de"))
@@ -377,11 +381,11 @@ int ClusterMainWindow::upackSpot(QString txt)
     // look for locator
     if (dxMsg[timePos + 1] == "")
     {
-        dxLocator = "";
+        spotLocator = "";
     }
     else
     {
-        dxLocator = dxMsg[timePos + 1];
+        spotLocator = dxMsg[timePos + 1];
     }
     // reassemble the comment
     for (int i = 5; i < timePos; i++)
@@ -391,6 +395,10 @@ int ClusterMainWindow::upackSpot(QString txt)
             spotComment += dxMsg[i] + " ";
         }
     }
+
+    // remove seperator char from comment
+    spotComment.remove(SPOT_DATA_SEPERATOR);
+    findLocInComment(spotLocator, dxLocator, spotComment);
 
 
     return 0;
@@ -412,6 +420,47 @@ void ClusterMainWindow::getBand(QString freq, QString &band, QString &bandMask)
         }
     }
 }
+
+
+void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment)
+{
+    int i = 0;
+    QStringList loc;
+    QRegExp fullLocExp = FULL_LOC_EXP;
+    QRegExp partLocExp = PART_LOC_EXP;
+    if (comment.contains('<') && comment.contains('>'))
+    {
+        loc = comment.split('<');
+        if (loc[0].contains(fullLocExp))
+        {
+            i = loc[0].indexOf(fullLocExp, 0);
+            spotLoc = loc[0].mid(i, 6);
+
+        }
+        else if (loc[0].contains(partLocExp))
+        {
+           i = loc[0].indexOf(partLocExp, 0);
+           spotLoc = loc[0].mid(i, 4);
+        }
+
+
+        //loc = comment.split('>');
+        if (loc[1].contains(fullLocExp))
+        {
+            i = loc[1].indexOf(fullLocExp, 0);
+            dxLoc = loc[1].mid(i, 6);
+
+        }
+        else if (loc[1].contains(partLocExp))
+        {
+           i = loc[1].indexOf(partLocExp, 0);
+           dxLoc = loc[1].mid(i, 4);
+        }
+
+
+    }
+}
+
 
 // ************* Send text *************************************************
 
