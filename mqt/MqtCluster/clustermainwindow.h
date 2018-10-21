@@ -14,6 +14,7 @@
 #include "clusterrpc.h"
 #include "dxspotdatamodel.h"
 #include "clusterClientServer.h"
+#include "userclustercommanddialog.h"
 #include "rotpresetbutton.h"
 
 namespace Ui {
@@ -115,7 +116,9 @@ private slots:
 
     void showUserCmdButtonMenu(int buttonNumber);
     void userCmdButtonRead(int buttonNumber);
-    void userCmdButtonEdit(int buttonNumber;
+    void userCmdButtonEdit(int buttonNumber);
+    void userCmdButtonClear(int buttonNumber);
+    void userCmdButtonWrite(int buttonNumber);
 
 private:
     Ui::ClusterMainWindow *ui;
@@ -191,6 +194,11 @@ private:
 
 
     void initUserCommandButtons();
+    void userCommandButtonUpdate(int buttonNumber, ClusterUserCommandData &buttonData);
+    void userCommandAllButtonUpdate();
+    void saveRotPresetButton(ClusterUserCommandData &buttonData);
+    void saveUserCommandString(int buttonNumber, ClusterUserCommandData &buttonData);
+    void readUserCommandStrings();
 };
 
 #endif // CLUSTERMAINWINDOW_H

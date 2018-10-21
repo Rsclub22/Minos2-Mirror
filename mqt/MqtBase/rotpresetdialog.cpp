@@ -18,7 +18,7 @@
 #include "ui_rotpresetdialog.h"
 
 
-RotPresetDialog::RotPresetDialog(int buttonNumber, RotPresetData* _editData, RotPresetData* _curData, QWidget *parent) :
+RotPresetDialog::RotPresetDialog(QWidget *parent, int buttonNumber, RotPresetData* _editData, RotPresetData* _curData, QString name) :
     QDialog(parent),
     ui(new Ui::RotPresetDialog)
 {
@@ -27,7 +27,7 @@ RotPresetDialog::RotPresetDialog(int buttonNumber, RotPresetData* _editData, Rot
 
     editData = _editData;
     curData = _curData;
-    setWindowTitle(QString("Rotator Preset %1 - Edit").arg(QString::number(buttonNumber + 1)));
+    setWindowTitle(QString("Rotator Preset %1 - %2").arg(QString::number(buttonNumber + 1)).arg(name));
     ui->nameEdit->setText(curData->name);
     ui->bearingEdit->setText(curData->bearing);
     ui->nameEdit->setFocus();

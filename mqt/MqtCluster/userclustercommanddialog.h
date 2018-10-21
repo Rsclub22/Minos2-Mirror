@@ -12,10 +12,9 @@ class ClusterUserCommandData
 
 public:
 
-    ClusterUserCommandData(int _number, QString _name, QString _cmdString);
+    ClusterUserCommandData(QString _name, QString _cmdString);
     ClusterUserCommandData();
 
-    int number = 0;
     QString name;
     QString cmdString;
 
@@ -26,7 +25,7 @@ class userClusterCommandDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit userClusterCommandDialog(QWidget *parent, int buttonNumber, ClusterUserCommandData* _editData, ClusterUserCommandData* _curData);
+    explicit userClusterCommandDialog(QWidget *parent, int buttonNumber, ClusterUserCommandData* _editData, ClusterUserCommandData* _curData, QString name);
     ~userClusterCommandDialog();
 
 private slots:

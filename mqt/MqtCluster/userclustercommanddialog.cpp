@@ -2,9 +2,8 @@
 #include "ui_userclustercommanddialog.h"
 
 
-ClusterUserCommandData::ClusterUserCommandData(int _number, QString _name, QString _cmdString)
+ClusterUserCommandData::ClusterUserCommandData(QString _name, QString _cmdString)
 {
-    number = _number;
     name = _name;
     cmdString = _cmdString;
 }
@@ -18,7 +17,7 @@ ClusterUserCommandData::ClusterUserCommandData()
 
 
 
-userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, int buttonNumber, ClusterUserCommandData* _editData, ClusterUserCommandData* _curData) :
+userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, int buttonNumber, ClusterUserCommandData* _editData, ClusterUserCommandData* _curData, QString name) :
     QDialog(parent),
     ui(new Ui::userClusterCommandDialog)
     ,editData(nullptr)
@@ -31,7 +30,7 @@ userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, int buttonNu
 
     editData = _editData;
     curData = _curData;
-    setWindowTitle(QString("Rotator Preset %1 - Edit").arg(QString::number(buttonNumber + 1)));
+    setWindowTitle(QString("User Cluster Command %1 - %2").arg(QString::number(buttonNumber + 1)).arg(name));
     ui->name->setText(curData->name);
     ui->commandString->setText(curData->cmdString);
 

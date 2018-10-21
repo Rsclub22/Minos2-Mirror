@@ -19,7 +19,6 @@
 #include "clustermainwindow.h"
 #include "clustercommon.h"
 #include "rigutils.h"
-#include "userclustercommanddialog.h"
 #include "ui_clustermainwindow.h"
 
 #include <QDebug>
@@ -66,6 +65,10 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
+
+    initUserCommandButtons();
+    readUserCommandStrings();
+    userCommandAllButtonUpdate();
 
     dxSpotDataModel = new DxSpotDataModel();
     dxSpotView = new QTableView();
@@ -348,10 +351,10 @@ int ClusterMainWindow::upackSpot(QString txt)
     }
 
     dxMsg = txt.split(QRegExp("\\s+"));
-    dxCall = dxMsg[2].remove(':');
+    spotCall = dxMsg[2].remove(':');
     dxFreq = convertKhzToMhz(dxMsg[3]);
     getBand(dxFreq, dxBandStr, dxBandMask);
-    spotCall = dxMsg[4];
+    dxCall = dxMsg[4];
     // find time
     for (int i = 4; i < dxMsg.count(); i++)
     {
@@ -421,7 +424,11 @@ void ClusterMainWindow::sendText()
 
 void ClusterMainWindow::txText(QString msg)
 {
-    client->sendData(msg);
+    if (connected)
+    {
+       client->sendData(msg);
+    }
+
 }
 
 
@@ -505,23 +512,6 @@ void ClusterMainWindow::getStartCommands()
     }
 }
 
-void ClusterMainWindow::getUserCommands()
-{
-    userCommands.clear();
-
-    QString fileName = CLUSTER_PATH + CLUSTER_COMMANDS;
-    QSettings settings(fileName, QSettings::IniFormat);
-
-    settings.beginGroup("UserCommandStrings");
-    QStringList commandkeys = settings.allKeys();
-    settings.endGroup();
-
-    for (int i = 0; i < commandkeys.count(); i++)
-    {
-        userCommands.append(settings.value(commandkeys[i]).toString());
-    }
-}
-
 
 
 /**************************** User Command Buttons **************************/
@@ -530,6 +520,7 @@ void ClusterMainWindow::getUserCommands()
 void ClusterMainWindow::initUserCommandButtons()
 {
 
+    ui->userCmdButFrame->setVisible(true);
     QList<QToolButton*> ui_userCommandButtons;
     ui_userCommandButtons << ui->sendButton0 << ui->sendButton1 << ui->sendButton2 << ui->sendButton3 << ui->sendButton4
                      << ui->sendButton5 << ui->sendButton6 << ui->sendButton7 << ui->sendButton8 << ui->sendButton9;
@@ -557,7 +548,7 @@ void ClusterMainWindow::initUserCommandButtons()
 
         userCmdButton.append(new RotPresetButton(ui_userCommandButtons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i]));
 
-        connect(userCmdButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
+        connect(userCmdButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {userCmdButtonRead(i);});
         connect(userCmdButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showUserCmdButtonMenu(i);});
         connect(userCmdButton[i], &RotPresetButton::presetReadAction, [this, i]() {userCmdButtonRead(i);});
         connect(userCmdButton[i], &RotPresetButton::presetEditAction, [this, i]() {userCmdButtonEdit(i);});
@@ -577,11 +568,22 @@ void ClusterMainWindow::showUserCmdButtonMenu(int buttonNumber)
 
 void ClusterMainWindow::userCmdButtonRead(int buttonNumber)
 {
-    if (!userCmdButton.isEmpty()  && buttonNumber < userCmdButton.count())
+    trace(QString("UserCmdButton Button Read = %1").arg(buttonNumber + 1));
+    if (!userCommands[buttonNumber].isEmpty() && buttonNumber < userCmdButton.count())
     {
-        if (!userCommands[buttonNumber].isEmpty())
+        if (userCommands[buttonNumber].contains(':'))
         {
-            txText(userCommands[buttonNumber]);
+            QStringList d = userCommands[buttonNumber].split(':');
+            if (d.count() == 2)
+            {
+                if (!d[1].isEmpty())
+                {
+                    d[1].append('\n');
+                    trace(QString("UserCmdButton Read - Send Command to cluster = %1").arg(d[1]));
+                    txText(userCommands[buttonNumber]);
+                }
+            }
+
         }
     }
 
@@ -589,177 +591,147 @@ void ClusterMainWindow::userCmdButtonRead(int buttonNumber)
 
 void ClusterMainWindow::userCmdButtonEdit(int buttonNumber)
 {
-
-
-    if (!userCmdButton.isEmpty()  && buttonNumber < userCmdButton.count())
+    trace(QString("UserCmdButton Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
+    if (!userCommands[buttonNumber].isEmpty() && buttonNumber < userCmdButton.count())
     {
-        if (buttonNumber < userCommands.count())
+
+        if (userCommands[buttonNumber].contains(':'))
         {
-            if (userCommands[buttonNumber].contains(':'))
+            QStringList d = userCommands[buttonNumber].split(':');
+            if (d.count() == 2)
             {
-                QStringList d = userCommands[buttonNumber].split(':');
-                if (d.count() != 2)
+                ClusterUserCommandData editData(d[0], d[1]);
+                ClusterUserCommandData curData(d[0], d[1]);
+
+                trace(QString("UserCmdButton - Edit Data - name = %1, cmdString = %2").arg(d[0]).arg(d[1]));
+                userClusterCommandDialog cmdStringDialog(this, buttonNumber, &editData, &curData, QString("Edit"));
+
+
+                if (cmdStringDialog.exec() == QDialog::Accepted)
                 {
-                    ClusterUserCommandData editData(buttonNumber, d[0], d[1]);
-                    ClusterUserCommandData curData(buttonNumber, d[0], d[1]);
-
-                    trace(QString("UserCmdButton Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-                    userClusterCommandDialog cmdStringDialog(this, buttonNumber, &editData, &curData);
-
-
-                    if (cmdStringDialog.exec() == QDialog::Accepted)
+                    if (editData.name != curData.name || editData.cmdString != curData.cmdString)
                     {
-                        if (editData.name != curData.name || editData.cmdString != curData.cmdString)
-                        {
-
-                            saveUserCmdString(buttonNumber, editData);
-                            userCommandButtonUpdate(buttonNumber, editData);
-                        }
-
+                        trace(QString("UserCmdButton - Saving Edited Data - name = %1, cmdString = %2").arg(editData.name).arg(editData.cmdString));
+                        saveUserCommandString(buttonNumber, editData);
+                        userCommandButtonUpdate(buttonNumber, editData);
                     }
+
                 }
             }
-
-
         }
-
     }
-
-
 }
 
-void ClusterMainWindow::userCommandClear(int buttonNumber)
+void ClusterMainWindow::userCmdButtonClear(int buttonNumber)
 {
     trace(QString("UserCommand Clear Selected = %1").arg(QString::number(buttonNumber +1)));
-    if (!userCmdButton.isEmpty()  && buttonNumber < userCmdButton.count())
+
+    if (!userCommands[buttonNumber].isEmpty() || (!userCmdButton.isEmpty()  && buttonNumber < userCmdButton.count()))
     {
-        if (buttonNumber < userCommands.count())
+        int status = QMessageBox::question( this,
+                                tr("Cluster User Command Clear"),
+                                tr("Do you really want to clear cluster user command number:%1?")
+                                .arg(buttonNumber + 1),
+                                QMessageBox::Yes|QMessageBox::Default,
+                                QMessageBox::No|QMessageBox::Escape,
+                                QMessageBox::NoButton);
+
+        if (status == QMessageBox::Yes)
         {
-            ClusterUserCommandData pData(0, "", "");
-            saveUserCmdString(buttonNumber, pData);
+             trace(QString("UserCommand Clear - Clearing Button = %1").arg(QString::number(buttonNumber +1)));
+            ClusterUserCommandData pData("", "");
+            saveUserCommandString(buttonNumber, pData);
             userCommandButtonUpdate(buttonNumber, pData);
         }
 
+
     }
 
 
 }
 
-/*
 
-void RotatorMainWindow::presetButtonUpdate(int buttonNumber)
+
+void ClusterMainWindow::userCmdButtonWrite(int buttonNumber)
 {
-
-}
-*/
-
-void ClusterMainWindow::userCommandWrite(int buttonNumber)
-{
-    trace(QString("UserCommand Write Selected = %1").arg(QString::number(buttonNumber +1)));
+    trace(QString("UserCommand New Selected = %1").arg(QString::number(buttonNumber +1)));
     if (!userCmdButton.isEmpty()  && buttonNumber < userCmdButton.count())
     {
-        if (buttonNumber < userCommands.count())
+
+        ClusterUserCommandData editData("", "");
+        ClusterUserCommandData curData("", "");
+        userClusterCommandDialog cmdStringDialog(this, buttonNumber, &editData, &curData, QString("New"));
+
+
+        if (cmdStringDialog.exec() == QDialog::Accepted)
         {
-            ClusterUserCommandData editData(buttonNumber, "", "");
-            ClusterUserCommandData curData(buttonNumber, "", "");
-            userClusterCommandDialog cmdStringDialog(this, buttonNumber, &editData, &curData);
-
-
-            if (cmdStringDialog.exec() == QDialog::Accepted)
+            if (editData.name != curData.name || editData.cmdString != curData.cmdString)
             {
-                if (editData.name != curData.name || editData.cmdString != curData.cmdString)
-                {
-
-                    saveUserCmdString(buttonNumber, editData);
-                    userCommandButtonUpdate(buttonNumber, editData);
-                }
-
+                trace(QString("UserCommand New Selected - Saving new data name = %1, cmdString = %2").arg(editData.name).arg(editData.cmdString));
+                saveUserCommandString(buttonNumber, editData);
+                userCommandButtonUpdate(buttonNumber, editData);
             }
+
+        }
+
+    }
+}
+
+
+
+void ClusterMainWindow::userCommandButtonUpdate(int buttonNumber, ClusterUserCommandData& buttonData)
+{
+    userCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1)).arg(buttonData.name) );
+    //QString tTipStr = "Bearing = " + editData.bearing;
+    //presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
+}
+
+
+void ClusterMainWindow::userCommandAllButtonUpdate()
+{
+    ClusterUserCommandData buttonData;
+    QStringList cmdData;
+    if (userCommands.count() > 0)
+    {
+        for (int i = 0; i < userCommands.count(); i++)
+        {
+            cmdData = userCommands[i].split(':');
+            if (cmdData.count() == 2)
+            {
+               buttonData.name = cmdData[0];
+               buttonData.cmdString = cmdData[1];
+               userCommandButtonUpdate(i, buttonData);
+            }
+
         }
     }
 }
 
 
-void RotatorMainWindow::setRotPresetButData(int buttonNumber, RotPresetData& editData)
+
+void ClusterMainWindow::readUserCommandStrings()
 {
-    rotPresets[buttonNumber]->name = editData.name;
-    rotPresets[buttonNumber]->bearing = editData.bearing;
-    saveRotPresetButton(editData);
-}
-
-
-void RotatorMainWindow::rotPresetButtonUpdate(int buttonNumber, RotPresetData& editData)
-{
-    presetButton[buttonNumber]->presetButton->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1)).arg(editData.name) );
-    QString tTipStr = "Bearing = " + editData.bearing;
-    presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
-}
-
-void RotatorMainWindow::saveRotPresetButton(RotPresetData& editData)
-{
-    QString msg;
-    msg = QString("%1:%2:%3").arg(QString::number(editData.number)).arg(editData.name).arg(editData.bearing);
-    savePreset(editData);
-    sendPresetListLogger();
-    //emit sendRotatorPreset(msg);
-}
-
-
-void RotatorMainWindow::readPresets()
-{
-    QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
-    config.beginGroup("Presets");
-    if (presetButton.count() > 0)
+    QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
+    config.beginGroup("UserCommandStrings");
+    if (userCmdButton.count() > 0)
     {
-        for (int i = 0; i < presetButton.count(); i++)
+        for (int i = 0; i < userCmdButton.count(); i++)
         {
-        rotPresets.append(new RotPresetData(i, config.value("preset" +  QString::number(i+1)).toString(),
-                                        config.value("bearing" +  QString::number(i+1)).toString()));
-    }
-    }
-
-
-    config.endGroup();
-}
-
-
-void RotatorMainWindow:: savePreset(RotPresetData& editData)
-{
-
-
-    QSettings config("./Configuration/MinosRotatorConfig.ini", QSettings::IniFormat);
-    config.beginGroup("Presets");
-        config.setValue("preset" + QString::number(editData.number + 1), editData.name);
-        config.setValue("bearing" + QString::number(editData.number + 1), editData.bearing);
-    config.endGroup();
-        //emit updatePresetButtonLabels();
-}
-
-
-
-void RotatorMainWindow::refreshPresetLabels()
-{
-    readPresets();
-    if (rotPresets.count() > 0)
-    {
-        for (int i = 0; i < rotPresets.count(); i++)
-        {
-            if (rotPresets[i]->name != "" || rotPresets[i]->name != presetButton[i]->getText())
-            {
-                RotPresetData d = RotPresetData(i, rotPresets[i]->name, rotPresets[i]->bearing);
-                rotPresetButtonUpdate(i, d);
-                //presetButton[i]->setShortcut(presetShortCut[i]);     // restore the shortcut
-            }
+            userCommands.append(config.value(QString("command%1").arg(QString::number(i+1)), "").toString());
         }
     }
-    sendPresetListLogger();
-
+    config.endGroup();
 }
 
 
-
-void RotatorMainWindow::updatePresetLabels()
+void ClusterMainWindow:: saveUserCommandString(int buttonNumber, ClusterUserCommandData& buttonData)
 {
-    refreshPresetLabels();
-//    update();
+
+    QString cmd = buttonData.name + ":" + buttonData.cmdString;
+    QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
+    config.beginGroup("UserCommandStrings");
+    config.setValue(QString("command%1").arg(QString::number(buttonNumber + 1)), QString(buttonData.name + ":" + buttonData.cmdString));
+    config.endGroup();
+
 }
+
