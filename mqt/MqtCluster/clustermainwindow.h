@@ -120,6 +120,8 @@ private slots:
     void userCmdButtonClear(int buttonNumber);
     void userCmdButtonWrite(int buttonNumber);
 
+    void newTTLValue(QString ttl);
+
 private:
     Ui::ClusterMainWindow *ui;
     StdInReader stdinReader;

@@ -1465,7 +1465,7 @@ RunMemoryButton::RunMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
     shortKey = new QShortcut(QKeySequence(runButShortCut[memNo]), memButton);
     shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), memButton);
     readAction = new QAction("&Read", memButton);
-    writeAction = new QAction("&Write",memButton);
+    writeAction = new QAction("&New",memButton);
     editAction = new QAction("&Edit", memButton);
     clearAction = new QAction("&Clear",memButton);
     memoryMenu->addAction(readAction);

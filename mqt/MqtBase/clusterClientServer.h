@@ -28,6 +28,7 @@ public:
     virtual ~ClusterClientServer();
     static ClusterClientServer  *getClusterClientServer();
     void sendDxSpot(QString spot);
+    void sendTimeToLive(QString ttl);
 
 
 private:

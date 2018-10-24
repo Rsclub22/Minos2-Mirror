@@ -33,17 +33,18 @@ const int NUM_ALLBANDMASKS = NUM_VHFMASKS + NUM_MWAVEMASKS;
 const unsigned int modeMasks[] = {CWMODE, PHONEMODE, RTTYMODE, PSKMODE, MGMMODE};
 const int NUM_MODEMASKS = 5;
 
-// Spot Offset
+// OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
 const int DXCALL = 0;
-const int DXFREQ = 1;
-const int DXBANDSTR = 2;
-const int DXBANDMASK = 3;
-const int DXMODESTR = 4;
-const int DXMODEMASK = 5;
-const int SPOTCALL = 6;
-const int DXLOCATOR = 7;
-const int SPOTTIME = 8;
-const int SPOTCOMMENT = 9;
+const int DXLOCATOR = 1;
+const int DXFREQ = 2;
+const int DXBANDSTR = 3;
+const int DXBANDMASK = 4;
+const int DXMODESTR = 5;
+const int DXMODEMASK = 6;
+const int SPOTCALL = 7;
+const int SPOTLOCATOR = 8;
+const int SPOTTIME = 9;
+const int SPOTCOMMENT = 10;
 
 
 // Cluster List Table
@@ -68,5 +69,14 @@ const int COMMENT_COL_WIDTH = 170;
 const QChar SPOT_DATA_SEPERATOR = ':';
 const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
 const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d");
+
+const int MIN_TTL = 10;
+const int MAX_TTL = 180;
+
+// Message headers
+const QString DXSPOT = "DXSPOT:";
+const QString TIMETOLIVE = "TIMETOLIVE:";
+
+const int PURGE_TIME = 1000 * 5;   // ms
 
 #endif // CLUSTERCOMMON_H

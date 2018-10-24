@@ -52,6 +52,10 @@ public:
 
 
     void saveCurrentNodeName(QString nodeName);
+
+signals:
+    void newTTLValue(QString);
+
 public slots:
     QString getCurrentNodeName();
 private slots:
@@ -59,6 +63,11 @@ private slots:
 
     void addClusterNode();
     void deleteClusterNode();
+    void timeToliveEditFinished();
+
+    void saveGeneralSettings();
+    void readGeneralSettings();
+    void loadGeneralToSetupTab();
 
     void clusterListDataChanged(QStandardItem *);
 
@@ -84,9 +93,11 @@ private:
     QPushButton *clustersListDeleteButton;
 
     int numClusterNodes;
-    bool listDataChanged = false;
+    bool listDataChanged;
+    QString timeToLive;
+    bool timeToLiveChanged;
 
-    bool personelDataChanged = false;
+    bool personelDataChanged;
 
     void savePersonel();
     void readPersonel();

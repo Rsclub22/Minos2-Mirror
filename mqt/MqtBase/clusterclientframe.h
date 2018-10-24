@@ -47,12 +47,21 @@ private:
     BaseContestLog *contest;
     ClusterClientFilterTab *filterSetup;
 
+    QTimer* purgeTimer;
+    int timeToLive;
+    bool purgeSpotFlag;
+
+    QVector<QString> spotQueue;
 
     DxSpotDataModel* dxSpotDataModel;
     QTableView* dxSpotView;
     void restoreDxSpotViewColumns();
 
     void addDxSpotToTable(QString spot);
+    bool spotTimedOut(QString spotTime);
+
+    void handleDxSpots(QVector<QString> spotQueue);
+
 private slots:
 
 
@@ -60,6 +69,7 @@ private slots:
     void dxSpots(QVector<QString>);
     void on_FontChanged();
     void filterButtonSelected();
+    void purgeSpots();
 };
 
 #endif // CLUSTERCLIENTFRAME_H

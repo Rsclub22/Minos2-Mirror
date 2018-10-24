@@ -84,8 +84,8 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
     }
     if (role == Qt::DisplayRole)
     {
-        int r = index.row();
-        int c = index.column();
+        //int r = index.row();
+        //int c = index.column();
         QStringList dxSpot = dxSpotData.at(index.row());
 
          if (dxSpot.size() > 0)
@@ -121,7 +121,7 @@ bool DxSpotDataModel::removeRows(int row, int count, const QModelIndex &parent)
     beginRemoveRows(parent, row, row + count - 1);
     for (int row=0; row < count; ++row)
     {
-             dxSpotData.removeAt(row);
+        dxSpotData.removeAt(row);
     }
     endRemoveRows();
     return true;

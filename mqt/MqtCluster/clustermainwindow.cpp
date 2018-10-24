@@ -82,7 +82,6 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader->setDefaultSectionSize(18);
 
-
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
 
@@ -104,6 +103,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(ui->actionSetup, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
 
     connect(ui->nodeCb, SIGNAL(activated(QString)), this, SLOT(connectToNode(QString)));
+
+    connect(setupCluster, SIGNAL(newTTLValue(QString)), this, SLOT(newTTLValue(QString)));
 
     connect(client, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
     connect(client, SIGNAL(loginRequired()), this, SLOT(logIn()));
@@ -158,6 +159,12 @@ void ClusterMainWindow::on_sectionResized(int, int, int)
 
 }
 
+
+void ClusterMainWindow::newTTLValue(QString ttl)
+{
+    clusterRpc->sendTTLSpot(ttl);
+}
+
 void ClusterMainWindow::restoreDxSpotViewColumns()
 {
     QSettings settings;
@@ -169,7 +176,7 @@ void ClusterMainWindow::restoreDxSpotViewColumns()
 
 void ClusterMainWindow::connectToNode(const QString &nodeName)
 {
-    QString selNodeName = nodeName;
+    //QString selNodeName = nodeName;
 
     if ((nodeName.isEmpty() && nodeConnected) || nodeName == "")
     {
@@ -191,6 +198,7 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
         else
         {
             connectToSelectedHost(nodeName);
+            setupCluster->saveCurrentNodeName(currentNodeName);
         }
 
     }

@@ -14,6 +14,7 @@
 #include "setupdialog.h"
 #include "ui_setupdialog.h"
 #include "cutils.h"
+#include "clustercommon.h"
 
 
 #include <QSettings>
@@ -22,10 +23,18 @@
 SetupDialog::SetupDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SetupDialog)
+    ,listDataChanged(false)
+    ,timeToLiveChanged(false)
+    ,personelDataChanged(false)
 {
     ui->setupUi(this);
 
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    // General Tab
+    connect(ui->timeToLive, SIGNAL(editingFinished()), this, SLOT(timeToliveEditFinished()));
+    readGeneralSettings();
+    loadGeneralToSetupTab();
 
     // Personal Tab
     ui->callsignEdit->setValidator(new UpperCaseValidator(true));
@@ -38,6 +47,7 @@ SetupDialog::SetupDialog(QWidget *parent) :
 
     readPersonel();
     loadPersonelToSetupTab();
+
 
 
     // Cluster Node List Tab
@@ -65,6 +75,7 @@ void SetupDialog::saveButtonPushed()
 
     clusterListSave();
     savePersonel();
+    saveGeneralSettings();
 
 }
 
@@ -72,31 +83,93 @@ void SetupDialog::saveButtonPushed()
 void SetupDialog::cancelButtonPushed()
 {
 
-    if (listDataChanged)
-    {
-        // load back the data to model
-        clusterListModel->clear();      // also clears rows and columns
 
-        QString fileName = CLUSTER_NODE_LIST_FILE;
-        QSettings settings(fileName, QSettings::IniFormat);
-        QStringList availNodeNames = settings.childGroups();
-        clusterListModel->setRowCount(availNodeNames.count());      // restore model row and col
-        clusterListModel->setColumnCount(ClusterListNumCols);
-        clusterListModel->setHeaderData(NameColNum, Qt::Horizontal, QObject::tr("Name"));
-        clusterListModel->setHeaderData(AddressColNum, Qt::Horizontal, QObject::tr("Address"));
-        clusterListModel->setHeaderData(PortColNum, Qt::Horizontal, QObject::tr("Port"));
-        clusterListModel->setHeaderData(PasswdColNum, Qt::Horizontal, QObject::tr("Password"));
-        loadSettingsToModel(availNodeNames, settings);
-    }
+    // load back the data to model
+    clusterListModel->clear();      // also clears rows and columns
 
-    if (personelDataChanged)
-    {
-        readPersonel();
-        loadPersonelToSetupTab();
-    }
+    QString fileName = CLUSTER_NODE_LIST_FILE;
+    QSettings settings(fileName, QSettings::IniFormat);
+    QStringList availNodeNames = settings.childGroups();
+    clusterListModel->setRowCount(availNodeNames.count());      // restore model row and col
+    clusterListModel->setColumnCount(ClusterListNumCols);
+    clusterListModel->setHeaderData(NameColNum, Qt::Horizontal, QObject::tr("Name"));
+    clusterListModel->setHeaderData(AddressColNum, Qt::Horizontal, QObject::tr("Address"));
+    clusterListModel->setHeaderData(PortColNum, Qt::Horizontal, QObject::tr("Port"));
+    clusterListModel->setHeaderData(PasswdColNum, Qt::Horizontal, QObject::tr("Password"));
+    loadSettingsToModel(availNodeNames, settings);
+
+    readPersonel();
+    loadPersonelToSetupTab();
+
+    readGeneralSettings();
+    loadGeneralToSetupTab();
+
 
 
 }
+
+
+void SetupDialog::timeToliveEditFinished()
+{
+    QString ttl = ui->timeToLive->text().trimmed();
+    if (ttl != timeToLive)
+    {
+        if (ttl.isEmpty())
+        {
+            timeToLiveChanged = true;
+            return;
+        }
+        bool ok = false;
+        int ittl = ttl.toInt(&ok);
+        if (ok)
+        {
+            if (ittl < MIN_TTL || ittl > MAX_TTL)
+            {
+                QMessageBox msgBox;
+                msgBox.setText(QString("Time to live must be between %1 minutes and %2 minutes!").arg(MIN_TTL).arg(MAX_TTL));
+                msgBox.exec();
+                return;
+            }
+            timeToLiveChanged = true;
+        }
+
+    }
+}
+
+void SetupDialog::saveGeneralSettings()
+{
+    if (timeToLiveChanged)
+    {
+        timeToLive = ui->timeToLive->text().trimmed();
+        QString fileName = CLUSTER_SETTINGS_FILE;
+
+        QSettings config(fileName, QSettings::IniFormat);
+
+        config.beginGroup("TimeToLive");
+        config.setValue("timeToLive", timeToLive);
+        config.endGroup();
+
+        emit newTTLValue(timeToLive);
+
+
+    }
+}
+
+void SetupDialog::readGeneralSettings()
+{
+    QString fileName = CLUSTER_SETTINGS_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("TimeToLive");
+    timeToLive = config.value("timeToLive", "").toString();
+    config.endGroup();
+}
+
+void SetupDialog::loadGeneralToSetupTab()
+{
+
+    ui->timeToLive->setText(timeToLive);
+}
+
 
 
 
@@ -110,6 +183,8 @@ void SetupDialog::callsignEditFinished()
     }
 
 }
+
+
 
 void SetupDialog::nameEditFinshed()
 {

@@ -14,6 +14,7 @@
 #include "MinosLoggerEvents.h"
 
 #include "clusterclientframe.h"
+#include "clustercommon.h"
 
 #include "base_pch.h"
 #include "ui_clusterclientframe.h"
@@ -22,16 +23,24 @@
 ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     QFrame(parent)
     , ui(new Ui::ClusterClientFrame)
+    , purgeTimer(nullptr)
+    , timeToLive(0)
+    , purgeSpotFlag(false)
 {
 
     ui->setupUi(this);
     filterSetup = new ClusterClientFilterTab();
+
+    purgeTimer = new QTimer(this);
+
+    spotQueue.clear();
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
+    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
 
     on_FontChanged();
 
@@ -48,8 +57,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     //dxSpotView = new QTableView();
     dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotDataModel);
+    //dxSpotView->setSelectionBehavior( QAbstractItemView::SelectRows );
+    //dxSpotView->setSelectionMode( QAbstractItemView::SingleSelection );
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
-    //dxSpotView->setStyleSheet("QHeaderView::section { font: bold; height: 14px }");
 
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
@@ -68,6 +78,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreDxSpotViewColumns();
+
+    purgeTimer->start(PURGE_TIME);
 
 
 }
@@ -113,7 +125,19 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     }
 }
 
-void ClusterClientFrame::dxSpots(QVector<QString> spotQueue)
+void ClusterClientFrame::dxSpots(QVector<QString> _spotQueue)
+{
+    spotQueue = _spotQueue;
+    if (!purgeSpotFlag)     // do nothing while purging spots
+    {
+        handleDxSpots(spotQueue);
+    }
+
+
+}
+
+
+void ClusterClientFrame::handleDxSpots(QVector<QString> spotQueue)
 {
     for ( QVector<QString>::iterator i = spotQueue.begin(); i != spotQueue.end(); i++ )
     {
@@ -127,9 +151,9 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotQueue)
 
 void ClusterClientFrame::addDxSpotToTable(QString spot)
 {
-    if (spot.contains("DXSPOT:"))
+    if (spot.contains(DXSPOT))
     {
-        QStringList sl = spot.split("DXSPOT:");
+        QStringList sl = spot.split(DXSPOT);
         if (sl.count() == 2)
         {
             QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
@@ -140,9 +164,10 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
             unsigned int filterMask = filterSetup->getBandFilterMask();
             if ( filterMask & spotMask || filterMask == 0)
             {
-                //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotComment };
-                dxSpotDataModel->rowData = QStringList {spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTCOMMENT]};
+                //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
+                dxSpotDataModel->rowData = QStringList {spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]};
                 dxSpotDataModel->insertRows(0, 1);
+
             }
 
 
@@ -150,6 +175,30 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
         }
 
 
+    }
+    else if (spot.contains(TIMETOLIVE))
+    {
+        QStringList sl = spot.split(TIMETOLIVE);
+        if (sl.count() == 2)
+        {
+            if (sl[1] == "")
+            {
+                timeToLive = 0;  // timeToLive is off
+            }
+            else
+            {
+                bool ok = false;
+                int ttl = sl[1].toInt(&ok);
+                if (ok)
+                {
+                    if (ttl >= MIN_TTL && ttl <= MAX_TTL)
+                    {
+                        timeToLive = ttl;
+                    }
+                }
+            }
+
+        }
     }
 }
 
@@ -167,4 +216,72 @@ void ClusterClientFrame::restoreDxSpotViewColumns()
 void ClusterClientFrame::setContest(BaseContestLog *c)
 {
     contest = c;
+}
+
+
+void ClusterClientFrame::purgeSpots()
+{
+    if (timeToLive == 0)            // don't purge spots
+    {
+        int row = dxSpotDataModel->rowCount();
+        if (row > 0)
+        {
+           purgeSpotFlag = true;
+           //int col = dxSpotDataModel->columnCount();
+           for (int i = row; i > 0 ; --i)
+           {
+              QVariant spotTime = dxSpotDataModel->data(dxSpotDataModel->index(i, 0), Qt::DisplayRole);
+              if (spotTimedOut(spotTime.toString()))
+              {
+                  dxSpotDataModel->removeRow(i);
+              }
+              else
+              {
+                 break;
+              }
+           }
+           if (!spotQueue.empty())
+           {
+              handleDxSpots(spotQueue);
+           }
+
+           purgeSpotFlag = false;
+
+        }
+    }
+}
+
+
+bool ClusterClientFrame::spotTimedOut(QString spotTime)
+{
+    QStringList tl = spotTime.split(':');
+    int hr = 0;
+    int min = 0;
+    bool ok = false;
+    if (tl.count() == 2)
+    {
+        hr = tl[0].toInt(&ok);
+        if (!ok)
+        {
+            return ok;
+        }
+        min = tl[1].toInt(&ok);
+        if (!ok)
+        {
+            return ok;
+        }
+        QTime time = QTime(hr, min, 00, 00);
+        QTime Time2 = QTime::currentTime();
+        int timeDiff = time.secsTo(Time2);
+        if (timeDiff < 0)
+        {
+            timeDiff *= -1;
+        }
+        if (timeDiff >= timeToLive)
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

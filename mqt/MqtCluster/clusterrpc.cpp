@@ -5,6 +5,7 @@
 #include "MinosLoggerEvents.h"
 #include "base_pch.h"
 #include "clusterrpc.h"
+#include "clustercommon.h"
 
 Clusterrpc::Clusterrpc()
 {
@@ -51,7 +52,14 @@ void Clusterrpc::dxSpots(QVector<QString> spotQueue)
 
 void Clusterrpc::sendDXSpot(QString spot)
 {
-    QString msg = "DXSPOT:" + spot;
+    QString msg = DXSPOT + spot;
     ClusterClientServer::getClusterClientServer()->sendDxSpot(msg);
 
+}
+
+
+void Clusterrpc::sendTTLSpot(QString ttl)
+{
+    QString msg = TIMETOLIVE + ttl;
+    ClusterClientServer::getClusterClientServer()->sendTimeToLive(msg);
 }
