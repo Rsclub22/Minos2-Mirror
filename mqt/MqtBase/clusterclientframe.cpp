@@ -158,46 +158,39 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
         {
             QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
 
-            // check spot against filter setting
-            bool ok;
-            unsigned int spotMask = static_cast<unsigned int>(spotlist[DXBANDMASK].toInt(&ok));
-            unsigned int filterMask = filterSetup->getBandFilterMask();
-            if ( filterMask & spotMask || filterMask == 0)
+            if (spotlist.count() == TTLVALUE +1)
             {
-                //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
-                dxSpotDataModel->rowData = QStringList {spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]};
-                dxSpotDataModel->insertRows(0, 1);
-
-            }
-
-
-
-        }
-
-
-    }
-    else if (spot.contains(TIMETOLIVE))
-    {
-        QStringList sl = spot.split(TIMETOLIVE);
-        if (sl.count() == 2)
-        {
-            if (sl[1] == "")
-            {
-                timeToLive = 0;  // timeToLive is off
-            }
-            else
-            {
-                bool ok = false;
-                int ttl = sl[1].toInt(&ok);
-                if (ok)
+                // get time to live value
+                if (spotlist[TTLVALUE] == "")
                 {
-                    if (ttl >= MIN_TTL && ttl <= MAX_TTL)
+                    timeToLive = 0;  // timeToLive is off
+                }
+                else
+                {
+                    bool ok = false;
+                    int ttl = spotlist[TTLVALUE].toInt(&ok);
+                    if (ok)
                     {
-                        timeToLive = ttl;
+                        if (ttl >= MIN_TTL && ttl <= MAX_TTL)
+                        {
+                            timeToLive = ttl * 60; // seconds
+                        }
                     }
                 }
-            }
 
+
+                // check spot against filter setting
+                bool ok;
+                unsigned int spotMask = static_cast<unsigned int>(spotlist[DXBANDMASK].toInt(&ok));
+                unsigned int filterMask = filterSetup->getBandFilterMask();
+                if ( filterMask & spotMask || filterMask == 0)
+                {
+                    //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
+                    dxSpotDataModel->rowData = QStringList {spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]};
+                    dxSpotDataModel->insertRows(0, 1);
+
+                }
+            }
         }
     }
 }
@@ -221,16 +214,75 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
 
 void ClusterClientFrame::purgeSpots()
 {
-    if (timeToLive == 0)            // don't purge spots
+    if (timeToLive > 0)            // don't purge spots if == 0
     {
+        if (dxSpotDataModel->rowCount() > 0)
+        {
+           purgeSpotFlag = true;
+           while (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString()))   // spot not timed out
+           {
+               dxSpotDataModel->removeRows(dxSpotDataModel->rowCount() - 1, 1, QModelIndex());
+               if (dxSpotDataModel->rowCount() == 0)
+               {
+                   break;
+               }
+           }
+
+           //if (!spotQueue.empty())
+           //{
+           //   handleDxSpots(spotQueue);
+           //}
+           purgeSpotFlag = false;
+        }
+    }
+
+}
+
+
+/*
+
+
+           do
+           {
+             a = dxSpotDataModel->rowCount();
+             st = dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString();
+
+             if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString()))     // spot timed out
+             {
+                 a = dxSpotDataModel->rowCount();
+                 QString s = dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString();
+                 //dxSpotDataModel->removeRow(dxSpotDataModel->rowCount() - 1);
+                 dxSpotDataModel->removeRows(a - 1, 1, QModelIndex());
+
+                 a1 = dxSpotDataModel->rowCount();
+                 st1 = dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString();
+
+             }
+           } while (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString())); // spot not timed out
+
+           if (!spotQueue.empty())
+           {
+              handleDxSpots(spotQueue);
+           }
+
+           purgeSpotFlag = false;
+        }
+    }
+
+
+}
+
+*/
+ /*
         int row = dxSpotDataModel->rowCount();
         if (row > 0)
         {
            purgeSpotFlag = true;
            //int col = dxSpotDataModel->columnCount();
-           for (int i = row; i > 0 ; --i)
+           for (int i = row - 1; i >= 0 ; --i)
            {
-              QVariant spotTime = dxSpotDataModel->data(dxSpotDataModel->index(i, 0), Qt::DisplayRole);
+              QVariant spotTime = dxSpotDataModel->data(dxSpotDataModel->index(i, 0));
+              QString s = spotTime.toString();
               if (spotTimedOut(spotTime.toString()))
               {
                   dxSpotDataModel->removeRow(i);
@@ -249,39 +301,31 @@ void ClusterClientFrame::purgeSpots()
 
         }
     }
-}
 
+}
+*/
 
 bool ClusterClientFrame::spotTimedOut(QString spotTime)
 {
-    QStringList tl = spotTime.split(':');
-    int hr = 0;
-    int min = 0;
-    bool ok = false;
-    if (tl.count() == 2)
+
+    QRegExp re("\\d\\d\\d\\d");  // a digit (\d)
+    if (re.exactMatch(spotTime))
     {
-        hr = tl[0].toInt(&ok);
-        if (!ok)
-        {
-            return ok;
-        }
-        min = tl[1].toInt(&ok);
-        if (!ok)
-        {
-            return ok;
-        }
-        QTime time = QTime(hr, min, 00, 00);
-        QTime Time2 = QTime::currentTime();
-        int timeDiff = time.secsTo(Time2);
+        //trace(QString("Spottime = %1").arg(spotTime));
+        //trace(QString("CurrentTime = %1%2").arg(QDateTime::currentDateTimeUtc().time().hour()).arg(QDateTime::currentDateTimeUtc().time().minute()));
+        QTime time = QTime(spotTime.mid(0, 2).toInt(), spotTime.mid(2, 4).toInt(), 0, 0);
+        int timeDiff = time.secsTo(QDateTime::currentDateTimeUtc().time());
         if (timeDiff < 0)
         {
             timeDiff *= -1;
         }
+        //trace(QString("Difference = %1").arg(timeDiff));
         if (timeDiff >= timeToLive)
         {
             return true;
         }
-
-        return false;
     }
+
+    return false;
+
 }

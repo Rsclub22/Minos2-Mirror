@@ -57,9 +57,3 @@ void Clusterrpc::sendDXSpot(QString spot)
 
 }
 
-
-void Clusterrpc::sendTTLSpot(QString ttl)
-{
-    QString msg = TIMETOLIVE + ttl;
-    ClusterClientServer::getClusterClientServer()->sendTimeToLive(msg);
-}

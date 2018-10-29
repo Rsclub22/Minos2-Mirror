@@ -52,9 +52,8 @@ public:
 
 
     void saveCurrentNodeName(QString nodeName);
-
-signals:
-    void newTTLValue(QString);
+    void readGeneralSettings();
+    QString getTimeToLive();
 
 public slots:
     QString getCurrentNodeName();
@@ -66,7 +65,7 @@ private slots:
     void timeToliveEditFinished();
 
     void saveGeneralSettings();
-    void readGeneralSettings();
+
     void loadGeneralToSetupTab();
 
     void clusterListDataChanged(QStandardItem *);

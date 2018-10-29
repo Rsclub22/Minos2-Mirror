@@ -16,7 +16,7 @@ public:
     ~Clusterrpc();
     void setStandAlone();
     void sendDXSpot(QString spot);
-    void sendTTLSpot(QString ttl);
+
 
 private slots:
 

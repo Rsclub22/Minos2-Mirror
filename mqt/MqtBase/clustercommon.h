@@ -45,6 +45,7 @@ const int SPOTCALL = 7;
 const int SPOTLOCATOR = 8;
 const int SPOTTIME = 9;
 const int SPOTCOMMENT = 10;
+const int TTLVALUE = 11;
 
 
 // Cluster List Table
@@ -77,6 +78,6 @@ const int MAX_TTL = 180;
 const QString DXSPOT = "DXSPOT:";
 const QString TIMETOLIVE = "TIMETOLIVE:";
 
-const int PURGE_TIME = 1000 * 5;   // ms
+const int PURGE_TIME = 1000 * 60 * 1;   // mins
 
 #endif // CLUSTERCOMMON_H

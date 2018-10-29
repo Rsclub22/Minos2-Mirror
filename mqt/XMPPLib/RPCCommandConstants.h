@@ -55,7 +55,7 @@ static const QString clusterMethod      = QT_TR_NOOP("Minos:Cluster");
 static const QString clusterCategory       = QT_TR_NOOP("MinosCluster");
 static const QString clusterServer         = QT_TR_NOOP("MinosClusterServer");
 static const QString sendClusterSpot    = QT_TR_NOOP("SendClusterSpot");
-static const QString sendSpotTimeToLive    = QT_TR_NOOP("SendSpotTimeToLive");
+
 
 // Chat
 static const QString chatApp            = QT_TR_NOOP("mqtChat");

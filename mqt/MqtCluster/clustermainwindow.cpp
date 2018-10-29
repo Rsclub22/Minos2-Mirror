@@ -40,6 +40,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     trace(QString("AppName = %1").arg(appName));
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+    Q_UNUSED(rpc);
 
     createCloseEvent();
 
@@ -71,6 +72,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     initUserCommandButtons();
     readUserCommandStrings();
     userCommandAllButtonUpdate();
+    // spotTimeToLive
+    setupCluster->readGeneralSettings();
+
 
     dxSpotDataModel = new DxSpotDataModel();
     dxSpotView = new QTableView();
@@ -104,7 +108,6 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     connect(ui->nodeCb, SIGNAL(activated(QString)), this, SLOT(connectToNode(QString)));
 
-    connect(setupCluster, SIGNAL(newTTLValue(QString)), this, SLOT(newTTLValue(QString)));
 
     connect(client, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
     connect(client, SIGNAL(loginRequired()), this, SLOT(logIn()));
@@ -123,6 +126,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     currentUserName = setupCluster->getUserName();
     currentUserLocator = setupCluster->getUserLocator();
     currentUserQTH = setupCluster->getUserQth();
+
+
 
     // get current node from file and then connect to host
     connectToSelectedHost(setupCluster->getCurrentNodeName());
@@ -160,10 +165,7 @@ void ClusterMainWindow::on_sectionResized(int, int, int)
 }
 
 
-void ClusterMainWindow::newTTLValue(QString ttl)
-{
-    clusterRpc->sendTTLSpot(ttl);
-}
+
 
 void ClusterMainWindow::restoreDxSpotViewColumns()
 {
@@ -319,11 +321,11 @@ void ClusterMainWindow::parseDX(QString txt)
         if (retCode >= 0)
         {
 
-            trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11")
-            .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotComment));
+            trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12")
+            .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
             // Display
             QString displayFreq = alignFreqRight(dxFreq);
-            clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment));
+            clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
             dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
             //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             dxSpotDataModel->insertRows(0, 1);

@@ -116,10 +116,12 @@ bool DxSpotDataModel::insertColumns(int column, int count, const QModelIndex &pa
     return true;
 }
 
-bool DxSpotDataModel::removeRows(int row, int count, const QModelIndex &parent)
+
+
+bool DxSpotDataModel::removeRows(int _row, int count, const QModelIndex &parent)
 {
-    beginRemoveRows(parent, row, row + count - 1);
-    for (int row=0; row < count; ++row)
+    beginRemoveRows(parent, _row, _row + count - 1);
+    for (int row=_row; row < _row + count; ++row)
     {
         dxSpotData.removeAt(row);
     }

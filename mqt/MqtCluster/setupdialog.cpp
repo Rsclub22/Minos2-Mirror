@@ -149,7 +149,7 @@ void SetupDialog::saveGeneralSettings()
         config.setValue("timeToLive", timeToLive);
         config.endGroup();
 
-        emit newTTLValue(timeToLive);
+
 
 
     }
@@ -171,7 +171,10 @@ void SetupDialog::loadGeneralToSetupTab()
 }
 
 
-
+QString SetupDialog::getTimeToLive()
+{
+    return timeToLive;
+}
 
 
 void SetupDialog::callsignEditFinished()

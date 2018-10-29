@@ -193,17 +193,6 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
                     addSpotQueue( mess );
                 }
             }
-            if (args->getStructArgMember(0, rpcConstants::sendClusterSpot, psMess))
-            {
-                QString pmess;
-                if (psMess->getString(pmess))
-                {
-                    trace(QString("ClusterClientServer: on_serverCall - Message = %1").arg(pmess));
-                    // add to chat window
-                    QString mess = from + " : " + pmess;
-                    addSpotQueue( mess );
-                }
-            }
         }
     }
 }
@@ -252,15 +241,3 @@ void ClusterClientServer::sendDxSpot(QString spot)
 }
 
 
-void ClusterClientServer::sendTimeToLive(QString ttl)
-{
-    // We need to send the message to all connected stations
-    for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
-    {
-        RPCGeneralClient rpc(rpcConstants::clusterMethod);
-        QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember( ttl, rpcConstants::sendSpotTimeToLive );
-        rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( (*i).app );
-    }
-}
