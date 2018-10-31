@@ -42,6 +42,36 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
     connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
 
+    spotsMenu = new QMenu(ui->actionsButton);
+
+    ui->actionsButton->setFocusPolicy(Qt::NoFocus);
+
+    freqAction = new QAction("Set &Freq", this);
+    bearingAction = new QAction("Set &Bearing", this);
+    logAction = new QAction("Send &Log", this);
+    memoryAction = new QAction("Send &Memory", this);
+    clearSpotAction = new QAction("Clear &Spot", this);
+    clearAllSpotsAction = new QAction("Clear &All Spots", this);
+
+    spotsMenu->addAction(freqAction);
+    spotsMenu->addAction(bearingAction);
+    spotsMenu->addAction(logAction);
+    spotsMenu->addAction(memoryAction);
+    spotsMenu->addAction(clearSpotAction);
+    spotsMenu->addAction(clearAllSpotsAction);
+
+    ui->actionsButton->setMenu(spotsMenu);
+    connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
+
+    connect( freqAction, SIGNAL( triggered() ), this, SLOT(on_freqActionSelected()) );
+    connect( bearingAction, SIGNAL( triggered() ), this, SLOT(bearingActionSelected()) );
+    connect( logAction, SIGNAL( triggered() ), this, SLOT(logActionSelected()) );
+    connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
+    connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
+    connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
+
+
+
     on_FontChanged();
 
 /*
@@ -57,17 +87,20 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     //dxSpotView = new QTableView();
     dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotDataModel);
+    dxSpotView->setAlternatingRowColors(true);
     //dxSpotView->setSelectionBehavior( QAbstractItemView::SelectRows );
-    //dxSpotView->setSelectionMode( QAbstractItemView::SingleSelection );
-    dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+    dxSpotView->setSelectionMode( QAbstractItemView::SingleSelection );
+    dxSpotView->setSelectionBehavior(QAbstractItemView::SelectItems);
+    //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader->setDefaultSectionSize(18);
 
 
-    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)));
+    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
+    connect(dxSpotView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onDxSpotView_doubleClicked(const QModelIndex &)));
+
 
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
@@ -111,6 +144,17 @@ void ClusterClientFrame::on_FontChanged()
     QFont cf = QApplication::font();
     //ui->StationList->setFont(cf);
 }
+
+
+void ClusterClientFrame::onDxSpotView_doubleClicked(const QModelIndex &index)
+{
+    int r = index.row();
+    int c = index.column();
+    int a = 0;
+}
+
+
+
 
 
 //---------------------------------------------------------------------------
@@ -239,71 +283,6 @@ void ClusterClientFrame::purgeSpots()
 }
 
 
-/*
-
-
-           do
-           {
-             a = dxSpotDataModel->rowCount();
-             st = dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString();
-
-             if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString()))     // spot timed out
-             {
-                 a = dxSpotDataModel->rowCount();
-                 QString s = dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString();
-                 //dxSpotDataModel->removeRow(dxSpotDataModel->rowCount() - 1);
-                 dxSpotDataModel->removeRows(a - 1, 1, QModelIndex());
-
-                 a1 = dxSpotDataModel->rowCount();
-                 st1 = dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString();
-
-             }
-           } while (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString())); // spot not timed out
-
-           if (!spotQueue.empty())
-           {
-              handleDxSpots(spotQueue);
-           }
-
-           purgeSpotFlag = false;
-        }
-    }
-
-
-}
-
-*/
- /*
-        int row = dxSpotDataModel->rowCount();
-        if (row > 0)
-        {
-           purgeSpotFlag = true;
-           //int col = dxSpotDataModel->columnCount();
-           for (int i = row - 1; i >= 0 ; --i)
-           {
-              QVariant spotTime = dxSpotDataModel->data(dxSpotDataModel->index(i, 0));
-              QString s = spotTime.toString();
-              if (spotTimedOut(spotTime.toString()))
-              {
-                  dxSpotDataModel->removeRow(i);
-              }
-              else
-              {
-                 break;
-              }
-           }
-           if (!spotQueue.empty())
-           {
-              handleDxSpots(spotQueue);
-           }
-
-           purgeSpotFlag = false;
-
-        }
-    }
-
-}
-*/
 
 bool ClusterClientFrame::spotTimedOut(QString spotTime)
 {
@@ -329,3 +308,60 @@ bool ClusterClientFrame::spotTimedOut(QString spotTime)
     return false;
 
 }
+
+/********* Action Menu **********************************/
+
+void ClusterClientFrame::onMenuShow()
+{
+    //int buttonNumber = getSelectedLine();
+
+    //freqAction->setEnabled(buttonNumber >= 0);
+    //bearingAction->setEnabled(buttonNumber >= 0);
+    //logAction->setEnabled(buttonNumber >= 0);
+    //memoryAction->setEnabled(buttonNumber >= 0);
+    //clearSpotsAction->setEnabled(buttonNumber >= 0);
+}
+
+
+
+void ClusterClientFrame::on_freqActionSelected()
+{
+
+}
+
+
+
+
+void ClusterClientFrame::bearingActionSelected()
+{
+
+}
+
+
+
+void ClusterClientFrame::logActionSelected()
+{
+
+}
+
+
+void ClusterClientFrame::memoryActionSelected()
+{
+
+}
+
+void ClusterClientFrame::clearSpotActionSelected()
+{
+
+
+}
+
+
+
+void ClusterClientFrame::clearAllSpotsActionSelected()
+{
+
+
+}
+
+

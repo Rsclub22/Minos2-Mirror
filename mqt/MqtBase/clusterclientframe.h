@@ -55,6 +55,16 @@ private:
 
     DxSpotDataModel* dxSpotDataModel;
     QTableView* dxSpotView;
+
+    QMenu* spotsMenu;
+    QAction* freqAction;
+    QAction* bearingAction;
+    QAction* logAction;
+    QAction* memoryAction;
+    QAction* clearSpotAction;
+    QAction* clearAllSpotsAction;
+
+
     void restoreDxSpotViewColumns();
 
     void addDxSpotToTable(QString spot);
@@ -70,6 +80,14 @@ private slots:
     void on_FontChanged();
     void filterButtonSelected();
     void purgeSpots();
+    void onDxSpotView_doubleClicked(const QModelIndex &);
+    void onMenuShow();
+    void on_freqActionSelected();
+    void bearingActionSelected();
+    void logActionSelected();
+    void memoryActionSelected();
+    void clearSpotActionSelected();
+    void clearAllSpotsActionSelected();
 };
 
 #endif // CLUSTERCLIENTFRAME_H
