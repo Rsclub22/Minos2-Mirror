@@ -16,6 +16,7 @@
 #include <QProcessEnvironment>
 #include <QDebug>
 
+
 #include "clustermainwindow.h"
 #include "clustercommon.h"
 #include "rigutils.h"
@@ -77,10 +78,14 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
 
     dxSpotDataModel = new DxSpotDataModel();
+
+
     dxSpotView = new QTableView();
     dxSpotView->setModel(dxSpotDataModel);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
     //dxSpotView->setStyleSheet("QHeaderView::section { font: bold; height: 14px }");
+    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
 
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);

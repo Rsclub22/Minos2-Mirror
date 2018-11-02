@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QPlainTextEdit>
 #include <QVector>
+#include <QSortFilterProxyModel>
 #include "BandList.h"
 #include "base_pch.h"
 #include "mqtUtils_pch.h"
