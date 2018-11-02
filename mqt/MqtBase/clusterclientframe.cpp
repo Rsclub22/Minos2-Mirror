@@ -15,6 +15,7 @@
 
 #include "clusterclientframe.h"
 #include "clustercommon.h"
+#include "contest.h"
 
 #include "base_pch.h"
 #include "ui_clusterclientframe.h"
@@ -70,7 +71,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
 
-
+    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
 
     on_FontChanged();
 
@@ -105,7 +106,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
     dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
     dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
@@ -230,7 +233,7 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
                 if ( filterMask & spotMask || filterMask == 0)
                 {
                     //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
-                    dxSpotDataModel->rowData = QStringList {spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]};
+                    dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
                     dxSpotDataModel->insertRows(0, 1);
 
                 }
@@ -252,7 +255,7 @@ void ClusterClientFrame::restoreDxSpotViewColumns()
 
 void ClusterClientFrame::setContest(BaseContestLog *c)
 {
-    contest = c;
+    ct = c;
 }
 
 
@@ -362,6 +365,56 @@ void ClusterClientFrame::clearAllSpotsActionSelected()
 {
 
 
+}
+
+
+
+
+void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c)
+{
+      if (c && ct == c)
+      {
+          int spotCount = dxSpotDataModel->rowCount();
+          for (int spotNumber = 0; spotNumber < spotCount; spotNumber++)
+          {
+              QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), Qt::DisplayRole).toString();
+              QString callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), Qt::DisplayRole).toString();
+
+              QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), Qt::DisplayRole).toString();
+              QString locatorWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), Qt::DisplayRole).toString();
+              locator = locator.mid(0, 4);
+
+              if ( callsign != "" && callsignWkd == BOOL_NO)
+              {
+                  Callsign mcs(callsign);
+                  mcs.validate();
+
+                  for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+                  {
+                      if ((*i).wt->cs == mcs)
+                      {
+                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, Qt::EditRole);
+
+                      }
+                  }
+              }
+
+
+              if (locator != "" && locatorWkd == BOOL_NO)
+              {
+                  for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+                  {
+                      if ((*i).wt->loc.loc.getValue().mid(0,4) == locator)
+                      {
+                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, Qt::EditRole);
+
+                      }
+                  }
+              }
+
+
+          }
+      }
 }
 
 

@@ -326,7 +326,7 @@ void ClusterMainWindow::parseDX(QString txt)
             // Display
             QString displayFreq = alignFreqRight(dxFreq);
             clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
-            dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
+            dxSpotDataModel->rowData = new SpotData(spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment);
             //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             dxSpotDataModel->insertRows(0, 1);
 

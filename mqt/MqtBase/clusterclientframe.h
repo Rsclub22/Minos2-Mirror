@@ -44,7 +44,7 @@ public:
 
 private:
     Ui::ClusterClientFrame *ui;
-    BaseContestLog *contest;
+    BaseContestLog *ct;
     ClusterClientFilterTab *filterSetup;
 
     QTimer* purgeTimer;
@@ -88,6 +88,7 @@ private slots:
     void memoryActionSelected();
     void clearSpotActionSelected();
     void clearAllSpotsActionSelected();
+    void on_AfterLogContact(BaseContestLog *c);
 };
 
 #endif // CLUSTERCLIENTFRAME_H

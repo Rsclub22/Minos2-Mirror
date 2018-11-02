@@ -17,7 +17,7 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
 
-    dxSpotData = QList<QStringList>(); // create an empty list
+    //dxSpotData = QVector<SpotData>(); // create an empty list
 }
 
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -27,19 +27,23 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
 
          if (orientation == Qt::Horizontal) {
              switch (section) {
-                case 0:
+                case TIME_COL_NUM:
                     return tr("Time");
-                case 1:
+                case FREQ_COL_NUM:
                     return tr("Freq");
-                case 2:
+                case DXSPOT_CALL_COL_NUM:
                     return tr("Dx");
-                case 3:
+                case DXSPOT_CALL_WORKED_COL_NUM:
+                    return tr("DX Wkd");
+                case DXLOC_COL_NUM:
                     return tr("DxLoc");
-                case 4:
+                case DXLOC_WORKED_COL_NUM:
+                    return tr("Loc Wkd");
+                case SPOT_CALL_COL_NUM:
                     return tr("Spotter");
-                case 5:
+                case SPOTLOC_COL_NUM:
                     return tr("SpotLoc");
-                case 6:
+                case COMMENT_COL_NUM:
                     return tr("Comment");
 
                 default:
@@ -82,19 +86,109 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
     {
              return QVariant();
     }
+
+    QVariant d;
+
     if (role == Qt::DisplayRole)
     {
-        //int r = index.row();
-        //int c = index.column();
-        QStringList dxSpot = dxSpotData.at(index.row());
+        SpotData* dxSpot = dxSpotData.at(index.row());
 
-         if (dxSpot.size() > 0)
-             return dxSpot[index.column()];
+        int col = index.column();
+
+        switch (col)
+        {
+            case TIME_COL_NUM:
+                d = dxSpot->spotTime;
+            break;
+            case FREQ_COL_NUM:
+                d = dxSpot->dxFreq;
+            break;
+            case DXSPOT_CALL_COL_NUM:
+                d = dxSpot->dxCall;
+            break;
+            case DXSPOT_CALL_WORKED_COL_NUM:
+                d = dxSpot->dxCallWorked;
+            break;
+            case DXLOC_COL_NUM:
+                d = dxSpot->dxLocator;
+            break;
+            case DXLOC_WORKED_COL_NUM:
+                d = dxSpot->dxLocatorWorked;
+            break;
+            case SPOT_CALL_COL_NUM:
+                d = dxSpot->spotterCall;
+            break;
+            case SPOTLOC_COL_NUM:
+                d = dxSpot->spotterLocator;
+            break;
+            case COMMENT_COL_NUM:
+                d = dxSpot->spotComment;
+            break;
+            default:
+                d = "";
+
+        }
+
     }
 
-    return QVariant();
+    return d;
 }
 
+
+bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+    if (index.isValid() && role == Qt::EditRole) {
+            int row = index.row();
+
+            SpotData* dxSpot = dxSpotData.value(row);
+
+            int col = index.column();
+
+            switch (col)
+            {
+                case TIME_COL_NUM :
+                    dxSpot->spotTime = value.toString();
+                break;
+                case FREQ_COL_NUM:
+                    dxSpot->dxFreq = value.toString();
+                break;
+                case DXSPOT_CALL_COL_NUM:
+                    dxSpot->dxCall = value.toString();
+                break;
+                case DXSPOT_CALL_WORKED_COL_NUM:
+                    dxSpot->dxCallWorked = value.toString();
+                case DXLOC_COL_NUM:
+                    dxSpot->dxLocator = value.toString();
+                break;
+                case DXLOC_WORKED_COL_NUM:
+                    dxSpot->dxLocatorWorked = value.toString();
+                break;
+                case SPOT_CALL_COL_NUM:
+                    dxSpot->spotterCall = value.toString();
+                break;
+                case SPOTLOC_COL_NUM:
+                    dxSpot->spotterLocator = value.toString();
+                break;
+                case COMMENT_COL_NUM:
+                    dxSpot->spotComment = value.toString();
+                break;
+                default:
+                    return false;
+
+            }
+
+            dxSpotData.replace(row, dxSpot);
+            emit(dataChanged(index, index));
+
+            return true;
+        }
+
+        return false;
+}
+
+
+
+// NOTE! This needs modification of the for loop and rowData to trully support multiple rows!!
 bool DxSpotDataModel::insertRows(int row, int count, const QModelIndex &index)
 {
     Q_UNUSED(index);

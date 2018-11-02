@@ -14,8 +14,15 @@
 #define DXSPOTDATAMODEL_H
 
 #include <QAbstractTableModel>
+#include "spotdata.h"
+#include "clustercommon.h"
 
-const int dxSpotColCount = 7;
+const int dxSpotColCount = 9;
+
+
+
+
+
 
 class DxSpotDataModel : public QAbstractTableModel
 {
@@ -32,7 +39,10 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
+    // get data
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    // set data
+    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
 
     // Add data:
     bool insertRows(int row, int count, const QModelIndex &index = QModelIndex()) override;
@@ -41,10 +51,11 @@ public:
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
-    QStringList rowData;
+    SpotData* rowData;
 
 private:
-    QList<QStringList> dxSpotData;
+    //QList<QStringList> dxSpotData;
+    QVector<SpotData*> dxSpotData;
 
 
 };

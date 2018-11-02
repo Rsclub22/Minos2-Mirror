@@ -72,7 +72,8 @@ SOURCES += \
     qttelnet.cpp \
     clusterClientServer.cpp \
     clusterclientframe.cpp \
-    clusterclientfiltertab.cpp
+    clusterclientfiltertab.cpp \
+    spotdata.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -131,7 +132,8 @@ HEADERS += \
     clustercommon.h \
     clusterClientServer.h \
     clusterclientframe.h \
-    clusterclientfiltertab.h
+    clusterclientfiltertab.h \
+    spotdata.h
 
 unix {
     target.path = /usr/lib

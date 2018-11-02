@@ -53,19 +53,25 @@ const int TTLVALUE = 11;
 const int TIME_COL_NUM = 0;
 const int FREQ_COL_NUM = 1;
 const int DXSPOT_CALL_COL_NUM = 2;
-const int DXLOC_COL_NUM = 3;
-const int SPOT_CALL_COL_NUM = 4;
-const int SPOTLOC_COL_NUM = 5;
-const int COMMENT_COL_NUM = 6;
+const int DXSPOT_CALL_WORKED_COL_NUM = 3;
+const int DXLOC_COL_NUM = 4;
+const int DXLOC_WORKED_COL_NUM = 5;
+const int SPOT_CALL_COL_NUM = 6;
+const int SPOTLOC_COL_NUM = 7;
+const int COMMENT_COL_NUM = 8;
 
 const int TIME_COL_WIDTH = 40;
 const int FREQ_COL_WIDTH = 80;
 const int DXSPOT_CALL_COL_WIDTH = 80;
+const int DXSPOT_CALL_WKD_COL_WIDTH = 50;
 const int DXLOC_COL_WIDTH = 60;
+const int DXLOC_WKD_COL_WIDTH = 50;
 const int SPOT_CALL_COL_WIDTH = 80;
 const int SPOTLOC_COL_WIDTH = 60;
 const int COMMENT_COL_WIDTH = 170;
 
+const QString BOOL_YES = "Yes";
+const QString BOOL_NO = "";
 
 const QChar SPOT_DATA_SEPERATOR = ':';
 const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
