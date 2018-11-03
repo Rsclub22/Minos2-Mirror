@@ -27,6 +27,32 @@ namespace Ui {
     class ClusterClientFrame;
 }
 
+class CallsignSortFilterProxyModel : public QSortFilterProxyModel
+{
+public:
+
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    CallsignSortFilterProxyModel()
+    {
+    }
+
+
+};
+
+class LocatorSortFilterProxyModel : public QSortFilterProxyModel
+{
+public:
+
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    LocatorSortFilterProxyModel()
+    {
+    }
+
+
+};
+
 
 class ClusterClientFrame : public QFrame
 {
@@ -54,7 +80,12 @@ private:
     QVector<QString> spotQueue;
 
     DxSpotDataModel* dxSpotDataModel;
+    CallsignSortFilterProxyModel* callSignProxyModel;
+    LocatorSortFilterProxyModel* locatorProxyModel;
+
     QTableView* dxSpotView;
+    QTableView* callSignView;
+    QTableView* locatorView;
 
     QMenu* spotsMenu;
     QAction* freqAction;
@@ -72,6 +103,7 @@ private:
 
     void handleDxSpots(QVector<QString> spotQueue);
 
+    void setAllTabsColor(QColor c);
 private slots:
 
 
@@ -89,6 +121,11 @@ private slots:
     void clearSpotActionSelected();
     void clearAllSpotsActionSelected();
     void on_AfterLogContact(BaseContestLog *c);
+    void restoreCallsignViewColumns();
+    void restoreLocatorViewColumns();
+    void onCallsignSpotView_doubleClicked(const QModelIndex &index);
+    void onLocatorSpotView_doubleClicked(const QModelIndex &index);
+    void onSpotTabChanged(int index);
 };
 
 #endif // CLUSTERCLIENTFRAME_H

@@ -2,6 +2,9 @@
 #define CLUSTERCOMMON_H
 
 #include <QList>
+#include <QColor>
+
+
 
 // Band Filter Data
 
@@ -80,9 +83,15 @@ const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d");
 const int MIN_TTL = 10;
 const int MAX_TTL = 180;
 
+// cluster tab text colours
+const QColor CLUSTER_TAB_SELECT_COLOR = Qt::red;
+const QColor CLUSTER_TAB_NOT_SELECT_COLOR = Qt::black;
+
 // Message headers
 const QString DXSPOT = "DXSPOT:";
 const QString TIMETOLIVE = "TIMETOLIVE:";
+
+
 
 const int PURGE_TIME = 1000 * 60 * 1;   // mins
 

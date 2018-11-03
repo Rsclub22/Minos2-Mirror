@@ -123,6 +123,7 @@ private slots:
 
 
 
+    void onSpotTabChanged(int index);
 private:
     Ui::ClusterMainWindow *ui;
     StdInReader stdinReader;
@@ -204,6 +205,7 @@ private:
     void saveUserCommandString(int buttonNumber, ClusterUserCommandData &buttonData);
     void readUserCommandStrings();
     void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment);
+    void setAllTabsColor(QColor c);
 };
 
 #endif // CLUSTERMAINWINDOW_H

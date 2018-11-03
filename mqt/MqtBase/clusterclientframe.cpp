@@ -75,18 +75,11 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     on_FontChanged();
 
-/*
-    dxSpotDataModel = new DxSpotDataModel();
-    dxSpotView = ui->dxSpotView;
-    dxSpotView->setModel(dxSpotDataModel);
-    dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
-    restoreDxSpotViewColumns();
-    dxSpotView->resizeRowsToContents();
-*/
 
     dxSpotDataModel = new DxSpotDataModel();
-    //dxSpotView = new QTableView();
-    dxSpotView = ui->dxSpotView;
+    dxSpotView = new QTableView();
+    ui->dxSpotTab->addTab(dxSpotView, "DX Spots");
+    //dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotDataModel);
     dxSpotView->setAlternatingRowColors(true);
     //dxSpotView->setSelectionBehavior( QAbstractItemView::SelectRows );
@@ -94,9 +87,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     dxSpotView->setSelectionBehavior(QAbstractItemView::SelectItems);
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
-    QHeaderView *verticalHeader = dxSpotView->verticalHeader();
-    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    verticalHeader->setDefaultSectionSize(18);
+    QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
+    spotVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    spotVerticalHeader->setDefaultSectionSize(18);
 
 
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
@@ -114,6 +107,83 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreDxSpotViewColumns();
+
+    // callsign filtered view
+
+    callSignProxyModel = new CallsignSortFilterProxyModel();
+    callSignProxyModel->setSourceModel(dxSpotDataModel);
+
+
+    callSignView = new QTableView();
+
+    ui->dxSpotTab->addTab(callSignView, "Callsign Spots");
+
+
+    callSignView->setModel(callSignProxyModel);
+    callSignView->setAlternatingRowColors(true);
+    callSignView->setSelectionMode( QAbstractItemView::SingleSelection );
+    callSignView->setSelectionBehavior(QAbstractItemView::SelectItems);
+    //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+
+    QHeaderView *callSignVerticalHeader = callSignView->verticalHeader();
+    callSignVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    callSignVerticalHeader->setDefaultSectionSize(18);
+
+
+    connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
+    connect(callSignView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onCallsignSpotView_doubleClicked(const QModelIndex &)));
+
+
+    callSignView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+    callSignView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+    callSignView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+    callSignView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
+    callSignView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+    callSignView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+    callSignView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+    callSignView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
+    callSignView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+    restoreCallsignViewColumns();
+
+    // filter locator view
+    locatorProxyModel = new LocatorSortFilterProxyModel();
+    locatorProxyModel->setSourceModel(dxSpotDataModel);
+
+    locatorView = new QTableView();
+    ui->dxSpotTab->addTab(locatorView, "Locator Spots");
+
+    locatorView->setModel(locatorProxyModel);
+    locatorView->setAlternatingRowColors(true);
+    locatorView->setSelectionMode( QAbstractItemView::SingleSelection );
+    locatorView->setSelectionBehavior(QAbstractItemView::SelectItems);
+    //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+
+    QHeaderView *locatorViewVerticalHeader = callSignView->verticalHeader();
+    locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    locatorViewVerticalHeader->setDefaultSectionSize(18);
+
+
+    connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
+    connect(locatorView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onLocatorSpotView_doubleClicked(const QModelIndex &)));
+
+
+    locatorView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+    locatorView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+    locatorView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+    locatorView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
+    locatorView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+    locatorView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+    locatorView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+    locatorView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
+    locatorView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+    setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
+    ui->dxSpotTab->setTabColor(ui->dxSpotTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
+
+
+    connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
+    restoreLocatorViewColumns();
 
     purgeTimer->start(PURGE_TIME);
 
@@ -149,6 +219,29 @@ void ClusterClientFrame::on_FontChanged()
 }
 
 
+void ClusterClientFrame::setAllTabsColor(QColor c)
+{
+    for (int i = 0; i < ui->dxSpotTab->count(); i++)
+    {
+        ui->dxSpotTab->setTabColor(i, c);
+    }
+}
+
+
+void ClusterClientFrame::onSpotTabChanged(int index)
+{
+    if (index == -1)
+    {
+        return;
+    }
+    else
+    {
+        setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
+        ui->dxSpotTab->setTabColor(index, CLUSTER_TAB_SELECT_COLOR);
+    }
+}
+
+
 void ClusterClientFrame::onDxSpotView_doubleClicked(const QModelIndex &index)
 {
     int r = index.row();
@@ -156,9 +249,19 @@ void ClusterClientFrame::onDxSpotView_doubleClicked(const QModelIndex &index)
     int a = 0;
 }
 
+void ClusterClientFrame::onCallsignSpotView_doubleClicked(const QModelIndex &index)
+{
+    int r = index.row();
+    int c = index.column();
+    int a = 0;
+}
 
-
-
+void ClusterClientFrame::onLocatorSpotView_doubleClicked(const QModelIndex &index)
+{
+    int r = index.row();
+    int c = index.column();
+    int a = 0;
+}
 
 //---------------------------------------------------------------------------
 void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverList)
@@ -252,6 +355,25 @@ void ClusterClientFrame::restoreDxSpotViewColumns()
     dxSpotView->horizontalHeader()->restoreState(state);
 }
 
+
+void ClusterClientFrame::restoreCallsignViewColumns()
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("dxSpotView/state").toByteArray();
+    callSignView->horizontalHeader()->restoreState(state);
+}
+
+
+void ClusterClientFrame::restoreLocatorViewColumns()
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("dxSpotView/state").toByteArray();
+    locatorView->horizontalHeader()->restoreState(state);
+}
 
 void ClusterClientFrame::setContest(BaseContestLog *c)
 {
@@ -417,4 +539,19 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c)
       }
 }
 
+bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
+{
+    QModelIndex index0 = sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM);
+    //bool ret = false;
+    return sourceModel()->data(index0).toString().contains("K");
+    //return ret;
+}
 
+
+bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
+{
+    QModelIndex index0 = sourceModel()->index(sourceRow, DXLOC_COL_NUM);
+    //bool ret = false;
+    return sourceModel()->data(index0).toString().contains("IO91");
+    //return ret;
+}

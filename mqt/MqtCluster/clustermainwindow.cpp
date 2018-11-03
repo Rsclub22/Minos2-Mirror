@@ -109,6 +109,10 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     ui->clusterViewsTab->addTab(dxSpotView, "DX Spots");
     ui->clusterViewsTab->addTab(rawClusterDataView, "Raw Data");
 
+    setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
+    ui->clusterViewsTab->setTabColor(ui->clusterViewsTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
+    connect(ui->clusterViewsTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
+
     connect(ui->actionSetup, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
 
     connect(ui->nodeCb, SIGNAL(activated(QString)), this, SLOT(connectToNode(QString)));
@@ -157,6 +161,31 @@ void ClusterMainWindow::onLaunchSetup()
 
     setupCluster->exec();
 }
+
+
+void ClusterMainWindow::setAllTabsColor(QColor c)
+{
+    for (int i = 0; i < ui->clusterViewsTab->count(); i++)
+    {
+        ui->clusterViewsTab->setTabColor(i, c);
+    }
+}
+
+
+void ClusterMainWindow::onSpotTabChanged(int index)
+{
+    if (index == -1)
+    {
+        return;
+    }
+    else
+    {
+        setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
+        ui->clusterViewsTab->setTabColor(index, CLUSTER_TAB_SELECT_COLOR);
+    }
+}
+
+
 
 
 void ClusterMainWindow::on_sectionResized(int, int, int)
