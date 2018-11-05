@@ -92,7 +92,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     spotVerticalHeader->setDefaultSectionSize(18);
 
 
-    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
+    //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(dxSpotView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onDxSpotView_doubleClicked(const QModelIndex &)));
 
 
@@ -130,7 +130,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     callSignVerticalHeader->setDefaultSectionSize(18);
 
 
-    connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
+    //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(callSignView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onCallsignSpotView_doubleClicked(const QModelIndex &)));
 
 
@@ -164,7 +164,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     locatorViewVerticalHeader->setDefaultSectionSize(18);
 
 
-    connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
+    //connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(locatorView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onLocatorSpotView_doubleClicked(const QModelIndex &)));
 
 
@@ -201,6 +201,7 @@ void ClusterClientFrame::filterButtonSelected()
 {
     filterSetup->copyBandFilterMaskToEdit();
     filterSetup->copyModeFilterMaskToEdit();
+    filterSetup->setCurrentIndex(filterSetup->currentIndex());
     filterSetup->show();
 
 }

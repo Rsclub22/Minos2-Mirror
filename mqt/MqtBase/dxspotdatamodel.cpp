@@ -34,15 +34,15 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                 case DXSPOT_CALL_COL_NUM:
                     return tr("Dx");
                 case DXSPOT_CALL_WORKED_COL_NUM:
-                    return tr("DX Wkd");
+                    return tr("Wkd");
                 case DXLOC_COL_NUM:
-                    return tr("DxLoc");
+                    return tr("Loc");
                 case DXLOC_WORKED_COL_NUM:
-                    return tr("Loc Wkd");
+                    return tr("Wkd");
                 case SPOT_CALL_COL_NUM:
                     return tr("Spotter");
                 case SPOTLOC_COL_NUM:
-                    return tr("SpotLoc");
+                    return tr("Loc");
                 case COMMENT_COL_NUM:
                     return tr("Comment");
 

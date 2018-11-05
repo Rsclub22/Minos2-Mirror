@@ -14,6 +14,7 @@
 #include <QSettings>
 #include <QTimer>
 #include <QProcessEnvironment>
+#include <QHeaderView>
 #include <QDebug>
 
 
@@ -76,6 +77,11 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     // spotTimeToLive
     setupCluster->readGeneralSettings();
 
+    //QString spotLoc;
+    //QString dxLoc;
+    //QString comment = QString("IO91SN tr ");
+    //findLocInComment(spotLoc, dxLoc, comment);
+
 
     dxSpotDataModel = new DxSpotDataModel();
 
@@ -87,13 +93,6 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
 
-    QHeaderView *verticalHeader = dxSpotView->verticalHeader();
-    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    verticalHeader->setDefaultSectionSize(18);
-
-    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)));
-
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
@@ -101,6 +100,17 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+
+    QHeaderView *verticalHeader = dxSpotView->verticalHeader();
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    verticalHeader->setDefaultSectionSize(18);
+
+    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sectionResized(int, int , int)));
+
+
+
 
     restoreDxSpotViewColumns();
 
@@ -469,41 +479,47 @@ void ClusterMainWindow::getBand(QString freq, QString &band, QString &bandMask)
 
 void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment)
 {
-    int i = 0;
     QStringList loc;
+    trace(QString("Extract locators - comment = %1").arg(comment));
     const QRegExp fullLocExp = FULL_LOC_EXP;
     const QRegExp partLocExp = PART_LOC_EXP;
-     if (comment.contains('<') && comment.contains('>'))
+    if (comment.contains('<') && comment.contains('>'))
     {
+        trace(QString("Comment contains <>"));
         loc = comment.split('<');
-        if (loc[0].contains(fullLocExp))
-        {
-            i = loc[0].indexOf(fullLocExp, 0);
-            spotLoc = loc[0].mid(i, 6);
-
-        }
-        else if (loc[0].contains(partLocExp))
-        {
-           i = loc[0].indexOf(partLocExp, 0);
-           spotLoc = loc[0].mid(i, 4);
-        }
-
-
-        //loc = comment.split('>');
-        if (loc[1].contains(fullLocExp))
-        {
-            i = loc[1].indexOf(fullLocExp, 0);
-            dxLoc = loc[1].mid(i, 6);
-
-        }
-        else if (loc[1].contains(partLocExp))
-        {
-           i = loc[1].indexOf(partLocExp, 0);
-           dxLoc = loc[1].mid(i, 4);
-        }
-
+        spotLoc = extractLocator(loc[0], fullLocExp, partLocExp);
+        dxLoc = extractLocator(loc[1], fullLocExp, partLocExp);
 
     }
+    else if (comment.contains("tr", Qt::CaseInsensitive))
+    {
+        trace(QString("Comment contains tr"));
+        loc = comment.split("tr", QString::KeepEmptyParts, Qt::CaseInsensitive);
+        spotLoc = extractLocator(loc[0], fullLocExp, partLocExp);
+        dxLoc = extractLocator(loc[1], fullLocExp, partLocExp);
+    }
+    else  if (comment.contains(fullLocExp))      // look for a single locator, which we assume is DX locator
+    {
+        trace(QString("Look for dxLoc only"));
+        dxLoc = extractLocator(comment, fullLocExp, partLocExp);
+    }
+    trace(QString("Extracted dxLoc = %1 spotLoc= %2").arg(dxLoc).arg(spotLoc));
+}
+
+
+QString ClusterMainWindow::extractLocator(const QString &text, const QRegExp fullLocExp, const QRegExp partLocExp)
+{
+    if (text.contains(fullLocExp))
+    {
+        return text.mid(text.indexOf(fullLocExp, 0), 6).toUpper();
+
+    }
+    else if (text.contains(partLocExp))
+    {
+       return text.mid(text.indexOf(partLocExp, 0), 4).toUpper();
+    }
+
+    return "";
 }
 
 

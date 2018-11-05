@@ -42,6 +42,7 @@ private:
     bool mWaveButtonState;
     bool modeButtonState;
 
+
     bool filterTabChanged;
 
     void initCheckFilterTab();
@@ -73,6 +74,7 @@ private slots:
 
     void filtersAccepted();
     void filtersRejected();
+
 };
 
 #endif // CLUSTERCLIENTFILTERTAB_H

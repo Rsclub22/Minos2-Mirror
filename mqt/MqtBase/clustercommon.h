@@ -64,16 +64,16 @@ const int SPOTLOC_COL_NUM = 7;
 const int COMMENT_COL_NUM = 8;
 
 const int TIME_COL_WIDTH = 40;
-const int FREQ_COL_WIDTH = 80;
-const int DXSPOT_CALL_COL_WIDTH = 80;
-const int DXSPOT_CALL_WKD_COL_WIDTH = 50;
-const int DXLOC_COL_WIDTH = 60;
-const int DXLOC_WKD_COL_WIDTH = 50;
-const int SPOT_CALL_COL_WIDTH = 80;
-const int SPOTLOC_COL_WIDTH = 60;
+const int FREQ_COL_WIDTH = 60;
+const int DXSPOT_CALL_COL_WIDTH = 60;
+const int DXSPOT_CALL_WKD_COL_WIDTH = 30;
+const int DXLOC_COL_WIDTH = 50;
+const int DXLOC_WKD_COL_WIDTH = 30;
+const int SPOT_CALL_COL_WIDTH = 60;
+const int SPOTLOC_COL_WIDTH = 50;
 const int COMMENT_COL_WIDTH = 170;
 
-const QString BOOL_YES = "Yes";
+const QString BOOL_YES = "Y";
 const QString BOOL_NO = "";
 
 const QChar SPOT_DATA_SEPERATOR = ':';

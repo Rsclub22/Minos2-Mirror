@@ -62,6 +62,8 @@ void ClusterClientFilterTab::initCheckFilterTab()
 
     }
 
+    setCurrentIndex(0);
+
 
     connect(ui->vhfSelectBut, SIGNAL(clicked()), this, SLOT(vhfButtonSelected()));
     connect(ui->mWSelectBut, SIGNAL(clicked()), this, SLOT(mWaveButtonSelected()));
@@ -72,6 +74,9 @@ void ClusterClientFilterTab::initCheckFilterTab()
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
 
 }
+
+
+
 
 
 
@@ -94,6 +99,7 @@ void ClusterClientFilterTab::filtersRejected()
 
 void ClusterClientFilterTab::restoreTabSettings()
 {
+
     loadBandSettings(bandFilterMask);
     loadModeSettings(modeFilterMask);
 }
