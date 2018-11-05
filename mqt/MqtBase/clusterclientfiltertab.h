@@ -27,6 +27,9 @@ public:
     void copyBandFilterMaskToEdit();
     void copyModeFilterMaskToEdit();
 
+signals:
+    void filtersChanged();
+
 private:
     Ui::ClusterClientFilterTab *ui;
     QList<QCheckBox*> vhfChkBoxList;

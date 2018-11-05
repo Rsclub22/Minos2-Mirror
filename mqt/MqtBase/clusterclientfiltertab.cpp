@@ -85,6 +85,7 @@ void ClusterClientFilterTab::filtersAccepted()
     // copy updated masks with edited values
     bandFilterMask = editBandFilterMask;
     modeFilterMask = editModeFilterMask;
+    emit filtersChanged();
     close();
 }
 

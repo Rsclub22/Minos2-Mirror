@@ -17,7 +17,7 @@
 #include "spotdata.h"
 #include "clustercommon.h"
 
-const int dxSpotColCount = 9;
+const int dxSpotColCount = 11;
 
 
 

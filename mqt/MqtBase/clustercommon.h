@@ -51,7 +51,7 @@ const int SPOTCOMMENT = 10;
 const int TTLVALUE = 11;
 
 
-// Cluster List Table
+// Cluster Data and View Columns
 
 const int TIME_COL_NUM = 0;
 const int FREQ_COL_NUM = 1;
@@ -62,6 +62,8 @@ const int DXLOC_WORKED_COL_NUM = 5;
 const int SPOT_CALL_COL_NUM = 6;
 const int SPOTLOC_COL_NUM = 7;
 const int COMMENT_COL_NUM = 8;
+const int DXBANDMASK_COL_NUM = 9;
+const int MODEMASK_COL_NUM = 10;
 
 const int TIME_COL_WIDTH = 40;
 const int FREQ_COL_WIDTH = 60;

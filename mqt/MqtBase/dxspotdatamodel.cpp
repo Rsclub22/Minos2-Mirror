@@ -103,6 +103,12 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case FREQ_COL_NUM:
                 d = dxSpot->dxFreq;
             break;
+            case DXBANDMASK_COL_NUM:
+                d = dxSpot->dxFreqMaskStr;
+            break;
+            case MODEMASK_COL_NUM:
+                d = dxSpot->dxModeMaskStr;
+            break;
             case DXSPOT_CALL_COL_NUM:
                 d = dxSpot->dxCall;
             break;

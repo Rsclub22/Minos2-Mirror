@@ -27,30 +27,53 @@ namespace Ui {
     class ClusterClientFrame;
 }
 
-class CallsignSortFilterProxyModel : public QSortFilterProxyModel
+
+class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
 
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    CallsignSortFilterProxyModel()
+    bool matchBand(int sourceRow) const;
+
+    DxSpotSortFilterProxyModel(ClusterClientFilterTab* _filterSetup)
     {
+        filterSetup = _filterSetup;
     }
 
+    ClusterClientFilterTab* filterSetup;
 
 };
 
-class LocatorSortFilterProxyModel : public QSortFilterProxyModel
+
+
+class CallsignSortFilterProxyModel : public DxSpotSortFilterProxyModel
 {
 public:
 
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    LocatorSortFilterProxyModel()
+
+
+    CallsignSortFilterProxyModel(ClusterClientFilterTab* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
     {
+
     }
 
+};
 
+class LocatorSortFilterProxyModel : public DxSpotSortFilterProxyModel
+{
+public:
+
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+
+
+    LocatorSortFilterProxyModel(ClusterClientFilterTab* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
+    {
+        filterSetup = _filterSetup;
+    }
 };
 
 
@@ -80,6 +103,7 @@ private:
     QVector<QString> spotQueue;
 
     DxSpotDataModel* dxSpotDataModel;
+    DxSpotSortFilterProxyModel* dxSpotProxyModel;
     CallsignSortFilterProxyModel* callSignProxyModel;
     LocatorSortFilterProxyModel* locatorProxyModel;
 
@@ -126,6 +150,7 @@ private slots:
     void onCallsignSpotView_doubleClicked(const QModelIndex &index);
     void onLocatorSpotView_doubleClicked(const QModelIndex &index);
     void onSpotTabChanged(int index);
+    void filtersChanged();
 };
 
 #endif // CLUSTERCLIENTFRAME_H

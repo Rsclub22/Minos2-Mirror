@@ -77,10 +77,14 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
 
     dxSpotDataModel = new DxSpotDataModel();
+
+    dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
+    dxSpotProxyModel->setSourceModel(dxSpotDataModel);
+
     dxSpotView = new QTableView();
     ui->dxSpotTab->addTab(dxSpotView, "DX Spots");
     //dxSpotView = ui->dxSpotView;
-    dxSpotView->setModel(dxSpotDataModel);
+    dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
     //dxSpotView->setSelectionBehavior( QAbstractItemView::SelectRows );
     dxSpotView->setSelectionMode( QAbstractItemView::SingleSelection );
@@ -95,7 +99,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(dxSpotView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onDxSpotView_doubleClicked(const QModelIndex &)));
 
-
+    dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
+    dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
@@ -110,7 +115,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     // callsign filtered view
 
-    callSignProxyModel = new CallsignSortFilterProxyModel();
+    callSignProxyModel = new CallsignSortFilterProxyModel(filterSetup);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
 
 
@@ -133,7 +138,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(callSignView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onCallsignSpotView_doubleClicked(const QModelIndex &)));
 
-
+    callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
+    callSignView->setColumnHidden(MODEMASK_COL_NUM, true);
     callSignView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     callSignView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     callSignView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
@@ -147,7 +153,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     restoreCallsignViewColumns();
 
     // filter locator view
-    locatorProxyModel = new LocatorSortFilterProxyModel();
+    locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
 
     locatorView = new QTableView();
@@ -167,7 +173,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     //connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(locatorView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onLocatorSpotView_doubleClicked(const QModelIndex &)));
 
-
+    locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
+    locatorView->setColumnHidden(MODEMASK_COL_NUM, true);
     locatorView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     locatorView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     locatorView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
@@ -184,6 +191,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
     restoreLocatorViewColumns();
+
+    connect(filterSetup, SIGNAL(filtersChanged()), this, SLOT(filtersChanged()));
 
     purgeTimer->start(PURGE_TIME);
 
@@ -206,7 +215,13 @@ void ClusterClientFrame::filterButtonSelected()
 
 }
 
-
+void ClusterClientFrame::filtersChanged()
+{
+    //update views..
+    dxSpotProxyModel->setFilterRegExp("");
+    callSignProxyModel->setFilterRegExp("");
+    locatorProxyModel->setFilterRegExp("");
+}
 
 void ClusterClientFrame::setStandAlone()
 {
@@ -331,16 +346,16 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
 
 
                 // check spot against filter setting
-                bool ok;
-                unsigned int spotMask = static_cast<unsigned int>(spotlist[DXBANDMASK].toInt(&ok));
+                //bool ok;
+                //unsigned int spotMask = static_cast<unsigned int>(spotlist[DXBANDMASK].toInt(&ok));
                 unsigned int filterMask = filterSetup->getBandFilterMask();
-                if ( filterMask & spotMask || filterMask == 0)
-                {
+                //if ( filterMask & spotMask || filterMask == 0)
+                //{
                     //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
-                    dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
+                    dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXBANDMASK], spotlist[DXMODEMASK], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
                     dxSpotDataModel->insertRows(0, 1);
 
-                }
+                //}
             }
         }
     }
@@ -540,19 +555,53 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c)
       }
 }
 
+
+bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
+{
+    return matchBand(sourceRow);
+}
+
+bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
+{
+    QModelIndex index = sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM);
+    bool ok = false;
+    unsigned int spotMask = static_cast<unsigned int>(sourceModel()->data(index).toString().toInt(&ok));
+    unsigned int filterMask = filterSetup->getBandFilterMask();
+    if ( filterMask & spotMask || filterMask == 0)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
 bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
+
+    return matchBand(sourceRow);
+
+    /*
     QModelIndex index0 = sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM);
     //bool ret = false;
     return sourceModel()->data(index0).toString().contains("K");
     //return ret;
+    */
 }
+
 
 
 bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
+    return matchBand(sourceRow);
+
+    return false;
+    /*
     QModelIndex index0 = sourceModel()->index(sourceRow, DXLOC_COL_NUM);
     //bool ret = false;
     return sourceModel()->data(index0).toString().contains("IO91");
     //return ret;
+    */
 }
+
+

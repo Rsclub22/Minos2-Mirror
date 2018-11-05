@@ -92,7 +92,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     //dxSpotView->setStyleSheet("QHeaderView::section { font: bold; height: 14px }");
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
-
+    dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
+    dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
@@ -370,7 +371,7 @@ void ClusterMainWindow::parseDX(QString txt)
             // Display
             QString displayFreq = alignFreqRight(dxFreq);
             clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
-            dxSpotDataModel->rowData = new SpotData(spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment);
+            dxSpotDataModel->rowData = new SpotData(spotTime, displayFreq, dxBandMask, dxModeMask, dxCall, dxLocator, spotCall, spotLocator, spotComment);
             //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             dxSpotDataModel->insertRows(0, 1);
 
