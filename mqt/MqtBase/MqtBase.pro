@@ -72,8 +72,8 @@ SOURCES += \
     qttelnet.cpp \
     clusterClientServer.cpp \
     clusterclientframe.cpp \
-    clusterclientfiltertab.cpp \
-    spotdata.cpp
+    spotdata.cpp \
+    clusterclientfilterdialog.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -132,8 +132,8 @@ HEADERS += \
     clustercommon.h \
     clusterClientServer.h \
     clusterclientframe.h \
-    clusterclientfiltertab.h \
-    spotdata.h
+    spotdata.h \
+    clusterclientfilterdialog.h
 
 unix {
     target.path = /usr/lib
@@ -150,4 +150,4 @@ FORMS += \
     rotpresetdialog.ui \
     StartConfig.ui \
     clusterclientframe.ui \
-    clusterclientfiltertab.ui
+    clusterclientfilterdialog.ui

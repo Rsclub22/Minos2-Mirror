@@ -93,8 +93,11 @@ const QColor CLUSTER_TAB_NOT_SELECT_COLOR = Qt::black;
 const QString DXSPOT = "DXSPOT:";
 const QString TIMETOLIVE = "TIMETOLIVE:";
 
-
+// Filter entry delimiter
+const QChar FILTER_DELIMITER = ',';
 
 const int PURGE_TIME = 1000 * 60 * 1;   // mins
+
+const QStringList locatorSeperators = {"<", "tr", "-"};
 
 #endif // CLUSTERCOMMON_H

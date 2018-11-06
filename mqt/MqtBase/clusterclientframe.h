@@ -20,7 +20,7 @@
 #include "dxspotdatamodel.h"
 #include "base_pch.h"
 #include "clusterClientServer.h"
-#include "clusterclientfiltertab.h"
+#include "clusterclientfilterdialog.h"
 #include "MinosLoggerEvents.h"
 
 namespace Ui {
@@ -36,12 +36,12 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool matchBand(int sourceRow) const;
 
-    DxSpotSortFilterProxyModel(ClusterClientFilterTab* _filterSetup)
+    DxSpotSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup)
     {
         filterSetup = _filterSetup;
     }
 
-    ClusterClientFilterTab* filterSetup;
+    ClusterClientFilterDialog* filterSetup;
 
 };
 
@@ -55,7 +55,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    CallsignSortFilterProxyModel(ClusterClientFilterTab* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
+    CallsignSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
     {
 
     }
@@ -70,7 +70,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    LocatorSortFilterProxyModel(ClusterClientFilterTab* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
+    LocatorSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
     {
         filterSetup = _filterSetup;
     }
@@ -94,7 +94,7 @@ public:
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *ct;
-    ClusterClientFilterTab *filterSetup;
+    ClusterClientFilterDialog *filterSetup;
 
     QTimer* purgeTimer;
     int timeToLive;

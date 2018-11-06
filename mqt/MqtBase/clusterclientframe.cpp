@@ -30,7 +30,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 {
 
     ui->setupUi(this);
-    filterSetup = new ClusterClientFilterTab();
+    filterSetup = new ClusterClientFilterDialog();
 
     purgeTimer = new QTimer(this);
 
@@ -165,7 +165,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     locatorView->setSelectionBehavior(QAbstractItemView::SelectItems);
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
-    QHeaderView *locatorViewVerticalHeader = callSignView->verticalHeader();
+    QHeaderView *locatorViewVerticalHeader = locatorView->verticalHeader();
     locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     locatorViewVerticalHeader->setDefaultSectionSize(18);
 
@@ -210,7 +210,7 @@ void ClusterClientFrame::filterButtonSelected()
 {
     filterSetup->copyBandFilterMaskToEdit();
     filterSetup->copyModeFilterMaskToEdit();
-    filterSetup->setCurrentIndex(filterSetup->currentIndex());
+    filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
     filterSetup->show();
 
 }
@@ -344,18 +344,10 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
                     }
                 }
 
+                //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
+                dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXBANDMASK], spotlist[DXMODEMASK], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
+                dxSpotDataModel->insertRows(0, 1);
 
-                // check spot against filter setting
-                //bool ok;
-                //unsigned int spotMask = static_cast<unsigned int>(spotlist[DXBANDMASK].toInt(&ok));
-                unsigned int filterMask = filterSetup->getBandFilterMask();
-                //if ( filterMask & spotMask || filterMask == 0)
-                //{
-                    //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
-                    dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXBANDMASK], spotlist[DXMODEMASK], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
-                    dxSpotDataModel->insertRows(0, 1);
-
-                //}
             }
         }
     }

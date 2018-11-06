@@ -1,34 +1,31 @@
-#include "clusterclientfiltertab.h"
-#include "ui_clusterclientfiltertab.h"
+#include "cutils.h"
+#include "clusterclientfilterdialog.h"
+#include "ui_clusterclientfilterdialog.h"
 
-
-
-ClusterClientFilterTab::ClusterClientFilterTab(QWidget *parent) :
-    QTabWidget(parent)
-    ,ui(new Ui::ClusterClientFilterTab)
-    ,bandFilterMask(0)
-    ,editBandFilterMask(0)
-    ,modeFilterMask(0)
-    ,editModeFilterMask(0)
-    ,vhfButtonState(false)
-    ,mWaveButtonState(false)
-    ,modeButtonState(false)
-    ,filterTabChanged(false)
+ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::ClusterClientFilterDialog),
+    bandFilterMask(0),
+    editBandFilterMask(0),
+    modeFilterMask(0),
+    editModeFilterMask(0),
+    vhfButtonState(false),
+    mWaveButtonState(false),
+    modeButtonState(false),
+    filterTabChanged(false),
+    callsignEditChanged(false),
+    locatorEditChanged(false)
 {
     ui->setupUi(this);
-
     initCheckFilterTab();
-
 }
 
-ClusterClientFilterTab::~ClusterClientFilterTab()
+ClusterClientFilterDialog::~ClusterClientFilterDialog()
 {
     delete ui;
 }
 
-
-
-void ClusterClientFilterTab::initCheckFilterTab()
+void ClusterClientFilterDialog::initCheckFilterTab()
 {
 
 
@@ -62,13 +59,16 @@ void ClusterClientFilterTab::initCheckFilterTab()
 
     }
 
-    setCurrentIndex(0);
-
+    ui->ClusterClientFilterTab->setCurrentIndex(0);
+    ui->callsignEdit->setValidator(new UpperCaseValidator(true));
 
     connect(ui->vhfSelectBut, SIGNAL(clicked()), this, SLOT(vhfButtonSelected()));
     connect(ui->mWSelectBut, SIGNAL(clicked()), this, SLOT(mWaveButtonSelected()));
     connect(ui->modeSelectBut, SIGNAL(clicked()), this, SLOT(modeButtonSelected()));
     connect(ui->clearAllBut, SIGNAL(clicked()), this, SLOT(clearAllButtonSelected()));
+
+    connect(ui->callsignEdit, SIGNAL(editingFinished()), this, SLOT(callsignEditFinished()));
+    connect(ui->locatorEdit, SIGNAL(editingFinished()), this, SLOT(locatorEditFinished()));
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
@@ -80,7 +80,7 @@ void ClusterClientFilterTab::initCheckFilterTab()
 
 
 
-void ClusterClientFilterTab::filtersAccepted()
+void ClusterClientFilterDialog::filtersAccepted()
 {
     // copy updated masks with edited values
     bandFilterMask = editBandFilterMask;
@@ -90,7 +90,7 @@ void ClusterClientFilterTab::filtersAccepted()
 }
 
 
-void ClusterClientFilterTab::filtersRejected()
+void ClusterClientFilterDialog::filtersRejected()
 {
     // restore settings on tab
     restoreTabSettings();
@@ -98,7 +98,17 @@ void ClusterClientFilterTab::filtersRejected()
 }
 
 
-void ClusterClientFilterTab::restoreTabSettings()
+void ClusterClientFilterDialog::setTabCurrentIndex(int i)
+{
+    ui->ClusterClientFilterTab->setCurrentIndex(i);
+}
+
+int ClusterClientFilterDialog::getTabCurrentIndex()
+{
+    return ui->ClusterClientFilterTab->currentIndex();
+}
+
+void ClusterClientFilterDialog::restoreTabSettings()
 {
 
     loadBandSettings(bandFilterMask);
@@ -106,23 +116,23 @@ void ClusterClientFilterTab::restoreTabSettings()
 }
 
 
-void ClusterClientFilterTab::closeEvent (QCloseEvent *event)
+void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
 {
     restoreTabSettings();
     QWidget::closeEvent(event);
 }
 
-void ClusterClientFilterTab::copyBandFilterMaskToEdit()
+void ClusterClientFilterDialog::copyBandFilterMaskToEdit()
 {
     editBandFilterMask = bandFilterMask;
 }
 
-void ClusterClientFilterTab::copyModeFilterMaskToEdit()
+void ClusterClientFilterDialog::copyModeFilterMaskToEdit()
 {
     editModeFilterMask = modeFilterMask;
 }
 
-void ClusterClientFilterTab::loadBandSettings(unsigned int bandMask)
+void ClusterClientFilterDialog::loadBandSettings(unsigned int bandMask)
 {
     for (int i = 0; i < NUM_VHFMASKS; i++)
     {
@@ -149,7 +159,7 @@ void ClusterClientFilterTab::loadBandSettings(unsigned int bandMask)
     }
 }
 
-void ClusterClientFilterTab::loadModeSettings(unsigned int modeMask)
+void ClusterClientFilterDialog::loadModeSettings(unsigned int modeMask)
 {
     for (int i = 0; i < NUM_MODEMASKS; i++)
     {
@@ -164,7 +174,7 @@ void ClusterClientFilterTab::loadModeSettings(unsigned int modeMask)
     }
 }
 
-void ClusterClientFilterTab::vhfButtonSelected()
+void ClusterClientFilterDialog::vhfButtonSelected()
 {
     if (!vhfButtonState)
     {
@@ -178,7 +188,7 @@ void ClusterClientFilterTab::vhfButtonSelected()
     }
 }
 
-void ClusterClientFilterTab::mWaveButtonSelected()
+void ClusterClientFilterDialog::mWaveButtonSelected()
 {
     if (!mWaveButtonState)
     {
@@ -192,7 +202,7 @@ void ClusterClientFilterTab::mWaveButtonSelected()
     }
 }
 
-void ClusterClientFilterTab::modeButtonSelected()
+void ClusterClientFilterDialog::modeButtonSelected()
 {
     if (!modeButtonState)
     {
@@ -207,13 +217,13 @@ void ClusterClientFilterTab::modeButtonSelected()
 }
 
 
-void ClusterClientFilterTab::clearAllButtonSelected()
+void ClusterClientFilterDialog::clearAllButtonSelected()
 {
     clearAllFilters();
 }
 
 
-void ClusterClientFilterTab::clearAllFilters()
+void ClusterClientFilterDialog::clearAllFilters()
 {
     clearVHFBands();
     clearMWaveBands();
@@ -223,7 +233,7 @@ void ClusterClientFilterTab::clearAllFilters()
 
 
 
-void ClusterClientFilterTab::clearVHFBands()
+void ClusterClientFilterDialog::clearVHFBands()
 {
     editBandFilterMask = editBandFilterMask & ~_50M & ~_70M & ~_144M & ~_432M;
     for (int i = 0; i < vhfChkBoxList.count(); i++)
@@ -232,7 +242,7 @@ void ClusterClientFilterTab::clearVHFBands()
     }
 }
 
-void ClusterClientFilterTab::setVHFBands()
+void ClusterClientFilterDialog::setVHFBands()
 {
     editBandFilterMask = editBandFilterMask | _50M | _70M | _144M | _432M;
     for (int i = 0; i < vhfChkBoxList.count(); i++)
@@ -241,7 +251,7 @@ void ClusterClientFilterTab::setVHFBands()
     }
 }
 
-void ClusterClientFilterTab::vhfChecked(int checkBoxNum)
+void ClusterClientFilterDialog::vhfChecked(int checkBoxNum)
 {
     if (checkBoxNum < vhfChkBoxList.count())
     {
@@ -259,7 +269,7 @@ void ClusterClientFilterTab::vhfChecked(int checkBoxNum)
 }
 
 
-void ClusterClientFilterTab::clearMWaveBands()
+void ClusterClientFilterDialog::clearMWaveBands()
 {
     editBandFilterMask = editBandFilterMask & ~_1296M & ~_2300M & ~_3_4G & ~_5_6G & ~_10G;
     for (int i = 0; i < mWaveChkBoxList.count(); i++)
@@ -268,7 +278,7 @@ void ClusterClientFilterTab::clearMWaveBands()
     }
 }
 
-void ClusterClientFilterTab::setMWaveBands()
+void ClusterClientFilterDialog::setMWaveBands()
 {
     editBandFilterMask = editBandFilterMask | _1296M | _2300M | _3_4G | _5_6G | _10G;
     for (int i = 0; i < mWaveChkBoxList.count(); i++)
@@ -280,7 +290,7 @@ void ClusterClientFilterTab::setMWaveBands()
 
 
 
-void ClusterClientFilterTab::mWaveChecked(int checkBoxNum)
+void ClusterClientFilterDialog::mWaveChecked(int checkBoxNum)
 {
     if (checkBoxNum < mWaveChkBoxList.count())
     {
@@ -296,7 +306,7 @@ void ClusterClientFilterTab::mWaveChecked(int checkBoxNum)
 
 }
 
-void ClusterClientFilterTab::clearModes()
+void ClusterClientFilterDialog::clearModes()
 {
     editModeFilterMask = editModeFilterMask & ~CWMODE & ~PHONEMODE & ~RTTYMODE & ~MGMMODE;
     for (int i = 0; i <modeChkBoxList.count(); i++)
@@ -305,7 +315,7 @@ void ClusterClientFilterTab::clearModes()
     }
 }
 
-void ClusterClientFilterTab::setModes()
+void ClusterClientFilterDialog::setModes()
 {
     editModeFilterMask = editModeFilterMask | CWMODE | PHONEMODE | RTTYMODE | MGMMODE;
     for (int i = 0; i < modeChkBoxList.count(); i++)
@@ -315,7 +325,7 @@ void ClusterClientFilterTab::setModes()
 }
 
 
-void ClusterClientFilterTab::modeChecked(int checkBoxNum)
+void ClusterClientFilterDialog::modeChecked(int checkBoxNum)
 {
     if (checkBoxNum < modeChkBoxList.count())
     {
@@ -332,11 +342,47 @@ void ClusterClientFilterTab::modeChecked(int checkBoxNum)
 }
 
 
-unsigned int ClusterClientFilterTab::getBandFilterMask()
+unsigned int ClusterClientFilterDialog::getBandFilterMask()
 {
     return bandFilterMask;
 }
-unsigned int ClusterClientFilterTab::getModeFilterMask()
+unsigned int ClusterClientFilterDialog::getModeFilterMask()
 {
     return modeFilterMask;
+}
+
+
+void ClusterClientFilterDialog::callsignEditFinished()
+{
+    callsignFilterListTemp.clear();
+    if (!ui->callsignEdit->text().isEmpty())
+    {
+        if (ui->callsignEdit->text().contains(FILTER_DELIMITER))
+        {
+            callsignFilterListTemp = ui->callsignEdit->text().split(FILTER_DELIMITER, QString::SkipEmptyParts);
+            for (int i = 0; i < callsignFilterListTemp.count(); i++)
+            {
+                callsignFilterListTemp[i] = callsignFilterListTemp[i].trimmed();
+            }
+        }
+        else
+        {
+            callsignFilterListTemp.append(ui->callsignEdit->text().trimmed());
+        }
+
+        callsignEditChanged = true;
+    }
+    else
+    {
+        if (!callsignFilterList.isEmpty())
+        {
+            callsignEditChanged = true;
+        }
+    }
+}
+
+
+void ClusterClientFilterDialog::locatorEditFinished()
+{
+
 }

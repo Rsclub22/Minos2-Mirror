@@ -1,25 +1,33 @@
-#ifndef CLUSTERCLIENTFILTERTAB_H
-#define CLUSTERCLIENTFILTERTAB_H
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur RadRotator Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
 
+#ifndef CLUSTERCLIENTFILTERDIALOG_H
+#define CLUSTERCLIENTFILTERDIALOG_H
+
+#include <QDialog>
 #include <QTabWidget>
 #include <QVector>
 #include <QCheckBox>
 #include "clustercommon.h"
 
-
-
 namespace Ui {
-class ClusterClientFilterTab;
+class ClusterClientFilterDialog;
 }
 
-
-class ClusterClientFilterTab : public QTabWidget
+class ClusterClientFilterDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ClusterClientFilterTab(QWidget *parent = nullptr);
-    ~ClusterClientFilterTab();
+    explicit ClusterClientFilterDialog(QWidget *parent = nullptr);
+    ~ClusterClientFilterDialog();
 
     unsigned int getBandFilterMask();
     unsigned int getModeFilterMask();
@@ -27,14 +35,25 @@ public:
     void copyBandFilterMaskToEdit();
     void copyModeFilterMaskToEdit();
 
+
+
+    void setTabCurrentIndex(int i);
+    int getTabCurrentIndex();
+
 signals:
     void filtersChanged();
 
+
 private:
-    Ui::ClusterClientFilterTab *ui;
+    Ui::ClusterClientFilterDialog *ui;
     QList<QCheckBox*> vhfChkBoxList;
     QList<QCheckBox*> mWaveChkBoxList;
     QList<QCheckBox*> modeChkBoxList;
+
+    QStringList callsignFilterList;
+    QStringList callsignFilterListTemp;
+    QStringList locatorFilterList;
+    QStringList locatorFilterListTemp;
 
     unsigned int bandFilterMask;
     unsigned int editBandFilterMask;
@@ -47,6 +66,8 @@ private:
 
 
     bool filterTabChanged;
+    bool callsignEditChanged;
+    bool locatorEditChanged;
 
     void initCheckFilterTab();
     void clearVHFBands();
@@ -78,6 +99,8 @@ private slots:
     void filtersAccepted();
     void filtersRejected();
 
+    void callsignEditFinished();
+    void locatorEditFinished();
 };
 
-#endif // CLUSTERCLIENTFILTERTAB_H
+#endif // CLUSTERCLIENTFILTERDIALOG_H

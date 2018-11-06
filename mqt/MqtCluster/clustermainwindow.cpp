@@ -88,6 +88,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     dxSpotView = new QTableView();
     dxSpotView->setModel(dxSpotDataModel);
+    dxSpotView->setAlternatingRowColors(true);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
     //dxSpotView->setStyleSheet("QHeaderView::section { font: bold; height: 14px }");
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
@@ -484,22 +485,25 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
     trace(QString("Extract locators - comment = %1").arg(comment));
     const QRegExp fullLocExp = FULL_LOC_EXP;
     const QRegExp partLocExp = PART_LOC_EXP;
-    if (comment.contains('<') && comment.contains('>'))
+
+    for (int i = 0; i < locatorSeperators.count(); i++)
     {
-        trace(QString("Comment contains <>"));
-        loc = comment.split('<');
-        spotLoc = extractLocator(loc[0], fullLocExp, partLocExp);
-        dxLoc = extractLocator(loc[1], fullLocExp, partLocExp);
+        trace(QString("Exract locators - looks for seperator %1").arg(locatorSeperators[i]));
+        if (comment.contains(locatorSeperators[i], Qt::CaseInsensitive))
+        {
+            trace(QString("Exract locators - found seperator %1").arg(locatorSeperators[i]));
+            loc = comment.split(locatorSeperators[i], QString::KeepEmptyParts, Qt::CaseInsensitive);
+            spotLoc = extractLocator(loc[0], fullLocExp, partLocExp);
+            dxLoc = extractLocator(loc[1], fullLocExp, partLocExp);
+            trace(QString("Extracted dxLoc = %1 spotLoc= %2").arg(dxLoc).arg(spotLoc));
+            return;
+        }
+
 
     }
-    else if (comment.contains("tr", Qt::CaseInsensitive))
-    {
-        trace(QString("Comment contains tr"));
-        loc = comment.split("tr", QString::KeepEmptyParts, Qt::CaseInsensitive);
-        spotLoc = extractLocator(loc[0], fullLocExp, partLocExp);
-        dxLoc = extractLocator(loc[1], fullLocExp, partLocExp);
-    }
-    else  if (comment.contains(fullLocExp))      // look for a single locator, which we assume is DX locator
+
+
+    if (comment.contains(fullLocExp))      // look for a single locator, which we assume is DX locator
     {
         trace(QString("Look for dxLoc only"));
         dxLoc = extractLocator(comment, fullLocExp, partLocExp);
