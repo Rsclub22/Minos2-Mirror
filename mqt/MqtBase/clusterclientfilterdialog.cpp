@@ -1,3 +1,4 @@
+#include <QStringListModel>
 #include "cutils.h"
 #include "clusterclientfilterdialog.h"
 #include "ui_clusterclientfilterdialog.h"
@@ -60,14 +61,17 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     }
 
     ui->ClusterClientFilterTab->setCurrentIndex(0);
-    ui->callsignEdit->setValidator(new UpperCaseValidator(true));
+
+    callsignListModel = new StringListModel(callsignFilterListTemp);
+    connect(ui->callsignListWidget, SIGNAL(currentTextChanged(const QString&)()), this, SLOT(currentTextChanged(const QString&)()));
+    connect(ui->callsignAddButton, SIGNAL(clicked()), SLOT(callsignAddClicked()));
+    //ui->callsignEdit->setValidator(new UpperCaseValidator(true));
 
     connect(ui->vhfSelectBut, SIGNAL(clicked()), this, SLOT(vhfButtonSelected()));
     connect(ui->mWSelectBut, SIGNAL(clicked()), this, SLOT(mWaveButtonSelected()));
     connect(ui->modeSelectBut, SIGNAL(clicked()), this, SLOT(modeButtonSelected()));
     connect(ui->clearAllBut, SIGNAL(clicked()), this, SLOT(clearAllButtonSelected()));
 
-    connect(ui->callsignEdit, SIGNAL(editingFinished()), this, SLOT(callsignEditFinished()));
     connect(ui->locatorEdit, SIGNAL(editingFinished()), this, SLOT(locatorEditFinished()));
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
@@ -352,8 +356,9 @@ unsigned int ClusterClientFilterDialog::getModeFilterMask()
 }
 
 
-void ClusterClientFilterDialog::callsignEditFinished()
+void ClusterClientFilterDialog::currentTextChanged(const QString& text)
 {
+/*
     callsignFilterListTemp.clear();
     if (!ui->callsignEdit->text().isEmpty())
     {
@@ -379,6 +384,17 @@ void ClusterClientFilterDialog::callsignEditFinished()
             callsignEditChanged = true;
         }
     }
+*/
+}
+
+
+void ClusterClientFilterDialog::callsignAddClicked()
+{
+
+    QListWidgetItem *newItem = new QListWidgetItem;
+    newItem->setText("");
+    int row = callsignListWidget->count();
+    callsignListWidget->insertItem(row, newItem);
 }
 
 

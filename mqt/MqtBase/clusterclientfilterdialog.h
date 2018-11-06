@@ -15,6 +15,8 @@
 #include <QTabWidget>
 #include <QVector>
 #include <QCheckBox>
+#include <QStringListModel>
+#include <QListView>
 #include "clustercommon.h"
 
 namespace Ui {
@@ -50,8 +52,12 @@ private:
     QList<QCheckBox*> mWaveChkBoxList;
     QList<QCheckBox*> modeChkBoxList;
 
+
     QStringList callsignFilterList;
     QStringList callsignFilterListTemp;
+    QAbstractItemModel* callsignListModel;
+    QListView* callsignFilterListView;
+
     QStringList locatorFilterList;
     QStringList locatorFilterListTemp;
 
@@ -99,8 +105,9 @@ private slots:
     void filtersAccepted();
     void filtersRejected();
 
-    void callsignEditFinished();
+    void currentTextChanged(const QString& text);
     void locatorEditFinished();
+    void callsignAddClicked();
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H

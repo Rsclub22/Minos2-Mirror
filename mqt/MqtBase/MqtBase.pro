@@ -73,7 +73,8 @@ SOURCES += \
     clusterClientServer.cpp \
     clusterclientframe.cpp \
     spotdata.cpp \
-    clusterclientfilterdialog.cpp
+    clusterclientfilterdialog.cpp \
+    stringlistmodel.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -133,7 +134,8 @@ HEADERS += \
     clusterClientServer.h \
     clusterclientframe.h \
     spotdata.h \
-    clusterclientfilterdialog.h
+    clusterclientfilterdialog.h \
+    stringlistmodel.h
 
 unix {
     target.path = /usr/lib

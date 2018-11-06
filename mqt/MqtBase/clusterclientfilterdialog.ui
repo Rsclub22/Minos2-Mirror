@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterClientFilterTab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="bandsFilter">
       <attribute name="title">
@@ -240,16 +240,23 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
+        <widget class="QListView" name="callsignListView"/>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QPushButton" name="callsignAddButton">
            <property name="text">
-            <string>Callsign</string>
+            <string>Add</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="callsignEdit"/>
+          <widget class="QPushButton" name="callsignDelButton">
+           <property name="text">
+            <string>Delete</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
