@@ -44,6 +44,7 @@ public:
     int getTabCurrentIndex();
 
     QStringList *getCallsignFilterList();
+    QStringList *getLocatorFilterList();
 signals:
     void filtersChanged(int);
 
@@ -56,13 +57,13 @@ private:
 
 
     QStringList callsignFilterList;
-    QStringList callsignFilterListTemp;
     QListWidget* callsignListWidget;
     int callsignListWidgetCurrentRow;
 
 
     QStringList locatorFilterList;
-    QStringList locatorFilterListTemp;
+    QListWidget* locatorListWidget;
+    int locatorListWidgetCurrentRow;
 
     unsigned int bandFilterMask;
     unsigned int editBandFilterMask;
@@ -110,11 +111,15 @@ private slots:
     void filtersRejected();
 
     void currentTextChanged(const QString& text);
-    void locatorEditFinished();
+
     void callsignAddClicked();
     void callsignDelClicked();
-    void currentRowChanged(int currentRow);
+    void callsignCurrentRowChanged(int currentRow);
+    void locatorCurrentRowChanged(int currentRow);
     void callsignEditClicked();
+    void locatorAddClicked();
+    void locatorEditClicked();
+    void locatorDelClicked();
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H

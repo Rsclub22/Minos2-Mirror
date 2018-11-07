@@ -69,23 +69,27 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     callsignListWidget->addItems(callsignFilterList);
 
 
-    connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(currentRowChanged(int)));
+    connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(callsignCurrentRowChanged(int)));
 
 
     connect(ui->callsignAddButton, SIGNAL(clicked()), SLOT(callsignAddClicked()));
-    //ui->callsignAddButton->setShortcut(QKeySequence(ADD_CALLSIGN_KEY));
     connect(ui->callsignEditButton, SIGNAL(clicked()), SLOT(callsignEditClicked()));
-    //ui->callsignEditButton->setShortcut(QKeySequence(EDIT_CALLSIGN_KEY));
     connect(ui->callsignDelButton, SIGNAL(clicked()), SLOT(callsignDelClicked()));
-    //ui->callsignDelButton->setShortcut(QKeySequence(DEL_CALLSIGN_KEY));
 
+    locatorListWidget = ui->locatorListWidget;
+    locatorListWidget->addItems(locatorFilterList);
+
+    connect(ui->locatorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(locatorCurrentRowChanged(int)));
+
+    connect(ui->locatorAddButton, SIGNAL(clicked()), SLOT(locatorAddClicked()));
+    connect(ui->locatorEditButton, SIGNAL(clicked()), SLOT(locatorEditClicked()));
+    connect(ui->locatorDelButton, SIGNAL(clicked()), SLOT(locatorDelClicked()));
 
     connect(ui->vhfSelectBut, SIGNAL(clicked()), this, SLOT(vhfButtonSelected()));
     connect(ui->mWSelectBut, SIGNAL(clicked()), this, SLOT(mWaveButtonSelected()));
     connect(ui->modeSelectBut, SIGNAL(clicked()), this, SLOT(modeButtonSelected()));
     connect(ui->clearAllBut, SIGNAL(clicked()), this, SLOT(clearAllButtonSelected()));
 
-    connect(ui->locatorEdit, SIGNAL(editingFinished()), this, SLOT(locatorEditFinished()));
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
@@ -114,6 +118,17 @@ void ClusterClientFilterDialog::filtersAccepted()
         }
         filterChangeMask |= CALLSIGNUP;
     }
+    else if (locatorEditChanged)
+    {
+        locatorEditChanged = false;
+        locatorFilterList.clear();
+        for (int row = 0; row < locatorListWidget->count(); row++)
+        {
+            QListWidgetItem* item = locatorListWidget->item(row);
+            locatorFilterList.append(item->text());
+        }
+        filterChangeMask |= LOCATORUP;
+    }
 
     emit filtersChanged(filterChangeMask);
     close();
@@ -131,6 +146,16 @@ void ClusterClientFilterDialog::filtersRejected()
             callsignListWidget->addItem(callsignFilterList[i]);
         }
     }
+    else if (locatorEditChanged)
+    {
+        // restore the locatorListWidget
+        locatorListWidget->clear();
+        for(int i = 0; i < locatorFilterList.count(); i++)
+        {
+            locatorListWidget->addItem(locatorFilterList[i]);
+        }
+    }
+
     // restore settings on tab
     restoreTabSettings();
 
@@ -436,7 +461,7 @@ void ClusterClientFilterDialog::callsignAddClicked()
         if (!callsign.isEmpty())
         {
 
-            if (callsignFilterList.contains(callsign) || searchItem(callsign, callsignListWidget))
+            if (callsignFilterList.contains(callsign))
             {
                 QMessageBox::information(this, tr("Add Callsign Filter"),
                                          tr("Callsign already exists in list!"),
@@ -473,15 +498,18 @@ bool ClusterClientFilterDialog::searchItem(QString text, QListWidget* listWidget
 }
 
 
-void ClusterClientFilterDialog::currentRowChanged(int currentRow)
+void ClusterClientFilterDialog::callsignCurrentRowChanged(int currentRow)
 {
     callsignListWidgetCurrentRow = currentRow;
 }
 
+void ClusterClientFilterDialog::locatorCurrentRowChanged(int currentRow)
+{
+    locatorListWidgetCurrentRow = currentRow;
+}
+
 void ClusterClientFilterDialog::callsignDelClicked()
 {
-
-
     if (callsignListWidgetCurrentRow >=0)
     {
         int status = QMessageBox::question( this,
@@ -507,15 +535,23 @@ void ClusterClientFilterDialog::callsignEditClicked()
 {
     if (callsignListWidgetCurrentRow >= 0)
     {
-        CallLocInputDialog callsignDialog(this, QString(callsignListWidget->currentItem()->text()), QString("Edit Callsign Filter"), QString("Edit Callsign"));
+        int row = callsignListWidgetCurrentRow;
+        QString currentCall = callsignListWidget->currentItem()->text();
+        CallLocInputDialog callsignDialog(this, currentCall, QString("Edit Callsign Filter"), QString("Edit Callsign"));
         QString callsign;
         if (callsignDialog.exec() == QDialog::Accepted)
         {
             callsign = callsignDialog.getText();
-            QListWidgetItem *editItem = new QListWidgetItem;
-            editItem->setText(callsign);
-            callsignListWidget->setCurrentItem(editItem);
-            callsignEditChanged = true;
+            if (callsign != currentCall)
+            {
+                QListWidgetItem *editItem = new QListWidgetItem;
+                editItem->setText(callsign);
+                 callsignListWidget->takeItem(row);
+                 callsignListWidget->insertItem(row, editItem);
+                //callsignListWidget->setCurrentItem(editItem);
+                callsignEditChanged = true;
+            }
+
         }
     }
 }
@@ -526,7 +562,84 @@ QStringList* ClusterClientFilterDialog::getCallsignFilterList()
     return &callsignFilterList;
 }
 
-void ClusterClientFilterDialog::locatorEditFinished()
+QStringList* ClusterClientFilterDialog::getLocatorFilterList()
 {
+    return &locatorFilterList;
+}
 
+void ClusterClientFilterDialog::locatorAddClicked()
+{
+    CallLocInputDialog locatorDialog(this, QString(""), QString("Add Locator Filter"), QString("Enter Callsign"));
+    QString locator;
+    if (locatorDialog.exec() == QDialog::Accepted)
+    {
+        locator = locatorDialog.getText();
+
+        if (!locator.isEmpty())
+        {
+
+            if (locatorFilterList.contains(locator))
+            {
+                QMessageBox::information(this, tr("Add Locator Filter"),
+                                         tr("Locator already exists in list!"),
+                                          QMessageBox::Ok|QMessageBox::Default,
+                                          QMessageBox::NoButton, QMessageBox::NoButton);
+            }
+            else
+            {
+                QListWidgetItem *newItem = new QListWidgetItem;
+                newItem->setText(locator);
+                int row = locatorListWidget->count();
+                locatorListWidget->insertItem(row, newItem);
+                locatorEditChanged = true;
+            }
+
+        }
+    }
+}
+void ClusterClientFilterDialog::locatorEditClicked()
+{
+    if (locatorListWidgetCurrentRow >= 0)
+    {
+        int row = locatorListWidgetCurrentRow;
+        QString currentLocator = locatorListWidget->currentItem()->text();
+        CallLocInputDialog callsignDialog(this, currentLocator, QString("Edit Locator Filter"), QString("Edit Locator"));
+        QString locator;
+        if (callsignDialog.exec() == QDialog::Accepted)
+        {
+            locator = callsignDialog.getText();
+            if (locator != currentLocator)
+            {
+                QListWidgetItem *editItem = new QListWidgetItem;
+                editItem->setText(locator);
+                 locatorListWidget->takeItem(row);
+                 locatorListWidget->insertItem(row, editItem);
+                //callsignListWidget->setCurrentItem(editItem);
+                locatorEditChanged = true;
+            }
+
+        }
+    }
+}
+
+void ClusterClientFilterDialog::locatorDelClicked()
+{
+    if (locatorListWidgetCurrentRow >=0)
+    {
+        int status = QMessageBox::question( this,
+        QString("Delete Locator Filter"),
+        QString("Do you want to delete locator %1 ?").arg(locatorListWidget->currentItem()->text()),
+        QMessageBox::Yes|QMessageBox::Default,
+        QMessageBox::No|QMessageBox::Escape,
+        QMessageBox::NoButton);
+        if (status == QMessageBox::Yes)
+        {
+            if (locatorListWidgetCurrentRow >= 0 && locatorListWidgetCurrentRow < locatorListWidget->count())
+            {
+                locatorListWidget->takeItem(locatorListWidgetCurrentRow);
+                locatorEditChanged = true;
+            }
+        }
+
+    }
 }

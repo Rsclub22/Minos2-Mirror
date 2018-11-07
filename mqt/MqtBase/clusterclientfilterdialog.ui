@@ -13,11 +13,11 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_6">
+  <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
     <widget class="QTabWidget" name="ClusterClientFilterTab">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="bandsFilter">
       <attribute name="title">
@@ -273,18 +273,32 @@
       <attribute name="title">
        <string>Locator</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_7">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <widget class="QListWidget" name="locatorListWidget"/>
+       </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QPushButton" name="locatorAddButton">
            <property name="text">
-            <string>Locators</string>
+            <string>&amp;Add</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="locatorEdit"/>
+          <widget class="QPushButton" name="locatorEditButton">
+           <property name="text">
+            <string>&amp;Edit</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="locatorDelButton">
+           <property name="text">
+            <string>&amp;Delete</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
