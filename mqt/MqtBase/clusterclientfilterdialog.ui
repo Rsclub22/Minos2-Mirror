@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>319</width>
-    <height>322</height>
+    <width>300</width>
+    <height>327</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
+  <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <widget class="QTabWidget" name="ClusterClientFilterTab">
      <property name="currentIndex">
@@ -238,23 +238,30 @@
       <attribute name="title">
        <string>Callsign</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_6">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QListView" name="callsignListView"/>
+        <widget class="QListWidget" name="callsignListWidget"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QPushButton" name="callsignAddButton">
            <property name="text">
-            <string>Add</string>
+            <string>&amp;Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="callsignEditButton">
+           <property name="text">
+            <string>&amp;Edit</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="callsignDelButton">
            <property name="text">
-            <string>Delete</string>
+            <string>&amp;Delete</string>
            </property>
           </widget>
          </item>

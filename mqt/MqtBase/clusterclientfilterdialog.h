@@ -16,7 +16,8 @@
 #include <QVector>
 #include <QCheckBox>
 #include <QStringListModel>
-#include <QListView>
+#include <QListWidget>
+
 #include "clustercommon.h"
 
 namespace Ui {
@@ -42,8 +43,9 @@ public:
     void setTabCurrentIndex(int i);
     int getTabCurrentIndex();
 
+    QStringList *getCallsignFilterList();
 signals:
-    void filtersChanged();
+    void filtersChanged(int);
 
 
 private:
@@ -55,8 +57,9 @@ private:
 
     QStringList callsignFilterList;
     QStringList callsignFilterListTemp;
-    QAbstractItemModel* callsignListModel;
-    QListView* callsignFilterListView;
+    QListWidget* callsignListWidget;
+    int callsignListWidgetCurrentRow;
+
 
     QStringList locatorFilterList;
     QStringList locatorFilterListTemp;
@@ -91,6 +94,7 @@ private:
 
     void closeEvent(QCloseEvent *event);
 
+    bool searchItem(QString text, QListWidget *listWidget);
 private slots:
     void vhfChecked(int checkBoxNum);
     void mWaveChecked(int checkBoxNum);
@@ -108,6 +112,9 @@ private slots:
     void currentTextChanged(const QString& text);
     void locatorEditFinished();
     void callsignAddClicked();
+    void callsignDelClicked();
+    void currentRowChanged(int currentRow);
+    void callsignEditClicked();
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H

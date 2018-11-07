@@ -192,7 +192,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
     restoreLocatorViewColumns();
 
-    connect(filterSetup, SIGNAL(filtersChanged()), this, SLOT(filtersChanged()));
+    connect(filterSetup, SIGNAL(filtersChanged(int)), this, SLOT(filtersChanged(int)));
 
     purgeTimer->start(PURGE_TIME);
 
@@ -215,11 +215,15 @@ void ClusterClientFrame::filterButtonSelected()
 
 }
 
-void ClusterClientFrame::filtersChanged()
+void ClusterClientFrame::filtersChanged(int changeMask)
 {
     //update views..
     dxSpotProxyModel->setFilterRegExp("");
-    callSignProxyModel->setFilterRegExp("");
+    if (changeMask & CALLSIGNUP)
+    {
+        callSignProxyModel->setFilterRegExp("");
+    }
+
     locatorProxyModel->setFilterRegExp("");
 }
 
@@ -404,11 +408,6 @@ void ClusterClientFrame::purgeSpots()
                    break;
                }
            }
-
-           //if (!spotQueue.empty())
-           //{
-           //   handleDxSpots(spotQueue);
-           //}
            purgeSpotFlag = false;
         }
     }
@@ -571,14 +570,17 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
 
-    return matchBand(sourceRow);
+    if (matchBand(sourceRow))
+    {
+        QModelIndex index = sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM);
+        QString spotCall = sourceModel()->data(index).toString();
+        if (filterSetup->getCallsignFilterList()->contains(spotCall))
+        {
+            return true;
+        }
+    }
 
-    /*
-    QModelIndex index0 = sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM);
-    //bool ret = false;
-    return sourceModel()->data(index0).toString().contains("K");
-    //return ret;
-    */
+    return false;
 }
 
 

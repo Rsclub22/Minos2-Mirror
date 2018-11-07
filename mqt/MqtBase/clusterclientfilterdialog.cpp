@@ -1,11 +1,14 @@
 #include <QStringListModel>
+#include <QMessageBox>
 #include "cutils.h"
 #include "clusterclientfilterdialog.h"
+#include "calllocinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
 ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
+    callsignListWidgetCurrentRow(-1),
     bandFilterMask(0),
     editBandFilterMask(0),
     modeFilterMask(0),
@@ -62,10 +65,20 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     ui->ClusterClientFilterTab->setCurrentIndex(0);
 
-    callsignListModel = new StringListModel(callsignFilterListTemp);
-    connect(ui->callsignListWidget, SIGNAL(currentTextChanged(const QString&)()), this, SLOT(currentTextChanged(const QString&)()));
+    callsignListWidget = ui->callsignListWidget;
+    callsignListWidget->addItems(callsignFilterList);
+
+
+    connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(currentRowChanged(int)));
+
+
     connect(ui->callsignAddButton, SIGNAL(clicked()), SLOT(callsignAddClicked()));
-    //ui->callsignEdit->setValidator(new UpperCaseValidator(true));
+    //ui->callsignAddButton->setShortcut(QKeySequence(ADD_CALLSIGN_KEY));
+    connect(ui->callsignEditButton, SIGNAL(clicked()), SLOT(callsignEditClicked()));
+    //ui->callsignEditButton->setShortcut(QKeySequence(EDIT_CALLSIGN_KEY));
+    connect(ui->callsignDelButton, SIGNAL(clicked()), SLOT(callsignDelClicked()));
+    //ui->callsignDelButton->setShortcut(QKeySequence(DEL_CALLSIGN_KEY));
+
 
     connect(ui->vhfSelectBut, SIGNAL(clicked()), this, SLOT(vhfButtonSelected()));
     connect(ui->mWSelectBut, SIGNAL(clicked()), this, SLOT(mWaveButtonSelected()));
@@ -86,18 +99,41 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
 void ClusterClientFilterDialog::filtersAccepted()
 {
+    int filterChangeMask = 0;
     // copy updated masks with edited values
     bandFilterMask = editBandFilterMask;
     modeFilterMask = editModeFilterMask;
-    emit filtersChanged();
+    if (callsignEditChanged)
+    {
+        callsignEditChanged = false;
+        callsignFilterList.clear();
+        for (int row = 0; row < callsignListWidget->count(); row++)
+        {
+            QListWidgetItem* item = callsignListWidget->item(row);
+            callsignFilterList.append(item->text());
+        }
+        filterChangeMask |= CALLSIGNUP;
+    }
+
+    emit filtersChanged(filterChangeMask);
     close();
 }
 
 
 void ClusterClientFilterDialog::filtersRejected()
 {
+    if (callsignEditChanged)
+    {
+        // restore the callsignListWidget
+        callsignListWidget->clear();
+        for (int i = 0; i < callsignFilterList.count(); i++)
+        {
+            callsignListWidget->addItem(callsignFilterList[i]);
+        }
+    }
     // restore settings on tab
     restoreTabSettings();
+
     close();
 }
 
@@ -391,12 +427,104 @@ void ClusterClientFilterDialog::currentTextChanged(const QString& text)
 void ClusterClientFilterDialog::callsignAddClicked()
 {
 
-    QListWidgetItem *newItem = new QListWidgetItem;
-    newItem->setText("");
-    int row = callsignListWidget->count();
-    callsignListWidget->insertItem(row, newItem);
+    CallLocInputDialog callsignDialog(this, QString(""), QString("Add Callsign Filter"), QString("Enter Callsign"));
+    QString callsign;
+    if (callsignDialog.exec() == QDialog::Accepted)
+    {
+        callsign = callsignDialog.getText();
+
+        if (!callsign.isEmpty())
+        {
+
+            if (callsignFilterList.contains(callsign) || searchItem(callsign, callsignListWidget))
+            {
+                QMessageBox::information(this, tr("Add Callsign Filter"),
+                                         tr("Callsign already exists in list!"),
+                                          QMessageBox::Ok|QMessageBox::Default,
+                                          QMessageBox::NoButton, QMessageBox::NoButton);
+            }
+            else
+            {
+                QListWidgetItem *newItem = new QListWidgetItem;
+                newItem->setText(callsign);
+                int row = callsignListWidget->count();
+                callsignListWidget->insertItem(row, newItem);
+                callsignEditChanged = true;
+            }
+
+        }
+    }
 }
 
+
+bool ClusterClientFilterDialog::searchItem(QString text, QListWidget* listWidget)
+{
+    for (int i = 0; i < listWidget->count(); i++)
+    {
+        QListWidgetItem* item = listWidget->item(i);
+        if (item->text() == text)
+        {
+            return true;
+        }
+
+    }
+
+    return false;
+}
+
+
+void ClusterClientFilterDialog::currentRowChanged(int currentRow)
+{
+    callsignListWidgetCurrentRow = currentRow;
+}
+
+void ClusterClientFilterDialog::callsignDelClicked()
+{
+
+
+    if (callsignListWidgetCurrentRow >=0)
+    {
+        int status = QMessageBox::question( this,
+        QString("Delete Callsign Filter"),
+        QString("Do you want to delete callsign %1 ?").arg(callsignListWidget->currentItem()->text()),
+        QMessageBox::Yes|QMessageBox::Default,
+        QMessageBox::No|QMessageBox::Escape,
+        QMessageBox::NoButton);
+        if (status == QMessageBox::Yes)
+        {
+            if (callsignListWidgetCurrentRow >= 0 && callsignListWidgetCurrentRow < callsignListWidget->count())
+            {
+                callsignListWidget->takeItem(callsignListWidgetCurrentRow);
+                callsignEditChanged = true;
+            }
+        }
+
+    }
+
+}
+
+void ClusterClientFilterDialog::callsignEditClicked()
+{
+    if (callsignListWidgetCurrentRow >= 0)
+    {
+        CallLocInputDialog callsignDialog(this, QString(callsignListWidget->currentItem()->text()), QString("Edit Callsign Filter"), QString("Edit Callsign"));
+        QString callsign;
+        if (callsignDialog.exec() == QDialog::Accepted)
+        {
+            callsign = callsignDialog.getText();
+            QListWidgetItem *editItem = new QListWidgetItem;
+            editItem->setText(callsign);
+            callsignListWidget->setCurrentItem(editItem);
+            callsignEditChanged = true;
+        }
+    }
+}
+
+
+QStringList* ClusterClientFilterDialog::getCallsignFilterList()
+{
+    return &callsignFilterList;
+}
 
 void ClusterClientFilterDialog::locatorEditFinished()
 {

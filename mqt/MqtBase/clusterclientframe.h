@@ -150,7 +150,7 @@ private slots:
     void onCallsignSpotView_doubleClicked(const QModelIndex &index);
     void onLocatorSpotView_doubleClicked(const QModelIndex &index);
     void onSpotTabChanged(int index);
-    void filtersChanged();
+    void filtersChanged(int);
 };
 
 #endif // CLUSTERCLIENTFRAME_H

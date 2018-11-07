@@ -74,7 +74,8 @@ SOURCES += \
     clusterclientframe.cpp \
     spotdata.cpp \
     clusterclientfilterdialog.cpp \
-    stringlistmodel.cpp
+    stringlistmodel.cpp \
+    calllocinputdialog.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -135,7 +136,8 @@ HEADERS += \
     clusterclientframe.h \
     spotdata.h \
     clusterclientfilterdialog.h \
-    stringlistmodel.h
+    stringlistmodel.h \
+    calllocinputdialog.h
 
 unix {
     target.path = /usr/lib
@@ -152,4 +154,5 @@ FORMS += \
     rotpresetdialog.ui \
     StartConfig.ui \
     clusterclientframe.ui \
-    clusterclientfilterdialog.ui
+    clusterclientfilterdialog.ui \
+    calllocinputdialog.ui

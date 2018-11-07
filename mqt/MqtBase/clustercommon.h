@@ -100,4 +100,13 @@ const int PURGE_TIME = 1000 * 60 * 1;   // mins
 
 const QStringList locatorSeperators = {"<", "tr", "-"};
 
+// Filter Change
+const int FREQFILTERUP = 1 << 0;
+const int CALLSIGNUP = 1 << 1;
+const int LOCATORUP = 1 << 2;
+
+// Callsign Edit Shortcuts
+const QString ADD_CALLSIGN_KEY = "Ctrl-a";
+const QString EDIT_CALLSIGN_KEY = "Ctrl-e";
+const QString DEL_CALLSIGN_KEY = "Ctrl-d";
 #endif // CLUSTERCOMMON_H
