@@ -43,8 +43,8 @@ public:
     void setTabCurrentIndex(int i);
     int getTabCurrentIndex();
 
-    QStringList *getCallsignFilterList();
-    QStringList *getLocatorFilterList();
+    QStringList getCallsignFilterList();
+    QStringList getLocatorFilterList();
 signals:
     void filtersChanged(int);
 

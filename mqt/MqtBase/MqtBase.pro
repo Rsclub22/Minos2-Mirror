@@ -74,7 +74,6 @@ SOURCES += \
     clusterclientframe.cpp \
     spotdata.cpp \
     clusterclientfilterdialog.cpp \
-    stringlistmodel.cpp \
     calllocinputdialog.cpp
 
 HEADERS += \
@@ -136,7 +135,6 @@ HEADERS += \
     clusterclientframe.h \
     spotdata.h \
     clusterclientfilterdialog.h \
-    stringlistmodel.h \
     calllocinputdialog.h
 
 unix {

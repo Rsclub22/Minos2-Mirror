@@ -557,14 +557,14 @@ void ClusterClientFilterDialog::callsignEditClicked()
 }
 
 
-QStringList* ClusterClientFilterDialog::getCallsignFilterList()
+QStringList ClusterClientFilterDialog::getCallsignFilterList()
 {
-    return &callsignFilterList;
+    return callsignFilterList;
 }
 
-QStringList* ClusterClientFilterDialog::getLocatorFilterList()
+QStringList ClusterClientFilterDialog::getLocatorFilterList()
 {
-    return &locatorFilterList;
+    return locatorFilterList;
 }
 
 void ClusterClientFilterDialog::locatorAddClicked()

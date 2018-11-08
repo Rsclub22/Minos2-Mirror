@@ -570,13 +570,16 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
 
-    if (matchBand(sourceRow))
+    if (!filterSetup->getCallsignFilterList().empty())
     {
-        QModelIndex index = sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM);
-        QString spotCall = sourceModel()->data(index).toString();
-        if (filterSetup->getCallsignFilterList()->contains(spotCall))
+        if (matchBand(sourceRow))
         {
-            return true;
+            QModelIndex index = sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM);
+            QString spotCall = sourceModel()->data(index).toString();
+            if (filterSetup->getCallsignFilterList().contains(spotCall))
+            {
+                return true;
+            }
         }
     }
 
@@ -587,15 +590,27 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
 
 bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    return matchBand(sourceRow);
+    if (!filterSetup->getLocatorFilterList().empty())
+    {
+        if (matchBand(sourceRow))
+        {
+            QModelIndex index = sourceModel()->index(sourceRow, DXLOC_COL_NUM);
+            QString locator = sourceModel()->data(index).toString();
+            if (locator != "")
+            {
+                foreach (const QString &str, filterSetup->getLocatorFilterList())
+                {
+                    if (str.contains(QRegExp(locator, Qt::CaseInsensitive)))
+                    {
+                        return true;
+                    }
+                }
+
+            }
+        }
+    }
 
     return false;
-    /*
-    QModelIndex index0 = sourceModel()->index(sourceRow, DXLOC_COL_NUM);
-    //bool ret = false;
-    return sourceModel()->data(index0).toString().contains("IO91");
-    //return ret;
-    */
 }
 
 
