@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterClientFilterTab">
      <property name="currentIndex">
-      <number>2</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="bandsFilter">
       <attribute name="title">
@@ -265,6 +265,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="callsignDelAllButton">
+           <property name="text">
+            <string>Delete All</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
@@ -297,6 +304,13 @@
           <widget class="QPushButton" name="locatorDelButton">
            <property name="text">
             <string>&amp;Delete</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="locatorDelAllButton">
+           <property name="text">
+            <string>Delete All</string>
            </property>
           </widget>
          </item>

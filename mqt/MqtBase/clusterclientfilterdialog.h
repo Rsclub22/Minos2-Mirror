@@ -37,14 +37,16 @@ public:
 
     void copyBandFilterMaskToEdit();
     void copyModeFilterMaskToEdit();
-
-
+    void copyCallsignFilterListToListWidget();
+    void copyLocatorFilterListToListWidget();
 
     void setTabCurrentIndex(int i);
     int getTabCurrentIndex();
 
     QStringList getCallsignFilterList();
     QStringList getLocatorFilterList();
+
+
 signals:
     void filtersChanged(int);
 
@@ -75,17 +77,20 @@ private:
     bool modeButtonState;
 
 
-    bool filterTabChanged;
+    bool bandTabChanged;
     bool callsignEditChanged;
     bool locatorEditChanged;
 
     void initCheckFilterTab();
     void clearVHFBands();
     void setVHFBands();
+    void restoreVHFBands();
     void clearMWaveBands();
     void setMWaveBands();
+    void restoreMWBands();
     void clearModes();
     void setModes();
+    void restoreModes();
     void clearAllFilters();
 
 
@@ -96,6 +101,9 @@ private:
     void closeEvent(QCloseEvent *event);
 
     bool searchItem(QString text, QListWidget *listWidget);
+
+
+
 private slots:
     void vhfChecked(int checkBoxNum);
     void mWaveChecked(int checkBoxNum);

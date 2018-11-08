@@ -210,6 +210,8 @@ void ClusterClientFrame::filterButtonSelected()
 {
     filterSetup->copyBandFilterMaskToEdit();
     filterSetup->copyModeFilterMaskToEdit();
+    filterSetup->copyCallsignFilterListToListWidget();
+    filterSetup->copyLocatorFilterListToListWidget();
     filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
     filterSetup->show();
 
@@ -218,13 +220,19 @@ void ClusterClientFrame::filterButtonSelected()
 void ClusterClientFrame::filtersChanged(int changeMask)
 {
     //update views..
-    dxSpotProxyModel->setFilterRegExp("");
-    if (changeMask & CALLSIGNUP)
+    if (changeMask & FREQFILTERUP)
+    {
+        dxSpotProxyModel->setFilterRegExp("");
+    }
+    else if (changeMask & CALLSIGNUP)
     {
         callSignProxyModel->setFilterRegExp("");
     }
+    else if (changeMask & LOCATORUP)
+    {
+        locatorProxyModel->setFilterRegExp("");
+    }
 
-    locatorProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::setStandAlone()
@@ -576,10 +584,17 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
         {
             QModelIndex index = sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM);
             QString spotCall = sourceModel()->data(index).toString();
-            if (filterSetup->getCallsignFilterList().contains(spotCall))
+            foreach (const QString &str, filterSetup->getCallsignFilterList())
             {
-                return true;
+                if (spotCall.contains(str, Qt::CaseInsensitive))
+                {
+                    return true;
+                }
             }
+            //if (filterSetup->getCallsignFilterList().contains(spotCall))
+            //{
+            //    return true;
+            //}
         }
     }
 
@@ -595,15 +610,12 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
         if (matchBand(sourceRow))
         {
             QModelIndex index = sourceModel()->index(sourceRow, DXLOC_COL_NUM);
-            QString locator = sourceModel()->data(index).toString();
+            QString locator = sourceModel()->data(index).toString().mid(0,4);
             if (locator != "")
             {
-                foreach (const QString &str, filterSetup->getLocatorFilterList())
+                if (filterSetup->getLocatorFilterList().contains(locator))
                 {
-                    if (str.contains(QRegExp(locator, Qt::CaseInsensitive)))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
 
             }
