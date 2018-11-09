@@ -46,6 +46,24 @@ public:
 };
 
 
+class SearchSortFilterProxyModel : public QSortFilterProxyModel
+{
+public:
+
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    bool matchBand(int sourceRow) const;
+
+    SearchSortFilterProxyModel()
+    {
+
+    }
+
+    QString searchParameter;
+
+};
+
+
 
 class CallsignSortFilterProxyModel : public DxSpotSortFilterProxyModel
 {
@@ -104,10 +122,12 @@ private:
 
     DxSpotDataModel* dxSpotDataModel;
     DxSpotSortFilterProxyModel* dxSpotProxyModel;
+    SearchSortFilterProxyModel* searchSortProxyModel;
     CallsignSortFilterProxyModel* callSignProxyModel;
     LocatorSortFilterProxyModel* locatorProxyModel;
 
     QTableView* dxSpotView;
+    QTableView* searchView;
     QTableView* callSignView;
     QTableView* locatorView;
 
@@ -128,6 +148,10 @@ private:
     void handleDxSpots(QVector<QString> spotQueue);
 
     void setAllTabsColor(QColor c);
+    void setupSearchSpotView();
+    void setupDXSpotView();
+    void setupCallsignSpotView();
+    void setupLocatorSpotView();
 private slots:
 
 

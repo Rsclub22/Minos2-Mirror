@@ -75,7 +75,38 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     on_FontChanged();
 
+    setupDXSpotView();
 
+    setupSearchSpotView();
+
+    setupCallsignSpotView();
+
+    setupLocatorSpotView();
+
+    setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
+    ui->dxSpotTab->setTabColor(ui->dxSpotTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
+
+
+    connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
+    restoreLocatorViewColumns();
+
+    connect(filterSetup, SIGNAL(filtersChanged(int)), this, SLOT(filtersChanged(int)));
+
+    purgeTimer->start(PURGE_TIME);
+
+
+}
+
+
+ClusterClientFrame::~ClusterClientFrame()
+{
+    delete ui;
+}
+
+
+
+void ClusterClientFrame::setupDXSpotView()
+{
     dxSpotDataModel = new DxSpotDataModel();
 
     dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
@@ -112,9 +143,52 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreDxSpotViewColumns();
+}
 
-    // callsign filtered view
 
+void ClusterClientFrame::setupSearchSpotView()
+{
+    searchSortProxyModel = new SearchSortFilterProxyModel();
+    searchSortProxyModel->setSourceModel(dxSpotDataModel);
+
+
+    searchView = new QTableView();
+
+    ui->dxSpotTab->addTab(searchView, "Search Spots");
+
+
+    searchView->setModel(searchSortProxyModel);
+    searchView->setAlternatingRowColors(true);
+    searchView->setSelectionMode( QAbstractItemView::SingleSelection );
+    searchView->setSelectionBehavior(QAbstractItemView::SelectItems);
+    //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+
+    QHeaderView *searchVerticalHeader = searchView->verticalHeader();
+    searchVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+    searchVerticalHeader->setDefaultSectionSize(18);
+
+
+    //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
+    connect(searchView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onSeachSpotView_doubleClicked(const QModelIndex &)));
+
+    searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
+    searchView->setColumnHidden(MODEMASK_COL_NUM, true);
+    searchView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+    searchView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+    searchView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+    searchView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
+    searchView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+    searchView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+    searchView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+    searchView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
+    searchView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+}
+
+
+
+
+void ClusterClientFrame::setupCallsignSpotView()
+{
     callSignProxyModel = new CallsignSortFilterProxyModel(filterSetup);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
 
@@ -151,8 +225,10 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     callSignView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreCallsignViewColumns();
+}
 
-    // filter locator view
+void ClusterClientFrame::setupLocatorSpotView()
+{
     locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
 
@@ -184,26 +260,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     locatorView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     locatorView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     locatorView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
-
-    setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
-    ui->dxSpotTab->setTabColor(ui->dxSpotTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
-
-
-    connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
-    restoreLocatorViewColumns();
-
-    connect(filterSetup, SIGNAL(filtersChanged(int)), this, SLOT(filtersChanged(int)));
-
-    purgeTimer->start(PURGE_TIME);
-
-
 }
 
-
-ClusterClientFrame::~ClusterClientFrame()
-{
-    delete ui;
-}
 
 
 void ClusterClientFrame::filterButtonSelected()
@@ -575,6 +633,12 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 }
 
 
+bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
+{
+    return false;
+}
+
+
 bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
 
@@ -583,18 +647,15 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
         if (matchBand(sourceRow))
         {
             QModelIndex index = sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM);
-            QString spotCall = sourceModel()->data(index).toString();
+            Callsign spotCall(sourceModel()->data(index).toString());
+            spotCall.validate();
             foreach (const QString &str, filterSetup->getCallsignFilterList())
             {
-                if (spotCall.contains(str, Qt::CaseInsensitive))
+                if (spotCall.realCall.contains(str, Qt::CaseInsensitive))
                 {
                     return true;
                 }
             }
-            //if (filterSetup->getCallsignFilterList().contains(spotCall))
-            //{
-            //    return true;
-            //}
         }
     }
 

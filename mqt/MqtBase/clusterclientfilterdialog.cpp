@@ -548,7 +548,7 @@ void ClusterClientFilterDialog::callsignAddClicked()
         if (!callsign.isEmpty())
         {
 
-            if (callsignFilterList.contains(callsign))
+            if (searchItem(callsign, callsignListWidget))
             {
                 QMessageBox::information(this, tr("Add Callsign Filter"),
                                          tr("Callsign already exists in list!"),
@@ -676,7 +676,7 @@ void ClusterClientFilterDialog::locatorAddClicked()
         if (!locator.isEmpty())
         {
 
-            if (locatorFilterList.contains(locator))
+            if (searchItem(locator, locatorListWidget))
             {
                 QMessageBox::information(this, tr("Add Locator Filter"),
                                          tr("Locator already exists in list!"),

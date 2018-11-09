@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
+    <width>362</width>
     <height>327</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterClientFilterTab">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="bandsFilter">
       <attribute name="title">
