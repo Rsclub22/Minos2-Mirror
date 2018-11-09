@@ -46,15 +46,15 @@ public:
 };
 
 
-class SearchSortFilterProxyModel : public QSortFilterProxyModel
+class SearchSortFilterProxyModel : public DxSpotSortFilterProxyModel
 {
 public:
 
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    bool matchBand(int sourceRow) const;
 
-    SearchSortFilterProxyModel()
+
+    SearchSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
     {
 
     }
@@ -177,6 +177,7 @@ private slots:
     void onLocatorSpotViewClicked(const QModelIndex &index);
     void onSpotTabChanged(int index);
     void filtersChanged(int);
+    void onSearchEditingFinished();
 };
 
 #endif // CLUSTERCLIENTFRAME_H

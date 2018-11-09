@@ -81,6 +81,7 @@ const QString BOOL_NO = "";
 const QChar SPOT_DATA_SEPERATOR = ':';
 const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
 const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d");
+const QRegExp SEARCH_LOC_EXP = QRegExp("[I,J,K,L][P,O,N,M,L]\\d\\d");
 
 const int MIN_TTL = 10;
 const int MAX_TTL = 180;

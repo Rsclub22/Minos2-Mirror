@@ -496,36 +496,7 @@ unsigned int ClusterClientFilterDialog::getModeFilterMask()
 
 
 
-void ClusterClientFilterDialog::currentTextChanged(const QString& text)
-{
-/*
-    callsignFilterListTemp.clear();
-    if (!ui->callsignEdit->text().isEmpty())
-    {
-        if (ui->callsignEdit->text().contains(FILTER_DELIMITER))
-        {
-            callsignFilterListTemp = ui->callsignEdit->text().split(FILTER_DELIMITER, QString::SkipEmptyParts);
-            for (int i = 0; i < callsignFilterListTemp.count(); i++)
-            {
-                callsignFilterListTemp[i] = callsignFilterListTemp[i].trimmed();
-            }
-        }
-        else
-        {
-            callsignFilterListTemp.append(ui->callsignEdit->text().trimmed());
-        }
 
-        callsignEditChanged = true;
-    }
-    else
-    {
-        if (!callsignFilterList.isEmpty())
-        {
-            callsignEditChanged = true;
-        }
-    }
-*/
-}
 
 void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
 {

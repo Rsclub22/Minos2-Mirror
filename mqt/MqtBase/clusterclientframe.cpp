@@ -16,7 +16,7 @@
 #include "clusterclientframe.h"
 #include "clustercommon.h"
 #include "contest.h"
-
+#include "cutils.h"
 #include "base_pch.h"
 #include "ui_clusterclientframe.h"
 
@@ -72,6 +72,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
 
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
+
+    ui->searchLineEdit->setValidator(new UpperCaseValidator(true));
+    connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
 
     on_FontChanged();
 
@@ -148,7 +151,7 @@ void ClusterClientFrame::setupDXSpotView()
 
 void ClusterClientFrame::setupSearchSpotView()
 {
-    searchSortProxyModel = new SearchSortFilterProxyModel();
+    searchSortProxyModel = new SearchSortFilterProxyModel(filterSetup);
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
 
 
@@ -588,7 +591,20 @@ void ClusterClientFrame::clearAllSpotsActionSelected()
 
 }
 
-
+void ClusterClientFrame::onSearchEditingFinished()
+{
+    if (ui->searchLineEdit->text().trimmed().isEmpty())
+    {
+        searchSortProxyModel->searchParameter = "";
+        searchSortProxyModel->setFilterRegExp("");
+    }
+    else
+    {
+        searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
+        ui->searchLineEdit->selectAll();
+        searchSortProxyModel->setFilterRegExp("");
+    }
+}
 
 
 void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c)
@@ -646,9 +662,8 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
-    QModelIndex index = sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM);
     bool ok = false;
-    unsigned int spotMask = static_cast<unsigned int>(sourceModel()->data(index).toString().toInt(&ok));
+    unsigned int spotMask = static_cast<unsigned int>(sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM)).toString().toInt(&ok));
     unsigned int filterMask = filterSetup->getBandFilterMask();
     if ( filterMask & spotMask || filterMask == 0)
     {
@@ -661,6 +676,28 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 
 bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
+    if (!searchParameter.isEmpty() && matchBand(sourceRow))
+    {
+        if (searchParameter.contains(SEARCH_LOC_EXP))
+        {
+            QString loc = sourceModel()->data(sourceModel()->index(sourceRow, DXLOC_COL_NUM)).toString().mid(0,4);
+            if (loc.contains(searchParameter, Qt::CaseInsensitive))
+            {
+                return true;
+            }
+        }
+        else
+        {
+            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM)).toString());
+            spotCall.validate();
+            if (spotCall.realCall.contains(searchParameter, Qt::CaseInsensitive))
+            {
+                return true;
+            }
+        }
+    }
+
+
     return false;
 }
 
@@ -672,8 +709,7 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
     {
         if (matchBand(sourceRow))
         {
-            QModelIndex index = sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM);
-            Callsign spotCall(sourceModel()->data(index).toString());
+            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM)).toString());
             spotCall.validate();
             foreach (const QString &str, filterSetup->getCallsignFilterList())
             {

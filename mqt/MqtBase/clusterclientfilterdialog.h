@@ -118,7 +118,6 @@ private slots:
     void filtersAccepted();
     void filtersRejected();
 
-    void currentTextChanged(const QString& text);
 
     void callsignAddClicked();
     void callsignDelClicked();
