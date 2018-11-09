@@ -152,6 +152,7 @@ private:
     void setupDXSpotView();
     void setupCallsignSpotView();
     void setupLocatorSpotView();
+    void sendFreqToRig(QString freq);
 private slots:
 
 
@@ -160,7 +161,6 @@ private slots:
     void on_FontChanged();
     void filterButtonSelected();
     void purgeSpots();
-    void onDxSpotView_doubleClicked(const QModelIndex &);
     void onMenuShow();
     void on_freqActionSelected();
     void bearingActionSelected();
@@ -171,8 +171,10 @@ private slots:
     void on_AfterLogContact(BaseContestLog *c);
     void restoreCallsignViewColumns();
     void restoreLocatorViewColumns();
-    void onCallsignSpotView_doubleClicked(const QModelIndex &index);
-    void onLocatorSpotView_doubleClicked(const QModelIndex &index);
+    void onDxSpotViewClicked(const QModelIndex &);
+    void onSearchSpotViewClicked(const QModelIndex &);
+    void onCallsignSpotViewClicked(const QModelIndex &index);
+    void onLocatorSpotViewClicked(const QModelIndex &index);
     void onSpotTabChanged(int index);
     void filtersChanged(int);
 };

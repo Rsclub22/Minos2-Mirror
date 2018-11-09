@@ -157,6 +157,8 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     connect(ui->RitEdit, SIGNAL(newFreq(int)), this, SLOT(changeRitRadioFreq(int)));
     connect(ui->RitClear, SIGNAL(clicked(bool)), this, SLOT(ritClearButtonSelected(bool)));
 
+    // from cluster frame
+    connect(&MinosLoggerEvents::mle, SIGNAL(FreqStrToRig(QString)), this, SLOT(sendFreq(QString)));
 
     // volume control updates to radio
     connect(ui->volumeSlider, SIGNAL(sendVolumeRadio(int)), this, SLOT(sendVolumeRadio(int)));

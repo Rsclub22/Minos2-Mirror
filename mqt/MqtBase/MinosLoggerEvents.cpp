@@ -192,6 +192,11 @@ void MinosLoggerEvents::sendRotBearingChanged(int f, BaseContestLog *c)
     emit mle.RotBearingChanged(f, c);
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::SendFreqStrToRig(QString f)
+{
+    emit mle.FreqStrToRig(f);
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendBrgStrToRot(QString bearing)
 {
     emit mle.BrgStrToRot(bearing);

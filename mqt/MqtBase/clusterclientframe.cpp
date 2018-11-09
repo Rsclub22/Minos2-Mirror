@@ -128,7 +128,7 @@ void ClusterClientFrame::setupDXSpotView()
 
 
     //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
-    connect(dxSpotView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onDxSpotView_doubleClicked(const QModelIndex &)));
+    connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
 
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -169,7 +169,7 @@ void ClusterClientFrame::setupSearchSpotView()
 
 
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
-    connect(searchView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onSeachSpotView_doubleClicked(const QModelIndex &)));
+    connect(searchView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onSearchSpotViewClicked(const QModelIndex &)));
 
     searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     searchView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -210,7 +210,7 @@ void ClusterClientFrame::setupCallsignSpotView()
 
 
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
-    connect(callSignView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onCallsignSpotView_doubleClicked(const QModelIndex &)));
+    connect(callSignView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCallsignSpotViewClicked(const QModelIndex &)));
 
     callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     callSignView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -247,7 +247,7 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 
     //connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
-    connect(locatorView, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onLocatorSpotView_doubleClicked(const QModelIndex &)));
+    connect(locatorView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onLocatorSpotViewClicked(const QModelIndex &)));
 
     locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     locatorView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -328,26 +328,52 @@ void ClusterClientFrame::onSpotTabChanged(int index)
 }
 
 
-void ClusterClientFrame::onDxSpotView_doubleClicked(const QModelIndex &index)
+void ClusterClientFrame::onDxSpotViewClicked(const QModelIndex &index)
 {
-    int r = index.row();
-    int c = index.column();
-    int a = 0;
+    if (index.column() == FREQ_COL_NUM)
+    {
+        QString freq = dxSpotProxyModel->sourceModel()->data(index).toString();
+        sendFreqToRig(freq);
+    }
+
 }
 
-void ClusterClientFrame::onCallsignSpotView_doubleClicked(const QModelIndex &index)
+void ClusterClientFrame::onSearchSpotViewClicked(const QModelIndex &index)
 {
-    int r = index.row();
-    int c = index.column();
-    int a = 0;
+    if (index.column() == FREQ_COL_NUM)
+    {
+        QString freq = searchSortProxyModel->sourceModel()->data(index).toString();
+        sendFreqToRig(freq);
+    }
 }
 
-void ClusterClientFrame::onLocatorSpotView_doubleClicked(const QModelIndex &index)
+
+
+void ClusterClientFrame::onCallsignSpotViewClicked(const QModelIndex &index)
 {
-    int r = index.row();
-    int c = index.column();
-    int a = 0;
+    if (index.column() == FREQ_COL_NUM)
+    {
+        QString freq = callSignProxyModel->sourceModel()->data(index).toString();
+        sendFreqToRig(freq);
+    }
 }
+
+void ClusterClientFrame::onLocatorSpotViewClicked(const QModelIndex &index)
+{
+    if (index.column() == FREQ_COL_NUM)
+    {
+        QString freq = locatorProxyModel->sourceModel()->data(index).toString();
+        sendFreqToRig(freq);
+    }
+}
+
+
+void ClusterClientFrame::sendFreqToRig(QString freq)
+{
+    QString f = freq.remove('.').append(QString("000"));
+    MinosLoggerEvents::SendFreqStrToRig(f);
+}
+
 
 //---------------------------------------------------------------------------
 void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverList)

@@ -53,6 +53,7 @@ signals:
    void Validated();
 
    void BrgStrToRot(QString);
+   void FreqStrToRig(QString);
 
    void CountrySelect(QString cty, BaseContestLog *c);
    void DistrictSelect(QString dist, BaseContestLog *c);
@@ -111,6 +112,7 @@ public:
 
    static void SendFontChanged();
    static void SendBrgStrToRot(QString);
+   static void SendFreqStrToRig(QString);
 
    static void sendUpdateStats(BaseContestLog *c );
    static void sendFiltersChanged(BaseContestLog *c );
