@@ -238,6 +238,7 @@ private slots:
     void sendRadioVolume(int);
     void on_FontChanged();
     void invalidateCacheOnDisconnect();
+    void dxSpotToLog(memoryData::memData);
 public:
     void sendTpm(int t, QString f);
 

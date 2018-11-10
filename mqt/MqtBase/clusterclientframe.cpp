@@ -18,6 +18,7 @@
 #include "contest.h"
 #include "cutils.h"
 #include "base_pch.h"
+#include "rigmemcommondata.h"
 #include "ui_clusterclientframe.h"
 
 
@@ -338,6 +339,16 @@ void ClusterClientFrame::onDxSpotViewClicked(const QModelIndex &index)
         QString freq = dxSpotProxyModel->sourceModel()->data(index).toString();
         sendFreqToRig(freq);
     }
+    else if (index.column() == DXSPOT_CALL_COL_NUM )
+    {
+        // transfer spot details to qsolog
+        memoryData::memData spotData;
+        spotData.callsign = dxSpotProxyModel->data(index).toString();
+        spotData.freq = dxSpotProxyModel->data(dxSpotProxyModel->index(index.row(), FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
+        spotData.mode = memDefData::DEFAULT_MODE;
+        spotData.locator = dxSpotProxyModel->data(dxSpotProxyModel->index(index.row(), DXLOC_COL_NUM)).toString();
+        MinosLoggerEvents::SendSpotToLog(spotData);
+    }
 
 }
 
@@ -347,6 +358,16 @@ void ClusterClientFrame::onSearchSpotViewClicked(const QModelIndex &index)
     {
         QString freq = searchSortProxyModel->sourceModel()->data(index).toString();
         sendFreqToRig(freq);
+    }
+    else if (index.column() == DXSPOT_CALL_COL_NUM )
+    {
+        // transfer spot details to qsolog
+        memoryData::memData spotData;
+        spotData.callsign = searchSortProxyModel->data(index).toString();
+        spotData.freq = searchSortProxyModel->data(searchSortProxyModel->index(index.row(), FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
+        spotData.mode = memDefData::DEFAULT_MODE;
+        spotData.locator = searchSortProxyModel->data(searchSortProxyModel->index(index.row(), DXLOC_COL_NUM)).toString();
+        MinosLoggerEvents::SendSpotToLog(spotData);
     }
 }
 
@@ -359,6 +380,16 @@ void ClusterClientFrame::onCallsignSpotViewClicked(const QModelIndex &index)
         QString freq = callSignProxyModel->sourceModel()->data(index).toString();
         sendFreqToRig(freq);
     }
+    else if (index.column() == DXSPOT_CALL_COL_NUM )
+    {
+        // transfer spot details to qsolog
+        memoryData::memData spotData;
+        spotData.callsign = callSignProxyModel->data(index).toString();
+        spotData.freq = callSignProxyModel->data(callSignProxyModel->index(index.row(), FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
+        spotData.mode = memDefData::DEFAULT_MODE;
+        spotData.locator = callSignProxyModel->data(callSignProxyModel->index(index.row(), DXLOC_COL_NUM)).toString();
+        MinosLoggerEvents::SendSpotToLog(spotData);
+    }
 }
 
 void ClusterClientFrame::onLocatorSpotViewClicked(const QModelIndex &index)
@@ -368,7 +399,19 @@ void ClusterClientFrame::onLocatorSpotViewClicked(const QModelIndex &index)
         QString freq = locatorProxyModel->sourceModel()->data(index).toString();
         sendFreqToRig(freq);
     }
+    else if (index.column() == DXSPOT_CALL_COL_NUM )
+    {
+        // transfer spot details to qsolog
+        memoryData::memData spotData;
+        spotData.callsign = locatorProxyModel->data(index).toString();
+        spotData.freq = locatorProxyModel->data(locatorProxyModel->index(index.row(), FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
+        spotData.mode = memDefData::DEFAULT_MODE;
+        spotData.locator = locatorProxyModel->data(locatorProxyModel->index(index.row(), DXLOC_COL_NUM)).toString();
+        MinosLoggerEvents::SendSpotToLog(spotData);
+    }
 }
+
+
 
 
 void ClusterClientFrame::sendFreqToRig(QString freq)

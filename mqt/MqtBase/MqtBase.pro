@@ -135,7 +135,8 @@ HEADERS += \
     clusterclientframe.h \
     spotdata.h \
     clusterclientfilterdialog.h \
-    calllocinputdialog.h
+    calllocinputdialog.h \
+    rigmemcommondata.h
 
 unix {
     target.path = /usr/lib

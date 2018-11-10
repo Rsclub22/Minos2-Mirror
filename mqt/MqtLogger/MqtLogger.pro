@@ -129,7 +129,6 @@ HEADERS  += \
     qsologframe.h \
     reg1test.h \
     rigcontrolframe.h \
-    rigmemcommondata.h \
     rigmemdialog.h \
     ritlineedit.h \
     rotcontrolframe.h \

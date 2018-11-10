@@ -128,6 +128,10 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), rotPresets, SLOT(selectRotator(QString)));
     connect(rotPresets, SIGNAL(presetTurn(QString)), this, SLOT(presetTurn(QString)));
 
+    // from cluster frame
+    connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToLog(memoryData::memData)), this, SLOT(dxSpotToLog(memoryData::memData)));
+
+
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
 
@@ -868,6 +872,13 @@ void TSingleLogFrame::transferDetails(MatchTreeItem *MatchTreeIndex )
        }
    }
 }
+
+void TSingleLogFrame::dxSpotToLog(memoryData::memData m )
+{
+    transferDetails(m);
+}
+
+
 void TSingleLogFrame::transferDetails(memoryData::memData &m )
 {
     if ( !contest  )
