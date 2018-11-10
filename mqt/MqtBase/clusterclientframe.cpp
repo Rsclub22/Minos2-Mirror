@@ -644,7 +644,7 @@ void ClusterClientFrame::onSearchEditingFinished()
     else
     {
         searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
-        ui->searchLineEdit->selectAll();
+        //ui->searchLineEdit->selectAll();
         searchSortProxyModel->setFilterRegExp("");
     }
 }
