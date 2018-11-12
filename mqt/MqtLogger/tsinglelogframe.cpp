@@ -343,9 +343,10 @@ void TSingleLogFrame::clearScreenLayout()
                 qsa->deleteLater();
                 tw->hide();
                 tw->setParent(this);
-                QWidget *aux = dynamic_cast<StackedInfoFrame *>(tw);
+                StackedInfoFrame *aux = dynamic_cast<StackedInfoFrame *>(tw);
                 if (aux)
                 {
+                    aux->setContest(nullptr);
                     aux->deleteLater();
                 }
             }
@@ -567,18 +568,8 @@ void TSingleLogFrame::closeContest()
     if ( TContestApp::getContestApp() )
     {
        RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
-       qsoModel.initialise(nullptr);
 
-       thisMatchFrame->setContest(nullptr);
-       otherMatchFrame->setContest(nullptr);
-       archiveMatchFrame->setContest(nullptr);
-
-       FKHRigControlFrame->setContest(nullptr);
-       FKHRotControlFrame->setContest(nullptr);
-
-       // Do we need to setContest on all the aux frames as well?
-       // it may be just luck that we get away with it as we wn't be repainting
-
+       clearScreenLayout();
        TContestApp::getContestApp() ->closeFile( contest );
        GJVQSOLogFrame->closeContest();
        contest = nullptr;
