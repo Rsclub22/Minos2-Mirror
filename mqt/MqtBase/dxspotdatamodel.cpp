@@ -23,34 +23,41 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
+    {
              return QVariant();
+    }
 
-         if (orientation == Qt::Horizontal) {
-             switch (section) {
-                case TIME_COL_NUM:
-                    return tr("Time");
-                case FREQ_COL_NUM:
-                    return tr("Freq");
-                case DXSPOT_CALL_COL_NUM:
-                    return tr("Dx");
-                case DXSPOT_CALL_WORKED_COL_NUM:
-                    return tr("Wkd");
-                case DXLOC_COL_NUM:
-                    return tr("Loc");
-                case DXLOC_WORKED_COL_NUM:
-                    return tr("Wkd");
-                case SPOT_CALL_COL_NUM:
-                    return tr("Spotter");
-                case SPOTLOC_COL_NUM:
-                    return tr("Loc");
-                case COMMENT_COL_NUM:
-                    return tr("Comment");
+    if (orientation == Qt::Horizontal)
+    {
+        switch (section) {
+            case TIME_COL_NUM:
+                return tr("Time");
+            case FREQ_COL_NUM:
+                return tr("Freq");
+            case DXSPOT_CALL_COL_NUM:
+                return tr("Dx");
+            case DXSPOT_CALL_WORKED_COL_NUM:
+                return tr("Wkd");
+            case DXLOC_COL_NUM:
+                return tr("Loc");
+            case DXLOC_WORKED_COL_NUM:
+                return tr("Wkd");
+            case SPOT_CALL_COL_NUM:
+                return tr("Spotter");
+            case SPOTLOC_COL_NUM:
+                return tr("Loc");
+            case COMMENT_COL_NUM:
+                return tr("Comment");
 
-                default:
-                  return QVariant();
-             }
-         }
-         return QVariant();
+            default:
+            return QVariant();
+        }
+    }
+    if (orientation == Qt::Vertical)
+    {
+       return tr("Mem");
+    }
+    return QVariant();
 }
 
 int DxSpotDataModel::rowCount(const QModelIndex &parent) const

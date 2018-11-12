@@ -107,6 +107,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader->setDefaultSectionSize(18);
+    verticalHeader->setVisible(false);
 
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));

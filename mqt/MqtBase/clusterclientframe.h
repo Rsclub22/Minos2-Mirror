@@ -178,6 +178,10 @@ private slots:
     void onSpotTabChanged(int index);
     void filtersChanged(int);
     void onSearchEditingFinished();
+    void onDXSpotVertHeaderClicked(int row);
+    void onLocatorSpotVertHeaderClicked(int row);
+    void onCallsignSpotVertHeaderClicked(int row);
+    void onSearchSpotVertHeaderClicked(int row);
 };
 
 #endif // CLUSTERCLIENTFRAME_H

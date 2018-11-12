@@ -121,18 +121,19 @@ void ClusterClientFrame::setupDXSpotView()
     //dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
-    //dxSpotView->setSelectionBehavior( QAbstractItemView::SelectRows );
+    dxSpotView->setSelectionBehavior( QAbstractItemView::SelectRows );
     dxSpotView->setSelectionMode( QAbstractItemView::SingleSelection );
-    dxSpotView->setSelectionBehavior(QAbstractItemView::SelectItems);
-    //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+    //dxSpotView->setSelectionBehavior(QAbstractItemView::SelectItems);
 
     QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
     spotVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     spotVerticalHeader->setDefaultSectionSize(18);
 
 
+
     //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
+    connect(spotVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onDXSpotVertHeaderClicked(int)));
 
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -174,6 +175,7 @@ void ClusterClientFrame::setupSearchSpotView()
 
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(searchView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onSearchSpotViewClicked(const QModelIndex &)));
+    connect(searchVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onSearchSpotVertHeaderClicked(int)));
 
     searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     searchView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -215,6 +217,7 @@ void ClusterClientFrame::setupCallsignSpotView()
 
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(callSignView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCallsignSpotViewClicked(const QModelIndex &)));
+    connect(callSignVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onCallSignSpotVertHeaderClicked(int)));
 
     callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     callSignView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -252,6 +255,8 @@ void ClusterClientFrame::setupLocatorSpotView()
 
     //connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(locatorView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onLocatorSpotViewClicked(const QModelIndex &)));
+    connect(locatorViewVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onLocatorSpotVertHeaderClicked(int)));
+
 
     locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     locatorView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -352,6 +357,11 @@ void ClusterClientFrame::onDxSpotViewClicked(const QModelIndex &index)
 
 }
 
+void ClusterClientFrame::onDXSpotVertHeaderClicked(int row)
+{
+    int r = row;
+}
+
 void ClusterClientFrame::onSearchSpotViewClicked(const QModelIndex &index)
 {
     if (index.column() == FREQ_COL_NUM)
@@ -371,7 +381,10 @@ void ClusterClientFrame::onSearchSpotViewClicked(const QModelIndex &index)
     }
 }
 
-
+void ClusterClientFrame::onSearchSpotVertHeaderClicked(int row)
+{
+    int r = row;
+}
 
 void ClusterClientFrame::onCallsignSpotViewClicked(const QModelIndex &index)
 {
@@ -390,6 +403,11 @@ void ClusterClientFrame::onCallsignSpotViewClicked(const QModelIndex &index)
         spotData.locator = callSignProxyModel->data(callSignProxyModel->index(index.row(), DXLOC_COL_NUM)).toString();
         MinosLoggerEvents::SendSpotToLog(spotData);
     }
+}
+
+void ClusterClientFrame::onCallsignSpotVertHeaderClicked(int row)
+{
+    int r = row;
 }
 
 void ClusterClientFrame::onLocatorSpotViewClicked(const QModelIndex &index)
@@ -411,7 +429,10 @@ void ClusterClientFrame::onLocatorSpotViewClicked(const QModelIndex &index)
     }
 }
 
-
+void ClusterClientFrame::onLocatorSpotVertHeaderClicked(int row)
+{
+    int r = row;
+}
 
 
 void ClusterClientFrame::sendFreqToRig(QString freq)
