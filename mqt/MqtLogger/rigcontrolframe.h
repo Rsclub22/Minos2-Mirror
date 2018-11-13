@@ -200,7 +200,7 @@ private:
 
     void setRunMemoryData(int memoryNumber, memoryData::memData m);
 
-    LoggerContestLog *ct;
+    LoggerContestLog *ct = nullptr;
 
     QMap<int, RunMemoryButton *> runButtonMap;
     QMap<int, TuneMemoryButton *> tuneButtonMap;

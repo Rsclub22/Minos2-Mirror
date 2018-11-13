@@ -36,7 +36,7 @@ class RotControlFrame : public QFrame
 {
     Q_OBJECT
 
-    LoggerContestLog *ct;
+    LoggerContestLog *ct = nullptr;
 public:
     explicit RotControlFrame(QWidget *parent);
     ~RotControlFrame();
