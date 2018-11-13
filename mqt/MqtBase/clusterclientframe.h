@@ -153,6 +153,7 @@ private:
     void setupCallsignSpotView();
     void setupLocatorSpotView();
     void sendFreqToRig(QString freq);
+    memoryData::memData getSpotDataToMemoryVariable(int);
 private slots:
 
 

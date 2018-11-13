@@ -48,6 +48,8 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(RotBearingChanged(int,BaseContestLog*)), this, SLOT(onRotBearingChanged(int,BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
+    // from cluster frame
+    connect(&MinosLoggerEvents::mle, SIGNAL(DXSpotToMemory(memoryData::memData)), this, SLOT(DXSpotToMemory(memoryData::memData)));
 
     reloadColumns();
 
@@ -120,6 +122,43 @@ void RigMemoryFrame::onMenuShow()
     editAction->setEnabled(buttonNumber >= 0);
     clearAction->setEnabled(buttonNumber >= 0);
 }
+
+
+// this could do with tidying up!
+void RigMemoryFrame::DXSpotToMemory(memoryData::memData m)
+{
+    memoryData::memData logData = m;
+    int n = -1;
+    int mcount = ct->rigMemories.size();
+    for (int i = 0; i <= mcount; i ++)  // <= - extra one gets blank
+    {
+        memoryData::memData m = ct->getRigMemoryData(i);
+
+        if ( m.callsign == memDefData::DEFAULT_CALLSIGN)
+        {
+            n = i;
+            break;
+        }
+    }
+
+    if (n == -1)
+    {
+        mShowMessage("Panic", this);
+        return;
+    }
+
+    //RigMemDialog memDialog(this);
+    //memDialog.setLogData(&logData, buttonNumber, ct);
+    //memDialog.setWindowTitle(QString("M%1 - Write").arg(QString::number(buttonNumber + 1)));
+   //if ( memDialog.exec() == QDialog::Accepted)
+   //{
+       setRigMemoryData(n, logData);
+
+       sendUpdateMemories();
+   //}
+}
+
+
 void RigMemoryFrame::on_rigMemTable_doubleClicked(const QModelIndex &/*index*/)
 {
     editActionSelected();

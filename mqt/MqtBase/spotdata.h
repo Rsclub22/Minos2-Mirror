@@ -32,8 +32,9 @@ public:
     QString dxModeMaskStr;
     QString dxCall;
     QString dxLocator;
-    QString dxCallWorked;
-    QString dxLocatorWorked;
+    bool dxCallWorked;
+    bool dxLocatorWorked;
+    bool sentToMemory;
     QString spotterCall;
     QString spotterLocator;
     QString spotComment;

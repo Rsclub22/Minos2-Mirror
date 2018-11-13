@@ -207,6 +207,11 @@ void MinosLoggerEvents::SendSpotToLog(memoryData::memData spotData)
     emit mle.DxSpotToLog(spotData);
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::SendSpotToMemory(memoryData::memData spotData)
+{
+    emit mle.DXSpotToMemory(spotData);
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::sendXferEnabled(bool s, BaseContestLog *c, QString basename)
 {
     emit mle.XferEnabled(s, c, basename);
