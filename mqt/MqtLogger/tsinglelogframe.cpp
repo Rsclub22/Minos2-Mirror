@@ -326,7 +326,16 @@ createScreenComponents()
 }
 void TSingleLogFrame::clearScreenLayout()
 {
-    // clear down the screen elements, but don't delete them - they will be used to rebuild the screen
+    // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
+    // BUT on contest creation, the contest address may change, so clear the contest
+
+    FKHRigControlFrame->setContest(nullptr);
+    FKHRotControlFrame->setContest(nullptr);
+    rotPresets->setContest(nullptr);
+    thisMatchFrame->setContest(nullptr);
+    otherMatchFrame->setContest(nullptr);
+    archiveMatchFrame->setContest(nullptr);
+
     while (singleLogFrameSplitter->count())
     {
         MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
