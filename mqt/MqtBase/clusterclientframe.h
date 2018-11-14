@@ -126,6 +126,7 @@ private:
     CallsignSortFilterProxyModel* callSignProxyModel;
     LocatorSortFilterProxyModel* locatorProxyModel;
 
+
     QTableView* dxSpotView;
     QTableView* searchView;
     QTableView* callSignView;

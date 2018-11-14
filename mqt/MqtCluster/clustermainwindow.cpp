@@ -504,9 +504,9 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
     }
 
 
-    if (comment.contains(fullLocExp))      // look for a single locator, which we assume is DX locator
+    if (comment.count(fullLocExp) || comment.count(partLocExp))      // look for a single locator, which we assume is DX locator
     {
-        trace(QString("Look for dxLoc only"));
+        trace(QString("Only locator in comment - extract"));
         dxLoc = extractLocator(comment, fullLocExp, partLocExp);
     }
     trace(QString("Extracted dxLoc = %1 spotLoc= %2").arg(dxLoc).arg(spotLoc));

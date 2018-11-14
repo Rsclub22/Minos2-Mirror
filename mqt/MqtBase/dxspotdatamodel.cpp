@@ -22,10 +22,10 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
 
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    //if (role != Qt::DisplayRole)
-    //{
-    //         return QVariant();
-    //}
+    if (role != Qt::DisplayRole)
+    {
+             return QVariant();
+    }
 
     if (orientation == Qt::Horizontal)
     {
