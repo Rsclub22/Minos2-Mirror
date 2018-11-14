@@ -26,6 +26,7 @@ class ClusterMainWindow;
 const QString CLUSTER_PATH = "./Configuration/Cluster/";
 const QString CLUSTER_SITES = "ClusterSites.ini";
 const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
+const QString CLUSTER_START_FILE = "cluster_start.txt";
 
 
 const QString USER_COMMAND1 = "Ctrl+1";
@@ -124,10 +125,16 @@ private slots:
 
 
     void onSpotTabChanged(int index);
+    void disconnectTimeout();
+
+signals:
+
+    void disconnectTimerfinished();
 private:
     Ui::ClusterMainWindow *ui;
     StdInReader stdinReader;
     class QTimer LogTimer;
+    QTimer *disconnectTimer;
 
     QString appName;
     QLabel* status;
@@ -180,6 +187,8 @@ private:
     bool loginSuccess;
     bool nodeConnected;
 
+    bool reconnectFlag;
+
     QString geoStr;         // geometry registry location
 
 
@@ -191,7 +200,7 @@ private:
 
     void closeEvent(QCloseEvent *event);
     void disconnectNode();
-    void connectToSelectedHost(QString nodeName);
+    void connectToHost(QString hostName);
     void getBand(QString freq, QString &band, QString &bandMask);
 
     void getStartCommands();
@@ -207,6 +216,9 @@ private:
     void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment);
     void setAllTabsColor(QColor c);
     QString extractLocator(const QString &text, const QRegExp fullLocExp, const QRegExp partLocExp);
+    void handleStartFile();
+    void showStatusMessage(const QString &message);
+    void startDisconnectTimer(int time);
 };
 
 #endif // CLUSTERMAINWINDOW_H

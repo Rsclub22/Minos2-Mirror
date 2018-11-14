@@ -119,6 +119,6 @@ const QString ADD_CALLSIGN_KEY = "Ctrl-a";
 const QString EDIT_CALLSIGN_KEY = "Ctrl-e";
 const QString DEL_CALLSIGN_KEY = "Ctrl-d";
 
-
+const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
 
 #endif // CLUSTERCOMMON_H

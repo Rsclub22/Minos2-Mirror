@@ -22,6 +22,7 @@
 #include "clustercommon.h"
 #include "rigutils.h"
 #include "ui_clustermainwindow.h"
+#include "fileutils.h"
 
 #include <QDebug>
 
@@ -30,7 +31,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     ui(new Ui::ClusterMainWindow),
     loginStart(false),
     loginSuccess(false),
-    nodeConnected(false)
+    nodeConnected(false),
+    reconnectFlag(false)
 {
     ui->setupUi(this);
 
@@ -45,6 +47,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     Q_UNUSED(rpc);
 
     createCloseEvent();
+
+    disconnectTimer = new QTimer();
+    connect(disconnectTimer, SIGNAL(timeout()), this, SLOT(disconnectTimeout()));
 
     connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
     LogTimer.start(100);
@@ -77,10 +82,6 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     // spotTimeToLive
     setupCluster->readGeneralSettings();
 
-    //QString spotLoc;
-    //QString dxLoc;
-    //QString comment = QString("IO91SN tr ");
-    //findLocInComment(spotLoc, dxLoc, comment);
 
 
     dxSpotDataModel = new DxSpotDataModel();
@@ -152,7 +153,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
 
     // get current node from file and then connect to host
-    connectToSelectedHost(setupCluster->getCurrentNodeName());
+    currentNodeName = setupCluster->getCurrentNodeName();
+    connectToHost(currentNodeName);
 
 
 }
@@ -227,7 +229,7 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
 {
     //QString selNodeName = nodeName;
 
-    if ((nodeName.isEmpty() && nodeConnected) || nodeName == "")
+    if ((nodeName.isEmpty() && nodeConnected))
     {
         disconnectNode();
         currentNodeName = "";
@@ -238,15 +240,31 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
     }
     else
     {
-        if (currentNodeName == nodeName)
+        if (nodeConnected)
         {
+            if (currentNodeName != nodeName)
+            {
+                currentNodeName = nodeName;
+                setupCluster->saveCurrentNodeName(currentNodeName);
+            }
+
             //reconnect
             disconnectNode();
-            client->connectToHost(currentAddress, currentPort.toUShort());
+            // wait for disconnection, set flag to reconnect in loggedout slot
+            reconnectFlag = true;
+            startDisconnectTimer(15000);
+            QEventLoop loop;
+            QObject::connect( this, SIGNAL( disconnectTimerfinished() ), &loop, SLOT( quit() ) );
+            loop.exec();
+
+            // error if got here
+            showStatusMessage(QString("Disconnect Timeout"));
+            trace(QString("Connect to Node - Disconnect Timeout"));
         }
         else
         {
-            connectToSelectedHost(nodeName);
+            currentNodeName = nodeName;
+            connectToHost(nodeName);
             setupCluster->saveCurrentNodeName(currentNodeName);
         }
 
@@ -257,16 +275,16 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
 }
 
 
-void ClusterMainWindow::connectToSelectedHost(QString nodeName)
+void ClusterMainWindow::connectToHost(QString hostName)
 {
 
-    currentNodeName = nodeName;
+    //currentNodeName = nodeName;
 
-    if (setupCluster->doesClusterNameExist(currentNodeName))
+    if (setupCluster->doesClusterNameExist(hostName))
     {
-        ui->nodeCb->setCurrentText(currentNodeName);
+        ui->nodeCb->setCurrentText(hostName);
         // get current node data
-        QStringList nd = setupCluster->getClusterInfo(currentNodeName);
+        QStringList nd = setupCluster->getClusterInfo(hostName);
         currentNodeName = nd[0];
         currentAddress = nd[1];
         currentPort = nd[2];
@@ -290,11 +308,14 @@ void ClusterMainWindow::connectToSelectedHost(QString nodeName)
 void ClusterMainWindow::connectionEstab()
 {
     nodeConnected = true;
+    showStatusMessage(QString("Connected to: %1 %2 %3").arg(currentNodeName).arg(currentAddress).arg(currentPort));
     trace(QString("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort));
 }
 
 void ClusterMainWindow::connectionError(QAbstractSocket::SocketError error)
 {
+    nodeConnected = false;
+    showStatusMessage(QString("Connection Error: Error Code %1").arg(QString::number(error)));
     trace(QString("Connection failed error %1").arg(error));
 }
 
@@ -311,10 +332,28 @@ void ClusterMainWindow::logIn()
 void ClusterMainWindow::loggedOut()
 {
     trace(QString("Logged Out of node  %1").arg(currentNodeName));
-    currentNodeName = "";
-    currentAddress = "";
-    currentPort = "";
     nodeConnected = false;
+    loginStart = false;
+    loginSuccess = false;
+    showStatusMessage((QString("Disconnected")));
+    if (reconnectFlag)
+    {
+
+        trace(QString("Logged Out - Reconnect to %1 ").arg(currentNodeName));
+        reconnectFlag = false;
+        disconnectTimer->stop();
+        connectToHost(currentNodeName);
+    }
+    else
+    {
+        currentNodeName = "";
+        currentAddress = "";
+        currentPort = "";
+
+    }
+
+
+
 
 }
 
@@ -349,6 +388,7 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
             txText(dxCluster->setNameMsg(currentUserName));
             txText(dxCluster->setQthMsg(currentUserQTH));
             txText(dxCluster->setQraMsg(currentUserLocator));
+            handleStartFile();          // send user commands
         }
 
     }
@@ -357,6 +397,40 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
 }
 
 
+void ClusterMainWindow::handleStartFile()
+{
+    QStringList listCmds;
+
+    if (FileExists(CLUSTER_PATH + CLUSTER_START_FILE))
+    {
+        QFile inputFile(CLUSTER_PATH + CLUSTER_START_FILE);
+        if (inputFile.open(QIODevice::ReadOnly))
+        {
+           QTextStream in(&inputFile);
+           while (!in.atEnd())
+           {
+              QString line = in.readLine().append('\n');
+              listCmds.append(line);
+           }
+           inputFile.close();
+        }
+    }
+
+    if (!listCmds.isEmpty())
+    {
+        for (int i = 0; i < listCmds.count(); ++i)
+        {
+            QString cmd = listCmds[i];
+            if (cmd != "")
+            {
+                if (cmd[0] == CLUSTER_START_COMMENT_DELIMTER)
+                {
+                    txText(cmd);
+                }
+            }
+        }
+    }
+}
 
 
 void ClusterMainWindow::parseDX(QString txt)
@@ -371,9 +445,9 @@ void ClusterMainWindow::parseDX(QString txt)
             trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12")
             .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
             // Display
-            QString displayFreq = alignFreqRight(dxFreq);
+            //QString displayFreq = alignFreqRight(dxFreq);
             clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
-            dxSpotDataModel->rowData = new SpotData(spotTime, displayFreq, dxBandMask, dxModeMask, dxCall, dxLocator, spotCall, spotLocator, spotComment);
+            dxSpotDataModel->rowData = new SpotData(spotTime, dxFreq, dxBandMask, dxModeMask, dxCall, dxLocator, spotCall, spotLocator, spotComment);
             //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             dxSpotDataModel->insertRows(0, 1);
 
@@ -540,7 +614,7 @@ void ClusterMainWindow::sendText()
 
 void ClusterMainWindow::txText(QString msg)
 {
-    if (connected)
+    if (loginSuccess)
     {
        client->sendData(msg);
     }
@@ -696,7 +770,7 @@ void ClusterMainWindow::userCmdButtonRead(int buttonNumber)
                 {
                     d[1].append('\n');
                     trace(QString("UserCmdButton Read - Send Command to cluster = %1").arg(d[1]));
-                    txText(userCommands[buttonNumber]);
+                    txText(d[1]);
                 }
             }
 
@@ -851,3 +925,22 @@ void ClusterMainWindow:: saveUserCommandString(int buttonNumber, ClusterUserComm
 
 }
 
+void ClusterMainWindow::showStatusMessage(const QString &message)
+{
+    status->setText(message);
+}
+
+void ClusterMainWindow::startDisconnectTimer(int time)
+{
+    disconnectTimer->start(time);
+}
+
+
+void ClusterMainWindow::disconnectTimeout()
+{
+
+    trace(QString("Cluster Server - Disconnect Timeout"));
+    //msgComplete = false;
+    //retCode = -52;
+    emit disconnectTimerfinished();
+}
