@@ -434,7 +434,7 @@ void ClusterClientFrame::onCallsignSpotViewClicked(const QModelIndex &index)
     }
 }
 
-void ClusterClientFrame::onCallsignSpotVertHeaderClicked(int row)
+void ClusterClientFrame::onCallSignSpotVertHeaderClicked(int row)
 {
     // check if spot has been sent to memory
     if (!callSignProxyModel->data(callSignProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool())

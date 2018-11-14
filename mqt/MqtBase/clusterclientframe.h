@@ -181,7 +181,7 @@ private slots:
     void onSearchEditingFinished();
     void onDXSpotVertHeaderClicked(int row);
     void onLocatorSpotVertHeaderClicked(int row);
-    void onCallsignSpotVertHeaderClicked(int row);
+    void onCallSignSpotVertHeaderClicked(int);
     void onSearchSpotVertHeaderClicked(int row);
 };
 
