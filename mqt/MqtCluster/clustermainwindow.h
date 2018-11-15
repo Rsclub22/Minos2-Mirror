@@ -22,12 +22,18 @@ namespace Ui {
 class ClusterMainWindow;
 }
 
+#define TEST_SPOTS
 
 const QString CLUSTER_PATH = "./Configuration/Cluster/";
 const QString CLUSTER_SITES = "ClusterSites.ini";
 const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
 const QString CLUSTER_START_FILE = "cluster_start.txt";
 
+#ifdef TEST_SPOTS
+
+const QString CLUSTER_SPOT_TEST_FILE = "testspots.txt";
+
+#endif
 
 const QString USER_COMMAND1 = "Ctrl+1";
 const QString USER_COMMAND2 = "Ctrl+2";
@@ -219,6 +225,14 @@ private:
     void handleStartFile();
     void showStatusMessage(const QString &message);
     void startDisconnectTimer(int time);
+#ifdef TEST_SPOTS
+    QTimer* spotTestTimer;
+    QStringList testSpotList;
+    int spotNum = 0;
+private slots:
+    void testSpotPbClicked();
+    void spotTimerTimeOut();
+#endif
 };
 
 #endif // CLUSTERMAINWINDOW_H

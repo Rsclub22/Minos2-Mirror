@@ -60,6 +60,19 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     loadVhfAndUpBands(bands);
 
+#ifdef TEST_SPOTS
+    ui->testSpotsPb->setVisible(true);
+    ui->testSpotsLab->setVisible(true);
+    connect(ui->testSpotsPb, SIGNAL(clicked()), this, SLOT(testSpotPbClicked()));
+    spotTestTimer = new QTimer();
+    connect(spotTestTimer, SIGNAL(timeout()), this, SLOT(spotTimerTimeOut()));
+
+#elif !defined TEST_SPOTS
+    ui->testSpotsPb->setVisible(false);
+    ui->testSpotsLab->setVisible(false);
+
+#endif
+
 
     QSettings settings;
     geoStr = QString("clusterServer/geometry");
@@ -465,6 +478,8 @@ void ClusterMainWindow::parseDX(QString txt)
 
 int ClusterMainWindow::upackSpot(QString txt)
 {
+    trace(QString("raw spot = %1").arg(txt));
+
     int timePos = 0;
 
     // clear spot data
@@ -944,3 +959,60 @@ void ClusterMainWindow::disconnectTimeout()
     //retCode = -52;
     emit disconnectTimerfinished();
 }
+
+
+/****************************** Test Routine *********************************/
+
+#ifdef TEST_SPOTS
+
+
+void ClusterMainWindow::testSpotPbClicked()
+{
+    testSpotList.clear();
+
+    // get list of test spots from file
+    if (FileExists(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE))
+    {
+        QFile inputFile(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE);
+        if (inputFile.open(QIODevice::ReadOnly))
+        {
+           QTextStream in(&inputFile);
+           while (!in.atEnd())
+           {
+              QString line = in.readLine().append('\n');
+              testSpotList.append(line);
+           }
+           inputFile.close();
+        }
+    }
+    spotNum = 0;
+    loginSuccess = true;  // spoof login to allow parse of spots
+    spotTestTimer->start(1000);
+
+}
+
+void ClusterMainWindow::spotTimerTimeOut()
+{
+    QString spot;
+    QTime time;
+    QString timeStr;
+    if (spotNum >= testSpotList.count())
+    {
+        spotTestTimer->stop();
+        return;
+    }
+    if (!testSpotList.isEmpty())
+    {
+        spot = testSpotList[spotNum].remove('\n');
+        time = QDateTime::currentDateTimeUtc().time();
+        timeStr = QString("%1%2Z").arg(time.hour()).arg(time.minute());
+        spot = spot.append(timeStr).append('\n');
+        parseDX(spot);
+        spotNum++;
+
+    }
+
+}
+
+
+#endif
