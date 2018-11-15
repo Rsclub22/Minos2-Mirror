@@ -56,6 +56,8 @@ signals:
    void BrgStrToRot(QString);
    void FreqStrToRig(QString);
    void DxSpotToLog(memoryData::memData);
+   void DXSpotToMemory(memoryData::memData);
+
 
    void CountrySelect(QString cty, BaseContestLog *c);
    void DistrictSelect(QString dist, BaseContestLog *c);
@@ -116,6 +118,7 @@ public:
    static void SendBrgStrToRot(QString);
    static void SendFreqStrToRig(QString);
    static void SendSpotToLog(memoryData::memData);
+   static void SendSpotToMemory(memoryData::memData);
 
    static void sendUpdateStats(BaseContestLog *c );
    static void sendFiltersChanged(BaseContestLog *c );

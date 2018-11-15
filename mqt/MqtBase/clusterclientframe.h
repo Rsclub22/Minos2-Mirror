@@ -126,6 +126,7 @@ private:
     CallsignSortFilterProxyModel* callSignProxyModel;
     LocatorSortFilterProxyModel* locatorProxyModel;
 
+
     QTableView* dxSpotView;
     QTableView* searchView;
     QTableView* callSignView;
@@ -153,6 +154,7 @@ private:
     void setupCallsignSpotView();
     void setupLocatorSpotView();
     void sendFreqToRig(QString freq);
+    memoryData::memData getSpotDataToMemoryVariable(int);
 private slots:
 
 
@@ -180,7 +182,7 @@ private slots:
     void onSearchEditingFinished();
     void onDXSpotVertHeaderClicked(int row);
     void onLocatorSpotVertHeaderClicked(int row);
-    void onCallsignSpotVertHeaderClicked(int row);
+    void onCallSignSpotVertHeaderClicked(int);
     void onSearchSpotVertHeaderClicked(int row);
 };
 

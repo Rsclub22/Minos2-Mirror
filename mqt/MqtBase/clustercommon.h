@@ -64,6 +64,7 @@ const int SPOTLOC_COL_NUM = 7;
 const int COMMENT_COL_NUM = 8;
 const int DXBANDMASK_COL_NUM = 9;
 const int MODEMASK_COL_NUM = 10;
+const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 11;
 
 const int TIME_COL_WIDTH = 40;
 const int FREQ_COL_WIDTH = 60;
@@ -75,8 +76,8 @@ const int SPOT_CALL_COL_WIDTH = 60;
 const int SPOTLOC_COL_WIDTH = 50;
 const int COMMENT_COL_WIDTH = 170;
 
-const QString BOOL_YES = "Y";
-const QString BOOL_NO = "";
+const bool BOOL_YES = true;
+const bool BOOL_NO = false;
 
 const QChar SPOT_DATA_SEPERATOR = ':';
 const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
@@ -106,8 +107,18 @@ const int FREQFILTERUP = 1 << 0;
 const int CALLSIGNUP = 1 << 1;
 const int LOCATORUP = 1 << 2;
 
+// Colour of text for worked callsign and locators in cluster views
+const QColor CALLSIGN_WORKED_COLOUR = Qt::red;
+const QColor LOCATOR_WORKED_COLOUR = Qt::red;
+const QColor SPOT_TO_MEMORY = Qt::blue;
+const QColor NO_SPOT_TO_MEMORY = Qt::black;
+
+
 // Callsign Edit Shortcuts
 const QString ADD_CALLSIGN_KEY = "Ctrl-a";
 const QString EDIT_CALLSIGN_KEY = "Ctrl-e";
 const QString DEL_CALLSIGN_KEY = "Ctrl-d";
+
+const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
+
 #endif // CLUSTERCOMMON_H

@@ -99,6 +99,7 @@ private slots:
     void clearAllActionSelected();
     void clearWorkedActionSelected();
 
+    void DXSpotToMemory(memoryData::memData);
     void onMenuShow();
 
     void on_rigMemTable_doubleClicked(const QModelIndex &index);

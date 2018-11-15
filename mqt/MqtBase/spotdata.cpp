@@ -28,6 +28,7 @@ SpotData::SpotData(QString _spotTime, QString _dxFreq, QString _dxFreqMaskStr, Q
     dxLocator = _dxLocator;
     dxCallWorked = BOOL_NO;
     dxLocatorWorked = BOOL_NO;
+    sentToMemory = BOOL_NO;
     spotterCall = _spotterCall;
     spotterLocator = _spotterLocator;
     spotComment = comment;
@@ -43,6 +44,7 @@ void SpotData::operator = (const SpotData& spd)
     dxLocator = spd.dxLocator;
     dxCallWorked = spd.dxCallWorked;
     dxLocatorWorked = spd.dxLocatorWorked;
+    sentToMemory = spd.sentToMemory;
     spotterCall = spd.spotterCall;
     spotterLocator = spd.spotterLocator;
     spotComment = spd.spotComment;

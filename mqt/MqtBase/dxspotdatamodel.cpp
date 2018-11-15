@@ -55,7 +55,24 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
     }
     if (orientation == Qt::Vertical)
     {
-       return tr("Mem");
+       if (role == Qt::DisplayRole)
+       {
+           return tr("Mem");
+       }
+       else if (role == Qt::ForegroundRole)
+       {
+           SpotData* dxSpot = dxSpotData.at(section);
+           if (dxSpot->sentToMemory)
+           {
+               QColor c = SPOT_TO_MEMORY;
+               return c;
+           }
+           else
+           {
+               QColor c = NO_SPOT_TO_MEMORY;
+               return c;
+           }
+       }
     }
     return QVariant();
 }
@@ -95,53 +112,73 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
     }
 
     QVariant d;
+    SpotData* dxSpot = dxSpotData.at(index.row());
 
     if (role == Qt::DisplayRole)
     {
-        SpotData* dxSpot = dxSpotData.at(index.row());
-
         int col = index.column();
 
         switch (col)
         {
             case TIME_COL_NUM:
                 d = dxSpot->spotTime;
-            break;
+                break;
             case FREQ_COL_NUM:
                 d = dxSpot->dxFreq;
-            break;
+                break;
             case DXBANDMASK_COL_NUM:
                 d = dxSpot->dxFreqMaskStr;
-            break;
+                break;
             case MODEMASK_COL_NUM:
                 d = dxSpot->dxModeMaskStr;
-            break;
+                break;
             case DXSPOT_CALL_COL_NUM:
                 d = dxSpot->dxCall;
-            break;
+                break;
             case DXSPOT_CALL_WORKED_COL_NUM:
                 d = dxSpot->dxCallWorked;
-            break;
+                break;
             case DXLOC_COL_NUM:
                 d = dxSpot->dxLocator;
-            break;
+                break;
             case DXLOC_WORKED_COL_NUM:
                 d = dxSpot->dxLocatorWorked;
-            break;
+                break;
             case SPOT_CALL_COL_NUM:
                 d = dxSpot->spotterCall;
-            break;
+                break;
             case SPOTLOC_COL_NUM:
                 d = dxSpot->spotterLocator;
-            break;
+                break;
             case COMMENT_COL_NUM:
                 d = dxSpot->spotComment;
-            break;
+                break;
             default:
                 d = "";
 
         }
 
+        return d;
+
+    }
+    else if (role == Qt::ForegroundRole)
+    {
+        if (index.column() == DXSPOT_CALL_COL_NUM)
+        {
+            if (dxSpot->dxCallWorked == BOOL_YES)
+            {
+                QColor colour = CALLSIGN_WORKED_COLOUR;
+                return colour;
+            }
+        }
+        else if (index.column() == DXLOC_COL_NUM)
+        {
+            if (dxSpot->dxLocatorWorked == BOOL_YES)
+            {
+                QColor colour = LOCATOR_WORKED_COLOUR;
+                return colour;
+            }
+        }
     }
 
     return d;
@@ -161,30 +198,33 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             {
                 case TIME_COL_NUM :
                     dxSpot->spotTime = value.toString();
-                break;
+                    break;
                 case FREQ_COL_NUM:
                     dxSpot->dxFreq = value.toString();
-                break;
+                    break;
                 case DXSPOT_CALL_COL_NUM:
                     dxSpot->dxCall = value.toString();
-                break;
+                    break;
                 case DXSPOT_CALL_WORKED_COL_NUM:
-                    dxSpot->dxCallWorked = value.toString();
+                    dxSpot->dxCallWorked = value.toBool();
+                    break;
                 case DXLOC_COL_NUM:
                     dxSpot->dxLocator = value.toString();
-                break;
+                    break;
                 case DXLOC_WORKED_COL_NUM:
-                    dxSpot->dxLocatorWorked = value.toString();
-                break;
+                    dxSpot->dxLocatorWorked = value.toBool();
+                    break;
                 case SPOT_CALL_COL_NUM:
                     dxSpot->spotterCall = value.toString();
-                break;
+                    break;
                 case SPOTLOC_COL_NUM:
                     dxSpot->spotterLocator = value.toString();
-                break;
+                    break;
                 case COMMENT_COL_NUM:
                     dxSpot->spotComment = value.toString();
-                break;
+                    break;
+                case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
+                    dxSpot->sentToMemory = value.toBool();
                 default:
                     return false;
 
