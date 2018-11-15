@@ -111,7 +111,7 @@ public:
 
 private:
     Ui::ClusterClientFrame *ui;
-    BaseContestLog *ct;
+    BaseContestLog *ct = nullptr;
     ClusterClientFilterDialog *filterSetup;
 
     QTimer* purgeTimer;

@@ -221,7 +221,7 @@ void ClusterClientFrame::setupCallsignSpotView()
 
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(callSignView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCallsignSpotViewClicked(const QModelIndex &)));
-    connect(callSignVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onCallSignSpotVertHeaderClicked(int)));
+    connect(callSignVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onCallsignSpotVertHeaderClicked(int)));
 
     callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     callSignView->setColumnHidden(MODEMASK_COL_NUM, true);

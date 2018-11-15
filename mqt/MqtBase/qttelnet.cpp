@@ -1122,9 +1122,11 @@ void QtTelnet::sendSync()
         return;
     d->socket->flush(); // Force the socket to send all the pending data before
                         // sending the SYNC sequence.
-    int s = d->socket->socketDescriptor();
-    char tosend = static_cast<char>(Common::DM);
-    ::send(static_cast<SOCKET>(s), &tosend, 1, MSG_OOB); // Send the DATA MARK as out-of-band
+    QByteArray oob(Common::DM, 1);
+    d->socket->write(oob);
+//    int s = d->socket->socketDescriptor();
+//    char tosend = static_cast<char>(Common::DM);
+//    ::send(static_cast<SOCKET>(s), &tosend, 1, MSG_OOB); // Send the DATA MARK as out-of-band
 }
 
 /*!

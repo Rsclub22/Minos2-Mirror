@@ -326,7 +326,16 @@ createScreenComponents()
 }
 void TSingleLogFrame::clearScreenLayout()
 {
-    // clear down the screen elements, but don't delete them - they will be used to rebuild the screen
+    // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
+    // BUT on contest creation, the contest address may change, so clear the contest
+
+    FKHRigControlFrame->setContest(nullptr);
+    FKHRotControlFrame->setContest(nullptr);
+    rotPresets->setContest(nullptr);
+    thisMatchFrame->setContest(nullptr);
+    otherMatchFrame->setContest(nullptr);
+    archiveMatchFrame->setContest(nullptr);
+
     while (singleLogFrameSplitter->count())
     {
         MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
@@ -343,9 +352,10 @@ void TSingleLogFrame::clearScreenLayout()
                 qsa->deleteLater();
                 tw->hide();
                 tw->setParent(this);
-                QWidget *aux = dynamic_cast<StackedInfoFrame *>(tw);
+                StackedInfoFrame *aux = dynamic_cast<StackedInfoFrame *>(tw);
                 if (aux)
                 {
+                    aux->setContest(nullptr);
                     aux->deleteLater();
                 }
             }
@@ -567,18 +577,8 @@ void TSingleLogFrame::closeContest()
     if ( TContestApp::getContestApp() )
     {
        RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
-       qsoModel.initialise(nullptr);
 
-       thisMatchFrame->setContest(nullptr);
-       otherMatchFrame->setContest(nullptr);
-       archiveMatchFrame->setContest(nullptr);
-
-       FKHRigControlFrame->setContest(nullptr);
-       FKHRotControlFrame->setContest(nullptr);
-
-       // Do we need to setContest on all the aux frames as well?
-       // it may be just luck that we get away with it as we wn't be repainting
-
+       clearScreenLayout();
        TContestApp::getContestApp() ->closeFile( contest );
        GJVQSOLogFrame->closeContest();
        contest = nullptr;
