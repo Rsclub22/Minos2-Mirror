@@ -144,6 +144,8 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
     dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
     dxSpotView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
     dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
@@ -189,6 +191,8 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
     searchView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
     searchView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+    searchView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+    searchView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
     searchView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     searchView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     searchView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
@@ -232,6 +236,8 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
     callSignView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
     callSignView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+    callSignView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+    callSignView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
     callSignView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
     callSignView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     callSignView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
@@ -274,6 +280,8 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
     locatorView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
     locatorView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+    locatorView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+    locatorView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
     locatorView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     locatorView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     locatorView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
@@ -434,7 +442,7 @@ void ClusterClientFrame::onCallsignSpotViewClicked(const QModelIndex &index)
     }
 }
 
-void ClusterClientFrame::onCallSignSpotVertHeaderClicked(int row)
+void ClusterClientFrame::onCallsignSpotVertHeaderClicked(int row)
 {
     // check if spot has been sent to memory
     if (!callSignProxyModel->data(callSignProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool())
@@ -555,14 +563,95 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
                     }
                 }
 
-                //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
-                dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXBANDMASK], spotlist[DXMODEMASK], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
+                // check to see if call or locator worked
+                bool callWorked = false;
+                bool locWorked = false;
+                checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+
+                double dist = 0;
+                int brg = 0;
+                QString distance;
+                QString bearing;
+                if (!spotlist[DXLOCATOR].isEmpty())
+                {
+                    calcSpotDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
+                    distance = QString::number(static_cast< int> ( dist));
+                    bearing =  QString::number(brg);
+                }
+
+                dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ],
+                                                        spotlist[DXBANDMASK], spotlist[DXMODEMASK],
+                                                        spotlist[DXCALL], callWorked,
+                                                        spotlist[DXLOCATOR], locWorked,
+                                                        distance, bearing,
+                                                        spotlist[SPOTCALL], spotlist[SPOTLOCATOR],
+                                                        spotlist[SPOTCOMMENT]);
                 dxSpotDataModel->insertRows(0, 1);
 
             }
         }
     }
 }
+
+
+void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bool* callWorked, bool* locatorWorked)
+{
+    if (ct)
+    {
+        Callsign mcs(callsign);
+        mcs.validate();
+        for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+        {
+            if ((*i).wt->cs == mcs)
+            {
+                *callWorked = true;
+
+            }
+            else if ((*i).wt->loc.loc.getValue().mid(0,4) == locator)
+            {
+                *locatorWorked = true;
+
+            }
+        }
+
+
+    }
+}
+
+
+void ClusterClientFrame::calcSpotDistanceBearing(const QString& _locator, double* distance, int* bearing)
+{
+    bool locValid = true;
+    QString locator = _locator;
+    double latitude;
+    double longitude;
+    double dist;
+    int brg = 0;
+
+    if (ct && !locator.isEmpty())
+    {
+        if (locator.count() == 4)
+        {
+            locator.append("MM");
+        }
+
+        int locValres = lonlat( locator, longitude, latitude );
+        if ( ( locValres ) != LOC_OK )
+        {
+            locValid = false;
+        }
+        if (locValid)
+        {
+            ct->disbeara(longitude, latitude, dist, brg);
+            *distance = dist;
+            *bearing = brg;
+        }
+
+    }
+
+
+}
+
 
 
 void ClusterClientFrame::restoreDxSpotViewColumns()

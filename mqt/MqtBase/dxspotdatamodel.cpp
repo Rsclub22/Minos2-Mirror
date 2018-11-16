@@ -40,6 +40,10 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                 return tr("Wkd");
             case DXLOC_COL_NUM:
                 return tr("Loc");
+            case DXDIST_COL_NUM:
+                return tr("Dist");
+            case DXBRG_COL_NUM:
+                return tr("Brg");
             case DXLOC_WORKED_COL_NUM:
                 return tr("Wkd");
             case SPOT_CALL_COL_NUM:
@@ -122,37 +126,43 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
         {
             case TIME_COL_NUM:
                 d = dxSpot->spotTime;
-                break;
+            break;
             case FREQ_COL_NUM:
                 d = dxSpot->dxFreq;
-                break;
+            break;
             case DXBANDMASK_COL_NUM:
                 d = dxSpot->dxFreqMaskStr;
-                break;
+            break;
             case MODEMASK_COL_NUM:
                 d = dxSpot->dxModeMaskStr;
-                break;
+            break;
             case DXSPOT_CALL_COL_NUM:
                 d = dxSpot->dxCall;
-                break;
+            break;
             case DXSPOT_CALL_WORKED_COL_NUM:
                 d = dxSpot->dxCallWorked;
-                break;
+            break;
             case DXLOC_COL_NUM:
                 d = dxSpot->dxLocator;
-                break;
+            break;
+            case DXDIST_COL_NUM:
+                d = dxSpot->dxDist;
+            break;
+            case DXBRG_COL_NUM:
+                d = dxSpot->dxBrg;
+            break;
             case DXLOC_WORKED_COL_NUM:
                 d = dxSpot->dxLocatorWorked;
-                break;
+            break;
             case SPOT_CALL_COL_NUM:
                 d = dxSpot->spotterCall;
-                break;
+            break;
             case SPOTLOC_COL_NUM:
                 d = dxSpot->spotterLocator;
-                break;
+            break;
             case COMMENT_COL_NUM:
                 d = dxSpot->spotComment;
-                break;
+            break;
             default:
                 d = "";
 

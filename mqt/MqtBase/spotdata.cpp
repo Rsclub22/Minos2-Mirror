@@ -18,7 +18,13 @@ SpotData::SpotData()
 
 }
 
-SpotData::SpotData(QString _spotTime, QString _dxFreq, QString _dxFreqMaskStr, QString _dxModeMaskStr, QString _dxCall, QString _dxLocator, QString _spotterCall, QString _spotterLocator, QString comment)
+SpotData::SpotData(QString _spotTime, QString _dxFreq,
+                   QString _dxFreqMaskStr, QString _dxModeMaskStr,
+                   QString _dxCall, bool _dxCallWorked,
+                   QString _dxLocator, bool _dxLocatorWorked,
+                   QString distance, QString bearing,
+                   QString _spotterCall, QString _spotterLocator,
+                   QString comment)
 {
     spotTime = _spotTime;
     dxFreq = _dxFreq;
@@ -26,8 +32,10 @@ SpotData::SpotData(QString _spotTime, QString _dxFreq, QString _dxFreqMaskStr, Q
     dxModeMaskStr = _dxModeMaskStr;
     dxCall = _dxCall;
     dxLocator = _dxLocator;
-    dxCallWorked = BOOL_NO;
-    dxLocatorWorked = BOOL_NO;
+    dxDist = distance;
+    dxBrg = bearing;
+    dxCallWorked = _dxCallWorked;
+    dxLocatorWorked = _dxLocatorWorked;
     sentToMemory = BOOL_NO;
     spotterCall = _spotterCall;
     spotterLocator = _spotterLocator;
@@ -42,6 +50,8 @@ void SpotData::operator = (const SpotData& spd)
     dxModeMaskStr = spd.dxModeMaskStr;
     dxCall = spd.dxCall;
     dxLocator = spd.dxLocator;
+    dxDist = spd.dxDist;
+    dxBrg = spd.dxDist;
     dxCallWorked = spd.dxCallWorked;
     dxLocatorWorked = spd.dxLocatorWorked;
     sentToMemory = spd.sentToMemory;
