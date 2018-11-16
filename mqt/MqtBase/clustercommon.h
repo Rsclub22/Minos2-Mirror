@@ -73,7 +73,7 @@ const int FREQ_COL_WIDTH = 60;
 const int DXSPOT_CALL_COL_WIDTH = 60;
 const int DXSPOT_CALL_WKD_COL_WIDTH = 30;
 const int DXLOC_COL_WIDTH = 50;
-const int DXDIST_COL_WIDTH = 50;
+const int DXDIST_COL_WIDTH = 40;
 const int DXBRG_COL_WIDTH = 30;
 const int DXLOC_WKD_COL_WIDTH = 30;
 const int SPOT_CALL_COL_WIDTH = 60;
@@ -84,8 +84,10 @@ const bool BOOL_YES = true;
 const bool BOOL_NO = false;
 
 const QChar SPOT_DATA_SEPERATOR = ':';
-const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
-const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d");
+//const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
+//const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d");
+const QRegExp FULL_LOC_EXP = QRegExp("[I,J,K,L][P,O,N,M,L]\\d\\d[A-Za-z][A-Za-z]");
+const QRegExp PART_LOC_EXP = QRegExp("[I,J,K,L][P,O,N,M,L]\\d\\d");
 const QRegExp SEARCH_LOC_EXP = QRegExp("[I,J,K,L][P,O,N,M,L]\\d\\d");
 
 const int MIN_TTL = 10;

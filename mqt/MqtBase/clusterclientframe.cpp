@@ -139,6 +139,8 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
+
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
@@ -607,7 +609,11 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
                 *callWorked = true;
 
             }
-            else if ((*i).wt->loc.loc.getValue().mid(0,4) == locator)
+
+        }
+        for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+        {
+            if ((*i).wt->loc.loc.getValue().mid(0,4) == locator)
             {
                 *locatorWorked = true;
 

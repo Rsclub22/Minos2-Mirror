@@ -104,13 +104,16 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setModel(dxSpotDataModel);
     dxSpotView->setAlternatingRowColors(true);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
-    //dxSpotView->setStyleSheet("QHeaderView::section { font: bold; height: 14px }");
-    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+
+    dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
+
+
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
@@ -121,9 +124,14 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
 
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
+    verticalHeader->setVisible(false);
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
     verticalHeader->setDefaultSectionSize(18);
-    verticalHeader->setVisible(false);
+
+/*
+
+
+
 
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
@@ -132,7 +140,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
 
     restoreDxSpotViewColumns();
-
+*/
     rawClusterDataView = new QPlainTextEdit();
 
     ui->clusterViewsTab->addTab(dxSpotView, "DX Spots");
@@ -584,29 +592,28 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
     const QRegExp fullLocExp = FULL_LOC_EXP;
     const QRegExp partLocExp = PART_LOC_EXP;
 
-    for (int i = 0; i < locatorSeperators.count(); i++)
-    {
-        trace(QString("Exract locators - looks for seperator %1").arg(locatorSeperators[i]));
-        if (comment.contains(locatorSeperators[i], Qt::CaseInsensitive))
-        {
-            trace(QString("Exract locators - found seperator %1").arg(locatorSeperators[i]));
-            loc = comment.split(locatorSeperators[i], QString::KeepEmptyParts, Qt::CaseInsensitive);
-            spotLoc = extractLocator(loc[0], fullLocExp, partLocExp);
-            dxLoc = extractLocator(loc[1], fullLocExp, partLocExp);
-            trace(QString("Extracted dxLoc = %1 spotLoc= %2").arg(dxLoc).arg(spotLoc));
-            return;
-        }
-
-
-    }
-
-
-    if (comment.count(fullLocExp) || comment.count(partLocExp))      // look for a single locator, which we assume is DX locator
+    if (comment.count(fullLocExp) == 1 || comment.count(partLocExp) == 1)      // look for a single locator, which we assume is DX locator
     {
         trace(QString("Only locator in comment - extract"));
         dxLoc = extractLocator(comment, fullLocExp, partLocExp);
     }
+    else
+    {
+        for (int i = 0; i < locatorSeperators.count(); i++)
+        {
+            trace(QString("Exract locators - looks for seperator %1").arg(locatorSeperators[i]));
+            if (comment.contains(locatorSeperators[i], Qt::CaseInsensitive))
+            {
+                trace(QString("Exract locators - found seperator %1").arg(locatorSeperators[i]));
+                loc = comment.split(locatorSeperators[i], QString::KeepEmptyParts, Qt::CaseInsensitive);
+                spotLoc = extractLocator(loc[0], fullLocExp, partLocExp);
+                dxLoc = extractLocator(loc[1], fullLocExp, partLocExp);
+             }
+        }
+    }
+
     trace(QString("Extracted dxLoc = %1 spotLoc= %2").arg(dxLoc).arg(spotLoc));
+
 }
 
 
@@ -1013,7 +1020,25 @@ void ClusterMainWindow::spotTimerTimeOut()
     {
         spot = testSpotList[spotNum].remove('\n');
         time = QDateTime::currentDateTimeUtc().time();
-        timeStr = QString("%1%2Z").arg(time.hour()).arg(time.minute());
+        QString hourStr;
+        QString minStr;
+        if (time.hour() < 10)
+        {
+            hourStr = QString("0%1").arg(time.hour());
+        }
+        else
+        {
+            hourStr = QString("%1").arg(time.hour());
+        }
+        if (time.minute() < 10)
+        {
+            minStr = QString("0%1").arg(time.minute());
+        }
+        else
+        {
+            minStr = QString("%1").arg(time.minute());
+        }
+        timeStr = QString("   %1%2Z").arg(hourStr).arg(minStr);
         spot = spot.append(timeStr).append('\n');
         parseDX(spot);
         spotNum++;
