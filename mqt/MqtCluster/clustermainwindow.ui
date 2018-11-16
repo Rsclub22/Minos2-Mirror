@@ -28,6 +28,20 @@
        <widget class="QComboBox" name="nodeCb"/>
       </item>
       <item>
+       <widget class="QLabel" name="testSpotsLab">
+        <property name="text">
+         <string>Test Spots</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="testSpotsPb">
+        <property name="text">
+         <string>Test Spots</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
