@@ -55,6 +55,7 @@ signals:
 
    void BrgStrToRot(QString);
    void FreqStrToRig(QString);
+   void SpotBrgStrToRot(QString);
    void DxSpotToLog(memoryData::memData);
    void DXSpotToMemory(memoryData::memData);
 
@@ -117,6 +118,7 @@ public:
    static void SendFontChanged();
    static void SendBrgStrToRot(QString);
    static void SendFreqStrToRig(QString);
+   static void SendSpotBrgStrToRot(QString);
    static void SendSpotToLog(memoryData::memData);
    static void SendSpotToMemory(memoryData::memData);
 
