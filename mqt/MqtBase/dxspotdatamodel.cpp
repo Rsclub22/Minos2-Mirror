@@ -299,7 +299,15 @@ bool DxSpotDataModel::insertColumns(int column, int count, const QModelIndex &pa
 bool DxSpotDataModel::removeRows(int _row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, _row, _row + count - 1);
-    for (int row=_row; row < _row + count; ++row)
+/*
+    for (int row =_row; row < _row + count; ++row)
+    {
+        dxSpotData.removeAt(row);
+    }
+*/
+    //int i = _row + count - 1;
+    //while (i )
+    for (int row = _row + count - 1; row > (_row - 1); row--)
     {
         dxSpotData.removeAt(row);
     }

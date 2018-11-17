@@ -87,6 +87,16 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     setupLocatorSpotView();
 
+    filterProxyModelList.append(dxSpotProxyModel);
+    filterProxyModelList.append(searchSortProxyModel);
+    filterProxyModelList.append(callSignProxyModel);
+    filterProxyModelList.append(locatorProxyModel);
+
+    spotViewList.append(dxSpotView);
+    spotViewList.append(searchView);
+    spotViewList.append(callSignView);
+    spotViewList.append(locatorView);
+
     setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
     ui->dxSpotTab->setTabColor(ui->dxSpotTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
 
@@ -785,12 +795,66 @@ void ClusterClientFrame::logActionSelected()
 
 void ClusterClientFrame::memoryActionSelected()
 {
+    int curTab = ui->dxSpotTab->currentIndex();
+
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int currentRow = spotViewList[curTab]->currentIndex().row();
+        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
+        {
+            // check if spot has been sent to memory
+            if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool())
+            {
+                sendSpotToMemory(filterProxyModelList[curTab], currentRow);
+            }
+
+        }
+
+    }
+}
+
+
+
+void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyModel, int row)
+{
+
+    memoryData::memData spotData;
+    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM)).toString();
+    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM)).toString();
+    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
+    spotData.mode = memDefData::DEFAULT_MODE;
+    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM)).toString();
+
+    MinosLoggerEvents::SendSpotToMemory(spotData);
+    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, Qt::EditRole);
 
 }
 
+
+
 void ClusterClientFrame::clearSpotActionSelected()
 {
+    int curTab = ui->dxSpotTab->currentIndex();
 
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int currentRow = spotViewList[curTab]->currentIndex().row();
+        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
+        {
+            int ret = QMessageBox::warning(this, tr("Cluster"),
+                                           tr("Confirm you want to delete this spot?"),
+                                           QMessageBox::Yes | QMessageBox::No);
+
+            if (ret == QMessageBox::Yes)
+            {
+                purgeSpotFlag = true;
+                filterProxyModelList[curTab]->removeRows(currentRow, 1, QModelIndex());
+                purgeSpotFlag = false;
+            }
+        }
+
+
+    }
 
 }
 
@@ -798,8 +862,20 @@ void ClusterClientFrame::clearSpotActionSelected()
 
 void ClusterClientFrame::clearAllSpotsActionSelected()
 {
+    // only apply to DX spot tab
+    if (dxSpotDataModel->rowCount() > 0 && ui->dxSpotTab->currentIndex() == 0)
+    {
+        int ret = QMessageBox::warning(this, tr("Cluster"),
+                                       tr("Confirm you want to delete all the spots?"),
+                                       QMessageBox::Yes | QMessageBox::No);
 
-
+        if (ret == QMessageBox::Yes)
+        {
+            purgeSpotFlag = true;
+            dxSpotDataModel->removeRows(0, dxSpotDataModel->rowCount(), QModelIndex());
+            purgeSpotFlag = false;
+        }
+    }
 }
 
 void ClusterClientFrame::onSearchEditingFinished()

@@ -126,11 +126,14 @@ private:
     CallsignSortFilterProxyModel* callSignProxyModel;
     LocatorSortFilterProxyModel* locatorProxyModel;
 
+    QVector<DxSpotSortFilterProxyModel*> filterProxyModelList;
 
     QTableView* dxSpotView;
     QTableView* searchView;
     QTableView* callSignView;
     QTableView* locatorView;
+
+    QVector<QTableView*> spotViewList;
 
     QMenu* spotsMenu;
     QAction* freqAction;
@@ -157,6 +160,7 @@ private:
     memoryData::memData getSpotDataToMemoryVariable(int);
     void calcSpotDistanceBearing(const QString &locator, double *distance, int *bearing);
 
+    void sendSpotToMemory(DxSpotSortFilterProxyModel *spotProxyModel, int row);
 private slots:
 
 
