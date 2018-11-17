@@ -397,15 +397,8 @@ void ClusterClientFrame::onDXSpotVertHeaderClicked(int row)
     // check if spot has been sent to memory
     if (!dxSpotProxyModel->data(dxSpotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool())
     {
-        memoryData::memData spotData;
-        spotData.callsign = dxSpotProxyModel->data(dxSpotProxyModel->index(row, DXSPOT_CALL_COL_NUM)).toString();
-        spotData.time = dxSpotProxyModel->data(dxSpotProxyModel->index(row, TIME_COL_NUM)).toString();
-        spotData.freq = dxSpotProxyModel->data(dxSpotProxyModel->index(row, FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
-        spotData.mode = memDefData::DEFAULT_MODE;
-        spotData.locator = dxSpotProxyModel->data(dxSpotProxyModel->index(row, DXLOC_COL_NUM)).toString();
+        sendSpotToMemory(dxSpotProxyModel, row);
 
-        MinosLoggerEvents::SendSpotToMemory(spotData);
-        dxSpotDataModel->setData(dxSpotProxyModel->mapToSource(dxSpotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM)), BOOL_YES, Qt::EditRole);
     }
 }
 
@@ -862,8 +855,10 @@ void ClusterClientFrame::clearSpotActionSelected()
 
 void ClusterClientFrame::clearAllSpotsActionSelected()
 {
-    // only apply to DX spot tab
-    if (dxSpotDataModel->rowCount() > 0 && ui->dxSpotTab->currentIndex() == 0)
+
+    int curTab = ui->dxSpotTab->currentIndex();
+
+    if (filterProxyModelList[curTab]->rowCount() > 0)
     {
         int ret = QMessageBox::warning(this, tr("Cluster"),
                                        tr("Confirm you want to delete all the spots?"),
@@ -872,7 +867,7 @@ void ClusterClientFrame::clearAllSpotsActionSelected()
         if (ret == QMessageBox::Yes)
         {
             purgeSpotFlag = true;
-            dxSpotDataModel->removeRows(0, dxSpotDataModel->rowCount(), QModelIndex());
+            filterProxyModelList[curTab]->removeRows(0, dxSpotDataModel->rowCount(), QModelIndex());
             purgeSpotFlag = false;
         }
     }
