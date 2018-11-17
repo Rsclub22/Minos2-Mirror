@@ -611,15 +611,19 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
             }
 
         }
-        for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+        if (!locator.isEmpty())
         {
-            if ((*i).wt->loc.loc.getValue().mid(0,4) == locator)
-            {
-                *locatorWorked = true;
+            QString loc = locator.mid(0,4);
 
+            for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+            {
+                if ((*i).wt->loc.loc.getValue().mid(0,4) == loc)
+                {
+                    *locatorWorked = true;
+
+                }
             }
         }
-
 
     }
 }

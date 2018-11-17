@@ -590,7 +590,7 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
     QStringList loc;
     trace(QString("Extract locators - comment = %1").arg(comment));
     // this should hopefully cope with different scenarios, independent of seperation chars
-    // it is dependent on the sender correctly ordering the dxLoc and spotLoc
+    // it is dependent on the sender correctly ordering the spotLoc and dxLoc, the spotLoc should be first
 
     int fullLocExpCount = comment.count(FULL_LOC_EXP);
     int partLocExpCount = comment.count(PART_LOC_EXP);
