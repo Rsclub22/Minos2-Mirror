@@ -589,8 +589,55 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
 {
     QStringList loc;
     trace(QString("Extract locators - comment = %1").arg(comment));
-    const QRegExp fullLocExp = FULL_LOC_EXP;
-    const QRegExp partLocExp = PART_LOC_EXP;
+    // this should hopefully cope with different scenarios, independent of seperation chars
+    // it is dependent on the sender correctly ordering the dxLoc and spotLoc
+
+    int fullLocExpCount = comment.count(FULL_LOC_EXP);
+    int partLocExpCount = comment.count(PART_LOC_EXP);
+
+    if (fullLocExpCount == 2)
+    {
+        int firstIndex = comment.indexOf(FULL_LOC_EXP);
+        int secondIndex = comment.indexOf(FULL_LOC_EXP, firstIndex + 4);
+        // extract locators
+        spotLoc = comment.mid(firstIndex, 6).toUpper();
+        dxLoc = comment.mid(secondIndex, 6).toUpper();
+    }
+    else if (partLocExpCount == 2)
+    {
+        int firstIndex = comment.indexOf(PART_LOC_EXP);
+        int secondIndex = comment.indexOf(PART_LOC_EXP, firstIndex + 4);
+        // extract locators
+        spotLoc = comment.mid(firstIndex, 4).toUpper();
+        dxLoc = comment.mid(secondIndex, 4).toUpper();
+    }
+    else if (fullLocExpCount == 1 && partLocExpCount == 1)
+    {
+        int firstIndex = comment.indexOf(FULL_LOC_EXP);
+        int secondIndex = comment.indexOf(PART_LOC_EXP);
+        if (firstIndex < secondIndex)
+        {
+            spotLoc = comment.mid(firstIndex, 6).toUpper();
+            dxLoc = comment.mid(secondIndex, 4).toUpper();
+        }
+        else
+        {
+            spotLoc = comment.mid(secondIndex, 4).toUpper();
+            dxLoc = comment.mid(firstIndex, 6).toUpper();
+        }
+    }
+    else if (fullLocExpCount == 1 && partLocExpCount == 0)
+    {
+        int firstIndex = comment.indexOf(FULL_LOC_EXP);
+        dxLoc = comment.mid(firstIndex, 6).toUpper();
+    }
+    else if (partLocExpCount == 1 && fullLocExpCount == 0)
+    {
+        int firstIndex = comment.indexOf(PART_LOC_EXP);
+        dxLoc = comment.mid(firstIndex, 4).toUpper();
+    }
+
+    /*
 
     if (comment.count(fullLocExp) == 1 || comment.count(partLocExp) == 1)      // look for a single locator, which we assume is DX locator
     {
@@ -611,7 +658,7 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
              }
         }
     }
-
+*/
     trace(QString("Extracted dxLoc = %1 spotLoc= %2").arg(dxLoc).arg(spotLoc));
 
 }

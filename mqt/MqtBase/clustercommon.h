@@ -84,11 +84,10 @@ const bool BOOL_YES = true;
 const bool BOOL_NO = false;
 
 const QChar SPOT_DATA_SEPERATOR = ':';
-//const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
-//const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d");
-const QRegExp FULL_LOC_EXP = QRegExp("[I,J,K,L][P,O,N,M,L]\\d\\d[A-Za-z][A-Za-z]");
-const QRegExp PART_LOC_EXP = QRegExp("[I,J,K,L][P,O,N,M,L]\\d\\d");
-const QRegExp SEARCH_LOC_EXP = QRegExp("[I,J,K,L][P,O,N,M,L]\\d\\d");
+// Only locators in Europe
+const QRegExp FULL_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d[A-Za-z][A-Za-z]");
+const QRegExp PART_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d\\W");
+const QRegExp SEARCH_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d");
 
 const int MIN_TTL = 10;
 const int MAX_TTL = 180;
@@ -106,7 +105,7 @@ const QChar FILTER_DELIMITER = ',';
 
 const int PURGE_TIME = 1000 * 60 * 1;   // mins
 
-const QStringList locatorSeperators = {"<", "tr", "-"};
+//const QStringList locatorSeperators = {"<", "tr", "-"};
 
 // Filter Change
 const int FREQFILTERUP = 1 << 0;
