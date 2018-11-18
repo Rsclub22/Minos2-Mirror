@@ -27,6 +27,7 @@ namespace Ui {
     class ClusterClientFrame;
 }
 
+enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {
@@ -163,6 +164,8 @@ private:
 
     void sendSpotToMemory(DxSpotSortFilterProxyModel *spotProxyModel, int row);
 
+    void handleClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, const QModelIndex &index);
+    void handleVertHeaderClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, int row);
 private slots:
 
 

@@ -22,7 +22,7 @@ namespace Ui {
 class ClusterMainWindow;
 }
 
-#define TEST_SPOTS
+//#define TEST_SPOTS
 
 const QString CLUSTER_PATH = "./Configuration/Cluster/";
 const QString CLUSTER_SITES = "ClusterSites.ini";
@@ -128,7 +128,8 @@ private slots:
     void userCmdButtonClear(int buttonNumber);
     void userCmdButtonWrite(int buttonNumber);
 
-
+     void onClearAllSpots();
+     void getSpotsFromQueue();
 
     void onSpotTabChanged(int index);
     void disconnectTimeout();
@@ -163,6 +164,8 @@ private:
 
     SetupDialog *setupCluster;
 
+    QVector<SpotData*> spotsList;
+    QTimer* getSpotsTimer;
 
     QString currentNodeName;
     QString currentAddress;
@@ -192,6 +195,7 @@ private:
     bool loginStart;
     bool loginSuccess;
     bool nodeConnected;
+    bool purgeSpotFlag;
 
     bool reconnectFlag;
 
@@ -225,6 +229,8 @@ private:
     void handleStartFile();
     void showStatusMessage(const QString &message);
     void startDisconnectTimer(int time);
+
+
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
     QStringList testSpotList;
@@ -233,6 +239,8 @@ private slots:
     void testSpotPbClicked();
     void spotTimerTimeOut();
 #endif
+
+
 };
 
 #endif // CLUSTERMAINWINDOW_H

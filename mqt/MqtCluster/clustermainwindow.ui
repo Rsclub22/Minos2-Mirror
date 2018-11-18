@@ -178,7 +178,14 @@
      <string>Help</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuActions">
+    <property name="title">
+     <string>Actions</string>
+    </property>
+    <addaction name="actionClear_All_Spots"/>
+   </widget>
    <addaction name="menuConfigure"/>
+   <addaction name="menuActions"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -193,6 +200,11 @@
   <action name="actionSetup">
    <property name="text">
     <string>Setup</string>
+   </property>
+  </action>
+  <action name="actionClear_All_Spots">
+   <property name="text">
+    <string>Clear All Spots</string>
    </property>
   </action>
  </widget>
