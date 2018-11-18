@@ -35,6 +35,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     purgeTimer = new QTimer(this);
 
+    checkNewSpotsTimer = new QTimer(this);
+    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));
     spotQueue.clear();
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
@@ -87,6 +89,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     setupLocatorSpotView();
 
+
     filterProxyModelList.append(dxSpotProxyModel);
     filterProxyModelList.append(searchSortProxyModel);
     filterProxyModelList.append(callSignProxyModel);
@@ -107,6 +110,12 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect(filterSetup, SIGNAL(filtersChanged(int)), this, SLOT(filtersChanged(int)));
 
     purgeTimer->start(PURGE_TIME);
+
+    newCallsignSpotIndToggle(false);
+    newLocatorSpotIndToggle(false);
+    checkNewSpotsTimer->start(1000);
+
+
 
 
 }
@@ -937,6 +946,78 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c)
           locatorProxyModel->setFilterRegExp("");
           searchSortProxyModel->setFilterRegExp("");
       }
+
+}
+
+
+void ClusterClientFrame::checkNewSpots()
+{
+    // look for new spots in callsign and locator view
+    static int oldCallsignCount = 0;
+    static int oldLocatorCount = 0;
+
+    int newCallsignCount =  callSignProxyModel->rowCount();
+    int newLocatorCount = locatorProxyModel->rowCount();
+
+    if (newCallsignCount == 0 || ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)
+    {
+       newCallsignSpotIndToggle(false);
+    }
+
+    if (newLocatorCount == 0 || ui->dxSpotTab->currentIndex() == LOCATOR_TAB)
+    {
+       newLocatorSpotIndToggle(false);
+    }
+
+
+    if (newCallsignCount > oldCallsignCount)
+    {
+        oldCallsignCount = newCallsignCount;
+        if (ui->dxSpotTab->currentIndex() != CALLSIGN_TAB)
+        {
+            newCallsignSpotIndToggle(true);
+        }
+
+    }
+
+    if (newLocatorCount > oldLocatorCount)
+    {
+        oldLocatorCount = newLocatorCount;
+        if (ui->dxSpotTab->currentIndex() != LOCATOR_TAB)
+        {
+            newLocatorSpotIndToggle(true);
+        }
+
+    }
+
+
+}
+
+void ClusterClientFrame::newCallsignSpotIndToggle(bool on)
+{
+
+    if (on)
+    {
+        ui->callsignIndicator->setStyleSheet(NEWSPOT_INDICATOR_ON_STYLE);
+    }
+    else
+    {
+       ui->callsignIndicator->setStyleSheet(NEWSPOT_INDICATOR_OFF_STYLE);
+    }
+
+}
+
+void ClusterClientFrame::newLocatorSpotIndToggle(bool on)
+{
+
+    if (on)
+    {
+        ui->locatorIndicator->setStyleSheet(NEWSPOT_INDICATOR_ON_STYLE);
+    }
+    else
+    {
+       ui->locatorIndicator->setStyleSheet(NEWSPOT_INDICATOR_OFF_STYLE);
+    }
 
 }
 

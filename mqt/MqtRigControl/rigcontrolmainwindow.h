@@ -136,6 +136,7 @@ private:
 
     QString geoStr;         // geometry registry location
 
+
     QVector<QPushButton*> supRadioInd;
     const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color: white ;\n");
     const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue ; \n");

@@ -29,6 +29,10 @@ namespace Ui {
 
 enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 
+const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: white ;\n");
+const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ; \n");
+
+
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
@@ -96,6 +100,8 @@ public:
 };
 
 
+
+
 class ClusterClientFrame : public QFrame
 {
     Q_OBJECT
@@ -118,6 +124,8 @@ private:
     QTimer* purgeTimer;
     int timeToLive;
     bool purgeSpotFlag;
+
+    QTimer* checkNewSpotsTimer;
 
     QVector<QString> spotQueue;
 
@@ -166,6 +174,8 @@ private:
 
     void handleClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, const QModelIndex &index);
     void handleVertHeaderClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, int row);
+    void newCallsignSpotIndToggle(bool on);
+    void newLocatorSpotIndToggle(bool on);
 private slots:
 
 
@@ -196,6 +206,7 @@ private slots:
     void onCallsignSpotVertHeaderClicked(int);
     void onSearchSpotVertHeaderClicked(int row);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
+    void checkNewSpots();
 };
 
 #endif // CLUSTERCLIENTFRAME_H

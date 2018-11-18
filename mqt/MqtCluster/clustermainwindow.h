@@ -22,7 +22,7 @@ namespace Ui {
 class ClusterMainWindow;
 }
 
-//#define TEST_SPOTS
+#define TEST_SPOTS
 
 const QString CLUSTER_PATH = "./Configuration/Cluster/";
 const QString CLUSTER_SITES = "ClusterSites.ini";
