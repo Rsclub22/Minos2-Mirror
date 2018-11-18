@@ -87,6 +87,16 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     setupLocatorSpotView();
 
+    filterProxyModelList.append(dxSpotProxyModel);
+    filterProxyModelList.append(searchSortProxyModel);
+    filterProxyModelList.append(callSignProxyModel);
+    filterProxyModelList.append(locatorProxyModel);
+
+    spotViewList.append(dxSpotView);
+    spotViewList.append(searchView);
+    spotViewList.append(callSignView);
+    spotViewList.append(locatorView);
+
     setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
     ui->dxSpotTab->setTabColor(ui->dxSpotTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
 
@@ -139,11 +149,15 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
+
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
     dxSpotView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
     dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+    dxSpotView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
     dxSpotView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
     dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
@@ -189,6 +203,8 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
     searchView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
     searchView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+    searchView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+    searchView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
     searchView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     searchView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     searchView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
@@ -232,6 +248,8 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
     callSignView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
     callSignView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+    callSignView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+    callSignView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
     callSignView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
     callSignView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     callSignView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
@@ -274,6 +292,8 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
     locatorView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
     locatorView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+    locatorView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+    locatorView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
     locatorView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     locatorView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     locatorView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
@@ -344,14 +364,14 @@ void ClusterClientFrame::onSpotTabChanged(int index)
     }
 }
 
-memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(int row)
+memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
     memoryData::memData spotData;
-    spotData.callsign = dxSpotProxyModel->data(dxSpotProxyModel->index(row, DXSPOT_CALL_COL_NUM)).toString();
-    spotData.time = dxSpotProxyModel->data(dxSpotProxyModel->index(row, TIME_COL_NUM)).toString();
-    spotData.freq = dxSpotProxyModel->data(dxSpotProxyModel->index(row, FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
+    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM)).toString();
+    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM)).toString();
+    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
     spotData.mode = memDefData::DEFAULT_MODE;
-    spotData.locator = dxSpotProxyModel->data(dxSpotProxyModel->index(row, DXLOC_COL_NUM)).toString();
+    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM)).toString();
     return spotData;
 }
 
@@ -367,7 +387,7 @@ void ClusterClientFrame::onDxSpotViewClicked(const QModelIndex &index)
     {
         // transfer spot details to qsolog
 
-        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(index.row()));
+        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(dxSpotProxyModel, index.row()));
     }
 
 }
@@ -377,15 +397,8 @@ void ClusterClientFrame::onDXSpotVertHeaderClicked(int row)
     // check if spot has been sent to memory
     if (!dxSpotProxyModel->data(dxSpotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool())
     {
-        memoryData::memData spotData;
-        spotData.callsign = dxSpotProxyModel->data(dxSpotProxyModel->index(row, DXSPOT_CALL_COL_NUM)).toString();
-        spotData.time = dxSpotProxyModel->data(dxSpotProxyModel->index(row, TIME_COL_NUM)).toString();
-        spotData.freq = dxSpotProxyModel->data(dxSpotProxyModel->index(row, FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
-        spotData.mode = memDefData::DEFAULT_MODE;
-        spotData.locator = dxSpotProxyModel->data(dxSpotProxyModel->index(row, DXLOC_COL_NUM)).toString();
+        sendSpotToMemory(dxSpotProxyModel, row);
 
-        MinosLoggerEvents::SendSpotToMemory(spotData);
-        dxSpotDataModel->setData(dxSpotProxyModel->mapToSource(dxSpotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM)), BOOL_YES, Qt::EditRole);
     }
 }
 
@@ -399,7 +412,7 @@ void ClusterClientFrame::onSearchSpotViewClicked(const QModelIndex &index)
     else if (index.column() == DXSPOT_CALL_COL_NUM )
     {
         // transfer spot details to qsolog
-        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(index.row()));
+        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(searchSortProxyModel, index.row()));
     }
 }
 
@@ -430,11 +443,11 @@ void ClusterClientFrame::onCallsignSpotViewClicked(const QModelIndex &index)
     else if (index.column() == DXSPOT_CALL_COL_NUM )
     {
         // transfer spot details to qsolog
-        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(index.row()));
+        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(callSignProxyModel, index.row()));
     }
 }
 
-void ClusterClientFrame::onCallSignSpotVertHeaderClicked(int row)
+void ClusterClientFrame::onCallsignSpotVertHeaderClicked(int row)
 {
     // check if spot has been sent to memory
     if (!callSignProxyModel->data(callSignProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool())
@@ -461,7 +474,7 @@ void ClusterClientFrame::onLocatorSpotViewClicked(const QModelIndex &index)
     else if (index.column() == DXSPOT_CALL_COL_NUM )
     {
         // transfer spot details to qsolog
-        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(index.row()));
+        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(locatorProxyModel, index.row()));
     }
 }
 
@@ -487,6 +500,12 @@ void ClusterClientFrame::sendFreqToRig(QString freq)
 {
     QString f = freq.remove('.').append(QString("000"));
     MinosLoggerEvents::SendFreqStrToRig(f);
+}
+
+
+void ClusterClientFrame::sendBrgToRot(QString brg)
+{
+    MinosLoggerEvents::SendSpotBrgStrToRot(brg);
 }
 
 
@@ -555,14 +574,103 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
                     }
                 }
 
-                //dxSpotDataModel->rowData = QStringList {spotTime, displayFreq, dxCall, dxLocator, spotCall, spotLocator, spotComment };
-                dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ], spotlist[DXBANDMASK], spotlist[DXMODEMASK], spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[SPOTCALL], spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
+                // check to see if call or locator worked
+                bool callWorked = false;
+                bool locWorked = false;
+                checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+
+                double dist = 0;
+                int brg = 0;
+                QString distance;
+                QString bearing;
+                if (!spotlist[DXLOCATOR].isEmpty())
+                {
+                    calcSpotDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
+                    distance = QString::number(static_cast< int> ( dist));
+                    bearing =  QString::number(brg);
+                }
+
+                dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ],
+                                                        spotlist[DXBANDMASK], spotlist[DXMODEMASK],
+                                                        spotlist[DXCALL], callWorked,
+                                                        spotlist[DXLOCATOR], locWorked,
+                                                        distance, bearing,
+                                                        spotlist[SPOTCALL], spotlist[SPOTLOCATOR],
+                                                        spotlist[SPOTCOMMENT]);
                 dxSpotDataModel->insertRows(0, 1);
 
             }
         }
     }
 }
+
+
+void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bool* callWorked, bool* locatorWorked)
+{
+    if (ct)
+    {
+        Callsign mcs(callsign);
+        mcs.validate();
+        for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+        {
+            if ((*i).wt->cs == mcs)
+            {
+                *callWorked = true;
+
+            }
+
+        }
+        if (!locator.isEmpty())
+        {
+            QString loc = locator.mid(0,4);
+
+            for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+            {
+                if ((*i).wt->loc.loc.getValue().mid(0,4) == loc)
+                {
+                    *locatorWorked = true;
+
+                }
+            }
+        }
+
+    }
+}
+
+
+void ClusterClientFrame::calcSpotDistanceBearing(const QString& _locator, double* distance, int* bearing)
+{
+    bool locValid = true;
+    QString locator = _locator;
+    double latitude;
+    double longitude;
+    double dist;
+    int brg = 0;
+
+    if (ct && !locator.isEmpty())
+    {
+        if (locator.count() == 4)
+        {
+            locator.append("MM");
+        }
+
+        int locValres = lonlat( locator, longitude, latitude );
+        if ( ( locValres ) != LOC_OK )
+        {
+            locValid = false;
+        }
+        if (locValid)
+        {
+            ct->disbeara(longitude, latitude, dist, brg);
+            *distance = dist;
+            *bearing = brg;
+        }
+
+    }
+
+
+}
+
 
 
 void ClusterClientFrame::restoreDxSpotViewColumns()
@@ -665,6 +773,15 @@ void ClusterClientFrame::onMenuShow()
 
 void ClusterClientFrame::on_freqActionSelected()
 {
+    int curTab = ui->dxSpotTab->currentIndex();
+    {
+        if (filterProxyModelList[curTab]->rowCount() > 0)
+        {
+            int currentRow = spotViewList[curTab]->currentIndex().row();
+            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM)).toString();
+            sendFreqToRig(freq);
+        }
+    }
 
 }
 
@@ -673,25 +790,94 @@ void ClusterClientFrame::on_freqActionSelected()
 
 void ClusterClientFrame::bearingActionSelected()
 {
-
+    int curTab = ui->dxSpotTab->currentIndex();
+    {
+        if (filterProxyModelList[curTab]->rowCount() > 0)
+        {
+            int currentRow = spotViewList[curTab]->currentIndex().row();
+            QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM)).toString();
+            sendBrgToRot(brg);
+        }
+    }
 }
 
 
 
 void ClusterClientFrame::logActionSelected()
 {
+    int curTab = ui->dxSpotTab->currentIndex();
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int currentRow = spotViewList[curTab]->currentIndex().row();
+        // transfer spot details to qsolog
 
+        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(filterProxyModelList[curTab], currentRow));
+    }
 }
 
 
 void ClusterClientFrame::memoryActionSelected()
 {
+    int curTab = ui->dxSpotTab->currentIndex();
+
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int currentRow = spotViewList[curTab]->currentIndex().row();
+        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
+        {
+            // check if spot has been sent to memory
+            if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool())
+            {
+                sendSpotToMemory(filterProxyModelList[curTab], currentRow);
+            }
+
+        }
+
+    }
+}
+
+
+
+void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyModel, int row)
+{
+
+    memoryData::memData spotData;
+    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM)).toString();
+    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM)).toString();
+    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
+    spotData.mode = memDefData::DEFAULT_MODE;
+    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM)).toString();
+
+    MinosLoggerEvents::SendSpotToMemory(spotData);
+    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, Qt::EditRole);
 
 }
 
+
+
 void ClusterClientFrame::clearSpotActionSelected()
 {
+    int curTab = ui->dxSpotTab->currentIndex();
 
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int currentRow = spotViewList[curTab]->currentIndex().row();
+        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
+        {
+            int ret = QMessageBox::warning(this, tr("Cluster"),
+                                           tr("Confirm you want to delete this spot?"),
+                                           QMessageBox::Yes | QMessageBox::No);
+
+            if (ret == QMessageBox::Yes)
+            {
+                purgeSpotFlag = true;
+                filterProxyModelList[curTab]->removeRows(currentRow, 1, QModelIndex());
+                purgeSpotFlag = false;
+            }
+        }
+
+
+    }
 
 }
 
@@ -700,7 +886,21 @@ void ClusterClientFrame::clearSpotActionSelected()
 void ClusterClientFrame::clearAllSpotsActionSelected()
 {
 
+    int curTab = ui->dxSpotTab->currentIndex();
 
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int ret = QMessageBox::warning(this, tr("Cluster"),
+                                       tr("Confirm you want to delete all the spots?"),
+                                       QMessageBox::Yes | QMessageBox::No);
+
+        if (ret == QMessageBox::Yes)
+        {
+            purgeSpotFlag = true;
+            filterProxyModelList[curTab]->removeRows(0, dxSpotDataModel->rowCount(), QModelIndex());
+            purgeSpotFlag = false;
+        }
+    }
 }
 
 void ClusterClientFrame::onSearchEditingFinished()

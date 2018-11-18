@@ -126,11 +126,14 @@ private:
     CallsignSortFilterProxyModel* callSignProxyModel;
     LocatorSortFilterProxyModel* locatorProxyModel;
 
+    QVector<DxSpotSortFilterProxyModel*> filterProxyModelList;
 
     QTableView* dxSpotView;
     QTableView* searchView;
     QTableView* callSignView;
     QTableView* locatorView;
+
+    QVector<QTableView*> spotViewList;
 
     QMenu* spotsMenu;
     QAction* freqAction;
@@ -154,7 +157,12 @@ private:
     void setupCallsignSpotView();
     void setupLocatorSpotView();
     void sendFreqToRig(QString freq);
-    memoryData::memData getSpotDataToMemoryVariable(int);
+    void sendBrgToRot(QString brg);
+    memoryData::memData getSpotDataToMemoryVariable(DxSpotSortFilterProxyModel*, int);
+    void calcSpotDistanceBearing(const QString &locator, double *distance, int *bearing);
+
+    void sendSpotToMemory(DxSpotSortFilterProxyModel *spotProxyModel, int row);
+
 private slots:
 
 
@@ -182,8 +190,9 @@ private slots:
     void onSearchEditingFinished();
     void onDXSpotVertHeaderClicked(int row);
     void onLocatorSpotVertHeaderClicked(int row);
-    void onCallSignSpotVertHeaderClicked(int);
+    void onCallsignSpotVertHeaderClicked(int);
     void onSearchSpotVertHeaderClicked(int row);
+    void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
 };
 
 #endif // CLUSTERCLIENTFRAME_H

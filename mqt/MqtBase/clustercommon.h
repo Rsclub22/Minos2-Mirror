@@ -58,19 +58,23 @@ const int FREQ_COL_NUM = 1;
 const int DXSPOT_CALL_COL_NUM = 2;
 const int DXSPOT_CALL_WORKED_COL_NUM = 3;
 const int DXLOC_COL_NUM = 4;
-const int DXLOC_WORKED_COL_NUM = 5;
-const int SPOT_CALL_COL_NUM = 6;
-const int SPOTLOC_COL_NUM = 7;
-const int COMMENT_COL_NUM = 8;
-const int DXBANDMASK_COL_NUM = 9;
-const int MODEMASK_COL_NUM = 10;
-const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 11;
+const int DXDIST_COL_NUM = 5;
+const int DXBRG_COL_NUM = 6;
+const int DXLOC_WORKED_COL_NUM = 7;
+const int SPOT_CALL_COL_NUM = 8;
+const int SPOTLOC_COL_NUM = 9;
+const int COMMENT_COL_NUM = 10;
+const int DXBANDMASK_COL_NUM = 11;
+const int MODEMASK_COL_NUM = 12;
+const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 13;
 
 const int TIME_COL_WIDTH = 40;
 const int FREQ_COL_WIDTH = 60;
 const int DXSPOT_CALL_COL_WIDTH = 60;
 const int DXSPOT_CALL_WKD_COL_WIDTH = 30;
 const int DXLOC_COL_WIDTH = 50;
+const int DXDIST_COL_WIDTH = 40;
+const int DXBRG_COL_WIDTH = 30;
 const int DXLOC_WKD_COL_WIDTH = 30;
 const int SPOT_CALL_COL_WIDTH = 60;
 const int SPOTLOC_COL_WIDTH = 50;
@@ -80,9 +84,10 @@ const bool BOOL_YES = true;
 const bool BOOL_NO = false;
 
 const QChar SPOT_DATA_SEPERATOR = ':';
-const QRegExp FULL_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d[A-Za-z][A-Za-z]");
-const QRegExp PART_LOC_EXP = QRegExp("[A-Za-z][A-Za-z]\\d\\d");
-const QRegExp SEARCH_LOC_EXP = QRegExp("[I,J,K,L][P,O,N,M,L]\\d\\d");
+// Only locators in Europe
+const QRegExp FULL_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d[A-Za-z][A-Za-z]");
+const QRegExp PART_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d\\W");
+const QRegExp SEARCH_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d");
 
 const int MIN_TTL = 10;
 const int MAX_TTL = 180;
@@ -100,7 +105,7 @@ const QChar FILTER_DELIMITER = ',';
 
 const int PURGE_TIME = 1000 * 60 * 1;   // mins
 
-const QStringList locatorSeperators = {"<", "tr", "-"};
+//const QStringList locatorSeperators = {"<", "tr", "-"};
 
 // Filter Change
 const int FREQFILTERUP = 1 << 0;

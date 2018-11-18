@@ -61,6 +61,9 @@ RotControlFrame::RotControlFrame(QWidget *parent):
 
     connect(&MinosLoggerEvents::mle, SIGNAL(BrgStrToRot(QString)), this, SLOT(getBrgFrmQSOLog(QString)));
 
+    // from cluster frame
+    connect(&MinosLoggerEvents::mle, SIGNAL(SpotBrgStrToRot(QString)), this, SLOT(setBrgFromSpot(QString)));
+
     rot_left_button_off();
     rot_right_button_off();
     showTurnButOff();
@@ -132,6 +135,13 @@ void RotControlFrame::setBrgFromRigFrmMemory(QString brg)
     traceMsg("Set Bearing from memory " + brg);
     ui->BrgSt->setText(brg);
 }
+
+void RotControlFrame::setBrgFromSpot(QString brg)
+{
+    traceMsg(QString("Set Beearing from spot %1").arg(brg));
+    turnTo(brg.toInt());
+}
+
 
 void RotControlFrame::turnTo(int angle)
 {

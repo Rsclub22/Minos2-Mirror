@@ -13,6 +13,7 @@
 
 #include "dxspotdatamodel.h"
 
+
 DxSpotDataModel::DxSpotDataModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
@@ -40,6 +41,10 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                 return tr("Wkd");
             case DXLOC_COL_NUM:
                 return tr("Loc");
+            case DXDIST_COL_NUM:
+                return tr("Dist");
+            case DXBRG_COL_NUM:
+                return tr("Brg");
             case DXLOC_WORKED_COL_NUM:
                 return tr("Wkd");
             case SPOT_CALL_COL_NUM:
@@ -48,7 +53,12 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                 return tr("Loc");
             case COMMENT_COL_NUM:
                 return tr("Comment");
-
+            case DXBANDMASK_COL_NUM:
+                return tr("Band Mask");
+            case MODEMASK_COL_NUM:
+                return tr("mode Mask");
+            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
+                return tr("Spot to Mem Flag");
             default:
             return QVariant();
         }
@@ -122,37 +132,46 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
         {
             case TIME_COL_NUM:
                 d = dxSpot->spotTime;
-                break;
+            break;
             case FREQ_COL_NUM:
                 d = dxSpot->dxFreq;
-                break;
-            case DXBANDMASK_COL_NUM:
-                d = dxSpot->dxFreqMaskStr;
-                break;
-            case MODEMASK_COL_NUM:
-                d = dxSpot->dxModeMaskStr;
-                break;
+            break;
             case DXSPOT_CALL_COL_NUM:
                 d = dxSpot->dxCall;
-                break;
+            break;
             case DXSPOT_CALL_WORKED_COL_NUM:
                 d = dxSpot->dxCallWorked;
-                break;
+            break;
             case DXLOC_COL_NUM:
                 d = dxSpot->dxLocator;
-                break;
+            break;
+            case DXDIST_COL_NUM:
+                d = dxSpot->dxDist;
+            break;
+            case DXBRG_COL_NUM:
+                d = dxSpot->dxBrg;
+            break;
             case DXLOC_WORKED_COL_NUM:
                 d = dxSpot->dxLocatorWorked;
-                break;
+            break;
             case SPOT_CALL_COL_NUM:
                 d = dxSpot->spotterCall;
-                break;
+            break;
             case SPOTLOC_COL_NUM:
                 d = dxSpot->spotterLocator;
-                break;
+            break;
             case COMMENT_COL_NUM:
                 d = dxSpot->spotComment;
-                break;
+            break;
+            case DXBANDMASK_COL_NUM:
+                d = dxSpot->dxFreqMaskStr;
+            break;
+            case MODEMASK_COL_NUM:
+                d = dxSpot->dxModeMaskStr;
+            break;
+            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
+                d = dxSpot->sentToMemory;
+            break;
             default:
                 d = "";
 
@@ -198,22 +217,28 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             {
                 case TIME_COL_NUM :
                     dxSpot->spotTime = value.toString();
-                    break;
+                break;
                 case FREQ_COL_NUM:
                     dxSpot->dxFreq = value.toString();
-                    break;
+                break;
                 case DXSPOT_CALL_COL_NUM:
                     dxSpot->dxCall = value.toString();
-                    break;
+                break;
                 case DXSPOT_CALL_WORKED_COL_NUM:
                     dxSpot->dxCallWorked = value.toBool();
-                    break;
+                break;
                 case DXLOC_COL_NUM:
                     dxSpot->dxLocator = value.toString();
-                    break;
+                break;
+                case DXDIST_COL_NUM:
+                    dxSpot->dxDist = value.toString();
+                break;
+                case DXBRG_COL_NUM:
+                    dxSpot->dxBrg = value.toString();
+                break;
                 case DXLOC_WORKED_COL_NUM:
                     dxSpot->dxLocatorWorked = value.toBool();
-                    break;
+                break;
                 case SPOT_CALL_COL_NUM:
                     dxSpot->spotterCall = value.toString();
                     break;
@@ -223,6 +248,12 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
                 case COMMENT_COL_NUM:
                     dxSpot->spotComment = value.toString();
                     break;
+                case DXBANDMASK_COL_NUM:
+                    dxSpot->dxModeMaskStr = value.toString();
+                break;
+                case MODEMASK_COL_NUM:
+                    dxSpot->dxModeMaskStr = value.toString();
+                break;
                 case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                     dxSpot->sentToMemory = value.toBool();
                 default:
@@ -268,7 +299,15 @@ bool DxSpotDataModel::insertColumns(int column, int count, const QModelIndex &pa
 bool DxSpotDataModel::removeRows(int _row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, _row, _row + count - 1);
-    for (int row=_row; row < _row + count; ++row)
+/*
+    for (int row =_row; row < _row + count; ++row)
+    {
+        dxSpotData.removeAt(row);
+    }
+*/
+    //int i = _row + count - 1;
+    //while (i )
+    for (int row = _row + count - 1; row > (_row - 1); row--)
     {
         dxSpotData.removeAt(row);
     }
