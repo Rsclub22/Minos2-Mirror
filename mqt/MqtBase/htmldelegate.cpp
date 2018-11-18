@@ -20,9 +20,24 @@
 ======================================================================================*/
 
 #include "base_pch.h"
+#include "MinosLoggerEvents.h"
 
 #include "htmldelegate.h"
 
+
+HtmlDelegate::HtmlDelegate(qreal wmult, qreal hmult):wmult(wmult), hmult(hmult)
+{
+    connect(&MinosLoggerEvents::mle, SIGNAL(listCompressionChanged(qreal)),
+            this, SLOT(onListCompressionChanged(qreal)));
+
+}
+HtmlDelegate:: ~HtmlDelegate()
+{}
+
+void HtmlDelegate::onListCompressionChanged(qreal h)
+{
+    hmult = h;
+}
 void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption, const QModelIndex &index ) const
 {
     QStyleOptionViewItem option = poption; // kill const

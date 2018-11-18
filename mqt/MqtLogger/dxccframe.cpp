@@ -38,7 +38,9 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
     model.ct = contest;
     if (contest)
     {
-        delegate = new HtmlDelegate(1.0, 1.0);
+        int lcf;
+        TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+        delegate = new HtmlDelegate(1.0, lcf/100.0);
         model.delegate = delegate;
 
         proxyModel.setSourceModel(&model);

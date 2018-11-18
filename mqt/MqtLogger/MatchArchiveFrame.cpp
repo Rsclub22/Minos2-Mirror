@@ -83,6 +83,6 @@ void MatchArchiveFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QStrin
 
         if (sel)
             treeClickIndex = selected.indexes().at(0);
-        getTreeView()->viewport()->repaint();
+        getTreeView()->viewport()->update();
     }
 }

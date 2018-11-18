@@ -26,7 +26,9 @@ void MatchTreeFrame::initialise()
 {
     setModel(getMatchModel());
     header()->setSectionResizeMode(QHeaderView::Interactive);
-    setItemDelegate( new HtmlDelegate(1.0, 1.0) );
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    setItemDelegate( new HtmlDelegate(1.0, lcf/100.0) );
     setUniformRowHeights(true);
 
 

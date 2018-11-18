@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "ContestApp.h"
 #include "LoggerContest.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
@@ -40,9 +41,11 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     proxyModel.setSourceModel(&model);
     ui->rigMemTable->setModel(&proxyModel);
 
-    ui->rigMemTable->setItemDelegate( new HtmlDelegate(1.0, 1.0) );
-    ui->rigMemTable->resizeColumnsToContents();
-    ui->rigMemTable->resizeRowsToContents();
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    ui->rigMemTable->setItemDelegate( new HtmlDelegate(1.0, lcf/100.0) );
+//    ui->rigMemTable->resizeColumnsToContents();
+//    ui->rigMemTable->resizeRowsToContents();
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));

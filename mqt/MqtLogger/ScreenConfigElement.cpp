@@ -77,9 +77,6 @@ void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
     if (!parentRow->checkOk(this))
     {
         setType(sctNone);
-//        repaint();
-//        QString t = getType();
-//        mShowMessage(t, this);
     }
 }
 
