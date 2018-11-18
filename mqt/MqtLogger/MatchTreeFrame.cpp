@@ -262,6 +262,10 @@ void QSOMatchGridModel::initialise(MatchType t, SharedMatchCollection pmatch )
 }
 QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
 {
+    if (!index.isValid())
+    {
+        return QVariant();
+    }
     QModelIndex p = index.parent();
 
     MatchTreeItem *thisItem = static_cast<MatchTreeItem*>(index.internalPointer());

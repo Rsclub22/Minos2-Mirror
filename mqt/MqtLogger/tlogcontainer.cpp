@@ -1057,12 +1057,14 @@ void TLogContainer::listCompressionActionExecute()
 {
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    enquireDialog(this, "Set List Compression Value as percentage", lcf, 50, 150);
-    TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, lcf);
-    MinosLoggerEvents::sendListCompressionChanged(lcf/100.0);
+    if (enquireDialog(this, "Set List Compression Value as percentage", lcf, 50, 150))
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, lcf);
+        MinosLoggerEvents::sendListCompressionChanged(lcf/100.0);
 
-    TWaitCursor wc(this);
-    selectSession(TContestApp::getContestApp()->currSession);
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+    }
 }
 
 void TLogContainer::on_ContestPageControl_currentChanged(int index)
