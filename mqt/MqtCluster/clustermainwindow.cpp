@@ -32,7 +32,10 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     loginStart(false),
     loginSuccess(false),
     nodeConnected(false),
+    purgeSpotFlag(false),
     reconnectFlag(false)
+
+
 {
     ui->setupUi(this);
 
@@ -53,6 +56,11 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
     LogTimer.start(100);
+
+    spotsList.clear();
+    getSpotsTimer = new QTimer();
+    connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromQueue()));
+    getSpotsTimer->start(1000);
 
     setWindowTitle("Minos Cluster Server");
     status = new QLabel;
@@ -151,6 +159,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(ui->clusterViewsTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
 
     connect(ui->actionSetup, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
+    connect(ui->actionClear_All_Spots, SIGNAL(triggered()), this, SLOT(onClearAllSpots()));
 
     connect(ui->nodeCb, SIGNAL(activated(QString)), this, SLOT(connectToNode(QString)));
 
@@ -198,6 +207,25 @@ void ClusterMainWindow::onLaunchSetup()
 
 
     setupCluster->exec();
+}
+
+
+void ClusterMainWindow::onClearAllSpots()
+{
+    if (dxSpotDataModel->rowCount() > 0)
+    {
+        int ret = QMessageBox::warning(this, tr("Cluster"),
+                                       tr("Please confirm you want to delete all the spots?"),
+                                       QMessageBox::Yes | QMessageBox::No);
+
+        if (ret == QMessageBox::Yes)
+        {
+            purgeSpotFlag = true;
+            dxSpotDataModel->removeRows(0, dxSpotDataModel->rowCount(), QModelIndex());
+            purgeSpotFlag = false;
+        }
+    }
+
 }
 
 
@@ -470,15 +498,13 @@ void ClusterMainWindow::parseDX(QString txt)
             // Display
             //QString displayFreq = alignFreqRight(dxFreq);
             clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
-            dxSpotDataModel->rowData = new SpotData(spotTime, dxFreq,
-                                                    dxBandMask, dxModeMask,
-                                                    dxCall, false,
-                                                    dxLocator, false,
-                                                    "", "",
-                                                    spotCall, spotLocator,
-                                                    spotComment);
-            //dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
-            dxSpotDataModel->insertRows(0, 1);
+            spotsList.append(new SpotData(spotTime, dxFreq,
+                                          dxBandMask, dxModeMask,
+                                          dxCall, false,
+                                          dxLocator, false,
+                                          "", "",
+                                          spotCall, spotLocator,
+                                          spotComment));
 
         }
         else if (retCode < 0)
@@ -489,7 +515,23 @@ void ClusterMainWindow::parseDX(QString txt)
     }
 }
 
-
+void ClusterMainWindow::getSpotsFromQueue()
+{
+    if (!spotsList.isEmpty())
+    {
+        // get spots from queue
+        for (int i = spotsList.count() -1 ; i > -1; i--)
+        {
+            if (purgeSpotFlag)
+            {
+                return;
+            }
+            dxSpotDataModel->rowData = spotsList[i];
+            spotsList.remove(i);
+            dxSpotDataModel->insertRows(0, 1);
+        }
+    }
+}
 
 
 int ClusterMainWindow::upackSpot(QString txt)
