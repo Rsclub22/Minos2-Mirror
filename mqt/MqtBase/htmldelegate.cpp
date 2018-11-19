@@ -49,25 +49,19 @@ void HtmlDelegate::paint( QPainter *painter, const QStyleOptionViewItem &poption
     QTextDocument doc;
     doc.setHtml( option.text );
 
-    /// Painting item without text
+    // Painting item without text - gives highlighting etc
     option.text = QString();
     style->drawControl( QStyle::CE_ItemViewItem, &option, painter );
 
     QAbstractTextDocumentLayout::PaintContext ctx;
 
-    // Highlighting text if item is selected
-    // But this gives crap colours
-
-    //    if (option.state & QStyle::State_Selected)
-    //        ctx.palette.setColor(QPalette::Text, option.palette.color(QPalette::Active, QPalette::HighlightedText));
-
     QRect textRect = style->subElementRect( QStyle::SE_ItemViewItemText, &option );
-//    textRect.setBottom(textRect.top() + (textRect.bottom() - textRect.top()) / hmult);
 
     QRect oldRect = textRect;
     int oldHeight = textRect.bottom() - textRect.top();
     int newHeight = static_cast<int>(oldHeight*hmult);
     textRect.setBottom(textRect.top() + newHeight);
+    textRect.setTop(textRect.top() + (newHeight - oldHeight)*2/3);
 
     painter->save();
     painter->translate( textRect.topLeft() );

@@ -1057,7 +1057,7 @@ void TLogContainer::listCompressionActionExecute()
 {
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    if (enquireDialog(this, "Set List Compression Value as percentage", lcf, 50, 150))
+    if (enquireDialog(this, "Set List Spacing Compression Value as percentage", lcf, 50, 150))
     {
         TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, lcf);
         MinosLoggerEvents::sendListCompressionChanged(lcf/100.0);
@@ -1305,7 +1305,7 @@ void TLogContainer::updateLayoutsMenu()
 {
     screenLayoutMenu->clear();
     ScreenConfigAction = newAction("Configure Screen Layouts...", screenLayoutMenu, SLOT(doScreenConfigAction()));
-    listCompressionAction = newAction("List compression factor", screenLayoutMenu, SLOT(listCompressionActionExecute()));
+    listCompressionAction = newAction("Set List Spacing Compression...", screenLayoutMenu, SLOT(listCompressionActionExecute()));
 
     screenLayoutMenu->addSeparator();
 
