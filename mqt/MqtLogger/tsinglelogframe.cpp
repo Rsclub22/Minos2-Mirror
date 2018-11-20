@@ -176,7 +176,6 @@ void TSingleLogFrame::createScreenComponents()
     QSOTable->setSelectionMode(QAbstractItemView::SingleSelection);
     QSOTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     QSOTable->setWordWrap(false);
-    QSOTable->setCornerButtonEnabled(false);
     QSOTable->horizontalHeader()->setHighlightSections(false);
     QSOTable->horizontalHeader()->setStretchLastSection(true);
     QSOTable->verticalHeader()->setVisible(false);

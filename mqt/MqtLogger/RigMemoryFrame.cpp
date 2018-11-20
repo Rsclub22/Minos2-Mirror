@@ -9,11 +9,13 @@
 #include "htmldelegate.h"
 #include "ui_RigMemoryFrame.h"
 
-enum eRigMemGridCols {ermLocator, ermBearing, ermFreq, ermTime, ermWorked,
+
+enum eRigMemGridCols {ermCallsign, ermLocator, ermBearing, ermFreq, ermTime, ermWorked,
                     ermMaxCol
                    };
 static GridColumn RigMemoryColumns[ ermMaxCol ] =
    {
+      GridColumn( ermCallsign, "(GM4ABC/P) FBXX", "Callsign", taLeftJustify ),
       GridColumn( ermLocator, "MM00MM00", "Locator", taLeftJustify ),
       GridColumn( ermBearing, "BRGXXX", "Brg", taCenter ),
       GridColumn( ermFreq, "144.000.000", "Freq", taLeftJustify ),
@@ -43,9 +45,10 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    ui->rigMemTable->setItemDelegate( new HtmlDelegate(1.0, lcf/100.0) );
-//    ui->rigMemTable->resizeColumnsToContents();
-//    ui->rigMemTable->resizeRowsToContents();
+    delegate = new HtmlDelegate(1.0, lcf/100.0) ;
+    model.delegate = delegate;
+    ui->rigMemTable->setItemDelegate( delegate);
+    ui->rigMemTable->resizeRowsToContents();
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
@@ -150,15 +153,9 @@ void RigMemoryFrame::DXSpotToMemory(memoryData::memData m)
         return;
     }
 
-    //RigMemDialog memDialog(this);
-    //memDialog.setLogData(&logData, buttonNumber, ct);
-    //memDialog.setWindowTitle(QString("M%1 - Write").arg(QString::number(buttonNumber + 1)));
-   //if ( memDialog.exec() == QDialog::Accepted)
-   //{
-       setRigMemoryData(n, logData);
+    setRigMemoryData(n, logData);
 
-       sendUpdateMemories();
-   //}
+    sendUpdateMemories();
 }
 
 
@@ -253,17 +250,11 @@ void RigMemoryFrame::doMemoryUpdates()
 {
     // called from minosLoggerEvents following sendUpdateMemories
     // clear all the "old" buttons
-/*
-    QString tTipStr = "Callsign: " + m.callsign + "\n"
-            + "Freq: " + convertFreqStrDisp(m.freq) + "\n"
-            + "Mode: " + m.mode + "\n"
-            + "Locator: " + m.locator + "\n"
-            + "Bearing: " + QString::number(m.bearing) + "\n"
-            + "Time: " + m.time;
-*/
+
     model.reset();
     reloadColumns();
     on_AfterLogContact(ct);
+//    ui->rigMemTable->resizeRowsToContents();
 }
 
 void RigMemoryFrame::checkTimerTimer()
@@ -288,8 +279,10 @@ void RigMemoryFrame::checkTimerTimer()
     tslf->getCurrentDetails(logData);
 
     if (!doTimer && (logData.freq == lastRigFreq && logData.bearing == lastBearing))
+    {
+        ui->rigMemTable->resizeRowsToContents();
         return;
-
+    }
     doTimer = false;
 
     lastRigFreq = logData.freq;
@@ -655,9 +648,6 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
     int col = index.column();
     if (ct)
     {
-        if ( role != Qt::DisplayRole && role != Qt::EditRole && role != Qt::UserRole )
-            return QVariant();
-
         if (role == Qt::DisplayRole || role == Qt::UserRole)
         {
             LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
@@ -665,6 +655,17 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
             QString disp;
             switch(col)
             {
+            case ermCallsign:
+            {
+                disp = frame->headerVal[row].text;
+                if (disp.isEmpty())
+                {
+                    disp = "     " + m.callsign + "    ";
+                }
+                QColor colour = frame->headerVal[row].colour;
+                disp = HtmlFontColour(colour) + disp;
+                break;
+            }
             case ermWorked:
                 disp = m.worked?"Y":"N";
                 break;
@@ -694,7 +695,8 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
             }
             return disp;
         }
-        if (role == Qt::TextAlignmentRole)
+
+        else if (role == Qt::TextAlignmentRole)
             return Qt::AlignLeft;
     }
     return QVariant();
@@ -717,35 +719,24 @@ QVariant RigMemoryGridModel::headerData( int section, Qt::Orientation orientatio
     }
     else if (orientation == Qt::Vertical)
     {
-        if (role == Qt::DisplayRole)
+        if (role == Qt::SizeHintRole)
         {
-            QString disp;
-            LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
-            if (c)
+            if (delegate)
             {
-                memoryData::memData m = c->getRigMemoryData(section);
-                disp = frame->headerVal[section].text;
-                if (disp.isEmpty())
-                {
-                    // This appears to be the line that defines the width
-                    // of the vertical header
-                    disp = "     " + m.callsign + "    ";
-                }
-            }
-            return disp;
-        }
-        else if (role == Qt::ForegroundRole)
-        {
-            LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
-            if (c)
-            {
-                memoryData::memData m = c->getRigMemoryData(section);
-                QColor colour = frame->headerVal[section].colour;
-                return colour;
+                // BUT the headers aren't drawn using the delegate, so this
+                // all fails to work
+
+                // Do we lose the vertical header?
+                QString s = "__";
+                QSize r = delegate->docSize(s);
+                return r;
             }
         }
-        else if (role == Qt::TextAlignmentRole)
-            return Qt::AlignLeft;
+        else if (role == Qt::ToolTipRole)
+        {
+            return "Click here to transfer memory to QSO";
+        }
+
     }
     return QVariant();
 }
