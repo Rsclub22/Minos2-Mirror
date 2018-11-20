@@ -19,10 +19,7 @@
 
 const int dxSpotColCount = 14;
 
-
-
-
-
+class HtmlDelegate;
 
 class DxSpotDataModel : public QAbstractTableModel
 {
@@ -51,7 +48,8 @@ public:
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
-    SpotData* rowData;
+    SpotData* rowData = nullptr;
+    HtmlDelegate *delegate = nullptr;
 
 private:
     //QList<QStringList> dxSpotData;

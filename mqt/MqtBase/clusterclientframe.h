@@ -121,6 +121,8 @@ private:
     BaseContestLog *ct = nullptr;
     ClusterClientFilterDialog *filterSetup;
 
+    HtmlDelegate *delegate = nullptr;
+
     QTimer* purgeTimer;
     int timeToLive;
     bool purgeSpotFlag;

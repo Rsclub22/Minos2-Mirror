@@ -133,8 +133,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setVisible(false);
-    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    verticalHeader->setDefaultSectionSize(18);
+//    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+//    verticalHeader->setDefaultSectionSize(18);
 
 /*
 
