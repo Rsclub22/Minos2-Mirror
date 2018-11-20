@@ -221,9 +221,9 @@ void RotatorMainWindow::logMessage( QString s )
 void RotatorMainWindow::onStdInRead(QString cmd)
 {
     trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(true);
-    if (cmd.indexOf("HideServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
 }
 
