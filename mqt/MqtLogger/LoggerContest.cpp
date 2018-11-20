@@ -29,6 +29,8 @@ LoggerContestLog::LoggerContestLog( ) : BaseContestLog(),
       logFile( false ), adifFile( false ), ediFile( false ),
       needExport( false )
 {
+
+
 }
 void LoggerContestLog::makeContact(bool timeNow, QSharedPointer<BaseContact> &lct )
 {

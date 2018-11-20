@@ -22,18 +22,22 @@
 #include "ui_clusterclientframe.h"
 
 
-ClusterClientFrame::ClusterClientFrame(QWidget *parent):
-    QFrame(parent)
-    , ui(new Ui::ClusterClientFrame)
-    , purgeTimer(nullptr)
-    , timeToLive(0)
-    , purgeSpotFlag(false)
+ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
+    QFrame(parent),
+    ui(new Ui::ClusterClientFrame),
+    purgeTimer(nullptr),
+    timeToLive(0),
+    purgeSpotFlag(false),
+    instanceNum(instanceNum)
 {
 
     ui->setupUi(this);
+
     filterSetup = new ClusterClientFilterDialog();
 
     purgeTimer = new QTimer(this);
+
+    qDebug() << "new cluster frame, instance num = " << instanceNum;
 
     checkNewSpotsTimer = new QTimer(this);
     connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));

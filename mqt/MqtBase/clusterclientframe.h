@@ -33,6 +33,7 @@ const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: white ;\n
 const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ; \n");
 
 
+
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
@@ -108,9 +109,10 @@ class ClusterClientFrame : public QFrame
 
     void traceMsg(QString msg);
 public:
-    explicit ClusterClientFrame(QWidget *parent);
+    explicit ClusterClientFrame(QWidget *parent, int instanceNum);
     ~ClusterClientFrame() override;
     void setStandAlone();
+
     void setContest(BaseContestLog *contest);
 
 
@@ -119,6 +121,9 @@ public:
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *ct = nullptr;
+
+
+
     ClusterClientFilterDialog *filterSetup;
 
     QTimer* purgeTimer;
@@ -152,6 +157,7 @@ private:
     QAction* clearSpotAction;
     QAction* clearAllSpotsAction;
 
+    int instanceNum;
 
     void restoreDxSpotViewColumns();
 

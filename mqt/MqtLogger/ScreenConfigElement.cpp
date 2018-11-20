@@ -7,6 +7,7 @@ static QVector <SCTypeOption> scoptions =
 {
     {sctAux, "Auxiliary", "Auxiiary Display"},
     {sctChat, "Chat Display", "Chat Display"},
+    {sctCluster, "Cluster Display", "Cluster Display"},
     {sctLog, "Log List", "QSO Log List"},
     {sctNextQSODetails, "Next QSO Details", "Next QSO details"},
     {sctQSOEdit, "QSO Edit", "QSO Edit"},

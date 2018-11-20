@@ -9,9 +9,7 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
-    bandFilterMask(0),
     editBandFilterMask(0),
-    modeFilterMask(0),
     editModeFilterMask(0),
     vhfButtonState(false),
     mWaveButtonState(false),
@@ -66,7 +64,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     ui->ClusterClientFilterTab->setCurrentIndex(0);
 
     callsignListWidget = ui->callsignListWidget;
-    callsignListWidget->addItems(callsignFilterList);
+    callsignListWidget->addItems(filterSettings.callsignFilterList);
 
 
     connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(callsignCurrentRowChanged(int)));
@@ -77,7 +75,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     connect(ui->callsignDelButton, SIGNAL(clicked()), SLOT(callsignDelClicked()));
 
     locatorListWidget = ui->locatorListWidget;
-    locatorListWidget->addItems(locatorFilterList);
+    locatorListWidget->addItems(filterSettings.locatorFilterList);
 
     connect(ui->locatorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(locatorCurrentRowChanged(int)));
 
@@ -105,34 +103,35 @@ void ClusterClientFilterDialog::filtersAccepted()
 {
     int filterChangeMask = 0;
 
+
     if (bandTabChanged)
     {
         bandTabChanged = false;
         // copy updated masks with edited values
-        bandFilterMask = editBandFilterMask;
-        modeFilterMask = editModeFilterMask;
+        filterSettings.bandFilterMask = editBandFilterMask;
+        filterSettings.modeFilterMask = editModeFilterMask;
         filterChangeMask |= FREQFILTERUP;
     }
 
     else if (callsignEditChanged)
     {
         callsignEditChanged = false;
-        callsignFilterList.clear();
+        filterSettings.callsignFilterList.clear();
         for (int row = 0; row < callsignListWidget->count(); row++)
         {
             QListWidgetItem* item = callsignListWidget->item(row);
-            callsignFilterList.append(item->text());
+            filterSettings.callsignFilterList.append(item->text());
         }
         filterChangeMask |= CALLSIGNUP;
     }
     else if (locatorEditChanged)
     {
         locatorEditChanged = false;
-        locatorFilterList.clear();
+        filterSettings.locatorFilterList.clear();
         for (int row = 0; row < locatorListWidget->count(); row++)
         {
             QListWidgetItem* item = locatorListWidget->item(row);
-            locatorFilterList.append(item->text());
+            filterSettings.locatorFilterList.append(item->text());
         }
         filterChangeMask |= LOCATORUP;
     }
@@ -154,18 +153,18 @@ void ClusterClientFilterDialog::filtersRejected()
     {
         // restore the callsignListWidget
         callsignListWidget->clear();
-        for (int i = 0; i < callsignFilterList.count(); i++)
+        for (int i = 0; i < filterSettings.callsignFilterList.count(); i++)
         {
-            callsignListWidget->addItem(callsignFilterList[i]);
+            callsignListWidget->addItem(filterSettings.callsignFilterList[i]);
         }
     }
     else if (locatorEditChanged)
     {
         // restore the locatorListWidget
         locatorListWidget->clear();
-        for(int i = 0; i < locatorFilterList.count(); i++)
+        for(int i = 0; i < filterSettings.locatorFilterList.count(); i++)
         {
-            locatorListWidget->addItem(locatorFilterList[i]);
+            locatorListWidget->addItem(filterSettings.locatorFilterList[i]);
         }
     }
 
@@ -189,8 +188,8 @@ int ClusterClientFilterDialog::getTabCurrentIndex()
 void ClusterClientFilterDialog::restoreTabSettings()
 {
 
-    loadBandSettings(bandFilterMask);
-    loadModeSettings(modeFilterMask);
+    loadBandSettings(filterSettings.bandFilterMask);
+    loadModeSettings(filterSettings.modeFilterMask);
 }
 
 
@@ -202,12 +201,12 @@ void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
 
 void ClusterClientFilterDialog::copyBandFilterMaskToEdit()
 {
-    editBandFilterMask = bandFilterMask;
+    editBandFilterMask = filterSettings.bandFilterMask;
 }
 
 void ClusterClientFilterDialog::copyModeFilterMaskToEdit()
 {
-    editModeFilterMask = modeFilterMask;
+    editModeFilterMask = filterSettings.modeFilterMask;
 }
 
 void ClusterClientFilterDialog::loadBandSettings(unsigned int bandMask)
@@ -356,7 +355,7 @@ void ClusterClientFilterDialog::restoreVHFBands()
 
     for (int i = 0; i < NUM_VHFMASKS; i++)
     {
-        if (bandFilterMask & vhfBandMasks[i])
+        if (filterSettings.bandFilterMask & vhfBandMasks[i])
         {
             vhfChkBoxList[i]->setChecked(true);
         }
@@ -417,7 +416,7 @@ void ClusterClientFilterDialog::restoreMWBands()
 
     for (int i = 0; i < NUM_MWAVEMASKS; i++)
     {
-        if (bandFilterMask & mWaveBandMasks[i])
+        if (filterSettings.bandFilterMask & mWaveBandMasks[i])
         {
             mWaveChkBoxList[i]->setChecked(true);
         }
@@ -470,7 +469,7 @@ void ClusterClientFilterDialog::restoreModes()
 
     for (int i = 0; i < NUM_MODEMASKS; i++)
     {
-        if (modeFilterMask & modeMasks[i])
+        if (filterSettings.modeFilterMask & modeMasks[i])
         {
             modeChkBoxList[i]->setChecked(true);
         }
@@ -486,11 +485,11 @@ void ClusterClientFilterDialog::restoreModes()
 
 unsigned int ClusterClientFilterDialog::getBandFilterMask()
 {
-    return bandFilterMask;
+    return filterSettings.bandFilterMask;
 }
 unsigned int ClusterClientFilterDialog::getModeFilterMask()
 {
-    return modeFilterMask;
+    return filterSettings.modeFilterMask;
 }
 
 
@@ -501,7 +500,7 @@ unsigned int ClusterClientFilterDialog::getModeFilterMask()
 void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
 {
     callsignListWidget->clear();
-    foreach (QString str, callsignFilterList)
+    foreach (QString str, filterSettings.callsignFilterList)
     {
         callsignListWidget->addItem(str);
     }
@@ -617,19 +616,19 @@ void ClusterClientFilterDialog::callsignEditClicked()
 
 QStringList ClusterClientFilterDialog::getCallsignFilterList()
 {
-    return callsignFilterList;
+    return filterSettings.callsignFilterList;
 }
 
 QStringList ClusterClientFilterDialog::getLocatorFilterList()
 {
-    return locatorFilterList;
+    return filterSettings.locatorFilterList;
 }
 
 
 void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
 {
     locatorListWidget->clear();
-    foreach (QString str, locatorFilterList)
+    foreach (QString str, filterSettings.locatorFilterList)
     {
         locatorListWidget->addItem(str);
     }

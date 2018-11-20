@@ -58,19 +58,21 @@ private:
     QList<QCheckBox*> modeChkBoxList;
 
 
-    QStringList callsignFilterList;
+    //QStringList callsignFilterList;
     QListWidget* callsignListWidget;
     int callsignListWidgetCurrentRow;
 
 
-    QStringList locatorFilterList;
+    //QStringList locatorFilterList;
     QListWidget* locatorListWidget;
     int locatorListWidgetCurrentRow;
 
-    unsigned int bandFilterMask;
+    //unsigned int bandFilterMask;
     unsigned int editBandFilterMask;
-    unsigned int modeFilterMask;
+    //unsigned int modeFilterMask;
     unsigned int editModeFilterMask;
+
+    ClusterClientFilterSettings filterSettings;
 
     bool vhfButtonState;
     bool mWaveButtonState;
