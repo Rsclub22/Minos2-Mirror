@@ -56,6 +56,7 @@ class TSingleLogFrame : public QFrame
     QTableView *QSOTable;
     RigControlFrame *FKHRigControlFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
+
     RotPresets *rotPresets = nullptr;
 
     QFrame *CribSheet= nullptr;
@@ -68,7 +69,7 @@ class TSingleLogFrame : public QFrame
 
     ChatFrame *chatFrame = nullptr;
 
-    ClusterClientFrame *clusterFrame = nullptr;
+    ClusterClientFrame *clusterControlFrame = nullptr;
 
     QVector <MinosSplitter *> rowSplitters;
 

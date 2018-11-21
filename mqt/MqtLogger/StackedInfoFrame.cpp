@@ -29,7 +29,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     QStringList infoList =
     {
         "Clock",
-        "Cluster",
+        //"Cluster",
         "DXCC",
         "District",
         "Filter",
@@ -65,7 +65,7 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int arg1)
     }
 
     clockFrame = nullptr;
-    clusterClientFrame = nullptr;
+    //clusterClientFrame = nullptr;
     dxccFrame = nullptr;
     districtFrame = nullptr;
     filterFrame = nullptr;
@@ -82,54 +82,76 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int arg1)
         layout()->addWidget(currStackFrame);
         clockFrame->setContest(contest);
         break;
+/*
     case 1:
-        clusterClientFrame = new ClusterClientFrame(this);
-        currStackFrame = clusterClientFrame;
-        layout()->addWidget(currStackFrame);
-        clusterClientFrame->setContest(contest);
+
+
+        if (contest->clusterFrameCount < 3)
+        {
+            int instanceNum = getClusterInstanceNum();
+            if (instanceNum != -1)
+            {
+                qDebug() << "stackframe cluster count = " << contest->clusterFrameCount;
+                contest->clusterFrameCount++;
+                clusterClientFrame = new ClusterClientFrame(this, instanceNum);
+                currStackFrame = clusterClientFrame;
+                layout()->addWidget(currStackFrame);
+                clusterClientFrame->setContest(contest);
+            }
+
+        }
+        else
+        {
+            // default to clock if max cluster frames
+            clockFrame = new TClockFrame(this);
+            currStackFrame = clockFrame;
+            layout()->addWidget(currStackFrame);
+            clockFrame->setContest(contest);
+        }
         break;
-    case 2:
+*/
+    case 1:
         dxccFrame = new DXCCFrame(this);
         currStackFrame = dxccFrame;
         layout()->addWidget(currStackFrame);
         dxccFrame->setContest(contest);
         break;
-    case 3:
+    case 2:
 //    "District",
         districtFrame = new DistrictFrame(this);
         currStackFrame = districtFrame;
         layout()->addWidget(districtFrame);
         districtFrame->setContest(contest);
         break;
-    case 4:
+    case 3:
 //    "Filter",
         filterFrame = new FilterFrame(this);
         currStackFrame = filterFrame;
         layout()->addWidget(filterFrame);
         filterFrame->setContest(contest);
         break;
-    case 5:
+    case 4:
 //    "Memories",
         rigMemFrame = new RigMemoryFrame(this);
         currStackFrame = rigMemFrame;
         layout()->addWidget(rigMemFrame);
         rigMemFrame->setContest(contest);
         break;
-    case 6:
+    case 5:
 //    "Locator Map",
         locFrame = new LocFrame(this);
         currStackFrame = locFrame;
         layout()->addWidget(locFrame);
         locFrame->setContest(contest);
         break;
-    case 7:
+    case 6:
 //    "Locator Tree",
         locTreeFrame = new LocTreeFrame(this);
         currStackFrame = locTreeFrame;
         layout()->addWidget(locTreeFrame);
         locTreeFrame->setContest(contest);
         break;
-    case 8:
+    case 7:
 //    "Stats"
         statsFrame = new TStatsDispFrame(this);
         currStackFrame = statsFrame;
@@ -170,9 +192,10 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
             clockFrame->setContest(contest);
         if (rigMemFrame)
             rigMemFrame->setContest(contest);
+/*
         if (clusterClientFrame)
             clusterClientFrame->setContest(contest);
-
+*/
         if (contest)
         {
             if (stackInstance < STACKITEMS)
@@ -271,3 +294,20 @@ void StackedInfoFrame::onFiltersChanged(BaseContestLog *ct)
             statsFrame->reInitialiseStats();
     }
 }
+
+/*
+int StackedInfoFrame::getClusterInstanceNum()
+{
+    for (int i = 0; i < contest->clusterInstanceFlags.count(); i++)
+    {
+        if (!contest->clusterInstanceFlags[i])
+        {
+            contest->clusterInstanceFlags[i] = true;
+            return i;
+        }
+    }
+
+    return -1;   // no slots found
+
+}
+*/

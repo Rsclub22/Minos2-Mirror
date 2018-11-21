@@ -126,4 +126,42 @@ const QString DEL_CALLSIGN_KEY = "Ctrl-d";
 
 const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
 
+
+class ClusterClientFilterSettings
+{
+
+public:
+    ClusterClientFilterSettings():
+        bandFilterMask(0),
+        modeFilterMask(0)
+    {
+
+    }
+
+    ClusterClientFilterSettings(QStringList& cfl, QStringList& lfl, unsigned int bfm, unsigned int mfm)
+    {
+        callsignFilterList = cfl;
+        locatorFilterList = lfl;
+        bandFilterMask = bfm;
+        modeFilterMask = mfm;
+    }
+
+
+
+    QStringList callsignFilterList;
+    QStringList locatorFilterList;
+    unsigned int bandFilterMask;
+    unsigned int modeFilterMask;
+
+
+void operator = (const ClusterClientFilterSettings& ccfs)
+{
+    callsignFilterList = ccfs.callsignFilterList;
+    locatorFilterList = ccfs.locatorFilterList;
+    bandFilterMask = ccfs.bandFilterMask;
+    modeFilterMask = ccfs.modeFilterMask;
+}
+
+};
+
 #endif // CLUSTERCOMMON_H

@@ -23,22 +23,27 @@
 #include "ui_clusterclientframe.h"
 
 
-ClusterClientFrame::ClusterClientFrame(QWidget *parent):
-    QFrame(parent)
-    , ui(new Ui::ClusterClientFrame)
-    , purgeTimer(nullptr)
-    , timeToLive(0)
-    , purgeSpotFlag(false)
+ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
+    QFrame(parent),
+    ui(new Ui::ClusterClientFrame),
+    purgeTimer(nullptr),
+    timeToLive(0),
+    purgeSpotFlag(false),
+    instanceNum(instanceNum)
 {
 
     ui->setupUi(this);
+
     int lcf;
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
     delegate = new HtmlDelegate(1.0, lcf/100.0) ;
 
+
     filterSetup = new ClusterClientFilterDialog();
 
     purgeTimer = new QTimer(this);
+
+    qDebug() << "new cluster frame, instance num = " << instanceNum;
 
     checkNewSpotsTimer = new QTimer(this);
     connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));
@@ -893,24 +898,32 @@ void ClusterClientFrame::clearAllSpotsActionSelected()
 
 void ClusterClientFrame::onSearchEditingFinished()
 {
-    if (ui->dxSpotTab->currentIndex() != SEARCH_TAB)
+    static QString oldEntry = "";
+
+    if (ui->searchLineEdit->text() != oldEntry)
     {
-        ui->dxSpotTab->setCurrentIndex(SEARCH_TAB);
+        oldEntry = ui->searchLineEdit->text();
+
+        if (ui->dxSpotTab->currentIndex() != SEARCH_TAB)
+        {
+            ui->dxSpotTab->setCurrentIndex(SEARCH_TAB);
+        }
+
+        if (ui->searchLineEdit->text().trimmed().isEmpty())
+        {
+            searchSortProxyModel->searchParameter = "";
+            searchSortProxyModel->setFilterRegExp("");
+        }
+        else
+        {
+            searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
+            //ui->searchLineEdit->selectAll();
+            searchSortProxyModel->setFilterRegExp("");
+        }
+
+        ui->searchLineEdit->setFocus();
     }
 
-    if (ui->searchLineEdit->text().trimmed().isEmpty())
-    {
-        searchSortProxyModel->searchParameter = "";
-        searchSortProxyModel->setFilterRegExp("");
-    }
-    else
-    {
-        searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
-        //ui->searchLineEdit->selectAll();
-        searchSortProxyModel->setFilterRegExp("");
-    }
-
-    ui->searchLineEdit->setFocus();
 }
 
 

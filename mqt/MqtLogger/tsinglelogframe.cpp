@@ -228,7 +228,15 @@ void TSingleLogFrame::createScreenComponents()
 
     FKHRotControlFrame->setVisible(false);
     FKHRotControlFrame->setContest(contest);
+/*
+    clusterControlFrame = new ClusterClientFrame(this, 0);
+    clusterControlFrame->setObjectName(QStringLiteral("ClusterControlFrame"));
+    clusterControlFrame->setFrameShape(QFrame::StyledPanel);
+    clusterControlFrame->setFrameShadow(QFrame::Raised);
 
+    clusterControlFrame->setVisible(false);
+    clusterControlFrame->setContest(contest);
+*/
     rotPresets = new RotPresets(this);
 
     rotPresets->setObjectName(QStringLiteral("rotPresets"));
@@ -293,14 +301,6 @@ void TSingleLogFrame::createScreenComponents()
     chatFrame->setFrameShadow(QFrame::Raised);
 
     chatFrame->setVisible(false);
-
-    clusterFrame = new ClusterClientFrame(this);
-    clusterFrame->setObjectName(QStringLiteral("clusterFrame"));
-    clusterFrame->setFrameShape(QFrame::StyledPanel);
-    clusterFrame->setFrameShadow(QFrame::Raised);
-
-    clusterFrame->setVisible(false);
-
 
 
     // set frame to Vertical Layout, insert LogFrameSplitter
@@ -400,6 +400,7 @@ void TSingleLogFrame::buildScreenLayout()
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;
+    int clusterInstance = 0;
     for (int j = 0; j < sc.rows.count(); j++)
     {
         if (sc.rows[j].elements.count())
@@ -511,6 +512,13 @@ void TSingleLogFrame::buildScreenLayout()
                     chatFrame->setVisible(true);
                     break;
                 }
+                case sctCluster:
+
+                    clusterControlFrame = new ClusterClientFrame(elementScrollArea, clusterInstance++);
+                    elementScrollArea->setWidget(clusterControlFrame);
+                    clusterControlFrame->setVisible(true);
+                    clusterControlFrame->setContest(ct);
+                    break;
 
                 }
 

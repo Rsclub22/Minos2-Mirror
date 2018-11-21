@@ -336,6 +336,7 @@ class BaseContestLog: public BaseLogList
       bool checkTime(const dtg &t) const;
       bool checkTime(const QDateTime &t) const;
 
+
 protected:
    unsigned long nextBlock = 1;
    int ct_stanzaCount = 0;
