@@ -523,6 +523,7 @@ void TSingleLogFrame::buildScreenLayout()
                     clusterControlFrame = new ClusterClientFrame(elementScrollArea, clusterInstance++);
                     elementScrollArea->setWidget(clusterControlFrame);
                     clusterControlFrame->setVisible(true);
+                    clusterControlFrame->setContest(ct);
                     break;
 
                 }

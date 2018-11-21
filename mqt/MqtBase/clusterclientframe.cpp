@@ -873,24 +873,32 @@ void ClusterClientFrame::clearAllSpotsActionSelected()
 
 void ClusterClientFrame::onSearchEditingFinished()
 {
-    if (ui->dxSpotTab->currentIndex() != SEARCH_TAB)
+    static QString oldEntry = "";
+
+    if (ui->searchLineEdit->text() != oldEntry)
     {
-        ui->dxSpotTab->setCurrentIndex(SEARCH_TAB);
+        oldEntry = ui->searchLineEdit->text();
+
+        if (ui->dxSpotTab->currentIndex() != SEARCH_TAB)
+        {
+            ui->dxSpotTab->setCurrentIndex(SEARCH_TAB);
+        }
+
+        if (ui->searchLineEdit->text().trimmed().isEmpty())
+        {
+            searchSortProxyModel->searchParameter = "";
+            searchSortProxyModel->setFilterRegExp("");
+        }
+        else
+        {
+            searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
+            //ui->searchLineEdit->selectAll();
+            searchSortProxyModel->setFilterRegExp("");
+        }
+
+        ui->searchLineEdit->setFocus();
     }
 
-    if (ui->searchLineEdit->text().trimmed().isEmpty())
-    {
-        searchSortProxyModel->searchParameter = "";
-        searchSortProxyModel->setFilterRegExp("");
-    }
-    else
-    {
-        searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
-        //ui->searchLineEdit->selectAll();
-        searchSortProxyModel->setFilterRegExp("");
-    }
-
-    ui->searchLineEdit->setFocus();
 }
 
 
