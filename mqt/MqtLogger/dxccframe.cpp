@@ -70,6 +70,7 @@ void DXCCFrame::reInitialiseCountries()
             ui->DXCCTable->setCurrentIndex(proxyModel.index(i, 0));
         }
     }
+    ui->DXCCTable->resizeRowsToContents();
 }
 void DXCCFrame::scrollToCountry( int ctry_ind, bool makeVisible )
 {

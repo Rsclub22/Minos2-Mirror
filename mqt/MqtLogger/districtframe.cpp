@@ -64,7 +64,7 @@ void DistrictFrame::reInitialiseDistricts()
             ui->DistrictTable->setCurrentIndex(proxyModel.index(i, 0));
         }
     }
-
+    ui->DistrictTable->resizeRowsToContents();
 }
 void DistrictFrame::scrollToDistrict( int district_ind, bool makeVisible )
 {
