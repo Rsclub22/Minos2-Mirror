@@ -80,6 +80,7 @@ signals:
    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
 
    void FontChanged();
+   void listCompressionChanged(qreal hmult);
 public:
    static MinosLoggerEvents mle;
 
@@ -133,6 +134,7 @@ public:
     static void sendXferEnabled(bool s, BaseContestLog *c, QString basename);
     static void sendXferPressed(BaseContestLog *c, QString basename);
     static void sendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
+    static void sendListCompressionChanged(qreal hmult);
 };
 //---------------------------------------------------------------------------
 #endif

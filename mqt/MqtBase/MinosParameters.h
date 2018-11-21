@@ -38,6 +38,8 @@ class MinosParameters
       virtual void setDisplayColumnWidth( const QString &key, int val ) = 0;
       virtual void getBoolDisplayProfile( int enumkey, bool &value ) = 0;
       virtual void setBoolDisplayProfile( int enumkey, bool value ) = 0;
+      virtual void getIntDisplayProfile(int enumkey, int &value) = 0;
+      virtual void setIntDisplayProfile(int enumkey, int value) = 0;
       virtual void getStringDisplayProfile( int enumkey, QString &value ) = 0;
       virtual void setStringDisplayProfile( int enumkey, QString value ) = 0;
       virtual void flushDisplayProfile( ) = 0;
@@ -69,6 +71,8 @@ class MinosParametersAdapter : public MinosParameters
       virtual void setDisplayColumnWidth( const QString &key, int val ) override;
       virtual void getBoolDisplayProfile( int enumkey, bool &value ) override;
       virtual void setBoolDisplayProfile( int enumkey, bool value ) override;
+      virtual void getIntDisplayProfile(int enumkey, int &value) override;
+      virtual void setIntDisplayProfile(int enumkey, int value) override;
       virtual void getStringDisplayProfile( int enumkey, QString &value ) override;
       virtual void setStringDisplayProfile( int enumkey, QString value ) override;
       virtual void flushDisplayProfile( ) override;

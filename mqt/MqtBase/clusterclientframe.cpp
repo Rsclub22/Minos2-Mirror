@@ -10,15 +10,16 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "base_pch.h"
+
 #include "MinosRPC.h"
 #include "MinosLoggerEvents.h"
-
 #include "clusterclientframe.h"
 #include "clustercommon.h"
 #include "contest.h"
 #include "cutils.h"
-#include "base_pch.h"
 #include "rigmemcommondata.h"
+#include "htmldelegate.h"
 #include "ui_clusterclientframe.h"
 
 
@@ -32,6 +33,11 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 {
 
     ui->setupUi(this);
+
+    int lcf;
+    MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = new HtmlDelegate(1.0, lcf/100.0) ;
+
 
     filterSetup = new ClusterClientFilterDialog();
 
@@ -82,6 +88,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     ui->searchLineEdit->setValidator(new UpperCaseValidator(true));
     connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
+
+    dxSpotDataModel = new DxSpotDataModel();
+    dxSpotDataModel->delegate = delegate;
 
     on_FontChanged();
 
@@ -134,12 +143,11 @@ ClusterClientFrame::~ClusterClientFrame()
 
 void ClusterClientFrame::setupDXSpotView()
 {
-    dxSpotDataModel = new DxSpotDataModel();
+    dxSpotView = new QTableView();
 
     dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
 
-    dxSpotView = new QTableView();
     ui->dxSpotTab->addTab(dxSpotView, "DX Spots");
     //dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotProxyModel);
@@ -147,12 +155,14 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setSelectionBehavior( QAbstractItemView::SelectRows );
     dxSpotView->setSelectionMode( QAbstractItemView::SingleSelection );
     //dxSpotView->setSelectionBehavior(QAbstractItemView::SelectItems);
+    dxSpotView->verticalHeader()->setDefaultSectionSize(10);
+    dxSpotView->verticalHeader()->setMinimumSectionSize(10);
+
+
+    dxSpotView->setItemDelegate( delegate);
+    dxSpotView->resizeRowsToContents();
 
     QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
-    spotVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    spotVerticalHeader->setDefaultSectionSize(18);
-
-
 
     //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
@@ -182,11 +192,10 @@ void ClusterClientFrame::setupDXSpotView()
 
 void ClusterClientFrame::setupSearchSpotView()
 {
+    searchView = new QTableView();
+
     searchSortProxyModel = new SearchSortFilterProxyModel(filterSetup);
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
-
-
-    searchView = new QTableView();
 
     ui->dxSpotTab->addTab(searchView, "Search Spots");
 
@@ -197,11 +206,13 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setSelectionBehavior(QAbstractItemView::SelectItems);
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
+    searchView->setItemDelegate( delegate);
+    searchView->resizeRowsToContents();
+
+    searchView->verticalHeader()->setDefaultSectionSize(10);
+    searchView->verticalHeader()->setMinimumSectionSize(10);
+
     QHeaderView *searchVerticalHeader = searchView->verticalHeader();
-    searchVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    searchVerticalHeader->setDefaultSectionSize(18);
-
-
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(searchView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onSearchSpotViewClicked(const QModelIndex &)));
     connect(searchVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onSearchSpotVertHeaderClicked(int)));
@@ -230,11 +241,10 @@ void ClusterClientFrame::setupSearchSpotView()
 
 void ClusterClientFrame::setupCallsignSpotView()
 {
+    callSignView = new QTableView();
+
     callSignProxyModel = new CallsignSortFilterProxyModel(filterSetup);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
-
-
-    callSignView = new QTableView();
 
     ui->dxSpotTab->addTab(callSignView, "Callsign Spots");
 
@@ -245,11 +255,14 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setSelectionBehavior(QAbstractItemView::SelectItems);
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
+    callSignView->setItemDelegate( delegate);
+    callSignView->resizeRowsToContents();
+
+    callSignView->verticalHeader()->setDefaultSectionSize(10);
+    callSignView->verticalHeader()->setMinimumSectionSize(10);
+
+
     QHeaderView *callSignVerticalHeader = callSignView->verticalHeader();
-    callSignVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    callSignVerticalHeader->setDefaultSectionSize(18);
-
-
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(callSignView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCallsignSpotViewClicked(const QModelIndex &)));
     connect(callSignVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onCallsignSpotVertHeaderClicked(int)));
@@ -277,10 +290,11 @@ void ClusterClientFrame::setupCallsignSpotView()
 
 void ClusterClientFrame::setupLocatorSpotView()
 {
+    locatorView = new QTableView();
+    locatorView->setItemDelegate(delegate);
     locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
 
-    locatorView = new QTableView();
     ui->dxSpotTab->addTab(locatorView, "Locator Spots");
 
     locatorView->setModel(locatorProxyModel);
@@ -289,9 +303,16 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setSelectionBehavior(QAbstractItemView::SelectItems);
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
+    locatorView->setItemDelegate( delegate);
+    locatorView->resizeRowsToContents();
+
+    locatorView->setItemDelegate( delegate);
+    locatorView->resizeRowsToContents();
+
+
     QHeaderView *locatorViewVerticalHeader = locatorView->verticalHeader();
-    locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-    locatorViewVerticalHeader->setDefaultSectionSize(18);
+    locatorView->verticalHeader()->setDefaultSectionSize(10);
+    locatorView->verticalHeader()->setMinimumSectionSize(10);
 
 
     //connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
@@ -506,6 +527,10 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> spotQueue)
        trace("syncSpots " + (*i));
     }
     spotQueue.clear();
+    dxSpotView->resizeRowsToContents();
+    searchView->resizeRowsToContents();
+    callSignView->resizeRowsToContents();
+    locatorView->resizeRowsToContents();
 }
 
 

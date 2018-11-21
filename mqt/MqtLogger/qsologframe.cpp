@@ -1814,8 +1814,6 @@ void QSOLogFrame::updateQSODisplay()
    ui->ModeButton->setEnabled(!mgm);
 
    on_FontChanged();    // do all style sheets again
-
-   //repaint();
 }
 
 //---------------------------------------------------------------------------

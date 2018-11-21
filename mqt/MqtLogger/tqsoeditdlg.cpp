@@ -99,8 +99,8 @@ void TQSOEditDlg::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * )
 {
     if (!in)
     {
-        ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
-        ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+        ui->archiveMatchFrame->getTreeView()->viewport()->update();
+        ui->otherMatchFrame->getTreeView()->viewport()->update();
         return;
     }
 
@@ -108,14 +108,14 @@ void TQSOEditDlg::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * )
     ui->otherMatchFrame->setCurrentModel(true);
     ui->archiveMatchFrame->setCurrentModel(false);
 
-    ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
+    ui->archiveMatchFrame->getTreeView()->viewport()->update();
 }
 void TQSOEditDlg::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
 {
     if (!in)
     {
-        ui->archiveMatchFrame->getTreeView()->viewport()->repaint();
-        ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+        ui->archiveMatchFrame->getTreeView()->viewport()->update();
+        ui->otherMatchFrame->getTreeView()->viewport()->update();
         return;
     }
 
@@ -123,7 +123,7 @@ void TQSOEditDlg::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
     ui->archiveMatchFrame->setCurrentModel(true);
     ui->otherMatchFrame->setCurrentModel(false);
 
-     ui->otherMatchFrame->getTreeView()->viewport()->repaint();
+     ui->otherMatchFrame->getTreeView()->viewport()->update();
 }
 //---------------------------------------------------------------------------
 void TQSOEditDlg::keyPressEvent( QKeyEvent* event )

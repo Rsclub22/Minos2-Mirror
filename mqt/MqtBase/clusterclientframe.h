@@ -126,6 +126,8 @@ private:
 
     ClusterClientFilterDialog *filterSetup;
 
+    HtmlDelegate *delegate = nullptr;
+
     QTimer* purgeTimer;
     int timeToLive;
     bool purgeSpotFlag;

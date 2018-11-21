@@ -86,6 +86,8 @@ class TContestApp : public MinosParameters
       virtual void setDisplayColumnWidth( const QString &key, int val ) override;
       virtual void getBoolDisplayProfile( int enumkey, bool &value ) override;
       virtual void setBoolDisplayProfile( int enumkey, bool value ) override;
+      virtual void getIntDisplayProfile(int enumkey, int &value) override;
+      virtual void setIntDisplayProfile(int enumkey, int value) override;
       virtual void getStringDisplayProfile( int enumkey, QString &value ) override;
       virtual void setStringDisplayProfile( int enumkey, QString value ) override;
       virtual void flushDisplayProfile( ) override;
@@ -134,7 +136,6 @@ class TContestApp : public MinosParameters
       void closeListFile( ContactList *list );
 
       void setCurrentContest( BaseContestLog * );
-
 };
 extern qint64 bigClockCorr;
 

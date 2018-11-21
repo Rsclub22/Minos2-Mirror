@@ -150,14 +150,9 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
             this, SLOT(sendBandMap(QString,QString,QString,QString,QString)));
 */
 
-    connect(this, SIGNAL(do_repaint()), this, SLOT(on_doRepaint()), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 }
 
-void TSingleLogFrame::on_doRepaint()
-{
-    repaint();
-}
 void TSingleLogFrame::on_FontChanged()
 {
     applyScreenLayout();
@@ -169,9 +164,7 @@ TSingleLogFrame::~TSingleLogFrame()
     ui = nullptr;
     contest = nullptr;
 }
-void TSingleLogFrame::
-
-createScreenComponents()
+void TSingleLogFrame::createScreenComponents()
 {
     // create component frames, parentless
 
@@ -183,7 +176,6 @@ createScreenComponents()
     QSOTable->setSelectionMode(QAbstractItemView::SingleSelection);
     QSOTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     QSOTable->setWordWrap(false);
-    QSOTable->setCornerButtonEnabled(false);
     QSOTable->horizontalHeader()->setHighlightSections(false);
     QSOTable->horizontalHeader()->setStretchLastSection(true);
     QSOTable->verticalHeader()->setVisible(false);
@@ -191,7 +183,9 @@ createScreenComponents()
     QSOTable->verticalHeader()->setMinimumSectionSize(1);
     QSOTable->verticalHeader()->setDefaultSectionSize(1);
 
-    delegate = new HtmlDelegate(1.0, 1.0);
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = new HtmlDelegate(1.0, lcf/100.0);
     qsoModel.delegate = delegate;
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);
@@ -364,7 +358,7 @@ void TSingleLogFrame::clearScreenLayout()
         s->deleteLater();
     }
     rowSplitters.clear();
-    repaint();
+    update();
 }
 void TSingleLogFrame::applyScreenLayout()
 {
@@ -668,7 +662,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     updateQSODisplay();
 
-    emit do_repaint();
+    update();   // this queues a repaint
 }
 
 void TSingleLogFrame::NextContactDetailsTimerTimer( )
@@ -752,8 +746,8 @@ void TSingleLogFrame::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * 
 {
     if (!in)
     {
-        archiveMatchFrame->getTreeView()->viewport()->repaint();
-        otherMatchFrame->getTreeView()->viewport()->repaint();
+        archiveMatchFrame->getTreeView()->viewport()->update();
+        otherMatchFrame->getTreeView()->viewport()->update();
         return;
     }
 
@@ -761,16 +755,16 @@ void TSingleLogFrame::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * 
     otherMatchFrame->setCurrentModel(true);
     archiveMatchFrame->setCurrentModel(false);
 
-    archiveMatchFrame->getTreeView()->viewport()->repaint();
-    otherMatchFrame->getTreeView()->viewport()->repaint();
+    archiveMatchFrame->getTreeView()->viewport()->update();
+    otherMatchFrame->getTreeView()->viewport()->update();
 }
 
 void TSingleLogFrame::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
 {
     if (!in)
     {
-        archiveMatchFrame->getTreeView()->viewport()->repaint();
-        otherMatchFrame->getTreeView()->viewport()->repaint();
+        archiveMatchFrame->getTreeView()->viewport()->update();
+        otherMatchFrame->getTreeView()->viewport()->update();
         return;
     }
 
@@ -778,8 +772,8 @@ void TSingleLogFrame::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
     archiveMatchFrame->setCurrentModel( true);
     otherMatchFrame->setCurrentModel(false);
 
-    archiveMatchFrame->getTreeView()->viewport()->repaint();
-    otherMatchFrame->getTreeView()->viewport()->repaint();
+    archiveMatchFrame->getTreeView()->viewport()->update();
+    otherMatchFrame->getTreeView()->viewport()->update();
 }
 void TSingleLogFrame::on_MatchStarting(BaseContestLog *ct)
 {

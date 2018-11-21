@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "ContestApp.h"
 #include "contest.h"
 #include "htmldelegate.h"
 #include "cutils.h"
@@ -11,7 +12,9 @@ LocTreeFrame::LocTreeFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->LocTree->setItemDelegate(new HtmlDelegate(1.0, 1.0));
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    ui->LocTree->setItemDelegate(new HtmlDelegate(1.0, lcf/100.0));
 }
 LocTreeFrame::~LocTreeFrame()
 {

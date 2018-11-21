@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
+#include "htmldelegate.h"
 #include "dxspotdatamodel.h"
 
 
@@ -23,12 +23,7 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
 
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role != Qt::DisplayRole)
-    {
-             return QVariant();
-    }
-
-    if (orientation == Qt::Horizontal)
+    if (orientation == Qt::Horizontal && role != Qt::DisplayRole)
     {
         switch (section) {
             case TIME_COL_NUM:
@@ -82,6 +77,23 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                QColor c = NO_SPOT_TO_MEMORY;
                return c;
            }
+       }
+       else if (role == Qt::SizeHintRole)
+       {
+           if (delegate)
+           {
+               // BUT the headers aren't drawn using the delegate, so this
+               // all fails to work
+
+               // Do we lose the vertical header?
+               QString s = "Memxx";
+               QSize r = delegate->docSize(s);
+               return r;
+           }
+       }
+       else if (role == Qt::ToolTipRole)
+       {
+           return "Click here to transfer spot to memory";
        }
     }
     return QVariant();

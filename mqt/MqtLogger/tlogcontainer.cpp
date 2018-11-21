@@ -1053,6 +1053,19 @@ void TLogContainer::StartConfigActionExecute()
     StartConfig configBox( this, false);
     configBox.exec();
 }
+void TLogContainer::listCompressionActionExecute()
+{
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    if (enquireDialog(this, "Set List Spacing Compression Value as percentage", lcf, 50, 150))
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, lcf);
+        MinosLoggerEvents::sendListCompressionChanged(lcf/100.0);
+
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+    }
+}
 
 void TLogContainer::on_ContestPageControl_currentChanged(int index)
 {
@@ -1292,6 +1305,7 @@ void TLogContainer::updateLayoutsMenu()
 {
     screenLayoutMenu->clear();
     ScreenConfigAction = newAction("Configure Screen Layouts...", screenLayoutMenu, SLOT(doScreenConfigAction()));
+    listCompressionAction = newAction("Set List Spacing Compression...", screenLayoutMenu, SLOT(listCompressionActionExecute()));
 
     screenLayoutMenu->addSeparator();
 
@@ -1366,6 +1380,8 @@ void TLogContainer::selectLayout(QString layout)
 }
 void TLogContainer::applyScreenLayouts()
 {
+    TWaitCursor wc(this);
+
     // clear old splitter settings
     QSettings settings;
     settings.remove("Splitters");

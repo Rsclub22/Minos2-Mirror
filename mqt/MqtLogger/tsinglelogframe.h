@@ -235,7 +235,6 @@ private slots:
     void sendSelectRotator(const QString &);
     void onSplitterMoved(int, int);
 
-    void on_doRepaint();
     void sendRadioVolume(int);
     void on_FontChanged();
     void invalidateCacheOnDisconnect();
@@ -243,8 +242,6 @@ private slots:
 public:
     void sendTpm(int t, QString f);
 
-signals:
-    void do_repaint();
 };
 
 #endif // TSINGLELOGFRAME_H

@@ -8,7 +8,6 @@
 #include <QSortFilterProxyModel>
 #include "BandList.h"
 #include "base_pch.h"
-#include "mqtUtils_pch.h"
 #include "qttelnet.h"
 #include "cluster.h"
 #include "setupdialog.h"
@@ -17,6 +16,7 @@
 #include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
 #include "rotpresetbutton.h"
+#include "htmldelegate.h"
 
 namespace Ui {
 class ClusterMainWindow;
@@ -142,6 +142,7 @@ private:
     StdInReader stdinReader;
     class QTimer LogTimer;
     QTimer *disconnectTimer;
+    HtmlDelegate *delegate = nullptr;
 
     QString appName;
     QLabel* status;

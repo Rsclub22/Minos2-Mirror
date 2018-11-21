@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "ContestApp.h"
 #include "cutils.h"
 #include "contest.h"
 #include "htmldelegate.h"
@@ -112,7 +113,9 @@ LocFrame::LocFrame(QWidget *parent) :
 
     currentCentre = "IO91";
 
-    delegate = new HtmlDelegate(1.0, 1.0);
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = new HtmlDelegate(1.0, lcf/100.0);
     ui->LocView->setItemDelegate(delegate);
 
     model = new LocGridModel();

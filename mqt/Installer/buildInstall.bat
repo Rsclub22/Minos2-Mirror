@@ -54,7 +54,7 @@ mkdir Bin
 
 copy %MROOT%\build\MqtAppStarter\release\MqtAppStarter.exe Bin
 copy %MROOT%\build\MqtChat\release\MqtChat.exe Bin
-copy %MROOT%\build\MqtChat\release\MqtCluster.exe Bin
+copy %MROOT%\build\MqtCluster\release\MqtCluster.exe Bin
 REM copy %MROOT%\build\MqtControl\release\MqtControl.exe Bin
 REM copy %MROOT%\build\MqtKeyer\release\MqtKeyer.exe Bin
 copy %MROOT%\build\MqtLogger\release\MqtLogger.exe Bin
