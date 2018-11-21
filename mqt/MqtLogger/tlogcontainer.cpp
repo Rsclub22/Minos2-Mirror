@@ -136,10 +136,24 @@ void TLogContainer::on_TimeDisplayTimer( )
 
    if ( TContestApp::getContestApp() )
    {
+       BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+
        QDateTime t = QDateTime::currentDateTimeUtc().addSecs( MinosParameters::getMinosParameters() ->getBigClockCorrection());
        QString disp = t.toString( "dd/MM/yyyy HH:mm:ss" ) + " UTC       ";
 
-       sblabel2 ->setText(disp);
+       QString fc;
+       bool timeOK = false;
+       if (ct)
+       {
+            timeOK = ct->checkTime(t);
+            if (!timeOK)
+
+                fc = HtmlFontColour(Qt::red) + "<b>";
+            else
+                fc = HtmlFontColour(Qt::blue);
+       }
+
+       sblabel2 ->setText(fc + disp);
 
        MinosLoggerEvents::SendTimerDistribution();
 
@@ -152,7 +166,6 @@ void TLogContainer::on_TimeDisplayTimer( )
 #endif
 
        QString statbuf;
-      BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
       if ( ct )
       {
          ct->setScore( statbuf );
