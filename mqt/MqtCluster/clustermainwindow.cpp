@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+﻿/////////////////////////////////////////////////////////////////////////////
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
@@ -17,12 +17,10 @@
 #include <QHeaderView>
 #include <QDebug>
 
-
 #include "clustermainwindow.h"
 #include "clustercommon.h"
 #include "rigutils.h"
 #include "ui_clustermainwindow.h"
-#include "fileutils.h"
 
 #include <QDebug>
 
@@ -104,14 +102,19 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     setupCluster->readGeneralSettings();
 
 
-
     dxSpotDataModel = new DxSpotDataModel();
 
 
     dxSpotView = new QTableView();
+
+    delegate = new HtmlDelegate(1.0, 1.0) ;
+
+    dxSpotDataModel->delegate = delegate;
+
     dxSpotView->setModel(dxSpotDataModel);
     dxSpotView->setAlternatingRowColors(true);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+    dxSpotView->setItemDelegate(delegate);
 
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
@@ -130,11 +133,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
-
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setVisible(false);
+    verticalHeader->setDefaultSectionSize(10);
+    verticalHeader->setMinimumSectionSize(10);
 //    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 //    verticalHeader->setDefaultSectionSize(18);
+    dxSpotView->resizeRowsToContents();
 
 /*
 
@@ -225,6 +230,7 @@ void ClusterMainWindow::onClearAllSpots()
             purgeSpotFlag = false;
         }
     }
+    dxSpotView->resizeRowsToContents();
 
 }
 
@@ -530,6 +536,7 @@ void ClusterMainWindow::getSpotsFromQueue()
             spotsList.remove(i);
             dxSpotDataModel->insertRows(0, 1);
         }
+        dxSpotView->resizeRowsToContents();
     }
 }
 
