@@ -138,7 +138,7 @@ public:
 
     }
 
-    ClusterClientFilterSettings(QStringList& cfl, QStringList& lfl, unsigned int bfm, unsigned int mfm)
+    ClusterClientFilterSettings(QString& cfl, QString& lfl, unsigned int bfm, unsigned int mfm)
     {
         callsignFilterList = cfl;
         locatorFilterList = lfl;
@@ -146,10 +146,10 @@ public:
         modeFilterMask = mfm;
     }
 
+    // note the list of callsign and locator filters strings are stored as QString for saving to contest.
 
-
-    QStringList callsignFilterList;
-    QStringList locatorFilterList;
+    QString callsignFilterList;
+    QString locatorFilterList;
     unsigned int bandFilterMask;
     unsigned int modeFilterMask;
 
@@ -160,6 +160,39 @@ void operator = (const ClusterClientFilterSettings& ccfs)
     locatorFilterList = ccfs.locatorFilterList;
     bandFilterMask = ccfs.bandFilterMask;
     modeFilterMask = ccfs.modeFilterMask;
+}
+
+QString packFilterList(QStringList& l)
+{
+    QString s;
+    for (int i = 0; i < l.count(); i++)
+    {
+        if (i != l.count() - 1)
+        {
+            QString t = l[i].append(FILTER_DELIMITER);
+            s.append(t);
+        }
+        else
+        {
+            s.append(l[i]);  // last string
+        }
+    }
+    return s;
+}
+
+
+QStringList unpackFilterList(QString &sl)
+{
+    QStringList fl;
+    if (sl.isEmpty())
+    {
+        return fl;
+    }
+    else
+    {
+       fl = sl.split(FILTER_DELIMITER);
+    }
+    return fl;
 }
 
 };

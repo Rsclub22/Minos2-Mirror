@@ -64,7 +64,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     ui->ClusterClientFilterTab->setCurrentIndex(0);
 
     callsignListWidget = ui->callsignListWidget;
-    callsignListWidget->addItems(filterSettings.callsignFilterList);
+    callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
 
 
     connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(callsignCurrentRowChanged(int)));
@@ -75,7 +75,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     connect(ui->callsignDelButton, SIGNAL(clicked()), SLOT(callsignDelClicked()));
 
     locatorListWidget = ui->locatorListWidget;
-    locatorListWidget->addItems(filterSettings.locatorFilterList);
+    locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.locatorFilterList));
 
     connect(ui->locatorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(locatorCurrentRowChanged(int)));
 
@@ -117,22 +117,30 @@ void ClusterClientFilterDialog::filtersAccepted()
     {
         callsignEditChanged = false;
         filterSettings.callsignFilterList.clear();
+        // get list of callsigns
+        QStringList csl;
         for (int row = 0; row < callsignListWidget->count(); row++)
         {
             QListWidgetItem* item = callsignListWidget->item(row);
-            filterSettings.callsignFilterList.append(item->text());
+            csl.append(item->text());
+
         }
+        filterSettings.callsignFilterList = filterSettings.packFilterList(csl);
         filterChangeMask |= CALLSIGNUP;
     }
     else if (locatorEditChanged)
     {
         locatorEditChanged = false;
         filterSettings.locatorFilterList.clear();
+        // get list of locators
+        QStringList ll;
         for (int row = 0; row < locatorListWidget->count(); row++)
         {
             QListWidgetItem* item = locatorListWidget->item(row);
+            ll.append(item->text());
             filterSettings.locatorFilterList.append(item->text());
         }
+        filterSettings.locatorFilterList = filterSettings.packFilterList(ll);
         filterChangeMask |= LOCATORUP;
     }
 
@@ -153,19 +161,21 @@ void ClusterClientFilterDialog::filtersRejected()
     {
         // restore the callsignListWidget
         callsignListWidget->clear();
-        for (int i = 0; i < filterSettings.callsignFilterList.count(); i++)
-        {
-            callsignListWidget->addItem(filterSettings.callsignFilterList[i]);
-        }
+        callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
+        //for (int i = 0; i < filterSettings.callsignFilterList.count(); i++)
+        //{
+        //    callsignListWidget->addItem(filterSettings.callsignFilterList[i]);
+        //}
     }
     else if (locatorEditChanged)
     {
         // restore the locatorListWidget
         locatorListWidget->clear();
-        for(int i = 0; i < filterSettings.locatorFilterList.count(); i++)
-        {
-            locatorListWidget->addItem(filterSettings.locatorFilterList[i]);
-        }
+        locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
+        //for(int i = 0; i < filterSettings.locatorFilterList.count(); i++)
+        //{
+        //    locatorListWidget->addItem(filterSettings.locatorFilterList[i]);
+       // }
     }
 
     // restore settings on tab
@@ -500,7 +510,7 @@ unsigned int ClusterClientFilterDialog::getModeFilterMask()
 void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
 {
     callsignListWidget->clear();
-    foreach (QString str, filterSettings.callsignFilterList)
+    foreach (QString str, filterSettings.unpackFilterList(filterSettings.callsignFilterList))
     {
         callsignListWidget->addItem(str);
     }
@@ -616,19 +626,21 @@ void ClusterClientFilterDialog::callsignEditClicked()
 
 QStringList ClusterClientFilterDialog::getCallsignFilterList()
 {
-    return filterSettings.callsignFilterList;
+    QStringList cl = filterSettings.unpackFilterList(filterSettings.callsignFilterList);
+    return cl;
 }
 
 QStringList ClusterClientFilterDialog::getLocatorFilterList()
 {
-    return filterSettings.locatorFilterList;
+    QStringList ll = filterSettings.unpackFilterList(filterSettings.locatorFilterList);
+    return ll;
 }
 
 
 void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
 {
     locatorListWidget->clear();
-    foreach (QString str, filterSettings.locatorFilterList)
+    foreach (QString str, filterSettings.unpackFilterList( filterSettings.locatorFilterList))
     {
         locatorListWidget->addItem(str);
     }
