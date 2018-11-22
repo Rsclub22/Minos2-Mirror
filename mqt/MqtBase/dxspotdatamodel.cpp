@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "cutils.h"
 #include "htmldelegate.h"
 #include "dxspotdatamodel.h"
 
@@ -133,13 +134,13 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
              return QVariant();
     }
 
-    QVariant d;
     SpotData* dxSpot = dxSpotData.at(index.row());
 
     if (role == Qt::DisplayRole)
     {
         int col = index.column();
 
+        QString d;
         switch (col)
         {
             case TIME_COL_NUM:
@@ -149,13 +150,23 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->dxFreq;
             break;
             case DXSPOT_CALL_COL_NUM:
-                d = dxSpot->dxCall;
+                if (dxSpot->dxCallWorked == BOOL_YES)
+                {
+                    QColor colour = CALLSIGN_WORKED_COLOUR;
+                    d = HtmlFontColour(colour);
+                }
+                d = d + dxSpot->dxCall;
             break;
             case DXSPOT_CALL_WORKED_COL_NUM:
                 d = dxSpot->dxCallWorked;
             break;
             case DXLOC_COL_NUM:
-                d = dxSpot->dxLocator;
+                if (dxSpot->dxLocatorWorked == BOOL_YES)
+                {
+                    QColor colour = LOCATOR_WORKED_COLOUR;
+                    d = HtmlFontColour(colour);
+                }
+                d = d + dxSpot->dxLocator;
             break;
             case DXDIST_COL_NUM:
                 d = dxSpot->dxDist;
@@ -190,35 +201,15 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
         }
 
         return d;
-
     }
-    else if (role == Qt::ForegroundRole)
-    {
-        if (index.column() == DXSPOT_CALL_COL_NUM)
-        {
-            if (dxSpot->dxCallWorked == BOOL_YES)
-            {
-                QColor colour = CALLSIGN_WORKED_COLOUR;
-                return colour;
-            }
-        }
-        else if (index.column() == DXLOC_COL_NUM)
-        {
-            if (dxSpot->dxLocatorWorked == BOOL_YES)
-            {
-                QColor colour = LOCATOR_WORKED_COLOUR;
-                return colour;
-            }
-        }
-    }
-
-    return d;
+    return QVariant();
 }
 
 
 bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-    if (index.isValid() && role == Qt::EditRole) {
+    if (index.isValid() && role == Qt::EditRole)
+    {
             int row = index.row();
 
             SpotData* dxSpot = dxSpotData.value(row);
