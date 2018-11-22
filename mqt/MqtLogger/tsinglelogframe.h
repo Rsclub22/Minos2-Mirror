@@ -32,6 +32,7 @@ class ListContact;
 class FocusWatcher;
 class MatchTreeFrame;
 class ChatFrame;
+class ClusterClientFrame;
 class MinosSplitter;
 
 // We may need to define our own validation controls with valid methods
@@ -55,6 +56,7 @@ class TSingleLogFrame : public QFrame
     QTableView *QSOTable;
     RigControlFrame *FKHRigControlFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
+
     RotPresets *rotPresets = nullptr;
 
     QFrame *CribSheet= nullptr;
@@ -66,6 +68,8 @@ class TSingleLogFrame : public QFrame
     MatchArchiveFrame *archiveMatchFrame = nullptr;
 
     ChatFrame *chatFrame = nullptr;
+
+    ClusterClientFrame *clusterControlFrame = nullptr;
 
     QVector <MinosSplitter *> rowSplitters;
 
@@ -136,6 +140,7 @@ public:
 private:
     //    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
+    HtmlDelegate *delegate = nullptr;
     QSOGridModel qsoModel;
     int splitterHandleWidth;
     QString curScreenLayout;
@@ -230,15 +235,13 @@ private slots:
     void sendSelectRotator(const QString &);
     void onSplitterMoved(int, int);
 
-    void on_doRepaint();
     void sendRadioVolume(int);
     void on_FontChanged();
     void invalidateCacheOnDisconnect();
+    void dxSpotToLog(memoryData::memData);
 public:
     void sendTpm(int t, QString f);
 
-signals:
-    void do_repaint();
 };
 
 #endif // TSINGLELOGFRAME_H

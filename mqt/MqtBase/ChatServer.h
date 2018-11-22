@@ -8,7 +8,7 @@ extern QString stateList[];
 class Server
 {
 public:
-    QString name;
+    QString serverName;
     QString app;
     QString freq;
     PublishState state;

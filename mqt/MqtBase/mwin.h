@@ -46,6 +46,7 @@ enum MatchType {ThisMatch, OtherMatch, ArchiveMatch};
 enum ExportType {EREG1TEST, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
 
 #define STACKITEMS 10
+#define CLUSTERITEMS 3
 
 // control block for repeated actions on contest contacts
 class GJVParams

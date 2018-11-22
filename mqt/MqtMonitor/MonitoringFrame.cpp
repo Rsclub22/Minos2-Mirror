@@ -10,7 +10,7 @@ MonitoringFrame::MonitoringFrame(MonitorMain *parent) :
     ui(new Ui::MonitoringFrame)
 {
     ui->setupUi(this);
-    ui->QSOTable->setItemDelegate( new HtmlDelegate(1.7, 0.5) );
+    ui->QSOTable->setItemDelegate( new HtmlDelegate(1.0, 1.0) );
 
     ui->QSOTable->resizeColumnsToContents();
     ui->QSOTable->resizeRowsToContents();

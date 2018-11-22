@@ -11,6 +11,7 @@
 
 #include "base_pch.h"
 #include "MatchCollection.h"
+#include "rigmemcommondata.h"
 //---------------------------------------------------------------------------
 class BaseContestLog;
 class LoggerContestLog;
@@ -53,6 +54,11 @@ signals:
    void Validated();
 
    void BrgStrToRot(QString);
+   void FreqStrToRig(QString);
+   void SpotBrgStrToRot(QString);
+   void DxSpotToLog(memoryData::memData);
+   void DXSpotToMemory(memoryData::memData);
+
 
    void CountrySelect(QString cty, BaseContestLog *c);
    void DistrictSelect(QString dist, BaseContestLog *c);
@@ -74,6 +80,7 @@ signals:
    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
 
    void FontChanged();
+   void listCompressionChanged(qreal hmult);
 public:
    static MinosLoggerEvents mle;
 
@@ -111,6 +118,10 @@ public:
 
    static void SendFontChanged();
    static void SendBrgStrToRot(QString);
+   static void SendFreqStrToRig(QString);
+   static void SendSpotBrgStrToRot(QString);
+   static void SendSpotToLog(memoryData::memData);
+   static void SendSpotToMemory(memoryData::memData);
 
    static void sendUpdateStats(BaseContestLog *c );
    static void sendFiltersChanged(BaseContestLog *c );
@@ -123,6 +134,7 @@ public:
     static void sendXferEnabled(bool s, BaseContestLog *c, QString basename);
     static void sendXferPressed(BaseContestLog *c, QString basename);
     static void sendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
+    static void sendListCompressionChanged(qreal hmult);
 };
 //---------------------------------------------------------------------------
 #endif

@@ -36,7 +36,7 @@ class RotControlFrame : public QFrame
 {
     Q_OBJECT
 
-    LoggerContestLog *ct;
+    LoggerContestLog *ct = nullptr;
 public:
     explicit RotControlFrame(QWidget *parent);
     ~RotControlFrame();
@@ -137,6 +137,7 @@ private slots:
     void on_antennaName_activated(const QString &arg1);
 
 
+    void setBrgFromSpot(QString brg);
 };
 
 #endif // ROTCONTROLFRAME_H

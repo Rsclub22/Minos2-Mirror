@@ -48,6 +48,13 @@ void MinosParametersAdapter::getBoolDisplayProfile( int /*enumkey*/, bool &value
 void MinosParametersAdapter::setBoolDisplayProfile( int /*enumkey*/, bool /*value*/ )
 {
 }
+void MinosParametersAdapter::getIntDisplayProfile( int /*enumkey*/, int &value )
+{
+   value = 0;
+}
+void MinosParametersAdapter::setIntDisplayProfile( int /*enumkey*/, int /*value*/ )
+{
+}
 void MinosParametersAdapter::getStringDisplayProfile( int /*enumkey*/, QString &/*value*/ )
 {
 

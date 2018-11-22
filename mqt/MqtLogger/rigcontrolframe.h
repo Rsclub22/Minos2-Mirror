@@ -184,7 +184,7 @@ private slots:
     void ritClearButtonSelected(bool state);
     void ritFreqEditShortCutInFocus();
     void sendVolumeRadio(int level);
-
+    void sendFreq(QString f);
 
 
     void ritClearShortCutSelected();
@@ -200,7 +200,7 @@ private:
 
     void setRunMemoryData(int memoryNumber, memoryData::memData m);
 
-    LoggerContestLog *ct;
+    LoggerContestLog *ct = nullptr;
 
     QMap<int, RunMemoryButton *> runButtonMap;
     QMap<int, TuneMemoryButton *> tuneButtonMap;
@@ -266,7 +266,7 @@ private:
     void loadMemories();
     void mgmLabelVisible(bool state);
     bool checkValidFreq(QString freq);
-    void sendFreq(QString f);
+
     QString calcNewFreq(double incFreq);
 
     int calcMinosMode(QString mode);

@@ -121,7 +121,7 @@ void RotPresets::presetEdit(int buttonNumber)
         RotPresetData curData(buttonNumber, rotPresetData[buttonNumber]->name, rotPresetData[buttonNumber]->bearing);
 
         traceMsg(QString("RotFrame: Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-        RotPresetDialog presetDialog(buttonNumber, &editData, &curData, this);
+        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, "Edit");
 
 
         if (presetDialog.exec() == QDialog::Accepted)
@@ -164,7 +164,7 @@ void RotPresets::presetWrite(int buttonNumber)
         RotPresetData curData(buttonNumber, "", "0");
 
         traceMsg(QString("RotFrame: Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-        RotPresetDialog presetDialog(buttonNumber, &editData, &curData, this);
+        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, "New");
 
 
         if (presetDialog.exec() == QDialog::Accepted)

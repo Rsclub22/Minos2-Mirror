@@ -15,6 +15,7 @@ enum SCType
     sctOtherMatch,
     sctArchiveMatch,
     sctChat,
+    sctCluster,
     sctNone
 };
 class SCElement

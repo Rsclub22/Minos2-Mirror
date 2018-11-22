@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "ContestApp.h"
 #include "cutils.h"
 #include "contest.h"
 #include "htmldelegate.h"
@@ -112,9 +113,13 @@ LocFrame::LocFrame(QWidget *parent) :
 
     currentCentre = "IO91";
 
-    ui->LocView->setItemDelegate(new HtmlDelegate(1.2, 0.3));
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = new HtmlDelegate(1.0, lcf/100.0);
+    ui->LocView->setItemDelegate(delegate);
 
     model = new LocGridModel();
+    model->delegate = delegate;
     ui->LocView->setModel(model);
 
     connect(ui->LocView, SIGNAL(minosViewScrolled()), this, SLOT(on_minosViewScrolled()));
@@ -304,7 +309,20 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
     }
     return QVariant();
 }
-
+QVariant LocGridModel::headerData( int section, Qt::Orientation orientation,
+                     int role ) const
+{
+    if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = data(index(section, 0), Qt::DisplayRole).toString();
+            QSize r = delegate->docSize(s);
+            return r;
+        }
+    }
+    return QVariant();
+}
 QModelIndex LocGridModel::index( int row, int column, const QModelIndex &/*parent*/) const
 {
     if ( row < 0 || row >= rowCount()  )

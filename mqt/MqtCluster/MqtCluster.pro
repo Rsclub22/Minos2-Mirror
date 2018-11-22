@@ -3,8 +3,10 @@
 # Project created by QtCreator 2017-09-10T22:05:15
 #
 #-------------------------------------------------
+include($$PWD/../mqt.pri)
+include($$PWD/../mqtapplibs.pri)
 
-QT       += core gui network
+QT       += core gui network sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,14 +26,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 win32:LIBS += -lWs2_32
 
-SOURCES +=\
+SOURCES += main.cpp\
+        clustermainwindow.cpp \
+    setupdialog.cpp \
+    cluster.cpp \
+    spotsdatabase.cpp \
+    clusterrpc.cpp \
+    userclustercommanddialog.cpp
 
 
 
-HEADERS  += \
+HEADERS  += clustermainwindow.h \
+    setupdialog.h \
+    cluster.h \
+    spotsdatabase.h \
+    clusterrpc.h \
+    userclustercommanddialog.h
 
 
 
-
-FORMS    += \
-
+FORMS    += clustermainwindow.ui \
+    setupdialog.ui \
+    userclustercommanddialog.ui

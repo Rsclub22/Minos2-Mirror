@@ -225,6 +225,13 @@ bool getKeyerStatus( QString &s )
    s = "";
    return false;
 }
+void getTransverterSwitch( QString &s )
+{
+    if ( currentKeyer )
+       currentKeyer->getTransverterSwitch( s );
+    else
+       s = "No current keyer";
+}
 unsigned long keyer_getintcount()
 {
    return MORSEINTCOUNT;
@@ -434,7 +441,10 @@ void commonKeyer::getActionState( QString &s )
 
    s = "<" + lineModeStrings[linesMode] + "> " + s;
 }
-
+void commonKeyer::getTransverterSwitch( QString &buff )
+{
+    buff = "(" + QString::number(transverterSwitch) + ")";
+}
 bool commonKeyer::getStatus( QString &buff )
 {
    buff = "[";
@@ -498,6 +508,16 @@ bool commonKeyer::linesModeChanged( int state )
    }
    linesMode = static_cast<LineModes>(state);
    return true;
+}
+
+bool commonKeyer::transverterSwitchChanged(int s)
+{
+    if ( sblog )
+    {
+       trace( "transverterSwitchChanged(" + QString::number( s ) + ")" );
+    }
+    transverterSwitch = s;
+    return true;
 }
 void commonKeyer::queueFinished()
 {}

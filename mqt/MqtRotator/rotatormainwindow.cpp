@@ -221,9 +221,9 @@ void RotatorMainWindow::logMessage( QString s )
 void RotatorMainWindow::onStdInRead(QString cmd)
 {
     trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(true);
-    if (cmd.indexOf("HideServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
 }
 
@@ -2038,7 +2038,7 @@ void RotatorMainWindow::presetEdit(int buttonNumber)
         RotPresetData curData(buttonNumber, rotPresets[buttonNumber]->name, rotPresets[buttonNumber]->bearing);
 
         logMessage(QString("Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-        RotPresetDialog presetDialog(buttonNumber, &editData, &curData, this);
+        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, "Edit");
 
 
         if (presetDialog.exec() == QDialog::Accepted)
@@ -2084,7 +2084,7 @@ void RotatorMainWindow::presetWrite(int buttonNumber)
         RotPresetData curData(buttonNumber, "", "0");
 
         logMessage(QString("Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-        RotPresetDialog presetDialog(buttonNumber, &editData, &curData, this);
+        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, "New");
 
 
         if (presetDialog.exec() == QDialog::Accepted)

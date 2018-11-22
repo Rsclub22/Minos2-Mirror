@@ -260,6 +260,24 @@ bool BandList::findBand(double freq, BandInfo &bi)
    return false;
 }
 
+void loadVhfAndUpBands(QVector<BandDetail*> &bands)
+{
+    BandList &blist = BandList::getBandList();
+
+    for (int i = 0; i < blist.bandList.size(); i++)   // just load VHF/UHF bands
+    {
+        // don't use bands > 10GHz (can't support Freq display)
+        if ( blist.bandList[i].uk != "24 GHz" && blist.bandList[i].uk != "47 GHz"
+             && blist.bandList[i].uk != "76 GHz" && blist.bandList[i].uk != "120 GHz"
+             && blist.bandList[i].uk != "134 GHz" && blist.bandList[i].uk != "248 GHz")
+
+        {
+            if (blist.bandList[i].getType().compare("VHF", Qt::CaseInsensitive) == 0 || blist.bandList[i].getType().compare("MWave", Qt::CaseInsensitive) == 0)
+                bands.append(new BandDetail(blist.bandList[i].uk, blist.bandList[i].flow, blist.bandList[i].fhigh));
+        }
+    }
+
+}
 
 
 BandDetail::BandDetail(QString _name, double _flow, double _fhigh)
@@ -268,3 +286,5 @@ BandDetail::BandDetail(QString _name, double _flow, double _fhigh)
     fLow = _flow;;
     fHigh = _fhigh;
 }
+
+

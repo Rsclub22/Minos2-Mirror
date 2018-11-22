@@ -91,6 +91,7 @@ SOURCES += \
     tstatsdispframe.cpp \
     volumeslider.cpp
 
+
 HEADERS  += \
     AdifImport.h \
     ContestApp.h \
@@ -128,7 +129,6 @@ HEADERS  += \
     qsologframe.h \
     reg1test.h \
     rigcontrolframe.h \
-    rigmemcommondata.h \
     rigmemdialog.h \
     ritlineedit.h \
     rotcontrolframe.h \
@@ -149,6 +149,7 @@ HEADERS  += \
     tsinglelogframe.h \
     tstatsdispframe.h \
     volumeslider.h
+
 
 FORMS    += \
     contestdetails.ui \

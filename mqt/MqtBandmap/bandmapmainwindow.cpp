@@ -1,4 +1,5 @@
 #include "bandmapmainwindow.h"
+#include "cutils.h"
 #include "rigcontrol.h"
 #include "bandmap.h"
 #include "freqdial.h"
@@ -79,9 +80,9 @@ BandMapMainWindow::~BandMapMainWindow()
 void BandMapMainWindow::onStdInRead(QString cmd)
 {
     trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(true);
-    if (cmd.indexOf("HideServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
 }
 
@@ -232,7 +233,7 @@ void BandMapMainWindow::getFrequency()
 
 void BandMapMainWindow::updateFreq(double frequency)
 {
-    if (curFreq == frequency)
+    if (almost_equal(curFreq, frequency, 2))
     {
         return;
     }
@@ -258,7 +259,7 @@ void BandMapMainWindow::drawDial(double frequency)
 {
 
 
-    if (frequency != dial->getCurFreq())
+    if (!almost_equal(frequency, dial->getCurFreq(), 2))
     {
         dial->setCurFreq(frequency);
         dial->setCurHeight(ui->bandmapView->height());
@@ -275,10 +276,10 @@ QString BandMapMainWindow::convertStringFreq(double frequency)
     double freq = frequency;
     sfreq = "";
     qint32 f = 0;
-    f = freq/1000000;
+    f = static_cast<qint32>(freq/1000000);
     sfreq = QString::number(f) + ".";
     freq = freq - (f*1000000);
-    f = freq/1000;
+    f = static_cast<qint32>(freq/1000);
     if (f < 10)
     {
         sfreq = sfreq + "00";

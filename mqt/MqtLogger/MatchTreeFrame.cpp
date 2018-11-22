@@ -26,7 +26,9 @@ void MatchTreeFrame::initialise()
 {
     setModel(getMatchModel());
     header()->setSectionResizeMode(QHeaderView::Interactive);
-    setItemDelegate( new HtmlDelegate(1.7, 0.8) );
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    setItemDelegate( new HtmlDelegate(1.0, lcf/100.0) );
     setUniformRowHeights(true);
 
 
@@ -260,6 +262,10 @@ void QSOMatchGridModel::initialise(MatchType t, SharedMatchCollection pmatch )
 }
 QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
 {
+    if (!index.isValid())
+    {
+        return QVariant();
+    }
     QModelIndex p = index.parent();
 
     MatchTreeItem *thisItem = static_cast<MatchTreeItem*>(index.internalPointer());

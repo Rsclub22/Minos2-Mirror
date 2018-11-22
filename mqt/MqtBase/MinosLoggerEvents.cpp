@@ -192,9 +192,29 @@ void MinosLoggerEvents::sendRotBearingChanged(int f, BaseContestLog *c)
     emit mle.RotBearingChanged(f, c);
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::SendFreqStrToRig(QString f)
+{
+    emit mle.FreqStrToRig(f);
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendBrgStrToRot(QString bearing)
 {
     emit mle.BrgStrToRot(bearing);
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::SendSpotBrgStrToRot(QString bearing)
+{
+    emit mle.SpotBrgStrToRot(bearing);
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::SendSpotToLog(memoryData::memData spotData)
+{
+    emit mle.DxSpotToLog(spotData);
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::SendSpotToMemory(memoryData::memData spotData)
+{
+    emit mle.DXSpotToMemory(spotData);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::sendXferEnabled(bool s, BaseContestLog *c, QString basename)
@@ -212,3 +232,7 @@ void MinosLoggerEvents::sendMatchTreeSelected(MatchType m, BaseContestLog *c, QS
     emit mle.MatchTreeSelected(m, c, basename, selected);
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::sendListCompressionChanged(qreal hmult)
+{
+    emit mle.listCompressionChanged(hmult);
+}

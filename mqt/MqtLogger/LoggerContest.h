@@ -142,6 +142,7 @@ class LoggerContestLog : public BaseContestLog
       memoryData::memData getRigMemoryData(int memoryNumber);
 
 
+
       // dirty info is only relevant when it is being editted
       // but needs to stay with the data
 

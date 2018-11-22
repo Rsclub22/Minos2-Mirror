@@ -18,6 +18,8 @@ class RigMemoryGridModel: public QAbstractItemModel
 
         BaseContestLog *ct = nullptr;
         RigMemoryFrame *frame = nullptr;
+        HtmlDelegate *delegate = nullptr;
+
 
         void beginResetModel(){QAbstractItemModel::beginResetModel();}
         void endResetModel(){QAbstractItemModel::endResetModel();}
@@ -57,6 +59,7 @@ class RigMemoryFrame : public QFrame
 {
     Q_OBJECT
 
+    QHeaderView *vheader = nullptr;
     void sendUpdateMemories();
     RigMemoryGridModel model;
     RigMemorySortFilterProxyModel proxyModel;
@@ -99,6 +102,7 @@ private slots:
     void clearAllActionSelected();
     void clearWorkedActionSelected();
 
+    void DXSpotToMemory(memoryData::memData);
     void onMenuShow();
 
     void on_rigMemTable_doubleClicked(const QModelIndex &index);
@@ -113,6 +117,7 @@ private:
     int lastBearing = 0;
     bool lastVisible = false;
     bool doTimer = false;
+    HtmlDelegate *delegate = nullptr;
 
     QMenu* memoryMenu;
 

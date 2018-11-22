@@ -32,6 +32,8 @@
 #include "rotcontrolframe.h"
 #include "RotPresets.h"
 #include "ChatFrame.h"
+#include "clusterclientframe.h"
+
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -126,6 +128,10 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), rotPresets, SLOT(selectRotator(QString)));
     connect(rotPresets, SIGNAL(presetTurn(QString)), this, SLOT(presetTurn(QString)));
 
+    // from cluster frame
+    connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToLog(memoryData::memData)), this, SLOT(dxSpotToLog(memoryData::memData)));
+
+
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
 
@@ -144,14 +150,9 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
             this, SLOT(sendBandMap(QString,QString,QString,QString,QString)));
 */
 
-    connect(this, SIGNAL(do_repaint()), this, SLOT(on_doRepaint()), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 }
 
-void TSingleLogFrame::on_doRepaint()
-{
-    repaint();
-}
 void TSingleLogFrame::on_FontChanged()
 {
     applyScreenLayout();
@@ -163,36 +164,37 @@ TSingleLogFrame::~TSingleLogFrame()
     ui = nullptr;
     contest = nullptr;
 }
-void TSingleLogFrame::
-
-createScreenComponents()
+void TSingleLogFrame::createScreenComponents()
 {
     // create component frames, parentless
 
     QSOTable = new QTableView(this);
     QSOTable->setObjectName(QStringLiteral("QSOTable"));
     QSOTable->setFocusPolicy(Qt::ClickFocus);
-    QSOTable->setFrameShape(QFrame::NoFrame);
-    QSOTable->setFrameShadow(QFrame::Plain);
-    QSOTable->setLineWidth(1);
-    QSOTable->setMidLineWidth(1);
-    QSOTable->setEditTriggers(QAbstractItemView::EditKeyPressed);
+    QSOTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     QSOTable->setAlternatingRowColors(true);
     QSOTable->setSelectionMode(QAbstractItemView::SingleSelection);
     QSOTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     QSOTable->setWordWrap(false);
-    QSOTable->setCornerButtonEnabled(false);
     QSOTable->horizontalHeader()->setHighlightSections(false);
     QSOTable->horizontalHeader()->setStretchLastSection(true);
     QSOTable->verticalHeader()->setVisible(false);
+    QSOTable->setCornerButtonEnabled(false);
+    QSOTable->verticalHeader()->setMinimumSectionSize(1);
+    QSOTable->verticalHeader()->setDefaultSectionSize(1);
 
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = new HtmlDelegate(1.0, lcf/100.0);
+    qsoModel.delegate = delegate;
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);
 
-    QSOTable->setItemDelegate( new HtmlDelegate(1.7, 0.3) );
-
-    QSOTable->resizeColumnsToContents();
+    // the order of the next two lines is critical
+    QSOTable->setItemDelegate( delegate );
     QSOTable->resizeRowsToContents();       // this is where the sizehint gets called
+
+
     QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     QSOTable->setVisible(false);
@@ -226,7 +228,15 @@ createScreenComponents()
 
     FKHRotControlFrame->setVisible(false);
     FKHRotControlFrame->setContest(contest);
+/*
+    clusterControlFrame = new ClusterClientFrame(this, 0);
+    clusterControlFrame->setObjectName(QStringLiteral("ClusterControlFrame"));
+    clusterControlFrame->setFrameShape(QFrame::StyledPanel);
+    clusterControlFrame->setFrameShadow(QFrame::Raised);
 
+    clusterControlFrame->setVisible(false);
+    clusterControlFrame->setContest(contest);
+*/
     rotPresets = new RotPresets(this);
 
     rotPresets->setObjectName(QStringLiteral("rotPresets"));
@@ -292,6 +302,7 @@ createScreenComponents()
 
     chatFrame->setVisible(false);
 
+
     // set frame to Vertical Layout, insert LogFrameSplitter
     verticalLayout = new QVBoxLayout(this);
     verticalLayout->setSpacing(0);
@@ -309,7 +320,16 @@ createScreenComponents()
 }
 void TSingleLogFrame::clearScreenLayout()
 {
-    // clear down the screen elements, but don't delete them - they will be used to rebuild the screen
+    // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
+    // BUT on contest creation, the contest address may change, so clear the contest
+
+    FKHRigControlFrame->setContest(nullptr);
+    FKHRotControlFrame->setContest(nullptr);
+    rotPresets->setContest(nullptr);
+    thisMatchFrame->setContest(nullptr);
+    otherMatchFrame->setContest(nullptr);
+    archiveMatchFrame->setContest(nullptr);
+
     while (singleLogFrameSplitter->count())
     {
         MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
@@ -326,9 +346,10 @@ void TSingleLogFrame::clearScreenLayout()
                 qsa->deleteLater();
                 tw->hide();
                 tw->setParent(this);
-                QWidget *aux = dynamic_cast<StackedInfoFrame *>(tw);
+                StackedInfoFrame *aux = dynamic_cast<StackedInfoFrame *>(tw);
                 if (aux)
                 {
+                    aux->setContest(nullptr);
                     aux->deleteLater();
                 }
             }
@@ -337,7 +358,7 @@ void TSingleLogFrame::clearScreenLayout()
         s->deleteLater();
     }
     rowSplitters.clear();
-    repaint();
+    update();
 }
 void TSingleLogFrame::applyScreenLayout()
 {
@@ -379,6 +400,7 @@ void TSingleLogFrame::buildScreenLayout()
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;
+    int clusterInstance = 0;
     for (int j = 0; j < sc.rows.count(); j++)
     {
         if (sc.rows[j].elements.count())
@@ -490,6 +512,13 @@ void TSingleLogFrame::buildScreenLayout()
                     chatFrame->setVisible(true);
                     break;
                 }
+                case sctCluster:
+
+                    clusterControlFrame = new ClusterClientFrame(elementScrollArea, clusterInstance++);
+                    elementScrollArea->setWidget(clusterControlFrame);
+                    clusterControlFrame->setVisible(true);
+                    clusterControlFrame->setContest(ct);
+                    break;
 
                 }
 
@@ -550,18 +579,8 @@ void TSingleLogFrame::closeContest()
     if ( TContestApp::getContestApp() )
     {
        RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
-       qsoModel.initialise(nullptr);
 
-       thisMatchFrame->setContest(nullptr);
-       otherMatchFrame->setContest(nullptr);
-       archiveMatchFrame->setContest(nullptr);
-
-       FKHRigControlFrame->setContest(nullptr);
-       FKHRotControlFrame->setContest(nullptr);
-
-       // Do we need to setContest on all the aux frames as well?
-       // it may be just luck that we get away with it as we wn't be repainting
-
+       clearScreenLayout();
        TContestApp::getContestApp() ->closeFile( contest );
        GJVQSOLogFrame->closeContest();
        contest = nullptr;
@@ -643,7 +662,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     updateQSODisplay();
 
-    emit do_repaint();
+    update();   // this queues a repaint
 }
 
 void TSingleLogFrame::NextContactDetailsTimerTimer( )
@@ -727,8 +746,8 @@ void TSingleLogFrame::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * 
 {
     if (!in)
     {
-        archiveMatchFrame->getTreeView()->viewport()->repaint();
-        otherMatchFrame->getTreeView()->viewport()->repaint();
+        archiveMatchFrame->getTreeView()->viewport()->update();
+        otherMatchFrame->getTreeView()->viewport()->update();
         return;
     }
 
@@ -736,16 +755,16 @@ void TSingleLogFrame::onOtherMatchTreeFocused(QObject *, bool in, QFocusEvent * 
     otherMatchFrame->setCurrentModel(true);
     archiveMatchFrame->setCurrentModel(false);
 
-    archiveMatchFrame->getTreeView()->viewport()->repaint();
-    otherMatchFrame->getTreeView()->viewport()->repaint();
+    archiveMatchFrame->getTreeView()->viewport()->update();
+    otherMatchFrame->getTreeView()->viewport()->update();
 }
 
 void TSingleLogFrame::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
 {
     if (!in)
     {
-        archiveMatchFrame->getTreeView()->viewport()->repaint();
-        otherMatchFrame->getTreeView()->viewport()->repaint();
+        archiveMatchFrame->getTreeView()->viewport()->update();
+        otherMatchFrame->getTreeView()->viewport()->update();
         return;
     }
 
@@ -753,8 +772,8 @@ void TSingleLogFrame::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
     archiveMatchFrame->setCurrentModel( true);
     otherMatchFrame->setCurrentModel(false);
 
-    archiveMatchFrame->getTreeView()->viewport()->repaint();
-    otherMatchFrame->getTreeView()->viewport()->repaint();
+    archiveMatchFrame->getTreeView()->viewport()->update();
+    otherMatchFrame->getTreeView()->viewport()->update();
 }
 void TSingleLogFrame::on_MatchStarting(BaseContestLog *ct)
 {
@@ -855,6 +874,13 @@ void TSingleLogFrame::transferDetails(MatchTreeItem *MatchTreeIndex )
        }
    }
 }
+
+void TSingleLogFrame::dxSpotToLog(memoryData::memData m )
+{
+    transferDetails(m);
+}
+
+
 void TSingleLogFrame::transferDetails(memoryData::memData &m )
 {
     if ( !contest  )

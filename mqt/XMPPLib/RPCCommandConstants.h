@@ -35,7 +35,7 @@ static const QString monitorLogCategory = QT_TR_NOOP("MonitorLog");
 static const QString loggerStanzaRequest = QT_TR_NOOP("Minos:Logger:GetStanza");
 static const QString loggerStanzaResponse = QT_TR_NOOP("Minos:Logger:StanzaReturned");
 
-// bandmap
+// Bandmap
 static const QString bandmapApp         = QT_TR_NOOP("mqtBandMap");
 static const QString bandmapMethod      = QT_TR_NOOP("Minos:BandMap");
 
@@ -47,6 +47,15 @@ static const QString bandmapParamQTH    = QT_TR_NOOP("QTH");
 
 static const QString BandMapCategory    = QT_TR_NOOP("BandMap");
 static const QString bandmapKeyLoaded    = QT_TR_NOOP("Loaded");
+
+
+// Cluster
+static const QString clusterApp         = QT_TR_NOOP("mqtCluster");
+static const QString clusterMethod      = QT_TR_NOOP("Minos:Cluster");
+static const QString clusterCategory       = QT_TR_NOOP("MinosCluster");
+static const QString clusterServer         = QT_TR_NOOP("MinosClusterServer");
+static const QString sendClusterSpot    = QT_TR_NOOP("SendClusterSpot");
+
 
 // Chat
 static const QString chatApp            = QT_TR_NOOP("mqtChat");

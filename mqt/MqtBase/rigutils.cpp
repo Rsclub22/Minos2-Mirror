@@ -394,7 +394,76 @@ QString convertFreqToFullDigit(QString f)
 
 }
 
+// converts freq received from cluster from khz to ghz and mhz
 
+QString convertKhzToMhz(QString f)
+{
+    QStringList sl;
+    if (!f.contains('.'))
+    {
+        return f;
+    }
+    else
+    {
+
+        sl = f.split('.');
+        if (sl.count() == 2)
+        {
+            if (sl[0].count() <= 6 && sl[0].count() > 3)
+            {
+                sl[0] = sl[0].insert(sl[0].count() - 3, '.');
+            }
+            else
+            {
+                if (sl[0].count() >= 4 && sl[0].count() <= 8)
+                {
+                    sl[0] = sl[0].insert(sl[0].count() - 6, '.');
+                    sl[0] = sl[0].insert(sl[0].count() - 3, '.');
+
+                }
+            }
+        }
+    }
+
+
+
+    return sl[0];
+}
+
+
+// used to pad display of freq with spaces
+
+QString alignFreqRight(QString f)
+{
+    QString freq = f;
+    QStringList sl;
+    if (freq.count('.') == 1)
+    {
+        sl = freq.split('.');
+        if (sl.count() == 2)
+        {
+            for (int i = 0; i < (6 - sl[0].count()); i++)
+            {
+                freq.prepend('\x20');
+            }
+            return freq;
+        }
+    }
+    else if (freq.count('.') == 2)
+    {
+        sl = freq.split('.');
+        if (sl.count() == 3)
+        {
+            if (sl[0].count() == 1)
+            {
+                freq.prepend('\x20');
+            }
+            return freq;
+        }
+    }
+
+    return freq;
+}
 
 
 QString convertSinglePeriodFreqToMultiPeriod(QString f)
@@ -492,7 +561,5 @@ QString convertRitFreqToStr(int freq)
     return rfreq;
 
 }
-
-
 
 

@@ -211,7 +211,7 @@ void StartConfig::on_newElementButton_clicked()
     cef->setElement(c);
     elementFrames.append(cef);
 
-    repaint();
+    update();
 
     QTimer *timer = new QTimer(this);
     timer->setSingleShot(true);

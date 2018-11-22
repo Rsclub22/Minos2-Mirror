@@ -10,6 +10,7 @@
 #ifndef RIGUTILS_H
 #define RIGUTILS_H
 
+
 #include "base_pch.h"
 
 const QString FREQ_EDIT_ERR_MSG = QString("Frequency has invalid characters or missing periods.\r\n\r\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\r\n");
@@ -37,5 +38,9 @@ QString convertSinglePeriodFreqToMultiPeriod(QString f);
 QString convertFreqToFullDigit(QString f);
 
 QString convertRitFreqToStr(int freq);
+
+QString convertKhzToMhz(QString f);
+QString alignFreqRight(QString f);
+
 
 #endif // RIGUTILS_H

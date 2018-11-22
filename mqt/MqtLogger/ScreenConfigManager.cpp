@@ -66,7 +66,7 @@ void ScreenConfigManager::showDetails()
     }
     ui->layoutList->setCurrentRow(crow);
     checkEnabled();
-    repaint();
+    update();
     suppressItemSelect = false;
 }
 

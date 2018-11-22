@@ -10,6 +10,7 @@
 #include "locframe.h"
 #include "tstatsdispframe.h"
 #include "FilterFrame.h"
+//#include "clusterclientframe.h"
 
 namespace Ui {
 class StackedInfoFrame;
@@ -33,6 +34,7 @@ private:
     LoggerContestLog *contest;
 
     TClockFrame *clockFrame = nullptr;
+    //ClusterClientFrame * clusterClientFrame = nullptr;
     DXCCFrame *dxccFrame = nullptr;
     DistrictFrame *districtFrame = nullptr;
     FilterFrame *filterFrame = nullptr;
@@ -42,6 +44,8 @@ private:
     TStatsDispFrame *statsFrame = nullptr;
 
     QFrame *currStackFrame = nullptr;
+
+    //int getClusterInstanceNum();
 
 private slots:
     void on_ScrollToDistrict( const QString &qth, BaseContestLog* );

@@ -74,6 +74,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     msg = new RigControlRpc(this);
 
+
+
     QSettings settings;
     geoStr = "geometry";
     if (appName.length() > 0)
@@ -112,7 +114,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     radio = new RigControl();
     radio->getRigList();
 
-    loadBands();
+    loadVhfAndUpBands(bands);
     FreqPresetDialog::readSettings(presetFreq);
 
     setupRadio = new RigSetupDialog(radio, bands);
@@ -255,9 +257,9 @@ void RigControlMainWindow::closeEvent(QCloseEvent *event)
 void RigControlMainWindow::onStdInRead(QString cmd)
 {
     trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(true);
-    if (cmd.indexOf("HideServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
 }
 
@@ -1028,7 +1030,7 @@ void RigControlMainWindow::loggerSetFreq(QString freq)
         setFreq(freq, RIG_VFO_CURR);
     }
     // but the rig hasn't updated...
-    //msg->rigCache.publish();
+    msg->rigCache.publish();
 }
 
 
@@ -2489,7 +2491,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
 }
 
 /************************** Band Information ***********************************/
-
+/*
 void RigControlMainWindow::loadBands()
 {
     BandList &blist = BandList::getBandList();
@@ -2509,7 +2511,7 @@ void RigControlMainWindow::loadBands()
 
 }
 
-
+*/
 
 void delay(int sec)
 {

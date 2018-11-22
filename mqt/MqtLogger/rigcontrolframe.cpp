@@ -157,6 +157,8 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     connect(ui->RitEdit, SIGNAL(newFreq(int)), this, SLOT(changeRitRadioFreq(int)));
     connect(ui->RitClear, SIGNAL(clicked(bool)), this, SLOT(ritClearButtonSelected(bool)));
 
+    // from cluster frame
+    connect(&MinosLoggerEvents::mle, SIGNAL(FreqStrToRig(QString)), this, SLOT(sendFreq(QString)));
 
     // volume control updates to radio
     connect(ui->volumeSlider, SIGNAL(sendVolumeRadio(int)), this, SLOT(sendVolumeRadio(int)));
@@ -1465,7 +1467,7 @@ RunMemoryButton::RunMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
     shortKey = new QShortcut(QKeySequence(runButShortCut[memNo]), memButton);
     shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), memButton);
     readAction = new QAction("&Read", memButton);
-    writeAction = new QAction("&Write",memButton);
+    writeAction = new QAction("&New",memButton);
     editAction = new QAction("&Edit", memButton);
     clearAction = new QAction("&Clear",memButton);
     memoryMenu->addAction(readAction);

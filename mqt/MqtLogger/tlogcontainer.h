@@ -123,6 +123,7 @@ private:
     QAction *ShiftTabRightAction;
 
     QAction *startConfigAction;
+    QAction *listCompressionAction;
     QAction *LocCalcAction;
     QAction *AnalyseMinosLogAction;
     QAction *CorrectDateTimeAction;
@@ -202,6 +203,7 @@ private slots:
     void menuLogsActionExecute();
 
     void StartConfigActionExecute();
+    void listCompressionActionExecute();
 
     void on_ContestPageControl_currentChanged(int index);
     void on_ContestPageControl_tabBarDoubleClicked(int index);

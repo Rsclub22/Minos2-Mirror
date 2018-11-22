@@ -48,6 +48,7 @@ if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 
 	cp -r ../Minos2/build/MqtAppStarter/MqtAppStarter.app Bin
 	cp -r ../Minos2/build/MqtChat/MqtChat.app Bin
+	cp -r ../Minos2/build/MqtCluster/MqtCluster.app Bin
 	cp -r ../Minos2/build/MqtControl/MqtControl.app Bin
 	cp -r ../Minos2/build/MqtKeyer/MqtKeyer.app Bin
 	cp -r ../Minos2/build/MqtLogger/MqtLogger.app Bin
@@ -59,6 +60,7 @@ if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 else
 	cp ../Minos2/build/MqtAppStarter/MqtAppStarter Bin
 	cp ../Minos2/build/MqtChat/MqtChat Bin
+	cp ../Minos2/build/MqtCluster/MqtCluster Bin
 	cp ../Minos2/build/MqtControl/MqtControl Bin
 	cp ../Minos2/build/MqtKeyer/MqtKeyer Bin
 	cp ../Minos2/build/MqtLogger/MqtLogger Bin

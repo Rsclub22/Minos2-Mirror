@@ -152,9 +152,9 @@ KeyerMain::~KeyerMain()
 void KeyerMain::onStdInRead(QString cmd)
 {
     trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(true);
-    if (cmd.indexOf("HideServers", Qt::CaseInsensitive) >= 0)
+    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
 }
 
@@ -234,13 +234,16 @@ void KeyerMain::LineTimerTimer( )
    QString astate;
    getActionState( astate );
 
+   QString tswitch;
+   getTransverterSwitch ( tswitch );
+
    // This isn't quite what we want - needs to be better english and slower changing
 
    QString kstatus;
    if ( getKeyerStatus( kstatus ) )
-      setWindowTitle(QString( msets[ m ] ) + " : " + astate + " : " + kstatus);
+      setWindowTitle(QString( msets[ m ] ) + " : " + astate + " : " + kstatus + " : " + tswitch);
    else
-      setWindowTitle(QString( msets[ m ] ) + " : " + astate);
+      setWindowTitle(QString( msets[ m ] ) + " : " + astate + " : " + tswitch);
 
    static QString old;
 

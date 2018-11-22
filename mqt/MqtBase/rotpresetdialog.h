@@ -24,7 +24,7 @@ class RotPresetDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RotPresetDialog(int buttonNumber, RotPresetData* _editData, RotPresetData* _curData, QWidget *parent = nullptr);
+    explicit RotPresetDialog(QWidget *parent, int buttonNumber, RotPresetData* _editData, RotPresetData* _curData, QString name);
     virtual ~RotPresetDialog() override;
 
     private slots:

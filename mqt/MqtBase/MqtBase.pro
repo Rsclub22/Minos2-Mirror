@@ -67,7 +67,14 @@ SOURCES += \
     serialcomms.cpp \
     StartConfig.cpp \
     TreeUtils.cpp \
-    validators.cpp
+    validators.cpp \
+    dxspotdatamodel.cpp \
+    qttelnet.cpp \
+    clusterClientServer.cpp \
+    clusterclientframe.cpp \
+    spotdata.cpp \
+    clusterclientfilterdialog.cpp \
+    calllocinputdialog.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -120,7 +127,16 @@ HEADERS += \
     StartConfig.h \
     TreeUtils.h \
     validators.h \
-    waitcursor.h
+    waitcursor.h \
+    dxspotdatamodel.h \
+    qttelnet.h \
+    clustercommon.h \
+    clusterClientServer.h \
+    clusterclientframe.h \
+    spotdata.h \
+    clusterclientfilterdialog.h \
+    calllocinputdialog.h \
+    rigmemcommondata.h
 
 unix {
     target.path = /usr/lib
@@ -135,4 +151,7 @@ FORMS += \
     ConfigElementFrame.ui \
     minoskeyboard.ui \
     rotpresetdialog.ui \
-    StartConfig.ui
+    StartConfig.ui \
+    clusterclientframe.ui \
+    clusterclientfilterdialog.ui \
+    calllocinputdialog.ui

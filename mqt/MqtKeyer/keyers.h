@@ -146,6 +146,10 @@ class lineMonitor
       virtual bool L1Changed( int state ) = 0;
       virtual bool L2Changed( int state ) = 0;
       virtual bool linesModeChanged(int lmode) = 0;
+      virtual bool transverterSwitchChanged(int /*s*/)
+      {
+          return true;
+      }
 
       virtual bool initialise( const KeyerConfig &keyer, const PortConfig &port ) = 0;
 
@@ -177,6 +181,7 @@ class commonKeyer: public lineMonitor, public timerTicker
       virtual bool L1Changed( int state ) override;
       virtual bool L2Changed( int state ) override;
       virtual bool linesModeChanged(int lmode) override;
+      virtual bool transverterSwitchChanged(int s) override;
 
       virtual void tickEvent() override;       // this will often be an interrupt routine
       virtual bool getInfo( KeyerInfo * ) = 0;
@@ -186,6 +191,7 @@ class commonKeyer: public lineMonitor, public timerTicker
 
       virtual bool docommand( const KeyerCtrl &dvp_ctrl ) = 0;
 
+      virtual void getTransverterSwitch(QString &buff);
       virtual bool getPTT( );
       virtual void getActionState( QString & );
       virtual bool getStatus( QString &a );
@@ -206,6 +212,7 @@ class commonKeyer: public lineMonitor, public timerTicker
       bool L2State = false;
       bool pttState = false;
       LineModes linesMode = elmNone;
+      int transverterSwitch = 0;
       virtual void enableQueue( bool /*b*/ )
       {}
       bool boxRecPending = false;

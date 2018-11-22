@@ -32,7 +32,8 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
                      edpShowOperators,
                      edpEditor, edpStatisticsPeriod1, edpStatisticsPeriod2,
                      edpCurrentLayout,
-                     edpShowTPM
+                     edpShowTPM,
+                     edpListCompression
                     };
 enum ENTRYPROFILE {eepCall, eepEntrant, eepMyName, eepMyCall,
                    eepMyAddress1, eepMyAddress2, eepMyCity, eepMyPostCode, eepMyCountry,

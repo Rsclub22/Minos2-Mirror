@@ -2,6 +2,7 @@
 #include "MinosLoggerEvents.h"
 #include "contest.h"
 #include "cutils.h"
+#include "tlogcontainer.h"
 #include "TClockFrame.h"
 #include "ui_TClockFrame.h"
 
@@ -44,6 +45,7 @@ void TClockFrame::RecheckTimerTimer(  )
        colour = HtmlFontColour(Qt::blue);
 
 
-   ui->clockLabel ->setText("<b><center><nobr><p><big><h1>"
-                            + colour + disp + "</p></h1>");
+   QString mess = "<b><center><nobr><p><big><h1>"
+           + colour + disp + "</p></h1>";
+   ui->clockLabel ->setText(mess);
 }
