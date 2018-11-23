@@ -67,15 +67,20 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     loadVhfAndUpBands(bands);
 
 #ifdef TEST_SPOTS
-    ui->testSpotsPb->setVisible(true);
-    ui->testSpotsLab->setVisible(true);
-    connect(ui->testSpotsPb, SIGNAL(clicked()), this, SLOT(testSpotPbClicked()));
-    spotTestTimer = new QTimer();
-    connect(spotTestTimer, SIGNAL(timeout()), this, SLOT(spotTimerTimeOut()));
 
-#elif !defined TEST_SPOTS
-    ui->testSpotsPb->setVisible(false);
-    ui->testSpotsLab->setVisible(false);
+    if (FileExists(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE))
+    {
+        ui->testSpotsPb->setVisible(true);
+        ui->testSpotsLab->setVisible(true);
+        connect(ui->testSpotsPb, SIGNAL(clicked()), this, SLOT(testSpotPbClicked()));
+        spotTestTimer = new QTimer();
+        connect(spotTestTimer, SIGNAL(timeout()), this, SLOT(spotTimerTimeOut()));
+    }
+    else
+    {
+        ui->testSpotsPb->setVisible(false);
+        ui->testSpotsLab->setVisible(false);
+    }
 
 #endif
 
