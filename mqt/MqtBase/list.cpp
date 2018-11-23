@@ -11,15 +11,7 @@
 #include "contacts.h"
 #include "ListContact.h"
 #include "list.h"
-class CsvReader
-{
-    void checkString(QString &temp, QChar character, QList<QStringList> &csv);
-    QStringList itemList;
-public:
-    CsvReader();
 
-    bool parseCsv(const QString &fileName, QList<QStringList> &csv);
-};
 CsvReader::CsvReader(){}
 
 bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
@@ -81,6 +73,8 @@ void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &
         temp.append(character);
     }
 }
+
+
 ContactList::ContactList() :
   cslFile( false )
   , slotno( -1 )

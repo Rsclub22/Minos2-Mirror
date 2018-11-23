@@ -1,6 +1,7 @@
 #include <QStringListModel>
 #include <QMessageBox>
 #include "cutils.h"
+#include "list.h"
 #include "clusterclientfilterdialog.h"
 #include "calllocinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
@@ -30,6 +31,9 @@ ClusterClientFilterDialog::~ClusterClientFilterDialog()
 void ClusterClientFilterDialog::initCheckFilterTab()
 {
 
+
+    setWindowTitle("Cluster Spot Filters");
+    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     vhfChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox;
 
@@ -73,6 +77,9 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     connect(ui->callsignAddButton, SIGNAL(clicked()), SLOT(callsignAddClicked()));
     connect(ui->callsignEditButton, SIGNAL(clicked()), SLOT(callsignEditClicked()));
     connect(ui->callsignDelButton, SIGNAL(clicked()), SLOT(callsignDelClicked()));
+    connect(ui->callsignDelAllButton, SIGNAL(clicked()), SLOT(callsignDelAllClicked()));
+    connect(ui->saveCallsignList, SIGNAL(clicked()), SLOT(onCallsignListSave()));
+    connect(ui->importCallsignList, SIGNAL(clicked()), SLOT(onCallsignListImport()));
 
     locatorListWidget = ui->locatorListWidget;
     locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.locatorFilterList));
@@ -82,6 +89,9 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     connect(ui->locatorAddButton, SIGNAL(clicked()), SLOT(locatorAddClicked()));
     connect(ui->locatorEditButton, SIGNAL(clicked()), SLOT(locatorEditClicked()));
     connect(ui->locatorDelButton, SIGNAL(clicked()), SLOT(locatorDelClicked()));
+    connect(ui->locatorDelAllButton, SIGNAL(clicked()), SLOT(locatorDelAllClicked()));
+    connect(ui->saveLocatorList, SIGNAL(clicked()), SLOT(onLocatorListSave()));
+    connect(ui->importLocatorList, SIGNAL(clicked()), SLOT(onLocatorListImport()));
 
     connect(ui->vhfSelectBut, SIGNAL(clicked()), this, SLOT(vhfButtonSelected()));
     connect(ui->mWSelectBut, SIGNAL(clicked()), this, SLOT(mWaveButtonSelected()));
@@ -118,34 +128,35 @@ void ClusterClientFilterDialog::filtersAccepted()
         callsignEditChanged = false;
         filterSettings.callsignFilterList.clear();
         // get list of callsigns
-        QStringList csl;
-        for (int row = 0; row < callsignListWidget->count(); row++)
-        {
-            QListWidgetItem* item = callsignListWidget->item(row);
-            csl.append(item->text());
-
-        }
-        filterSettings.callsignFilterList = filterSettings.packFilterList(csl);
+        filterSettings.callsignFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(callsignListWidget));
         filterChangeMask |= CALLSIGNUP;
     }
     else if (locatorEditChanged)
     {
         locatorEditChanged = false;
         filterSettings.locatorFilterList.clear();
-        // get list of locators
-        QStringList ll;
-        for (int row = 0; row < locatorListWidget->count(); row++)
-        {
-            QListWidgetItem* item = locatorListWidget->item(row);
-            ll.append(item->text());
-            filterSettings.locatorFilterList.append(item->text());
-        }
-        filterSettings.locatorFilterList = filterSettings.packFilterList(ll);
+        filterSettings.locatorFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(locatorListWidget));
         filterChangeMask |= LOCATORUP;
     }
 
     emit filtersChanged(filterChangeMask);
     close();
+}
+
+
+QStringList ClusterClientFilterDialog::getItemsTextFromListWidget(QListWidget* lw)
+{
+    QStringList l;
+    if (lw->count() != 0)
+    {
+        for (int row = 0; row < lw->count(); row++)
+        {
+            QListWidgetItem* item = lw->item(row);
+            l.append(item->text());
+        }
+    }
+
+    return l;
 }
 
 
@@ -577,11 +588,11 @@ void ClusterClientFilterDialog::locatorCurrentRowChanged(int currentRow)
 
 void ClusterClientFilterDialog::callsignDelClicked()
 {
-    if (callsignListWidgetCurrentRow >=0)
+    if (callsignListWidgetCurrentRow >= 0)
     {
         int status = QMessageBox::question( this,
         QString("Delete Callsign Filter"),
-        QString("Do you want to delete callsign %1 ?").arg(callsignListWidget->currentItem()->text()),
+        QString("Please confirm you want to delete callsign %1 ?").arg(callsignListWidget->currentItem()->text()),
         QMessageBox::Yes|QMessageBox::Default,
         QMessageBox::No|QMessageBox::Escape,
         QMessageBox::NoButton);
@@ -596,6 +607,25 @@ void ClusterClientFilterDialog::callsignDelClicked()
 
     }
 
+}
+
+
+void ClusterClientFilterDialog::callsignDelAllClicked()
+{
+    if (callsignListWidget->count() > 0)
+    {
+        int status = QMessageBox::question( this,
+        QString("Delete All Callsign Filters"),
+        QString("Please confirm you want to delete all callsigns?"),
+        QMessageBox::Yes|QMessageBox::Default,
+        QMessageBox::No|QMessageBox::Escape,
+        QMessageBox::NoButton);
+        if (status == QMessageBox::Yes)
+        {
+            callsignListWidget->clear();
+            callsignEditChanged = true;
+        }
+    }
 }
 
 void ClusterClientFilterDialog::callsignEditClicked()
@@ -722,4 +752,150 @@ void ClusterClientFilterDialog::locatorDelClicked()
         }
 
     }
+}
+
+
+void ClusterClientFilterDialog::locatorDelAllClicked()
+{
+    if (locatorListWidget->count() > 0)
+    {
+        int status = QMessageBox::question( this,
+        QString("Delete All Locator Filters"),
+        QString("Please confirm you want to delete all locators?"),
+        QMessageBox::Yes|QMessageBox::Default,
+        QMessageBox::No|QMessageBox::Escape,
+        QMessageBox::NoButton);
+        if (status == QMessageBox::Yes)
+        {
+            locatorListWidget->clear();
+            locatorEditChanged = true;
+        }
+    }
+}
+
+
+void ClusterClientFilterDialog::onCallsignListSave()
+{
+    if (callsignListWidget->count() != 0)
+    {
+        saveFilterToFile(getItemsTextFromListWidget(callsignListWidget), "Callsign");
+    }
+
+}
+
+void ClusterClientFilterDialog::onCallsignListImport()
+{
+    QStringList lof;
+    importFilterToWidgetList(lof, "Callsign");
+    if (!lof.isEmpty())
+    {
+        callsignListWidget->addItems(lof);
+    }
+}
+
+void ClusterClientFilterDialog::onLocatorListSave()
+{
+    if (locatorListWidget->count() != 0)
+    {
+        saveFilterToFile(getItemsTextFromListWidget(locatorListWidget), "Locator");
+    }
+}
+
+void ClusterClientFilterDialog::onLocatorListImport()
+{
+    QStringList lof;
+    importFilterToWidgetList(lof, "Locator");
+    if (!lof.isEmpty())
+    {
+        locatorListWidget->addItems(lof);
+    }
+}
+
+void ClusterClientFilterDialog::saveFilterToFile(QStringList listOfFilters, QString type)
+{
+    if (!listOfFilters.isEmpty())
+    {
+        QString listDir;
+        QString path;
+        if (type == "Callsign")
+        {
+           listDir =  CLUSTER_CALLSIGNLIST_DIR;
+        }
+        else if (type == "Locator")
+        {
+            listDir = CLUSTER_LOCATORLIST_DIR;
+        }
+        path = CLUSTER_PATH + listDir;
+
+        CreateDir(path);
+
+        QString fileName = QFileDialog::getSaveFileName(this,
+            tr("Save %1").arg(type), path, tr("%1 List Files (*.txt)").arg(type));
+
+        QFile file( fileName );
+
+        if (file.exists(fileName))
+        {
+           file.remove(fileName);
+        }
+
+        if ( file.open(QIODevice::ReadWrite | QIODevice::Text) )
+        {
+            QTextStream stream( &file );
+            int i = 0;
+            while (i < listOfFilters.count())
+            {
+                stream << listOfFilters[i];
+                if (i == listOfFilters.count() - 1)
+                {
+                    stream << endl;
+                }
+                else
+                {
+                   stream << FILTER_DELIMITER << endl;
+                }
+
+                i++;
+            }
+        }
+
+        file.close();
+    }
+}
+
+void ClusterClientFilterDialog::importFilterToWidgetList(QStringList &listOfFilters, QString type)
+{
+    QList<QStringList> lof;
+    QString listDir;
+    QString path;
+    if (type == "Callsign")
+    {
+       listDir =  CLUSTER_CALLSIGNLIST_DIR;
+    }
+    else if (type == "Locator")
+    {
+        listDir = CLUSTER_LOCATORLIST_DIR;
+    }
+    path = CLUSTER_PATH + listDir;
+
+    QString fileName = QFileDialog::getOpenFileName(this,
+        tr("Open %1").arg(type), path, tr("%1 List Files (*.txt)").arg(type));
+
+    CsvReader csv;
+    csv.parseCsv(fileName, lof);
+
+    for (int i = 0; i < lof.count(); i++)
+    {
+        QStringList l;
+        l = lof[i];
+        for (int x = 0; x < l.count(); x++)
+        {
+            QString s = l[x];
+            if (s != "")
+            {
+               listOfFilters.append(s);
+            }
+        }
+    }
+
 }

@@ -15,6 +15,7 @@ class ListContact;
 typedef QVector < ListContact *> ListList;
 typedef ListList::iterator ListIterator;
 
+
 class ContactList : public BaseLogList
 {
    private:
@@ -41,4 +42,16 @@ class ContactList : public BaseLogList
       ListContact *pcontactAt(int offset );
       int getSlotNo() const{return slotno;}
 };
+
+
+class CsvReader
+{
+    void checkString(QString &temp, QChar character, QList<QStringList> &csv);
+    QStringList itemList;
+public:
+    CsvReader();
+
+    bool parseCsv(const QString &fileName, QList<QStringList> &csv);
+};
+
 #endif

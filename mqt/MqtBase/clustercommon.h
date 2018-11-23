@@ -4,6 +4,13 @@
 #include <QList>
 #include <QColor>
 
+// Files
+const QString CLUSTER_PATH = "./Configuration/Cluster/";
+const QString CLUSTER_SITES = "ClusterSites.ini";
+const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
+const QString CLUSTER_START_FILE = "cluster_start.txt";
+const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
+const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
 
 
 // Band Filter Data
@@ -162,7 +169,7 @@ void operator = (const ClusterClientFilterSettings& ccfs)
     modeFilterMask = ccfs.modeFilterMask;
 }
 
-QString packFilterList(QStringList& l)
+QString packFilterList(QStringList l)
 {
     QString s;
     for (int i = 0; i < l.count(); i++)

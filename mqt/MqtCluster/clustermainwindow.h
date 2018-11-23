@@ -16,6 +16,7 @@
 #include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
 #include "rotpresetbutton.h"
+#include "clustercommon.h"
 #include "htmldelegate.h"
 
 namespace Ui {
@@ -24,10 +25,7 @@ class ClusterMainWindow;
 
 #define TEST_SPOTS
 
-const QString CLUSTER_PATH = "./Configuration/Cluster/";
-const QString CLUSTER_SITES = "ClusterSites.ini";
-const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
-const QString CLUSTER_START_FILE = "cluster_start.txt";
+
 
 #ifdef TEST_SPOTS
 

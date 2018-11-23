@@ -106,6 +106,11 @@ private:
 
 
 
+    void saveFilterToFile(QStringList listOfFilters, QString type);
+    void importFilterToWidgetList(QStringList &listOfFilters, QString type);
+    QStringList getItemsTextFromListWidget(QListWidget *lw);
+
+
 private slots:
     void vhfChecked(int checkBoxNum);
     void mWaveChecked(int checkBoxNum);
@@ -129,6 +134,12 @@ private slots:
     void locatorAddClicked();
     void locatorEditClicked();
     void locatorDelClicked();
+    void onCallsignListSave();
+    void onCallsignListImport();
+    void onLocatorListSave();
+    void onLocatorListImport();
+    void callsignDelAllClicked();
+    void locatorDelAllClicked();
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H
