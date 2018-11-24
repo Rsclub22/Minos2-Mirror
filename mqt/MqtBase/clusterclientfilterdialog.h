@@ -47,14 +47,19 @@ public:
     QStringList getLocatorFilterList();
 
 
+    void setContest(BaseContestLog *c);
+
 signals:
     void filtersChanged(int);
 
 
 private:
     Ui::ClusterClientFilterDialog *ui;
-    QList<QCheckBox*> vhfChkBoxList;
-    QList<QCheckBox*> mWaveChkBoxList;
+    BaseContestLog *ct = nullptr;
+
+
+    QList<QCheckBox*> bandChkBoxList;
+    //QList<QCheckBox*> mWaveChkBoxList;
     QList<QCheckBox*> modeChkBoxList;
 
 
@@ -68,9 +73,12 @@ private:
     int locatorListWidgetCurrentRow;
 
     //unsigned int bandFilterMask;
-    unsigned int editBandFilterMask;
+    QList<bool> editBandFilter;
+
+    //unsigned int editBandFilterMask;
     //unsigned int modeFilterMask;
-    unsigned int editModeFilterMask;
+    //unsigned int editModeFilterMask;
+    QList<bool> editModeFilter;
 
     ClusterClientFilterSettings filterSettings;
 
@@ -80,6 +88,7 @@ private:
 
 
     bool bandTabChanged;
+    bool modeChanged;
     bool callsignEditChanged;
     bool locatorEditChanged;
 
@@ -112,8 +121,8 @@ private:
 
 
 private slots:
-    void vhfChecked(int checkBoxNum);
-    void mWaveChecked(int checkBoxNum);
+    void bandChecked(int checkBoxNum);
+    //void mWaveChecked(int checkBoxNum);
     void modeChecked(int checkBoxNum);
 
     void vhfButtonSelected();

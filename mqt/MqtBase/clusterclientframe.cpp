@@ -693,7 +693,10 @@ void ClusterClientFrame::restoreLocatorViewColumns()
 
 void ClusterClientFrame::setContest(BaseContestLog *c)
 {
-    ct = c;
+    ct = dynamic_cast<LoggerContestLog *>( c);
+
+    // set the contest in the filter dialog
+    filterSetup->setContest(c);
 }
 
 

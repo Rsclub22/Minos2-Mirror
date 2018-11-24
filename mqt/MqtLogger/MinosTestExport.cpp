@@ -376,6 +376,26 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    }
    return exp_stanzaCount;
 }
+void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd, int filterNum)
+{
+    MinosItem<ClusterClientFilterSettings> filter = ct->clusterFilterSettings[filterNum];
+    if (filter.isDirty())
+    {
+        RPCParamStruct * st = new RPCParamStruct;
+        makeHeader( st, 1 );
+
+        st->addMember(filterNum,"filterNum");
+        st->addMember(filter.getValue().callsignFilterList, "callsignList");
+        st->addMember(filter.getValue().locatorFilterList, "locatorList");
+        st->addMember(filter.getInt().bandFilterMask, "bandfilter");
+        st->addMember(filter.getValue().modeFilterMask, "modefilter");
+
+        sendRequest(expfd, "MinosClusterFilter", st);
+
+    }
+}
+
+
 void MinosTestExport::exportRigMemory(QSharedPointer<QFile> expfd, int memno )
 {
     MinosItem<memoryData::memData> mem = ct->rigMemories[memno];

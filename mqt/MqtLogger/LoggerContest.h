@@ -14,6 +14,7 @@
 //----------------------------------------------------------------------------
 #include "profiles.h"
 #include "rigmemcommondata.h"
+#include "clustercommon.h"
 #include "PubSubValue.h"
 #include "contest.h"
 
@@ -120,6 +121,8 @@ class LoggerContestLog : public BaseContestLog
 
       QVector<MinosItem<memoryData::memData> > runMemories;
       QVector<MinosItem<memoryData::memData> > rigMemories;
+
+      QVector<MinosItem<ClusterClientFilterSettings>> clusterFilterSettings;
 
       MinosStringItem<QString> screenLayout;
 

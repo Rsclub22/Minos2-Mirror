@@ -39,7 +39,7 @@ class MinosTestExport
       void exportRunMemory(QSharedPointer<QFile> expfd, int memno );
       int exportStackDisplay(QSharedPointer<QFile> expfd);
       void exportAllMemories(QSharedPointer<QFile> expfd);
-
+      void exportClusterFilter(QSharedPointer<QFile> expfd, int filterNum);
 
    public:
       MinosTestExport( LoggerContestLog * const ct );
@@ -50,6 +50,7 @@ class MinosTestExport
       int exportTest(QSharedPointer<QFile> expfd, int mindump, int maxdump );
 
       int exportQSO( QSharedPointer<QFile> expfd, const QSharedPointer<BaseContact>lct );
+
 
 };
 #endif
