@@ -18,6 +18,7 @@
 #include <QStringListModel>
 #include <QListWidget>
 
+#include "LoggerContest.h"
 #include "clustercommon.h"
 
 namespace Ui {
@@ -29,7 +30,7 @@ class ClusterClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClusterClientFilterDialog(QWidget *parent = nullptr);
+    explicit ClusterClientFilterDialog(QWidget *parent = nullptr, int instanceNum);
     ~ClusterClientFilterDialog();
 
     unsigned int getBandFilterMask();
@@ -55,7 +56,7 @@ signals:
 
 private:
     Ui::ClusterClientFilterDialog *ui;
-    BaseContestLog *ct = nullptr;
+    LoggerContestLog *ct = nullptr;
 
 
     QList<QCheckBox*> bandChkBoxList;
@@ -82,10 +83,11 @@ private:
 
     ClusterClientFilterSettings filterSettings;
 
-    bool vhfButtonState;
-    bool mWaveButtonState;
-    bool modeButtonState;
+    //bool vhfButtonState;
+    //bool mWaveButtonState;
+    //bool modeButtonState;
 
+    int instanceNum;
 
     bool bandTabChanged;
     bool modeChanged;

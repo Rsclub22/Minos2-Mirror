@@ -6,14 +6,16 @@
 #include "calllocinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
-ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
+ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent, int instanceNum) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
-    vhfButtonState(false),
-    mWaveButtonState(false),
-    modeButtonState(false),
+    instanceNum(instanceNum),
+    //vhfButtonState(false),
+   // mWaveButtonState(false),
+   // modeButtonState(false),
     bandTabChanged(false),
+    modeChanged(false),
     callsignEditChanged(false),
     locatorEditChanged(false)
 {
@@ -112,7 +114,8 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
 void ClusterClientFilterDialog::setContest(BaseContestLog *c)
 {
-    ct = c;
+    ct = dynamic_cast<LoggerContestLog *>( c);
+
 }
 
 
@@ -124,9 +127,10 @@ void ClusterClientFilterDialog::filtersAccepted()
 
     if (bandTabChanged)
     {
+
         bandTabChanged = false;
         // copy updated masks with edited values
-        ct->clusterFilterSettings.setAllBandFilters(editBandFilter);
+        ct->clusterFilterSettings[instanceNum].setAllBandFilters(editBandFilter);
         filterChangeMask |= FREQFILTERUP;
     }
 

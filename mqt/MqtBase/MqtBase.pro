@@ -71,9 +71,7 @@ SOURCES += \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
     clusterClientServer.cpp \
-    clusterclientframe.cpp \
     spotdata.cpp \
-    clusterclientfilterdialog.cpp \
     calllocinputdialog.cpp
 
 HEADERS += \
@@ -132,9 +130,7 @@ HEADERS += \
     qttelnet.h \
     clustercommon.h \
     clusterClientServer.h \
-    clusterclientframe.h \
     spotdata.h \
-    clusterclientfilterdialog.h \
     calllocinputdialog.h \
     rigmemcommondata.h
 
@@ -152,6 +148,4 @@ FORMS += \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \
-    clusterclientframe.ui \
-    clusterclientfilterdialog.ui \
     calllocinputdialog.ui

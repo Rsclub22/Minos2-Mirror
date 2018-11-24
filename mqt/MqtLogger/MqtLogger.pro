@@ -89,7 +89,9 @@ SOURCES += \
     tsettingseditdlg.cpp \
     tsinglelogframe.cpp \
     tstatsdispframe.cpp \
-    volumeslider.cpp
+    volumeslider.cpp \
+    clusterclientfilterdialog.cpp \
+    clusterclientframe.cpp
 
 
 HEADERS  += \
@@ -148,7 +150,9 @@ HEADERS  += \
     tsettingseditdlg.h \
     tsinglelogframe.h \
     tstatsdispframe.h \
-    volumeslider.h
+    volumeslider.h \
+    clusterclientfilterdialog.h \
+    clusterclientframe.h
 
 
 FORMS    += \
@@ -189,7 +193,9 @@ FORMS    += \
     TSessionManager.ui \
     tsettingseditdlg.ui \
     tsinglelogframe.ui \
-    tstatsdispframe.ui
+    tstatsdispframe.ui \
+    clusterclientfilterdialog.ui \
+    clusterclientframe.ui
 
 
 DISTFILES += \
