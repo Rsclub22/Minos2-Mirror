@@ -25,6 +25,7 @@
 #include "ScreenConfigManager.h"
 #include "MinosTestImport.h"
 #include "singleapplication.h"
+#include "helpbrowser.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -349,6 +350,7 @@ void TLogContainer::setupMenus()
         KeyerPlaybackAction = newAction((s), keyerPlaybackMenu, SLOT(KeyerPlaybackActionExecute()));
         KeyerPlaybackAction->setData(i);
     }
+    HelpAction = newAction("Help...", ui->menuHelp, SLOT(HelpActionExecute()));
     HelpAboutAction = newAction("About...", ui->menuHelp, SLOT(HelpAboutActionExecute()));
 }
 
@@ -359,6 +361,7 @@ void TLogContainer::enableActions()
 
    LocCalcAction->setEnabled(true);
    FileNewAction->setEnabled(true);
+   HelpAction->setEnabled(true);
    HelpAboutAction->setEnabled(true);
 
    FileCloseAction->setEnabled(f);
@@ -486,6 +489,19 @@ QString TLogContainer::strippedName(const QString &fullFileName)
 void TLogContainer::HelpAboutActionExecute()
 {
     TAboutBox::ShowAboutBox(this, false);
+}
+void TLogContainer::HelpActionExecute()
+{
+    //  Action method for Help Browser button.
+
+    //  Creates a HelpBrowser instance and sets the collection and startUrl.
+
+    QString collectionFile = GetCurrentDir() + "/helpfiles/archiveutilities.qhc";
+    QUrl startUrl = QUrl(QString("qthelp://G4AUC/archiveutilities/ArchiveUtilities.html"));
+    if (!helpBrowser)
+        helpBrowser = QSharedPointer<HelpBrowser>(new HelpBrowser(collectionFile, startUrl, this));
+    helpBrowser->show();
+
 }
 QString TLogContainer::getDefaultDirectory( bool IsList )
 {

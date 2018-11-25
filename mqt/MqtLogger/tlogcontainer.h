@@ -2,6 +2,7 @@
 #define TLOGCONTAINER_H
 
 #include "base_pch.h"
+#include "helpbrowser.h"
 
 namespace Ui {
 class TLogContainer;
@@ -79,6 +80,8 @@ private:
     QMenu *keyerRecordMenu;
     QMenu *keyerPlaybackMenu;
 
+    QSharedPointer<HelpBrowser>  helpBrowser;
+
     void enableActions();
 
     QString getCurrentFile();
@@ -100,6 +103,7 @@ private:
     QAction *newCheckableAction( const QString &text, QMenu *m, const char *atype );
     void setupMenus();
 
+    QAction *HelpAction;
     QAction *HelpAboutAction;
 
     QAction *FileOpenAction;
@@ -158,6 +162,7 @@ private:
     void updateLayoutsMenu();
 private slots:
     void CancelClick();
+    void HelpActionExecute();
     void HelpAboutActionExecute();
 
     void selectLayout();

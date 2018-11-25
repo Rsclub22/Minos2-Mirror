@@ -4,23 +4,23 @@
 #include "base_pch.h"
 
 namespace Ui {
-class TMinosHelpForm;
+class TMinosBSHelpForm;
 }
 
-class TMinosHelpForm : public QDialog
+class TMinosBSHelpForm : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit TMinosHelpForm(QWidget *parent = nullptr);
-    ~TMinosHelpForm();
+    explicit TMinosBSHelpForm(QWidget *parent = nullptr);
+    ~TMinosBSHelpForm();
     void setText(const QString &text);
 
 private slots:
     void on_CloseButton_clicked();
 
 private:
-    Ui::TMinosHelpForm *ui;
+    Ui::TMinosBSHelpForm *ui;
 };
 
 #endif // TMINOSHELPFORM_H

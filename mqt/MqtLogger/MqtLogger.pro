@@ -9,6 +9,7 @@ include($$PWD/../mqtapplibs.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
+QT       += help
 
 TARGET = MqtLogger
 TEMPLATE = app
@@ -84,12 +85,12 @@ SOURCES += \
     tlogcontainer.cpp \
     tmanagelistsdlg.cpp \
     tminosbandchooser.cpp \
-    tminoshelpform.cpp \
     tqsoeditdlg.cpp \
     tsettingseditdlg.cpp \
     tsinglelogframe.cpp \
     tstatsdispframe.cpp \
-    volumeslider.cpp
+    volumeslider.cpp \
+    tminosbshelpform.cpp
 
 
 HEADERS  += \
@@ -143,12 +144,12 @@ HEADERS  += \
     tlogcontainer.h \
     tmanagelistsdlg.h \
     tminosbandchooser.h \
-    tminoshelpform.h \
     tqsoeditdlg.h \
     tsettingseditdlg.h \
     tsinglelogframe.h \
     tstatsdispframe.h \
-    volumeslider.h
+    volumeslider.h \
+    tminosbshelpform.h
 
 
 FORMS    += \
@@ -184,12 +185,12 @@ FORMS    += \
     tlogcontainer.ui \
     tmanagelistsdlg.ui \
     tminosbandchooser.ui \
-    tminoshelpform.ui \
     tqsoeditdlg.ui \
     TSessionManager.ui \
     tsettingseditdlg.ui \
     tsinglelogframe.ui \
-    tstatsdispframe.ui
+    tstatsdispframe.ui \
+    tminosbshelpform.ui
 
 
 DISTFILES += \

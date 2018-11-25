@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TMinosHelpForm</class>
- <widget class="QDialog" name="TMinosHelpForm">
+ <class>TMinosBSHelpForm</class>
+ <widget class="QDialog" name="TMinosBSHelpForm">
   <property name="geometry">
    <rect>
     <x>0</x>

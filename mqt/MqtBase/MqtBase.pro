@@ -9,6 +9,7 @@ QT       += core gui
 QT       += widgets
 QT       += network
 QT       += serialport
+QT       += help
 
 TARGET = MqtBase
 TEMPLATE = lib
@@ -74,7 +75,9 @@ SOURCES += \
     clusterclientframe.cpp \
     spotdata.cpp \
     clusterclientfilterdialog.cpp \
-    calllocinputdialog.cpp
+    calllocinputdialog.cpp \
+    helpbrowser.cpp \
+    helptextbrowser.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -136,7 +139,9 @@ HEADERS += \
     spotdata.h \
     clusterclientfilterdialog.h \
     calllocinputdialog.h \
-    rigmemcommondata.h
+    rigmemcommondata.h \
+    helpbrowser.h \
+    helptextbrowser.h
 
 unix {
     target.path = /usr/lib
@@ -154,4 +159,5 @@ FORMS += \
     StartConfig.ui \
     clusterclientframe.ui \
     clusterclientfilterdialog.ui \
-    calllocinputdialog.ui
+    calllocinputdialog.ui \
+    helpbrowser.ui

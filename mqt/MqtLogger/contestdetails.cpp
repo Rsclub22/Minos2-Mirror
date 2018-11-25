@@ -7,7 +7,7 @@
 #include "CalendarList.h"
 #include "BandList.h"
 #include "tentryoptionsform.h"
-#include "tminoshelpform.h"
+#include "tminosbshelpform.h"
 #include "tcalendarform.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
@@ -1243,7 +1243,7 @@ static QString BSHelpText =
 void ContestDetails::on_BSHelpButton_clicked()
 {
     // Put up the help text on bundled settings
-     TMinosHelpForm HelpForm( this );
+     TMinosBSHelpForm HelpForm( this );
      HelpForm.setText(BSHelpText);
      HelpForm.exec();}
 
