@@ -13,42 +13,21 @@ const QString CLUSTER_START_FILE = "cluster_start.txt";
 const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
 const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
 
-/*
-// Band Filter Data
 
-const unsigned int _50M = 1;
-const unsigned int _70M = 1 << 1;
-const unsigned int _144M = 1 << 2;
-const unsigned int _432M = 1 << 3;
-const unsigned int _1296M = 1 << 4;
-const unsigned int _2300M = 1 << 5;
-const unsigned int _3_4G = 1 << 6;
-const unsigned int _5_6G = 1 << 7;
-const unsigned int _10G = 1 << 8;
 
-// Mode Filter Data
+const int NUMBANDS = 9;
+const int VHFBANDSTART = 0;
+const int VHFBANDEND = 4;
+const int MWBANDSTART = 4;
+const int MWBANDEND = 9;
 
-const unsigned int CWMODE = 1;
-const unsigned int PHONEMODE = 1 << 1;
-const unsigned int RTTYMODE = 1 << 2;
-const unsigned int PSKMODE = 1 << 3;
-const unsigned int MGMMODE = 1 << 4;
-
-*/
-
-//enum vhfBandOffset {_50M, _70M, _144M, _432M};
-//const unsigned int vhfBandMasks[] = {_50M, _70M, _144M, _432M};
-const int NUM_BANDS = 9;
-//enum mWaveBandOffset {_1296M, _2300M, _3_4G, _5_6G, _10G};
-//const unsigned int mWaveBandMasks[] = {_1296M, _2300M, _3_4G, _5_6G, _10G};
-//const int NUM_MWAVEMASKS = 5;
 enum allBandOffsets {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
 //const unsigned int allBandMasks[] = {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
 
 
-const int NUM_ALLBANDMASKS = NUM_VHFMASKS + NUM_MWAVEMASKS;
-const unsigned int modeMasks[] = {CWMODE, PHONEMODE, RTTYMODE, PSKMODE, MGMMODE};
-const int NUM_MODEMASKS = 5;
+//const int NUM_ALLBANDMASKS = NUM_VHFMASKS + NUM_MWAVEMASKS;
+enum allModeOffsets {CWMODE, PHONEMODE, RTTYMODE, PSKMODE, MGMMODE};
+const int NUM_MODES = 5;
 
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
 const int DXCALL = 0;
@@ -145,20 +124,24 @@ class ClusterClientFilterSettings
 {
 
 public:
-    ClusterClientFilterSettings()
+    ClusterClientFilterSettings() :
+        bandFilter50Mhz(false),
+        bandFilter70Mhz(false),
+        bandFilter144Mhz(false),
+        bandFilter432Mhz(false),
+        bandFilter1296Mhz(false),
+        bandFilter2300Mhz(false),
+        bandFilter3_4Ghz(false),
+        bandFilter5_6Ghz(false),
+        bandFilter10Ghz(false),
+        modeFilterCW(false),
+        modeFilterPHONEMODE(false),
+        modeFilterRTTYMODE(false),
+        modeFilterPSKMODE(false),
+        modeFilterMGMMODE(false)
     {
-        bandFilters.resize(NUM_BANDS);
 
-        for (int i = 0; i < NUM_BANDS; i++)
-        {
-            bandFilters[i].setInitialValue(false);
-        }
 
-        modeFilters.resize(NUM_BANDS);
-        for (int i = 0; i < NUM_BANDS; i++)
-        {
-            modeFilters[i].setInitialValue(false);
-        }
     }
 
 
@@ -166,25 +149,32 @@ public:
 
     QString callsignFilterList;
     QString locatorFilterList;
-    QVector<MinosItem<bool>> bandFilters;
-    QVector<MinosItem<bool>> modeFilters;
 
-void setClusterClientFilterSettings(QString& cfl, QString& lfl, QList<bool> &bandFilter, QList<bool> &modeFilter)
-{
-    callsignFilterList = cfl;
-    locatorFilterList = lfl;
+    QList<bool*> bandFilters = { &bandFilter50Mhz, &bandFilter70Mhz, &bandFilter144Mhz,
+                                 &bandFilter432Mhz, &bandFilter1296Mhz, &bandFilter2300Mhz,
+                                 &bandFilter3_4Ghz, &bandFilter5_6Ghz, &bandFilter10Ghz};
 
-    for (int i = 0; i < bandFilters.count(); i++)
-    {
-        bandFilters[i].setValue(bandFilter[i]);
-    }
+    QList<bool*> modeFilters = { &modeFilterCW, &modeFilterPHONEMODE, &modeFilterRTTYMODE,
+                                 &modeFilterPSKMODE, &modeFilterMGMMODE};
 
-    for (int i = 0; i < modeFilters.count(); i++)
-    {
-        modeFilters[i].setValue(modeFilter[i]);
-    }
 
-}
+    bool bandFilter50Mhz;
+    bool bandFilter70Mhz;
+    bool bandFilter144Mhz;
+    bool bandFilter432Mhz;
+    bool bandFilter1296Mhz;
+    bool bandFilter2300Mhz;
+    bool bandFilter3_4Ghz;
+    bool bandFilter5_6Ghz;
+    bool bandFilter10Ghz;
+
+    bool modeFilterCW;
+    bool modeFilterPHONEMODE;
+    bool modeFilterRTTYMODE;
+    bool modeFilterPSKMODE;
+    bool modeFilterMGMMODE;
+
+
 
 
 void setCallSignFilterList(QString cfl)
@@ -200,54 +190,46 @@ QString getCallSignFilterList()
 
 
 
-
-void setLocatorFilterList(QString cfl)
-{
-    locatorFilterList = cfl;
-
-}
-
-QString getLocatorFilterList()
-{
-    return locatorFilterList;
-}
-
-
-void setBandFilter(bool setting, int bandNum)
-{
-    bandFilters[bandNum].setValue(setting);
-}
-
 void setAllBandFilters(QList<bool> bfl)
 {
     for (int i = 0; i < bfl.count(); i++)
     {
-        bandFilters[i].setValue(bfl[i]);
+        *bandFilters[i] = bfl[i];
     }
 }
 
 
-bool getBandFilter(int bandNum)
+bool getBandFilter(int band)
 {
-    return bandFilters[bandNum].getValue();
+    return *bandFilters[band];
 }
 
-void setModeFilter(bool setting, int modeNum)
+
+void setBandFilter(bool setting, int band)
 {
-    modeFilters[modeNum].setValue(setting);
+    *bandFilters[band] = setting;
 }
+
+
 
 void setAllModeFilters(QList<bool> mfl)
 {
     for (int i = 0; i < mfl.count(); i++)
     {
-        modeFilters[i].setValue(mfl[i]);
+        *modeFilters[i] = mfl[i];
+
     }
 }
 
-bool getModeFilter(int modeNum)
+
+bool getModeFilter(int band)
 {
-    return modeFilters[modeNum].getValue();
+    return *modeFilters[band];
+}
+
+void setModeFilter(bool setting, int band)
+{
+    *modeFilters[band] = setting;
 }
 
 void operator = (const ClusterClientFilterSettings& ccfs)
@@ -255,21 +237,16 @@ void operator = (const ClusterClientFilterSettings& ccfs)
     callsignFilterList = ccfs.callsignFilterList;
     locatorFilterList = ccfs.locatorFilterList;
 
-    //bandFilters.resize(ccfs.bandFilters.count());
-
-    for (int i = 0; i < bandFilters.count(); i++)
+    for (int i = 0; i < NUMBANDS; i++)
     {
-        //bandFilters[i].setInitialValue(false);
-        bandFilters[i] = ccfs.bandFilters[i];
+        *bandFilters[i] = *ccfs.bandFilters[i];
     }
 
-   // modeFilters.resize(ccfs.modeFilters.count());
-
-    for (int i = 0; i < modeFilters.count(); i++)
+    for (int i = 0; i < NUM_MODES; i++)
     {
-        //modeFilters[i].setInitialValue(false);
-        modeFilters[i] = ccfs.modeFilters[i];
+        *modeFilters[i] = *ccfs.modeFilters[i];
     }
+
 
 }
 

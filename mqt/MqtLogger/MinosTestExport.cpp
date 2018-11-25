@@ -387,8 +387,8 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd, int filte
         st->addMember(filterNum,"filterNum");
         st->addMember(filter.getValue().callsignFilterList, "callsignList");
         st->addMember(filter.getValue().locatorFilterList, "locatorList");
-        st->addMember(filter.getInt().bandFilterMask, "bandfilter");
-        st->addMember(filter.getValue().modeFilterMask, "modefilter");
+        //st->addMember(filter.getInt().bandFilterMask, "bandfilter");
+        //st->addMember(filter.getValue().modeFilterMask, "modefilter");
 
         sendRequest(expfd, "MinosClusterFilter", st);
 

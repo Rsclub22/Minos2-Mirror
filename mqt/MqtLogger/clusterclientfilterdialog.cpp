@@ -10,12 +10,12 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent, int instan
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
+    vhfButtonState(false),
+    mWaveButtonState(false),
+    modeButtonState(false),
     instanceNum(instanceNum),
-    //vhfButtonState(false),
-   // mWaveButtonState(false),
-   // modeButtonState(false),
-    bandTabChanged(false),
-    modeChanged(false),
+    bandEditChanged(false),
+    modeEditChanged(false),
     callsignEditChanged(false),
     locatorEditChanged(false)
 {
@@ -44,9 +44,14 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     modeChkBoxList << ui->cwModeChkBox << ui->phoneModeChkBox << ui->rttyModeChkBox << ui->pskModeChkBox << ui->mgmModeChkBox;
 
 
-    for (int i = 0; i < NUM_BANDS; i++)
+    for (int i = 0; i < NUMBANDS; i++)
     {
         editBandFilter.append(false);
+
+    }
+
+    for (int i = 0; i < NUM_MODES; i++)
+    {
         editModeFilter.append(false);
     }
 
@@ -122,35 +127,43 @@ void ClusterClientFilterDialog::setContest(BaseContestLog *c)
 
 void ClusterClientFilterDialog::filtersAccepted()
 {
-    int filterChangeMask = 0;
+    bool bandfilterChanged = false;
+    bool modefilterChanged = false;
+    bool callsignfilterChanged = false;
+    bool locatorfilterChanged = false;
 
 
-    if (bandTabChanged)
+    if (bandEditChanged)
     {
 
-        bandTabChanged = false;
+        bandEditChanged = false;
         // copy updated masks with edited values
-        ct->clusterFilterSettings[instanceNum].setAllBandFilters(editBandFilter);
-        filterChangeMask |= FREQFILTERUP;
+        filterSettings.setAllBandFilters(editBandFilter);
+        bandfilterChanged = true;
     }
+    else if (modeEditChanged)
+    {
+        // need to do this!!!
 
+        modefilterChanged = true;
+    }
     else if (callsignEditChanged)
     {
         callsignEditChanged = false;
         filterSettings.callsignFilterList.clear();
         // get list of callsigns
         filterSettings.callsignFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(callsignListWidget));
-        filterChangeMask |= CALLSIGNUP;
+        callsignfilterChanged = true;
     }
     else if (locatorEditChanged)
     {
         locatorEditChanged = false;
         filterSettings.locatorFilterList.clear();
         filterSettings.locatorFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(locatorListWidget));
-        filterChangeMask |= LOCATORUP;
+        locatorfilterChanged = true;
     }
 
-    emit filtersChanged(filterChangeMask);
+    emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
     close();
 }
 
@@ -173,10 +186,9 @@ QStringList ClusterClientFilterDialog::getItemsTextFromListWidget(QListWidget* l
 
 void ClusterClientFilterDialog::filtersRejected()
 {
-    if (bandTabChanged)
+    if (bandEditChanged)
     {
-        restoreVHFBands();
-        restoreMWBands();
+        restoreBands();
         restoreModes();
     }
     else if (callsignEditChanged)
@@ -220,8 +232,8 @@ int ClusterClientFilterDialog::getTabCurrentIndex()
 void ClusterClientFilterDialog::restoreTabSettings()
 {
 
-    loadBandSettings(filterSettings.bandFilterMask);
-    loadModeSettings(filterSettings.modeFilterMask);
+    loadBandSettings(filterSettings.bandFilters);
+    loadModeSettings(filterSettings.modeFilters);
 }
 
 
@@ -231,48 +243,46 @@ void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
     QWidget::closeEvent(event);
 }
 
-void ClusterClientFilterDialog::copyBandFilterMaskToEdit()
+void ClusterClientFilterDialog::copyBandFiltersToEdit()
 {
-    editBandFilterMask = filterSettings.bandFilterMask;
-}
-
-void ClusterClientFilterDialog::copyModeFilterMaskToEdit()
-{
-    editModeFilterMask = filterSettings.modeFilterMask;
-}
-
-void ClusterClientFilterDialog::loadBandSettings(unsigned int bandMask)
-{
-    for (int i = 0; i < NUM_VHFMASKS; i++)
+    for (int i = 0; i < NUMBANDS; i++)
     {
-        if (bandMask & vhfBandMasks[i])
+        editBandFilter[i] = *filterSettings.bandFilters[i];
+    }
+
+}
+
+void ClusterClientFilterDialog::copyModeFiltersToEdit()
+{
+    for (int i = 0; i < NUM_MODES; i++)
+    {
+        editModeFilter[i] = *filterSettings.modeFilters[i];
+    }
+
+}
+
+void ClusterClientFilterDialog::loadBandSettings(QList<bool*> bsl)
+{
+    for (int i = 0; i < NUMBANDS; i++)
+    {
+        if (*bsl[i])
         {
-            vhfChkBoxList[i]->setChecked(true);
+            bandChkBoxList[i]->setChecked(true);
         }
         else
         {
-            vhfChkBoxList[i]->setChecked(false);
+            bandChkBoxList[i]->setChecked(false);
         }
     }
 
-    for (int i = 0; i < NUM_MWAVEMASKS; i++)
-    {
-        if (bandMask & mWaveBandMasks[i])
-        {
-            mWaveChkBoxList[i]->setChecked(true);
-        }
-        else
-        {
-            mWaveChkBoxList[i]->setChecked(false);
-        }
-    }
+
 }
 
-void ClusterClientFilterDialog::loadModeSettings(unsigned int modeMask)
+void ClusterClientFilterDialog::loadModeSettings(QList<bool*> msl)
 {
-    for (int i = 0; i < NUM_MODEMASKS; i++)
+    for (int i = 0; i < NUM_MODES; i++)
     {
-        if (modeMask & modeMasks[i])
+        if (*msl[i])
         {
             modeChkBoxList[i]->setChecked(true);
         }
@@ -349,7 +359,7 @@ void ClusterClientFilterDialog::clearVHFBands()
         bandChkBoxList[i]->setCheckState(Qt::Unchecked);
         editBandFilter[i] = true;
     }
-    bandTabChanged = true;
+    bandEditChanged = true;
 }
 
 void ClusterClientFilterDialog::setVHFBands()
@@ -359,7 +369,7 @@ void ClusterClientFilterDialog::setVHFBands()
         bandChkBoxList[i]->setCheckState(Qt::Checked);
         editBandFilter[i] = true;
     }
-    bandTabChanged = true;
+    bandEditChanged = true;
 }
 
 void ClusterClientFilterDialog::bandChecked(int checkBoxNum)
@@ -368,10 +378,14 @@ void ClusterClientFilterDialog::bandChecked(int checkBoxNum)
     {
         if (bandChkBoxList[checkBoxNum]->checkState() == Qt::Checked)
         {
-            editBandFilter[checkBoxNum];
+            editBandFilter[checkBoxNum] = true;
+        }
+        else
+        {
+            editBandFilter[checkBoxNum] = false;
         }
 
-        bandTabChanged = true;
+        bandEditChanged = true;
     }
 }
 
@@ -380,7 +394,7 @@ void ClusterClientFilterDialog::restoreBands()
 
     for (int i = 0; i < NUMBANDS; i++)
     {
-        bandChkBoxList[i]->setChecked(filterSettings.bandFilterMask);
+        bandChkBoxList[i]->setChecked(*filterSettings.bandFilters[i]);
 
     }
 
@@ -390,12 +404,12 @@ void ClusterClientFilterDialog::restoreBands()
 
 void ClusterClientFilterDialog::clearMWaveBands()
 {
-    for (int i = MWBANDSTART; i < MWBANDEND.count(); i++)
+    for (int i = MWBANDSTART; i < MWBANDEND; i++)
     {
         bandChkBoxList[i]->setCheckState(Qt::Unchecked);
         editBandFilter[i] = false;
     }
-    bandTabChanged = true;
+    bandEditChanged = true;
 }
 
 void ClusterClientFilterDialog::setMWaveBands()
@@ -405,7 +419,7 @@ void ClusterClientFilterDialog::setMWaveBands()
         bandChkBoxList[i]->setCheckState(Qt::Checked);
         editBandFilter[i] = false;
     }
-    bandTabChanged = true;
+    bandEditChanged = true;
 }
 
 
@@ -455,7 +469,7 @@ void ClusterClientFilterDialog::clearModes()
         modeChkBoxList[i]->setCheckState(Qt::Unchecked);
         editModeFilter[i] = false;
     }
-    modeChanged = true;
+    modeEditChanged = true;
 }
 
 void ClusterClientFilterDialog::setModes()
@@ -465,7 +479,7 @@ void ClusterClientFilterDialog::setModes()
         modeChkBoxList[i]->setCheckState(Qt::Checked);
         editModeFilter[i] = false;
     }
-    modeChanged = true;
+    modeEditChanged = true;
 }
 
 
@@ -482,32 +496,31 @@ void ClusterClientFilterDialog::modeChecked(int checkBoxNum)
             editModeFilter[checkBoxNum] = false;
         }
     }
-    modeChanged = true;
+    modeEditChanged = true;
 }
 
 void ClusterClientFilterDialog::restoreModes()
 {
 
-    for (int i = 0; i < NUM_MODEMASKS; i++)
+    for (int i = 0; i < NUM_MODES; i++)
     {
-        if (filterSettings.modeFilterMask & modeMasks[i])
-        {
-            modeChkBoxList[i]->setChecked(filterSettings.modeFilterMask[i]);
-        }
 
-        modeChanged = true;
+        modeChkBoxList[i]->setChecked(filterSettings.modeFilters[i]);
+
+
+        modeEditChanged = true;
     }
 
 }
 
 
-unsigned int ClusterClientFilterDialog::getBandFilterMask()
+bool  ClusterClientFilterDialog::checkBandMatch(int bandNum)
 {
-    return filterSettings.bandFilterMask;
+    return *filterSettings.bandFilters[bandNum];
 }
-unsigned int ClusterClientFilterDialog::getModeFilterMask()
+bool ClusterClientFilterDialog::checkModeMatch(int bandNum)
 {
-    return filterSettings.modeFilterMask;
+    return *filterSettings.modeFilters[bandNum];
 }
 
 

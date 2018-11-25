@@ -207,7 +207,7 @@ private slots:
     void onCallsignSpotViewClicked(const QModelIndex &index);
     void onLocatorSpotViewClicked(const QModelIndex &index);
     void onSpotTabChanged(int index);
-    void filtersChanged(int);
+    void filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged);
     void onSearchEditingFinished();
     void onDXSpotVertHeaderClicked(int row);
     void onLocatorSpotVertHeaderClicked(int row);

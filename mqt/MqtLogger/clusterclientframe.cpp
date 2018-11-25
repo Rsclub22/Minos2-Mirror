@@ -39,7 +39,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     delegate = new HtmlDelegate(1.0, lcf/100.0) ;
 
 
-    filterSetup = new ClusterClientFilterDialog();
+    filterSetup = new ClusterClientFilterDialog(this, instanceNum);
 
     purgeTimer = new QTimer(this);
 
@@ -120,7 +120,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
     restoreLocatorViewColumns();
 
-    connect(filterSetup, SIGNAL(filtersChanged(int)), this, SLOT(filtersChanged(int)));
+    connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
     purgeTimer->start(PURGE_TIME);
 
@@ -343,8 +343,8 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 void ClusterClientFrame::filterButtonSelected()
 {
-    filterSetup->copyBandFilterMaskToEdit();
-    filterSetup->copyModeFilterMaskToEdit();
+    filterSetup->copyBandFiltersToEdit();
+    filterSetup->copyModeFiltersToEdit();
     filterSetup->copyCallsignFilterListToListWidget();
     filterSetup->copyLocatorFilterListToListWidget();
     filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
@@ -352,18 +352,18 @@ void ClusterClientFrame::filterButtonSelected()
 
 }
 
-void ClusterClientFrame::filtersChanged(int changeMask)
+void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged)
 {
     //update views..
-    if (changeMask & FREQFILTERUP)
+    if (bandfilterChanged)
     {
         dxSpotProxyModel->setFilterRegExp("");
     }
-    else if (changeMask & CALLSIGNUP)
+    else if (callsignfilterChanged)
     {
         callSignProxyModel->setFilterRegExp("");
     }
-    else if (changeMask & LOCATORUP)
+    else if (locatorfilterChanged)
     {
         locatorProxyModel->setFilterRegExp("");
     }
@@ -1071,11 +1071,11 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
     bool ok = false;
     unsigned int spotMask = static_cast<unsigned int>(sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM)).toString().toInt(&ok));
-    unsigned int filterMask = filterSetup->getBandFilterMask();
-    if ( filterMask & spotMask || filterMask == 0)
-    {
-        return true;
-    }
+    //unsigned int filterMask = filterSetup->getBandFilterMask();
+    //if ( filterMask & spotMask || filterMask == 0)
+    //{
+   //     return true;
+    //}
 
     return false;
 }

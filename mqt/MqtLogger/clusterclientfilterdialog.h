@@ -30,14 +30,16 @@ class ClusterClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClusterClientFilterDialog(QWidget *parent = nullptr, int instanceNum);
+    explicit ClusterClientFilterDialog(QWidget *parent, int instanceNum);
     ~ClusterClientFilterDialog();
 
-    unsigned int getBandFilterMask();
-    unsigned int getModeFilterMask();
+    //unsigned int getBandFilterMask();
+    //unsigned int getModeFilterMask();
+    bool checkBandMatch(int bandNum);
+    bool checkModeMatch(int bandNum);
 
-    void copyBandFilterMaskToEdit();
-    void copyModeFilterMaskToEdit();
+    void copyBandFiltersToEdit();
+    void copyModeFiltersToEdit();
     void copyCallsignFilterListToListWidget();
     void copyLocatorFilterListToListWidget();
 
@@ -51,7 +53,7 @@ public:
     void setContest(BaseContestLog *c);
 
 signals:
-    void filtersChanged(int);
+    void filtersChanged(bool, bool, bool, bool);
 
 
 private:
@@ -60,7 +62,6 @@ private:
 
 
     QList<QCheckBox*> bandChkBoxList;
-    //QList<QCheckBox*> mWaveChkBoxList;
     QList<QCheckBox*> modeChkBoxList;
 
 
@@ -83,21 +84,21 @@ private:
 
     ClusterClientFilterSettings filterSettings;
 
-    //bool vhfButtonState;
-    //bool mWaveButtonState;
-    //bool modeButtonState;
+    bool vhfButtonState;
+    bool mWaveButtonState;
+    bool modeButtonState;
 
     int instanceNum;
 
-    bool bandTabChanged;
-    bool modeChanged;
+    bool bandEditChanged;
+    bool modeEditChanged;
     bool callsignEditChanged;
     bool locatorEditChanged;
 
     void initCheckFilterTab();
     void clearVHFBands();
     void setVHFBands();
-    void restoreVHFBands();
+    void restoreBands();
     void clearMWaveBands();
     void setMWaveBands();
     void restoreMWBands();
@@ -107,8 +108,8 @@ private:
     void clearAllFilters();
 
 
-    void loadBandSettings(unsigned int bandMask);
-    void loadModeSettings(unsigned int modeMask);
+    void loadBandSettings(QList<bool*> bsl);
+    void loadModeSettings(QList<bool*> msl);
     void restoreTabSettings();
 
     void closeEvent(QCloseEvent *event);
