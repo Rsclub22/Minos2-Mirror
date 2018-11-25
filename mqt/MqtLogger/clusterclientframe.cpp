@@ -1070,14 +1070,16 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
     bool ok = false;
-    unsigned int spotMask = static_cast<unsigned int>(sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM)).toString().toInt(&ok));
-    //unsigned int filterMask = filterSetup->getBandFilterMask();
-    //if ( filterMask & spotMask || filterMask == 0)
-    //{
-   //     return true;
-    //}
+    int spotMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM)).toString().toInt(&ok);
+    if (spotMask < NUMBANDS)
+    {
+       return filterSetup->filterSettings.getBandFilter(spotMask);
+    }
+    else
+    {
+        return false;
+    }
 
-    return false;
 }
 
 

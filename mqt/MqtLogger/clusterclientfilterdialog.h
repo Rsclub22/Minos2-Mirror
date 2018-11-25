@@ -33,8 +33,6 @@ public:
     explicit ClusterClientFilterDialog(QWidget *parent, int instanceNum);
     ~ClusterClientFilterDialog();
 
-    //unsigned int getBandFilterMask();
-    //unsigned int getModeFilterMask();
     bool checkBandMatch(int bandNum);
     bool checkModeMatch(int bandNum);
 
@@ -51,6 +49,7 @@ public:
 
 
     void setContest(BaseContestLog *c);
+    ClusterClientFilterSettings filterSettings;
 
 signals:
     void filtersChanged(bool, bool, bool, bool);
@@ -65,24 +64,18 @@ private:
     QList<QCheckBox*> modeChkBoxList;
 
 
-    //QStringList callsignFilterList;
     QListWidget* callsignListWidget;
     int callsignListWidgetCurrentRow;
 
 
-    //QStringList locatorFilterList;
     QListWidget* locatorListWidget;
     int locatorListWidgetCurrentRow;
 
-    //unsigned int bandFilterMask;
     QList<bool> editBandFilter;
 
-    //unsigned int editBandFilterMask;
-    //unsigned int modeFilterMask;
-    //unsigned int editModeFilterMask;
     QList<bool> editModeFilter;
 
-    ClusterClientFilterSettings filterSettings;
+
 
     bool vhfButtonState;
     bool mWaveButtonState;
@@ -125,7 +118,6 @@ private:
 
 private slots:
     void bandChecked(int checkBoxNum);
-    //void mWaveChecked(int checkBoxNum);
     void modeChecked(int checkBoxNum);
 
     void vhfButtonSelected();

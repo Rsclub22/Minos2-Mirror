@@ -22,10 +22,8 @@ const int MWBANDSTART = 4;
 const int MWBANDEND = 9;
 
 enum allBandOffsets {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
-//const unsigned int allBandMasks[] = {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
 
 
-//const int NUM_ALLBANDMASKS = NUM_VHFMASKS + NUM_MWAVEMASKS;
 enum allModeOffsets {CWMODE, PHONEMODE, RTTYMODE, PSKMODE, MGMMODE};
 const int NUM_MODES = 5;
 

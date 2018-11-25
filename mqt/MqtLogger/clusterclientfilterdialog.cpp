@@ -38,9 +38,6 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     bandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
 
-    //mWaveChkBoxList << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
-
-
     modeChkBoxList << ui->cwModeChkBox << ui->phoneModeChkBox << ui->rttyModeChkBox << ui->pskModeChkBox << ui->mgmModeChkBox;
 
 
@@ -62,13 +59,6 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     }
 
-
-    //for (int i = 0; i < mWaveChkBoxList.count(); i++)
-    //{
-
-    //    connect(mWaveChkBoxList[i], &QCheckBox::stateChanged, [this, i]() {mWaveChecked(i);});
-
-    //}
 
     for (int i = 0; i < modeChkBoxList.count(); i++)
     {
@@ -196,20 +186,14 @@ void ClusterClientFilterDialog::filtersRejected()
         // restore the callsignListWidget
         callsignListWidget->clear();
         callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
-        //for (int i = 0; i < filterSettings.callsignFilterList.count(); i++)
-        //{
-        //    callsignListWidget->addItem(filterSettings.callsignFilterList[i]);
-        //}
+
     }
     else if (locatorEditChanged)
     {
         // restore the locatorListWidget
         locatorListWidget->clear();
         locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
-        //for(int i = 0; i < filterSettings.locatorFilterList.count(); i++)
-        //{
-        //    locatorListWidget->addItem(filterSettings.locatorFilterList[i]);
-       // }
+
     }
 
     // restore settings on tab
@@ -423,44 +407,7 @@ void ClusterClientFilterDialog::setMWaveBands()
 }
 
 
-/*
 
-void ClusterClientFilterDialog::mWaveChecked(int checkBoxNum)
-{
-    if (checkBoxNum < mWaveChkBoxList.count())
-    {
-        if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Checked)
-        {
-            editBandFilterMask |= mWaveBandMasks[checkBoxNum];
-        }
-        else if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Unchecked)
-        {
-            editBandFilterMask &= ~mWaveBandMasks[checkBoxNum];
-        }
-    }
-    bandTabChanged = true;
-
-}
-
-
-void ClusterClientFilterDialog::restoreMWBands()
-{
-
-    for (int i = 0; i < NUM_MWAVEMASKS; i++)
-    {
-        if (filterSettings.bandFilterMask & mWaveBandMasks[i])
-        {
-            mWaveChkBoxList[i]->setChecked(true);
-        }
-        else
-        {
-            mWaveChkBoxList[i]->setChecked(false);
-        }
-
-    }
-
-}
-*/
 
 void ClusterClientFilterDialog::clearModes()
 {

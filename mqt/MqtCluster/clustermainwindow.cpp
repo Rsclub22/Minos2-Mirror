@@ -632,7 +632,7 @@ void ClusterMainWindow::getBand(QString freq, QString &band, QString &bandMask)
         if (f <= bands[i]->fHigh && f >= bands[i]->fLow)
         {
             band = bands[i]->name;
-            //bandMask = QString::number(allBandMasks[i]);
+            bandMask = QString::number(i);
             break;
         }
     }
