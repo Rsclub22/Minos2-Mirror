@@ -46,7 +46,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="CIVlineEdit"/>
+        <widget class="QLineEdit" name="CIVlineEdit">
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -81,6 +85,9 @@
           <widget class="QLineEdit" name="networkAddBox">
            <property name="maxLength">
             <number>15</number>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -122,6 +129,9 @@
            </property>
            <property name="maxLength">
             <number>32767</number>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

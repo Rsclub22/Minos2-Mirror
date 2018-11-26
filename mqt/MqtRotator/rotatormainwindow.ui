@@ -193,7 +193,11 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="bearingEdit"/>
+             <widget class="QLineEdit" name="bearingEdit">
+              <property name="clearButtonEnabled">
+               <bool>true</bool>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="turnButton">

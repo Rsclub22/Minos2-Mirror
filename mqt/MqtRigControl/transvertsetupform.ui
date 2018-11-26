@@ -34,6 +34,9 @@
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>
@@ -44,7 +47,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="targetFreq"/>
+      <widget class="QLineEdit" name="targetFreq">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="OffSetLbl">
@@ -94,6 +101,9 @@
       <widget class="QLineEdit" name="transVertSwNum">
        <property name="maxLength">
         <number>20</number>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

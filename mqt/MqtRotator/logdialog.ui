@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>LogDialog</class>
  <widget class="QDialog" name="LogDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>271</width>
+    <height>131</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Rotator Position Logging</string>
   </property>
@@ -16,7 +24,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="logDirectoryEdit"/>
+      <widget class="QLineEdit" name="logDirectoryEdit">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="logDirBrowsePb">
@@ -40,6 +52,9 @@
       <widget class="QLineEdit" name="logFilenameEdit">
        <property name="maxLength">
         <number>50</number>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
