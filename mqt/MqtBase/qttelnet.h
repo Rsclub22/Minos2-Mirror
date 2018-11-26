@@ -71,7 +71,6 @@ class QtTelnetPrivate;
 #  define QT_QTTELNET_EXPORT
 #endif
 
-
 namespace Common // RFC854
 {
     // Commands

@@ -98,8 +98,8 @@ class QtTelnetAuth
 public:
     enum State { AuthIntermediate, AuthSuccess, AuthFailure };
 
-    QtTelnetAuth(char code) : st(AuthIntermediate), cd(code) {}
-    virtual ~QtTelnetAuth() {}
+    QtTelnetAuth(char code);
+    virtual ~QtTelnetAuth();
 
     int code() const { return cd; }
     State state() const { return st; }
@@ -111,6 +111,8 @@ private:
     State st;
     int   cd;
 };
+QtTelnetAuth::QtTelnetAuth(char code) : st(AuthIntermediate), cd(code) {}
+QtTelnetAuth::~QtTelnetAuth() {}
 
 class QtTelnetReceiveBuffer
 {
@@ -665,7 +667,7 @@ int QtTelnetPrivate::parsePlaintext(const QByteArray &data)
     //if (!nocheckp && nullauth) {
     if (!nocheckp && !nullauth) {
         bool f = text.contains("login:", Qt::CaseInsensitive);
-        if (!loginp.isEmpty() && text.contains("login:", Qt::CaseInsensitive)) {
+        if (!loginp.isEmpty() && f) {
             if (triedlogin || firsttry) {
                 emit q->message(text);    // Display the login prompt
                 text.clear();
@@ -990,7 +992,7 @@ void QtTelnet::sendControl(Control ctrl)
         break;
     //default:
 
-        return;
+    //return;
     }
     const char command[2] = {static_cast<char>(Common::IAC), c};
     d->sendCommand(command, sizeof(command));
