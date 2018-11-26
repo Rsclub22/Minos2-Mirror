@@ -53,7 +53,7 @@ ClusterClientServer::ClusterClientServer()
     connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
     SyncTimer.start(100);
 
-    MinosRPC *rpc = MinosRPC::getMinosRPC();    // DO NOT use the environment variable - use "Chat" everywhere
+    MinosRPC *rpc = MinosRPC::getMinosRPC();
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
