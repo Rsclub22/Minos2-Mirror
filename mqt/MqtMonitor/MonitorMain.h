@@ -20,6 +20,7 @@ class MonitoredStation
 
    public:
       QString stationName;
+      QString publisher;
       PublishState state;
       QVector< MonitoredLog *> slotList;
 
@@ -31,12 +32,13 @@ class MonitoredStation
 struct MonitoredStationCmp
 {
    QString cmpstr;
-   MonitoredStationCmp( const QString &s ) : cmpstr( s )
+   QString pub;
+   MonitoredStationCmp( const QString &s, QString p ) : cmpstr( s ), pub(p)
    {}
 
    bool operator() ( MonitoredStation * &s1 ) const
    {
-      return s1->stationName.compare( cmpstr, Qt::CaseInsensitive ) == 0;
+      return s1->stationName.compare( cmpstr, Qt::CaseInsensitive ) == 0 && s1->publisher.compare(pub) == 0;
    }
 };
 struct MonitoredLogCmp

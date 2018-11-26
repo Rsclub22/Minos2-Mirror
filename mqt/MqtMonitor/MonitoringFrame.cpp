@@ -10,10 +10,6 @@ MonitoringFrame::MonitoringFrame(MonitorMain *parent) :
     ui(new Ui::MonitoringFrame)
 {
     ui->setupUi(this);
-    ui->QSOTable->setItemDelegate( new HtmlDelegate(1.0, 1.0) );
-
-    ui->QSOTable->resizeColumnsToContents();
-    ui->QSOTable->resizeRowsToContents();
 
     ui->QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     connect( ui->QSOTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
@@ -27,10 +23,21 @@ MonitoringFrame::~MonitoringFrame()
 }
 void MonitoringFrame::initialise( BaseContestLog * pcontest )
 {
-    // we don't currently have the required structures to include here...
    contest = pcontest;
    qsoModel.initialise(contest);
+   HtmlDelegate *delegate = new HtmlDelegate(1.0, 1.0);
+   qsoModel.delegate = delegate;
    ui->QSOTable->setModel(&qsoModel);
+
+   ui->QSOTable->verticalHeader()->setVisible(false);
+   ui->QSOTable->setCornerButtonEnabled(false);
+   ui->QSOTable->verticalHeader()->setDefaultSectionSize(10);
+   ui->QSOTable->verticalHeader()->setMinimumSectionSize(10);
+   ui->QSOTable->setAlternatingRowColors(true);
+   ui->QSOTable->setItemDelegate( delegate );
+
+//   ui->QSOTable->resizeColumnsToContents();
+   ui->QSOTable->resizeRowsToContents();
 
 }
 void MonitoringFrame::showQSOs()
@@ -48,6 +55,7 @@ void MonitoringFrame::setScore()
 void MonitoringFrame::update()
 {
     qsoModel.reset();
+    ui->QSOTable->resizeRowsToContents();
 }
 void MonitoringFrame::on_sectionResized(int, int, int)
 {

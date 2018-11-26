@@ -397,7 +397,7 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
        {
 
            logMessage( "Station " + key + " " + value );
-          QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( key ) );
+          QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( key, an.getPublisherProgram() ) );
 
           if (state != psRevoked)
           {
@@ -406,6 +406,7 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 MonitoredStation * ms = new MonitoredStation();
                 ms->stationName = key;
                 ms->state = state;
+                ms->publisher = an.getPublisherProgram();
                 stationList.push_back( ms );
                 RPCPubSub::subscribeRemote( key, rpcConstants::monitorLogCategory);
              }
@@ -431,7 +432,7 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
           QString logval = server + " : " + key ;
           logMessage( "ContestLog " + logval + " " + value );
 
-          QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( server ) );
+          QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( server, an.getPublisherProgram() ) );
           if ( stat != stationList.end() )
           {
              QVector< MonitoredLog *>::iterator log = std::find_if( ( *stat ) ->slotList.begin(), ( *stat ) ->slotList.end(), MonitoredLogCmp( key ) );
@@ -500,7 +501,8 @@ void MonitorMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const
                     for ( QVector<MonitoredStation *>::iterator i = stationList.begin(); i != stationList.end(); i++ )
                     {
                         // "from" is something like Logger@dev-station
-                        if ( "Logger@" + ( *i ) ->stationName == from )
+                        // BUT it isn't necessarily Logger!
+                        if ( ( *i ) ->publisher + "@" + (*i)->stationName == from )
                         {
                             for ( QVector<MonitoredLog *>::iterator j = ( *i ) ->slotList.begin(); j != ( *i ) ->slotList.end(); j++ )
                             {
