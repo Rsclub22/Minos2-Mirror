@@ -245,7 +245,39 @@ void operator = (const ClusterClientFilterSettings& ccfs)
         *modeFilters[i] = *ccfs.modeFilters[i];
     }
 
+}
 
+
+bool operator==( const ClusterClientFilterSettings& ccfs ) const
+{
+    if ( callsignFilterList == ccfs.callsignFilterList &&
+         locatorFilterList == ccfs.locatorFilterList &&
+         bandFilter50Mhz == ccfs.bandFilter50Mhz &&
+         bandFilter70Mhz == ccfs.bandFilter70Mhz &&
+         bandFilter144Mhz == ccfs.bandFilter144Mhz &&
+         bandFilter432Mhz == ccfs.bandFilter432Mhz &&
+         bandFilter1296Mhz == ccfs.bandFilter1296Mhz &&
+         bandFilter2300Mhz == ccfs.bandFilter2300Mhz &&
+         bandFilter3_4Ghz == ccfs.bandFilter3_4Ghz &&
+         bandFilter5_6Ghz == ccfs.bandFilter5_6Ghz &&
+         bandFilter10Ghz == ccfs.bandFilter10Ghz &&
+         modeFilterCW == ccfs.modeFilterCW &&
+         modeFilterPHONEMODE == ccfs.modeFilterPHONEMODE &&
+         modeFilterRTTYMODE == ccfs.modeFilterRTTYMODE &&
+         modeFilterPSKMODE == ccfs.modeFilterPSKMODE &&
+         modeFilterMGMMODE == ccfs.modeFilterMGMMODE)
+    {
+        return true;
+    }
+
+    return false;
+
+}
+
+
+bool operator!=( const ClusterClientFilterSettings& ccfs ) const
+{
+    return !(*this == ccfs);
 }
 
 QString packFilterList(QStringList l)
