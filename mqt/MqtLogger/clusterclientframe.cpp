@@ -164,7 +164,7 @@ void ClusterClientFrame::setupDXSpotView()
 
     QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
 
-    //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
+    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
     connect(spotVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onDXSpotVertHeaderClicked(int)));
 
@@ -694,7 +694,6 @@ void ClusterClientFrame::restoreLocatorViewColumns()
 void ClusterClientFrame::setContest(BaseContestLog *c)
 {
     ct = c;
-
     // set the contest in the filter dialog
     filterSetup->setContest(c);
 }

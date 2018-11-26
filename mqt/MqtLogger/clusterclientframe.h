@@ -117,7 +117,6 @@ public:
 
 
 
-
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *ct = nullptr;
@@ -215,6 +214,8 @@ private slots:
     void onSearchSpotVertHeaderClicked(int row);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
     void checkNewSpots();
+
+
 };
 
 #endif // CLUSTERCLIENTFRAME_H

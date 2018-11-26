@@ -69,6 +69,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     ui->ClusterClientFilterTab->setCurrentIndex(0);
 
+
     callsignListWidget = ui->callsignListWidget;
     callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
 
@@ -151,6 +152,11 @@ void ClusterClientFilterDialog::filtersAccepted()
         filterSettings.locatorFilterList.clear();
         filterSettings.locatorFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(locatorListWidget));
         locatorfilterChanged = true;
+    }
+
+    if (bandfilterChanged || modefilterChanged || callsignfilterChanged || locatorfilterChanged)
+    {
+        ct->saveClusterFilter(instanceNum, filterSettings);
     }
 
     emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);

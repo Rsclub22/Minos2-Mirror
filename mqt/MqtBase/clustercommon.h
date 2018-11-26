@@ -123,6 +123,7 @@ class ClusterClientFilterSettings
 
 public:
     ClusterClientFilterSettings() :
+        instanceNum(-1),
         bandFilter50Mhz(false),
         bandFilter70Mhz(false),
         bandFilter144Mhz(false),
@@ -144,6 +145,8 @@ public:
 
 
     // note the list of callsign and locator filters strings are stored as QString for saving to contest.
+
+    int instanceNum;
 
     QString callsignFilterList;
     QString locatorFilterList;

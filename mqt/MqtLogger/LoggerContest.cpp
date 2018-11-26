@@ -93,6 +93,11 @@ void LoggerContestLog::clearDirty()
        rigMemories[i].clearDirty();
    }
 
+   for (int i =0; i < clusterFilterSettings.size(); i++)
+   {
+       clusterFilterSettings[i].clearDirty();
+   }
+
    screenLayout.clearDirty();
    statsPeriod1.clearDirty();
    statsPeriod2.clearDirty();
@@ -153,6 +158,11 @@ void LoggerContestLog::setDirty()
    for (int i = 0; i < rigMemories.size(); i++)
    {
        rigMemories[i].setDirty();
+   }
+
+   for (int i =0; i < clusterFilterSettings.size(); i++)
+   {
+       clusterFilterSettings[i].setDirty();
    }
 
    screenLayout.setDirty();
@@ -614,6 +624,42 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
     }
     return m;
 }
+
+//==========================================================================
+
+void LoggerContestLog::saveClusterFilter(int instanceNum, const ClusterClientFilterSettings &ccfs)
+{
+    if (clusterFilterSettings.size() < instanceNum + 1)
+    {
+        clusterFilterSettings.resize(instanceNum + 1);
+    }
+    ClusterClientFilterSettings cs = ccfs;
+    cs.instanceNum = instanceNum;
+    clusterFilterSettings[instanceNum].setValue(cs);
+    commonSave(false);
+}
+void LoggerContestLog::saveInitialClusterFilter(int instanceNum, const ClusterClientFilterSettings &ccfs)
+{
+    if (clusterFilterSettings.size() < instanceNum + 1)
+    {
+        clusterFilterSettings.resize(instanceNum + 1);
+    }
+    ClusterClientFilterSettings cs = ccfs;
+    cs.instanceNum = instanceNum;
+    clusterFilterSettings[instanceNum].setInitialValue(cs);
+
+}
+ClusterClientFilterSettings LoggerContestLog::getClusterFilter(int instanceNum)
+{
+    ClusterClientFilterSettings cs;
+    if (clusterFilterSettings.size() > instanceNum)
+    {
+        cs = clusterFilterSettings[instanceNum].getValue();
+
+    }
+    return cs;
+}
+
 
 //==========================================================================
 bool LoggerContestLog::commonSave( bool newfile )
@@ -1512,6 +1558,31 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                    mt->getStructArgMemberValue( "mode", mem.mode);
 
                                    saveInitialRunMemory(memno, mem);
+
+                               }
+                               else if (methodName == "MinosClusterFilter")
+                               {
+                                       ClusterClientFilterSettings ccfs;
+                                       int  intstanceNum;
+                                       mt->getStructArgMemberValue("filterNum", intstanceNum);
+                                       mt->getStructArgMemberValue("callsignList", ccfs.callsignFilterList);
+                                       mt->getStructArgMemberValue("locatorList", ccfs.locatorFilterList);
+                                       mt->getStructArgMemberValue("bandFilter50Mhz", ccfs.bandFilter50Mhz);
+                                       mt->getStructArgMemberValue("bandFilter70Mhz", ccfs.bandFilter70Mhz);
+                                       mt->getStructArgMemberValue("bandFilter144Mhz", ccfs.bandFilter144Mhz);
+                                       mt->getStructArgMemberValue("bandFilter432Mhz", ccfs.bandFilter432Mhz);
+                                       mt->getStructArgMemberValue("bandFilter1296Mhz", ccfs.bandFilter1296Mhz);
+                                       mt->getStructArgMemberValue("bandFilter2300Mhz", ccfs.bandFilter2300Mhz);
+                                       mt->getStructArgMemberValue("bandFilter3_4Ghz", ccfs.bandFilter3_4Ghz);
+                                       mt->getStructArgMemberValue("bandFilter5_64Ghz", ccfs.bandFilter5_6Ghz);
+                                       mt->getStructArgMemberValue("bandFilter10Ghz", ccfs.bandFilter10Ghz);
+                                       mt->getStructArgMemberValue("modeFilterCW", ccfs.modeFilterCW);
+                                       mt->getStructArgMemberValue("modeFilterPHONEMODE", ccfs.modeFilterPHONEMODE);
+                                       mt->getStructArgMemberValue("modeFilterRTTYMODE", ccfs.modeFilterRTTYMODE);
+                                       mt->getStructArgMemberValue("modeFilterPSKMODE", ccfs.modeFilterPSKMODE);
+                                       mt->getStructArgMemberValue("modeFilterMGMMODE", ccfs.modeFilterMGMMODE);
+
+                                       saveInitialClusterFilter(intstanceNum, ccfs);
 
                                }
                                else
