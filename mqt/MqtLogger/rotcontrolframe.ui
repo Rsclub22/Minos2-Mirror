@@ -120,6 +120,9 @@
             <property name="frame">
              <bool>true</bool>
             </property>
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
          </layout>
