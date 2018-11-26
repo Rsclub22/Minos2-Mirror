@@ -417,7 +417,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     {
         // transfer spot details to qsolog
 
-        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(spotProxyModel, index.row()));
+        MinosLoggerEvents::SendSetToLog(getSpotDataToMemoryVariable(spotProxyModel, index.row()));
     }
     else if (index.column() == DXBRG_COL_NUM)
     {
@@ -800,7 +800,7 @@ void ClusterClientFrame::logActionSelected()
         int currentRow = spotViewList[curTab]->currentIndex().row();
         // transfer spot details to qsolog
 
-        MinosLoggerEvents::SendSpotToLog(getSpotDataToMemoryVariable(filterProxyModelList[curTab], currentRow));
+        MinosLoggerEvents::SendSetToLog(getSpotDataToMemoryVariable(filterProxyModelList[curTab], currentRow));
     }
 }
 
@@ -832,7 +832,7 @@ void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyM
 
     memoryData::memData spotData = getSpotDataToMemoryVariable(spotProxyModel, row);
 
-    MinosLoggerEvents::SendSpotToMemory(spotData);
+    MinosLoggerEvents::SendSetToMemory(spotData);
     spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, Qt::EditRole);
 
 }

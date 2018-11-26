@@ -659,3 +659,19 @@ void TContestApp::mshowMessage( const QString &mess, QWidget* Owner )
 {
    mShowMessage( mess, Owner );
 }
+int TContestApp::getContestSlotCount()
+{
+    return contestSlotList.size();
+}
+BaseContestLog *TContestApp::getContestSlot(int s)
+{
+    return contestSlotList[s]->slot;
+}
+int TContestApp::getListSlotCount()
+{
+    return listSlotList.size();
+}
+ContactList *TContestApp::getListSlot(int s)
+{
+    return listSlotList[s]->slot;
+}

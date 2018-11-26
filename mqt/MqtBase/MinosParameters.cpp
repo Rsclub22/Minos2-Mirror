@@ -123,4 +123,19 @@ QVector<BaseContestLog *> MinosParametersAdapter::getContestList()
    return logList;
 }
 
-
+int MinosParametersAdapter::getContestSlotCount()
+{
+    return 0;
+}
+BaseContestLog *MinosParametersAdapter::getContestSlot(int)
+{
+    return nullptr;
+}
+int MinosParametersAdapter::MinosParametersAdapter::getListSlotCount()
+{
+    return 0;
+}
+ContactList *MinosParametersAdapter::getListSlot(int)
+{
+    return nullptr;
+}

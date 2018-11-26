@@ -56,8 +56,8 @@ signals:
    void BrgStrToRot(QString);
    void FreqStrToRig(QString);
    void SpotBrgStrToRot(QString);
-   void DxSpotToLog(memoryData::memData);
-   void DXSpotToMemory(memoryData::memData);
+   void SetToLog(memoryData::memData);
+   void SetToMemory(memoryData::memData);
 
 
    void CountrySelect(QString cty, BaseContestLog *c);
@@ -66,6 +66,7 @@ signals:
    void refreshStackMults(BaseContestLog *contest);
 
    void setMemory(BaseContestLog *, QString call, QString loc);
+   void setMemoryAction(BaseContestLog *, QString call, QString loc);
 
 
    void FiltersChanged(BaseContestLog *);
@@ -115,13 +116,14 @@ public:
    static void SendLocSelect(QString loc, BaseContestLog *c);
    static void sendRefreshStackMults(BaseContestLog *contest);
    static void sendSetMemory(BaseContestLog *, QString call, QString loc);
+   static void sendSetMemoryAction(BaseContestLog *, QString call, QString loc);
 
    static void SendFontChanged();
    static void SendBrgStrToRot(QString);
    static void SendFreqStrToRig(QString);
    static void SendSpotBrgStrToRot(QString);
-   static void SendSpotToLog(memoryData::memData);
-   static void SendSpotToMemory(memoryData::memData);
+   static void SendSetToLog(memoryData::memData);
+   static void SendSetToMemory(memoryData::memData);
 
    static void sendUpdateStats(BaseContestLog *c );
    static void sendFiltersChanged(BaseContestLog *c );

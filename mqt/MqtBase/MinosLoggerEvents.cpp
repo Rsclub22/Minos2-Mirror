@@ -157,6 +157,11 @@ void MinosLoggerEvents::sendSetMemory(BaseContestLog * ct, QString call, QString
     emit mle.setMemory(ct, call, loc);
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::sendSetMemoryAction(BaseContestLog * ct, QString call, QString loc)
+{
+    emit mle.setMemoryAction(ct, call, loc);
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendFontChanged()
 {
     emit mle.FontChanged();
@@ -207,14 +212,14 @@ void MinosLoggerEvents::SendSpotBrgStrToRot(QString bearing)
     emit mle.SpotBrgStrToRot(bearing);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendSpotToLog(memoryData::memData spotData)
+void MinosLoggerEvents::SendSetToLog(memoryData::memData spotData)
 {
-    emit mle.DxSpotToLog(spotData);
+    emit mle.SetToLog(spotData);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendSpotToMemory(memoryData::memData spotData)
+void MinosLoggerEvents::SendSetToMemory(memoryData::memData spotData)
 {
-    emit mle.DXSpotToMemory(spotData);
+    emit mle.SetToMemory(spotData);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::sendXferEnabled(bool s, BaseContestLog *c, QString basename)

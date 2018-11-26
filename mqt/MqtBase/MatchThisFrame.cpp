@@ -1,4 +1,4 @@
-#include "ContestApp.h"
+#include "MinosParameters.h"
 #include "MinosLoggerEvents.h"
 
 #include "MatchThisFrame.h"
@@ -27,7 +27,7 @@ void MatchThisFrame::showThisMatchQSOs( SharedMatchCollection matchCollection )
 }
 void MatchThisFrame::on_ReplaceThisLogList(SharedMatchCollection matchCollection, BaseContestLog*, QString b )
 {
-    if (b == baseName && contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    if (b == baseName && contest && contest == MinosParameters::getMinosParameters() ->getCurrentContest())
         showThisMatchQSOs( matchCollection );
 }
 void MatchThisFrame::on_matchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)

@@ -1,4 +1,4 @@
-#include "ContestApp.h"
+#include "MinosParameters.h"
 #include "MinosLoggerEvents.h"
 #include "ListContact.h"
 #include "MatchArchiveFrame.h"
@@ -41,7 +41,7 @@ void MatchArchiveFrame::showMatchList( SharedMatchCollection matchCollection )
 
 void MatchArchiveFrame::on_ReplaceListList( SharedMatchCollection matchCollection, BaseContestLog*, QString b )
 {
-    if (b == baseName && contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    if (b == baseName && contest && contest == MinosParameters::getMinosParameters() ->getCurrentContest())
         showMatchList( matchCollection );
 }
 

@@ -218,7 +218,7 @@ private slots:
     void on_TimeDisplayTimer( );
     void on_ReportOverstrike(bool , BaseContestLog * );
     void onTabMoved(int, int);
-
+    void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
 public slots:
     void onArgsReceived(QString conarg);

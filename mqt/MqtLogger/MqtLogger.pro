@@ -41,11 +41,6 @@ SOURCES += \
     LocCalcFrame.cpp \
     LoggerContacts.cpp \
     LoggerContest.cpp \
-    MatchArchiveFrame.cpp \
-    MatchOtherFrame.cpp \
-    MatchThisFrame.cpp \
-    MatchThread.cpp \
-    MatchTreeFrame.cpp \
     MinosTestExport.cpp \
     PrintFile.cpp \
     RigMemoryFrame.cpp \
@@ -101,11 +96,6 @@ HEADERS  += \
     LocCalcFrame.h \
     LoggerContacts.h \
     LoggerContest.h \
-    MatchArchiveFrame.h \
-    MatchOtherFrame.h \
-    MatchThisFrame.h \
-    MatchThread.h \
-    MatchTreeFrame.h \
     MinosTestExport.h \
     RigMemoryFrame.h \
     RotPresets.h \
@@ -160,7 +150,6 @@ FORMS    += \
     LocCalcFrame.ui \
     locframe.ui \
     locTreeFrame.ui \
-    MatchTreeFrame.ui \
     presetbuttondialog.ui \
     qsologframe.ui \
     rigcontrolframe.ui \

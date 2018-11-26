@@ -104,6 +104,9 @@ bool TLogContainer::show(int argc, char *argv[])
     connect(&MinosLoggerEvents::mle, SIGNAL(ReportOverstrike(bool , BaseContestLog * )),
             this, SLOT(on_ReportOverstrike(bool , BaseContestLog * )), Qt::QueuedConnection);
 
+    connect(&MinosLoggerEvents::mle, SIGNAL(setMemoryAction(BaseContestLog *, QString, QString)),
+            this, SLOT(mleSetMemoryAction(BaseContestLog *, QString, QString)));
+
     QMainWindow::show();
     if ( TAboutBox::ShowAboutBox( this, true ) == false )
     {
@@ -1789,6 +1792,14 @@ void TLogContainer::onTabMoved(int from, int to)
     TContestApp::getContestApp() ->writeContestList();
 
     enableActions();
+}
+
+void TLogContainer::mleSetMemoryAction(BaseContestLog *cnt, QString call, QString loc)
+{
+    setMemoryAction->call = call;
+    setMemoryAction->loc = loc;
+    setMemoryAction->ct = cnt;
+    setMemoryAction->setVisible(true);
 }
 //---------------------------------------------------------------------------
 

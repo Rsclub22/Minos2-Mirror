@@ -1,4 +1,4 @@
-#include "ContestApp.h"
+#include "MinosParameters.h"
 #include "MinosLoggerEvents.h"
 #include "MatchOtherFrame.h"
 
@@ -40,7 +40,7 @@ void MatchOtherFrame::showOtherMatchQSOs(SharedMatchCollection matchCollection )
 }
 void MatchOtherFrame::on_ReplaceOtherLogList( SharedMatchCollection matchCollection, BaseContestLog*, QString b )
 {
-    if (b == baseName && contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    if (b == baseName && contest && contest == MinosParameters::getMinosParameters() ->getCurrentContest())
         showOtherMatchQSOs( matchCollection );
 }
 void MatchOtherFrame::on_matchTree_doubleClicked(const QModelIndex &/*index*/)

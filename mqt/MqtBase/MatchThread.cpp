@@ -9,12 +9,13 @@
 #include "base_pch.h"
 #include "MinosLoggerEvents.h"
 #include "cutils.h"
-#include "ContestApp.h"
+#include "MinosParameters.h"
 
 #include "MatchContact.h"
 #include "MatchThread.h"
-#include "tsinglelogframe.h"
-#include "tlogcontainer.h"
+//#include "tsinglelogframe.h"
+//#include "tlogcontainer.h"
+#include "ScreenContact.h"
 #include "contest.h"
 #include "ListContact.h"
 //---------------------------------------------------------------------------
@@ -114,7 +115,7 @@ void TMatchThread::InitialiseMatchThread()
 }
 void TMatchThread::on_ScreenContactChanged(ScreenContact *sct, BaseContestLog *context, QString b)
 {
-   BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+   BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    if (context == ct)
    {
        baseName = b;
@@ -130,7 +131,7 @@ void TMatchThread::on_ScreenContactChanged(ScreenContact *sct, BaseContestLog *c
 //---------------------------------------------------------------------------
 void TMatchThread::on_CountrySelect(QString sel, BaseContestLog *c)
 {
-    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+    BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    if (c == ct)
    {
       mct = nullptr;
@@ -145,7 +146,7 @@ void TMatchThread::on_DistrictSelect(QString
                                      #endif
                                      , BaseContestLog *c)
 {
-    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+    BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    if (c == ct)
    {
 
@@ -158,7 +159,7 @@ void TMatchThread::on_LocatorSelect(QString
                                     #endif
                                     , BaseContestLog *c)
 {
-    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+    BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    if (c == ct)
    {
 
@@ -205,7 +206,7 @@ void TMatchThread::run()
 //---------------------------------------------------------------------------
 /*static*/ void TMatchThread::startMatch(   QSharedPointer<CountryEntry> ce )
 {
-   BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+   BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    MinosLoggerEvents::SendMatchStarting(ct);
 
    matchThread->thisLogMatch->startMatch( ce );
@@ -217,20 +218,20 @@ void TMatchThread::run()
 void TMatchThread::replaceThisContestList( SharedMatchCollection matchCollection )
 {
    myThisMatches = matchCollection;
-   BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+   BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    MinosLoggerEvents::SendReplaceThisLogList(myThisMatches, ct, baseName);
 }
 void TMatchThread::replaceOtherContestList( SharedMatchCollection matchCollection )
 {
    myOtherMatches = matchCollection;
-   BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+   BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    MinosLoggerEvents::SendReplaceOtherLogList(myOtherMatches, ct, baseName);
 }
 //---------------------------------------------------------------------------
 void TMatchThread::replaceListList(SharedMatchCollection matchCollection )
 {
    myListMatches = matchCollection;
-   BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+   BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    MinosLoggerEvents::SendReplaceListList(myListMatches, ct, baseName);
 }
 //---------------------------------------------------------------------------
@@ -263,14 +264,14 @@ QString TMatchThread::getOtherMatchStatus( )
 void TMatchThread::matchCountry( QString cs )
 {
    ctrymatch = cs;
-   BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+   BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    MinosLoggerEvents::SendScrollToCountry(ctrymatch, ct);
 }
 //=============================================================================
 void  TMatchThread::matchDistrict( QString dist )
 {
    distmatch = dist;
-   BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+   BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    MinosLoggerEvents::SendScrollToDistrict(distmatch, ct);
 }
 
@@ -416,7 +417,7 @@ void Matcher::initMatch( )
          return ;
       }
 
-      if ( !TContestApp::getContestApp() ->getCurrentContest() )
+      if ( !MinosParameters::getMinosParameters() ->getCurrentContest() )
       {
          clearmatchall();
          return ;
@@ -662,7 +663,7 @@ bool ThisLogMatcher::idleMatch( int limit )
                 matchStarted = false;
                 setMatchRequired( false );
 
-                BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+                BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
                 if ( bool( ct ) && ( mp != Country )  && ( mp != District )  && ( mp != Locator ) )
                    addMatch( ct->DupSheet.getCurDup(), ct );	// in case it isn't already
 
@@ -702,7 +703,7 @@ bool ThisLogMatcher::idleMatch( int limit )
              }
           }
 
-       BaseContestLog *ccon = TContestApp::getContestApp() ->getCurrentContest();		// we always go through current FIRST! to make sure we see it
+       BaseContestLog *ccon = MinosParameters::getMinosParameters() ->getCurrentContest();		// we always go through current FIRST! to make sure we see it
 
        while (  matchStarted && limit > 0 )
        {
@@ -886,7 +887,7 @@ bool OtherLogMatcher::idleMatch( int limit )
          firstMatch = Rest;
       }
       else
-         if ( ( contestIndex >= TContestApp::getContestApp() ->getContestSlotCount() ) || ( cnt > MATCH_LIM ) )
+         if ( ( contestIndex >= MinosParameters::getMinosParameters() ->getContestSlotCount() ) || ( cnt > MATCH_LIM ) )
          {
             bool EndScan = true;
 
@@ -1026,9 +1027,8 @@ bool OtherLogMatcher::idleMatch( int limit )
             }
          }
 
-      QSharedPointer<ContestSlot> cs = TContestApp::getContestApp() ->contestSlotList[ contestIndex ];
-      BaseContestLog * ccon = cs->slot;
-      if ( ccon == TContestApp::getContestApp() ->getCurrentContest() )
+      BaseContestLog * ccon = MinosParameters::getMinosParameters()->getContestSlot(contestIndex);
+      if ( ccon == MinosParameters::getMinosParameters() ->getCurrentContest() )
       {
          contactIndex = ccon->getContactCount();	// force to go on
       }
@@ -1204,7 +1204,7 @@ bool ListMatcher::idleMatch( int limit )
       // this is called repeatedly off the timer to execute the match
       if ( !matchStarted || ( contestIndex < 0 ) )
          return false;				// nothing to do (yet)
-      if ( TContestApp::getContestApp() ->getListSlotCount() <= 0 )
+      if ( MinosParameters::getMinosParameters() ->getListSlotCount() <= 0 )
          return false;
 
       int cnt = matchCollection->contactCount();
@@ -1215,7 +1215,7 @@ bool ListMatcher::idleMatch( int limit )
          firstMatch = MainContest;
       }
       else
-         if ( ( contestIndex >= TContestApp::getContestApp() ->getListSlotCount() ) || ( cnt > MATCH_LIM ) )
+         if ( ( contestIndex >= MinosParameters::getMinosParameters() ->getListSlotCount() ) || ( cnt > MATCH_LIM ) )
          {
             bool EndScan = true;
 
@@ -1349,8 +1349,7 @@ bool ListMatcher::idleMatch( int limit )
             }
          }
 
-      QSharedPointer<ListSlot> cs = TContestApp::getContestApp() ->listSlotList[ contestIndex ];
-      ContactList *ccon = cs->slot;
+      ContactList *ccon = MinosParameters::getMinosParameters()->getListSlot(contestIndex);
 
       while ( limit > 0  && !ce)
       {
@@ -1375,11 +1374,10 @@ bool ListMatcher::idleMatch( int limit )
             {
                // go to the next ContestLog
                contestIndex++;
-               if ( contestIndex < TContestApp::getContestApp() ->getListSlotCount() )
+               if ( contestIndex < MinosParameters::getMinosParameters() ->getListSlotCount() )
                {
                   // ContestLog is valid, if it is a list set first part
-                  QSharedPointer<ListSlot> cs = TContestApp::getContestApp() ->listSlotList[ contestIndex ];
-                  ccon = cs->slot;  // not used as we return true below
+                  ccon = MinosParameters::getMinosParameters()->getListSlot(contestIndex);  // not used as we return true below
                }
             }
             return true;

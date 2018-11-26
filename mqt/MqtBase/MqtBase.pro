@@ -44,6 +44,11 @@ SOURCES += \
     ListContact.cpp \
     MatchCollection.cpp \
     MatchContact.cpp \
+    MatchArchiveFrame.cpp \
+    MatchOtherFrame.cpp \
+    MatchThisFrame.cpp \
+    MatchThread.cpp \
+    MatchTreeFrame.cpp \
     minoskeyboard.cpp \
     MinosLines.cpp \
     MinosLoggerEvents.cpp \
@@ -103,6 +108,11 @@ HEADERS += \
     ListContact.h \
     MatchCollection.h \
     MatchContact.h \
+    MatchArchiveFrame.h \
+    MatchOtherFrame.h \
+    MatchThisFrame.h \
+    MatchThread.h \
+    MatchTreeFrame.h \
     minoskeyboard.h \
     MinosLines.h \
     MinosLoggerEvents.h \
@@ -154,6 +164,7 @@ DISTFILES += \
 FORMS += \
     ChatFrame.ui \
     ConfigElementFrame.ui \
+    MatchTreeFrame.ui \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \

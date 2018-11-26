@@ -57,6 +57,11 @@ class MinosParameters
       virtual bool isContestOpen( const QString fn ) = 0;
       virtual bool isListOpen( const QString fn ) = 0;
       virtual QVector<BaseContestLog *> getContestList() = 0;
+      virtual int getContestSlotCount() = 0;
+      virtual BaseContestLog *getContestSlot(int) = 0;
+      virtual int getListSlotCount() = 0;
+      virtual ContactList *getListSlot(int) = 0;
+
 };
 class MinosParametersAdapter : public MinosParameters
 {
@@ -90,5 +95,9 @@ class MinosParametersAdapter : public MinosParameters
       virtual bool isContestOpen( const QString fn ) override;
       virtual bool isListOpen(const QString fn ) override;
       virtual QVector<BaseContestLog *> getContestList() override;
+      virtual int getContestSlotCount() override;
+      virtual BaseContestLog *getContestSlot(int) override;
+      virtual int getListSlotCount() override;
+      virtual ContactList *getListSlot(int) override;
 };
 #endif

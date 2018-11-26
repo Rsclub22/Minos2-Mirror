@@ -1,12 +1,12 @@
 #include "base_pch.h"
 #include "MinosLoggerEvents.h"
-#include "ContestApp.h"
+#include "MinosParameters.h"
 #include "ListContact.h"
 #include "list.h"
 #include "contest.h"
 #include "htmldelegate.h"
 #include "MatchThread.h"
-#include "tlogcontainer.h"
+//#include "tlogcontainer.h"
 #include "cutils.h"
 
 #include "MatchTreeFrame.h"
@@ -27,7 +27,7 @@ void MatchTreeFrame::initialise()
     setModel(getMatchModel());
     header()->setSectionResizeMode(QHeaderView::Interactive);
     int lcf;
-    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
     setItemDelegate( new HtmlDelegate(1.0, lcf/100.0) );
     setUniformRowHeights(true);
 
@@ -97,16 +97,12 @@ void MatchTreeFrame::doCustomContextMenuRequested()
             ListContact *lct = mc->getListContact();
             if (bct)
             {
-                LogContainer->setMemoryAction->call = bct->cs.fullCall.getValue();
-                LogContainer->setMemoryAction->loc = bct->loc.loc.getValue();
+                MinosLoggerEvents::sendSetMemoryAction(contest, bct->cs.fullCall.getValue(), bct->loc.loc.getValue());
             }
             else if (lct)
             {
-                LogContainer->setMemoryAction->call = lct->cs.fullCall.getValue();
-                LogContainer->setMemoryAction->loc = lct->loc.loc.getValue();
+                MinosLoggerEvents::sendSetMemoryAction(contest, lct->cs.fullCall.getValue(), lct->loc.loc.getValue());
             }
-            LogContainer->setMemoryAction->ct = contest;
-            LogContainer->setMemoryAction->setVisible(true);
         }
     }
 }
@@ -326,7 +322,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
             {
                 if( column >= 0 && column < columnCount(p))
                 {
-                    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+                    BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
                     QString cell;
                     contactList->getMatchField( lct, ArchiveMatchTreeColumns[ column ].fieldId, cell, ct );     // col 0 is the tree lines
 
@@ -359,7 +355,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                 {
 
                     QString line;
-                    BaseContestLog * act = TContestApp::getContestApp() ->getCurrentContest();
+                    BaseContestLog * act = MinosParameters::getMinosParameters() ->getCurrentContest();
 
 
                     if (type == ThisMatch)

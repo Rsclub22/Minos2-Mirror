@@ -111,14 +111,11 @@ class TContestApp : public MinosParameters
       ~TContestApp() override;
       void close();
 
-      int getContestSlotCount()
-      {
-         return contestSlotList.size();
-      }
-      int getListSlotCount()
-      {
-         return listSlotList.size();
-      }
+      virtual int getContestSlotCount() override;
+      virtual BaseContestLog *getContestSlot(int) override;
+      virtual int getListSlotCount() override;
+      virtual ContactList *getListSlot(int) override;
+
       int getOccupiedListSlotCount();
 
       bool insertContest( BaseContestLog *p, int sno ) override;
