@@ -133,7 +133,7 @@ private:
    protected:
       virtual void Execute();    // TThread method
    public:
-      ScreenContact * mct;
+      ScreenContact * mct = nullptr;
       void Terminate()
       {
           Terminated = true;

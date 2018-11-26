@@ -105,16 +105,16 @@ class TContestApp : public MinosParameters
       virtual bool isContestOpen( const QString fn ) override;
       virtual bool isListOpen(const QString fn ) override;
       virtual QVector<BaseContestLog *> getContestList() override;
+      virtual int getContestSlotCount() override;
+      virtual BaseContestLog *getContestSlot(int) override;
+      virtual int getListSlotCount() override;
+      virtual ContactList *getListSlot(int) override;
+
 
       TContestApp();
       bool initialise();
       ~TContestApp() override;
       void close();
-
-      virtual int getContestSlotCount() override;
-      virtual BaseContestLog *getContestSlot(int) override;
-      virtual int getListSlotCount() override;
-      virtual ContactList *getListSlot(int) override;
 
       int getOccupiedListSlotCount();
 

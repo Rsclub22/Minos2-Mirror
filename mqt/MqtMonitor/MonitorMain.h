@@ -4,7 +4,7 @@
 #include "base_pch.h"
 #include <QAction>
 #include <QMenu>
-
+#include "ScreenContact.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
 
@@ -66,22 +66,9 @@ protected:
 public:
     MonitorMain *monmain;
 
-    TreeNode(NodeType sn, TreeNode *parent, QString name, MonitorMain *mm):
-        ntype(sn), NodeName(name), parentItem(parent), monmain(mm), mlog(nullptr)
-    {
-        if (parent)
-            parent->nodes.push_back(this);
-    }
-    TreeNode(NodeType sn, TreeNode *parent, MonitoredLog *log, MonitorMain *mm):
-        ntype(sn), NodeName(log->getPublishedName()), parentItem(parent), monmain(mm), mlog(log)
-    {
-        if (parent)
-            parent->nodes.push_back(this);
-    }
-    virtual ~TreeNode()
-    {
-        clear();
-    }
+    TreeNode(NodeType sn, TreeNode *parent, QString name, MonitorMain *mm);
+    TreeNode(NodeType sn, TreeNode *parent, MonitoredLog *log, MonitorMain *mm);
+    virtual ~TreeNode();
 
     virtual NodeType GetNodeType()
     {
@@ -172,12 +159,17 @@ public:
     ~MonitorMain() override;
 
     QVector<MonitoredStation *> stationList;
+    ScreenContact screenContact;
 
     void logMessage( const QString &s );
 //    void notifyCallback( bool err, MinosRPCObj *mro, const QString &from );
 //    void loggerSubscribeClientCallback( bool err, MinosRPCObj *mro, const QString &from );
 
     void closeTab(MonitoringFrame *tab);
+
+    int getContestSlotCount();
+    BaseContestLog *getContestSlot(int);
+    BaseContestLog *getCurrentContest();
 
 private slots:
     void on_closeButton_clicked();
@@ -195,6 +187,14 @@ private slots:
     void CancelClick();
 
     void on_contestPageControl_tabCloseRequested(int index);
+
+    void on_callsignEdit_textChanged(const QString &arg1);
+
+    void on_locEdit_textChanged(const QString &arg1);
+
+    void on_exchangeEdit_textChanged(const QString &arg1);
+
+    void on_contestPageControl_currentChanged(int index);
 
 private:
     Ui::MonitorMain *ui;
@@ -223,6 +223,9 @@ private:
     void addSlot( MonitoredLog *ct );
     MonitoringFrame *findCurrentLogFrame();
     MonitoringFrame *findContestPage( BaseContestLog *ct );
+    void searchChanged();
 };
+
+extern MonitorMain *monitorMain;
 
 #endif // MONITORMAIN_H

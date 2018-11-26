@@ -1,3 +1,4 @@
+#include "MonitorMain.h"
 #include "MonitorParameters.h"
 
 static MonitorParameters mp;
@@ -26,3 +27,16 @@ void MonitorParameters::mshowMessage( const QString &mess, QWidget* Owner )
 {
    mShowMessage( mess, Owner );
 }
+int MonitorParameters::getContestSlotCount()
+{
+    return monitorMain->getContestSlotCount();
+}
+BaseContestLog *MonitorParameters::getContestSlot(int s)
+{
+    return monitorMain->getContestSlot(s);
+}
+BaseContestLog * MonitorParameters::getCurrentContest()
+{
+   return monitorMain->getCurrentContest();
+}
+

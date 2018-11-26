@@ -1,10 +1,33 @@
 #include "base_pch.h"
 #include "contest.h"
+#include "MinosLoggerEvents.h"
+#include "ScreenContact.h"
+#include "MatchThread.h"
+#include "cutils.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
 #include "MonitorMain.h"
 #include "ui_MonitorMain.h"
+
+MonitorMain *monitorMain = nullptr;
+
 //=============================================================================================
+TreeNode::TreeNode(NodeType sn, TreeNode *parent, QString name, MonitorMain *mm):
+    ntype(sn), NodeName(name), parentItem(parent), mlog(nullptr), monmain(mm)
+{
+    if (parent)
+        parent->nodes.push_back(this);
+}
+TreeNode::TreeNode(NodeType sn, TreeNode *parent, MonitoredLog *log, MonitorMain *mm):
+    ntype(sn), NodeName(log->getPublishedName()), parentItem(parent), mlog(log), monmain(mm)
+{
+    if (parent)
+        parent->nodes.push_back(this);
+}
+TreeNode:: ~TreeNode()
+{
+    clear();
+}
 int TreeNode::find( const TreeNode *t ) const
 {
     int i = 0;
@@ -205,6 +228,8 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui(new Ui::MonitorMain)
 {
     ui->setupUi(this);
+    monitorMain = this;
+
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
 
@@ -259,6 +284,17 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     closeMonitoredLog = newAction("Close tab", &TabPopup, SLOT(on_closeMonitoredLog()));
     newAction( "Cancel", &TabPopup, SLOT( CancelClick() ) );
+
+    ui->callsignEdit->setValidator(new UpperCaseValidator(true));
+    ui->locEdit->setValidator(new UpperCaseValidator(true));
+    ui->exchangeEdit->setValidator(new UpperCaseValidator(true));
+
+    TMatchThread::InitialiseMatchThread();
+    ui->thisMatchFrame->initialise();
+    ui->thisMatchFrame->setBaseName("Monitor");
+    ui->otherMatchFrame->initialise();
+    ui->otherMatchFrame->setBaseName("Monitor");
+
 }
 
 MonitorMain::~MonitorMain()
@@ -279,6 +315,7 @@ MonitorMain::~MonitorMain()
 void MonitorMain::closeEvent(QCloseEvent *event)
 {
     // and tidy up all loose ends
+    TMatchThread::FinishMatchThread();
 
     QWidget::closeEvent(event);
 }
@@ -346,6 +383,31 @@ void MonitorMain::closeTab(MonitoringFrame *cttab)
         }
     }
 
+}
+
+int MonitorMain::getContestSlotCount()
+{
+    return ui->contestPageControl->count();
+}
+
+BaseContestLog *MonitorMain::getContestSlot(int s)
+{
+    QWidget *tw = ui->contestPageControl->widget(s);
+    MonitoringFrame *f = dynamic_cast<MonitoringFrame *>(tw);
+    if (f)
+    {
+        return f->getContest();
+    }
+    return nullptr;
+}
+
+BaseContestLog *MonitorMain::getCurrentContest()
+{
+    MonitoringFrame *mf = findCurrentLogFrame();
+    if (mf)
+        return mf->getContest();
+
+    return nullptr;
 }
 void MonitorMain::on_contestPageControl_customContextMenuRequested(const QPoint &pos)
 {
@@ -564,13 +626,12 @@ void MonitorMain::addSlot( MonitoredLog *ct )
    MonitoringFrame *f = new MonitoringFrame( this );
    f->setObjectName( QString( "LogFrame" ) + QString::number(namegen++));
 
+   f->initialise( ct->getContest() );
+   ct->setFrame( f );
+
    int tno = ui->contestPageControl->addTab(f, baseFName);
    ui->contestPageControl->setCurrentWidget(ui->contestPageControl->widget(tno));
    ui->contestPageControl->setTabToolTip(tno, ct->getPublishedName());
-
-
-   f->initialise( ct->getContest() );
-   ct->setFrame( f );
    f->showQSOs();
 }
 
@@ -702,4 +763,48 @@ void MonitorMain::on_contestPageControl_tabCloseRequested(int index)
     MonitoringFrame *f = dynamic_cast<MonitoringFrame *>(w);
 
     closeTab(f);
+}
+
+void MonitorMain::searchChanged()
+{
+    MonitoringFrame *mf = findCurrentLogFrame();
+    if (!mf)
+        return;
+    BaseContestLog *bct = mf->getContest();
+    if (!bct)
+        return;
+
+    screenContact.cs.fullCall.setValue(ui->callsignEdit->text().trimmed());
+    screenContact.loc.loc.setValue(ui->locEdit->text().trimmed());
+    screenContact.extraText = ui->exchangeEdit->text().trimmed();
+
+    MinosLoggerEvents::SendScreenContactChanged(&screenContact, bct, "Monitor");
+
+}
+void MonitorMain::on_callsignEdit_textChanged(const QString &/*arg1*/)
+{
+    searchChanged();
+}
+
+void MonitorMain::on_locEdit_textChanged(const QString &/*arg1*/)
+{
+    searchChanged();
+}
+
+void MonitorMain::on_exchangeEdit_textChanged(const QString &/*arg1*/)
+{
+    searchChanged();
+}
+
+void MonitorMain::on_contestPageControl_currentChanged(int /*index*/)
+{
+    MonitoringFrame *mf = findCurrentLogFrame();
+    if (!mf)
+        return;
+    BaseContestLog *bct = mf->getContest();
+    if (!bct)
+        return;
+
+    ui->thisMatchFrame->setContest(bct);
+    ui->otherMatchFrame->setContest(bct);
 }

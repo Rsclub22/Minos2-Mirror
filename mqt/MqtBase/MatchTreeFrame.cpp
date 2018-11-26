@@ -28,6 +28,8 @@ void MatchTreeFrame::initialise()
     header()->setSectionResizeMode(QHeaderView::Interactive);
     int lcf;
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
+    if (lcf == 0)
+        lcf = 100;
     setItemDelegate( new HtmlDelegate(1.0, lcf/100.0) );
     setUniformRowHeights(true);
 
@@ -511,10 +513,14 @@ int QSOMatchGridModel::rowCount( const QModelIndex &parent ) const
         return 0;
 
     if (!parent.isValid())
-        return rootItem->childCount();
+    {
+        int cc = rootItem->childCount();
+        return cc;
+    }
 
     MatchTreeItem *parentItem = static_cast<MatchTreeItem*>(parent.internalPointer());
-    return parentItem->childCount();
+    int pcc = parentItem->childCount();
+    return pcc;
 }
 
 int QSOMatchGridModel::columnCount( const QModelIndex &/*parent*/ ) const
