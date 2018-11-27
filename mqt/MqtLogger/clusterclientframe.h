@@ -183,6 +183,8 @@ private:
     void handleVertHeaderClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, int row);
     void newCallsignSpotIndToggle(bool on);
     void newLocatorSpotIndToggle(bool on);
+
+    void checkSavedFilters();
 private slots:
 
 

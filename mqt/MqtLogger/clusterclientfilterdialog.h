@@ -38,6 +38,8 @@ public:
 
     void copyBandFiltersToEdit();
     void copyModeFiltersToEdit();
+    void loadBandSettings(QList<bool*> bsl);
+    void loadModeSettings(QList<bool*> msl);
     void copyCallsignFilterListToListWidget();
     void copyLocatorFilterListToListWidget();
 
@@ -101,8 +103,7 @@ private:
     void clearAllFilters();
 
 
-    void loadBandSettings(QList<bool*> bsl);
-    void loadModeSettings(QList<bool*> msl);
+
     void restoreTabSettings();
 
     void closeEvent(QCloseEvent *event);

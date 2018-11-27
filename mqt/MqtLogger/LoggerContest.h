@@ -196,6 +196,7 @@ class LoggerContestLog : public BaseContestLog
       QSharedPointer<BaseContact> addContactBetween(QSharedPointer<BaseContact> prior, QSharedPointer<BaseContact> next , dtg ctTime);
       void removeContact(QSharedPointer<BaseContact> );
 
+
 };
 
 #endif
