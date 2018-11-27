@@ -58,6 +58,7 @@ QTreeView *MatchTreeFrame::getTreeView()
 void MatchTreeFrame::setBaseName(QString b)
 {
     baseName = b;
+    getMatchModel()->baseName = b;
 }
 
 void MatchTreeFrame::setContest(BaseContestLog *ct)
@@ -293,7 +294,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::BackgroundRole)
     {
-        if (ct && type == ThisMatch)
+        if (ct && type == ThisMatch && baseName.compare("Monitor") != 0 )
         {
             if ( ct->contactFlags.getValue() & FORCE_LOG )
             {
@@ -328,7 +329,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                     QString cell;
                     contactList->getMatchField( lct, ArchiveMatchTreeColumns[ column ].fieldId, cell, ct );     // col 0 is the tree lines
 
-                    if (currentModel)
+                    if (currentModel && baseName.compare("Monitor") != 0)
                     {
                         cell = HtmlFontColour(lightRed) + "<b>" + cell;
                     }
@@ -340,7 +341,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                 if (column == 0)
                 {
                     QString cell = contactList->name;
-                    if (currentModel)
+                    if (currentModel && baseName.compare("Monitor") != 0)
                     {
                         cell = HtmlFontColour(lightRed) + "<b>" + cell;
                     }
@@ -409,12 +410,12 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                             }
                             break;
                         }
-                        if (setHighlight)
+                        if (setHighlight && baseName.compare("Monitor") != 0)
                             line = HtmlFontColour(multhighlight) + "<b>" + line;
                     }
                     else
                     {
-                        if (currentModel)
+                        if (currentModel && baseName.compare("Monitor") != 0)
                         {
                             line = HtmlFontColour(lightRed) + "<b>" + line;
                         }
@@ -435,7 +436,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                         QString band = contest->band.getValue();
 
                         QString cell = "[" + band + "] " + name;
-                        if (currentModel)
+                        if (currentModel && baseName.compare("Monitor") != 0)
                         {
                             cell = HtmlFontColour(lightRed) + "<b>" + cell;
                         }

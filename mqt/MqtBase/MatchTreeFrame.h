@@ -60,6 +60,8 @@ public:
     QSOMatchGridModel();
     ~QSOMatchGridModel() override;
 
+    QString baseName;
+
     QModelIndex firstIndex;
     bool currentModel;
 

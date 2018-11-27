@@ -79,7 +79,6 @@ void MonitoredLog::checkMonitor()
 }
 void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
 {
-   // This is in a thread, so it isn't  VCL safe...
    inStanzaRequest = 0;
    if ( stanzasPulled.find( stanza ) == stanzasPulled.end() )
    {

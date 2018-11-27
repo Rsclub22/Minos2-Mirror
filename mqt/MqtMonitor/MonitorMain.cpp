@@ -295,6 +295,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->otherMatchFrame->initialise();
     ui->otherMatchFrame->setBaseName("Monitor");
 
+    ui->callsignEdit->setFocus();
 }
 
 MonitorMain::~MonitorMain()
@@ -633,6 +634,7 @@ void MonitorMain::addSlot( MonitoredLog *ct )
    ui->contestPageControl->setCurrentWidget(ui->contestPageControl->widget(tno));
    ui->contestPageControl->setTabToolTip(tno, ct->getPublishedName());
    f->showQSOs();
+   f->setFocusPolicy(Qt::NoFocus);
 }
 
 MonitoringFrame *MonitorMain::findCurrentLogFrame()
@@ -689,11 +691,8 @@ void MonitorMain::on_monitorTimeout()
            jcnt++;
           if ((*j)->getState() == psRevoked)
           {
-             QWidget *cttab = findContestPage( (*j)->getContest() );
-             if ( cttab )
-             {
-                delete cttab;
-             }
+             MonitoringFrame *cttab = findContestPage( (*j)->getContest() );
+             closeTab(cttab);
              // take it out of the slot list and close it
              // and we need to redo the list
              delete (*j);
@@ -718,6 +717,8 @@ void MonitorMain::on_monitorTimeout()
     {
         f->getContest()->scanContest();
         f->setScore();
+        // clear dups here - we have no need of them in monitor
+        f->getContest()->DupSheet.clear();
     }
 }
 void MonitorMain::on_monitorTree_doubleClicked(const QModelIndex &index)
@@ -807,4 +808,7 @@ void MonitorMain::on_contestPageControl_currentChanged(int /*index*/)
 
     ui->thisMatchFrame->setContest(bct);
     ui->otherMatchFrame->setContest(bct);
+
+    searchChanged();
+    ui->callsignEdit->setFocus();
 }
