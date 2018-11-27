@@ -161,10 +161,6 @@ public:
     QVector<MonitoredStation *> stationList;
     ScreenContact screenContact;
 
-    void logMessage( const QString &s );
-//    void notifyCallback( bool err, MinosRPCObj *mro, const QString &from );
-//    void loggerSubscribeClientCallback( bool err, MinosRPCObj *mro, const QString &from );
-
     void closeTab(MonitoringFrame *tab);
 
     int getContestSlotCount();
@@ -195,6 +191,10 @@ private slots:
     void on_exchangeEdit_textChanged(const QString &arg1);
 
     void on_contestPageControl_currentChanged(int index);
+
+    void on_mainSplitter_splitterMoved(int pos, int index);
+
+    void on_searchSplitter_splitterMoved(int pos, int index);
 
 private:
     Ui::MonitorMain *ui;

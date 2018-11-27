@@ -40,7 +40,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="MinosSplitter" name="splitter_2">
+        <widget class="MinosSplitter" name="mainSplitter">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -159,7 +159,7 @@
            </property>
           </widget>
          </widget>
-         <widget class="MinosSplitter" name="splitter">
+         <widget class="MinosSplitter" name="searchSplitter">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>

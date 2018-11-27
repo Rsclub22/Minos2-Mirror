@@ -279,7 +279,19 @@ MonitorMain::MonitorMain(QWidget *parent) :
         QList<int> split{200, 600};
         ui->monitorSplitter->setSizes(split);
     }
+
+    state = settings.value("MainSplitter/state").toByteArray();
+    if (state.size())
+        ui->mainSplitter->restoreState(state);
+
+    state = settings.value("SearchSplitter/state").toByteArray();
+    if (state.size())
+        ui->searchSplitter->restoreState(state);
+
     ui->monitorSplitter->setHandleWidth(splitterHandleWidth);
+    ui->mainSplitter->setHandleWidth(splitterHandleWidth);
+    ui->searchSplitter->setHandleWidth(splitterHandleWidth);
+
     ui->contestPageControl->setContextMenuPolicy( Qt::CustomContextMenu );
 
     closeMonitoredLog = newAction("Close tab", &TabPopup, SLOT(on_closeMonitoredLog()));
@@ -355,14 +367,22 @@ void MonitorMain::on_monitorSplitter_splitterMoved(int /*pos*/, int /*index*/)
     QSettings settings;
     settings.setValue("MonitorSplitter/state", state);
 }
+void MonitorMain::on_mainSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QByteArray state = ui->mainSplitter->saveState();
+    QSettings settings;
+    settings.setValue("MainSplitter/state", state);
+}
 
+void MonitorMain::on_searchSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QByteArray state = ui->searchSplitter->saveState();
+    QSettings settings;
+    settings.setValue("SearchSplitter/state", state);
+}
 void MonitorMain::on_closeButton_clicked()
 {
     close();
-}
-void MonitorMain::logMessage( const QString &s )
-{
-   trace( s );
 }
 void MonitorMain::closeTab(MonitoringFrame *cttab)
 {
@@ -437,7 +457,7 @@ void MonitorMain::CancelClick()
 void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
     // pubsub notify
-    logMessage( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
     AnalysePubSubNotify an( err, mro );
 
     if ( an.getOK() )
@@ -459,7 +479,7 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
        if ( an.getCategory() == rpcConstants::LoggerCategory )
        {
 
-           logMessage( "Station " + key + " " + value );
+           trace( "Station " + key + " " + value );
           QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( key, an.getPublisherProgram() ) );
 
           if (state != psRevoked)
@@ -493,7 +513,7 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
           }
 
           QString logval = server + " : " + key ;
-          logMessage( "ContestLog " + logval + " " + value );
+          trace( "ContestLog " + logval + " " + value );
 
           QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( server, an.getPublisherProgram() ) );
           if ( stat != stationList.end() )
@@ -531,7 +551,7 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
 //---------------------------------------------------------------------------
 void MonitorMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-    logMessage( "logger server callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    trace( "logger server callback from " + from + ( err ? ":Error" : ":Normal" ) );
     if ( !err )
     {
         // This will return stanza id, pubname, and stanza content
@@ -559,7 +579,7 @@ void MonitorMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const
                      && psStanza->getInt( stanza ) && psResult->getBoolean( result )
                      )
                 {
-                    logMessage( "Name " + logName + " stanza " + QString::number( stanza ) );
+                    trace( "Name " + logName + " stanza " + QString::number( stanza ) );
                     // Find the matching MonitoredLog and send the stanza their for processing
                     for ( QVector<MonitoredStation *>::iterator i = stationList.begin(); i != stationList.end(); i++ )
                     {
@@ -571,7 +591,7 @@ void MonitorMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const
                             {
                                 if ((*j) && ( *j ) ->getPublishedName() == logName )
                                 {
-                                    logMessage( "||" + stanzaData + "||" );
+                                    trace( "||" + stanzaData + "||" );
                                     ( *j ) ->processLogStanza( stanza, stanzaData );
                                     return ;
                                 }
@@ -812,3 +832,4 @@ void MonitorMain::on_contestPageControl_currentChanged(int /*index*/)
     searchChanged();
     ui->callsignEdit->setFocus();
 }
+
