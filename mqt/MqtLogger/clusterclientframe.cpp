@@ -39,7 +39,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     delegate = new HtmlDelegate(1.0, lcf/100.0) ;
 
 
-    filterSetup = new ClusterClientFilterDialog();
+    filterSetup = new ClusterClientFilterDialog(this, instanceNum);
 
     purgeTimer = new QTimer(this);
 
@@ -120,7 +120,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
     restoreLocatorViewColumns();
 
-    connect(filterSetup, SIGNAL(filtersChanged(int)), this, SLOT(filtersChanged(int)));
+    connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
     purgeTimer->start(PURGE_TIME);
 
@@ -157,7 +157,6 @@ void ClusterClientFrame::setupDXSpotView()
     //dxSpotView->setSelectionBehavior(QAbstractItemView::SelectItems);
     dxSpotView->verticalHeader()->setDefaultSectionSize(10);
     dxSpotView->verticalHeader()->setMinimumSectionSize(10);
-
 
     dxSpotView->setItemDelegate( delegate);
     dxSpotView->resizeRowsToContents();
@@ -343,8 +342,8 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 void ClusterClientFrame::filterButtonSelected()
 {
-    filterSetup->copyBandFilterMaskToEdit();
-    filterSetup->copyModeFilterMaskToEdit();
+    filterSetup->copyBandFiltersToDialog();
+    filterSetup->copyModeFiltersToDialog();
     filterSetup->copyCallsignFilterListToListWidget();
     filterSetup->copyLocatorFilterListToListWidget();
     filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
@@ -352,18 +351,18 @@ void ClusterClientFrame::filterButtonSelected()
 
 }
 
-void ClusterClientFrame::filtersChanged(int changeMask)
+void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged)
 {
     //update views..
-    if (changeMask & FREQFILTERUP)
+    if (bandfilterChanged)
     {
         dxSpotProxyModel->setFilterRegExp("");
     }
-    else if (changeMask & CALLSIGNUP)
+    else if (callsignfilterChanged)
     {
         callSignProxyModel->setFilterRegExp("");
     }
-    else if (changeMask & LOCATORUP)
+    else if (locatorfilterChanged)
     {
         locatorProxyModel->setFilterRegExp("");
     }
@@ -694,6 +693,8 @@ void ClusterClientFrame::restoreLocatorViewColumns()
 void ClusterClientFrame::setContest(BaseContestLog *c)
 {
     ct = c;
+    // set the contest in the filter dialog
+    filterSetup->setContest(c);
 }
 
 
@@ -1027,8 +1028,24 @@ void ClusterClientFrame::checkNewSpots()
 
     }
 
+    checkSavedFilters();
 
 }
+
+void ClusterClientFrame::checkSavedFilters()
+{
+    // this looks for changed saved settings
+    LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
+    if (contest->clusterFilterSettings.size() > instanceNum)
+    {
+        ClusterClientFilterSettings cfs = contest->clusterFilterSettings[instanceNum].getValue();
+        if (cfs != filterSetup->filterSettings)
+        {
+            filterSetup->filterSettings = cfs;
+        }
+    }
+}
+
 
 void ClusterClientFrame::newCallsignSpotIndToggle(bool on)
 {
@@ -1067,14 +1084,16 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
     bool ok = false;
-    unsigned int spotMask = static_cast<unsigned int>(sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM)).toString().toInt(&ok));
-    unsigned int filterMask = filterSetup->getBandFilterMask();
-    if ( filterMask & spotMask || filterMask == 0)
+    int spotMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM)).toString().toInt(&ok);
+    if (spotMask < NUMBANDS)
     {
-        return true;
+       return filterSetup->filterSettings.getBandFilter(spotMask);
+    }
+    else
+    {
+        return false;
     }
 
-    return false;
 }
 
 

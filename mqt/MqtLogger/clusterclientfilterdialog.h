@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur RadRotator Control
@@ -18,6 +18,7 @@
 #include <QStringListModel>
 #include <QListWidget>
 
+#include "LoggerContest.h"
 #include "clustercommon.h"
 
 namespace Ui {
@@ -29,14 +30,14 @@ class ClusterClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClusterClientFilterDialog(QWidget *parent = nullptr);
+    explicit ClusterClientFilterDialog(QWidget *parent, int instanceNum);
     ~ClusterClientFilterDialog();
 
-    unsigned int getBandFilterMask();
-    unsigned int getModeFilterMask();
+    bool checkBandMatch(int bandNum);
+    bool checkModeMatch(int bandNum);
 
-    void copyBandFilterMaskToEdit();
-    void copyModeFilterMaskToEdit();
+    void copyBandFiltersToDialog();
+    void copyModeFiltersToDialog();
     void copyCallsignFilterListToListWidget();
     void copyLocatorFilterListToListWidget();
 
@@ -47,46 +48,40 @@ public:
     QStringList getLocatorFilterList();
 
 
+    void setContest(BaseContestLog *c);
+    ClusterClientFilterSettings filterSettings;
+
 signals:
-    void filtersChanged(int);
+    void filtersChanged(bool, bool, bool, bool);
 
 
 private:
     Ui::ClusterClientFilterDialog *ui;
-    QList<QCheckBox*> vhfChkBoxList;
-    QList<QCheckBox*> mWaveChkBoxList;
+    LoggerContestLog *ct = nullptr;
+
+
+    QList<QCheckBox*> bandChkBoxList;
     QList<QCheckBox*> modeChkBoxList;
 
 
-    //QStringList callsignFilterList;
     QListWidget* callsignListWidget;
     int callsignListWidgetCurrentRow;
 
 
-    //QStringList locatorFilterList;
     QListWidget* locatorListWidget;
     int locatorListWidgetCurrentRow;
 
-    //unsigned int bandFilterMask;
-    unsigned int editBandFilterMask;
-    //unsigned int modeFilterMask;
-    unsigned int editModeFilterMask;
-
-    ClusterClientFilterSettings filterSettings;
 
     bool vhfButtonState;
     bool mWaveButtonState;
     bool modeButtonState;
 
-
-    bool bandTabChanged;
-    bool callsignEditChanged;
-    bool locatorEditChanged;
+    int instanceNum;
 
     void initCheckFilterTab();
     void clearVHFBands();
     void setVHFBands();
-    void restoreVHFBands();
+    void restoreBands();
     void clearMWaveBands();
     void setMWaveBands();
     void restoreMWBands();
@@ -96,8 +91,7 @@ private:
     void clearAllFilters();
 
 
-    void loadBandSettings(unsigned int bandMask);
-    void loadModeSettings(unsigned int modeMask);
+
     void restoreTabSettings();
 
     void closeEvent(QCloseEvent *event);
@@ -111,10 +105,18 @@ private:
     QStringList getItemsTextFromListWidget(QListWidget *lw);
 
 
+    bool bandFiltersChanged();
+    bool modeFiltersChanged();
+    bool callsignFiltersChanged();
+    bool locatorFiltersChanged();
+
+    void copyBandFiltersToFilterSettings();
+    void copyModeFiltersToFilterSettings();
+
+
 private slots:
-    void vhfChecked(int checkBoxNum);
-    void mWaveChecked(int checkBoxNum);
-    void modeChecked(int checkBoxNum);
+    //void bandChecked(int checkBoxNum);
+    //void modeChecked(int checkBoxNum);
 
     void vhfButtonSelected();
     void mWaveButtonSelected();

@@ -14,6 +14,7 @@
 //----------------------------------------------------------------------------
 #include "profiles.h"
 #include "rigmemcommondata.h"
+#include "clustercommon.h"
 #include "PubSubValue.h"
 #include "contest.h"
 
@@ -121,6 +122,9 @@ class LoggerContestLog : public BaseContestLog
       QVector<MinosItem<memoryData::memData> > runMemories;
       QVector<MinosItem<memoryData::memData> > rigMemories;
 
+      QVector<ClusterClientFilterSettings> filterSettings;
+      QVector<MinosItem<ClusterClientFilterSettings>> clusterFilterSettings;
+
       MinosStringItem<QString> screenLayout;
 
       MinosItem<int> statsPeriod1;
@@ -140,8 +144,9 @@ class LoggerContestLog : public BaseContestLog
       void saveInitialRunMemory(int memno, const memoryData::memData &mem);
       void saveInitialRigMemory(int memno, const memoryData::memData &mem);
       memoryData::memData getRigMemoryData(int memoryNumber);
-
-
+      void saveClusterFilter(int instanceNum, const ClusterClientFilterSettings &ccfs);
+      void saveInitialClusterFilter(int instanceNum, const ClusterClientFilterSettings &ccfs);
+      ClusterClientFilterSettings getClusterFilter(int instanceNum);
 
       // dirty info is only relevant when it is being editted
       // but needs to stay with the data
@@ -190,6 +195,7 @@ class LoggerContestLog : public BaseContestLog
       QSharedPointer<BaseContact> addContact(int newctno, unsigned short extra_flags, bool save_new, bool catchup , QString mode, dtg ctTime);
       QSharedPointer<BaseContact> addContactBetween(QSharedPointer<BaseContact> prior, QSharedPointer<BaseContact> next , dtg ctTime);
       void removeContact(QSharedPointer<BaseContact> );
+
 
 };
 

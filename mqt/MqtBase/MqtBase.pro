@@ -18,7 +18,6 @@ CONFIG += staticlib
 INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../XMPPLib
-INCLUDEPATH += ../qtcsv/src/include
 
 PRECOMPILED_HEADER = ../MqtBase/base_pch.h
 
@@ -77,9 +76,7 @@ SOURCES += \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
     clusterClientServer.cpp \
-    clusterclientframe.cpp \
     spotdata.cpp \
-    clusterclientfilterdialog.cpp \
     calllocinputdialog.cpp \
     helpbrowser.cpp \
     helptextbrowser.cpp
@@ -145,9 +142,7 @@ HEADERS += \
     qttelnet.h \
     clustercommon.h \
     clusterClientServer.h \
-    clusterclientframe.h \
     spotdata.h \
-    clusterclientfilterdialog.h \
     calllocinputdialog.h \
     rigmemcommondata.h \
     helpbrowser.h \
@@ -168,7 +163,5 @@ FORMS += \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \
-    clusterclientframe.ui \
-    clusterclientfilterdialog.ui \
     calllocinputdialog.ui \
     helpbrowser.ui

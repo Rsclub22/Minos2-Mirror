@@ -117,7 +117,6 @@ public:
 
 
 
-
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *ct = nullptr;
@@ -184,6 +183,8 @@ private:
     void handleVertHeaderClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, int row);
     void newCallsignSpotIndToggle(bool on);
     void newLocatorSpotIndToggle(bool on);
+
+    void checkSavedFilters();
 private slots:
 
 
@@ -207,7 +208,7 @@ private slots:
     void onCallsignSpotViewClicked(const QModelIndex &index);
     void onLocatorSpotViewClicked(const QModelIndex &index);
     void onSpotTabChanged(int index);
-    void filtersChanged(int);
+    void filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged);
     void onSearchEditingFinished();
     void onDXSpotVertHeaderClicked(int row);
     void onLocatorSpotVertHeaderClicked(int row);
@@ -215,6 +216,8 @@ private slots:
     void onSearchSpotVertHeaderClicked(int row);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
     void checkNewSpots();
+
+
 };
 
 #endif // CLUSTERCLIENTFRAME_H

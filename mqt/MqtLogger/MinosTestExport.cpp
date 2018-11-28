@@ -376,6 +376,47 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    }
    return exp_stanzaCount;
 }
+void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd, int filterNum)
+{
+    MinosItem<ClusterClientFilterSettings> filter = ct->clusterFilterSettings[filterNum];
+    if (filter.isDirty())
+    {
+        RPCParamStruct * st = new RPCParamStruct;
+        makeHeader( st, 1 );
+
+        st->addMember(filterNum,"filterNum");
+        st->addMember(filter.getValue().callsignFilterList, "callsignList");
+        st->addMember(filter.getValue().locatorFilterList, "locatorList");
+        st->addMember(filter.getValue().bandFilter50Mhz, "bandFilter50Mhz");
+        st->addMember(filter.getValue().bandFilter70Mhz, "bandFilter70Mhz");
+        st->addMember(filter.getValue().bandFilter144Mhz, "bandFilter144Mhz");
+        st->addMember(filter.getValue().bandFilter432Mhz, "bandFilter432Mhz");
+        st->addMember(filter.getValue().bandFilter1296Mhz, "bandFilter1296Mhz");
+        st->addMember(filter.getValue().bandFilter2300Mhz, "bandFilter2300Mhz");
+        st->addMember(filter.getValue().bandFilter3_4Ghz, "bandFilter3_4Ghz");
+        st->addMember(filter.getValue().bandFilter5_6Ghz, "bandFilter5_6Ghz");
+        st->addMember(filter.getValue().bandFilter10Ghz, "bandFilter10Ghz");
+        st->addMember(filter.getValue().modeFilterCW, "modeFilterCW");
+        st->addMember(filter.getValue().modeFilterPHONEMODE, "modeFilterPHONEMODE");
+        st->addMember(filter.getValue().modeFilterRTTYMODE, "modeFilterRTTYMODE");
+        st->addMember(filter.getValue().modeFilterPSKMODE, "modeFilterPSKMODE");
+        st->addMember(filter.getValue().modeFilterMGMMODE, "modeFilterMGMMODE");
+
+        sendRequest(expfd, "MinosClusterFilter", st);
+
+    }
+}
+
+
+void MinosTestExport::exportAllClusterFilters(QSharedPointer<QFile> expfd )
+{
+    for (int i = 0; i < ct->clusterFilterSettings.size(); i++)
+    {
+        exportClusterFilter( expfd, i);
+    }
+}
+
+
 void MinosTestExport::exportRigMemory(QSharedPointer<QFile> expfd, int memno )
 {
     MinosItem<memoryData::memData> mem = ct->rigMemories[memno];
@@ -479,6 +520,7 @@ int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bo
    exportBundles( minosContestFile );
    exportAllMemories(minosContestFile);
    exportStackDisplay(minosContestFile);
+   exportAllClusterFilters(minosContestFile);
 
    return exp_stanzaCount;
 }
@@ -506,6 +548,7 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
    exportApps(expfd);
    exportBundles( expfd );
    exportAllMemories(expfd);
+   exportAllClusterFilters(expfd);
 
    bool inDump = false;
    foreach(MapWrapper<BaseContact> dct, ct->ctList)

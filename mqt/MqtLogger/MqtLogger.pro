@@ -27,11 +27,8 @@ android {
 }
 
 INCLUDEPATH += $$PWD/../MqtRotator
-#DEPENDPATH += $$PWD/../MqtRotator
 INCLUDEPATH += $$PWD/../MqtRigControl
-#DEPENDPATH += $$PWD/../MqtRigControl
 INCLUDEPATH += $$PWD/../MqtBandMap
-#DEPENDPATH += $$PWD/../MqtBandMap
 
 SOURCES += \
     AdifImport.cpp \
@@ -84,6 +81,8 @@ SOURCES += \
     tsettingseditdlg.cpp \
     tsinglelogframe.cpp \
     tstatsdispframe.cpp \
+    clusterclientfilterdialog.cpp \
+    clusterclientframe.cpp \
     volumeslider.cpp \
     tminosbshelpform.cpp
 
@@ -138,6 +137,8 @@ HEADERS  += \
     tsettingseditdlg.h \
     tsinglelogframe.h \
     tstatsdispframe.h \
+    clusterclientfilterdialog.h \
+    clusterclientframe.h \
     volumeslider.h \
     tminosbshelpform.h
 
@@ -178,6 +179,8 @@ FORMS    += \
     TSessionManager.ui \
     tsettingseditdlg.ui \
     tsinglelogframe.ui \
+    clusterclientfilterdialog.ui \
+    clusterclientframe.ui \
     tstatsdispframe.ui \
     tminosbshelpform.ui
 

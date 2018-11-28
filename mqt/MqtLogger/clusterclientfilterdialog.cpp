@@ -6,18 +6,14 @@
 #include "calllocinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
-ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
+ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent, int instanceNum) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
-    editBandFilterMask(0),
-    editModeFilterMask(0),
     vhfButtonState(false),
     mWaveButtonState(false),
     modeButtonState(false),
-    bandTabChanged(false),
-    callsignEditChanged(false),
-    locatorEditChanged(false)
+    instanceNum(instanceNum)
 {
     ui->setupUi(this);
     initCheckFilterTab();
@@ -35,37 +31,16 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     setWindowTitle("Cluster Spot Filters");
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    vhfChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox;
+    filterSettings.instanceNum = instanceNum;
 
-    mWaveChkBoxList << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
-
+    bandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
+                   << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
 
     modeChkBoxList << ui->cwModeChkBox << ui->phoneModeChkBox << ui->rttyModeChkBox << ui->pskModeChkBox << ui->mgmModeChkBox;
 
 
-    for (int i = 0; i < vhfChkBoxList.count(); i++)
-    {
+   ui->ClusterClientFilterTab->setCurrentIndex(0);
 
-        connect(vhfChkBoxList[i], &QCheckBox::stateChanged, [this, i]() {vhfChecked(i);});
-
-    }
-
-
-    for (int i = 0; i < mWaveChkBoxList.count(); i++)
-    {
-
-        connect(mWaveChkBoxList[i], &QCheckBox::stateChanged, [this, i]() {mWaveChecked(i);});
-
-    }
-
-    for (int i = 0; i < modeChkBoxList.count(); i++)
-    {
-
-        connect(modeChkBoxList[i], &QCheckBox::stateChanged, [this, i]() {modeChecked(i);});
-
-    }
-
-    ui->ClusterClientFilterTab->setCurrentIndex(0);
 
     callsignListWidget = ui->callsignListWidget;
     callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
@@ -105,41 +80,61 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 }
 
 
+void ClusterClientFilterDialog::setContest(BaseContestLog *c)
+{
+    ct = dynamic_cast<LoggerContestLog *>( c);
 
+}
 
 
 
 void ClusterClientFilterDialog::filtersAccepted()
 {
-    int filterChangeMask = 0;
+    bool bandfilterChanged = false;
+    bool modefilterChanged = false;
+    bool callsignfilterChanged = false;
+    bool locatorfilterChanged = false;
 
 
-    if (bandTabChanged)
+    if (bandFiltersChanged())
     {
-        bandTabChanged = false;
         // copy updated masks with edited values
-        filterSettings.bandFilterMask = editBandFilterMask;
-        filterSettings.modeFilterMask = editModeFilterMask;
-        filterChangeMask |= FREQFILTERUP;
+        copyBandFiltersToFilterSettings();
+        bandfilterChanged = true;
     }
+    else if (modeFiltersChanged())
+    {
+        copyModeFiltersToFilterSettings();
+        modefilterChanged = true;
+    }
+    else if (callsignFiltersChanged())
+    {
 
-    else if (callsignEditChanged)
-    {
-        callsignEditChanged = false;
         filterSettings.callsignFilterList.clear();
-        // get list of callsigns
         filterSettings.callsignFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(callsignListWidget));
-        filterChangeMask |= CALLSIGNUP;
+        callsignfilterChanged = true;
     }
-    else if (locatorEditChanged)
+    else if (locatorFiltersChanged())
     {
-        locatorEditChanged = false;
         filterSettings.locatorFilterList.clear();
         filterSettings.locatorFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(locatorListWidget));
-        filterChangeMask |= LOCATORUP;
+        locatorfilterChanged = true;
     }
 
-    emit filtersChanged(filterChangeMask);
+    if (bandfilterChanged || modefilterChanged || callsignfilterChanged || locatorfilterChanged)
+    {
+        trace(QString("Cluster Filters Changed - Instance = %1").arg(instanceNum));
+        trace(QString("BandFilter Changed = %1, ModeFilter Changed = %2, CallsignFilter Changed = %3, LocatorFilter Changed = %4").arg(bandfilterChanged).arg(modefilterChanged).arg(callsignfilterChanged).arg(locatorfilterChanged));
+        trace(QString("Band 50Mhz = %1, Band 70Mhz = %2, Band 144Mhz = %3, Band 432Mhz = %4, Band = 1296Mhz = %5").arg(*filterSettings.bandFilters[_50M]).arg(*filterSettings.bandFilters[_70M]).arg(*filterSettings.bandFilters[_144M]).arg(*filterSettings.bandFilters[_432M]).arg(*filterSettings.bandFilters[_1296M]));
+        trace(QString("Band 2300Mhz = %1, Band 3.4Ghz = %2, Band 5.6Ghz = %3, Band 10Ghz = %4").arg(*filterSettings.bandFilters[_2300M]).arg(*filterSettings.bandFilters[_3_4G]).arg(*filterSettings.bandFilters[_5_6G]).arg(*filterSettings.bandFilters[_10G]));
+        trace(QString("Mode Filters CW = %1, PhoneMode = %2, RTTYMode = %3, PSKMode = %4, MGMMode = %5").arg(*filterSettings.modeFilters[CWMODE]).arg(*filterSettings.modeFilters[PHONEMODE]).arg(*filterSettings.modeFilters[RTTYMODE]).arg(*filterSettings.modeFilters[PSKMODE]).arg(*filterSettings.modeFilters[MGMMODE]));
+        trace(QString("Calsign List = %1").arg(filterSettings.callsignFilterList));
+        trace(QString("Locator List = %1").arg(filterSettings.locatorFilterList));
+        trace(QString("Save to log"));
+        ct->saveClusterFilter(instanceNum, filterSettings);
+    }
+
+    emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
     close();
 }
 
@@ -159,13 +154,57 @@ QStringList ClusterClientFilterDialog::getItemsTextFromListWidget(QListWidget* l
     return l;
 }
 
+bool ClusterClientFilterDialog::bandFiltersChanged()
+{
+    for (int i = 0; i < bandChkBoxList.count(); i++)
+    {
+        if (*filterSettings.bandFilters[i] != bandChkBoxList[i]->isChecked())
+        {
+            return true;
+        }
+    }
 
+    return false;
+}
+
+bool ClusterClientFilterDialog::modeFiltersChanged()
+{
+    for (int i = 0; i < modeChkBoxList.count(); i++)
+    {
+        if (*filterSettings.modeFilters[i] != modeChkBoxList[i]->isChecked())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool ClusterClientFilterDialog::callsignFiltersChanged()
+{
+    QString editedCalls = filterSettings.packFilterList(getItemsTextFromListWidget(callsignListWidget));
+    if (editedCalls != filterSettings.callsignFilterList)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool ClusterClientFilterDialog::locatorFiltersChanged()
+{
+    QString editedlocators = filterSettings.packFilterList(getItemsTextFromListWidget(locatorListWidget));
+    if (editedlocators != filterSettings.locatorFilterList)
+    {
+        return true;
+    }
+    return false;
+}
 void ClusterClientFilterDialog::filtersRejected()
 {
-    if (bandTabChanged)
+ /*
+    if (bandFiltersChanged())
     {
-        restoreVHFBands();
-        restoreMWBands();
+        restoreBands();
         restoreModes();
     }
     else if (callsignEditChanged)
@@ -173,23 +212,18 @@ void ClusterClientFilterDialog::filtersRejected()
         // restore the callsignListWidget
         callsignListWidget->clear();
         callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
-        //for (int i = 0; i < filterSettings.callsignFilterList.count(); i++)
-        //{
-        //    callsignListWidget->addItem(filterSettings.callsignFilterList[i]);
-        //}
+
     }
     else if (locatorEditChanged)
     {
         // restore the locatorListWidget
         locatorListWidget->clear();
         locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
-        //for(int i = 0; i < filterSettings.locatorFilterList.count(); i++)
-        //{
-        //    locatorListWidget->addItem(filterSettings.locatorFilterList[i]);
-       // }
+
     }
 
     // restore settings on tab
+*/
     restoreTabSettings();
 
     close();
@@ -209,8 +243,9 @@ int ClusterClientFilterDialog::getTabCurrentIndex()
 void ClusterClientFilterDialog::restoreTabSettings()
 {
 
-    loadBandSettings(filterSettings.bandFilterMask);
-    loadModeSettings(filterSettings.modeFilterMask);
+    copyBandFiltersToDialog();
+    copyModeFiltersToDialog();
+
 }
 
 
@@ -220,57 +255,39 @@ void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
     QWidget::closeEvent(event);
 }
 
-void ClusterClientFilterDialog::copyBandFilterMaskToEdit()
+void ClusterClientFilterDialog::copyBandFiltersToFilterSettings()
 {
-    editBandFilterMask = filterSettings.bandFilterMask;
-}
-
-void ClusterClientFilterDialog::copyModeFilterMaskToEdit()
-{
-    editModeFilterMask = filterSettings.modeFilterMask;
-}
-
-void ClusterClientFilterDialog::loadBandSettings(unsigned int bandMask)
-{
-    for (int i = 0; i < NUM_VHFMASKS; i++)
+    for (int i = 0; i < bandChkBoxList.count(); i++)
     {
-        if (bandMask & vhfBandMasks[i])
-        {
-            vhfChkBoxList[i]->setChecked(true);
-        }
-        else
-        {
-            vhfChkBoxList[i]->setChecked(false);
-        }
-    }
-
-    for (int i = 0; i < NUM_MWAVEMASKS; i++)
-    {
-        if (bandMask & mWaveBandMasks[i])
-        {
-            mWaveChkBoxList[i]->setChecked(true);
-        }
-        else
-        {
-            mWaveChkBoxList[i]->setChecked(false);
-        }
+        *filterSettings.bandFilters[i] = bandChkBoxList[i]->isChecked();
     }
 }
 
-void ClusterClientFilterDialog::loadModeSettings(unsigned int modeMask)
+void ClusterClientFilterDialog::copyBandFiltersToDialog()
 {
-    for (int i = 0; i < NUM_MODEMASKS; i++)
+    for (int i = 0; i < bandChkBoxList.count(); i++)
     {
-        if (modeMask & modeMasks[i])
-        {
-            modeChkBoxList[i]->setChecked(true);
-        }
-        else
-        {
-            modeChkBoxList[i]->setChecked(false);
-        }
+        bandChkBoxList[i]->setChecked(*filterSettings.bandFilters[i]);
     }
 }
+
+void ClusterClientFilterDialog::copyModeFiltersToFilterSettings()
+{
+    for (int i = 0; i < modeChkBoxList.count(); i++)
+    {
+        *filterSettings.modeFilters[i] = modeChkBoxList[i]->isChecked();
+    }
+}
+
+void ClusterClientFilterDialog::copyModeFiltersToDialog()
+{
+    for (int i = 0; i < modeChkBoxList.count(); i++)
+    {
+        modeChkBoxList[i]->setChecked(*filterSettings.modeFilters[i]);
+    }
+}
+
+
 
 void ClusterClientFilterDialog::vhfButtonSelected()
 {
@@ -333,59 +350,36 @@ void ClusterClientFilterDialog::clearAllFilters()
 
 void ClusterClientFilterDialog::clearVHFBands()
 {
-    editBandFilterMask = editBandFilterMask & ~_50M & ~_70M & ~_144M & ~_432M;
-    for (int i = 0; i < vhfChkBoxList.count(); i++)
+    for (int i =  VHFBANDSTART; i < VHFBANDEND; i++)
     {
-        vhfChkBoxList[i]->setCheckState(Qt::Unchecked);
+        bandChkBoxList[i]->setCheckState(Qt::Unchecked);
+
     }
-    bandTabChanged = true;
+
 }
 
 void ClusterClientFilterDialog::setVHFBands()
 {
-    editBandFilterMask = editBandFilterMask | _50M | _70M | _144M | _432M;
-    for (int i = 0; i < vhfChkBoxList.count(); i++)
+    for (int i = VHFBANDSTART; i < VHFBANDEND; i++)
     {
-        vhfChkBoxList[i]->setCheckState(Qt::Checked);
-    }
-    bandTabChanged = true;
-}
-
-void ClusterClientFilterDialog::vhfChecked(int checkBoxNum)
-{
-    if (checkBoxNum < vhfChkBoxList.count())
-    {
-        if (vhfChkBoxList[checkBoxNum]->checkState() == Qt::Checked)
-        {
-            editBandFilterMask |= vhfBandMasks[checkBoxNum];
-        }
-        else if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Unchecked)
-        {
-            editBandFilterMask &= ~vhfBandMasks[checkBoxNum];
-        }
-
-        bandTabChanged = true;
+        bandChkBoxList[i]->setCheckState(Qt::Checked);
 
     }
-
 
 }
 
-void ClusterClientFilterDialog::restoreVHFBands()
+
+
+void ClusterClientFilterDialog::restoreBands()
 {
 
-    for (int i = 0; i < NUM_VHFMASKS; i++)
+    for (int i = 0; i < NUMBANDS; i++)
     {
-        if (filterSettings.bandFilterMask & vhfBandMasks[i])
-        {
-            vhfChkBoxList[i]->setChecked(true);
-        }
-        else
-        {
-            vhfChkBoxList[i]->setChecked(false);
-        }
+        bandChkBoxList[i]->setChecked(*filterSettings.bandFilters[i]);
 
     }
+
+
 
 }
 
@@ -393,124 +387,68 @@ void ClusterClientFilterDialog::restoreVHFBands()
 
 void ClusterClientFilterDialog::clearMWaveBands()
 {
-    editBandFilterMask = editBandFilterMask & ~_1296M & ~_2300M & ~_3_4G & ~_5_6G & ~_10G;
-    for (int i = 0; i < mWaveChkBoxList.count(); i++)
+    for (int i = MWBANDSTART; i < MWBANDEND; i++)
     {
-        mWaveChkBoxList[i]->setCheckState(Qt::Unchecked);
+        bandChkBoxList[i]->setCheckState(Qt::Unchecked);
+
     }
-    bandTabChanged = true;
+
 }
 
 void ClusterClientFilterDialog::setMWaveBands()
 {
-    editBandFilterMask = editBandFilterMask | _1296M | _2300M | _3_4G | _5_6G | _10G;
-    for (int i = 0; i < mWaveChkBoxList.count(); i++)
+    for (int i = MWBANDSTART; i < MWBANDEND; i++)
     {
-        mWaveChkBoxList[i]->setCheckState(Qt::Checked);
-    }
-    bandTabChanged = true;
-}
-
-
-
-
-void ClusterClientFilterDialog::mWaveChecked(int checkBoxNum)
-{
-    if (checkBoxNum < mWaveChkBoxList.count())
-    {
-        if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Checked)
-        {
-            editBandFilterMask |= mWaveBandMasks[checkBoxNum];
-        }
-        else if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Unchecked)
-        {
-            editBandFilterMask &= ~mWaveBandMasks[checkBoxNum];
-        }
-    }
-    bandTabChanged = true;
-
-}
-
-
-void ClusterClientFilterDialog::restoreMWBands()
-{
-
-    for (int i = 0; i < NUM_MWAVEMASKS; i++)
-    {
-        if (filterSettings.bandFilterMask & mWaveBandMasks[i])
-        {
-            mWaveChkBoxList[i]->setChecked(true);
-        }
-        else
-        {
-            mWaveChkBoxList[i]->setChecked(false);
-        }
+        bandChkBoxList[i]->setCheckState(Qt::Checked);
 
     }
 
 }
+
+
+
 
 void ClusterClientFilterDialog::clearModes()
 {
-    editModeFilterMask = editModeFilterMask & ~CWMODE & ~PHONEMODE & ~RTTYMODE & ~MGMMODE;
     for (int i = 0; i <modeChkBoxList.count(); i++)
     {
         modeChkBoxList[i]->setCheckState(Qt::Unchecked);
+
     }
+
 }
 
 void ClusterClientFilterDialog::setModes()
 {
-    editModeFilterMask = editModeFilterMask | CWMODE | PHONEMODE | RTTYMODE | MGMMODE;
     for (int i = 0; i < modeChkBoxList.count(); i++)
     {
         modeChkBoxList[i]->setCheckState(Qt::Checked);
-    }
-}
 
-
-void ClusterClientFilterDialog::modeChecked(int checkBoxNum)
-{
-    if (checkBoxNum < modeChkBoxList.count())
-    {
-        if (modeChkBoxList[checkBoxNum]->checkState() == Qt::Checked)
-        {
-           editModeFilterMask |= modeMasks[checkBoxNum];
-        }
-        else if (mWaveChkBoxList[checkBoxNum]->checkState() == Qt::Unchecked)
-        {
-            editModeFilterMask &= ~modeMasks[checkBoxNum];
-        }
     }
 
 }
+
 
 void ClusterClientFilterDialog::restoreModes()
 {
 
-    for (int i = 0; i < NUM_MODEMASKS; i++)
+    for (int i = 0; i < NUM_MODES; i++)
     {
-        if (filterSettings.modeFilterMask & modeMasks[i])
-        {
-            modeChkBoxList[i]->setChecked(true);
-        }
-        else
-        {
-            modeChkBoxList[i]->setChecked(false);
-        }
+
+        modeChkBoxList[i]->setChecked(filterSettings.modeFilters[i]);
 
     }
-
 }
 
 
-unsigned int ClusterClientFilterDialog::getBandFilterMask()
+bool  ClusterClientFilterDialog::checkBandMatch(int bandNum)
 {
-    return filterSettings.bandFilterMask;
+    return *filterSettings.bandFilters[bandNum];
 }
-unsigned int ClusterClientFilterDialog::getModeFilterMask()
+
+bool ClusterClientFilterDialog::checkModeMatch(int bandNum)
 {
-    return filterSettings.modeFilterMask;
+    return *filterSettings.modeFilters[bandNum];
 }
 
 
@@ -552,7 +490,7 @@ void ClusterClientFilterDialog::callsignAddClicked()
                 newItem->setText(callsign);
                 int row = callsignListWidget->count();
                 callsignListWidget->insertItem(row, newItem);
-                callsignEditChanged = true;
+
             }
 
         }
@@ -601,7 +539,7 @@ void ClusterClientFilterDialog::callsignDelClicked()
             if (callsignListWidgetCurrentRow >= 0 && callsignListWidgetCurrentRow < callsignListWidget->count())
             {
                 callsignListWidget->takeItem(callsignListWidgetCurrentRow);
-                callsignEditChanged = true;
+
             }
         }
 
@@ -623,7 +561,7 @@ void ClusterClientFilterDialog::callsignDelAllClicked()
         if (status == QMessageBox::Yes)
         {
             callsignListWidget->clear();
-            callsignEditChanged = true;
+
         }
     }
 }
@@ -646,7 +584,7 @@ void ClusterClientFilterDialog::callsignEditClicked()
                  callsignListWidget->takeItem(row);
                  callsignListWidget->insertItem(row, editItem);
                 //callsignListWidget->setCurrentItem(editItem);
-                callsignEditChanged = true;
+
             }
 
         }
@@ -701,7 +639,7 @@ void ClusterClientFilterDialog::locatorAddClicked()
                 newItem->setText(locator);
                 int row = locatorListWidget->count();
                 locatorListWidget->insertItem(row, newItem);
-                locatorEditChanged = true;
+
             }
 
         }
@@ -725,7 +663,7 @@ void ClusterClientFilterDialog::locatorEditClicked()
                  locatorListWidget->takeItem(row);
                  locatorListWidget->insertItem(row, editItem);
                 //callsignListWidget->setCurrentItem(editItem);
-                locatorEditChanged = true;
+
             }
 
         }
@@ -747,7 +685,7 @@ void ClusterClientFilterDialog::locatorDelClicked()
             if (locatorListWidgetCurrentRow >= 0 && locatorListWidgetCurrentRow < locatorListWidget->count())
             {
                 locatorListWidget->takeItem(locatorListWidgetCurrentRow);
-                locatorEditChanged = true;
+
             }
         }
 
@@ -768,7 +706,7 @@ void ClusterClientFilterDialog::locatorDelAllClicked()
         if (status == QMessageBox::Yes)
         {
             locatorListWidget->clear();
-            locatorEditChanged = true;
+
         }
     }
 }
@@ -790,6 +728,7 @@ void ClusterClientFilterDialog::onCallsignListImport()
     if (!lof.isEmpty())
     {
         callsignListWidget->addItems(lof);
+
     }
 }
 
@@ -808,6 +747,7 @@ void ClusterClientFilterDialog::onLocatorListImport()
     if (!lof.isEmpty())
     {
         locatorListWidget->addItems(lof);
+
     }
 }
 
