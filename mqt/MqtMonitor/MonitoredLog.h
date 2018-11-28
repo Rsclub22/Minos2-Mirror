@@ -19,6 +19,7 @@ class MonitoredLog
       PublishState state = psNotConnected;
       QString server;
       QString publishedName;
+      QString displayName;
       int expectedStanzaCount = 0;
       MinosTestImport *mt = nullptr;
       BaseContestLog * contest = nullptr;
@@ -73,6 +74,8 @@ class MonitoredLog
       void stopMonitor();
       void checkMonitor();
       void processLogStanza( int stanza, const QString &stanzaData );
+      QString getDisplayName() const;
+      void setDisplayName(const QString &value);
 };
 
 #endif // MONITOREDLOG_H

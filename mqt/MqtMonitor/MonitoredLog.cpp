@@ -59,10 +59,20 @@ void MonitoredLog::getLogStanza( int stanza )
     rpc.getCallArgs() ->addParam( st );
     rpc.queueCall( rpcConstants::loggerApp + "@" + server );
 }
+
+QString MonitoredLog::getDisplayName() const
+{
+    return displayName;
+}
+
+void MonitoredLog::setDisplayName(const QString &value)
+{
+    displayName = value;
+}
 void MonitoredLog::checkMonitor()
 {
-   // here we need to check that we haven't got any gaps in the received log
-   // and re-request the lot as necessary
+    // here we need to check that we haven't got any gaps in the received log
+    // and re-request the lot as necessary
    if ( !contest || !frame || state != psPublished )
    {
       return ;

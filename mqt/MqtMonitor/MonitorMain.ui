@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>615</width>
     <height>595</height>
    </rect>
   </property>
@@ -67,12 +67,9 @@
              </widget>
             </item>
             <item>
-             <widget class="QFrame" name="frame_2">
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>Search Parameters</string>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_2">
                <item>
@@ -128,16 +125,6 @@
                   </widget>
                  </item>
                 </layout>
-               </item>
-               <item>
-                <widget class="QPushButton" name="closeButton">
-                 <property name="focusPolicy">
-                  <enum>Qt::NoFocus</enum>
-                 </property>
-                 <property name="text">
-                  <string>Close</string>
-                 </property>
-                </widget>
                </item>
               </layout>
              </widget>
@@ -204,7 +191,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>615</width>
      <height>21</height>
     </rect>
    </property>

@@ -19,7 +19,7 @@ TreeNode::TreeNode(NodeType sn, TreeNode *parent, QString name, MonitorMain *mm)
         parent->nodes.push_back(this);
 }
 TreeNode::TreeNode(NodeType sn, TreeNode *parent, MonitoredLog *log, MonitorMain *mm):
-    ntype(sn), NodeName(log->getPublishedName()), parentItem(parent), mlog(log), monmain(mm)
+    ntype(sn), NodeName(log->getDisplayName()), hintString(log->getPublishedName()), parentItem(parent), mlog(log), monmain(mm)
 {
     if (parent)
         parent->nodes.push_back(this);
@@ -139,12 +139,19 @@ QVariant MonitorTreeModel::data( const QModelIndex &index, int role ) const
     if ( !index.isValid() )
         return QVariant();
 
-    if ( role != Qt::DisplayRole && role != Qt::EditRole )
-        return QVariant();
+    if ( role == Qt::DisplayRole )
+    {
+        TreeNode *item = getItem( index );
 
-    TreeNode *item = getItem( index );
+        return item->data( index.column() );
+    }
+    if (role == Qt::ToolTipRole)
+    {
+        TreeNode *item = getItem( index );
 
-    return item->data( index.column() );
+        return item->hint();
+    }
+    return QVariant();
 }
 
 QVariant MonitorTreeModel::headerData( int section, Qt::Orientation orientation,
@@ -525,7 +532,16 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 {
                    MonitoredLog * ml = new MonitoredLog();
                    ml->initialise( server, key );
-                   ml->setExpectedStanzaCount( value.toInt() );
+                   QStringList args = value.split(";");
+
+                   if (args.count() >= 1)
+                        ml->setExpectedStanzaCount( args[0].toInt() );
+
+                   if (args.count() >= 2)
+                       ml->setDisplayName(args[1]);
+                   else
+                       ml->setDisplayName(key);
+
                    ml->setState(state);
                    ( *stat ) ->slotList.push_back( ml );
                    syncstat = true;

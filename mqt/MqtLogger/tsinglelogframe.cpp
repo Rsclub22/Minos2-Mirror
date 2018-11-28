@@ -714,7 +714,12 @@ void TSingleLogFrame::PublishTimerTimer(  )
          // category LoggerContestLog
          // name filename(?)
          // value stanzaCount
-         RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( stanzaCount ), psPublished );
+          QString name = contest->name.getValue();
+          QString band = contest->band.getValue();
+
+          QString cell = QString::number( stanzaCount ) + ";[" + band + "] " + name;
+
+         RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, cell, psPublished );
          lastStanzaCount = stanzaCount;
       }
    }

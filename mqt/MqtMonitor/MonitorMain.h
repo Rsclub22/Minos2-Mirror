@@ -59,6 +59,7 @@ class TreeNode
     NodeType ntype;
 protected:
     QString NodeName;
+    QString hintString;
     int childNo;
     TreeNode *parentItem;
     MonitoredLog *mlog;
@@ -70,7 +71,7 @@ public:
     TreeNode(NodeType sn, TreeNode *parent, MonitoredLog *log, MonitorMain *mm);
     virtual ~TreeNode();
 
-    virtual NodeType GetNodeType()
+    virtual NodeType GetNodeType() const
     {
         return ntype;
     }
@@ -81,9 +82,13 @@ public:
 
     void clear();
 
-    virtual QString Name (  )
+    virtual QString Name (  ) const
     {
         return NodeName;
+    }
+    virtual QString hint() const
+    {
+        return hintString;
     }
     virtual QString data( int column ) = 0;
 
