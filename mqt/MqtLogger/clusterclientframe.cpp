@@ -358,6 +358,10 @@ void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterC
     {
         dxSpotProxyModel->setFilterRegExp("");
     }
+    else if (modefilterChanged)
+    {
+
+    }
     else if (callsignfilterChanged)
     {
         callSignProxyModel->setFilterRegExp("");

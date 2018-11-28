@@ -92,6 +92,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
         restoreGeometry(geometry);
 
     setupCluster = new SetupDialog();
+
+    connect(setupCluster, SIGNAL(personalDataChanged(QString, QString, QString, QString)), SLOT(personalDataChanged(QString, QString, QString, QString)));
+
     clusterRpc = new Clusterrpc();
 
     clusterRpc->setStandAlone();
@@ -160,6 +163,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     restoreDxSpotViewColumns();
 */
     rawClusterDataView = new QPlainTextEdit();
+    rawClusterDataView->setReadOnly(true);
 
     ui->clusterViewsTab->addTab(dxSpotView, "DX Spots");
     ui->clusterViewsTab->addTab(rawClusterDataView, "Raw Data");
@@ -208,7 +212,13 @@ ClusterMainWindow::~ClusterMainWindow()
 }
 
 
-
+void ClusterMainWindow::personalDataChanged(QString callsign, QString name, QString locator, QString qth)
+{
+    currentUserCallsign = callsign;
+    currentUserName = name;
+    currentUserLocator = locator;
+    currentUserQTH = qth;
+}
 
 
 
@@ -352,8 +362,35 @@ void ClusterMainWindow::connectToHost(QString hostName)
         currentPort = nd[2];
         currentPassword = nd[3];
 
+        if (currentUserName.isEmpty() || currentUserCallsign.isEmpty()
+                || currentUserQTH.isEmpty() || currentUserLocator.isEmpty())
+        {
+            int ret = QMessageBox::warning(this, tr("Connect to Cluster Node"),
+                                           tr("Personel Data missing.\n"
+                                              "User Name: %1\n"
+                                              "User Callsign: %2\n"
+                                              "User QTH: %3\n"
+                                              "User Locator: %4\n"
+                                              "Do you want to enter\\change your details?").arg(currentUserName).arg(currentUserCallsign).arg(currentUserQTH).arg(currentUserLocator),
+                                           QMessageBox::Yes | QMessageBox::Cancel);
+            switch (ret) {
+              case QMessageBox::Yes:
+                  setupCluster->setTabNum(PERSONEL_TABNUM);
+                  onLaunchSetup();
+                  break;
+              case QMessageBox::Discard:
+                  // Discard was clicked
+                  break;
+              default:
+                  // should never be reached
+                  break;
+            }
+        }
+        else
+        {
+            client->connectToHost(currentAddress, currentPort.toUShort());
+        }
 
-        client->connectToHost(currentAddress, currentPort.toUShort());
 
     }
 
@@ -1003,6 +1040,8 @@ void ClusterMainWindow::userCmdButtonWrite(int buttonNumber)
 void ClusterMainWindow::userCommandButtonUpdate(int buttonNumber, ClusterUserCommandData& buttonData)
 {
     userCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1)).arg(buttonData.name) );
+    // update store
+    userCommands[buttonNumber] = buttonData.name + ":" + buttonData.cmdString;
     //QString tTipStr = "Bearing = " + editData.bearing;
     //presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
 }

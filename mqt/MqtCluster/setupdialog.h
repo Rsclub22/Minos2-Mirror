@@ -55,6 +55,12 @@ public:
     void readGeneralSettings();
     QString getTimeToLive();
 
+    void setTabNum(int num);
+
+signals:
+
+    void personalDataChanged(QString, QString, QString, QString);
+
 public slots:
     QString getCurrentNodeName();
 private slots:
