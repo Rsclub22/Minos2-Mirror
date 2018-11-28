@@ -36,10 +36,8 @@ public:
     bool checkBandMatch(int bandNum);
     bool checkModeMatch(int bandNum);
 
-    void copyBandFiltersToEdit();
-    void copyModeFiltersToEdit();
-    void loadBandSettings(QList<bool*> bsl);
-    void loadModeSettings(QList<bool*> msl);
+    void copyBandFiltersToDialog();
+    void copyModeFiltersToDialog();
     void copyCallsignFilterListToListWidget();
     void copyLocatorFilterListToListWidget();
 
@@ -73,22 +71,12 @@ private:
     QListWidget* locatorListWidget;
     int locatorListWidgetCurrentRow;
 
-    QList<bool> editBandFilter;
-
-    QList<bool> editModeFilter;
-
-
 
     bool vhfButtonState;
     bool mWaveButtonState;
     bool modeButtonState;
 
     int instanceNum;
-
-    bool bandEditChanged;
-    bool modeEditChanged;
-    bool callsignEditChanged;
-    bool locatorEditChanged;
 
     void initCheckFilterTab();
     void clearVHFBands();
@@ -117,9 +105,18 @@ private:
     QStringList getItemsTextFromListWidget(QListWidget *lw);
 
 
+    bool bandFiltersChanged();
+    bool modeFiltersChanged();
+    bool callsignFiltersChanged();
+    bool locatorFiltersChanged();
+
+    void copyBandFiltersToFilterSettings();
+    void copyModeFiltersToFilterSettings();
+
+
 private slots:
-    void bandChecked(int checkBoxNum);
-    void modeChecked(int checkBoxNum);
+    //void bandChecked(int checkBoxNum);
+    //void modeChecked(int checkBoxNum);
 
     void vhfButtonSelected();
     void mWaveButtonSelected();

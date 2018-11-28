@@ -158,13 +158,12 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->verticalHeader()->setDefaultSectionSize(10);
     dxSpotView->verticalHeader()->setMinimumSectionSize(10);
 
-
     dxSpotView->setItemDelegate( delegate);
     dxSpotView->resizeRowsToContents();
 
     QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
 
-    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
+    //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
     connect(spotVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onDXSpotVertHeaderClicked(int)));
 
@@ -343,8 +342,8 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 void ClusterClientFrame::filterButtonSelected()
 {
-    filterSetup->copyBandFiltersToEdit();
-    filterSetup->copyModeFiltersToEdit();
+    filterSetup->copyBandFiltersToDialog();
+    filterSetup->copyModeFiltersToDialog();
     filterSetup->copyCallsignFilterListToListWidget();
     filterSetup->copyLocatorFilterListToListWidget();
     filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
@@ -1043,10 +1042,6 @@ void ClusterClientFrame::checkSavedFilters()
         if (cfs != filterSetup->filterSettings)
         {
             filterSetup->filterSettings = cfs;
-            filterSetup->loadBandSettings(filterSetup->filterSettings.bandFilters);
-            filterSetup->loadModeSettings(filterSetup->filterSettings.modeFilters);
-            filterSetup->copyCallsignFilterListToListWidget();
-            filterSetup->copyLocatorFilterListToListWidget();
         }
     }
 }

@@ -233,20 +233,24 @@ void setModeFilter(bool setting, int band)
     *modeFilters[band] = setting;
 }
 
-void operator = (const ClusterClientFilterSettings& ccfs)
+void operator= (const ClusterClientFilterSettings& ccfs)
 {
     callsignFilterList = ccfs.callsignFilterList;
     locatorFilterList = ccfs.locatorFilterList;
-
-    for (int i = 0; i < NUMBANDS; i++)
-    {
-        *bandFilters[i] = *ccfs.bandFilters[i];
-    }
-
-    for (int i = 0; i < NUM_MODES; i++)
-    {
-        *modeFilters[i] = *ccfs.modeFilters[i];
-    }
+    bandFilter50Mhz = ccfs.bandFilter50Mhz;
+    bandFilter70Mhz = ccfs.bandFilter70Mhz;
+    bandFilter144Mhz = ccfs.bandFilter144Mhz;
+    bandFilter432Mhz = ccfs.bandFilter432Mhz;
+    bandFilter1296Mhz = ccfs.bandFilter1296Mhz;
+    bandFilter2300Mhz = ccfs.bandFilter2300Mhz;
+    bandFilter3_4Ghz = ccfs.bandFilter3_4Ghz;
+    bandFilter5_6Ghz = ccfs.bandFilter5_6Ghz;
+    bandFilter10Ghz = ccfs.bandFilter10Ghz;
+    modeFilterCW = ccfs.modeFilterCW;
+    modeFilterPHONEMODE = ccfs.modeFilterPHONEMODE;
+    modeFilterRTTYMODE = ccfs.modeFilterRTTYMODE;
+    modeFilterPSKMODE = ccfs.modeFilterPSKMODE;
+    modeFilterMGMMODE = ccfs.modeFilterMGMMODE;
 
 }
 
