@@ -20,6 +20,10 @@ void MonitoredLog::initialise( const QString &srv, const QString &name )
 
    delete contest;
    contest = new MonitoredContestLog();
+
+   static int slotcnt = 0;
+   contest->cslotno = slotcnt++;
+
    delete mt;
    mt = new MinosTestImport( contest );
    mt->startImportTest();
