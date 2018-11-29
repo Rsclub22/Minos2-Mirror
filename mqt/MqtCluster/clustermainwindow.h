@@ -73,6 +73,9 @@ const QStringList userCommandMenuShortCutKeys = {
                                              };
 
 
+const int TIME_TO_LIVE_TABNUM = 0;
+const int PERSONEL_TABNUM = 1;
+const int NODELIST_TABNUM = 2;
 
 
 class ClusterAddress
@@ -102,6 +105,8 @@ class ClusterMainWindow : public QMainWindow
 public:
     explicit ClusterMainWindow(QWidget *parent = nullptr);
     ~ClusterMainWindow();
+
+
 
 private slots:
     void connectionEstab();
@@ -240,6 +245,7 @@ private slots:
 #endif
 
 
+    void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 };
 
 #endif // CLUSTERMAINWINDOW_H

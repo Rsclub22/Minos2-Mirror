@@ -241,6 +241,7 @@ void SetupDialog::savePersonel()
         config.setValue("Qth", qth);
 
         config.endGroup();
+        emit personalDataChanged(callsign, name, locator, qth);
     }
 }
 
@@ -491,4 +492,11 @@ QStringList SetupDialog::getListOfClusterNames()
 
     return clusterNameList;
 
+}
+
+void SetupDialog::setTabNum(int num)
+{
+
+
+    ui->ClusterSetUpTabWidget->setCurrentIndex(num);
 }
