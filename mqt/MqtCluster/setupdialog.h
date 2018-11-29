@@ -59,7 +59,7 @@ public:
 
 signals:
 
-    void personalDataChanged(QString, QString, QString, QString);
+    void personalDataUpdated(QString, QString, QString, QString);
 
 public slots:
     QString getCurrentNodeName();
@@ -102,10 +102,10 @@ private:
     QString timeToLive;
     bool timeToLiveChanged;
 
-    bool personelDataChanged;
+    bool personalDataChanged;
 
-    void savePersonel();
-    void readPersonel();
+    void savePersonal();
+    void readPersonal();
 
     QString callsign;
     QString name;
@@ -119,7 +119,7 @@ private:
     void loadListClusterToView();
     void loadClusterListToModel();
     void initClusterListModel();
-    void loadPersonelToSetupTab();
+    void loadPersonalToSetupTab();
     void clusterListSave();
     void loadSettingsToModel(QStringList &availNodeNames, QSettings &settings);
 };

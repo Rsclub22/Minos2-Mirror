@@ -74,7 +74,7 @@ const QStringList userCommandMenuShortCutKeys = {
 
 
 const int TIME_TO_LIVE_TABNUM = 0;
-const int PERSONEL_TABNUM = 1;
+const int PERSONAL_TABNUM = 1;
 const int NODELIST_TABNUM = 2;
 
 
@@ -234,11 +234,19 @@ private:
     void showStatusMessage(const QString &message);
     void startDisconnectTimer(int time);
 
+    void echoCmdRawTextWindow(QString cmd);
+    void echoCmd(QString cmd);
+    void echoErrorMsg(QString err);
+    void echoMsg(QString msg);
 
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
     QStringList testSpotList;
     int spotNum = 0;
+
+
+
+
 private slots:
     void testSpotPbClicked();
     void spotTimerTimeOut();

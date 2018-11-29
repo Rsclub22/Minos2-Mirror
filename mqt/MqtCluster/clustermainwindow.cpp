@@ -331,7 +331,9 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
 
             // error if got here
             showStatusMessage(QString("Disconnect Timeout"));
-            trace(QString("Connect to Node - Disconnect Timeout"));
+            QString msg = QString("Connect to Node - Disconnect Timeout");
+            trace(msg);
+            echoErrorMsg(msg);
         }
         else
         {
@@ -366,7 +368,7 @@ void ClusterMainWindow::connectToHost(QString hostName)
                 || currentUserQTH.isEmpty() || currentUserLocator.isEmpty())
         {
             int ret = QMessageBox::warning(this, tr("Connect to Cluster Node"),
-                                           tr("Personel Data missing.\n"
+                                           tr("Personnel Data missing.\n"
                                               "User Name: %1\n"
                                               "User Callsign: %2\n"
                                               "User QTH: %3\n"
@@ -375,7 +377,7 @@ void ClusterMainWindow::connectToHost(QString hostName)
                                            QMessageBox::Yes | QMessageBox::Cancel);
             switch (ret) {
               case QMessageBox::Yes:
-                  setupCluster->setTabNum(PERSONEL_TABNUM);
+                  setupCluster->setTabNum(PERSONAL_TABNUM);
                   onLaunchSetup();
                   break;
               case QMessageBox::Discard:
@@ -408,29 +410,38 @@ void ClusterMainWindow::connectionEstab()
 {
     nodeConnected = true;
     showStatusMessage(QString("Connected to: %1 %2 %3").arg(currentNodeName).arg(currentAddress).arg(currentPort));
-    trace(QString("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort));
+    QString msg = QString("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort);
+    trace(QString(msg));
+    echoMsg(msg);
 }
 
 void ClusterMainWindow::connectionError(QAbstractSocket::SocketError error)
 {
     nodeConnected = false;
     showStatusMessage(QString("Connection Error: Error Code %1").arg(QString::number(error)));
-    trace(QString("Connection failed error %1").arg(error));
+    QString msg = QString("Connection failed error %1").arg(error);
+    trace(msg);
+    echoErrorMsg(msg);
 }
 
 
 
 void ClusterMainWindow::logIn()
 {
-    trace(QString("Login Start - Send logon message\n"));
+    QString msg = QString("Login Start - Send logon message\n");
+    trace(msg);
+    echoMsg(msg);
     client->login(QString("%1\r\n").arg(currentUserCallsign), currentPassword);
     loginStart = true;
+    echoMsg(QString("Logging in with callsign %1").arg(currentUserCallsign));
 
 }
 
 void ClusterMainWindow::loggedOut()
 {
-    trace(QString("Logged Out of node  %1").arg(currentNodeName));
+    QString msg = QString("Logged Out of node  %1").arg(currentNodeName);
+    trace(QString(msg));
+    echoErrorMsg(msg);
     nodeConnected = false;
     loginStart = false;
     loginSuccess = false;
@@ -460,18 +471,40 @@ void ClusterMainWindow::disconnectNode()
 {
     trace(QString("Disconnect Node %1").arg(currentNodeName));
     //client->logout();
-    txText(dxCluster->quit());
+    QString msg = dxCluster->quit();
+    txText(msg);
+    echoCmd(msg);
 
 }
 
 
-// ********** handle rx messages *********** //
 
 
 void ClusterMainWindow::messageRx(QString msg)
 {
     //qDebug() << msg;
     rawClusterDataView->appendPlainText(msg.remove('\x07'));
+}
+
+
+void ClusterMainWindow::echoCmdRawTextWindow(QString cmd)
+{
+    rawClusterDataView->appendPlainText(cmd.remove('\n'));
+}
+
+void ClusterMainWindow::echoCmd(QString cmd)
+{
+    echoCmdRawTextWindow(QString("<%1>").arg(cmd));
+}
+
+void ClusterMainWindow::echoMsg(QString msg)
+{
+    echoCmdRawTextWindow(QString("[%1]").arg(msg));
+}
+
+void ClusterMainWindow::echoErrorMsg(QString err)
+{
+    echoCmdRawTextWindow(QString("[Error: %1]").arg(err));
 }
 
 void ClusterMainWindow::checkedLoggedIn(QString msg)
@@ -499,10 +532,13 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
 void ClusterMainWindow::handleStartFile()
 {
     QStringList listCmds;
-
-    if (FileExists(CLUSTER_PATH + CLUSTER_START_FILE))
+    QString fileName = CLUSTER_PATH + CLUSTER_START_FILE;
+    if (FileExists(fileName))
     {
-        QFile inputFile(CLUSTER_PATH + CLUSTER_START_FILE);
+        QString msg = QString("Start file found - %1").arg(fileName);
+        trace(msg);
+        echoMsg(msg);
+        QFile inputFile(fileName);
         if (inputFile.open(QIODevice::ReadOnly))
         {
            QTextStream in(&inputFile);
@@ -514,20 +550,39 @@ void ClusterMainWindow::handleStartFile()
            inputFile.close();
         }
     }
+    else
+    {
+        QString msg = QString("Cluster Start File missing - %1!").arg(fileName);
+        trace(msg);
+        echoErrorMsg(msg);
+        return;
+    }
 
     if (!listCmds.isEmpty())
     {
+        QString msg = QString("Sending Start Commands");
+        trace(msg);
+        echoMsg(msg);
         for (int i = 0; i < listCmds.count(); ++i)
         {
             QString cmd = listCmds[i];
             if (cmd != "")
             {
-                if (cmd[0] == CLUSTER_START_COMMENT_DELIMTER)
-                {
-                    txText(cmd);
-                }
+                if (cmd[0] != CLUSTER_START_COMMENT_DELIMTER)
+                txText(cmd);
             }
         }
+
+        msg = QString("Finished sending Start Commands");
+        trace(msg);
+        echoMsg(msg);
+
+    }
+    else
+    {
+        QString msg = QString("Start file empty %1").arg(fileName);
+        trace(msg);
+        echoErrorMsg(msg);
     }
 }
 
@@ -785,6 +840,13 @@ void ClusterMainWindow::txText(QString msg)
     if (loginSuccess)
     {
        client->sendData(msg);
+       echoCmd(msg);
+
+    }
+    else
+    {
+        QString err = "Sending command - Not logged in  - " + msg;
+        echoErrorMsg(err);
     }
 
 }

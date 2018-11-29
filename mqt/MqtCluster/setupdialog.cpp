@@ -25,7 +25,7 @@ SetupDialog::SetupDialog(QWidget *parent) :
     ui(new Ui::SetupDialog)
     ,listDataChanged(false)
     ,timeToLiveChanged(false)
-    ,personelDataChanged(false)
+    ,personalDataChanged(false)
 {
     ui->setupUi(this);
 
@@ -45,8 +45,8 @@ SetupDialog::SetupDialog(QWidget *parent) :
     connect(ui->locatorEdit, SIGNAL(editingFinished()), this, SLOT(locatorEditFinished()));
     connect(ui->qthEdit, SIGNAL(editingFinished()), this, SLOT(qthEditFinished()));
 
-    readPersonel();
-    loadPersonelToSetupTab();
+    readPersonal();
+    loadPersonalToSetupTab();
 
 
 
@@ -74,7 +74,7 @@ void SetupDialog::saveButtonPushed()
 {
 
     clusterListSave();
-    savePersonel();
+    savePersonal();
     saveGeneralSettings();
 
 }
@@ -98,8 +98,8 @@ void SetupDialog::cancelButtonPushed()
     clusterListModel->setHeaderData(PasswdColNum, Qt::Horizontal, QObject::tr("Password"));
     loadSettingsToModel(availNodeNames, settings);
 
-    readPersonel();
-    loadPersonelToSetupTab();
+    readPersonal();
+    loadPersonalToSetupTab();
 
     readGeneralSettings();
     loadGeneralToSetupTab();
@@ -182,7 +182,7 @@ void SetupDialog::callsignEditFinished()
 
     if (!ui->callsignEdit->text().trimmed().isEmpty())
     {
-        personelDataChanged = true;
+        personalDataChanged = true;
     }
 
 }
@@ -194,7 +194,7 @@ void SetupDialog::nameEditFinshed()
 
     if (!ui->nameEdit->text().trimmed().isEmpty())
     {
-        personelDataChanged = true;
+        personalDataChanged = true;
     }
 
 }
@@ -204,7 +204,7 @@ void SetupDialog::locatorEditFinished()
 
     if (!ui->locatorEdit->text().trimmed().isEmpty())
     {
-        personelDataChanged = true;
+        personalDataChanged = true;
     }
 
 
@@ -221,9 +221,9 @@ void SetupDialog::qthEditFinished()
 
 
 
-void SetupDialog::savePersonel()
+void SetupDialog::savePersonal()
 {
-    if (personelDataChanged)
+    if (personalDataChanged)
     {
         callsign = ui->callsignEdit->text().trimmed();
         name = ui->nameEdit->text().trimmed();
@@ -241,12 +241,12 @@ void SetupDialog::savePersonel()
         config.setValue("Qth", qth);
 
         config.endGroup();
-        emit personalDataChanged(callsign, name, locator, qth);
+        emit personalDataUpdated(callsign, name, locator, qth);
     }
 }
 
 
-void SetupDialog::readPersonel()
+void SetupDialog::readPersonal()
 {
     // need to check for no ini file...*************
 
@@ -295,7 +295,7 @@ QString SetupDialog::getCurrentNodeName()
 
 
 
-void SetupDialog::loadPersonelToSetupTab()
+void SetupDialog::loadPersonalToSetupTab()
 {
 
     ui->callsignEdit->setText(callsign);
