@@ -212,14 +212,14 @@ void MinosLoggerEvents::SendSpotBrgStrToRot(QString bearing)
     emit mle.SpotBrgStrToRot(bearing);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendSetToLog(memoryData::memData spotData)
+void MinosLoggerEvents::SendSpotToLog(memoryData::memData spotData)
 {
-    emit mle.SetToLog(spotData);
+    emit mle.DxSpotToLog(spotData);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendSetToMemory(memoryData::memData spotData)
+void MinosLoggerEvents::SendSpotToMemory(memoryData::memData spotData)
 {
-    emit mle.SetToMemory(spotData);
+    emit mle.DxSpotToMemory(spotData);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::sendXferEnabled(bool s, BaseContestLog *c, QString basename)

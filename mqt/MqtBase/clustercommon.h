@@ -44,6 +44,8 @@ const int TTLVALUE = 11;
 
 // Cluster Data and View Columns
 
+
+
 const int TIME_COL_NUM = 0;
 const int FREQ_COL_NUM = 1;
 const int DXSPOT_CALL_COL_NUM = 2;

@@ -56,8 +56,8 @@ signals:
    void BrgStrToRot(QString);
    void FreqStrToRig(QString);
    void SpotBrgStrToRot(QString);
-   void SetToLog(memoryData::memData);
-   void SetToMemory(memoryData::memData);
+   void DxSpotToLog(memoryData::memData);         // cluster spot
+   void DxSpotToMemory(memoryData::memData);      // cluster spot
 
 
    void CountrySelect(QString cty, BaseContestLog *c);
@@ -122,8 +122,8 @@ public:
    static void SendBrgStrToRot(QString);
    static void SendFreqStrToRig(QString);
    static void SendSpotBrgStrToRot(QString);
-   static void SendSetToLog(memoryData::memData);
-   static void SendSetToMemory(memoryData::memData);
+   static void SendSpotToLog(memoryData::memData);     // cluster spot
+   static void SendSpotToMemory(memoryData::memData);  // cluster spot
 
    static void sendUpdateStats(BaseContestLog *c );
    static void sendFiltersChanged(BaseContestLog *c );

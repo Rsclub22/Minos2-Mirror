@@ -55,7 +55,7 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, SIGNAL(RotBearingChanged(int,BaseContestLog*)), this, SLOT(onRotBearingChanged(int,BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
     // from cluster frame
-    connect(&MinosLoggerEvents::mle, SIGNAL(DXSpotToMemory(memoryData::memData)), this, SLOT(DXSpotToMemory(memoryData::memData)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToMemory(memoryData::memData)), this, SLOT(DXSpotToMemory(memoryData::memData)));
 
     reloadColumns();
 
