@@ -1,6 +1,7 @@
 #ifndef MONITOREDLOG_H
 #define MONITOREDLOG_H
 #include "base_pch.h"
+#include "MonitoredContestLog.h"
 
 class MonitoringFrame;
 class MinosTestImport;
@@ -22,7 +23,7 @@ class MonitoredLog
       QString displayName;
       int expectedStanzaCount = 0;
       MinosTestImport *mt = nullptr;
-      BaseContestLog * contest = nullptr;
+      MonitoredContestLog * contest = nullptr;
       MonitoringFrame *frame = nullptr;
 
    public:

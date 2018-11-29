@@ -307,6 +307,10 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->callsignEdit->setValidator(new UpperCaseValidator(true));
     ui->locEdit->setValidator(new UpperCaseValidator(true));
     ui->exchangeEdit->setValidator(new UpperCaseValidator(true));
+    ui->callsignEdit->installEventFilter(this);
+    ui->locEdit->installEventFilter(this);
+    ui->exchangeEdit->installEventFilter(this);
+
 
     TMatchThread::InitialiseMatchThread();
     ui->thisMatchFrame->initialise();
@@ -359,7 +363,24 @@ void MonitorMain::changeEvent( QEvent* e )
         settings.setValue("geometry", saveGeometry());
     }
 }
-void MonitorMain::onStdInRead(QString cmd)
+bool MonitorMain::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *ke = dynamic_cast<QKeyEvent *>(event);
+        int Key = ke->key();
+
+        if (Key == Qt::Key_Escape)
+        {
+            ui->callsignEdit->clear();
+            ui->locEdit->clear();
+            ui->exchangeEdit->clear();
+            ui->callsignEdit->setFocus();
+            return true;
+        }
+    }
+    return false;
+}void MonitorMain::onStdInRead(QString cmd)
 {
     trace("Command read from stdin: " + cmd);
     if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)

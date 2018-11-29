@@ -215,6 +215,7 @@ private:
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
+    virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
     StdInReader stdinReader;
     QString localServerName;

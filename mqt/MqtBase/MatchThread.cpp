@@ -860,7 +860,8 @@ void OtherLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog 
    found.reset();
    foreach(MapWrapper<BaseMatchContest> test, contestMatchList)
    {
-       if (test.wt->getContactLog() == ccon)
+       const BaseContestLog *tcon = test.wt->getContactLog();
+       if (tcon == ccon)
        {
             found = test.wt;
             MapWrapper<MatchContact> mct(new MatchLogContact( ccon, cct ));
