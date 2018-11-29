@@ -959,14 +959,10 @@ void ClusterMainWindow::initUserCommandButtons()
 
 
 
-
-
-
-
     for (int i = 0; i < ui_userCommandButtons.count(); i++)
     {
 
-        userCmdButton.append(new RotPresetButton(ui_userCommandButtons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i]));
+        userCmdButton.append(new RotPresetButton(ui_userCommandButtons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], userCmdButtonLabels));
 
         connect(userCmdButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {userCmdButtonRead(i);});
         connect(userCmdButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showUserCmdButtonMenu(i);});

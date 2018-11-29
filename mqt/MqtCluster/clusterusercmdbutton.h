@@ -2,7 +2,7 @@
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//                      Rotator Control
+//                      Cluster Control
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
 //
 //
@@ -10,8 +10,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef ROTPRESETBUTTON_H
-#define ROTPRESETBUTTON_H
+#ifndef CLUSTERUSERCMDBUTTON_H
+#define CLUSTERUSERCMDBUTTON_H
+
+
 
 #include <QShortcut>
 #include <QToolButton>
@@ -20,17 +22,17 @@
 
 
 
-//class RotPreset;
-class RotPresetButton : public QObject
+
+class ClusterUserCmdButton : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit RotPresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* shiftkey, QStringList buttonLabels);
+    explicit ClusterUserCmdButton(QToolButton *b, int num, QShortcut* key, QShortcut* shiftkey);
 
-    virtual ~RotPresetButton() override;
+    virtual ~ClusterUserCmdButton() override;
 
-    QToolButton* presetButton;
+    QToolButton* userCmdButton;
 
     void showButtonMenu();
     void setText(QString t);
@@ -38,12 +40,12 @@ public:
     QString getText();
 signals:
 
-    void presetShortCutRecall();
-    void presetShiftShortCutRecall();
-    void presetReadAction();
-    void presetEditAction();
-    void presetWriteAction();
-    void presetClearAction();
+    void userCmdShortCutRecall();
+    void userCmdShiftShortCutRecall();
+    void userCmdSendAction();
+    void userCmdEditAction();
+    void userCmdNewAction();
+    void userCmdClearAction();
 
 
 private:
@@ -52,19 +54,19 @@ private:
     QMenu* presetMenu;
     QShortcut* shortKey;
     QShortcut* shiftShortKey;
-    QAction* readAction;
-    QAction* writeAction;
+    QAction* sendAction;
+    QAction* newAction;
     QAction* editAction;
     QAction* clearAction;
 
 
-    int presetNum;
+    int userCmdNum;
 
 private slots:
     //void presetUpdate();
 
-    void presetShortCutSelected();
-    void readActionSelected();
+    void shortCutSelected();
+    void sendActionSelected();
     void editActionSelected();
     void writeActionSelected();
     void clearActionSelected();
@@ -74,10 +76,12 @@ private slots:
 
 
 
-    void memoryRecallShortCutSelected();
-    void memoryShiftShortCutSelected();
+    void recallShortCutSelected();
+    void recallShiftShortCutSelected();
 };
 
 
 
-#endif // ROTPRESETBUTTON_H
+
+
+#endif // CLUSTERUSERCMDBUTTON_H

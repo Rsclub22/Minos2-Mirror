@@ -141,5 +141,6 @@ enum overlapStat { NO_OVERLAP, NEG_OVERLAP, POS_OVERLAP};
 const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
+const QStringList presetButtonLabels = {"&Read", "&New", "&Edit", "&Clear"};
 
 #endif // ROTATORCOMMON_H

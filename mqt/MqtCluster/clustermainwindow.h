@@ -152,6 +152,7 @@ private:
 
     QVector<BandDetail*> bands;
 
+    const QStringList userCmdButtonLabels = {"&Send", "&New", "&Edit", "&Clear"};
     QList<RotPresetButton *> userCmdButton;
     QList<QShortcut *> shortCutKeyList;
     QList<QShortcut *> shiftShortCutKeyList;
@@ -202,6 +203,8 @@ private:
     bool purgeSpotFlag;
 
     bool reconnectFlag;
+
+
 
     QString geoStr;         // geometry registry location
 

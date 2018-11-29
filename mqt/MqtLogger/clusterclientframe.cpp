@@ -43,8 +43,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     purgeTimer = new QTimer(this);
 
-    qDebug() << "new cluster frame, instance num = " << instanceNum;
-
     checkNewSpotsTimer = new QTimer(this);
     connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));
     spotQueue.clear();

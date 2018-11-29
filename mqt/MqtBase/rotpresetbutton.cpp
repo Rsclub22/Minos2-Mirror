@@ -14,7 +14,7 @@
 
 
 
-RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* shiftkey)
+RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* shiftkey, QStringList buttonLabels)
 {
     presetNum = num;
 
@@ -28,11 +28,11 @@ RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key, QShort
 
     shortKey = key;
     shiftShortKey = shiftkey;
-    readAction = new QAction("&Read", presetButton);
-    //writeAction = new QAction("&Write",presetButton);
-    writeAction = new QAction("&New",presetButton);
-    editAction = new QAction("&Edit", presetButton);
-    clearAction = new QAction("&Clear",presetButton);
+    readAction = new QAction(buttonLabels[0], presetButton);
+    //writeAction = new QAction(buttonLabels[1],presetButton);
+    writeAction = new QAction(buttonLabels[1],presetButton);
+    editAction = new QAction(buttonLabels[2], presetButton);
+    clearAction = new QAction(buttonLabels[3],presetButton);
     presetMenu->addAction(readAction);
     presetMenu->addAction(writeAction);
     presetMenu->addAction(editAction);

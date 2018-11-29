@@ -81,7 +81,7 @@ void RotPresets::initPresetButtons()
     {
 
         // build array of buttons
-        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i]));
+        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], presetButtonLabels));
 
         connect(presetButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
         connect(presetButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
