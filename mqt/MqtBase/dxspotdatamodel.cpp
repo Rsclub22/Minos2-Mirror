@@ -24,7 +24,7 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
 
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal && role != Qt::DisplayRole)
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
         switch (section) {
             case TIME_COL_NUM:
