@@ -93,7 +93,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     setupCluster = new SetupDialog();
 
-    connect(setupCluster, SIGNAL(personalDataChanged(QString, QString, QString, QString)), SLOT(personalDataChanged(QString, QString, QString, QString)));
+    connect(setupCluster, SIGNAL(personalDataUpdated(QString, QString, QString, QString)), SLOT(personalDataChanged(QString, QString, QString, QString)));
 
     clusterRpc = new Clusterrpc();
 

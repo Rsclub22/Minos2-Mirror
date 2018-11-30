@@ -411,7 +411,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
 {
     if (index.column() == FREQ_COL_NUM)
     {
-        QString freq = spotProxyModel->data(index).toString();
+        QString freq = spotProxyModel->data(index, DataStoredRole).toString();
         sendFreqToRig(freq);
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
@@ -422,17 +422,15 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     }
     else if (index.column() == DXBRG_COL_NUM)
     {
-        QString brg = spotProxyModel->data(index).toString();
+        QString brg = spotProxyModel->data(index, DataStoredRole).toString();
         sendBrgToRot(brg);
     }
 }
 
 void ClusterClientFrame::handleVertHeaderClickedItems(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
-    QVariant d = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM));
-    bool alreadyInMemory = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool();
     // check if spot has been sent to memory
-    if (!spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool())
+    if (!spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
     {
         sendSpotToMemory(spotProxyModel, row);
 
@@ -709,7 +707,7 @@ void ClusterClientFrame::purgeSpots()
         if (dxSpotDataModel->rowCount() > 0)
         {
            purgeSpotFlag = true;
-           while (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0)).toString()))   // spot not timed out
+           while (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0), DataStoredRole).toString()))   // spot not timed out
            {
                dxSpotDataModel->removeRows(dxSpotDataModel->rowCount() - 1, 1, QModelIndex());
                if (dxSpotDataModel->rowCount() == 0)
@@ -772,7 +770,7 @@ void ClusterClientFrame::on_freqActionSelected()
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
-            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM)).toString();
+            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM), DataStoredRole).toString();
             sendFreqToRig(freq);
         }
     }
@@ -789,7 +787,7 @@ void ClusterClientFrame::bearingActionSelected()
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
-            QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM)).toString();
+            QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM), DataStoredRole).toString();
             sendBrgToRot(brg);
         }
     }
@@ -820,7 +818,7 @@ void ClusterClientFrame::memoryActionSelected()
         if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
         {
             // check if spot has been sent to memory
-            if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM)).toBool())
+            if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
             {
                 sendSpotToMemory(filterProxyModelList[curTab], currentRow);
             }
@@ -838,18 +836,18 @@ void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyM
     memoryData::memData spotData = getSpotDataToMemoryVariable(spotProxyModel, row);
 
     MinosLoggerEvents::SendSpotToMemory(spotData);
-    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, Qt::EditRole);
+    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, DataStoredRole);
 
 }
 
 memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
     memoryData::memData spotData;
-    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM)).toString();
-    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM)).toString();
-    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM)).toString().remove('.').append(QString("000"));
+    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
+    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM), DataStoredRole).toString();
+    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole).toString().remove('.').append(QString("000"));
     spotData.mode = memDefData::DEFAULT_MODE;
-    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM)).toString();
+    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
     return spotData;
 }
 
@@ -940,11 +938,11 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c)
           int spotCount = dxSpotDataModel->rowCount();
           for (int spotNumber = 0; spotNumber < spotCount; spotNumber++)
           {
-              QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), Qt::DisplayRole).toString();
-              bool callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), Qt::DisplayRole).toBool();
+              QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+              bool callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
 
-              QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), Qt::DisplayRole).toString();
-              bool locatorWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), Qt::DisplayRole).toBool();
+              QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+              bool locatorWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
               locator = locator.mid(0, 4);
 
               if ( callsign != "" && callsignWkd == BOOL_NO)
@@ -956,7 +954,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c)
                   {
                       if ((*i).wt->cs == mcs)
                       {
-                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, Qt::EditRole);
+                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
                           worked = true;
 
                       }
@@ -970,7 +968,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c)
                   {
                       if ((*i).wt->loc.loc.getValue().mid(0,4) == locator)
                       {
-                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, Qt::EditRole);
+                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
                           worked = true;
 
                       }
@@ -1088,7 +1086,7 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
     bool ok = false;
-    int spotMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM)).toString().toInt(&ok);
+    int spotMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
     if (spotMask < NUMBANDS)
     {
        return filterSetup->filterSettings.getBandFilter(spotMask);
@@ -1109,7 +1107,7 @@ bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
     {
         if (searchParameter.contains(SEARCH_LOC_EXP))
         {
-            QString loc = sourceModel()->data(sourceModel()->index(sourceRow, DXLOC_COL_NUM)).toString().mid(0,4);
+            QString loc = sourceModel()->data(sourceModel()->index(sourceRow, DXLOC_COL_NUM), DataStoredRole).toString().mid(0,4);
             if (loc.contains(searchParameter, Qt::CaseInsensitive))
             {
                 return true;
@@ -1117,7 +1115,7 @@ bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
         }
         else
         {
-            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM)).toString());
+            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
             spotCall.validate();
             if (spotCall.realCall.contains(searchParameter, Qt::CaseInsensitive))
             {
@@ -1139,7 +1137,7 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
     {
         if (matchBand(sourceRow))
         {
-            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM)).toString());
+            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
             spotCall.validate();
             foreach (const QString &str, filterSetup->getCallsignFilterList())
             {
@@ -1163,7 +1161,7 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
         if (matchBand(sourceRow))
         {
             QModelIndex index = sourceModel()->index(sourceRow, DXLOC_COL_NUM);
-            QString locator = sourceModel()->data(index).toString().mid(0,4);
+            QString locator = sourceModel()->data(index, DataStoredRole).toString().mid(0,4);
             if (locator != "")
             {
                 if (filterSetup->getLocatorFilterList().contains(locator))

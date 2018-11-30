@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <QDebug>
 #include "cutils.h"
 #include "htmldelegate.h"
 #include "dxspotdatamodel.h"
@@ -27,33 +28,33 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
         switch (section) {
-            case TIME_COL_NUM:
+            case TIME_COL_NUM:          // 0
                 return tr("Time");
-            case FREQ_COL_NUM:
+            case FREQ_COL_NUM:          // 1
                 return tr("Freq");
-            case DXSPOT_CALL_COL_NUM:
+            case DXSPOT_CALL_COL_NUM:   // 2
                 return tr("Dx");
-            case DXSPOT_CALL_WORKED_COL_NUM:
+            case DXSPOT_CALL_WORKED_COL_NUM:  // 3
                 return tr("Wkd");
-            case DXLOC_COL_NUM:
+            case DXLOC_COL_NUM:         // 4
                 return tr("Loc");
-            case DXDIST_COL_NUM:
+            case DXDIST_COL_NUM:        // 5
                 return tr("Dist");
-            case DXBRG_COL_NUM:
+            case DXBRG_COL_NUM:        // 6
                 return tr("Brg");
-            case DXLOC_WORKED_COL_NUM:
+            case DXLOC_WORKED_COL_NUM:  // 7
                 return tr("Wkd");
-            case SPOT_CALL_COL_NUM:
+            case SPOT_CALL_COL_NUM:     // 8
                 return tr("Spotter");
-            case SPOTLOC_COL_NUM:
+            case SPOTLOC_COL_NUM:       // 9
                 return tr("Loc");
-            case COMMENT_COL_NUM:
+            case COMMENT_COL_NUM:       // 10
                 return tr("Comment");
-            case DXBANDMASK_COL_NUM:
+            case DXBANDMASK_COL_NUM:    // 11
                 return tr("Band Mask");
-            case MODEMASK_COL_NUM:
+            case MODEMASK_COL_NUM:      // 12
                 return tr("mode Mask");
-            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
+            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:  // 13
                 return tr("Spot to Mem Flag");
             default:
             return QVariant();
@@ -145,10 +146,10 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
         {
             case TIME_COL_NUM:
                 d = dxSpot->spotTime;
-            break;
+                break;
             case FREQ_COL_NUM:
                 d = dxSpot->dxFreq;
-            break;
+                break;
             case DXSPOT_CALL_COL_NUM:
                 if (dxSpot->dxCallWorked == BOOL_YES)
                 {
@@ -156,10 +157,8 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                     d = HtmlFontColour(colour);
                 }
                 d = d + dxSpot->dxCall;
-            break;
-            case DXSPOT_CALL_WORKED_COL_NUM:
-                d = dxSpot->dxCallWorked;
-            break;
+                break;
+
             case DXLOC_COL_NUM:
                 if (dxSpot->dxLocatorWorked == BOOL_YES)
                 {
@@ -167,48 +166,89 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                     d = HtmlFontColour(colour);
                 }
                 d = d + dxSpot->dxLocator;
-            break;
+                break;
             case DXDIST_COL_NUM:
                 d = dxSpot->dxDist;
-            break;
+                break;
             case DXBRG_COL_NUM:
                 d = dxSpot->dxBrg;
-            break;
-            case DXLOC_WORKED_COL_NUM:
-                d = dxSpot->dxLocatorWorked;
-            break;
+                break;
             case SPOT_CALL_COL_NUM:
                 d = dxSpot->spotterCall;
-            break;
+                break;
             case SPOTLOC_COL_NUM:
                 d = dxSpot->spotterLocator;
-            break;
+                break;
             case COMMENT_COL_NUM:
                 d = dxSpot->spotComment;
-            break;
+                break;
+            default:
+                d = "";
+        }
+        return d;
+    }
+
+    if (role == DataStoredRole)
+    {
+        int col = index.column();
+
+        QVariant d;
+        switch (col)
+        {
+            case TIME_COL_NUM:
+                d = dxSpot->spotTime;
+                break;
+            case FREQ_COL_NUM:
+                d = dxSpot->dxFreq;
+                break;
+            case DXSPOT_CALL_COL_NUM:
+                d = dxSpot->dxCall;
+                break;
+            case DXLOC_COL_NUM:
+                d = dxSpot->dxLocator;
+                break;
+            case DXDIST_COL_NUM:
+                d = dxSpot->dxDist;
+                break;
+            case DXBRG_COL_NUM:
+                d = dxSpot->dxBrg;
+                break;
+            case SPOT_CALL_COL_NUM:
+                d = dxSpot->spotterCall;
+                break;
+            case SPOTLOC_COL_NUM:
+                d = dxSpot->spotterLocator;
+                break;
+            case COMMENT_COL_NUM:
+                d = dxSpot->spotComment;
+                break;
+            case DXSPOT_CALL_WORKED_COL_NUM:
+                d = dxSpot->dxCallWorked;
+                break;
+            case DXLOC_WORKED_COL_NUM:
+                d = dxSpot->dxLocatorWorked;
+                break;
+            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
+                d = dxSpot->sentToMemory;
+                break;
             case DXBANDMASK_COL_NUM:
                 d = dxSpot->dxFreqMaskStr;
-            break;
+                break;
             case MODEMASK_COL_NUM:
                 d = dxSpot->dxModeMaskStr;
             break;
-            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
-                d = dxSpot->sentToMemory;
-            break;
-            default:
-                d = "";
-
         }
 
         return d;
     }
+
     return QVariant();
 }
 
 
 bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-    if (index.isValid() && role == Qt::EditRole)
+    if (index.isValid() && role == DataStoredRole)
     {
             int row = index.row();
 

@@ -19,6 +19,8 @@
 
 const int dxSpotColCount = 14;
 
+#define DataStoredRole Qt::UserRole + 0
+
 class HtmlDelegate;
 
 class DxSpotDataModel : public QAbstractTableModel
