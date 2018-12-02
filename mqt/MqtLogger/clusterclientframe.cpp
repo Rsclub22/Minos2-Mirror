@@ -854,12 +854,14 @@ memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFi
 
 void ClusterClientFrame::clearSpotActionSelected()
 {
+    int row;
+
     int curTab = ui->dxSpotTab->currentIndex();
 
     if (filterProxyModelList[curTab]->rowCount() > 0)
     {
-        int currentRow = spotViewList[curTab]->currentIndex().row();
-        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
+        row = spotViewList[curTab]->currentIndex().row();
+        if (row >= 0 && row < filterProxyModelList[curTab]->rowCount())
         {
             int ret = QMessageBox::warning(this, tr("Cluster"),
                                            tr("Please confirm you want to delete this spot?"),
@@ -867,9 +869,14 @@ void ClusterClientFrame::clearSpotActionSelected()
 
             if (ret == QMessageBox::Yes)
             {
-                //holdUpdateFlag = true;
-                filterProxyModelList[curTab]->removeRows(currentRow, 1, QModelIndex());
-                //purgeSpotFlag = false;
+
+                // we need to convert the row index back to the data model
+                // map to source row
+                row = filterProxyModelList[curTab]->mapToSource(spotViewList[curTab]->currentIndex()).row();
+                // reverse the row because display is in reverse
+                row = filterProxyModelList[0]->rowCount() - 1 - row;
+                dxSpotDataModel->removeRows(row, 1, QModelIndex());
+
             }
         }
 

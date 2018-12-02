@@ -486,8 +486,7 @@ bool DxSpotDataModel::removeRows(int _row, int count, const QModelIndex &parent)
         dxSpotData.removeAt(row);
     }
 */
-    //int i = _row + count - 1;
-    //while (i )
+
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
         dxSpotData.removeAt(row);
