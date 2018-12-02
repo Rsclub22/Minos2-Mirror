@@ -549,17 +549,23 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
              QVector< MonitoredLog *>::iterator log = std::find_if( ( *stat ) ->slotList.begin(), ( *stat ) ->slotList.end(), MonitoredLogCmp( key ) );
              if (state == psPublished)
              {
+                 QStringList args = value.split(";");
                 if ( log == ( *stat ) ->slotList.end() )
                 {
                    MonitoredLog * ml = new MonitoredLog();
                    ml->initialise( server, key );
-                   QStringList args = value.split(";");
+
 
                    if (args.count() >= 1)
+                   {
+                       trace(QString("args 0 %1 ").arg(args[0]));
                         ml->setExpectedStanzaCount( args[0].toInt() );
-
+                   }
                    if (args.count() >= 2)
+                   {
+                       trace(QString("args 1 %2").arg(args[1]));
                        ml->setDisplayName(args[1]);
+                   }
                    else
                        ml->setDisplayName(key);
 
@@ -570,7 +576,11 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 }
                 else
                 {
-                   ( *log ) ->setExpectedStanzaCount( value.toInt() );
+                    if (args.count() >= 1)
+                    {
+                        trace(QString("args 0 %1 ").arg(args[0]));
+                         (*log)->setExpectedStanzaCount( args[0].toInt() );
+                    }
                    (*log)->setState(state);
                 }
              }
