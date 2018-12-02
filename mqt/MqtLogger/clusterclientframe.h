@@ -130,6 +130,7 @@ private:
     QTimer* purgeTimer;
     int timeToLive;
     bool purgeSpotFlag;
+    bool holdUpdateFlag;
 
     QTimer* checkNewSpotsTimer;
 
@@ -165,7 +166,7 @@ private:
     void addDxSpotToTable(QString spot);
     bool spotTimedOut(QString spotTime);
 
-    void handleDxSpots(QVector<QString> spotQueue);
+    void handleDxSpots(QVector<QString> &spotQueue);
 
     void setAllTabsColor(QColor c);
     void setupSearchSpotView();
@@ -185,6 +186,9 @@ private:
     void newLocatorSpotIndToggle(bool on);
 
     void checkSavedFilters();
+
+    bool event(QEvent *event) override;
+
 private slots:
 
 
