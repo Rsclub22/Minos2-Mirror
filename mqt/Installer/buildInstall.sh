@@ -72,8 +72,8 @@ fi
 
 cp -r ../Minos2/mqt/ControlFiles/Configuration/* ./Configuration
 cp -r ../Minos2/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
-rm -rf ../Minos2/mqt/ControlFiles/Configuration/WindowsFiles
-rm -rf ../Minos2/mqt/ControlFiles/Configuration/LinuxFiles
+rm -rf ./Configuration/WindowsFiles
+rm -rf ./Configuration/LinuxFiles
 cp ../Minos2/mqt/Installer/Minos.sh . 
 
 cd Configuration
