@@ -29,6 +29,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     purgeTimer(nullptr),
     timeToLive(0),
     purgeSpotFlag(false),
+    holdUpdateFlag(false),
     instanceNum(instanceNum)
 {
 
@@ -411,7 +412,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
 {
     if (index.column() == FREQ_COL_NUM)
     {
-        QString freq = spotProxyModel->data(index, DataStoredRole).toString();
+        QString freq = spotProxyModel->data(index, DataStoredInverseRole).toString();
         sendFreqToRig(freq);
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
@@ -422,7 +423,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     }
     else if (index.column() == DXBRG_COL_NUM)
     {
-        QString brg = spotProxyModel->data(index, DataStoredRole).toString();
+        QString brg = spotProxyModel->data(index, DataStoredInverseRole).toString();
         sendBrgToRot(brg);
     }
 }
@@ -430,7 +431,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
 void ClusterClientFrame::handleVertHeaderClickedItems(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
     // check if spot has been sent to memory
-    if (!spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
+    if (!spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredInverseRole).toBool())
     {
         sendSpotToMemory(spotProxyModel, row);
 
@@ -509,17 +510,15 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 
 void ClusterClientFrame::dxSpots(QVector<QString> _spotQueue)
 {
-    spotQueue = _spotQueue;
-    if (!purgeSpotFlag)     // do nothing while purging spots
+    spotQueue.append(_spotQueue);
+    if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
     {
         handleDxSpots(spotQueue);
     }
-
-
 }
 
 
-void ClusterClientFrame::handleDxSpots(QVector<QString> spotQueue)
+void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 {
     for ( QVector<QString>::iterator i = spotQueue.begin(); i != spotQueue.end(); i++ )
     {
@@ -587,9 +586,9 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
                                                         distance, bearing,
                                                         spotlist[SPOTCALL], spotlist[SPOTLOCATOR],
                                                         spotlist[SPOTCOMMENT]);
-                dxSpotDataModel->insertRows(0, 1);
-
-            }
+                //dxSpotDataModel->insertRows(0, 1);
+                dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+           }
         }
     }
 }
@@ -702,7 +701,8 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
 
 void ClusterClientFrame::purgeSpots()
 {
-    if (timeToLive > 0)            // don't purge spots if == 0
+
+    if (timeToLive > 0 && !holdUpdateFlag)      // don't purge spots if == 0 and holdupdateflag is on
     {
         if (dxSpotDataModel->rowCount() > 0)
         {
@@ -715,7 +715,7 @@ void ClusterClientFrame::purgeSpots()
                    break;
                }
            }
-           purgeSpotFlag = false;
+          purgeSpotFlag = false;
         }
     }
 
@@ -770,7 +770,7 @@ void ClusterClientFrame::on_freqActionSelected()
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
-            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM), DataStoredRole).toString();
+            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM), DataStoredInverseRole).toString();
             sendFreqToRig(freq);
         }
     }
@@ -787,7 +787,7 @@ void ClusterClientFrame::bearingActionSelected()
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
-            QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM), DataStoredRole).toString();
+            QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM), DataStoredInverseRole).toString();
             sendBrgToRot(brg);
         }
     }
@@ -818,7 +818,7 @@ void ClusterClientFrame::memoryActionSelected()
         if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
         {
             // check if spot has been sent to memory
-            if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
+            if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredInverseRole).toBool())
             {
                 sendSpotToMemory(filterProxyModelList[curTab], currentRow);
             }
@@ -836,18 +836,19 @@ void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyM
     memoryData::memData spotData = getSpotDataToMemoryVariable(spotProxyModel, row);
 
     MinosLoggerEvents::SendSpotToMemory(spotData);
-    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, DataStoredRole);
+    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, DataStoredInverseRole);
 
 }
 
 memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
     memoryData::memData spotData;
-    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
-    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM), DataStoredRole).toString();
-    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole).toString().remove('.').append(QString("000"));
+    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredInverseRole).toString();
+    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM), DataStoredInverseRole).toString();
+    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredInverseRole).toString().remove('.').append(QString("000"));
     spotData.mode = memDefData::DEFAULT_MODE;
-    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
+    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredInverseRole).toString();
+    spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredInverseRole).toString().toInt();
     return spotData;
 }
 
@@ -866,9 +867,9 @@ void ClusterClientFrame::clearSpotActionSelected()
 
             if (ret == QMessageBox::Yes)
             {
-                purgeSpotFlag = true;
+                //holdUpdateFlag = true;
                 filterProxyModelList[curTab]->removeRows(currentRow, 1, QModelIndex());
-                purgeSpotFlag = false;
+                //purgeSpotFlag = false;
             }
         }
 
@@ -892,9 +893,9 @@ void ClusterClientFrame::clearAllSpotsActionSelected()
 
         if (ret == QMessageBox::Yes)
         {
-            purgeSpotFlag = true;
+            //purgeSpotFlag = true;
             filterProxyModelList[curTab]->removeRows(0, dxSpotDataModel->rowCount(), QModelIndex());
-            purgeSpotFlag = false;
+            //purgeSpotFlag = false;
         }
     }
 }
@@ -1075,6 +1076,27 @@ void ClusterClientFrame::newLocatorSpotIndToggle(bool on)
        ui->locatorIndicator->setStyleSheet(NEWSPOT_INDICATOR_OFF_STYLE);
     }
 
+}
+
+
+
+bool ClusterClientFrame::event(QEvent *event)
+{
+    if (event->type() == QEvent::Enter)
+    {
+        holdUpdateFlag = true;
+    }
+    else if (event->type() == QEvent::Leave)
+    {
+        if (!spotQueue.isEmpty())
+        {
+            handleDxSpots(spotQueue);
+        }
+        holdUpdateFlag = false;
+
+    }
+
+    return QWidget::event(event);
 }
 
 

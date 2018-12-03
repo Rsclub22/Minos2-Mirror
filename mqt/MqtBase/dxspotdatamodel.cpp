@@ -135,11 +135,23 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
              return QVariant();
     }
 
-    SpotData* dxSpot = dxSpotData.at(index.row());
+    int col = index.column();
+
+    SpotData* dxSpot = new SpotData();
 
     if (role == Qt::DisplayRole)
     {
-        int col = index.column();
+
+        // invert data to display new at top
+        int row = dxSpotData.size() - index.row() - 1;
+        if (row < 0 && row >= dxSpotData.size())
+        {
+            return QVariant();
+        }
+
+        dxSpot = dxSpotData.at(row);
+
+
 
         QString d;
         switch (col)
@@ -190,7 +202,71 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
 
     if (role == DataStoredRole)
     {
-        int col = index.column();
+
+        dxSpot = dxSpotData.at(index.row());
+
+        QVariant d;
+        switch (col)
+        {
+            case TIME_COL_NUM:
+                d = dxSpot->spotTime;
+                break;
+            case FREQ_COL_NUM:
+                d = dxSpot->dxFreq;
+                break;
+            case DXSPOT_CALL_COL_NUM:
+                d = dxSpot->dxCall;
+                break;
+            case DXLOC_COL_NUM:
+                d = dxSpot->dxLocator;
+                break;
+            case DXDIST_COL_NUM:
+                d = dxSpot->dxDist;
+                break;
+            case DXBRG_COL_NUM:
+                d = dxSpot->dxBrg;
+                break;
+            case SPOT_CALL_COL_NUM:
+                d = dxSpot->spotterCall;
+                break;
+            case SPOTLOC_COL_NUM:
+                d = dxSpot->spotterLocator;
+                break;
+            case COMMENT_COL_NUM:
+                d = dxSpot->spotComment;
+                break;
+            case DXSPOT_CALL_WORKED_COL_NUM:
+                d = dxSpot->dxCallWorked;
+                break;
+            case DXLOC_WORKED_COL_NUM:
+                d = dxSpot->dxLocatorWorked;
+                break;
+            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
+                d = dxSpot->sentToMemory;
+                break;
+            case DXBANDMASK_COL_NUM:
+                d = dxSpot->dxFreqMaskStr;
+                break;
+            case MODEMASK_COL_NUM:
+                d = dxSpot->dxModeMaskStr;
+            break;
+        }
+
+        return d;
+    }
+
+    if (role == DataStoredInverseRole)
+    {
+
+        // display is reversed so reverse back to get data
+
+        int row = dxSpotData.size() - 1 - index.row();
+        if (row < 0 || row >= dxSpotData.size())
+        {
+            return QVariant();
+        }
+
+        dxSpot = dxSpotData.at(row);
 
         QVariant d;
         switch (col)
@@ -248,13 +324,74 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
 
 bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
+
+    int row = index.row();
+    int col = index.column();
+
     if (index.isValid() && role == DataStoredRole)
     {
-            int row = index.row();
+
+        SpotData* dxSpot = dxSpotData.value(row);
+
+        switch (col)
+        {
+            case TIME_COL_NUM :
+                dxSpot->spotTime = value.toString();
+            break;
+            case FREQ_COL_NUM:
+                dxSpot->dxFreq = value.toString();
+            break;
+            case DXSPOT_CALL_COL_NUM:
+                dxSpot->dxCall = value.toString();
+            break;
+            case DXSPOT_CALL_WORKED_COL_NUM:
+                dxSpot->dxCallWorked = value.toBool();
+            break;
+            case DXLOC_COL_NUM:
+                dxSpot->dxLocator = value.toString();
+            break;
+            case DXDIST_COL_NUM:
+                dxSpot->dxDist = value.toString();
+            break;
+            case DXBRG_COL_NUM:
+                dxSpot->dxBrg = value.toString();
+            break;
+            case DXLOC_WORKED_COL_NUM:
+                dxSpot->dxLocatorWorked = value.toBool();
+            break;
+            case SPOT_CALL_COL_NUM:
+                dxSpot->spotterCall = value.toString();
+                break;
+            case SPOTLOC_COL_NUM:
+                dxSpot->spotterLocator = value.toString();
+                break;
+            case COMMENT_COL_NUM:
+                dxSpot->spotComment = value.toString();
+                break;
+            case DXBANDMASK_COL_NUM:
+                dxSpot->dxModeMaskStr = value.toString();
+            break;
+            case MODEMASK_COL_NUM:
+                dxSpot->dxModeMaskStr = value.toString();
+            break;
+            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
+                dxSpot->sentToMemory = value.toBool();
+            default:
+                return false;
+
+        }
+
+        if (index.isValid() && role == DataStoredInverseRole)
+        {
+            // display is reversed so reverse back to get data
+
+            int row = dxSpotData.size() - 1 - index.row();
+            if (row < 0 || row >= dxSpotData.size())
+            {
+                return false;
+            }
 
             SpotData* dxSpot = dxSpotData.value(row);
-
-            int col = index.column();
 
             switch (col)
             {
@@ -303,9 +440,10 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
                     return false;
 
             }
+        }
 
-            dxSpotData.replace(row, dxSpot);
-            emit(dataChanged(index, index));
+        dxSpotData.replace(row, dxSpot);
+        emit(dataChanged(index, index));
 
             return true;
         }
@@ -319,11 +457,11 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
 bool DxSpotDataModel::insertRows(int row, int count, const QModelIndex &index)
 {
     Q_UNUSED(index);
-    int _row = row;
-    beginInsertRows(QModelIndex(), row, row + count - 1);
+
+    beginInsertRows(QModelIndex(), row , row + count - 1);
     for (int i = 0; i < count; i++)
     {
-        dxSpotData.insert(_row, rowData);
+        dxSpotData.insert(row , rowData);
     }
     endInsertRows();
     return true;

@@ -631,9 +631,11 @@ void ClusterMainWindow::getSpotsFromQueue()
             }
             dxSpotDataModel->rowData = spotsList[i];
             spotsList.remove(i);
-            dxSpotDataModel->insertRows(0, 1);
+            //dxSpotDataModel->insertRows(0, 1);
+            dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
         }
         dxSpotView->resizeRowsToContents();
+        //dxSpotView->scrollToBottom();
     }
 }
 

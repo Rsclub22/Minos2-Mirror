@@ -19,7 +19,8 @@
 
 const int dxSpotColCount = 14;
 
-#define DataStoredRole Qt::UserRole + 0
+const int DataStoredRole = Qt::UserRole + 0;
+const int DataStoredInverseRole = Qt::UserRole + 1;
 
 class HtmlDelegate;
 
