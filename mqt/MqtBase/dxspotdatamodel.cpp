@@ -142,6 +142,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole)
     {
 
+        trace(QString("data displayrole - row = %1").arg(index.row()));
         // invert data to display new at top
         int row = dxSpotData.size() - index.row() - 1;
         if (row < 0 && row >= dxSpotData.size())
@@ -150,7 +151,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
         }
 
         dxSpot = dxSpotData.at(row);
-
+        trace(QString("Callsign = %1, incomming row = %2, transvert row = %3, num of items = %4").arg(dxSpot->dxCall).arg(index.row()).arg(row).arg(dxSpotData.size()));
 
 
         QString d;

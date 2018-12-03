@@ -1125,7 +1125,10 @@ bool ClusterClientFrame::event(QEvent *event)
 
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    return matchBand(sourceRow);
+    bool ok = matchBand(sourceRow);
+    trace(QString("sourceRow = %1, state = $2").arg(sourceRow).arg(ok));
+    return ok;
+    //return
 }
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
@@ -1136,6 +1139,7 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
     if (spotMask < NUMBANDS)
     {
        ok = filterSetup->filterSettings.getBandFilter(spotMask);
+       trace(QString("matchband - spotmask = %1, state = %2").arg(spotMask).arg(ok));
        return ok;
         //return filterSetup->filterSettings.getBandFilter(spotMask);
     }
