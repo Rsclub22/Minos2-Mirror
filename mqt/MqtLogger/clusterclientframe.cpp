@@ -123,6 +123,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     purgeTimer->start(PURGE_TIME);
 
+    newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
     checkNewSpotsTimer->start(1000);
@@ -1057,6 +1058,21 @@ void ClusterClientFrame::checkSavedFilters()
 }
 
 
+
+void ClusterClientFrame::newSpotIndToggle(bool on)
+{
+
+    if (on)
+    {
+        ui->spotIndicator->setStyleSheet(NEWSPOT_INDICATOR_ON_STYLE);
+    }
+    else
+    {
+       ui->spotIndicator->setStyleSheet(NEWSPOT_INDICATOR_OFF_STYLE);
+    }
+
+}
+
 void ClusterClientFrame::newCallsignSpotIndToggle(bool on)
 {
 
@@ -1116,9 +1132,12 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
     bool ok = false;
     int spotMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
+    QString callsign = sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
     if (spotMask < NUMBANDS)
     {
-       return filterSetup->filterSettings.getBandFilter(spotMask);
+       ok = filterSetup->filterSettings.getBandFilter(spotMask);
+       return ok;
+        //return filterSetup->filterSettings.getBandFilter(spotMask);
     }
     else
     {

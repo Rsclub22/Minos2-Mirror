@@ -204,7 +204,9 @@ void setAllBandFilters(QList<bool> bfl)
 
 bool getBandFilter(int band)
 {
-    return *bandFilters[band];
+    bool ok  = *bandFilters[band];
+    return ok;
+    // return *bandFilters[band];
 }
 
 
