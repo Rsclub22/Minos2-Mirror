@@ -48,6 +48,7 @@ mkdir installFiles
 cd installFiles
 
 mkdir Configuration
+mkdir Configuration\Cluster
 mkdir Lists
 mkdir Logs
 mkdir Bin
@@ -67,6 +68,7 @@ copy C:\Projects\hamlib-w32-3.3\bin\*.dll Bin
 
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration
+xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Cluster .\Configuration\Cluster
 
 cd Configuration
 
