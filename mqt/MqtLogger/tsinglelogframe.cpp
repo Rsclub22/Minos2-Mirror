@@ -329,6 +329,7 @@ void TSingleLogFrame::clearScreenLayout()
     thisMatchFrame->setContest(nullptr);
     otherMatchFrame->setContest(nullptr);
     archiveMatchFrame->setContest(nullptr);
+    clusterControlFrame->setContest(nullptr);
 
     while (singleLogFrameSplitter->count())
     {
@@ -486,7 +487,7 @@ void TSingleLogFrame::buildScreenLayout()
                     }
                     case sctThisMatch:
                     {
-                        rowSplitters[j]->addWidget(thisMatchFrame);
+                       rowSplitters[j]->addWidget(thisMatchFrame);
                         thisMatchFrame->setVisible(true);
                         thisMatchFrame->setContest(ct);
                         break;
@@ -513,16 +514,13 @@ void TSingleLogFrame::buildScreenLayout()
                     }
                     case sctCluster:
                     {
-
-                        clusterControlFrame = new ClusterClientFrame(elementScrollArea, 0);
                         elementScrollArea->setWidget(clusterControlFrame);
                         clusterControlFrame->setVisible(true);
                         clusterControlFrame->setContest(ct);
                         break;
 
                     }
-               }
-
+                }
             }
         }
     }
@@ -545,6 +543,7 @@ void TSingleLogFrame::buildScreenLayout()
         connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
     }
 }
+
 
 void TSingleLogFrame::keyPressEvent( QKeyEvent* event )
 {
