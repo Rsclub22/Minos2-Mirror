@@ -83,7 +83,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(delayed_afterLogContact(BaseContestLog *)), Qt::QueuedConnection);
 
     ui->searchLineEdit->setValidator(new UpperCaseValidator(true));
     connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
@@ -528,7 +528,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 
 void ClusterClientFrame::dxSpots(QVector<QString> _spotQueue)
 {
-    spotQueue +=_spotQueue;
+    spotQueue +=_spotQueue;                    // was append - no good on Pi, pre Qt 5.5
     if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
     {
         handleDxSpots(spotQueue);
