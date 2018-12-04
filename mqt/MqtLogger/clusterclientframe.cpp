@@ -123,6 +123,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     purgeTimer->start(PURGE_TIME);
 
+    newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
     checkNewSpotsTimer->start(1000);
@@ -162,6 +163,7 @@ void ClusterClientFrame::setupDXSpotView()
 
     dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
+    dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
     ui->dxSpotTab->addTab(dxSpotView, "DX Spots");
     //dxSpotView = ui->dxSpotView;
@@ -428,7 +430,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
 {
     if (index.column() == FREQ_COL_NUM)
     {
-        QString freq = spotProxyModel->data(index, DataStoredInverseRole).toString();
+        QString freq = spotProxyModel->data(index, DataStoredRole).toString();
         sendFreqToRig(freq);
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
@@ -439,7 +441,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     }
     else if (index.column() == DXBRG_COL_NUM)
     {
-        QString brg = spotProxyModel->data(index, DataStoredInverseRole).toString();
+        QString brg = spotProxyModel->data(index, DataStoredRole).toString();
         sendBrgToRot(brg);
     }
 }
@@ -447,7 +449,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
 void ClusterClientFrame::handleVertHeaderClickedItems(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
     // check if spot has been sent to memory
-    if (!spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredInverseRole).toBool())
+    if (!spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
     {
         sendSpotToMemory(spotProxyModel, row);
 
@@ -595,13 +597,13 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
                     bearing =  QString::number(brg);
                 }
 
-                dxSpotDataModel->rowData = new SpotData(spotlist[SPOTTIME], spotlist[DXFREQ],
-                                                        spotlist[DXBANDMASK], spotlist[DXMODEMASK],
-                                                        spotlist[DXCALL], callWorked,
-                                                        spotlist[DXLOCATOR], locWorked,
-                                                        distance, bearing,
-                                                        spotlist[SPOTCALL], spotlist[SPOTLOCATOR],
-                                                        spotlist[SPOTCOMMENT]);
+                dxSpotDataModel->rowData = new SpotData(QDateTime::currentMSecsSinceEpoch(), spotlist[SPOTTIME],
+                                                        spotlist[DXFREQ], spotlist[DXBANDMASK],
+                                                        spotlist[DXMODEMASK], spotlist[DXCALL],
+                                                        callWorked, spotlist[DXLOCATOR],
+                                                        locWorked,distance,
+                                                        bearing, spotlist[SPOTCALL],
+                                                        spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
                 //dxSpotDataModel->insertRows(0, 1);
                 dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
            }
@@ -786,7 +788,7 @@ void ClusterClientFrame::on_freqActionSelected()
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
-            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM), DataStoredInverseRole).toString();
+            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM), DataStoredRole).toString();
             sendFreqToRig(freq);
         }
     }
@@ -803,7 +805,7 @@ void ClusterClientFrame::bearingActionSelected()
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
-            QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM), DataStoredInverseRole).toString();
+            QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM), DataStoredRole).toString();
             sendBrgToRot(brg);
         }
     }
@@ -834,7 +836,7 @@ void ClusterClientFrame::memoryActionSelected()
         if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
         {
             // check if spot has been sent to memory
-            if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredInverseRole).toBool())
+            if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
             {
                 sendSpotToMemory(filterProxyModelList[curTab], currentRow);
             }
@@ -852,30 +854,32 @@ void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyM
     memoryData::memData spotData = getSpotDataToMemoryVariable(spotProxyModel, row);
 
     MinosLoggerEvents::SendSpotToMemory(spotData);
-    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, DataStoredInverseRole);
+    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, DataStoredRole);
 
 }
 
 memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
     memoryData::memData spotData;
-    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredInverseRole).toString();
-    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM), DataStoredInverseRole).toString();
-    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredInverseRole).toString().remove('.').append(QString("000"));
+    spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
+    spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM), DataStoredRole).toString();
+    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole).toString().remove('.').append(QString("000"));
     spotData.mode = memDefData::DEFAULT_MODE;
-    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredInverseRole).toString();
-    spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredInverseRole).toString().toInt();
+    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
+    spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();
     return spotData;
 }
 
 void ClusterClientFrame::clearSpotActionSelected()
 {
+    int row;
+
     int curTab = ui->dxSpotTab->currentIndex();
 
     if (filterProxyModelList[curTab]->rowCount() > 0)
     {
-        int currentRow = spotViewList[curTab]->currentIndex().row();
-        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
+        row = spotViewList[curTab]->currentIndex().row();
+        if (row >= 0 && row < filterProxyModelList[curTab]->rowCount())
         {
             int ret = QMessageBox::warning(this, tr("Cluster"),
                                            tr("Please confirm you want to delete this spot?"),
@@ -883,9 +887,10 @@ void ClusterClientFrame::clearSpotActionSelected()
 
             if (ret == QMessageBox::Yes)
             {
-                //holdUpdateFlag = true;
-                filterProxyModelList[curTab]->removeRows(currentRow, 1, QModelIndex());
-                //purgeSpotFlag = false;
+                // map to source row
+                row = filterProxyModelList[curTab]->mapToSource(spotViewList[curTab]->currentIndex()).row();
+                dxSpotDataModel->removeRows(row, 1, QModelIndex());
+
             }
         }
 
@@ -1066,6 +1071,21 @@ void ClusterClientFrame::checkSavedFilters()
 }
 
 
+
+void ClusterClientFrame::newSpotIndToggle(bool on)
+{
+
+    if (on)
+    {
+        ui->spotIndicator->setStyleSheet(NEWSPOT_INDICATOR_ON_STYLE);
+    }
+    else
+    {
+       ui->spotIndicator->setStyleSheet(NEWSPOT_INDICATOR_OFF_STYLE);
+    }
+
+}
+
 void ClusterClientFrame::newCallsignSpotIndToggle(bool on)
 {
 
@@ -1118,7 +1138,10 @@ bool ClusterClientFrame::event(QEvent *event)
 
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    return matchBand(sourceRow);
+    bool ok = matchBand(sourceRow);
+    trace(QString("sourceRow = %1, state = $2").arg(sourceRow).arg(ok));
+    return ok;
+    //return
 }
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const

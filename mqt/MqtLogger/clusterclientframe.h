@@ -191,6 +191,7 @@ private:
 
     bool event(QEvent *event) override;
 
+    void newSpotIndToggle(bool on);
 private slots:
 
 
