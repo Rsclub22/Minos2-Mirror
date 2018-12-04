@@ -187,6 +187,8 @@ private:
 
     void checkSavedFilters();
 
+    void on_AfterLogContact(BaseContestLog *c);
+
     bool event(QEvent *event) override;
 
 private slots:
@@ -204,7 +206,7 @@ private slots:
     void memoryActionSelected();
     void clearSpotActionSelected();
     void clearAllSpotsActionSelected();
-    void on_AfterLogContact(BaseContestLog *c);
+    void delayed_afterLogContact(BaseContestLog *c);
     void restoreCallsignViewColumns();
     void restoreLocatorViewColumns();
     void onDxSpotViewClicked(const QModelIndex &);
@@ -220,8 +222,6 @@ private slots:
     void onSearchSpotVertHeaderClicked(int row);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
     void checkNewSpots();
-
-
 };
 
 #endif // CLUSTERCLIENTFRAME_H

@@ -138,8 +138,24 @@ ClusterClientFrame::~ClusterClientFrame()
     delete ui;
 }
 
+void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c)
+{
+    // delay the search of the spots until the contact logging should have finished
+    // and the screen been redrawn, or a lot of spots slows things down too much
 
+    QTimer *timer = new QTimer(this);
+    timer->setSingleShot(true);
 
+    connect(timer, &QTimer::timeout, [=]()
+    {
+        // NB a lambda function
+        on_AfterLogContact(c);
+        timer->deleteLater();
+    }
+    );
+
+    timer->start(50);
+}
 void ClusterClientFrame::setupDXSpotView()
 {
     dxSpotView = new QTableView();
