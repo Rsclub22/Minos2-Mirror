@@ -274,7 +274,6 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setAlternatingRowColors(true);
     callSignView->setSelectionMode( QAbstractItemView::SingleSelection );
     callSignView->setSelectionBehavior(QAbstractItemView::SelectItems);
-    //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
     callSignView->setItemDelegate( delegate);
     callSignView->resizeRowsToContents();
@@ -380,6 +379,7 @@ void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterC
     if (bandfilterChanged)
     {
         dxSpotProxyModel->setFilterRegExp("");
+        dxSpotView->resizeRowsToContents();
     }
     else if (modefilterChanged)
     {
@@ -388,10 +388,12 @@ void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterC
     else if (callsignfilterChanged)
     {
         callSignProxyModel->setFilterRegExp("");
+        callSignView->resizeRowsToContents();
     }
     else if (locatorfilterChanged)
     {
         locatorProxyModel->setFilterRegExp("");
+        locatorView->resizeRowsToContents();
     }
 
 }
@@ -1012,12 +1014,14 @@ void ClusterClientFrame::onSearchEditingFinished()
         {
             searchSortProxyModel->searchParameter = "";
             searchSortProxyModel->setFilterRegExp("");
+            searchView->resizeRowsToContents();
         }
         else
         {
             searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
             //ui->searchLineEdit->selectAll();
             searchSortProxyModel->setFilterRegExp("");
+            searchView->resizeRowsToContents();
         }
 
         ui->searchLineEdit->setFocus();
@@ -1035,28 +1039,28 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, Loc
           for (int spotNumber = 0; spotNumber < dxSpotDataModel->rowCount(); spotNumber++)
           {
               QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
-              bool callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
-              if (!callsignWkd)
-              {
-                  if (cs.realCall == callsign && !callsignWkd)
+              //bool callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
+              //if (!callsignWkd)
+              //{
+                  if (cs.realCall == callsign)
                   {
                       dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
                       worked = true;
                   }
-              }
+              //}
 
 
               QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
-              bool locatorWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
+              //bool locatorWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
 
-              if(!locatorWkd)
-              {
+              //if(!locatorWkd)
+              //{
                   if (loc.loc.getValue().mid(0,4) == locator.mid(0, 4) )
                   {
                       dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
                       worked = true;
                   }
-              }
+              //}
           }
       }
 
