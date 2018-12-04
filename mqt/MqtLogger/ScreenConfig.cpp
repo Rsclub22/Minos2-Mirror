@@ -189,7 +189,6 @@ void ScreenConfig::addAfter(ScreenConfigRow *r)
 bool ScreenConfig::checkOk(ScreenConfigElement *e)
 {
     int auxCount = 0;
-    int clusterCount = 0;
     QString etype = e->getType();
     for (int i = 0; i < vbl->count(); i++)
     {
@@ -210,10 +209,6 @@ bool ScreenConfig::checkOk(ScreenConfigElement *e)
                         {
                             auxCount++;
                         }
-                        else if (type == getScreenTypeString(sctCluster))
-                        {
-                            clusterCount++;
-                        }
                         else
                         {
                             return false;
@@ -227,7 +222,7 @@ bool ScreenConfig::checkOk(ScreenConfigElement *e)
     {
         return true;
     }
-    else if (etype != getScreenTypeString(sctCluster) || clusterCount < CLUSTERITEMS)
+    else if (etype != getScreenTypeString(sctCluster))
     {
         return true;
     }

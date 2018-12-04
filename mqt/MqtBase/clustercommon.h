@@ -205,10 +205,7 @@ void setAllBandFilters(QList<bool> bfl)
 
 bool getBandFilter(int band)
 {
-    bool ok  = *bandFilters[band];
-    trace(QString("getbandfilter - band = %1, state = %2").arg(band).arg(ok));
-    return ok;
-    // return *bandFilters[band];
+    return *bandFilters[band];
 }
 
 

@@ -228,7 +228,7 @@ void TSingleLogFrame::createScreenComponents()
 
     FKHRotControlFrame->setVisible(false);
     FKHRotControlFrame->setContest(contest);
-/*
+
     clusterControlFrame = new ClusterClientFrame(this, 0);
     clusterControlFrame->setObjectName(QStringLiteral("ClusterControlFrame"));
     clusterControlFrame->setFrameShape(QFrame::StyledPanel);
@@ -236,7 +236,7 @@ void TSingleLogFrame::createScreenComponents()
 
     clusterControlFrame->setVisible(false);
     clusterControlFrame->setContest(contest);
-*/
+
     rotPresets = new RotPresets(this);
 
     rotPresets->setObjectName(QStringLiteral("rotPresets"));
@@ -400,7 +400,6 @@ void TSingleLogFrame::buildScreenLayout()
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;
-    int clusterInstance = 0;
     for (int j = 0; j < sc.rows.count(); j++)
     {
         if (sc.rows[j].elements.count())
@@ -435,92 +434,94 @@ void TSingleLogFrame::buildScreenLayout()
 
                 switch (type)
                 {
-                case sctNone:
-                {
-                    break;
-                }
-                case sctAux:
-                {
-                    StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
+                    case sctNone:
+                    {
+                        break;
+                    }
+                    case sctAux:
+                    {
+                        StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
 
-                    f->setContest(ct);
-                    elementScrollArea->setWidget(f);
-                    f->setVisible(true);
-                    break;
-                }
-                case sctLog:
-                {
-                    QSOTable->setParent(rowSplitters[j]);
-                    rowSplitters[j]->addWidget(QSOTable);
-                    QSOTable->setVisible(true);
-                    break;
-                }
-                case sctRigControl:
-                {
-                    elementScrollArea->setWidget(FKHRigControlFrame);
-                    FKHRigControlFrame->setContest(ct);
-                    break;
-                }
-                case sctRotControl:
-                {
-                    elementScrollArea->setWidget(FKHRotControlFrame);
-                    FKHRotControlFrame->setContest(ct);
-                    break;
-                }
-                case sctRotPresets:
-                {
-                    elementScrollArea->setWidget(rotPresets);
-                    rotPresets->setContest(ct);
-                    break;
-                }
-                case sctQSOEdit:
-                {
-                    elementScrollArea->setWidget(GJVQSOLogFrame);
-                    GJVQSOLogFrame->setVisible(true);
-                    break;
-                }
-                case sctNextQSODetails:
-                {
-                    elementScrollArea->setWidget(CribSheet);
-                    CribSheet->setVisible(true);
-                    break;
-                }
-                case sctThisMatch:
-                {
-                    rowSplitters[j]->addWidget(thisMatchFrame);
-                    thisMatchFrame->setVisible(true);
-                    thisMatchFrame->setContest(ct);
-                    break;
-                }
-                case sctOtherMatch:
-                {
-                    rowSplitters[j]->addWidget(otherMatchFrame);
-                    otherMatchFrame->setVisible(true);
-                    otherMatchFrame->setContest(ct);
-                    break;
-                }
-                case sctArchiveMatch:
-                {
-                    rowSplitters[j]->addWidget(archiveMatchFrame);
-                    archiveMatchFrame->setVisible(true);
-                    archiveMatchFrame->setContest(ct);
-                    break;
-                }
-                case sctChat:
-                {
-                    elementScrollArea->setWidget(chatFrame);
-                    chatFrame->setVisible(true);
-                    break;
-                }
-                case sctCluster:
+                        f->setContest(ct);
+                        elementScrollArea->setWidget(f);
+                        f->setVisible(true);
+                        break;
+                    }
+                    case sctLog:
+                    {
+                        QSOTable->setParent(rowSplitters[j]);
+                        rowSplitters[j]->addWidget(QSOTable);
+                        QSOTable->setVisible(true);
+                        break;
+                    }
+                    case sctRigControl:
+                    {
+                        elementScrollArea->setWidget(FKHRigControlFrame);
+                        FKHRigControlFrame->setContest(ct);
+                        break;
+                    }
+                    case sctRotControl:
+                    {
+                        elementScrollArea->setWidget(FKHRotControlFrame);
+                        FKHRotControlFrame->setContest(ct);
+                        break;
+                    }
+                    case sctRotPresets:
+                    {
+                        elementScrollArea->setWidget(rotPresets);
+                        rotPresets->setContest(ct);
+                        break;
+                    }
+                    case sctQSOEdit:
+                    {
+                        elementScrollArea->setWidget(GJVQSOLogFrame);
+                        GJVQSOLogFrame->setVisible(true);
+                        break;
+                    }
+                    case sctNextQSODetails:
+                    {
+                        elementScrollArea->setWidget(CribSheet);
+                        CribSheet->setVisible(true);
+                        break;
+                    }
+                    case sctThisMatch:
+                    {
+                        rowSplitters[j]->addWidget(thisMatchFrame);
+                        thisMatchFrame->setVisible(true);
+                        thisMatchFrame->setContest(ct);
+                        break;
+                    }
+                    case sctOtherMatch:
+                    {
+                        rowSplitters[j]->addWidget(otherMatchFrame);
+                        otherMatchFrame->setVisible(true);
+                        otherMatchFrame->setContest(ct);
+                        break;
+                    }
+                    case sctArchiveMatch:
+                    {
+                        rowSplitters[j]->addWidget(archiveMatchFrame);
+                        archiveMatchFrame->setVisible(true);
+                        archiveMatchFrame->setContest(ct);
+                        break;
+                    }
+                    case sctChat:
+                    {
+                        elementScrollArea->setWidget(chatFrame);
+                        chatFrame->setVisible(true);
+                        break;
+                    }
+                    case sctCluster:
+                    {
 
-                    clusterControlFrame = new ClusterClientFrame(elementScrollArea, clusterInstance++);
-                    elementScrollArea->setWidget(clusterControlFrame);
-                    clusterControlFrame->setVisible(true);
-                    clusterControlFrame->setContest(ct);
-                    break;
+                        clusterControlFrame = new ClusterClientFrame(elementScrollArea, 0);
+                        elementScrollArea->setWidget(clusterControlFrame);
+                        clusterControlFrame->setVisible(true);
+                        clusterControlFrame->setContest(ct);
+                        break;
 
-                }
+                    }
+               }
 
             }
         }
@@ -544,6 +545,7 @@ void TSingleLogFrame::buildScreenLayout()
         connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
     }
 }
+
 void TSingleLogFrame::keyPressEvent( QKeyEvent* event )
 {
     GJVQSOLogFrame->doKeyPressEvent(event);

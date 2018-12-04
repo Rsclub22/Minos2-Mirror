@@ -871,12 +871,8 @@ void ClusterClientFrame::clearSpotActionSelected()
 
             if (ret == QMessageBox::Yes)
             {
-
-                // we need to convert the row index back to the data model
                 // map to source row
                 row = filterProxyModelList[curTab]->mapToSource(spotViewList[curTab]->currentIndex()).row();
-                // reverse the row because display is in reverse
-                row = filterProxyModelList[0]->rowCount() - 1 - row;
                 dxSpotDataModel->removeRows(row, 1, QModelIndex());
 
             }
@@ -1136,13 +1132,9 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
     bool ok = false;
     int spotMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
-    QString callsign = sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
     if (spotMask < NUMBANDS)
     {
-       ok = filterSetup->filterSettings.getBandFilter(spotMask);
-       trace(QString("matchband - spotmask = %1, state = %2").arg(spotMask).arg(ok));
-       return ok;
-        //return filterSetup->filterSettings.getBandFilter(spotMask);
+       return filterSetup->filterSettings.getBandFilter(spotMask);
     }
     else
     {

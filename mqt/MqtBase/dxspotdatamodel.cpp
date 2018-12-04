@@ -20,7 +20,7 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
 
-    //dxSpotData = QVector<SpotData>(); // create an empty list
+
 }
 
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -142,9 +142,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole)
     {
 
-        //trace(QString("data displayrole - row = %1").arg(index.row()));
-        // invert data to display new at top
-        //
+
         int row = index.row();
         if (row < 0 && row >= dxSpotData.size())
         {
