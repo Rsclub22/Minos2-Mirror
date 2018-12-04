@@ -528,7 +528,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 
 void ClusterClientFrame::dxSpots(QVector<QString> _spotQueue)
 {
-    spotQueue.append(_spotQueue);
+    spotQueue +=_spotQueue;
     if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
     {
         handleDxSpots(spotQueue);
