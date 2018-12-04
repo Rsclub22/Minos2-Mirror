@@ -1060,7 +1060,7 @@ void ClusterClientFrame::checkSavedFilters()
 {
     // this looks for changed saved settings
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
-    if (contest->clusterFilterSettings.size() > instanceNum)
+    if (contest && contest->clusterFilterSettings.size() > instanceNum)
     {
         ClusterClientFilterSettings cfs = contest->clusterFilterSettings[instanceNum].getValue();
         if (cfs != filterSetup->filterSettings)
