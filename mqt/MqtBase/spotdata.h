@@ -22,16 +22,17 @@ class SpotData
 {
 public:
     SpotData();
-    SpotData(QString _spotTime, QString _dxFreq,
-             QString _dxFreqMaskStr, QString _dxModeMaskStr,
-             QString _dxCall, bool _dxCallWorked,
-             QString _dxLocator, bool _dxLocatorWorked,
-             QString distance, QString bearing,
-             QString _spotterCall, QString _spotterLocator,
-             QString comment);
+    SpotData(qint64 _rxTime, QString _spotTime,
+             QString _dxFreq, QString _dxFreqMaskStr,
+             QString _dxModeMaskStr, QString _dxCall,
+             bool _dxCallWorked, QString _dxLocator,
+             bool _dxLocatorWorked, QString distance,
+             QString bearing, QString _spotterCall,
+             QString _spotterLocator, QString comment);
 
     void operator = (const SpotData& spd);
 
+    qint64 rxTime;
     QString spotTime;
     QString dxFreq;
     QString dxFreqMaskStr;

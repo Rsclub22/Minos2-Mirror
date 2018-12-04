@@ -60,6 +60,7 @@ const int COMMENT_COL_NUM = 10;
 const int DXBANDMASK_COL_NUM = 11;
 const int MODEMASK_COL_NUM = 12;
 const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 13;
+const int RXTIME_COL_NUM = 14;
 
 const int TIME_COL_WIDTH = 40;
 const int FREQ_COL_WIDTH = 60;
@@ -204,7 +205,10 @@ void setAllBandFilters(QList<bool> bfl)
 
 bool getBandFilter(int band)
 {
-    return *bandFilters[band];
+    bool ok  = *bandFilters[band];
+    trace(QString("getbandfilter - band = %1, state = %2").arg(band).arg(ok));
+    return ok;
+    // return *bandFilters[band];
 }
 
 
