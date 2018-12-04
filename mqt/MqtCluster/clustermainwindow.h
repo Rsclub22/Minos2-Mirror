@@ -164,6 +164,7 @@ private:
     Cluster* dxCluster;
 
     DxSpotDataModel* dxSpotDataModel;
+    QSortFilterProxyModel* dxSpotProxyModel;        // use base as we are not doing custom filtering
     QTableView* dxSpotView;
     QPlainTextEdit* rawClusterDataView;
 

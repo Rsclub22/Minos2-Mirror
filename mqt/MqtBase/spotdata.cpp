@@ -18,7 +18,7 @@ SpotData::SpotData()
 
 }
 
-SpotData::SpotData(QString _spotTime, QString _dxFreq,
+SpotData::SpotData(qint64 _rxTime, QString _spotTime, QString _dxFreq,
                    QString _dxFreqMaskStr, QString _dxModeMaskStr,
                    QString _dxCall, bool _dxCallWorked,
                    QString _dxLocator, bool _dxLocatorWorked,
@@ -26,6 +26,8 @@ SpotData::SpotData(QString _spotTime, QString _dxFreq,
                    QString _spotterCall, QString _spotterLocator,
                    QString comment)
 {
+
+    rxTime = _rxTime;
     spotTime = _spotTime;
     dxFreq = _dxFreq;
     dxFreqMaskStr = _dxFreqMaskStr;
@@ -44,6 +46,7 @@ SpotData::SpotData(QString _spotTime, QString _dxFreq,
 
 void SpotData::operator = (const SpotData& spd)
 {
+    rxTime = spd.rxTime;
     spotTime = spd.spotTime;
     dxFreq = spd.dxFreq;
     dxFreqMaskStr = spd.dxFreqMaskStr;
