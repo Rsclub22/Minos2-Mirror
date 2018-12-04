@@ -161,6 +161,12 @@ private:
 
     int instanceNum;
 
+    QString contestBandStr;
+    int contestBand;
+
+    QString contestModeStr;
+    int contestMode;
+
     void restoreDxSpotViewColumns();
 
     void addDxSpotToTable(QString spot);
@@ -187,13 +193,18 @@ private:
 
     void checkSavedFilters();
 
-    void on_AfterLogContact(BaseContestLog *c);
+    //void on_AfterLogContact(BaseContestLog *c, Callsign cs, Locator loc);
 
     bool event(QEvent *event) override;
 
     void newSpotIndToggle(bool on);
+    int getBandOffSet(QString contestBandStr);
+
+    int getModeOffSet(QString contestModeStr);
+
 private slots:
 
+    void on_AfterLogContact(BaseContestLog *c, Callsign cs, Locator loc);
 
     void clusterClientServerList(QVector<ClusterServer>);
     void dxSpots(QVector<QString>);
@@ -207,7 +218,7 @@ private slots:
     void memoryActionSelected();
     void clearSpotActionSelected();
     void clearAllSpotsActionSelected();
-    void delayed_afterLogContact(BaseContestLog *c);
+    void delayed_afterLogContact(BaseContestLog *c, Callsign cs, Locator loc);
     void restoreCallsignViewColumns();
     void restoreLocatorViewColumns();
     void onDxSpotViewClicked(const QModelIndex &);

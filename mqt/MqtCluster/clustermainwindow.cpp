@@ -135,6 +135,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
+    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
 
 
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);

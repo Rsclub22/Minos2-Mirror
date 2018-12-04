@@ -22,9 +22,12 @@ const int MWBANDSTART = 4;
 const int MWBANDEND = 9;
 
 enum allBandOffsets {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
+const QStringList clusterBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
 
 enum allModeOffsets {CWMODE, PHONEMODE, RTTYMODE, PSKMODE, MGMMODE};
+const QStringList clusterModes = QStringList() << "CW" << "USB" << "FM" << "MGM";
+
 const int NUM_MODES = 5;
 
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
