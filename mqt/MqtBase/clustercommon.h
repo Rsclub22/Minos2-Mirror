@@ -14,7 +14,7 @@ const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
 const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
 
 
-
+const int NO_BANDS = -1;
 const int NUMBANDS = 9;
 const int VHFBANDSTART = 0;
 const int VHFBANDEND = 4;

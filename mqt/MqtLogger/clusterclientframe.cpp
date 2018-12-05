@@ -765,7 +765,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
-
+        filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
 
     }
 
