@@ -160,6 +160,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     verticalHeader->setMinimumSectionSize(10);
 //    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 //    verticalHeader->setDefaultSectionSize(18);
+    dxSpotView->horizontalHeader()->setStretchLastSection(true);
+
     dxSpotView->resizeRowsToContents();
 
 /*
