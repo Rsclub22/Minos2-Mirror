@@ -83,7 +83,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(delayed_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
+   connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(delayed_afterLogContact(BaseContestLog *)), Qt::QueuedConnection);
 
     ui->searchLineEdit->setValidator(new UpperCaseValidator(true));
     connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
@@ -1139,7 +1139,7 @@ bool ClusterClientFrame::event(QEvent *event)
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
     bool ok = matchBand(sourceRow);
-    trace(QString("sourceRow = %1, state = $2").arg(sourceRow).arg(ok));
+    trace(QString("sourceRow = %1, state = %2").arg(sourceRow).arg(ok));
     return ok;
     //return
 }
