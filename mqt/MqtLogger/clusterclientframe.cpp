@@ -995,14 +995,12 @@ void ClusterClientFrame::clearAllSpotsActionSelected()
     if (filterProxyModelList[curTab]->rowCount() > 0)
     {
         int ret = QMessageBox::warning(this, tr("Cluster"),
-                                       tr("Please confirm you want to delete all the spots?"),
+                                       tr("Please confirm you want to delete all the spots in the %1 tab?").arg(ui->dxSpotTab->tabText(curTab)),
                                        QMessageBox::Yes | QMessageBox::No);
 
         if (ret == QMessageBox::Yes)
         {
-            //purgeSpotFlag = true;
-            filterProxyModelList[curTab]->removeRows(0, dxSpotDataModel->rowCount(), QModelIndex());
-            //purgeSpotFlag = false;
+            filterProxyModelList[curTab]->removeRows(0, filterProxyModelList[curTab]->rowCount(), QModelIndex());
         }
     }
 }
