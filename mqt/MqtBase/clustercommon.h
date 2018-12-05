@@ -95,7 +95,9 @@ const QColor CLUSTER_TAB_NOT_SELECT_COLOR = Qt::black;
 
 // Message headers
 const QString DXSPOT = "DXSPOT:";
-const QString TIMETOLIVE = "TIMETOLIVE:";
+//const QString TIMETOLIVE = "TIMETOLIVE:";
+const QString CLUSTER_STATUS = "CLUSTER_STATUS!";
+const QChar CLUSTER_STAT_DELIMITER = '!';
 
 // Filter entry delimiter
 const QChar FILTER_DELIMITER = ',';

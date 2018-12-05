@@ -562,7 +562,16 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 
 void ClusterClientFrame::addDxSpotToTable(QString spot)
 {
-    if (spot.contains(DXSPOT))
+
+    if (spot.contains(CLUSTER_STATUS))
+    {
+        QStringList sl = spot.split(CLUSTER_STAT_DELIMITER);
+        if (sl.count() ==  2)
+        {
+             ui->statusText->setText(QString("%1").arg(sl[1]));
+        }
+    }
+    else if (spot.contains(DXSPOT))
     {
         QStringList sl = spot.split(DXSPOT);
         if (sl.count() == 2)

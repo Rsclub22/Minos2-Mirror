@@ -17,6 +17,8 @@ public:
     void setStandAlone();
     void sendDXSpot(QString spot);
 
+signals:
+    void clientConnected();
 
 private slots:
 
