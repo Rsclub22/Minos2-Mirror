@@ -592,7 +592,13 @@ void ClusterClientFrame::addDxSpotToTable(QString spot)
                 // check to see if call or locator worked
                 bool callWorked = false;
                 bool locWorked = false;
-                checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+
+                if (spotlist[DXBANDMASK].toInt() == contestBand) // if contestband matches spotband
+                {
+                    checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+                }
+
+
 
                 double dist = 0;
                 int brg = 0;
@@ -626,6 +632,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
     bool locfound = false;
     if (ct)
     {
+
         Callsign mcs(callsign);
         mcs.validate();
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
@@ -658,6 +665,9 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
 
         }
 
+    }
+
+
 
  /*
         if (!locator.isEmpty())
@@ -675,7 +685,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
         }
 */
 
-    }
+
 }
 
 
@@ -1038,29 +1048,34 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, Loc
 
           for (int spotNumber = 0; spotNumber < dxSpotDataModel->rowCount(); spotNumber++)
           {
-              QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
-              //bool callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
-              //if (!callsignWkd)
-              //{
-                  if (cs.realCall == callsign)
-                  {
-                      dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
-                      worked = true;
-                  }
-              //}
+              int bandMask = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXBANDMASK_COL_NUM,  QModelIndex()), DataStoredRole).toString().toInt();
+              if (bandMask == contestBand)
+              {
+                  QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+                  //bool callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
+                  //if (!callsignWkd)
+                  //{
+                      if (cs.realCall == callsign)
+                      {
+                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
+                          worked = true;
+                      }
+                  //}
 
 
-              QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
-              //bool locatorWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
+                  QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+                  //bool locatorWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
 
-              //if(!locatorWkd)
-              //{
-                  if (loc.loc.getValue().mid(0,4) == locator.mid(0, 4) )
-                  {
-                      dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
-                      worked = true;
-                  }
-              //}
+                  //if(!locatorWkd)
+                  //{
+                      if (loc.loc.getValue().mid(0,4) == locator.mid(0, 4) )
+                      {
+                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
+                          worked = true;
+                      }
+                  //}
+              }
+
           }
       }
 
