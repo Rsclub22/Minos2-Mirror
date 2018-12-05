@@ -14,7 +14,7 @@ const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
 const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
 
 
-
+const int NO_BANDS = -1;
 const int NUMBANDS = 9;
 const int VHFBANDSTART = 0;
 const int VHFBANDEND = 4;
@@ -22,9 +22,12 @@ const int MWBANDSTART = 4;
 const int MWBANDEND = 9;
 
 enum allBandOffsets {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
+const QStringList clusterBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
 
 enum allModeOffsets {CWMODE, PHONEMODE, RTTYMODE, PSKMODE, MGMMODE};
+const QStringList clusterModes = QStringList() << "CW" << "USB" << "FM" << "MGM";
+
 const int NUM_MODES = 5;
 
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
@@ -92,7 +95,9 @@ const QColor CLUSTER_TAB_NOT_SELECT_COLOR = Qt::black;
 
 // Message headers
 const QString DXSPOT = "DXSPOT:";
-const QString TIMETOLIVE = "TIMETOLIVE:";
+//const QString TIMETOLIVE = "TIMETOLIVE:";
+const QString CLUSTER_STATUS = "CLUSTER_STATUS!";
+const QChar CLUSTER_STAT_DELIMITER = '!';
 
 // Filter entry delimiter
 const QChar FILTER_DELIMITER = ',';

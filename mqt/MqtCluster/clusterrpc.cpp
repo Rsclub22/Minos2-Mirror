@@ -45,15 +45,18 @@ void Clusterrpc::dxSpots(QVector<QString> spotQueue)
     {
        //ui->ChatMemo->append( (*i) );
        trace("syncChat " + (*i));
+       if ((*i).contains("MinosQtLogger") && (*i).contains("Available"))
+       {
+            emit clientConnected();
+       }
     }
     spotQueue.clear();
 }
 
 
-void Clusterrpc::sendDXSpot(QString spot)
+void Clusterrpc::sendDXSpot(QString msg)
 {
-    QString msg = DXSPOT + spot;
-    ClusterClientServer::getClusterClientServer()->sendDxSpot(msg);
-
+   ClusterClientServer::getClusterClientServer()->sendDxSpot(msg);
 }
+
 

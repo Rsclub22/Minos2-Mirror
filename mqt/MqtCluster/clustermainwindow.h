@@ -172,6 +172,10 @@ private:
 
     QVector<SpotData*> spotsList;
     QTimer* getSpotsTimer;
+    bool connectedToClientFlag;
+
+    QStringList sendSpotsQueue;
+    QTimer* sendSpotsTimer;
 
     QString currentNodeName;
     QString currentAddress;
@@ -242,22 +246,30 @@ private:
     void echoCmd(QString cmd);
     void echoErrorMsg(QString err);
     void echoMsg(QString msg);
+    QString createSpotToSend(QString spot);
+    QString createStatusToSend(QString status);
 
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
     QStringList testSpotList;
     int spotNum = 0;
 
-
+#endif
 
 
 private slots:
+    void clientConnected();
+    void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
+    void getSpotsFromSendQueue();
+
+
+
+#ifdef TEST_SPOTS
     void testSpotPbClicked();
     void spotTimerTimeOut();
 #endif
 
 
-    void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 };
 
 #endif // CLUSTERMAINWINDOW_H

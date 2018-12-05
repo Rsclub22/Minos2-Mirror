@@ -27,6 +27,7 @@
 ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ClusterMainWindow),
+    connectedToClientFlag(false),
     loginStart(false),
     loginSuccess(false),
     nodeConnected(false),
@@ -59,6 +60,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     getSpotsTimer = new QTimer();
     connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromQueue()));
     getSpotsTimer->start(1000);
+
+
 
     setWindowTitle("Minos Cluster Server");
     status = new QLabel;
@@ -96,8 +99,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(setupCluster, SIGNAL(personalDataUpdated(QString, QString, QString, QString)), SLOT(personalDataChanged(QString, QString, QString, QString)));
 
     clusterRpc = new Clusterrpc();
+    connect (clusterRpc, SIGNAL(clientConnected()), this, SLOT(clientConnected()));
 
     clusterRpc->setStandAlone();
+
+    sendSpotsTimer = new QTimer();
+    connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromSendQueue()));
+    sendSpotsTimer->start(1000);
 
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
@@ -135,6 +143,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
+    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
 
 
     dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
@@ -604,8 +613,8 @@ void ClusterMainWindow::parseDX(QString txt)
             .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
             // Display
             //QString displayFreq = alignFreqRight(dxFreq);
-            clusterRpc->sendDXSpot(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
-            spotsList.append(new SpotData(QDateTime::currentMSecsSinceEpoch(), spotTime,
+            sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive())));
+            spotsList += (new SpotData(QDateTime::currentMSecsSinceEpoch(), spotTime,
                                           dxFreq, dxBandMask,
                                           dxModeMask, dxCall,
                                           false, dxLocator,
@@ -622,6 +631,43 @@ void ClusterMainWindow::parseDX(QString txt)
     }
 }
 
+
+QString ClusterMainWindow::createSpotToSend(QString spot)
+{
+    return DXSPOT + spot;
+}
+
+QString ClusterMainWindow::createStatusToSend(QString status)
+{
+    return CLUSTER_STATUS + status;
+}
+
+
+void ClusterMainWindow::clientConnected()
+{
+    connectedToClientFlag = true;
+}
+
+void ClusterMainWindow::getSpotsFromSendQueue()
+{
+
+    if (!sendSpotsQueue.isEmpty() && connectedToClientFlag)
+    {
+        // get spots from queue and send to client
+        while (sendSpotsQueue.count() > 0)
+        {
+            clusterRpc->sendDXSpot(sendSpotsQueue[0]);
+            sendSpotsQueue.removeFirst();
+        }
+    }
+
+}
+
+
+
+
+
+// this is the queue of spots for display
 void ClusterMainWindow::getSpotsFromQueue()
 {
     if (!spotsList.isEmpty())
@@ -1162,6 +1208,8 @@ void ClusterMainWindow:: saveUserCommandString(int buttonNumber, ClusterUserComm
 void ClusterMainWindow::showStatusMessage(const QString &message)
 {
     status->setText(message);
+    // send status to clients
+    sendSpotsQueue.append(createStatusToSend(message));
 }
 
 void ClusterMainWindow::startDisconnectTimer(int time)

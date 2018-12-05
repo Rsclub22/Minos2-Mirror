@@ -51,6 +51,7 @@ public:
     void setContest(BaseContestLog *c);
     ClusterClientFilterSettings filterSettings;
 
+    void setBandFilter(int band);
 signals:
     void filtersChanged(bool, bool, bool, bool);
 

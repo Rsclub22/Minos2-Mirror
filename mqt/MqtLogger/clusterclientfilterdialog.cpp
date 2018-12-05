@@ -332,6 +332,15 @@ void ClusterClientFilterDialog::modeButtonSelected()
 }
 
 
+void ClusterClientFilterDialog::setBandFilter(int band)
+{
+    if (band > NO_BANDS && band < NUMBANDS)
+    {
+        *filterSettings.bandFilters[band] = true;
+    }
+}
+
+
 void ClusterClientFilterDialog::clearAllButtonSelected()
 {
     clearAllFilters();
