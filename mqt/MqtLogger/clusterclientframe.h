@@ -36,6 +36,14 @@ const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange
 
 const int MOUSE_IN_FRAME_TIMEOUT = 10000;
 
+class ClusterClientFrame;
+
+
+
+
+
+
+
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
@@ -102,7 +110,7 @@ public:
     }
 };
 
-
+class MouseInObject;
 
 
 class ClusterClientFrame : public QFrame
@@ -119,6 +127,12 @@ public:
 
     void mouseMoveEvent(QMouseEvent *event) override;
 
+
+    void setHoldUpdateFlag(bool state);
+
+    bool isSpotQueueEmpty();
+    QTimer* mouseInFrameTimer;
+    void buttonHandleDxSpots();
 
 private:
     Ui::ClusterClientFrame *ui;
@@ -137,7 +151,7 @@ private:
 
     QTimer* checkNewSpotsTimer;
 
-    QTimer* mouseInFrameTimer;
+    MouseInObject* actionInObject;
 
     QVector<QString> spotQueue;
 
@@ -242,5 +256,50 @@ private slots:
     void checkNewSpots();
     void mouseTimerCheckNewSpots();
 };
+
+class MouseInObject : public QObject
+{
+    Q_OBJECT
+public:
+    MouseInObject(QWidget *parent, ClusterClientFrame* frame)
+    {
+        clusterFrame = frame;
+    }
+
+
+
+
+bool eventFilter(QObject *obj, QEvent *event)
+{
+
+
+    if (event->type() == QEvent::Enter)
+    {
+        clusterFrame->setHoldUpdateFlag(true);
+    }
+    else if (event->type() == QEvent::Leave)
+    {
+        clusterFrame->mouseInFrameTimer->stop();
+        if (!clusterFrame->isSpotQueueEmpty())
+        {
+            clusterFrame->buttonHandleDxSpots();
+        }
+        clusterFrame->setHoldUpdateFlag(false);
+
+    }
+
+    return QObject::eventFilter(obj, event);
+}
+
+
+
+private:
+
+ClusterClientFrame* clusterFrame;
+
+
+};
+
+
 
 #endif // CLUSTERCLIENTFRAME_H

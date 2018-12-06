@@ -60,9 +60,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
     connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
 
+
+
     spotsMenu = new QMenu(ui->actionsButton);
 
     ui->actionsButton->setFocusPolicy(Qt::NoFocus);
+    actionInObject = new MouseInObject(this, this);
+    spotsMenu->installEventFilter(actionInObject);
 
     freqAction = new QAction("Set &Freq", this);
     bearingAction = new QAction("Set &Bearing", this);
@@ -1153,27 +1157,45 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, Loc
 void ClusterClientFrame::checkNewSpots()
 {
     // look for new spots in callsign and locator view
+    static int oldSpotCount = 0;
     static int oldCallsignCount = 0;
     static int oldLocatorCount = 0;
 
+    int newSpotCount = dxSpotProxyModel->rowCount();
     int newCallsignCount =  callSignProxyModel->rowCount();
     int newLocatorCount = locatorProxyModel->rowCount();
 
-    if (newCallsignCount == 0 || ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)
+    if ((newSpotCount == 0 || ui->dxSpotTab->currentIndex() == DXSPOT_TAB) && !holdUpdateFlag)
+    {
+       newSpotIndToggle(false);
+    }
+
+    if ((newCallsignCount == 0 || ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)  && !holdUpdateFlag)
     {
        newCallsignSpotIndToggle(false);
     }
 
-    if (newLocatorCount == 0 || ui->dxSpotTab->currentIndex() == LOCATOR_TAB)
+    if ((newLocatorCount == 0 || ui->dxSpotTab->currentIndex() == LOCATOR_TAB)  && !holdUpdateFlag)
     {
        newLocatorSpotIndToggle(false);
     }
+
+    if (newSpotCount > oldSpotCount)
+    {
+        oldSpotCount = newSpotCount;
+        if (ui->dxSpotTab->currentIndex() != DXSPOT_TAB || holdUpdateFlag)
+        {
+            newSpotIndToggle(true);
+        }
+
+    }
+
 
 
     if (newCallsignCount > oldCallsignCount)
     {
         oldCallsignCount = newCallsignCount;
-        if (ui->dxSpotTab->currentIndex() != CALLSIGN_TAB)
+        if (ui->dxSpotTab->currentIndex() != CALLSIGN_TAB  || holdUpdateFlag)
         {
             newCallsignSpotIndToggle(true);
         }
@@ -1183,7 +1205,7 @@ void ClusterClientFrame::checkNewSpots()
     if (newLocatorCount > oldLocatorCount)
     {
         oldLocatorCount = newLocatorCount;
-        if (ui->dxSpotTab->currentIndex() != LOCATOR_TAB)
+        if (ui->dxSpotTab->currentIndex() != LOCATOR_TAB  || holdUpdateFlag)
         {
             newLocatorSpotIndToggle(true);
         }
@@ -1288,6 +1310,23 @@ bool ClusterClientFrame::event(QEvent *event)
     return QWidget::event(event);
 }
 
+
+void ClusterClientFrame::setHoldUpdateFlag(bool state)
+{
+
+    holdUpdateFlag = state;
+}
+
+
+bool ClusterClientFrame::isSpotQueueEmpty()
+{
+    return spotQueue.isEmpty();
+}
+
+void ClusterClientFrame::buttonHandleDxSpots()
+{
+    handleDxSpots(spotQueue);
+}
 
 void ClusterClientFrame::mouseMoveEvent(QMouseEvent *event)
 {
