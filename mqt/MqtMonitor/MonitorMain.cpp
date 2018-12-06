@@ -363,7 +363,7 @@ void MonitorMain::changeEvent( QEvent* e )
         settings.setValue("geometry", saveGeometry());
     }
 }
-bool MonitorMain::eventFilter(QObject *obj, QEvent *event)
+bool MonitorMain::eventFilter(QObject */*obj*/, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress)
     {
