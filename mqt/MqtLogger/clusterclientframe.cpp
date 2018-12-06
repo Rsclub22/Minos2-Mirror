@@ -537,7 +537,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 
 void ClusterClientFrame::dxSpots(QVector<QString> _spotQueue)
 {
-    spotQueue.append(_spotQueue);
+    spotQueue +=_spotQueue;                    // was append - no good on Pi, pre Qt 5.5
     if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
     {
         handleDxSpots(spotQueue);
@@ -616,7 +616,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
                 if (spotlist[DXBANDMASK].toInt() == contestBand) // if contestband matches spotband
                 {
-                    checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+                checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
                 }
 
 
@@ -660,12 +660,12 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
         {
             if (!callfound)
             {
-                if ((*i).wt->cs == mcs)
-                {
-                    *callWorked = true;
+            if ((*i).wt->cs == mcs)
+            {
+                *callWorked = true;
                     callfound = true;
 
-                }
+            }
             }
 
             if (!locator.isEmpty())
@@ -676,7 +676,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
                     *locatorWorked = true;
                     locfound = true;
 
-                }
+        }
             }
 
             if (callfound && locfound)
@@ -1070,7 +1070,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, Loc
               int bandMask = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXBANDMASK_COL_NUM,  QModelIndex()), DataStoredRole).toString().toInt();
               if (bandMask == contestBand)
               {
-                  QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+              QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
                   //bool callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
                   //if (!callsignWkd)
                   //{
@@ -1082,7 +1082,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, Loc
                   //}
 
 
-                  QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+              QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
                   //bool locatorWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
 
                   //if(!locatorWkd)
