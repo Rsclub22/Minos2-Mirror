@@ -25,40 +25,48 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
 
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    if (orientation == Qt::Horizontal)
     {
-        switch (section) {
-            case TIME_COL_NUM:          // 0
-                return tr("Time");
-            case FREQ_COL_NUM:          // 1
-                return tr("Freq");
-            case DXSPOT_CALL_COL_NUM:   // 2
-                return tr("Dx");
-            case DXSPOT_CALL_WORKED_COL_NUM:  // 3
-                return tr("Wkd");
-            case DXLOC_COL_NUM:         // 4
-                return tr("Loc");
-            case DXDIST_COL_NUM:        // 5
-                return tr("Dist");
-            case DXBRG_COL_NUM:        // 6
-                return tr("Brg");
-            case DXLOC_WORKED_COL_NUM:  // 7
-                return tr("Wkd");
-            case SPOT_CALL_COL_NUM:     // 8
-                return tr("Spotter");
-            case SPOTLOC_COL_NUM:       // 9
-                return tr("Loc");
-            case COMMENT_COL_NUM:       // 10
-                return tr("Comment");
-            case DXBANDMASK_COL_NUM:    // 11
-                return tr("Band Mask");
-            case MODEMASK_COL_NUM:      // 12
-                return tr("mode Mask");
-            case DXSPOT_TO_MEMORY_FLAG_COL_NUM:  // 13
-                return tr("Spot to Mem Flag");
-            default:
-            return QVariant();
+        if (role == Qt::DisplayRole)
+        {
+            switch (section) {
+                case TIME_COL_NUM:          // 0
+                    return tr("UTC");
+                case FREQ_COL_NUM:          // 1
+                    return tr("Freq");
+                case DXSPOT_CALL_COL_NUM:   // 2
+                    return tr("Dx");
+                case DXSPOT_CALL_WORKED_COL_NUM:  // 3
+                    return tr("Wkd");
+                case DXLOC_COL_NUM:         // 4
+                    return tr("Loc");
+                case DXDIST_COL_NUM:        // 5
+                    return tr("Dist");
+                case DXBRG_COL_NUM:        // 6
+                    return tr("Brg");
+                case DXLOC_WORKED_COL_NUM:  // 7
+                    return tr("Wkd");
+                case SPOT_CALL_COL_NUM:     // 8
+                    return tr("Spotter");
+                case SPOTLOC_COL_NUM:       // 9
+                    return tr("Loc");
+                case COMMENT_COL_NUM:       // 10
+                    return tr("Comment");
+                case DXBANDMASK_COL_NUM:    // 11
+                    return tr("Band Mask");
+                case MODEMASK_COL_NUM:      // 12
+                    return tr("mode Mask");
+                case DXSPOT_TO_MEMORY_FLAG_COL_NUM:  // 13
+                    return tr("Spot to Mem Flag");
+                default:
+                return QVariant();
+            }
         }
+        else if (role == Qt::TextAlignmentRole)
+        {
+            return Qt::AlignLeft;
+        }
+
     }
     if (orientation == Qt::Vertical)
     {

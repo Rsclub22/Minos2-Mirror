@@ -30,9 +30,9 @@ namespace Ui {
 enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 
 const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: white ;\n");
-const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ; \n");
-
-
+const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ;\n");
+const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: white;\n");
+const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: blue;\n");
 
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {
@@ -169,7 +169,7 @@ private:
 
     void restoreDxSpotViewColumns();
 
-    void addDxSpotToTable(QString spot);
+    void addDxSpotToTable(const QString spot);
     bool spotTimedOut(QString spotTime);
 
     void handleDxSpots(QVector<QString> &spotQueue);
@@ -190,7 +190,7 @@ private:
     void handleVertHeaderClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, int row);
     void newCallsignSpotIndToggle(bool on);
     void newLocatorSpotIndToggle(bool on);
-
+    void statusIndicatorToggle(bool on);
     void checkSavedFilters();
 
     //void on_AfterLogContact(BaseContestLog *c, Callsign cs, Locator loc);
@@ -201,6 +201,7 @@ private:
     int getBandOffSet(QString contestBandStr);
 
     int getModeOffSet(QString contestModeStr);
+
 
 private slots:
 

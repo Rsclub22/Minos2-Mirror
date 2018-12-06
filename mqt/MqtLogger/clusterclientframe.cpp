@@ -126,6 +126,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     purgeTimer->start(PURGE_TIME);
 
+    statusIndicatorToggle(false);
     newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
@@ -560,16 +561,27 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 }
 
 
-void ClusterClientFrame::addDxSpotToTable(QString spot)
+void ClusterClientFrame::addDxSpotToTable(const QString spot)
 {
 
     if (spot.contains(CLUSTER_STATUS))
     {
-        QStringList sl = spot.split(CLUSTER_STAT_DELIMITER);
-        if (sl.count() ==  2)
+        if (spot.contains("!Connected"))
         {
-             ui->statusText->setText(QString("%1").arg(sl[1]));
+             statusIndicatorToggle(true);
         }
+        else
+        {
+             statusIndicatorToggle(false);
+        }
+
+        //QStringList sl;
+        //sl = spot.split('!');
+        //if (sl.count() ==  2)
+        //{
+        //     ui->statusIndicator->setToolTip(QString("%1").arg(sl[1]));
+        //
+        //}
     }
     else if (spot.contains(DXSPOT))
     {
@@ -1194,6 +1206,19 @@ void ClusterClientFrame::checkSavedFilters()
 }
 
 
+
+void ClusterClientFrame::statusIndicatorToggle(bool on)
+{
+    if (on)
+    {
+        ui->statusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+    }
+    else
+    {
+       ui->statusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+    }
+
+}
 
 void ClusterClientFrame::newSpotIndToggle(bool on)
 {
