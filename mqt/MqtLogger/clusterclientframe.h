@@ -29,10 +29,12 @@ namespace Ui {
 
 enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 
-const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: white ;\n");
+const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: yellow ;\n");
 const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ;\n");
-const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: white;\n");
-const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: blue;\n");
+const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yellow;\n");
+const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
+
+const int MOUSE_IN_FRAME_TIMEOUT = 10000;
 
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {
@@ -115,6 +117,7 @@ public:
 
     void setContest(BaseContestLog *contest);
 
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 
 private:
@@ -133,6 +136,8 @@ private:
     bool holdUpdateFlag;
 
     QTimer* checkNewSpotsTimer;
+
+    QTimer* mouseInFrameTimer;
 
     QVector<QString> spotQueue;
 
@@ -235,6 +240,7 @@ private slots:
     void onSearchSpotVertHeaderClicked(int row);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
     void checkNewSpots();
+    void mouseTimerCheckNewSpots();
 };
 
 #endif // CLUSTERCLIENTFRAME_H

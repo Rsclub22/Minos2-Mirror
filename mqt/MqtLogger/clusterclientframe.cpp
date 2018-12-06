@@ -41,6 +41,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
     delegate = new HtmlDelegate(1.0, lcf/100.0) ;
 
+    this->setMouseTracking(true);
+    mouseInFrameTimer = new QTimer(this);
+    connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
 
     filterSetup = new ClusterClientFilterDialog(this, instanceNum);
 
@@ -1272,6 +1275,7 @@ bool ClusterClientFrame::event(QEvent *event)
     }
     else if (event->type() == QEvent::Leave)
     {
+        mouseInFrameTimer->stop();
         if (!spotQueue.isEmpty())
         {
             handleDxSpots(spotQueue);
@@ -1280,7 +1284,36 @@ bool ClusterClientFrame::event(QEvent *event)
 
     }
 
+
     return QWidget::event(event);
+}
+
+
+void ClusterClientFrame::mouseMoveEvent(QMouseEvent *event)
+{
+    static QPoint mousePos = QPoint(0, 0);
+    if (holdUpdateFlag)
+    {
+       mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
+       if (mousePos != event->pos())
+       {
+           mousePos = event->pos();
+           mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
+       }
+    }
+
+}
+
+void ClusterClientFrame::mouseTimerCheckNewSpots()
+{
+    if (holdUpdateFlag)
+    {
+        if (!spotQueue.isEmpty())
+        {
+            handleDxSpots(spotQueue);
+        }
+        mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
+    }
 }
 
 

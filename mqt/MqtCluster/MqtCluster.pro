@@ -30,7 +30,6 @@ SOURCES += main.cpp\
         clustermainwindow.cpp \
     setupdialog.cpp \
     cluster.cpp \
-    spotsdatabase.cpp \
     clusterrpc.cpp \
     userclustercommanddialog.cpp \
     clusterusercmdbutton.cpp
@@ -40,7 +39,6 @@ SOURCES += main.cpp\
 HEADERS  += clustermainwindow.h \
     setupdialog.h \
     cluster.h \
-    spotsdatabase.h \
     clusterrpc.h \
     userclustercommanddialog.h \
     clusterusercmdbutton.h
