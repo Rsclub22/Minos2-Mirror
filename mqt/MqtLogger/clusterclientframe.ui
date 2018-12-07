@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>477</width>
+    <width>503</width>
     <height>334</height>
    </rect>
   </property>
@@ -76,9 +76,16 @@
           </widget>
          </item>
          <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Spot</string>
+            <string>Dx Spot</string>
            </property>
           </widget>
          </item>
@@ -141,6 +148,13 @@
            </property>
            <property name="text">
             <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
           </widget>
          </item>
