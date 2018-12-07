@@ -52,10 +52,12 @@ ContestDetails::ContestDetails(QWidget *parent) :
         QString cbText = QString("%1:").arg(i, 2, 10, QChar('0'));
         QString hour = cbText + "00 UTC";
         QString halfhour = cbText + "30 UTC";
+        QString fiftyfive = cbText + "55 UTC";
         ui->StartTimeCombo->addItem( hour );
         ui->StartTimeCombo->addItem ( halfhour );
         ui->EndTimeCombo->addItem( hour );
         ui->EndTimeCombo->addItem ( halfhour );
+        ui->EndTimeCombo->addItem ( fiftyfive );
     }
 
     ui->StartDateEdit->setDate(QDate::currentDate());
