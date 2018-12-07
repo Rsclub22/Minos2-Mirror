@@ -72,7 +72,8 @@ public:
     int findCurrentRadio(QString currentRadioName);
     void setTabToCurrentRadio();
 
-
+    void fillPortsInfo();
+    void loadAvailComports();
 
 signals:
 
@@ -111,7 +112,7 @@ private:
     void saveSettings();
 
     void fillRadioModelInfo();
-    void fillPortsInfo();
+
     void fillSpeedInfo();
     void fillDataBitsInfo();
     void fillStopBitsInfo();

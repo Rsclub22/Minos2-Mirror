@@ -147,7 +147,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     radioTab[tabNum]->setRadioModel(radioTab[tabNum]->getRadioData()->radioModel);
 
     radioTab[tabNum]->setCIVAddress(radioTab[tabNum]->getRadioData()->civAddress);
-    radioTab[tabNum]->setComport(radioTab[tabNum]->getRadioData()->comport);
+    //radioTab[tabNum]->setComport(radioTab[tabNum]->getRadioData()->comport);
     radioTab[tabNum]->setDataSpeed(QString::number(radioTab[tabNum]->getRadioData()->baudrate));
     radioTab[tabNum]->setDataBits(QString::number(radioTab[tabNum]->getRadioData()->databits));
     radioTab[tabNum]->setStopBits(QString::number(radioTab[tabNum]->getRadioData()->stopbits));
@@ -392,6 +392,18 @@ int RigSetupDialog::comportAvial(int radioNum, QString comport)
     }
 
     return -1;
+}
+
+
+void RigSetupDialog::loadAvailComports()
+{
+    for (int i = 0; i <radioTab.count(); i++)
+    {
+        radioTab[i]->loadRadioComports();
+        radioTab[i]->setComport(availRadioData[i]->comport);
+    }
+
+
 }
 
 

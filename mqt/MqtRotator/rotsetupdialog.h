@@ -73,6 +73,8 @@ public:
     int comportAvial(QString comport);
     int findCurrentAntenna(QString currentAntName);
     void setTabToCurrentAntenna();
+    void loadAvailComports();
+
 signals:
 
     void currentAntennaSettingChanged(QString);

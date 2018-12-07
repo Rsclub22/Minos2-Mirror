@@ -45,7 +45,7 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
 
 
     fillRadioModelInfo();  // add radio models to drop down
-    fillPortsInfo(ui->comPortBox);     // add comports to drop down
+    //fillPortsInfo(ui->comPortBox);     // add comports to drop down
     fillPortsInfo(ui->locTVComPortSel);
     fillSpeedInfo();
     fillDataBitsInfo();
@@ -364,6 +364,12 @@ QString RigSetupForm::getComport()
 void RigSetupForm::setComport(QString p)
 {
     ui->comPortBox->setCurrentIndex(ui->comPortBox->findText(p));
+}
+
+
+void RigSetupForm::loadRadioComports()
+{
+    fillPortsInfo(ui->comPortBox);
 }
 
 /***************************** Data Speed *************************/

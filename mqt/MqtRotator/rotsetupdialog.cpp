@@ -167,7 +167,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->setCheckOverrun(availAntData[tabNum]->overRunFlag);
         antennaTab[tabNum]->setAntennaOffset(QString::number(availAntData[tabNum]->antennaOffset));
         antennaTab[tabNum]->antennaOffSetVisible(true);
-        antennaTab[tabNum]->setComport(availAntData[tabNum]->comport);
+        //antennaTab[tabNum]->setComport(availAntData[tabNum]->comport);
         antennaTab[tabNum]->setDataSpeed(QString::number(availAntData[tabNum]->baudrate));
         antennaTab[tabNum]->setDataBits(QString::number(availAntData[tabNum]->databits));
         antennaTab[tabNum]->setStopBits(QString::number(availAntData[tabNum]->stopbits));
@@ -492,6 +492,18 @@ int RotSetupDialog::comportAvial(QString comport)
     {
         return -1;
     }
+}
+
+
+void RotSetupDialog::loadAvailComports()
+{
+    for (int i = 0; i <antennaTab.count(); i++)
+    {
+        antennaTab[i]->fillPortsInfo();
+        antennaTab[i]->setComport(availAntData[i]->comport);
+    }
+
+
 }
 
 //void RotSetupDialog::clearAvailRotators()

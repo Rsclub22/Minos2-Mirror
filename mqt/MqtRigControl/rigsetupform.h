@@ -126,6 +126,9 @@ public:
 
     void setTransVertSwVisible(bool b);
 
+    void loadRadioComports();
+
+
 signals:
     void transVertTabAdded(int);
 
