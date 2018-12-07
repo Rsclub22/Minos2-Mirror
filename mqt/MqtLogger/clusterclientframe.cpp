@@ -586,8 +586,9 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
         sl = spot.split(CLUSTER_STATUS);
         if (sl.count() ==  2)
         {
-             ui->statusIndicator->setToolTip(QString("%1").arg(sl[1]));
-             qDebug() << QString("%1").arg(sl[1]);
+            QString statusMsg = QString("%1").arg(sl[1]);
+            ui->statusIndicator->setToolTip(statusMsg);
+            trace(QString("Cluster Status: %1").arg(statusMsg));
 
         }
     }
