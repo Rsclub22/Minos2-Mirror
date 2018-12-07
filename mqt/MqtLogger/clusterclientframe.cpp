@@ -582,13 +582,14 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
              statusIndicatorToggle(false);
         }
 
-        //QStringList sl;
-        //sl = spot.split('!');
-        //if (sl.count() ==  2)
-        //{
-        //     ui->statusIndicator->setToolTip(QString("%1").arg(sl[1]));
-        //
-        //}
+        QStringList sl;
+        sl = spot.split(CLUSTER_STATUS);
+        if (sl.count() ==  2)
+        {
+             ui->statusIndicator->setToolTip(QString("%1").arg(sl[1]));
+             qDebug() << QString("%1").arg(sl[1]);
+
+        }
     }
     else if (spot.contains(DXSPOT))
     {
