@@ -198,7 +198,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->spotterLocator;
                 break;
             case COMMENT_COL_NUM:
-                d = dxSpot->spotComment;
+                d = dxSpot->spotComment.replace('<', " - ").replace(">", " - ");
                 break;
             case RXTIME_COL_NUM:
                 d = QString::number(dxSpot->rxTime);

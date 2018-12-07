@@ -837,28 +837,6 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
         dxLoc = comment.mid(firstIndex, 4).toUpper();
     }
 
-    /*
-
-    if (comment.count(fullLocExp) == 1 || comment.count(partLocExp) == 1)      // look for a single locator, which we assume is DX locator
-    {
-        trace(QString("Only locator in comment - extract"));
-        dxLoc = extractLocator(comment, fullLocExp, partLocExp);
-    }
-    else
-    {
-        for (int i = 0; i < locatorSeperators.count(); i++)
-        {
-            trace(QString("Exract locators - looks for seperator %1").arg(locatorSeperators[i]));
-            if (comment.contains(locatorSeperators[i], Qt::CaseInsensitive))
-            {
-                trace(QString("Exract locators - found seperator %1").arg(locatorSeperators[i]));
-                loc = comment.split(locatorSeperators[i], QString::KeepEmptyParts, Qt::CaseInsensitive);
-                spotLoc = extractLocator(loc[0], fullLocExp, partLocExp);
-                dxLoc = extractLocator(loc[1], fullLocExp, partLocExp);
-             }
-        }
-    }
-*/
     trace(QString("Extracted dxLoc = %1 spotLoc= %2").arg(dxLoc).arg(spotLoc));
 
 }
