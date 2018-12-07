@@ -370,3 +370,26 @@ QString removeChars(QString s, const QList<QChar> chars)
 
 }
 
+
+QString escapeXML ( const QString &value )
+{
+    QString escaped;
+    for ( int index = 0; index < value.length(); ++index )
+    {
+        QChar c = value[ index ];
+        if (c == '<')
+            escaped += "&lt;";
+        else if (c == '>')
+            escaped += "&gt;";
+        else if (c == '&')
+            escaped += "&amp;";
+        else if (c == '\'')
+            escaped += "&apos;";
+        else if (c == '"')
+            escaped += "&quot;";
+        else
+            escaped += c;
+    }
+
+    return escaped;
+}

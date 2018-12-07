@@ -52,7 +52,7 @@ const QList<QChar> illegalChars = {QChar('|'), QChar('/'), QChar('\\'), QChar('[
 extern bool containsChars(QString s, const QList<QChar> chars);
 extern QString replaceChars(QString s, const QChar c, const QList<QChar> cChars );
 extern QString removeChars(QString s, const QList<QChar> chars);
-
+extern QString escapeXML (const QString &value);
 
 
 class writer

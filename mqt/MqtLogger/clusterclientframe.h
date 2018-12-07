@@ -263,6 +263,7 @@ class MouseInObject : public QObject
 public:
     MouseInObject(QWidget *parent, ClusterClientFrame* frame)
     {
+        Q_UNUSED(parent)
         clusterFrame = frame;
     }
 
