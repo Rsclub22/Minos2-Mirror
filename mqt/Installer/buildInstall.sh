@@ -41,6 +41,8 @@ mkdir Configuration
 mkdir Lists
 mkdir Logs
 mkdir Bin
+mkdir Docs
+mkdir Help
 
 echo $OSTYPE
 
@@ -75,6 +77,8 @@ cp -r ../Minos2/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
 rm -rf ./Configuration/WindowsFiles
 rm -rf ./Configuration/LinuxFiles
 cp ../Minos2/mqt/Installer/Minos.sh . 
+cp ../Minos2/mqt/Docs/*.* ./Docs
+cp ../Minos2/mqt/Help/*.* ./Help
 
 cd Configuration
 

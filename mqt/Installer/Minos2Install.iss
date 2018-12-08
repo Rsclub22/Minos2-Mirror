@@ -7,6 +7,7 @@
 #define SourcePath="C:\temp\mqtInstaller\installFiles"
 
 #define MyAppExename "MqtLogger.exe" 
+#define MyDocFileName "Minos V2.0.8 Documentation (Y2.0.8).pdf"
 #define MyAppMajor ""
 #define MyAppMinor ""
 #define MyAppRev ""
@@ -79,6 +80,7 @@ Type: files; Name: "{app}\Configuration\MinosControl.ini"
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"
+Name: "{group}\{#MyDocFileName}"; Filename: "{app}\Docs\{#MyDocFileName}";WorkingDir: "{app}\Docs"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"; Tasks: desktopicon
 Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"; Tasks: quicklaunchicon
