@@ -1758,7 +1758,7 @@ void RotatorMainWindow::hamlibError(int errorCode, QString cmd )
     }
     // log all errors
     QString errorMsg = rotator->gethamlibErrorMsg(errorCode);
-    logMessage(QString("Hamlib Error - Code = %1 - %2").arg(QString::number(errorCode).arg(errorMsg)));
+    logMessage(QString("Hamlib Error - Code = %1 - %2").arg(errorCode).arg(errorMsg));
 
 
      pollTimer->stop();
