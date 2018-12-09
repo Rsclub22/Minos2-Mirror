@@ -1919,7 +1919,7 @@ void RotatorMainWindow::updateSelectAntennaBox()
 void RotatorMainWindow::onLaunchSetup()
 {
     setupAntenna->setTabToCurrentAntenna();
-
+    setupAntenna->loadAvailComports();
     setupAntenna->exec();
 }
 

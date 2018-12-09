@@ -115,6 +115,7 @@ private:
     void copyModeFiltersToFilterSettings();
 
 
+    void doCloseEvent();
 private slots:
     //void bandChecked(int checkBoxNum);
     //void modeChecked(int checkBoxNum);

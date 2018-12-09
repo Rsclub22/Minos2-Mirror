@@ -39,6 +39,11 @@ RotSetupDialog::RotSetupDialog(RotControl* _rotator, QWidget *parent) :
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     rotator = _rotator;
 
+    QSettings settings;
+    QByteArray geometry = settings.value("RotControlSetup/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveButtonPushed()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelButtonPushed()));
     connect(ui->addAntenna, SIGNAL(clicked()), this, SLOT(addAntenna()));
@@ -167,7 +172,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->setCheckOverrun(availAntData[tabNum]->overRunFlag);
         antennaTab[tabNum]->setAntennaOffset(QString::number(availAntData[tabNum]->antennaOffset));
         antennaTab[tabNum]->antennaOffSetVisible(true);
-        antennaTab[tabNum]->setComport(availAntData[tabNum]->comport);
+        //antennaTab[tabNum]->setComport(availAntData[tabNum]->comport);
         antennaTab[tabNum]->setDataSpeed(QString::number(availAntData[tabNum]->baudrate));
         antennaTab[tabNum]->setDataBits(QString::number(availAntData[tabNum]->databits));
         antennaTab[tabNum]->setStopBits(QString::number(availAntData[tabNum]->stopbits));
@@ -259,9 +264,17 @@ void RotSetupDialog::saveButtonPushed()
 }
 
 
+void RotSetupDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("RotControlSetup/geometry", saveGeometry());
+}
+
+
 void RotSetupDialog::closeEvent (QCloseEvent *event)
 {
     cancelButtonPushed();
+    doCloseEvent();
     QWidget::closeEvent(event);
 }
 
@@ -291,7 +304,7 @@ void RotSetupDialog::cancelButtonPushed()
         initSetup();
     }
 
-
+    doCloseEvent();
 }
 
 
@@ -395,7 +408,7 @@ void RotSetupDialog::saveSettings()
 
    }
 
-
+    doCloseEvent();
 }
 
 
@@ -492,6 +505,18 @@ int RotSetupDialog::comportAvial(QString comport)
     {
         return -1;
     }
+}
+
+
+void RotSetupDialog::loadAvailComports()
+{
+    for (int i = 0; i <antennaTab.count(); i++)
+    {
+        antennaTab[i]->fillPortsInfo();
+        antennaTab[i]->setComport(availAntData[i]->comport);
+    }
+
+
 }
 
 //void RotSetupDialog::clearAvailRotators()

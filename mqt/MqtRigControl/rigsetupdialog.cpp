@@ -44,6 +44,12 @@ RigSetupDialog::RigSetupDialog(RigControl* _radio, const QVector<BandDetail*> _b
     radio = _radio;
     bands = _bands;
 
+    QSettings settings;
+    QByteArray geometry = settings.value("RigControl/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveButtonPushed()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelButtonPushed()));
     connect(ui->addRadio, SIGNAL(clicked()), this, SLOT(addRadio()));
@@ -147,7 +153,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     radioTab[tabNum]->setRadioModel(radioTab[tabNum]->getRadioData()->radioModel);
 
     radioTab[tabNum]->setCIVAddress(radioTab[tabNum]->getRadioData()->civAddress);
-    radioTab[tabNum]->setComport(radioTab[tabNum]->getRadioData()->comport);
+    //radioTab[tabNum]->setComport(radioTab[tabNum]->getRadioData()->comport);
     radioTab[tabNum]->setDataSpeed(QString::number(radioTab[tabNum]->getRadioData()->baudrate));
     radioTab[tabNum]->setDataBits(QString::number(radioTab[tabNum]->getRadioData()->databits));
     radioTab[tabNum]->setStopBits(QString::number(radioTab[tabNum]->getRadioData()->stopbits));
@@ -395,11 +401,29 @@ int RigSetupDialog::comportAvial(int radioNum, QString comport)
 }
 
 
+void RigSetupDialog::loadAvailComports()
+{
+    for (int i = 0; i <radioTab.count(); i++)
+    {
+        radioTab[i]->loadRadioComports();
+        radioTab[i]->setComport(availRadioData[i]->comport);
+    }
+
+
+}
+
+void RigSetupDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("RigControl/geometry", saveGeometry());
+}
+
 
 
 void RigSetupDialog::closeEvent (QCloseEvent *event)
 {
     cancelButtonPushed();
+    doCloseEvent();
     QWidget::closeEvent(event);
 }
 
@@ -407,6 +431,7 @@ void RigSetupDialog::saveButtonPushed()
 {
 
     saveSettings();
+    doCloseEvent();
 
 }
 
@@ -433,6 +458,8 @@ void RigSetupDialog::cancelButtonPushed()
         ui->radioTab->clear();
         initSetup();                // load data from file
     }
+
+    doCloseEvent();
 }
 
 

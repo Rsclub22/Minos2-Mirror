@@ -71,6 +71,7 @@ public:
     QString getPollInterval();
     void setPollInterval(QString i);
 
+    void fillPortsInfo();
 
     bool getsStopOffBut();
     void setSStopOffButChecked(bool s);
@@ -148,7 +149,7 @@ private:
     void loadAntennaName();
     void fillRotatorModelInfo();
     void fillPollInterValInfo();
-    void fillPortsInfo();
+
     void fillSpeedInfo();
     void fillDataBitsInfo();
     void fillStopBitsInfo();

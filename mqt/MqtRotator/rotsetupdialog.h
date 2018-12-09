@@ -73,6 +73,8 @@ public:
     int comportAvial(QString comport);
     int findCurrentAntenna(QString currentAntName);
     void setTabToCurrentAntenna();
+    void loadAvailComports();
+
 signals:
 
     void currentAntennaSettingChanged(QString);
@@ -121,6 +123,7 @@ private:
     void getAvailAntenna(int antNum, QSettings &config);
     void initSetup();
     void closeEvent(QCloseEvent *event) override;
+    void doCloseEvent();
 };
 
 #endif // SETUPDIALOG_H

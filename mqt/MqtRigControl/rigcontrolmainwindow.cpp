@@ -2359,7 +2359,7 @@ void RigControlMainWindow::sendTpm(int tpm)
 void RigControlMainWindow::onLaunchSetup()
 {
     setupRadio->setTabToCurrentRadio();
-
+    setupRadio->loadAvailComports();
     setupRadio->exec();
 }
 

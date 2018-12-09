@@ -60,6 +60,7 @@ public:
 signals:
 
     void personalDataUpdated(QString, QString, QString, QString);
+    void clusterListChanged();
 
 public slots:
     QString getCurrentNodeName();
@@ -122,6 +123,7 @@ private:
     void loadPersonalToSetupTab();
     void clusterListSave();
     void loadSettingsToModel(QStringList &availNodeNames, QSettings &settings);
+    void doCloseEvent();
 };
 
 #endif // SETUPDIALOG_H

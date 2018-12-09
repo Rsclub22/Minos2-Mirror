@@ -45,7 +45,7 @@ rotSetupForm::rotSetupForm(RotControl* _rotator, srotParams* _antennaData, QWidg
     antennaData = _antennaData;
 
     fillRotatorModelInfo();
-    fillPortsInfo();
+    //fillPortsInfo();
     fillPollInterValInfo();
     fillSpeedInfo();
     fillDataBitsInfo();

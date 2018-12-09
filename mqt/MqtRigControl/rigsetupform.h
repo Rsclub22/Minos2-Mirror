@@ -126,6 +126,9 @@ public:
 
     void setTransVertSwVisible(bool b);
 
+    void loadRadioComports();
+
+
 signals:
     void transVertTabAdded(int);
 
@@ -191,6 +194,7 @@ private:
 
 
     bool radioSupportRit(int radioModelNumber);
+
 };
 
 #endif // RIGSETUPFORM_H
