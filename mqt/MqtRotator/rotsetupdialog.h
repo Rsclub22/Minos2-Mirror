@@ -124,6 +124,7 @@ private:
     void initSetup();
     void closeEvent(QCloseEvent *event) override;
     void doCloseEvent();
+    void loadAvailComportsToTab(int tabNum);
 };
 
 #endif // SETUPDIALOG_H

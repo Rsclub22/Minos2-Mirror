@@ -142,6 +142,7 @@ private:
     void initSetup();
     void closeEvent(QCloseEvent *event);
     void doCloseEvent();
+    void loadAvailComportsToTab(int tabNum);
 };
 
 #endif // SETUPDIALOG_H
