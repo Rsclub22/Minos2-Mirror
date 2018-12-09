@@ -40,6 +40,7 @@ private:
     ClusterUserCommandData *curData;
     bool nameChanged;
     bool cmdStringChanged;
+    void doCloseEvent();
 };
 
 #endif // USERCLUSTERCOMMANDDIALOG_H

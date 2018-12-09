@@ -29,6 +29,11 @@ SetupDialog::SetupDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QSettings settings;
+    QByteArray geometry = settings.value("ClusterSetup/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     // General Tab
@@ -64,10 +69,22 @@ SetupDialog::SetupDialog(QWidget *parent) :
 
 }
 
+
+
+
+
 SetupDialog::~SetupDialog()
 {
     delete ui;
 }
+
+
+void SetupDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("ClusterSetup/geometry", saveGeometry());
+}
+
 
 
 void SetupDialog::saveButtonPushed()
@@ -76,6 +93,7 @@ void SetupDialog::saveButtonPushed()
     clusterListSave();
     savePersonal();
     saveGeneralSettings();
+    doCloseEvent();
 
 }
 
@@ -103,6 +121,7 @@ void SetupDialog::cancelButtonPushed()
 
     readGeneralSettings();
     loadGeneralToSetupTab();
+    doCloseEvent();
 
 
 
@@ -416,6 +435,8 @@ void SetupDialog::clusterListSave()
             settings.endGroup();
 
         }
+
+        emit clusterListChanged();
 
     }
     listDataChanged = false;

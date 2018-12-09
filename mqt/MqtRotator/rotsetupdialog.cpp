@@ -39,6 +39,11 @@ RotSetupDialog::RotSetupDialog(RotControl* _rotator, QWidget *parent) :
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     rotator = _rotator;
 
+    QSettings settings;
+    QByteArray geometry = settings.value("RotControlSetup/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveButtonPushed()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelButtonPushed()));
     connect(ui->addAntenna, SIGNAL(clicked()), this, SLOT(addAntenna()));
@@ -259,9 +264,17 @@ void RotSetupDialog::saveButtonPushed()
 }
 
 
+void RotSetupDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("RotControlSetup/geometry", saveGeometry());
+}
+
+
 void RotSetupDialog::closeEvent (QCloseEvent *event)
 {
     cancelButtonPushed();
+    doCloseEvent();
     QWidget::closeEvent(event);
 }
 
@@ -291,7 +304,7 @@ void RotSetupDialog::cancelButtonPushed()
         initSetup();
     }
 
-
+    doCloseEvent();
 }
 
 
@@ -395,7 +408,7 @@ void RotSetupDialog::saveSettings()
 
    }
 
-
+    doCloseEvent();
 }
 
 

@@ -15,6 +15,7 @@
 #include <QTimer>
 #include <QProcessEnvironment>
 #include <QHeaderView>
+#include <QTextStream>
 #include <QDebug>
 
 #include "clustermainwindow.h"
@@ -32,9 +33,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     loginSuccess(false),
     nodeConnected(false),
     purgeSpotFlag(false),
-    reconnectFlag(false)
-
-
+    reconnectFlag(false),
+    enableHFSpots(false)
 {
     ui->setupUi(this);
 
@@ -117,6 +117,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     // spotTimeToLive
     setupCluster->readGeneralSettings();
 
+    // read enable hf spots flag
+    QString fileName = CLUSTER_SETTINGS_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("HFSpots");
+    enableHFSpots = config.value("enable", false).toBool();
+    config.endGroup();
+
 
     dxSpotDataModel = new DxSpotDataModel();
 
@@ -192,8 +199,10 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     connect(ui->nodeCb, SIGNAL(activated(QString)), this, SLOT(connectToNode(QString)));
 
+    connect(setupCluster, SIGNAL(clusterListChanged()), this, SLOT(clusterListChanged()));
 
     connect(client, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
+    //connect(client, SIGNAL(connected(bool)), this, SLOT(connected(bool)));
     connect(client, SIGNAL(loginRequired()), this, SLOT(logIn()));
     connect(client, SIGNAL(connectionError(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
     connect(client, SIGNAL(loggedOut()), this, SLOT(loggedOut()));
@@ -218,6 +227,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connectToHost(currentNodeName);
 
 
+}
+
+
+
+void ClusterMainWindow::clusterListChanged()
+{
+    loadNodesSelectBox(setupCluster->getListOfClusterNames());
 }
 
 
@@ -383,7 +399,7 @@ void ClusterMainWindow::connectToHost(QString hostName)
                 || currentUserQTH.isEmpty() || currentUserLocator.isEmpty())
         {
             int ret = QMessageBox::warning(this, tr("Connect to Cluster Node"),
-                                           tr("Personnel Data missing.\n"
+                                           tr("Personal Data missing.\n"
                                               "User Name: %1\n"
                                               "User Callsign: %2\n"
                                               "User QTH: %3\n"
@@ -416,11 +432,6 @@ void ClusterMainWindow::connectToHost(QString hostName)
 
 
 
-
-
-
-
-
 void ClusterMainWindow::connectionEstab()
 {
     nodeConnected = true;
@@ -428,6 +439,7 @@ void ClusterMainWindow::connectionEstab()
     QString msg = QString("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort);
     trace(QString(msg));
     echoMsg(msg);
+
 }
 
 void ClusterMainWindow::connectionError(QAbstractSocket::SocketError error)
@@ -602,36 +614,185 @@ void ClusterMainWindow::handleStartFile()
 }
 
 
-void ClusterMainWindow::parseDX(QString txt)
+void ClusterMainWindow::parseDX(const QString txt)
 {
+    QString buf;
+    QTextStream in;
+    in.setString(&buf, QIODevice::ReadOnly);
+    buf = txt;
+
+    int retCode = -100;
+    spotCall = "";
+    QString line;
     if (loginSuccess)
     {
-        int retCode = upackSpot(txt);
+        trace(QString("raw spot = %1").arg(txt));
 
-        if (retCode >= 0)
+        QTextStream in;
+        in.setString(&buf, QIODevice::ReadOnly);
+
+        do
         {
+            line = in.readLine();
+            if (!line.isEmpty())
+            {
+                if (line.contains("DX de"))
+                {
+                   retCode = upackDxSpot(line, spotCall);
+                   trace(QString("ParseDx - Unpack DxSpot retcode = %1").arg(retCode));
 
-            trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12")
-            .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
-            // Display
-            //QString displayFreq = alignFreqRight(dxFreq);
-            sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive())));
-            spotsList += (new SpotData(QDateTime::currentMSecsSinceEpoch(), spotTime,
-                                          dxFreq, dxBandMask,
-                                          dxModeMask, dxCall,
-                                          false, dxLocator,
-                                          false, "",
-                                          "", spotCall,
-                                          spotLocator, spotComment));
+                }
+                else if (checkShowDxMsg(line, spotCall))
+                {
+                    retCode = upackShowDxSpot(line, spotCall);
+                    trace(QString("ParseDx - Unpack ShowDxSpot retcode = %1").arg(retCode));
+                }
 
+
+
+                if (retCode >= 0)
+                {
+
+                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12")
+                    .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
+                    // Display
+                    //QString displayFreq = alignFreqRight(dxFreq);
+                    sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive())));
+                    spotsList += (new SpotData(QDateTime::currentMSecsSinceEpoch(), spotTime,
+                                                  dxFreq, dxBandMask,
+                                                  dxModeMask, dxCall,
+                                                  false, dxLocator,
+                                                  false, "",
+                                                  "", spotCall,
+                                                  spotLocator, spotComment));
+
+                }
+                else if (retCode == -100)
+                {
+                    trace(QString("ParseDx - Not a valid spot retcode = %1").arg(retCode));
+                }
+            }
+        } while (!line.isNull());
+    }
+}
+
+//
+int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCall)
+{
+    spotCall = _spotCall;
+
+    // clear the rest of spot data
+    dxCall = "";
+    dxFreq = "";
+    dxBandStr = "";
+    dxBandMask = "";
+    dxModeStr = "";
+    dxModeMask = "";
+
+    spotComment = "";
+    spotTime = "";
+    dxLocator = "";
+    spotLocator = "";
+
+    dxMsg = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+
+    if (dxMsg.count() > 4)
+    {
+        dxFreq = convertKhzToMhz(dxMsg[0]);
+        getBand(dxFreq, dxBandStr, dxBandMask);
+        if (dxBandStr.isEmpty() && !enableHFSpots)
+        {
+            // discard spot as it is HF
+            trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(dxFreq));
+            return -3;
         }
-        else if (retCode < 0)
+        dxCall = dxMsg[1];
+        spotTime = dxMsg[3].remove('Z');
+        QString sptCall = spotCall;
+        sptCall.prepend('<').append('>');
+        // reassemble comment
+        for (int i = 4; i < dxMsg.indexOf(sptCall); i++)
         {
-            trace(QString("ParseDx: Error unpacking spot"));
+            if (dxMsg[i] != "")
+            {
+                spotComment += dxMsg[i] + " ";
+            }
+        }
+
+        findLocInComment(spotLocator, dxLocator, spotComment);
+        return 0;
+    }
+
+    return -1;
+
+}
+
+
+bool ClusterMainWindow::checkShowDxMsg(const QString txt, QString &spotCall)
+{
+
+    QChar sep1 = '<';
+    QChar sep2 = '>';
+
+    int countSep1 = 0;
+    int countSep2 = 0;
+
+    countSep1 = txt.count(sep1);
+    countSep2 = txt.count(sep2);
+    QList<int> SepIdx1;
+    QList<int> SepIdx2;
+    QStringList extractStr;
+    //bool foundCall = false;
+
+
+    if (((countSep1 - countSep2) == 0) && countSep1 >= 1 && countSep2 >= 1)
+    {
+        // we have a matching pair of seperators, get their index positions
+        int pos = 0;
+        for (int i = 0; i < countSep1; i++)
+        {
+            pos = txt.indexOf(sep1, pos);
+            SepIdx1 += pos + 1;
+            pos++;
+        }
+
+        pos = 0;
+        for (int i = 0; i < countSep2; i++)
+        {
+            pos = txt.indexOf(sep2, pos);
+            SepIdx2 += pos;
+            pos++;
+        }
+    }
+
+    for (int i = 0; i < SepIdx1.count(); i++)
+    {
+        QString str;
+        if (SepIdx2[i] - SepIdx1[i] > 0)
+        {
+            extractStr += txt.mid(SepIdx1[i], SepIdx2[i] - SepIdx1[i]);
         }
 
     }
+
+    if (extractStr.count() > 0)
+    {
+        for (int i = 0; i < extractStr.count(); i++)
+        {
+            Callsign callsign(extractStr[i]);
+            if (callsign.validate() == CS_OK)
+            {
+                spotCall = extractStr[i];
+                return true;
+                break;
+            }
+        }
+    }
+
+    return false;
+
 }
+
 
 
 QString ClusterMainWindow::createSpotToSend(QString spot)
@@ -692,9 +853,9 @@ void ClusterMainWindow::getSpotsFromQueue()
 }
 
 
-int ClusterMainWindow::upackSpot(QString txt)
+int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
 {
-    trace(QString("raw spot = %1").arg(txt));
+
 
     int timePos = 0;
 
@@ -705,66 +866,84 @@ int ClusterMainWindow::upackSpot(QString txt)
     dxBandMask = "";
     dxModeStr = "";
     dxModeMask = "";
-    spotCall = "";
+    //spotCall = "";
     spotComment = "";
     spotTime = "";
     dxLocator = "";
     spotLocator = "";
 
     txt.remove('\x07');
-    if (!txt.contains("DX de"))
-    {
-        return -2;
-    }
+    //if (!txt.contains("DX de"))
+    //{
+    //    return -2;
+    //}
 
     dxMsg = txt.split(QRegExp("\\s+"));
-    spotCall = dxMsg[2].remove(':');
-    dxFreq = convertKhzToMhz(dxMsg[3]);
-    getBand(dxFreq, dxBandStr, dxBandMask);
-    dxCall = dxMsg[4];
-    // find time
-    for (int i = 4; i < dxMsg.count(); i++)
+
+    if (dxMsg.count() > 5)
     {
-        QRegularExpression re("\\d\\d\\d\\dZ");
-        QRegularExpressionMatch match = re.match(dxMsg[i]);
-        if (match.hasMatch())
+        spotCall = dxMsg[2].remove(':');
+        dxFreq = convertKhzToMhz(dxMsg[3]);
+        getBand(dxFreq, dxBandStr, dxBandMask);
+        if (dxBandStr.isEmpty() && !enableHFSpots)
         {
-            spotTime = dxMsg[i].remove('Z');
-            timePos = i;
-            break;
+            // discard spot as it is HF
+            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(dxFreq));
+            return -3;
         }
-    }
-
-    if (spotTime == "")
-    {
-        //error
-        return -1;
-    }
-
-    // look for locator
-    if (dxMsg[timePos + 1] == "")
-    {
-        spotLocator = "";
-    }
-    else
-    {
-        spotLocator = dxMsg[timePos + 1];
-    }
-    // reassemble the comment
-    for (int i = 5; i < timePos; i++)
-    {
-        if (dxMsg[i] != "")
+        dxCall = dxMsg[4];
+        // find time
+        for (int i = 4; i < dxMsg.count(); i++)
         {
-            spotComment += dxMsg[i] + " ";
+            QRegularExpression re("\\d\\d\\d\\dZ");
+            QRegularExpressionMatch match = re.match(dxMsg[i]);
+            if (match.hasMatch())
+            {
+                spotTime = dxMsg[i].remove('Z');
+                timePos = i;
+                break;
+            }
         }
+
+        if (spotTime == "")
+        {
+            //error
+            return -1;
+        }
+
+        // look for locator
+        if (timePos + 1 >= dxMsg.count())  // make sure not out of range
+        {
+            // no spotlocator sent
+            spotLocator = "";
+        }
+        //else if (dxMsg[timePos + 1] == "")
+        //{
+        //    spotLocator = "";
+        //}
+        else
+        {
+            spotLocator = dxMsg[timePos + 1];
+        }
+        // reassemble the comment
+        for (int i = 5; i < timePos; i++)
+        {
+            if (dxMsg[i] != "")
+            {
+                spotComment += dxMsg[i] + " ";
+            }
+        }
+
+        // remove seperator char from comment
+        spotComment.remove(SPOT_DATA_SEPERATOR);
+        findLocInComment(spotLocator, dxLocator, spotComment);
+
+
+        return 0;
     }
 
-    // remove seperator char from comment
-    spotComment.remove(SPOT_DATA_SEPERATOR);
-    findLocInComment(spotLocator, dxLocator, spotComment);
+    return -1;
 
-
-    return 0;
 }
 
 

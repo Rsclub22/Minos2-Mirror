@@ -16,12 +16,23 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent, int instan
     instanceNum(instanceNum)
 {
     ui->setupUi(this);
+    QSettings settings;
+    QByteArray geometry = settings.value("ClusterClientFilter/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
     initCheckFilterTab();
 }
 
 ClusterClientFilterDialog::~ClusterClientFilterDialog()
 {
     delete ui;
+}
+
+void ClusterClientFilterDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("ClusterClientFilter/geometry", saveGeometry());
 }
 
 void ClusterClientFilterDialog::initCheckFilterTab()
@@ -135,6 +146,7 @@ void ClusterClientFilterDialog::filtersAccepted()
     }
 
     emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
+    doCloseEvent();
     close();
 }
 
@@ -225,7 +237,7 @@ void ClusterClientFilterDialog::filtersRejected()
     // restore settings on tab
 */
     restoreTabSettings();
-
+    doCloseEvent();
     close();
 }
 
@@ -252,6 +264,7 @@ void ClusterClientFilterDialog::restoreTabSettings()
 void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
 {
     restoreTabSettings();
+    doCloseEvent();
     QWidget::closeEvent(event);
 }
 

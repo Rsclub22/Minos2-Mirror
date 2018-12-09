@@ -38,6 +38,8 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
 
     ui->setupUi(this);
 
+
+
     radio = _radio;
     radioData = _radioData;
 
@@ -95,6 +97,7 @@ scatParams* RigSetupForm::getRadioData()
 {
     return radioData;
 }
+
 
 
 

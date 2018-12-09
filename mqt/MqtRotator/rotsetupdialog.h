@@ -123,6 +123,7 @@ private:
     void getAvailAntenna(int antNum, QSettings &config);
     void initSetup();
     void closeEvent(QCloseEvent *event) override;
+    void doCloseEvent();
 };
 
 #endif // SETUPDIALOG_H

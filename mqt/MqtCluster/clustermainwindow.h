@@ -209,13 +209,15 @@ private:
 
     bool reconnectFlag;
 
+    bool enableHFSpots;
+
 
 
     QString geoStr;         // geometry registry location
 
 
     void txText(QString msg);
-    int upackSpot(QString txt);
+    int upackDxSpot(QString txt, QString &spotCall);
     void loadNodesSelectBox(QStringList listOfNodes);
 
     void restoreDxSpotViewColumns();
@@ -248,6 +250,8 @@ private:
     void echoMsg(QString msg);
     QString createSpotToSend(QString spot);
     QString createStatusToSend(QString status);
+    int upackShowDxSpot(const QString txt, const QString spotCall);
+    bool checkShowDxMsg(const QString txt, QString &spotCall);
 
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
@@ -257,17 +261,20 @@ private:
 #endif
 
 
+
+
 private slots:
     void clientConnected();
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
-
+    void clusterListChanged();
 
 
 #ifdef TEST_SPOTS
     void testSpotPbClicked();
     void spotTimerTimeOut();
 #endif
+
 
 
 };

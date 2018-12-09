@@ -141,6 +141,7 @@ private:
 
     void initSetup();
     void closeEvent(QCloseEvent *event);
+    void doCloseEvent();
 };
 
 #endif // SETUPDIALOG_H

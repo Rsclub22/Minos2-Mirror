@@ -44,6 +44,12 @@ RigSetupDialog::RigSetupDialog(RigControl* _radio, const QVector<BandDetail*> _b
     radio = _radio;
     bands = _bands;
 
+    QSettings settings;
+    QByteArray geometry = settings.value("RigControl/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveButtonPushed()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelButtonPushed()));
     connect(ui->addRadio, SIGNAL(clicked()), this, SLOT(addRadio()));
@@ -406,12 +412,18 @@ void RigSetupDialog::loadAvailComports()
 
 }
 
+void RigSetupDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("RigControl/geometry", saveGeometry());
+}
 
 
 
 void RigSetupDialog::closeEvent (QCloseEvent *event)
 {
     cancelButtonPushed();
+    doCloseEvent();
     QWidget::closeEvent(event);
 }
 
@@ -419,6 +431,7 @@ void RigSetupDialog::saveButtonPushed()
 {
 
     saveSettings();
+    doCloseEvent();
 
 }
 
@@ -445,6 +458,8 @@ void RigSetupDialog::cancelButtonPushed()
         ui->radioTab->clear();
         initSetup();                // load data from file
     }
+
+    doCloseEvent();
 }
 
 

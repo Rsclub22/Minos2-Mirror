@@ -1,3 +1,18 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Cluster Server
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+//
+///
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+#include <QSettings>
+
 #include "userclustercommanddialog.h"
 #include "ui_userclustercommanddialog.h"
 
@@ -28,6 +43,12 @@ userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, int buttonNu
     ui->setupUi(this);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    QSettings settings;
+    QByteArray geometry = settings.value("ClusterUserCommand/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
     editData = _editData;
     curData = _curData;
     setWindowTitle(QString("Cluster User Command %1 - %2").arg(QString::number(buttonNumber + 1)).arg(name));
@@ -49,6 +70,14 @@ userClusterCommandDialog::~userClusterCommandDialog()
 {
     delete ui;
 }
+
+void userClusterCommandDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("ClusterUserCommand/geometry", saveGeometry());
+}
+
+
 
 void userClusterCommandDialog::nameEditFinished()
 {
@@ -74,6 +103,7 @@ void userClusterCommandDialog::cmdStringEditFinished()
 void userClusterCommandDialog::editAccepted()
 {
     return;
+    doCloseEvent();
 }
 
 void userClusterCommandDialog::editRejected()
@@ -89,5 +119,7 @@ void userClusterCommandDialog::editRejected()
         editData->cmdString = curData->cmdString;
         cmdStringChanged = false;
     }
+
+    doCloseEvent();
 
 }
