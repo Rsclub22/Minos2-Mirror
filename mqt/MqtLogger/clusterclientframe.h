@@ -35,6 +35,7 @@ const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yel
 const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
 
 const int MOUSE_IN_FRAME_TIMEOUT = 10000;
+const int CHECKSPOTS_DURATION = 500;
 
 class ClusterClientFrame;
 

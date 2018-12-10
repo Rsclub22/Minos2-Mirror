@@ -137,7 +137,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
-    checkNewSpotsTimer->start(1000);
+    checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
 
 
@@ -1167,49 +1167,45 @@ void ClusterClientFrame::checkNewSpots()
     int newCallsignCount =  callSignProxyModel->rowCount();
     int newLocatorCount = locatorProxyModel->rowCount();
 
-    if ((newSpotCount == 0 || ui->dxSpotTab->currentIndex() == DXSPOT_TAB) /*&& !holdUpdateFlag*/)
+
+    if ((newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
+        || (!spotQueue.isEmpty() && ui->dxSpotTab->currentIndex() == DXSPOT_TAB && holdUpdateFlag))
     {
+        newSpotIndToggle(true);
+    }
+
+    if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB && !holdUpdateFlag)
+    {
+       oldSpotCount = newSpotCount;
        newSpotIndToggle(false);
     }
 
-    if ((newCallsignCount == 0 || ui->dxSpotTab->currentIndex() == CALLSIGN_TAB) /* && !holdUpdateFlag*/)
+
+    if ((newCallsignCount > oldCallsignCount && ui->dxSpotTab->currentIndex() != CALLSIGN_TAB)
+        || (!spotQueue.isEmpty() && ui->dxSpotTab->currentIndex() == CALLSIGN_TAB && holdUpdateFlag))
     {
+        newCallsignSpotIndToggle(true);
+    }
+
+    if (ui->dxSpotTab->currentIndex() == CALLSIGN_TAB && !holdUpdateFlag)
+    {
+       oldCallsignCount = newCallsignCount;
        newCallsignSpotIndToggle(false);
     }
 
-    if ((newLocatorCount == 0 || ui->dxSpotTab->currentIndex() == LOCATOR_TAB)  /*&& !holdUpdateFlag*/)
+    if ((newLocatorCount > oldLocatorCount && ui->dxSpotTab->currentIndex() != LOCATOR_TAB)
+        || (!spotQueue.isEmpty() && ui->dxSpotTab->currentIndex() == LOCATOR_TAB && holdUpdateFlag))
     {
+        newLocatorSpotIndToggle(true);
+    }
+
+    if (ui->dxSpotTab->currentIndex() == LOCATOR_TAB && !holdUpdateFlag)
+    {
+       oldLocatorCount = newLocatorCount;
        newLocatorSpotIndToggle(false);
     }
 
-    if (newSpotCount > 0)
-    {
-        if (ui->dxSpotTab->currentIndex() != DXSPOT_TAB || holdUpdateFlag)
-        {
-            newSpotIndToggle(true);
-        }
 
-    }
-
-
-
-    if (newCallsignCount > 0)
-    {
-        if (ui->dxSpotTab->currentIndex() != CALLSIGN_TAB  || holdUpdateFlag)
-        {
-            newCallsignSpotIndToggle(true);
-        }
-
-    }
-
-    if (newLocatorCount > 0)
-    {
-        if (ui->dxSpotTab->currentIndex() != LOCATOR_TAB  || holdUpdateFlag)
-        {
-            newLocatorSpotIndToggle(true);
-        }
-
-    }
 
     checkSavedFilters();
 
