@@ -596,7 +596,9 @@ void ClusterMainWindow::handleStartFile()
             if (cmd != "")
             {
                 if (cmd[0] != CLUSTER_START_COMMENT_DELIMTER)
-                txText(cmd);
+                {
+                    txText(cmd);
+                }
             }
         }
 

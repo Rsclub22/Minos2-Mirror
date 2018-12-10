@@ -625,7 +625,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
                 if (spotlist[DXBANDMASK].toInt() == contestBand) // if contestband matches spotband
                 {
-                checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+                    checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
                 }
 
 
@@ -1158,7 +1158,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, Loc
 
 void ClusterClientFrame::checkNewSpots()
 {
-    // look for new spots in callsign and locator view
+    // look for new spots in spot, callsign and locator view
     static int oldSpotCount = 0;
     static int oldCallsignCount = 0;
     static int oldLocatorCount = 0;
@@ -1167,24 +1167,23 @@ void ClusterClientFrame::checkNewSpots()
     int newCallsignCount =  callSignProxyModel->rowCount();
     int newLocatorCount = locatorProxyModel->rowCount();
 
-    if ((newSpotCount == 0 || ui->dxSpotTab->currentIndex() == DXSPOT_TAB) && !holdUpdateFlag)
+    if ((newSpotCount == 0 || ui->dxSpotTab->currentIndex() == DXSPOT_TAB) /*&& !holdUpdateFlag*/)
     {
        newSpotIndToggle(false);
     }
 
-    if ((newCallsignCount == 0 || ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)  && !holdUpdateFlag)
+    if ((newCallsignCount == 0 || ui->dxSpotTab->currentIndex() == CALLSIGN_TAB) /* && !holdUpdateFlag*/)
     {
        newCallsignSpotIndToggle(false);
     }
 
-    if ((newLocatorCount == 0 || ui->dxSpotTab->currentIndex() == LOCATOR_TAB)  && !holdUpdateFlag)
+    if ((newLocatorCount == 0 || ui->dxSpotTab->currentIndex() == LOCATOR_TAB)  /*&& !holdUpdateFlag*/)
     {
        newLocatorSpotIndToggle(false);
     }
 
-    if (newSpotCount > oldSpotCount)
+    if (newSpotCount > 0)
     {
-        oldSpotCount = newSpotCount;
         if (ui->dxSpotTab->currentIndex() != DXSPOT_TAB || holdUpdateFlag)
         {
             newSpotIndToggle(true);
@@ -1194,9 +1193,8 @@ void ClusterClientFrame::checkNewSpots()
 
 
 
-    if (newCallsignCount > oldCallsignCount)
+    if (newCallsignCount > 0)
     {
-        oldCallsignCount = newCallsignCount;
         if (ui->dxSpotTab->currentIndex() != CALLSIGN_TAB  || holdUpdateFlag)
         {
             newCallsignSpotIndToggle(true);
@@ -1204,9 +1202,8 @@ void ClusterClientFrame::checkNewSpots()
 
     }
 
-    if (newLocatorCount > oldLocatorCount)
+    if (newLocatorCount > 0)
     {
-        oldLocatorCount = newLocatorCount;
         if (ui->dxSpotTab->currentIndex() != LOCATOR_TAB  || holdUpdateFlag)
         {
             newLocatorSpotIndToggle(true);
