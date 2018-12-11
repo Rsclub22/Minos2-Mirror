@@ -187,6 +187,7 @@ private:
     QString contestModeStr;
     int contestMode;
 
+
     void restoreDxSpotViewColumns();
 
     void addDxSpotToTable(const QString spot);

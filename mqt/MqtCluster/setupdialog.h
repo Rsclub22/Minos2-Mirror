@@ -5,7 +5,7 @@
 #include <QStandardItemModel>
 #include <QSettings>
 
-
+#include "clustercommon.h"
 
 
 class QDialogButtonBox;
@@ -18,7 +18,6 @@ namespace Ui {
 class SetupDialog;
 }
 
-const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.ini";
 const QString CLUSTER_NODE_LIST_FILE = "./Configuration/Cluster/ClusterSites.ini";
 
 const int ClusterListNumCols = 4;

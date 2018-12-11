@@ -12,7 +12,7 @@ const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
 const QString CLUSTER_START_FILE = "cluster_start.txt";
 const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
 const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
-
+const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.ini";
 
 const int NO_BANDS = -1;
 const int NUMBANDS = 9;
@@ -210,7 +210,14 @@ void setAllBandFilters(QList<bool> bfl)
 
 bool getBandFilter(int band)
 {
-    return *bandFilters[band];
+    if (band >= 0 && band < bandFilters.count())
+    {
+        return *bandFilters[band];
+    }
+    else
+    {
+        return false;
+    }
 }
 
 
@@ -233,7 +240,14 @@ void setAllModeFilters(QList<bool> mfl)
 
 bool getModeFilter(int band)
 {
-    return *modeFilters[band];
+    if (band >= 0 && band < modeFilters.count())
+    {
+        return *modeFilters[band];
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void setModeFilter(bool setting, int band)

@@ -13,13 +13,22 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent, int instan
     vhfButtonState(false),
     mWaveButtonState(false),
     modeButtonState(false),
-    instanceNum(instanceNum)
+    instanceNum(instanceNum),
+    enableHFSpots(false)
 {
     ui->setupUi(this);
     QSettings settings;
     QByteArray geometry = settings.value("ClusterClientFilter/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
+
+    // read enable hf spots flag
+    QString fileName = CLUSTER_SETTINGS_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("HFSpots");
+    enableHFSpots = config.value("enable", false).toBool();
+    config.endGroup();
+
 
     initCheckFilterTab();
 }
@@ -860,4 +869,10 @@ void ClusterClientFilterDialog::importFilterToWidgetList(QStringList &listOfFilt
         }
     }
 
+}
+
+
+bool ClusterClientFilterDialog::getEnableHFSpotsFlag()
+{
+    return enableHFSpots;
 }
