@@ -76,6 +76,7 @@ void MatchTreeFrame::restoreColumns()
     header()->restoreState(state);
     QFont cf = QApplication::font();
     header()->setFont(cf);
+    header()->setMinimumSectionSize(10);
 
 }
 void MatchTreeFrame::setCurrentModel(bool s)

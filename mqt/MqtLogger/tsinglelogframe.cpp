@@ -183,6 +183,8 @@ void TSingleLogFrame::createScreenComponents()
     QSOTable->verticalHeader()->setMinimumSectionSize(1);
     QSOTable->verticalHeader()->setDefaultSectionSize(1);
 
+    QSOTable->horizontalHeader()->setMinimumSectionSize(10);
+
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
     delegate = new HtmlDelegate(1.0, lcf/100.0);
@@ -594,6 +596,8 @@ void TSingleLogFrame::restoreColumns()
 
     state = settings.value("QSOTable/state").toByteArray();
     QSOTable->horizontalHeader()->restoreState(state);
+
+    QSOTable->horizontalHeader()->setMinimumSectionSize(10);
 
     thisMatchFrame->restoreColumns();
     otherMatchFrame->restoreColumns();
