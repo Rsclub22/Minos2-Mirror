@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QStringList>
 #include "rigcontrol.h"
-#include <hamlib/rotator.h>
+#include <hamlib/rig.h>
 //#include "rotctl_parse.h"
 
 

@@ -5,7 +5,7 @@
 #include <QComboBox>
 #include <QStringList>
 
-#include <hamlib/rotator.h>
+#include <hamlib/rig.h>
 
 bool model_Sort(const rig_caps *caps1,const rig_caps *caps2);
 
