@@ -31,6 +31,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connectedToClientFlag(false),
     loginStart(false),
     loginSuccess(false),
+    loginStatDetails(false),
     nodeConnected(false),
     purgeSpotFlag(false),
     reconnectFlag(false),
@@ -209,6 +210,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(client, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(parseDX(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
+    //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
     //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
 
     // get list of clusters
@@ -472,6 +474,7 @@ void ClusterMainWindow::loggedOut()
     nodeConnected = false;
     loginStart = false;
     loginSuccess = false;
+    loginStatDetails = false;
     showStatusMessage((QString("Disconnected")));
     if (reconnectFlag)
     {
@@ -544,13 +547,77 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
         {
             loginSuccess = true;
             txText("set/echo enable\n");
-            txText(dxCluster->setNameMsg(currentUserName));
-            txText(dxCluster->setQthMsg(currentUserQTH));
-            txText(dxCluster->setQraMsg(currentUserLocator));
-            handleStartFile();          // send user commands
+            txText("SH/ST\n");      // ask for station details
+            loginStatDetails = true;
         }
 
     }
+
+
+}
+
+
+void ClusterMainWindow::checkStationDetails(QString msg)
+{
+    QStringList details = {"Name", "QTH", "Location"};
+    QStringList ourDetails = {currentUserName, currentUserQTH, currentUserLocator};
+    bool foundMatch[] = {false, false, false};
+    QString buf;
+    QTextStream in;
+    in.setString(&buf, QIODevice::ReadOnly);
+    buf = msg;
+    QString line;
+    QStringList data;
+    if (loginStatDetails)
+    {
+
+        do
+        {
+            line = in.readLine();
+            if (!line.isEmpty())
+            {
+                data.append(line);
+            }
+        }while (!line.isNull());
+
+        if (data.count() >= details.count())
+        {
+            for (int i = 0; i < details.count(); i++)
+            {
+                for (int x = 0; x < data.count(); x++)
+                {
+                    if (data[x].contains(details[i]) && data[x].contains(ourDetails[i]))
+                    {
+                        foundMatch[i] = true;
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    txText("set/echo enable\n");
+
+    if (!foundMatch[0])
+    {
+        txText(dxCluster->setNameMsg(currentUserName));
+    }
+    else if (!foundMatch[1])
+    {
+        txText(dxCluster->setQthMsg(currentUserQTH));
+    }
+    else if (!foundMatch[2])
+    {
+        txText(dxCluster->setQraMsg(currentUserLocator));
+    }
+
+
+    if (setupCluster->getRunStartFileFlag())
+    {
+        handleStartFile();          // send user commands
+    }
+
 
 
 }
@@ -629,9 +696,6 @@ void ClusterMainWindow::parseDX(const QString txt)
     if (loginSuccess)
     {
         trace(QString("raw spot = %1").arg(txt));
-
-        QTextStream in;
-        in.setString(&buf, QIODevice::ReadOnly);
 
         do
         {
@@ -821,6 +885,7 @@ void ClusterMainWindow::getSpotsFromSendQueue()
         // get spots from queue and send to client
         while (sendSpotsQueue.count() > 0)
         {
+            trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsQueue.count()).arg(sendSpotsQueue[0]));
             clusterRpc->sendDXSpot(sendSpotsQueue[0]);
             sendSpotsQueue.removeFirst();
         }

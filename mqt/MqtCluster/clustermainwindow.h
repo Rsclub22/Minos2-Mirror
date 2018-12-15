@@ -118,7 +118,7 @@ private slots:
     void onLaunchSetup();
     void connectToNode(const QString &nodeName);
     void logIn();
-
+    void checkStationDetails(QString msg);
     void on_sectionResized(int, int, int);
     void LogTimerTimer();
 
@@ -204,6 +204,7 @@ private:
 
     bool loginStart;
     bool loginSuccess;
+    bool loginStatDetails;
     bool nodeConnected;
     bool purgeSpotFlag;
 

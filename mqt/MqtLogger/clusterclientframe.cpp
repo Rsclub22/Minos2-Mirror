@@ -135,6 +135,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     purgeTimer->start(PURGE_TIME);
 
     statusIndicatorToggle(false);
+    //queueIndToggle(false);
     newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
@@ -617,7 +618,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
         if (spotlist.count() == TTLVALUE +1)
         {
             // get time to live value
-            if (spotlist[TTLVALUE] == "")
+            if (spotlist[TTLVALUE] == "0")
             {
                 timeToLive = 0;  // timeToLive is off
             }
@@ -1183,13 +1184,24 @@ void ClusterClientFrame::checkNewSpots()
     int newLocatorCount = locatorProxyModel->rowCount();
 
 
-    if ((newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
-        || (!spotQueue.isEmpty() && ui->dxSpotTab->currentIndex() == DXSPOT_TAB && holdUpdateFlag))
+    //if (!spotQueue.isEmpty()  && holdUpdateFlag)
+    //{
+    //    queueIndToggle(true);
+    //}
+    //else if (spotQueue.isEmpty())
+    //{
+    //    queueIndToggle(false);
+    //}
+
+    //if ((newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
+    //    || (!spotQueue.isEmpty() && ui->dxSpotTab->currentIndex() == DXSPOT_TAB && holdUpdateFlag))
+    if (newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
     {
         newSpotIndToggle(true);
     }
 
-    if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB && !holdUpdateFlag)
+    //if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB && !holdUpdateFlag)
+    if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB )
     {
        oldSpotCount = newSpotCount;
        newSpotIndToggle(false);
@@ -1252,6 +1264,26 @@ void ClusterClientFrame::statusIndicatorToggle(bool on)
     }
 
 }
+
+
+
+
+/*
+void ClusterClientFrame::queueIndToggle(bool on)
+{
+
+    if (on)
+    {
+        ui->queueIndicator->setStyleSheet(NEWSPOT_INDICATOR_ON_STYLE);
+    }
+    else
+    {
+       ui->queueIndicator->setStyleSheet(NEWSPOT_INDICATOR_OFF_STYLE);
+    }
+
+}
+
+*/
 
 void ClusterClientFrame::newSpotIndToggle(bool on)
 {

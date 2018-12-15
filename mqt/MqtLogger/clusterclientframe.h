@@ -209,6 +209,7 @@ private:
 
     void handleClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, const QModelIndex &index);
     void handleVertHeaderClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, int row);
+    //void queueIndToggle(bool on);
     void newCallsignSpotIndToggle(bool on);
     void newLocatorSpotIndToggle(bool on);
     void statusIndicatorToggle(bool on);
@@ -222,6 +223,7 @@ private:
     int getBandOffSet(QString contestBandStr);
 
     int getModeOffSet(QString contestModeStr);
+
 
 
 private slots:

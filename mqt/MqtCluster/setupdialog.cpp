@@ -22,10 +22,14 @@
 
 SetupDialog::SetupDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::SetupDialog)
-    ,listDataChanged(false)
-    ,timeToLiveChanged(false)
-    ,personalDataChanged(false)
+    ui(new Ui::SetupDialog),
+    listDataChanged(false),
+    timeToLiveChanged(false),
+    runStartCmdFilesChanged(false),
+    enableStartCmdFiles(false),
+    runEndCmdFilesChanged(false),
+    enableEndCmdFiles(false),
+    personalDataChanged(false)
 {
     ui->setupUi(this);
 
@@ -38,6 +42,9 @@ SetupDialog::SetupDialog(QWidget *parent) :
 
     // General Tab
     connect(ui->timeToLive, SIGNAL(editingFinished()), this, SLOT(timeToliveEditFinished()));
+    connect(ui->runStartCmdFileChkBox, SIGNAL(stateChanged(int)), this, SLOT(runStartCmdFileChkBoxChanged(int)));
+    connect(ui->runEndCmdFileChkBox, SIGNAL(stateChanged(int)), this, SLOT(runEndCmdFileChkBoxChanged(int)));
+
     readGeneralSettings();
     loadGeneralToSetupTab();
 
@@ -79,8 +86,19 @@ SetupDialog::~SetupDialog()
 }
 
 
+
+void SetupDialog::closeEvent (QCloseEvent *event)
+{
+
+    cancelButtonPushed();
+    doCloseEvent();
+    QWidget::closeEvent(event);
+}
+
+
 void SetupDialog::doCloseEvent()
 {
+
     QSettings settings;
     settings.setValue("ClusterSetup/geometry", saveGeometry());
 }
@@ -133,43 +151,58 @@ void SetupDialog::timeToliveEditFinished()
     QString ttl = ui->timeToLive->text().trimmed();
     if (ttl != timeToLive)
     {
-        if (ttl.isEmpty())
-        {
-            timeToLiveChanged = true;
-            return;
-        }
         bool ok = false;
         int ittl = ttl.toInt(&ok);
         if (ok)
         {
-            if (ittl < MIN_TTL || ittl > MAX_TTL)
+            if (ittl == 0)
+            {
+                timeToLiveChanged = true;
+                return;
+            }
+            else if (ittl < MIN_TTL || ittl > MAX_TTL)
             {
                 QMessageBox msgBox;
-                msgBox.setText(QString("Time to live must be between %1 minutes and %2 minutes!").arg(MIN_TTL).arg(MAX_TTL));
+                msgBox.setText(QString("%1 minutes has been entered\nThe time to live must be between %2 minutes and %3 minutes or 0 for no purge!").arg(ui->timeToLive->text()).arg(MIN_TTL).arg(MAX_TTL));
                 msgBox.exec();
+                ui->timeToLive->setText(timeToLive);  // restore setting
                 return;
             }
             timeToLiveChanged = true;
         }
-
     }
 }
 
 void SetupDialog::saveGeneralSettings()
 {
-    if (timeToLiveChanged)
+    if (timeToLiveChanged || runStartCmdFilesChanged || runEndCmdFilesChanged)
     {
         timeToLive = ui->timeToLive->text().trimmed();
         QString fileName = CLUSTER_SETTINGS_FILE;
 
         QSettings config(fileName, QSettings::IniFormat);
 
-        config.beginGroup("TimeToLive");
-        config.setValue("timeToLive", timeToLive);
-        config.endGroup();
-
-
-
+        if (timeToLiveChanged)
+        {
+            config.beginGroup("TimeToLive");
+            config.setValue("timeToLive", timeToLive);
+            config.endGroup();
+            timeToLiveChanged = false;
+        }
+        else if (runStartCmdFilesChanged)
+        {
+            config.beginGroup("CommandFile");
+            config.setValue("enableStartCommandFile", enableStartCmdFiles);
+            config.endGroup();
+            runStartCmdFilesChanged = false;
+        }
+        else if (runEndCmdFilesChanged)
+        {
+            config.beginGroup("CommandFile");
+            config.setValue("enableEndCommandFile", enableEndCmdFiles);
+            config.endGroup();
+            runEndCmdFilesChanged = false;
+        }
 
     }
 }
@@ -181,12 +214,19 @@ void SetupDialog::readGeneralSettings()
     config.beginGroup("TimeToLive");
     timeToLive = config.value("timeToLive", "").toString();
     config.endGroup();
+    config.beginGroup("CommandFile");
+    enableStartCmdFiles = config.value("enableStartCommandFile", false).toBool();
+    enableEndCmdFiles = config.value("enableEndCommandFile", false).toBool();
+    config.endGroup();
+
 }
 
 void SetupDialog::loadGeneralToSetupTab()
 {
 
     ui->timeToLive->setText(timeToLive);
+    ui->runStartCmdFileChkBox->setChecked(enableStartCmdFiles);
+    ui->runEndCmdFileChkBox->setChecked(enableEndCmdFiles);
 }
 
 
@@ -194,6 +234,35 @@ QString SetupDialog::getTimeToLive()
 {
     return timeToLive;
 }
+
+
+void SetupDialog::runStartCmdFileChkBoxChanged(int state)
+{
+    runStartCmdFilesChanged = true;
+    if (state ==  Qt::Checked)
+    {
+        enableStartCmdFiles = true;
+    }
+    else if (state == Qt::Unchecked)
+    {
+        enableStartCmdFiles = false;
+    }
+}
+
+
+void SetupDialog::runEndCmdFileChkBoxChanged(int state)
+{
+    runEndCmdFilesChanged = true;
+    if (state ==  Qt::Checked)
+    {
+        enableEndCmdFiles = true;
+    }
+    else if (state == Qt::Unchecked)
+    {
+        enableEndCmdFiles = false;
+    }
+}
+
 
 
 void SetupDialog::callsignEditFinished()
@@ -234,7 +303,7 @@ void SetupDialog::qthEditFinished()
 {
     if (!ui->qthEdit->text().trimmed().isEmpty())
     {
-        listDataChanged = true;
+        personalDataChanged = true;
     }
 }
 
@@ -520,4 +589,16 @@ void SetupDialog::setTabNum(int num)
 
 
     ui->ClusterSetUpTabWidget->setCurrentIndex(num);
+}
+
+
+bool SetupDialog::getRunStartFileFlag()
+{
+    return enableStartCmdFiles;
+}
+
+
+bool SetupDialog::getRunEndFileFlag()
+{
+   return enableEndCmdFiles;
 }

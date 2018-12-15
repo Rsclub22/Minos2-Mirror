@@ -1584,6 +1584,7 @@ int RigControlMainWindow::getMinosModeIndex(QString mode)
 void RigControlMainWindow::loggerSetVolume(int level)
 {
 
+    logMessage(QString("Set Volume: From Logger, level = %1").arg(level));
     setVolume(RIG_VFO_CURR, level);
 
 }
@@ -1925,6 +1926,7 @@ int RigControlMainWindow::getVolume(vfo_t vfo)
 
 int RigControlMainWindow::setVolume(vfo_t vfo, int level)
 {
+    logMessage(QString("Set volume to level = %1").arg(level));
     int retCode = 0;
     float volLevel = level;
     volLevel = volLevel/VOLMULT;
