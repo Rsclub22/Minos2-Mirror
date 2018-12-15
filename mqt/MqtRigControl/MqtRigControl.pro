@@ -4,8 +4,8 @@
 #
 #-------------------------------------------------
 include($$PWD/../mqt.pri)
-include($$PWD/../mqthamlib.pri)
 include($$PWD/../mqtapplibs.pri)
+include($$PWD/../mqthamlib.pri)
 
 QT       += core gui serialport
 QT       += widgets

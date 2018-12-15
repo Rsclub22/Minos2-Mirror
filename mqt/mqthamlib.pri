@@ -1,8 +1,23 @@
 win32: {
-   HAMLIBDIR = $$absolute_path(../../hamlib-w32-3.3)
-   win32: INCLUDEPATH += $$HAMLIBDIR/include
-   win32-g++: LIBS += -L$$HAMLIBDIR/lib/gcc/ -llibhamlib
-   msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-2
+   win32-g++* {
+      contains(QT_ARCH, i386) {
+      HAMLIBDIR = $$absolute_path(../../hamlib-w32-3.3)
+      }
+   contains(QT_ARCH, x86_64) {
+      HAMLIBDIR = $$absolute_path(../../hamlib-w64-3.3)
+      }
+      LIBS += -L$$HAMLIBDIR/lib/gcc/ -llibhamlib
+   } else {
+      contains(QT_ARCH, i386) {
+         HAMLIBDIR = $$absolute_path(../../hamlib-w32-3.3)
+      }
+      contains(QT_ARCH, x86_64) {
+         HAMLIBDIR = $$absolute_path(../../hamlib-w64-3.3)
+      }
+      msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-2
+}
+   INCLUDEPATH += $$HAMLIBDIR/include
+
 }
 
 unix: {
@@ -12,10 +27,7 @@ unix: {
 macx: { 
    HAMLIBDIR = /usr/local
    LIBS += -L$$HAMLIBDIR/lib/ -L$${HAMLIBDIR}/lib/hamlib -lhamlib
-	INCLUDEPATH += -I $${HAMLIBDIR}/include
-   message('Include:  $${INCLUDEPATH}')
-   message('LIBS:  $${LIBS}')
-   message('BUILDING FOR MACOS')
+   INCLUDEPATH += $${HAMLIBDIR}/include
 }
 
 

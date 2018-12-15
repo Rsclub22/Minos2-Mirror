@@ -3,8 +3,8 @@
 # Project created by QtCreator 2016-11-10T21:16:20
 #-------------------------------------------------
 include($$PWD/../mqt.pri)
-include($$PWD/../mqthamlib.pri)
 include($$PWD/../mqtapplibs.pri) 
+include($$PWD/../mqthamlib.pri)
 
 QT       += core gui serialport
 QT       += widgets
