@@ -15,6 +15,7 @@ win32: {
          HAMLIBDIR = $$absolute_path(../../hamlib-w64-3.3)
       }
       msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-2
+      msvc: DEFINES += DLL_EXPORT
 }
    INCLUDEPATH += $$HAMLIBDIR/include
 

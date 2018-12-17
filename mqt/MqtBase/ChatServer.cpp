@@ -214,7 +214,7 @@ void ChatServer::sendMessage(QString mess)
         rpc.queueCall( (*i).app );
     }
 }
-void ChatServer::onRigFreqChanged(QString f, BaseContestLog */*c*/)
+void ChatServer::onRigFreqChanged(QString f, BaseContestLog * /*c*/)
 {
     RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServerFrequency, f, psPublished);
 }

@@ -47,7 +47,7 @@ TransVertSetupForm::TransVertSetupForm(TransVertParams* _transvertData, QWidget 
 
 
 
-void TransVertSetupForm::radioFreqEditfocusChange(QObject */*obj*/, bool fIn, QFocusEvent * /*event*/)
+void TransVertSetupForm::radioFreqEditfocusChange(QObject * /*obj*/, bool fIn, QFocusEvent * /*event*/)
 {
     if (fIn)
     {
@@ -88,7 +88,7 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject */*obj*/, bool fIn, QF
     }
 }
 
-void TransVertSetupForm::targetFreqEditfocusChange(QObject */*obj*/, bool fIn, QFocusEvent * /*event*/)
+void TransVertSetupForm::targetFreqEditfocusChange(QObject * /*obj*/, bool fIn, QFocusEvent * /*event*/)
 {
     if (fIn)
     {
