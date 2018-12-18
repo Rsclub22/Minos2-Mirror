@@ -24,7 +24,7 @@ ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
 
 
     scf.loadFile();
-    curConfigName = scf.defaultLayoutName;
+    curConfigName = defaultLayoutName;
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
@@ -72,7 +72,7 @@ void ScreenConfigManager::showDetails()
 
 void ScreenConfigManager::checkEnabled()
 {
-    bool enable = (curConfigName != scf.defaultLayoutName);
+    bool enable = (curConfigName != defaultLayoutName);
 
     ui->deleteButton->setEnabled(enable);
     ui->renameButton->setEnabled(enable);
@@ -114,7 +114,7 @@ void ScreenConfigManager::on_layoutList_itemSelectionChanged()
 void ScreenConfigManager::on_layoutList_itemDoubleClicked(QListWidgetItem * /*item*/)
 {
     curConfigName = stripDefaultDecoration(ui->layoutList->currentItem()->text());
-    if (curConfigName == scf.defaultLayoutName)
+    if (curConfigName == defaultLayoutName)
         return;
 
     on_editButton_clicked();
@@ -180,9 +180,9 @@ void ScreenConfigManager::on_deleteButton_clicked()
     scf.configs.remove(curConfigName);
     if (curConfigName == defaultConfigName)
     {
-        defaultConfigName = scf.defaultLayoutName;
+        defaultConfigName = defaultLayoutName;
     }
-    curConfigName = scf.defaultLayoutName;
+    curConfigName = defaultLayoutName;
     showDetails();
 
 }

@@ -12,6 +12,8 @@
 #include "base_pch.h"
 #include "ProfileEnums.h"
 //----------------------------------------------------------------------------
+extern const QString defaultLayoutName;
+
 class SettingsBundle;
 class ProfileEntry
 {

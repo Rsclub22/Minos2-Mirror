@@ -59,7 +59,6 @@ SOURCES += \
     locTreeFrame.cpp \
     locframe.cpp \
     main.cpp \
-    profiles.cpp \
     qsologframe.cpp \
     reg1test.cpp \
     rigcontrolframe.cpp \
@@ -115,7 +114,6 @@ HEADERS  += \
     locTreeFrame.h \
     locframe.h \
     printfile.h \
-    profiles.h \
     qsologframe.h \
     reg1test.h \
     rigcontrolframe.h \

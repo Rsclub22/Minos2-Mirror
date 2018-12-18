@@ -397,7 +397,7 @@ void TSingleLogFrame::buildScreenLayout()
     QString curConfigName = ct->screenLayout.getValue();
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
-        curConfigName = ScreenConfigFile::defaultLayoutName;
+        curConfigName = defaultLayoutName;
     }
     curScreenLayout = curConfigName;
     SC sc = scf.configs[curConfigName];

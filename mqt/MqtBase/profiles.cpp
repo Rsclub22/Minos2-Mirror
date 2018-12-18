@@ -11,7 +11,8 @@
 #include "MLogFile.h"
 #include "INIFile.h"
 #include "profiles.h"
-#include "ScreenConfigFile.h"
+//#include "ScreenConfigFile.h"
+const QString defaultLayoutName = QString("default");
 
 AppSettingsBundle::AppSettingsBundle():
     SettingsBundle()
@@ -74,8 +75,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod2, "Statistics Period 2", 60, "", "Statistics Period 2", false ) ) );
 
         {
-            QString temp = ScreenConfigFile::defaultLayoutName;
-            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.toUtf8().constData(), ScreenConfigFile::defaultLayoutName.toUtf8(), "hint", false ) ) );
+            QString temp = defaultLayoutName;
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.toUtf8().constData(), defaultLayoutName.toUtf8(), "hint", false ) ) );
         }
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowTPM, "ShowTPM", false, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );
