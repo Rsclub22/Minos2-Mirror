@@ -32,8 +32,8 @@ void Clusterrpc::clusterClientServerList(QVector<ClusterServer> serverList)
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = clusterStateIndicator[(*i).state] + " " + (*i).app + "\r\n";
-        trace(QString("clusterClientServerList standalone rpc - state = %1").arg(state));
+        QString state = clusterStateIndicator[(*i).state] + " " + (*i).app;
+        trace(QString("clusterClientServerList standalone rpc - state = %1, number of stations = %2").arg(state).arg(serverList.count()));
         //ui->StationList->addItem( state );
     }
 }
