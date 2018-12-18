@@ -281,7 +281,11 @@ int RtAudioSoundSystem::audioCallback( void *outputBuffer, void *inputBuffer,
                                 double /*streamTime*/,
                                 RtAudioStreamStatus status )
 {
+#if defined (_MSC_VER)
+    int16_t *inStageBuffer = new int16_t[nFrames * 2];
+#else
     int16_t inStageBuffer[nFrames * 2];
+#endif
 
     if (outputBuffer == nullptr && inputBuffer == nullptr)
     {

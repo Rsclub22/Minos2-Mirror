@@ -11,7 +11,8 @@
 #include "MLogFile.h"
 #include "INIFile.h"
 #include "profiles.h"
-#include "ScreenConfigFile.h"
+//#include "ScreenConfigFile.h"
+const QString defaultLayoutName = QString("default");
 
 AppSettingsBundle::AppSettingsBundle():
     SettingsBundle()
@@ -44,6 +45,10 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPreloadSection, "PreloadSection", "Default", "Preload contests default section", "Section to use in preload file", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsFile, "ListsFile", "./Configuration/ListPreload.ini", "List preload file", "File containing list pre-loads", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsSection, "ListsSection", "Default", "Preload Lists file section", "Section to use in lists preload file", false ) ) );
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpFile, "HelpFile", "./helpfiles/MinosHelp.qch", "Help file", "Help file", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpEntryURL, "HelpEntryPoint", "qthelp://Minos/Minos.html", "Help entry point", "Help entry point", false ) ) );
+
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, "Auto Fill signal report", "Auto Fill signal report on return", false ) ) );
 
         break;
@@ -74,8 +79,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod2, "Statistics Period 2", 60, "", "Statistics Period 2", false ) ) );
 
         {
-            QString temp = ScreenConfigFile::defaultLayoutName;
-            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.toUtf8().constData(), ScreenConfigFile::defaultLayoutName.toUtf8(), "hint", false ) ) );
+            QString temp = defaultLayoutName;
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.toUtf8().constData(), defaultLayoutName.toUtf8(), "hint", false ) ) );
         }
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowTPM, "ShowTPM", false, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );

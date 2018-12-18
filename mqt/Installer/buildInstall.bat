@@ -52,6 +52,8 @@ mkdir Configuration\Cluster
 mkdir Lists
 mkdir Logs
 mkdir Bin
+mkdir Docs
+mkdir Help
 
 copy %MROOT%\build\MqtAppStarter\release\MqtAppStarter.exe Bin
 copy %MROOT%\build\MqtChat\release\MqtChat.exe Bin
@@ -65,6 +67,9 @@ copy %MROOT%\build\MqtRotator\release\MqtRotator.exe Bin
 copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
 
 copy C:\Projects\hamlib-w32-3.3\bin\*.dll Bin
+
+copy %MROOT%\mqt\Docs\*.* Docs
+copy %MROOT%\mqt\Help\*.* Help
 
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration

@@ -58,6 +58,7 @@ SOURCES += \
     mults.cpp \
     MultsImpl.cpp \
     mwin.cpp \
+    profiles.cpp \
     qlogtabwidget.cpp \
     RigCache.cpp \
     rigcommon.cpp \
@@ -121,6 +122,7 @@ HEADERS += \
     MultsImpl.h \
     mwin.h \
     ProfileEnums.h \
+    profiles.h \
     qlogtabwidget.h \
     RigCache.h \
     rigcommon.h \

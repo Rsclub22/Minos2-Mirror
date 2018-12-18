@@ -499,8 +499,13 @@ void TLogContainer::HelpActionExecute()
 
     //  Creates a HelpBrowser instance and sets the collection and startUrl.
 
-    QString collectionFile = GetCurrentDir() + "/helpfiles/archiveutilities.qhc";
-    QUrl startUrl = QUrl(QString("qthelp://G4AUC/archiveutilities/ArchiveUtilities.html"));
+    QString collectionFile;
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpHelpFile, collectionFile );
+
+    QString url;
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpHelpEntryURL, url );
+    QUrl startUrl = QUrl(url);
+
     if (!helpBrowser)
         helpBrowser = QSharedPointer<HelpBrowser>(new HelpBrowser(collectionFile, startUrl, this));
     helpBrowser->show();

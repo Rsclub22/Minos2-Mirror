@@ -38,9 +38,11 @@
 */
 /************************************************************************/
 
+#if !defined (_MSC_VER)
 #pragma GCC diagnostic ignored "-Wunused-result"
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #pragma GCC diagnostic ignored "-Wunused-function"
+#endif
 
 // RtAudio: Version 4.1.2
 

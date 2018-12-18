@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonParseError>
+#include "profiles.h"
 
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
@@ -24,7 +25,6 @@ static QString defaultConfig = "[{\"name\": \"%1\","
         "[{\"type\": \"%7\"},{\"type\": \"%8\"}],"
         "[{\"type\": \"%9\"},{\"type\": \"%10\"},{\"type\": \"%11\"}]"
         "]}]";
-const QString ScreenConfigFile::defaultLayoutName = QString("default");
 
 ScreenConfigFile::ScreenConfigFile()
 {
