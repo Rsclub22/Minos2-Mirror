@@ -82,6 +82,7 @@ void MinosRPCClient::queueCall( QString to )
    RPCRequest * m = new RPCRequest( to, methodName );
    m->setNextId();      // only happens if no Id already
    m->args = callArgs.args;     // copy vector of pointers
+   trace("TX " + m->analyse());
    ::sendAction( m );
    delete m;
 }

@@ -161,7 +161,7 @@ QString RPCRequest::print()
 }
 QString RPCRequest::analyse()
 {
-   QString s;
+   QString s = methodName + (!from.isEmpty()?" from " + from:"") + (!to.isEmpty()?" to " + to:"") + " : ";
    for ( QVector<QSharedPointer<RPCParam> >::iterator i = args.begin(); i != args.end(); i++ )
    {
       s += ( *i ) ->analyse();

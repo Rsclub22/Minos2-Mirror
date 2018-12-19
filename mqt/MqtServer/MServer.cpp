@@ -87,6 +87,8 @@ bool MinosServer::analyseNode( MinosCommonConnection *il, TiXmlElement *tix )
    {
       RPCRequest * xs = new RPCRequest( from.fullId, mcall );
       xs->setId( id );
+      trace("RX " + xs->analyse());
+
       dispatchStanza( il, xs );
       delete xs;
       return true;

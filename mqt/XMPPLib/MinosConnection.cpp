@@ -99,6 +99,7 @@ void MinosAppConnection::on_connected()
 
     RPCRequest *rpa = new RPCRequest( "", myId, "ClientSetFromId" );   // for our local server, this one MUST have a from
     rpa->addParam( myId );
+    trace("TX " + rpa->analyse());
     sendAction( rpa );
     delete rpa;
     RPCPubSub::reconnectPubSub();
@@ -131,6 +132,7 @@ bool MinosAppConnection::closeConnection()
 //---------------------------------------------------------------------------
 void MinosAppConnection::onLog ( const TIXML_STRING &data, bool is_incoming )
 {
+    /*
    QString logbuff;
    if ( is_incoming )
       logbuff += "RECV";
@@ -141,6 +143,7 @@ void MinosAppConnection::onLog ( const TIXML_STRING &data, bool is_incoming )
    logbuff += "]";
 
    logMessage( "XMPP", logbuff );
+   */
 }//---------------------------------------------------------------------------
 
 void MinosAppConnection::on_readyRead()
@@ -240,6 +243,7 @@ void MinosAppConnection::dispatchResponse( XStanza *xs )
    RPCRequest * req = dynamic_cast<RPCRequest *>( xs );
    if ( req )
    {
+       trace("RX " + req->analyse());
        makeXMPPEvent( req );
    }
 }

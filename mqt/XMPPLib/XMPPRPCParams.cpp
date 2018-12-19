@@ -276,11 +276,11 @@ QString RPCParamStruct::analyse()
          QString s15 = (n & 0x0004)?" 1":" 0";
          QString s16 = (n & 0x0002)?" 1":" 0";
          QString s17 = (n & 0x0001)?" 1":" 0";
-         s += ( *i ) ->name + "<" + s1 + " : " + s2  + s3  + s4  + s5  + s6  + s7  + s8  + s9  + s10 + s11 + s12  + s13  + s14  + s15  + s16  + s17 + " (" +  ( *i ) ->analyse() + ")>";
+         s += ( *i ) ->name + "<" + s1 + " : " + s2  + s3  + s4  + s5  + s6  + s7  + s8  + s9  + s10 + s11 + s12  + s13  + s14  + s15  + s16  + s17 + " (" +  ( *i ) ->analyse() + ")> ";
       }
       else
       {
-         s += ( *i ) ->name + "<" + ( *i ) ->analyse() + ">";
+         s += ( *i ) ->name + "<" + ( *i ) ->analyse() + "> ";
       }
    }
    return s;
