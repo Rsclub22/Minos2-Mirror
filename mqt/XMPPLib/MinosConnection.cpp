@@ -132,6 +132,8 @@ bool MinosAppConnection::closeConnection()
 //---------------------------------------------------------------------------
 void MinosAppConnection::onLog ( const TIXML_STRING &data, bool is_incoming )
 {
+    Q_UNUSED(data)
+    Q_UNUSED(is_incoming)
     /*
    QString logbuff;
    if ( is_incoming )
