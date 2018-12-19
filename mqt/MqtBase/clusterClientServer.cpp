@@ -113,9 +113,10 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
         {
             trace( QString("***" + clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
             QVector<ClusterServer>::iterator stat;
+            bool clusterFound = false;
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
-                if ((*stat).app == an.getPublisherProgram())
+                if ((*stat).app == an.getKey())
                 {
                     if ((*stat).state != an.getState())
                     {
@@ -124,10 +125,11 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
                         addSpotQueue( mess );
                         syncstat = true;
                     }
+                    clusterFound = true;
                     break;
                 }
             }
-            if ( stat == serverList.end() )
+            if ( !clusterFound )
             {
                 // We have received notification from a previously unknown station - so report on it
                 ClusterServer s;
@@ -135,7 +137,7 @@ void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, c
                 s.state = an.getState();
                 s.app = an.getKey();
                 serverList.push_back( s );
-                QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()];
+                QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()] + " and added";
                  addSpotQueue( mess );
                 syncstat = true;
             }
