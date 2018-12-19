@@ -1223,6 +1223,8 @@ void QSOLogFrame::calcLoc( )
                 if (contest->MGMContestRules.getValue())
                 {
                     dist = contest->CalcCentres ( gridref, brg );
+                    if (dist == 1)
+                        dist = 50;  // MGM same square == 50 points
                 }
                 else
                 {
