@@ -17,6 +17,7 @@
 #include "clusterclientframe.h"
 #include "clustercommon.h"
 #include "contest.h"
+#include "ContestApp.h"
 #include "cutils.h"
 #include "rigmemcommondata.h"
 #include "htmldelegate.h"
@@ -32,7 +33,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     holdUpdateFlag(false),
     instanceNum(instanceNum),
     contestBand(-1),
-    contestMode(-1)
+    contestMode(-1),
+    isProtected(false)
 {
 
     ui->setupUi(this);
@@ -52,14 +54,23 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     checkNewSpotsTimer = new QTimer(this);
     connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));
+
     spotQueue.clear();
 
+
+    checkNewSpotsTimer = new QTimer(this);
+    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));
+    spotQueue.clear();
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
+
+    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
+
+
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
-    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
+
 
 
 
@@ -548,6 +559,12 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 
 void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
 {
+    // if contest is protected ignore
+    if (isProtected)
+    {
+        return;
+    }
+
     //get spot Message from queue
     for (int i = 0; i < spotMsg.count(); i++)
     {
@@ -589,7 +606,7 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
         handleDxSpots(spotQueue);
     }
 
-}
+ }
 
 
 void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
@@ -814,7 +831,17 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
         filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
-
+        if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
+        {
+            if (!ct->isProtected())
+            {
+                isProtected = false;
+            }
+            else
+            {
+                isProtected = true;
+            }
+        }
     }
 
 

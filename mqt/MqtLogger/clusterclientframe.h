@@ -187,6 +187,7 @@ private:
     QString contestModeStr;
     int contestMode;
 
+    bool isProtected;
 
     void restoreDxSpotViewColumns();
 
