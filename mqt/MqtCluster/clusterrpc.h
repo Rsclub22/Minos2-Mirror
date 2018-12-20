@@ -15,7 +15,7 @@ public:
     explicit Clusterrpc();
     ~Clusterrpc();
     void setStandAlone();
-    void sendDXSpot(QString spot);
+    void sendDXSpot(QString spot, QString appName);
 
 signals:
     void clientConnected();

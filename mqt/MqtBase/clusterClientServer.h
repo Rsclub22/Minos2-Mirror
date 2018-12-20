@@ -27,7 +27,7 @@ public:
     explicit ClusterClientServer();
     virtual ~ClusterClientServer();
     static ClusterClientServer  *getClusterClientServer();
-    void sendDxSpot(QString spot);
+    void sendDxSpot(QString spot, QString appName);
 
 
 

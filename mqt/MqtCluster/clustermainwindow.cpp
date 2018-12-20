@@ -886,7 +886,7 @@ void ClusterMainWindow::getSpotsFromSendQueue()
         while (sendSpotsQueue.count() > 0)
         {
             trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsQueue.count()).arg(sendSpotsQueue[0]));
-            clusterRpc->sendDXSpot(sendSpotsQueue[0]);
+            clusterRpc->sendDXSpot(sendSpotsQueue[0], appName);     // send appName to prevent spot being sent to cluster spot server
             sendSpotsQueue.removeFirst();
         }
     }

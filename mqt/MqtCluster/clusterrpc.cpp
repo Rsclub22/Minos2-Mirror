@@ -38,7 +38,7 @@ void Clusterrpc::clusterClientServerList(QVector<ClusterServer> serverList)
     }
 }
 
-// do we need this? maybe not if we use a common frame.
+
 void Clusterrpc::dxSpots(QVector<QString> spotQueue)
 {
     for ( QVector<QString>::iterator i = spotQueue.begin(); i != spotQueue.end(); i++ )
@@ -54,9 +54,9 @@ void Clusterrpc::dxSpots(QVector<QString> spotQueue)
 }
 
 
-void Clusterrpc::sendDXSpot(QString msg)
+void Clusterrpc::sendDXSpot(QString msg, QString appName)
 {
-   ClusterClientServer::getClusterClientServer()->sendDxSpot(msg);
+   ClusterClientServer::getClusterClientServer()->sendDxSpot(msg, appName);
 }
 
 

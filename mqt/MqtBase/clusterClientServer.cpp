@@ -230,17 +230,21 @@ void ClusterClientServer::syncSpots()
     }
 }
 //---------------------------------------------------------------------------
-void ClusterClientServer::sendDxSpot(QString spot)
+void ClusterClientServer::sendDxSpot(QString spot, QString appName)
 {
-    // We need to send the message to all connected stations
+    // We need to send the message to all connected cluster clients, except the spot server
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        trace(QString("SendDxSpot to station = %1").arg((*i).serverName));
-        RPCGeneralClient rpc(rpcConstants::clusterMethod);
-        QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember( spot, rpcConstants::sendClusterSpot );
-        rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( (*i).app );
+        if (!(*i).app.contains(appName))
+        {
+            trace(QString("SendDxSpot to station = %1").arg((*i).app));
+            RPCGeneralClient rpc(rpcConstants::clusterMethod);
+            QSharedPointer<RPCParam>st(new RPCParamStruct);
+            st->addMember( spot, rpcConstants::sendClusterSpot );
+            rpc.getCallArgs() ->addParam( st );
+            rpc.queueCall( (*i).app );
+        }
+
     }
 }
 
