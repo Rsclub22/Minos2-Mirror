@@ -625,11 +625,22 @@ void ClusterMainWindow::checkStationDetails(QString msg)
 
 void ClusterMainWindow::handleStartFile()
 {
+    handleCmdFile(CLUSTER_PATH + CLUSTER_START_FILE);
+}
+
+
+void ClusterMainWindow::handleEndFile()
+{
+    handleCmdFile(CLUSTER_PATH + CLUSTER_END_FILE);
+}
+
+void ClusterMainWindow::handleCmdFile(QString fileName)
+{
     QStringList listCmds;
-    QString fileName = CLUSTER_PATH + CLUSTER_START_FILE;
+    //QString fileName = CLUSTER_PATH + CLUSTER_START_FILE;
     if (FileExists(fileName))
     {
-        QString msg = QString("Start file found - %1").arg(fileName);
+        QString msg = QString("handleCmdFile: Command file found - %1").arg(fileName);
         trace(msg);
         echoMsg(msg);
         QFile inputFile(fileName);
@@ -646,7 +657,7 @@ void ClusterMainWindow::handleStartFile()
     }
     else
     {
-        QString msg = QString("Cluster Start File missing - %1!").arg(fileName);
+        QString msg = QString("handleCmdFile: Command File missing - %1!").arg(fileName);
         trace(msg);
         echoErrorMsg(msg);
         return;
@@ -654,7 +665,7 @@ void ClusterMainWindow::handleStartFile()
 
     if (!listCmds.isEmpty())
     {
-        QString msg = QString("Sending Start Commands");
+        QString msg = QString("handleCmdFile: Sending Commands");
         trace(msg);
         echoMsg(msg);
         for (int i = 0; i < listCmds.count(); ++i)
@@ -669,14 +680,14 @@ void ClusterMainWindow::handleStartFile()
             }
         }
 
-        msg = QString("Finished sending Start Commands");
+        msg = QString("handleCmdFile: Finished sending Commands");
         trace(msg);
         echoMsg(msg);
 
     }
     else
     {
-        QString msg = QString("Start file empty %1").arg(fileName);
+        QString msg = QString("handleCmdFile: Command file empty %1").arg(fileName);
         trace(msg);
         echoErrorMsg(msg);
     }
@@ -1178,6 +1189,15 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 
     QSettings settings;
     settings.setValue(geoStr, saveGeometry());
+
+    if (setupCluster->getRunEndFileFlag())
+    {
+        handleEndFile();          // send user commands
+    }
+
+    disconnectNode();
+
+
     trace("Minos Cluster Server Closing");
     QWidget::closeEvent(event);
 }
