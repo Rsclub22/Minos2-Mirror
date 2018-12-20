@@ -32,13 +32,13 @@ void Clusterrpc::clusterClientServerList(QVector<ClusterServer> serverList)
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = clusterStateIndicator[(*i).state] + " " + (*i).app + "\r\n";
-        trace(QString("clusterClientServerList standalone rpc - state = %1").arg(state));
+        QString state = clusterStateIndicator[(*i).state] + " " + (*i).app;
+        trace(QString("clusterClientServerList standalone rpc - state = %1, number of stations = %2").arg(state).arg(serverList.count()));
         //ui->StationList->addItem( state );
     }
 }
 
-// do we need this? maybe not if we use a common frame.
+
 void Clusterrpc::dxSpots(QVector<QString> spotQueue)
 {
     for ( QVector<QString>::iterator i = spotQueue.begin(); i != spotQueue.end(); i++ )
@@ -54,9 +54,9 @@ void Clusterrpc::dxSpots(QVector<QString> spotQueue)
 }
 
 
-void Clusterrpc::sendDXSpot(QString msg)
+void Clusterrpc::sendDXSpot(QString msg, QString appName)
 {
-   ClusterClientServer::getClusterClientServer()->sendDxSpot(msg);
+   ClusterClientServer::getClusterClientServer()->sendDxSpot(msg, appName);
 }
 
 

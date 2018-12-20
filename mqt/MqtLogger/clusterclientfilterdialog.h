@@ -52,6 +52,8 @@ public:
     ClusterClientFilterSettings filterSettings;
 
     void setBandFilter(int band);
+    bool getEnableHFSpotsFlag();
+
 signals:
     void filtersChanged(bool, bool, bool, bool);
 
@@ -78,6 +80,8 @@ private:
     bool modeButtonState;
 
     int instanceNum;
+
+    bool enableHFSpots;
 
     void initCheckFilterTab();
     void clearVHFBands();

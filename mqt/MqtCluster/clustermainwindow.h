@@ -118,7 +118,7 @@ private slots:
     void onLaunchSetup();
     void connectToNode(const QString &nodeName);
     void logIn();
-
+    void checkStationDetails(QString msg);
     void on_sectionResized(int, int, int);
     void LogTimerTimer();
 
@@ -204,6 +204,7 @@ private:
 
     bool loginStart;
     bool loginSuccess;
+    bool loginStatDetails;
     bool nodeConnected;
     bool purgeSpotFlag;
 
@@ -240,7 +241,7 @@ private:
     void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment);
     void setAllTabsColor(QColor c);
     QString extractLocator(const QString &text, const QRegExp fullLocExp, const QRegExp partLocExp);
-    void handleStartFile();
+
     void showStatusMessage(const QString &message);
     void startDisconnectTimer(int time);
 
@@ -253,12 +254,17 @@ private:
     int upackShowDxSpot(const QString txt, const QString spotCall);
     bool checkShowDxMsg(const QString txt, QString &spotCall);
 
+    void handleStartFile();
+    void handleEndFile();
+    void handleCmdFile(QString fileName);
+
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
     QStringList testSpotList;
     int spotNum = 0;
 
 #endif
+
 
 
 

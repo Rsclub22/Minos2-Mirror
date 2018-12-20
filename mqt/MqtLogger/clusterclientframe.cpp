@@ -17,6 +17,7 @@
 #include "clusterclientframe.h"
 #include "clustercommon.h"
 #include "contest.h"
+#include "ContestApp.h"
 #include "cutils.h"
 #include "rigmemcommondata.h"
 #include "htmldelegate.h"
@@ -32,7 +33,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     holdUpdateFlag(false),
     instanceNum(instanceNum),
     contestBand(-1),
-    contestMode(-1)
+    contestMode(-1),
+    isProtected(false)
 {
 
     ui->setupUi(this);
@@ -47,18 +49,28 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     filterSetup = new ClusterClientFilterDialog(this, instanceNum);
 
+
     purgeTimer = new QTimer(this);
 
     checkNewSpotsTimer = new QTimer(this);
     connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));
+
     spotQueue.clear();
 
+
+    checkNewSpotsTimer = new QTimer(this);
+    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));
+    spotQueue.clear();
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
+
+    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
+
+
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
-    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
+
 
 
 
@@ -134,10 +146,11 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     purgeTimer->start(PURGE_TIME);
 
     statusIndicatorToggle(false);
+    //queueIndToggle(false);
     newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
-    checkNewSpotsTimer->start(1000);
+    checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
 
 
@@ -411,6 +424,8 @@ void ClusterClientFrame::setStandAlone()
     RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
     RPCPubSub::subscribe(rpcConstants::StationCategory);
 }
+
+
 void ClusterClientFrame::on_FontChanged()
 {
     QFont cf = QApplication::font();
@@ -542,14 +557,56 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     }
 }
 
-void ClusterClientFrame::dxSpots(QVector<QString> _spotQueue)
+void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
 {
-    spotQueue +=_spotQueue;                    // was append - no good on Pi, pre Qt 5.5
+    // if contest is protected ignore
+    if (isProtected)
+    {
+        return;
+    }
+
+    //get spot Message from queue
+    for (int i = 0; i < spotMsg.count(); i++)
+    {
+        QString msg = spotMsg[i];
+
+        // check to see if this is a non spot message
+        if (msg.contains(CLUSTER_STATUS))
+        {
+            if (msg.contains("!Connected"))
+            {
+                 statusIndicatorToggle(true);
+            }
+            else
+            {
+                 statusIndicatorToggle(false);
+            }
+
+            QStringList sl;
+            sl = msg.split(CLUSTER_STATUS);
+            if (sl.count() ==  2)
+            {
+                QString statusMsg = QString("%1").arg(sl[1]);
+                ui->statusIndicator->setToolTip(statusMsg);
+                trace(QString("Cluster Status: %1").arg(statusMsg));
+
+            }
+        }
+        else if (msg.contains(DXSPOT))
+        {
+            spotQueue += spotMsg[i];
+        }
+
+
+    }
+
+
     if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
     {
         handleDxSpots(spotQueue);
     }
-}
+
+ }
 
 
 void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
@@ -571,88 +628,66 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 void ClusterClientFrame::addDxSpotToTable(const QString spot)
 {
 
-    if (spot.contains(CLUSTER_STATUS))
+
+    QStringList sl = spot.split(DXSPOT);
+    if (sl.count() == 2)
     {
-        if (spot.contains("!Connected"))
-        {
-             statusIndicatorToggle(true);
-        }
-        else
-        {
-             statusIndicatorToggle(false);
-        }
+        QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
 
-        QStringList sl;
-        sl = spot.split(CLUSTER_STATUS);
-        if (sl.count() ==  2)
+        if (spotlist.count() == TTLVALUE +1)
         {
-            QString statusMsg = QString("%1").arg(sl[1]);
-            ui->statusIndicator->setToolTip(statusMsg);
-            trace(QString("Cluster Status: %1").arg(statusMsg));
-
-        }
-    }
-    else if (spot.contains(DXSPOT))
-    {
-        QStringList sl = spot.split(DXSPOT);
-        if (sl.count() == 2)
-        {
-            QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
-
-            if (spotlist.count() == TTLVALUE +1)
+            // get time to live value
+            if (spotlist[TTLVALUE] == "0")
             {
-                // get time to live value
-                if (spotlist[TTLVALUE] == "")
+                timeToLive = 0;  // timeToLive is off
+            }
+            else
+            {
+                bool ok = false;
+                int ttl = spotlist[TTLVALUE].toInt(&ok);
+                if (ok)
                 {
-                    timeToLive = 0;  // timeToLive is off
-                }
-                else
-                {
-                    bool ok = false;
-                    int ttl = spotlist[TTLVALUE].toInt(&ok);
-                    if (ok)
+                    if (ttl >= MIN_TTL && ttl <= MAX_TTL)
                     {
-                        if (ttl >= MIN_TTL && ttl <= MAX_TTL)
-                        {
-                            timeToLive = ttl * 60; // seconds
-                        }
+                        timeToLive = ttl * 60; // seconds
                     }
                 }
+            }
 
-                // check to see if call or locator worked
-                bool callWorked = false;
-                bool locWorked = false;
+            // check to see if call or locator worked
+            bool callWorked = false;
+            bool locWorked = false;
 
-                if (spotlist[DXBANDMASK].toInt() == contestBand) // if contestband matches spotband
-                {
+            if (spotlist[DXBANDMASK].toInt() == contestBand) // if contestband matches spotband
+            {
                 checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
-                }
+            }
 
 
 
-                double dist = 0;
-                int brg = 0;
-                QString distance;
-                QString bearing;
-                if (!spotlist[DXLOCATOR].isEmpty())
-                {
-                    calcSpotDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
-                    distance = QString::number(static_cast< int> ( dist));
-                    bearing =  QString::number(brg);
-                }
+            double dist = 0;
+            int brg = 0;
+            QString distance;
+            QString bearing;
+            if (!spotlist[DXLOCATOR].isEmpty())
+            {
+                calcSpotDistanceBearing(spotlist[DXLOCATOR], &dist, &brg);
+                distance = QString::number(static_cast< int> ( dist));
+                bearing =  QString::number(brg);
+            }
 
-                dxSpotDataModel->rowData = new SpotData(QDateTime::currentMSecsSinceEpoch(), spotlist[SPOTTIME],
-                                                        spotlist[DXFREQ], spotlist[DXBANDMASK],
-                                                        spotlist[DXMODEMASK], spotlist[DXCALL],
-                                                        callWorked, spotlist[DXLOCATOR],
-                                                        locWorked,distance,
-                                                        bearing, spotlist[SPOTCALL],
-                                                        spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
-                //dxSpotDataModel->insertRows(0, 1);
-                dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
-           }
-        }
+            dxSpotDataModel->rowData = new SpotData(QDateTime::currentMSecsSinceEpoch(), spotlist[SPOTTIME],
+                                                    spotlist[DXFREQ], spotlist[DXBANDMASK],
+                                                    spotlist[DXMODEMASK], spotlist[DXCALL],
+                                                    callWorked, spotlist[DXLOCATOR],
+                                                    locWorked,distance,
+                                                    bearing, spotlist[SPOTCALL],
+                                                    spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
+            //dxSpotDataModel->insertRows(0, 1);
+            dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+       }
     }
+
 }
 
 
@@ -796,7 +831,17 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
         filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
-
+        if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
+        {
+            if (!ct->isProtected())
+            {
+                isProtected = false;
+            }
+            else
+            {
+                isProtected = true;
+            }
+        }
     }
 
 
@@ -1158,7 +1203,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, Loc
 
 void ClusterClientFrame::checkNewSpots()
 {
-    // look for new spots in callsign and locator view
+    // look for new spots in spot, callsign and locator view
     static int oldSpotCount = 0;
     static int oldCallsignCount = 0;
     static int oldLocatorCount = 0;
@@ -1167,52 +1212,54 @@ void ClusterClientFrame::checkNewSpots()
     int newCallsignCount =  callSignProxyModel->rowCount();
     int newLocatorCount = locatorProxyModel->rowCount();
 
-    if ((newSpotCount == 0 || ui->dxSpotTab->currentIndex() == DXSPOT_TAB) && !holdUpdateFlag)
+
+    //if (!spotQueue.isEmpty()  && holdUpdateFlag)
+    //{
+    //    queueIndToggle(true);
+    //}
+    //else if (spotQueue.isEmpty())
+    //{
+    //    queueIndToggle(false);
+    //}
+
+    //if ((newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
+    //    || (!spotQueue.isEmpty() && ui->dxSpotTab->currentIndex() == DXSPOT_TAB && holdUpdateFlag))
+    if (newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
     {
+        newSpotIndToggle(true);
+    }
+
+    //if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB && !holdUpdateFlag)
+    if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB )
+    {
+       oldSpotCount = newSpotCount;
        newSpotIndToggle(false);
     }
 
-    if ((newCallsignCount == 0 || ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)  && !holdUpdateFlag)
+
+    if (newCallsignCount > oldCallsignCount && ui->dxSpotTab->currentIndex() != CALLSIGN_TAB)
     {
+        newCallsignSpotIndToggle(true);
+    }
+
+    if (ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)
+    {
+       oldCallsignCount = newCallsignCount;
        newCallsignSpotIndToggle(false);
     }
 
-    if ((newLocatorCount == 0 || ui->dxSpotTab->currentIndex() == LOCATOR_TAB)  && !holdUpdateFlag)
+    if (newLocatorCount > oldLocatorCount && ui->dxSpotTab->currentIndex() != LOCATOR_TAB)
     {
+        newLocatorSpotIndToggle(true);
+    }
+
+    if (ui->dxSpotTab->currentIndex() == LOCATOR_TAB)
+    {
+       oldLocatorCount = newLocatorCount;
        newLocatorSpotIndToggle(false);
     }
 
-    if (newSpotCount > oldSpotCount)
-    {
-        oldSpotCount = newSpotCount;
-        if (ui->dxSpotTab->currentIndex() != DXSPOT_TAB || holdUpdateFlag)
-        {
-            newSpotIndToggle(true);
-        }
 
-    }
-
-
-
-    if (newCallsignCount > oldCallsignCount)
-    {
-        oldCallsignCount = newCallsignCount;
-        if (ui->dxSpotTab->currentIndex() != CALLSIGN_TAB  || holdUpdateFlag)
-        {
-            newCallsignSpotIndToggle(true);
-        }
-
-    }
-
-    if (newLocatorCount > oldLocatorCount)
-    {
-        oldLocatorCount = newLocatorCount;
-        if (ui->dxSpotTab->currentIndex() != LOCATOR_TAB  || holdUpdateFlag)
-        {
-            newLocatorSpotIndToggle(true);
-        }
-
-    }
 
     checkSavedFilters();
 
@@ -1246,6 +1293,26 @@ void ClusterClientFrame::statusIndicatorToggle(bool on)
     }
 
 }
+
+
+
+
+/*
+void ClusterClientFrame::queueIndToggle(bool on)
+{
+
+    if (on)
+    {
+        ui->queueIndicator->setStyleSheet(NEWSPOT_INDICATOR_ON_STYLE);
+    }
+    else
+    {
+       ui->queueIndicator->setStyleSheet(NEWSPOT_INDICATOR_OFF_STYLE);
+    }
+
+}
+
+*/
 
 void ClusterClientFrame::newSpotIndToggle(bool on)
 {
@@ -1367,10 +1434,15 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
     bool ok = false;
-    int spotMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
-    if (spotMask < NUMBANDS)
+    int bandMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
+
+    if (ok && (bandMask >=0 && bandMask < NUMBANDS) )
     {
-       return filterSetup->filterSettings.getBandFilter(spotMask);
+       return filterSetup->filterSettings.getBandFilter(bandMask);
+    }
+    else if (!ok && filterSetup->getEnableHFSpotsFlag())
+    {
+        return true;        // if DXBandMask is empty it must be a HF Spot
     }
     else
     {

@@ -5,7 +5,7 @@
 #include <QStandardItemModel>
 #include <QSettings>
 
-
+#include "clustercommon.h"
 
 
 class QDialogButtonBox;
@@ -18,7 +18,6 @@ namespace Ui {
 class SetupDialog;
 }
 
-const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.ini";
 const QString CLUSTER_NODE_LIST_FILE = "./Configuration/Cluster/ClusterSites.ini";
 
 const int ClusterListNumCols = 4;
@@ -57,6 +56,9 @@ public:
 
     void setTabNum(int num);
 
+    bool getRunStartFileFlag();
+    bool getRunEndFileFlag();
+
 signals:
 
     void personalDataUpdated(QString, QString, QString, QString);
@@ -84,6 +86,10 @@ private slots:
     void saveButtonPushed();
 
     void cancelButtonPushed();
+    void runStartCmdFileChkBoxChanged(int state);
+    void runEndCmdFileChkBoxChanged(int state);
+
+
 private:
     Ui::SetupDialog *ui;
 
@@ -102,6 +108,11 @@ private:
     bool listDataChanged;
     QString timeToLive;
     bool timeToLiveChanged;
+
+    bool runStartCmdFilesChanged;
+    bool enableStartCmdFiles;
+    bool runEndCmdFilesChanged;
+    bool enableEndCmdFiles;
 
     bool personalDataChanged;
 
@@ -123,6 +134,7 @@ private:
     void loadPersonalToSetupTab();
     void clusterListSave();
     void loadSettingsToModel(QStringList &availNodeNames, QSettings &settings);
+    void closeEvent(QCloseEvent *event);
     void doCloseEvent();
 };
 

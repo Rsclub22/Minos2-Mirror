@@ -31,6 +31,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connectedToClientFlag(false),
     loginStart(false),
     loginSuccess(false),
+    loginStatDetails(false),
     nodeConnected(false),
     purgeSpotFlag(false),
     reconnectFlag(false),
@@ -209,6 +210,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(client, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(parseDX(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
+    //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
     //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
 
     // get list of clusters
@@ -472,6 +474,7 @@ void ClusterMainWindow::loggedOut()
     nodeConnected = false;
     loginStart = false;
     loginSuccess = false;
+    loginStatDetails = false;
     showStatusMessage((QString("Disconnected")));
     if (reconnectFlag)
     {
@@ -544,10 +547,8 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
         {
             loginSuccess = true;
             txText("set/echo enable\n");
-            txText(dxCluster->setNameMsg(currentUserName));
-            txText(dxCluster->setQthMsg(currentUserQTH));
-            txText(dxCluster->setQraMsg(currentUserLocator));
-            handleStartFile();          // send user commands
+            txText("SH/ST\n");      // ask for station details
+            loginStatDetails = true;
         }
 
     }
@@ -556,13 +557,90 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
 }
 
 
+void ClusterMainWindow::checkStationDetails(QString msg)
+{
+    QStringList details = {"Name", "QTH", "Location"};
+    QStringList ourDetails = {currentUserName, currentUserQTH, currentUserLocator};
+    bool foundMatch[] = {false, false, false};
+    QString buf;
+    QTextStream in;
+    in.setString(&buf, QIODevice::ReadOnly);
+    buf = msg;
+    QString line;
+    QStringList data;
+    if (loginStatDetails)
+    {
+
+        do
+        {
+            line = in.readLine();
+            if (!line.isEmpty())
+            {
+                data.append(line);
+            }
+        }while (!line.isNull());
+
+        if (data.count() >= details.count())
+        {
+            for (int i = 0; i < details.count(); i++)
+            {
+                for (int x = 0; x < data.count(); x++)
+                {
+                    if (data[x].contains(details[i]) && data[x].contains(ourDetails[i]))
+                    {
+                        foundMatch[i] = true;
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    txText("set/echo enable\n");
+
+    if (!foundMatch[0])
+    {
+        txText(dxCluster->setNameMsg(currentUserName));
+    }
+    else if (!foundMatch[1])
+    {
+        txText(dxCluster->setQthMsg(currentUserQTH));
+    }
+    else if (!foundMatch[2])
+    {
+        txText(dxCluster->setQraMsg(currentUserLocator));
+    }
+
+
+    if (setupCluster->getRunStartFileFlag())
+    {
+        handleStartFile();          // send user commands
+    }
+
+
+
+}
+
+
 void ClusterMainWindow::handleStartFile()
 {
+    handleCmdFile(CLUSTER_PATH + CLUSTER_START_FILE);
+}
+
+
+void ClusterMainWindow::handleEndFile()
+{
+    handleCmdFile(CLUSTER_PATH + CLUSTER_END_FILE);
+}
+
+void ClusterMainWindow::handleCmdFile(QString fileName)
+{
     QStringList listCmds;
-    QString fileName = CLUSTER_PATH + CLUSTER_START_FILE;
+    //QString fileName = CLUSTER_PATH + CLUSTER_START_FILE;
     if (FileExists(fileName))
     {
-        QString msg = QString("Start file found - %1").arg(fileName);
+        QString msg = QString("handleCmdFile: Command file found - %1").arg(fileName);
         trace(msg);
         echoMsg(msg);
         QFile inputFile(fileName);
@@ -579,7 +657,7 @@ void ClusterMainWindow::handleStartFile()
     }
     else
     {
-        QString msg = QString("Cluster Start File missing - %1!").arg(fileName);
+        QString msg = QString("handleCmdFile: Command File missing - %1!").arg(fileName);
         trace(msg);
         echoErrorMsg(msg);
         return;
@@ -587,7 +665,7 @@ void ClusterMainWindow::handleStartFile()
 
     if (!listCmds.isEmpty())
     {
-        QString msg = QString("Sending Start Commands");
+        QString msg = QString("handleCmdFile: Sending Commands");
         trace(msg);
         echoMsg(msg);
         for (int i = 0; i < listCmds.count(); ++i)
@@ -596,18 +674,20 @@ void ClusterMainWindow::handleStartFile()
             if (cmd != "")
             {
                 if (cmd[0] != CLUSTER_START_COMMENT_DELIMTER)
-                txText(cmd);
+                {
+                    txText(cmd);
+                }
             }
         }
 
-        msg = QString("Finished sending Start Commands");
+        msg = QString("handleCmdFile: Finished sending Commands");
         trace(msg);
         echoMsg(msg);
 
     }
     else
     {
-        QString msg = QString("Start file empty %1").arg(fileName);
+        QString msg = QString("handleCmdFile: Command file empty %1").arg(fileName);
         trace(msg);
         echoErrorMsg(msg);
     }
@@ -627,9 +707,6 @@ void ClusterMainWindow::parseDX(const QString txt)
     if (loginSuccess)
     {
         trace(QString("raw spot = %1").arg(txt));
-
-        QTextStream in;
-        in.setString(&buf, QIODevice::ReadOnly);
 
         do
         {
@@ -819,7 +896,8 @@ void ClusterMainWindow::getSpotsFromSendQueue()
         // get spots from queue and send to client
         while (sendSpotsQueue.count() > 0)
         {
-            clusterRpc->sendDXSpot(sendSpotsQueue[0]);
+            trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsQueue.count()).arg(sendSpotsQueue[0]));
+            clusterRpc->sendDXSpot(sendSpotsQueue[0], appName);     // send appName to prevent spot being sent to cluster spot server
             sendSpotsQueue.removeFirst();
         }
     }
@@ -1111,6 +1189,15 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 
     QSettings settings;
     settings.setValue(geoStr, saveGeometry());
+
+    if (setupCluster->getRunEndFileFlag())
+    {
+        handleEndFile();          // send user commands
+    }
+
+    disconnectNode();
+
+
     trace("Minos Cluster Server Closing");
     QWidget::closeEvent(event);
 }
