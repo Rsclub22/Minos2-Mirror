@@ -93,9 +93,10 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         {
             trace( QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
             QVector<Server>::iterator stat;
+            bool chatFound = false;
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
             {
-                if ((*stat).app == an.getPublisherProgram())
+                if ((*stat).app == an.getKey())
                 {
                     if ((*stat).state != an.getState())
                     {
@@ -104,10 +105,11 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
                         addChat( mess );
                         syncstat = true;
                     }
+                    chatFound = true;
                     break;
                 }
             }
-            if ( stat == serverList.end() )
+            if ( !chatFound )
             {
                 // We have received notification from a previously unknown station - so report on it
                 Server s;
