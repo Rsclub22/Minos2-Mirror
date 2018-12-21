@@ -491,19 +491,23 @@ void ClusterMainWindow::loggedOut()
         currentPort = "";
 
     }
-
-
-
-
 }
 
 void ClusterMainWindow::disconnectNode()
 {
     trace(QString("Disconnect Node %1").arg(currentNodeName));
     //client->logout();
-    QString msg = dxCluster->quit();
-    txText(msg);
-    echoCmd(msg);
+    if (nodeConnected)
+    {
+        if (setupCluster->getRunEndFileFlag())
+        {
+            handleEndFile();          // send user commands
+        }
+        QString msg = dxCluster->quit();
+        txText(msg);
+        echoCmd(msg);
+    }
+
 
 }
 
@@ -541,14 +545,26 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
 {
     QString endOfMsg = QString(">\r\n");
 
-    if (loginStart && !loginSuccess)
+    if (loginStart && !loginSuccess)  // loginSuccess not used at the moment!
     {
         if (msg.contains(endOfMsg))
         {
             loginSuccess = true;
             txText("set/echo enable\n");
-            txText("SH/ST\n");      // ask for station details
-            loginStatDetails = true;
+            txText(dxCluster->setNameMsg(currentUserName));
+            txText(dxCluster->setQthMsg(currentUserQTH));
+            txText(dxCluster->setQraMsg(currentUserLocator));
+
+
+            //txText("SH/ST\n");      // ask for station details
+            //loginStatDetails = true;
+
+
+            if (setupCluster->getRunStartFileFlag())
+            {
+                handleStartFile();          // send user commands
+            }
+
         }
 
     }
@@ -556,6 +572,8 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
 
 }
 
+
+// revisit this to improve login process???
 
 void ClusterMainWindow::checkStationDetails(QString msg)
 {
@@ -1190,13 +1208,7 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
     QSettings settings;
     settings.setValue(geoStr, saveGeometry());
 
-    if (setupCluster->getRunEndFileFlag())
-    {
-        handleEndFile();          // send user commands
-    }
-
     disconnectNode();
-
 
     trace("Minos Cluster Server Closing");
     QWidget::closeEvent(event);
