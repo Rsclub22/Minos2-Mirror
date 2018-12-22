@@ -199,6 +199,8 @@ private:
     QString spotCall;
     QString spotComment;
     QString spotTime;
+    QString spotDate;
+    QDateTime spotDateTime;
     QString dxLocator;
     QString spotLocator;
 
@@ -257,6 +259,8 @@ private:
     void handleStartFile();
     void handleEndFile();
     void handleCmdFile(QString fileName);
+
+
 
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;

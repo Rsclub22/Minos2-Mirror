@@ -21,6 +21,7 @@
 #include "clustermainwindow.h"
 #include "clustercommon.h"
 #include "rigutils.h"
+#include "cutils.h"
 #include "ui_clustermainwindow.h"
 
 #include <QDebug>
@@ -748,12 +749,13 @@ void ClusterMainWindow::parseDX(const QString txt)
                 if (retCode >= 0)
                 {
 
-                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12")
-                    .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
+                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13")
+                    .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
                     // Display
                     //QString displayFreq = alignFreqRight(dxFreq);
-                    sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive())));
-                    spotsList += (new SpotData(QDateTime::currentMSecsSinceEpoch(), spotTime,
+                    sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive())));
+                    qint64 rxTime = spotDateTime.toMSecsSinceEpoch();
+                    spotsList += (new SpotData(rxTime, spotTime,
                                                   dxFreq, dxBandMask,
                                                   dxModeMask, dxCall,
                                                   false, dxLocator,
@@ -771,7 +773,12 @@ void ClusterMainWindow::parseDX(const QString txt)
     }
 }
 
-//
+
+
+
+
+
+
 int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCall)
 {
     spotCall = _spotCall;
@@ -786,6 +793,8 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
 
     spotComment = "";
     spotTime = "";
+    spotDate = "";
+    spotDateTime = QDateTime::currentDateTime();
     dxLocator = "";
     spotLocator = "";
 
@@ -802,7 +811,13 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
             return -3;
         }
         dxCall = dxMsg[1];
+        spotDate = dxMsg[2];
         spotTime = dxMsg[3].remove('Z');
+        spotDateTime = getSpotDateTime(spotDate, spotTime);
+        if (!spotDateTime.isValid())
+        {
+           return -1;
+        }
         QString sptCall = spotCall;
         sptCall.prepend('<').append('>');
         // reassemble comment
@@ -890,6 +905,9 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QString &spotCall)
 
 
 
+
+
+
 QString ClusterMainWindow::createSpotToSend(QString spot)
 {
     return DXSPOT + spot;
@@ -965,6 +983,8 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
     //spotCall = "";
     spotComment = "";
     spotTime = "";
+    spotDate = "";
+    spotDateTime = QDateTime::currentDateTime();
     dxLocator = "";
     spotLocator = "";
 
@@ -1005,6 +1025,15 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
         {
             //error
             return -1;
+        }
+
+        // get current date
+        QDate d = QDate::currentDate();
+        spotDate = d.toString("dd-MMM-yyyy");
+        spotDateTime = getSpotDateTime(spotDate, spotTime);
+        if (!spotDateTime.isValid())
+        {
+           return -1;
         }
 
         // look for locator

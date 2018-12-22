@@ -127,6 +127,10 @@ const QString DEL_CALLSIGN_KEY = "Ctrl-d";
 const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
 
 
+QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
+
+
+
 class ClusterClientFilterSettings
 {
 
@@ -344,5 +348,7 @@ QStringList unpackFilterList(QString &sl)
 }
 
 };
+
+
 
 #endif // CLUSTERCOMMON_H

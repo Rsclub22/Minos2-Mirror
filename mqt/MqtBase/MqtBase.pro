@@ -80,7 +80,8 @@ SOURCES += \
     spotdata.cpp \
     calllocinputdialog.cpp \
     helpbrowser.cpp \
-    helptextbrowser.cpp
+    helptextbrowser.cpp \
+    clustercommon.cpp
 
 HEADERS += \
     AntennaDetail.h \
