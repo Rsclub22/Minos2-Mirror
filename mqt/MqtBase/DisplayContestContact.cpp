@@ -335,7 +335,7 @@ void DisplayContestContact::checkContact( )
        {
            int brg;
             dist = clp->CalcCentres ( loc.loc.getValue(), brg );
-            if (dist == 1)
+            if ( almost_equal(dist, 1.0, 2))
                 dist = 50;  // MGM same square == 50 points
        }
        else if ( loc.loc.getValue().size() == 4 && clp->allowLoc4.getValue() )

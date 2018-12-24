@@ -85,7 +85,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     Op2String = ui->SecondOpLabel->text();
 
     freqFW = new FocusWatcher(ui->frequencyEdit);
-    Op2String = ui->freqLabel->text();
+    freqString = ui->freqLabel->text();
 
     connect(CallsignFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(RSTTXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
@@ -1223,7 +1223,7 @@ void QSOLogFrame::calcLoc( )
                 if (contest->MGMContestRules.getValue())
                 {
                     dist = contest->CalcCentres ( gridref, brg );
-                    if (dist == 1)
+                    if ( almost_equal(dist, 1.0, 2))
                         dist = 50;  // MGM same square == 50 points
                 }
                 else
