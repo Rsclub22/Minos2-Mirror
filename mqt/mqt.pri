@@ -1,7 +1,7 @@
-VERSION=2.1.0.0
+VERSION=2.1.0.999
 DEFINES += STRINGVERSION=\\\"$$VERSION\\\"
-#DEFINES += PRERELEASETYPE=\\\"Beta\\\"
-DEFINES += PRERELEASETYPE=\\\"\\\"
+DEFINES += PRERELEASETYPE=\\\"Pre Beta\\\"
+#DEFINES += PRERELEASETYPE=\\\"\\\"
 CONFIG += c++11
 DEFINES += TIXML_USE_STL
 *g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch
