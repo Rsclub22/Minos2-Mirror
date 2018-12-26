@@ -199,8 +199,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 break;
             case COMMENT_COL_NUM:
                 d = escapeXML(dxSpot->spotComment);
-
-            break;
+                break;
             case RXTIME_COL_NUM:
                 d = QString::number(dxSpot->rxTime);
                 break;

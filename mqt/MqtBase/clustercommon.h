@@ -42,8 +42,9 @@ const int DXMODEMASK = 6;
 const int SPOTCALL = 7;
 const int SPOTLOCATOR = 8;
 const int SPOTTIME = 9;
-const int SPOTCOMMENT = 10;
-const int TTLVALUE = 11;
+const int SPOTDATE = 10;
+const int SPOTCOMMENT = 11;
+const int TTLVALUE = 12;
 
 
 // Cluster Data and View Columns

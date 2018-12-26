@@ -753,8 +753,11 @@ void ClusterMainWindow::parseDX(const QString txt)
                     .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
                     // Display
                     //QString displayFreq = alignFreqRight(dxFreq);
+                    trace(QString("ParseDx: Send Spot to Queue"));
                     sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive())));
                     qint64 rxTime = spotDateTime.toMSecsSinceEpoch();
+                    trace(QString("ParseDx: rxTime = %1").arg(rxTime));
+                    trace(QString("ParseDx: Add spot for display"));
                     spotsList += (new SpotData(rxTime, spotTime,
                                                   dxFreq, dxBandMask,
                                                   dxModeMask, dxCall,
@@ -771,6 +774,8 @@ void ClusterMainWindow::parseDX(const QString txt)
             }
         } while (!line.isNull());
     }
+
+    trace(QString("ParseDx: Finished"));
 }
 
 
@@ -949,20 +954,27 @@ void ClusterMainWindow::getSpotsFromQueue()
 {
     if (!spotsList.isEmpty())
     {
+        trace(QString("GetSpotsFromQueue: spots available = %1").arg(spotsList.count()));
         // get spots from queue
         for (int i = spotsList.count() -1 ; i > -1; i--)
         {
+
             if (purgeSpotFlag)
             {
+                trace(QString("GetSpotsFromQueue: PurgeFlag On"));
                 return;
             }
+
             dxSpotDataModel->rowData = spotsList[i];
             spotsList.remove(i);
             //dxSpotDataModel->insertRows(0, 1);
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+            trace(QString("GetSpotsFromQueue: finished loop"));
         }
+        trace(QString("GetSpotsFromQueue: resize contents"));
         dxSpotView->resizeRowsToContents();
-        //dxSpotView->scrollToBottom();
+
+        trace(QString("GetSpotsFromQueue: finished"));
     }
 }
 

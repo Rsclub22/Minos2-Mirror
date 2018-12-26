@@ -628,7 +628,7 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 void ClusterClientFrame::addDxSpotToTable(const QString spot)
 {
 
-
+    QDateTime spotDateTime = QDateTime::currentDateTime();
     QStringList sl = spot.split(DXSPOT);
     if (sl.count() == 2)
     {
@@ -676,7 +676,10 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                 bearing =  QString::number(brg);
             }
 
-            dxSpotDataModel->rowData = new SpotData(QDateTime::currentMSecsSinceEpoch(), spotlist[SPOTTIME],
+            spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
+            qint64 rxTime = spotDateTime.toMSecsSinceEpoch();
+
+            dxSpotDataModel->rowData = new SpotData(rxTime, spotlist[SPOTTIME],
                                                     spotlist[DXFREQ], spotlist[DXBANDMASK],
                                                     spotlist[DXMODEMASK], spotlist[DXCALL],
                                                     callWorked, spotlist[DXLOCATOR],
