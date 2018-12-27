@@ -502,13 +502,24 @@ void TLogContainer::HelpActionExecute()
     QString collectionFile;
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpHelpFile, collectionFile );
 
-    QString url;
-    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpHelpEntryURL, url );
-    QUrl startUrl = QUrl(url);
+    if (FileExists(collectionFile))
+    {
+        QString url;
+        TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpHelpEntryURL, url );
+        QUrl startUrl = QUrl(url);
 
-    if (!helpBrowser)
-        helpBrowser = QSharedPointer<HelpBrowser>(new HelpBrowser(collectionFile, startUrl, this));
-    helpBrowser->show();
+        if (!helpBrowser)
+            helpBrowser = QSharedPointer<HelpBrowser>(new HelpBrowser(collectionFile, startUrl, this));
+        helpBrowser->show();
+    }
+    else
+    {
+        if (helpBrowser)
+        {
+            helpBrowser.clear();
+        }
+        mShowMessage(QString("Help file %1 doesn't exist.").arg(collectionFile), this);
+    }
 
 }
 QString TLogContainer::getDefaultDirectory( bool IsList )

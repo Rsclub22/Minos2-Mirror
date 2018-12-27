@@ -827,7 +827,7 @@ QStringList RigControl::gethamlibErrorMsg()
 
 QString RigControl::gethamlibVersion()
 {
-    QString ver = hamlib_version2;
+    QString ver = hamlib_version;
     return ver;
 }
 

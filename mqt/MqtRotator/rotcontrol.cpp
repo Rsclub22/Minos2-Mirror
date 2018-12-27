@@ -438,7 +438,7 @@ QStringList RotControl::gethamlibErrorMsg()
 
 QString RotControl::gethamlibVersion()
 {
-    QString ver = hamlib_version2;
+    QString ver = hamlib_version;
     return ver;
 }
 
