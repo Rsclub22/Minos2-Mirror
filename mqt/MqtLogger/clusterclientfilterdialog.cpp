@@ -557,7 +557,9 @@ void ClusterClientFilterDialog::locatorCurrentRowChanged(int currentRow)
 
 void ClusterClientFilterDialog::callsignDelClicked()
 {
-    if (callsignListWidgetCurrentRow >= 0)
+    QList<QListWidgetItem *> selItems = callsignListWidget->selectedItems();
+
+    if (selItems.count() == 1)
     {
         int status = QMessageBox::question( this,
         QString("Delete Callsign Filter"),
@@ -703,7 +705,9 @@ void ClusterClientFilterDialog::locatorEditClicked()
 
 void ClusterClientFilterDialog::locatorDelClicked()
 {
-    if (locatorListWidgetCurrentRow >=0)
+    QList<QListWidgetItem *> selItems = locatorListWidget->selectedItems();
+
+    if (selItems.count() == 1)
     {
         int status = QMessageBox::question( this,
         QString("Delete Locator Filter"),
