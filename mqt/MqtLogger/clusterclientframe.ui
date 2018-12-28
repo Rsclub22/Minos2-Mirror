@@ -16,6 +16,9 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLogTabWidget" name="dxSpotTab">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="currentIndex">
       <number>-1</number>
      </property>
@@ -25,6 +28,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="actionsButton">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string>Actions</string>
        </property>
@@ -41,6 +47,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="searchLineEdit">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
          </property>
@@ -67,6 +76,9 @@
            <width>16</width>
            <height>16</height>
           </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
           <string/>
@@ -98,6 +110,9 @@
            <height>16</height>
           </size>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -121,6 +136,9 @@
            <height>16</height>
           </size>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -143,6 +161,9 @@
            <width>16</width>
            <height>16</height>
           </size>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
           <string/>
@@ -173,6 +194,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="filtersBut">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
        <property name="text">
         <string>Filters</string>
        </property>

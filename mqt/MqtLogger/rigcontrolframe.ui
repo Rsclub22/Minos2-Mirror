@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>542</width>
+    <width>558</width>
     <height>149</height>
    </rect>
   </property>
@@ -319,6 +319,9 @@
           </item>
           <item>
            <widget class="VolumeSlider" name="volumeSlider">
+            <property name="focusPolicy">
+             <enum>Qt::ClickFocus</enum>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
