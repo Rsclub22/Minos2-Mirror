@@ -177,6 +177,7 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuActions">
     <property name="title">
@@ -205,6 +206,11 @@
   <action name="actionClear_All_Spots">
    <property name="text">
     <string>Clear All Spots</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

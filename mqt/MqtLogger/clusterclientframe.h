@@ -146,7 +146,7 @@ private:
     HtmlDelegate *delegate = nullptr;
 
     QTimer* purgeTimer;
-    int timeToLive;
+    qlonglong timeToLive;
     bool purgeSpotFlag;
     bool holdUpdateFlag;
 
@@ -192,7 +192,7 @@ private:
     void restoreDxSpotViewColumns();
 
     void addDxSpotToTable(const QString spot);
-    bool spotTimedOut(QString spotTime);
+
 
     void handleDxSpots(QVector<QString> &spotQueue);
 

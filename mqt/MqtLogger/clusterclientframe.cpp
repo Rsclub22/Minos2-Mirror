@@ -654,6 +654,13 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                 }
             }
 
+            //*********************************************************
+
+            //timeToLive = 120; // for testing.....
+
+            //*******************************************************
+
+
             // check to see if call or locator worked
             bool callWorked = false;
             bool locWorked = false;
@@ -677,7 +684,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             }
 
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
-            qint64 rxTime = spotDateTime.toMSecsSinceEpoch();
+            qint64 rxTime = spotDateTime.toSecsSinceEpoch();
 
             dxSpotDataModel->rowData = new SpotData(rxTime, spotlist[SPOTTIME],
                                                     spotlist[DXFREQ], spotlist[DXBANDMASK],
@@ -686,8 +693,9 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                                                     locWorked,distance,
                                                     bearing, spotlist[SPOTCALL],
                                                     spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
-            //dxSpotDataModel->insertRows(0, 1);
+
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+
        }
     }
 
@@ -884,18 +892,21 @@ int ClusterClientFrame::getModeOffSet(QString contestModeStr)
 void ClusterClientFrame::purgeSpots()
 {
 
-    if (timeToLive > 0 && !holdUpdateFlag)      // don't purge spots if == 0 and holdupdateflag is on
+    if (timeToLive > 0 && !holdUpdateFlag /*&& (ct && ct == TContestApp::getContestApp()->getCurrentContest())*/)      // don't purge spots if == 0 and holdupdateflag is on
     {
         if (dxSpotDataModel->rowCount() > 0)
         {
            purgeSpotFlag = true;
-           while (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(dxSpotDataModel->rowCount() - 1, 0), DataStoredRole).toString()))   // spot not timed out
+           int idx = dxSpotDataModel->rowCount() - 1;
+           while (idx >= 0 && dxSpotDataModel->rowCount() > 0)
            {
-               dxSpotDataModel->removeRows(dxSpotDataModel->rowCount() - 1, 1, QModelIndex());
-               if (dxSpotDataModel->rowCount() == 0)
+               trace(QString("purgeSpots: idx = %1").arg(idx));
+
+               if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), timeToLive))
                {
-                   break;
+                     dxSpotDataModel->removeRows(idx, 1, QModelIndex());
                }
+               idx--;
            }
           purgeSpotFlag = false;
         }
@@ -905,30 +916,9 @@ void ClusterClientFrame::purgeSpots()
 
 
 
-bool ClusterClientFrame::spotTimedOut(QString spotTime)
-{
 
-    QRegExp re("\\d\\d\\d\\d");  // a digit (\d)
-    if (re.exactMatch(spotTime))
-    {
-        //trace(QString("Spottime = %1").arg(spotTime));
-        //trace(QString("CurrentTime = %1%2").arg(QDateTime::currentDateTimeUtc().time().hour()).arg(QDateTime::currentDateTimeUtc().time().minute()));
-        QTime time = QTime(spotTime.mid(0, 2).toInt(), spotTime.mid(2, 4).toInt(), 0, 0);
-        int timeDiff = time.secsTo(QDateTime::currentDateTimeUtc().time());
-        if (timeDiff < 0)
-        {
-            timeDiff *= -1;
-        }
-        //trace(QString("Difference = %1").arg(timeDiff));
-        if (timeDiff >= timeToLive)
-        {
-            return true;
-        }
-    }
 
-    return false;
 
-}
 
 /********* Action Menu **********************************/
 
@@ -1215,53 +1205,63 @@ void ClusterClientFrame::checkNewSpots()
     int newCallsignCount =  callSignProxyModel->rowCount();
     int newLocatorCount = locatorProxyModel->rowCount();
 
-
-    //if (!spotQueue.isEmpty()  && holdUpdateFlag)
-    //{
-    //    queueIndToggle(true);
-    //}
-    //else if (spotQueue.isEmpty())
-    //{
-    //    queueIndToggle(false);
-    //}
-
-    //if ((newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
-    //    || (!spotQueue.isEmpty() && ui->dxSpotTab->currentIndex() == DXSPOT_TAB && holdUpdateFlag))
-    if (newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
+    if (newSpotCount != oldSpotCount)
     {
-        newSpotIndToggle(true);
+        if (newSpotCount == 0)
+        {
+            newSpotIndToggle(false);
+        }
+        else if (newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
+        {
+            newSpotIndToggle(true);
+        }
+
+        oldSpotCount = newSpotCount;
+
+    }
+    else if (newCallsignCount != oldCallsignCount)
+    {
+        if (newCallsignCount == 0)
+        {
+            newCallsignSpotIndToggle(false);
+        }
+        else if (newCallsignCount > oldCallsignCount && ui->dxSpotTab->currentIndex() != CALLSIGN_TAB)
+        {
+            newCallsignSpotIndToggle(true);
+        }
+
+        oldCallsignCount = newCallsignCount;
+    }
+    else if (newLocatorCount != oldLocatorCount)
+    {
+
+        if  (newLocatorCount == 0)
+        {
+            newLocatorSpotIndToggle(false);
+        }
+        else if (newLocatorCount > oldLocatorCount && ui->dxSpotTab->currentIndex() != LOCATOR_TAB)
+        {
+            newLocatorSpotIndToggle(true);
+        }
+
+        oldLocatorCount = newLocatorCount;
     }
 
-    //if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB && !holdUpdateFlag)
     if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB )
     {
-       oldSpotCount = newSpotCount;
        newSpotIndToggle(false);
+       oldSpotCount = newSpotCount;
     }
-
-
-    if (newCallsignCount > oldCallsignCount && ui->dxSpotTab->currentIndex() != CALLSIGN_TAB)
-    {
-        newCallsignSpotIndToggle(true);
-    }
-
-    if (ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)
+    else if (ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)
     {
        oldCallsignCount = newCallsignCount;
        newCallsignSpotIndToggle(false);
     }
-
-    if (newLocatorCount > oldLocatorCount && ui->dxSpotTab->currentIndex() != LOCATOR_TAB)
-    {
-        newLocatorSpotIndToggle(true);
-    }
-
-    if (ui->dxSpotTab->currentIndex() == LOCATOR_TAB)
+    else if (ui->dxSpotTab->currentIndex() == LOCATOR_TAB)
     {
        oldLocatorCount = newLocatorCount;
        newLocatorSpotIndToggle(false);
     }
-
 
 
     checkSavedFilters();

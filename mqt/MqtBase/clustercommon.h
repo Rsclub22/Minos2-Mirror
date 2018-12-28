@@ -130,7 +130,7 @@ const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
 
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
 
-
+bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive);
 
 class ClusterClientFilterSettings
 {

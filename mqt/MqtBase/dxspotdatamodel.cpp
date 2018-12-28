@@ -258,7 +258,12 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 break;
             case MODEMASK_COL_NUM:
                 d = dxSpot->dxModeMaskStr;
-            break;
+                break;
+            case RXTIME_COL_NUM:
+                d = dxSpot->rxTime;
+                break;
+
+
         }
 
         return d;

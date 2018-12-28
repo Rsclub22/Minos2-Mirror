@@ -287,6 +287,7 @@ private slots:
 
 
 
+    void about();
 };
 
 #endif // CLUSTERMAINWINDOW_H

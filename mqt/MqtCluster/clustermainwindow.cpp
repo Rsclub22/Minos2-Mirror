@@ -69,6 +69,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     status = new QLabel;
     ui->statusBar->addWidget(status);
 
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
+
     loadVhfAndUpBands(bands);
 
 #ifdef TEST_SPOTS
@@ -748,23 +750,34 @@ void ClusterMainWindow::parseDX(const QString txt)
 
                 if (retCode >= 0)
                 {
-
                     trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13")
                     .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
-                    // Display
-                    //QString displayFreq = alignFreqRight(dxFreq);
-                    trace(QString("ParseDx: Send Spot to Queue"));
-                    sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive())));
-                    qint64 rxTime = spotDateTime.toMSecsSinceEpoch();
-                    trace(QString("ParseDx: rxTime = %1").arg(rxTime));
-                    trace(QString("ParseDx: Add spot for display"));
-                    spotsList += (new SpotData(rxTime, spotTime,
-                                                  dxFreq, dxBandMask,
-                                                  dxModeMask, dxCall,
-                                                  false, dxLocator,
-                                                  false, "",
-                                                  "", spotCall,
-                                                  spotLocator, spotComment));
+
+                    qint64 rxTime = spotDateTime.toSecsSinceEpoch();
+                    // is spot older than time to live time
+                    int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
+                    if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))
+                    {
+                        trace(QString("ParseDx: Spot within timeToLive - Send Spot to Queue"));
+                        sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive())));
+
+                        trace(QString("ParseDx: rxTime = %1").arg(rxTime));
+                        trace(QString("ParseDx: Add spot for display"));
+                        spotsList += (new SpotData(rxTime, spotTime,
+                                                      dxFreq, dxBandMask,
+                                                      dxModeMask, dxCall,
+                                                      false, dxLocator,
+                                                      false, "",
+                                                      "", spotCall,
+                                                      spotLocator, spotComment));
+
+                    }
+                    else
+                    {
+                       trace(QString("ParseDx: Spot older than time to live time = %1 mins").arg(timeToLive/60));
+                    }
+
+
 
                 }
                 else if (retCode == -100)
@@ -1525,6 +1538,14 @@ void ClusterMainWindow::disconnectTimeout()
     //retCode = -52;
     emit disconnectTimerfinished();
 }
+
+
+
+void ClusterMainWindow::about()
+{
+    QMessageBox::about(this, "Minos Cluster Server", "Minos Rotator\nCopyright D Balharrie G8FKH/M0DGB 2016 - 2019");
+}
+
 
 
 /****************************** Test Routine *********************************/
