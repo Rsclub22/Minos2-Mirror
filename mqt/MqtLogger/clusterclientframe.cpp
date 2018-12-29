@@ -39,6 +39,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     ui->setupUi(this);
 
+    trace(QString("ClusterClientFrame Starting"));
+
     int lcf;
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
     delegate = new HtmlDelegate(1.0, lcf/100.0) ;
