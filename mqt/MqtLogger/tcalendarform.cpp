@@ -295,7 +295,14 @@ void TCalendarForm::downloadFiles()
 {
     if (!QSslSocket::supportsSsl())
     {
-        mShowMessage("You need to install the 32 bit light version of open ssl from http://slproweb.com/products/Win32OpenSSL.html", this);
+        mShowMessage("You need to install the 32 bit light version of open ssl (Win32 OpenSSL v1.0.2q Light) \r\n"
+                     "from http://slproweb.com/products/Win32OpenSSL.html\r\n"
+                     "You may also need the Microsoft VC++ 2013 Redistributable (vcredist_x86.exe)\r\n"
+                     "from https://www.microsoft.com/en-ph/download/details.aspx?id=40784"
+
+                     , this);
+
+        return;
     }
 
     QString fpath = "./Configuration";
