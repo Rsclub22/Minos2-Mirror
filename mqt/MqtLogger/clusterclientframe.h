@@ -35,7 +35,7 @@ const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yel
 const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
 
 const int MOUSE_IN_FRAME_TIMEOUT = 10000;
-const int CHECKSPOTS_DURATION = 500;
+const int CHECKSPOTS_DURATION = 10000;
 
 class ClusterClientFrame;
 
@@ -146,7 +146,7 @@ private:
     HtmlDelegate *delegate = nullptr;
 
     QTimer* purgeTimer;
-    int timeToLive;
+    qlonglong timeToLive;
     bool purgeSpotFlag;
     bool holdUpdateFlag;
 
@@ -192,7 +192,7 @@ private:
     void restoreDxSpotViewColumns();
 
     void addDxSpotToTable(const QString spot);
-    bool spotTimedOut(QString spotTime);
+
 
     void handleDxSpots(QVector<QString> &spotQueue);
 

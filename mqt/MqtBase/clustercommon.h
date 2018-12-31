@@ -42,8 +42,9 @@ const int DXMODEMASK = 6;
 const int SPOTCALL = 7;
 const int SPOTLOCATOR = 8;
 const int SPOTTIME = 9;
-const int SPOTCOMMENT = 10;
-const int TTLVALUE = 11;
+const int SPOTDATE = 10;
+const int SPOTCOMMENT = 11;
+const int TTLVALUE = 12;
 
 
 // Cluster Data and View Columns
@@ -126,6 +127,10 @@ const QString DEL_CALLSIGN_KEY = "Ctrl-d";
 
 const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
 
+
+QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
+
+bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive);
 
 class ClusterClientFilterSettings
 {
@@ -344,5 +349,7 @@ QStringList unpackFilterList(QString &sl)
 }
 
 };
+
+
 
 #endif // CLUSTERCOMMON_H

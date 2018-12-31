@@ -21,6 +21,7 @@
 #include "clustermainwindow.h"
 #include "clustercommon.h"
 #include "rigutils.h"
+#include "cutils.h"
 #include "ui_clustermainwindow.h"
 
 #include <QDebug>
@@ -67,6 +68,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     setWindowTitle("Minos Cluster Server");
     status = new QLabel;
     ui->statusBar->addWidget(status);
+
+    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 
     loadVhfAndUpBands(bands);
 
@@ -747,19 +750,34 @@ void ClusterMainWindow::parseDX(const QString txt)
 
                 if (retCode >= 0)
                 {
+                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13")
+                    .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
 
-                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12")
-                    .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive()));
-                    // Display
-                    //QString displayFreq = alignFreqRight(dxFreq);
-                    sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotComment).arg(setupCluster->getTimeToLive())));
-                    spotsList += (new SpotData(QDateTime::currentMSecsSinceEpoch(), spotTime,
-                                                  dxFreq, dxBandMask,
-                                                  dxModeMask, dxCall,
-                                                  false, dxLocator,
-                                                  false, "",
-                                                  "", spotCall,
-                                                  spotLocator, spotComment));
+                    qint64 rxTime = spotDateTime.toSecsSinceEpoch();
+                    // is spot older than time to live time
+                    int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
+                    if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))
+                    {
+                        trace(QString("ParseDx: Spot within timeToLive - Send Spot to Queue"));
+                        sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive())));
+
+                        trace(QString("ParseDx: rxTime = %1").arg(rxTime));
+                        trace(QString("ParseDx: Add spot for display"));
+                        spotsList += (new SpotData(rxTime, spotTime,
+                                                      dxFreq, dxBandMask,
+                                                      dxModeMask, dxCall,
+                                                      false, dxLocator,
+                                                      false, "",
+                                                      "", spotCall,
+                                                      spotLocator, spotComment));
+
+                    }
+                    else
+                    {
+                       trace(QString("ParseDx: Spot older than time to live time = %1 mins").arg(timeToLive/60));
+                    }
+
+
 
                 }
                 else if (retCode == -100)
@@ -769,9 +787,16 @@ void ClusterMainWindow::parseDX(const QString txt)
             }
         } while (!line.isNull());
     }
+
+    trace(QString("ParseDx: Finished"));
 }
 
-//
+
+
+
+
+
+
 int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCall)
 {
     spotCall = _spotCall;
@@ -786,6 +811,8 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
 
     spotComment = "";
     spotTime = "";
+    spotDate = "";
+    spotDateTime = QDateTime::currentDateTime();
     dxLocator = "";
     spotLocator = "";
 
@@ -802,7 +829,13 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
             return -3;
         }
         dxCall = dxMsg[1];
+        spotDate = dxMsg[2];
         spotTime = dxMsg[3].remove('Z');
+        spotDateTime = getSpotDateTime(spotDate, spotTime);
+        if (!spotDateTime.isValid())
+        {
+           return -1;
+        }
         QString sptCall = spotCall;
         sptCall.prepend('<').append('>');
         // reassemble comment
@@ -890,6 +923,9 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QString &spotCall)
 
 
 
+
+
+
 QString ClusterMainWindow::createSpotToSend(QString spot)
 {
     return DXSPOT + spot;
@@ -931,20 +967,27 @@ void ClusterMainWindow::getSpotsFromQueue()
 {
     if (!spotsList.isEmpty())
     {
+        trace(QString("GetSpotsFromQueue: spots available = %1").arg(spotsList.count()));
         // get spots from queue
         for (int i = spotsList.count() -1 ; i > -1; i--)
         {
+
             if (purgeSpotFlag)
             {
+                trace(QString("GetSpotsFromQueue: PurgeFlag On"));
                 return;
             }
+
             dxSpotDataModel->rowData = spotsList[i];
             spotsList.remove(i);
             //dxSpotDataModel->insertRows(0, 1);
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+            trace(QString("GetSpotsFromQueue: finished loop"));
         }
+        trace(QString("GetSpotsFromQueue: resize contents"));
         dxSpotView->resizeRowsToContents();
-        //dxSpotView->scrollToBottom();
+
+        trace(QString("GetSpotsFromQueue: finished"));
     }
 }
 
@@ -965,6 +1008,8 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
     //spotCall = "";
     spotComment = "";
     spotTime = "";
+    spotDate = "";
+    spotDateTime = QDateTime::currentDateTime();
     dxLocator = "";
     spotLocator = "";
 
@@ -1005,6 +1050,15 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
         {
             //error
             return -1;
+        }
+
+        // get current date
+        QDate d = QDate::currentDate();
+        spotDate = d.toString("dd-MMM-yyyy");
+        spotDateTime = getSpotDateTime(spotDate, spotTime);
+        if (!spotDateTime.isValid())
+        {
+           return -1;
         }
 
         // look for locator
@@ -1484,6 +1538,14 @@ void ClusterMainWindow::disconnectTimeout()
     //retCode = -52;
     emit disconnectTimerfinished();
 }
+
+
+
+void ClusterMainWindow::about()
+{
+    QMessageBox::about(this, "Minos Cluster Server", "Minos Rotator\nCopyright D Balharrie G8FKH/M0DGB 2016 - 2019");
+}
+
 
 
 /****************************** Test Routine *********************************/

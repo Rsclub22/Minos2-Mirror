@@ -199,6 +199,8 @@ private:
     QString spotCall;
     QString spotComment;
     QString spotTime;
+    QString spotDate;
+    QDateTime spotDateTime;
     QString dxLocator;
     QString spotLocator;
 
@@ -258,6 +260,8 @@ private:
     void handleEndFile();
     void handleCmdFile(QString fileName);
 
+
+
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
     QStringList testSpotList;
@@ -283,6 +287,7 @@ private slots:
 
 
 
+    void about();
 };
 
 #endif // CLUSTERMAINWINDOW_H
