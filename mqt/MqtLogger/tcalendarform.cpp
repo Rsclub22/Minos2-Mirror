@@ -1,7 +1,7 @@
 #include "base_pch.h"
 
 #include "tlogcontainer.h"
-
+#include <QSslSocket>
 #include "tcalendarform.h"
 #include "ui_tcalendarform.h"
 
@@ -293,6 +293,10 @@ void TCalendarForm::FormShow ( )
 }
 void TCalendarForm::downloadFiles()
 {
+    if (!QSslSocket::supportsSsl())
+    {
+        mShowMessage("You need to install the 32 bit light version of open ssl from http://slproweb.com/products/Win32OpenSSL.html", this);
+    }
 
     QString fpath = "./Configuration";
 
