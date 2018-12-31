@@ -665,6 +665,7 @@ void RotSetupDialog::addAntenna()
   numAvailAntennas++;
   antennaTab[tabNum]->setupRotatorModel(rotModel);
   antennaTab[tabNum]->setPollInterval(ROT_DEFAULT_POLLINTERVAL);
+  loadAvailComportsToTab(tabNum);
   //loadSettingsToTab(tabNum);
   //saveAntenna(tabNum);
   ui->antennaTab->setCurrentIndex(tabNum);
