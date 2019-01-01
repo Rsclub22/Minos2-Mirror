@@ -193,6 +193,8 @@ private slots:
     void ritClearShortCutSelected();
     void bandListTimeout();
 
+    void setRadioFreq();
+
 
 public slots:
     void returnChangeRadioFreq();
