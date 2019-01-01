@@ -686,7 +686,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             }
 
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
-            qint64 rxTime = spotDateTime.toSecsSinceEpoch();
+            qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
             dxSpotDataModel->rowData = new SpotData(rxTime, spotlist[SPOTTIME],
                                                     spotlist[DXFREQ], spotlist[DXBANDMASK],
