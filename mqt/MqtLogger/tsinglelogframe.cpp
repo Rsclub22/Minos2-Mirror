@@ -659,6 +659,10 @@ void TSingleLogFrame::on_ContestPageChanged ()
     LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
     LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
 
+    // save current freq as notifyRigChange writes incorrect contest freq to this frame
+    // with a contest change
+    sSavedCurFreq = sCurFreq;
+    trace(QString("on_ContestPageChanged:: save current freq = %1, for frame = %2").arg(sSavedCurFreq).arg(ct->name.getValue() + " uuid " + ct->uuid));
     LogContainer->sendDM->notifyRigChanges();
     LogContainer->sendDM->notifyRotChanges();
 
@@ -1259,17 +1263,16 @@ void TSingleLogFrame::on_SetMode(QString m)
 
 void TSingleLogFrame::on_SetFreq(QString f)
 {
+    qDebug() << "Freq from radio = " << f;
+    //trace(QString("Freq from radio = %1").arg(f));
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        sCurFreq = f;
+        FKHRigControlFrame->setFreq(f);
+        GJVQSOLogFrame->setFreq(f);
+        MinosLoggerEvents::sendRigFreqChanged(f, contest);
+    }
 
-    //if (sCurFreq != f)
-    //{
-        if ( this == LogContainer->getCurrentLogFrame() )
-        {
-            sCurFreq = f;
-            FKHRigControlFrame->setFreq(f);
-            GJVQSOLogFrame->setFreq(f);
-            MinosLoggerEvents::sendRigFreqChanged(f, contest);
-        }
-    //}
 }
 
 void TSingleLogFrame::on_SetRitFreq(QString f)
@@ -1439,7 +1442,7 @@ void TSingleLogFrame::sendRadioMode(QString mode)
 
 void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mode)
 {
-    //QString radName = extractRadioName(radioName);    // extract radioName from message, removing mode if appended
+
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
@@ -1449,16 +1452,14 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
             if (radName != GJVQSOLogFrame->getRadioName())
             {
                GJVQSOLogFrame->setRadioName(radName);
-               FKHRigControlFrame->setRadioName(radName, mode);
-               LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+               //FKHRigControlFrame->setRadioName(radName, mode);
+               //LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+            }
+
+            LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+            LogContainer->sendDM->changeRigSelectionTo(radName, mode, ct->uuid);  // send message including mode if it has been appended.
 
 
-            }
-            else
-            {
-                LogContainer->sendDM->changeRigSelectionTo(radName, mode, ct->uuid);  // send message including mode if it has been appended.
-                LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
-            }
 
 
             if (radName != ct->radioName.getValue().toString())

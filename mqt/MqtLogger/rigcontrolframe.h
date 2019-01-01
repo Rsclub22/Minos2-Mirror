@@ -29,6 +29,8 @@ namespace Ui {
     class RigControlFrame;
 }
 
+const int BANDLIST_TIMEOUT_DUR = 3000;
+
 class RigControlFrame;
 class RunMemoryButton : public QObject
 {
@@ -161,6 +163,7 @@ signals:
     void sendRitFreq(int);
     void ritStatus(bool);
     void radioDisconnected();
+    void newBandList();
 
 private slots:
     void on_FontChanged();
@@ -188,6 +191,9 @@ private slots:
 
 
     void ritClearShortCutSelected();
+    void bandListTimeout();
+
+
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -237,6 +243,8 @@ private:
     QString radioState;
     //QStringList listOfBands;
 
+    QTimer *bandListTimer;
+    bool bandListRxError;
 
     QString lastFreq;
 

@@ -99,6 +99,7 @@ public:
 
     // From rigcontrol
     QString sCurFreq;
+    QString sSavedCurFreq;
     QString sCurRitFreq;
     QString sCurMode;
 

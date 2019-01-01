@@ -3,10 +3,10 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2018
 //
 // Interprocess Control Logic
-// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2018
 //
 //
 //
@@ -48,21 +48,22 @@ const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ;\n");
 
 
 RigControlFrame::RigControlFrame(QWidget *parent):
-    QFrame(parent)
-    , ui(new Ui::RigControlFrame)
-    , ct(nullptr)
-    , radioLoaded(false)
-    , radioConnected(false)
-    , radioError(false)
-    , freqEditOn(false)
-    , curFreq(memDefData::DEFAULT_FREQ)
-    , curMode("")
-    , ritEnable(false)
-    , ritOn(false)
-    , ritEditOn(false)
+    QFrame(parent),
+    ui(new Ui::RigControlFrame),
+    ct(nullptr),
+    radioLoaded(false),
+    radioConnected(false),
+    radioError(false),
+    freqEditOn(false),
+    curFreq(memDefData::DEFAULT_FREQ),
+    curMode(""),
+    ritEnable(false),
+    ritOn(false),
+    ritEditOn(false),
     //, curRit("0.00")
-    , radioName(NORADIO)
-    , radioState("None")
+    radioName(NORADIO),
+    radioState("None"),
+    bandListRxError(false)
 {
     ui->setupUi(this);
 
@@ -87,6 +88,10 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     TContestApp::getContestApp() ->displayBundle.getBoolProfile( edpShowTPM, tpm );
 
     ui->tpmBox->setVisible(tpm);
+
+    bandListTimer = new QTimer(this);
+    bandListTimer->setSingleShot(true);
+    connect(bandListTimer, SIGNAL(timeout()), this, SLOT(bandListTimeout()));
 
     // init memory button data before radio connection
     setRadioName(radioName, "");
@@ -179,13 +184,16 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
 }
 
+
+
+
 void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
 {
-
+    // radio combo selected
     radioName = arg1;
 
     trace("on_radioNameSel_activated emit selectRadio");
-    emit selectRadio(arg1, ct->currentMode.getValue());
+    setRadioName(arg1, ct->currentMode.getValue());
 
 }
 
@@ -214,12 +222,13 @@ void RigControlFrame::noRadioSetFreq(QString f)
 
 void RigControlFrame::setFreq(QString freq)
 {
-    if (freq == "0")
+    if (freq == "0" && freq == "-1")
     {
         // this is force an update of freq, ignore
         traceMsg(QString("Force Freq Update Received - Ignore!"));
         return;
     }
+    qDebug() << "rigcontrol setFreq = " << freq;
     traceMsg(QString("Set Freq = %1").arg(freq));
 
 //    if (tuneButtonMap[0]->freq.isEmpty() && tuneButtonMap[1]->freq.isEmpty())
@@ -246,6 +255,7 @@ void RigControlFrame::setFreq(QString freq)
     {
         if (!freqEditOn)
         {
+            qDebug() << "Display Freq %1 = " << freq;
             ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
             ui->freqInput->setText(freq);
         }
@@ -519,27 +529,135 @@ void RigControlFrame::noRadioSendOutMode(QString m)
 }
 
 
-
 void RigControlFrame::on_ContestPageChanged()
 {
+
+    return;
     QString radioName = ct->radioName.getValue().toString();
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     QString mode = tslf->sCurMode;
+    trace(QString("on_ContestPageChanged: CurMode = %1").arg(mode));
     if (mode.isEmpty() || mode == memDefData::DEFAULT_MODE)
+    {
         mode = ct->currentMode.getValue();
+    }
 
-    trace(QString("on_ContestPageChanged emit selectRadio %1 %2 ").arg(radioName).arg(mode));
+    listOfBands.clear();
+
+    trace(QString("on_ContestPageChanged: emit selectRadio %1 %2 ").arg(radioName).arg(mode));
     emit selectRadio(radioName, mode);
 
-    QString bandlist = LogContainer->sendDM->getRigDetails(radioName).bandList().getValue();
+    if (radioName.isEmpty())
+    {
+        return;
+    }
+
+
+
+
+    if (bandListRxError || listOfBands.isEmpty())
+    {
+        setRadioBandWarning(QString("<font color='Red'>Error Receiving Bandlist!</font>"));
+        trace(QString("on_ContestPageChanged: Error Receiving Bandlist!"));
+        sendFreq(NO_BAND_SUPPORT);
+        return;
+    }
+
+    trace(QString("on_ContestPageChanged: received new bandlist"));
+
+
+    if (ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        //And we want to select the frequency based on the contest band
+
+       trace(QString("on_ContestPageChanged: select frequency"));
+       QString cb = ct->band.getValue().trimmed();
+
+       BandList &blist = BandList::getBandList();
+       BandInfo bi;
+       bool bandOK = blist.findBand(cb, bi);
+       if (bandOK)
+       {
+
+            for (int i = 0; i < listOfBands.size(); i++)
+            {
+                if (listOfBands[i].band == cb)
+                {
+                    trace(QString("onContestPageChanged: found band %1 on radio").arg(cb));
+                    QString freq = tslf->sSavedCurFreq;
+                    QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
+                    if (!re.exactMatch(freq))
+                    {
+                        freq = "0";
+                    }
+
+                    double cf = convertStrToFreq(tslf->sSavedCurFreq);
+                    QString cfstr;
+                    // find band for current freq
+                    for (int i = 0; i < blist.bandList.count(); i++)
+                    {
+                        if (cf >= blist.bandList[i].flow && cf <= blist.bandList[i].fhigh)
+                        {
+                            cfstr = blist.bandList[i].uk;
+                            break;
+                        }
+
+                    }
+
+
+                    if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
+                    {
+                        //sendFreq(freq);
+                        tslf->sCurFreq = freq;
+                        trace(QString("Set band list: Set previous freq = %1").arg(QString::number(cf)));
+                    }
+                    else
+                    {
+                        //sendFreq(listOfBands[i].freq);
+                        tslf->sCurFreq = listOfBands[i].freq;
+                        trace(QString("Set band list: Set defaut freq = %1").arg(listOfBands[i].freq));
+                    }
+
+                    setRadioBandWarning("");
+
+                    return;
+                }
+            }
+            // warn no band for this radio
+            setRadioBandWarning(QString("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
+            trace(QString("Set band list: %1 Band not found on this radio").arg(cb));
+            sendFreq(NO_BAND_SUPPORT);
+        }
+
+
+     }
+
+
+
+
+    //QString bandlist = LogContainer->sendDM->getRigDetails(radioName).bandList().getValue();
+
+
+/*
     setBandList(bandlist);
 
     QString freq = tslf->sCurFreq;
+    trace(QString("on_ContestPageChanged CurFreq = %1").arg(freq));
     if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
     {
+        trace(QString("on_ContestPageChanged SendFreq = %1").arg(freq));
         sendFreq(freq);
     }
+
+*/
+
+}
+
+void RigControlFrame::bandListTimeout()
+{
+    trace(QString("bandListTimeOut Error"));
+    bandListRxError = true;
 
 }
 
@@ -747,31 +865,68 @@ void RigControlFrame::sendModeToRadio(QString m)
 
 void RigControlFrame::setRadioName(QString radNam, QString mode)
 {
+    bandListRxError = false;
+
     traceMsg(QString("Set RadioName = %1 mode = %2 contest %3").arg(radNam).arg(mode).arg(ct?ct->uuid:""));
     if (radNam == NORADIO)
     {
         return;
     }
 
-    int index = ui->radioNameSel->findText(radNam, Qt::MatchFixedString);
-    if (index >= 0)
-        ui->radioNameSel->setCurrentIndex(index);
-    else
-        ui->radioNameSel->setCurrentText(radNam);
-
-    radioName = ui->radioNameSel->currentText();
-
     if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-        trace("setRadioName emit selectRadio");
+        trace(QString("setRadioName:: Looking for radio"));
+        int index = ui->radioNameSel->findText(radNam, Qt::MatchFixedString);
+        if (index >= 0)
+        {
+            ui->radioNameSel->setCurrentIndex(index);
+        }
+        else
+        {
+            ui->radioNameSel->setCurrentText(radNam);
+        }
+
+        // update radio name in rigcontrol and log frame
+        radioName = ui->radioNameSel->currentText();
+
+
+
+        trace(QString("setRadioName:: Select Radio = %1 Mode = %2 on rigcontrol").arg(radNam).arg(mode));
+        listOfBands.clear();
         emit selectRadio(radNam, mode);  // send radio and mode if appended.
+
+        if (radioName.isEmpty())
+        {
+            return;
+        }
+        // wait for bandlist to arrive
+        trace(QString("setRadioName:: wait for new bandlist"));
+        bandListTimer->start(BANDLIST_TIMEOUT_DUR);
+        QEventLoop loop;
+        QObject::connect( this, SIGNAL( newBandList() ), &loop, SLOT( quit() ) );
+        loop.exec();
+
+        if (bandListRxError || listOfBands.isEmpty())
+        {
+            setRadioBandWarning(QString("<font color='Red'>Error Receiving Bandlist!</font>"));
+            trace(QString("setRadioName:: Error Receiving Bandlist!"));
+            sendFreq(NO_BAND_SUPPORT);
+            return;
+        }
+
+        trace(QString("setRadioName:: received new bandlist"));
 
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         QString freq = tslf->sCurFreq;
         if (!freq.isEmpty() && freq != memDefData::DEFAULT_FREQ)
         {
+            trace(QString("setRadioName:: send Freq = %1").arg(freq));
             sendFreq(freq);
         }
+    }
+    else
+    {
+        trace(QString("setRadioName:: No contest or protect, no radio selection"));
     }
 }
 
@@ -808,7 +963,7 @@ void RigControlFrame::setBandList(QString b)
     trace("setBandList " + b);
     if (!b.isEmpty())
     {
-        QString currentBand = ui->bandSelCombo->currentText();
+        //QString currentBand = ui->bandSelCombo->currentText();
         listOfBands.clear();
         QStringList lbf;
         QStringList lb;
@@ -826,10 +981,6 @@ void RigControlFrame::setBandList(QString b)
         ui->bandSelCombo->clear();
         ui->bandSelCombo->addItem("");
         ui->bandSelCombo->addItems(lb);
-
-        int i = ui->bandSelCombo->findText(currentBand);
-        if (i >= 0)
-            ui->bandSelCombo->setCurrentIndex(i);
 
         if (ct == TContestApp::getContestApp() ->getCurrentContest())
         {
@@ -850,46 +1001,14 @@ void RigControlFrame::setBandList(QString b)
                         trace(QString("Set band list: found band %1 on radio").arg(cb));
                         ui->bandSelCombo->setCurrentIndex(i + 1);
 
-
-                        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-                        double cf = convertStrToFreq(tslf->sCurFreq);
-                        QString cfstr;
-                        // find band for current freq
-                        for (int i = 0; i < blist.bandList.count(); i++)
-                        {
-                            if (cf >= blist.bandList[i].flow && cf <= blist.bandList[i].fhigh)
-                            {
-                                cfstr = blist.bandList[i].uk;
-                                break;
-                            }
-
-                        }
-
-
-                        if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
-                        {
-                            sendFreq(tslf->sCurFreq);
-                            trace(QString("Set band list: Set previous freq = %1").arg(cf));
-                        }
-                        else
-                        {
-                            sendFreq(listOfBands[i].freq);
-                            trace(QString("Set band list: Set defaut freq = %1").arg(listOfBands[i].freq));
-                        }
-
-                        setRadioBandWarning("");
-
-                        return;
                     }
+
                 }
-                // warn no band for this radio
-                setRadioBandWarning(QString("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
-                trace(QString("Set band list: %1 Band not found on this radio").arg(cb));
-                sendFreq(NO_BAND_SUPPORT);
             }
-
-
          }
+
+        bandListTimer->stop();
+        emit newBandList();
 
     }
 }
@@ -903,7 +1022,7 @@ void RigControlFrame::setBandList(QString b)
 void RigControlFrame::setRadioState(QString s)
 {
     traceMsg(QString("Set RadioState = %1").arg(s));
-
+    qDebug() << "set radioState = " << s;
     if (s != "")
     {
         if (s == RIG_STATUS_CONNECTED)
@@ -918,6 +1037,7 @@ void RigControlFrame::setRadioState(QString s)
 
            ui->bandWarnLabel->setText("");
            curFreq = "00000000000";
+           qDebug() << "radio state dis curFreq = %1 " << curFreq;
            ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
            ui->freqInput->setText(curFreq);
            ui->bandSelCombo->clear();
