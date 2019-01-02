@@ -122,7 +122,6 @@ class ClusterClientFrame : public QFrame
 public:
     explicit ClusterClientFrame(QWidget *parent, int instanceNum);
     ~ClusterClientFrame() override;
-    void setStandAlone();
 
     void setContest(BaseContestLog *contest);
 

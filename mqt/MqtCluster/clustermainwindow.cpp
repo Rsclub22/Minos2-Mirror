@@ -29,7 +29,6 @@
 ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ClusterMainWindow),
-    connectedToClientFlag(false),
     loginStart(false),
     loginSuccess(false),
     loginStatDetails(false),
@@ -103,12 +102,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(setupCluster, SIGNAL(personalDataUpdated(QString, QString, QString, QString)), SLOT(personalDataChanged(QString, QString, QString, QString)));
 
     clusterRpc = new Clusterrpc();
-    connect (clusterRpc, SIGNAL(clientConnected()), this, SLOT(clientConnected()));
-
-    clusterRpc->setStandAlone();
 
     sendSpotsTimer = new QTimer();
-    connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromSendQueue()));
+    connect(sendSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromSendQueue()));
     sendSpotsTimer->start(1000);
 
     client = new QtTelnet(parent);
@@ -936,22 +932,15 @@ QString ClusterMainWindow::createStatusToSend(QString status)
     return CLUSTER_STATUS + status;
 }
 
-
-void ClusterMainWindow::clientConnected()
-{
-    connectedToClientFlag = true;
-}
-
 void ClusterMainWindow::getSpotsFromSendQueue()
 {
-
-    if (!sendSpotsQueue.isEmpty() && connectedToClientFlag)
+    if (!sendSpotsQueue.isEmpty())
     {
         // get spots from queue and send to client
         while (sendSpotsQueue.count() > 0)
         {
             trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsQueue.count()).arg(sendSpotsQueue[0]));
-            clusterRpc->sendDXSpot(sendSpotsQueue[0], appName);     // send appName to prevent spot being sent to cluster spot server
+            clusterRpc->sendDXSpot(sendSpotsQueue[0]);
             sendSpotsQueue.removeFirst();
         }
     }

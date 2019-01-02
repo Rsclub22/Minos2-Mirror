@@ -21,35 +21,24 @@ class ClusterClientServer : public QObject
 {
     Q_OBJECT
 
-
-
 public:
     explicit ClusterClientServer();
     virtual ~ClusterClientServer();
     static ClusterClientServer  *getClusterClientServer();
-    void sendDxSpot(QString spot, QString appName);
-
-
 
 private:
     static ClusterClientServer *clusterClientServer;
-    QVector<ClusterServer> serverList;
     QTimer SyncTimer;
 
-   void addSpotQueue(const QString &spot);
-    void syncSpots();
-    void syncStations();
-
+    void addSpotQueue(const QString &spot);
 
 private slots:
     void SyncTimerTimer( );
-    void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &);
     void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
 
 signals:
     void ClusterServerList(QVector<ClusterServer>);
     void dxSpot(QVector<QString>);
-
 
 };
 

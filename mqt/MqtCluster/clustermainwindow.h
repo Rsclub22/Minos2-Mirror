@@ -13,7 +13,7 @@
 #include "setupdialog.h"
 #include "clusterrpc.h"
 #include "dxspotdatamodel.h"
-#include "clusterClientServer.h"
+//#include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
 #include "rotpresetbutton.h"
 #include "clustercommon.h"
@@ -172,7 +172,6 @@ private:
 
     QVector<SpotData*> spotsList;
     QTimer* getSpotsTimer;
-    bool connectedToClientFlag;
 
     QStringList sendSpotsQueue;
     QTimer* sendSpotsTimer;
@@ -260,8 +259,6 @@ private:
     void handleEndFile();
     void handleCmdFile(QString fileName);
 
-
-
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
     QStringList testSpotList;
@@ -269,12 +266,7 @@ private:
 
 #endif
 
-
-
-
-
 private slots:
-    void clientConnected();
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
     void clusterListChanged();
@@ -284,9 +276,6 @@ private slots:
     void testSpotPbClicked();
     void spotTimerTimeOut();
 #endif
-
-
-
     void about();
 };
 

@@ -913,6 +913,10 @@ void TSendDM::subscribeApps()
             catMap[rpcConstants::LocalStationCategory].push_back((*i));
             catMap[rpcConstants::StationCategory].push_back((*i));
         }
+        else if ((*i)->appType == "Cluster")
+        {
+            catMap[rpcConstants::clusterClientServer].push_back((*i));
+        }
     }
 
     if (!servers.contains(config->getThisServerName()))

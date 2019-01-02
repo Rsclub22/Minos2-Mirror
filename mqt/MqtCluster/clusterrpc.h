@@ -3,30 +3,30 @@
 
 #include <QObject>
 #include "base_pch.h"
-#include "clusterClientServer.h"
+//#include "clusterClientServer.h"
 #include "MinosLoggerEvents.h"
+
+class ClusterServer
+{
+public:
+    QString serverName;
+    QString app;
+    PublishState state;
+};
 
 class Clusterrpc : public QObject
 {
     Q_OBJECT
 
+    QVector<ClusterServer> serverList;
 
 public:
     explicit Clusterrpc();
     ~Clusterrpc();
-    void setStandAlone();
-    void sendDXSpot(QString spot, QString appName);
-
-signals:
-    void clientConnected();
+    void sendDXSpot(QString spot);
 
 private slots:
-
-
-    void clusterClientServerList(QVector<ClusterServer>);
-    void dxSpots(QVector<QString>);
-
-
+    void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &);
 };
 
 #endif // CLUSTERRPC_H
