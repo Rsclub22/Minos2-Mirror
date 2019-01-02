@@ -22,7 +22,6 @@ bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive)
     qint64 curTime = QDateTime::currentMSecsSinceEpoch()/1000;  // currentSecsSinceEpoch only available since 5.8
     if ((curTime - spotTime) >= timeToLive)
     {
-        trace(QString("spotTimedOut: Spot Purged"));
         return true;
     }
     return false;
