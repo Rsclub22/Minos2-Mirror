@@ -105,7 +105,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     sendSpotsTimer = new QTimer();
     connect(sendSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromSendQueue()));
-    sendSpotsTimer->start(1000);
+    sendSpotsTimer->start(SEND_SPOTS_DUR);
 
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
@@ -211,6 +211,10 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
     //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
     //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
+
+    statusTimer = new QTimer(this);
+    connect(statusTimer, SIGNAL(timeout()), this, SLOT(handleStatusTimer()));
+    statusTimer->start(STATUS_TIMER_DUR);
 
     // get list of clusters
     loadNodesSelectBox(setupCluster->getListOfClusterNames());
@@ -1509,8 +1513,8 @@ void ClusterMainWindow:: saveUserCommandString(int buttonNumber, ClusterUserComm
 void ClusterMainWindow::showStatusMessage(const QString &message)
 {
     status->setText(message);
-    // send status to clients
-    sendSpotsQueue.append(createStatusToSend(message));
+    trace(QString("showStatusMessage: %1").arg(message));
+
 }
 
 void ClusterMainWindow::startDisconnectTimer(int time)
@@ -1526,6 +1530,24 @@ void ClusterMainWindow::disconnectTimeout()
     //msgComplete = false;
     //retCode = -52;
     emit disconnectTimerfinished();
+}
+
+
+void ClusterMainWindow::handleStatusTimer()
+{
+    static QString oldStatusMsg;
+
+    if (!status->text().isEmpty() && clusterRpc->getServerListCount() > 0)
+    {
+        if (oldStatusMsg != status->text())
+        {
+            oldStatusMsg = status->text();
+            // send status to clients
+            trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(status->text()));
+            sendSpotsQueue.append(createStatusToSend(status->text()));
+        }
+    }
+
 }
 
 

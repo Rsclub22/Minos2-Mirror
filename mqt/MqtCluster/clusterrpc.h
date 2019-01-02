@@ -25,6 +25,7 @@ public:
     ~Clusterrpc();
     void sendDXSpot(QString spot);
 
+    int getServerListCount();
 private slots:
     void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &);
 };
