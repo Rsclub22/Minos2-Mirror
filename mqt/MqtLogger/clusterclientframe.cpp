@@ -902,8 +902,6 @@ void ClusterClientFrame::purgeSpots()
            int idx = dxSpotDataModel->rowCount() - 1;
            while (idx >= 0 && dxSpotDataModel->rowCount() > 0)
            {
-               trace(QString("purgeSpots: idx = %1").arg(idx));
-
                if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), timeToLive))
                {
                      dxSpotDataModel->removeRows(idx, 1, QModelIndex());
