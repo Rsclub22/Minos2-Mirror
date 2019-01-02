@@ -147,7 +147,6 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
 //---------------------------------------------------------------------------
 void ChatServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-    trace( "chat callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
     // Should we use QMap to give a list of name/value pairs?
     // BUT the value isn't always the same type - should it be?
