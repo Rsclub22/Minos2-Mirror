@@ -175,7 +175,7 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
     connect(ui->bandSelCombo, SIGNAL(activated(int)), this, SLOT(radioBandFreq(int)));
 
-    connect(this, SIGNAL(newBandList()), this, SLOT(setRadioFreq()));
+    connect(this, SIGNAL(newBandList(bool)), this, SLOT(setRadioFreq(bool)));
 
     setVolControlVisible(false);
 
@@ -772,8 +772,8 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
     if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-        if (radioName != ct->radioName.getValue().toString() || curMode != ct->currentMode.getValue())
-        {
+        //if (radioName != ct->radioName.getValue().toString() || curMode != ct->currentMode.getValue())
+        //{
             trace(QString("setRadioName:: Looking for radio"));
             int index = ui->radioNameSel->findText(radNam, Qt::MatchFixedString);
             if (index >= 0)
@@ -804,12 +804,12 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
             bandListTimer->start(BANDLIST_TIMEOUT_DUR);
 
 
-        }
-        else
-        {
-            trace(QString("no change of radio or mode required, change freq only"));
-            setRadioFreq();
-        }
+        //}
+        //else
+        //{
+        //    trace(QString("no change of radio or mode required, change freq only"));
+        //    setRadioFreq(false);   //don't expect new banlist
+        //}
 
     }
     else
@@ -821,19 +821,32 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
 
 
-void RigControlFrame::setRadioFreq()
+void RigControlFrame::setRadioFreq(bool expectBandList)
 {
 
-
-    if (bandListRxError || listOfBands.isEmpty())
+    if (expectBandList)
     {
-        setRadioBandWarning(QString("<font color='Red'>Error Receiving Bandlist!</font>"));
-        trace(QString("setRadioName:: Error Receiving Bandlist!"));
-        sendFreq(NO_BAND_SUPPORT);
-        return;
+        if (bandListRxError || listOfBands.isEmpty())
+        {
+            setRadioBandWarning(QString("<font color='Red'>Error Receiving Bandlist!</font>"));
+            trace(QString("setRadioName:: Error Receiving Bandlist!"));
+            sendFreq(NO_BAND_SUPPORT);
+            return;
+        }
+
+        trace(QString("setRadioName:: received new bandlist"));
+    }
+    else
+    {
+        if (listOfBands.isEmpty())
+        {
+            setRadioBandWarning(QString("<font color='Red'>Radio has no available bands</font>"));
+            trace(QString("setRadioName:: Error No available bands!"));
+            sendFreq(NO_BAND_SUPPORT);
+            return;
+        }
     }
 
-    trace(QString("setRadioName:: received new bandlist"));
 
 
 
@@ -969,7 +982,7 @@ void RigControlFrame::setBandList(QString b)
         ui->bandSelCombo->addItems(lb);
 
         bandListTimer->stop();
-        emit newBandList();
+        emit newBandList(true);     // expect new bandlist in setfreq
 
     }
 }
