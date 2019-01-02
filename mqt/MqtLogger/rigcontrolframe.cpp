@@ -808,7 +808,8 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
         //else
         //{
         //    trace(QString("no change of radio or mode required, change freq only"));
-        //    setRadioFreq(false);   //don't expect new banlist
+        //    setRadioFreq(false);   //don't expect new bandlist
+
         //}
 
     }
@@ -899,8 +900,11 @@ void RigControlFrame::setRadioFreq(bool expectBandList)
                     if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
                     {
                         sendFreq(freq);
-
                         trace(QString("Set band list: Set previous freq = %1").arg(QString::number(cf)));
+                        if (ui->freqInput->text().toInt() == 0) // if display is zero update display locally
+                        {
+                            setFreq(freq);
+                        }
                     }
                     else
                     {
