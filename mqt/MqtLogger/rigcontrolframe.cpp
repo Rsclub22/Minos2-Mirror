@@ -230,7 +230,7 @@ void RigControlFrame::setFreq(QString freq)
         traceMsg(QString("Force Freq Update Received - Ignore!"));
         return;
     }
-    qDebug() << "rigcontrol setFreq = " << freq;
+
     traceMsg(QString("Set Freq = %1").arg(freq));
 
 //    if (tuneButtonMap[0]->freq.isEmpty() && tuneButtonMap[1]->freq.isEmpty())
@@ -257,7 +257,7 @@ void RigControlFrame::setFreq(QString freq)
     {
         if (!freqEditOn)
         {
-            qDebug() << "Display Freq %1 = " << freq;
+            trace(QString("setFreq: Display Freq %1 = ").arg(freq));
             ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
             ui->freqInput->setText(freq);
         }
@@ -872,8 +872,6 @@ void RigControlFrame::setRadioFreq(bool expectBandList)
                     ui->bandSelCombo->setCurrentIndex(i + 1);
 
                     QString freq = tslf->sSavedCurFreq;
-                    qDebug() << "onContestPageChanged freq = " << tslf->sCurFreq << "save Freq = " << tslf->sSavedCurFreq;
-
                     trace(QString("onContestPageChanged: found band %1 on radio, freq %2").arg(cb).arg(freq));
 
 
@@ -1000,7 +998,7 @@ void RigControlFrame::setBandList(QString b)
 void RigControlFrame::setRadioState(QString s)
 {
     traceMsg(QString("Set RadioState = %1").arg(s));
-    qDebug() << "set radioState = " << s;
+
     if (s != "")
     {
         if (s == RIG_STATUS_CONNECTED)
@@ -1015,7 +1013,6 @@ void RigControlFrame::setRadioState(QString s)
 
            ui->bandWarnLabel->setText("");
            curFreq = "00000000000";
-           qDebug() << "radio state dis curFreq = %1 " << curFreq;
            ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
            ui->freqInput->setText(curFreq);
            ui->bandSelCombo->clear();

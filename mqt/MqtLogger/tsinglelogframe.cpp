@@ -1263,8 +1263,7 @@ void TSingleLogFrame::on_SetMode(QString m)
 
 void TSingleLogFrame::on_SetFreq(QString f)
 {
-    qDebug() << "Freq from radio = " << f;
-    //trace(QString("Freq from radio = %1").arg(f));
+    trace(QString("Freq from radio = %1").arg(f));
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         sCurFreq = f;
