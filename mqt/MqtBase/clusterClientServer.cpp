@@ -16,10 +16,10 @@
 #include "base_pch.h"
 #include "MinosRPC.h"
 #include "MinosLoggerEvents.h"
+#include "ConfigFile.h"
 
 #include "clusterClientServer.h"
 
-static bool syncstat = false;
 static QVector<QString> spotQueue;
 
 QString clusterStateIndicator[] =
@@ -56,127 +56,19 @@ ClusterClientServer::ClusterClientServer()
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
 
+    QString a = rpc->getAppName();
+    QString station = MinosConfig::getMinosConfig()->getThisServerName();
+    RPCPubSub::publish(rpcConstants::clusterClientServer,  a + "@" + station, "", psPublished);
 }
 
 ClusterClientServer::~ClusterClientServer()
 {
 }
 
-void ClusterClientServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
-{
-    AnalysePubSubNotify an( err, mro );
-
-    if ( an.getOK() )
-    {
-        if ( an.getCategory() == rpcConstants::LocalStationCategory)
-        {
-            QString server = an.getKey();
-            QVector<ClusterServer>::iterator stat;
-            bool pubNeeded = true;
-            QString a = MinosRPC::getMinosRPC()->getAppName();
-            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
-            {
-                if ((*stat).app == a + "@" + server)
-                {
-                    pubNeeded = false;
-                    break;
-                }
-            }
-            if (pubNeeded)
-            {
-                RPCPubSub::publish(rpcConstants::clusterServer,  a + "@" + server, "", psPublished);
-            }
-        }
-        if (an.getCategory() == rpcConstants::StationCategory)
-        {
-            QString server = an.getKey();
-            QVector<ClusterServer>::iterator stat;
-            bool subNeeded = true;
-            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
-            {
-                if ((*stat).serverName == server)
-                {
-                    subNeeded = false;
-                    break;
-                }
-            }
-            if (subNeeded)
-            {
-                RPCPubSub::subscribeRemote(server, rpcConstants::clusterCategory);
-                RPCPubSub::subscribeRemote(server, rpcConstants::clusterServer);
-            }
-        }
-
-        if ( an.getCategory() == rpcConstants::clusterServer )
-        {
-            trace( QString("***" + clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
-            QVector<ClusterServer>::iterator stat;
-            bool clusterFound = false;
-            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
-            {
-                if ((*stat).app == an.getKey())
-                {
-                    if ((*stat).state != an.getState())
-                    {
-                        (*stat).state = an.getState();
-                        QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()];
-                        trace(QString("On notify: %1").arg(mess));
-                        addSpotQueue( mess );
-                        syncstat = true;
-                    }
-                    clusterFound = true;
-                    break;
-                }
-            }
-            if ( !clusterFound )
-            {
-                // We have received notification from a previously unknown station - so report on it
-                ClusterServer s;
-                s.serverName = an.getPublisherServer();
-                s.state = an.getState();
-                s.app = an.getKey();
-                serverList.push_back( s );
-                QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()] + " and added";
-                 addSpotQueue( mess );
-                syncstat = true;
-            }
-        }
-
-        if ( an.getCategory() == rpcConstants::clusterCategory )
-        {
-            trace( QString("!!!!" + clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() + " " + an.getValue() );
-            /*
-            if (an.getKey() == rpcConstants::ChatServerFrequency)
-            {
-                QVector<ClusterServer>::iterator stat;
-                for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
-                {
-                    if ((*stat).serverName == an.getPublisherServer())
-                    {
-                        if ((*stat).freq != an.getValue())
-                        {
-                            (*stat).freq = an.getValue();
-                            syncstat = true;
-                        }
-                        break;
-                    }
-                }
-            }
-            */
-
-        }
-    }
-}
 //---------------------------------------------------------------------------
 void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-    trace( "cluster callback from " + from + ( err ? ":Error" : ":Normal" ) );
-
-    // Should we use QMap to give a list of name/value pairs?
-    // BUT the value isn't always the same type - should it be?
-    // We could use QVariant, of course...
     trace(QString("ClusterClientServer: on_serverCall - Message from %1").arg(from));
     if ( !err )
     {
@@ -201,51 +93,23 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
 }
 void ClusterClientServer::SyncTimerTimer(  )
 {
-    syncStations();
-    syncSpots();
-}
-
-//---------------------------------------------------------------------------
-void ClusterClientServer::syncStations()
-{
-    if ( syncstat )
-    {
-        syncstat = false;
-
-        emit ClusterServerList(serverList);
-    }
-}
-void ClusterClientServer::addSpotQueue(const QString &spot)
-{
-    QDateTime dt = QDateTime::currentDateTime();
-    QString sdt = dt.toString( "HH:mm:ss " ) + spot;
-    spotQueue.push_back(sdt);
-}
-void ClusterClientServer::syncSpots()
-{
     if (spotQueue.count())
     {
         emit dxSpot(spotQueue);
         spotQueue.clear();
     }
 }
-//---------------------------------------------------------------------------
-void ClusterClientServer::sendDxSpot(QString spot, QString appName)
-{
-    // We need to send the message to all connected cluster clients, except the spot server
-    for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
-    {
-        if (!(*i).app.contains(appName))
-        {
-            trace(QString("SendDxSpot to station = %1").arg((*i).app));
-            RPCGeneralClient rpc(rpcConstants::clusterMethod);
-            QSharedPointer<RPCParam>st(new RPCParamStruct);
-            st->addMember( spot, rpcConstants::sendClusterSpot );
-            rpc.getCallArgs() ->addParam( st );
-            rpc.queueCall( (*i).app );
-        }
 
-    }
+//---------------------------------------------------------------------------
+
+void ClusterClientServer::addSpotQueue(const QString &spot)
+{
+    QDateTime dt = QDateTime::currentDateTime();
+    QString sdt = dt.toString( "HH:mm:ss " ) + spot;
+    spotQueue.push_back(sdt);
 }
+
+//---------------------------------------------------------------------------
+
 
 

@@ -421,13 +421,6 @@ void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterC
 
 }
 
-void ClusterClientFrame::setStandAlone()
-{
-    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
-    RPCPubSub::subscribe(rpcConstants::StationCategory);
-}
-
-
 void ClusterClientFrame::on_FontChanged()
 {
     QFont cf = QApplication::font();
