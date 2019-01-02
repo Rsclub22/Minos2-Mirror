@@ -116,12 +116,23 @@ void TSettingsEditDlg::showSection()
       ui->OptionsTable->setVisible(false);
       bundle->openSection( bundle->noneBundle );
    }
-   setWindowTitle(baseTitle + " - " + bundle->getBundle() + " for \"" + bundle->getSection() + "\"") ;
+   setWindowTitle(baseTitle + " - " + bundle->getBundle() + (currSectionOnly?"":" for \"" + bundle->getSection() + "\"")) ;
 
-   ui->NewSectionButton->setEnabled(!currSectionOnly);
-   ui->DeleteButton->setEnabled(currSectionOnly?false:( offset > 0 ));
-   ui->CopyButton->setEnabled(currSectionOnly?false:( offset > 0 ));
-   ui->renameButton->setEnabled(currSectionOnly?false:( offset > 0 ));
+   if (currSectionOnly)
+   {
+       ui->NewSectionButton->setVisible(false);
+       ui->DeleteButton->setVisible(false);
+       ui->CopyButton->setVisible(false);
+       ui->renameButton->setVisible(false);
+       ui->SectionsList->setVisible(false);
+   }
+   else
+   {
+       ui->NewSectionButton->setEnabled(true);
+       ui->DeleteButton->setEnabled( offset > 0 );
+       ui->CopyButton->setEnabled(offset > 0 );
+       ui->renameButton->setEnabled(offset > 0 );
+   }
 }
 void TSettingsEditDlg::showDetails()
 {

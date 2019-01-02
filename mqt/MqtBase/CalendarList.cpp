@@ -109,12 +109,12 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
     QUrl qurl( calendarURL );
     QNetworkRequest qnr( qurl );
 
-    qnr.setRawHeader( "User-Agent" , "Mozilla/4.0 (compatible;Adjsql)" );
+    qnr.setRawHeader( "User-Agent" , "Mozilla/4.0 (compatible;Minos2)" );
 
-    QNetworkReply *reply = m_NetworkMngr.get( qnr );
+    QSharedPointer<QNetworkReply> reply = QSharedPointer<QNetworkReply>(m_NetworkMngr.get( qnr ));
 
     QEventLoop loop;
-    QObject::connect( reply, SIGNAL( finished() ), &loop, SLOT( quit() ) );
+    QObject::connect( reply.data(), SIGNAL( finished() ), &loop, SLOT( quit() ) );
     loop.exec();
 
     if ( reply->error() == QNetworkReply::NoError )
@@ -125,17 +125,16 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
             QUrl redirect =  reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
 
             QNetworkRequest qnr1( redirect );
-            qnr1.setRawHeader( "User-Agent" , "Mozilla/4.0 (compatible;Adjsql)" );
+            qnr1.setRawHeader( "User-Agent" , "Mozilla/4.0 (compatible;Minos2)" );
 
-            delete reply;
-            reply = m_NetworkMngr.get( qnr1 );
+            reply = QSharedPointer<QNetworkReply>(m_NetworkMngr.get( qnr1 ));
             QEventLoop loop;
-            QObject::connect( reply, SIGNAL( finished() ), &loop, SLOT( quit() ) );
+            QObject::connect( reply.data(), SIGNAL( finished() ), &loop, SLOT( quit() ) );
             loop.exec();
             raw = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         }
         QByteArray data = reply->readAll();
-        if (data.size() > 0)
+        if (raw == 200 && data.size() > 0)
         {
             QUrl aUrl( calendarURL );
             QFileInfo fileInfo = aUrl.path();
@@ -143,13 +142,17 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
             QFile file( getPath() );
             file.open( QIODevice::WriteOnly );
             file.write( data );
-            trace ( "HTPP Get of " + calendarURL + " OK" );
+            trace ( "HTPP Get of " + calendarURL + " OK size " + QString::number(data.size()) );
         }
         else
         {
            trace ( "HTPP Get of " + calendarURL + " failed - zero length data returned with attribute " + QString::number(raw));
+           if (data.size() > 0)
+           {
+               trace(data);
+           }
+           return false;
         }
-        delete reply;
         return true;
     }
     else
@@ -160,7 +163,5 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
             mShowMessage ( QString( "HTPP Get of " ) + calendarURL + " failed: " + reply->errorString(), parent );
         }
     }
-
-    delete reply;
     return false;
 }

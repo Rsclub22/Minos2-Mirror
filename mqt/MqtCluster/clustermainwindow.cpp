@@ -753,7 +753,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                     trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13")
                     .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
 
-                    qint64 rxTime = spotDateTime.toSecsSinceEpoch();
+                    qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
                     // is spot older than time to live time
                     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
                     if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))

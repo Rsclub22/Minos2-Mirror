@@ -675,7 +675,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    }
    if (ic.specialRules.indexOf("MGM") >= 0)
    {
-       contest->locMult.setValue( true );
+       //contest->locMult.setValue( true );
        contest->MGMContestRules.setValue(true);
        contest->serialMandatoryField.setValue(false);
        contest->allowLoc4.setValue(true);

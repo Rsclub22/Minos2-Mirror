@@ -64,7 +64,7 @@ public Q_SLOTS:
         Calendar vhfother;
         Calendar hfbartg;
         IndividualContest ic;
-        static void downloadFiles();
+        void downloadFiles();
 
         QString description;
         QDateTime sdate;
