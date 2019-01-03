@@ -63,6 +63,9 @@ public:
     void selectLayout(QString layout);
 
     SetMemoryAction *setMemoryAction;
+
+    QString clusterConnectStatus;
+
 private:
     Ui::TLogContainer *ui;
 

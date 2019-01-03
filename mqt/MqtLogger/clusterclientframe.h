@@ -223,8 +223,7 @@ private:
     int getBandOffSet(QString contestBandStr);
 
     int getModeOffSet(QString contestModeStr);
-
-
+    void handleClusterStatusMessage(QString &msg);
 
 private slots:
 
