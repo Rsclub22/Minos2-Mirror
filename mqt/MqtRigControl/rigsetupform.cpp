@@ -1091,21 +1091,16 @@ void RigSetupForm::removeTransVerter()
         return;
     }
 
+
     // remove this transverter
     ui->transVertTab->removeTab(currentIndex);
+    transVertTab.removeAt(currentIndex);
+
     radioData->transVertNames.removeAt(currentIndex);
     radioData->transVertSettings.removeAt(currentIndex);
-    transVertTab.removeAt(currentIndex);
+
     radioData->numTransverters--;
-    //removedTransVertTabs.append(currentName);
 
-
-    //QString fileName = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
-
-    //QSettings config(fileName, QSettings::IniFormat);
-    //config.beginGroup(currentName);
-    //config.remove("");      // remove all keys for this group
-    //config.endGroup();
 
 }
 
@@ -1184,4 +1179,11 @@ void RigSetupForm::transVertTabEnable(bool enable)
     ui->changeBand->setDisabled(!enable);
     //ui->transvertFrame->setDisabled(!enable);
     ui->transVertTab->setDisabled(!enable);
+}
+
+
+void RigSetupForm::transVertTabRemove(int tabNum)
+{
+    ui->transVertTab->removeTab(tabNum);
+    transVertTab.removeAt(tabNum);
 }

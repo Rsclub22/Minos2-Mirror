@@ -196,5 +196,7 @@ const QStringList SMETERTEXT = {
 const QString RIG_DEFAULT_POLLINTERVAL = "1";
 const QString ROT_DEFAULT_POLLINTERVAL = "1";
 
+//enum class Tvert_Config_Status { NO_CHANGE, CHANGED, DELETE};
+
 
 #endif // RIGCONTROLCOMMONCONSTANTS_H

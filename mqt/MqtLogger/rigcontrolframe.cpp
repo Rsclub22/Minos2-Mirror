@@ -60,6 +60,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ritEnable(false),
     ritOn(false),
     ritEditOn(false),
+    expectBandList(false),
     //, curRit("0.00")
     radioName(NORADIO),
     radioState("None"),
@@ -555,6 +556,7 @@ void RigControlFrame::bandListTimeout()
 {
     trace(QString("bandListTimeOut Error"));
     bandListRxError = true;
+    emit setRadioFreq(expectBandList);
 
 }
 
@@ -802,13 +804,15 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
             // wait for bandlist to arrive
             trace(QString("setRadioName:: wait for new bandlist"));
             bandListTimer->start(BANDLIST_TIMEOUT_DUR);
+            expectBandList = true;
 
 
         //}
         //else
         //{
         //    trace(QString("no change of radio or mode required, change freq only"));
-        //    setRadioFreq(false);   //don't expect new bandlist
+        //    expectBandList = false;
+        //    setRadioFreq(expectBandList);   //don't expect new bandlist
 
         //}
 
@@ -822,11 +826,12 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
 
 
-void RigControlFrame::setRadioFreq(bool expectBandList)
+void RigControlFrame::setRadioFreq(bool expectBandListFlag)
 {
 
-    if (expectBandList)
+    if (expectBandListFlag)
     {
+        expectBandList = false;
         if (bandListRxError || listOfBands.isEmpty())
         {
             setRadioBandWarning(QString("<font color='Red'>Error Receiving Bandlist!</font>"));
@@ -836,6 +841,7 @@ void RigControlFrame::setRadioFreq(bool expectBandList)
         }
 
         trace(QString("setRadioName:: received new bandlist"));
+
     }
     else
     {
@@ -849,7 +855,7 @@ void RigControlFrame::setRadioFreq(bool expectBandList)
     }
 
 
-
+    setRadioBandWarning(QString(""));
 
     if (ct == TContestApp::getContestApp() ->getCurrentContest())
     {
@@ -984,7 +990,7 @@ void RigControlFrame::setBandList(QString b)
         ui->bandSelCombo->addItems(lb);
 
         bandListTimer->stop();
-        emit newBandList(true);     // expect new bandlist in setfreq
+        emit newBandList(expectBandList);     // expect new bandlist in setfreq
 
     }
 }

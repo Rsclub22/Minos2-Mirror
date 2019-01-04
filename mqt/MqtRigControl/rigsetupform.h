@@ -129,6 +129,7 @@ public:
     void loadRadioComports();
 
 
+    void transVertTabRemove(int tabNum);
 signals:
     void transVertTabAdded(int);
 

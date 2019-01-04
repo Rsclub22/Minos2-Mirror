@@ -112,7 +112,7 @@ void RigSetupDialog::initSetup()
             {
                 for (int t = 0; t < availRadioData[i]->numTransverters; t++)
                 {
-                   radioTab[i]->addTransVertTab(t, radioTab[i]->getRadioData()->transVertNames[t], false);   // adding and existing tab, set change flag = false
+                   radioTab[i]->addTransVertTab(t, radioTab[i]->getRadioData()->transVertNames[t], false);   // adding and existing tab, set change flag = N0CHANGE
                 }
             }
 
@@ -551,7 +551,7 @@ void RigSetupDialog::saveSettings()
 
             if (currentRadioName == radioTab[i]->getRadioData()->radioName)
             {
-                // settings changed in current antenna
+                // settings changed in current radio
                 currRadioChanged = true;
             }
 
@@ -589,6 +589,11 @@ void RigSetupDialog::saveSettings()
                             configTransVert.beginGroup(savedTransVertNames[t]);        // entry no longer exists
                             configTransVert.remove("");      // remove all keys for this group
                             configTransVert.endGroup();
+                            if (currentRadioName == radioTab[i]->getRadioData()->radioName)
+                            {
+                                // settings changed in current radio
+                                currRadioChanged = true;
+                            }
                         }
                     }
                 }
@@ -622,8 +627,36 @@ void RigSetupDialog::saveSettings()
 
             if (radioTab[i]->getRadioData()->numTransverters > 0)
             {
+
+
+                /*
+                // look for transverters marked for deletion
+                int t = radioTab[i]->getRadioData()->numTransverters - 1;
+                while (t > 0)
+                {
+                    if (radioTab[i]->transVertTab[t]->transVertValueChanged  == Tvert_Config_Status::DELETE)
+                    {
+                        // remove this transverter
+                        radioTab[i]->transVertTabRemove(t);
+                        radioTab[i]->getRadioData()->transVertNames.removeAt(t);
+                        radioTab[i]->getRadioData()->transVertSettings.removeAt(t);
+                        radioTab[i]->getRadioData()->numTransverters--;
+                        if (currentRadioName == radioTab[i]->getRadioData()->radioName)
+                        {
+                            // settings changed in current radio
+                            currRadioChanged = true;
+                        }
+
+                    }
+                    t--;
+                }
+    */
+                // look for transverters that have changed
+
                 for (int t = 0; t < radioTab[i]->getRadioData()->numTransverters; t++)
                 {
+
+
                     if (radioTab[i]->transVertTab[t]->transVertValueChanged)
                     {
                         if (radioTab[i]->transVertTab[t]->transVertNameChanged)

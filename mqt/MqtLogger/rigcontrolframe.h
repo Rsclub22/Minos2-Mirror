@@ -193,7 +193,7 @@ private slots:
     void ritClearShortCutSelected();
     void bandListTimeout();
 
-    void setRadioFreq(bool expectBandList);
+    void setRadioFreq(bool expectBandListFlag);
 
 
 public slots:
@@ -236,7 +236,7 @@ private:
     bool ritOn;
     bool ritEditOn;
     //QString curRit;
-
+    bool expectBandList;
 
 
     QStringList listOfRadios;

@@ -23,7 +23,6 @@ public:
     explicit TransVertSetupForm(TransVertParams* _transvertData, QWidget *parent = nullptr);
 
 
-
         bool transVertValueChanged = false;
         bool transVertNameChanged = false;
 
