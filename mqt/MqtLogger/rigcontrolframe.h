@@ -163,7 +163,7 @@ signals:
     void sendRitFreq(int);
     void ritStatus(bool);
     void radioDisconnected();
-    void newBandList(bool expectBandList);
+    //void newBandList();
 
 private slots:
     void on_FontChanged();
@@ -193,7 +193,7 @@ private slots:
     void ritClearShortCutSelected();
     void bandListTimeout();
 
-    void setRadioFreq(bool expectBandListFlag);
+    void setRadioFreq();
 
 
 public slots:

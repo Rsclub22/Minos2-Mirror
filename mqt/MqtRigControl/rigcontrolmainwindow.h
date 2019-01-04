@@ -272,6 +272,7 @@ private:
 
     void clearTransVertSupport();
 
+    bool readTestStandAloneFlag();
 private slots:
 
     void onStdInRead(QString);

@@ -176,7 +176,7 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
     connect(ui->bandSelCombo, SIGNAL(activated(int)), this, SLOT(radioBandFreq(int)));
 
-    connect(this, SIGNAL(newBandList(bool)), this, SLOT(setRadioFreq(bool)));
+    //connect(this, SIGNAL(newBandList()), this, SLOT(setRadioFreq()));
 
     setVolControlVisible(false);
 
@@ -556,7 +556,7 @@ void RigControlFrame::bandListTimeout()
 {
     trace(QString("bandListTimeOut Error"));
     bandListRxError = true;
-    emit setRadioFreq(expectBandList);
+    //emit setRadioFreq();
 
 }
 
@@ -826,10 +826,10 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
 
 
-void RigControlFrame::setRadioFreq(bool expectBandListFlag)
+void RigControlFrame::setRadioFreq()
 {
 
-    if (expectBandListFlag)
+    if (expectBandList)
     {
         expectBandList = false;
         if (bandListRxError || listOfBands.isEmpty())
@@ -989,8 +989,13 @@ void RigControlFrame::setBandList(QString b)
         ui->bandSelCombo->addItem("");
         ui->bandSelCombo->addItems(lb);
 
-        bandListTimer->stop();
-        emit newBandList(expectBandList);     // expect new bandlist in setfreq
+        if (expectBandList)
+        {
+            // bandlist expected by setRadioFreq
+            bandListTimer->stop();
+            setRadioFreq();
+        }
+
 
     }
 }

@@ -83,14 +83,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         geoStr = geoStr + appName;
     }
 
-    if (appName.length() > 0)
-    {
-        testBoxesVisible(false);
-    }
-    else
-    {
-        testBoxesVisible(true);
-    }
+
 
     ui->testRitButton->setVisible(false);
     ui->setRitSpinner->setVisible(false);
@@ -123,6 +116,11 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     serialTVSw = new SerialTVSwitch();     // create local serial sw
 
+    setSelectRadioBoxVisible(false);
+    setRadioNameLabelVisible(false);
+    testBoxesVisible(false);
+
+
     if (appName.length() > 0)
     {
         // connected to logger don't show radio selectbox
@@ -132,8 +130,10 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     else
     {
         setSelectRadioBoxVisible(true);
+        testBoxesVisible(true);
         setRadioNameLabelVisible(false);
     }
+
 
     pollTimer = new QTimer(this);
 
@@ -2052,6 +2052,34 @@ void RigControlMainWindow::hamlibError(int errorCode, QString cmd)
         sendStatusToLogDisConnected();
     }
 }
+
+
+
+bool RigControlMainWindow::readTestStandAloneFlag()
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("TestStandAlone");
+    bool state = config.value("TestStandAlone", false).toBool();
+    config.endGroup();
+
+    return state;
+}
+
+
+
+
+
 
 void RigControlMainWindow::readTraceLogFlag()
 {
