@@ -36,7 +36,8 @@
 
 RigSetupDialog::RigSetupDialog(RigControl* _radio, const QVector<BandDetail*> _bands, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::RigSetupDialog)
+    ui(new Ui::RigSetupDialog),
+    radioRemoved(false)
 
 {
     ui->setupUi(this);
@@ -271,7 +272,7 @@ void RigSetupDialog::addRadio()
 
     ui->radioTab->setCurrentIndex(tabNum);
 
-    emit radioTabChanged();
+    //emit radioTabChanged();
 
 }
 
@@ -322,8 +323,9 @@ void RigSetupDialog::removeRadio()
     availRadioData.remove(currentIndex);
     availRadios.removeAt(currentIndex);
     numAvailRadios--;
+    radioRemoved = true;
 
-    emit radioTabChanged();
+    //emit radioTabChanged();
 
 
 
@@ -450,12 +452,15 @@ void RigSetupDialog::cancelButtonPushed()
     bool change = false;
     for (int i = 0; i < radioTab.count(); i++)
     {
-        if (radioTab[i]->radioValueChanged)
+        if (radioTab[i]->radioValueChanged || radioRemoved || radioTab[i]->getTransVertRemovedFlag())
         {
+            radioRemoved = false;
             change = true;
             break;
         }
     }
+
+
 
     if (change)
     {
@@ -512,21 +517,22 @@ void RigSetupDialog::saveSettings()
     int v = savedRadioNames.indexOf("Version");   // the section name
     savedRadioNames.removeAt(v);
 
-    if (savedRadioNames.count() > 0)
+    if (savedRadioNames.count() > 0 && radioRemoved)
     {
+        radioRemoved = false;
         for (int i = 0; i < savedRadioNames.count(); i++)
         {
             if (!availRadios.contains(savedRadioNames[i]))
             {
-                configRadio.beginGroup(savedRadioNames[i]);        // entry no longer exists
-                configRadio.remove("");      // remove all keys for this group
-                configRadio.endGroup();
-                // remove transverters for this radio
-                fileNameTransVert = TRANSVERT_PATH_LOGGER + savedRadioNames[i] + FILENAME_TRANSVERT_RADIOS;
-                if (QFile::exists(fileNameTransVert))
-                {
-                    QFile::remove(fileNameTransVert);
-                }
+                   configRadio.beginGroup(savedRadioNames[i]);        // entry no longer exists
+                    configRadio.remove("");      // remove all keys for this group
+                    configRadio.endGroup();
+                    // remove transverters for this radio
+                    fileNameTransVert = TRANSVERT_PATH_LOGGER + savedRadioNames[i] + FILENAME_TRANSVERT_RADIOS;
+                    if (QFile::exists(fileNameTransVert))
+                    {
+                        QFile::remove(fileNameTransVert);
+                    }
             }
         }
     }
@@ -571,6 +577,7 @@ void RigSetupDialog::saveSettings()
         // now save transvert settings
         if (radioTab[i]->getRadioData()->transVertEnable)
         {
+            radioTab[i]->setTransVertRemovedFlag(false);
 
             fileNameTransVert = TRANSVERT_PATH_LOGGER + radioTab[i]->getRadioData()->radioName + FILENAME_TRANSVERT_RADIOS;
             QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
@@ -746,29 +753,6 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
 }
 
 
-
-
-
-
-
-/*
-void RigSetupDialog::clearRadioValueChanged()
-{
-    for (int i = 0; i < numAvailRadios; i++)
-    {
-        radioValueChanged[i] = false;
-    }
-}
-
-void RigSetupDialog::clearRadioNameChanged()
-{
-    for (int i = 0; i < numAvailRadios; i++)
-    {
-        radioNameChanged[i] = false;
-    }
-}
-
-*/
 
 void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
 {

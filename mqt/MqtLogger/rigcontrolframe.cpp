@@ -835,12 +835,12 @@ void RigControlFrame::setRadioFreq(bool expectBandListFlag)
         if (bandListRxError || listOfBands.isEmpty())
         {
             setRadioBandWarning(QString("<font color='Red'>Error Receiving Bandlist!</font>"));
-            trace(QString("setRadioName:: Error Receiving Bandlist!"));
+            trace(QString("setRadioFreq:: Error Receiving Bandlist!"));
             sendFreq(NO_BAND_SUPPORT);
             return;
         }
 
-        trace(QString("setRadioName:: received new bandlist"));
+        trace(QString("setRadioFreq:: received new bandlist"));
 
     }
     else
@@ -848,7 +848,7 @@ void RigControlFrame::setRadioFreq(bool expectBandListFlag)
         if (listOfBands.isEmpty())
         {
             setRadioBandWarning(QString("<font color='Red'>Radio has no available bands</font>"));
-            trace(QString("setRadioName:: Error No available bands!"));
+            trace(QString("setRadioFreq:: Error No available bands!"));
             sendFreq(NO_BAND_SUPPORT);
             return;
         }
@@ -861,7 +861,7 @@ void RigControlFrame::setRadioFreq(bool expectBandListFlag)
     {
        //And we want to select the frequency based on the contest band
        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-       trace(QString("on_ContestPageChanged: select frequency"));
+       trace(QString("setRadioFreq: select frequency"));
        QString cb = ct->band.getValue().trimmed();
 
        BandList &blist = BandList::getBandList();
@@ -874,11 +874,11 @@ void RigControlFrame::setRadioFreq(bool expectBandListFlag)
             {
                 if (listOfBands[i].band == cb)
                 {
-                    trace(QString("Set band list: found band %1 on radio, set band select").arg(cb));
+                    trace(QString("setRadioFreq: found band %1 on radio, set band select").arg(cb));
                     ui->bandSelCombo->setCurrentIndex(i + 1);
 
                     QString freq = tslf->sSavedCurFreq;
-                    trace(QString("onContestPageChanged: found band %1 on radio, freq %2").arg(cb).arg(freq));
+                    trace(QString("setRadioFreq: found band %1 on radio, freq %2").arg(cb).arg(freq));
 
 
                     QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
@@ -904,7 +904,7 @@ void RigControlFrame::setRadioFreq(bool expectBandListFlag)
                     if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
                     {
                         sendFreq(freq);
-                        trace(QString("Set band list: Set previous freq = %1").arg(QString::number(cf)));
+                        trace(QString("setRadioFreq: Set previous freq = %1").arg(QString::number(cf)));
                         if (ui->freqInput->text().toInt() == 0) // if display is zero update display locally
                         {
                             setFreq(freq);
@@ -913,7 +913,7 @@ void RigControlFrame::setRadioFreq(bool expectBandListFlag)
                     else
                     {
                         sendFreq(listOfBands[i].freq);
-                        trace(QString("Set band list: Set defaut freq = %1").arg(listOfBands[i].freq));
+                        trace(QString("setRadioFreq: Set defaut freq = %1").arg(listOfBands[i].freq));
                     }
 
                     setRadioBandWarning("");
@@ -923,7 +923,7 @@ void RigControlFrame::setRadioFreq(bool expectBandListFlag)
             }
             // warn no band for this radio
             setRadioBandWarning(QString("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
-            trace(QString("Set band list: %1 Band not found on this radio").arg(cb));
+            trace(QString("SsetRadioFreq: %1 Band not found on this radio").arg(cb));
             sendFreq(NO_BAND_SUPPORT);
         }
 

@@ -32,7 +32,8 @@
 
 RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QWidget *parent):
     QWidget(parent),
-    ui(new Ui::rigSetupForm)
+    ui(new Ui::rigSetupForm),
+    transverterRemoved(false)
 {
 
 
@@ -1100,11 +1101,21 @@ void RigSetupForm::removeTransVerter()
     radioData->transVertSettings.removeAt(currentIndex);
 
     radioData->numTransverters--;
+    transverterRemoved = true;
 
 
 }
 
 
+bool RigSetupForm::getTransVertRemovedFlag()
+{
+    return transverterRemoved;
+}
+
+void RigSetupForm::setTransVertRemovedFlag(bool value)
+{
+    transverterRemoved = value;
+}
 
 void RigSetupForm::changeBand()
 {

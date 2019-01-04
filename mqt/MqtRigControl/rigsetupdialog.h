@@ -107,7 +107,7 @@ private:
     bool chkloadflg = false;
     QString appName = "";
 
-
+    bool radioRemoved;
 
     void saveSettings();
 

@@ -97,6 +97,10 @@ public:
     void CIVEditVisible(bool visible);
     void transVertTabEnable(bool visible);
 
+    bool getTransVertRemovedFlag();
+    void transVertTabRemove(int tabNum);
+    void setTransVertRemovedFlag(bool value);
+
     void setTransVertTabText(int tabNum, QString tabName);
 
     void setAppName(QString name);
@@ -129,7 +133,7 @@ public:
     void loadRadioComports();
 
 
-    void transVertTabRemove(int tabNum);
+
 signals:
     void transVertTabAdded(int);
 
@@ -176,7 +180,7 @@ private:
     //TransVertSetupForm *transVerter;
     QString appName;
 
-
+    bool transverterRemoved;
 
     void fillHandShakeInfo();
     void fillParityInfo();
