@@ -29,8 +29,7 @@
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 
-
-RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QWidget *parent):
+RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
     QWidget(parent),
     ui(new Ui::rigSetupForm),
     transverterRemoved(false)
@@ -45,6 +44,8 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     radioData = _radioData;
 
     bands = _bands;
+
+    ui_RadioTab = _ui_RadioTab;
 
 
     fillRadioModelInfo();  // add radio models to drop down
@@ -100,7 +101,10 @@ scatParams* RigSetupForm::getRadioData()
 }
 
 
-
+void RigSetupForm::setCurrentRadioName(QString name)
+{
+    currentRadioName = name;
+}
 
 
 /************************ Radio Model Dialogue *********************/
@@ -1077,12 +1081,25 @@ void RigSetupForm::removeTransVerter()
     }
 
     int currentIndex = ui->transVertTab->currentIndex();
-    QString currentName = ui->transVertTab->tabText(currentIndex);
+    QString currentTransVertName = ui->transVertTab->tabText(currentIndex);
+
+
+    if (currentRadioName == ui_RadioTab->tabText(ui_RadioTab->currentIndex()))
+    {
+        // can't remove transverter on current RadioName
+        QMessageBox msgBox;
+        msgBox.setText(QString("You can not remove this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
+        msgBox.exec();
+        return;
+    }
+
+
+
 
     int status = QMessageBox::question( this,
                             tr("Remove Transverter"),
                             tr("Do you really want to remove transverter - %1?")
-                            .arg(currentName),
+                            .arg(currentTransVertName),
                             QMessageBox::Yes|QMessageBox::Default,
                             QMessageBox::No|QMessageBox::Escape,
                             QMessageBox::NoButton);
@@ -1126,6 +1143,20 @@ void RigSetupForm::changeBand()
     }
 
     int tabNum = ui->transVertTab->currentIndex();
+    QString currentTransVertName = ui->transVertTab->tabText(tabNum);
+
+
+    if (currentRadioName == ui_RadioTab->tabText(ui_RadioTab->currentIndex()))
+    {
+        // can't change transverter band on current RadioName
+        QMessageBox msgBox;
+        msgBox.setText(QString("You can not change band on this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
+        msgBox.exec();
+        return;
+    }
+
+
+
 
     AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
     if (addTransDialog.exec() != QDialog::Accepted)

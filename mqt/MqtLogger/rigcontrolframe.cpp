@@ -225,26 +225,28 @@ void RigControlFrame::noRadioSetFreq(QString f)
 
 void RigControlFrame::setFreq(QString freq)
 {
-    if (freq == "0" && freq == "-1")
+    traceMsg(QString("Set Freq: = %1").arg(freq));
+
+            if (freq == "0" && freq == "-1")
     {
         // this is force an update of freq, ignore
         traceMsg(QString("Force Freq Update Received - Ignore!"));
         return;
     }
 
-    traceMsg(QString("Set Freq = %1").arg(freq));
+
 
 //    if (tuneButtonMap[0]->freq.isEmpty() && tuneButtonMap[1]->freq.isEmpty())
 //    {
 //        tuneButtonMap[0]->freq = freq;
 //        tuneButtonMap[1]->freq = freq;
 //        curTuneButton = tuneButtonMap[0];
-//        trace(QString("curTuneButton initialised to button 1 freq %1").arg(freq));
+//        trace(QString("setFreq: curTuneButton initialised to button 1 freq %1").arg(freq));
 //    }
 //    else
     if (curTuneButton)
     {
-        trace(QString("curTuneButton %1 freq set to %2").arg(curTuneButton->memNo).arg(freq));
+        trace(QString("setFreq: curTuneButton %1 freq set to %2").arg(curTuneButton->memNo).arg(freq));
         curTuneButton->freq = freq;
     }
 
@@ -258,7 +260,7 @@ void RigControlFrame::setFreq(QString freq)
     {
         if (!freqEditOn)
         {
-            trace(QString("setFreq: Display Freq %1 = ").arg(freq));
+            trace(QString("setFreq: Display Freq = %1").arg(freq));
             ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
             ui->freqInput->setText(freq);
         }
@@ -832,6 +834,7 @@ void RigControlFrame::setRadioFreq()
     if (expectBandList)
     {
         expectBandList = false;
+
         if (bandListRxError || listOfBands.isEmpty())
         {
             setRadioBandWarning(QString("<font color='Red'>Error Receiving Bandlist!</font>"));
@@ -970,7 +973,7 @@ void RigControlFrame::setBandList(QString b)
     trace("setBandList " + b);
     if (!b.isEmpty())
     {
-        //QString currentBand = ui->bandSelCombo->currentText();
+        QString currentBand = ui->bandSelCombo->currentText();
         listOfBands.clear();
         QStringList lbf;
         QStringList lb;
@@ -988,10 +991,12 @@ void RigControlFrame::setBandList(QString b)
         ui->bandSelCombo->clear();
         ui->bandSelCombo->addItem("");
         ui->bandSelCombo->addItems(lb);
+        ui->bandSelCombo->setCurrentText(currentBand); // restore for now
 
         if (expectBandList)
         {
             // bandlist expected by setRadioFreq
+            ui->bandSelCombo->setCurrentText("");
             bandListTimer->stop();
             setRadioFreq();
         }
@@ -1023,13 +1028,15 @@ void RigControlFrame::setRadioState(QString s)
            radioError = false;
 
            ui->bandWarnLabel->setText("");
-           curFreq = "00000000000";
-           ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
-           ui->freqInput->setText(curFreq);
-           ui->bandSelCombo->clear();
+           if (ui->radioNameSel->currentText() == "")
+           {
+               curFreq = "00000000000";
+               ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
+               ui->freqInput->setText(curFreq);
+               ui->bandSelCombo->clear();
+           }
+
            emit radioDisconnected();
-
-
 
         }
         else if (s == RIG_STATUS_ERROR)

@@ -138,7 +138,7 @@ void RigSetupDialog::addTab(int tabNum, QString tabName)
        availRadios.append(tabName);
     }
 
-    radioTab.append(new RigSetupForm(radio, availRadioData[tabNum], bands));
+    radioTab.append(new RigSetupForm(radio, availRadioData[tabNum], bands, ui->radioTab));
     ui->radioTab->insertTab(tabNum, radioTab[tabNum], tabName);
     ui->radioTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
 
@@ -891,6 +891,22 @@ void RigSetupDialog::saveCurrentRadio()
 
 
 }
+
+void RigSetupDialog::setCurrentRadioName(QString name)
+{
+    currentRadioName = name;
+    // set currentRadioName in radio tab to test remove transverter
+    for (int i = 0; i < radioTab.count(); i++)
+    {
+        radioTab[i]->setCurrentRadioName(name);
+    }
+}
+
+QString RigSetupDialog::getCurrentRadioName()
+{
+    return currentRadioName;
+}
+
 
 void RigSetupDialog::readCurrentRadio()
 {

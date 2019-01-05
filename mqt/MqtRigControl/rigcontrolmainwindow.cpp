@@ -171,7 +171,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
         setupRadio->readCurrentRadio();
 
-        if (setupRadio->currentRadioName == "")
+        if (setupRadio->getCurrentRadioName() == "")
         {
             logMessage(QString("No radio selected for this appName, %1").arg(appName));
             QString errmsg = "<font color='Red'>Please select a radio!</font>";
@@ -180,7 +180,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         }
         else
         {
-            ui->selectRadioBox->setCurrentText(setupRadio->currentRadioName);
+            ui->selectRadioBox->setCurrentText(setupRadio->getCurrentRadioName());
         }
     }
 
@@ -380,7 +380,7 @@ void RigControlMainWindow::initSelectRadioBox()
 
 void RigControlMainWindow::selectRadio()
 {
-    setupRadio->currentRadioName = ui->selectRadioBox->currentText();
+    setupRadio->setCurrentRadioName(ui->selectRadioBox->currentText());
     upDateRadio();
 }
 
@@ -409,9 +409,9 @@ void RigControlMainWindow::upDateRadio()
     clearSupportRitFlags();
 
     int ridx = 0;
-    if (setupRadio->currentRadioName != "")
+    if (setupRadio->getCurrentRadioName() != "")
     {
-        radioIndex = setupRadio->findCurrentRadio(setupRadio->currentRadioName);
+        radioIndex = setupRadio->findCurrentRadio(setupRadio->getCurrentRadioName());
         ridx = radioIndex;
         if (ridx > -1 && ridx < setupRadio->numAvailRadios)  // find radio and update current radio pointer
         {
@@ -980,9 +980,9 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
         selRadioMode = mode;
     }
 
-    QString oldRadio = setupRadio->currentRadioName;
+    QString oldRadio = setupRadio->getCurrentRadioName();
 
-    setupRadio->currentRadioName = s.key();
+    setupRadio->setCurrentRadioName(s.key());
 
     if (!s.isEmpty() && s.key() == oldRadio)
     {
