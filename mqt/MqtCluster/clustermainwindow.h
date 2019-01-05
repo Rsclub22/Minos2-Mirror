@@ -76,6 +76,8 @@ const QStringList userCommandMenuShortCutKeys = {
 const int TIME_TO_LIVE_TABNUM = 0;
 const int PERSONAL_TABNUM = 1;
 const int NODELIST_TABNUM = 2;
+const int SEND_SPOTS_DUR = 1000;
+const int STATUS_TIMER_DUR = 500;
 
 
 class ClusterAddress
@@ -213,7 +215,7 @@ private:
 
     bool enableHFSpots;
 
-
+    QTimer *statusTimer;
 
     QString geoStr;         // geometry registry location
 
@@ -259,6 +261,8 @@ private:
     void handleEndFile();
     void handleCmdFile(QString fileName);
 
+
+
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
     QStringList testSpotList;
@@ -270,13 +274,15 @@ private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
     void clusterListChanged();
+    void about();
+    void handleStatusTimer();
 
 
 #ifdef TEST_SPOTS
     void testSpotPbClicked();
     void spotTimerTimeOut();
 #endif
-    void about();
+
 };
 
 #endif // CLUSTERMAINWINDOW_H

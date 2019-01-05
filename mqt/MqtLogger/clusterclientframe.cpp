@@ -21,6 +21,7 @@
 #include "cutils.h"
 #include "rigmemcommondata.h"
 #include "htmldelegate.h"
+#include "tlogcontainer.h"
 #include "ui_clusterclientframe.h"
 
 
@@ -147,8 +148,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     purgeTimer->start(PURGE_TIME);
 
-    statusIndicatorToggle(false);
-    //queueIndToggle(false);
+    handleClusterStatusMessage(LogContainer->clusterConnectStatus);
+
     newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
@@ -568,24 +569,10 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
         // check to see if this is a non spot message
         if (msg.contains(CLUSTER_STATUS))
         {
-            if (msg.contains("!Connected"))
-            {
-                 statusIndicatorToggle(true);
-            }
-            else
-            {
-                 statusIndicatorToggle(false);
-            }
 
-            QStringList sl;
-            sl = msg.split(CLUSTER_STATUS);
-            if (sl.count() ==  2)
-            {
-                QString statusMsg = QString("%1").arg(sl[1]);
-                ui->statusIndicator->setToolTip(statusMsg);
-                trace(QString("Cluster Status: %1").arg(statusMsg));
+            LogContainer->clusterConnectStatus = msg;       // save for new clusterClientFrames
+            handleClusterStatusMessage(msg);
 
-            }
         }
         else if (msg.contains(DXSPOT))
         {
@@ -1274,6 +1261,37 @@ void ClusterClientFrame::checkSavedFilters()
         }
     }
 }
+
+void ClusterClientFrame::handleClusterStatusMessage(QString &msg)
+{
+
+    if (msg.contains("!Connected"))
+    {
+         statusIndicatorToggle(true);
+    }
+    else
+    {
+         statusIndicatorToggle(false);
+    }
+
+    QStringList sl;
+    sl = msg.split(CLUSTER_STATUS);
+    if (sl.count() ==  2)
+    {
+        QString statusMsg = QString("%1").arg(sl[1]);
+        ui->statusIndicator->setToolTip(statusMsg);
+        trace(QString("Cluster Status: %1").arg(statusMsg));
+    }
+    else
+    {
+        ui->statusIndicator->setToolTip("");
+    }
+}
+
+
+
+
+
 
 
 
