@@ -425,7 +425,9 @@ void RigControlFrame::changeMainRadioFreq()
             }
             else
             {
-                ui->freqInput->setText(QString("%1 %2 %3").arg("<font color='Red'>").arg(lastFreq).arg("</font>"));
+                QString f = QString("%1 %2 %3").arg("<font color='Red'>").arg(lastFreq).arg("</font>");
+                trace("changeMainRadioFreq " + f);
+                ui->freqInput->setText(f);
             }
         }
     }
