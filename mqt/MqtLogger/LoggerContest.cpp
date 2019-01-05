@@ -1574,7 +1574,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("bandFilter1296Mhz", ccfs.bandFilter1296Mhz);
                                        mt->getStructArgMemberValue("bandFilter2300Mhz", ccfs.bandFilter2300Mhz);
                                        mt->getStructArgMemberValue("bandFilter3_4Ghz", ccfs.bandFilter3_4Ghz);
-                                       mt->getStructArgMemberValue("bandFilter5_64Ghz", ccfs.bandFilter5_6Ghz);
+                                       mt->getStructArgMemberValue("bandFilter5_6Ghz", ccfs.bandFilter5_6Ghz);
                                        mt->getStructArgMemberValue("bandFilter10Ghz", ccfs.bandFilter10Ghz);
                                        mt->getStructArgMemberValue("modeFilterCW", ccfs.modeFilterCW);
                                        mt->getStructArgMemberValue("modeFilterPHONEMODE", ccfs.modeFilterPHONEMODE);
