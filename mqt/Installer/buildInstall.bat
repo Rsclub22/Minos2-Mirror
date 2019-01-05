@@ -67,6 +67,8 @@ copy %MROOT%\build\MqtRotator\release\MqtRotator.exe Bin
 copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
 
 copy C:\Projects\hamlib-w32-3.3\bin\*.dll Bin
+copy C:\Projects\openssl-1.0.2q-i386-win32\*.* Bin
+
 
 copy %MROOT%\mqt\Docs\*.* Docs
 copy %MROOT%\mqt\Help\*.* Help
