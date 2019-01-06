@@ -195,7 +195,7 @@ void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
     // radio combo selected
     radioName = arg1;
 
-    trace("on_radioNameSel_activated emit selectRadio");
+    trace(QString("on radioNameSel activated: radioName - %1 requested").arg(arg1));
     setRadioName(arg1, ct->currentMode.getValue());
 
 }
@@ -537,20 +537,23 @@ void RigControlFrame::noRadioSendOutMode(QString m)
 void RigControlFrame::on_ContestPageChanged()
 {
 
-
-    QString radioName = ct->radioName.getValue().toString();
-
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    QString mode = tslf->sCurMode;
-    if (mode.isEmpty() || mode == memDefData::DEFAULT_MODE)
+    if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-        mode = ct->currentMode.getValue();
+        QString radioName = ct->radioName.getValue().toString();
+
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        QString mode = tslf->sCurMode;
+        if (mode.isEmpty() || mode == memDefData::DEFAULT_MODE)
+        {
+            mode = ct->currentMode.getValue();
+        }
+
+        //tslf->sCurFreq = tslf->sSavedCurFreq;
+        if (!listOfRadios.isEmpty())
+        {
+           setRadioName(radioName, mode);
+        }
     }
-
-    //tslf->sCurFreq = tslf->sSavedCurFreq;
-    setRadioName(radioName, mode);
-
-
 
 }
 
@@ -776,8 +779,11 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
     if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-        //if (radioName != ct->radioName.getValue().toString() || curMode != ct->currentMode.getValue())
-        //{
+        if (radioName != radNam || curMode != mode)
+        {
+            radioName = radNam;
+            curMode = mode;
+            trace(QString("setRadioName:: update with new radio request - radioName  %1, mode %2").arg(radNam).arg(curMode));
             trace(QString("setRadioName:: Looking for radio"));
             int index = ui->radioNameSel->findText(radNam, Qt::MatchFixedString);
             if (index >= 0)
@@ -809,14 +815,14 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
             expectBandList = true;
 
 
-        //}
-        //else
-        //{
-        //    trace(QString("no change of radio or mode required, change freq only"));
-        //    expectBandList = false;
-        //    setRadioFreq(expectBandList);   //don't expect new bandlist
+        }
+        else
+        {
+            trace(QString("no change of radio or mode required, change freq only"));
+            expectBandList = false;
+            setRadioFreq();   //don't expect new bandlist
 
-        //}
+        }
 
     }
     else
@@ -956,11 +962,7 @@ void RigControlFrame::setRadioList()
     if (ct && !ct->isProtected())
     {
         // this sets the radio on frame launch as well as updated list from rigcontrol
-        if (radioName != ct->radioName.getValue().toString() || curMode != ct->currentMode.getValue())
-        {
-           setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
-        }
-
+        setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
     }
 
 }
