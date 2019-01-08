@@ -254,6 +254,7 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const Q
 
 void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
 {
+    trace(QString("SendDM sendRigControlFreq = %1").arg(freq));
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setFreq(rigSelected, convertStrToFreq(freq));
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);

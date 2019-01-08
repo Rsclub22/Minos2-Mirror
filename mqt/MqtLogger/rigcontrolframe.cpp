@@ -541,20 +541,20 @@ void RigControlFrame::on_ContestPageChanged()
 
         QString radNam = ct->radioName.getValue().toString();
         QString mode = ct->currentMode.getValue();
-        //if (radioName != radNam || curMode != mode)
-        //{
+        if (radioName != radNam || curMode != mode)
+        {
            setRadioName(radNam, mode);
 
-        //}
-       // else
-       // {
+        }
+        else
+        {
             if (!radNam.isEmpty())
             {
                 expectBandList = false;
                 setRadioFreq();
             }
 
-        //}
+        }
 
     }
 }
