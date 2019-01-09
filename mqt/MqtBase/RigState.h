@@ -16,8 +16,10 @@ class RigState: public PubSubValue
 {
     CacheSelection _selected;
     MinosStringItem<QString> _status;
-    MinosItem<double> _freq;
-    MinosStringItem<QString> _mode;
+    MinosItem<double> _radioFreq;
+    MinosItem<double> _logFreq;
+    MinosStringItem<QString> _radioMode;
+    MinosStringItem<QString> _logMode;
     MinosItem<int> _volLevel;
     MinosItem<int> _ritFreq;
     MinosItem<bool> _ritOnOffStatus;
@@ -39,8 +41,10 @@ public:
 
     MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     MinosStringItem<QString> status() const;
-    MinosItem<double> freq() const;
-    MinosStringItem<QString> mode() const;
+    MinosItem<double> radioFreq() const;
+    MinosItem<double> logFreq() const;
+    MinosStringItem<QString> radioMode() const;
+    MinosStringItem<QString> logMode() const;
     MinosItem<bool> ritOnOffStatus() const;
     MinosItem<bool> ritRadioStatus() const;
     MinosItem<int> ritFreq() const;
@@ -48,8 +52,10 @@ public:
     MinosItem<int> tpm() const;
 
     void setSelected(const QString &loggeruuid, const QString &selected);
-    void setFreq(double freq);
-    void setMode(const QString &mode);
+    void setRadioFreq(double freq);
+    void setLogFreq(double freq);
+    void setRadioMode(const QString &mode);
+    void setLogMode(const QString &mode);
     void setVolume(int level);
     void setStatus(const QString &status);
     void setRitFreq(int freq);

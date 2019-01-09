@@ -233,13 +233,21 @@ void RigCache::setStatus(const PubSubName &name, const QString &status)
     rigStates[name].setStatus(status);
 }
 
-void RigCache::setFreq(const PubSubName &name, double freq)
+void RigCache::setRadioFreq(const PubSubName &name, double freq)
 {
-    rigStates[name].setFreq(freq);
+    rigStates[name].setRadioFreq(freq);
 }
-void RigCache::setMode(const PubSubName &name, const QString &mode)
+void RigCache::setLogFreq(const PubSubName &name, double freq)
 {
-    rigStates[name].setMode(mode);
+    rigStates[name].setLogFreq(freq);
+}
+void RigCache::setRadioMode(const PubSubName &name, const QString &mode)
+{
+    rigStates[name].setRadioMode(mode);
+}
+void RigCache::setLogMode(const PubSubName &name, const QString &mode)
+{
+    rigStates[name].setLogMode(mode);
 }
 void RigCache::setVolume(const PubSubName &name, const int level)
 {

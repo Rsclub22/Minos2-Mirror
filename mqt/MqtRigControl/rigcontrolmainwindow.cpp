@@ -114,6 +114,18 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     setupRadio->setAppName(appName);
 
 
+    if (appName.length() > 0)
+    {
+        // init cache with radio data
+        initCacheData();
+        sendRadioListLogger();
+
+        msg->rigCache.publish();
+    }
+
+
+
+
     serialTVSw = new SerialTVSwitch();     // create local serial sw
 
     setSelectRadioBoxVisible(false);
@@ -315,7 +327,7 @@ void RigControlMainWindow::setupBandFreq()
     {
         fPresetDialog.readSettings(presetFreq);
         logMessage(QString("RigControl: Band Freq Change, send new bandlist to logger"));
-        sendBandListLogger();
+        //sendBandListLogger();
         freqPresetChanged = false;
     }
 }
@@ -522,7 +534,7 @@ void RigControlMainWindow::upDateRadio()
                     modelNumber = irigctld_radioNumber;
                 }
 
-                buildSupBandList(modelNumber);
+                //buildSupBandList(modelNumber);
 
                 // does the radio support control of volume control
 
@@ -568,7 +580,7 @@ void RigControlMainWindow::upDateRadio()
 
                 dumpRadioToTraceLog();
 
-                sendBandListLogger();       // here as delay after sending to logger the connected message
+                //sendBandListLogger();       // here as delay after sending to logger the connected message
 
 
             }
@@ -1341,7 +1353,130 @@ void RigControlMainWindow::clrRigctldNames()
 }
 
 
-/******************** Supported Bands on the Current Radio ********/
+
+/***************** init cache data ***************/
+
+
+void RigControlMainWindow::initCacheData()
+{
+
+    if (setupRadio->availRadioData.count() > 0)
+    {
+        // bandlist
+        for (int i = 0; i < setupRadio->availRadioData.count(); i++)
+        {
+            QStringList supBandList;
+            buildSupBandList(i, supBandList);
+            sendBandListLogger(i, supBandList);
+        }
+    }
+
+
+}
+
+
+
+
+
+
+/******************** Supported Bands  ********/
+
+
+
+void RigControlMainWindow::buildSupBandList(int radioIdx, QStringList &bandList)
+{
+    bandList.clear();
+    int radioModelNumber = setupRadio->availRadioData[radioIdx]->radioModelNumber;
+
+    // find the bands the radio supports
+    QStringList supBandsList;
+    buildSupportedRadioBands(radioModelNumber, supBandsList);
+
+    // merge radio bands and transverter bands
+    if(setupRadio->availRadioData[radioIdx]->transVertEnable)
+    {
+        if (bands.count() > 0)
+        {
+            for (int i = 0; i < bands.count(); i++)
+            {
+                if (findSupRadioBand(bands[i]->name, supBandsList) ||  findSupTransBand(bands[i]->name, radioIdx))
+                {
+                    bandList.append(bands[i]->name);
+                }
+            }
+        }
+    }
+    else
+    {
+        // no transverters enabled
+        bandList = supBandsList;
+    }
+
+
+
+}
+
+
+
+// probe radio for supported bands
+void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber, QStringList& supBandList)
+{
+
+
+    RIG *my_rig = rig_init(radioModelNumber);
+    if (my_rig)
+    {
+
+        for (int i = 0; i < bands.count(); i++)
+        {
+            if (radio->chkFreqRange(my_rig, bands[i]->fLow, "USB"))
+            {
+                supBandList.append(bands[i]->name);
+            }
+        }
+    }
+
+}
+
+
+/*
+
+// build the supported band list including transverters
+void RigControlMainWindow::buildSupBandList(int radioModelNumber)
+{
+    // find the bands the radio supports
+    buildSupportedRadioBands(radioModelNumber);
+
+    // merge radio bands and transverter bands
+    setupRadio->currentRadio.radioTransSupBands.clear();
+    if(setupRadio->currentRadio.transVertEnable)
+    {
+        if (bands.count() > 0)
+        {
+            for (int i = 0; i < bands.count(); i++)
+            {
+                if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
+                {
+                    setupRadio->currentRadio.radioTransSupBands.append(bands[i]->name);
+                }
+            }
+        }
+    }
+    else
+    {
+        // no transverters enabled, just copy the bands supported by the radio
+        for (int i = 0; i < setupRadio->currentRadio.radioSupBands.count(); i++)
+        {
+            setupRadio->currentRadio.radioTransSupBands.append(setupRadio->currentRadio.radioSupBands[i]);
+        }
+    }
+
+}
+
+
+
+
+
 
 
 // build the supported band list including transverters
@@ -1398,14 +1533,16 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber)
 
 }
 
+*/
+
 // is this band in the supported band list for this model
-bool RigControlMainWindow::findSupRadioBand(const QString band)
+bool RigControlMainWindow::findSupRadioBand(const QString band, const QStringList& supBandsList)
 {
-    if (setupRadio->currentRadio.radioSupBands.count() > 0)
+    if (supBandsList.count() > 0)
     {
-        for (int i = 0; i < setupRadio->currentRadio.radioSupBands.count();i++)
+        for (int i = 0; i < supBandsList.count();i++)
         {
-            if (band == setupRadio->currentRadio.radioSupBands[i])
+            if (band == supBandsList[i])
             {
                 return true;
             }
@@ -1418,14 +1555,14 @@ bool RigControlMainWindow::findSupRadioBand(const QString band)
 }
 
 // is this band in the transverter list for this radio
-bool RigControlMainWindow::findSupTransBand(const QString band)
+bool RigControlMainWindow::findSupTransBand(const QString band, const int radioIdx)
 {
-    if (setupRadio->currentRadio.transVertNames.count() > 0)
+    if (setupRadio->availRadioData[radioIdx]->transVertNames.count() > 0)
     {
-        for (int i = 0; i < setupRadio->currentRadio.transVertNames.count();i++)
+        for (int i = 0; i < setupRadio->availRadioData[radioIdx]->transVertNames.count();i++)
         {
 
-            if (band == setupRadio->currentRadio.transVertNames[i])
+            if (band == setupRadio->availRadioData[radioIdx]->transVertNames[i])
             {
                 return true;
             }
@@ -2158,7 +2295,7 @@ void RigControlMainWindow::sendRadioListLogger()
     msg->publishRadioNames(radioList);
 }
 
-void RigControlMainWindow::sendBandListLogger()
+void RigControlMainWindow::sendBandListLogger(const int radioIdx, const QStringList& supBandList)
 {
     QString fileName;
     fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
@@ -2167,16 +2304,16 @@ void RigControlMainWindow::sendBandListLogger()
     config.beginGroup("FreqPresets");
 
     QStringList bandList;
-    if (!setupRadio->currentRadio.radioTransSupBands.isEmpty())
+    if (!supBandList.isEmpty())
     {
-        for (int i = 0; i < setupRadio->currentRadio.radioTransSupBands.count(); i++)
+        for (int i = 0; i < supBandList.count(); i++)
         {
             // get index to band
             int k = 0;
             bool match = false;
             do
             {
-                if (setupRadio->currentRadio.radioTransSupBands[i] == freqPresetData::presetBands[k])
+                if (supBandList[i] == freqPresetData::presetBands[k])
                 {
                     match = true;
                     break;
@@ -2184,19 +2321,19 @@ void RigControlMainWindow::sendBandListLogger()
                 k++;
             }while (k < freqPresetData::presetBands.count() && !match);
 
-            bandList.append(QString("%1-%2").arg(setupRadio->currentRadio.radioTransSupBands[i])
-                            .arg(config.value(setupRadio->currentRadio.radioTransSupBands[i], freqPresetData::bandFreq[k]).toString()));
+            bandList.append(QString("%1-%2").arg(supBandList[i])
+                            .arg(config.value(supBandList[i], freqPresetData::bandFreq[k]).toString()));
         }
 
 
-        PubSubName psname(setupRadio->currentRadio.radioName);
+        PubSubName psname(setupRadio->availRadioData[radioIdx]->radioName);
         QString bands = bandList.join(":");
-        logMessage(QString("Send bandlist to logger - %1").arg(bands));
+        logMessage(QString("Send bandlist to logger: for radio %1 - %2").arg(setupRadio->availRadioData[radioIdx]->radioName).arg(bands));
         msg->rigCache.setBandList(psname, bands);
     }
     else
     {
-        logMessage(QString("Send bandlist to logger - error radio bandlist empty"));
+        logMessage(QString("Send bandlist to logger: error radio bandlist empty"));
     }
     config.endGroup();
 }
@@ -2247,7 +2384,7 @@ void RigControlMainWindow::sendFreqToLog(freq_t freq)
     if (appName.length() > 0)
     {
         PubSubName psname(setupRadio->currentRadio.radioName);
-        msg->rigCache.setFreq(psname, freq);
+        msg->rigCache.setRadioFreq(psname, freq);
         logMessage(QString("Send freq to logger = %1 psn=%2").arg(convertFreqToStr(freq)).arg(psname.toString()));
     }
 }
@@ -2261,7 +2398,7 @@ void RigControlMainWindow::sendModeToLog(QString mode)
     {
         logMessage(QString("Send mode to logger = %1").arg(mode));
         PubSubName psname(setupRadio->currentRadio.radioName);
-        msg->rigCache.setMode(psname, mode);
+        msg->rigCache.setRadioMode(psname, mode);
     }
 }
 

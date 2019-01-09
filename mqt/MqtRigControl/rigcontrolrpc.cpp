@@ -93,7 +93,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
 
         if ( args->getStructArgMember( 0, rpcConstants::rigTpm, psTpm ) )
         {
-            if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psFreq ))
+            if ( args->getStructArgMember( 0, rpcConstants::rigControlLogFreq, psFreq ))
             {
                 PubSubName psn("test"); // just uses server/appname
                 QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
@@ -110,7 +110,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 }
             }
         }
-        else if ( args->getStructArgMember( 0, rpcConstants::rigControlFreq, psFreq ))
+        else if ( args->getStructArgMember( 0, rpcConstants::rigControlLogFreq, psFreq ))
         {
             PubSubName psn("test"); // just uses server/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
@@ -151,7 +151,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 if (rigCache.setSelected(psn, loggeruuid, selContest))
                 {
                     QString mode;
-                    if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psMode ) )
+                    if ( args->getStructArgMember( 0, rpcConstants::rigControlLogMode, psMode ) )
                     {
                         if ( psMode->getString( mode ) )
                         {
@@ -168,7 +168,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 }
             }
         }
-        else if ( args->getStructArgMember( 0, rpcConstants::rigControlMode, psMode ) )
+        else if ( args->getStructArgMember( 0, rpcConstants::rigControlLogMode, psMode ) )
         {
             PubSubName psn("test"); // just uses server/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);

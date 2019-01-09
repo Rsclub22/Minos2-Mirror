@@ -39,9 +39,11 @@ public:
     RigDetails &getDetails(const PubSubName &p);
     bool setSelected(const PubSubName &name, const QString &loggeruuid, const QString &selected);
     void setStatus(const PubSubName &name, const QString &status);
-    void setFreq(const PubSubName &name, double freq);
+    void setRadioFreq(const PubSubName &name, double freq);
+    void setLogFreq(const PubSubName &name, double freq);
     void setVolume(const PubSubName &name, const int level);
-    void setMode(const PubSubName &name, const QString &mode);
+    void setRadioMode(const PubSubName &name, const QString &mode);
+    void setLogMode(const PubSubName &name, const QString &mode);
     void setTransverterOffset(const PubSubName &name, double transverterOffset);
     void setTransverterSwitch(const PubSubName &name, int transverterSwitch);
     void setTransverterStatus(const PubSubName &name, bool transverterStatus);
