@@ -307,6 +307,7 @@ void RigCache::publishState()
 void RigCache::publishDetails()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();
+    trace("publishRigDetails");
     for(QMap<PubSubName, RigDetails>::iterator i = rigDetails.begin(); i != rigDetails.end(); i++ )
     {
         if (i.value().isDirty())
