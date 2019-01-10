@@ -83,7 +83,8 @@ SOURCES += \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
     volumeslider.cpp \
-    tminosbshelpform.cpp
+    tminosbshelpform.cpp \
+    radiodetails.cpp
 
 
 HEADERS  += \
@@ -138,7 +139,8 @@ HEADERS  += \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
     volumeslider.h \
-    tminosbshelpform.h
+    tminosbshelpform.h \
+    radiodetails.h
 
 
 FORMS    += \

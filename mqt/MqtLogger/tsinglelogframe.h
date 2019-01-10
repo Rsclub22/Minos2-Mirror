@@ -197,7 +197,7 @@ private slots:
 
     void on_RadioLoaded();
     void on_SetRadioList();
-    void on_SetBandList(QString);
+    //void on_SetBandList(QString);
     void on_SetMode(QString);
     void on_SetFreq(QString);
     void on_SetRitFreq(QString);
@@ -242,7 +242,14 @@ private slots:
     void dxSpotToLog(memoryData::memData);
 public:
     void sendTpm(int t, QString f);
+    
+    void on_SetTransVertOffset(double offset, PubSubName psn);
+    void on_SetTransVertSwitch(int switchNum, PubSubName psn);
+    void on_SetTransVertStatus(bool status, PubSubName psn);
+    void on_SetVolumeStatus(bool status, PubSubName psn);
 
+    void on_SetRitEnableStatus(bool status, PubSubName psn);
+    void on_SetBandList(QString s, PubSubName psn);
 };
 
 #endif // TSINGLELOGFRAME_H

@@ -60,6 +60,7 @@ public:
     {
         return rigList;
     }
+    
 };
 
 #endif // RIGCACHE_H

@@ -238,7 +238,7 @@ private:
 
     int getVolume(vfo_t vfo);
     int setVolume(vfo_t vfo, int level);
-    void sendVolStatusToLog(bool status);
+    //void sendVolStatusToLog(bool status);
 
     int getSignalStrength(vfo_t vfo);
     void displaySignalStrength(int level);
@@ -281,7 +281,7 @@ private:
 
     void initCacheData();
 
-
+    void sendVolStatusToLog(const int radIdx, bool status);
 private slots:
 
     void onStdInRead(QString);

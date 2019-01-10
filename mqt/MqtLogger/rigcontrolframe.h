@@ -23,7 +23,7 @@
 #include <QShortcut>
 #include "RPCCommandConstants.h"
 #include "rigmemcommondata.h"
-
+#include "radiodetails.h"
 
 namespace Ui {
     class RigControlFrame;
@@ -118,7 +118,7 @@ public:
 
     void setRadioLoaded();
     void setRadioList();
-    void setBandList(QString);
+
     void setMode(QString);
     void setVolume(int level);
     void setFreq(QString);
@@ -151,6 +151,15 @@ public:
     void checkConnection();
 
     void setRadioVolumeState(bool state);
+
+    void setTransVertOffset(double offset, PubSubName psn);
+    void setTransVertSwitch(int switchNum, PubSubName psn);
+    void setTransVertStatus(bool status, PubSubName psn);
+    void setVolumeStatus(bool status, PubSubName psn);
+    void setRitEnableStatus(bool status, PubSubName psn);
+    void setBandList(QString s, PubSubName psn);
+
+    void createActiveBandList(QString);
 
 signals:
     void selectRadio(QString, QString);
@@ -191,7 +200,7 @@ private slots:
 
 
     void ritClearShortCutSelected();
-    void bandListTimeout();
+    //void bandListTimeout();
 
     void setRadioFreq();
 
@@ -214,7 +223,7 @@ private:
     QMap<int, TuneMemoryButton *> tuneButtonMap;
     QVector<quickBandSelData> listOfBands;
 
-
+    QMap<PubSubName, RadioDetails> allRadioDetails;
 
     QShortcut* freqEditShortKey;
 
@@ -236,17 +245,19 @@ private:
     bool ritOn;
     bool ritEditOn;
     //QString curRit;
-    bool expectBandList;
+    //bool expectBandList;
 
 
     QStringList listOfRadios;
+    RadioDetails selRadioDetails;
+    PubSubName selRadioName;
     QString radioName;
     QString rigAppName;
     QString radioState;
     //QStringList listOfBands;
 
-    QTimer *bandListTimer;
-    bool bandListRxError;
+    //QTimer *bandListTimer;
+    //bool bandListRxError;
 
     QString lastFreq;
 

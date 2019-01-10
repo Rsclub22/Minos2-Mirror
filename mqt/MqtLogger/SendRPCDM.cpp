@@ -380,6 +380,74 @@ void TSendDM::sendRotatorPreset(QString s)
     rpc.queueCall( rotSelected );
 }
 //---------------------------------------------------------------------------
+void TSendDM::notifyRigDetailChanges()
+{
+    QVector<PubSubName> riglist = rigCache.getRigList();
+    QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
+    foreach (PubSubName psn, riglist)
+    {
+        RigDetails& selDetail = rigCache.getDetails(psn);
+        if (selDetail.isDirty())
+        {
+            trace(QString("notifyRigDetailChanges: %1 is dirty, send to rigcontrol").arg(psn.toString()));
+            if (selDetail.transverterOffset().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetTransVertOffset(selDetail.transverterOffset().getValue(), psn);
+                }
+            }
+            if (selDetail.transverterSwitch().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetTransVertSwitch(selDetail.transverterSwitch().getValue(), psn);
+                }
+            }
+            if (selDetail.transverterStatus().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetTransVertStatus(selDetail.transverterStatus().getValue(), psn);
+                }
+            }
+            if (selDetail.volumeStatus().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetVolumeStatus(selDetail.volumeStatus().getValue(), psn);
+                }
+            }
+            if (selDetail.ritEnableStatus().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
+                }
+            }
+            if (selDetail.bandList().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetBandList(selDetail.bandList().getValue(), psn);
+                }
+            }
+
+        }
+        selDetail.clearDirty();
+    }
+}
+
+
+
+
+
 void TSendDM::notifyRigChanges()
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
@@ -438,6 +506,8 @@ void TSendDM::notifyRigChanges()
                     }
                     selState.clearDirty();
                 }
+
+       /*
                 if (selDetailsUuid == frameUuid)
                 {
                     trace("Rig details distribution for " + selDetailsUuid);
@@ -464,6 +534,7 @@ void TSendDM::notifyRigChanges()
                     selDetail.clearDirty();
 
                 }
+       */
             }
         }
     }
@@ -662,6 +733,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             }
         }
 
+        notifyRigDetailChanges();
         notifyRigChanges();
         notifyRotChanges();
 

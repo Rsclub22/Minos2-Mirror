@@ -117,8 +117,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     if (appName.length() > 0)
     {
         // init cache with radio data
-        initCacheData();
         sendRadioListLogger();
+        initCacheData();
+
 
         msg->rigCache.publish();
     }
@@ -534,13 +535,13 @@ void RigControlMainWindow::upDateRadio()
                     modelNumber = irigctld_radioNumber;
                 }
 
-                //buildSupBandList(modelNumber);
+                //buildSupBandList(ridx, modelNumber);
 
                 // does the radio support control of volume control
 
                 supVolume = radio->supportVolControl(modelNumber);
                 logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(supVolume ? "True" : "False"));
-                sendVolStatusToLog(supVolume);
+                sendVolStatusToLog(ridx, supVolume);
 
                 // does the radio support signal strength meter
 
@@ -1368,6 +1369,9 @@ void RigControlMainWindow::initCacheData()
             QStringList supBandList;
             buildSupBandList(i, supBandList);
             sendBandListLogger(i, supBandList);
+            int rmn = setupRadio->availRadioData[i]->radioModelNumber;
+            bool f = radio->supportVolControl(rmn);
+            sendVolStatusToLog(i, f);
         }
     }
 
@@ -2004,6 +2008,7 @@ void RigControlMainWindow::sendRadioRitStatusLogger(bool status)
 {
     if (appName.length() > 0)
     {
+
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setRadioRitStatus(psname, status);
         logMessage(QString("Send Radio Rit status to logger = %1 psn=%2").arg(status ? "On" : "Off").arg(psname.toString()));
@@ -2413,14 +2418,14 @@ void RigControlMainWindow::sendVolToLog(int level)
 }
 
 
-void RigControlMainWindow::sendVolStatusToLog(bool status)
+void RigControlMainWindow::sendVolStatusToLog(const int radIdx, bool status)
 {
     if (appName.length() > 0)
     {
         QString f = "";
         status  ? f = "True" : f = "False";
         logMessage(QString("Send Volume Status to logger = %1").arg(f));
-        PubSubName psname(setupRadio->currentRadio.radioName);
+        PubSubName psname(setupRadio->availRadioData[radIdx]->radioName);
         msg->rigCache.setVolumeStatus(psname, status);
 
     }

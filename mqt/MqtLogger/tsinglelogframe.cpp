@@ -1333,9 +1333,35 @@ void TSingleLogFrame::on_SetRadioList()
     FKHRigControlFrame->setRadioList();
 }
 
-void TSingleLogFrame::on_SetBandList(QString s)
+void TSingleLogFrame::on_SetTransVertOffset(double offset, PubSubName psn)
 {
-    FKHRigControlFrame->setBandList(s);
+    FKHRigControlFrame->setTransVertOffset( offset, psn);
+}
+
+void TSingleLogFrame::on_SetTransVertSwitch(int switchNum, PubSubName psn)
+{
+    FKHRigControlFrame->setTransVertSwitch(switchNum, psn);
+}
+
+void TSingleLogFrame::on_SetTransVertStatus(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setTransVertStatus(status, psn);
+}
+
+void TSingleLogFrame::on_SetVolumeStatus(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setVolumeStatus( status, psn);
+}
+
+void TSingleLogFrame::on_SetRitEnableStatus(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setRitEnableStatus(status, psn);
+}
+
+
+void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
+{
+    FKHRigControlFrame->setBandList(s, psn);
 }
 
 void TSingleLogFrame::on_SetRadioStatus(QString s)

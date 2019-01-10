@@ -127,6 +127,8 @@ void RigCache::setDetails(const PubSubName &name, const RigDetails &details)
     rigDetails[name] = details;
 }
 
+
+
 bool RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, const QString &contestuuid)
 {
     trace("setSelected radio " + name.toString()+ " logger " + loggeruuid + " contest " + contestuuid);
