@@ -2024,7 +2024,7 @@ void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
     if (appName.length() > 0)
     {
         PubSubName psname(setupRadio->currentRadio.radioName);
-        msg->rigCache.setRitFreq(psname, ritFreq);
+        msg->rigCache.setRadioRitFreq(psname, ritFreq);
         logMessage(QString("Send Rit freq to logger = %1 psn=%2").arg(convertRitFreqToStr(ritFreq)).arg(psname.toString()));
 
     }
@@ -2416,7 +2416,7 @@ void RigControlMainWindow::sendVolToLog(int level)
     {
         logMessage(QString("Send volume to logger = %1").arg(QString::number(level)));
         PubSubName psname(setupRadio->currentRadio.radioName);
-        msg->rigCache.setVolume(psname, level);
+        msg->rigCache.setRadioVolume(psname, level);
     }
 }
 

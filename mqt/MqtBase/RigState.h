@@ -20,8 +20,10 @@ class RigState: public PubSubValue
     MinosItem<double> _logFreq;
     MinosStringItem<QString> _radioMode;
     MinosStringItem<QString> _logMode;
-    MinosItem<int> _volLevel;
-    MinosItem<int> _ritFreq;
+    MinosItem<int> _radioVolLevel;
+    MinosItem<int> _logVolLevel;
+    MinosItem<int> _radioRitFreq;
+    MinosItem<int> _logRitFreq;
     MinosItem<bool> _ritOnOffStatus;
     MinosItem<bool> _ritRadioStatus;
     MinosItem<int> _tpm;
@@ -47,8 +49,10 @@ public:
     MinosStringItem<QString> logMode() const;
     MinosItem<bool> ritOnOffStatus() const;
     MinosItem<bool> ritRadioStatus() const;
-    MinosItem<int> ritFreq() const;
-    MinosItem<int> volLevel() const;
+    MinosItem<int> radioRitFreq() const;
+    MinosItem<int> logRitFreq() const;
+    MinosItem<int> radioVolLevel() const;
+    MinosItem<int> logVolLevel() const;
     MinosItem<int> tpm() const;
 
     void setSelected(const QString &loggeruuid, const QString &selected);
@@ -56,9 +60,11 @@ public:
     void setLogFreq(double freq);
     void setRadioMode(const QString &mode);
     void setLogMode(const QString &mode);
-    void setVolume(int level);
+    void setRadioVolume(int level);
+    void setLogVolume(int level);
     void setStatus(const QString &status);
-    void setRitFreq(int freq);
+    void setRadioRitFreq(int freq);
+    void setLogRitFreq(int freq);
     void setRitOnOffStatus(const bool status);
     void setRitRadioStatus(const bool status);
     void setTpm(int tpm);

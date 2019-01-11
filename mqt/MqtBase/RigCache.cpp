@@ -251,9 +251,13 @@ void RigCache::setLogMode(const PubSubName &name, const QString &mode)
 {
     rigStates[name].setLogMode(mode);
 }
-void RigCache::setVolume(const PubSubName &name, const int level)
+void RigCache::setRadioVolume(const PubSubName &name, const int level)
 {
-    rigStates[name].setVolume(level);
+    rigStates[name].setRadioVolume(level);
+}
+void RigCache::setLogVolume(const PubSubName &name, const int level)
+{
+    rigStates[name].setLogVolume(level);
 }
 
 void RigCache::setTransverterOffset(const PubSubName &name, double transverterOffset)
@@ -280,9 +284,13 @@ void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {
     rigDetails[name].setBandList(bands);
 }
-void RigCache::setRitFreq(const PubSubName &name, int freq)
+void RigCache::setRadioRitFreq(const PubSubName &name, int freq)
 {
-    rigStates[name].setRitFreq(freq);
+    rigStates[name].setRadioRitFreq(freq);
+}
+void RigCache::setLogRitFreq(const PubSubName &name, int freq)
+{
+    rigStates[name].setLogRitFreq(freq);
 }
 void RigCache::setRitEnableStatus(const PubSubName &name, bool ritEnableStatus)
 {

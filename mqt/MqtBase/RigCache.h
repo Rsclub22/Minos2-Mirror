@@ -41,7 +41,8 @@ public:
     void setStatus(const PubSubName &name, const QString &status);
     void setRadioFreq(const PubSubName &name, double freq);
     void setLogFreq(const PubSubName &name, double freq);
-    void setVolume(const PubSubName &name, const int level);
+    void setRadioVolume(const PubSubName &name, const int level);
+    void setLogVolume(const PubSubName &name, const int level);
     void setRadioMode(const PubSubName &name, const QString &mode);
     void setLogMode(const PubSubName &name, const QString &mode);
     void setTransverterOffset(const PubSubName &name, double transverterOffset);
@@ -50,7 +51,8 @@ public:
     void setTransverterStatus(const PubSubName &name, bool transverterStatus);
     void setVolumeStatus(const PubSubName &name, bool volumeStatus);
     void setBandList(const PubSubName &name, const QString &bands);
-    void setRitFreq(const PubSubName &name, int freq);
+    void setRadioRitFreq(const PubSubName &name, int freq);
+    void setLogRitFreq(const PubSubName &name, int freq);
     void setRitEnableStatus(const PubSubName &name, bool ritEnableStatus);
     void setRitOnOffStatus(const PubSubName &name, bool status);
     void setRadioRitStatus(const PubSubName &name, bool status);
