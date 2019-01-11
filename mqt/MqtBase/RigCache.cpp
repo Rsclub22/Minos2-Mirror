@@ -264,6 +264,10 @@ void RigCache::setTransverterSwitch(const PubSubName &name, int transverterSwitc
 {
     rigDetails[name].setTransverterSwitch(transverterSwitch);
 }
+void RigCache::setTransverterEnabled(const PubSubName &name, bool transverterEnabled)
+{
+    rigDetails[name].setTransverterEnabled(transverterEnabled);
+}
 void RigCache::setTransverterStatus(const PubSubName &name, bool transverterStatus)
 {
     rigDetails[name].setTransverterStatus(transverterStatus);

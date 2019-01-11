@@ -196,7 +196,16 @@ const QStringList SMETERTEXT = {
 const QString RIG_DEFAULT_POLLINTERVAL = "1";
 const QString ROT_DEFAULT_POLLINTERVAL = "1";
 
-//enum class Tvert_Config_Status { NO_CHANGE, CHANGED, DELETE};
+const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color: white ;\n");
+const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue ; \n");
+const QString SUP_RADIO_INDICATOR_TRANSVERT_STYLE = QString("background-color: yellow ; \n");
+const QString SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE = QString("background-color: orange ; \n");
+const QString RIT_STATUS_OFF_STYLE = QString("background-color:  white ;\n");
+const QString RIT_STATUS_ON_STYLE = QString("background-color:  orange ;\n");
+const QString RIT_RADIO_GETSETFREQ_INDICATOR_FALSE = QString("background-color: white ;\n");
+const QString RIT_RADIO_GETSETFREQ_INDICATOR_TRUE = QString("background-color: blue ;\n");
+
+
 
 
 #endif // RIGCONTROLCOMMONCONSTANTS_H

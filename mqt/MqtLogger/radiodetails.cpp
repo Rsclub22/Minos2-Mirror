@@ -32,6 +32,14 @@ int RadioDetails::getTransVertSwitch()
 {
     return transVerterSwitch;
 }
+void RadioDetails::setTransVertEnabled(bool status)
+{
+    transVertEnabled = status;
+}
+bool RadioDetails::getTransVertEnabled()
+{
+    return transVertEnabled;
+}
 void RadioDetails::setTransVertStatus(bool status)
 {
     transVertStatus = status;

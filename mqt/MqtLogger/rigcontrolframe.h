@@ -127,7 +127,6 @@ public:
     void setRadioName(QString, QString mode);
     void setRadioState(QString);
     void setTpm(int);
-    void setRadioTxVertState(bool s);
     void setRitEnableState(bool s);
 
     bool isRadioLoaded();
@@ -161,6 +160,7 @@ public:
 
     void createActiveBandList(QString);
 
+    void setTransVertEnabled(bool status, PubSubName psn);
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -304,6 +304,10 @@ private:
     void ritButtonOff();
 
     void setRadioBandWarning(QString s);
+    void setRadioTxVertEnabled(bool s);
+    void setRadioTxVertStatus(bool status);
+    void transVertIndicatorOn();
+    void transVertIndicatorOff();
 };
 
 

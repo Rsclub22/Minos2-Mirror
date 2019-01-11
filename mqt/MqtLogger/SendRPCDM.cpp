@@ -406,6 +406,14 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->on_SetTransVertSwitch(selDetail.transverterSwitch().getValue(), psn);
                 }
             }
+            if (selDetail.transverterEnabled().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetTransVertEnabled(selDetail.transverterEnabled().getValue(), psn);
+                }
+            }
             if (selDetail.transverterStatus().isDirty())
             {
                 for (int i = 0; i < frames.size(); i++)

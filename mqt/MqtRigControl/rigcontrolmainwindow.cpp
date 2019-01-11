@@ -499,7 +499,7 @@ void RigControlMainWindow::upDateRadio()
 
                 // only show transvert freq box is enabled
                 setTransVertDisplayVisible(setupRadio->currentRadio.transVertEnable);
-                sendTransVertStatus(setupRadio->currentRadio.transVertEnable);   // send to logger
+                sendTransVertEnabled(setupRadio->currentRadio.transVertEnable);   // send to logger
                 sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);                                 // turn off transVerter Sw
                 sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
                 transVertSwNum = TRANSSW_NUM_DEFAULT;
@@ -1093,6 +1093,7 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
                 selTvBand = cb;
                 ui->transVertBandDisp->setText(cb);
                 showActiveTransVertIndicator(cb);
+                sendTransVertStatusToLog(true);
 
                 if (setupRadio->currentRadio.enableTransSwitch)
                 {
@@ -1133,6 +1134,8 @@ void RigControlMainWindow::setFreq(QString freq, vfo_t vfo)
                 // no transverter found for this band
                 logMessage(QString("SetFreq: No transverter found for this band"));
                 clearTransVertSupport();
+                sendTransVertStatusToLog(false);
+
 
             }
 
@@ -2431,8 +2434,23 @@ void RigControlMainWindow::sendVolStatusToLog(const int radIdx, bool status)
     }
 }
 
+void RigControlMainWindow::sendTransVertEnabled(bool status)
+{
+    //QString flag;
+    if (appName.length() > 0)
+    {
+        QString f = "";
+        status  ? f = "True" : f = "False";
+        logMessage(QString("Send Transvert Enabled to logger = %1").arg(f));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setTransverterEnabled(psname, status);
 
-void RigControlMainWindow::sendTransVertStatus(bool status)
+    }
+}
+
+
+
+void RigControlMainWindow::sendTransVertStatusToLog(bool status)
 {
     //QString flag;
     if (appName.length() > 0)

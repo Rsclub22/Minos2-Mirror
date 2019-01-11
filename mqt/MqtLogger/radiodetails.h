@@ -11,6 +11,8 @@ public:
     double getTransVerterOffset();
     void setTransVertSwitch(int switchNum);
     int getTransVertSwitch();
+    void setTransVertEnabled(bool status);
+    bool getTransVertEnabled();
     void setTransVertStatus(bool status);
     bool getTransVertStatus();
     void setVolumeStatus(bool status);
@@ -25,6 +27,7 @@ private:
 
 double transVerterOffset;
 int transVerterSwitch;
+bool transVertEnabled;
 bool transVertStatus;
 bool volumeStatus;
 bool ritEnableStatus;

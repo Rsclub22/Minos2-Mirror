@@ -205,9 +205,6 @@ private slots:
     void on_SetVolume(int level);
     void on_SetRadioStatus(QString);
     void on_SetRadioTpm(int);
-    void on_SetRadioTxVertState(bool s);
-    void on_SetRitEnableState(bool s);
-    void on_SetRadioVolumeState(bool s);
 
     void on_RotatorLoaded();
     void on_RotatorList();
@@ -250,6 +247,7 @@ public:
 
     void on_SetRitEnableStatus(bool status, PubSubName psn);
     void on_SetBandList(QString s, PubSubName psn);
+    void on_SetTransVertEnabled(bool status, PubSubName psn);
 };
 
 #endif // TSINGLELOGFRAME_H

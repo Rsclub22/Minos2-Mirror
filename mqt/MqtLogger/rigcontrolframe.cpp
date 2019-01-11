@@ -80,7 +80,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     mgmLabelVisible(false);
 
-    setRadioTxVertState(false);
+    setRadioTxVertEnabled(false);
     setRitEnableState(false);
     setRadioVolumeState(false);
 
@@ -234,6 +234,31 @@ void RigControlFrame::setTransVertSwitch(int switchNum, PubSubName psn)
     }
 }
 
+void RigControlFrame::setTransVertEnabled(bool status, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setTransVertEnabled(status);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setTransVertEnabled(status);
+        allRadioDetails[psn] = rd;
+    }
+    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        setRadioTxVertEnabled(status);
+        selRadioDetails.setTransVertEnabled(status);
+    }
+}
+
+
+
+
+
 void RigControlFrame::setTransVertStatus(bool status, PubSubName psn)
 {
     RadioDetails rd;
@@ -250,7 +275,7 @@ void RigControlFrame::setTransVertStatus(bool status, PubSubName psn)
     }
     if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-        setRadioTxVertState(status);
+        setRadioTxVertStatus(status);
         selRadioDetails.setTransVertStatus(status);
     }
 }
@@ -500,6 +525,9 @@ void RigControlFrame::showRitButOff()
     ui->RitButton->setStyleSheet(RIT_BUTTON_OFF_STYLE);
     ui->RitButton->setText("Off");
 }
+
+
+
 
 void RigControlFrame::changeMainRadioFreq()
 {
@@ -914,7 +942,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
             {
                 trace(QString("setRadioName:: Select Radio = %1 Mode = %2 on rigcontrol").arg(radioName).arg(mode));
                 selRadioDetails = allRadioDetails[selRadioName];
-                setRadioTxVertState(false);
+                setRadioTxVertEnabled(false);
                 setRitEnableState(false);
                 setRadioVolumeState(false);
                 emit selectRadio(radioName, mode);  // send radio and mode if appended.
@@ -1182,14 +1210,38 @@ void RigControlFrame::setTpm(int t)
     updateTuneButtons();
 }
 
-void RigControlFrame::setRadioTxVertState(bool s)
+void RigControlFrame::setRadioTxVertEnabled(bool s)
 {
-    ui->txvertStat->setVisible(s);
-    ui->TxVertLabel->setVisible(s);
-    ui->txvertStat->setText("On");
-    ui->txvertStat->setVisible(s);
-
+     ui->TxVertLabel->setVisible(s);
+     ui->transvertIndicator->setVisible(s);
+     transVertIndicatorOff();
 }
+
+
+void RigControlFrame::setRadioTxVertStatus(bool status)
+{
+
+    if(status)
+    {
+        transVertIndicatorOn();
+    }
+    else
+    {
+        transVertIndicatorOff();
+    }
+}
+
+
+void RigControlFrame::transVertIndicatorOn()
+{
+    ui->transvertIndicator->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
+}
+
+void RigControlFrame::transVertIndicatorOff()
+{
+    ui->transvertIndicator->setStyleSheet(SUP_RADIO_INDICATOR_RADIO_STYLE);
+}
+
 
 void RigControlFrame::setRadioBandWarning(QString s)
 {

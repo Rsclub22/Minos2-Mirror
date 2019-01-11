@@ -138,14 +138,6 @@ private:
 
 
     QVector<QPushButton*> supRadioInd;
-    const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color: white ;\n");
-    const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue ; \n");
-    const QString SUP_RADIO_INDICATOR_TRANSVERT_STYLE = QString("background-color: yellow ; \n");
-    const QString SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE = QString("background-color: orange ; \n");
-    const QString RIT_STATUS_OFF_STYLE = QString("background-color:  white ;\n");
-    const QString RIT_STATUS_ON_STYLE = QString("background-color:  orange ;\n");
-    const QString RIT_RADIO_GETSETFREQ_INDICATOR_FALSE = QString("background-color: white ;\n");
-    const QString RIT_RADIO_GETSETFREQ_INDICATOR_TRUE = QString("background-color: blue ;\n");
     QString selTransVertBandIndicator = "";
 
     void initActionsConnections();
@@ -213,7 +205,7 @@ private:
 
     void setTransVertDisplayVisible(bool visible);
     void writeWindowTitle(QString appName);
-    void sendTransVertStatus(bool status);
+    void sendTransVertStatusToLog(bool status);
 
     void refreshRadio();
 
@@ -282,6 +274,8 @@ private:
     void initCacheData();
 
     void sendVolStatusToLog(const int radIdx, bool status);
+    void sendTransVertEnabled(bool status);
+
 private slots:
 
     void onStdInRead(QString);

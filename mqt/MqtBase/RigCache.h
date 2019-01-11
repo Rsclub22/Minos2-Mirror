@@ -46,6 +46,7 @@ public:
     void setLogMode(const PubSubName &name, const QString &mode);
     void setTransverterOffset(const PubSubName &name, double transverterOffset);
     void setTransverterSwitch(const PubSubName &name, int transverterSwitch);
+    void setTransverterEnabled(const PubSubName &name, bool transverterEnabled);
     void setTransverterStatus(const PubSubName &name, bool transverterStatus);
     void setVolumeStatus(const PubSubName &name, bool volumeStatus);
     void setBandList(const PubSubName &name, const QString &bands);
@@ -61,6 +62,7 @@ public:
         return rigList;
     }
     
+
 };
 
 #endif // RIGCACHE_H

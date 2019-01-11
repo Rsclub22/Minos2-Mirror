@@ -135,6 +135,7 @@ static const QString rigControlLogFreq     = QT_TR_NOOP("LogFrequency");
 static const QString rigControlRadioMode   = QT_TR_NOOP("RadioMode");
 static const QString rigControlLogMode     = QT_TR_NOOP("LogMode");
 static const QString rigControlSelectRadioName   = QT_TR_NOOP("SelectRadioName");
+static const QString rigControlTxVertEnabled = QT_TR_NOOP("TransVertEnabled");
 static const QString rigControlTxVertStatus = QT_TR_NOOP("TransVertStatus");
 static const QString rigControlTxVertOffsetFreq = QT_TR_NOOP("TransVertOffSetFreq");
 static const QString rigControlTxVertSwitch = QT_TR_NOOP("TransVertSwitch");

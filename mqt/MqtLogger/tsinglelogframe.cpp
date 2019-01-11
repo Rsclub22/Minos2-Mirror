@@ -1343,6 +1343,12 @@ void TSingleLogFrame::on_SetTransVertSwitch(int switchNum, PubSubName psn)
     FKHRigControlFrame->setTransVertSwitch(switchNum, psn);
 }
 
+void TSingleLogFrame::on_SetTransVertEnabled(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setTransVertEnabled(status, psn);
+}
+
+
 void TSingleLogFrame::on_SetTransVertStatus(bool status, PubSubName psn)
 {
     FKHRigControlFrame->setTransVertStatus(status, psn);
@@ -1380,14 +1386,7 @@ void TSingleLogFrame::on_SetRadioTpm(int t)
     }
 }
 
-void TSingleLogFrame::on_SetRadioTxVertState(bool s)
-{
-    if ( this == LogContainer->getCurrentLogFrame() )
-    {
-        FKHRigControlFrame->setRadioTxVertState(s);
-    }
-}
-
+/*
 
 void TSingleLogFrame::on_SetRadioVolumeState(bool s)
 {
@@ -1404,7 +1403,7 @@ void TSingleLogFrame::on_SetRitEnableState(bool s)
         FKHRigControlFrame->setRitEnableState(s);
     }
 }
-
+*/
 //---- Send to RigController
 
 
