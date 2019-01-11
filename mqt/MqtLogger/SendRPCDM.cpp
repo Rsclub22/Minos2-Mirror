@@ -450,6 +450,9 @@ void TSendDM::notifyRigDetailChanges()
         }
         selDetail.clearDirty();
     }
+
+    radioLoaded = true;
+    emit setRadioLoaded();
 }
 
 
@@ -703,8 +706,8 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             {
                 trace("SendRPC set rigList and loaded " + an.getValue());
                 rigCache.addRigList(an.getValue());
-                radioLoaded = true;
-                emit setRadioLoaded();
+                //radioLoaded = true;
+                //emit setRadioLoaded();
                 emit setRadioList();
             }
             else if ( an.getCategory() == rpcConstants::RotatorCategory && an.getKey() == rpcConstants::rotatorList )

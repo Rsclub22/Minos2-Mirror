@@ -1370,6 +1370,7 @@ void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
     FKHRigControlFrame->setBandList(s, psn);
 }
 
+
 void TSingleLogFrame::on_SetRadioStatus(QString s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )

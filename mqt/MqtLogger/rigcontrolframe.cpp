@@ -3,10 +3,10 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2019
 //
 // Interprocess Control Logic
-// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2018
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2019
 //
 //
 //
@@ -339,11 +339,22 @@ void RigControlFrame::setBandList(QString s,PubSubName psn)
     }
 }
 
+
+
+
 void RigControlFrame::setRadioLoaded()
 {
     traceMsg(QString("%1 Set Radio Loaded").arg(ct?ct->uuid:""));
     radioLoaded = true;
     ui->modelbl->setVisible(true);
+
+    if (ct && !ct->isProtected())
+    {
+        // this sets the radio on frame launch
+        trace(QString("setRadioList:: setRadioName - radioName = %1, mode = %2").arg(ct->radioName.getValue().toString()).arg(ct->currentMode.getValue()));
+        setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
+    }
+
     setTpm(1);
 }
 
@@ -680,20 +691,8 @@ void RigControlFrame::on_ContestPageChanged()
 
         QString radNam = ct->radioName.getValue().toString();
         QString mode = ct->currentMode.getValue();
-        if (radioName != radNam || curMode != mode)
-        {
-           setRadioName(radNam, mode);
+        setRadioName(radNam, mode);
 
-        }
-        else
-        {
-            if (!radNam.isEmpty())
-            {
-                //expectBandList = false;
-                setRadioFreq();
-            }
-
-        }
 
     }
 }
@@ -931,24 +930,37 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
             }
             else
             {
-                ui->radioNameSel->setCurrentText(radNam);
+                trace(QString("setRadioName: Can't find %1 in radioNameSel").arg(radioName));
             }
 
-            // update radio name in rigcontrol and log frame
-            radioName = ui->radioNameSel->currentText();
+            trace(QString("setRadioName:: Select Radio = %1 Mode = %2 on rigcontrol").arg(radioName).arg(mode));
 
-            selRadioName = PubSubName(radioName);
-            if (allRadioDetails.contains(selRadioName))
+            setRadioTxVertEnabled(false);
+            setRitEnableState(false);
+            setRadioVolumeState(false);
+
+            if (radioName.isEmpty())
             {
-                trace(QString("setRadioName:: Select Radio = %1 Mode = %2 on rigcontrol").arg(radioName).arg(mode));
-                selRadioDetails = allRadioDetails[selRadioName];
-                setRadioTxVertEnabled(false);
-                setRitEnableState(false);
-                setRadioVolumeState(false);
                 emit selectRadio(radioName, mode);  // send radio and mode if appended.
-
-                setRadioFreq();
+                selRadioDetails = RadioDetails();
             }
+            else
+            {
+                selRadioName = PubSubName(radioName);
+                if (allRadioDetails.contains(selRadioName))
+                {
+                    trace(QString("setRadioName:: Select Radio = %1 Mode = %2 on rigcontrol").arg(radioName).arg(mode));
+                    selRadioDetails = allRadioDetails[selRadioName];
+                    emit selectRadio(radioName, mode);  // send radio and mode if appended.
+
+                    setRadioFreq();
+                }
+
+
+            }
+
+
+
 
 
 
@@ -1071,6 +1083,8 @@ void RigControlFrame::loadMemories()
     loadRunButtonLabels();
 }
 
+
+
 void RigControlFrame::setRadioList()
 {
     listOfRadios = LogContainer->sendDM->rigs();
@@ -1083,12 +1097,7 @@ void RigControlFrame::setRadioList()
         ui->radioNameSel->setCurrentText(radioName);
     }
 
-    //if (ct && !ct->isProtected())
-   // {
-        // this sets the radio on frame launch as well as updated list from rigcontrol
-   //     trace(QString("setRadioList:: setRadioName - radioName = %1, mode = %2").arg(ct->radioName.getValue().toString()).arg(ct->currentMode.getValue()));
-   //     setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
-  //  }
+
 
 }
 
