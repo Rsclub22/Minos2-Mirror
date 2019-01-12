@@ -234,7 +234,6 @@ private slots:
     void onSplitterMoved(int, int);
 
     void sendRadioVolume(int);
-    void sendRequestInfoFromRadio();
 
     void on_FontChanged();
     void invalidateCacheOnDisconnect();

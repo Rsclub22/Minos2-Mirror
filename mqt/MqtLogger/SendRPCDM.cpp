@@ -252,25 +252,7 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const Q
 
 }
 
-void TSendDM::sendRigGetRigInfo()
-{
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid));
-    st->addMember( select, rpcConstants::selected );
-
-
-    st->addMember( QString(""), rpcConstants::rigSendRadioInfo );
-    rpc.getCallArgs() ->addParam( st );
-
-    rpc.queueCall( rigSelected );
-
-}
 
 void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
 {

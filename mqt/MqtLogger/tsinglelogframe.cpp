@@ -106,7 +106,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
 
     // To rig controller
-    connect(FKHRigControlFrame, SIGNAL(radioRequestInfo()), this, SLOT(sendRequestInfoFromRadio()));
 
     connect(FKHRigControlFrame, SIGNAL(radioDisconnected()), this, SLOT(invalidateCacheOnDisconnect()));
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
@@ -463,7 +462,6 @@ void TSingleLogFrame::buildScreenLayout()
                     {
                         elementScrollArea->setWidget(FKHRigControlFrame);
                         FKHRigControlFrame->setContest(ct);
-                        sendRequestInfoFromRadio();                 // get radio details
                         break;
                     }
                     case sctRotControl:
@@ -1411,15 +1409,6 @@ void TSingleLogFrame::on_SetRitEnableState(bool s)
 //---- Send to RigController
 
 
-void TSingleLogFrame::sendRequestInfoFromRadio()
-{
-    int a = 1;
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-    {
-        LogContainer->sendDM->sendRigGetRigInfo();
-    }
-
-}
 
 
 void TSingleLogFrame::sendRadioFreq(QString freq)

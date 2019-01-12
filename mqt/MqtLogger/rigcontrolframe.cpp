@@ -122,10 +122,34 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     on_FontChanged();
 
+
+    if (listOfRadios.isEmpty() && LogContainer->sendDM->getRigCache()->getRigListCount() > 0)
+    {
+        listOfRadios = LogContainer->sendDM->rigs();
+    }
+
+    if (allRadioDetails.isEmpty())
+    {
+        if (LogContainer->sendDM->getRigCache()->getRigDetailCount() == listOfRadios.count())
+        {
+            QVector<PubSubName> rigList = LogContainer->sendDM->getRigCache()->getRigList();
+            foreach (PubSubName psn, rigList)
+            {
+                RigDetails& selDetail = LogContainer->sendDM->getRigCache()->getDetails(psn);
+                setTransVertOffset(selDetail.transverterOffset().getValue(), psn);
+                setTransVertSwitch(selDetail.transverterSwitch().getValue(), psn);
+                setTransVertEnabled(selDetail.transverterEnabled().getValue(), psn);
+                setTransVertStatus(selDetail.transverterStatus().getValue(), psn);
+                setVolumeStatus(selDetail.volumeStatus().getValue(), psn);
+                setRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
+                setBandList(selDetail.bandList().getValue(), psn);
+            }
+        }
+    }
+
+
     traceMsg(QString("RigControlFrame Started"));
 
-    //(QString("rigControlFrame request riglist and rigdetails"));
-    //emit radioRequestInfo();
 }
 
 RigControlFrame::~RigControlFrame()

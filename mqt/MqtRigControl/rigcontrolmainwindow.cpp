@@ -114,16 +114,15 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     setupRadio->setAppName(appName);
 
 
-    //if (appName.length() > 0)
-    //{
+    if (appName.length() > 0)
+    {
         // init cache with radio data
-    //    trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
-    //    sendRadioListLogger();
-    //    initCacheData();
+        trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
+        sendRadioListLogger();
+        initCacheData();
 
-
-    //    msg->rigCache.publish();
-    //}
+        msg->rigCache.publish();
+    }
 
 
 

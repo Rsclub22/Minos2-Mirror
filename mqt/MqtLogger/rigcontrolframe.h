@@ -174,7 +174,6 @@ signals:
     void ritStatus(bool);
     void radioDisconnected();
 
-    void radioRequestInfo();
 
 private slots:
     void on_FontChanged();
