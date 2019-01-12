@@ -121,7 +121,11 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
     on_FontChanged();
+
     traceMsg(QString("RigControlFrame Started"));
+
+    //(QString("rigControlFrame request riglist and rigdetails"));
+    //emit radioRequestInfo();
 }
 
 RigControlFrame::~RigControlFrame()

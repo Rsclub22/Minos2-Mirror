@@ -252,6 +252,26 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const Q
 
 }
 
+void TSendDM::sendRigGetRigInfo()
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid));
+    st->addMember( select, rpcConstants::selected );
+
+
+    st->addMember( QString(""), rpcConstants::rigSendRadioInfo );
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+
+}
+
 void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
 {
     trace(QString("SendDM sendRigControlFreq = %1").arg(freq));
@@ -450,9 +470,16 @@ void TSendDM::notifyRigDetailChanges()
         }
         selDetail.clearDirty();
     }
-
-    radioLoaded = true;
-    emit setRadioLoaded();
+/*
+    if (!radioLoaded )
+    {
+        if (rigCache.getRigDetailCount() == rigCache.getRigListCount())
+        {
+            radioLoaded = true;
+            emit setRadioLoaded();      // this should load the radio if available
+        }
+    }
+*/
 }
 
 
@@ -706,8 +733,8 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             {
                 trace("SendRPC set rigList and loaded " + an.getValue());
                 rigCache.addRigList(an.getValue());
-                //radioLoaded = true;
-                //emit setRadioLoaded();
+                radioLoaded = true;
+                emit setRadioLoaded();
                 emit setRadioList();
             }
             else if ( an.getCategory() == rpcConstants::RotatorCategory && an.getKey() == rpcConstants::rotatorList )

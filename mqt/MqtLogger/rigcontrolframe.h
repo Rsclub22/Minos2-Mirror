@@ -173,7 +173,8 @@ signals:
     void sendRitFreq(int);
     void ritStatus(bool);
     void radioDisconnected();
-    //void newBandList();
+
+    void radioRequestInfo();
 
 private slots:
     void on_FontChanged();

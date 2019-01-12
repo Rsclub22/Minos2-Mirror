@@ -114,15 +114,16 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     setupRadio->setAppName(appName);
 
 
-    if (appName.length() > 0)
-    {
+    //if (appName.length() > 0)
+    //{
         // init cache with radio data
-        sendRadioListLogger();
-        initCacheData();
+    //    trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
+    //    sendRadioListLogger();
+    //    initCacheData();
 
 
-        msg->rigCache.publish();
-    }
+    //    msg->rigCache.publish();
+    //}
 
 
 
@@ -175,7 +176,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     if (appName.length() > 0)
     {
-        logMessage((QString("Read Current Radio for AppName %1 from logger").arg(appName)));
+        logMessage((QString("Radio Selection for Current Radio, for AppName %1, will be from logger").arg(appName)));
 
     }
     else
@@ -384,11 +385,11 @@ void RigControlMainWindow::initSelectRadioBox()
         ui->selectRadioBox->addItem(setupRadio->availRadioData[i]->radioName);
     }
 
-    if (appName.length() > 0)
-    {
-        sendRadioListLogger();
+    //if (appName.length() > 0)
+    //{
+    //    sendRadioListLogger();
 
-    }
+    //}
 }
 
 void RigControlMainWindow::selectRadio()

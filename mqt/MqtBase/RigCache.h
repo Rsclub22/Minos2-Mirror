@@ -23,6 +23,15 @@ public:
         publishDetails();
     }
 
+    int getRigDetailCount()
+    {
+        return rigDetails.count();
+    }
+
+    int getRigListCount()
+    {
+        return rigList.count();
+    }
     void setStateString(const AnalysePubSubNotify & an);
     QString getDetailsString(const PubSubName &name) const;
     void setDetailsString(const AnalysePubSubNotify & an);

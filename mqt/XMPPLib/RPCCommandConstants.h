@@ -147,6 +147,7 @@ static const QString rigRitRadioStatus     = QT_TR_NOOP("RitRadioStatus");
 static const QString rigRadioVolLevel      = QT_TR_NOOP("RadioVolLevel");
 static const QString rigLogVolLevel      = QT_TR_NOOP("LogVolLevel");
 static const QString rigVolStatus           = QT_TR_NOOP("VolStatus");
+static const QString rigSendRadioInfo    = QT_TR_NOOP("SendRadioInfo");
 static const QString rigTpm                 = QT_TR_NOOP("Tpm");
 }
 #endif // RPCCOMMANDRCONSTANTS_H

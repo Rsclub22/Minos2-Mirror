@@ -234,6 +234,8 @@ private slots:
     void onSplitterMoved(int, int);
 
     void sendRadioVolume(int);
+    void sendRequestInfoFromRadio();
+
     void on_FontChanged();
     void invalidateCacheOnDisconnect();
     void dxSpotToLog(memoryData::memData);
@@ -248,6 +250,7 @@ public:
     void on_SetRitEnableStatus(bool status, PubSubName psn);
     void on_SetBandList(QString s, PubSubName psn);
     void on_SetTransVertEnabled(bool status, PubSubName psn);
+
 };
 
 #endif // TSINGLELOGFRAME_H
