@@ -197,7 +197,7 @@ private slots:
 
     void on_RadioLoaded();
     void on_SetRadioList();
-    void on_SetBandList(QString);
+    //void on_SetBandList(QString);
     void on_SetMode(QString);
     void on_SetFreq(QString);
     void on_SetRitFreq(QString);
@@ -205,9 +205,6 @@ private slots:
     void on_SetVolume(int level);
     void on_SetRadioStatus(QString);
     void on_SetRadioTpm(int);
-    void on_SetRadioTxVertState(bool s);
-    void on_SetRitEnableState(bool s);
-    void on_SetRadioVolumeState(bool s);
 
     void on_RotatorLoaded();
     void on_RotatorList();
@@ -237,11 +234,21 @@ private slots:
     void onSplitterMoved(int, int);
 
     void sendRadioVolume(int);
+
     void on_FontChanged();
     void invalidateCacheOnDisconnect();
     void dxSpotToLog(memoryData::memData);
 public:
     void sendTpm(int t, QString f);
+    
+    void on_SetTransVertOffset(double offset, PubSubName psn);
+    void on_SetTransVertSwitch(int switchNum, PubSubName psn);
+    void on_SetTransVertStatus(bool status, PubSubName psn);
+    void on_SetVolumeStatus(bool status, PubSubName psn);
+
+    void on_SetRitEnableStatus(bool status, PubSubName psn);
+    void on_SetBandList(QString s, PubSubName psn);
+    void on_SetTransVertEnabled(bool status, PubSubName psn);
 
 };
 

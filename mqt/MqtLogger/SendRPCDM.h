@@ -34,7 +34,8 @@ class TSendDM : public QObject
 
       QString loggerUuid;
 
-   public:  		// User declarations
+
+public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();
 
@@ -82,9 +83,16 @@ class TSendDM : public QObject
       const RigDetails &getRigDetails(const QString &);
 
       void notifyRigChanges();
+      void notifyRigDetailChanges();
 
       
       void notifyRotChanges();
+
+      RigCache* getRigCache()
+      {
+          return &rigCache;
+      }
+
 
 private slots:
       void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );

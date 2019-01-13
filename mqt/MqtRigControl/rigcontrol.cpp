@@ -451,7 +451,15 @@ pbwidth_t RigControl::getPassBand()
 
 bool RigControl::supportVolControl(int rigNumber)
 {
-    return (rigHasGetLevel(rigNumber, RIG_LEVEL_AF) & rigHasSetLevel(rigNumber, RIG_LEVEL_AF));
+    if ((rigHasGetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (rigHasSetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF))
+    {
+        return true;
+    }
+    else
+    {
+
+        return false;
+    }
 }
 
 int RigControl::setVolume(vfo_t vfo, float val)

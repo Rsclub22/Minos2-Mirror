@@ -127,6 +127,8 @@ void RigCache::setDetails(const PubSubName &name, const RigDetails &details)
     rigDetails[name] = details;
 }
 
+
+
 bool RigCache::setSelected(const PubSubName &name, const QString &loggeruuid, const QString &contestuuid)
 {
     trace("setSelected radio " + name.toString()+ " logger " + loggeruuid + " contest " + contestuuid);
@@ -233,17 +235,29 @@ void RigCache::setStatus(const PubSubName &name, const QString &status)
     rigStates[name].setStatus(status);
 }
 
-void RigCache::setFreq(const PubSubName &name, double freq)
+void RigCache::setRadioFreq(const PubSubName &name, double freq)
 {
-    rigStates[name].setFreq(freq);
+    rigStates[name].setRadioFreq(freq);
 }
-void RigCache::setMode(const PubSubName &name, const QString &mode)
+void RigCache::setLogFreq(const PubSubName &name, double freq)
 {
-    rigStates[name].setMode(mode);
+    rigStates[name].setLogFreq(freq);
 }
-void RigCache::setVolume(const PubSubName &name, const int level)
+void RigCache::setRadioMode(const PubSubName &name, const QString &mode)
 {
-    rigStates[name].setVolume(level);
+    rigStates[name].setRadioMode(mode);
+}
+void RigCache::setLogMode(const PubSubName &name, const QString &mode)
+{
+    rigStates[name].setLogMode(mode);
+}
+void RigCache::setRadioVolume(const PubSubName &name, const int level)
+{
+    rigStates[name].setRadioVolume(level);
+}
+void RigCache::setLogVolume(const PubSubName &name, const int level)
+{
+    rigStates[name].setLogVolume(level);
 }
 
 void RigCache::setTransverterOffset(const PubSubName &name, double transverterOffset)
@@ -253,6 +267,10 @@ void RigCache::setTransverterOffset(const PubSubName &name, double transverterOf
 void RigCache::setTransverterSwitch(const PubSubName &name, int transverterSwitch)
 {
     rigDetails[name].setTransverterSwitch(transverterSwitch);
+}
+void RigCache::setTransverterEnabled(const PubSubName &name, bool transverterEnabled)
+{
+    rigDetails[name].setTransverterEnabled(transverterEnabled);
 }
 void RigCache::setTransverterStatus(const PubSubName &name, bool transverterStatus)
 {
@@ -266,9 +284,13 @@ void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {
     rigDetails[name].setBandList(bands);
 }
-void RigCache::setRitFreq(const PubSubName &name, int freq)
+void RigCache::setRadioRitFreq(const PubSubName &name, int freq)
 {
-    rigStates[name].setRitFreq(freq);
+    rigStates[name].setRadioRitFreq(freq);
+}
+void RigCache::setLogRitFreq(const PubSubName &name, int freq)
+{
+    rigStates[name].setLogRitFreq(freq);
 }
 void RigCache::setRitEnableStatus(const PubSubName &name, bool ritEnableStatus)
 {
@@ -307,6 +329,7 @@ void RigCache::publishState()
 void RigCache::publishDetails()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();
+    trace("publishRigDetails");
     for(QMap<PubSubName, RigDetails>::iterator i = rigDetails.begin(); i != rigDetails.end(); i++ )
     {
         if (i.value().isDirty())

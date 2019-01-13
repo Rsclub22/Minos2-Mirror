@@ -262,8 +262,8 @@ void MainWindow::on_transfer21Button_clicked()
 
         QSharedPointer<RPCParam>select(new RPCStringParam(selc ));
         st->addMember( select, rpcConstants::selected );
-
-        st->addMember( convertFreqToStr(lFreq + transvertOffset), rpcConstants::rigControlFreq );
+/******************************************* needs fixing *************************/
+        //st->addMember( convertFreqToStr(lFreq + transvertOffset), rpcConstants::rigControlFreq );
         rpc.getCallArgs() ->addParam( st );
 
         rpc.queueCall( rigSelected);
@@ -304,8 +304,10 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
 
             if (selState.isDirty())
             {
-                mode = selState.mode().getValue();
-                freq = selState.freq().getValue();
+               /*************** needs fixing ******************************************/
+
+                // mode = selState.mode().getValue();
+               // freq = selState.freq().getValue();
                 //                   status = selState.status();
                 selState.clearDirty();
                 ui->QF1Label->setText(convertFreqToStr(freq));
