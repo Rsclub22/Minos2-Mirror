@@ -122,6 +122,10 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     on_FontChanged();
 
+    traceMsg(QString("RigControlFrame Started"));
+
+    // now check if we have the details to launch a radio selection
+
 
     if (listOfRadios.isEmpty() && LogContainer->sendDM->getRigCache()->getRigListCount() > 0)
     {
@@ -148,7 +152,13 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     }
 
 
-    traceMsg(QString("RigControlFrame Started"));
+    // start timer to wait for bandlist and rigdetails to launch
+    launchRadioSelectTimer = new QTimer(this);
+    launchRadioSelectCount = 5;     // wait five seconds
+    connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
+    launchRadioSelectTimer->start(1000);
+
+
 
 }
 
@@ -166,6 +176,48 @@ void RigControlFrame::on_FontChanged()
     cf.setBold(true);
     ui->freqInput->setFont(cf);
 }
+
+
+void RigControlFrame::checkRigDetailsAvail()
+{
+
+    launchRadioSelectCount--;
+    if (launchRadioSelectCount == 0)
+    {
+        // timed out waiting for rigdetails
+        launchRadioSelectTimer->stop();
+        trace(QString("rigControlFrame: Timed out waiting for rigdetails"));
+        return;
+    }
+    else if (ct && ( ct->isProtected() || ct != TContestApp::getContestApp() ->getCurrentContest()))
+    {
+        launchRadioSelectTimer->stop();
+        return;
+    }
+
+    if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        if (!ct->radioName.getValue().toString().isEmpty() )
+        {
+            if (allRadioDetails.contains(ct->radioName.getValue().toString() ))
+            {
+               if (allRadioDetails[ct->radioName.getValue().toString()].getBandListCount() > 0)
+               {
+                   launchRadioSelectTimer->stop();
+                   trace(QString("rigControlFrame: start select radio %1, mode %2").arg(ct->radioName.getValue().toString()).arg(ct->currentMode.getValue()));
+                   setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
+               }
+            }
+
+        }
+
+    }
+
+
+}
+
+
+
 
 void RigControlFrame::setContest(BaseContestLog *c)
 {
@@ -376,12 +428,12 @@ void RigControlFrame::setRadioLoaded()
     radioLoaded = true;
     ui->modelbl->setVisible(true);
 
-    if (ct && !ct->isProtected())
-    {
+    //if (ct && !ct->isProtected())
+   // {
         // this sets the radio on frame launch
-        trace(QString("setRadioList:: setRadioName - radioName = %1, mode = %2").arg(ct->radioName.getValue().toString()).arg(ct->currentMode.getValue()));
-        setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
-    }
+    //    trace(QString("setRadioList:: setRadioName - radioName = %1, mode = %2").arg(ct->radioName.getValue().toString()).arg(ct->currentMode.getValue()));
+   //     setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
+   // }
 
     setTpm(1);
 }
@@ -971,6 +1023,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
             {
                 emit selectRadio(radioName, mode);  // send radio and mode if appended.
                 selRadioDetails = RadioDetails();
+                createActiveBandList(selRadioDetails.getBandList());
             }
             else
             {
@@ -979,6 +1032,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                 {
                     trace(QString("setRadioName:: Select Radio = %1 Mode = %2 on rigcontrol").arg(radioName).arg(mode));
                     selRadioDetails = allRadioDetails[selRadioName];
+                    createActiveBandList(selRadioDetails.getBandList());
                     emit selectRadio(radioName, mode);  // send radio and mode if appended.
 
                     setRadioFreq();
@@ -1014,7 +1068,7 @@ void RigControlFrame::setRadioFreq()
         return;
     }
 
-    createActiveBandList(selRadioDetails.getBandList());
+    //createActiveBandList(selRadioDetails.getBandList());
 
     if (listOfBands.isEmpty())
     {

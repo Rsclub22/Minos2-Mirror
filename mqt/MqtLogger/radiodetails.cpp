@@ -72,3 +72,7 @@ QString RadioDetails::getBandList()
 {
     return bandList;
 }
+int RadioDetails::getBandListCount()
+{
+    return bandList.count();
+}

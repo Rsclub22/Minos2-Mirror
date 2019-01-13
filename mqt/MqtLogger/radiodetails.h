@@ -21,6 +21,7 @@ public:
     bool getRitEnableStatus();
     void setBandList(QString bandList);
     QString getBandList();
+    int getBandListCount();
 
 
 private:

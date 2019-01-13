@@ -206,6 +206,7 @@ private slots:
     void setRadioFreq();
 
 
+    void checkRigDetailsAvail();
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -246,7 +247,7 @@ private:
     bool ritOn;
     bool ritEditOn;
     //QString curRit;
-    //bool expectBandList;
+
 
 
     QStringList listOfRadios;
@@ -255,10 +256,9 @@ private:
     QString radioName;
     QString rigAppName;
     QString radioState;
-    //QStringList listOfBands;
 
-    //QTimer *bandListTimer;
-    //bool bandListRxError;
+    QTimer *launchRadioSelectTimer;
+    int launchRadioSelectCount;
 
     QString lastFreq;
 
