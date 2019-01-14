@@ -535,7 +535,7 @@ void RigControlMainWindow::upDateRadio()
                     modelNumber = irigctld_radioNumber;
                 }
 
-                //buildSupBandList(ridx, modelNumber);
+                buildSupBandList(ridx, modelNumber, setupRadio->currentRadio.radioTransSupBands);
 
                 // does the radio support control of volume control
 
@@ -1370,7 +1370,8 @@ void RigControlMainWindow::initCacheData()
         for (int i = 0; i < setupRadio->availRadioData.count(); i++)
         {
             QStringList supBandList;
-            buildSupBandList(i, supBandList);
+            int radioModelNumber = setupRadio->availRadioData[i]->radioModelNumber;
+            buildSupBandList(i, radioModelNumber, supBandList);
             sendBandListLogger(i, supBandList);
             int rmn = setupRadio->availRadioData[i]->radioModelNumber;
             bool f = radio->supportVolControl(rmn);
@@ -1390,10 +1391,10 @@ void RigControlMainWindow::initCacheData()
 
 
 
-void RigControlMainWindow::buildSupBandList(int radioIdx, QStringList &bandList)
+void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList)
 {
     bandList.clear();
-    int radioModelNumber = setupRadio->availRadioData[radioIdx]->radioModelNumber;
+    //int radioModelNumber = setupRadio->availRadioData[radioIdx]->radioModelNumber;
 
     // find the bands the radio supports
     QStringList supBandsList;
