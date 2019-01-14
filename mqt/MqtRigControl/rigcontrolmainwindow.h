@@ -265,7 +265,7 @@ private:
     void clearTransVertSupport();
 
     bool readTestStandAloneFlag();
-    void buildSupBandList(int index, QStringList& bandList);
+    void buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList);
     void buildSupportedRadioBands(int radioModelNumber, QStringList& supBandList);
     bool findSupRadioBand(const QString band, const QStringList& supBandsList);
     bool findSupTransBand(const QString band, const int radioIdx);
@@ -275,6 +275,7 @@ private:
 
     void sendVolStatusToLog(const int radIdx, bool status);
     void sendTransVertEnabled(bool status);
+
 
 private slots:
 
