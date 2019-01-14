@@ -84,10 +84,14 @@ SOURCES += \
     clusterclientframe.cpp \
     volumeslider.cpp \
     tminosbshelpform.cpp \
-    radiodetails.cpp
+    radiodetails.cpp \
     WsjtxFrame.cpp \
-    DecodesModel.cpp
-
+    DecodesModel.cpp \
+    MessageServer.cpp \
+    NetworkMessage.cpp \
+    qt_helpers.cpp \
+    Radio.cpp \
+    RadioMetaType.cpp
 
 HEADERS  += \
     AdifImport.h \
@@ -142,9 +146,17 @@ HEADERS  += \
     clusterclientframe.h \
     volumeslider.h \
     tminosbshelpform.h \
-    radiodetails.h
+    radiodetails.h \
     WsjtxFrame.h \
-
+    DecodesModel.hpp \
+    MessageServer.hpp \
+    NetworkMessage.hpp \
+    pimpl_h.hpp \
+    pimpl_impl.hpp \
+    Radio.hpp \
+    pimpl_h.hpp \
+    pimpl_impl.hpp \
+    qt_helpers.hpp
 
 FORMS    += \
     contestdetails.ui \

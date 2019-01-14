@@ -17,8 +17,7 @@ SUBDIRS += \
     MqtBandmap \
     MqtMonitor \
     MqtRigControl \
-    Qs1rSync \
-    MqtWsjtxConnector
+    Qs1rSync
 
 win32 {
 greaterThan(QT_MAJOR_VERSION, 4) : greaterThan(QT_MINOR_VERSION, 8) {
