@@ -138,14 +138,6 @@ private:
 
 
     QVector<QPushButton*> supRadioInd;
-    const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color: white ;\n");
-    const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue ; \n");
-    const QString SUP_RADIO_INDICATOR_TRANSVERT_STYLE = QString("background-color: yellow ; \n");
-    const QString SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE = QString("background-color: orange ; \n");
-    const QString RIT_STATUS_OFF_STYLE = QString("background-color:  white ;\n");
-    const QString RIT_STATUS_ON_STYLE = QString("background-color:  orange ;\n");
-    const QString RIT_RADIO_GETSETFREQ_INDICATOR_FALSE = QString("background-color: white ;\n");
-    const QString RIT_RADIO_GETSETFREQ_INDICATOR_TRUE = QString("background-color: blue ;\n");
     QString selTransVertBandIndicator = "";
 
     void initActionsConnections();
@@ -181,7 +173,7 @@ private:
     void closeEvent(QCloseEvent *event);
 
 
-    void sendBandListLogger();
+    //void sendBandListLogger();
     void sendStatusLogger(const QString &message);
     void sendStatusToLogDisConnected();
     void sendStatusToLogConnected();
@@ -213,7 +205,7 @@ private:
 
     void setTransVertDisplayVisible(bool visible);
     void writeWindowTitle(QString appName);
-    void sendTransVertStatus(bool status);
+    void sendTransVertStatusToLog(bool status);
 
     void refreshRadio();
 
@@ -238,7 +230,7 @@ private:
 
     int getVolume(vfo_t vfo);
     int setVolume(vfo_t vfo, int level);
-    void sendVolStatusToLog(bool status);
+    //void sendVolStatusToLog(bool status);
 
     int getSignalStrength(vfo_t vfo);
     void displaySignalStrength(int level);
@@ -265,12 +257,24 @@ private:
     void getRigctldNames(QString address, quint16 port);
     void clrRigctldNames();
 
-    bool findSupRadioBand(const QString band);
-    void buildSupportedRadioBands(int radioModelNumber);
-    void buildSupBandList(int radioModelNumber);
-    bool findSupTransBand(const QString band);
+    //bool findSupRadioBand(const QString band);
+    //void buildSupportedRadioBands(int radioModelNumber);
+    //void buildSupBandList(int radioModelNumber);
+    //bool findSupTransBand(const QString band);
 
     void clearTransVertSupport();
+
+    bool readTestStandAloneFlag();
+    void buildSupBandList(int index, QStringList& bandList);
+    void buildSupportedRadioBands(int radioModelNumber, QStringList& supBandList);
+    bool findSupRadioBand(const QString band, const QStringList& supBandsList);
+    bool findSupTransBand(const QString band, const int radioIdx);
+    void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
+
+    void initCacheData();
+
+    void sendVolStatusToLog(const int radIdx, bool status);
+    void sendTransVertEnabled(bool status);
 
 private slots:
 

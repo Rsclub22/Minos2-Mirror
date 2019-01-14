@@ -50,7 +50,7 @@ public:
     ~RigSetupDialog();
 
 
-    QString currentRadioName;
+
     scatParams currentRadio;
 
     QVector<scatParams*> availRadioData;
@@ -70,10 +70,14 @@ public:
     void setAppName(QString name);
     int comportAvial(int radioNum, QString comport);
     int findCurrentRadio(QString currentRadioName);
+    void setCurrentRadioName(QString name);
+    QString getCurrentRadioName();
     void setTabToCurrentRadio();
 
     void fillPortsInfo();
     void loadAvailComports();
+
+
 
 signals:
 
@@ -107,7 +111,9 @@ private:
     bool chkloadflg = false;
     QString appName = "";
 
+    bool radioRemoved;
 
+    QString currentRadioName;
 
     void saveSettings();
 

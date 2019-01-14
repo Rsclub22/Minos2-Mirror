@@ -19,6 +19,7 @@ class RigDetails: public PubSubValue
     CacheSelection _selected;
     MinosItem<double> _transverterOffset;
     MinosItem<int> _transverterSwitch;
+    MinosItem<bool> _transverterEnabled;
     MinosItem<bool> _transverterStatus;
     MinosItem<bool> _volumeStatus;
     MinosItem<bool> _ritEnableStatus;
@@ -40,6 +41,7 @@ public:
     MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     MinosItem<double> transverterOffset() const;
     MinosItem<int> transverterSwitch() const;
+    MinosItem<bool> transverterEnabled() const;
     MinosItem<bool> transverterStatus() const;
     MinosItem<bool> volumeStatus() const;
     MinosItem<bool> ritEnableStatus() const;
@@ -48,6 +50,7 @@ public:
     void setSelected(const QString &loggeruuid, const QString &selected);
     void setTransverterOffset(double transverterOffset);
     void setTransverterSwitch(int transverterSwitch);
+    void setTransverterEnabled(bool transverterEnabled);
     void setTransverterStatus(bool transverterStatus);
     void setVolumeStatus(bool volumeStatus);
     void setBandList(const QString &bandList);

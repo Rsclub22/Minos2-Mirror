@@ -29,10 +29,10 @@
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 
-
-RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QWidget *parent):
+RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
     QWidget(parent),
-    ui(new Ui::rigSetupForm)
+    ui(new Ui::rigSetupForm),
+    transverterRemoved(false)
 {
 
 
@@ -44,6 +44,8 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     radioData = _radioData;
 
     bands = _bands;
+
+    ui_RadioTab = _ui_RadioTab;
 
 
     fillRadioModelInfo();  // add radio models to drop down
@@ -99,7 +101,10 @@ scatParams* RigSetupForm::getRadioData()
 }
 
 
-
+void RigSetupForm::setCurrentRadioName(QString name)
+{
+    currentRadioName = name;
+}
 
 
 /************************ Radio Model Dialogue *********************/
@@ -1076,12 +1081,25 @@ void RigSetupForm::removeTransVerter()
     }
 
     int currentIndex = ui->transVertTab->currentIndex();
-    QString currentName = ui->transVertTab->tabText(currentIndex);
+    QString currentTransVertName = ui->transVertTab->tabText(currentIndex);
+
+
+    if (currentRadioName == ui_RadioTab->tabText(ui_RadioTab->currentIndex()))
+    {
+        // can't remove transverter on current RadioName
+        QMessageBox msgBox;
+        msgBox.setText(QString("You can not remove this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
+        msgBox.exec();
+        return;
+    }
+
+
+
 
     int status = QMessageBox::question( this,
                             tr("Remove Transverter"),
                             tr("Do you really want to remove transverter - %1?")
-                            .arg(currentName),
+                            .arg(currentTransVertName),
                             QMessageBox::Yes|QMessageBox::Default,
                             QMessageBox::No|QMessageBox::Escape,
                             QMessageBox::NoButton);
@@ -1091,25 +1109,30 @@ void RigSetupForm::removeTransVerter()
         return;
     }
 
+
     // remove this transverter
     ui->transVertTab->removeTab(currentIndex);
+    transVertTab.removeAt(currentIndex);
+
     radioData->transVertNames.removeAt(currentIndex);
     radioData->transVertSettings.removeAt(currentIndex);
-    transVertTab.removeAt(currentIndex);
+
     radioData->numTransverters--;
-    //removedTransVertTabs.append(currentName);
+    transverterRemoved = true;
 
-
-    //QString fileName = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
-
-    //QSettings config(fileName, QSettings::IniFormat);
-    //config.beginGroup(currentName);
-    //config.remove("");      // remove all keys for this group
-    //config.endGroup();
 
 }
 
 
+bool RigSetupForm::getTransVertRemovedFlag()
+{
+    return transverterRemoved;
+}
+
+void RigSetupForm::setTransVertRemovedFlag(bool value)
+{
+    transverterRemoved = value;
+}
 
 void RigSetupForm::changeBand()
 {
@@ -1120,6 +1143,20 @@ void RigSetupForm::changeBand()
     }
 
     int tabNum = ui->transVertTab->currentIndex();
+    QString currentTransVertName = ui->transVertTab->tabText(tabNum);
+
+
+    if (currentRadioName == ui_RadioTab->tabText(ui_RadioTab->currentIndex()))
+    {
+        // can't change transverter band on current RadioName
+        QMessageBox msgBox;
+        msgBox.setText(QString("You can not change band on this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
+        msgBox.exec();
+        return;
+    }
+
+
+
 
     AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
     if (addTransDialog.exec() != QDialog::Accepted)
@@ -1184,4 +1221,11 @@ void RigSetupForm::transVertTabEnable(bool enable)
     ui->changeBand->setDisabled(!enable);
     //ui->transvertFrame->setDisabled(!enable);
     ui->transVertTab->setDisabled(!enable);
+}
+
+
+void RigSetupForm::transVertTabRemove(int tabNum)
+{
+    ui->transVertTab->removeTab(tabNum);
+    transVertTab.removeAt(tabNum);
 }
