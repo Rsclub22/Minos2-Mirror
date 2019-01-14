@@ -106,6 +106,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
 
     // To rig controller
+
     connect(FKHRigControlFrame, SIGNAL(radioDisconnected()), this, SLOT(invalidateCacheOnDisconnect()));
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
 
@@ -1347,10 +1348,43 @@ void TSingleLogFrame::on_SetRadioList()
     FKHRigControlFrame->setRadioList();
 }
 
-void TSingleLogFrame::on_SetBandList(QString s)
+void TSingleLogFrame::on_SetTransVertOffset(double offset, PubSubName psn)
 {
-    FKHRigControlFrame->setBandList(s);
+    FKHRigControlFrame->setTransVertOffset( offset, psn);
 }
+
+void TSingleLogFrame::on_SetTransVertSwitch(int switchNum, PubSubName psn)
+{
+    FKHRigControlFrame->setTransVertSwitch(switchNum, psn);
+}
+
+void TSingleLogFrame::on_SetTransVertEnabled(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setTransVertEnabled(status, psn);
+}
+
+
+void TSingleLogFrame::on_SetTransVertStatus(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setTransVertStatus(status, psn);
+}
+
+void TSingleLogFrame::on_SetVolumeStatus(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setVolumeStatus( status, psn);
+}
+
+void TSingleLogFrame::on_SetRitEnableStatus(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setRitEnableStatus(status, psn);
+}
+
+
+void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
+{
+    FKHRigControlFrame->setBandList(s, psn);
+}
+
 
 void TSingleLogFrame::on_SetRadioStatus(QString s)
 {
@@ -1368,14 +1402,7 @@ void TSingleLogFrame::on_SetRadioTpm(int t)
     }
 }
 
-void TSingleLogFrame::on_SetRadioTxVertState(bool s)
-{
-    if ( this == LogContainer->getCurrentLogFrame() )
-    {
-        FKHRigControlFrame->setRadioTxVertState(s);
-    }
-}
-
+/*
 
 void TSingleLogFrame::on_SetRadioVolumeState(bool s)
 {
@@ -1392,8 +1419,9 @@ void TSingleLogFrame::on_SetRitEnableState(bool s)
         FKHRigControlFrame->setRitEnableState(s);
     }
 }
-
+*/
 //---- Send to RigController
+
 
 
 

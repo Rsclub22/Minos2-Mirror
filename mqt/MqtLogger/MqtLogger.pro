@@ -84,6 +84,7 @@ SOURCES += \
     clusterclientframe.cpp \
     volumeslider.cpp \
     tminosbshelpform.cpp \
+    radiodetails.cpp
     WsjtxFrame.cpp \
     DecodesModel.cpp
 
@@ -141,8 +142,8 @@ HEADERS  += \
     clusterclientframe.h \
     volumeslider.h \
     tminosbshelpform.h \
+    radiodetails.h
     WsjtxFrame.h \
-    DecodesModel.hpp
 
 
 FORMS    += \

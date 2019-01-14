@@ -235,7 +235,7 @@ void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &mode, 
 void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const QString &uuid)
 {
     rigCache.setSelected(s, loggerUuid, uuid);
-    rigCache.setMode(s, mode);
+    rigCache.setLogMode(s, mode);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -245,17 +245,20 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const Q
     st->addMember( select, rpcConstants::selected );
 
     st->addMember( s.toString(), rpcConstants::rigControlSelectRadioName );
-    st->addMember( mode, rpcConstants::rigControlMode );
+    st->addMember( mode, rpcConstants::rigControlLogMode );
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( s );
 
 }
 
+
+
 void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
 {
+    trace(QString("SendDM sendRigControlFreq = %1").arg(freq));
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setFreq(rigSelected, convertStrToFreq(freq));
+    rigCache.setLogFreq(rigSelected, convertStrToFreq(freq));
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -265,7 +268,7 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
 
-    st->addMember( freq, rpcConstants::rigControlFreq );
+    st->addMember( freq, rpcConstants::rigControlLogFreq );
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
@@ -275,7 +278,7 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setMode(rigSelected, mode);
+    rigCache.setLogMode(rigSelected, mode);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -283,7 +286,7 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
     st->addMember( logger, rpcConstants::loggerUuid );
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
-    st->addMember( mode, rpcConstants::rigControlMode );
+    st->addMember( mode, rpcConstants::rigControlLogMode );
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
@@ -294,7 +297,7 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf, int freq)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setRitFreq(rigSelected, freq);
+    rigCache.setLogRitFreq(rigSelected, freq);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -302,7 +305,7 @@ void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf, int freq)
     st->addMember( logger, rpcConstants::loggerUuid );
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
-    st->addMember( freq, rpcConstants::rigControlRitFreq );
+    st->addMember( freq, rpcConstants::rigControlLogRitFreq );
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
@@ -330,7 +333,7 @@ void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
 void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setVolume(rigSelected, level);
+    rigCache.setLogVolume(rigSelected, level);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -338,7 +341,7 @@ void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
     st->addMember( logger, rpcConstants::loggerUuid );
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
-    st->addMember( level, rpcConstants::rigVolLevel);
+    st->addMember( level, rpcConstants::rigLogVolLevel);
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
@@ -348,7 +351,7 @@ void TSendDM::sendRigControlTpm(TSingleLogFrame *tslf, int tpm, QString &freq)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setTpm(rigSelected, tpm);
-    rigCache.setFreq(rigSelected, convertStrToFreq(freq));
+    rigCache.setLogFreq(rigSelected, convertStrToFreq(freq));
 
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -358,7 +361,7 @@ void TSendDM::sendRigControlTpm(TSingleLogFrame *tslf, int tpm, QString &freq)
     QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
     st->addMember( select, rpcConstants::selected );
     st->addMember( tpm, rpcConstants::rigTpm);
-    st->addMember( freq, rpcConstants::rigControlFreq );
+    st->addMember( freq, rpcConstants::rigControlLogFreq );
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
@@ -379,6 +382,92 @@ void TSendDM::sendRotatorPreset(QString s)
     rpc.queueCall( rotSelected );
 }
 //---------------------------------------------------------------------------
+void TSendDM::notifyRigDetailChanges()
+{
+    QVector<PubSubName> riglist = rigCache.getRigList();
+    QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
+    foreach (PubSubName psn, riglist)
+    {
+        RigDetails& selDetail = rigCache.getDetails(psn);
+        if (selDetail.isDirty())
+        {
+            trace(QString("notifyRigDetailChanges: %1 is dirty, send to rigcontrol").arg(psn.toString()));
+            if (selDetail.transverterOffset().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetTransVertOffset(selDetail.transverterOffset().getValue(), psn);
+                }
+            }
+            if (selDetail.transverterSwitch().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetTransVertSwitch(selDetail.transverterSwitch().getValue(), psn);
+                }
+            }
+            if (selDetail.transverterEnabled().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetTransVertEnabled(selDetail.transverterEnabled().getValue(), psn);
+                }
+            }
+            if (selDetail.transverterStatus().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetTransVertStatus(selDetail.transverterStatus().getValue(), psn);
+                }
+            }
+            if (selDetail.volumeStatus().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetVolumeStatus(selDetail.volumeStatus().getValue(), psn);
+                }
+            }
+            if (selDetail.ritEnableStatus().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
+                }
+            }
+            if (selDetail.bandList().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetBandList(selDetail.bandList().getValue(), psn);
+                }
+            }
+
+        }
+        selDetail.clearDirty();
+    }
+/*
+    if (!radioLoaded )
+    {
+        if (rigCache.getRigDetailCount() == rigCache.getRigListCount())
+        {
+            radioLoaded = true;
+            emit setRadioLoaded();      // this should load the radio if available
+        }
+    }
+*/
+}
+
+
+
+
+
 void TSendDM::notifyRigChanges()
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
@@ -404,20 +493,20 @@ void TSendDM::notifyRigChanges()
                         trace("SendRPC Rig set tpm " + QString::number(selState.tpm().getValue()));
                         tslf->on_SetRadioTpm(selState.tpm().getValue());
                     }
-                    if (selState.mode().isDirty())
+                    if (selState.radioMode().isDirty())
                     {
-                        trace("SendRPC Rig set mode " + selState.mode().getValue());
-                        tslf->on_SetMode(selState.mode().getValue());
+                        trace("SendRPC Rig set mode " + selState.radioMode().getValue());
+                        tslf->on_SetMode(selState.radioMode().getValue());
                     }
-                    if (selState.freq().isDirty())
+                    if (selState.radioFreq().isDirty())
                     {
-                        trace("SendRPC Rig set freq " + convertFreqToStr(selState.freq().getValue()));
-                        tslf->on_SetFreq(convertFreqToStr(selState.freq().getValue()));
+                        trace("SendRPC Rig set freq " + convertFreqToStr(selState.radioFreq().getValue()));
+                        tslf->on_SetFreq(convertFreqToStr(selState.radioFreq().getValue()));
                     }
-                    if (selState.ritFreq().isDirty())
+                    if (selState.radioRitFreq().isDirty())
                     {
-                        trace("SendRPC Rig set ritFreq " + convertRitFreqToStr(selState.ritFreq().getValue()));
-                        tslf->on_SetRitFreq(convertRitFreqToStr(selState.ritFreq().getValue()));
+                        trace("SendRPC Rig set ritFreq " + convertRitFreqToStr(selState.radioRitFreq().getValue()));
+                        tslf->on_SetRitFreq(convertRitFreqToStr(selState.radioRitFreq().getValue()));
                     }
                     if (selState.ritRadioStatus().isDirty())
                     {
@@ -425,10 +514,10 @@ void TSendDM::notifyRigChanges()
                         trace("SendRPC Rig set ritRadioStatus " + (s = selState.ritRadioStatus().getValue() ? "On" : "Off"));
                         tslf->on_SetRitRadioStatus(selState.ritRadioStatus().getValue());
                     }
-                    if (selState.volLevel().isDirty())
+                    if (selState.radioVolLevel().isDirty())
                     {
-                        trace("SendRPC Rig set volume " + QString::number(selState.volLevel().getValue()));
-                        tslf->on_SetVolume(selState.volLevel().getValue());
+                        trace("SendRPC Rig set volume " + QString::number(selState.radioVolLevel().getValue()));
+                        tslf->on_SetVolume(selState.radioVolLevel().getValue());
                     }
                     if (selState.status().isDirty())
                     {
@@ -437,6 +526,8 @@ void TSendDM::notifyRigChanges()
                     }
                     selState.clearDirty();
                 }
+
+       /*
                 if (selDetailsUuid == frameUuid)
                 {
                     trace("Rig details distribution for " + selDetailsUuid);
@@ -463,6 +554,7 @@ void TSendDM::notifyRigChanges()
                     selDetail.clearDirty();
 
                 }
+       */
             }
         }
     }
@@ -661,6 +753,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             }
         }
 
+        notifyRigDetailChanges();
         notifyRigChanges();
         notifyRotChanges();
 
@@ -784,8 +877,8 @@ QStringList TSendDM::rigs()
     QVector<PubSubName> riglist = rigCache.getRigList();
     foreach (PubSubName psn, riglist)
     {
-        QString antname = psn.toString();
-        sl.append(antname);
+        QString rigname = psn.toString();
+        sl.append(rigname);
     }
     qSort(sl);
     return  sl;

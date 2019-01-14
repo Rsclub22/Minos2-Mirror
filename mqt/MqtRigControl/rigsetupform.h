@@ -21,7 +21,7 @@ class RigSetupForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QWidget *parent = nullptr);
+    explicit RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
     ~RigSetupForm();
 
 
@@ -97,6 +97,10 @@ public:
     void CIVEditVisible(bool visible);
     void transVertTabEnable(bool visible);
 
+    bool getTransVertRemovedFlag();
+    void transVertTabRemove(int tabNum);
+    void setTransVertRemovedFlag(bool value);
+
     void setTransVertTabText(int tabNum, QString tabName);
 
     void setAppName(QString name);
@@ -129,6 +133,8 @@ public:
     void loadRadioComports();
 
 
+
+    void setCurrentRadioName(QString name);
 signals:
     void transVertTabAdded(int);
 
@@ -170,12 +176,13 @@ private:
     RigControl *radio;
     scatParams *radioData;
 
-
+    QLogTabWidget* ui_RadioTab;
 
     //TransVertSetupForm *transVerter;
     QString appName;
 
-
+    bool transverterRemoved;
+    QString currentRadioName;
 
     void fillHandShakeInfo();
     void fillParityInfo();

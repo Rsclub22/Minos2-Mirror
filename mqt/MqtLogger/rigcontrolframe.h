@@ -4,10 +4,10 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
 //
 // Interprocess Control Logic
-// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2019
 //
 //
 //
@@ -23,7 +23,7 @@
 #include <QShortcut>
 #include "RPCCommandConstants.h"
 #include "rigmemcommondata.h"
-
+#include "radiodetails.h"
 
 namespace Ui {
     class RigControlFrame;
@@ -118,7 +118,7 @@ public:
 
     void setRadioLoaded();
     void setRadioList();
-    void setBandList(QString);
+
     void setMode(QString);
     void setVolume(int level);
     void setFreq(QString);
@@ -127,7 +127,6 @@ public:
     void setRadioName(QString, QString mode);
     void setRadioState(QString);
     void setTpm(int);
-    void setRadioTxVertState(bool s);
     void setRitEnableState(bool s);
 
     bool isRadioLoaded();
@@ -152,6 +151,17 @@ public:
 
     void setRadioVolumeState(bool state);
 
+    void setTransVertOffset(double offset, PubSubName psn);
+    void setTransVertSwitch(int switchNum, PubSubName psn);
+    void setTransVertStatus(bool status, PubSubName psn);
+    void setVolumeStatus(bool status, PubSubName psn);
+    void setRitEnableStatus(bool status, PubSubName psn);
+    void setBandList(QString s, PubSubName psn);
+
+    void createActiveBandList(QString);
+
+    void setTransVertEnabled(bool status, PubSubName psn);
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -163,7 +173,7 @@ signals:
     void sendRitFreq(int);
     void ritStatus(bool);
     void radioDisconnected();
-    void newBandList(bool expectBandList);
+
 
 private slots:
     void on_FontChanged();
@@ -191,11 +201,12 @@ private slots:
 
 
     void ritClearShortCutSelected();
-    void bandListTimeout();
+    //void bandListTimeout();
 
-    void setRadioFreq(bool expectBandList);
+    void setRadioFreq();
 
 
+    void checkRigDetailsAvail();
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -214,7 +225,7 @@ private:
     QMap<int, TuneMemoryButton *> tuneButtonMap;
     QVector<quickBandSelData> listOfBands;
 
-
+    QMap<PubSubName, RadioDetails> allRadioDetails;
 
     QShortcut* freqEditShortKey;
 
@@ -240,13 +251,14 @@ private:
 
 
     QStringList listOfRadios;
+    RadioDetails selRadioDetails;
+    PubSubName selRadioName;
     QString radioName;
     QString rigAppName;
     QString radioState;
-    //QStringList listOfBands;
 
-    QTimer *bandListTimer;
-    bool bandListRxError;
+    QTimer *launchRadioSelectTimer;
+    int launchRadioSelectCount;
 
     QString lastFreq;
 
@@ -293,6 +305,10 @@ private:
     void ritButtonOff();
 
     void setRadioBandWarning(QString s);
+    void setRadioTxVertEnabled(bool s);
+    void setRadioTxVertStatus(bool status);
+    void transVertIndicatorOn();
+    void transVertIndicatorOff();
 };
 
 
