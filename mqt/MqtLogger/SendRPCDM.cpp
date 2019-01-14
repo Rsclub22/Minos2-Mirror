@@ -917,6 +917,10 @@ void TSendDM::subscribeApps()
         {
             catMap[rpcConstants::clusterClientServer].push_back((*i));
         }
+        else if ((*i)->appType == "WsjtConnect")
+        {
+            catMap[rpcConstants::wsjtConnector].push_back((*i));
+        }
     }
 
     if (!servers.contains(config->getThisServerName()))

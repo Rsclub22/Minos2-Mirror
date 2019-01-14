@@ -11,6 +11,7 @@
 #include "MatchThisFrame.h"
 #include "MatchOtherFrame.h"
 #include "MatchArchiveFrame.h"
+#include "WsjtxFrame.h"
 
 #include "qsologframe.h"
 #include "rigcontrolframe.h"
@@ -68,6 +69,8 @@ class TSingleLogFrame : public QFrame
     MatchArchiveFrame *archiveMatchFrame = nullptr;
 
     ChatFrame *chatFrame = nullptr;
+
+    WsjtxFrame *wsjtxFrame = nullptr;
 
     ClusterClientFrame *clusterControlFrame = nullptr;
 

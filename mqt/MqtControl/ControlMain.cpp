@@ -514,6 +514,10 @@ void ControlMain::subscribeApps()
         {
             // no action
         }
+        else if ((*i)->appType == "WsjtConnect")
+        {
+            // no action
+        }
         else if ((*i)->appType == "RigControl")
         {
             catMap[rpcConstants::rigControlCategory].push_back((*i));

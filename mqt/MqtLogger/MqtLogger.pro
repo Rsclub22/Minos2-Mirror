@@ -83,7 +83,9 @@ SOURCES += \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
     volumeslider.cpp \
-    tminosbshelpform.cpp
+    tminosbshelpform.cpp \
+    WsjtxFrame.cpp \
+    DecodesModel.cpp
 
 
 HEADERS  += \
@@ -138,7 +140,9 @@ HEADERS  += \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
     volumeslider.h \
-    tminosbshelpform.h
+    tminosbshelpform.h \
+    WsjtxFrame.h \
+    DecodesModel.hpp
 
 
 FORMS    += \
@@ -180,7 +184,8 @@ FORMS    += \
     clusterclientfilterdialog.ui \
     clusterclientframe.ui \
     tstatsdispframe.ui \
-    tminosbshelpform.ui
+    tminosbshelpform.ui \
+    WsjtxFrame.ui
 
 
 DISTFILES += \

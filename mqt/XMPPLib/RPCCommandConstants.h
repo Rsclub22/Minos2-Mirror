@@ -143,5 +143,11 @@ static const QString rigRitRadioStatus     = QT_TR_NOOP("RitRadioStatus");
 static const QString rigVolLevel            = QT_TR_NOOP("VolLevel");
 static const QString rigVolStatus           = QT_TR_NOOP("VolStatus");
 static const QString rigTpm                 = QT_TR_NOOP("Tpm");
+
+// WSJT-X connector
+
+static const QString wsjtxConnectorApp      = QT_TR_NOOP("wsjtxConnector");
+static const QString wsjtClientServer       = QT_TR_NOOP("MinosWsjtClientServer");
+static const QString wsjtConnector          = QT_TR_NOOP("MinosWsjtConnector");
 }
 #endif // RPCCOMMANDRCONSTANTS_H

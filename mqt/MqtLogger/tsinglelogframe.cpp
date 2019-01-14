@@ -304,6 +304,12 @@ void TSingleLogFrame::createScreenComponents()
 
     chatFrame->setVisible(false);
 
+    wsjtxFrame = new WsjtxFrame(this);
+    wsjtxFrame->setObjectName(QStringLiteral("wsjtxFrame"));
+    wsjtxFrame->setFrameShape(QFrame::StyledPanel);
+    wsjtxFrame->setFrameShadow(QFrame::Raised);
+
+    wsjtxFrame->setVisible(false);
 
     // set frame to Vertical Layout, insert LogFrameSplitter
     verticalLayout = new QVBoxLayout(this);
@@ -332,6 +338,7 @@ void TSingleLogFrame::clearScreenLayout()
     otherMatchFrame->setContest(nullptr);
     archiveMatchFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
+    wsjtxFrame->setContest(nullptr);
 
     while (singleLogFrameSplitter->count())
     {
@@ -521,6 +528,13 @@ void TSingleLogFrame::buildScreenLayout()
                         clusterControlFrame->setContest(ct);
                         break;
 
+                    }
+                    case sctWsjtx:
+                    {
+                        elementScrollArea->setWidget(wsjtxFrame);
+                        wsjtxFrame->setVisible(true);
+                        wsjtxFrame->setContest(ct);
+                        break;
                     }
                 }
             }
