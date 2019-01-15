@@ -322,6 +322,7 @@ void RigSetupDialog::removeRadio()
     ui->radioTab->removeTab(currentIndex);
     availRadioData.remove(currentIndex);
     availRadios.removeAt(currentIndex);
+    radioTab.removeAt(currentIndex);
     numAvailRadios--;
     radioRemoved = true;
 
