@@ -162,6 +162,9 @@ public:
 
     void setTransVertEnabled(bool status, PubSubName psn);
 
+    void closeContest();
+
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
