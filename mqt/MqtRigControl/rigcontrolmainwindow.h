@@ -307,7 +307,7 @@ private slots:
     void sendRadioListLogger();
 
     void ritEnableChecked(int state);
-
+    void updateRigDetailsCache();
 
 #ifdef RIGCONTROL_TEST
 
@@ -315,6 +315,7 @@ private slots:
     void ritbuttontoggle();  // for test.... *************************
 signals:
 #endif
+
 
 
 };

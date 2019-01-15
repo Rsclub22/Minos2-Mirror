@@ -88,6 +88,7 @@ signals:
     void transVertSettingHasChanged();
 
     void radioSettingsSaved();
+    void upDateRadioDetailsCache();
 
 private slots:
 
@@ -137,7 +138,7 @@ private:
     void saveMgmList();
     void addTab(int tabNum, QString tabName);
     void loadSettingsToTab(int tabNum);
-    void saveRadio(int i);
+    //void saveRadio(int i);
     bool checkRadioNameMatch(QString radioName);
     void saveTranVerterSetting(int radioNum, int transVertNum, QSettings  &config);
     void readTranVerterSetting(int radioNum, int transVertNum, QSettings &config);

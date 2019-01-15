@@ -292,7 +292,8 @@ void RigControlMainWindow::initActionsConnections()
     connect(setupRadio, SIGNAL(currentRadioSettingChanged(QString)), this, SLOT(currentRadioSettingChanged(QString)));
     connect(setupRadio, SIGNAL(radioNameChange()), this, SLOT(updateSelectRadioBox()));
     connect(setupRadio, SIGNAL(radioTabChanged()), this, SLOT(updateSelectRadioBox()));
-    connect(setupRadio, SIGNAL(radioSettingsSaved()), this, SLOT(sendRadioListLogger()));
+    connect(setupRadio, SIGNAL(upDateRadioDetailsCache()), this, SLOT(updateRigDetailsCache()));
+
 
 
     // Message from Logger
@@ -1358,7 +1359,7 @@ void RigControlMainWindow::clrRigctldNames()
 
 
 
-/***************** init cache data ***************/
+/*****************  cache data ***************/
 
 
 void RigControlMainWindow::initCacheData()
@@ -1366,15 +1367,14 @@ void RigControlMainWindow::initCacheData()
 
     if (setupRadio->availRadioData.count() > 0)
     {
-        // bandlist
+
         for (int i = 0; i < setupRadio->availRadioData.count(); i++)
         {
             QStringList supBandList;
             int radioModelNumber = setupRadio->availRadioData[i]->radioModelNumber;
             buildSupBandList(i, radioModelNumber, supBandList);
             sendBandListLogger(i, supBandList);
-            int rmn = setupRadio->availRadioData[i]->radioModelNumber;
-            bool f = radio->supportVolControl(rmn);
+            bool f = radio->supportVolControl(radioModelNumber);
             sendVolStatusToLog(i, f);
         }
     }
@@ -1382,9 +1382,17 @@ void RigControlMainWindow::initCacheData()
 
 }
 
+// this is a bit brutal...updates all rigdetails even if data hasn't changed...
 
+void RigControlMainWindow::updateRigDetailsCache()
+{
+    // update riglist first
+    sendRadioListLogger();
+    // now rigdetails available before radio is opened
+    initCacheData();
+    msg->rigCache.publish();
 
-
+}
 
 
 /******************** Supported Bands  ********/
