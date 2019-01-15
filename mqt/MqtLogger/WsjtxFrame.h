@@ -8,6 +8,7 @@
 #include "MessageServer.hpp"
 
 using Frequency = MessageServer::Frequency;
+using port_type = MessageServer::port_type;
 
 namespace Ui {
 class WsjtxFrame;
@@ -25,19 +26,23 @@ public:
 private:
     Ui::WsjtxFrame *ui;
     BaseContestLog *ct = nullptr;
-    DecodesModel * decodes_model_;
-    MessageServer * server_;
+    DecodesModel * decodes_model_ = nullptr;
+    bool fast_mode_ = false;
     QString id_;
-    bool fast_mode_;
+
 
     class IdFilterModel final
       : public QSortFilterProxyModel
     {
     public:
-      IdFilterModel (QString const& client_id);
+      IdFilterModel ();
 
       void de_call (QString const&);
       void rx_df (int);
+      void setId(QString clientId)
+      {
+          client_id_ = clientId;
+      }
 
       QVariant data (QModelIndex const& proxy_index, int role = Qt::DisplayRole) const override;
 
@@ -51,6 +56,8 @@ private:
       int rx_df_;
     } decodes_proxy_model_;
 
+
+
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
@@ -61,6 +68,7 @@ public slots:
                          , QString const& report_received, QString const& tx_power, QString const& comments
                          , QString const& name, QDateTime time_on, QString const& operator_call
                          , QString const& my_call, QString const& my_grid);
+    void log_ADIF(QString const& id, QByteArray const& ADIF);
 
     bool fast_mode () const {return fast_mode_;}
 
@@ -74,16 +82,17 @@ public slots:
                               , QString const& message, bool low_confidence, bool off_air);
     void clear_decodes (QString const& client_id);
 
+    void reply (QString const& id, QTime time, qint32 snr, float delta_time
+                               , quint32 delta_frequency, QString const& mode
+                               , QString const& message_text, bool low_confidence, quint8 modifiers);
+
 signals:
-    void do_reply (QModelIndex const&, quint8 modifier);
     void do_halt_tx (QString const& id, bool auto_only);
     void do_free_text (QString const& id, QString const& text, bool);
     void location (QString const& id, QString const& text);
     void highlight_callsign (QString const& id, QString const& call
                                       , QColor const& bg = QColor {}, QColor const& fg = QColor {}
                                       , bool last_only = false);
-
-
 };
 
 #endif // WSJTXFRAME_H

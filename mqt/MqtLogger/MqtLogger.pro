@@ -91,7 +91,8 @@ SOURCES += \
     NetworkMessage.cpp \
     qt_helpers.cpp \
     Radio.cpp \
-    RadioMetaType.cpp
+    RadioMetaType.cpp \
+    WsjtxServer.cpp
 
 HEADERS  += \
     AdifImport.h \
@@ -156,7 +157,8 @@ HEADERS  += \
     Radio.hpp \
     pimpl_h.hpp \
     pimpl_impl.hpp \
-    qt_helpers.hpp
+    qt_helpers.hpp \
+    WsjtxServer.h
 
 FORMS    += \
     contestdetails.ui \
