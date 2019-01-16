@@ -260,6 +260,8 @@ private:
     QString rigAppName;
     QString radioState;
 
+    bool onContestPageChangedFlag;
+
     QTimer *launchRadioSelectTimer;
     int launchRadioSelectCount;
 
