@@ -162,6 +162,9 @@ public:
 
     void setTransVertEnabled(bool status, PubSubName psn);
 
+    void closeContest();
+
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -256,6 +259,8 @@ private:
     QString radioName;
     QString rigAppName;
     QString radioState;
+
+    bool onContestPageChangedFlag;
 
     QTimer *launchRadioSelectTimer;
     int launchRadioSelectCount;

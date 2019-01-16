@@ -60,10 +60,9 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ritEnable(false),
     ritOn(false),
     ritEditOn(false),
-    //expectBandList(false),
-    //, curRit("0.00")
-    radioState("None")
-    //bandListRxError(false)
+    radioState("None"),
+    onContestPageChangedFlag(false)
+
 {
     ui->setupUi(this);
 
@@ -773,21 +772,15 @@ void RigControlFrame::on_ContestPageChanged()
 
         QString radNam = ct->radioName.getValue().toString();
         QString mode = ct->currentMode.getValue();
+
+        onContestPageChangedFlag = true;
         setRadioName(radNam, mode);
 
 
     }
 }
 
-/*
-void RigControlFrame::bandListTimeout()
-{
-    trace(QString("bandListTimeOut Error"));
-    bandListRxError = true;
-    //emit setRadioFreq();
 
-}
-*/
 bool RigControlFrame::eventFilter(QObject *obj, QEvent *event)
 {
    Q_UNUSED(obj)
@@ -992,7 +985,7 @@ void RigControlFrame::sendModeToRadio(QString m)
 
 void RigControlFrame::setRadioName(QString radNam, QString mode)
 {
-    //bandListRxError = false;
+
 
     traceMsg(QString("setRadioName: Set RadioName = %1, mode = %2, contest = %3").arg(radNam).arg(mode).arg(ct?ct->uuid:""));
 
@@ -1020,6 +1013,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
             setRadioTxVertEnabled(false);
             setRitEnableState(false);
             setRadioVolumeState(false);
+
 
             if (radioName.isEmpty())
             {
@@ -1106,7 +1100,19 @@ void RigControlFrame::setRadioFreq()
                     trace(QString("setRadioFreq: found band %1 on radio, set band select").arg(cb));
                     ui->bandSelCombo->setCurrentIndex(i + 1);
 
-                    QString freq = tslf->sSavedCurFreq;
+                    QString freq;
+
+                    if (onContestPageChangedFlag)
+                    {
+                        onContestPageChangedFlag = false;
+                        freq = tslf->sSavedCurFreq;
+                    }
+                    else
+                    {
+                       freq = lastFreq;
+                    }
+
+
                     trace(QString("setRadioFreq: found band %1 on radio, freq %2").arg(cb).arg(freq));
 
 
@@ -1239,6 +1245,7 @@ void RigControlFrame::setRadioState(QString s)
            radioConnected = false;
            radioError = false;
 
+
            ui->bandWarnLabel->setText("");
            if (ui->radioNameSel->currentText() == "")
            {
@@ -1247,6 +1254,10 @@ void RigControlFrame::setRadioState(QString s)
                ui->freqInput->setText(curFreq);
                ui->bandSelCombo->clear();
            }
+
+
+
+
 
            emit radioDisconnected();
 
@@ -1556,6 +1567,17 @@ void RigControlFrame::mgmLabelVisible(bool state)
 {
     ui->mgmbreak->setVisible(state);
     ui->mgmLbl->setVisible(state);
+}
+
+
+void RigControlFrame::closeContest()
+{
+    // is this the last frame
+    if (LogContainer->getLogFrameCount() == 1 && radioConnected)
+    {
+        trace(QString("Last contest frame closing, close radio connection"));
+        setRadioName("", ct->currentMode.getValue());
+    }
 }
 
 void RigControlFrame::traceMsg(QString msg)

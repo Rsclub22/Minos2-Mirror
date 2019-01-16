@@ -1935,3 +1935,8 @@ QVector<TSingleLogFrame *> TLogContainer::getLogFrames()
 
     return logs;
 }
+
+int TLogContainer::getLogFrameCount()
+{
+    return ui->ContestPageControl->count();
+}

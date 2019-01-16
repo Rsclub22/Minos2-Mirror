@@ -322,6 +322,7 @@ void RigSetupDialog::removeRadio()
     ui->radioTab->removeTab(currentIndex);
     availRadioData.remove(currentIndex);
     availRadios.removeAt(currentIndex);
+    radioTab.removeAt(currentIndex);
     numAvailRadios--;
     radioRemoved = true;
 
@@ -477,6 +478,7 @@ void RigSetupDialog::cancelButtonPushed()
 
 
 // remove ??? *********************************
+/*
 void RigSetupDialog::saveRadio(int i)
 {
 
@@ -501,7 +503,7 @@ void RigSetupDialog::saveRadio(int i)
 
 }
 
-
+*/
 
 void RigSetupDialog::saveSettings()
 {
@@ -543,6 +545,7 @@ void RigSetupDialog::saveSettings()
     bool radioSettingChanged = false;
     bool transVertSettingChanged = false;
     bool transVertNameChanged = false;
+
 
     for (int i = 0; i < numAvailRadios; i++)
     {
@@ -693,6 +696,12 @@ void RigSetupDialog::saveSettings()
 
 
     }
+
+    if (radioSettingChanged || transVertSettingChanged || transVertNameChanged)
+    {
+        emit upDateRadioDetailsCache();
+    }
+
 
 
     if (radioSettingChanged)

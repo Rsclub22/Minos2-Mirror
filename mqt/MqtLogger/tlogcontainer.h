@@ -46,6 +46,7 @@ public:
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
     QVector<TSingleLogFrame *> getLogFrames();
+    int getLogFrameCount();
 
     QString getDefaultDirectory( bool IsList );
 

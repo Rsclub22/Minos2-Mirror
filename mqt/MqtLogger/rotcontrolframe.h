@@ -66,6 +66,7 @@ public:
     void setCwCcwCmdEnable(bool s);
 
     void checkConnection();
+    void closeContest();
 private:
 
     QShortcut *nudgeRight1;
