@@ -48,6 +48,7 @@ BundleFile::BundleFile( PROFILES p )
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpFile, "HelpFile", "./helpfiles/MinosHelp.qch", "Help file", "Help file", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpEntryURL, "HelpEntryPoint", "qthelp://Minos/Minos.html", "Help entry point", "Help entry point", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPDFFile, "PDFFile", "./Docs/Minos.pdf", "PDF documentation file", "PDF documentation file", false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, "Auto Fill signal report", "Auto Fill signal report on return", false ) ) );
 

@@ -2,6 +2,7 @@
 #include "MinosLoggerEvents.h"
 
 #include <QFontDialog>
+#include <QDesktopServices>
 
 #include "ContestApp.h"
 #include "LoggerContest.h"
@@ -518,7 +519,16 @@ void TLogContainer::HelpActionExecute()
         {
             helpBrowser.clear();
         }
-        mShowMessage(QString("Help file %1 doesn't exist.").arg(collectionFile), this);
+        TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpPDFFile, collectionFile );
+        if (FileExists(collectionFile))
+        {
+            QUrl url = QUrl().fromLocalFile(collectionFile);
+            QDesktopServices::openUrl(url);
+        }
+        else
+        {
+            mShowMessage(QString("Documentation File %1 doesn't exist.").arg(collectionFile), this);
+        }
     }
 
 }
