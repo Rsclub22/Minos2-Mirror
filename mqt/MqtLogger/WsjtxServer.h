@@ -15,8 +15,7 @@ public:
     WsjtxServer();
     static WsjtxServer *getWsjtxServer();
 
-    void start (port_type port,
-                         QHostAddress const& multicast_group_address = QHostAddress {});
+    void start ();
 
     void reply (QString const& id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency
                        , QString const& mode, QString const& message, bool low_confidence, quint8 modifiers);
@@ -32,11 +31,11 @@ public slots:
 
     void remove_client (QString const& id);
 
-    void log_qso (QString const& /*id*/, QDateTime time_off, QString const& dx_call, QString const& dx_grid
-                         , Frequency dial_frequency, QString const& mode, QString const& report_sent
-                         , QString const& report_received, QString const& tx_power, QString const& comments
-                         , QString const& name, QDateTime time_on, QString const& operator_call
-                         , QString const& my_call, QString const& my_grid);
+//    void log_qso (QString const& /*id*/, QDateTime time_off, QString const& dx_call, QString const& dx_grid
+//                         , Frequency dial_frequency, QString const& mode, QString const& report_sent
+//                         , QString const& report_received, QString const& tx_power, QString const& comments
+//                         , QString const& name, QDateTime time_on, QString const& operator_call
+//                         , QString const& my_call, QString const& my_grid);
 
     void log_ADIF(QString const& id, QByteArray const& ADIF);
 
@@ -64,11 +63,11 @@ signals:
                               , QString const& message, bool low_confidence, bool off_air);
     void do_clear_decodes (QString const& client_id);
 
-    void do_log_qso ( QString const& id, QDateTime time_off, QString const& dx_call, QString const& dx_grid
-                         , Frequency dial_frequency, QString const& mode, QString const& report_sent
-                         , QString const& report_received, QString const& tx_power, QString const& comments
-                         , QString const& name, QDateTime time_on, QString const& operator_call
-                         , QString const& my_call, QString const& my_grid);
+//    void do_log_qso ( QString const& id, QDateTime time_off, QString const& dx_call, QString const& dx_grid
+//                         , Frequency dial_frequency, QString const& mode, QString const& report_sent
+//                         , QString const& report_received, QString const& tx_power, QString const& comments
+//                         , QString const& name, QDateTime time_on, QString const& operator_call
+//                         , QString const& my_call, QString const& my_grid);
 
     void do_log_ADIF(QString const& id, QByteArray const& ADIF);
 

@@ -180,6 +180,19 @@ void ADIFImport::ADIFImportEndOfRecord( )
    }
    return false;
 }
+/*static*/bool ADIFImport::doImportADIFString(LoggerContestLog * c, const QString &adif)
+{
+    if ( !c )
+       return false;
+
+    ADIFImport aimp( c, QSharedPointer<QFile>() );
+
+    aimp.fileContent = adif;
+    aimp.limit = aimp.fileContent.size();
+    aimp.offset = 0;
+
+    return aimp.executeImport();
+}
 //====================================================================
 bool ADIFImport::getNextChar( char &ic )
 {
@@ -197,7 +210,7 @@ bool ADIFImport::importAdifFile()
    //Create and Open File Stream
     QTextStream in( adifContestFile.data() );
     fileContent =in.readAll();
-    offset = 1;
+    offset = 0;
     limit = fileContent.size();
     return true;
 }

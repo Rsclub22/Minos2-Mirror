@@ -20,6 +20,9 @@ enum LOGGERPROFILE {
    elpEntryFile,
    elpStationFile,
    elpQTHFile,
+   elpWSJTXEnabled,
+   elpWSJTXPort,
+   elpWSJTXGroupAddress,
    elpHelpFile, elpHelpEntryURL,
    elpPDFFile,
    elpAutoFill

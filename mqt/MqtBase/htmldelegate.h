@@ -39,5 +39,15 @@ class HtmlDelegate : public QStyledItemDelegate
     private slots:
         void onListCompressionChanged(qreal h);
 };
+class TestDelegate : public HtmlDelegate
+{
+    Q_OBJECT
+
+    public:
+        TestDelegate(qreal wmult, qreal hmult):HtmlDelegate(wmult, hmult){}
+    protected:
+        void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
+        QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
+};
 
 #endif // HTMLDELEGATE_H

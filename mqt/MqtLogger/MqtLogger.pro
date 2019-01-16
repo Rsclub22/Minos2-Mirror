@@ -92,7 +92,8 @@ SOURCES += \
     qt_helpers.cpp \
     Radio.cpp \
     RadioMetaType.cpp \
-    WsjtxServer.cpp
+    WsjtxServer.cpp \
+    WsjtxConfigure.cpp
 
 HEADERS  += \
     AdifImport.h \
@@ -158,7 +159,8 @@ HEADERS  += \
     pimpl_h.hpp \
     pimpl_impl.hpp \
     qt_helpers.hpp \
-    WsjtxServer.h
+    WsjtxServer.h \
+    WsjtxConfigure.h
 
 FORMS    += \
     contestdetails.ui \
@@ -200,7 +202,8 @@ FORMS    += \
     clusterclientframe.ui \
     tstatsdispframe.ui \
     tminosbshelpform.ui \
-    WsjtxFrame.ui
+    WsjtxFrame.ui \
+    WsjtxConfigure.ui
 
 
 DISTFILES += \

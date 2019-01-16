@@ -12,6 +12,9 @@
  #define AdifImportH
 
 #include "base_pch.h"
+class LoggerContestLog;
+class BaseContact;
+
 class ADIFImport
 {
       int offset;
@@ -34,6 +37,7 @@ class ADIFImport
       QSharedPointer<BaseContact> aqso;
    public:
       static bool doImportADIFLog( LoggerContestLog * c, QSharedPointer<QFile> hFile );
+      static bool doImportADIFString(LoggerContestLog * c, const QString &adif);
 
 };
 

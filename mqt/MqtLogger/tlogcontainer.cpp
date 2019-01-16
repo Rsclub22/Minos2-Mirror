@@ -27,6 +27,8 @@
 #include "MinosTestImport.h"
 #include "singleapplication.h"
 #include "helpbrowser.h"
+#include "WsjtxServer.h"
+#include "WsjtxConfigure.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -81,6 +83,9 @@ TLogContainer::TLogContainer(QWidget *parent) :
     sendDM->subscribeApps();
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
+
+    WsjtxServer::getWsjtxServer()->start();
+
 }
 TLogContainer::~TLogContainer()
 {
@@ -302,6 +307,7 @@ void TLogContainer::setupMenus()
 //    ui->menuTools->addSeparator();
 
     FontEditAcceptAction = newAction("Select &Font...", ui->menuTools, SLOT(FontEditAcceptActionExecute()));
+    WSJTXConfigAction = newAction("WSJT-X link configuration", ui->menuTools, SLOT(WsjtConfigActionExecute()));
     ReportAutofillAction = newCheckableAction("Signal Report AutoFill", ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction("Correct Date/Time", ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
 
@@ -1037,7 +1043,12 @@ void TLogContainer::FontEditAcceptActionExecute()
         }
     }
 }
+void TLogContainer::WsjtConfigActionExecute()
+{
+    WsjtxConfigure wsjtConfig;
 
+    wsjtConfig.exec();
+}
 void TLogContainer::ReportAutofillActionExecute()
 {
     bool autoFill = ReportAutofillAction->isChecked();

@@ -1,5 +1,13 @@
 #include "ConfigFile.h"
 #include "ContestApp.h"
+#include "LoggerContest.h"
+#include "AdifImport.h"
+#include "MinosLoggerEvents.h"
+#include "contacts.h"
+#include "tlogcontainer.h"
+#include "tsinglelogframe.h"
+#include "htmldelegate.h"
+
 #include "DecodesModel.hpp"
 #include "WsjtxServer.h"
 
@@ -39,6 +47,7 @@ WsjtxFrame::IdFilterModel::IdFilterModel ()
 
 QVariant WsjtxFrame::IdFilterModel::data (QModelIndex const& proxy_index, int role) const
 {
+    /*
   if (role == Qt::BackgroundRole)
     {
       switch (proxy_index.column ())
@@ -69,18 +78,25 @@ QVariant WsjtxFrame::IdFilterModel::data (QModelIndex const& proxy_index, int ro
           break;
         }
     }
+    */
   return QSortFilterProxyModel::data (proxy_index, role);
 }
 
 bool WsjtxFrame::IdFilterModel::filterAcceptsRow (int source_row
                                                     , QModelIndex const& source_parent) const
 {
+    /*
   auto source_index_col0 = sourceModel ()->index (source_row, 0, source_parent);
-  return sourceModel ()->data (source_index_col0).toString () == client_id_;
+  QString lineid = sourceModel ()->data (source_index_col0).toString () ;
+
+  return lineid == client_id_;
+  */
+    return true;
 }
 
 void WsjtxFrame::IdFilterModel::de_call (QString const& call)
 {
+    /*
   if (call != call_)
     {
       beginResetModel ();
@@ -95,33 +111,19 @@ void WsjtxFrame::IdFilterModel::de_call (QString const& call)
       call_ = call;
       endResetModel ();
     }
+    */
 }
 
 void WsjtxFrame::IdFilterModel::rx_df (int df)
 {
+    /*
   if (df != rx_df_)
     {
       beginResetModel ();
       rx_df_ = df;
       endResetModel ();
     }
-}
-
-namespace
-{
-  QString make_title (QString const& id, QString const& version, QString const& revision)
-  {
-    QString title {id};
-    if (version.size ())
-      {
-        title += QString {" v%1"}.arg (version);
-      }
-    if (revision.size ())
-      {
-        title += QString {" (%1)"}.arg (revision);
-      }
-    return "Client: " + title;
-  }
+    */
 }
 
 WsjtxFrame::WsjtxFrame(QWidget *parent) :
@@ -133,39 +135,30 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->port_spin_box->setMinimum (1);
-    ui->port_spin_box->setMaximum (std::numeric_limits<port_type>::max ());
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = new TestDelegate(1.0, lcf/100.0);
+    ui->decodes_table_view_->setItemDelegate( delegate);
 
     decodes_proxy_model_.setSourceModel (decodes_model_);
     ui->decodes_table_view_->setModel (&decodes_proxy_model_);
     ui->decodes_table_view_->verticalHeader ()->hide ();
     ui->decodes_table_view_->hideColumn (0);
     ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
+    ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(1);
 
-    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_log_qso, this, &WsjtxFrame::log_qso);
+    ui->decodes_table_view_->resizeRowsToContents();
+
+    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_log_ADIF, this, &WsjtxFrame::log_ADIF);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_add_client, this, &WsjtxFrame::add_client);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::remove_client);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, decodes_model_, &DecodesModel::clear_decodes);
-    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_decode_added, [this] (bool is_new, QString const& id, QTime time
-             , qint32 snr, float delta_time
-             , quint32 delta_frequency, QString const& mode
-             , QString const& message, bool low_confidence
-             , bool off_air) {
-        decodes_model_->add_decode (is_new, id, time, snr, delta_time, delta_frequency, mode, message
-                                    , low_confidence, off_air, fast_mode ());});
+    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_decode_added, this, &WsjtxFrame::decode_added, Qt::QueuedConnection);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_clear_decodes, decodes_model_, &DecodesModel::clear_decodes);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_update_status, this, &WsjtxFrame::update_status);
     connect (decodes_model_, &DecodesModel::reply, this, &WsjtxFrame::reply);
 
     // UI behaviour
-    connect (ui->port_spin_box, static_cast<void (QSpinBox::*)(int)> (&QSpinBox::valueChanged)
-             , [] (port_type port) {WsjtxServer::getWsjtxServer()->start (port);});
-
-    connect (ui->multicast_group_line_edit_, &QLineEdit::editingFinished, [this] () {
-        WsjtxServer::getWsjtxServer()->start (ui->port_spin_box->value (), QHostAddress {ui->multicast_group_line_edit_->text ()});
-      });
-
-    ui->port_spin_box->setValue (2237); // start up in unicast mode
 
     connect (ui->auto_off_button_, &QAbstractButton::clicked, [this] (bool /* checked */) {
         emit do_halt_tx (id_, true);
@@ -174,7 +167,9 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
         emit do_halt_tx (id_, false);
       });
 
-
+    connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, [this] (QModelIndex const& index) {
+        decodes_model_->do_reply (decodes_proxy_model_.mapToSource (index), QApplication::keyboardModifiers () >> 24);
+      });
 }
 WsjtxFrame::~WsjtxFrame()
 {
@@ -186,16 +181,16 @@ void WsjtxFrame::setContest(BaseContestLog *c)
     ct = c;
 }
 
-void WsjtxFrame::log_qso (QString const& /*id*/, QDateTime time_off, QString const& dx_call
-                                           , QString const& dx_grid, Frequency dial_frequency, QString const& mode
-                                           , QString const& report_sent, QString const& report_received
-                                           , QString const& tx_power, QString const& comments
-                                           , QString const& name, QDateTime time_on, QString const& operator_call
-                                           , QString const& my_call, QString const& my_grid)
-{
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
-        return;
+//void WsjtxFrame::log_qso (QString const& /*id*/, QDateTime time_off, QString const& dx_call
+//                                           , QString const& dx_grid, Frequency dial_frequency, QString const& mode
+//                                           , QString const& report_sent, QString const& report_received
+//                                           , QString const& tx_power, QString const& comments
+//                                           , QString const& name, QDateTime time_on, QString const& operator_call
+//                                           , QString const& my_call, QString const& my_grid)
+//{
+//    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
+//    if (ct != cc)
+//        return;
 //  QList<QStandardItem *> row;
 //  row << new QStandardItem {time_on.toString ("dd-MMM-yyyy hh:mm:ss")}
 //  << new QStandardItem {time_off.toString ("dd-MMM-yyyy hh:mm:ss")}
@@ -215,12 +210,30 @@ void WsjtxFrame::log_qso (QString const& /*id*/, QDateTime time_off, QString con
 //  log_table_view_->resizeColumnsToContents ();
 //  log_table_view_->horizontalHeader ()->setStretchLastSection (true);
 //  log_table_view_->scrollToBottom ();
-}
+//}
 void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc)
         return;
+
+    int spoint = ct->ctList.count();
+    if (! ADIFImport::doImportADIFString(dynamic_cast<LoggerContestLog *>(ct),  ADIF ))
+    {
+        MinosParameters::getMinosParameters() ->mshowMessage( "Failed to append ADIF from " + id );
+    }
+    ct->scanContest();
+    ct->validateLoc();
+    for ( int i = spoint; i != ct->ctList.count(); i++ )
+    {
+        QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
+        bct->commonSave(bct);
+    }
+    ct->commonSave( false );
+    MinosLoggerEvents::SendAfterLogContact(ct);
+    TSingleLogFrame * tslf = LogContainer ->findContest( ct );
+
+    tslf->showQSOs();
 }
 void WsjtxFrame::add_client (QString const& id, QString const& /*version*/, QString const& /*revision*/)
 {
@@ -229,6 +242,7 @@ void WsjtxFrame::add_client (QString const& id, QString const& /*version*/, QStr
         return;
 
     id_ = id;
+    decodes_proxy_model_.setId(id_);
 }
 
 void WsjtxFrame::remove_client (QString const& /*id*/)
@@ -274,32 +288,35 @@ void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString cons
 //    }
 }
 
-void WsjtxFrame::decode_added (bool /*is_new*/, QString const& client_id, QTime /*time*/, qint32 /*snr*/
-                                 , float /*delta_time*/, quint32 /*delta_frequency*/, QString const& /*mode*/
-                                 , QString const& /*message*/, bool /*low_confidence*/, bool /*off_air*/)
+void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
+                               , qint32 snr, float delta_time
+                               , quint32 delta_frequency, QString const& mode
+                               , QString const& message, bool low_confidence
+                               , bool off_air)
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc)
         return;
 
-//  if (client_id == id_ && !columns_resized_)
-//    {
-//      decodes_stack_->setCurrentIndex (0);
-//      decodes_table_view_->resizeColumnsToContents ();
-//      columns_resized_ = true;
-//    }
-//  decodes_table_view_->scrollToBottom ();
+    decodes_model_->add_decode (is_new, id, time, snr, delta_time, delta_frequency, mode, message
+                           , low_confidence, off_air, fast_mode ());
+
+    ui->decodes_table_view_->resizeRowsToContents();
+
+    if (!columns_resized_)
+    {
+      ui->decodes_table_view_->resizeColumnsToContents ();
+      columns_resized_ = true;
+    }
+    ui->decodes_table_view_->scrollToBottom ();
 }
-void WsjtxFrame::clear_decodes (QString const& client_id)
+void WsjtxFrame::clear_decodes (QString const& /*client_id*/)
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc)
         return;
 
-//    if (client_id == id_)
-//    {
-//      //columns_resized_ = false;
-//    }
+    columns_resized_ = false;
 }
 void WsjtxFrame::reply (QString const& id, QTime time, qint32 snr, float delta_time
                            , quint32 delta_frequency, QString const& mode
@@ -310,4 +327,9 @@ void WsjtxFrame::reply (QString const& id, QTime time, qint32 snr, float delta_t
         return;
 
     WsjtxServer::getWsjtxServer()->reply(id, time, snr, delta_time, delta_frequency, mode, message_text, low_confidence, modifiers);
+}
+
+void WsjtxFrame::on_autoSelectButton_clicked()
+{
+    ui->autoSelectButton->setDown(!ui->autoSelectButton->isDown());
 }

@@ -86,3 +86,16 @@ QSize HtmlDelegate::docSize(QString text) const
     doc.setTextWidth( -1 );
     return QSize( static_cast<int>(doc.idealWidth() * wmult), static_cast<int>(doc.size().height() * hmult) );
 }
+
+
+void TestDelegate::paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    HtmlDelegate::paint(painter, option, index);
+}
+
+QSize TestDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const
+{
+    QSize s = HtmlDelegate::sizeHint(option, index);
+    QString text = option.text;
+    return s;
+}

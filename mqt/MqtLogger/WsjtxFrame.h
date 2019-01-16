@@ -29,6 +29,8 @@ private:
     DecodesModel * decodes_model_ = nullptr;
     bool fast_mode_ = false;
     QString id_;
+    bool columns_resized_ = false;
+    HtmlDelegate *delegate = nullptr;
 
 
     class IdFilterModel final
@@ -63,11 +65,11 @@ public slots:
 
     void remove_client (QString const& id);
 
-    void log_qso (QString const& /*id*/, QDateTime time_off, QString const& dx_call, QString const& dx_grid
-                         , Frequency dial_frequency, QString const& mode, QString const& report_sent
-                         , QString const& report_received, QString const& tx_power, QString const& comments
-                         , QString const& name, QDateTime time_on, QString const& operator_call
-                         , QString const& my_call, QString const& my_grid);
+//    void log_qso (QString const& /*id*/, QDateTime time_off, QString const& dx_call, QString const& dx_grid
+//                         , Frequency dial_frequency, QString const& mode, QString const& report_sent
+//                         , QString const& report_received, QString const& tx_power, QString const& comments
+//                         , QString const& name, QDateTime time_on, QString const& operator_call
+//                         , QString const& my_call, QString const& my_grid);
     void log_ADIF(QString const& id, QByteArray const& ADIF);
 
     bool fast_mode () const {return fast_mode_;}
@@ -77,9 +79,7 @@ public slots:
                                , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                , QString const& de_call, QString const& de_grid, QString const& dx_grid
                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode);
-    void decode_added (bool is_new, QString const& client_id, QTime, qint32 snr
-                              , float delta_time, quint32 delta_frequency, QString const& mode
-                              , QString const& message, bool low_confidence, bool off_air);
+    void decode_added (bool is_new, const QString &id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency, const QString &mode, const QString &message, bool low_confidence, bool off_air);
     void clear_decodes (QString const& client_id);
 
     void reply (QString const& id, QTime time, qint32 snr, float delta_time
@@ -93,6 +93,8 @@ signals:
     void highlight_callsign (QString const& id, QString const& call
                                       , QColor const& bg = QColor {}, QColor const& fg = QColor {}
                                       , bool last_only = false);
+private slots:
+    void on_autoSelectButton_clicked();
 };
 
 #endif // WSJTXFRAME_H
