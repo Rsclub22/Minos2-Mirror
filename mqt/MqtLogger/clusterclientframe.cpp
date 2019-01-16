@@ -393,7 +393,7 @@ void ClusterClientFrame::filterButtonSelected()
     filterSetup->copyCallsignFilterListToListWidget();
     filterSetup->copyLocatorFilterListToListWidget();
     filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
-    filterSetup->show();
+    filterSetup->exec();
 
 }
 
