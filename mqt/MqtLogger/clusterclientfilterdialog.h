@@ -136,8 +136,8 @@ private slots:
 
     void callsignAddClicked();
     void callsignDelClicked();
-    void callsignCurrentRowChanged(int currentRow);
-    void locatorCurrentRowChanged(int currentRow);
+    //void callsignCurrentRowChanged(int currentRow);
+    //void locatorCurrentRowChanged(int currentRow);
     void callsignEditClicked();
     void locatorAddClicked();
     void locatorEditClicked();

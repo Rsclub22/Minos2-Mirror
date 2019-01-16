@@ -66,7 +66,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
 
 
-    connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(callsignCurrentRowChanged(int)));
+    //connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(callsignCurrentRowChanged(int)));
 
 
     connect(ui->callsignAddButton, SIGNAL(clicked()), SLOT(callsignAddClicked()));
@@ -79,7 +79,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     locatorListWidget = ui->locatorListWidget;
     locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.locatorFilterList));
 
-    connect(ui->locatorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(locatorCurrentRowChanged(int)));
+    //connect(ui->locatorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(locatorCurrentRowChanged(int)));
 
     connect(ui->locatorAddButton, SIGNAL(clicked()), SLOT(locatorAddClicked()));
     connect(ui->locatorEditButton, SIGNAL(clicked()), SLOT(locatorEditClicked()));
@@ -544,7 +544,7 @@ bool ClusterClientFilterDialog::searchItem(QString text, QListWidget* listWidget
     return false;
 }
 
-
+/*
 void ClusterClientFilterDialog::callsignCurrentRowChanged(int currentRow)
 {
     callsignListWidgetCurrentRow = currentRow;
@@ -554,6 +554,7 @@ void ClusterClientFilterDialog::locatorCurrentRowChanged(int currentRow)
 {
     locatorListWidgetCurrentRow = currentRow;
 }
+*/
 
 void ClusterClientFilterDialog::callsignDelClicked()
 {
@@ -569,9 +570,10 @@ void ClusterClientFilterDialog::callsignDelClicked()
         QMessageBox::NoButton);
         if (status == QMessageBox::Yes)
         {
-            if (callsignListWidgetCurrentRow >= 0 && callsignListWidgetCurrentRow < callsignListWidget->count())
+            int row = locatorListWidget->row(selItems[0]);
+            if (row >= 0 && row < callsignListWidget->count())
             {
-                callsignListWidget->takeItem(callsignListWidgetCurrentRow);
+                callsignListWidget->takeItem(row);
 
             }
         }
@@ -601,9 +603,11 @@ void ClusterClientFilterDialog::callsignDelAllClicked()
 
 void ClusterClientFilterDialog::callsignEditClicked()
 {
-    if (callsignListWidgetCurrentRow >= 0)
+    QList<QListWidgetItem *> selItems = callsignListWidget->selectedItems();
+
+    if (selItems.count() == 1)
     {
-        int row = callsignListWidgetCurrentRow;
+        int row = callsignListWidget->row(selItems[0]);
         QString currentCall = callsignListWidget->currentItem()->text();
         CallLocInputDialog callsignDialog(this, currentCall, QString("Edit Callsign Filter"), QString("Edit Callsign"));
         QString callsign;
@@ -680,9 +684,12 @@ void ClusterClientFilterDialog::locatorAddClicked()
 }
 void ClusterClientFilterDialog::locatorEditClicked()
 {
-    if (locatorListWidgetCurrentRow >= 0)
+
+    QList<QListWidgetItem *> selItems = locatorListWidget->selectedItems();
+
+    if (selItems.count() == 1)
     {
-        int row = locatorListWidgetCurrentRow;
+        int row = locatorListWidget->row(selItems[0]);
         QString currentLocator = locatorListWidget->currentItem()->text();
         CallLocInputDialog callsignDialog(this, currentLocator, QString("Edit Locator Filter"), QString("Edit Locator"));
         QString locator;
@@ -717,9 +724,10 @@ void ClusterClientFilterDialog::locatorDelClicked()
         QMessageBox::NoButton);
         if (status == QMessageBox::Yes)
         {
-            if (locatorListWidgetCurrentRow >= 0 && locatorListWidgetCurrentRow < locatorListWidget->count())
+            int row = locatorListWidget->row(selItems[0]);
+            if (row >= 0 && row < locatorListWidget->count())
             {
-                locatorListWidget->takeItem(locatorListWidgetCurrentRow);
+                locatorListWidget->takeItem(row);
 
             }
         }
