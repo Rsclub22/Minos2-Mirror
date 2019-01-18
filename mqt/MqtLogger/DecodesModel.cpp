@@ -7,6 +7,42 @@
 #include <QFont>
 #include <QList>
 
+/*
+  We want:
+
+  Message
+  "Answerable" - i.e. CQ or call to me
+  potential points difference
+  distance
+  bearing
+
+
+
+  click to populate rotator
+  double click to reply
+
+  set "auto" to reply to the "best available" over the minimum distance
+
+
+  reply to CQ (who can be working someone)
+           Tail ender (calls me while I'm working someone else) - pref at 73 or RR73 stage
+           one of several responses to my CQ
+
+  Then let WSJT-X "auto seq" manage the QSO
+
+  Just because I am CQing doesn't mean I have to take replies - I can respond to a CQer instead
+
+  All this has to happen after decode transitions true to false, at which point we have all the decodes
+
+  Do we need a whitelist(work if available)/blacklist(ignore)?
+
+  What about EU contest mode? Can  we tell? and so ignore/not ignore as appropriate.
+
+  We need to "age" decodes ?? no more than 10 decode periods?
+
+  What about the oher modes?
+
+  */
 namespace
 {
   char const * const headings[] = {

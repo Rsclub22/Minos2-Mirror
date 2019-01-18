@@ -6,6 +6,7 @@
 #include "DecodesModel.hpp"
 #include "Radio.hpp"
 #include "MessageServer.hpp"
+#include "WsjtxServer.h"
 
 using Frequency = MessageServer::Frequency;
 using port_type = MessageServer::port_type;
@@ -13,6 +14,46 @@ using port_type = MessageServer::port_type;
 namespace Ui {
 class WsjtxFrame;
 }
+/*
+  // Normal
+CQ K1ABC FN42                          #K1ABC calls CQ
+                  K1ABC G0XYZ IO91     #G0XYZ answers
+G0XYZ K1ABC –19                        #K1ABC sends report
+                  K1ABC G0XYZ R-22     #G0XYZ sends R+report
+G0XYZ K1ABC RR73                       #K1ABC sends RRR - or RR73
+                  K1ABC G0XYZ 73       #G0XYZ sends 73
+  */
+
+/*
+  // EU VHF Contest
+CQ TEST G4ABC/P IO91                                         "/P" is optional
+                                   G4ABC/P PA9XYZ JO22       on either callsign
+PA9XYZ 590003 IO91NP
+                                   G4ABC/P R 570007 JO22DB
+PA9XYZ G4ABC/P RR73
+                                   G4ABC/P PA9XYZ 73
+  */
+enum MessageStage {emsNone, emsCQ, emsFirstResponse, emsCQreport, emsReplyReport, emsCQRR73, ems73};
+class decodeMessage
+{
+public:
+    // Can I populate this accurately?
+    // Do I need the whole decode set to allow for eply?
+
+    MessageStage mstage{emsNone};
+    SpecialOperatingActivity opMode;
+
+    QDateTime decodeTime;
+    QString message;
+    QString toCall;
+    QString toGrid;
+    QString fromCall;
+    QString fromGrid;
+    int bearing = 0;
+    int distance = 0;
+    int points = 0;
+};
+
 class WsjtxFrame : public QFrame
 {
     Q_OBJECT
@@ -78,8 +119,9 @@ public slots:
                                , QString const& report, QString const& tx_mode, bool tx_enabled
                                , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                               , bool watchdog_timeout, QString const& sub_mode, bool fast_mode);
-    void decode_added (bool is_new, const QString &id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency, const QString &mode, const QString &message, bool low_confidence, bool off_air);
+                               , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode);
+    void decode_added (bool is_new, const QString &id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency,
+                       const QString &mode, const QString &message, bool low_confidence, bool off_air);
     void clear_decodes (QString const& client_id);
 
     void reply (QString const& id, QTime time, qint32 snr, float delta_time

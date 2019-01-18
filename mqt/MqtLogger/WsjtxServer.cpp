@@ -74,10 +74,10 @@ void WsjtxServer::update_status (QString const& id, Frequency f, QString const& 
                                   , QString const& report, QString const& tx_mode, bool tx_enabled
                                   , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                   , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                                  , bool watchdog_timeout, QString const& sub_mode, bool fast_mode)
+                                  , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 {
     emit do_update_status(id, f, mode, dx_call, report, tx_mode, tx_enabled, transmitting, decoding, rx_df, tx_df,
-                          de_call, de_grid, dx_grid, watchdog_timeout, sub_mode, fast_mode);
+                          de_call, de_grid, dx_grid, watchdog_timeout, sub_mode, fast_mode, special_op_mode);
 
     trace(QString("WsjtxServer::update_status transmitting %1 decoding %2").arg(transmitting).arg(decoding));
 
