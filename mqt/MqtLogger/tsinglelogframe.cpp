@@ -534,13 +534,16 @@ void TSingleLogFrame::buildScreenLayout()
                     {
                         elementScrollArea->setWidget(wsjtxFrame);
                         wsjtxFrame->setVisible(true);
-                        wsjtxFrame->setContest(ct);
+                        // don't set contest here
                         break;
                     }
                 }
             }
         }
     }
+    // ALWAYS link the wsjt frame to the contest; then we can log
+    // even without showing it
+    wsjtxFrame->setContest(ct);
     verticalLayout->addWidget(singleLogFrameSplitter);
 
     getSplitters();

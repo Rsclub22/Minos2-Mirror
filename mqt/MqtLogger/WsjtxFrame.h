@@ -33,12 +33,16 @@ PA9XYZ 590003 IO91NP
 PA9XYZ G4ABC/P RR73
                                    G4ABC/P PA9XYZ 73
   */
-enum MessageStage {emsNone, emsCQ, emsFirstResponse, emsCQreport, emsReplyReport, emsCQRR73, ems73};
+enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73};
 class decodeMessage
 {
 public:
     // Can I populate this accurately?
-    // Do I need the whole decode set to allow for eply?
+    // Do I need the whole decode set to allow for reply?
+    // Doesn't contain MY sent messages... In fact, once working someone
+    // it may all go to pot
+
+    // I CAN see transmit "sessions" - does the status give me enough?
 
     MessageStage mstage{emsNone};
     SpecialOperatingActivity opMode;
@@ -49,6 +53,7 @@ public:
     QString toGrid;
     QString fromCall;
     QString fromGrid;
+    int strength = -100;
     int bearing = 0;
     int distance = 0;
     int points = 0;
