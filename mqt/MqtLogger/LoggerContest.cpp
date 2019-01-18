@@ -94,10 +94,8 @@ void LoggerContestLog::clearDirty()
    }
 
 
-   for (QMap<QString, MinosItem<ClusterClientFilterSettings>>::iterator i = clusterFilterSettings.begin(); i != clusterFilterSettings.end(); i++)
-   {
-       clusterFilterSettings[i.key()].clearDirty();
-   }
+   clusterFilterSettings.clearDirty();
+
 
 
 
@@ -164,11 +162,8 @@ void LoggerContestLog::setDirty()
    }
 
 
+   clusterFilterSettings.setDirty();
 
-   for (QMap<QString, MinosItem<ClusterClientFilterSettings>>::iterator i = clusterFilterSettings.begin(); i != clusterFilterSettings.end(); i++)
-   {
-       clusterFilterSettings[i.key()].setDirty();
-   }
 
 
 
@@ -634,43 +629,23 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
 
 //==========================================================================
 
-void LoggerContestLog::saveClusterFilter(QString contestUuid, const ClusterClientFilterSettings &ccfs)
+void LoggerContestLog::saveClusterFilter(const ClusterClientFilterSettings &ccfs)
 {
-    ClusterClientFilterSettings cs = ccfs;
-    cs.contestUuid = contestUuid;
-    clusterFilterSettings[contestUuid].setValue(cs);
+    clusterFilterSettings.setValue(ccfs);
     commonSave(false);
 }
-void LoggerContestLog::saveInitialClusterFilter(QString contestUuid, const ClusterClientFilterSettings &ccfs)
+void LoggerContestLog::saveInitialClusterFilter(const ClusterClientFilterSettings &ccfs)
 {
-    ClusterClientFilterSettings cs = ccfs;
-    cs.contestUuid = contestUuid;
-    clusterFilterSettings[contestUuid].setInitialValue(cs);
+    clusterFilterSettings.setInitialValue(ccfs);
 
 }
-ClusterClientFilterSettings LoggerContestLog::getClusterFilter(QString contestUuid)
+ClusterClientFilterSettings LoggerContestLog::getClusterFilter()
 {
-    ClusterClientFilterSettings cs;
-    if (clusterFilterSettings.contains(contestUuid))
-    {
-        cs = clusterFilterSettings[contestUuid].getValue();
 
-    }
-
-    return cs;
+        return clusterFilterSettings.getValue();
 }
 
 
-bool LoggerContestLog::removeClusterFilterSetting(QString contestUuid)
-{
-    if (clusterFilterSettings.contains(contestUuid))
-    {
-        clusterFilterSettings.remove(contestUuid);
-        return true;
-    }
-
-    return false;
-}
 
 
 //==========================================================================
@@ -1575,9 +1550,6 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                else if (methodName == "MinosClusterFilter")
                                {
                                        ClusterClientFilterSettings ccfs;
-                                       QString contestUuid;
-                                       mt->getStructArgMemberValue("contestUuid", contestUuid);
-                                       ccfs.contestUuid = contestUuid;
                                        mt->getStructArgMemberValue("callsignList", ccfs.callsignFilterList);
                                        mt->getStructArgMemberValue("locatorList", ccfs.locatorFilterList);
                                        mt->getStructArgMemberValue("bandFilter50Mhz", ccfs.bandFilter50Mhz);
@@ -1595,7 +1567,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("modeFilterPSKMODE", ccfs.modeFilterPSKMODE);
                                        mt->getStructArgMemberValue("modeFilterMGMMODE", ccfs.modeFilterMGMMODE);
 
-                                       saveInitialClusterFilter(contestUuid, ccfs);
+                                       saveInitialClusterFilter(ccfs);
 
                                }
                                else

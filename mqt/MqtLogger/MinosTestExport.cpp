@@ -376,15 +376,14 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    }
    return exp_stanzaCount;
 }
-void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd, QString contestUuid)
+void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
 {
-    MinosItem<ClusterClientFilterSettings> filter = ct->clusterFilterSettings[contestUuid];
+    MinosItem<ClusterClientFilterSettings> filter = ct->clusterFilterSettings;
     if (filter.isDirty())
     {
         RPCParamStruct * st = new RPCParamStruct;
         makeHeader( st, 1 );
 
-        st->addMember(contestUuid,"contestUuid");
         st->addMember(filter.getValue().callsignFilterList, "callsignList");
         st->addMember(filter.getValue().locatorFilterList, "locatorList");
         st->addMember(filter.getValue().bandFilter50Mhz, "bandFilter50Mhz");
@@ -408,17 +407,7 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd, QString c
 }
 
 
-void MinosTestExport::exportAllClusterFilters(QSharedPointer<QFile> expfd )
-{
-    QMapIterator<QString, MinosItem<ClusterClientFilterSettings>> i(ct->clusterFilterSettings);
-    while (i.hasNext())
-    {
-       i.next();
-       MinosItem<ClusterClientFilterSettings> filter = ct->clusterFilterSettings[i.key()].getValue();
-       exportClusterFilter( expfd, filter.getValue().contestUuid);
-    }
 
-}
 
 
 void MinosTestExport::exportRigMemory(QSharedPointer<QFile> expfd, int memno )
@@ -524,7 +513,7 @@ int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bo
    exportBundles( minosContestFile );
    exportAllMemories(minosContestFile);
    exportStackDisplay(minosContestFile);
-   exportAllClusterFilters(minosContestFile);
+   exportClusterFilter(minosContestFile);
 
    return exp_stanzaCount;
 }
@@ -552,7 +541,7 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
    exportApps(expfd);
    exportBundles( expfd );
    exportAllMemories(expfd);
-   exportAllClusterFilters(expfd);
+   exportClusterFilter(expfd);
 
    bool inDump = false;
    foreach(MapWrapper<BaseContact> dct, ct->ctList)

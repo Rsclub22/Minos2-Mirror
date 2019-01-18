@@ -137,7 +137,7 @@ class ClusterClientFilterSettings
 
 public:
     ClusterClientFilterSettings() :
-        contestUuid(""),
+
         bandFilter50Mhz(false),
         bandFilter70Mhz(false),
         bandFilter144Mhz(false),
@@ -160,7 +160,7 @@ public:
 
     // note the list of callsign and locator filters strings are stored as QString for saving to contest.
 
-    QString contestUuid;
+
 
     QString callsignFilterList;
     QString locatorFilterList;
@@ -263,7 +263,7 @@ void setModeFilter(bool setting, int band)
 
 void operator= (const ClusterClientFilterSettings& ccfs)
 {
-    contestUuid = ccfs.contestUuid;
+
     callsignFilterList = ccfs.callsignFilterList;
     locatorFilterList = ccfs.locatorFilterList;
     bandFilter50Mhz = ccfs.bandFilter50Mhz;
@@ -286,8 +286,7 @@ void operator= (const ClusterClientFilterSettings& ccfs)
 
 bool operator==( const ClusterClientFilterSettings& ccfs ) const
 {
-    if ( contestUuid == ccfs.contestUuid &&
-         callsignFilterList == ccfs.callsignFilterList &&
+    if ( callsignFilterList == ccfs.callsignFilterList &&
          locatorFilterList == ccfs.locatorFilterList &&
          bandFilter50Mhz == ccfs.bandFilter50Mhz &&
          bandFilter70Mhz == ccfs.bandFilter70Mhz &&

@@ -30,7 +30,7 @@ class ClusterClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClusterClientFilterDialog(QWidget *parent, QString contestUuid);
+    explicit ClusterClientFilterDialog(QWidget *parent);
     ~ClusterClientFilterDialog();
 
     bool checkBandMatch(int bandNum);

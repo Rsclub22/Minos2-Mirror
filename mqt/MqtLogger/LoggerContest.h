@@ -122,7 +122,7 @@ class LoggerContestLog : public BaseContestLog
       QVector<MinosItem<memoryData::memData> > runMemories;
       QVector<MinosItem<memoryData::memData> > rigMemories;
 
-      QMap<QString, MinosItem<ClusterClientFilterSettings>> clusterFilterSettings;
+      MinosItem<ClusterClientFilterSettings> clusterFilterSettings;
 
       MinosStringItem<QString> screenLayout;
 
@@ -143,10 +143,10 @@ class LoggerContestLog : public BaseContestLog
       void saveInitialRunMemory(int memno, const memoryData::memData &mem);
       void saveInitialRigMemory(int memno, const memoryData::memData &mem);
       memoryData::memData getRigMemoryData(int memoryNumber);
-      void saveClusterFilter(QString contestUuid, const ClusterClientFilterSettings &ccfs);
-      void saveInitialClusterFilter(QString contestUuid, const ClusterClientFilterSettings &ccfs);
-      ClusterClientFilterSettings getClusterFilter(QString contestUuid);
-      bool removeClusterFilterSetting(QString contestUuid);
+      void saveClusterFilter(const ClusterClientFilterSettings &ccfs);
+      void saveInitialClusterFilter(const ClusterClientFilterSettings &ccfs);
+      ClusterClientFilterSettings getClusterFilter();
+
 
       // dirty info is only relevant when it is being editted
       // but needs to stay with the data

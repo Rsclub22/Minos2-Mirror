@@ -6,14 +6,13 @@
 #include "calllocinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
-ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent, QString contestUuid) :
+ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
     vhfButtonState(false),
     mWaveButtonState(false),
     modeButtonState(false),
-    contestUuid(contestUuid),
     enableHFSpots(false)
 {
     ui->setupUi(this);
@@ -51,7 +50,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     setWindowTitle("Cluster Spot Filters");
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    filterSettings.contestUuid = contestUuid;
+
 
     bandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
@@ -151,7 +150,7 @@ void ClusterClientFilterDialog::filtersAccepted()
         trace(QString("Callsign List = %1").arg(filterSettings.callsignFilterList));
         trace(QString("Locator List = %1").arg(filterSettings.locatorFilterList));
         trace(QString("Save to log"));
-        ct->saveClusterFilter(contestUuid, filterSettings);
+        ct->saveClusterFilter(filterSettings);
     }
 
     emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
@@ -489,6 +488,8 @@ bool ClusterClientFilterDialog::checkModeMatch(int bandNum)
 
 void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
 {
+    //LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
+    //ClusterClientFilterSettings ccfs = ct->clusterFilterSettings.getValue();
     callsignListWidget->clear();
     foreach (QString str, filterSettings.unpackFilterList(filterSettings.callsignFilterList))
     {
@@ -644,6 +645,8 @@ QStringList ClusterClientFilterDialog::getLocatorFilterList()
 
 void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
 {
+    //LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
+    //ClusterClientFilterSettings ccfs = ct->clusterFilterSettings.getValue();
     locatorListWidget->clear();
     foreach (QString str, filterSettings.unpackFilterList( filterSettings.locatorFilterList))
     {
