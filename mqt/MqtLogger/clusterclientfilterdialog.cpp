@@ -121,19 +121,22 @@ void ClusterClientFilterDialog::filtersAccepted()
         copyBandFiltersToFilterSettings();
         bandfilterChanged = true;
     }
-    else if (modeFiltersChanged())
+
+    if (modeFiltersChanged())
     {
         copyModeFiltersToFilterSettings();
         modefilterChanged = true;
     }
-    else if (callsignFiltersChanged())
+
+    if (callsignFiltersChanged())
     {
 
         filterSettings.callsignFilterList.clear();
         filterSettings.callsignFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(callsignListWidget));
         callsignfilterChanged = true;
     }
-    else if (locatorFiltersChanged())
+
+    if (locatorFiltersChanged())
     {
         filterSettings.locatorFilterList.clear();
         filterSettings.locatorFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(locatorListWidget));
@@ -571,7 +574,7 @@ void ClusterClientFilterDialog::callsignDelClicked()
         QMessageBox::NoButton);
         if (status == QMessageBox::Yes)
         {
-            int row = locatorListWidget->row(selItems[0]);
+            int row = callsignListWidget->row(selItems[0]);
             if (row >= 0 && row < callsignListWidget->count())
             {
                 callsignListWidget->takeItem(row);
