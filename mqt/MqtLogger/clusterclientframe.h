@@ -120,7 +120,7 @@ class ClusterClientFrame : public QFrame
 
     void traceMsg(QString msg);
 public:
-    explicit ClusterClientFrame(QWidget *parent, int instanceNum);
+    explicit ClusterClientFrame(QWidget *parent, QString contestUuid);
     ~ClusterClientFrame() override;
 
     void setContest(BaseContestLog *contest);
@@ -178,7 +178,7 @@ private:
     QAction* clearSpotAction;
     QAction* clearAllSpotsAction;
 
-    int instanceNum;
+    QString contestUuid;
 
     QString contestBandStr;
     int contestBand;

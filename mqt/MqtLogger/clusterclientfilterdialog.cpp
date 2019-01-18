@@ -6,14 +6,14 @@
 #include "calllocinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
-ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent, int instanceNum) :
+ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent, QString contestUuid) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
     vhfButtonState(false),
     mWaveButtonState(false),
     modeButtonState(false),
-    instanceNum(instanceNum),
+    contestUuid(contestUuid),
     enableHFSpots(false)
 {
     ui->setupUi(this);
@@ -51,7 +51,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     setWindowTitle("Cluster Spot Filters");
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    filterSettings.instanceNum = instanceNum;
+    filterSettings.contestUuid = contestUuid;
 
     bandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
@@ -143,7 +143,7 @@ void ClusterClientFilterDialog::filtersAccepted()
 
     if (bandfilterChanged || modefilterChanged || callsignfilterChanged || locatorfilterChanged)
     {
-        trace(QString("Cluster Filters Changed - Instance = %1").arg(instanceNum));
+        trace(QString("Cluster Filters Changed - ContestUuid = %1").arg(contestUuid));
         trace(QString("BandFilter Changed = %1, ModeFilter Changed = %2, CallsignFilter Changed = %3, LocatorFilter Changed = %4").arg(bandfilterChanged).arg(modefilterChanged).arg(callsignfilterChanged).arg(locatorfilterChanged));
         trace(QString("Band 50Mhz = %1, Band 70Mhz = %2, Band 144Mhz = %3, Band 432Mhz = %4, Band = 1296Mhz = %5").arg(*filterSettings.bandFilters[_50M]).arg(*filterSettings.bandFilters[_70M]).arg(*filterSettings.bandFilters[_144M]).arg(*filterSettings.bandFilters[_432M]).arg(*filterSettings.bandFilters[_1296M]));
         trace(QString("Band 2300Mhz = %1, Band 3.4Ghz = %2, Band 5.6Ghz = %3, Band 10Ghz = %4").arg(*filterSettings.bandFilters[_2300M]).arg(*filterSettings.bandFilters[_3_4G]).arg(*filterSettings.bandFilters[_5_6G]).arg(*filterSettings.bandFilters[_10G]));
@@ -151,7 +151,7 @@ void ClusterClientFilterDialog::filtersAccepted()
         trace(QString("Callsign List = %1").arg(filterSettings.callsignFilterList));
         trace(QString("Locator List = %1").arg(filterSettings.locatorFilterList));
         trace(QString("Save to log"));
-        ct->saveClusterFilter(instanceNum, filterSettings);
+        ct->saveClusterFilter(contestUuid, filterSettings);
     }
 
     emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);

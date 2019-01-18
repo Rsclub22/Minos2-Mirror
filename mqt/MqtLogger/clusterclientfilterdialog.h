@@ -30,7 +30,7 @@ class ClusterClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClusterClientFilterDialog(QWidget *parent, int instanceNum);
+    explicit ClusterClientFilterDialog(QWidget *parent, QString contestUuid);
     ~ClusterClientFilterDialog();
 
     bool checkBandMatch(int bandNum);
@@ -79,7 +79,7 @@ private:
     bool mWaveButtonState;
     bool modeButtonState;
 
-    int instanceNum;
+    QString contestUuid;
 
     bool enableHFSpots;
 

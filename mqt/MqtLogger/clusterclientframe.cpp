@@ -25,14 +25,14 @@
 #include "ui_clusterclientframe.h"
 
 
-ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
+ClusterClientFrame::ClusterClientFrame(QWidget *parent, QString contestUuid):
     QFrame(parent),
     ui(new Ui::ClusterClientFrame),
     purgeTimer(nullptr),
     timeToLive(0),
     purgeSpotFlag(false),
     holdUpdateFlag(false),
-    instanceNum(instanceNum),
+    contestUuid(contestUuid),
     contestBand(-1),
     contestMode(-1),
     isProtected(false)
@@ -50,7 +50,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
 
-    filterSetup = new ClusterClientFilterDialog(this, instanceNum);
+    filterSetup = new ClusterClientFilterDialog(this, contestUuid);
 
 
     purgeTimer = new QTimer(this);
@@ -1252,9 +1252,9 @@ void ClusterClientFrame::checkSavedFilters()
 {
     // this looks for changed saved settings
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
-    if (contest && contest->clusterFilterSettings.size() > instanceNum)
+    if (contest && !contest->clusterFilterSettings.isEmpty())
     {
-        ClusterClientFilterSettings cfs = contest->clusterFilterSettings[instanceNum].getValue();
+        ClusterClientFilterSettings cfs = contest->clusterFilterSettings[contestUuid].getValue();
         if (cfs != filterSetup->filterSettings)
         {
             filterSetup->filterSettings = cfs;

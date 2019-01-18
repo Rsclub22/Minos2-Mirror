@@ -93,10 +93,13 @@ void LoggerContestLog::clearDirty()
        rigMemories[i].clearDirty();
    }
 
-   for (int i =0; i < clusterFilterSettings.size(); i++)
+
+   for (QMap<QString, MinosItem<ClusterClientFilterSettings>>::iterator i = clusterFilterSettings.begin(); i != clusterFilterSettings.end(); i++)
    {
-       clusterFilterSettings[i].clearDirty();
+       clusterFilterSettings[i.key()].clearDirty();
    }
+
+
 
    screenLayout.clearDirty();
    statsPeriod1.clearDirty();
@@ -160,10 +163,14 @@ void LoggerContestLog::setDirty()
        rigMemories[i].setDirty();
    }
 
-   for (int i =0; i < clusterFilterSettings.size(); i++)
+
+
+   for (QMap<QString, MinosItem<ClusterClientFilterSettings>>::iterator i = clusterFilterSettings.begin(); i != clusterFilterSettings.end(); i++)
    {
-       clusterFilterSettings[i].setDirty();
+       clusterFilterSettings[i.key()].setDirty();
    }
+
+
 
    screenLayout.setDirty();
    statsPeriod1.setDirty();
@@ -627,37 +634,42 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
 
 //==========================================================================
 
-void LoggerContestLog::saveClusterFilter(int instanceNum, const ClusterClientFilterSettings &ccfs)
+void LoggerContestLog::saveClusterFilter(QString contestUuid, const ClusterClientFilterSettings &ccfs)
 {
-    if (clusterFilterSettings.size() < instanceNum + 1)
-    {
-        clusterFilterSettings.resize(instanceNum + 1);
-    }
     ClusterClientFilterSettings cs = ccfs;
-    cs.instanceNum = instanceNum;
-    clusterFilterSettings[instanceNum].setValue(cs);
+    cs.contestUuid = contestUuid;
+    clusterFilterSettings[contestUuid].setValue(cs);
     commonSave(false);
 }
-void LoggerContestLog::saveInitialClusterFilter(int instanceNum, const ClusterClientFilterSettings &ccfs)
+void LoggerContestLog::saveInitialClusterFilter(QString contestUuid, const ClusterClientFilterSettings &ccfs)
 {
-    if (clusterFilterSettings.size() < instanceNum + 1)
-    {
-        clusterFilterSettings.resize(instanceNum + 1);
-    }
     ClusterClientFilterSettings cs = ccfs;
-    cs.instanceNum = instanceNum;
-    clusterFilterSettings[instanceNum].setInitialValue(cs);
+    cs.contestUuid = contestUuid;
+    clusterFilterSettings[contestUuid].setInitialValue(cs);
 
 }
-ClusterClientFilterSettings LoggerContestLog::getClusterFilter(int instanceNum)
+ClusterClientFilterSettings LoggerContestLog::getClusterFilter(QString contestUuid)
 {
     ClusterClientFilterSettings cs;
-    if (clusterFilterSettings.size() > instanceNum)
+    if (clusterFilterSettings.contains(contestUuid))
     {
-        cs = clusterFilterSettings[instanceNum].getValue();
+        cs = clusterFilterSettings[contestUuid].getValue();
 
     }
+
     return cs;
+}
+
+
+bool LoggerContestLog::removeClusterFilterSetting(QString contestUuid)
+{
+    if (clusterFilterSettings.contains(contestUuid))
+    {
+        clusterFilterSettings.remove(contestUuid);
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -1563,8 +1575,9 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                else if (methodName == "MinosClusterFilter")
                                {
                                        ClusterClientFilterSettings ccfs;
-                                       int  intstanceNum;
-                                       mt->getStructArgMemberValue("filterNum", intstanceNum);
+                                       QString contestUuid;
+                                       mt->getStructArgMemberValue("contestUuid", contestUuid);
+                                       ccfs.contestUuid = contestUuid;
                                        mt->getStructArgMemberValue("callsignList", ccfs.callsignFilterList);
                                        mt->getStructArgMemberValue("locatorList", ccfs.locatorFilterList);
                                        mt->getStructArgMemberValue("bandFilter50Mhz", ccfs.bandFilter50Mhz);
@@ -1582,7 +1595,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("modeFilterPSKMODE", ccfs.modeFilterPSKMODE);
                                        mt->getStructArgMemberValue("modeFilterMGMMODE", ccfs.modeFilterMGMMODE);
 
-                                       saveInitialClusterFilter(intstanceNum, ccfs);
+                                       saveInitialClusterFilter(contestUuid, ccfs);
 
                                }
                                else

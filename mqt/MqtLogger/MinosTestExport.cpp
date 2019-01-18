@@ -376,15 +376,15 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    }
    return exp_stanzaCount;
 }
-void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd, int filterNum)
+void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd, QString contestUuid)
 {
-    MinosItem<ClusterClientFilterSettings> filter = ct->clusterFilterSettings[filterNum];
+    MinosItem<ClusterClientFilterSettings> filter = ct->clusterFilterSettings[contestUuid];
     if (filter.isDirty())
     {
         RPCParamStruct * st = new RPCParamStruct;
         makeHeader( st, 1 );
 
-        st->addMember(filterNum,"filterNum");
+        st->addMember(contestUuid,"contestUuid");
         st->addMember(filter.getValue().callsignFilterList, "callsignList");
         st->addMember(filter.getValue().locatorFilterList, "locatorList");
         st->addMember(filter.getValue().bandFilter50Mhz, "bandFilter50Mhz");
@@ -410,10 +410,14 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd, int filte
 
 void MinosTestExport::exportAllClusterFilters(QSharedPointer<QFile> expfd )
 {
-    for (int i = 0; i < ct->clusterFilterSettings.size(); i++)
+    QMapIterator<QString, MinosItem<ClusterClientFilterSettings>> i(ct->clusterFilterSettings);
+    while (i.hasNext())
     {
-        exportClusterFilter( expfd, i);
+       i.next();
+       MinosItem<ClusterClientFilterSettings> filter = ct->clusterFilterSettings[i.key()].getValue();
+       exportClusterFilter( expfd, filter.getValue().contestUuid);
     }
+
 }
 
 
