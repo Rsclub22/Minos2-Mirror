@@ -537,7 +537,11 @@ void ClusterClientFrame::sendFreqToRig(QString freq)
 
 void ClusterClientFrame::sendBrgToRot(QString brg)
 {
-    MinosLoggerEvents::SendSpotBrgStrToRot(brg);
+    if (!brg.isEmpty())
+    {
+       MinosLoggerEvents::SendSpotBrgStrToRot(brg);
+    }
+
 }
 
 
