@@ -1536,12 +1536,24 @@ void ClusterMainWindow::disconnectTimeout()
 void ClusterMainWindow::handleStatusTimer()
 {
     static QString oldStatusMsg;
+    static int oldServerListCount = 0;
 
-    if (!status->text().isEmpty() && clusterRpc->getServerListCount() > 0)
+
+    if (oldServerListCount != clusterRpc->getServerListCount())
+    {
+        oldServerListCount = clusterRpc->getServerListCount();
+        // send status to clients
+        trace(QString("handleStatusTimer: Cluster Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(clusterRpc->getServerListCount()).arg(status->text()));
+        sendSpotsQueue.append(createStatusToSend(status->text()));
+    }
+
+    // send status message if it has changed
+    else if (!status->text().isEmpty() && clusterRpc->getServerListCount() > 0)
     {
         if (oldStatusMsg != status->text())
         {
             oldStatusMsg = status->text();
+
             // send status to clients
             trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(status->text()));
             sendSpotsQueue.append(createStatusToSend(status->text()));
