@@ -754,6 +754,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                     .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
 
                     qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
+
                     // is spot older than time to live time
                     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
                     if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))
@@ -1536,12 +1537,24 @@ void ClusterMainWindow::disconnectTimeout()
 void ClusterMainWindow::handleStatusTimer()
 {
     static QString oldStatusMsg;
+    static int oldServerListCount = 0;
 
-    if (!status->text().isEmpty() && clusterRpc->getServerListCount() > 0)
+
+    if (oldServerListCount != clusterRpc->getServerListCount())
+    {
+        oldServerListCount = clusterRpc->getServerListCount();
+        // send status to clients
+        trace(QString("handleStatusTimer: Cluster Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(clusterRpc->getServerListCount()).arg(status->text()));
+        sendSpotsQueue.append(createStatusToSend(status->text()));
+    }
+
+    // send status message if it has changed
+    else if (!status->text().isEmpty() && clusterRpc->getServerListCount() > 0)
     {
         if (oldStatusMsg != status->text())
         {
             oldStatusMsg = status->text();
+
             // send status to clients
             trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(status->text()));
             sendSpotsQueue.append(createStatusToSend(status->text()));

@@ -6,10 +6,16 @@
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
 {
     QDateTime dt = QDateTime();
+    int tn = QTime::currentTime().second();
+    QString t = QString::number(tn);
+    if (tn < 10)
+    {
+        t = "0" + t;
+    }
     QStringList dl = spotDate.split('-');
     if (dl.count() == 3)
     {
-        dt = QDateTime::fromString(dl[2] + dl[1] + dl[0] + spotTime, "yyyyMMMddHHmm" );
+        dt = QDateTime::fromString(dl[2] + dl[1] + dl[0] + spotTime + t, "yyyyMMMddHHmmss" );
         dt.setTimeSpec(Qt::UTC);
 
     }

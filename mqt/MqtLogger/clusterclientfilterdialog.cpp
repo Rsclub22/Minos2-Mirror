@@ -6,14 +6,13 @@
 #include "calllocinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
-ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent, int instanceNum) :
+ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
     vhfButtonState(false),
     mWaveButtonState(false),
     modeButtonState(false),
-    instanceNum(instanceNum),
     enableHFSpots(false)
 {
     ui->setupUi(this);
@@ -51,7 +50,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     setWindowTitle("Cluster Spot Filters");
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    filterSettings.instanceNum = instanceNum;
+
 
     bandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
@@ -66,7 +65,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
 
 
-    connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(callsignCurrentRowChanged(int)));
+    //connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(callsignCurrentRowChanged(int)));
 
 
     connect(ui->callsignAddButton, SIGNAL(clicked()), SLOT(callsignAddClicked()));
@@ -79,7 +78,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     locatorListWidget = ui->locatorListWidget;
     locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.locatorFilterList));
 
-    connect(ui->locatorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(locatorCurrentRowChanged(int)));
+    //connect(ui->locatorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(locatorCurrentRowChanged(int)));
 
     connect(ui->locatorAddButton, SIGNAL(clicked()), SLOT(locatorAddClicked()));
     connect(ui->locatorEditButton, SIGNAL(clicked()), SLOT(locatorEditClicked()));
@@ -122,19 +121,22 @@ void ClusterClientFilterDialog::filtersAccepted()
         copyBandFiltersToFilterSettings();
         bandfilterChanged = true;
     }
-    else if (modeFiltersChanged())
+
+    if (modeFiltersChanged())
     {
         copyModeFiltersToFilterSettings();
         modefilterChanged = true;
     }
-    else if (callsignFiltersChanged())
+
+    if (callsignFiltersChanged())
     {
 
         filterSettings.callsignFilterList.clear();
         filterSettings.callsignFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(callsignListWidget));
         callsignfilterChanged = true;
     }
-    else if (locatorFiltersChanged())
+
+    if (locatorFiltersChanged())
     {
         filterSettings.locatorFilterList.clear();
         filterSettings.locatorFilterList = filterSettings.packFilterList(getItemsTextFromListWidget(locatorListWidget));
@@ -143,7 +145,7 @@ void ClusterClientFilterDialog::filtersAccepted()
 
     if (bandfilterChanged || modefilterChanged || callsignfilterChanged || locatorfilterChanged)
     {
-        trace(QString("Cluster Filters Changed - Instance = %1").arg(instanceNum));
+        trace(QString("Cluster Filters Changed - ContestUuid = %1").arg(contestUuid));
         trace(QString("BandFilter Changed = %1, ModeFilter Changed = %2, CallsignFilter Changed = %3, LocatorFilter Changed = %4").arg(bandfilterChanged).arg(modefilterChanged).arg(callsignfilterChanged).arg(locatorfilterChanged));
         trace(QString("Band 50Mhz = %1, Band 70Mhz = %2, Band 144Mhz = %3, Band 432Mhz = %4, Band = 1296Mhz = %5").arg(*filterSettings.bandFilters[_50M]).arg(*filterSettings.bandFilters[_70M]).arg(*filterSettings.bandFilters[_144M]).arg(*filterSettings.bandFilters[_432M]).arg(*filterSettings.bandFilters[_1296M]));
         trace(QString("Band 2300Mhz = %1, Band 3.4Ghz = %2, Band 5.6Ghz = %3, Band 10Ghz = %4").arg(*filterSettings.bandFilters[_2300M]).arg(*filterSettings.bandFilters[_3_4G]).arg(*filterSettings.bandFilters[_5_6G]).arg(*filterSettings.bandFilters[_10G]));
@@ -151,7 +153,7 @@ void ClusterClientFilterDialog::filtersAccepted()
         trace(QString("Callsign List = %1").arg(filterSettings.callsignFilterList));
         trace(QString("Locator List = %1").arg(filterSettings.locatorFilterList));
         trace(QString("Save to log"));
-        ct->saveClusterFilter(instanceNum, filterSettings);
+        ct->saveClusterFilter(filterSettings);
     }
 
     emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
@@ -489,6 +491,8 @@ bool ClusterClientFilterDialog::checkModeMatch(int bandNum)
 
 void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
 {
+    //LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
+    //ClusterClientFilterSettings ccfs = ct->clusterFilterSettings.getValue();
     callsignListWidget->clear();
     foreach (QString str, filterSettings.unpackFilterList(filterSettings.callsignFilterList))
     {
@@ -544,7 +548,7 @@ bool ClusterClientFilterDialog::searchItem(QString text, QListWidget* listWidget
     return false;
 }
 
-
+/*
 void ClusterClientFilterDialog::callsignCurrentRowChanged(int currentRow)
 {
     callsignListWidgetCurrentRow = currentRow;
@@ -554,6 +558,7 @@ void ClusterClientFilterDialog::locatorCurrentRowChanged(int currentRow)
 {
     locatorListWidgetCurrentRow = currentRow;
 }
+*/
 
 void ClusterClientFilterDialog::callsignDelClicked()
 {
@@ -569,9 +574,10 @@ void ClusterClientFilterDialog::callsignDelClicked()
         QMessageBox::NoButton);
         if (status == QMessageBox::Yes)
         {
-            if (callsignListWidgetCurrentRow >= 0 && callsignListWidgetCurrentRow < callsignListWidget->count())
+            int row = callsignListWidget->row(selItems[0]);
+            if (row >= 0 && row < callsignListWidget->count())
             {
-                callsignListWidget->takeItem(callsignListWidgetCurrentRow);
+                callsignListWidget->takeItem(row);
 
             }
         }
@@ -601,9 +607,11 @@ void ClusterClientFilterDialog::callsignDelAllClicked()
 
 void ClusterClientFilterDialog::callsignEditClicked()
 {
-    if (callsignListWidgetCurrentRow >= 0)
+    QList<QListWidgetItem *> selItems = callsignListWidget->selectedItems();
+
+    if (selItems.count() == 1)
     {
-        int row = callsignListWidgetCurrentRow;
+        int row = callsignListWidget->row(selItems[0]);
         QString currentCall = callsignListWidget->currentItem()->text();
         CallLocInputDialog callsignDialog(this, currentCall, QString("Edit Callsign Filter"), QString("Edit Callsign"));
         QString callsign;
@@ -640,6 +648,8 @@ QStringList ClusterClientFilterDialog::getLocatorFilterList()
 
 void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
 {
+    //LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
+    //ClusterClientFilterSettings ccfs = ct->clusterFilterSettings.getValue();
     locatorListWidget->clear();
     foreach (QString str, filterSettings.unpackFilterList( filterSettings.locatorFilterList))
     {
@@ -680,9 +690,12 @@ void ClusterClientFilterDialog::locatorAddClicked()
 }
 void ClusterClientFilterDialog::locatorEditClicked()
 {
-    if (locatorListWidgetCurrentRow >= 0)
+
+    QList<QListWidgetItem *> selItems = locatorListWidget->selectedItems();
+
+    if (selItems.count() == 1)
     {
-        int row = locatorListWidgetCurrentRow;
+        int row = locatorListWidget->row(selItems[0]);
         QString currentLocator = locatorListWidget->currentItem()->text();
         CallLocInputDialog callsignDialog(this, currentLocator, QString("Edit Locator Filter"), QString("Edit Locator"));
         QString locator;
@@ -717,9 +730,10 @@ void ClusterClientFilterDialog::locatorDelClicked()
         QMessageBox::NoButton);
         if (status == QMessageBox::Yes)
         {
-            if (locatorListWidgetCurrentRow >= 0 && locatorListWidgetCurrentRow < locatorListWidget->count())
+            int row = locatorListWidget->row(selItems[0]);
+            if (row >= 0 && row < locatorListWidget->count())
             {
-                locatorListWidget->takeItem(locatorListWidgetCurrentRow);
+                locatorListWidget->takeItem(row);
 
             }
         }

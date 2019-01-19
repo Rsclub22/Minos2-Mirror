@@ -146,42 +146,56 @@ void RotControlFrame::setBrgFromSpot(QString brg)
 void RotControlFrame::turnTo(int angle)
 {
     traceMsg("Turn to - " + QString::number(angle));
-    if (angle == COMPASS_ERROR)
+
+    if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-        traceMsg(QString("TurnTo: Bearing empty or invalid"));
-        QString msg = "<font color='Red'>Bearing empty or invalid</font>";
-        ui->rotatorStatMsg->setText(msg);
-        return;
-    }
+        ui->BrgSt->setText(QString::number(angle));
+
+        if (rotConnected)
+        {
+            traceMsg("Turn to - Contest match and connected");
+
+            if (angle == COMPASS_ERROR)
+            {
+                traceMsg(QString("TurnTo: Bearing empty or invalid"));
+                QString msg = "<font color='Red'>Bearing empty or invalid</font>";
+                ui->rotatorStatMsg->setText(msg);
+                return;
+            }
 
 
-    //if (angle > maxAzimuth)
-    if (angle > COMPASS_MAX360)
-    {
-        traceMsg(QString("TurnTo: Bearing too large"));
-        QString msg = "<font color='Red'>Bearing too large - " + QString::number(angle) + "</font>";
-        ui->rotatorStatMsg->setText(msg);
-        return;
-    }
-    //else if (angle < minAzimuth)
-    else if (angle < COMPASS_MIN0)
-    {
-        traceMsg(QString("TurnTo: Bearing too small"));
-        QString msg = "<font color='Red'>Bearing too small - " + QString::number(angle) + "</font>";
-        ui->rotatorStatMsg->setText(msg);
-        return;
-    }
-    else if (angle == currentBearing)
-    {
-        traceMsg(QString("TurnTo: Bearing = CurrentBearing"));
-        return;
-    }
-    else
-    {
-        traceMsg(QString("Send Bearing %1 to Rotator Control").arg(QString::number(angle)));
-        emit sendRotator(rpcConstants::eRotateDirect, angle);
-        showTurnButOn();
-        moving = true;
+            //if (angle > maxAzimuth)
+            if (angle > COMPASS_MAX360)
+            {
+                traceMsg(QString("TurnTo: Bearing too large"));
+                QString msg = "<font color='Red'>Bearing too large - " + QString::number(angle) + "</font>";
+                ui->rotatorStatMsg->setText(msg);
+                return;
+            }
+            //else if (angle < minAzimuth)
+            else if (angle < COMPASS_MIN0)
+            {
+                traceMsg(QString("TurnTo: Bearing too small"));
+                QString msg = "<font color='Red'>Bearing too small - " + QString::number(angle) + "</font>";
+                ui->rotatorStatMsg->setText(msg);
+                return;
+            }
+            else if (angle == currentBearing)
+            {
+                traceMsg(QString("TurnTo: Bearing = CurrentBearing"));
+                return;
+            }
+            else
+            {
+                traceMsg(QString("Send Bearing %1 to Rotator Control").arg(QString::number(angle)));
+                emit sendRotator(rpcConstants::eRotateDirect, angle);
+                showTurnButOn();
+                moving = true;
+            }
+
+
+        }
+
     }
 }
 
@@ -532,14 +546,14 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastStatus == ROT_STATUS_TURN_TO)
                {
-                   ui->rotatorStatMsg->setText(lastStatus);
-                   rotError = false;
-                   moving = true;
-                   movingCW = false;
-                   movingCCW = false;
-                   showTurnButOn();
-                   //clearRotatorFlags();
 
+                       ui->rotatorStatMsg->setText(lastStatus);
+                       rotError = false;
+                       moving = true;
+                       movingCW = false;
+                       movingCCW = false;
+                       showTurnButOn();
+                       //clearRotatorFlags();
                }
                else if (lastStatus == ROT_STATUS_CONNECTED)
                {

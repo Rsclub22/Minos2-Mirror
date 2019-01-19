@@ -93,10 +93,11 @@ void LoggerContestLog::clearDirty()
        rigMemories[i].clearDirty();
    }
 
-   for (int i =0; i < clusterFilterSettings.size(); i++)
-   {
-       clusterFilterSettings[i].clearDirty();
-   }
+
+   clusterFilterSettings.clearDirty();
+
+
+
 
    screenLayout.clearDirty();
    statsPeriod1.clearDirty();
@@ -160,10 +161,11 @@ void LoggerContestLog::setDirty()
        rigMemories[i].setDirty();
    }
 
-   for (int i =0; i < clusterFilterSettings.size(); i++)
-   {
-       clusterFilterSettings[i].setDirty();
-   }
+
+   clusterFilterSettings.setDirty();
+
+
+
 
    screenLayout.setDirty();
    statsPeriod1.setDirty();
@@ -627,38 +629,23 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
 
 //==========================================================================
 
-void LoggerContestLog::saveClusterFilter(int instanceNum, const ClusterClientFilterSettings &ccfs)
+void LoggerContestLog::saveClusterFilter(const ClusterClientFilterSettings &ccfs)
 {
-    if (clusterFilterSettings.size() < instanceNum + 1)
-    {
-        clusterFilterSettings.resize(instanceNum + 1);
-    }
-    ClusterClientFilterSettings cs = ccfs;
-    cs.instanceNum = instanceNum;
-    clusterFilterSettings[instanceNum].setValue(cs);
+    clusterFilterSettings.setValue(ccfs);
     commonSave(false);
 }
-void LoggerContestLog::saveInitialClusterFilter(int instanceNum, const ClusterClientFilterSettings &ccfs)
+void LoggerContestLog::saveInitialClusterFilter(const ClusterClientFilterSettings &ccfs)
 {
-    if (clusterFilterSettings.size() < instanceNum + 1)
-    {
-        clusterFilterSettings.resize(instanceNum + 1);
-    }
-    ClusterClientFilterSettings cs = ccfs;
-    cs.instanceNum = instanceNum;
-    clusterFilterSettings[instanceNum].setInitialValue(cs);
+    clusterFilterSettings.setInitialValue(ccfs);
 
 }
-ClusterClientFilterSettings LoggerContestLog::getClusterFilter(int instanceNum)
+ClusterClientFilterSettings LoggerContestLog::getClusterFilter()
 {
-    ClusterClientFilterSettings cs;
-    if (clusterFilterSettings.size() > instanceNum)
-    {
-        cs = clusterFilterSettings[instanceNum].getValue();
 
-    }
-    return cs;
+        return clusterFilterSettings.getValue();
 }
+
+
 
 
 //==========================================================================
@@ -1563,8 +1550,6 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                else if (methodName == "MinosClusterFilter")
                                {
                                        ClusterClientFilterSettings ccfs;
-                                       int  intstanceNum;
-                                       mt->getStructArgMemberValue("filterNum", intstanceNum);
                                        mt->getStructArgMemberValue("callsignList", ccfs.callsignFilterList);
                                        mt->getStructArgMemberValue("locatorList", ccfs.locatorFilterList);
                                        mt->getStructArgMemberValue("bandFilter50Mhz", ccfs.bandFilter50Mhz);
@@ -1582,7 +1567,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("modeFilterPSKMODE", ccfs.modeFilterPSKMODE);
                                        mt->getStructArgMemberValue("modeFilterMGMMODE", ccfs.modeFilterMGMMODE);
 
-                                       saveInitialClusterFilter(intstanceNum, ccfs);
+                                       saveInitialClusterFilter(ccfs);
 
                                }
                                else

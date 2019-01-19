@@ -232,7 +232,7 @@ void TSingleLogFrame::createScreenComponents()
     FKHRotControlFrame->setVisible(false);
     FKHRotControlFrame->setContest(contest);
 
-    clusterControlFrame = new ClusterClientFrame(this, 0);
+    clusterControlFrame = new ClusterClientFrame(this);
     clusterControlFrame->setObjectName(QStringLiteral("ClusterControlFrame"));
     clusterControlFrame->setFrameShape(QFrame::StyledPanel);
     clusterControlFrame->setFrameShadow(QFrame::Raised);

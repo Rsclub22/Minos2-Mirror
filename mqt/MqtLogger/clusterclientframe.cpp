@@ -25,20 +25,20 @@
 #include "ui_clusterclientframe.h"
 
 
-ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
+ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     QFrame(parent),
     ui(new Ui::ClusterClientFrame),
     purgeTimer(nullptr),
     timeToLive(0),
     purgeSpotFlag(false),
     holdUpdateFlag(false),
-    instanceNum(instanceNum),
     contestBand(-1),
     contestMode(-1),
     isProtected(false)
 {
 
     ui->setupUi(this);
+
 
     trace(QString("ClusterClientFrame Starting"));
 
@@ -50,7 +50,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
 
-    filterSetup = new ClusterClientFilterDialog(this, instanceNum);
+    filterSetup = new ClusterClientFilterDialog(this);
 
 
     purgeTimer = new QTimer(this);
@@ -60,10 +60,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
 
     spotQueue.clear();
 
+    checkNewFilters = new QTimer(this);
+    connect (checkNewFilters, SIGNAL(timeout()), this, SLOT(checkSavedFilters()));
 
-    checkNewSpotsTimer = new QTimer(this);
-    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));
-    spotQueue.clear();
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
 
@@ -153,6 +152,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent, int instanceNum):
     newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
+    checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
 
@@ -393,7 +393,7 @@ void ClusterClientFrame::filterButtonSelected()
     filterSetup->copyCallsignFilterListToListWidget();
     filterSetup->copyLocatorFilterListToListWidget();
     filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
-    filterSetup->show();
+    filterSetup->exec();
 
 }
 
@@ -537,7 +537,11 @@ void ClusterClientFrame::sendFreqToRig(QString freq)
 
 void ClusterClientFrame::sendBrgToRot(QString brg)
 {
-    MinosLoggerEvents::SendSpotBrgStrToRot(brg);
+    if (!brg.isEmpty())
+    {
+       MinosLoggerEvents::SendSpotBrgStrToRot(brg);
+    }
+
 }
 
 
@@ -814,11 +818,14 @@ void ClusterClientFrame::restoreLocatorViewColumns()
 void ClusterClientFrame::setContest(BaseContestLog *c)
 {
     ct = c;
+
     // set the contest in the filter dialog
     filterSetup->setContest(c);
 
     if (ct != nullptr)
     {
+        contestUuid = ct->uuid;
+        trace(QString("Cluster ClientFrame Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->band.getValue();
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
@@ -1244,17 +1251,19 @@ void ClusterClientFrame::checkNewSpots()
     }
 
 
-    checkSavedFilters();
 
 }
+
+
 
 void ClusterClientFrame::checkSavedFilters()
 {
     // this looks for changed saved settings
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
-    if (contest && contest->clusterFilterSettings.size() > instanceNum)
+    if (contest)
     {
-        ClusterClientFilterSettings cfs = contest->clusterFilterSettings[instanceNum].getValue();
+        QString cUuuid = ct->uuid;
+        ClusterClientFilterSettings cfs = contest->clusterFilterSettings.getValue();
         if (cfs != filterSetup->filterSettings)
         {
             filterSetup->filterSettings = cfs;

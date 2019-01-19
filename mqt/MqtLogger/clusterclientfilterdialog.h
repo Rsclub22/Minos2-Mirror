@@ -30,7 +30,7 @@ class ClusterClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClusterClientFilterDialog(QWidget *parent, int instanceNum);
+    explicit ClusterClientFilterDialog(QWidget *parent);
     ~ClusterClientFilterDialog();
 
     bool checkBandMatch(int bandNum);
@@ -79,7 +79,7 @@ private:
     bool mWaveButtonState;
     bool modeButtonState;
 
-    int instanceNum;
+    QString contestUuid;
 
     bool enableHFSpots;
 
@@ -136,8 +136,8 @@ private slots:
 
     void callsignAddClicked();
     void callsignDelClicked();
-    void callsignCurrentRowChanged(int currentRow);
-    void locatorCurrentRowChanged(int currentRow);
+    //void callsignCurrentRowChanged(int currentRow);
+    //void locatorCurrentRowChanged(int currentRow);
     void callsignEditClicked();
     void locatorAddClicked();
     void locatorEditClicked();

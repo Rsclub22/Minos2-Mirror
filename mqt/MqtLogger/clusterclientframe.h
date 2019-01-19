@@ -35,7 +35,8 @@ const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yel
 const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
 
 const int MOUSE_IN_FRAME_TIMEOUT = 10000;
-const int CHECKSPOTS_DURATION = 10000;
+const int CHECKSPOTS_DURATION = 1000;
+const int CHECK_NEWFILTERS_DURATION = 1000;
 
 class ClusterClientFrame;
 
@@ -120,7 +121,7 @@ class ClusterClientFrame : public QFrame
 
     void traceMsg(QString msg);
 public:
-    explicit ClusterClientFrame(QWidget *parent, int instanceNum);
+    explicit ClusterClientFrame(QWidget *parent);
     ~ClusterClientFrame() override;
 
     void setContest(BaseContestLog *contest);
@@ -150,6 +151,7 @@ private:
     bool holdUpdateFlag;
 
     QTimer* checkNewSpotsTimer;
+    QTimer* checkNewFilters;
 
     MouseInObject* actionInObject;
 
@@ -178,7 +180,7 @@ private:
     QAction* clearSpotAction;
     QAction* clearAllSpotsAction;
 
-    int instanceNum;
+    QString contestUuid;
 
     QString contestBandStr;
     int contestBand;
@@ -213,7 +215,7 @@ private:
     void newCallsignSpotIndToggle(bool on);
     void newLocatorSpotIndToggle(bool on);
     void statusIndicatorToggle(bool on);
-    void checkSavedFilters();
+
 
     //void on_AfterLogContact(BaseContestLog *c, Callsign cs, Locator loc);
 
@@ -257,7 +259,9 @@ private slots:
     void onSearchSpotVertHeaderClicked(int row);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
     void checkNewSpots();
+    void checkSavedFilters();
     void mouseTimerCheckNewSpots();
+
 };
 
 class MouseInObject : public QObject
