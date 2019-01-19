@@ -229,7 +229,7 @@ private:
 
 private slots:
 
-    void on_AfterLogContact(BaseContestLog *c, Callsign cs, Locator loc);
+    void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
 
     void clusterClientServerList(QVector<ClusterServer>);
     void dxSpots(QVector<QString>);
@@ -243,7 +243,7 @@ private slots:
     void memoryActionSelected();
     void clearSpotActionSelected();
     void clearAllSpotsActionSelected();
-    void delayed_afterLogContact(BaseContestLog *c, Callsign cs, Locator loc);
+    void delayed_afterLogContact(BaseContestLog *c, Callsign cs, QString loc);
     void restoreCallsignViewColumns();
     void restoreLocatorViewColumns();
     void onDxSpotViewClicked(const QModelIndex &);
@@ -261,6 +261,7 @@ private slots:
     void checkNewSpots();
     void checkSavedFilters();
     void mouseTimerCheckNewSpots();
+
 
 };
 
