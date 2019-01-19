@@ -754,6 +754,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                     .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
 
                     qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
+
                     // is spot older than time to live time
                     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
                     if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))
