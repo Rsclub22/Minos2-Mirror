@@ -14,12 +14,17 @@ WsjtxConfigure::WsjtxConfigure(QWidget *parent) :
     ui(new Ui::WsjtxConfigure)
 {
     ui->setupUi(this);
+
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    QSettings settings;
+    QByteArray geometry = settings.value("WsjtxConfigure/geometry/").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
     ui->portSpinBox->setMinimum (1);
     ui->portSpinBox->setMaximum (std::numeric_limits<port_type>::max ());
-
-    //elpWSJTXEnabled,
-    //elpWSJTXPort,
-    //elpWSJTXGroupAddress,
 
     bool enabled;
     int port = 0;
@@ -39,6 +44,13 @@ WsjtxConfigure::~WsjtxConfigure()
     delete ui;
 }
 
+void WsjtxConfigure::doClose()
+{
+    QSettings settings;
+    settings.setValue("WsjtxConfigure/geometry/", saveGeometry());
+
+    close();
+}
 void WsjtxConfigure::on_OKButton_clicked()
 {
     bool enabled = ui->enabledcb->isChecked();
@@ -50,10 +62,11 @@ void WsjtxConfigure::on_OKButton_clicked()
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpWSJTXGroupAddress, addr );
 
     WsjtxServer::getWsjtxServer()->start();
-    close();
+
+    doClose();
 }
 
 void WsjtxConfigure::on_CancelButton_clicked()
 {
-    close();
+    doClose();
 }

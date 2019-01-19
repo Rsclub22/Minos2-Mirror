@@ -1,4 +1,5 @@
 #include "DecodesModel.hpp"
+#include "cutils.h"
 
 #include <QStandardItem>
 #include <QModelIndex>
@@ -82,7 +83,7 @@ namespace
     snr_item->setData (snr);
     snr_item->setTextAlignment (Qt::AlignRight);
 
-    auto dt = new QStandardItem {QString::number (delta_time)};
+    auto dt = new QStandardItem {QString::number (static_cast<double>( delta_time))};
     dt->setData (delta_time);
     dt->setTextAlignment (Qt::AlignRight);
 
@@ -135,7 +136,7 @@ void DecodesModel::add_decode (bool is_new, QString const& client_id, QTime time
               auto row_time = item (row, 1)->data ().toTime ();
               if (row_time == time
                   && item (row, 2)->data ().toInt () == snr
-                  && item (row, 3)->data ().toFloat () == delta_time
+                  && almost_equal( item (row, 3)->data ().toFloat (), delta_time, 2)
                   && item (row, 4)->data ().toUInt () == delta_frequency
                   && data (index (row, 5)).toString () == mode
                   && data (index (row, 7)).toString () == confidence_string (low_confidence)
@@ -180,11 +181,10 @@ void DecodesModel::do_reply (QModelIndex const& source, quint8 modifiers)
                 , item (row, 1)->data ().toTime ()
                 , item (row, 2)->data ().toInt ()
                 , item (row, 3)->data ().toFloat ()
-                , item (row, 4)->data ().toInt ()
+                , static_cast<quint32>(item (row, 4)->data ().toInt ())
                 , data (index (row, 5)).toString ()
                 , data (index (row, 8)).toString ()
                 , confidence_string (true) == data (index (row, 7)).toString ()
                 , modifiers);
 }
 
-#include "moc_DecodesModel.cpp"

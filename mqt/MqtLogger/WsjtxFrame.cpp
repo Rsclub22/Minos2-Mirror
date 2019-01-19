@@ -125,6 +125,24 @@ void WsjtxFrame::IdFilterModel::rx_df (int df)
     }
     */
 }
+decodeMessage::decodeMessage(WsjtxFrame *frame, bool /*is_new*/, QString const& /*id*/, QTime time
+              , qint32 snr, float /*delta_time*/
+              , quint32 /*delta_frequency*/, QString const& /*mode*/
+              , QString const& message, bool /*low_confidence*/
+              , bool /*off_air*/)
+    :
+ decodeTime(time)
+, message(message)
+, strength(snr)
+
+{}
+decodeMessage::decodeMessage()
+{
+
+}
+
+decodeMessage::~decodeMessage()
+{}
 
 WsjtxFrame::WsjtxFrame(QWidget *parent) :
     QFrame(parent)
@@ -312,6 +330,10 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc)
         return;
+
+    decodeMessage dc(this, is_new, id, time, snr, delta_time, delta_frequency, mode, message
+                     , low_confidence, off_air);
+    messages.push_back(dc);
 
     decodes_model_->add_decode (is_new, id, time, snr, delta_time, delta_frequency, mode, message
                            , low_confidence, off_air, fast_mode ());

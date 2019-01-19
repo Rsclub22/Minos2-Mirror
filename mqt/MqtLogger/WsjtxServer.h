@@ -7,7 +7,7 @@
 
 using Frequency = MessageServer::Frequency;
 using port_type = MessageServer::port_type;
-enum class SpecialOperatingActivity {NONE, NA_VHF, EU_VHF, FIELD_DAY, RTTY, FOX, HOUND};
+enum SpecialOperatingActivity {NONE, NA_VHF, EU_VHF, FIELD_DAY, RTTY, FOX, HOUND};
 
 class WsjtxServer : public QObject
 {

@@ -34,6 +34,7 @@ PA9XYZ G4ABC/P RR73
                                    G4ABC/P PA9XYZ 73
   */
 enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73};
+class WsjtxFrame;
 class decodeMessage
 {
 public:
@@ -45,9 +46,9 @@ public:
     // I CAN see transmit "sessions" - does the status give me enough?
 
     MessageStage mstage{emsNone};
-    SpecialOperatingActivity opMode;
+    SpecialOperatingActivity opMode = NONE;
 
-    QDateTime decodeTime;
+    QTime decodeTime;
     QString message;
     QString toCall;
     QString toGrid;
@@ -57,6 +58,14 @@ public:
     int bearing = 0;
     int distance = 0;
     int points = 0;
+
+    decodeMessage(WsjtxFrame *frame, bool is_new, QString const& id, QTime time
+                  , qint32 snr, float delta_time
+                  , quint32 delta_frequency, QString const& mode
+                  , QString const& message, bool low_confidence
+                  , bool off_air);
+    decodeMessage();
+    ~decodeMessage();
 };
 
 class WsjtxFrame : public QFrame
@@ -68,6 +77,11 @@ public:
     ~WsjtxFrame();
 
     void setContest(BaseContestLog *c);
+    SpecialOperatingActivity curOpMode = NONE;
+    QString myCall;
+    QString myLoc;
+
+    QVector<decodeMessage> messages;
 
 private:
     Ui::WsjtxFrame *ui;

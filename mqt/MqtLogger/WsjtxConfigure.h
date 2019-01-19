@@ -22,6 +22,7 @@ private slots:
 
 private:
     Ui::WsjtxConfigure *ui;
+    void doClose();
 };
 
 #endif // WSJTXCONFIGURE_H

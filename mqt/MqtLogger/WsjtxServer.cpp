@@ -41,7 +41,7 @@ void WsjtxServer::start ( )
 
     trace(QString("WsjtxServer::start port %1 address %2").arg(port).arg(multicast_group_address));
 
-    server_->start(port, QHostAddress {multicast_group_address});
+    server_->start(static_cast<port_type>( port), QHostAddress {multicast_group_address});
 }
 //void WsjtxServer::log_qso (QString const& id, QDateTime time_off, QString const& dx_call
 //                                           , QString const& dx_grid, Frequency dial_frequency, QString const& mode
