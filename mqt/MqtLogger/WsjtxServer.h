@@ -2,12 +2,11 @@
 #define WSJTXSERVER_H
 
 #include "base_pch.h"
-#include "MessageServer.hpp"
-#include "Radio.hpp"
+#include "WsjtxMessageServer.hpp"
+#include "WsjtxRadio.hpp"
 
 using Frequency = MessageServer::Frequency;
 using port_type = MessageServer::port_type;
-enum SpecialOperatingActivity {NONE, NA_VHF, EU_VHF, FIELD_DAY, RTTY, FOX, HOUND};
 
 class WsjtxServer : public QObject
 {

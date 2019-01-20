@@ -408,7 +408,7 @@
 
 #include <QDataStream>
 
-#include "pimpl_h.hpp"
+#include "Wsjtx_pimpl_h.hpp"
 
 class QIODevice;
 class QByteArray;

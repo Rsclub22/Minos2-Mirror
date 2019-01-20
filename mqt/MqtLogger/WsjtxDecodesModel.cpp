@@ -1,4 +1,4 @@
-#include "DecodesModel.hpp"
+#include "WsjtxDecodesModel.hpp"
 #include "cutils.h"
 
 #include <QStandardItem>

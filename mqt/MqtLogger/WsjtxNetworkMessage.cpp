@@ -1,4 +1,4 @@
-#include "NetworkMessage.hpp"
+#include "WsjtxNetworkMessage.hpp"
 
 #include <exception>
 
@@ -6,7 +6,7 @@
 #include <QByteArray>
 #include <QDebug>
 
-#include "pimpl_impl.hpp"
+#include "Wsjtx_pimpl_impl.hpp"
 
 namespace NetworkMessage
 {

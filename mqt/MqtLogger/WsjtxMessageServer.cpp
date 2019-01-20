@@ -1,4 +1,4 @@
-#include "MessageServer.hpp"
+#include "WsjtxMessageServer.hpp"
 
 #include <stdexcept>
 
@@ -8,13 +8,13 @@
 #include <QTimer>
 #include <QHash>
 
-#include "Radio.hpp"
-#include "NetworkMessage.hpp"
-#include "qt_helpers.hpp"
+#include "WsjtxRadio.hpp"
+#include "WsjtxNetworkMessage.hpp"
+#include "Wsjtx_qt_helpers.hpp"
 
-#include "pimpl_impl.hpp"
+#include "Wsjtx_pimpl_impl.hpp"
 
-#include "moc_MessageServer.cpp"
+#include "moc_WsjtxMessageServer.cpp"
 
 class MessageServer::impl
   : public QUdpSocket
@@ -92,7 +92,7 @@ public:
 
 MessageServer::impl::BindMode constexpr MessageServer::impl::bind_mode_;
 
-#include "MessageServer.moc"
+#include "WsjtxMessageServer.moc"
 
 void MessageServer::impl::leave_multicast_group ()
 {

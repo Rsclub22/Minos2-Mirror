@@ -8,7 +8,7 @@
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"
 
-#include "DecodesModel.hpp"
+#include "WsjtxDecodesModel.hpp"
 #include "WsjtxServer.h"
 
 #include "WsjtxFrame.h"
@@ -47,7 +47,7 @@ WsjtxFrame::IdFilterModel::IdFilterModel ()
 
 QVariant WsjtxFrame::IdFilterModel::data (QModelIndex const& proxy_index, int role) const
 {
-    /*
+
   if (role == Qt::BackgroundRole)
     {
       switch (proxy_index.column ())
@@ -78,26 +78,24 @@ QVariant WsjtxFrame::IdFilterModel::data (QModelIndex const& proxy_index, int ro
           break;
         }
     }
-    */
+
   return QSortFilterProxyModel::data (proxy_index, role);
 }
 
 bool WsjtxFrame::IdFilterModel::filterAcceptsRow (int source_row
                                                     , QModelIndex const& source_parent) const
 {
-    /*
+
   auto source_index_col0 = sourceModel ()->index (source_row, 0, source_parent);
   QString lineid = sourceModel ()->data (source_index_col0).toString () ;
 
   return lineid == client_id_;
-  */
-    return true;
 }
 
 void WsjtxFrame::IdFilterModel::de_call (QString const& call)
 {
-    /*
-  if (call != call_)
+    // sets up my call
+    if (call != call_)
     {
       beginResetModel ();
       if (call.size ())
@@ -111,38 +109,18 @@ void WsjtxFrame::IdFilterModel::de_call (QString const& call)
       call_ = call;
       endResetModel ();
     }
-    */
 }
 
 void WsjtxFrame::IdFilterModel::rx_df (int df)
 {
-    /*
-  if (df != rx_df_)
+    // sets up my delta frequency
+    if (df != rx_df_)
     {
       beginResetModel ();
       rx_df_ = df;
       endResetModel ();
     }
-    */
 }
-decodeMessage::decodeMessage(WsjtxFrame *frame, bool /*is_new*/, QString const& /*id*/, QTime time
-              , qint32 snr, float /*delta_time*/
-              , quint32 /*delta_frequency*/, QString const& /*mode*/
-              , QString const& message, bool /*low_confidence*/
-              , bool /*off_air*/)
-    :
- decodeTime(time)
-, message(message)
-, strength(snr)
-
-{}
-decodeMessage::decodeMessage()
-{
-
-}
-
-decodeMessage::~decodeMessage()
-{}
 
 WsjtxFrame::WsjtxFrame(QWidget *parent) :
     QFrame(parent)
@@ -296,6 +274,8 @@ void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString cons
       }
 
       fast_mode_ = fast_mode;
+      decoder.setMyCall(de_call);
+      decoder.setMyGrid(de_grid);
       decodes_proxy_model_.de_call (de_call);
       decodes_proxy_model_.rx_df (rx_df);
       ui->de_label_->setText (de_call.size () >= 0 ? QString {"DE: %1%2"}.arg (de_call)
@@ -331,8 +311,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     if (ct != cc)
         return;
 
-    decodeMessage dc(this, is_new, id, time, snr, delta_time, delta_frequency, mode, message
-                     , low_confidence, off_air);
+    decodeMessage dc = decoder.decode(message);
     messages.push_back(dc);
 
     decodes_model_->add_decode (is_new, id, time, snr, delta_time, delta_frequency, mode, message

@@ -1,6 +1,6 @@
 #include "base_pch.h"
 #include "ContestApp.h"
-#include "MessageServer.hpp"
+#include "WsjtxMessageServer.hpp"
 #include "WsjtxServer.h"
 
 #include "WsjtxConfigure.h"

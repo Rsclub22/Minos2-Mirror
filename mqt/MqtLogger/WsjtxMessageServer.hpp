@@ -9,9 +9,9 @@
 
 #define UDP_EXPORT
 //#include "udp_export.h"
-#include "Radio.hpp"
+#include "WsjtxRadio.hpp"
 
-#include "pimpl_h.hpp"
+#include "Wsjtx_pimpl_h.hpp"
 
 class QString;
 

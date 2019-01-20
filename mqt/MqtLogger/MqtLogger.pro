@@ -86,14 +86,15 @@ SOURCES += \
     tminosbshelpform.cpp \
     radiodetails.cpp \
     WsjtxFrame.cpp \
-    DecodesModel.cpp \
-    MessageServer.cpp \
-    NetworkMessage.cpp \
-    qt_helpers.cpp \
-    Radio.cpp \
-    RadioMetaType.cpp \
     WsjtxServer.cpp \
-    WsjtxConfigure.cpp
+    WsjtxConfigure.cpp \
+    WsjtxDecode.cpp \
+    WsjtxDecodesModel.cpp \
+    WsjtxNetworkMessage.cpp \
+    WsjtxMessageServer.cpp \
+    WsjtxRadio.cpp \
+    WsjtxRadioMetaType.cpp \
+    Wsjtx_qt_helpers.cpp
 
 HEADERS  += \
     AdifImport.h \
@@ -150,17 +151,16 @@ HEADERS  += \
     tminosbshelpform.h \
     radiodetails.h \
     WsjtxFrame.h \
-    DecodesModel.hpp \
-    MessageServer.hpp \
-    NetworkMessage.hpp \
-    pimpl_h.hpp \
-    pimpl_impl.hpp \
-    Radio.hpp \
-    pimpl_h.hpp \
-    pimpl_impl.hpp \
-    qt_helpers.hpp \
     WsjtxServer.h \
-    WsjtxConfigure.h
+    WsjtxConfigure.h \
+    WsjtxDecode.h \
+    WsjtxDecodesModel.hpp \
+    WsjtxNetworkMessage.hpp \
+    WsjtxMessageServer.hpp \
+    Wsjtx_pimpl_h.hpp \
+    Wsjtx_pimpl_impl.hpp \
+    Wsjtx_qt_helpers.hpp \
+    WsjtxRadio.hpp
 
 FORMS    += \
     contestdetails.ui \

@@ -3,9 +3,10 @@
 
 #include "base_pch.h"
 
-#include "DecodesModel.hpp"
-#include "Radio.hpp"
-#include "MessageServer.hpp"
+#include "WsjtxDecode.h"
+#include "WsjtxDecodesModel.hpp"
+#include "WsjtxRadio.hpp"
+#include "WsjtxMessageServer.hpp"
 #include "WsjtxServer.h"
 
 using Frequency = MessageServer::Frequency;
@@ -14,59 +15,6 @@ using port_type = MessageServer::port_type;
 namespace Ui {
 class WsjtxFrame;
 }
-/*
-  // Normal
-CQ K1ABC FN42                          #K1ABC calls CQ
-                  K1ABC G0XYZ IO91     #G0XYZ answers
-G0XYZ K1ABC –19                        #K1ABC sends report
-                  K1ABC G0XYZ R-22     #G0XYZ sends R+report
-G0XYZ K1ABC RR73                       #K1ABC sends RRR - or RR73
-                  K1ABC G0XYZ 73       #G0XYZ sends 73
-  */
-
-/*
-  // EU VHF Contest
-CQ TEST G4ABC/P IO91                                         "/P" is optional
-                                   G4ABC/P PA9XYZ JO22       on either callsign
-PA9XYZ 590003 IO91NP
-                                   G4ABC/P R 570007 JO22DB
-PA9XYZ G4ABC/P RR73
-                                   G4ABC/P PA9XYZ 73
-  */
-enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73};
-class WsjtxFrame;
-class decodeMessage
-{
-public:
-    // Can I populate this accurately?
-    // Do I need the whole decode set to allow for reply?
-    // Doesn't contain MY sent messages... In fact, once working someone
-    // it may all go to pot
-
-    // I CAN see transmit "sessions" - does the status give me enough?
-
-    MessageStage mstage{emsNone};
-    SpecialOperatingActivity opMode = NONE;
-
-    QTime decodeTime;
-    QString message;
-    QString toCall;
-    QString toGrid;
-    QString fromCall;
-    QString fromGrid;
-    int strength = -100;
-    int bearing = 0;
-    int distance = 0;
-    int points = 0;
-
-    decodeMessage(WsjtxFrame *frame, bool is_new, QString const& id, QTime time
-                  , qint32 snr, float delta_time
-                  , quint32 delta_frequency, QString const& mode
-                  , QString const& message, bool low_confidence
-                  , bool off_air);
-    decodeMessage();
-    ~decodeMessage();
-};
 
 class WsjtxFrame : public QFrame
 {
@@ -91,6 +39,8 @@ private:
     QString id_;
     bool columns_resized_ = false;
     HtmlDelegate *delegate = nullptr;
+
+    WsjtxDecode decoder;
 
 
     class IdFilterModel final

@@ -1,4 +1,4 @@
-#include "Radio.hpp"
+#include "WsjtxRadio.hpp"
 
 #include <QMetaType>
 #include <QDebug>

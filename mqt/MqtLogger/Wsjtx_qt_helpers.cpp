@@ -1,4 +1,4 @@
-#include "qt_helpers.hpp"
+#include "Wsjtx_qt_helpers.hpp"
 
 #include <QString>
 #include <QFont>
