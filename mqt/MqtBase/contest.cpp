@@ -85,9 +85,9 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAt( int i )
    return QSharedPointer<BaseContact>();
 }
 
-QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequence )
+QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequence ) const
 {
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( ConstLogIterator i = ctList.begin(); i != ctList.end(); i++ )
    {
       if ( i->wt ->getLogSequence() == logSequence )
          return i->wt;
@@ -317,7 +317,7 @@ void BaseContestLog::disbearc( double lon, double lat, double &dist, int &brg ) 
    brg = static_cast< int > (az) ;                   /* and give it back as integer */
 }
 //---------------------------------------------------------------------------
-bool BaseContestLog::getsdist( const QString &loc, QString &minloc, double &mindist )
+bool BaseContestLog::getsdist( const QString &loc, QString &minloc, double &mindist ) const
 {
    int brg;
    double dist = 0.0;
@@ -338,7 +338,7 @@ bool BaseContestLog::getsdist( const QString &loc, QString &minloc, double &mind
    return false;
 }
 //---------------------------------------------------------------------------
-int BaseContestLog::CalcNearest( const QString &qscalcloc )
+int BaseContestLog::CalcNearest( const QString &qscalcloc ) const
 {
    if ( qscalcloc.length() != 4 )
       return 0;	// only valid 4 fig locs
@@ -384,7 +384,7 @@ int BaseContestLog::CalcNearest( const QString &qscalcloc )
    return static_cast<int>(mindist);
 }
 //---------------------------------------------------------------------------
-int BaseContestLog::CalcCentres( const QString &qscalcloc, int &brg )
+int BaseContestLog::CalcCentres( const QString &qscalcloc, int &brg ) const
 {
    if ( qscalcloc.length() < 4 )
       return 0;	// only valid 4 or more fig locs
@@ -936,11 +936,12 @@ bool dupsheet::checkCurDup(ScreenContact *nct, unsigned long valpseq, bool inser
    }
    return false;
 }
+
 bool dupsheet::checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsigned long valpseq, bool insert )
 {
    curdup.reset();
    QSharedPointer<BaseContact> nct = contest->pcontactAtSeq(nctseq);
-   if ( nct->cs.valRes == CS_OK )
+   if ( nct && nct->cs.valRes == CS_OK )
    {
       QSharedPointer<DupContact> test( new DupContact(nct) );
       DupIterator c = ctList.find(test);
@@ -1295,10 +1296,10 @@ void BaseContestLog::loadBonusList()
     }
 
 }
-int BaseContestLog::getSquareBonus(QString sloc)
+int BaseContestLog::getSquareBonus(QString sloc) const
 {
     int bonus = 0;
-    QMap<QString, int>::iterator l = locBonuses.find(sloc);
+    QMap<QString, int>::const_iterator l = locBonuses.find(sloc);
 
     if ( l != locBonuses.end())
     {
@@ -1307,7 +1308,7 @@ int BaseContestLog::getSquareBonus(QString sloc)
     }
     else
     {
-        QMap<QString, int>::iterator l = locBonuses.find("DEFAULT");
+        QMap<QString, int>::const_iterator l = locBonuses.find("DEFAULT");
         if ( l != locBonuses.end())
         {
            // specific bonus for square allocated

@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QFileDialog>
 #include <QProcessEnvironment>
+#include <QMessageBox>
 
 static QString appStartupName;
 QString getAppStartupName()
@@ -40,6 +41,13 @@ void myMessageOutput(QtMsgType type,
     }
     QString res = QString("AppMessageHandler (%1, %2 %3:%4): %5").arg(mtype).arg(context.file).arg(context.line).arg(context.function).arg(msg);
     trace(res);
+    if (type == QtCriticalMsg || type == QtFatalMsg)
+    {
+        QMessageBox msgBox(nullptr);
+        msgBox.setText( res );
+
+        msgBox.exec();
+    }
 }
 
 void appStartup(const QString &pappName)

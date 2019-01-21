@@ -325,7 +325,6 @@ void TSingleLogFrame::createScreenComponents()
     singleLogFrameSplitter->setChildrenCollapsible(false);
 
     connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
-
 }
 void TSingleLogFrame::clearScreenLayout()
 {

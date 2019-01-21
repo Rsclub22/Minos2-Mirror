@@ -1,13 +1,11 @@
-#include "WsjtxDecodesModel.hpp"
-#include "cutils.h"
+#include "base_pch.h"
 
 #include <QStandardItem>
-#include <QModelIndex>
-#include <QTime>
-#include <QString>
-#include <QFont>
-#include <QList>
 
+#include "WsjtxRadio.hpp"
+#include "cutils.h"
+
+#include "WsjtxDecodesModel.hpp"
 /*
   We want:
 
@@ -46,145 +44,239 @@
   */
 namespace
 {
-  char const * const headings[] = {
-    QT_TRANSLATE_NOOP ("DecodesModel", "Client"),
-    QT_TRANSLATE_NOOP ("DecodesModel", "Time"),
-    QT_TRANSLATE_NOOP ("DecodesModel", "Snr"),
-    QT_TRANSLATE_NOOP ("DecodesModel", "DT"),
-    QT_TRANSLATE_NOOP ("DecodesModel", "DF"),
-    QT_TRANSLATE_NOOP ("DecodesModel", "Md"),
-    QT_TRANSLATE_NOOP ("DecodesModel", "Confidence"),
-    QT_TRANSLATE_NOOP ("DecodesModel", "Live"),
-    QT_TRANSLATE_NOOP ("DecodesModel", "Message"),
-  };
+class DecodeHeading
+{
+public:
+    QString text;
+    Qt::AlignmentFlag alignment;
+};
 
-  QString confidence_string (bool low_confidence)
-  {
+enum DecodeColumns
+{
+    dcId,
+    dcTime, dcSnr, dcDT, dcDF, dcMd, dcConfidence, dcLive, dcSeq, dcPoints, dcBearing, dcDistance,
+    dcFromCall, dcFromGrid, dcToCall, dcToGrid,
+    dcMessage, dcMaxVal
+};
+
+DecodeHeading const headings[dcMaxVal] = {
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Client"), Qt::AlignRight},
+
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Time"), Qt::AlignRight},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Snr"), Qt::AlignRight},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "DT"), Qt::AlignRight},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "DF"), Qt::AlignRight},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Md"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Confidence"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Live"),Qt::AlignHCenter},
+
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Seq"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "points"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "bearing"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "distance"),Qt::AlignHCenter},
+
+    {QT_TRANSLATE_NOOP ("DecodesModel", "From call"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "From grid"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "To Call"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "To Grid"), Qt::AlignLeft},
+
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Message"), Qt::AlignLeft}
+};
+
+QRegularExpression cq_re {"(CQ|CQDX|QRZ)[^A-Z0-9/]+"};
+
+QString confidence_string (bool low_confidence)
+{
     return low_confidence ? QT_TRANSLATE_NOOP ("DecodesModel", "low") : QT_TRANSLATE_NOOP ("DecodesModel", "high");
-  }
-
-  QString live_string (bool off_air)
-  {
-    return off_air ? QT_TRANSLATE_NOOP ("DecodesModel", "no") : QT_TRANSLATE_NOOP ("DecodesModel", "yes");
-  }
-
-  QFont text_font {"Courier", 10};
-
-  QList<QStandardItem *> make_row (QString const& client_id, QTime time, qint32 snr, float delta_time
-                                   , quint32 delta_frequency, QString const& mode, QString const& message
-                                   , bool low_confidence, bool off_air, bool is_fast)
-  {
-    auto time_item = new QStandardItem {time.toString (is_fast || "~" == mode ? "hh:mm:ss" : "hh:mm")};
-//    auto time_item = new QStandardItem {time.toString( is_fast || (("~" == mode) ? "hh:mm:ss" : "hh:mm"))};
-    time_item->setData (time);
-    time_item->setTextAlignment (Qt::AlignRight);
-
-    auto snr_item = new QStandardItem {QString::number (snr)};
-    snr_item->setData (snr);
-    snr_item->setTextAlignment (Qt::AlignRight);
-
-    auto dt = new QStandardItem {QString::number (static_cast<double>( delta_time))};
-    dt->setData (delta_time);
-    dt->setTextAlignment (Qt::AlignRight);
-
-    auto df = new QStandardItem {QString::number (delta_frequency)};
-    df->setData (delta_frequency);
-    df->setTextAlignment (Qt::AlignRight);
-
-    auto md = new QStandardItem {mode};
-    md->setTextAlignment (Qt::AlignHCenter);
-
-    auto confidence = new QStandardItem {confidence_string (low_confidence)};
-    confidence->setTextAlignment (Qt::AlignHCenter);
-
-    auto live = new QStandardItem {live_string (off_air)};
-    live->setTextAlignment (Qt::AlignHCenter);
-
-    QList<QStandardItem *> row {
-      new QStandardItem {client_id}, time_item, snr_item, dt, df, md, confidence, live, new QStandardItem {message}};
-    Q_FOREACH (auto& item, row)
-      {
-        item->setEditable (false);
-        item->setFont (text_font);
-        item->setTextAlignment (item->textAlignment () | Qt::AlignVCenter);
-      }
-    return row;
-  }
 }
 
-DecodesModel::DecodesModel (QObject * parent)
-  : QStandardItemModel {0, sizeof (headings) / sizeof (headings[0]), parent}
+QString live_string (bool off_air)
 {
-  int column {0};
-  for (auto const& heading : headings)
+    return off_air ? QT_TRANSLATE_NOOP ("DecodesModel", "no") : QT_TRANSLATE_NOOP ("DecodesModel", "yes");
+}
+
+}
+
+DecodesModel::DecodesModel ()
+    : QAbstractItemModel (), rx_df_ (-1)
+{
+    int column {0};
+    for (auto const& heading : headings)
     {
-      setHeaderData (column++, Qt::Horizontal, tr (heading));
+        setHeaderData (column++, Qt::Horizontal, heading.text);
     }
 }
 
-void DecodesModel::add_decode (bool is_new, QString const& client_id, QTime time, qint32 snr, float delta_time
-                               , quint32 delta_frequency, QString const& mode, QString const& message
-                               , bool low_confidence, bool off_air, bool is_fast)
+void DecodesModel::add_decode ()
 {
-  if (!is_new)
+    beginResetModel();
+    endResetModel();
+}
+
+void DecodesModel::de_call (QString const& call)
+{
+    // sets up my call
+    if (call != call_)
     {
-      int target_row {-1};
-      for (auto row = 0; row < rowCount (); ++row)
+        beginResetModel ();
+        if (call.size ())
         {
-          if (data (index (row, 0)).toString () == client_id)
+            base_call_re_.setPattern ("[^A-Z0-9]*" + Radio::base_callsign (call) + "[^A-Z0-9]*");
+        }
+        else
+        {
+            base_call_re_.setPattern (QString {});
+        }
+        call_ = call;
+        endResetModel ();
+    }
+}
+
+void DecodesModel::rx_df (int df)
+{
+    // sets up my delta frequency
+    if (df != rx_df_)
+    {
+        beginResetModel ();
+        rx_df_ = df;
+        endResetModel ();
+    }
+}
+QVariant DecodesModel::data (QModelIndex const& index, int role) const
+{
+
+    if (role == Qt::BackgroundRole)
+    {
+        switch (index.column ())
+        {
+        case dcMessage:                 // message
+        {
+            auto message = data (index).toString ();
+            if (base_call_re_.pattern ().size ()
+                    && message.contains (base_call_re_))
             {
-              auto row_time = item (row, 1)->data ().toTime ();
-              if (row_time == time
-                  && item (row, 2)->data ().toInt () == snr
-                  && almost_equal( item (row, 3)->data ().toFloat (), delta_time, 2)
-                  && item (row, 4)->data ().toUInt () == delta_frequency
-                  && data (index (row, 5)).toString () == mode
-                  && data (index (row, 7)).toString () == confidence_string (low_confidence)
-                  && data (index (row, 6)).toString () == live_string (off_air)
-                  && data (index (row, 8)).toString () == message)
-                {
-                  return;
-                }
-              if (time <= row_time)
-                {
-                  target_row = row; // last row with same time
-                }
+                // my call in message - colour red(ish)
+                return QColor {255,200,200};
+            }
+            if (message.contains (cq_re))
+            {
+                // CQ call in message - colour green(ish)
+                return QColor {200, 255, 200};
             }
         }
-      if (target_row >= 0)
-        {
-          insertRow (target_row + 1, make_row (client_id, time, snr, delta_time, delta_frequency, mode
-                                               , message, low_confidence, off_air, is_fast));
-          return;
+            break;
+
+        case dcDF:                 // DF
+            if (qAbs (data (index).toInt () - rx_df_) <= 10)
+            {
+                // near my freq  - colour red(ish)
+                return QColor {255, 200, 200};
+            }
+            break;
+
+        default:
+            break;
         }
     }
-
-  appendRow (make_row (client_id, time, snr, delta_time, delta_frequency, mode, message, low_confidence
-                       , off_air, is_fast));
-}
-
-void DecodesModel::clear_decodes (QString const& client_id)
-{
-  for (auto row = rowCount () - 1; row >= 0; --row)
+    if (role == Qt::DisplayRole)
     {
-      if (data (index (row, 0)).toString () == client_id)
+        switch (index.column())
         {
-          removeRow (row);
+        case dcId:
+            return messages->at(index.row()).id;
+        case dcTime:
+            return messages->at(index.row()).time.toString ("hh:mm:ss");
+        case dcSnr:
+            return QString::number(messages->at(index.row()).snr);
+        case dcDT:
+            return QString::number (static_cast<double>( messages->at(index.row()).delta_time));
+        case dcDF:
+            return QString::number(messages->at(index.row()).delta_frequency);
+        case dcMd:
+            return messages->at(index.row()).mode;
+        case dcConfidence:
+            return  confidence_string (messages->at(index.row()).low_confidence) ;
+        case dcLive:
+            return live_string (messages->at(index.row()).off_air);
+        case dcSeq:
+            return messages->at(index.row()).getMStage();
+
+        case dcPoints:
+            return QString::number(messages->at(index.row()).points);
+        case dcBearing:
+            return QString::number(messages->at(index.row()).bearing);
+        case dcDistance:
+            return QString::number(messages->at(index.row()).distance);
+
+        case dcFromCall:
+            return messages->at(index.row()).fromCall.realCall;
+        case dcFromGrid:
+            return messages->at(index.row()).fromGrid.loc.getValue();
+        case dcToCall:
+            return messages->at(index.row()).toCall.realCall;
+        case dcToGrid:
+            return messages->at(index.row()).toGrid.loc.getValue();
+
+
+        case dcMessage:
+            return messages->at(index.row()).message;
+
         }
     }
+
+    return QVariant();
 }
 
-void DecodesModel::do_reply (QModelIndex const& source, quint8 modifiers)
+QVariant DecodesModel::headerData (int section, Qt::Orientation orientation,
+                                   int role) const
 {
-  auto row = source.row ();
-  Q_EMIT reply (data (index (row, 0)).toString ()
-                , item (row, 1)->data ().toTime ()
-                , item (row, 2)->data ().toInt ()
-                , item (row, 3)->data ().toFloat ()
-                , static_cast<quint32>(item (row, 4)->data ().toInt ())
-                , data (index (row, 5)).toString ()
-                , data (index (row, 8)).toString ()
-                , confidence_string (true) == data (index (row, 7)).toString ()
-                , modifiers);
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    {
+        QString h = headings[ section ].text;
+        return h;
+    }
+    else if (role == Qt::TextAlignmentRole)
+    {
+        return headings[ section ].alignment;
+    }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            QString s = data(index(section, 0), Qt::DisplayRole).toString();
+            QSize r = delegate->docSize(s);
+            r.setWidth(0);
+            return r;
+        }
+    }
+    return QVariant();
+
+}
+QModelIndex DecodesModel::index( int row, int column, const QModelIndex &parent) const
+{
+    if ( row < 0 || row >= rowCount() || ( parent.isValid() && parent.column() != 0 ) )
+        return QModelIndex();
+
+    return createIndex( row, column );
 }
 
+QModelIndex DecodesModel::parent( const QModelIndex &/*index*/ ) const
+{
+    return QModelIndex();
+}
+
+int DecodesModel::rowCount( const QModelIndex &/*parent*/ ) const
+{
+    return messages->size();
+}
+
+int DecodesModel::columnCount( const QModelIndex &/*parent*/ ) const
+{
+    return  dcMaxVal;
+}
+void DecodesModel::clear()
+{
+    beginResetModel();
+    messages->clear();
+    endResetModel();
+}

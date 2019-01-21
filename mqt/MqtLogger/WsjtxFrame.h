@@ -30,6 +30,7 @@ public:
     QString myLoc;
 
     QVector<decodeMessage> messages;
+    int decodeStartSize = 0;
 
 private:
     Ui::WsjtxFrame *ui;
@@ -42,34 +43,7 @@ private:
 
     WsjtxDecode decoder;
 
-
-    class IdFilterModel final
-      : public QSortFilterProxyModel
-    {
-    public:
-      IdFilterModel ();
-
-      void de_call (QString const&);
-      void rx_df (int);
-      void setId(QString clientId)
-      {
-          client_id_ = clientId;
-      }
-
-      QVariant data (QModelIndex const& proxy_index, int role = Qt::DisplayRole) const override;
-
-    protected:
-      bool filterAcceptsRow (int source_row, QModelIndex const& source_parent) const override;
-
-    private:
-      QString client_id_;
-      QString call_;
-      QRegularExpression base_call_re_;
-      int rx_df_;
-    } decodes_proxy_model_;
-
-
-
+    void reply(decodeMessage &dc);
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
@@ -93,19 +67,18 @@ public slots:
                        const QString &mode, const QString &message, bool low_confidence, bool off_air);
     void clear_decodes (QString const& client_id);
 
-    void reply (QString const& id, QTime time, qint32 snr, float delta_time
-                               , quint32 delta_frequency, QString const& mode
-                               , QString const& message_text, bool low_confidence, quint8 modifiers);
+    void do_reply (QModelIndex source);
+
+    void do_halt_tx (QString const& id, bool auto_only);
 
 signals:
-    void do_halt_tx (QString const& id, bool auto_only);
     void do_free_text (QString const& id, QString const& text, bool);
     void location (QString const& id, QString const& text);
     void highlight_callsign (QString const& id, QString const& call
                                       , QColor const& bg = QColor {}, QColor const& fg = QColor {}
                                       , bool last_only = false);
 private slots:
-    void on_autoSelectButton_clicked();
+    void on_autoSelectButton_toggled(bool);
 };
 
 #endif // WSJTXFRAME_H

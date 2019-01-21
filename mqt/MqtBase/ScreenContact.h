@@ -14,9 +14,9 @@
 //----------------------------------------------------------------------------
 class ScreenContact
 {
-      unsigned long logSequence; // sparse sequence, used to provide
+      unsigned long logSequence = 0L; // sparse sequence, used to provide
    protected:
-      BaseContestLog *contest;
+      BaseContestLog *contest =nullptr;
    public:
       ScreenContact();
       virtual ~ScreenContact();
@@ -35,6 +35,8 @@ class ScreenContact
 
       void initialise( BaseContestLog *ct );
 
+      void score();
+
 
       Callsign cs;   //CONTAIN MinosItem
       Locator loc;   //CONTAIN MinosItem
@@ -47,7 +49,7 @@ class ScreenContact
       QString serialr;
       QString extraText;
       QString comments;
-      unsigned short contactFlags;
+      unsigned short contactFlags = 0;
       QString forcedMult;
       QString frequency;
       QString rotatorHeading;
@@ -57,21 +59,21 @@ class ScreenContact
       QString op2;
       //------------------
 
-      bool screenQSOValid;
-      bool newCtry;
-      bool newDistrict;
-      int locCount;  // was newLocs, now is mult from locs
-      bool newGLoc;
-      bool newNonGLoc;
+      bool screenQSOValid =false;
+      bool newCtry = false;
+      bool newDistrict = false;
+      int locCount = 0;  // was newLocs, now is mult from locs
+      bool newGLoc = false;
+      bool newNonGLoc = false;
 
       QSharedPointer<DistrictEntry> districtMult;
       QSharedPointer<CountryEntry> ctryMult;
 
-      int contactScore;
-      int bearing;
-      char multCount;
-      int bonus;
-      bool newBonus;
+      int contactScore = 0;
+      int bearing = 0;
+      char multCount = 0;
+      int bonus = 0;
+      bool newBonus = 0;
 };
 
 #endif

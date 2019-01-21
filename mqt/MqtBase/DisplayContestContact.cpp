@@ -210,8 +210,8 @@ void DisplayContestContact::checkContact( )
 
    if ( !checkret )
    {
-// and if scanContest has set dup, then this won't fire tering a new QSO
-// But it DOES fire when checking on en
+// and if scanContest has set dup, then this won't fire entering a new QSO
+// But it DOES fire when checking on
       unsigned long valp  = clp->validationPoint;
       if ( clp->DupSheet.checkCurDup( clp, getLogSequence(), valp, false ) )
       {

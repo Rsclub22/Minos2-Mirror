@@ -20,6 +20,7 @@ public:
     void reply (QString const& id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency
                        , QString const& mode, QString const& message, bool low_confidence, quint8 modifiers);
 
+    void do_halt_tx (QString const& id, bool auto_only);
 
 private:
     static WsjtxServer *wsjtxServer;
@@ -56,7 +57,6 @@ signals:
     void do_add_client (QString const& id, QString const& version, QString const& revision);
 
     void do_remove_client (QString const& id);
-    void do_halt_tx (QString const& id, bool auto_only);
     void do_free_text (QString const& id, QString const& text, bool);
 
     void do_decode_added (bool is_new, QString const& client_id, QTime, qint32 snr

@@ -83,9 +83,6 @@ TLogContainer::TLogContainer(QWidget *parent) :
     sendDM->subscribeApps();
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
-
-    WsjtxServer::getWsjtxServer()->start();
-
 }
 TLogContainer::~TLogContainer()
 {
@@ -134,6 +131,9 @@ bool TLogContainer::show(int argc, char *argv[])
 
     }
     TContestApp::getContestApp()->setPreloadComplete();
+
+    WsjtxServer::getWsjtxServer()->start();
+
     return true;
 }
 void TLogContainer::onArgsReceived(QString conarg)

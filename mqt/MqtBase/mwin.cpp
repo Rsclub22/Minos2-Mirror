@@ -28,6 +28,10 @@ Locator::Locator( ) : valRes( ERR_NOLOC )
 {
    loc.setInitialValue( "        " );
 }
+Locator::Locator(const QString & l): valRes(ERR_NOLOC)
+{
+    loc.setInitialValue(l);
+}
 // default versions are good enough for now!
 //locator::locator(const locator&)
 //{
@@ -37,6 +41,7 @@ Locator::Locator( ) : valRes( ERR_NOLOC )
 //}
 Locator::~Locator()
 {}
+
 char Locator::validate( double &lon, double &lat )
 {
    valRes = lonlat( loc.getValue(), lon, lat );

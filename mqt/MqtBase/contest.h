@@ -39,6 +39,7 @@ class DupContact
 };
 typedef QMap < MapWrapper<DupContact>, MapWrapper<DupContact> > DupList;
 typedef DupList::iterator DupIterator;
+typedef DupList::const_iterator ConstDupIterator;
 class dupsheet
 {
       // a dupsheet is a sorted collection of (full LoggerContestLog) ContestContact records,
@@ -64,6 +65,7 @@ enum SCOREMODE {PPKM, PPQSO};
 
 typedef QMap < MapWrapper<BaseContact>, MapWrapper<BaseContact> > LogList;
 typedef LogList::iterator LogIterator;
+typedef LogList::const_iterator ConstLogIterator;
 
 typedef QMap < QString, QString > OperatorList;
 typedef OperatorList::iterator OperatorIterator;
@@ -241,7 +243,7 @@ class BaseContestLog: public BaseLogList
       QString bonusTypeLoaded;
       QMap<QString, int> locBonuses;
       void loadBonusList();
-      int getSquareBonus(QString sloc);
+      int getSquareBonus(QString sloc) const;
 
       QSharedPointer<int> districtWorked;
       QSharedPointer<int> countryWorked;
@@ -317,7 +319,7 @@ class BaseContestLog: public BaseLogList
 
       int getContactCount( );
       int indexOf( QSharedPointer<BaseContact> item );
-      QSharedPointer<BaseContact> pcontactAtSeq( unsigned long logSequence );
+      QSharedPointer<BaseContact> pcontactAtSeq( unsigned long logSequence ) const;
       QSharedPointer<BaseContact> pcontactAt(int offset );
 
       //      virtual void makeContact( bool time_now, DisplayContestContact *&){}
@@ -328,9 +330,9 @@ class BaseContestLog: public BaseLogList
 
       void disbeara( double lon, double lat, double &dist, int &brg ) const;
       void disbearc( double lon, double lat, double &dist, int &brg ) const;
-      int CalcNearest( const QString &scalcloc );
-      int CalcCentres(const QString &scalcloc , int &brg);
-      bool getsdist(const QString &loc, QString &minloc, double &mindist );
+      int CalcNearest( const QString &scalcloc ) const;
+      int CalcCentres(const QString &scalcloc , int &brg) const;
+      bool getsdist(const QString &loc, QString &minloc, double &mindist ) const;
       QSharedPointer<BaseContact> getBestDX( );
       QString dateRange( DTG dstyle );
       bool checkTime(const dtg &t) const;

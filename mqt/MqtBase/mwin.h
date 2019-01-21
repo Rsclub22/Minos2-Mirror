@@ -266,11 +266,12 @@ private:
 class Locator
 {
    public:
-      MinosStringItem<QString> loc;	// allowing for Microwave locs
+      MinosStringItem<QString> loc;
 
       mutable char valRes;
 
       Locator();
+      Locator(const QString &);
       //    locator(const locator&);
       //    locator& operator =(const locator&);
       ~Locator();

@@ -98,6 +98,16 @@ void WsjtxServer::clear_decodes (QString const& client_id)
 void WsjtxServer::reply (QString const& id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency
                    , QString const& mode, QString const& message, bool low_confidence, quint8 modifiers)
 {
-    trace(QString("WsjtxServer::reply"));
+    trace(QString("WsjtxServer::reply to " + message));
     server_->reply(id, time, snr, delta_time, delta_frequency, mode, message, low_confidence, modifiers);
+}
+
+void WsjtxServer::do_halt_tx (QString const& id, bool auto_only)
+{
+    if (auto_only)
+        trace("WsjtxServer Disable TX");
+    else
+        trace("WsjtxServer Halt TX");
+
+    server_->halt_tx(id, auto_only);
 }

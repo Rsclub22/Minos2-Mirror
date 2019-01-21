@@ -17,35 +17,52 @@ public:
     // I CAN see transmit "sessions" - does the status give me enough?
 
     MessageStage mstage{emsNone};
+    QString getMStage() const;
     SpecialOperatingActivity opMode = NONE;
 
     QTime decodeTime;
     QString message;
-    QString toCall;
-    QString toGrid;
-    QString fromCall;
-    QString fromGrid;
+    Callsign toCall;
+    Locator toGrid;
+    Callsign fromCall;
+    Locator fromGrid;
     int strength = -100;
     int bearing = 0;
     int distance = 0;
     int points = 0;
 
+    // extra info needed for reply
+
+    QString id;
+    QTime time;
+    qint32 snr;
+    float delta_time;
+    quint32 delta_frequency;
+    QString mode;
+    bool low_confidence;
+    bool off_air;
+
     decodeMessage();
+    bool checkAsContact();
 };
 
 class WsjtxDecode
 {
-    QString myCall;
-    QString myGrid;
 public:
     WsjtxDecode();
 
-    decodeMessage decode(QString);
+    decodeMessage decode(QString const& id, QTime time, qint32 snr, float delta_time
+                         , quint32 delta_frequency, QString const& mode
+                         , QString const& message_text, bool low_confidence, bool off_air);
 
-    QString getMyCall() const;
-    void setMyCall(const QString &value);
-    QString getMyGrid() const;
+    Callsign getMyCall() const;
+    void setMyCallGrid(const QString &c, const QString &l);
+    Locator getMyGrid() const;
     void setMyGrid(const QString &value);
+private:
+    Callsign myCall;
+    Locator myGrid;
+
 };
 
 #endif // WSJTXDECODE_H

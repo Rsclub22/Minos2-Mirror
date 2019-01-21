@@ -7,7 +7,9 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"
+#include "cutils.h"
 
+#include "Wsjtx_qt_helpers.hpp"
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxServer.h"
 
@@ -21,113 +23,16 @@ static QString wsjtStateIndicator[] =
 };
 static QString wsjtStateList[] =
 {
-   "Available",
-   "Not Available",
-   "No Contact"
+    "Available",
+    "Not Available",
+    "No Contact"
 };
-namespace
-{
-  //QRegExp message_alphabet {"[- A-Za-z0-9+./?]*"};
-  QRegExp message_alphabet {"[- @A-Za-z0-9+./?#<>]*"};
-  QRegularExpression cq_re {"(CQ|CQDX|QRZ)[^A-Z0-9/]+"};
 
-  void update_dynamic_property (QWidget * widget, char const * property, QVariant const& value)
-  {
-    widget->setProperty (property, value);
-    widget->style ()->unpolish (widget);
-    widget->style ()->polish (widget);
-    widget->update ();
-  }
-}
-
-WsjtxFrame::IdFilterModel::IdFilterModel ()
-  : rx_df_ (-1)
-{
-}
-
-QVariant WsjtxFrame::IdFilterModel::data (QModelIndex const& proxy_index, int role) const
-{
-
-  if (role == Qt::BackgroundRole)
-    {
-      switch (proxy_index.column ())
-        {
-        case 8:                 // message
-          {
-            auto message = QSortFilterProxyModel::data (proxy_index).toString ();
-            if (base_call_re_.pattern ().size ()
-                && message.contains (base_call_re_))
-              {
-                return QColor {255,200,200};
-              }
-            if (message.contains (cq_re))
-              {
-                return QColor {200, 255, 200};
-              }
-          }
-          break;
-
-        case 4:                 // DF
-          if (qAbs (QSortFilterProxyModel::data (proxy_index).toInt () - rx_df_) <= 10)
-            {
-              return QColor {255, 200, 200};
-            }
-          break;
-
-        default:
-          break;
-        }
-    }
-
-  return QSortFilterProxyModel::data (proxy_index, role);
-}
-
-bool WsjtxFrame::IdFilterModel::filterAcceptsRow (int source_row
-                                                    , QModelIndex const& source_parent) const
-{
-
-  auto source_index_col0 = sourceModel ()->index (source_row, 0, source_parent);
-  QString lineid = sourceModel ()->data (source_index_col0).toString () ;
-
-  return lineid == client_id_;
-}
-
-void WsjtxFrame::IdFilterModel::de_call (QString const& call)
-{
-    // sets up my call
-    if (call != call_)
-    {
-      beginResetModel ();
-      if (call.size ())
-        {
-          base_call_re_.setPattern ("[^A-Z0-9]*" + Radio::base_callsign (call) + "[^A-Z0-9]*");
-        }
-      else
-        {
-          base_call_re_.setPattern (QString {});
-        }
-      call_ = call;
-      endResetModel ();
-    }
-}
-
-void WsjtxFrame::IdFilterModel::rx_df (int df)
-{
-    // sets up my delta frequency
-    if (df != rx_df_)
-    {
-      beginResetModel ();
-      rx_df_ = df;
-      endResetModel ();
-    }
-}
 
 WsjtxFrame::WsjtxFrame(QWidget *parent) :
     QFrame(parent)
   , ui(new Ui::WsjtxFrame)
-  , decodes_model_ {new DecodesModel {this}}
-  , decodes_proxy_model_ {}
-
+  , decodes_model_ {new DecodesModel()}
 {
     ui->setupUi(this);
 
@@ -135,9 +40,10 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
     delegate = new TestDelegate(1.0, lcf/100.0);
     ui->decodes_table_view_->setItemDelegate( delegate);
+    decodes_model_->delegate = delegate;
+    decodes_model_->messages = &messages;
 
-    decodes_proxy_model_.setSourceModel (decodes_model_);
-    ui->decodes_table_view_->setModel (&decodes_proxy_model_);
+    ui->decodes_table_view_->setModel (decodes_model_);
     ui->decodes_table_view_->verticalHeader ()->hide ();
     ui->decodes_table_view_->hideColumn (0);
     ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
@@ -148,30 +54,32 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_log_ADIF, this, &WsjtxFrame::log_ADIF);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_add_client, this, &WsjtxFrame::add_client);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::remove_client);
-    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, decodes_model_, &DecodesModel::clear_decodes);
+    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::clear_decodes);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_decode_added, this, &WsjtxFrame::decode_added, Qt::QueuedConnection);
-    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_clear_decodes, decodes_model_, &DecodesModel::clear_decodes);
+    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_clear_decodes, this, &WsjtxFrame::clear_decodes);//
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_update_status, this, &WsjtxFrame::update_status);
-    connect (decodes_model_, &DecodesModel::reply, this, &WsjtxFrame::reply);
 
     // UI behaviour
 
     connect (ui->auto_off_button_, &QAbstractButton::clicked, [this] (bool /* checked */) {
-        emit do_halt_tx (id_, true);
-      });
+        do_halt_tx (id_, true);
+    });
     connect (ui->halt_tx_button_, &QAbstractButton::clicked, [this] (bool /* checked */) {
-        emit do_halt_tx (id_, false);
-      });
+        do_halt_tx (id_, false);
+    });
 
-    connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, [this] (QModelIndex const& index) {
-        decodes_model_->do_reply (decodes_proxy_model_.mapToSource (index), QApplication::keyboardModifiers () >> 24);
-      });
+    // this to change - get the item, and use the message decode data
+    connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
 }
 WsjtxFrame::~WsjtxFrame()
 {
     delete ui;
 }
-
+void WsjtxFrame::do_halt_tx(QString const& id, bool auto_only)
+{
+    ui->replyto_label->setText("");
+    WsjtxServer::getWsjtxServer()->do_halt_tx(id, auto_only);
+}
 void WsjtxFrame::setContest(BaseContestLog *c)
 {
     ct = c;
@@ -213,6 +121,7 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
     if (ct != cc)
         return;
 
+    ui->replyto_label->setText("");
     int spoint = ct->ctList.count();
     if (! ADIFImport::doImportADIFString(dynamic_cast<LoggerContestLog *>(ct),  ADIF ))
     {
@@ -238,7 +147,6 @@ void WsjtxFrame::add_client (QString const& id, QString const& /*version*/, QStr
         return;
 
     id_ = id;
-    decodes_proxy_model_.setId(id_);
 }
 
 void WsjtxFrame::remove_client (QString const& /*id*/)
@@ -248,57 +156,110 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
         return;    id_.clear();
 }
 void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString const& mode, QString const& dx_call
-                                  , QString const& report, QString const& tx_mode, bool tx_enabled
-                                  , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
-                                  , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                                  , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
+                                , QString const& report, QString const& tx_mode, bool tx_enabled
+                                , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
+                                , QString const& de_call, QString const& de_grid, QString const& dx_grid
+                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc)
         return;
 
+    QColor fcolour = Qt::black;
+    if (transmitting)
+        fcolour = Qt::red;
+    QColor dcolour = Qt::black;
+    if (decoding)
+        dcolour = Qt::blue;
+    QColor tcolour = Qt::black;
+    if (watchdog_timeout)
+        tcolour = Qt::red;
+
     // pass to decodes model
-//  if (id == id_)
-//    {
+    //  if (id == id_)
+    //    {
     QString special;
     switch (special_op_mode)
-      {
-      case 0: special = "[Normal]"; break;
-      case 1: special = "[NA VHF]"; break;
-      case 2: special = "[EU VHF]"; break;
-      case 3: special = "[FD]"; break;
-      case 4: special = "[RTTY RU]"; break;
-      case 5: special = "[Fox]"; break;
-      case 6: special = "[Hound]"; break;
-      default: special = "[Unknown]";
-      }
+    {
+    case 0: special = "[Normal]"; break;
+    case 1: special = "[NA VHF]"; break;
+    case 2: special = "[EU VHF]"; break;
+    case 3: special = "[FD]"; break;
+    case 4: special = "[RTTY RU]"; break;
+    case 5: special = "[Fox]"; break;
+    case 6: special = "[Hound]"; break;
+    default: special = "[Unknown]";
+    }
 
-      fast_mode_ = fast_mode;
-      decoder.setMyCall(de_call);
-      decoder.setMyGrid(de_grid);
-      decodes_proxy_model_.de_call (de_call);
-      decodes_proxy_model_.rx_df (rx_df);
-      ui->de_label_->setText (de_call.size () >= 0 ? QString {"DE: %1%2"}.arg (de_call)
-                          .arg (de_grid.size () ? '(' + de_grid + ')' : QString {}) : QString {});
+    fast_mode_ = fast_mode;
+    decoder.setMyCallGrid(de_call, de_grid);
+    decodes_model_->de_call (de_call);
+    decodes_model_->rx_df (rx_df);
+    ui->de_label_->setText (de_call.size () >= 0 ? QString {"DE: %1%2"}.arg (de_call)
+                                                   .arg (de_grid.size () ? '(' + de_grid + ')' : QString {}) : QString {});
 
-      ui->specialOpMode->setText(special);
-      ui->mode_label_->setText (QString {"Mode: %1%2%3%4"}
-           .arg (mode)
-           .arg (sub_mode)
-           .arg (fast_mode && !mode.contains (QRegularExpression {R"(ISCAT|MSK144)"}) ? "fast" : "")
-           .arg (tx_mode.isEmpty () || tx_mode == mode ? "" : '(' + tx_mode + ')'));
-      ui->frequency_label_->setText ("QRG: " + Radio::pretty_frequency_MHz_string (f));
-      ui->dx_label_->setText (dx_call.size () >= 0 ? QString {"DX: %1%2"}.arg (dx_call)
-                          .arg (dx_grid.size () ? '(' + dx_grid + ')' : QString {}) : QString {});
-      ui->rx_df_label_->setText (rx_df >= 0 ? QString {"Rx: %1"}.arg (rx_df) : "");
-      ui->tx_df_label_->setText (tx_df >= 0 ? QString {"Tx: %1"}.arg (tx_df) : "");
-      ui->report_label_->setText ("SNR: " + report);
-      update_dynamic_property (ui->frequency_label_, "transmitting", transmitting);
-      ui->auto_off_button_->setEnabled (tx_enabled);
-      ui->halt_tx_button_->setEnabled (transmitting);
-      update_dynamic_property (ui->mode_label_, "decoding", decoding);
-      update_dynamic_property (ui->tx_df_label_, "watchdog_timeout", watchdog_timeout);
-//    }
+    ui->specialOpMode->setText(special);
+    ui->mode_label_->setText (HtmlFontColour(dcolour) + QString {"Mode: %1%2%3%4"}
+                              .arg (mode)
+                              .arg (sub_mode)
+                              .arg (fast_mode && !mode.contains (QRegularExpression {R"(ISCAT|MSK144)"}) ? "fast" : "")
+                              .arg (tx_mode.isEmpty () || tx_mode == mode ? "" : '(' + tx_mode + ')'));
+
+
+    ui->frequency_label_->setText (HtmlFontColour(fcolour) + "QRG: " + Radio::pretty_frequency_MHz_string (f));
+    ui->dx_label_->setText (dx_call.size () >= 0 ? QString {"DX: %1%2"}.arg (dx_call)
+                                                   .arg (dx_grid.size () ? '(' + dx_grid + ')' : QString {}) : QString {});
+    ui->rx_df_label_->setText (rx_df >= 0 ? QString {HtmlFontColour(tcolour) + "Rx: %1"}.arg (rx_df) : "");
+    ui->tx_df_label_->setText (tx_df >= 0 ? QString {HtmlFontColour(tcolour) + "Tx: %1"}.arg (tx_df) : "");
+    ui->report_label_->setText ("SNR: " + report);
+    ui->auto_off_button_->setEnabled (tx_enabled);
+    ui->halt_tx_button_->setEnabled (transmitting);
+
+    static bool inDecode = false;
+
+    if (decoding && !inDecode)
+    {
+        inDecode = true;
+        decodeStartSize = messages.size();
+    }
+    if (inDecode && decoding == false)
+    {
+        ui->decodes_table_view_->resizeRowsToContents();
+        inDecode = false;
+
+        int decodeEndSize = messages.size();
+        if (ui->autoSelectButton->isChecked() && decodeEndSize > decodeStartSize)
+        {
+            // iterate over the latest decodes, and select the best
+
+            int bestOffset = -1;
+            int bestPoints = -1;
+
+            for (int i = decodeStartSize; i < decodeEndSize; i++)
+            {
+                decodeMessage &dc = messages[i];
+
+                if (dc.mstage == emsCQ
+                || dc.mstage == emsRRR
+                || dc.mstage == ems73
+                || (dc.mstage == emsGrid && dc.toCall.fullCall.getValue() == myCall)
+                   )
+                {
+                    if ((!ui->snrCheckBox->isChecked() || dc.snr >= ui->snrSpinner->value() )
+                            && (!ui->minPointsCheckBox->isChecked() || bestPoints >= ui->minPointsSpinner->value() )
+                            && dc.points > bestPoints)
+                    {
+                        bestOffset = i;
+                    }
+                }
+            }
+            if (bestOffset > 0 )
+            {
+                reply(messages[bestOffset]);
+            }
+        }
+    }
+    //    }
 }
 
 void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
@@ -311,18 +272,56 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     if (ct != cc)
         return;
 
-    decodeMessage dc = decoder.decode(message);
-    messages.push_back(dc);
+    decodeMessage dc = decoder.decode(id, time, snr, delta_time
+                                      , delta_frequency, mode
+                                      , message, low_confidence, off_air);
 
-    decodes_model_->add_decode (is_new, id, time, snr, delta_time, delta_frequency, mode, message
-                           , low_confidence, off_air, fast_mode ());
+    // need to make use of the decode data stack, both here and in ::data
+    if (!is_new)
+    {
+        trace("WsjtxFrame::decode_added - old message " + message);
+        int target_row {-1};
+        for (int row = 0; row < messages.size(); ++row)
+        {
+            decodeMessage &m = messages[row];
+            if (m.id == id)
+            {
+                if (m.time == time
+                        && m.snr == snr
+                        && almost_equal( m.delta_time, delta_time, 2)
+                        && m.delta_frequency == delta_frequency
+                        && m.mode == mode
+                        && m.low_confidence == low_confidence
+                        && m.off_air == off_air
+                        && m.message == message)
+                {
+                    return;   // message already present
+                }
+                if (time <= m.time)
+                {
+                    target_row = row; // last row with same time
+                }
+            }
+        }
+        if (target_row >= 0)
+        {
+            messages.insert(target_row + 1, dc);
+        }
+        else
+            messages.push_back(dc);
+    }
+    else
+    {
+        trace("WsjtxFrame::decode_added - new message " + message);
+        messages.push_back(dc);
+    }
 
-    ui->decodes_table_view_->resizeRowsToContents();
+    decodes_model_->add_decode ();
 
     if (!columns_resized_)
     {
-      ui->decodes_table_view_->resizeColumnsToContents ();
-      columns_resized_ = true;
+        ui->decodes_table_view_->resizeColumnsToContents ();
+        columns_resized_ = true;
     }
     ui->decodes_table_view_->scrollToBottom ();
 }
@@ -332,20 +331,41 @@ void WsjtxFrame::clear_decodes (QString const& /*client_id*/)
     if (ct != cc)
         return;
 
+    decodes_model_->removeRows(0, messages.size());
+    messages.clear();
+
     columns_resized_ = false;
 }
-void WsjtxFrame::reply (QString const& id, QTime time, qint32 snr, float delta_time
-                           , quint32 delta_frequency, QString const& mode
-                           , QString const& message_text, bool low_confidence, quint8 modifiers)
+void WsjtxFrame::reply(decodeMessage &dc)
+{
+    ui->autoSelectButton->setChecked(false);
+    ui->autoSelectButton->setArrowType(Qt::NoArrow);
+    WsjtxServer::getWsjtxServer()->reply(dc.id, dc.time, dc.snr, dc.delta_time, dc.delta_frequency, dc.mode, dc.message, dc.low_confidence,  QApplication::keyboardModifiers () >> 24);
+    ui->replyto_label->setText("Replying to: " + dc.message);
+}
+void WsjtxFrame::do_reply (QModelIndex index)
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc)
         return;
 
-    WsjtxServer::getWsjtxServer()->reply(id, time, snr, delta_time, delta_frequency, mode, message_text, low_confidence, modifiers);
+    decodeMessage &dc = messages[index.row()];
+
+    reply(dc);
+
+
 }
 
-void WsjtxFrame::on_autoSelectButton_clicked()
+void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 {
-    ui->autoSelectButton->setDown(!ui->autoSelectButton->isDown());
+    if (!c)
+    {
+        //ui->autoSelectButton->setChecked(false);
+        ui->autoSelectButton->setArrowType(Qt::NoArrow);
+    }
+    else
+    {
+        //ui->autoSelectButton->setChecked(true);
+        ui->autoSelectButton->setArrowType(Qt::DownArrow);
+    }
 }

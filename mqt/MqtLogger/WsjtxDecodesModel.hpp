@@ -1,15 +1,16 @@
-#ifndef WSJTX_UDP_DECODES_MODEL_HPP__
-#define WSJTX_UDP_DECODES_MODEL_HPP__
+#ifndef WSJTX_UDP_DECODES_MODEL_HPP
+#define WSJTX_UDP_DECODES_MODEL_HPP
 
-#include <QStandardItemModel>
+#include "base_pch.h"
+#include <QAbstractItemModel>
+#include <QRegularExpression>
+#include "htmldelegate.h"
+#include "WsjtxDecode.h"
 
-//#include "MessageServer.hpp"
 
-//using Frequency = MessageServer::Frequency;
-
-class QTime;
-class QString;
-class QModelIndex;
+//class QTime;
+//class QString;
+//class QModelIndex;
 
 //
 // Decodes Model - simple data model for all decodes
@@ -24,21 +25,41 @@ class QModelIndex;
 // which is emitted as a signal respectively.
 //
 class DecodesModel
-  : public QStandardItemModel
+  : public QAbstractItemModel
 {
   Q_OBJECT
 
+private:
+  QString client_id_;
+  QString call_;
+  QRegularExpression base_call_re_;
+  int rx_df_;
+
 public:
-  explicit DecodesModel (QObject * parent = nullptr);
+  HtmlDelegate *delegate = nullptr;
+  QVector<decodeMessage> *messages = nullptr;
+  explicit DecodesModel ();
 
-  Q_SLOT void add_decode (bool is_new, QString const& client_id, QTime time, qint32 snr, float delta_time
-                          , quint32 delta_frequency, QString const& mode, QString const& message
-                          , bool low_confidence, bool off_air, bool is_fast);
-  Q_SLOT void clear_decodes (QString const& client_id);
-  Q_SLOT void do_reply (QModelIndex const& source, quint8 modifiers);
+  Q_SLOT void add_decode ();
 
-  Q_SIGNAL void reply (QString const& id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency
-                       , QString const& mode, QString const& message, bool low_confidence, quint8 modifiers);
+  void de_call (QString const&);
+  void rx_df (int);
+  void setId(QString clientId)
+  {
+      client_id_ = clientId;
+  }
+  QVariant data (QModelIndex const& proxy_index, int role = Qt::DisplayRole) const override;
+  virtual QVariant headerData (int section, Qt::Orientation orientation,
+                               int role = Qt::DisplayRole) const override;
+  QModelIndex index( int row, int column,
+                     const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+  QModelIndex parent( const QModelIndex &index ) const Q_DECL_OVERRIDE;
+
+  int rowCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+  int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+
+  void clear();
+
 };
 
 #endif
