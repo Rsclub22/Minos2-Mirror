@@ -227,6 +227,7 @@ private:
     int getModeOffSet(QString contestModeStr);
     void handleClusterStatusMessage(QString &msg);
 
+    int getNumberSpotsIndicator(QDateTime& lastTime, DxSpotSortFilterProxyModel *spotProxyModel);
 private slots:
 
     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
