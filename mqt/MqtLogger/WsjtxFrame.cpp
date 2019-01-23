@@ -224,7 +224,6 @@ void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString cons
     }
     if (inDecode && decoding == false)
     {
-        ui->decodes_table_view_->resizeRowsToContents();
         inDecode = false;
 
         int decodeEndSize = messages.size();
@@ -317,6 +316,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     }
 
     decodes_model_->add_decode ();
+    ui->decodes_table_view_->resizeRowToContents(messages.size() - 1);
 
     if (!columns_resized_)
     {
