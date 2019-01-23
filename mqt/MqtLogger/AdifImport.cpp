@@ -134,7 +134,7 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           else
           {
               aqso->mode.setValue(hamlibData::MGM);
-              aqso->comments.setValue(temp);
+              //aqso->comments.setValue(temp);
           }
       }
    }
