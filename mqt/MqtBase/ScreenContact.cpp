@@ -286,14 +286,11 @@ void ScreenContact::score()
 {
     // check shouldalready have run
 
-    bool locValid = true;
     QString gridref = loc.loc.getValue();
 
     double latitude;
     double longitude;
-    int locValres = lonlat( gridref, longitude, latitude );
-    if ( locValres != LOC_OK )
-        locValid = false;
+    /*int locValres =*/ lonlat( gridref, longitude, latitude );
 
     if ( !( contactFlags & MANUAL_SCORE ) || ( contactFlags & DONT_PRINT ) )
     {
