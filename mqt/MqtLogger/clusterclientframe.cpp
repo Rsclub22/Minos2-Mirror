@@ -107,13 +107,14 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
 
     //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, Locator)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
 
     ui->searchLineEdit->setValidator(new UpperCaseValidator(true));
     connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
 
     dxSpotDataModel = new DxSpotDataModel();
     dxSpotDataModel->delegate = delegate;
+
 
     on_FontChanged();
 
@@ -166,7 +167,10 @@ ClusterClientFrame::~ClusterClientFrame()
     delete ui;
 }
 
-void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs, Locator loc)
+
+
+
+void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs, QString loc)
 {
     // delay the search of the spots until the contact logging should have finished
     // and the screen been redrawn, or a lot of spots slows things down too much
@@ -191,6 +195,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+    //dxSpotProxyModel->setDynamicSortFilter(true);
 
     ui->dxSpotTab->addTab(dxSpotView, "DX Spots");
     //dxSpotView = ui->dxSpotView;
@@ -240,10 +245,9 @@ void ClusterClientFrame::setupSearchSpotView()
 
     searchSortProxyModel = new SearchSortFilterProxyModel(filterSetup);
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
+    searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
     ui->dxSpotTab->addTab(searchView, "Search Spots");
-
-
     searchView->setModel(searchSortProxyModel);
     searchView->setAlternatingRowColors(true);
     searchView->setSelectionMode( QAbstractItemView::SingleSelection );
@@ -290,9 +294,9 @@ void ClusterClientFrame::setupCallsignSpotView()
 
     callSignProxyModel = new CallsignSortFilterProxyModel(filterSetup);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
+    callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
     ui->dxSpotTab->addTab(callSignView, "Callsign Spots");
-
 
     callSignView->setModel(callSignProxyModel);
     callSignView->setAlternatingRowColors(true);
@@ -339,9 +343,9 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setItemDelegate(delegate);
     locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
+    locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
     ui->dxSpotTab->addTab(locatorView, "Locator Spots");
-
     locatorView->setModel(locatorProxyModel);
     locatorView->setAlternatingRowColors(true);
     locatorView->setSelectionMode( QAbstractItemView::SingleSelection );
@@ -370,6 +374,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
+    locatorView->setColumnHidden(RXTIME_COL_NUM, true);
 
     locatorView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
     locatorView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
@@ -614,7 +619,7 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 void ClusterClientFrame::addDxSpotToTable(const QString spot)
 {
 
-    QDateTime spotDateTime = QDateTime::currentDateTime();
+    QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
     QStringList sl = spot.split(DXSPOT);
     if (sl.count() == 2)
     {
@@ -692,7 +697,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
 {
     bool callfound = false;
     bool locfound = false;
-    if (ct)
+    if (ct && !ct->isProtected())
     {
 
         Callsign mcs(callsign);
@@ -1093,7 +1098,7 @@ void ClusterClientFrame::onSearchEditingFinished()
 }
 
 
-void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, Locator loc)
+void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QString loc)
 {
       bool worked = false;
       if (c && ct == c)
@@ -1121,137 +1126,123 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, Loc
 
                   //if(!locatorWkd)
                   //{
-                      if (loc.loc.getValue().mid(0,4) == locator.mid(0, 4) )
+                      if (loc.mid(0,4) == locator.mid(0, 4) )
                       {
-                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
+                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
                           worked = true;
                       }
                   //}
               }
-
           }
-      }
 
-
-/*
-              if ( callsign != "" && callsignWkd == BOOL_NO)
+          if (worked)
+          {
+              // refresh views
+              if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB)
               {
-                  Callsign mcs(callsign);
-                  mcs.validate();
-
-                  for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
-                  {
-                      if ((*i).wt->cs == mcs)
-                      {
-                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
-                          worked = true;
-
-                      }
-                  }
+                  dxSpotProxyModel->setDynamicSortFilter(false);
+                  dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+                  dxSpotProxyModel->setDynamicSortFilter(true);
+              }
+              else if (ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)
+              {
+                  callSignProxyModel->setDynamicSortFilter(false);
+                  callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+                  callSignProxyModel->setDynamicSortFilter(true);
+              }
+              else if (ui->dxSpotTab->currentIndex() == LOCATOR_TAB)
+              {
+                  locatorProxyModel->setDynamicSortFilter(false);
+                  locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+                  locatorProxyModel->setDynamicSortFilter(true);
+              }
+              else if (ui->dxSpotTab->currentIndex() == SEARCH_TAB)
+              {
+                  searchSortProxyModel->setDynamicSortFilter(false);
+                  searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+                  searchSortProxyModel->setDynamicSortFilter(true);
               }
 
-
-              if (locator != "" && locatorWkd == BOOL_NO)
-              {
-                  for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
-                  {
-                      if ((*i).wt->loc.loc.getValue().mid(0,4) == locator)
-                      {
-                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
-                          worked = true;
-
-                      }
-                  }
-              }
-
-
           }
-      }
 
-*/
-      if (worked)
-      {
-          // refresh views
-          dxSpotProxyModel->setFilterRegExp("");
-          callSignProxyModel->setFilterRegExp("");
-          locatorProxyModel->setFilterRegExp("");
-          searchSortProxyModel->setFilterRegExp("");
       }
-
 }
 
 
 void ClusterClientFrame::checkNewSpots()
 {
-    // look for new spots in spot, callsign and locator view
-    static int oldSpotCount = 0;
-    static int oldCallsignCount = 0;
-    static int oldLocatorCount = 0;
 
-    int newSpotCount = dxSpotProxyModel->rowCount();
-    int newCallsignCount =  callSignProxyModel->rowCount();
-    int newLocatorCount = locatorProxyModel->rowCount();
-
-    if (newSpotCount != oldSpotCount)
+    if (ct && !ct->isProtected() && ct == TContestApp::getContestApp()->getCurrentContest())
     {
-        if (newSpotCount == 0)
+        LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
+
+        if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB || dxSpotProxyModel->rowCount() == 0)
         {
             newSpotIndToggle(false);
+            contest->lastSpotTabTime = QDateTime::currentDateTimeUtc();
         }
-        else if (newSpotCount > oldSpotCount && ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
-        {
-            newSpotIndToggle(true);
-        }
-
-        oldSpotCount = newSpotCount;
-
-    }
-    else if (newCallsignCount != oldCallsignCount)
-    {
-        if (newCallsignCount == 0)
+        else if (ui->dxSpotTab->currentIndex() == CALLSIGN_TAB || callSignProxyModel->rowCount() == 0)
         {
             newCallsignSpotIndToggle(false);
+            contest->lastCallsignTabTime = QDateTime::currentDateTimeUtc();
         }
-        else if (newCallsignCount > oldCallsignCount && ui->dxSpotTab->currentIndex() != CALLSIGN_TAB)
-        {
-            newCallsignSpotIndToggle(true);
-        }
-
-        oldCallsignCount = newCallsignCount;
-    }
-    else if (newLocatorCount != oldLocatorCount)
-    {
-
-        if  (newLocatorCount == 0)
+        else if (ui->dxSpotTab->currentIndex() == LOCATOR_TAB  || locatorProxyModel->rowCount() == 0)
         {
             newLocatorSpotIndToggle(false);
+            contest->lastLocatorTabTime = QDateTime::currentDateTimeUtc();
         }
-        else if (newLocatorCount > oldLocatorCount && ui->dxSpotTab->currentIndex() != LOCATOR_TAB)
+
+
+        if (ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
         {
-            newLocatorSpotIndToggle(true);
+            if (getNumberSpotsIndicator(contest->lastSpotTabTime, dxSpotProxyModel) > 0)
+            {
+                newSpotIndToggle(true);
+            }
         }
 
-        oldLocatorCount = newLocatorCount;
+
+        if (ui->dxSpotTab->currentIndex() != CALLSIGN_TAB)
+        {
+            if (getNumberSpotsIndicator(contest->lastCallsignTabTime, callSignProxyModel) > 0)
+            {
+                newCallsignSpotIndToggle(true);
+            }
+        }
+
+
+
+        if (ui->dxSpotTab->currentIndex() != LOCATOR_TAB)
+        {
+            if (getNumberSpotsIndicator(contest->lastLocatorTabTime, locatorProxyModel) > 0)
+            {
+                newLocatorSpotIndToggle(true);
+            }
+        }
     }
 
-    if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB )
+
+}
+
+int ClusterClientFrame::getNumberSpotsIndicator(const QDateTime& _lastTime, DxSpotSortFilterProxyModel* _spotProxyModel)
+{
+    int spotCount = 0;
+    if (_spotProxyModel->rowCount() > 0)
     {
-       newSpotIndToggle(false);
-       oldSpotCount = newSpotCount;
-    }
-    else if (ui->dxSpotTab->currentIndex() == CALLSIGN_TAB)
-    {
-       oldCallsignCount = newCallsignCount;
-       newCallsignSpotIndToggle(false);
-    }
-    else if (ui->dxSpotTab->currentIndex() == LOCATOR_TAB)
-    {
-       oldLocatorCount = newLocatorCount;
-       newLocatorSpotIndToggle(false);
+        qlonglong spotTime = 0;
+        qlonglong lastTime = _lastTime.toMSecsSinceEpoch() / 1000;
+        for (int i =0; i < _spotProxyModel->rowCount(); i++)
+        {
+            spotTime = _spotProxyModel->data(_spotProxyModel->index(i, RXTIME_COL_NUM), DataStoredRole).toLongLong();
+            if (spotTime > lastTime)
+            {
+                spotCount++;
+            }
+        }
     }
 
 
-
+    return spotCount;
 }
 
 

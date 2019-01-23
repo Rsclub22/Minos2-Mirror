@@ -34,7 +34,7 @@ signals:
    void ValidateError(int err);
    void ReportOverstrike(bool ov, BaseContestLog *c);
    void AfterLogContact(BaseContestLog *ct);
-   void AfterLogContactToCluster(BaseContestLog *ct, Callsign cs, Locator loc);
+   void AfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
    void AfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    void ContestDetails(BaseContestLog *);
    void GoToSerial(BaseContestLog *);
@@ -92,7 +92,7 @@ public:
    static void SendValidateError(int err);
    static void SendReportOverstrike(bool ov, BaseContestLog *c);
    static void SendAfterLogContact(BaseContestLog *ct);
-   static void SendAfterLogContactToCluster(BaseContestLog *ct, Callsign cs, Locator loc);
+   static void SendAfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
    static void SendAfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    static void SendContestDetails(BaseContestLog *);
    static void SendGoToSerial(BaseContestLog *);

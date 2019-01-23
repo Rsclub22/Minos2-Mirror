@@ -2054,7 +2054,7 @@ void QSOLogFrame::logScreenEntry( )
    killPartial();
 
    MinosLoggerEvents::SendAfterLogContact(ct);
-   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc);
+   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.loc.getValue());
 
    if (!edit )
         startNextEntry( );	// select the "next"

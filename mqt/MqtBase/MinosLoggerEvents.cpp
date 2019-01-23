@@ -42,7 +42,7 @@ void MinosLoggerEvents::SendAfterLogContact(BaseContestLog *ct)
     emit mle.AfterLogContact(ct);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendAfterLogContactToCluster(BaseContestLog *ct, Callsign cs, Locator loc)
+void MinosLoggerEvents::SendAfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc)
 {
     emit mle.AfterLogContactToCluster(ct, cs, loc);
 }

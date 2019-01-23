@@ -30,6 +30,10 @@ LoggerContestLog::LoggerContestLog( ) : BaseContestLog(),
       needExport( false )
 {
 
+    // clusterClientFrame
+    lastSpotTabTime = QDateTime::currentDateTimeUtc();
+    lastCallsignTabTime = QDateTime::currentDateTimeUtc();
+    lastLocatorTabTime = QDateTime::currentDateTimeUtc();
 
 }
 void LoggerContestLog::makeContact(bool timeNow, QSharedPointer<BaseContact> &lct )

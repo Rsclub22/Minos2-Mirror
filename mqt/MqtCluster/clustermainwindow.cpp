@@ -813,7 +813,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
     spotComment = "";
     spotTime = "";
     spotDate = "";
-    spotDateTime = QDateTime::currentDateTime();
+    spotDateTime = QDateTime::currentDateTimeUtc();
     dxLocator = "";
     spotLocator = "";
 
@@ -1003,7 +1003,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
     spotComment = "";
     spotTime = "";
     spotDate = "";
-    spotDateTime = QDateTime::currentDateTime();
+    spotDateTime = QDateTime::currentDateTimeUtc();
     dxLocator = "";
     spotLocator = "";
 
