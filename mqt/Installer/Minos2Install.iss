@@ -7,7 +7,7 @@
 #define SourcePath="C:\temp\mqtInstaller\installFiles"
 
 #define MyAppExename "MqtLogger.exe" 
-#define MyDocFileName "Minos V2.1.0 Documentation (Y2.1.0.0).pdf"
+#define MyDocFileName "Minos.pdf"
 #define MyAppMajor ""
 #define MyAppMinor ""
 #define MyAppRev ""
