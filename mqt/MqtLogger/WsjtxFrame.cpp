@@ -36,6 +36,8 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->autoSelectReplyFrame->setVisible(false);
+
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
     delegate = new TestDelegate(1.0, lcf/100.0);
@@ -45,7 +47,16 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 
     ui->decodes_table_view_->setModel (decodes_model_);
     ui->decodes_table_view_->verticalHeader ()->hide ();
-    ui->decodes_table_view_->hideColumn (0);
+    ui->decodes_table_view_->hideColumn (dcId);
+    ui->decodes_table_view_->hideColumn (dcSeq);
+    ui->decodes_table_view_->hideColumn (dcPoints);
+    ui->decodes_table_view_->hideColumn (dcBearing);
+    ui->decodes_table_view_->hideColumn (dcDistance);
+    ui->decodes_table_view_->hideColumn (dcFromCall);
+    ui->decodes_table_view_->hideColumn (dcFromGrid);
+    ui->decodes_table_view_->hideColumn (dcToCall);
+    ui->decodes_table_view_->hideColumn (dcToGrid);
+
     ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
     ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(1);
 

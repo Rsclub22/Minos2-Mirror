@@ -51,14 +51,6 @@ public:
     Qt::AlignmentFlag alignment;
 };
 
-enum DecodeColumns
-{
-    dcId,
-    dcTime, dcSnr, dcDT, dcDF, dcMd, dcConfidence, dcLive, dcSeq, dcPoints, dcBearing, dcDistance,
-    dcFromCall, dcFromGrid, dcToCall, dcToGrid,
-    dcMessage, dcMaxVal
-};
-
 DecodeHeading const headings[dcMaxVal] = {
     {QT_TRANSLATE_NOOP ("DecodesModel", "Client"), Qt::AlignRight},
 

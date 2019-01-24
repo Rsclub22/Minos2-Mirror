@@ -8,22 +8,15 @@
 #include "WsjtxDecode.h"
 
 
-//class QTime;
-//class QString;
-//class QModelIndex;
+enum DecodeColumns
+{
+    dcId,
+    dcTime, dcSnr, dcDT, dcDF, dcMd, dcConfidence, dcLive,
+    dcSeq, dcPoints, dcBearing, dcDistance,
+    dcFromCall, dcFromGrid, dcToCall, dcToGrid,
+    dcMessage, dcMaxVal
+};
 
-//
-// Decodes Model - simple data model for all decodes
-//
-// The model is a basic table with uniform row format. Rows consist of
-// QStandardItem instances containing the string representation of the
-// column data  and if the underlying  field is not a  string then the
-// UserRole+1 role contains the underlying data item.
-//
-// Three slots  are provided to add  a new decode, remove  all decodes
-// for a client  and, to build a  reply to CQ message for  a given row
-// which is emitted as a signal respectively.
-//
 class DecodesModel
   : public QAbstractItemModel
 {
