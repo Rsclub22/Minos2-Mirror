@@ -704,6 +704,12 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
         mcs.validate();
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
+            unsigned short cf = (*i).wt->contactFlags.getValue();
+            if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+            {
+                continue;
+            }
+
             if (!callfound)
             {
             if ((*i).wt->cs == mcs)
