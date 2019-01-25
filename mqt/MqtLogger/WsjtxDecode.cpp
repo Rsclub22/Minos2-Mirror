@@ -22,6 +22,21 @@ PA9XYZ 590003 IO91NP                                                    emsDB
                                    G4ABC/P R 570007 JO22DB              emsRplusDb
 PA9XYZ G4ABC/P RR73                                                     emsRRR
                                    G4ABC/P PA9XYZ 73                    ems73
+
+ PA9XYZ 590003 IO91NP (emsDb)
+
+ Look for previous grid message from PA9XYZ, which gives "CQ" call and PA9XYZ partial locator
+
+ Look for previous CQ message for "CQ" call - check DF is in range and locator is compatible
+ (as otherwise it could be someone else who is sending the DB message)
+
+ G4ABC/P R 570007 JO22DB (emsRplusDb)
+
+ This gives the CQ call
+ Look for previous grid message on frequency with matching CQ call and matching partial loc; this gives responding call
+ Intervening should be a DB message to responder from CQ call
+
+
   */
 
 /*
