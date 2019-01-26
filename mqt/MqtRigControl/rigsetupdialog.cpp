@@ -185,7 +185,10 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     }
     radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);
 
-
+    radioTab[tabNum]->setUseRigctldCheckbox(radioTab[tabNum]->getRadioData()->rigCtldEnable);
+    radioTab[tabNum]->rigCtldNetworkVisible(radioTab[tabNum]->getRadioData()->rigCtldEnable);
+    radioTab[tabNum]->setRigctldNetworkAddress(radioTab[tabNum]->getRadioData()->rigCtldNetworkAdd);
+    radioTab[tabNum]->setRigctldPortNumber(radioTab[tabNum]->getRadioData()->rigCtldNetworkPort);
 
     // now load transverter settings
     if (radioTab[tabNum]->getRadioData()->numTransverters > 0 )
@@ -747,6 +750,9 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("stopbits", radioTab[radNum]->getRadioData()->stopbits);
     config.setValue("handshake", radioTab[radNum]->getRadioData()->handshake);
     config.setValue("radioPollInterval", radioTab[radNum]->getRadioData()->pollInterval);
+    config.setValue("rigCtldEnable", radioTab[radNum]->getRadioData()->rigCtldEnable);
+    config.setValue("rigCtldNetworkAddress", radioTab[radNum]->getRadioData()->rigCtldNetworkAdd);
+    config.setValue("rigCtldPortNumber", radioTab[radNum]->getRadioData()->rigCtldNetworkPort);
     config.setValue("antSwitchAvail", radioTab[radNum]->getRadioData()->antSwitchAvail);
     config.setValue("transVertEnable", radioTab[radNum]->getRadioData()->transVertEnable);
     config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
@@ -781,6 +787,9 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->stopbits = config.value("stopbits", 1).toInt();
     radioTab[radNum]->getRadioData()->handshake = config.value("handshake", 0).toInt();
     radioTab[radNum]->getRadioData()->pollInterval = config.value("radioPollInterval", "1").toString();
+    radioTab[radNum]->getRadioData()->rigCtldEnable = config.value("rigCtldEnable", false).toBool();
+    radioTab[radNum]->getRadioData()->rigCtldNetworkAdd = config.value("rigCtldNetworkAddress", "").toString();
+    radioTab[radNum]->getRadioData()->rigCtldNetworkPort = config.value("rigCtldPortNumber", "").toString();
     radioTab[radNum]->getRadioData()->transVertEnable = config.value("transVertEnable", false).toBool();
     radioTab[radNum]->getRadioData()->antSwitchAvail = config.value("antSwitchAvail", false).toBool();
     radioTab[radNum]->getRadioData()->networkAdd = config.value("netAddress", "").toString();

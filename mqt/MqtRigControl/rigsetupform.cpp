@@ -74,9 +74,13 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     connect(ui->netPortBox, SIGNAL(editingFinished()), this, SLOT(networkPortSelected()));
     connect(ui->pollInterval, SIGNAL(activated(int)), this, SLOT(pollIntervalSelected()));
     connect(ui->enableTransVert, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSelected(bool)));
-    connect(ui->useRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(useRigCtldSelected(bool)));
     connect(ui->mgmBox, SIGNAL(activated(int)), this, SLOT(mgmModeSelected()));
     connect(ui->CIVlineEdit, SIGNAL(editingFinished()), this, SLOT(civAddressFinished()));
+
+    connect(ui->useRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(useRigCtldSelected(bool)));
+    connect(ui->rigCtldNetworkAddBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkAddressSelected()));
+    connect(ui->rigCtldNetPortBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkPortSelected()));
+
     // transvert
     connect(ui->enableTransVertSw, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSwSel(bool)));
     connect(ui->locTvConChk, SIGNAL(clicked(bool)), this, SLOT(localTransVertSwSel(bool)));
@@ -506,23 +510,9 @@ int RigSetupForm::comportAvial(QString comport)
 
 void RigSetupForm::networkAddressSelected()
 {
-    if (ui->networkAddBox->text() != radioData->networkAdd)
-        {
-            QHostAddress address(ui->networkAddBox->text());
-            if (QAbstractSocket::IPv4Protocol == address.protocol())
-            {
-                radioData->networkAdd = ui->networkAddBox->text();
-                radioValueChanged = true;
-            }
-            else
-            {
-               QMessageBox messageBox;
-               QString msg = "Invalid Network Address " + ui->networkAddBox->text();
-               messageBox.critical(this, "Network Address Entry Error", msg);
-               ui->networkAddBox->setFocus();
-            }
 
-        }
+    processNetAddress(ui->networkAddBox, radioData->networkAdd);
+
 }
 
 QString RigSetupForm::getNetAddress()
@@ -539,22 +529,10 @@ void RigSetupForm::setNetAddress(QString netAdd)
 
 void RigSetupForm::networkPortSelected()
 {
-    if (ui->netPortBox->text() != radioData->networkPort)
-     {
-         if (ui->netPortBox->text().toInt() >= 1 && ui->netPortBox->text().toInt() <= 65535)
-         {
-             radioData->networkPort = ui->netPortBox->text();
-             radioValueChanged = true;
-         }
-         else
-         {
-             QMessageBox messageBox;
-             QString msg = "Invalid Network Port Number " + ui->netPortBox->text();
-             messageBox.critical(this, "Network Port Number out of range", msg);
-             ui->netPortBox->setFocus();
-         }
 
-     }
+    processPortNumber(ui->netPortBox, radioData->networkPort);
+
+
 }
 
 QString RigSetupForm::getNetPortNum()
@@ -806,6 +784,50 @@ void RigSetupForm::useRigCtldSelected(bool /*selected*/)
 }
 
 
+void RigSetupForm::setUseRigctldCheckbox(bool checked)
+{
+    if (checked)
+    {
+        ui->useRigCtldChkBox->setCheckState(Qt::CheckState::Checked);
+    }
+    else
+    {
+       ui->useRigCtldChkBox->setCheckState(Qt::CheckState::Unchecked);
+    }
+}
+
+
+
+void RigSetupForm::rigCtldNetworkAddressSelected()
+{
+    processNetAddress(ui->rigCtldNetworkAddBox, radioData->rigCtldNetworkAdd);
+}
+
+QString RigSetupForm::getRigctldNetworkAddress()
+{
+    return ui->rigCtldNetworkAddBox->text();
+}
+
+void RigSetupForm::setRigctldNetworkAddress(const QString& address)
+{
+    ui->rigCtldNetworkAddBox->setText(address);
+}
+
+void RigSetupForm::rigCtldNetworkPortSelected()
+{
+    processPortNumber(ui->rigCtldNetPortBox, radioData->rigCtldNetworkPort);
+}
+
+
+QString RigSetupForm::getRigctldPortNumber()
+{
+    return ui->rigCtldNetPortBox->text();
+}
+
+void RigSetupForm::setRigctldPortNumber(const QString& port)
+{
+    ui->rigCtldNetPortBox->setText(port);
+}
 /************** RigSetup Enable **************************************/
 
 
@@ -862,6 +884,13 @@ void RigSetupForm::fillRadioModelInfo()
 {
     ui->radioModelBox->clear();
     radio->getRigList(ui->radioModelBox);
+    // remove rigCtl...
+    int idx = ui->radioModelBox->findText("    2, Hamlib, NET rigctl", Qt::MatchExactly);
+    if (idx != -1)
+    {
+       ui->radioModelBox->removeItem(idx);
+    }
+
 
 }
 
@@ -1252,4 +1281,52 @@ void RigSetupForm::transVertTabRemove(int tabNum)
 {
     ui->transVertTab->removeTab(tabNum);
     transVertTab.removeAt(tabNum);
+}
+
+void RigSetupForm::processNetAddress(QLineEdit* networkAddBox, QString& netAddress)
+{
+    if (networkAddBox->text() != netAddress)
+    {
+        QHostAddress address(networkAddBox->text());
+        if (QAbstractSocket::IPv4Protocol == address.protocol())
+        {
+            netAddress = networkAddBox->text();
+            radioValueChanged = true;
+        }
+        else
+        {
+           QMessageBox messageBox;
+           QString msg = "Invalid Network Address " + networkAddBox->text();
+           messageBox.critical(this, "Network Address Entry Error", msg);
+           networkAddBox->setFocus();
+        }
+
+    }
+
+}
+
+
+void RigSetupForm::processPortNumber(QLineEdit* netPortBox, QString& portNumber)
+{
+
+    if (netPortBox->text() != portNumber)
+     {
+         if (netPortBox->text().toInt() >= 1 && netPortBox->text().toInt() <= 65535)
+         {
+             portNumber = netPortBox->text();
+             radioValueChanged = true;
+         }
+         else
+         {
+             QMessageBox messageBox;
+             QString msg = "Invalid Network Port Number " + netPortBox->text();
+             messageBox.critical(this, "Network Port Number out of range", msg);
+             netPortBox->setFocus();
+         }
+
+     }
+
+
+
+
 }
