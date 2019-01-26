@@ -327,7 +327,7 @@ void DisplayContestContact::checkContact( )
          }
       }
    }
-   clp->DupSheet.checkCurDup( clp, getLogSequence(), 0, true ); // add to duplicates list
+   bool dupContact = clp->DupSheet.checkCurDup( clp, getLogSequence(), 0, true ); // add to duplicates list
 
    if ( !( contactFlags.getValue() & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
    {
@@ -357,18 +357,20 @@ void DisplayContestContact::checkContact( )
                {
                   cscore = ( cscore + 1 ) / 2;
                }
-               clp->contestScore += cscore;
+               if (!dupContact)
+                    clp->contestScore += cscore;
             }
             break;
 
          case PPQSO:
-            if ( cscore > 0 )
+            if ( cscore > 0 && !dupContact)
                clp->contestScore++;
             break;
 
       }
    }
 
+   if (!dupContact)
    {
       // now look at the locator list
       QString letters;
