@@ -123,6 +123,8 @@ class LoggerContestLog : public BaseContestLog
       QVector<MinosItem<memoryData::memData> > rigMemories;
 
       MinosItem<ClusterClientFilterSettings> clusterFilterSettings;
+      bool clusterFilterSettingsExist;
+
       QDateTime lastSpotTabTime;
       QDateTime lastCallsignTabTime;
       QDateTime lastLocatorTabTime;

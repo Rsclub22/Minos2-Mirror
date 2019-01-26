@@ -27,7 +27,8 @@ LoggerContestLog::LoggerContestLog( ) : BaseContestLog(),
       minosFile( false ),
       GJVFile( false ),
       logFile( false ), adifFile( false ), ediFile( false ),
-      needExport( false )
+      needExport( false ),
+      clusterFilterSettingsExist( false)
 {
 
     // clusterClientFrame
@@ -1553,6 +1554,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                }
                                else if (methodName == "MinosClusterFilter")
                                {
+                                       clusterFilterSettingsExist = true;
                                        ClusterClientFilterSettings ccfs;
                                        mt->getStructArgMemberValue("callsignList", ccfs.callsignFilterList);
                                        mt->getStructArgMemberValue("locatorList", ccfs.locatorFilterList);

@@ -235,6 +235,56 @@
       <widget class="QComboBox" name="mgmBox"/>
      </item>
      <item>
+      <widget class="QCheckBox" name="useRigCtldChkBox">
+       <property name="text">
+        <string>Use RigCtld</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="rigCtldNetworkAddLbl">
+       <property name="text">
+        <string>Network Adress</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="rigCtldNetworkAddBox">
+       <property name="maxLength">
+        <number>15</number>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="rigCtldNetPortLbl">
+       <property name="text">
+        <string>Port</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="rigCtldNetPortBox">
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>32767</number>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_7">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

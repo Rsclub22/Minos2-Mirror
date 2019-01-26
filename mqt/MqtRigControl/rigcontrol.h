@@ -116,6 +116,9 @@ public:
       dest.activeDTR = srce->activeDTR;
       dest.nactiveRTS = srce->nactiveRTS;
       dest.nactiveDTR = srce->nactiveDTR;
+      dest.rigCtldEnable = srce->rigCtldEnable;
+      dest.rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
+      dest.rigCtldNetworkPort = srce->rigCtldNetworkPort;
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
@@ -173,6 +176,9 @@ public:
   bool activeDTR  = false;
   bool nactiveRTS  = false;
   bool nactiveDTR  = false;
+  bool rigCtldEnable = false;
+  QString rigCtldNetworkAdd;
+  QString rigCtldNetworkPort;
   QString mgmMode = "USB";
   ptt_type_t pttType;
   bool antSwitchAvail = false;
