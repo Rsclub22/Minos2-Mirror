@@ -167,6 +167,7 @@ private slots:
     void localTransVertSwSel(bool);
     void locTVComPortSel(int);
 
+    void useRigCtldSelected(bool selected);
 private:
 
 
@@ -202,6 +203,7 @@ private:
 
     bool radioSupportRit(int radioModelNumber);
 
+    void rigCtldNetworkVisible(bool enable);
 };
 
 #endif // RIGSETUPFORM_H

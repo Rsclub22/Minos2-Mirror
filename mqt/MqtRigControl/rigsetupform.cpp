@@ -60,6 +60,9 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     fillMgmModes();
     civSetToolTip();
 
+    ui->useRigCtldChkBox->setCheckState(Qt::CheckState::Unchecked);
+    rigCtldNetworkVisible(false);
+
     connect(ui->radioModelBox, SIGNAL(activated(int)), this, SLOT(radioModelSelected()));
     connect(ui->comPortBox, SIGNAL(activated(int)), this, SLOT(comportSelected()));
     connect(ui->comSpeedBox, SIGNAL(activated(int)), this, SLOT(comSpeedSelected()));
@@ -71,6 +74,7 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     connect(ui->netPortBox, SIGNAL(editingFinished()), this, SLOT(networkPortSelected()));
     connect(ui->pollInterval, SIGNAL(activated(int)), this, SLOT(pollIntervalSelected()));
     connect(ui->enableTransVert, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSelected(bool)));
+    connect(ui->useRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(useRigCtldSelected(bool)));
     connect(ui->mgmBox, SIGNAL(activated(int)), this, SLOT(mgmModeSelected()));
     connect(ui->CIVlineEdit, SIGNAL(editingFinished()), this, SLOT(civAddressFinished()));
     // transvert
@@ -779,7 +783,27 @@ void RigSetupForm::setLocTVSWComportVisible(bool visible)
 
 }
 
+/************** RigCtld Setup ****************************************/
 
+void RigSetupForm::rigCtldNetworkVisible(bool enable)
+{
+    ui->rigCtldNetworkAddLbl->setVisible(enable);
+    ui->rigCtldNetworkAddBox->setVisible(enable);
+    ui->rigCtldNetPortLbl->setVisible(enable);
+    ui->rigCtldNetPortBox->setVisible(enable);
+}
+
+void RigSetupForm::useRigCtldSelected(bool /*selected*/)
+{
+    bool checked = ui->useRigCtldChkBox->isChecked();
+    if(radioData->rigCtldEnable != checked)
+    {
+        radioData->rigCtldEnable = checked;
+        rigCtldNetworkVisible(checked);
+    }
+
+    radioValueChanged = true;
+}
 
 
 /************** RigSetup Enable **************************************/

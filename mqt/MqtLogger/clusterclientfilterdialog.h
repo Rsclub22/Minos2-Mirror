@@ -54,6 +54,7 @@ public:
     void setBandFilter(int band);
     bool getEnableHFSpotsFlag();
 
+    void saveClusterFilterToContest();
 signals:
     void filtersChanged(bool, bool, bool, bool);
 

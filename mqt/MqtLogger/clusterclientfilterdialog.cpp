@@ -153,12 +153,18 @@ void ClusterClientFilterDialog::filtersAccepted()
         trace(QString("Callsign List = %1").arg(filterSettings.callsignFilterList));
         trace(QString("Locator List = %1").arg(filterSettings.locatorFilterList));
         trace(QString("Save to log"));
-        ct->saveClusterFilter(filterSettings);
+        saveClusterFilterToContest();
     }
 
     emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
     doCloseEvent();
     close();
+}
+
+
+void ClusterClientFilterDialog::saveClusterFilterToContest()
+{
+    ct->saveClusterFilter(filterSettings);
 }
 
 

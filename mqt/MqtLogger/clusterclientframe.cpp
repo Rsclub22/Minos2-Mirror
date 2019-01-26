@@ -829,6 +829,7 @@ void ClusterClientFrame::restoreLocatorViewColumns()
 void ClusterClientFrame::setContest(BaseContestLog *c)
 {
     ct = c;
+    LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
 
     // set the contest in the filter dialog
     filterSetup->setContest(c);
@@ -841,7 +842,13 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
-        filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
+        if (!contest->clusterFilterSettingsExist)       // have settings been saved before?
+        {
+            // no, save current band filter for this contest
+            filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
+            filterSetup->saveClusterFilterToContest();
+        }
+
         if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
         {
             if (!ct->isProtected())
