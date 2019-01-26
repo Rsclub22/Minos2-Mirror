@@ -1202,16 +1202,27 @@ void ClusterClientFrame::checkNewSpots()
 
         if (ui->dxSpotTab->currentIndex() != DXSPOT_TAB)
         {
-            if (getNumberSpotsIndicator(contest->lastSpotTabTime, dxSpotProxyModel) > 0)
+            if (dxSpotProxyModel->rowCount() == 0)
+            {
+                newSpotIndToggle(false);
+                contest->lastSpotTabTime = QDateTime::currentDateTimeUtc();
+            }
+            else if (getNumberSpotsIndicator(contest->lastSpotTabTime, dxSpotProxyModel) > 0)
             {
                 newSpotIndToggle(true);
             }
         }
 
 
+
         if (ui->dxSpotTab->currentIndex() != CALLSIGN_TAB)
         {
-            if (getNumberSpotsIndicator(contest->lastCallsignTabTime, callSignProxyModel) > 0)
+            if (callSignProxyModel->rowCount() == 0)
+            {
+                newCallsignSpotIndToggle(false);
+                contest->lastCallsignTabTime = QDateTime::currentDateTimeUtc();
+            }
+            else if (getNumberSpotsIndicator(contest->lastCallsignTabTime, callSignProxyModel) > 0)
             {
                 newCallsignSpotIndToggle(true);
             }
@@ -1221,7 +1232,12 @@ void ClusterClientFrame::checkNewSpots()
 
         if (ui->dxSpotTab->currentIndex() != LOCATOR_TAB)
         {
-            if (getNumberSpotsIndicator(contest->lastLocatorTabTime, locatorProxyModel) > 0)
+            if (locatorProxyModel->rowCount() == 0)
+            {
+                newLocatorSpotIndToggle(false);
+                contest->lastLocatorTabTime = QDateTime::currentDateTimeUtc();
+            }
+            else if (getNumberSpotsIndicator(contest->lastLocatorTabTime, locatorProxyModel) > 0)
             {
                 newLocatorSpotIndToggle(true);
             }
