@@ -355,10 +355,6 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setItemDelegate( delegate);
     locatorView->resizeRowsToContents();
 
-    locatorView->setItemDelegate( delegate);
-    locatorView->resizeRowsToContents();
-
-
     QHeaderView *locatorViewVerticalHeader = locatorView->verticalHeader();
     locatorView->verticalHeader()->setDefaultSectionSize(10);
     locatorView->verticalHeader()->setMinimumSectionSize(10);
