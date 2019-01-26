@@ -135,6 +135,14 @@ public:
 
 
     void setCurrentRadioName(QString name);
+    QString getRigctldNetworkAddress();
+    void setRigctldNetworkAddress(const QString &address);
+    QString getRigctldPortNumber();
+    void setRigctldPortNumber(const QString &port);
+    void setUseRigctldCheckbox(bool checked);
+    void rigCtldNetworkVisible(bool enable);
+
+
 signals:
     void transVertTabAdded(int);
 
@@ -168,6 +176,8 @@ private slots:
     void locTVComPortSel(int);
 
     void useRigCtldSelected(bool selected);
+    void rigCtldNetworkAddressSelected();
+    void rigCtldNetworkPortSelected();
 private:
 
 
@@ -203,7 +213,11 @@ private:
 
     bool radioSupportRit(int radioModelNumber);
 
-    void rigCtldNetworkVisible(bool enable);
+
+    void processNetAddress(QLineEdit *networkAddBox, QString& netAddress);
+    void processPortNumber(QLineEdit *netPortBox, QString &portNumber);
+
+
 };
 
 #endif // RIGSETUPFORM_H
