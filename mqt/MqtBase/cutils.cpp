@@ -308,6 +308,11 @@ QString HtmlFontColour( const QColor &c )
     QString s = "<font color='" + c.name() + "'>";
     return s;
 }
+QString HtmlFontColour( const QString &c )
+{
+    QString s = "<font color='" + c + "'>";
+    return s;
+}
 UpperCaseValidator::UpperCaseValidator(bool makeSignal):makeSignal(makeSignal)
 {
 

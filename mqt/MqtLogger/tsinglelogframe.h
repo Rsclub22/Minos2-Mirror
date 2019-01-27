@@ -62,6 +62,7 @@ class TSingleLogFrame : public QFrame
 
     QFrame *CribSheet= nullptr;
     QLabel *NextContactDetailsLabel;
+    QLabel *CurrentBandLabel;
 
     QSOLogFrame *GJVQSOLogFrame = nullptr;
     MatchThisFrame *thisMatchFrame = nullptr;

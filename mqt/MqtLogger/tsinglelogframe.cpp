@@ -257,6 +257,28 @@ void TSingleLogFrame::createScreenComponents()
     verticalLayout_5->setSpacing(0);
     verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
     verticalLayout_5->setContentsMargins(10, 0, 5, 0);
+
+    CurrentBandLabel = new QLabel(CribSheet);
+    CurrentBandLabel->setObjectName(QStringLiteral("CurrentBandLabel"));
+    CurrentBandLabel->setFrameShape(QFrame::NoFrame);
+    CurrentBandLabel->setLineWidth(2);
+    CurrentBandLabel->setMidLineWidth(2);
+    CurrentBandLabel->setTextFormat(Qt::RichText);
+    CurrentBandLabel->setWordWrap(true);
+
+    CurrentBandLabel->setFrameStyle(QFrame::Panel | QFrame::Raised);
+
+    verticalLayout_5->addWidget(CurrentBandLabel);
+
+//    QFrame *line;
+//    line = new QFrame(CribSheet);
+//    line->setFrameShape(QFrame::HLine);
+//    line->setFrameShadow(QFrame::Sunken);
+//    line->setLineWidth(3);
+
+//    verticalLayout_5->addWidget(line);
+
+
     NextContactDetailsLabel = new QLabel(CribSheet);
     NextContactDetailsLabel->setObjectName(QStringLiteral("NextContactDetailsLabel"));
     NextContactDetailsLabel->setFrameShape(QFrame::NoFrame);
@@ -265,6 +287,7 @@ void TSingleLogFrame::createScreenComponents()
     NextContactDetailsLabel->setTextFormat(Qt::RichText);
     NextContactDetailsLabel->setWordWrap(true);
     verticalLayout_5->addWidget(NextContactDetailsLabel);
+    verticalLayout_5->addSpacerItem(new QSpacerItem(40, 20, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
     CribSheet->setVisible(false);
 
@@ -706,10 +729,15 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         {
             cb = bi.uk;
         }
+
+        //we want to put a line across, and colour the bands - need a map of band->colour
+        // ideally we want it configurable...
+
+        CurrentBandLabel->setText( HtmlFontColour(bi.bandColour) + "<b><center><nobr><p><big><h1>" + cb);
+
         if ( contest->isReadOnly() )
         {
-            NextContactDetailsLabel->setText( "<b><center><nobr><p><big>"
-                                                  + cb + "</p><h1>"
+            NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
                                                   + contest->mycall.fullCall.getValue() + "<br>"
                                                   + contest->myloc.loc.getValue() + "<br>"
                                                   + contest->location.getValue());
@@ -722,8 +750,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
             {
                 locBuff = "<br>" + contest->location.getValue();
             }
-            NextContactDetailsLabel->setText( "<b><center><nobr><p><big>"
-                                                  + cb + "</p><h1>"
+            NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
                                                   + contest->mycall.fullCall.getValue() + "<br>"
                                                   + snBuff + "<br>"
                                                   + contest->myloc.loc.getValue()
