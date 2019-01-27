@@ -8,6 +8,7 @@
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"
 #include "cutils.h"
+#include "BandList.h"
 
 #include "Wsjtx_qt_helpers.hpp"
 #include "WsjtxDecodesModel.hpp"
@@ -166,7 +167,7 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
     if (ct != cc)
         return;    id_.clear();
 }
-void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString const& mode, QString const& dx_call
+void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                 , QString const& de_call, QString const& de_grid, QString const& dx_grid
@@ -218,6 +219,31 @@ void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString cons
 
 
     ui->frequency_label_->setText (HtmlFontColour(fcolour) + "QRG: " + Radio::pretty_frequency_MHz_string (f));
+
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    double df = f;
+    bool bandOK = blist.findBand(df, bi);
+    if (bandOK)
+    {
+        QString cb = cc->band.getValue().trimmed();
+        BandInfo cbi;
+        bool bandOK = blist.findBand(cb, cbi);
+        if (bandOK)
+        {
+            cb = cbi.uk;
+        }
+        if (cb != bi.uk)
+        {
+            QString mess = QString("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
+            ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+        }
+        else
+        {
+            ui->bandErrorLabel->clear();
+        }
+    }
+
     ui->dx_label_->setText (dx_call.size () >= 0 ? QString {"DX: %1%2"}.arg (dx_call)
                                                    .arg (dx_grid.size () ? '(' + dx_grid + ')' : QString {}) : QString {});
     ui->rx_df_label_->setText (rx_df >= 0 ? QString {HtmlFontColour(tcolour) + "Rx: %1"}.arg (rx_df) : "");
