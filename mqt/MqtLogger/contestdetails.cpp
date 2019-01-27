@@ -1428,23 +1428,23 @@ void ContestDetails::bundleChanged()
 
 void ContestDetails::on_MGMCheckBox_stateChanged(int)
 {
-    if (ui->MGMCheckBox->isChecked())
-    {
-        noMultRipple = true;
+//    if (ui->MGMCheckBox->isChecked())
+//    {
+//        noMultRipple = true;
 
-        ui->LocatorMult->setChecked(true);
-        ui->GLocMult->setChecked(false);
-        ui->NonGCtryMult->setChecked(false);
-        ui->DXCCMult->setChecked(false);
-        ui->M7LocatorMults->setChecked(false);
+//        ui->LocatorMult->setChecked(true);
+//        ui->GLocMult->setChecked(false);
+//        ui->NonGCtryMult->setChecked(false);
+//        ui->DXCCMult->setChecked(false);
+//        ui->M7LocatorMults->setChecked(false);
 
-        ui->commencedKRB->setChecked(true);
-        ui->BonusComboBox->setCurrentIndex(0);
+//        ui->commencedKRB->setChecked(true);
+//        ui->BonusComboBox->setCurrentIndex(0);
 
-        ui->SerialField->setChecked(false);
+//        ui->SerialField->setChecked(false);
 
-        noMultRipple = false;
-    }
+//        noMultRipple = false;
+//    }
     enableControls();
 }
 void ContestDetails::on_RotatorList()
