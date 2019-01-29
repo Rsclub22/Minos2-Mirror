@@ -20,6 +20,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <QVector>
+#include <QProcess>
 
 #include "mqtUtils_pch.h"
 #include "rigcontrol.h"
@@ -37,7 +38,14 @@ class RigControlRpc;
 
 void delay(int sec);
 
+const QString RIGCTLD_PATH = "D:\\hamlib-w32-3.1\\bin\\";
+//const QString RIGCTLD_WORKING_DIR = "D:\\hamlib-w32-3.1\\bin";
+const QString RIGCTLD_EXE = "rigctld.exe";
 
+//const QString RIGCTLD_PATH = "c:\\qt_projects\\minos-minos\\runtime\\configuration\\radio\\";
+//const QString RIGCTLD_WORKING_DIR = "D:\\hamlib-w32-3.1\\bin";
+//const QString RIGCTLD_BAT = "rigctld_yaesu.bat";
+//const QString RIGCTLD_BAT = "rigctld.bat";
 
 namespace Ui {
 class RigControlMainWindow;
@@ -47,7 +55,10 @@ namespace displayIndicator {
     enum indicatorType { OFF, RADIO, TRANSVERT, TRANSVERT_ON};
 }
 
-
+namespace rigCtldTrace {
+    enum rigCtldTraceCodes {NONE, BUG, ERR, WARN, VERBOSE, TRACE};
+    const QStringList  rigCtldTraceStr = {"", "-v", "-vv", "-vvv", "-vvvv", "-vvvvv"};
+}
 
 //#define RIGCONTROL_TEST
 
@@ -139,6 +150,8 @@ private:
 
     QVector<QPushButton*> supRadioInd;
     QString selTransVertBandIndicator = "";
+
+    QProcess *rigCtldProcess;
 
     void initActionsConnections();
     void initSelectRadioBox();
@@ -277,6 +290,9 @@ private:
     void sendTransVertEnabled(bool status);
 
 
+    void runRigCtlDaemon(const QString &manufacturer, const QString &model, const QString &comport, const QString &baudRate, const QString &dataBits, const QString &civ, const QString &netAdd, const QString &portNum, const QString &stopBits, const int &parity, const QString &rtsState, const QString &dtrState, rigCtldTrace::rigCtldTraceCodes diagnostics);
+
+
 private slots:
 
     void onStdInRead(QString);
@@ -318,6 +334,9 @@ signals:
 
 
 
+    void rigCtldMessage();
+    void rigCtldErrorMessage();
+    void rigCtldStarted();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

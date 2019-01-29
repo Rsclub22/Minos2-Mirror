@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -74,7 +74,11 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     msg = new RigControlRpc(this);
 
+    rigCtldProcess = new QProcess(this);
 
+    connect(rigCtldProcess, SIGNAL(readyReadStandardOutput()),this, SLOT(rigCtldMessage()) );
+    connect(rigCtldProcess, SIGNAL(readyReadStandardError()), this, SLOT(rigCtldErrorMessage()) );
+    connect(rigCtldProcess, SIGNAL(started()), this, SLOT(rigCtldStarted()));
 
     QSettings settings;
     geoStr = "geometry";
@@ -432,6 +436,16 @@ void RigControlMainWindow::upDateRadio()
             // found radio, update currentRadio  to selected radiodata
             scatParams::copyRig(setupRadio->availRadioData[ridx], setupRadio->currentRadio);
             setupRadio->currentRadio.radioNumber = QString::number(ridx);           // save radio number
+
+
+
+            runRigCtlDaemon(setupRadio->currentRadio.radioMfg_Name, QString::number(setupRadio->currentRadio.radioModelNumber), setupRadio->currentRadio.comport,
+                                                       QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.networkAdd, setupRadio->currentRadio.networkPort,
+                                                       QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, "ON", "ON", rigCtldTrace::rigCtldTraceCodes::NONE);
+
+
+
+
 
             if (radioCommsOK)
             {
@@ -2847,9 +2861,97 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
 }
 
 
+void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QString& model, const QString& comport,
+                                           const QString& baudRate, const QString& dataBits, const QString& civ, const QString& netAdd, const QString& portNum,
+                                           const QString& stopBits, const int& parity, const QString& rtsState, const QString& dtrState,
+                                           rigCtldTrace::rigCtldTraceCodes diagnostics)
+{
+
+    QString program = RIGCTLD_PATH + RIGCTLD_EXE;
+
+    QStringList arguments;
+
+    if (model.isEmpty() || comport.isEmpty() || baudRate.isEmpty() || stopBits.isEmpty() || parity < 0 || parity > 4)
+    {
+        trace(QString("runRigCtlDaemon:: parameter is empty"));
+        return;
+    }
+
+    QStringList parityNames = radio->getParityCodeNames();
+    QString parityName = parityNames[parity];
+
+    arguments << "-m" + model.trimmed() << "-r" + comport.trimmed()  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
+              << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
+
+    if (manufacturer == "Icom")
+    {
+        if (!civ.isEmpty())
+        {
+           arguments << "--set-conf=civaddr=" + civ.trimmed();
+        }
+    }
+
+    if (!netAdd.trimmed().isEmpty())
+    {
+        arguments << QString("--listen-addr=%1").arg(netAdd.trimmed());
+    }
 
 
 
+    if (!portNum.trimmed().isEmpty())
+    {
+        arguments << QString("--port=%1").arg(portNum.trimmed());
+    }
+
+    if (diagnostics != rigCtldTrace::rigCtldTraceCodes::NONE)
+    {
+        arguments << rigCtldTrace::rigCtldTraceStr[diagnostics];
+    }
+
+
+    trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, rtsState = %8, dtrState = %9, civ = %10, netaddress = %11, netPort = %12")
+          .arg(manufacturer).arg(model).arg(comport).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(netAdd).arg(portNum));
+
+
+    //qint64 ritCtldPid = 0;
+    //bool started = QProcess::startDetached(program, arguments, RIGCTLD_WORKING_DIR, &ritCtldPid);
+
+
+
+    rigCtldProcess->start(program, arguments);
+
+
+
+   rigCtldProcess->kill();
+
+}
+
+
+void RigControlMainWindow::rigCtldMessage()
+{
+    if (rigCtldProcess->state())
+    {
+        QString line = rigCtldProcess->readLine();
+            trace(QString("rigCtld-StandardOut:: %1").arg(line));
+    }
+
+
+}
+
+
+void RigControlMainWindow::rigCtldErrorMessage()
+{
+    if (rigCtldProcess->state())
+    {
+        QString r = rigCtldProcess->readAllStandardError();
+        trace(QString("rigCtld-ErrorOut:: %1").arg(r));
+    }
+}
+
+void RigControlMainWindow::rigCtldStarted()
+{
+    trace(QString("rigCtld:: daemon started!"));
+}
 
 /*********************************** test *********************************************/
 
