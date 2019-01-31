@@ -47,6 +47,10 @@ const QString RIGCTLD_EXE = "rigctld.exe";
 //const QString RIGCTLD_BAT = "rigctld_yaesu.bat";
 //const QString RIGCTLD_BAT = "rigctld.bat";
 
+const bool RIGCTLD_ON = true;
+const bool RIGCTLD_OFF = false;
+
+
 namespace Ui {
 class RigControlMainWindow;
 }
@@ -99,6 +103,7 @@ private:
     int irigctld_radioNumber = 0;
     QString rigctld_radioName;
     QString rigctld_radioMfg;
+    QTimer *RigCtldStatusTimer;
 
     // data from logger
     QString logger_freq;
@@ -293,6 +298,11 @@ private:
     void runRigCtlDaemon(const QString &manufacturer, const QString &model, const QString &comport, const QString &baudRate, const QString &dataBits, const QString &civ, const QString &netAdd, const QString &portNum, const QString &stopBits, const int &parity, const QString &rtsState, const QString &dtrState, rigCtldTrace::rigCtldTraceCodes diagnostics);
 
 
+    int openRigCtldRadio();
+    void setRigCltdIndicatorVisible(bool visible);
+    void rigCtldIndicatorToggle(bool state);
+
+
 private slots:
 
     void onStdInRead(QString);
@@ -337,6 +347,7 @@ signals:
     void rigCtldMessage();
     void rigCtldErrorMessage();
     void rigCtldStarted();
+    void rigCtldStatusTimeout();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

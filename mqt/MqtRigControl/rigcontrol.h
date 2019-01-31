@@ -25,6 +25,7 @@
 bool model_Sort(const rig_caps *caps1,const rig_caps *caps2);
 int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 
+const int RIGCTLD_MODEL_NUMBER = 2;
 namespace serialData
 {
 const serial_parity_e parityCodes[] = {RIG_PARITY_NONE, RIG_PARITY_ODD, RIG_PARITY_EVEN, RIG_PARITY_MARK, RIG_PARITY_SPACE};
@@ -211,7 +212,7 @@ class RigControl : public QObject
 public:
     explicit RigControl(QObject *parent = nullptr);
     ~RigControl();
-    int init(scatParams &currentRadio);
+    int init(scatParams &currentRadio, bool useRigCtld);
     bool enabled() {return rigControlEnabled;}
 
     int getFrequency(vfo_t vfo, freq_t*);
@@ -295,9 +296,11 @@ public:
     int getSignalStrength(vfo_t vfo, value_t *val);
 
     void enableTraceComms(bool state);
+    bool getTraceState();
 
     int getPttStatus(vfo_t vfo, ptt_t *pttStatus);
     int setPtt(vfo_t vfo, ptt_t ptt);
+
 
 
 
