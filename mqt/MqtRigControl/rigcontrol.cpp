@@ -57,7 +57,7 @@ RigControl::~RigControl()
     rig_cleanup(my_rig); /* if you care about memory */
 }
 
-int RigControl::init(scatParams &currentRadio)
+int RigControl::init(scatParams &currentRadio, bool useRigCtld)
 {
     int retcode;
 
@@ -69,7 +69,15 @@ int RigControl::init(scatParams &currentRadio)
     QString comport = "/dev/";
 #endif
 
-    my_rig = rig_init(currentRadio.radioModelNumber);
+    if (useRigCtld)
+    {
+        my_rig = rig_init(RIGCTLD_MODEL_NUMBER);
+    }
+    else
+    {
+        my_rig = rig_init(currentRadio.radioModelNumber);
+    }
+
 
     if (!my_rig)
     {
@@ -77,25 +85,35 @@ int RigControl::init(scatParams &currentRadio)
     }
 
     // load cat params
+    if (useRigCtld)
+    {
+        strncpy(my_rig->state.rigport.pathname, QString(currentRadio.rigCtldNetworkAdd + ":" + currentRadio.rigCtldNetworkPort).toLatin1().data(), FILPATHLEN);
+    }
+    else
+    {
 
-    if (rig_port_e(currentRadio.portType) == RIG_PORT_SERIAL)
-    {
-        comport.append(currentRadio.comport);
-        strncpy(my_rig->state.rigport.pathname, comport.toLatin1().data(), FILPATHLEN);
-        my_rig->state.rigport.parm.serial.rate = currentRadio.baudrate;
-        my_rig->state.rigport.parm.serial.data_bits = currentRadio.databits;
-        my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
-        my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
-        my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
+        if (rig_port_e(currentRadio.portType) == RIG_PORT_SERIAL)
+        {
+            comport.append(currentRadio.comport);
+            strncpy(my_rig->state.rigport.pathname, comport.toLatin1().data(), FILPATHLEN);
+            my_rig->state.rigport.parm.serial.rate = currentRadio.baudrate;
+            my_rig->state.rigport.parm.serial.data_bits = currentRadio.databits;
+            my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
+            my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
+            my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
+        }
+        else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
+        {
+            strncpy(my_rig->state.rigport.pathname, QString(currentRadio.networkAdd + ":" + currentRadio.networkPort).toLatin1().data(), FILPATHLEN);
+        }
+        else if (rig_port_e(currentRadio.portType) == RIG_PORT_NONE)
+        {
+            strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), FILPATHLEN);
+        }
+
+
     }
-    else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
-    {
-        strncpy(my_rig->state.rigport.pathname, QString(currentRadio.networkAdd + ":" + currentRadio.networkPort).toLatin1().data(), FILPATHLEN);
-    }
-    else if (rig_port_e(currentRadio.portType) == RIG_PORT_NONE)
-    {
-        strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), FILPATHLEN);
-    }
+
 
 
 
@@ -857,6 +875,10 @@ void RigControl::enableTraceComms(bool state)
     traceComms = state;
 }
 
+bool RigControl::getTraceState()
+{
+    return traceComms;
+}
 
 // which passes the call to this method
 int RigControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const char *fmt, va_list ap)

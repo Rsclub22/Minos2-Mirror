@@ -1585,6 +1585,9 @@ void RigControlFrame::traceMsg(QString msg)
     trace(QString("RigcontrolFrame: %1 - %2 ").arg(radioName).arg(msg));
 }
 
+
+
+
 //********************** Run Buttons *******************************
 
 void RigControlFrame::initRunMemoryButton()
