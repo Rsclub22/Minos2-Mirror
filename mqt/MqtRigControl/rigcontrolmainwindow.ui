@@ -829,7 +829,6 @@ Active</string>
     <addaction name="actionSetup_Radios"/>
     <addaction name="actionSetup_Band_Freq"/>
     <addaction name="actionTraceComms"/>
-    <addaction name="actionTrace_RigCtld_Comms"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">

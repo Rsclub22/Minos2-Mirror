@@ -303,6 +303,8 @@ private:
     void rigCtldIndicatorToggle(bool state);
 
 
+    bool rigCtldKill();
+
 private slots:
 
     void onStdInRead(QString);

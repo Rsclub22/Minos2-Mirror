@@ -446,16 +446,6 @@ void RigControlMainWindow::upDateRadio()
             scatParams::copyRig(setupRadio->availRadioData[ridx], setupRadio->currentRadio);
             setupRadio->currentRadio.radioNumber = QString::number(ridx);           // save radio number
 
-
-
-            //runRigCtlDaemon(setupRadio->currentRadio.radioMfg_Name, QString::number(setupRadio->currentRadio.radioModelNumber), setupRadio->currentRadio.comport,
-            //                                           QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.networkAdd, setupRadio->currentRadio.networkPort,
-           //                                            QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, "ON", "ON", rigCtldTrace::rigCtldTraceCodes::NONE);
-
-
-
-
-
             if (radioCommsOK)
             {
                 closeRadio();
@@ -691,10 +681,14 @@ int RigControlMainWindow::openRigCtldRadio()
     int retCode = 0;
     radioCommsOK = false;
 
-    if (rigCtldProcess->state())
+    if (rigCtldProcess->state() == QProcess::Running)
     {
         trace(QString("openRigCtldRadio: rigctld running - killing"));
-        rigCtldProcess->kill();
+        if (!rigCtldKill())
+        {
+            trace(QString("openRigCtldRadio: rigctld did not stop"));
+            return RIGCTLD_FAILED_TO_STOP;
+        }
     }
 
     rigCtldTrace::rigCtldTraceCodes traceCode = rigCtldTrace::rigCtldTraceCodes::NONE;
@@ -710,13 +704,25 @@ int RigControlMainWindow::openRigCtldRadio()
                                                QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, "ON", "ON", traceCode);
 
 
-    if (rigCtldProcess->state())
+    // wait for rigctld to start
+    int waitStartDur = 5;
+    while (waitStartDur != 0)
+    {
+        if (rigCtldProcess->state() == QProcess::Running)
+        {
+             break;
+        }
+        delay(1);
+    }
+
+    if (waitStartDur > 0)
     {
         trace(QString("openRigCtldRadio: rigctld running for radio %1").arg(setupRadio->currentRadio.radioModel));
     }
     else
     {
         trace(QString("openRigCtldRadio: rigctld failed for radio %1").arg(setupRadio->currentRadio.radioModel));
+        return RIGCTLD_FAILED;
     }
 
     // now open radio using rigctld model
@@ -954,9 +960,12 @@ void RigControlMainWindow::closeRadio()
         radio->closeRig();
     }
 
-    if (rigCtldProcess->state())
+    if (rigCtldProcess->state() == QProcess::Running)
     {
-        rigCtldProcess->kill();
+        if (!rigCtldKill())
+        {
+            logMessage(QString("closeRadio: rigCtld daemon failed to stop"));
+        }
         setRigCltdIndicatorVisible(false);
     }
 
@@ -3072,12 +3081,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
     trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, rtsState = %8, dtrState = %9, civ = %10, netaddress = %11, netPort = %12")
           .arg(manufacturer).arg(model).arg(comport).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(netAdd).arg(portNum));
 
-
-    //qint64 ritCtldPid = 0;
-    //bool started = QProcess::startDetached(program, arguments, RIGCTLD_WORKING_DIR, &ritCtldPid);
-
-
-
+    Q_PID pid = rigCtldProcess->pid();
     rigCtldProcess->start(program, arguments);
 
 
@@ -3086,7 +3090,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
 
 void RigControlMainWindow::rigCtldMessage()
 {
-    if (rigCtldProcess->state())
+    if (rigCtldProcess->state() == QProcess::Running)
     {
         QString line = rigCtldProcess->readLine();
             trace(QString("rigCtld-StandardOut:: %1").arg(line));
@@ -3098,7 +3102,7 @@ void RigControlMainWindow::rigCtldMessage()
 
 void RigControlMainWindow::rigCtldErrorMessage()
 {
-    if (rigCtldProcess->state())
+    if (rigCtldProcess->state() == QProcess::Running)
     {
         QString r = rigCtldProcess->readAllStandardError();
         trace(QString("rigCtld-ErrorOut:: %1").arg(r));
@@ -3110,6 +3114,25 @@ void RigControlMainWindow::rigCtldStarted()
     trace(QString("rigCtld:: daemon started!"));
 }
 
+
+bool RigControlMainWindow::rigCtldKill()
+{
+    int killTimeout = RIGCTLD_PROCESS_TIMEOUT;
+
+    rigCtldProcess->kill();
+
+    while (killTimeout > 0)
+    {
+        if (rigCtldProcess)
+        {
+            return true;
+        }
+
+        delay(1);
+    }
+
+    return false;
+}
 
 void RigControlMainWindow::setRigCltdIndicatorVisible(bool visible)
 {
@@ -3138,7 +3161,15 @@ void RigControlMainWindow::rigCtldStatusTimeout()
     if (setupRadio->currentRadio.rigCtldEnable)
     {
 
-        rigCtldIndicatorToggle(rigCtldProcess->state());
+        if (rigCtldProcess->state() == QProcess::Running)
+        {
+           rigCtldIndicatorToggle(true);
+        }
+        else
+        {
+           rigCtldIndicatorToggle(false);
+        }
+
 
     }
 }

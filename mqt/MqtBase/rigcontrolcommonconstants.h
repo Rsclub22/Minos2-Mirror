@@ -69,8 +69,11 @@ namespace hamlibData
 
 }
 
-const int OPEN_FAILED = -1;
 const int OPEN_OK = 0;
+const int OPEN_FAILED = -1;
+const int RIGCTLD_FAILED = -2;
+const int RIGCTLD_FAILED_TO_STOP = -3;
+
 
 const QString NO_BAND_SUPPORT = "???";
 
@@ -196,18 +199,18 @@ const QStringList SMETERTEXT = {
 const QString RIG_DEFAULT_POLLINTERVAL = "1";
 const QString ROT_DEFAULT_POLLINTERVAL = "1";
 
-const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color: white ;\n");
-const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue ; \n");
-const QString SUP_RADIO_INDICATOR_TRANSVERT_STYLE = QString("background-color: yellow ; \n");
-const QString SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE = QString("background-color: orange ; \n");
-const QString RIT_STATUS_OFF_STYLE = QString("background-color:  white ;\n");
-const QString RIT_STATUS_ON_STYLE = QString("background-color:  orange ;\n");
-const QString RIT_RADIO_GETSETFREQ_INDICATOR_FALSE = QString("background-color: white ;\n");
+const QString SUP_RADIO_INDICATOR_OFF_STYLE = QString("background-color: white;\n");
+const QString SUP_RADIO_INDICATOR_RADIO_STYLE = QString("background-color: blue;\n");
+const QString SUP_RADIO_INDICATOR_TRANSVERT_STYLE = QString("background-color: yellow;\n");
+const QString SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE = QString("background-color: orange;\n");
+const QString RIT_STATUS_OFF_STYLE = QString("background-color:  white;\n");
+const QString RIT_STATUS_ON_STYLE = QString("background-color:  orange;\n");
+const QString RIT_RADIO_GETSETFREQ_INDICATOR_FALSE = QString("background-color: white;\n");
 const QString RIT_RADIO_GETSETFREQ_INDICATOR_TRUE = QString("background-color: blue ;\n");
-const QString RIGCTLD_INDICATOR_ON = QString("background-color: orange ; \n");
-const QString RIGCTLD_INDICATOR_OFF = QString("background-color: yellow ; \n");
+const QString RIGCTLD_INDICATOR_ON = QString("background-color: orange;\n");
+const QString RIGCTLD_INDICATOR_OFF = QString("background-color: white;\n");
 
 const int RIGCTLD_STATUS_TIMER_DUR = 1000;
-
+const int RIGCTLD_PROCESS_TIMEOUT = 5;
 
 #endif // RIGCONTROLCOMMONCONSTANTS_H
