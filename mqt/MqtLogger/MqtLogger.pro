@@ -94,7 +94,11 @@ SOURCES += \
     WsjtxMessageServer.cpp \
     WsjtxRadio.cpp \
     WsjtxRadioMetaType.cpp \
-    Wsjtx_qt_helpers.cpp
+    Wsjtx_qt_helpers.cpp \
+    bandmapclientframe.cpp \
+    bandmap.cpp \
+    bandmapcallsignmarker.cpp \
+    bandmapfreqdial.cpp
 
 HEADERS  += \
     AdifImport.h \
@@ -160,7 +164,11 @@ HEADERS  += \
     Wsjtx_pimpl_h.hpp \
     Wsjtx_pimpl_impl.hpp \
     Wsjtx_qt_helpers.hpp \
-    WsjtxRadio.hpp
+    WsjtxRadio.hpp \
+    bandmapclientframe.h \
+    bandmap.h \
+    bandmapcallsignmarker.h \
+    bandmapfreqdial.h
 
 FORMS    += \
     contestdetails.ui \
@@ -203,7 +211,8 @@ FORMS    += \
     tstatsdispframe.ui \
     tminosbshelpform.ui \
     WsjtxFrame.ui \
-    WsjtxConfigure.ui
+    WsjtxConfigure.ui \
+    bandmapclientframe.ui
 
 
 DISTFILES += \
