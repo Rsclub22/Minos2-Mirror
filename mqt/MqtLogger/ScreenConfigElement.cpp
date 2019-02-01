@@ -18,6 +18,7 @@ static QVector <SCTypeOption> scoptions =
     {sctOtherMatch, "Other Contest Match", "Other Contest Matches" },
     {sctArchiveMatch, "Archive Match", "Archive List Matches" },
     {sctWsjtx, "WSJT-X Connector", "WSJT-X Connector" },
+    {sctBandmap, "Bandmap Display", "bandmap Dispaly"},
     {sctNone, "None", "Not in use"}
 };
 SCType getScreenType(QString s)

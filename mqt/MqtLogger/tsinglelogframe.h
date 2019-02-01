@@ -34,6 +34,7 @@ class FocusWatcher;
 class MatchTreeFrame;
 class ChatFrame;
 class ClusterClientFrame;
+class BandmapClientFrame;
 class MinosSplitter;
 
 // We may need to define our own validation controls with valid methods
@@ -73,6 +74,8 @@ class TSingleLogFrame : public QFrame
     WsjtxFrame *wsjtxFrame = nullptr;
 
     ClusterClientFrame *clusterControlFrame = nullptr;
+
+    BandmapClientFrame *bandmapControlFrame = nullptr;
 
     QVector <MinosSplitter *> rowSplitters;
 

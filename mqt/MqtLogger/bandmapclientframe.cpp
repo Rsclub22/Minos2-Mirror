@@ -13,7 +13,7 @@
 #include "base_pch.h"
 #include "cutils.h"
 #include <QDebug>
-
+#include "ui_bandmapclientframe.h"
 
 #include "bandmapclientframe.h"
 
@@ -73,7 +73,11 @@ void BandmapClientFrame::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
 }
 
-
+void BandmapClientFrame::setContest(BaseContestLog *c)
+{
+    //ct = c;
+    //LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
+}
 
 void BandmapClientFrame::paintEvent(QPaintEvent  * /*event */)
 {

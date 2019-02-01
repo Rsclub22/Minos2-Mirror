@@ -24,10 +24,10 @@ Bandmap::Bandmap()
 void Bandmap::addCallsignMarker(double frequency, QString callsign, QString time, int spotType, int callBearing)
 {
 
-    QVector <CallsignMarker> markerList;
-    QMap<double, QVector<CallsignMarker>>::iterator i;
+    QVector <BandmapCallsignMarker> markerList;
+    QMap<double, QVector<BandmapCallsignMarker>>::iterator i;
 
-    CallsignMarker newMark(callsign, time, spotType, callBearing);
+    BandmapCallsignMarker newMark(callsign, time, spotType, callBearing);
     markerList << newMark;
 
     if (markers.empty()|| !markers.contains(frequency))
@@ -37,7 +37,7 @@ void Bandmap::addCallsignMarker(double frequency, QString callsign, QString time
     else
     {
         bool callFound = false;
-        QVector<CallsignMarker> s;
+        QVector<BandmapCallsignMarker> s;
         // check if callsign exists
         for (i = markers.begin(); i != markers.end(); ++i)
         {

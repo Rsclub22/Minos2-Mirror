@@ -38,6 +38,7 @@ public:
 
 
 
+    void setContest(BaseContestLog *c);
 private:
 
     Ui::BandmapClientFrame *ui;

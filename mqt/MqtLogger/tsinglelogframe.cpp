@@ -33,7 +33,7 @@
 #include "RotPresets.h"
 #include "ChatFrame.h"
 #include "clusterclientframe.h"
-
+#include "bandmapclientframe.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -239,6 +239,15 @@ void TSingleLogFrame::createScreenComponents()
 
     clusterControlFrame->setVisible(false);
     clusterControlFrame->setContest(contest);
+
+    bandmapControlFrame = new BandmapClientFrame(this);
+    bandmapControlFrame->setObjectName(QStringLiteral("BandmapControlFrame"));
+    bandmapControlFrame->setFrameShape(QFrame::StyledPanel);
+    bandmapControlFrame->setFrameShadow(QFrame::Raised);
+
+    bandmapControlFrame->setVisible(false);
+    bandmapControlFrame->setContest(contest);
+
 
     rotPresets = new RotPresets(this);
 
@@ -534,6 +543,13 @@ void TSingleLogFrame::buildScreenLayout()
                         elementScrollArea->setWidget(wsjtxFrame);
                         wsjtxFrame->setVisible(true);
                         // don't set contest here
+                        break;
+                    }
+                    case sctBandmap:
+                    {
+                        elementScrollArea->setWidget(bandmapControlFrame);
+                        bandmapControlFrame->setVisible(true);
+                        bandmapControlFrame->setContest(ct);
                         break;
                     }
                 }

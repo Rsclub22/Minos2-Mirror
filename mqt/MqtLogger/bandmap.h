@@ -34,7 +34,7 @@ signals:
 
 private:
 
-    QMap<double, QVector<CallsignMarker>> markers;
+    QMap<double, QVector<BandmapCallsignMarker>> markers;
 
 //    QMultiMap<double, QString> mapMarkers;
 
