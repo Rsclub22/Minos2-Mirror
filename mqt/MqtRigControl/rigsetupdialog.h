@@ -79,6 +79,8 @@ public:
 
 
 
+    QString getRigCtldPath();
+    QString getRigCtldExePath();
 signals:
 
     void radioNameChange();
@@ -115,6 +117,8 @@ private:
     bool radioRemoved;
 
     QString currentRadioName;
+
+    QString rigCtldExePath;
 
     void saveSettings();
 
