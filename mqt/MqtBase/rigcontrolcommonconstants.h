@@ -73,6 +73,10 @@ const int OPEN_OK = 0;
 const int OPEN_FAILED = -1;
 const int RIGCTLD_FAILED = -2;
 const int RIGCTLD_FAILED_TO_STOP = -3;
+const int RIGCTLD_EXE_MISSING = -4;
+
+const QStringList radioOpenMessages = {"Open OK", "Open Failed", "RigCtld Failed",
+                                      "RigCtld Failed to Stop", "RigCtld Exe Missing"};
 
 
 const QString NO_BAND_SUPPORT = "???";
@@ -82,6 +86,7 @@ const QString TRANSSW_NUM_DEFAULT = "0";
 
 // File Name Constants
 
+const QString DEFAULT_BIN_PATH = "./Bin/";
 
 const QString LOCAL_RADIO = "Local";
 
@@ -103,6 +108,7 @@ const QString FILENAME_TRANSVERT_RADIOS = "TransVertRadio.ini";
 
 const QString FILENAME_FREQ_PRESETS = "FreqPresets.ini";
 
+const QString RIGCTL_EXE_FILENAME = "rigctld.exe";
 
 // Tooltips
 

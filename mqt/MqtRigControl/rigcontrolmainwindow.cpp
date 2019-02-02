@@ -614,7 +614,8 @@ void RigControlMainWindow::upDateRadio()
             }
             else
             {
-                trace(QString("#### Radio Failed to connect ####"));
+
+                trace(QString("#### Radio Failed to connect Error Code = %1, %2  ####").arg(radioOpenStat).arg(radioOpenMessages[radioOpenStat * -1]));
                 sendStatusToLogDisConnected();
             }
 
@@ -680,6 +681,16 @@ int RigControlMainWindow::openRigCtldRadio()
 {
     int retCode = 0;
     radioCommsOK = false;
+
+    // check rigctld file exists
+    QString filename = setupRadio->getRigCtldPath() + RIGCTL_EXE_FILENAME;
+    if (!FileExists(filename))
+    {
+        trace(QString("openRigCtld: rigctld exe is missing from %1").arg(filename));
+        return RIGCTLD_EXE_MISSING;
+    }
+
+    trace(QString("openRigCrld: found rigctld exe = %1").arg(filename));
 
     if (rigCtldProcess->state() == QProcess::Running)
     {
@@ -2765,6 +2776,7 @@ void RigControlMainWindow::aboutRigConfig()
             }
 
         }
+        msg.append(QString("\n"));
         msg.append(QString("Rig PortType = %1\n").arg(hamlibData::portTypeList[setupRadio->currentRadio.portType]));
         msg.append(QString("Network Address = %1\n").arg(setupRadio->currentRadio.networkAdd));
         msg.append(QString("Network Port = %1\n").arg(setupRadio->currentRadio.networkPort));
@@ -2773,14 +2785,22 @@ void RigControlMainWindow::aboutRigConfig()
         msg.append(QString("Stop bits = %1\n").arg(QString::number(setupRadio->currentRadio.stopbits)));
         msg.append(QString("Parity = %1\n").arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]));
         msg.append(QString("Handshake = %1\n").arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]));
-        msg.append(QString("Using rigctld daemon = %1\n").arg(setupRadio->currentRadio.rigCtldEnable ? "True" : "False"));
-        msg.append(QString("Rigctld network address = %1\n").arg(setupRadio->currentRadio.rigCtldNetworkAdd));
-        msg.append(QString("Rigctld port address = %1\n").arg(setupRadio->currentRadio.rigCtldNetworkPort));
+        if (setupRadio->currentRadio.rigCtldEnable)
+        {
+            msg.append(QString("\n"));
+            msg.append(QString("Using rigctld daemon = %1\n").arg(setupRadio->currentRadio.rigCtldEnable ? "True" : "False"));
+            msg.append(QString("Rigctld path = %1\n").arg(setupRadio->getRigCtldPath()));
+            msg.append(QString("Rigctld network address = %1\n").arg(setupRadio->currentRadio.rigCtldNetworkAdd));
+            msg.append(QString("Rigctld port address = %1\n").arg(setupRadio->currentRadio.rigCtldNetworkPort));
+        }
+
+        msg.append(QString("\n"));
         msg.append(QString("TransVert Enable = %1\n").arg(setupRadio->currentRadio.transVertEnable ? "True" : "False"));
         msg.append(QString("Number of TransVerters = %1\n").arg(setupRadio->currentRadio.numTransverters));
 
         for (int i = 0; i < setupRadio->currentRadio.numTransverters; i++)
         {
+            msg.append(QString("\n"));
             msg.append(QString("Transverter %1\n").arg(i));
             msg.append(QString("Transverter Name = %1\n").arg(setupRadio->currentRadio.transVertSettings[i]->transVertName));
             msg.append(QString("Transverter Band = %1\n").arg(setupRadio->currentRadio.transVertSettings[i]->band));
@@ -2788,6 +2808,8 @@ void RigControlMainWindow::aboutRigConfig()
             msg.append(QString("Transverter Switch num = %1\n").arg(setupRadio->currentRadio.transVertSettings[i]->transSwitchNum));
             msg.append(QString("Transverter Switch enable = %1\n").arg(setupRadio->currentRadio.enableTransSwitch  ? "True" : "False"));
         }
+
+        msg.append(QString("\n"));
         msg.append(QString("Radio Supports RIT = %1\n").arg(radioSupSetRit ? "True" : "False"));
         if (radioSupSetRit)
         {
@@ -2839,9 +2861,13 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         trace(QString("Stop bits = %1").arg(QString::number(setupRadio->currentRadio.stopbits)));
         trace(QString("Parity = %1").arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]));
         trace(QString("Handshake = %1").arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]));
-        trace(QString("Using rigctld daemon = %1").arg(setupRadio->currentRadio.rigCtldEnable ? "True" : "False"));
-        trace(QString("Rigctld network address = %1").arg(setupRadio->currentRadio.rigCtldNetworkAdd));
-        trace(QString("Rigctld port address = %1").arg(setupRadio->currentRadio.rigCtldNetworkPort));
+        if (setupRadio->currentRadio.rigCtldEnable)
+        {
+            trace(QString("Using rigctld daemon = %1").arg(setupRadio->currentRadio.rigCtldEnable ? "True" : "False"));
+            trace(QString("Rigctld network address = %1").arg(setupRadio->currentRadio.rigCtldNetworkAdd));
+            trace(QString("Rigctld port address = %1").arg(setupRadio->currentRadio.rigCtldNetworkPort));
+            trace(QString("Rigctld path = %1").arg(setupRadio->getRigCtldPath()));
+        }
         trace(QString("MGM mode = %1").arg(setupRadio->currentRadio.mgmMode));
         trace(QString("TransVert Enable = %1").arg(setupRadio->currentRadio.transVertEnable ? "True" : "False"));
         trace(QString("Number of TransVerters = %1").arg(setupRadio->currentRadio.numTransverters));
@@ -3036,7 +3062,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
                                            rigCtldTrace::rigCtldTraceCodes diagnostics)
 {
 
-    QString program = RIGCTLD_PATH + RIGCTLD_EXE;
+    QString program = setupRadio->getRigCtldExePath() + RIGCTL_EXE_FILENAME;
 
     QStringList arguments;
 

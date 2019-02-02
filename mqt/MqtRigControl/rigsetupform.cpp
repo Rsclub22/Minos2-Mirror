@@ -788,6 +788,7 @@ void RigSetupForm::setUseRigctldCheckbox(bool checked)
 {
     if (checked)
     {
+
         ui->useRigCtldChkBox->setCheckState(Qt::CheckState::Checked);
     }
     else

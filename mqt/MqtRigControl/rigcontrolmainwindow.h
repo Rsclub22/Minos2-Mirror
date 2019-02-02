@@ -38,14 +38,7 @@ class RigControlRpc;
 
 void delay(int sec);
 
-const QString RIGCTLD_PATH = "D:\\hamlib-w32-3.1\\bin\\";
-//const QString RIGCTLD_WORKING_DIR = "D:\\hamlib-w32-3.1\\bin";
-const QString RIGCTLD_EXE = "rigctld.exe";
 
-//const QString RIGCTLD_PATH = "c:\\qt_projects\\minos-minos\\runtime\\configuration\\radio\\";
-//const QString RIGCTLD_WORKING_DIR = "D:\\hamlib-w32-3.1\\bin";
-//const QString RIGCTLD_BAT = "rigctld_yaesu.bat";
-//const QString RIGCTLD_BAT = "rigctld.bat";
 
 const bool RIGCTLD_ON = true;
 const bool RIGCTLD_OFF = false;
