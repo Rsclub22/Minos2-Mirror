@@ -37,7 +37,10 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->autoSelectReplyFrame->setVisible(false);
+    bool autoEnabled;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
+
+    ui->autoSelectReplyFrame->setVisible(autoEnabled);
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
