@@ -71,7 +71,16 @@ int RigControl::init(scatParams &currentRadio, bool useRigCtld)
 
     if (useRigCtld)
     {
+        if (currentRadio.rigCtldNetworkAdd.isEmpty())
+        {
+            currentRadio.rigCtldNetworkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
+        }
+        if (currentRadio.rigCtldNetworkPort.isEmpty())
+        {
+            currentRadio.rigCtldNetworkPort = RIGCTLD_DEFAULT_PORT_ADDRESS;
+        }
         my_rig = rig_init(RIGCTLD_MODEL_NUMBER);
+
     }
     else
     {
@@ -113,7 +122,6 @@ int RigControl::init(scatParams &currentRadio, bool useRigCtld)
 
 
     }
-
 
 
 

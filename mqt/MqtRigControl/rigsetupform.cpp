@@ -172,6 +172,9 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             {
                serialDataEntryVisible(false);
                networkDataEntryVisible(true);
+               rigCtldNetworkVisible(false);
+               radioData->rigCtldEnable = false;
+
             }
             else if (portType == RIG_PORT_SERIAL)
             {
@@ -763,12 +766,22 @@ void RigSetupForm::setLocTVSWComportVisible(bool visible)
 
 /************** RigCtld Setup ****************************************/
 
-void RigSetupForm::rigCtldNetworkVisible(bool enable)
+void RigSetupForm::rigCtldNetworkVisible(bool visible)
 {
-    ui->rigCtldNetworkAddLbl->setVisible(enable);
-    ui->rigCtldNetworkAddBox->setVisible(enable);
-    ui->rigCtldNetPortLbl->setVisible(enable);
-    ui->rigCtldNetPortBox->setVisible(enable);
+    rigCtldNetworkAddBoxVisible(false);
+    rigCtldPortBoxVisible(visible);
+}
+
+void RigSetupForm::rigCtldNetworkAddBoxVisible(bool visible)
+{
+    ui->rigCtldNetworkAddLbl->setVisible(visible);
+    ui->rigCtldNetworkAddBox->setVisible(visible);
+}
+
+void RigSetupForm::rigCtldPortBoxVisible(bool visible)
+{
+    ui->rigCtldNetPortLbl->setVisible(visible);
+    ui->rigCtldNetPortBox->setVisible(visible);
 }
 
 void RigSetupForm::useRigCtldSelected(bool /*selected*/)

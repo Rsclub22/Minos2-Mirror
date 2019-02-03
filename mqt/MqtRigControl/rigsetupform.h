@@ -218,6 +218,8 @@ private:
     void processPortNumber(QLineEdit *netPortBox, QString &portNumber);
 
 
+    void rigCtldNetworkAddBoxVisible(bool visible);
+    void rigCtldPortBoxVisible(bool visible);
 };
 
 #endif // RIGSETUPFORM_H
