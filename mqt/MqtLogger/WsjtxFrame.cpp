@@ -273,6 +273,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
             int bestOffset = -1;
             int bestPoints = -1;
+            int bestSNR = -100;
 
             for (int i = decodeStartSize; i < decodeEndSize; i++)
             {
@@ -288,7 +289,11 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                             && (!ui->minPointsCheckBox->isChecked() || bestPoints >= ui->minPointsSpinner->value() )
                             && dc.points > bestPoints)
                     {
-                        bestOffset = i;
+                        if (dc.snr > bestSNR)
+                        {
+                            bestOffset = i;
+                            bestSNR = dc.snr;
+                        }
                     }
                 }
             }
