@@ -706,7 +706,7 @@ void BaseContestLog::scanContest( )
       nct->newNonGLoc = false;
       nct->bonus = 0;
       nct->newBonus = false;
-      nct->checkContact( );   // in scanContest
+      nct->checkContact( true);   // in scanContest
 
       if (nct->time.notEntered() == 0 && !(nct->contactFlags.getValue() & TO_BE_ENTERED))
       {

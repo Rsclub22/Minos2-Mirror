@@ -171,7 +171,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    return false;  // i.e. equal
 }
 
-void DisplayContestContact::checkContact( )
+void DisplayContestContact::checkContact( bool inScan)
 {
    // check on country and district. If valid, return true,
    // having mapped any synonyms to their parents and
@@ -327,7 +327,10 @@ void DisplayContestContact::checkContact( )
          }
       }
    }
-   bool dupContact = clp->DupSheet.checkCurDup( clp, getLogSequence(), 0, true ); // add to duplicates list
+
+   bool dupContact = clp->DupSheet.checkCurDup( clp, clp->validationPoint, 0, true ); // add to duplicates list
+   if (inScan)
+       dupContact = (csret == ERR_DUPCS);
 
    if ( !( contactFlags.getValue() & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
    {
@@ -812,7 +815,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
             contest->maxSerial = maxct;
 
          contest->validationPoint = getLogSequence();
-         checkContact();                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history
+         checkContact(false);                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history
          QSharedPointer<BaseContact> bc( new BaseContact(*this) );   // this should get it now??
          getHistory().push_back( bc );
       }
