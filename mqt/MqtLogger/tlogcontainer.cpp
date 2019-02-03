@@ -1034,7 +1034,10 @@ void TLogContainer::FontEditAcceptActionExecute()
             QApplication::setFont( f );
 
             foreach ( QWidget * widget, QApplication::allWidgets() )
+            {
+                widget->setFont(f);
                 widget->update();
+            }
 
             QSettings settings;
             settings.setValue( "font", font() );
