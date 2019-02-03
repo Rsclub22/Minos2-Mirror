@@ -788,7 +788,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
          }
          cs.nctry += nct->newCtry?1:0;
          cs.ndistrict += nct->newDistrict?1:0;
-         cs.nlocs += nct->locCount;
+         cs.nlocs += (nct->newGLoc || nct->newNonGLoc)?1:0;
          cs.nqsos++;
 
          cs.bonus += nct->bonus;

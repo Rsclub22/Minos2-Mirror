@@ -426,6 +426,8 @@ void DisplayContestContact::checkContact( bool inScan)
                   newBonus = true;
                }
             }
+
+            // but we set uk/non uk mult value to zero...
             if (UKcall)
             {
                if (!npt->UKMultGiven)
@@ -435,14 +437,14 @@ void DisplayContestContact::checkContact( bool inScan)
                   if (npt->UKLocCount + npt->nonUKLocCount == 0)
                   {
                      // hasn't been worked at all
-                     clp->nlocs += clp->UKloc_multiplier;
+                     clp->nlocs += 1;
                      multCount += clp->UKloc_multiplier;
                   }
                   else
                   {
                      // has already been worked - must have been non-uk, so that
                      // bit of the mult has already happened.
-                     clp->nlocs += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
+                     //clp->nlocs += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
                      multCount += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
                   }
                }
@@ -452,7 +454,7 @@ void DisplayContestContact::checkContact( bool inScan)
             {
                if ( npt->UKLocCount + npt->nonUKLocCount == 0 )
                {
-                  clp->nlocs += clp->NonUKloc_multiplier;
+                  clp->nlocs += 1;
                   multCount += clp->NonUKloc_multiplier;
                }
                if (npt->nonUKLocCount == 0)
