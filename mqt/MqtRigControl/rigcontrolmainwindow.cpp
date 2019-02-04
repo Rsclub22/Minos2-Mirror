@@ -3161,7 +3161,6 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
     trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, rtsState = %8, dtrState = %9, civ = %10, netaddress = %11, netPort = %12")
           .arg(manufacturer).arg(model).arg(comport).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
 
-    Q_PID pid = rigCtldProcess->pid();
     rigCtldProcess->start(program, arguments);
 
 
