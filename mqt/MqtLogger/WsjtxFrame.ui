@@ -168,10 +168,19 @@
           <property name="focusPolicy">
            <enum>Qt::ClickFocus</enum>
           </property>
+          <property name="maximum">
+           <number>10000</number>
+          </property>
+          <property name="singleStep">
+           <number>10</number>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="snrCheckBox">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
           <property name="text">
            <string>Ignore &lt; (SNR)</string>
           </property>
@@ -179,6 +188,9 @@
         </item>
         <item>
          <widget class="QSpinBox" name="snrSpinner">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
           <property name="minimum">
            <number>-30</number>
           </property>
