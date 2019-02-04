@@ -219,4 +219,7 @@ const QString RIGCTLD_INDICATOR_OFF = QString("background-color: white;\n");
 const int RIGCTLD_STATUS_TIMER_DUR = 1000;
 const int RIGCTLD_PROCESS_TIMEOUT = 5;
 
+const QString RIGCTLD_LOCAL_HOST_ADDRESS = "127.0.0.1";
+const QString RIGCTLD_DEFAULT_PORT_ADDRESS = "4532";
+
 #endif // RIGCONTROLCOMMONCONSTANTS_H

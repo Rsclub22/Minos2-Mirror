@@ -428,7 +428,13 @@ void RigControlMainWindow::upDateRadio()
 {
     int radioOpenStat = OPEN_FAILED;
 
-    logMessage(QString("UpdateRadio: Index Selected = %1").arg(QString::number(ui->selectRadioBox->currentIndex())));
+    logMessage(QString("UpdateRadio: Radio requested = %1").arg(setupRadio->getCurrentRadioName()));
+
+    if (appName.length() == 0)
+    {
+        logMessage(QString("UpdateRadio: Index Selected = %1").arg(QString::number(ui->selectRadioBox->currentIndex())));
+    }
+
 
     pollTimer->stop();      // stop updates
 
@@ -608,12 +614,23 @@ void RigControlMainWindow::upDateRadio()
 
                 dumpRadioToTraceLog();
 
-                //sendBandListLogger();       // here as delay after sending to logger the connected message
-
 
             }
             else
             {
+                int msgOffSet = radioOpenStat;
+                if (msgOffSet <= 0)
+                {
+                    if (msgOffSet < 0)
+                    {
+                        msgOffSet = msgOffSet * -1;
+                        if (msgOffSet > radioOpenMessages.count())
+                        {
+                            trace(QString("UpdateRadio: Radio Failed to Connect - Error Message Number out of range = %1").arg(msgOffSet));
+                        }
+                    }
+                }
+
 
                 trace(QString("#### Radio Failed to connect Error Code = %1, %2  ####").arg(radioOpenStat).arg(radioOpenMessages[radioOpenStat * -1]));
                 sendStatusToLogDisConnected();
@@ -690,7 +707,7 @@ int RigControlMainWindow::openRigCtldRadio()
         return RIGCTLD_EXE_MISSING;
     }
 
-    trace(QString("openRigCrld: found rigctld exe = %1").arg(filename));
+    trace(QString("openRigCtld: found rigctld exe = %1").arg(filename));
 
     if (rigCtldProcess->state() == QProcess::Running)
     {
@@ -711,7 +728,7 @@ int RigControlMainWindow::openRigCtldRadio()
     // start rigctld
 
     runRigCtlDaemon(setupRadio->currentRadio.radioMfg_Name, QString::number(setupRadio->currentRadio.radioModelNumber), setupRadio->currentRadio.comport,
-                                               QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.networkAdd, setupRadio->currentRadio.networkPort,
+                                               QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.rigCtldNetworkAdd, setupRadio->currentRadio.rigCtldNetworkPort,
                                                QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, "ON", "ON", traceCode);
 
 
@@ -737,13 +754,13 @@ int RigControlMainWindow::openRigCtldRadio()
     }
 
     // now open radio using rigctld model
-
+    trace(QString("openRigCtldRadio: Open radio = %1, via Rigctld").arg(setupRadio->currentRadio.radioModel));
     retCode = radio->init(setupRadio->currentRadio, RIGCTLD_ON);
     if (retCode < 0)
     {
         radio->closeRig();
-        logMessage(QString("Error Opening Radio Error Code = %1").arg(QString::number(retCode)));
-        hamlibError(retCode, "Open Radio");
+        logMessage(QString("openRigCtldRadio: Error Opening Radio %1, Error Code = %2").arg(setupRadio->currentRadio.radioModel).arg(QString::number(retCode)));
+        hamlibError(retCode, "RigCtld Open Radio");
         return OPEN_FAILED;
     }
 
@@ -752,15 +769,15 @@ int RigControlMainWindow::openRigCtldRadio()
     {
 
         int retCode = RIG_OK;
-        showStatusMessage(QString("Attempting to communicate with radio - %1").arg(setupRadio->currentRadio.radioName));
+        showStatusMessage(QString("Attempting to communicate with radio via Rigctld - %1").arg(setupRadio->currentRadio.radioName));
         delay(1);
         retCode = radio->getFrequency(RIG_VFO_CURR, &rfrequency);
 
 
         if (retCode < RIG_OK)
         {
-            logMessage(QString("Open rigctld Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
-            hamlibError(retCode, "Test Radio Connection\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require CTS/RTS to be selected in Handshake.");
+            logMessage(QString("openRigctldRadio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
+            hamlibError(retCode, "Test Radio Connection via Rigctld\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require CTS/RTS to be selected in Handshake.");
             //sendStatusToLogDisConnected();
             return OPEN_FAILED;
         }
@@ -773,15 +790,17 @@ int RigControlMainWindow::openRigCtldRadio()
 
     if (radioCommsOK)
     {
-        logMessage(QString("Open Radio Rigctld: Radio Opened %1").arg(setupRadio->currentRadio.radioName));
+        logMessage(QString("openRigctldRadio: Radio Opened %1").arg(setupRadio->currentRadio.radioName));
         showStatusMessage(QString("Radio Opened Rigctld: %1").arg(setupRadio->currentRadio.radioName));
 
         if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
         {
-            showStatusMessage(QString("Connected: %1 - %2, %3, %4, %5, %6, %7, %8")
+            showStatusMessage(QString("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, %8")
                               .arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel).trimmed().arg(setupRadio->currentRadio.comport).arg(setupRadio->currentRadio.baudrate).arg(setupRadio->currentRadio.databits)
                               .arg(setupRadio->currentRadio.stopbits).arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]).arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]));
         }
+
+        /*
         else if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_UDP_NETWORK)
         {
             if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)
@@ -794,9 +813,10 @@ int RigControlMainWindow::openRigCtldRadio()
             }
 
         }
+        */
         else if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_NONE)
         {
-            showStatusMessage(QString("Connected: %1 - %2").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()));
+            showStatusMessage(QString("Connected via Rigctld: %1 - %2").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()));
         }
 
     }
@@ -965,20 +985,31 @@ int RigControlMainWindow::openRadio()
 
 void RigControlMainWindow::closeRadio()
 {
-
+    int retCode;
     if (radio->get_serialConnected())
     {
-        radio->closeRig();
+        retCode = radio->closeRig();
+        if (retCode < 0)
+        {
+            trace(QString("closeRadio: error closing radio %1").arg(retCode));
+        }
     }
 
-    if (rigCtldProcess->state() == QProcess::Running)
+    if (setupRadio->currentRadio.rigCtldEnable)
     {
-        if (!rigCtldKill())
+        if (rigCtldProcess->state() == QProcess::Running)
         {
-            logMessage(QString("closeRadio: rigCtld daemon failed to stop"));
+            if (!rigCtldKill())
+            {
+                logMessage(QString("closeRadio: rigCtld daemon failed to stop"));
+            }
+            setRigCltdIndicatorVisible(false);
         }
-        setRigCltdIndicatorVisible(false);
+
+        RigCtldStatusTimer->stop();
     }
+
+
 
     radioCommsOK = false;
 
@@ -995,6 +1026,7 @@ void RigControlMainWindow::closeRadio()
     ui->transVertSwNum->setText("");
     turnOffAllsupRadioIndicators();
     displaySignalStrength(-54);
+    setRigCltdIndicatorVisible(false);
     logMessage(QString("Radio Closed"));
 
     msg->rigCache.publish();
@@ -3065,37 +3097,59 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
     QString program = setupRadio->getRigCtldExePath() + RIGCTL_EXE_FILENAME;
 
     QStringList arguments;
+    QStringList parityNames;
+    QString parityName;
+    QString networkAdd = netAdd.trimmed();
+    QString networkPort = portNum.trimmed();
 
-    if (model.isEmpty() || comport.isEmpty() || baudRate.isEmpty() || stopBits.isEmpty() || parity < 0 || parity > 4)
+    if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
     {
-        trace(QString("runRigCtlDaemon:: parameter is empty"));
-        return;
-    }
+        parityNames = radio->getParityCodeNames();
+        parityName = parityNames[parity];
+        arguments << "-m" + model.trimmed() << "-r" + comport.trimmed()  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
+                  << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
 
-    QStringList parityNames = radio->getParityCodeNames();
-    QString parityName = parityNames[parity];
-
-    arguments << "-m" + model.trimmed() << "-r" + comport.trimmed()  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
-              << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
-
-    if (manufacturer == "Icom")
-    {
-        if (!civ.isEmpty())
+        if (manufacturer == "Icom")
         {
-           arguments << "--set-conf=civaddr=" + civ.trimmed();
+            if (!civ.isEmpty())
+            {
+               arguments << "--set-conf=civaddr=" + civ.trimmed();
+
+               trace(QString("runRigCtlDaemon:: using icom civ address = %1").arg(civ.trimmed()));
+
+            }
         }
     }
-
-    if (!netAdd.trimmed().isEmpty())
+    else if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_NONE)
     {
-        arguments << QString("--listen-addr=%1").arg(netAdd.trimmed());
+        // for dummy radio
+        arguments << "-m" + model.trimmed();
+    }
+
+    // this is the rigctld network address usually local host 127.0.0.1 and port usually 4532
+
+    if (!networkAdd.isEmpty())
+    {
+        arguments << QString("--listen-addr=%1").arg(networkAdd);
+    }
+    else
+    {
+        networkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
+        arguments << QString("--listen-addr=%1").arg(QString(networkAdd));
+        trace(QString("runRigCtlDaemon:: network address is empty - using default %1").arg(networkAdd));
     }
 
 
 
-    if (!portNum.trimmed().isEmpty())
+    if (!networkPort.isEmpty())
     {
-        arguments << QString("--port=%1").arg(portNum.trimmed());
+        arguments << QString("--port=%1").arg(networkPort);
+    }
+    else
+    {
+        networkPort = RIGCTLD_DEFAULT_PORT_ADDRESS;
+        arguments << QString("--port=%1").arg(networkPort);
+        trace(QString("runRigCtlDaemon:: port address is empty - using default %1").arg(networkPort));
     }
 
     if (diagnostics != rigCtldTrace::rigCtldTraceCodes::NONE)
@@ -3105,7 +3159,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
 
 
     trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, rtsState = %8, dtrState = %9, civ = %10, netaddress = %11, netPort = %12")
-          .arg(manufacturer).arg(model).arg(comport).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(netAdd).arg(portNum));
+          .arg(manufacturer).arg(model).arg(comport).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
 
     Q_PID pid = rigCtldProcess->pid();
     rigCtldProcess->start(program, arguments);
@@ -3144,19 +3198,22 @@ void RigControlMainWindow::rigCtldStarted()
 bool RigControlMainWindow::rigCtldKill()
 {
     int killTimeout = RIGCTLD_PROCESS_TIMEOUT;
-
+    trace(QString("rigCtldKill: starting to kill  rigCtld"));
     rigCtldProcess->kill();
 
     while (killTimeout > 0)
     {
-        if (rigCtldProcess)
+        if (rigCtldProcess->state() == QProcess::NotRunning)
         {
+            trace(QString("rigCtldKill: rigCtld kill complete"));
             return true;
         }
 
         delay(1);
+        killTimeout--;
     }
 
+    trace(QString("rigCtldKill: rigCtld kill failed - timeout!"));
     return false;
 }
 
