@@ -304,10 +304,13 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
                 // we may also need to differentiate between VHF Eu and normal modes
 
+                bool ismycall =  (dc.toCall.fullCall.getValue() == myCall || dc.fromCall.fullCall.getValue() == myCall);
                 if (dc.mstage == emsCQ
-                || dc.mstage == emsRRR
-                || dc.mstage == ems73
-                || (dc.mstage == emsGrid && dc.toCall.fullCall.getValue() == myCall)
+
+                || (dc.mstage == emsGrid && ismycall)
+
+                || (dc.mstage == emsRRR && !ismycall)
+                || (dc.mstage == ems73 && !ismycall)
                    )
                 {
                     if ((!ui->snrCheckBox->isChecked() || dc.snr >= ui->snrSpinner->value() )
