@@ -273,11 +273,18 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
             int bestOffset = -1;
             int bestPoints = -1;
-            int bestSNR = -100;
 
             for (int i = decodeStartSize; i < decodeEndSize; i++)
             {
                 decodeMessage &dc = messages[i];
+
+                // NB that we get the decodes strongest first, so we shouldn't need to
+                // select for the strongest decode for a station
+
+                // we may end up needing to limit the message types
+                // we can reply to.
+
+                // we may also need to differentiate between VHF Eu and normal modes
 
                 if (dc.mstage == emsCQ
                 || dc.mstage == emsRRR
@@ -289,11 +296,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                             && (!ui->minPointsCheckBox->isChecked() || bestPoints >= ui->minPointsSpinner->value() )
                             && dc.points > bestPoints)
                     {
-                        if (dc.snr > bestSNR)
-                        {
-                            bestOffset = i;
-                            bestSNR = dc.snr;
-                        }
+                        bestOffset = i;
                     }
                 }
             }
