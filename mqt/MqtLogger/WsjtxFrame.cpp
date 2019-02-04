@@ -297,6 +297,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                             && dc.points > bestPoints)
                     {
                         bestOffset = i;
+                        bestPoints = dc.points;
                     }
                 }
             }
