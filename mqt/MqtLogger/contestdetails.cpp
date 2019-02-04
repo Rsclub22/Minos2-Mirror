@@ -1149,16 +1149,16 @@ void ContestDetails::enableControls()
 
    ui->MGMCheckBox->setEnabled(!protectedChecked);
 
-   if (!protectedChecked)
-   {
-       bool mgm = ui->MGMCheckBox->isChecked();
-       ui->ScoreGroupBox->setEnabled(!mgm);
-       ui->BonusComboBox->setEnabled(!mgm);
-       ui->LocatorGroupBox->setEnabled(!mgm);
-       ui->FieldsGroupBox->setEnabled(!mgm);
-       ui->MultGroupBox->setEnabled(!mgm);
-       ui->ModeComboBox->setEnabled(!mgm);
-   }
+//   if (!protectedChecked)
+//   {
+//       bool mgm = ui->MGMCheckBox->isChecked();
+//       ui->ScoreGroupBox->setEnabled(!mgm);
+//       ui->BonusComboBox->setEnabled(!mgm);
+//       ui->LocatorGroupBox->setEnabled(!mgm);
+//       ui->FieldsGroupBox->setEnabled(!mgm);
+//       ui->MultGroupBox->setEnabled(!mgm);
+//       ui->ModeComboBox->setEnabled(!mgm);
+//   }
 }
 //---------------------------------------------------------------------------
 
