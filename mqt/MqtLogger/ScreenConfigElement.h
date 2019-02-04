@@ -1,7 +1,7 @@
 #ifndef SCREENCONFIGELEMENT_H
 #define SCREENCONFIGELEMENT_H
 
-#include <QFrame>
+#include "StackedInfoFrame.h"
 #include "ScreenConfigFile.h"
 
 class ScreenConfigRow;
@@ -30,6 +30,9 @@ public:
 
     void setType(SCType);
     QString getType() const;
+
+    void setAuxType(AuxEntries);
+    QString getAuxType() const;
 
 private slots:
     void on_elementTypeCombo_activated(const QString &arg1);

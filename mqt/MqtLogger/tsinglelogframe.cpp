@@ -475,6 +475,7 @@ void TSingleLogFrame::buildScreenLayout()
                     {
                         StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
 
+                        f->setCurrentFrameType(getAuxTypeString(sc.rows[j].elements[k].auxType));
                         f->setContest(ct);
                         elementScrollArea->setWidget(f);
                         f->setVisible(true);
