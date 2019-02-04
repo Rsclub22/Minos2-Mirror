@@ -14,6 +14,7 @@ enum DecodeColumns
     dcTime, dcSnr, dcDT, dcDF, dcMd, dcConfidence, dcLive,
     dcSeq, dcPoints, dcBearing, dcDistance,
     dcFromCall, dcFromGrid, dcToCall, dcToGrid,
+    dcBest,
     dcMessage, dcMaxVal
 };
 

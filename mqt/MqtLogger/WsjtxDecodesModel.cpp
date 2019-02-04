@@ -71,6 +71,7 @@ DecodeHeading const headings[dcMaxVal] = {
     {QT_TRANSLATE_NOOP ("DecodesModel", "From grid"), Qt::AlignLeft},
     {QT_TRANSLATE_NOOP ("DecodesModel", "To Call"), Qt::AlignLeft},
     {QT_TRANSLATE_NOOP ("DecodesModel", "To Grid"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Best"), Qt::AlignLeft},
 
     {QT_TRANSLATE_NOOP ("DecodesModel", "Message"), Qt::AlignLeft}
 };
@@ -209,6 +210,8 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
         case dcToGrid:
             return messages->at(index.row()).toGrid.loc.getValue();
 
+        case dcBest:
+            return messages->at(index.row()).best?"Best":"";
 
         case dcMessage:
             return messages->at(index.row()).message;

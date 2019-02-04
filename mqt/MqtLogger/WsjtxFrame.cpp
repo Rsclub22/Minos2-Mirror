@@ -61,6 +61,9 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->decodes_table_view_->hideColumn (dcToCall);
     ui->decodes_table_view_->hideColumn (dcToGrid);
 
+    if (!autoEnabled)
+        ui->decodes_table_view_->hideColumn (dcBest);
+
     ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
     ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(1);
 
@@ -267,7 +270,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         inDecode = false;
 
         int decodeEndSize = messages.size();
-        if (ui->autoSelectButton->isChecked() && decodeEndSize > decodeStartSize)
+        if (decodeEndSize > decodeStartSize)
         {
             // iterate over the latest decodes, and select the best
 
@@ -301,13 +304,18 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                     }
                 }
             }
-            if (bestOffset > 0 )
+            for (int i = decodeStartSize; i < decodeEndSize; i++)
+            {
+                decodeMessage &dc = messages[i];
+                dc.best = (bestOffset == i);
+            }
+            emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
+            if (ui->autoSelectButton->isChecked() && bestOffset > 0 )
             {
                 reply(messages[bestOffset]);
             }
         }
     }
-    //    }
 }
 
 void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
