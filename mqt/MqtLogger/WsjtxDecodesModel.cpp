@@ -167,6 +167,28 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             }
             break;
 
+        case dcTime:
+            {
+                QString secs = messages->at(index.row()).time.toString ("ss");
+                if (secs == "00")
+                {
+                    return QColor(Qt::red).lighter();
+                }
+                else if (secs == "15")
+                {
+                    return QColor(Qt::green).lighter();
+                }
+                else if (secs == "30")
+                {
+                    return QColor(Qt::blue).lighter();
+                }
+                else if (secs == "45")
+                {
+                    return QColor(Qt::yellow).lighter();
+                }
+            }
+            break;
+
         default:
             break;
         }

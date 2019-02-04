@@ -49,17 +49,32 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     decodes_model_->delegate = delegate;
     decodes_model_->messages = &messages;
 
+//    enum DecodeColumns
+//    {
+//        dcId,
+//        dcTime, dcSnr, dcDT, dcDF, dcMd, dcConfidence, dcLive,
+//        dcSeq, dcPoints, dcBearing, dcDistance,
+//        dcFromCall, dcFromGrid, dcToCall, dcToGrid,
+//        dcBest,
+//        dcMessage, dcMaxVal
+//    };
+
     ui->decodes_table_view_->setModel (decodes_model_);
     ui->decodes_table_view_->verticalHeader ()->hide ();
     ui->decodes_table_view_->hideColumn (dcId);
+    ui->decodes_table_view_->hideColumn (dcDT);
+    ui->decodes_table_view_->hideColumn (dcMd);
+    ui->decodes_table_view_->hideColumn (dcConfidence);
+    ui->decodes_table_view_->hideColumn (dcLive);
     ui->decodes_table_view_->hideColumn (dcSeq);
-    ui->decodes_table_view_->hideColumn (dcPoints);
-    ui->decodes_table_view_->hideColumn (dcBearing);
+    //ui->decodes_table_view_->hideColumn (dcPoints);
+    //ui->decodes_table_view_->hideColumn (dcBearing);
     ui->decodes_table_view_->hideColumn (dcDistance);
     ui->decodes_table_view_->hideColumn (dcFromCall);
     ui->decodes_table_view_->hideColumn (dcFromGrid);
     ui->decodes_table_view_->hideColumn (dcToCall);
     ui->decodes_table_view_->hideColumn (dcToGrid);
+
 
     if (!autoEnabled)
         ui->decodes_table_view_->hideColumn (dcBest);
