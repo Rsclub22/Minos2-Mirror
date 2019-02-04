@@ -726,21 +726,18 @@ int RigControlMainWindow::openRigCtldRadio()
     }
 
     // start rigctld
-
+    trace(QString("openRigCtldRadio: starting rigctld"));
     runRigCtlDaemon(setupRadio->currentRadio.radioMfg_Name, QString::number(setupRadio->currentRadio.radioModelNumber), setupRadio->currentRadio.comport,
                                                QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.rigCtldNetworkAdd, setupRadio->currentRadio.rigCtldNetworkPort,
                                                QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, "ON", "ON", traceCode);
 
 
     // wait for rigctld to start
-    int waitStartDur = 5;
-    while (waitStartDur != 0)
+    int waitStartDur = 500;
+    while (rigCtldProcess->state() != QProcess::Running && waitStartDur > 0)
     {
-        if (rigCtldProcess->state() == QProcess::Running)
-        {
-             break;
-        }
-        delay(1);
+        sleepFor(100);
+        waitStartDur--;
     }
 
     if (waitStartDur > 0)
@@ -770,7 +767,6 @@ int RigControlMainWindow::openRigCtldRadio()
 
         int retCode = RIG_OK;
         showStatusMessage(QString("Attempting to communicate with radio via Rigctld - %1").arg(setupRadio->currentRadio.radioName));
-        delay(1);
         retCode = radio->getFrequency(RIG_VFO_CURR, &rfrequency);
 
 
@@ -918,7 +914,7 @@ int RigControlMainWindow::openRadio()
 
         int retCode = RIG_OK;
         showStatusMessage(QString("Attempting to communicate with radio - %1").arg(setupRadio->currentRadio.radioName));
-        delay(1);
+        //delay(1);
         retCode = radio->getFrequency(RIG_VFO_CURR, &rfrequency);
 
 
@@ -2953,12 +2949,9 @@ void RigControlMainWindow::loadBands()
 
 */
 
-void delay(int sec)
-{
-    QTime dieTime= QTime::currentTime().addSecs(sec);
-    while (QTime::currentTime() < dieTime)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-}
+
+
+
 
 
 /********************************* Supported Radio Display *****************************/
@@ -3209,7 +3202,7 @@ bool RigControlMainWindow::rigCtldKill()
             return true;
         }
 
-        delay(1);
+        sleepFor(100);
         killTimeout--;
     }
 
@@ -3277,6 +3270,26 @@ void RigControlMainWindow::testBoxesVisible(bool visible)
     ui->selFreq->setVisible(visible);
     ui->freqInputBox->setVisible(visible);
 }
+
+
+void delay(int sec)
+{
+    QTime dieTime= QTime::currentTime().addSecs(sec);
+    while (QTime::currentTime() < dieTime)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
+}
+
+void sleepFor(qint64 milliseconds)
+{
+    qint64 timeToExitFunction = QDateTime::currentMSecsSinceEpoch() + milliseconds;
+    while(timeToExitFunction > QDateTime::currentMSecsSinceEpoch())
+    {
+        QApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
+}
+
 
 #ifdef RIGCONTROL_TEST
 
