@@ -2575,9 +2575,9 @@ void RigControlMainWindow::sendBandListLogger(const int radioIdx, const QStringL
             }while (k < freqPresetData::presetBands.count() && !match);
 
             QString lookupBand = supBandList[i];
-
+            lookupBand = lookupBand.remove('\x20').replace('.', '_');   // remove space or convert period to underscore to correctly lookup band
             bandList.append(QString("%1-%2").arg(supBandList[i])
-                                        .arg(config.value(lookupBand.remove(' '), freqPresetData::bandFreq[k]).toString()));
+                                        .arg(config.value(lookupBand, freqPresetData::bandFreq[k]).toString()));
         }
 
 
