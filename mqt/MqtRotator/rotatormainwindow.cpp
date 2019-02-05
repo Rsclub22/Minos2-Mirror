@@ -489,6 +489,8 @@ void RotatorMainWindow::closeRotator()
         stop_rotation();
     }
 
+    pollTimer->stop();
+
     if (rotator->get_serialConnected())
     {
         rotator->closeRotator();
