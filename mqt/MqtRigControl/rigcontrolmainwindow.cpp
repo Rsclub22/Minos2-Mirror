@@ -123,7 +123,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     setupRadio = new RigSetupDialog(radio, bands);
     setupRadio->setAppName(appName);
 
-
     if (appName.length() > 0)
     {
         // init cache with radio data
@@ -262,6 +261,7 @@ void RigControlMainWindow::closeEvent(QCloseEvent *event)
 {
 
     LogTimer.stop();
+
     closeRadio();
 
     // and tidy up all loose ends
@@ -981,28 +981,48 @@ int RigControlMainWindow::openRadio()
 
 void RigControlMainWindow::closeRadio()
 {
+    pollTimer->stop();
     int retCode;
+
     if (radio->get_serialConnected())
     {
+        logMessage(QString("closeRadio: closing radio"));
         retCode = radio->closeRig();
         if (retCode < 0)
         {
-            trace(QString("closeRadio: error closing radio %1").arg(retCode));
+            logMessage(QString("closeRadio: error closing radio %1").arg(retCode));
         }
+        else
+        {
+            logMessage(QString("closeRadio: radio closed succesfully"));
+        }
+
+
     }
 
     if (setupRadio->currentRadio.rigCtldEnable)
     {
-        if (rigCtldProcess->state() == QProcess::Running)
+        logMessage(QString("closeRadio: closing rigCtld"));
+
+        if (rigCtldProcess)
         {
-            if (!rigCtldKill())
+            if (rigCtldProcess->state() == QProcess::Running)
             {
-                logMessage(QString("closeRadio: rigCtld daemon failed to stop"));
+                if (!rigCtldKill())
+                {
+                    logMessage(QString("closeRadio: rigCtld daemon failed to stop"));
+                }
+                else
+                {
+                    logMessage(QString("closeRadio: rigCtld daemon has stopped"));
+                }
+                setRigCltdIndicatorVisible(false);
+                RigCtldStatusTimer->stop();
             }
-            setRigCltdIndicatorVisible(false);
+
+
         }
 
-        RigCtldStatusTimer->stop();
     }
 
 
@@ -2554,8 +2574,10 @@ void RigControlMainWindow::sendBandListLogger(const int radioIdx, const QStringL
                 k++;
             }while (k < freqPresetData::presetBands.count() && !match);
 
+            QString lookupBand = supBandList[i];
+
             bandList.append(QString("%1-%2").arg(supBandList[i])
-                            .arg(config.value(supBandList[i], freqPresetData::bandFreq[k]).toString()));
+                                        .arg(config.value(lookupBand.remove(' '), freqPresetData::bandFreq[k]).toString()));
         }
 
 
