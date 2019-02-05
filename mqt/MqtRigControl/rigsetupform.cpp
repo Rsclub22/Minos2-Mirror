@@ -173,7 +173,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
                serialDataEntryVisible(false);
                networkDataEntryVisible(true);
                rigCtldNetworkVisible(false);
-               radioData->rigCtldEnable = false;
+
 
             }
             else if (portType == RIG_PORT_SERIAL)
@@ -185,6 +185,8 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             {
                 serialDataEntryVisible(false);
                 networkDataEntryVisible(false);
+                setRigctldCheckBoxVisible(false);
+                radioData->rigCtldEnable = false;
             }
         }
 
@@ -842,6 +844,13 @@ void RigSetupForm::setRigctldPortNumber(const QString& port)
 {
     ui->rigCtldNetPortBox->setText(port);
 }
+
+
+void RigSetupForm::setRigctldCheckBoxVisible(bool visible)
+{
+    ui->useRigCtldChkBox->setVisible(visible);
+}
+
 /************** RigSetup Enable **************************************/
 
 

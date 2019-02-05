@@ -489,6 +489,8 @@ void RotatorMainWindow::closeRotator()
         stop_rotation();
     }
 
+    pollTimer->stop();
+
     if (rotator->get_serialConnected())
     {
         rotator->closeRotator();
@@ -1823,19 +1825,23 @@ void RotatorMainWindow::sendStatusToLogError()
 }
 
 
-
-
-void RotatorMainWindow::sleepFor(qint64 milliseconds)
+void delay(int sec)
 {
-    qint64 timeToExitFunction = QDateTime::currentMSecsSinceEpoch()+milliseconds;
-    while(timeToExitFunction>QDateTime::currentMSecsSinceEpoch()){
-        QApplication::processEvents(QEventLoop::AllEvents, 100);
+    QTime dieTime= QTime::currentTime().addSecs(sec);
+    while (QTime::currentTime() < dieTime)
+    {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
 }
 
-
-
-
+void sleepFor(qint64 milliseconds)
+{
+    qint64 timeToExitFunction = QDateTime::currentMSecsSinceEpoch() + milliseconds;
+    while(timeToExitFunction > QDateTime::currentMSecsSinceEpoch())
+    {
+        QApplication::processEvents(QEventLoop::AllEvents, 100);
+    }
+}
 
 
 void RotatorMainWindow::about()

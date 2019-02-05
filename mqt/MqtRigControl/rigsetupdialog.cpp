@@ -189,6 +189,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(true);
+        radioTab[tabNum]->setRigctldCheckBoxVisible(false);
+        radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
     }
     else if (rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_SERIAL)
     {
@@ -199,6 +201,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(false);
+        radioTab[tabNum]->setRigctldCheckBoxVisible(false);
+        radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
     }
     radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);
 

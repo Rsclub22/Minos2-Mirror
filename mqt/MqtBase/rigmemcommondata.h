@@ -43,7 +43,7 @@ enum freqMask_lookup {
 
 
 }
-
+#ifdef BANDSELDATA
 namespace bandSelData {
 
 
@@ -91,7 +91,7 @@ const maskData::freqMask_lookup bandMaskIdx[] = { maskData::MHZ99,      /* Not u
 
 
 }
-
+#endif
 
 namespace memDefData {
 
