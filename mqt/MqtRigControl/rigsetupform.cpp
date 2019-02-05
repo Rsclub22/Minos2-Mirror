@@ -168,11 +168,12 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         if (radio->getPortType(radioData->radioModelNumber, &portType) != -1)
         {
             radioData->portType = int(portType);
-            if (portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK)
+            if (portType == RIG_PORT_NONE || portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK)
             {
                serialDataEntryVisible(false);
                networkDataEntryVisible(true);
                rigCtldNetworkVisible(false);
+               setRigctldCheckBoxVisible(false);
                radioData->rigCtldEnable = false;
 
             }
@@ -842,6 +843,13 @@ void RigSetupForm::setRigctldPortNumber(const QString& port)
 {
     ui->rigCtldNetPortBox->setText(port);
 }
+
+
+void RigSetupForm::setRigctldCheckBoxVisible(bool visible)
+{
+    ui->useRigCtldChkBox->setVisible(visible);
+}
+
 /************** RigSetup Enable **************************************/
 
 

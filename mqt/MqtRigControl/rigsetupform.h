@@ -143,6 +143,7 @@ public:
     void rigCtldNetworkVisible(bool enable);
 
 
+    void setRigctldCheckBoxVisible(bool visible);
 signals:
     void transVertTabAdded(int);
 

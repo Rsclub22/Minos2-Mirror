@@ -598,22 +598,27 @@ bool RigControl::getRigList(QComboBox *cb)
     QStringList sl;
     // add blank at beginning
     //sl << "";
-    for (i=0;i<capsList.count();i++)
+    for (i = 0;i < capsList.count(); i++)
     {
 
         QString t;
-        t= QString::number(capsList.at(i)->rig_model);
-        t=t.rightJustified(5,' ')+", ";
-        t+= capsList.at(i)->mfg_name;
-        t+=", ";
-        t+=capsList.at(i)->model_name;
-        if (getPortType(capsList.at(i)->rig_model, &portType) != -1)
+        t = QString::number(capsList.at(i)->rig_model);
+        if (t.trimmed() != "2")      // don't display rigctl model
         {
-            if (portType == RIG_PORT_NONE || portType == RIG_PORT_SERIAL  || portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK)
+            t = t.rightJustified(5,' ')+", ";
+            t+= capsList.at(i)->mfg_name;
+            t+= ", ";
+            t+= capsList.at(i)->model_name;
+            if (getPortType(capsList.at(i)->rig_model, &portType) != -1)
             {
-                sl << t;        // only add these portTypes
+                if (portType == RIG_PORT_NONE || portType == RIG_PORT_SERIAL  || portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK)
+                {
+                    sl << t;        // only add these portTypes
+                }
             }
+
         }
+
    }
    std::sort(sl.begin(), sl.end());
    cb->addItems(sl);

@@ -994,7 +994,7 @@ void RigControlMainWindow::closeRadio()
         }
         else
         {
-            logMessage(QString("closeRadio: radio closed succesfully"));
+            logMessage(QString("closeRadio: radio closed successfully"));
         }
 
 

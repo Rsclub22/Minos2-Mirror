@@ -185,10 +185,12 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     radioTab[tabNum]->setEnableTransVertSw(radioTab[tabNum]->getRadioData()->enableTransSwitch);
     radioTab[tabNum]->setEnableLocalTransVertSw(radioTab[tabNum]->getRadioData()->enableLocTVSwMsg);
 
-    if (rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_NETWORK || rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_UDP_NETWORK)
+    if (rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_NONE ||rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_NETWORK || rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_UDP_NETWORK)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(true);
+        radioTab[tabNum]->setRigctldCheckBoxVisible(false);
+        radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
     }
     else if (rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_SERIAL)
     {
