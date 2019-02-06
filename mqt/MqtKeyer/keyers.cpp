@@ -324,6 +324,7 @@ void setPipEnabled( bool val )
    if ( currentKeyer )
    {
       currentKeyer->kconf.enablePip = val;
+      trace(QString("Pip set to ").arg(val?"true":"false"));
    }
 }
 
@@ -507,6 +508,7 @@ bool commonKeyer::linesModeChanged( int state )
       trace( "linesModeChanged(" + QString::number( state ) + ")" );
    }
    linesMode = static_cast<LineModes>(state);
+   trace("lineMode is now " + lineModeStrings[linesMode]);
    return true;
 }
 
