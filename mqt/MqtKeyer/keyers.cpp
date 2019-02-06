@@ -324,7 +324,7 @@ void setPipEnabled( bool val )
    if ( currentKeyer )
    {
       currentKeyer->kconf.enablePip = val;
-      trace(QString("Pip set to ").arg(val?"true":"false"));
+      trace(QString("Pip set to %1").arg(val?"true":"false"));
    }
 }
 
