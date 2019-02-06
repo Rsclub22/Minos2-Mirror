@@ -90,9 +90,6 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     ui->tpmBox->setVisible(tpm);
 
-    //bandListTimer = new QTimer(this);
-    //bandListTimer->setSingleShot(true);
-    //connect(bandListTimer, SIGNAL(timeout()), this, SLOT(bandListTimeout()));
 
     // init memory button data before radio connection
     setRadioName(radioName, "");
@@ -1017,7 +1014,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
             if (radioName.isEmpty())
             {
-                emit selectRadio(radioName, mode);  // send radio and mode if appended.
+                emit selectRadio(radioName, mode);  // send radio and mode.
                 selRadioDetails = RadioDetails();
                 createActiveBandList(selRadioDetails.getBandList());
             }
@@ -1029,7 +1026,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                     trace(QString("setRadioName:: Select Radio = %1 Mode = %2 on rigcontrol").arg(radioName).arg(mode));
                     selRadioDetails = allRadioDetails[selRadioName];
                     createActiveBandList(selRadioDetails.getBandList());
-                    emit selectRadio(radioName, mode);  // send radio and mode if appended.
+                    emit selectRadio(radioName, mode);  // send radio and mode.
 
                     setRadioFreq();
                 }
@@ -1177,18 +1174,32 @@ void RigControlFrame::loadMemories()
 
 void RigControlFrame::setRadioList()
 {
-    listOfRadios = LogContainer->sendDM->rigs();
-
-    ui->radioNameSel->clear();
-    ui->radioNameSel->addItem("");
-    ui->radioNameSel->addItems(listOfRadios);
-    if (radioName != "")
+    if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-        ui->radioNameSel->setCurrentText(radioName);
+
+
+        // test if rigcontrol has restarted
+        // radioNameSel already has list of radios, it is rigcontrol restart
+        if  (ui->radioNameSel->count() > 0 && !launchRadioSelectTimer->isActive())
+        {
+            trace(QString("setRadioList: rigControl restart? reconnecting"));
+            launchRadioSelectCount = 5;     // wait five seconds
+            launchRadioSelectTimer->start(1000);
+        }
+
+
+        listOfRadios = LogContainer->sendDM->rigs();
+
+        ui->radioNameSel->clear();
+        ui->radioNameSel->addItem("");
+        ui->radioNameSel->addItems(listOfRadios);
+        if (radioName != "")
+        {
+            ui->radioNameSel->setCurrentText(radioName);
+        }
+
+
     }
-
-
-
 }
 
 
