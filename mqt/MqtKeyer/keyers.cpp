@@ -658,6 +658,19 @@ bool voiceKeyer::pttChanged( int state )
          if ( state )
          {
             // no current action...
+             switch (linesMode)
+             {
+             case elmPlayPip:
+                 setPipEnabled(true);
+                 break;
+
+             case elmPlayNoPip:
+                 setPipEnabled(false);
+                 break;
+
+             default:
+                 break;
+             }
             new InitialPTTAction();
             KeyerAction::getCurrentAction() ->timeOut();
          }
