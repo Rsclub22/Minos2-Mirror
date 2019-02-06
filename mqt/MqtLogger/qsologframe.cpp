@@ -1962,20 +1962,21 @@ void QSOLogFrame::modeSentFromRig(QString m)
     {
         return;
     }
-    QString mode = mlist[0];
+    QString newMode = mlist[0];
 
     for (int i = 0; i < hamlibData::supModeList.count(); i++)
     {
-        if (mode == hamlibData::supModeList[i])
+        if (newMode == hamlibData::supModeList[i])
         {
             oldMode = ui->ModeComboBoxGJV->currentText();
-            if (mode == ui->ModeComboBoxGJV->currentText())
+            if (newMode == ui->ModeComboBoxGJV->currentText())
             {
                 return;
             }
             {
                 // set index to new mode
-                ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText(mode));
+                ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText( newMode));
+                mode = newMode;
             }
 
             // ensure flip mode is shown on mode button

@@ -126,6 +126,7 @@ private:
     rmode_t curMode;
     QString sCurMode;
     bool mgmModeFlag;
+    QStringList  mgmModes;
     int rRitFreq;        // converted from hamlib long ritFreq
     int curVol;
     int curSignalStrength = 0;

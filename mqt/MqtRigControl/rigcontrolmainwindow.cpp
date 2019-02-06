@@ -123,6 +123,18 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     setupRadio = new RigSetupDialog(radio, bands);
     setupRadio->setAppName(appName);
 
+    QString fileName;
+
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("MGM_Modes");
+
+
+    mgmModes = config.value("MgmModes", "").toStringList();
+
+    config.endGroup();
+
+
     if (appName.length() > 0)
     {
         // init cache with radio data
@@ -1772,9 +1784,25 @@ int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 
         if (!mgmModeFlag)
         {
-            displayModeVfo(radio->convertModeQstr(rmode));
-            displayPassband(rwidth);
-            sendModeToLog(QString("%1:%2").arg(radio->convertModeQstr(rmode)).arg(" "));
+            // check to see if radio has been put in MGM mode, excluding USB
+            if (mgmModes.contains(sCurMode) && sCurMode != hamlibData::USB)
+            {
+
+                    mgmModeFlag = true;
+                    setupRadio->currentRadio.mgmMode = sCurMode;
+                    displayModeVfo(hamlibData::MGM);
+                    displayPassband(rwidth);
+                    sendModeToLog(QString("%1:%2").arg(hamlibData::MGM).arg(setupRadio->currentRadio.mgmMode));
+
+            }
+            else
+            {
+                displayModeVfo(radio->convertModeQstr(rmode));
+                displayPassband(rwidth);
+                sendModeToLog(QString("%1:%2").arg(radio->convertModeQstr(rmode)).arg(" "));
+            }
+
+
         }
         else
         {
