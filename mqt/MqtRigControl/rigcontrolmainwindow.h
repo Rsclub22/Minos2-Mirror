@@ -301,6 +301,9 @@ private:
 
     bool rigCtldKill();
 
+    int getTXStatus(vfo_t vfo);
+
+
 private slots:
 
     void onStdInRead(QString);

@@ -1210,8 +1210,21 @@ void RigControlMainWindow::getRadioInfo()
         }
 
     }
+/*
+    if (radioCommsOK)
+    {
 
+        retCode = getTXStatus(RIG_VFO_CURR);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request TX Status");
+        }
 
+    }
+
+*/
     msg->rigCache.publish();
 }
 
@@ -1688,101 +1701,7 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber, QStrin
 }
 
 
-/*
 
-// build the supported band list including transverters
-void RigControlMainWindow::buildSupBandList(int radioModelNumber)
-{
-    // find the bands the radio supports
-    buildSupportedRadioBands(radioModelNumber);
-
-    // merge radio bands and transverter bands
-    setupRadio->currentRadio.radioTransSupBands.clear();
-    if(setupRadio->currentRadio.transVertEnable)
-    {
-        if (bands.count() > 0)
-        {
-            for (int i = 0; i < bands.count(); i++)
-            {
-                if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
-                {
-                    setupRadio->currentRadio.radioTransSupBands.append(bands[i]->name);
-                }
-            }
-        }
-    }
-    else
-    {
-        // no transverters enabled, just copy the bands supported by the radio
-        for (int i = 0; i < setupRadio->currentRadio.radioSupBands.count(); i++)
-        {
-            setupRadio->currentRadio.radioTransSupBands.append(setupRadio->currentRadio.radioSupBands[i]);
-        }
-    }
-
-}
-
-
-
-
-
-
-
-// build the supported band list including transverters
-void RigControlMainWindow::buildSupBandList(int radioModelNumber)
-{
-    // find the bands the radio supports
-    buildSupportedRadioBands(radioModelNumber);
-
-    // merge radio bands and transverter bands
-    setupRadio->currentRadio.radioTransSupBands.clear();
-    if(setupRadio->currentRadio.transVertEnable)
-    {
-        if (bands.count() > 0)
-        {
-            for (int i = 0; i < bands.count(); i++)
-            {
-                if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
-                {
-                    setupRadio->currentRadio.radioTransSupBands.append(bands[i]->name);
-                }
-            }
-        }
-    }
-    else
-    {
-        // no transverters enabled, just copy the bands supported by the radio
-        for (int i = 0; i < setupRadio->currentRadio.radioSupBands.count(); i++)
-        {
-            setupRadio->currentRadio.radioTransSupBands.append(setupRadio->currentRadio.radioSupBands[i]);
-        }
-    }
-
-}
-
-
-// probe radio for supported bands
-void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber)
-{
-
-    setupRadio->currentRadio.radioSupBands.clear();
-
-    RIG *my_rig = rig_init(radioModelNumber);
-    if (my_rig)
-    {
-
-        for (int i = 0; i < bands.count(); i++)
-        {
-            if (radio->chkFreqRange(my_rig, bands[i]->fLow, "USB"))
-            {
-                setupRadio->currentRadio.radioSupBands.append(bands[i]->name);
-            }
-        }
-    }
-
-}
-
-*/
 
 // is this band in the supported band list for this model
 bool RigControlMainWindow::findSupRadioBand(const QString band, const QStringList& supBandsList)
@@ -2438,6 +2357,27 @@ void RigControlMainWindow::hamlibError(int errorCode, QString cmd)
     }
 }
 
+
+/********************* PTT ****************************************/
+
+// not implemented yet..
+int RigControlMainWindow::getTXStatus(vfo_t vfo)
+{
+
+    ptt_t pttStatus;
+    int retCode = radio->getPttStatus(vfo, &pttStatus);
+    if (retCode == RIG_OK)
+    {
+       if (pttStatus == RIG_PTT_ON)
+       {
+           // turn on indicator
+
+       }
+    }
+
+   return retCode;
+
+}
 
 
 bool RigControlMainWindow::readTestStandAloneFlag()
