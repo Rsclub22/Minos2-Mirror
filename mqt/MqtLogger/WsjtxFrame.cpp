@@ -186,7 +186,8 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc)
-        return;    id_.clear();
+        return;
+    id_.clear();
 }
 void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
@@ -291,11 +292,15 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
             int bestOffset = -1;
             int bestPoints = -1;
+            QString bestCs;
+            int currSn = -100;
 
             for (int i = decodeStartSize; i < decodeEndSize; i++)
             {
                 decodeMessage &dc = messages[i];
 
+                if (dx_call == dc.fromCall.fullCall.getValue())
+                    continue;
                 // NB that we get the decodes strongest first, so we shouldn't need to
                 // select for the strongest decode for a station
 
@@ -304,23 +309,43 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
                 // we may also need to differentiate between VHF Eu and normal modes
 
-                bool ismycall =  (dc.toCall.fullCall.getValue() == myCall || dc.fromCall.fullCall.getValue() == myCall);
+                int minpoints = ui->minPointsSpinner->value();
+                if (!ui->minPointsCheckBox->isChecked())
+                    minpoints = 0;
+                int minsnr =  ui->snrSpinner->value();
+                if (!ui->snrCheckBox->isChecked())
+                    minsnr = -100;
+
+//                bool ismycall =  (dc.toCall.fullCall.getValue() == myCall || dc.fromCall.fullCall.getValue() == myCall);
                 if (dc.mstage == emsCQ
-
-                || (dc.mstage == emsGrid && ismycall)
-
-                || (dc.mstage == emsRRR && !ismycall)
-                || (dc.mstage == ems73 && !ismycall)
+                || (dc.mstage == emsGrid && dc.toCall.fullCall.getValue() == myCall)
+//                || (dc.mstage == emsRRR && !ismycall)
+//                || (dc.mstage == ems73 && !ismycall)
                    )
                 {
-                    int minsnr =  ui->snrSpinner->value();
-                    int minpoints = ui->minPointsSpinner->value();
-                    if ((!ui->snrCheckBox->isChecked() || dc.snr >= minsnr)
-                            && (!ui->minPointsCheckBox->isChecked() || dc.points >= minpoints )
-                            && dc.points > bestPoints)
+
+                    if (  dc.points > 0
+                            && dc.snr >= minsnr
+                            && dc.points > minpoints
+                            && dc.points > bestPoints
+                          )
                     {
                         bestOffset = i;
                         bestPoints = dc.points;
+                        bestCs = dc.toCall.fullCall.getValue();
+                        currSn = dc.snr;
+                    }
+                    else
+                    {
+                        if (bestOffset >= 0
+                            && bestOffset != i
+                            && dc.toCall.fullCall.getValue() == bestCs
+                            && dc.snr > currSn
+                            )
+                        {
+                            bestOffset = i;
+                            currSn = dc.snr;
+                        }
                     }
                 }
             }
