@@ -171,7 +171,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    return false;  // i.e. equal
 }
 
-void DisplayContestContact::checkContact( )
+void DisplayContestContact::checkContact( bool inScan)
 {
    // check on country and district. If valid, return true,
    // having mapped any synonyms to their parents and
@@ -327,7 +327,10 @@ void DisplayContestContact::checkContact( )
          }
       }
    }
-   clp->DupSheet.checkCurDup( clp, getLogSequence(), 0, true ); // add to duplicates list
+
+   bool dupContact = clp->DupSheet.checkCurDup( clp, clp->validationPoint, 0, true ); // add to duplicates list
+   if (inScan)
+       dupContact = (csret == ERR_DUPCS);
 
    if ( !( contactFlags.getValue() & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
    {
@@ -357,18 +360,20 @@ void DisplayContestContact::checkContact( )
                {
                   cscore = ( cscore + 1 ) / 2;
                }
-               clp->contestScore += cscore;
+               if (!dupContact)
+                    clp->contestScore += cscore;
             }
             break;
 
          case PPQSO:
-            if ( cscore > 0 )
+            if ( cscore > 0 && !dupContact)
                clp->contestScore++;
             break;
 
       }
    }
 
+   if (!dupContact)
    {
       // now look at the locator list
       QString letters;
@@ -421,6 +426,8 @@ void DisplayContestContact::checkContact( )
                   newBonus = true;
                }
             }
+
+            // but we set uk/non uk mult value to zero...
             if (UKcall)
             {
                if (!npt->UKMultGiven)
@@ -430,14 +437,14 @@ void DisplayContestContact::checkContact( )
                   if (npt->UKLocCount + npt->nonUKLocCount == 0)
                   {
                      // hasn't been worked at all
-                     clp->nlocs += clp->UKloc_multiplier;
+                     clp->nlocs += 1;
                      multCount += clp->UKloc_multiplier;
                   }
                   else
                   {
                      // has already been worked - must have been non-uk, so that
                      // bit of the mult has already happened.
-                     clp->nlocs += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
+                     //clp->nlocs += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
                      multCount += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
                   }
                }
@@ -447,7 +454,7 @@ void DisplayContestContact::checkContact( )
             {
                if ( npt->UKLocCount + npt->nonUKLocCount == 0 )
                {
-                  clp->nlocs += clp->NonUKloc_multiplier;
+                  clp->nlocs += 1;
                   multCount += clp->NonUKloc_multiplier;
                }
                if (npt->nonUKLocCount == 0)
@@ -810,7 +817,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
             contest->maxSerial = maxct;
 
          contest->validationPoint = getLogSequence();
-         checkContact();                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history
+         checkContact(false);                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history
          QSharedPointer<BaseContact> bc( new BaseContact(*this) );   // this should get it now??
          getHistory().push_back( bc );
       }

@@ -15,6 +15,37 @@ ContList contlist[ CONTINENTS ] =
       {"SA", false},
       {"NA", false},
    };
+
+QVector <AuxTypeOption> auxoptions = {
+    {aeClock, "Clock", "Clock"},
+    {aeDXCC, "DXCC", "DXCC"},
+    {aeDistrict, "District", "District"},
+    {aeFilter, "Filter", "Filter"},
+    {aeMemories, "Memories", "Memories"},
+    {aeLocatorMap, "Locator Map", "Locator Map"},
+    {aeLocatorTree, "Locator Tree", "Locator Tree"},
+    {aeStats, "Stats", "Stats"},
+};
+
+AuxEntries getAuxEntryType(QString s)
+{
+    foreach(const AuxTypeOption &opt, auxoptions)
+    {
+        if (opt.s == s)
+            return opt.type;
+    }
+    return aeClock;
+}
+QString getAuxTypeString(AuxEntries t)
+{
+    foreach(const AuxTypeOption &opt, auxoptions)
+    {
+        if (opt.type == t)
+            return opt.s;
+    }
+    return getAuxTypeString(aeClock);
+}
+
 bool showWorked = false;
 bool showUnworked = false;
 
@@ -26,18 +57,13 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
 {
     ui->setupUi(this);
 
-    QStringList infoList =
+    ui->infoCombo->clear();
+    int i = 0;
+    foreach(const AuxTypeOption &opt, auxoptions)
     {
-        "Clock",
-        "DXCC",
-        "District",
-        "Filter",
-        "Memories",
-        "Locator Map",
-        "Locator Tree",
-        "Stats"
-    };
-    ui->infoCombo->addItems(infoList);
+        ui->infoCombo->addItem(opt.s, opt.type);
+        ui->infoCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
+    }
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ScrollToCountry(QString,BaseContestLog*)), this, SLOT(on_ScrollToCountry(QString,BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(ScrollToDistrict(QString,BaseContestLog*)), this, SLOT(on_ScrollToDistrict(QString,BaseContestLog*)), Qt::QueuedConnection);
@@ -53,8 +79,12 @@ StackedInfoFrame::~StackedInfoFrame()
 {
     delete ui;
 }
+void StackedInfoFrame::setCurrentFrameType(QString s)
+{
+    ui->infoCombo->setCurrentText(s);
+}
 
-void StackedInfoFrame::on_infoCombo_currentIndexChanged(int arg1)
+void StackedInfoFrame::on_infoCombo_currentIndexChanged(int /*arg1*/)
 {
     if (currStackFrame)
     {
@@ -72,64 +102,65 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int arg1)
     locTreeFrame = nullptr;
     statsFrame = nullptr;
 
-    switch ( arg1 )
+    switch ( getAuxEntryType(ui->infoCombo->currentText()) )
     {
-    case 0:
+    case aeClock:
         clockFrame = new TClockFrame(this);
         currStackFrame = clockFrame;
         layout()->addWidget(currStackFrame);
         clockFrame->setContest(contest);
         break;
 
-    case 1:
+    case aeDXCC:
         dxccFrame = new DXCCFrame(this);
         currStackFrame = dxccFrame;
         layout()->addWidget(currStackFrame);
         dxccFrame->setContest(contest);
         break;
-    case 2:
-//    "District",
+
+    case aeDistrict:
         districtFrame = new DistrictFrame(this);
         currStackFrame = districtFrame;
         layout()->addWidget(districtFrame);
         districtFrame->setContest(contest);
         break;
-    case 3:
-//    "Filter",
+
+    case aeFilter:
         filterFrame = new FilterFrame(this);
         currStackFrame = filterFrame;
         layout()->addWidget(filterFrame);
         filterFrame->setContest(contest);
         break;
-    case 4:
-//    "Memories",
+
+    case aeMemories:
         rigMemFrame = new RigMemoryFrame(this);
         currStackFrame = rigMemFrame;
         layout()->addWidget(rigMemFrame);
         rigMemFrame->setContest(contest);
         break;
-    case 5:
-//    "Locator Map",
+
+    case aeLocatorMap:
         locFrame = new LocFrame(this);
         currStackFrame = locFrame;
         layout()->addWidget(locFrame);
         locFrame->setContest(contest);
         break;
-    case 6:
-//    "Locator Tree",
+
+    case aeLocatorTree:
         locTreeFrame = new LocTreeFrame(this);
         currStackFrame = locTreeFrame;
         layout()->addWidget(locTreeFrame);
         locTreeFrame->setContest(contest);
         break;
-    case 7:
-//    "Stats"
+
+    case aeStats:
         statsFrame = new TStatsDispFrame(this);
         currStackFrame = statsFrame;
         layout()->addWidget(statsFrame);
         statsFrame->setContest(contest);
         break;
     }
+
     if (contest)
     {
         if (contest)
@@ -167,7 +198,13 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
         if (contest)
         {
             if (stackInstance < STACKITEMS)
-                ui->infoCombo->setCurrentText(contest->currentStackItems[stackInstance].getValue());   // start up on the clock - useful outside the contest!
+            {
+                QString aux = contest->currentStackItems[stackInstance].getValue();
+                if (!aux.isEmpty())
+                {
+                    ui->infoCombo->setCurrentText(aux);
+                }
+            }
         }
     }
 }

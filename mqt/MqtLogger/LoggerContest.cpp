@@ -241,7 +241,8 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, temp );
    screenLayout.setInitialValue(temp);
 
-   MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpStackFrame, temp );
+   temp.clear(); // Initial value now comes from the screen config
+
    for (int i = 0; i < STACKITEMS; i++)
    {
         currentStackItems[i].setInitialValue(temp);
@@ -867,9 +868,6 @@ bool LoggerContestLog::export_contest(QSharedPointer<QFile> expfd, ExportType ex
       case EPRINTFILE:
          ret = exportPrintFile(expfd);
          break;
-
-      default:
-         return false;
    }
    clearDirty();    // BUT don't leave it dirty!!
    return ret;

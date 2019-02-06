@@ -22,6 +22,7 @@ public:
 
     QTime decodeTime;
     QString message;
+    bool best = false;
     Callsign toCall;
     Locator toGrid;
     Callsign fromCall;

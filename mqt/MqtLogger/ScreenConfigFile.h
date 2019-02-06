@@ -1,6 +1,7 @@
 #ifndef SCREENCONFIGFILE_H
 #define SCREENCONFIGFILE_H
 #include "base_pch.h"
+#include "StackedInfoFrame.h"
 
 enum SCType
 {
@@ -23,6 +24,7 @@ class SCElement
 {
 public:
     SCType type;
+    AuxEntries auxType;
 };
 
 class SCRow

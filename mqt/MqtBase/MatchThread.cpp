@@ -718,9 +718,14 @@ bool ThisLogMatcher::idleMatch( int limit )
              return true;
           }
           QSharedPointer<BaseContact> cct = ccon->pcontactAt( contactIndex++ );
-          if ( !cct )
+          if ( !cct)
              return true;
 
+          unsigned short cf = cct->contactFlags.getValue();
+          if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+          {
+              continue;
+          }
           // now do the match
 
           if ( mp != Country && mp != District && mp != Locator )
@@ -1050,6 +1055,11 @@ bool OtherLogMatcher::idleMatch( int limit )
          if ( !cct )
             return true;
 
+         unsigned short cf = cct->contactFlags.getValue();
+         if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+         {
+             continue;
+         }
          // now do the match
 
          if ( mp != Country && mp != District && mp != Locator )

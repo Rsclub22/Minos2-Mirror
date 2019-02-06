@@ -184,7 +184,7 @@ class BaseContact
       }
       virtual void processMinosStanza( const QString &/*methodName*/, MinosTestImport * const /*mt*/ )
       {}
-      virtual void checkContact( )
+      virtual void checkContact( bool /*inScan*/ )
       {}
       virtual void copyFromArg(QSharedPointer<BaseContact> )
       {}

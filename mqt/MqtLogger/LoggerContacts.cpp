@@ -569,7 +569,7 @@ bool ContestContact::commonSave(QSharedPointer<BaseContact> tct)
          cs.valRes = CS_NOT_VALIDATED;
          loc.valRes = LOC_NOT_VALIDATED;
          loc.validate();
-         checkContact( );                    // in commonSave, AFTER saved, to update stats etc
+         checkContact(false );                    // in commonSave, AFTER saved, to update stats etc
       }
    }
    return ret;

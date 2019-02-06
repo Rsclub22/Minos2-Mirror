@@ -8,6 +8,7 @@
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"
 #include "cutils.h"
+#include "BandList.h"
 
 #include "Wsjtx_qt_helpers.hpp"
 #include "WsjtxDecodesModel.hpp"
@@ -36,7 +37,10 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->autoSelectReplyFrame->setVisible(false);
+    bool autoEnabled;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
+
+    ui->autoSelectReplyFrame->setVisible(autoEnabled);
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
@@ -45,17 +49,35 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     decodes_model_->delegate = delegate;
     decodes_model_->messages = &messages;
 
+//    enum DecodeColumns
+//    {
+//        dcId,
+//        dcTime, dcSnr, dcDT, dcDF, dcMd, dcConfidence, dcLive,
+//        dcSeq, dcPoints, dcBearing, dcDistance,
+//        dcFromCall, dcFromGrid, dcToCall, dcToGrid,
+//        dcBest,
+//        dcMessage, dcMaxVal
+//    };
+
     ui->decodes_table_view_->setModel (decodes_model_);
     ui->decodes_table_view_->verticalHeader ()->hide ();
     ui->decodes_table_view_->hideColumn (dcId);
+    ui->decodes_table_view_->hideColumn (dcDT);
+    ui->decodes_table_view_->hideColumn (dcMd);
+    ui->decodes_table_view_->hideColumn (dcConfidence);
+    ui->decodes_table_view_->hideColumn (dcLive);
     ui->decodes_table_view_->hideColumn (dcSeq);
-    ui->decodes_table_view_->hideColumn (dcPoints);
-    ui->decodes_table_view_->hideColumn (dcBearing);
+    //ui->decodes_table_view_->hideColumn (dcPoints);
+    //ui->decodes_table_view_->hideColumn (dcBearing);
     ui->decodes_table_view_->hideColumn (dcDistance);
     ui->decodes_table_view_->hideColumn (dcFromCall);
     ui->decodes_table_view_->hideColumn (dcFromGrid);
     ui->decodes_table_view_->hideColumn (dcToCall);
     ui->decodes_table_view_->hideColumn (dcToGrid);
+
+
+    if (!autoEnabled)
+        ui->decodes_table_view_->hideColumn (dcBest);
 
     ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
     ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(1);
@@ -166,7 +188,7 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
     if (ct != cc)
         return;    id_.clear();
 }
-void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString const& mode, QString const& dx_call
+void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                 , QString const& de_call, QString const& de_grid, QString const& dx_grid
@@ -218,6 +240,31 @@ void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString cons
 
 
     ui->frequency_label_->setText (HtmlFontColour(fcolour) + "QRG: " + Radio::pretty_frequency_MHz_string (f));
+
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    double df = f;
+    bool bandOK = blist.findBand(df, bi);
+    if (bandOK)
+    {
+        QString cb = cc->band.getValue().trimmed();
+        BandInfo cbi;
+        bool bandOK = blist.findBand(cb, cbi);
+        if (bandOK)
+        {
+            cb = cbi.uk;
+        }
+        if (cb != bi.uk)
+        {
+            QString mess = QString("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
+            ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+        }
+        else
+        {
+            ui->bandErrorLabel->clear();
+        }
+    }
+
     ui->dx_label_->setText (dx_call.size () >= 0 ? QString {"DX: %1%2"}.arg (dx_call)
                                                    .arg (dx_grid.size () ? '(' + dx_grid + ')' : QString {}) : QString {});
     ui->rx_df_label_->setText (rx_df >= 0 ? QString {HtmlFontColour(tcolour) + "Rx: %1"}.arg (rx_df) : "");
@@ -238,7 +285,7 @@ void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString cons
         inDecode = false;
 
         int decodeEndSize = messages.size();
-        if (ui->autoSelectButton->isChecked() && decodeEndSize > decodeStartSize)
+        if (decodeEndSize > decodeStartSize)
         {
             // iterate over the latest decodes, and select the best
 
@@ -249,27 +296,46 @@ void WsjtxFrame::update_status (QString const& /*id*/, Frequency f, QString cons
             {
                 decodeMessage &dc = messages[i];
 
+                // NB that we get the decodes strongest first, so we shouldn't need to
+                // select for the strongest decode for a station
+
+                // we may end up needing to limit the message types
+                // we can reply to.
+
+                // we may also need to differentiate between VHF Eu and normal modes
+
+                bool ismycall =  (dc.toCall.fullCall.getValue() == myCall || dc.fromCall.fullCall.getValue() == myCall);
                 if (dc.mstage == emsCQ
-                || dc.mstage == emsRRR
-                || dc.mstage == ems73
-                || (dc.mstage == emsGrid && dc.toCall.fullCall.getValue() == myCall)
+
+                || (dc.mstage == emsGrid && ismycall)
+
+                || (dc.mstage == emsRRR && !ismycall)
+                || (dc.mstage == ems73 && !ismycall)
                    )
                 {
-                    if ((!ui->snrCheckBox->isChecked() || dc.snr >= ui->snrSpinner->value() )
-                            && (!ui->minPointsCheckBox->isChecked() || bestPoints >= ui->minPointsSpinner->value() )
+                    int minsnr =  ui->snrSpinner->value();
+                    int minpoints = ui->minPointsSpinner->value();
+                    if ((!ui->snrCheckBox->isChecked() || dc.snr >= minsnr)
+                            && (!ui->minPointsCheckBox->isChecked() || dc.points >= minpoints )
                             && dc.points > bestPoints)
                     {
                         bestOffset = i;
+                        bestPoints = dc.points;
                     }
                 }
             }
-            if (bestOffset > 0 )
+            for (int i = decodeStartSize; i < decodeEndSize; i++)
+            {
+                decodeMessage &dc = messages[i];
+                dc.best = (bestOffset == i);
+            }
+            emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
+            if (ui->autoSelectButton->isChecked() && bestOffset > 0 )
             {
                 reply(messages[bestOffset]);
             }
         }
     }
-    //    }
 }
 
 void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time

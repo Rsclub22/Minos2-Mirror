@@ -45,7 +45,10 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
            for (int k = 0; k < sc.rows[j].elements.count(); k++)
            {
                ScreenConfigElement *e = new ScreenConfigElement(this, baseRow);
-               e->setType(sc.rows[j].elements[k].type);
+               SCType sctype = sc.rows[j].elements[k].type;
+               e->setType(sctype);
+               if (sctype == sctAux)
+                   e->setAuxType(sc.rows[j].elements[k].auxType);
                baseRow->vbl->insertWidget(k, e);
            }
         }
@@ -92,6 +95,7 @@ SC ScreenConfig::getConfig()
                 {
                     SCElement scele;
                     scele.type = getScreenType(ele->getType());
+                    scele.auxType = getAuxEntryType(ele->getAuxType());
                     scrow.elements.append(scele);
 
                 }

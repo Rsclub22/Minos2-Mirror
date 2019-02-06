@@ -53,6 +53,13 @@ ScreenConfigElement::ScreenConfigElement(QWidget *parent, ScreenConfigRow *paren
         ui->elementTypeCombo->addItem(opt.s, opt.type);
         ui->elementTypeCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
     }
+
+    i = 0;
+    foreach(const AuxTypeOption &opt, auxoptions)
+    {
+        ui->auxTypeCombo->addItem(opt.s, opt.type);
+        ui->auxTypeCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
+    }
 }
 
 ScreenConfigElement::~ScreenConfigElement()
@@ -62,11 +69,23 @@ ScreenConfigElement::~ScreenConfigElement()
 void ScreenConfigElement::setType(SCType t)
 {
     ui->elementTypeCombo->setCurrentText(getScreenTypeString(t));
+
+    ui->auxTypeCombo->setVisible(t == sctAux);
 }
 QString ScreenConfigElement::getType() const
 {
     return ui->elementTypeCombo->currentText();
 }
+
+void ScreenConfigElement::setAuxType(AuxEntries ae)
+{
+    ui->auxTypeCombo->setCurrentText(getAuxTypeString(ae));
+}
+QString ScreenConfigElement::getAuxType() const
+{
+    return ui->auxTypeCombo->currentText();
+}
+
 void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
 {
     // if not aux, check only one of the type - make the other one "none"
@@ -80,6 +99,9 @@ void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
     {
         setType(sctNone);
     }
+    SCType t = getScreenType(ui->elementTypeCombo->currentText());
+    ui->auxTypeCombo->setVisible(t == sctAux);
+
 }
 
 void ScreenConfigElement::on_addLeftButton_clicked()

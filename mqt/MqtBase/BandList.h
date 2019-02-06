@@ -41,6 +41,8 @@ class BandInfo
         QString adif;
         QString reg1test;
 
+        QString bandColour;
+
         void setType ( const QString &t );
         QString getType();
 };
