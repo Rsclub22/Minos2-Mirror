@@ -105,7 +105,7 @@ private:
     QString logger_freq;
     QString slogMode;
     QString selRadioMode;   // onSelectRadio mode from logger at startup
-    rmode_t logMode;
+    //rmode_t logMode;
     QString selTvBand;      // selected band from radio
     QString transVertSwNum;
     bool logRitOn;

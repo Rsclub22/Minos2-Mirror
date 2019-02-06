@@ -555,7 +555,7 @@ void RigControlMainWindow::upDateRadio()
 
                     slogMode = "USB";
                     // set mode
-                    logMode = radio->convertQStrMode("USB");
+                    //logMode = radio->convertQStrMode("USB");
                     setMode("USB", RIG_VFO_CURR);
                 }
 
@@ -1878,7 +1878,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
     if (radioCommsOK && !rigErrorFlag)
     {
         slogMode = mode;
-        logMode = radio->convertQStrMode(mode);
+        //logMode = radio->convertQStrMode(mode);
 
 
         if (slogMode == hamlibData::MGM)
@@ -1890,6 +1890,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
                 if (curMode !=  radio->convertQStrMode(setupRadio->currentRadio.mgmMode))
                 {
                     setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR);
+                    logMessage((QString("Log SetMode: MgmMode Flag alread set, Send to setmode MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
 
                 }
             }
@@ -1898,7 +1899,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
                 mgmModeFlag = true;
                 setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR);
 
-                logMessage((QString("Log SetMode: Set MgmMode Flag, Selected MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
+                logMessage((QString("Log SetMode: Set MgmMode Flag, Send to setmode MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
             }
         }
         else
@@ -1915,16 +1916,10 @@ void RigControlMainWindow::loggerSetMode(QString mode)
 
 void RigControlMainWindow::setMode(QString mode, vfo_t vfo)
 {
-    //if (mode == "")
-    //{
-    //    logMessage(QString("SetMode: Mode is blank!"));
-    //    return;
-    //}
-
     int retCode = 0;
 
     cmdLockOn();      // lock get radio info
-
+    logMessage(QString("SetMode: Mode Requested = %1").arg(mode));
     mode = mode.left(mode.indexOf(":"));
     rmode_t mCode = radio->convertQStrMode(mode);
 
