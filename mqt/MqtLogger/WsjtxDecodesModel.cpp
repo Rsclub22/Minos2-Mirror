@@ -236,7 +236,7 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             return messages->at(index.row()).best?"Best":"";
 
         case dcMessage:
-            return messages->at(index.row()).message;
+            return escapeXML( messages->at(index.row()).message );
 
         }
     }
