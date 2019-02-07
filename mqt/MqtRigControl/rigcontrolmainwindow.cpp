@@ -123,6 +123,18 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     setupRadio = new RigSetupDialog(radio, bands);
     setupRadio->setAppName(appName);
 
+    QString fileName;
+
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("MGM_Modes");
+
+
+    mgmModes = config.value("MgmModes", "").toStringList();
+
+    config.endGroup();
+
+
     if (appName.length() > 0)
     {
         // init cache with radio data
@@ -555,7 +567,7 @@ void RigControlMainWindow::upDateRadio()
 
                     slogMode = "USB";
                     // set mode
-                    logMode = radio->convertQStrMode("USB");
+                    //logMode = radio->convertQStrMode("USB");
                     setMode("USB", RIG_VFO_CURR);
                 }
 
@@ -1210,8 +1222,21 @@ void RigControlMainWindow::getRadioInfo()
         }
 
     }
+/*
+    if (radioCommsOK)
+    {
 
+        retCode = getTXStatus(RIG_VFO_CURR);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
+            hamlibError(retCode, "Request TX Status");
+        }
 
+    }
+
+*/
     msg->rigCache.publish();
 }
 
@@ -1688,101 +1713,7 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber, QStrin
 }
 
 
-/*
 
-// build the supported band list including transverters
-void RigControlMainWindow::buildSupBandList(int radioModelNumber)
-{
-    // find the bands the radio supports
-    buildSupportedRadioBands(radioModelNumber);
-
-    // merge radio bands and transverter bands
-    setupRadio->currentRadio.radioTransSupBands.clear();
-    if(setupRadio->currentRadio.transVertEnable)
-    {
-        if (bands.count() > 0)
-        {
-            for (int i = 0; i < bands.count(); i++)
-            {
-                if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
-                {
-                    setupRadio->currentRadio.radioTransSupBands.append(bands[i]->name);
-                }
-            }
-        }
-    }
-    else
-    {
-        // no transverters enabled, just copy the bands supported by the radio
-        for (int i = 0; i < setupRadio->currentRadio.radioSupBands.count(); i++)
-        {
-            setupRadio->currentRadio.radioTransSupBands.append(setupRadio->currentRadio.radioSupBands[i]);
-        }
-    }
-
-}
-
-
-
-
-
-
-
-// build the supported band list including transverters
-void RigControlMainWindow::buildSupBandList(int radioModelNumber)
-{
-    // find the bands the radio supports
-    buildSupportedRadioBands(radioModelNumber);
-
-    // merge radio bands and transverter bands
-    setupRadio->currentRadio.radioTransSupBands.clear();
-    if(setupRadio->currentRadio.transVertEnable)
-    {
-        if (bands.count() > 0)
-        {
-            for (int i = 0; i < bands.count(); i++)
-            {
-                if (findSupRadioBand(bands[i]->name) ||  findSupTransBand(bands[i]->name))
-                {
-                    setupRadio->currentRadio.radioTransSupBands.append(bands[i]->name);
-                }
-            }
-        }
-    }
-    else
-    {
-        // no transverters enabled, just copy the bands supported by the radio
-        for (int i = 0; i < setupRadio->currentRadio.radioSupBands.count(); i++)
-        {
-            setupRadio->currentRadio.radioTransSupBands.append(setupRadio->currentRadio.radioSupBands[i]);
-        }
-    }
-
-}
-
-
-// probe radio for supported bands
-void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber)
-{
-
-    setupRadio->currentRadio.radioSupBands.clear();
-
-    RIG *my_rig = rig_init(radioModelNumber);
-    if (my_rig)
-    {
-
-        for (int i = 0; i < bands.count(); i++)
-        {
-            if (radio->chkFreqRange(my_rig, bands[i]->fLow, "USB"))
-            {
-                setupRadio->currentRadio.radioSupBands.append(bands[i]->name);
-            }
-        }
-    }
-
-}
-
-*/
 
 // is this band in the supported band list for this model
 bool RigControlMainWindow::findSupRadioBand(const QString band, const QStringList& supBandsList)
@@ -1853,9 +1784,25 @@ int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 
         if (!mgmModeFlag)
         {
-            displayModeVfo(radio->convertModeQstr(rmode));
-            displayPassband(rwidth);
-            sendModeToLog(QString("%1:%2").arg(radio->convertModeQstr(rmode)).arg(" "));
+            // check to see if radio has been put in MGM mode, excluding USB
+            if (mgmModes.contains(sCurMode) && sCurMode != hamlibData::USB)
+            {
+
+                    mgmModeFlag = true;
+                    setupRadio->currentRadio.mgmMode = sCurMode;
+                    displayModeVfo(hamlibData::MGM);
+                    displayPassband(rwidth);
+                    sendModeToLog(QString("%1:%2").arg(hamlibData::MGM).arg(setupRadio->currentRadio.mgmMode));
+
+            }
+            else
+            {
+                displayModeVfo(radio->convertModeQstr(rmode));
+                displayPassband(rwidth);
+                sendModeToLog(QString("%1:%2").arg(radio->convertModeQstr(rmode)).arg(" "));
+            }
+
+
         }
         else
         {
@@ -1878,7 +1825,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
     if (radioCommsOK && !rigErrorFlag)
     {
         slogMode = mode;
-        logMode = radio->convertQStrMode(mode);
+        //logMode = radio->convertQStrMode(mode);
 
 
         if (slogMode == hamlibData::MGM)
@@ -1890,6 +1837,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
                 if (curMode !=  radio->convertQStrMode(setupRadio->currentRadio.mgmMode))
                 {
                     setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR);
+                    logMessage((QString("Log SetMode: MgmMode Flag alread set, Send to setmode MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
 
                 }
             }
@@ -1898,7 +1846,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
                 mgmModeFlag = true;
                 setMode(setupRadio->currentRadio.mgmMode, RIG_VFO_CURR);
 
-                logMessage((QString("Log SetMode: Set MgmMode Flag, Selected MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
+                logMessage((QString("Log SetMode: Set MgmMode Flag, Send to setmode MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
             }
         }
         else
@@ -1915,16 +1863,10 @@ void RigControlMainWindow::loggerSetMode(QString mode)
 
 void RigControlMainWindow::setMode(QString mode, vfo_t vfo)
 {
-    //if (mode == "")
-    //{
-    //    logMessage(QString("SetMode: Mode is blank!"));
-    //    return;
-    //}
-
     int retCode = 0;
 
     cmdLockOn();      // lock get radio info
-
+    logMessage(QString("SetMode: Mode Requested = %1").arg(mode));
     mode = mode.left(mode.indexOf(":"));
     rmode_t mCode = radio->convertQStrMode(mode);
 
@@ -2443,6 +2385,27 @@ void RigControlMainWindow::hamlibError(int errorCode, QString cmd)
     }
 }
 
+
+/********************* PTT ****************************************/
+
+// not implemented yet..
+int RigControlMainWindow::getTXStatus(vfo_t vfo)
+{
+
+    ptt_t pttStatus;
+    int retCode = radio->getPttStatus(vfo, &pttStatus);
+    if (retCode == RIG_OK)
+    {
+       if (pttStatus == RIG_PTT_ON)
+       {
+           // turn on indicator
+
+       }
+    }
+
+   return retCode;
+
+}
 
 
 bool RigControlMainWindow::readTestStandAloneFlag()

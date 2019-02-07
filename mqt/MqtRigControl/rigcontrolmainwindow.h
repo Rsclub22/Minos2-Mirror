@@ -105,7 +105,7 @@ private:
     QString logger_freq;
     QString slogMode;
     QString selRadioMode;   // onSelectRadio mode from logger at startup
-    rmode_t logMode;
+    //rmode_t logMode;
     QString selTvBand;      // selected band from radio
     QString transVertSwNum;
     bool logRitOn;
@@ -126,6 +126,7 @@ private:
     rmode_t curMode;
     QString sCurMode;
     bool mgmModeFlag;
+    QStringList  mgmModes;
     int rRitFreq;        // converted from hamlib long ritFreq
     int curVol;
     int curSignalStrength = 0;
@@ -300,6 +301,9 @@ private:
 
 
     bool rigCtldKill();
+
+    int getTXStatus(vfo_t vfo);
+
 
 private slots:
 
