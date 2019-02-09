@@ -1635,6 +1635,15 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
     QString program = setupRadio->getRigCtldExePath() + RIGCTL_EXE_FILENAME;
 
     QStringList arguments;
+
+#if defined Q_OS_WIN32
+    QString serPort = comport.trimmed();
+#elif defined Q_OS_LINUX
+    QString serPort = "/dev/" + comport.trimmed();
+#elif defined Q_OS_MAC
+    QString serPort = "/dev/" + comport.trimmed();
+#endif
+
     QStringList parityNames;
     QString parityName;
     QString networkAdd = netAdd.trimmed();
@@ -1644,7 +1653,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
     {
         parityNames = radio->getParityCodeNames();
         parityName = parityNames[parity];
-        arguments << "-m" + model.trimmed() << "-r" + comport.trimmed()  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
+        arguments << "-m" + model.trimmed() << "-r" + serPort  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
                   << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
 
         if (manufacturer == "Icom")
@@ -1697,7 +1706,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
 
 
     trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, rtsState = %8, dtrState = %9, civ = %10, netaddress = %11, netPort = %12")
-          .arg(manufacturer).arg(model).arg(comport).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
+          .arg(manufacturer).arg(model).arg(serPort).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
 
     rigCtldProcess->start(program, arguments);
 
