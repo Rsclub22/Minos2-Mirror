@@ -95,11 +95,13 @@ private:
     bool rigErrorFlag;
     bool cmdLockFlag;
     // data from rigctld
+    QProcess *rigCtldProcess;
     QString rigctld_radioNumber;
     int irigctld_radioNumber = 0;
     QString rigctld_radioName;
     QString rigctld_radioMfg;
     QTimer *RigCtldStatusTimer;
+    int rigCtldConnectDelay;
 
     // data from logger
     QString logger_freq;
@@ -153,7 +155,6 @@ private:
     QVector<QPushButton*> supRadioInd;
     QString selTransVertBandIndicator = "";
 
-    QProcess *rigCtldProcess;
 
     void initActionsConnections();
     void initSelectRadioBox();
@@ -303,6 +304,9 @@ private:
     bool rigCtldKill();
 
     int getTXStatus(vfo_t vfo);
+
+
+    void getRigCtldConnectDelay();
 
 
 private slots:
