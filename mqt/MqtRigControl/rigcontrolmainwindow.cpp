@@ -35,27 +35,28 @@
 
 
 RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
-    QMainWindow(parent)
-  , ui(new Ui::RigControlMainWindow)
-  , radioIndex(0)
-  , rigErrorFlag(false)
-  , cmdLockFlag(false)
-  , logRitOn(false)
-  , supVolume(false)
-  , supSignalStrength(false)
-  , curVfoFrq(0.0)
-  , curTransVertFrq(0.0)
-  , mgmModeFlag(false)
-  , rRitFreq(0)
-  , curVol(0)
-  , curSignalStrength(0)
-  , radioSupGetRit(false)
-  , radioSupSetRit(false)
-  , radioSupGetRitState(false)
-  , radioSupRitOnOff(false)
-  , radioRitOn(false)
-  , ritEnable(false)
-  , radioCommsOK(false)
+   QMainWindow(parent),
+   ui(new Ui::RigControlMainWindow),
+   radioIndex(0),
+   rigErrorFlag(false),
+   cmdLockFlag(false),
+   rigCtldConnectDelay(0),
+   logRitOn(false),
+   supVolume(false),
+   supSignalStrength(false),
+   curVfoFrq(0.0),
+   curTransVertFrq(0.0),
+   mgmModeFlag(false),
+   rRitFreq(0),
+   curVol(0),
+   curSignalStrength(0),
+   radioSupGetRit(false),
+   radioSupSetRit(false),
+   radioSupGetRitState(false),
+   radioSupRitOnOff(false),
+   radioRitOn(false),
+   ritEnable(false),
+   radioCommsOK(false)
 {
     ui->setupUi(this);
 
@@ -81,6 +82,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     connect(rigCtldProcess, SIGNAL(started()), this, SLOT(rigCtldStarted()));
 
     setRigCltdIndicatorVisible(false);
+
+    getRigCtldConnectDelay();
 
     RigCtldStatusTimer = new QTimer(this);
     connect(RigCtldStatusTimer, SIGNAL(timeout()), this, SLOT(rigCtldStatusTimeout()));
@@ -760,6 +763,13 @@ int RigControlMainWindow::openRigCtldRadio()
     {
         trace(QString("openRigCtldRadio: rigctld failed for radio %1").arg(setupRadio->currentRadio.radioModel));
         return RIGCTLD_FAILED;
+    }
+
+
+    if (rigCtldConnectDelay != 0)
+    {
+        trace(QString("openRigCtldRadio: Delay = %1 secs before connecting to rigCtld").arg(rigCtldConnectDelay));
+        delay(rigCtldConnectDelay);
     }
 
     // now open radio using rigctld model
@@ -1612,6 +1622,203 @@ void RigControlMainWindow::clrRigctldNames()
     rigctld_radioNumber = "";
     rigctld_radioName = "";
     rigctld_radioMfg = "";
+
+}
+
+
+void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QString& model, const QString& comport,
+                                           const QString& baudRate, const QString& dataBits, const QString& civ, const QString& netAdd, const QString& portNum,
+                                           const QString& stopBits, const int& parity, const QString& rtsState, const QString& dtrState,
+                                           rigCtldTrace::rigCtldTraceCodes diagnostics)
+{
+
+    QString program = setupRadio->getRigCtldExePath() + RIGCTL_EXE_FILENAME;
+
+    QStringList arguments;
+    QStringList parityNames;
+    QString parityName;
+    QString networkAdd = netAdd.trimmed();
+    QString networkPort = portNum.trimmed();
+
+    if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
+    {
+        parityNames = radio->getParityCodeNames();
+        parityName = parityNames[parity];
+        arguments << "-m" + model.trimmed() << "-r" + comport.trimmed()  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
+                  << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
+
+        if (manufacturer == "Icom")
+        {
+            if (!civ.isEmpty())
+            {
+               arguments << "--set-conf=civaddr=" + civ.trimmed();
+
+               trace(QString("runRigCtlDaemon:: using icom civ address = %1").arg(civ.trimmed()));
+
+            }
+        }
+    }
+    else if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_NONE)
+    {
+        // for dummy radio
+        arguments << "-m" + model.trimmed();
+    }
+
+    // this is the rigctld network address usually local host 127.0.0.1 and port usually 4532
+
+    if (!networkAdd.isEmpty())
+    {
+        arguments << QString("--listen-addr=%1").arg(networkAdd);
+    }
+    else
+    {
+        networkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
+        arguments << QString("--listen-addr=%1").arg(QString(networkAdd));
+        trace(QString("runRigCtlDaemon:: network address is empty - using default %1").arg(networkAdd));
+    }
+
+
+
+    if (!networkPort.isEmpty())
+    {
+        arguments << QString("--port=%1").arg(networkPort);
+    }
+    else
+    {
+        networkPort = RIGCTLD_DEFAULT_PORT_ADDRESS;
+        arguments << QString("--port=%1").arg(networkPort);
+        trace(QString("runRigCtlDaemon:: port address is empty - using default %1").arg(networkPort));
+    }
+
+    if (diagnostics != rigCtldTrace::rigCtldTraceCodes::NONE)
+    {
+        arguments << rigCtldTrace::rigCtldTraceStr[diagnostics];
+    }
+
+
+    trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, rtsState = %8, dtrState = %9, civ = %10, netaddress = %11, netPort = %12")
+          .arg(manufacturer).arg(model).arg(comport).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
+
+    rigCtldProcess->start(program, arguments);
+
+
+}
+
+
+void RigControlMainWindow::rigCtldMessage()
+{
+    if (rigCtldProcess->state() == QProcess::Running)
+    {
+        QString line = rigCtldProcess->readLine();
+            trace(QString("rigCtld-StandardOut:: %1").arg(line));
+    }
+
+
+}
+
+
+void RigControlMainWindow::rigCtldErrorMessage()
+{
+    if (rigCtldProcess->state() == QProcess::Running)
+    {
+        QString r = rigCtldProcess->readAllStandardError();
+        trace(QString("rigCtld-ErrorOut:: %1").arg(r));
+    }
+}
+
+void RigControlMainWindow::rigCtldStarted()
+{
+    trace(QString("rigCtld:: daemon started!"));
+}
+
+
+bool RigControlMainWindow::rigCtldKill()
+{
+    int killTimeout = RIGCTLD_PROCESS_TIMEOUT;
+    trace(QString("rigCtldKill: starting to kill  rigCtld"));
+    rigCtldProcess->kill();
+
+    while (killTimeout > 0)
+    {
+        if (rigCtldProcess->state() == QProcess::NotRunning)
+        {
+            trace(QString("rigCtldKill: rigCtld kill complete"));
+            return true;
+        }
+
+        sleepFor(100);
+        killTimeout--;
+    }
+
+    trace(QString("rigCtldKill: rigCtld kill failed - timeout!"));
+    return false;
+}
+
+void RigControlMainWindow::setRigCltdIndicatorVisible(bool visible)
+{
+    ui->rigCtldIndicator->setVisible(visible);
+    ui->rigCtldIndicatorLabel->setVisible(visible);
+
+}
+
+
+void RigControlMainWindow::rigCtldIndicatorToggle(bool state)
+{
+    if (state)
+    {
+        ui->rigCtldIndicator->setStyleSheet(RIGCTLD_INDICATOR_ON);
+    }
+    else
+    {
+        ui->rigCtldIndicator->setStyleSheet(RIGCTLD_INDICATOR_OFF);
+    }
+}
+
+
+
+void RigControlMainWindow::rigCtldStatusTimeout()
+{
+    if (setupRadio->currentRadio.rigCtldEnable)
+    {
+
+        if (rigCtldProcess->state() == QProcess::Running)
+        {
+           rigCtldIndicatorToggle(true);
+        }
+        else
+        {
+           rigCtldIndicatorToggle(false);
+        }
+
+
+    }
+}
+
+
+void RigControlMainWindow::getRigCtldConnectDelay()
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("RigCtld");
+    rigCtldConnectDelay = config.value("RigCtldConnectDelay", DEFAULT_RIGCTLD_CONNECT_DELAY).toInt();
+    config.endGroup();
+
+    if (rigCtldConnectDelay > MAX_RIGCTLD_CONNECT_DELAY)
+    {
+        logMessage(QString("ERROR rigctld connect delay value = %1, too high, setting max delay = %2").arg(rigCtldConnectDelay).arg(MAX_RIGCTLD_CONNECT_DELAY));
+        rigCtldConnectDelay = 5;
+        }
+
 
 }
 
@@ -2805,6 +3012,7 @@ void RigControlMainWindow::aboutRigConfig()
             msg.append(QString("Rigctld path = %1\n").arg(setupRadio->getRigCtldPath()));
             msg.append(QString("Rigctld network address = %1\n").arg(setupRadio->currentRadio.rigCtldNetworkAdd));
             msg.append(QString("Rigctld port address = %1\n").arg(setupRadio->currentRadio.rigCtldNetworkPort));
+            msg.append(QString("Rigctld Connect delay = %1\n").arg(rigCtldConnectDelay));
         }
 
         msg.append(QString("\n"));
@@ -2880,6 +3088,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             trace(QString("Rigctld network address = %1").arg(setupRadio->currentRadio.rigCtldNetworkAdd));
             trace(QString("Rigctld port address = %1").arg(setupRadio->currentRadio.rigCtldNetworkPort));
             trace(QString("Rigctld path = %1").arg(setupRadio->getRigCtldPath()));
+            trace(QString("Rigctld Connect delay = %1").arg(rigCtldConnectDelay));
         }
         trace(QString("MGM mode = %1").arg(setupRadio->currentRadio.mgmMode));
         trace(QString("TransVert Enable = %1").arg(setupRadio->currentRadio.transVertEnable ? "True" : "False"));
@@ -3066,173 +3275,7 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
 }
 
 
-void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QString& model, const QString& comport,
-                                           const QString& baudRate, const QString& dataBits, const QString& civ, const QString& netAdd, const QString& portNum,
-                                           const QString& stopBits, const int& parity, const QString& rtsState, const QString& dtrState,
-                                           rigCtldTrace::rigCtldTraceCodes diagnostics)
-{
 
-    QString program = setupRadio->getRigCtldExePath() + RIGCTL_EXE_FILENAME;
-
-    QStringList arguments;
-    QStringList parityNames;
-    QString parityName;
-    QString networkAdd = netAdd.trimmed();
-    QString networkPort = portNum.trimmed();
-
-    if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
-    {
-        parityNames = radio->getParityCodeNames();
-        parityName = parityNames[parity];
-        arguments << "-m" + model.trimmed() << "-r" + comport.trimmed()  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
-                  << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
-
-        if (manufacturer == "Icom")
-        {
-            if (!civ.isEmpty())
-            {
-               arguments << "--set-conf=civaddr=" + civ.trimmed();
-
-               trace(QString("runRigCtlDaemon:: using icom civ address = %1").arg(civ.trimmed()));
-
-            }
-        }
-    }
-    else if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_NONE)
-    {
-        // for dummy radio
-        arguments << "-m" + model.trimmed();
-    }
-
-    // this is the rigctld network address usually local host 127.0.0.1 and port usually 4532
-
-    if (!networkAdd.isEmpty())
-    {
-        arguments << QString("--listen-addr=%1").arg(networkAdd);
-    }
-    else
-    {
-        networkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
-        arguments << QString("--listen-addr=%1").arg(QString(networkAdd));
-        trace(QString("runRigCtlDaemon:: network address is empty - using default %1").arg(networkAdd));
-    }
-
-
-
-    if (!networkPort.isEmpty())
-    {
-        arguments << QString("--port=%1").arg(networkPort);
-    }
-    else
-    {
-        networkPort = RIGCTLD_DEFAULT_PORT_ADDRESS;
-        arguments << QString("--port=%1").arg(networkPort);
-        trace(QString("runRigCtlDaemon:: port address is empty - using default %1").arg(networkPort));
-    }
-
-    if (diagnostics != rigCtldTrace::rigCtldTraceCodes::NONE)
-    {
-        arguments << rigCtldTrace::rigCtldTraceStr[diagnostics];
-    }
-
-
-    trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, rtsState = %8, dtrState = %9, civ = %10, netaddress = %11, netPort = %12")
-          .arg(manufacturer).arg(model).arg(comport).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
-
-    rigCtldProcess->start(program, arguments);
-
-
-}
-
-
-void RigControlMainWindow::rigCtldMessage()
-{
-    if (rigCtldProcess->state() == QProcess::Running)
-    {
-        QString line = rigCtldProcess->readLine();
-            trace(QString("rigCtld-StandardOut:: %1").arg(line));
-    }
-
-
-}
-
-
-void RigControlMainWindow::rigCtldErrorMessage()
-{
-    if (rigCtldProcess->state() == QProcess::Running)
-    {
-        QString r = rigCtldProcess->readAllStandardError();
-        trace(QString("rigCtld-ErrorOut:: %1").arg(r));
-    }
-}
-
-void RigControlMainWindow::rigCtldStarted()
-{
-    trace(QString("rigCtld:: daemon started!"));
-}
-
-
-bool RigControlMainWindow::rigCtldKill()
-{
-    int killTimeout = RIGCTLD_PROCESS_TIMEOUT;
-    trace(QString("rigCtldKill: starting to kill  rigCtld"));
-    rigCtldProcess->kill();
-
-    while (killTimeout > 0)
-    {
-        if (rigCtldProcess->state() == QProcess::NotRunning)
-        {
-            trace(QString("rigCtldKill: rigCtld kill complete"));
-            return true;
-        }
-
-        sleepFor(100);
-        killTimeout--;
-    }
-
-    trace(QString("rigCtldKill: rigCtld kill failed - timeout!"));
-    return false;
-}
-
-void RigControlMainWindow::setRigCltdIndicatorVisible(bool visible)
-{
-    ui->rigCtldIndicator->setVisible(visible);
-    ui->rigCtldIndicatorLabel->setVisible(visible);
-
-}
-
-
-void RigControlMainWindow::rigCtldIndicatorToggle(bool state)
-{
-    if (state)
-    {
-        ui->rigCtldIndicator->setStyleSheet(RIGCTLD_INDICATOR_ON);
-    }
-    else
-    {
-        ui->rigCtldIndicator->setStyleSheet(RIGCTLD_INDICATOR_OFF);
-    }
-}
-
-
-
-void RigControlMainWindow::rigCtldStatusTimeout()
-{
-    if (setupRadio->currentRadio.rigCtldEnable)
-    {
-
-        if (rigCtldProcess->state() == QProcess::Running)
-        {
-           rigCtldIndicatorToggle(true);
-        }
-        else
-        {
-           rigCtldIndicatorToggle(false);
-        }
-
-
-    }
-}
 
 /*********************************** test *********************************************/
 
