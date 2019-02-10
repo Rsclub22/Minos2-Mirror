@@ -715,14 +715,21 @@ int RigControlMainWindow::openRigCtldRadio()
     radioCommsOK = false;
 
     // check rigctld file exists
-    QString filename = setupRadio->getRigCtldPath() + RIGCTL_EXE_FILENAME;
+#if defined Q_OS_WIN32
+    QString filename = setupRadio->getRigCtldPath() + RIGCTL_WIN32_EXE_FILENAME;
+#elif defined Q_OS_LINUX
+    QString filename = setupRadio->getRigCtldPath() + RIGCTL_LINUX_EXE_FILENAME;
+#elif defined Q_OS_MAC
+    QString filename = setupRadio->getRigCtldPath() + RIGCTL_MAC_EXE_FILENAME;
+#endif
+
     if (!FileExists(filename))
     {
         trace(QString("openRigCtld: rigctld exe is missing from %1").arg(filename));
         return RIGCTLD_EXE_MISSING;
     }
 
-    trace(QString("openRigCtld: found rigctld exe = %1").arg(filename));
+    trace(QString("openRigCtld: found rigctld = %1").arg(filename));
 
     if (rigCtldProcess->state() == QProcess::Running)
     {
@@ -1632,7 +1639,13 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
                                            rigCtldTrace::rigCtldTraceCodes diagnostics)
 {
 
-    QString program = setupRadio->getRigCtldExePath() + RIGCTL_EXE_FILENAME;
+#if defined Q_OS_WIN32
+    QString program = setupRadio->getRigCtldPath() + RIGCTL_WIN32_EXE_FILENAME;
+#elif defined Q_OS_LINUX
+    QString program = setupRadio->getRigCtldPath() + RIGCTL_LINUX_EXE_FILENAME;
+#elif defined Q_OS_MAC
+    QString program = setupRadio->getRigCtldPath() + RIGCTL_MAC_EXE_FILENAME;
+#endif
 
     QStringList arguments;
 
