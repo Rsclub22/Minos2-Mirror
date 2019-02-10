@@ -136,7 +136,15 @@ QString RigSetupDialog::getRigCtldPath()
     fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
     QSettings  settings(fileName, QSettings::IniFormat);
     settings.beginGroup("Rigctld");
-    rigCtldExePath = settings.value("RigCtld_Path", DEFAULT_BIN_PATH).toString();
+
+#if defined Q_OS_WIN32
+    rigCtldExePath = settings.value("RigCtld_Path", DEFAULT_WIN32_RIGCTLD_PATH).toString();
+#elif defined Q_OS_LINUX
+    rigCtldExePath = settings.value("RigCtld_Path", DEFAULT_LINUX_RIGCTLD_PATH).toString();
+#elif defined Q_OS_MAC
+    rigCtldExePath = settings.value("RigCtld_Path", DEFAULT_MAC_RIGCTLD_PATH).toString();
+#endif
+
     settings.endGroup();
     return rigCtldExePath;
 }

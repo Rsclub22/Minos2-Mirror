@@ -87,6 +87,9 @@ const QString TRANSSW_NUM_DEFAULT = "0";
 // File Name Constants
 
 const QString DEFAULT_BIN_PATH = "./Bin/";
+const QString DEFAULT_WIN32_RIGCTLD_PATH = "./Bin/";
+const QString DEFAULT_LINUX_RIGCTLD_PATH = "/usr/bin/";
+const QString DEFAULT_MAC_RIGCTLD_PATH = "/usr/bin/";
 
 const QString LOCAL_RADIO = "Local";
 
@@ -108,7 +111,9 @@ const QString FILENAME_TRANSVERT_RADIOS = "TransVertRadio.ini";
 
 const QString FILENAME_FREQ_PRESETS = "FreqPresets.ini";
 
-const QString RIGCTL_EXE_FILENAME = "rigctld.exe";
+const QString RIGCTL_WIN32_EXE_FILENAME = "rigctld.exe";
+const QString RIGCTL_LINUX_EXE_FILENAME = "rigctld";
+const QString RIGCTL_MAC_EXE_FILENAME = "rigctld";
 
 // Tooltips
 
@@ -221,7 +226,7 @@ const int RIGCTLD_PROCESS_TIMEOUT = 5;
 
 const QString RIGCTLD_LOCAL_HOST_ADDRESS = "127.0.0.1";
 const QString RIGCTLD_DEFAULT_PORT_ADDRESS = "4532";
-const int DEFAULT_RIGCTLD_CONNECT_DELAY = 0;
+const int DEFAULT_RIGCTLD_CONNECT_DELAY = 2;
 const int MAX_RIGCTLD_CONNECT_DELAY = 5;
 
 #endif // RIGCONTROLCOMMONCONSTANTS_H
