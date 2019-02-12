@@ -715,17 +715,18 @@ int RigControlMainWindow::openRigCtldRadio()
     radioCommsOK = false;
 
     // check rigctld file exists
+    setupRadio->getRigCtldExePathFromFile();
 #if defined Q_OS_WIN32
-    QString filename = setupRadio->getRigCtldPath() + RIGCTL_WIN32_EXE_FILENAME;
+    QString filename = setupRadio->getRigCtldExePath() + RIGCTL_WIN32_EXE_FILENAME;
 #elif defined Q_OS_LINUX
-    QString filename = setupRadio->getRigCtldPath() + RIGCTL_LINUX_EXE_FILENAME;
+    QString filename = setupRadio->getRigCtldExePath() + RIGCTL_LINUX_EXE_FILENAME;
 #elif defined Q_OS_MAC
-    QString filename = setupRadio->getRigCtldPath() + RIGCTL_MAC_EXE_FILENAME;
+    QString filename = setupRadio->getRigCtldExePath() + RIGCTL_MAC_EXE_FILENAME;
 #endif
 
     if (!FileExists(filename))
     {
-        trace(QString("openRigCtld: rigctld exe is missing from %1").arg(filename));
+        trace(QString("openRigCtld: rigctld is missing from %1").arg(filename));
         return RIGCTLD_EXE_MISSING;
     }
 
@@ -1639,12 +1640,14 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
                                            rigCtldTrace::rigCtldTraceCodes diagnostics)
 {
 
+    setupRadio->getRigCtldExePathFromFile();;
+
 #if defined Q_OS_WIN32
-    QString program = setupRadio->getRigCtldPath() + RIGCTL_WIN32_EXE_FILENAME;
+    QString program = setupRadio->getRigCtldExePath() + RIGCTL_WIN32_EXE_FILENAME;
 #elif defined Q_OS_LINUX
-    QString program = setupRadio->getRigCtldPath() + RIGCTL_LINUX_EXE_FILENAME;
+    QString program = setupRadio->getRigCtldExePath() + RIGCTL_LINUX_EXE_FILENAME;
 #elif defined Q_OS_MAC
-    QString program = setupRadio->getRigCtldPath() + RIGCTL_MAC_EXE_FILENAME;
+    QString program = setupRadio->getRigCtldExePath() + RIGCTL_MAC_EXE_FILENAME;
 #endif
 
     QStringList arguments;
@@ -3031,7 +3034,7 @@ void RigControlMainWindow::aboutRigConfig()
         {
             msg.append(QString("\n"));
             msg.append(QString("Using rigctld daemon = %1\n").arg(setupRadio->currentRadio.rigCtldEnable ? "True" : "False"));
-            msg.append(QString("Rigctld path = %1\n").arg(setupRadio->getRigCtldPath()));
+            msg.append(QString("Rigctld path = %1\n").arg(setupRadio->getRigCtldExePath()));
             msg.append(QString("Rigctld network address = %1\n").arg(setupRadio->currentRadio.rigCtldNetworkAdd));
             msg.append(QString("Rigctld port address = %1\n").arg(setupRadio->currentRadio.rigCtldNetworkPort));
             msg.append(QString("Rigctld Connect delay = %1\n").arg(rigCtldConnectDelay));
@@ -3109,7 +3112,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             trace(QString("Using rigctld daemon = %1").arg(setupRadio->currentRadio.rigCtldEnable ? "True" : "False"));
             trace(QString("Rigctld network address = %1").arg(setupRadio->currentRadio.rigCtldNetworkAdd));
             trace(QString("Rigctld port address = %1").arg(setupRadio->currentRadio.rigCtldNetworkPort));
-            trace(QString("Rigctld path = %1").arg(setupRadio->getRigCtldPath()));
+            trace(QString("Rigctld path = %1").arg(setupRadio->getRigCtldExePath()));
             trace(QString("Rigctld Connect delay = %1").arg(rigCtldConnectDelay));
         }
         trace(QString("MGM mode = %1").arg(setupRadio->currentRadio.mgmMode));
