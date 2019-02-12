@@ -88,8 +88,10 @@ const QString TRANSSW_NUM_DEFAULT = "0";
 
 const QString DEFAULT_BIN_PATH = "./Bin/";
 const QString DEFAULT_WIN32_RIGCTLD_PATH = "./Bin/";
-const QString DEFAULT_LINUX_RIGCTLD_PATH = "/usr/bin/";
-const QString DEFAULT_MAC_RIGCTLD_PATH = "/usr/bin/";
+const QString DEFAULT_LINUX_RIGCTLD_PATH = "./Bin/";
+const QString DEFAULT_MAC_RIGCTLD_PATH = "./Bin/";
+//const QString DEFAULT_LINUX_RIGCTLD_PATH = "/usr/bin/";
+//const QString DEFAULT_MAC_RIGCTLD_PATH = "/usr/bin/";
 
 const QString LOCAL_RADIO = "Local";
 
