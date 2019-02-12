@@ -79,8 +79,10 @@ public:
 
 
 
-    QString getRigCtldPath();
+
     QString getRigCtldExePath();
+    void getRigCtldExePathFromFile();
+
 signals:
 
     void radioNameChange();

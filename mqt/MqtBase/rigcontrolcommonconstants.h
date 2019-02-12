@@ -115,6 +115,9 @@ const QString RIGCTL_WIN32_EXE_FILENAME = "rigctld.exe";
 const QString RIGCTL_LINUX_EXE_FILENAME = "rigctld";
 const QString RIGCTL_MAC_EXE_FILENAME = "rigctld";
 
+const QString RIGCTLD_GROUP_NAME = "Rigctld";
+const QString RIGCTLD_PATH_SETTING_NAME = "RigctldPath";
+
 // Tooltips
 
 const QString civToolTip = "Leave field blank for default radio CIV,\nor enter in the form 0xnn or nn, where nn is the radio CIV address in Hex.";
