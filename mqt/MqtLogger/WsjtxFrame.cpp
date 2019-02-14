@@ -295,56 +295,48 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             QString bestCs;
             int currSn = -100;
 
+            int minpoints = ui->minPointsSpinner->value();
+            if (!ui->minPointsCheckBox->isChecked())
+                minpoints = 0;
+            int minsnr =  ui->snrSpinner->value();
+            if (!ui->snrCheckBox->isChecked())
+                minsnr = -100;
+
             for (int i = decodeStartSize; i < decodeEndSize; i++)
             {
                 decodeMessage &dc = messages[i];
 
                 if (dx_call == dc.fromCall.fullCall.getValue())
                     continue;
-                // NB that we get the decodes strongest first, so we shouldn't need to
-                // select for the strongest decode for a station
 
-                // we may end up needing to limit the message types
-                // we can reply to.
-
-                // we may also need to differentiate between VHF Eu and normal modes
-
-                int minpoints = ui->minPointsSpinner->value();
-                if (!ui->minPointsCheckBox->isChecked())
-                    minpoints = 0;
-                int minsnr =  ui->snrSpinner->value();
-                if (!ui->snrCheckBox->isChecked())
-                    minsnr = -100;
-
-//                bool ismycall =  (dc.toCall.fullCall.getValue() == myCall || dc.fromCall.fullCall.getValue() == myCall);
                 if (dc.mstage == emsCQ
                 || (dc.mstage == emsGrid && dc.toCall.fullCall.getValue() == myCall)
-//                || (dc.mstage == emsRRR && !ismycall)
-//                || (dc.mstage == ems73 && !ismycall)
                    )
                 {
 
-                    if (  dc.points > 0
-                            && dc.snr >= minsnr
-                            && dc.points > minpoints
-                            && dc.points > bestPoints
-                          )
+                    if (  dc.points > 0)
                     {
-                        bestOffset = i;
-                        bestPoints = dc.points;
-                        bestCs = dc.toCall.fullCall.getValue();
-                        currSn = dc.snr;
-                    }
-                    else
-                    {
-                        if (bestOffset >= 0
-                            && bestOffset != i
-                            && dc.toCall.fullCall.getValue() == bestCs
-                            && dc.snr > currSn
-                            )
+                        if ( dc.snr >= minsnr
+                                && dc.points > minpoints
+                                && dc.points > bestPoints
+                              )
                         {
                             bestOffset = i;
+                            bestPoints = dc.points;
+                            bestCs = dc.toCall.fullCall.getValue();
                             currSn = dc.snr;
+                        }
+                        else
+                        {
+                            if (bestOffset >= 0
+                                && bestOffset != i
+                                && dc.toCall.fullCall.getValue() == bestCs
+                                && dc.snr > currSn
+                                )
+                            {
+                                bestOffset = i;
+                                currSn = dc.snr;
+                            }
                         }
                     }
                 }
