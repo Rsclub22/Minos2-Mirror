@@ -657,6 +657,7 @@ void RigControlMainWindow::upDateRadio()
     else
     {   // no radio selected
         trace("No radio selected");
+        setupRadio->saveCurrentRadio();
         ui->radioNameDisp->setText("");
         closeRadio();
         writeWindowTitle(appName);
@@ -1478,7 +1479,7 @@ int RigControlMainWindow::getAndSendFrequency(vfo_t vfo)
     if (retCode == RIG_OK)
     {
         curVfoFrq = rfrequency;
-
+        logMessage(QString("Get Freq: Read Freq from Radio = %1").arg(QString::number(curVfoFrq, 'f', 0)));
         if (setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters > 0)
         {
             if (selTvBand != "")
@@ -3065,11 +3066,12 @@ void RigControlMainWindow::aboutRigConfig()
             msg.append(QString("Radio Supports Get RIT State On/Off = %1\n").arg(radioSupGetRitState ? "True" : "False"));
             msg.append(QString("Radio Supports Set RIT State On/Off = %1\n").arg(radioSupRitOnOff ? "True" : "False"));
         }
+        msg.append(QString("Radio Polltime = %1\n").arg(setupRadio->currentRadio.pollInterval));
         msg.append(QString("Tracelog = %1\n").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
     }
     else
     {
-        msg.append(QString("No radio selected"));
+        msg.append(QString("No Radio selected\n"));
     }
     QMessageBox::about(this, "Minos RigControl", msg);
 }
@@ -3127,21 +3129,23 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             trace(QString("Transverter Switch num = %1").arg(setupRadio->currentRadio.transVertSettings[i]->transSwitchNum));
             trace(QString("Transverter Switch enable = %1").arg(setupRadio->currentRadio.enableTransSwitch  ? "True" : "False"));
         }
-        trace(QString("Radio Supports RIT = %1\n").arg(radioSupSetRit ? "True" : "False"));
+        trace(QString("Radio Supports RIT = %1").arg(radioSupSetRit ? "True" : "False"));
         if (radioSupSetRit)
         {
-            trace(QString("Rit Enable On = %1\n").arg(ritEnable  ? "True" : "False"));
-            trace(QString("Radio Supports Get RIT Freq = %1\n").arg(radioSupGetRit ? "True" : "False"));
-            trace(QString("Radio Supports Set RIT Freq = %1\n").arg(radioSupSetRit ? "True" : "False"));
-            trace(QString("Radio Supports Get RIT State On/Off = %1\n").arg(radioSupGetRitState ? "True" : "False"));
-            trace(QString("Radio Supports Set RIT State On/Off = %1\n").arg(radioSupRitOnOff ? "True" : "False"));
+            trace(QString("Rit Enable On = %1").arg(ritEnable  ? "True" : "False"));
+            trace(QString("Radio Supports Get RIT Freq = %1").arg(radioSupGetRit ? "True" : "False"));
+            trace(QString("Radio Supports Set RIT Freq = %1").arg(radioSupSetRit ? "True" : "False"));
+            trace(QString("Radio Supports Get RIT State On/Off = %1").arg(radioSupGetRitState ? "True" : "False"));
+            trace(QString("Radio Supports Set RIT State On/Off = %1").arg(radioSupRitOnOff ? "True" : "False"));
         }
+
+        trace(QString("Radio Polltime = %1").arg(setupRadio->currentRadio.pollInterval));
         trace(QString("Tracelog = %1").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
 
     }
     else
     {
-        trace(QString("No radio selected"));
+        trace(QString("No Radio selected"));
     }
 }
 
