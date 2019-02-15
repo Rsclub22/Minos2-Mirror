@@ -37,7 +37,6 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    bool autoEnabled;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
 
     ui->autoSelectReplyFrame->setVisible(autoEnabled);
@@ -154,6 +153,8 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
     if (ct != cc)
         return;
 
+    trace("WsjtxFrame::log_ADIF " + QString(ADIF));
+
     ui->replyto_label->setText("");
     int spoint = ct->ctList.count();
     if (! ADIFImport::doImportADIFString(dynamic_cast<LoggerContestLog *>(ct),  ADIF ))
@@ -210,8 +211,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         tcolour = Qt::red;
 
     // pass to decodes model
-    //  if (id == id_)
-    //    {
     QString special;
     switch (special_op_mode)
     {
@@ -274,48 +273,53 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     ui->auto_off_button_->setEnabled (tx_enabled);
     ui->halt_tx_button_->setEnabled (transmitting);
 
-    static bool inDecode = false;
-
-    if (decoding && !inDecode)
+    if (autoEnabled)
     {
-        inDecode = true;
-        decodeStartSize = messages.size();
-    }
-    if (inDecode && decoding == false)
-    {
-        inDecode = false;
+        static bool inDecode = false;
 
-        int decodeEndSize = messages.size();
-        if (decodeEndSize > decodeStartSize)
+        if (decoding && !inDecode)
         {
-            // iterate over the latest decodes, and select the best
+            inDecode = true;
+            decodeStartSize = messages.size();
+        }
+        if (inDecode && decoding == false)
+        {
+            inDecode = false;
 
-            int bestOffset = -1;
-            int bestPoints = -1;
-            QString bestCs;
-            int currSn = -100;
+            trace("WsjtxFrame::update_status Checking decodes");
 
-            int minpoints = ui->minPointsSpinner->value();
-            if (!ui->minPointsCheckBox->isChecked())
-                minpoints = 0;
-            int minsnr =  ui->snrSpinner->value();
-            if (!ui->snrCheckBox->isChecked())
-                minsnr = -100;
-
-            for (int i = decodeStartSize; i < decodeEndSize; i++)
+            int decodeEndSize = messages.size();
+            if (decodeEndSize > decodeStartSize)
             {
-                decodeMessage &dc = messages[i];
+                // iterate over the latest decodes, and select the best
 
-                if (dx_call == dc.fromCall.fullCall.getValue())
-                    continue;
+                int bestOffset = -1;
+                int bestPoints = -1;
+                QString bestCs;
+                int currSn = -100;
 
-                if (dc.mstage == emsCQ
-                || (dc.mstage == emsGrid && dc.toCall.fullCall.getValue() == myCall)
-                   )
+                int minpoints = ui->minPointsSpinner->value();
+                if (!ui->minPointsCheckBox->isChecked())
+                    minpoints = 0;
+                int minsnr =  ui->snrSpinner->value();
+                if (!ui->snrCheckBox->isChecked())
+                    minsnr = -100;
+
+                for (int i = decodeStartSize; i < decodeEndSize; i++)
                 {
+                    decodeMessage &dc = messages[i];
 
-                    if (  dc.points > 0)
+                    if (dx_call == dc.fromCall.fullCall.getValue())
+                        continue;
+
+                    if (dc.points <= 0)
+                        continue;
+
+                    if (dc.mstage == emsCQ
+                    || (dc.mstage == emsGrid && dc.toCall.fullCall.getValue() == myCall)
+                       )
                     {
+
                         if ( dc.snr >= minsnr
                                 && dc.points > minpoints
                                 && dc.points > bestPoints
@@ -329,7 +333,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                         else
                         {
                             if (bestOffset >= 0
-                                && bestOffset != i
                                 && dc.toCall.fullCall.getValue() == bestCs
                                 && dc.snr > currSn
                                 )
@@ -340,16 +343,19 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                         }
                     }
                 }
-            }
-            for (int i = decodeStartSize; i < decodeEndSize; i++)
-            {
-                decodeMessage &dc = messages[i];
-                dc.best = (bestOffset == i);
-            }
-            emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
-            if (ui->autoSelectButton->isChecked() && bestOffset > 0 )
-            {
-                reply(messages[bestOffset]);
+                for (int i = decodeStartSize; i < decodeEndSize; i++)
+                {
+                    decodeMessage &dc = messages[i];
+                    dc.best = (bestOffset == i);
+                }
+                trace("WsjtxFrame::update_status best decode is " + messages[bestOffset].message);
+
+                emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
+                if (ui->autoSelectButton->isChecked() && bestOffset >= 0 )
+                {
+                    trace("WsjtxFrame::update_status replying to " + messages[bestOffset].message);
+                    reply(messages[bestOffset]);
+                }
             }
         }
     }
