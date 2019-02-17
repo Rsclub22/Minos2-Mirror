@@ -348,7 +348,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                     decodeMessage &dc = messages[i];
                     dc.best = (bestOffset == i);
                 }
-                trace("WsjtxFrame::update_status best decode is " + messages[bestOffset].message);
+                if (bestOffset >= 0)
+                    trace("WsjtxFrame::update_status best decode is " + messages[bestOffset].message);
 
                 emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
                 if (ui->autoSelectButton->isChecked() && bestOffset >= 0 )
