@@ -150,7 +150,7 @@ void WsjtxFrame::setContest(BaseContestLog *c)
 void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
+    if (ct != cc || ct->isProtected())
         return;
 
     trace("WsjtxFrame::log_ADIF " + QString(ADIF));
