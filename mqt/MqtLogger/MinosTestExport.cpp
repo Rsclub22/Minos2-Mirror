@@ -356,6 +356,7 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    lct->comments.addIfDirty( st, "commentsRx", dirty );
    lct->mode.addIfDirty( st, "modeTx", dirty );
    lct->mode.addIfDirty( st, "modeRx", dirty );
+   lct->mgmSubmode.addIfDirty(st, "mgmSubmode", dirty);
    ct->power.addIfDirty( st, "power", dirty );
    ct->band.addIfDirty( st, "band", dirty );
    lct->forcedMult.addIfDirty( st, "forcedMult", dirty );

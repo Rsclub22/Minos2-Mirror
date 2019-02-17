@@ -111,6 +111,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     ui->ModeComboBoxGJV->setCurrentText(hamlibData::USB);
     ui->ModeButton->setText(hamlibData::CW);
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterTabFocusIn(QLineEdit*)), this, SLOT(on_AfterTabFocusIn(QLineEdit*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(Validated()), this, SLOT(on_Validated()));
@@ -975,6 +976,7 @@ void QSOLogFrame::getScreenEntry()
        screenContact.op2 = ui->SecondOpComboBox->currentText();
    }
    screenContact.mode = ui->ModeComboBoxGJV->currentText().trimmed();
+   screenContact.mgmSubmode = ui->MGMSubModeEdit->text().trimmed();
    screenContact.contactFlags &= ~NON_SCORING;
 
    // op1/op2 get set when the attached combos change - I hope :)
@@ -1035,6 +1037,7 @@ void QSOLogFrame::showScreenEntry( )
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
       setMode(temp.mode.trimmed());
+      ui->MGMSubModeEdit->setText(temp.mgmSubmode);
 
       // and now we want to put the selection on each at the END of the text
       for ( QVector <ValidatedControl *>::iterator vcp = vcs.begin(); vcp != vcs.end(); vcp++ )
@@ -1694,7 +1697,7 @@ void QSOLogFrame::setMode(QString m)
       ui->ModeButton->setText(hamlibData::CW);
    }
 
-
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::setFreq(QString f)
@@ -1792,6 +1795,7 @@ void QSOLogFrame::updateQSODisplay()
    ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());
    ui->CommentsEdit->setEnabled(notProtected);
    ui->ModeComboBoxGJV->setEnabled(notProtected);
+   ui->MGMSubModeFrame->setEnabled(notProtected);
    ui->NonScoreCheckBox->setEnabled(notProtected);
    ui->DeletedCheckBox->setEnabled(notProtected);
    ui->GJVOKButton->setEnabled(notProtected);
@@ -1947,6 +1951,7 @@ void QSOLogFrame::on_ModeButton_clicked()
     mode = ui->ModeButton->text();
     oldMode = myOldMode;
     ui->ModeButton->setText(oldMode);
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
     EditControlExit(ui->ModeButton);
 }
 
@@ -1988,6 +1993,7 @@ void QSOLogFrame::modeSentFromRig(QString m)
             {
                ui->ModeButton->setText(hamlibData::CW);
             }
+            ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
             // finished..
             return;
         }
@@ -2012,7 +2018,7 @@ void QSOLogFrame::logScreenEntry( )
    QSharedPointer<BaseContact> lct = selectedContact;
    if (!lct)
    {
-        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode, dtg(true) );	// "current" doesn't get flag, don't save ContestLog yet
+        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode, screenContact.mgmSubmode, dtg(true) );	// "current" doesn't get flag, don't save ContestLog yet
    }
 
    if ( screenContact.mode.compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0 )
@@ -2145,7 +2151,8 @@ void QSOLogFrame::logCurrentContact( )
                 // last child is "current contact", and we need to add TO IT
                 LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
                 QString currmode = ui->ModeComboBoxGJV->currentText();
-                ct->addContact( nct_no, orflag, true, false, currmode, ctTime ); // last contact
+                QString currSubmode = ui->MGMSubModeEdit->text().trimmed();
+                ct->addContact( nct_no, orflag, true, false, currmode, currSubmode, ctTime ); // last contact
                 nct_no++;
              }
              while ( nct_no < ctno ) ;
@@ -2539,6 +2546,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
             ui->RSTRXEdit->clear();
         }
     }
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 }
 
 void QSOLogFrame::on_ValidateError (int mess_no )

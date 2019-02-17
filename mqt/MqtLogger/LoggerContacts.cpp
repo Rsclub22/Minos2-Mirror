@@ -463,6 +463,7 @@ QString ContestContact::getADIFLine()
     }
 
     QString smode = mode.getValue().toUpper();
+    QString smgmSubmode = mgmSubmode.getValue();
     if (  smode.compare( hamlibData::CW ) == 0 )
         outstr += makeADIFField( "MODE", "CW" );
     else
@@ -472,7 +473,10 @@ QString ContestContact::getADIFLine()
             if ( smode.compare( hamlibData::FM ) == 0 )
                 outstr += makeADIFField( "MODE", "FM" );
             else
-                outstr += makeADIFField( "MODE", mode.getValue() );
+                if ( smode.compare( hamlibData::MGM) && !smgmSubmode.trimmed().isEmpty())
+                     outstr += makeADIFField( "MODE", smgmSubmode);
+                else
+                    outstr += makeADIFField( "MODE", mode.getValue() );
 
     if ( contactFlags.getValue() & COMMENT_ONLY )
     {

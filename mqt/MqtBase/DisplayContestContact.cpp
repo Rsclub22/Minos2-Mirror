@@ -92,6 +92,7 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    contactScore.setValue( cct.contactScore );
    bearing = cct.bearing;
    mode.setValue( cct.mode );
+   mgmSubmode.setValue( cct.mgmSubmode );
 
 }
 // used to test if anything has changed
@@ -138,6 +139,9 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.mode, mode.getValue() ) )
+      return true; // i.e. not equal
+
+   if ( strcmpsp( mct.mgmSubmode, mgmSubmode.getValue() ) )
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.forcedMult, forcedMult.getValue() ) )
@@ -788,6 +792,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          contactFlags.setInitialValue( cf );
 
          mt->getStructArgMemberValue( "modeTx", mode );
+         mt->getStructArgMemberValue( "mgmSubmode", mgmSubmode);
          mt->getStructArgMemberValue( "rstTx", reps );
          mt->getStructArgMemberValue( "serialTx", serials );
          mt->getStructArgMemberValue( "exchangeTx", contest->location );
