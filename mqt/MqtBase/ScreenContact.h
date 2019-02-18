@@ -43,6 +43,7 @@ class ScreenContact
       dtg time;      //CONTAIN MinosItem
 
       QString mode;
+      QString mgmSubmode;
       QString reps;
       QString serials;
       QString repr;

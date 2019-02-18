@@ -40,6 +40,7 @@ private:
     QString id_;
     bool columns_resized_ = false;
     HtmlDelegate *delegate = nullptr;
+    bool autoEnabled = false;
 
     WsjtxDecode decoder;
 

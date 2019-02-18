@@ -473,7 +473,8 @@ void LoggerContestLog::closeFile( )
    adifContestFile.reset();
    ediContestFile.reset();
 }
-QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned short extraFlags, bool saveNew, bool catchup, QString mode, dtg ctTime )
+QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned short extraFlags, bool saveNew, bool catchup,
+                                                          QString mode, QString mgmSubmode, dtg ctTime )
 {
    // add the contact number as an new empty contact, with disk block and log_seq
 
@@ -500,6 +501,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned 
    }
    bct->contactFlags.setValue( bct->contactFlags.getValue() | extraFlags );
    bct->mode.setValue(mode);
+   bct->mgmSubmode.setValue(mgmSubmode);
 
    if (catchup)
    {
@@ -536,6 +538,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
    bct->time = ctTime;
    bct->serials.setValue( "" );
    bct->mode.setValue(prior->mode.getValue());
+   bct->mgmSubmode.setValue(prior->mgmSubmode.getValue());
 
    unsigned long pls =  prior?prior->getLogSequence():0;
    unsigned long nls =  next->getLogSequence();

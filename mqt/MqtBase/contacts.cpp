@@ -47,6 +47,7 @@ BaseContact& BaseContact::operator =( const BaseContact &ct )
 
    extraText = ct.extraText;
    mode = ct.mode;
+   mgmSubmode = ct.mgmSubmode;
    reps = ct.reps;
    serials = ct.serials;
    repr = ct.repr;
@@ -80,6 +81,7 @@ void BaseContact::clearDirty()
 
    extraText.clearDirty();
    mode.clearDirty();
+   mgmSubmode.clearDirty();
    reps.clearDirty();
    serials.clearDirty();
    repr.clearDirty();
@@ -102,6 +104,7 @@ void BaseContact::setDirty()
 
    extraText.setDirty();
    mode.setDirty();
+   mgmSubmode.setDirty();
    reps.setDirty();
    serials.setDirty();
    repr.setDirty();
