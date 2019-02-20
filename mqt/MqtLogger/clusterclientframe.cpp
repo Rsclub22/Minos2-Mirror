@@ -191,6 +191,7 @@ void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs,
 void ClusterClientFrame::setupDXSpotView()
 {
     dxSpotView = new QTableView();
+    dxSpotView->setFocusPolicy(Qt::NoFocus);
 
     dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
@@ -242,6 +243,7 @@ void ClusterClientFrame::setupDXSpotView()
 void ClusterClientFrame::setupSearchSpotView()
 {
     searchView = new QTableView();
+    searchView->setFocusPolicy(Qt::NoFocus);
 
     searchSortProxyModel = new SearchSortFilterProxyModel(filterSetup);
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
@@ -291,6 +293,7 @@ void ClusterClientFrame::setupSearchSpotView()
 void ClusterClientFrame::setupCallsignSpotView()
 {
     callSignView = new QTableView();
+    callSignView->setFocusPolicy(Qt::NoFocus);
 
     callSignProxyModel = new CallsignSortFilterProxyModel(filterSetup);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
@@ -340,6 +343,8 @@ void ClusterClientFrame::setupCallsignSpotView()
 void ClusterClientFrame::setupLocatorSpotView()
 {
     locatorView = new QTableView();
+    locatorView->setFocusPolicy(Qt::NoFocus);
+
     locatorView->setItemDelegate(delegate);
     locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
