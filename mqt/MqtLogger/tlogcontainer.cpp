@@ -167,7 +167,7 @@ void TLogContainer::on_TimeDisplayTimer( )
 
        MinosLoggerEvents::SendTimerDistribution();
 
-#ifndef FINDFOCUS
+#ifdef FINDFOCUS
        QWidget *f = QApplication::focusWidget ();
        if(f)
             sblabel1->setText(f->metaObject()->className());
