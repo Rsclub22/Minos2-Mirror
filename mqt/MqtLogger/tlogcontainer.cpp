@@ -1674,9 +1674,12 @@ void TLogContainer::preloadFiles( const QString &conarg )
 
     if ( conarg.size() )
     {
-        // open the "argument" one last - which will make it current
-        ct = addSlot( nullptr, conarg, false, -1 );
-        app ->writeContestList();	// or this one will not get included
+        if (!TContestApp::getContestApp()->isContestOpen(conarg))
+        {
+            // open the "argument" one last - which will make it current
+            ct = addSlot( nullptr, conarg, false, -1 );
+            app ->writeContestList();	// or this one will not get included
+        }
     }
 
     if ( ct )

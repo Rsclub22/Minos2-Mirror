@@ -40,7 +40,11 @@ bool isOpen(QSharedPointer<ContestSlot> cs, const QString &fn )
    BaseContestLog * con = cs->slot;
    if ( !con )
       return false;
-   if ( con->cfileName.compare(fn, Qt::CaseInsensitive ) == 0 )
+
+   QFileInfo confi(con->cfileName);
+   QFileInfo fnfi(fn);
+
+   if ( confi == fnfi )
       return true;
    return false;
 }
