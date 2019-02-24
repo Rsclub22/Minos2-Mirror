@@ -129,6 +129,7 @@ void ScreenConfig::on_applyButton_clicked()
     // write it back, or the screen redraw doesn't work
     scf.dumpFile();
 
+    LogContainer->selectLayout(curConfigName);
     LogContainer->applyScreenLayouts();
 }
 
