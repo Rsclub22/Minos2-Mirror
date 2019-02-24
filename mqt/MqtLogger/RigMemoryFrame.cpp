@@ -191,15 +191,18 @@ void RigMemoryFrame::rigMemTable_Hdr_customContextMenuRequested( const QPoint &p
 
 void RigMemoryFrame::saveAllColumnWidthsAndPositions()
 {
-    QSettings settings;
-    QByteArray state;
+    if (!suppressSaveColumns)
+    {
+        QSettings settings;
+        QByteArray state;
 
-    state = ui->rigMemTable->horizontalHeader()->saveState();
-    settings.setValue("RigMem/state", state);
+        state = ui->rigMemTable->horizontalHeader()->saveState();
+        settings.setValue("RigMem/state", state);
 
-    //And we need to send this out to all other instances
+        //And we need to send this out to all other instances
 
-    sendUpdateMemories();
+        sendUpdateMemories();
+    }
 }
 void RigMemoryFrame::reloadColumns()
 {
@@ -253,6 +256,7 @@ void RigMemoryFrame::doMemoryUpdates()
 
     model.reset();
     reloadColumns();
+    firstTime = true;
     on_AfterLogContact(ct);
 //    ui->rigMemTable->resizeRowsToContents();
 }
@@ -415,6 +419,7 @@ void RigMemoryFrame::on_newMemoryButton_clicked()
     }
 
     writeMemory(n); // which creates the button as well
+    firstTime = true;
 }
 void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
 {
@@ -442,6 +447,49 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
                   }
               }
           }
+
+          if (firstTime)
+          {
+              // we shouldn't need to do any of this, but "blank" memories seem to kill selection (issue #442)
+              int sortCol = ui->rigMemTable->horizontalHeader()->sortIndicatorSection();
+              bool sortOrder = ui->rigMemTable->horizontalHeader()->sortIndicatorOrder() == Qt::AscendingOrder;
+
+              {
+                  QTimer *timer = new QTimer(this);
+                  timer->setSingleShot(true);
+
+                  connect(timer, &QTimer::timeout, [=]()
+                  {
+                      // NB a lambda function
+                      suppressSaveColumns = true;
+                      ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
+                      suppressSaveColumns = false;
+                      timer->deleteLater();
+                  }
+                  );
+
+                  timer->start(10);
+              }
+
+              {
+                  QTimer *timer2 = new QTimer(this);
+                  timer2->setSingleShot(true);
+
+                  connect(timer2, &QTimer::timeout, [=]()
+                  {
+                      // NB a lambda function
+                      suppressSaveColumns = true;
+                      ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
+                      suppressSaveColumns = false;
+                      timer2->deleteLater();
+                  }
+                  );
+
+                  timer2->start(20);
+              }
+              firstTime = false;
+          }
+
       }
 }
 
@@ -657,13 +705,20 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
             {
             case ermCallsign:
             {
-                disp = frame->headerVal[row].text;
-                if (disp.isEmpty())
+                if (role == Qt::UserRole)
                 {
-                    disp = "     " + m.callsign + "    ";
+                    disp = m.callsign;
                 }
-                QColor colour = frame->headerVal[row].colour;
-                disp = HtmlFontColour(colour) + disp;
+                else
+                {
+                    disp = frame->headerVal[row].text;
+                    if (disp.isEmpty())
+                    {
+                        disp = "     " + m.callsign + "    ";
+                    }
+                    QColor colour = frame->headerVal[row].colour;
+                    disp = HtmlFontColour(colour) + disp;
+                }
                 break;
             }
             case ermWorked:

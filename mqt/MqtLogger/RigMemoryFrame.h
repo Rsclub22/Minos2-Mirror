@@ -113,6 +113,8 @@ private:
     Ui::RigMemoryFrame *ui;
     LoggerContestLog *ct = nullptr;
     bool suppressSendUpdate = false;
+    bool suppressSaveColumns = false;
+    bool firstTime = true;
     QString lastRigFreq;
     int lastBearing = 0;
     bool lastVisible = false;
