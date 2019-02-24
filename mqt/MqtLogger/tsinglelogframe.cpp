@@ -168,6 +168,8 @@ TSingleLogFrame::~TSingleLogFrame()
 void TSingleLogFrame::createScreenComponents()
 {
     // create component frames, parentless
+    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
+    trace("TSingleLogFrame::createScreenComponents for " + ct->name.getValue() + " uuid " + ct->uuid);
 
     QSOTable = new QTableView(this);
     QSOTable->setObjectName(QStringLiteral("QSOTable"));
@@ -353,6 +355,8 @@ void TSingleLogFrame::clearScreenLayout()
 {
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
+    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
+    trace("TSingleLogFrame::clearScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
 
     FKHRigControlFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
@@ -395,6 +399,8 @@ void TSingleLogFrame::clearScreenLayout()
 }
 void TSingleLogFrame::applyScreenLayout()
 {
+    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
+    trace("TSingleLogFrame::applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
     hide();
     clearScreenLayout();
     buildScreenLayout();
@@ -416,6 +422,7 @@ void TSingleLogFrame::setCurScreenLayout(const QString &value)
 
 void TSingleLogFrame::buildScreenLayout()
 {
+
     ScreenConfigFile scf;
     if (!scf.loadFile())
     {
@@ -425,6 +432,7 @@ void TSingleLogFrame::buildScreenLayout()
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     QString curConfigName = ct->screenLayout.getValue();
+    trace("TSingleLogFrame::buildScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid + " to layout " + curConfigName);
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
         curConfigName = defaultLayoutName;
