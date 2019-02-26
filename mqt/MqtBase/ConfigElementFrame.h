@@ -46,13 +46,13 @@ private slots:
 
     void on_rbConnectRemote_clicked();
 
-    void on_appTypeCombo_currentIndexChanged(const QString &arg1);
-
     void on_advancedCheckbox_clicked();
 
     void on_enabledCheckbox_clicked();
 
     void on_hideAppCheckBox_clicked();
+public slots:
+    void on_appTypeCombo_currentIndexChanged(const QString &arg1);
 
 private:
     Ui::ConfigElementFrame *ui;
