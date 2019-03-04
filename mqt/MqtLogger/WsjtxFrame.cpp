@@ -37,7 +37,8 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
+    // disable auto for the full release until it works properly
+    //TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
 
     ui->autoSelectReplyFrame->setVisible(autoEnabled);
 
