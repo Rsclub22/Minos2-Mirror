@@ -233,8 +233,17 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             return messages->at(index.row()).toGrid.loc.getValue();
 
         case dcBest:
-            return messages->at(index.row()).best?"Best":"";
-
+        {
+            if (messages->at(index.row()).best)
+            {
+                if (messages->at(index.row()).autoresp)
+                {
+                    return "Auto";
+                }
+                return "Best";
+            }
+            return "";
+        }
         case dcMessage:
             return escapeXML( messages->at(index.row()).message );
 

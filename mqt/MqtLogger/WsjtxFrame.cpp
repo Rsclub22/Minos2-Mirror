@@ -200,6 +200,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     if (ct != cc)
         return;
 
+    trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
+          .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
     QColor fcolour = Qt::black;
     if (transmitting)
         fcolour = Qt::red;
@@ -354,7 +356,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
                 if (ui->autoSelectButton->isChecked() && bestOffset >= 0 )
                 {
-                    trace("WsjtxFrame::update_status replying to " + messages[bestOffset].message);
+                    trace("WsjtxFrame::update_status auto replying to " + messages[bestOffset].message);
+                    messages[bestOffset].autoresp = true;
                     reply(messages[bestOffset]);
                 }
             }
@@ -412,7 +415,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     }
     else
     {
-        trace("WsjtxFrame::decode_added - new message " + message);
+        trace(QString("WsjtxFrame::decode_added - new message %1 stage %2 points %3 snr %4").arg(message).arg(dc.getMStage()).arg(dc.points).arg(dc.snr));
         messages.push_back(dc);
     }
 
@@ -452,6 +455,8 @@ void WsjtxFrame::do_reply (QModelIndex index)
 
     decodeMessage &dc = messages[index.row()];
 
+    trace(QString("WsjtxFrame::do_reply on %1").arg(dc.message));
+
     reply(dc);
 
 
@@ -463,10 +468,12 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
     {
         //ui->autoSelectButton->setChecked(false);
         ui->autoSelectButton->setArrowType(Qt::NoArrow);
+        trace("WsjtxFrame autoselect off");
     }
     else
     {
         //ui->autoSelectButton->setChecked(true);
         ui->autoSelectButton->setArrowType(Qt::DownArrow);
+        trace("WsjtxFrame autoselect on");
     }
 }
