@@ -114,6 +114,11 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           aqso->frequency.setValue(sfreq);
       }
 
+      if ( Fieldname.toUpper() == "COMMENT" )
+      {
+          strcpysp( temp, FieldContent, FieldLength );
+          aqso->comments.setValue(temp);
+      }
       if ( Fieldname.toUpper() == "MODE" )
       {
           strcpysp( temp, FieldContent, FieldLength );
@@ -135,7 +140,6 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           {
               aqso->mode.setValue(hamlibData::MGM);
               aqso->mgmSubmode.setValue(temp.trimmed());
-              //aqso->comments.setValue(temp);
           }
       }
    }
