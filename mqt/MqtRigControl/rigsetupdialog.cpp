@@ -304,7 +304,13 @@ void RigSetupDialog::addRadio()
     numAvailRadios++;
     radioTab[tabNum]->setupRadioModel(radioModel);
     radioTab[tabNum]->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
+
     loadAvailComportsToTab(tabNum);
+    radioTab[tabNum]->setDataSpeed("9600");
+    radioTab[tabNum]->setDataBits("1");
+    radioTab[tabNum]->setStopBits("0");
+    radioTab[tabNum]->setParityBits(0);
+
 
     ui->radioTab->setCurrentIndex(tabNum);
 
