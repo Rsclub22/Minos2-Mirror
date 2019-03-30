@@ -37,6 +37,8 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->testButton->setVisible(false);
+
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
 
     ui->autoSelectReplyFrame->setVisible(autoEnabled);
@@ -332,13 +334,13 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                             trace(QString("Candidate %1").arg(messages[i].message));
                             bestOffset = i;
                             bestPoints = dc.points;
-                            bestCs = dc.toCall.fullCall.getValue();
+                            bestCs = dc.fromCall.fullCall.getValue();
                             currSn = dc.snr;
                         }
                         else
                         {
                             if (bestOffset >= 0
-                                && dc.toCall.fullCall.getValue() == bestCs
+                                && dc.fromCall.fullCall.getValue() == bestCs
                                 && dc.snr > currSn
                                 )
                             {
@@ -480,4 +482,49 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
         ui->autoSelectButton->setArrowType(Qt::DownArrow);
         trace("WsjtxFrame autoselect on");
     }
+}
+
+void WsjtxFrame::on_testButton_clicked()
+{
+    /*
+//update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
+//        , QString const& report, QString const& tx_mode, bool tx_enabled
+//        , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
+//        , QString const& de_call, QString const& de_grid, QString const& dx_grid
+//        , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
+
+
+            update_status ("test", 12345, "FT8", "","0", "FT8", false, false, true, 0, 0
+                                    , "G0GJV", "IO91", "JO01"
+                                    , false, "", false, 0);
+
+
+//void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
+//       , qint32 snr, float delta_time
+//       , quint32 delta_frequency, QString const& mode
+//       , QString const& message, bool low_confidence
+//       , bool off_air)
+
+//            600: 17:41:14.605 WsjtxFrame::update_status Checking decodes
+//            608: 17:41:29.400 WsjtxFrame::update_status dx_call  dx_grid JO01 transmitting 0 decoding 1 tx_enabled 0
+//            637: 17:41:29.927 WsjtxFrame::decode_added - 17:41:15 new message CQ PC4N JO21 stage CQ points 416 snr -14
+//            645: 17:41:30.296 WsjtxFrame::decode_added - 17:41:15 new message CQ G3YDY JO01 stage CQ points 139 snr -2
+//            646: 17:41:30.331 WsjtxFrame::decode_added - 17:41:15 new message CQ G3YDY JO01 stage CQ points 139 snr -1
+//            647: 17:41:30.430 WsjtxFrame::decode_added - 17:41:15 new message <...> G4DHF stage Free points 0 snr -21
+//            648: 17:41:30.461 WsjtxFrame::decode_added - 17:41:15 new message <...> G4DHF stage Free points 0 snr -17
+//            649: 17:41:31.207 WsjtxFrame::update_status dx_call  dx_grid JO01 transmitting 0 decoding 0 tx_enabled 0
+//            650: 17:41:31.209 WsjtxFrame::update_status Checking decodes
+//            651: 17:41:31.209 WsjtxFrame::update_status best decode is CQ G3YDY JO01
+
+            QTime now = QTime::currentTime();
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ PC4N JO21", false, true);
+            decode_added(true, "test", now, -2, 0, 0, "FT8", "CQ G3YDY JO01", false, true);
+            decode_added(true, "test", now, -1, 0, 0, "FT8", "CQ G3YDY JO01", false, true);
+            decode_added(true, "test", now, -21, 0, 0, "FT8", "<...> G4DHF", false, true);
+            decode_added(true, "test", now, -17, 0, 0, "FT8", "<...> G4DHF", false, true);
+
+            update_status ("test", 12345, "FT8", "","0", "FT8", false, false, false, 0, 0
+                                    , "G0GJV", "IO91", "JO01"
+                                    , false, "", false, 0);
+*/
 }
