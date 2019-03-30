@@ -288,9 +288,9 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         {
             inDecode = false;
 
-            trace("WsjtxFrame::update_status Checking decodes");
-
             int decodeEndSize = messages.size();
+            trace(QString("WsjtxFrame::update_status Checking decodes start %1 end %2").arg(decodeStartSize).arg(decodeEndSize));
+
             if (decodeEndSize > decodeStartSize)
             {
                 // iterate over the latest decodes, and select the best
@@ -311,6 +311,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 {
                     decodeMessage &dc = messages[i];
 
+                    trace(QString("Checking %1").arg(messages[i].message));
+
                     if (dx_call == dc.fromCall.fullCall.getValue())
                         continue;
 
@@ -327,6 +329,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 && dc.points > bestPoints
                               )
                         {
+                            trace(QString("Candidate %1").arg(messages[i].message));
                             bestOffset = i;
                             bestPoints = dc.points;
                             bestCs = dc.toCall.fullCall.getValue();
@@ -339,6 +342,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 && dc.snr > currSn
                                 )
                             {
+                                trace(QString("Candidate - CS already seen %1").arg(messages[i].message));
                                 bestOffset = i;
                                 currSn = dc.snr;
                             }
