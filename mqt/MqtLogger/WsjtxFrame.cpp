@@ -313,7 +313,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 {
                     decodeMessage &dc = messages[i];
 
-                    trace(QString("Checking %1").arg(messages[i].message));
+                    trace(QString("WsjtxFrame::update_status Checking %1 stage %2 tocall %3 fromcall %4")
+                          .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
 
                     if (dx_call == dc.fromCall.fullCall.getValue())
                         continue;
@@ -331,7 +332,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 && dc.points > bestPoints
                               )
                         {
-                            trace(QString("Candidate %1").arg(messages[i].message));
+                            trace(QString("WsjtxFrame::update_status Candidate %1").arg(messages[i].message));
                             bestOffset = i;
                             bestPoints = dc.points;
                             bestCs = dc.fromCall.fullCall.getValue();
@@ -344,11 +345,20 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 && dc.snr > currSn
                                 )
                             {
-                                trace(QString("Candidate - CS already seen %1").arg(messages[i].message));
+                                trace(QString("WsjtxFrame::update_status Candidate - CS already seen %1").arg(messages[i].message));
                                 bestOffset = i;
                                 currSn = dc.snr;
                             }
+                            else
+                            {
+                                trace(QString("WsjtxFrame::update_status NOT best %1").arg(messages[i].message));
+
+                            }
                         }
+                    }
+                    else
+                    {
+                        trace(QString("WsjtxFrame::update_status NOT Candidate %1").arg(messages[i].message));
                     }
                 }
                 for (int i = decodeStartSize; i < decodeEndSize; i++)
