@@ -322,8 +322,12 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                     if (dc.points <= 0)
                         continue;
 
+//                    QString tc = dc.toCall.fullCall.getValue();
+//                    QString mc = decoder.getMyCall().fullCall.getValue();
+//                    QString st = dc.getMStage();
+
                     if (dc.mstage == emsCQ
-                    || (dc.mstage == emsGrid && dc.toCall.fullCall.getValue() == myCall)
+                    || (dc.mstage == emsGrid && dc.toCall == decoder.getMyCall())
                        )
                     {
 
@@ -496,7 +500,7 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 
 void WsjtxFrame::on_testButton_clicked()
 {
-    /*
+/*
 //update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
 //        , QString const& report, QString const& tx_mode, bool tx_enabled
 //        , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
@@ -515,23 +519,14 @@ void WsjtxFrame::on_testButton_clicked()
 //       , QString const& message, bool low_confidence
 //       , bool off_air)
 
-//            600: 17:41:14.605 WsjtxFrame::update_status Checking decodes
-//            608: 17:41:29.400 WsjtxFrame::update_status dx_call  dx_grid JO01 transmitting 0 decoding 1 tx_enabled 0
-//            637: 17:41:29.927 WsjtxFrame::decode_added - 17:41:15 new message CQ PC4N JO21 stage CQ points 416 snr -14
-//            645: 17:41:30.296 WsjtxFrame::decode_added - 17:41:15 new message CQ G3YDY JO01 stage CQ points 139 snr -2
-//            646: 17:41:30.331 WsjtxFrame::decode_added - 17:41:15 new message CQ G3YDY JO01 stage CQ points 139 snr -1
-//            647: 17:41:30.430 WsjtxFrame::decode_added - 17:41:15 new message <...> G4DHF stage Free points 0 snr -21
-//            648: 17:41:30.461 WsjtxFrame::decode_added - 17:41:15 new message <...> G4DHF stage Free points 0 snr -17
-//            649: 17:41:31.207 WsjtxFrame::update_status dx_call  dx_grid JO01 transmitting 0 decoding 0 tx_enabled 0
-//            650: 17:41:31.209 WsjtxFrame::update_status Checking decodes
-//            651: 17:41:31.209 WsjtxFrame::update_status best decode is CQ G3YDY JO01
-
+//19:30:14.516 WsjtxFrame::decode_added - 18:30:00 new message CQ G4FTC IO91 stage CQ points 0 snr 13
+//19:30:14.580 WsjtxFrame::decode_added - 18:30:00 new message G0GJV M0GXZ IO92 stage Grid points 112 snr -24
+//19:30:14.690 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G8KWX IO91 stage Grid points 50 snr -15
+//19:30:14.733 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G3ZPB IO91 stage Grid points 50 snr -15
             QTime now = QTime::currentTime();
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ PC4N JO21", false, true);
-            decode_added(true, "test", now, -2, 0, 0, "FT8", "CQ G3YDY JO01", false, true);
-            decode_added(true, "test", now, -1, 0, 0, "FT8", "CQ G3YDY JO01", false, true);
-            decode_added(true, "test", now, -21, 0, 0, "FT8", "<...> G4DHF", false, true);
-            decode_added(true, "test", now, -17, 0, 0, "FT8", "<...> G4DHF", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
+            decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX IO91", false, true);
+            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
 
             update_status ("test", 12345, "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"

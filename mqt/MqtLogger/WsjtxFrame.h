@@ -26,8 +26,6 @@ public:
 
     void setContest(BaseContestLog *c);
     SpecialOperatingActivity curOpMode = NONE;
-    QString myCall;
-    QString myLoc;
 
     QVector<decodeMessage> messages;
     int decodeStartSize = 0;
