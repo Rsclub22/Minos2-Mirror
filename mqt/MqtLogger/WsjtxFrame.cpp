@@ -455,8 +455,8 @@ void WsjtxFrame::clear_decodes (QString const& /*client_id*/)
     if (ct != cc)
         return;
 
-    decodes_model_->removeRows(0, messages.size());
-    messages.clear();
+//    bool cret  = decodes_model_->removeRows(0, messages.size());
+    decodes_model_->clear();
 
     columns_resized_ = false;
 }
