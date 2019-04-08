@@ -186,7 +186,7 @@ QModelIndex MonitorTreeModel::index( int row, int column, const QModelIndex &par
 
     TreeNode *parentItem = getItem( parent );
 
-    if ( parentItem && row < parentItem->childCount() )
+    if ( parentItem && row < parentItem->childCount() && row >= 0 )
     {
         TreeNode * childItem = parentItem->child( row );
         if ( childItem )
