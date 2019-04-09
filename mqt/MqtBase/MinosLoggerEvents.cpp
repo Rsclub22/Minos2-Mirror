@@ -132,11 +132,6 @@ void MinosLoggerEvents::SendAfterTabFocusIn(QLineEdit *tle)
     emit mle.AfterTabFocusIn(tle);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendValidated()
-{
-    emit mle.Validated();
-}
-//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendCountrySelect(QString cty, BaseContestLog *c)
 {
     emit mle.CountrySelect(cty, c);

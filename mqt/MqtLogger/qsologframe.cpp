@@ -40,37 +40,37 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     CallsignFW = new FocusWatcher(ui->CallsignEdit);
     CallsignLabelString = ui->Callsignlabel->text();
-    ui->CallsignEdit->setValidator(new UpperCaseValidator(true));
+    ui->CallsignEdit->setValidator(new UpperCaseValidator());
     ui->CallsignEdit->installEventFilter(this);
 
     RSTTXFW = new FocusWatcher(ui->RSTTXEdit);
     RSTTXLabelString = ui->RSTTXLabel->text();
-    ui->RSTTXEdit->setValidator(new UpperCaseValidator(true));
+    ui->RSTTXEdit->setValidator(new UpperCaseValidator());
     ui->RSTTXEdit->installEventFilter(this);
 
     SerTXFW = new FocusWatcher(ui->SerTXEdit);
     SerTXLabelString = ui->SerTXLabel->text();
-    ui->SerTXEdit->setValidator(new UpperCaseValidator(true));
+    ui->SerTXEdit->setValidator(new UpperCaseValidator());
     ui->SerTXEdit->installEventFilter(this);
 
     RSTRXFW = new FocusWatcher(ui->RSTRXEdit);
     RSTRXLabelString = ui->RSTRXLabel->text();
-    ui->RSTRXEdit->setValidator(new UpperCaseValidator(true));
+    ui->RSTRXEdit->setValidator(new UpperCaseValidator());
     ui->RSTRXEdit->installEventFilter(this);
 
     SerRXFW = new FocusWatcher(ui->SerRXEdit);
     SerRXLabelString = ui->SerRXLabel->text();
-    ui->SerRXEdit->setValidator(new UpperCaseValidator(true));
+    ui->SerRXEdit->setValidator(new UpperCaseValidator());
     ui->SerRXEdit->installEventFilter(this);
 
     LocFW = new FocusWatcher(ui->LocEdit);
     LocLabelString = ui->LocLabel->text();
-    ui->LocEdit->setValidator(new UpperCaseValidator(true));
+    ui->LocEdit->setValidator(new UpperCaseValidator());
     ui->LocEdit->installEventFilter(this);
 
     QTHFW = new FocusWatcher(ui->QTHEdit);
     QTHLabelString = ui->QTHLabel->text();
-    ui->QTHEdit->setValidator(new UpperCaseValidator(true));
+    ui->QTHEdit->setValidator(new UpperCaseValidator());
     ui->QTHEdit->installEventFilter(this);
 
     CommentsFW = new FocusWatcher(ui->CommentsEdit);
@@ -78,10 +78,10 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->CommentsEdit->installEventFilter(this);
 
     MainOpFW = new FocusWatcher(ui->MainOpComboBox);
-    ui->MainOpComboBox->setValidator(new UpperCaseValidator(false));
+    ui->MainOpComboBox->setValidator(new UpperCaseValidator());
     Op1String = ui->OperatorLabel->text();
     SecondOpFW = new FocusWatcher(ui->SecondOpComboBox);
-    ui->SecondOpComboBox->setValidator(new UpperCaseValidator(false));
+    ui->SecondOpComboBox->setValidator(new UpperCaseValidator());
     Op2String = ui->SecondOpLabel->text();
 
     freqFW = new FocusWatcher(ui->frequencyEdit);
@@ -98,7 +98,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(MainOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(SecondOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(freqFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-//    connect(ui->frequencyEdit, SIGNAL(editingFinished()), this, SLOT(on_FreqEditFinished()), Qt::QueuedConnection);
 
     ui->timeEdit->installEventFilter(this);
     ui->dateEdit->installEventFilter(this);
@@ -114,7 +113,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterTabFocusIn(QLineEdit*)), this, SLOT(on_AfterTabFocusIn(QLineEdit*)), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(Validated()), this, SLOT(on_Validated()));
     connect(&MinosLoggerEvents::mle, SIGNAL(ValidateError(int)), this, SLOT(on_ValidateError(int)));
     connect(&MinosLoggerEvents::mle, SIGNAL(ShowOperators()), this, SLOT(on_ShowOperators()));
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
@@ -522,35 +520,6 @@ void QSOLogFrame::SecondOpComboBox_Exit()
        refreshOps();
     }
 }
-
-/*
-void QSOLogFrame::on_FreqEditFinished()
-{
-    QString f = ui->frequencyEdit->text().trimmed().remove( QRegExp("^[0]*"));
-    if (f != "")
-    {
-        if (f.count('.') == 0)
-        {
-            f += ".000";
-        }
-        if (f.count('.') == 1)
-        {
-            QStringList fl = f.split('.');
-            fl[1] = fl[1] + "000000";
-            fl[1].truncate(6);
-            f = fl[0] + "." + fl[1];
-        }
-        if (!validateFreqTxtInput(f))
-        {
-            // error
-            QMessageBox msgBox;
-            msgBox.setText(FREQ_EDIT_ERR_MSG);
-            msgBox.exec();
-
-        }
-    }
-}
-*/
 void QSOLogFrame::on_GJVOKButton_clicked()
 {
     if ( contest->isReadOnly() )
@@ -590,7 +559,6 @@ void QSOLogFrame::on_GJVOKButton_clicked()
        {
           if ( !( *vcp ) ->wc->isVisible() || !( *vcp ) ->wc->isEnabled())
           {
- //         #error but if date or time are invalid...
              continue;
           }
           if ( onCurrent )
@@ -763,10 +731,6 @@ void QSOLogFrame::killPartial( )
       delete partialContact;
       partialContact = nullptr;
    }
-}
-void QSOLogFrame::on_Validated()
-{
-    killPartial();
 }
 
 void QSOLogFrame::startNextEntry( )
@@ -1934,6 +1898,9 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
       }
       MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
       valid( cmCheckValid ); // make sure all single and cross field
+
+      // someone has changed one of the controls - which is the requirement for killing partial
+      killPartial();
    }
 }
 

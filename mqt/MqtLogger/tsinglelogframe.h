@@ -143,7 +143,6 @@ public:
     void setCurScreenLayout(const QString &value);
 
 private:
-    //    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
     HtmlDelegate *delegate = nullptr;
     QSOGridModel qsoModel;
@@ -201,7 +200,6 @@ private slots:
 
     void on_RadioLoaded();
     void on_SetRadioList();
-    //void on_SetBandList(QString);
     void on_SetMode(QString);
     void on_SetFreq(QString);
     void on_SetRitFreq(QString);

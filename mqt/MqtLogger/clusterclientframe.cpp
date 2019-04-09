@@ -109,7 +109,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
 
-    ui->searchLineEdit->setValidator(new UpperCaseValidator(true));
+    ui->searchLineEdit->setValidator(new UpperCaseValidator());
     connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
 
     dxSpotDataModel = new DxSpotDataModel();

@@ -272,15 +272,6 @@ void TSingleLogFrame::createScreenComponents()
 
     verticalLayout_5->addWidget(CurrentBandLabel);
 
-//    QFrame *line;
-//    line = new QFrame(CribSheet);
-//    line->setFrameShape(QFrame::HLine);
-//    line->setFrameShadow(QFrame::Sunken);
-//    line->setLineWidth(3);
-
-//    verticalLayout_5->addWidget(line);
-
-
     NextContactDetailsLabel = new QLabel(CribSheet);
     NextContactDetailsLabel->setObjectName(QStringLiteral("NextContactDetailsLabel"));
     NextContactDetailsLabel->setFrameShape(QFrame::NoFrame);

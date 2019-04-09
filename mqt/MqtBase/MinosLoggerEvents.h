@@ -52,7 +52,6 @@ signals:
    void BandMapPressed();
    void TimerDistribution();
    void AfterTabFocusIn(QLineEdit *tle);
-   void Validated();
 
    void BrgStrToRot(QString);
    void FreqStrToRig(QString);
@@ -111,7 +110,6 @@ public:
    static void SendBandMapPressed();
    static void SendTimerDistribution();
    static void SendAfterTabFocusIn(QLineEdit *tle);
-   static void SendValidated();
 
    static void SendCountrySelect(QString cty, BaseContestLog *c);
    static void SendDistrictSelect(QString dist, BaseContestLog *c);
@@ -130,7 +128,6 @@ public:
    static void sendUpdateStats(BaseContestLog *c );
    static void sendFiltersChanged(BaseContestLog *c );
    static void sendUpdateMemories(BaseContestLog *c );
-//   static void sendRefreshMults(BaseContestLog *c );
 
     static void sendRigFreqChanged(QString f, BaseContestLog *c);
     static void sendRotBearingChanged(int f, BaseContestLog *c);
