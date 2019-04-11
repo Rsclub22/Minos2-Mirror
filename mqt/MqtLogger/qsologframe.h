@@ -78,6 +78,9 @@ public:
 
     bool valid( validTypes command );
 
+    ScreenContact *getPartialContact() const;
+    void setPartialContact(ScreenContact *value);
+
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;

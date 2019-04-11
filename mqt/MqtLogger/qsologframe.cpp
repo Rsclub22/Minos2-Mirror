@@ -1370,6 +1370,16 @@ bool QSOLogFrame::valid( validTypes command )
 
    return pvalid;
 }
+
+ScreenContact *QSOLogFrame::getPartialContact() const
+{
+    return partialContact;
+}
+
+void QSOLogFrame::setPartialContact(ScreenContact *value)
+{
+    partialContact = value;
+}
 //---------------------------------------------------------------------------
 void QSOLogFrame::selectField( QWidget *v )
 {

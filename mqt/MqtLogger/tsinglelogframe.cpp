@@ -682,9 +682,12 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     if ( logColumnsChanged )
     {
-       GJVQSOLogFrame->killPartial();
+       ScreenContact *p = GJVQSOLogFrame->getPartialContact();
+       GJVQSOLogFrame->setPartialContact(nullptr);
        showQSOs();             // this does a restorePartial
        logColumnsChanged = false;
+       GJVQSOLogFrame->killPartial();
+       GJVQSOLogFrame->setPartialContact(p);
     }
 
     if (splittersChanged)
