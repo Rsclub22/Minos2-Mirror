@@ -451,11 +451,8 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
 }
 void WsjtxFrame::clear_decodes (QString const& /*client_id*/)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
-        return;
+    // don't check for contest - clear is across all contests
 
-//    bool cret  = decodes_model_->removeRows(0, messages.size());
     decodes_model_->clear();
 
     columns_resized_ = false;
