@@ -43,6 +43,7 @@ class MinosSplitter;
 
 class BaseMatchContest;
 class MatchContact;
+class SCRow;
 
 class TSingleLogFrame : public QFrame
 {
@@ -167,6 +168,8 @@ private:
     void buildScreenLayout();
     void createScreenComponents();
     void clearScreenLayout();
+    void buildRow(SCRow &scrow, int auxInstance, MinosSplitter *splitterParent);
+    void clearSplitter(MinosSplitter *s);
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 

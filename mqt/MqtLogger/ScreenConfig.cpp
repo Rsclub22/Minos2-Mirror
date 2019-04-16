@@ -7,9 +7,37 @@
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
 #include "ScreenConfigRow.h"
+#include "ScreenConfigElement.h"
 
 #include "ScreenConfig.h"
 #include "ui_ScreenConfig.h"
+
+void ScreenConfig::buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl)
+{
+    for (int j = 0; j < rows.count(); j++)
+    {
+        //QWidget *w = parentWidget();
+        ScreenConfigRow *baseRow = new ScreenConfigRow(bele);
+        vbl->insertWidget( j, baseRow);
+       for (int k = 0; k < rows[j].elements.count(); k++)
+       {
+           ScreenConfigElement *e = new ScreenConfigElement(baseRow);
+           SCType sctype = rows[j].elements[k].type;
+           e->setType(sctype);
+           if (sctype == sctAux)
+           {
+               e->setAuxType(rows[j].elements[k].auxType);
+           }
+           else if (sctype == sctSplit)
+           {
+               e->setIsSplitElement(true);
+               QVBoxLayout *v = e->vbl;
+               buildRows(rows[j].elements[k].rows, e, v);
+           }
+           baseRow->hbl->insertWidget(k, e);
+       }
+    }
+}
 
 ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curConfigNamep) :
     QDialog(parent),
@@ -32,28 +60,18 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
 
     SC sc = scf.configs[curConfigName];
 
-    if (sc.rows.count() == 0)
+    baseElement = new ScreenConfigElement(nullptr, this);
+
+    if (sc.baseElement->rows.count() == 0)
     {
         on_addRowButton_clicked();
     }
     else
     {
-        for (int j = 0; j < sc.rows.count(); j++)
-        {
-            ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
-            vbl->insertWidget( j, baseRow);
-           for (int k = 0; k < sc.rows[j].elements.count(); k++)
-           {
-               ScreenConfigElement *e = new ScreenConfigElement(this, baseRow);
-               SCType sctype = sc.rows[j].elements[k].type;
-               e->setType(sctype);
-               if (sctype == sctAux)
-                   e->setAuxType(sc.rows[j].elements[k].auxType);
-               baseRow->vbl->insertWidget(k, e);
-           }
-        }
+        buildRows(sc.baseElement->rows, baseElement, vbl);
+
     }
-    ui->addRowButton->setVisible(vbl->count() == 0);
+    checkAddRowButton();
 }
 
 ScreenConfig::~ScreenConfig()
@@ -75,38 +93,69 @@ void ScreenConfig::accept()
     doCloseEvent();
     QDialog::accept();
 }
+void ScreenConfig::procRow(ScreenConfigRow *row, SCRow &scrow)
+{
+    if (row != nullptr)
+    {
+        int eleCt = row->hbl->count();
+        for (int j = 0; j < eleCt; j++)
+        {
+            QWidget *w = row->hbl->itemAt(j)->widget();
+            ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
+            if (ele)
+            {
+                SCElement scele;
+                if (ele->getIsSplitElement())
+                {
+                    scele.type = sctSplit;
+
+                    int vCt = ele->vbl->count();
+                    for (int i = 0; i < vCt; i++)
+                    {
+                        ScreenConfigRow *r = dynamic_cast<ScreenConfigRow *>(ele->vbl->itemAt(i)->widget());
+                        if (r != nullptr)
+                        {
+                            SCRow scr;
+                            procRow(r, scr);
+                            scele.rows.push_back(scr);
+                        }
+                    }
+                }
+                else
+                {
+                    scele.type = getScreenType(ele->getType());
+                    scele.auxType = getAuxEntryType(ele->getAuxType());
+                }
+                scrow.elements.append(scele);
+            }
+        }
+    }
+}
 SC ScreenConfig::getConfig()
 {
     SC sc;
     sc.name = curConfigName;
+    sc.baseElement = new SCElement;
+    sc.baseElement->type = sctSplit;
 
-    for (int i = 0; i < vbl->count(); i++)
+    int vCt = vbl->count();
+    for (int i = 0; i < vCt; i++)
     {
         QWidget *w = vbl->itemAt(i)->widget();
         ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
         if (row)
         {
             SCRow scrow;
-            for (int j = 0; j < row->vbl->count(); j++)
-            {
-                w = row->vbl->itemAt(j)->widget();
-                ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
-                if (ele)
-                {
-                    SCElement scele;
-                    scele.type = getScreenType(ele->getType());
-                    scele.auxType = getAuxEntryType(ele->getAuxType());
-                    scrow.elements.append(scele);
-
-                }
-            }
-            sc.rows.append(scrow);
+            procRow(row, scrow);
+            sc.baseElement->rows.append(scrow);
         }
     }
     return sc;
 }
 void ScreenConfig::on_OKButton_clicked()
 {
+    trace("ScreenConfig::on_OKButton_clicked()");
+
     // analyse and apply the new layout
     SC sc = getConfig();
 
@@ -119,6 +168,7 @@ void ScreenConfig::on_OKButton_clicked()
 void ScreenConfig::on_applyButton_clicked()
 {
     // First, analyse the screen layout into a config object
+    trace("ScreenConfig::on_applyButton_clicked()");
 
     SC sc = getConfig();
 
@@ -135,94 +185,59 @@ void ScreenConfig::on_applyButton_clicked()
 
 void ScreenConfig::on_cancelButton_clicked()
 {
+    trace("ScreenConfig::on_cancelButton_clicked()");
     close();
 }
-void ScreenConfig::addBefore(ScreenConfigRow *r)
-{
-    int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
-    {
-        if (vbl->itemAt(i)->widget() == r)
-        {
-            pos = i;
-            break;
-        }
-    }
-    ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
-    vbl->insertWidget( pos, baseRow);
-    baseRow->addLeft(nullptr);
-    ui->addRowButton->setVisible(vbl->count() == 0);
 
-}
-void ScreenConfig::remove(ScreenConfigRow *r)
+bool ScreenConfig::checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e, int &auxCount)
 {
-    int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
-    {
-        if (vbl->itemAt(i)->widget() == r)
-        {
-            pos = i;
-            break;
-        }
-    }
-    QLayoutItem *taken = vbl->takeAt(pos);
-    if (taken)
-    {
-        // From the source, I don't think the deleting the layout item deletes the widget
-        taken->widget()->deleteLater();
-        delete taken;
-    }
-    ui->addRowButton->setVisible(vbl->count() == 0);
-}
-void ScreenConfig::addAfter(ScreenConfigRow *r)
-{
-    int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
-    {
-        if (vbl->itemAt(i)->widget() == r)
-        {
-            pos = i;
-            break;
-        }
-    }
-    ScreenConfigRow *baseRow = new ScreenConfigRow(parentWidget(), this);
-    vbl->insertWidget( pos + 1, baseRow);
-    baseRow->addLeft(nullptr);
-    ui->addRowButton->setVisible(vbl->count() == 0);
-}
-
-bool ScreenConfig::checkOk(ScreenConfigElement *e)
-{
-    int auxCount = 0;
     QString etype = e->getType();
-    for (int i = 0; i < vbl->count(); i++)
+    if (row)
     {
-        const QWidget *w = vbl->itemAt(i)->widget();
-        const ScreenConfigRow *row = dynamic_cast<const ScreenConfigRow *>(w);
-        if (row)
+        for (int j = 0; j < row->hbl->count(); j++)
         {
-            for (int j = 0; j < row->vbl->count(); j++)
+            const QWidget *w = row->hbl->itemAt(j)->widget();
+            const ScreenConfigElement *ele = dynamic_cast<const ScreenConfigElement *>(w);
+            if (ele && ele != e)
             {
-                w = row->vbl->itemAt(j)->widget();
-                const ScreenConfigElement *ele = dynamic_cast<const ScreenConfigElement *>(w);
-                if (ele && ele != e)
+                QString type = ele->getType();
+                if (ele->getIsSplitElement())
                 {
-                    QString type = ele->getType();
-                    if (type == etype)
+                    for (int i = 0; i < ele->vbl->count(); i++)
                     {
-                        if (type == getScreenTypeString(sctAux))
-                        {
-                            auxCount++;
-                        }
-                        else
-                        {
+                        ScreenConfigRow *r = dynamic_cast<ScreenConfigRow *>(ele->vbl->itemAt(i)->widget());
+                        if (!checkRowOk(r, e, auxCount))
                             return false;
-                        }
+                    }
+                }
+                else if (type == etype)
+                {
+                    if (type == getScreenTypeString(sctAux))
+                    {
+                        auxCount++;
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
             }
         }
     }
+    return true;
+}
+bool ScreenConfig::checkOk(ScreenConfigElement *e)
+{
+    int auxCount = 0;
+    for (int i = 0; i < vbl->count(); i++)
+    {
+        const QWidget *w = vbl->itemAt(i)->widget();
+        const ScreenConfigRow *row = dynamic_cast<const ScreenConfigRow *>(w);
+        if (!checkRowOk(row, e, auxCount))
+            return false;
+
+    }
+    QString etype = e->getType();
     if (etype != getScreenTypeString(sctAux) || auxCount < STACKITEMS)
     {
         return true;
@@ -236,6 +251,7 @@ bool ScreenConfig::checkOk(ScreenConfigElement *e)
 
 void ScreenConfig::on_addRowButton_clicked()
 {
+    trace("ScreenConfig::on_addRowButton_clicked()");
     QLayoutItem *last = nullptr;
     QWidget *wlast = nullptr;
 
@@ -245,6 +261,10 @@ void ScreenConfig::on_addRowButton_clicked()
         wlast = last->widget();
     }
 
-    addAfter(dynamic_cast<ScreenConfigRow *>(wlast));
+    baseElement->addRowAfter(dynamic_cast<ScreenConfigRow *>(wlast));
+    checkAddRowButton();
+}
+void ScreenConfig::checkAddRowButton()
+{
     ui->addRowButton->setVisible(vbl->count() == 0);
 }

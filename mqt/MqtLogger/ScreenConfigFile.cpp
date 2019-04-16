@@ -40,6 +40,38 @@ bool ScreenConfigFile::dumpFile()
 {
     return writeFile("./Configuration/ScreenConfigs.json");
 }
+void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
+{
+    for (int j = 0; j < rows.count(); j++)
+    {
+        SCRow scrow;
+        QJsonArray elearray = rows[j].toArray();
+        for (int k = 0; k < elearray.count(); k++)
+        {
+            SCElement scele;
+            QJsonObject ele = elearray[k].toObject();
+            QString eletype = ele.value("type").toString();
+            scele.type = getScreenType(eletype);
+            if (scele.type == sctSplit)
+            {
+                QJsonArray rows = ele.value("rows").toArray();
+                procRows(scele.rows, rows);
+            }
+            else if (scele.type == sctAux)
+            {
+                QString auxtype = ele.value("auxtype").toString();
+                scele.auxType = getAuxEntryType(auxtype);
+            }
+            else
+            {
+                scele.auxType = aeClock;
+            }
+//                        trace(QString("Name %1 row %2 ele %3 type %4").arg(name).arg(j).arg(k).arg(eletype));
+            scrow.elements.push_back(scele);
+        }
+        elerows.push_back(scrow);
+    }
+}
 bool ScreenConfigFile::readFile(QString f)
 {
     QJsonParseError err;
@@ -78,31 +110,10 @@ bool ScreenConfigFile::readFile(QString f)
                 QJsonObject namestruct = namearray[i].toObject();
                 QString name = namestruct.value("name").toString();
                 config.name = name;
+//                explicit ScreenConfigElement(QWidget *parent, ScreenConfigRow *parentrow);
+                config.baseElement = new SCElement();
                 QJsonArray rows = namestruct.value("rows").toArray();
-                for (int j = 0; j < rows.count(); j++)
-                {
-                    SCRow scrow;
-                    QJsonArray elearray = rows[j].toArray();
-                    for (int k = 0; k < elearray.count(); k++)
-                    {
-                        SCElement scele;
-                        QJsonObject ele = elearray[k].toObject();
-                        QString eletype = ele.value("type").toString();
-                        scele.type = getScreenType(eletype);
-                        if (scele.type == sctAux)
-                        {
-                            QString auxtype = ele.value("auxtype").toString();
-                            scele.auxType = getAuxEntryType(auxtype);
-                        }
-                        else
-                        {
-                            scele.auxType = aeClock;
-                        }
-//                        trace(QString("Name %1 row %2 ele %3 type %4").arg(name).arg(j).arg(k).arg(eletype));
-                        scrow.elements.push_back(scele);
-                    }
-                    config.rows.push_back(scrow);
-                }
+                procRows(config.baseElement->rows, rows);
                 configs[name] = config;
             }
             return true;
@@ -120,6 +131,33 @@ bool ScreenConfigFile::readFile(QString f)
     }
 
 }
+void ScreenConfigFile::writeTypetoRow(SCElement &e, QJsonArray &scrow)
+{
+    QJsonObject scele;
+    SCType sctype = e.type;
+    scele.insert("type", getScreenTypeString(sctype));
+
+    if (sctype == sctSplit)
+    {
+        QJsonArray splitRows;
+
+        for (int j = 0; j < e.rows.count(); j++)
+        {
+            QJsonArray splitRow;
+           for (int k = 0; k < e.rows[j].elements.count(); k++)
+           {
+               writeTypetoRow(e.rows[j].elements[k], splitRow);
+           }
+           splitRows.append(splitRow);
+        }
+        scele.insert("rows", splitRows);
+    }
+    else if (sctype == sctAux)
+    {
+        scele.insert("auxtype", getAuxTypeString(e.auxType));
+    }
+    scrow.append(scele);
+}
 bool ScreenConfigFile::writeFile(QString f)
 {
     QFile jf(f);
@@ -135,21 +173,18 @@ bool ScreenConfigFile::writeFile(QString f)
      {
          QJsonObject sc;
          QJsonArray scrows;
-         for (int j = 0; j < i.value().rows.count(); j++)
+         QString name = i.value().name;
+         SC &scb = i.value();
+         for (int j = 0; j < scb.baseElement->rows.count(); j++)
          {
-             QJsonArray scrow;
-            for (int k = 0; k < i.value().rows[j].elements.count(); k++)
+            QJsonArray scrow;
+            for (int k = 0; k < scb.baseElement->rows[j].elements.count(); k++)
             {
-                QJsonObject scele;
-                SCType sctype = i.value().rows[j].elements[k].type;
-                scele.insert("type", getScreenTypeString(sctype));
-                if (sctype == sctAux)
-                    scele.insert("auxtype", getAuxTypeString(i.value().rows[j].elements[k].auxType));
-                scrow.append(scele);
+                writeTypetoRow(scb.baseElement->rows[j].elements[k], scrow);
             }
             scrows.append(scrow);
          }
-         sc.insert("name", i.value().name);
+         sc.insert("name", name);
          sc.insert("rows", scrows);
 
          scarray.append(sc);
