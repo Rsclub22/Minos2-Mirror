@@ -104,6 +104,7 @@ bool decodeMessage::checkAsContact()
     scc.time = dtg(true);
 
     scc.checkScreenContact();
+    csret = scc.cs.valRes;
     if (scc.screenQSOValid)
     {
         scc.score();

@@ -63,7 +63,7 @@ DecodeHeading const headings[dcMaxVal] = {
     {QT_TRANSLATE_NOOP ("DecodesModel", "Live"),Qt::AlignHCenter},
 
     {QT_TRANSLATE_NOOP ("DecodesModel", "Seq"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "points"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "points\r\ninc"),Qt::AlignHCenter},
     {QT_TRANSLATE_NOOP ("DecodesModel", "bearing"),Qt::AlignHCenter},
     {QT_TRANSLATE_NOOP ("DecodesModel", "distance"),Qt::AlignHCenter},
 
@@ -217,6 +217,14 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             return messages->at(index.row()).getMStage();
 
         case dcPoints:
+            if (messages->at(index.row()).mstage != emsCQ && messages->at(index.row()).mstage != emsGrid)
+            {
+                return "";
+            }
+            if (messages->at(index.row()).csret == ERR_DUPCS)
+            {
+                return "(wkd)";
+            }
             return QString::number(messages->at(index.row()).points);
         case dcBearing:
             return QString::number(messages->at(index.row()).bearing);
