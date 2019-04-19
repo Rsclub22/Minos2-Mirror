@@ -213,14 +213,12 @@ void ScreenConfigElement::on_splitAboveButton_clicked()
     vbl->insertWidget( 0, baseRow);
     baseRow->addLeft(nullptr );
 
-
     ScreenConfigRow *newRow = new ScreenConfigRow(this);
     vbl->insertWidget( 1, newRow);
     ScreenConfigElement *e = newRow->addLeft(nullptr);
 
     e->setType(getScreenType(t));
     e->setAuxType(getAuxEntryType(aux));
-    setLayout(vbl);
 }
 
 void ScreenConfigElement::on_splitBelowButton_clicked()
@@ -237,13 +235,6 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
     QString aux = getAuxType();
     setIsSplitElement(true);
 
-    eraseLayout(layout());
-    delete layout();
-
-    vbl = new  QVBoxLayout();
-    setLayout(vbl);
-    vbl->setMargin(1);
-
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
     vbl->insertWidget( 0, baseRow);
     ScreenConfigElement *e = baseRow->addLeft(nullptr );
@@ -255,7 +246,6 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
 
     e->setType(getScreenType(t));
     e->setAuxType(getAuxEntryType(aux));
-    setLayout(vbl);
 }
 void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
 {
