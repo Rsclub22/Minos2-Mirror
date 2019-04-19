@@ -461,6 +461,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int auxInstance, MinosSplitter *spl
                     && type != sctOtherMatch
                     && type != sctArchiveMatch
                     && type != sctSplit
+                    && type != sctWsjtx
                     )
             {
                 elementScrollArea = new QScrollArea();
@@ -561,7 +562,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int auxInstance, MinosSplitter *spl
                 }
                 case sctWsjtx:
                 {
-                    elementScrollArea->setWidget(wsjtxFrame);
+                    hs->addWidget(wsjtxFrame);
                     wsjtxFrame->setVisible(true);
                     // don't set contest here
                     break;
