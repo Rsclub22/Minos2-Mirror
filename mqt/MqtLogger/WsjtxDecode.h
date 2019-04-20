@@ -32,6 +32,8 @@ public:
     int bearing = 0;
     int distance = 0;
     int points = 0;
+    int mults = 0;
+    int bonus = 0;
     int csret = CS_OK;
 
     // extra info needed for reply

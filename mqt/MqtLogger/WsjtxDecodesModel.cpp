@@ -63,7 +63,7 @@ DecodeHeading const headings[dcMaxVal] = {
     {QT_TRANSLATE_NOOP ("DecodesModel", "Live"),Qt::AlignHCenter},
 
     {QT_TRANSLATE_NOOP ("DecodesModel", "Seq"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "points\r\ninc"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "points"),Qt::AlignHCenter},
     {QT_TRANSLATE_NOOP ("DecodesModel", "bearing"),Qt::AlignHCenter},
     {QT_TRANSLATE_NOOP ("DecodesModel", "distance"),Qt::AlignHCenter},
 
@@ -217,16 +217,38 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             return messages->at(index.row()).getMStage();
 
         case dcPoints:
-            if (messages->at(index.row()).mstage != emsCQ && messages->at(index.row()).mstage != emsGrid)
+        {
+            bool highlight = false;
+            const decodeMessage &dc = messages->at(index.row());
+            if (dc.mstage != emsCQ && dc.mstage != emsGrid)
+            {
+                return "";
+            }
+            if (dc.csret == ERR_DUPCS)
+            {
+                return "(wkd)";
+            }
+            QString points = QString::number(dc.points);
+
+            if (dc.bonus)
+            {
+                points += " b";
+            }
+            if (dc.mults)
+            {
+                points += "m";
+            }
+            return highlight?HtmlFontColour(Qt::red):"" + points ;
+        }
+        case dcBearing:
+            if (messages->at(index.row()).points == 0)
             {
                 return "";
             }
             if (messages->at(index.row()).csret == ERR_DUPCS)
             {
-                return "(wkd)";
+                return "";
             }
-            return QString::number(messages->at(index.row()).points);
-        case dcBearing:
             return QString::number(messages->at(index.row()).bearing);
         case dcDistance:
             return QString::number(messages->at(index.row()).distance);

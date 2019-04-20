@@ -111,22 +111,14 @@ bool decodeMessage::checkAsContact()
         points = scc.contactScore;
         distance = points;
         bearing = scc.bearing;
+        mults = 0;
         if (scc.multCount >= 1)
         {
-            ContestScore cs(cc);
-            cc->getScoresTo(cs, QDateTime::currentDateTime());
-            int ctmultct = cs.nmults;
-
-            /*
-             sum is (new points)*(new mults) - (old points) * (old mults)
-
-             which reduces to the following calculation
-             */
-            points = (cs.contestScore + points) * ctmultct + points * cs.nmults;
+            mults = scc.multCount;
         }
         if (scc.bonus)
         {
-            points += scc.bonus;
+            bonus = scc.bonus;
         }
         return true;
     }
