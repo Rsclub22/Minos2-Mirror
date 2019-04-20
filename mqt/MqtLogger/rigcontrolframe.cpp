@@ -415,7 +415,7 @@ void RigControlFrame::setBandList(QString s,PubSubName psn)
     }
 
     // update bandlist combo if current radio and current contest
-    if (psn.toString().toLower() == radioName.toLower() && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (psn.toString().toLower() == radioName.toLower() && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
         createActiveBandList(s);
     }
