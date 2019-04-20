@@ -199,7 +199,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
+    if (ct != cc || cc == nullptr)
         return;
 
     trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
