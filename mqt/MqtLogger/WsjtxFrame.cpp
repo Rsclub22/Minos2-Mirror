@@ -37,7 +37,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-   // ui->testButton->setVisible(false);
+    ui->testButton->setVisible(false);
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
 
@@ -497,7 +497,7 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 
 void WsjtxFrame::on_testButton_clicked()
 {
-
+/*
 //update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
 //        , QString const& report, QString const& tx_mode, bool tx_enabled
 //        , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
@@ -528,5 +528,5 @@ void WsjtxFrame::on_testButton_clicked()
             update_status ("test", 12345, "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0);
-
+*/
 }
