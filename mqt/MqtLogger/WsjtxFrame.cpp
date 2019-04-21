@@ -16,19 +16,6 @@
 
 #include "WsjtxFrame.h"
 #include "ui_WsjtxFrame.h"
-static QString wsjtStateIndicator[] =
-{
-    "Available",
-    "NotAvailable",
-    "NoContact"
-};
-static QString wsjtStateList[] =
-{
-    "Available",
-    "Not Available",
-    "No Contact"
-};
-
 
 WsjtxFrame::WsjtxFrame(QWidget *parent) :
     QFrame(parent)
@@ -64,6 +51,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->decodes_table_view_->verticalHeader ()->hide ();
     ui->decodes_table_view_->hideColumn (dcId);
     ui->decodes_table_view_->hideColumn (dcDT);
+    ui->decodes_table_view_->hideColumn (dcDF);
     ui->decodes_table_view_->hideColumn (dcMd);
     ui->decodes_table_view_->hideColumn (dcConfidence);
     ui->decodes_table_view_->hideColumn (dcLive);
@@ -316,17 +304,10 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                     trace(QString("WsjtxFrame::update_status Checking %1 stage %2 tocall %3 fromcall %4")
                           .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
 
- //                   if (dx_call == dc.fromCall.fullCall.getValue())
- //                       continue;
-
-                    if (dc.points <= 0)
+                     if (dc.points <= 0)
                         continue;
 
-//                    QString tc = dc.toCall.fullCall.getValue();
-//                    QString mc = decoder.getMyCall().fullCall.getValue();
-//                    QString st = dc.getMStage();
-
-                    if (dc.mstage == emsCQ
+                     if (dc.mstage == emsCQ
                     || (dc.mstage == emsGrid && dc.toCall == decoder.getMyCall())
                        )
                     {
@@ -483,13 +464,11 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 {
     if (!c)
     {
-        //ui->autoSelectButton->setChecked(false);
         ui->autoSelectButton->setArrowType(Qt::NoArrow);
         trace("WsjtxFrame autoselect off");
     }
     else
     {
-        //ui->autoSelectButton->setChecked(true);
         ui->autoSelectButton->setArrowType(Qt::DownArrow);
         trace("WsjtxFrame autoselect on");
     }
