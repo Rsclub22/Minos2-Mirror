@@ -316,8 +316,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                     trace(QString("WsjtxFrame::update_status Checking %1 stage %2 tocall %3 fromcall %4")
                           .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
 
-                    if (dx_call == dc.fromCall.fullCall.getValue())
-                        continue;
+ //                   if (dx_call == dc.fromCall.fullCall.getValue())
+ //                       continue;
 
                     if (dc.points <= 0)
                         continue;
