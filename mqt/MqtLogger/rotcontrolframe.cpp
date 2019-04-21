@@ -606,7 +606,8 @@ void RotControlFrame::on_ContestPageChanged()
 {
     // send rotator select to rotator app
 
-    emit selectRotator(ct->antennaName.getValue().toString());
+    if (ct)
+        emit selectRotator(ct->antennaName.getValue().toString());
 }
 
 void RotControlFrame::setRotatorBearing(const QString &s)
