@@ -461,6 +461,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int auxInstance, MinosSplitter *spl
                     && type != sctOtherMatch
                     && type != sctArchiveMatch
                     && type != sctSplit
+                    && type != sctCluster
                     && type != sctWsjtx
                     )
             {
@@ -554,7 +555,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int auxInstance, MinosSplitter *spl
                 }
                 case sctCluster:
                 {
-                    elementScrollArea->setWidget(clusterControlFrame);
+                    hs->addWidget(clusterControlFrame);
                     clusterControlFrame->setVisible(true);
                     clusterControlFrame->setContest(ct);
                     break;
