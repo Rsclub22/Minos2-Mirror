@@ -976,10 +976,10 @@ void ClusterMainWindow::getSpotsFromQueue()
             spotsList.remove(i);
             //dxSpotDataModel->insertRows(0, 1);
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+            dxSpotView->resizeRowToContents(0); // as we always show latest at the top
             trace(QString("GetSpotsFromQueue: finished loop"));
         }
         trace(QString("GetSpotsFromQueue: resize contents"));
-        dxSpotView->resizeRowsToContents();
 
         trace(QString("GetSpotsFromQueue: finished"));
     }
