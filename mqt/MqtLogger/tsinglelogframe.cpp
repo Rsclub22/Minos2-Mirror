@@ -707,13 +707,19 @@ void TSingleLogFrame::restoreColumns()
 
 void TSingleLogFrame::showQSOs()
 {
+    ScreenContact *p = GJVQSOLogFrame->getPartialContact();
+    GJVQSOLogFrame->setPartialContact(nullptr);
 
    NextContactDetailsTimerTimer( );
 
    restoreColumns();
+   logColumnsChanged = false;
 
    GJVQSOLogFrame->clearCurrentField();
    GJVQSOLogFrame->startNextEntry();
+
+   GJVQSOLogFrame->killPartial();
+   GJVQSOLogFrame->setPartialContact(p);
 
 }
 void TSingleLogFrame::on_ContestPageChanged ()
@@ -734,12 +740,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     if ( logColumnsChanged )
     {
-       ScreenContact *p = GJVQSOLogFrame->getPartialContact();
-       GJVQSOLogFrame->setPartialContact(nullptr);
        showQSOs();             // this does a restorePartial
-       logColumnsChanged = false;
-       GJVQSOLogFrame->killPartial();
-       GJVQSOLogFrame->setPartialContact(p);
     }
 
     if (splittersChanged)

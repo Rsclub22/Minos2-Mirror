@@ -935,7 +935,6 @@ void TLogContainer::AppendAdifActionExecute()
         TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
         tslf->showQSOs();
-
     }
 }
 
