@@ -189,7 +189,10 @@ decodeMessage WsjtxDecode::decode(const QString &id, QTime time, qint32 snr, flo
 
     QStringList sl = message_text.trimmed().split(' ', QString::SkipEmptyParts);
 
-    if (sl[0] == "CQ")
+    if (sl.count() == 0)
+        return dc;
+
+    if  (sl[0] == "CQ")
     {
         // repliable to "from"
         // CQ K1ABC FN42
