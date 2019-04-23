@@ -155,6 +155,7 @@ class LocSquare
       bool operator==( const LocSquare& rhs ) const;
       bool operator!=( const LocSquare& rhs ) const;
 
+      bool isClear();
 };
 
 typedef QMap < MapWrapper<LocSquare>, MapWrapper<LocSquare> > LocSquareList;
