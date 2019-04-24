@@ -17,15 +17,17 @@ class ScreenConfig : public QDialog
     Q_OBJECT
 
 public:
+    QVBoxLayout *vbl;
+
     explicit ScreenConfig(QWidget *parent, ScreenConfigFile &scf, QString curConfigName);
     ~ScreenConfig() override;
 
-    void addBefore(ScreenConfigRow *r);
-    void remove(ScreenConfigRow *r);
-    void addAfter(ScreenConfigRow *r);
+    ScreenConfigElement *baseElement = nullptr;
+
 
     bool checkOk(ScreenConfigElement *e);
 
+    void checkAddRowButton();
 public slots:
     void reject() override;
     void accept() override;
@@ -40,13 +42,15 @@ private slots:
 
 private:
     Ui::ScreenConfig *ui;
-    QVBoxLayout *vbl;
 
     ScreenConfigFile &scf;
     QString curConfigName;
 
     void doCloseEvent();
     SC getConfig();
+    void buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl);
+    void procRow(ScreenConfigRow *row, SCRow &scrow);
+    bool checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e, int &auxCount);
 };
 
 #endif // SCREENCONFIG_H

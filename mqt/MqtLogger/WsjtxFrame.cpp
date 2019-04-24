@@ -16,19 +16,6 @@
 
 #include "WsjtxFrame.h"
 #include "ui_WsjtxFrame.h"
-static QString wsjtStateIndicator[] =
-{
-    "Available",
-    "NotAvailable",
-    "NoContact"
-};
-static QString wsjtStateList[] =
-{
-    "Available",
-    "Not Available",
-    "No Contact"
-};
-
 
 WsjtxFrame::WsjtxFrame(QWidget *parent) :
     QFrame(parent)
@@ -36,6 +23,8 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
   , decodes_model_ {new DecodesModel()}
 {
     ui->setupUi(this);
+
+   // ui->testButton->setVisible(false);
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
 
@@ -62,6 +51,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->decodes_table_view_->verticalHeader ()->hide ();
     ui->decodes_table_view_->hideColumn (dcId);
     ui->decodes_table_view_->hideColumn (dcDT);
+    ui->decodes_table_view_->hideColumn (dcDF);
     ui->decodes_table_view_->hideColumn (dcMd);
     ui->decodes_table_view_->hideColumn (dcConfidence);
     ui->decodes_table_view_->hideColumn (dcLive);
@@ -197,9 +187,11 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
+    if (ct != cc || cc == nullptr)
         return;
 
+    trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
+          .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
     QColor fcolour = Qt::black;
     if (transmitting)
         fcolour = Qt::red;
@@ -286,9 +278,9 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         {
             inDecode = false;
 
-            trace("WsjtxFrame::update_status Checking decodes");
-
             int decodeEndSize = messages.size();
+            trace(QString("WsjtxFrame::update_status Checking decodes start %1 end %2").arg(decodeStartSize).arg(decodeEndSize));
+
             if (decodeEndSize > decodeStartSize)
             {
                 // iterate over the latest decodes, and select the best
@@ -309,14 +301,14 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 {
                     decodeMessage &dc = messages[i];
 
-                    if (dx_call == dc.fromCall.fullCall.getValue())
+                    trace(QString("WsjtxFrame::update_status Checking %1 stage %2 tocall %3 fromcall %4")
+                          .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
+
+                     if (dc.points <= 0)
                         continue;
 
-                    if (dc.points <= 0)
-                        continue;
-
-                    if (dc.mstage == emsCQ
-                    || (dc.mstage == emsGrid && dc.toCall.fullCall.getValue() == myCall)
+                     if (dc.mstage == emsCQ
+                    || (dc.mstage == emsGrid && dc.toCall == decoder.getMyCall())
                        )
                     {
 
@@ -325,22 +317,33 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 && dc.points > bestPoints
                               )
                         {
+                            trace(QString("WsjtxFrame::update_status Candidate %1").arg(messages[i].message));
                             bestOffset = i;
                             bestPoints = dc.points;
-                            bestCs = dc.toCall.fullCall.getValue();
+                            bestCs = dc.fromCall.fullCall.getValue();
                             currSn = dc.snr;
                         }
                         else
                         {
                             if (bestOffset >= 0
-                                && dc.toCall.fullCall.getValue() == bestCs
+                                && dc.fromCall.fullCall.getValue() == bestCs
                                 && dc.snr > currSn
                                 )
                             {
+                                trace(QString("WsjtxFrame::update_status Candidate - CS already seen %1").arg(messages[i].message));
                                 bestOffset = i;
                                 currSn = dc.snr;
                             }
+                            else
+                            {
+                                trace(QString("WsjtxFrame::update_status NOT best %1").arg(messages[i].message));
+
+                            }
                         }
+                    }
+                    else
+                    {
+                        trace(QString("WsjtxFrame::update_status NOT Candidate %1").arg(messages[i].message));
                     }
                 }
                 for (int i = decodeStartSize; i < decodeEndSize; i++)
@@ -354,7 +357,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
                 if (ui->autoSelectButton->isChecked() && bestOffset >= 0 )
                 {
-                    trace("WsjtxFrame::update_status replying to " + messages[bestOffset].message);
+                    trace("WsjtxFrame::update_status auto replying to " + messages[bestOffset].message);
+                    messages[bestOffset].autoresp = true;
                     reply(messages[bestOffset]);
                 }
             }
@@ -379,7 +383,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     // need to make use of the decode data stack, both here and in ::data
     if (!is_new)
     {
-        trace("WsjtxFrame::decode_added - old message " + message);
+        trace(QString("WsjtxFrame::decode_added - %1 old message %2").arg(time.toString("HH:mm:ss")).arg( message));
         int target_row {-1};
         for (int row = 0; row < messages.size(); ++row)
         {
@@ -412,7 +416,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     }
     else
     {
-        trace("WsjtxFrame::decode_added - new message " + message);
+        trace(QString("WsjtxFrame::decode_added - %1 new message %2 stage %3 points %4 snr %5").arg(time.toString("HH:mm:ss")).arg(message).arg(dc.getMStage()).arg(dc.points).arg(dc.snr));
         messages.push_back(dc);
     }
 
@@ -428,12 +432,9 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
 }
 void WsjtxFrame::clear_decodes (QString const& /*client_id*/)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
-        return;
+    // don't check for contest - clear is across all contests
 
-    decodes_model_->removeRows(0, messages.size());
-    messages.clear();
+    decodes_model_->clear();
 
     columns_resized_ = false;
 }
@@ -452,6 +453,8 @@ void WsjtxFrame::do_reply (QModelIndex index)
 
     decodeMessage &dc = messages[index.row()];
 
+    trace(QString("WsjtxFrame::do_reply on %1").arg(dc.message));
+
     reply(dc);
 
 
@@ -461,12 +464,48 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 {
     if (!c)
     {
-        //ui->autoSelectButton->setChecked(false);
         ui->autoSelectButton->setArrowType(Qt::NoArrow);
+        trace("WsjtxFrame autoselect off");
     }
     else
     {
-        //ui->autoSelectButton->setChecked(true);
         ui->autoSelectButton->setArrowType(Qt::DownArrow);
+        trace("WsjtxFrame autoselect on");
     }
+}
+
+void WsjtxFrame::on_testButton_clicked()
+{
+/*
+//update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
+//        , QString const& report, QString const& tx_mode, bool tx_enabled
+//        , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
+//        , QString const& de_call, QString const& de_grid, QString const& dx_grid
+//        , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
+
+
+            update_status ("test", 12345, "FT8", "","0", "FT8", false, false, true, 0, 0
+                                    , "G0GJV", "IO91", "JO01"
+                                    , false, "", false, 0);
+
+
+//void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
+//       , qint32 snr, float delta_time
+//       , quint32 delta_frequency, QString const& mode
+//       , QString const& message, bool low_confidence
+//       , bool off_air)
+
+//19:30:14.516 WsjtxFrame::decode_added - 18:30:00 new message CQ G4FTC IO91 stage CQ points 0 snr 13
+//19:30:14.580 WsjtxFrame::decode_added - 18:30:00 new message G0GJV M0GXZ IO92 stage Grid points 112 snr -24
+//19:30:14.690 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G8KWX IO91 stage Grid points 50 snr -15
+//19:30:14.733 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G3ZPB IO91 stage Grid points 50 snr -15
+            QTime now = QTime::currentTime();
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
+            decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
+            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
+
+            update_status ("test", 12345, "FT8", "","0", "FT8", false, false, false, 0, 0
+                                    , "G0GJV", "IO91", "JO01"
+                                    , false, "", false, 0);
+*/
 }

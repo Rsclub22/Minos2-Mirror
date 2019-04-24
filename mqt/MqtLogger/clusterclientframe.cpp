@@ -109,7 +109,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
 
-    ui->searchLineEdit->setValidator(new UpperCaseValidator(true));
+    ui->searchLineEdit->setValidator(new UpperCaseValidator());
     connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
 
     dxSpotDataModel = new DxSpotDataModel();
@@ -191,6 +191,7 @@ void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs,
 void ClusterClientFrame::setupDXSpotView()
 {
     dxSpotView = new QTableView();
+    dxSpotView->setFocusPolicy(Qt::NoFocus);
 
     dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
@@ -215,6 +216,8 @@ void ClusterClientFrame::setupDXSpotView()
     //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
     connect(spotVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onDXSpotVertHeaderClicked(int)));
+    dxSpotView->horizontalHeader()->setStretchLastSection(true);
+
 
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -242,6 +245,7 @@ void ClusterClientFrame::setupDXSpotView()
 void ClusterClientFrame::setupSearchSpotView()
 {
     searchView = new QTableView();
+    searchView->setFocusPolicy(Qt::NoFocus);
 
     searchSortProxyModel = new SearchSortFilterProxyModel(filterSetup);
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
@@ -264,6 +268,7 @@ void ClusterClientFrame::setupSearchSpotView()
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(searchView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onSearchSpotViewClicked(const QModelIndex &)));
     connect(searchVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onSearchSpotVertHeaderClicked(int)));
+    searchView->horizontalHeader()->setStretchLastSection(true);
 
     searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     searchView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -291,6 +296,7 @@ void ClusterClientFrame::setupSearchSpotView()
 void ClusterClientFrame::setupCallsignSpotView()
 {
     callSignView = new QTableView();
+    callSignView->setFocusPolicy(Qt::NoFocus);
 
     callSignProxyModel = new CallsignSortFilterProxyModel(filterSetup);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
@@ -314,6 +320,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(callSignView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCallsignSpotViewClicked(const QModelIndex &)));
     connect(callSignVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onCallsignSpotVertHeaderClicked(int)));
+    callSignView->horizontalHeader()->setStretchLastSection(true);
 
     callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     callSignView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -340,6 +347,8 @@ void ClusterClientFrame::setupCallsignSpotView()
 void ClusterClientFrame::setupLocatorSpotView()
 {
     locatorView = new QTableView();
+    locatorView->setFocusPolicy(Qt::NoFocus);
+
     locatorView->setItemDelegate(delegate);
     locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
@@ -363,6 +372,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     //connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(locatorView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onLocatorSpotViewClicked(const QModelIndex &)));
     connect(locatorViewVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onLocatorSpotVertHeaderClicked(int)));
+    locatorView->horizontalHeader()->setStretchLastSection(true);
 
 
     locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
@@ -600,15 +610,18 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 {
     for ( QVector<QString>::iterator i = spotQueue.begin(); i != spotQueue.end(); i++ )
     {
-       //ui->ChatMemo->append( (*i) );
        addDxSpotToTable((*i));
+       dxSpotView->resizeRowToContents(0); // as we always show latest at the top
+       searchView->resizeRowToContents(0);
+       callSignView->resizeRowToContents(0);
+       locatorView->resizeRowToContents(0);
        trace("syncSpots " + (*i));
     }
     spotQueue.clear();
-    dxSpotView->resizeRowsToContents();
-    searchView->resizeRowsToContents();
-    callSignView->resizeRowsToContents();
-    locatorView->resizeRowsToContents();
+//    dxSpotView->resizeRowsToContents();
+//    searchView->resizeRowsToContents();
+//    callSignView->resizeRowsToContents();
+//    locatorView->resizeRowsToContents();
 }
 
 
@@ -901,15 +914,24 @@ void ClusterClientFrame::purgeSpots()
         {
            purgeSpotFlag = true;
            int idx = dxSpotDataModel->rowCount() - 1;
+           bool rowsRemoved = false;
            while (idx >= 0 && dxSpotDataModel->rowCount() > 0)
            {
                if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), timeToLive))
                {
                      dxSpotDataModel->removeRows(idx, 1, QModelIndex());
+                     rowsRemoved = true;
                }
                idx--;
            }
-          purgeSpotFlag = false;
+           if (rowsRemoved)
+           {
+               dxSpotView->resizeRowsToContents();
+               searchView->resizeRowsToContents();
+               callSignView->resizeRowsToContents();
+               locatorView->resizeRowsToContents();
+           }
+           purgeSpotFlag = false;
         }
     }
 

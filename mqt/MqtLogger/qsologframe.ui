@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>755</width>
-    <height>253</height>
+    <height>254</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -234,7 +234,11 @@ to</string>
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="MGMSubModeEdit"/>
+             <widget class="QLineEdit" name="MGMSubModeEdit">
+              <property name="focusPolicy">
+               <enum>Qt::ClickFocus</enum>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>

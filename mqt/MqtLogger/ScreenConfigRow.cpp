@@ -7,15 +7,15 @@
 
 #include "ui_ScreenConfigRow.h"
 
-ScreenConfigRow::ScreenConfigRow(QWidget *parent, ScreenConfig *parentc) :
-    QFrame(parent)
+ScreenConfigRow::ScreenConfigRow(ScreenConfigElement *parentc) :
+    QFrame(nullptr)
   , ui(new Ui::ScreenConfigRow)
-  , parentDialog(parentc)
+  , parentElement(parentc)
 {
     ui->setupUi(this);
-    vbl = new QHBoxLayout(ui->scrollAreaWidgetContents);
-    vbl->setMargin(1);
-    ui->scrollAreaWidgetContents->setLayout(vbl);
+    hbl = new QHBoxLayout(ui->scrollAreaWidgetContents);
+    hbl->setMargin(1);
+    ui->scrollAreaWidgetContents->setLayout(hbl);
 }
 
 ScreenConfigRow::~ScreenConfigRow()
@@ -23,76 +23,82 @@ ScreenConfigRow::~ScreenConfigRow()
     delete ui;
 }
 
-void ScreenConfigRow::on_addBeforeButton_clicked()
+void ScreenConfigRow::on_addRowBeforeButton_clicked()
 {
-    parentDialog->addBefore(this);
+    trace("ScreenConfigRow::on_addRowBeforeButton_clicked()");
+    parentElement->addRowBefore(this);
 }
 
-void ScreenConfigRow::on_removeButton_clicked()
+void ScreenConfigRow::on_removeRowButton_clicked()
 {
-    parentDialog->remove(this);
+    trace("ScreenConfigRow::on_removeRowButton_clicked()");
+    parentElement->removeRow(this);
 }
 
-void ScreenConfigRow::on_addAfterButton_clicked()
+void ScreenConfigRow::on_addRowAfterButton_clicked()
 {
-    parentDialog->addAfter(this);
+    trace("ScreenConfigRow::on_addRowAfterButton_clicked()");
+    parentElement->addRowAfter(this);
 }
 
-void ScreenConfigRow::addLeft(ScreenConfigElement *e)
+ScreenConfigElement * ScreenConfigRow::addLeft(ScreenConfigElement *e)
 {
     int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
+    for (int i = 0; i < hbl->count(); i++)
     {
-        if (vbl->itemAt(i)->widget() == e)
+        if (hbl->itemAt(i)->widget() == e)
         {
             pos = i;
             break;
         }
     }
-    ScreenConfigElement *baseElement = new ScreenConfigElement(parentWidget(), this);
-    vbl->insertWidget( pos, baseElement);
+    ScreenConfigElement *baseElement = new ScreenConfigElement(this);
+    hbl->insertWidget( pos, baseElement);
 
+    return baseElement;
 }
 void ScreenConfigRow::remove(ScreenConfigElement *e)
 {
     int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
+    for (int i = 0; i < hbl->count(); i++)
     {
-        if (vbl->itemAt(i)->widget() == e)
+        if (hbl->itemAt(i)->widget() == e)
         {
             pos = i;
             break;
         }
     }
-    QLayoutItem *taken = vbl->takeAt(pos);
+    QLayoutItem *taken = hbl->takeAt(pos);
     if (taken)
     {
         // From the source, I don't think the deleting the layout item deletes the widget
         taken->widget()->deleteLater();
         delete taken;
     }
-    if (vbl->count() == 0)
+    if (hbl->count() == 0)
     {
-        parentDialog->remove(this);
+        parentElement->removeRow(this);
     }
 }
-void ScreenConfigRow::addRight(ScreenConfigElement *e)
+
+ScreenConfigElement *ScreenConfigRow::addRight(ScreenConfigElement *e)
 {
     int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
+    for (int i = 0; i < hbl->count(); i++)
     {
-        if (vbl->itemAt(i)->widget() == e)
+        if (hbl->itemAt(i)->widget() == e)
         {
             pos = i;
             break;
         }
     }
-    ScreenConfigElement *baseElement = new ScreenConfigElement(parentWidget(), this);
-    vbl->insertWidget( pos + 1, baseElement);
+    ScreenConfigElement *baseElement = new ScreenConfigElement(this);
+    hbl->insertWidget( pos + 1, baseElement);
 
+    return baseElement;
 }
 
 bool ScreenConfigRow::checkOk(ScreenConfigElement *e)
 {
-    return parentDialog->checkOk(e);
+    return parentElement->checkOk(e);
 }

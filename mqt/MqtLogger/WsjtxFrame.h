@@ -26,8 +26,6 @@ public:
 
     void setContest(BaseContestLog *c);
     SpecialOperatingActivity curOpMode = NONE;
-    QString myCall;
-    QString myLoc;
 
     QVector<decodeMessage> messages;
     int decodeStartSize = 0;
@@ -80,6 +78,7 @@ signals:
                                       , bool last_only = false);
 private slots:
     void on_autoSelectButton_toggled(bool);
+    void on_testButton_clicked();
 };
 
 #endif // WSJTXFRAME_H

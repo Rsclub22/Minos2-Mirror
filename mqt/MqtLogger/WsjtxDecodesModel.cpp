@@ -138,6 +138,7 @@ void DecodesModel::rx_df (int df)
 QVariant DecodesModel::data (QModelIndex const& index, int role) const
 {
 
+    const decodeMessage &msg = messages->at(index.row());
     if (role == Qt::BackgroundRole)
     {
         switch (index.column ())
@@ -169,7 +170,7 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
 
         case dcTime:
             {
-                QString secs = messages->at(index.row()).time.toString ("ss");
+                QString secs = msg.time.toString ("ss");
                 if (secs == "00")
                 {
                     return QColor(Qt::red).lighter();
@@ -198,45 +199,89 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
         switch (index.column())
         {
         case dcId:
-            return messages->at(index.row()).id;
+            return msg.id;
         case dcTime:
-            return messages->at(index.row()).time.toString ("hh:mm:ss");
+            return msg.time.toString ("hh:mm:ss");
         case dcSnr:
-            return QString::number(messages->at(index.row()).snr);
+            return QString::number(msg.snr);
         case dcDT:
-            return QString::number (static_cast<double>( messages->at(index.row()).delta_time));
+            return QString::number (static_cast<double>( msg.delta_time));
         case dcDF:
-            return QString::number(messages->at(index.row()).delta_frequency);
+            return QString::number(msg.delta_frequency);
         case dcMd:
-            return messages->at(index.row()).mode;
+            return msg.mode;
         case dcConfidence:
-            return  confidence_string (messages->at(index.row()).low_confidence) ;
+            return  confidence_string (msg.low_confidence) ;
         case dcLive:
-            return live_string (messages->at(index.row()).off_air);
+            return live_string (msg.off_air);
         case dcSeq:
-            return messages->at(index.row()).getMStage();
+            return msg.getMStage();
 
         case dcPoints:
-            return QString::number(messages->at(index.row()).points);
+        {
+            bool highlight = false;
+            if (msg.mstage != emsCQ && msg.mstage != emsGrid)
+            {
+                return "";
+            }
+            if (msg.csret == ERR_DUPCS)
+            {
+                return "(wkd)";
+            }
+            QString points = QString::number(msg.points);
+
+            if (msg.bonus)
+            {
+                highlight = true;
+                points += " (b+" + QString::number(msg.bonus) + ")";
+            }
+            if (msg.mults)
+            {
+                highlight = true;
+                points += " (m*" + QString::number(msg.mults) + ")";
+            }
+            return highlight?HtmlFontColour(Qt::red):"" + points ;
+        }
         case dcBearing:
-            return QString::number(messages->at(index.row()).bearing);
+            if (msg.mstage != emsCQ && msg.mstage != emsGrid)
+            {
+                return "";
+            }
+            if (msg.points == 0)
+            {
+                return "";
+            }
+            if (msg.csret == ERR_DUPCS)
+            {
+                return "";
+            }
+            return QString::number(msg.bearing);
         case dcDistance:
-            return QString::number(messages->at(index.row()).distance);
+            return QString::number(msg.distance);
 
         case dcFromCall:
-            return messages->at(index.row()).fromCall.realCall;
+            return msg.fromCall.realCall;
         case dcFromGrid:
-            return messages->at(index.row()).fromGrid.loc.getValue();
+            return msg.fromGrid.loc.getValue();
         case dcToCall:
-            return messages->at(index.row()).toCall.realCall;
+            return msg.toCall.realCall;
         case dcToGrid:
-            return messages->at(index.row()).toGrid.loc.getValue();
+            return msg.toGrid.loc.getValue();
 
         case dcBest:
-            return messages->at(index.row()).best?"Best":"";
-
+        {
+            if (msg.best)
+            {
+                if (msg.autoresp)
+                {
+                    return "Auto";
+                }
+                return "Best";
+            }
+            return "";
+        }
         case dcMessage:
-            return escapeXML( messages->at(index.row()).message );
+            return escapeXML( msg.message );
 
         }
     }

@@ -2116,7 +2116,7 @@ void RotatorMainWindow::setRotPresetButData(int buttonNumber, RotPresetData& edi
 
 void RotatorMainWindow::rotPresetButtonUpdate(int buttonNumber, RotPresetData& editData)
 {
-    presetButton[buttonNumber]->presetButton->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1)).arg(editData.name) );
+    presetButton[buttonNumber]->presetButton->setText(QString("%1: %2\r\n%3").arg(QString::number(buttonNumber + 1)).arg(editData.name).arg(editData.bearing) );
     QString tTipStr = "Bearing = " + editData.bearing;
     presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
 }

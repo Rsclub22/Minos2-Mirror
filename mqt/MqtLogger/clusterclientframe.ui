@@ -6,14 +6,30 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
+    <width>677</width>
     <height>375</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Frame</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label_6">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Cluster</string>
+     </property>
+    </widget>
+   </item>
    <item>
     <widget class="QLogTabWidget" name="dxSpotTab">
      <property name="focusPolicy">
@@ -26,6 +42,9 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
      <item>
       <widget class="QPushButton" name="actionsButton">
        <property name="focusPolicy">
@@ -119,7 +138,7 @@
         </widget>
        </item>
        <item>
-        <widget class="Line" name="line_4">
+        <widget class="Line" name="line_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -184,13 +203,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="Line" name="line_2">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
@@ -200,7 +212,7 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>40</width>
+         <width>191</width>
          <height>20</height>
         </size>
        </property>

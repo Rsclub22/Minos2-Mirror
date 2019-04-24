@@ -93,9 +93,8 @@ typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
 
 class UpperCaseValidator:public QValidator
 {
-    bool makeSignal;
 public:
-    UpperCaseValidator(bool makeSignal = false);
+    UpperCaseValidator();
     virtual ~UpperCaseValidator() override
     {}
     QValidator::State validate(QString & input, int & /*pos*/) const override;

@@ -55,7 +55,7 @@ void WsjtxServer::start ( )
 //}
 void WsjtxServer::log_ADIF(QString const& id, QByteArray const& ADIF)
 {
-    trace(QString("WsjtxServer::log_ADIF %1").arg(QString(ADIF)));
+    //trace(QString("WsjtxServer::log_ADIF %1").arg(QString(ADIF)));
     emit do_log_ADIF(id, ADIF);
 }
 void WsjtxServer::add_client (QString const& id, QString const& version, QString const& revision)
@@ -79,7 +79,7 @@ void WsjtxServer::update_status (QString const& id, Frequency f, QString const& 
     emit do_update_status(id, f, mode, dx_call, report, tx_mode, tx_enabled, transmitting, decoding, rx_df, tx_df,
                           de_call, de_grid, dx_grid, watchdog_timeout, sub_mode, fast_mode, special_op_mode);
 
-    trace(QString("WsjtxServer::update_status transmitting %1 decoding %2").arg(transmitting).arg(decoding));
+    //trace(QString("WsjtxServer::update_status transmitting %1 decoding %2").arg(transmitting).arg(decoding));
 
 }
 
@@ -87,7 +87,7 @@ void WsjtxServer::decode_added (bool is_new, QString const& client_id, QTime tim
                                  , float delta_time, quint32 delta_frequency, QString const& mode
                                  , QString const& message, bool low_confidence, bool off_air)
 {
-    trace(QString("WsjtxServer::decode_added %1").arg(message));
+    //trace(QString("WsjtxServer::decode_added %1").arg(message));
     emit do_decode_added(is_new, client_id, time, snr, delta_time, delta_frequency, mode, message, low_confidence, off_air);
 }
 void WsjtxServer::clear_decodes (QString const& client_id)

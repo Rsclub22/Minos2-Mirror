@@ -23,6 +23,7 @@ public:
     QTime decodeTime;
     QString message;
     bool best = false;
+    bool autoresp = false;
     Callsign toCall;
     Locator toGrid;
     Callsign fromCall;
@@ -31,6 +32,9 @@ public:
     int bearing = 0;
     int distance = 0;
     int points = 0;
+    int mults = 0;
+    int bonus = 0;
+    int csret = CS_OK;
 
     // extra info needed for reply
 

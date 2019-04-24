@@ -50,13 +50,35 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
     {
         mShowMessage(reqErrs, this);
     }
+    formShowTimer.setSingleShot(true);
+    connect(&formShowTimer, SIGNAL(timeout()), this, SLOT(on_formShown()));
+    formShowTimer.start(100);
 
     checkEnabled();
 
     connect(&runTimer, SIGNAL(timeout()), this, SLOT(checkEnabled()));
     runTimer.start(1000);
 }
+void StartConfig::on_formShown()
+{
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    if (minosConfig->elelist.size() == 0 )
+    {
+        // configure a new server
+        on_newElementButton_clicked();
 
+        QSharedPointer<RunConfigElement> c(new RunConfigElement());
+        c->runType = RunLocal;
+        c->appType = "Server";
+        c->rEnabled = true;
+        elementFrames[0]->setElement(c);
+        elementFrames[0]->on_appTypeCombo_currentIndexChanged("Server");
+
+        // and start the next one
+        on_newElementButton_clicked();
+
+    }
+}
 StartConfig::~StartConfig()
 {
     delete ui;

@@ -44,6 +44,9 @@ void LocTreeFrame::reInitialiseLocators()
         QSharedPointer<LocSquare> l = ct->locs.itemAt(k);
         if (!l)
             break;
+
+        if (l->isClear())
+            continue;
         QString locStart = l ->loc;
         it->setText(0, locStart);
         it->setExpanded(true);

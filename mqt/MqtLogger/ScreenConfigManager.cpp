@@ -182,7 +182,7 @@ void ScreenConfigManager::on_deleteButton_clicked()
     {
         defaultConfigName = defaultLayoutName;
     }
-    curConfigName = defaultLayoutName;
+    curConfigName = defaultConfigName;
     showDetails();
 
 }

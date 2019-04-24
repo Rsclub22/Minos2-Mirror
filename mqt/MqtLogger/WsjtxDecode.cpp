@@ -104,23 +104,21 @@ bool decodeMessage::checkAsContact()
     scc.time = dtg(true);
 
     scc.checkScreenContact();
+    csret = scc.cs.valRes;
     if (scc.screenQSOValid)
     {
         scc.score();
         points = scc.contactScore;
         distance = points;
         bearing = scc.bearing;
-        if (scc.bonus)
-        {
-            points += scc.bonus;
-        }
+        mults = 0;
         if (scc.multCount >= 1)
         {
-            ContestScore cs(cc);
-            cc->getScoresTo(cs, QDateTime::currentDateTime());
-            int ctmultct = cs.nmults;
-
-            points = (cs.contestScore + points) * ctmultct + points * cs.nmults;
+            mults = scc.multCount;
+        }
+        if (scc.bonus)
+        {
+            bonus = scc.bonus;
         }
         return true;
     }
@@ -191,7 +189,10 @@ decodeMessage WsjtxDecode::decode(const QString &id, QTime time, qint32 snr, flo
 
     QStringList sl = message_text.trimmed().split(' ', QString::SkipEmptyParts);
 
-    if (sl[0] == "CQ")
+    if (sl.count() == 0)
+        return dc;
+
+    if  (sl[0] == "CQ")
     {
         // repliable to "from"
         // CQ K1ABC FN42

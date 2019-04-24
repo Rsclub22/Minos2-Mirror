@@ -473,7 +473,7 @@ QString ContestContact::getADIFLine()
             if ( smode.compare( hamlibData::FM ) == 0 )
                 outstr += makeADIFField( "MODE", "FM" );
             else
-                if ( smode.compare( hamlibData::MGM) && !smgmSubmode.trimmed().isEmpty())
+                if ( smode.compare( hamlibData::MGM) == 0 && !smgmSubmode.trimmed().isEmpty())
                      outstr += makeADIFField( "MODE", smgmSubmode);
                 else
                     outstr += makeADIFField( "MODE", mode.getValue() );

@@ -20,6 +20,7 @@ public:
 private:
     Ui::StartConfig *ui;
     QTimer runTimer;
+    QTimer formShowTimer;
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
@@ -47,6 +48,7 @@ private slots:
     void on_newElementButton_clicked();
 
     void checkEnabled();
+    void on_formShown();
 public slots:
     void on_CancelButton_clicked();
 
