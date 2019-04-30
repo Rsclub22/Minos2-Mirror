@@ -24,7 +24,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-   // ui->testButton->setVisible(false);
+    ui->testButton->setVisible(false);
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
 
