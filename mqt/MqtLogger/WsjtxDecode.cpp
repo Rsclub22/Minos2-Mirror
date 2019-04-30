@@ -57,7 +57,7 @@ static void addCall(const Callsign &c, const Locator &l)
     }
 }
 
-static const Locator &getCallLoc(const Callsign &c)
+const Locator &WsjtGetCallLoc(const Callsign &c)
 {
     if (GridCallMap.contains(c.realCall))
     {
@@ -181,11 +181,18 @@ decodeMessage WsjtxDecode::decode(const QString &id, QTime time, qint32 snr, flo
     dc.delta_time = delta_time;
     dc.delta_frequency = delta_frequency;
     dc.mode = mode;
-    dc.message= message_text.trimmed();
     dc.low_confidence = low_confidence;
     dc.off_air = off_air;
     
     // there shouldn't be any spare spaces but...
+
+    int spoff = message_text.trimmed().indexOf("   ");
+    if (spoff > 0)
+        dc.message = message_text.left(spoff + 1).trimmed();
+    else
+    {
+        dc.message= message_text.trimmed();
+    }
 
     QStringList sl = message_text.trimmed().split(' ', QString::SkipEmptyParts);
 
@@ -329,12 +336,12 @@ decodeMessage WsjtxDecode::decode(const QString &id, QTime time, qint32 snr, flo
 
     if (dc.fromCall.valRes == CS_OK && dc.fromGrid.valRes != LOC_OK && dc.fromGrid.valRes != LOC_PARTIAL)
     {
-        dc.fromGrid = getCallLoc(dc.fromCall);
+        dc.fromGrid = WsjtGetCallLoc(dc.fromCall);
     }
     if (dc.toCall.valRes == CS_OK)
     {
         // we never have toGrid
-        dc.toGrid = getCallLoc(dc.toCall);
+        dc.toGrid = WsjtGetCallLoc(dc.toCall);
     }
     if (dc.fromCall.realCall != myCall.realCall)
     {

@@ -254,6 +254,10 @@ class Callsign
       Callsign( const QString &orig );
       ~Callsign();
       bool operator==( const Callsign& rhs ) const;
+      bool operator!=( const Callsign& rhs ) const
+      {
+          return !(rhs == *this);
+      }
       bool operator<( const Callsign& rhs ) const;
 
       int validate( );

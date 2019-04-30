@@ -156,6 +156,12 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
     for ( int i = spoint; i != ct->ctList.count(); i++ )
     {
         QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
+        if (bct->loc.loc.getValue().isEmpty())
+        {
+            Callsign cs = bct->cs;
+            const Locator loc = WsjtGetCallLoc(cs);
+            bct->loc = loc;
+        }
         bct->commonSave(bct);
     }
     ct->commonSave( false );
@@ -180,6 +186,31 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
         return;
     id_.clear();
 }
+class PointBonusMult
+{
+    int points = 0;
+    int bonus = 0;
+    int mults = 0;
+public:
+    PointBonusMult()
+    {
+
+    }
+    PointBonusMult(decodeMessage &dc):points(dc.points), bonus(dc.bonus), mults(dc.mults)
+    {
+
+    }
+    bool operator>(PointBonusMult &rhs)
+    {
+        if (mults > rhs.mults)
+            return true;
+        if (points + bonus > rhs.points + rhs.bonus)
+            return true;
+
+        return false;
+    }
+};
+
 void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
@@ -265,20 +296,19 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     ui->auto_off_button_->setEnabled (tx_enabled);
     ui->halt_tx_button_->setEnabled (transmitting);
 
-    if (autoEnabled)
+
+    if (decoding && !inDecode)
     {
-        static bool inDecode = false;
+        inDecode = true;
+        decodeStartSize = messages.size();
+    }
+    if (inDecode && decoding == false)
+    {
+        inDecode = false;
 
-        if (decoding && !inDecode)
+        int decodeEndSize = messages.size();
+        if (autoEnabled)
         {
-            inDecode = true;
-            decodeStartSize = messages.size();
-        }
-        if (inDecode && decoding == false)
-        {
-            inDecode = false;
-
-            int decodeEndSize = messages.size();
             trace(QString("WsjtxFrame::update_status Checking decodes start %1 end %2").arg(decodeStartSize).arg(decodeEndSize));
 
             if (decodeEndSize > decodeStartSize)
@@ -286,7 +316,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 // iterate over the latest decodes, and select the best
 
                 int bestOffset = -1;
-                int bestPoints = -1;
+                PointBonusMult bestPoints;
                 QString bestCs;
                 int currSn = -100;
 
@@ -300,6 +330,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 for (int i = decodeStartSize; i < decodeEndSize; i++)
                 {
                     decodeMessage &dc = messages[i];
+                    if (dc.oldmsg)
+                        continue;
 
                     trace(QString("WsjtxFrame::update_status Checking %1 stage %2 tocall %3 fromcall %4")
                           .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
@@ -308,18 +340,21 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                         continue;
 
                      if (dc.mstage == emsCQ
-                    || (dc.mstage == emsGrid && dc.toCall == decoder.getMyCall())
+                             || (dc.mstage == ems73 && dc.toCall != decoder.getMyCall())
+                             || (dc.mstage == emsRRR && dc.toCall != decoder.getMyCall())
+                             || (dc.mstage == emsGrid && dc.toCall == decoder.getMyCall())
                        )
                     {
+                         PointBonusMult pbv(dc);
 
                         if ( dc.snr >= minsnr
                                 && dc.points > minpoints
-                                && dc.points > bestPoints
+                                && pbv > bestPoints
                               )
                         {
                             trace(QString("WsjtxFrame::update_status Candidate %1").arg(messages[i].message));
                             bestOffset = i;
-                            bestPoints = dc.points;
+                            bestPoints = pbv;
                             bestCs = dc.fromCall.fullCall.getValue();
                             currSn = dc.snr;
                         }
@@ -379,6 +414,16 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     decodeMessage dc = decoder.decode(id, time, snr, delta_time
                                       , delta_frequency, mode
                                       , message, low_confidence, off_air);
+
+    if (lastTime != dc.time)
+    {
+        lastcol++;
+        lastcol %= 4;
+        lastTime = dc.time;
+    }
+
+    dc.colOffset = lastcol;
+    dc.oldmsg = !is_new;
 
     // need to make use of the decode data stack, both here and in ::data
     if (!is_new)

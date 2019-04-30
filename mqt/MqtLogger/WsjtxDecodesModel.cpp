@@ -170,20 +170,19 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
 
         case dcTime:
             {
-                QString secs = msg.time.toString ("ss");
-                if (secs == "00")
+                if (msg.colOffset == 0)
                 {
                     return QColor(Qt::red).lighter();
                 }
-                else if (secs == "15")
+                else if (msg.colOffset  == 1)
                 {
                     return QColor(Qt::green).lighter();
                 }
-                else if (secs == "30")
+                else if (msg.colOffset  == 2)
                 {
                     return QColor(Qt::blue).lighter();
                 }
-                else if (secs == "45")
+                else if (msg.colOffset  == 3)
                 {
                     return QColor(Qt::yellow).lighter();
                 }
@@ -220,13 +219,21 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
         case dcPoints:
         {
             bool highlight = false;
-            if (msg.mstage != emsCQ && msg.mstage != emsGrid)
+
+            if (msg.mstage != emsCQ && msg.mstage != emsGrid && msg.mstage != ems73 && msg.mstage != emsRRR )
             {
                 return "";
             }
             if (msg.csret == ERR_DUPCS)
             {
                 return "(wkd)";
+            }
+            if ((msg.mstage == ems73 || msg.mstage == emsRRR))
+            {
+                if (msg.toCall == call_ )
+                {
+                    return "";
+                }
             }
             QString points = QString::number(msg.points);
 
@@ -240,7 +247,8 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
                 highlight = true;
                 points += " (m*" + QString::number(msg.mults) + ")";
             }
-            return highlight?HtmlFontColour(Qt::red):"" + points ;
+            QString pts = (highlight?HtmlFontColour(Qt::red):QString()) + points;
+            return  pts;
         }
         case dcBearing:
             if (msg.mstage != emsCQ && msg.mstage != emsGrid)
@@ -270,6 +278,10 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
 
         case dcBest:
         {
+            if (msg.oldmsg)
+            {
+                return "(old)";
+            }
             if (msg.best)
             {
                 if (msg.autoresp)
