@@ -40,7 +40,6 @@ void LocTreeFrame::reInitialiseLocators()
 
     for (int k = 0; k < ct->locs.llist.size(); k++)
     {
-        QTreeWidgetItem *it = new QTreeWidgetItem(ui->LocTree);
         QSharedPointer<LocSquare> l = ct->locs.itemAt(k);
         if (!l)
             break;
@@ -48,6 +47,8 @@ void LocTreeFrame::reInitialiseLocators()
         if (l->isClear())
             continue;
         QString locStart = l ->loc;
+
+        QTreeWidgetItem *it = new QTreeWidgetItem(ui->LocTree);
         it->setText(0, locStart);
         it->setExpanded(true);
 
