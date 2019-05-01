@@ -435,7 +435,7 @@ void TSingleLogFrame::setCurScreenLayout(const QString &value)
     ct->screenLayout.setValue(value);
     ct->commonSave(false);
 }
-void TSingleLogFrame::buildRow(SCRow &scrow, int auxInstance, MinosSplitter *splitterParent)
+void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent)
 {
     if (scrow.elements.count())
     {
