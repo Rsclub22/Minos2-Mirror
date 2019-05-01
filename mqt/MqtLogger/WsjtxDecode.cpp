@@ -199,7 +199,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, QTime time, qint32 snr, flo
     if (sl.count() == 0)
         return dc;
 
-    if  (sl[0] == "CQ")
+    if  (sl[0] == "CQ" || sl[0] == "QRZ")
     {
         // repliable to "from"
         // CQ K1ABC FN42

@@ -153,14 +153,15 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
     }
     ct->scanContest();
     ct->validateLoc();
-    for ( int i = spoint; i != ct->ctList.count(); i++ )
+    for ( int i = spoint; i < ct->ctList.count(); i++ )
     {
         QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
         if (bct->loc.loc.getValue().isEmpty())
         {
             Callsign cs = bct->cs;
             const Locator loc = WsjtGetCallLoc(cs);
-            bct->loc = loc;
+            bct->loc.loc.setValue(loc.loc);
+            trace(QString("loc for %1 is empty; filling in with %2").arg(cs.fullCall.getValue()).arg(loc.loc.getValue()));
         }
         bct->commonSave(bct);
     }
