@@ -19,6 +19,25 @@ void MonitorParameters::setStatsPeriod2( int p )
 {
    p2 = p;
 }
+bool MonitorParameters::getAllowLoc4()
+{
+   BaseContestLog * ct = monitorMain->getCurrentContest();
+   if ( !ct )
+   {
+      return false;
+   }
+   return ct->allowLoc4.getValue();
+}
+bool MonitorParameters::getAllowLoc8()
+{
+   BaseContestLog * ct = monitorMain->getCurrentContest();
+   if ( !ct )
+   {
+      return false;
+   }
+   return ct->allowLoc8.getValue();
+}
+
 bool MonitorParameters::yesNoMessage( QWidget* Owner, const QString &mess )
 {
    return mShowYesNoMessage( Owner, mess );
