@@ -95,10 +95,15 @@ TMatchThread::TMatchThread()
    connect(&MinosLoggerEvents::mle, SIGNAL(DistrictSelect(QString,BaseContestLog*)), this, SLOT(on_DistrictSelect(QString,BaseContestLog*)));
    connect(&MinosLoggerEvents::mle, SIGNAL(LocSelect(QString,BaseContestLog*)), this, SLOT(on_LocatorSelect(QString,BaseContestLog*)));
 }
+
+QString TMatchThread::getBaseName() const
+{
+    return baseName;
+}
 void TMatchThread::FinishMatchThread()
 {
-   if ( matchThread )
-   {
+    if ( matchThread )
+    {
       matchThread->Terminate();
       trace( "WaitFor TMatchThread" );
       matchThread->wait(ULONG_MAX);
@@ -663,9 +668,12 @@ bool ThisLogMatcher::idleMatch( int limit )
                 matchStarted = false;
                 setMatchRequired( false );
 
+                QString baseName = TMatchThread::getMatchThread() ->getBaseName();
                 BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
-                if ( bool( ct ) && ( mp != Country )  && ( mp != District )  && ( mp != Locator ) )
+                if (baseName == "Log" && bool( ct ) && ( mp != Country )  && ( mp != District )  && ( mp != Locator ) )
+                {
                    addMatch( ct->DupSheet.getCurDup(), ct );	// in case it isn't already
+                }
 
                 QString buff;
                 // now make it display
