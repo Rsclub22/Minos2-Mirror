@@ -24,6 +24,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    remove_client(QString());    // kill off the ratshit
     ui->testButton->setVisible(false);
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
@@ -182,9 +183,20 @@ void WsjtxFrame::add_client (QString const& id, QString const& /*version*/, QStr
 
 void WsjtxFrame::remove_client (QString const& /*id*/)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
-        return;
+    ui->dx_label_->clear();
+    ui->rx_df_label_->clear();
+    ui->tx_df_label_->clear();
+    ui->report_label_->clear();
+    ui->auto_off_button_->setEnabled (false);
+    ui->halt_tx_button_->setEnabled (false);
+    ui->de_label_->clear();
+    ui->frequency_label_->clear();
+    ui->specialOpMode->clear();
+    ui->mode_label_->clear();
+    ui->bandErrorLabel->clear();
+    ui->replyto_label->clear();
+    if (ui->autoSelectButton->isChecked())
+        ui->autoSelectButton->toggle();
     id_.clear();
 }
 class PointBonusMult
@@ -296,7 +308,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     ui->report_label_->setText ("SNR: " + report);
     ui->auto_off_button_->setEnabled (tx_enabled);
     ui->halt_tx_button_->setEnabled (transmitting);
-
 
     if (decoding && !inDecode)
     {
