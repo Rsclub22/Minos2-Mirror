@@ -38,7 +38,6 @@ private:
     QSharedPointer<ContestDetailsTransferObject> ct;
     LoggerContestLog *inputContest = nullptr;
 
-    ExportType expformat;
     bool minosSave;
     void getContestOperators();
 };

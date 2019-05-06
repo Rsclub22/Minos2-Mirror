@@ -64,67 +64,49 @@
       <item>
        <widget class="QGroupBox" name="EntryGroupBox">
         <property name="title">
-         <string>File Format</string>
+         <string>File Formats - check all that are required</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QRadioButton" name="enrb0">
+          <widget class="QCheckBox" name="enrb0">
            <property name="text">
             <string>Reg1Test (Entry)</string>
            </property>
-           <attribute name="buttonGroup">
-            <string notr="true">EntryGroup</string>
-           </attribute>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="enrb1">
+          <widget class="QCheckBox" name="enrb1">
            <property name="text">
             <string>ADIF (Export)</string>
            </property>
-           <attribute name="buttonGroup">
-            <string notr="true">EntryGroup</string>
-           </attribute>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="enrb2">
+          <widget class="QCheckBox" name="enrb2">
            <property name="text">
             <string>G0GJV (Export)</string>
            </property>
-           <attribute name="buttonGroup">
-            <string notr="true">EntryGroup</string>
-           </attribute>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="enrb3">
+          <widget class="QCheckBox" name="enrb3">
            <property name="text">
             <string>Minos (Export)</string>
            </property>
-           <attribute name="buttonGroup">
-            <string notr="true">EntryGroup</string>
-           </attribute>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="enrb4">
+          <widget class="QCheckBox" name="enrb4">
            <property name="text">
             <string>KML (Google Earth)</string>
            </property>
-           <attribute name="buttonGroup">
-            <string notr="true">EntryGroup</string>
-           </attribute>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="enrb5">
+          <widget class="QCheckBox" name="enrb5">
            <property name="text">
             <string>Printable (Export)</string>
            </property>
-           <attribute name="buttonGroup">
-            <string notr="true">EntryGroup</string>
-           </attribute>
           </widget>
          </item>
         </layout>
@@ -184,7 +166,4 @@
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="EntryGroup"/>
- </buttongroups>
 </ui>

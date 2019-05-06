@@ -128,21 +128,14 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
 
     ui->OptionsScrollBox->verticalHeader()->show();
 
-    ui->EntryGroup->setId( ui->enrb0, 0 );
-    ui->EntryGroup->setId( ui->enrb1, 1 );
-    ui->EntryGroup->setId( ui->enrb2, 2 );
-    ui->EntryGroup->setId( ui->enrb3, 3 );
-    ui->EntryGroup->setId( ui->enrb4, 4 );
-    ui->EntryGroup->setId( ui->enrb5, 5 );
-
     if ( minosSave )
     {
-        ui->EntryGroup->buttons().at( EMINOS ) ->setChecked( true );
+        ui->enrb3->setChecked( true );
         ui->EntryGroupBox->setVisible( false);
     }
     else
     {
-        ui->EntryGroup->buttons().at( EREG1TEST ) ->setChecked( true );
+        ui->enrb0->setChecked( true );
     }
 }
 
@@ -207,9 +200,6 @@ void TEntryOptionsForm::on_CloseButton_clicked()
     ct->entPhone.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->entEMail.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
 
-    //enum ExportType {EREG1TEST, EADIF, EG0GJV, EMINOS, EKML};
-    expformat = static_cast< ExportType> (ui->EntryGroup->checkedId());
-
     accept();
 }
 
@@ -251,103 +241,140 @@ void TEntryOptionsForm::getContestOperators()
 
 QString TEntryOptionsForm::doFileSave( )
 {
-    QString InitialDir = ExtractFilePath( ct->cfileName );
-
     QString expName;
-    QString fname = ExtractFileName( ct->cfileName );
-    QString ext = ExtractFileExt( ct->cfileName );
-    fname = fname.left( fname.size() - ext.size() );
-
-    //enum ExportType {EREG1TEST, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
-    QString defext;
-    QString filter;
-    switch ( expformat )
+    QVector<ExportType> exptypes;
+    if (ui->enrb0->isChecked())
     {
-    case EG0GJV:
-        defext = "gjv";
-        filter = "GJV ContestLog files (*.gjv);;All Files (*.*);;" ;
-        break;
-    case EMINOS:
-        defext = "minos";
-        filter = "Minos ContestLog files (*.minos *.Minos);;All Files (*.*);;" ;
-        break;
-    case EADIF:
-        defext = "adi";
-        filter = "ADIF files (*.adi);;All Files (*.*);;" ;
-        break;
-    case EKML:
-        defext = "kml";
-        filter = "KML(GoogleEarth) files (*.kml);;All Files (*.*);;" ;
-        break;
-    case EREG1TEST:
-        defext = "edi";
-        ct->mycall.valRes = CS_NOT_VALIDATED;
-        ct->mycall.validate( );
-        filter = "Region 1 EDI files (*.edi);;All Files (*.*);;" ;
-        break;
-    case EPRINTFILE:
-    {
-        defext = "txt";
-        filter = "Text output (*.txt);;All Files (*.*);;" ;
+        exptypes.push_back(EREG1TEST);
     }
-        break;
+    if (ui->enrb1->isChecked())
+    {
+        exptypes.push_back(EADIF);
+    }
+    if (ui->enrb2->isChecked())
+    {
+        exptypes.push_back(EG0GJV);
+    }
+    if (ui->enrb3->isChecked())
+    {
+        exptypes.push_back(EMINOS);
+    }
+    if (ui->enrb4->isChecked())
+    {
+        exptypes.push_back(EKML);
+    }
+    if (ui->enrb5->isChecked())
+    {
+        exptypes.push_back(EPRINTFILE);
     }
 
-    bool Ok = false;
-
-    while (!Ok)
+    foreach(ExportType expformat, exptypes)
     {
-        QString fileName = QFileDialog::getSaveFileName( this,
-                                                         "Save contest as...",
-                                                         InitialDir + "/" + fname + "." + defext,
-                                                         filter);
-//                                                         ,
-//                                                         0,
-//                                                         QFileDialog::DontConfirmOverwrite
-//                                                         );
-        if ( !fileName.isEmpty() )
+        QString InitialDir = ExtractFilePath( ct->cfileName );
+
+        QString fname = ExtractFileName( ct->cfileName );
+        QString ext = ExtractFileExt( ct->cfileName );
+        fname = fname.left( fname.size() - ext.size() );
+
+        //enum ExportType {EREG1TEST, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
+        QString defext;
+        QString filter;
+        QString title;
+
+        switch ( expformat )
         {
-
-            expName = fileName;
-
-            // open the export file
-            if ( FileAccessible(expName) && !FileWriteable(expName) )
-            {
-                    MinosParameters::getMinosParameters() ->mshowMessage( "File is Read Only", this );
-                    continue;
-            }
-            if ( MinosParameters::getMinosParameters() ->isContestOpen( expName ) )
-            {
-                // then try again...
-                continue;
-            }
-
-            QIODevice::OpenMode om = QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered;
-            QSharedPointer<QFile> contestFile(new QFile(expName));
-
-            if (!contestFile->open(om))
-            {
-               QString lerr = contestFile->errorString();
-               QString emess = "Failed to open Contest export file " + expName + " : " + lerr;
-               MinosParameters::getMinosParameters() ->mshowMessage( emess, this );
-               continue;
-            }
-
-
-            ct->setToContest(inputContest);
-            int ret = inputContest->export_contest( contestFile, expformat, ui->NACSerials->isChecked() );
-            contestFile->close();
-
-            if ( ret == -1 )
-            {
-                QFile::remove( expName );		// failure response, so delete file again
-                expName = "";
-            }
+        case EG0GJV:
+            defext = "gjv";
+            filter = "GJV ContestLog files (*.gjv);;All Files (*.*);;" ;
+            title = "Save contest in GJV format as...";
+            break;
+        case EMINOS:
+            defext = "minos";
+            filter = "Minos ContestLog files (*.minos *.Minos);;All Files (*.*);;" ;
+            title = "Save contest in .minos format as...";
+            break;
+        case EADIF:
+            defext = "adi";
+            filter = "ADIF files (*.adi);;All Files (*.*);;" ;
+            title = "Save contest in ADIF format as...";
+            break;
+        case EKML:
+            defext = "kml";
+            filter = "KML(GoogleEarth) files (*.kml);;All Files (*.*);;" ;
+            title = "Save contest in KML(GoogleEarth) format as...";
+            break;
+        case EREG1TEST:
+            defext = "edi";
+            ct->mycall.valRes = CS_NOT_VALIDATED;
+            ct->mycall.validate( );
+            filter = "Region 1 EDI files (*.edi);;All Files (*.*);;" ;
+            title = "Save contest in Region 1 EDI file format as...";
+            break;
+        case EPRINTFILE:
+        {
+            defext = "txt";
+            filter = "Text output (*.txt);;All Files (*.*);;" ;
+            title = "Save contest in ptintable text format as...";
+        }
             break;
         }
-        else
+
+        bool Ok = false;
+
+        while (!Ok)
         {
-            return "";
+            QString fileName = QFileDialog::getSaveFileName( this,
+                                                             title,
+                                                             InitialDir + "/" + fname + "." + defext,
+                                                             filter);
+    //                                                         ,
+    //                                                         0,
+    //                                                         QFileDialog::DontConfirmOverwrite
+    //                                                         );
+            if ( !fileName.isEmpty() )
+            {
+
+                expName = fileName;
+
+                // open the export file
+                if ( FileAccessible(expName) && !FileWriteable(expName) )
+                {
+                        MinosParameters::getMinosParameters() ->mshowMessage( "File is Read Only", this );
+                        continue;
+                }
+                if ( MinosParameters::getMinosParameters() ->isContestOpen( expName ) )
+                {
+                    // then try again...
+                    continue;
+                }
+
+                QIODevice::OpenMode om = QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Unbuffered;
+                QSharedPointer<QFile> contestFile(new QFile(expName));
+
+                if (!contestFile->open(om))
+                {
+                   QString lerr = contestFile->errorString();
+                   QString emess = "Failed to open Contest export file " + expName + " : " + lerr;
+                   MinosParameters::getMinosParameters() ->mshowMessage( emess, this );
+                   continue;
+                }
+
+
+                ct->setToContest(inputContest);
+                int ret = inputContest->export_contest( contestFile, expformat, ui->NACSerials->isChecked() );
+                contestFile->close();
+
+                if ( ret == -1 )
+                {
+                    QFile::remove( expName );		// failure response, so delete file again
+                    expName = "";
+                }
+                break;
+            }
+            else
+            {
+                break;;
+            }
         }
     }
     return expName;
