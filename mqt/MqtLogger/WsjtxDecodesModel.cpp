@@ -52,23 +52,23 @@ public:
 };
 
 DecodeHeading const headings[dcMaxVal] = {
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Client"), Qt::AlignRight},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Client"), Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Time"), Qt::AlignRight},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Snr"), Qt::AlignRight},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "DT"), Qt::AlignRight},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "DF"), Qt::AlignRight},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Md"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Confidence"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Live"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Time"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Snr"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "DT"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "DF"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Md"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Confidence"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Live"),Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Seq"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "points"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "bearing"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "distance"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Seq"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "points"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "brg"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "distance"),Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "From call"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "From grid"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Call"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Grid"), Qt::AlignLeft},
     {QT_TRANSLATE_NOOP ("DecodesModel", "To Call"), Qt::AlignLeft},
     {QT_TRANSLATE_NOOP ("DecodesModel", "To Grid"), Qt::AlignLeft},
     {QT_TRANSLATE_NOOP ("DecodesModel", "Best"), Qt::AlignLeft},
@@ -251,7 +251,7 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             return  pts;
         }
         case dcBearing:
-            if (msg.mstage != emsCQ && msg.mstage != emsGrid)
+            if (msg.mstage != emsCQ && msg.mstage != emsGrid && msg.mstage != ems73 && msg.mstage != emsRRR)
             {
                 return "";
             }

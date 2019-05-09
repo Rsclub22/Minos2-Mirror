@@ -39,6 +39,7 @@ private:
     bool columns_resized_ = false;
     HtmlDelegate *delegate = nullptr;
     bool autoEnabled = false;
+    bool showTest = false;
     bool inDecode = false;
     int lastcol = 0;
     QTime lastTime;

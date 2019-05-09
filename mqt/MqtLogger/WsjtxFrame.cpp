@@ -24,11 +24,13 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->splitter->setStretchFactor(0, 2);
+    ui->splitter->setStretchFactor(1, 1);
     remove_client(QString());    // kill off the ratshit
-    ui->testButton->setVisible(false);
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXTestEnabled, showTest );
+    ui->testButton->setVisible(showTest);
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
-
     ui->autoSelectReplyFrame->setVisible(autoEnabled);
 
     int lcf;
@@ -61,7 +63,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     //ui->decodes_table_view_->hideColumn (dcBearing);
     ui->decodes_table_view_->hideColumn (dcDistance);
     ui->decodes_table_view_->hideColumn (dcFromCall);
-    ui->decodes_table_view_->hideColumn (dcFromGrid);
+    //ui->decodes_table_view_->hideColumn (dcFromGrid);
     ui->decodes_table_view_->hideColumn (dcToCall);
     ui->decodes_table_view_->hideColumn (dcToGrid);
 
@@ -351,10 +353,12 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                      if (dc.points <= 0)
                         continue;
 
+                     bool auto73 = ui->autosel73cb->isChecked();
+                     bool toMyCall = (dc.toCall == decoder.getMyCall());
                      if (dc.mstage == emsCQ
-                             || (dc.mstage == ems73 && dc.toCall != decoder.getMyCall())
-                             || (dc.mstage == emsRRR && dc.toCall != decoder.getMyCall())
-                             || (dc.mstage == emsGrid && dc.toCall == decoder.getMyCall())
+                             || (auto73 && dc.mstage == ems73 && !toMyCall)
+                             || (auto73 && dc.mstage == emsRRR && !toMyCall)
+                             || (dc.mstage == emsGrid && toMyCall)
                        )
                     {
                          PointBonusMult pbv(dc);
@@ -498,7 +502,7 @@ void WsjtxFrame::clear_decodes (QString const& /*client_id*/)
 void WsjtxFrame::reply(decodeMessage &dc)
 {
     ui->autoSelectButton->setChecked(false);
-    ui->autoSelectButton->setArrowType(Qt::NoArrow);
+    //ui->autoSelectButton->setArrowType(Qt::NoArrow);
     WsjtxServer::getWsjtxServer()->reply(dc.id, dc.time, dc.snr, dc.delta_time, dc.delta_frequency, dc.mode, dc.message, dc.low_confidence,  QApplication::keyboardModifiers () >> 24);
     ui->replyto_label->setText("Replying to: " + dc.message);
 }
@@ -521,19 +525,19 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 {
     if (!c)
     {
-        ui->autoSelectButton->setArrowType(Qt::NoArrow);
+        //ui->autoSelectButton->setArrowType(Qt::NoArrow);
         trace("WsjtxFrame autoselect off");
     }
     else
     {
-        ui->autoSelectButton->setArrowType(Qt::DownArrow);
+        //ui->autoSelectButton->setArrowType(Qt::DownArrow);
         trace("WsjtxFrame autoselect on");
     }
 }
 
 void WsjtxFrame::on_testButton_clicked()
 {
-/*
+
 //update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
 //        , QString const& report, QString const& tx_mode, bool tx_enabled
 //        , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
@@ -560,9 +564,10 @@ void WsjtxFrame::on_testButton_clicked()
             decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
             decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
             decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
+            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB RR73", false, true);
 
             update_status ("test", 12345, "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0);
-*/
+
 }

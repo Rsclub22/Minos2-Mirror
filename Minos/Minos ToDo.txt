@@ -7,6 +7,8 @@ Switch between bands in Minos (hitting known problem of second contest not conne
 
 Restart WSJT-X (with Minos on different band from original) Minos switches WSJT-X to its currently selected band but message stays until WSJT-X switched to original band (from self or Minos)
 //===========================================================================
+Done
+
 On the produce entry window can it stay open until you cancel (or "done") / X it away?
 On the produce entry window can it stay open until you cancel (or "done") / X it away? Reason is I produce several exports, entry, adif for log4om, kml for Google earth, and txt. Each time it closes the window so it's quite a repetitive task opening it up all the time for each one. (G1YBB)
 //===========================================================================
