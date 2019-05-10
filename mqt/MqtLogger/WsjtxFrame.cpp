@@ -79,9 +79,9 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_log_ADIF, this, &WsjtxFrame::log_ADIF);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_add_client, this, &WsjtxFrame::add_client);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::remove_client);
-    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::clear_decodes);
+    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::decodes_cleared);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_decode_added, this, &WsjtxFrame::decode_added, Qt::QueuedConnection);
-    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_clear_decodes, this, &WsjtxFrame::clear_decodes);//
+    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_decodes_cleared, this, &WsjtxFrame::decodes_cleared);//
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_update_status, this, &WsjtxFrame::update_status);
 
     // UI behaviour
@@ -104,6 +104,10 @@ void WsjtxFrame::do_halt_tx(QString const& id, bool auto_only)
 {
     ui->replyto_label->setText("");
     WsjtxServer::getWsjtxServer()->do_halt_tx(id, auto_only);
+}
+void WsjtxFrame::on_clearDecodesButton_clicked()
+{
+    WsjtxServer::getWsjtxServer()->do_clear_decodes(id_, 3);
 }
 void WsjtxFrame::setContest(BaseContestLog *c)
 {
@@ -491,7 +495,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     }
     ui->decodes_table_view_->scrollToBottom ();
 }
-void WsjtxFrame::clear_decodes (QString const& /*client_id*/)
+void WsjtxFrame::decodes_cleared (QString const& /*client_id*/)
 {
     // don't check for contest - clear is across all contests
 
@@ -571,3 +575,5 @@ void WsjtxFrame::on_testButton_clicked()
                                     , false, "", false, 0);
 
 }
+
+

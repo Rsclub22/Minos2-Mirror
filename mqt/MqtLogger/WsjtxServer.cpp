@@ -23,7 +23,7 @@ WsjtxServer::WsjtxServer():
     connect (server_, &MessageServer::client_opened, this, &WsjtxServer::add_client);
     connect (server_, &MessageServer::client_closed, this, &WsjtxServer::remove_client);
     connect (server_, &MessageServer::decode, this, &WsjtxServer::decode_added);
-    connect (server_, &MessageServer::clear_decodes,  this, &WsjtxServer::clear_decodes);
+    connect (server_, &MessageServer::decodes_cleared,  this, &WsjtxServer::decodes_cleared);
 
 }
 void WsjtxServer::start ( )
@@ -90,10 +90,10 @@ void WsjtxServer::decode_added (bool is_new, QString const& client_id, QTime tim
     //trace(QString("WsjtxServer::decode_added %1").arg(message));
     emit do_decode_added(is_new, client_id, time, snr, delta_time, delta_frequency, mode, message, low_confidence, off_air);
 }
-void WsjtxServer::clear_decodes (QString const& client_id)
+void WsjtxServer::decodes_cleared (QString const& client_id)
 {
-    trace(QString("WsjtxServer::clear_decodes"));
-    emit do_clear_decodes(client_id);
+    trace(QString("WsjtxServer::decodes_cleared"));
+    emit do_decodes_cleared(client_id);
 }
 void WsjtxServer::reply (QString const& id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency
                    , QString const& mode, QString const& message, bool low_confidence, quint8 modifiers)
@@ -110,4 +110,8 @@ void WsjtxServer::do_halt_tx (QString const& id, bool auto_only)
         trace("WsjtxServer Halt TX");
 
     server_->halt_tx(id, auto_only);
+}
+void WsjtxServer::do_clear_decodes (QString const& id, quint8 window)
+{
+    server_->clear_decodes(id, window);
 }

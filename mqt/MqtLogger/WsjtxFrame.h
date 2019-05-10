@@ -68,7 +68,7 @@ public slots:
                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode);
     void decode_added (bool is_new, const QString &id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency,
                        const QString &mode, const QString &message, bool low_confidence, bool off_air);
-    void clear_decodes (QString const& client_id);
+    void decodes_cleared (QString const& client_id);
 
     void do_reply (QModelIndex source);
 
@@ -83,6 +83,7 @@ signals:
 private slots:
     void on_autoSelectButton_toggled(bool);
     void on_testButton_clicked();
+    void on_clearDecodesButton_clicked();
 };
 
 #endif // WSJTXFRAME_H
