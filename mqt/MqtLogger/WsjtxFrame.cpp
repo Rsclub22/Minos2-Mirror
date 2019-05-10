@@ -107,7 +107,7 @@ void WsjtxFrame::do_halt_tx(QString const& id, bool auto_only)
 }
 void WsjtxFrame::on_clearDecodesButton_clicked()
 {
-    WsjtxServer::getWsjtxServer()->do_clear_decodes(id_, 3);
+    WsjtxServer::getWsjtxServer()->do_clear_decodes(id_, 2);
 }
 void WsjtxFrame::setContest(BaseContestLog *c)
 {
