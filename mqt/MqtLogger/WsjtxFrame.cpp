@@ -109,6 +109,10 @@ void WsjtxFrame::on_clearDecodesButton_clicked()
 {
     WsjtxServer::getWsjtxServer()->do_clear_decodes(id_, 2);
 }
+void WsjtxFrame::on_clearLocalDecodesButton_clicked()
+{
+    decodes_cleared(id_);
+}
 void WsjtxFrame::setContest(BaseContestLog *c)
 {
     ct = c;
@@ -575,5 +579,4 @@ void WsjtxFrame::on_testButton_clicked()
                                     , false, "", false, 0);
 
 }
-
 

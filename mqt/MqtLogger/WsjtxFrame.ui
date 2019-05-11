@@ -346,9 +346,16 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
+               <widget class="QPushButton" name="clearLocalDecodesButton">
+                <property name="text">
+                 <string>Clear Local Decodes</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="clearDecodesButton">
                 <property name="text">
-                 <string>Clear Decodes</string>
+                 <string>Clear All Decodes</string>
                 </property>
                </widget>
               </item>
