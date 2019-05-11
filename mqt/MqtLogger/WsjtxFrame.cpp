@@ -580,3 +580,17 @@ void WsjtxFrame::on_testButton_clicked()
 
 }
 
+
+void WsjtxFrame::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    /*
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    QString curScreenLayout = tslf->getCurScreenLayout();
+
+    QByteArray state = ui->splitter->saveState();
+    QSettings settings;
+    settings.setValue("Splitters/WsjtxFrame/state/" + curScreenLayout, state);
+
+    MinosLoggerEvents::SendSplittersChanged();
+    */
+}

@@ -85,6 +85,7 @@ private slots:
     void on_testButton_clicked();
     void on_clearDecodesButton_clicked();
     void on_clearLocalDecodesButton_clicked();
+    void on_splitter_splitterMoved(int pos, int index);
 };
 
 #endif // WSJTXFRAME_H
