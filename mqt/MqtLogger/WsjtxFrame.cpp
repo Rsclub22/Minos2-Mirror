@@ -84,15 +84,6 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_decodes_cleared, this, &WsjtxFrame::decodes_cleared);//
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_update_status, this, &WsjtxFrame::update_status);
 
-    // UI behaviour
-
-    connect (ui->auto_off_button_, &QAbstractButton::clicked, [this] (bool /* checked */) {
-        do_halt_tx (id_, true);
-    });
-    connect (ui->halt_tx_button_, &QAbstractButton::clicked, [this] (bool /* checked */) {
-        do_halt_tx (id_, false);
-    });
-
     // this to change - get the item, and use the message decode data
     connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
 }
@@ -100,14 +91,21 @@ WsjtxFrame::~WsjtxFrame()
 {
     delete ui;
 }
-void WsjtxFrame::do_halt_tx(QString const& id, bool auto_only)
+
+void WsjtxFrame::on_halt_tx_button__clicked()
 {
     ui->replyto_label->setText("");
-    WsjtxServer::getWsjtxServer()->do_halt_tx(id, auto_only);
+    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, true);
+}
+
+void WsjtxFrame::on_auto_off_button__clicked()
+{
+    ui->replyto_label->setText("");
+    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, false);
 }
 void WsjtxFrame::on_clearDecodesButton_clicked()
 {
-    WsjtxServer::getWsjtxServer()->do_clear_decodes(id_, 2);
+    WsjtxServer::getWsjtxServer()->do_clear_decodes(id_, 2);    // 2 is "both windows"
 }
 void WsjtxFrame::on_clearLocalDecodesButton_clicked()
 {
@@ -150,6 +148,7 @@ void WsjtxFrame::setContest(BaseContestLog *c)
 //}
 void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 {
+    id_ = id;
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc || ct->isProtected())
         return;
@@ -239,6 +238,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc || cc == nullptr)
         return;
+    id_ = id;
 
     trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
           .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
@@ -430,6 +430,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc)
         return;
+    id_ = id;
 
     decodeMessage dc = decoder.decode(id, time, snr, delta_time
                                       , delta_frequency, mode
@@ -495,10 +496,11 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     }
     ui->decodes_table_view_->scrollToBottom ();
 }
-void WsjtxFrame::decodes_cleared (QString const& /*client_id*/)
+void WsjtxFrame::decodes_cleared (QString const& client_id)
 {
     // don't check for contest - clear is across all contests
 
+    id_ = client_id;
     decodes_model_->clear();
 
     columns_resized_ = false;

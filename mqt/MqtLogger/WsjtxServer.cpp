@@ -5,7 +5,6 @@
 
 WsjtxServer *WsjtxServer::wsjtxServer = nullptr;
 
-
 WsjtxServer *WsjtxServer::getWsjtxServer()
 {
     if (!wsjtxServer)

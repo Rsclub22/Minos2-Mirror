@@ -72,7 +72,6 @@ public slots:
 
     void do_reply (QModelIndex source);
 
-    void do_halt_tx (QString const& id, bool auto_only);
 
 signals:
     void do_free_text (QString const& id, QString const& text, bool);
@@ -86,6 +85,8 @@ private slots:
     void on_clearDecodesButton_clicked();
     void on_clearLocalDecodesButton_clicked();
     void on_splitter_splitterMoved(int pos, int index);
+    void on_halt_tx_button__clicked();
+    void on_auto_off_button__clicked();
 };
 
 #endif // WSJTXFRAME_H
