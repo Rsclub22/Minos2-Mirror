@@ -184,10 +184,6 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 }
 void WsjtxFrame::add_client (QString const& id, QString const& /*version*/, QString const& /*revision*/)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
-        return;
-
     id_ = id;
 }
 
