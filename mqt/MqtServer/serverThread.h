@@ -21,9 +21,9 @@ class MinosServerConnection: public MinosCommonConnection
 {
     Q_OBJECT
    private:
-      Server *srv;
-      bool resubscribed;
-      bool fromDatagram;
+      Server *srv = nullptr;
+      bool resubscribed = false;
+      bool fromDatagram = false;
 
       QTimer resubscribeTimer;
    protected:

@@ -44,8 +44,8 @@ class Server
       virtual ~Server();
 };
 extern QVector<Server *> serverList;
-extern Server *findStation( const QString s );
-extern Server *findIp( const QString s );
+extern QVector<Server *>::iterator findStation( const QString s );
+extern QVector<Server *>::iterator findIp( const QString s );
 
 class UDPSocket: public QObject
 {

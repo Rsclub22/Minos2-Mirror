@@ -32,7 +32,7 @@ ServerMain::ServerMain(QWidget *parent) :
 
     connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
 
-    QString sname = MinosServer::getMinosServer()->getServerName();
+    QString sname = ThisMinosServer::getThisMinosServer()->getServerName();
 
     clientListener = QSharedPointer<MinosClientListener>(new MinosClientListener);
     clientListener ->initialise( "Client", MinosClientPort );

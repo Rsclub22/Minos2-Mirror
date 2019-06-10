@@ -50,7 +50,7 @@ class MinosCommonConnection: public QObject
       TIXML_STRING packetbuff;
 
     protected:
-       bool connected;
+       bool connected = false;
        qint64 lastRx = 0;
 
       // who is connected?
@@ -68,8 +68,8 @@ class MinosCommonConnection: public QObject
 
       QSharedPointer<QTcpSocket> sock;
 
-      bool remove_socket;
-      bool fromIdSet;
+      bool remove_socket = false;
+      bool fromIdSet = false;
       QHostAddress connectHost;
 
       MinosCommonConnection();

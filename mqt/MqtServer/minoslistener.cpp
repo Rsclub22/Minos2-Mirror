@@ -160,7 +160,7 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
 
     if ( to.server.size() == 0 )
         return false;
-    if ( to.server.compare( MinosServer::getMinosServer() ->getServerName(), Qt::CaseInsensitive) == 0 )
+    if ( to.server.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive) == 0 )
         return false;
     if ( to.server.compare( DEFAULT_SERVER_NAME, Qt::CaseInsensitive ) == 0 )
         return false;
@@ -174,6 +174,7 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
         {
             if ( !( *i ) ->tryForwardStanza( tix ) )
             {
+                // This would have been connectSocket = true???
                 connectSocket = false;
                 break;
             }
@@ -182,18 +183,21 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
     }
     // send failed; stash the message and initiate a server connection
     // (but some stanza types should be ignored?)
-    if ( connectSocket && MinosServer::getMinosServer() ->getServerName() != DEFAULT_SERVER_NAME )
+
+    // NB connectSocket from above is ALWAYS false!
+
+    if ( connectSocket && ThisMinosServer::getThisMinosServer() ->getServerName() != DEFAULT_SERVER_NAME )
     {
         // We need to look at the servers vector, and try to find the relevant one
         // If we can't find it, we refuse anyway
 
-        Server * srv = findStation( to.server );
-        if ( srv )
+        QVector<Server *>::iterator srv = findStation( to.server );
+        if ( srv != serverList.end() )
         {
             // set ourselves up to connect
             trace("Creating MinosServerConnection sendServer for " + to.server);
             MinosServerConnection * s = new MinosServerConnection(false);
-            s->mConnect( srv );
+            s->mConnect( *srv );
             addListenerSlot( s );
             // and we need to TRY to resend
             if (!s ->tryForwardStanza( tix ))
@@ -287,13 +291,13 @@ bool MinosClientListener::sendClient( TiXmlElement *tix )
 
    bool addressOK = false;
 
-   if ( from.empty() || from.server.compare( MinosServer::getMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
+   if ( from.empty() || from.server.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
       fromLocal = true;
 
    if ( from.empty() && from.server.compare( DEFAULT_SERVER_NAME, Qt::CaseInsensitive ) == 0 )
       fromLocalHost = true;
 
-   if ( to.server.compare( MinosServer::getMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
+   if ( to.server.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
       toLocal = true;
 
    if ( to.server.compare( DEFAULT_SERVER_NAME, Qt::CaseInsensitive ) == 0 )
