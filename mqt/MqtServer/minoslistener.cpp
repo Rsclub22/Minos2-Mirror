@@ -218,8 +218,8 @@ void MinosServerListener::buildTable(QTableWidget *tab)
 {
     tab->clear();
     tab->setRowCount(i_array.count());
-    tab->setColumnCount(4);
-    QStringList h = {"name", "address", "dg?", "uuid"};
+    tab->setColumnCount(3);
+    QStringList h = {"name", "address", "uuid"};
     tab->setHorizontalHeaderLabels(h);
     int row = 0;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
@@ -230,10 +230,8 @@ void MinosServerListener::buildTable(QTableWidget *tab)
         tab->setItem(row, 0, s);
         s = new QTableWidgetItem(msc->server()->host.toString());
         tab->setItem(row, 1, s);
-        s = new QTableWidgetItem(msc->isFromDatagram()?"dg":"norm");
-        tab->setItem(row, 2, s);
         s = new QTableWidgetItem(msc->server()->uuid);
-        tab->setItem(row, 3, s);
+        tab->setItem(row, 2, s);
         row++;
     }
 }

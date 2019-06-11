@@ -162,11 +162,6 @@ void MinosCommonConnection::onLog (const char *data, bool is_incoming )
    else
       logbuff += "SEND";
 
-   if (isFromDatagram())
-   {
-           logbuff += " DG";
-   }
-
    logbuff += "[";
    logbuff += data;
    logbuff += "]";
@@ -188,8 +183,7 @@ void MinosCommonConnection::on_readyRead()
 {
    // select says we have data, so read it
    // and send the data through the parser
-   trace ( QString("MinosCommonConnection::on_readyRead called to receive data from (%1) %2")
-           .arg(isFromDatagram()?"dg":"norm")
+   trace ( QString("MinosCommonConnection::on_readyRead called to receive data from %2")
            .arg(connectHost.toString())  );
 
    // documntation says this may occasionally fail on Windows

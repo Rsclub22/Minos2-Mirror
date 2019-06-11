@@ -43,7 +43,9 @@ void MinosServerConnection::closeDown()
    if (PubSubMain)
        PubSubMain->disconnectServer(makeJid());
    if (srv)
-      TZConf::getZConf()->publishDisconnect(srv->station);
+   {
+      TZConf::getZConf()->publishDisconnect(srv);
+   }
 }
 
 bool MinosServerConnection::checkFrom( TiXmlElement *tix )

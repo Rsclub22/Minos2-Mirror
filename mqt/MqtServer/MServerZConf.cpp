@@ -173,7 +173,7 @@ void TZConf::onTimeout()
 
     if (lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval)
     {
-        readServerList();
+        readServerListFile();
     }
     if (readSocket.hasPendingDatagrams())
     {
@@ -259,7 +259,7 @@ QVector<Server *>::iterator findIp( const QHostAddress &h )
    return serverList.end();
 }
 
-void TZConf::readServerList()
+void TZConf::readServerListFile()
 {
    trace("Reading Server List File");
 
@@ -367,13 +367,13 @@ Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
     trace("zcPublishServer finished");
     return *s;
 }
-void TZConf::publishDisconnect(const QString &name)
+void TZConf::publishDisconnect(Server *srv)
 {
    trace("publishDisconnect");
-   QVector<Server *>::iterator s = findStation( name );
+   QVector<Server *>::iterator s = findStation( srv->station );
    if ( s != serverList.end() )
    {
-      PubSubMain->publish( "", rpcConstants::StationCategory, name, (*s)->host.toString(), psNotConnected );
+      PubSubMain->publish( "", rpcConstants::StationCategory, srv->station, (*s)->host.toString(), psNotConnected );
       serverList.erase(s);
    }
 }
