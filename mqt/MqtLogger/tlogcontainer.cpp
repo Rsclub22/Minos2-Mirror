@@ -1893,6 +1893,10 @@ void TLogContainer::selectContest( BaseContestLog *pc, QSharedPointer<BaseContac
 //---------------------------------------------------------------------------
 void TLogContainer::setCaption(QString captionToSet)
 {
+    if (captionToSet == "MinosQtLogger")
+    {
+        mShowMessage( windowTitle(), this);
+    }
    if ( windowTitle().length() )
    {
       if ( captionToSet != windowTitle() )
