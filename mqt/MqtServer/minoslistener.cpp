@@ -173,44 +173,15 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
 
     // OK, it is not for us... look at connected servers
 
-    bool connectSocket = false;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
         if ( ( *i ) ->checkServer( to ) )
         {
             if ( !( *i ) ->tryForwardStanza( tix ) )
             {
-                // This would have been connectSocket = true???
-                connectSocket = false;
                 break;
             }
-            return true;
-        }
-    }
-    // send failed; stash the message and initiate a server connection
-    // (but some stanza types should be ignored?)
-
-    // NB connectSocket from above is ALWAYS false!
-
-    if ( connectSocket && ThisMinosServer::getThisMinosServer() ->getServerName() != DEFAULT_SERVER_NAME )
-    {
-        // We need to look at the servers vector, and try to find the relevant one
-        // If we can't find it, we refuse anyway
-
-        QVector<Server *>::iterator srv = findStation( to.server );
-        if ( srv != serverList.end() )
-        {
-            // set ourselves up to connect
-            trace("Creating MinosServerConnection sendServer for " + to.server);
-            MinosServerConnection * s = new MinosServerConnection(false);
-            s->mConnect( *srv );
-            addListenerSlot( s );
-            // and we need to TRY to resend
-            if (!s ->tryForwardStanza( tix ))
-            {
-                connectSocket = false;
-            }
-            return true;
+            break;
         }
     }
 
