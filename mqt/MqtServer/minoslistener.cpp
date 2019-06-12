@@ -96,6 +96,8 @@ void MinosListener::on_timeout()
         for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
         {
             QString hi = (*i)->getClientServer();
+            if ((*i)->remove_socket)
+                continue;
             for ( CommonIterator j = i + 1; j != i_array.end(); j++ )
             {
                 QString hj = (*j)->getClientServer();
@@ -108,7 +110,6 @@ void MinosListener::on_timeout()
                     if (remIP < locIP)
                     {
                         (*j)->remove_socket = true;
-                        (*j)->closeConnection = false;
                         trace("removing socket for " + (*j)->getClientServer());
                     }
                 }
@@ -123,10 +124,7 @@ void MinosListener::on_timeout()
         {
             // process says to finish off
             MinosCommonConnection *mcc = (*i);
-            if ((*i)->closeConnection)
-            {
-                mcc->closeDown();
-            }
+            mcc->closeDown();
             delete mcc;
             *i = nullptr;
             clearup = true;

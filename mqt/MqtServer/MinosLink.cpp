@@ -314,5 +314,4 @@ void MinosCommonConnection::on_disconnected()
 {
     trace("MinosCommonConnection::on_disconnected() " + clientServer + " " + clientUser + "; remove_socket = true");
     remove_socket = true;
-    closeConnection = true;
 }
