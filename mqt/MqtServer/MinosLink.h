@@ -69,6 +69,7 @@ class MinosCommonConnection: public QObject
       QSharedPointer<QTcpSocket> sock;
 
       bool remove_socket = false;
+      bool publish_disconnect = true;
       bool fromIdSet = false;
       QHostAddress connectHost;
 

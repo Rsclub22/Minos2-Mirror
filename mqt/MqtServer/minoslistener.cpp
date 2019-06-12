@@ -110,6 +110,7 @@ void MinosListener::on_timeout()
                     if (remIP < locIP)
                     {
                         (*j)->remove_socket = true;
+                        (*j)->publish_disconnect = false;
                         trace("removing socket for " + (*j)->getClientServer());
                     }
                 }
@@ -124,7 +125,10 @@ void MinosListener::on_timeout()
         {
             // process says to finish off
             MinosCommonConnection *mcc = (*i);
-            mcc->closeDown();
+            if ((*i)->publish_disconnect)
+            {
+                mcc->closeDown();
+            }
             delete mcc;
             *i = nullptr;
             clearup = true;
