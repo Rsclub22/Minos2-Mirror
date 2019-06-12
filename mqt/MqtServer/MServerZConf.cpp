@@ -98,7 +98,7 @@ void TZConf::startZConf(const QString &name)
 
     // set up the receiver
     readSocket.bind(UPNP_PORT);
-    connect(&readSocket, SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::QueuedConnection);
+    connect(&readSocket, SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
 
     // Get network interfaces list
 

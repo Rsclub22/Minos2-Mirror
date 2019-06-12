@@ -24,8 +24,8 @@ void MinosClientConnection::initialise()
 {
    QHostAddress h = sock->peerAddress();
    connectHost = h;
-   connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()));
-   connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()));
+   connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()), Qt::UniqueConnection);
+   connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()), Qt::UniqueConnection);
 }
 
 MinosClientConnection::~MinosClientConnection()

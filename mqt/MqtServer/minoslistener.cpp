@@ -25,7 +25,7 @@ void xperror( int test_val, QString s, bool endit = true )
 //=============================================================================
 MinosListener::MinosListener():sock(new QTcpServer(this))
 {
-    connect(&CheckTimer, SIGNAL(timeout()), this, SLOT(on_timeout()));
+    connect(&CheckTimer, SIGNAL(timeout()), this, SLOT(on_timeout()), Qt::UniqueConnection);
     CheckTimer.start(100);
 }
 MinosListener::~MinosListener()
@@ -41,7 +41,7 @@ bool MinosListener::initialise( QString type, quint16 port )
     {
         addr = QHostAddress::LocalHost;
     }
-    connect(sock.data(), SIGNAL(newConnection()), this, SLOT(on_newConnection()));
+    connect(sock.data(), SIGNAL(newConnection()), this, SLOT(on_newConnection()), Qt::UniqueConnection);
    bool res = sock->listen(addr, port); // signals newConnection()
    xperror( res == false ,type + " listen"  );
 
