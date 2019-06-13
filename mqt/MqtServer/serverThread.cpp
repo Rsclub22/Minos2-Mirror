@@ -195,4 +195,12 @@ bool MinosServerConnection::checkLastRx()
     return true;
 }
 //==============================================================================
+void MinosServerConnection::sendCloseSocket()
+{
+    if (srv)
+    {
+       sendRaw(QString("<closeSocket/>").toStdString());
+    }
+}
+//==============================================================================
 

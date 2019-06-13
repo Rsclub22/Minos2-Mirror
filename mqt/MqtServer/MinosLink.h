@@ -104,6 +104,8 @@ class MinosCommonConnection: public QObject
       }
       virtual void sendKeepAlive( )
       {}
+      virtual void sendCloseSocket( )
+      {}
       QString getClientServer() const;
 
       QString getClientUser() const;

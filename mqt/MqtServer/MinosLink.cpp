@@ -279,6 +279,11 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
     {
         return true;
     }
+    if (  checkElementName( tix, "closeSocket" ) )
+    {
+        publish_disconnect = false;
+        return true;
+    }
 
     if ( !checkFrom( tix ) )
    {
@@ -312,6 +317,8 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
 //=============================================================================
 void MinosCommonConnection::on_disconnected()
 {
+    // All disconnects come through here
+    // if server we need to see if is a true disconnect, or a "spare"
     trace("MinosCommonConnection::on_disconnected() " + clientServer + " " + clientUser + "; remove_socket = true");
     remove_socket = true;
 }

@@ -111,6 +111,7 @@ void MinosListener::on_timeout()
                     {
                         (*j)->remove_socket = true;
                         (*j)->publish_disconnect = false;
+                        (*j)->sendCloseSocket();
                         trace("removing socket for " + (*j)->getClientServer());
                     }
                 }
