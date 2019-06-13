@@ -200,6 +200,7 @@ void MinosServerConnection::sendCloseSocket()
     if (srv)
     {
        sendRaw(QString("<closeSocket/>").toStdString());
+       sock->waitForBytesWritten();
     }
 }
 //==============================================================================
