@@ -194,13 +194,18 @@ void DisplayContestContact::checkContact( bool inScan)
    {
       double lon = 0.0;
       double lat = 0.0;
-      int brg;
+      int brg = -1;
 
-      if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
+      char v = lonlat( loc.loc.getValue(), lon, lat );
+      if ( v == LOC_OK )
       {
          clp->disbeara( lon, lat, dist, brg );
-         bearing = brg;
       }
+      else if (v == LOC_PARTIAL)
+      {
+          clp->disbearc( lon, lat, dist, brg );
+      }
+      bearing = brg;
    }
 
    if ( contactFlags.getValue() & NON_SCORING )
