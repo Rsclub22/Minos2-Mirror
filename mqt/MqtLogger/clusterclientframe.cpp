@@ -473,6 +473,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     {
         QString freq = spotProxyModel->data(index, DataStoredRole).toString();
         sendFreqToRig(freq);
+
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
     {

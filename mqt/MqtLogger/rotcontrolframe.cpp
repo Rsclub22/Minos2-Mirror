@@ -204,12 +204,14 @@ void RotControlFrame::on_Rotate_clicked()
     if (rotConnected && !rotError)
     {
         traceMsg("Turn to button Clicked");
-        QString brgSt = ui->BrgSt->text();
+        QString brgStr = ui->BrgSt->text();
+        if (!brgStr.isEmpty())
+        {
+            int angle = getAngle(brgStr);
+            turnTo(angle);
+            ui->BrgSt->selectAll();
 
-        int angle = getAngle(brgSt);
-
-        turnTo(angle);
-        ui->BrgSt->selectAll();
+        }
     }
     else
     {
