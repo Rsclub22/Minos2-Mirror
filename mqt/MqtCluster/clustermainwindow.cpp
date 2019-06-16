@@ -169,7 +169,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 //    verticalHeader->setDefaultSectionSize(18);
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
 
-    dxSpotView->resizeRowsToContents();
+    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    //dxSpotView->resizeRowsToContents();
 
 /*
 
@@ -281,7 +283,7 @@ void ClusterMainWindow::onClearAllSpots()
             purgeSpotFlag = false;
         }
     }
-    dxSpotView->resizeRowsToContents();
+    //dxSpotView->resizeRowsToContents();
 
 }
 
@@ -981,7 +983,7 @@ void ClusterMainWindow::getSpotsFromQueue()
 
 
         }
-        {
+/*        {
             QTimer *timer = new QTimer(this);
             timer->setSingleShot(true);
 
@@ -997,7 +999,9 @@ void ClusterMainWindow::getSpotsFromQueue()
             );
 
             timer->start(10);
-        }       trace(QString("GetSpotsFromQueue: resize contents"));
+        }  */
+        //
+        //trace(QString("GetSpotsFromQueue: resize contents"));
 
         trace(QString("GetSpotsFromQueue: finished"));
     }

@@ -212,7 +212,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->verticalHeader()->setMinimumSectionSize(10);
 
     dxSpotView->setItemDelegate( delegate);
-    dxSpotView->resizeRowsToContents();
+   // dxSpotView->resizeRowsToContents();
 
     QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
 
@@ -242,6 +242,8 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreDxSpotViewColumns();
+
+    spotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 
@@ -262,7 +264,7 @@ void ClusterClientFrame::setupSearchSpotView()
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
     searchView->setItemDelegate( delegate);
-    searchView->resizeRowsToContents();
+    //searchView->resizeRowsToContents();
 
     searchView->verticalHeader()->setDefaultSectionSize(10);
     searchView->verticalHeader()->setMinimumSectionSize(10);
@@ -291,6 +293,9 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     searchView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     searchView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+    searchVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
 }
 
 
@@ -313,7 +318,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setSelectionBehavior(QAbstractItemView::SelectItems);
 
     callSignView->setItemDelegate( delegate);
-    callSignView->resizeRowsToContents();
+    //callSignView->resizeRowsToContents();
 
     callSignView->verticalHeader()->setDefaultSectionSize(10);
     callSignView->verticalHeader()->setMinimumSectionSize(10);
@@ -345,6 +350,9 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreCallsignViewColumns();
+
+    callSignVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
 }
 
 void ClusterClientFrame::setupLocatorSpotView()
@@ -365,7 +373,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
     locatorView->setItemDelegate( delegate);
-    locatorView->resizeRowsToContents();
+    //locatorView->resizeRowsToContents();
 
     QHeaderView *locatorViewVerticalHeader = locatorView->verticalHeader();
     locatorView->verticalHeader()->setDefaultSectionSize(10);
@@ -396,6 +404,9 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     locatorView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     locatorView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+    locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
 }
 
 
@@ -417,7 +428,7 @@ void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterC
     if (bandfilterChanged)
     {
         dxSpotProxyModel->setFilterRegExp("");
-        dxSpotView->resizeRowsToContents();
+        //dxSpotView->resizeRowsToContents();
     }
     else if (modefilterChanged)
     {
@@ -426,12 +437,12 @@ void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterC
     else if (callsignfilterChanged)
     {
         callSignProxyModel->setFilterRegExp("");
-        callSignView->resizeRowsToContents();
+        //callSignView->resizeRowsToContents();
     }
     else if (locatorfilterChanged)
     {
         locatorProxyModel->setFilterRegExp("");
-        locatorView->resizeRowsToContents();
+        //locatorView->resizeRowsToContents();
     }
 
 }
@@ -619,26 +630,28 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
        trace("syncSpots " + spotQueue[i]);
     }
 
-   {
-       QTimer *timer = new QTimer(this);
-       timer->setSingleShot(true);
+//   {
+//       QTimer *timer = new QTimer(this);
+//       timer->setSingleShot(true);
 
-       connect(timer, &QTimer::timeout, [=]()
-       {
-           // NB a lambda function
-           for (int i = 0; i < sqsize; i++)
-           {
-               dxSpotView->resizeRowToContents(i); // as we always show latest at the top
-               searchView->resizeRowToContents(i);
-               callSignView->resizeRowToContents(i);
-               locatorView->resizeRowToContents(i);
-           }
-           timer->deleteLater();
-       }
-       );
+//       connect(timer, &QTimer::timeout, [=]()
+//       {
+//           // NB a lambda function
+//           for (int i = 0; i < sqsize; i++)
+//           {
+//               trace(QString("syncSpots resize row %1").arg(i));
 
-       timer->start(10);
-   }
+//               dxSpotView->resizeRowToContents(i); // as we always show latest at the top
+//               searchView->resizeRowToContents(i);
+//               callSignView->resizeRowToContents(i);
+//               locatorView->resizeRowToContents(i);
+//           }
+//           timer->deleteLater();
+//       }
+//       );
+
+//       timer->start(10);
+//   }
 
     spotQueue.clear();
 //    dxSpotView->resizeRowsToContents();
@@ -949,10 +962,10 @@ void ClusterClientFrame::purgeSpots()
            }
            if (rowsRemoved)
            {
-               dxSpotView->resizeRowsToContents();
-               searchView->resizeRowsToContents();
-               callSignView->resizeRowsToContents();
-               locatorView->resizeRowsToContents();
+               //dxSpotView->resizeRowsToContents();
+               //searchView->resizeRowsToContents();
+               //callSignView->resizeRowsToContents();
+               //locatorView->resizeRowsToContents();
            }
            purgeSpotFlag = false;
         }
@@ -1136,14 +1149,14 @@ void ClusterClientFrame::onSearchEditingFinished()
         {
             searchSortProxyModel->searchParameter = "";
             searchSortProxyModel->setFilterRegExp("");
-            searchView->resizeRowsToContents();
+            //searchView->resizeRowsToContents();
         }
         else
         {
             searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
             //ui->searchLineEdit->selectAll();
             searchSortProxyModel->setFilterRegExp("");
-            searchView->resizeRowsToContents();
+            //searchView->resizeRowsToContents();
         }
 
         ui->searchLineEdit->setFocus();
