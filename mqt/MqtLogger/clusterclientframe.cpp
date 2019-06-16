@@ -611,15 +611,34 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
 
 void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 {
-    for ( QVector<QString>::iterator i = spotQueue.begin(); i != spotQueue.end(); i++ )
+    int sqsize = spotQueue.count();
+    for (int i = sqsize -1 ; i > -1; i--)
     {
-       addDxSpotToTable((*i));
-       dxSpotView->resizeRowToContents(0); // as we always show latest at the top
-       searchView->resizeRowToContents(0);
-       callSignView->resizeRowToContents(0);
-       locatorView->resizeRowToContents(0);
-       trace("syncSpots " + (*i));
+       addDxSpotToTable(spotQueue[i]);
+       trace("syncSpots " + spotQueue[i]);
     }
+
+   {
+       QTimer *timer = new QTimer(this);
+       timer->setSingleShot(true);
+
+       connect(timer, &QTimer::timeout, [=]()
+       {
+           // NB a lambda function
+           for (int i = 0; i < sqsize; i++)
+           {
+               dxSpotView->resizeRowToContents(i); // as we always show latest at the top
+               searchView->resizeRowToContents(i);
+               callSignView->resizeRowToContents(i);
+               locatorView->resizeRowToContents(i);
+           }
+           timer->deleteLater();
+       }
+       );
+
+       timer->start(10);
+   }
+
     spotQueue.clear();
 //    dxSpotView->resizeRowsToContents();
 //    searchView->resizeRowsToContents();
