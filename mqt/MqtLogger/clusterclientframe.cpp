@@ -91,6 +91,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     memoryAction = new QAction("Send &Memory", this);
     clearSpotAction = new QAction("Clear &Spot", this);
     clearAllSpotsAction = new QAction("Clear &All Spots", this);
+    memoryActionOveride = new QAction("Force &Send Memory", this);
 
     spotsMenu->addAction(freqAction);
     spotsMenu->addAction(bearingAction);
@@ -98,6 +99,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     spotsMenu->addAction(memoryAction);
     spotsMenu->addAction(clearSpotAction);
     spotsMenu->addAction(clearAllSpotsAction);
+    spotsMenu->addAction(memoryActionOveride);
 
     ui->actionsButton->setMenu(spotsMenu);
     connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
@@ -108,6 +110,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
+    connect( memoryActionOveride, SIGNAL( triggered() ), this, SLOT(memoryActionOverideSelected()) );
 
     //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
@@ -1059,6 +1062,26 @@ void ClusterClientFrame::memoryActionSelected()
     }
 }
 
+// this sends spot to memory if it has allready been sent
+void ClusterClientFrame::memoryActionOverideSelected()
+{
+    int curTab = ui->dxSpotTab->currentIndex();
+
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int currentRow = spotViewList[curTab]->currentIndex().row();
+        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
+        {
+            // check if spot has been sent to memory
+            if (filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
+            {
+                sendSpotToMemory(filterProxyModelList[curTab], currentRow);
+            }
+
+        }
+
+    }
+}
 
 
 void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyModel, int row)
