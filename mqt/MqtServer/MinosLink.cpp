@@ -65,7 +65,7 @@ void MinosId::setId( const QString &s )
 //=============================================================================
 
 // called from XMPPRPCObj instead of the one in MinosConnection
-static void serversendAction( XStanza *a )
+static void serverSendAction( XStanza *a )
 {
    // stanza has a "to" - but this is internal, so we need to dispatch it
    TIXML_STRING mess = a->getActionMessage();
@@ -81,7 +81,7 @@ static void serversendAction( XStanza *a )
    {
       // insert a from of ourselves.
 
-      QString from = MinosServer::getMinosServer() ->getServerName();
+      QString from = ThisMinosServer::getThisMinosServer() ->getServerName();
       if ( from.length() )
       {
          x->SetAttribute( "from", from.toStdString().c_str() );
@@ -94,7 +94,7 @@ static void serversendAction( XStanza *a )
    }
    // and now dispatch to its destination
 
-   if ( !MinosServer::getMinosServer() ->forwardStanza( nullptr, x ) )              // our own services
+   if ( !ThisMinosServer::getThisMinosServer() ->forwardStanza( nullptr, x ) )              // our own services
    {
       if ( !MinosClientListener::getListener() ->sendClient( x ) )         // look at real and potential clients
       {
@@ -109,11 +109,8 @@ static void serversendAction( XStanza *a )
 }
 //==============================================================================
 MinosCommonConnection::MinosCommonConnection()
-    :
-    remove_socket( false )
-  , fromIdSet( false )
 {
-    setSendAction(serversendAction);
+    setSendAction(serverSendAction);
 
     lastRx = QDateTime::currentMSecsSinceEpoch() + 5000;
 }
@@ -165,11 +162,6 @@ void MinosCommonConnection::onLog (const char *data, bool is_incoming )
    else
       logbuff += "SEND";
 
-   if (isFromDatagram())
-   {
-           logbuff += " DG";
-   }
-
    logbuff += "[";
    logbuff += data;
    logbuff += "]";
@@ -191,8 +183,7 @@ void MinosCommonConnection::on_readyRead()
 {
    // select says we have data, so read it
    // and send the data through the parser
-   trace ( QString("MinosCommonConnection::on_readyRead called to receive data from (%1) %2")
-           .arg(isFromDatagram()?"dg":"norm")
+   trace ( QString("MinosCommonConnection::on_readyRead called to receive data from %2")
            .arg(connectHost.toString())  );
 
    // documntation says this may occasionally fail on Windows
@@ -288,6 +279,11 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
     {
         return true;
     }
+    if (  checkElementName( tix, "closeSocket" ) )
+    {
+        publish_disconnect = false;
+        return true;
+    }
 
     if ( !checkFrom( tix ) )
    {
@@ -305,7 +301,7 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
    // ZConf is a possibility, but it (currently) works via PubSub
    // Actually, we could build these in to the server as RPC calls
    // - don't need a decent "to", just the server name
-   if ( !MinosServer::getMinosServer() ->forwardStanza( this, tix ) )              // our own services
+   if ( !ThisMinosServer::getThisMinosServer() ->forwardStanza( this, tix ) )              // our own services
    {
       if ( !MinosClientListener::getListener() ->sendClient( tix ) )         // look at real and potential clients
       {
@@ -321,6 +317,8 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
 //=============================================================================
 void MinosCommonConnection::on_disconnected()
 {
+    // All disconnects come through here
+    // if server we need to see if is a true disconnect, or a "spare"
     trace("MinosCommonConnection::on_disconnected() " + clientServer + " " + clientUser + "; remove_socket = true");
     remove_socket = true;
 }

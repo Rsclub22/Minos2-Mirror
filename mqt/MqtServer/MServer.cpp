@@ -17,27 +17,27 @@
 #include "serverThread.h"
 #include "MServer.h"
 
-MinosServer *MinosServer::singleton = nullptr;
+ThisMinosServer *ThisMinosServer::singleton = nullptr;
 /*static*/
-MinosServer *MinosServer::getMinosServer()
+ThisMinosServer *ThisMinosServer::getThisMinosServer()
 {
    if ( !singleton )
    {
-      singleton = new MinosServer();
+      singleton = new ThisMinosServer();
    }
    return singleton;
 }
 //---------------------------------------------------------------------------
 
-MinosServer::MinosServer()
+ThisMinosServer::ThisMinosServer()
 {
     serverName = MinosConfig::getMinosConfig()->getThisServerName();
 }
 
-MinosServer::~MinosServer()
+ThisMinosServer::~ThisMinosServer()
 {}
 //---------------------------------------------------------------------------
-bool MinosServer::forwardStanza( MinosCommonConnection *il, TiXmlElement *tix )
+bool ThisMinosServer::forwardStanza( MinosCommonConnection *il, TiXmlElement *tix )
 {
    // while we don't know our name, we can accept client connections, but NOT server connections
    bool res = false;
@@ -58,7 +58,7 @@ bool MinosServer::forwardStanza( MinosCommonConnection *il, TiXmlElement *tix )
    return res;
 }
 //---------------------------------------------------------------------------
-bool MinosServer::analyseNode( MinosCommonConnection *il, TiXmlElement *tix )
+bool ThisMinosServer::analyseNode( MinosCommonConnection *il, TiXmlElement *tix )
 {
    // response factory - look at the node, and build the correct response stanza object
 
@@ -96,7 +96,7 @@ bool MinosServer::analyseNode( MinosCommonConnection *il, TiXmlElement *tix )
    return true;      // which may not be right?
 }
 //---------------------------------------------------------------------------
-void MinosServer::dispatchStanza( MinosCommonConnection *il, RPCRequest *req )
+void ThisMinosServer::dispatchStanza( MinosCommonConnection *il, RPCRequest *req )
 {
    // really need to go to an RPC Object factory here
    trace( "RPCRequest received - " + req->methodName );

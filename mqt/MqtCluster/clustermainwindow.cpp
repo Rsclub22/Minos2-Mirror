@@ -963,7 +963,8 @@ void ClusterMainWindow::getSpotsFromQueue()
     {
         trace(QString("GetSpotsFromQueue: spots available = %1").arg(spotsList.count()));
         // get spots from queue
-        for (int i = spotsList.count() -1 ; i > -1; i--)
+        int slsize= spotsList.count();
+        for (int i = slsize -1 ; i > -1; i--)
         {
 
             if (purgeSpotFlag)
@@ -976,10 +977,27 @@ void ClusterMainWindow::getSpotsFromQueue()
             spotsList.remove(i);
             //dxSpotDataModel->insertRows(0, 1);
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
-            dxSpotView->resizeRowToContents(0); // as we always show latest at the top
             trace(QString("GetSpotsFromQueue: finished loop"));
+
+
         }
-        trace(QString("GetSpotsFromQueue: resize contents"));
+        {
+            QTimer *timer = new QTimer(this);
+            timer->setSingleShot(true);
+
+            connect(timer, &QTimer::timeout, [=]()
+            {
+                // NB a lambda function
+                for (int i = 0 ; i < slsize; i++)
+                {
+                    dxSpotView->resizeRowToContents(i); // as we always show latest at the top
+                }
+                timer->deleteLater();
+            }
+            );
+
+            timer->start(10);
+        }       trace(QString("GetSpotsFromQueue: resize contents"));
 
         trace(QString("GetSpotsFromQueue: finished"));
     }
