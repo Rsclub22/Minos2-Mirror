@@ -74,8 +74,8 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
     ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(1);
 
-    ui->decodes_table_view_->resizeRowsToContents();
-
+    //ui->decodes_table_view_->resizeRowsToContents();
+    ui->decodes_table_view_->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_log_ADIF, this, &WsjtxFrame::log_ADIF);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_add_client, this, &WsjtxFrame::add_client);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::remove_client);
@@ -487,7 +487,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     }
 
     decodes_model_->add_decode ();
-    ui->decodes_table_view_->resizeRowToContents(messages.size() - 1);
+    //ui->decodes_table_view_->resizeRowToContents(messages.size() - 1);
 
     if (!columns_resized_)
     {
