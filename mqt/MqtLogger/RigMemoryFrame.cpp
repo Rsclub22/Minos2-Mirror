@@ -133,6 +133,8 @@ void RigMemoryFrame::onMenuShow()
 // this could do with tidying up!
 void RigMemoryFrame::DXSpotToMemory(memoryData::memData m)
 {
+
+
     memoryData::memData logData = m;
     int n = -1;
     int mcount = ct->rigMemories.size();
@@ -156,6 +158,8 @@ void RigMemoryFrame::DXSpotToMemory(memoryData::memData m)
     setRigMemoryData(n, logData);
 
     sendUpdateMemories();
+
+
 }
 
 

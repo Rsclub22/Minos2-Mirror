@@ -39,6 +39,10 @@ private:
     bool columns_resized_ = false;
     HtmlDelegate *delegate = nullptr;
     bool autoEnabled = false;
+    bool showTest = false;
+    bool inDecode = false;
+    int lastcol = 0;
+    QTime lastTime;
 
     WsjtxDecode decoder;
 
@@ -64,11 +68,10 @@ public slots:
                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode);
     void decode_added (bool is_new, const QString &id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency,
                        const QString &mode, const QString &message, bool low_confidence, bool off_air);
-    void clear_decodes (QString const& client_id);
+    void decodes_cleared (QString const& client_id);
 
     void do_reply (QModelIndex source);
 
-    void do_halt_tx (QString const& id, bool auto_only);
 
 signals:
     void do_free_text (QString const& id, QString const& text, bool);
@@ -79,6 +82,11 @@ signals:
 private slots:
     void on_autoSelectButton_toggled(bool);
     void on_testButton_clicked();
+    void on_clearDecodesButton_clicked();
+    void on_clearLocalDecodesButton_clicked();
+    void on_splitter_splitterMoved(int pos, int index);
+    void on_halt_tx_button__clicked();
+    void on_auto_off_button__clicked();
 };
 
 #endif // WSJTXFRAME_H

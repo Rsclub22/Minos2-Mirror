@@ -22,6 +22,7 @@
 #include "rigmemcommondata.h"
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
+#include "tsinglelogframe.h"
 #include "ui_clusterclientframe.h"
 
 
@@ -39,6 +40,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
+    ui->splitter->setStretchFactor(0, 2);
+    ui->splitter->setStretchFactor(1, 1);
 
     trace(QString("ClusterClientFrame Starting"));
 
@@ -470,6 +473,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     {
         QString freq = spotProxyModel->data(index, DataStoredRole).toString();
         sendFreqToRig(freq);
+
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
     {
@@ -1590,3 +1594,16 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     return false;
 }
 
+void ClusterClientFrame::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    /*
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    QString curScreenLayout = tslf->getCurScreenLayout();
+
+    QByteArray state = ui->splitter->saveState();
+    QSettings settings;
+    settings.setValue("Splitters/ClusterClientFrame/state/" + curScreenLayout, state);
+
+    MinosLoggerEvents::SendSplittersChanged();
+    */
+}

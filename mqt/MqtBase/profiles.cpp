@@ -50,6 +50,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXPort, "WSJTXPort", 2237, "WSJTX Port", "WSJTX Port", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXGroupAddress, "WSJTXGroupAddress", "", "WSJTX Group Address", "WSJTX Group Address", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXAutoEnabled, "WSJTXAutoEnabled", false, "WSJTX Auto Enabled", "WSJTX Auto Enabled", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXTestEnabled, "WSJTXtestEnabled", false, "WSJTX Test Enabled", "WSJTX Test Enabled", false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpFile, "HelpFile", "./helpfiles/MinosHelp.qch", "Help file", "Help file", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpEntryURL, "HelpEntryPoint", "qthelp://Minos/Minos.html", "Help entry point", "Help entry point", false ) ) );

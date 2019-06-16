@@ -70,7 +70,6 @@ class MinosItem
    protected:
       bool dirty = false;
       itemtype val{};                          // C++ 11 default brace initialisation
-      itemtype operator = ( const itemtype& ); // make it inaccessible
 
    public:
 
@@ -122,7 +121,12 @@ class MinosItem
       {}
       virtual ~MinosItem()
       {}
-
+      MinosItem& operator = ( const MinosItem&rhs )
+      {
+          dirty = rhs.dirty;
+          val = rhs.val;
+          return *this;
+      }
       void addIfDirty( RPCParamStruct *st, const QString &stName, bool &d ) const
       {
          d |= isDirty();
@@ -158,6 +162,13 @@ public:
        MinosItem<QString>::dirty = false;
        MinosItem<QString>::val = t;
     }
+    MinosStringItem& operator = ( const MinosStringItem&rhs )
+    {
+        MinosItem<QString>::dirty = rhs.dirty;
+        MinosItem<QString>::val = rhs.val;
+        return *this;
+    }
+
 };
 
 //---------------------------------------------------------------------------
@@ -254,7 +265,13 @@ class Callsign
       Callsign( const QString &orig );
       ~Callsign();
       bool operator==( const Callsign& rhs ) const;
+      bool operator!=( const Callsign& rhs ) const
+      {
+          return !(rhs == *this);
+      }
       bool operator<( const Callsign& rhs ) const;
+      Callsign& operator = ( const Callsign& );
+
 
       int validate( );
       bool isUK() const;
@@ -277,6 +294,9 @@ class Locator
       ~Locator();
       char validate( );
       char validate( double &lon, double &lat );
+      Locator &operator =( const Locator& );
+
+
 };
 
 class BaseLogList

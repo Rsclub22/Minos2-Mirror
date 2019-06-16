@@ -157,6 +157,8 @@ private:
       }
 
       // QThread interface
+      QString getBaseName() const;
+
 protected:
       virtual void run() override;
 private slots:

@@ -938,6 +938,13 @@ int RigControlMainWindow::openRadio()
 
     }
 
+    if (radio->get_serialConnected() && rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
+    {
+        // turn on DTR and RTS lines
+        retCode = radio->setDtrState(true);
+        retCode = radio->setRtsState(true);
+    }
+
 
     // let's see if we can get freq from radio and confirm comms
     if (radio->get_serialConnected())

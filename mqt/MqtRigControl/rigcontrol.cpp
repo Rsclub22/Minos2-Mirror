@@ -713,6 +713,38 @@ int RigControl::getPortType(int rigNumber, rig_port_e *portType)
 
 }
 
+// true set DTR state, false unset DTR state
+int RigControl::setDtrState( const bool state)
+{
+    int retCode = 0;
+    retCode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "dtr_state"), state ? "ON" : "OFF");
+
+    return retCode;
+}
+
+
+// true set DTR state, false unset DTR state
+int RigControl::setRtsState( const bool state)
+{
+    int retCode = 0;
+    retCode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "rts_state"), state ? "ON" : "OFF");
+    return retCode;
+}
+
+
+
+
+int RigControl::setRetryNumber(const QString retries)
+{
+    rig_set_conf(my_rig, rig_token_lookup(my_rig, "retry") , retries.toLatin1().data());
+
+}
+
+int RigControl::setTimeoutDur(const QString timeoutDur)
+{
+    rig_set_conf(my_rig, rig_token_lookup(my_rig, "timeout") , timeoutDur.toLatin1().data());
+
+}
 
 /*
 int RigControl::getModelNumber(int idx)

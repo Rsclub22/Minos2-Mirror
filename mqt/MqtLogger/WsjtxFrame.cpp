@@ -24,10 +24,13 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-   // ui->testButton->setVisible(false);
+    ui->splitter->setStretchFactor(0, 2);
+    ui->splitter->setStretchFactor(1, 1);
+    remove_client(QString());    // kill off the ratshit
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXTestEnabled, showTest );
+    ui->testButton->setVisible(showTest);
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
-
     ui->autoSelectReplyFrame->setVisible(autoEnabled);
 
     int lcf;
@@ -60,7 +63,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     //ui->decodes_table_view_->hideColumn (dcBearing);
     ui->decodes_table_view_->hideColumn (dcDistance);
     ui->decodes_table_view_->hideColumn (dcFromCall);
-    ui->decodes_table_view_->hideColumn (dcFromGrid);
+    //ui->decodes_table_view_->hideColumn (dcFromGrid);
     ui->decodes_table_view_->hideColumn (dcToCall);
     ui->decodes_table_view_->hideColumn (dcToGrid);
 
@@ -76,19 +79,10 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_log_ADIF, this, &WsjtxFrame::log_ADIF);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_add_client, this, &WsjtxFrame::add_client);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::remove_client);
-    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::clear_decodes);
+    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::decodes_cleared);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_decode_added, this, &WsjtxFrame::decode_added, Qt::QueuedConnection);
-    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_clear_decodes, this, &WsjtxFrame::clear_decodes);//
+    connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_decodes_cleared, this, &WsjtxFrame::decodes_cleared);//
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_update_status, this, &WsjtxFrame::update_status);
-
-    // UI behaviour
-
-    connect (ui->auto_off_button_, &QAbstractButton::clicked, [this] (bool /* checked */) {
-        do_halt_tx (id_, true);
-    });
-    connect (ui->halt_tx_button_, &QAbstractButton::clicked, [this] (bool /* checked */) {
-        do_halt_tx (id_, false);
-    });
 
     // this to change - get the item, and use the message decode data
     connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
@@ -97,10 +91,25 @@ WsjtxFrame::~WsjtxFrame()
 {
     delete ui;
 }
-void WsjtxFrame::do_halt_tx(QString const& id, bool auto_only)
+
+void WsjtxFrame::on_halt_tx_button__clicked()
 {
     ui->replyto_label->setText("");
-    WsjtxServer::getWsjtxServer()->do_halt_tx(id, auto_only);
+    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, true);
+}
+
+void WsjtxFrame::on_auto_off_button__clicked()
+{
+    ui->replyto_label->setText("");
+    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, false);
+}
+void WsjtxFrame::on_clearDecodesButton_clicked()
+{
+    WsjtxServer::getWsjtxServer()->do_clear_decodes(id_, 2);    // 2 is "both windows"
+}
+void WsjtxFrame::on_clearLocalDecodesButton_clicked()
+{
+    decodes_cleared(id_);
 }
 void WsjtxFrame::setContest(BaseContestLog *c)
 {
@@ -139,6 +148,7 @@ void WsjtxFrame::setContest(BaseContestLog *c)
 //}
 void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 {
+    id_ = id;
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc || ct->isProtected())
         return;
@@ -153,9 +163,16 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
     }
     ct->scanContest();
     ct->validateLoc();
-    for ( int i = spoint; i != ct->ctList.count(); i++ )
+    for ( int i = spoint; i < ct->ctList.count(); i++ )
     {
         QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
+        if (bct->loc.loc.getValue().isEmpty())
+        {
+            Callsign cs = bct->cs;
+            const Locator loc = WsjtGetCallLoc(cs);
+            bct->loc.loc.setValue(loc.loc);
+            trace(QString("loc for %1 is empty; filling in with %2").arg(cs.fullCall.getValue()).arg(loc.loc.getValue()));
+        }
         bct->commonSave(bct);
     }
     ct->commonSave( false );
@@ -166,20 +183,52 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 }
 void WsjtxFrame::add_client (QString const& id, QString const& /*version*/, QString const& /*revision*/)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
-        return;
-
     id_ = id;
 }
 
 void WsjtxFrame::remove_client (QString const& /*id*/)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
-        return;
+    ui->dx_label_->clear();
+    ui->rx_df_label_->clear();
+    ui->tx_df_label_->clear();
+    ui->report_label_->clear();
+    ui->auto_off_button_->setEnabled (false);
+    ui->halt_tx_button_->setEnabled (false);
+    ui->de_label_->clear();
+    ui->frequency_label_->clear();
+    ui->specialOpMode->clear();
+    ui->mode_label_->clear();
+    ui->bandErrorLabel->clear();
+    ui->replyto_label->clear();
+    if (ui->autoSelectButton->isChecked())
+        ui->autoSelectButton->toggle();
     id_.clear();
 }
+class PointBonusMult
+{
+    int points = 0;
+    int bonus = 0;
+    int mults = 0;
+public:
+    PointBonusMult()
+    {
+
+    }
+    PointBonusMult(decodeMessage &dc):points(dc.points), bonus(dc.bonus), mults(dc.mults)
+    {
+
+    }
+    bool operator>(PointBonusMult &rhs)
+    {
+        if (mults > rhs.mults)
+            return true;
+        if (points + bonus > rhs.points + rhs.bonus)
+            return true;
+
+        return false;
+    }
+};
+
 void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
@@ -189,6 +238,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc || cc == nullptr)
         return;
+    id_ = id;
 
     trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
           .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
@@ -265,20 +315,18 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     ui->auto_off_button_->setEnabled (tx_enabled);
     ui->halt_tx_button_->setEnabled (transmitting);
 
-    if (autoEnabled)
+    if (decoding && !inDecode)
     {
-        static bool inDecode = false;
+        inDecode = true;
+        decodeStartSize = messages.size();
+    }
+    if (inDecode && decoding == false)
+    {
+        inDecode = false;
 
-        if (decoding && !inDecode)
+        int decodeEndSize = messages.size();
+        if (autoEnabled)
         {
-            inDecode = true;
-            decodeStartSize = messages.size();
-        }
-        if (inDecode && decoding == false)
-        {
-            inDecode = false;
-
-            int decodeEndSize = messages.size();
             trace(QString("WsjtxFrame::update_status Checking decodes start %1 end %2").arg(decodeStartSize).arg(decodeEndSize));
 
             if (decodeEndSize > decodeStartSize)
@@ -286,7 +334,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 // iterate over the latest decodes, and select the best
 
                 int bestOffset = -1;
-                int bestPoints = -1;
+                PointBonusMult bestPoints;
                 QString bestCs;
                 int currSn = -100;
 
@@ -300,6 +348,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 for (int i = decodeStartSize; i < decodeEndSize; i++)
                 {
                     decodeMessage &dc = messages[i];
+                    if (dc.oldmsg)
+                        continue;
 
                     trace(QString("WsjtxFrame::update_status Checking %1 stage %2 tocall %3 fromcall %4")
                           .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
@@ -307,19 +357,24 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                      if (dc.points <= 0)
                         continue;
 
+                     bool auto73 = ui->autosel73cb->isChecked();
+                     bool toMyCall = (dc.toCall == decoder.getMyCall());
                      if (dc.mstage == emsCQ
-                    || (dc.mstage == emsGrid && dc.toCall == decoder.getMyCall())
+                             || (auto73 && dc.mstage == ems73 && !toMyCall)
+                             || (auto73 && dc.mstage == emsRRR && !toMyCall)
+                             || (dc.mstage == emsGrid && toMyCall)
                        )
                     {
+                         PointBonusMult pbv(dc);
 
                         if ( dc.snr >= minsnr
                                 && dc.points > minpoints
-                                && dc.points > bestPoints
+                                && pbv > bestPoints
                               )
                         {
                             trace(QString("WsjtxFrame::update_status Candidate %1").arg(messages[i].message));
                             bestOffset = i;
-                            bestPoints = dc.points;
+                            bestPoints = pbv;
                             bestCs = dc.fromCall.fullCall.getValue();
                             currSn = dc.snr;
                         }
@@ -375,10 +430,21 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
     if (ct != cc)
         return;
+    id_ = id;
 
     decodeMessage dc = decoder.decode(id, time, snr, delta_time
                                       , delta_frequency, mode
                                       , message, low_confidence, off_air);
+
+    if (lastTime != dc.time)
+    {
+        lastcol++;
+        lastcol %= 4;
+        lastTime = dc.time;
+    }
+
+    dc.colOffset = lastcol;
+    dc.oldmsg = !is_new;
 
     // need to make use of the decode data stack, both here and in ::data
     if (!is_new)
@@ -430,10 +496,11 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
     }
     ui->decodes_table_view_->scrollToBottom ();
 }
-void WsjtxFrame::clear_decodes (QString const& /*client_id*/)
+void WsjtxFrame::decodes_cleared (QString const& client_id)
 {
     // don't check for contest - clear is across all contests
 
+    id_ = client_id;
     decodes_model_->clear();
 
     columns_resized_ = false;
@@ -441,7 +508,7 @@ void WsjtxFrame::clear_decodes (QString const& /*client_id*/)
 void WsjtxFrame::reply(decodeMessage &dc)
 {
     ui->autoSelectButton->setChecked(false);
-    ui->autoSelectButton->setArrowType(Qt::NoArrow);
+    //ui->autoSelectButton->setArrowType(Qt::NoArrow);
     WsjtxServer::getWsjtxServer()->reply(dc.id, dc.time, dc.snr, dc.delta_time, dc.delta_frequency, dc.mode, dc.message, dc.low_confidence,  QApplication::keyboardModifiers () >> 24);
     ui->replyto_label->setText("Replying to: " + dc.message);
 }
@@ -464,19 +531,19 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 {
     if (!c)
     {
-        ui->autoSelectButton->setArrowType(Qt::NoArrow);
+        //ui->autoSelectButton->setArrowType(Qt::NoArrow);
         trace("WsjtxFrame autoselect off");
     }
     else
     {
-        ui->autoSelectButton->setArrowType(Qt::DownArrow);
+        //ui->autoSelectButton->setArrowType(Qt::DownArrow);
         trace("WsjtxFrame autoselect on");
     }
 }
 
 void WsjtxFrame::on_testButton_clicked()
 {
-/*
+
 //update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
 //        , QString const& report, QString const& tx_mode, bool tx_enabled
 //        , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
@@ -503,9 +570,25 @@ void WsjtxFrame::on_testButton_clicked()
             decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
             decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
             decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
+            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB RR73", false, true);
 
             update_status ("test", 12345, "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0);
-*/
+
+}
+
+
+void WsjtxFrame::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    /*
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    QString curScreenLayout = tslf->getCurScreenLayout();
+
+    QByteArray state = ui->splitter->saveState();
+    QSettings settings;
+    settings.setValue("Splitters/WsjtxFrame/state/" + curScreenLayout, state);
+
+    MinosLoggerEvents::SendSplittersChanged();
+    */
 }

@@ -264,6 +264,7 @@ private slots:
     void mouseTimerCheckNewSpots();
 
 
+    void on_splitter_splitterMoved(int, int);
 };
 
 class MouseInObject : public QObject

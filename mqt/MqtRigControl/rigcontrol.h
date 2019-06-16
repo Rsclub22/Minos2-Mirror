@@ -305,6 +305,12 @@ public:
 
 
 
+    int setDtrState(const bool state);
+    int setRtsState(const bool state);
+
+    int setRetryNumber(const QString retries);
+    int setTimeoutDur(const QString timeoutDur);
+
 signals:
     void frequency_updated(double);
     void debug_protocol(QString);
