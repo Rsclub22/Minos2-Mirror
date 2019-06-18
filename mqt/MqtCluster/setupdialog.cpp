@@ -317,7 +317,7 @@ void SetupDialog::locatorEditFinished()
 
     if (!locator.isEmpty())
     {
-        if (lonlat(locator, longitude, latitude) == LOC_OK)
+        if (lonlat(locator, longitude, latitude, false) == LOC_OK)
         {
             personalDataChanged = true;
         }

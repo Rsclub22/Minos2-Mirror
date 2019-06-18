@@ -736,13 +736,13 @@ int RigControl::setRtsState( const bool state)
 
 int RigControl::setRetryNumber(const QString retries)
 {
-    rig_set_conf(my_rig, rig_token_lookup(my_rig, "retry") , retries.toLatin1().data());
+    return rig_set_conf(my_rig, rig_token_lookup(my_rig, "retry") , retries.toLatin1().data());
 
 }
 
 int RigControl::setTimeoutDur(const QString timeoutDur)
 {
-    rig_set_conf(my_rig, rig_token_lookup(my_rig, "timeout") , timeoutDur.toLatin1().data());
+    return rig_set_conf(my_rig, rig_token_lookup(my_rig, "timeout") , timeoutDur.toLatin1().data());
 
 }
 
