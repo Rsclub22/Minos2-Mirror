@@ -123,7 +123,7 @@ class MultList : public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >
                   int useBearing = 0;
 
                   QString brgbuff;
-                  int valRes = lonlat( ce->central.loc.getValue(), longitude, latitude );
+                  int valRes = lonlat( ce->central.loc.getValue(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                   if ( ( valRes == LOC_OK ) && ct ->locValid )
                      ct ->disbeara( longitude, latitude, useScore, useBearing );
                   else

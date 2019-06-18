@@ -324,7 +324,7 @@ bool BaseContestLog::getsdist( const QString &loc, QString &minloc, double &mind
    double lon = 0.0;
    double lat = 0.0;
 
-   int lres = lonlat( loc, lon, lat );
+   int lres = lonlat( loc, lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
    if ( lres == LOC_OK || lres == LOC_SHORT )
    {
       disbeara( lon, lat, dist, brg );
@@ -397,7 +397,7 @@ int BaseContestLog::CalcCentres( const QString &qscalcloc, int &brg ) const
    double lon = 0.0;
    double lat = 0.0;
 
-   int lres = lonlat( temploc, lon, lat );
+   int lres = lonlat( temploc, lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
    if (lres == LOC_OK)
    {
         disbearc(lon, lat, dist, brg);

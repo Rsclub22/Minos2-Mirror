@@ -36,8 +36,7 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
    ui->QSOTable->setAlternatingRowColors(true);
    ui->QSOTable->setItemDelegate( delegate );
 
-//   ui->QSOTable->resizeColumnsToContents();
-   ui->QSOTable->resizeRowsToContents();
+   ui->QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 }
 void MonitoringFrame::showQSOs()
@@ -55,7 +54,6 @@ void MonitoringFrame::setScore()
 void MonitoringFrame::update()
 {
     qsoModel.reset();
-    ui->QSOTable->resizeRowsToContents();
 }
 void MonitoringFrame::on_sectionResized(int, int, int)
 {

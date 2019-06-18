@@ -44,7 +44,7 @@ Locator::~Locator()
 
 char Locator::validate( double &lon, double &lat )
 {
-   valRes = lonlat( loc.getValue(), lon, lat );
+   valRes = lonlat( loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
    return valRes;
 }
 
@@ -59,7 +59,7 @@ char Locator::validate( )
    double longitude = 0.0;
    double latitude = 0.0;
 
-   valRes = lonlat( loc.getValue(), longitude, latitude );
+   valRes = lonlat( loc.getValue(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
 
    return valRes;
 }

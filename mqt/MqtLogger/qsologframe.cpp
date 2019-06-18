@@ -1169,7 +1169,7 @@ void QSOLogFrame::calcLoc( )
         double dist;
         int brg = 0;
 
-        int locValres = lonlat( gridref, longitude, latitude );
+        int locValres = lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
         if ( ( locValres ) != LOC_OK )
             locValid = false;
 

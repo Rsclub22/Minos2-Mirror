@@ -295,7 +295,9 @@ void SetupDialog::locatorFinished(const QString& locator)
 
     if (!locator.isEmpty() && ui->locatorEdit->isValid())
     {
+
         personalDataChanged = true;
+
     }
 
 

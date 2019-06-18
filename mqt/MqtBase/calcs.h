@@ -14,7 +14,7 @@
 //----------------------------------------------------------------------------
 extern int normBrg( int mbear );
 extern int varBrg( int mbear );
-extern char lonlat(const QString &pinqra, double &lon, double &lat );
+extern char lonlat(const QString &pinqra, double &lon, double &lat , bool allowLoc4);
 extern QString WtodbW( const QString &W );
 extern QString dbWtoW( const QString &dbW );
 

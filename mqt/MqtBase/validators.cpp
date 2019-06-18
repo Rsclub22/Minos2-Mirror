@@ -194,7 +194,7 @@ bool Validator::validate(const QString &str, ScreenContact &screenContact )
             double longitude = 0.0;
             double latitude = 0.0;
 
-            if ( PXret && lonlat( loc, longitude, latitude ) != LOC_OK )
+            if ( PXret && lonlat( loc, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() ) != LOC_OK )
                PXret = false;
 
             if ( PXret == false )

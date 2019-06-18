@@ -96,7 +96,7 @@ void RigMemDialog::setLogData(memoryData::memData* ldata, int buttonNumber, Logg
     {
         double lon = 0.0;
         double lat = 0.0;
-        int lres = lonlat( ldata->locator, lon, lat );
+        int lres = lonlat( ldata->locator, lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
         if ( lres == LOC_OK )
         {
             double dist;
@@ -175,7 +175,7 @@ void RigMemDialog::onLocEditFinish()
     double longitude;
 
     QString gridref = ui->locatorLineEdit->text();
-    int locValres = lonlat( gridref, longitude, latitude );
+    int locValres = lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
     if ( ( locValres ) == LOC_OK )
     {
         int brg = 0;

@@ -44,7 +44,7 @@ void DistrictFrame::setContest(BaseContestLog *contest)
         connect( ui->DistrictTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
                  this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     }
-    ui->DistrictTable->resizeRowsToContents();
+    ui->DistrictTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 void DistrictFrame::reInitialiseDistricts()
 {
@@ -64,7 +64,6 @@ void DistrictFrame::reInitialiseDistricts()
             ui->DistrictTable->setCurrentIndex(proxyModel.index(i, 0));
         }
     }
-    ui->DistrictTable->resizeRowsToContents();
 }
 void DistrictFrame::scrollToDistrict( int district_ind, bool makeVisible )
 {

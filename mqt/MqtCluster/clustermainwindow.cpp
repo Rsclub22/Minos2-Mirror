@@ -165,25 +165,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     verticalHeader->setVisible(false);
     verticalHeader->setDefaultSectionSize(10);
     verticalHeader->setMinimumSectionSize(10);
-//    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-//    verticalHeader->setDefaultSectionSize(18);
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
 
     verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    //dxSpotView->resizeRowsToContents();
-
 /*
-
-
-
-
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
-
-
-
-
     restoreDxSpotViewColumns();
 */
     rawClusterDataView = new QPlainTextEdit();
@@ -283,8 +271,6 @@ void ClusterMainWindow::onClearAllSpots()
             purgeSpotFlag = false;
         }
     }
-    //dxSpotView->resizeRowsToContents();
-
 }
 
 
@@ -983,25 +969,6 @@ void ClusterMainWindow::getSpotsFromQueue()
 
 
         }
-/*        {
-            QTimer *timer = new QTimer(this);
-            timer->setSingleShot(true);
-
-            connect(timer, &QTimer::timeout, [=]()
-            {
-                // NB a lambda function
-                for (int i = 0 ; i < slsize; i++)
-                {
-                    dxSpotView->resizeRowToContents(i); // as we always show latest at the top
-                }
-                timer->deleteLater();
-            }
-            );
-
-            timer->start(10);
-        }  */
-        //
-        //trace(QString("GetSpotsFromQueue: resize contents"));
 
         trace(QString("GetSpotsFromQueue: finished"));
     }

@@ -31,7 +31,7 @@ void LocatorLineEdit::onTextChanged(const QString& locator)
         double latitude;
         double longitude;
 
-        if (lonlat(locator, longitude, latitude) == LOC_OK)
+        if (lonlat(locator, longitude, latitude, false) == LOC_OK)
         {
             locatorValid = true;
         }
