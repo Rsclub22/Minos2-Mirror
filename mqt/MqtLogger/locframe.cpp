@@ -214,7 +214,6 @@ void LocFrame::reInitialiseLocators()
 
     // don't resize earlier, or there won't be ANY DATA TO RESIZE TO...
     ui->LocView->resizeColumnsToContents();
-    //ui->LocView->resizeRowsToContents();
     ui->LocView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     for(int i = 0; i < model->rowCount(); i++)

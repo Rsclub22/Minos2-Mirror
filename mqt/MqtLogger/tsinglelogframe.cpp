@@ -197,7 +197,6 @@ void TSingleLogFrame::createScreenComponents()
 
     // the order of the next two lines is critical
     QSOTable->setItemDelegate( delegate );
-    QSOTable->resizeRowsToContents();       // this is where the sizehint gets called
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 
@@ -1103,7 +1102,6 @@ void TSingleLogFrame::refreshMults()
 void TSingleLogFrame::updateTrees()
 {
    qsoModel.reset();
-   QSOTable->resizeRowsToContents();
    refreshMults();
 }
 bool TSingleLogFrame::getStanza( unsigned int stanza, QString &stanzaData )

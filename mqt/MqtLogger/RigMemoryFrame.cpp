@@ -49,7 +49,6 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     delegate = new HtmlDelegate(1.0, lcf/100.0) ;
     model.delegate = delegate;
     ui->rigMemTable->setItemDelegate( delegate);
-    //ui->rigMemTable->resizeRowsToContents();
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
@@ -286,7 +285,6 @@ void RigMemoryFrame::doMemoryUpdates()
     reloadColumns();
     firstTime = true;
     on_AfterLogContact(ct);
-//    ui->rigMemTable->resizeRowsToContents();
 }
 
 void RigMemoryFrame::checkTimerTimer()
@@ -312,7 +310,6 @@ void RigMemoryFrame::checkTimerTimer()
 
     if (!doTimer && (logData.freq == lastRigFreq && logData.bearing == lastBearing))
     {
-        //ui->rigMemTable->resizeRowsToContents();
         return;
     }
     doTimer = false;
@@ -396,7 +393,6 @@ void RigMemoryFrame::checkTimerTimer()
         scrollIntoView(firstMatch);
     }
     proxyModel.headerDataChanged(Qt::Vertical, 0, model.rowCount() - 1);
-    //ui->rigMemTable->resizeRowsToContents();
 }
 void RigMemoryFrame::onRigFreqChanged(QString /*f*/, BaseContestLog *c)
 {
