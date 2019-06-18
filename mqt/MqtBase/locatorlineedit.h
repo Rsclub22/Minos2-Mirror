@@ -1,0 +1,51 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      LocatorLineEdit
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+//
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+#ifndef LOCATORLINEEDIT_H
+#define LOCATORLINEEDIT_H
+
+#include <QLineEdit>
+#include "cutils.h"
+
+class LocatorLineEdit : public QLineEdit
+{
+    Q_OBJECT
+
+public:
+    LocatorLineEdit(QWidget*);
+    bool isValid();
+signals:
+
+    void textChanged(QLineEdit*, const QString&);
+    void editingFinished(QLineEdit*);
+
+    void locatorFinished(const QString&);
+
+
+
+
+
+private slots:
+    void onTextChanged(const QString &);
+    void onEditingFinished();
+
+private:
+
+
+    bool locatorValid;
+    QString LocatorLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
+    QString LocatorLineEditFrBlackBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}";
+    void showLocatorGoodBad(bool state);
+
+
+};
+
+#endif // LOCATORLINEEDIT_H

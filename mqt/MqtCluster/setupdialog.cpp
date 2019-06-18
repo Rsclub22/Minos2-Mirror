@@ -15,6 +15,7 @@
 #include "ui_setupdialog.h"
 #include "cutils.h"
 #include "clustercommon.h"
+#include "CallsignLineEdit.h"
 
 
 #include <QSettings>
@@ -57,6 +58,8 @@ SetupDialog::SetupDialog(QWidget *parent) :
     connect(ui->locatorEdit, SIGNAL(editingFinished()), this, SLOT(locatorEditFinished()));
     connect(ui->qthEdit, SIGNAL(editingFinished()), this, SLOT(qthEditFinished()));
 
+    connect(ui->testCallsign, SIGNAL(callsignFinished(const QString&)), this, SLOT(callsignFinished(const QString&)));
+
     readPersonal();
     loadPersonalToSetupTab();
 
@@ -77,7 +80,11 @@ SetupDialog::SetupDialog(QWidget *parent) :
 }
 
 
-
+void SetupDialog::callsignFinished(const QString& cs)
+{
+    QString callsign = cs;
+    bool valid = ui->testCallsign->isValid();
+}
 
 
 SetupDialog::~SetupDialog()
@@ -267,10 +274,24 @@ void SetupDialog::runEndCmdFileChkBoxChanged(int state)
 
 void SetupDialog::callsignEditFinished()
 {
+    QString call = ui->callsignEdit->text().trimmed();
 
-    if (!ui->callsignEdit->text().trimmed().isEmpty())
+    if (!call.isEmpty())
     {
-        personalDataChanged = true;
+        Callsign cs(call);
+        if (cs.validate() != CS_OK)
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Invalid callsign entered!");
+            msgBox.exec();
+            personalDataChanged = false;
+
+        }
+        else
+        {
+            personalDataChanged = true;
+        }
+
     }
 
 }
@@ -289,10 +310,25 @@ void SetupDialog::nameEditFinshed()
 
 void SetupDialog::locatorEditFinished()
 {
+    QString locator = ui->locatorEdit->text().trimmed();
+    double latitude;
+    double longitude;
 
-    if (!ui->locatorEdit->text().trimmed().isEmpty())
+
+    if (!locator.isEmpty())
     {
-        personalDataChanged = true;
+        if (lonlat(locator, longitude, latitude) == LOC_OK)
+        {
+            personalDataChanged = true;
+        }
+        else
+        {
+            QMessageBox msgBox;
+            msgBox.setText("Invalid locator entered!");
+            msgBox.exec();
+            personalDataChanged = false;
+        }
+
     }
 
 

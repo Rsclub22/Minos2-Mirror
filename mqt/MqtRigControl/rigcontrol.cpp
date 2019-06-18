@@ -110,6 +110,16 @@ int RigControl::init(scatParams &currentRadio, bool useRigCtld)
             my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
             my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
             my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
+            if (my_rig->state.rigport.parm.serial.handshake == RIG_HANDSHAKE_NONE)
+            {
+                my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_ON;
+                my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_ON;
+            }
+            else
+            {
+                my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_UNSET;
+                my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
+            }
         }
         else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
         {
@@ -477,6 +487,11 @@ pbwidth_t RigControl::getPassBand()
 
 bool RigControl::supportVolControl(int rigNumber)
 {
+    if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
+    {
+        return false;
+    }
+
     if ((rigHasGetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (rigHasSetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF))
     {
         return true;
@@ -698,6 +713,38 @@ int RigControl::getPortType(int rigNumber, rig_port_e *portType)
 
 }
 
+// true set DTR state, false unset DTR state
+int RigControl::setDtrState( const bool state)
+{
+    int retCode = 0;
+    retCode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "dtr_state"), state ? "ON" : "OFF");
+
+    return retCode;
+}
+
+
+// true set DTR state, false unset DTR state
+int RigControl::setRtsState( const bool state)
+{
+    int retCode = 0;
+    retCode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "rts_state"), state ? "ON" : "OFF");
+    return retCode;
+}
+
+
+
+
+int RigControl::setRetryNumber(const QString retries)
+{
+    rig_set_conf(my_rig, rig_token_lookup(my_rig, "retry") , retries.toLatin1().data());
+
+}
+
+int RigControl::setTimeoutDur(const QString timeoutDur)
+{
+    rig_set_conf(my_rig, rig_token_lookup(my_rig, "timeout") , timeoutDur.toLatin1().data());
+
+}
 
 /*
 int RigControl::getModelNumber(int idx)

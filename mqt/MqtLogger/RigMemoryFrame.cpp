@@ -2,6 +2,7 @@
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "tlogcontainer.h"
+#include "BandList.h"
 #include "tsinglelogframe.h"
 #include "rigmemdialog.h"
 #include "rigutils.h"
@@ -135,29 +136,54 @@ void RigMemoryFrame::onMenuShow()
 // this could do with tidying up!
 void RigMemoryFrame::DXSpotToMemory(memoryData::memData m)
 {
-    memoryData::memData logData = m;
-    int n = -1;
-    int mcount = ct->rigMemories.size();
-    for (int i = 0; i <= mcount; i ++)  // <= - extra one gets blank
-    {
-        memoryData::memData m = ct->getRigMemoryData(i);
 
-        if ( m.callsign == memDefData::DEFAULT_CALLSIGN)
+    // is it for this band?
+    QString cb = ct->band.getValue().trimmed();
+    double cf = convertStrToFreq(m.freq);
+    QString mem_cb;
+    // find band for current freq
+    BandList &blist = BandList::getBandList();
+    for (int i = 0; i < blist.bandList.count(); i++)
+    {
+        if (cf >= blist.bandList[i].flow && cf <= blist.bandList[i].fhigh)
         {
-            n = i;
+            mem_cb = blist.bandList[i].uk;
             break;
         }
+
     }
 
-    if (n == -1)
+    if (cb == mem_cb && !ct->isProtected()) // band match and not protected?
     {
-        mShowMessage("Panic", this);
-        return;
+
+        memoryData::memData logData = m;
+        int n = -1;
+        int mcount = ct->rigMemories.size();
+        for (int i = 0; i <= mcount; i ++)  // <= - extra one gets blank
+        {
+            memoryData::memData m = ct->getRigMemoryData(i);
+
+            if ( m.callsign == memDefData::DEFAULT_CALLSIGN)
+            {
+                n = i;
+                break;
+            }
+        }
+
+        if (n == -1)
+        {
+            mShowMessage("Panic", this);
+            return;
+        }
+
+        setRigMemoryData(n, logData);
+
+        sendUpdateMemories();
     }
 
-    setRigMemoryData(n, logData);
 
-    sendUpdateMemories();
+
+
 }
 
 

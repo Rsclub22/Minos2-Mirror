@@ -241,7 +241,7 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     connect(ui->RitClear, SIGNAL(clicked(bool)), this, SLOT(ritClearButtonSelected(bool)));
 
     // from cluster frame
-    connect(&MinosLoggerEvents::mle, SIGNAL(FreqStrToRig(QString)), this, SLOT(sendFreq(QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(FreqStrToRig(QString)), this, SLOT(clusterUpdateRigFreq(QString)));
 
     // volume control updates to radio
     connect(ui->volumeSlider, SIGNAL(sendVolumeRadio(int)), this, SLOT(sendVolumeRadio(int)));
@@ -262,6 +262,13 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
         ui->modelbl->setVisible(false);
     }
 
+}
+
+
+void RigControlFrame::clusterUpdateRigFreq(QString freq)
+{
+    ui->freqInput->clearFocus();
+    sendFreq(freq);
 }
 
 

@@ -179,6 +179,7 @@ private:
     QAction* memoryAction;
     QAction* clearSpotAction;
     QAction* clearAllSpotsAction;
+    QAction* memoryActionOveride;
 
     QString contestUuid;
 
@@ -265,6 +266,7 @@ private slots:
 
 
     void on_splitter_splitterMoved(int, int);
+    void memoryActionOverideSelected();
 };
 
 class MouseInObject : public QObject

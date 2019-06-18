@@ -130,6 +130,16 @@ int RotControl::init(srotParams &selectedAntenna)
         my_rot->state.rotport.parm.serial.stop_bits = selectedAntenna.stopbits;
         my_rot->state.rotport.parm.serial.parity = getSerialParityCode(selectedAntenna.parity);
         my_rot->state.rotport.parm.serial.handshake = getSerialHandshakeCode(selectedAntenna.handshake);
+        if (my_rot->state.rotport.parm.serial.handshake == RIG_HANDSHAKE_NONE)
+        {
+            my_rot->state.rotport.parm.serial.dtr_state = RIG_SIGNAL_ON;
+            my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_ON;
+        }
+        else
+        {
+            my_rot->state.rotport.parm.serial.dtr_state = RIG_SIGNAL_UNSET;
+            my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
+        }
     }
     else if (rig_port_e(selectedAntenna.portType) == RIG_PORT_NETWORK || rig_port_e(selectedAntenna.portType) == RIG_PORT_UDP_NETWORK)
     {

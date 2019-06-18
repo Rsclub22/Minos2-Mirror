@@ -66,6 +66,7 @@ signals:
 
 public slots:
     QString getCurrentNodeName();
+
 private slots:
 
 
@@ -80,6 +81,9 @@ private slots:
     void clusterListDataChanged(QStandardItem *);
 
     void callsignEditFinished();
+
+    void callsignFinished(const QString&);
+
     void nameEditFinshed();
     void qthEditFinished();
     void locatorEditFinished();
