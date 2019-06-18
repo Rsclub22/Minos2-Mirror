@@ -81,7 +81,9 @@ SOURCES += \
     calllocinputdialog.cpp \
     helpbrowser.cpp \
     helptextbrowser.cpp \
-    clustercommon.cpp
+    clustercommon.cpp \
+    CallsignLineEdit.cpp \
+    locatorlineedit.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -149,7 +151,9 @@ HEADERS += \
     calllocinputdialog.h \
     rigmemcommondata.h \
     helpbrowser.h \
-    helptextbrowser.h
+    helptextbrowser.h \
+    CallsignLineEdit.h \
+    locatorlineedit.h
 
 unix {
     target.path = /usr/lib

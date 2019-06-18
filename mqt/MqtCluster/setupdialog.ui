@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterSetUpTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="generalTab">
       <attribute name="title">
@@ -149,6 +149,12 @@
         </layout>
        </item>
        <item>
+        <widget class="CallsignLineEdit" name="testCallsign"/>
+       </item>
+       <item>
+        <widget class="LocatorLineEdit" name="testLocator"/>
+       </item>
+       <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -212,6 +218,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CallsignLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>callsignlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LocatorLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>locatorlineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
