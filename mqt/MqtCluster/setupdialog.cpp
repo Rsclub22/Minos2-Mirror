@@ -267,10 +267,10 @@ void SetupDialog::runEndCmdFileChkBoxChanged(int state)
 
 
 
-void SetupDialog::callsignFinished(const QString& cs)
+void SetupDialog::callsignFinished(const QString& /*cs*/)
 {
 
-    if (!cs.isEmpty() &&  ui->callsignEdit->isValid())
+    if (ui->callsignEdit->getCallsign() != callsign)
     {
         personalDataChanged = true;
 
@@ -283,17 +283,17 @@ void SetupDialog::callsignFinished(const QString& cs)
 void SetupDialog::nameEditFinshed()
 {
 
-    if (!ui->nameEdit->text().trimmed().isEmpty())
+    if (ui->nameEdit->text().trimmed() != name)
     {
         personalDataChanged = true;
     }
 
 }
 
-void SetupDialog::locatorFinished(const QString& locator)
+void SetupDialog::locatorFinished(const QString& /*locator*/)
 {
 
-    if (!locator.isEmpty() && ui->locatorEdit->isValid())
+    if (ui->locatorEdit->getLocator() != locator) // data changed
     {
 
         personalDataChanged = true;
@@ -306,7 +306,7 @@ void SetupDialog::locatorFinished(const QString& locator)
 
 void SetupDialog::qthEditFinished()
 {
-    if (!ui->qthEdit->text().trimmed().isEmpty())
+    if (ui->qthEdit->text().trimmed() != qth)
     {
         personalDataChanged = true;
     }
@@ -319,34 +319,44 @@ void SetupDialog::savePersonal()
     if (personalDataChanged)
     {
 
-        if (callsign != ui->callsignEdit->getCallsign() && ui->callsignEdit->isValid())
+        if (callsign != ui->callsignEdit->getCallsign())
         {
-            callsign = ui->callsignEdit->getCallsign();
+            if (ui->callsignEdit->isValid())
+            {
+                callsign = ui->callsignEdit->getCallsign();
+            }
+            else
+            {
+                ui->callsignEdit->setCallsign(callsign);
+            }
+
         }
-        else
-        {
-            ui->callsignEdit->setCallsign(callsign);  // callsign invalid, restore callsign to dialogue
-        }
+
 
         if (name != ui->nameEdit->text().trimmed())
         {
             name = ui->nameEdit->text().trimmed();
         }
 
-        if (locator != ui->locatorEdit->getLocator() && ui->locatorEdit->isValid())
+        if (locator != ui->locatorEdit->getLocator() )
         {
-            locator = ui->locatorEdit->getLocator();
-        }
-        else
-        {
-            ui->locatorEdit->setLocator(locator); // locator invalid restore locator
+            if (ui->locatorEdit->isValid())
+            {
+              locator = ui->locatorEdit->getLocator();
+            }
+            else
+            {
+                ui->locatorEdit->setLocator(locator);
+            }
 
         }
+
 
         if (qth != ui->qthEdit->text().trimmed())
         {
             qth = ui->qthEdit->text().trimmed();
         }
+
 
 
         QString fileName = CLUSTER_SETTINGS_FILE;

@@ -94,6 +94,7 @@ bool CallsignLineEdit::isValid()
 
 QString CallsignLineEdit::getCallsign()
 {
+    callsign = text().trimmed();
     return callsign;
 }
 

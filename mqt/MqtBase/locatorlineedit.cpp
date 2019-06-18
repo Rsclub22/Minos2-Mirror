@@ -88,7 +88,9 @@ bool LocatorLineEdit::isValid()
 
 QString LocatorLineEdit::getLocator()
 {
+    locator = text().trimmed();
     return locator;
+
 }
 
 void LocatorLineEdit::setLocator(const QString loc)
