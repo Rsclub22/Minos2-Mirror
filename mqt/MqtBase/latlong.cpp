@@ -565,7 +565,7 @@ static void ukoscentre ( double /*longi*/, double *centre )
 
 static int locinput( Location *ingrid )
 {
-   int tok = lonlat( ingrid->datastring, ingrid->easting, ingrid->northing );
+   int tok = lonlat( ingrid->datastring, ingrid->easting, ingrid->northing, MinosParameters::getMinosParameters() ->getAllowLoc4() );
 
    if (tok == LOC_OK )
    {

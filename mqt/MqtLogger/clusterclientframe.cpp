@@ -822,7 +822,7 @@ void ClusterClientFrame::calcSpotDistanceBearing(const QString& _locator, double
             locator.append("MM");
         }
 
-        int locValres = lonlat( locator, longitude, latitude );
+        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
         if ( ( locValres ) != LOC_OK )
         {
             locValid = false;

@@ -293,7 +293,7 @@ void ScreenContact::score()
 
     double latitude;
     double longitude;
-    /*int locValres =*/ lonlat( gridref, longitude, latitude );
+    /*int locValres =*/ lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
 
     if ( !( contactFlags & MANUAL_SCORE ) || ( contactFlags & DONT_PRINT ) )
     {

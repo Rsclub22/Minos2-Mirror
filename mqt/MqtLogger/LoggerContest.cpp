@@ -624,7 +624,7 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
             double lon = 0.0;
             double lat = 0.0;
 
-            if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
+            if ( lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
             {
                 double dist;
                 int brg;

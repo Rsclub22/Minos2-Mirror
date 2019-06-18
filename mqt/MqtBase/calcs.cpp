@@ -18,7 +18,7 @@
 /* Latitude is NS, Longtitude is EW                   */
 /*                                                    */
 /******************************************************/
-char lonlat( const QString &inqra, double &lon, double &lat )
+char lonlat( const QString &inqra, double &lon, double &lat, bool allowLoc4 )
 {
    // defaulted to square centres - LL55LL55
    double ft[ 8 ] = {0.0, 0.0, 5.0, 5.0, 11.0, 11.0, 5.0, 5.0} ; /* work values for locator positions */
@@ -93,8 +93,6 @@ char lonlat( const QString &inqra, double &lon, double &lat )
    /* clean exit */
    lon = lon * dr ;                /* hold ready for calculation */
    lat = lat * dr ;
-
-   bool allowLoc4 = MinosParameters::getMinosParameters() ->getAllowLoc4();
 
    if ( l == 4 && allowLoc4 )
    {

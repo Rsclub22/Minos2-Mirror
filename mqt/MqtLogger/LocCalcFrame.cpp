@@ -60,7 +60,7 @@ void LocCalcFrame::on_CalcButton_clicked()
     cnt.myloc.loc.setValue( ui->S1Loc->text().toUpper() );
     cnt.validateLoc();
 
-    if ( lonlat( ui->S2Loc->text().toUpper(), longitude, latitude ) == LOC_OK )
+    if ( lonlat( ui->S2Loc->text().toUpper(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
     {
         cnt.disbeara( longitude, latitude, dist, brg );
         int idist = static_cast<int>(dist);

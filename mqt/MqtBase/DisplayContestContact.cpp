@@ -196,7 +196,7 @@ void DisplayContestContact::checkContact( bool inScan)
       double lat = 0.0;
       int brg = -1;
 
-      char v = lonlat( loc.loc.getValue(), lon, lat );
+      char v = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
       if ( v == LOC_OK )
       {
          clp->disbeara( lon, lat, dist, brg );
@@ -564,7 +564,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         // rework to come from prime contest loc
                         double lon = 0.0;
                         double lat = 0.0;
-                        if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
+                        if ( lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
                         {
                            // we don't have it worked out already...
                            double dist;
@@ -592,7 +592,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                              // rework to come from prime contest loc
                              double lon = 0.0;
                              double lat = 0.0;
-                             char llres = lonlat( loc.loc.getValue(), lon, lat );
+                             char llres = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                              if ( llres == LOC_OK || llres == LOC_PARTIAL )
                              {
                                 // we don't have it worked out already...
@@ -670,7 +670,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         double lat = 0.0;
                         int brg;
                         double dist = 0.0;
-                        char llres = lonlat( loc.loc.getValue(), lon, lat );
+                        char llres = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                         if ( llres == LOC_OK )
                         {
                            curcon->disbeara( lon, lat, dist, brg );
