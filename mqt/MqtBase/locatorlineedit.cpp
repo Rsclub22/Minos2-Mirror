@@ -53,11 +53,11 @@ void LocatorLineEdit::onTextChanged(const QString& locator)
 
 void LocatorLineEdit::onEditingFinished()
 {
-    QString call = text().trimmed();
-    if (!call.isEmpty())
+    locator = text().trimmed();
+    if (!locator.isEmpty())
     {
 
-       emit locatorFinished(call);
+       emit locatorFinished(locator);
 
     }
 
@@ -83,4 +83,15 @@ void LocatorLineEdit::showLocatorGoodBad(bool state)
 bool LocatorLineEdit::isValid()
 {
     return locatorValid;
+}
+
+
+QString LocatorLineEdit::getLocator()
+{
+    return locator;
+}
+
+void LocatorLineEdit::setLocator(const QString loc)
+{
+    setText(loc);
 }

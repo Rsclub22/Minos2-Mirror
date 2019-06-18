@@ -60,11 +60,11 @@ void CallsignLineEdit::onTextChanged(const QString& callsign)
 
 void CallsignLineEdit::onEditingFinished()
 {
-    QString call = text().trimmed();
-    if (!call.isEmpty())
+    callsign = text().trimmed();
+    if (!callsign.isEmpty())
     {
 
-       emit callsignFinished(call);
+       emit callsignFinished(callsign);
 
     }
 
@@ -90,4 +90,14 @@ void CallsignLineEdit::showCallsignGoodBad(bool state)
 bool CallsignLineEdit::isValid()
 {
     return callsignValid;
+}
+
+QString CallsignLineEdit::getCallsign()
+{
+    return callsign;
+}
+
+void CallsignLineEdit::setCallsign(const QString call)
+{
+    setText(call);
 }
