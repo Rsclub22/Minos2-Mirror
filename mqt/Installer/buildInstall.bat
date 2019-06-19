@@ -2,8 +2,9 @@ C:
 
 setlocal
 
-set QtTools=C:\Qt\Tools\mingw530_32\bin
-set QtKit="C:\Qt\5.11.2\mingw53_32\bin"
+set QtTools=C:\Qt\Tools\mingw730_32\bin
+set QtKit="C:\Qt\5.12.4\mingw73_32\bin"
+set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 
 if exist %QtKit% goto kitInstalled
 
@@ -67,8 +68,8 @@ copy %MROOT%\build\MqtRotator\release\MqtRotator.exe Bin
 copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
 
 copy C:\Projects\hamlib-w32-3.3\bin\*.dll Bin
-copy C:\Projects\openssl-1.0.2q-i386-win32\*.* Bin
 
+copy %QtOpenSSL%\*.DLL Bin
 
 copy %MROOT%\mqt\Docs\*.* Docs
 copy %MROOT%\mqt\Help\*.* Help
