@@ -108,6 +108,8 @@ const int PURGE_TIME = 1000 * 60 * 1;   // mins
 
 //const QStringList locatorSeperators = {"<", "tr", "-"};
 
+
+
 // Filter Change
 const int FREQFILTERUP = 1 << 0;
 const int CALLSIGNUP = 1 << 1;
