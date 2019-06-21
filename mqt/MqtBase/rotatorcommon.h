@@ -34,7 +34,10 @@ const QChar SHORTLOCATOR_IDENTIFIER = '#'; // add to bearing to identify that it
 
 // Common Rotator Constants
 
-const char DEGREE_SYMBOL = '\xB0';
+const QChar DEGREE_SYMBOL = '\xB0';
+const QChar BEARING_TRUE_CHAR = 'T';
+const QChar SHORTLOC_DELIMITER_START = '(';
+const QChar SHORTLOC_DELIMITER_END = ')';
 const int ROTATE_MOVE_TIMEOUT = 5;
 
 

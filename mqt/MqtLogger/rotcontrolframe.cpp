@@ -58,6 +58,7 @@ RotControlFrame::RotControlFrame(QWidget *parent):
 
 
     connect(this, SIGNAL(bearingEditReturn()), this, SLOT(on_Rotate_clicked()));
+    connect(ui->BrgSt, SIGNAL(textChanged(const QString)), this, SLOT(on_BearingStTextChange(const QString)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(BrgStrToRot(QString)), this, SLOT(getBrgFrmQSOLog(QString)));
 
@@ -121,10 +122,10 @@ int RotControlFrame::getCurrentBearing()
 QString RotControlFrame::convertBearingForDisplay(QString bearing)
 {
     QString brgbuff;
-    const QChar degreeChar(0260); // octal value
-    const QChar trueChar('T');
-    const QChar shortLocDelimiterStart('(');
-    const QChar shortLocDelimiterEnd(')');
+    const QChar degreeChar(DEGREE_SYMBOL);
+    const QChar trueChar(BEARING_TRUE_CHAR);
+    const QChar shortLocDelimiterStart(SHORTLOC_DELIMITER_START);
+    const QChar shortLocDelimiterEnd(SHORTLOC_DELIMITER_END);
     if (bearing.contains(SHORTLOCATOR_IDENTIFIER))
     {
         brgbuff = QString("%1%2%3%4%5").arg(shortLocDelimiterStart).arg( bearing.remove(SHORTLOCATOR_IDENTIFIER) ).arg(degreeChar).arg(trueChar).arg(shortLocDelimiterEnd);
@@ -246,8 +247,8 @@ void RotControlFrame::on_Rotate_clicked()
     if (rotConnected && !rotError)
     {
         traceMsg("Turn to button Clicked");
-        QString brgStr = ui->BrgSt->text();
-        if (!brgStr.isEmpty())
+        QString brgStr = ui->BrgSt->text().trimmed();
+        if (!brgStr.isEmpty() && validateBearingEntry(brgStr))
         {
             setTurnDisplayText(convertBearingForDisplay(brgStr));
             ui->BrgSt->selectAll();
@@ -392,6 +393,39 @@ void RotControlFrame::on_RotateRight_clicked()
 
 }
 
+
+void RotControlFrame::on_BearingStTextChange(const QString brg)
+{
+
+    if (validateBearingEntry(brg) || brg.isEmpty())
+    {
+        // set frame to black
+        ui->BrgSt->setStyleSheet("QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}");
+    }
+    else
+    {
+        // set frame to red
+        ui->BrgSt->setStyleSheet("QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}");
+    }
+}
+
+
+bool RotControlFrame::validateBearingEntry(const QString brg)
+{
+    QString bearing = brg;
+
+    bearing = bearing.trimmed().remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END);
+    bool ok;
+    int br = bearing.toInt(&ok);
+    if ((br >= COMPASS_MIN0 && br <= COMPASS_MAX360 && ok) )
+    {
+       return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 void RotControlFrame::keyPressEvent(QKeyEvent *event)
 {
