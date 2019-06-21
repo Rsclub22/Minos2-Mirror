@@ -59,8 +59,8 @@ SetupDialog::SetupDialog(QWidget *parent) :
     connect(ui->qthEdit, SIGNAL(editingFinished()), this, SLOT(qthEditFinished()));
 
 
-    readPersonal();
-    loadPersonalToSetupTab();
+    //readPersonal();
+    //loadPersonalToSetupTab();
 
 
 
@@ -207,6 +207,37 @@ void SetupDialog::saveGeneralSettings()
         }
 
     }
+}
+
+
+void SetupDialog::createDefaultGeneralSettingsFile()
+{
+
+    QString fileName = CLUSTER_SETTINGS_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("Personal");
+    config.setValue("Callsign", "");
+    config.setValue("Name", "");
+    config.setValue("Locator", "");
+    config.setValue("Qth", "");
+    config.endGroup();
+
+    config.beginGroup("TimeToLive");
+    config.setValue("timeToLive", 30);
+    config.endGroup();
+
+    config.beginGroup("HFSpots");
+    config.setValue("enable", false);
+    config.endGroup();
+
+    config.beginGroup("CommandFile");
+    config.setValue("enableCommandFile", false);
+    config.setValue("enableStartCommandFile", false);
+    config.setValue("enableEndCommandFile", false);
+    config.endGroup();
+
+
 }
 
 void SetupDialog::readGeneralSettings()
@@ -377,7 +408,7 @@ void SetupDialog::savePersonal()
 
 void SetupDialog::readPersonal()
 {
-    // need to check for no ini file...*************
+
 
     QString fileName = CLUSTER_SETTINGS_FILE;
 

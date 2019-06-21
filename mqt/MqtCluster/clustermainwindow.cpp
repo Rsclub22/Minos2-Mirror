@@ -110,12 +110,21 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
 
+    if (!FileExists(CLUSTER_PATH + CLUSTER_SETTINGS_FILE))
+    {
+        // missing cluster settings file, create default
+        setupCluster->createDefaultGeneralSettingsFile();
+    }
+
 
     initUserCommandButtons();
     readUserCommandStrings();
     userCommandAllButtonUpdate();
     // spotTimeToLive
     setupCluster->readGeneralSettings();
+    setupCluster->loadGeneralToSetupTab();
+    setupCluster->readPersonal();
+    setupCluster->loadPersonalToSetupTab();
 
     // read enable hf spots flag
     QString fileName = CLUSTER_SETTINGS_FILE;
