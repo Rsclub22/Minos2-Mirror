@@ -110,7 +110,7 @@
         <enum>QFrame::Raised</enum>
        </property>
        <property name="lineWidth">
-        <number>2</number>
+        <number>1</number>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
