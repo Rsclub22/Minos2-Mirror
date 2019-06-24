@@ -26,9 +26,10 @@ class CallsignLineEdit : public QLineEdit
 
 public:
     CallsignLineEdit(QWidget*);
-
+    QString getCallsign();
     bool isValid();
 
+    void setCallsign(const QString call);
 signals:
 
     void textChanged(QLineEdit*, const QString&);
@@ -46,11 +47,12 @@ private slots:
 
 private:
 
-
+    QString callsign;
     bool callsignValid;
     QString CallsignLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
     QString CallsignLineEditFrBlackBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}";
     void showCallsignGoodBad(bool state);
+
 };
 
 #endif // CALLSIGNLINEEDIT_H

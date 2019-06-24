@@ -210,6 +210,12 @@ void MinosLoggerEvents::SendBrgStrToRot(QString bearing)
 void MinosLoggerEvents::SendSpotBrgStrToRot(QString bearing)
 {
     emit mle.SpotBrgStrToRot(bearing);
+
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::SendMemBrgStrToRot(QString bearing)
+{
+    emit mle.MemBrgStrToRot(bearing);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendSpotToLog(memoryData::memData spotData)

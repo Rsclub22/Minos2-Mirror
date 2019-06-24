@@ -83,7 +83,8 @@ SOURCES += \
     helptextbrowser.cpp \
     clustercommon.cpp \
     CallsignLineEdit.cpp \
-    locatorlineedit.cpp
+    locatorlineedit.cpp \
+    bearinglineedit.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -153,7 +154,8 @@ HEADERS += \
     helpbrowser.h \
     helptextbrowser.h \
     CallsignLineEdit.h \
-    locatorlineedit.h
+    locatorlineedit.h \
+    bearinglineedit.h
 
 unix {
     target.path = /usr/lib

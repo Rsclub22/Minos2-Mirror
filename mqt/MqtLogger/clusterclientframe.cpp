@@ -20,6 +20,7 @@
 #include "ContestApp.h"
 #include "cutils.h"
 #include "rigmemcommondata.h"
+#include "rotatorcommon.h"
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
@@ -490,6 +491,11 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     else if (index.column() == DXBRG_COL_NUM)
     {
         QString brg = spotProxyModel->data(index, DataStoredRole).toString();
+        QString loc = spotProxyModel->data(spotProxyModel->index(index.row(), DXLOC_COL_NUM), DataStoredRole).toString();
+        if (loc.count() < 6)
+        {
+            brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+        }
         sendBrgToRot(brg);
     }
 }
@@ -558,6 +564,7 @@ void ClusterClientFrame::sendFreqToRig(QString freq)
 
 void ClusterClientFrame::sendBrgToRot(QString brg)
 {
+    trace(QString("Send Bearing to Rot = %1").arg(brg));
     if (!brg.isEmpty())
     {
        MinosLoggerEvents::SendSpotBrgStrToRot(brg);
@@ -979,6 +986,12 @@ void ClusterClientFrame::bearingActionSelected()
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
             QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM), DataStoredRole).toString();
+            QString loc = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXLOC_COL_NUM), DataStoredRole).toString();
+            if (loc.count() < 6)
+            {
+                brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+
+            }
             sendBrgToRot(brg);
         }
     }

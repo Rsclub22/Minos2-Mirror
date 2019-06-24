@@ -80,13 +80,13 @@ private slots:
 
     void clusterListDataChanged(QStandardItem *);
 
-    void callsignEditFinished();
+
 
     void callsignFinished(const QString&);
 
     void nameEditFinshed();
     void qthEditFinished();
-    void locatorEditFinished();
+    void locatorFinished(const QString&);
     void saveButtonPushed();
 
     void cancelButtonPushed();

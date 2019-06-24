@@ -21,7 +21,10 @@ class LocatorLineEdit : public QLineEdit
 
 public:
     LocatorLineEdit(QWidget*);
+    QString getLocator();
     bool isValid();
+    void setLocator(const QString loc);
+
 signals:
 
     void textChanged(QLineEdit*, const QString&);
@@ -39,7 +42,7 @@ private slots:
 
 private:
 
-
+    QString locator;
     bool locatorValid;
     QString LocatorLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
     QString LocatorLineEditFrBlackBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}";
