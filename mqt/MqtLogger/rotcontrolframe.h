@@ -57,7 +57,7 @@ public:
     int getCurrentBearing();
 
     QString getBrgTxtFrmFrame();
-    void setBrgFromRigFrmMemory(QString Brg);
+
     void getRotDetails(memoryData::memData &m);
 
     void on_ContestPageChanged();
@@ -117,6 +117,15 @@ private:
 
     void keyPressEvent(QKeyEvent *event);
     void setCwCcW_Items_Visible(bool visible);
+
+
+
+
+    void setTurnDisplayText(QString brg);
+    QString convertBearingForDisplay(QString bearing);
+
+
+    bool validateBearingEntry(const QString brg);
 signals:
     void selectRotator(QString);
     void sendRotator(rpcConstants::RotateDirection direction, int angle );
@@ -139,6 +148,8 @@ private slots:
 
 
     void setBrgFromSpot(QString brg);
+    void setBrgFromFrmMemory(QString Brg);
+    void on_BearingStTextChange(const QString);
 };
 
 #endif // ROTCONTROLFRAME_H

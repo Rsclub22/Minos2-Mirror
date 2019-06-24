@@ -53,12 +53,11 @@ SetupDialog::SetupDialog(QWidget *parent) :
     ui->callsignEdit->setValidator(new UpperCaseValidator());
     ui->locatorEdit->setValidator(new UpperCaseValidator());
 
-    connect(ui->callsignEdit, SIGNAL(editingFinished()), this, SLOT(callsignEditFinished()));
+    connect(ui->callsignEdit, SIGNAL(callsignFinished(const QString&)), this, SLOT(callsignFinished(const QString&)));
     connect(ui->nameEdit, SIGNAL(editingFinished()), this, SLOT(nameEditFinshed()));
-    connect(ui->locatorEdit, SIGNAL(editingFinished()), this, SLOT(locatorEditFinished()));
+    connect(ui->locatorEdit, SIGNAL(locatorFinished(const QString&)), this, SLOT(locatorFinished(const QString&)));
     connect(ui->qthEdit, SIGNAL(editingFinished()), this, SLOT(qthEditFinished()));
 
-    connect(ui->testCallsign, SIGNAL(callsignFinished(const QString&)), this, SLOT(callsignFinished(const QString&)));
 
     readPersonal();
     loadPersonalToSetupTab();
@@ -80,11 +79,7 @@ SetupDialog::SetupDialog(QWidget *parent) :
 }
 
 
-void SetupDialog::callsignFinished(const QString& cs)
-{
-    QString callsign = cs;
-    bool valid = ui->testCallsign->isValid();
-}
+
 
 
 SetupDialog::~SetupDialog()
@@ -272,25 +267,12 @@ void SetupDialog::runEndCmdFileChkBoxChanged(int state)
 
 
 
-void SetupDialog::callsignEditFinished()
+void SetupDialog::callsignFinished(const QString& /*cs*/)
 {
-    QString call = ui->callsignEdit->text().trimmed();
 
-    if (!call.isEmpty())
+    if (ui->callsignEdit->getCallsign() != callsign)
     {
-        Callsign cs(call);
-        if (cs.validate() != CS_OK)
-        {
-            QMessageBox msgBox;
-            msgBox.setText("Invalid callsign entered!");
-            msgBox.exec();
-            personalDataChanged = false;
-
-        }
-        else
-        {
-            personalDataChanged = true;
-        }
+        personalDataChanged = true;
 
     }
 
@@ -301,33 +283,20 @@ void SetupDialog::callsignEditFinished()
 void SetupDialog::nameEditFinshed()
 {
 
-    if (!ui->nameEdit->text().trimmed().isEmpty())
+    if (ui->nameEdit->text().trimmed() != name)
     {
         personalDataChanged = true;
     }
 
 }
 
-void SetupDialog::locatorEditFinished()
+void SetupDialog::locatorFinished(const QString& /*locator*/)
 {
-    QString locator = ui->locatorEdit->text().trimmed();
-    double latitude;
-    double longitude;
 
-
-    if (!locator.isEmpty())
+    if (ui->locatorEdit->getLocator() != locator) // data changed
     {
-        if (lonlat(locator, longitude, latitude, false) == LOC_OK)
-        {
-            personalDataChanged = true;
-        }
-        else
-        {
-            QMessageBox msgBox;
-            msgBox.setText("Invalid locator entered!");
-            msgBox.exec();
-            personalDataChanged = false;
-        }
+
+        personalDataChanged = true;
 
     }
 
@@ -337,7 +306,7 @@ void SetupDialog::locatorEditFinished()
 
 void SetupDialog::qthEditFinished()
 {
-    if (!ui->qthEdit->text().trimmed().isEmpty())
+    if (ui->qthEdit->text().trimmed() != qth)
     {
         personalDataChanged = true;
     }
@@ -349,10 +318,46 @@ void SetupDialog::savePersonal()
 {
     if (personalDataChanged)
     {
-        callsign = ui->callsignEdit->text().trimmed();
-        name = ui->nameEdit->text().trimmed();
-        locator = ui->locatorEdit->text().trimmed();
-        qth = ui->qthEdit->text().trimmed();
+
+        if (callsign != ui->callsignEdit->getCallsign())
+        {
+            if (ui->callsignEdit->isValid())
+            {
+                callsign = ui->callsignEdit->getCallsign();
+            }
+            else
+            {
+                ui->callsignEdit->setCallsign(callsign);
+            }
+
+        }
+
+
+        if (name != ui->nameEdit->text().trimmed())
+        {
+            name = ui->nameEdit->text().trimmed();
+        }
+
+        if (locator != ui->locatorEdit->getLocator() )
+        {
+            if (ui->locatorEdit->isValid())
+            {
+              locator = ui->locatorEdit->getLocator();
+            }
+            else
+            {
+                ui->locatorEdit->setLocator(locator);
+            }
+
+        }
+
+
+        if (qth != ui->qthEdit->text().trimmed())
+        {
+            qth = ui->qthEdit->text().trimmed();
+        }
+
+
 
         QString fileName = CLUSTER_SETTINGS_FILE;
 
