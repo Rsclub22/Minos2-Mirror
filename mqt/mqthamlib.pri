@@ -5,7 +5,7 @@
 # For example C:\Qt_Projects\hamlib-w32-4.0\bin
 
 
-CONFIG += hamlib_V4_0
+CONFIG += hamlib_V3_3
 
 CONFIG(hamlib_V4_0){
 
