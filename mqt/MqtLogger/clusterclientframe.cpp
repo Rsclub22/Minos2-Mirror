@@ -27,6 +27,14 @@
 #include "ui_clusterclientframe.h"
 
 
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonParseError>
+
+#include "clustermodebandplan.h"
+
 ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     QFrame(parent),
     ui(new Ui::ClusterClientFrame),
@@ -163,8 +171,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
-
-
+    // test clusterbandplan json
+    ClusterModeBandPlan* cmbp = new ClusterModeBandPlan();
+    cmbp->loadFile();
 
 }
 
