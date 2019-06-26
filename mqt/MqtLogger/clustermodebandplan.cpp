@@ -1,3 +1,17 @@
+////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Cluster Mode/Bandplan
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+//
+///
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
 #include "clustermodebandplan.h"
 
 #include <QJsonDocument>
@@ -133,5 +147,60 @@ bool ClusterModeBandPlan::readFile(QString f)
         trace("Err " + err.errorString() + " Bad Json document " + s);
         return false;
     }
+
+}
+
+
+
+int ClusterModeBandPlan::confirmMode(QString &band, QString &mode, double freq)
+{
+
+    QMap<QString, ModeFreqDetail> modeList;
+    ModeFreqDetail freqs;
+
+
+    if (bandModeFreqList.contains(band))
+    {
+        modeList = bandModeFreqList.value(band);
+        if (modeList.contains(mode))
+        {
+            freqs = modeList.value(mode);
+            for (int i = 0; i < freqs.freq.count(); i++)
+            {
+                QList< double > freqLimits = freqs.freq[i];
+                if (freq >= freqLimits[0] && freq <= freqLimits[1])
+                {
+                    return MODE_FREQ_MATCH;
+
+                }
+            }
+
+            return NO_MODE_FREQ_MATCH;
+        }
+
+        return MODE_NOT_FOUND;
+    }
+
+    return BAND_NOT_FOUND;
+}
+
+
+// return false if band or mode doesn't exist - true if mode and band exists
+
+bool ClusterModeBandPlan::modeExists(QString &band, QString &mode)
+{
+
+    QMap<QString, ModeFreqDetail> modeList;
+
+    if (bandModeFreqList.contains(band))
+    {
+        modeList = bandModeFreqList.value(band);
+        if (modeList.contains(mode))
+        {
+            return true;
+        }
+    }
+
+    return false;
 
 }

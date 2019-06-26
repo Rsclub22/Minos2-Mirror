@@ -15,7 +15,6 @@
 #include "MinosRPC.h"
 #include "MinosLoggerEvents.h"
 #include "clusterclientframe.h"
-#include "clustercommon.h"
 #include "contest.h"
 #include "ContestApp.h"
 #include "cutils.h"
@@ -33,7 +32,7 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 
-#include "clustermodebandplan.h"
+
 
 ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     QFrame(parent),
@@ -85,7 +84,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
 
+    modeBandPlan = new ClusterModeBandPlan();
 
+    modeBandPlan->loadFile();
+
+    QString band = "70 MHz";
+    QString mode = "MGM";
+    bool test = modeBandPlan->modeExists(band, mode);
 
 
     spotsMenu = new QMenu(ui->actionsButton);
