@@ -680,6 +680,7 @@ void TSingleLogFrame::closeContest()
        clearScreenLayout();
        TContestApp::getContestApp() ->closeFile( contest );
        GJVQSOLogFrame->closeContest();
+       qsoModel.initialise(nullptr);
 
        contest = nullptr;
     }

@@ -54,6 +54,9 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
     if ( row >= rowCount() )
         return QVariant();
 
+    if (contest == nullptr)
+        return QVariant();
+
     QSharedPointer<BaseContact> ct = contest->pcontactAt( row);
     if (!ct)
         return QVariant();
