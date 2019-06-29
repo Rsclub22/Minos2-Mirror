@@ -22,7 +22,7 @@
 #include "clusterClientServer.h"
 #include "clusterclientfilterdialog.h"
 #include "clustercommon.h"
-#include "clustermodebandplan.h"
+#include "bandModeFrequencyPlan.h"
 #include "MinosLoggerEvents.h"
 
 namespace Ui {
@@ -144,7 +144,7 @@ private:
 
     ClusterClientFilterDialog *filterSetup;
 
-    ClusterModeBandPlan *modeBandPlan;
+    BandModeFrequencyPlan *modeBandPlan;
 
     HtmlDelegate *delegate = nullptr;
 

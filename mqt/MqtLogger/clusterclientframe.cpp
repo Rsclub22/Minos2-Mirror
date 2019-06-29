@@ -84,9 +84,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
 
-    modeBandPlan = new ClusterModeBandPlan();
+    modeBandPlan = new BandModeFrequencyPlan();
 
-    modeBandPlan->loadFile();
+    modeBandPlan->loadFile("./Configuration/mode_bandplan.json");
 
     QString band = "70 MHz";
     QString mode = "MGM";
