@@ -84,7 +84,8 @@ SOURCES += \
     clustercommon.cpp \
     CallsignLineEdit.cpp \
     locatorlineedit.cpp \
-    bearinglineedit.cpp
+    bearinglineedit.cpp \
+    bandModeFrequencyPlan.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -155,7 +156,8 @@ HEADERS += \
     helptextbrowser.h \
     CallsignLineEdit.h \
     locatorlineedit.h \
-    bearinglineedit.h
+    bearinglineedit.h \
+    bandModeFrequencyPlan.h
 
 unix {
     target.path = /usr/lib

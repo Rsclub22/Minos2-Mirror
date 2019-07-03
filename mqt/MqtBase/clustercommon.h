@@ -31,6 +31,8 @@ const QStringList clusterModes = QStringList() << "CW" << "USB" << "FM" << "MGM"
 
 const int NUM_MODES = 5;
 
+enum bandPlanModeError {MODE_FREQ_MATCH, NO_MODE_FREQ_MATCH, MODE_NOT_FOUND, BAND_NOT_FOUND};
+
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
 const int DXCALL = 0;
 const int DXLOCATOR = 1;
