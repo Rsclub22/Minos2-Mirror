@@ -27,9 +27,11 @@ BearingLineEdit::BearingLineEdit(QWidget * parent): QLineEdit (parent),
 
 void BearingLineEdit::onTextChanged(const QString& brg)
 {
-    if (!brg.isEmpty())
+    bool ok = false;
+    int bearing = brg.toInt(&ok);
+    if (!brg.isEmpty() && ok)
     {
-        if (brg <= COMPASS_MIN0 && brg >= COMPASS_MAX360)
+        if (bearing <= COMPASS_MIN0 && bearing >= COMPASS_MAX360)
         {
             bearingValid = false;
             showBearingGoodBad(bearingValid);
