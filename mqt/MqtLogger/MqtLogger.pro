@@ -59,6 +59,7 @@ SOURCES += \
     locTreeFrame.cpp \
     locframe.cpp \
     main.cpp \
+    minoscontestloaddialog.cpp \
     qsologframe.cpp \
     reg1test.cpp \
     rigcontrolframe.cpp \
@@ -124,6 +125,7 @@ HEADERS  += \
     freqlineedit.h \
     locTreeFrame.h \
     locframe.h \
+    minoscontestloaddialog.h \
     printfile.h \
     qsologframe.h \
     reg1test.h \
@@ -172,6 +174,7 @@ FORMS    += \
     LocCalcFrame.ui \
     locframe.ui \
     locTreeFrame.ui \
+    minoscontestloaddialog.ui \
     presetbuttondialog.ui \
     qsologframe.ui \
     rigcontrolframe.ui \
