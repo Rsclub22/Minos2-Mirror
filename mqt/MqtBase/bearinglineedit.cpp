@@ -31,7 +31,7 @@ void BearingLineEdit::onTextChanged(const QString& brg)
     int bearing = brg.toInt(&ok);
     if (!brg.isEmpty() && ok)
     {
-        if (bearing <= COMPASS_MIN0 && bearing >= COMPASS_MAX360)
+        if (bearing < COMPASS_MIN0 && bearing >= COMPASS_MAX360)
         {
             bearingValid = false;
             showBearingGoodBad(bearingValid);
@@ -92,7 +92,12 @@ QString BearingLineEdit::getBearing()
 
 void BearingLineEdit::setBearing(const QString brg)
 {
-    if (brg >= COMPASS_MIN0 && brg <= COMPASS_MAX360)
-        setText(brg);
+    bool ok = false;
+    int bearing = brg.toInt(&ok);
+    if (!brg.isEmpty() && ok)
+    {
+        if (bearing >= COMPASS_MIN0 && bearing < COMPASS_MAX360)
+            setText(brg);
+    }
 }
 
