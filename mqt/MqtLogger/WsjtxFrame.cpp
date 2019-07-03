@@ -417,6 +417,12 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                 }
             }
         }
+        if (!columns_resized_)
+        {
+            ui->decodes_table_view_->resizeColumnsToContents ();
+            columns_resized_ = true;
+        }
+        ui->decodes_table_view_->scrollToBottom ();
     }
 }
 
@@ -487,12 +493,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
 
     decodes_model_->add_decode ();
 
-    if (!columns_resized_)
-    {
-        ui->decodes_table_view_->resizeColumnsToContents ();
-        columns_resized_ = true;
-    }
-    ui->decodes_table_view_->scrollToBottom ();
+
 }
 void WsjtxFrame::decodes_cleared (QString const& client_id)
 {
