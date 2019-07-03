@@ -94,7 +94,8 @@ SOURCES += \
     WsjtxMessageServer.cpp \
     WsjtxRadio.cpp \
     WsjtxRadioMetaType.cpp \
-    Wsjtx_qt_helpers.cpp
+    Wsjtx_qt_helpers.cpp \
+    clustermodebandplan.cpp
 
 HEADERS  += \
     AdifImport.h \
@@ -160,7 +161,8 @@ HEADERS  += \
     Wsjtx_pimpl_h.hpp \
     Wsjtx_pimpl_impl.hpp \
     Wsjtx_qt_helpers.hpp \
-    WsjtxRadio.hpp
+    WsjtxRadio.hpp \
+    clustermodebandplan.h
 
 FORMS    += \
     contestdetails.ui \

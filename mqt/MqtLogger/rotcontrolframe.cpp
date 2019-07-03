@@ -130,9 +130,13 @@ QString RotControlFrame::convertBearingForDisplay(QString bearing)
     {
         brgbuff = QString("%1%2%3%4%5").arg(shortLocDelimiterStart).arg( bearing.remove(SHORTLOCATOR_IDENTIFIER) ).arg(degreeChar).arg(trueChar).arg(shortLocDelimiterEnd);
     }
-    else
+    else if (!bearing.contains(DEGREE_SYMBOL) && !bearing.contains(BEARING_TRUE_CHAR))
     {
         brgbuff = QString("%1%2%3").arg( bearing ).arg(degreeChar).arg(trueChar);
+    }
+    else
+    {
+        brgbuff = bearing;
     }
 
     traceMsg(QString("Convert Bearing for Display = %1").arg(brgbuff));
