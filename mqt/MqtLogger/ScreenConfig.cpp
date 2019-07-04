@@ -56,13 +56,13 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
     vbl->setMargin(1);
     ui->scrollAreaWidgetContents->setLayout(vbl);
 
+    baseElement = new ScreenConfigElement(nullptr, this);
+
     // create the screen contents based on the config
 
     SC sc = scf.configs[curConfigName];
 
-    baseElement = new ScreenConfigElement(nullptr, this);
-
-    if (sc.baseElement->rows.count() == 0)
+    if (sc.baseElement == nullptr || sc.baseElement->rows.count() == 0)
     {
         on_addRowButton_clicked();
     }
