@@ -1692,7 +1692,7 @@ void TSingleLogFrame::on_RotatorBearing(QString s)
 }
 
 
-void TSingleLogFrame::on_RotatorMaxAzimuth(QString s)
+void TSingleLogFrame::on_RotatorMaxAzimuth(int s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
@@ -1700,7 +1700,7 @@ void TSingleLogFrame::on_RotatorMaxAzimuth(QString s)
     }
 }
 
-void TSingleLogFrame::on_RotatorMinAzimuth(QString s)
+void TSingleLogFrame::on_RotatorMinAzimuth(int s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {

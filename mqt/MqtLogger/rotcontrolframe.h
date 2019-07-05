@@ -51,8 +51,8 @@ public:
     void setRotatorState(const QString &s);
     void setRotatorBearing(const QString &s);
     void setRotatorAntennaName(const QString &s);
-    void setRotatorMaxAzimuth(const QString &s);
-    void setRotatorMinAzimuth(const QString &s);
+    void setRotatorMaxAzimuth(const int s);
+    void setRotatorMinAzimuth(const int s);
     int getAngle(QString);
     int getCurrentBearing();
 

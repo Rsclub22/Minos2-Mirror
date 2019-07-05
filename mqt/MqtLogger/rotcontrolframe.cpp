@@ -768,29 +768,21 @@ void RotControlFrame::setRotatorBearing(const QString &s)
 
 }
 
-void RotControlFrame::setRotatorMaxAzimuth(const QString &s)
+void RotControlFrame::setRotatorMaxAzimuth(const int maxAz)
 {
-    traceMsg("Set MaxAzimuth = " + s);
-    bool ok;
-    int max_azimuth = 0;
-    max_azimuth = s.toInt(&ok, 10);
-    if (ok)
-    {
-        maxAzimuth = max_azimuth;
-    }
+    traceMsg(QString("Set MaxAzimuth = %1").arg(QString::number(maxAz)));
+
+    maxAzimuth = maxAz;
+
 }
 
 
-void RotControlFrame::setRotatorMinAzimuth(const QString &s)
+void RotControlFrame::setRotatorMinAzimuth(const int minAz)
 {
-    traceMsg("Set MinAzimuth = " + s);
-    bool ok;
-    int min_azimuth = 0;
-    min_azimuth = s.toInt(&ok, 10);
-    if (ok)
-    {
-        minAzimuth = min_azimuth;
-    }
+    traceMsg(QString("Set MinAzimuth = %1").arg(QString::number(minAz)));
+
+    minAzimuth = minAz;
+
 }
 
 
