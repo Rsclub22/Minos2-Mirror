@@ -197,7 +197,7 @@ void TSingleLogFrame::createScreenComponents()
 
     // the order of the next two lines is critical
     QSOTable->setItemDelegate( delegate );
-    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    //QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 
     QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
@@ -418,9 +418,12 @@ void TSingleLogFrame::applyScreenLayout()
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     trace("TSingleLogFrame::applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
     hide();
+    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+
     clearScreenLayout();
     buildScreenLayout();
     show();
+    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     onSplitterMoved(-1, -1);
 }
 
@@ -636,6 +639,7 @@ void TSingleLogFrame::buildScreenLayout()
         }
         connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
     }
+
 }
 
 
@@ -770,6 +774,10 @@ void TSingleLogFrame::on_ContestPageChanged ()
     FKHRotControlFrame->on_ContestPageChanged();
 
     updateQSODisplay();
+
+   //QHeaderView::ResizeMode rm =  QSOTable->verticalHeader()->sectionResizeMode(1);
+   // default seems to be 0, Interactive
+    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     update();   // this queues a repaint
 }
