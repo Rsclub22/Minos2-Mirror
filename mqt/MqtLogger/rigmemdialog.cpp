@@ -157,7 +157,16 @@ void RigMemDialog::on_okButton_clicked()
 
     logData->mode = ui->modecb->currentText();
     logData->locator = ui->locatorLineEdit->text();
-    logData->bearing = ui->bearingLineEdit->text().toInt();
+
+    if (ui->bearingLineEdit->isValid())
+    {
+       logData->bearing = ui->bearingLineEdit->text().toInt();
+    }
+    else
+    {
+        ui->bearingLineEdit->setText(QString::number(logData->bearing));
+    }
+
     logData->time = ui->timeLineEdit->text();
     accept();
 }

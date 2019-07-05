@@ -32,7 +32,7 @@ RotPresetDialog::RotPresetDialog(QWidget *parent, int buttonNumber, RotPresetDat
     ui->bearingEdit->setText(curData->bearing);
     ui->nameEdit->setFocus();
 
-    connect(ui->bearingEdit, SIGNAL(editingFinished()), this, SLOT(bearingEditFinished()));
+    //connect(ui->bearingEdit, SIGNAL(editingFinished()), this, SLOT(bearingEditFinished()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(editAccepted()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(editRejected()));
 }
@@ -47,6 +47,8 @@ RotPresetDialog::~RotPresetDialog()
 
 bool RotPresetDialog::bearingEditFinished()
 {
+/*
+
     int b = ui->bearingEdit->text().toInt();
     if (b < 0 || b > 360)
     {
@@ -57,6 +59,23 @@ bool RotPresetDialog::bearingEditFinished()
         return false;
     }
     return true;
+
+*/
+
+    if (ui->bearingEdit->isValid())
+    {
+        return true;
+    }
+
+    QMessageBox::information(this, tr("Bearing Out of range"),
+                             tr("Bearing: %1, out of range, should be 0-360 \nPlease enter another bearing").arg(ui->bearingEdit->text().trimmed()),
+                              QMessageBox::Ok|QMessageBox::Default,
+                              QMessageBox::NoButton, QMessageBox::NoButton);
+    return false;
+
+
+
+
 }
 
 

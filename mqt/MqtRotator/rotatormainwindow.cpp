@@ -1146,26 +1146,10 @@ void RotatorMainWindow::rotateToController()
     {
         return;
     }
-    //bool ok;
-    //int intBearing;
+
 
     rotCmdflag = true;
-    //QString bearing = ui->bearingEdit->text();
 
-    //intBearing = bearing.toInt(&ok, 10);
-
-    //if (intBearing >= currentMinAzimuth && intBearing <= currentMaxAzimuth && ok)
-    //if (intBearing >= COMPASS_MIN0 && intBearing <= COMPASS_MAX360 && ok)
-    //{
-    //    rotateTo(intBearing);
-    //    logMessage(QString("Rotate to bearing %1").arg(bearing));
-    //}
-    //else
-    //{
-
-    //    QString s = QString("Invalid Bearing\nPlease enter %1 - %2").arg(QString::number(COMPASS_MIN0)).arg(QString::number(COMPASS_MAX360));
-    //    QMessageBox::critical(this, tr("Bearing Error"), s);
-    //}
 
     if (ui->bearingEdit->isValid())
     {
