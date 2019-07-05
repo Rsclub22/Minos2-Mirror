@@ -5,10 +5,13 @@
 # For example C:\Qt_Projects\hamlib-w32-4.0\bin
 
 
-CONFIG += hamlib_V3_3
+HAMLIBVER = $$(hamlib)
 
-CONFIG(hamlib_V4_0){
+HAMLIBVER(4_0){
 
+    message(Using hamlib V4.0)
+    HAMLIBVER = $$(hamlib)
+    message(The hamlib version is $$HAMLIBVER)
     win32: {
        win32-g++* {
           contains(QT_ARCH, i386) {
