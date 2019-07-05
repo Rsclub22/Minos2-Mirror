@@ -26,7 +26,7 @@ class BearingLineEdit : public QLineEdit
 
 public:
     BearingLineEdit(QWidget*);
-    QString getBearing();
+    int getBearing();
     void setBearing(QString);
     bool isValid();
 
@@ -34,18 +34,17 @@ public:
 signals:
 
     void textChanged(QLineEdit*, const QString&);
-    void editingFinished(QLineEdit*);
 
-    void bearingFinished(const QString&);
+
 
 
 private slots:
     void onTextChanged(const QString &);
-    void onEditingFinished();
+
 
 private:
 
-    QString bearing;
+    int bearing;
     bool bearingValid;
     QString BearingLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
     QString BearingLineEditFrBlackBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}";
