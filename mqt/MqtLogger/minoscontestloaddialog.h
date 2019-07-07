@@ -21,8 +21,8 @@ public:
     void doShow();
 private:
     Ui::MinosContestLoadDialog *ui;
-    QEventLoop *el;
-    QTimer *timer;
+    QEventLoop *el = nullptr;
+    QTimer *timer = nullptr;
 };
 
 #endif // MINOSCONTESTLOADDIALOG_H

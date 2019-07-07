@@ -1315,11 +1315,8 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
    }
    TContestApp::getContestApp() ->writeContestList();
    enableActions();
-   if (ced == nullptr)
-   {
-       //create and show a progress splash screen
-       progress.hide();
-   }
+
+   progress.hide();
 
    return contest;
 }
