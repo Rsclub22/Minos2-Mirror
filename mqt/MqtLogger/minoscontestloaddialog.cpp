@@ -6,12 +6,26 @@ MinosContestLoadDialog::MinosContestLoadDialog(QWidget *parent) :
     ui(new Ui::MinosContestLoadDialog)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Window | Qt::CustomizeWindowHint);
+    el = new QEventLoop(this);
+    timer = new QTimer(this);
+
+    connect(timer, &QTimer::timeout, [=]()
+    {
+        // NB a lambda function
+        timer->stop();
+        el->quit();
+    }
+    );
+    timer->start(500);
 }
 
 MinosContestLoadDialog::~MinosContestLoadDialog()
 {
     delete ui;
+    timer->stop();
+    timer->deleteLater();
+    el->quit();
+    el->deleteLater();
 }
 
 void MinosContestLoadDialog::setLoadMessage(QString mess, bool newFile, bool list)
@@ -25,9 +39,12 @@ void MinosContestLoadDialog::setLoadMessage(QString mess, bool newFile, bool lis
     m += mess;
 
     ui->contestNameLabel->setText(m);
+
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 void MinosContestLoadDialog::doShow()
 {
     show();
-    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+
+    el->exec();
 }

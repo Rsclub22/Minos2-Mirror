@@ -2,6 +2,8 @@
 #define MINOSCONTESTLOADDIALOG_H
 
 #include <QDialog>
+#include <QEventLoop>
+#include <QTimer>
 
 namespace Ui {
 class MinosContestLoadDialog;
@@ -19,6 +21,8 @@ public:
     void doShow();
 private:
     Ui::MinosContestLoadDialog *ui;
+    QEventLoop *el;
+    QTimer *timer;
 };
 
 #endif // MINOSCONTESTLOADDIALOG_H
