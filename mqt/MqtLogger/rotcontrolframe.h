@@ -125,7 +125,7 @@ private:
     QString convertBearingForDisplay(QString bearing);
 
 
-    bool validateBearingEntry(const QString brg);
+    //bool validateBearingEntry(const QString brg);
 signals:
     void selectRotator(QString);
     void sendRotator(rpcConstants::RotateDirection direction, int angle );
@@ -149,7 +149,7 @@ private slots:
 
     void setBrgFromSpot(QString brg);
     void setBrgFromFrmMemory(QString Brg);
-    void on_BearingStTextChange(const QString);
+    //void on_BearingStTextChange(const QString);
 };
 
 #endif // ROTCONTROLFRAME_H

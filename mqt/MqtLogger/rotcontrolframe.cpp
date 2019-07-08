@@ -58,7 +58,7 @@ RotControlFrame::RotControlFrame(QWidget *parent):
 
 
     connect(this, SIGNAL(bearingEditReturn()), this, SLOT(on_Rotate_clicked()));
-    connect(ui->BrgSt, SIGNAL(textChanged(const QString)), this, SLOT(on_BearingStTextChange(const QString)));
+    //connect(ui->BrgSt, SIGNAL(textChanged(const QString)), this, SLOT(on_BearingStTextChange(const QString)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(BrgStrToRot(QString)), this, SLOT(getBrgFrmQSOLog(QString)));
 
@@ -252,7 +252,7 @@ void RotControlFrame::on_Rotate_clicked()
     {
         traceMsg("Turn to button Clicked");
         QString brgStr = ui->BrgSt->text().trimmed();
-        if (!brgStr.isEmpty() && validateBearingEntry(brgStr))
+        if (!brgStr.isEmpty() && ui->BrgSt->isValid())
         {
             setTurnDisplayText(convertBearingForDisplay(brgStr));
             ui->BrgSt->selectAll();
@@ -397,7 +397,7 @@ void RotControlFrame::on_RotateRight_clicked()
 
 }
 
-
+/*
 void RotControlFrame::on_BearingStTextChange(const QString brg)
 {
 
@@ -430,6 +430,8 @@ bool RotControlFrame::validateBearingEntry(const QString brg)
         return false;
     }
 }
+
+*/
 
 void RotControlFrame::keyPressEvent(QKeyEvent *event)
 {

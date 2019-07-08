@@ -26,16 +26,17 @@ BearingLineEdit::BearingLineEdit(QWidget * parent): QLineEdit (parent),
 
 void BearingLineEdit::onTextChanged(const QString& brg)
 {
-    bool ok = false;
+
     bearingValid = false;
 
     if (!brg.isEmpty())
     {
 
-        int bearing = brg.toInt(&ok);
-        // is it a number?
-        if (ok)
+        QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
+        if (re.exactMatch(brg.trimmed()))
         {
+            // all digits
+            int bearing = brg.trimmed().toInt();
             if (bearing >= COMPASS_MIN0 && bearing <= COMPASS_MAX360)
             {
                 bearingValid = true;
@@ -84,7 +85,9 @@ bool BearingLineEdit::isValid()
 
 int BearingLineEdit::getBearing()
 {
-    bearing = text().trimmed().toInt();
+
+    int bearing = text().trimmed().remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END).toInt();
+
     return bearing;
 }
 
