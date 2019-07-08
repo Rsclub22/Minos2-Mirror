@@ -26,7 +26,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="callSignLineEdit">
+        <widget class="CallsignLineEdit" name="callSignLineEdit">
          <property name="text">
           <string/>
          </property>
@@ -108,7 +108,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="locatorLineEdit">
+        <widget class="LocatorLineEdit" name="locatorLineEdit">
          <property name="inputMask">
           <string/>
          </property>
@@ -137,10 +137,10 @@
        <item>
         <widget class="BearingLineEdit" name="bearingLineEdit">
          <property name="inputMask">
-          <string>999</string>
+          <string/>
          </property>
          <property name="text">
-          <string>000</string>
+          <string/>
          </property>
          <property name="clearButtonEnabled">
           <bool>true</bool>
@@ -200,6 +200,16 @@
    <class>BearingLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">bearinglineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LocatorLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>locatorlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CallsignLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>callsignlineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

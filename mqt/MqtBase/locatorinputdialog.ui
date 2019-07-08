@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CallLocInputDialog</class>
- <widget class="QDialog" name="CallLocInputDialog">
+ <class>LocatorInputDialog</class>
+ <widget class="QDialog" name="LocatorInputDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>241</width>
-    <height>100</height>
+    <width>227</width>
+    <height>99</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,51 +17,34 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLabel" name="lineEditLabel">
+      <widget class="QLabel" name="locatorInputLabel">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Locator</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="CallsignLineEdit" name="lineEdit"/>
+      <widget class="LocatorLineEdit" name="locatorInput"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CallsignLineEdit</class>
+   <class>LocatorLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>callsignlineedit.h</header>
+   <header>locatorlineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -69,7 +52,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>CallLocInputDialog</receiver>
+   <receiver>LocatorInputDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -85,7 +68,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>CallLocInputDialog</receiver>
+   <receiver>LocatorInputDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

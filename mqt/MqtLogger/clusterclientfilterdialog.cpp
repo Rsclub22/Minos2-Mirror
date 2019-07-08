@@ -3,7 +3,8 @@
 #include "cutils.h"
 #include "list.h"
 #include "clusterclientfilterdialog.h"
-#include "calllocinputdialog.h"
+#include "callsigninputdialog.h"
+#include "locatorinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
 ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
@@ -509,7 +510,7 @@ void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
 void ClusterClientFilterDialog::callsignAddClicked()
 {
 
-    CallLocInputDialog callsignDialog(this, QString(""), QString("Add Callsign Filter"), QString("Enter Callsign"));
+    CallsignInputDialog callsignDialog(this, QString(""), QString("Add Callsign Filter"), QString("Enter Callsign"));
     QString callsign;
     if (callsignDialog.exec() == QDialog::Accepted)
     {
@@ -619,7 +620,7 @@ void ClusterClientFilterDialog::callsignEditClicked()
     {
         int row = callsignListWidget->row(selItems[0]);
         QString currentCall = callsignListWidget->currentItem()->text();
-        CallLocInputDialog callsignDialog(this, currentCall, QString("Edit Callsign Filter"), QString("Edit Callsign"));
+        CallsignInputDialog callsignDialog(this, currentCall, QString("Edit Callsign Filter"), QString("Edit Callsign"));
         QString callsign;
         if (callsignDialog.exec() == QDialog::Accepted)
         {
@@ -666,7 +667,7 @@ void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
 
 void ClusterClientFilterDialog::locatorAddClicked()
 {
-    CallLocInputDialog locatorDialog(this, QString(""), QString("Add Locator Filter"), QString("Enter Locator"));
+    LocatorInputDialog locatorDialog(this, QString(""), QString("Add Locator Filter"), QString("Enter Locator"));
     QString locator;
     if (locatorDialog.exec() == QDialog::Accepted)
     {
@@ -703,7 +704,7 @@ void ClusterClientFilterDialog::locatorEditClicked()
     {
         int row = locatorListWidget->row(selItems[0]);
         QString currentLocator = locatorListWidget->currentItem()->text();
-        CallLocInputDialog callsignDialog(this, currentLocator, QString("Edit Locator Filter"), QString("Edit Locator"));
+        LocatorInputDialog callsignDialog(this, currentLocator, QString("Edit Locator Filter"), QString("Edit Locator"));
         QString locator;
         if (callsignDialog.exec() == QDialog::Accepted)
         {

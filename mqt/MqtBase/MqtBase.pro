@@ -85,7 +85,9 @@ SOURCES += \
     CallsignLineEdit.cpp \
     locatorlineedit.cpp \
     bearinglineedit.cpp \
-    bandModeFrequencyPlan.cpp
+    bandModeFrequencyPlan.cpp \
+    callsigninputdialog.cpp \
+    locatorinputdialog.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -157,7 +159,9 @@ HEADERS += \
     CallsignLineEdit.h \
     locatorlineedit.h \
     bearinglineedit.h \
-    bandModeFrequencyPlan.h
+    bandModeFrequencyPlan.h \
+    callsigninputdialog.h \
+    locatorinputdialog.h
 
 unix {
     target.path = /usr/lib
@@ -175,4 +179,6 @@ FORMS += \
     rotpresetdialog.ui \
     StartConfig.ui \
     calllocinputdialog.ui \
-    helpbrowser.ui
+    helpbrowser.ui \
+    callsigninputdialog.ui \
+    locatorinputdialog.ui
