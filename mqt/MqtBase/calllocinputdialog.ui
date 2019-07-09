@@ -61,7 +61,7 @@
   <customwidget>
    <class>CallsignLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>callsignlineedit.h</header>
+   <header>CallsignLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
