@@ -675,21 +675,31 @@ void ClusterClientFilterDialog::locatorAddClicked()
 
         if (!locator.isEmpty())
         {
-
-            if (searchItem(locator, locatorListWidget))
+            if (locatorDialog.isValid())
             {
-                QMessageBox::information(this, tr("Add Locator Filter"),
-                                         tr("Locator already exists in list!"),
-                                          QMessageBox::Ok|QMessageBox::Default,
-                                          QMessageBox::NoButton, QMessageBox::NoButton);
+                if (searchItem(locator, locatorListWidget))
+                {
+                    QMessageBox::information(this, tr("Add Locator Filter"),
+                                             tr("Locator already exists in list!"),
+                                              QMessageBox::Ok|QMessageBox::Default,
+                                              QMessageBox::NoButton, QMessageBox::NoButton);
+                }
+                else
+                {
+                    QListWidgetItem *newItem = new QListWidgetItem;
+                    newItem->setText(locator);
+                    int row = locatorListWidget->count();
+                    locatorListWidget->insertItem(row, newItem);
+
+                }
             }
             else
             {
-                QListWidgetItem *newItem = new QListWidgetItem;
-                newItem->setText(locator);
-                int row = locatorListWidget->count();
-                locatorListWidget->insertItem(row, newItem);
-
+                QMessageBox::information(this, tr("Add Locator Filter"),
+                                         tr("Invalid Locator!"),
+                                          QMessageBox::Ok|QMessageBox::Default,
+                                          QMessageBox::NoButton, QMessageBox::NoButton);
+                locatorDialog.setText("");
             }
 
         }

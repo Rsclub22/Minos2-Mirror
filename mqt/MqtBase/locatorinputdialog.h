@@ -16,6 +16,11 @@ public:
     ~LocatorInputDialog();
 
     QString getText();
+    void setText(QString text);
+    bool isValid();
+    void allowLoc4(bool allow);
+
+
 
 private:
     Ui::LocatorInputDialog *ui;
