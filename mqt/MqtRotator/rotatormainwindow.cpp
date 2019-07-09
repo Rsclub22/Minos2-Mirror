@@ -954,6 +954,7 @@ void RotatorMainWindow::upDateAntenna()
                PubSubName psname(setupAntenna->currentAntennaName);
                trace(QString("Update Antenna - send to logger - maxAzimuth = %1, minAzimuth = %2, simulate CwCcwCmd = %3").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)).arg(QString::number(setupAntenna->currentAntenna.min_azimuth)).arg(setupAntenna->currentAntenna.supportCwCcwCmd  ? "True" : "False"));
                msg->rotatorCache.setMaxAzimuth(psname, setupAntenna->currentAntenna.max_azimuth);
+               msg->rotatorCache.setMinAzimuth(psname, setupAntenna->currentAntenna.min_azimuth);
                if (setupAntenna->currentAntenna.supportCwCcwCmd)           // want to use simCwCccwCmd?
                {
                    msg->rotatorCache.setCwCcwCmdEnable(psname, true);
@@ -1145,26 +1146,21 @@ void RotatorMainWindow::rotateToController()
     {
         return;
     }
-    bool ok;
-    int intBearing;
+
 
     rotCmdflag = true;
-    QString bearing = ui->bearingEdit->text();
 
-    intBearing = bearing.toInt(&ok, 10);
 
-    //if (intBearing >= currentMinAzimuth && intBearing <= currentMaxAzimuth && ok)
-    if (intBearing >= COMPASS_MIN0 && intBearing <= COMPASS_MAX360 && ok)
+    if (ui->bearingEdit->isValid())
     {
-        rotateTo(intBearing);
-        logMessage(QString("Rotate to bearing %1").arg(bearing));
+        rotateTo(ui->bearingEdit->getBearing());
     }
     else
     {
-        //QString s = "Invalid Bearing\nPlease enter " + QString::number(currentMinAzimuth) + " - " + QString::number(currentMaxAzimuth);
-        QString s = QString("Invalid Bearing\nPlease enter %1 - %2").arg(QString::number(COMPASS_MIN0)).arg(QString::number(COMPASS_MAX360));
-        QMessageBox::critical(this, tr("Bearing Error"), s);
+         QMessageBox::critical(this, tr("Bearing Error"),
+                               QString("Invalid Bearing\nPlease enter %1 - %2").arg(QString::number(COMPASS_MIN0)).arg(QString::number(COMPASS_MAX360)));
     }
+
     rotCmdflag = false;
 }
 

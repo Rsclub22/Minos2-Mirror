@@ -58,7 +58,7 @@ RotControlFrame::RotControlFrame(QWidget *parent):
 
 
     connect(this, SIGNAL(bearingEditReturn()), this, SLOT(on_Rotate_clicked()));
-    connect(ui->BrgSt, SIGNAL(textChanged(const QString)), this, SLOT(on_BearingStTextChange(const QString)));
+    //connect(ui->BrgSt, SIGNAL(textChanged(const QString)), this, SLOT(on_BearingStTextChange(const QString)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(BrgStrToRot(QString)), this, SLOT(getBrgFrmQSOLog(QString)));
 
@@ -252,7 +252,7 @@ void RotControlFrame::on_Rotate_clicked()
     {
         traceMsg("Turn to button Clicked");
         QString brgStr = ui->BrgSt->text().trimmed();
-        if (!brgStr.isEmpty() && validateBearingEntry(brgStr))
+        if (!brgStr.isEmpty() && ui->BrgSt->isValid())
         {
             setTurnDisplayText(convertBearingForDisplay(brgStr));
             ui->BrgSt->selectAll();
@@ -397,7 +397,7 @@ void RotControlFrame::on_RotateRight_clicked()
 
 }
 
-
+/*
 void RotControlFrame::on_BearingStTextChange(const QString brg)
 {
 
@@ -430,6 +430,8 @@ bool RotControlFrame::validateBearingEntry(const QString brg)
         return false;
     }
 }
+
+*/
 
 void RotControlFrame::keyPressEvent(QKeyEvent *event)
 {
@@ -768,29 +770,21 @@ void RotControlFrame::setRotatorBearing(const QString &s)
 
 }
 
-void RotControlFrame::setRotatorMaxAzimuth(const QString &s)
+void RotControlFrame::setRotatorMaxAzimuth(const int maxAz)
 {
-    traceMsg("Set MaxAzimuth = " + s);
-    bool ok;
-    int max_azimuth = 0;
-    max_azimuth = s.toInt(&ok, 10);
-    if (ok)
-    {
-        maxAzimuth = max_azimuth;
-    }
+    traceMsg(QString("Set MaxAzimuth = %1").arg(QString::number(maxAz)));
+
+    maxAzimuth = maxAz;
+
 }
 
 
-void RotControlFrame::setRotatorMinAzimuth(const QString &s)
+void RotControlFrame::setRotatorMinAzimuth(const int minAz)
 {
-    traceMsg("Set MinAzimuth = " + s);
-    bool ok;
-    int min_azimuth = 0;
-    min_azimuth = s.toInt(&ok, 10);
-    if (ok)
-    {
-        minAzimuth = min_azimuth;
-    }
+    traceMsg(QString("Set MinAzimuth = %1").arg(QString::number(minAz)));
+
+    minAzimuth = minAz;
+
 }
 
 

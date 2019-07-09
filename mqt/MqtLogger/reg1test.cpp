@@ -157,7 +157,9 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    linelist[ static_cast< int> (CDXCs) ] = reg1testLine( "CDXCs", QString::number( nctry ) + ";0;1" ); /*, "Claimed no. of DXCCs; Bonus for each new DXCC;DXCC multiplier"*/
    linelist[ static_cast< int> (CDXCB) ] = reg1testLine( "CDXCB", QString("0") ); /*, "Claimed no of DXCC bonus points"*/
    linelist[ static_cast< int> (CToSc) ] = reg1testLine( "CToSc", QString::number( ct->contestScore * ltot + bonus ) ); /*, "Claimed total score"*/
-   linelist[ static_cast< int> (CODXC) ] = reg1testLine( "CODXC", QString(bestdx ? ( bestdx->cs.fullCall.getValue() + ";" + bestdx->loc.loc.getValue() + ";" + QString::number( bestdx->contactScore.getValue() )  ) : ";;" )); /*, "(Best DX) Callsign; Locator; Distance"*/
+
+   QString sbestdx = QString(bestdx ? ( bestdx->cs.fullCall.getValue() + ";" + bestdx->loc.loc.getValue() + ";" + QString::number( bestdx->contactScore.getValue() )  ) : QString(";;") );
+   linelist[ static_cast< int> (CODXC) ] = reg1testLine( "CODXC", sbestdx); /*, "(Best DX) Callsign; Locator; Distance"*/
 
    for ( int i = 0; i < LineCount; i++ )
    {

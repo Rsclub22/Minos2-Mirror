@@ -126,6 +126,8 @@ void BaseContestLog::clearDirty()
    scoreMode.clearDirty();
    DTGStart.clearDirty();
    DTGEnd.clearDirty();
+   currentOp1.clearDirty();
+   currentOp2.clearDirty();
    for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
    {
       i->wt->clearDirty();
@@ -162,6 +164,9 @@ void BaseContestLog::setDirty()
    scoreMode.setDirty();
    DTGStart.setDirty();
    DTGEnd.setDirty();
+   currentOp1.setDirty();
+   currentOp2.setDirty();
+
    for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
    {
       i->wt->setDirty();

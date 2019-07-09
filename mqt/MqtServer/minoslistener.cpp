@@ -18,7 +18,7 @@ void xperror( int test_val, QString s, bool endit = true )
 
       if ( endit )
       {
-         throw Exception( ("JServer error: " + s ).toStdString().c_str());
+         throw Exception( QString(("JServer error: " + s )).toStdString().c_str());
       }
    }
 }

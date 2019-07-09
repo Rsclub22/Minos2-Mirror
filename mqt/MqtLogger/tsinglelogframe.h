@@ -216,8 +216,8 @@ private slots:
     void on_RotatorPresetList(QString);
     void on_RotatorStatus(QString);
     void on_RotatorBearing(QString);
-    void on_RotatorMaxAzimuth(QString);
-    void on_RotatorMinAzimuth(QString);
+    void on_RotatorMaxAzimuth(int);
+    void on_RotatorMinAzimuth(int);
     void on_cwCcwCmdEnable(bool);
     void presetTurn(QString);
 

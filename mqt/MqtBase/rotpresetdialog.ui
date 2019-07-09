@@ -40,7 +40,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="bearingEdit"/>
+        <widget class="BearingLineEdit" name="bearingEdit"/>
        </item>
       </layout>
      </item>
@@ -58,6 +58,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BearingLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">bearinglineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
