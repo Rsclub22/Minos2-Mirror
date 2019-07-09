@@ -224,7 +224,7 @@ void MessageServer::impl::parse_message (QHostAddress const& sender, port_type s
               break;
 
             case NetworkMessage::Clear:
-              Q_EMIT self_->clear_decodes (id);
+              Q_EMIT self_->decodes_cleared (id);
               break;
 
             case NetworkMessage::Status:
@@ -312,35 +312,41 @@ void MessageServer::impl::parse_message (QHostAddress const& sender, port_type s
 
             case NetworkMessage::QSOLogged:
               {
-                QDateTime time_off;
-                QByteArray dx_call;
-                QByteArray dx_grid;
-                Frequency dial_frequency;
-                QByteArray mode;
-                QByteArray report_sent;
-                QByteArray report_received;
-                QByteArray tx_power;
-                QByteArray comments;
-                QByteArray name;
-                QDateTime time_on; // Note: LOTW uses TIME_ON for their +/- 30-minute time window
-                QByteArray operator_call;
-                QByteArray my_call;
-                QByteArray my_grid;
-                QByteArray exchange_sent;
-                QByteArray exchange_rcvd;
-                in >> time_off >> dx_call >> dx_grid >> dial_frequency >> mode >> report_sent >> report_received
-                   >> tx_power >> comments >> name >> time_on >> operator_call >> my_call >> my_grid
-                   >> exchange_sent >> exchange_rcvd;
-                if (check_status (in) != Fail)
+              /*
+                  if (id != "MSHV")
                   {
-                    Q_EMIT self_->qso_logged (id, time_off, QString::fromUtf8 (dx_call), QString::fromUtf8 (dx_grid)
-                                              , dial_frequency, QString::fromUtf8 (mode), QString::fromUtf8 (report_sent)
-                                              , QString::fromUtf8 (report_received), QString::fromUtf8 (tx_power)
-                                              , QString::fromUtf8 (comments), QString::fromUtf8 (name), time_on
-                                              , QString::fromUtf8 (operator_call), QString::fromUtf8 (my_call)
-                                              , QString::fromUtf8 (my_grid), QString::fromUtf8 (exchange_sent)
-                                              , QString::fromUtf8 (exchange_rcvd));
+                      // we don't use this, and MSHV seems to send it wrongly
+                      QDateTime time_off;
+                      QByteArray dx_call;
+                      QByteArray dx_grid;
+                      Frequency dial_frequency;
+                      QByteArray mode;
+                      QByteArray report_sent;
+                      QByteArray report_received;
+                      QByteArray tx_power;
+                      QByteArray comments;
+                      QByteArray name;
+                      QDateTime time_on; // Note: LOTW uses TIME_ON for their +/- 30-minute time window
+                      QByteArray operator_call;
+                      QByteArray my_call;
+                      QByteArray my_grid;
+                      QByteArray exchange_sent;
+                      QByteArray exchange_rcvd;
+                      in >> time_off >> dx_call >> dx_grid >> dial_frequency >> mode >> report_sent >> report_received
+                              >> tx_power >> comments >> name >> time_on >> operator_call >> my_call >> my_grid
+                              >> exchange_sent >> exchange_rcvd;
+                      if (check_status (in) != Fail)
+                      {
+                          Q_EMIT self_->qso_logged (id, time_off, QString::fromUtf8 (dx_call), QString::fromUtf8 (dx_grid)
+                                                    , dial_frequency, QString::fromUtf8 (mode), QString::fromUtf8 (report_sent)
+                                                    , QString::fromUtf8 (report_received), QString::fromUtf8 (tx_power)
+                                                    , QString::fromUtf8 (comments), QString::fromUtf8 (name), time_on
+                                                    , QString::fromUtf8 (operator_call), QString::fromUtf8 (my_call)
+                                                    , QString::fromUtf8 (my_grid), QString::fromUtf8 (exchange_sent)
+                                                    , QString::fromUtf8 (exchange_rcvd));
+                      }
                   }
+                  */
               }
               break;
 
@@ -452,6 +458,18 @@ void MessageServer::start (port_type port, QHostAddress const& multicast_group_a
         {
           m_->port_ = 0;
         }
+    }
+}
+
+void MessageServer::clear_decodes (QString const& id, quint8 window)
+{
+  auto iter = m_->clients_.find (id);
+  if (iter != std::end (m_->clients_))
+    {
+      QByteArray message;
+      NetworkMessage::Builder out {&message, NetworkMessage::Clear, id, (*iter).negotiated_schema_number_};
+      out << window;
+      m_->send_message (out, message, iter.value ().sender_address_, (*iter).sender_port_);
     }
 }
 

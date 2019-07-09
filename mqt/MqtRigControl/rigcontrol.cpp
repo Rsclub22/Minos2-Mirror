@@ -71,7 +71,16 @@ int RigControl::init(scatParams &currentRadio, bool useRigCtld)
 
     if (useRigCtld)
     {
+        if (currentRadio.rigCtldNetworkAdd.isEmpty())
+        {
+            currentRadio.rigCtldNetworkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
+        }
+        if (currentRadio.rigCtldNetworkPort.isEmpty())
+        {
+            currentRadio.rigCtldNetworkPort = RIGCTLD_DEFAULT_PORT_ADDRESS;
+        }
         my_rig = rig_init(RIGCTLD_MODEL_NUMBER);
+
     }
     else
     {
@@ -101,6 +110,16 @@ int RigControl::init(scatParams &currentRadio, bool useRigCtld)
             my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
             my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
             my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
+            if (my_rig->state.rigport.parm.serial.handshake == RIG_HANDSHAKE_NONE)
+            {
+                my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_ON;
+                my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_ON;
+            }
+            else
+            {
+                my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_UNSET;
+                my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
+            }
         }
         else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
         {
@@ -113,7 +132,6 @@ int RigControl::init(scatParams &currentRadio, bool useRigCtld)
 
 
     }
-
 
 
 
@@ -469,6 +487,11 @@ pbwidth_t RigControl::getPassBand()
 
 bool RigControl::supportVolControl(int rigNumber)
 {
+    if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
+    {
+        return false;
+    }
+
     if ((rigHasGetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (rigHasSetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF))
     {
         return true;
@@ -590,22 +613,27 @@ bool RigControl::getRigList(QComboBox *cb)
     QStringList sl;
     // add blank at beginning
     //sl << "";
-    for (i=0;i<capsList.count();i++)
+    for (i = 0;i < capsList.count(); i++)
     {
 
         QString t;
-        t= QString::number(capsList.at(i)->rig_model);
-        t=t.rightJustified(5,' ')+", ";
-        t+= capsList.at(i)->mfg_name;
-        t+=", ";
-        t+=capsList.at(i)->model_name;
-        if (getPortType(capsList.at(i)->rig_model, &portType) != -1)
+        t = QString::number(capsList.at(i)->rig_model);
+        if (t.trimmed() != "2")      // don't display rigctl model
         {
-            if (portType == RIG_PORT_NONE || portType == RIG_PORT_SERIAL  || portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK)
+            t = t.rightJustified(5,' ')+", ";
+            t+= capsList.at(i)->mfg_name;
+            t+= ", ";
+            t+= capsList.at(i)->model_name;
+            if (getPortType(capsList.at(i)->rig_model, &portType) != -1)
             {
-                sl << t;        // only add these portTypes
+                if (portType == RIG_PORT_NONE || portType == RIG_PORT_SERIAL  || portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK)
+                {
+                    sl << t;        // only add these portTypes
+                }
             }
+
         }
+
    }
    std::sort(sl.begin(), sl.end());
    cb->addItems(sl);
@@ -685,6 +713,38 @@ int RigControl::getPortType(int rigNumber, rig_port_e *portType)
 
 }
 
+// true set DTR state, false unset DTR state
+int RigControl::setDtrState( const bool state)
+{
+    int retCode = 0;
+    retCode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "dtr_state"), state ? "ON" : "OFF");
+
+    return retCode;
+}
+
+
+// true set DTR state, false unset DTR state
+int RigControl::setRtsState( const bool state)
+{
+    int retCode = 0;
+    retCode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "rts_state"), state ? "ON" : "OFF");
+    return retCode;
+}
+
+
+
+
+int RigControl::setRetryNumber(const QString retries)
+{
+    return rig_set_conf(my_rig, rig_token_lookup(my_rig, "retry") , retries.toLatin1().data());
+
+}
+
+int RigControl::setTimeoutDur(const QString timeoutDur)
+{
+    return rig_set_conf(my_rig, rig_token_lookup(my_rig, "timeout") , timeoutDur.toLatin1().data());
+
+}
 
 /*
 int RigControl::getModelNumber(int idx)

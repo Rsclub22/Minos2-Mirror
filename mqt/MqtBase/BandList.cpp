@@ -142,6 +142,33 @@ bool BandList::parseBand ( TiXmlElement * e )
     band.adif = getAttribute ( e, "ADIF" );
     band.cabrillo = getAttribute ( e, "Cabrillo" );
 
+    band.bandColour = getAttribute(e, "Colour");
+
+    if (band.bandColour.isEmpty())
+    {
+        if (band.cabrillo=="1800")  band.bandColour="red";
+        if (band.cabrillo=="3500")  band.bandColour="green";
+        if (band.cabrillo=="7000")  band.bandColour="blue";
+        if (band.cabrillo=="14000") band.bandColour="teal";
+        if (band.cabrillo=="21000") band.bandColour="purple";
+        if (band.cabrillo=="28000") band.bandColour="navy";
+        if (band.cabrillo=="50")    band.bandColour="red";
+        if (band.cabrillo=="70")    band.bandColour="green";
+        if (band.cabrillo=="144")   band.bandColour="blue";
+        if (band.cabrillo=="432")   band.bandColour="teal";
+        if (band.cabrillo=="1.2G")  band.bandColour="purple";
+        if (band.cabrillo=="2.3G")  band.bandColour="navy";
+        if (band.cabrillo=="3.4G")  band.bandColour="black";
+        if (band.cabrillo=="5.7G")  band.bandColour="red";
+        if (band.cabrillo=="10G")   band.bandColour="green";
+        if (band.cabrillo=="24G")   band.bandColour="blue";
+        if (band.cabrillo=="47G")   band.bandColour="teal";
+        if (band.cabrillo=="76G")   band.bandColour="purple";
+        if (band.cabrillo=="120G")  band.bandColour="navy";
+        if (band.cabrillo=="134G")  band.bandColour="black";
+        if (band.cabrillo=="241G")  band.bandColour="red";
+    }
+
     bandList.push_back ( band );
 
     return true;

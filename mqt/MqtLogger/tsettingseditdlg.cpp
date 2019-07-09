@@ -116,7 +116,7 @@ void TSettingsEditDlg::showSection()
       ui->OptionsTable->setVisible(false);
       bundle->openSection( bundle->noneBundle );
    }
-   setWindowTitle(baseTitle + " - " + bundle->getBundle() + (currSectionOnly?"":" for \"" + bundle->getSection() + "\"")) ;
+   setWindowTitle(baseTitle + " - " + bundle->getBundle() + (currSectionOnly?QString():" for \"" + bundle->getSection() + "\"")) ;
 
    if (currSectionOnly)
    {

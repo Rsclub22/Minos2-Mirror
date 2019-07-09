@@ -138,6 +138,10 @@ class BaseContestLog: public BaseLogList
 
 	  MinosItem<int> bearingOffset;
 
+      MinosStringItem<QString> currentOp1;         // current main op
+      MinosStringItem<QString> currentOp2;         // current second op
+
+
       // dirty info is only relevant when it is being editted
       // but needs to stay with the data
 
@@ -194,9 +198,6 @@ class BaseContestLog: public BaseLogList
       LogList ctList;
 
       // Ancilliary variables
-
-      MinosStringItem<QString> currentOp1;         // current main op - derived from contacts
-      MinosStringItem<QString> currentOp2;         // current second op - derived from contacts
 
       OperatorList oplist;
 

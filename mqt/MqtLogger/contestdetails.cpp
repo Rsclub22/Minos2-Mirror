@@ -64,8 +64,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->EndDateEdit->setDate(QDate::currentDate());
     ui->CallsignEdit->setValidator(new UpperCaseValidator());
     ui->LocatorEdit->setValidator(new UpperCaseValidator());
-    ui->MainOpComboBox->setValidator(new UpperCaseValidator(false));
-    ui->SecondOpComboBox->setValidator(new UpperCaseValidator(false));
+    ui->MainOpComboBox->setValidator(new UpperCaseValidator());
+    ui->SecondOpComboBox->setValidator(new UpperCaseValidator());
 
     ContestNameEditFW = new FocusWatcher(ui->ContestNameEdit);
     ui->ContestNameEdit->installEventFilter(this);
@@ -1149,16 +1149,16 @@ void ContestDetails::enableControls()
 
    ui->MGMCheckBox->setEnabled(!protectedChecked);
 
-   if (!protectedChecked)
-   {
-       bool mgm = ui->MGMCheckBox->isChecked();
-       ui->ScoreGroupBox->setEnabled(!mgm);
-       ui->BonusComboBox->setEnabled(!mgm);
-       ui->LocatorGroupBox->setEnabled(!mgm);
-       ui->FieldsGroupBox->setEnabled(!mgm);
-       ui->MultGroupBox->setEnabled(!mgm);
-       ui->ModeComboBox->setEnabled(!mgm);
-   }
+//   if (!protectedChecked)
+//   {
+//       bool mgm = ui->MGMCheckBox->isChecked();
+//       ui->ScoreGroupBox->setEnabled(!mgm);
+//       ui->BonusComboBox->setEnabled(!mgm);
+//       ui->LocatorGroupBox->setEnabled(!mgm);
+//       ui->FieldsGroupBox->setEnabled(!mgm);
+//       ui->MultGroupBox->setEnabled(!mgm);
+//       ui->ModeComboBox->setEnabled(!mgm);
+//   }
 }
 //---------------------------------------------------------------------------
 
@@ -1428,23 +1428,23 @@ void ContestDetails::bundleChanged()
 
 void ContestDetails::on_MGMCheckBox_stateChanged(int)
 {
-    if (ui->MGMCheckBox->isChecked())
-    {
-        noMultRipple = true;
+//    if (ui->MGMCheckBox->isChecked())
+//    {
+//        noMultRipple = true;
 
-        ui->LocatorMult->setChecked(true);
-        ui->GLocMult->setChecked(false);
-        ui->NonGCtryMult->setChecked(false);
-        ui->DXCCMult->setChecked(false);
-        ui->M7LocatorMults->setChecked(false);
+//        ui->LocatorMult->setChecked(true);
+//        ui->GLocMult->setChecked(false);
+//        ui->NonGCtryMult->setChecked(false);
+//        ui->DXCCMult->setChecked(false);
+//        ui->M7LocatorMults->setChecked(false);
 
-        ui->commencedKRB->setChecked(true);
-        ui->BonusComboBox->setCurrentIndex(0);
+//        ui->commencedKRB->setChecked(true);
+//        ui->BonusComboBox->setCurrentIndex(0);
 
-        ui->SerialField->setChecked(false);
+//        ui->SerialField->setChecked(false);
 
-        noMultRipple = false;
-    }
+//        noMultRipple = false;
+//    }
     enableControls();
 }
 void ContestDetails::on_RotatorList()

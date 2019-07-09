@@ -30,6 +30,7 @@ void ScreenContact::initialise( BaseContestLog *ct )
     if ( clp )
     {
         mode = clp->currentMode.getValue();
+        mgmSubmode.clear();
         ms = clp->maxSerial + 1;
     }
 
@@ -123,6 +124,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     contactScore = cct->contactScore.getValue();
     bearing = cct->bearing;
     mode = cct->mode.getValue();
+    mgmSubmode = cct->mgmSubmode.getValue();
 }
 void ScreenContact::copyFromArg( ScreenContact &cct )
 {
@@ -173,6 +175,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     contactScore = cct.contactScore;
     bearing = cct.bearing;
     mode = cct.mode;
+    mgmSubmode = cct.mgmSubmode;
 }
 void ScreenContact::checkScreenContact( )
 {
@@ -290,7 +293,7 @@ void ScreenContact::score()
 
     double latitude;
     double longitude;
-    /*int locValres =*/ lonlat( gridref, longitude, latitude );
+    /*int locValres =*/ lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
 
     if ( !( contactFlags & MANUAL_SCORE ) || ( contactFlags & DONT_PRINT ) )
     {

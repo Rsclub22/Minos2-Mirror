@@ -309,7 +309,7 @@ void ServerSubscriber::SendTo ( const PublishedKey &pk )
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
    //server is OUR server name
-   QSharedPointer<RPCParam>sServer(new RPCStringParam( MinosServer::getMinosServer() ->getServerName() ));
+   QSharedPointer<RPCParam>sServer(new RPCStringParam( ThisMinosServer::getThisMinosServer() ->getServerName() ));
    QSharedPointer<RPCParam>sCategory;
    PublishedCategory *pc = nullptr;
    QString cat;
@@ -358,7 +358,7 @@ QString Published::getPublisherServer()
     }
     if (publisherServer == "localhost")
     {
-        QString sname = MinosServer::getMinosServer()->getServerName();
+        QString sname = ThisMinosServer::getThisMinosServer()->getServerName();
         publisherServer = sname;
     }
     return publisherServer;
@@ -497,7 +497,7 @@ int PublishedCategory::GetSubscribedCount()
       for ( PublishedKeyListIterator i = ( *f ) ->pubkeylist.begin(); i != ( *f ) ->pubkeylist.end(); i++ )
       {
          // Here we are sending all the already published values
-         if ( ( *i ) ->getServer().size() == 0 || ( *i ) ->getServer() == "localhost" || ( *i ) ->getServer() == MinosServer::getMinosServer() ->getServerName() )
+         if ( ( *i ) ->getServer().size() == 0 || ( *i ) ->getServer() == "localhost" || ( *i ) ->getServer() == ThisMinosServer::getThisMinosServer() ->getServerName() )
          {
             s->SendTo( *( *i ) );
          }
@@ -567,7 +567,7 @@ int PublishedCategory::GetSubscribedCount()
          // want to re-publish
          // BUT it can publish as blank
          QString pserver = ( *i ) ->getServer();
-         if ( pserver.size() == 0 || pserver == "localhost" || pserver == MinosServer::getMinosServer() ->getServerName() )
+         if ( pserver.size() == 0 || pserver == "localhost" || pserver == ThisMinosServer::getThisMinosServer() ->getServerName() )
          {
             // Here we are sending all the already published values
 
@@ -892,7 +892,7 @@ void TPubSubMain::remoteSubscribeCallback( bool err, QSharedPointer<MinosRPCObj>
          bool resc = psCategory->getString( Category );
          if ( ress && resc )
          {
-            if ( !Server.size() || Server == "localhost" || Server == MinosServer::getMinosServer() ->getServerName() )
+            if ( !Server.size() || Server == "localhost" || Server == ThisMinosServer::getThisMinosServer() ->getServerName() )
             {
                subscribeCallback( err, mro, from );     // actually, for local server
                return ;
@@ -1011,7 +1011,7 @@ void TPubSubMain::disconnectServer(const QString &pubId)
    }
    if (publisherServer == "localhost")
    {
-        QString sname = MinosServer::getMinosServer()->getServerName();
+        QString sname = ThisMinosServer::getThisMinosServer()->getServerName();
         publisherServer = sname;
    }
 

@@ -12,6 +12,8 @@
 #include "ServerDetails.h"
 #include "ui_ServerDetails.h"
 
+// display class/form showing current connections and topics
+
 ServerDetails::ServerDetails(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ServerDetails)

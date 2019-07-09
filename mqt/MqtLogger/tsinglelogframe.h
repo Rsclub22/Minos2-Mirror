@@ -44,6 +44,7 @@ class MinosSplitter;
 
 class BaseMatchContest;
 class MatchContact;
+class SCRow;
 
 class TSingleLogFrame : public QFrame
 {
@@ -63,6 +64,7 @@ class TSingleLogFrame : public QFrame
 
     QFrame *CribSheet= nullptr;
     QLabel *NextContactDetailsLabel;
+    QLabel *CurrentBandLabel;
 
     QSOLogFrame *GJVQSOLogFrame = nullptr;
     MatchThisFrame *thisMatchFrame = nullptr;
@@ -145,7 +147,6 @@ public:
     void setCurScreenLayout(const QString &value);
 
 private:
-    //    QVector< StackedInfoFrame *> auxFrames;  // NOT shared pointers - singleLogFrame owns them
     BaseContestLog * contest;
     HtmlDelegate *delegate = nullptr;
     QSOGridModel qsoModel;
@@ -170,6 +171,8 @@ private:
     void buildScreenLayout();
     void createScreenComponents();
     void clearScreenLayout();
+    void buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
+    void clearSplitter(MinosSplitter *s);
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
@@ -203,7 +206,6 @@ private slots:
 
     void on_RadioLoaded();
     void on_SetRadioList();
-    //void on_SetBandList(QString);
     void on_SetMode(QString);
     void on_SetFreq(QString);
     void on_SetRitFreq(QString);
@@ -217,8 +219,8 @@ private slots:
     void on_RotatorPresetList(QString);
     void on_RotatorStatus(QString);
     void on_RotatorBearing(QString);
-    void on_RotatorMaxAzimuth(QString);
-    void on_RotatorMinAzimuth(QString);
+    void on_RotatorMaxAzimuth(int);
+    void on_RotatorMinAzimuth(int);
     void on_cwCcwCmdEnable(bool);
     void presetTurn(QString);
 

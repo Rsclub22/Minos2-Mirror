@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rotator Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
 #include "volumeslider.h"
 #include "rigcontrolcommonconstants.h"
 
@@ -13,9 +24,7 @@ VolumeSlider::VolumeSlider(QWidget *parent):
     connect(this, SIGNAL(sliderReleased()), this, SLOT(setRadioVol()));
     connect(this, SIGNAL(valueChanged(int)), this, SLOT(setRadioVol(int)));
 
-    // signals to prevent slider update from radio
-    connect(this, SIGNAL(sliderPressed()), this, SLOT(volSliderPressed()));
-    connect(this, SIGNAL(sliderReleased()), this, SLOT(volSliderReleased()));
+
 
 }
 
@@ -26,17 +35,6 @@ VolumeSlider::~VolumeSlider()
 
 
 
-void VolumeSlider::volSliderPressed()
-{
-    volSliderSelected = true;
-}
-
-
-void VolumeSlider::volSliderReleased()
-{
-    volSliderSelected = false;
-}
-
 
 
 
@@ -44,27 +42,36 @@ void VolumeSlider::volSliderReleased()
 
 void VolumeSlider::setVolume(int level)
 {
-
-
-   if (!volSliderSelected)   // don't update level from radio if slider has focus
-   {
-
-       setValue(level);
-   }
-
-
+    valueFromRadio = true;
+    setValue(level);
 }
+
+
+
 
 // to radio
 
 void VolumeSlider::setRadioVol()
 {
-    int level = value();
-    emit sendVolumeRadio(level);
+    if (!valueFromRadio)
+    {
+        int level = value();
+        emit sendVolumeRadio(level);
+    }
+
+    valueFromRadio = false;
+
 
 }
 
 void VolumeSlider::setRadioVol(int level)
 {
-    emit sendVolumeRadio(level);
+    if (!valueFromRadio)
+    {
+        emit sendVolumeRadio(level);
+    }
+
+    valueFromRadio = false;
 }
+
+

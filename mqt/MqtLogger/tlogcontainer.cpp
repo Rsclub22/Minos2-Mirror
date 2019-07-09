@@ -29,6 +29,7 @@
 #include "helpbrowser.h"
 #include "WsjtxServer.h"
 #include "WsjtxConfigure.h"
+#include "minoscontestloaddialog.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -935,7 +936,6 @@ void TLogContainer::AppendAdifActionExecute()
         TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
         tslf->showQSOs();
-
     }
 }
 
@@ -1034,7 +1034,10 @@ void TLogContainer::FontEditAcceptActionExecute()
             QApplication::setFont( f );
 
             foreach ( QWidget * widget, QApplication::allWidgets() )
+            {
+                widget->setFont(f);
                 widget->update();
+            }
 
             QSettings settings;
             settings.setValue( "font", font() );
@@ -1242,6 +1245,11 @@ void TLogContainer::on_ContestPageControl_customContextMenuRequested(const QPoin
 }
 BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno )
 {
+   MinosContestLoadDialog progress(this);
+  //create and show a progress splash screen
+   progress.setLoadMessage(fname, newfile, false);
+   progress.doShow();
+
    static int namegen = 0;
    // openFile ends up calling ContestLog::initialise which then
    // calls TContestApp::insertContest
@@ -1307,6 +1315,9 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
    }
    TContestApp::getContestApp() ->writeContestList();
    enableActions();
+
+   progress.hide();
+
    return contest;
 }
 TSingleLogFrame *TLogContainer::getCurrentLogFrame()
@@ -1671,9 +1682,12 @@ void TLogContainer::preloadFiles( const QString &conarg )
 
     if ( conarg.size() )
     {
-        // open the "argument" one last - which will make it current
-        ct = addSlot( nullptr, conarg, false, -1 );
-        app ->writeContestList();	// or this one will not get included
+        if (!TContestApp::getContestApp()->isContestOpen(conarg))
+        {
+            // open the "argument" one last - which will make it current
+            ct = addSlot( nullptr, conarg, false, -1 );
+            app ->writeContestList();	// or this one will not get included
+        }
     }
 
     if ( ct )
@@ -1709,6 +1723,12 @@ void TLogContainer::preloadLists( )
 
 void TLogContainer::addListSlot( const QString &fname, int slotno, bool preload )
 {
+
+    MinosContestLoadDialog progress(this);
+   //create and show a progress splash screen
+    progress.setLoadMessage(fname, false, true);
+    progress.doShow();
+
     // openFile ends up calling ContactList::initialise which then
     // calls TContestApp::insertList
 
@@ -1725,6 +1745,7 @@ void TLogContainer::addListSlot( const QString &fname, int slotno, bool preload 
 
     TContestApp::getContestApp() ->writeListsList();
     enableActions();
+    progress.hide();
 }
 
 void TLogContainer::ListOpenActionExecute()

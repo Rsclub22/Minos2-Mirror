@@ -58,12 +58,15 @@ RotControlFrame::RotControlFrame(QWidget *parent):
 
 
     connect(this, SIGNAL(bearingEditReturn()), this, SLOT(on_Rotate_clicked()));
+    //connect(ui->BrgSt, SIGNAL(textChanged(const QString)), this, SLOT(on_BearingStTextChange(const QString)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(BrgStrToRot(QString)), this, SLOT(getBrgFrmQSOLog(QString)));
 
     // from cluster frame
     connect(&MinosLoggerEvents::mle, SIGNAL(SpotBrgStrToRot(QString)), this, SLOT(setBrgFromSpot(QString)));
 
+    // from memory frame
+    connect(&MinosLoggerEvents::mle, SIGNAL(MemBrgStrToRot(QString)), this, SLOT(setBrgFromFrmMemory(QString)));
     rot_left_button_off();
     rot_right_button_off();
     showTurnButOff();
@@ -116,10 +119,41 @@ int RotControlFrame::getCurrentBearing()
 }
 
 
+QString RotControlFrame::convertBearingForDisplay(QString bearing)
+{
+    QString brgbuff;
+    const QChar degreeChar(DEGREE_SYMBOL);
+    const QChar trueChar(BEARING_TRUE_CHAR);
+    const QChar shortLocDelimiterStart(SHORTLOC_DELIMITER_START);
+    const QChar shortLocDelimiterEnd(SHORTLOC_DELIMITER_END);
+    if (bearing.contains(SHORTLOCATOR_IDENTIFIER))
+    {
+        brgbuff = QString("%1%2%3%4%5").arg(shortLocDelimiterStart).arg( bearing.remove(SHORTLOCATOR_IDENTIFIER) ).arg(degreeChar).arg(trueChar).arg(shortLocDelimiterEnd);
+    }
+    else if (!bearing.contains(DEGREE_SYMBOL) && !bearing.contains(BEARING_TRUE_CHAR))
+    {
+        brgbuff = QString("%1%2%3").arg( bearing ).arg(degreeChar).arg(trueChar);
+    }
+    else
+    {
+        brgbuff = bearing;
+    }
+
+    traceMsg(QString("Convert Bearing for Display = %1").arg(brgbuff));
+    return brgbuff;
+}
+
+
+
 void RotControlFrame::getBrgFrmQSOLog(QString brg)
 {
-    traceMsg("Bearing from QSO Log" + brg);
-    ui->BrgSt->setText(brg);
+    // bearing arrives here correctly formatted for display
+    if (!brg.isEmpty())
+    {
+        traceMsg("Bearing from QSO Log" + brg);
+        setTurnDisplayText(brg);
+    }
+
 }
 
 
@@ -130,16 +164,29 @@ QString RotControlFrame::getBrgTxtFrmFrame()
     return brg;
 }
 
-void RotControlFrame::setBrgFromRigFrmMemory(QString brg)
+// Note! The bearing string from memory could have '#' appended to denote
+// bearing was calculated from a short locator.
+void RotControlFrame::setBrgFromFrmMemory(QString brg)
 {
     traceMsg("Set Bearing from memory " + brg);
-    ui->BrgSt->setText(brg);
+    setTurnDisplayText(convertBearingForDisplay(brg));
+
 }
 
+// Note! The bearing string from cluster spot could have '#' appended to denote
+// bearing was calculated from a short locator.
 void RotControlFrame::setBrgFromSpot(QString brg)
 {
-    traceMsg(QString("Set Beearing from spot %1").arg(brg));
-    turnTo(brg.toInt());
+    traceMsg(QString("Set Bearing from spot %1").arg(brg));
+    setTurnDisplayText(convertBearingForDisplay(brg));
+    traceMsg(QString("Bearing text box from spot %1").arg(ui->BrgSt->text()));
+    turnTo(getAngle(brg));
+}
+
+
+void RotControlFrame::setTurnDisplayText(QString brg)
+{
+    ui->BrgSt->setText(brg);
 }
 
 
@@ -149,7 +196,7 @@ void RotControlFrame::turnTo(int angle)
 
     if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-        ui->BrgSt->setText(QString::number(angle));
+        //ui->BrgSt->setText(bearingForDisplay(angle));
 
         if (rotConnected)
         {
@@ -204,12 +251,15 @@ void RotControlFrame::on_Rotate_clicked()
     if (rotConnected && !rotError)
     {
         traceMsg("Turn to button Clicked");
-        QString brgSt = ui->BrgSt->text();
+        QString brgStr = ui->BrgSt->text().trimmed();
+        if (!brgStr.isEmpty() && ui->BrgSt->isValid())
+        {
+            setTurnDisplayText(convertBearingForDisplay(brgStr));
+            ui->BrgSt->selectAll();
+            turnTo(getAngle(brgStr));
 
-        int angle = getAngle(brgSt);
 
-        turnTo(angle);
-        ui->BrgSt->selectAll();
+        }
     }
     else
     {
@@ -228,6 +278,7 @@ void RotControlFrame::on_nudgeLeft_clicked()
         int newBearing = currentBearing - 3;
         if (newBearing < 0)
             newBearing += 360;
+        setTurnDisplayText(convertBearingForDisplay(QString::number(newBearing)));
         turnTo(newBearing);
     }
     else
@@ -245,6 +296,7 @@ void RotControlFrame::on_nudgeRight_clicked()
         int newBearing = currentBearing + 3;
         if (newBearing >= 360)
             newBearing -= 360;
+        setTurnDisplayText(convertBearingForDisplay(QString::number(newBearing)));
         turnTo(newBearing);
     }
     else
@@ -345,6 +397,41 @@ void RotControlFrame::on_RotateRight_clicked()
 
 }
 
+/*
+void RotControlFrame::on_BearingStTextChange(const QString brg)
+{
+
+    if (validateBearingEntry(brg) || brg.isEmpty())
+    {
+        // set frame to black
+        ui->BrgSt->setStyleSheet("QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}");
+    }
+    else
+    {
+        // set frame to red
+        ui->BrgSt->setStyleSheet("QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}");
+    }
+}
+
+
+bool RotControlFrame::validateBearingEntry(const QString brg)
+{
+    QString bearing = brg;
+
+    bearing = bearing.trimmed().remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END);
+    bool ok;
+    int br = bearing.toInt(&ok);
+    if ((br >= COMPASS_MIN0 && br <= COMPASS_MAX360 && ok) )
+    {
+       return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+*/
 
 void RotControlFrame::keyPressEvent(QKeyEvent *event)
 {
@@ -606,7 +693,8 @@ void RotControlFrame::on_ContestPageChanged()
 {
     // send rotator select to rotator app
 
-    emit selectRotator(ct->antennaName.getValue().toString());
+    if (ct)
+        emit selectRotator(ct->antennaName.getValue().toString());
 }
 
 void RotControlFrame::setRotatorBearing(const QString &s)
@@ -682,29 +770,21 @@ void RotControlFrame::setRotatorBearing(const QString &s)
 
 }
 
-void RotControlFrame::setRotatorMaxAzimuth(const QString &s)
+void RotControlFrame::setRotatorMaxAzimuth(const int maxAz)
 {
-    traceMsg("Set MaxAzimuth = " + s);
-    bool ok;
-    int max_azimuth = 0;
-    max_azimuth = s.toInt(&ok, 10);
-    if (ok)
-    {
-        maxAzimuth = max_azimuth;
-    }
+    traceMsg(QString("Set MaxAzimuth = %1").arg(QString::number(maxAz)));
+
+    maxAzimuth = maxAz;
+
 }
 
 
-void RotControlFrame::setRotatorMinAzimuth(const QString &s)
+void RotControlFrame::setRotatorMinAzimuth(const int minAz)
 {
-    traceMsg("Set MinAzimuth = " + s);
-    bool ok;
-    int min_azimuth = 0;
-    min_azimuth = s.toInt(&ok, 10);
-    if (ok)
-    {
-        minAzimuth = min_azimuth;
-    }
+    traceMsg(QString("Set MinAzimuth = %1").arg(QString::number(minAz)));
+
+    minAzimuth = minAz;
+
 }
 
 
@@ -743,7 +823,8 @@ void RotControlFrame::getRotDetails(memoryData::memData &m)
 void RotControlFrame::presetTurn(QString b)
 {
     turnTo(b.toInt());
-    ui->BrgSt->setText(b);
+    //ui->BrgSt->setText(b);
+    setTurnDisplayText(convertBearingForDisplay(b));
     ui->BrgSt->setFocus();
 }
 void RotControlFrame::checkConnection()

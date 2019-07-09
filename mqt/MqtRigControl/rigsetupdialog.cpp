@@ -129,6 +129,35 @@ void RigSetupDialog::initSetup()
 
 }
 
+
+void RigSetupDialog::getRigCtldExePathFromFile()
+{
+    QString fileName;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings  settings(fileName, QSettings::IniFormat);
+    settings.beginGroup(RIGCTLD_GROUP_NAME);
+
+#if defined Q_OS_WIN32
+    rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_WIN32_RIGCTLD_PATH).toString();
+#elif defined Q_OS_LINUX
+    rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_LINUX_RIGCTLD_PATH).toString();
+    rigCtldExePath.replace("//", "/");
+#elif defined Q_OS_MAC
+    rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_MAC_RIGCTLD_PATH).toString();
+    rigCtldExePath.replace("//", "/");
+#endif
+
+    settings.endGroup();
+
+
+
+}
+
+QString RigSetupDialog::getRigCtldExePath()
+{
+    return rigCtldExePath;
+}
+
 void RigSetupDialog::addTab(int tabNum, QString tabName)
 {
     availRadioData.append(new scatParams);
@@ -172,6 +201,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(true);
+        radioTab[tabNum]->setRigctldCheckBoxVisible(false);
+        radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
     }
     else if (rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_SERIAL)
     {
@@ -182,6 +213,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(false);
+        radioTab[tabNum]->setRigctldCheckBoxVisible(false);
+        radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
     }
     radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);
 
@@ -271,7 +304,13 @@ void RigSetupDialog::addRadio()
     numAvailRadios++;
     radioTab[tabNum]->setupRadioModel(radioModel);
     radioTab[tabNum]->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
+
     loadAvailComportsToTab(tabNum);
+    radioTab[tabNum]->setDataSpeed("9600");
+    radioTab[tabNum]->setDataBits("1");
+    radioTab[tabNum]->setStopBits("0");
+    radioTab[tabNum]->setParityBits(0);
+
 
     ui->radioTab->setCurrentIndex(tabNum);
 

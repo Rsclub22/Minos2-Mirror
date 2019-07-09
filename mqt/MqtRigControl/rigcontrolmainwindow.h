@@ -28,6 +28,7 @@
 #include "serialtvswitch.h"
 #include "smeterbar.h"
 
+
 class QLabel;
 class QComboBox;
 class QBitArray;
@@ -36,16 +37,9 @@ class RigControl;
 class RigControlRpc;
 
 
-void delay(int sec);
 
-const QString RIGCTLD_PATH = "D:\\hamlib-w32-3.1\\bin\\";
-//const QString RIGCTLD_WORKING_DIR = "D:\\hamlib-w32-3.1\\bin";
-const QString RIGCTLD_EXE = "rigctld.exe";
 
-//const QString RIGCTLD_PATH = "c:\\qt_projects\\minos-minos\\runtime\\configuration\\radio\\";
-//const QString RIGCTLD_WORKING_DIR = "D:\\hamlib-w32-3.1\\bin";
-//const QString RIGCTLD_BAT = "rigctld_yaesu.bat";
-//const QString RIGCTLD_BAT = "rigctld.bat";
+
 
 const bool RIGCTLD_ON = true;
 const bool RIGCTLD_OFF = false;
@@ -66,6 +60,8 @@ namespace rigCtldTrace {
 
 //#define RIGCONTROL_TEST
 
+void delay(int sec);
+void sleepFor(qint64 milliseconds);
 
 
 
@@ -99,17 +95,19 @@ private:
     bool rigErrorFlag;
     bool cmdLockFlag;
     // data from rigctld
+    QProcess *rigCtldProcess;
     QString rigctld_radioNumber;
     int irigctld_radioNumber = 0;
     QString rigctld_radioName;
     QString rigctld_radioMfg;
     QTimer *RigCtldStatusTimer;
+    int rigCtldConnectDelay;
 
     // data from logger
     QString logger_freq;
     QString slogMode;
     QString selRadioMode;   // onSelectRadio mode from logger at startup
-    rmode_t logMode;
+    //rmode_t logMode;
     QString selTvBand;      // selected band from radio
     QString transVertSwNum;
     bool logRitOn;
@@ -130,6 +128,7 @@ private:
     rmode_t curMode;
     QString sCurMode;
     bool mgmModeFlag;
+    QStringList  mgmModes;
     int rRitFreq;        // converted from hamlib long ritFreq
     int curVol;
     int curSignalStrength = 0;
@@ -156,7 +155,6 @@ private:
     QVector<QPushButton*> supRadioInd;
     QString selTransVertBandIndicator = "";
 
-    QProcess *rigCtldProcess;
 
     void initActionsConnections();
     void initSelectRadioBox();
@@ -304,6 +302,12 @@ private:
 
 
     bool rigCtldKill();
+
+    int getTXStatus(vfo_t vfo);
+
+
+    void getRigCtldConnectDelay();
+
 
 private slots:
 

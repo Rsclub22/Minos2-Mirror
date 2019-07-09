@@ -308,7 +308,12 @@ QString HtmlFontColour( const QColor &c )
     QString s = "<font color='" + c.name() + "'>";
     return s;
 }
-UpperCaseValidator::UpperCaseValidator(bool makeSignal):makeSignal(makeSignal)
+QString HtmlFontColour( const QString &c )
+{
+    QString s = "<font color='" + c + "'>";
+    return s;
+}
+UpperCaseValidator::UpperCaseValidator()
 {
 
 }
@@ -317,10 +322,6 @@ QValidator::State UpperCaseValidator::validate(QString & input, int & /*pos*/) c
 {
     input = input.toUpper();
 
-    if (makeSignal)
-    {
-        MinosLoggerEvents::SendValidated();
-    }
     return Acceptable;
 }
 

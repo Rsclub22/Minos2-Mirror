@@ -59,6 +59,7 @@ SOURCES += \
     locTreeFrame.cpp \
     locframe.cpp \
     main.cpp \
+    minoscontestloaddialog.cpp \
     qsologframe.cpp \
     reg1test.cpp \
     rigcontrolframe.cpp \
@@ -95,10 +96,12 @@ SOURCES += \
     WsjtxRadio.cpp \
     WsjtxRadioMetaType.cpp \
     Wsjtx_qt_helpers.cpp \
-    bandmapclientframe.cpp \
+	bandmapclientframe.cpp \
     bandmap.cpp \
     bandmapcallsignmarker.cpp \
-    bandmapfreqdial.cpp
+    bandmapfreqdial.cpp	\
+	clustermodebandplan.cpp
+
 
 HEADERS  += \
     AdifImport.h \
@@ -127,6 +130,7 @@ HEADERS  += \
     freqlineedit.h \
     locTreeFrame.h \
     locframe.h \
+    minoscontestloaddialog.h \
     printfile.h \
     qsologframe.h \
     reg1test.h \
@@ -168,7 +172,8 @@ HEADERS  += \
     bandmapclientframe.h \
     bandmap.h \
     bandmapcallsignmarker.h \
-    bandmapfreqdial.h
+    bandmapfreqdial.h	\
+    clustermodebandplan.h \
 
 FORMS    += \
     contestdetails.ui \
@@ -178,6 +183,7 @@ FORMS    += \
     LocCalcFrame.ui \
     locframe.ui \
     locTreeFrame.ui \
+    minoscontestloaddialog.ui \
     presetbuttondialog.ui \
     qsologframe.ui \
     rigcontrolframe.ui \

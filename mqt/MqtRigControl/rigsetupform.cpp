@@ -172,6 +172,9 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             {
                serialDataEntryVisible(false);
                networkDataEntryVisible(true);
+               rigCtldNetworkVisible(false);
+
+
             }
             else if (portType == RIG_PORT_SERIAL)
             {
@@ -182,6 +185,8 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             {
                 serialDataEntryVisible(false);
                 networkDataEntryVisible(false);
+                setRigctldCheckBoxVisible(false);
+                radioData->rigCtldEnable = false;
             }
         }
 
@@ -763,12 +768,22 @@ void RigSetupForm::setLocTVSWComportVisible(bool visible)
 
 /************** RigCtld Setup ****************************************/
 
-void RigSetupForm::rigCtldNetworkVisible(bool enable)
+void RigSetupForm::rigCtldNetworkVisible(bool visible)
 {
-    ui->rigCtldNetworkAddLbl->setVisible(enable);
-    ui->rigCtldNetworkAddBox->setVisible(enable);
-    ui->rigCtldNetPortLbl->setVisible(enable);
-    ui->rigCtldNetPortBox->setVisible(enable);
+    rigCtldNetworkAddBoxVisible(false);
+    rigCtldPortBoxVisible(visible);
+}
+
+void RigSetupForm::rigCtldNetworkAddBoxVisible(bool visible)
+{
+    ui->rigCtldNetworkAddLbl->setVisible(visible);
+    ui->rigCtldNetworkAddBox->setVisible(visible);
+}
+
+void RigSetupForm::rigCtldPortBoxVisible(bool visible)
+{
+    ui->rigCtldNetPortLbl->setVisible(visible);
+    ui->rigCtldNetPortBox->setVisible(visible);
 }
 
 void RigSetupForm::useRigCtldSelected(bool /*selected*/)
@@ -788,6 +803,7 @@ void RigSetupForm::setUseRigctldCheckbox(bool checked)
 {
     if (checked)
     {
+
         ui->useRigCtldChkBox->setCheckState(Qt::CheckState::Checked);
     }
     else
@@ -828,6 +844,13 @@ void RigSetupForm::setRigctldPortNumber(const QString& port)
 {
     ui->rigCtldNetPortBox->setText(port);
 }
+
+
+void RigSetupForm::setRigctldCheckBoxVisible(bool visible)
+{
+    ui->useRigCtldChkBox->setVisible(visible);
+}
+
 /************** RigSetup Enable **************************************/
 
 

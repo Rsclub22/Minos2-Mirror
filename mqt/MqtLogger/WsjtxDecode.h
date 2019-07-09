@@ -5,6 +5,8 @@
 enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73, emsFree};
 enum SpecialOperatingActivity {NONE, NA_VHF, EU_VHF, FIELD_DAY, RTTY, FOX, HOUND};
 
+const Locator &WsjtGetCallLoc(const Callsign &c);
+
 class WsjtxFrame;
 class decodeMessage
 {
@@ -22,6 +24,8 @@ public:
 
     QTime decodeTime;
     QString message;
+    bool best = false;
+    bool autoresp = false;
     Callsign toCall;
     Locator toGrid;
     Callsign fromCall;
@@ -30,6 +34,11 @@ public:
     int bearing = 0;
     int distance = 0;
     int points = 0;
+    int mults = 0;
+    int bonus = 0;
+    int csret = CS_OK;
+    int colOffset;
+    bool oldmsg;
 
     // extra info needed for reply
 

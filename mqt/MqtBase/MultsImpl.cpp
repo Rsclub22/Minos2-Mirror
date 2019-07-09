@@ -741,16 +741,28 @@ LocCount *LocSquare::map( int num )
 
 void LocSquare::clear( )
 {
-   int i, j;
-   for ( i = 0; i < 10; i++ )
-      for ( j = 0; j < 10; j++ )
+   for ( int i = 0; i < 10; i++ )
+      for ( int j = 0; j < 10; j++ )
       {
          numbers[ i ][ j ].UKMultGiven = false;
          numbers[ i ][ j ].UKLocCount = 0;
          numbers[ i ][ j ].nonUKLocCount = 0;
       }
 }
-
+bool LocSquare::isClear()
+{
+    for ( int i = 0; i < 10; i++ )
+    {
+       for ( int j = 0; j < 10; j++ )
+       {
+          if (numbers[ i ][ j ].UKLocCount > 0)
+              return false;
+          if (numbers[ i ][ j ].nonUKLocCount > 0)
+              return false;
+       }
+    }
+    return true;
+}
 bool LocSquare::operator<( const LocSquare& rhs ) const
 {
    return loc.compare(rhs.loc) < 0;

@@ -2,6 +2,7 @@
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "tlogcontainer.h"
+#include "BandList.h"
 #include "tsinglelogframe.h"
 #include "rigmemdialog.h"
 #include "rigutils.h"
@@ -48,7 +49,6 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     delegate = new HtmlDelegate(1.0, lcf/100.0) ;
     model.delegate = delegate;
     ui->rigMemTable->setItemDelegate( delegate);
-    ui->rigMemTable->resizeRowsToContents();
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
@@ -58,6 +58,8 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToMemory(memoryData::memData)), this, SLOT(DXSpotToMemory(memoryData::memData)));
 
     reloadColumns();
+
+    ui->rigMemTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     connect( ui->rigMemTable->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
              this, SLOT( on_sectionMoved(int, int , int)));
@@ -133,29 +135,54 @@ void RigMemoryFrame::onMenuShow()
 // this could do with tidying up!
 void RigMemoryFrame::DXSpotToMemory(memoryData::memData m)
 {
-    memoryData::memData logData = m;
-    int n = -1;
-    int mcount = ct->rigMemories.size();
-    for (int i = 0; i <= mcount; i ++)  // <= - extra one gets blank
-    {
-        memoryData::memData m = ct->getRigMemoryData(i);
 
-        if ( m.callsign == memDefData::DEFAULT_CALLSIGN)
+    // is it for this band?
+    QString cb = ct->band.getValue().trimmed();
+    double cf = convertStrToFreq(m.freq);
+    QString mem_cb;
+    // find band for current freq
+    BandList &blist = BandList::getBandList();
+    for (int i = 0; i < blist.bandList.count(); i++)
+    {
+        if (cf >= blist.bandList[i].flow && cf <= blist.bandList[i].fhigh)
         {
-            n = i;
+            mem_cb = blist.bandList[i].uk;
             break;
         }
+
     }
 
-    if (n == -1)
+    if (cb == mem_cb && !ct->isProtected()) // band match and not protected?
     {
-        mShowMessage("Panic", this);
-        return;
+
+        memoryData::memData logData = m;
+        int n = -1;
+        int mcount = ct->rigMemories.size();
+        for (int i = 0; i <= mcount; i ++)  // <= - extra one gets blank
+        {
+            memoryData::memData m = ct->getRigMemoryData(i);
+
+            if ( m.callsign == memDefData::DEFAULT_CALLSIGN)
+            {
+                n = i;
+                break;
+            }
+        }
+
+        if (n == -1)
+        {
+            mShowMessage("Panic", this);
+            return;
+        }
+
+        setRigMemoryData(n, logData);
+
+        sendUpdateMemories();
     }
 
-    setRigMemoryData(n, logData);
 
-    sendUpdateMemories();
+
+
 }
 
 
@@ -191,15 +218,18 @@ void RigMemoryFrame::rigMemTable_Hdr_customContextMenuRequested( const QPoint &p
 
 void RigMemoryFrame::saveAllColumnWidthsAndPositions()
 {
-    QSettings settings;
-    QByteArray state;
+    if (!suppressSaveColumns)
+    {
+        QSettings settings;
+        QByteArray state;
 
-    state = ui->rigMemTable->horizontalHeader()->saveState();
-    settings.setValue("RigMem/state", state);
+        state = ui->rigMemTable->horizontalHeader()->saveState();
+        settings.setValue("RigMem/state", state);
 
-    //And we need to send this out to all other instances
+        //And we need to send this out to all other instances
 
-    sendUpdateMemories();
+        sendUpdateMemories();
+    }
 }
 void RigMemoryFrame::reloadColumns()
 {
@@ -253,8 +283,8 @@ void RigMemoryFrame::doMemoryUpdates()
 
     model.reset();
     reloadColumns();
+    firstTime = true;
     on_AfterLogContact(ct);
-//    ui->rigMemTable->resizeRowsToContents();
 }
 
 void RigMemoryFrame::checkTimerTimer()
@@ -280,7 +310,6 @@ void RigMemoryFrame::checkTimerTimer()
 
     if (!doTimer && (logData.freq == lastRigFreq && logData.bearing == lastBearing))
     {
-        ui->rigMemTable->resizeRowsToContents();
         return;
     }
     doTimer = false;
@@ -364,7 +393,6 @@ void RigMemoryFrame::checkTimerTimer()
         scrollIntoView(firstMatch);
     }
     proxyModel.headerDataChanged(Qt::Vertical, 0, model.rowCount() - 1);
-    ui->rigMemTable->resizeRowsToContents();
 }
 void RigMemoryFrame::onRigFreqChanged(QString /*f*/, BaseContestLog *c)
 {
@@ -415,6 +443,7 @@ void RigMemoryFrame::on_newMemoryButton_clicked()
     }
 
     writeMemory(n); // which creates the button as well
+    firstTime = true;
 }
 void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
 {
@@ -442,6 +471,49 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
                   }
               }
           }
+
+          if (firstTime)
+          {
+              // we shouldn't need to do any of this, but "blank" memories seem to kill selection (issue #442)
+              int sortCol = ui->rigMemTable->horizontalHeader()->sortIndicatorSection();
+              bool sortOrder = ui->rigMemTable->horizontalHeader()->sortIndicatorOrder() == Qt::AscendingOrder;
+
+              {
+                  QTimer *timer = new QTimer(this);
+                  timer->setSingleShot(true);
+
+                  connect(timer, &QTimer::timeout, [=]()
+                  {
+                      // NB a lambda function
+                      suppressSaveColumns = true;
+                      ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
+                      suppressSaveColumns = false;
+                      timer->deleteLater();
+                  }
+                  );
+
+                  timer->start(10);
+              }
+
+              {
+                  QTimer *timer2 = new QTimer(this);
+                  timer2->setSingleShot(true);
+
+                  connect(timer2, &QTimer::timeout, [=]()
+                  {
+                      // NB a lambda function
+                      suppressSaveColumns = true;
+                      ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
+                      suppressSaveColumns = false;
+                      timer2->deleteLater();
+                  }
+                  );
+
+                  timer2->start(20);
+              }
+              firstTime = false;
+          }
+
       }
 }
 
@@ -466,8 +538,16 @@ void RigMemoryFrame::bearingActionSelected()
 
     traceMsg(QString("Memory Bearing Selected = %1").arg(QString::number(buttonNumber +1)));
     memoryData::memData m = ct->getRigMemoryData(buttonNumber);
-
-    MinosLoggerEvents::SendBrgStrToRot(QString::number(m.bearing));
+    QString brg;
+    if (m.locator.count() < 6)
+    {
+        brg = QString::number(m.bearing).append(SHORTLOCATOR_IDENTIFIER); // flag bearing from a short locator
+    }
+    else
+    {
+        brg = QString::number(m.bearing);
+    }
+    MinosLoggerEvents::SendMemBrgStrToRot(brg);
 }
 void RigMemoryFrame::readActionSelected()
 {
@@ -657,13 +737,20 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
             {
             case ermCallsign:
             {
-                disp = frame->headerVal[row].text;
-                if (disp.isEmpty())
+                if (role == Qt::UserRole)
                 {
-                    disp = "     " + m.callsign + "    ";
+                    disp = m.callsign;
                 }
-                QColor colour = frame->headerVal[row].colour;
-                disp = HtmlFontColour(colour) + disp;
+                else
+                {
+                    disp = frame->headerVal[row].text;
+                    if (disp.isEmpty())
+                    {
+                        disp = "     " + m.callsign + "    ";
+                    }
+                    QColor colour = frame->headerVal[row].colour;
+                    disp = HtmlFontColour(colour) + disp;
+                }
                 break;
             }
             case ermWorked:

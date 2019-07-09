@@ -18,10 +18,10 @@
 
 class MinosCommonConnection;
 
-class MinosServer
+class ThisMinosServer
 {
    private:
-      static MinosServer *singleton;
+      static ThisMinosServer *singleton;
       QString serverName;
    public:
       QString getServerName()
@@ -29,12 +29,12 @@ class MinosServer
          return serverName;
       }
 
-      static MinosServer *getMinosServer();
+      static ThisMinosServer *getThisMinosServer();
       bool forwardStanza( MinosCommonConnection *, TiXmlElement *pak );
       virtual bool analyseNode( MinosCommonConnection *il, TiXmlElement * pak );
       virtual void dispatchStanza( MinosCommonConnection *il, RPCRequest *a );
 
-      MinosServer();
-      virtual ~MinosServer();
+      ThisMinosServer();
+      virtual ~ThisMinosServer();
 };
 #endif

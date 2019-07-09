@@ -20,16 +20,16 @@
 
 //==============================================================================
 //==============================================================================
-MinosServerConnection::MinosServerConnection(bool fromDatagram) : srv( nullptr ), resubscribed( false ), fromDatagram(fromDatagram)
+MinosServerConnection::MinosServerConnection(bool fromDatagram) : fromDatagram(fromDatagram)
 {}
 void MinosServerConnection::initialise()
 {
     QHostAddress h = sock->peerAddress();
     connectHost = h;
-    connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()));
-    connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()));
+    connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()), Qt::UniqueConnection);
+    connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()), Qt::UniqueConnection);
 
-    connect(&resubscribeTimer, SIGNAL(timeout()), this, SLOT(sendKeepAlive()));
+    connect(&resubscribeTimer, SIGNAL(timeout()), this, SLOT(sendKeepAlive()), Qt::UniqueConnection);
     resubscribeTimer.start(1000);
 }
 
@@ -43,7 +43,9 @@ void MinosServerConnection::closeDown()
    if (PubSubMain)
        PubSubMain->disconnectServer(makeJid());
    if (srv)
-      TZConf::getZConf()->publishDisconnect(srv->station);
+   {
+      TZConf::getZConf()->publishDisconnect(srv);
+   }
 }
 
 bool MinosServerConnection::checkFrom( TiXmlElement *tix )
@@ -78,16 +80,16 @@ void MinosServerConnection::mConnect( Server *psrv )
    // We need to connect out to the end point - looks much like a client connection!
     sock = QSharedPointer<QTcpSocket>(new QTcpSocket);
 
-    connect(sock.data(), SIGNAL(connected()), this, SLOT(on_connected()));
-    connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()));
-    connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()));
+    connect(sock.data(), SIGNAL(connected()), this, SLOT(on_connected()), Qt::UniqueConnection);
+    connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()), Qt::UniqueConnection);
+    connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()), Qt::UniqueConnection);
     sock->connectToHost(srv->host, srv->port);
 }
 void MinosServerConnection::on_connected()
 {
     trace( QString( "Server: Connected OK to " ) + srv->station + " host " + srv->host.toString() );
-    RPCRequest *rpa = new RPCRequest( clientServer, MinosServer::getMinosServer() ->getServerName(), "ServerSetFromId" );   // for our local server, this one MUST have a from
-    rpa->addParam( MinosServer::getMinosServer() ->getServerName() );
+    RPCRequest *rpa = new RPCRequest( clientServer, ThisMinosServer::getThisMinosServer() ->getServerName(), "ServerSetFromId" );   // for our local server, this one MUST have a from
+    rpa->addParam( ThisMinosServer::getThisMinosServer() ->getServerName() );
     rpa->addParam( TZConf::getZConf()->getZConfString(false, connectHost.toString() ) );
     sendAction( rpa );
     delete rpa;
@@ -112,7 +114,11 @@ void MinosServerConnection::setFromId( MinosId &id, RPCRequest *req )
    if ( !srv )
    {
       // we need to find who is connecting to us
-      srv = findStation( id.server );
+      QVector<Server *>::iterator srvi = findStation( id.server );
+      if (srvi != serverList.end())
+      {
+          srv = *srvi;
+      }
       if ( srv )
       {
          trace( "ServerSetFromId: server " + srv->station + " connected to us" );
@@ -162,7 +168,7 @@ void MinosServerConnection::sendKeepAlive( )
         if ( !resubscribed && srv )
         {
             if ( clientServer.size() && clientServer.compare( "localhost", Qt::CaseInsensitive ) != 0 &&
-                 clientServer.compare( MinosServer::getMinosServer() ->getServerName(), Qt::CaseInsensitive) != 0 )
+                 clientServer.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive) != 0 )
             {
                 RPCServerPubSub::serverReconnectRemotePubSub( srv->station );
                 resubscribed = true;
@@ -187,6 +193,15 @@ bool MinosServerConnection::checkLastRx()
     }
 
     return true;
+}
+//==============================================================================
+void MinosServerConnection::sendCloseSocket()
+{
+    if (srv)
+    {
+       sendRaw(QString("<closeSocket/>").toStdString());
+       sock->waitForBytesWritten();
+    }
 }
 //==============================================================================
 

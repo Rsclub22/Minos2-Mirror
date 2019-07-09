@@ -143,6 +143,7 @@ public:
     void rigCtldNetworkVisible(bool enable);
 
 
+    void setRigctldCheckBoxVisible(bool visible);
 signals:
     void transVertTabAdded(int);
 
@@ -218,6 +219,8 @@ private:
     void processPortNumber(QLineEdit *netPortBox, QString &portNumber);
 
 
+    void rigCtldNetworkAddBoxVisible(bool visible);
+    void rigCtldPortBoxVisible(bool visible);
 };
 
 #endif // RIGSETUPFORM_H

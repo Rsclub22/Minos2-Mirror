@@ -44,15 +44,22 @@ Locator::~Locator()
 
 char Locator::validate( double &lon, double &lat )
 {
-   valRes = lonlat( loc.getValue(), lon, lat );
+   valRes = lonlat( loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
    return valRes;
+}
+
+Locator & Locator::operator =(const Locator &rhs)
+{
+    loc.setValue(rhs.loc);
+    validate();
+    return *this;
 }
 char Locator::validate( )
 {
    double longitude = 0.0;
    double latitude = 0.0;
 
-   valRes = lonlat( loc.getValue(), longitude, latitude );
+   valRes = lonlat( loc.getValue(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
 
    return valRes;
 }
@@ -385,14 +392,14 @@ int dtg::notEntered( )
 // default versions are good enough for now!
 dtg::dtg(const dtg&rhs)
 {
-   sdate = rhs.sdate;
-   stime = rhs.stime;
+   sdate.setValue(rhs.sdate);
+   stime.setValue(rhs.stime);
    baddtg = false;
 }
 dtg& dtg::operator =(const dtg&rhs)
 {
-   sdate = rhs.sdate;
-   stime = rhs.stime;
+   sdate.setValue(rhs.sdate);
+   stime.setValue(rhs.stime);
    baddtg = false;
    return *this;
 }
@@ -437,9 +444,13 @@ Callsign::Callsign(const QString &pcs ) : valRes( CS_NOT_VALIDATED )
 //callsign::callsign(const callsign&)
 //{
 //}
-//callsign& callsign::operator =(const callsign&)
-//{
-//}
+Callsign& Callsign::operator =(const Callsign& rhs)
+{
+    fullCall.setValue(rhs.fullCall);
+    valRes = CS_NOT_VALIDATED;
+    validate();
+    return *this;
+}
 Callsign::~Callsign()
 {
    // nothing needed

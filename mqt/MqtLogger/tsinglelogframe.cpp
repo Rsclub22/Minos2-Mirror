@@ -168,6 +168,8 @@ TSingleLogFrame::~TSingleLogFrame()
 void TSingleLogFrame::createScreenComponents()
 {
     // create component frames, parentless
+    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
+    trace("TSingleLogFrame::createScreenComponents for " + ct->name.getValue() + " uuid " + ct->uuid);
 
     QSOTable = new QTableView(this);
     QSOTable->setObjectName(QStringLiteral("QSOTable"));
@@ -195,7 +197,7 @@ void TSingleLogFrame::createScreenComponents()
 
     // the order of the next two lines is critical
     QSOTable->setItemDelegate( delegate );
-    QSOTable->resizeRowsToContents();       // this is where the sizehint gets called
+    //QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 
     QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
@@ -266,6 +268,19 @@ void TSingleLogFrame::createScreenComponents()
     verticalLayout_5->setSpacing(0);
     verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
     verticalLayout_5->setContentsMargins(10, 0, 5, 0);
+
+    CurrentBandLabel = new QLabel(CribSheet);
+    CurrentBandLabel->setObjectName(QStringLiteral("CurrentBandLabel"));
+    CurrentBandLabel->setFrameShape(QFrame::NoFrame);
+    CurrentBandLabel->setLineWidth(2);
+    CurrentBandLabel->setMidLineWidth(2);
+    CurrentBandLabel->setTextFormat(Qt::RichText);
+    CurrentBandLabel->setWordWrap(true);
+
+    CurrentBandLabel->setFrameStyle(QFrame::Panel | QFrame::Raised);
+
+    verticalLayout_5->addWidget(CurrentBandLabel);
+
     NextContactDetailsLabel = new QLabel(CribSheet);
     NextContactDetailsLabel->setObjectName(QStringLiteral("NextContactDetailsLabel"));
     NextContactDetailsLabel->setFrameShape(QFrame::NoFrame);
@@ -274,6 +289,7 @@ void TSingleLogFrame::createScreenComponents()
     NextContactDetailsLabel->setTextFormat(Qt::RichText);
     NextContactDetailsLabel->setWordWrap(true);
     verticalLayout_5->addWidget(NextContactDetailsLabel);
+    verticalLayout_5->addSpacerItem(new QSpacerItem(40, 20, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
     CribSheet->setVisible(false);
 
@@ -335,10 +351,57 @@ void TSingleLogFrame::createScreenComponents()
 
     connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
 }
+void TSingleLogFrame::clearSplitter(MinosSplitter *s)
+{
+    while(s && s->count())
+    {
+        QWidget *w = s->widget(0);
+        MinosSplitter *ws = dynamic_cast<MinosSplitter *>(w);
+
+        if (ws)
+        {
+            clearSplitter(ws);
+            ws->setParent(nullptr);
+            ws->deleteLater();
+        }
+        else
+        {
+            // normal components - keep them built, but out of the way (not shown)
+            // A lot ofthe code relies on them existing
+            // aux components - delete them, and recreate them as necessary
+
+            // but get rid of any scroll area "wrappers".
+
+            w->hide();
+            w->setParent(this);
+
+            QScrollArea *qsa = dynamic_cast<QScrollArea *>(w);
+            if (qsa)
+            {
+                QWidget *tw = qsa->takeWidget();
+                qsa->deleteLater();
+                if (tw)
+                {
+                    tw->hide();
+                    tw->setParent(this);
+                    StackedInfoFrame *aux = dynamic_cast<StackedInfoFrame *>(tw);
+                    if (aux)
+                    {
+                        aux->setContest(nullptr);
+                        aux->deleteLater();
+                    }
+                }
+            }
+        }
+    }
+
+}
 void TSingleLogFrame::clearScreenLayout()
 {
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
+    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
+    trace("TSingleLogFrame::clearScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
 
     FKHRigControlFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
@@ -352,27 +415,7 @@ void TSingleLogFrame::clearScreenLayout()
     while (singleLogFrameSplitter->count())
     {
         MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
-        while(s && s->count())
-        {
-            QWidget *w = s->widget(0);
-            w->hide();
-            w->setParent(this);
-
-            QScrollArea *qsa = dynamic_cast<QScrollArea *>(w);
-            if (qsa)
-            {
-                QWidget *tw = qsa->takeWidget();
-                qsa->deleteLater();
-                tw->hide();
-                tw->setParent(this);
-                StackedInfoFrame *aux = dynamic_cast<StackedInfoFrame *>(tw);
-                if (aux)
-                {
-                    aux->setContest(nullptr);
-                    aux->deleteLater();
-                }
-            }
-        }
+        clearSplitter(s);
         s->setParent(nullptr);
         s->deleteLater();
     }
@@ -381,10 +424,15 @@ void TSingleLogFrame::clearScreenLayout()
 }
 void TSingleLogFrame::applyScreenLayout()
 {
+    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
+    trace("TSingleLogFrame::applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
     hide();
+    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+
     clearScreenLayout();
     buildScreenLayout();
     show();
+    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     onSplitterMoved(-1, -1);
 }
 
@@ -399,9 +447,164 @@ void TSingleLogFrame::setCurScreenLayout(const QString &value)
     ct->screenLayout.setValue(value);
     ct->commonSave(false);
 }
+void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent)
+{
+    if (scrow.elements.count())
+    {
+        LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
 
+        // insert horizontal splitter in splitterParent
+        MinosSplitter *hs = new MinosSplitter();
+        hs->setObjectName("row" + QString::number(rowSplitters.size()) + "splitter");
+        hs->setOrientation(Qt::Horizontal);
+        hs->setChildrenCollapsible(false);
+        rowSplitters.push_back(hs);
+
+        for (int srele = 0; srele < scrow.elements.count(); srele++)
+        {
+            SCElement scele = scrow.elements[srele];
+            SCType type = scele.type;
+            if (type == sctNone)
+                continue;
+
+            QScrollArea *elementScrollArea = nullptr;
+            if (type != sctLog
+                    && type != sctThisMatch
+                    && type != sctOtherMatch
+                    && type != sctArchiveMatch
+                    && type != sctSplit
+                    && type != sctCluster
+                    && type != sctWsjtx
+                    )
+            {
+                elementScrollArea = new QScrollArea();
+                elementScrollArea->setWidgetResizable(true);
+                elementScrollArea->setFocusPolicy(Qt::NoFocus);
+                hs->addWidget(elementScrollArea);
+            }
+
+            // insert correct widget type in horizontal splitter
+
+            switch (type)
+            {
+                case sctNone:
+                {
+                    break;
+                }
+                case sctAux:
+                {
+                    StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
+
+                    f->setCurrentFrameType(getAuxTypeString(scele.auxType));
+                    f->setContest(ct);
+                    elementScrollArea->setWidget(f);
+                    f->setVisible(true);
+                    break;
+                }
+                case sctLog:
+                {
+                    QSOTable->setParent(hs);
+                    hs->addWidget(QSOTable);
+                    QSOTable->setVisible(true);
+                    break;
+                }
+                case sctRigControl:
+                {
+                    elementScrollArea->setWidget(FKHRigControlFrame);
+                    FKHRigControlFrame->setContest(ct);
+                    break;
+                }
+                case sctRotControl:
+                {
+                    elementScrollArea->setWidget(FKHRotControlFrame);
+                    FKHRotControlFrame->setContest(ct);
+                    break;
+                }
+                case sctRotPresets:
+                {
+                    elementScrollArea->setWidget(rotPresets);
+                    rotPresets->setContest(ct);
+                    break;
+                }
+                case sctQSOEdit:
+                {
+                    elementScrollArea->setWidget(GJVQSOLogFrame);
+                    GJVQSOLogFrame->setVisible(true);
+                    break;
+                }
+                case sctNextQSODetails:
+                {
+                    elementScrollArea->setWidget(CribSheet);
+                    CribSheet->setVisible(true);
+                    break;
+                }
+                case sctThisMatch:
+                {
+                    hs->addWidget(thisMatchFrame);
+                    thisMatchFrame->setVisible(true);
+                    thisMatchFrame->setContest(ct);
+                    break;
+                }
+                case sctOtherMatch:
+                {
+                    hs->addWidget(otherMatchFrame);
+                    otherMatchFrame->setVisible(true);
+                    otherMatchFrame->setContest(ct);
+                    break;
+                }
+                case sctArchiveMatch:
+                {
+                    hs->addWidget(archiveMatchFrame);
+                    archiveMatchFrame->setVisible(true);
+                    archiveMatchFrame->setContest(ct);
+                    break;
+                }
+                case sctChat:
+                {
+                    elementScrollArea->setWidget(chatFrame);
+                    chatFrame->setVisible(true);
+                    break;
+                }
+                case sctCluster:
+                {
+                    hs->addWidget(clusterControlFrame);
+                    clusterControlFrame->setVisible(true);
+                    clusterControlFrame->setContest(ct);
+                    break;
+
+                }
+                case sctWsjtx:
+                {
+                    hs->addWidget(wsjtxFrame);
+                    wsjtxFrame->setVisible(true);
+                    // don't set contest here
+                    break;
+                }
+                case sctSplit:
+                {
+                    MinosSplitter *vs = new MinosSplitter();
+                    vs->setObjectName("splitRow" + QString::number(rowSplitters.size()) + "splitter");
+                    vs->setOrientation(Qt::Vertical);
+                    vs->setChildrenCollapsible(false);
+                    rowSplitters.push_back(vs);
+
+                    for (int srow = 0; srow < scele.rows.count(); srow++)
+                    {
+                        buildRow(scele.rows[srow], auxInstance, vs);
+                    }
+
+                    hs->addWidget(vs);
+                    break;
+                }
+            }
+        }
+        splitterParent->addWidget(hs);
+    }
+
+}
 void TSingleLogFrame::buildScreenLayout()
 {
+
     ScreenConfigFile scf;
     if (!scf.loadFile())
     {
@@ -411,6 +614,7 @@ void TSingleLogFrame::buildScreenLayout()
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     QString curConfigName = ct->screenLayout.getValue();
+    trace("TSingleLogFrame::buildScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid + " to layout " + curConfigName);
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
         curConfigName = defaultLayoutName;
@@ -419,142 +623,11 @@ void TSingleLogFrame::buildScreenLayout()
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;
-    for (int j = 0; j < sc.rows.count(); j++)
+    for (int j = 0; j < sc.baseElement->rows.count(); j++)
     {
-        if (sc.rows[j].elements.count())
-        {
-            // insert horizontal splitter in LogFrameSplitter
-            MinosSplitter *hs = new MinosSplitter(singleLogFrameSplitter);
-            hs->setObjectName("row" + QString::number(j) + "splitter");
-            hs->setOrientation(Qt::Horizontal);
-            hs->setChildrenCollapsible(false);
-            rowSplitters.push_back(hs);
 
-            for (int k = 0; k < sc.rows[j].elements.count(); k++)
-            {
-                SCType type = sc.rows[j].elements[k].type;
-                if (type == sctNone)
-                    continue;
+        buildRow(sc.baseElement->rows[j], auxInstance, singleLogFrameSplitter);
 
-                QScrollArea *elementScrollArea = nullptr;
-                if (type != sctLog
-                        && type != sctThisMatch
-                        && type != sctOtherMatch
-                        && type != sctArchiveMatch
-                        )
-                {
-                    elementScrollArea = new QScrollArea();
-                    elementScrollArea->setWidgetResizable(true);
-                    elementScrollArea->setFocusPolicy(Qt::NoFocus);
-                    rowSplitters[j]->addWidget(elementScrollArea);
-                }
-
-                // insert correct widget type in horizontal splitter
-
-                switch (type)
-                {
-                    case sctNone:
-                    {
-                        break;
-                    }
-                    case sctAux:
-                    {
-                        StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
-
-                        f->setContest(ct);
-                        elementScrollArea->setWidget(f);
-                        f->setVisible(true);
-                        break;
-                    }
-                    case sctLog:
-                    {
-                        QSOTable->setParent(rowSplitters[j]);
-                        rowSplitters[j]->addWidget(QSOTable);
-                        QSOTable->setVisible(true);
-                        break;
-                    }
-                    case sctRigControl:
-                    {
-                        elementScrollArea->setWidget(FKHRigControlFrame);
-                        FKHRigControlFrame->setContest(ct);
-                        break;
-                    }
-                    case sctRotControl:
-                    {
-                        elementScrollArea->setWidget(FKHRotControlFrame);
-                        FKHRotControlFrame->setContest(ct);
-                        break;
-                    }
-                    case sctRotPresets:
-                    {
-                        elementScrollArea->setWidget(rotPresets);
-                        rotPresets->setContest(ct);
-                        break;
-                    }
-                    case sctQSOEdit:
-                    {
-                        elementScrollArea->setWidget(GJVQSOLogFrame);
-                        GJVQSOLogFrame->setVisible(true);
-                        break;
-                    }
-                    case sctNextQSODetails:
-                    {
-                        elementScrollArea->setWidget(CribSheet);
-                        CribSheet->setVisible(true);
-                        break;
-                    }
-                    case sctThisMatch:
-                    {
-                       rowSplitters[j]->addWidget(thisMatchFrame);
-                        thisMatchFrame->setVisible(true);
-                        thisMatchFrame->setContest(ct);
-                        break;
-                    }
-                    case sctOtherMatch:
-                    {
-                        rowSplitters[j]->addWidget(otherMatchFrame);
-                        otherMatchFrame->setVisible(true);
-                        otherMatchFrame->setContest(ct);
-                        break;
-                    }
-                    case sctArchiveMatch:
-                    {
-                        rowSplitters[j]->addWidget(archiveMatchFrame);
-                        archiveMatchFrame->setVisible(true);
-                        archiveMatchFrame->setContest(ct);
-                        break;
-                    }
-                    case sctChat:
-                    {
-                        elementScrollArea->setWidget(chatFrame);
-                        chatFrame->setVisible(true);
-                        break;
-                    }
-                    case sctCluster:
-                    {
-                        elementScrollArea->setWidget(clusterControlFrame);
-                        clusterControlFrame->setVisible(true);
-                        clusterControlFrame->setContest(ct);
-                        break;
-
-                    }
-                    case sctWsjtx:
-                    {
-                        elementScrollArea->setWidget(wsjtxFrame);
-                        wsjtxFrame->setVisible(true);
-                        // don't set contest here
-                        break;
-                    }
-                    case sctBandmap:
-                    {
-                        elementScrollArea->setWidget(bandmapControlFrame);
-                        bandmapControlFrame->setVisible(true);
-                        bandmapControlFrame->setContest(ct);
-                        break;
-                    }
-                }
-            }
-        }
     }
     // ALWAYS link the wsjt frame to the contest; then we can log
     // even without showing it
@@ -577,6 +650,7 @@ void TSingleLogFrame::buildScreenLayout()
         }
         connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
     }
+
 }
 
 
@@ -621,6 +695,7 @@ void TSingleLogFrame::closeContest()
        clearScreenLayout();
        TContestApp::getContestApp() ->closeFile( contest );
        GJVQSOLogFrame->closeContest();
+       qsoModel.initialise(nullptr);
 
        contest = nullptr;
     }
@@ -648,13 +723,19 @@ void TSingleLogFrame::restoreColumns()
 
 void TSingleLogFrame::showQSOs()
 {
+    ScreenContact *p = GJVQSOLogFrame->getPartialContact();
+    GJVQSOLogFrame->setPartialContact(nullptr);
 
    NextContactDetailsTimerTimer( );
 
    restoreColumns();
+   logColumnsChanged = false;
 
    GJVQSOLogFrame->clearCurrentField();
    GJVQSOLogFrame->startNextEntry();
+
+   GJVQSOLogFrame->killPartial();
+   GJVQSOLogFrame->setPartialContact(p);
 
 }
 void TSingleLogFrame::on_ContestPageChanged ()
@@ -675,9 +756,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     if ( logColumnsChanged )
     {
-       GJVQSOLogFrame->killPartial();
        showQSOs();             // this does a restorePartial
-       logColumnsChanged = false;
     }
 
     if (splittersChanged)
@@ -707,6 +786,10 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     updateQSODisplay();
 
+   //QHeaderView::ResizeMode rm =  QSOTable->verticalHeader()->sectionResizeMode(1);
+   // default seems to be 0, Interactive
+    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
     update();   // this queues a repaint
 }
 
@@ -722,10 +805,15 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         {
             cb = bi.uk;
         }
+
+        //we want to put a line across, and colour the bands - need a map of band->colour
+        // ideally we want it configurable...
+
+        CurrentBandLabel->setText( HtmlFontColour(bi.bandColour) + "<b><center><nobr><p><big><h1>" + cb);
+
         if ( contest->isReadOnly() )
         {
-            NextContactDetailsLabel->setText( "<b><center><nobr><p><big>"
-                                                  + cb + "</p><h1>"
+            NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
                                                   + contest->mycall.fullCall.getValue() + "<br>"
                                                   + contest->myloc.loc.getValue() + "<br>"
                                                   + contest->location.getValue());
@@ -738,8 +826,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
             {
                 locBuff = "<br>" + contest->location.getValue();
             }
-            NextContactDetailsLabel->setText( "<b><center><nobr><p><big>"
-                                                  + cb + "</p><h1>"
+            NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
                                                   + contest->mycall.fullCall.getValue() + "<br>"
                                                   + snBuff + "<br>"
                                                   + contest->myloc.loc.getValue()
@@ -1035,7 +1122,6 @@ void TSingleLogFrame::refreshMults()
 void TSingleLogFrame::updateTrees()
 {
    qsoModel.reset();
-   QSOTable->resizeRowsToContents();
    refreshMults();
 }
 bool TSingleLogFrame::getStanza( unsigned int stanza, QString &stanzaData )
@@ -1057,9 +1143,10 @@ void TSingleLogFrame::getSplitters()
 
     foreach(MinosSplitter *s, rowSplitters)
     {
+        QByteArray sstate;
         QString name = s->objectName();
-        state = settings.value("Splitters/" + name + "/state/" + curScreenLayout, state).toByteArray();
-        s->restoreState(state);
+        sstate = settings.value("Splitters/" + name + "/state/" + curScreenLayout, sstate).toByteArray();
+        s->restoreState(sstate);
         s->setHandleWidth(splitterHandleWidth);
         s->setChildrenCollapsible(false);
     }
@@ -1624,7 +1711,7 @@ void TSingleLogFrame::on_RotatorBearing(QString s)
 }
 
 
-void TSingleLogFrame::on_RotatorMaxAzimuth(QString s)
+void TSingleLogFrame::on_RotatorMaxAzimuth(int s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
@@ -1632,7 +1719,7 @@ void TSingleLogFrame::on_RotatorMaxAzimuth(QString s)
     }
 }
 
-void TSingleLogFrame::on_RotatorMinAzimuth(QString s)
+void TSingleLogFrame::on_RotatorMinAzimuth(int s)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {

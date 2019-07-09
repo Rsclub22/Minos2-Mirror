@@ -15,6 +15,7 @@
 #include "ui_setupdialog.h"
 #include "cutils.h"
 #include "clustercommon.h"
+#include "CallsignLineEdit.h"
 
 
 #include <QSettings>
@@ -49,16 +50,17 @@ SetupDialog::SetupDialog(QWidget *parent) :
     loadGeneralToSetupTab();
 
     // Personal Tab
-    ui->callsignEdit->setValidator(new UpperCaseValidator(true));
-    ui->locatorEdit->setValidator(new UpperCaseValidator(true));
+    ui->callsignEdit->setValidator(new UpperCaseValidator());
+    ui->locatorEdit->setValidator(new UpperCaseValidator());
 
-    connect(ui->callsignEdit, SIGNAL(editingFinished()), this, SLOT(callsignEditFinished()));
+    connect(ui->callsignEdit, SIGNAL(callsignFinished(const QString&)), this, SLOT(callsignFinished(const QString&)));
     connect(ui->nameEdit, SIGNAL(editingFinished()), this, SLOT(nameEditFinshed()));
-    connect(ui->locatorEdit, SIGNAL(editingFinished()), this, SLOT(locatorEditFinished()));
+    connect(ui->locatorEdit, SIGNAL(locatorFinished(const QString&)), this, SLOT(locatorFinished(const QString&)));
     connect(ui->qthEdit, SIGNAL(editingFinished()), this, SLOT(qthEditFinished()));
 
-    readPersonal();
-    loadPersonalToSetupTab();
+
+    //readPersonal();
+    //loadPersonalToSetupTab();
 
 
 
@@ -207,6 +209,37 @@ void SetupDialog::saveGeneralSettings()
     }
 }
 
+
+void SetupDialog::createDefaultGeneralSettingsFile()
+{
+
+    QString fileName = CLUSTER_SETTINGS_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("Personal");
+    config.setValue("Callsign", "");
+    config.setValue("Name", "");
+    config.setValue("Locator", "");
+    config.setValue("Qth", "");
+    config.endGroup();
+
+    config.beginGroup("TimeToLive");
+    config.setValue("timeToLive", 30);
+    config.endGroup();
+
+    config.beginGroup("HFSpots");
+    config.setValue("enable", false);
+    config.endGroup();
+
+    config.beginGroup("CommandFile");
+    config.setValue("enableCommandFile", false);
+    config.setValue("enableStartCommandFile", false);
+    config.setValue("enableEndCommandFile", false);
+    config.endGroup();
+
+
+}
+
 void SetupDialog::readGeneralSettings()
 {
     QString fileName = CLUSTER_SETTINGS_FILE;
@@ -265,12 +298,13 @@ void SetupDialog::runEndCmdFileChkBoxChanged(int state)
 
 
 
-void SetupDialog::callsignEditFinished()
+void SetupDialog::callsignFinished(const QString& /*cs*/)
 {
 
-    if (!ui->callsignEdit->text().trimmed().isEmpty())
+    if (ui->callsignEdit->getCallsign() != callsign)
     {
         personalDataChanged = true;
+
     }
 
 }
@@ -280,19 +314,21 @@ void SetupDialog::callsignEditFinished()
 void SetupDialog::nameEditFinshed()
 {
 
-    if (!ui->nameEdit->text().trimmed().isEmpty())
+    if (ui->nameEdit->text().trimmed() != name)
     {
         personalDataChanged = true;
     }
 
 }
 
-void SetupDialog::locatorEditFinished()
+void SetupDialog::locatorFinished(const QString& /*locator*/)
 {
 
-    if (!ui->locatorEdit->text().trimmed().isEmpty())
+    if (ui->locatorEdit->getLocator() != locator) // data changed
     {
+
         personalDataChanged = true;
+
     }
 
 
@@ -301,7 +337,7 @@ void SetupDialog::locatorEditFinished()
 
 void SetupDialog::qthEditFinished()
 {
-    if (!ui->qthEdit->text().trimmed().isEmpty())
+    if (ui->qthEdit->text().trimmed() != qth)
     {
         personalDataChanged = true;
     }
@@ -313,10 +349,46 @@ void SetupDialog::savePersonal()
 {
     if (personalDataChanged)
     {
-        callsign = ui->callsignEdit->text().trimmed();
-        name = ui->nameEdit->text().trimmed();
-        locator = ui->locatorEdit->text().trimmed();
-        qth = ui->qthEdit->text().trimmed();
+
+        if (callsign != ui->callsignEdit->getCallsign())
+        {
+            if (ui->callsignEdit->isValid())
+            {
+                callsign = ui->callsignEdit->getCallsign();
+            }
+            else
+            {
+                ui->callsignEdit->setCallsign(callsign);
+            }
+
+        }
+
+
+        if (name != ui->nameEdit->text().trimmed())
+        {
+            name = ui->nameEdit->text().trimmed();
+        }
+
+        if (locator != ui->locatorEdit->getLocator() )
+        {
+            if (ui->locatorEdit->isValid())
+            {
+              locator = ui->locatorEdit->getLocator();
+            }
+            else
+            {
+                ui->locatorEdit->setLocator(locator);
+            }
+
+        }
+
+
+        if (qth != ui->qthEdit->text().trimmed())
+        {
+            qth = ui->qthEdit->text().trimmed();
+        }
+
+
 
         QString fileName = CLUSTER_SETTINGS_FILE;
 
@@ -336,7 +408,7 @@ void SetupDialog::savePersonal()
 
 void SetupDialog::readPersonal()
 {
-    // need to check for no ini file...*************
+
 
     QString fileName = CLUSTER_SETTINGS_FILE;
 

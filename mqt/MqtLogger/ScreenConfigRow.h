@@ -16,26 +16,26 @@ class ScreenConfigRow : public QFrame
     Q_OBJECT
 
 public:
-    explicit ScreenConfigRow(QWidget *parent, ScreenConfig *parentc);
+    Ui::ScreenConfigRow *ui;
+
+    explicit ScreenConfigRow(ScreenConfigElement *parentElement);
     ~ScreenConfigRow();
 
-    QHBoxLayout *vbl = nullptr;
+    QHBoxLayout *hbl = nullptr;
+    ScreenConfigElement *parentElement;
 
-    void addLeft(ScreenConfigElement *e);
+    ScreenConfigElement *addLeft(ScreenConfigElement *e);
     void remove(ScreenConfigElement *e);
-    void addRight(ScreenConfigElement *e);
+    ScreenConfigElement * addRight(ScreenConfigElement *e);
 
     bool checkOk(ScreenConfigElement *e);
+
 private slots:
-    void on_addBeforeButton_clicked();
+    void on_addRowBeforeButton_clicked();
 
-    void on_removeButton_clicked();
+    void on_removeRowButton_clicked();
 
-    void on_addAfterButton_clicked();
-
-private:
-    Ui::ScreenConfigRow *ui;
-    ScreenConfig *parentDialog;
+    void on_addRowAfterButton_clicked();
 
 };
 

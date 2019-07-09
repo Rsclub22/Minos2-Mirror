@@ -599,12 +599,12 @@ void TSendDM::notifyRotChanges()
                     if (selDetail.maxAzimuth().isDirty())
                     {
                         trace(QString("SendRPC Rotator set maxAzimuth %1").arg(selDetail.maxAzimuth().getValue()));
-                        tslf->on_RotatorMaxAzimuth(QString::number(selDetail.maxAzimuth().getValue()));
+                        tslf->on_RotatorMaxAzimuth(selDetail.maxAzimuth().getValue());
                     }
                     if (selDetail.minAzimuth().isDirty())
                     {
                         trace(QString("SendRPC Rotator set minAzimuth %1").arg(selDetail.minAzimuth().getValue()));
-                        tslf->on_RotatorMinAzimuth(QString::number(selDetail.minAzimuth().getValue()));
+                        tslf->on_RotatorMinAzimuth(selDetail.minAzimuth().getValue());
                     }
                     if (selDetail.cwCcwCmdEnable().isDirty())
                     {

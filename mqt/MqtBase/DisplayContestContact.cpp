@@ -92,6 +92,7 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    contactScore.setValue( cct.contactScore );
    bearing = cct.bearing;
    mode.setValue( cct.mode );
+   mgmSubmode.setValue( cct.mgmSubmode );
 
 }
 // used to test if anything has changed
@@ -140,6 +141,9 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.mode, mode.getValue() ) )
       return true; // i.e. not equal
 
+   if ( strcmpsp( mct.mgmSubmode, mgmSubmode.getValue() ) )
+      return true; // i.e. not equal
+
    if ( strcmpsp( mct.forcedMult, forcedMult.getValue() ) )
       return true; // i.e. not equal
 
@@ -171,7 +175,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    return false;  // i.e. equal
 }
 
-void DisplayContestContact::checkContact( )
+void DisplayContestContact::checkContact( bool inScan)
 {
    // check on country and district. If valid, return true,
    // having mapped any synonyms to their parents and
@@ -190,13 +194,18 @@ void DisplayContestContact::checkContact( )
    {
       double lon = 0.0;
       double lat = 0.0;
-      int brg;
+      int brg = -1;
 
-      if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
+      char v = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
+      if ( v == LOC_OK )
       {
          clp->disbeara( lon, lat, dist, brg );
-         bearing = brg;
       }
+      else if (v == LOC_PARTIAL)
+      {
+          clp->disbearc( lon, lat, dist, brg );
+      }
+      bearing = brg;
    }
 
    if ( contactFlags.getValue() & NON_SCORING )
@@ -327,7 +336,10 @@ void DisplayContestContact::checkContact( )
          }
       }
    }
-   clp->DupSheet.checkCurDup( clp, getLogSequence(), 0, true ); // add to duplicates list
+
+   bool dupContact = clp->DupSheet.checkCurDup( clp, clp->validationPoint, 0, true ); // add to duplicates list
+   if (inScan)
+       dupContact = (csret == ERR_DUPCS);
 
    if ( !( contactFlags.getValue() & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
    {
@@ -357,18 +369,20 @@ void DisplayContestContact::checkContact( )
                {
                   cscore = ( cscore + 1 ) / 2;
                }
-               clp->contestScore += cscore;
+               if (!dupContact)
+                    clp->contestScore += cscore;
             }
             break;
 
          case PPQSO:
-            if ( cscore > 0 )
+            if ( cscore > 0 && !dupContact)
                clp->contestScore++;
             break;
 
       }
    }
 
+   if (!dupContact)
    {
       // now look at the locator list
       QString letters;
@@ -421,6 +435,8 @@ void DisplayContestContact::checkContact( )
                   newBonus = true;
                }
             }
+
+            // but we set uk/non uk mult value to zero...
             if (UKcall)
             {
                if (!npt->UKMultGiven)
@@ -430,14 +446,14 @@ void DisplayContestContact::checkContact( )
                   if (npt->UKLocCount + npt->nonUKLocCount == 0)
                   {
                      // hasn't been worked at all
-                     clp->nlocs += clp->UKloc_multiplier;
+                     clp->nlocs += 1;
                      multCount += clp->UKloc_multiplier;
                   }
                   else
                   {
                      // has already been worked - must have been non-uk, so that
                      // bit of the mult has already happened.
-                     clp->nlocs += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
+                     //clp->nlocs += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
                      multCount += clp->UKloc_multiplier - clp->NonUKloc_multiplier;
                   }
                }
@@ -447,7 +463,7 @@ void DisplayContestContact::checkContact( )
             {
                if ( npt->UKLocCount + npt->nonUKLocCount == 0 )
                {
-                  clp->nlocs += clp->NonUKloc_multiplier;
+                  clp->nlocs += 1;
                   multCount += clp->NonUKloc_multiplier;
                }
                if (npt->nonUKLocCount == 0)
@@ -548,7 +564,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         // rework to come from prime contest loc
                         double lon = 0.0;
                         double lat = 0.0;
-                        if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
+                        if ( lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
                         {
                            // we don't have it worked out already...
                            double dist;
@@ -576,7 +592,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                              // rework to come from prime contest loc
                              double lon = 0.0;
                              double lat = 0.0;
-                             char llres = lonlat( loc.loc.getValue(), lon, lat );
+                             char llres = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                              if ( llres == LOC_OK || llres == LOC_PARTIAL )
                              {
                                 // we don't have it worked out already...
@@ -654,7 +670,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         double lat = 0.0;
                         int brg;
                         double dist = 0.0;
-                        char llres = lonlat( loc.loc.getValue(), lon, lat );
+                        char llres = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                         if ( llres == LOC_OK )
                         {
                            curcon->disbeara( lon, lat, dist, brg );
@@ -781,6 +797,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          contactFlags.setInitialValue( cf );
 
          mt->getStructArgMemberValue( "modeTx", mode );
+         mt->getStructArgMemberValue( "mgmSubmode", mgmSubmode);
          mt->getStructArgMemberValue( "rstTx", reps );
          mt->getStructArgMemberValue( "serialTx", serials );
          mt->getStructArgMemberValue( "exchangeTx", contest->location );
@@ -810,7 +827,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
             contest->maxSerial = maxct;
 
          contest->validationPoint = getLogSequence();
-         checkContact();                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history
+         checkContact(false);                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history
          QSharedPointer<BaseContact> bc( new BaseContact(*this) );   // this should get it now??
          getHistory().push_back( bc );
       }

@@ -29,9 +29,15 @@ public:
 };
 
 
+const QChar SHORTLOCATOR_IDENTIFIER = '#'; // add to bearing to identify that it has been calculated from short locator.
+                                           // Used in bearing sent from memory and clusterframe.
+
 // Common Rotator Constants
 
-const char DEGREE_SYMBOL = '\xB0';
+const QChar DEGREE_SYMBOL = 0260; // octal value
+const QChar BEARING_TRUE_CHAR = 'T';
+const QChar SHORTLOC_DELIMITER_START = '(';
+const QChar SHORTLOC_DELIMITER_END = ')';
 const int ROTATE_MOVE_TIMEOUT = 5;
 
 

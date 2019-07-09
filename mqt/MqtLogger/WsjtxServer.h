@@ -21,11 +21,11 @@ public:
                        , QString const& mode, QString const& message, bool low_confidence, quint8 modifiers);
 
     void do_halt_tx (QString const& id, bool auto_only);
+    void do_clear_decodes (QString const& id, quint8 window);
 
 private:
     static WsjtxServer *wsjtxServer;
     MessageServer * server_ = nullptr;
-    QString id_;
     bool fast_mode_ = false;
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
@@ -51,7 +51,7 @@ public slots:
     void decode_added (bool is_new, QString const& client_id, QTime time, qint32 snr
                               , float delta_time, quint32 delta_frequency, QString const& mode
                               , QString const& message, bool low_confidence, bool off_air);
-    void clear_decodes (QString const& client_id);
+    void decodes_cleared (QString const& client_id);
 
 signals:
     void do_add_client (QString const& id, QString const& version, QString const& revision);
@@ -62,7 +62,7 @@ signals:
     void do_decode_added (bool is_new, QString const& client_id, QTime, qint32 snr
                               , float delta_time, quint32 delta_frequency, QString const& mode
                               , QString const& message, bool low_confidence, bool off_air);
-    void do_clear_decodes (QString const& client_id);
+    void do_decodes_cleared (QString const& client_id);
 
 //    void do_log_qso ( QString const& id, QDateTime time_off, QString const& dx_call, QString const& dx_grid
 //                         , Frequency dial_frequency, QString const& mode, QString const& report_sent

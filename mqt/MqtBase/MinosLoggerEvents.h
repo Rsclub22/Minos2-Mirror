@@ -52,11 +52,11 @@ signals:
    void BandMapPressed();
    void TimerDistribution();
    void AfterTabFocusIn(QLineEdit *tle);
-   void Validated();
 
    void BrgStrToRot(QString);
    void FreqStrToRig(QString);
    void SpotBrgStrToRot(QString);
+   void MemBrgStrToRot(QString);
    void DxSpotToLog(memoryData::memData);         // cluster spot
    void DxSpotToMemory(memoryData::memData);      // cluster spot
 
@@ -111,7 +111,6 @@ public:
    static void SendBandMapPressed();
    static void SendTimerDistribution();
    static void SendAfterTabFocusIn(QLineEdit *tle);
-   static void SendValidated();
 
    static void SendCountrySelect(QString cty, BaseContestLog *c);
    static void SendDistrictSelect(QString dist, BaseContestLog *c);
@@ -124,13 +123,13 @@ public:
    static void SendBrgStrToRot(QString);
    static void SendFreqStrToRig(QString);
    static void SendSpotBrgStrToRot(QString);
+   static void SendMemBrgStrToRot(QString);
    static void SendSpotToLog(memoryData::memData);     // cluster spot
    static void SendSpotToMemory(memoryData::memData);  // cluster spot
 
    static void sendUpdateStats(BaseContestLog *c );
    static void sendFiltersChanged(BaseContestLog *c );
    static void sendUpdateMemories(BaseContestLog *c );
-//   static void sendRefreshMults(BaseContestLog *c );
 
     static void sendRigFreqChanged(QString f, BaseContestLog *c);
     static void sendRotBearingChanged(int f, BaseContestLog *c);

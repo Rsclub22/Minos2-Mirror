@@ -606,6 +606,26 @@
               </layout>
              </item>
              <item>
+              <widget class="QLabel" name="RadioModeLabel">
+               <property name="text">
+                <string>Radio Mode:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="RadioMode">
+               <property name="font">
+                <font>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_17">
                <item>
                 <widget class="QLabel" name="label_2">

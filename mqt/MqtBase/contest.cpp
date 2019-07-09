@@ -126,6 +126,8 @@ void BaseContestLog::clearDirty()
    scoreMode.clearDirty();
    DTGStart.clearDirty();
    DTGEnd.clearDirty();
+   currentOp1.clearDirty();
+   currentOp2.clearDirty();
    for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
    {
       i->wt->clearDirty();
@@ -162,6 +164,9 @@ void BaseContestLog::setDirty()
    scoreMode.setDirty();
    DTGStart.setDirty();
    DTGEnd.setDirty();
+   currentOp1.setDirty();
+   currentOp2.setDirty();
+
    for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
    {
       i->wt->setDirty();
@@ -324,7 +329,7 @@ bool BaseContestLog::getsdist( const QString &loc, QString &minloc, double &mind
    double lon = 0.0;
    double lat = 0.0;
 
-   int lres = lonlat( loc, lon, lat );
+   int lres = lonlat( loc, lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
    if ( lres == LOC_OK || lres == LOC_SHORT )
    {
       disbeara( lon, lat, dist, brg );
@@ -397,7 +402,7 @@ int BaseContestLog::CalcCentres( const QString &qscalcloc, int &brg ) const
    double lon = 0.0;
    double lat = 0.0;
 
-   int lres = lonlat( temploc, lon, lat );
+   int lres = lonlat( temploc, lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
    if (lres == LOC_OK)
    {
         disbearc(lon, lat, dist, brg);
@@ -706,7 +711,7 @@ void BaseContestLog::scanContest( )
       nct->newNonGLoc = false;
       nct->bonus = 0;
       nct->newBonus = false;
-      nct->checkContact( );   // in scanContest
+      nct->checkContact( true);   // in scanContest
 
       if (nct->time.notEntered() == 0 && !(nct->contactFlags.getValue() & TO_BE_ENTERED))
       {
@@ -788,7 +793,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
          }
          cs.nctry += nct->newCtry?1:0;
          cs.ndistrict += nct->newDistrict?1:0;
-         cs.nlocs += nct->locCount;
+         cs.nlocs += (nct->newGLoc || nct->newNonGLoc)?1:0;
          cs.nqsos++;
 
          cs.bonus += nct->bonus;

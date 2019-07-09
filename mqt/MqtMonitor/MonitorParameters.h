@@ -15,6 +15,8 @@ class MonitorParameters : public MinosParametersAdapter
       virtual int getStatsPeriod2() override;
       virtual void setStatsPeriod1( int ) override;
       virtual void setStatsPeriod2( int ) override;
+      virtual bool getAllowLoc4() override;
+      virtual bool getAllowLoc8() override;
       virtual bool yesNoMessage( QWidget* Owner, const QString &mess ) override;
       virtual void mshowMessage(const QString &mess, QWidget* Owner = nullptr ) override;
       virtual int getContestSlotCount() override;

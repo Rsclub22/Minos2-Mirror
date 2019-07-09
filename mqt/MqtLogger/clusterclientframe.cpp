@@ -15,14 +15,23 @@
 #include "MinosRPC.h"
 #include "MinosLoggerEvents.h"
 #include "clusterclientframe.h"
-#include "clustercommon.h"
 #include "contest.h"
 #include "ContestApp.h"
 #include "cutils.h"
 #include "rigmemcommondata.h"
+#include "rotatorcommon.h"
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
+#include "tsinglelogframe.h"
 #include "ui_clusterclientframe.h"
+
+
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonParseError>
+
 
 
 ClusterClientFrame::ClusterClientFrame(QWidget *parent):
@@ -39,6 +48,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
+    ui->splitter->setStretchFactor(0, 2);
+    ui->splitter->setStretchFactor(1, 1);
 
     trace(QString("ClusterClientFrame Starting"));
 
@@ -73,7 +84,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
 
+    modeBandPlan = new BandModeFrequencyPlan();
 
+    modeBandPlan->loadFile("./Configuration/mode_bandplan.json");
+
+    QString band = "70 MHz";
+    QString mode = "MGM";
+    bool test = modeBandPlan->modeExists(band, mode);
 
 
     spotsMenu = new QMenu(ui->actionsButton);
@@ -88,6 +105,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     memoryAction = new QAction("Send &Memory", this);
     clearSpotAction = new QAction("Clear &Spot", this);
     clearAllSpotsAction = new QAction("Clear &All Spots", this);
+    memoryActionOveride = new QAction("Force &Send Memory", this);
 
     spotsMenu->addAction(freqAction);
     spotsMenu->addAction(bearingAction);
@@ -95,6 +113,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     spotsMenu->addAction(memoryAction);
     spotsMenu->addAction(clearSpotAction);
     spotsMenu->addAction(clearAllSpotsAction);
+    spotsMenu->addAction(memoryActionOveride);
 
     ui->actionsButton->setMenu(spotsMenu);
     connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
@@ -105,11 +124,12 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
+    connect( memoryActionOveride, SIGNAL( triggered() ), this, SLOT(memoryActionOverideSelected()) );
 
     //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
 
-    ui->searchLineEdit->setValidator(new UpperCaseValidator(true));
+    ui->searchLineEdit->setValidator(new UpperCaseValidator());
     connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
 
     dxSpotDataModel = new DxSpotDataModel();
@@ -156,8 +176,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
-
-
+    // test clusterbandplan json
+    //ClusterModeBandPlan* cmbp = new ClusterModeBandPlan();
+    //cmbp->loadFile();
 
 }
 
@@ -191,6 +212,7 @@ void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs,
 void ClusterClientFrame::setupDXSpotView()
 {
     dxSpotView = new QTableView();
+    dxSpotView->setFocusPolicy(Qt::NoFocus);
 
     dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
@@ -208,13 +230,14 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->verticalHeader()->setMinimumSectionSize(10);
 
     dxSpotView->setItemDelegate( delegate);
-    dxSpotView->resizeRowsToContents();
 
     QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
 
     //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
     connect(spotVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onDXSpotVertHeaderClicked(int)));
+    dxSpotView->horizontalHeader()->setStretchLastSection(true);
+
 
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -236,12 +259,15 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreDxSpotViewColumns();
+
+    spotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 
 void ClusterClientFrame::setupSearchSpotView()
 {
     searchView = new QTableView();
+    searchView->setFocusPolicy(Qt::NoFocus);
 
     searchSortProxyModel = new SearchSortFilterProxyModel(filterSetup);
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
@@ -255,8 +281,6 @@ void ClusterClientFrame::setupSearchSpotView()
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
     searchView->setItemDelegate( delegate);
-    searchView->resizeRowsToContents();
-
     searchView->verticalHeader()->setDefaultSectionSize(10);
     searchView->verticalHeader()->setMinimumSectionSize(10);
 
@@ -264,6 +288,7 @@ void ClusterClientFrame::setupSearchSpotView()
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(searchView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onSearchSpotViewClicked(const QModelIndex &)));
     connect(searchVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onSearchSpotVertHeaderClicked(int)));
+    searchView->horizontalHeader()->setStretchLastSection(true);
 
     searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     searchView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -283,6 +308,9 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     searchView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     searchView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+    searchVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
 }
 
 
@@ -291,6 +319,7 @@ void ClusterClientFrame::setupSearchSpotView()
 void ClusterClientFrame::setupCallsignSpotView()
 {
     callSignView = new QTableView();
+    callSignView->setFocusPolicy(Qt::NoFocus);
 
     callSignProxyModel = new CallsignSortFilterProxyModel(filterSetup);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
@@ -304,7 +333,6 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setSelectionBehavior(QAbstractItemView::SelectItems);
 
     callSignView->setItemDelegate( delegate);
-    callSignView->resizeRowsToContents();
 
     callSignView->verticalHeader()->setDefaultSectionSize(10);
     callSignView->verticalHeader()->setMinimumSectionSize(10);
@@ -314,6 +342,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(callSignView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCallsignSpotViewClicked(const QModelIndex &)));
     connect(callSignVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onCallsignSpotVertHeaderClicked(int)));
+    callSignView->horizontalHeader()->setStretchLastSection(true);
 
     callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     callSignView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -335,11 +364,16 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreCallsignViewColumns();
+
+    callSignVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
 }
 
 void ClusterClientFrame::setupLocatorSpotView()
 {
     locatorView = new QTableView();
+    locatorView->setFocusPolicy(Qt::NoFocus);
+
     locatorView->setItemDelegate(delegate);
     locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
@@ -353,11 +387,6 @@ void ClusterClientFrame::setupLocatorSpotView()
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
     locatorView->setItemDelegate( delegate);
-    locatorView->resizeRowsToContents();
-
-    locatorView->setItemDelegate( delegate);
-    locatorView->resizeRowsToContents();
-
 
     QHeaderView *locatorViewVerticalHeader = locatorView->verticalHeader();
     locatorView->verticalHeader()->setDefaultSectionSize(10);
@@ -367,6 +396,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     //connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(locatorView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onLocatorSpotViewClicked(const QModelIndex &)));
     connect(locatorViewVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onLocatorSpotVertHeaderClicked(int)));
+    locatorView->horizontalHeader()->setStretchLastSection(true);
 
 
     locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
@@ -387,6 +417,9 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
     locatorView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
     locatorView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+    locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
 }
 
 
@@ -408,7 +441,6 @@ void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterC
     if (bandfilterChanged)
     {
         dxSpotProxyModel->setFilterRegExp("");
-        dxSpotView->resizeRowsToContents();
     }
     else if (modefilterChanged)
     {
@@ -417,12 +449,10 @@ void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterC
     else if (callsignfilterChanged)
     {
         callSignProxyModel->setFilterRegExp("");
-        callSignView->resizeRowsToContents();
     }
     else if (locatorfilterChanged)
     {
         locatorProxyModel->setFilterRegExp("");
-        locatorView->resizeRowsToContents();
     }
 
 }
@@ -464,6 +494,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     {
         QString freq = spotProxyModel->data(index, DataStoredRole).toString();
         sendFreqToRig(freq);
+
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
     {
@@ -474,6 +505,11 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     else if (index.column() == DXBRG_COL_NUM)
     {
         QString brg = spotProxyModel->data(index, DataStoredRole).toString();
+        QString loc = spotProxyModel->data(spotProxyModel->index(index.row(), DXLOC_COL_NUM), DataStoredRole).toString();
+        if (loc.count() < 6)
+        {
+            brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+        }
         sendBrgToRot(brg);
     }
 }
@@ -542,6 +578,7 @@ void ClusterClientFrame::sendFreqToRig(QString freq)
 
 void ClusterClientFrame::sendBrgToRot(QString brg)
 {
+    trace(QString("Send Bearing to Rot = %1").arg(brg));
     if (!brg.isEmpty())
     {
        MinosLoggerEvents::SendSpotBrgStrToRot(brg);
@@ -602,17 +639,15 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
 
 void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 {
-    for ( QVector<QString>::iterator i = spotQueue.begin(); i != spotQueue.end(); i++ )
+    int sqsize = spotQueue.count();
+    for (int i = sqsize -1 ; i > -1; i--)
     {
-       //ui->ChatMemo->append( (*i) );
-       addDxSpotToTable((*i));
-       trace("syncSpots " + (*i));
+       addDxSpotToTable(spotQueue[i]);
+       trace("syncSpots " + spotQueue[i]);
     }
+
+
     spotQueue.clear();
-    dxSpotView->resizeRowsToContents();
-    searchView->resizeRowsToContents();
-    callSignView->resizeRowsToContents();
-    locatorView->resizeRowsToContents();
 }
 
 
@@ -704,6 +739,12 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
         mcs.validate();
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
+            unsigned short cf = (*i).wt->contactFlags.getValue();
+            if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+            {
+                continue;
+            }
+
             if (!callfound)
             {
             if ((*i).wt->cs == mcs)
@@ -772,7 +813,7 @@ void ClusterClientFrame::calcSpotDistanceBearing(const QString& _locator, double
             locator.append("MM");
         }
 
-        int locValres = lonlat( locator, longitude, latitude );
+        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
         if ( ( locValres ) != LOC_OK )
         {
             locValid = false;
@@ -907,7 +948,7 @@ void ClusterClientFrame::purgeSpots()
                }
                idx--;
            }
-          purgeSpotFlag = false;
+           purgeSpotFlag = false;
         }
     }
 
@@ -959,6 +1000,12 @@ void ClusterClientFrame::bearingActionSelected()
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
             QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM), DataStoredRole).toString();
+            QString loc = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXLOC_COL_NUM), DataStoredRole).toString();
+            if (loc.count() < 6)
+            {
+                brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+
+            }
             sendBrgToRot(brg);
         }
     }
@@ -999,6 +1046,26 @@ void ClusterClientFrame::memoryActionSelected()
     }
 }
 
+// this sends spot to memory if it has allready been sent
+void ClusterClientFrame::memoryActionOverideSelected()
+{
+    int curTab = ui->dxSpotTab->currentIndex();
+
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int currentRow = spotViewList[curTab]->currentIndex().row();
+        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
+        {
+            // check if spot has been sent to memory
+            if (filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
+            {
+                sendSpotToMemory(filterProxyModelList[curTab], currentRow);
+            }
+
+        }
+
+    }
+}
 
 
 void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyModel, int row)
@@ -1089,14 +1156,12 @@ void ClusterClientFrame::onSearchEditingFinished()
         {
             searchSortProxyModel->searchParameter = "";
             searchSortProxyModel->setFilterRegExp("");
-            searchView->resizeRowsToContents();
         }
         else
         {
             searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
             //ui->searchLineEdit->selectAll();
             searchSortProxyModel->setFilterRegExp("");
-            searchView->resizeRowsToContents();
         }
 
         ui->searchLineEdit->setFocus();
@@ -1566,3 +1631,16 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     return false;
 }
 
+void ClusterClientFrame::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    /*
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    QString curScreenLayout = tslf->getCurScreenLayout();
+
+    QByteArray state = ui->splitter->saveState();
+    QSettings settings;
+    settings.setValue("Splitters/ClusterClientFrame/state/" + curScreenLayout, state);
+
+    MinosLoggerEvents::SendSplittersChanged();
+    */
+}

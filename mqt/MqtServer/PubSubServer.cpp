@@ -57,10 +57,14 @@ bool RPCServerSubscriber::isRemoteEqual( const QString &pServer, const QString &
 {
    return server == pServer && isEqual( category );
 }
+RPCServerSubscriber::RPCServerSubscriber(const QString &server, const QString &category)
+    : RPCSubscriber( category ), server( server )
+{}
+
 void RPCServerSubscriber::testAndSubscribe( const QString &server, const QString &category )
 {
-   RPCServerSubscriber * sub = nullptr;
-   for ( QVector<RPCServerSubscriber *>::iterator i = serverSubscribeList.begin(); i != serverSubscribeList.end(); i++ )
+    RPCServerSubscriber * sub = nullptr;
+    for ( QVector<RPCServerSubscriber *>::iterator i = serverSubscribeList.begin(); i != serverSubscribeList.end(); i++ )
    {
       if ( ( *i ) ->isRemoteEqual( server, category ) )
       {
@@ -90,3 +94,96 @@ void RPCServerSubscriber::serverReSubscribe()
    rsc.queueCall( server );       // localhost just causes the server to loop
 }
 
+QString RPCServerSubscriber::getServer()
+{
+    return server;
+}
+
+
+RPCServerNotifyServer::RPCServerNotifyServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::serverNotify, cb )
+{}
+
+RPCServerNotifyServer::~RPCServerNotifyServer()
+{}
+
+QSharedPointer<MinosRPCObj> RPCServerNotifyServer::makeObj()
+{
+    return QSharedPointer<MinosRPCObj>(new RPCServerNotifyServer( callback ));
+}
+
+RPCServerNotifyClient::RPCServerNotifyClient(TRPCFunctor *cb) : MinosRPCClient( rpcConstants::serverNotify, cb )
+{}
+
+RPCServerNotifyClient::~RPCServerNotifyClient()
+{}
+
+QSharedPointer<MinosRPCObj> RPCServerNotifyClient::makeObj()
+{
+    return QSharedPointer<MinosRPCObj>(new RPCServerNotifyClient( callback ));
+}
+
+RPCClientNotifyClient::RPCClientNotifyClient(TRPCFunctor *cb) : MinosRPCClient( rpcConstants::clientNotify, cb )
+{}
+
+RPCClientNotifyClient::~RPCClientNotifyClient()
+{}
+
+QSharedPointer<MinosRPCObj> RPCClientNotifyClient::makeObj()
+{
+    return QSharedPointer<MinosRPCObj>(new RPCClientNotifyClient( callback ));
+}
+
+RPCRemoteSubscribeServer::RPCRemoteSubscribeServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::remoteSubscribe, cb )
+{}
+
+RPCRemoteSubscribeServer::~RPCRemoteSubscribeServer()
+{}
+
+QSharedPointer<MinosRPCObj> RPCRemoteSubscribeServer::makeObj()
+{
+    return QSharedPointer<MinosRPCObj>(new RPCRemoteSubscribeServer( callback ) );
+}
+
+RPCSubscribeServer::RPCSubscribeServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::subscribe, cb )
+{}
+
+RPCSubscribeServer::~RPCSubscribeServer()
+{}
+
+QSharedPointer<MinosRPCObj> RPCSubscribeServer::makeObj()
+{
+    return QSharedPointer<MinosRPCObj>(new RPCSubscribeServer( callback ) );
+}
+
+RPCPublishServer::RPCPublishServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::publish, cb )
+{}
+
+RPCPublishServer::~RPCPublishServer()
+{}
+
+QSharedPointer<MinosRPCObj> RPCPublishServer::makeObj()
+{
+    return QSharedPointer<MinosRPCObj>(new RPCPublishServer( callback ));
+}
+
+RPCRServerSubscribeServer::RPCRServerSubscribeServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::serverSubscribe, cb )
+{}
+
+RPCRServerSubscribeServer::~RPCRServerSubscribeServer()
+{}
+
+QSharedPointer<MinosRPCObj> RPCRServerSubscribeServer::makeObj()
+{
+    return QSharedPointer<MinosRPCObj>(new RPCRServerSubscribeServer( callback ) );
+}
+
+RPCServerSubscribeClient::RPCServerSubscribeClient(TRPCFunctor *cb) : RPCPubSub( rpcConstants::serverSubscribe, cb )
+{}
+
+RPCServerSubscribeClient::~RPCServerSubscribeClient()
+{}
+
+QSharedPointer<MinosRPCObj> RPCServerSubscribeClient::makeObj()
+{
+    return QSharedPointer<MinosRPCObj>(new RPCServerSubscribeClient( callback ) );
+}

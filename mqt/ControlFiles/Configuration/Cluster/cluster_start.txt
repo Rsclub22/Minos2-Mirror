@@ -1,1 +1,0 @@
-accept/spots on vhf and (by_zone 14,15,16 or call_zone 14,15,16)

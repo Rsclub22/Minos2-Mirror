@@ -44,8 +44,8 @@ class Server
       virtual ~Server();
 };
 extern QVector<Server *> serverList;
-extern Server *findStation( const QString s );
-extern Server *findIp( const QString s );
+extern QVector<Server *>::iterator findStation( const QString s );
+extern QVector<Server *>::iterator findIp( const QString s );
 
 class UDPSocket: public QObject
 {
@@ -76,7 +76,7 @@ class TZConf: public QObject
       QTimer beaconTimer;
 
       bool sendMessage();
-      void readServerList();
+      void readServerListFile();
 
       static TZConf *ZConf;
 
@@ -105,7 +105,7 @@ public:  		// User declarations
 
       QString getZConfString(bool beaconreq, const QString &h);
       Server *processZConfString(const QString &message, QHostAddress &host, QDateTime &beaconResponse);
-      void publishDisconnect(const QString &name);
+      void publishDisconnect(Server *);
       void closeDown();
 private slots:
       void onReadyRead();

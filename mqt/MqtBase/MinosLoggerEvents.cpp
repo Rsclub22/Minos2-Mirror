@@ -132,11 +132,6 @@ void MinosLoggerEvents::SendAfterTabFocusIn(QLineEdit *tle)
     emit mle.AfterTabFocusIn(tle);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendValidated()
-{
-    emit mle.Validated();
-}
-//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendCountrySelect(QString cty, BaseContestLog *c)
 {
     emit mle.CountrySelect(cty, c);
@@ -215,6 +210,12 @@ void MinosLoggerEvents::SendBrgStrToRot(QString bearing)
 void MinosLoggerEvents::SendSpotBrgStrToRot(QString bearing)
 {
     emit mle.SpotBrgStrToRot(bearing);
+
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::SendMemBrgStrToRot(QString bearing)
+{
+    emit mle.MemBrgStrToRot(bearing);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendSpotToLog(memoryData::memData spotData)

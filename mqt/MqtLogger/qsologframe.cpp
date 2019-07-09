@@ -40,37 +40,37 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     CallsignFW = new FocusWatcher(ui->CallsignEdit);
     CallsignLabelString = ui->Callsignlabel->text();
-    ui->CallsignEdit->setValidator(new UpperCaseValidator(true));
+    ui->CallsignEdit->setValidator(new UpperCaseValidator());
     ui->CallsignEdit->installEventFilter(this);
 
     RSTTXFW = new FocusWatcher(ui->RSTTXEdit);
     RSTTXLabelString = ui->RSTTXLabel->text();
-    ui->RSTTXEdit->setValidator(new UpperCaseValidator(true));
+    ui->RSTTXEdit->setValidator(new UpperCaseValidator());
     ui->RSTTXEdit->installEventFilter(this);
 
     SerTXFW = new FocusWatcher(ui->SerTXEdit);
     SerTXLabelString = ui->SerTXLabel->text();
-    ui->SerTXEdit->setValidator(new UpperCaseValidator(true));
+    ui->SerTXEdit->setValidator(new UpperCaseValidator());
     ui->SerTXEdit->installEventFilter(this);
 
     RSTRXFW = new FocusWatcher(ui->RSTRXEdit);
     RSTRXLabelString = ui->RSTRXLabel->text();
-    ui->RSTRXEdit->setValidator(new UpperCaseValidator(true));
+    ui->RSTRXEdit->setValidator(new UpperCaseValidator());
     ui->RSTRXEdit->installEventFilter(this);
 
     SerRXFW = new FocusWatcher(ui->SerRXEdit);
     SerRXLabelString = ui->SerRXLabel->text();
-    ui->SerRXEdit->setValidator(new UpperCaseValidator(true));
+    ui->SerRXEdit->setValidator(new UpperCaseValidator());
     ui->SerRXEdit->installEventFilter(this);
 
     LocFW = new FocusWatcher(ui->LocEdit);
     LocLabelString = ui->LocLabel->text();
-    ui->LocEdit->setValidator(new UpperCaseValidator(true));
+    ui->LocEdit->setValidator(new UpperCaseValidator());
     ui->LocEdit->installEventFilter(this);
 
     QTHFW = new FocusWatcher(ui->QTHEdit);
     QTHLabelString = ui->QTHLabel->text();
-    ui->QTHEdit->setValidator(new UpperCaseValidator(true));
+    ui->QTHEdit->setValidator(new UpperCaseValidator());
     ui->QTHEdit->installEventFilter(this);
 
     CommentsFW = new FocusWatcher(ui->CommentsEdit);
@@ -78,10 +78,10 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->CommentsEdit->installEventFilter(this);
 
     MainOpFW = new FocusWatcher(ui->MainOpComboBox);
-    ui->MainOpComboBox->setValidator(new UpperCaseValidator(false));
+    ui->MainOpComboBox->setValidator(new UpperCaseValidator());
     Op1String = ui->OperatorLabel->text();
     SecondOpFW = new FocusWatcher(ui->SecondOpComboBox);
-    ui->SecondOpComboBox->setValidator(new UpperCaseValidator(false));
+    ui->SecondOpComboBox->setValidator(new UpperCaseValidator());
     Op2String = ui->SecondOpLabel->text();
 
     freqFW = new FocusWatcher(ui->frequencyEdit);
@@ -98,7 +98,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(MainOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(SecondOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(freqFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-//    connect(ui->frequencyEdit, SIGNAL(editingFinished()), this, SLOT(on_FreqEditFinished()), Qt::QueuedConnection);
 
     ui->timeEdit->installEventFilter(this);
     ui->dateEdit->installEventFilter(this);
@@ -111,9 +110,9 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     ui->ModeComboBoxGJV->setCurrentText(hamlibData::USB);
     ui->ModeButton->setText(hamlibData::CW);
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterTabFocusIn(QLineEdit*)), this, SLOT(on_AfterTabFocusIn(QLineEdit*)), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(Validated()), this, SLOT(on_Validated()));
     connect(&MinosLoggerEvents::mle, SIGNAL(ValidateError(int)), this, SLOT(on_ValidateError(int)));
     connect(&MinosLoggerEvents::mle, SIGNAL(ShowOperators()), this, SLOT(on_ShowOperators()));
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
@@ -521,35 +520,6 @@ void QSOLogFrame::SecondOpComboBox_Exit()
        refreshOps();
     }
 }
-
-/*
-void QSOLogFrame::on_FreqEditFinished()
-{
-    QString f = ui->frequencyEdit->text().trimmed().remove( QRegExp("^[0]*"));
-    if (f != "")
-    {
-        if (f.count('.') == 0)
-        {
-            f += ".000";
-        }
-        if (f.count('.') == 1)
-        {
-            QStringList fl = f.split('.');
-            fl[1] = fl[1] + "000000";
-            fl[1].truncate(6);
-            f = fl[0] + "." + fl[1];
-        }
-        if (!validateFreqTxtInput(f))
-        {
-            // error
-            QMessageBox msgBox;
-            msgBox.setText(FREQ_EDIT_ERR_MSG);
-            msgBox.exec();
-
-        }
-    }
-}
-*/
 void QSOLogFrame::on_GJVOKButton_clicked()
 {
     if ( contest->isReadOnly() )
@@ -589,7 +559,6 @@ void QSOLogFrame::on_GJVOKButton_clicked()
        {
           if ( !( *vcp ) ->wc->isVisible() || !( *vcp ) ->wc->isEnabled())
           {
- //         #error but if date or time are invalid...
              continue;
           }
           if ( onCurrent )
@@ -762,10 +731,6 @@ void QSOLogFrame::killPartial( )
       delete partialContact;
       partialContact = nullptr;
    }
-}
-void QSOLogFrame::on_Validated()
-{
-    killPartial();
 }
 
 void QSOLogFrame::startNextEntry( )
@@ -975,6 +940,7 @@ void QSOLogFrame::getScreenEntry()
        screenContact.op2 = ui->SecondOpComboBox->currentText();
    }
    screenContact.mode = ui->ModeComboBoxGJV->currentText().trimmed();
+   screenContact.mgmSubmode = ui->MGMSubModeEdit->text().trimmed();
    screenContact.contactFlags &= ~NON_SCORING;
 
    // op1/op2 get set when the attached combos change - I hope :)
@@ -1035,6 +1001,7 @@ void QSOLogFrame::showScreenEntry( )
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
       setMode(temp.mode.trimmed());
+      ui->MGMSubModeEdit->setText(temp.mgmSubmode);
 
       // and now we want to put the selection on each at the END of the text
       for ( QVector <ValidatedControl *>::iterator vcp = vcs.begin(); vcp != vcs.end(); vcp++ )
@@ -1202,7 +1169,7 @@ void QSOLogFrame::calcLoc( )
         double dist;
         int brg = 0;
 
-        int locValres = lonlat( gridref, longitude, latitude );
+        int locValres = lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
         if ( ( locValres ) != LOC_OK )
             locValid = false;
 
@@ -1402,6 +1369,16 @@ bool QSOLogFrame::valid( validTypes command )
    pvalid = validateControls( cmValidStatus ); // look at current validity
 
    return pvalid;
+}
+
+ScreenContact *QSOLogFrame::getPartialContact() const
+{
+    return partialContact;
+}
+
+void QSOLogFrame::setPartialContact(ScreenContact *value)
+{
+    partialContact = value;
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::selectField( QWidget *v )
@@ -1694,7 +1671,7 @@ void QSOLogFrame::setMode(QString m)
       ui->ModeButton->setText(hamlibData::CW);
    }
 
-
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::setFreq(QString f)
@@ -1792,6 +1769,7 @@ void QSOLogFrame::updateQSODisplay()
    ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());
    ui->CommentsEdit->setEnabled(notProtected);
    ui->ModeComboBoxGJV->setEnabled(notProtected);
+   ui->MGMSubModeFrame->setEnabled(notProtected);
    ui->NonScoreCheckBox->setEnabled(notProtected);
    ui->DeletedCheckBox->setEnabled(notProtected);
    ui->GJVOKButton->setEnabled(notProtected);
@@ -1930,6 +1908,9 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
       }
       MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
       valid( cmCheckValid ); // make sure all single and cross field
+
+      // someone has changed one of the controls - which is the requirement for killing partial
+      killPartial();
    }
 }
 
@@ -1947,6 +1928,7 @@ void QSOLogFrame::on_ModeButton_clicked()
     mode = ui->ModeButton->text();
     oldMode = myOldMode;
     ui->ModeButton->setText(oldMode);
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
     EditControlExit(ui->ModeButton);
 }
 
@@ -1962,20 +1944,21 @@ void QSOLogFrame::modeSentFromRig(QString m)
     {
         return;
     }
-    QString mode = mlist[0];
+    QString newMode = mlist[0];
 
     for (int i = 0; i < hamlibData::supModeList.count(); i++)
     {
-        if (mode == hamlibData::supModeList[i])
+        if (newMode == hamlibData::supModeList[i])
         {
             oldMode = ui->ModeComboBoxGJV->currentText();
-            if (mode == ui->ModeComboBoxGJV->currentText())
+            if (newMode == ui->ModeComboBoxGJV->currentText())
             {
                 return;
             }
             {
                 // set index to new mode
-                ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText(mode));
+                ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText( newMode));
+                mode = newMode;
             }
 
             // ensure flip mode is shown on mode button
@@ -1987,6 +1970,7 @@ void QSOLogFrame::modeSentFromRig(QString m)
             {
                ui->ModeButton->setText(hamlibData::CW);
             }
+            ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
             // finished..
             return;
         }
@@ -2011,7 +1995,7 @@ void QSOLogFrame::logScreenEntry( )
    QSharedPointer<BaseContact> lct = selectedContact;
    if (!lct)
    {
-        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode, dtg(true) );	// "current" doesn't get flag, don't save ContestLog yet
+        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode, screenContact.mgmSubmode, dtg(true) );	// "current" doesn't get flag, don't save ContestLog yet
    }
 
    if ( screenContact.mode.compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0 )
@@ -2144,7 +2128,8 @@ void QSOLogFrame::logCurrentContact( )
                 // last child is "current contact", and we need to add TO IT
                 LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
                 QString currmode = ui->ModeComboBoxGJV->currentText();
-                ct->addContact( nct_no, orflag, true, false, currmode, ctTime ); // last contact
+                QString currSubmode = ui->MGMSubModeEdit->text().trimmed();
+                ct->addContact( nct_no, orflag, true, false, currmode, currSubmode, ctTime ); // last contact
                 nct_no++;
              }
              while ( nct_no < ctno ) ;
@@ -2538,6 +2523,7 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
             ui->RSTRXEdit->clear();
         }
     }
+    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 }
 
 void QSOLogFrame::on_ValidateError (int mess_no )

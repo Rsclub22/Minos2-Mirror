@@ -463,6 +463,7 @@ QString ContestContact::getADIFLine()
     }
 
     QString smode = mode.getValue().toUpper();
+    QString smgmSubmode = mgmSubmode.getValue();
     if (  smode.compare( hamlibData::CW ) == 0 )
         outstr += makeADIFField( "MODE", "CW" );
     else
@@ -472,7 +473,10 @@ QString ContestContact::getADIFLine()
             if ( smode.compare( hamlibData::FM ) == 0 )
                 outstr += makeADIFField( "MODE", "FM" );
             else
-                outstr += makeADIFField( "MODE", mode.getValue() );
+                if ( smode.compare( hamlibData::MGM) == 0 && !smgmSubmode.trimmed().isEmpty())
+                     outstr += makeADIFField( "MODE", smgmSubmode);
+                else
+                    outstr += makeADIFField( "MODE", mode.getValue() );
 
     if ( contactFlags.getValue() & COMMENT_ONLY )
     {
@@ -569,7 +573,7 @@ bool ContestContact::commonSave(QSharedPointer<BaseContact> tct)
          cs.valRes = CS_NOT_VALIDATED;
          loc.valRes = LOC_NOT_VALIDATED;
          loc.validate();
-         checkContact( );                    // in commonSave, AFTER saved, to update stats etc
+         checkContact(false );                    // in commonSave, AFTER saved, to update stats etc
       }
    }
    return ret;

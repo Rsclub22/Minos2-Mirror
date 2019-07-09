@@ -140,9 +140,12 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
    linelist[ static_cast< int> (CExcs) ] = PrintFileLine( "Claimed number of exchanges             ", QString::number( ndistrict )); /*, "Claimed no. of exchanges; Bonus for each new exchange; Exchange Multiplier"*/
    linelist[ static_cast< int> (CDXCs) ] = PrintFileLine( "Claimed number of DXCCs                 ", QString::number( nctry )); /*, "Claimed no. of DXCCs; Bonus for each new DXCC;DXCC multiplier"*/
    linelist[ static_cast< int> (CToSc) ] = PrintFileLine( "Claimed total score                     ", QString::number( ct->contestScore * ltot ) ); /*, "Claimed total score"*/
-   linelist[ static_cast< int> (CODXC) ] = PrintFileLine( "Best DX - Callsign; Locator; Distance   ",
-       bestdx ? ( bestdx->cs.fullCall.getValue() + ";" + bestdx->loc.loc.getValue() + ";" + QString::number(bestdx->contactScore.getValue()) )
-              : ";;" ); /*, "(Best DX) Callsign; Locator; Distance"*/
+
+
+   QString sbestdx = bestdx
+               ?( bestdx->cs.fullCall.getValue() + ";" + bestdx->loc.loc.getValue() + ";" + QString::number(bestdx->contactScore.getValue()))
+               : QString(";;");
+   linelist[ static_cast< int> (CODXC) ] = PrintFileLine( "Best DX - Callsign; Locator; Distance   ", sbestdx ); /*, "(Best DX) Callsign; Locator; Distance"*/
 
    wr.lwrite(fileHeader);
    wr.lwriteLine();

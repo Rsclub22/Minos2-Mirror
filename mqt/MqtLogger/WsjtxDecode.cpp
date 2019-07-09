@@ -22,6 +22,21 @@ PA9XYZ 590003 IO91NP                                                    emsDB
                                    G4ABC/P R 570007 JO22DB              emsRplusDb
 PA9XYZ G4ABC/P RR73                                                     emsRRR
                                    G4ABC/P PA9XYZ 73                    ems73
+
+ PA9XYZ 590003 IO91NP (emsDb)
+
+ Look for previous grid message from PA9XYZ, which gives "CQ" call and PA9XYZ partial locator
+
+ Look for previous CQ message for "CQ" call - check DF is in range and locator is compatible
+ (as otherwise it could be someone else who is sending the DB message)
+
+ G4ABC/P R 570007 JO22DB (emsRplusDb)
+
+ This gives the CQ call
+ Look for previous grid message on frequency with matching CQ call and matching partial loc; this gives responding call
+ Intervening should be a DB message to responder from CQ call
+
+
   */
 
 /*
@@ -42,7 +57,7 @@ static void addCall(const Callsign &c, const Locator &l)
     }
 }
 
-static const Locator &getCallLoc(const Callsign &c)
+const Locator &WsjtGetCallLoc(const Callsign &c)
 {
     if (GridCallMap.contains(c.realCall))
     {
@@ -89,23 +104,21 @@ bool decodeMessage::checkAsContact()
     scc.time = dtg(true);
 
     scc.checkScreenContact();
+    csret = scc.cs.valRes;
     if (scc.screenQSOValid)
     {
         scc.score();
         points = scc.contactScore;
         distance = points;
         bearing = scc.bearing;
-        if (scc.bonus)
-        {
-            points += scc.bonus;
-        }
+        mults = 0;
         if (scc.multCount >= 1)
         {
-            ContestScore cs(cc);
-            cc->getScoresTo(cs, QDateTime::currentDateTime());
-            int ctmultct = cs.nmults;
-
-            points = (cs.contestScore + points) * ctmultct + points * cs.nmults;
+            mults = scc.multCount;
+        }
+        if (scc.bonus)
+        {
+            bonus = scc.bonus;
         }
         return true;
     }
@@ -168,15 +181,25 @@ decodeMessage WsjtxDecode::decode(const QString &id, QTime time, qint32 snr, flo
     dc.delta_time = delta_time;
     dc.delta_frequency = delta_frequency;
     dc.mode = mode;
-    dc.message= message_text.trimmed();
     dc.low_confidence = low_confidence;
     dc.off_air = off_air;
     
     // there shouldn't be any spare spaces but...
 
+    int spoff = message_text.trimmed().indexOf("   ");
+    if (spoff > 0)
+        dc.message = message_text.left(spoff + 1).trimmed();
+    else
+    {
+        dc.message= message_text.trimmed();
+    }
+
     QStringList sl = message_text.trimmed().split(' ', QString::SkipEmptyParts);
 
-    if (sl[0] == "CQ")
+    if (sl.count() == 0)
+        return dc;
+
+    if  (sl[0] == "CQ" || sl[0] == "QRZ")
     {
         // repliable to "from"
         // CQ K1ABC FN42
@@ -313,12 +336,12 @@ decodeMessage WsjtxDecode::decode(const QString &id, QTime time, qint32 snr, flo
 
     if (dc.fromCall.valRes == CS_OK && dc.fromGrid.valRes != LOC_OK && dc.fromGrid.valRes != LOC_PARTIAL)
     {
-        dc.fromGrid = getCallLoc(dc.fromCall);
+        dc.fromGrid = WsjtGetCallLoc(dc.fromCall);
     }
     if (dc.toCall.valRes == CS_OK)
     {
         // we never have toGrid
-        dc.toGrid = getCallLoc(dc.toCall);
+        dc.toGrid = WsjtGetCallLoc(dc.toCall);
     }
     if (dc.fromCall.realCall != myCall.realCall)
     {

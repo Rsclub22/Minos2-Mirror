@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterSetUpTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="generalTab">
       <attribute name="title">
@@ -102,7 +102,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="callsignEdit"/>
+          <widget class="CallsignLineEdit" name="callsignEdit"/>
          </item>
         </layout>
        </item>
@@ -130,7 +130,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="locatorEdit"/>
+          <widget class="LocatorLineEdit" name="locatorEdit"/>
          </item>
         </layout>
        </item>
@@ -212,6 +212,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CallsignLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>CallsignLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LocatorLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>locatorlineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>

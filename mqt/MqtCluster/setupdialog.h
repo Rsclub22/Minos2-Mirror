@@ -59,6 +59,11 @@ public:
     bool getRunStartFileFlag();
     bool getRunEndFileFlag();
 
+    void createDefaultGeneralSettingsFile();
+    void readPersonal();
+    void loadGeneralToSetupTab();
+    void loadPersonalToSetupTab();
+
 signals:
 
     void personalDataUpdated(QString, QString, QString, QString);
@@ -66,6 +71,7 @@ signals:
 
 public slots:
     QString getCurrentNodeName();
+
 private slots:
 
 
@@ -75,14 +81,17 @@ private slots:
 
     void saveGeneralSettings();
 
-    void loadGeneralToSetupTab();
+
 
     void clusterListDataChanged(QStandardItem *);
 
-    void callsignEditFinished();
+
+
+    void callsignFinished(const QString&);
+
     void nameEditFinshed();
     void qthEditFinished();
-    void locatorEditFinished();
+    void locatorFinished(const QString&);
     void saveButtonPushed();
 
     void cancelButtonPushed();
@@ -117,7 +126,7 @@ private:
     bool personalDataChanged;
 
     void savePersonal();
-    void readPersonal();
+
 
     QString callsign;
     QString name;
@@ -131,11 +140,12 @@ private:
     void loadListClusterToView();
     void loadClusterListToModel();
     void initClusterListModel();
-    void loadPersonalToSetupTab();
+
     void clusterListSave();
     void loadSettingsToModel(QStringList &availNodeNames, QSettings &settings);
     void closeEvent(QCloseEvent *event);
     void doCloseEvent();
+
 };
 
 #endif // SETUPDIALOG_H

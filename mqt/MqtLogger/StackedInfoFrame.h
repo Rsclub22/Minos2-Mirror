@@ -17,6 +17,28 @@ class StackedInfoFrame;
 extern ContList contlist[ CONTINENTS ];
 extern bool showWorked;
 extern bool showUnworked ;
+
+enum AuxEntries {
+    aeClock,
+    aeDXCC,
+    aeDistrict,
+    aeFilter,
+    aeMemories,
+    aeLocatorMap,
+    aeLocatorTree,
+    aeStats
+};
+class AuxTypeOption
+{
+public:
+    AuxEntries type;
+    QString s;
+    QString hint;
+};
+extern QVector <AuxTypeOption> auxoptions ;
+extern AuxEntries getAuxEntryType(QString s);
+extern QString getAuxTypeString(AuxEntries t);
+
 class StackedInfoFrame : public QFrame
 {
     Q_OBJECT
@@ -24,6 +46,8 @@ class StackedInfoFrame : public QFrame
 public:
     explicit StackedInfoFrame(QWidget *parent = nullptr, int instance = 0);
     ~StackedInfoFrame();
+
+    void setCurrentFrameType(QString);
 
 private:
     Ui::StackedInfoFrame *ui;

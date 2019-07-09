@@ -53,6 +53,8 @@ namespace Ui {
 class RotatorMainWindow;
 }
 
+void delay(int sec);
+void sleepFor(qint64 milliseconds);
 
 
 class RotatorMainWindow : public QMainWindow
@@ -192,10 +194,6 @@ private:
 
 
     void hamlibError(int errorCode, QString cmd);
-
-
-
-    void sleepFor(qint64 milliseconds);
 
     void rotatorActive();
 

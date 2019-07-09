@@ -52,25 +52,26 @@ public:
 };
 
 DecodeHeading const headings[dcMaxVal] = {
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Client"), Qt::AlignRight},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Client"), Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Time"), Qt::AlignRight},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Snr"), Qt::AlignRight},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "DT"), Qt::AlignRight},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "DF"), Qt::AlignRight},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Md"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Confidence"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Live"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Time"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Snr"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "DT"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "DF"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Md"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Confidence"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Live"),Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Seq"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "points"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "bearing"),Qt::AlignHCenter},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "distance"),Qt::AlignHCenter},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Seq"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "points"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "brg"),Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "distance"),Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "From call"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "From grid"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Call"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Grid"), Qt::AlignLeft},
     {QT_TRANSLATE_NOOP ("DecodesModel", "To Call"), Qt::AlignLeft},
     {QT_TRANSLATE_NOOP ("DecodesModel", "To Grid"), Qt::AlignLeft},
+    {QT_TRANSLATE_NOOP ("DecodesModel", "Best"), Qt::AlignLeft},
 
     {QT_TRANSLATE_NOOP ("DecodesModel", "Message"), Qt::AlignLeft}
 };
@@ -137,6 +138,7 @@ void DecodesModel::rx_df (int df)
 QVariant DecodesModel::data (QModelIndex const& index, int role) const
 {
 
+    const decodeMessage &msg = messages->at(index.row());
     if (role == Qt::BackgroundRole)
     {
         switch (index.column ())
@@ -166,6 +168,27 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             }
             break;
 
+        case dcTime:
+            {
+                if (msg.colOffset == 0)
+                {
+                    return QColor(Qt::red).lighter();
+                }
+                else if (msg.colOffset  == 1)
+                {
+                    return QColor(Qt::green).lighter();
+                }
+                else if (msg.colOffset  == 2)
+                {
+                    return QColor(Qt::blue).lighter();
+                }
+                else if (msg.colOffset  == 3)
+                {
+                    return QColor(Qt::yellow).lighter();
+                }
+            }
+            break;
+
         default:
             break;
         }
@@ -175,43 +198,102 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
         switch (index.column())
         {
         case dcId:
-            return messages->at(index.row()).id;
+            return msg.id;
         case dcTime:
-            return messages->at(index.row()).time.toString ("hh:mm:ss");
+            return msg.time.toString ("hh:mm:ss");
         case dcSnr:
-            return QString::number(messages->at(index.row()).snr);
+            return QString::number(msg.snr);
         case dcDT:
-            return QString::number (static_cast<double>( messages->at(index.row()).delta_time));
+            return QString::number (static_cast<double>( msg.delta_time));
         case dcDF:
-            return QString::number(messages->at(index.row()).delta_frequency);
+            return QString::number(msg.delta_frequency);
         case dcMd:
-            return messages->at(index.row()).mode;
+            return msg.mode;
         case dcConfidence:
-            return  confidence_string (messages->at(index.row()).low_confidence) ;
+            return  confidence_string (msg.low_confidence) ;
         case dcLive:
-            return live_string (messages->at(index.row()).off_air);
+            return live_string (msg.off_air);
         case dcSeq:
-            return messages->at(index.row()).getMStage();
+            return msg.getMStage();
 
         case dcPoints:
-            return QString::number(messages->at(index.row()).points);
+        {
+            bool highlight = false;
+
+            if (msg.mstage != emsCQ && msg.mstage != emsGrid && msg.mstage != ems73 && msg.mstage != emsRRR )
+            {
+                return "";
+            }
+            if (msg.csret == ERR_DUPCS)
+            {
+                return "(wkd)";
+            }
+            if ((msg.mstage == ems73 || msg.mstage == emsRRR))
+            {
+                if (msg.toCall == call_ )
+                {
+                    return "";
+                }
+            }
+            QString points = QString::number(msg.points);
+
+            if (msg.bonus)
+            {
+                highlight = true;
+                points += " (b+" + QString::number(msg.bonus) + ")";
+            }
+            if (msg.mults)
+            {
+                highlight = true;
+                points += " (m*" + QString::number(msg.mults) + ")";
+            }
+            QString pts = (highlight?HtmlFontColour(Qt::red):QString()) + points;
+            return  pts;
+        }
         case dcBearing:
-            return QString::number(messages->at(index.row()).bearing);
+            if (msg.mstage != emsCQ && msg.mstage != emsGrid && msg.mstage != ems73 && msg.mstage != emsRRR)
+            {
+                return "";
+            }
+            if (msg.points == 0)
+            {
+                return "";
+            }
+            if (msg.csret == ERR_DUPCS)
+            {
+                return "";
+            }
+            return QString::number(msg.bearing);
         case dcDistance:
-            return QString::number(messages->at(index.row()).distance);
+            return QString::number(msg.distance);
 
         case dcFromCall:
-            return messages->at(index.row()).fromCall.realCall;
+            return msg.fromCall.realCall;
         case dcFromGrid:
-            return messages->at(index.row()).fromGrid.loc.getValue();
+            return msg.fromGrid.loc.getValue();
         case dcToCall:
-            return messages->at(index.row()).toCall.realCall;
+            return msg.toCall.realCall;
         case dcToGrid:
-            return messages->at(index.row()).toGrid.loc.getValue();
+            return msg.toGrid.loc.getValue();
 
-
+        case dcBest:
+        {
+            if (msg.oldmsg)
+            {
+                return "(old)";
+            }
+            if (msg.best)
+            {
+                if (msg.autoresp)
+                {
+                    return "Auto";
+                }
+                return "Best";
+            }
+            return "";
+        }
         case dcMessage:
-            return messages->at(index.row()).message;
+            return escapeXML( msg.message );
 
         }
     }

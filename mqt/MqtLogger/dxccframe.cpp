@@ -47,7 +47,8 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
         ui->DXCCTable->setModel(&proxyModel);
         ui->DXCCTable->setItemDelegate(delegate);
         reInitialiseCountries();
-        ui->DXCCTable->resizeRowsToContents();
+        ui->DXCCTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
         connect( ui->DXCCTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
                  this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     }
@@ -70,7 +71,6 @@ void DXCCFrame::reInitialiseCountries()
             ui->DXCCTable->setCurrentIndex(proxyModel.index(i, 0));
         }
     }
-    ui->DXCCTable->resizeRowsToContents();
 }
 void DXCCFrame::scrollToCountry( int ctry_ind, bool makeVisible )
 {

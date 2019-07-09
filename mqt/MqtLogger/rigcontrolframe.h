@@ -210,6 +210,10 @@ private slots:
 
 
     void checkRigDetailsAvail();
+    void clusterUpdateRigFreq(QString freq);
+
+
+
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);

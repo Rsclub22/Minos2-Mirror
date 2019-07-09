@@ -131,6 +131,7 @@ class BaseContact
 
       MinosStringItem<QString> extraText;
       MinosStringItem<QString> mode;
+      MinosStringItem<QString> mgmSubmode;
       MinosStringItem<QString> reps;
       MinosStringItem<QString> serials;
       MinosStringItem<QString> repr;
@@ -184,7 +185,7 @@ class BaseContact
       }
       virtual void processMinosStanza( const QString &/*methodName*/, MinosTestImport * const /*mt*/ )
       {}
-      virtual void checkContact( )
+      virtual void checkContact( bool /*inScan*/ )
       {}
       virtual void copyFromArg(QSharedPointer<BaseContact> )
       {}

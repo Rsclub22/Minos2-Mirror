@@ -39,8 +39,8 @@ RigMemDialog::RigMemDialog(QWidget *parent) :
         ui->modecb->addItem(hamlibData::supModeList[i]);
     }
 
-    ui->callSignLineEdit->setValidator(new UpperCaseValidator(true));
-    ui->locatorLineEdit->setValidator(new UpperCaseValidator(true));
+    ui->callSignLineEdit->setValidator(new UpperCaseValidator());
+    ui->locatorLineEdit->setValidator(new UpperCaseValidator());
 
     ui->callSignLineEdit->setFocus();
     // validate the input
@@ -96,7 +96,7 @@ void RigMemDialog::setLogData(memoryData::memData* ldata, int buttonNumber, Logg
     {
         double lon = 0.0;
         double lat = 0.0;
-        int lres = lonlat( ldata->locator, lon, lat );
+        int lres = lonlat( ldata->locator, lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
         if ( lres == LOC_OK )
         {
             double dist;
@@ -157,7 +157,16 @@ void RigMemDialog::on_okButton_clicked()
 
     logData->mode = ui->modecb->currentText();
     logData->locator = ui->locatorLineEdit->text();
-    logData->bearing = ui->bearingLineEdit->text().toInt();
+
+    if (ui->bearingLineEdit->isValid())
+    {
+       logData->bearing = ui->bearingLineEdit->text().toInt();
+    }
+    else
+    {
+        ui->bearingLineEdit->setText(QString::number(logData->bearing));
+    }
+
     logData->time = ui->timeLineEdit->text();
     accept();
 }
@@ -175,7 +184,7 @@ void RigMemDialog::onLocEditFinish()
     double longitude;
 
     QString gridref = ui->locatorLineEdit->text();
-    int locValres = lonlat( gridref, longitude, latitude );
+    int locValres = lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
     if ( ( locValres ) == LOC_OK )
     {
         int brg = 0;

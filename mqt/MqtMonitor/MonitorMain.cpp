@@ -186,7 +186,7 @@ QModelIndex MonitorTreeModel::index( int row, int column, const QModelIndex &par
 
     TreeNode *parentItem = getItem( parent );
 
-    if ( parentItem && row < parentItem->childCount() )
+    if ( parentItem && row < parentItem->childCount() && row >= 0 )
     {
         TreeNode * childItem = parentItem->child( row );
         if ( childItem )
@@ -304,9 +304,9 @@ MonitorMain::MonitorMain(QWidget *parent) :
     closeMonitoredLog = newAction("Close tab", &TabPopup, SLOT(on_closeMonitoredLog()));
     newAction( "Cancel", &TabPopup, SLOT( CancelClick() ) );
 
-    ui->callsignEdit->setValidator(new UpperCaseValidator(true));
-    ui->locEdit->setValidator(new UpperCaseValidator(true));
-    ui->exchangeEdit->setValidator(new UpperCaseValidator(true));
+    ui->callsignEdit->setValidator(new UpperCaseValidator());
+    ui->locEdit->setValidator(new UpperCaseValidator());
+    ui->exchangeEdit->setValidator(new UpperCaseValidator());
     ui->callsignEdit->installEventFilter(this);
     ui->locEdit->installEventFilter(this);
     ui->exchangeEdit->installEventFilter(this);

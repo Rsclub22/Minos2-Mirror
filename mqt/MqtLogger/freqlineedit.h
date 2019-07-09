@@ -24,7 +24,7 @@ class FreqLineEdit : public QLineEdit
 public:
 
     FreqLineEdit(QWidget *parent);
-    ~FreqLineEdit();
+    ~FreqLineEdit() override;
     void changeFreq(bool direction);
     //QString convertFreqString(double frequency);
 

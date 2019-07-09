@@ -81,7 +81,13 @@ SOURCES += \
     calllocinputdialog.cpp \
     helpbrowser.cpp \
     helptextbrowser.cpp \
-    clustercommon.cpp
+    clustercommon.cpp \
+    CallsignLineEdit.cpp \
+    locatorlineedit.cpp \
+    bearinglineedit.cpp \
+    bandModeFrequencyPlan.cpp \
+    callsigninputdialog.cpp \
+    locatorinputdialog.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -149,7 +155,13 @@ HEADERS += \
     calllocinputdialog.h \
     rigmemcommondata.h \
     helpbrowser.h \
-    helptextbrowser.h
+    helptextbrowser.h \
+    CallsignLineEdit.h \
+    locatorlineedit.h \
+    bearinglineedit.h \
+    bandModeFrequencyPlan.h \
+    callsigninputdialog.h \
+    locatorinputdialog.h
 
 unix {
     target.path = /usr/lib
@@ -167,4 +179,6 @@ FORMS += \
     rotpresetdialog.ui \
     StartConfig.ui \
     calllocinputdialog.ui \
-    helpbrowser.ui
+    helpbrowser.ui \
+    callsigninputdialog.ui \
+    locatorinputdialog.ui

@@ -98,7 +98,7 @@ void TZConf::startZConf(const QString &name)
 
     // set up the receiver
     readSocket.bind(UPNP_PORT);
-    connect(&readSocket, SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::QueuedConnection);
+    connect(&readSocket, SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
 
     // Get network interfaces list
 
@@ -173,7 +173,7 @@ void TZConf::onTimeout()
 
     if (lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval)
     {
-        readServerList();
+        readServerListFile();
     }
     if (readSocket.hasPendingDatagrams())
     {
@@ -233,18 +233,18 @@ void TZConf::onReadyRead()
 //---------------------------------------------------------------------------
 
 
-Server *findStation( const QString s )
+QVector<Server *>::iterator findStation( const QString s )
 {
    for ( QVector<Server *>::iterator i = serverList.begin(); i != serverList.end(); i++ )
    {
       if ( ( *i ) ->station.compare( s, Qt::CaseInsensitive ) == 0 )
       {
-         return ( *i );
+         return i;
       }
    }
-   return nullptr;
+   return serverList.end();
 }
-Server *findIp( const QHostAddress &h )
+QVector<Server *>::iterator findIp( const QHostAddress &h )
 {
     quint32 ha = h.toIPv4Address();
    for ( QVector<Server *>::iterator i = serverList.begin(); i != serverList.end(); i++ )
@@ -253,13 +253,13 @@ Server *findIp( const QHostAddress &h )
        trace(QString("findIP comparing %1 with %2").arg(ha).arg(a));
       if (ha == a)
       {
-         return ( *i );
+         return i;
       }
    }
-   return nullptr;
+   return serverList.end();
 }
 
-void TZConf::readServerList()
+void TZConf::readServerListFile()
 {
    trace("Reading Server List File");
 
@@ -325,54 +325,56 @@ Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
     trace( "zcPublishServer Host " + host.toString() + " Station " + name +
            " Port " + QString::number( PortAsNumber ) + " uuid " + uuid  );
     MinosServerListener *msl = MinosServerListener::getListener();
-    Server *s = findStation( name );
-    if ( s )
+    QVector<Server *>::iterator s = findStation( name );
+    if ( s != serverList.end() )
     {
         trace("Station " + name + " found by name");
     }
-    if (!s)
+    if (s == serverList.end())
     {
         s = findIp(host);
-        if (s)
+        if (s != serverList.end())
         {
             trace("Station " + host.toString() + " found by ip");
             MinosServerConnection *m = msl->findConnection(host);
-            m->setServer(s);
+            m->setServer(*s);
         }
     }
-    if (!s)
+    if (s == serverList.end())
     {
         trace("Station " + name + " not found");
-        s = new Server( uuid, host, name, PortAsNumber );
+        Server *sss = new Server( uuid, host, name, PortAsNumber );
         if ( name == getZConf()->getName() )
         {
-            s->local = true;
+            sss->local = true;
         }
         else
         {
             // we must have a server connection already
             trace("Creating MinosServerConnection zcPublishServer for " + name);
             MinosServerConnection *msc = new MinosServerConnection(true);
-            msc->mConnect(s);
+            msc->mConnect(sss);
             msl->addListenerSlot(msc);
         }
-        serverList.push_back( s );
+        serverList.push_back( sss );
+        s = findStation(name);
     }
-    if ( s->local )
+    if ( (*s)->local )
     {
         PubSubMain->publish( "", rpcConstants::LocalStationCategory, name, host.toString(), psPublished );
     }
     PubSubMain->publish( "", rpcConstants::StationCategory, name, host.toString(), psPublished );
     trace("zcPublishServer finished");
-    return s;
+    return *s;
 }
-void TZConf::publishDisconnect(const QString &name)
+void TZConf::publishDisconnect(Server *srv)
 {
    trace("publishDisconnect");
-   Server *s = findStation( name );
-   if ( s )
+   QVector<Server *>::iterator s = findStation( srv->station );
+   if ( s != serverList.end() )
    {
-      PubSubMain->publish( "", rpcConstants::StationCategory, name, s->host.toString(), psNotConnected );
+      PubSubMain->publish( "", rpcConstants::StationCategory, srv->station, (*s)->host.toString(), psNotConnected );
+      serverList.erase(s);
    }
 }
 //==============================================================================

@@ -110,12 +110,21 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
 
+    if (!FileExists(CLUSTER_SETTINGS_FILE))
+    {
+        // missing cluster settings file, create default
+        setupCluster->createDefaultGeneralSettingsFile();
+    }
+
 
     initUserCommandButtons();
     readUserCommandStrings();
     userCommandAllButtonUpdate();
     // spotTimeToLive
     setupCluster->readGeneralSettings();
+    setupCluster->loadGeneralToSetupTab();
+    setupCluster->readPersonal();
+    setupCluster->loadPersonalToSetupTab();
 
     // read enable hf spots flag
     QString fileName = CLUSTER_SETTINGS_FILE;
@@ -165,23 +174,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     verticalHeader->setVisible(false);
     verticalHeader->setDefaultSectionSize(10);
     verticalHeader->setMinimumSectionSize(10);
-//    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-//    verticalHeader->setDefaultSectionSize(18);
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
 
-    dxSpotView->resizeRowsToContents();
+    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 /*
-
-
-
-
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
-
-
-
-
     restoreDxSpotViewColumns();
 */
     rawClusterDataView = new QPlainTextEdit();
@@ -281,8 +280,6 @@ void ClusterMainWindow::onClearAllSpots()
             purgeSpotFlag = false;
         }
     }
-    dxSpotView->resizeRowsToContents();
-
 }
 
 
@@ -963,7 +960,8 @@ void ClusterMainWindow::getSpotsFromQueue()
     {
         trace(QString("GetSpotsFromQueue: spots available = %1").arg(spotsList.count()));
         // get spots from queue
-        for (int i = spotsList.count() -1 ; i > -1; i--)
+        int slsize= spotsList.count();
+        for (int i = slsize -1 ; i > -1; i--)
         {
 
             if (purgeSpotFlag)
@@ -977,9 +975,9 @@ void ClusterMainWindow::getSpotsFromQueue()
             //dxSpotDataModel->insertRows(0, 1);
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             trace(QString("GetSpotsFromQueue: finished loop"));
+
+
         }
-        trace(QString("GetSpotsFromQueue: resize contents"));
-        dxSpotView->resizeRowsToContents();
 
         trace(QString("GetSpotsFromQueue: finished"));
     }

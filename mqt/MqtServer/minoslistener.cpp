@@ -18,14 +18,14 @@ void xperror( int test_val, QString s, bool endit = true )
 
       if ( endit )
       {
-         throw Exception( ("JServer error: " + s ).toStdString().c_str());
+         throw Exception( QString(("JServer error: " + s )).toStdString().c_str());
       }
    }
 }
 //=============================================================================
 MinosListener::MinosListener():sock(new QTcpServer(this))
 {
-    connect(&CheckTimer, SIGNAL(timeout()), this, SLOT(on_timeout()));
+    connect(&CheckTimer, SIGNAL(timeout()), this, SLOT(on_timeout()), Qt::UniqueConnection);
     CheckTimer.start(100);
 }
 MinosListener::~MinosListener()
@@ -41,7 +41,7 @@ bool MinosListener::initialise( QString type, quint16 port )
     {
         addr = QHostAddress::LocalHost;
     }
-    connect(sock.data(), SIGNAL(newConnection()), this, SLOT(on_newConnection()));
+    connect(sock.data(), SIGNAL(newConnection()), this, SLOT(on_newConnection()), Qt::UniqueConnection);
    bool res = sock->listen(addr, port); // signals newConnection()
    xperror( res == false ,type + " listen"  );
 
@@ -91,9 +91,13 @@ void MinosListener::on_timeout()
 {
     if (isServer())
     {
+        // This is intended to remove the second link each process
+        // gets initially
         for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
         {
             QString hi = (*i)->getClientServer();
+            if ((*i)->remove_socket)
+                continue;
             for ( CommonIterator j = i + 1; j != i_array.end(); j++ )
             {
                 QString hj = (*j)->getClientServer();
@@ -106,6 +110,8 @@ void MinosListener::on_timeout()
                     if (remIP < locIP)
                     {
                         (*j)->remove_socket = true;
+                        (*j)->publish_disconnect = false;
+                        (*j)->sendCloseSocket();
                         trace("removing socket for " + (*j)->getClientServer());
                     }
                 }
@@ -120,7 +126,10 @@ void MinosListener::on_timeout()
         {
             // process says to finish off
             MinosCommonConnection *mcc = (*i);
-            mcc->closeDown();
+            if ((*i)->publish_disconnect)
+            {
+                mcc->closeDown();
+            }
             delete mcc;
             *i = nullptr;
             clearup = true;
@@ -160,47 +169,22 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
 
     if ( to.server.size() == 0 )
         return false;
-    if ( to.server.compare( MinosServer::getMinosServer() ->getServerName(), Qt::CaseInsensitive) == 0 )
+    if ( to.server.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive) == 0 )
         return false;
     if ( to.server.compare( DEFAULT_SERVER_NAME, Qt::CaseInsensitive ) == 0 )
         return false;
 
     // OK, it is not for us... look at connected servers
 
-    bool connectSocket = false;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
     {
         if ( ( *i ) ->checkServer( to ) )
         {
             if ( !( *i ) ->tryForwardStanza( tix ) )
             {
-                connectSocket = false;
                 break;
             }
-            return true;
-        }
-    }
-    // send failed; stash the message and initiate a server connection
-    // (but some stanza types should be ignored?)
-    if ( connectSocket && MinosServer::getMinosServer() ->getServerName() != DEFAULT_SERVER_NAME )
-    {
-        // We need to look at the servers vector, and try to find the relevant one
-        // If we can't find it, we refuse anyway
-
-        Server * srv = findStation( to.server );
-        if ( srv )
-        {
-            // set ourselves up to connect
-            trace("Creating MinosServerConnection sendServer for " + to.server);
-            MinosServerConnection * s = new MinosServerConnection(false);
-            s->mConnect( srv );
-            addListenerSlot( s );
-            // and we need to TRY to resend
-            if (!s ->tryForwardStanza( tix ))
-            {
-                connectSocket = false;
-            }
-            return true;
+            break;
         }
     }
 
@@ -214,8 +198,8 @@ void MinosServerListener::buildTable(QTableWidget *tab)
 {
     tab->clear();
     tab->setRowCount(i_array.count());
-    tab->setColumnCount(4);
-    QStringList h = {"name", "address", "dg?", "uuid"};
+    tab->setColumnCount(3);
+    QStringList h = {"name", "address", "uuid"};
     tab->setHorizontalHeaderLabels(h);
     int row = 0;
     for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
@@ -226,10 +210,8 @@ void MinosServerListener::buildTable(QTableWidget *tab)
         tab->setItem(row, 0, s);
         s = new QTableWidgetItem(msc->server()->host.toString());
         tab->setItem(row, 1, s);
-        s = new QTableWidgetItem(msc->isFromDatagram()?"dg":"norm");
-        tab->setItem(row, 2, s);
         s = new QTableWidgetItem(msc->server()->uuid);
-        tab->setItem(row, 3, s);
+        tab->setItem(row, 2, s);
         row++;
     }
 }
@@ -287,13 +269,13 @@ bool MinosClientListener::sendClient( TiXmlElement *tix )
 
    bool addressOK = false;
 
-   if ( from.empty() || from.server.compare( MinosServer::getMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
+   if ( from.empty() || from.server.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
       fromLocal = true;
 
    if ( from.empty() && from.server.compare( DEFAULT_SERVER_NAME, Qt::CaseInsensitive ) == 0 )
       fromLocalHost = true;
 
-   if ( to.server.compare( MinosServer::getMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
+   if ( to.server.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
       toLocal = true;
 
    if ( to.server.compare( DEFAULT_SERVER_NAME, Qt::CaseInsensitive ) == 0 )

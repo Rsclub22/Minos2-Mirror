@@ -30,8 +30,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>544</width>
-        <height>540</height>
+        <width>599</width>
+        <height>551</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -744,7 +744,8 @@
            <item>
             <widget class="QCheckBox" name="MGMCheckBox">
              <property name="text">
-              <string>RSGB MGM Contest Rules</string>
+              <string>RSGB MGM Contest Rules
+Score between 4 fig loc centres</string>
              </property>
             </widget>
            </item>

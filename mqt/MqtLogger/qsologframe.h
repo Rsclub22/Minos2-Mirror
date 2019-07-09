@@ -78,6 +78,9 @@ public:
 
     bool valid( validTypes command );
 
+    ScreenContact *getPartialContact() const;
+    void setPartialContact(ScreenContact *value);
+
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -209,7 +212,6 @@ private:
 
 signals:
     void QSOFrameCancelled();
-    //void sendRotator(rpcConstants::RotateDirection direction, int angle );
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
     void sendModeControl(QString);
 
@@ -232,18 +234,15 @@ private slots:
 
     void on_TimeDisplayTimer();
     void on_AfterTabFocusIn(QLineEdit *tle);
-    void on_Validated();
     void on_ValidateError (int mess_no );
     void on_ShowOperators();
 
-//    void on_ModeComboBoxGJV_currentIndexChanged(int index);
     void on_ModeComboBoxGJV_activated(int index);
     void on_RSTTXEdit_textChanged(const QString &arg1);
     void on_RSTRXEdit_textChanged(const QString &arg1);
 
     void on_FontChanged();
 
-//    void on_FreqEditFinished();
     void on_SerRXEdit_textChanged(const QString &);
 
     void on_SerTXEdit_textChanged(const QString &);

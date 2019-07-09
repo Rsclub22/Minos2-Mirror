@@ -21,6 +21,8 @@
 #include "base_pch.h"
 #include "clusterClientServer.h"
 #include "clusterclientfilterdialog.h"
+#include "clustercommon.h"
+#include "bandModeFrequencyPlan.h"
 #include "MinosLoggerEvents.h"
 
 namespace Ui {
@@ -39,7 +41,6 @@ const int CHECKSPOTS_DURATION = 1000;
 const int CHECK_NEWFILTERS_DURATION = 1000;
 
 class ClusterClientFrame;
-
 
 
 
@@ -143,6 +144,8 @@ private:
 
     ClusterClientFilterDialog *filterSetup;
 
+    BandModeFrequencyPlan *modeBandPlan;
+
     HtmlDelegate *delegate = nullptr;
 
     QTimer* purgeTimer;
@@ -179,6 +182,7 @@ private:
     QAction* memoryAction;
     QAction* clearSpotAction;
     QAction* clearAllSpotsAction;
+    QAction* memoryActionOveride;
 
     QString contestUuid;
 
@@ -264,6 +268,8 @@ private slots:
     void mouseTimerCheckNewSpots();
 
 
+    void on_splitter_splitterMoved(int, int);
+    void memoryActionOverideSelected();
 };
 
 class MouseInObject : public QObject

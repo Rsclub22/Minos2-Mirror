@@ -241,7 +241,8 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, temp );
    screenLayout.setInitialValue(temp);
 
-   MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpStackFrame, temp );
+   temp.clear(); // Initial value now comes from the screen config
+
    for (int i = 0; i < STACKITEMS; i++)
    {
         currentStackItems[i].setInitialValue(temp);
@@ -472,7 +473,8 @@ void LoggerContestLog::closeFile( )
    adifContestFile.reset();
    ediContestFile.reset();
 }
-QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned short extraFlags, bool saveNew, bool catchup, QString mode, dtg ctTime )
+QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned short extraFlags, bool saveNew, bool catchup,
+                                                          QString mode, QString mgmSubmode, dtg ctTime )
 {
    // add the contact number as an new empty contact, with disk block and log_seq
 
@@ -499,6 +501,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned 
    }
    bct->contactFlags.setValue( bct->contactFlags.getValue() | extraFlags );
    bct->mode.setValue(mode);
+   bct->mgmSubmode.setValue(mgmSubmode);
 
    if (catchup)
    {
@@ -535,6 +538,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
    bct->time = ctTime;
    bct->serials.setValue( "" );
    bct->mode.setValue(prior->mode.getValue());
+   bct->mgmSubmode.setValue(prior->mgmSubmode.getValue());
 
    unsigned long pls =  prior?prior->getLogSequence():0;
    unsigned long nls =  next->getLogSequence();
@@ -620,7 +624,7 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
             double lon = 0.0;
             double lat = 0.0;
 
-            if ( lonlat( loc.loc.getValue(), lon, lat ) == LOC_OK )
+            if ( lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
             {
                 double dist;
                 int brg;
@@ -867,9 +871,6 @@ bool LoggerContestLog::export_contest(QSharedPointer<QFile> expfd, ExportType ex
       case EPRINTFILE:
          ret = exportPrintFile(expfd);
          break;
-
-      default:
-         return false;
    }
    clearDirty();    // BUT don't leave it dirty!!
    return ret;
