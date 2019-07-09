@@ -512,29 +512,51 @@ void ClusterClientFilterDialog::callsignAddClicked()
 
     CallsignInputDialog callsignDialog(this, QString(""), QString("Add Callsign Filter"), QString("Enter Callsign"));
     QString callsign;
+    bool useCallsign = false;
+
     if (callsignDialog.exec() == QDialog::Accepted)
     {
         callsign = callsignDialog.getText();
 
         if (!callsign.isEmpty())
         {
+           if (!callsignDialog.isValid())
+           {
+                int ret = QMessageBox::information(this, tr("Add Callsign Filter"),
+                                         tr("Callsign may be invalid, do you still want to use the callsign?"),
+                                          QMessageBox::Yes|QMessageBox::No);
 
-            if (searchItem(callsign, callsignListWidget))
+                if (ret == QMessageBox::Yes)
+                {
+                    useCallsign = true;
+                }
+
+
+
+           }
+
+
+
+            if (callsignDialog.isValid() || useCallsign)
             {
-                QMessageBox::information(this, tr("Add Callsign Filter"),
-                                         tr("Callsign already exists in list!"),
-                                          QMessageBox::Ok|QMessageBox::Default,
-                                          QMessageBox::NoButton, QMessageBox::NoButton);
-            }
-            else
-            {
-                QListWidgetItem *newItem = new QListWidgetItem;
-                newItem->setText(callsign);
-                int row = callsignListWidget->count();
-                callsignListWidget->insertItem(row, newItem);
+                if (searchItem(callsign, callsignListWidget))
+                {
+                    QMessageBox::information(this, tr("Add Callsign Filter"),
+                                             tr("Callsign already exists in list!"),
+                                              QMessageBox::Ok|QMessageBox::Default,
+                                              QMessageBox::NoButton, QMessageBox::NoButton);
+                }
+                else
+                {
+                    QListWidgetItem *newItem = new QListWidgetItem;
+                    newItem->setText(callsign);
+                    int row = callsignListWidget->count();
+                    callsignListWidget->insertItem(row, newItem);
+
+                }
+
 
             }
-
         }
     }
 }
@@ -668,14 +690,40 @@ void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
 void ClusterClientFilterDialog::locatorAddClicked()
 {
     LocatorInputDialog locatorDialog(this, QString(""), QString("Add Locator Filter"), QString("Enter Locator"));
+    locatorDialog.allowLoc4(true);
+
     QString locator;
+
+    bool useLocator = false;
+
     if (locatorDialog.exec() == QDialog::Accepted)
     {
         locator = locatorDialog.getText();
 
         if (!locator.isEmpty())
         {
-            if (locatorDialog.isValid())
+
+
+            if (!locatorDialog.isValid())
+            {
+                 int ret = QMessageBox::information(this, tr("Add Locator Filter"),
+                                          tr("Locator may be invalid, do you still want to use the callsign?"),
+                                           QMessageBox::Yes|QMessageBox::No);
+
+                 if (ret == QMessageBox::Yes)
+                 {
+                     useLocator = true;
+                 }
+
+
+
+            }
+
+
+
+
+
+            if (locatorDialog.isValid() || useLocator)
             {
                 if (searchItem(locator, locatorListWidget))
                 {
@@ -693,14 +741,7 @@ void ClusterClientFilterDialog::locatorAddClicked()
 
                 }
             }
-            else
-            {
-                QMessageBox::information(this, tr("Add Locator Filter"),
-                                         tr("Invalid Locator!"),
-                                          QMessageBox::Ok|QMessageBox::Default,
-                                          QMessageBox::NoButton, QMessageBox::NoButton);
-                locatorDialog.setText("");
-            }
+
 
         }
     }
