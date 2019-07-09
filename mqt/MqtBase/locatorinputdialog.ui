@@ -1,48 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RotPresetDialog</class>
- <widget class="QDialog" name="RotPresetDialog">
+ <class>LocatorInputDialog</class>
+ <widget class="QDialog" name="LocatorInputDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>223</width>
-    <height>106</height>
+    <width>227</width>
+    <height>99</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Name</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="nameEdit"/>
-       </item>
-      </layout>
+      <widget class="QLabel" name="locatorInputLabel">
+       <property name="text">
+        <string>Locator</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Bearing</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="BearingLineEdit" name="bearingEdit"/>
-       </item>
-      </layout>
+      <widget class="LocatorLineEdit" name="locatorInput"/>
      </item>
     </layout>
    </item>
@@ -60,9 +42,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BearingLineEdit</class>
+   <class>LocatorLineEdit</class>
    <extends>QLineEdit</extends>
-   <header location="global">bearinglineedit.h</header>
+   <header>locatorlineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -70,7 +52,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>RotPresetDialog</receiver>
+   <receiver>LocatorInputDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -86,7 +68,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>RotPresetDialog</receiver>
+   <receiver>LocatorInputDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

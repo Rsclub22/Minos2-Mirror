@@ -3,7 +3,8 @@
 #include "cutils.h"
 #include "list.h"
 #include "clusterclientfilterdialog.h"
-#include "calllocinputdialog.h"
+#include "callsigninputdialog.h"
+#include "locatorinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
 ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
@@ -509,31 +510,53 @@ void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
 void ClusterClientFilterDialog::callsignAddClicked()
 {
 
-    CallLocInputDialog callsignDialog(this, QString(""), QString("Add Callsign Filter"), QString("Enter Callsign"));
+    CallsignInputDialog callsignDialog(this, QString(""), QString("Add Callsign Filter"), QString("Enter Callsign"));
     QString callsign;
+    bool useCallsign = false;
+
     if (callsignDialog.exec() == QDialog::Accepted)
     {
         callsign = callsignDialog.getText();
 
         if (!callsign.isEmpty())
         {
+           if (!callsignDialog.isValid())
+           {
+                int ret = QMessageBox::information(this, tr("Add Callsign Filter"),
+                                         tr("Callsign may be invalid, do you still want to use the callsign?"),
+                                          QMessageBox::Yes|QMessageBox::No);
 
-            if (searchItem(callsign, callsignListWidget))
+                if (ret == QMessageBox::Yes)
+                {
+                    useCallsign = true;
+                }
+
+
+
+           }
+
+
+
+            if (callsignDialog.isValid() || useCallsign)
             {
-                QMessageBox::information(this, tr("Add Callsign Filter"),
-                                         tr("Callsign already exists in list!"),
-                                          QMessageBox::Ok|QMessageBox::Default,
-                                          QMessageBox::NoButton, QMessageBox::NoButton);
-            }
-            else
-            {
-                QListWidgetItem *newItem = new QListWidgetItem;
-                newItem->setText(callsign);
-                int row = callsignListWidget->count();
-                callsignListWidget->insertItem(row, newItem);
+                if (searchItem(callsign, callsignListWidget))
+                {
+                    QMessageBox::information(this, tr("Add Callsign Filter"),
+                                             tr("Callsign already exists in list!"),
+                                              QMessageBox::Ok|QMessageBox::Default,
+                                              QMessageBox::NoButton, QMessageBox::NoButton);
+                }
+                else
+                {
+                    QListWidgetItem *newItem = new QListWidgetItem;
+                    newItem->setText(callsign);
+                    int row = callsignListWidget->count();
+                    callsignListWidget->insertItem(row, newItem);
+
+                }
+
 
             }
-
         }
     }
 }
@@ -619,7 +642,7 @@ void ClusterClientFilterDialog::callsignEditClicked()
     {
         int row = callsignListWidget->row(selItems[0]);
         QString currentCall = callsignListWidget->currentItem()->text();
-        CallLocInputDialog callsignDialog(this, currentCall, QString("Edit Callsign Filter"), QString("Edit Callsign"));
+        CallsignInputDialog callsignDialog(this, currentCall, QString("Edit Callsign Filter"), QString("Edit Callsign"));
         QString callsign;
         if (callsignDialog.exec() == QDialog::Accepted)
         {
@@ -666,8 +689,13 @@ void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
 
 void ClusterClientFilterDialog::locatorAddClicked()
 {
-    CallLocInputDialog locatorDialog(this, QString(""), QString("Add Locator Filter"), QString("Enter Locator"));
+    LocatorInputDialog locatorDialog(this, QString(""), QString("Add Locator Filter"), QString("Enter Locator"));
+    locatorDialog.allowLoc4(true);
+
     QString locator;
+
+    bool useLocator = false;
+
     if (locatorDialog.exec() == QDialog::Accepted)
     {
         locator = locatorDialog.getText();
@@ -675,21 +703,45 @@ void ClusterClientFilterDialog::locatorAddClicked()
         if (!locator.isEmpty())
         {
 
-            if (searchItem(locator, locatorListWidget))
+
+            if (!locatorDialog.isValid())
             {
-                QMessageBox::information(this, tr("Add Locator Filter"),
-                                         tr("Locator already exists in list!"),
-                                          QMessageBox::Ok|QMessageBox::Default,
-                                          QMessageBox::NoButton, QMessageBox::NoButton);
-            }
-            else
-            {
-                QListWidgetItem *newItem = new QListWidgetItem;
-                newItem->setText(locator);
-                int row = locatorListWidget->count();
-                locatorListWidget->insertItem(row, newItem);
+                 int ret = QMessageBox::information(this, tr("Add Locator Filter"),
+                                          tr("Locator may be invalid, do you still want to use the callsign?"),
+                                           QMessageBox::Yes|QMessageBox::No);
+
+                 if (ret == QMessageBox::Yes)
+                 {
+                     useLocator = true;
+                 }
+
+
 
             }
+
+
+
+
+
+            if (locatorDialog.isValid() || useLocator)
+            {
+                if (searchItem(locator, locatorListWidget))
+                {
+                    QMessageBox::information(this, tr("Add Locator Filter"),
+                                             tr("Locator already exists in list!"),
+                                              QMessageBox::Ok|QMessageBox::Default,
+                                              QMessageBox::NoButton, QMessageBox::NoButton);
+                }
+                else
+                {
+                    QListWidgetItem *newItem = new QListWidgetItem;
+                    newItem->setText(locator);
+                    int row = locatorListWidget->count();
+                    locatorListWidget->insertItem(row, newItem);
+
+                }
+            }
+
 
         }
     }
@@ -703,7 +755,7 @@ void ClusterClientFilterDialog::locatorEditClicked()
     {
         int row = locatorListWidget->row(selItems[0]);
         QString currentLocator = locatorListWidget->currentItem()->text();
-        CallLocInputDialog callsignDialog(this, currentLocator, QString("Edit Locator Filter"), QString("Edit Locator"));
+        LocatorInputDialog callsignDialog(this, currentLocator, QString("Edit Locator Filter"), QString("Edit Locator"));
         QString locator;
         if (callsignDialog.exec() == QDialog::Accepted)
         {

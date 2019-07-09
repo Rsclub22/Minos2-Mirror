@@ -12,7 +12,8 @@
 #include "locatorlineedit.h"
 
 LocatorLineEdit::LocatorLineEdit(QWidget * parent) : QLineEdit (parent),
-    locatorValid(false)
+    locatorValid(false),
+    allowLoc4(false)
 {
     setValidator(new UpperCaseValidator());
     connect(this, SIGNAL(textChanged(const QString& )), this, SLOT(onTextChanged(const QString&)));
@@ -31,7 +32,7 @@ void LocatorLineEdit::onTextChanged(const QString& locator)
         double latitude;
         double longitude;
 
-        if (lonlat(locator, longitude, latitude, false) == LOC_OK)
+        if (lonlat(locator, longitude, latitude, allowLoc4) == LOC_OK)   // allow 4 char locator
         {
             locatorValid = true;
         }
@@ -96,4 +97,9 @@ QString LocatorLineEdit::getLocator()
 void LocatorLineEdit::setLocator(const QString loc)
 {
     setText(loc);
+}
+
+void LocatorLineEdit::setAllowLoc4(bool loc4)
+{
+    allowLoc4 = loc4;
 }

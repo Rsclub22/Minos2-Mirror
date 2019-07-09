@@ -5,14 +5,19 @@
 # For example C:\Qt_Projects\hamlib-w32-4.0\bin
 
 
-CONFIG += hamlib_V3_3
+HAMLIBVER = $$(hamlib)
+message(The hamlib version is $$HAMLIBVER)
 
-CONFIG(hamlib_V4_0){
+equals(HAMLIBVER, 40){
 
-    win32: {
+    message(Using hamlib V4.0)
+
+
+       win32: {
        win32-g++* {
           contains(QT_ARCH, i386) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.0)
+          message(Hamlib path is $$HAMLIBDIR)
           }
        contains(QT_ARCH, x86_64) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.0)
@@ -28,15 +33,18 @@ CONFIG(hamlib_V4_0){
           msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-2
           msvc: DEFINES += DLL_EXPORT
     }
-       INCLUDEPATH += $$HAMLIBDIR/include
+
+        INCLUDEPATH += $$HAMLIBDIR/include
 
     }
 }else {
 
+    message(Using default version - hamlib V3.3)
     win32: {
        win32-g++* {
           contains(QT_ARCH, i386) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w32-3.3)
+          message(Hamlib path is $$HAMLIBDIR)
           }
        contains(QT_ARCH, x86_64) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w64-3.3)

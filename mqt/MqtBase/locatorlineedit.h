@@ -24,6 +24,7 @@ public:
     QString getLocator();
     bool isValid();
     void setLocator(const QString loc);
+    void setAllowLoc4(bool loc4);
 
 signals:
 
@@ -44,6 +45,7 @@ private:
 
     QString locator;
     bool locatorValid;
+    bool allowLoc4;
     QString LocatorLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
     QString LocatorLineEditFrBlackBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}";
     void showLocatorGoodBad(bool state);

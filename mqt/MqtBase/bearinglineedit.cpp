@@ -19,7 +19,6 @@ BearingLineEdit::BearingLineEdit(QWidget * parent): QLineEdit (parent),
 
     setValidator(new UpperCaseValidator());
     connect(this, SIGNAL(textChanged(const QString& )), this, SLOT(onTextChanged(const QString&)));
-    connect(this, SIGNAL(editingFinished()), this, SLOT(onEditingFinished()));
 
 
 }
@@ -27,42 +26,42 @@ BearingLineEdit::BearingLineEdit(QWidget * parent): QLineEdit (parent),
 
 void BearingLineEdit::onTextChanged(const QString& brg)
 {
-    bool ok = false;
-    int bearing = brg.toInt(&ok);
-    if (!brg.isEmpty() && ok)
+
+    bearingValid = false;
+
+    if (!brg.isEmpty())
     {
-        if (bearing < COMPASS_MIN0 && bearing >= COMPASS_MAX360)
+
+        QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
+        if (re.exactMatch(brg.trimmed()))
+        {
+            // all digits
+            int bearing = brg.trimmed().toInt();
+            if (bearing >= COMPASS_MIN0 && bearing <= COMPASS_MAX360)
+            {
+                bearingValid = true;
+                showBearingGoodBad(bearingValid);
+
+            }
+
+        }
+
+        if (!bearingValid)
         {
             bearingValid = false;
             showBearingGoodBad(bearingValid);
+        }
 
-        }
-        else
-        {
-            bearingValid = true;
-            showBearingGoodBad(bearingValid);
-        }
+
     }
     else
     {
-        bearingValid = true;
-        showBearingGoodBad(bearingValid);
+
+        showBearingGoodBad(true);
     }
 }
 
 
-void BearingLineEdit::onEditingFinished()
-{
-    bearing = text().trimmed();
-    if (!bearing.isEmpty())
-    {
-
-       emit bearingFinished(bearing);
-
-    }
-
-
-}
 
 
 void BearingLineEdit::showBearingGoodBad(bool state)
@@ -84,9 +83,11 @@ bool BearingLineEdit::isValid()
     return bearingValid;
 }
 
-QString BearingLineEdit::getBearing()
+int BearingLineEdit::getBearing()
 {
-    bearing = text().trimmed();
+
+    int bearing = text().trimmed().remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END).toInt();
+
     return bearing;
 }
 
