@@ -24,7 +24,6 @@ class MinosTestImport: public RPCDispatcher
    private:
       BaseContestLog *ct;
       int curfpos;
-      int iqOffset;
 
       QSharedPointer<RPCParam> body;
 

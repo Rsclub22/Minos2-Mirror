@@ -277,7 +277,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                               .arg (mode)
                               .arg (sub_mode)
                               .arg (fast_mode && !mode.contains (QRegularExpression {R"(ISCAT|MSK144)"}) ? "fast" : "")
-                              .arg (tx_mode.isEmpty () || tx_mode == mode ? "" : '(' + tx_mode + ')'));
+                              .arg (tx_mode.isEmpty () || tx_mode == mode ? QString() : '(' + tx_mode + ')'));
 
 
     ui->frequency_label_->setText (HtmlFontColour(fcolour) + "QRG: " + Radio::pretty_frequency_MHz_string (f));
