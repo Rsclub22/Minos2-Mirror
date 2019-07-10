@@ -475,6 +475,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     && type != sctSplit
                     && type != sctCluster
                     && type != sctWsjtx
+                    && type != sctBandmap
                     )
             {
                 elementScrollArea = new QScrollArea();
@@ -566,6 +567,14 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     break;
                 }
                 case sctCluster:
+                {
+                    hs->addWidget(clusterControlFrame);
+                    clusterControlFrame->setVisible(true);
+                    clusterControlFrame->setContest(ct);
+                    break;
+
+                }
+                case sctBandmap:
                 {
                     hs->addWidget(clusterControlFrame);
                     clusterControlFrame->setVisible(true);
