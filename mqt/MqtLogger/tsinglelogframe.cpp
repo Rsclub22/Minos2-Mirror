@@ -410,6 +410,7 @@ void TSingleLogFrame::clearScreenLayout()
     otherMatchFrame->setContest(nullptr);
     archiveMatchFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
+    bandmapControlFrame->setContest(nullptr);
     wsjtxFrame->setContest(nullptr);
 
     while (singleLogFrameSplitter->count())
@@ -576,9 +577,9 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 }
                 case sctBandmap:
                 {
-                    hs->addWidget(clusterControlFrame);
-                    clusterControlFrame->setVisible(true);
-                    clusterControlFrame->setContest(ct);
+                    hs->addWidget(bandmapControlFrame);
+                    bandmapControlFrame->setVisible(true);
+                    bandmapControlFrame->setContest(ct);
                     break;
 
                 }
