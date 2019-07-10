@@ -20,7 +20,7 @@ static QVector <SCTypeOption> scoptions =
     {sctOtherMatch, "Other Contest Match", "Other Contest Matches" },
     {sctArchiveMatch, "Archive Match", "Archive List Matches" },
     {sctWsjtx, "WSJT-X Connector", "WSJT-X Connector" },
-    {sctBandmap, "Bandmap Display", "bandmap Dispaly"},
+    {sctBandmap, "Bandmap Display", "Bandmap Display"},
     {sctSplit, "HSplit", "Horizontally split element"},
     {sctNone, "None", "Not in use"}
 };
