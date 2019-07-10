@@ -57,7 +57,7 @@ void MatchArchiveFrame::afterMatchTreeClicked()
             ListContact *lct = mc->getListContact();
 
             QString bearing = lct->getField(egBrg, contest);
-            MinosLoggerEvents::SendBrgStrToRot(bearing);
+            MinosLoggerEvents::SendMatchBrgStrToRot(bearing);
         }
     }
 }

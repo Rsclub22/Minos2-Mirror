@@ -126,6 +126,7 @@ private:
 
 
     //bool validateBearingEntry(const QString brg);
+
 signals:
     void selectRotator(QString);
     void sendRotator(rpcConstants::RotateDirection direction, int angle );
@@ -149,6 +150,7 @@ private slots:
 
     void setBrgFromSpot(QString brg);
     void setBrgFromFrmMemory(QString Brg);
+    void setBrgFromMatchFrame(QString brg);
     //void on_BearingStTextChange(const QString);
 };
 

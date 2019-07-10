@@ -55,6 +55,7 @@ signals:
 
    void BrgStrToRot(QString);
    void FreqStrToRig(QString);
+   void MatchBrgStrToRot(QString);
    void SpotBrgStrToRot(QString);
    void MemBrgStrToRot(QString);
    void DxSpotToLog(memoryData::memData);         // cluster spot
@@ -122,6 +123,7 @@ public:
    static void SendFontChanged();
    static void SendBrgStrToRot(QString);
    static void SendFreqStrToRig(QString);
+   static void SendMatchBrgStrToRot(QString);
    static void SendSpotBrgStrToRot(QString);
    static void SendMemBrgStrToRot(QString);
    static void SendSpotToLog(memoryData::memData);     // cluster spot

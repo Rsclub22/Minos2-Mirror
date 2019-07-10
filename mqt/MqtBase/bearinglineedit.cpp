@@ -13,6 +13,8 @@
 
 #include "bearinglineedit.h"
 
+// we could remove the remove char code as it is now removed before display...
+
 BearingLineEdit::BearingLineEdit(QWidget * parent): QLineEdit (parent),
     bearingValid(false)
 {
@@ -28,15 +30,17 @@ void BearingLineEdit::onTextChanged(const QString& brg)
 {
 
     bearingValid = false;
+    QString bearingStr = brg;
+    bearingStr = bearingStr.remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END);
 
-    if (!brg.isEmpty())
+    if (!bearingStr.isEmpty())
     {
 
         QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
-        if (re.exactMatch(brg.trimmed()))
+        if (re.exactMatch(bearingStr.trimmed()))
         {
             // all digits
-            int bearing = brg.trimmed().toInt();
+            int bearing = bearingStr.trimmed().toInt();
             if (bearing >= COMPASS_MIN0 && bearing <= COMPASS_MAX360)
             {
                 bearingValid = true;

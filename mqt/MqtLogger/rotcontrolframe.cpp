@@ -62,6 +62,9 @@ RotControlFrame::RotControlFrame(QWidget *parent):
 
     connect(&MinosLoggerEvents::mle, SIGNAL(BrgStrToRot(QString)), this, SLOT(getBrgFrmQSOLog(QString)));
 
+    // from match frame
+    connect(&MinosLoggerEvents::mle, SIGNAL(MatchBrgStrToRot(QString)), this, SLOT(setBrgFromMatchFrame(QString)));
+
     // from cluster frame
     connect(&MinosLoggerEvents::mle, SIGNAL(SpotBrgStrToRot(QString)), this, SLOT(setBrgFromSpot(QString)));
 
@@ -121,7 +124,12 @@ int RotControlFrame::getCurrentBearing()
 
 QString RotControlFrame::convertBearingForDisplay(QString bearing)
 {
-    QString brgbuff;
+    // bearing could be decorated with characters which are removed for display in
+    // the bearing edit box.
+    QString brgbuff = bearing;
+    brgbuff.remove(DEGREE_SYMBOL).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END).remove(SHORTLOCATOR_IDENTIFIER);
+
+/*
     const QChar degreeChar(DEGREE_SYMBOL);
     const QChar trueChar(BEARING_TRUE_CHAR);
     const QChar shortLocDelimiterStart(SHORTLOC_DELIMITER_START);
@@ -138,7 +146,7 @@ QString RotControlFrame::convertBearingForDisplay(QString bearing)
     {
         brgbuff = bearing;
     }
-
+*/
     traceMsg(QString("Convert Bearing for Display = %1").arg(brgbuff));
     return brgbuff;
 }
@@ -151,18 +159,27 @@ void RotControlFrame::getBrgFrmQSOLog(QString brg)
     if (!brg.isEmpty())
     {
         traceMsg("Bearing from QSO Log" + brg);
-        setTurnDisplayText(brg);
+        setTurnDisplayText(convertBearingForDisplay(brg));
     }
 
 }
 
+// Note! This comes from the single click on Match Frame Entry. Double-click is via
+// QSOLog Frame
+void RotControlFrame::setBrgFromMatchFrame(QString brg)
+{
+    traceMsg(QString("Set bearing from single click match frame - %1").arg(brg));
+     setTurnDisplayText(convertBearingForDisplay(brg));
+}
 
+/*
 QString RotControlFrame::getBrgTxtFrmFrame()
 {
     QString brg = ui->BrgSt->text();
     traceMsg(QString("Bearing from Bearing Edit Box = %1").arg(brg));
     return brg;
 }
+*/
 
 // Note! The bearing string from memory could have '#' appended to denote
 // bearing was calculated from a short locator.
