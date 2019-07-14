@@ -65,7 +65,7 @@ private:
     QVector<QString> spotQueue;
 
     //QGraphicsScene *bandmapScene;
-    BandmapFreqDial *dial;
+    //BandmapFreqDial *dial;
     Bandmap *bandmap;
 
     QString sfreq;

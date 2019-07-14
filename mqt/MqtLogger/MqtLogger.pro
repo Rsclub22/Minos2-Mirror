@@ -100,7 +100,9 @@ SOURCES += \
     bandmap.cpp \
     bandmapcallsignmarker.cpp \
     bandmapfreqdial.cpp	\
-	clustermodebandplan.cpp
+	clustermodebandplan.cpp \
+    bandmapview.cpp \
+    textmarker.cpp
 
 
 HEADERS  += \
@@ -174,6 +176,8 @@ HEADERS  += \
     bandmapcallsignmarker.h \
     bandmapfreqdial.h	\
     clustermodebandplan.h \
+    bandmapview.h \
+    textmarker.h
 
 FORMS    += \
     contestdetails.ui \

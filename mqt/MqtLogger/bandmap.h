@@ -2,42 +2,54 @@
 #define BANDMAP_H
 
 #include <QWidget>
-//#include <QPainter>
-//#include <QGraphicsItem>
-//#include <QList>
-#include <QMultiMap>
-#include "bandmapcallsignmarker.h"
+#include <QAbstractItemModel>
+#include <QLocale>
+#include <QPainter>
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QHBoxLayout>
 
+class QAbstractItemModel;
+class QModelIndex;
+class QScrollArea;
+class BandmapView;
 
-namespace mapData {
-
-
-
-const int MAX_CALLSIGNS = 3;
-
-
-}
-
-
-
-class Bandmap
+class Bandmap : public QWidget
 {
-//    Q_OBJECT
+    Q_OBJECT
 public:
-    explicit Bandmap();
-    void addCallsignMarker(double frequency, QString callsign, QString time, int spotType, int callBearing);
-    void addCallsignToDial(QPainter *painter);
+    explicit Bandmap(QScrollArea *bandMapSroll, QWidget *parent = nullptr);
 
+    QAbstractItemModel *getBandmapModel() const { return bandmapModel; }
+    void setModel(QAbstractItemModel *model);
+    QScrollArea *getBandmapScrollArea() const { return bandmapScrollArea; }
+
+    int getSelectedRow() const { return selectedRow; }
+    void setSelectedRow(int row);
+    int getSelectedColumn() const { return selectedColumn; }
+    void setSelectedColumn(int column);
+
+
+
+    void setFreq(double freq);
 signals:
+    void clicked(const QModelIndex&);
 
+public slots:
+
+    void setCurrentIndex(const QModelIndex &index);
 
 
 private:
+    QAbstractItemModel *bandmapModel;
+    QScrollArea *bandmapScrollArea;
 
-    QMap<double, QVector<BandmapCallsignMarker>> markers;
+    QHBoxLayout *bandmapLayout;
+    BandmapView *bandmapView;
 
-//    QMultiMap<double, QString> mapMarkers;
 
+    int selectedRow;
+    int selectedColumn;
 
 };
 

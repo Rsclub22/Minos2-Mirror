@@ -35,6 +35,7 @@ class BandmapFreqDial : public QGraphicsItem
 public:
     BandmapFreqDial();
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
     QRectF boundingRect() const;
 
     void setCurFreq(double frequency);
@@ -42,6 +43,8 @@ public:
     void setCurHeight(int height);
     int getCurHeight();
 
+    void drawScale(QPainter *painter, double frequency, int scaleHeight);
+    void drawCursor(QPainter *painter, double frequency);
 
     void changeBoundingRect(int height);
 protected:
@@ -56,8 +59,7 @@ private:
     double scaleEndFreq = 0;
 
 //    QPainter  *painter;
-    void drawScale(QPainter *painter, double frequency, int scaleHeight);
-    void drawCursor(QPainter *painter, double frequency);
+
 
 };
 

@@ -34,7 +34,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
 
-
+    bandmap = new Bandmap(ui->bandmapScrollArea);
 /*
     bandmapScene = new QGraphicsScene(this);
     ui->bandmapView->setScene(bandmapScene);
@@ -352,14 +352,21 @@ void BandmapClientFrame::setFreq(QString freq)
     if (lastfreq != freq)
     {
         lastfreq = freq;
-    }
-    {
         if (freq.count() >= 4)
         {
             ui->freqDisplay->setInputMask(maskData::freqMask[freq.count() - 4]);
             ui->freqDisplay->setText(freq);
         }
+
+        curFreq = freq.toDouble();
+        bandmap->setFreq(curFreq);
+
+
+
     }
+
+
+
 
 
 
