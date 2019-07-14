@@ -15,9 +15,17 @@
 #define BANDMAPCLIENTFRAME_H
 
 #include <QObject>
-#include <QGraphicsScene>
+//#include <QGraphicsScene>
 #include <QFrame>
-
+#include "dxspotdatamodel.h"
+#include "base_pch.h"
+#include "clusterClientServer.h"
+#include "clusterclientfilterdialog.h"
+#include "clustercommon.h"
+#include "contest.h"
+#include "ContestApp.h"
+#include "bandModeFrequencyPlan.h"
+#include "MinosLoggerEvents.h"
 #include "bandmapcallsignmarker.h"
 #include "bandmap.h"
 #include "bandmapfreqdial.h"
@@ -37,12 +45,26 @@ public:
     ~BandmapClientFrame() override;
 
 
-
+    void setFreq(QString);
     void setContest(BaseContestLog *c);
 private:
 
     Ui::BandmapClientFrame *ui;
-    QGraphicsScene *bandmapScene;
+    bool isProtected;
+    BaseContestLog *ct = nullptr;
+    QString contestUuid;
+    QString contestBandStr;
+    int contestBand;
+    QString contestModeStr;
+    int contestMode;
+
+    QString lastfreq;
+
+
+    // cluster spots
+    QVector<QString> spotQueue;
+
+    //QGraphicsScene *bandmapScene;
     BandmapFreqDial *dial;
     Bandmap *bandmap;
 
@@ -51,13 +73,20 @@ private:
     int mapViewHeight = 0;
 
 
+    int getBandOffSet(QString contestBandStr);
+    int getModeOffSet(QString contestModeStr);
+    void handleDxSpots(QVector<QString> &spotQueue);
+    void handleClusterStatusMessage(QString &msg);
+    void statusIndicatorToggle(bool on);
 protected:
-    void resizeEvent(QResizeEvent *event) override;
-    void paintEvent(QPaintEvent *) override;
+    //void resizeEvent(QResizeEvent *event) override;
+    //void paintEvent(QPaintEvent *) override;
 
 
 private slots:
-     void drawDial(double frequency);
+     //void drawDial(double frequency);
+     void clusterClientServerList(QVector<ClusterServer>);
+     void dxSpots(QVector<QString>);
 
 
 };

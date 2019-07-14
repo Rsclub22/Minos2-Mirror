@@ -88,9 +88,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     modeBandPlan->loadFile("./Configuration/mode_bandplan.json");
 
-    QString band = "70 MHz";
-    QString mode = "MGM";
-    bool test = modeBandPlan->modeExists(band, mode);
+    //QString band = "70 MHz";
+    //QString mode = "MGM";
+    //bool test = modeBandPlan->modeExists(band, mode);
 
 
     spotsMenu = new QMenu(ui->actionsButton);

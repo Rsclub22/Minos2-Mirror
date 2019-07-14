@@ -460,7 +460,7 @@ void RigControlFrame::noRadioSetFreq(QString f)
 
 void RigControlFrame::setFreq(QString freq)
 {
-    traceMsg(QString("Set Freq: = %1").arg(freq));
+    traceMsg(QString("Rigcontrol frame Set Freq: = %1").arg(freq));
 
             if (freq == "0" && freq == "-1")
     {

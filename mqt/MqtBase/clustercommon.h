@@ -131,6 +131,11 @@ const QString DEL_CALLSIGN_KEY = "Ctrl-d";
 
 const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
 
+const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: yellow ;\n");
+const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ;\n");
+const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yellow;\n");
+const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
+
 
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
 

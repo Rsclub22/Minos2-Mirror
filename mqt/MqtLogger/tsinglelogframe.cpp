@@ -146,10 +146,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer, SIGNAL(sendKeyerTwoTone()), this, SLOT(sendKeyerTwoTone()));
     connect(LogContainer, SIGNAL(sendKeyerStop()), this, SLOT(sendKeyerStop()));
 
-/*
-    connect(FKHBandMapFrame, SIGNAL(sendBandMap( QString, QString, QString, QString, QString )),
-            this, SLOT(sendBandMap(QString,QString,QString,QString,QString)));
-*/
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 }
@@ -1399,9 +1395,15 @@ void TSingleLogFrame::on_SetFreq(QString f)
     trace(QString("Freq from radio = %1").arg(f));
     if ( this == LogContainer->getCurrentLogFrame() )
     {
+
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
         GJVQSOLogFrame->setFreq(f);
+        //if (isBandMapLoaded())
+        //{
+           bandmapControlFrame->setFreq(f);
+       // }
+
         MinosLoggerEvents::sendRigFreqChanged(f, contest);
     }
 
