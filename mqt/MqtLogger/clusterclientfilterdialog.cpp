@@ -1,3 +1,17 @@
+////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Cluster Client Filter
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+//
+///
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
 #include <QStringListModel>
 #include <QMessageBox>
 #include "cutils.h"

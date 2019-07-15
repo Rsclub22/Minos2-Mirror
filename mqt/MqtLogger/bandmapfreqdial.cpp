@@ -1,3 +1,19 @@
+////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Bandmap Dial
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+//
+///
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 #include "bandmapfreqdial.h"
 
 BandmapFreqDial::BandmapFreqDial()

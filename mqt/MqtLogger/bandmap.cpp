@@ -1,3 +1,17 @@
+////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Bandmap
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+//
+///
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
 #include "bandmap.h"
 #include "bandmapview.h"
 #include "ui_clusterclientframe.h"
@@ -46,6 +60,12 @@ void Bandmap::setCurrentIndex(const QModelIndex &index)
     //int x = xOffsetForMiddleOfColumn(index.column());
     //int y = yOffsetForRow(index.row());
     //bandmapScrollArea->ensureVisible(x, y, 10, 20);
+}
+
+
+int Bandmap::getScrollViewHeight()
+{
+    bandmapScrollArea->verticalScrollBar()->sizeHint().height();
 }
 
 

@@ -32,6 +32,7 @@ public:
 
 
     void setFreq(double freq);
+    int getScrollViewHeight();
 signals:
     void clicked(const QModelIndex&);
 
