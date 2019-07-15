@@ -22,17 +22,20 @@ public:
 
     QAbstractItemModel *getBandmapModel() const { return bandmapModel; }
     void setModel(QAbstractItemModel *model);
-    QScrollArea *getBandmapScrollArea() const { return bandmapScrollArea; }
+
 
     int getSelectedRow() const { return selectedRow; }
     void setSelectedRow(int row);
     int getSelectedColumn() const { return selectedColumn; }
     void setSelectedColumn(int column);
 
-    void initBandmap(QScrollArea *bMapScrollArea);
+    void initBandmap();
 
     void setFreq(double freq);
-    int getScrollViewHeight();
+
+    int getBandmapFrameHeight();
+    int getBandmapFrameWidth();
+
 signals:
     void clicked(const QModelIndex&);
 
@@ -43,9 +46,10 @@ public slots:
 
 private:
     QAbstractItemModel *bandmapModel;
-    QScrollArea *bandmapScrollArea;
+    QWidget *bandmapFrame;
 
-    QHBoxLayout *bandmapLayout;
+
+
     BandmapView *bandmapView;
 
 

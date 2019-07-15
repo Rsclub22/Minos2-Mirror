@@ -20,7 +20,8 @@ const int Invalid = -1;
 
 
 Bandmap::Bandmap(QWidget *parent)
-    : QWidget(parent), bandmapModel(nullptr), selectedRow(Invalid),
+    : QWidget(parent),
+      bandmapModel(nullptr), bandmapFrame(parent), selectedRow(Invalid),
       selectedColumn(Invalid)
 {
 
@@ -28,14 +29,14 @@ Bandmap::Bandmap(QWidget *parent)
 
 
 
-void Bandmap::initBandmap(QScrollArea *bMapScrollArea)
+void Bandmap::initBandmap()
 {
     QFontMetrics fm(font());
     bandmapView = new BandmapView(this);
-    bandmapScrollArea = bMapScrollArea;
-    bandmapScrollArea->setBackgroundRole(QPalette::Light);
+    //bandmapScrollArea = bMapScrollArea;
+    //bandmapScrollArea->setBackgroundRole(QPalette::Light);
    // bandmapScrollArea->setWidget(bandmapView);
-    bandmapScrollArea->installEventFilter(bandmapView);
+    //bandmapScrollArea->installEventFilter(bandmapView);
 
     //bandmapLayout = new QHBoxLayout;
     //bandmapLayout->addWidget(bandmapScrollArea);
@@ -52,6 +53,15 @@ void Bandmap::setSelectedRow(int row)
     bandmapView->update();
 }
 
+int Bandmap::getBandmapFrameHeight()
+{
+    return bandmapFrame->height();
+}
+
+int Bandmap::getBandmapFrameWidth()
+{
+    return bandmapFrame->width();
+}
 
 void Bandmap::setSelectedColumn(int column)
 {
@@ -69,10 +79,7 @@ void Bandmap::setCurrentIndex(const QModelIndex &index)
 }
 
 
-int Bandmap::getScrollViewHeight()
-{
-    bandmapScrollArea->verticalScrollBar()->sizeHint().height();
-}
+
 
 
 void Bandmap::setFreq(double freq)

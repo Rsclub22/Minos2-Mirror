@@ -80,9 +80,9 @@ void BandmapView::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
     QPainter painter(this);
-    qDebug() << "height" << bandmap->getScrollViewHeight();
-    qDebug() << "width" << bandmap->width();
-    dial->drawScale(&painter, curFreq, 1000);
+    qDebug() << "height" << bandmap->getBandmapFrameHeight();
+    qDebug() << "width" << bandmap->getBandmapFrameWidth();
+    dial->drawScale(&painter, curFreq, bandmap->getBandmapFrameHeight());
     dial->drawCursor(&painter, curFreq);
 }
 

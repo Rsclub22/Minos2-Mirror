@@ -34,8 +34,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
 
-    bandmap = ui->bandMap;
-    bandmap->initBandmap(ui->bandmapScrollArea);
+    bandmap = new Bandmap(ui->bandmapFrame);
+    bandmap->initBandmap();
 
 /*
     bandmapScene = new QGraphicsScene(this);
