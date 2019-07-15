@@ -19,15 +19,22 @@
 const int Invalid = -1;
 
 
-Bandmap::Bandmap(QScrollArea *bandMapSroll, QWidget *parent)
+Bandmap::Bandmap(QWidget *parent)
     : QWidget(parent), bandmapModel(nullptr), selectedRow(Invalid),
       selectedColumn(Invalid)
 {
+
+}
+
+
+
+void Bandmap::initBandmap(QScrollArea *bMapScrollArea)
+{
     QFontMetrics fm(font());
     bandmapView = new BandmapView(this);
-    bandmapScrollArea = bandMapSroll;
+    bandmapScrollArea = bMapScrollArea;
     bandmapScrollArea->setBackgroundRole(QPalette::Light);
-    bandmapScrollArea->setWidget(bandmapView);
+   // bandmapScrollArea->setWidget(bandmapView);
     bandmapScrollArea->installEventFilter(bandmapView);
 
     //bandmapLayout = new QHBoxLayout;
@@ -37,7 +44,6 @@ Bandmap::Bandmap(QScrollArea *bandMapSroll, QWidget *parent)
     //setLayout(bandmapLayout);
 
     connect(bandmapView, SIGNAL(clicked(const QModelIndex&)), this, SIGNAL(clicked(const QModelIndex&)));
-
 }
 
 void Bandmap::setSelectedRow(int row)

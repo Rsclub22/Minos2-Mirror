@@ -47,7 +47,7 @@
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
+     <widget class="Bandmap" name="bandMap">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -104,6 +104,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Bandmap</class>
+   <extends>QWidget</extends>
+   <header>bandmap.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

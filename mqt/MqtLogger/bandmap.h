@@ -18,7 +18,7 @@ class Bandmap : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Bandmap(QScrollArea *bandMapSroll, QWidget *parent = nullptr);
+    explicit Bandmap(QWidget *parent = nullptr);
 
     QAbstractItemModel *getBandmapModel() const { return bandmapModel; }
     void setModel(QAbstractItemModel *model);
@@ -29,7 +29,7 @@ public:
     int getSelectedColumn() const { return selectedColumn; }
     void setSelectedColumn(int column);
 
-
+    void initBandmap(QScrollArea *bMapScrollArea);
 
     void setFreq(double freq);
     int getScrollViewHeight();
