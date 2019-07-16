@@ -49,13 +49,14 @@ void BandmapFreqDial::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
 // painter =  new QPainter( this );
     zoomLevel = 8;
 
-    drawScale(painter, currentFreq, maxScaleY);
-    drawCursor(painter, currentFreq);
+//    drawScale(painter, currentFreq, maxScaleY);
+//    drawCursor(painter, currentFreq);
 
 
 }
 
 
+/*
 void BandmapFreqDial::setCurFreq(double frequency)
 {
     currentFreq = frequency;
@@ -65,6 +66,19 @@ void BandmapFreqDial::setCurFreq(double frequency)
 double BandmapFreqDial::getCurFreq()
 {
    return currentFreq;
+}
+
+*/
+
+void BandmapFreqDial::setZoomLevel(int level)
+{
+    zoomLevel = level;
+}
+
+
+int BandmapFreqDial::getZoomLevel()
+{
+   return zoomLevel;
 }
 
 
@@ -78,10 +92,11 @@ int BandmapFreqDial::getCurHeight()
     return maxScaleY;
 }
 
-void BandmapFreqDial::drawScale(QPainter *painter, double frequency, int scaleHeight)
+void BandmapFreqDial::drawScale(QPainter *painter, double _frequency, int scaleHeight)
 {
     maxScaleY = scaleHeight;
     qint32 freq = 0;
+    qint32 frequency = static_cast<qint32>(_frequency);
     freq = frequency/1000;
     int freqRange = maxScaleY / dialData::khzPixelStep[zoomLevel];
     int mid_freqRange = freqRange/2;
@@ -196,12 +211,13 @@ void BandmapFreqDial::drawScale(QPainter *painter, double frequency, int scaleHe
 }
 
 
-void BandmapFreqDial::drawCursor(QPainter *painter, double frequency)
+void BandmapFreqDial::drawCursor(QPainter *painter, double _frequency)
 {
 
 
     qint32 fmaj = 0;
     qint32 fmin = 0;
+    qint32 frequency = static_cast<qint32>(_frequency);
     fmaj = frequency/1000;
     fmin = frequency - (fmaj*1000);
     qint32 offsetFreq = fmaj - scaleStartFreq;

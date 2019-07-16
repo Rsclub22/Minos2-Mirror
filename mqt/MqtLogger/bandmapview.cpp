@@ -82,6 +82,7 @@ void BandmapView::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     qDebug() << "height" << bandmap->getBandmapFrameHeight();
     qDebug() << "width" << bandmap->getBandmapFrameWidth();
+    dial->setZoomLevel(8);
     dial->drawScale(&painter, curFreq, bandmap->getBandmapFrameHeight());
     dial->drawCursor(&painter, curFreq);
 }

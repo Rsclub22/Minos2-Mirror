@@ -47,16 +47,18 @@ public:
     void drawCursor(QPainter *painter, double frequency);
 
     void changeBoundingRect(int height);
+    void setZoomLevel(int level);
+    int getZoomLevel();
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 private:
 
     int zoomLevel = 0;
     int maxScaleY = dialData::MAXSCALEY;
-    double currentFreq = 0;
 
-    double scaleStartFreq = 0;
-    double scaleEndFreq = 0;
+    //qint32 currentFreq = 0;
+    qint32 scaleStartFreq = 0;
+    qint32 scaleEndFreq = 0;
 
 //    QPainter  *painter;
 
