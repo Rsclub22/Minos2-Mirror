@@ -23,10 +23,11 @@ signals:
     void clicked(const QModelIndex&);
 
 protected:
-    bool eventFilter(QObject *target, QEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void paintEvent(QPaintEvent *event);
+    bool eventFilter(QObject *target, QEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
 
 
 public slots:
@@ -39,6 +40,10 @@ private:
     BandmapFreqDial *dial;
     double curFreq;
 
+    int dialMinZoomLevel;
+    int dialMaxZoomLevel;
+
+    void changeZoom(bool direction);
 };
 
 #endif // BANDMAPVIEW_H

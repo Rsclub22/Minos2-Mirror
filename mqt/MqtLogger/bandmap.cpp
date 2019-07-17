@@ -19,6 +19,9 @@
 const int Invalid = -1;
 
 
+
+
+
 Bandmap::Bandmap(QWidget *parent)
     : QWidget(parent),
       bandmapModel(nullptr), bandmapFrame(parent), selectedRow(Invalid),

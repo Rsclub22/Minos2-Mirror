@@ -11,12 +11,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
-
 #include "bandmapview.h"
 #include <QDebug>
+
+
 
 BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
 {
@@ -25,6 +23,8 @@ BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
     setFocusPolicy((Qt::WheelFocus));
     setMinimumSize(minimumSizeHint());
     dial = new BandmapFreqDial();
+    dialMinZoomLevel = dial->getMinZoomLevel();
+    dialMaxZoomLevel = dial->getMaxZoomLevel();
 
 
 }
@@ -82,9 +82,49 @@ void BandmapView::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     qDebug() << "height" << bandmap->getBandmapFrameHeight();
     qDebug() << "width" << bandmap->getBandmapFrameWidth();
-    dial->setZoomLevel(8);
+
     dial->drawScale(&painter, curFreq, bandmap->getBandmapFrameHeight());
     dial->drawCursor(&painter, curFreq);
+}
+
+void BandmapView::wheelEvent(QWheelEvent *event)
+{
+    int numDegrees = event->delta() / 8;
+    int numTicks = numDegrees / 15;
+
+    if (numTicks == 1)
+    {
+       changeZoom(true);
+    }
+    else
+    {
+        changeZoom(false);
+    }
+
+    event->accept();
+}
+
+
+void BandmapView::changeZoom(bool direction)
+{
+    if (direction)
+    {
+        if (dial->getZoomLevel() < dialMaxZoomLevel && dial->getZoomLevel() >= dialMinZoomLevel)
+        {
+            int newLevel = dial->getZoomLevel();
+            dial->setZoomLevel(++newLevel);
+            update();
+        }
+    }
+    else
+    {
+        if (dial->getZoomLevel() != dialMinZoomLevel && dial->getZoomLevel() <= dialMaxZoomLevel)
+        {
+            int newLevel = dial->getZoomLevel();
+            dial->setZoomLevel(--newLevel);
+            update();
+        }
+    }
 }
 
 
