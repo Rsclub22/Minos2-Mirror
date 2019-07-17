@@ -29,6 +29,7 @@
 #include "bandmapcallsignmarker.h"
 #include "bandmap.h"
 #include "bandmapfreqdial.h"
+#include "bandmapdatamodel.h"
 
 namespace Ui {
     class BandmapClientFrame;
@@ -72,6 +73,9 @@ private:
     double curFreq = 0;
     int mapViewHeight = 0;
 
+    BandmapDataModel *bandmapDataModel;
+    BandmapData *bandmapData;
+
 
     int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);
@@ -89,6 +93,7 @@ private slots:
      void dxSpots(QVector<QString>);
 
 
+     void on_FontChanged();
 };
 
 #endif // BANDMAPCLIENTFRAME_H

@@ -18,6 +18,12 @@ void TextMarker::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*opt
     //painter->drawRect(0,0,40,10);
 }
 
+void TextMarker::drawTextMarker(QPainter *painter)
+{
+    painter->setPen(colour);
+    painter->drawText(xCoord, yCoord, callSign);
+}
+
 QRectF TextMarker::boundingRect() const
 {
     qreal penWidth = 3;

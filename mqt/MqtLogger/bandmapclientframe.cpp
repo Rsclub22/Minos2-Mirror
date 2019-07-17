@@ -34,17 +34,47 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
 
-    bandmap = new Bandmap(ui->bandmapFrame);
-    bandmap->initBandmap();
+    bandmapDataModel = new BandmapDataModel();
 
-/*
-    bandmapScene = new QGraphicsScene(this);
-    ui->bandmapView->setScene(bandmapScene);
-    ui->bandmapView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
-    bandmap = new Bandmap();
-    dial = new BandmapFreqDial();
-    bandmapScene->addItem(dial);
-*/
+    bandmap = new Bandmap(ui->bandmapFrame);
+    bandmap->initBandmap(bandmapDataModel);
+
+
+
+
+
+    BandmapData *bandmapData0 = new BandmapData();
+    BandmapData *bandmapData1 = new BandmapData();
+    BandmapData *bandmapData2 = new BandmapData();
+    BandmapData *bandmapData3 = new BandmapData();
+
+    bandmapData0->dxCall = "G8FKH";
+    bandmapData0->dxFreq = "14420000";
+    bandmapData0->dxLocator = "IO91SN";
+    bandmapDataModel->rowData = bandmapData0;
+    bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+
+    bandmapData1->dxCall = "G4CLB";
+    bandmapData1->dxFreq = "14421000";
+    bandmapData1->dxLocator = "IO92AB";
+    bandmapDataModel->rowData = bandmapData1;
+    bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+
+    bandmapData2->dxCall = "GM3SEK";
+    bandmapData2->dxFreq = "14421500";
+    bandmapData2->dxLocator = "IO94FG";
+    bandmapDataModel->rowData = bandmapData2;
+    bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+
+    bandmapData3->dxCall = "M0SAT";
+    bandmapData3->dxFreq = "14431500";
+    bandmapData3->dxLocator = "IO91TP";
+    bandmapDataModel->rowData = bandmapData3;
+    bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+
+    int a = 0;
+
+    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
 
 }
@@ -53,6 +83,11 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 BandmapClientFrame::~BandmapClientFrame()
 {
     delete ui;
+}
+
+void BandmapClientFrame::on_FontChanged()
+{
+    QFont cf = QApplication::font();
 }
 
 

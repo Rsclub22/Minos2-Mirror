@@ -27,6 +27,7 @@ BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
     dialMaxZoomLevel = dial->getMaxZoomLevel();
 
 
+
 }
 
 
@@ -85,6 +86,9 @@ void BandmapView::paintEvent(QPaintEvent *event)
 
     dial->drawScale(&painter, curFreq, bandmap->getBandmapFrameHeight());
     dial->drawCursor(&painter, curFreq);
+
+    bandmapSpotMarker = new TextMarker(80, 100, "G8FKH", Qt::red);
+    bandmapSpotMarker->drawTextMarker(&painter);
 }
 
 void BandmapView::wheelEvent(QWheelEvent *event)
@@ -134,5 +138,28 @@ void BandmapView::setFreq(double f)
         curFreq = f;
         update();
 
+
+}
+
+void BandmapView::drawBandMapSpots(QPainter* painter, QPaintEvent *event)
+{
+    // check model exists!
+
+    int ExtraHeight = 10;
+    QFontMetrics fm(font());
+    const int RowHeight = fm.height() + ExtraHeight;
+    const int MinY = qMax(0, event->rect().y() - RowHeight);
+    const int MaxY = MinY + event->rect().height() + RowHeight;
+
+    int row = MinY/RowHeight;
+    int y = row * RowHeight;
+    for (; row < bandmap->getBandDataModel()->rowCount(); ++row)
+    {
+        bandmapSpotMarker = new TextMarker(80, 100, "G8FKH", Qt::red);
+        //paintRow(painter, row, y, RowHeight);
+        y += RowHeight;
+        if (y > MaxY)
+            break;
+    }
 
 }

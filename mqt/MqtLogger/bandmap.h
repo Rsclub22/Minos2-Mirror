@@ -8,6 +8,8 @@
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QHBoxLayout>
+#include "base_pch.h"
+#include "bandmapdatamodel.h"
 
 class QAbstractItemModel;
 class QModelIndex;
@@ -20,8 +22,8 @@ class Bandmap : public QWidget
 public:
     explicit Bandmap(QWidget *parent = nullptr);
 
-    QAbstractItemModel *getBandmapModel() const { return bandmapModel; }
-    void setModel(QAbstractItemModel *model);
+    //QAbstractItemModel *getBandmapModel() const { return bandmapModel; }
+    //void setModel(QAbstractItemModel *model);
 
 
     int getSelectedRow() const { return selectedRow; }
@@ -29,12 +31,14 @@ public:
     int getSelectedColumn() const { return selectedColumn; }
     void setSelectedColumn(int column);
 
-    void initBandmap();
+    void initBandmap(BandmapDataModel *bmModel);
 
     void setFreq(double freq);
 
     int getBandmapFrameHeight();
     int getBandmapFrameWidth();
+
+    BandmapDataModel* getBandDataModel() {return bandmapDataModel;}
 
 signals:
     void clicked(const QModelIndex&);
@@ -45,8 +49,10 @@ public slots:
 
 
 private:
-    QAbstractItemModel *bandmapModel;
+    //QAbstractItemModel *bandmapModel;
     QWidget *bandmapFrame;
+
+    BandmapDataModel *bandmapDataModel;
 
 
 

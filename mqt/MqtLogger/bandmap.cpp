@@ -24,7 +24,7 @@ const int Invalid = -1;
 
 Bandmap::Bandmap(QWidget *parent)
     : QWidget(parent),
-      bandmapModel(nullptr), bandmapFrame(parent), selectedRow(Invalid),
+      bandmapFrame(parent), selectedRow(Invalid),
       selectedColumn(Invalid)
 {
 
@@ -32,10 +32,11 @@ Bandmap::Bandmap(QWidget *parent)
 
 
 
-void Bandmap::initBandmap()
+void Bandmap::initBandmap(BandmapDataModel *bmDataModel)
 {
     QFontMetrics fm(font());
     bandmapView = new BandmapView(this);
+    bandmapDataModel = bmDataModel;
     //bandmapScrollArea = bMapScrollArea;
     //bandmapScrollArea->setBackgroundRole(QPalette::Light);
    // bandmapScrollArea->setWidget(bandmapView);

@@ -9,6 +9,7 @@
 #include <QScrollBar>
 #include "bandmap.h"
 #include "bandmapfreqdial.h"
+#include "textmarker.h"
 
 class BandmapView : public QWidget
 {
@@ -40,10 +41,13 @@ private:
     BandmapFreqDial *dial;
     double curFreq;
 
+    TextMarker *bandmapSpotMarker;
+
     int dialMinZoomLevel;
     int dialMaxZoomLevel;
 
     void changeZoom(bool direction);
+    void drawBandMapSpots(QPainter *painter, QPaintEvent *event);
 };
 
 #endif // BANDMAPVIEW_H

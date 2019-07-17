@@ -21,6 +21,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QRectF boundingRect() const;
 
+    void drawTextMarker(QPainter *painter);
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
