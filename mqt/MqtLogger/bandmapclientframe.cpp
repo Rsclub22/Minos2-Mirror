@@ -36,8 +36,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapDataModel = new BandmapDataModel();
 
-    bandmap = new Bandmap(ui->bandmapFrame);
-    bandmap->initBandmap(bandmapDataModel);
+    bandmap = new Bandmap();
+    bandmap->initBandmap(bandmapDataModel, ui->bandmapView);
 
 
 

@@ -43,20 +43,18 @@ void BandmapFreqDial::changeBoundingRect(int height)
 
 
 
-//void BandmapFreqDial::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/)
-//{
-
-// painter =  new QPainter( this );
-//    zoomLevel = 8;
-
-//    drawScale(painter, currentFreq, maxScaleY);
-//    drawCursor(painter, currentFreq);
+void BandmapFreqDial::paint(QPainter *painter, const QStyleOptionGraphicsItem * /*option*/, QWidget * /*widget*/)
+{
 
 
-//}
+    drawScale(painter, currentFreq, maxScaleY);
+    drawCursor(painter, currentFreq);
 
 
-/*
+}
+
+
+
 void BandmapFreqDial::setCurFreq(double frequency)
 {
     currentFreq = frequency;
@@ -68,7 +66,7 @@ double BandmapFreqDial::getCurFreq()
    return currentFreq;
 }
 
-*/
+
 
 void BandmapFreqDial::setZoomLevel(int level)
 {
@@ -258,6 +256,44 @@ void BandmapFreqDial::drawCursor(QPainter *painter, double _frequency)
 
 }
 
+void BandmapFreqDial::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+
+    int numDegrees = event->delta() / 8;
+    int numTicks = numDegrees / 15;
+
+    if (numTicks == 1)
+    {
+       changeZoom(true);
+    }
+    else
+    {
+        changeZoom(false);
+    }
+
+    event->accept();
+}
+
+
+void BandmapFreqDial::changeZoom(bool direction)
+{
+    if (direction)
+    {
+        if (zoomLevel < dialData::MAX_ZOOM_LEVEL && zoomLevel >= dialData::MIN_ZOOM_LEVEL)
+        {
+            ++zoomLevel;
+            update();
+        }
+    }
+    else
+    {
+        if (zoomLevel != dialData::MIN_ZOOM_LEVEL && zoomLevel <= dialData::MAX_ZOOM_LEVEL)
+        {
+            --zoomLevel;
+            update();
+        }
+    }
+}
 
 
 //void BandmapFreqDial::mousePressEvent(QGraphicsSceneMouseEvent *event)

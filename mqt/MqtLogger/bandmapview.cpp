@@ -13,6 +13,7 @@
 
 #include "bandmapview.h"
 #include <QDebug>
+#include <QGraphicsScene>
 
 
 
@@ -22,9 +23,19 @@ BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
     Q_ASSERT(bandmap);
     setFocusPolicy((Qt::WheelFocus));
     setMinimumSize(minimumSizeHint());
+
+    bandmapScene = new QGraphicsScene(this);
+
+    bandmap->getBandMapGraphicsView()->setScene(bandmapScene);
+    bandmap->getBandMapGraphicsView()->setAlignment(Qt::AlignTop|Qt::AlignLeft);
+
     dial = new BandmapFreqDial();
     dialMinZoomLevel = dial->getMinZoomLevel();
     dialMaxZoomLevel = dial->getMaxZoomLevel();
+    bandmapScene->addItem(dial);
+    dial->setCurFreq(0.0);
+    dial->setCurHeight(700);
+    dial->update();
 
 
 
@@ -79,64 +90,27 @@ void BandmapView::keyPressEvent(QKeyEvent *event)
 
 void BandmapView::paintEvent(QPaintEvent *event)
 {
-    QWidget::paintEvent(event);
-    QPainter painter(this);
-    qDebug() << "height" << bandmap->getBandmapFrameHeight();
-    qDebug() << "width" << bandmap->getBandmapFrameWidth();
+    //QWidget::paintEvent(event);
+    //QPainter painter(this);
+    //qDebug() << "height" << bandmap->getBandmapFrameHeight();
+    //qDebug() << "width" << bandmap->getBandmapFrameWidth();
 
-    dial->drawScale(&painter, curFreq, bandmap->getBandmapFrameHeight());
-    dial->drawCursor(&painter, curFreq);
+    //dial->drawScale(&painter, curFreq, bandmap->getBandmapFrameHeight());
+    //dial->drawCursor(&painter, curFreq);
 
-    bandmapSpotMarker = new TextMarker(80, 100, "G8FKH", Qt::red);
-    bandmapSpotMarker->drawTextMarker(&painter);
-}
-
-void BandmapView::wheelEvent(QWheelEvent *event)
-{
-    int numDegrees = event->delta() / 8;
-    int numTicks = numDegrees / 15;
-
-    if (numTicks == 1)
-    {
-       changeZoom(true);
-    }
-    else
-    {
-        changeZoom(false);
-    }
-
-    event->accept();
+    //bandmapSpotMarker = new TextMarker(80, 100, "G8FKH", Qt::red);
+    //bandmapSpotMarker->drawTextMarker(&painter);
 }
 
 
-void BandmapView::changeZoom(bool direction)
-{
-    if (direction)
-    {
-        if (dial->getZoomLevel() < dialMaxZoomLevel && dial->getZoomLevel() >= dialMinZoomLevel)
-        {
-            int newLevel = dial->getZoomLevel();
-            dial->setZoomLevel(++newLevel);
-            update();
-        }
-    }
-    else
-    {
-        if (dial->getZoomLevel() != dialMinZoomLevel && dial->getZoomLevel() <= dialMaxZoomLevel)
-        {
-            int newLevel = dial->getZoomLevel();
-            dial->setZoomLevel(--newLevel);
-            update();
-        }
-    }
-}
 
 
 void BandmapView::setFreq(double f)
 {
 
         curFreq = f;
-        update();
+        dial->setCurFreq(f);
+        dial->update();
 
 
 }

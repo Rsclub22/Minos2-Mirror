@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QAbstractItemModel>
+#include <QGraphicsView>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QScrollArea>
@@ -28,7 +29,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override;
+    //void wheelEvent(QWheelEvent *event) override;
 
 
 public slots:
@@ -38,6 +39,7 @@ public slots:
 private:
 
     Bandmap *bandmap;
+    QGraphicsScene *bandmapScene;
     BandmapFreqDial *dial;
     double curFreq;
 
@@ -46,7 +48,7 @@ private:
     int dialMinZoomLevel;
     int dialMaxZoomLevel;
 
-    void changeZoom(bool direction);
+    //void changeZoom(bool direction);
     void drawBandMapSpots(QPainter *painter, QPaintEvent *event);
 };
 

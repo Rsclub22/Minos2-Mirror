@@ -15,6 +15,8 @@ class QAbstractItemModel;
 class QModelIndex;
 class QScrollArea;
 class BandmapView;
+class QGraphicsView;
+class QGraphicsScene;
 
 class Bandmap : public QWidget
 {
@@ -31,7 +33,7 @@ public:
     int getSelectedColumn() const { return selectedColumn; }
     void setSelectedColumn(int column);
 
-    void initBandmap(BandmapDataModel *bmModel);
+    void initBandmap(BandmapDataModel *bmModel, QGraphicsView* bandmapview);
 
     void setFreq(double freq);
 
@@ -39,6 +41,7 @@ public:
     int getBandmapFrameWidth();
 
     BandmapDataModel* getBandDataModel() {return bandmapDataModel;}
+    QGraphicsView* getBandMapGraphicsView() {return bandmapGraphicsView;}
 
 signals:
     void clicked(const QModelIndex&);
@@ -57,6 +60,8 @@ private:
 
 
     BandmapView *bandmapView;
+    QGraphicsScene* bandmapScene;
+    QGraphicsView* bandmapGraphicsView;
 
 
     int selectedRow;

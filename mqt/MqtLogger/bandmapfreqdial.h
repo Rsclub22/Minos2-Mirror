@@ -1,7 +1,8 @@
 #ifndef BANDMAPFREQDIAL_H
 #define BANDMAPFREQDIAL_H
 #include <QPainter>
-//#include <QGraphicsItem>
+#include <QGraphicsItem>
+#include <QGraphicsSceneWheelEvent>
 #include "base_pch.h"
 
 namespace dialData {
@@ -35,14 +36,13 @@ const int DIAL_VERT_OFFSET = 10;      // dial offset to show first text
 
 
 
-//class BandmapFreqDial : public QGraphicsItem
-class BandmapFreqDial
+class BandmapFreqDial : public QGraphicsItem
 {
 public:
     BandmapFreqDial();
-    //void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    QRectF boundingRect() const;
+    QRectF boundingRect() const override;
 
     void setCurFreq(double frequency);
     double getCurFreq();
@@ -60,6 +60,7 @@ public:
 
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void wheelEvent(QGraphicsSceneWheelEvent * event) override;
 
 
 private:
@@ -67,11 +68,13 @@ private:
     int zoomLevel = 0;
     int maxScaleY = dialData::MAXSCALEY;
 
+    double currentFreq;
+
     //qint32 currentFreq = 0;
     qint32 scaleStartFreq = 0;
     qint32 scaleEndFreq = 0;
 
-
+    void changeZoom(bool direction);
 
 //    QPainter  *painter;
 
