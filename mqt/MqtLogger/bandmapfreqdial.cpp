@@ -264,11 +264,11 @@ void BandmapFreqDial::wheelEvent(QGraphicsSceneWheelEvent *event)
 
     if (numTicks == 1)
     {
-       changeZoom(true);
+       changeZoom(false);
     }
     else
     {
-        changeZoom(false);
+        changeZoom(true);
     }
 
     event->accept();

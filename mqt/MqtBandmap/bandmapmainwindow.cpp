@@ -61,9 +61,9 @@ BandMapMainWindow::BandMapMainWindow(QWidget *parent) :
     bandmapScene->addItem(new TextMarker(80,200, "GD8EXI", Qt::black));
     bandmapScene->addItem(new TextMarker(80,250, "M0SAT", Qt::blue));
 //    dial->setPos(-100,-50);
-    bandmap->addCallsignMarker(144000000.00, "G8FKH", "12:30", 0, 120);
-    bandmap->addCallsignMarker(144000000.00, "G8LZE", "12:50", 0, 200);
-    bandmap->addCallsignMarker(144000000.00, "M0ICR", "12:55", 0, 140);
+//    bandmap->addCallsignMarker(144000000.00, "G8FKH", "12:30", 0, 120);
+//    bandmap->addCallsignMarker(144000000.00, "G8LZE", "12:50", 0, 200);
+//    bandmap->addCallsignMarker(144000000.00, "M0ICR", "12:55", 0, 140);
 
 
 

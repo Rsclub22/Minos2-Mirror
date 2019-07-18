@@ -91,7 +91,7 @@ void BandmapView::keyPressEvent(QKeyEvent *event)
 void BandmapView::paintEvent(QPaintEvent *event)
 {
     //QWidget::paintEvent(event);
-    //QPainter painter(this);
+    QPainter painter(this);
     //qDebug() << "height" << bandmap->getBandmapFrameHeight();
     //qDebug() << "width" << bandmap->getBandmapFrameWidth();
 
@@ -100,6 +100,8 @@ void BandmapView::paintEvent(QPaintEvent *event)
 
     //bandmapSpotMarker = new TextMarker(80, 100, "G8FKH", Qt::red);
     //bandmapSpotMarker->drawTextMarker(&painter);
+    drawBandMapSpots(&painter, event);
+
 }
 
 
@@ -118,7 +120,7 @@ void BandmapView::setFreq(double f)
 void BandmapView::drawBandMapSpots(QPainter* painter, QPaintEvent *event)
 {
     // check model exists!
-
+/*
     int ExtraHeight = 10;
     QFontMetrics fm(font());
     const int RowHeight = fm.height() + ExtraHeight;
@@ -129,11 +131,18 @@ void BandmapView::drawBandMapSpots(QPainter* painter, QPaintEvent *event)
     int y = row * RowHeight;
     for (; row < bandmap->getBandDataModel()->rowCount(); ++row)
     {
-        bandmapSpotMarker = new TextMarker(80, 100, "G8FKH", Qt::red);
+        bandmapScene->addItem(new TextMarker(80, 100, "G8FKH", Qt::red) );
         //paintRow(painter, row, y, RowHeight);
         y += RowHeight;
         if (y > MaxY)
             break;
     }
+*/
+
+
+    bandmapScene->addItem(new TextMarker(80, 100, "G8FKH", Qt::red) );
 
 }
+
+
+
