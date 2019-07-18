@@ -5,6 +5,7 @@ setlocal
 set QtTools=C:\Qt\Tools\mingw730_32\bin
 set QtKit="C:\Qt\5.12.4\mingw73_32\bin"
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
+set QtLicenses="C:\Qt\Tools\Licenses"
 
 if exist %QtKit% goto kitInstalled
 
@@ -70,6 +71,7 @@ copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
 copy C:\Projects\hamlib-w32-3.3\bin\*.dll Bin
 
 copy %QtOpenSSL%\*.DLL Bin
+copy %QtLicenses%\LICENSE-OPENSSL
 
 copy %MROOT%\mqt\Docs\*.* Docs
 copy %MROOT%\mqt\Help\*.* Help
