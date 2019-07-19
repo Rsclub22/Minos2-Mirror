@@ -51,6 +51,7 @@ SOURCES += \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
     TSessionManager.cpp \
+    bandmapspotmarker.cpp \
     contestdetails.cpp \
     districtframe.cpp \
     dxccframe.cpp \
@@ -125,6 +126,7 @@ HEADERS  += \
     StackedInfoFrame.h \
     TClockFrame.h \
     TSessionManager.h \
+    bandmapspotmarker.h \
     contestdetails.h \
     districtframe.h \
     dxccframe.h \

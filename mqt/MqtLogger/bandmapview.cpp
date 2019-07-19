@@ -15,6 +15,8 @@
 #include <QDebug>
 #include <QGraphicsScene>
 
+#include "bandmapspotmarker.h"
+
 
 
 BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
@@ -37,6 +39,15 @@ BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
     dial->setCurHeight(700);
     dial->update();
 
+
+    QString redHtml = "<font color=\"Red\">";
+    QString endHtml = "</font><br>";
+    QString msg = redHtml + "G8FKH" + endHtml;
+    QPoint pos = QPoint(80,100);
+    BandmapSpotMarker* spot = new BandmapSpotMarker(pos, redHtml + "G8FKH" + endHtml, "testing", Qt::red, bandmapScene);
+    //spot->setSpotText(msg);
+    pos = QPoint(80,125);
+    spot = new BandmapSpotMarker(pos, redHtml + "M0ICR" + endHtml, "testing", Qt::red, bandmapScene);
 
 
 }
