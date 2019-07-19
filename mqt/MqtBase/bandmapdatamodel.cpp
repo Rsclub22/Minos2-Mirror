@@ -73,7 +73,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->spotTime;
                 break;
             case FREQ_COL_NUM:
-                d = bandmapSpot->dxFreq;
+                d = bandmapSpot->dxFreqStr;
                 break;
             case DXSPOT_CALL_COL_NUM:
                 //if (bandmapSpot->dxCallWorked == BOOL_YES)
@@ -129,7 +129,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->spotTime;
                 break;
             case FREQ_COL_NUM:
-                d = bandmapSpot->dxFreq;
+                d = bandmapSpot->dxFreqStr;
                 break;
             case DXSPOT_CALL_COL_NUM:
                 d = bandmapSpot->dxCall;
@@ -199,7 +199,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 bandmapSpot->spotTime = value.toString();
             break;
             case FREQ_COL_NUM:
-                bandmapSpot->dxFreq = value.toString();
+                bandmapSpot->dxFreqStr = value.toString();
             break;
             case DXSPOT_CALL_COL_NUM:
                 bandmapSpot->dxCall = value.toString();

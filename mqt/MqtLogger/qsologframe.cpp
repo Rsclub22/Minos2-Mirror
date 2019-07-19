@@ -119,6 +119,8 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     ui->qsoFrame->setStyleSheet(ssQsoFrameBlue);
     widgetStyles[ui->qsoFrame] = ssQsoFrameBlue;
+
+
 }
 
 void QSOLogFrame::on_FontChanged()
@@ -238,6 +240,8 @@ QSOLogFrame::~QSOLogFrame()
 void QSOLogFrame::on_TimeDisplayTimer()
 {
     updateQSOTime(true);
+
+    checkBandMapAndClusterLoaded();
 }
 
 void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
@@ -378,6 +382,11 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     oldTimeOK = true;
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(on_TimeDisplayTimer()));
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
+
+    connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapMarkFreqPbClicked()));
+    connect(ui->bandmapSaveFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapSaveFreqPbClicked()));
+
+    connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
 
 }
 void QSOLogFrame::setTimeStyles()
@@ -866,6 +875,22 @@ void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
         setDtgSection();
     }
 }
+
+void QSOLogFrame::on_bandmapMarkFreqPbClicked()
+{
+
+}
+
+void QSOLogFrame::on_bandmapSaveFreqPbClicked()
+{
+
+}
+
+void QSOLogFrame::on_SpotPbClicked()
+{
+
+}
+
 void QSOLogFrame::setActiveControl( int *Key )
 {
    switch ( *Key )
@@ -2555,14 +2580,70 @@ bool QSOLogFrame::isKeyerLoaded()
 //---------------------------------------------------------
 
 
-void QSOLogFrame::setBandMapLoaded()
+void QSOLogFrame::setBandMapLoaded(bool loaded)
 {
-    bandMapLoaded = true;
+    bandMapLoaded = loaded;
 }
 bool QSOLogFrame::isBandMapLoaded()
 {
     return bandMapLoaded;
 }
+
+void QSOLogFrame::setBandMapControlsVisible(bool visible)
+{
+    ui->bandmapRunFreqChkBox->setVisible(visible);
+    ui->bandmapMarkFreqPb->setVisible(visible);
+    ui->bandmapSaveFreqPb->setVisible(visible);
+}
+
+//---------------------------------------------------------
+
+
+void QSOLogFrame::setClusterLoaded(bool loaded)
+{
+    clusterLoaded = loaded;
+}
+bool QSOLogFrame::isClusterLoaded()
+{
+    return clusterLoaded;
+}
+
+void QSOLogFrame::setClusterControlsVisible(bool visible)
+{
+    ui->lastLoggedChkBx->setVisible(visible);
+    ui->spotPb->setVisible(visible);
+
+}
+
+
+//--------------------------------------------------------
+
+void QSOLogFrame::checkBandMapAndClusterLoaded()
+{
+
+    if (isBandMapLoaded())
+    {
+        setBandMapControlsVisible(true);
+    }
+    else
+    {
+        setBandMapControlsVisible(false);
+    }
+
+    if (isClusterLoaded())
+    {
+        setClusterControlsVisible(true);
+    }
+    else
+    {
+        setClusterControlsVisible(false);
+    }
+
+}
+
+
+
+
 
 //---------------------------------------------------------
 void QSOLogFrame::setRadioLoaded()

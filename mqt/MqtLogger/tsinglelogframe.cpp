@@ -237,6 +237,7 @@ void TSingleLogFrame::createScreenComponents()
 
     clusterControlFrame->setVisible(false);
     clusterControlFrame->setContest(contest);
+    setClusterLoaded(false);
 
     bandmapControlFrame = new BandmapClientFrame(this);
     bandmapControlFrame->setObjectName(QStringLiteral("BandmapControlFrame"));
@@ -245,6 +246,7 @@ void TSingleLogFrame::createScreenComponents()
 
     bandmapControlFrame->setVisible(false);
     bandmapControlFrame->setContest(contest);
+    setBandmapLoaded(false);
 
 
     rotPresets = new RotPresets(this);
@@ -568,6 +570,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     hs->addWidget(clusterControlFrame);
                     clusterControlFrame->setVisible(true);
                     clusterControlFrame->setContest(ct);
+                    setClusterLoaded(true);
                     break;
 
                 }
@@ -576,6 +579,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     hs->addWidget(bandmapControlFrame);
                     bandmapControlFrame->setVisible(true);
                     bandmapControlFrame->setContest(ct);
+                    setBandmapLoaded(true);
                     break;
 
                 }
@@ -1350,16 +1354,33 @@ void TSingleLogFrame::sendKeyerStop()
 
 // Bandmap
 
-void TSingleLogFrame::on_BandMapLoaded()
+void TSingleLogFrame::setBandmapLoaded(bool loaded)
 {
-   bandMapLoaded = true;
-   GJVQSOLogFrame->setBandMapLoaded();
+   bandMapLoaded = loaded;
+   GJVQSOLogFrame->setBandMapLoaded(loaded);
 }
 
 bool TSingleLogFrame::isBandMapLoaded()
 {
    return bandMapLoaded;
 }
+
+//---------------------------------------------------------------------------
+
+// Cluster
+
+void TSingleLogFrame::setClusterLoaded(bool loaded)
+{
+   bandMapLoaded = loaded;
+   GJVQSOLogFrame->setClusterLoaded(loaded);
+}
+
+bool TSingleLogFrame::isClusterLoaded()
+{
+   return bandMapLoaded;
+}
+
+
 
 //---------------------------------------------------------------------------
 void TSingleLogFrame::checkConnections()

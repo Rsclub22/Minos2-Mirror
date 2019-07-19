@@ -401,21 +401,21 @@ to</string>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_15">
            <item>
-            <widget class="QCheckBox" name="runFreqChkBox">
+            <widget class="QCheckBox" name="bandmapRunFreqChkBox">
              <property name="text">
               <string>Run Freq</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="markFreqPb">
+            <widget class="QPushButton" name="bandmapMarkFreqPb">
              <property name="text">
               <string>Mark Freq</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="saveFreqPb">
+            <widget class="QPushButton" name="bandmapSaveFreqPb">
              <property name="text">
               <string>Save Freq</string>
              </property>
@@ -426,14 +426,14 @@ to</string>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_16">
            <item>
-            <widget class="QCheckBox" name="checkBox">
+            <widget class="QCheckBox" name="lastLoggedChkBx">
              <property name="text">
               <string>Last Logged</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="spotFreqPb">
+            <widget class="QPushButton" name="spotPb">
              <property name="text">
               <string>Spot</string>
              </property>

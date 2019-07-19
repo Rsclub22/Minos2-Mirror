@@ -16,10 +16,11 @@ BandmapData::BandmapData()
 {
     rxTime = 0;
     sentToMemory = false;
+    dxFreq = 0;
 }
 
-BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreq,
-                   QString _dxFreqMaskStr, QString _dxModeMaskStr,
+BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
+                   qint64 _dxFreq, QString _dxFreqMaskStr, QString _dxModeMaskStr,
                    QString _dxCall, bool _dxCallWorked,
                    QString _dxLocator, bool _dxLocatorWorked,
                    QString distance, QString bearing,
@@ -29,8 +30,9 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreq,
 
     rxTime = _rxTime;
     spotTime = _spotTime;
-    dxFreq = _dxFreq;
+    dxFreqStr = _dxFreqStr;
     dxFreqMaskStr = _dxFreqMaskStr;
+    dxFreq = _dxFreq;
     dxModeMaskStr = _dxModeMaskStr;
     dxCall = _dxCall;
     dxLocator = _dxLocator;
@@ -48,8 +50,9 @@ void BandmapData::operator = (const BandmapData& bmd)
 {
     rxTime = bmd.rxTime;
     spotTime = bmd.spotTime;
-    dxFreq = bmd.dxFreq;
+    dxFreqStr = bmd.dxFreqStr;
     dxFreqMaskStr = bmd.dxFreqMaskStr;
+    dxFreq = bmd.dxFreq;
     dxModeMaskStr = bmd.dxModeMaskStr;
     dxCall = bmd.dxCall;
     dxLocator = bmd.dxLocator;

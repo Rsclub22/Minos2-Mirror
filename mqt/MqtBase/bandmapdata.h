@@ -38,7 +38,7 @@ class BandmapData
 public:
     BandmapData();
     BandmapData(qint64 _rxTime, QString _spotTime,
-             QString _dxFreq, QString _dxFreqMaskStr,
+             QString _dxFreqStr, qint64 dxFreq, QString _dxFreqMaskStr,
              QString _dxModeMaskStr, QString _dxCall,
              bool _dxCallWorked, QString _dxLocator,
              bool _dxLocatorWorked, QString distance,
@@ -49,7 +49,8 @@ public:
 
     qint64 rxTime;
     QString spotTime;
-    QString dxFreq;
+    QString dxFreqStr;
+    qint64 dxFreq;
     QString dxFreqMaskStr;
     QString dxModeMaskStr;
     QString dxCall;
