@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGraphicsView" name="bandmapView"/>
+    <widget class="BandmapGraphicsPanel" name="bandmapView"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -104,6 +104,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BandmapGraphicsPanel</class>
+   <extends>QGraphicsView</extends>
+   <header>bandmapgraphicspanel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

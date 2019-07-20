@@ -94,6 +94,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, double _frequency, int scaleH
 {
 
     dialHeight = scaleHeight;
+    qDebug() << "drawscale height " << dialHeight;
     qint32 freq = 0;
     qint32 frequency = static_cast<qint32>(_frequency);
     freq = frequency/1000;

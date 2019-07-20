@@ -31,12 +31,15 @@ protected:
     void paintEvent(QPaintEvent *event) override;
     //void wheelEvent(QWheelEvent *event) override;
 
+
     void resizeEvent(QResizeEvent *) override;
 
 public slots:
 
 
 
+private slots:
+    void bandmapResize(int);
 private:
 
     Bandmap *bandmap;

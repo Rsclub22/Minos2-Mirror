@@ -33,12 +33,15 @@ BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
     bandmap->getBandMapGraphicsView()->setAlignment(Qt::AlignTop|Qt::AlignLeft);
 
     dial = new BandmapFreqDial(70, bandmap->getBandmapFrameHeight());
+    qDebug() << "bandmap height " << bandmap->getBandmapFrameHeight();
     dialMinZoomLevel = dial->getMinZoomLevel();
     dialMaxZoomLevel = dial->getMaxZoomLevel();
     bandmapScene->addItem(dial);
     dial->setCurFreq(0.0);
 
     dial->update();
+
+    connect (bandmap->getBandMapGraphicsView(), SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
 
 
     QString redHtml = "<font color=\"Red\">";
@@ -54,12 +57,23 @@ BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
 }
 
 
+
+
 QSize BandmapView::minimumSizeHint() const
 {
     return QSize(70, bandmap->getBandmapFrameHeight());
      //            QFontMetrics(font()).height() + ExtraHeight);
 
+}
 
+
+void BandmapView::bandmapResize(int _height)
+{
+    int height = _height;
+    //int width = _width;
+    qDebug() << "bandmap resize height " << height;
+    dial->setCurHeight(height);
+    dial->update();
 
 
 }
@@ -98,12 +112,7 @@ void BandmapView::keyPressEvent(QKeyEvent *event)
 }
 
 
-void BandmapView::resizeEvent(QResizeEvent *)
-{
-    dial->setCurHeight(bandmap->getBandmapFrameHeight());
-    qDebug() << "resize height " << bandmap->getBandmapFrameHeight();
-    dial->update();
-}
+
 
 void BandmapView::paintEvent(QPaintEvent *event)
 {
@@ -124,9 +133,11 @@ void BandmapView::paintEvent(QPaintEvent *event)
 
 }
 
+void BandmapView::resizeEvent(QResizeEvent *)
+{
 
 
-
+}
 void BandmapView::setFreq(double f)
 {
 
