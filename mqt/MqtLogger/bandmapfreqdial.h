@@ -25,7 +25,7 @@ const int MIN_ZOOM_LEVEL = 0;
 const int MAX_ZOOM_LEVEL = 16;
 
 const int MAXSCALEY = 675;
-//const int MAXSCALEY = 775;
+const int MAXSCALEX = 100;
 
 const int DIAL_VERT_OFFSET = 10;      // dial offset to show first text
 
@@ -39,7 +39,7 @@ const int DIAL_VERT_OFFSET = 10;      // dial offset to show first text
 class BandmapFreqDial : public QGraphicsItem
 {
 public:
-    BandmapFreqDial();
+    BandmapFreqDial(int width, int height);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     QRectF boundingRect() const override;
@@ -66,7 +66,8 @@ protected:
 private:
 
     int zoomLevel = 0;
-    int maxScaleY = dialData::MAXSCALEY;
+    int dialHeight = dialData::MAXSCALEY;
+    int dialWidth  = dialData::MAXSCALEX;
 
     double currentFreq;
 

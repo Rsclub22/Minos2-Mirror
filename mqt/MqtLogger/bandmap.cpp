@@ -16,6 +16,7 @@
 #include "bandmapview.h"
 #include "ui_clusterclientframe.h"
 
+
 const int Invalid = -1;
 
 
@@ -39,6 +40,11 @@ void Bandmap::initBandmap(BandmapDataModel *bmDataModel, QGraphicsView* _bandmap
 
     bandmapDataModel = bmDataModel;
     bandmapGraphicsView = _bandmapGraphicsView;
+    bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    bandmapGraphicsView->viewport()->update();
+    qDebug() << "height " << bandmapGraphicsView->size();
+
     bandmapView = new BandmapView(this);
 
 
@@ -64,12 +70,12 @@ void Bandmap::setSelectedRow(int row)
 
 int Bandmap::getBandmapFrameHeight()
 {
-    return bandmapFrame->height();
+    return bandmapGraphicsView->viewport()->height();
 }
 
 int Bandmap::getBandmapFrameWidth()
 {
-    return bandmapFrame->width();
+    return bandmapGraphicsView->viewport()->width();
 }
 
 void Bandmap::setSelectedColumn(int column)

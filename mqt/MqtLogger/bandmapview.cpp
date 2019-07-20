@@ -29,14 +29,15 @@ BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
     bandmapScene = new QGraphicsScene(this);
 
     bandmap->getBandMapGraphicsView()->setScene(bandmapScene);
+
     bandmap->getBandMapGraphicsView()->setAlignment(Qt::AlignTop|Qt::AlignLeft);
 
-    dial = new BandmapFreqDial();
+    dial = new BandmapFreqDial(70, bandmap->getBandmapFrameHeight());
     dialMinZoomLevel = dial->getMinZoomLevel();
     dialMaxZoomLevel = dial->getMaxZoomLevel();
     bandmapScene->addItem(dial);
     dial->setCurFreq(0.0);
-    dial->setCurHeight(700);
+
     dial->update();
 
 
@@ -55,13 +56,11 @@ BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
 
 QSize BandmapView::minimumSizeHint() const
 {
-/*    return QSize(visualizer->widthOfYearColumn() +
-                 visualizer->maleFemaleHeaderTextWidth() +
-                 visualizer->widthOfTotalColumn(),
-                 QFontMetrics(font()).height() + ExtraHeight);
-*/
+    return QSize(70, bandmap->getBandmapFrameHeight());
+     //            QFontMetrics(font()).height() + ExtraHeight);
 
-       return QSize(200, 800);
+
+
 
 }
 
@@ -77,7 +76,7 @@ QSize BandmapView::sizeHint() const
             visualizer->yOffsetForRow(rows));
     */
 
-    return QSize(200,800);
+    return QSize(70, bandmap->getBandmapFrameHeight());
 }
 
 
@@ -99,6 +98,13 @@ void BandmapView::keyPressEvent(QKeyEvent *event)
 }
 
 
+void BandmapView::resizeEvent(QResizeEvent *)
+{
+    dial->setCurHeight(bandmap->getBandmapFrameHeight());
+    qDebug() << "resize height " << bandmap->getBandmapFrameHeight();
+    dial->update();
+}
+
 void BandmapView::paintEvent(QPaintEvent *event)
 {
     //QWidget::paintEvent(event);
@@ -111,7 +117,10 @@ void BandmapView::paintEvent(QPaintEvent *event)
 
     //bandmapSpotMarker = new TextMarker(80, 100, "G8FKH", Qt::red);
     //bandmapSpotMarker->drawTextMarker(&painter);
-    drawBandMapSpots(&painter, event);
+    //dial->drawScale(&painter, curFreq, bandmap->getBandmapFrameHeight());
+    //dial->drawCursor(&painter, curFreq);
+
+    //drawBandMapSpots(&painter, event);
 
 }
 
@@ -151,7 +160,7 @@ void BandmapView::drawBandMapSpots(QPainter* painter, QPaintEvent *event)
 */
 
 
-    bandmapScene->addItem(new TextMarker(80, 100, "G8FKH", Qt::red) );
+   // bandmapScene->addItem(new TextMarker(80, 100, "G8FKH", Qt::red) );
 
 }
 

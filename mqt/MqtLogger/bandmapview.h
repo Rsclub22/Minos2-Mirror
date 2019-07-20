@@ -17,8 +17,8 @@ class BandmapView : public QWidget
     Q_OBJECT
 public:
     explicit BandmapView(QWidget *parent = nullptr);
-    QSize minimumSizeHint() const;
-    QSize sizeHint() const;
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override;
 
     void setFreq(double f);
 signals:
@@ -31,6 +31,7 @@ protected:
     void paintEvent(QPaintEvent *event) override;
     //void wheelEvent(QWheelEvent *event) override;
 
+    void resizeEvent(QResizeEvent *) override;
 
 public slots:
 

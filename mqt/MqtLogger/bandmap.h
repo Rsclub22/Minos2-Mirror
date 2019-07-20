@@ -53,7 +53,7 @@ public slots:
 
 private:
     //QAbstractItemModel *bandmapModel;
-    QWidget *bandmapFrame;
+    //QWidget *bandmapFrame;
 
     BandmapDataModel *bandmapDataModel;
 
