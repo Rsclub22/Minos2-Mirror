@@ -40,18 +40,19 @@ BandmapView::BandmapView(QWidget *parent) : QWidget(parent)
     dial->setCurFreq(0.0);
 
     dial->update();
+    drawBandMapSpots();
 
     connect (bandmap->getBandMapGraphicsView(), SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
 
 
-    QString redHtml = "<font color=\"Red\">";
-    QString endHtml = "</font><br>";
-    QString msg = redHtml + "G8FKH" + endHtml;
-    QPoint pos = QPoint(80,100);
-    BandmapSpotMarker* spot = new BandmapSpotMarker(pos, redHtml + "G8FKH" + endHtml, "testing", Qt::red, bandmapScene);
+    //QString redHtml = "<font color=\"Red\">";
+    //QString endHtml = "</font><br>";
+    //QString msg = redHtml + "G8FKH" + endHtml;
+    //QPoint pos = QPoint(80,100);
+    //BandmapSpotMarker* spot = new BandmapSpotMarker(pos, redHtml + "G8FKH" + endHtml, "testing", Qt::red, bandmapScene);
     //spot->setSpotText(msg);
-    pos = QPoint(80,125);
-    spot = new BandmapSpotMarker(pos, redHtml + "M0ICR" + endHtml, "testing", Qt::red, bandmapScene);
+    //pos = QPoint(80,125);
+    //spot = new BandmapSpotMarker(pos, redHtml + "M0ICR" + endHtml, "testing", Qt::red, bandmapScene);
 
 
 }
@@ -74,6 +75,7 @@ void BandmapView::bandmapResize(int _height)
     qDebug() << "bandmap resize height " << height;
     dial->setCurHeight(height);
     dial->update();
+    drawBandMapSpots();
 
 
 }
@@ -148,30 +150,27 @@ void BandmapView::setFreq(double f)
 
 }
 
-void BandmapView::drawBandMapSpots(QPainter* painter, QPaintEvent *event)
+void BandmapView::drawBandMapSpots()
 {
-    // check model exists!
-/*
-    int ExtraHeight = 10;
-    QFontMetrics fm(font());
-    const int RowHeight = fm.height() + ExtraHeight;
-    const int MinY = qMax(0, event->rect().y() - RowHeight);
-    const int MaxY = MinY + event->rect().height() + RowHeight;
-
-    int row = MinY/RowHeight;
-    int y = row * RowHeight;
-    for (; row < bandmap->getBandDataModel()->rowCount(); ++row)
+    if (!listOfMarkers.isEmpty())
     {
-        bandmapScene->addItem(new TextMarker(80, 100, "G8FKH", Qt::red) );
-        //paintRow(painter, row, y, RowHeight);
-        y += RowHeight;
-        if (y > MaxY)
-            break;
+        for (int i = 0; i < listOfMarkers.count(); i++)
+        {
+            bandmapScene->removeItem(listOfMarkers[i]);
+        }
     }
-*/
-
-
-   // bandmapScene->addItem(new TextMarker(80, 100, "G8FKH", Qt::red) );
+    QString redHtml = "<font color=\"Red\">";
+    QString endHtml = "</font><br>";
+    QString msg = redHtml + "G8FKH" + endHtml;
+    QPoint pos = QPoint(80,100);
+    BandmapSpotMarker* spot = new BandmapSpotMarker(pos, redHtml + "G8FKH" + endHtml, "testing", Qt::red);
+    listOfMarkers.append(spot);
+    spot->setSpotText(msg);
+    bandmapScene->addItem(spot);
+    pos = QPoint(80,125);
+    spot = new BandmapSpotMarker(pos, redHtml + "M0ICR" + endHtml, "testing", Qt::red);
+    listOfMarkers.append(spot);
+    bandmapScene->addItem(spot);
 
 }
 

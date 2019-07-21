@@ -53,7 +53,9 @@ private:
     int dialMaxZoomLevel;
 
     //void changeZoom(bool direction);
-    void drawBandMapSpots(QPainter *painter, QPaintEvent *event);
+    void drawBandMapSpots();
+    QList<QGraphicsItem*> listOfMarkers;
+
 };
 
 #endif // BANDMAPVIEW_H

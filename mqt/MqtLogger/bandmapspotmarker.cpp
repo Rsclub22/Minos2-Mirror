@@ -12,7 +12,7 @@
 
 #include "bandmapspotmarker.h"
 
-BandmapSpotMarker::BandmapSpotMarker(const QPoint &_position, QString text, QString _auxText, QColor _colour, QGraphicsScene* scene)
+BandmapSpotMarker::BandmapSpotMarker(const QPoint &_position, QString text, QString _auxText, QColor _colour)
     : QGraphicsTextItem(),
       position(_position),
       displayText(text),
@@ -21,8 +21,8 @@ BandmapSpotMarker::BandmapSpotMarker(const QPoint &_position, QString text, QStr
 {
     // setFont(QFont("Helvetica", 11));
     setPos(position);
-    scene->clearSelection();
-    scene->addItem(this);
+    //scene->clearSelection();
+    //scene->addItem(this);
     //setSelected(true);
     setHtml(displayText);
 

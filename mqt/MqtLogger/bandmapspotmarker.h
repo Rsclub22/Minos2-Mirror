@@ -23,7 +23,7 @@ class BandmapSpotMarker : public QGraphicsTextItem
 
     Q_OBJECT
 public:
-    BandmapSpotMarker(const QPoint &_position, const QString text, const QString _auxText, const QColor _colour, QGraphicsScene* scene);
+    BandmapSpotMarker(const QPoint &_position, const QString text, const QString _auxText, const QColor _colour);
 
 
     void setSpotText(QString text);
