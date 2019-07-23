@@ -99,12 +99,10 @@ SOURCES += \
     WsjtxRadioMetaType.cpp \
     Wsjtx_qt_helpers.cpp \
 	bandmapclientframe.cpp \
-    bandmap.cpp \
     bandmapcallsignmarker.cpp \
     bandmapfreqdial.cpp	\
 	clustermodebandplan.cpp \
-    bandmapview.cpp \
-    textmarker.cpp
+    bandmapview.cpp
 
 
 HEADERS  += \
@@ -176,12 +174,10 @@ HEADERS  += \
     Wsjtx_qt_helpers.hpp \
     WsjtxRadio.hpp \
     bandmapclientframe.h \
-    bandmap.h \
     bandmapcallsignmarker.h \
     bandmapfreqdial.h	\
     clustermodebandplan.h \
-    bandmapview.h \
-    textmarker.h
+    bandmapview.h
 
 FORMS    += \
     contestdetails.ui \
