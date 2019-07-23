@@ -27,7 +27,8 @@
 #include "bandModeFrequencyPlan.h"
 #include "MinosLoggerEvents.h"
 #include "bandmapcallsignmarker.h"
-#include "bandmap.h"
+//#include "bandmap.h"
+#include "bandmapview.h"
 #include "bandmapfreqdial.h"
 #include "bandmapdatamodel.h"
 
@@ -68,8 +69,8 @@ private:
     // cluster spots
     QVector<QString> spotQueue;
 
-
-    Bandmap *bandmap;
+    BandmapView *bandmapView;
+    QGraphicsView* bandmapGraphicsView;
 
     QString sfreq;
     double curFreq = 0;

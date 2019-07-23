@@ -45,7 +45,7 @@ void Bandmap::initBandmap(BandmapDataModel *bmDataModel, QGraphicsView* _bandmap
     //bandmapGraphicsView->viewport()->update();
     //qDebug() << "height " << bandmapGraphicsView->size();
 
-    bandmapView = new BandmapView(this);
+    bandmapView = new BandmapView(bandmapGraphicsView);
 
 
     //bandmapScrollArea = bMapScrollArea;

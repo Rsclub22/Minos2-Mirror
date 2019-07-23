@@ -59,9 +59,9 @@ private:
 
 
 
-    BandmapView *bandmapView;
+      BandmapView *bandmapView;
     QGraphicsScene* bandmapScene;
-    QGraphicsView* bandmapGraphicsView;
+      QGraphicsView* bandmapGraphicsView;
 
 
     int selectedRow;
