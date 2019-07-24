@@ -14,6 +14,12 @@
 #include "bandmapview.h"
 #include <QDebug>
 
+BandmarkerDetials::BandmarkerDetials(QPoint _freqLineStart, QPoint _freqLineEnd, BandmapSpotMarker* _spot)
+{
+    freqLineStart = _freqLineStart;
+    freqLineEnd = _freqLineEnd;
+    spot = _spot;
+}
 
 
 
@@ -334,7 +340,7 @@ void BandmapView::drawBandMapSpots()
     {
         for (int i = 0; i < listOfMarkers.count(); i++)
         {
-            bandmapScene->removeItem(listOfMarkers[i]);
+            bandmapScene->removeItem(listOfMarkers[i]->spot);
         }
     }
     QString redHtml = "<font color=\"Red\">";
@@ -342,12 +348,13 @@ void BandmapView::drawBandMapSpots()
     QString msg = redHtml + "G8FKH" + endHtml;
     QPoint pos = QPoint(80,100);
     BandmapSpotMarker* spot = new BandmapSpotMarker(pos, redHtml + "G8FKH" + endHtml, "testing", Qt::red);
-    listOfMarkers.append(spot);
+    BandmarkerDetials* markerDetials = new BandmarkerDetials(QPoint(0,0), QPoint(0,0), spot);
+    listOfMarkers.append(markerDetials);
     spot->setSpotText(msg);
     bandmapScene->addItem(spot);
     pos = QPoint(80,125);
     spot = new BandmapSpotMarker(pos, redHtml + "M0ICR" + endHtml, "testing", Qt::red);
-    listOfMarkers.append(spot);
+    listOfMarkers.append(markerDetials);
     bandmapScene->addItem(spot);
 
 }

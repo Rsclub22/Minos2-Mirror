@@ -58,6 +58,10 @@ public:
     int getMaxZoomLevel() {return dialData::MAX_ZOOM_LEVEL;}
     int getMinZoomLevel() {return dialData::MIN_ZOOM_LEVEL;}
 
+    qint32 getScaleStartFreq();
+    qint32 getScaleEndFreq();
+
+
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void wheelEvent(QGraphicsSceneWheelEvent * event) override;
@@ -80,6 +84,7 @@ private:
 //    QPainter  *painter;
 
 
+    QString converFreqDialDisplay(qint32 freq);
 };
 
 #endif // BANDMAPFREQDIAL_H

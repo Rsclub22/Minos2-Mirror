@@ -12,6 +12,25 @@
 #include "bandmapfreqdial.h"
 #include "bandmapspotmarker.h"
 
+
+
+class BandmarkerDetials
+{
+
+public:
+    BandmarkerDetials();
+    BandmarkerDetials(QPoint _freqLineStart, QPoint _freqLineEnd, BandmapSpotMarker* _spot);
+
+
+
+QPoint freqLineStart;
+QPoint freqLineEnd;
+BandmapSpotMarker* spot;
+
+};
+
+
+
 class BandmapView : public QAbstractItemView
 {
     Q_OBJECT
@@ -89,7 +108,7 @@ private:
 
     //void changeZoom(bool direction);
     void drawBandMapSpots();
-    QList<QGraphicsItem*> listOfMarkers;
+    QVector<BandmarkerDetials*> listOfMarkers;
 
 };
 
