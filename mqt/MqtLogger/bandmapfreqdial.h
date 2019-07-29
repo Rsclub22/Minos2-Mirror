@@ -49,10 +49,10 @@ public:
     void setCurHeight(int height);
     int getCurHeight();
 
-    void drawScale(QPainter *painter, double frequency, int scaleHeight);
-    void drawCursor(QPainter *painter, double frequency);
+    void drawScale(QPainter *painter, qint32 frequency, int scaleHeight);
+    void drawCursor(QPainter *painter, qint32 frequency);
 
-    void changeBoundingRect(int height);
+
     void setZoomLevel(int level);
     int getZoomLevel();
     int getMaxZoomLevel() {return dialData::MAX_ZOOM_LEVEL;}
@@ -60,6 +60,14 @@ public:
 
     qint32 getScaleStartFreq();
     qint32 getScaleEndFreq();
+
+
+    void setCurWidth(int width);
+    int getCurWidth();
+
+    void changeBoundingRect(int height, int width);
+    int checkFreqWidth(qint32 freq);
+    int checkFreqWidth(double freq);
 
 
 protected:
@@ -72,19 +80,22 @@ private:
     int zoomLevel = 0;
     int dialHeight = dialData::MAXSCALEY;
     int dialWidth  = dialData::MAXSCALEX;
+    int newWidth = 0;
 
-    double currentFreq;
+    double currentFreqDbl;
 
     //qint32 currentFreq = 0;
     qint32 scaleStartFreq = 0;
     qint32 scaleEndFreq = 0;
+    qint32 currentFreqInt = 0;
 
     void changeZoom(bool direction);
 
 //    QPainter  *painter;
 
 
-    QString converFreqDialDisplay(qint32 freq);
+    QString convertFreqDialDisplay(qint32 freq);
+
 };
 
 #endif // BANDMAPFREQDIAL_H

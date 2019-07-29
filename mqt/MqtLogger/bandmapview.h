@@ -110,6 +110,7 @@ private:
     void drawBandMapSpots();
     QVector<BandmarkerDetials*> listOfMarkers;
 
+    void bandmapUpdate();
 };
 
 #endif // BANDMAPVIEW_H

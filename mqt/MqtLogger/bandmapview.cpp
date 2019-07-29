@@ -287,6 +287,12 @@ void BandmapView::keyPressEvent(QKeyEvent *event)
 
 
 
+void BandmapView::bandmapUpdate()
+{
+    dial->update();
+
+}
+
 
 void BandmapView::paintEvent(QPaintEvent *event)
 {
@@ -327,10 +333,9 @@ int BandmapView::getBandmapFrameWidth()
 void BandmapView::setFreq(double f)
 {
 
-        curFreq = f;
-        dial->setCurFreq(f);
-        dial->update();
-
+            curFreq = f;
+            dial->setCurFreq(f);
+            dial->update();
 
 }
 
