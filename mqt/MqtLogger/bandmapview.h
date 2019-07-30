@@ -53,6 +53,7 @@ public:
 
     int getBandmapFrameHeight();
     int getBandmapFrameWidth();
+    void onFontChanged(QFont cf);
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
 

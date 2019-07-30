@@ -75,6 +75,7 @@ public:
     int checkFreqWidth(double freq);
 
 
+    void onFontChanged(QFont cf);
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void wheelEvent(QGraphicsSceneWheelEvent * event) override;
@@ -87,6 +88,7 @@ private:
     int dialWidth  = dialData::MAXSCALEX;
     int newFreqTextWidth = 0;
     int freqTextWidth = 0;
+    int fontHeight = 0;
 
     double currentFreqDbl;
 
@@ -102,6 +104,7 @@ private:
 
     QString convertFreqDialDisplay(qint32 freq);
 
+    int getFontHeight();
 };
 
 #endif // BANDMAPFREQDIAL_H

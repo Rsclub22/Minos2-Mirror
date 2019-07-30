@@ -67,6 +67,7 @@ BandmapClientFrame::~BandmapClientFrame()
 void BandmapClientFrame::on_FontChanged()
 {
     QFont cf = QApplication::font();
+    bandmapView->onFontChanged(cf);
 }
 
 

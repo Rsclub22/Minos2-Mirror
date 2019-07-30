@@ -61,6 +61,12 @@ BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) :
 
 }
 
+
+void BandmapView::onFontChanged(QFont cf)
+{
+    dial->onFontChanged(cf);
+}
+
 void BandmapView::setModel(QAbstractItemModel *model)
 {
     QAbstractItemView::setModel(model);
