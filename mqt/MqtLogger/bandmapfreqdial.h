@@ -17,9 +17,14 @@ const int roundFactor[] = {0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 10, 10, 10}
 
 const int fMajMrkXStart = 50;
 const int fMajMrkXEnd = 70;
+const int fMajMrkLength = 20;
+const int fMajTextXStart = 5;
 
 const int fMinMrkXStart = 60;
 const int fMinMrkXEnd = 70;
+const int fMinMrkLength = 10;
+
+const int additionalWidth = 30;  // width in addition to freq text
 
 const int MIN_ZOOM_LEVEL = 0;
 const int MAX_ZOOM_LEVEL = 16;
@@ -80,7 +85,8 @@ private:
     int zoomLevel = 0;
     int dialHeight = dialData::MAXSCALEY;
     int dialWidth  = dialData::MAXSCALEX;
-    int newWidth = 0;
+    int newFreqTextWidth = 0;
+    int freqTextWidth = 0;
 
     double currentFreqDbl;
 

@@ -16,9 +16,11 @@ const int minorMarker[] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 3, 0, 0, 0};
 
 const int fMajMrkXStart = 50;
 const int fMajMrkXEnd = 70;
+const int fMajMrkLength = 20;
 
 const int fMinMrkXStart = 60;
 const int fMinMrkXEnd = 70;
+const int fMinMrkLength = 10;
 
 const int MAXSCALEY = 675;
 //const int MAXSCALEY = 775;
