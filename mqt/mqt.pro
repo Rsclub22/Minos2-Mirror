@@ -14,7 +14,6 @@ SUBDIRS += \
     MqtLogger \
     MqtServer \
     MqtRotator \
-    MqtBandmap \
     MqtMonitor \
     MqtRigControl \
     Qs1rSync

@@ -42,9 +42,10 @@ BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) :
     dialMaxZoomLevel = dial->getMaxZoomLevel();
     bandmapScene->addItem(dial);
     dial->setCurFreq(0.0);
+    dial->setCursorColour(Qt::black);
 
-    dial->update();
-    drawBandMapSpots();
+    bandmapUpdate();
+
 
     connect (bandmapGraphicsView, SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
 
@@ -251,8 +252,7 @@ void BandmapView::bandmapResize(int _height)
     //int width = _width;
     qDebug() << "bandmap resize height " << height;
     dial->setCurHeight(height);
-    dial->update();
-    drawBandMapSpots();
+    bandmapUpdate();
 
 
 }
@@ -296,28 +296,12 @@ void BandmapView::keyPressEvent(QKeyEvent *event)
 void BandmapView::bandmapUpdate()
 {
     dial->update();
+    drawBandMapSpots();
 
 }
 
 
-void BandmapView::paintEvent(QPaintEvent *event)
-{
-    //QWidget::paintEvent(event);
-    QPainter painter(this);
-    //qDebug() << "height" << bandmap->getBandmapFrameHeight();
-    //qDebug() << "width" << bandmap->getBandmapFrameWidth();
 
-    //dial->drawScale(&painter, curFreq, bandmap->getBandmapFrameHeight());
-    //dial->drawCursor(&painter, curFreq);
-
-    //bandmapSpotMarker = new TextMarker(80, 100, "G8FKH", Qt::red);
-    //bandmapSpotMarker->drawTextMarker(&painter);
-    //dial->drawScale(&painter, curFreq, bandmap->getBandmapFrameHeight());
-    //dial->drawCursor(&painter, curFreq);
-
-    //drawBandMapSpots(&painter, event);
-
-}
 
 void BandmapView::resizeEvent(QResizeEvent *)
 {

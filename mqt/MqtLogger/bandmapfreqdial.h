@@ -55,7 +55,7 @@ public:
     int getCurHeight();
 
     void drawScale(QPainter *painter, qint32 frequency, int scaleHeight);
-    void drawCursor(QPainter *painter, qint32 frequency);
+    void drawCursor(QPainter *painter, qint64 frequency);
 
 
     void setZoomLevel(int level);
@@ -76,6 +76,8 @@ public:
 
 
     void onFontChanged(QFont cf);
+    void setCursorColour(QColor colour);
+
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void wheelEvent(QGraphicsSceneWheelEvent * event) override;
@@ -95,7 +97,10 @@ private:
     //qint32 currentFreq = 0;
     qint32 scaleStartFreq = 0;
     qint32 scaleEndFreq = 0;
-    qint32 currentFreqInt = 0;
+    qint32 currentFreqInt32 = 0;
+    qint64 currentFreqInt64 = 0;
+
+    QColor cursorColour;
 
     void changeZoom(bool direction);
 

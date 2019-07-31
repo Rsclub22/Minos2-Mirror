@@ -20,14 +20,15 @@
 BandmapFreqDial::BandmapFreqDial(int _width, int _height):
     zoomLevel(0),
     dialHeight(_height),
-    dialWidth(_width)
+    dialWidth(_width),
+    cursorColour(Qt::red)
 {
 
 }
 
 void BandmapFreqDial::onFontChanged(QFont cf)
 {
-    newFreqTextWidth = checkFreqWidth(currentFreqInt);
+    newFreqTextWidth = checkFreqWidth(currentFreqInt32);
     QFontMetrics fm(cf);
     if (fontHeight != fm.height())
     {
@@ -37,6 +38,10 @@ void BandmapFreqDial::onFontChanged(QFont cf)
     update();
 }
 
+void BandmapFreqDial::setCursorColour(QColor colour)
+{
+    cursorColour = colour;
+}
 
 QRectF BandmapFreqDial::boundingRect() const
 {
@@ -61,8 +66,8 @@ void BandmapFreqDial::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
 {
 
 
-    drawScale(painter, currentFreqInt, dialHeight);
-    drawCursor(painter, currentFreqInt);
+    drawScale(painter, currentFreqInt32, dialHeight);
+    drawCursor(painter, currentFreqInt64);
 
 
 }
@@ -73,14 +78,15 @@ void BandmapFreqDial::setCurFreq(double f)
 {
     currentFreqDbl = f;
     qint64 frequency = static_cast<qint64>(f);
-    qint32 freq = static_cast<qint32>(frequency/1000);
-    if (freq != currentFreqInt)
+    if (frequency != currentFreqInt64)
     {
-        currentFreqInt = freq;
-        newFreqTextWidth = checkFreqWidth(currentFreqInt);
-
+        currentFreqInt64 = frequency;
+        qint32 freq = static_cast<qint32>(frequency/1000);
+        currentFreqInt32 = freq;
+        newFreqTextWidth = checkFreqWidth(currentFreqInt32);
     }
-}
+
+ }
 
 
 double BandmapFreqDial::getCurFreq()
@@ -354,12 +360,11 @@ QString BandmapFreqDial::convertFreqDialDisplay(qint32 freq)
 }
 
 
-void BandmapFreqDial::drawCursor(QPainter *painter, qint32 _frequency)
+void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
 {
 
-    qint32 frequency = _frequency;
-    qint32 fmaj = frequency/1000;
-    qint32 fmin = frequency - (fmaj*1000);
+    qint32 fmaj = static_cast<qint32>(frequency/1000);
+    qint32 fmin = static_cast<qint32>(frequency - (fmaj*1000));
     qint32 offsetFreq = fmaj - scaleStartFreq;
     int cursorY = (offsetFreq * dialData::khzPixelStep[zoomLevel]) + (fmin/dialData::hzPixelStep[zoomLevel]);
 
@@ -371,7 +376,7 @@ void BandmapFreqDial::drawCursor(QPainter *painter, qint32 _frequency)
     freqCursor << QPoint(70,cursorY +dialData::DIAL_VERT_OFFSET);
     freqCursor << QPoint(60,cursorY-5 + dialData::DIAL_VERT_OFFSET);
 
-    QBrush freqCursorBrush(Qt::red, Qt::SolidPattern);
+    QBrush freqCursorBrush(cursorColour, Qt::SolidPattern);
 
     QPainterPath freqCursorPath;
     freqCursorPath.addPolygon(freqCursor);

@@ -79,7 +79,7 @@ protected:
 
     //void scrollContentsBy(int dx, int dy) override;
 
-    void paintEvent(QPaintEvent*) override;
+    //void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override;
     void mousePressEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
