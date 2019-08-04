@@ -201,6 +201,7 @@ private:
 public slots:
     void rotateToController();
     void displayBearing(int);
+    void compassClicked(int);
     void updatePresetLabels();
     void clickedPreset(int buttonNumber);
     void logMessage( QString s );

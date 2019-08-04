@@ -36,6 +36,8 @@ signals:
 
 // for test
 */
+signals:
+    void sendClickBearing(int brg);
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 

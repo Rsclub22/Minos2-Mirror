@@ -181,12 +181,39 @@ void MinosCompass::paintEvent(QPaintEvent *)
 
 }
 
+double angleFromN(const QPoint &V )
+{
+    return atan2(-V.y(), V.x());    // mouse position increases down and right
+}
 
 void MinosCompass::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton) {
+    if (event->button() == Qt::LeftButton)
+    {
         lastPoint = event->pos();
-        //qDebug() << "mouse position" << lastPoint;
+        QPoint centre(width()/2, height()/2);
+        QPoint top(width()/2, height());
+
+        QPoint vec = lastPoint - centre;
+
+        double distanceFromCentre = sqrt(vec.x() * vec.x() + vec.y() * vec.y());
+
+        if (distanceFromCentre < width()/2 && distanceFromCentre > (width()/2 - width()/5))
+        {
+            double brg = angleFromN(vec) ;
+            brg *= -180/M_PI;    // clockwise degrees
+            brg += 90;      // from N rather than E
+
+            while (brg < 0)
+                brg += 360;
+            while (brg > 360)
+                brg -= 360;
+            emit sendClickBearing(static_cast<int>(brg) );
+
+//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;;
+        }
+
+//        qDebug() << "mouse position" << lastPoint;
     }
 }
 
