@@ -11,7 +11,7 @@
 #include <QGraphicsScene>
 #include "bandmapfreqdial.h"
 #include "bandmapspotmarker.h"
-
+#include "bandmapdatamodel.h"
 
 
 class BandmarkerDetials
@@ -19,12 +19,13 @@ class BandmarkerDetials
 
 public:
     BandmarkerDetials();
-    BandmarkerDetials(QPoint _freqLineStart, QPoint _freqLineEnd, BandmapSpotMarker* _spot);
+    BandmarkerDetials(QPoint _freqLineStart, QPoint _freqLineEnd, QPoint _spotMarkerCoord, BandmapSpotMarker* _spot);
 
 
 
 QPoint freqLineStart;
 QPoint freqLineEnd;
+QPoint spotMarkerCoord;
 BandmapSpotMarker* spot;
 
 };
@@ -34,13 +35,14 @@ BandmapSpotMarker* spot;
 class BandmapView : public QAbstractItemView
 {
     Q_OBJECT
+
 public:
-    explicit BandmapView(QGraphicsView* bandmapGraphicsView, QWidget *parent = nullptr);
+    explicit BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent = nullptr);
 
     QModelIndex indexAt(const QPoint &point_) const override;
     void scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint) override;
     QRect visualRect(const QModelIndex &index) const override;
-    void setModel(QAbstractItemModel *model) override;
+
 
 
 
@@ -55,7 +57,7 @@ public:
     int getBandmapFrameWidth();
     void onFontChanged(QFont cf);
 protected slots:
-    void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
+    void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 
     void rowsInserted(const QModelIndex &parent, int start, int end) override;
     void rowsAboutToBeRemoved(const QModelIndex &parent, int start,
@@ -70,16 +72,17 @@ signals:
 
 protected:
     int horizontalOffset() const override;
+    int verticalOffset() const override;
     bool isIndexHidden(const QModelIndex&) const override{ return false; }
     QModelIndex moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers modifiers) override;
     void setSelection(const QRect &rect, QFlags<QItemSelectionModel::SelectionFlag> flags) override;
-    int verticalOffset() const override;
+
     QRegion visualRegionForSelection(const QItemSelection &selection) const override;
 
 
     //void scrollContentsBy(int dx, int dy) override;
 
-    //void paintEvent(QPaintEvent*) override;
+    void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override;
     void mousePressEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
@@ -98,7 +101,6 @@ private:
     //Bandmap *bandmap;
     QGraphicsScene *bandmapScene;
     QGraphicsView* bandmapGraphicsView;
-
     BandmapFreqDial *dial;
     double curFreq;
 
@@ -107,11 +109,15 @@ private:
     int dialMinZoomLevel;
     int dialMaxZoomLevel;
 
+    int fontHeight;
+    int maxNumSpots;
+
     //void changeZoom(bool direction);
-    void drawBandMapSpots();
+
     QVector<BandmarkerDetials*> listOfMarkers;
 
-    void bandmapUpdate();
+
+    void drawBandMapSpots(QPainter* painter, BandmapFreqDial *dial);
 };
 
 #endif // BANDMAPVIEW_H

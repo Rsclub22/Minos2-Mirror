@@ -12,18 +12,25 @@
 
 
 #include "bandmapview.h"
+
+
 #include <QDebug>
 
-BandmarkerDetials::BandmarkerDetials(QPoint _freqLineStart, QPoint _freqLineEnd, BandmapSpotMarker* _spot)
+BandmarkerDetials::BandmarkerDetials(QPoint _freqLineStart, QPoint _freqLineEnd, QPoint _spotMarkerCoord, BandmapSpotMarker* _spot)
 {
     freqLineStart = _freqLineStart;
     freqLineEnd = _freqLineEnd;
+    spotMarkerCoord = _spotMarkerCoord;
     spot = _spot;
+
 }
 
 
 
-BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) : QAbstractItemView(parent)
+BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) :
+    QAbstractItemView(parent),
+    fontHeight(0),
+    maxNumSpots(0)
 {
 
     //setFocusPolicy((Qt::WheelFocus));
@@ -31,8 +38,14 @@ BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) :
 
     bandmapScene = new QGraphicsScene(this);
 
+
+    horizontalScrollBar()->setRange(0, 0);
+    verticalScrollBar()->setRange(0, 0);
+
+
     bandmapGraphicsView = _bandmapGraphicsView;
-    bandmapGraphicsView->setScene(bandmapScene);
+    //bandmapGraphicsView->setScene(bandmapScene);
+    setScene(bandmapScene);
 
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
 
@@ -44,20 +57,10 @@ BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) :
     dial->setCurFreq(0.0);
     dial->setCursorColour(Qt::black);
 
-    bandmapUpdate();
+
 
 
     connect (bandmapGraphicsView, SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
-
-
-    //QString redHtml = "<font color=\"Red\">";
-    //QString endHtml = "</font><br>";
-    //QString msg = redHtml + "G8FKH" + endHtml;
-    //QPoint pos = QPoint(80,100);
-    //BandmapSpotMarker* spot = new BandmapSpotMarker(pos, redHtml + "G8FKH" + endHtml, "testing", Qt::red, bandmapScene);
-    //spot->setSpotText(msg);
-    //pos = QPoint(80,125);
-    //spot = new BandmapSpotMarker(pos, redHtml + "M0ICR" + endHtml, "testing", Qt::red, bandmapScene);
 
 
 }
@@ -66,19 +69,111 @@ BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) :
 void BandmapView::onFontChanged(QFont cf)
 {
     dial->onFontChanged(cf);
+    QFontMetrics fm(cf);
+    if (fontHeight != fm.height())
+    {
+        fontHeight = fm.height();
+    }
+
+
 }
 
-void BandmapView::setModel(QAbstractItemModel *model)
+
+void BandmapView::paintEvent(QPaintEvent *event)
 {
-    QAbstractItemView::setModel(model);
-    //hashIsDirty = true;
+
+    QPainter* painter = new QPainter(bandmapGraphicsView);
+
+    dial->update();
+    drawBandMapSpots(painter, dial);
+
+/*
+    QItemSelectionModel *selections = selectionModel();
+    QStyleOptionViewItem option = viewOptions();
+
+    QBrush background = option.palette.base();
+    QPen foreground(option.palette.color(QPalette::WindowText));
+
+    QPainter painter(viewport());
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    painter.fillRect(event->rect(), background);
+    painter.setPen(foreground);
+
+    // Viewport rectangles
+    QRect pieRect = QRect(margin, margin, pieSize, pieSize);
+
+    if (validItems <= 0)
+        return;
+
+    painter.save();
+    painter.translate(pieRect.x() - horizontalScrollBar()->value(),
+                      pieRect.y() - verticalScrollBar()->value());
+    painter.drawEllipse(0, 0, pieSize, pieSize);
+    double startAngle = 0.0;
+    int row;
+
+    for (row = 0; row < model()->rowCount(rootIndex()); ++row) {
+        QModelIndex index = model()->index(row, 1, rootIndex());
+        double value = model()->data(index).toDouble();
+
+        if (value > 0.0) {
+            double angle = 360 * value / totalValue;
+
+            QModelIndex colorIndex = model()->index(row, 0, rootIndex());
+            QColor color = QColor(model()->data(colorIndex, Qt::DecorationRole).toString());
+
+            if (currentIndex() == index)
+                painter.setBrush(QBrush(color, Qt::Dense4Pattern));
+            else if (selections->isSelected(index))
+                painter.setBrush(QBrush(color, Qt::Dense3Pattern));
+            else
+                painter.setBrush(QBrush(color));
+
+            painter.drawPie(0, 0, pieSize, pieSize, int(startAngle*16), int(angle*16));
+
+            startAngle += angle;
+        }
+    }
+    painter.restore();
+
+    int keyNumber = 0;
+
+    for (row = 0; row < model()->rowCount(rootIndex()); ++row) {
+        QModelIndex index = model()->index(row, 1, rootIndex());
+        double value = model()->data(index).toDouble();
+
+        if (value > 0.0) {
+            QModelIndex labelIndex = model()->index(row, 0, rootIndex());
+
+            QStyleOptionViewItem option = viewOptions();
+            option.rect = visualRect(labelIndex);
+            if (selections->isSelected(labelIndex))
+                option.state |= QStyle::State_Selected;
+            if (currentIndex() == labelIndex)
+                option.state |= QStyle::State_HasFocus;
+            itemDelegate()->paint(&painter, option, labelIndex);
+
+            ++keyNumber;
+        }
+    }
+
+*/
+
 }
 
+//void BandmapView::setModel(QAbstractItemModel *model)
+//{
+//    QAbstractItemView::setModel(model);
+//    //hashIsDirty = true;
+//}
 
-void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+
+void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
 
-    QAbstractItemView::dataChanged(topLeft, bottomRight);
+    QAbstractItemView::dataChanged(topLeft, bottomRight, roles);
+    viewport()->update();
 }
 
 
@@ -86,7 +181,9 @@ void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
 
     QAbstractItemView::rowsInserted(parent, start, end);
+    viewport()->update();
 }
+
 
 void BandmapView::rowsAboutToBeRemoved(const QModelIndex &parent,
                                          int start, int end)
@@ -201,8 +298,7 @@ QModelIndex BandmapView::indexAt(const QPoint &point_) const
 
 
 
-void BandmapView::scrollTo(const QModelIndex &index,
-                             QAbstractItemView::ScrollHint)
+void BandmapView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint)
 {
     QRect viewRect = viewport()->rect();
     QRect itemRect = visualRect(index);
@@ -227,10 +323,16 @@ void BandmapView::scrollTo(const QModelIndex &index,
 
 QRect BandmapView::visualRect(const QModelIndex &index) const
 {
-    QRect rect;
-    if (index.isValid())
-        //rect = viewportRectForRow(index.row()).toRect();
-    return rect;
+//    QRect rect = itemRect(index);
+//    if (!rect.isValid())
+//        return rect;
+
+//    return QRect(rect.left() - horizontalScrollBar()->value(),
+//                 rect.top() - verticalScrollBar()->value(),
+//                 rect.width(), rect.height());
+
+    return viewport()->rect();
+
 }
 
 
@@ -252,7 +354,7 @@ void BandmapView::bandmapResize(int _height)
     //int width = _width;
     qDebug() << "bandmap resize height " << height;
     dial->setCurHeight(height);
-    bandmapUpdate();
+    viewport()->update();
 
 
 }
@@ -293,13 +395,6 @@ void BandmapView::keyPressEvent(QKeyEvent *event)
 
 
 
-void BandmapView::bandmapUpdate()
-{
-    dial->update();
-    drawBandMapSpots();
-
-}
-
 
 
 
@@ -325,33 +420,138 @@ void BandmapView::setFreq(double f)
 
             curFreq = f;
             dial->setCurFreq(f);
-            dial->update();
+            viewport()->update();
 
 }
 
-void BandmapView::drawBandMapSpots()
+void BandmapView::drawBandMapSpots(QPainter* painter, BandmapFreqDial *dial)
 {
     if (!listOfMarkers.isEmpty())
     {
         for (int i = 0; i < listOfMarkers.count(); i++)
         {
-            bandmapScene->removeItem(listOfMarkers[i]->spot);
+            if (listOfMarkers[i]->spot != nullptr)
+            {
+                bandmapScene->removeItem(listOfMarkers[i]->spot);
+            }
+
         }
     }
-    QString redHtml = "<font color=\"Red\">";
-    QString endHtml = "</font><br>";
-    QString msg = redHtml + "G8FKH" + endHtml;
-    QPoint pos = QPoint(80,100);
-    BandmapSpotMarker* spot = new BandmapSpotMarker(pos, redHtml + "G8FKH" + endHtml, "testing", Qt::red);
-    BandmarkerDetials* markerDetials = new BandmarkerDetials(QPoint(0,0), QPoint(0,0), spot);
-    listOfMarkers.append(markerDetials);
-    spot->setSpotText(msg);
-    bandmapScene->addItem(spot);
-    pos = QPoint(80,125);
-    spot = new BandmapSpotMarker(pos, redHtml + "M0ICR" + endHtml, "testing", Qt::red);
-    listOfMarkers.append(markerDetials);
-    bandmapScene->addItem(spot);
 
+    listOfMarkers.clear();
+
+    qint32 startFreq = dial->getScaleStartFreq();
+    qint32 endFreq = dial->getScaleEndFreq();
+    int dialWidth = dial->getCurWidth();
+    int dialHeight = dial->getCurHeight();
+
+    QFont cf = QApplication::font();
+    QFontMetrics fm(cf);
+    fontHeight = fm.height();
+
+
+    if (dialHeight == 0 || fontHeight == 0)
+        return;
+
+    maxNumSpots = dialHeight/fontHeight;
+    if (maxNumSpots == 0)
+        return;
+
+    int textYCoord = 0;
+
+    for (int i = 0; i < maxNumSpots; i++)
+    {
+        BandmarkerDetials* markerDetials = new BandmarkerDetials(QPoint(0,0), QPoint(0, 0), QPoint(dialWidth + 10, textYCoord), nullptr);
+        listOfMarkers.append(markerDetials);
+        textYCoord += fontHeight;
+    }
+
+    int yCoord = 0;
+    int numrows = model()->rowCount();
+
+    if (numrows != 0)
+    {
+        for (int row = 0; row < numrows; ++row)
+        {
+
+            QModelIndex index = model()->index(row, FREQ_COL_NUM);
+            QString freq = model()->data(index, Qt::DisplayRole).toString() + "000";
+            qint64 f_int64 = freq.toLongLong();
+            qint32 f_int32 = freq.toLong();
+
+            if (f_int32 >= startFreq * 1000 && f_int32 <= endFreq * 1000)
+            {
+                yCoord = dial->getYCoordOnDial(f_int64);
+
+                for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
+                {
+                    qDebug() << listOfMarkers[markNum]->spotMarkerCoord.y();
+                    if (listOfMarkers[markNum]->spotMarkerCoord.y() >= yCoord)
+                    {
+                        if (listOfMarkers[markNum]->spot == nullptr)
+                        {
+                            index = model()->index(row, DXSPOT_CALL_COL_NUM);
+                            QString callsign = model()->data(index, Qt::DisplayRole).toString();
+                            BandmapSpotMarker* spot = new BandmapSpotMarker(QPoint(listOfMarkers[markNum]->spotMarkerCoord.x(), listOfMarkers[markNum]->spotMarkerCoord.y()), callsign, "testing", Qt::red);
+                            bandmapScene->addItem(spot);
+                            spot->setSpotText(callsign + " " + freq);
+                            listOfMarkers[markNum]->spot = spot;
+                            QPoint startMarkerLine = QPoint(dialWidth + 10, listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight/2);
+                            QPoint endMarkerLine = QPoint(dialWidth, yCoord);
+                            painter->setPen(Qt::black);
+                            painter->drawLine(startMarkerLine, endMarkerLine);
+                            listOfMarkers[markNum]->freqLineStart = startMarkerLine;
+                            listOfMarkers[markNum]->freqLineEnd = endMarkerLine;
+                            break;
+                        }
+                    }
+                }
+
+
+
+                /*
+                // find a free slot to display
+                for (int i = 0; i < listOfMarkers.count(); i++)
+                {
+
+                    if (yCoord >= listOfMarkers[i]->spotMarkerCoord.y())
+                    {
+                        if (listOfMarkers[i]->spot != nullptr)
+                        {
+                            index = model()->index(row, DXSPOT_CALL_COL_NUM);
+                            QString callsign = model()->data(index, Qt::DisplayRole).toString();
+                            BandmapSpotMarker* spot = new BandmapSpotMarker(QPoint(listOfMarkers[i]->spotMarkerCoord.x(), listOfMarkers[i]->spotMarkerCoord.y()), callsign, "testing", Qt::red);
+                            bandmapScene->addItem(spot);
+                            spot->setSpotText(callsign + " " + freq);
+                            listOfMarkers[i]->spot = spot;
+                        }
+                    }
+                }
+                */
+
+            }
+
+
+        }
+
+    }
+
+
+    /*
+        QString redHtml = "<font color=\"Red\">";
+        QString endHtml = "</font><br>";
+        QString msg = redHtml + "G8FKH" + endHtml;
+        QPoint pos = QPoint(80,100);
+        BandmapSpotMarker* spot = new BandmapSpotMarker(pos, redHtml + "G8FKH" + endHtml, "testing", Qt::red);
+        BandmarkerDetials* markerDetials = new BandmarkerDetials(QPoint(0,0), QPoint(0,0), spot);
+        listOfMarkers.append(markerDetials);
+        spot->setSpotText(msg);
+        bandmapScene->addItem(spot);
+        pos = QPoint(80,125);
+        spot = new BandmapSpotMarker(pos, redHtml + "M0ICR" + endHtml, "testing", Qt::red);
+        listOfMarkers.append(markerDetials);
+        bandmapScene->addItem(spot);
+    */
 }
 
 

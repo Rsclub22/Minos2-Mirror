@@ -78,6 +78,9 @@ public:
     void onFontChanged(QFont cf);
     void setCursorColour(QColor colour);
 
+    int getYCoordOnDial(qint64 frequency);
+
+
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void wheelEvent(QGraphicsSceneWheelEvent * event) override;

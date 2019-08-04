@@ -360,13 +360,22 @@ QString BandmapFreqDial::convertFreqDialDisplay(qint32 freq)
 }
 
 
-void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
+int BandmapFreqDial::getYCoordOnDial(qint64 frequency)
 {
-
     qint32 fmaj = static_cast<qint32>(frequency/1000);
     qint32 fmin = static_cast<qint32>(frequency - (fmaj*1000));
     qint32 offsetFreq = fmaj - scaleStartFreq;
-    int cursorY = (offsetFreq * dialData::khzPixelStep[zoomLevel]) + (fmin/dialData::hzPixelStep[zoomLevel]);
+    return (offsetFreq * dialData::khzPixelStep[zoomLevel]) + (fmin/dialData::hzPixelStep[zoomLevel]);
+
+}
+
+
+
+void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
+{
+
+
+    int cursorY = getYCoordOnDial(frequency);
 
 
     QPolygon freqCursor;

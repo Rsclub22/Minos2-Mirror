@@ -236,6 +236,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 bandmapSpot->sentToMemory = value.toBool();
+            break;
             default:
                 return false;
 

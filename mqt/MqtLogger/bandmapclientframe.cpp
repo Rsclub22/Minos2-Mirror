@@ -40,10 +40,13 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     bandmapDataModel = new BandmapDataModel();
 
     bandmapGraphicsView = ui->bandmapView;
-    bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
-    bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    //bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    //bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    bandmapGraphicsView->setVisible(true);
 
     bandmapView = new BandmapView(bandmapGraphicsView);
+    bandmapView->setModel(bandmapDataModel);
+
 
 
     //bandmap = new Bandmap();
@@ -290,7 +293,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
                                                     spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
 
             bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
-            int a = 0;
+
        }
     }
 
