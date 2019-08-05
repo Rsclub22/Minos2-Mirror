@@ -39,22 +39,10 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapDataModel = new BandmapDataModel();
 
-    //bandmapGraphicsView = ui->bandmapView;
-    //bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
-    //bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
-    //bandmapGraphicsView->setVisible(true);
-
-    //bandmapView = new BandmapView(bandmapGraphicsView);
-
-
     bandmapView = new BandmapView;
     bandmapView->setModel(bandmapDataModel);
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
-
-
-    //bandmap = new Bandmap();
-    //bandmap->initBandmap(bandmapDataModel, ui->bandmapView);
 
     checkNewSpotsTimer = new QTimer(this);
     connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkBandMapSpots()));

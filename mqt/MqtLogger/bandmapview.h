@@ -19,14 +19,12 @@ class BandmarkerDetials
 
 public:
     BandmarkerDetials();
-    BandmarkerDetials(QPoint _freqLineStart, QPoint _freqLineEnd, QPoint _spotMarkerCoord, BandmapSpotMarker* _spot);
+    BandmarkerDetials(QPoint _spotMarkerCoord, BandmapSpotMarker* _spot, QGraphicsLineItem* _markerline);
 
 
-
-QPoint freqLineStart;
-QPoint freqLineEnd;
-QPoint spotMarkerCoord;
+QPoint spotMarkerCoord;     // text coords
 BandmapSpotMarker* spot;
+QGraphicsLineItem* markerline;
 
 };
 
@@ -59,6 +57,8 @@ public:
     void initBandmapView(QGraphicsView *view);
 
 
+    void bandmapUpdate();
+
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 
@@ -85,7 +85,7 @@ protected:
 
     //void scrollContentsBy(int dx, int dy) override;
 
-    void paintEvent(QPaintEvent*) override;
+//    void paintEvent(QPaintEvent*) override;
     void resizeEvent(QResizeEvent*) override;
     void mousePressEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
@@ -122,8 +122,8 @@ private:
 
 
 
-    void drawBandMapSpots(QPainter* painter, BandmapFreqDial *dial);
-    QRectF viewportRectForRow(int row) const;
+    void drawBandMapSpots();
+
 };
 
 #endif // BANDMAPVIEW_H

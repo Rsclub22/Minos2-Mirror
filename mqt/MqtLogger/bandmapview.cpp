@@ -16,12 +16,11 @@
 
 #include <QDebug>
 
-BandmarkerDetials::BandmarkerDetials(QPoint _freqLineStart, QPoint _freqLineEnd, QPoint _spotMarkerCoord, BandmapSpotMarker* _spot)
+BandmarkerDetials::BandmarkerDetials( QPoint _spotMarkerCoord, BandmapSpotMarker* _spot, QGraphicsLineItem* _markerLine)
 {
-    freqLineStart = _freqLineStart;
-    freqLineEnd = _freqLineEnd;
     spotMarkerCoord = _spotMarkerCoord;
     spot = _spot;
+    markerline = _markerLine;
 
 }
 
@@ -57,6 +56,8 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapGraphicsView = view;
     bandmapGraphicsView->setScene(bandmapScene);
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
+    bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
 
     dial = new BandmapFreqDial(70, bandmapGraphicsView->viewport()->height());
     qDebug() << "bandmap height " << getBandmapFrameHeight();
@@ -65,7 +66,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapScene->addItem(dial);
     dial->setCurFreq(0.0);
     dial->setCursorColour(Qt::black);
-    //viewport()->update();
+    bandmapUpdate();
 
 
 
@@ -89,16 +90,13 @@ void BandmapView::onFontChanged(QFont cf)
 
 }
 
-
+/*
 void BandmapView::paintEvent(QPaintEvent *event)
 {
 
-    QPainter* painter = new QPainter(this);
 
-    dial->drawDial(painter);
-    drawBandMapSpots(painter, dial);
 
-/*
+
     QItemSelectionModel *selections = selectionModel();
     QStyleOptionViewItem option = viewOptions();
 
@@ -169,9 +167,10 @@ void BandmapView::paintEvent(QPaintEvent *event)
         }
     }
 
-*/
+
 
 }
+*/
 
 //void BandmapView::setModel(QAbstractItemModel *model)
 //{
@@ -192,6 +191,7 @@ void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
 
     QAbstractItemView::rowsInserted(parent, start, end);
+    bandmapUpdate();
 
 }
 
@@ -203,6 +203,20 @@ void BandmapView::rowsAboutToBeRemoved(const QModelIndex &parent,
     QAbstractItemView::rowsAboutToBeRemoved(parent, start, end);
 }
 
+
+void BandmapView::bandmapUpdate()
+{
+
+    QPainter* painter = new QPainter(this);
+
+    dial->drawDial(painter);
+
+    drawBandMapSpots();
+
+}
+
+
+
 void BandmapView::updateGeometries()
 {
 
@@ -213,7 +227,7 @@ void BandmapView::updateGeometries()
 int BandmapView::horizontalOffset() const
 {
 
-
+    return horizontalScrollBar()->value();
 }
 
 
@@ -254,14 +268,14 @@ QModelIndex BandmapView::moveCursor(QAbstractItemView::CursorAction cursorAction
 
 void BandmapView::setSelection(const QRect &rect, QFlags<QItemSelectionModel::SelectionFlag> flags)
 {
-
+    // do nothing
 }
 
 
 int BandmapView::verticalOffset() const
 {
 
-
+    return verticalScrollBar()->value();
 }
 
 
@@ -277,16 +291,7 @@ QRegion BandmapView::visualRegionForSelection(const QItemSelection &selection) c
 
 
 
-QRectF BandmapView::viewportRectForRow(int row) const
-{
-    calculateRectsIfNecessary();
-    QRectF rect = rectForRow.value(row).toRect();
-    if (!rect.isValid())
-        return rect;
-    return QRectF(rect.x() - horizontalScrollBar()->value(),
-                  rect.y() - verticalScrollBar()->value(),
-                  rect.width(), rect.height());
-}
+
 
 
 QModelIndex BandmapView::indexAt(const QPoint &point_) const
@@ -311,50 +316,24 @@ QModelIndex BandmapView::indexAt(const QPoint &point_) const
 
 void BandmapView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint)
 {
-    QRect viewRect = viewport()->rect();
-    QRect itemRect = visualRect(index);
-
-    if (itemRect.left() < viewRect.left())
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value()
-                + itemRect.left() - viewRect.left());
-    else if (itemRect.right() > viewRect.right())
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value()
-                + qMin(itemRect.right() - viewRect.right(),
-                       itemRect.left() - viewRect.left()));
-    if (itemRect.top() < viewRect.top())
-        verticalScrollBar()->setValue(verticalScrollBar()->value() +
-                itemRect.top() - viewRect.top());
-    else if (itemRect.bottom() > viewRect.bottom())
-        verticalScrollBar()->setValue(verticalScrollBar()->value() +
-                qMin(itemRect.bottom() - viewRect.bottom(),
-                     itemRect.top() - viewRect.top()));
-    viewport()->update();
+    // cannot scroll
 }
 
 
 QRect BandmapView::visualRect(const QModelIndex &index) const
 {
 
-    QRect rect;
-        if (index.isValid())
-            rect = viewportRectForRow(index.row()).toRect();
-        return rect;
+    //QRect rect;
+    //    if (index.isValid())
+    //        rect = viewportRectForRow(index.row()).toRect();
+        return rect();
 
 
 }
 
 
 
-QRectF BandmapView::viewportRectForRow(int row) const
-{
-    calculateRectsIfNecessary();
-    QRectF rect = rectForRow.value(row).toRect();
-    if (!rect.isValid())
-        return rect;
-    return QRectF(rect.x() - horizontalScrollBar()->value(),
-                  rect.y() - verticalScrollBar()->value(),
-                  rect.width(), rect.height());
-}
+
 
 
 //QSize BandmapView::minimumSizeHint() const
@@ -374,7 +353,7 @@ void BandmapView::bandmapResize(int _height)
     //int width = _width;
     qDebug() << "bandmap resize height " << height;
     dial->setCurHeight(height);
-    viewport()->update();
+    bandmapUpdate();
 
 
 }
@@ -440,11 +419,11 @@ void BandmapView::setFreq(double f)
 
             curFreq = f;
             dial->setCurFreq(f);
-            viewport()->update();
+            bandmapUpdate();
 
 }
 
-void BandmapView::drawBandMapSpots(QPainter* painter, BandmapFreqDial *dial)
+void BandmapView::drawBandMapSpots()
 {
     if (!listOfMarkers.isEmpty())
     {
@@ -453,6 +432,10 @@ void BandmapView::drawBandMapSpots(QPainter* painter, BandmapFreqDial *dial)
             if (listOfMarkers[i]->spot != nullptr)
             {
                 bandmapScene->removeItem(listOfMarkers[i]->spot);
+            }
+            if (listOfMarkers[i]->markerline != nullptr)
+            {
+                bandmapScene->removeItem(listOfMarkers[i]->markerline);
             }
 
         }
@@ -481,7 +464,7 @@ void BandmapView::drawBandMapSpots(QPainter* painter, BandmapFreqDial *dial)
 
     for (int i = 0; i < maxNumSpots; i++)
     {
-        BandmarkerDetials* markerDetials = new BandmarkerDetials(QPoint(0,0), QPoint(0, 0), QPoint(dialWidth + 10, textYCoord), nullptr);
+        BandmarkerDetials* markerDetials = new BandmarkerDetials(QPoint(dialWidth + 10, textYCoord), nullptr, nullptr);
         listOfMarkers.append(markerDetials);
         textYCoord += fontHeight;
     }
@@ -518,10 +501,14 @@ void BandmapView::drawBandMapSpots(QPainter* painter, BandmapFreqDial *dial)
                             listOfMarkers[markNum]->spot = spot;
                             QPoint startMarkerLine = QPoint(dialWidth + 10, listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight/2);
                             QPoint endMarkerLine = QPoint(dialWidth, yCoord);
-                            painter->setPen(Qt::black);
-                            painter->drawLine(startMarkerLine, endMarkerLine);
-                            listOfMarkers[markNum]->freqLineStart = startMarkerLine;
-                            listOfMarkers[markNum]->freqLineEnd = endMarkerLine;
+                            QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
+                            QLineF markerLineCoordsF = QLineF(markerLineCoord);
+
+                            QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
+                            bandmapScene->addItem(markerLine);
+
+                            listOfMarkers[markNum]->markerline = markerLine;
+
                             break;
                         }
                     }
