@@ -23,7 +23,7 @@ BandmapFreqDial::BandmapFreqDial(int _width, int _height):
     dialWidth(_width),
     cursorColour(Qt::red)
 {
-
+    changeBoundingRect(dialHeight, dialWidth);
 }
 
 void BandmapFreqDial::onFontChanged(QFont cf)
@@ -70,6 +70,13 @@ void BandmapFreqDial::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
     drawCursor(painter, currentFreqInt64);
 
 
+}
+
+
+void BandmapFreqDial::drawDial(QPainter *painter)
+{
+    drawScale(painter, currentFreqInt32, dialHeight);
+    drawCursor(painter, currentFreqInt64);
 }
 
 

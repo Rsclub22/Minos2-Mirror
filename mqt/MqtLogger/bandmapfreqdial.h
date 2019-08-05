@@ -81,6 +81,9 @@ public:
     int getYCoordOnDial(qint64 frequency);
 
 
+    void drawDial(QPainter *painter);
+
+
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void wheelEvent(QGraphicsSceneWheelEvent * event) override;

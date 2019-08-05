@@ -40,7 +40,7 @@
     </widget>
    </item>
    <item>
-    <widget class="BandmapGraphicsPanel" name="bandmapView"/>
+    <widget class="BandmapGraphicsPanel" name="bandmapGraphicsView"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

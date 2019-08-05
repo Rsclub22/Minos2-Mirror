@@ -27,7 +27,7 @@ BandmarkerDetials::BandmarkerDetials(QPoint _freqLineStart, QPoint _freqLineEnd,
 
 
 
-BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) :
+BandmapView::BandmapView(QWidget *parent) :
     QAbstractItemView(parent),
     fontHeight(0),
     maxNumSpots(0)
@@ -36,26 +36,36 @@ BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) :
     //setFocusPolicy((Qt::WheelFocus));
     //setMinimumSize(minimumSizeHint());
 
-    bandmapScene = new QGraphicsScene(this);
+    bandmapScene = new QGraphicsScene(parent);
 
 
     horizontalScrollBar()->setRange(0, 0);
     verticalScrollBar()->setRange(0, 0);
 
 
-    bandmapGraphicsView = _bandmapGraphicsView;
+    //bandmapGraphicsView = new QGraphicsView(bandmapScene);
     //bandmapGraphicsView->setScene(bandmapScene);
-    setScene(bandmapScene);
 
+
+
+
+}
+
+
+void BandmapView::initBandmapView(QGraphicsView* view )
+{
+    bandmapGraphicsView = view;
+    bandmapGraphicsView->setScene(bandmapScene);
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
 
-    dial = new BandmapFreqDial(70, getBandmapFrameHeight());
+    dial = new BandmapFreqDial(70, bandmapGraphicsView->viewport()->height());
     qDebug() << "bandmap height " << getBandmapFrameHeight();
     dialMinZoomLevel = dial->getMinZoomLevel();
     dialMaxZoomLevel = dial->getMaxZoomLevel();
     bandmapScene->addItem(dial);
     dial->setCurFreq(0.0);
     dial->setCursorColour(Qt::black);
+    //viewport()->update();
 
 
 
@@ -64,6 +74,7 @@ BandmapView::BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent) :
 
 
 }
+
 
 
 void BandmapView::onFontChanged(QFont cf)
@@ -82,9 +93,9 @@ void BandmapView::onFontChanged(QFont cf)
 void BandmapView::paintEvent(QPaintEvent *event)
 {
 
-    QPainter* painter = new QPainter(bandmapGraphicsView);
+    QPainter* painter = new QPainter(this);
 
-    dial->update();
+    dial->drawDial(painter);
     drawBandMapSpots(painter, dial);
 
 /*
@@ -173,7 +184,7 @@ void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
 {
 
     QAbstractItemView::dataChanged(topLeft, bottomRight, roles);
-    viewport()->update();
+
 }
 
 
@@ -181,7 +192,7 @@ void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
 
     QAbstractItemView::rowsInserted(parent, start, end);
-    viewport()->update();
+
 }
 
 
@@ -264,7 +275,7 @@ QRegion BandmapView::visualRegionForSelection(const QItemSelection &selection) c
 
 
 
-/*
+
 
 QRectF BandmapView::viewportRectForRow(int row) const
 {
@@ -276,7 +287,7 @@ QRectF BandmapView::viewportRectForRow(int row) const
                   rect.y() - verticalScrollBar()->value(),
                   rect.width(), rect.height());
 }
-*/
+
 
 QModelIndex BandmapView::indexAt(const QPoint &point_) const
 {
@@ -323,18 +334,27 @@ void BandmapView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHi
 
 QRect BandmapView::visualRect(const QModelIndex &index) const
 {
-//    QRect rect = itemRect(index);
-//    if (!rect.isValid())
-//        return rect;
 
-//    return QRect(rect.left() - horizontalScrollBar()->value(),
-//                 rect.top() - verticalScrollBar()->value(),
-//                 rect.width(), rect.height());
+    QRect rect;
+        if (index.isValid())
+            rect = viewportRectForRow(index.row()).toRect();
+        return rect;
 
-    return viewport()->rect();
 
 }
 
+
+
+QRectF BandmapView::viewportRectForRow(int row) const
+{
+    calculateRectsIfNecessary();
+    QRectF rect = rectForRow.value(row).toRect();
+    if (!rect.isValid())
+        return rect;
+    return QRectF(rect.x() - horizontalScrollBar()->value(),
+                  rect.y() - verticalScrollBar()->value(),
+                  rect.width(), rect.height());
+}
 
 
 //QSize BandmapView::minimumSizeHint() const

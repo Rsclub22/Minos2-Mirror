@@ -37,7 +37,7 @@ class BandmapView : public QAbstractItemView
     Q_OBJECT
 
 public:
-    explicit BandmapView(QGraphicsView* _bandmapGraphicsView, QWidget *parent = nullptr);
+    explicit BandmapView(QWidget *parent = nullptr);
 
     QModelIndex indexAt(const QPoint &point_) const override;
     void scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint) override;
@@ -56,6 +56,9 @@ public:
     int getBandmapFrameHeight();
     int getBandmapFrameWidth();
     void onFontChanged(QFont cf);
+    void initBandmapView(QGraphicsView *view);
+
+
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 
@@ -117,7 +120,10 @@ private:
     QVector<BandmarkerDetials*> listOfMarkers;
 
 
+
+
     void drawBandMapSpots(QPainter* painter, BandmapFreqDial *dial);
+    QRectF viewportRectForRow(int row) const;
 };
 
 #endif // BANDMAPVIEW_H
