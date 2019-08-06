@@ -92,12 +92,13 @@ protected:
 
 
 
-public slots:
+
 
 
 
 private slots:
     void bandmapResize(int);
+    void drawBandMapSpots();
 
 private:
 
@@ -122,7 +123,7 @@ private:
 
 
 
-    void drawBandMapSpots();
+
 
 };
 

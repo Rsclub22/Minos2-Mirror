@@ -16,6 +16,9 @@
 
 #include <QDebug>
 
+const int SPOTMARKER_XOFFSET = 20;
+
+
 BandmarkerDetials::BandmarkerDetials( QPoint _spotMarkerCoord, BandmapSpotMarker* _spot, QGraphicsLineItem* _markerLine)
 {
     spotMarkerCoord = _spotMarkerCoord;
@@ -70,7 +73,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
 
 
 
-
+    connect (dial, SIGNAL(dialupdated()), this, SLOT(drawBandMapSpots()));
     connect (bandmapGraphicsView, SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
 
 
@@ -207,11 +210,7 @@ void BandmapView::rowsAboutToBeRemoved(const QModelIndex &parent,
 void BandmapView::bandmapUpdate()
 {
 
-    QPainter* painter = new QPainter(this);
-
-    dial->drawDial(painter);
-
-    drawBandMapSpots();
+    dial->update();
 
 }
 
@@ -464,7 +463,7 @@ void BandmapView::drawBandMapSpots()
 
     for (int i = 0; i < maxNumSpots; i++)
     {
-        BandmarkerDetials* markerDetials = new BandmarkerDetials(QPoint(dialWidth + 10, textYCoord), nullptr, nullptr);
+        BandmarkerDetials* markerDetials = new BandmarkerDetials(QPoint(dialWidth + SPOTMARKER_XOFFSET, textYCoord), nullptr, nullptr);
         listOfMarkers.append(markerDetials);
         textYCoord += fontHeight;
     }
@@ -485,10 +484,10 @@ void BandmapView::drawBandMapSpots()
             if (f_int32 >= startFreq * 1000 && f_int32 <= endFreq * 1000)
             {
                 yCoord = dial->getYCoordOnDial(f_int64);
-
+                qDebug() << "spot marker line ycoord" << yCoord;
                 for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
                 {
-                    qDebug() << listOfMarkers[markNum]->spotMarkerCoord.y();
+                    //qDebug() << listOfMarkers[markNum]->spotMarkerCoord.y();
                     if (listOfMarkers[markNum]->spotMarkerCoord.y() >= yCoord)
                     {
                         if (listOfMarkers[markNum]->spot == nullptr)
@@ -499,7 +498,7 @@ void BandmapView::drawBandMapSpots()
                             bandmapScene->addItem(spot);
                             spot->setSpotText(callsign + " " + freq);
                             listOfMarkers[markNum]->spot = spot;
-                            QPoint startMarkerLine = QPoint(dialWidth + 10, listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight/2);
+                            QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight/2);
                             QPoint endMarkerLine = QPoint(dialWidth, yCoord);
                             QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
                             QLineF markerLineCoordsF = QLineF(markerLineCoord);

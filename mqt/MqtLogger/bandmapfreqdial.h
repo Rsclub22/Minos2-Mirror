@@ -41,9 +41,14 @@ const int DIAL_VERT_OFFSET = 10;      // dial offset to show first text
 
 
 
-class BandmapFreqDial : public QGraphicsItem
+class BandmapFreqDial : public QObject, public QGraphicsItem
 {
+    Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
+
+
 public:
+    //BandmapFreqDial(int width, int height, QGraphicsItem *parent = nullptr);
     BandmapFreqDial(int width, int height);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
@@ -83,6 +88,8 @@ public:
 
     void drawDial(QPainter *painter);
 
+signals:
+    void dialupdated();
 
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
