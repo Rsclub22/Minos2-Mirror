@@ -745,6 +745,10 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     if ( logColumnsChanged )
     {
+       if (clusterControlFrame)
+       {
+           clusterControlFrame->restoreColumns();
+       }
        showQSOs();             // this does a restorePartial
     }
 

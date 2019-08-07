@@ -135,6 +135,7 @@ public:
     bool isSpotQueueEmpty();
     QTimer* mouseInFrameTimer;
     void buttonHandleDxSpots();
+    void restoreColumns();
 
 private:
     Ui::ClusterClientFrame *ui;
@@ -194,6 +195,10 @@ private:
 
     bool isProtected;
 
+    void restoreCallsignViewColumns();
+    void restoreLocatorViewColumns();
+    void restoreSearchViewColumns();
+
     void restoreDxSpotViewColumns();
 
     void addDxSpotToTable(const QString spot);
@@ -249,8 +254,6 @@ private slots:
     void clearSpotActionSelected();
     void clearAllSpotsActionSelected();
     void delayed_afterLogContact(BaseContestLog *c, Callsign cs, QString loc);
-    void restoreCallsignViewColumns();
-    void restoreLocatorViewColumns();
     void onDxSpotViewClicked(const QModelIndex &);
     void onSearchSpotViewClicked(const QModelIndex &);
     void onCallsignSpotViewClicked(const QModelIndex &index);
@@ -267,6 +270,10 @@ private slots:
     void checkSavedFilters();
     void mouseTimerCheckNewSpots();
 
+    void on_dxSpotViewSectionResized(int, int , int);
+    void on_callsignViewSectionResized(int, int , int);
+    void on_locatorViewSectionResized(int, int , int);
+    void on_searchViewSectionResized(int, int , int);
 
     void on_splitter_splitterMoved(int, int);
     void memoryActionOverideSelected();
