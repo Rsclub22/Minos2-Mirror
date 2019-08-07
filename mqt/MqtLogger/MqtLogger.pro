@@ -51,6 +51,7 @@ SOURCES += \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
     TSessionManager.cpp \
+    bandmapclientfilterdialog.cpp \
     bandmapgraphicspanel.cpp \
     bandmapspotmarker.cpp \
     contestdetails.cpp \
@@ -125,6 +126,7 @@ HEADERS  += \
     StackedInfoFrame.h \
     TClockFrame.h \
     TSessionManager.h \
+    bandmapclientfilterdialog.h \
     bandmapgraphicspanel.h \
     bandmapspotmarker.h \
     contestdetails.h \
@@ -180,6 +182,7 @@ HEADERS  += \
     bandmapview.h
 
 FORMS    += \
+    bandmapclientfilterdialog.ui \
     contestdetails.ui \
     districtframe.ui \
     dxccframe.ui \

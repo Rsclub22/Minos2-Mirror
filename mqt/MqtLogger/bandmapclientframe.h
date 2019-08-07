@@ -15,7 +15,7 @@
 #define BANDMAPCLIENTFRAME_H
 
 #include <QObject>
-//#include <QGraphicsScene>
+#include <QSortFilterProxyModel>
 #include <QFrame>
 #include "dxspotdatamodel.h"
 #include "base_pch.h"
@@ -31,10 +31,32 @@
 #include "bandmapview.h"
 #include "bandmapfreqdial.h"
 #include "bandmapdatamodel.h"
+#include "bandmapclientfilterdialog.h"
 
 namespace Ui {
     class BandmapClientFrame;
 }
+
+
+class BandmapSpotSortFilterProxyModel : public QSortFilterProxyModel
+{
+public:
+
+    BandmapSpotSortFilterProxyModel(BandmapClientFilterDialog* _filterSetup)
+    {
+        filterSetup = _filterSetup;
+    }
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    bool matchBand(int sourceRow) const;
+
+
+
+    BandmapClientFilterDialog* filterSetup;
+
+};
+
+
 
 
 
@@ -71,6 +93,9 @@ private:
 
     BandmapView *bandmapView;
     QGraphicsView* bandmapGraphicsView;
+
+    BandmapSpotSortFilterProxyModel* bandmapSpotProxyModel;
+    BandmapClientFilterDialog* filterSetup;
 
     QString sfreq;
     double curFreq = 0;

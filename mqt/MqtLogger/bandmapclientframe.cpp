@@ -21,6 +21,11 @@
 
 #include "bandmapclientframe.h"
 
+
+
+
+
+
 BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     QFrame(parent),
     ui(new Ui::BandmapClientFrame),
@@ -37,10 +42,19 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
 
+    filterSetup = new BandmapClientFilterDialog(this);
+
+
     bandmapDataModel = new BandmapDataModel();
 
     bandmapView = new BandmapView;
-    bandmapView->setModel(bandmapDataModel);
+
+    bandmapSpotProxyModel = new BandmapSpotSortFilterProxyModel(filterSetup);
+    bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
+    bandmapSpotProxyModel->sort(FREQ_COL_NUM, Qt::AscendingOrder);
+
+    bandmapView->setModel(bandmapSpotProxyModel);
+
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
 
