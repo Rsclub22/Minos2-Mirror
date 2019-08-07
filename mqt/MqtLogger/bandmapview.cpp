@@ -211,6 +211,7 @@ void BandmapView::bandmapUpdate()
 {
 
     dial->update();
+    drawBandMapSpots();
 
 }
 
@@ -447,6 +448,9 @@ void BandmapView::drawBandMapSpots()
     int dialWidth = dial->getCurWidth();
     int dialHeight = dial->getCurHeight();
 
+    trace(QString("bandmapView: scale startFreq = %1").arg(startFreq));
+    trace(QString("bandmapView: scale endFreq = %1").arg(endFreq));
+
     QFont cf = QApplication::font();
     QFontMetrics fm(cf);
     fontHeight = fm.height();
@@ -478,13 +482,15 @@ void BandmapView::drawBandMapSpots()
 
             QModelIndex index = model()->index(row, FREQ_COL_NUM);
             QString freq = model()->data(index, Qt::DisplayRole).toString() + "000";
+            trace(QString("bandmapView: marker freq = %1").arg(freq));
             qint64 f_int64 = freq.toLongLong();
             qint32 f_int32 = freq.toLong();
 
             if (f_int32 >= startFreq * 1000 && f_int32 <= endFreq * 1000)
             {
                 yCoord = dial->getYCoordOnDial(f_int64);
-                qDebug() << "spot marker line ycoord" << yCoord;
+                trace(QString("bandmapView: cursor Freq = %1").arg(f_int64));
+                trace(QString("bandmapView: cursor Freq y coord = %1").arg(yCoord));
                 for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
                 {
                     //qDebug() << listOfMarkers[markNum]->spotMarkerCoord.y();
@@ -494,12 +500,20 @@ void BandmapView::drawBandMapSpots()
                         {
                             index = model()->index(row, DXSPOT_CALL_COL_NUM);
                             QString callsign = model()->data(index, Qt::DisplayRole).toString();
+                            trace(QString("bandmapView: addmarker = %1").arg(callsign));
+
                             BandmapSpotMarker* spot = new BandmapSpotMarker(QPoint(listOfMarkers[markNum]->spotMarkerCoord.x(), listOfMarkers[markNum]->spotMarkerCoord.y()), callsign, "testing", Qt::red);
+                            trace(QString("bandmapView: spot coord x = %1 y = %2").arg(listOfMarkers[markNum]->spotMarkerCoord.x()).arg(listOfMarkers[markNum]->spotMarkerCoord.y()));
+
                             bandmapScene->addItem(spot);
                             spot->setSpotText(callsign + " " + freq);
                             listOfMarkers[markNum]->spot = spot;
                             QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight/2);
-                            QPoint endMarkerLine = QPoint(dialWidth, yCoord);
+                            trace(QString("bandmapView: marker start coord x = %1 y = %2").arg(dialWidth + SPOTMARKER_XOFFSET).arg(listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight/2));
+                            trace(QString("bandmapView: font addition = %1").arg(fontHeight/2));
+                            QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
+                            trace(QString("bandmapView: marker end coord x = %1 y = %2").arg(dialWidth).arg(yCoord));
+
                             QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
                             QLineF markerLineCoordsF = QLineF(markerLineCoord);
 

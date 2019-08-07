@@ -211,8 +211,9 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
    // }
     scaleEndFreq = scaleStartFreq + freqRange;
 
-    qDebug() << "scale startF" << scaleStartFreq;
-    qDebug() << "scale endF" << scaleEndFreq;
+    trace(QString("bandmapFreqDial: scale startFreq = %1").arg(scaleStartFreq));
+    trace(QString("bandmapFreqDial: scale endFreq = %1").arg(scaleEndFreq));
+
 
     QRect scaleRec(0,0, dialWidth, dialHeight);
     QBrush scaleBackGndBrush(Qt::lightGray, Qt::SolidPattern);
@@ -371,7 +372,8 @@ void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
 
 
     int cursorY = getYCoordOnDial(frequency);
-    qDebug() << "cursor ycoord" << cursorY;
+    trace(QString("bandmapFreqDial: cursor Freq = %1").arg(frequency));
+    trace(QString("bandmapFreqDial: cursor Freq y coord = %1").arg(cursorY));
 
     QPolygon freqCursor;
 
