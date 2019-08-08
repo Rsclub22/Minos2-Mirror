@@ -205,10 +205,10 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
        scaleStartFreq =  ((scaleStartFreq + 2) / 10) * 10;
     }
 
-    //if (scaleStartFreq < 144000)  //// ************************this needs to be the lower limit of the band
-    //{
-    //    scaleStartFreq = 144000;
-   // }
+    if (scaleStartFreq < 144150)  //// ************************this needs to be the lower limit of the band
+    {
+        scaleStartFreq = 144150;
+    }
     scaleEndFreq = scaleStartFreq + freqRange;
 
     trace(QString("bandmapFreqDial: scale startFreq = %1").arg(scaleStartFreq));

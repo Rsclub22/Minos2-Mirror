@@ -432,10 +432,12 @@ void BandmapView::drawBandMapSpots()
             if (listOfMarkers[i]->spot != nullptr)
             {
                 bandmapScene->removeItem(listOfMarkers[i]->spot);
+                delete(listOfMarkers[i]->spot);
             }
             if (listOfMarkers[i]->markerline != nullptr)
             {
                 bandmapScene->removeItem(listOfMarkers[i]->markerline);
+                delete(listOfMarkers[i]->markerline);
             }
 
         }
@@ -493,8 +495,17 @@ void BandmapView::drawBandMapSpots()
                 trace(QString("bandmapView: cursor Freq y coord = %1").arg(yCoord));
                 for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
                 {
-                    //qDebug() << listOfMarkers[markNum]->spotMarkerCoord.y();
-                    if (listOfMarkers[markNum]->spotMarkerCoord.y() >= yCoord)
+                    int fontOffset;
+                    if (markNum == 0)
+                    {
+                        fontOffset = 0;
+                    }
+                    else
+                    {
+                        fontOffset = fontHeight;
+                    }
+
+                    if (listOfMarkers[markNum]->spotMarkerCoord.y() + fontOffset  >= yCoord && markNum != 0)
                     {
                         if (listOfMarkers[markNum]->spot == nullptr)
                         {
@@ -508,11 +519,11 @@ void BandmapView::drawBandMapSpots()
                             bandmapScene->addItem(spot);
                             spot->setSpotText(callsign + " " + freq);
                             listOfMarkers[markNum]->spot = spot;
-                            QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight/2);
-                            trace(QString("bandmapView: marker start coord x = %1 y = %2").arg(dialWidth + SPOTMARKER_XOFFSET).arg(listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight/2));
-                            trace(QString("bandmapView: font addition = %1").arg(fontHeight/2));
+                            QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight);
+                            trace(QString("bandmapView: marker start coord x = %1 y = %2").arg(dialWidth + SPOTMARKER_XOFFSET).arg(listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight));
+                            trace(QString("bandmapView: font addition = %1").arg(fontHeight));
                             QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
-                            trace(QString("bandmapView: marker end coord x = %1 y = %2").arg(dialWidth).arg(yCoord));
+                            trace(QString("bandmapView: marker end coord x = %1 y = %2").arg(dialWidth).arg(yCoord + dialData::DIAL_VERT_OFFSET));
 
                             QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
                             QLineF markerLineCoordsF = QLineF(markerLineCoord);

@@ -39,6 +39,10 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
+    int height = ui->bandmapGraphicsView->height();
+    int width = ui->bandmapGraphicsView->width();
+    qDebug() << "ui frame height = " << height << " ui frame width = " << width;
+
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
 
@@ -49,7 +53,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapView = new BandmapView;
 
-    bandmapSpotProxyModel = new BandmapSpotSortFilterProxyModel(filterSetup);
+    bandmapSpotProxyModel = new BandmapSpotFilterProxyModel(filterSetup);
     bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
     bandmapSpotProxyModel->sort(FREQ_COL_NUM, Qt::AscendingOrder);
 

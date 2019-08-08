@@ -53,6 +53,7 @@ SOURCES += \
     TSessionManager.cpp \
     bandmapclientfilterdialog.cpp \
     bandmapgraphicspanel.cpp \
+    bandmapspotfilterproxymodel.cpp \
     bandmapspotmarker.cpp \
     contestdetails.cpp \
     districtframe.cpp \
@@ -128,6 +129,7 @@ HEADERS  += \
     TSessionManager.h \
     bandmapclientfilterdialog.h \
     bandmapgraphicspanel.h \
+    bandmapspotfilterproxymodel.h \
     bandmapspotmarker.h \
     contestdetails.h \
     districtframe.h \
