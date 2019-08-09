@@ -17,7 +17,7 @@
 #include "bandmapdata.h"
 #include "clustercommon.h"
 
-const int bandmapColCount = 15;
+const int bandmapColCount = 16;
 const int BMP_DataStoredRole = Qt::UserRole + 0;
 
 class BandmapDataModel : public QAbstractTableModel

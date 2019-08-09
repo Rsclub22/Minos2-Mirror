@@ -41,6 +41,7 @@ BandmapView::BandmapView(QWidget *parent) :
     bandmapScene = new QGraphicsScene(parent);
 
 
+
     horizontalScrollBar()->setRange(0, 0);
     verticalScrollBar()->setRange(0, 0);
 
@@ -61,6 +62,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
     bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
     bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), bandmapGraphicsView->height());
 
     dial = new BandmapFreqDial(70, bandmapGraphicsView->viewport()->height());
     qDebug() << "bandmap height " << getBandmapFrameHeight();

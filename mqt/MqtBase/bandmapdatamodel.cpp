@@ -12,6 +12,8 @@
 
 #include "bandmapdatamodel.h"
 
+// Note this is being used by a custom view with no horizontal headers.
+
 BandmapDataModel::BandmapDataModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
@@ -111,6 +113,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case RXTIME_COL_NUM:
                 d = QString::number(bandmapSpot->rxTime);
                 break;
+            case SPOT_TYPE_COL_NUM:
+                d = bandmapSpot->spotType;
+                break;
             default:
                 d = "";
         }
@@ -169,6 +174,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 break;
             case RXTIME_COL_NUM:
                 d = bandmapSpot->rxTime;
+                break;
+            case SPOT_TYPE_COL_NUM:
+                d = bandmapSpot->spotType;
                 break;
 
 
@@ -230,12 +238,15 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 break;
             case DXBANDMASK_COL_NUM:
                 bandmapSpot->dxModeMaskStr = value.toString();
-            break;
+                break;
             case MODEMASK_COL_NUM:
                 bandmapSpot->dxModeMaskStr = value.toString();
-            break;
+                break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 bandmapSpot->sentToMemory = value.toBool();
+                break;
+            case SPOT_TYPE_COL_NUM:
+                bandmapSpot->spotType = static_cast<SPOT_TYPE>(value.toInt());
             break;
             default:
                 return false;

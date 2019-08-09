@@ -21,10 +21,47 @@
 
 #include "bandmapclientframe.h"
 
+// track how many spots on the same freq
+class multFreq
+{
+
+public:
+    multFreq():
+        time(0),
+        row(0)
+    {
+
+    }
 
 
 
+    void setTime(qint64 t)
+    {
+        time = t;
+    }
 
+    qint64 getTime()
+    {
+        return time;
+    }
+
+    void setRow(int r)
+    {
+        row = r;
+    }
+
+    int getRow()
+    {
+        return row;
+    }
+private:
+
+    qint64 time;
+    int row;
+
+};
+
+const int MAX_CALL_SAME_FREQ = 3;
 
 BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     QFrame(parent),
@@ -235,6 +272,8 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
     {
         QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
 
+        checkSpotInTable(spotlist);
+
         if (spotlist.count() == TTLVALUE +1)
         {
             // get time to live value
@@ -300,14 +339,82 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
                                                     callWorked, spotlist[DXLOCATOR],
                                                     locWorked,distance,
                                                     bearing, spotlist[SPOTCALL],
-                                                    spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
+                                                    spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT], SPOT_TYPE::CLUSTER);
 
             bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+
 
        }
     }
 
 }
+
+
+void BandmapClientFrame::checkSpotInTable(QStringList &sl)
+{
+    QStringList spotlist = sl;
+    QString dxCallsign = spotlist[DXCALL];
+    QString dxFreq = spotlist[DXFREQ].remove('.');
+    multFreq matchFreq;
+    QVector<multFreq> listOfFreq;
+
+    if (bandmapDataModel->rowCount() != 0)
+    {
+
+        // check for repeat call
+        for (int row = 0; row < bandmapDataModel->rowCount(); row++)
+        {
+            QModelIndex mi = bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM );
+            if (dxCallsign == bandmapDataModel->data(mi, Qt::DisplayRole).toString())
+            {
+                // yes, remove old spot
+                bandmapDataModel->removeRows(row, 1);
+            }
+        }
+
+        // check for multiple spots on the same freq
+        for (int row = 0; row < bandmapDataModel->rowCount(); row++)
+        {
+            QModelIndex mi = bandmapDataModel->index(row, FREQ_COL_NUM);
+            QString df = bandmapDataModel->data(mi, Qt::DisplayRole).toString();
+            if (dxFreq == bandmapDataModel->data(mi, Qt::DisplayRole).toString())
+            {
+                // found a spot on this freq
+                matchFreq.setRow(row);
+                QModelIndex mit = bandmapDataModel->index(row, TIME_COL_NUM);
+                qint64 timeInt64 = bandmapDataModel->data(mit, Qt::DisplayRole).toLongLong();
+                matchFreq.setTime(timeInt64);
+                listOfFreq.append(matchFreq);
+
+
+
+                if (listOfFreq.count() == MAX_CALL_SAME_FREQ)
+                {
+                    // remove oldest spot
+                    int position = 0;
+                    qint64 oldest = listOfFreq[0].getTime();
+                    for(int i = 1; i < listOfFreq.count(); i++)
+                    {
+                        if(oldest > listOfFreq[1].getTime())
+                        {
+                           oldest = listOfFreq[1].getTime();
+                           position = i;
+                         }
+                    }
+                    // remove oldest
+                    bandmapDataModel->removeRows(listOfFreq[position].getRow(), 1);
+
+                }
+
+            }
+        }
+
+    }
+
+
+}
+
+
 
 
 void BandmapClientFrame::checkSpotWorked(QString &callsign, QString &locator, bool* callWorked, bool* locatorWorked)

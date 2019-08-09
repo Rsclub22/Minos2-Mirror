@@ -205,10 +205,10 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
        scaleStartFreq =  ((scaleStartFreq + 2) / 10) * 10;
     }
 
-    if (scaleStartFreq < 144150)  //// ************************this needs to be the lower limit of the band
-    {
-        scaleStartFreq = 144150;
-    }
+//    if (scaleStartFreq < 144150)  //// ************************this needs to be the lower limit of the band
+//    {
+//        scaleStartFreq = 144150;
+//    }
     scaleEndFreq = scaleStartFreq + freqRange;
 
     trace(QString("bandmapFreqDial: scale startFreq = %1").arg(scaleStartFreq));
@@ -376,11 +376,16 @@ void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
     trace(QString("bandmapFreqDial: cursor Freq y coord = %1").arg(cursorY));
 
     QPolygon freqCursor;
-
+/*
     freqCursor << QPoint(60,cursorY-5 + dialData::DIAL_VERT_OFFSET);
     freqCursor << QPoint(60,cursorY+10 + dialData::DIAL_VERT_OFFSET);
     freqCursor << QPoint(70,cursorY +dialData::DIAL_VERT_OFFSET);
     freqCursor << QPoint(60,cursorY-5 + dialData::DIAL_VERT_OFFSET);
+*/
+    freqCursor << QPoint(dialWidth -  10, cursorY - 10 + dialData::DIAL_VERT_OFFSET);
+    freqCursor << QPoint(dialWidth - 10, cursorY + 10 + dialData::DIAL_VERT_OFFSET);
+    freqCursor << QPoint(dialWidth, cursorY + dialData::DIAL_VERT_OFFSET);
+    freqCursor << QPoint(dialWidth -  10, cursorY - 10 + dialData::DIAL_VERT_OFFSET);
 
     QBrush freqCursorBrush(cursorColour, Qt::SolidPattern);
 

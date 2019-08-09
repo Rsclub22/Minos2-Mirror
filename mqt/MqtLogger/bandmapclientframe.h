@@ -96,6 +96,7 @@ private:
     void addDxSpotToBandmapTable(const QString spot);
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
+    void checkSpotInTable(QStringList &sl);
 protected:
 
 

@@ -31,6 +31,9 @@
 
 #include <QString>
 
+
+enum SPOT_TYPE {CLUSTER, LOCAL};
+
 class BandmapData
 {
 
@@ -43,7 +46,7 @@ public:
              bool _dxCallWorked, QString _dxLocator,
              bool _dxLocatorWorked, QString distance,
              QString bearing, QString _spotterCall,
-             QString _spotterLocator, QString comment);
+             QString _spotterLocator, QString comment, SPOT_TYPE _spotType);
 
     void operator = (const BandmapData& bmd);
 
@@ -63,6 +66,7 @@ public:
     QString spotterCall;
     QString spotterLocator;
     QString spotComment;
+    SPOT_TYPE spotType;
 
 
 
