@@ -89,7 +89,8 @@ public:
     void drawDial(QPainter *painter);
 
 signals:
-    void dialupdated();
+    //void dialupdated();
+    void zoomUpdated(bool);
 
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

@@ -98,7 +98,8 @@ protected:
 
 private slots:
     void bandmapResize(int);
-    void drawBandMapSpots();
+    void zoomUpdated(bool dir);
+
 
 private:
 
@@ -112,12 +113,13 @@ private:
 
     int dialMinZoomLevel;
     int dialMaxZoomLevel;
+    int zoomLevel;
 
     int fontHeight;
     int maxNumSpots;
 
     //void changeZoom(bool direction);
-
+    void drawBandMapSpots();
     QVector<BandmarkerDetials*> listOfMarkers;
 
 

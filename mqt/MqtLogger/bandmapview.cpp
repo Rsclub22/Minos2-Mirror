@@ -31,6 +31,7 @@ BandmarkerDetials::BandmarkerDetials( QPoint _spotMarkerCoord, BandmapSpotMarker
 
 BandmapView::BandmapView(QWidget *parent) :
     QAbstractItemView(parent),
+    zoomLevel(0),
     fontHeight(0),
     maxNumSpots(0)
 {
@@ -75,7 +76,8 @@ void BandmapView::initBandmapView(QGraphicsView* view )
 
 
 
-    connect (dial, SIGNAL(dialupdated()), this, SLOT(drawBandMapSpots()));
+    //connect (dial, SIGNAL(dialupdated()), this, SLOT(drawBandMapSpots()));
+    connect (dial, SIGNAL(zoomUpdated(bool)), this, SLOT(zoomUpdated(bool)));
     connect (bandmapGraphicsView, SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
 
 
@@ -95,6 +97,30 @@ void BandmapView::onFontChanged(QFont cf)
 
 }
 
+
+void BandmapView::zoomUpdated(bool dir)
+{
+
+    if (dir)
+    {
+        if (zoomLevel < dialMaxZoomLevel && zoomLevel >= dialMinZoomLevel)
+        {
+            ++zoomLevel;
+            dial->setZoomLevel(zoomLevel);
+            bandmapUpdate();
+        }
+    }
+    else
+    {
+        if (zoomLevel != dialMinZoomLevel && zoomLevel <= dialMaxZoomLevel)
+        {
+            --zoomLevel;
+            dial->setZoomLevel(zoomLevel);
+            bandmapUpdate();
+        }
+    }
+
+}
 /*
 void BandmapView::paintEvent(QPaintEvent *event)
 {

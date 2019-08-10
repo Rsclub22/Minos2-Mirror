@@ -422,23 +422,23 @@ void BandmapFreqDial::changeZoom(bool direction)
 {
     if (direction)
     {
-        if (zoomLevel < dialData::MAX_ZOOM_LEVEL && zoomLevel >= dialData::MIN_ZOOM_LEVEL)
-        {
-            ++zoomLevel;
-            update();
-            emit dialupdated();
+        //if (zoomLevel < dialData::MAX_ZOOM_LEVEL && zoomLevel >= dialData::MIN_ZOOM_LEVEL)
+        //{
+        //    ++zoomLevel;
+        //    update();
+            emit zoomUpdated(true);
 
-        }
+        //}
     }
     else
     {
-        if (zoomLevel != dialData::MIN_ZOOM_LEVEL && zoomLevel <= dialData::MAX_ZOOM_LEVEL)
-        {
-            --zoomLevel;
-            update();
-            emit dialupdated();
+        //if (zoomLevel != dialData::MIN_ZOOM_LEVEL && zoomLevel <= dialData::MAX_ZOOM_LEVEL)
+        //{
+        //    --zoomLevel;
+        //    update();
+        emit zoomUpdated(false);
 
-        }
+        //}
     }
 }
 
