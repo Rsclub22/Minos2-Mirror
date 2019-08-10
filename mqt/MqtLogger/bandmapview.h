@@ -9,9 +9,13 @@
 #include <QScrollArea>
 #include <QScrollBar>
 #include <QGraphicsScene>
+#include <QSortFilterProxyModel>
 #include "bandmapfreqdial.h"
 #include "bandmapspotmarker.h"
 #include "bandmapdatamodel.h"
+
+
+const QChar DEG_SYMBOL = 0260; // octal value
 
 
 class BandmarkerDetials
@@ -127,6 +131,8 @@ private:
 
 
 
+    QString assembleSpotMsg(int row);
+    QString assembleToolTip(int row, QString freq);
 };
 
 #endif // BANDMAPVIEW_H

@@ -123,7 +123,7 @@ const QColor CALLSIGN_WORKED_COLOUR = Qt::red;
 const QColor LOCATOR_WORKED_COLOUR = Qt::red;
 const QColor SPOT_TO_MEMORY = Qt::blue;
 const QColor NO_SPOT_TO_MEMORY = Qt::black;
-
+const QColor NOT_WORKED_COLOUR = Qt::black;
 
 // Callsign Edit Shortcuts
 const QString ADD_CALLSIGN_KEY = "Ctrl-a";

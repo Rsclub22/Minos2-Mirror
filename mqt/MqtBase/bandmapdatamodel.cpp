@@ -78,24 +78,28 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->dxFreqStr;
                 break;
             case DXSPOT_CALL_COL_NUM:
-                //if (bandmapSpot->dxCallWorked == BOOL_YES)
-                //{
-                //    QColor colour = CALLSIGN_WORKED_COLOUR;
-               //     d = HtmlFontColour(colour);
-               // }
+                if (bandmapSpot->dxCallWorked == BOOL_YES)
+                {
+                    d = HtmlFontColour(CALLSIGN_WORKED_COLOUR);
+                }
                 d = d + bandmapSpot->dxCall;
                 break;
 
             case DXLOC_COL_NUM:
-                if (bandmapSpot->dxLocatorWorked == BOOL_YES)
-                //{
-                //    QColor colour = LOCATOR_WORKED_COLOUR;
-                //    d = HtmlFontColour(colour);
-                //}
+                if (bandmapSpot->dxLocatorWorked == BOOL_NO && bandmapSpot->dxCallWorked == BOOL_YES)
+                {
+                    d = HtmlFontColour(NOT_WORKED_COLOUR);
+                }
+                else if (bandmapSpot->dxLocatorWorked == BOOL_YES)
+                {
+                    d = HtmlFontColour(LOCATOR_WORKED_COLOUR);
+                }
+
                 d = d + bandmapSpot->dxLocator;
                 break;
             case DXDIST_COL_NUM:
-                d = bandmapSpot->dxDist;
+                d = HtmlFontColour(NOT_WORKED_COLOUR);
+                d = d + bandmapSpot->dxDist;
                 break;
             case DXBRG_COL_NUM:
                 d = bandmapSpot->dxBrg;
@@ -107,8 +111,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->spotterLocator;
                 break;
             case COMMENT_COL_NUM:
-                //d = escapeXML(bandmapSpot->spotComment);
-                d = bandmapSpot->spotComment;
+                d = escapeXML(bandmapSpot->spotComment);
                 break;
             case RXTIME_COL_NUM:
                 d = QString::number(bandmapSpot->rxTime);

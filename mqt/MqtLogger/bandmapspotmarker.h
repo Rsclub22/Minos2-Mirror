@@ -23,13 +23,16 @@ class BandmapSpotMarker : public QGraphicsTextItem
 
     Q_OBJECT
 public:
-    BandmapSpotMarker(const QPoint &_position, const QString text, const QString _auxText, const QColor _colour);
+    BandmapSpotMarker(const QPoint &_position);
 
 
     void setSpotText(QString text);
 
+    void setToolTipText(QString text);
 
 
+    QString getToolTipText();
+    QString getSpotText();
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;

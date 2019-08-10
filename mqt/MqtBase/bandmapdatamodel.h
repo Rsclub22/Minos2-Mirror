@@ -16,6 +16,7 @@
 #include <QAbstractTableModel>
 #include "bandmapdata.h"
 #include "clustercommon.h"
+#include "cutils.h"
 
 const int bandmapColCount = 16;
 const int BMP_DataStoredRole = Qt::UserRole + 0;

@@ -121,93 +121,7 @@ void BandmapView::zoomUpdated(bool dir)
     }
 
 }
-/*
-void BandmapView::paintEvent(QPaintEvent *event)
-{
 
-
-
-
-    QItemSelectionModel *selections = selectionModel();
-    QStyleOptionViewItem option = viewOptions();
-
-    QBrush background = option.palette.base();
-    QPen foreground(option.palette.color(QPalette::WindowText));
-
-    QPainter painter(viewport());
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    painter.fillRect(event->rect(), background);
-    painter.setPen(foreground);
-
-    // Viewport rectangles
-    QRect pieRect = QRect(margin, margin, pieSize, pieSize);
-
-    if (validItems <= 0)
-        return;
-
-    painter.save();
-    painter.translate(pieRect.x() - horizontalScrollBar()->value(),
-                      pieRect.y() - verticalScrollBar()->value());
-    painter.drawEllipse(0, 0, pieSize, pieSize);
-    double startAngle = 0.0;
-    int row;
-
-    for (row = 0; row < model()->rowCount(rootIndex()); ++row) {
-        QModelIndex index = model()->index(row, 1, rootIndex());
-        double value = model()->data(index).toDouble();
-
-        if (value > 0.0) {
-            double angle = 360 * value / totalValue;
-
-            QModelIndex colorIndex = model()->index(row, 0, rootIndex());
-            QColor color = QColor(model()->data(colorIndex, Qt::DecorationRole).toString());
-
-            if (currentIndex() == index)
-                painter.setBrush(QBrush(color, Qt::Dense4Pattern));
-            else if (selections->isSelected(index))
-                painter.setBrush(QBrush(color, Qt::Dense3Pattern));
-            else
-                painter.setBrush(QBrush(color));
-
-            painter.drawPie(0, 0, pieSize, pieSize, int(startAngle*16), int(angle*16));
-
-            startAngle += angle;
-        }
-    }
-    painter.restore();
-
-    int keyNumber = 0;
-
-    for (row = 0; row < model()->rowCount(rootIndex()); ++row) {
-        QModelIndex index = model()->index(row, 1, rootIndex());
-        double value = model()->data(index).toDouble();
-
-        if (value > 0.0) {
-            QModelIndex labelIndex = model()->index(row, 0, rootIndex());
-
-            QStyleOptionViewItem option = viewOptions();
-            option.rect = visualRect(labelIndex);
-            if (selections->isSelected(labelIndex))
-                option.state |= QStyle::State_Selected;
-            if (currentIndex() == labelIndex)
-                option.state |= QStyle::State_HasFocus;
-            itemDelegate()->paint(&painter, option, labelIndex);
-
-            ++keyNumber;
-        }
-    }
-
-
-
-}
-*/
-
-//void BandmapView::setModel(QAbstractItemModel *model)
-//{
-//    QAbstractItemView::setModel(model);
-//    //hashIsDirty = true;
-//}
 
 
 void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
@@ -538,15 +452,16 @@ void BandmapView::drawBandMapSpots()
                     {
                         if (listOfMarkers[markNum]->spot == nullptr)
                         {
-                            index = model()->index(row, DXSPOT_CALL_COL_NUM);
-                            QString callsign = model()->data(index, Qt::DisplayRole).toString();
-                            trace(QString("bandmapView: addmarker = %1").arg(callsign));
+                            //index = model()->index(row, DXSPOT_CALL_COL_NUM);
+                            //QString callsign = model()->data(index, Qt::DisplayRole).toString();
+                            //trace(QString("bandmapView: addmarker = %1").arg(callsign));
 
-                            BandmapSpotMarker* spot = new BandmapSpotMarker(QPoint(listOfMarkers[markNum]->spotMarkerCoord.x(), listOfMarkers[markNum]->spotMarkerCoord.y()), callsign, "testing", Qt::red);
+                            BandmapSpotMarker* spot = new BandmapSpotMarker(QPoint(listOfMarkers[markNum]->spotMarkerCoord.x(), listOfMarkers[markNum]->spotMarkerCoord.y()));
                             trace(QString("bandmapView: spot coord x = %1 y = %2").arg(listOfMarkers[markNum]->spotMarkerCoord.x()).arg(listOfMarkers[markNum]->spotMarkerCoord.y()));
 
                             bandmapScene->addItem(spot);
-                            spot->setSpotText(callsign + " " + freq);
+                            spot->setSpotText(assembleSpotMsg(row));
+                            spot->setToolTipText(assembleToolTip(row, freq));
                             listOfMarkers[markNum]->spot = spot;
                             QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight);
                             trace(QString("bandmapView: marker start coord x = %1 y = %2").arg(dialWidth + SPOTMARKER_XOFFSET).arg(listOfMarkers[markNum]->spotMarkerCoord.y() + fontHeight));
@@ -566,6 +481,7 @@ void BandmapView::drawBandMapSpots()
                         }
                     }
                 }
+
 
 
 
@@ -614,5 +530,39 @@ void BandmapView::drawBandMapSpots()
     */
 }
 
+
+QString BandmapView::assembleSpotMsg(int row)
+{
+
+    QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+    QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), Qt::DisplayRole).toString();
+    QString dxDist = model()->data(model()->index(row, DXDIST_COL_NUM), Qt::DisplayRole).toString();
+    QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), Qt::DisplayRole).toString();
+    QChar degSym = QChar(DEG_SYMBOL);
+    if (dxBrg.isEmpty())
+    {
+        degSym = QChar(' ');
+    }
+    QString msg = QString("%1  %2  %3  %4%5").arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym);
+    qDebug() << "spot = " << msg;
+    return msg;
+
+}
+
+
+QString BandmapView::assembleToolTip(int row, QString freq)
+{
+    QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+    QString spotterCallsign =  model()->data(model()->index(row, SPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+    QString spotterLocator = model()->data(model()->index(row, SPOTLOC_COL_NUM), Qt::DisplayRole).toString();
+    QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), Qt::DisplayRole).toString();
+
+    QString elapsedTime = QString("0");
+
+    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] - %6").arg(callsign).arg(freq).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTime).arg(spotterComment);
+    qDebug() << "tooltip = " << msg;
+    return msg;
+
+}
 
 

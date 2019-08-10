@@ -12,14 +12,13 @@
 
 #include "bandmapspotmarker.h"
 
-BandmapSpotMarker::BandmapSpotMarker(const QPoint &_position, QString text, QString _auxText, QColor _colour)
+BandmapSpotMarker::BandmapSpotMarker(const QPoint &_position)
     : QGraphicsTextItem(),
-      position(_position),
-      displayText(text),
-      auxText(_auxText),
-      textColour(_colour)
+      position(_position)
+      //displayText(text),
+      //auxText(_auxText),
+      //textColour(_colour)
 {
-    // setFont(QFont("Helvetica", 11));
     setPos(position);
     //scene->clearSelection();
     //scene->addItem(this);
@@ -37,10 +36,28 @@ void BandmapSpotMarker::setSpotText(QString text)
 }
 
 
+QString BandmapSpotMarker::getSpotText()
+{
+    return displayText;
+}
+
+
+void BandmapSpotMarker::setToolTipText(QString text)
+{
+    auxText = text;
+    setToolTip(text);
+}
+
+QString BandmapSpotMarker::getToolTipText()
+{
+    return auxText;
+}
+
+
 void BandmapSpotMarker::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
 {
 
-   setToolTip("10:30, 360 deg");
+
 
 }
 
