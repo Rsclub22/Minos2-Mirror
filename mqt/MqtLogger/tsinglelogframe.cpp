@@ -82,7 +82,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(setMemory(BaseContestLog *, QString, QString)), this, SLOT(on_SetMemory(BaseContestLog *, QString, QString)));
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(LogColumnsChanged()), this, SLOT(onLogColumnsChanged()));
+    connect(&MinosLoggerEvents::mle, SIGNAL(ColumnsChanged()), this, SLOT(onColumnsChanged()));
     connect(&MinosLoggerEvents::mle, SIGNAL(SplittersChanged()), this, SLOT(onSplittersChanged()));
     connect(&MinosLoggerEvents::mle, SIGNAL(NextUnfilled(BaseContestLog*)), this, SLOT(on_NextUnfilled(BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(GoToSerial(BaseContestLog*)), this, SLOT(on_GoToSerial(BaseContestLog*)));
@@ -94,6 +94,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
             this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
 
+    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
 
     // BandMap Updates
 
@@ -699,14 +701,14 @@ void TSingleLogFrame::restoreColumns()
 
     QSOTable->horizontalHeader()->setMinimumSectionSize(10);
 
-    thisMatchFrame->restoreColumns();
-    otherMatchFrame->restoreColumns();
-    archiveMatchFrame->restoreColumns();
+// these now subscribe for themselves
+//    thisMatchFrame->restoreColumns();
+//    otherMatchFrame->restoreColumns();
+//    archiveMatchFrame->restoreColumns();
 
     QFont cf = QApplication::font();
     QSOTable->horizontalHeader()->setFont(cf);
-
-    logColumnsChanged = false;
+    columnsChanged = false;
 
 }
 
@@ -718,7 +720,7 @@ void TSingleLogFrame::showQSOs()
    NextContactDetailsTimerTimer( );
 
    restoreColumns();
-   logColumnsChanged = false;
+   columnsChanged = false;
 
    GJVQSOLogFrame->clearCurrentField();
    GJVQSOLogFrame->startNextEntry();
@@ -743,18 +745,16 @@ void TSingleLogFrame::on_ContestPageChanged ()
     trace("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
     TContestApp::getContestApp() ->setCurrentContest( ct );
 
-    if ( logColumnsChanged )
+    if ( columnsChanged )
     {
-       if (clusterControlFrame)
-       {
-           clusterControlFrame->restoreColumns();
-       }
-       showQSOs();             // this does a restorePartial
+        MinosLoggerEvents::SendDoColumnChanges(ct);             // this does a restorePartial in showQSOs
+        columnsChanged = false;
     }
 
     if (splittersChanged)
     {
-       getSplitters();
+        MinosLoggerEvents::SendDoSplitterChanges(ct);
+        splittersChanged = false;
     }
 
     refreshMults();
@@ -784,6 +784,20 @@ void TSingleLogFrame::on_ContestPageChanged ()
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     update();   // this queues a repaint
+}
+void TSingleLogFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == contest)
+    {
+        showQSOs();             // this does a restorePartial
+    }
+}
+void TSingleLogFrame::on_doSplitterChanges(BaseContestLog *b)
+{
+    if (b == contest)
+    {
+        getSplitters();
+    }
 }
 
 void TSingleLogFrame::NextContactDetailsTimerTimer( )
@@ -1170,11 +1184,11 @@ void TSingleLogFrame::on_sectionResized(int, int, int)
     state = QSOTable->horizontalHeader()->saveState();
     settings.setValue("QSOTable/state", state);
 
-    MinosLoggerEvents::SendLogColumnsChanged();
+    MinosLoggerEvents::SendColumnsChanged();
 }
-void TSingleLogFrame::onLogColumnsChanged()
+void TSingleLogFrame::onColumnsChanged()
 {
-    logColumnsChanged = true;
+    columnsChanged = true;
 }
 void TSingleLogFrame::goNextUnfilled()
 {

@@ -82,7 +82,6 @@ private slots:
 
 public slots:
     void setContest(LoggerContestLog *contest);
-    //void refreshMults(LoggerContestLog *contest);
 };
 
 #endif // STACKEDINFOFRAME_H

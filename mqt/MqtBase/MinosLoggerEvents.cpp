@@ -17,14 +17,24 @@ void MinosLoggerEvents::SendContestPageChanged()
     emit mle.ContestPageChanged();
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendLogColumnsChanged()
+void MinosLoggerEvents::SendColumnsChanged()
 {
-    emit mle.LogColumnsChanged();
+    emit mle.ColumnsChanged();
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::SendDoColumnChanges(BaseContestLog *b)
+{
+    emit mle.doColumnChanges(b);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendSplittersChanged()
 {
     emit mle.SplittersChanged();
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::SendDoSplitterChanges(BaseContestLog *b)
+{
+    emit mle.doSplitterChanges(b);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendValidateError(int err)
@@ -181,11 +191,7 @@ void MinosLoggerEvents::sendUpdateMemories(BaseContestLog *c )
 {
     emit mle.UpdateMemories(c);
 }
-//---------------------------------------------------------------------------
-//void MinosLoggerEvents::sendRefreshMults(BaseContestLog *c )
-//{
-//    emit mle.RefreshMults(c);
-//}
+
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::sendRigFreqChanged(QString f, BaseContestLog *c)
 {

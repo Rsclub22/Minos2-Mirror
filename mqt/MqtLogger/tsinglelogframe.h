@@ -99,7 +99,7 @@ public:
 
     void refreshMults();
 
-    bool logColumnsChanged;
+    bool columnsChanged;
     bool splittersChanged;
 
     // From rigcontrol
@@ -170,6 +170,7 @@ private:
     void clearScreenLayout();
     void buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
     void clearSplitter(MinosSplitter *s);
+
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
@@ -192,7 +193,7 @@ private slots:
     void on_GoToSerial(BaseContestLog*);
     void on_SetMemory(BaseContestLog *, QString, QString);
 
-    void onLogColumnsChanged();
+    void onColumnsChanged();
     void onSplittersChanged();
     void on_sectionResized(int, int, int);
     void EditContact(QSharedPointer<BaseContact> lct );
@@ -243,6 +244,9 @@ private slots:
     void on_FontChanged();
     void invalidateCacheOnDisconnect();
     void dxSpotToLog(memoryData::memData);
+
+    void on_doColumnChanges(BaseContestLog*);
+    void on_doSplitterChanges(BaseContestLog*);
 public:
     void sendTpm(int t, QString f);
     

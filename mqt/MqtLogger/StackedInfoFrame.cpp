@@ -71,7 +71,6 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     connect(&MinosLoggerEvents::mle, SIGNAL(FiltersChanged(BaseContestLog*)), this, SLOT(onFiltersChanged(BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(UpdateStats(BaseContestLog*)), this, SLOT(onUpdateStats(BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(UpdateMemories(BaseContestLog*)), this, SLOT(onUpdateMemories(BaseContestLog*)), Qt::QueuedConnection);
-    //connect(&MinosLoggerEvents::mle, SIGNAL(RefreshMults(BaseContestLog*)), this, SLOT(onRefreshMults(BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(refreshStackMults(BaseContestLog *)), this, SLOT(onRefreshStackMults(BaseContestLog *)));
 }
 
@@ -236,15 +235,7 @@ void StackedInfoFrame::on_ScrollToCountry( const QString &csCs, BaseContestLog *
         }
     }
 }
-/*
-void StackedInfoFrame::refreshMults(LoggerContestLog *ct)
-{
-    if (contest == ct)
-    {
-        MinosLoggerEvents::sendRefreshMults(contest);
-    }
-}
-*/
+
 void StackedInfoFrame::onUpdateStats(BaseContestLog *ct)
 {
     if (contest == ct && statsFrame)
@@ -276,7 +267,6 @@ void StackedInfoFrame::onRefreshStackMults(BaseContestLog *ct)
 
 void StackedInfoFrame::on_FontChanged()
 {
-    //refreshMults(contest);
 }
 
 

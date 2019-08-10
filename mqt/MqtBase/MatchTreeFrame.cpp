@@ -44,6 +44,8 @@ void MatchTreeFrame::initialise()
 
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
             this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
+
+    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
 }
 MatchTreeFrame::~MatchTreeFrame()
 {
@@ -120,7 +122,15 @@ void MatchTreeFrame::on_sectionResized(int, int, int)
     state = header()->saveState();
     settings.setValue(baseName + "/" + treeName + "/state", state);
 
-    MinosLoggerEvents::SendLogColumnsChanged();
+    MinosLoggerEvents::SendColumnsChanged();
+}
+
+void MatchTreeFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == contest)
+    {
+        restoreColumns();
+    }
 }
 void MatchTreeFrame::on_matchTree_clicked(const QModelIndex &)
 {

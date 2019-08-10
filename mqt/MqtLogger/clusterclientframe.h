@@ -237,6 +237,7 @@ private:
     void handleClusterStatusMessage(QString &msg);
 
     int getNumberSpotsIndicator(const QDateTime& lastTime, DxSpotSortFilterProxyModel *spotProxyModel);
+    void restoreSplitters();
 private slots:
 
     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
@@ -275,8 +276,12 @@ private slots:
     void on_locatorViewSectionResized(int, int , int);
     void on_searchViewSectionResized(int, int , int);
 
-    void on_splitter_splitterMoved(int, int);
+    void on_clusterSplitter_splitterMoved(int pos, int index);
+
     void memoryActionOverideSelected();
+
+    void on_doColumnChanges(BaseContestLog *);
+    void on_doSplitterChanges(BaseContestLog *);
 };
 
 class MouseInObject : public QObject

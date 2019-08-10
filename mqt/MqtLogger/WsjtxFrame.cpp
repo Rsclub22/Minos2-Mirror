@@ -85,6 +85,10 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 
     // this to change - get the item, and use the message decode data
     connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
+
+    restoreSplitters();
+    connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
+
 }
 WsjtxFrame::~WsjtxFrame()
 {
@@ -580,14 +584,27 @@ void WsjtxFrame::on_testButton_clicked()
 
 void WsjtxFrame::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
 {
-    /*
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    QString curScreenLayout = tslf->getCurScreenLayout();
 
     QByteArray state = ui->splitter->saveState();
     QSettings settings;
-    settings.setValue("Splitters/WsjtxFrame/state/" + curScreenLayout, state);
+    settings.setValue("Splitters/WsjtxFrame/state/", state);
 
     MinosLoggerEvents::SendSplittersChanged();
-    */
+}
+
+
+void WsjtxFrame::restoreSplitters()
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("Splitters/WsjtxFrame/state/").toByteArray();
+    ui->splitter->restoreState(state);
+}
+void WsjtxFrame::on_doSplitterChanges(BaseContestLog *b)
+{
+    if (b == ct)
+    {
+        restoreSplitters();
+    }
 }

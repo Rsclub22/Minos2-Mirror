@@ -48,8 +48,10 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
-    ui->splitter->setStretchFactor(0, 2);
-    ui->splitter->setStretchFactor(1, 1);
+    ui->clusterSplitter->setStretchFactor(0, 2);
+    ui->clusterSplitter->setStretchFactor(1, 1);
+
+    restoreSplitters();
 
     trace(QString("ClusterClientFrame Starting"));
 
@@ -163,6 +165,12 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
     restoreLocatorViewColumns();
+
+    // all initial restores have been done
+
+    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
+
 
     connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
@@ -842,6 +850,7 @@ void ClusterClientFrame::on_dxSpotViewSectionResized(int, int , int)
 
     state = dxSpotView->horizontalHeader()->saveState();
     settings.setValue("ClusterClientFilter/dxSpotView/state", state);
+    MinosLoggerEvents::SendColumnsChanged();
 }
 void ClusterClientFrame::on_callsignViewSectionResized(int, int , int)
 {
@@ -850,6 +859,7 @@ void ClusterClientFrame::on_callsignViewSectionResized(int, int , int)
 
     state = callSignView->horizontalHeader()->saveState();
     settings.setValue("ClusterClientFilter/callSignView/state", state);
+    MinosLoggerEvents::SendColumnsChanged();
 }
 void ClusterClientFrame::on_locatorViewSectionResized(int, int , int)
 {
@@ -858,6 +868,7 @@ void ClusterClientFrame::on_locatorViewSectionResized(int, int , int)
 
     state = locatorView->horizontalHeader()->saveState();
     settings.setValue("ClusterClientFilter/locatorView/state", state);
+    MinosLoggerEvents::SendColumnsChanged();
 }
 
 void ClusterClientFrame::on_searchViewSectionResized(int, int , int)
@@ -867,7 +878,7 @@ void ClusterClientFrame::on_searchViewSectionResized(int, int , int)
 
     state = searchView->horizontalHeader()->saveState();
     settings.setValue("ClusterClientFilter/searchView/state", state);
-    MinosLoggerEvents::SendLogColumnsChanged();
+    MinosLoggerEvents::SendColumnsChanged();
 
 }
 
@@ -878,7 +889,7 @@ void ClusterClientFrame::restoreDxSpotViewColumns()
 
     state = settings.value("ClusterClientFilter/dxSpotView/state").toByteArray();
     dxSpotView->horizontalHeader()->restoreState(state);
-    MinosLoggerEvents::SendLogColumnsChanged();
+    MinosLoggerEvents::SendColumnsChanged();
 
 }
 
@@ -890,7 +901,7 @@ void ClusterClientFrame::restoreCallsignViewColumns()
 
     state = settings.value("ClusterClientFilter/callSignView/state").toByteArray();
     callSignView->horizontalHeader()->restoreState(state);
-    MinosLoggerEvents::SendLogColumnsChanged();
+    MinosLoggerEvents::SendColumnsChanged();
 
 }
 
@@ -919,6 +930,38 @@ void ClusterClientFrame::restoreColumns()
     restoreSearchViewColumns();
     restoreDxSpotViewColumns();
 }
+void ClusterClientFrame::on_clusterSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QByteArray state = ui->clusterSplitter->saveState();
+    QSettings settings;
+    settings.setValue("Splitters/ClusterClientFrame/state/", state);
+
+    MinosLoggerEvents::SendSplittersChanged();
+}
+
+void ClusterClientFrame::restoreSplitters()
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("Splitters/ClusterClientFrame/state/").toByteArray();
+    ui->clusterSplitter->restoreState(state);
+}
+void ClusterClientFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == ct)
+    {
+        restoreColumns();
+    }
+}
+void ClusterClientFrame::on_doSplitterChanges(BaseContestLog *b)
+{
+    if (b == ct)
+    {
+        restoreSplitters();
+    }
+}
+
 void ClusterClientFrame::setContest(BaseContestLog *c)
 {
     ct = c;
@@ -1687,18 +1730,4 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     }
 
     return false;
-}
-
-void ClusterClientFrame::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
-{
-    /*
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    QString curScreenLayout = tslf->getCurScreenLayout();
-
-    QByteArray state = ui->splitter->saveState();
-    QSettings settings;
-    settings.setValue("Splitters/ClusterClientFrame/state/" + curScreenLayout, state);
-
-    MinosLoggerEvents::SendSplittersChanged();
-    */
 }
