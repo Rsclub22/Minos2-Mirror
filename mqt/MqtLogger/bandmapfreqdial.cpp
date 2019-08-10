@@ -73,11 +73,11 @@ void BandmapFreqDial::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
 }
 
 
-void BandmapFreqDial::drawDial(QPainter *painter)
-{
-    drawScale(painter, currentFreqInt32, dialHeight);
-    drawCursor(painter, currentFreqInt64);
-}
+//void BandmapFreqDial::drawDial(QPainter *painter)
+//{
+//    drawScale(painter, currentFreqInt32, dialHeight);
+//    drawCursor(painter, currentFreqInt64);
+//}
 
 
 
@@ -101,6 +101,10 @@ double BandmapFreqDial::getCurFreq()
    return currentFreqDbl;
 }
 
+qint32 BandmapFreqDial::getCurFreqInt32()
+{
+    return currentFreqInt32;
+}
 
 
 void BandmapFreqDial::setZoomLevel(int level)
@@ -191,6 +195,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
         changeBoundingRect(dialHeight, dialWidth);
     }
 
+/*
     qint32 freq = frequency;
 
     int freqRange = dialHeight / dialData::khzPixelStep[zoomLevel];
@@ -210,7 +215,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
 //        scaleStartFreq = 144150;
 //    }
     scaleEndFreq = scaleStartFreq + freqRange;
-
+*/
     trace(QString("bandmapFreqDial: scale startFreq = %1").arg(scaleStartFreq));
     trace(QString("bandmapFreqDial: scale endFreq = %1").arg(scaleEndFreq));
 
@@ -319,6 +324,30 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
 
     }
 
+}
+
+
+void BandmapFreqDial::calcStartEndFreq(qint32 frequency)
+{
+    qint32 freq = frequency;
+
+    int freqRange = dialHeight / dialData::khzPixelStep[zoomLevel];
+    int mid_freqRange = freqRange/2;
+    scaleStartFreq = freq - mid_freqRange;
+    if (dialData::roundFactor[zoomLevel] == 5)      //  round to nearest 5khz
+    {
+       scaleStartFreq =  ((scaleStartFreq + 2) / 5) * 5;
+    }
+    else if (dialData::roundFactor[zoomLevel] == 10)    // round to nearest 10khz
+    {
+       scaleStartFreq =  ((scaleStartFreq + 2) / 10) * 10;
+    }
+
+//    if (scaleStartFreq < 144150)  //// ************************this needs to be the lower limit of the band
+//    {
+//        scaleStartFreq = 144150;
+//    }
+    scaleEndFreq = scaleStartFreq + freqRange;
 }
 
 

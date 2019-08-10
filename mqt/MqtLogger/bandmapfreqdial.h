@@ -86,8 +86,10 @@ public:
     int getYCoordOnDial(qint64 frequency);
 
 
-    void drawDial(QPainter *painter);
+//    void drawDial(QPainter *painter);
 
+    void calcStartEndFreq(qint32 frequency);
+    qint32 getCurFreqInt32();
 signals:
     //void dialupdated();
     void zoomUpdated(bool);

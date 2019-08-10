@@ -238,6 +238,7 @@ void BandmapView::rowsAboutToBeRemoved(const QModelIndex &parent,
 void BandmapView::bandmapUpdate()
 {
 
+    dial->calcStartEndFreq(dial->getCurFreqInt32());
     dial->update();
     drawBandMapSpots();
 
