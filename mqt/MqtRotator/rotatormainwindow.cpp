@@ -816,6 +816,7 @@ void RotatorMainWindow::displayBearing(int bearing)
 void RotatorMainWindow::compassClicked(int brg)
 {
     ui->bearingEdit->setText(QString::number(brg));
+    emit presetRotateTo();
 }
 
 
