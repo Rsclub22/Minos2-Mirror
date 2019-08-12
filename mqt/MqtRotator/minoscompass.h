@@ -42,11 +42,12 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 
-    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
     int compassDialBearing;
-    QPoint lastPoint;
+    int mouseBearing = -1;
 
     QSize minimumSizeHint() const Q_DECL_OVERRIDE;
     QSize sizeHint() const Q_DECL_OVERRIDE;
