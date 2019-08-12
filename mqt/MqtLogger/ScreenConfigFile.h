@@ -18,7 +18,8 @@ enum SCType
     sctChat,
     sctCluster,
     sctWsjtx,
-    sctSplit,
+    sctBandmap,
+	sctSplit,
     sctNone
 };
 class SCElement;

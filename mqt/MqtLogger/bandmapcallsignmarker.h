@@ -1,15 +1,15 @@
-#ifndef CALLSIGNMARKER_H
-#define CALLSIGNMARKER_H
+#ifndef BANDMAPCALLSIGNMARKER_H
+#define BANDMAPCALLSIGNMARKER_H
 
 #include <QDateTime>
 #include <QString>
 #include <QMetaType>
 
-class CallsignMarker
+class BandmapCallsignMarker
 {
 public:
-    CallsignMarker();
-    CallsignMarker(QString callsign, QString logtime, int type, int bearing);
+    BandmapCallsignMarker();
+    BandmapCallsignMarker(QString callsign, QString logtime, int type, int bearing);
 
 
 
@@ -40,7 +40,7 @@ private:
 };
 
 
-Q_DECLARE_METATYPE(CallsignMarker)
+Q_DECLARE_METATYPE(BandmapCallsignMarker)
 
 
-#endif // CALLSIGNMARKER_H
+#endif // BANDMAPCALLSIGNMARKER_H

@@ -23,10 +23,14 @@ public:
     ~QSOLogFrame() override;
 
     void setAsEdit(bool s, QString b);
-    void setBandMapLoaded();
+    void setBandMapLoaded(bool loaded);
     void setKeyerLoaded();
     void setRadioLoaded();
     void setRotatorLoaded();
+    void setClusterLoaded(bool loaded);
+
+
+
 
     bool savePartial(  );
     bool restorePartial( );
@@ -175,12 +179,19 @@ private:
 
     bool bandMapLoaded;
     bool isBandMapLoaded();
+    void setBandMapControlsVisible(bool visible);
 
     bool keyerLoaded;
     bool isKeyerLoaded();
 
     bool radioConnected;
     bool radioError;
+
+    bool clusterLoaded;
+    bool isClusterLoaded();
+    void setClusterControlsVisible(bool visible);
+
+
 
     void MainOpComboBox_Exit();
     void SecondOpComboBox_Exit();
@@ -210,6 +221,7 @@ private:
 
     QMap<QWidget *, QString> widgetStyles;
 
+    void checkBandMapAndClusterLoaded();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
@@ -248,6 +260,11 @@ private slots:
     void on_SerTXEdit_textChanged(const QString &);
 
     void on_frequencyEdit_textChanged(const QString &arg1);
+
+    void on_bandmapMarkFreqPbClicked();
+    void on_bandmapSaveFreqPbClicked();
+    void on_SpotPbClicked();
+
 
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
