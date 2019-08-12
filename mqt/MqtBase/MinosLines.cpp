@@ -129,7 +129,7 @@ void LineSet::writeSet()
    memcpy( linebuff, scxml.c_str(), scxml.size() ); //include zero termination
    linebuff[ scxml.size() ] = 0;
    memcpy( FileMap->GetMap(), linebuff, MAX_LINE_SIZE ); //include zero termination
-   Log( QString( "writeSet (publish)  " ) + FileMap->GetMap() );
+   Log( QString( "writeSet (publish)  " ) + QString(FileMap->GetMap()) );
 }
 bool LineSet::readSet()
 {
@@ -168,7 +168,7 @@ void LineSet::publish( const QString &name, bool state )
 {
    LineFileBlock guard(FileMap);
    readSet();
-   Log( QString( "readSet  (publish)  " ) + FileMap->GetMap() );
+   Log( QString( "readSet  (publish)  " ) + QString(FileMap->GetMap()) );
    LineMap[ name ] = state;
    writeSet();
 }
@@ -176,7 +176,7 @@ void LineSet::readLines()
 {
    LineFileBlock guard(FileMap);
    readSet();
-   Log( QString( "readSet (readLines) " ) + FileMap->GetMap() );
+   Log( QString( "readSet (readLines) " ) + QString(FileMap->GetMap()) );
 
 }
 bool LineSet::getState( const QString name )
