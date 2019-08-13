@@ -12,6 +12,7 @@
 
 
 #include "bandmapview.h"
+#include "rigutils.h"
 
 
 #include <QDebug>
@@ -552,15 +553,15 @@ QString BandmapView::assembleSpotMsg(int row)
 
 QString BandmapView::assembleToolTip(int row, QString freq)
 {
-    QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
-    QString spotterCallsign =  model()->data(model()->index(row, SPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
-    QString spotterLocator = model()->data(model()->index(row, SPOTLOC_COL_NUM), Qt::DisplayRole).toString();
-    QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), Qt::DisplayRole).toString();
+    QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+    QString spotterCallsign =  model()->data(model()->index(row, SPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+    QString spotterLocator = model()->data(model()->index(row, SPOTLOC_COL_NUM), BMP_DataStoredRole).toString();
+    QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), BMP_DataStoredRole).toString().replace('<', " (").replace('>', ") ");
 
     QString elapsedTime = QString("0");
 
-    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] - %6").arg(callsign).arg(freq).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTime).arg(spotterComment);
-    qDebug() << "tooltip = " << msg;
+    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] \n%6").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTime).arg(spotterComment);
+
     return msg;
 
 }
