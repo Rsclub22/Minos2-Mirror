@@ -1,4 +1,5 @@
 #include "bandmapgraphicspanel.h"
+#include <QDebug>
 
 BandmapGraphicsPanel::BandmapGraphicsPanel(QWidget *parent)
 {

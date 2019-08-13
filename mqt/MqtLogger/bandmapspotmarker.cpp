@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "bandmapspotmarker.h"
+#include <QDebug>
 
 BandmapSpotMarker::BandmapSpotMarker(const QPoint &_position)
     : QGraphicsTextItem(),
