@@ -108,7 +108,8 @@ const QChar CLUSTER_STAT_DELIMITER = '!';
 const QChar FILTER_DELIMITER = ',';
 
 const int PURGE_TIME = 1000 * 60 * 1;   // mins
-
+const int CHECKSPOTS_DURATION = 1000;
+const int CHECK_NEWFILTERS_DURATION = 1000;
 //const QStringList locatorSeperators = {"<", "tr", "-"};
 
 

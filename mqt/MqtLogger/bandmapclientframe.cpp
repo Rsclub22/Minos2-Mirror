@@ -76,6 +76,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
+
     int height = ui->bandmapGraphicsView->height();
     int width = ui->bandmapGraphicsView->width();
     qDebug() << "ui frame height = " << height << " ui frame width = " << width;
@@ -101,7 +102,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     checkNewSpotsTimer = new QTimer(this);
     connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkBandMapSpots()));
-    checkNewSpotsTimer->start();
+    checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
