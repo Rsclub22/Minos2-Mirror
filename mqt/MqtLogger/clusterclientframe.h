@@ -22,7 +22,7 @@
 #include "clusterClientServer.h"
 #include "clusterclientfilterdialog.h"
 #include "clustercommon.h"
-#include "bandModeFrequencyPlan.h"
+#include "bandModeLegalFreqPlan.h"
 #include "MinosLoggerEvents.h"
 
 namespace Ui {

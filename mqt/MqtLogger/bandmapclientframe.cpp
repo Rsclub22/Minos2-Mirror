@@ -105,6 +105,13 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
+    legalOperatingFreq = new BandModeLegalFreqPlan();
+    if (legalOperatingFreq->loadFile("./Configuration/operating_frequencies.json"))
+    {
+        trace(QString("Bandmap: Legal frequency File loaded OK"));
+    }
+
+    int a = 0;
 
 }
 

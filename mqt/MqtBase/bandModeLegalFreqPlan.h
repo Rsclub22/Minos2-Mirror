@@ -13,8 +13,8 @@
 
 
 
-#ifndef BANDMODEFREQUENCYPLAN_H
-#define BANDMODEFREQUENCYPLAN_H
+#ifndef BANDMODELEGALFREQPLAN_H
+#define BANDMODELEGALFREQPLAN_H
 
 #include "base_pch.h"
 #include "clustercommon.h"
@@ -34,10 +34,10 @@ public:
 
 
 
-class BandModeFrequencyPlan
+class BandModeLegalFreqPlan
 {
 public:
-    BandModeFrequencyPlan();
+    BandModeLegalFreqPlan();
     bool loadFile(QString f);
 
     int confirmMode(QString &band, QString &mode, double freq);
@@ -51,4 +51,4 @@ private:
 
 };
 
-#endif // BANDMODEFREQUENCYPLAN_H
+#endif // BANDMODELEGALFREQPLAN_H

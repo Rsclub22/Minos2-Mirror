@@ -12,7 +12,7 @@
 
 
 
-#include "bandModeFrequencyPlan.h"
+#include "bandModeLegalFreqPlan.h"
 
 #include <QJsonDocument>
 #include <QJsonParseError>
@@ -21,7 +21,7 @@
 #include <QJsonParseError>
 
 
-BandModeFrequencyPlan::BandModeFrequencyPlan()
+BandModeLegalFreqPlan::BandModeLegalFreqPlan()
 {
 
 }
@@ -30,7 +30,7 @@ BandModeFrequencyPlan::BandModeFrequencyPlan()
 //"./Configuration/mode_bandplan.json"
 
 
-bool BandModeFrequencyPlan::loadFile(QString fileName)
+bool BandModeLegalFreqPlan::loadFile(QString fileName)
 {
     bool ret = false;
     ret = readFile(fileName);
@@ -41,7 +41,7 @@ bool BandModeFrequencyPlan::loadFile(QString fileName)
 
 
 
-bool BandModeFrequencyPlan::readFile(QString f)
+bool BandModeLegalFreqPlan::readFile(QString f)
 {
 
 
@@ -113,7 +113,7 @@ bool BandModeFrequencyPlan::readFile(QString f)
 
                         if (freqArray.count() < 0 && freqArray.count() > 9)     // max 9 freqs.
                         {
-                            trace(QString("Cluster Mode Plan - Too many freqs - %1 - %2").arg(bandlist[0].arg(modeList[0])));
+                            trace(QString("Legal Freq Plan - Too many freqs - %1 - %2").arg(bandlist[0].arg(modeList[0])));
                             return false;
                         }
 
@@ -141,7 +141,7 @@ bool BandModeFrequencyPlan::readFile(QString f)
         }
         else
         {
-            trace("Cluster Mode Plan Not a JSON object");
+            trace("Operating Freq Plan Not a JSON object");
             return false;
         }
     }
@@ -155,7 +155,7 @@ bool BandModeFrequencyPlan::readFile(QString f)
 
 
 
-int BandModeFrequencyPlan::confirmMode(QString &band, QString &mode, double freq)
+int BandModeLegalFreqPlan::confirmMode(QString &band, QString &mode, double freq)
 {
 
     QMap<QString, ModeFreqDetail> modeList;
@@ -190,7 +190,7 @@ int BandModeFrequencyPlan::confirmMode(QString &band, QString &mode, double freq
 
 // return false if band or mode doesn't exist - true if mode and band exists
 
-bool BandModeFrequencyPlan::modeExists(QString &band, QString &mode)
+bool BandModeLegalFreqPlan::modeExists(QString &band, QString &mode)
 {
 
     QMap<QString, ModeFreqDetail> modeList;

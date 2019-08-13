@@ -167,6 +167,10 @@ public:
 
     }
 
+// search for data in cluster comments
+    QStringList propFilterStrings = {"TR", "ES", "MS", "EME"};
+    QStringList modeFilterStrings = {"CW","USB", "RTTY", "PSK31", "FM", "FT8", "MSK144", "FSK441"};
+
 
     // note the list of callsign and locator filters strings are stored as QString for saving to contest.
 

@@ -177,7 +177,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
     // test clusterbandplan json
-    //ClusterModeBandPlan* cmbp = new ClusterModeBandPlan();
+    ClusterModeBandPlan* cmbp = new ClusterModeBandPlan();
     //cmbp->loadFile();
 
 

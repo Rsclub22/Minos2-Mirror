@@ -23,7 +23,7 @@
 #include "clustercommon.h"
 #include "contest.h"
 #include "ContestApp.h"
-#include "bandModeFrequencyPlan.h"
+#include "bandModeLegalFreqPlan.h"
 #include "MinosLoggerEvents.h"
 #include "bandmapcallsignmarker.h"
 //#include "bandmap.h"
@@ -32,6 +32,7 @@
 #include "bandmapdatamodel.h"
 #include "bandmapclientfilterdialog.h"
 #include "bandmapspotfilterproxymodel.h"
+#include "clustermodebandplan.h"
 
 namespace Ui {
     class BandmapClientFrame;
@@ -83,6 +84,9 @@ private:
 
     BandmapDataModel *bandmapDataModel;
     BandmapData *bandmapData;
+
+    BandModeLegalFreqPlan* legalOperatingFreq;
+
 
     bool purgeSpotFlag;
     bool holdUpdateFlag;
