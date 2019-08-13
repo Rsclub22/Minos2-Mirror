@@ -23,7 +23,6 @@
 #include "clustercommon.h"
 #include "contest.h"
 #include "ContestApp.h"
-#include "bandModeLegalFreqPlan.h"
 #include "MinosLoggerEvents.h"
 #include "bandmapcallsignmarker.h"
 //#include "bandmap.h"
@@ -85,7 +84,7 @@ private:
     BandmapDataModel *bandmapDataModel;
     BandmapData *bandmapData;
 
-    BandModeLegalFreqPlan* legalOperatingFreq;
+    ClusterModeBandPlan* legalOperatingFreq;
 
 
     bool purgeSpotFlag;

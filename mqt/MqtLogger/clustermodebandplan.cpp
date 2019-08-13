@@ -27,10 +27,10 @@ ClusterModeBandPlan::ClusterModeBandPlan()
 }
 
 
-bool ClusterModeBandPlan::loadFile()
+bool ClusterModeBandPlan::loadFile(QString filename)
 {
     bool ret = false;
-    ret = readFile("./Configuration/mode_bandplan.json");
+    ret = readFile(filename);
 
     return ret;
 }

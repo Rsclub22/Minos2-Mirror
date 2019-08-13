@@ -88,7 +88,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapDataModel = new BandmapDataModel();
 
-    bandmapView = new BandmapView;
+    bandmapView = new BandmapView();
 
     bandmapSpotProxyModel = new BandmapSpotFilterProxyModel(filterSetup);
     bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
@@ -105,13 +105,14 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
-    legalOperatingFreq = new BandModeLegalFreqPlan();
+    legalOperatingFreq = new ClusterModeBandPlan();
     if (legalOperatingFreq->loadFile("./Configuration/operating_frequencies.json"))
     {
-        trace(QString("Bandmap: Legal frequency File loaded OK"));
+        trace(QString("Bandmap: Operating frequency File loaded OK"));
     }
 
     int a = 0;
+    a = 10;
 
 }
 
