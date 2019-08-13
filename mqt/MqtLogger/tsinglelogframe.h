@@ -34,6 +34,7 @@ class FocusWatcher;
 class MatchTreeFrame;
 class ChatFrame;
 class ClusterClientFrame;
+class BandmapClientFrame;
 class MinosSplitter;
 
 // We may need to define our own validation controls with valid methods
@@ -76,6 +77,8 @@ class TSingleLogFrame : public QFrame
 
     ClusterClientFrame *clusterControlFrame = nullptr;
 
+    BandmapClientFrame *bandmapControlFrame = nullptr;
+
     QVector <MinosSplitter *> rowSplitters;
 
 public:
@@ -111,6 +114,9 @@ public:
     bool isBandMapLoaded();
     bool bandMapLoaded;
 
+    bool isClusterLoaded();
+    bool clusterLoaded;
+
     bool rotatorLoaded;
     bool isRotatorLoaded();
 
@@ -143,6 +149,7 @@ public:
 
     void setCurScreenLayout(const QString &value);
 
+
 private:
     BaseContestLog * contest;
     HtmlDelegate *delegate = nullptr;
@@ -170,6 +177,9 @@ private:
     void clearScreenLayout();
     void buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
     void clearSplitter(MinosSplitter *s);
+    void setClusterLoaded(bool loaded);
+    void setBandmapLoaded(bool loaded);
+
 
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
@@ -200,7 +210,7 @@ private slots:
 
     void on_KeyerLoaded();
 
-    void on_BandMapLoaded();
+
 
     void on_RadioLoaded();
     void on_SetRadioList();

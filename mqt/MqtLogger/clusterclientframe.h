@@ -31,10 +31,6 @@ namespace Ui {
 
 enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 
-const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: yellow ;\n");
-const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ;\n");
-const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yellow;\n");
-const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
 
 const int MOUSE_IN_FRAME_TIMEOUT = 10000;
 const int CHECKSPOTS_DURATION = 1000;

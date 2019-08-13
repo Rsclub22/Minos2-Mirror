@@ -278,6 +278,9 @@ QString convertFreqStrDispSingleNoTrailZero(QString sfreq)
         return sfreq;
 }
 
+
+
+
 QString removeTrailingZeroes(QString sfreq)
 {
     // remove trailing zero, apart from after period.

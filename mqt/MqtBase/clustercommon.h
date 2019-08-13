@@ -68,6 +68,7 @@ const int DXBANDMASK_COL_NUM = 11;
 const int MODEMASK_COL_NUM = 12;
 const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 13;
 const int RXTIME_COL_NUM = 14;
+const int SPOT_TYPE_COL_NUM = 15;       // used in bandmap
 
 const int TIME_COL_WIDTH = 40;
 const int FREQ_COL_WIDTH = 60;
@@ -122,7 +123,7 @@ const QColor CALLSIGN_WORKED_COLOUR = Qt::red;
 const QColor LOCATOR_WORKED_COLOUR = Qt::red;
 const QColor SPOT_TO_MEMORY = Qt::blue;
 const QColor NO_SPOT_TO_MEMORY = Qt::black;
-
+const QColor NOT_WORKED_COLOUR = Qt::black;
 
 // Callsign Edit Shortcuts
 const QString ADD_CALLSIGN_KEY = "Ctrl-a";
@@ -130,6 +131,11 @@ const QString EDIT_CALLSIGN_KEY = "Ctrl-e";
 const QString DEL_CALLSIGN_KEY = "Ctrl-d";
 
 const QChar CLUSTER_START_COMMENT_DELIMTER = '#';
+
+const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: yellow ;\n");
+const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ;\n");
+const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yellow;\n");
+const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
 
 
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);

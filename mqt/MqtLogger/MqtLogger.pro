@@ -51,6 +51,10 @@ SOURCES += \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
     TSessionManager.cpp \
+    bandmapclientfilterdialog.cpp \
+    bandmapgraphicspanel.cpp \
+    bandmapspotfilterproxymodel.cpp \
+    bandmapspotmarker.cpp \
     contestdetails.cpp \
     districtframe.cpp \
     dxccframe.cpp \
@@ -96,7 +100,12 @@ SOURCES += \
     WsjtxRadio.cpp \
     WsjtxRadioMetaType.cpp \
     Wsjtx_qt_helpers.cpp \
-    clustermodebandplan.cpp
+	bandmapclientframe.cpp \
+    bandmapcallsignmarker.cpp \
+    bandmapfreqdial.cpp	\
+	clustermodebandplan.cpp \
+    bandmapview.cpp
+
 
 HEADERS  += \
     AdifImport.h \
@@ -118,6 +127,10 @@ HEADERS  += \
     StackedInfoFrame.h \
     TClockFrame.h \
     TSessionManager.h \
+    bandmapclientfilterdialog.h \
+    bandmapgraphicspanel.h \
+    bandmapspotfilterproxymodel.h \
+    bandmapspotmarker.h \
     contestdetails.h \
     districtframe.h \
     dxccframe.h \
@@ -164,9 +177,14 @@ HEADERS  += \
     Wsjtx_pimpl_impl.hpp \
     Wsjtx_qt_helpers.hpp \
     WsjtxRadio.hpp \
-    clustermodebandplan.h
+    bandmapclientframe.h \
+    bandmapcallsignmarker.h \
+    bandmapfreqdial.h	\
+    clustermodebandplan.h \
+    bandmapview.h
 
 FORMS    += \
+    bandmapclientfilterdialog.ui \
     contestdetails.ui \
     districtframe.ui \
     dxccframe.ui \
@@ -208,7 +226,8 @@ FORMS    += \
     tstatsdispframe.ui \
     tminosbshelpform.ui \
     WsjtxFrame.ui \
-    WsjtxConfigure.ui
+    WsjtxConfigure.ui \
+    bandmapclientframe.ui
 
 
 DISTFILES += \

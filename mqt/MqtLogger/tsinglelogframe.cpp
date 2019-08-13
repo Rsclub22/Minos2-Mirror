@@ -33,7 +33,7 @@
 #include "RotPresets.h"
 #include "ChatFrame.h"
 #include "clusterclientframe.h"
-
+#include "bandmapclientframe.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -148,10 +148,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(LogContainer, SIGNAL(sendKeyerTwoTone()), this, SLOT(sendKeyerTwoTone()));
     connect(LogContainer, SIGNAL(sendKeyerStop()), this, SLOT(sendKeyerStop()));
 
-/*
-    connect(FKHBandMapFrame, SIGNAL(sendBandMap( QString, QString, QString, QString, QString )),
-            this, SLOT(sendBandMap(QString,QString,QString,QString,QString)));
-*/
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 }
@@ -243,6 +239,17 @@ void TSingleLogFrame::createScreenComponents()
 
     clusterControlFrame->setVisible(false);
     clusterControlFrame->setContest(contest);
+    setClusterLoaded(false);
+
+    bandmapControlFrame = new BandmapClientFrame(this);
+    bandmapControlFrame->setObjectName(QStringLiteral("BandmapControlFrame"));
+    bandmapControlFrame->setFrameShape(QFrame::StyledPanel);
+    bandmapControlFrame->setFrameShadow(QFrame::Raised);
+
+    bandmapControlFrame->setVisible(false);
+    bandmapControlFrame->setContest(contest);
+    setBandmapLoaded(false);
+
 
     rotPresets = new RotPresets(this);
 
@@ -403,6 +410,7 @@ void TSingleLogFrame::clearScreenLayout()
     otherMatchFrame->setContest(nullptr);
     archiveMatchFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
+    bandmapControlFrame->setContest(nullptr);
     wsjtxFrame->setContest(nullptr);
 
     while (singleLogFrameSplitter->count())
@@ -468,6 +476,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     && type != sctSplit
                     && type != sctCluster
                     && type != sctWsjtx
+                    && type != sctBandmap
                     )
             {
                 elementScrollArea = new QScrollArea();
@@ -563,6 +572,16 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     hs->addWidget(clusterControlFrame);
                     clusterControlFrame->setVisible(true);
                     clusterControlFrame->setContest(ct);
+                    setClusterLoaded(true);
+                    break;
+
+                }
+                case sctBandmap:
+                {
+                    hs->addWidget(bandmapControlFrame);
+                    bandmapControlFrame->setVisible(true);
+                    bandmapControlFrame->setContest(ct);
+                    setBandmapLoaded(true);
                     break;
 
                 }
@@ -618,7 +637,9 @@ void TSingleLogFrame::buildScreenLayout()
     int auxInstance = 0;
     for (int j = 0; j < sc.baseElement->rows.count(); j++)
     {
+
         buildRow(sc.baseElement->rows[j], auxInstance, singleLogFrameSplitter);
+
     }
     // ALWAYS link the wsjt frame to the contest; then we can log
     // even without showing it
@@ -1351,16 +1372,33 @@ void TSingleLogFrame::sendKeyerStop()
 
 // Bandmap
 
-void TSingleLogFrame::on_BandMapLoaded()
+void TSingleLogFrame::setBandmapLoaded(bool loaded)
 {
-   bandMapLoaded = true;
-   GJVQSOLogFrame->setBandMapLoaded();
+   bandMapLoaded = loaded;
+   GJVQSOLogFrame->setBandMapLoaded(loaded);
 }
 
 bool TSingleLogFrame::isBandMapLoaded()
 {
    return bandMapLoaded;
 }
+
+//---------------------------------------------------------------------------
+
+// Cluster
+
+void TSingleLogFrame::setClusterLoaded(bool loaded)
+{
+   bandMapLoaded = loaded;
+   GJVQSOLogFrame->setClusterLoaded(loaded);
+}
+
+bool TSingleLogFrame::isClusterLoaded()
+{
+   return bandMapLoaded;
+}
+
+
 
 //---------------------------------------------------------------------------
 void TSingleLogFrame::checkConnections()
@@ -1396,9 +1434,15 @@ void TSingleLogFrame::on_SetFreq(QString f)
     trace(QString("Freq from radio = %1").arg(f));
     if ( this == LogContainer->getCurrentLogFrame() )
     {
+
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
         GJVQSOLogFrame->setFreq(f);
+        //if (isBandMapLoaded())
+        //{
+           bandmapControlFrame->setFreq(f);
+       // }
+
         MinosLoggerEvents::sendRigFreqChanged(f, contest);
     }
 

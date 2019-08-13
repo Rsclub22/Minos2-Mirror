@@ -87,7 +87,9 @@ SOURCES += \
     bearinglineedit.cpp \
     bandModeFrequencyPlan.cpp \
     callsigninputdialog.cpp \
-    locatorinputdialog.cpp
+    locatorinputdialog.cpp \
+    bandmapdata.cpp \
+    bandmapdatamodel.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -161,7 +163,10 @@ HEADERS += \
     bearinglineedit.h \
     bandModeFrequencyPlan.h \
     callsigninputdialog.h \
-    locatorinputdialog.h
+    locatorinputdialog.h \
+    bandmapdata.h \
+    bandmapdatamodel.h \
+    bandmapcommon.h
 
 unix {
     target.path = /usr/lib
