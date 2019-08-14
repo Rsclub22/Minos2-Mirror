@@ -306,7 +306,12 @@ bool BandmapDataModel::removeRows(int _row, int count, const QModelIndex &parent
 
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
+        BandmapData* spotData = bandmapData[row];
         bandmapData.removeAt(row);
+        if (spotData != nullptr)
+        {
+            delete(spotData);
+        }
     }
     endRemoveRows();
     return true;
