@@ -26,6 +26,7 @@ SOURCES += \
     AntennaState.cpp \
     BandList.cpp \
     CacheSelection.cpp \
+    bandmapmarkerdetails.cpp \
     calcs.cpp \
     Calendar.cpp \
     CalendarList.cpp \
@@ -94,6 +95,7 @@ HEADERS += \
     AntennaDetail.h \
     AntennaState.h \
     BandList.h \
+    bandmapmarkerdetails.h \
     base_pch.h \
     CacheSelection.h \
     calcs.h \

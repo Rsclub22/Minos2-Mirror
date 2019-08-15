@@ -33,6 +33,8 @@ public:
 
     QString getToolTipText();
     QString getSpotText();
+
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
@@ -42,7 +44,7 @@ private:
     QPoint position;
     QString displayText;
     QString auxText;
-    QColor textColour;
+    //QColor textColour;
 
 };
 

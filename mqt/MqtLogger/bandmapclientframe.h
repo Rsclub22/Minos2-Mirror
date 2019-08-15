@@ -72,6 +72,7 @@ private:
     QVector<QString> spotQueue;
 
     BandmapView *bandmapView;
+    QItemSelectionModel *selectionModel;
     QGraphicsView* bandmapGraphicsView;
 
     BandmapSpotFilterProxyModel* bandmapSpotProxyModel;
