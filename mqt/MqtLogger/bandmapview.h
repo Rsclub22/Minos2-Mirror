@@ -49,7 +49,7 @@ public:
     void initBandmapView(QGraphicsView *view);
 
 
-//    void bandmapUpdate();
+    void bandmapUpdate();
 
     int rows(const QModelIndex &index) const;
 

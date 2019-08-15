@@ -17,6 +17,8 @@ signals:
 
 protected:
     void resizeEvent(QResizeEvent *) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // BANDMAPGRAPHICSPANEL_H

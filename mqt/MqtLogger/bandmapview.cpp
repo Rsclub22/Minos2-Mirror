@@ -61,7 +61,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapScene->addItem(dial);
     dial->setCurFreq(0.0);
     dial->setCursorColour(Qt::black);
-    viewport()->update();
+    bandmapUpdate();
 
 
 
@@ -96,7 +96,7 @@ void BandmapView::zoomUpdated(bool dir)
         {
             ++zoomLevel;
             dial->setZoomLevel(zoomLevel);
-            viewport()->update();
+            bandmapUpdate();
         }
     }
     else
@@ -105,7 +105,7 @@ void BandmapView::zoomUpdated(bool dir)
         {
             --zoomLevel;
             dial->setZoomLevel(zoomLevel);
-            viewport()->update();
+            bandmapUpdate();
         }
     }
 
@@ -137,7 +137,7 @@ void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
 
     QAbstractItemView::rowsInserted(parent, start, end);
-    viewport()->update();
+    bandmapUpdate();
 
 }
 
@@ -149,7 +149,7 @@ void BandmapView::rowsAboutToBeRemoved(const QModelIndex &parent,
     QAbstractItemView::rowsAboutToBeRemoved(parent, start, end);
 }
 
-/*
+
 void BandmapView::bandmapUpdate()
 {
 
@@ -158,7 +158,7 @@ void BandmapView::bandmapUpdate()
     drawBandMapSpots();
 
 }
-*/
+
 
 
 void BandmapView::updateGeometries()
@@ -327,7 +327,7 @@ void BandmapView::bandmapResize(int _height)
     //int width = _width;
     qDebug() << "bandmap resize height " << height;
     dial->setCurHeight(height);
-    viewport()->update();
+    bandmapUpdate();
 
 
 }
@@ -398,7 +398,7 @@ void BandmapView::setFreq(double f)
 {
     curFreq = f;
     dial->setCurFreq(f);
-    viewport()->update();
+    bandmapUpdate();
 }
 
 void BandmapView::drawBandMapSpots()
