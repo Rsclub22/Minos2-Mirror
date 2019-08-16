@@ -132,6 +132,7 @@ private:
     QRectF calculateSpotRect(const QString text, const QPoint spotCoord);
     void bandmapSelectFreq(int y);
     void bandmapSelectSpot(QPoint p);
+    void sendFreqToRig(QString freq);
 };
 
 #endif // BANDMAPVIEW_H

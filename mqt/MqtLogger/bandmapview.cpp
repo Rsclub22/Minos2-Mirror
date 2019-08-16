@@ -13,6 +13,7 @@
 
 #include "bandmapview.h"
 #include "rigutils.h"
+#include "MinosLoggerEvents.h"
 
 
 #include <QDebug>
@@ -385,8 +386,19 @@ void BandmapView::setFreq(double f)
 
 void BandmapView::bandmapSelectFreq(int y)
 {
-    double f = dial->getFreqFromYCoordOnDial(y);
+    QString f = dial->getFreqFromYCoordOnDial(y);
+    MinosLoggerEvents::SendFreqStrToRig(f);
+
 }
+
+
+void BandmapView::sendFreqToRig(QString freq)
+{
+    QString f = freq.remove('.').append(QString("000"));
+    MinosLoggerEvents::SendFreqStrToRig(f);
+}
+
+
 
 void BandmapView::bandmapSelectSpot(QPoint p)
 {

@@ -106,7 +106,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     checkNewSpotsTimer = new QTimer(this);
     connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkBandMapSpots()));
-    checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
+    //checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
