@@ -18,7 +18,7 @@
 #include <QDebug>
 
 const int SPOTMARKER_XOFFSET = 20;
-
+const int FREQ_SEL_WIDTH = 20;
 
 
 
@@ -68,7 +68,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     //connect (dial, SIGNAL(dialupdated()), this, SLOT(drawBandMapSpots()));
     connect (dial, SIGNAL(zoomUpdated(bool)), this, SLOT(zoomUpdated(bool)));
     connect (bandmapGraphicsView, SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
-
+    connect (bandmapGraphicsView, SIGNAL(mousePressed(QPoint)), this, SLOT(mousePressed(QPoint)));
 
 }
 
@@ -111,15 +111,7 @@ void BandmapView::zoomUpdated(bool dir)
 
 }
 
-void BandmapView::paintEvent(QPaintEvent *event)
-{
 
-    dial->calcStartEndFreq(dial->getCurFreqInt32());
-    dial->update();
-    drawBandMapSpots();
-
-
-}
 
 void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
@@ -130,7 +122,7 @@ void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
 
 void BandmapView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
-    int a = 0;
+    // do nothing
 }
 
 void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
@@ -160,13 +152,23 @@ void BandmapView::bandmapUpdate()
 }
 
 
+void BandmapView::mousePressed(QPoint p)
+{
+    if (p.x() <= dial->getCurWidth() && p.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
+    {
+        // select the freq
+        bandmapSelectFreq(p.y());
+    }
+    else
+    {
+        bandmapSelectSpot(p);
+    }
+}
+
 
 void BandmapView::updateGeometries()
 {
-    horizontalScrollBar()->setPageStep(viewport()->width());
-    horizontalScrollBar()->setRange(0, qMax(0, 2 * totalSize - viewport()->width()));
-    verticalScrollBar()->setPageStep(viewport()->height());
-    verticalScrollBar()->setRange(0, qMax(0, totalSize - viewport()->height()));
+
 }
 
 
@@ -215,8 +217,6 @@ QModelIndex BandmapView::moveCursor(QAbstractItemView::CursorAction cursorAction
 
 void BandmapView::setSelection(const QRect &rect, QFlags<QItemSelectionModel::SelectionFlag> flags)
 {
-    int a = 0;
-
     // do nothing
 }
 
@@ -349,33 +349,15 @@ void BandmapView::bandmapResize(int _height)
 //}
 
 
-//bool BandmapView::eventFilter(QObject *target, QEvent *event)
-//{
-
-//}
-
-
-void BandmapView::mousePressEvent(QMouseEvent *event)
-{
-    QAbstractItemView::mousePressEvent(event);
-    setCurrentIndex(indexAt(event->pos()));
-}
-
-
-void BandmapView::keyPressEvent(QKeyEvent *event)
-{
-    int a = 0;
-}
 
 
 
 
 
 
-void BandmapView::resizeEvent(QResizeEvent *)
-{
-    updateGeometries();
-}
+
+
+
 
 
 int BandmapView::rows(const QModelIndex &index) const
@@ -399,6 +381,19 @@ void BandmapView::setFreq(double f)
     curFreq = f;
     dial->setCurFreq(f);
     bandmapUpdate();
+}
+
+void BandmapView::bandmapSelectFreq(int y)
+{
+    double f = dial->getFreqFromYCoordOnDial(y);
+}
+
+void BandmapView::bandmapSelectSpot(QPoint p)
+{
+
+
+
+
 }
 
 void BandmapView::drawBandMapSpots()

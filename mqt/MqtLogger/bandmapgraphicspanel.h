@@ -14,10 +14,13 @@ public:
 
 signals:
     void bandmapResize(int);
+    void mousePressed(QPoint);
+    void mouseDoubleClicked(QPoint);
 
 protected:
     void resizeEvent(QResizeEvent *) override;
     void mousePressEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 };
 

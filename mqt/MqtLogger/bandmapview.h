@@ -64,7 +64,7 @@ protected slots:
 
 
 signals:
-    void clicked(const QModelIndex&);
+    //void clicked(const QModelIndex&);
 
 
 protected:
@@ -79,10 +79,10 @@ protected:
 
     //void scrollContentsBy(int dx, int dy) override;
 
-    void paintEvent(QPaintEvent*) override;
-    void resizeEvent(QResizeEvent*) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
+    //void paintEvent(QPaintEvent*) override;
+    //void resizeEvent(QResizeEvent*) override;
+    //void mousePressEvent(QMouseEvent *event) override;
+    //void keyPressEvent(QKeyEvent *event) override;
 
 
 
@@ -93,6 +93,8 @@ protected:
 private slots:
     void bandmapResize(int);
     void zoomUpdated(bool dir);
+    void mousePressed(QPoint p);
+
 
 
 private:
@@ -128,6 +130,8 @@ private:
     QString assembleToolTip(int row, QString freq);
     QRectF viewportRectForRow(int row) const;
     QRectF calculateSpotRect(const QString text, const QPoint spotCoord);
+    void bandmapSelectFreq(int y);
+    void bandmapSelectSpot(QPoint p);
 };
 
 #endif // BANDMAPVIEW_H

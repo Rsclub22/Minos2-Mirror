@@ -90,6 +90,7 @@ public:
 
     void calcStartEndFreq(qint32 frequency);
     qint32 getCurFreqInt32();
+    double getFreqFromYCoordOnDial(int y);
 signals:
     //void dialupdated();
     void zoomUpdated(bool);

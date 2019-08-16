@@ -18,14 +18,19 @@ void BandmapGraphicsPanel::resizeEvent(QResizeEvent *)
 void BandmapGraphicsPanel::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
-    //setCurrentIndex();
-    //indexAt(event->pos())
+
     QPoint p = event->pos();
-    qDebug() << "x mouse" << p.x();
-    qDebug() << "y mouse" << p.y();
-    int a = 0;
+    emit mousePressed(p);
 }
 
+
+void BandmapGraphicsPanel::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseDoubleClickEvent(event);
+    QPoint p = event->pos();
+    emit mouseDoubleClicked(p);
+
+}
 
 void BandmapGraphicsPanel::keyPressEvent(QKeyEvent *event)
 {

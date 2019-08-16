@@ -394,7 +394,14 @@ int BandmapFreqDial::getYCoordOnDial(qint64 frequency)
 
 }
 
-
+double BandmapFreqDial::getFreqFromYCoordOnDial(int y)
+{
+    qint32 fmaj = y / dialData::khzPixelStep[zoomLevel] * dialData::khzStep[zoomLevel] * 1000;
+    qint32 fmin = y % dialData::khzPixelStep[zoomLevel] * dialData::hzPixelStep[zoomLevel];
+    qint32 ftot = fmaj + fmin;
+    qint64 freq = (scaleStartFreq * 1000) + ftot;
+    return static_cast<double>(freq);
+}
 
 void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
 {
