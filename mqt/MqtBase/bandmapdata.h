@@ -32,7 +32,7 @@
 #include <QString>
 
 
-enum SPOT_TYPE {CLUSTER, LOCAL};
+enum SPOT_TYPE {NOTHING, CLUSTER, LOCAL};
 
 class BandmapData
 {

@@ -22,6 +22,8 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseDoubleClickEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
+private slots:
+
 };
 
 #endif // BANDMAPGRAPHICSPANEL_H

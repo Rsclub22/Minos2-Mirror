@@ -7,6 +7,8 @@ BandmapGraphicsPanel::BandmapGraphicsPanel(QWidget *parent)
 }
 
 
+
+
 void BandmapGraphicsPanel::resizeEvent(QResizeEvent *)
 {
 

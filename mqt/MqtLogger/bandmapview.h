@@ -17,7 +17,7 @@
 
 
 const QChar DEG_SYMBOL = 0260; // octal value
-
+const int NO_SELECTED_ROWNUM = -1;
 
 
 
@@ -97,6 +97,7 @@ private slots:
 
 
 
+
 private:
 
     //Bandmap *bandmap;
@@ -121,6 +122,9 @@ private:
     void drawBandMapSpots();
     QVector<BandmapMarkerDetails*> listOfMarkers;
 
+    BandmapData selectedSpot;
+    int selectedSpotRowNum;
+
 
 
 
@@ -131,7 +135,7 @@ private:
     QRectF viewportRectForRow(int row) const;
     QRectF calculateSpotRect(const QString text, const QPoint spotCoord);
     void bandmapSelectFreq(int y);
-    void bandmapSelectSpot(QPoint p);
+    bool bandmapSelectSpot(QPoint p);
     void sendFreqToRig(QString freq);
     void clearSelectedSpot();
     void setSelectedSpot(int displayedSpotNum);

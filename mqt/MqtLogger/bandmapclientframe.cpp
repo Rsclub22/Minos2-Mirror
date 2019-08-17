@@ -84,6 +84,11 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
 
+    ui->bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( ui->bandmapGraphicsView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
+             this, SLOT( on_bandmap_customContextMenuRequested( const QPoint& ) ) );
+
+
     filterSetup = new BandmapClientFilterDialog(this);
 
 
@@ -110,6 +115,36 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
+    spotsMenu = new QMenu(ui->actionsButton);
+
+    ui->actionsButton->setFocusPolicy(Qt::NoFocus);
+    //actionInObject = new MouseInObject(this, this);
+    //spotsMenu->installEventFilter(actionInObject);
+
+    freqAction = new QAction("Set &Freq", this);
+    bearingAction = new QAction("Set &Bearing", this);
+    logAction = new QAction("Send &Log", this);
+    memoryAction = new QAction("Send &Memory", this);
+    clearSpotAction = new QAction("Clear &Spot", this);
+
+    spotsMenu->addAction(freqAction);
+    spotsMenu->addAction(bearingAction);
+    spotsMenu->addAction(logAction);
+    spotsMenu->addAction(memoryAction);
+    spotsMenu->addAction(clearSpotAction);
+
+    ui->actionsButton->setMenu(spotsMenu);
+    connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
+
+    connect( freqAction, SIGNAL( triggered() ), this, SLOT(on_freqActionSelected()) );
+    connect( bearingAction, SIGNAL( triggered() ), this, SLOT(bearingActionSelected()) );
+    connect( logAction, SIGNAL( triggered() ), this, SLOT(logActionSelected()) );
+    connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
+    connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
+
+
+
+
     legalOperatingFreq = new ClusterModeBandPlan();
     if (legalOperatingFreq->loadFile("./Configuration/operating_frequencies.json"))
     {
@@ -131,6 +166,13 @@ void BandmapClientFrame::on_FontChanged()
 {
     QFont cf = QApplication::font();
     bandmapView->onFontChanged(cf);
+}
+
+
+void BandmapClientFrame::on_bandmap_customContextMenuRequested( const QPoint& pos)
+{
+    QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
+    spotsMenu->popup( globalPos );
 }
 
 

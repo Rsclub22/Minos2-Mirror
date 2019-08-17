@@ -85,6 +85,13 @@ private:
     BandmapDataModel *bandmapDataModel;
     BandmapData *bandmapData;
 
+    QMenu* spotsMenu;
+    QAction* freqAction;
+    QAction* bearingAction;
+    QAction* logAction;
+    QAction* memoryAction;
+    QAction* clearSpotAction;
+
     ClusterModeBandPlan* legalOperatingFreq;
 
 
@@ -113,6 +120,7 @@ private slots:
      void on_FontChanged();
 
      void checkBandMapSpots();
+     void on_bandmap_customContextMenuRequested(const QPoint &);
 };
 
 #endif // BANDMAPCLIENTFRAME_H
