@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QHBoxLayout>
 
+class QScrollArea;
 class ScreenConfig;
 class ScreenConfigElement;
 
@@ -23,6 +24,7 @@ public:
 
     QHBoxLayout *hbl = nullptr;
     ScreenConfigElement *parentElement;
+    QScrollArea *getScrollArea();
 
     ScreenConfigElement *addLeft(ScreenConfigElement *e);
     void remove(ScreenConfigElement *e);
