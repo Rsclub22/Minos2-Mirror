@@ -34,6 +34,8 @@ MinosCompass::MinosCompass(QWidget *parent)
 
    compassDialBearing = 0;
    setSizePolicy(QSizePolicy:: Preferred, QSizePolicy:: Preferred);
+
+   setMouseTracking(true);
 /*
    // for test...
    QTimer *timer = new QTimer(this);
@@ -89,6 +91,8 @@ void MinosCompass::paintEvent(QPaintEvent *)
 
     QColor needleFrontColor("red");
     QColor needleBackColor("gray");
+    QColor mouseBearingColor("green");
+    QColor annulusColor("aliceblue");
 
     int side = qMin(width(), height());
 
@@ -98,6 +102,14 @@ void MinosCompass::paintEvent(QPaintEvent *)
 
     painter.scale(side / 200.0, side / 200.0);
 
+    QPainterPath qpp;
+    qpp.addEllipse(QRect(-100, -100, 200, 200));
+    qpp.addEllipse(QRect(-70, -70, 140, 140));
+
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(QBrush(annulusColor));
+
+    painter.drawPath(qpp);
 
     QFont dialfont = dynamic_cast<QWidget *>(parent())->font();
     qreal dps = dialfont.pointSizeF();
@@ -115,6 +127,14 @@ void MinosCompass::paintEvent(QPaintEvent *)
     for (int i = 0; i < 36; ++i) {
        painter.drawLine(88, 0, 96, 0);
        painter.rotate(10.0);
+    }
+
+    if (mouseBearing >= 0)
+    {
+        painter.setPen(mouseBearingColor);
+        painter.rotate(mouseBearing);
+        painter.drawLine(00, -100, 0, -70);//x1, y1, x2, y2
+        painter.rotate(-mouseBearing);
     }
 
     painter.setPen(Qt::NoPen);
@@ -181,16 +201,81 @@ void MinosCompass::paintEvent(QPaintEvent *)
 
 }
 
+double angleFromN(const QPoint &V )
+{
+    return atan2(-V.y(), V.x());    // mouse position increases down and right
+}
 
 void MinosCompass::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton) {
-        lastPoint = event->pos();
-        //qDebug() << "mouse position" << lastPoint;
+    if (event->button() == Qt::LeftButton)
+    {
+        QPoint lastPoint = event->pos();
+        QPoint centre(width()/2, height()/2);
+
+        QPoint vec = lastPoint - centre;
+
+        double distanceFromCentre = sqrt(vec.x() * vec.x() + vec.y() * vec.y());
+
+        int radius = ((width()/2))*96/100;
+        int inner = (radius * 7)/10;
+
+        if (distanceFromCentre < radius && distanceFromCentre > inner)
+        {
+            double brg = angleFromN(vec) ;
+            brg *= -180/M_PI;    // clockwise degrees
+            brg += 90;      // from N rather than E
+
+            while (brg < 0)
+                brg += 360;
+            while (brg > 360)
+                brg -= 360;
+            emit sendClickBearing(static_cast<int>(brg) );
+
+//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;;
+        }
+
+//        qDebug() << "mouse position" << lastPoint;
     }
 }
 
+void MinosCompass::mouseMoveEvent(QMouseEvent *event)
+{
+    QPoint lastPoint = event->pos();
+    QPoint centre(width()/2, height()/2);
 
+    QPoint vec = lastPoint - centre;
+
+    double distanceFromCentre = sqrt(vec.x() * vec.x() + vec.y() * vec.y());
+
+    int radius = ((width()/2))*96/100;
+    int inner = (radius * 7)/10;
+
+    if (distanceFromCentre < radius && distanceFromCentre > inner)
+    {
+        double brg = angleFromN(vec) ;
+        brg *= -180/M_PI;    // clockwise degrees
+        brg += 90;      // from N rather than E
+
+        while (brg < 0)
+            brg += 360;
+        while (brg > 360)
+            brg -= 360;
+        mouseBearing = static_cast<int>(brg);
+
+        update();
+//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;;
+    }
+    else
+    {
+        if (mouseBearing != -1)
+        {
+            mouseBearing = -1;
+            update();
+        }
+
+    }
+}
 
 
 

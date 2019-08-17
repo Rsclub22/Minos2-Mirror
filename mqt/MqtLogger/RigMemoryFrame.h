@@ -109,6 +109,7 @@ private slots:
 
     void on_rigMemTable_clicked(const QModelIndex &index);
 
+    void on_doColumnChanges(BaseContestLog *b);
 private:
     Ui::RigMemoryFrame *ui;
     LoggerContestLog *ct = nullptr;

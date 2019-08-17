@@ -579,6 +579,10 @@ void RotatorMainWindow::initActionsConnections()
     connect(ui->rot_left_button, SIGNAL(clicked(bool)), this, SLOT(rotateCCW(bool)));
     connect(this, SIGNAL(escapePressed()), this, SLOT(stop_rotation()));
 
+    // click on compass rose
+
+    connect(ui->compassDial, SIGNAL(sendClickBearing(int)), this, SLOT(compassClicked(int)));
+
     // display bearing
     connect(pollTimer, SIGNAL(timeout()), this, SLOT(request_bearing()));
     connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
@@ -807,6 +811,12 @@ void RotatorMainWindow::displayBearing(int bearing)
     }
     emit sendBackBearing(backBearingmsg);
 
+}
+
+void RotatorMainWindow::compassClicked(int brg)
+{
+    ui->bearingEdit->setText(QString::number(brg));
+    emit presetRotateTo();
 }
 
 

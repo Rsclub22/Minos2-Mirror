@@ -59,6 +59,8 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
 
     reloadColumns();
 
+    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+
     ui->rigMemTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     connect( ui->rigMemTable->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
@@ -229,6 +231,8 @@ void RigMemoryFrame::saveAllColumnWidthsAndPositions()
         //And we need to send this out to all other instances
 
         sendUpdateMemories();
+        MinosLoggerEvents::SendColumnsChanged();
+
     }
 }
 void RigMemoryFrame::reloadColumns()
@@ -241,6 +245,13 @@ void RigMemoryFrame::reloadColumns()
         // this will fire signals, so... don't save at the same time
         ui->rigMemTable->horizontalHeader()->restoreState(state);
         suppressSendUpdate = false;
+    }
+}
+void RigMemoryFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == ct)
+    {
+        reloadColumns();
     }
 }
 void RigMemoryFrame:: on_sectionMoved(int /*logicalIndex*/, int /*oldVisualIndex*/, int /*newVisualIndex*/)

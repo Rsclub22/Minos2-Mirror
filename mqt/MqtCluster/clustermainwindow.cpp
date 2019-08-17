@@ -162,27 +162,26 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
 
 
-    dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-    dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-    dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-    dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-    dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-    dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-    dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+//    dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+//    dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+//    dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+//    dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+//    dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+//    dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
+//    dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setVisible(false);
     verticalHeader->setDefaultSectionSize(10);
     verticalHeader->setMinimumSectionSize(10);
-    dxSpotView->horizontalHeader()->setStretchLastSection(true);
 
     verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-/*
+    restoreDxSpotViewColumns();
+    dxSpotView->horizontalHeader()->setStretchLastSection(true);
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
-    restoreDxSpotViewColumns();
-*/
+
     rawClusterDataView = new QPlainTextEdit();
     rawClusterDataView->setReadOnly(true);
 

@@ -48,8 +48,10 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
-    ui->splitter->setStretchFactor(0, 2);
-    ui->splitter->setStretchFactor(1, 1);
+    ui->clusterSplitter->setStretchFactor(0, 2);
+    ui->clusterSplitter->setStretchFactor(1, 1);
+
+    restoreSplitters();
 
     trace(QString("ClusterClientFrame Starting"));
 
@@ -164,6 +166,12 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
     restoreLocatorViewColumns();
 
+    // all initial restores have been done
+
+    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
+
+
     connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
     purgeTimer->start(PURGE_TIME);
@@ -231,11 +239,8 @@ void ClusterClientFrame::setupDXSpotView()
 
     QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
 
-    //connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
     connect(spotVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onDXSpotVertHeaderClicked(int)));
-    dxSpotView->horizontalHeader()->setStretchLastSection(true);
-
 
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -244,19 +249,22 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
 
-    dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-    dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-    dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-    dxSpotView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
-    dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-    dxSpotView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
-    dxSpotView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
-    dxSpotView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
-    dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-    dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-    dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+//    dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+//    dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+//    dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+//    dxSpotView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
+//    dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+//    dxSpotView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+//    dxSpotView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
+//    dxSpotView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+//    dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+//    dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
+//    dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreDxSpotViewColumns();
+    dxSpotView->horizontalHeader()->setStretchLastSection(true);
+
+    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_dxSpotViewSectionResized(int, int , int)));
 
     spotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
@@ -283,10 +291,8 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->verticalHeader()->setMinimumSectionSize(10);
 
     QHeaderView *searchVerticalHeader = searchView->verticalHeader();
-    //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(searchView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onSearchSpotViewClicked(const QModelIndex &)));
     connect(searchVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onSearchSpotVertHeaderClicked(int)));
-    searchView->horizontalHeader()->setStretchLastSection(true);
 
     searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     searchView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -295,18 +301,21 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     searchView->setColumnHidden(RXTIME_COL_NUM, true);
 
-    searchView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-    searchView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-    searchView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-    searchView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
-    searchView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-    searchView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
-    searchView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
-    searchView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
-    searchView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-    searchView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-    searchView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+//    searchView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+//    searchView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+//    searchView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+//    searchView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
+//    searchView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+//    searchView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+//    searchView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+//    searchView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
+//    searchView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+//    searchView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
+//    searchView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
+    restoreSearchViewColumns();
+    searchView->horizontalHeader()->setStretchLastSection(true);
+    connect( searchView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_searchViewSectionResized(int, int , int)));
     searchVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 }
@@ -337,10 +346,8 @@ void ClusterClientFrame::setupCallsignSpotView()
 
 
     QHeaderView *callSignVerticalHeader = callSignView->verticalHeader();
-    //connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(callSignView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCallsignSpotViewClicked(const QModelIndex &)));
     connect(callSignVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onCallsignSpotVertHeaderClicked(int)));
-    callSignView->horizontalHeader()->setStretchLastSection(true);
 
     callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     callSignView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -349,19 +356,21 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     callSignView->setColumnHidden(RXTIME_COL_NUM, true);
 
-    callSignView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-    callSignView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-    callSignView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-    callSignView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
-    callSignView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-    callSignView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
-    callSignView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
-    callSignView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
-    callSignView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-    callSignView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-    callSignView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+//    callSignView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+//    callSignView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+//    callSignView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+//    callSignView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
+//    callSignView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+//    callSignView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+//    callSignView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
+//    callSignView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+//    callSignView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+//    callSignView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
+//    callSignView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreCallsignViewColumns();
+    callSignView->horizontalHeader()->setStretchLastSection(true);
+    connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_callsignViewSectionResized(int, int , int)));
 
     callSignVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
@@ -391,11 +400,8 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->verticalHeader()->setMinimumSectionSize(10);
 
 
-    //connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_sectionResized(int, int , int)));
     connect(locatorView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onLocatorSpotViewClicked(const QModelIndex &)));
     connect(locatorViewVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onLocatorSpotVertHeaderClicked(int)));
-    locatorView->horizontalHeader()->setStretchLastSection(true);
-
 
     locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     locatorView->setColumnHidden(MODEMASK_COL_NUM, true);
@@ -404,17 +410,24 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
 
-    locatorView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-    locatorView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-    locatorView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-    locatorView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
-    locatorView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-    locatorView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
-    locatorView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
-    locatorView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
-    locatorView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-    locatorView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-    locatorView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+//    locatorView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
+//    locatorView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
+//    locatorView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
+//    locatorView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
+//    locatorView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
+//    locatorView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
+//    locatorView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
+//    locatorView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
+//    locatorView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
+//    locatorView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
+//    locatorView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+
+
+    restoreLocatorViewColumns();
+    locatorView->horizontalHeader()->setStretchLastSection(true);
+    connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_locatorViewSectionResized(int, int , int)));
+
 
     locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
@@ -828,15 +841,54 @@ void ClusterClientFrame::calcSpotDistanceBearing(const QString& _locator, double
 
 }
 
+void ClusterClientFrame::on_dxSpotViewSectionResized(int, int , int)
+{
+    QSettings settings;
+    QByteArray state;
 
+    state = dxSpotView->horizontalHeader()->saveState();
+    settings.setValue("ClusterClientFilter/dxSpotView/state", state);
+    MinosLoggerEvents::SendColumnsChanged();
+}
+void ClusterClientFrame::on_callsignViewSectionResized(int, int , int)
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = callSignView->horizontalHeader()->saveState();
+    settings.setValue("ClusterClientFilter/callSignView/state", state);
+    MinosLoggerEvents::SendColumnsChanged();
+}
+void ClusterClientFrame::on_locatorViewSectionResized(int, int , int)
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = locatorView->horizontalHeader()->saveState();
+    settings.setValue("ClusterClientFilter/locatorView/state", state);
+    MinosLoggerEvents::SendColumnsChanged();
+}
+
+void ClusterClientFrame::on_searchViewSectionResized(int, int , int)
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = searchView->horizontalHeader()->saveState();
+    settings.setValue("ClusterClientFilter/searchView/state", state);
+    MinosLoggerEvents::SendColumnsChanged();
+
+}
 
 void ClusterClientFrame::restoreDxSpotViewColumns()
 {
     QSettings settings;
     QByteArray state;
 
-    state = settings.value("dxSpotView/state").toByteArray();
+    state = settings.value("ClusterClientFilter/dxSpotView/state").toByteArray();
     dxSpotView->horizontalHeader()->restoreState(state);
+    MinosLoggerEvents::SendColumnsChanged();
+
 }
 
 
@@ -845,8 +897,10 @@ void ClusterClientFrame::restoreCallsignViewColumns()
     QSettings settings;
     QByteArray state;
 
-    state = settings.value("dxSpotView/state").toByteArray();
+    state = settings.value("ClusterClientFilter/callSignView/state").toByteArray();
     callSignView->horizontalHeader()->restoreState(state);
+    MinosLoggerEvents::SendColumnsChanged();
+
 }
 
 
@@ -855,8 +909,55 @@ void ClusterClientFrame::restoreLocatorViewColumns()
     QSettings settings;
     QByteArray state;
 
-    state = settings.value("dxSpotView/state").toByteArray();
+    state = settings.value("ClusterClientFilter/locatorView/state").toByteArray();
     locatorView->horizontalHeader()->restoreState(state);
+}
+void ClusterClientFrame::restoreSearchViewColumns()
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("ClusterClientFilter/searchView/state").toByteArray();
+    searchView->horizontalHeader()->restoreState(state);
+}
+
+void ClusterClientFrame::restoreColumns()
+{
+    restoreCallsignViewColumns();
+    restoreLocatorViewColumns();
+    restoreSearchViewColumns();
+    restoreDxSpotViewColumns();
+}
+void ClusterClientFrame::on_clusterSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QByteArray state = ui->clusterSplitter->saveState();
+    QSettings settings;
+    settings.setValue("Splitters/ClusterClientFrame/state/", state);
+
+    MinosLoggerEvents::SendSplittersChanged();
+}
+
+void ClusterClientFrame::restoreSplitters()
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("Splitters/ClusterClientFrame/state/").toByteArray();
+    ui->clusterSplitter->restoreState(state);
+}
+void ClusterClientFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == ct)
+    {
+        restoreColumns();
+    }
+}
+void ClusterClientFrame::on_doSplitterChanges(BaseContestLog *b)
+{
+    if (b == ct)
+    {
+        restoreSplitters();
+    }
 }
 
 void ClusterClientFrame::setContest(BaseContestLog *c)
@@ -1627,18 +1728,4 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     }
 
     return false;
-}
-
-void ClusterClientFrame::on_splitter_splitterMoved(int /*pos*/, int /*index*/)
-{
-    /*
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    QString curScreenLayout = tslf->getCurScreenLayout();
-
-    QByteArray state = ui->splitter->saveState();
-    QSettings settings;
-    settings.setValue("Splitters/ClusterClientFrame/state/" + curScreenLayout, state);
-
-    MinosLoggerEvents::SendSplittersChanged();
-    */
 }

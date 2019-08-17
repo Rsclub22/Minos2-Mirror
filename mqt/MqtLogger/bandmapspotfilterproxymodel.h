@@ -2,6 +2,7 @@
 #define BANDMAPSPOTFILTERPROXYMODEL_H
 
 #include "bandmapclientfilterdialog.h"
+#include <QSortFilterProxyModel>
 
 class BandmapSpotFilterProxyModel : public QSortFilterProxyModel
 {

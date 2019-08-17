@@ -29,8 +29,10 @@ public:
 
 signals:
    void ContestPageChanged();
-   void LogColumnsChanged();
+   void ColumnsChanged();
+   void doColumnChanges(BaseContestLog *);
    void SplittersChanged();
+   void doSplitterChanges(BaseContestLog *);
    void ValidateError(int err);
    void ReportOverstrike(bool ov, BaseContestLog *c);
    void AfterLogContact(BaseContestLog *ct);
@@ -74,7 +76,6 @@ signals:
    void FiltersChanged(BaseContestLog *);
    void UpdateStats(BaseContestLog *);
    void UpdateMemories(BaseContestLog *);
-   //void RefreshMults(BaseContestLog *);
    void RigFreqChanged(QString, BaseContestLog *);
    void RotBearingChanged(int, BaseContestLog *);
 
@@ -88,8 +89,10 @@ public:
    static MinosLoggerEvents mle;
 
    static void SendContestPageChanged();
-   static void SendLogColumnsChanged();
+   static void SendColumnsChanged();
+   static void SendDoColumnChanges(BaseContestLog *);
    static void SendSplittersChanged();
+   static void SendDoSplitterChanges(BaseContestLog *);
    static void SendValidateError(int err);
    static void SendReportOverstrike(bool ov, BaseContestLog *c);
    static void SendAfterLogContact(BaseContestLog *ct);

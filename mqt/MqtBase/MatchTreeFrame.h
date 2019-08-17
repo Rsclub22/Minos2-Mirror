@@ -96,11 +96,11 @@ public:
     void setBaseName(QString);
     void setContest(BaseContestLog *);
     void restoreColumns();
-    void getSplitters();
+//    void getSplitters();
 
     void doCustomContextMenuRequested();
 
-    bool logColumnsChanged;
+//    bool logColumnsChanged;
 
 
 protected:
@@ -125,6 +125,7 @@ private slots:
 
     void on_sectionResized(int, int, int);
 
+    void on_doColumnChanges(BaseContestLog*);
 signals:
     void editContact(QSharedPointer<BaseContact> bct);
 

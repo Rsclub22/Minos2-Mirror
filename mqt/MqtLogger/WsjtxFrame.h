@@ -47,6 +47,7 @@ private:
     WsjtxDecode decoder;
 
     void reply(decodeMessage &dc);
+    void restoreSplitters();
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
@@ -87,6 +88,7 @@ private slots:
     void on_splitter_splitterMoved(int pos, int index);
     void on_halt_tx_button__clicked();
     void on_auto_off_button__clicked();
+    void on_doSplitterChanges(BaseContestLog *b);
 };
 
 #endif // WSJTXFRAME_H

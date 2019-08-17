@@ -37,6 +37,7 @@
 TLogContainer *LogContainer = nullptr;
 static QString defLayoutText = " (default)";
 
+
 SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 {}
 
@@ -1294,7 +1295,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          ui->ContestPageControl->setCurrentWidget(ui->ContestPageControl->widget(tno));
          ui->ContestPageControl->setTabToolTip(tno, contest->cfileName);
 
-         f->logColumnsChanged = true;  // also causes show QSOs
+         f->columnsChanged = true;  // also causes show QSOs
          f->splittersChanged = true;
 
          sendDM->subscribeApps();
