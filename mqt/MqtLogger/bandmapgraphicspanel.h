@@ -14,7 +14,7 @@ public:
 
 signals:
     void bandmapResize(int);
-    void mousePressed(QPoint);
+    void leftMouseButtonPressed(QPoint);
     void mouseDoubleClicked(QPoint);
 
 protected:

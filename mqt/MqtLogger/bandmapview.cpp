@@ -60,6 +60,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     qDebug() << "bandmap height " << getBandmapFrameHeight();
     dialMinZoomLevel = dial->getMinZoomLevel();
     dialMaxZoomLevel = dial->getMaxZoomLevel();
+
     bandmapScene->addItem(dial);
     dial->setCurFreq(0.0);
     dial->setCursorColour(Qt::black);
@@ -70,7 +71,10 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     //connect (dial, SIGNAL(dialupdated()), this, SLOT(drawBandMapSpots()));
     connect (dial, SIGNAL(zoomUpdated(bool)), this, SLOT(zoomUpdated(bool)));
     connect (bandmapGraphicsView, SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
-    connect (bandmapGraphicsView, SIGNAL(mousePressed(QPoint)), this, SLOT(mousePressed(QPoint)));
+    connect (bandmapGraphicsView, SIGNAL(leftMouseButtonPressed(QPoint)), this, SLOT(leftMouseButtonPressed(QPoint)));
+
+    bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( bandmapGraphicsView, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( on_bandmap_customContextMenuRequested( const QPoint& ) ) );
 
 
 }
@@ -92,9 +96,11 @@ void BandmapView::onFontChanged(QFont cf)
 
 void BandmapView::zoomUpdated(bool dir)
 {
+    zoomLevel = dial->getZoomLevel();
 
     if (dir)
     {
+        ;
         if (zoomLevel < dialMaxZoomLevel && zoomLevel >= dialMinZoomLevel)
         {
             ++zoomLevel;
@@ -155,7 +161,7 @@ void BandmapView::bandmapUpdate()
 }
 
 
-void BandmapView::mousePressed(QPoint p)
+void BandmapView::leftMouseButtonPressed(QPoint p)
 {
     if (p.x() <= dial->getCurWidth() && p.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
     {
@@ -168,6 +174,14 @@ void BandmapView::mousePressed(QPoint p)
     }
 }
 
+
+void BandmapView::on_bandmap_customContextMenuRequested( const QPoint& p)
+{
+    if (p.x() >= dial->getCurWidth() && p.x() <= bandmapGraphicsView->width())
+    {
+        emit contextMenuSelected(p);
+    }
+}
 
 void BandmapView::updateGeometries()
 {
@@ -402,24 +416,38 @@ void BandmapView::sendFreqToRig(QString freq)
 
 
 
-bool BandmapView::bandmapSelectSpot(QPoint p)
+int BandmapView::isClickInRegionOfSpot(QPoint p)
 {
-
     if (!listOfMarkers.isEmpty())
     {
         for (int i = 0; i < listOfMarkers.count(); i++)
         {
             if (listOfMarkers[i]->getSpotRect().contains(p))
             {
-                clearSelectedSpot();       // clear any spot previously selected
-                setSelectedSpot(i);        // mark new selected spot
-                return true;
+                return i;
             }
         }
-
     }
 
-    return false;
+    return -1;
+}
+
+
+void BandmapView::bandmapSelectSpot(QPoint p)
+{
+    int spotNum = isClickInRegionOfSpot(p);
+
+    if (spotNum >= 0)
+    {
+        clearSelectedSpot();       // clear any spot previously selected
+        setSelectedSpot(spotNum);        // mark new selected spot
+
+    }
+    else
+    {
+        clearSelectedSpot();        // clear any selected spots
+    }
+
 }
 
 

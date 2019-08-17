@@ -3,7 +3,7 @@
 
 BandmapGraphicsPanel::BandmapGraphicsPanel(QWidget *parent)
 {
-
+    Q_UNUSED(parent)
 }
 
 
@@ -21,9 +21,14 @@ void BandmapGraphicsPanel::resizeEvent(QResizeEvent *)
 void BandmapGraphicsPanel::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
+    Qt::MouseButtons mouseButtons = event->buttons();
+    if( mouseButtons == Qt::LeftButton)
+    {
+        QPoint p = event->pos();
+        emit leftMouseButtonPressed(p);
+    }
 
-    QPoint p = event->pos();
-    emit mousePressed(p);
+
 }
 
 

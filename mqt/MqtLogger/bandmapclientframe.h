@@ -120,7 +120,8 @@ private slots:
      void on_FontChanged();
 
      void checkBandMapSpots();
-     void on_bandmap_customContextMenuRequested(const QPoint &);
+
+     void on_contextMenuSelected(const QPoint &pos);
 };
 
 #endif // BANDMAPCLIENTFRAME_H

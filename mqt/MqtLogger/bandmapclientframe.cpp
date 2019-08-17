@@ -84,9 +84,6 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
 
-    ui->bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( ui->bandmapGraphicsView, SIGNAL( customContextMenuRequested( const QPoint& ) ),
-             this, SLOT( on_bandmap_customContextMenuRequested( const QPoint& ) ) );
 
 
     filterSetup = new BandmapClientFilterDialog(this);
@@ -114,6 +111,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+
+    connect( bandmapView, SIGNAL( contextMenuSelected( const QPoint& ) ), this, SLOT( on_contextMenuSelected( const QPoint& ) ) );
 
     spotsMenu = new QMenu(ui->actionsButton);
 
@@ -169,10 +168,11 @@ void BandmapClientFrame::on_FontChanged()
 }
 
 
-void BandmapClientFrame::on_bandmap_customContextMenuRequested( const QPoint& pos)
+void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 {
     QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
     spotsMenu->popup( globalPos );
+
 }
 
 

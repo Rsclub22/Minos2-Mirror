@@ -53,6 +53,9 @@ public:
 
     int rows(const QModelIndex &index) const;
 
+    int isClickInRegionOfSpot(QPoint p);
+
+
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 
@@ -64,7 +67,8 @@ protected slots:
 
 
 signals:
-    //void clicked(const QModelIndex&);
+
+    void contextMenuSelected(const QPoint &p);
 
 
 protected:
@@ -93,11 +97,12 @@ protected:
 private slots:
     void bandmapResize(int);
     void zoomUpdated(bool dir);
-    void mousePressed(QPoint p);
+    void leftMouseButtonPressed(QPoint p);
 
 
 
 
+    void on_bandmap_customContextMenuRequested(const QPoint &p);
 private:
 
     //Bandmap *bandmap;
@@ -135,7 +140,7 @@ private:
     QRectF viewportRectForRow(int row) const;
     QRectF calculateSpotRect(const QString text, const QPoint spotCoord);
     void bandmapSelectFreq(int y);
-    bool bandmapSelectSpot(QPoint p);
+    void bandmapSelectSpot(QPoint p);
     void sendFreqToRig(QString freq);
     void clearSelectedSpot();
     void setSelectedSpot(int displayedSpotNum);

@@ -18,7 +18,7 @@
 
 
 BandmapFreqDial::BandmapFreqDial(int _width, int _height):
-    zoomLevel(0),
+    zoomLevel(dialData::MAX_ZOOM_LEVEL),
     dialHeight(_height),
     dialWidth(_width),
     cursorColour(Qt::red)
