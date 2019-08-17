@@ -9,7 +9,7 @@ BandmapMarkerDetails::BandmapMarkerDetails(QPoint _spotMarkerCoord)
     markerline = nullptr;
     spotRect = QRect();
     spotIndex = QModelIndex();
-    modelRow = 0;
+    modelRow = -1;
 
 }
 
@@ -72,3 +72,5 @@ int BandmapMarkerDetails::getModelRowNum() const
 {
     return modelRow;
 }
+
+

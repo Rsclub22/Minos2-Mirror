@@ -403,9 +403,44 @@ void BandmapView::sendFreqToRig(QString freq)
 void BandmapView::bandmapSelectSpot(QPoint p)
 {
 
+    if (!listOfMarkers.isEmpty())
+    {
+        for (int i = 0; i < listOfMarkers.count(); i++)
+        {
+            if (listOfMarkers[i]->getSpotRect().contains(p))
+            {
+                clearSelectedSpot();       // clear any spot previously selected
+                setSelectedSpot(i);        // mark new selected spot
+            }
+        }
+    }
 
 
+}
 
+
+void BandmapView::clearSelectedSpot()
+{
+
+    for (int i = 0; i < model()->rowCount(); i++)
+    {
+        if (model()->data(model()->index(i, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
+        {
+            model()->setData(model()->index(i, SPOT_IS_SELECTED_COL_NUM), false, BMP_DataStoredRole);
+        }
+    }
+}
+
+void BandmapView::setSelectedSpot(int displayedSpotNum)
+{
+
+    if (displayedSpotNum > listOfMarkers.count() || displayedSpotNum < 0 || listOfMarkers[displayedSpotNum]->getModelRowNum() > model()->rowCount() || listOfMarkers[displayedSpotNum]->getModelRowNum() < 0)
+    {
+        return;
+    }
+
+    model()->setData(model()->index(listOfMarkers[displayedSpotNum]->getModelRowNum() , SPOT_IS_SELECTED_COL_NUM), true, BMP_DataStoredRole);
+    bandmapUpdate();
 }
 
 void BandmapView::drawBandMapSpots()
@@ -416,13 +451,15 @@ void BandmapView::drawBandMapSpots()
         {
             if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
             {
-                delete(listOfMarkers[i]->getSpotMarkerPtr());
+                BandmapSpotMarker* s = listOfMarkers[i]->getSpotMarkerPtr();
                 bandmapScene->removeItem(listOfMarkers[i]->getSpotMarkerPtr());
+                delete s;
             }
             if (listOfMarkers[i]->getMarkerLinePtr() != nullptr)
             {
-                delete(listOfMarkers[i]->getMarkerLinePtr());
+                QGraphicsLineItem* l = listOfMarkers[i]->getMarkerLinePtr();
                 bandmapScene->removeItem(listOfMarkers[i]->getMarkerLinePtr());
+                delete l;
 
             }
 
@@ -611,7 +648,14 @@ QString BandmapView::assembleSpotMsg(int row)
     {
         degSym = QChar(' ');
     }
+
     QString msg = QString("%1  %2  %3  %4%5").arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym);
+
+    if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
+    {
+        msg = QString("<div style='background:rgba(200, 200, 200, 75%);'>" + msg + QString("</div<"));           // show selected
+
+    }
     qDebug() << "spot = " << msg;
     return msg;
 

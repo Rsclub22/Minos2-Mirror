@@ -133,6 +133,8 @@ private:
     void bandmapSelectFreq(int y);
     void bandmapSelectSpot(QPoint p);
     void sendFreqToRig(QString freq);
+    void clearSelectedSpot();
+    void setSelectedSpot(int displayedSpotNum);
 };
 
 #endif // BANDMAPVIEW_H

@@ -31,6 +31,8 @@ public:
     void setModelRowNum(int row);
     int getModelRowNum() const;
 
+
+
 private:
 
     QPoint spotMarkerCoord;     // text coords

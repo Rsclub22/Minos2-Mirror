@@ -45,6 +45,7 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
     spotterLocator = _spotterLocator;
     spotComment = comment;
     spotType = _spotType;
+    isSelected = false;
 }
 
 void BandmapData::operator = (const BandmapData& bmd)
@@ -66,4 +67,5 @@ void BandmapData::operator = (const BandmapData& bmd)
     spotterLocator = bmd.spotterLocator;
     spotComment = bmd.spotComment;
     spotType = bmd.spotType;
+    isSelected = bmd.isSelected;
 }

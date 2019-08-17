@@ -135,52 +135,55 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
         {
             case TIME_COL_NUM:
                 d = bandmapSpot->spotTime;
-                break;
+            break;
             case FREQ_COL_NUM:
                 d = bandmapSpot->dxFreqStr;
                 break;
             case DXSPOT_CALL_COL_NUM:
                 d = bandmapSpot->dxCall;
-                break;
+            break;
             case DXLOC_COL_NUM:
                 d = bandmapSpot->dxLocator;
-                break;
+            break;
             case DXDIST_COL_NUM:
                 d = bandmapSpot->dxDist;
-                break;
+            break;
             case DXBRG_COL_NUM:
                 d = bandmapSpot->dxBrg;
-                break;
+            break;
             case SPOT_CALL_COL_NUM:
                 d = bandmapSpot->spotterCall;
-                break;
+            break;
             case SPOTLOC_COL_NUM:
                 d = bandmapSpot->spotterLocator;
-                break;
+            break;
             case COMMENT_COL_NUM:
                 d = bandmapSpot->spotComment;
-                break;
+            break;
             case DXSPOT_CALL_WORKED_COL_NUM:
                 d = bandmapSpot->dxCallWorked;
-                break;
+            break;
             case DXLOC_WORKED_COL_NUM:
                 d = bandmapSpot->dxLocatorWorked;
-                break;
+            break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 d = bandmapSpot->sentToMemory;
-                break;
+            break;
             case DXBANDMASK_COL_NUM:
                 d = bandmapSpot->dxFreqMaskStr;
-                break;
+            break;
             case MODEMASK_COL_NUM:
                 d = bandmapSpot->dxModeMaskStr;
-                break;
+            break;
             case RXTIME_COL_NUM:
                 d = bandmapSpot->rxTime;
-                break;
+            break;
             case SPOT_TYPE_COL_NUM:
                 d = bandmapSpot->spotType;
-                break;
+            break;
+            case SPOT_IS_SELECTED_COL_NUM:
+                d = bandmapSpot->isSelected;
+            break;
 
 
         }
@@ -250,6 +253,9 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 break;
             case SPOT_TYPE_COL_NUM:
                 bandmapSpot->spotType = static_cast<SPOT_TYPE>(value.toInt());
+            break;
+            case SPOT_IS_SELECTED_COL_NUM:
+                bandmapSpot->isSelected = value.toBool();
             break;
             default:
                 return false;

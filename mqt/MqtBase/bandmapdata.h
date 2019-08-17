@@ -67,6 +67,7 @@ public:
     QString spotterLocator;
     QString spotComment;
     SPOT_TYPE spotType;
+    bool isSelected;
 
 
 
