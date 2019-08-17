@@ -23,6 +23,11 @@ ScreenConfigRow::~ScreenConfigRow()
     delete ui;
 }
 
+QScrollArea *ScreenConfigRow::getScrollArea()
+{
+    return ui->scrollArea;
+}
+
 void ScreenConfigRow::on_addRowBeforeButton_clicked()
 {
     trace("ScreenConfigRow::on_addRowBeforeButton_clicked()");

@@ -8,6 +8,8 @@
 
 class ScreenConfigRow;
 class ScreenConfigElement;
+class ScreenConfigAddColumn;
+
 namespace Ui {
 class ScreenConfig;
 }
@@ -24,10 +26,13 @@ public:
 
     ScreenConfigElement *baseElement = nullptr;
 
+    int topRowCount();
 
     bool checkOk(ScreenConfigElement *e);
 
     void checkAddRowButton();
+    void addColumnLeft(int top, int bottom);
+    void addColumnRight(int top, int bottom);
 public slots:
     void reject() override;
     void accept() override;
@@ -40,6 +45,8 @@ private slots:
 
     void on_addRowButton_clicked();
 
+    void on_addColumnButton_clicked();
+
 private:
     Ui::ScreenConfig *ui;
 
@@ -51,6 +58,7 @@ private:
     void buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl);
     void procRow(ScreenConfigRow *row, SCRow &scrow);
     bool checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e, int &auxCount);
+    ScreenConfigRow *combineRows(int top, int bottom);
 };
 
 #endif // SCREENCONFIG_H
