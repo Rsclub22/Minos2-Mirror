@@ -25,11 +25,10 @@ void ScreenConfigAddColumn::on_cancelButton_clicked()
     reject();
 }
 
-void ScreenConfigAddColumn::on_addColumnLeftButton_clicked()
+void ScreenConfigAddColumn::on_OKButton_clicked()
 {
     topRow = ui->topRow->value();
     bottomRow = ui->bottomRow->value();
-    addLeft = true;
 
     if (topRow >= bottomRow)
     {
@@ -40,20 +39,3 @@ void ScreenConfigAddColumn::on_addColumnLeftButton_clicked()
         accept();
     }
 }
-
-void ScreenConfigAddColumn::on_addColumnRightButton_clicked()
-{
-    topRow = ui->topRow->value();
-    bottomRow = ui->bottomRow->value();
-    addLeft = false;
-
-    if (topRow >= bottomRow)
-    {
-        mShowMessage("Bottom must be at larger than top (i.e. at least two rows", this);
-    }
-    else
-    {
-        accept();
-    }
-}
-

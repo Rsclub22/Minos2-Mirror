@@ -18,15 +18,12 @@ public:
 
     int topRow = 0;
     int bottomRow = 0;
-    bool addLeft = false;
 
 private slots:
 
-    void on_addColumnLeftButton_clicked();
-
-    void on_addColumnRightButton_clicked();
-
     void on_cancelButton_clicked();
+
+    void on_OKButton_clicked();
 
 private:
     Ui::ScreenConfigAddColumn *ui;

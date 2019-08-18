@@ -314,11 +314,10 @@ void ScreenConfig::addColumnRight(int top, int bottom)
     newRow->addRight(nullptr);
 }
 
-void ScreenConfig::on_addColumnButton_clicked()
+void ScreenConfig::on_addColumnRightButton_clicked()
 {
     int topRow = 0;
     int bottomRow = 0;
-    bool addLeft = false;
     int ret = 0;
 
     {
@@ -328,22 +327,29 @@ void ScreenConfig::on_addColumnButton_clicked()
 
         topRow = scac.topRow;
         bottomRow = scac.bottomRow;
-        addLeft = scac.addLeft;
     }
     if (ret == QDialog::Accepted)
     {
-        if (addLeft)
-        {
-            addColumnLeft(topRow, bottomRow);
-        }
-        else
-        {
-            addColumnRight(topRow, bottomRow);
-        }
+        addColumnRight(topRow, bottomRow);
     }
+}
 
+void ScreenConfig::on_addColumnLeftButton_clicked()
+{
+    int topRow = 0;
+    int bottomRow = 0;
+    int ret = 0;
 
-    update();
+    {
+        // add a column spanning several rows
+        ScreenConfigAddColumn scac(this);
+        ret = scac.exec();
 
-    SC sc = getConfig();
+        topRow = scac.topRow;
+        bottomRow = scac.bottomRow;
+    }
+    if (ret == QDialog::Accepted)
+    {
+        addColumnLeft(topRow, bottomRow);
+    }
 }

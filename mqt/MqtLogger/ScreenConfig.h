@@ -45,7 +45,9 @@ private slots:
 
     void on_addRowButton_clicked();
 
-    void on_addColumnButton_clicked();
+    void on_addColumnRightButton_clicked();
+
+    void on_addColumnLeftButton_clicked();
 
 private:
     Ui::ScreenConfig *ui;
