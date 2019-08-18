@@ -38,7 +38,7 @@ class ClusterModeBandPlan
 {
 public:
     ClusterModeBandPlan();
-    bool loadFile();
+    bool loadFile(QString filename);
 
     int confirmMode(QString &band, QString &mode, double freq);
     bool modeExists(QString &band, QString &mode);

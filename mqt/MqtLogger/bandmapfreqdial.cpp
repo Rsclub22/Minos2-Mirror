@@ -18,7 +18,7 @@
 
 
 BandmapFreqDial::BandmapFreqDial(int _width, int _height):
-    zoomLevel(0),
+    zoomLevel(dialData::MAX_ZOOM_LEVEL),
     dialHeight(_height),
     dialWidth(_width),
     cursorColour(Qt::red)
@@ -394,7 +394,15 @@ int BandmapFreqDial::getYCoordOnDial(qint64 frequency)
 
 }
 
-
+QString BandmapFreqDial::getFreqFromYCoordOnDial(int y)
+{
+    int dialPos = y - dialData::DIAL_VERT_OFFSET;
+    qint32 fmaj = dialPos / dialData::khzPixelStep[zoomLevel]  * 1000;
+    qint32 fmin = dialPos % dialData::khzPixelStep[zoomLevel] * dialData::hzPixelStep[zoomLevel];
+    qint32 ftot = fmaj + fmin;
+    qint64 freq = (scaleStartFreq * 1000) + ftot;
+    return QString::number(freq);
+}
 
 void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
 {

@@ -69,6 +69,8 @@ const int MODEMASK_COL_NUM = 12;
 const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 13;
 const int RXTIME_COL_NUM = 14;
 const int SPOT_TYPE_COL_NUM = 15;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 16;    // used in bandmap
+
 
 const int TIME_COL_WIDTH = 40;
 const int FREQ_COL_WIDTH = 60;
@@ -167,6 +169,10 @@ public:
 
 
     }
+
+// search for data in cluster comments
+    QStringList propFilterStrings = {"TR", "ES", "MS", "EME"};
+    QStringList modeFilterStrings = {"CW","USB", "RTTY", "PSK31", "FM", "FT8", "MSK144", "FSK441"};
 
 
     // note the list of callsign and locator filters strings are stored as QString for saving to contest.

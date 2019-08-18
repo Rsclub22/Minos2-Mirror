@@ -104,8 +104,10 @@ SOURCES += \
 	bandmapclientframe.cpp \
     bandmapcallsignmarker.cpp \
     bandmapfreqdial.cpp	\
-	clustermodebandplan.cpp \
+    clustermodebandplan.cpp \
     bandmapview.cpp
+
+
 
 
 HEADERS  += \

@@ -86,9 +86,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
 
-    modeBandPlan = new BandModeFrequencyPlan();
+    //modeBandPlan = new ClusterModeBandPlan();
 
-    modeBandPlan->loadFile("./Configuration/mode_bandplan.json");
+    //modeBandPlan->loadFile("./Configuration/mode_bandplan.json");
 
     //QString band = "70 MHz";
     //QString mode = "MGM";
@@ -184,9 +184,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
-    // test clusterbandplan json
-    //ClusterModeBandPlan* cmbp = new ClusterModeBandPlan();
-    //cmbp->loadFile();
 
 
 }

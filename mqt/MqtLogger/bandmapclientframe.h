@@ -23,7 +23,6 @@
 #include "clustercommon.h"
 #include "contest.h"
 #include "ContestApp.h"
-#include "bandModeFrequencyPlan.h"
 #include "MinosLoggerEvents.h"
 #include "bandmapcallsignmarker.h"
 //#include "bandmap.h"
@@ -32,6 +31,7 @@
 #include "bandmapdatamodel.h"
 #include "bandmapclientfilterdialog.h"
 #include "bandmapspotfilterproxymodel.h"
+#include "clustermodebandplan.h"
 
 namespace Ui {
     class BandmapClientFrame;
@@ -72,6 +72,7 @@ private:
     QVector<QString> spotQueue;
 
     BandmapView *bandmapView;
+    QItemSelectionModel *selectionModel;
     QGraphicsView* bandmapGraphicsView;
 
     BandmapSpotFilterProxyModel* bandmapSpotProxyModel;
@@ -83,6 +84,16 @@ private:
 
     BandmapDataModel *bandmapDataModel;
     BandmapData *bandmapData;
+
+    QMenu* spotsMenu;
+    QAction* freqAction;
+    QAction* bearingAction;
+    QAction* logAction;
+    QAction* memoryAction;
+    QAction* clearSpotAction;
+
+    ClusterModeBandPlan* legalOperatingFreq;
+
 
     bool purgeSpotFlag;
     bool holdUpdateFlag;
@@ -109,6 +120,8 @@ private slots:
      void on_FontChanged();
 
      void checkBandMapSpots();
+
+     void on_contextMenuSelected(const QPoint &pos);
 };
 
 #endif // BANDMAPCLIENTFRAME_H

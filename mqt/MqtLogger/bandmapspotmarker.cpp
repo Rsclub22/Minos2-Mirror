@@ -16,17 +16,13 @@
 BandmapSpotMarker::BandmapSpotMarker(const QPoint &_position)
     : QGraphicsTextItem(),
       position(_position)
-      //displayText(text),
-      //auxText(_auxText),
-      //textColour(_colour)
+
 {
     setPos(position);
-    //scene->clearSelection();
-    //scene->addItem(this);
-    //setSelected(true);
-    setHtml(displayText);
+
 
 }
+
 
 
 void BandmapSpotMarker::setSpotText(QString text)

@@ -383,7 +383,13 @@ bool DxSpotDataModel::removeRows(int _row, int count, const QModelIndex &parent)
 
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
+        SpotData* spotData = dxSpotData[row];
         dxSpotData.removeAt(row);
+        if (spotData != nullptr)
+        {
+            delete(spotData);       // return memory
+        }
+
     }
     endRemoveRows();
     return true;
