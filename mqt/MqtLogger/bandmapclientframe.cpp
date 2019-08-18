@@ -175,7 +175,56 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 
 }
 
+void BandmapClientFrame::on_freqActionSelected()
+{
+    QString freq = "";
+    sendFreqToRig(freq);
+}
 
+void BandmapClientFrame::sendFreqToRig(QString freq)
+{
+    QString f = freq.remove('.');
+    MinosLoggerEvents::SendFreqStrToRig(f);
+}
+
+void BandmapClientFrame::bearingActionSelected()
+{
+    QString brg = "";
+    QString loc = "";
+    if (loc.count() < 6)
+    {
+        brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+
+    }
+    sendBrgToRot(brg);
+}
+
+
+void BandmapClientFrame::sendBrgToRot(QString brg)
+{
+    if (!brg.isEmpty())
+    {
+       MinosLoggerEvents::SendSpotBrgStrToRot(brg);
+    }
+
+}
+
+
+void BandmapClientFrame::logActionSelected()
+{
+
+}
+
+
+void BandmapClientFrame::memoryActionSelected()
+{
+
+}
+
+void BandmapClientFrame::clearSpotActionSelected()
+{
+
+}
 
 void BandmapClientFrame::setContest(BaseContestLog *c)
 {
