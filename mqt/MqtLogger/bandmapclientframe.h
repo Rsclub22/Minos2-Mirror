@@ -91,6 +91,8 @@ private:
     QAction* logAction;
     QAction* memoryAction;
     QAction* clearSpotAction;
+    BandmapData selectedSpotData;
+    int selectedSpotRowNum;
 
     ClusterModeBandPlan* legalOperatingFreq;
 

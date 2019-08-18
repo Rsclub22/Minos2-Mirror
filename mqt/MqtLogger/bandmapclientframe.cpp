@@ -170,8 +170,15 @@ void BandmapClientFrame::on_FontChanged()
 
 void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 {
-    QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
-    spotsMenu->popup( globalPos );
+    int displayedSpotNum = bandmapView->isClickInRegionOfSpot(pos);
+    if (displayedSpotNum != -1)
+    {
+        bandmapView->getSpotData(selectedSpotRowNum, displayedSpotNum, selectedSpotData);
+        QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
+        spotsMenu->popup( globalPos );
+
+    }
+
 
 }
 

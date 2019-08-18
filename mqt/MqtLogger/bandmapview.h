@@ -56,6 +56,11 @@ public:
     int isClickInRegionOfSpot(QPoint p);
 
 
+    void getSpotData(int &selectedSpotRowNum, int &displayedSpotNum, BandmapData &selectedSpot);
+
+    void clearSpotData(BandmapData &selectedSpot);
+
+
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 

@@ -460,23 +460,29 @@ void BandmapView::clearSelectedSpot()
         {
             model()->setData(model()->index(i, SPOT_IS_SELECTED_COL_NUM), false, BMP_DataStoredRole);
 
-            selectedSpotRowNum = NO_SELECTED_ROWNUM;
-            selectedSpot.spotTime = "";
-            selectedSpot.dxFreqStr = "";
-            //selectedSpot.dxFreq = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toLongLong();
-            selectedSpot.dxCall = "";
-            selectedSpot.dxLocator = "";
-            selectedSpot.dxDist = "";
-            selectedSpot.dxBrg = "";
-            selectedSpot.dxCallWorked = false;
-            selectedSpot.dxLocatorWorked = false;
-            selectedSpot.spotType = SPOT_TYPE::NOTHING;
+            clearSpotData(selectedSpot );
+
             bandmapUpdate();
 
 
 
         }
     }
+}
+
+void BandmapView::clearSpotData(BandmapData &selectedSpot)
+{
+    selectedSpotRowNum = NO_SELECTED_ROWNUM;
+    selectedSpot.spotTime = "";
+    selectedSpot.dxFreqStr = "";
+    //selectedSpot.dxFreq = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toLongLong();
+    selectedSpot.dxCall = "";
+    selectedSpot.dxLocator = "";
+    selectedSpot.dxDist = "";
+    selectedSpot.dxBrg = "";
+    selectedSpot.dxCallWorked = false;
+    selectedSpot.dxLocatorWorked = false;
+    selectedSpot.spotType = SPOT_TYPE::NOTHING;
 }
 
 void BandmapView::setSelectedSpot(int displayedSpotNum)
@@ -487,11 +493,17 @@ void BandmapView::setSelectedSpot(int displayedSpotNum)
         return;
     }
 
-    selectedSpotRowNum = listOfMarkers[displayedSpotNum]->getModelRowNum();
+    getSpotData(selectedSpotRowNum, displayedSpotNum, selectedSpot);
+
     model()->setData(model()->index(selectedSpotRowNum , SPOT_IS_SELECTED_COL_NUM), true, BMP_DataStoredRole);
 
+    bandmapUpdate();
+}
 
 
+void BandmapView::getSpotData(int &selectedSpotRowNum, int &displayedSpotNum, BandmapData &selectedSpot)
+{
+    selectedSpotRowNum = listOfMarkers[displayedSpotNum]->getModelRowNum();
     selectedSpot.spotTime = model()->data(model()->index(selectedSpotRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString();
     selectedSpot.dxFreqStr = model()->data(model()->index(selectedSpotRowNum, FREQ_COL_NUM), BMP_DataStoredRole).toString();
     //selectedSpot.dxFreq = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toLongLong();
@@ -503,7 +515,7 @@ void BandmapView::setSelectedSpot(int displayedSpotNum)
     selectedSpot.dxLocatorWorked = model()->data(model()->index(selectedSpotRowNum, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
     selectedSpot.spotType = static_cast<SPOT_TYPE>(model()->data(model()->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
-    bandmapUpdate();
+
 }
 
 
