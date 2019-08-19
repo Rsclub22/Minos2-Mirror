@@ -31,8 +31,12 @@
 
 #include <QString>
 
+namespace bandmapSpotType {
 
-enum SPOT_TYPE {NOTHING, CLUSTER, LOCAL};
+enum SPOT_TYPE {NONE, CLUSTER, LOGGED, MARKED, SAVED};
+
+}
+
 
 class BandmapData
 {
@@ -46,7 +50,7 @@ public:
              bool _dxCallWorked, QString _dxLocator,
              bool _dxLocatorWorked, QString distance,
              QString bearing, QString _spotterCall,
-             QString _spotterLocator, QString comment, SPOT_TYPE _spotType);
+             QString _spotterLocator, QString comment, bandmapSpotType::SPOT_TYPE _spotType);
 
     void operator = (const BandmapData& bmd);
 
@@ -66,7 +70,7 @@ public:
     QString spotterCall;
     QString spotterLocator;
     QString spotComment;
-    SPOT_TYPE spotType;
+    bandmapSpotType::SPOT_TYPE spotType;
     bool isSelected;
 
 

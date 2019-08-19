@@ -37,6 +37,7 @@ signals:
    void ReportOverstrike(bool ov, BaseContestLog *c);
    void AfterLogContact(BaseContestLog *ct);
    void AfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
+   void AfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, QString freq);
    void AfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    void ContestDetails(BaseContestLog *);
    void GoToSerial(BaseContestLog *);
@@ -51,7 +52,7 @@ signals:
    void ScrollToDistrict(QString prefix, BaseContestLog *);
    void MatchStarting(BaseContestLog *);
    void ShowOperators();
-   void BandMapPressed();
+   //void BandMapPressed();
    void TimerDistribution();
    void AfterTabFocusIn(QLineEdit *tle);
 
@@ -97,6 +98,7 @@ public:
    static void SendReportOverstrike(bool ov, BaseContestLog *c);
    static void SendAfterLogContact(BaseContestLog *ct);
    static void SendAfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
+   static void SendAfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, QString freq);
    static void SendAfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    static void SendContestDetails(BaseContestLog *);
    static void SendGoToSerial(BaseContestLog *);
