@@ -145,10 +145,14 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 
 
-    legalOperatingFreq = new ClusterModeBandPlan();
-    if (legalOperatingFreq->loadFile("./Configuration/operating_frequencies.json"))
+    modeBandPlan = new ClusterModeBandPlan();
+    if (modeBandPlan->loadFile("./Configuration/operating_frequencies.json"))
     {
         trace(QString("Bandmap: Operating frequency File loaded OK"));
+    }
+    else
+    {
+        trace(QString("Bandmap: Mode Bandplan Failed to Load"));
     }
 
     int a = 0;

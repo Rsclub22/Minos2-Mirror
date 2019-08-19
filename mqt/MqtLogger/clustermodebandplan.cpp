@@ -105,7 +105,7 @@ bool ClusterModeBandPlan::readFile(QString f)
                     for (int f = 0; f < modeFreqArray.count(); f++)
                     {
                         modeFreqObj = modeFreqArray[f].toObject();
-                        freqArray = modeFreqObj.value(QString(40+f)).toArray();
+                        freqArray = modeFreqObj.value(QString::number(f)).toArray();
                         freqHighLow.clear();
 
                         if (freqArray.count() < 0 && freqArray.count() > 9)     // max 9 freqs.

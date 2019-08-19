@@ -94,7 +94,7 @@ private:
     BandmapData selectedSpotData;
     int selectedSpotRowNum;
 
-    ClusterModeBandPlan* legalOperatingFreq;
+    ClusterModeBandPlan* modeBandPlan;;
 
 
     bool purgeSpotFlag;
