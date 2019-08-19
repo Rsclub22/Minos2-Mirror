@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ScreenConfigRow</class>
- <widget class="QFrame" name="ScreenConfigRow">
+ <class>ScreenConfigAddColumn</class>
+ <widget class="QDialog" name="ScreenConfigAddColumn">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,41 +11,39 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Frame</string>
-  </property>
-  <property name="autoFillBackground">
-   <bool>true</bool>
-  </property>
-  <property name="frameShape">
-   <enum>QFrame::WinPanel</enum>
+   <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>376</width>
-        <height>246</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="addRowBeforeButton">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Add Row Before</string>
+        <string>First row in span</string>
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QSpinBox" name="topRow"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Last row in span</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="bottomRow"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -60,9 +58,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="removeRowButton">
+      <widget class="QPushButton" name="cancelButton">
        <property name="text">
-        <string>Remove This Row</string>
+        <string>Cancel</string>
        </property>
       </widget>
      </item>
@@ -80,9 +78,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="addRowAfterButton">
+      <widget class="QPushButton" name="OKButton">
        <property name="text">
-        <string>Add Row After</string>
+        <string>OK</string>
        </property>
       </widget>
      </item>

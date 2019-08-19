@@ -8,6 +8,7 @@
 #include "ScreenConfigElement.h"
 #include "ScreenConfigRow.h"
 #include "ScreenConfigElement.h"
+#include "screenconfigaddcolumn.h"
 
 #include "ScreenConfig.h"
 #include "ui_ScreenConfig.h"
@@ -77,6 +78,12 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
 ScreenConfig::~ScreenConfig()
 {
     delete ui;
+}
+
+int ScreenConfig::topRowCount()
+{
+    int vCt = vbl->count();
+    return vCt;
 }
 void ScreenConfig::doCloseEvent()
 {
@@ -267,4 +274,82 @@ void ScreenConfig::on_addRowButton_clicked()
 void ScreenConfig::checkAddRowButton()
 {
     ui->addRowButton->setVisible(vbl->count() == 0);
+}
+
+ScreenConfigRow *ScreenConfig::combineRows(int top, int bottom)
+{
+    QWidget *qli = vbl->itemAt(top)->widget();
+    ScreenConfigRow *scr = dynamic_cast<ScreenConfigRow *>(qli);
+
+    scr->parentElement->addRowBefore(scr);
+    ScreenConfigRow *newRow = dynamic_cast<ScreenConfigRow *>(scr->parentElement->vbl->itemAt(top)->widget());
+
+    //new row needs a split element, to which we add our old rows
+
+    QWidget *w = newRow->hbl->itemAt(0)->widget();
+    ScreenConfigElement *split = dynamic_cast<ScreenConfigElement *>(w);
+    split->setIsSplitElement(true);
+    split->setType(sctSplit);
+
+    for (int i = top + 1; i <= bottom + 1; i++)
+    {
+        // keep taking the top of the old, and put it back at the bottom of the new
+        QLayoutItem *l = scr->parentElement->vbl->takeAt(top + 1);
+
+        split->vbl->addItem(l);
+        // reset the parentage, or it all displays in the wrong place
+        l->widget()->setParent(split);
+    }
+    return  newRow;
+}
+void ScreenConfig::addColumnLeft(int top, int bottom)
+{
+    ScreenConfigRow *newRow = combineRows(top, bottom);
+    newRow->addLeft(nullptr);
+}
+
+void ScreenConfig::addColumnRight(int top, int bottom)
+{
+    ScreenConfigRow *newRow = combineRows(top, bottom);
+    newRow->addRight(nullptr);
+}
+
+void ScreenConfig::on_addColumnRightButton_clicked()
+{
+    int topRow = 0;
+    int bottomRow = 0;
+    int ret = 0;
+
+    {
+        // add a column spanning several rows
+        ScreenConfigAddColumn scac(this);
+        ret = scac.exec();
+
+        topRow = scac.topRow;
+        bottomRow = scac.bottomRow;
+    }
+    if (ret == QDialog::Accepted)
+    {
+        addColumnRight(topRow, bottomRow);
+    }
+}
+
+void ScreenConfig::on_addColumnLeftButton_clicked()
+{
+    int topRow = 0;
+    int bottomRow = 0;
+    int ret = 0;
+
+    {
+        // add a column spanning several rows
+        ScreenConfigAddColumn scac(this);
+        ret = scac.exec();
+
+        topRow = scac.topRow;
+        bottomRow = scac.bottomRow;
+    }
+    if (ret == QDialog::Accepted)
+    {
+        addColumnLeft(topRow, bottomRow);
+    }
 }
