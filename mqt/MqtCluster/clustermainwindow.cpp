@@ -817,7 +817,10 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
 
     if (dxMsg.count() > 4)
     {
-        dxFreq = convertKhzToMhz(dxMsg[0]);
+        //dxFreq = convertKhzToMhz(dxMsg[0]);
+        QString f = dxMsg[0] + "00";
+        f.remove('.');
+        dxFreq = convertFreqStrDisp(f);
         getBand(dxFreq, dxBandStr, dxBandMask);
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
@@ -1015,7 +1018,10 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
     if (dxMsg.count() > 5)
     {
         spotCall = dxMsg[2].remove(':');
-        dxFreq = convertKhzToMhz(dxMsg[3]);
+        QString f = dxMsg[3] + "00";
+        f.remove('.');
+        //dxFreq = convertKhzToMhz(dxMsg[3]);
+        dxFreq = convertFreqStrDisp(f);
         getBand(dxFreq, dxBandStr, dxBandMask);
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
@@ -1091,7 +1097,8 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
 
 void ClusterMainWindow::getBand(QString freq, QString &band, QString &bandMask)
 {
-    double f = freq.append("000").remove('.').toDouble();
+    //double f = freq.append("000").remove('.').toDouble();
+    double f = freq.remove('.').toDouble();
 
     for (int i = 0; i < bands.count(); i++)
     {

@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "bandmapdatamodel.h"
+#include "rigutils.h"
 
 // Note this is being used by a custom view with no horizontal headers.
 

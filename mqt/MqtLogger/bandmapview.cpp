@@ -585,7 +585,7 @@ void BandmapView::drawBandMapSpots()
         {
 
             QModelIndex index = model()->index(row, FREQ_COL_NUM);
-            QString freq = model()->data(index, Qt::DisplayRole).toString() + "000";
+            QString freq = model()->data(index, Qt::DisplayRole).toString().remove('.');
             trace(QString("bandmapView: marker freq = %1").arg(freq));
             qint64 f_int64 = freq.toLongLong();
             qint32 f_int32 = freq.toLong();

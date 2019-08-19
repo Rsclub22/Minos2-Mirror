@@ -99,15 +99,15 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapView->setModel(bandmapSpotProxyModel);
 
-    selectionModel = new QItemSelectionModel(bandmapSpotProxyModel);
+//    selectionModel = new QItemSelectionModel(bandmapSpotProxyModel);
 
-    bandmapView->setSelectionModel(selectionModel);
+//    bandmapView->setSelectionModel(selectionModel);
 
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
 
     checkNewSpotsTimer = new QTimer(this);
-    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkBandMapSpots()));
+    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewBandMapSpots()));
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
@@ -355,7 +355,7 @@ void BandmapClientFrame::dxSpots(QVector<QString> spotMsg)
  }
 
 
-void BandmapClientFrame::checkBandMapSpots()
+void BandmapClientFrame::checkNewBandMapSpots()
 {
     if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
     {

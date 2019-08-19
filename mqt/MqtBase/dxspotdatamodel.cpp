@@ -12,6 +12,7 @@
 
 #include <QDebug>
 #include "cutils.h"
+#include "rigutils.h"
 #include "htmldelegate.h"
 #include "dxspotdatamodel.h"
 
@@ -166,7 +167,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->spotTime;
                 break;
             case FREQ_COL_NUM:
-                d = dxSpot->dxFreq;
+                d = removeHundredHzAndHzDigits(dxSpot->dxFreq);
                 break;
             case DXSPOT_CALL_COL_NUM:
                 if (dxSpot->dxCallWorked == BOOL_YES)

@@ -582,7 +582,7 @@ void ClusterClientFrame::onLocatorSpotVertHeaderClicked(int row)
 
 void ClusterClientFrame::sendFreqToRig(QString freq)
 {
-    QString f = freq.remove('.').append(QString("000"));
+    QString f = freq.remove('.');
     MinosLoggerEvents::SendFreqStrToRig(f);
 }
 
@@ -1182,7 +1182,7 @@ memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFi
     memoryData::memData spotData;
     spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
     spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM), DataStoredRole).toString();
-    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole).toString().remove('.').append(QString("000"));
+    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole).toString().remove('.');
     spotData.mode = memDefData::DEFAULT_MODE;
     spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
     spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();

@@ -124,7 +124,7 @@ private slots:
 
      void on_FontChanged();
 
-     void checkBandMapSpots();
+     void checkNewBandMapSpots();
 
      void on_contextMenuSelected(const QPoint &pos);
      void on_freqActionSelected();
