@@ -343,10 +343,10 @@ void BandmapFreqDial::calcStartEndFreq(qint32 frequency)
        scaleStartFreq =  ((scaleStartFreq + 2) / 10) * 10;
     }
 
-//    if (scaleStartFreq < 144150)  //// ************************this needs to be the lower limit of the band
-//    {
-//        scaleStartFreq = 144150;
-//    }
+    if (scaleStartFreq < 144150)  //// ************************this needs to be the lower limit of the band
+    {
+        scaleStartFreq = 144150;
+    }
     scaleEndFreq = scaleStartFreq + freqRange;
 }
 

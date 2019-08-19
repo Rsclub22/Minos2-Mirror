@@ -398,9 +398,10 @@ QString convertFreqToFullDigit(QString f)
 }
 
 // converts freq received from cluster from khz to ghz and mhz
-
+// not used...
 QString convertKhzToMhz(QString f)
 {
+
     QStringList sl;
     if (!f.contains('.'))
     {
@@ -565,4 +566,26 @@ QString convertRitFreqToStr(int freq)
 
 }
 
+// remove hundreds hz and hz from freq for cluster display
+QString removeHundredHzAndHzDigits(QString f)
+{
+    QStringList sl = f.split('.');
+    int count = sl.count();
+    sl[count - 1] = sl[count - 1].mid(0,1);
+    QString fnew;
+    for (int i = count - 1; i >= 0; i--)
+    {
+        if (i == count - 1)
+        {
+            fnew = (sl[i]);
+        }
+        else
+        {
+            fnew.prepend(sl[i] + ".");
+        }
 
+    }
+
+    return fnew;
+
+}

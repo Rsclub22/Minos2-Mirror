@@ -91,6 +91,8 @@ private:
     QAction* logAction;
     QAction* memoryAction;
     QAction* clearSpotAction;
+    BandmapData selectedSpotData;
+    int selectedSpotRowNum;
 
     ClusterModeBandPlan* legalOperatingFreq;
 
@@ -108,6 +110,9 @@ private:
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
     void checkSpotInTable(QStringList &sl);
+    void sendFreqToRig(QString freq);
+
+
 protected:
 
 
@@ -119,9 +124,15 @@ private slots:
 
      void on_FontChanged();
 
-     void checkBandMapSpots();
+     void checkNewBandMapSpots();
 
      void on_contextMenuSelected(const QPoint &pos);
+     void on_freqActionSelected();
+     void bearingActionSelected();
+     void logActionSelected();
+     void memoryActionSelected();
+     void clearSpotActionSelected();
+     void sendBrgToRot(QString brg);
 };
 
 #endif // BANDMAPCLIENTFRAME_H

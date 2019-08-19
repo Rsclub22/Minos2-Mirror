@@ -99,15 +99,15 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapView->setModel(bandmapSpotProxyModel);
 
-    selectionModel = new QItemSelectionModel(bandmapSpotProxyModel);
+//    selectionModel = new QItemSelectionModel(bandmapSpotProxyModel);
 
-    bandmapView->setSelectionModel(selectionModel);
+//    bandmapView->setSelectionModel(selectionModel);
 
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
 
     checkNewSpotsTimer = new QTimer(this);
-    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkBandMapSpots()));
+    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewBandMapSpots()));
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
@@ -170,12 +170,68 @@ void BandmapClientFrame::on_FontChanged()
 
 void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 {
-    QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
-    spotsMenu->popup( globalPos );
+    int displayedSpotNum = bandmapView->isClickInRegionOfSpot(pos);
+    if (displayedSpotNum != -1)
+    {
+        bandmapView->getSpotData(selectedSpotRowNum, displayedSpotNum, selectedSpotData);
+        QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
+        spotsMenu->popup( globalPos );
+
+    }
+
+
+}
+
+void BandmapClientFrame::on_freqActionSelected()
+{
+    QString freq = "";
+    sendFreqToRig(freq);
+}
+
+void BandmapClientFrame::sendFreqToRig(QString freq)
+{
+    QString f = freq.remove('.');
+    MinosLoggerEvents::SendFreqStrToRig(f);
+}
+
+void BandmapClientFrame::bearingActionSelected()
+{
+    QString brg = "";
+    QString loc = "";
+    if (loc.count() < 6)
+    {
+        brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+
+    }
+    sendBrgToRot(brg);
+}
+
+
+void BandmapClientFrame::sendBrgToRot(QString brg)
+{
+    if (!brg.isEmpty())
+    {
+       MinosLoggerEvents::SendSpotBrgStrToRot(brg);
+    }
 
 }
 
 
+void BandmapClientFrame::logActionSelected()
+{
+
+}
+
+
+void BandmapClientFrame::memoryActionSelected()
+{
+
+}
+
+void BandmapClientFrame::clearSpotActionSelected()
+{
+
+}
 
 void BandmapClientFrame::setContest(BaseContestLog *c)
 {
@@ -299,7 +355,7 @@ void BandmapClientFrame::dxSpots(QVector<QString> spotMsg)
  }
 
 
-void BandmapClientFrame::checkBandMapSpots()
+void BandmapClientFrame::checkNewBandMapSpots()
 {
     if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
     {
