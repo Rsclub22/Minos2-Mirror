@@ -253,7 +253,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 bandmapSpot->sentToMemory = value.toBool();
                 break;
             case SPOT_TYPE_COL_NUM:
-                bandmapSpot->spotType = static_cast<SPOT_TYPE>(value.toInt());
+                bandmapSpot->spotType = static_cast<bandmapSpotType::SPOT_TYPE>(value.toInt());
             break;
             case SPOT_IS_SELECTED_COL_NUM:
                 bandmapSpot->isSelected = value.toBool();

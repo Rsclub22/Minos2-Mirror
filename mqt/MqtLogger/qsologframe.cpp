@@ -2065,6 +2065,11 @@ void QSOLogFrame::logScreenEntry( )
    MinosLoggerEvents::SendAfterLogContact(ct);
    MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.loc.getValue());
 
+   if (ui->bandmapRunFreqChkBox->isVisible() && !ui->bandmapRunFreqChkBox->isChecked())
+   {
+       MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue());
+   }
+
    if (!edit )
         startNextEntry( );	// select the "next"
 }

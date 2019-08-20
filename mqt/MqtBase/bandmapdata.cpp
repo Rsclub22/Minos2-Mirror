@@ -25,7 +25,7 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
                    QString _dxLocator, bool _dxLocatorWorked,
                    QString distance, QString bearing,
                    QString _spotterCall, QString _spotterLocator,
-                   QString comment, SPOT_TYPE _spotType)
+                   QString comment, bandmapSpotType::SPOT_TYPE _spotType)
 {
 
     rxTime = _rxTime;

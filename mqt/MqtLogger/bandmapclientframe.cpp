@@ -111,6 +111,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToBandmap(BaseContestLog *, Callsign, QString, QString, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString, QString, QString)));
 
     connect( bandmapView, SIGNAL( contextMenuSelected( const QPoint& ) ), this, SLOT( on_contextMenuSelected( const QPoint& ) ) );
 
@@ -144,10 +145,14 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 
 
-    legalOperatingFreq = new ClusterModeBandPlan();
-    if (legalOperatingFreq->loadFile("./Configuration/operating_frequencies.json"))
+    modeBandPlan = new ClusterModeBandPlan();
+    if (modeBandPlan->loadFile("./Configuration/operating_frequencies.json"))
     {
         trace(QString("Bandmap: Operating frequency File loaded OK"));
+    }
+    else
+    {
+        trace(QString("Bandmap: Mode Bandplan Failed to Load"));
     }
 
     int a = 0;
@@ -166,6 +171,14 @@ void BandmapClientFrame::on_FontChanged()
     QFont cf = QApplication::font();
     bandmapView->onFontChanged(cf);
 }
+
+
+void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq)
+{
+
+
+}
+
 
 
 void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
@@ -450,7 +463,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
                                                     callWorked, spotlist[DXLOCATOR],
                                                     locWorked,distance,
                                                     bearing, spotlist[SPOTCALL],
-                                                    spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT], SPOT_TYPE::CLUSTER);
+                                                    spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT], bandmapSpotType::SPOT_TYPE::CLUSTER);
 
             bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 

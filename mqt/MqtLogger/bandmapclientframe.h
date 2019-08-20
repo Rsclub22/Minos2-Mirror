@@ -94,7 +94,7 @@ private:
     BandmapData selectedSpotData;
     int selectedSpotRowNum;
 
-    ClusterModeBandPlan* legalOperatingFreq;
+    ClusterModeBandPlan* modeBandPlan;;
 
 
     bool purgeSpotFlag;
@@ -133,6 +133,7 @@ private slots:
      void memoryActionSelected();
      void clearSpotActionSelected();
      void sendBrgToRot(QString brg);
+     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq);
 };
 
 #endif // BANDMAPCLIENTFRAME_H

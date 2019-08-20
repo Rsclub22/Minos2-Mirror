@@ -18,6 +18,13 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Bandmap</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLineEdit" name="freqDisplay">
      <property name="font">
       <font>

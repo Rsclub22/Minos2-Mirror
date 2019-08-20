@@ -482,7 +482,7 @@ void BandmapView::clearSpotData(BandmapData &selectedSpot)
     selectedSpot.dxBrg = "";
     selectedSpot.dxCallWorked = false;
     selectedSpot.dxLocatorWorked = false;
-    selectedSpot.spotType = SPOT_TYPE::NOTHING;
+    selectedSpot.spotType = bandmapSpotType::SPOT_TYPE::NONE;
 }
 
 void BandmapView::setSelectedSpot(int displayedSpotNum)
@@ -513,7 +513,7 @@ void BandmapView::getSpotData(int &selectedSpotRowNum, int &displayedSpotNum, Ba
     selectedSpot.dxBrg = model()->data(model()->index(selectedSpotRowNum, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
     selectedSpot.dxCallWorked = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
     selectedSpot.dxLocatorWorked = model()->data(model()->index(selectedSpotRowNum, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-    selectedSpot.spotType = static_cast<SPOT_TYPE>(model()->data(model()->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    selectedSpot.spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
 
 }
