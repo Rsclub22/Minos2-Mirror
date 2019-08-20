@@ -32,6 +32,8 @@ public:
     explicit ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfig *sc = nullptr);
     ~ScreenConfigElement();
 
+    bool isTopLevelRow(ScreenConfigRow *scr);
+
     void setType(SCType);
     QString getType() const;
 

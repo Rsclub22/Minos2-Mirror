@@ -16,6 +16,8 @@ ScreenConfigRow::ScreenConfigRow(ScreenConfigElement *parentc) :
     hbl = new QHBoxLayout(ui->scrollAreaWidgetContents);
     hbl->setMargin(1);
     ui->scrollAreaWidgetContents->setLayout(hbl);
+
+    setStyleSheet("background-color: light grey;");
 }
 
 ScreenConfigRow::~ScreenConfigRow()
@@ -106,4 +108,39 @@ ScreenConfigElement *ScreenConfigRow::addRight(ScreenConfigElement *e)
 bool ScreenConfigRow::checkOk(ScreenConfigElement *e)
 {
     return parentElement->checkOk(e);
+}
+bool ScreenConfigRow::isTopLevelRow()
+{
+    return parentElement->isTopLevelRow(this);
+}
+void ScreenConfigRow::mousePressEvent(QMouseEvent *)
+{
+    if (isTopLevelRow())
+    {
+        mouseDown = true;
+    }
+}
+void ScreenConfigRow::mouseReleaseEvent(QMouseEvent *)
+{
+    if (mouseDown)
+    {
+        if (selected)
+        {
+            setStyleSheet("background-color: light grey;");
+            selected = false;
+        }
+        else
+        {
+            setStyleSheet("background-color: aqua;");
+            selected = true;
+        }
+    }
+    mouseDown = false;
+}
+void ScreenConfigRow::leaveEvent(QEvent *)
+{
+    if (mouseDown && isTopLevelRow())
+    {
+        mouseDown = false;
+    }
 }
