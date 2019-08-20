@@ -130,6 +130,11 @@ ScreenConfigElement::~ScreenConfigElement()
     delete ui;
 }
 
+bool ScreenConfigElement::isTopLevelRow(ScreenConfigRow *scr)
+{
+    return parentDialog && parentDialog->isTopLevelRow(scr);
+}
+
 void ScreenConfigElement::setType(SCType t)
 {
     ui->elementTypeCombo->setCurrentText(getScreenTypeString(t));

@@ -67,7 +67,6 @@ SOURCES += \
     ritlineedit.cpp \
     rotcontrolframe.cpp \
     runbuttondialog.cpp \
-    screenconfigaddcolumn.cpp \
     taboutbox.cpp \
     tbundleframe.cpp \
     tcalendarform.cpp \
@@ -135,7 +134,6 @@ HEADERS  += \
     ritlineedit.h \
     rotcontrolframe.h \
     runbuttondialog.h \
-    screenconfigaddcolumn.h \
     taboutbox.h \
     tbundleframe.h \
     tcalendarform.h \
@@ -190,7 +188,6 @@ FORMS    += \
     ScreenConfigManager.ui \
     ScreenConfigRow.ui \
     StackedInfoFrame.ui \
-    screenconfigaddcolumn.ui \
     taboutbox.ui \
     tbundleframe.ui \
     tcalendarform.ui \
