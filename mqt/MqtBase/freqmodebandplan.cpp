@@ -119,7 +119,7 @@ bool freqModeBandPlan::readFile(QString f)
                         {
 
                             bool ok = false;
-                            freqHighLow.append(freqArray[j].toString().toDouble(&ok));
+                            freqHighLow.append(freqArray[j].toString().remove('.').toDouble(&ok));
 
                         }
 
