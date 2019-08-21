@@ -55,6 +55,7 @@ SOURCES += \
     bandmapgraphicspanel.cpp \
     bandmapspotfilterproxymodel.cpp \
     bandmapspotmarker.cpp \
+    checkmodeagainstfreq.cpp \
     contestdetails.cpp \
     districtframe.cpp \
     dxccframe.cpp \
@@ -104,7 +105,6 @@ SOURCES += \
 	bandmapclientframe.cpp \
     bandmapcallsignmarker.cpp \
     bandmapfreqdial.cpp	\
-    clustermodebandplan.cpp \
     bandmapview.cpp
 
 
@@ -134,6 +134,7 @@ HEADERS  += \
     bandmapgraphicspanel.h \
     bandmapspotfilterproxymodel.h \
     bandmapspotmarker.h \
+    checkmodeagainstfreq.h \
     contestdetails.h \
     districtframe.h \
     dxccframe.h \
@@ -184,7 +185,6 @@ HEADERS  += \
     bandmapclientframe.h \
     bandmapcallsignmarker.h \
     bandmapfreqdial.h	\
-    clustermodebandplan.h \
     bandmapview.h
 
 FORMS    += \

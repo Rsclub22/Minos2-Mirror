@@ -28,11 +28,14 @@ public:
     int confirmMode(QString &band, QString &mode, double freq);
     bool modeExists(QString &band, QString &mode);
 
+protected:
+    QMap<QString, QMap<QString, ModeFreqDetail> > bandModeFreqList;
+    QMap<QString, ModeFreqDetail> modeFreqList;
+
 private:
 
     bool readFile(QString f);
-    QMap<QString, QMap<QString, ModeFreqDetail> > bandModeFreqList;
-    QMap<QString, ModeFreqDetail> modeFreqList;
+
 
 
 

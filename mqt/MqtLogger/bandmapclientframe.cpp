@@ -145,8 +145,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 
 
-    modeBandPlan = new ClusterModeBandPlan();
-    if (modeBandPlan->loadFile("./Configuration/operating_frequencies.json"))
+    modeBandPlan = new checkModeAgainstFreq();
+    if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
     {
         trace(QString("Bandmap: Operating frequency File loaded OK"));
     }
@@ -154,6 +154,9 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     {
         trace(QString("Bandmap: Mode Bandplan Failed to Load"));
     }
+
+    QString band = QString("144 MHz");
+    QString lookedupMode = modeBandPlan->getMode(band, QString("144200000").toDouble());
 
     int a = 0;
     a = 10;
