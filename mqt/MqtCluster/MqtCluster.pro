@@ -30,6 +30,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 win32:LIBS += -lWs2_32
 
 SOURCES += main.cpp\
+    checkmodeagainstfreq.cpp \
         clustermainwindow.cpp \
     setupdialog.cpp \
     cluster.cpp \
@@ -40,6 +41,7 @@ SOURCES += main.cpp\
 
 
 HEADERS  += clustermainwindow.h \
+    checkmodeagainstfreq.h \
     setupdialog.h \
     cluster.h \
     clusterrpc.h \

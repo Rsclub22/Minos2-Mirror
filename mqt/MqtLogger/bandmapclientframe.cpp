@@ -144,7 +144,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 
 
-
+/*
     modeBandPlan = new checkModeAgainstFreq();
     if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
     {
@@ -160,7 +160,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     int a = 0;
     a = 10;
-
+*/
 }
 
 

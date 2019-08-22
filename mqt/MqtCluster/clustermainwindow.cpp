@@ -72,6 +72,16 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     loadVhfAndUpBands(bands);
 
+    modeBandPlan = new checkModeAgainstFreq();
+    if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
+    {
+        trace(QString("Mode frequency bandplan loaded OK"));
+    }
+    else
+    {
+        trace(QString("Mode frequency bandplan loaded failed to Load"));
+    }
+
 #ifdef TEST_SPOTS
 
     if (FileExists(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE))
@@ -1029,6 +1039,9 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
             trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(dxFreq));
             return -3;
         }
+
+        getMode(dxFreq, dxBandStr, dxModeStr, dxModeMask);
+
         dxCall = dxMsg[4];
         // find time
         for (int i = 4; i < dxMsg.count(); i++)
@@ -1111,6 +1124,22 @@ void ClusterMainWindow::getBand(QString freq, QString &band, QString &bandMask)
     }
 }
 
+
+void ClusterMainWindow::getMode(const QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
+{
+    if (modeBandPlan->checkLoadedOk() && dxBand != "")
+    {
+        QString f = freq;
+        QString b = dxBand;
+
+        dxModeStr = modeBandPlan->getMode(b, f.remove('.').toDouble());
+
+
+
+    }
+
+
+}
 
 void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment)
 {
