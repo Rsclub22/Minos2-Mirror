@@ -37,6 +37,7 @@ SOURCES += \
     contest.cpp \
     cutils.cpp \
     DisplayContestContact.cpp \
+    freqmodebandplan.cpp \
     htmldelegate.cpp \
     KeyerState.cpp \
     latlong.cpp \
@@ -109,6 +110,7 @@ HEADERS += \
     cutils.h \
     DisplayContestContact.h \
     focuswatcher.h \
+    freqmodebandplan.h \
     htmldelegate.h \
     KeyerState.h \
     latlong.h \

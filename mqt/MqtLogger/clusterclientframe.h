@@ -23,7 +23,7 @@
 #include "clusterclientfilterdialog.h"
 #include "clustercommon.h"
 #include "MinosLoggerEvents.h"
-#include "clustermodebandplan.h"
+#include "checkmodeagainstfreq.h"
 
 namespace Ui {
     class ClusterClientFrame;
@@ -141,7 +141,7 @@ private:
 
     ClusterClientFilterDialog *filterSetup;
 
-    ClusterModeBandPlan *modeBandPlan;
+    checkModeAgainstFreq *modeBandPlan;
 
     HtmlDelegate *delegate = nullptr;
 

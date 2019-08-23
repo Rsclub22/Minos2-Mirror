@@ -12,22 +12,23 @@
 
 
 
-#include "clustermodebandplan.h"
+#include "freqmodebandplan.h"
 
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QJsonParseError>
 
 
-ClusterModeBandPlan::ClusterModeBandPlan()
+// parses a json file to get mode frequencies for each band or "legal" operating frequencies for each band
+
+freqModeBandPlan::freqModeBandPlan()
 {
 
 }
 
 
-bool ClusterModeBandPlan::loadFile(QString filename)
+bool freqModeBandPlan::loadFile(QString filename)
 {
     bool ret = false;
     ret = readFile(filename);
@@ -38,7 +39,7 @@ bool ClusterModeBandPlan::loadFile(QString filename)
 
 
 
-bool ClusterModeBandPlan::readFile(QString f)
+bool freqModeBandPlan::readFile(QString f)
 {
 
 
@@ -118,7 +119,7 @@ bool ClusterModeBandPlan::readFile(QString f)
                         {
 
                             bool ok = false;
-                            freqHighLow.append(freqArray[j].toString().toDouble(&ok));
+                            freqHighLow.append(freqArray[j].toString().remove('.').toDouble(&ok));
 
                         }
 
@@ -147,60 +148,5 @@ bool ClusterModeBandPlan::readFile(QString f)
         trace("Err " + err.errorString() + " Bad Json document " + s);
         return false;
     }
-
-}
-
-
-
-int ClusterModeBandPlan::confirmMode(QString &band, QString &mode, double freq)
-{
-
-    QMap<QString, ModeFreqDetail> modeList;
-    ModeFreqDetail freqs;
-
-
-    if (bandModeFreqList.contains(band))
-    {
-        modeList = bandModeFreqList.value(band);
-        if (modeList.contains(mode))
-        {
-            freqs = modeList.value(mode);
-            for (int i = 0; i < freqs.freq.count(); i++)
-            {
-                QList< double > freqLimits = freqs.freq[i];
-                if (freq >= freqLimits[0] && freq <= freqLimits[1])
-                {
-                    return MODE_FREQ_MATCH;
-
-                }
-            }
-
-            return NO_MODE_FREQ_MATCH;
-        }
-
-        return MODE_NOT_FOUND;
-    }
-
-    return BAND_NOT_FOUND;
-}
-
-
-// return false if band or mode doesn't exist - true if mode and band exists
-
-bool ClusterModeBandPlan::modeExists(QString &band, QString &mode)
-{
-
-    QMap<QString, ModeFreqDetail> modeList;
-
-    if (bandModeFreqList.contains(band))
-    {
-        modeList = bandModeFreqList.value(band);
-        if (modeList.contains(mode))
-        {
-            return true;
-        }
-    }
-
-    return false;
 
 }

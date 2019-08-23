@@ -31,7 +31,7 @@
 #include "bandmapdatamodel.h"
 #include "bandmapclientfilterdialog.h"
 #include "bandmapspotfilterproxymodel.h"
-#include "clustermodebandplan.h"
+#include "checkmodeagainstfreq.h"
 
 namespace Ui {
     class BandmapClientFrame;
@@ -94,7 +94,7 @@ private:
     BandmapData selectedSpotData;
     int selectedSpotRowNum;
 
-    ClusterModeBandPlan* modeBandPlan;;
+    checkModeAgainstFreq* modeBandPlan;;
 
 
     bool purgeSpotFlag;
