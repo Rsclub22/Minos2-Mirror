@@ -24,6 +24,7 @@ public:
 
 private:
     Ui::LocTreeFrame *ui;
+    QSharedPointer<HtmlDelegate> delegate;
 
     BaseContestLog *ct;
 };

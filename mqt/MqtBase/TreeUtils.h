@@ -54,7 +54,7 @@ class QSOGridModel: public QAbstractItemModel
     public:
         QSOGridModel();
         ~QSOGridModel() Q_DECL_OVERRIDE;
-        HtmlDelegate *delegate = nullptr;
+        QSharedPointer<HtmlDelegate> delegate;
 
         void reset();
         void initialise( BaseContestLog * pcontest );

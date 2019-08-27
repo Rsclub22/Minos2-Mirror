@@ -9,7 +9,7 @@ CallLocInputDialog::CallLocInputDialog(QWidget *parent, QString textToEdit, cons
     ui->setupUi(this);
     setWindowTitle(dialogTitle);
     ui->lineEditLabel->setText(lineEditLable);
-    ui->lineEdit->setValidator(new UpperCaseValidator());
+    ui->lineEdit->setValidator(&ucValidator);
     ui->lineEdit->setText(textToEdit);
 
 }

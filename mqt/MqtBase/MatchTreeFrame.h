@@ -82,6 +82,8 @@ class MatchTreeFrame : public QTreeView
     Q_OBJECT
     Ui::MatchTreeFrame *ui;
 
+    QSharedPointer<HtmlDelegate> delegate;
+
 public:
     QModelIndex treeClickIndex;
 

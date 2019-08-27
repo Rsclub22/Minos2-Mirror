@@ -202,11 +202,17 @@ void closeContestApp( )
    {
       TContestApp::getContestApp() ->close();
    }
-   //delete TContestApp::getContestApp();
+   delete TContestApp::getContestApp();
 }
 void TContestApp::close()
 {
    writeContestList();
+
+   for (int i = 0; i < epMAXPROFILE; i++)
+   {
+        BundleFile::bundleFiles[ i ].clear();
+   }
+
    TMatchThread::FinishMatchThread();
 }
 TContestApp::TContestApp() : MinosParameters(),

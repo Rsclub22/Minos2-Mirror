@@ -107,6 +107,7 @@ void TMatchThread::FinishMatchThread()
       matchThread->Terminate();
       trace( "WaitFor TMatchThread" );
       matchThread->wait(ULONG_MAX);
+      delete matchThread;
    }
    trace( "TMatchThread close complete" );
 }

@@ -59,6 +59,11 @@ class TContestApp : public MinosParameters
           preloadComplete = true;
       }
 
+      void clearPreloadComplete()
+      {
+          preloadComplete = false;
+      }
+
 
       // general settings - choose at startup
       SettingsBundle loggerBundle;     // startup defaults - INI files, sections, etc

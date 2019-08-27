@@ -30,6 +30,8 @@
 #include "WsjtxServer.h"
 #include "WsjtxConfigure.h"
 #include "minoscontestloaddialog.h"
+#include "ChatServer.h"
+#include "clusterClientServer.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -90,6 +92,12 @@ TLogContainer::~TLogContainer()
 {
     delete ui;
     delete sendDM;
+    delete MinosConfig::getMinosConfig();
+    clearPubSub();
+    delete ChatServer::getChatServer();
+    delete ClusterClientServer::getClusterClientServer();
+    delete WsjtxServer::getWsjtxServer();
+
 }
 
 
@@ -207,7 +215,26 @@ void TLogContainer::on_ReportOverstrike(bool overstrike, BaseContestLog *econtes
 void TLogContainer::closeEvent(QCloseEvent *event)
 {
     TimerUpdateQSOTimer.stop();
+
+    TContestApp::getContestApp() ->writeContestList();
+    TContestApp::getContestApp() ->suppressWritePreload = true;
+    TContestApp::getContestApp() ->clearPreloadComplete();
+
+    while ( ui->ContestPageControl->count())
+    {
+       // Keep closing the current (and hence visible) contest
+       closeSlot(0, true);
+    }
+
+    for ( ListSlotIterator i = TContestApp::getContestApp() ->listSlotList.begin(); i != TContestApp::getContestApp() ->listSlotList.end(); i++ )
+    {
+       if ( ( *i ) )
+       {
+          TContestApp::getContestApp() ->closeListFile( ( *i ) ->slot );
+       }
+    }
     closeContestApp();
+
     QWidget::closeEvent(event);
 }
 void TLogContainer::moveEvent(QMoveEvent *event)

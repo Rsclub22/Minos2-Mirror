@@ -14,7 +14,7 @@ class DistrictGridModel: public QAbstractItemModel
     public:
         DistrictGridModel();
         ~DistrictGridModel() override;
-        HtmlDelegate *delegate = nullptr;
+        QSharedPointer<HtmlDelegate> delegate ;
 
         BaseContestLog *ct;
 
@@ -47,7 +47,7 @@ class DistrictFrame : public QFrame
 
     DistrictGridModel model;
     DistrictSortFilterProxyModel proxyModel;
-    HtmlDelegate *delegate = nullptr;
+    QSharedPointer<HtmlDelegate> delegate;
 
 public:
     explicit DistrictFrame(QWidget *parent = nullptr);

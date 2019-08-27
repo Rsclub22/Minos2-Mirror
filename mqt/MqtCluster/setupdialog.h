@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QStandardItemModel>
 #include <QSettings>
-
+#include "cutils.h"
 #include "clustercommon.h"
 
 
@@ -101,6 +101,7 @@ private slots:
 
 private:
     Ui::SetupDialog *ui;
+    UpperCaseValidator ucValidator;
 
 
     QStringList availNodeNames;

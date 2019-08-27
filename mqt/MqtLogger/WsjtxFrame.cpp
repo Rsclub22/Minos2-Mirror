@@ -35,8 +35,8 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = new TestDelegate(1.0, lcf/100.0);
-    ui->decodes_table_view_->setItemDelegate( delegate);
+    delegate = QSharedPointer<HtmlDelegate> (new TestDelegate(1.0, lcf/100.0));
+    ui->decodes_table_view_->setItemDelegate( delegate.data());
     decodes_model_->delegate = delegate;
     decodes_model_->messages = &messages;
 
@@ -93,6 +93,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 WsjtxFrame::~WsjtxFrame()
 {
     delete ui;
+    delete decodes_model_;
 }
 
 void WsjtxFrame::on_halt_tx_button__clicked()

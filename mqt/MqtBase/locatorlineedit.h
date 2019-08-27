@@ -46,6 +46,8 @@ private:
     QString locator;
     bool locatorValid;
     bool allowLoc4;
+    UpperCaseValidator ucValidator;
+
     QString LocatorLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
     QString LocatorLineEditFrBlackBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}";
     void showLocatorGoodBad(bool state);

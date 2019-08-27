@@ -161,6 +161,14 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 RigControlFrame::~RigControlFrame()
 {
     delete ui;
+    foreach(auto b, runButtonMap)
+    {
+        delete b;
+    }
+    foreach(auto b, tuneButtonMap)
+    {
+        delete b;
+    }
 
 }
 void RigControlFrame::on_FontChanged()

@@ -49,6 +49,8 @@ private:
 
     QString callsign;
     bool callsignValid;
+    UpperCaseValidator ucValidator;
+
     QString CallsignLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
     QString CallsignLineEditFrBlackBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}";
     void showCallsignGoodBad(bool state);

@@ -14,6 +14,7 @@
 #include "RPCCommandConstants.h"
 #include "MinosRPC.h"
 //---------------------------------------------------------------------------
+void clearPubSub();
 class RPCPublishClient: public RPCPubSub
 {
    public:

@@ -30,7 +30,7 @@ private:
   int rx_df_;
 
 public:
-  HtmlDelegate *delegate = nullptr;
+  QSharedPointer<HtmlDelegate> delegate;
   QVector<decodeMessage> *messages = nullptr;
   explicit DecodesModel ();
 

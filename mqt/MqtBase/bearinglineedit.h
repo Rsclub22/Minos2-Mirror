@@ -46,6 +46,9 @@ private:
 
     int bearing;
     bool bearingValid;
+
+    UpperCaseValidator ucValidator;
+
     QString BearingLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
     QString BearingLineEditFrBlackBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}";
     void showBearingGoodBad(bool state);

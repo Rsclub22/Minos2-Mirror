@@ -50,8 +50,8 @@ SetupDialog::SetupDialog(QWidget *parent) :
     loadGeneralToSetupTab();
 
     // Personal Tab
-    ui->callsignEdit->setValidator(new UpperCaseValidator());
-    ui->locatorEdit->setValidator(new UpperCaseValidator());
+    ui->callsignEdit->setValidator(&ucValidator);
+    ui->locatorEdit->setValidator(&ucValidator);
 
     connect(ui->callsignEdit, SIGNAL(callsignFinished(const QString&)), this, SLOT(callsignFinished(const QString&)));
     connect(ui->nameEdit, SIGNAL(editingFinished()), this, SLOT(nameEditFinshed()));
