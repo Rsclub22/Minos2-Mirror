@@ -138,9 +138,9 @@ private:
     BaseContestLog *ct = nullptr;
     UpperCaseValidator ucValidator;
 
-    ClusterClientFilterDialog *filterSetup;
+    ClusterClientFilterDialog *filterSetup = nullptr;
 
-    checkModeAgainstFreq *modeBandPlan;
+    checkModeAgainstFreq *modeBandPlan = nullptr;
 
     QSharedPointer<HtmlDelegate> dxDelegate ;
     QSharedPointer<HtmlDelegate> callsignDelegate ;
