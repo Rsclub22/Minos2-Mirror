@@ -207,6 +207,7 @@ private:
     QDateTime spotDateTime;
     QString dxLocator;
     QString spotLocator;
+    QString dxPropMode;
 
     bool loginStart;
     bool loginSuccess;
@@ -274,6 +275,7 @@ private:
 #endif
 
 
+    QString getPropMode(const QString comment);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();

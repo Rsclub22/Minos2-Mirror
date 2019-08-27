@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>351</width>
-    <height>370</height>
+    <width>356</width>
+    <height>376</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterSetUpTabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="generalTab">
       <attribute name="title">
@@ -53,7 +53,7 @@
          <item>
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>10-180, or 0 no purge</string>
+            <string>10-180</string>
            </property>
           </widget>
          </item>
@@ -73,14 +73,32 @@
         </layout>
        </item>
        <item>
-        <spacer name="verticalSpacer">
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QCheckBox" name="displayModeCheckBox">
+           <property name="text">
+            <string>Display Mode</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="displayPropCheckBox">
+           <property name="text">
+            <string>Display Propogation Mode</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>225</height>
+           <height>40</height>
           </size>
          </property>
         </spacer>
@@ -149,7 +167,7 @@
         </layout>
        </item>
        <item>
-        <spacer name="verticalSpacer_2">
+        <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>

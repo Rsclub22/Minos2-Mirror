@@ -26,11 +26,14 @@ enum allBandOffsets {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10
 const QStringList clusterBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
 
-enum allModeOffsets {CWMODE, PHONEMODE, RTTYMODE, PSKMODE, MGMMODE};
-const QStringList clusterModes = QStringList() << "CW" << "USB" << "FM" << "MGM";
+enum allModeOffsets {CWMODE, PHONEMODE, FM_MODE, RTTYMODE, PSKMODE, FT8_MODE, MSK144_MODE, JT65_MODE};
+const QStringList clusterModes = QStringList() << "CW" << "USB" << "FM" << "RTTY" << "PSK31" << "FT8" << "MSK144" << "JT65";
 
-const int NUM_MODES = 5;
 
+
+const int NUM_MODES = clusterModes.count();
+
+const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";
 enum bandPlanModeError {MODE_FREQ_MATCH, NO_MODE_FREQ_MATCH, MODE_NOT_FOUND, BAND_NOT_FOUND};
 
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
@@ -46,7 +49,8 @@ const int SPOTLOCATOR = 8;
 const int SPOTTIME = 9;
 const int SPOTDATE = 10;
 const int SPOTCOMMENT = 11;
-const int TTLVALUE = 12;
+const int DXPROPMODE = 12;
+const int TTLVALUE = 13;
 
 
 // Cluster Data and View Columns
@@ -57,32 +61,24 @@ const int TIME_COL_NUM = 0;
 const int FREQ_COL_NUM = 1;
 const int DXSPOT_CALL_COL_NUM = 2;
 const int DXSPOT_CALL_WORKED_COL_NUM = 3;
-const int DXLOC_COL_NUM = 4;
-const int DXDIST_COL_NUM = 5;
-const int DXBRG_COL_NUM = 6;
-const int DXLOC_WORKED_COL_NUM = 7;
-const int SPOT_CALL_COL_NUM = 8;
-const int SPOTLOC_COL_NUM = 9;
-const int COMMENT_COL_NUM = 10;
-const int DXBANDMASK_COL_NUM = 11;
-const int MODEMASK_COL_NUM = 12;
-const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 13;
-const int RXTIME_COL_NUM = 14;
-const int SPOT_TYPE_COL_NUM = 15;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 16;    // used in bandmap
+const int DXSPOT_MODE_COL_NUM = 4;
+const int DXLOC_COL_NUM = 5;
+const int DXDIST_COL_NUM = 6;
+const int DXBRG_COL_NUM = 7;
+const int DXLOC_WORKED_COL_NUM = 8;
+const int SPOT_CALL_COL_NUM = 9;
+const int SPOTLOC_COL_NUM = 10;
+const int COMMENT_COL_NUM = 11;
+const int DXBANDMASK_COL_NUM = 12;
+const int MODEMASK_COL_NUM = 13;
+const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 14;
+const int DXSPOT_PROP_MODE_COL_NUM = 15;
+const int RXTIME_COL_NUM = 16;
+const int SPOT_TYPE_COL_NUM = 17;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 18;    // used in bandmap
 
 
-const int TIME_COL_WIDTH = 40;
-const int FREQ_COL_WIDTH = 60;
-const int DXSPOT_CALL_COL_WIDTH = 60;
-const int DXSPOT_CALL_WKD_COL_WIDTH = 30;
-const int DXLOC_COL_WIDTH = 50;
-const int DXDIST_COL_WIDTH = 40;
-const int DXBRG_COL_WIDTH = 30;
-const int DXLOC_WKD_COL_WIDTH = 30;
-const int SPOT_CALL_COL_WIDTH = 60;
-const int SPOTLOC_COL_WIDTH = 50;
-const int COMMENT_COL_WIDTH = 170;
+
 
 const bool BOOL_YES = true;
 const bool BOOL_NO = false;

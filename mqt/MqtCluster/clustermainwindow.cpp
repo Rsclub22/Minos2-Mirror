@@ -162,23 +162,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
     dxSpotView->setItemDelegate(delegate);
 
-    dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-    dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
-    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
 
 
-//    dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-//    dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-//    dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-//    dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-//    dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-//    dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-//    dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setVisible(false);
@@ -191,6 +176,18 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
+
+
+    dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
+    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
+
 
     rawClusterDataView = new QPlainTextEdit();
     rawClusterDataView->setReadOnly(true);
@@ -766,17 +763,17 @@ void ClusterMainWindow::parseDX(const QString txt)
                     if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))
                     {
                         trace(QString("ParseDx: Spot within timeToLive - Send Spot to Queue"));
-                        sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive())));
+                        sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(dxPropMode).arg(setupCluster->getTimeToLive())));
 
                         trace(QString("ParseDx: rxTime = %1").arg(rxTime));
                         trace(QString("ParseDx: Add spot for display"));
                         spotsList += (new SpotData(rxTime, spotTime,
                                                       dxFreq, dxBandMask,
-                                                      dxModeMask, dxCall,
+                                                      dxModeStr, dxModeMask, dxCall,
                                                       false, dxLocator,
                                                       false, "",
                                                       "", spotCall,
-                                                      spotLocator, spotComment));
+                                                      spotLocator, dxPropMode, spotComment));
 
                     }
                     else
@@ -821,6 +818,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
     spotDate = "";
     spotDateTime = QDateTime::currentDateTimeUtc();
     dxLocator = "";
+    dxPropMode = "";
     spotLocator = "";
 
     dxMsg = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
@@ -838,6 +836,9 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
             trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(dxFreq));
             return -3;
         }
+
+        getMode(dxFreq, dxBandStr, dxModeStr, dxModeMask);
+
         dxCall = dxMsg[1];
         spotDate = dxMsg[2];
         spotTime = dxMsg[3].remove('Z');
@@ -858,6 +859,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
         }
 
         findLocInComment(spotLocator, dxLocator, spotComment);
+        dxPropMode = getPropMode(spotComment);
         return 0;
     }
 
@@ -1015,6 +1017,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
     spotDate = "";
     spotDateTime = QDateTime::currentDateTimeUtc();
     dxLocator = "";
+    dxPropMode = "";
     spotLocator = "";
 
     txt.remove('\x07');
@@ -1097,6 +1100,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
         // remove seperator char from comment
         spotComment.remove(SPOT_DATA_SEPERATOR);
         findLocInComment(spotLocator, dxLocator, spotComment);
+        dxPropMode = getPropMode(spotComment);
 
 
         return 0;
@@ -1134,10 +1138,34 @@ void ClusterMainWindow::getMode(const QString freq, const QString &dxBand, QStri
 
         dxModeStr = modeBandPlan->getMode(b, f.remove('.').toDouble());
 
+        int modeMask = clusterModes.indexOf(dxModeStr);
+        if (modeMask == -1)
+        {
+            dxModeMask = "";
+        }
+        else
+        {
+            dxModeMask = QString::number(modeMask);
+        }
 
 
     }
 
+
+}
+
+
+QString ClusterMainWindow::getPropMode(const QString comment)
+{
+    for (int i = 0; i < clusterPropModes.count(); i++)
+    {
+        if (comment.contains(clusterPropModes[i], Qt::CaseInsensitive))
+        {
+            return clusterPropModes[i];
+        }
+    }
+
+    return "";
 
 }
 
