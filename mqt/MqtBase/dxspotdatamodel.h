@@ -30,7 +30,7 @@ class DxSpotDataModel : public QAbstractTableModel
 
 public:
     explicit DxSpotDataModel(QObject *parent = nullptr);
-
+    ~DxSpotDataModel() override;
 
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
