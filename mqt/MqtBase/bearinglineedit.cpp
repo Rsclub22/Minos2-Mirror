@@ -19,7 +19,7 @@ BearingLineEdit::BearingLineEdit(QWidget * parent): QLineEdit (parent),
     bearingValid(false)
 {
 
-    setValidator(new UpperCaseValidator());
+    setValidator(&ucValidator);
     connect(this, SIGNAL(textChanged(const QString& )), this, SLOT(onTextChanged(const QString&)));
 
 

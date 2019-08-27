@@ -14,7 +14,7 @@ class DXCCGridModel: public QAbstractItemModel
     public:
         DXCCGridModel();
         ~DXCCGridModel() Q_DECL_OVERRIDE;
-        HtmlDelegate *delegate = nullptr;
+        QSharedPointer<HtmlDelegate> delegate;
 
         LoggerContestLog *ct;
 
@@ -46,7 +46,7 @@ class DXCCFrame : public QFrame
 
     DXCCGridModel model;
     DXCCSortFilterProxyModel proxyModel;
-    HtmlDelegate *delegate = nullptr;
+    QSharedPointer<HtmlDelegate> delegate ;
 
 public:
     explicit DXCCFrame(QWidget *parent = nullptr);

@@ -30,7 +30,9 @@ void MatchTreeFrame::initialise()
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
     if (lcf == 0)
         lcf = 100;
-    setItemDelegate( new HtmlDelegate(1.0, lcf/100.0) );
+
+    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate(1.0, lcf/100.0) );
+    setItemDelegate( delegate.data() );
     setUniformRowHeights(true);
 
 

@@ -2,6 +2,7 @@
 #define LOCATORINPUTDIALOG_H
 
 #include <QDialog>
+#include "cutils.h"
 
 namespace Ui {
 class LocatorInputDialog;
@@ -24,6 +25,8 @@ public:
 
 private:
     Ui::LocatorInputDialog *ui;
+    UpperCaseValidator ucValidator;
+
 };
 
 #endif // LOCATORINPUTDIALOG_H

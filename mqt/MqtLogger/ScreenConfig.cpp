@@ -155,7 +155,7 @@ SC ScreenConfig::getConfig()
 {
     SC sc;
     sc.name = curConfigName;
-    sc.baseElement = new SCElement;
+    sc.baseElement = QSharedPointer<SCElement>(new SCElement);
     sc.baseElement->type = sctSplit;
 
     int vCt = vbl->count();

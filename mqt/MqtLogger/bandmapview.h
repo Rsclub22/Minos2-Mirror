@@ -28,6 +28,7 @@ class BandmapView : public QAbstractItemView
 
 public:
     explicit BandmapView(QWidget *parent = nullptr);
+    ~BandmapView() override;
 
     QModelIndex indexAt(const QPoint &point_) const override;
     void scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint) override;
@@ -149,6 +150,8 @@ private:
     void sendFreqToRig(QString freq);
     void clearSelectedSpot();
     void setSelectedSpot(int displayedSpotNum);
+
+    void clearListOfMarkers();
 };
 
 #endif // BANDMAPVIEW_H

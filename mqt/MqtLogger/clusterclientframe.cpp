@@ -57,7 +57,10 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     int lcf;
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = new HtmlDelegate(1.0, lcf/100.0) ;
+    dxDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
+    searchDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
+    callsignDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
+    locatorDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
 
     this->setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
@@ -131,11 +134,11 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
 
-    ui->searchLineEdit->setValidator(new UpperCaseValidator());
+    ui->searchLineEdit->setValidator(&ucValidator);
     connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
 
     dxSpotDataModel = new DxSpotDataModel();
-    dxSpotDataModel->delegate = delegate;
+    dxSpotDataModel->delegate = dxDelegate;
 
 
     on_FontChanged();
@@ -192,6 +195,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 ClusterClientFrame::~ClusterClientFrame()
 {
     delete ui;
+    delete dxSpotDataModel;
+
+    foreach(auto m, filterProxyModelList)
+    {
+        delete m;
+    }
+    delete actionInObject;
 }
 
 
@@ -235,7 +245,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->verticalHeader()->setDefaultSectionSize(10);
     dxSpotView->verticalHeader()->setMinimumSectionSize(10);
 
-    dxSpotView->setItemDelegate( delegate);
+    dxSpotView->setItemDelegate( dxDelegate.data());
 
     QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
 
@@ -286,7 +296,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setSelectionBehavior(QAbstractItemView::SelectItems);
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
-    searchView->setItemDelegate( delegate);
+    searchView->setItemDelegate( searchDelegate.data());
     searchView->verticalHeader()->setDefaultSectionSize(10);
     searchView->verticalHeader()->setMinimumSectionSize(10);
 
@@ -339,7 +349,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setSelectionMode( QAbstractItemView::SingleSelection );
     callSignView->setSelectionBehavior(QAbstractItemView::SelectItems);
 
-    callSignView->setItemDelegate( delegate);
+    callSignView->setItemDelegate( callsignDelegate.data());
 
     callSignView->verticalHeader()->setDefaultSectionSize(10);
     callSignView->verticalHeader()->setMinimumSectionSize(10);
@@ -381,7 +391,6 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView = new QTableView();
     locatorView->setFocusPolicy(Qt::NoFocus);
 
-    locatorView->setItemDelegate(delegate);
     locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
     locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
@@ -393,7 +402,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setSelectionBehavior(QAbstractItemView::SelectItems);
     //dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
 
-    locatorView->setItemDelegate( delegate);
+    locatorView->setItemDelegate( locatorDelegate.data());
 
     QHeaderView *locatorViewVerticalHeader = locatorView->verticalHeader();
     locatorView->verticalHeader()->setDefaultSectionSize(10);

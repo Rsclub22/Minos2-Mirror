@@ -12,8 +12,8 @@ LocCalcFrame::LocCalcFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->S1Grid->setValidator(new UpperCaseValidator());
-    ui->S2Grid->setValidator(new UpperCaseValidator());
+    ui->S1Grid->setValidator(&ucValidator);
+    ui->S2Grid->setValidator(&ucValidator);
 }
 
 LocCalcFrame::~LocCalcFrame()

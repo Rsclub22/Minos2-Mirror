@@ -25,7 +25,7 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
 {
    contest = pcontest;
    qsoModel.initialise(contest);
-   HtmlDelegate *delegate = new HtmlDelegate(1.0, 1.0);
+   QSharedPointer<HtmlDelegate> delegate(new HtmlDelegate(1.0, 1.0));
    qsoModel.delegate = delegate;
    ui->QSOTable->setModel(&qsoModel);
 
@@ -34,7 +34,7 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
    ui->QSOTable->verticalHeader()->setDefaultSectionSize(10);
    ui->QSOTable->verticalHeader()->setMinimumSectionSize(10);
    ui->QSOTable->setAlternatingRowColors(true);
-   ui->QSOTable->setItemDelegate( delegate );
+   ui->QSOTable->setItemDelegate( delegate.data() );
 
    ui->QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 

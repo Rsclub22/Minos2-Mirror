@@ -40,37 +40,37 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     CallsignFW = new FocusWatcher(ui->CallsignEdit);
     CallsignLabelString = ui->Callsignlabel->text();
-    ui->CallsignEdit->setValidator(new UpperCaseValidator());
+    ui->CallsignEdit->setValidator(&ucValidator);
     ui->CallsignEdit->installEventFilter(this);
 
     RSTTXFW = new FocusWatcher(ui->RSTTXEdit);
     RSTTXLabelString = ui->RSTTXLabel->text();
-    ui->RSTTXEdit->setValidator(new UpperCaseValidator());
+    ui->RSTTXEdit->setValidator(&ucValidator);
     ui->RSTTXEdit->installEventFilter(this);
 
     SerTXFW = new FocusWatcher(ui->SerTXEdit);
     SerTXLabelString = ui->SerTXLabel->text();
-    ui->SerTXEdit->setValidator(new UpperCaseValidator());
+    ui->SerTXEdit->setValidator(&ucValidator);
     ui->SerTXEdit->installEventFilter(this);
 
     RSTRXFW = new FocusWatcher(ui->RSTRXEdit);
     RSTRXLabelString = ui->RSTRXLabel->text();
-    ui->RSTRXEdit->setValidator(new UpperCaseValidator());
+    ui->RSTRXEdit->setValidator(&ucValidator);
     ui->RSTRXEdit->installEventFilter(this);
 
     SerRXFW = new FocusWatcher(ui->SerRXEdit);
     SerRXLabelString = ui->SerRXLabel->text();
-    ui->SerRXEdit->setValidator(new UpperCaseValidator());
+    ui->SerRXEdit->setValidator(&ucValidator);
     ui->SerRXEdit->installEventFilter(this);
 
     LocFW = new FocusWatcher(ui->LocEdit);
     LocLabelString = ui->LocLabel->text();
-    ui->LocEdit->setValidator(new UpperCaseValidator());
+    ui->LocEdit->setValidator(&ucValidator);
     ui->LocEdit->installEventFilter(this);
 
     QTHFW = new FocusWatcher(ui->QTHEdit);
     QTHLabelString = ui->QTHLabel->text();
-    ui->QTHEdit->setValidator(new UpperCaseValidator());
+    ui->QTHEdit->setValidator(&ucValidator);
     ui->QTHEdit->installEventFilter(this);
 
     CommentsFW = new FocusWatcher(ui->CommentsEdit);
@@ -78,10 +78,10 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->CommentsEdit->installEventFilter(this);
 
     MainOpFW = new FocusWatcher(ui->MainOpComboBox);
-    ui->MainOpComboBox->setValidator(new UpperCaseValidator());
+    ui->MainOpComboBox->setValidator(&ucValidator);
     Op1String = ui->OperatorLabel->text();
     SecondOpFW = new FocusWatcher(ui->SecondOpComboBox);
-    ui->SecondOpComboBox->setValidator(new UpperCaseValidator());
+    ui->SecondOpComboBox->setValidator(&ucValidator);
     Op2String = ui->SecondOpLabel->text();
 
     freqFW = new FocusWatcher(ui->frequencyEdit);
@@ -236,6 +236,7 @@ QSOLogFrame::~QSOLogFrame()
     {
        delete ( *vcp );
     }
+    killPartial();
 }
 void QSOLogFrame::on_TimeDisplayTimer()
 {

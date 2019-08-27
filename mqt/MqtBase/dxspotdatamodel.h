@@ -52,7 +52,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
     SpotData* rowData = nullptr;
-    HtmlDelegate *delegate = nullptr;
+    QSharedPointer<HtmlDelegate> delegate ;
 
 private:
     //QList<QStringList> dxSpotData;

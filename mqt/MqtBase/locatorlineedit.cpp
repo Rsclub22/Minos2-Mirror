@@ -15,7 +15,7 @@ LocatorLineEdit::LocatorLineEdit(QWidget * parent) : QLineEdit (parent),
     locatorValid(false),
     allowLoc4(false)
 {
-    setValidator(new UpperCaseValidator());
+    setValidator(&ucValidator);
     connect(this, SIGNAL(textChanged(const QString& )), this, SLOT(onTextChanged(const QString&)));
     connect(this, SIGNAL(editingFinished()), this, SLOT(onEditingFinished()));
 

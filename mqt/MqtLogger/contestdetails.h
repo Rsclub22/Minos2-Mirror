@@ -23,9 +23,9 @@ public:
 
 private:
     Ui::ContestDetails *ui;
+    UpperCaseValidator ucValidator;
 
-private:   	// User declarations
-   QSharedPointer< ContestDetailsTransferObject > contest;
+    QSharedPointer< ContestDetailsTransferObject > contest;
    LoggerContestLog * inputcontest;
    QString sectionList;
    bool saveContestOK;

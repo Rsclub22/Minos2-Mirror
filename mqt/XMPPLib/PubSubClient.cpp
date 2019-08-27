@@ -13,6 +13,21 @@
 QVector<RPCSubscriber *> subscribeList;
 QVector<RPCPublisher *> publishList;
 
+void clearPubSub()
+{
+    foreach(auto v, subscribeList)
+    {
+        delete v;
+    }
+    subscribeList.clear();
+    foreach(auto v, publishList)
+    {
+        delete v;
+    }
+    publishList.clear();
+}
+
+
 RPCPublishClient::~RPCPublishClient()
 {}
 RPCSubscribeClient::~RPCSubscribeClient()

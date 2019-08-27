@@ -30,6 +30,7 @@ TSendDM::TSendDM(QWidget* Owner )
 }
 TSendDM::~TSendDM()
 {
+    delete MinosRPC::getMinosRPC(getAppStartupName());
 }
 void TSendDM::invalidateCache()
 {

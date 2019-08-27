@@ -167,6 +167,10 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 BandmapClientFrame::~BandmapClientFrame()
 {
     delete ui;
+    delete bandmapView;
+    delete bandmapSpotProxyModel;
+    delete bandmapDataModel;
+    delete modeBandPlan;
 }
 
 void BandmapClientFrame::on_FontChanged()

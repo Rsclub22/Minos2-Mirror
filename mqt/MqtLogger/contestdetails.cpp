@@ -62,10 +62,10 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     ui->StartDateEdit->setDate(QDate::currentDate());
     ui->EndDateEdit->setDate(QDate::currentDate());
-    ui->CallsignEdit->setValidator(new UpperCaseValidator());
-    ui->LocatorEdit->setValidator(new UpperCaseValidator());
-    ui->MainOpComboBox->setValidator(new UpperCaseValidator());
-    ui->SecondOpComboBox->setValidator(new UpperCaseValidator());
+    ui->CallsignEdit->setValidator(&ucValidator);
+    ui->LocatorEdit->setValidator(&ucValidator);
+    ui->MainOpComboBox->setValidator(&ucValidator);
+    ui->SecondOpComboBox->setValidator(&ucValidator);
 
     ContestNameEditFW = new FocusWatcher(ui->ContestNameEdit);
     ui->ContestNameEdit->installEventFilter(this);

@@ -2,6 +2,7 @@
 #define MONITORMAIN_H
 
 #include "base_pch.h"
+#include "cutils.h"
 #include <QAction>
 #include <QMenu>
 #include "ScreenContact.h"
@@ -203,6 +204,7 @@ private slots:
 
 private:
     Ui::MonitorMain *ui;
+    UpperCaseValidator ucValidator;
 
     QAction *newAction( const QString &text, QMenu *m, const char *atype );
     QMenu TabPopup;

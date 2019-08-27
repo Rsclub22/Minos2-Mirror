@@ -35,6 +35,10 @@ RotPresets::RotPresets(QWidget *parent) :
 RotPresets::~RotPresets()
 {
     delete ui;
+    foreach(auto b, presetButton)
+    {
+        delete b;
+    }
 }
 void RotPresets::setContest(BaseContestLog *c)
 {

@@ -39,8 +39,8 @@ RigMemDialog::RigMemDialog(QWidget *parent) :
         ui->modecb->addItem(hamlibData::supModeList[i]);
     }
 
-    ui->callSignLineEdit->setValidator(new UpperCaseValidator());
-    ui->locatorLineEdit->setValidator(new UpperCaseValidator());
+    ui->callSignLineEdit->setValidator(&ucValidator);
+    ui->locatorLineEdit->setValidator(&ucValidator);
 
     ui->callSignLineEdit->setFocus();
     // validate the input

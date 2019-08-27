@@ -20,6 +20,8 @@ public:
     QString getText();
 private:
     Ui::CallLocInputDialog *ui;
+    UpperCaseValidator ucValidator;
+
 
 };
 

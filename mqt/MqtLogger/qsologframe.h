@@ -6,6 +6,7 @@
 #include "ScreenContact.h"
 #include "focuswatcher.h"
 #include "validators.h"
+#include "cutils.h"
 
 class ListContact;
 
@@ -28,9 +29,6 @@ public:
     void setRadioLoaded();
     void setRotatorLoaded();
     void setClusterLoaded(bool loaded);
-
-
-
 
     bool savePartial(  );
     bool restorePartial( );
@@ -88,6 +86,8 @@ public:
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
+
+    UpperCaseValidator ucValidator;
 
     QString baseName;
     QString oldloc;

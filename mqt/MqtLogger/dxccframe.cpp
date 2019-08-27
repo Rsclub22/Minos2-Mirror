@@ -40,12 +40,12 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
     {
         int lcf;
         TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-        delegate = new HtmlDelegate(1.0, lcf/100.0);
+        delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
         model.delegate = delegate;
 
         proxyModel.setSourceModel(&model);
         ui->DXCCTable->setModel(&proxyModel);
-        ui->DXCCTable->setItemDelegate(delegate);
+        ui->DXCCTable->setItemDelegate(delegate.data());
         reInitialiseCountries();
         ui->DXCCTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 

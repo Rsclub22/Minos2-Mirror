@@ -9,7 +9,7 @@ LocatorInputDialog::LocatorInputDialog(QWidget *parent, QString textToEdit, cons
     ui->setupUi(this);
     setWindowTitle(dialogTitle);
     ui->locatorInput->setText(lineEditLabel);
-    ui->locatorInput->setValidator(new UpperCaseValidator());
+    ui->locatorInput->setValidator(&ucValidator);
     ui->locatorInput->setText(textToEdit);
 }
 

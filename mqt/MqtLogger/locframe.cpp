@@ -115,8 +115,8 @@ LocFrame::LocFrame(QWidget *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = new HtmlDelegate(1.0, lcf/100.0);
-    ui->LocView->setItemDelegate(delegate);
+    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate(1.0, lcf/100.0));
+    ui->LocView->setItemDelegate(delegate.data());
 
     model = new LocGridModel();
     model->delegate = delegate;

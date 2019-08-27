@@ -37,7 +37,7 @@ private:
     bool fast_mode_ = false;
     QString id_;
     bool columns_resized_ = false;
-    HtmlDelegate *delegate = nullptr;
+    QSharedPointer<HtmlDelegate> delegate;
     bool autoEnabled = false;
     bool showTest = false;
     bool inDecode = false;

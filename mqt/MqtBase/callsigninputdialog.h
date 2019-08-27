@@ -2,6 +2,7 @@
 #define CALLSIGNINPUTDIALOG_H
 
 #include <QDialog>
+#include "cutils.h"
 
 namespace Ui {
 class CallsignInputDialog;
@@ -23,6 +24,8 @@ public:
 
 private:
     Ui::CallsignInputDialog *ui;
+    UpperCaseValidator ucValidator;
+
 };
 
 #endif // CALLSIGNINPUTDIALOG_H

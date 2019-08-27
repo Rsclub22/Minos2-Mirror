@@ -152,7 +152,7 @@ public:
 
 private:
     BaseContestLog * contest;
-    HtmlDelegate *delegate = nullptr;
+    QSharedPointer<HtmlDelegate> delegate;
     QSOGridModel qsoModel;
     int splitterHandleWidth;
     QString curScreenLayout;
