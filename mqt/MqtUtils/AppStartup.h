@@ -6,5 +6,6 @@
 extern void appStartup(const QString &appName);
 extern QString getAppStartupName();
 extern void setAppFont();
+extern void setAppClosing();
 
 #endif // APPSTARTUP_H

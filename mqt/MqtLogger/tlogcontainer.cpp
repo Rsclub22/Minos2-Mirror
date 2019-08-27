@@ -90,6 +90,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
 }
 TLogContainer::~TLogContainer()
 {
+    setAppClosing();
     delete ui;
     delete sendDM;
     delete MinosConfig::getMinosConfig();
