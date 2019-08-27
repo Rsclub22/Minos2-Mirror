@@ -1,6 +1,8 @@
 #ifndef BANDMAPMARKERDETAILS_H
 #define BANDMAPMARKERDETAILS_H
-
+#include <QPoint>
+#include <QRect>
+#include <QModelIndex>
 
 class BandmapSpotMarker;
 class QGraphicsLineItem;
