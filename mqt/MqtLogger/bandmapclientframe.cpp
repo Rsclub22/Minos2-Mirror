@@ -462,11 +462,11 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
             bandmapDataModel->rowData = new BandmapData(rxTime, spotlist[SPOTTIME],
                                                     spotlist[DXFREQ], dxFreq, spotlist[DXBANDMASK],
-                                                    spotlist[DXMODEMASK], spotlist[DXCALL],
+                                                    spotlist[DXMODEMASK], spotlist[DXMODESTR],spotlist[DXCALL],
                                                     callWorked, spotlist[DXLOCATOR],
                                                     locWorked,distance,
                                                     bearing, spotlist[SPOTCALL],
-                                                    spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT], bandmapSpotType::SPOT_TYPE::CLUSTER);
+                                                    spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT], bandmapSpotType::SPOT_TYPE::CLUSTER);
 
             bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 
