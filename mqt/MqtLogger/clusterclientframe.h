@@ -136,13 +136,23 @@ public:
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *ct = nullptr;
+    UpperCaseValidator ucValidator;
 
+    ClusterClientFilterDialog *filterSetup = nullptr;
+
+    
 
 
     ClusterClientFilterDialog *filterSetup;
 
 
     HtmlDelegate *delegate = nullptr;
+
+    QSharedPointer<HtmlDelegate> dxDelegate ;
+    QSharedPointer<HtmlDelegate> callsignDelegate ;
+    QSharedPointer<HtmlDelegate> locatorDelegate ;
+    QSharedPointer<HtmlDelegate> searchDelegate ;
+
 
     QTimer* purgeTimer;
     qlonglong timeToLive;

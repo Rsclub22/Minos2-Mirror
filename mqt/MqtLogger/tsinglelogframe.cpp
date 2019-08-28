@@ -162,6 +162,9 @@ TSingleLogFrame::~TSingleLogFrame()
 
     ui = nullptr;
     contest = nullptr;
+
+    delete clusterControlFrame;
+    delete wsjtxFrame;
 }
 void TSingleLogFrame::createScreenComponents()
 {
@@ -188,13 +191,13 @@ void TSingleLogFrame::createScreenComponents()
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = new HtmlDelegate(1.0, lcf/100.0);
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
     qsoModel.delegate = delegate;
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);
 
     // the order of the next two lines is critical
-    QSOTable->setItemDelegate( delegate );
+    QSOTable->setItemDelegate( delegate.data() );
     //QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 

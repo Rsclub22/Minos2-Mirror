@@ -18,7 +18,7 @@
 // We use a custom report hook to filter out Qt's own memory leaks
 // Credit to Andreas Schmidts - http://www.schmidt-web-berlin.de/winfig/blog/?p=154
 
-_CRT_REPORT_HOOK prevHook;
+static _CRT_REPORT_HOOK prevHook;
 
 int customReportHook(int /* reportType */, char* message, int* /* returnValue */)
 {
@@ -44,7 +44,7 @@ int customReportHook(int /* reportType */, char* message, int* /* returnValue */
             ignoreMessage = true;
 
         // something from our own code?
-        if (strstr(message, ".cpp") == NULL)
+        if (strstr(message, ".cpp") == nullptr)
         {
             if (debugMsgPartsCount++ < numFollowupDebugMsgParts)
                 // give it back to _CrtDbgReport() to be printed to the console
@@ -69,7 +69,7 @@ int customReportHook(int /* reportType */, char* message, int* /* returnValue */
 int main(int argc, char *argv[])
 {
 #if defined(_MSC_VER)
-//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF | _CRTDBG_CHECK_ALWAYS_DF);
+//    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF /*| _CRTDBG_CHECK_ALWAYS_DF*/);
 //    prevHook = _CrtSetReportHook(customReportHook);
 //     _CrtSetBreakAlloc(1312120); // Use this line to break at the nth memory allocation
 #endif

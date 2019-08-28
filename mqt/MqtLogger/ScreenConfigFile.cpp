@@ -29,6 +29,11 @@ static QString defaultConfig = "[{\"name\": \"%1\","
 ScreenConfigFile::ScreenConfigFile()
 {
 }
+
+ScreenConfigFile::~ScreenConfigFile()
+{
+
+}
 bool ScreenConfigFile::loadFile()
 {
     bool ret = false;
@@ -111,7 +116,7 @@ bool ScreenConfigFile::readFile(QString f)
                 QString name = namestruct.value("name").toString();
                 config.name = name;
 //                explicit ScreenConfigElement(QWidget *parent, ScreenConfigRow *parentrow);
-                config.baseElement = new SCElement();
+                config.baseElement = QSharedPointer<SCElement>(new SCElement());
                 QJsonArray rows = namestruct.value("rows").toArray();
                 procRows(config.baseElement->rows, rows);
                 configs[name] = config;

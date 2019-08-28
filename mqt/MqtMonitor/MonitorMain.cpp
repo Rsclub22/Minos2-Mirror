@@ -304,9 +304,9 @@ MonitorMain::MonitorMain(QWidget *parent) :
     closeMonitoredLog = newAction("Close tab", &TabPopup, SLOT(on_closeMonitoredLog()));
     newAction( "Cancel", &TabPopup, SLOT( CancelClick() ) );
 
-    ui->callsignEdit->setValidator(new UpperCaseValidator());
-    ui->locEdit->setValidator(new UpperCaseValidator());
-    ui->exchangeEdit->setValidator(new UpperCaseValidator());
+    ui->callsignEdit->setValidator(&ucValidator);
+    ui->locEdit->setValidator(&ucValidator);
+    ui->exchangeEdit->setValidator(&ucValidator);
     ui->callsignEdit->installEventFilter(this);
     ui->locEdit->installEventFilter(this);
     ui->exchangeEdit->installEventFilter(this);

@@ -148,7 +148,7 @@ private:
     StdInReader stdinReader;
     class QTimer LogTimer;
     QTimer *disconnectTimer;
-    HtmlDelegate *delegate = nullptr;
+    QSharedPointer<HtmlDelegate> delegate;
 
     QString appName;
     QLabel* status;

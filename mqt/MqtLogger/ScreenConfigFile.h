@@ -48,7 +48,7 @@ class SC
 {
 public:
     QString name;
-    SCElement *baseElement = nullptr;
+    QSharedPointer<SCElement> baseElement;
 };
 
 class ScreenConfigFile
@@ -56,6 +56,7 @@ class ScreenConfigFile
 public:
 
     ScreenConfigFile();
+    ~ScreenConfigFile();
     bool loadFile();
     bool dumpFile();
 

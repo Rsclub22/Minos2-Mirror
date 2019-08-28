@@ -24,6 +24,15 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
 
 }
 
+DxSpotDataModel::~DxSpotDataModel()
+{
+    foreach(auto s, dxSpotData)
+    {
+        delete s;
+    }
+    dxSpotData.clear();
+}
+
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal)
@@ -150,7 +159,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
 
     int col = index.column();
 
-    SpotData* dxSpot = new SpotData();
+//    SpotData* dxSpot = new SpotData();
 
     if (role == Qt::DisplayRole)
     {
@@ -162,7 +171,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
 
-        dxSpot = dxSpotData.at(row);
+        SpotData* dxSpot = dxSpotData.at(row);
 
         QString d;
         switch (col)
@@ -223,7 +232,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
     if (role == DataStoredRole)
     {
 
-        dxSpot = dxSpotData.at(index.row());
+        SpotData* dxSpot = dxSpotData.at(index.row());
 
         QVariant d;
         switch (col)
@@ -406,13 +415,8 @@ bool DxSpotDataModel::removeRows(int _row, int count, const QModelIndex &parent)
 
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
-        SpotData* spotData = dxSpotData[row];
-        dxSpotData.removeAt(row);
-        if (spotData != nullptr)
-        {
-            delete(spotData);       // return memory
-        }
-
+        SpotData *s = dxSpotData.takeAt(row);
+        delete s;
     }
     endRemoveRows();
     return true;

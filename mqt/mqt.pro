@@ -27,7 +27,6 @@ greaterThan(QT_MAJOR_VERSION, 4) : greaterThan(QT_MINOR_VERSION, 8) {
 
 RPCTest.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtAppStarter.depends = MqtUtils TinyXML XMPPLib MqtBase
-MqtBandmap.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtChat.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtCluster.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtControl.depends = MqtUtils TinyXML XMPPLib MqtBase

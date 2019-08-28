@@ -149,7 +149,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     dxSpotView = new QTableView();
 
-    delegate = new HtmlDelegate(1.0, 1.0) ;
+    delegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
 
     dxSpotDataModel->delegate = delegate;
 
@@ -160,7 +160,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
-    dxSpotView->setItemDelegate(delegate);
+    dxSpotView->setItemDelegate(delegate.data());
 
 
 

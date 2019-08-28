@@ -18,7 +18,7 @@ class RigMemoryGridModel: public QAbstractItemModel
 
         BaseContestLog *ct = nullptr;
         RigMemoryFrame *frame = nullptr;
-        HtmlDelegate *delegate = nullptr;
+        QSharedPointer<HtmlDelegate> delegate;
 
 
         void beginResetModel(){QAbstractItemModel::beginResetModel();}
@@ -120,7 +120,7 @@ private:
     int lastBearing = 0;
     bool lastVisible = false;
     bool doTimer = false;
-    HtmlDelegate *delegate = nullptr;
+    QSharedPointer<HtmlDelegate> delegate;
 
     QMenu* memoryMenu;
 

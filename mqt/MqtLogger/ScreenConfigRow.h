@@ -16,11 +16,13 @@ class ScreenConfigRow : public QFrame
 {
     Q_OBJECT
 
+    bool isTopLevelRow();
 public:
     Ui::ScreenConfigRow *ui;
+    bool selected = false;
 
     explicit ScreenConfigRow(ScreenConfigElement *parentElement);
-    ~ScreenConfigRow();
+    ~ScreenConfigRow() override;
 
     QHBoxLayout *hbl = nullptr;
     ScreenConfigElement *parentElement;
@@ -31,6 +33,12 @@ public:
     ScreenConfigElement * addRight(ScreenConfigElement *e);
 
     bool checkOk(ScreenConfigElement *e);
+
+protected:
+    bool mouseDown = false;
+    void mousePressEvent(QMouseEvent *) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
+    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
 
 private slots:
     void on_addRowBeforeButton_clicked();

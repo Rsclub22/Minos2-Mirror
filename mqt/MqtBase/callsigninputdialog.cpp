@@ -8,7 +8,7 @@ CallsignInputDialog::CallsignInputDialog(QWidget *parent, QString textToEdit, co
     ui->setupUi(this);
     setWindowTitle(dialogTitle);
     ui->callsignInput->setText(lineEditLabel);
-    ui->callsignInput->setValidator(new UpperCaseValidator());
+    ui->callsignInput->setValidator(&ucValidator);
     ui->callsignInput->setText(textToEdit);
 }
 

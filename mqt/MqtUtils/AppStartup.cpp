@@ -5,6 +5,7 @@
 #include <QProcessEnvironment>
 #include <QMessageBox>
 
+static bool appClosing = false;
 static QString appStartupName;
 QString getAppStartupName()
 {
@@ -17,6 +18,9 @@ void myMessageOutput(QtMsgType type,
 {
     // catch (and trace) application output before a crash
     oldHandler(type, context, msg);
+
+    if (appClosing)
+        return;
 
     QString mtype;
     switch (type)
@@ -122,5 +126,9 @@ void setAppFont()
     {
         QApplication::setFont( qfont.value<QFont>() );
     }
+}
+void setAppClosing()
+{
+    appClosing = true;
 }
 

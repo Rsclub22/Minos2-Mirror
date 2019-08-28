@@ -2,6 +2,7 @@
 #define LOCCALCFRAME_H
 
 #include "base_pch.h"
+#include "cutils.h"
 
 namespace Ui {
 class LocCalcFrame;
@@ -34,6 +35,8 @@ private slots:
 
 private:
     Ui::LocCalcFrame *ui;
+    UpperCaseValidator ucValidator;
+
     void doCloseEvent();
     bool handleExit( QLineEdit *Edit );
 

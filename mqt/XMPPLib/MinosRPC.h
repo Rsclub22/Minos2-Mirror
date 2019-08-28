@@ -42,8 +42,6 @@ class MinosRPC: public QObject
     Q_OBJECT
 
     MinosRPC(const QString &defaultName, bool useEnvVar);
-    ~MinosRPC() override
-    {}
 
     static MinosRPC *rpc;
 
@@ -73,6 +71,10 @@ public:
     static MinosRPC *validMinosRPC()
     {
         return rpc;
+    }
+    ~MinosRPC() override
+    {
+        rpc = nullptr;
     }
 
     QString getAppName();

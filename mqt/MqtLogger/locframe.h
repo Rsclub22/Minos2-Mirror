@@ -15,7 +15,7 @@ class LocGridModel: public QAbstractItemModel
     public:
         LocGridModel();
         ~LocGridModel() override;
-        HtmlDelegate *delegate = nullptr;
+        QSharedPointer<HtmlDelegate> delegate;
 
         QString myLoc;
 
@@ -50,7 +50,7 @@ class LocFrame : public QFrame
 public:
     explicit LocFrame(QWidget *parent = nullptr);
     ~LocFrame();
-    HtmlDelegate *delegate = nullptr;
+    QSharedPointer<HtmlDelegate> delegate;
 
     void reInitialiseLocators();
     void setContest(BaseContestLog *contest);

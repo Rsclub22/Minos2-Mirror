@@ -46,6 +46,13 @@ BandmapView::BandmapView(QWidget *parent) :
 
 }
 
+BandmapView::~BandmapView()
+{
+    clearListOfMarkers();
+    delete dial;
+    delete bandmapScene;
+}
+
 
 void BandmapView::initBandmapView(QGraphicsView* view )
 {
@@ -249,6 +256,8 @@ QRegion BandmapView::visualRegionForSelection(const QItemSelection &selection) c
 {
     int a = 0;
 
+    return QRegion();
+
 }
 
 
@@ -262,8 +271,6 @@ QRegion BandmapView::visualRegionForSelection(const QItemSelection &selection) c
 
 QModelIndex BandmapView::indexAt(const QPoint &point_) const
 {
-
-
     QPoint point(point_);
     point.rx() += horizontalScrollBar()->value();
     point.ry() += verticalScrollBar()->value();
@@ -275,7 +282,7 @@ QModelIndex BandmapView::indexAt(const QPoint &point_) const
    //     if (i.value().contains(point))
     //        return model()->index(i.key(), 0, rootIndex());
    //}
-    //return QModelIndex();
+    return QModelIndex();
 }
 
 
@@ -500,6 +507,15 @@ void BandmapView::setSelectedSpot(int displayedSpotNum)
     bandmapUpdate();
 }
 
+void BandmapView::clearListOfMarkers()
+{
+    for (int i = 0; i < listOfMarkers.count(); i++)
+    {
+        delete listOfMarkers[i];
+    }
+    listOfMarkers.clear();
+}
+
 
 void BandmapView::getSpotData(int &selectedSpotRowNum, int &displayedSpotNum, BandmapData &selectedSpot)
 {
@@ -545,7 +561,7 @@ void BandmapView::drawBandMapSpots()
         }
     }
 
-    listOfMarkers.clear();
+    clearListOfMarkers();
 
     qint32 startFreq = dial->getScaleStartFreq();
     qint32 endFreq = dial->getScaleEndFreq();

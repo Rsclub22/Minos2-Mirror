@@ -30,7 +30,7 @@ class DxSpotDataModel : public QAbstractTableModel
 
 public:
     explicit DxSpotDataModel(QObject *parent = nullptr);
-
+    ~DxSpotDataModel() override;
 
     // Header:
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
@@ -52,7 +52,7 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
     SpotData* rowData = nullptr;
-    HtmlDelegate *delegate = nullptr;
+    QSharedPointer<HtmlDelegate> delegate ;
 
 private:
 

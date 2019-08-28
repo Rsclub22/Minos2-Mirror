@@ -33,6 +33,7 @@ public:
     void checkAddRowButton();
     void addColumnLeft(int top, int bottom);
     void addColumnRight(int top, int bottom);
+    bool isTopLevelRow(ScreenConfigRow *scr);
 public slots:
     void reject() override;
     void accept() override;
@@ -61,6 +62,8 @@ private:
     void procRow(ScreenConfigRow *row, SCRow &scrow);
     bool checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e, int &auxCount);
     ScreenConfigRow *combineRows(int top, int bottom);
+    int getTopRow();
+    int getBottomRow();
 };
 
 #endif // SCREENCONFIG_H

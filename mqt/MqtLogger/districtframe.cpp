@@ -33,9 +33,9 @@ void DistrictFrame::setContest(BaseContestLog *contest)
     model.ct = contest;
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = new HtmlDelegate(1.0, lcf/100.0);
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
     model.delegate = delegate;
-    ui->DistrictTable->setItemDelegate(delegate);
+    ui->DistrictTable->setItemDelegate(delegate.data());
     proxyModel.setSourceModel(&model);
     ui->DistrictTable->setModel(&proxyModel);
     if (contest)

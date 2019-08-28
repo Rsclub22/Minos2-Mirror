@@ -46,9 +46,9 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = new HtmlDelegate(1.0, lcf/100.0) ;
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
     model.delegate = delegate;
-    ui->rigMemTable->setItemDelegate( delegate);
+    ui->rigMemTable->setItemDelegate( delegate.data());
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));

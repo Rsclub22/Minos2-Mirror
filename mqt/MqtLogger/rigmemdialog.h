@@ -19,6 +19,7 @@
 #define RIGMEMDIALOG_H
 #include "base_pch.h"
 #include "rigmemcommondata.h"
+#include "cutils.h"
 
 class LoggerContestLog;
 
@@ -45,6 +46,8 @@ private slots:
     void onLocEditFinish();
 private:
     Ui::RigMemDialog *ui;
+    UpperCaseValidator ucValidator;
+
     memoryData::memData *logData;
     int memoryNumber;
 

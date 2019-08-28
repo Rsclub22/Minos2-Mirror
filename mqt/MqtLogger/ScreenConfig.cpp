@@ -8,7 +8,6 @@
 #include "ScreenConfigElement.h"
 #include "ScreenConfigRow.h"
 #include "ScreenConfigElement.h"
-#include "screenconfigaddcolumn.h"
 
 #include "ScreenConfig.h"
 #include "ui_ScreenConfig.h"
@@ -85,6 +84,20 @@ int ScreenConfig::topRowCount()
     int vCt = vbl->count();
     return vCt;
 }
+bool ScreenConfig::isTopLevelRow(ScreenConfigRow *scr)
+{
+    int vCt = vbl->count();
+    for (int i = 0; i < vCt; i++)
+    {
+        QWidget *w = vbl->itemAt(i)->widget();
+        ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+        if (row == scr)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 void ScreenConfig::doCloseEvent()
 {
     QSettings settings;
@@ -142,7 +155,7 @@ SC ScreenConfig::getConfig()
 {
     SC sc;
     sc.name = curConfigName;
-    sc.baseElement = new SCElement;
+    sc.baseElement = QSharedPointer<SCElement>(new SCElement);
     sc.baseElement->type = sctSplit;
 
     int vCt = vbl->count();
@@ -314,42 +327,84 @@ void ScreenConfig::addColumnRight(int top, int bottom)
     newRow->addRight(nullptr);
 }
 
+int ScreenConfig::getTopRow()
+{
+    int vCt = vbl->count();
+    for (int i = 0; i < vCt; i++)
+    {
+        QWidget *w = vbl->itemAt(i)->widget();
+        ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+        if (row && row->selected)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int ScreenConfig::getBottomRow()
+{
+    int vCt = vbl->count();
+    for (int i = vCt - 1; i >= 0; i--)
+    {
+        QWidget *w = vbl->itemAt(i)->widget();
+        ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+        if (row && row->selected)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
 void ScreenConfig::on_addColumnRightButton_clicked()
 {
-    int topRow = 0;
-    int bottomRow = 0;
-    int ret = 0;
+    int topRow = getTopRow();
+    int bottomRow = getBottomRow();
 
+    if (topRow < 0 || topRow == bottomRow)
     {
-        // add a column spanning several rows
-        ScreenConfigAddColumn scac(this);
-        ret = scac.exec();
-
-        topRow = scac.topRow;
-        bottomRow = scac.bottomRow;
+        mShowMessage("Please select (by mouse click) the top and bottom rows for the (right) column.\r\n"
+                     "The row background will change colour when selected.", this);
     }
-    if (ret == QDialog::Accepted)
+    else
     {
+        int vCt = vbl->count();
+        for (int i = 0; i < vCt; i++)
+        {
+            QWidget *w = vbl->itemAt(i)->widget();
+            ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+            if (row && row->selected)
+            {
+                row->setStyleSheet("background-color: light grey;");
+                row->selected = false;
+            }
+        }
         addColumnRight(topRow, bottomRow);
     }
 }
 
 void ScreenConfig::on_addColumnLeftButton_clicked()
 {
-    int topRow = 0;
-    int bottomRow = 0;
-    int ret = 0;
-
+    int topRow = getTopRow();
+    int bottomRow = getBottomRow();
+    if (topRow < 0 || topRow == bottomRow)
     {
-        // add a column spanning several rows
-        ScreenConfigAddColumn scac(this);
-        ret = scac.exec();
-
-        topRow = scac.topRow;
-        bottomRow = scac.bottomRow;
+        mShowMessage("Please select (by mouse click) the top and bottom rows for the (left) column.\r\n"
+                     "The row background will change colour when selected.", this);
     }
-    if (ret == QDialog::Accepted)
+    else
     {
+        int vCt = vbl->count();
+        for (int i = 0; i < vCt; i++)
+        {
+            QWidget *w = vbl->itemAt(i)->widget();
+            ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+            if (row && row->selected)
+            {
+                row->setStyleSheet("background-color: light grey;");
+                row->selected = false;
+            }
+        }
         addColumnLeft(topRow, bottomRow);
     }
 }
