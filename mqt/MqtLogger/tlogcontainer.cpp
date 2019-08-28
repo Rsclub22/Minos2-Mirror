@@ -95,10 +95,17 @@ TLogContainer::~TLogContainer()
     delete sendDM;
     delete MinosConfig::getMinosConfig();
     clearPubSub();
-    delete ChatServer::getChatServer();
-    delete ClusterClientServer::getClusterClientServer();
-    delete WsjtxServer::getWsjtxServer();
 
+    if (MinosRPC::getMinosRPC())
+    {
+        delete ChatServer::getChatServer();
+        delete ClusterClientServer::getClusterClientServer();
+        delete WsjtxServer::getWsjtxServer();
+
+        delete MinosRPC::getMinosRPC();
+        delete MinosAppConnection::minosAppConnection;
+    }
+    MinosRPCObj::clearRPCObjects();
 }
 
 
