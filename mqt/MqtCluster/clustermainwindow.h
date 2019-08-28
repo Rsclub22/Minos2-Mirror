@@ -15,6 +15,7 @@
 #include "dxspotdatamodel.h"
 //#include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
+#include "checkmodeagainstfreq.h"
 #include "rotpresetbutton.h"
 #include "clustercommon.h"
 #include "htmldelegate.h"
@@ -170,6 +171,8 @@ private:
     QTableView* dxSpotView;
     QPlainTextEdit* rawClusterDataView;
 
+    checkModeAgainstFreq* modeBandPlan;
+
     SetupDialog *setupCluster;
 
     QVector<SpotData*> spotsList;
@@ -204,6 +207,7 @@ private:
     QDateTime spotDateTime;
     QString dxLocator;
     QString spotLocator;
+    QString dxPropMode;
 
     bool loginStart;
     bool loginSuccess;
@@ -261,7 +265,7 @@ private:
     void handleEndFile();
     void handleCmdFile(QString fileName);
 
-
+    void getMode(const QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
 
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
@@ -270,6 +274,8 @@ private:
 
 #endif
 
+
+    QString getPropMode(const QString comment);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();

@@ -18,19 +18,21 @@ SpotData::SpotData()
 
 }
 
-SpotData::SpotData(qint64 _rxTime, QString _spotTime, QString _dxFreq,
-                   QString _dxFreqMaskStr, QString _dxModeMaskStr,
+SpotData::SpotData(qint64 _rxTime, QString _spotTime,
+                   QString _dxFreq, QString _dxFreqMaskStr,
+                   QString _dxMode, QString _dxModeMaskStr,
                    QString _dxCall, bool _dxCallWorked,
                    QString _dxLocator, bool _dxLocatorWorked,
                    QString distance, QString bearing,
                    QString _spotterCall, QString _spotterLocator,
-                   QString comment)
+                   QString _dxPropMode, QString comment)
 {
 
     rxTime = _rxTime;
     spotTime = _spotTime;
     dxFreq = _dxFreq;
     dxFreqMaskStr = _dxFreqMaskStr;
+    dxMode = _dxMode;
     dxModeMaskStr = _dxModeMaskStr;
     dxCall = _dxCall;
     dxLocator = _dxLocator;
@@ -41,6 +43,7 @@ SpotData::SpotData(qint64 _rxTime, QString _spotTime, QString _dxFreq,
     sentToMemory = BOOL_NO;
     spotterCall = _spotterCall;
     spotterLocator = _spotterLocator;
+    dxPropMode = _dxPropMode;
     spotComment = comment;
 }
 
@@ -50,6 +53,7 @@ void SpotData::operator = (const SpotData& spd)
     spotTime = spd.spotTime;
     dxFreq = spd.dxFreq;
     dxFreqMaskStr = spd.dxFreqMaskStr;
+    dxMode = spd.dxMode;
     dxModeMaskStr = spd.dxModeMaskStr;
     dxCall = spd.dxCall;
     dxLocator = spd.dxLocator;
@@ -60,6 +64,7 @@ void SpotData::operator = (const SpotData& spd)
     sentToMemory = spd.sentToMemory;
     spotterCall = spd.spotterCall;
     spotterLocator = spd.spotterLocator;
+    dxPropMode = spd.dxPropMode;
     spotComment = spd.spotComment;
 }
 

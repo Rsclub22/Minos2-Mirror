@@ -22,7 +22,8 @@
 
 // parses a json file to get mode frequencies for each band or "legal" operating frequencies for each band
 
-freqModeBandPlan::freqModeBandPlan()
+freqModeBandPlan::freqModeBandPlan() :
+    loadedOk(false)
 {
 
 }
@@ -134,7 +135,7 @@ bool freqModeBandPlan::readFile(QString f)
             }
 
 
-
+            loadedOk = true;
             return true;
         }
         else
@@ -149,4 +150,10 @@ bool freqModeBandPlan::readFile(QString f)
         return false;
     }
 
+}
+
+
+bool freqModeBandPlan::checkLoadedOk()
+{
+    return loadedOk;
 }

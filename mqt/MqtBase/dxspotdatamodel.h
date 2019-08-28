@@ -17,7 +17,7 @@
 #include "spotdata.h"
 #include "clustercommon.h"
 
-const int dxSpotColCount = 15;
+const int dxSpotColCount = 17;
 
 const int DataStoredRole = Qt::UserRole + 0;
 
@@ -55,7 +55,7 @@ public:
     QSharedPointer<HtmlDelegate> delegate ;
 
 private:
-    //QList<QStringList> dxSpotData;
+
     QVector<SpotData*> dxSpotData;
 
 

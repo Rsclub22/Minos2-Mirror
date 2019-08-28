@@ -7,7 +7,7 @@ checkModeAgainstFreq::checkModeAgainstFreq()
 
 
 
-QString checkModeAgainstFreq::getMode(QString &band, double freq)
+QString checkModeAgainstFreq::getMode(const QString &band, double freq)
 {
     QMap<QString, ModeFreqDetail> modeList;
     ModeFreqDetail freqs;

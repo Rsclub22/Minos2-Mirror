@@ -164,7 +164,7 @@ void ClusterClientFilterDialog::filtersAccepted()
         trace(QString("BandFilter Changed = %1, ModeFilter Changed = %2, CallsignFilter Changed = %3, LocatorFilter Changed = %4").arg(bandfilterChanged).arg(modefilterChanged).arg(callsignfilterChanged).arg(locatorfilterChanged));
         trace(QString("Band 50Mhz = %1, Band 70Mhz = %2, Band 144Mhz = %3, Band 432Mhz = %4, Band = 1296Mhz = %5").arg(*filterSettings.bandFilters[_50M]).arg(*filterSettings.bandFilters[_70M]).arg(*filterSettings.bandFilters[_144M]).arg(*filterSettings.bandFilters[_432M]).arg(*filterSettings.bandFilters[_1296M]));
         trace(QString("Band 2300Mhz = %1, Band 3.4Ghz = %2, Band 5.6Ghz = %3, Band 10Ghz = %4").arg(*filterSettings.bandFilters[_2300M]).arg(*filterSettings.bandFilters[_3_4G]).arg(*filterSettings.bandFilters[_5_6G]).arg(*filterSettings.bandFilters[_10G]));
-        trace(QString("Mode Filters CW = %1, PhoneMode = %2, RTTYMode = %3, PSKMode = %4, MGMMode = %5").arg(*filterSettings.modeFilters[CWMODE]).arg(*filterSettings.modeFilters[PHONEMODE]).arg(*filterSettings.modeFilters[RTTYMODE]).arg(*filterSettings.modeFilters[PSKMODE]).arg(*filterSettings.modeFilters[MGMMODE]));
+        //trace(QString("Mode Filters CW = %1, PhoneMode = %2, RTTYMode = %3, PSKMode = %4, MGMMode = %5").arg(*filterSettings.modeFilters[CWMODE]).arg(*filterSettings.modeFilters[PHONEMODE]).arg(*filterSettings.modeFilters[RTTYMODE]).arg(*filterSettings.modeFilters[PSKMODE]).arg(*filterSettings.modeFilters[MGMMODE]));
         trace(QString("Callsign List = %1").arg(filterSettings.callsignFilterList));
         trace(QString("Locator List = %1").arg(filterSettings.locatorFilterList));
         trace(QString("Save to log"));

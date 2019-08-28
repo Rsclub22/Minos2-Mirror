@@ -202,7 +202,7 @@ ClusterClientFrame::~ClusterClientFrame()
         delete m;
     }
     delete actionInObject;
-    delete modeBandPlan;
+
 }
 
 
@@ -259,18 +259,8 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
-
-//    dxSpotView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-//    dxSpotView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-//    dxSpotView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-//    dxSpotView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
-//    dxSpotView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-//    dxSpotView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
-//    dxSpotView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
-//    dxSpotView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
-//    dxSpotView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-//    dxSpotView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-//    dxSpotView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+    dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
 
     restoreDxSpotViewColumns();
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
@@ -311,18 +301,9 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     searchView->setColumnHidden(RXTIME_COL_NUM, true);
+    searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
 
-//    searchView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-//    searchView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-//    searchView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-//    searchView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
-//    searchView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-//    searchView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
-//    searchView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
-//    searchView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
-//    searchView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-//    searchView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-//    searchView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
     restoreSearchViewColumns();
     searchView->horizontalHeader()->setStretchLastSection(true);
@@ -366,18 +347,8 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     callSignView->setColumnHidden(RXTIME_COL_NUM, true);
-
-//    callSignView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-//    callSignView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-//    callSignView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-//    callSignView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
-//    callSignView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-//    callSignView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
-//    callSignView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
-//    callSignView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
-//    callSignView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-//    callSignView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-//    callSignView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
+    callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
 
     restoreCallsignViewColumns();
     callSignView->horizontalHeader()->setStretchLastSection(true);
@@ -419,19 +390,9 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
+    locatorView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
 
-
-//    locatorView->setColumnWidth(TIME_COL_NUM, TIME_COL_WIDTH);
-//    locatorView->setColumnWidth(FREQ_COL_NUM, FREQ_COL_WIDTH);
-//    locatorView->setColumnWidth(DXSPOT_CALL_COL_NUM, DXSPOT_CALL_COL_WIDTH);
-//    locatorView->setColumnWidth(DXSPOT_CALL_WORKED_COL_NUM, DXSPOT_CALL_WKD_COL_WIDTH);
-//    locatorView->setColumnWidth(DXLOC_COL_NUM, DXLOC_COL_WIDTH);
-//    locatorView->setColumnWidth(DXLOC_WORKED_COL_NUM, DXLOC_WKD_COL_WIDTH);
-//    locatorView->setColumnWidth(DXDIST_COL_NUM, DXDIST_COL_WIDTH);
-//    locatorView->setColumnWidth(DXBRG_COL_NUM, DXBRG_COL_WIDTH);
-//    locatorView->setColumnWidth(SPOT_CALL_COL_NUM, SPOT_CALL_COL_WIDTH);
-//    locatorView->setColumnWidth(SPOTLOC_COL_NUM, SPOTLOC_COL_WIDTH);
-//    locatorView->setColumnWidth(COMMENT_COL_NUM, COMMENT_COL_WIDTH);
 
 
     restoreLocatorViewColumns();
@@ -735,11 +696,11 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
             dxSpotDataModel->rowData = new SpotData(rxTime, spotlist[SPOTTIME],
                                                     spotlist[DXFREQ], spotlist[DXBANDMASK],
-                                                    spotlist[DXMODEMASK], spotlist[DXCALL],
+                                                    spotlist[DXMODESTR], spotlist[DXMODEMASK], spotlist[DXCALL],
                                                     callWorked, spotlist[DXLOCATOR],
                                                     locWorked,distance,
                                                     bearing, spotlist[SPOTCALL],
-                                                    spotlist[SPOTLOCATOR], spotlist[SPOTCOMMENT]);
+                                                    spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
 

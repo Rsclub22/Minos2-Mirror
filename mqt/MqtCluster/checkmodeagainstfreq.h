@@ -9,7 +9,7 @@ public:
     checkModeAgainstFreq();
     int confirmMode(QString &band, QString &mode, double freq);
     bool modeExists(QString &band, QString &mode);
-    QString getMode(QString &band, double freq);
+    QString getMode(const QString &band, double freq);
 };
 
 #endif // CHECKMODEAGAINSTFREQ_H

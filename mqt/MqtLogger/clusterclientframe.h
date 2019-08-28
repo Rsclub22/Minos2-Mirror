@@ -23,7 +23,7 @@
 #include "clusterclientfilterdialog.h"
 #include "clustercommon.h"
 #include "MinosLoggerEvents.h"
-#include "checkmodeagainstfreq.h"
+
 
 namespace Ui {
     class ClusterClientFrame;
@@ -140,12 +140,14 @@ private:
 
     ClusterClientFilterDialog *filterSetup = nullptr;
 
-    checkModeAgainstFreq *modeBandPlan = nullptr;
+
+    HtmlDelegate *delegate = nullptr;
 
     QSharedPointer<HtmlDelegate> dxDelegate ;
     QSharedPointer<HtmlDelegate> callsignDelegate ;
     QSharedPointer<HtmlDelegate> locatorDelegate ;
     QSharedPointer<HtmlDelegate> searchDelegate ;
+
 
     QTimer* purgeTimer;
     qlonglong timeToLive;

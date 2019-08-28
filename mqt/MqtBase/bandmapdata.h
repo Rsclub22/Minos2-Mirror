@@ -12,20 +12,6 @@
 
 
 
-
-/////////////////////////////////////////////////////////////////////////////
-// $Id$
-//
-// PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//                       Bandmap
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
-//
-///
-//
-//
-/////////////////////////////////////////////////////////////////////////////
-
-
 #ifndef BANDMAPDATA_H
 #define BANDMAPDATA_H
 
@@ -46,11 +32,12 @@ public:
     BandmapData();
     BandmapData(qint64 _rxTime, QString _spotTime,
              QString _dxFreqStr, qint64 dxFreq, QString _dxFreqMaskStr,
-             QString _dxModeMaskStr, QString _dxCall,
+             QString _dxMode, QString _dxModeMaskStr, QString _dxCall,
              bool _dxCallWorked, QString _dxLocator,
              bool _dxLocatorWorked, QString distance,
              QString bearing, QString _spotterCall,
-             QString _spotterLocator, QString comment, bandmapSpotType::SPOT_TYPE _spotType);
+             QString _spotterLocator, QString _dxPropMode,
+             QString comment, bandmapSpotType::SPOT_TYPE _spotType);
 
     void operator = (const BandmapData& bmd);
 
@@ -59,6 +46,7 @@ public:
     QString dxFreqStr;
     qint64 dxFreq;
     QString dxFreqMaskStr;
+    QString dxMode;
     QString dxModeMaskStr;
     QString dxCall;
     QString dxLocator;
@@ -69,6 +57,7 @@ public:
     bool sentToMemory;
     QString spotterCall;
     QString spotterLocator;
+    QString dxPropMode;
     QString spotComment;
     bandmapSpotType::SPOT_TYPE spotType;
     bool isSelected;

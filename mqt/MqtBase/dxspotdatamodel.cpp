@@ -48,26 +48,30 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                     return tr("Dx");
                 case DXSPOT_CALL_WORKED_COL_NUM:  // 3
                     return tr("Wkd");
-                case DXLOC_COL_NUM:         // 4
+                case DXSPOT_MODE_COL_NUM:          // 4
+                    return tr("Mode");
+                case DXLOC_COL_NUM:         // 5
                     return tr("Loc");
-                case DXDIST_COL_NUM:        // 5
+                case DXDIST_COL_NUM:        // 6
                     return tr("Dist");
-                case DXBRG_COL_NUM:        // 6
+                case DXBRG_COL_NUM:        // 7
                     return tr("Brg");
-                case DXLOC_WORKED_COL_NUM:  // 7
+                case DXLOC_WORKED_COL_NUM:  // 8
                     return tr("Wkd");
-                case SPOT_CALL_COL_NUM:     // 8
+                case SPOT_CALL_COL_NUM:     // 9
                     return tr("Spotter");
-                case SPOTLOC_COL_NUM:       // 9
+                case SPOTLOC_COL_NUM:       // 10
                     return tr("Loc");
-                case COMMENT_COL_NUM:       // 10
-                    return tr("Comment");
-                case DXBANDMASK_COL_NUM:    // 11
+                case COMMENT_COL_NUM:       // 11
+                return tr("Comment");
+                case DXBANDMASK_COL_NUM:    // 12
                     return tr("Band Mask");
-                case MODEMASK_COL_NUM:      // 12
+                case MODEMASK_COL_NUM:      // 13
                     return tr("mode Mask");
-                case DXSPOT_TO_MEMORY_FLAG_COL_NUM:  // 13
+                case DXSPOT_TO_MEMORY_FLAG_COL_NUM:  // 14
                     return tr("Spot to Mem Flag");
+                case DXSPOT_PROP_MODE_COL_NUM:              // 15
+                    return tr("Prop Mode");
                 default:
                 return QVariant();
             }
@@ -213,6 +217,12 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case RXTIME_COL_NUM:
                 d = QString::number(dxSpot->rxTime);
                 break;
+            case DXSPOT_MODE_COL_NUM:
+                d = dxSpot->dxMode;
+            break;
+            case DXSPOT_PROP_MODE_COL_NUM:
+                d = dxSpot->dxPropMode;
+            break;
             default:
                 d = "";
         }
@@ -272,6 +282,12 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case RXTIME_COL_NUM:
                 d = dxSpot->rxTime;
                 break;
+            case DXSPOT_MODE_COL_NUM:
+                d = dxSpot->dxMode;
+            break;
+            case DXSPOT_PROP_MODE_COL_NUM:
+                d = dxSpot->dxPropMode;
+            break;
 
 
         }
@@ -338,7 +354,13 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 dxSpot->sentToMemory = value.toBool();
             break;
-            default:
+            case DXSPOT_MODE_COL_NUM:
+                dxSpot->dxMode  = value.toString();
+            break;
+            case DXSPOT_PROP_MODE_COL_NUM:
+                dxSpot->dxPropMode  = value.toString();
+            break;
+                default:
                 return false;
 
         }

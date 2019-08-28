@@ -55,7 +55,6 @@ SOURCES += \
     bandmapgraphicspanel.cpp \
     bandmapspotfilterproxymodel.cpp \
     bandmapspotmarker.cpp \
-    checkmodeagainstfreq.cpp \
     contestdetails.cpp \
     districtframe.cpp \
     dxccframe.cpp \
@@ -133,7 +132,6 @@ HEADERS  += \
     bandmapgraphicspanel.h \
     bandmapspotfilterproxymodel.h \
     bandmapspotmarker.h \
-    checkmodeagainstfreq.h \
     contestdetails.h \
     districtframe.h \
     dxccframe.h \

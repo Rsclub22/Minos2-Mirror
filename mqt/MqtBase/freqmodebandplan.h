@@ -27,6 +27,7 @@ public:
 
     int confirmMode(QString &band, QString &mode, double freq);
     bool modeExists(QString &band, QString &mode);
+    bool checkLoadedOk();
 
 protected:
     QMap<QString, QMap<QString, ModeFreqDetail> > bandModeFreqList;
@@ -35,6 +36,7 @@ protected:
 private:
 
     bool readFile(QString f);
+    bool loadedOk;
 
 
 

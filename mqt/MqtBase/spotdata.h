@@ -24,11 +24,11 @@ public:
     SpotData();
     SpotData(qint64 _rxTime, QString _spotTime,
              QString _dxFreq, QString _dxFreqMaskStr,
-             QString _dxModeMaskStr, QString _dxCall,
-             bool _dxCallWorked, QString _dxLocator,
+             QString _dxMode, QString _dxModeMaskStr,
+             QString _dxCall, bool _dxCallWorked, QString _dxLocator,
              bool _dxLocatorWorked, QString distance,
              QString bearing, QString _spotterCall,
-             QString _spotterLocator, QString comment);
+             QString _spotterLocator, QString _dxPropMode, QString comment);
 
     void operator = (const SpotData& spd);
 
@@ -36,6 +36,7 @@ public:
     QString spotTime;
     QString dxFreq;
     QString dxFreqMaskStr;
+    QString dxMode;
     QString dxModeMaskStr;
     QString dxCall;
     QString dxLocator;
@@ -46,6 +47,7 @@ public:
     bool sentToMemory;
     QString spotterCall;
     QString spotterLocator;
+    QString dxPropMode;
     QString spotComment;
 
 
