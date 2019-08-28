@@ -44,6 +44,7 @@ private:
     void rotPresetButtonUpdate(int buttonNumber, RotPresetData &editData);
 
     void traceMsg(QString msg);
+    void clearPresetData();
 signals:
     void sendRotatorPreset(QString);
     void presetTurn(QString);

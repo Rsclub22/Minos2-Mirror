@@ -48,6 +48,14 @@ QString MinosConfig::getThisServerName()
 
 
 //---------------------------------------------------------------------------
+RunConfigElement::RunConfigElement()
+{}
+
+RunConfigElement::~RunConfigElement()
+{
+    delete runner;
+}
+
 bool RunConfigElement::initialise(INIFile &config, QString sect )
 {
     // config should refer to ./Configuration/MinosConfig.ini

@@ -62,7 +62,8 @@ public:  		// User declarations
 
     bool stopping = false;
 
-    RunConfigElement(){}
+    RunConfigElement();
+    ~RunConfigElement();
     bool initialise( INIFile &, QString sect );
 
     void save(INIFile &);
