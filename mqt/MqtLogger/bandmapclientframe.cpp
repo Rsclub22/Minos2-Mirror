@@ -170,7 +170,7 @@ BandmapClientFrame::~BandmapClientFrame()
     delete bandmapView;
     delete bandmapSpotProxyModel;
     delete bandmapDataModel;
-    delete modeBandPlan;
+
 }
 
 void BandmapClientFrame::on_FontChanged()

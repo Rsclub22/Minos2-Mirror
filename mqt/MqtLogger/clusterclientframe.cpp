@@ -202,7 +202,7 @@ ClusterClientFrame::~ClusterClientFrame()
         delete m;
     }
     delete actionInObject;
-    delete modeBandPlan;
+
 }
 
 

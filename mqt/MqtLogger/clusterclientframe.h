@@ -140,11 +140,6 @@ private:
 
     ClusterClientFilterDialog *filterSetup = nullptr;
 
-    
-
-
-    ClusterClientFilterDialog *filterSetup;
-
 
     HtmlDelegate *delegate = nullptr;
 
