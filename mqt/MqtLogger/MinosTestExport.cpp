@@ -397,10 +397,13 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
         st->addMember(filter.getValue().bandFilter5_6Ghz, "bandFilter5_6Ghz");
         st->addMember(filter.getValue().bandFilter10Ghz, "bandFilter10Ghz");
         st->addMember(filter.getValue().modeFilterCW, "modeFilterCW");
-        st->addMember(filter.getValue().modeFilterPHONEMODE, "modeFilterPHONEMODE");
+        st->addMember(filter.getValue().modeFilterUSBMODE, "modeFilterUSBMODE");
+        st->addMember(filter.getValue().modeFilterFMMODE, "modeFilterFMMODE");
         st->addMember(filter.getValue().modeFilterRTTYMODE, "modeFilterRTTYMODE");
-        st->addMember(filter.getValue().modeFilterPSKMODE, "modeFilterPSKMODE");
-        st->addMember(filter.getValue().modeFilterMGMMODE, "modeFilterMGMMODE");
+        st->addMember(filter.getValue().modeFilterPSK31MODE, "modeFilterPSK31MODE");
+        st->addMember(filter.getValue().modeFilterFT8MODE, "modeFilterFT8MODE");
+        st->addMember(filter.getValue().modeFilterMSK144MODE, "modeFilterMSK144MODE");
+        st->addMember(filter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
 
         sendRequest(expfd, "MinosClusterFilter", st);
 

@@ -1569,10 +1569,13 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("bandFilter5_6Ghz", ccfs.bandFilter5_6Ghz);
                                        mt->getStructArgMemberValue("bandFilter10Ghz", ccfs.bandFilter10Ghz);
                                        mt->getStructArgMemberValue("modeFilterCW", ccfs.modeFilterCW);
-                                       mt->getStructArgMemberValue("modeFilterPHONEMODE", ccfs.modeFilterPHONEMODE);
+                                       mt->getStructArgMemberValue("modeFilterUSBMODE", ccfs.modeFilterUSBMODE);
+                                       mt->getStructArgMemberValue("modeFilterFMMODE", ccfs.modeFilterFMMODE);
                                        mt->getStructArgMemberValue("modeFilterRTTYMODE", ccfs.modeFilterRTTYMODE);
-                                       mt->getStructArgMemberValue("modeFilterPSKMODE", ccfs.modeFilterPSKMODE);
-                                       mt->getStructArgMemberValue("modeFilterMGMMODE", ccfs.modeFilterMGMMODE);
+                                       mt->getStructArgMemberValue("modeFilterPSK31MODE", ccfs.modeFilterPSK31MODE);
+                                       mt->getStructArgMemberValue("modeFilterFT8MODE", ccfs.modeFilterFT8MODE);
+                                       mt->getStructArgMemberValue("modeFilterMSK144MODE", ccfs.modeFilterMSK144MODE);
+                                       mt->getStructArgMemberValue("modeFilterJT65MODE", ccfs.modeFilterJT65MODE);
 
                                        saveInitialClusterFilter(ccfs);
 
