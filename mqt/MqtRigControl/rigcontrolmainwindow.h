@@ -118,6 +118,7 @@ private:
     QVector<BandDetail*> bands;
     QStringList presetFreq;
 
+    int *test_mem;
     // data from radio
     freq_t rfrequency;       // read frequency
     QString sfreq;          // read freq converted to string

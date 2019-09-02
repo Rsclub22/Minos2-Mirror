@@ -173,7 +173,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case DXBANDMASK_COL_NUM:
                 d = bandmapSpot->dxFreqMaskStr;
             break;
-            case MODEMASK_COL_NUM:
+            case DXMODEMASK_COL_NUM:
                 d = bandmapSpot->dxModeMaskStr;
             break;
             case RXTIME_COL_NUM:
@@ -246,7 +246,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             case DXBANDMASK_COL_NUM:
                 bandmapSpot->dxModeMaskStr = value.toString();
                 break;
-            case MODEMASK_COL_NUM:
+            case DXMODEMASK_COL_NUM:
                 bandmapSpot->dxModeMaskStr = value.toString();
                 break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:

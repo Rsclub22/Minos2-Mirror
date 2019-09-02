@@ -170,7 +170,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         testBoxesVisible(true);
         setRadioNameLabelVisible(false);
     }
-
+    test_mem = new int[3000];
 
     pollTimer = new QTimer(this);
 

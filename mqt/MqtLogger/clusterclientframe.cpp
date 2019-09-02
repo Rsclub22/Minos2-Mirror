@@ -226,6 +226,9 @@ void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs,
 
     timer->start(50);
 }
+
+
+
 void ClusterClientFrame::setupDXSpotView()
 {
     dxSpotView = new QTableView();
@@ -253,14 +256,6 @@ void ClusterClientFrame::setupDXSpotView()
     connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
     connect(spotVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onDXSpotVertHeaderClicked(int)));
 
-    dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-    dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
-    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
 
     restoreDxSpotViewColumns();
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
@@ -268,6 +263,16 @@ void ClusterClientFrame::setupDXSpotView()
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_dxSpotViewSectionResized(int, int , int)));
 
     spotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+
+    dxSpotView->setColumnHidden(DXMODEMASK_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
+    dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
+    //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
+
 }
 
 
@@ -295,20 +300,22 @@ void ClusterClientFrame::setupSearchSpotView()
     connect(searchView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onSearchSpotViewClicked(const QModelIndex &)));
     connect(searchVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onSearchSpotVertHeaderClicked(int)));
 
-    searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-    searchView->setColumnHidden(MODEMASK_COL_NUM, true);
-    searchView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    searchView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
-    searchView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
-    searchView->setColumnHidden(RXTIME_COL_NUM, true);
-    searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
-    searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-
-
     restoreSearchViewColumns();
     searchView->horizontalHeader()->setStretchLastSection(true);
     connect( searchView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_searchViewSectionResized(int, int , int)));
     searchVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+
+    searchView->setColumnHidden(DXMODEMASK_COL_NUM, true);
+    searchView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
+    searchView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    searchView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
+    searchView->setColumnHidden(RXTIME_COL_NUM, true);
+    //searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
+
+
+
 
 }
 
@@ -341,20 +348,22 @@ void ClusterClientFrame::setupCallsignSpotView()
     connect(callSignView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCallsignSpotViewClicked(const QModelIndex &)));
     connect(callSignVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onCallsignSpotVertHeaderClicked(int)));
 
-    callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-    callSignView->setColumnHidden(MODEMASK_COL_NUM, true);
-    callSignView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
-    callSignView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
-    callSignView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
-    callSignView->setColumnHidden(RXTIME_COL_NUM, true);
-    callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
-    callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
 
     restoreCallsignViewColumns();
     callSignView->horizontalHeader()->setStretchLastSection(true);
     connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_callsignViewSectionResized(int, int , int)));
 
     callSignVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    callSignView->setColumnHidden(DXMODEMASK_COL_NUM, true);
+    callSignView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
+    callSignView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    callSignView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
+    callSignView->setColumnHidden(RXTIME_COL_NUM, true);
+    //callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
+
+
 
 }
 
@@ -384,23 +393,19 @@ void ClusterClientFrame::setupLocatorSpotView()
     connect(locatorView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onLocatorSpotViewClicked(const QModelIndex &)));
     connect(locatorViewVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onLocatorSpotVertHeaderClicked(int)));
 
-    locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-    locatorView->setColumnHidden(MODEMASK_COL_NUM, true);
+    restoreLocatorViewColumns();
+    locatorView->horizontalHeader()->setStretchLastSection(true);
+    connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_locatorViewSectionResized(int, int , int)));
+    locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    locatorView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
-    locatorView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    //locatorView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
 
-
-
-    restoreLocatorViewColumns();
-    locatorView->horizontalHeader()->setStretchLastSection(true);
-    connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_locatorViewSectionResized(int, int , int)));
-
-
-    locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 }
 
@@ -1599,7 +1604,7 @@ void ClusterClientFrame::mouseTimerCheckNewSpots()
 
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    return matchBand(sourceRow);
+    return matchBand(sourceRow) && matchMode(sourceRow);
 
 }
 
@@ -1623,12 +1628,25 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 
 }
 
+bool DxSpotSortFilterProxyModel::matchMode(int sourceRow) const
+{
+    bool ok = false;
+    int modeMask = sourceModel()->data(sourceModel()->index(sourceRow, DXMODEMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
+    if (ok and modeMask >=0)
+    {
+        return filterSetup->filterSettings.getModeFilter(modeMask);
+    }
+    else
+    {
+        return false;
+    }
 
+}
 
 
 bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    if (!searchParameter.isEmpty() && matchBand(sourceRow))
+    if (!searchParameter.isEmpty() && matchBand(sourceRow) && matchMode(sourceRow))
     {
         if (searchParameter.contains(SEARCH_LOC_EXP))
         {
@@ -1660,7 +1678,7 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
 
     if (!filterSetup->getCallsignFilterList().empty())
     {
-        if (matchBand(sourceRow))
+        if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
             Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
             spotCall.validate();
@@ -1683,7 +1701,7 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
 {
     if (!filterSetup->getLocatorFilterList().empty())
     {
-        if (matchBand(sourceRow))
+        if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
             QModelIndex index = sourceModel()->index(sourceRow, DXLOC_COL_NUM);
             QString locator = sourceModel()->data(index, DataStoredRole).toString().mid(0,4);

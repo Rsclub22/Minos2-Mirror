@@ -180,8 +180,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
-    dxSpotView->setColumnHidden(MODEMASK_COL_NUM, true);
+    //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
@@ -753,8 +753,9 @@ void ClusterMainWindow::parseDX(const QString txt)
 
                 if (retCode >= 0)
                 {
-                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13")
-                    .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(dxLocator).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
+                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
+                    .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
+                    .arg(spotCall).arg(dxLocator).arg(spotLocator).arg(dxPropMode).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
 
                     qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
@@ -818,8 +819,8 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
     spotDate = "";
     spotDateTime = QDateTime::currentDateTimeUtc();
     dxLocator = "";
-    dxPropMode = "";
     spotLocator = "";
+    dxPropMode = "";
 
     dxMsg = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
 
@@ -924,7 +925,7 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QString &spotCall)
             {
                 spotCall = extractStr[i];
                 return true;
-                break;
+
             }
         }
     }
@@ -1017,8 +1018,8 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
     spotDate = "";
     spotDateTime = QDateTime::currentDateTimeUtc();
     dxLocator = "";
-    dxPropMode = "";
     spotLocator = "";
+    dxPropMode = "";
 
     txt.remove('\x07');
     //if (!txt.contains("DX de"))

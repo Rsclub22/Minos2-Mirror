@@ -70,7 +70,7 @@ const int SPOT_CALL_COL_NUM = 9;
 const int SPOTLOC_COL_NUM = 10;
 const int COMMENT_COL_NUM = 11;
 const int DXBANDMASK_COL_NUM = 12;
-const int MODEMASK_COL_NUM = 13;
+const int DXMODEMASK_COL_NUM = 13;
 const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 14;
 const int DXSPOT_PROP_MODE_COL_NUM = 15;
 const int RXTIME_COL_NUM = 16;
@@ -264,11 +264,11 @@ void setAllModeFilters(QList<bool> mfl)
 }
 
 
-bool getModeFilter(int band)
+bool getModeFilter(int mode)
 {
-    if (band >= 0 && band < modeFilters.count())
+    if (mode >= 0 && mode < modeFilters.count())
     {
-        return *modeFilters[band];
+        return *modeFilters[mode];
     }
     else
     {
