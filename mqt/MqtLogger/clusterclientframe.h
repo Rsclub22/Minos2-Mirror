@@ -50,6 +50,7 @@ public:
 
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool matchBand(int sourceRow) const;
+    bool matchMode(int sourceRow) const;
 
     DxSpotSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup)
     {

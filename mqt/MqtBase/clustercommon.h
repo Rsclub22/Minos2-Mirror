@@ -70,7 +70,7 @@ const int SPOT_CALL_COL_NUM = 9;
 const int SPOTLOC_COL_NUM = 10;
 const int COMMENT_COL_NUM = 11;
 const int DXBANDMASK_COL_NUM = 12;
-const int MODEMASK_COL_NUM = 13;
+const int DXMODEMASK_COL_NUM = 13;
 const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 14;
 const int DXSPOT_PROP_MODE_COL_NUM = 15;
 const int RXTIME_COL_NUM = 16;
@@ -157,10 +157,13 @@ public:
         bandFilter5_6Ghz(false),
         bandFilter10Ghz(false),
         modeFilterCW(false),
-        modeFilterPHONEMODE(false),
+        modeFilterUSBMODE(false),
+        modeFilterFMMODE(false),
         modeFilterRTTYMODE(false),
-        modeFilterPSKMODE(false),
-        modeFilterMGMMODE(false)
+        modeFilterPSK31MODE(false),
+        modeFilterFT8MODE(false),
+        modeFilterMSK144MODE(false),
+        modeFilterJT65MODE(false)
     {
 
 
@@ -182,8 +185,9 @@ public:
                                  &bandFilter432Mhz, &bandFilter1296Mhz, &bandFilter2300Mhz,
                                  &bandFilter3_4Ghz, &bandFilter5_6Ghz, &bandFilter10Ghz};
 
-    QList<bool*> modeFilters = { &modeFilterCW, &modeFilterPHONEMODE, &modeFilterRTTYMODE,
-                                 &modeFilterPSKMODE, &modeFilterMGMMODE};
+    QList<bool*> modeFilters = { &modeFilterCW, &modeFilterUSBMODE, &modeFilterFMMODE,
+                                 &modeFilterRTTYMODE, &modeFilterPSK31MODE, &modeFilterFT8MODE,
+                                &modeFilterMSK144MODE, &modeFilterJT65MODE};
 
 
     bool bandFilter50Mhz;
@@ -197,10 +201,13 @@ public:
     bool bandFilter10Ghz;
 
     bool modeFilterCW;
-    bool modeFilterPHONEMODE;
+    bool modeFilterUSBMODE;
+    bool modeFilterFMMODE;
     bool modeFilterRTTYMODE;
-    bool modeFilterPSKMODE;
-    bool modeFilterMGMMODE;
+    bool modeFilterPSK31MODE;
+    bool modeFilterFT8MODE;
+    bool modeFilterMSK144MODE;
+    bool modeFilterJT65MODE;
 
 
 
@@ -257,11 +264,11 @@ void setAllModeFilters(QList<bool> mfl)
 }
 
 
-bool getModeFilter(int band)
+bool getModeFilter(int mode)
 {
-    if (band >= 0 && band < modeFilters.count())
+    if (mode >= 0 && mode < modeFilters.count())
     {
-        return *modeFilters[band];
+        return *modeFilters[mode];
     }
     else
     {
@@ -289,10 +296,13 @@ void operator= (const ClusterClientFilterSettings& ccfs)
     bandFilter5_6Ghz = ccfs.bandFilter5_6Ghz;
     bandFilter10Ghz = ccfs.bandFilter10Ghz;
     modeFilterCW = ccfs.modeFilterCW;
-    modeFilterPHONEMODE = ccfs.modeFilterPHONEMODE;
+    modeFilterUSBMODE = ccfs.modeFilterUSBMODE;
+    modeFilterFMMODE = ccfs.modeFilterFMMODE;
     modeFilterRTTYMODE = ccfs.modeFilterRTTYMODE;
-    modeFilterPSKMODE = ccfs.modeFilterPSKMODE;
-    modeFilterMGMMODE = ccfs.modeFilterMGMMODE;
+    modeFilterPSK31MODE = ccfs.modeFilterPSK31MODE;
+    modeFilterFT8MODE = ccfs.modeFilterFT8MODE;
+    modeFilterMSK144MODE = ccfs.modeFilterMSK144MODE;
+    modeFilterJT65MODE = ccfs.modeFilterJT65MODE;
 
 }
 
@@ -311,10 +321,13 @@ bool operator==( const ClusterClientFilterSettings& ccfs ) const
          bandFilter5_6Ghz == ccfs.bandFilter5_6Ghz &&
          bandFilter10Ghz == ccfs.bandFilter10Ghz &&
          modeFilterCW == ccfs.modeFilterCW &&
-         modeFilterPHONEMODE == ccfs.modeFilterPHONEMODE &&
+         modeFilterUSBMODE == ccfs.modeFilterUSBMODE &&
+         modeFilterFMMODE == ccfs.modeFilterFMMODE &&
          modeFilterRTTYMODE == ccfs.modeFilterRTTYMODE &&
-         modeFilterPSKMODE == ccfs.modeFilterPSKMODE &&
-         modeFilterMGMMODE == ccfs.modeFilterMGMMODE)
+         modeFilterPSK31MODE == ccfs.modeFilterPSK31MODE &&
+         modeFilterFT8MODE == ccfs.modeFilterFT8MODE &&
+         modeFilterMSK144MODE == ccfs.modeFilterMSK144MODE &&
+         modeFilterJT65MODE == ccfs.modeFilterJT65MODE)
     {
         return true;
     }
