@@ -114,6 +114,10 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToBandmap(BaseContestLog *, Callsign, QString, QString, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString, QString, QString)));
 
     connect( bandmapView, SIGNAL( contextMenuSelected( const QPoint& ) ), this, SLOT( on_contextMenuSelected( const QPoint& ) ) );
+    connect (ui->filtersPushBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
+
+    checkNewFilters = new QTimer(this);
+    connect (checkNewFilters, SIGNAL(timeout()), this, SLOT(checkSavedFilters()));
 
     spotsMenu = new QMenu(ui->actionsButton);
 
@@ -142,25 +146,9 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
 
+    checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
 
 
-/*
-    modeBandPlan = new checkModeAgainstFreq();
-    if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
-    {
-        trace(QString("Bandmap: Operating frequency File loaded OK"));
-    }
-    else
-    {
-        trace(QString("Bandmap: Mode Bandplan Failed to Load"));
-    }
-
-    QString band = QString("144 MHz");
-    QString lookedupMode = modeBandPlan->getMode(band, QString("144200000").toDouble());
-
-    int a = 0;
-    a = 10;
-*/
 }
 
 
@@ -258,6 +246,9 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
     ct = c;
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
 
+    // set the contest in the filter dialog
+    filterSetup->setContest(c);
+
     if (ct != nullptr)
     {
         contestUuid = ct->uuid;
@@ -266,7 +257,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
-//        if (!contest->clusterFilterSettingsExist)       // have settings been saved before?
+//        if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
 //        {
 //            // no, save current band filter for this contest
 //            filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
@@ -288,6 +279,9 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
 
 }
+
+
+
 
 int BandmapClientFrame::getBandOffSet(QString contestBandStr)
 {
@@ -650,6 +644,26 @@ void BandmapClientFrame::calcSpotDistanceBearing(const QString& _locator, double
 
 }
 
+
+void BandmapClientFrame::checkSavedFilters()
+{
+    // this looks for changed saved settings
+    LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
+    if (contest)
+    {
+        QString cUuuid = ct->uuid;
+        BandmapClientFilterSettings bfs = contest->bandmapFilterSettings.getValue();
+        if (bfs != filterSetup->filterSettings)
+        {
+            filterSetup->filterSettings = bfs;
+        }
+    }
+}
+
+
+
+
+
 void BandmapClientFrame::handleClusterStatusMessage(QString &msg)
 {
 
@@ -711,9 +725,15 @@ void BandmapClientFrame::setFreq(QString freq)
 
     }
 
+}
 
 
 
+void BandmapClientFrame::filterButtonSelected()
+{
 
+    filterSetup->copyModeFiltersToDialog();
+
+    filterSetup->exec();
 
 }

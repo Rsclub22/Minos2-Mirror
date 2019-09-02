@@ -654,7 +654,23 @@ ClusterClientFilterSettings LoggerContestLog::getClusterFilter()
         return clusterFilterSettings.getValue();
 }
 
+//==========================================================================
 
+void LoggerContestLog::saveBandmapFilter(const BandmapClientFilterSettings &bcfs)
+{
+    bandmapFilterSettings.setValue(bcfs);
+    commonSave(false);
+}
+void LoggerContestLog::saveInitialBandmapFilter(const BandmapClientFilterSettings &bcfs)
+{
+    bandmapFilterSettings.setInitialValue(bcfs);
+
+}
+BandmapClientFilterSettings LoggerContestLog::getBandmapFilter()
+{
+
+        return bandmapFilterSettings.getValue();
+}
 
 
 //==========================================================================

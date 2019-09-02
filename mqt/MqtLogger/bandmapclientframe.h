@@ -67,6 +67,7 @@ private:
 
     QTimer* purgeTimer;
     QTimer* checkNewSpotsTimer;
+    QTimer* checkNewFilters;
 
     // cluster spots
     QVector<QString> spotQueue;
@@ -134,6 +135,8 @@ private slots:
      void clearSpotActionSelected();
      void sendBrgToRot(QString brg);
      void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq);
+     void filterButtonSelected();
+     void checkSavedFilters();
 };
 
 #endif // BANDMAPCLIENTFRAME_H

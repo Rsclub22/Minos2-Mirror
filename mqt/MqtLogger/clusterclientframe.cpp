@@ -89,14 +89,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
 
-    //modeBandPlan = new ClusterModeBandPlan();
-
-    //modeBandPlan->loadFile("./Configuration/mode_bandplan.json");
-
-    //QString band = "70 MHz";
-    //QString mode = "MGM";
-    //bool test = modeBandPlan->modeExists(band, mode);
-
 
     spotsMenu = new QMenu(ui->actionsButton);
 
@@ -272,6 +264,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
     //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
 
 }
 
@@ -313,6 +306,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnHidden(RXTIME_COL_NUM, true);
     //searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
+    searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
 
 
 
@@ -362,6 +356,8 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnHidden(RXTIME_COL_NUM, true);
     //callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
+    callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
+
 
 
 
@@ -405,6 +401,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
     //locatorView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
+    locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
 
 
 }
