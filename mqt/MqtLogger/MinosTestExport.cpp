@@ -405,6 +405,7 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
         st->addMember(clusterFilter.getValue().modeFilterFT8MODE, "modeFilterFT8MODE");
         st->addMember(clusterFilter.getValue().modeFilterMSK144MODE, "modeFilterMSK144MODE");
         st->addMember(clusterFilter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
+        st->addMember(clusterFilter.getValue().modeFilterNONE, "modeFilterNONEMODE");
 
         sendRequest(expfd, "MinosClusterFilter", st);
 
@@ -428,6 +429,7 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
         st->addMember(bandmapFilter.getValue().modeFilterFT8MODE, "modeFilterFT8MODE");
         st->addMember(bandmapFilter.getValue().modeFilterMSK144MODE, "modeFilterMSK144MODE");
         st->addMember(bandmapFilter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
+        st->addMember(bandmapFilter.getValue().modeFilterNONE, "modeFilterNONEMODE");
 
         sendRequest(expfd, "MinosBandmapFilter", st);
 
@@ -541,6 +543,7 @@ int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bo
    exportAllMemories(minosContestFile);
    exportStackDisplay(minosContestFile);
    exportClusterFilter(minosContestFile);
+   exportBandmapFilter(minosContestFile);
 
    return exp_stanzaCount;
 }

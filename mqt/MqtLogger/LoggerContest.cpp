@@ -100,6 +100,7 @@ void LoggerContestLog::clearDirty()
 
 
    clusterFilterSettings.clearDirty();
+   bandmapFilterSettings.clearDirty();
 
 
 
@@ -168,6 +169,7 @@ void LoggerContestLog::setDirty()
 
 
    clusterFilterSettings.setDirty();
+   bandmapFilterSettings.setDirty();
 
 
 
@@ -1592,8 +1594,26 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("modeFilterFT8MODE", ccfs.modeFilterFT8MODE);
                                        mt->getStructArgMemberValue("modeFilterMSK144MODE", ccfs.modeFilterMSK144MODE);
                                        mt->getStructArgMemberValue("modeFilterJT65MODE", ccfs.modeFilterJT65MODE);
+                                       mt->getStructArgMemberValue("modeFilterNONEMODE", ccfs.modeFilterNONE);
 
                                        saveInitialClusterFilter(ccfs);
+
+                               }
+                               else if (methodName == "MinosBandmapFilter")
+                               {
+                                       bandmapFilterSettingsExist = true;
+                                       BandmapClientFilterSettings bcfs;
+                                       mt->getStructArgMemberValue("modeFilterCW", bcfs.modeFilterCW);
+                                       mt->getStructArgMemberValue("modeFilterUSBMODE", bcfs.modeFilterUSBMODE);
+                                       mt->getStructArgMemberValue("modeFilterFMMODE", bcfs.modeFilterFMMODE);
+                                       mt->getStructArgMemberValue("modeFilterRTTYMODE", bcfs.modeFilterRTTYMODE);
+                                       mt->getStructArgMemberValue("modeFilterPSK31MODE", bcfs.modeFilterPSK31MODE);
+                                       mt->getStructArgMemberValue("modeFilterFT8MODE", bcfs.modeFilterFT8MODE);
+                                       mt->getStructArgMemberValue("modeFilterMSK144MODE", bcfs.modeFilterMSK144MODE);
+                                       mt->getStructArgMemberValue("modeFilterJT65MODE", bcfs.modeFilterJT65MODE);
+                                       mt->getStructArgMemberValue("modeFilterNONEMODE", bcfs.modeFilterNONE);
+
+                                       saveInitialBandmapFilter(bcfs);
 
                                }
                                else
