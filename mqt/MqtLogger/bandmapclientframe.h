@@ -76,7 +76,7 @@ private:
     QItemSelectionModel *selectionModel;
     QGraphicsView* bandmapGraphicsView;
 
-    BandmapSpotFilterProxyModel* bandmapSpotProxyModel;
+    QSortFilterProxyModel* bandmapSpotProxyModel;
     BandmapClientFilterDialog* filterSetup;
 
     QString sfreq;
@@ -137,6 +137,7 @@ private slots:
      void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq);
      void filterButtonSelected();
      void checkSavedFilters();
+     void onMenuShow();
 };
 
 #endif // BANDMAPCLIENTFRAME_H

@@ -92,8 +92,9 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     bandmapDataModel = new BandmapDataModel();
 
     bandmapView = new BandmapView();
+    bandmapView->setFilter(filterSetup);
 
-    bandmapSpotProxyModel = new BandmapSpotFilterProxyModel(filterSetup);
+    bandmapSpotProxyModel = new QSortFilterProxyModel(parent);
     bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
     bandmapSpotProxyModel->sort(FREQ_COL_NUM, Qt::AscendingOrder);
 
@@ -156,7 +157,6 @@ BandmapClientFrame::~BandmapClientFrame()
 {
     delete ui;
     delete bandmapView;
-    delete bandmapSpotProxyModel;
     delete bandmapDataModel;
 
 }
@@ -194,6 +194,11 @@ void BandmapClientFrame::on_freqActionSelected()
 {
     QString freq = "";
     sendFreqToRig(freq);
+}
+
+void BandmapClientFrame::onMenuShow()
+{
+
 }
 
 void BandmapClientFrame::sendFreqToRig(QString freq)
@@ -425,6 +430,12 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
             //--------------------------------------------------------
 
+            // check to see if spot is for this contest band
+
+            if (spotlist[DXBANDSTR] != contestBand)
+            {
+                return;
+            }
 
             // check to see if call or locator worked
             bool callWorked = false;
