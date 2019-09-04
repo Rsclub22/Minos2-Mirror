@@ -25,6 +25,7 @@ const int FREQ_SEL_WIDTH = 20;
 
 BandmapView::BandmapView(QWidget *parent) :
     QAbstractItemView(parent),
+    curFreq(0.0),
     zoomLevel(0),
     idealWidth(0),
     idealHeight(0),
@@ -539,8 +540,8 @@ void BandmapView::getSpotData(int &selectedSpotRowNum, int &displayedSpotNum, Ba
 void BandmapView::drawBandMapSpots()
 {
 
-    // don't draw spots when freq is zero
-    if (curFreq == 0.0)
+    // don't draw spots when freq is zero, or no spots
+    if (curFreq == 0.0 || model()->rowCount() == 0)
     {
         return;
     }
@@ -757,10 +758,10 @@ QString BandmapView::assembleToolTip(int row, QString freq)
     QString spotterCallsign =  model()->data(model()->index(row, SPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
     QString spotterLocator = model()->data(model()->index(row, SPOTLOC_COL_NUM), BMP_DataStoredRole).toString();
     QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), BMP_DataStoredRole).toString().replace('<', " (").replace('>', ") ");
-
+    QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     QString elapsedTime = QString("0");
 
-    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] \n%6").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTime).arg(spotterComment);
+    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] \nThe computed mode is %6\n%7").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTime).arg(computedMode).arg(spotterComment);
 
     return msg;
 

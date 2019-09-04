@@ -30,7 +30,7 @@
 #include "bandmapfreqdial.h"
 #include "bandmapdatamodel.h"
 #include "bandmapclientfilterdialog.h"
-#include "bandmapspotfilterproxymodel.h"
+
 
 
 namespace Ui {

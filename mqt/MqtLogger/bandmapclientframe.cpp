@@ -432,7 +432,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
             // check to see if spot is for this contest band
 
-            if (spotlist[DXBANDSTR] != contestBand)
+            if (spotlist[DXBANDSTR] != contestBandStr)
             {
                 return;
             }
@@ -467,11 +467,13 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
             QString f = spotlist[DXFREQ].remove('.') + "000";
             qint64 dxFreq = f.toLongLong(&ok, 10);
             if (!ok)
+            {
                 dxFreq = 0;
+            }
 
             bandmapDataModel->rowData = new BandmapData(rxTime, spotlist[SPOTTIME],
-                                                    spotlist[DXFREQ], dxFreq, spotlist[DXBANDMASK],
-                                                    spotlist[DXMODEMASK], spotlist[DXMODESTR],spotlist[DXCALL],
+                                                    spotlist[DXFREQ], dxFreq, spotlist[DXBANDSTR],  spotlist[DXBANDMASK],
+                                                    spotlist[DXMODESTR], spotlist[DXMODEMASK], spotlist[DXCALL],
                                                     callWorked, spotlist[DXLOCATOR],
                                                     locWorked,distance,
                                                     bearing, spotlist[SPOTCALL],

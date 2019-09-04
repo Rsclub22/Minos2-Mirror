@@ -69,13 +69,14 @@ const int DXLOC_WORKED_COL_NUM = 8;
 const int SPOT_CALL_COL_NUM = 9;
 const int SPOTLOC_COL_NUM = 10;
 const int COMMENT_COL_NUM = 11;
-const int DXBANDMASK_COL_NUM = 12;
-const int DXMODEMASK_COL_NUM = 13;
-const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 14;
-const int DXSPOT_PROP_MODE_COL_NUM = 15;
-const int RXTIME_COL_NUM = 16;
-const int SPOT_TYPE_COL_NUM = 17;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 18;    // used in bandmap
+const int DXBANDSTR_COL_NUM = 12;
+const int DXBANDMASK_COL_NUM = 13;
+const int DXMODEMASK_COL_NUM = 14;
+const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 15;
+const int DXSPOT_PROP_MODE_COL_NUM = 16;
+const int RXTIME_COL_NUM = 17;
+const int SPOT_TYPE_COL_NUM = 18;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 19;    // used in bandmap
 
 
 
