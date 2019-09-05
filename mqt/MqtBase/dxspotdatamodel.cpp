@@ -40,37 +40,37 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
         if (role == Qt::DisplayRole)
         {
             switch (section) {
-                case TIME_COL_NUM:          // 0
+                case TIME_COL_NUM:
                     return tr("UTC");
-                case FREQ_COL_NUM:          // 1
+                case FREQ_COL_NUM:
                     return tr("Freq");
-                case DXSPOT_CALL_COL_NUM:   // 2
+                case DXSPOT_CALL_COL_NUM:
                     return tr("Dx");
-                case DXSPOT_CALL_WORKED_COL_NUM:  // 3
+                case DXSPOT_CALL_WORKED_COL_NUM:
                     return tr("Wkd");
-                case DXSPOT_MODE_COL_NUM:          // 4
+                case DXSPOT_MODE_COL_NUM:
                     return tr("Mode");
-                case DXLOC_COL_NUM:         // 5
+                case DXLOC_COL_NUM:
                     return tr("Loc");
-                case DXDIST_COL_NUM:        // 6
+                case DXDIST_COL_NUM:
                     return tr("Dist");
-                case DXBRG_COL_NUM:        // 7
+                case DXBRG_COL_NUM:
                     return tr("Brg");
-                case DXLOC_WORKED_COL_NUM:  // 9
+                case DXLOC_WORKED_COL_NUM:
                     return tr("Wkd");
-                case SPOT_CALL_COL_NUM:     // 10
+                case SPOT_CALL_COL_NUM:
                     return tr("Spotter");
-                case SPOTLOC_COL_NUM:       // 11
+                case SPOTLOC_COL_NUM:
                     return tr("Loc");
-                case COMMENT_COL_NUM:       // 12
+                case COMMENT_COL_NUM:
                 return tr("Comment");
-                case DXBANDMASK_COL_NUM:    // 13
+                case DXBANDMASK_COL_NUM:
                     return tr("Band Mask");
-                case DXMODEMASK_COL_NUM:      // 14
+                case DXMODEMASK_COL_NUM:
                     return tr("mode Mask");
-                case DXSPOT_TO_MEMORY_FLAG_COL_NUM:  // 15
+                case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                     return tr("Spot to Mem Flag");
-                case DXSPOT_PROP_MODE_COL_NUM:              // 16
+                case DXSPOT_PROP_MODE_COL_NUM:
                     return tr("Prop Mode");
                 default:
                 return QVariant();
@@ -224,6 +224,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXSPOT_PROP_MODE_COL_NUM:
                 d = dxSpot->dxPropMode;
             break;
+            case DXBANDSTR_COL_NUM:
+                d = dxSpot->dxBandStr;
+            break;
             default:
                 d = "";
         }
@@ -275,7 +278,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->sentToMemory;
             break;
             case DXBANDMASK_COL_NUM:
-                d = dxSpot->dxFreqMaskStr;
+                d = dxSpot->dxBandMask;
             break;
             case DXMODEMASK_COL_NUM:
                 d = dxSpot->dxModeMaskStr;
@@ -288,6 +291,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             break;
             case DXSPOT_PROP_MODE_COL_NUM:
                 d = dxSpot->dxPropMode;
+            break;
+            case DXBANDSTR_COL_NUM:
+                d = dxSpot->dxBandStr;
             break;
 
 
@@ -361,7 +367,10 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             case DXSPOT_PROP_MODE_COL_NUM:
                 dxSpot->dxPropMode  = value.toString();
             break;
-                default:
+            case DXBANDSTR_COL_NUM:
+                dxSpot->dxBandStr = value.toString();
+            break;
+            default:
                 return false;
 
         }

@@ -25,6 +25,7 @@ const int FREQ_SEL_WIDTH = 20;
 
 BandmapView::BandmapView(QWidget *parent) :
     QAbstractItemView(parent),
+    curFreq(0.0),
     zoomLevel(0),
     idealWidth(0),
     idealHeight(0),
@@ -254,10 +255,8 @@ int BandmapView::verticalOffset() const
 
 QRegion BandmapView::visualRegionForSelection(const QItemSelection &selection) const
 {
-    int a = 0;
 
     return QRegion();
-
 }
 
 
@@ -271,17 +270,12 @@ QRegion BandmapView::visualRegionForSelection(const QItemSelection &selection) c
 
 QModelIndex BandmapView::indexAt(const QPoint &point_) const
 {
+
+    // not used
     QPoint point(point_);
     point.rx() += horizontalScrollBar()->value();
     point.ry() += verticalScrollBar()->value();
-    int a = 0;
-    //calculateRectsIfNecessary();
-    //QHashIterator<int, QRectF> i(rectForRow);
-    //while (i.hasNext()) {
-    //    i.next();
-   //     if (i.value().contains(point))
-    //        return model()->index(i.key(), 0, rootIndex());
-   //}
+
     return QModelIndex();
 }
 
@@ -332,6 +326,11 @@ QRectF BandmapView::viewportRectForRow(int row) const
 
 }
 
+
+void BandmapView::setFilter(BandmapClientFilterDialog* filter)
+{
+    filterSetup = filter;
+}
 
 
 //QSize BandmapView::minimumSizeHint() const
@@ -540,6 +539,14 @@ void BandmapView::getSpotData(int &selectedSpotRowNum, int &displayedSpotNum, Ba
 
 void BandmapView::drawBandMapSpots()
 {
+
+    // don't draw spots when freq is zero, or no spots
+    if (curFreq == 0.0 || model()->rowCount() == 0)
+    {
+        return;
+    }
+
+
     if (!listOfMarkers.isEmpty())
     {
         for (int i = 0; i < listOfMarkers.count(); i++)
@@ -599,6 +606,12 @@ void BandmapView::drawBandMapSpots()
     {
         for (int row = 0; row < numrows; ++row)
         {
+
+            // check mode against the filter settings
+            if (!matchMode(row))
+            {
+                return;
+            }
 
             QModelIndex index = model()->index(row, FREQ_COL_NUM);
             QString freq = model()->data(index, Qt::DisplayRole).toString().remove('.');
@@ -667,26 +680,6 @@ void BandmapView::drawBandMapSpots()
 
 
 
-                /*
-                // find a free slot to display
-                for (int i = 0; i < listOfMarkers.count(); i++)
-                {
-
-                    if (yCoord >= listOfMarkers[i]->spotMarkerCoord.y())
-                    {
-                        if (listOfMarkers[i]->spot != nullptr)
-                        {
-                            index = model()->index(row, DXSPOT_CALL_COL_NUM);
-                            QString callsign = model()->data(index, Qt::DisplayRole).toString();
-                            BandmapSpotMarker* spot = new BandmapSpotMarker(QPoint(listOfMarkers[i]->spotMarkerCoord.x(), listOfMarkers[i]->spotMarkerCoord.y()), callsign, "testing", Qt::red);
-                            bandmapScene->addItem(spot);
-                            spot->setSpotText(callsign + " " + freq);
-                            listOfMarkers[i]->spot = spot;
-                        }
-                    }
-                }
-                */
-
             }
 
 
@@ -695,22 +688,24 @@ void BandmapView::drawBandMapSpots()
     }
 
 
-    /*
-        QString redHtml = "<font color=\"Red\">";
-        QString endHtml = "</font><br>";
-        QString msg = redHtml + "G8FKH" + endHtml;
-        QPoint pos = QPoint(80,100);
-        BandmapSpotMarker* spot = new BandmapSpotMarker(pos, redHtml + "G8FKH" + endHtml, "testing", Qt::red);
-        BandmarkerDetials* markerDetials = new BandmarkerDetials(QPoint(0,0), QPoint(0,0), spot);
-        listOfMarkers.append(markerDetials);
-        spot->setSpotText(msg);
-        bandmapScene->addItem(spot);
-        pos = QPoint(80,125);
-        spot = new BandmapSpotMarker(pos, redHtml + "M0ICR" + endHtml, "testing", Qt::red);
-        listOfMarkers.append(markerDetials);
-        bandmapScene->addItem(spot);
-    */
 }
+
+
+bool BandmapView::matchMode(int sourceRow)
+{
+    bool ok = false;
+    int modeMask = model()->data(model()->index(sourceRow, DXMODEMASK_COL_NUM), BMP_DataStoredRole).toString().toInt(&ok);
+    if (ok and modeMask >=0)
+    {
+        return filterSetup->filterSettings.getModeFilter(modeMask);
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
 
 
 
@@ -763,10 +758,10 @@ QString BandmapView::assembleToolTip(int row, QString freq)
     QString spotterCallsign =  model()->data(model()->index(row, SPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
     QString spotterLocator = model()->data(model()->index(row, SPOTLOC_COL_NUM), BMP_DataStoredRole).toString();
     QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), BMP_DataStoredRole).toString().replace('<', " (").replace('>', ") ");
-
+    QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     QString elapsedTime = QString("0");
 
-    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] \n%6").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTime).arg(spotterComment);
+    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] \nThe computed mode is %6\n%7").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTime).arg(computedMode).arg(spotterComment);
 
     return msg;
 

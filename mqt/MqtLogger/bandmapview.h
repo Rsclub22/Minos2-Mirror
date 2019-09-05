@@ -14,6 +14,7 @@
 #include "bandmapspotmarker.h"
 #include "bandmapdatamodel.h"
 #include "bandmapmarkerdetails.h"
+#include "bandmapclientfilterdialog.h"
 
 
 const QChar DEG_SYMBOL = 0260; // octal value
@@ -61,6 +62,8 @@ public:
 
     void clearSpotData(BandmapData &selectedSpot);
 
+
+    void setFilter(BandmapClientFilterDialog *filter);
 
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
@@ -136,7 +139,7 @@ private:
     BandmapData selectedSpot;
     int selectedSpotRowNum;
 
-
+    BandmapClientFilterDialog* filterSetup;
 
 
 
@@ -152,6 +155,7 @@ private:
     void setSelectedSpot(int displayedSpotNum);
 
     void clearListOfMarkers();
+    bool matchMode(int sourceRow);
 };
 
 #endif // BANDMAPVIEW_H

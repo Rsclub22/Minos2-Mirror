@@ -78,13 +78,20 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case FREQ_COL_NUM:
                 d = bandmapSpot->dxFreqStr;
                 break;
+            case DXBANDSTR_COL_NUM:
+                d = bandmapSpot->dxBand;
+            break;
             case DXSPOT_CALL_COL_NUM:
                 if (bandmapSpot->dxCallWorked == BOOL_YES)
                 {
                     d = HtmlFontColour(CALLSIGN_WORKED_COLOUR);
                 }
                 d = d + bandmapSpot->dxCall;
-                break;
+            break;
+
+            case DXSPOT_MODE_COL_NUM:
+                d = bandmapSpot->dxMode;
+            break;
 
             case DXLOC_COL_NUM:
                 if (bandmapSpot->dxLocatorWorked == BOOL_NO && bandmapSpot->dxCallWorked == BOOL_YES)
@@ -140,6 +147,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case FREQ_COL_NUM:
                 d = bandmapSpot->dxFreqStr;
                 break;
+            case DXBANDSTR_COL_NUM:
+                d = bandmapSpot->dxBand;
+            break;
             case DXSPOT_CALL_COL_NUM:
                 d = bandmapSpot->dxCall;
             break;
@@ -151,6 +161,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             break;
             case DXBRG_COL_NUM:
                 d = bandmapSpot->dxBrg;
+            break;
+            case DXSPOT_MODE_COL_NUM:
+                d = bandmapSpot->dxMode;
             break;
             case SPOT_CALL_COL_NUM:
                 d = bandmapSpot->spotterCall;
@@ -171,7 +184,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->sentToMemory;
             break;
             case DXBANDMASK_COL_NUM:
-                d = bandmapSpot->dxFreqMaskStr;
+                d = bandmapSpot->dxBandMaskStr;
             break;
             case DXMODEMASK_COL_NUM:
                 d = bandmapSpot->dxModeMaskStr;
@@ -216,11 +229,17 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             case FREQ_COL_NUM:
                 bandmapSpot->dxFreqStr = value.toString();
             break;
+            case DXBANDSTR_COL_NUM:
+                bandmapSpot->dxBand = value.toString();
+            break;
             case DXSPOT_CALL_COL_NUM:
                 bandmapSpot->dxCall = value.toString();
             break;
             case DXSPOT_CALL_WORKED_COL_NUM:
                 bandmapSpot->dxCallWorked = value.toBool();
+            break;
+            case DXSPOT_MODE_COL_NUM:
+                bandmapSpot->dxMode =value.toString();
             break;
             case DXLOC_COL_NUM:
                 bandmapSpot->dxLocator = value.toString();

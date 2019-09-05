@@ -30,7 +30,7 @@
 #include "bandmapfreqdial.h"
 #include "bandmapdatamodel.h"
 #include "bandmapclientfilterdialog.h"
-#include "bandmapspotfilterproxymodel.h"
+
 
 
 namespace Ui {
@@ -67,6 +67,7 @@ private:
 
     QTimer* purgeTimer;
     QTimer* checkNewSpotsTimer;
+    QTimer* checkNewFilters;
 
     // cluster spots
     QVector<QString> spotQueue;
@@ -75,7 +76,7 @@ private:
     QItemSelectionModel *selectionModel;
     QGraphicsView* bandmapGraphicsView;
 
-    BandmapSpotFilterProxyModel* bandmapSpotProxyModel;
+    QSortFilterProxyModel* bandmapSpotProxyModel;
     BandmapClientFilterDialog* filterSetup;
 
     QString sfreq;
@@ -134,6 +135,9 @@ private slots:
      void clearSpotActionSelected();
      void sendBrgToRot(QString brg);
      void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq);
+     void filterButtonSelected();
+     void checkSavedFilters();
+     void onMenuShow();
 };
 
 #endif // BANDMAPCLIENTFRAME_H

@@ -19,7 +19,7 @@ SpotData::SpotData()
 }
 
 SpotData::SpotData(qint64 _rxTime, QString _spotTime,
-                   QString _dxFreq, QString _dxFreqMaskStr,
+                   QString _dxFreq, QString _dxBandStr, QString _dxBandMask,
                    QString _dxMode, QString _dxModeMaskStr,
                    QString _dxCall, bool _dxCallWorked,
                    QString _dxLocator, bool _dxLocatorWorked,
@@ -31,7 +31,8 @@ SpotData::SpotData(qint64 _rxTime, QString _spotTime,
     rxTime = _rxTime;
     spotTime = _spotTime;
     dxFreq = _dxFreq;
-    dxFreqMaskStr = _dxFreqMaskStr;
+    dxBandStr = _dxBandStr;
+    dxBandMask = _dxBandMask;
     dxMode = _dxMode;
     dxModeMaskStr = _dxModeMaskStr;
     dxCall = _dxCall;
@@ -52,7 +53,8 @@ void SpotData::operator = (const SpotData& spd)
     rxTime = spd.rxTime;
     spotTime = spd.spotTime;
     dxFreq = spd.dxFreq;
-    dxFreqMaskStr = spd.dxFreqMaskStr;
+    dxBandStr = spd.dxBandStr;
+    dxBandMask = spd.dxBandMask;
     dxMode = spd.dxMode;
     dxModeMaskStr = spd.dxModeMaskStr;
     dxCall = spd.dxCall;

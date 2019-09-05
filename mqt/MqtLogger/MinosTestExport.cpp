@@ -379,37 +379,62 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
 }
 void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
 {
-    MinosItem<ClusterClientFilterSettings> filter = ct->clusterFilterSettings;
-    if (filter.isDirty())
+    MinosItem<ClusterClientFilterSettings> clusterFilter = ct->clusterFilterSettings;
+    if (clusterFilter.isDirty())
     {
         RPCParamStruct * st = new RPCParamStruct;
         makeHeader( st, 1 );
 
-        st->addMember(filter.getValue().callsignFilterList, "callsignList");
-        st->addMember(filter.getValue().locatorFilterList, "locatorList");
-        st->addMember(filter.getValue().bandFilter50Mhz, "bandFilter50Mhz");
-        st->addMember(filter.getValue().bandFilter70Mhz, "bandFilter70Mhz");
-        st->addMember(filter.getValue().bandFilter144Mhz, "bandFilter144Mhz");
-        st->addMember(filter.getValue().bandFilter432Mhz, "bandFilter432Mhz");
-        st->addMember(filter.getValue().bandFilter1296Mhz, "bandFilter1296Mhz");
-        st->addMember(filter.getValue().bandFilter2300Mhz, "bandFilter2300Mhz");
-        st->addMember(filter.getValue().bandFilter3_4Ghz, "bandFilter3_4Ghz");
-        st->addMember(filter.getValue().bandFilter5_6Ghz, "bandFilter5_6Ghz");
-        st->addMember(filter.getValue().bandFilter10Ghz, "bandFilter10Ghz");
-        st->addMember(filter.getValue().modeFilterCW, "modeFilterCW");
-        st->addMember(filter.getValue().modeFilterUSBMODE, "modeFilterUSBMODE");
-        st->addMember(filter.getValue().modeFilterFMMODE, "modeFilterFMMODE");
-        st->addMember(filter.getValue().modeFilterRTTYMODE, "modeFilterRTTYMODE");
-        st->addMember(filter.getValue().modeFilterPSK31MODE, "modeFilterPSK31MODE");
-        st->addMember(filter.getValue().modeFilterFT8MODE, "modeFilterFT8MODE");
-        st->addMember(filter.getValue().modeFilterMSK144MODE, "modeFilterMSK144MODE");
-        st->addMember(filter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
+        st->addMember(clusterFilter.getValue().callsignFilterList, "callsignList");
+        st->addMember(clusterFilter.getValue().locatorFilterList, "locatorList");
+        st->addMember(clusterFilter.getValue().bandFilter50Mhz, "bandFilter50Mhz");
+        st->addMember(clusterFilter.getValue().bandFilter70Mhz, "bandFilter70Mhz");
+        st->addMember(clusterFilter.getValue().bandFilter144Mhz, "bandFilter144Mhz");
+        st->addMember(clusterFilter.getValue().bandFilter432Mhz, "bandFilter432Mhz");
+        st->addMember(clusterFilter.getValue().bandFilter1296Mhz, "bandFilter1296Mhz");
+        st->addMember(clusterFilter.getValue().bandFilter2300Mhz, "bandFilter2300Mhz");
+        st->addMember(clusterFilter.getValue().bandFilter3_4Ghz, "bandFilter3_4Ghz");
+        st->addMember(clusterFilter.getValue().bandFilter5_6Ghz, "bandFilter5_6Ghz");
+        st->addMember(clusterFilter.getValue().bandFilter10Ghz, "bandFilter10Ghz");
+        st->addMember(clusterFilter.getValue().modeFilterNONE, "modeFilterNONE");
+        st->addMember(clusterFilter.getValue().modeFilterCW, "modeFilterCW");
+        st->addMember(clusterFilter.getValue().modeFilterUSBMODE, "modeFilterUSBMODE");
+        st->addMember(clusterFilter.getValue().modeFilterFMMODE, "modeFilterFMMODE");
+        st->addMember(clusterFilter.getValue().modeFilterRTTYMODE, "modeFilterRTTYMODE");
+        st->addMember(clusterFilter.getValue().modeFilterPSK31MODE, "modeFilterPSK31MODE");
+        st->addMember(clusterFilter.getValue().modeFilterFT8MODE, "modeFilterFT8MODE");
+        st->addMember(clusterFilter.getValue().modeFilterMSK144MODE, "modeFilterMSK144MODE");
+        st->addMember(clusterFilter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
+        st->addMember(clusterFilter.getValue().modeFilterNONE, "modeFilterNONEMODE");
 
         sendRequest(expfd, "MinosClusterFilter", st);
 
     }
 }
 
+void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
+{
+    MinosItem<BandmapClientFilterSettings> bandmapFilter = ct->bandmapFilterSettings;
+    if (bandmapFilter.isDirty())
+    {
+        RPCParamStruct * st = new RPCParamStruct;
+        makeHeader( st, 1 );
+
+        st->addMember(bandmapFilter.getValue().modeFilterNONE, "modeFilterNONE");
+        st->addMember(bandmapFilter.getValue().modeFilterCW, "modeFilterCW");
+        st->addMember(bandmapFilter.getValue().modeFilterUSBMODE, "modeFilterUSBMODE");
+        st->addMember(bandmapFilter.getValue().modeFilterFMMODE, "modeFilterFMMODE");
+        st->addMember(bandmapFilter.getValue().modeFilterRTTYMODE, "modeFilterRTTYMODE");
+        st->addMember(bandmapFilter.getValue().modeFilterPSK31MODE, "modeFilterPSK31MODE");
+        st->addMember(bandmapFilter.getValue().modeFilterFT8MODE, "modeFilterFT8MODE");
+        st->addMember(bandmapFilter.getValue().modeFilterMSK144MODE, "modeFilterMSK144MODE");
+        st->addMember(bandmapFilter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
+        st->addMember(bandmapFilter.getValue().modeFilterNONE, "modeFilterNONEMODE");
+
+        sendRequest(expfd, "MinosBandmapFilter", st);
+
+    }
+}
 
 
 
@@ -518,6 +543,7 @@ int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bo
    exportAllMemories(minosContestFile);
    exportStackDisplay(minosContestFile);
    exportClusterFilter(minosContestFile);
+   exportBandmapFilter(minosContestFile);
 
    return exp_stanzaCount;
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
-    <height>348</height>
+    <width>367</width>
+    <height>349</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -148,24 +148,17 @@
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout">
+             <item row="3" column="1">
+              <widget class="QCheckBox" name="jt65ModeChkBox">
+               <property name="text">
+                <string>JT65</string>
+               </property>
+              </widget>
+             </item>
              <item row="2" column="0">
               <widget class="QCheckBox" name="fmModeChkBox">
                <property name="text">
                 <string>FM</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="cwModeChkBox">
-               <property name="text">
-                <string>CW</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="0">
-              <widget class="QCheckBox" name="rttyModeChkBox">
-               <property name="text">
-                <string>RTTY</string>
                </property>
               </widget>
              </item>
@@ -176,6 +169,20 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="1">
+              <widget class="QCheckBox" name="ft8ModeChkBox">
+               <property name="text">
+                <string>FT8</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cwModeChkBox">
+               <property name="text">
+                <string>CW</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="1">
               <widget class="QCheckBox" name="psk31ModeChkBox">
                <property name="text">
@@ -183,10 +190,10 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QCheckBox" name="ft8ModeChkBox">
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="rttyModeChkBox">
                <property name="text">
-                <string>FT8</string>
+                <string>RTTY</string>
                </property>
               </widget>
              </item>
@@ -197,10 +204,10 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
-              <widget class="QCheckBox" name="jt65ModeChkBox">
+             <item row="4" column="0">
+              <widget class="QCheckBox" name="noneModeChkBox">
                <property name="text">
-                <string>JT65</string>
+                <string>Mode None</string>
                </property>
               </widget>
              </item>

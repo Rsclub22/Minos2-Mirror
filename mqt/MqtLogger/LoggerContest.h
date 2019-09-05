@@ -125,6 +125,9 @@ class LoggerContestLog : public BaseContestLog
       MinosItem<ClusterClientFilterSettings> clusterFilterSettings;
       bool clusterFilterSettingsExist;
 
+      MinosItem<BandmapClientFilterSettings> bandmapFilterSettings;
+      bool bandmapFilterSettingsExist;
+
       QDateTime lastSpotTabTime;
       QDateTime lastCallsignTabTime;
       QDateTime lastLocatorTabTime;
@@ -148,10 +151,14 @@ class LoggerContestLog : public BaseContestLog
       void saveInitialRunMemory(int memno, const memoryData::memData &mem);
       void saveInitialRigMemory(int memno, const memoryData::memData &mem);
       memoryData::memData getRigMemoryData(int memoryNumber);
+
       void saveClusterFilter(const ClusterClientFilterSettings &ccfs);
       void saveInitialClusterFilter(const ClusterClientFilterSettings &ccfs);
       ClusterClientFilterSettings getClusterFilter();
 
+      void saveBandmapFilter(const BandmapClientFilterSettings &bcfs);
+      void saveInitialBandmapFilter(const BandmapClientFilterSettings &bcfs);
+      BandmapClientFilterSettings getBandmapFilter();
 
       // dirty info is only relevant when it is being editted
       // but needs to stay with the data

@@ -26,8 +26,8 @@ enum allBandOffsets {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10
 const QStringList clusterBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
 
-enum allModeOffsets {CWMODE, PHONEMODE, FM_MODE, RTTYMODE, PSKMODE, FT8_MODE, MSK144_MODE, JT65_MODE};
-const QStringList clusterModes = QStringList() << "CW" << "USB" << "FM" << "RTTY" << "PSK31" << "FT8" << "MSK144" << "JT65";
+enum allModeOffsets {NO_MODE, CW_MODE, USB_MODE, FM_MODE, RTTY_MODE, PSK31_MODE, FT8_MODE, MSK144_MODE, JT65_MODE};
+const QStringList clusterModes = QStringList() << "None" << "CW" << "USB" << "FM" << "RTTY" << "PSK31" << "FT8" << "MSK144" << "JT65";
 
 
 
@@ -69,13 +69,14 @@ const int DXLOC_WORKED_COL_NUM = 8;
 const int SPOT_CALL_COL_NUM = 9;
 const int SPOTLOC_COL_NUM = 10;
 const int COMMENT_COL_NUM = 11;
-const int DXBANDMASK_COL_NUM = 12;
-const int DXMODEMASK_COL_NUM = 13;
-const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 14;
-const int DXSPOT_PROP_MODE_COL_NUM = 15;
-const int RXTIME_COL_NUM = 16;
-const int SPOT_TYPE_COL_NUM = 17;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 18;    // used in bandmap
+const int DXBANDSTR_COL_NUM = 12;
+const int DXBANDMASK_COL_NUM = 13;
+const int DXMODEMASK_COL_NUM = 14;
+const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 15;
+const int DXSPOT_PROP_MODE_COL_NUM = 16;
+const int RXTIME_COL_NUM = 17;
+const int SPOT_TYPE_COL_NUM = 18;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 19;    // used in bandmap
 
 
 
@@ -156,6 +157,7 @@ public:
         bandFilter3_4Ghz(false),
         bandFilter5_6Ghz(false),
         bandFilter10Ghz(false),
+        modeFilterNONE(false),
         modeFilterCW(false),
         modeFilterUSBMODE(false),
         modeFilterFMMODE(false),
@@ -169,10 +171,6 @@ public:
 
     }
 
-// search for data in cluster comments
-    QStringList propFilterStrings = {"TR", "ES", "MS", "EME"};
-    QStringList modeFilterStrings = {"CW","USB", "RTTY", "PSK31", "FM", "FT8", "MSK144", "FSK441"};
-
 
     // note the list of callsign and locator filters strings are stored as QString for saving to contest.
 
@@ -185,7 +183,7 @@ public:
                                  &bandFilter432Mhz, &bandFilter1296Mhz, &bandFilter2300Mhz,
                                  &bandFilter3_4Ghz, &bandFilter5_6Ghz, &bandFilter10Ghz};
 
-    QList<bool*> modeFilters = { &modeFilterCW, &modeFilterUSBMODE, &modeFilterFMMODE,
+    QList<bool*> modeFilters = { &modeFilterNONE, &modeFilterCW, &modeFilterUSBMODE, &modeFilterFMMODE,
                                  &modeFilterRTTYMODE, &modeFilterPSK31MODE, &modeFilterFT8MODE,
                                 &modeFilterMSK144MODE, &modeFilterJT65MODE};
 
@@ -200,6 +198,7 @@ public:
     bool bandFilter5_6Ghz;
     bool bandFilter10Ghz;
 
+    bool modeFilterNONE;
     bool modeFilterCW;
     bool modeFilterUSBMODE;
     bool modeFilterFMMODE;
@@ -295,6 +294,7 @@ void operator= (const ClusterClientFilterSettings& ccfs)
     bandFilter3_4Ghz = ccfs.bandFilter3_4Ghz;
     bandFilter5_6Ghz = ccfs.bandFilter5_6Ghz;
     bandFilter10Ghz = ccfs.bandFilter10Ghz;
+    modeFilterNONE = ccfs.modeFilterNONE;
     modeFilterCW = ccfs.modeFilterCW;
     modeFilterUSBMODE = ccfs.modeFilterUSBMODE;
     modeFilterFMMODE = ccfs.modeFilterFMMODE;
@@ -320,6 +320,7 @@ bool operator==( const ClusterClientFilterSettings& ccfs ) const
          bandFilter3_4Ghz == ccfs.bandFilter3_4Ghz &&
          bandFilter5_6Ghz == ccfs.bandFilter5_6Ghz &&
          bandFilter10Ghz == ccfs.bandFilter10Ghz &&
+         modeFilterNONE == ccfs.modeFilterNONE &&
          modeFilterCW == ccfs.modeFilterCW &&
          modeFilterUSBMODE == ccfs.modeFilterUSBMODE &&
          modeFilterFMMODE == ccfs.modeFilterFMMODE &&
@@ -377,6 +378,152 @@ QStringList unpackFilterList(QString &sl)
 
 };
 
+
+
+class BandmapClientFilterSettings
+{
+
+public:
+    BandmapClientFilterSettings() :
+
+        modeFilterNONE(false),
+        modeFilterCW(false),
+        modeFilterUSBMODE(false),
+        modeFilterFMMODE(false),
+        modeFilterRTTYMODE(false),
+        modeFilterPSK31MODE(false),
+        modeFilterFT8MODE(false),
+        modeFilterMSK144MODE(false),
+        modeFilterJT65MODE(false)
+    {
+
+
+    }
+
+
+
+
+    QList<bool*> modeFilters = { &modeFilterNONE, &modeFilterCW, &modeFilterUSBMODE, &modeFilterFMMODE,
+                                 &modeFilterRTTYMODE, &modeFilterPSK31MODE, &modeFilterFT8MODE,
+                                &modeFilterMSK144MODE, &modeFilterJT65MODE};
+
+
+
+    bool modeFilterNONE;
+    bool modeFilterCW;
+    bool modeFilterUSBMODE;
+    bool modeFilterFMMODE;
+    bool modeFilterRTTYMODE;
+    bool modeFilterPSK31MODE;
+    bool modeFilterFT8MODE;
+    bool modeFilterMSK144MODE;
+    bool modeFilterJT65MODE;
+
+
+
+
+void setAllModeFilters(QList<bool> mfl)
+{
+    for (int i = 0; i < mfl.count(); i++)
+    {
+        *modeFilters[i] = mfl[i];
+
+    }
+}
+
+
+bool getModeFilter(int mode)
+{
+    if (mode >= 0 && mode < modeFilters.count())
+    {
+        return *modeFilters[mode];
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void setModeFilter(bool setting, int band)
+{
+    *modeFilters[band] = setting;
+}
+
+void operator= (const BandmapClientFilterSettings& bcfs)
+{
+
+    modeFilterNONE = bcfs.modeFilterNONE;
+    modeFilterCW = bcfs.modeFilterCW;
+    modeFilterUSBMODE = bcfs.modeFilterUSBMODE;
+    modeFilterFMMODE = bcfs.modeFilterFMMODE;
+    modeFilterRTTYMODE = bcfs.modeFilterRTTYMODE;
+    modeFilterPSK31MODE = bcfs.modeFilterPSK31MODE;
+    modeFilterFT8MODE = bcfs.modeFilterFT8MODE;
+    modeFilterMSK144MODE = bcfs.modeFilterMSK144MODE;
+    modeFilterJT65MODE = bcfs.modeFilterJT65MODE;
+
+}
+
+
+bool operator==( const BandmapClientFilterSettings& bcfs ) const
+{
+    if ( modeFilterNONE == bcfs.modeFilterNONE &&
+         modeFilterCW == bcfs.modeFilterCW &&
+         modeFilterUSBMODE == bcfs.modeFilterUSBMODE &&
+         modeFilterFMMODE == bcfs.modeFilterFMMODE &&
+         modeFilterRTTYMODE == bcfs.modeFilterRTTYMODE &&
+         modeFilterPSK31MODE == bcfs.modeFilterPSK31MODE &&
+         modeFilterFT8MODE == bcfs.modeFilterFT8MODE &&
+         modeFilterMSK144MODE == bcfs.modeFilterMSK144MODE &&
+         modeFilterJT65MODE == bcfs.modeFilterJT65MODE)
+    {
+        return true;
+    }
+
+    return false;
+
+}
+
+
+bool operator!=( const BandmapClientFilterSettings& ccfs ) const
+{
+    return !(*this == ccfs);
+}
+
+QString packFilterList(QStringList l)
+{
+    QString s;
+    for (int i = 0; i < l.count(); i++)
+    {
+        if (i != l.count() - 1)
+        {
+            QString t = l[i].append(FILTER_DELIMITER);
+            s.append(t);
+        }
+        else
+        {
+            s.append(l[i]);  // last string
+        }
+    }
+    return s;
+}
+
+
+QStringList unpackFilterList(QString &sl)
+{
+    QStringList fl;
+    if (sl.isEmpty())
+    {
+        return fl;
+    }
+    else
+    {
+       fl = sl.split(FILTER_DELIMITER);
+    }
+    return fl;
+}
+
+};
 
 
 #endif // CLUSTERCOMMON_H

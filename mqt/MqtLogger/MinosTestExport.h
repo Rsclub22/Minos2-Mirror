@@ -40,6 +40,7 @@ class MinosTestExport
       int exportStackDisplay(QSharedPointer<QFile> expfd);
       void exportAllMemories(QSharedPointer<QFile> expfd);
       void exportClusterFilter(QSharedPointer<QFile> expfd);
+      void exportBandmapFilter(QSharedPointer<QFile> expfd);
       void exportAllClusterFilters(QSharedPointer<QFile> expfd );
    public:
       MinosTestExport( LoggerContestLog * const ct );
