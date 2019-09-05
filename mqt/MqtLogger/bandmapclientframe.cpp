@@ -120,6 +120,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     checkNewFilters = new QTimer(this);
     connect (checkNewFilters, SIGNAL(timeout()), this, SLOT(checkSavedFilters()));
 
+
+
     spotsMenu = new QMenu(ui->actionsButton);
 
     ui->actionsButton->setFocusPolicy(Qt::NoFocus);
@@ -146,6 +148,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect( logAction, SIGNAL( triggered() ), this, SLOT(logActionSelected()) );
     connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
+
+    connect(filterSetup, SIGNAL(filtersChanged(bool)), this, SLOT(on_FitersChanged(bool)));
 
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
 
@@ -199,6 +203,15 @@ void BandmapClientFrame::on_freqActionSelected()
 void BandmapClientFrame::onMenuShow()
 {
 
+}
+
+
+void BandmapClientFrame::on_FitersChanged(bool state)
+{
+    if (state)
+    {
+        bandmapView->bandmapUpdate();
+    }
 }
 
 void BandmapClientFrame::sendFreqToRig(QString freq)
@@ -669,6 +682,7 @@ void BandmapClientFrame::checkSavedFilters()
         if (bfs != filterSetup->filterSettings)
         {
             filterSetup->filterSettings = bfs;
+
         }
     }
 }

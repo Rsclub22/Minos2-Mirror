@@ -546,9 +546,10 @@ void BandmapView::drawBandMapSpots()
         return;
     }
 
-
+    trace(QString("Bandmap Drawspots: Start Drawing"));
     if (!listOfMarkers.isEmpty())
     {
+        trace(QString("Bandmap Drawspots: Remove %1 markers").arg(listOfMarkers.count()));
         for (int i = 0; i < listOfMarkers.count(); i++)
         {
             if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
@@ -604,83 +605,84 @@ void BandmapView::drawBandMapSpots()
 
     if (numrows != 0)
     {
+        trace(QString("Bandmap Drawspots: Number of Rows to Check = %1").arg(numrows));
         for (int row = 0; row < numrows; ++row)
         {
-
+            trace(QString("Bandmap Drawspots: Row = %1").arg(row));
             // check mode against the filter settings
-            if (!matchMode(row))
+            if (matchMode(row))
             {
-                return;
-            }
 
-            QModelIndex index = model()->index(row, FREQ_COL_NUM);
-            QString freq = model()->data(index, Qt::DisplayRole).toString().remove('.');
-            trace(QString("bandmapView: marker freq = %1").arg(freq));
-            qint64 f_int64 = freq.toLongLong();
-            qint32 f_int32 = freq.toLong();
+                QModelIndex index = model()->index(row, FREQ_COL_NUM);
+                QString freq = model()->data(index, Qt::DisplayRole).toString().remove('.');
+                trace(QString("Bandmap Drawspots: marker freq = %1").arg(freq));
+                qint64 f_int64 = freq.toLongLong();
+                qint32 f_int32 = freq.toLong();
 
-            if (f_int32 >= startFreq * 1000 && f_int32 <= endFreq * 1000)
-            {
-                yCoord = dial->getYCoordOnDial(f_int64);
-                trace(QString("bandmapView: cursor Freq = %1").arg(f_int64));
-                trace(QString("bandmapView: cursor Freq y coord = %1").arg(yCoord));
-                for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
+                if (f_int32 >= startFreq * 1000 && f_int32 <= endFreq * 1000)
                 {
-                    int fontOffset;
-                    if (markNum == 0)
+                    yCoord = dial->getYCoordOnDial(f_int64);
+                    trace(QString("Bandmap Drawspots: spot freq within scale"));
+                    trace(QString("Bandmap Drawspots: cursor Freq = %1").arg(f_int64));
+                    trace(QString("Bandmap Drawspots: cursor Freq y coord = %1").arg(yCoord));
+                    for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
                     {
-                        fontOffset = 0;
-                    }
-                    else
-                    {
-                        fontOffset = fontHeight;
-                    }
-
-                    if (listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontOffset  >= yCoord && markNum != 0)
-                    {
-                        if (listOfMarkers[markNum]->getSpotMarkerPtr() == nullptr)
+                        int fontOffset;
+                        if (markNum == 0)
                         {
-                            //index = model()->index(row, DXSPOT_CALL_COL_NUM);
-                            //QString callsign = model()->data(index, Qt::DisplayRole).toString();
-                            //trace(QString("bandmapView: addmarker = %1").arg(callsign));
-
-                            QPoint spotCoord = QPoint(listOfMarkers[markNum]->getSpotMarkerCoord().x(), listOfMarkers[markNum]->getSpotMarkerCoord().y());
-                            BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
-                            trace(QString("bandmapView: spot coord x = %1 y = %2").arg(listOfMarkers[markNum]->getSpotMarkerCoord().x()).arg(listOfMarkers[markNum]->getSpotMarkerCoord().y()));
-
-                            bandmapScene->addItem(spot);
-                            QString spotMsg = assembleSpotMsg(row);
-                            QRectF spotRect = calculateSpotRect(spotMsg, spotCoord);
-                            spot->setSpotText(spotMsg);
-                            spot->setToolTipText(assembleToolTip(row, freq));
-                            listOfMarkers[markNum]->setSpotMarkerPtr(spot);
-
-                            QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight);
-                            trace(QString("bandmapView: marker start coord x = %1 y = %2").arg(dialWidth + SPOTMARKER_XOFFSET).arg(listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight));
-                            trace(QString("bandmapView: font addition = %1").arg(fontHeight));
-                            QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
-                            trace(QString("bandmapView: marker end coord x = %1 y = %2").arg(dialWidth).arg(yCoord + dialData::DIAL_VERT_OFFSET));
-
-                            QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
-                            QLineF markerLineCoordsF = QLineF(markerLineCoord);
-
-                            QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
-                            bandmapScene->addItem(markerLine);
-
-                            listOfMarkers[markNum]->setMarkerLinePtr(markerLine);
-                            listOfMarkers[markNum]->setSpotRect(spotRect);
-                            //listOfMarkers[markNum]->setModelIndex() =
-                            listOfMarkers[markNum]->setModelRowNum(row);
-
-                            break;
+                            fontOffset = 0;
                         }
+                        else
+                        {
+                            fontOffset = fontHeight;
+                        }
+
+                        if (listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontOffset  >= yCoord && markNum != 0)
+                        {
+                            if (listOfMarkers[markNum]->getSpotMarkerPtr() == nullptr)
+                            {
+                                //index = model()->index(row, DXSPOT_CALL_COL_NUM);
+                                QString callsign = model()->data(index, Qt::DisplayRole).toString();
+                                trace(QString("Bandmap Drawspots: addmarker = %1").arg(callsign));
+
+                                QPoint spotCoord = QPoint(listOfMarkers[markNum]->getSpotMarkerCoord().x(), listOfMarkers[markNum]->getSpotMarkerCoord().y());
+                                BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
+                                trace(QString("Bandmap Drawspots: spot coord x = %1 y = %2").arg(listOfMarkers[markNum]->getSpotMarkerCoord().x()).arg(listOfMarkers[markNum]->getSpotMarkerCoord().y()));
+
+                                bandmapScene->addItem(spot);
+                                QString spotMsg = assembleSpotMsg(row);
+                                QRectF spotRect = calculateSpotRect(spotMsg, spotCoord);
+                                spot->setSpotText(spotMsg);
+                                spot->setToolTipText(assembleToolTip(row, freq));
+                                listOfMarkers[markNum]->setSpotMarkerPtr(spot);
+
+                                QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight);
+                                trace(QString("Bandmap Drawspots: marker start coord x = %1 y = %2").arg(dialWidth + SPOTMARKER_XOFFSET).arg(listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight));
+                                trace(QString("Bandmap Drawspots: font addition = %1").arg(fontHeight));
+                                QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
+                                trace(QString("Bandmap Drawspots: marker end coord x = %1 y = %2").arg(dialWidth).arg(yCoord + dialData::DIAL_VERT_OFFSET));
+
+                                QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
+                                QLineF markerLineCoordsF = QLineF(markerLineCoord);
+
+                                QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
+                                bandmapScene->addItem(markerLine);
+
+                                listOfMarkers[markNum]->setMarkerLinePtr(markerLine);
+                                listOfMarkers[markNum]->setSpotRect(spotRect);
+                                //listOfMarkers[markNum]->setModelIndex() =
+                                listOfMarkers[markNum]->setModelRowNum(row);
+
+                                break;
+                            }
+
+                        }
+
                     }
+
                 }
 
-
-
-
-            }
+              }
 
 
         }
@@ -695,13 +697,20 @@ bool BandmapView::matchMode(int sourceRow)
 {
     bool ok = false;
     int modeMask = model()->data(model()->index(sourceRow, DXMODEMASK_COL_NUM), BMP_DataStoredRole).toString().toInt(&ok);
+    QString callsign = model()->data(model()->index(sourceRow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+    QString freq = model()->data(model()->index(sourceRow, FREQ_COL_NUM), BMP_DataStoredRole).toString();
+    QString mode = model()->data(model()->index(sourceRow, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
+    trace(QString("Bandmap matchMode - Callsign = %1, freq. = %2, mode = %3, modemask = %4").arg(callsign).arg(freq).arg(mode).arg(QString::number(modeMask)));
     if (ok and modeMask >=0)
     {
+        trace(QString("Bandmap matchMode - mode match ok"));
         return filterSetup->filterSettings.getModeFilter(modeMask);
     }
     else
     {
+        trace(QString("Bandmap matchMode - no mode match"));
         return false;
+
     }
 
 }
@@ -746,7 +755,7 @@ QString BandmapView::assembleSpotMsg(int row)
         msg = QString("<div style='background:rgba(200, 200, 200, 75%);'>" + msg + QString("</div<"));           // show selected
 
     }
-    qDebug() << "spot = " << msg;
+
     return msg;
 
 }

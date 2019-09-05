@@ -138,6 +138,8 @@ private slots:
      void filterButtonSelected();
      void checkSavedFilters();
      void onMenuShow();
+
+     void on_FitersChanged(bool state);
 };
 
 #endif // BANDMAPCLIENTFRAME_H
