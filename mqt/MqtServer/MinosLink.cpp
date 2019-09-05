@@ -196,8 +196,8 @@ void MinosCommonConnection::on_readyRead()
           rxbuff[ rxlen ] = 0;
 
           // We might have embedded nulls between message parts - so strip them
-          int rxpt = 0;
-          while ( rxpt < rxlen )
+          size_t rxpt = 0;
+          while ( rxpt < static_cast<size_t>(rxlen) )
           {
              size_t ptlen = strlen( &rxbuff[ rxpt ] );
              if ( ptlen )
