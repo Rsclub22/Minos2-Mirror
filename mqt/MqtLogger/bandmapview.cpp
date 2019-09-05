@@ -695,7 +695,7 @@ bool BandmapView::matchMode(int sourceRow)
 {
     bool ok = false;
     int modeMask = model()->data(model()->index(sourceRow, DXMODEMASK_COL_NUM), BMP_DataStoredRole).toString().toInt(&ok);
-    if (ok and modeMask >=0)
+    if (ok && modeMask >=0)
     {
         return filterSetup->filterSettings.getModeFilter(modeMask);
     }
