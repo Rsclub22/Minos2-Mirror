@@ -422,13 +422,9 @@ void ClusterClientFrame::filterButtonSelected()
 void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged)
 {
     //update views..
-    if (bandfilterChanged)
+    if (bandfilterChanged || modefilterChanged)
     {
         dxSpotProxyModel->setFilterRegExp("");
-    }
-    else if (modefilterChanged)
-    {
-
     }
     else if (callsignfilterChanged)
     {
