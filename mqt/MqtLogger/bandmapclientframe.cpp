@@ -194,11 +194,7 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 
 }
 
-void BandmapClientFrame::on_freqActionSelected()
-{
-    QString freq = "";
-    sendFreqToRig(freq);
-}
+
 
 void BandmapClientFrame::onMenuShow()
 {
@@ -214,6 +210,12 @@ void BandmapClientFrame::on_FitersChanged(bool state)
     }
 }
 
+void BandmapClientFrame::on_freqActionSelected()
+{
+    QString freq = selectedSpotData.dxFreqStr;
+    sendFreqToRig(freq);
+}
+
 void BandmapClientFrame::sendFreqToRig(QString freq)
 {
     QString f = freq.remove('.');
@@ -222,8 +224,8 @@ void BandmapClientFrame::sendFreqToRig(QString freq)
 
 void BandmapClientFrame::bearingActionSelected()
 {
-    QString brg = "";
-    QString loc = "";
+    QString brg = selectedSpotData.dxBrg;
+    QString loc = selectedSpotData.dxLocator;
     if (loc.count() < 6)
     {
         brg = brg.append(SHORTLOCATOR_IDENTIFIER);
@@ -245,13 +247,27 @@ void BandmapClientFrame::sendBrgToRot(QString brg)
 
 void BandmapClientFrame::logActionSelected()
 {
+    memoryData::memData spotData;
+    spotData.callsign = selectedSpotData.dxCall;
+    spotData.time = selectedSpotData.spotTime;
+    spotData.freq = selectedSpotData.dxFreqStr;
+    spotData.locator = selectedSpotData.dxLocator;
+    spotData.bearing = selectedSpotData.dxBrg.toInt();
 
+    MinosLoggerEvents::SendSpotToLog(spotData);
 }
 
 
 void BandmapClientFrame::memoryActionSelected()
 {
+    memoryData::memData spotData;
+    spotData.callsign = selectedSpotData.dxCall;
+    spotData.time = selectedSpotData.spotTime;
+    spotData.freq = selectedSpotData.dxFreqStr;
+    spotData.locator = selectedSpotData.dxLocator;
+    spotData.bearing = selectedSpotData.dxBrg.toInt();
 
+    MinosLoggerEvents::SendSpotToMemory(spotData);
 }
 
 void BandmapClientFrame::clearSpotActionSelected()
