@@ -32,3 +32,10 @@ bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive)
     }
     return false;
 }
+
+qlonglong spotElapsedTime(qlonglong spotTime)
+{
+    qint64 curTime = QDateTime::currentMSecsSinceEpoch()/1000;  // currentSecsSinceEpoch only available since 5.8
+    qlonglong elapsedTime = curTime - spotTime;
+    return elapsedTime;
+}

@@ -776,13 +776,24 @@ QString BandmapView::assembleSpotMsg(int row)
     QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), Qt::DisplayRole).toString();
     QString dxDist = model()->data(model()->index(row, DXDIST_COL_NUM), Qt::DisplayRole).toString();
     QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), Qt::DisplayRole).toString();
+
+    qlonglong spotTime = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
+    bool olderThan3Min = spotTimedOut(spotTime, NEW_SPOT_TIME);
+
+    QString newSpotMsg = "";
+    if (!olderThan3Min)
+    {
+        newSpotMsg = HtmlFontColour(BANDMAP_NEW_COLOUR) + "New" +  HtmlFontColour(NOT_WORKED_COLOUR);
+    }
+
+
     QChar degSym = QChar(DEG_SYMBOL);
     if (dxBrg.isEmpty())
     {
         degSym = QChar(' ');
     }
 
-    QString msg = QString("%1  %2  %3  %4%5").arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym);
+    QString msg = QString("%1  %2  %3  %4%5 %6").arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(newSpotMsg);
 
     if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
     {
@@ -802,9 +813,12 @@ QString BandmapView::assembleToolTip(int row, QString freq)
     QString spotterLocator = model()->data(model()->index(row, SPOTLOC_COL_NUM), BMP_DataStoredRole).toString();
     QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), BMP_DataStoredRole).toString().replace('<', " (").replace('>', ") ");
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
-    QString elapsedTime = QString("0");
 
-    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] \nThe computed mode is %6\n%7").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTime).arg(computedMode).arg(spotterComment);
+    qlonglong spotTime = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
+    qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
+    QString elapsedTimeStr = QString::number(elapsedTime);
+
+    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] \nThe computed mode is %6\n%7").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTimeStr).arg(computedMode).arg(spotterComment);
 
     return msg;
 

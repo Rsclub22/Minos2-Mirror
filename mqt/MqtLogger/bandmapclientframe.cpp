@@ -76,6 +76,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
+    ui->bandmapFrameTitle->setText("Bandmap");
 
     int height = ui->bandmapGraphicsView->height();
     int width = ui->bandmapGraphicsView->width();
@@ -789,7 +790,7 @@ bool BandmapClientFrame::event(QEvent *event)
 {
     if (event->type() == QEvent::Enter)
     {
-        holdUpdateFlag = true;
+        setHoldUpdateFlag(true);
     }
     else if (event->type() == QEvent::Leave)
     {
@@ -798,7 +799,7 @@ bool BandmapClientFrame::event(QEvent *event)
         {
             checkNewBandMapSpots();
         }
-        holdUpdateFlag = false;
+        setHoldUpdateFlag(false);
 
     }
 
@@ -807,10 +808,21 @@ bool BandmapClientFrame::event(QEvent *event)
 }
 
 
+
+
+
 void BandmapClientFrame::setHoldUpdateFlag(bool state)
 {
 
     holdUpdateFlag = state;
+    if (state)
+    {
+        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse within frame!</font>");
+    }
+    else
+    {
+        ui->bandmapFrameTitle->setText("Bandmap");
+    }
 }
 
 
@@ -853,7 +865,7 @@ void BandmapClientFrame::mouseTimerCheckNewSpots()
 
 void BandmapClientFrame::purgeSpots()
 {
+    // don't purge spots when holdupdate flag is true
 
-
-
+    bandmapView->bandmapUpdate();
 }

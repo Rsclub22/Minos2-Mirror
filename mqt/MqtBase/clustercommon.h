@@ -93,6 +93,8 @@ const QRegExp SEARCH_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\
 const int MIN_TTL = 10;
 const int MAX_TTL = 180;
 
+const int NEW_SPOT_TIME = 3 * 60;  //seconds
+
 // cluster tab text colours
 const QColor CLUSTER_TAB_SELECT_COLOR = Qt::red;
 const QColor CLUSTER_TAB_NOT_SELECT_COLOR = Qt::black;
@@ -124,6 +126,7 @@ const QColor LOCATOR_WORKED_COLOUR = Qt::red;
 const QColor SPOT_TO_MEMORY = Qt::blue;
 const QColor NO_SPOT_TO_MEMORY = Qt::black;
 const QColor NOT_WORKED_COLOUR = Qt::black;
+const QColor BANDMAP_NEW_COLOUR = Qt::blue;
 
 // Callsign Edit Shortcuts
 const QString ADD_CALLSIGN_KEY = "Ctrl-a";
@@ -141,6 +144,8 @@ const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
 
 bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive);
+
+qlonglong spotElapsedTime(qlonglong spotTime);
 
 class ClusterClientFilterSettings
 {
