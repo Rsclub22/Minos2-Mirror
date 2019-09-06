@@ -110,7 +110,7 @@ const int PURGE_TIME = 1000 * 60 * 1;   // mins
 const int CHECKSPOTS_DURATION = 1000;
 const int CHECK_NEWFILTERS_DURATION = 1000;
 //const QStringList locatorSeperators = {"<", "tr", "-"};
-
+const int MOUSE_IN_FRAME_TIMEOUT = 10000;
 
 
 // Filter Change

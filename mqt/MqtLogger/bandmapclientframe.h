@@ -38,7 +38,7 @@ namespace Ui {
 }
 
 
-
+class BMP_MouseInObject;
 
 class BandmapClientFrame : public QFrame
 {
@@ -48,9 +48,15 @@ public:
     explicit BandmapClientFrame(QWidget* parent);
     ~BandmapClientFrame() override;
 
+    QTimer* mouseInFrameTimer;
 
     void setFreq(QString);
     void setContest(BaseContestLog *c);
+    void setHoldUpdateFlag(bool state);
+    bool isSpotQueueEmpty();
+    void buttonHandleDxSpots();
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseTimerCheckNewSpots();
 private:
 
     Ui::BandmapClientFrame *ui;
@@ -68,6 +74,10 @@ private:
     QTimer* purgeTimer;
     QTimer* checkNewSpotsTimer;
     QTimer* checkNewFilters;
+
+
+    BMP_MouseInObject* actionInObject;
+
 
     // cluster spots
     QVector<QString> spotQueue;
@@ -114,6 +124,7 @@ private:
     void sendFreqToRig(QString freq);
 
 
+    bool event(QEvent *event) override;
 protected:
 
 
@@ -140,6 +151,55 @@ private slots:
      void onMenuShow();
 
      void on_FitersChanged(bool state);
+     void purgeSpots();
 };
+
+
+
+class BMP_MouseInObject : public QObject
+{
+    Q_OBJECT
+public:
+    BMP_MouseInObject(QWidget *parent, BandmapClientFrame* frame)
+    {
+        Q_UNUSED(parent)
+        bandmapFrame = frame;
+    }
+
+
+
+
+    bool eventFilter(QObject *obj, QEvent *event)
+    {
+
+
+        if (event->type() == QEvent::Enter)
+     {
+            bandmapFrame->setHoldUpdateFlag(true);
+        }
+        else if (event->type() == QEvent::Leave)
+        {
+            bandmapFrame->mouseInFrameTimer->stop();
+            if (!bandmapFrame->isSpotQueueEmpty())
+            {
+                bandmapFrame->buttonHandleDxSpots();
+            }
+            bandmapFrame->setHoldUpdateFlag(false);
+
+        }
+
+        return QObject::eventFilter(obj, event);
+    }
+
+
+
+private:
+
+BandmapClientFrame* bandmapFrame;
+
+
+};
+
+
 
 #endif // BANDMAPCLIENTFRAME_H

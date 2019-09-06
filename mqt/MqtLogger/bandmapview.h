@@ -90,16 +90,6 @@ protected:
     QRegion visualRegionForSelection(const QItemSelection &selection) const override;
 
 
-    //void scrollContentsBy(int dx, int dy) override;
-
-    //void paintEvent(QPaintEvent*) override;
-    //void resizeEvent(QResizeEvent*) override;
-    //void mousePressEvent(QMouseEvent *event) override;
-    //void keyPressEvent(QKeyEvent *event) override;
-
-
-
-
 
 
 
@@ -107,11 +97,13 @@ private slots:
     void bandmapResize(int);
     void zoomUpdated(bool dir);
     void leftMouseButtonPressed(QPoint p);
-
+    void mouseDoubleClicked(QPoint p);
 
 
 
     void on_bandmap_customContextMenuRequested(const QPoint &p);
+
+    void on_nextSpot(bool nextFreqUpDown, bool nextMult);
 private:
 
     //Bandmap *bandmap;

@@ -77,9 +77,12 @@ void BandmapView::initBandmapView(QGraphicsView* view )
 
 
     //connect (dial, SIGNAL(dialupdated()), this, SLOT(drawBandMapSpots()));
-    connect (dial, SIGNAL(zoomUpdated(bool)), this, SLOT(zoomUpdated(bool)));
-    connect (bandmapGraphicsView, SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
-    connect (bandmapGraphicsView, SIGNAL(leftMouseButtonPressed(QPoint)), this, SLOT(leftMouseButtonPressed(QPoint)));
+    connect(dial, SIGNAL(zoomUpdated(bool)), this, SLOT(zoomUpdated(bool)));
+    connect(bandmapGraphicsView, SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
+    connect(bandmapGraphicsView, SIGNAL(leftMouseButtonPressed(QPoint)), this, SLOT(leftMouseButtonPressed(QPoint)));
+    connect(bandmapGraphicsView, SIGNAL(mouseDoubleClicked(QPoint)), this, SLOT(mouseDoubleClicked(QPoint)));
+    connect(bandmapGraphicsView, SIGNAL(zoomMap(bool)), this, SLOT(zoomUpdated(bool)));
+    connect(bandmapGraphicsView, SIGNAL(nextSpot(bool, bool)), this, SLOT(on_nextSpot(bool, bool)));
 
     bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( bandmapGraphicsView, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( on_bandmap_customContextMenuRequested( const QPoint& ) ) );
@@ -128,7 +131,11 @@ void BandmapView::zoomUpdated(bool dir)
 
 }
 
+void BandmapView::on_nextSpot(bool nextFreqUpDown, bool nextMult)
+{
+    qDebug() << "freqUpDown = " << nextFreqUpDown << "nextMult" << nextMult;
 
+}
 
 void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
@@ -180,6 +187,32 @@ void BandmapView::leftMouseButtonPressed(QPoint p)
     {
         bandmapSelectSpot(p);
     }
+}
+
+
+void BandmapView::mouseDoubleClicked(QPoint p)
+{
+    int spotNum = isClickInRegionOfSpot(p);
+
+    if (spotNum >= 0)
+    {
+        //clearSelectedSpot();    // clear any spot previously selected
+        //setSelectedSpot(spotNum);
+
+
+        memoryData::memData spotData;
+        spotData.callsign = selectedSpot.dxCall;
+        spotData.time = selectedSpot.spotTime;
+        spotData.freq = selectedSpot.dxFreqStr;
+        spotData.locator = selectedSpot.dxLocator;
+        spotData.bearing = selectedSpot.dxBrg.toInt();
+
+        MinosLoggerEvents::SendSpotToLog(spotData);
+
+
+    }
+
+
 }
 
 
@@ -448,6 +481,7 @@ void BandmapView::bandmapSelectSpot(QPoint p)
         clearSelectedSpot();       // clear any spot previously selected
         setSelectedSpot(spotNum);        // mark new selected spot
 
+        MinosLoggerEvents::SendFreqStrToRig(selectedSpot.dxFreqStr);
     }
     else
     {

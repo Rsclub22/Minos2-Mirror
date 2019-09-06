@@ -43,5 +43,35 @@ void BandmapGraphicsPanel::mouseDoubleClickEvent(QMouseEvent *event)
 
 void BandmapGraphicsPanel::keyPressEvent(QKeyEvent *event)
 {
+    int key = event->key();
+    Qt::KeyboardModifiers mods = event->modifiers();
+    //bool shift = mods & Qt::ShiftModifier;
+    bool ctrl = mods & Qt::ControlModifier;
+    bool alt = mods & Qt::AltModifier;
+
+    if (key == Qt::Key_Plus)
+    {
+        emit zoomMap(false);
+    }
+    else if (key == Qt::Key_Minus)
+    {
+        emit zoomMap(true);
+    }
+    else if (key == Qt::Key_Up && ctrl && alt)
+    {
+        emit nextSpot(true, true);
+    }
+    else if (key == Qt::Key_Down && ctrl && alt)
+    {
+        emit nextSpot(false, true);
+    }
+    else if (key == Qt::Key_Down && ctrl)
+    {
+        emit nextSpot(true, false);
+    }
+    else if (key == Qt::Key_Up && ctrl)
+    {
+        emit nextSpot(false, false);
+    }
 
 }

@@ -120,13 +120,14 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     checkNewFilters = new QTimer(this);
     connect (checkNewFilters, SIGNAL(timeout()), this, SLOT(checkSavedFilters()));
 
-
+    purgeTimer = new QTimer(this);
+    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
 
     spotsMenu = new QMenu(ui->actionsButton);
 
     ui->actionsButton->setFocusPolicy(Qt::NoFocus);
-    //actionInObject = new MouseInObject(this, this);
-    //spotsMenu->installEventFilter(actionInObject);
+    actionInObject = new BMP_MouseInObject(this, this);
+    spotsMenu->installEventFilter(actionInObject);
 
     freqAction = new QAction("Set &Freq", this);
     bearingAction = new QAction("Set &Bearing", this);
@@ -151,6 +152,12 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect(filterSetup, SIGNAL(filtersChanged(bool)), this, SLOT(on_FitersChanged(bool)));
 
+
+    this->setMouseTracking(true);
+    mouseInFrameTimer = new QTimer(this);
+    connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
+
+    purgeTimer->start(PURGE_TIME);
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
 
 
@@ -162,6 +169,7 @@ BandmapClientFrame::~BandmapClientFrame()
     delete ui;
     delete bandmapView;
     delete bandmapDataModel;
+    delete actionInObject;
 
 }
 
@@ -395,10 +403,6 @@ void BandmapClientFrame::dxSpots(QVector<QString> spotMsg)
     }
 
 
-    //if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
-    //{
-        //handleDxSpots(spotQueue);
-    //}
 
  }
 
@@ -778,5 +782,78 @@ void BandmapClientFrame::filterButtonSelected()
     filterSetup->copyModeFiltersToDialog();
 
     filterSetup->exec();
+
+}
+
+bool BandmapClientFrame::event(QEvent *event)
+{
+    if (event->type() == QEvent::Enter)
+    {
+        holdUpdateFlag = true;
+    }
+    else if (event->type() == QEvent::Leave)
+    {
+        mouseInFrameTimer->stop();
+        if (!spotQueue.isEmpty())
+        {
+            checkNewBandMapSpots();
+        }
+        holdUpdateFlag = false;
+
+    }
+
+
+    return QWidget::event(event);
+}
+
+
+void BandmapClientFrame::setHoldUpdateFlag(bool state)
+{
+
+    holdUpdateFlag = state;
+}
+
+
+bool BandmapClientFrame::isSpotQueueEmpty()
+{
+    return spotQueue.isEmpty();
+}
+
+void BandmapClientFrame::buttonHandleDxSpots()
+{
+    checkNewBandMapSpots();
+}
+
+void BandmapClientFrame::mouseMoveEvent(QMouseEvent *event)
+{
+    static QPoint mousePos = QPoint(0, 0);
+    if (holdUpdateFlag)
+    {
+       mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
+       if (mousePos != event->pos())
+       {
+           mousePos = event->pos();
+           mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
+       }
+    }
+
+}
+
+void BandmapClientFrame::mouseTimerCheckNewSpots()
+{
+    if (holdUpdateFlag)
+    {
+        if (!spotQueue.isEmpty())
+        {
+            checkNewBandMapSpots();
+        }
+        mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
+    }
+}
+
+void BandmapClientFrame::purgeSpots()
+{
+
+
 
 }

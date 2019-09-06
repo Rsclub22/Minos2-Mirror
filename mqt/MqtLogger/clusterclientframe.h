@@ -32,7 +32,7 @@ namespace Ui {
 enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 
 
-const int MOUSE_IN_FRAME_TIMEOUT = 10000;
+//const int MOUSE_IN_FRAME_TIMEOUT = 10000;
 //const int CHECKSPOTS_DURATION = 1000;
 //const int CHECK_NEWFILTERS_DURATION = 1000;
 
@@ -298,27 +298,27 @@ public:
 
 
 
-bool eventFilter(QObject *obj, QEvent *event)
-{
+    bool eventFilter(QObject *obj, QEvent *event)
+    {
 
 
-    if (event->type() == QEvent::Enter)
-    {
-        clusterFrame->setHoldUpdateFlag(true);
-    }
-    else if (event->type() == QEvent::Leave)
-    {
-        clusterFrame->mouseInFrameTimer->stop();
-        if (!clusterFrame->isSpotQueueEmpty())
-        {
-            clusterFrame->buttonHandleDxSpots();
+        if (event->type() == QEvent::Enter)
+     {
+            clusterFrame->setHoldUpdateFlag(true);
         }
-        clusterFrame->setHoldUpdateFlag(false);
+        else if (event->type() == QEvent::Leave)
+        {
+            clusterFrame->mouseInFrameTimer->stop();
+            if (!clusterFrame->isSpotQueueEmpty())
+            {
+                clusterFrame->buttonHandleDxSpots();
+            }
+            clusterFrame->setHoldUpdateFlag(false);
 
+        }
+
+        return QObject::eventFilter(obj, event);
     }
-
-    return QObject::eventFilter(obj, event);
-}
 
 
 
