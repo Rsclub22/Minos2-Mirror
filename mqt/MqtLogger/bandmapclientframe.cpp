@@ -865,7 +865,31 @@ void BandmapClientFrame::mouseTimerCheckNewSpots()
 
 void BandmapClientFrame::purgeSpots()
 {
-    // don't purge spots when holdupdate flag is true
+    if (timeToLive > 0 && !holdUpdateFlag /*&& (ct && ct == TContestApp::getContestApp()->getCurrentContest())*/)      // don't purge spots if == 0 and holdupdateflag is on
+    {
+        if (bandmapDataModel->rowCount() > 0)
+        {
+           purgeSpotFlag = true;
+           bandmapSpotType::SPOT_TYPE spotType;
+
+
+           int idx = bandmapDataModel->rowCount() - 1;
+           while (idx >= 0 && bandmapDataModel->rowCount() > 0)
+           {
+               spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(idx, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+               if (spotType == bandmapSpotType::CLUSTER)
+               {
+                   if (spotTimedOut(bandmapDataModel->data(bandmapDataModel->index(idx, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong(), timeToLive))
+                   {
+                         bandmapDataModel->removeRows(idx, 1, QModelIndex());
+                   }
+               }
+
+               idx--;
+           }
+           purgeSpotFlag = false;
+        }
+    }
 
     bandmapView->bandmapUpdate();
 }
