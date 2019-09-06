@@ -444,9 +444,9 @@ bool getModeFilter(int mode)
     }
 }
 
-void setModeFilter(bool setting, int band)
+void setModeFilter(bool setting, int mode)
 {
-    *modeFilters[band] = setting;
+    *modeFilters[mode] = setting;
 }
 
 void operator= (const BandmapClientFilterSettings& bcfs)
