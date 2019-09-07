@@ -735,7 +735,7 @@ bool BandmapView::matchMode(int sourceRow)
     QString freq = model()->data(model()->index(sourceRow, FREQ_COL_NUM), BMP_DataStoredRole).toString();
     QString mode = model()->data(model()->index(sourceRow, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     trace(QString("Bandmap matchMode - Callsign = %1, freq. = %2, mode = %3, modemask = %4").arg(callsign).arg(freq).arg(mode).arg(QString::number(modeMask)));
-    if (ok and modeMask >=0)
+    if (ok && modeMask >=0)
     {
         trace(QString("Bandmap matchMode - mode match ok"));
         return filterSetup->filterSettings.getModeFilter(modeMask);
