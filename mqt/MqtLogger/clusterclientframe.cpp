@@ -48,6 +48,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
+    ui->clusterClientFrameTitle->setText("Cluster");
+
     ui->clusterSplitter->setStretchFactor(0, 2);
     ui->clusterSplitter->setStretchFactor(1, 1);
 
@@ -422,13 +424,9 @@ void ClusterClientFrame::filterButtonSelected()
 void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged)
 {
     //update views..
-    if (bandfilterChanged)
+    if (bandfilterChanged || modefilterChanged)
     {
         dxSpotProxyModel->setFilterRegExp("");
-    }
-    else if (modefilterChanged)
-    {
-
     }
     else if (callsignfilterChanged)
     {
@@ -1537,7 +1535,7 @@ bool ClusterClientFrame::event(QEvent *event)
 {
     if (event->type() == QEvent::Enter)
     {
-        holdUpdateFlag = true;
+        setHoldUpdateFlag(true);
     }
     else if (event->type() == QEvent::Leave)
     {
@@ -1546,7 +1544,7 @@ bool ClusterClientFrame::event(QEvent *event)
         {
             handleDxSpots(spotQueue);
         }
-        holdUpdateFlag = false;
+        setHoldUpdateFlag(false);
 
     }
 
@@ -1559,6 +1557,14 @@ void ClusterClientFrame::setHoldUpdateFlag(bool state)
 {
 
     holdUpdateFlag = state;
+    if (state)
+    {
+        ui->clusterClientFrameTitle->setText("Cluster - <font color='Red'>Mouse within frame!</font>");
+    }
+    else
+    {
+        ui->clusterClientFrameTitle->setText("Cluster");
+    }
 }
 
 

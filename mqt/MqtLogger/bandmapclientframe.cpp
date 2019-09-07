@@ -76,6 +76,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
+    ui->bandmapFrameTitle->setText("Bandmap");
 
     int height = ui->bandmapGraphicsView->height();
     int width = ui->bandmapGraphicsView->width();
@@ -120,11 +121,14 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     checkNewFilters = new QTimer(this);
     connect (checkNewFilters, SIGNAL(timeout()), this, SLOT(checkSavedFilters()));
 
+    purgeTimer = new QTimer(this);
+    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
+
     spotsMenu = new QMenu(ui->actionsButton);
 
     ui->actionsButton->setFocusPolicy(Qt::NoFocus);
-    //actionInObject = new MouseInObject(this, this);
-    //spotsMenu->installEventFilter(actionInObject);
+    actionInObject = new BMP_MouseInObject(this, this);
+    spotsMenu->installEventFilter(actionInObject);
 
     freqAction = new QAction("Set &Freq", this);
     bearingAction = new QAction("Set &Bearing", this);
@@ -147,6 +151,14 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
 
+    connect(filterSetup, SIGNAL(filtersChanged(bool)), this, SLOT(on_FitersChanged(bool)));
+
+
+    this->setMouseTracking(true);
+    mouseInFrameTimer = new QTimer(this);
+    connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
+
+    purgeTimer->start(PURGE_TIME);
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
 
 
@@ -158,6 +170,7 @@ BandmapClientFrame::~BandmapClientFrame()
     delete ui;
     delete bandmapView;
     delete bandmapDataModel;
+    delete actionInObject;
 
 }
 
@@ -190,15 +203,26 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 
 }
 
-void BandmapClientFrame::on_freqActionSelected()
-{
-    QString freq = "";
-    sendFreqToRig(freq);
-}
+
 
 void BandmapClientFrame::onMenuShow()
 {
 
+}
+
+
+void BandmapClientFrame::on_FitersChanged(bool state)
+{
+    if (state)
+    {
+        bandmapView->bandmapUpdate();
+    }
+}
+
+void BandmapClientFrame::on_freqActionSelected()
+{
+    QString freq = selectedSpotData.dxFreqStr;
+    sendFreqToRig(freq);
 }
 
 void BandmapClientFrame::sendFreqToRig(QString freq)
@@ -209,8 +233,8 @@ void BandmapClientFrame::sendFreqToRig(QString freq)
 
 void BandmapClientFrame::bearingActionSelected()
 {
-    QString brg = "";
-    QString loc = "";
+    QString brg = selectedSpotData.dxBrg;
+    QString loc = selectedSpotData.dxLocator;
     if (loc.count() < 6)
     {
         brg = brg.append(SHORTLOCATOR_IDENTIFIER);
@@ -232,13 +256,27 @@ void BandmapClientFrame::sendBrgToRot(QString brg)
 
 void BandmapClientFrame::logActionSelected()
 {
+    memoryData::memData spotData;
+    spotData.callsign = selectedSpotData.dxCall;
+    spotData.time = selectedSpotData.spotTime;
+    spotData.freq = selectedSpotData.dxFreqStr;
+    spotData.locator = selectedSpotData.dxLocator;
+    spotData.bearing = selectedSpotData.dxBrg.toInt();
 
+    MinosLoggerEvents::SendSpotToLog(spotData);
 }
 
 
 void BandmapClientFrame::memoryActionSelected()
 {
+    memoryData::memData spotData;
+    spotData.callsign = selectedSpotData.dxCall;
+    spotData.time = selectedSpotData.spotTime;
+    spotData.freq = selectedSpotData.dxFreqStr;
+    spotData.locator = selectedSpotData.dxLocator;
+    spotData.bearing = selectedSpotData.dxBrg.toInt();
 
+    MinosLoggerEvents::SendSpotToMemory(spotData);
 }
 
 void BandmapClientFrame::clearSpotActionSelected()
@@ -366,10 +404,6 @@ void BandmapClientFrame::dxSpots(QVector<QString> spotMsg)
     }
 
 
-    //if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
-    //{
-        //handleDxSpots(spotQueue);
-    //}
 
  }
 
@@ -669,6 +703,7 @@ void BandmapClientFrame::checkSavedFilters()
         if (bfs != filterSetup->filterSettings)
         {
             filterSetup->filterSettings = bfs;
+
         }
     }
 }
@@ -749,4 +784,112 @@ void BandmapClientFrame::filterButtonSelected()
 
     filterSetup->exec();
 
+}
+
+bool BandmapClientFrame::event(QEvent *event)
+{
+    if (event->type() == QEvent::Enter)
+    {
+        setHoldUpdateFlag(true);
+    }
+    else if (event->type() == QEvent::Leave)
+    {
+        mouseInFrameTimer->stop();
+        if (!spotQueue.isEmpty())
+        {
+            checkNewBandMapSpots();
+        }
+        setHoldUpdateFlag(false);
+
+    }
+
+
+    return QWidget::event(event);
+}
+
+
+
+
+
+void BandmapClientFrame::setHoldUpdateFlag(bool state)
+{
+
+    holdUpdateFlag = state;
+    if (state)
+    {
+        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse within frame!</font>");
+    }
+    else
+    {
+        ui->bandmapFrameTitle->setText("Bandmap");
+    }
+}
+
+
+bool BandmapClientFrame::isSpotQueueEmpty()
+{
+    return spotQueue.isEmpty();
+}
+
+void BandmapClientFrame::buttonHandleDxSpots()
+{
+    checkNewBandMapSpots();
+}
+
+void BandmapClientFrame::mouseMoveEvent(QMouseEvent *event)
+{
+    static QPoint mousePos = QPoint(0, 0);
+    if (holdUpdateFlag)
+    {
+       mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
+       if (mousePos != event->pos())
+       {
+           mousePos = event->pos();
+           mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
+       }
+    }
+
+}
+
+void BandmapClientFrame::mouseTimerCheckNewSpots()
+{
+    if (holdUpdateFlag)
+    {
+        if (!spotQueue.isEmpty())
+        {
+            checkNewBandMapSpots();
+        }
+        mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
+    }
+}
+
+void BandmapClientFrame::purgeSpots()
+{
+    if (timeToLive > 0 && !holdUpdateFlag /*&& (ct && ct == TContestApp::getContestApp()->getCurrentContest())*/)      // don't purge spots if == 0 and holdupdateflag is on
+    {
+        if (bandmapDataModel->rowCount() > 0)
+        {
+           purgeSpotFlag = true;
+           bandmapSpotType::SPOT_TYPE spotType;
+
+
+           int idx = bandmapDataModel->rowCount() - 1;
+           while (idx >= 0 && bandmapDataModel->rowCount() > 0)
+           {
+               spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(idx, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+               if (spotType == bandmapSpotType::CLUSTER)
+               {
+                   if (spotTimedOut(bandmapDataModel->data(bandmapDataModel->index(idx, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong(), timeToLive))
+                   {
+                         bandmapDataModel->removeRows(idx, 1, QModelIndex());
+                   }
+               }
+
+               idx--;
+           }
+           purgeSpotFlag = false;
+        }
+    }
+
+    bandmapView->bandmapUpdate();
 }

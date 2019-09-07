@@ -16,6 +16,8 @@ signals:
     void bandmapResize(int);
     void leftMouseButtonPressed(QPoint);
     void mouseDoubleClicked(QPoint);
+    void zoomMap(bool);
+    void nextSpot(bool, bool);
 
 protected:
     void resizeEvent(QResizeEvent *) override;
