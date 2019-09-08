@@ -101,10 +101,6 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapView->setModel(bandmapSpotProxyModel);
 
-//    selectionModel = new QItemSelectionModel(bandmapSpotProxyModel);
-
-//    bandmapView->setSelectionModel(selectionModel);
-
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
 
