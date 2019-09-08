@@ -1636,7 +1636,7 @@ bool DxSpotSortFilterProxyModel::matchMode(int sourceRow) const
 {
     bool ok = false;
     int modeMask = sourceModel()->data(sourceModel()->index(sourceRow, DXMODEMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
-    if (ok and modeMask >=0)
+    if (ok && modeMask >=0)
     {
         return filterSetup->filterSettings.getModeFilter(modeMask);
     }
