@@ -97,6 +97,8 @@ private:
     BandmapData *bandmapData;
 
     QMenu* spotsMenu;
+    QAction* markSpotAction;
+    QAction* unMarkSpotAction;
     QAction* freqAction;
     QAction* bearingAction;
     QAction* logAction;
@@ -152,6 +154,8 @@ private slots:
 
      void on_FitersChanged(bool state);
      void purgeSpots();
+     void on_markSpotActionSelected();
+     void on_unMarkSpotActionSelected();
 };
 
 
