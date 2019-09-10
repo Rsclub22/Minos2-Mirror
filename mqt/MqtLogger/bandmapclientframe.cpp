@@ -101,10 +101,6 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapView->setModel(bandmapSpotProxyModel);
 
-//    selectionModel = new QItemSelectionModel(bandmapSpotProxyModel);
-
-//    bandmapView->setSelectionModel(selectionModel);
-
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
 
@@ -130,12 +126,17 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     actionInObject = new BMP_MouseInObject(this, this);
     spotsMenu->installEventFilter(actionInObject);
 
+
+    markSpotAction = new QAction("Mark Spot", this);
+    unMarkSpotAction = new QAction("Unmark Spot", this);
     freqAction = new QAction("Set &Freq", this);
     bearingAction = new QAction("Set &Bearing", this);
     logAction = new QAction("Send &Log", this);
     memoryAction = new QAction("Send &Memory", this);
     clearSpotAction = new QAction("Clear &Spot", this);
 
+    spotsMenu->addAction(markSpotAction);
+    spotsMenu->addAction(unMarkSpotAction);
     spotsMenu->addAction(freqAction);
     spotsMenu->addAction(bearingAction);
     spotsMenu->addAction(logAction);
@@ -145,6 +146,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui->actionsButton->setMenu(spotsMenu);
     connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
 
+    connect( markSpotAction, SIGNAL( triggered() ), this, SLOT(on_markSpotActionSelected()) );
+    connect( unMarkSpotAction, SIGNAL( triggered() ), this, SLOT(on_unMarkSpotActionSelected()) );
     connect( freqAction, SIGNAL( triggered() ), this, SLOT(on_freqActionSelected()) );
     connect( bearingAction, SIGNAL( triggered() ), this, SLOT(bearingActionSelected()) );
     connect( logAction, SIGNAL( triggered() ), this, SLOT(logActionSelected()) );
@@ -215,6 +218,28 @@ void BandmapClientFrame::on_FitersChanged(bool state)
 {
     if (state)
     {
+        bandmapView->bandmapUpdate();
+    }
+}
+
+
+
+void BandmapClientFrame::on_markSpotActionSelected()
+{
+    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    if (spotType != bandmapSpotType::MARKED)
+    {
+        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::MARKED, BMP_DataStoredRole);
+        bandmapView->bandmapUpdate();
+    }
+}
+
+void BandmapClientFrame::on_unMarkSpotActionSelected()
+{
+    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    if (spotType == bandmapSpotType::MARKED)
+    {
+        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
 }

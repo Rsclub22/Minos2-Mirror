@@ -773,9 +773,14 @@ QString BandmapView::assembleSpotMsg(int row)
 {
 
     QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+    qint64 freq = model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole).toLongLong();
+    freq = freq / 1000;
+    qint32 curFreq = dial->getCurFreqInt32();
     QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), Qt::DisplayRole).toString();
     QString dxDist = model()->data(model()->index(row, DXDIST_COL_NUM), Qt::DisplayRole).toString();
     QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), Qt::DisplayRole).toString();
+    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+
 
     qlonglong spotTime = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
     bool olderThan3Min = spotTimedOut(spotTime, NEW_SPOT_TIME);
@@ -793,7 +798,23 @@ QString BandmapView::assembleSpotMsg(int row)
         degSym = QChar(' ');
     }
 
-    QString msg = QString("%1  %2  %3  %4%5 %6").arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(newSpotMsg);
+    QString uLineStart = "";
+    QString uLineEnd = "";
+
+    if (freq >= curFreq - 1 && freq <= curFreq +1)
+    {
+        uLineStart = "<b>";
+        uLineEnd = "</b>";
+    }
+
+    QString markSym = "";
+    if (spotType == bandmapSpotType::MARKED)
+    {
+        markSym = HtmlFontColour(MARKED_SPOT_COLOUR) + "#" + HtmlFontColour(NOT_WORKED_COLOUR);
+    }
+
+
+    QString msg = QString("%1%2  %3  %4  %5%6%7 %8 %9").arg(uLineStart).arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(uLineEnd).arg(markSym).arg(newSpotMsg);
 
     if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
     {
