@@ -281,9 +281,10 @@ private slots:
 
     void on_RunPushButtonClicked();
     void on_BandmapMarkFreqPbClicked();
-    void on_BandmapSaveFreqPbClicked();
+    void on_bandmapSaveFreqPbClicked();
 
     void on_SpotPbClicked();
+
 
 
 

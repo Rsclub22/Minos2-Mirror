@@ -1,4 +1,61 @@
 #include "clustercommon.h"
+#include "checkmodeagainstfreq.h"
+#include "BandList.h"
+
+
+
+void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
+{
+    if (dxBand != "")
+    {
+
+        if (modeBandPlan->checkLoadedOk() )
+        {
+            QString f = freq;
+            QString b = dxBand;
+
+            dxModeStr = modeBandPlan->getMode(b, f.remove('.').toDouble());
+
+            int modeMask = clusterModes.indexOf(dxModeStr);
+            if (modeMask == -1)
+            {
+                dxModeStr = "None";
+                dxModeMask = "0";
+            }
+            else
+            {
+                dxModeMask = QString::number(modeMask);
+            }
+
+        }
+        else
+        {
+            // modeplan file missing
+            dxModeStr = "None";
+            dxModeMask = "0";
+
+        }
+    }
+}
+
+
+void getBand(QVector<BandDetail*> &bands, QString freq, QString &band, QString &bandMask)
+{
+    //double f = freq.append("000").remove('.').toDouble();
+    double f = freq.remove('.').toDouble();
+
+    for (int i = 0; i < bands.count(); i++)
+    {
+        if (f <= bands[i]->fHigh && f >= bands[i]->fLow)
+        {
+            band = bands[i]->name;
+            bandMask = QString::number(i);
+            break;
+        }
+    }
+}
+
+
 
 
 

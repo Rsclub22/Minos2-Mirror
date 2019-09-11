@@ -161,6 +161,21 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
 
+    loadVhfAndUpBands(bands);
+
+    modeBandPlan = new checkModeAgainstFreq();
+    if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
+    {
+        trace(QString("Mode frequency bandplan loaded OK"));
+
+    }
+    else
+    {
+        trace(QString("Mode frequency bandplan loaded failed to Load"));
+
+    }
+
+
     purgeTimer->start(PURGE_TIME);
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
 
@@ -587,10 +602,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
     }
 
     bandmapDataModel->rowData = new BandmapData(logTime, logTimeStr,
-                                            spot->getFreq(), logFreq, "",  "",
-                                            "USB", "2", spot->getCallsign().fullCall.getValue(),
-                                            true, spot->getLocator(),
-                                            true, distance,
+                                            spot->getFreq(), logFreq, spot->getbandStr(),  spot->getBandMask(),
+                                            spot->getModeStr(), spot->getModeMask(), spot->getCallsign().fullCall.getValue(),
+                                            spot->getWorked(), spot->getLocator(),
+                                            false, distance,
                                             spot->getBearing(), "",
                                             "", "", "", spot->getSpotType());
 
@@ -980,7 +995,19 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
     //QString time = QDateTime::currentDateTimeUtc().time().toString("HH:MM");
     QDateTime time = QDateTime::currentDateTimeUtc();
 
-    LoggerSpots* spot = new LoggerSpots(cs, loc, brg, freq, true, time, bandmapSpotType::LOGGED);
+    QString logBandStr;
+    QString logBandMask;
+    QString logModeStr;
+    QString logModeMask;
+
+    getBand(bands, freq, logBandStr, logBandMask);
+    getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+
+
+    LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
+                                        logModeStr, logModeMask,
+                                        freq, logBandStr, logBandMask,
+                                        true, time, bandmapSpotType::LOGGED);
     logSpotQueue.append(spot);
 }
 
@@ -989,7 +1016,20 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
 void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString freq, QString loc, QString brg)
 {
     QDateTime time = QDateTime::currentDateTimeUtc();
-    LoggerSpots* spot = new LoggerSpots(Callsign(cs), loc, brg, freq, false, time, bandmapSpotType::MARKED);
+
+    QString logBandStr;
+    QString logBandMask;
+    QString logModeStr;
+    QString logModeMask;
+
+    getBand(bands, freq, logBandStr, logBandMask);
+    getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+
+
+    LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
+                                        logModeStr, logModeMask,
+                                        freq, logBandStr, logBandMask,
+                                        false, time, bandmapSpotType::MARKED);
     logSpotQueue.append(spot);
 }
 
@@ -997,7 +1037,19 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString freq, QString lo
 void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString freq, QString loc, QString brg)
 {
     QDateTime time = QDateTime::currentDateTimeUtc();
-    LoggerSpots* spot = new LoggerSpots(Callsign(cs), loc, brg, freq, false, time, bandmapSpotType::SAVED);
+
+    QString logBandStr;
+    QString logBandMask;
+    QString logModeStr;
+    QString logModeMask;
+
+    getBand(bands, freq, logBandStr, logBandMask);
+    getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+
+    LoggerSpots* spot = new LoggerSpots(Callsign("????"), loc, brg,
+                                        logModeStr, logModeMask,
+                                        freq, logBandStr, logBandMask,
+                                        false, time, bandmapSpotType::SAVED);
     logSpotQueue.append(spot);
 }
 

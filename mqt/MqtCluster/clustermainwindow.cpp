@@ -76,10 +76,12 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
     {
         trace(QString("Mode frequency bandplan loaded OK"));
+
     }
     else
     {
         trace(QString("Mode frequency bandplan loaded failed to Load"));
+
     }
 
 #ifdef TEST_SPOTS
@@ -830,7 +832,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
         QString f = dxMsg[0] + "00";
         f.remove('.');
         dxFreq = convertFreqStrDisp(f);
-        getBand(dxFreq, dxBandStr, dxBandMask);
+        getBand(bands, dxFreq, dxBandStr, dxBandMask);
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
             // discard spot as it is HF
@@ -838,7 +840,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
             return -3;
         }
 
-        getMode(dxFreq, dxBandStr, dxModeStr, dxModeMask);
+        getMode(modeBandPlan, dxFreq, dxBandStr, dxModeStr, dxModeMask);
 
         dxCall = dxMsg[1];
         spotDate = dxMsg[2];
@@ -1036,7 +1038,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
         f.remove('.');
         //dxFreq = convertKhzToMhz(dxMsg[3]);
         dxFreq = convertFreqStrDisp(f);
-        getBand(dxFreq, dxBandStr, dxBandMask);
+        getBand(bands, dxFreq, dxBandStr, dxBandMask);
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
             // discard spot as it is HF
@@ -1044,7 +1046,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
             return -3;
         }
 
-        getMode(dxFreq, dxBandStr, dxModeStr, dxModeMask);
+        getMode(modeBandPlan, dxFreq, dxBandStr, dxModeStr, dxModeMask);
 
         dxCall = dxMsg[4];
         // find time
@@ -1112,48 +1114,6 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
 }
 
 
-
-void ClusterMainWindow::getBand(QString freq, QString &band, QString &bandMask)
-{
-    //double f = freq.append("000").remove('.').toDouble();
-    double f = freq.remove('.').toDouble();
-
-    for (int i = 0; i < bands.count(); i++)
-    {
-        if (f <= bands[i]->fHigh && f >= bands[i]->fLow)
-        {
-            band = bands[i]->name;
-            bandMask = QString::number(i);
-            break;
-        }
-    }
-}
-
-
-void ClusterMainWindow::getMode(const QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
-{
-    if (modeBandPlan->checkLoadedOk() && dxBand != "")
-    {
-        QString f = freq;
-        QString b = dxBand;
-
-        dxModeStr = modeBandPlan->getMode(b, f.remove('.').toDouble());
-
-        int modeMask = clusterModes.indexOf(dxModeStr);
-        if (modeMask == -1)
-        {
-            dxModeMask = "";
-        }
-        else
-        {
-            dxModeMask = QString::number(modeMask);
-        }
-
-
-    }
-
-
-}
 
 
 QString ClusterMainWindow::getPropMode(const QString comment)

@@ -33,6 +33,7 @@ SOURCES += \
     ChatFrame.cpp \
     ChatServer.cpp \
     ConfigElementFrame.cpp \
+    checkmodeagainstfreq.cpp \
     contacts.cpp \
     contest.cpp \
     cutils.cpp \
@@ -105,6 +106,7 @@ HEADERS += \
     ChatFrame.h \
     ChatServer.h \
     ConfigElementFrame.h \
+    checkmodeagainstfreq.h \
     contacts.h \
     contest.h \
     cutils.h \

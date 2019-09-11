@@ -30,6 +30,8 @@
 #include "bandmapfreqdial.h"
 #include "bandmapdatamodel.h"
 #include "bandmapclientfilterdialog.h"
+#include "BandList.h"
+#include "checkmodeagainstfreq.h"
 
 
 
@@ -45,12 +47,19 @@ class LoggerSpots
 {
 public:
 
-    LoggerSpots(Callsign _cs, QString _loc,  QString _brg, QString _freq, bool _worked, QDateTime _time, bandmapSpotType::SPOT_TYPE _spotType )
+    LoggerSpots(Callsign _cs, QString _loc,  QString _brg,
+                QString _modeStr, QString _modeMask,
+                QString _freq, QString _bandStr, QString _bandMask,
+                bool _worked, QDateTime _time, bandmapSpotType::SPOT_TYPE _spotType )
     {
         cs = _cs;
         loc = _loc;
         brg = _brg;
         freq = _freq;
+        bandStr = _bandStr;
+        bandMask = _bandMask;
+        modeStr = _modeStr;
+        modeMask = _modeMask;
         worked = _worked;
         time = _time;
         spotType = _spotType;
@@ -69,6 +78,19 @@ public:
     QString getFreq(){return freq;}
     void setFreq(QString _freq){freq = _freq;}
 
+    QString getbandStr(){return bandStr;}
+    void setBandStr(QString _bandStr){bandStr = _bandStr;}
+
+    QString getBandMask(){return bandMask;}
+    void setBandMask(QString _bandMask){bandMask = _bandMask;}
+
+
+    QString getModeStr(){return modeStr;}
+    void setModeStr(QString _modeStr){modeStr = _modeStr;}
+
+    QString getModeMask(){return modeMask;}
+    void setModeMask(QString _modeMask){modeMask = _modeMask;}
+
     bool getWorked(){return worked;}
     void setWorked(bool _worked){worked = _worked;}
 
@@ -83,7 +105,11 @@ private:
     Callsign cs;
     QString loc;
     QString brg;
+    QString modeStr;
+    QString modeMask;
     QString freq;
+    QString bandStr;
+    QString bandMask;
     bool worked;
     QDateTime time;
     bandmapSpotType::SPOT_TYPE spotType;
@@ -129,6 +155,8 @@ private:
     QTimer* checkNewSpotsTimer;
     QTimer* checkNewFilters;
 
+    QVector<BandDetail*> bands;
+    checkModeAgainstFreq* modeBandPlan;
 
     BMP_MouseInObject* actionInObject;
 

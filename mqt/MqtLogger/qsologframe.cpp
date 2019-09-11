@@ -2640,7 +2640,7 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 }
 
 
-void QSOLogFrame::on_BandmapSaveFreqPbClicked()
+void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 {
     memoryData::memData logData = getLogDetails();
     if (logData.callsign.isEmpty())

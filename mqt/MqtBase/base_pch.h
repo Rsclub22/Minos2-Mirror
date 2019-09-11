@@ -69,6 +69,7 @@ template <class itemtype >inline bool operator == (const MapWrapper<itemtype> &k
 
 #include "rigcontrolcommonconstants.h"
 
+
 #include "MShowMessageDlg.h"
 #include "MMessageDialog.h"
 
