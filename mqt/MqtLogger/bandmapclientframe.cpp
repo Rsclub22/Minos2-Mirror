@@ -184,13 +184,6 @@ void BandmapClientFrame::on_FontChanged()
 }
 
 
-void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq)
-{
-
-
-}
-
-
 
 void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 {
@@ -442,10 +435,29 @@ void BandmapClientFrame::checkNewBandMapSpots()
         for (int i = sqsize -1 ; i > -1; i--)
         {
              addDxSpotToBandmapTable(spotQueue[i]);
-             trace("Bandmapframe syncSpots " + spotQueue[i]);
+             trace("Bandmapframe New Cluster Spot: " + spotQueue[i]);
+
+
         }
 
         spotQueue.clear();
+
+
+        // any logger spots
+        if (!logSpotQueue.isEmpty())
+        {
+            for (int i = 0; i < logSpotQueue.count(); i++)
+            {
+                addLogSpotToBandmapTable(logSpotQueue[i]);
+                trace(QString("Bandmapframe New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq()).arg(logSpotQueue[i]->getLocator()));
+                delete logSpotQueue[i];
+            }
+
+            logSpotQueue.clear();
+        }
+
+
+
 
 
     }
@@ -519,7 +531,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
             }
 
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
-            qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
+            qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
             // convert freq
             bool ok = false;
@@ -543,6 +555,48 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
        }
     }
+
+}
+
+
+
+void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
+{
+    // find distance to station
+    double dist = 0;
+    int brg = 0;
+    QString distance;
+
+
+    if (!spot->getLocator().isEmpty())
+    {
+        calcSpotDistanceBearing(spot->getLocator(), &dist, &brg);
+        distance = QString::number(static_cast<int>(dist));
+    }
+
+    qint64 logTime = spot->getTime().toMSecsSinceEpoch() / 1000;
+
+    QString logTimeStr = spot->getTime().time().toString("HH:MM");
+
+    // convert freq
+    bool ok = false;
+    qint64 logFreq = spot->getFreq().toLongLong(&ok, 10);
+    if (!ok)
+    {
+        logFreq = 0;
+    }
+
+    bandmapDataModel->rowData = new BandmapData(logTime, logTimeStr,
+                                            spot->getFreq(), logFreq, "",  "",
+                                            "USB", "2", spot->getCallsign().fullCall.getValue(),
+                                            true, spot->getLocator(),
+                                            true, distance,
+                                            spot->getBearing(), "",
+                                            "", "", "", spot->getSpotType());
+
+    bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+
+
 
 }
 
@@ -918,3 +972,34 @@ void BandmapClientFrame::purgeSpots()
 
     bandmapView->bandmapUpdate();
 }
+
+void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq)
+{
+    Q_UNUSED(c)
+
+    //QString time = QDateTime::currentDateTimeUtc().time().toString("HH:MM");
+    QDateTime time = QDateTime::currentDateTimeUtc();
+
+    LoggerSpots* spot = new LoggerSpots(cs, loc, brg, freq, true, time, bandmapSpotType::LOGGED);
+    logSpotQueue.append(spot);
+}
+
+
+
+void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString freq, QString loc, QString brg)
+{
+    QDateTime time = QDateTime::currentDateTimeUtc();
+    LoggerSpots* spot = new LoggerSpots(Callsign(cs), loc, brg, freq, false, time, bandmapSpotType::MARKED);
+    logSpotQueue.append(spot);
+}
+
+
+void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString freq, QString loc, QString brg)
+{
+    QDateTime time = QDateTime::currentDateTimeUtc();
+    LoggerSpots* spot = new LoggerSpots(Callsign(cs), loc, brg, freq, false, time, bandmapSpotType::SAVED);
+    logSpotQueue.append(spot);
+}
+
+
+

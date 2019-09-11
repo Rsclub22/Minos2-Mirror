@@ -6,6 +6,7 @@
 #include "LoggerContacts.h"
 #include "ListContact.h"
 #include "tlogcontainer.h"
+#include "tsinglelogframe.h"
 #include "tqsoeditdlg.h"
 #include "tforcelogdlg.h"
 #include "SendRPCDM.h"
@@ -31,6 +32,8 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , keyerLoaded(false)
     , radioConnected(false)
     , radioError(false)
+    , clusterLoaded(false)
+    , runButtonOn(false)
     , curFreq("00000000000")
 {
     ui->setupUi(this);
@@ -120,7 +123,16 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->qsoFrame->setStyleSheet(ssQsoFrameBlue);
     widgetStyles[ui->qsoFrame] = ssQsoFrameBlue;
 
+    runFreq[0] = "0";
+    runFreq[1] = "0";
 
+    ignoreRunState[0] = false;
+    ignoreRunState[1] = false;
+    connect(ui->runPushButton, SIGNAL(clicked()), this, SLOT(on_RunPushButtonClicked()));
+    connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_BandmapMarkFreqPbClicked()));
+    connect(ui->bandmapSaveFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapSaveFreqPbClicked()));
+
+    connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
 }
 
 void QSOLogFrame::on_FontChanged()
@@ -877,20 +889,7 @@ void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
     }
 }
 
-void QSOLogFrame::on_bandmapMarkFreqPbClicked()
-{
 
-}
-
-void QSOLogFrame::on_bandmapSaveFreqPbClicked()
-{
-
-}
-
-void QSOLogFrame::on_SpotPbClicked()
-{
-
-}
 
 void QSOLogFrame::setActiveControl( int *Key )
 {
@@ -2066,7 +2065,25 @@ void QSOLogFrame::logScreenEntry( )
    MinosLoggerEvents::SendAfterLogContact(ct);
    MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.loc.getValue());
 
-   if (ui->bandmapRunFreqChkBox->isVisible() && !ui->bandmapRunFreqChkBox->isChecked())
+   if (ui->runPushButton->isVisible() && runButtonOn)
+   {
+       if (!ignoreRunState[0])
+       {
+           if (runFreq[0] == curFreq)
+           {
+               MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue());
+           }
+       }
+       else if (!ignoreRunState[1])
+       {
+           if (runFreq[1] == curFreq)
+           {
+               MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue());
+           }
+       }
+
+   }
+   else if (ui->runPushButton->isVisible() && !runButtonOn)
    {
        MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue());
    }
@@ -2597,10 +2614,67 @@ bool QSOLogFrame::isBandMapLoaded()
 
 void QSOLogFrame::setBandMapControlsVisible(bool visible)
 {
-    ui->bandmapRunFreqChkBox->setVisible(visible);
+    ui->runPushButton->setVisible(visible);
     ui->bandmapMarkFreqPb->setVisible(visible);
     ui->bandmapSaveFreqPb->setVisible(visible);
+
 }
+
+
+
+
+void QSOLogFrame::on_SpotPbClicked()
+{
+
+}
+
+void QSOLogFrame::on_BandmapMarkFreqPbClicked()
+{
+    memoryData::memData logData = getLogDetails();
+    if (!logData.callsign.isEmpty())
+    {
+        emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+    }
+
+
+}
+
+
+void QSOLogFrame::on_BandmapSaveFreqPbClicked()
+{
+    memoryData::memData logData = getLogDetails();
+    if (logData.callsign.isEmpty())
+    {
+        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString(logData.bearing));
+    }
+
+}
+
+void QSOLogFrame::showRunButtonOnOff(bool state)
+{
+    if (state)
+    {
+        ui->runPushButton->setStyleSheet(RUN_BUTTON_ON_STYLE);
+
+    }
+    else
+    {
+        ui->runPushButton->setStyleSheet(RUN_BUTTON_OFF_STYLE);
+    }
+}
+
+
+memoryData::memData QSOLogFrame::getLogDetails()
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+    memoryData::memData logData;
+    tslf->getDetails(logData);
+
+    return logData;
+
+}
+
 
 //---------------------------------------------------------
 
@@ -2682,4 +2756,36 @@ QString QSOLogFrame::getBearing()
 {
     return ui->BrgSt->text();
 }
+
+//-------------------------------------------------------------------
+
+void QSOLogFrame::setRunMemoryFreqUpdate(int num, QString freq )
+{
+    runFreq[num] = freq;
+}
+
+void QSOLogFrame::setIgnoreRunChkBoxState(int num, bool checked)
+{
+
+    ignoreRunState[num] = checked;
+}
+
+
+void QSOLogFrame::on_RunPushButtonClicked()
+{
+    if (runButtonOn)
+    {
+        runButtonOn = false;
+        showRunButtonOnOff(runButtonOn);
+    }
+    else
+    {
+        runButtonOn = true;
+        showRunButtonOnOff(runButtonOn);
+
+    }
+
+}
+
+
 

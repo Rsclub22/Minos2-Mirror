@@ -116,6 +116,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
+    initRunIgnoreChkBox();
+
     on_FontChanged();
 
     traceMsg(QString("RigControlFrame Started"));
@@ -1633,6 +1635,45 @@ void RigControlFrame::initRunMemoryButton()
 
 }
 
+void RigControlFrame::initRunIgnoreChkBox()
+{
+    ignoreRunChkBoxMap[0] = ui->ignoreRunChkBox0;
+    connect(ignoreRunChkBoxMap[0], SIGNAL(stateChanged(int)), this, SLOT(ignoreRunChkBoxSelected0(int)), Qt::QueuedConnection);
+
+    ignoreRunChkBoxMap[1] = ui->ignoreRunChkBox1;
+    connect(ignoreRunChkBoxMap[1], SIGNAL(stateChanged(int)), this, SLOT(ignoreRunChkBoxSelected1(int)), Qt::QueuedConnection);
+}
+
+void RigControlFrame::ignoreRunChkBoxSelected0(int s)
+{
+    bool checked = false;
+    if (s == Qt::Checked)
+    {
+        checked = true;
+        emit sendIgnoreRunChkBoxState(0, checked);
+    }
+    else if (s == Qt::Unchecked)
+    {
+        emit sendIgnoreRunChkBoxState(0, checked);
+    }
+}
+
+void RigControlFrame::ignoreRunChkBoxSelected1(int s)
+{
+    bool checked = false;
+    if (s == Qt::Checked)
+    {
+        checked = true;
+        emit sendIgnoreRunChkBoxState(1, checked);
+    }
+    else if (s == Qt::Unchecked)
+    {
+        emit sendIgnoreRunChkBoxState(1, checked);
+    }
+}
+
+
+
 
 void RigControlFrame::runButReadActSel(int buttonNumber)
 {
@@ -1732,6 +1773,14 @@ void RigControlFrame::runButtonUpdate(int buttonNumber)
 
     runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
 }
+
+
+void RigControlFrame::setIgnoreRunChecksBoxVisible(bool visible)
+{
+    ui->ignoreRunChkBox0->setVisible(visible);
+    ui->ignoreRunChkBox1->setVisible(visible);
+}
+
 //********************** Tune point Buttons *******************************
 
 
@@ -1851,6 +1900,7 @@ memoryData::memData RigControlFrame::getRunMemoryData(int memoryNumber)
 void RigControlFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
 {
     ct->saveRunMemory(memoryNumber, m);
+    emit runMemoryFreqUpdate(memoryNumber, m.freq);       // update QSOLogFrame
 }
 
 //*******************Run Memory Button *************************//
@@ -1922,7 +1972,7 @@ void RunMemoryButton::clearActionSelected()
     emit clearActionSelected(memNo);
 }
 
-//*******************Run Memory Button *************************//
+//*******************Tune Memory Button *************************//
 
 TuneMemoryButton::TuneMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
 {

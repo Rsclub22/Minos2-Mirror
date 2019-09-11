@@ -7,6 +7,7 @@
 #include "focuswatcher.h"
 #include "validators.h"
 #include "cutils.h"
+#include "rigmemcommondata.h"
 
 class ListContact;
 
@@ -83,6 +84,8 @@ public:
     ScreenContact *getPartialContact() const;
     void setPartialContact(ScreenContact *value);
 
+    void setRunMemoryFreqUpdate(int num, QString freq);
+    void setIgnoreRunChkBoxState(int num, bool checked);
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -196,6 +199,10 @@ private:
     void MainOpComboBox_Exit();
     void SecondOpComboBox_Exit();
 
+    QMap<int, QString> runFreq;
+    QMap<int, bool> ignoreRunState;
+    bool runButtonOn;
+
     QString mode;
     QString oldMode;
     bool qsoLogModeFlag = false;
@@ -219,13 +226,24 @@ private:
     QString ssLineEditFrRedBkRed = "QLineEdit { background-color: red ; border-style: outset ; border-width: 1px ; border-color: red ; color : white }";
     QString ssLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
 
+    const QString RUN_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+    const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+
+
     QMap<QWidget *, QString> widgetStyles;
 
     void checkBandMapAndClusterLoaded();
+    void showRunButtonOnOff(bool state);
+    memoryData::memData getLogDetails();
+
+
+    void onBandMapAfterLogContact();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
     void sendModeControl(QString);
+    void bandmapMarkFreq(QString, QString, QString, QString);
+    void bandmapSaveFreq(QString, QString, QString, QString);
 
 private slots:
     void focusChange(QObject *, bool, QFocusEvent *event);
@@ -261,9 +279,14 @@ private slots:
 
     void on_frequencyEdit_textChanged(const QString &arg1);
 
-    void on_bandmapMarkFreqPbClicked();
-    void on_bandmapSaveFreqPbClicked();
+    void on_RunPushButtonClicked();
+    void on_BandmapMarkFreqPbClicked();
+    void on_BandmapSaveFreqPbClicked();
+
     void on_SpotPbClicked();
+
+
+
 
 
 public slots:

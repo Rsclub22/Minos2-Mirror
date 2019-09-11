@@ -40,6 +40,57 @@ namespace Ui {
 
 class BMP_MouseInObject;
 
+
+class LoggerSpots
+{
+public:
+
+    LoggerSpots(Callsign _cs, QString _loc,  QString _brg, QString _freq, bool _worked, QDateTime _time, bandmapSpotType::SPOT_TYPE _spotType )
+    {
+        cs = _cs;
+        loc = _loc;
+        brg = _brg;
+        freq = _freq;
+        worked = _worked;
+        time = _time;
+        spotType = _spotType;
+
+    }
+
+    Callsign getCallsign(){ return cs;}
+    void setCallsign(Callsign _cs){cs = _cs;}
+
+    QString getLocator(){return loc;}
+    void setLocator(QString _loc){loc = _loc;}
+
+    QString getBearing(){return brg;}
+    void setBearing(QString _brg){brg = _brg;}
+
+    QString getFreq(){return freq;}
+    void setFreq(QString _freq){freq = _freq;}
+
+    bool getWorked(){return worked;}
+    void setWorked(bool _worked){worked = _worked;}
+
+    QDateTime getTime(){return time;}
+    void setTime(QDateTime _time){time = _time;}
+
+    bandmapSpotType::SPOT_TYPE getSpotType(){return spotType;}
+    void setSpotType(bandmapSpotType::SPOT_TYPE _spotType){spotType = _spotType;}
+
+private:
+
+    Callsign cs;
+    QString loc;
+    QString brg;
+    QString freq;
+    bool worked;
+    QDateTime time;
+    bandmapSpotType::SPOT_TYPE spotType;
+};
+
+
+
 class BandmapClientFrame : public QFrame
 {
     Q_OBJECT
@@ -57,6 +108,9 @@ public:
     void buttonHandleDxSpots();
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseTimerCheckNewSpots();
+    void setBandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
+    void setBandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
+
 private:
 
     Ui::BandmapClientFrame *ui;
@@ -81,6 +135,9 @@ private:
 
     // cluster spots
     QVector<QString> spotQueue;
+
+    // spots from logger
+    QVector<LoggerSpots*> logSpotQueue;
 
     BandmapView *bandmapView;
     QItemSelectionModel *selectionModel;
@@ -156,6 +213,7 @@ private slots:
      void purgeSpots();
      void on_markSpotActionSelected();
      void on_unMarkSpotActionSelected();
+     void addLogSpotToBandmapTable(LoggerSpots *spot);
 };
 
 

@@ -135,6 +135,8 @@ signals:
     void bearingEditReturn();
 
 
+
+
 private slots:
 
     void on_Rotate_clicked();

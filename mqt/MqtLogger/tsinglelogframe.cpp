@@ -119,6 +119,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
+    connect(FKHRigControlFrame, SIGNAL(runMemoryFreqUpdate(int, QString)), this, SLOT(sendRunMemoryFreqUpdate(int, QString)));
+    connect(FKHRigControlFrame, SIGNAL(sendIgnoreRunChkBoxState(int, bool)), this, SLOT(sendIgnoreRunChkBoxState(int, bool)));
     // Rotator updates
     // From rotator controller
     connect(LogContainer->sendDM, SIGNAL(RotatorLoaded()), this, SLOT(on_RotatorLoaded()));
@@ -134,6 +136,11 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     // from cluster frame
     connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToLog(memoryData::memData)), this, SLOT(dxSpotToLog(memoryData::memData)));
 
+    // to bandmap
+    connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, QString, QString, QString)),
+            this, SLOT(on_BandmapMarkFreq(QString, QString, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, QString, QString, QString)),
+            this, SLOT(on_BandmapSaveFreq(QString, QString, QString, QString)));
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
@@ -1346,10 +1353,22 @@ void TSingleLogFrame::sendKeyerRecord( int fno )
         LogContainer->sendDM->sendKeyerRecord(this, fno);
 }
 
-void TSingleLogFrame::sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth )
+//void TSingleLogFrame::sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth )
+//{
+//    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+//        LogContainer->sendDM->sendBandMap(this, freq, call, utc, loc, qth);
+//}
+
+
+void TSingleLogFrame::on_BandmapMarkFreq(QString cs, QString freq, QString loc, QString brg)
 {
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-        LogContainer->sendDM->sendBandMap(this, freq, call, utc, loc, qth);
+    bandmapControlFrame->setBandmapMarkFreq(cs, freq, loc, brg);
+}
+
+
+void TSingleLogFrame::on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg)
+{
+    bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg);
 }
 
 void TSingleLogFrame::sendKeyerTone()
@@ -1673,6 +1692,17 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
         }
 
     }
+}
+
+
+void TSingleLogFrame::sendRunMemoryFreqUpdate(int num, QString freq)
+{
+    GJVQSOLogFrame->setRunMemoryFreqUpdate(num, freq);
+}
+
+void TSingleLogFrame::sendIgnoreRunChkBoxState(int num, bool checked)
+{
+    GJVQSOLogFrame->setIgnoreRunChkBoxState(num, checked);
 }
 
 void TSingleLogFrame::invalidateCacheOnDisconnect()

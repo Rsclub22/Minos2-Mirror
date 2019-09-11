@@ -401,9 +401,9 @@ to</string>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_15">
            <item>
-            <widget class="QCheckBox" name="bandmapRunFreqChkBox">
+            <widget class="QPushButton" name="runPushButton">
              <property name="text">
-              <string>Run Freq</string>
+              <string>Run</string>
              </property>
             </widget>
            </item>

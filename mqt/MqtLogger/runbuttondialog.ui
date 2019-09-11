@@ -41,6 +41,13 @@
       </layout>
      </item>
      <item>
+      <widget class="QCheckBox" name="curFreqCheckBox">
+       <property name="text">
+        <string>Use Current Freq</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
         <widget class="QLabel" name="label_6">
