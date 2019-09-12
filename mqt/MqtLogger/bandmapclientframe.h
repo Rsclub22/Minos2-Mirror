@@ -137,6 +137,8 @@ public:
     void setBandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
     void setBandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
 
+    void setRotatorBearing(QString s);
+    void setRotatorConnected(bool connected);
 private:
 
     Ui::BandmapClientFrame *ui;
@@ -192,12 +194,12 @@ private:
     BandmapData selectedSpotData;
     int selectedSpotRowNum;
 
-
-
-
     bool purgeSpotFlag;
     bool holdUpdateFlag;
     qlonglong timeToLive;
+
+    QString curRotBearing;
+    bool rotatorConnected;
 
     int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);

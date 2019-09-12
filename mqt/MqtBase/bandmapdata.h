@@ -34,8 +34,8 @@ public:
              QString _dxFreqStr, qint64 dxFreq, QString _dxBand, QString _dxBandMaskStr,
              QString _dxMode, QString _dxModeMaskStr, QString _dxCall,
              bool _dxCallWorked, QString _dxLocator,
-             bool _dxLocatorWorked, QString distance,
-             QString bearing, QString _spotterCall,
+             bool _dxLocatorWorked, QString _distance,
+             QString _bearing, QString _rotBrg, bool _rotConnected, QString _spotterCall,
              QString _spotterLocator, QString _dxPropMode,
              QString comment, bandmapSpotType::SPOT_TYPE _spotType);
 
@@ -53,6 +53,8 @@ public:
     QString dxLocator;
     QString dxDist;
     QString dxBrg;
+    QString rotBrg;
+    bool rotConnected;
     bool dxCallWorked;
     bool dxLocatorWorked;
     bool sentToMemory;

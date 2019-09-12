@@ -81,6 +81,8 @@ const int DXSPOT_PROP_MODE_COL_NUM = 16;
 const int RXTIME_COL_NUM = 17;
 const int SPOT_TYPE_COL_NUM = 18;       // used in bandmap
 const int SPOT_IS_SELECTED_COL_NUM = 19;    // used in bandmap
+const int ROT_BEARING_COL_NUM = 20;
+const int ROT_CONNECTED_COL_NUM = 21;
 
 
 

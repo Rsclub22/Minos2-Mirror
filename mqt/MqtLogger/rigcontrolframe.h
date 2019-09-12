@@ -302,7 +302,7 @@ private:
 
     void traceMsg(QString msg);
 
-    QString extractKhz(QString f);
+
     void loadMemories();
     void mgmLabelVisible(bool state);
     bool checkValidFreq(QString freq);

@@ -1841,39 +1841,7 @@ void RigControlFrame::tuneButtonUpdate(int buttonNumber)
     tuneButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
 }
 //-----------------------------------------------------------------------------------
-QString RigControlFrame::extractKhz(QString f)
-{
-    QString khz = "***";
-    QString sf = f.remove('.');
-    bool ok = false;
-    double df = sf.toDouble(&ok);
-    if (ok && df != 0.0)
-    {
-        if (f.contains('.'))
-        {
-            QStringList k = f.split('.');
-            int i = k.length();
-            if (i >=2)
-            {
-                return k[i-2];
-            }
-        }
-        else
-        {
-            int i = f.length();
-            if (i >= 6)
-            {
-                khz = f.mid(i - 6, 3);
-                return khz;
-            }
-        }
-    }
 
-
-    return khz;
-
-
-}
 
 void RigControlFrame::checkConnection()
 {

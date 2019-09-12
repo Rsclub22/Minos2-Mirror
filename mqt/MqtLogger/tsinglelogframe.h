@@ -261,6 +261,7 @@ private slots:
     void sendIgnoreRunChkBoxState(int num, bool checked);
     void on_BandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
     void on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
+    void on_rotatorConnected(bool connected);
 public:
     void sendTpm(int t, QString f);
     

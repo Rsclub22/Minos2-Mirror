@@ -134,6 +134,8 @@ signals:
     void turnBearingReturn();
     void bearingEditReturn();
 
+    void rotatorConnected(bool);
+
 
 
 

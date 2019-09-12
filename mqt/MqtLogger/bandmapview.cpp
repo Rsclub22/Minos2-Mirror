@@ -779,6 +779,9 @@ QString BandmapView::assembleSpotMsg(int row)
     QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), Qt::DisplayRole).toString();
     QString dxDist = model()->data(model()->index(row, DXDIST_COL_NUM), Qt::DisplayRole).toString();
     QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), Qt::DisplayRole).toString();
+    QString rotBrg = model()->data(model()->index(row, ROT_BEARING_COL_NUM), Qt::DisplayRole).toString();
+    bool rotConnected = model()->data(model()->index(row, ROT_CONNECTED_COL_NUM), BMP_DataStoredRole).toBool();
+
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
 
@@ -793,10 +796,31 @@ QString BandmapView::assembleSpotMsg(int row)
 
 
     QChar degSym = QChar(DEG_SYMBOL);
-    if (dxBrg.isEmpty())
+    if (dxLoc.isEmpty())
     {
-        degSym = QChar(' ');
+       if (rotConnected)
+       {
+           dxBrg = rotBrg;
+       }
+       else
+       {
+           dxBrg = "";
+           degSym = QChar(' ');
+       }
     }
+    else
+    {
+        if (dxBrg.isEmpty())
+        {
+            degSym = QChar(' ');
+            dxBrg = "";
+        }
+    }
+
+
+
+
+
 
     QString bLineStart = "";
     QString bLineEnd = "";

@@ -43,4 +43,7 @@ QString convertKhzToMhz(QString f);
 QString alignFreqRight(QString f);
 
 QString removeHundredHzAndHzDigits(QString f);
+
+QString extractKhz(QString f);
+
 #endif // RIGUTILS_H

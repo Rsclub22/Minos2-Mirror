@@ -15,6 +15,8 @@ namespace Ui {
 class QSOLogFrame;
 }
 
+const int RUN_TOLERANCE = 5;
+
 class QSOLogFrame : public QFrame
 {
     Q_OBJECT
@@ -201,7 +203,18 @@ private:
 
     QMap<int, QString> runFreq;
     QMap<int, bool> ignoreRunState;
-    bool runButtonOn;
+    bool runButtonOnFlag;
+    bool radioOffRunFreq;
+
+    QString curRunFreq;
+    QTimer *chkRunFreqTimer;
+    QToolButton *runButton;
+    QMenu *runButtonMenu;
+    QAction* setRun1Action;
+    QAction* setRun2Action;
+    QAction* runOnAction;
+    QAction* runOffAction;
+
 
     QString mode;
     QString oldMode;
@@ -226,7 +239,8 @@ private:
     QString ssLineEditFrRedBkRed = "QLineEdit { background-color: red ; border-style: outset ; border-width: 1px ; border-color: red ; color : white }";
     QString ssLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
 
-    const QString RUN_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+    const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+    const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: khaki ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
     const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 
@@ -238,12 +252,22 @@ private:
 
 
     void onBandMapAfterLogContact();
+    bool chkRadioFreqOnRunFreq();
+    void initLogRunButton();
+    void runButtonOn();
+    void runButtonOff();
+    void sendFreq(QString f);
+    void showRunToolButtonOffFreq();
+    void showRunToolButtonOnFreq();
+    memoryData::memData getRunMemoryData(int memoryNumber);
+    void getRunFreq();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
     void sendModeControl(QString);
     void bandmapMarkFreq(QString, QString, QString, QString);
     void bandmapSaveFreq(QString, QString, QString, QString);
+    void sendFreqControl(QString);
 
 private slots:
     void focusChange(QObject *, bool, QFocusEvent *event);
@@ -285,9 +309,12 @@ private slots:
 
     void on_SpotPbClicked();
 
+   void on_ChkRunFreq();
 
-
-
+    void on_setRun1Action();
+    void on_setRun2Action();
+    void on_RunOnActionSelected();
+    void on_RunOffActionSelected();
 
 
 public slots:

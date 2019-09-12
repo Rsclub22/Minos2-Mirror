@@ -104,29 +104,35 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 }
 
                 d = d + bandmapSpot->dxLocator;
-                break;
+            break;
             case DXDIST_COL_NUM:
                 d = HtmlFontColour(NOT_WORKED_COLOUR);
                 d = d + bandmapSpot->dxDist;
-                break;
+            break;
             case DXBRG_COL_NUM:
                 d = bandmapSpot->dxBrg;
-                break;
+            break;
             case SPOT_CALL_COL_NUM:
                 d = bandmapSpot->spotterCall;
-                break;
+            break;
             case SPOTLOC_COL_NUM:
                 d = bandmapSpot->spotterLocator;
-                break;
+            break;
             case COMMENT_COL_NUM:
                 d = escapeXML(bandmapSpot->spotComment);
-                break;
+            break;
             case RXTIME_COL_NUM:
                 d = QString::number(bandmapSpot->rxTime);
-                break;
+            break;
             case SPOT_TYPE_COL_NUM:
                 d = bandmapSpot->spotType;
-                break;
+            break;
+            case ROT_BEARING_COL_NUM:
+                d = bandmapSpot->rotBrg + QChar('R');
+            break;
+            case ROT_CONNECTED_COL_NUM:
+                d = bandmapSpot->rotConnected;
+            break;
             default:
                 d = "";
         }
@@ -198,6 +204,14 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case SPOT_IS_SELECTED_COL_NUM:
                 d = bandmapSpot->isSelected;
             break;
+            case ROT_BEARING_COL_NUM:
+                d = bandmapSpot->rotBrg;
+            break;
+            case ROT_CONNECTED_COL_NUM:
+                d = bandmapSpot->rotConnected;
+            break;
+            default:
+            d = "";
 
 
         }
@@ -277,6 +291,13 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             case SPOT_IS_SELECTED_COL_NUM:
                 bandmapSpot->isSelected = value.toBool();
             break;
+            case ROT_BEARING_COL_NUM:
+                bandmapSpot->rotBrg = value.toString();
+            break;
+            case ROT_CONNECTED_COL_NUM:
+                bandmapSpot->rotConnected = value.toBool();
+            break;
+
             default:
                 return false;
 

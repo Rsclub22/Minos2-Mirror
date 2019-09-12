@@ -113,6 +113,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
+    connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
     connect(FKHRigControlFrame, SIGNAL(sendRitFreq(int)), this, SLOT(sendRadioRitFreq(int)));
     connect(FKHRigControlFrame, SIGNAL(sendVolumeToRadio(int)), this, SLOT(sendRadioVolume(int)));
     connect(FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
@@ -132,7 +133,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), this, SLOT(sendSelectRotator(QString)));
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), rotPresets, SLOT(selectRotator(QString)));
     connect(rotPresets, SIGNAL(presetTurn(QString)), this, SLOT(presetTurn(QString)));
-
+    connect(FKHRotControlFrame, SIGNAL(rotatorConnected(bool)), this, SLOT(on_rotatorConnected(bool)));
     // from cluster frame
     connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToLog(memoryData::memData)), this, SLOT(dxSpotToLog(memoryData::memData)));
 
@@ -1790,8 +1791,14 @@ void TSingleLogFrame::on_RotatorBearing(QString s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorBearing(s);
+        bandmapControlFrame->setRotatorBearing(s);
         GJVQSOLogFrame->setRotatorBearing(s);
     }
+}
+
+void TSingleLogFrame::on_rotatorConnected(bool connected)
+{
+    bandmapControlFrame->setRotatorConnected(connected);
 }
 
 

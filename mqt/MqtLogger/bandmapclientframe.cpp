@@ -71,7 +71,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     contestMode(-1),
     purgeSpotFlag(false),
     holdUpdateFlag(false),
-    timeToLive(0)
+    timeToLive(0),
+    rotatorConnected(false)
 {
 
     ui->setupUi(this);
@@ -562,7 +563,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
                                                     spotlist[DXMODESTR], spotlist[DXMODEMASK], spotlist[DXCALL],
                                                     callWorked, spotlist[DXLOCATOR],
                                                     locWorked,distance,
-                                                    bearing, spotlist[SPOTCALL],
+                                                    bearing, "", false, spotlist[SPOTCALL],        // ignore rotator bearing
                                                     spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT], bandmapSpotType::SPOT_TYPE::CLUSTER);
 
             bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
@@ -577,6 +578,8 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
 void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
 {
+    QString rotBrg;
+
     // find distance to station
     double dist = 0;
     int brg = 0;
@@ -588,6 +591,18 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
         calcSpotDistanceBearing(spot->getLocator(), &dist, &brg);
         distance = QString::number(static_cast<int>(dist));
     }
+
+
+    if (rotatorConnected)
+    {
+        rotBrg = curRotBearing;   // get rotator bearing
+    }
+    else
+    {
+        rotBrg = "0";
+    }
+
+
 
     qint64 logTime = spot->getTime().toMSecsSinceEpoch() / 1000;
 
@@ -606,7 +621,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
                                             spot->getModeStr(), spot->getModeMask(), spot->getCallsign().fullCall.getValue(),
                                             spot->getWorked(), spot->getLocator(),
                                             false, distance,
-                                            spot->getBearing(), "",
+                                            spot->getBearing(), rotBrg, rotatorConnected, "",
                                             "", "", "", spot->getSpotType());
 
     bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
@@ -1026,7 +1041,7 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString freq, QString lo
     getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
 
-    LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
+    LoggerSpots* spot = new LoggerSpots(Callsign("????"), loc, brg,
                                         logModeStr, logModeMask,
                                         freq, logBandStr, logBandMask,
                                         false, time, bandmapSpotType::MARKED);
@@ -1036,6 +1051,8 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString freq, QString lo
 
 void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString freq, QString loc, QString brg)
 {
+    Q_UNUSED(cs)
+
     QDateTime time = QDateTime::currentDateTimeUtc();
 
     QString logBandStr;
@@ -1046,12 +1063,25 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString freq, QString lo
     getBand(bands, freq, logBandStr, logBandMask);
     getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
-    LoggerSpots* spot = new LoggerSpots(Callsign("????"), loc, brg,
+    LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
                                         logModeStr, logModeMask,
                                         freq, logBandStr, logBandMask,
                                         false, time, bandmapSpotType::SAVED);
     logSpotQueue.append(spot);
 }
 
+void BandmapClientFrame::setRotatorBearing(QString s)
+{
+    QStringList sl = s.split(':');
+    if (sl.size() < 3)
+    {
+        return;
+    }
 
+    curRotBearing = sl[1];
+}
 
+void BandmapClientFrame::setRotatorConnected(bool connected)
+{
+    rotatorConnected = connected;
+}
