@@ -2636,12 +2636,7 @@ void QSOLogFrame::on_SpotPbClicked()
 void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 {
     memoryData::memData logData = getLogDetails();
-    if (!logData.callsign.isEmpty())
-    {
-        emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
-    }
-
-
+    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
 }
 
 
