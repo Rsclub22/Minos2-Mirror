@@ -36,6 +36,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , runButtonOnFlag(false)
     , radioOffRunFreq(false)
     , curRunFreq("00000000000")
+    , callsignEnterTextFreq("00000000000")
     , curFreq("00000000000")
 
 {
@@ -830,9 +831,19 @@ void QSOLogFrame::on_QTHEdit_textChanged(const QString &/*arg1*/)
     doGJVEditChange( ui->QTHEdit );
 }
 
-void QSOLogFrame::on_CallsignEdit_textChanged(const QString &/*arg1*/)
+void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
 {
     doGJVEditChange( ui->CallsignEdit );
+
+    if (text.count() > 0)
+    {
+        callsignEnterTextFreq = curFreq;
+    }
+    else
+    {
+        callsignEnterTextFreq = "00000000000";
+    }
+
 }
 
 void QSOLogFrame::on_LocEdit_textChanged(const QString &/*arg1*/)
@@ -2637,11 +2648,9 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 {
     memoryData::memData logData = getLogDetails();
-    if (logData.callsign.isEmpty())
-    {
-        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
-    }
-
+    callsignEnterTextFreq = "00000000000";
+    ui->CallsignEdit->clear();
+    emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
 }
 
 void QSOLogFrame::showRunButtonOnOff(bool state)
@@ -2983,6 +2992,17 @@ QString QSOLogFrame::getRunMemoryFreq(int memoryNumber)
 void QSOLogFrame::on_FreqChanged(QString f)
 {
 
-    int a = 0;
+    qint64 dialFreq = f.toLongLong() / 1000;
+    qint64 callsignEnterFreq = callsignEnterTextFreq.toLongLong() / 1000;
+
+    if (callsignEnterFreq != 0)
+    {
+        if (callsignEnterFreq != dialFreq)
+        {
+            callsignEnterTextFreq = "00000000000";
+            on_bandmapSaveFreqPbClicked();
+            ui->CallsignEdit->clear();
+        }
+    }
 
 }

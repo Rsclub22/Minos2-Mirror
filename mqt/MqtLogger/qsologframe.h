@@ -215,6 +215,8 @@ private:
     QAction* runOnAction;
     QAction* runOffAction;
 
+    QString callsignEnterTextFreq;
+
 
     QString mode;
     QString oldMode;
