@@ -268,6 +268,7 @@ signals:
     void bandmapMarkFreq(QString, QString, QString, QString);
     void bandmapSaveFreq(QString, QString, QString, QString);
     void sendFreqControl(QString);
+    void freqChanged(QString);
 
 private slots:
     void focusChange(QObject *, bool, QFocusEvent *event);
@@ -317,6 +318,7 @@ private slots:
     void on_RunOffActionSelected();
 
 
+    void on_FreqChanged(QString f);
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 

@@ -145,6 +145,8 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
 
+    connect(this, SIGNAL(freqChanged(QString)), this, SLOT(on_FreqChanged(QString)));
+
 
 }
 
@@ -1715,6 +1717,7 @@ void QSOLogFrame::setFreq(QString f)
     if (curFreq != f)
     {
         curFreq = f;
+        emit freqChanged(f);
 
     }
 }
@@ -3007,4 +3010,11 @@ memoryData::memData QSOLogFrame::getRunMemoryData(int memoryNumber)
     if (ct->runMemories.size() > memoryNumber)
         m = ct->runMemories[memoryNumber].getValue();
     return m;
+}
+
+void QSOLogFrame::on_FreqChanged(QString f)
+{
+
+    int a = 0;
+
 }
