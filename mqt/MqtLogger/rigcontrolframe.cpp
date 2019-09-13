@@ -1688,6 +1688,7 @@ void RigControlFrame::runButReadActSel(int buttonNumber)
             {
 
                 sendFreq(m.freq);
+                emit runMemoryFreqUpdate(buttonNumber, m.freq); // send run freq to qsolog
             }
 
 
@@ -1725,6 +1726,7 @@ void RigControlFrame::runButWriteActSel(int buttonNumber)
     {
         setRunMemoryData(buttonNumber, runData);
         runButtonUpdate(buttonNumber);
+
     }
 
 }
@@ -1862,13 +1864,16 @@ memoryData::memData RigControlFrame::getRunMemoryData(int memoryNumber)
     memoryData::memData m;
 
     if (ct->runMemories.size() > memoryNumber)
-        m = ct->runMemories[memoryNumber].getValue();
+    {
+       m = ct->runMemories[memoryNumber].getValue();
+
+    }
     return m;
 }
 void RigControlFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
 {
     ct->saveRunMemory(memoryNumber, m);
-    emit runMemoryFreqUpdate(memoryNumber, m.freq);       // update QSOLogFrame
+
 }
 
 //*******************Run Memory Button *************************//

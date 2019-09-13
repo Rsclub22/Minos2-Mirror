@@ -64,7 +64,7 @@ private slots:
     void clearActionSelected();
 signals:
     void clearActionSelected(int);
-    void runMemoryFreqUpdate(int, QString);
+
 
 };
 class TuneMemoryButton : public QObject
@@ -181,6 +181,7 @@ signals:
 
     void sendIgnoreRunChkBoxState(int, bool);
     void runMemoryFreqUpdate(int, QString);
+
 
 
 private slots:

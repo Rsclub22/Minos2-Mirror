@@ -126,26 +126,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->qsoFrame->setStyleSheet(ssQsoFrameBlue);
     widgetStyles[ui->qsoFrame] = ssQsoFrameBlue;
 
-    runFreq[0] = "0";
-    runFreq[1] = "0";
-
-    ignoreRunState[0] = false;
-    ignoreRunState[1] = false;
-
-    initLogRunButton();
-
-
-
-    chkRunFreqTimer = new QTimer(this);
-    connect(chkRunFreqTimer, SIGNAL(timeout()), this, SLOT(on_ChkRunFreq()));
-    chkRunFreqTimer->start(1000);
-
-    connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_BandmapMarkFreqPbClicked()));
-    connect(ui->bandmapSaveFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapSaveFreqPbClicked()));
-
-    connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
-
-    connect(this, SIGNAL(freqChanged(QString)), this, SLOT(on_FreqChanged(QString)));
 
 
 }
@@ -411,6 +391,18 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(on_TimeDisplayTimer()));
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
 
+    initLogRunButton();
+
+    chkRunFreqTimer = new QTimer(this);
+    connect(chkRunFreqTimer, SIGNAL(timeout()), this, SLOT(on_ChkRunFreq()));
+
+
+    connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_BandmapMarkFreqPbClicked()));
+    connect(ui->bandmapSaveFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapSaveFreqPbClicked()));
+
+    connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
+
+    connect(this, SIGNAL(freqChanged(QString)), this, SLOT(on_FreqChanged(QString)));
 
 
 
@@ -2772,18 +2764,20 @@ QString QSOLogFrame::getBearing()
 
 //-------------------------------------------------------------------
 
-void QSOLogFrame::setRunMemoryFreqUpdate(int num, QString freq )
+
+//void QSOLogFrame::setIgnoreRunChkBoxState(int num, bool checked)
+//{
+
+//    ignoreRunState[num] = checked;
+//}
+
+void QSOLogFrame::setRunMemoryFreqUpdate(int num, QString freq)
 {
-    runFreq[num] = freq;
+    Q_UNUSED(num)
+
+    curRunFreq = freq;
+    ui->runToolButton->setText("Run ." + extractKhz(freq));
 }
-
-void QSOLogFrame::setIgnoreRunChkBoxState(int num, bool checked)
-{
-
-    ignoreRunState[num] = checked;
-}
-
-
 
 
 
@@ -2820,25 +2814,10 @@ void QSOLogFrame::on_ChkRunFreq()
 bool QSOLogFrame::chkRadioFreqOnRunFreq()
 {
 
-    qint64 runF0 = runFreq[0].toLongLong() / 100;
-    qint64 runF1 = runFreq[1].toLongLong() / 100;
     qint64 curRunF = curRunFreq.toLongLong() / 100;
     qint64 curF = curFreq.toLongLong() / 100;
 
-    if (runF0 != 0 && !ignoreRunState[0])
-    {
-        if ((curF >= (runF0 - RUN_TOLERANCE)) && (curF <= (runF0 + RUN_TOLERANCE)))
-        {
-            return true;
-        }
-    }
-    else if (runF1 != 0 && !ignoreRunState[1])
-    {
-        if ((curF >= (runF1 - RUN_TOLERANCE)) && (curF <= (runF1 + RUN_TOLERANCE)))
-        {
-            return true;
-        }
-    }else if (curRunF != 0)
+    if (curRunF != 0)
     {
         if ((curF >= (curRunF - RUN_TOLERANCE)) && (curF <= (curRunF + RUN_TOLERANCE)))
         {
@@ -2854,21 +2833,8 @@ void QSOLogFrame::runButtonOn()
 {
 
 
-    qint64 curRunF = curRunFreq.toLongLong() / 100;
-    qint64 curF = curFreq.toLongLong() / 100;
     runButtonOnFlag = true;
-
-    if (curF == 0 || curRunF == 0)
-    {
-        return;
-    }
-
-    if ((curF < (curRunF - RUN_TOLERANCE)) || (curF > (curRunF + RUN_TOLERANCE)))
-    {
-        sendFreq(curRunFreq);
-        radioOffRunFreq = true;
-    }
-
+    chkRunFreqTimer->start(1000);
     showRunButtonOnOff(runButtonOnFlag);
 
 
@@ -2881,6 +2847,7 @@ void QSOLogFrame::runButtonOff()
 
 
     runButtonOnFlag = false;
+    chkRunFreqTimer->stop();
     showRunButtonOnOff(runButtonOnFlag);
 
 }
@@ -2916,7 +2883,7 @@ void QSOLogFrame::initLogRunButton()
     connect( runOnAction, SIGNAL( triggered() ), this, SLOT(on_RunOnActionSelected()) );
     connect( runOffAction, SIGNAL( triggered() ), this, SLOT(on_RunOffActionSelected()) );
 
-    getRunFreq();
+
 }
 
 
@@ -2959,9 +2926,9 @@ void QSOLogFrame::on_RunPushButtonClicked()
 
 void QSOLogFrame::on_setRun1Action()
 {
-    if (runFreq[0].toLongLong() != 0)
+    if (getRunMemoryFreq(0).toLongLong() != 0)
     {
-        curRunFreq = runFreq[0];
+        curRunFreq = getRunMemoryFreq(0);
         sendFreq(curRunFreq);
         radioOffRunFreq = true;
         ui->runToolButton->setText("Run ." + extractKhz(curRunFreq));
@@ -2971,9 +2938,9 @@ void QSOLogFrame::on_setRun1Action()
 
 void QSOLogFrame::on_setRun2Action()
 {
-    if (runFreq[1].toLongLong() != 0)
+    if (getRunMemoryFreq(1).toLongLong() != 0)
     {
-        curRunFreq = runFreq[1];
+        curRunFreq = getRunMemoryFreq(1);
         sendFreq(curRunFreq);
         radioOffRunFreq = true;
         ui->runToolButton->setText("Run ." + extractKhz(curRunFreq));
@@ -2996,20 +2963,21 @@ void QSOLogFrame::on_RunOffActionSelected()
     runButtonOff();
 }
 
-void QSOLogFrame::getRunFreq()
-{
-    //TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    //runFreq[0] = tslf->contest->runMemories[0].freq().getValue();
-}
 
-memoryData::memData QSOLogFrame::getRunMemoryData(int memoryNumber)
+QString QSOLogFrame::getRunMemoryFreq(int memoryNumber)
 {
     memoryData::memData m;
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-    if (ct->runMemories.size() > memoryNumber)
-        m = ct->runMemories[memoryNumber].getValue();
-    return m;
+    if (ct)
+    {
+        if (ct->runMemories.size() > memoryNumber)
+        {
+            m = ct->runMemories[memoryNumber].getValue();
+        }
+    }
+
+    return m.freq;
 }
 
 void QSOLogFrame::on_FreqChanged(QString f)

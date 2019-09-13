@@ -15,7 +15,7 @@ namespace Ui {
 class QSOLogFrame;
 }
 
-const int RUN_TOLERANCE = 5;
+const int RUN_TOLERANCE = 5; //run freq tolerance = 500Hz
 
 class QSOLogFrame : public QFrame
 {
@@ -87,7 +87,7 @@ public:
     void setPartialContact(ScreenContact *value);
 
     void setRunMemoryFreqUpdate(int num, QString freq);
-    void setIgnoreRunChkBoxState(int num, bool checked);
+    //void setIgnoreRunChkBoxState(int num, bool checked);
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -201,8 +201,8 @@ private:
     void MainOpComboBox_Exit();
     void SecondOpComboBox_Exit();
 
-    QMap<int, QString> runFreq;
-    QMap<int, bool> ignoreRunState;
+
+    //QMap<int, bool> ignoreRunState;
     bool runButtonOnFlag;
     bool radioOffRunFreq;
 
@@ -259,8 +259,8 @@ private:
     void sendFreq(QString f);
     void showRunToolButtonOffFreq();
     void showRunToolButtonOnFreq();
-    memoryData::memData getRunMemoryData(int memoryNumber);
-    void getRunFreq();
+    QString getRunMemoryFreq(int memoryNumber);
+
 signals:
     void QSOFrameCancelled();
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );

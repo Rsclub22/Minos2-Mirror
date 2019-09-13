@@ -121,7 +121,9 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
     connect(FKHRigControlFrame, SIGNAL(runMemoryFreqUpdate(int, QString)), this, SLOT(sendRunMemoryFreqUpdate(int, QString)));
-    connect(FKHRigControlFrame, SIGNAL(sendIgnoreRunChkBoxState(int, bool)), this, SLOT(sendIgnoreRunChkBoxState(int, bool)));
+    //connect(FKHRigControlFrame, SIGNAL(sendIgnoreRunChkBoxState(int, bool)), this, SLOT(sendIgnoreRunChkBoxState(int, bool)));
+
+
     // Rotator updates
     // From rotator controller
     connect(LogContainer->sendDM, SIGNAL(RotatorLoaded()), this, SLOT(on_RotatorLoaded()));
@@ -1372,6 +1374,11 @@ void TSingleLogFrame::on_BandmapSaveFreq(QString cs, QString freq, QString loc, 
     bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg);
 }
 
+void TSingleLogFrame::sendRunMemoryFreqUpdate(int runNum, QString f)
+{
+    GJVQSOLogFrame->setRunMemoryFreqUpdate(runNum, f);
+}
+
 void TSingleLogFrame::sendKeyerTone()
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
@@ -1696,15 +1703,12 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
 }
 
 
-void TSingleLogFrame::sendRunMemoryFreqUpdate(int num, QString freq)
-{
-    GJVQSOLogFrame->setRunMemoryFreqUpdate(num, freq);
-}
 
-void TSingleLogFrame::sendIgnoreRunChkBoxState(int num, bool checked)
-{
-    GJVQSOLogFrame->setIgnoreRunChkBoxState(num, checked);
-}
+
+//void TSingleLogFrame::sendIgnoreRunChkBoxState(int num, bool checked)
+//{
+//    GJVQSOLogFrame->setIgnoreRunChkBoxState(num, checked);
+//}
 
 void TSingleLogFrame::invalidateCacheOnDisconnect()
 {
