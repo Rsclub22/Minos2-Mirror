@@ -616,11 +616,17 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
         logFreq = 0;
     }
 
+    bool locWorked = false;
+    if (spot->getSpotType() == bandmapSpotType::LOGGED)
+    {
+        locWorked = true;
+    }
+
     bandmapDataModel->rowData = new BandmapData(logTime, logTimeStr,
                                             spot->getFreq(), logFreq, spot->getbandStr(),  spot->getBandMask(),
                                             spot->getModeStr(), spot->getModeMask(), spot->getCallsign().fullCall.getValue(),
                                             spot->getWorked(), spot->getLocator(),
-                                            false, distance,
+                                            locWorked, distance,
                                             spot->getBearing(), rotBrg, rotatorConnected, "",
                                             "", "", "", spot->getSpotType());
 
