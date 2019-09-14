@@ -640,6 +640,16 @@ void BandmapView::drawBandMapSpots()
     if (numrows != 0)
     {
         trace(QString("Bandmap Drawspots: Number of Rows to Check = %1").arg(numrows));
+        trace(QString("Bandmap: dump list of spots and freq"));
+        for (int row = 0; row < numrows; row++)
+        {
+            QString freq = model()->data(model()->index(row, FREQ_COL_NUM), Qt::DisplayRole).toString().remove('.');
+            QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+            trace(QString("Bandmap: DB# = %1, Callsign = %2, Freq = %3").arg(row).arg(callsign).arg(freq));
+        }
+
+
+
         for (int row = 0; row < numrows; ++row)
         {
             trace(QString("Bandmap Drawspots: Row = %1").arg(row));
@@ -647,8 +657,7 @@ void BandmapView::drawBandMapSpots()
             if (matchMode(row))
             {
 
-                QModelIndex index = model()->index(row, FREQ_COL_NUM);
-                QString freq = model()->data(index, Qt::DisplayRole).toString().remove('.');
+                QString freq = model()->data(model()->index(row, FREQ_COL_NUM), Qt::DisplayRole).toString().remove('.');
                 //trace(QString("Bandmap Drawspots: marker freq = %1").arg(freq));
                 qint64 f_int64 = freq.toLongLong();
                 qint32 f_int32 = freq.toLong();
@@ -675,9 +684,8 @@ void BandmapView::drawBandMapSpots()
                         {
                             if (listOfMarkers[markNum]->getSpotMarkerPtr() == nullptr)
                             {
-                                //index = model()->index(row, DXSPOT_CALL_COL_NUM);
-                                QString callsign = model()->data(index, Qt::DisplayRole).toString();
-                                trace(QString("Bandmap Drawspots: addmarker = %1").arg(callsign));
+                                QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+                                trace(QString("Bandmap Drawspots: addmarker = #%1 %2:%3").arg(markNum).arg(callsign).arg(freq));
 
                                 QPoint spotCoord = QPoint(listOfMarkers[markNum]->getSpotMarkerCoord().x(), listOfMarkers[markNum]->getSpotMarkerCoord().y());
                                 BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
@@ -832,7 +840,7 @@ QString BandmapView::assembleSpotMsg(int row)
     }
 
     QString markSym = "";
-    if (spotType == bandmapSpotType::MARKED)
+    if (spotType == bandmapSpotType::MARKED || spotType == bandmapSpotType::SAVED)
     {
         markSym = HtmlFontColour(MARKED_SPOT_COLOUR) + "#" + HtmlFontColour(NOT_WORKED_COLOUR);
     }

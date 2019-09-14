@@ -372,3 +372,12 @@ bool BandmapDataModel::removeColumns(int column, int count, const QModelIndex &p
     endRemoveColumns();
     return true;
 }
+
+BandmapData* BandmapDataModel::getBandmapDataRow(int row)
+{
+    return bandmapData[row];
+}
+
+
+void BandmapData::operator = (const BandmapData& bmd)
+{
