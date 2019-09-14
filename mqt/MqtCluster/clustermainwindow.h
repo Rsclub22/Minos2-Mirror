@@ -154,6 +154,7 @@ private:
     QLabel* status;
 
     QVector<BandDetail*> bands;
+    checkModeAgainstFreq* modeBandPlan;
 
     const QStringList userCmdButtonLabels = {"&Send", "&New", "&Edit", "&Clear"};
     QList<RotPresetButton *> userCmdButton;
@@ -171,7 +172,6 @@ private:
     QTableView* dxSpotView;
     QPlainTextEdit* rawClusterDataView;
 
-    checkModeAgainstFreq* modeBandPlan;
 
     SetupDialog *setupCluster;
 
@@ -224,6 +224,8 @@ private:
     QString geoStr;         // geometry registry location
 
 
+
+
     void txText(QString msg);
     int upackDxSpot(QString txt, QString &spotCall);
     void loadNodesSelectBox(QStringList listOfNodes);
@@ -233,7 +235,7 @@ private:
     void closeEvent(QCloseEvent *event);
     void disconnectNode();
     void connectToHost(QString hostName);
-    void getBand(QString freq, QString &band, QString &bandMask);
+
 
     void getStartCommands();
     void getUserCommands();
@@ -265,7 +267,6 @@ private:
     void handleEndFile();
     void handleCmdFile(QString fileName);
 
-    void getMode(const QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
 
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;

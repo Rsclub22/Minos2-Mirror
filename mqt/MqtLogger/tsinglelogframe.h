@@ -234,7 +234,7 @@ private slots:
 
     void sendKeyerPlay( int fno );
     void sendKeyerRecord( int fno );
-    void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
+    //void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
     void sendKeyerTone();
     void sendKeyerTwoTone();
     void sendKeyerStop();
@@ -257,6 +257,11 @@ private slots:
 
     void on_doColumnChanges(BaseContestLog*);
     void on_doSplitterChanges(BaseContestLog*);
+    //void sendIgnoreRunChkBoxState(int num, bool checked);
+    void on_BandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
+    void on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
+    void on_rotatorConnected(bool connected);
+    void sendRunMemoryFreqUpdate(int runNum, QString f);
 public:
     void sendTpm(int t, QString f);
     

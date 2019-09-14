@@ -7,12 +7,15 @@
 #include "focuswatcher.h"
 #include "validators.h"
 #include "cutils.h"
+#include "rigmemcommondata.h"
 
 class ListContact;
 
 namespace Ui {
 class QSOLogFrame;
 }
+
+const int RUN_TOLERANCE = 5; //run freq tolerance = 500Hz
 
 class QSOLogFrame : public QFrame
 {
@@ -83,6 +86,8 @@ public:
     ScreenContact *getPartialContact() const;
     void setPartialContact(ScreenContact *value);
 
+    void setRunMemoryFreqUpdate(int num, QString freq);
+    //void setIgnoreRunChkBoxState(int num, bool checked);
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -196,6 +201,23 @@ private:
     void MainOpComboBox_Exit();
     void SecondOpComboBox_Exit();
 
+
+    //QMap<int, bool> ignoreRunState;
+    bool runButtonOnFlag;
+    bool radioOffRunFreq;
+
+    QString curRunFreq;
+    QTimer *chkRunFreqTimer;
+    QToolButton *runButton;
+    QMenu *runButtonMenu;
+    QAction* setRun1Action;
+    QAction* setRun2Action;
+    QAction* runOnAction;
+    QAction* runOffAction;
+
+    QString callsignEnterTextFreq;
+
+
     QString mode;
     QString oldMode;
     bool qsoLogModeFlag = false;
@@ -219,13 +241,36 @@ private:
     QString ssLineEditFrRedBkRed = "QLineEdit { background-color: red ; border-style: outset ; border-width: 1px ; border-color: red ; color : white }";
     QString ssLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
 
+    const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+    const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: khaki ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+    const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+
+
     QMap<QWidget *, QString> widgetStyles;
 
     void checkBandMapAndClusterLoaded();
+    void showRunButtonOnOff(bool state);
+    memoryData::memData getLogDetails();
+
+
+    void onBandMapAfterLogContact();
+    bool chkRadioFreqOnRunFreq();
+    void initLogRunButton();
+    void runButtonOn();
+    void runButtonOff();
+    void sendFreq(QString f);
+    void showRunToolButtonOffFreq();
+    void showRunToolButtonOnFreq();
+    QString getRunMemoryFreq(int memoryNumber);
+
 signals:
     void QSOFrameCancelled();
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
     void sendModeControl(QString);
+    void bandmapMarkFreq(QString, QString, QString, QString);
+    void bandmapSaveFreq(QString, QString, QString, QString);
+    void sendFreqControl(QString);
+    void freqChanged(QString);
 
 private slots:
     void focusChange(QObject *, bool, QFocusEvent *event);
@@ -261,11 +306,21 @@ private slots:
 
     void on_frequencyEdit_textChanged(const QString &arg1);
 
-    void on_bandmapMarkFreqPbClicked();
+    void on_RunPushButtonClicked();
+    void on_BandmapMarkFreqPbClicked();
     void on_bandmapSaveFreqPbClicked();
+
     void on_SpotPbClicked();
 
+   void on_ChkRunFreq();
 
+    void on_setRun1Action();
+    void on_setRun2Action();
+    void on_RunOnActionSelected();
+    void on_RunOffActionSelected();
+
+
+    void on_FreqChanged(QString f);
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 

@@ -607,12 +607,16 @@ void RotControlFrame::setRotatorState(const QString &s)
                    ui->rotConnectState->setText(lastConnectStat);
                    rotError = false;
                    rotConnected = true;
+                   emit rotatorConnected(true);     // tell bandmap
                }
                else if (lastConnectStat == ROT_STATUS_DISCONNECTED)
                {
                    ui->rotConnectState->setText(lastConnectStat);
                    rotError = false;
                    rotConnected = false;
+                   emit rotatorConnected(false);     // tell bandmap
+
+
                }
            }
            if (sl.count() > 1 && sl[1] != lastStatus)

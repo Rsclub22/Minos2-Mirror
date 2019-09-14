@@ -134,6 +134,10 @@ signals:
     void turnBearingReturn();
     void bearingEditReturn();
 
+    void rotatorConnected(bool);
+
+
+
 
 private slots:
 

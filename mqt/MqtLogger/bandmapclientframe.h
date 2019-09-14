@@ -30,6 +30,8 @@
 #include "bandmapfreqdial.h"
 #include "bandmapdatamodel.h"
 #include "bandmapclientfilterdialog.h"
+#include "BandList.h"
+#include "checkmodeagainstfreq.h"
 
 
 
@@ -39,6 +41,81 @@ namespace Ui {
 
 
 class BMP_MouseInObject;
+
+
+class LoggerSpots
+{
+public:
+
+    LoggerSpots(Callsign _cs, QString _loc,  QString _brg,
+                QString _modeStr, QString _modeMask,
+                QString _freq, QString _bandStr, QString _bandMask,
+                bool _worked, QDateTime _time, bandmapSpotType::SPOT_TYPE _spotType )
+    {
+        cs = _cs;
+        loc = _loc;
+        brg = _brg;
+        freq = _freq;
+        bandStr = _bandStr;
+        bandMask = _bandMask;
+        modeStr = _modeStr;
+        modeMask = _modeMask;
+        worked = _worked;
+        time = _time;
+        spotType = _spotType;
+
+    }
+
+    Callsign getCallsign(){ return cs;}
+    void setCallsign(Callsign _cs){cs = _cs;}
+
+    QString getLocator(){return loc;}
+    void setLocator(QString _loc){loc = _loc;}
+
+    QString getBearing(){return brg;}
+    void setBearing(QString _brg){brg = _brg;}
+
+    QString getFreq(){return freq;}
+    void setFreq(QString _freq){freq = _freq;}
+
+    QString getbandStr(){return bandStr;}
+    void setBandStr(QString _bandStr){bandStr = _bandStr;}
+
+    QString getBandMask(){return bandMask;}
+    void setBandMask(QString _bandMask){bandMask = _bandMask;}
+
+
+    QString getModeStr(){return modeStr;}
+    void setModeStr(QString _modeStr){modeStr = _modeStr;}
+
+    QString getModeMask(){return modeMask;}
+    void setModeMask(QString _modeMask){modeMask = _modeMask;}
+
+    bool getWorked(){return worked;}
+    void setWorked(bool _worked){worked = _worked;}
+
+    QDateTime getTime(){return time;}
+    void setTime(QDateTime _time){time = _time;}
+
+    bandmapSpotType::SPOT_TYPE getSpotType(){return spotType;}
+    void setSpotType(bandmapSpotType::SPOT_TYPE _spotType){spotType = _spotType;}
+
+private:
+
+    Callsign cs;
+    QString loc;
+    QString brg;
+    QString modeStr;
+    QString modeMask;
+    QString freq;
+    QString bandStr;
+    QString bandMask;
+    bool worked;
+    QDateTime time;
+    bandmapSpotType::SPOT_TYPE spotType;
+};
+
+
 
 class BandmapClientFrame : public QFrame
 {
@@ -57,6 +134,11 @@ public:
     void buttonHandleDxSpots();
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseTimerCheckNewSpots();
+    void setBandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
+    void setBandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
+
+    void setRotatorBearing(QString s);
+    void setRotatorConnected(bool connected);
 private:
 
     Ui::BandmapClientFrame *ui;
@@ -75,12 +157,17 @@ private:
     QTimer* checkNewSpotsTimer;
     QTimer* checkNewFilters;
 
+    QVector<BandDetail*> bands;
+    checkModeAgainstFreq* modeBandPlan;
 
     BMP_MouseInObject* actionInObject;
 
 
     // cluster spots
     QVector<QString> spotQueue;
+
+    // spots from logger
+    QVector<LoggerSpots*> logSpotQueue;
 
     BandmapView *bandmapView;
     QItemSelectionModel *selectionModel;
@@ -107,12 +194,12 @@ private:
     BandmapData selectedSpotData;
     int selectedSpotRowNum;
 
-
-
-
     bool purgeSpotFlag;
     bool holdUpdateFlag;
     qlonglong timeToLive;
+
+    QString curRotBearing;
+    bool rotatorConnected;
 
     int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);
@@ -156,6 +243,7 @@ private slots:
      void purgeSpots();
      void on_markSpotActionSelected();
      void on_unMarkSpotActionSelected();
+     void addLogSpotToBandmapTable(LoggerSpots *spot);
 };
 
 

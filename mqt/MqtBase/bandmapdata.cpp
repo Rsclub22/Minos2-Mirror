@@ -24,7 +24,7 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
                    QString _dxMode,  QString _dxModeMaskStr,
                    QString _dxCall, bool _dxCallWorked,
                    QString _dxLocator, bool _dxLocatorWorked,
-                   QString distance, QString bearing,
+                   QString _distance, QString _bearing, QString _rotBrg, bool _rotConnected,
                    QString _spotterCall, QString _spotterLocator, QString _dxPropMode,
                    QString comment, bandmapSpotType::SPOT_TYPE _spotType)
 {
@@ -39,8 +39,10 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
     dxModeMaskStr = _dxModeMaskStr;
     dxCall = _dxCall;
     dxLocator = _dxLocator;
-    dxDist = distance;
-    dxBrg = bearing;
+    dxDist = _distance;
+    dxBrg = _bearing;
+    rotBrg = _rotBrg;
+    rotConnected = _rotConnected;
     dxCallWorked = _dxCallWorked;
     dxLocatorWorked = _dxLocatorWorked;
     sentToMemory = false;
@@ -66,6 +68,8 @@ void BandmapData::operator = (const BandmapData& bmd)
     dxLocator = bmd.dxLocator;
     dxDist = bmd.dxDist;
     dxBrg = bmd.dxDist;
+    rotBrg = bmd.rotBrg;
+    rotConnected = bmd.rotConnected;
     dxCallWorked = bmd.dxCallWorked;
     dxLocatorWorked = bmd.dxLocatorWorked;
     sentToMemory = bmd.sentToMemory;

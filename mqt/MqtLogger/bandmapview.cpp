@@ -583,7 +583,7 @@ void BandmapView::drawBandMapSpots()
     trace(QString("Bandmap Drawspots: Start Drawing"));
     if (!listOfMarkers.isEmpty())
     {
-        trace(QString("Bandmap Drawspots: Remove %1 markers").arg(listOfMarkers.count()));
+        //trace(QString("Bandmap Drawspots: Remove %1 markers").arg(listOfMarkers.count()));
         for (int i = 0; i < listOfMarkers.count(); i++)
         {
             if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
@@ -649,16 +649,16 @@ void BandmapView::drawBandMapSpots()
 
             QModelIndex index = model()->index(row, FREQ_COL_NUM);
             QString freq = model()->data(index, Qt::DisplayRole).toString().remove('.');
-                trace(QString("Bandmap Drawspots: marker freq = %1").arg(freq));
+                //trace(QString("Bandmap Drawspots: marker freq = %1").arg(freq));
             qint64 f_int64 = freq.toLongLong();
             qint32 f_int32 = freq.toLong();
 
             if (f_int32 >= startFreq * 1000 && f_int32 <= endFreq * 1000)
             {
                 yCoord = dial->getYCoordOnDial(f_int64);
-                    trace(QString("Bandmap Drawspots: spot freq within scale"));
-                    trace(QString("Bandmap Drawspots: cursor Freq = %1").arg(f_int64));
-                    trace(QString("Bandmap Drawspots: cursor Freq y coord = %1").arg(yCoord));
+                    //trace(QString("Bandmap Drawspots: spot freq within scale"));
+                    //trace(QString("Bandmap Drawspots: cursor Freq = %1").arg(f_int64));
+                    //trace(QString("Bandmap Drawspots: cursor Freq y coord = %1").arg(yCoord));
                 for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
                 {
                     int fontOffset;
@@ -681,7 +681,7 @@ void BandmapView::drawBandMapSpots()
 
                             QPoint spotCoord = QPoint(listOfMarkers[markNum]->getSpotMarkerCoord().x(), listOfMarkers[markNum]->getSpotMarkerCoord().y());
                             BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
-                                trace(QString("Bandmap Drawspots: spot coord x = %1 y = %2").arg(listOfMarkers[markNum]->getSpotMarkerCoord().x()).arg(listOfMarkers[markNum]->getSpotMarkerCoord().y()));
+                                //trace(QString("Bandmap Drawspots: spot coord x = %1 y = %2").arg(listOfMarkers[markNum]->getSpotMarkerCoord().x()).arg(listOfMarkers[markNum]->getSpotMarkerCoord().y()));
 
                             bandmapScene->addItem(spot);
                             QString spotMsg = assembleSpotMsg(row);
@@ -691,10 +691,10 @@ void BandmapView::drawBandMapSpots()
                             listOfMarkers[markNum]->setSpotMarkerPtr(spot);
 
                             QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight);
-                                trace(QString("Bandmap Drawspots: marker start coord x = %1 y = %2").arg(dialWidth + SPOTMARKER_XOFFSET).arg(listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight));
-                                trace(QString("Bandmap Drawspots: font addition = %1").arg(fontHeight));
+                                //trace(QString("Bandmap Drawspots: marker start coord x = %1 y = %2").arg(dialWidth + SPOTMARKER_XOFFSET).arg(listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight));
+                                //trace(QString("Bandmap Drawspots: font addition = %1").arg(fontHeight));
                             QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
-                                trace(QString("Bandmap Drawspots: marker end coord x = %1 y = %2").arg(dialWidth).arg(yCoord + dialData::DIAL_VERT_OFFSET));
+                                //trace(QString("Bandmap Drawspots: marker end coord x = %1 y = %2").arg(dialWidth).arg(yCoord + dialData::DIAL_VERT_OFFSET));
 
                             QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
                             QLineF markerLineCoordsF = QLineF(markerLineCoord);
@@ -779,6 +779,9 @@ QString BandmapView::assembleSpotMsg(int row)
     QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), Qt::DisplayRole).toString();
     QString dxDist = model()->data(model()->index(row, DXDIST_COL_NUM), Qt::DisplayRole).toString();
     QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), Qt::DisplayRole).toString();
+    QString rotBrg = model()->data(model()->index(row, ROT_BEARING_COL_NUM), Qt::DisplayRole).toString();
+    bool rotConnected = model()->data(model()->index(row, ROT_CONNECTED_COL_NUM), BMP_DataStoredRole).toBool();
+
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
 
@@ -793,18 +796,39 @@ QString BandmapView::assembleSpotMsg(int row)
 
 
     QChar degSym = QChar(DEG_SYMBOL);
+    if (dxLoc.isEmpty())
+    {
+       if (rotConnected)
+       {
+           dxBrg = rotBrg;
+       }
+       else
+       {
+           dxBrg = "";
+           degSym = QChar(' ');
+       }
+    }
+    else
+    {
     if (dxBrg.isEmpty())
     {
         degSym = QChar(' ');
+            dxBrg = "";
+    }
     }
 
-    QString uLineStart = "";
-    QString uLineEnd = "";
+
+
+
+
+
+    QString bLineStart = "";
+    QString bLineEnd = "";
 
     if (freq >= curFreq - 1 && freq <= curFreq +1)
     {
-        uLineStart = "<b>";
-        uLineEnd = "</b>";
+        bLineStart = "<b>";
+        bLineEnd = "</b>";
     }
 
     QString markSym = "";
@@ -814,7 +838,7 @@ QString BandmapView::assembleSpotMsg(int row)
     }
 
 
-    QString msg = QString("%1%2  %3  %4  %5%6%7 %8 %9").arg(uLineStart).arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(uLineEnd).arg(markSym).arg(newSpotMsg);
+    QString msg = QString("%1%2  %3  %4  %5%6%7 %8 %9").arg(bLineStart).arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(bLineEnd).arg(markSym).arg(newSpotMsg);
 
     if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
     {

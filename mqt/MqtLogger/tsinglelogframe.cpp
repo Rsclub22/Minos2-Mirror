@@ -113,11 +113,16 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
+    connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
     connect(FKHRigControlFrame, SIGNAL(sendRitFreq(int)), this, SLOT(sendRadioRitFreq(int)));
     connect(FKHRigControlFrame, SIGNAL(sendVolumeToRadio(int)), this, SLOT(sendRadioVolume(int)));
     connect(FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
+
+    connect(FKHRigControlFrame, SIGNAL(runMemoryFreqUpdate(int, QString)), this, SLOT(sendRunMemoryFreqUpdate(int, QString)));
+    //connect(FKHRigControlFrame, SIGNAL(sendIgnoreRunChkBoxState(int, bool)), this, SLOT(sendIgnoreRunChkBoxState(int, bool)));
+
 
     // Rotator updates
     // From rotator controller
@@ -130,10 +135,15 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), this, SLOT(sendSelectRotator(QString)));
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), rotPresets, SLOT(selectRotator(QString)));
     connect(rotPresets, SIGNAL(presetTurn(QString)), this, SLOT(presetTurn(QString)));
-
+    connect(FKHRotControlFrame, SIGNAL(rotatorConnected(bool)), this, SLOT(on_rotatorConnected(bool)));
     // from cluster frame
     connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToLog(memoryData::memData)), this, SLOT(dxSpotToLog(memoryData::memData)));
 
+    // to bandmap
+    connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, QString, QString, QString)),
+            this, SLOT(on_BandmapMarkFreq(QString, QString, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, QString, QString, QString)),
+            this, SLOT(on_BandmapSaveFreq(QString, QString, QString, QString)));
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
@@ -1346,10 +1356,27 @@ void TSingleLogFrame::sendKeyerRecord( int fno )
         LogContainer->sendDM->sendKeyerRecord(this, fno);
 }
 
-void TSingleLogFrame::sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth )
+//void TSingleLogFrame::sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth )
+//{
+//    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+//        LogContainer->sendDM->sendBandMap(this, freq, call, utc, loc, qth);
+//}
+
+
+void TSingleLogFrame::on_BandmapMarkFreq(QString cs, QString freq, QString loc, QString brg)
 {
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-        LogContainer->sendDM->sendBandMap(this, freq, call, utc, loc, qth);
+    bandmapControlFrame->setBandmapMarkFreq(cs, freq, loc, brg);
+}
+
+
+void TSingleLogFrame::on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg)
+{
+    bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg);
+}
+
+void TSingleLogFrame::sendRunMemoryFreqUpdate(int runNum, QString f)
+{
+    GJVQSOLogFrame->setRunMemoryFreqUpdate(runNum, f);
 }
 
 void TSingleLogFrame::sendKeyerTone()
@@ -1675,6 +1702,14 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
     }
 }
 
+
+
+
+//void TSingleLogFrame::sendIgnoreRunChkBoxState(int num, bool checked)
+//{
+//    GJVQSOLogFrame->setIgnoreRunChkBoxState(num, checked);
+//}
+
 void TSingleLogFrame::invalidateCacheOnDisconnect()
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
@@ -1760,8 +1795,14 @@ void TSingleLogFrame::on_RotatorBearing(QString s)
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         FKHRotControlFrame->setRotatorBearing(s);
+        bandmapControlFrame->setRotatorBearing(s);
         GJVQSOLogFrame->setRotatorBearing(s);
     }
+}
+
+void TSingleLogFrame::on_rotatorConnected(bool connected)
+{
+    bandmapControlFrame->setRotatorConnected(connected);
 }
 
 

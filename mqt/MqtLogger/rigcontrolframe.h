@@ -65,6 +65,7 @@ private slots:
 signals:
     void clearActionSelected(int);
 
+
 };
 class TuneMemoryButton : public QObject
 {
@@ -157,12 +158,13 @@ public:
     void setVolumeStatus(bool status, PubSubName psn);
     void setRitEnableStatus(bool status, PubSubName psn);
     void setBandList(QString s, PubSubName psn);
-
+    void setIgnoreRunChecksBoxVisible(bool);
     void createActiveBandList(QString);
 
     void setTransVertEnabled(bool status, PubSubName psn);
 
     void closeContest();
+
 
 
 signals:
@@ -176,6 +178,10 @@ signals:
     void sendRitFreq(int);
     void ritStatus(bool);
     void radioDisconnected();
+
+    void sendIgnoreRunChkBoxState(int, bool);
+    void runMemoryFreqUpdate(int, QString);
+
 
 
 private slots:
@@ -214,6 +220,8 @@ private slots:
 
 
 
+    void ignoreRunChkBoxSelected0(int s);
+    void ignoreRunChkBoxSelected1(int s);
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -229,6 +237,8 @@ private:
     LoggerContestLog *ct = nullptr;
 
     QMap<int, RunMemoryButton *> runButtonMap;
+    QMap<int, QCheckBox*> ignoreRunChkBoxMap;
+
     QMap<int, TuneMemoryButton *> tuneButtonMap;
     QVector<quickBandSelData> listOfBands;
 
@@ -293,7 +303,7 @@ private:
 
     void traceMsg(QString msg);
 
-    QString extractKhz(QString f);
+
     void loadMemories();
     void mgmLabelVisible(bool state);
     bool checkValidFreq(QString freq);
@@ -318,6 +328,7 @@ private:
     void setRadioTxVertStatus(bool status);
     void transVertIndicatorOn();
     void transVertIndicatorOff();
+    void initRunIgnoreChkBox();
 };
 
 

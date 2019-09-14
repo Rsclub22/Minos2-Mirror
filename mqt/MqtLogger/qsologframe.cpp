@@ -6,6 +6,7 @@
 #include "LoggerContacts.h"
 #include "ListContact.h"
 #include "tlogcontainer.h"
+#include "tsinglelogframe.h"
 #include "tqsoeditdlg.h"
 #include "tforcelogdlg.h"
 #include "SendRPCDM.h"
@@ -31,7 +32,13 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , keyerLoaded(false)
     , radioConnected(false)
     , radioError(false)
+    , clusterLoaded(false)
+    , runButtonOnFlag(false)
+    , radioOffRunFreq(false)
+    , curRunFreq("00000000000")
+    , callsignEnterTextFreq("00000000000")
     , curFreq("00000000000")
+
 {
     ui->setupUi(this);
 
@@ -119,6 +126,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     ui->qsoFrame->setStyleSheet(ssQsoFrameBlue);
     widgetStyles[ui->qsoFrame] = ssQsoFrameBlue;
+
 
 
 }
@@ -384,10 +392,20 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(on_TimeDisplayTimer()));
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
 
-    connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapMarkFreqPbClicked()));
+    initLogRunButton();
+
+    chkRunFreqTimer = new QTimer(this);
+    connect(chkRunFreqTimer, SIGNAL(timeout()), this, SLOT(on_ChkRunFreq()));
+
+
+    connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_BandmapMarkFreqPbClicked()));
     connect(ui->bandmapSaveFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapSaveFreqPbClicked()));
 
     connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
+
+    connect(this, SIGNAL(freqChanged(QString)), this, SLOT(on_FreqChanged(QString)));
+
+
 
 }
 void QSOLogFrame::setTimeStyles()
@@ -813,9 +831,19 @@ void QSOLogFrame::on_QTHEdit_textChanged(const QString &/*arg1*/)
     doGJVEditChange( ui->QTHEdit );
 }
 
-void QSOLogFrame::on_CallsignEdit_textChanged(const QString &/*arg1*/)
+void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
 {
     doGJVEditChange( ui->CallsignEdit );
+
+    if (text.count() > 0)
+    {
+        callsignEnterTextFreq = curFreq;
+    }
+    else
+    {
+        callsignEnterTextFreq = "00000000000";
+    }
+
 }
 
 void QSOLogFrame::on_LocEdit_textChanged(const QString &/*arg1*/)
@@ -877,20 +905,7 @@ void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
     }
 }
 
-void QSOLogFrame::on_bandmapMarkFreqPbClicked()
-{
 
-}
-
-void QSOLogFrame::on_bandmapSaveFreqPbClicked()
-{
-
-}
-
-void QSOLogFrame::on_SpotPbClicked()
-{
-
-}
 
 void QSOLogFrame::setActiveControl( int *Key )
 {
@@ -1705,8 +1720,13 @@ void QSOLogFrame::setFreq(QString f)
     if (curFreq != f)
     {
         curFreq = f;
+        emit freqChanged(f);
 
     }
+}
+void QSOLogFrame::sendFreq(QString f)
+{
+    emit sendFreqControl(f);
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::setRadioName(QString radioName)
@@ -2066,10 +2086,12 @@ void QSOLogFrame::logScreenEntry( )
    MinosLoggerEvents::SendAfterLogContact(ct);
    MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.loc.getValue());
 
-   if (ui->bandmapRunFreqChkBox->isVisible() && !ui->bandmapRunFreqChkBox->isChecked())
+   if ((ui->runToolButton->isVisible() && runButtonOnFlag && radioOffRunFreq) || (ui->runToolButton && !runButtonOnFlag))
    {
        MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue());
    }
+
+
 
    if (!edit )
         startNextEntry( );	// select the "next"
@@ -2597,10 +2619,71 @@ bool QSOLogFrame::isBandMapLoaded()
 
 void QSOLogFrame::setBandMapControlsVisible(bool visible)
 {
-    ui->bandmapRunFreqChkBox->setVisible(visible);
+    ui->runToolButton->setVisible(visible);
     ui->bandmapMarkFreqPb->setVisible(visible);
     ui->bandmapSaveFreqPb->setVisible(visible);
+
 }
+
+
+
+
+void QSOLogFrame::on_SpotPbClicked()
+{
+
+}
+
+void QSOLogFrame::on_BandmapMarkFreqPbClicked()
+{
+    memoryData::memData logData = getLogDetails();
+    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+}
+
+
+void QSOLogFrame::on_bandmapSaveFreqPbClicked()
+{
+    memoryData::memData logData = getLogDetails();
+    callsignEnterTextFreq = "00000000000";
+    ui->CallsignEdit->clear();
+    emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+}
+
+void QSOLogFrame::showRunButtonOnOff(bool state)
+{
+    if (state)
+    {
+        ui->runToolButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
+
+    }
+    else
+    {
+        ui->runToolButton->setStyleSheet(RUN_BUTTON_OFF_STYLE);
+    }
+}
+
+
+void QSOLogFrame::showRunToolButtonOffFreq()
+{
+    ui->runToolButton->setStyleSheet(RUN_BUTTON_OFF_FREQ_STYLE);
+}
+
+void QSOLogFrame::showRunToolButtonOnFreq()
+{
+    ui->runToolButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
+}
+
+
+memoryData::memData QSOLogFrame::getLogDetails()
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+    memoryData::memData logData;
+    tslf->getDetails(logData);
+
+    return logData;
+
+}
+
 
 //---------------------------------------------------------
 
@@ -2683,3 +2766,238 @@ QString QSOLogFrame::getBearing()
     return ui->BrgSt->text();
 }
 
+//-------------------------------------------------------------------
+
+
+//void QSOLogFrame::setIgnoreRunChkBoxState(int num, bool checked)
+//{
+
+//    ignoreRunState[num] = checked;
+//}
+
+void QSOLogFrame::setRunMemoryFreqUpdate(int num, QString freq)
+{
+    Q_UNUSED(num)
+
+    curRunFreq = freq;
+    ui->runToolButton->setText("Run ." + extractKhz(freq));
+}
+
+
+
+void QSOLogFrame::on_ChkRunFreq()
+{
+    if (runButtonOnFlag)
+    {
+        if (!chkRadioFreqOnRunFreq())
+        {
+            // off run freq
+            if (!radioOffRunFreq)
+            {
+                radioOffRunFreq = true;
+                showRunToolButtonOffFreq();
+            }
+         }
+
+        else if (chkRadioFreqOnRunFreq())
+        {
+            // back on a run freq
+            if (radioOffRunFreq)
+            {
+                radioOffRunFreq = false;
+                showRunToolButtonOnFreq();
+            }
+
+        }
+    }
+
+}
+
+
+
+bool QSOLogFrame::chkRadioFreqOnRunFreq()
+{
+
+    qint64 curRunF = curRunFreq.toLongLong() / 100;
+    qint64 curF = curFreq.toLongLong() / 100;
+
+    if (curRunF != 0)
+    {
+        if ((curF >= (curRunF - RUN_TOLERANCE)) && (curF <= (curRunF + RUN_TOLERANCE)))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+void QSOLogFrame::runButtonOn()
+{
+
+
+    runButtonOnFlag = true;
+    chkRunFreqTimer->start(1000);
+    showRunButtonOnOff(runButtonOnFlag);
+
+
+
+}
+
+
+void QSOLogFrame::runButtonOff()
+{
+
+
+    runButtonOnFlag = false;
+    chkRunFreqTimer->stop();
+    showRunButtonOnOff(runButtonOnFlag);
+
+}
+
+
+void QSOLogFrame::initLogRunButton()
+{
+
+    runButton = ui->runToolButton;
+
+    runButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    runButton->setPopupMode(QToolButton::MenuButtonPopup);
+    runButton->setFocusPolicy(Qt::NoFocus);
+    runButton->setText("Run .***");
+
+
+    runButtonMenu = new QMenu(runButton);
+
+    setRun1Action = new QAction("Set Run1", runButton);
+    setRun2Action = new QAction("Set Run2", runButton);
+    runOnAction = new QAction("Run On", runButton);
+    runOffAction = new QAction("Run Off", runButton);
+    runButtonMenu->addAction(setRun1Action);
+    runButtonMenu->addAction(setRun2Action);
+    runButtonMenu->addAction(runOnAction);
+    runButtonMenu->addAction(runOffAction);
+
+    runButton->setMenu(runButtonMenu);
+
+    connect(runButton, SIGNAL(clicked(bool)), this, SLOT(on_RunPushButtonClicked()));
+    connect( setRun1Action, SIGNAL( triggered() ), this, SLOT(on_setRun1Action()) );
+    connect( setRun2Action, SIGNAL( triggered() ), this, SLOT(on_setRun2Action()) );
+    connect( runOnAction, SIGNAL( triggered() ), this, SLOT(on_RunOnActionSelected()) );
+    connect( runOffAction, SIGNAL( triggered() ), this, SLOT(on_RunOffActionSelected()) );
+
+
+}
+
+
+
+void QSOLogFrame::on_RunPushButtonClicked()
+{
+
+    if (runButtonOnFlag)
+    {
+        runButtonOff();
+    }
+    else
+    {
+        runButtonOn();
+
+    }
+
+/*
+    qint64 curRunF = curRunFreq.toLongLong() / 100;
+    qint64 curF = curFreq.toLongLong() / 100;
+    //runButtonOnFlag = true;
+
+    if (curF == 0 || curRunF == 0)
+    {
+        return;
+    }
+
+
+    if ((curF < (curRunF - RUN_TOLERANCE)) || (curF > (curRunF + RUN_TOLERANCE)))
+    {
+        sendFreq(curRunFreq);
+        radioOffRunFreq = true;
+    }
+
+    //showRunButtonOnOff(runButtonOnFlag);
+
+*/
+}
+
+
+void QSOLogFrame::on_setRun1Action()
+{
+    if (getRunMemoryFreq(0).toLongLong() != 0)
+    {
+        curRunFreq = getRunMemoryFreq(0);
+        sendFreq(curRunFreq);
+        radioOffRunFreq = true;
+        ui->runToolButton->setText("Run ." + extractKhz(curRunFreq));
+    }
+
+}
+
+void QSOLogFrame::on_setRun2Action()
+{
+    if (getRunMemoryFreq(1).toLongLong() != 0)
+    {
+        curRunFreq = getRunMemoryFreq(1);
+        sendFreq(curRunFreq);
+        radioOffRunFreq = true;
+        ui->runToolButton->setText("Run ." + extractKhz(curRunFreq));
+    }
+}
+
+
+
+
+void QSOLogFrame::on_RunOnActionSelected()
+{
+
+        runButtonOn();
+}
+
+
+void QSOLogFrame::on_RunOffActionSelected()
+{
+
+    runButtonOff();
+}
+
+
+
+QString QSOLogFrame::getRunMemoryFreq(int memoryNumber)
+{
+    memoryData::memData m;
+    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
+    if (ct)
+    {
+        if (ct->runMemories.size() > memoryNumber)
+        {
+            m = ct->runMemories[memoryNumber].getValue();
+        }
+    }
+
+    return m.freq;
+}
+
+void QSOLogFrame::on_FreqChanged(QString f)
+{
+
+    qint64 dialFreq = f.toLongLong() / 1000;
+    qint64 callsignEnterFreq = callsignEnterTextFreq.toLongLong() / 1000;
+
+    if (callsignEnterFreq != 0)
+    {
+        if (callsignEnterFreq != dialFreq)
+        {
+            callsignEnterTextFreq = "00000000000";
+            on_bandmapSaveFreqPbClicked();
+            ui->CallsignEdit->clear();
+        }
+    }
+
+}

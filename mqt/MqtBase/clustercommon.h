@@ -1,9 +1,13 @@
 #ifndef CLUSTERCOMMON_H
 #define CLUSTERCOMMON_H
 
+
 #include "base_pch.h"
 #include <QList>
 #include <QColor>
+
+class checkModeAgainstFreq;
+class BandDetail;
 
 // Files
 const QString CLUSTER_PATH = "./Configuration/Cluster/";
@@ -77,6 +81,8 @@ const int DXSPOT_PROP_MODE_COL_NUM = 16;
 const int RXTIME_COL_NUM = 17;
 const int SPOT_TYPE_COL_NUM = 18;       // used in bandmap
 const int SPOT_IS_SELECTED_COL_NUM = 19;    // used in bandmap
+const int ROT_BEARING_COL_NUM = 20;
+const int ROT_CONNECTED_COL_NUM = 21;
 
 
 
@@ -147,6 +153,10 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
 bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive);
 
 qlonglong spotElapsedTime(qlonglong spotTime);
+
+void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
+
+void getBand(QVector<BandDetail*> &bands, QString freq, QString &band, QString &bandMask);
 
 class ClusterClientFilterSettings
 {
