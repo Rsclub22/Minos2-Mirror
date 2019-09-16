@@ -28,7 +28,7 @@ const int noeditlength = 32;
 
 void strtobuf( const QString &str )
 {
-   buffpt += strcpysp( &diskBuffer[ buffpt ], str, str.length() ) + 1;
+   buffpt += static_cast<int>(strcpysp( &diskBuffer[ buffpt ], str, str.length() ) + 1);
 }
 void strtobuf( const MinosStringItem<QString> &str )
 {

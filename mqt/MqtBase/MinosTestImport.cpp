@@ -220,7 +220,6 @@ int MinosTestImport::readTestFile(QSharedPointer<QFile> ctfile )
     startImportTest();
 
     QString buffer;
-    int bufend = 0;
 
     int bufOffset = 0;
 
@@ -239,15 +238,15 @@ int MinosTestImport::readTestFile(QSharedPointer<QFile> ctfile )
             try {
             buffer += rdbuffer;
             }
-            catch(std::exception &a)
+            catch(std::exception &/*a*/)
             {
-                int s = buffer.count();
-                const char * aa = a.what();
+//                int s = buffer.count();
+//                const char * aa = a.what();
                trace("broken");
             }
             catch(...)
             {
-                int s = buffer.count();
+                //int s = buffer.count();
                trace("broken");
             }
             int curfstart = buffer.indexOf("<iq", 0);

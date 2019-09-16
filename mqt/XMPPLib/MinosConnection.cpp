@@ -167,8 +167,8 @@ void MinosAppConnection::on_readyRead()
                 rxbuff[ rxlen ] = 0;
 
                 // We might have embedded nulls between message parts - so strip them
-                int rxpt = 0;
-                while ( rxpt < rxlen )
+                size_t rxpt = 0;
+                while ( rxpt < static_cast<size_t>(rxlen) )
                 {
                     size_t ptlen = strlen( &rxbuff[ rxpt ]);
                     if ( ptlen )
@@ -232,7 +232,7 @@ void MinosAppConnection::sendAction( XStanza *a )
           char * xmlbuff = new char[ 10 + 1 + xmllen + 1 ];
           sprintf( xmlbuff, "&&%lu%s&&", static_cast<unsigned long>(xmllen), xmlstr.c_str() );
           xmllen = strlen( xmlbuff );
-          qint64 ret = sock->write ( xmlbuff, xmllen );
+          qint64 ret = sock->write ( xmlbuff, static_cast<qint64>(xmllen) );
           if (ret >= 0)
               onLog ( xmlbuff, false );
           delete [] xmlbuff;

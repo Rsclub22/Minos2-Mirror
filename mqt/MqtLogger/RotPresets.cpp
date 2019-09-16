@@ -39,6 +39,15 @@ RotPresets::~RotPresets()
     {
         delete b;
     }
+    clearPresetData();
+}
+void RotPresets::clearPresetData()
+{
+    foreach(auto b, rotPresetData)
+    {
+        delete b;
+    }
+    rotPresetData.clear();
 }
 void RotPresets::setContest(BaseContestLog *c)
 {
@@ -57,7 +66,7 @@ void RotPresets::setRotatorPresetList(QString s)
     if (!s.isEmpty() && s.contains(':'))
     {
 
-        rotPresetData.clear();
+        clearPresetData();
 
         QStringList presets = s.split(':');
         for (int i = 0; i < presets.count(); i++)
