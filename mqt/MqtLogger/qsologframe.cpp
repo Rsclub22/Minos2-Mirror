@@ -186,6 +186,18 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         return true;
     }
 
+/*
+    // zoom bandmap
+    if (Key == Qt::Key_Plus && shift)
+    {
+       emit zoomMap(false);
+    }
+    else if (Key == Qt::Key_Underscore && ctrl)
+    {
+        emit zoomMap(true);
+    }
+
+*/
     bool doReturn = false;
     if ( ( Key == Qt::Key_Insert ) && !shift && !ctrl )
     {

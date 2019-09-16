@@ -58,12 +58,14 @@ public:
     int isClickInRegionOfSpot(QPoint p);
 
 
-    void getSpotData(int &selectedSpotRowNum, int &displayedSpotNum, BandmapData &selectedSpot);
+    void getSpotData(int &selectedSpotDataRowNum, int displayedSpotNum, BandmapData &selectedSpot);
 
     void clearSpotData(BandmapData &selectedSpot);
 
 
     void setFilter(BandmapClientFilterDialog *filter);
+
+    void updateZoom(bool dir);
 
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
@@ -104,6 +106,7 @@ private slots:
     void on_bandmap_customContextMenuRequested(const QPoint &p);
 
     void on_nextSpot(bool nextFreqUpDown, bool nextMult);
+    int findNextNonWorkedLocatorUpList(int curSpotViewNum);
 private:
 
     //Bandmap *bandmap;
@@ -129,7 +132,8 @@ private:
     QVector<BandmapMarkerDetails*> listOfMarkers;
 
     BandmapData selectedSpot;
-    int selectedSpotRowNum;
+    int selectedSpotDataRowNum;
+    int selectedSpotViewRowNum;
 
     BandmapClientFilterDialog* filterSetup;
 
@@ -148,6 +152,9 @@ private:
 
     void clearListOfMarkers();
     bool matchMode(int sourceRow);
+    int findNextOccupiedMarkerUpList(int curSpotViewNum);
+    int findNextOccupiedMarkerDownList(int curSpotViewNum);
+    int findNextNonWorkedLocatorDownList(int curSpotViewNum);
 };
 
 #endif // BANDMAPVIEW_H

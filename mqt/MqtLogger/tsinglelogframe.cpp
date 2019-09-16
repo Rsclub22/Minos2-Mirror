@@ -145,6 +145,9 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, QString, QString, QString)),
             this, SLOT(on_BandmapSaveFreq(QString, QString, QString, QString)));
 
+    connect(GJVQSOLogFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
+    connect(FKHRigControlFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
+
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
 
@@ -1377,6 +1380,11 @@ void TSingleLogFrame::on_BandmapSaveFreq(QString cs, QString freq, QString loc, 
 void TSingleLogFrame::sendRunMemoryFreqUpdate(int runNum, QString f)
 {
     GJVQSOLogFrame->setRunMemoryFreqUpdate(runNum, f);
+}
+
+void TSingleLogFrame::on_ZoomMap(bool dir)
+{
+    bandmapControlFrame->updateZoom(dir);
 }
 
 void TSingleLogFrame::sendKeyerTone()

@@ -139,6 +139,7 @@ public:
 
     void setRotatorBearing(QString s);
     void setRotatorConnected(bool connected);
+    void updateZoom(bool dir);
 private:
 
     Ui::BandmapClientFrame *ui;

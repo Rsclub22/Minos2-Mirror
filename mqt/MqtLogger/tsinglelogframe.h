@@ -262,6 +262,8 @@ private slots:
     void on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
     void on_rotatorConnected(bool connected);
     void sendRunMemoryFreqUpdate(int runNum, QString f);
+    void on_ZoomMap(bool dir);
+
 public:
     void sendTpm(int t, QString f);
     
