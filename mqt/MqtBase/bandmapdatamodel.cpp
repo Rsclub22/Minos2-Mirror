@@ -379,5 +379,3 @@ BandmapData* BandmapDataModel::getBandmapDataRow(int row)
 }
 
 
-void BandmapData::operator = (const BandmapData& bmd)
-{

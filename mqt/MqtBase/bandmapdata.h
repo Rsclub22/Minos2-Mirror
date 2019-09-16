@@ -40,6 +40,7 @@ public:
              QString comment, bandmapSpotType::SPOT_TYPE _spotType);
 
     void operator = (const BandmapData& bmd);
+    void operator = (const BandmapData* bmd);
 
     qint64 rxTime;
     QString spotTime;

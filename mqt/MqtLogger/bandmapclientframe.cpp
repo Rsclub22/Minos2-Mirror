@@ -594,11 +594,11 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
                 {
                     // we want to move the freq of the LOGGED spot
                     //bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM ), spot->getFreq() ,BMP_DataStoredRole);
-                    BandmapData *spotData = bandmapDataModel->getBandmapDataRow(row);
+                    BandmapData spotData = *bandmapDataModel->getBandmapDataRow(row);
                     bandmapDataModel->removeRows(row, 1);
 
-                    spotData->dxFreqStr = spot->getFreq();
-                    spotData->dxFreq = spot->getFreq().toLongLong();
+                    spotData.dxFreqStr = spot->getFreq();
+                    spotData.dxFreq = spot->getFreq().toLongLong();
                     bandmapDataModel->insertRows(findRowToInsert(spot->getFreq()), 1);
                     // do we need to update the time as well????
                     // we don't need to save this incomming logger spot as we have moved it..
