@@ -490,7 +490,10 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
     {
         QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
 
-        checkSpotInTable(spotlist);
+        if (!checkSpotInTable(spotlist))
+        {
+            return; // spot logged or marked and moved
+        }
 
         if (spotlist.count() == TTLVALUE +1)
         {
@@ -748,7 +751,7 @@ int BandmapClientFrame::findRowToInsert(QString f)
 
 }
 
-void BandmapClientFrame::checkSpotInTable(QStringList &sl)
+bool BandmapClientFrame::checkSpotInTable(QStringList &sl)
 {
     QStringList spotlist = sl;
     QString dxCallsign = spotlist[DXCALL];
@@ -762,11 +765,24 @@ void BandmapClientFrame::checkSpotInTable(QStringList &sl)
         // check for repeat call
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
-            QModelIndex mi = bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM );
-            if (dxCallsign == bandmapDataModel->data(mi, Qt::DisplayRole).toString())
+
+            if (dxCallsign == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), Qt::DisplayRole).toString())
             {
-                // yes, remove old spot
-                bandmapDataModel->removeRows(row, 1);
+                bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), BMP_DataStoredRole).toInt());
+                if ( spotType == bandmapSpotType::LOGGED || spotType == bandmapSpotType::SAVED)
+                {
+                    // move the logged or marked spot to new freq
+                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_STR_COL_NUM), dxFreq);
+                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_INT64_COL_NUM), dxFreq.toLongLong());
+                    return  false;          // don't save this spot to the bandmap spot list
+
+                }else if (spotType == bandmapSpotType::CLUSTER)
+                {
+                    // yes, remove old spot
+                    bandmapDataModel->removeRows(row, 1);
+                }
+
+
             }
         }
 
@@ -809,7 +825,7 @@ void BandmapClientFrame::checkSpotInTable(QStringList &sl)
 
     }
 
-
+    return true;
 }
 
 
