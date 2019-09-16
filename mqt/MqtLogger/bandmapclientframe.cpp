@@ -96,12 +96,12 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     bandmapView = new BandmapView();
     bandmapView->setFilter(filterSetup);
 
-    //bandmapSpotProxyModel = new QSortFilterProxyModel(parent);
-    //bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
-    //bandmapSpotProxyModel->sort(FREQ_COL_NUM, Qt::AscendingOrder);
+    bandmapSpotProxyModel = new QSortFilterProxyModel(parent);
+    bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
+    bandmapSpotProxyModel->sort(FREQ_STR_COL_NUM, Qt::AscendingOrder);
 
-    //bandmapView->setModel(bandmapSpotProxyModel);
-    bandmapView->setModel(bandmapDataModel);
+    bandmapView->setModel(bandmapSpotProxyModel);
+
 
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
@@ -567,8 +567,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
                                                     bearing, "", false, spotlist[SPOTCALL],        // ignore rotator bearing
                                                     spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT], bandmapSpotType::SPOT_TYPE::CLUSTER);
 
-            //bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
-            bandmapDataModel->insertRows(findRowToInsert(spotlist[DXFREQ]), 1);
+            bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 
 
        }
@@ -593,13 +592,9 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
                         && spot->getSpotType() == bandmapSpotType::SAVED)
                 {
                     // we want to move the freq of the LOGGED spot
-                    //bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM ), spot->getFreq() ,BMP_DataStoredRole);
-                    BandmapData spotData = *bandmapDataModel->getBandmapDataRow(row);
-                    bandmapDataModel->removeRows(row, 1);
+                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_STR_COL_NUM ), spot->getFreq() , BMP_DataStoredRole);
+                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_INT64_COL_NUM), spot->getFreq().toLongLong(), BMP_DataStoredRole);
 
-                    spotData.dxFreqStr = spot->getFreq();
-                    spotData.dxFreq = spot->getFreq().toLongLong();
-                    bandmapDataModel->insertRows(findRowToInsert(spot->getFreq()), 1);
                     // do we need to update the time as well????
                     // we don't need to save this incomming logger spot as we have moved it..
                     return;
@@ -693,8 +688,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
                                             spot->getBearing(), rotBrg, rotatorConnected, "",
                                             "", "", "", spot->getSpotType());
 
-    //bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
-    bandmapDataModel->insertRows(findRowToInsert(spot->getFreq()), 1);
+    bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 
 
 }
@@ -712,7 +706,7 @@ int BandmapClientFrame::findRowToInsert(QString f)
     {
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
-            freq = bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM), BMP_DataStoredRole).toLongLong();
+            freq = bandmapDataModel->data(bandmapDataModel->index(row, FREQ_STR_COL_NUM), BMP_DataStoredRole).toLongLong();
 
             if (row == 0)
             {
@@ -732,7 +726,7 @@ int BandmapClientFrame::findRowToInsert(QString f)
                 }
                 else
                 {
-                    nextFreq = bandmapDataModel->data(bandmapDataModel->index(row + 1, FREQ_COL_NUM), BMP_DataStoredRole).toLongLong();
+                    nextFreq = bandmapDataModel->data(bandmapDataModel->index(row + 1, FREQ_STR_COL_NUM), BMP_DataStoredRole).toLongLong();
                     if (spotf < nextFreq)
                     {
                         return row + 1;
@@ -779,7 +773,7 @@ void BandmapClientFrame::checkSpotInTable(QStringList &sl)
         // check for multiple spots on the same freq
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
-            QModelIndex mi = bandmapDataModel->index(row, FREQ_COL_NUM);
+            QModelIndex mi = bandmapDataModel->index(row, FREQ_STR_COL_NUM);
             QString df = bandmapDataModel->data(mi, Qt::DisplayRole).toString();
             if (dxFreq == bandmapDataModel->data(mi, Qt::DisplayRole).toString())
             {

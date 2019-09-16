@@ -554,7 +554,7 @@ void BandmapView::getSpotData(int &selectedSpotRowNum, int &displayedSpotNum, Ba
 {
     selectedSpotRowNum = listOfMarkers[displayedSpotNum]->getModelRowNum();
     selectedSpot.spotTime = model()->data(model()->index(selectedSpotRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString();
-    selectedSpot.dxFreqStr = model()->data(model()->index(selectedSpotRowNum, FREQ_COL_NUM), BMP_DataStoredRole).toString();
+    selectedSpot.dxFreqStr = model()->data(model()->index(selectedSpotRowNum, FREQ_STR_COL_NUM), BMP_DataStoredRole).toString();
     //selectedSpot.dxFreq = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toLongLong();
     selectedSpot.dxCall = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
     selectedSpot.dxLocator = model()->data(model()->index(selectedSpotRowNum, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
@@ -643,7 +643,7 @@ void BandmapView::drawBandMapSpots()
         trace(QString("Bandmap: dump list of spots and freq"));
         for (int row = 0; row < numrows; row++)
         {
-            QString freq = model()->data(model()->index(row, FREQ_COL_NUM), Qt::DisplayRole).toString().remove('.');
+            QString freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), Qt::DisplayRole).toString().remove('.');
             QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
             trace(QString("Bandmap: DB# = %1, Callsign = %2, Freq = %3").arg(row).arg(callsign).arg(freq));
         }
@@ -657,7 +657,7 @@ void BandmapView::drawBandMapSpots()
             if (matchMode(row))
             {
 
-                QString freq = model()->data(model()->index(row, FREQ_COL_NUM), Qt::DisplayRole).toString().remove('.');
+                QString freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), Qt::DisplayRole).toString().remove('.');
                 //trace(QString("Bandmap Drawspots: marker freq = %1").arg(freq));
                 qint64 f_int64 = freq.toLongLong();
                 qint32 f_int32 = freq.toLong();
@@ -740,7 +740,7 @@ bool BandmapView::matchMode(int sourceRow)
     bool ok = false;
     int modeMask = model()->data(model()->index(sourceRow, DXMODEMASK_COL_NUM), BMP_DataStoredRole).toString().toInt(&ok);
     QString callsign = model()->data(model()->index(sourceRow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
-    QString freq = model()->data(model()->index(sourceRow, FREQ_COL_NUM), BMP_DataStoredRole).toString();
+    QString freq = model()->data(model()->index(sourceRow, FREQ_STR_COL_NUM), BMP_DataStoredRole).toString();
     QString mode = model()->data(model()->index(sourceRow, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     trace(QString("Bandmap matchMode - Callsign = %1, freq. = %2, mode = %3, modemask = %4").arg(callsign).arg(freq).arg(mode).arg(QString::number(modeMask)));
     if (ok and modeMask >=0)
@@ -781,7 +781,7 @@ QString BandmapView::assembleSpotMsg(int row)
 {
 
     QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
-    qint64 freq = model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole).toLongLong();
+    qint64 freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), BMP_DataStoredRole).toLongLong();
     freq = freq / 1000;
     qint32 curFreq = dial->getCurFreqInt32();
     QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), Qt::DisplayRole).toString();

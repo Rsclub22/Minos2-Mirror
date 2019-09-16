@@ -173,7 +173,7 @@ private:
     QItemSelectionModel *selectionModel;
     QGraphicsView* bandmapGraphicsView;
 
-    //QSortFilterProxyModel* bandmapSpotProxyModel;
+    QSortFilterProxyModel* bandmapSpotProxyModel;
     BandmapClientFilterDialog* filterSetup;
 
     QString sfreq;
