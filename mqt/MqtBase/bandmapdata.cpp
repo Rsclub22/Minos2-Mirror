@@ -80,3 +80,30 @@ void BandmapData::operator = (const BandmapData& bmd)
     spotType = bmd.spotType;
     isSelected = bmd.isSelected;
 }
+
+void BandmapData::operator = (const BandmapData* bmd)
+{
+    rxTime = bmd->rxTime;
+    spotTime = bmd->spotTime;
+    dxFreqStr = bmd->dxFreqStr;
+    dxFreq = bmd->dxFreq;
+    dxBand = bmd->dxBand;
+    dxBandMaskStr = bmd->dxBandMaskStr;
+    dxMode = bmd->dxMode;
+    dxModeMaskStr = bmd->dxModeMaskStr;
+    dxCall = bmd->dxCall;
+    dxLocator = bmd->dxLocator;
+    dxDist = bmd->dxDist;
+    dxBrg = bmd->dxDist;
+    rotBrg = bmd->rotBrg;
+    rotConnected = bmd->rotConnected;
+    dxCallWorked = bmd->dxCallWorked;
+    dxLocatorWorked = bmd->dxLocatorWorked;
+    sentToMemory = bmd->sentToMemory;
+    spotterCall = bmd->spotterCall;
+    spotterLocator = bmd->spotterLocator;
+    dxPropMode = bmd->dxPropMode;
+    spotComment = bmd->spotComment;
+    spotType = bmd->spotType;
+    isSelected = bmd->isSelected;
+}

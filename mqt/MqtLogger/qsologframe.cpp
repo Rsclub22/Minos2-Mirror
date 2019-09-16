@@ -2653,7 +2653,7 @@ void QSOLogFrame::showRunButtonOnOff(bool state)
     if (state)
     {
         ui->runToolButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
-
+        runButtonMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
     }
     else
     {
@@ -2665,11 +2665,13 @@ void QSOLogFrame::showRunButtonOnOff(bool state)
 void QSOLogFrame::showRunToolButtonOffFreq()
 {
     ui->runToolButton->setStyleSheet(RUN_BUTTON_OFF_FREQ_STYLE);
+    runButtonMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
 }
 
 void QSOLogFrame::showRunToolButtonOnFreq()
 {
     ui->runToolButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
+    runButtonMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
 }
 
 

@@ -18,7 +18,7 @@
 #include "clustercommon.h"
 #include "cutils.h"
 
-const int bandmapColCount = 22;
+const int bandmapColCount = 23;
 const int BMP_DataStoredRole = Qt::UserRole + 0;
 
 class BandmapDataModel : public QAbstractTableModel
@@ -44,6 +44,8 @@ public:
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+
+    BandmapData* getBandmapDataRow(int row);
 
     BandmapData* rowData = nullptr;
 

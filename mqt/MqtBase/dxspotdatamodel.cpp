@@ -42,7 +42,7 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
             switch (section) {
                 case TIME_COL_NUM:
                     return tr("UTC");
-                case FREQ_COL_NUM:
+                case FREQ_STR_COL_NUM:
                     return tr("Freq");
                 case DXSPOT_CALL_COL_NUM:
                     return tr("Dx");
@@ -179,7 +179,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case TIME_COL_NUM:
                 d = dxSpot->spotTime;
             break;
-            case FREQ_COL_NUM:
+            case FREQ_STR_COL_NUM:
                 d = removeHundredHzAndHzDigits(dxSpot->dxFreq);
             break;
             case DXSPOT_CALL_COL_NUM:
@@ -244,7 +244,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case TIME_COL_NUM:
                 d = dxSpot->spotTime;
             break;
-            case FREQ_COL_NUM:
+            case FREQ_STR_COL_NUM:
                 d = dxSpot->dxFreq;
             break;
             case DXSPOT_CALL_COL_NUM:
@@ -322,7 +322,7 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             case TIME_COL_NUM :
                 dxSpot->spotTime = value.toString();
             break;
-            case FREQ_COL_NUM:
+            case FREQ_STR_COL_NUM:
                 dxSpot->dxFreq = value.toString();
             break;
             case DXSPOT_CALL_COL_NUM:

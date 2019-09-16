@@ -472,7 +472,7 @@ void ClusterClientFrame::onSpotTabChanged(int index)
 
 void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProxyModel, const QModelIndex &index)
 {
-    if (index.column() == FREQ_COL_NUM)
+    if (index.column() == FREQ_STR_COL_NUM)
     {
         QString freq = spotProxyModel->data(index, DataStoredRole).toString();
         sendFreqToRig(freq);
@@ -1053,7 +1053,7 @@ void ClusterClientFrame::on_freqActionSelected()
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
-            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM), DataStoredRole).toString();
+            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_STR_COL_NUM), DataStoredRole).toString();
             sendFreqToRig(freq);
         }
     }
@@ -1154,7 +1154,7 @@ memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFi
     memoryData::memData spotData;
     spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
     spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM), DataStoredRole).toString();
-    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole).toString().remove('.');
+    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_STR_COL_NUM), DataStoredRole).toString().remove('.');
     spotData.mode = memDefData::DEFAULT_MODE;
     spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
     spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();
