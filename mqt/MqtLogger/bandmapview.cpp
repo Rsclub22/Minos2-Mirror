@@ -31,7 +31,8 @@ BandmapView::BandmapView(QWidget *parent) :
     idealHeight(0),
     fontHeight(0),
     maxNumSpots(0),
-    selectedSpotRowNum(-1)
+    selectedSpotDataRowNum(NO_SELECTED_ROWNUM),
+    selectedSpotViewRowNum(NO_SELECTED_ROWNUM)
 {
 
     setFocusPolicy((Qt::WheelFocus));
@@ -104,6 +105,13 @@ void BandmapView::onFontChanged(QFont cf)
 
 }
 
+// this is called from other frames
+
+void BandmapView::updateZoom(bool dir)
+{
+    zoomUpdated(dir);
+}
+
 
 void BandmapView::zoomUpdated(bool dir)
 {
@@ -133,8 +141,155 @@ void BandmapView::zoomUpdated(bool dir)
 
 void BandmapView::on_nextSpot(bool nextFreqUpDown, bool nextMult)
 {
-    qDebug() << "freqUpDown = " << nextFreqUpDown << "nextMult" << nextMult;
 
+    if (selectedSpotViewRowNum != NO_SELECTED_ROWNUM)
+    {
+        if (!nextMult)
+        {
+            if (nextFreqUpDown)
+            {
+                if (selectedSpotViewRowNum != (listOfMarkers.count() - 1))
+                {
+                    int newMarkNum = findNextOccupiedMarkerUpList(selectedSpotViewRowNum);
+                    if (newMarkNum == selectedSpotViewRowNum)
+                    {
+                        return; // nothing found
+                    }
+
+                    clearSelectedSpot();
+                    selectedSpotViewRowNum = newMarkNum;
+                    setSelectedSpot(selectedSpotViewRowNum);
+                }
+
+            }
+            else
+            {
+                if (selectedSpotViewRowNum != 0)
+                {
+                    int newMarkNum = findNextOccupiedMarkerDownList(selectedSpotViewRowNum);
+                    if (newMarkNum == selectedSpotViewRowNum)
+                    {
+                        return;     // nothing found
+                    }
+
+                    clearSelectedSpot();
+                    selectedSpotViewRowNum = newMarkNum;
+                    setSelectedSpot(selectedSpotViewRowNum);
+                }
+            }
+        }
+        else if (nextFreqUpDown)
+        {
+            if (selectedSpotViewRowNum != (listOfMarkers.count() - 1))
+            {
+                int newMarkNum = findNextNonWorkedLocatorDownList(selectedSpotViewRowNum);
+                if (newMarkNum == selectedSpotViewRowNum)
+                {
+                    return; // nothing found
+                }
+
+                clearSelectedSpot();
+                selectedSpotViewRowNum = newMarkNum;
+                setSelectedSpot(selectedSpotViewRowNum);
+            }
+        }
+        else
+        {
+            if (selectedSpotViewRowNum != 0)
+            {
+                int newMarkNum = findNextNonWorkedLocatorUpList(selectedSpotViewRowNum);
+                if (newMarkNum == selectedSpotViewRowNum)
+                {
+                    return;     // nothing found
+                }
+
+                clearSelectedSpot();
+                selectedSpotViewRowNum = newMarkNum;
+                setSelectedSpot(selectedSpotViewRowNum);
+            }
+        }
+    }
+}
+
+
+int BandmapView::findNextOccupiedMarkerUpList(int curSpotViewNum)
+{
+    if (curSpotViewNum + 1 >= listOfMarkers.count())
+    {
+        return curSpotViewNum;
+    }
+    for (int i = curSpotViewNum + 1; i < listOfMarkers.count(); i++)
+    {
+        if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
+        {
+            return i;
+        }
+    }
+
+    return curSpotViewNum;
+}
+
+int BandmapView::findNextOccupiedMarkerDownList(int curSpotViewNum)
+{
+    if (curSpotViewNum - 1 < 0)
+    {
+        return curSpotViewNum;
+    }
+    for (int i = curSpotViewNum - 1; i >= 0; i--)
+    {
+        if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
+        {
+            return i;
+        }
+    }
+
+    return curSpotViewNum;
+}
+
+
+int BandmapView::findNextNonWorkedLocatorUpList(int curSpotViewNum)
+{
+    if (curSpotViewNum + 1 >= listOfMarkers.count())
+    {
+        return curSpotViewNum;
+    }
+    for (int i = curSpotViewNum + 1; i < listOfMarkers.count(); i++)
+    {
+        if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
+        {
+            int row = listOfMarkers[i]->getModelRowNum();
+            bool locWorked = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
+            if (!locWorked)
+            {
+                return i;
+            }
+        }
+    }
+
+    return curSpotViewNum;
+}
+
+int BandmapView::findNextNonWorkedLocatorDownList(int curSpotViewNum)
+{
+    if (curSpotViewNum - 1 < 0)
+    {
+        return curSpotViewNum;
+    }
+    for (int i = curSpotViewNum - 1; i >= 0; i--)
+    {
+        if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
+        {
+            int row = listOfMarkers[i]->getModelRowNum();
+            bool locWorked = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
+            if (!locWorked)
+            {
+                return i;
+            }
+
+        }
+    }
+
+    return curSpotViewNum;
 }
 
 void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
@@ -147,6 +302,10 @@ void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
 void BandmapView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     // do nothing
+
+    Q_UNUSED(selected)
+    Q_UNUSED(deselected)
+
 }
 
 void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
@@ -474,12 +633,12 @@ int BandmapView::isClickInRegionOfSpot(QPoint p)
 
 void BandmapView::bandmapSelectSpot(QPoint p)
 {
-    int spotNum = isClickInRegionOfSpot(p);
+    int spotViewNum = isClickInRegionOfSpot(p);
 
-    if (spotNum >= 0)
+    if (spotViewNum >= 0)
     {
         clearSelectedSpot();       // clear any spot previously selected
-        setSelectedSpot(spotNum);        // mark new selected spot
+        setSelectedSpot(spotViewNum);        // mark new selected spot
 
         MinosLoggerEvents::SendFreqStrToRig(selectedSpot.dxFreqStr);
     }
@@ -512,7 +671,8 @@ void BandmapView::clearSelectedSpot()
 
 void BandmapView::clearSpotData(BandmapData &selectedSpot)
 {
-    selectedSpotRowNum = NO_SELECTED_ROWNUM;
+    selectedSpotDataRowNum = NO_SELECTED_ROWNUM;
+    selectedSpotViewRowNum = NO_SELECTED_ROWNUM;
     selectedSpot.spotTime = "";
     selectedSpot.dxFreqStr = "";
     //selectedSpot.dxFreq = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toLongLong();
@@ -525,17 +685,19 @@ void BandmapView::clearSpotData(BandmapData &selectedSpot)
     selectedSpot.spotType = bandmapSpotType::SPOT_TYPE::NONE;
 }
 
-void BandmapView::setSelectedSpot(int displayedSpotNum)
+void BandmapView::setSelectedSpot(int spotViewNum)
 {
 
-    if (displayedSpotNum > listOfMarkers.count() || displayedSpotNum < 0 || listOfMarkers[displayedSpotNum]->getModelRowNum() > model()->rowCount() || listOfMarkers[displayedSpotNum]->getModelRowNum() < 0)
+    if (spotViewNum > listOfMarkers.count() || spotViewNum == NO_SELECTED_ROWNUM || listOfMarkers[spotViewNum]->getModelRowNum() > model()->rowCount() || listOfMarkers[spotViewNum]->getModelRowNum() < 0)
     {
         return;
     }
 
-    getSpotData(selectedSpotRowNum, displayedSpotNum, selectedSpot);
+    selectedSpotViewRowNum = spotViewNum;
 
-    model()->setData(model()->index(selectedSpotRowNum , SPOT_IS_SELECTED_COL_NUM), true, BMP_DataStoredRole);
+    getSpotData(selectedSpotDataRowNum, selectedSpotViewRowNum, selectedSpot);
+
+    model()->setData(model()->index(selectedSpotDataRowNum , SPOT_IS_SELECTED_COL_NUM), true, BMP_DataStoredRole);
 
     bandmapUpdate();
 }
@@ -550,19 +712,24 @@ void BandmapView::clearListOfMarkers()
 }
 
 
-void BandmapView::getSpotData(int &selectedSpotRowNum, int &displayedSpotNum, BandmapData &selectedSpot)
+void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewRowNum, BandmapData &selectedSpot)
 {
-    selectedSpotRowNum = listOfMarkers[displayedSpotNum]->getModelRowNum();
-    selectedSpot.spotTime = model()->data(model()->index(selectedSpotRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString();
-    selectedSpot.dxFreqStr = model()->data(model()->index(selectedSpotRowNum, FREQ_STR_COL_NUM), BMP_DataStoredRole).toString();
-    //selectedSpot.dxFreq = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toLongLong();
-    selectedSpot.dxCall = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
-    selectedSpot.dxLocator = model()->data(model()->index(selectedSpotRowNum, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
-    selectedSpot.dxDist = model()->data(model()->index(selectedSpotRowNum, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
-    selectedSpot.dxBrg = model()->data(model()->index(selectedSpotRowNum, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
-    selectedSpot.dxCallWorked = model()->data(model()->index(selectedSpotRowNum, DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-    selectedSpot.dxLocatorWorked = model()->data(model()->index(selectedSpotRowNum, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-    selectedSpot.spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    selectedSpotDataRowNum = listOfMarkers[selectedSpotViewRowNum]->getModelRowNum();
+
+    if (selectedSpotDataRowNum >= 0 && selectedSpotDataRowNum < model()->rowCount())
+    {
+        selectedSpot.spotTime = model()->data(model()->index(selectedSpotDataRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString();
+        selectedSpot.dxFreqStr = model()->data(model()->index(selectedSpotDataRowNum, FREQ_STR_COL_NUM), BMP_DataStoredRole).toString();
+        //selectedSpot.dxFreq = model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toLongLong();
+        selectedSpot.dxCall = model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+        selectedSpot.dxLocator = model()->data(model()->index(selectedSpotDataRowNum, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
+        selectedSpot.dxDist = model()->data(model()->index(selectedSpotDataRowNum, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
+        selectedSpot.dxBrg = model()->data(model()->index(selectedSpotDataRowNum, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
+        selectedSpot.dxCallWorked = model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
+        selectedSpot.dxLocatorWorked = model()->data(model()->index(selectedSpotDataRowNum, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
+        selectedSpot.spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+
+    }
 
 
 }

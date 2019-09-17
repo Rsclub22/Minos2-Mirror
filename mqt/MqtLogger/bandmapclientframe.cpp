@@ -204,10 +204,10 @@ void BandmapClientFrame::on_FontChanged()
 
 void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 {
-    int displayedSpotNum = bandmapView->isClickInRegionOfSpot(pos);
-    if (displayedSpotNum != -1)
+    int selectedSpotViewRowNum = bandmapView->isClickInRegionOfSpot(pos);
+    if (selectedSpotViewRowNum != -1)
     {
-        bandmapView->getSpotData(selectedSpotRowNum, displayedSpotNum, selectedSpotData);
+        bandmapView->getSpotData(selectedSpotRowNum, selectedSpotViewRowNum, selectedSpotData);
         QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
         spotsMenu->popup( globalPos );
 
@@ -239,7 +239,7 @@ void BandmapClientFrame::on_markSpotActionSelected()
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
     if (spotType != bandmapSpotType::MARKED)
     {
-        bandmapDataModel->setData(bandmapDataModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::MARKED, BMP_DataStoredRole);
+        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::MARKED, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
 }
@@ -249,7 +249,7 @@ void BandmapClientFrame::on_unMarkSpotActionSelected()
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
     if (spotType == bandmapSpotType::MARKED)
     {
-        bandmapDataModel->setData(bandmapDataModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
+        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
 }
@@ -317,6 +317,14 @@ void BandmapClientFrame::memoryActionSelected()
 void BandmapClientFrame::clearSpotActionSelected()
 {
 
+    int ret = QMessageBox::warning(this, tr("Bandmap"),
+                                   QString("Please confirm you want to delete this spot - %1?").arg(selectedSpotData.dxCall),
+                                   QMessageBox::Yes | QMessageBox::No);
+    if (ret == QMessageBox::Yes)
+    {
+        bandmapSpotProxyModel->removeRows(selectedSpotRowNum, 1);
+        bandmapView->bandmapUpdate();;
+    }
 }
 
 void BandmapClientFrame::setContest(BaseContestLog *c)
@@ -1222,4 +1230,10 @@ void BandmapClientFrame::setRotatorBearing(QString s)
 void BandmapClientFrame::setRotatorConnected(bool connected)
 {
     rotatorConnected = connected;
+}
+
+
+void BandmapClientFrame::updateZoom(bool dir)
+{
+    bandmapView->updateZoom(dir);
 }
