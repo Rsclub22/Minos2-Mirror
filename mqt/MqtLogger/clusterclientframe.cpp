@@ -181,6 +181,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
+    //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
+    //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
+
 
 
 }
@@ -1035,6 +1038,8 @@ void ClusterClientFrame::purgeSpots()
 
 void ClusterClientFrame::onMenuShow()
 {
+   //ui->actionsButton->showMenu();
+
     //int buttonNumber = getSelectedLine();
 
     //freqAction->setEnabled(buttonNumber >= 0);
@@ -1427,10 +1432,12 @@ void ClusterClientFrame::handleClusterStatusMessage(QString &msg)
     if (msg.contains("!Connected"))
     {
          statusIndicatorToggle(true);
+
     }
     else
     {
          statusIndicatorToggle(false);
+
     }
 
     QStringList sl;

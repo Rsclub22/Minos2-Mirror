@@ -150,6 +150,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
+    connect(LogContainer, SIGNAL(setClusterServerLoaded()),this, SLOT(on_clusterServerLoaded()));
+    connect(LogContainer, SIGNAL(setClusterState(QString)), this, SLOT(on_clusterServerState(QString)));
 
     connect( QSOTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
@@ -255,7 +257,7 @@ void TSingleLogFrame::createScreenComponents()
 
     clusterControlFrame->setVisible(false);
     clusterControlFrame->setContest(contest);
-    setClusterLoaded(false);
+    setClusterClientLoaded(false);
 
     bandmapControlFrame = new BandmapClientFrame(this);
     bandmapControlFrame->setObjectName(QStringLiteral("BandmapControlFrame"));
@@ -588,7 +590,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     hs->addWidget(clusterControlFrame);
                     clusterControlFrame->setVisible(true);
                     clusterControlFrame->setContest(ct);
-                    setClusterLoaded(true);
+                    setClusterClientLoaded(true);
                     break;
 
                 }
@@ -1425,17 +1427,39 @@ bool TSingleLogFrame::isBandMapLoaded()
 
 // Cluster
 
-void TSingleLogFrame::setClusterLoaded(bool loaded)
+
+void TSingleLogFrame::on_ClusterServerLoaded()
 {
-   bandMapLoaded = loaded;
-   GJVQSOLogFrame->setClusterLoaded(loaded);
+    setClusterServerLoaded(true);
 }
 
-bool TSingleLogFrame::isClusterLoaded()
+void TSingleLogFrame::setClusterServerLoaded(bool loaded)
 {
-   return bandMapLoaded;
+   clusterServerLoaded = loaded;
+   GJVQSOLogFrame->setClusterServerLoaded(loaded);
 }
 
+bool TSingleLogFrame::isClusterServerLoaded()
+{
+   return clusterServerLoaded;
+}
+
+void TSingleLogFrame::setClusterClientLoaded(bool loaded)
+{
+   clusterClientLoaded = loaded;
+   GJVQSOLogFrame->setClusterClientLoaded(loaded);
+}
+
+bool TSingleLogFrame::isClusterClientLoaded()
+{
+   return clusterClientLoaded;
+}
+
+
+void TSingleLogFrame::on_clusterServerState(QString state)
+{
+    GJVQSOLogFrame->setClusterServerState(state);
+}
 
 
 //---------------------------------------------------------------------------

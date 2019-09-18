@@ -129,8 +129,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     spotsMenu->installEventFilter(actionInObject);
 
 
-    markSpotAction = new QAction("Mark Spot", this);
-    unMarkSpotAction = new QAction("Unmark Spot", this);
+    markSpotAction = new QAction("M&ark Spot", this);
+    unMarkSpotAction = new QAction("&Unmark Spot", this);
     freqAction = new QAction("Set &Freq", this);
     bearingAction = new QAction("Set &Bearing", this);
     logAction = new QAction("Send &Log", this);
@@ -181,7 +181,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     purgeTimer->start(PURGE_TIME);
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
 
-
+    //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
+    //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
 }
 
 
@@ -220,7 +221,7 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 
 void BandmapClientFrame::onMenuShow()
 {
-
+   //ui->actionsButton->showMenu();
 }
 
 
@@ -968,10 +969,12 @@ void BandmapClientFrame::handleClusterStatusMessage(QString &msg)
     if (msg.contains("!Connected"))
     {
          statusIndicatorToggle(true);
+
     }
     else
     {
          statusIndicatorToggle(false);
+
     }
 
     QStringList sl;

@@ -114,8 +114,13 @@ public:
     bool isBandMapLoaded();
     bool bandMapLoaded;
 
-    bool isClusterLoaded();
-    bool clusterLoaded;
+    bool isClusterServerLoaded();
+    void setClusterServerLoaded(bool loaded);
+    bool clusterServerLoaded;
+
+    bool isClusterClientLoaded();
+    void setClusterClientLoaded(bool loaded);
+    bool clusterClientLoaded;
 
     bool rotatorLoaded;
     bool isRotatorLoaded();
@@ -179,6 +184,9 @@ private:
     void clearSplitter(MinosSplitter *s);
     void setClusterLoaded(bool loaded);
     void setBandmapLoaded(bool loaded);
+
+
+    void on_clusterServerState(QString state);
 
 
 private slots:
@@ -264,6 +272,7 @@ private slots:
     void sendRunMemoryFreqUpdate(int runNum, QString f);
     void on_ZoomMap(bool dir);
 
+    void on_ClusterServerLoaded();
 public:
     void sendTpm(int t, QString f);
     

@@ -148,6 +148,8 @@ void TSendDM::sendKeyerStop(TSingleLogFrame *tslf)
 }
 //---------------------------------------------------------------------------
 
+
+/*
 void TSendDM::sendBandMap(  TSingleLogFrame * tslf, const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth )
 {
    RPCGeneralClient rpc(rpcConstants::bandmapMethod);
@@ -165,6 +167,36 @@ void TSendDM::sendBandMap(  TSingleLogFrame * tslf, const QString &freq, const Q
    rpc.getCallArgs() ->addParam( st );
 //   rpc.queueCall( tslf->bandMapServerConnectable.remoteAppName + "@" + tslf->bandMapServerConnectable.serverName );
 }
+*/
+
+void TSendDM::sendSpotToCluster( TSingleLogFrame *tslf, const QString &freq, const QString &call, const QString &utc, const QString &loc )
+{
+
+    if (!clusterApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::clusterMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::txSpotToCluster ));
+        QSharedPointer<RPCParam>freqStr(new RPCStringParam(freq));
+        QSharedPointer<RPCParam>callStr(new RPCStringParam(call));
+        QSharedPointer<RPCParam>timeStr(new RPCStringParam(utc));
+        QSharedPointer<RPCParam>locStr(new RPCStringParam(loc));
+        //QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+
+        //st->addMember( logger, rpcConstants::loggerUuid );
+        //st->addMember( select, rpcConstants::selected );
+        st->addMember( sName, rpcConstants::paramName );
+        st->addMember( freqStr, rpcConstants::txSpotParamFreq );
+        st->addMember( callStr, rpcConstants::txSpotParamCallsign );
+        st->addMember( timeStr, rpcConstants::txSpotParamUTC );
+        st->addMember( locStr, rpcConstants::txSpotParamLocator );
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( clusterApp  );
+    }
+
+
+}
+
 
 void TSendDM::sendRotator(TSingleLogFrame *tslf, rpcConstants::RotateDirection direction, int angle )
 {
@@ -775,16 +807,21 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                     break;
                 }
             }
-            /*
-            if (an.getPublisherProgram() == tslf->bandMapServerConnectable.remoteAppName && an.getPublisherServer() == tslf->bandMapServerConnectable.serverName)
+
+
+            if ( an.getCategory() == rpcConstants::ClusterCategory  && an.getKey() == rpcConstants::clusterReport )
             {
-                if ( an.getCategory() == rpcConstants::BandMapCategory && an.getKey() == rpcConstants::bandmapKeyLoaded )
+                if (clusterApp.isEmpty())
                 {
-                    emit setBandMapLoaded();
-                    break;
+                    clusterApp = PubSubName(an);
+                    emit setClusterServerLoaded();
                 }
+
+                emit setClusterState(an.getValue());
+                break;
             }
-            */
+
+
         }
     }
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();

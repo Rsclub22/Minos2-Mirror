@@ -134,6 +134,9 @@ public:
     void buttonHandleDxSpots();
     void restoreColumns();
 
+
+
+
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *ct = nullptr;

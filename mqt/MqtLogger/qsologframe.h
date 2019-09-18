@@ -31,7 +31,8 @@ public:
     void setKeyerLoaded();
     void setRadioLoaded();
     void setRotatorLoaded();
-    void setClusterLoaded(bool loaded);
+    void setClusterClientLoaded(bool loaded);
+    void setClusterServerLoaded(bool loaded);
 
     bool savePartial(  );
     bool restorePartial( );
@@ -88,6 +89,7 @@ public:
 
     void setRunMemoryFreqUpdate(int num, QString freq);
     //void setIgnoreRunChkBoxState(int num, bool checked);
+    void setClusterServerState(QString state);
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -192,8 +194,10 @@ private:
     bool radioConnected;
     bool radioError;
 
-    bool clusterLoaded;
-    bool isClusterLoaded();
+    bool clusterClientLoaded;
+    bool isClusterClientLoaded();
+    bool clusterServerLoaded;
+    bool isClusterServerLoaded();
     void setClusterControlsVisible(bool visible);
 
 

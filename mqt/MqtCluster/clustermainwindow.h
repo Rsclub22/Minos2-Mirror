@@ -78,7 +78,7 @@ const int TIME_TO_LIVE_TABNUM = 0;
 const int PERSONAL_TABNUM = 1;
 const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
-const int STATUS_TIMER_DUR = 500;
+const int STATUS_TIMER_DUR = 1000;
 
 
 class ClusterAddress
@@ -181,6 +181,8 @@ private:
     QStringList sendSpotsQueue;
     QTimer* sendSpotsTimer;
 
+
+
     QString currentNodeName;
     QString currentAddress;
     QString currentPort;
@@ -268,6 +270,7 @@ private:
     void handleCmdFile(QString fileName);
 
 
+
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
     QStringList testSpotList;
@@ -289,6 +292,7 @@ private slots:
     void testSpotPbClicked();
     void spotTimerTimeOut();
 #endif
+
 
 };
 

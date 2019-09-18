@@ -32,7 +32,8 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , keyerLoaded(false)
     , radioConnected(false)
     , radioError(false)
-    , clusterLoaded(false)
+    , clusterClientLoaded(false)
+    , clusterServerLoaded(false)
     , runButtonOnFlag(false)
     , radioOffRunFreq(false)
     , curRunFreq("00000000000")
@@ -2702,19 +2703,34 @@ memoryData::memData QSOLogFrame::getLogDetails()
 //---------------------------------------------------------
 
 
-void QSOLogFrame::setClusterLoaded(bool loaded)
+void QSOLogFrame::setClusterClientLoaded(bool loaded)
 {
-    clusterLoaded = loaded;
+    clusterClientLoaded = loaded;
 }
-bool QSOLogFrame::isClusterLoaded()
+bool QSOLogFrame::isClusterClientLoaded()
 {
-    return clusterLoaded;
+    return clusterClientLoaded;
+}
+
+void QSOLogFrame::setClusterServerLoaded(bool loaded)
+{
+    clusterServerLoaded = loaded;
+}
+bool QSOLogFrame::isClusterServerLoaded()
+{
+    return clusterServerLoaded;
 }
 
 void QSOLogFrame::setClusterControlsVisible(bool visible)
 {
     ui->lastLoggedChkBx->setVisible(visible);
     ui->spotPb->setVisible(visible);
+
+}
+
+void QSOLogFrame::setClusterServerState(QString state)
+{
+
 
 }
 
@@ -2733,7 +2749,7 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
         setBandMapControlsVisible(false);
     }
 
-    if (isClusterLoaded())
+    if (isClusterServerLoaded())
     {
         setClusterControlsVisible(true);
     }
