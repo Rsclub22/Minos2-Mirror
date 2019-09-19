@@ -809,7 +809,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             }
 
 
-            if ( an.getCategory() == rpcConstants::ClusterCategory  && an.getKey() == rpcConstants::clusterReport )
+            if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterReport )
             {
                 if (clusterApp.isEmpty())
                 {
@@ -1047,6 +1047,7 @@ void TSendDM::subscribeApps()
         else if ((*i)->appType == "Cluster")
         {
             catMap[rpcConstants::clusterClientServer].push_back((*i));
+            catMap[rpcConstants::clusterCategory].push_back((*i));
         }
     }
 

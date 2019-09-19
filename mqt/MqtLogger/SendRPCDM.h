@@ -101,7 +101,7 @@ private slots:
       void on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
 
 signals:
-      void setBandMapLoaded();
+      //void setBandMapLoaded();
 
       void RotatorLoaded();
       void RotatorList();

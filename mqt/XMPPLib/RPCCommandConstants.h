@@ -61,7 +61,7 @@ static const QString txSpotParamFreq    = QT_TR_NOOP("Freq");
 static const QString txSpotParamCallsign = QT_TR_NOOP("Callsign");
 static const QString txSpotParamLocator = QT_TR_NOOP("Locator");
 static const QString txSpotParamUTC    = QT_TR_NOOP("UTC");
-static const QString ClusterCategory    = QT_TR_NOOP("Cluster");
+static const QString clusterCategory    = QT_TR_NOOP("ClusterCategory");
 static const QString clusterReport      = QT_TR_NOOP("Report");
 
 // Chat

@@ -133,7 +133,7 @@ public:
     bool isSpotQueueEmpty();
     void buttonHandleDxSpots();
     void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseTimerCheckNewSpots();
+
     void setBandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
     void setBandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
 
@@ -141,8 +141,11 @@ public:
     void setRotatorConnected(bool connected);
     void updateZoom(bool dir);
 
+    void setClusterServerState(QString stateMsg);
 
 
+
+    void setClusterServerLoaded(bool loaded);
 private:
 
     Ui::BandmapClientFrame *ui;
@@ -169,6 +172,8 @@ private:
 
     // cluster spots
     QVector<QString> spotQueue;
+    bool clusterServerLoaded;
+    bool clusterServerConnected;
 
     // spots from logger
     QVector<LoggerSpots*> logSpotQueue;
@@ -208,7 +213,7 @@ private:
     int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);
     void handleDxSpots(QVector<QString> &spotQueue);
-    void handleClusterStatusMessage(QString &msg);
+    //void handleClusterStatusMessage(QString &msg);
     void statusIndicatorToggle(bool on);
     void addDxSpotToBandmapTable(const QString spot);
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
@@ -249,6 +254,7 @@ private slots:
      void on_markSpotActionSelected();
      void on_unMarkSpotActionSelected();
      void addLogSpotToBandmapTable(LoggerSpots *spot);
+     void mouseTimerCheckNewSpots();
 };
 
 

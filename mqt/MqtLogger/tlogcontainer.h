@@ -65,7 +65,7 @@ public:
 
     SetMemoryAction *setMemoryAction;
 
-    QString clusterConnectStatus;
+
 
 private:
     Ui::TLogContainer *ui;

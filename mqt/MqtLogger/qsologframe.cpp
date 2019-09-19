@@ -2728,9 +2728,20 @@ void QSOLogFrame::setClusterControlsVisible(bool visible)
 
 }
 
-void QSOLogFrame::setClusterServerState(QString state)
+void QSOLogFrame::setClusterServerState(QString stateMsg)
 {
+    if (stateMsg.contains("Connected"))
+    {
 
+         clusterServerConnected = true;
+
+    }
+    else
+    {
+
+         clusterServerConnected = false;
+
+    }
 
 }
 

@@ -199,6 +199,7 @@ private:
     bool clusterServerLoaded;
     bool isClusterServerLoaded();
     void setClusterControlsVisible(bool visible);
+    bool clusterServerConnected;
 
 
 

@@ -186,6 +186,6 @@ void Clusterrpc::publishState( const QString &state )
   //if ( state != old )
   //{
   //   old = state;
-  RPCPubSub::publish( rpcConstants::ClusterCategory, rpcConstants::clusterReport, state, psPublished );
+  RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterReport, state, psPublished );
   //}
 }

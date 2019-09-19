@@ -173,13 +173,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     purgeTimer->start(PURGE_TIME);
 
-    handleClusterStatusMessage(LogContainer->clusterConnectStatus);
-
     newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
+
+    //setClusterServerState(LogContainer->getClusterServerState()); // need tslf?
 
     //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
     //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
@@ -597,15 +597,7 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
     {
         QString msg = spotMsg[i];
 
-        // check to see if this is a non spot message
-        if (msg.contains(CLUSTER_STATUS))
-        {
-
-            LogContainer->clusterConnectStatus = msg;       // save for new clusterClientFrames
-            handleClusterStatusMessage(msg);
-
-        }
-        else if (msg.contains(DXSPOT))
+        if (msg.contains(DXSPOT))
         {
             spotQueue += spotMsg[i];
         }
@@ -1426,27 +1418,28 @@ void ClusterClientFrame::checkSavedFilters()
     }
 }
 
-void ClusterClientFrame::handleClusterStatusMessage(QString &msg)
+void ClusterClientFrame::setClusterServerState(QString stateMsg)
 {
 
-    if (msg.contains("!Connected"))
+    if (stateMsg.contains("Connected"))
     {
          statusIndicatorToggle(true);
+         clusterServerConnected = true;
 
     }
     else
     {
          statusIndicatorToggle(false);
+         clusterServerConnected = false;
 
     }
 
-    QStringList sl;
-    sl = msg.split(CLUSTER_STATUS);
-    if (sl.count() ==  2)
+
+    if (clusterServerLoaded)
     {
-        QString statusMsg = QString("%1").arg(sl[1]);
-        ui->statusIndicator->setToolTip(statusMsg);
-        trace(QString("Cluster Status: %1").arg(statusMsg));
+
+        ui->statusIndicator->setToolTip(stateMsg);
+        trace(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
     {
@@ -1455,6 +1448,10 @@ void ClusterClientFrame::handleClusterStatusMessage(QString &msg)
 }
 
 
+void ClusterClientFrame::setClusterServerLoaded(bool loaded)
+{
+    clusterServerLoaded = loaded;
+}
 
 
 

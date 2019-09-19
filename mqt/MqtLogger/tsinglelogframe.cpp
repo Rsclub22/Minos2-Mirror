@@ -145,13 +145,13 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, QString, QString, QString)),
             this, SLOT(on_BandmapSaveFreq(QString, QString, QString, QString)));
 
-    connect(GJVQSOLogFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
-    connect(FKHRigControlFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
+    //connect(GJVQSOLogFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
+    //connect(FKHRigControlFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
-    connect(LogContainer, SIGNAL(setClusterServerLoaded()),this, SLOT(on_clusterServerLoaded()));
-    connect(LogContainer, SIGNAL(setClusterState(QString)), this, SLOT(on_clusterServerState(QString)));
+    connect(LogContainer->sendDM, SIGNAL(setClusterServerLoaded()),this, SLOT(on_clusterServerLoaded()));
+    connect(LogContainer->sendDM, SIGNAL(setClusterState(QString)), this, SLOT(on_clusterServerState(QString)));
 
     connect( QSOTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
@@ -1428,7 +1428,7 @@ bool TSingleLogFrame::isBandMapLoaded()
 // Cluster
 
 
-void TSingleLogFrame::on_ClusterServerLoaded()
+void TSingleLogFrame::on_clusterServerLoaded()
 {
     setClusterServerLoaded(true);
 }
@@ -1437,6 +1437,8 @@ void TSingleLogFrame::setClusterServerLoaded(bool loaded)
 {
    clusterServerLoaded = loaded;
    GJVQSOLogFrame->setClusterServerLoaded(loaded);
+   bandmapControlFrame->setClusterServerLoaded(loaded);
+   clusterControlFrame->setClusterServerLoaded(loaded);
 }
 
 bool TSingleLogFrame::isClusterServerLoaded()
@@ -1458,9 +1460,16 @@ bool TSingleLogFrame::isClusterClientLoaded()
 
 void TSingleLogFrame::on_clusterServerState(QString state)
 {
+    clusterServerState = state;
     GJVQSOLogFrame->setClusterServerState(state);
+    bandmapControlFrame->setClusterServerState(state);
+    clusterControlFrame->setClusterServerState(state);
 }
 
+QString TSingleLogFrame::getClusterServerState()
+{
+    return clusterServerState;
+}
 
 //---------------------------------------------------------------------------
 void TSingleLogFrame::checkConnections()
