@@ -136,8 +136,19 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), rotPresets, SLOT(selectRotator(QString)));
     connect(rotPresets, SIGNAL(presetTurn(QString)), this, SLOT(presetTurn(QString)));
     connect(FKHRotControlFrame, SIGNAL(rotatorConnected(bool)), this, SLOT(on_rotatorConnected(bool)));
+
     // from cluster frame
     connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToLog(memoryData::memData)), this, SLOT(dxSpotToLog(memoryData::memData)));
+
+
+    // to cluster server
+    connect(GJVQSOLogFrame, SIGNAL(sendSpotToClusterServer(QString, QString, QString)), this, SLOT(on_SendSpotToClusterServer(QString, QString, QString)));
+
+    // from cluster server
+    connect(LogContainer->sendDM, SIGNAL(setClusterServerLoaded()),this, SLOT(on_clusterServerLoaded()));
+    connect(LogContainer->sendDM, SIGNAL(setClusterState(QString)), this, SLOT(on_clusterServerState(QString)));
+    connect(LogContainer->sendDM, SIGNAL(setClusterTXSpotEnableState(QString)), this, SLOT(on_setClusterTXSpotEnableState(QString)));
+
 
     // to bandmap
     connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, QString, QString, QString)),
@@ -150,8 +161,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
-    connect(LogContainer->sendDM, SIGNAL(setClusterServerLoaded()),this, SLOT(on_clusterServerLoaded()));
-    connect(LogContainer->sendDM, SIGNAL(setClusterState(QString)), this, SLOT(on_clusterServerState(QString)));
 
     connect( QSOTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)));
@@ -1064,6 +1073,14 @@ void TSingleLogFrame::dxSpotToLog(memoryData::memData m )
 }
 
 
+void TSingleLogFrame::on_SendSpotToClusterServer(QString freq, QString callsign, QString loc)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendSpotToClusterServer(freq, callsign, loc);
+    }
+}
+
 void TSingleLogFrame::transferDetails(memoryData::memData &m )
 {
     if ( !contest  )
@@ -1456,6 +1473,18 @@ bool TSingleLogFrame::isClusterClientLoaded()
 {
    return clusterClientLoaded;
 }
+
+void TSingleLogFrame::on_setClusterTXSpotEnableState(QString state)
+{
+   bool txEnableState = false;
+    if (state == SPOT_TX_ON)
+    {
+        txEnableState = true;
+    }
+
+    GJVQSOLogFrame->setClusterTXSpotEnableState(txEnableState);
+}
+
 
 
 void TSingleLogFrame::on_clusterServerState(QString state)

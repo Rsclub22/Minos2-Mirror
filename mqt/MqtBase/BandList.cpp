@@ -306,6 +306,22 @@ void loadVhfAndUpBands(QVector<BandDetail*> &bands)
 
 }
 
+bool checkValidBand(QString freq)
+{
+    bool ok = false;
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    bool bandOK = false;
+    QString sfreq = freq.trimmed();
+
+    double dfreq = sfreq.toDouble(&ok);
+
+    if (ok)
+    {
+        bandOK = blist.findBand(dfreq, bi);
+    }
+    return bandOK;
+}
 
 BandDetail::BandDetail(QString _name, double _flow, double _fhigh)
 {

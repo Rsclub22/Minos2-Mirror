@@ -90,6 +90,9 @@ const int FREQ_INT64_COL_NUM = 22;      // used in bandmap, but not in display
 const bool BOOL_YES = true;
 const bool BOOL_NO = false;
 
+const QString SPOT_TX_ON = "TxSpotOn";
+const QString SPOT_TX_OFF = "TxSpotOff";
+
 const QChar SPOT_DATA_SEPERATOR = ':';
 // Only locators in Europe
 const QRegExp FULL_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d[A-Za-z][A-Za-z]");

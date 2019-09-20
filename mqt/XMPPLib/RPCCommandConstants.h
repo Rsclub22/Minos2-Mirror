@@ -63,6 +63,7 @@ static const QString txSpotParamLocator = QT_TR_NOOP("Locator");
 static const QString txSpotParamUTC    = QT_TR_NOOP("UTC");
 static const QString clusterCategory    = QT_TR_NOOP("ClusterCategory");
 static const QString clusterReport      = QT_TR_NOOP("Report");
+static const QString clusterTXSpotEnableState = QT_TR_NOOP("ClusterTXSpotEnableState");
 
 // Chat
 static const QString chatApp            = QT_TR_NOOP("mqtChat");

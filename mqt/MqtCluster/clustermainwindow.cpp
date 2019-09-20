@@ -22,9 +22,13 @@
 #include "clustercommon.h"
 #include "rigutils.h"
 #include "cutils.h"
+#include "BandList.h"
 #include "ui_clustermainwindow.h"
 
 #include <QDebug>
+
+//#define TXSPOT  // enable to actually send to cluster
+#define TEST_PLEASE_IGNORE // comment out to stop this in tx spot remarks
 
 ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -83,6 +87,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     }
 
+
 #ifdef TEST_SPOTS
 
     if (FileExists(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE))
@@ -113,6 +118,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(setupCluster, SIGNAL(personalDataUpdated(QString, QString, QString, QString)), SLOT(personalDataChanged(QString, QString, QString, QString)));
 
     clusterRpc = new Clusterrpc();
+    connect(clusterRpc, SIGNAL(sendSpotToDXCluster(QString, QString, QString)), this, SLOT(sendSpotToDXCluster(QString, QString, QString)));
+
 
     sendSpotsTimer = new QTimer();
     connect(sendSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromSendQueue()));
@@ -136,6 +143,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     setupCluster->loadGeneralToSetupTab();
     setupCluster->readPersonal();
     setupCluster->loadPersonalToSetupTab();
+
+    connect(setupCluster, SIGNAL(sendSpotToTxEnabled(bool)), this, SLOT(sendSpotToTxEnabled(bool)));
 
     // read enable hf spots flag
     QString fileName = CLUSTER_SETTINGS_FILE;
@@ -245,6 +254,23 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 void ClusterMainWindow::clusterListChanged()
 {
     loadNodesSelectBox(setupCluster->getListOfClusterNames());
+}
+
+
+void ClusterMainWindow::sendSpotToTxEnabled(bool state)
+{
+    QString stateMsg;
+    if (state)
+    {
+        stateMsg = SPOT_TX_ON;
+
+    }
+    else
+    {
+        stateMsg = SPOT_TX_OFF;
+    }
+
+    clusterRpc->publishTXEnable(stateMsg);
 }
 
 
@@ -1265,6 +1291,51 @@ void ClusterMainWindow::LogTimerTimer()
 }
 
 
+void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString loc)
+{
+    if (setupCluster->getSendToDXClusterEnabled() && loginSuccess && !freq.isEmpty() && !call.isEmpty())
+    {
+        if (checkValidBand(freq))
+        {
+            QString spotMsg = assembleSpotForDXCluster(freq, call, loc);
+#ifdef TXSPOT
+            txText(spotMsg);
+#endif
+            trace(QString("SendSpotToDXCluster: sending spot %1").arg(spotMsg));
+        }
+        else
+        {
+            trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq).arg(call));
+        }
+    }
+}
+
+
+QString ClusterMainWindow::assembleSpotForDXCluster(QString freq, QString call, QString loc)
+{
+    bool testMsg = true;
+    QString comment;
+
+
+#ifdef TEST_PLEASE_IGNORE
+    if (testMsg)
+    {
+        comment = "Test - Please ignore";
+    }
+#endif
+
+    qint64 f = freq.toLongLong();
+    f = f / 1000;
+
+
+    QString spotmsg = QString("DX %1 %2").arg(call).arg(QString::number(f));
+    if (!loc.isEmpty())
+    {
+        spotmsg = QString("%1 %2< >%3 %4").arg(spotmsg).arg(setupCluster->getUserLocator()).arg(loc).arg(comment);
+    }
+
+    return spotmsg + QChar('\n');
+}
 
 void ClusterMainWindow::closeEvent(QCloseEvent *event)
 {
@@ -1568,6 +1639,7 @@ void ClusterMainWindow::handleStatusTimer()
         trace(QString("handleStatusTimer: Cluster Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(clusterRpc->getServerListCount()).arg(status->text()));
     //    sendSpotsQueue.append(createStatusToSend(status->text()));
           clusterRpc->publishState(status->text());
+          sendSpotToTxEnabled(setupCluster->getSendToDXClusterEnabled()); // wait for cluster client to open before sending this to qsologframe
     }
 
     // send status message if it has changed

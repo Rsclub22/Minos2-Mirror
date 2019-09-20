@@ -30,6 +30,8 @@ SetupDialog::SetupDialog(QWidget *parent) :
     enableStartCmdFiles(false),
     runEndCmdFilesChanged(false),
     enableEndCmdFiles(false),
+    sendSpotToDXCluster(false),
+    sendSpotsToDXClusterChanged(false),
     personalDataChanged(false)
 {
     ui->setupUi(this);
@@ -45,6 +47,7 @@ SetupDialog::SetupDialog(QWidget *parent) :
     connect(ui->timeToLive, SIGNAL(editingFinished()), this, SLOT(timeToliveEditFinished()));
     connect(ui->runStartCmdFileChkBox, SIGNAL(stateChanged(int)), this, SLOT(runStartCmdFileChkBoxChanged(int)));
     connect(ui->runEndCmdFileChkBox, SIGNAL(stateChanged(int)), this, SLOT(runEndCmdFileChkBoxChanged(int)));
+    connect(ui->sendSpotsToDXClusterChkBox, SIGNAL(stateChanged(int)), this, SLOT(sendSpotsToDXClusterChkBoxChanged(int)));
 
     readGeneralSettings();
     loadGeneralToSetupTab();
@@ -177,7 +180,7 @@ void SetupDialog::timeToliveEditFinished()
 
 void SetupDialog::saveGeneralSettings()
 {
-    if (timeToLiveChanged || runStartCmdFilesChanged || runEndCmdFilesChanged)
+    if (timeToLiveChanged || runStartCmdFilesChanged || runEndCmdFilesChanged || sendSpotsToDXClusterChanged)
     {
         timeToLive = ui->timeToLive->text().trimmed();
         QString fileName = CLUSTER_SETTINGS_FILE;
@@ -204,6 +207,14 @@ void SetupDialog::saveGeneralSettings()
             config.setValue("enableEndCommandFile", enableEndCmdFiles);
             config.endGroup();
             runEndCmdFilesChanged = false;
+        }
+        else if (sendSpotsToDXClusterChanged)
+        {
+            config.beginGroup("EnableSendSpotsToDXCluster");
+            config.setValue("enableSendToDXCluster", sendSpotToDXCluster);
+            config.endGroup();
+            emit sendSpotToTxEnabled(sendSpotToDXCluster);
+            sendSpotsToDXClusterChanged = false;
         }
 
     }
@@ -236,6 +247,9 @@ void SetupDialog::createDefaultGeneralSettingsFile()
     config.setValue("enableStartCommandFile", false);
     config.setValue("enableEndCommandFile", false);
     config.endGroup();
+    config.beginGroup("EnableSendSpotsToDXCluster");
+    config.setValue("enableSendToDXCluster", false);
+    config.endGroup();
 
 
 }
@@ -251,6 +265,9 @@ void SetupDialog::readGeneralSettings()
     enableStartCmdFiles = config.value("enableStartCommandFile", false).toBool();
     enableEndCmdFiles = config.value("enableEndCommandFile", false).toBool();
     config.endGroup();
+    config.beginGroup("EnableSendSpotsToDXCluster");
+    sendSpotToDXCluster = config.value("enableSendToDXCluster", false).toBool();
+    config.endGroup();
 
 }
 
@@ -260,6 +277,7 @@ void SetupDialog::loadGeneralToSetupTab()
     ui->timeToLive->setText(timeToLive);
     ui->runStartCmdFileChkBox->setChecked(enableStartCmdFiles);
     ui->runEndCmdFileChkBox->setChecked(enableEndCmdFiles);
+    ui->sendSpotsToDXClusterChkBox->setChecked(sendSpotToDXCluster);
 }
 
 
@@ -296,7 +314,21 @@ void SetupDialog::runEndCmdFileChkBoxChanged(int state)
     }
 }
 
+void SetupDialog::sendSpotsToDXClusterChkBoxChanged(int state)
+{
+    sendSpotsToDXClusterChanged = true;
+    if (state == Qt::Checked)
+    {
+        sendSpotToDXCluster = true;
 
+    }
+    else if (state == Qt::Unchecked)
+    {
+        sendSpotToDXCluster = false;
+    }
+
+
+}
 
 void SetupDialog::callsignFinished(const QString& /*cs*/)
 {
@@ -309,7 +341,10 @@ void SetupDialog::callsignFinished(const QString& /*cs*/)
 
 }
 
-
+bool SetupDialog::getSendToDXClusterEnabled()
+{
+    return sendSpotToDXCluster;
+}
 
 void SetupDialog::nameEditFinshed()
 {

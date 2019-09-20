@@ -139,6 +139,8 @@ private slots:
 
     void onSpotTabChanged(int index);
     void disconnectTimeout();
+    void sendSpotToDXCluster(QString freq, QString call, QString loc);
+    void sendSpotToTxEnabled(bool state);
 
 signals:
 
@@ -280,6 +282,7 @@ private:
 
 
     QString getPropMode(const QString comment);
+    QString assembleSpotForDXCluster(QString freq, QString call, QString loc);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
@@ -292,6 +295,8 @@ private slots:
     void testSpotPbClicked();
     void spotTimerTimeOut();
 #endif
+
+
 
 
 };

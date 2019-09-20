@@ -73,6 +73,13 @@
         </layout>
        </item>
        <item>
+        <widget class="QCheckBox" name="sendSpotsToDXClusterChkBox">
+         <property name="text">
+          <string>Send Spots to DXCluster</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
           <widget class="QCheckBox" name="displayModeCheckBox">

@@ -428,7 +428,14 @@ to</string>
            <item>
             <widget class="QCheckBox" name="lastLoggedChkBx">
              <property name="text">
-              <string>Last Logged</string>
+              <string>Last Logged: </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lastLoggedCallsignLbl">
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
@@ -440,6 +447,20 @@ to</string>
             </widget>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="lastSpotSentTitleLbl">
+           <property name="text">
+            <string>Last Spot Sent: </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lastSpotSentLbl">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer_8">

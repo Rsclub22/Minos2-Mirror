@@ -64,10 +64,12 @@ public:
     void loadGeneralToSetupTab();
     void loadPersonalToSetupTab();
 
+    bool getSendToDXClusterEnabled();
 signals:
 
     void personalDataUpdated(QString, QString, QString, QString);
     void clusterListChanged();
+    void sendSpotToTxEnabled(bool);
 
 public slots:
     QString getCurrentNodeName();
@@ -99,6 +101,7 @@ private slots:
     void runEndCmdFileChkBoxChanged(int state);
 
 
+    void sendSpotsToDXClusterChkBoxChanged(int state);
 private:
     Ui::SetupDialog *ui;
     UpperCaseValidator ucValidator;
@@ -123,6 +126,9 @@ private:
     bool enableStartCmdFiles;
     bool runEndCmdFilesChanged;
     bool enableEndCmdFiles;
+
+    bool sendSpotToDXCluster;
+    bool sendSpotsToDXClusterChanged;
 
     bool personalDataChanged;
 

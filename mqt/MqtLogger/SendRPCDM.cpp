@@ -169,7 +169,7 @@ void TSendDM::sendBandMap(  TSingleLogFrame * tslf, const QString &freq, const Q
 }
 */
 
-void TSendDM::sendSpotToCluster( TSingleLogFrame *tslf, const QString &freq, const QString &call, const QString &utc, const QString &loc )
+void TSendDM::sendSpotToClusterServer( const QString &freq, const QString &call, const QString &loc )
 {
 
     if (!clusterApp.isEmpty())
@@ -179,7 +179,6 @@ void TSendDM::sendSpotToCluster( TSingleLogFrame *tslf, const QString &freq, con
         QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::txSpotToCluster ));
         QSharedPointer<RPCParam>freqStr(new RPCStringParam(freq));
         QSharedPointer<RPCParam>callStr(new RPCStringParam(call));
-        QSharedPointer<RPCParam>timeStr(new RPCStringParam(utc));
         QSharedPointer<RPCParam>locStr(new RPCStringParam(loc));
         //QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
 
@@ -188,7 +187,6 @@ void TSendDM::sendSpotToCluster( TSingleLogFrame *tslf, const QString &freq, con
         st->addMember( sName, rpcConstants::paramName );
         st->addMember( freqStr, rpcConstants::txSpotParamFreq );
         st->addMember( callStr, rpcConstants::txSpotParamCallsign );
-        st->addMember( timeStr, rpcConstants::txSpotParamUTC );
         st->addMember( locStr, rpcConstants::txSpotParamLocator );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( clusterApp  );
@@ -820,7 +818,10 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 emit setClusterState(an.getValue());
                 break;
             }
-
+            else if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterTXSpotEnableState )
+            {
+                emit setClusterTXSpotEnableState(an.getValue());
+            }
 
         }
     }

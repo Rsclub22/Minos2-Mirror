@@ -71,14 +71,13 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
       QSharedPointer<RPCParam>piValue;
       QSharedPointer<RPCParam> psFreq;
       QSharedPointer<RPCParam> psCall;
-      QSharedPointer<RPCParam> psUtc;
       QSharedPointer<RPCParam> psLoc;
       RPCArgs *args = mro->getCallArgs();
 
       QString freq;
       QString call;
       QString loc;
-      QString utc;
+
 
       if (args->getStructArgMember(0, rpcConstants::txSpotParamFreq, psFreq))
       {
@@ -102,17 +101,11 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
           }
 
       }
-      if (args->getStructArgMember(0, rpcConstants::txSpotParamUTC, psUtc))
-      {
-          if (psUtc->getString(utc))
-          {
-              trace(QString("Cluster RPC: UTC to send to cluster = %1").arg(utc));
-          }
-      }
 
+      emit sendSpotToDXCluster(freq, call, loc);
 
       mro->clearCallArgs();
-        QSharedPointer<RPCParam>st(new RPCParamStruct);
+      QSharedPointer<RPCParam>st(new RPCParamStruct);
 
 
    }
@@ -188,4 +181,16 @@ void Clusterrpc::publishState( const QString &state )
   //   old = state;
   RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterReport, state, psPublished );
   //}
+}
+
+void Clusterrpc::publishTXEnable(const QString txOnOff)
+{
+    static QString old;
+
+    if (txOnOff != old)
+    {
+        old = txOnOff;
+        RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterTXSpotEnableState, txOnOff, psPublished );
+
+    }
 }

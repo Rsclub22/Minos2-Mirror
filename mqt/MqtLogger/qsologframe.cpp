@@ -415,6 +415,7 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     connect(ui->bandmapSaveFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapSaveFreqPbClicked()));
 
     connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
+    setClusterControlsVisible(false);           // visibility controlled by txenable in clusterserver
 
     connect(this, SIGNAL(freqChanged(QString)), this, SLOT(on_FreqChanged(QString)));
 
@@ -2104,6 +2105,11 @@ void QSOLogFrame::logScreenEntry( )
        MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue());
    }
 
+   // save for send spot to DX cluster
+   lastLoggedCallsign = lct->cs;
+   ui->lastLoggedCallsignLbl->setText(lct->cs.realCall);
+   lastLoggedLocator = lct->loc.loc.getValue();
+   lastLoggedFreq = lct->frequency.getValue();
 
 
    if (!edit )
@@ -2643,13 +2649,27 @@ void QSOLogFrame::setBandMapControlsVisible(bool visible)
 
 void QSOLogFrame::on_SpotPbClicked()
 {
-
+    if (ui->lastLoggedChkBx->isChecked())
+    {
+        // send last spot logged
+        emit sendSpotToClusterServer( lastLoggedFreq.remove('.'), lastLoggedCallsign.realCall, lastLoggedLocator );
+        ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq);
+    }
+    else
+    {
+        memoryData::memData logData = getLogDetails();
+        if (!logData.callsign.isEmpty() || !logData.freq.isEmpty())
+        {
+           emit sendSpotToClusterServer(logData.freq.remove('.'), logData.callsign, logData.locator);
+           ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq);
+        }
+    }
 }
 
 void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 {
     memoryData::memData logData = getLogDetails();
-    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+    emit bandmapMarkFreq(lastLoggedCallsign.realCall, logData.freq, logData.locator, QString::number(logData.bearing));
 }
 
 
@@ -2721,10 +2741,22 @@ bool QSOLogFrame::isClusterServerLoaded()
     return clusterServerLoaded;
 }
 
+void QSOLogFrame::setClusterTXSpotEnableState(bool txEnableState)
+{
+    setClusterControlsVisible(txEnableState);
+}
+
 void QSOLogFrame::setClusterControlsVisible(bool visible)
 {
     ui->lastLoggedChkBx->setVisible(visible);
+    ui->lastLoggedCallsignLbl->setVisible(visible);
     ui->spotPb->setVisible(visible);
+    ui->lastSpotSentTitleLbl->setVisible(visible);
+    ui->lastSpotSentLbl->setVisible(visible);
+    if (visible)
+    {
+        ui->spotPb->setDisabled(false);
+    }
 
 }
 
@@ -2760,14 +2792,14 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
         setBandMapControlsVisible(false);
     }
 
-    if (isClusterServerLoaded())
-    {
-        setClusterControlsVisible(true);
-    }
-    else
-    {
-        setClusterControlsVisible(false);
-    }
+    //if (isClusterServerLoaded())
+    //{
+    //    setClusterControlsVisible(true);
+    //}
+    //else
+    //{
+    //    setClusterControlsVisible(false);
+    //}
 
 }
 
@@ -2836,6 +2868,7 @@ void QSOLogFrame::on_ChkRunFreq()
             if (!radioOffRunFreq)
             {
                 radioOffRunFreq = true;
+                ui->spotPb->setDisabled(false);
                 showRunToolButtonOffFreq();
             }
          }
@@ -2846,6 +2879,7 @@ void QSOLogFrame::on_ChkRunFreq()
             if (radioOffRunFreq)
             {
                 radioOffRunFreq = false;
+                ui->spotPb->setDisabled(true);
                 showRunToolButtonOnFreq();
             }
 
@@ -2893,6 +2927,7 @@ void QSOLogFrame::runButtonOff()
 
     runButtonOnFlag = false;
     chkRunFreqTimer->stop();
+    ui->spotPb->setDisabled(false);
     showRunButtonOnOff(runButtonOnFlag);
 
 }

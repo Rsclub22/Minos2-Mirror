@@ -90,6 +90,9 @@ public:
     void setRunMemoryFreqUpdate(int num, QString freq);
     //void setIgnoreRunChkBoxState(int num, bool checked);
     void setClusterServerState(QString state);
+    void setClusterTXSpotEnableState(bool txEnableState);
+
+
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -257,6 +260,10 @@ private:
     void showRunButtonOnOff(bool state);
     memoryData::memData getLogDetails();
 
+    Callsign lastLoggedCallsign;        // saved to send to cluster
+    QString lastLoggedLocator;
+    QString lastLoggedFreq;
+
 
     void onBandMapAfterLogContact();
     bool chkRadioFreqOnRunFreq();
@@ -277,6 +284,7 @@ signals:
     void sendFreqControl(QString);
     void freqChanged(QString);
     void zoomMap(bool);
+    void sendSpotToClusterServer(QString, QString, QString);
 
 private slots:
     void focusChange(QObject *, bool, QFocusEvent *event);

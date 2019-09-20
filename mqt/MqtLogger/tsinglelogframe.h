@@ -275,6 +275,8 @@ private slots:
     void on_ZoomMap(bool dir);
     void on_clusterServerState(QString state);
     void on_clusterServerLoaded();
+    void on_SendSpotToClusterServer(QString freq, QString callsign, QString loc);
+    void on_setClusterTXSpotEnableState(QString state);
 public:
     void sendTpm(int t, QString f);
     
