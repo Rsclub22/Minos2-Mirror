@@ -25,6 +25,10 @@
 #include "BandList.h"
 #include "ui_clustermainwindow.h"
 
+const QString DXSPOT_TAB_TITLE = "DX Spots";
+const QString SENT_SPOT_TAB_TITLE = "Sent Spots";
+const QString RAW_DATA_TAB_TITLE = "Raw Data";
+
 #include <QDebug>
 
 //#define TXSPOT  // enable to actually send to cluster
@@ -153,15 +157,16 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     enableHFSpots = config.value("enable", false).toBool();
     config.endGroup();
 
+    // in comming spot tab
 
     dxSpotDataModel = new DxSpotDataModel();
 
 
     dxSpotView = new QTableView();
 
-    delegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    dxSpotViewDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
 
-    dxSpotDataModel->delegate = delegate;
+    dxSpotDataModel->delegate = dxSpotViewDelegate;
 
     dxSpotProxyModel = new QSortFilterProxyModel();
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
@@ -170,7 +175,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
-    dxSpotView->setItemDelegate(delegate.data());
+    dxSpotView->setItemDelegate(dxSpotViewDelegate.data());
 
 
 
@@ -185,7 +190,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     restoreDxSpotViewColumns();
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)));
+             this, SLOT( on_dxSpotView_sectionResized(int, int , int)));
 
 
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
@@ -198,12 +203,47 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
 
+    // sent spot tab
+
+    sentSpotDataModel = new SentSpotDataModel();
+    sentSpotView = new QTableView();
+    sentSpotViewDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    sentSpotDataModel->delegate = sentSpotViewDelegate;
+
+    sentSpotProxyModel = new QSortFilterProxyModel();
+    sentSpotProxyModel->setSourceModel(sentSpotDataModel);
+    sentSpotProxyModel->sort(SENT_SPOT_RXTIME_COL_NUM, Qt::DescendingOrder);
+
+    sentSpotView->setModel(sentSpotProxyModel);
+    sentSpotView->setAlternatingRowColors(true);
+    sentSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+    sentSpotView->setItemDelegate(dxSpotViewDelegate.data());
+
+
+
+    QHeaderView *sentSpotVerticalHeader = sentSpotView->verticalHeader();
+    sentSpotVerticalHeader->setVisible(false);
+    sentSpotVerticalHeader->setDefaultSectionSize(10);
+    sentSpotVerticalHeader->setMinimumSectionSize(10);
+
+    sentSpotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    restoreSentSpotViewColumns();
+    sentSpotView->horizontalHeader()->setStretchLastSection(true);
+    connect( sentSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sentSpotView_sectionResized(int, int , int)));
+
+
+    // rawdata tab
 
     rawClusterDataView = new QPlainTextEdit();
     rawClusterDataView->setReadOnly(true);
 
-    ui->clusterViewsTab->addTab(dxSpotView, "DX Spots");
-    ui->clusterViewsTab->addTab(rawClusterDataView, "Raw Data");
+    ui->clusterViewsTab->addTab(dxSpotView, DXSPOT_TAB_TITLE);
+    //ui->clusterViewsTab->addTab(sentSpotView, SENT_SPOT_TAB_TITLE);
+    ui->clusterViewsTab->addTab(rawClusterDataView, RAW_DATA_TAB_TITLE);
+
+
 
     setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
     ui->clusterViewsTab->setTabColor(ui->clusterViewsTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
@@ -242,9 +282,15 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
 
 
+
+
     // get current node from file and then connect to host
     currentNodeName = setupCluster->getCurrentNodeName();
     connectToHost(currentNodeName);
+
+    connect(setupCluster, SIGNAL(sendSpotToTxEnabled(bool)), this, SLOT(sendSpotToTxEnabled(bool)));
+
+    removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
 
 }
@@ -263,14 +309,48 @@ void ClusterMainWindow::sendSpotToTxEnabled(bool state)
     if (state)
     {
         stateMsg = SPOT_TX_ON;
+        removeInsertSendSpotTab(true);
 
     }
     else
     {
         stateMsg = SPOT_TX_OFF;
+        removeInsertSendSpotTab(false);
     }
 
     clusterRpc->publishTXEnable(stateMsg);
+}
+
+void ClusterMainWindow::removeInsertSendSpotTab(bool state)
+{
+    if (ui->clusterViewsTab->count() >= 1)
+    {
+        if (state)
+        {
+            // insert the tab
+            if (ui->clusterViewsTab->tabText(1) == SENT_SPOT_TAB_TITLE)
+            {
+                // tab must exist
+                return;
+            }
+            else
+            {
+                ui->clusterViewsTab->insertTab(1, sentSpotView, SENT_SPOT_TAB_TITLE);
+            }
+        }
+        else if (ui->clusterViewsTab->tabText(1) != SENT_SPOT_TAB_TITLE)
+        {
+            // missing don't remove
+            return;
+        }
+        else
+        {
+            ui->clusterViewsTab->removeTab(1);
+        }
+
+
+
+    }
 }
 
 
@@ -341,7 +421,7 @@ void ClusterMainWindow::onSpotTabChanged(int index)
 
 
 
-void ClusterMainWindow::on_sectionResized(int, int, int)
+void ClusterMainWindow::on_dxSpotView_sectionResized(int, int, int)
 {
     QSettings settings;
     QByteArray state;
@@ -352,7 +432,15 @@ void ClusterMainWindow::on_sectionResized(int, int, int)
 }
 
 
+void ClusterMainWindow::on_sentSpotView_sectionResized(int, int, int)
+{
+    QSettings settings;
+    QByteArray state;
 
+    state = sentSpotView->horizontalHeader()->saveState();
+    settings.setValue("sentSpotView/state", state);
+
+}
 
 void ClusterMainWindow::restoreDxSpotViewColumns()
 {
@@ -361,6 +449,15 @@ void ClusterMainWindow::restoreDxSpotViewColumns()
 
     state = settings.value("dxSpotView/state").toByteArray();
     dxSpotView->horizontalHeader()->restoreState(state);
+}
+
+void ClusterMainWindow::restoreSentSpotViewColumns()
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("sentSpotView/state").toByteArray();
+    sentSpotView->horizontalHeader()->restoreState(state);
 }
 
 void ClusterMainWindow::connectToNode(const QString &nodeName)

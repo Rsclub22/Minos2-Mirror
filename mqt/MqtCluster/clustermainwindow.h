@@ -13,6 +13,7 @@
 #include "setupdialog.h"
 #include "clusterrpc.h"
 #include "dxspotdatamodel.h"
+#include "sentSpotdatamodel.h"
 //#include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
 #include "checkmodeagainstfreq.h"
@@ -122,7 +123,8 @@ private slots:
     void connectToNode(const QString &nodeName);
     void logIn();
     void checkStationDetails(QString msg);
-    void on_sectionResized(int, int, int);
+    void on_dxSpotView_sectionResized(int, int, int);
+    void on_sentSpotView_sectionResized(int, int, int);
     void LogTimerTimer();
 
     void onStdInRead(QString cmd);
@@ -150,7 +152,9 @@ private:
     StdInReader stdinReader;
     class QTimer LogTimer;
     QTimer *disconnectTimer;
-    QSharedPointer<HtmlDelegate> delegate;
+    QSharedPointer<HtmlDelegate> dxSpotViewDelegate;
+    QSharedPointer<HtmlDelegate> sentSpotViewDelegate;
+
 
     QString appName;
     QLabel* status;
@@ -173,6 +177,10 @@ private:
     QSortFilterProxyModel* dxSpotProxyModel;        // use base as we are not doing custom filtering
     QTableView* dxSpotView;
     QPlainTextEdit* rawClusterDataView;
+
+    SentSpotDataModel* sentSpotDataModel;
+    QSortFilterProxyModel* sentSpotProxyModel;
+    QTableView* sentSpotView;
 
 
     SetupDialog *setupCluster;
@@ -235,7 +243,7 @@ private:
     void loadNodesSelectBox(QStringList listOfNodes);
 
     void restoreDxSpotViewColumns();
-
+    void restoreSentSpotViewColumns();
     void closeEvent(QCloseEvent *event);
     void disconnectNode();
     void connectToHost(QString hostName);
@@ -283,6 +291,8 @@ private:
 
     QString getPropMode(const QString comment);
     QString assembleSpotForDXCluster(QString freq, QString call, QString loc);
+
+    void removeInsertSendSpotTab(bool state);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
@@ -295,6 +305,7 @@ private slots:
     void testSpotPbClicked();
     void spotTimerTimeOut();
 #endif
+
 
 
 
