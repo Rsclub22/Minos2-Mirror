@@ -203,7 +203,10 @@ private:
     QString currentUserQTH;
     QString currentUserLocator;
 
-
+    QString sentCallsign;
+    QString sentFreq;
+    QString sentLoc;
+    QString sentComment;
 
     QStringList dxMsg;
     QString dxCall;
@@ -238,7 +241,7 @@ private:
 
 
 
-    void txText(QString msg);
+    int txText(QString msg);
     int upackDxSpot(QString txt, QString &spotCall);
     void loadNodesSelectBox(QStringList listOfNodes);
 
@@ -293,6 +296,7 @@ private:
     QString assembleSpotForDXCluster(QString freq, QString call, QString loc);
 
     void removeInsertSendSpotTab(bool state);
+    void addSentSpotToDisplayQueue(bool spotStatus);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();

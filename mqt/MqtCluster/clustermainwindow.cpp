@@ -233,6 +233,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect( sentSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sentSpotView_sectionResized(int, int , int)));
 
+    sentSpotView->setColumnHidden(SENT_SPOT_RXTIME_COL_NUM, true);
 
     // rawdata tab
 
@@ -1334,12 +1335,14 @@ void ClusterMainWindow::sendText()
 }
 
 
-void ClusterMainWindow::txText(QString msg)
+int ClusterMainWindow::txText(QString msg)
 {
+    int error = 0;
     if (loginSuccess)
     {
-       client->sendData(msg);
+       error = client->sendData(msg);
        echoCmd(msg);
+       return error;
 
     }
     else
@@ -1347,6 +1350,8 @@ void ClusterMainWindow::txText(QString msg)
         QString err = "Sending command - Not logged in  - " + msg;
         echoErrorMsg(err);
     }
+
+    return -1; // error
 
 }
 
@@ -1390,15 +1395,26 @@ void ClusterMainWindow::LogTimerTimer()
 
 void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString loc)
 {
+    bool spotStatus = false;
     if (setupCluster->getSendToDXClusterEnabled() && loginSuccess && !freq.isEmpty() && !call.isEmpty())
     {
         if (checkValidBand(freq))
         {
             QString spotMsg = assembleSpotForDXCluster(freq, call, loc);
 #ifdef TXSPOT
-            txText(spotMsg);
+            int error = txText(spotMsg);
+            if (error < 0)
+            {
+                trace(QString("SendSpotToDXCluster: sending spot %1 failed to send").arg(spotMsg));
+            }
+            else
+            {
+                trace(QString("SendSpotToDXCluster: sending spot %1 failed to send").arg(spotMsg));
+                spotStatus = true;
+            }
 #endif
-            trace(QString("SendSpotToDXCluster: sending spot %1").arg(spotMsg));
+            addSentSpotToDisplayQueue(spotStatus);
+
         }
         else
         {
@@ -1408,27 +1424,47 @@ void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString 
 }
 
 
+void ClusterMainWindow::addSentSpotToDisplayQueue(bool spotStatus)
+{
+    QDateTime sentSpotDateTime = QDateTime::currentDateTimeUtc();
+    qint64 rxTime = sentSpotDateTime.toMSecsSinceEpoch()/1000;
+    QString sentSpotTime = sentSpotDateTime.toString("HH:MM");
+    SentSpotData* sentSpotData = new SentSpotData(rxTime, sentSpotTime,
+                                                   sentFreq, sentCallsign,
+                                                  sentLoc, sentComment, spotStatus);
+
+    sentSpotDataModel->rowData = sentSpotData;
+    sentSpotDataModel->insertRows(sentSpotDataModel->rowCount(), 1);
+
+}
+
+
+
 QString ClusterMainWindow::assembleSpotForDXCluster(QString freq, QString call, QString loc)
 {
     bool testMsg = true;
-    QString comment;
+    sentComment = QString("%1< >%2").arg(setupCluster->getUserLocator()).arg(loc);
 
 
 #ifdef TEST_PLEASE_IGNORE
     if (testMsg)
     {
-        comment = "Test - Please ignore";
+        sentComment = sentComment + " Test, Pls ignore";
     }
 #endif
 
     qint64 f = freq.toLongLong();
     f = f / 1000;
 
+    sentCallsign = call;
+    sentFreq = QString::number(f);
+    sentLoc = loc;
+
 
     QString spotmsg = QString("DX %1 %2").arg(call).arg(QString::number(f));
     if (!loc.isEmpty())
     {
-        spotmsg = QString("%1 %2< >%3 %4").arg(spotmsg).arg(setupCluster->getUserLocator()).arg(loc).arg(comment);
+        spotmsg = QString("%1 %2").arg(spotmsg).arg(sentComment);
     }
 
     return spotmsg + QChar('\n');
