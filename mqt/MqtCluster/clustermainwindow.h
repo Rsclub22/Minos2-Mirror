@@ -297,6 +297,8 @@ private:
 
     void removeInsertSendSpotTab(bool state);
     void addSentSpotToDisplayQueue(bool spotStatus);
+    bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();

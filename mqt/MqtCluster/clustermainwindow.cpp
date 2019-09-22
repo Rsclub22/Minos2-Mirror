@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Cluster Server
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
 //
 ///
 //
@@ -997,6 +997,16 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
 
         findLocInComment(spotLocator, dxLocator, spotComment);
         dxPropMode = getPropMode(spotComment);
+
+        // look for mode in comments, if found overide freq mode
+        int commentModeNum;
+        QString commentMode;
+        if (lookforModeInComment(spotComment, commentModeNum, commentMode))
+        {
+            dxModeStr = commentMode;
+            dxModeMask = QString::number(commentModeNum);
+        }
+
         return 0;
     }
 
@@ -1239,6 +1249,14 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
         findLocInComment(spotLocator, dxLocator, spotComment);
         dxPropMode = getPropMode(spotComment);
 
+        // look for mode in comments, if found overide freq mode
+        int commentModeNum;
+        QString commentMode;
+        if (lookforModeInComment(spotComment, commentModeNum, commentMode))
+        {
+            dxModeStr = commentMode;
+            dxModeMask = QString::number(commentModeNum);
+        }
 
         return 0;
     }
@@ -1336,6 +1354,21 @@ QString ClusterMainWindow::extractLocator(const QString &text, const QRegExp ful
     return "";
 }
 
+
+bool ClusterMainWindow::lookforModeInComment(const QString &spotComment, int &commentModeNum, QString &commentMode)
+{
+    for (int i = 0; i < clusterModes.count(); i++)
+    {
+        if (spotComment.contains(clusterModes[i], Qt::CaseInsensitive))
+        {
+            commentModeNum = i;
+            commentMode = clusterModes[i];
+            return true;
+        }
+    }
+
+    return false; // nothing found
+}
 
 // ************* Send text *************************************************
 
