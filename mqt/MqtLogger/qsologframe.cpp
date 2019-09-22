@@ -2649,21 +2649,26 @@ void QSOLogFrame::setBandMapControlsVisible(bool visible)
 
 void QSOLogFrame::on_SpotPbClicked()
 {
-    if (ui->lastLoggedChkBx->isChecked())
+    if (runButtonOnFlag && radioOffRunFreq)     // don't send a spot when running a freq
     {
-        // send last spot logged
-        emit sendSpotToClusterServer( lastLoggedFreq.remove('.'), lastLoggedCallsign.realCall, lastLoggedLocator );
-        ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq);
-    }
-    else
-    {
-        memoryData::memData logData = getLogDetails();
-        if (!logData.callsign.isEmpty() || !logData.freq.isEmpty())
+        if (ui->lastLoggedChkBx->isChecked())
         {
-           emit sendSpotToClusterServer(logData.freq.remove('.'), logData.callsign, logData.locator);
-           ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq);
+            // send last spot logged
+            emit sendSpotToClusterServer( lastLoggedFreq.remove('.'), lastLoggedCallsign.realCall, lastLoggedLocator );
+            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq);
+        }
+        else
+        {
+            memoryData::memData logData = getLogDetails();
+            if (!logData.callsign.isEmpty() || !logData.freq.isEmpty())
+            {
+               emit sendSpotToClusterServer(logData.freq.remove('.'), logData.callsign, logData.locator);
+               ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq);
+            }
         }
     }
+
+
 }
 
 void QSOLogFrame::on_BandmapMarkFreqPbClicked()
@@ -2868,7 +2873,6 @@ void QSOLogFrame::on_ChkRunFreq()
             if (!radioOffRunFreq)
             {
                 radioOffRunFreq = true;
-                ui->spotPb->setDisabled(false);
                 showRunToolButtonOffFreq();
             }
          }
@@ -2879,7 +2883,6 @@ void QSOLogFrame::on_ChkRunFreq()
             if (radioOffRunFreq)
             {
                 radioOffRunFreq = false;
-                ui->spotPb->setDisabled(true);
                 showRunToolButtonOnFreq();
             }
 
