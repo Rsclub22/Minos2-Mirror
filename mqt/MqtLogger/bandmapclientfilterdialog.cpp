@@ -203,6 +203,14 @@ void BandmapClientFilterDialog::setModes()
 
 }
 
+void BandmapClientFilterDialog::setModeFilter(bool state, int mode)
+{
+    if (mode >= 0 && mode < clusterModes.count())
+    {
+        *filterSettings.modeFilters[mode] = state;
+    }
+}
+
 
 void BandmapClientFilterDialog::restoreModes()
 {
@@ -214,3 +222,5 @@ void BandmapClientFilterDialog::restoreModes()
 
     }
 }
+
+

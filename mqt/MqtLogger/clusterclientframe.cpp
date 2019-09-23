@@ -943,12 +943,31 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
-        if (!contest->clusterFilterSettingsExist)       // have settings been saved before?
+
+        if (!contest->clusterFilterSettingsExist)       // have band settings been saved before?
         {
             // no, save current band filter for this contest
             filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
-            filterSetup->saveClusterFilterToContest();
+
+            if (contestModeStr == "MGM")       //  have mode settings been saved before?
+            {
+                for (int m = 4; m < clusterModes.count(); m++)
+                {
+                    filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
+                }
+            }
+            else
+            {
+                // no, save current mode filter for this contest
+                filterSetup->setModeFilter(true, contestMode);
+            }
+
+            filterSetup->saveClusterFilterToContest();  // save these settings
         }
+
+
+
+
 
         if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
         {

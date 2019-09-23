@@ -39,6 +39,7 @@ public:
     void saveBandmapFilterToContest();
 
 
+    void setModeFilter(bool state, int mode);
 signals:
     void filtersChanged(bool);
 

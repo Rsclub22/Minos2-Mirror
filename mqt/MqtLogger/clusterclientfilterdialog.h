@@ -55,6 +55,7 @@ public:
     bool getEnableHFSpotsFlag();
 
     void saveClusterFilterToContest();
+    void setModeFilter(bool state, int mode);
 signals:
     void filtersChanged(bool, bool, bool, bool);
 

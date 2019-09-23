@@ -346,12 +346,24 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
-//        if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
-//        {
-//            // no, save current band filter for this contest
-//            filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
-//            filterSetup->saveClusterFilterToContest();
-//        }
+
+        if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
+        {
+            if (contestModeStr == "MGM")       //  have mode settings been saved before?
+            {
+                for (int m = 4; m < clusterModes.count(); m++)
+                {
+                    filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
+                }
+            }
+            else
+            {
+                // no, save current mode filter for this contest
+                filterSetup->setModeFilter(true, contestMode);
+            }
+
+            filterSetup->saveBandmapFilterToContest();
+        }
 
         if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
         {
