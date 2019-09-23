@@ -743,26 +743,22 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             LogContainer->setCaption( an.getValue() );
             trace( "KeyerReport " + an.getValue() );
         }
-    }
 
-
-            if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterReport )
+        if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterReport )
+        {
+            if (clusterApp.isEmpty())
             {
-                if (clusterApp.isEmpty())
-                {
-                    clusterApp = PubSubName(an);
-                    emit setClusterServerLoaded();
-                }
-
-                emit setClusterState(an.getValue());
-                break;
-            }
-            else if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterTXSpotEnableState )
-            {
-                emit setClusterTXSpotEnableState(an.getValue());
+                clusterApp = PubSubName(an);
+                emit setClusterServerLoaded();
             }
 
+            emit setClusterState(an.getValue());
         }
+        else if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterTXSpotEnableState )
+        {
+            emit setClusterTXSpotEnableState(an.getValue());
+        }
+
     }
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
