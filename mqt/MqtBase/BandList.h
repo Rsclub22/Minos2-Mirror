@@ -28,6 +28,7 @@
 class BandDetail;
 
 void loadVhfAndUpBands(QVector<BandDetail*> &bands);
+bool checkValidBand(QString freq);
 
 class BandInfo
 {

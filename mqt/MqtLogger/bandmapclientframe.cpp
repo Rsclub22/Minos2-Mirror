@@ -69,6 +69,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     isProtected(false),
     contestBand(-1),
     contestMode(-1),
+    clusterServerLoaded(false),
+    clusterServerConnected(false),
     purgeSpotFlag(false),
     holdUpdateFlag(false),
     timeToLive(0),
@@ -129,8 +131,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     spotsMenu->installEventFilter(actionInObject);
 
 
-    markSpotAction = new QAction("Mark Spot", this);
-    unMarkSpotAction = new QAction("Unmark Spot", this);
+    markSpotAction = new QAction("M&ark Spot", this);
+    unMarkSpotAction = new QAction("&Unmark Spot", this);
     freqAction = new QAction("Set &Freq", this);
     bearingAction = new QAction("Set &Bearing", this);
     logAction = new QAction("Send &Log", this);
@@ -181,7 +183,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     purgeTimer->start(PURGE_TIME);
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
 
-
+    //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
+    //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
 }
 
 
@@ -220,7 +223,7 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 
 void BandmapClientFrame::onMenuShow()
 {
-
+   //ui->actionsButton->showMenu();
 }
 
 
@@ -343,12 +346,24 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
-//        if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
-//        {
-//            // no, save current band filter for this contest
-//            filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
-//            filterSetup->saveClusterFilterToContest();
-//        }
+
+        if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
+        {
+            if (contestModeStr == "MGM")       //  have mode settings been saved before?
+            {
+                for (int m = 4; m < clusterModes.count(); m++)
+                {
+                    filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
+                }
+            }
+            else
+            {
+                // no, save current mode filter for this contest
+                filterSetup->setModeFilter(true, contestMode);
+            }
+
+            filterSetup->saveBandmapFilterToContest();
+        }
 
         if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
         {
@@ -429,15 +444,7 @@ void BandmapClientFrame::dxSpots(QVector<QString> spotMsg)
     {
         QString msg = spotMsg[i];
 
-        // check to see if this is a non spot message
-        if (msg.contains(CLUSTER_STATUS))
-        {
-
-            LogContainer->clusterConnectStatus = msg;       // save for new clusterClientFrames
-            handleClusterStatusMessage(msg);
-
-        }
-        else if (msg.contains(DXSPOT))
+        if (msg.contains(DXSPOT))
         {
             spotQueue += spotMsg[i];
 
@@ -962,33 +969,40 @@ void BandmapClientFrame::checkSavedFilters()
 
 
 
-void BandmapClientFrame::handleClusterStatusMessage(QString &msg)
+
+void BandmapClientFrame::setClusterServerState(QString stateMsg)
 {
 
-    if (msg.contains("!Connected"))
+
+    if (stateMsg.contains("Connected"))
     {
          statusIndicatorToggle(true);
+         clusterServerConnected = true;
+
     }
     else
     {
          statusIndicatorToggle(false);
+         clusterServerConnected = false;
+
     }
 
-    QStringList sl;
-    sl = msg.split(CLUSTER_STATUS);
-    if (sl.count() ==  2)
+    if (clusterServerLoaded)
     {
-        QString statusMsg = QString("%1").arg(sl[1]);
-        ui->statusIndicator->setToolTip(statusMsg);
-        trace(QString("Bandmap Cluster Status: %1").arg(statusMsg));
+
+        ui->statusIndicator->setToolTip(stateMsg);
+        trace(QString("Bandmap Cluster Status: %1").arg(stateMsg));
     }
     else
     {
-        ui->statusIndicator->setToolTip("");
+        ui->statusIndicator->setToolTip("Cluster Server Not Running");
     }
 }
 
-
+void BandmapClientFrame::setClusterServerLoaded(bool loaded)
+{
+    clusterServerLoaded = loaded;
+}
 
 void BandmapClientFrame::statusIndicatorToggle(bool on)
 {

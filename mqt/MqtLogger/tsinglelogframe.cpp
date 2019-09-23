@@ -136,8 +136,19 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), rotPresets, SLOT(selectRotator(QString)));
     connect(rotPresets, SIGNAL(presetTurn(QString)), this, SLOT(presetTurn(QString)));
     connect(FKHRotControlFrame, SIGNAL(rotatorConnected(bool)), this, SLOT(on_rotatorConnected(bool)));
+
     // from cluster frame
     connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToLog(memoryData::memData)), this, SLOT(dxSpotToLog(memoryData::memData)));
+
+
+    // to cluster server
+    connect(GJVQSOLogFrame, SIGNAL(sendSpotToClusterServer(QString, QString, QString)), this, SLOT(on_SendSpotToClusterServer(QString, QString, QString)));
+
+    // from cluster server
+    connect(LogContainer->sendDM, SIGNAL(setClusterServerLoaded()),this, SLOT(on_clusterServerLoaded()));
+    connect(LogContainer->sendDM, SIGNAL(setClusterState(QString)), this, SLOT(on_clusterServerState(QString)));
+    connect(LogContainer->sendDM, SIGNAL(setClusterTXSpotEnableState(QString)), this, SLOT(on_setClusterTXSpotEnableState(QString)));
+
 
     // to bandmap
     connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, QString, QString, QString)),
@@ -145,8 +156,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, QString, QString, QString)),
             this, SLOT(on_BandmapSaveFreq(QString, QString, QString, QString)));
 
-    connect(GJVQSOLogFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
-    connect(FKHRigControlFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
+    //connect(GJVQSOLogFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
+    //connect(FKHRigControlFrame, SIGNAL(zoomMap(bool)), this, SLOT(on_ZoomMap(bool)));
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
@@ -255,7 +266,7 @@ void TSingleLogFrame::createScreenComponents()
 
     clusterControlFrame->setVisible(false);
     clusterControlFrame->setContest(contest);
-    setClusterLoaded(false);
+    setClusterClientLoaded(false);
 
     bandmapControlFrame = new BandmapClientFrame(this);
     bandmapControlFrame->setObjectName(QStringLiteral("BandmapControlFrame"));
@@ -588,7 +599,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     hs->addWidget(clusterControlFrame);
                     clusterControlFrame->setVisible(true);
                     clusterControlFrame->setContest(ct);
-                    setClusterLoaded(true);
+                    setClusterClientLoaded(true);
                     break;
 
                 }
@@ -1062,6 +1073,14 @@ void TSingleLogFrame::dxSpotToLog(memoryData::memData m )
 }
 
 
+void TSingleLogFrame::on_SendSpotToClusterServer(QString freq, QString callsign, QString loc)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendSpotToClusterServer(freq, callsign, loc);
+    }
+}
+
 void TSingleLogFrame::transferDetails(memoryData::memData &m )
 {
     if ( !contest  )
@@ -1425,18 +1444,61 @@ bool TSingleLogFrame::isBandMapLoaded()
 
 // Cluster
 
-void TSingleLogFrame::setClusterLoaded(bool loaded)
+
+void TSingleLogFrame::on_clusterServerLoaded()
 {
-   bandMapLoaded = loaded;
-   GJVQSOLogFrame->setClusterLoaded(loaded);
+    setClusterServerLoaded(true);
 }
 
-bool TSingleLogFrame::isClusterLoaded()
+void TSingleLogFrame::setClusterServerLoaded(bool loaded)
 {
-   return bandMapLoaded;
+   clusterServerLoaded = loaded;
+   GJVQSOLogFrame->setClusterServerLoaded(loaded);
+   bandmapControlFrame->setClusterServerLoaded(loaded);
+   clusterControlFrame->setClusterServerLoaded(loaded);
+}
+
+bool TSingleLogFrame::isClusterServerLoaded()
+{
+   return clusterServerLoaded;
+}
+
+void TSingleLogFrame::setClusterClientLoaded(bool loaded)
+{
+   clusterClientLoaded = loaded;
+   GJVQSOLogFrame->setClusterClientLoaded(loaded);
+}
+
+bool TSingleLogFrame::isClusterClientLoaded()
+{
+   return clusterClientLoaded;
+}
+
+void TSingleLogFrame::on_setClusterTXSpotEnableState(QString state)
+{
+   bool txEnableState = false;
+    if (state == SPOT_TX_ON)
+    {
+        txEnableState = true;
+    }
+
+    GJVQSOLogFrame->setClusterTXSpotEnableState(txEnableState);
 }
 
 
+
+void TSingleLogFrame::on_clusterServerState(QString state)
+{
+    clusterServerState = state;
+    GJVQSOLogFrame->setClusterServerState(state);
+    bandmapControlFrame->setClusterServerState(state);
+    clusterControlFrame->setClusterServerState(state);
+}
+
+QString TSingleLogFrame::getClusterServerState()
+{
+    return clusterServerState;
+}
 
 //---------------------------------------------------------------------------
 void TSingleLogFrame::checkConnections()

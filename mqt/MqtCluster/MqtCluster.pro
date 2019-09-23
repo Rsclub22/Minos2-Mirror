@@ -31,6 +31,8 @@ win32:LIBS += -lWs2_32
 
 SOURCES += main.cpp\
         clustermainwindow.cpp \
+    sentSpotdata.cpp \
+    sentSpotdatamodel.cpp \
     setupdialog.cpp \
     cluster.cpp \
     clusterrpc.cpp \
@@ -40,6 +42,8 @@ SOURCES += main.cpp\
 
 
 HEADERS  += clustermainwindow.h \
+    sentSpotdata.h \
+    sentSpotdatamodel.h \
     setupdialog.h \
     cluster.h \
     clusterrpc.h \

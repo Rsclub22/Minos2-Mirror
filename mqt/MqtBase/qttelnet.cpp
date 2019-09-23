@@ -1006,13 +1006,23 @@ void QtTelnet::sendControl(Control ctrl)
 
     \sa sendControl()
 */
-void QtTelnet::sendData(const QString &data)
+int QtTelnet::sendData(const QString &data)
 {
+    qint64 charSent = 0;
+
     if (!d->connected)
-        return;
+        return -2;
 
     QByteArray str = data.toLocal8Bit();
-    d->socket->write(str);
+    charSent = d->socket->write(str);
+    if (charSent == str.count())
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;  // error
+    }
     //d->socket->write("\r\n\0", 3);
 }
 

@@ -26,8 +26,16 @@ public:
     void sendDXSpot(QString spot);
 
     int getServerListCount();
+    void publishState(const QString &state);
+
+    void publishTXEnable(const QString txOnOff);
+signals:
+
+    void sendSpotToDXCluster(QString, QString, QString);
+
 private slots:
     void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &);
+    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
 };
 
 #endif // CLUSTERRPC_H

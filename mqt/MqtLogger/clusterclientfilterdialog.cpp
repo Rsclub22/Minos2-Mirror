@@ -183,6 +183,8 @@ void ClusterClientFilterDialog::saveClusterFilterToContest()
 }
 
 
+
+
 QStringList ClusterClientFilterDialog::getItemsTextFromListWidget(QListWidget* lw)
 {
     QStringList l;
@@ -385,6 +387,14 @@ void ClusterClientFilterDialog::setBandFilter(int band)
     }
 }
 
+
+void ClusterClientFilterDialog::setModeFilter(bool state, int mode)
+{
+    if (mode >= 0 && mode < clusterModes.count())
+    {
+        *filterSettings.modeFilters[mode] = state;
+    }
+}
 
 void ClusterClientFilterDialog::clearAllButtonSelected()
 {

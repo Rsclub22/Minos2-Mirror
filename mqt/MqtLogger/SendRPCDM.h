@@ -31,6 +31,7 @@ class TSendDM : public QObject
       QVector<QString> servers;
 
       PubSubName keyerApp;
+      PubSubName clusterApp;
 
       QString loggerUuid;
 
@@ -57,7 +58,8 @@ public:  		// User declarations
 
       void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
       void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
-      void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );
+      //void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );
+      void sendSpotToClusterServer(  const QString &freq, const QString &call, const QString &loc );
       void sendKeyerTone(TSingleLogFrame *tslf);
       void sendKeyerTwoTone(TSingleLogFrame *tslf);
       void sendKeyerStop(TSingleLogFrame *tslf);
@@ -99,7 +101,7 @@ private slots:
       void on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
 
 signals:
-      void setBandMapLoaded();
+      //void setBandMapLoaded();
 
       void RotatorLoaded();
       void RotatorList();
@@ -108,6 +110,9 @@ signals:
       void setRadioList();
 
       void setKeyerLoaded();
+      void setClusterServerLoaded();
+      void setClusterState(QString);
+      void setClusterTXSpotEnableState(QString);
 
 };
 #endif

@@ -114,8 +114,13 @@ public:
     bool isBandMapLoaded();
     bool bandMapLoaded;
 
-    bool isClusterLoaded();
-    bool clusterLoaded;
+    bool isClusterServerLoaded();
+    void setClusterServerLoaded(bool loaded);
+    bool clusterServerLoaded;
+
+    bool isClusterClientLoaded();
+    void setClusterClientLoaded(bool loaded);
+    bool clusterClientLoaded;
 
     bool rotatorLoaded;
     bool isRotatorLoaded();
@@ -157,6 +162,7 @@ private:
     int splitterHandleWidth;
     QString curScreenLayout;
 
+    QString clusterServerState;
     int lastStanzaCount;
 
     MatchTreeFrame *xferTree = nullptr;
@@ -179,6 +185,10 @@ private:
     void clearSplitter(MinosSplitter *s);
     void setClusterLoaded(bool loaded);
     void setBandmapLoaded(bool loaded);
+    QString getClusterServerState();
+
+
+
 
 
 private slots:
@@ -263,7 +273,10 @@ private slots:
     void on_rotatorConnected(bool connected);
     void sendRunMemoryFreqUpdate(int runNum, QString f);
     void on_ZoomMap(bool dir);
-
+    void on_clusterServerState(QString state);
+    void on_clusterServerLoaded();
+    void on_SendSpotToClusterServer(QString freq, QString callsign, QString loc);
+    void on_setClusterTXSpotEnableState(QString state);
 public:
     void sendTpm(int t, QString f);
     

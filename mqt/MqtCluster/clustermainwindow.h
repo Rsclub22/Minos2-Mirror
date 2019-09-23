@@ -13,6 +13,7 @@
 #include "setupdialog.h"
 #include "clusterrpc.h"
 #include "dxspotdatamodel.h"
+#include "sentSpotdatamodel.h"
 //#include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
 #include "checkmodeagainstfreq.h"
@@ -78,7 +79,7 @@ const int TIME_TO_LIVE_TABNUM = 0;
 const int PERSONAL_TABNUM = 1;
 const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
-const int STATUS_TIMER_DUR = 500;
+const int STATUS_TIMER_DUR = 1000;
 
 
 class ClusterAddress
@@ -122,7 +123,8 @@ private slots:
     void connectToNode(const QString &nodeName);
     void logIn();
     void checkStationDetails(QString msg);
-    void on_sectionResized(int, int, int);
+    void on_dxSpotView_sectionResized(int, int, int);
+    void on_sentSpotView_sectionResized(int, int, int);
     void LogTimerTimer();
 
     void onStdInRead(QString cmd);
@@ -139,6 +141,8 @@ private slots:
 
     void onSpotTabChanged(int index);
     void disconnectTimeout();
+    void sendSpotToDXCluster(QString freq, QString call, QString loc);
+    void sendSpotToTxEnabled(bool state);
 
 signals:
 
@@ -148,7 +152,9 @@ private:
     StdInReader stdinReader;
     class QTimer LogTimer;
     QTimer *disconnectTimer;
-    QSharedPointer<HtmlDelegate> delegate;
+    QSharedPointer<HtmlDelegate> dxSpotViewDelegate;
+    QSharedPointer<HtmlDelegate> sentSpotViewDelegate;
+
 
     QString appName;
     QLabel* status;
@@ -172,6 +178,10 @@ private:
     QTableView* dxSpotView;
     QPlainTextEdit* rawClusterDataView;
 
+    SentSpotDataModel* sentSpotDataModel;
+    QSortFilterProxyModel* sentSpotProxyModel;
+    QTableView* sentSpotView;
+
 
     SetupDialog *setupCluster;
 
@@ -180,6 +190,8 @@ private:
 
     QStringList sendSpotsQueue;
     QTimer* sendSpotsTimer;
+
+
 
     QString currentNodeName;
     QString currentAddress;
@@ -191,7 +203,10 @@ private:
     QString currentUserQTH;
     QString currentUserLocator;
 
-
+    QString sentCallsign;
+    QString sentFreq;
+    QString sentLoc;
+    QString sentComment;
 
     QStringList dxMsg;
     QString dxCall;
@@ -226,12 +241,12 @@ private:
 
 
 
-    void txText(QString msg);
+    int txText(QString msg);
     int upackDxSpot(QString txt, QString &spotCall);
     void loadNodesSelectBox(QStringList listOfNodes);
 
     void restoreDxSpotViewColumns();
-
+    void restoreSentSpotViewColumns();
     void closeEvent(QCloseEvent *event);
     void disconnectNode();
     void connectToHost(QString hostName);
@@ -268,6 +283,7 @@ private:
     void handleCmdFile(QString fileName);
 
 
+
 #ifdef TEST_SPOTS
     QTimer* spotTestTimer;
     QStringList testSpotList;
@@ -277,6 +293,12 @@ private:
 
 
     QString getPropMode(const QString comment);
+    QString assembleSpotForDXCluster(QString freq, QString call, QString loc);
+
+    void removeInsertSendSpotTab(bool state);
+    void addSentSpotToDisplayQueue(bool spotStatus);
+    bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
@@ -289,6 +311,10 @@ private slots:
     void testSpotPbClicked();
     void spotTimerTimeOut();
 #endif
+
+
+
+
 
 };
 

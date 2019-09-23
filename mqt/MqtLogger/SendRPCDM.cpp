@@ -148,6 +148,8 @@ void TSendDM::sendKeyerStop(TSingleLogFrame *tslf)
 }
 //---------------------------------------------------------------------------
 
+
+/*
 void TSendDM::sendBandMap(  TSingleLogFrame * tslf, const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth )
 {
    RPCGeneralClient rpc(rpcConstants::bandmapMethod);
@@ -165,6 +167,34 @@ void TSendDM::sendBandMap(  TSingleLogFrame * tslf, const QString &freq, const Q
    rpc.getCallArgs() ->addParam( st );
 //   rpc.queueCall( tslf->bandMapServerConnectable.remoteAppName + "@" + tslf->bandMapServerConnectable.serverName );
 }
+*/
+
+void TSendDM::sendSpotToClusterServer( const QString &freq, const QString &call, const QString &loc )
+{
+
+    if (!clusterApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::clusterMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::txSpotToCluster ));
+        QSharedPointer<RPCParam>freqStr(new RPCStringParam(freq));
+        QSharedPointer<RPCParam>callStr(new RPCStringParam(call));
+        QSharedPointer<RPCParam>locStr(new RPCStringParam(loc));
+        //QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+
+        //st->addMember( logger, rpcConstants::loggerUuid );
+        //st->addMember( select, rpcConstants::selected );
+        st->addMember( sName, rpcConstants::paramName );
+        st->addMember( freqStr, rpcConstants::txSpotParamFreq );
+        st->addMember( callStr, rpcConstants::txSpotParamCallsign );
+        st->addMember( locStr, rpcConstants::txSpotParamLocator );
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( clusterApp  );
+    }
+
+
+}
+
 
 void TSendDM::sendRotator(TSingleLogFrame *tslf, rpcConstants::RotateDirection direction, int angle )
 {
@@ -714,6 +744,26 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             trace( "KeyerReport " + an.getValue() );
         }
     }
+
+
+            if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterReport )
+            {
+                if (clusterApp.isEmpty())
+                {
+                    clusterApp = PubSubName(an);
+                    emit setClusterServerLoaded();
+                }
+
+                emit setClusterState(an.getValue());
+                break;
+            }
+            else if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterTXSpotEnableState )
+            {
+                emit setClusterTXSpotEnableState(an.getValue());
+            }
+
+        }
+    }
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
         tslf->checkConnections();
@@ -937,6 +987,7 @@ void TSendDM::subscribeApps()
         else if ((*i)->appType == "Cluster")
         {
             catMap[rpcConstants::clusterClientServer].push_back((*i));
+            catMap[rpcConstants::clusterCategory].push_back((*i));
         }
     }
 

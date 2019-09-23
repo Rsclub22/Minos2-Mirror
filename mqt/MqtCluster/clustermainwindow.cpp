@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Cluster Server
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
 //
 ///
 //
@@ -22,9 +22,17 @@
 #include "clustercommon.h"
 #include "rigutils.h"
 #include "cutils.h"
+#include "BandList.h"
 #include "ui_clustermainwindow.h"
 
+const QString DXSPOT_TAB_TITLE = "DX Spots";
+const QString SENT_SPOT_TAB_TITLE = "Sent Spots";
+const QString RAW_DATA_TAB_TITLE = "Raw Data";
+
 #include <QDebug>
+
+//#define TXSPOT  // enable to actually send to cluster
+#define TEST_PLEASE_IGNORE // comment out to stop this in tx spot remarks
 
 ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -63,7 +71,6 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     getSpotsTimer->start(1000);
 
 
-
     setWindowTitle("Minos Cluster Server");
     status = new QLabel;
     ui->statusBar->addWidget(status);
@@ -83,6 +90,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
         trace(QString("Mode frequency bandplan loaded failed to Load"));
 
     }
+
 
 #ifdef TEST_SPOTS
 
@@ -114,6 +122,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(setupCluster, SIGNAL(personalDataUpdated(QString, QString, QString, QString)), SLOT(personalDataChanged(QString, QString, QString, QString)));
 
     clusterRpc = new Clusterrpc();
+    connect(clusterRpc, SIGNAL(sendSpotToDXCluster(QString, QString, QString)), this, SLOT(sendSpotToDXCluster(QString, QString, QString)));
+
 
     sendSpotsTimer = new QTimer();
     connect(sendSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromSendQueue()));
@@ -138,6 +148,8 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     setupCluster->readPersonal();
     setupCluster->loadPersonalToSetupTab();
 
+    connect(setupCluster, SIGNAL(sendSpotToTxEnabled(bool)), this, SLOT(sendSpotToTxEnabled(bool)));
+
     // read enable hf spots flag
     QString fileName = CLUSTER_SETTINGS_FILE;
     QSettings config(fileName, QSettings::IniFormat);
@@ -145,15 +157,16 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     enableHFSpots = config.value("enable", false).toBool();
     config.endGroup();
 
+    // in comming spot tab
 
     dxSpotDataModel = new DxSpotDataModel();
 
 
     dxSpotView = new QTableView();
 
-    delegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    dxSpotViewDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
 
-    dxSpotDataModel->delegate = delegate;
+    dxSpotDataModel->delegate = dxSpotViewDelegate;
 
     dxSpotProxyModel = new QSortFilterProxyModel();
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
@@ -162,7 +175,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
-    dxSpotView->setItemDelegate(delegate.data());
+    dxSpotView->setItemDelegate(dxSpotViewDelegate.data());
 
 
 
@@ -177,7 +190,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     restoreDxSpotViewColumns();
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)));
+             this, SLOT( on_dxSpotView_sectionResized(int, int , int)));
 
 
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
@@ -190,12 +203,48 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
 
+    // sent spot tab
+
+    sentSpotDataModel = new SentSpotDataModel();
+    sentSpotView = new QTableView();
+    sentSpotViewDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    sentSpotDataModel->delegate = sentSpotViewDelegate;
+
+    sentSpotProxyModel = new QSortFilterProxyModel();
+    sentSpotProxyModel->setSourceModel(sentSpotDataModel);
+    sentSpotProxyModel->sort(SENT_SPOT_RXTIME_COL_NUM, Qt::DescendingOrder);
+
+    sentSpotView->setModel(sentSpotProxyModel);
+    sentSpotView->setAlternatingRowColors(true);
+    sentSpotView->setSelectionMode( QAbstractItemView::NoSelection );
+    sentSpotView->setItemDelegate(dxSpotViewDelegate.data());
+
+
+
+    QHeaderView *sentSpotVerticalHeader = sentSpotView->verticalHeader();
+    sentSpotVerticalHeader->setVisible(false);
+    sentSpotVerticalHeader->setDefaultSectionSize(10);
+    sentSpotVerticalHeader->setMinimumSectionSize(10);
+
+    sentSpotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    restoreSentSpotViewColumns();
+    sentSpotView->horizontalHeader()->setStretchLastSection(true);
+    connect( sentSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sentSpotView_sectionResized(int, int , int)));
+
+    sentSpotView->setColumnHidden(SENT_SPOT_RXTIME_COL_NUM, true);
+
+    // rawdata tab
 
     rawClusterDataView = new QPlainTextEdit();
     rawClusterDataView->setReadOnly(true);
 
-    ui->clusterViewsTab->addTab(dxSpotView, "DX Spots");
-    ui->clusterViewsTab->addTab(rawClusterDataView, "Raw Data");
+    ui->clusterViewsTab->addTab(dxSpotView, DXSPOT_TAB_TITLE);
+    //ui->clusterViewsTab->addTab(sentSpotView, SENT_SPOT_TAB_TITLE);
+    ui->clusterViewsTab->addTab(rawClusterDataView, RAW_DATA_TAB_TITLE);
+
+
 
     setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
     ui->clusterViewsTab->setTabColor(ui->clusterViewsTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
@@ -234,9 +283,15 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
 
 
+
+
     // get current node from file and then connect to host
     currentNodeName = setupCluster->getCurrentNodeName();
     connectToHost(currentNodeName);
+
+    connect(setupCluster, SIGNAL(sendSpotToTxEnabled(bool)), this, SLOT(sendSpotToTxEnabled(bool)));
+
+    removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
 
 }
@@ -246,6 +301,57 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 void ClusterMainWindow::clusterListChanged()
 {
     loadNodesSelectBox(setupCluster->getListOfClusterNames());
+}
+
+
+void ClusterMainWindow::sendSpotToTxEnabled(bool state)
+{
+    QString stateMsg;
+    if (state)
+    {
+        stateMsg = SPOT_TX_ON;
+        removeInsertSendSpotTab(true);
+
+    }
+    else
+    {
+        stateMsg = SPOT_TX_OFF;
+        removeInsertSendSpotTab(false);
+    }
+
+    clusterRpc->publishTXEnable(stateMsg);
+}
+
+void ClusterMainWindow::removeInsertSendSpotTab(bool state)
+{
+    if (ui->clusterViewsTab->count() >= 1)
+    {
+        if (state)
+        {
+            // insert the tab
+            if (ui->clusterViewsTab->tabText(1) == SENT_SPOT_TAB_TITLE)
+            {
+                // tab must exist
+                return;
+            }
+            else
+            {
+                ui->clusterViewsTab->insertTab(1, sentSpotView, SENT_SPOT_TAB_TITLE);
+            }
+        }
+        else if (ui->clusterViewsTab->tabText(1) != SENT_SPOT_TAB_TITLE)
+        {
+            // missing don't remove
+            return;
+        }
+        else
+        {
+            ui->clusterViewsTab->removeTab(1);
+        }
+
+
+
+    }
 }
 
 
@@ -316,7 +422,7 @@ void ClusterMainWindow::onSpotTabChanged(int index)
 
 
 
-void ClusterMainWindow::on_sectionResized(int, int, int)
+void ClusterMainWindow::on_dxSpotView_sectionResized(int, int, int)
 {
     QSettings settings;
     QByteArray state;
@@ -327,7 +433,15 @@ void ClusterMainWindow::on_sectionResized(int, int, int)
 }
 
 
+void ClusterMainWindow::on_sentSpotView_sectionResized(int, int, int)
+{
+    QSettings settings;
+    QByteArray state;
 
+    state = sentSpotView->horizontalHeader()->saveState();
+    settings.setValue("sentSpotView/state", state);
+
+}
 
 void ClusterMainWindow::restoreDxSpotViewColumns()
 {
@@ -336,6 +450,15 @@ void ClusterMainWindow::restoreDxSpotViewColumns()
 
     state = settings.value("dxSpotView/state").toByteArray();
     dxSpotView->horizontalHeader()->restoreState(state);
+}
+
+void ClusterMainWindow::restoreSentSpotViewColumns()
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("sentSpotView/state").toByteArray();
+    sentSpotView->horizontalHeader()->restoreState(state);
 }
 
 void ClusterMainWindow::connectToNode(const QString &nodeName)
@@ -766,7 +889,18 @@ void ClusterMainWindow::parseDX(const QString txt)
                     if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))
                     {
                         trace(QString("ParseDx: Spot within timeToLive - Send Spot to Queue"));
-                        sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask).arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(dxPropMode).arg(setupCluster->getTimeToLive())));
+                        if (currentUserCallsign != spotCall)
+                        {
+                            // send spot to clients if spotter isn't this station
+                            trace(QString("ParseDx: Spotter not this station, pass to clients"));
+                            sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
+                                                                   .arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(dxPropMode).arg(setupCluster->getTimeToLive())));
+                        }
+                        else
+                        {
+                            trace(QString("ParseDx: Spotter is this station, only display on server"));
+                        }
+
 
                         trace(QString("ParseDx: rxTime = %1").arg(rxTime));
                         trace(QString("ParseDx: Add spot for display"));
@@ -863,6 +997,16 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
 
         findLocInComment(spotLocator, dxLocator, spotComment);
         dxPropMode = getPropMode(spotComment);
+
+        // look for mode in comments, if found overide freq mode
+        int commentModeNum;
+        QString commentMode;
+        if (lookforModeInComment(spotComment, commentModeNum, commentMode))
+        {
+            dxModeStr = commentMode;
+            dxModeMask = QString::number(commentModeNum);
+        }
+
         return 0;
     }
 
@@ -1105,6 +1249,14 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
         findLocInComment(spotLocator, dxLocator, spotComment);
         dxPropMode = getPropMode(spotComment);
 
+        // look for mode in comments, if found overide freq mode
+        int commentModeNum;
+        QString commentMode;
+        if (lookforModeInComment(spotComment, commentModeNum, commentMode))
+        {
+            dxModeStr = commentMode;
+            dxModeMask = QString::number(commentModeNum);
+        }
 
         return 0;
     }
@@ -1203,6 +1355,21 @@ QString ClusterMainWindow::extractLocator(const QString &text, const QRegExp ful
 }
 
 
+bool ClusterMainWindow::lookforModeInComment(const QString &spotComment, int &commentModeNum, QString &commentMode)
+{
+    for (int i = 0; i < clusterModes.count(); i++)
+    {
+        if (spotComment.contains(clusterModes[i], Qt::CaseInsensitive))
+        {
+            commentModeNum = i;
+            commentMode = clusterModes[i];
+            return true;
+        }
+    }
+
+    return false; // nothing found
+}
+
 // ************* Send text *************************************************
 
 void ClusterMainWindow::sendText()
@@ -1212,12 +1379,14 @@ void ClusterMainWindow::sendText()
 }
 
 
-void ClusterMainWindow::txText(QString msg)
+int ClusterMainWindow::txText(QString msg)
 {
+    int error = 0;
     if (loginSuccess)
     {
-       client->sendData(msg);
+       error = client->sendData(msg);
        echoCmd(msg);
+       return error;
 
     }
     else
@@ -1225,6 +1394,8 @@ void ClusterMainWindow::txText(QString msg)
         QString err = "Sending command - Not logged in  - " + msg;
         echoErrorMsg(err);
     }
+
+    return -1; // error
 
 }
 
@@ -1266,6 +1437,82 @@ void ClusterMainWindow::LogTimerTimer()
 }
 
 
+void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString loc)
+{
+    bool spotStatus = false;
+    if (setupCluster->getSendToDXClusterEnabled() && loginSuccess && !freq.isEmpty() && !call.isEmpty())
+    {
+        if (checkValidBand(freq))
+        {
+            QString spotMsg = assembleSpotForDXCluster(freq, call, loc);
+#ifdef TXSPOT
+            int error = txText(spotMsg);
+            if (error < 0)
+            {
+                trace(QString("SendSpotToDXCluster: sending spot %1 failed to send").arg(spotMsg));
+            }
+            else
+            {
+                trace(QString("SendSpotToDXCluster: sending spot %1 failed to send").arg(spotMsg));
+                spotStatus = true;
+            }
+#endif
+            addSentSpotToDisplayQueue(spotStatus);
+
+        }
+        else
+        {
+            trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq).arg(call));
+        }
+    }
+}
+
+
+void ClusterMainWindow::addSentSpotToDisplayQueue(bool spotStatus)
+{
+    QDateTime sentSpotDateTime = QDateTime::currentDateTimeUtc();
+    qint64 rxTime = sentSpotDateTime.toMSecsSinceEpoch()/1000;
+    QString sentSpotTime = sentSpotDateTime.toString("HH:MM");
+    SentSpotData* sentSpotData = new SentSpotData(rxTime, sentSpotTime,
+                                                   sentFreq, sentCallsign,
+                                                  sentLoc, sentComment, spotStatus);
+
+    sentSpotDataModel->rowData = sentSpotData;
+    sentSpotDataModel->insertRows(sentSpotDataModel->rowCount(), 1);
+
+}
+
+
+
+QString ClusterMainWindow::assembleSpotForDXCluster(QString freq, QString call, QString loc)
+{
+    bool testMsg = true;
+    sentComment = QString("%1< >%2").arg(setupCluster->getUserLocator()).arg(loc);
+
+
+#ifdef TEST_PLEASE_IGNORE
+    if (testMsg)
+    {
+        sentComment = sentComment + " Test, Pls ignore";
+    }
+#endif
+
+    qint64 f = freq.toLongLong();
+    f = f / 1000;
+
+    sentCallsign = call;
+    sentFreq = QString::number(f);
+    sentLoc = loc;
+
+
+    QString spotmsg = QString("DX %1 %2").arg(call).arg(QString::number(f));
+    if (!loc.isEmpty())
+    {
+        spotmsg = QString("%1 %2").arg(spotmsg).arg(sentComment);
+    }
+
+    return spotmsg + QChar('\n');
+}
 
 void ClusterMainWindow::closeEvent(QCloseEvent *event)
 {
@@ -1567,11 +1814,13 @@ void ClusterMainWindow::handleStatusTimer()
         oldServerListCount = clusterRpc->getServerListCount();
         // send status to clients
         trace(QString("handleStatusTimer: Cluster Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(clusterRpc->getServerListCount()).arg(status->text()));
-        sendSpotsQueue.append(createStatusToSend(status->text()));
+    //    sendSpotsQueue.append(createStatusToSend(status->text()));
+          clusterRpc->publishState(status->text());
+          sendSpotToTxEnabled(setupCluster->getSendToDXClusterEnabled()); // wait for cluster client to open before sending this to qsologframe
     }
 
     // send status message if it has changed
-    else if (!status->text().isEmpty() && clusterRpc->getServerListCount() > 0)
+    else if (!status->text().isEmpty()  && clusterRpc->getServerListCount() > 0)
     {
         if (oldStatusMsg != status->text())
         {
@@ -1579,11 +1828,13 @@ void ClusterMainWindow::handleStatusTimer()
 
             // send status to clients
             trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(status->text()));
-            sendSpotsQueue.append(createStatusToSend(status->text()));
+            //sendSpotsQueue.append(createStatusToSend(status->text()));
+            clusterRpc->publishState(status->text());
         }
     }
 
 }
+
 
 
 

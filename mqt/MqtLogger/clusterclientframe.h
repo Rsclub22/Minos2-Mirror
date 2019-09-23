@@ -133,7 +133,12 @@ public:
     QTimer* mouseInFrameTimer;
     void buttonHandleDxSpots();
     void restoreColumns();
+    void setClusterServerState(QString stateMsg);
 
+
+
+
+    void setClusterServerLoaded(bool loaded);
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *ct = nullptr;
@@ -161,6 +166,8 @@ private:
     MouseInObject* actionInObject;
 
     QVector<QString> spotQueue;
+    bool clusterServerLoaded;
+    bool clusterServerConnected;
 
     DxSpotDataModel* dxSpotDataModel;
     DxSpotSortFilterProxyModel* dxSpotProxyModel;
@@ -235,7 +242,7 @@ private:
     int getBandOffSet(QString contestBandStr);
 
     int getModeOffSet(QString contestModeStr);
-    void handleClusterStatusMessage(QString &msg);
+    //void handleClusterStatusMessage(QString &msg);
 
     int getNumberSpotsIndicator(const QDateTime& lastTime, DxSpotSortFilterProxyModel *spotProxyModel);
     void restoreSplitters();

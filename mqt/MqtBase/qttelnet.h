@@ -245,7 +245,7 @@ public Q_SLOTS:
     void close();
     void logout();
     void sendControl(Control ctrl);
-    void sendData(const QString &data);
+    int sendData(const QString &data);
     void sendSync();
     void sConnected();
 

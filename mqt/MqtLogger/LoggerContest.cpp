@@ -28,7 +28,8 @@ LoggerContestLog::LoggerContestLog( ) : BaseContestLog(),
       GJVFile( false ),
       logFile( false ), adifFile( false ), ediFile( false ),
       needExport( false ),
-      clusterFilterSettingsExist( false)
+      clusterFilterSettingsExist( false),
+      bandmapFilterSettingsExist( false)
 {
 
     // clusterClientFrame

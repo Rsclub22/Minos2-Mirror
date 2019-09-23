@@ -24,7 +24,9 @@ Clusterrpc::Clusterrpc()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
+    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
+
 
     RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
     RPCPubSub::subscribe(rpcConstants::StationCategory);
@@ -58,6 +60,57 @@ void Clusterrpc::sendDXSpot(QString spot)
         rpc.queueCall( (*i).app );
     }
 }
+
+void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
+{
+   trace( "Cluster RPC: callback from " + from + ( err ? ":Error" : ":Normal" ) );
+
+   if ( !err )
+   {
+      QSharedPointer<RPCParam> psName;
+      QSharedPointer<RPCParam>piValue;
+      QSharedPointer<RPCParam> psFreq;
+      QSharedPointer<RPCParam> psCall;
+      QSharedPointer<RPCParam> psLoc;
+      RPCArgs *args = mro->getCallArgs();
+
+      QString freq;
+      QString call;
+      QString loc;
+
+
+      if (args->getStructArgMember(0, rpcConstants::txSpotParamFreq, psFreq))
+      {
+          if (psFreq->getString(freq))
+          {
+              trace(QString("Cluster RPC: freq to send to cluster = %1").arg(freq));
+          }
+      }
+      if (args->getStructArgMember(0, rpcConstants::txSpotParamCallsign, psCall))
+      {
+          if (psCall->getString(call))
+          {
+              trace(QString("Cluster RPC: callsign to send to cluster = %1").arg(call));
+          }
+      }
+      if (args->getStructArgMember(0, rpcConstants::txSpotParamLocator, psLoc))
+      {
+          if (psLoc->getString(loc))
+          {
+              trace(QString("Cluster RPC: locator to send to cluster = %1").arg(loc));
+          }
+
+      }
+
+      emit sendSpotToDXCluster(freq, call, loc);
+
+      mro->clearCallArgs();
+      QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+
+   }
+}
+
 
 
 void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
@@ -119,3 +172,25 @@ void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
     }
 }
 //---------------------------------------------------------------------------
+void Clusterrpc::publishState( const QString &state )
+{
+  //static QString old;
+
+  //if ( state != old )
+  //{
+  //   old = state;
+  RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterReport, state, psPublished );
+  //}
+}
+
+void Clusterrpc::publishTXEnable(const QString txOnOff)
+{
+    static QString old;
+
+    if (txOnOff != old)
+    {
+        old = txOnOff;
+        RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterTXSpotEnableState, txOnOff, psPublished );
+
+    }
+}

@@ -158,7 +158,6 @@ public:
     void setVolumeStatus(bool status, PubSubName psn);
     void setRitEnableStatus(bool status, PubSubName psn);
     void setBandList(QString s, PubSubName psn);
-    void setIgnoreRunChecksBoxVisible(bool);
     void createActiveBandList(QString);
 
     void setTransVertEnabled(bool status, PubSubName psn);
@@ -179,7 +178,7 @@ signals:
     void ritStatus(bool);
     void radioDisconnected();
 
-    void sendIgnoreRunChkBoxState(int, bool);
+
     void runMemoryFreqUpdate(int, QString);
 
 
@@ -219,9 +218,6 @@ private slots:
     void clusterUpdateRigFreq(QString freq);
 
 
-
-    void ignoreRunChkBoxSelected0(int s);
-    void ignoreRunChkBoxSelected1(int s);
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -328,7 +324,7 @@ private:
     void setRadioTxVertStatus(bool status);
     void transVertIndicatorOn();
     void transVertIndicatorOff();
-    void initRunIgnoreChkBox();
+
 };
 
 

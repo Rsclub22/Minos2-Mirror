@@ -173,13 +173,16 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     purgeTimer->start(PURGE_TIME);
 
-    handleClusterStatusMessage(LogContainer->clusterConnectStatus);
-
     newSpotIndToggle(false);
     newCallsignSpotIndToggle(false);
     newLocatorSpotIndToggle(false);
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
+
+    //setClusterServerState(LogContainer->getClusterServerState()); // need tslf?
+
+    //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
+    //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
 
 
 
@@ -594,15 +597,7 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
     {
         QString msg = spotMsg[i];
 
-        // check to see if this is a non spot message
-        if (msg.contains(CLUSTER_STATUS))
-        {
-
-            LogContainer->clusterConnectStatus = msg;       // save for new clusterClientFrames
-            handleClusterStatusMessage(msg);
-
-        }
-        else if (msg.contains(DXSPOT))
+        if (msg.contains(DXSPOT))
         {
             spotQueue += spotMsg[i];
         }
@@ -948,12 +943,31 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
-        if (!contest->clusterFilterSettingsExist)       // have settings been saved before?
+
+        if (!contest->clusterFilterSettingsExist)       // have band settings been saved before?
         {
             // no, save current band filter for this contest
             filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
-            filterSetup->saveClusterFilterToContest();
+
+            if (contestModeStr == "MGM")       //  have mode settings been saved before?
+            {
+                for (int m = 4; m < clusterModes.count(); m++)
+                {
+                    filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
+                }
+            }
+            else
+            {
+                // no, save current mode filter for this contest
+                filterSetup->setModeFilter(true, contestMode);
+            }
+
+            filterSetup->saveClusterFilterToContest();  // save these settings
         }
+
+
+
+
 
         if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
         {
@@ -1035,6 +1049,8 @@ void ClusterClientFrame::purgeSpots()
 
 void ClusterClientFrame::onMenuShow()
 {
+   //ui->actionsButton->showMenu();
+
     //int buttonNumber = getSelectedLine();
 
     //freqAction->setEnabled(buttonNumber >= 0);
@@ -1421,25 +1437,28 @@ void ClusterClientFrame::checkSavedFilters()
     }
 }
 
-void ClusterClientFrame::handleClusterStatusMessage(QString &msg)
+void ClusterClientFrame::setClusterServerState(QString stateMsg)
 {
 
-    if (msg.contains("!Connected"))
+    if (stateMsg.contains("Connected"))
     {
          statusIndicatorToggle(true);
+         clusterServerConnected = true;
+
     }
     else
     {
          statusIndicatorToggle(false);
+         clusterServerConnected = false;
+
     }
 
-    QStringList sl;
-    sl = msg.split(CLUSTER_STATUS);
-    if (sl.count() ==  2)
+
+    if (clusterServerLoaded)
     {
-        QString statusMsg = QString("%1").arg(sl[1]);
-        ui->statusIndicator->setToolTip(statusMsg);
-        trace(QString("Cluster Status: %1").arg(statusMsg));
+
+        ui->statusIndicator->setToolTip(stateMsg);
+        trace(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
     {
@@ -1448,6 +1467,10 @@ void ClusterClientFrame::handleClusterStatusMessage(QString &msg)
 }
 
 
+void ClusterClientFrame::setClusterServerLoaded(bool loaded)
+{
+    clusterServerLoaded = loaded;
+}
 
 
 
