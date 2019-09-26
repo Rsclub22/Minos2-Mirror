@@ -2922,7 +2922,7 @@ void QSOLogFrame::runButtonOn()
 
 
     runButtonOnFlag = true;
-    chkRunFreqTimer->start(1000);
+    chkRunFreqTimer->start(CHECK_RUNMODE_TIMER);
     showRunButtonOnOff(runButtonOnFlag);
     if (sendSpotToClusterOn)
     {

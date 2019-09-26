@@ -16,6 +16,7 @@ class QSOLogFrame;
 }
 
 const int RUN_TOLERANCE = 5; //run freq tolerance = 500Hz
+const int CHECK_RUNMODE_TIMER = 500;
 
 class QSOLogFrame : public QFrame
 {

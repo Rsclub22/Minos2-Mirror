@@ -1332,30 +1332,34 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
 void ClusterClientFrame::dxSpotProxyModelUpdate()
 {
-    dxSpotProxyModel->setDynamicSortFilter(false);
-    dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    dxSpotProxyModel->setDynamicSortFilter(true);
+    //dxSpotProxyModel->setDynamicSortFilter(false);
+    //dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+    //dxSpotProxyModel->setDynamicSortFilter(true);
+    dxSpotProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::callSignProxyModelUpdate()
 {
-    callSignProxyModel->setDynamicSortFilter(false);
-    callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    callSignProxyModel->setDynamicSortFilter(true);
+    //callSignProxyModel->setDynamicSortFilter(false);
+   // callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+    //callSignProxyModel->setDynamicSortFilter(true);
+    callSignProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::locatorProxyModelUpdate()
 {
-    locatorProxyModel->setDynamicSortFilter(false);
-    locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    locatorProxyModel->setDynamicSortFilter(true);
+    //locatorProxyModel->setDynamicSortFilter(false);
+    //locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+    //locatorProxyModel->setDynamicSortFilter(true);
+    locatorProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::searchProxyModelUpdate()
 {
-    searchSortProxyModel->setDynamicSortFilter(false);
-    searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    searchSortProxyModel->setDynamicSortFilter(true);
+    //searchSortProxyModel->setDynamicSortFilter(false);
+   // searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+   // searchSortProxyModel->setDynamicSortFilter(true);
+    searchSortProxyModel->setFilterRegExp("");
 }
 
 
@@ -1716,11 +1720,7 @@ void ClusterClientFrame::mouseTimerCheckNewSpots()
 
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-
-    bool locOk = matchWorkedLoc(sourceRow);
-    bool callOK = matchWorkedCallsign(sourceRow);
-    bool ok = matchBand(sourceRow) && matchMode(sourceRow) && matchWorkedLoc(sourceRow) && matchWorkedCallsign(sourceRow);
-    return ok;
+    return matchBand(sourceRow) && matchMode(sourceRow) && matchWorkedLoc(sourceRow) && matchWorkedCallsign(sourceRow);
 }
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
@@ -1762,8 +1762,7 @@ bool DxSpotSortFilterProxyModel::matchWorkedLoc(int sourceRow) const
 {
     if (unWorkedLocFlag)
     {
-        bool ok = sourceModel()->data(sourceModel()->index(sourceRow, DXLOC_WORKED_COL_NUM), DataStoredRole).toBool();
-        return !ok;
+        return !sourceModel()->data(sourceModel()->index(sourceRow, DXLOC_WORKED_COL_NUM), DataStoredRole).toBool();
     }
     else
     {
