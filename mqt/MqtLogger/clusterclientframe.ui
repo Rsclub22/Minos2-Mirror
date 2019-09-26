@@ -236,6 +236,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="Line" name="line_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -250,6 +257,13 @@
            </size>
           </property>
          </spacer>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="unworkedLocChkBox">
+          <property name="text">
+           <string>Unworked Locators</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QPushButton" name="filtersBut">

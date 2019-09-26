@@ -51,6 +51,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool matchBand(int sourceRow) const;
     bool matchMode(int sourceRow) const;
+    bool matchWorkedLoc(int sourceRow) const;
 
     DxSpotSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup)
     {
@@ -59,6 +60,11 @@ public:
 
     ClusterClientFilterDialog* filterSetup;
 
+    bool unWorkedLocFlag;
+
+
+
+    void setUnworkedLocFlag(bool state);
 };
 
 
@@ -246,6 +252,15 @@ private:
 
     int getNumberSpotsIndicator(const QDateTime& lastTime, DxSpotSortFilterProxyModel *spotProxyModel);
     void restoreSplitters();
+    void setUnWorkedLocCheckBoxVisible(bool state);
+
+
+    void dxSpotProxyModelUpdate();
+    void callSignProxyModelUpdate();
+    void locatorProxyModelUpdate();
+    void searchProxyModelUpdate();
+
+
 private slots:
 
     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
@@ -290,6 +305,7 @@ private slots:
 
     void on_doColumnChanges(BaseContestLog *);
     void on_doSplitterChanges(BaseContestLog *);
+    void on_unworkedLocCheckBox(int state);
 };
 
 class MouseInObject : public QObject

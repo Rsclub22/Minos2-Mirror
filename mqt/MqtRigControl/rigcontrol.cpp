@@ -723,7 +723,7 @@ int RigControl::setDtrState( const bool state)
 }
 
 
-// true set DTR state, false unset DTR state
+// true set RTS state, false unset RTS state
 int RigControl::setRtsState( const bool state)
 {
     int retCode = 0;
