@@ -15,6 +15,7 @@
 #include "bandmapdatamodel.h"
 #include "bandmapmarkerdetails.h"
 #include "bandmapclientfilterdialog.h"
+#include "bandmapcommon.h"
 
 
 const QChar DEG_SYMBOL = 0260; // octal value

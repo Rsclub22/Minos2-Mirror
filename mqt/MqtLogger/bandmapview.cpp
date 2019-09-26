@@ -18,9 +18,6 @@
 
 #include <QDebug>
 
-const int SPOTMARKER_XOFFSET = 20;
-const int FREQ_SEL_WIDTH = 20;
-
 
 
 BandmapView::BandmapView(QWidget *parent) :

@@ -82,7 +82,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->dxBand;
             break;
             case DXSPOT_CALL_COL_NUM:
-                if (bandmapSpot->dxCallWorked == BOOL_YES)
+                if (bandmapSpot->dxCallWorked == BMP_BOOL_YES)
                 {
                     d = HtmlFontColour(CALLSIGN_WORKED_COLOUR);
                 }
@@ -94,11 +94,11 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             break;
 
             case DXLOC_COL_NUM:
-                if (bandmapSpot->dxLocatorWorked == BOOL_NO && bandmapSpot->dxCallWorked == BOOL_YES)
+                if (bandmapSpot->dxLocatorWorked == BOOL_NO && bandmapSpot->dxCallWorked == BMP_BOOL_YES)
                 {
                     d = HtmlFontColour(NOT_WORKED_COLOUR);
                 }
-                else if (bandmapSpot->dxLocatorWorked == BOOL_YES)
+                else if (bandmapSpot->dxLocatorWorked == BMP_BOOL_YES)
                 {
                     d = HtmlFontColour(LOCATOR_WORKED_COLOUR);
                 }

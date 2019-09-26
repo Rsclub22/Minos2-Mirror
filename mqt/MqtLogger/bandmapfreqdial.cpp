@@ -179,6 +179,8 @@ qint32 BandmapFreqDial::getScaleEndFreq()
 void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHeight)
 {
 
+    Q_UNUSED(frequency)
+
     dialHeight = scaleHeight;
     qDebug() << "drawscale height " << dialHeight;
 
@@ -228,6 +230,10 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     painter->setPen(scalePen);
 
     painter->fillRect(scaleRec, scaleBackGndBrush);
+
+    QRect freqSelRec(dialWidth - FREQ_SEL_WIDTH,0, FREQ_SEL_WIDTH, dialHeight);
+    QBrush freqSelBackGndBrush(Qt::gray, Qt::SolidPattern);
+    painter->fillRect(freqSelRec, freqSelBackGndBrush);
 
     painter->drawLine(QPoint(dialWidth,0 + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, dialHeight));
 

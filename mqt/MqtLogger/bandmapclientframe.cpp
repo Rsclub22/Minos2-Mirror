@@ -326,7 +326,7 @@ void BandmapClientFrame::clearSpotActionSelected()
     if (ret == QMessageBox::Yes)
     {
         bandmapSpotProxyModel->removeRows(selectedSpotRowNum, 1);
-        bandmapView->bandmapUpdate();;
+        bandmapView->bandmapUpdate();
     }
 }
 

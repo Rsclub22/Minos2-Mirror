@@ -4,6 +4,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneWheelEvent>
 #include "base_pch.h"
+#include "bandmapcommon.h"
 
 namespace dialData {
 
