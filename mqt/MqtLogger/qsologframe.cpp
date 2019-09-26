@@ -34,11 +34,14 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , radioError(false)
     , clusterClientLoaded(false)
     , clusterServerLoaded(false)
+    , sendSpotToClusterOn(false)
+    , clusterServerConnected(false)
     , runButtonOnFlag(false)
     , radioOffRunFreq(false)
     , curRunFreq("00000000000")
     , callsignEnterTextFreq("00000000000")
     , curFreq("00000000000")
+
 
 {
     ui->setupUi(this);
@@ -415,7 +418,7 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     connect(ui->bandmapSaveFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapSaveFreqPbClicked()));
 
     connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
-    setClusterControlsVisible(false);           // visibility controlled by txenable in clusterserver
+    setClusterSendSpotControlsVisible(false);           // visibility controlled by txenable in clusterserver
 
     connect(this, SIGNAL(freqChanged(QString)), this, SLOT(on_FreqChanged(QString)));
 
@@ -2748,20 +2751,21 @@ bool QSOLogFrame::isClusterServerLoaded()
 
 void QSOLogFrame::setClusterTXSpotEnableState(bool txEnableState)
 {
-    setClusterControlsVisible(txEnableState);
+    setClusterSendSpotControlsVisible(txEnableState);
+    sendSpotToClusterOn = txEnableState;
 }
 
-void QSOLogFrame::setClusterControlsVisible(bool visible)
+void QSOLogFrame::setClusterSendSpotControlsVisible(bool visible)
 {
     ui->lastLoggedChkBx->setVisible(visible);
     ui->lastLoggedCallsignLbl->setVisible(visible);
     ui->spotPb->setVisible(visible);
     ui->lastSpotSentTitleLbl->setVisible(visible);
     ui->lastSpotSentLbl->setVisible(visible);
-    if (visible)
-    {
-        ui->spotPb->setDisabled(false);
-    }
+    //if (visible)
+    //{
+    //    ui->spotPb->setDisabled(false);
+    //}
 
 }
 
@@ -2874,6 +2878,7 @@ void QSOLogFrame::on_ChkRunFreq()
             {
                 radioOffRunFreq = true;
                 showRunToolButtonOffFreq();
+                setClusterSendSpotControlsVisible(true);
             }
          }
 
@@ -2884,6 +2889,7 @@ void QSOLogFrame::on_ChkRunFreq()
             {
                 radioOffRunFreq = false;
                 showRunToolButtonOnFreq();
+                setClusterSendSpotControlsVisible(false);
             }
 
         }
@@ -2918,6 +2924,10 @@ void QSOLogFrame::runButtonOn()
     runButtonOnFlag = true;
     chkRunFreqTimer->start(1000);
     showRunButtonOnOff(runButtonOnFlag);
+    if (sendSpotToClusterOn)
+    {
+       setClusterSendSpotControlsVisible(false);
+    }
 
 
 
@@ -2930,8 +2940,12 @@ void QSOLogFrame::runButtonOff()
 
     runButtonOnFlag = false;
     chkRunFreqTimer->stop();
-    ui->spotPb->setDisabled(false);
+    //ui->spotPb->setDisabled(false);
     showRunButtonOnOff(runButtonOnFlag);
+    if (sendSpotToClusterOn)
+    {
+        setClusterSendSpotControlsVisible(true);
+    }
 
 }
 

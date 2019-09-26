@@ -22,7 +22,7 @@
   <property name="autoFillBackground">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="MinosSplitter" name="clusterSplitter">
      <property name="orientation">
@@ -259,11 +259,22 @@
          </spacer>
         </item>
         <item>
-         <widget class="QCheckBox" name="unworkedLocChkBox">
-          <property name="text">
-           <string>Unworked Locators</string>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="unworkedCallsignsChkBox">
+            <property name="text">
+             <string>Unworked Callsigns</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="unworkedLocChkBox">
+            <property name="text">
+             <string>Unworked Locators</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QPushButton" name="filtersBut">

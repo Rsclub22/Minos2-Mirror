@@ -472,11 +472,11 @@ void ClusterClientFrame::onSpotTabChanged(int index)
         ui->dxSpotTab->setTabColor(index, CLUSTER_TAB_SELECT_COLOR);
         if (ui->dxSpotTab->currentIndex() == DXSPOT_TAB)
         {
-            setUnWorkedLocCheckBoxVisible(true);
+            setUnworkedCheckboxesVisible(true);
         }
         else
         {
-            setUnWorkedLocCheckBoxVisible(false);
+            setUnworkedCheckboxesVisible(false);
         }
     }
 }
@@ -1470,10 +1470,41 @@ void ClusterClientFrame::checkSavedFilters()
 }
 
 
+void ClusterClientFrame::setUnworkedCheckboxesVisible(bool state)
+{
+    setUnWorkedLocCheckBoxVisible(state);
+    setUnWorkedCallsignsCheckBoxVisible(state);
+}
+
+
+
 void ClusterClientFrame::setUnWorkedLocCheckBoxVisible(bool state)
 {
     ui->unworkedLocChkBox->setVisible(state);
 }
+
+void ClusterClientFrame::setUnWorkedCallsignsCheckBoxVisible(bool state)
+{
+    ui->unworkedCallsignsChkBox->setVisible(state);
+}
+
+
+void ClusterClientFrame::on_unworkedCallsignsCheckBox(int state)
+{
+    if (state == Qt::Checked)
+    {
+        dxSpotProxyModel->setUnworkedCallsignFlag(true);
+    }
+    else
+    {
+        dxSpotProxyModel->setUnworkedCallsignFlag(false);
+    }
+
+    dxSpotProxyModelUpdate();
+
+}
+
+
 
 
 void ClusterClientFrame::on_unworkedLocCheckBox(int state)
@@ -1685,7 +1716,11 @@ void ClusterClientFrame::mouseTimerCheckNewSpots()
 
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    return matchBand(sourceRow) && matchMode(sourceRow) && matchWorkedLoc(sourceRow);
+
+    bool locOk = matchWorkedLoc(sourceRow);
+    bool callOK = matchWorkedCallsign(sourceRow);
+    bool ok = matchBand(sourceRow) && matchMode(sourceRow) && matchWorkedLoc(sourceRow) && matchWorkedCallsign(sourceRow);
+    return ok;
 }
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
@@ -1727,7 +1762,21 @@ bool DxSpotSortFilterProxyModel::matchWorkedLoc(int sourceRow) const
 {
     if (unWorkedLocFlag)
     {
-        return !sourceModel()->data(sourceModel()->index(sourceRow, DXLOC_WORKED_COL_NUM), DataStoredRole).toBool();
+        bool ok = sourceModel()->data(sourceModel()->index(sourceRow, DXLOC_WORKED_COL_NUM), DataStoredRole).toBool();
+        return !ok;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+
+bool DxSpotSortFilterProxyModel::matchWorkedCallsign(int sourceRow) const
+{
+    if (unWorkedCallsignFlag)
+    {
+        return !sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_WORKED_COL_NUM), DataStoredRole).toBool();
     }
     else
     {
@@ -1740,6 +1789,14 @@ void DxSpotSortFilterProxyModel::setUnworkedLocFlag(bool state)
 {
     unWorkedLocFlag = state;
 }
+
+
+void DxSpotSortFilterProxyModel::setUnworkedCallsignFlag(bool state)
+{
+    unWorkedCallsignFlag = state;
+}
+
+
 
 
 bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const

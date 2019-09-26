@@ -201,7 +201,8 @@ private:
     bool isClusterClientLoaded();
     bool clusterServerLoaded;
     bool isClusterServerLoaded();
-    void setClusterControlsVisible(bool visible);
+    void setClusterSendSpotControlsVisible(bool visible);
+    bool sendSpotToClusterOn;
     bool clusterServerConnected;
 
 
