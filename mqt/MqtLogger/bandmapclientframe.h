@@ -32,6 +32,7 @@
 #include "bandmapclientfilterdialog.h"
 #include "BandList.h"
 #include "checkmodeagainstfreq.h"
+#include "checkoperatingfreq.h"
 
 
 
@@ -166,6 +167,10 @@ private:
 
     QVector<BandDetail*> bands;
     checkModeAgainstFreq* modeBandPlan;
+    bool modeBandPlanOk;
+
+    CheckOperatingFreq* operatingFreq;
+    bool operatingFreqPlanOk;
 
     BMP_MouseInObject* actionInObject;
 
@@ -224,6 +229,8 @@ private:
 
     bool event(QEvent *event) override;
     int findRowToInsert(QString f);
+    bool isFreqLegal(const double freq, const QString band, const QString mode);
+
 protected:
 
 

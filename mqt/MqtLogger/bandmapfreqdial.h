@@ -37,7 +37,28 @@ const int DIAL_VERT_OFFSET = 10;      // dial offset to show first text
 
 }
 
+class DialFreqText
+{
 
+public:
+
+    DialFreqText(QRect _textRect, qint32 _freqText)
+    {
+        textRect = _textRect;
+        freqText = _freqText;
+    }
+
+    QRect getTextRect(){return textRect;}
+    qint32 getFreqText(){return freqText;}
+
+
+
+private:
+
+    QRect textRect;
+    qint32 freqText;
+
+};
 
 
 
@@ -128,6 +149,8 @@ private:
     QString convertFreqDialDisplay(qint32 freq);
 
     int getFontHeight();
+
+    QList<DialFreqText*> dialFreqList;
 };
 
 #endif // BANDMAPFREQDIAL_H
