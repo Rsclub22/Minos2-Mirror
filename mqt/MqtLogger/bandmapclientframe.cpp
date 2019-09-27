@@ -194,7 +194,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
         operatingFreqPlanOk = false;
     }
 
-
+    freqDisplayPalette = new QPalette();       // to change colour when tuning
 
 
     purgeTimer->start(PURGE_TIME);
@@ -211,6 +211,7 @@ BandmapClientFrame::~BandmapClientFrame()
     delete bandmapView;
     delete bandmapDataModel;
     delete actionInObject;
+    delete freqDisplayPalette;
 
 }
 
@@ -1065,28 +1066,34 @@ void BandmapClientFrame::setFreq(QString freq)
 {
     trace(QString("Bandmap frame Set Freq: = %1").arg(freq));
 
+
     if (lastfreq != freq)
     {
         lastfreq = freq;
         if (freq.count() >= 4)
         {
-            QString msg;
+
             ui->freqDisplay->setInputMask(maskData::freqMask[freq.count() - 4]);
             if (isFreqLegal(freq.toDouble(), contestBandStr, contestModeStr))
             {
-               msg = freq;
+
+                freqDisplayPalette->setColor(QPalette::Text,Qt::black);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
+                legalFreq = true;
             }
             else
             {
-                msg = "<font color='Red'>" + freq + "</font>";
+                freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
+                legalFreq = false;
             }
 
 
-            ui->freqDisplay->setText(msg);
+            ui->freqDisplay->setText(freq);
         }
 
         curFreq = freq.toDouble();
-        bandmapView->setFreq(curFreq);
+        bandmapView->setFreq(curFreq, legalFreq);
 
 
 

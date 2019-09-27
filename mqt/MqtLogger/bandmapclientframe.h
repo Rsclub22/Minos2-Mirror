@@ -159,6 +159,8 @@ private:
     int contestMode;
 
     QString lastfreq;
+    QPalette *freqDisplayPalette;
+    bool legalFreq = true;
 
 
     QTimer* purgeTimer;

@@ -21,7 +21,7 @@ int CheckOperatingFreq::freqValid(const QString &band, const QString &mode, cons
             for (int i = 0; i < freqs.freq.count(); i++)
             {
                 QList< double > freqLimits = freqs.freq[i];
-                if (freq >= freqLimits[0] && freq <= freqLimits[1])
+                if (freq >= (freqLimits[0] * 1000) && freq <= (freqLimits[1] * 1000))
                 {
                     return FREQ_OK;
 

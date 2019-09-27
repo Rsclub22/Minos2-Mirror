@@ -142,6 +142,8 @@ private:
     qint32 currentFreqInt32 = 0;
     qint64 currentFreqInt64 = 0;
 
+
+
     QColor cursorColour;
 
     void changeZoom(bool direction);

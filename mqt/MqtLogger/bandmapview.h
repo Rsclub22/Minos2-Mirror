@@ -44,7 +44,7 @@ public:
     //QSize minimumSizeHint() const override;
     //QSize sizeHint() const override;
 
-    void setFreq(double f);
+    void setFreq(double f, bool legalFreq);
 
     int getBandmapFrameHeight();
     int getBandmapFrameWidth();
@@ -73,7 +73,7 @@ protected slots:
 
     void rowsInserted(const QModelIndex &parent, int start, int end) override;
     void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
-    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
     void updateGeometries() override;
 
 
@@ -116,6 +116,7 @@ private:
 
     BandmapFreqDial *dial;
     double curFreq;
+
 
     int totalSize = 300; //for test
 
