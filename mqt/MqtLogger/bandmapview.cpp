@@ -116,7 +116,7 @@ void BandmapView::zoomUpdated(bool dir)
 
     if (dir)
     {
-        ;
+
         if (zoomLevel < dialMaxZoomLevel && zoomLevel >= dialMinZoomLevel)
         {
             ++zoomLevel;
@@ -334,7 +334,13 @@ void BandmapView::bandmapUpdate()
 
 void BandmapView::leftMouseButtonPressed(QPoint p)
 {
-    if (p.x() <= dial->getCurWidth() && p.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
+    qint32 freq = dial->checkSelectedFreqTextOnDial(p);
+
+    if (freq > 0)
+    {
+        sendFreqToRig(QString::number(freq));
+    }
+    else if (p.x() <= dial->getCurWidth() && p.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
     {
         // select the freq
         bandmapSelectFreq(p.y());

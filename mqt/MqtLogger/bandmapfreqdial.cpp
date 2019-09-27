@@ -255,6 +255,8 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     int markCount = 0;
     qint32 markFreq = scaleStartFreq;
 
+    DialFreqText* dft = nullptr;
+
     if (dialData::minorMarker[zoomLevel] == 0)
     {
 
@@ -262,7 +264,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
         {
             painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
             QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
-            DialFreqText* dft = new DialFreqText(textPos, markFreq);
+            dft = new DialFreqText(textPos, markFreq);
             dialFreqList.append(dft);
             painter->drawText(textPos,  Qt::AlignLeft, convertFreqDialDisplay(markFreq));
             if (dialData::khzStep[zoomLevel] == 1)
@@ -286,7 +288,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
             {
                 painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
                 QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
-                DialFreqText* dft = new DialFreqText(textPos, markFreq);
+                dft = new DialFreqText(textPos, markFreq);
                 dialFreqList.append(dft);
                 painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
                 markFreq += 5;
@@ -310,7 +312,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
             {
                 painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
                 QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
-                DialFreqText* dft = new DialFreqText(textPos, markFreq);
+                dft = new DialFreqText(textPos, markFreq);
                 dialFreqList.append(dft);
                 painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
                 markFreq += 10;
@@ -335,7 +337,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
             {
                 painter->drawLine(QPoint(dialData::fMajMrkXStart, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialData::fMajMrkXEnd, ycoord + dialData::DIAL_VERT_OFFSET));
                 QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
-                DialFreqText* dft = new DialFreqText(textPos, markFreq);
+                dft = new DialFreqText(textPos, markFreq);
                 dialFreqList.append(dft);
                 painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
                 markFreq += 50;
@@ -513,4 +515,15 @@ void BandmapFreqDial::changeZoom(bool direction)
 //}
 
 
+qint32 BandmapFreqDial::checkSelectedFreqTextOnDial(QPoint p)
+{
+    for (int i = 0; i < dialFreqList.count(); i++)
+    {
+        if (dialFreqList[i]->getTextRect().contains(p))
+        {
+            return dialFreqList[i]->getFreqText();
+        }
+    }
 
+    return 0;
+}

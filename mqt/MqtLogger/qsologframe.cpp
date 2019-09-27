@@ -2869,7 +2869,7 @@ void QSOLogFrame::setRunMemoryFreqUpdate(int num, QString freq)
 
 void QSOLogFrame::on_ChkRunFreq()
 {
-    if (runButtonOnFlag)
+    if (runButtonOnFlag && curRunFreq.toLongLong() != 0)
     {
         if (!chkRadioFreqOnRunFreq())
         {
@@ -2920,14 +2920,30 @@ bool QSOLogFrame::chkRadioFreqOnRunFreq()
 void QSOLogFrame::runButtonOn()
 {
 
-
-    runButtonOnFlag = true;
-    chkRunFreqTimer->start(CHECK_RUNMODE_TIMER);
-    showRunButtonOnOff(runButtonOnFlag);
-    if (sendSpotToClusterOn)
+    if (curRunFreq.toLongLong() != 0)
     {
-       setClusterSendSpotControlsVisible(false);
+        if (!chkRadioFreqOnRunFreq())
+        {
+            radioOffRunFreq = true;
+            showRunToolButtonOffFreq();
+            if (sendSpotToClusterOn)
+            {
+               setClusterSendSpotControlsVisible(true);
+            }
+        }
+        else
+        {
+            radioOffRunFreq = false;
+            showRunToolButtonOnFreq();
+            if (sendSpotToClusterOn)
+            {
+                setClusterSendSpotControlsVisible(false);
+            }
+        }
+        runButtonOnFlag = true;
+        chkRunFreqTimer->start(CHECK_RUNMODE_TIMER);
     }
+
 
 
 

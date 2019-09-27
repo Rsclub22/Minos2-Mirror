@@ -251,8 +251,8 @@ private:
     QString ssLineEditFrRedBkRed = "QLineEdit { background-color: red ; border-style: outset ; border-width: 1px ; border-color: red ; color : white }";
     QString ssLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
 
-    const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-    const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: khaki ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+    const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+    const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
     const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 
