@@ -34,6 +34,7 @@ SOURCES += \
     ChatServer.cpp \
     ConfigElementFrame.cpp \
     checkmodeagainstfreq.cpp \
+    checkoperatingfreq.cpp \
     contacts.cpp \
     contest.cpp \
     cutils.cpp \
@@ -107,6 +108,7 @@ HEADERS += \
     ChatServer.h \
     ConfigElementFrame.h \
     checkmodeagainstfreq.h \
+    checkoperatingfreq.h \
     contacts.h \
     contest.h \
     cutils.h \

@@ -46,7 +46,12 @@ const int BMP_SPOT_CALL_COL_WIDTH = 60;
 const int BMP_SPOTLOC_COL_WIDTH = 50;
 const int BMP_COMMENT_COL_WIDTH = 170;
 
-const bool BOOL_YES = true;
-const bool BOOL_NO = false;
+const bool BMP_BOOL_YES = true;
+const bool BMP_BOOL_NO = false;
+
+const int SPOTMARKER_XOFFSET = 20;
+const int FREQ_SEL_WIDTH = 20;
+
+
 
 #endif // BANDMAPCOMMON_H

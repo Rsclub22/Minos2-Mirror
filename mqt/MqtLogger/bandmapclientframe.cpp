@@ -16,6 +16,7 @@
 #include "MinosLoggerEvents.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
+#include "checkoperatingfreq.h"
 #include <QDebug>
 #include "ui_bandmapclientframe.h"
 
@@ -170,14 +171,30 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     modeBandPlan = new checkModeAgainstFreq();
     if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
     {
-        trace(QString("Mode frequency bandplan loaded OK"));
+        trace(QString("Bandmap Client: Mode frequency bandplan loaded OK"));
+        modeBandPlanOk = true;
 
     }
     else
     {
-        trace(QString("Mode frequency bandplan loaded failed to Load"));
+        trace(QString("Bandmap Client: Mode frequency bandplan loaded failed to Load"));
+        modeBandPlanOk = false;
 
     }
+
+    operatingFreq = new CheckOperatingFreq();
+    if (operatingFreq->loadFile("./Configuration/operating_frequencies.json"))
+    {
+        trace(QString("Bandmap Client: Operating frequency bandplan loaded OK"));
+        operatingFreqPlanOk = true;
+    }
+    else
+    {
+        trace(QString("Bandmap Client: Operating frequency bandplan failed to load"));
+        operatingFreqPlanOk = false;
+    }
+
+    freqDisplayPalette = new QPalette();       // to change colour when tuning
 
 
     purgeTimer->start(PURGE_TIME);
@@ -194,6 +211,7 @@ BandmapClientFrame::~BandmapClientFrame()
     delete bandmapView;
     delete bandmapDataModel;
     delete actionInObject;
+    delete freqDisplayPalette;
 
 }
 
@@ -326,7 +344,7 @@ void BandmapClientFrame::clearSpotActionSelected()
     if (ret == QMessageBox::Yes)
     {
         bandmapSpotProxyModel->removeRows(selectedSpotRowNum, 1);
-        bandmapView->bandmapUpdate();;
+        bandmapView->bandmapUpdate();
     }
 }
 
@@ -415,7 +433,34 @@ int BandmapClientFrame::getModeOffSet(QString contestModeStr)
 }
 
 
+// returns true if freq ok, false if it is not...it will return true and error to tracelog is mode or band
+// is missing from operating freq file
+bool BandmapClientFrame::isFreqLegal(const double freq, const QString band, const QString mode)
+{
 
+    int retCode;
+    if (operatingFreqPlanOk)
+    {
+            retCode =  operatingFreq->freqValid(band, mode, freq);
+            switch (retCode)
+            {
+                case FREQ_OK:
+                    return true;
+                case FREQ_NO_MATCH:
+                    return false;
+                case MODE_MISSING:
+                    trace(QString("Bandmap isFreqLegal: mode is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    return true;
+                case BAND_MISSING:
+                    trace(QString("Bandmap isFreqLegal: band is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    return true;
+            }
+    }
+
+    trace(QString("Bandmap isFreqLegal: Operating Freq file not loaded"));
+    return true;
+
+}
 
 
 //---------------------- Cluster Spots -------------------------------------
@@ -1021,17 +1066,34 @@ void BandmapClientFrame::setFreq(QString freq)
 {
     trace(QString("Bandmap frame Set Freq: = %1").arg(freq));
 
+
     if (lastfreq != freq)
     {
         lastfreq = freq;
         if (freq.count() >= 4)
         {
+
             ui->freqDisplay->setInputMask(maskData::freqMask[freq.count() - 4]);
+            if (isFreqLegal(freq.toDouble(), contestBandStr, contestModeStr))
+            {
+
+                freqDisplayPalette->setColor(QPalette::Text,Qt::black);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
+                legalFreq = true;
+            }
+            else
+            {
+                freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
+                legalFreq = false;
+            }
+
+
             ui->freqDisplay->setText(freq);
         }
 
         curFreq = freq.toDouble();
-        bandmapView->setFreq(curFreq);
+        bandmapView->setFreq(curFreq, legalFreq);
 
 
 
@@ -1185,7 +1247,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
 
 void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString _freq, QString loc, QString brg)
 {
-    Q_UNUSED(cs);
+    Q_UNUSED(cs)
     QDateTime time = QDateTime::currentDateTimeUtc();
 
     QString logBandStr;

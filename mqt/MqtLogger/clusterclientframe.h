@@ -51,13 +51,31 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool matchBand(int sourceRow) const;
     bool matchMode(int sourceRow) const;
+    bool matchWorkedLoc(int sourceRow) const;
+    bool matchWorkedCallsign(int sourceRow) const;
 
-    DxSpotSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup)
+    void setUnworkedLocFlag(bool state);
+
+
+    void setUnworkedCallsignFlag(bool state);
+
+
+    DxSpotSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) :
+        unWorkedLocFlag(false),
+        unWorkedCallsignFlag(false)
     {
         filterSetup = _filterSetup;
     }
 
     ClusterClientFilterDialog* filterSetup;
+
+
+    bool unWorkedLocFlag;
+    bool unWorkedCallsignFlag;
+
+
+
+
 
 };
 
@@ -246,6 +264,17 @@ private:
 
     int getNumberSpotsIndicator(const QDateTime& lastTime, DxSpotSortFilterProxyModel *spotProxyModel);
     void restoreSplitters();
+    void setUnWorkedLocCheckBoxVisible(bool state);
+
+
+    void dxSpotProxyModelUpdate();
+    void callSignProxyModelUpdate();
+    void locatorProxyModelUpdate();
+    void searchProxyModelUpdate();
+
+
+    void setUnWorkedCallsignsCheckBoxVisible(bool state);
+    void setUnworkedCheckboxesVisible(bool state);
 private slots:
 
     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
@@ -290,6 +319,8 @@ private slots:
 
     void on_doColumnChanges(BaseContestLog *);
     void on_doSplitterChanges(BaseContestLog *);
+    void on_unworkedLocCheckBox(int state);
+    void on_unworkedCallsignsCheckBox(int state);
 };
 
 class MouseInObject : public QObject

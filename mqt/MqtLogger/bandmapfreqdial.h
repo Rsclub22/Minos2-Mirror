@@ -4,6 +4,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneWheelEvent>
 #include "base_pch.h"
+#include "bandmapcommon.h"
 
 namespace dialData {
 
@@ -36,7 +37,28 @@ const int DIAL_VERT_OFFSET = 10;      // dial offset to show first text
 
 }
 
+class DialFreqText
+{
 
+public:
+
+    DialFreqText(QRect _textRect, qint32 _freqText)
+    {
+        textRect = _textRect;
+        freqText = _freqText;
+    }
+
+    QRect getTextRect(){return textRect;}
+    qint32 getFreqText(){return freqText;}
+
+
+
+private:
+
+    QRect textRect;
+    qint32 freqText;
+
+};
 
 
 
@@ -91,6 +113,9 @@ public:
     void calcStartEndFreq(qint32 frequency);
     qint32 getCurFreqInt32();
     QString getFreqFromYCoordOnDial(int y);
+    qint32 checkSelectedFreqTextOnDial(QPoint p);
+
+
 signals:
     //void dialupdated();
     void zoomUpdated(bool);
@@ -117,6 +142,8 @@ private:
     qint32 currentFreqInt32 = 0;
     qint64 currentFreqInt64 = 0;
 
+
+
     QColor cursorColour;
 
     void changeZoom(bool direction);
@@ -127,6 +154,8 @@ private:
     QString convertFreqDialDisplay(qint32 freq);
 
     int getFontHeight();
+
+    QList<DialFreqText*> dialFreqList;
 };
 
 #endif // BANDMAPFREQDIAL_H

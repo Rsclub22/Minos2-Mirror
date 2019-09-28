@@ -18,9 +18,6 @@
 
 #include <QDebug>
 
-const int SPOTMARKER_XOFFSET = 20;
-const int FREQ_SEL_WIDTH = 20;
-
 
 
 BandmapView::BandmapView(QWidget *parent) :
@@ -119,7 +116,7 @@ void BandmapView::zoomUpdated(bool dir)
 
     if (dir)
     {
-        ;
+
         if (zoomLevel < dialMaxZoomLevel && zoomLevel >= dialMinZoomLevel)
         {
             ++zoomLevel;
@@ -337,7 +334,13 @@ void BandmapView::bandmapUpdate()
 
 void BandmapView::leftMouseButtonPressed(QPoint p)
 {
-    if (p.x() <= dial->getCurWidth() && p.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
+    qint32 freq = dial->checkSelectedFreqTextOnDial(p);
+
+    if (freq > 0)
+    {
+        sendFreqToRig(QString::number(freq));
+    }
+    else if (p.x() <= dial->getCurWidth() && p.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
     {
         // select the freq
         bandmapSelectFreq(p.y());
@@ -400,8 +403,12 @@ int BandmapView::horizontalOffset() const
 
 QModelIndex BandmapView::moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers)
 {
+    // unused
+    Q_UNUSED(cursorAction)
+
     QModelIndex index = currentIndex();
-/*
+
+    /*
     if (index.isValid()) {
         if ((cursorAction == MoveLeft && index.row() > 0) ||
             (cursorAction == MoveRight &&
@@ -435,6 +442,8 @@ QModelIndex BandmapView::moveCursor(QAbstractItemView::CursorAction cursorAction
 void BandmapView::setSelection(const QRect &rect, QFlags<QItemSelectionModel::SelectionFlag> flags)
 {
     // do nothing
+    Q_UNUSED(rect)
+    Q_UNUSED(flags)
 }
 
 
@@ -447,7 +456,8 @@ int BandmapView::verticalOffset() const
 
 QRegion BandmapView::visualRegionForSelection(const QItemSelection &selection) const
 {
-
+    // unused
+    Q_UNUSED(selection)
     return QRegion();
 }
 
@@ -479,6 +489,7 @@ QModelIndex BandmapView::indexAt(const QPoint &point_) const
 void BandmapView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint)
 {
     // cannot scroll
+    Q_UNUSED(index)
 }
 
 
@@ -549,32 +560,6 @@ void BandmapView::bandmapResize(int _height)
 
 
 
-//QSize BandmapView::sizeHint() const
-//{
-    /*
-    int rows = visualizer->model()
-               ? visualizer->model()->rowCount() : 1;
-    return QSize(visualizer->widthOfYearColumn() +
-            qMax(100, visualizer->maleFemaleHeaderTextWidth()) +
-            visualizer->widthOfTotalColumn(),
-            visualizer->yOffsetForRow(rows));
-    */
-
-//    return QSize(70, bandmap->getBandmapFrameHeight());
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
 int BandmapView::rows(const QModelIndex &index) const
 {
     return model()->rowCount(model()->parent(index));
@@ -591,10 +576,18 @@ int BandmapView::getBandmapFrameWidth()
 }
 
 
-void BandmapView::setFreq(double f)
+void BandmapView::setFreq(double f, bool legalFreq)
 {
     curFreq = f;
     dial->setCurFreq(f);
+    if (legalFreq)
+    {
+        dial->setCursorColour(Qt::black);
+    }
+    else
+    {
+        dial->setCursorColour(Qt::red);
+    }
     bandmapUpdate();
 }
 
