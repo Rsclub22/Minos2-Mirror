@@ -149,6 +149,21 @@ RigControlFrame::RigControlFrame(QWidget *parent):
         }
     }
 
+    operatingFreq = new CheckOperatingFreq();
+    if (operatingFreq->loadFile("./Configuration/operating_frequencies.json"))
+    {
+        trace(QString("RigControl Frame: Operating frequency bandplan loaded OK"));
+        operatingFreqPlanOk = true;
+    }
+    else
+    {
+        trace(QString("RigControl Frame: Operating frequency bandplan failed to load"));
+        operatingFreqPlanOk = false;
+    }
+
+    freqDisplayPalette = new QPalette();       // to change colour when tuning
+
+
 
     // start timer to wait for bandlist and rigdetails to launch
     launchRadioSelectTimer = new QTimer(this);
@@ -507,6 +522,7 @@ void RigControlFrame::setFreq(QString freq)
         {
             trace(QString("setFreq: Display Freq = %1").arg(freq));
             ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
+            setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setText(freq);
         }
         curFreq = freq;
@@ -643,18 +659,26 @@ void RigControlFrame::changeMainRadioFreq()
 {
     traceMsg(QString("Change Main Radio Freq"));
 
-    QString newfreq = ui->freqInput->text().trimmed().remove('.');
-    double f = convertStrToFreq(newfreq);
+
+    QString newFreqStr = ui->freqInput->text();
+    QString newFreq = newFreqStr.trimmed().remove('.');
+
+    // check legal freq
+    setFreqTextLegalColour(newFreq, curMode);
+
+    double f = convertStrToFreq(newFreq);
+
+
     if (f >= 0.0)
     {
         if (f > 0)
         {
-            newfreq.remove( QRegExp("^[0]*")); //remove periods and leading zeros
+            newFreq.remove( QRegExp("^[0]*")); //remove periods and leading zeros
         }
 
-        if (newfreq != lastFreq)
+        if (newFreq != lastFreq)
         {
-            lastFreq = newfreq;
+            lastFreq = newFreq;
             if (checkValidFreq(lastFreq))
             {
                 if (lastFreq.count() >=4)
@@ -828,9 +852,19 @@ void RigControlFrame::exitFreqEdit()
 {
     traceMsg(QString("Exit Edit Freq"));
     freqEditOn = false;
-    setFreq(curFreq);
+
     freqLineEditFrameColour(false);
+    QString freq = ui->freqInput->text();
+    if (freq.remove('.') != curFreq)
+    {
+        // up date display to current radio freq
+        ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
+        ui->freqInput->setText(curFreq);
+    }
+
+
     ui->freqInput->clearFocus();
+    setFreqTextLegalColour(curFreq, curMode);
 }
 
 void RigControlFrame::exitRitFreqEdit()
@@ -849,12 +883,12 @@ void RigControlFrame::freqEditSelected()
 {
     traceMsg(QString("Freq Edit Selected"));
     ui->freqInput->setFocus();
+
     int len = ui->freqInput->text().length();
     if (len > 5)
     {
        ui->freqInput->setCursorPosition(len - 5);
     }
-
 
 }
 
@@ -1434,6 +1468,7 @@ void RigControlFrame::freqLineEditInFocus()
     freqEditOn = true;
     ui->freqInput->setReadOnly(false);
     freqLineEditFrameColour(true);
+    setFreqTextLegalColour(curFreq, curMode);
 }
 
 
@@ -1492,6 +1527,9 @@ void RigControlFrame::freqLineEditFrameColour(bool status)
 
     }
 
+    //QString freq = ui->freqInput->text();
+    //setFreqTextLegalColour(freq, curMode);
+
 }
 
 
@@ -1549,7 +1587,9 @@ void RigControlFrame::freqPlusMinusButton(double f)
         QString freq = calcNewFreq(f);
         if (freq != "")
         {
-           ui->freqInput->setText(freq);
+
+            setFreqTextLegalColour(freq, curMode);
+            ui->freqInput->setText(freq);
 
            if (radioConnected && !radioError)
            {
@@ -1603,6 +1643,82 @@ void RigControlFrame::mgmLabelVisible(bool state)
     ui->mgmLbl->setVisible(state);
 }
 
+void RigControlFrame::setFreqTextLegalColour(const QString _freq, QString mode)
+{
+    QString freq = _freq;
+    double f = freq.remove('.').toDouble();
+
+    if (checkFreqIsLegal(f, mode))
+    {
+
+        freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+        ui->freqInput->setPalette(*freqDisplayPalette);
+        legalFreq = true;
+    }
+    else
+    {
+        freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+        ui->freqInput->setPalette(*freqDisplayPalette);
+        legalFreq = false;
+    }
+
+}
+
+
+
+
+
+bool RigControlFrame::checkFreqIsLegal(const double freq, const QString mode)
+{
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    bool bandOk = false;
+
+
+    bandOk = blist.findBand(freq, bi);
+    QString band = bi.uk;
+    if (bandOk)
+    {
+        return isFreqLegal(freq, band, mode);
+    }
+
+    return false;  // out of band
+
+
+}
+
+
+
+
+
+// returns true if freq ok, false if it is not...it will return true and error to tracelog is mode or band
+// is missing from operating freq file
+bool RigControlFrame::isFreqLegal(const double freq, const QString band, const QString mode)
+{
+
+    int retCode;
+    if (operatingFreqPlanOk)
+    {
+            retCode =  operatingFreq->freqValid(band, mode, freq);
+            switch (retCode)
+            {
+                case FREQ_OK:
+                    return true;
+                case FREQ_NO_MATCH:
+                    return false;
+                case MODE_MISSING:
+                    trace(QString("RigControl Frame isFreqLegal: mode is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    return true;
+                case BAND_MISSING:
+                    trace(QString("Bandmap isFreqLegal: band is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    return true;
+            }
+    }
+
+    trace(QString("RigControl Frame isFreqLegal: Operating Freq file not loaded"));
+    return true;
+
+}
 
 void RigControlFrame::closeContest()
 {

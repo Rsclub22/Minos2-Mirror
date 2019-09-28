@@ -1077,7 +1077,7 @@ void BandmapClientFrame::setFreq(QString freq)
             if (isFreqLegal(freq.toDouble(), contestBandStr, contestModeStr))
             {
 
-                freqDisplayPalette->setColor(QPalette::Text,Qt::black);
+                freqDisplayPalette->setColor(QPalette::Text, Qt::black);
                 ui->freqDisplay->setPalette(*freqDisplayPalette);
                 legalFreq = true;
             }
