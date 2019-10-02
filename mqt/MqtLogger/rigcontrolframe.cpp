@@ -1768,8 +1768,11 @@ void RigControlFrame::runButReadActSel(int buttonNumber)
             {
 
                 sendFreq(m.freq);
-                emit runMemoryFreqUpdate(buttonNumber, m.freq); // send run freq to qsolog
             }
+
+            // update run freq in QSOLogFrame
+            emit runMemoryFreqUpdate(buttonNumber, m.freq); // send run freq to qsolog
+
 
 
             if (m.mode != curMode)

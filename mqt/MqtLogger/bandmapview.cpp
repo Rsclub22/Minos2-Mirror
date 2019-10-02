@@ -60,6 +60,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
     bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
     bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    //bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), bandmapGraphicsView->height());
 
     dial = new BandmapFreqDial(70, bandmapGraphicsView->viewport()->height());
