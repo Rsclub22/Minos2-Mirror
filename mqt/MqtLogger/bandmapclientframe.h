@@ -155,6 +155,8 @@ private:
     QString contestUuid;
     QString contestBandStr;
     int contestBand;
+    double contestBandFlow;
+    double contestBandFHigh;
     QString contestModeStr;
     int contestMode;
 

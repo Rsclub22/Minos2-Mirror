@@ -24,8 +24,11 @@ BandmapView::BandmapView(QWidget *parent) :
     QAbstractItemView(parent),
     curFreq(0.0),
     zoomLevel(0),
+    contestBandFlow(0),
+    contestBandFHigh(0),
     idealWidth(0),
     idealHeight(0),
+    fullBandHeight(4000),
     fontHeight(0),
     maxNumSpots(0),
     selectedSpotDataRowNum(NO_SELECTED_ROWNUM),
@@ -59,9 +62,10 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapGraphicsView->setScene(bandmapScene);
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
     bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
-    bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
-    //bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), bandmapGraphicsView->height());
+    //bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    //bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), bandmapGraphicsView->height());
+    bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
 
     dial = new BandmapFreqDial(70, bandmapGraphicsView->viewport()->height());
     qDebug() << "bandmap height " << getBandmapFrameHeight();
@@ -82,6 +86,8 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     connect(bandmapGraphicsView, SIGNAL(mouseDoubleClicked(QPoint)), this, SLOT(mouseDoubleClicked(QPoint)));
     connect(bandmapGraphicsView, SIGNAL(zoomMap(bool)), this, SLOT(zoomUpdated(bool)));
     connect(bandmapGraphicsView, SIGNAL(nextSpot(bool, bool)), this, SLOT(on_nextSpot(bool, bool)));
+
+    connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(on_vertScrollBandChanged(int)));
 
     bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( bandmapGraphicsView, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( on_bandmap_customContextMenuRequested( const QPoint& ) ) );
@@ -135,6 +141,30 @@ void BandmapView::zoomUpdated(bool dir)
         }
     }
 
+}
+
+void BandmapView::on_vertScrollBandChanged(int value)
+{
+    qDebug() << "point A" << bandmapGraphicsView->mapToScene( QPoint(0, 0) );
+    qDebug() << "point B" << bandmapGraphicsView->mapToScene( QPoint(
+            bandmapGraphicsView->viewport()->width(),
+            bandmapGraphicsView->viewport()->height() ));
+    qDebug() << "start y " << getViewPortStartYCoordOnScene();
+    qDebug() << "end y " << getViewPortEndYCoordOnScene();
+    qDebug() << "int value" << value;
+}
+
+
+int BandmapView::getViewPortStartYCoordOnScene()
+{
+    return bandmapGraphicsView->mapToScene(QPoint(0,0)).toPoint().y();
+}
+
+int BandmapView::getViewPortEndYCoordOnScene()
+{
+    return bandmapGraphicsView->mapToScene( QPoint(
+                                                bandmapGraphicsView->viewport()->width(),
+                                                bandmapGraphicsView->viewport()->height() )).toPoint().y();
 }
 
 void BandmapView::on_nextSpot(bool nextFreqUpDown, bool nextMult)
@@ -326,7 +356,8 @@ void BandmapView::rowsAboutToBeRemoved(const QModelIndex &parent,
 void BandmapView::bandmapUpdate()
 {
 
-    dial->calcStartEndFreq(dial->getCurFreqInt32());
+    //dial->calcStartEndFreq(dial->getCurFreqInt32());
+    dial->setViewPortStartEndFreq(getViewPortStartYCoordOnScene(), getViewPortEndYCoordOnScene() ,contestBandFlow);
     dial->update();
     drawBandMapSpots();
 
@@ -600,6 +631,16 @@ void BandmapView::bandmapSelectFreq(int y)
 }
 
 
+void BandmapView::setBandFreqLimits(double flow, double fhigh)
+{
+    contestBandFlow = flow;
+    contestBandFHigh = fhigh;
+    fullBandHeight = dial->getFullBandHeight(flow, fhigh);
+    bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
+    curViewPortStartFreq = dial->getViewPortStartFreq(250, contestBandFlow);
+
+}
+
 void BandmapView::sendFreqToRig(QString freq)
 {
     QString f = freq.remove('.').append(QString("000"));
@@ -740,6 +781,12 @@ void BandmapView::drawBandMapSpots()
     {
         return;
     }
+
+
+    qDebug() << "point A" << bandmapGraphicsView->mapToScene( QPoint(0, 0) );
+    qDebug() << "point B" << bandmapGraphicsView->mapToScene( QPoint(
+            bandmapGraphicsView->viewport()->width(),
+            bandmapGraphicsView->viewport()->height() ));
 
     trace(QString("Bandmap Drawspots: Start Drawing"));
     if (!listOfMarkers.isEmpty())

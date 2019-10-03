@@ -69,6 +69,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui(new Ui::BandmapClientFrame),
     isProtected(false),
     contestBand(-1),
+    contestBandFlow(0),
+    contestBandFHigh(0),
     contestMode(-1),
     clusterServerLoaded(false),
     clusterServerConnected(false),
@@ -364,6 +366,23 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
+
+        BandList blist = BandList::getBandList();
+        BandInfo bi;
+
+
+        for (int i = 0; i < blist.bandList.count(); i++)
+        {
+            bi = blist.bandList[i];
+            if (bi.uk == contestBandStr)
+            {
+
+                contestBandFlow = bi.flow;
+                contestBandFHigh = bi.fhigh;
+                bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
+                break;
+            }
+        }
 
         if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
         {

@@ -326,7 +326,7 @@ bool checkValidBand(QString freq)
 BandDetail::BandDetail(QString _name, double _flow, double _fhigh)
 {
     name = _name;
-    fLow = _flow;;
+    fLow = _flow;
     fHigh = _fhigh;
 }
 

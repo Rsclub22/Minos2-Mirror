@@ -116,6 +116,13 @@ public:
     qint32 checkSelectedFreqTextOnDial(QPoint p);
 
 
+    int getFullBandHeight(double flow, double fhigh);
+
+
+    qint64 getViewPortStartFreq(int startPos, double contestBandFlow);
+
+    void setViewPortStartEndFreq(int startPos, int endPos, double contestBandFlow);
+
 signals:
     //void dialupdated();
     void zoomUpdated(bool);

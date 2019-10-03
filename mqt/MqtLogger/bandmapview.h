@@ -68,6 +68,7 @@ public:
 
     void updateZoom(bool dir);
 
+    void setBandFreqLimits(double flow, double fhigh);
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 
@@ -108,9 +109,10 @@ private slots:
 
     void on_nextSpot(bool nextFreqUpDown, bool nextMult);
     int findNextNonWorkedLocatorUpList(int curSpotViewNum);
+    void on_vertScrollBandChanged(int);
+
 private:
 
-    //Bandmap *bandmap;
     QGraphicsScene *bandmapScene;
     QGraphicsView* bandmapGraphicsView;
 
@@ -124,8 +126,13 @@ private:
     int dialMaxZoomLevel;
     int zoomLevel;
 
+    double contestBandFlow;
+    double contestBandFHigh;
+    qint64 curViewPortStartFreq;
+
     int idealWidth;
     int idealHeight;
+    int fullBandHeight;
     int fontHeight;
     int maxNumSpots;
 
@@ -157,6 +164,8 @@ private:
     int findNextOccupiedMarkerUpList(int curSpotViewNum);
     int findNextOccupiedMarkerDownList(int curSpotViewNum);
     int findNextNonWorkedLocatorDownList(int curSpotViewNum);
+    int getViewPortStartYCoordOnScene();
+    int getViewPortEndYCoordOnScene();
 };
 
 #endif // BANDMAPVIEW_H
