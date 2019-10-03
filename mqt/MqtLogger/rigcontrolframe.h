@@ -24,6 +24,7 @@
 #include "RPCCommandConstants.h"
 #include "rigmemcommondata.h"
 #include "radiodetails.h"
+#include "checkoperatingfreq.h"
 
 namespace Ui {
     class RigControlFrame;
@@ -279,6 +280,12 @@ private:
 
     TuneMemoryButton *curTuneButton = nullptr;
 
+    CheckOperatingFreq* operatingFreq;
+    bool operatingFreqPlanOk;
+
+    QPalette *freqDisplayPalette;
+    bool legalFreq = true;
+
     void sendModeToRadio(QString);
     void freqLineEditBkgnd(bool status);
     void freqLineEditFrameColour(bool status);
@@ -325,6 +332,9 @@ private:
     void transVertIndicatorOn();
     void transVertIndicatorOff();
 
+    bool isFreqLegal(const double freq, const QString band, const QString mode);
+    bool checkFreqIsLegal(const double freq, const QString mode);
+    void setFreqTextLegalColour(const QString freq, QString mode);
 };
 
 
