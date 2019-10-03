@@ -42,6 +42,7 @@ BaseContestLog::BaseContestLog( )
   scoreMode.setValue( PPKM );
   powerWatts.setValue( true );
   MGMContestRules.setValue(false);
+  bandPointsMultiplier.setValue(1);
 
    int nc = MultLists::getMultLists() ->getCtryListSize();
    countryWorked =QSharedPointer<int>( new int[ nc ]);
@@ -122,6 +123,8 @@ void BaseContestLog::clearDirty()
    bonusType.clearDirty();
    MGMContestRules.clearDirty();
 
+   bandPointsMultiplier.clearDirty();
+
    powerWatts.clearDirty();
    scoreMode.clearDirty();
    DTGStart.clearDirty();
@@ -159,6 +162,8 @@ void BaseContestLog::setDirty()
    usesBonus.setDirty();
    bonusType.setDirty();
    MGMContestRules.setDirty();
+
+   bandPointsMultiplier.setDirty();
 
    powerWatts.setDirty();
    scoreMode.setDirty();
@@ -1053,6 +1058,8 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "RSTField", RSTMandatoryField);
       mt->getStructArgMemberValue( "serialField", serialMandatoryField);
       mt->getStructArgMemberValue( "locatorField", locatorMandatoryField);
+
+      mt->getStructArgMemberValue( "bandPointsMultiplier", bandPointsMultiplier);
 
       mt->getStructArgMemberValue( "UKACBonus", usesBonus );
       mt->getStructArgMemberValue("BonusType", bonusType);
