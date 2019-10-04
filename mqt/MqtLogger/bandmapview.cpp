@@ -145,13 +145,9 @@ void BandmapView::zoomUpdated(bool dir)
 
 void BandmapView::on_vertScrollBandChanged(int value)
 {
-    qDebug() << "point A" << bandmapGraphicsView->mapToScene( QPoint(0, 0) );
-    qDebug() << "point B" << bandmapGraphicsView->mapToScene( QPoint(
-            bandmapGraphicsView->viewport()->width(),
-            bandmapGraphicsView->viewport()->height() ));
-    qDebug() << "start y " << getViewPortStartYCoordOnScene();
-    qDebug() << "end y " << getViewPortEndYCoordOnScene();
-    qDebug() << "int value" << value;
+    Q_UNUSED(value)
+    //dial->setViewPortStartEndFreq(getViewPortStartYCoordOnScene(), getViewPortEndYCoordOnScene(), contestBandFlow);
+    bandmapUpdate();
 }
 
 
@@ -637,7 +633,6 @@ void BandmapView::setBandFreqLimits(double flow, double fhigh)
     contestBandFHigh = fhigh;
     fullBandHeight = dial->getFullBandHeight(flow, fhigh);
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
-    curViewPortStartFreq = dial->getViewPortStartFreq(250, contestBandFlow);
 
 }
 

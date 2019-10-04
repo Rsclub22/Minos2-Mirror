@@ -21,6 +21,10 @@ BandmapFreqDial::BandmapFreqDial(int _width, int _height):
     zoomLevel(dialData::MAX_ZOOM_LEVEL),
     dialHeight(_height),
     dialWidth(_width),
+    scaleStartFreq(0),
+    scaleEndFreq(0),
+    scaleStartYCoord(0),
+    scaleEndYCoord(0),
     cursorColour(Qt::red)
 {
     changeBoundingRect(dialHeight, dialWidth);
@@ -190,8 +194,8 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
         dialFreqList.clear();
     }
 
-    dialHeight = scaleHeight;
-    qDebug() << "drawscale height " << dialHeight;
+    //dialHeight = scaleHeight;
+    dialHeight = scaleEndYCoord;
 
     int _fontHeight = getFontHeight();
     if (_fontHeight != fontHeight)
@@ -203,7 +207,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     {
         freqTextWidth = newFreqTextWidth;
         dialWidth = newFreqTextWidth + dialData::additionalWidth;
-        changeBoundingRect(dialHeight, dialWidth);
+        changeBoundingRect(scaleEndYCoord, dialWidth);
     }
 
 /*
@@ -231,7 +235,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     trace(QString("bandmapFreqDial: scale endFreq = %1").arg(scaleEndFreq));
 
 
-    QRect scaleRec(0,0, dialWidth, dialHeight);
+    QRect scaleRec(0,scaleStartYCoord, dialWidth, dialHeight);
     QBrush scaleBackGndBrush(Qt::lightGray, Qt::SolidPattern);
 
     QPen scalePen(Qt::black);
@@ -240,11 +244,11 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
 
     painter->fillRect(scaleRec, scaleBackGndBrush);
 
-    QRect freqSelRec(dialWidth - FREQ_SEL_WIDTH,0, FREQ_SEL_WIDTH, dialHeight);
+    QRect freqSelRec(dialWidth - FREQ_SEL_WIDTH, scaleStartYCoord, FREQ_SEL_WIDTH, dialHeight);
     QBrush freqSelBackGndBrush(Qt::gray, Qt::SolidPattern);
     painter->fillRect(freqSelRec, freqSelBackGndBrush);
 
-    painter->drawLine(QPoint(dialWidth,0 + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, dialHeight));
+    painter->drawLine(QPoint(dialWidth, scaleStartYCoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, dialHeight));
 
     QPen markerPen(Qt::blue);
     markerPen.setWidth(1);
@@ -255,13 +259,24 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     int markCount = 0;
     qint32 markFreq = scaleStartFreq;
 
-    DialFreqText* dft = nullptr;
+    DialFreqText* dft = nullptr;  //save freq text info to allow click select freq
+
 
     if (dialData::minorMarker[zoomLevel] == 0)
     {
-
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        trace(QString("********* start ********************"));
+        for (int ycoord = scaleStartYCoord; ycoord < scaleEndYCoord; ycoord += markStep)
         {
+
+            trace(QString("dialHeight %1").arg(dialHeight));
+            trace(QString("viewport start f %1").arg(scaleStartFreq));
+            trace(QString("viewport end f %1").arg(scaleEndFreq));
+            trace(QString("scaleStartYCoord %1").arg(scaleStartYCoord));
+            trace(QString("scaleEndYCoord %1").arg(scaleEndYCoord));
+            trace(QString("ycoord %1").arg(ycoord));
+            trace(QString("markFreq %1").arg(markFreq));
+
+
             painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
             QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
             dft = new DialFreqText(textPos, markFreq);
@@ -276,12 +291,12 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
                 markFreq += 50;
             }
         }
-
+        trace(QString("********* end ********************"));
     }
     else if (dialData::minorMarker[zoomLevel] == 1)
     {
 
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        for (int ycoord = scaleStartYCoord; ycoord < scaleEndYCoord; ycoord += markStep)
         {
 
             if (markCount == 0 || markCount % 5 == 0)
@@ -305,7 +320,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     }
     else if (dialData::minorMarker[zoomLevel] == 2)
     {
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        for (int ycoord = scaleStartYCoord; ycoord < scaleEndYCoord; ycoord += markStep)
         {
 
             if (markCount == 0 || markCount % 10 == 0)
@@ -330,7 +345,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     }
     else if (dialData::minorMarker[zoomLevel] == 3)
     {
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        for (int ycoord = scaleStartYCoord; ycoord < scaleEndYCoord; ycoord += markStep)
         {
 
             if (markCount == 0 || markCount % 2 == 0)
@@ -360,8 +375,10 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
 
 void BandmapFreqDial::setViewPortStartEndFreq(int startPos, int endPos, double contestBandFlow)
 {
-    scaleStartFreq = static_cast<qint32>(getViewPortStartFreq(startPos, contestBandFlow));
-    scaleEndFreq = static_cast<qint32>(getViewPortStartFreq(endPos, contestBandFlow));
+    scaleStartYCoord = startPos;
+    scaleEndYCoord = endPos;
+    scaleStartFreq = static_cast<qint32>(getViewPortFreq(startPos, contestBandFlow)) / 1000;
+    scaleEndFreq = static_cast<qint32>(getViewPortFreq(endPos, contestBandFlow)) / 1000;
 
 }
 
@@ -460,7 +477,7 @@ int BandmapFreqDial::getFullBandHeight(double flow, double fhigh)
 
 }
 
-qint64 BandmapFreqDial::getViewPortStartFreq(int startPos, double contestBandFlow)
+qint64 BandmapFreqDial::getViewPortFreq(int startPos, double contestBandFlow)
 {
     qint64 offSetF = startPos / dialData::khzPixelStep[zoomLevel] * 1000;
     return static_cast<qint64>(contestBandFlow) + offSetF;

@@ -119,7 +119,7 @@ public:
     int getFullBandHeight(double flow, double fhigh);
 
 
-    qint64 getViewPortStartFreq(int startPos, double contestBandFlow);
+    qint64 getViewPortFreq(int startPos, double contestBandFlow);
 
     void setViewPortStartEndFreq(int startPos, int endPos, double contestBandFlow);
 
@@ -148,6 +148,9 @@ private:
     qint32 scaleEndFreq = 0;
     qint32 currentFreqInt32 = 0;
     qint64 currentFreqInt64 = 0;
+
+    int scaleStartYCoord;
+    int scaleEndYCoord;
 
 
 
