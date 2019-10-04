@@ -59,7 +59,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     TContestApp::getContestApp(); // initialise all the infrastructure
 
     // make the tab control fill the window
-    ui->centralWidget->layout()->setContentsMargins(0,0,0,0);;
+    ui->centralWidget->layout()->setContentsMargins(0,0,0,0);
 
     setWindowTitle("Minos Contest Logger");
 
@@ -143,7 +143,7 @@ bool TLogContainer::show(int argc, char *argv[])
        {
           conarg = argv[1];
        }
-       preloadLists();;
+       preloadLists();
        preloadFiles( conarg );
        enableActions();
 
@@ -323,10 +323,10 @@ void TLogContainer::setupMenus()
     ui->menuFile->addSeparator();
     OptionsAction = newAction("Options...", ui->menuFile, SLOT(OptionsActionExecute()));
 #ifdef Q_OS_WIN
-    ExitClearAction = newAction("E&xit MinosQt and Clear registry", ui->menuFile, SLOT(ExitClearActionExecute()));
+    ExitClearAction = newAction("E&xit Minos Contest Logger and Clear registry", ui->menuFile, SLOT(ExitClearActionExecute()));
 #endif
     ui->menuFile->addSeparator();
-    ExitAction = newAction("E&xit MinosQt", ui->menuFile, SLOT(ExitActionExecute()));
+    ExitAction = newAction("E&xit Minos Contest Logger", ui->menuFile, SLOT(ExitActionExecute()));
 // end of file menu
 
     GoToSerialAction = newAction("&Go To Contact Serial...", ui->menuSearch, SLOT(GoToSerialActionExecute()));
