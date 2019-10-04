@@ -607,6 +607,25 @@ int BandmapView::getBandmapFrameWidth()
 void BandmapView::setFreq(double f, bool legalFreq)
 {
     curFreq = f;
+    qint32 freqInt32 = static_cast<qint32>(f / 1000);
+    int viewportYStart = bandmapGraphicsView->verticalScrollBar()->value();
+    qDebug() << "freqInt32 " << freqInt32;
+    qDebug() << "dial start f " << dial->getScaleStartFreq();
+    qDebug() << "dial end f" << dial->getScaleEndFreq();
+    qDebug() << "YcoordStart " << viewportYStart;
+
+    if (freqInt32 > dial->getScaleEndFreq())
+    {
+        // tuning up, move viewport
+
+        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart + 50);
+    }
+    else if (freqInt32 < dial->getScaleStartFreq())
+    {
+        // tuning down, move viewport
+        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart - 50);
+    }
+
     dial->setCurFreq(f);
     if (legalFreq)
     {

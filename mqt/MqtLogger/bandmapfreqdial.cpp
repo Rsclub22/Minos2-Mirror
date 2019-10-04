@@ -264,18 +264,9 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
 
     if (dialData::minorMarker[zoomLevel] == 0)
     {
-        trace(QString("********* start ********************"));
+
         for (int ycoord = scaleStartYCoord; ycoord < scaleEndYCoord; ycoord += markStep)
         {
-
-            trace(QString("dialHeight %1").arg(dialHeight));
-            trace(QString("viewport start f %1").arg(scaleStartFreq));
-            trace(QString("viewport end f %1").arg(scaleEndFreq));
-            trace(QString("scaleStartYCoord %1").arg(scaleStartYCoord));
-            trace(QString("scaleEndYCoord %1").arg(scaleEndYCoord));
-            trace(QString("ycoord %1").arg(ycoord));
-            trace(QString("markFreq %1").arg(markFreq));
-
 
             painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
             QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
@@ -291,7 +282,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
                 markFreq += 50;
             }
         }
-        trace(QString("********* end ********************"));
+
     }
     else if (dialData::minorMarker[zoomLevel] == 1)
     {
@@ -449,6 +440,7 @@ QString BandmapFreqDial::convertFreqDialDisplay(qint32 freq)
 }
 
 
+
 int BandmapFreqDial::getYCoordOnDial(qint64 frequency)
 {
     qint32 fmaj = static_cast<qint32>(frequency/1000);
@@ -457,6 +449,8 @@ int BandmapFreqDial::getYCoordOnDial(qint64 frequency)
     return (offsetFreq * dialData::khzPixelStep[zoomLevel]) + (fmin/dialData::hzPixelStep[zoomLevel]);
 
 }
+
+
 
 QString BandmapFreqDial::getFreqFromYCoordOnDial(int y)
 {
@@ -486,8 +480,7 @@ qint64 BandmapFreqDial::getViewPortFreq(int startPos, double contestBandFlow)
 void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
 {
 
-
-    int cursorY = getYCoordOnDial(frequency);
+    int cursorY = getYCoordOnDial(frequency) + scaleStartYCoord;
     trace(QString("bandmapFreqDial: cursor Freq = %1").arg(frequency));
     trace(QString("bandmapFreqDial: cursor Freq y coord = %1").arg(cursorY));
 
