@@ -3,7 +3,7 @@ C:
 setlocal
 
 set QtTools=C:\Qt\Tools\mingw730_32\bin
-set QtKit="C:\Qt\5.12.4\mingw73_32\bin"
+set QtKit="C:\Qt\5.12.5\mingw73_32\bin"
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Tools\Licenses"
 
@@ -83,9 +83,9 @@ xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Cluster .\Configuration\Clust
 cd Configuration
 
 call powershell.exe "& {Invoke-WebRequest http://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests17.xml -Outfile vhfcontests17.xml}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests18.xml -Outfile vhfcontests18.xml}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests19.xml -Outfile vhfcontests19.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests20.xml -Outfile vhfcontests20.xml}"
 
 
 cd ../Bin
@@ -106,7 +106,7 @@ mkdir Installer
 
 xcopy /E /F /Y %MROOT%\mqt\Installer .\Installer
 
-C:\"Program Files (x86)\Inno Setup 5\ISCC.exe" Installer\Minos2Install.iss
+C:\"Program Files (x86)\Inno Setup 6\ISCC.exe" Installer\Minos2Install.iss
 IF %ERRORLEVEL% == 0 goto reset
   echo Inno Setup failed; please fix errors and rebuild
 
