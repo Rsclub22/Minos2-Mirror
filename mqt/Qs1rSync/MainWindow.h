@@ -34,8 +34,14 @@ private slots:
     void onReadyRead();
 
     void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
-    void on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
 
+    void on_noTrack_clicked();
+
+    void on_trackRig_clicked();
+
+    void on_trackQS1R_clicked();
+
+    void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
 private:
     Ui::MainWindow *ui;
     RigCache rigCache;
