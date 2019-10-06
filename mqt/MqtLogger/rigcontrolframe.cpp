@@ -1197,29 +1197,18 @@ void RigControlFrame::setRadioList()
 {
     if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
+        listOfRadios = LogContainer->sendDM->rigs();
 
+        ui->radioNameSel->clear();
+        ui->radioNameSel->addItem("");
+        ui->radioNameSel->addItems(listOfRadios);
 
-        // test if rigcontrol has restarted
-        // radioNameSel already has list of radios, it is rigcontrol restart
         if  (ui->radioNameSel->count() > 0 && !launchRadioSelectTimer->isActive())
         {
             trace(QString("setRadioList: rigControl restart? reconnecting"));
             launchRadioSelectCount = 5;     // wait five seconds
             launchRadioSelectTimer->start(1000);
         }
-
-
-        listOfRadios = LogContainer->sendDM->rigs();
-
-        ui->radioNameSel->clear();
-        ui->radioNameSel->addItem("");
-        ui->radioNameSel->addItems(listOfRadios);
-        if (radioName != "")
-        {
-            ui->radioNameSel->setCurrentText(radioName);
-        }
-
-
     }
 }
 
