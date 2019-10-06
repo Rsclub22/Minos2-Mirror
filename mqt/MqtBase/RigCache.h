@@ -33,6 +33,7 @@ public:
         return rigList.count();
     }
     void setStateString(const AnalysePubSubNotify & an);
+    void setStateDisconnected(const AnalysePubSubNotify & an);
     QString getDetailsString(const PubSubName &name) const;
     void setDetailsString(const AnalysePubSubNotify & an);
 
