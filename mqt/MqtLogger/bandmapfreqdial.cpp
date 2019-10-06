@@ -465,9 +465,10 @@ QString BandmapFreqDial::getFreqFromYCoordOnDial(int y)
 
 int BandmapFreqDial::getFullBandHeight(double flow, double fhigh)
 {
-    qint64 bandRange = static_cast<qint32>(fhigh - flow);
-    qint64 bandRangeKhz = bandRange / 1000;
-    return static_cast<int>(bandRangeKhz  * dialData::khzPixelStep[zoomLevel]);
+    qint32 bandRange = static_cast<qint32>(fhigh - flow);
+    qint32 bandRangeKhz = bandRange / 1000;
+    int bandHeight = static_cast<int>(bandRangeKhz  * dialData::khzStep[zoomLevel] * dialData::khzPixelStep[zoomLevel]);
+    return bandHeight;
 
 }
 
