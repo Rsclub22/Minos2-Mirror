@@ -1259,6 +1259,15 @@ void RigControlFrame::setRadioState(QString s)
         if (s == RIG_STATUS_CONNECTED)
         {
             radioConnected = true;
+            int index = ui->radioNameSel->findText(radioName, Qt::MatchFixedString);
+            if (index >= 0)
+            {
+                ui->radioNameSel->setCurrentIndex(index);
+            }
+            else
+            {
+                trace(QString("setRadioName: Can't find %1 in radioNameSel").arg(radioName));
+            }
 
         }
         else if (s == RIG_STATUS_DISCONNECTED)
