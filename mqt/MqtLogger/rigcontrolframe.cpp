@@ -1214,12 +1214,10 @@ void RigControlFrame::setRadioList()
         ui->radioNameSel->clear();
         ui->radioNameSel->addItem("");
         ui->radioNameSel->addItems(listOfRadios);
-
-        setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
-//        if (radioName != "")
-//        {
-//            ui->radioNameSel->setCurrentText(radioName);
-//        }
+        if (radioName != "")
+        {
+            ui->radioNameSel->setCurrentText(radioName);
+        }
 
 
     }
