@@ -700,6 +700,35 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 }
             }
         }
+        else if (an.getState() == psRevoked)
+        {
+            // on far end close,
+            // all published cats/values get revoked
+            // StationCategory goes to psNotConnected
+//            e.g.
+//           14:21:59.563 RX Minos:PubSub:ClientNotify id 91 from Shack :
+//                        Server<'Stone'> Publisher<'RigControl@Stone'>
+//                        Category<'RigState'>
+//                        Key<'Stone/RigControl/rigctl'>
+//                        Value<''> State<1>
+
+//            rotStates[name].setStatus(ROT_STATUS_DISCONNECTED);
+
+            if ( an.getCategory() == rpcConstants::rigStateCategory)
+            {
+                rigCache.setStateDisconnected(an);
+            }
+            else if ( an.getCategory() == rpcConstants::rotatorStateCategory )
+            {
+                rotatorCache.setStateDisconnected(an);
+            }
+        }
+        else if (an.getState() == psNotConnected)
+        {
+            // when far end closes,
+            // all published cats/values get revoked
+            // StationCategory goes to psNotConnected
+        }
 
         notifyRigDetailChanges();
         notifyRigChanges();

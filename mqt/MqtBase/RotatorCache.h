@@ -44,6 +44,7 @@ public:
     void setDetailString(const AnalysePubSubNotify &an);
 
     void setStateString(const AnalysePubSubNotify & an);
+    void setStateDisconnected(const AnalysePubSubNotify & an);
 
     QString getPresetsString(const PubSubName &name) const;
     void setPresetsString(const AnalysePubSubNotify & an);

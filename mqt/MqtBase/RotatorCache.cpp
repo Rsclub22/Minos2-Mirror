@@ -126,6 +126,12 @@ void RotatorCache::setStateString(const AnalysePubSubNotify &an)
     AntennaState &as = rotStates[PubSubName(an)];
     as.unpack(an.getValue());
 }
+
+void RotatorCache::setStateDisconnected(const AnalysePubSubNotify &an)
+{
+    AntennaState &as = rotStates[PubSubName(an)];
+    as.setStatus(ROT_STATUS_DISCONNECTED);
+}
 QString RotatorCache::getPresetsString(const PubSubName &name) const
 {
     PubSubName n(name);

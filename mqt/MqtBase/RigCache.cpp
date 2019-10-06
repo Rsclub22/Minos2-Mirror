@@ -28,6 +28,12 @@ void RigCache::setStateString(const AnalysePubSubNotify & an)
     RigState &as = rigStates[PubSubName(an)];
     as.unpack(an.getValue());
 }
+void RigCache::setStateDisconnected(const AnalysePubSubNotify & an)
+{
+    RigState &as = rigStates[PubSubName(an)];
+    as.setStatus(RIG_STATUS_DISCONNECTED);
+}
+
 QString RigCache::getDetailsString(const PubSubName &name) const
 {
     QString val = rigDetails[name].pack();
