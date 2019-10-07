@@ -380,6 +380,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
                 contestBandFlow = bi.flow;
                 contestBandFHigh = bi.fhigh;
                 bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
+                bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
                 break;
             }
         }

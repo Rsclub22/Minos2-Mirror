@@ -123,6 +123,7 @@ public:
 
     void setViewPortStartEndFreq(int startPos, int endPos, double contestBandFlow);
 
+
 signals:
     //void dialupdated();
     void zoomUpdated(bool);

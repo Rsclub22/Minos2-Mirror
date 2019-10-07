@@ -18,7 +18,8 @@
 
 
 BandmapFreqDial::BandmapFreqDial(int _width, int _height):
-    zoomLevel(dialData::MAX_ZOOM_LEVEL),
+    //zoomLevel(dialData::MAX_ZOOM_LEVEL),
+    zoomLevel(dialData::MIN_ZOOM_LEVEL),
     dialHeight(_height),
     dialWidth(_width),
     scaleStartFreq(0),
@@ -63,6 +64,7 @@ void BandmapFreqDial::changeBoundingRect(int height, int width)
     boundingRect();
 
 }
+
 
 
 
@@ -467,13 +469,14 @@ int BandmapFreqDial::getFullBandHeight(double flow, double fhigh)
 {
     qint32 bandRange = static_cast<qint32>(fhigh - flow);
     qint32 bandRangeKhz = bandRange / 1000;
-    int bandHeight = static_cast<int>(bandRangeKhz  * dialData::khzStep[zoomLevel] * dialData::khzPixelStep[zoomLevel]);
+    int bandHeight = static_cast<int>(bandRangeKhz * dialData::khzPixelStep[zoomLevel]);
     return bandHeight;
 
 }
 
 qint64 BandmapFreqDial::getViewPortFreq(int startPos, double contestBandFlow)
 {
+    trace(QString("getViewFreq: zoomlevel = %1").arg(zoomLevel));
     qint64 offSetF = startPos / dialData::khzPixelStep[zoomLevel] * 1000;
     return static_cast<qint64>(contestBandFlow) + offSetF;
 }

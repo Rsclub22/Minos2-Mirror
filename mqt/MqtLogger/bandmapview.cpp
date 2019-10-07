@@ -42,8 +42,8 @@ BandmapView::BandmapView(QWidget *parent) :
 
 
 
-    horizontalScrollBar()->setRange(0, 0);
-    verticalScrollBar()->setRange(0, 0);
+    //horizontalScrollBar()->setRange(0, 0);
+    //verticalScrollBar()->setRange(0, 0);
 
 
 }
@@ -128,6 +128,7 @@ void BandmapView::zoomUpdated(bool dir)
         {
             ++zoomLevel;
             dial->setZoomLevel(zoomLevel);
+            setBandmapHeight(contestBandFlow, contestBandFHigh);
             bandmapUpdate();
         }
     }
@@ -137,6 +138,7 @@ void BandmapView::zoomUpdated(bool dir)
         {
             --zoomLevel;
             dial->setZoomLevel(zoomLevel);
+            setBandmapHeight(contestBandFlow, contestBandFHigh);
             bandmapUpdate();
         }
     }
@@ -145,9 +147,21 @@ void BandmapView::zoomUpdated(bool dir)
 
 void BandmapView::on_vertScrollBandChanged(int value)
 {
-    Q_UNUSED(value)
-    //dial->setViewPortStartEndFreq(getViewPortStartYCoordOnScene(), getViewPortEndYCoordOnScene(), contestBandFlow);
-    bandmapUpdate();
+    //Q_UNUSED(value)
+
+        dial->setViewPortStartEndFreq(value, getViewPortEndYCoordOnScene(), contestBandFlow);
+        trace(QString("scroll changed: value = %1").arg(value));
+        trace(QString("scroll changed: end Y coord = %1").arg(getViewPortEndYCoordOnScene()));
+        trace(QString("scroll changed: rect top left x = %1, y = %2").arg(bandmapGraphicsView->rect().topLeft().x()).arg(bandmapGraphicsView->rect().topLeft().y()));
+        trace(QString("scroll changed: rect bottom right x = %1, y = %2").arg(bandmapGraphicsView->rect().bottomRight().x()).arg(bandmapGraphicsView->rect().bottomRight().y()));
+        trace(QString("scroll changed: sceneRect top left x = %1, y = %2").arg(bandmapScene->sceneRect().topLeft().x()).arg(bandmapScene->sceneRect().topLeft().y()));
+        trace(QString("scroll changed: sceneRect bottom right x = %1, y = %2").arg(bandmapScene->sceneRect().bottomRight().x()).arg(bandmapScene->sceneRect().bottomRight().y()));
+        trace(QString("scroll changed: viewport h = %1").arg(bandmapGraphicsView->viewport()->height()));
+        trace(QString("scroll changed: fullheigt = %1").arg(fullBandHeight));
+        bandmapUpdate();
+
+
+
 }
 
 
@@ -353,7 +367,7 @@ void BandmapView::bandmapUpdate()
 {
 
     //dial->calcStartEndFreq(dial->getCurFreqInt32());
-    dial->setViewPortStartEndFreq(getViewPortStartYCoordOnScene(), getViewPortEndYCoordOnScene() ,contestBandFlow);
+    //dial->setViewPortStartEndFreq(getViewPortStartYCoordOnScene(), getViewPortEndYCoordOnScene() ,contestBandFlow);
     dial->update();
     drawBandMapSpots();
 
@@ -650,6 +664,10 @@ void BandmapView::setBandFreqLimits(double flow, double fhigh)
 {
     contestBandFlow = flow;
     contestBandFHigh = fhigh;
+}
+
+void BandmapView::setBandmapHeight(double flow, double fhigh)
+{
     fullBandHeight = dial->getFullBandHeight(flow, fhigh);
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
 
