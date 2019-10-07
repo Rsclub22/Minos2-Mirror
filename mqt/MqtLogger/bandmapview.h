@@ -128,7 +128,7 @@ private:
     int zoomLevel;
 
     double contestBandFlow;
-    double contestBandFHigh;
+    double contestBandFhigh;
     qint64 curViewPortStartFreq;
 
     int idealWidth;

@@ -25,7 +25,7 @@ BandmapView::BandmapView(QWidget *parent) :
     curFreq(0.0),
     zoomLevel(0),
     contestBandFlow(0),
-    contestBandFHigh(0),
+    contestBandFhigh(0),
     idealWidth(0),
     idealHeight(0),
     fullBandHeight(4000),
@@ -128,7 +128,8 @@ void BandmapView::zoomUpdated(bool dir)
         {
             ++zoomLevel;
             dial->setZoomLevel(zoomLevel);
-            setBandmapHeight(contestBandFlow, contestBandFHigh);
+            setBandmapHeight(contestBandFlow, contestBandFhigh);
+            dial->update();
             bandmapUpdate();
         }
     }
@@ -138,7 +139,8 @@ void BandmapView::zoomUpdated(bool dir)
         {
             --zoomLevel;
             dial->setZoomLevel(zoomLevel);
-            setBandmapHeight(contestBandFlow, contestBandFHigh);
+            setBandmapHeight(contestBandFlow, contestBandFhigh);
+            dial->update();
             bandmapUpdate();
         }
     }
@@ -368,7 +370,7 @@ void BandmapView::bandmapUpdate()
 
     //dial->calcStartEndFreq(dial->getCurFreqInt32());
     //dial->setViewPortStartEndFreq(getViewPortStartYCoordOnScene(), getViewPortEndYCoordOnScene() ,contestBandFlow);
-    dial->update();
+    //dial->update();
     drawBandMapSpots();
 
 }
@@ -663,12 +665,14 @@ void BandmapView::bandmapSelectFreq(int y)
 void BandmapView::setBandFreqLimits(double flow, double fhigh)
 {
     contestBandFlow = flow;
-    contestBandFHigh = fhigh;
+    contestBandFhigh = fhigh;
+    dial->setContestBandLimits(contestBandFlow, contestBandFhigh);
 }
 
 void BandmapView::setBandmapHeight(double flow, double fhigh)
 {
     fullBandHeight = dial->getFullBandHeight(flow, fhigh);
+    dial->changeBoundingRect(fullBandHeight, dial->getCurWidth());
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
 
 }

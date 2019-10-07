@@ -124,6 +124,7 @@ public:
     void setViewPortStartEndFreq(int startPos, int endPos, double contestBandFlow);
 
 
+    void setContestBandLimits(double flow, double fhigh);
 signals:
     //void dialupdated();
     void zoomUpdated(bool);
@@ -152,6 +153,10 @@ private:
 
     int scaleStartYCoord;
     int scaleEndYCoord;
+    int fullBandHeight;
+
+    qint32 contestBandFlow;
+    qint32 contestBandFhigh;
 
 
 
