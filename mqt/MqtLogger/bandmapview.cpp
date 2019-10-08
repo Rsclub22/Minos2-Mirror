@@ -51,8 +51,8 @@ BandmapView::BandmapView(QWidget *parent) :
 BandmapView::~BandmapView()
 {
     clearListOfMarkers();
-    delete dial;
     delete bandmapScene;
+    //delete dial;
 }
 
 
@@ -154,15 +154,19 @@ void BandmapView::on_vertScrollBandChanged(int value)
         dial->setViewPortStartEndFreq(value, getViewPortEndYCoordOnScene(), contestBandFlow);
         trace(QString("scroll changed: value = %1").arg(value));
         trace(QString("scroll changed: end Y coord = %1").arg(getViewPortEndYCoordOnScene()));
-        trace(QString("scroll changed: rect top left x = %1, y = %2").arg(bandmapGraphicsView->rect().topLeft().x()).arg(bandmapGraphicsView->rect().topLeft().y()));
-        trace(QString("scroll changed: rect bottom right x = %1, y = %2").arg(bandmapGraphicsView->rect().bottomRight().x()).arg(bandmapGraphicsView->rect().bottomRight().y()));
-        trace(QString("scroll changed: sceneRect top left x = %1, y = %2").arg(bandmapScene->sceneRect().topLeft().x()).arg(bandmapScene->sceneRect().topLeft().y()));
-        trace(QString("scroll changed: sceneRect bottom right x = %1, y = %2").arg(bandmapScene->sceneRect().bottomRight().x()).arg(bandmapScene->sceneRect().bottomRight().y()));
-        trace(QString("scroll changed: viewport h = %1").arg(bandmapGraphicsView->viewport()->height()));
-        trace(QString("scroll changed: fullheigt = %1").arg(fullBandHeight));
         bandmapUpdate();
 
 
+
+}
+
+void BandmapView::makeCursorVisibleInBandmap()
+{
+
+    int freqYCoord = dial->getYCoordOnDial(static_cast<qint64>(curFreq));
+    int scrollStart = freqYCoord - (bandmapGraphicsView->viewport()->height() / 2);
+    trace(QString("bandmapView: makeCursorVisible coord = %1").arg(scrollStart));
+    bandmapGraphicsView->verticalScrollBar()->setValue(scrollStart);
 
 }
 

@@ -224,7 +224,7 @@ private:
     QString curRotBearing;
     bool rotatorConnected;
 
-    bool mouseInFreqDisplay;
+
 
     int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);
@@ -273,6 +273,7 @@ private slots:
      void on_unMarkSpotActionSelected();
      void addLogSpotToBandmapTable(LoggerSpots *spot);
      void mouseTimerCheckNewSpots();
+     void on_FreqDisplayClicked();
 };
 
 

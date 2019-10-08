@@ -70,6 +70,8 @@ public:
 
     void setBandFreqLimits(double flow, double fhigh);
     void setBandmapHeight(double flow, double fhigh);
+    void makeCursorVisibleInBandmap();
+
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 

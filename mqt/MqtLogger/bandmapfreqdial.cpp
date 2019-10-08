@@ -488,9 +488,16 @@ void BandmapFreqDial::setContestBandLimits(double flow, double fhigh)
 
 qint64 BandmapFreqDial::getViewPortFreq(int startPos, double contestBandFlow)
 {
-    trace(QString("getViewFreq: zoomlevel = %1").arg(zoomLevel));
-    qint64 offSetF = startPos / dialData::khzPixelStep[zoomLevel] * 1000;
-    return static_cast<qint64>(contestBandFlow) + offSetF;
+    qint64 calcFreq = 0;
+    if (zoomLevel >= 0 && zoomLevel <= dialData::MAX_ZOOM_LEVEL)
+    {
+        trace(QString("getViewFreq: zoomlevel = %1").arg(zoomLevel));
+        qint64 offSetF = startPos / dialData::khzPixelStep[zoomLevel] * 1000;
+        calcFreq = static_cast<qint64>(contestBandFlow) + offSetF;
+    }
+
+    return calcFreq;
+
 }
 
 void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)

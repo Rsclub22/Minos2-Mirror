@@ -77,8 +77,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     purgeSpotFlag(false),
     holdUpdateFlag(false),
     timeToLive(0),
-    rotatorConnected(false),
-    mouseInFreqDisplay(false)
+    rotatorConnected(false)
+
 {
 
     ui->setupUi(this);
@@ -164,6 +164,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect(filterSetup, SIGNAL(filtersChanged(bool)), this, SLOT(on_FitersChanged(bool)));
 
+    connect(this, SIGNAL(freqDisplayClicked()), this, SLOT(on_FreqDisplayClicked()));
+
 
     this->setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
@@ -212,10 +214,11 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 BandmapClientFrame::~BandmapClientFrame()
 {
     delete ui;
-    delete bandmapView;
+
     delete bandmapDataModel;
     delete actionInObject;
     delete freqDisplayPalette;
+    //delete bandmapView;
 
 }
 
@@ -277,6 +280,11 @@ void BandmapClientFrame::on_unMarkSpotActionSelected()
         bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
+}
+
+void BandmapClientFrame::on_FreqDisplayClicked()
+{
+    bandmapView->makeCursorVisibleInBandmap();
 }
 
 void BandmapClientFrame::on_freqActionSelected()
@@ -1164,23 +1172,10 @@ bool BandmapClientFrame::event(QEvent *event)
 bool BandmapClientFrame::eventFilter(QObject *obj, QEvent *event)
 {
 
-   if (obj == ui->freqDisplay)
-   {
-       if (event->type() == QEvent::FocusIn)
-       {
-          mouseInFreqDisplay = true;
-       }
-       else if (event->type() == QEvent::FocusOut)
-       {
-          mouseInFreqDisplay = false;
-       }
-   }
-   else if (event->type() == QEvent::MouseButtonPress && mouseInFreqDisplay)
+   if (obj == ui->freqDisplay && event->type() == QEvent::MouseButtonPress)
    {
        emit freqDisplayClicked();
    }
-
-
 
    return false;
 }
