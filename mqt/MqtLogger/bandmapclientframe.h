@@ -147,6 +147,11 @@ public:
 
 
     void setClusterServerLoaded(bool loaded);
+
+signals:
+
+    void freqDisplayClicked();
+
 private:
 
     Ui::BandmapClientFrame *ui;
@@ -219,6 +224,8 @@ private:
     QString curRotBearing;
     bool rotatorConnected;
 
+    bool mouseInFreqDisplay;
+
     int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);
     void handleDxSpots(QVector<QString> &spotQueue);
@@ -230,8 +237,8 @@ private:
     bool checkSpotInTable(QStringList &sl);
     void sendFreqToRig(QString freq);
 
-
     bool event(QEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
     int findRowToInsert(QString f);
     bool isFreqLegal(const double freq, const QString band, const QString mode);
 

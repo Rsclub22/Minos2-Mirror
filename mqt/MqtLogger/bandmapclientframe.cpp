@@ -77,7 +77,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     purgeSpotFlag(false),
     holdUpdateFlag(false),
     timeToLive(0),
-    rotatorConnected(false)
+    rotatorConnected(false),
+    mouseInFreqDisplay(false)
 {
 
     ui->setupUi(this);
@@ -196,6 +197,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
         operatingFreqPlanOk = false;
     }
 
+    ui->freqDisplay->installEventFilter(this);
     freqDisplayPalette = new QPalette();       // to change colour when tuning
 
 
@@ -1132,29 +1134,56 @@ void BandmapClientFrame::filterButtonSelected()
 
 }
 
+
 bool BandmapClientFrame::event(QEvent *event)
 {
-    if (event->type() == QEvent::Enter)
-    {
-        setHoldUpdateFlag(true);
-    }
-    else if (event->type() == QEvent::Leave)
-    {
-        mouseInFrameTimer->stop();
-        if (!spotQueue.isEmpty())
-        {
-            checkNewBandMapSpots();
-        }
-        setHoldUpdateFlag(false);
-
-    }
 
 
-    return QWidget::event(event);
+   if (event->type() == QEvent::Enter)
+   {
+       setHoldUpdateFlag(true);
+   }
+   else if (event->type() == QEvent::Leave)
+   {
+       mouseInFrameTimer->stop();
+       if (!spotQueue.isEmpty())
+       {
+           checkNewBandMapSpots();
+       }
+       setHoldUpdateFlag(false);
+
+   }
+
+   return QWidget::event(event);
 }
 
 
 
+
+
+bool BandmapClientFrame::eventFilter(QObject *obj, QEvent *event)
+{
+
+   if (obj == ui->freqDisplay)
+   {
+       if (event->type() == QEvent::FocusIn)
+       {
+          mouseInFreqDisplay = true;
+       }
+       else if (event->type() == QEvent::FocusOut)
+       {
+          mouseInFreqDisplay = false;
+       }
+   }
+   else if (event->type() == QEvent::MouseButtonPress && mouseInFreqDisplay)
+   {
+       emit freqDisplayClicked();
+   }
+
+
+
+   return false;
+}
 
 
 void BandmapClientFrame::setHoldUpdateFlag(bool state)

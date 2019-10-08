@@ -827,8 +827,6 @@ void RigControlFrame::on_ContestPageChanged()
 
 bool RigControlFrame::eventFilter(QObject *obj, QEvent *event)
 {
-   Q_UNUSED(obj)
-
    if (obj == ui->freqInput)
    {
        if (event->type() == QEvent::FocusIn)

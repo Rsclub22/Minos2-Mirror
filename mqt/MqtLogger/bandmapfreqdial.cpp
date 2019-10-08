@@ -278,7 +278,6 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
             painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
             QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
             dft = new DialFreqText(textPos, markFreq);
-            trace(QString("mark freq = %1").arg(convertFreqDialDisplay(markFreq)));
             dialFreqList.append(dft);
             painter->drawText(textPos,  Qt::AlignLeft, convertFreqDialDisplay(markFreq));
             if (dialData::khzStep[zoomLevel] == 1)
@@ -303,7 +302,6 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
                 painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
                 QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
                 dft = new DialFreqText(textPos, markFreq);
-                trace(QString("mark freq = %1").arg(convertFreqDialDisplay(markFreq)));
                 dialFreqList.append(dft);
                 painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
                 markFreq += 5;
@@ -328,7 +326,6 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
                 painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
                 QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
                 dft = new DialFreqText(textPos, markFreq);
-                trace(QString("mark freq = %1").arg(convertFreqDialDisplay(markFreq)));
                 dialFreqList.append(dft);
                 painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
                 markFreq += 10;
@@ -354,7 +351,6 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
                 painter->drawLine(QPoint(dialData::fMajMrkXStart, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialData::fMajMrkXEnd, ycoord + dialData::DIAL_VERT_OFFSET));
                 QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
                 dft = new DialFreqText(textPos, markFreq);
-                trace(QString("mark freq = %1").arg(convertFreqDialDisplay(markFreq)));
                 dialFreqList.append(dft);
                 painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
                 markFreq += 50;
@@ -456,7 +452,8 @@ int BandmapFreqDial::getYCoordOnDial(qint64 frequency)
 {
     qint32 fmaj = static_cast<qint32>(frequency/1000);
     qint32 fmin = static_cast<qint32>(frequency - (fmaj*1000));
-    qint32 offsetFreq = fmaj - scaleStartFreq;
+    //qint32 offsetFreq = fmaj - scaleStartFreq;
+    qint32 offsetFreq = fmaj - contestBandFlow;
     return (offsetFreq * dialData::khzPixelStep[zoomLevel]) + (fmin/dialData::hzPixelStep[zoomLevel]);
 
 }
@@ -499,7 +496,8 @@ qint64 BandmapFreqDial::getViewPortFreq(int startPos, double contestBandFlow)
 void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
 {
 
-    int cursorY = getYCoordOnDial(frequency) + scaleStartYCoord;
+    //int cursorY = getYCoordOnDial(frequency) + scaleStartYCoord;
+    int cursorY = getYCoordOnDial(frequency);
     trace(QString("bandmapFreqDial: cursor Freq = %1").arg(frequency));
     trace(QString("bandmapFreqDial: cursor Freq y coord = %1").arg(cursorY));
 
@@ -524,6 +522,8 @@ void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
 
 
 }
+
+
 
 void BandmapFreqDial::wheelEvent(QGraphicsSceneWheelEvent *event)
 {

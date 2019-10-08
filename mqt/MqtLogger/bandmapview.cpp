@@ -370,7 +370,7 @@ void BandmapView::bandmapUpdate()
 
     //dial->calcStartEndFreq(dial->getCurFreqInt32());
     //dial->setViewPortStartEndFreq(getViewPortStartYCoordOnScene(), getViewPortEndYCoordOnScene() ,contestBandFlow);
-    //dial->update();
+    dial->update();
     drawBandMapSpots();
 
 }
