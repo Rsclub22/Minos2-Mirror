@@ -62,9 +62,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapGraphicsView->setScene(bandmapScene);
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
     bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
-    //bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
     bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    //bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), bandmapGraphicsView->height());
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
 
     dial = new BandmapFreqDial(70, bandmapGraphicsView->viewport()->height());
@@ -121,6 +119,10 @@ void BandmapView::zoomUpdated(bool dir)
 {
     zoomLevel = dial->getZoomLevel();
 
+    qint32 scaleStartFreq = static_cast<qint32>(dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow)) / 1000;
+    qint32 scaleEndFreq = static_cast<qint32>(dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow)) / 1000;
+    qint64 midScaleFreq = static_cast<qint64>((scaleStartFreq + ((scaleEndFreq - scaleStartFreq) / 2)) * 1000);
+
     if (dir)
     {
 
@@ -131,6 +133,7 @@ void BandmapView::zoomUpdated(bool dir)
             setBandmapHeight(contestBandFlow, contestBandFhigh);
             dial->update();
             bandmapUpdate();
+            scrollBandmapCenterToFreq(midScaleFreq);
         }
     }
     else
@@ -142,6 +145,7 @@ void BandmapView::zoomUpdated(bool dir)
             setBandmapHeight(contestBandFlow, contestBandFhigh);
             dial->update();
             bandmapUpdate();
+            scrollBandmapCenterToFreq(midScaleFreq);
         }
     }
 
@@ -171,6 +175,19 @@ void BandmapView::makeCursorVisibleInBandmap()
 }
 
 
+void BandmapView::scrollBandmapCenterToFreq(qint64 freq)
+{
+
+    trace(QString("centerToFreq: freq = %1").arg(freq));
+
+    int freqYCoord = dial->getYCoordOnDial(freq);
+    int scrollStart = freqYCoord - (bandmapGraphicsView->viewport()->height() / 2);
+    trace(QString("centerToFreq: fYCoord = %1").arg(freqYCoord));
+    trace(QString("bandmapView: scrollBandmapCenterToFreq coord = %1").arg(scrollStart));
+
+    bandmapGraphicsView->verticalScrollBar()->setValue(scrollStart);
+}
+
 int BandmapView::getViewPortStartYCoordOnScene()
 {
     return bandmapGraphicsView->mapToScene(QPoint(0,0)).toPoint().y();
@@ -182,6 +199,9 @@ int BandmapView::getViewPortEndYCoordOnScene()
                                                 bandmapGraphicsView->viewport()->width(),
                                                 bandmapGraphicsView->viewport()->height() )).toPoint().y();
 }
+
+
+
 
 void BandmapView::on_nextSpot(bool nextFreqUpDown, bool nextMult)
 {

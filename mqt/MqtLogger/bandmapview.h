@@ -72,6 +72,7 @@ public:
     void setBandmapHeight(double flow, double fhigh);
     void makeCursorVisibleInBandmap();
 
+    void scrollBandmapCenterToFreq(qint64 freq);
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 

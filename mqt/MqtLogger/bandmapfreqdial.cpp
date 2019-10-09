@@ -18,8 +18,7 @@
 
 
 BandmapFreqDial::BandmapFreqDial(int _width, int _height):
-    //zoomLevel(dialData::MAX_ZOOM_LEVEL),
-    zoomLevel(dialData::MIN_ZOOM_LEVEL),
+    zoomLevel(dialData::MAX_ZOOM_LEVEL),
     dialHeight(_height),
     dialWidth(_width),
     scaleStartFreq(0),

@@ -174,7 +174,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     loadVhfAndUpBands(bands);
 
     modeBandPlan = new checkModeAgainstFreq();
-    if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
+    if (modeBandPlan->loadFile(MODE_BANDPLAN_FILE))
     {
         trace(QString("Bandmap Client: Mode frequency bandplan loaded OK"));
         modeBandPlanOk = true;
@@ -188,7 +188,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     }
 
     operatingFreq = new CheckOperatingFreq();
-    if (operatingFreq->loadFile("./Configuration/operating_frequencies.json"))
+    if (operatingFreq->loadFile(OPERATING_FREQ_FILE))
     {
         trace(QString("Bandmap Client: Operating frequency bandplan loaded OK"));
         operatingFreqPlanOk = true;
@@ -218,7 +218,7 @@ BandmapClientFrame::~BandmapClientFrame()
     delete bandmapDataModel;
     delete actionInObject;
     delete freqDisplayPalette;
-    //delete bandmapView;
+    bandmapView->deleteLater();
 
 }
 
@@ -377,23 +377,47 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 
-        BandList blist = BandList::getBandList();
-        BandInfo bi;
 
+        QString bandplanLimits = readBandmapFreqLimit(contestBandStr, contestModeStr);
 
-        for (int i = 0; i < blist.bandList.count(); i++)
+        if (bandplanLimits.isEmpty())
         {
-            bi = blist.bandList[i];
-            if (bi.uk == contestBandStr)
-            {
+            getBandLimitsFromBandListXML();
 
-                contestBandFlow = bi.flow;
-                contestBandFHigh = bi.fhigh;
-                bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
-                bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
-                break;
+
+        }
+        else
+        {
+            // use user bandplan limits ini file
+            QStringList bpl = bandplanLimits.split(',');
+            if (bpl.count() == 2)
+            {
+                bool okL;
+                bool okH;
+                double flow = bpl[0].trimmed().remove('.').toDouble(&okL);
+                double fhigh = bpl[1].trimmed().remove('.').toDouble(&okH);
+                if (okL && okH)
+                {
+                    contestBandFlow = flow * 1000;
+                    contestBandFHigh = fhigh * 1000;
+                    bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
+                    bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
+                }
+                else
+                {
+                    getBandLimitsFromBandListXML();
+                }
+
+            }
+            else
+            {
+                getBandLimitsFromBandListXML();
             }
         }
+
+
+
+
 
         if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
         {
@@ -429,7 +453,31 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
 }
 
+void BandmapClientFrame::getBandLimitsFromBandListXML()
+{
 
+    // use band list file
+    BandList blist = BandList::getBandList();
+    BandInfo bi;
+
+
+    for (int i = 0; i < blist.bandList.count(); i++)
+    {
+        bi = blist.bandList[i];
+        if (bi.uk == contestBandStr)
+        {
+
+            contestBandFlow = bi.flow;
+            contestBandFHigh = bi.fhigh;
+            bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
+            bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
+            break;
+        }
+    }
+
+
+
+}
 
 
 int BandmapClientFrame::getBandOffSet(QString contestBandStr)
@@ -1356,4 +1404,31 @@ void BandmapClientFrame::setRotatorConnected(bool connected)
 void BandmapClientFrame::updateZoom(bool dir)
 {
     bandmapView->updateZoom(dir);
+}
+
+
+QString BandmapClientFrame::readBandmapFreqLimit(QString band, QString mode)
+{
+    QString limitFreqs = "";
+    QFile limitFile(BANDPLAN_FREQ_LIMITS_FILE);
+    if (limitFile.exists())
+    {
+        QString fileName = BANDPLAN_FREQ_LIMITS_FILE;
+        QSettings settings(fileName, QSettings::IniFormat);
+        QStringList limitBands = settings.childGroups();
+        if (limitBands.contains(band))
+        {
+            if (mode.isEmpty())
+            {
+                mode = "USB";
+            }
+            settings.beginGroup(band);
+            limitFreqs = settings.value(mode, "").toString();
+            settings.endGroup();
+        }
+
+    }
+
+    return limitFreqs;
+
 }

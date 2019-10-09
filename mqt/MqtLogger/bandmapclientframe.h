@@ -116,6 +116,9 @@ private:
     bandmapSpotType::SPOT_TYPE spotType;
 };
 
+const QString MODE_BANDPLAN_FILE = "./Configuration/mode_bandplan.json";
+const QString OPERATING_FREQ_FILE = "./Configuration/operating_frequencies.json";
+const QString BANDPLAN_FREQ_LIMITS_FILE = "./Configuration/bandmap_limits.ini";
 
 
 class BandmapClientFrame : public QFrame
@@ -242,6 +245,8 @@ private:
     int findRowToInsert(QString f);
     bool isFreqLegal(const double freq, const QString band, const QString mode);
 
+    QString readBandmapFreqLimit(QString band, QString mode);
+    void getBandLimitsFromBandListXML();
 protected:
 
 
