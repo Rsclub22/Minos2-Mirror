@@ -360,6 +360,7 @@ void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
 {
 
     QAbstractItemView::dataChanged(topLeft, bottomRight, roles);
+    bandmapUpdate();
 
 }
 
@@ -652,6 +653,8 @@ void BandmapView::setFreq(double f, bool legalFreq)
 {
     curFreq = f;
     qint32 freqInt32 = static_cast<qint32>(f / 1000);
+    dial->setViewPortStartEndFreq(bandmapGraphicsView->verticalScrollBar()->value(), getViewPortEndYCoordOnScene(), contestBandFlow);
+
     int viewportYStart = bandmapGraphicsView->verticalScrollBar()->value();
     qDebug() << "freqInt32 " << freqInt32;
     qDebug() << "dial start f " << dial->getScaleStartFreq();
