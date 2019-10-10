@@ -450,9 +450,11 @@ void BandmapView::mouseDoubleClicked(QPoint p)
 
 void BandmapView::on_bandmap_customContextMenuRequested( const QPoint& p)
 {
-    if (p.x() >= dial->getCurWidth() && p.x() <= bandmapGraphicsView->width())
+    QPoint mapP = bandmapGraphicsView->mapToScene(p).toPoint();
+
+    if (mapP.x() >= dial->getCurWidth() && mapP.x() <= bandmapGraphicsView->width())
     {
-        emit contextMenuSelected(p);
+        emit contextMenuSelected(mapP);
     }
 }
 

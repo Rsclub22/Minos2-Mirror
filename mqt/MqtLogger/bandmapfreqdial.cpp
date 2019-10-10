@@ -460,7 +460,6 @@ QString BandmapFreqDial::getFreqFromYCoordOnDial(int y)
     qint32 fmaj = dialPos / dialData::khzPixelStep[zoomLevel]  * 1000;
     qint32 fmin = dialPos % dialData::khzPixelStep[zoomLevel] * dialData::hzPixelStep[zoomLevel];
     qint32 ftot = fmaj + fmin;
-    //qint64 freq = (scaleStartFreq * 1000) + ftot;
     qint64 freq = (contestBandFlow * 1000) + ftot;
     return QString::number(freq);
 }
