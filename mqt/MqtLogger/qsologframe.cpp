@@ -29,6 +29,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , rotatorLoaded(false)
     , radioLoaded(false)
     , bandMapLoaded(false)
+    , logDataFromBandmap(false)
     , keyerLoaded(false)
     , radioConnected(false)
     , radioError(false)
@@ -851,6 +852,11 @@ void QSOLogFrame::on_QTHEdit_textChanged(const QString &/*arg1*/)
 void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
 {
     doGJVEditChange( ui->CallsignEdit );
+
+    if (logDataFromBandmap)
+    {
+        logDataFromBandmap = false;
+    }
 
     if (text.count() > 0)
     {
@@ -2347,10 +2353,15 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
    doGJVEditChange(ui->QTHEdit);
 }
 
-void QSOLogFrame::transferDetails(QString cs, const QString loc )
+void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool fromBandmap )
 {
     ui->CallsignEdit->setText(cs);
     ui->LocEdit->setText(loc);
+
+    if (fromBandmap)
+    {
+        logDataFromBandmap = true;
+    }
 
     valid( cmCheckValid ); // make sure all single and cross field
     // validation has been done
@@ -2851,11 +2862,7 @@ QString QSOLogFrame::getBearing()
 //-------------------------------------------------------------------
 
 
-//void QSOLogFrame::setIgnoreRunChkBoxState(int num, bool checked)
-//{
 
-//    ignoreRunState[num] = checked;
-//}
 
 void QSOLogFrame::setRunMemoryFreqUpdate(int num, QString freq)
 {
@@ -3108,17 +3115,26 @@ QString QSOLogFrame::getRunMemoryFreq(int memoryNumber)
 void QSOLogFrame::on_FreqChanged(QString f)
 {
 
-    qint64 dialFreq = f.toLongLong() / 1000;
-    qint64 callsignEnterFreq = callsignEnterTextFreq.toLongLong() / 1000;
-
-    if (callsignEnterFreq != 0)
+    if (!logDataFromBandmap)
     {
-        if (callsignEnterFreq != dialFreq)
+        qint64 dialFreq = f.toLongLong() / 1000;
+        qint64 callsignEnterFreq = callsignEnterTextFreq.toLongLong() / 1000;
+
+        if (callsignEnterFreq != 0)
         {
-            callsignEnterTextFreq = "00000000000";
-            on_bandmapSaveFreqPbClicked();
-            ui->CallsignEdit->clear();
+            if (callsignEnterFreq != dialFreq)
+            {
+                callsignEnterTextFreq = "00000000000";
+                on_bandmapSaveFreqPbClicked();
+                ui->CallsignEdit->clear();
+                ui->LocEdit->clear();
+            }
         }
     }
+    else
+    {
+        logDataFromBandmap = false;
+    }
+
 
 }

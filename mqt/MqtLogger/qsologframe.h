@@ -69,7 +69,7 @@ public:
 
     void transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct );
     void transferDetails(const ListContact *lct, const ContactList *matct );
-    void transferDetails(QString cs, const QString loc );
+    void transferDetails(QString cs, const QString loc, const bool fromBandmap );
 
     void setFirstUnfilledButtonEnabled(bool);
     void logTabChanged();
@@ -191,6 +191,7 @@ private:
     bool bandMapLoaded;
     bool isBandMapLoaded();
     void setBandMapControlsVisible(bool visible);
+    bool logDataFromBandmap;
 
     bool keyerLoaded;
     bool isKeyerLoaded();

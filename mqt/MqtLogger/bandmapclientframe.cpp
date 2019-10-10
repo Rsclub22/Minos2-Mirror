@@ -330,6 +330,7 @@ void BandmapClientFrame::logActionSelected()
     spotData.freq = selectedSpotData.dxFreqStr;
     spotData.locator = selectedSpotData.dxLocator;
     spotData.bearing = selectedSpotData.dxBrg.toInt();
+    spotData.fromBandmap = true;
 
     MinosLoggerEvents::SendSpotToLog(spotData);
 }
