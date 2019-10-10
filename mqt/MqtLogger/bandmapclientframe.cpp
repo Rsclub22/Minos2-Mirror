@@ -1413,11 +1413,13 @@ QString BandmapClientFrame::readBandmapFreqLimit(QString band, QString mode)
     QFile limitFile(BANDPLAN_FREQ_LIMITS_FILE);
     if (limitFile.exists())
     {
+        trace(QString("bandmap: bandmapLimit file found - %").arg(BANDPLAN_FREQ_LIMITS_FILE));
         QString fileName = BANDPLAN_FREQ_LIMITS_FILE;
         QSettings settings(fileName, QSettings::IniFormat);
         QStringList limitBands = settings.childGroups();
         if (limitBands.contains(band))
         {
+            trace(QString("bandmap: bandmapLimit band = %1, mode = %2").arg(band).arg(mode));
             if (mode.isEmpty())
             {
                 mode = "USB";

@@ -402,20 +402,22 @@ void BandmapView::bandmapUpdate()
 
 void BandmapView::leftMouseButtonPressed(QPoint p)
 {
-    qint32 freq = dial->checkSelectedFreqTextOnDial(p);
+    QPoint mappedP = bandmapGraphicsView->mapToScene(p).toPoint();
+
+    qint32 freq = dial->checkSelectedFreqTextOnDial(mappedP);
 
     if (freq > 0)
     {
         sendFreqToRig(QString::number(freq));
     }
-    else if (p.x() <= dial->getCurWidth() && p.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
+    else if (mappedP.x() <= dial->getCurWidth() && mappedP.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
     {
         // select the freq
-        bandmapSelectFreq(p.y());
+        bandmapSelectFreq(mappedP.y());
     }
     else
     {
-        bandmapSelectSpot(p);
+        bandmapSelectSpot(mappedP);
     }
 }
 
