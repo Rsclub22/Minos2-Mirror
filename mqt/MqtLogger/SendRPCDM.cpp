@@ -227,7 +227,6 @@ void TSendDM::changeRotatorSelectionTo(const PubSubName &name, const QString &uu
     {
         sendRotatorSelection(name, uuid);
     }
-    //emit RotatorList(rotators().join(":"));
 }
 void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
 {
@@ -259,9 +258,6 @@ void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &mode, 
         sendRigSelection(selected, "", "");
     }
     sendRigSelection(name, mode, uuid);
-
-    //emit setRadioList(rigs().join(":"));    // need to CALL this?
-
 }
 void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const QString &uuid)
 {
@@ -483,21 +479,7 @@ void TSendDM::notifyRigDetailChanges()
         }
         selDetail.clearDirty();
     }
-/*
-    if (!radioLoaded )
-    {
-        if (rigCache.getRigDetailCount() == rigCache.getRigListCount())
-        {
-            radioLoaded = true;
-            emit setRadioLoaded();      // this should load the radio if available
-        }
-    }
-*/
 }
-
-
-
-
 
 void TSendDM::notifyRigChanges()
 {
@@ -557,35 +539,6 @@ void TSendDM::notifyRigChanges()
                     }
                     selState.clearDirty();
                 }
-
-       /*
-                if (selDetailsUuid == frameUuid)
-                {
-                    trace("Rig details distribution for " + selDetailsUuid);
-                    if (selDetail.bandList().isDirty())
-                    {
-                        trace("SendRPC Rig set bandList " + selDetail.bandList().getValue());
-                        tslf->on_SetBandList(selDetail.bandList().getValue());
-                    }
-                    if (selDetail.transverterStatus().isDirty())
-                    {
-                        trace(QString("SendRPC Rig set transverter status ") + (selDetail.transverterStatus().getValue() ? " True" : " False"));
-                        tslf->on_SetRadioTxVertState( selDetail.transverterStatus().getValue() );
-                    }
-                    if (selDetail.volumeStatus().isDirty())
-                    {
-                        trace(QString("SendRPC Rig set volume status ") + (selDetail.volumeStatus().getValue() ? " True" : " False"));
-                        tslf->on_SetRadioVolumeState( selDetail.volumeStatus().getValue() );
-                    }
-                    if (selDetail.ritEnableStatus().isDirty())
-                    {
-                        trace(QString("SendRPC Rig set ritEnable status ") + (selDetail.ritEnableStatus().getValue() ? " True" : " False"));
-                        tslf->on_SetRitEnableState( selDetail.ritEnableStatus().getValue());
-                    }
-                    selDetail.clearDirty();
-
-                }
-       */
             }
         }
     }
@@ -758,12 +711,6 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 emit RotatorLoaded();
                 emit RotatorList();
             }
-            else if ( an.getCategory() == rpcConstants::LocalStationCategory)
-            {
-                //localServerName = an.getKey();
-//                if (!servers.contains(an.getKey()))
-//                    RPCPubSub::subscribe( rpcConstants::StationCategory );  //want ALL keys - but do it once we know who WE are!
-            }
             else if ( an.getCategory() == rpcConstants::StationCategory)
             {
                 QString server = an.getKey();
@@ -783,47 +730,64 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 }
             }
         }
+        else if (an.getState() == psRevoked)
+        {
+            // on far end close,
+            // all published cats/values get revoked
+            // StationCategory goes to psNotConnected
+//            e.g.
+//           14:21:59.563 RX Minos:PubSub:ClientNotify id 91 from Shack :
+//                        Server<'Stone'> Publisher<'RigControl@Stone'>
+//                        Category<'RigState'>
+//                        Key<'Stone/RigControl/rigctl'>
+//                        Value<''> State<1>
+
+//            rotStates[name].setStatus(ROT_STATUS_DISCONNECTED);
+
+            if ( an.getCategory() == rpcConstants::rigStateCategory)
+            {
+                rigCache.setStateDisconnected(an);
+            }
+            else if ( an.getCategory() == rpcConstants::rotatorStateCategory )
+            {
+                rotatorCache.setStateDisconnected(an);
+            }
+        }
+        else if (an.getState() == psNotConnected)
+        {
+            // when far end closes,
+            // all published cats/values get revoked
+            // StationCategory goes to psNotConnected
+        }
 
         notifyRigDetailChanges();
         notifyRigChanges();
         notifyRotChanges();
 
-        QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-        for (int i = 0; i < frames.size(); i++)
+        if ( an.getCategory() == rpcConstants::KeyerCategory && an.getKey() == rpcConstants::keyerReport )
         {
-            //TSingleLogFrame *tslf = frames[i];
-
-            //if (an.getPublisherProgram() == tslf->keyerServerConnectable.remoteAppName && an.getPublisherServer() == tslf->keyerServerConnectable.serverName)
-            {
-                if ( an.getCategory() == rpcConstants::KeyerCategory && an.getKey() == rpcConstants::keyerReport )
-                {
-                    if (keyerApp.isEmpty())
-                        keyerApp = PubSubName(an);
-                    emit setKeyerLoaded();
-                    LogContainer->setCaption( an.getValue() );
-                    trace( "KeyerReport " + an.getValue() );
-                    break;
-                }
-            }
-
-
-            if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterReport )
-            {
-                if (clusterApp.isEmpty())
-                {
-                    clusterApp = PubSubName(an);
-                    emit setClusterServerLoaded();
-                }
-
-                emit setClusterState(an.getValue());
-                break;
-            }
-            else if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterTXSpotEnableState )
-            {
-                emit setClusterTXSpotEnableState(an.getValue());
-            }
-
+            if (keyerApp.isEmpty())
+                keyerApp = PubSubName(an);
+            emit setKeyerLoaded();
+            LogContainer->setCaption( an.getValue() );
+            trace( "KeyerReport " + an.getValue() );
         }
+
+        if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterReport )
+        {
+            if (clusterApp.isEmpty())
+            {
+                clusterApp = PubSubName(an);
+                emit setClusterServerLoaded();
+            }
+
+            emit setClusterState(an.getValue());
+        }
+        else if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterTXSpotEnableState )
+        {
+            emit setClusterTXSpotEnableState(an.getValue());
+        }
+
     }
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)

@@ -26,7 +26,9 @@ void fillPortsInfo(QComboBox* comportSel)
         QStringList list;
         description = info.description();
         manufacturer = info.manufacturer();
+#if QT_VERSION > QT_VERSION_CHECK(5, 3, 0)
         serialNumber = info.serialNumber();
+#endif
         list << info.portName()
              << (!description.isEmpty() ? description : blankString)
              << (!manufacturer.isEmpty() ? manufacturer : blankString)

@@ -85,6 +85,8 @@ private:
 
     MinosItem<bool> MGMContestRules;
 
+    MinosItem<int> bandPointsMultiplier;
+
     MinosItem<bool> powerWatts;
     MinosItem<int> scoreMode;
     MinosStringItem<QString> DTGStart;

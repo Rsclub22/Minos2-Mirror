@@ -14,7 +14,7 @@
 #define SENDSPOTDATAMODEL_H
 
 #include <QAbstractTableModel>
-#include "sentSpotData.h"
+#include "sentSpotdata.h"
 #include "clustercommon.h"
 
 const int sentSpotColCount = 7;

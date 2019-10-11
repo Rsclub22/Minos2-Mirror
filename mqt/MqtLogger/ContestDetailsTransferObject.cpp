@@ -133,6 +133,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
 
     MGMContestRules = ct->MGMContestRules;
 
+    bandPointsMultiplier = ct->bandPointsMultiplier;
+
     powerWatts = ct->powerWatts;
     scoreMode = ct->scoreMode;
     DTGStart = ct->DTGStart;
@@ -235,6 +237,8 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->bonusType = bonusType;
 
     ct->MGMContestRules = MGMContestRules;
+
+    ct->bandPointsMultiplier = bandPointsMultiplier;
 
     ct->powerWatts = powerWatts;
     ct->scoreMode = scoreMode;

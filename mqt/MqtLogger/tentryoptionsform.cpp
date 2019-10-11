@@ -33,6 +33,7 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
         "Date Range (Calculated)",
         "Contest Name",
         "Band",
+        "Band Points Multiplier",
         "Entrant name (or group)",
         "Station QTH 1",
         "Station QTH 2",
@@ -84,6 +85,10 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
     ui->OptionsScrollBox->setItem(r++, 0, dateRangeItem);
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->name.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->band.getValue()));
+    int bpm = ct->bandPointsMultiplier.getValue();
+    if (bpm == 0)
+        bpm = 1;
+    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(QString::number(bpm)));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->entrant.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->sqth1.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->sqth2.getValue()));
@@ -166,6 +171,10 @@ void TEntryOptionsForm::on_CloseButton_clicked()
 
     ct->name.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->band.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
+    int bpm = ui->OptionsScrollBox->item(r++, 0)->text().toInt();
+    if (bpm == 0)
+        bpm = 1;
+    ct->bandPointsMultiplier.setValue(bpm);
     ct->entrant.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->sqth1.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->sqth2.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );

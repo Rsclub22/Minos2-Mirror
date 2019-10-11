@@ -607,6 +607,8 @@ void RotControlFrame::setRotatorState(const QString &s)
                    ui->rotConnectState->setText(lastConnectStat);
                    rotError = false;
                    rotConnected = true;
+                   setRotatorAntennaName(ct->antennaName.getValue().toString()); // make sure the name appears
+
                    emit rotatorConnected(true);     // tell bandmap
                }
                else if (lastConnectStat == ROT_STATUS_DISCONNECTED)

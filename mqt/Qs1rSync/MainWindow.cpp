@@ -225,6 +225,11 @@ void MainWindow::onReadyRead()
             }
             double f = (fCentre + ftf);
             lastF = "fCentre " + QString::number(fCentre) + "\r\n tf " + QString::number(ftf) + " freq " + QLocale::system().toString(f, 'f', 0);
+            if (ui->trackQS1R->isChecked())
+            {
+                on_transfer21Button_clicked();
+            }
+
         }
     }
 }
@@ -312,6 +317,11 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 selState.clearDirty();
                 ui->QF1Label->setText(convertFreqToStr(freq));
 
+                if (ui->trackRig->isChecked())
+                {
+                    on_transfer12Button_clicked();
+                }
+
             }
             if (selDetail.isDirty())
             {
@@ -340,3 +350,19 @@ void MainWindow::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const 
 }
 //---------------------------------------------------------------------------
 
+void MainWindow::on_noTrack_clicked()
+{
+    // do nothing
+}
+
+void MainWindow::on_trackRig_clicked()
+{
+    // set QS1R to rig
+    on_transfer12Button_clicked();
+}
+
+void MainWindow::on_trackQS1R_clicked()
+{
+    // set rig to QS1R
+    on_transfer21Button_clicked();
+}

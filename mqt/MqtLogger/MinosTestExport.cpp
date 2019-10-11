@@ -121,6 +121,8 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->bonusType.addIfDirty( st, "BonusType", dirty );
    ct->MGMContestRules.addIfDirty(st, "MGMContestRules", dirty);
 
+   ct->bandPointsMultiplier.addIfDirty(st, "bandPointsMultiplier", dirty);
+
    ct->screenLayout.addIfDirty(st, "ScreenLayout", dirty);
 
    if ( dirty )
