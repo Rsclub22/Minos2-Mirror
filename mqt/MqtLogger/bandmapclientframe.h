@@ -218,7 +218,7 @@ private:
     QAction* memoryAction;
     QAction* clearSpotAction;
     BandmapData selectedSpotData;
-    int selectedSpotRowNum;
+    int selectedSpotDataRowNum;
 
     bool purgeSpotFlag;
     bool holdUpdateFlag;

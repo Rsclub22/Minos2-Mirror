@@ -235,9 +235,9 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
     int selectedSpotViewRowNum = bandmapView->isClickInRegionOfSpot(pos);
     if (selectedSpotViewRowNum != -1)
     {
-        bandmapView->getSpotData(selectedSpotRowNum, selectedSpotViewRowNum, selectedSpotData);
+        bandmapView->getSpotData(selectedSpotDataRowNum, selectedSpotViewRowNum, selectedSpotData);
         QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
-        spotsMenu->popup( globalPos );
+        spotsMenu->popup(globalPos);
 
     }
 
@@ -264,20 +264,20 @@ void BandmapClientFrame::on_FitersChanged(bool state)
 
 void BandmapClientFrame::on_markSpotActionSelected()
 {
-    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
-    if (spotType != bandmapSpotType::MARKED)
+    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    if (spotType == bandmapSpotType::CLUSTER)
     {
-        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::MARKED, BMP_DataStoredRole);
+        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER_MARKED, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
 }
 
 void BandmapClientFrame::on_unMarkSpotActionSelected()
 {
-    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
-    if (spotType == bandmapSpotType::MARKED)
+    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    if (spotType == bandmapSpotType::CLUSTER_MARKED)
     {
-        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
+        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
 }
@@ -356,7 +356,7 @@ void BandmapClientFrame::clearSpotActionSelected()
                                    QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::Yes)
     {
-        bandmapSpotProxyModel->removeRows(selectedSpotRowNum, 1);
+        bandmapSpotProxyModel->removeRows(selectedSpotDataRowNum, 1);
         bandmapView->bandmapUpdate();
     }
 }
