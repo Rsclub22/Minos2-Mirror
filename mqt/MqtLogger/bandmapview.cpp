@@ -1120,6 +1120,14 @@ QString BandmapView::assembleSpotMsg(int row)
     {
         markSym = HtmlFontColour(MARKED_SPOT_COLOUR) + "#" + HtmlFontColour(NOT_WORKED_COLOUR);
     }
+    else if (spotType == bandmapSpotType::CLUSTER)
+    {
+        markSym = HtmlFontColour(CLUSTER_SPOT_COLOUR) + "*" + HtmlFontColour(NOT_WORKED_COLOUR);
+    }
+    else if (spotType == bandmapSpotType::CLUSTER_MARKED)
+    {
+        markSym = HtmlFontColour(CLUSTER_SPOT_COLOUR) + "*" + HtmlFontColour(MARKED_SPOT_COLOUR) + "#" + HtmlFontColour(NOT_WORKED_COLOUR);
+    }
 
 
     QString msg = QString("%1%2  %3  %4  %5%6%7 %8 %9").arg(bLineStart).arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(bLineEnd).arg(markSym).arg(newSpotMsg);

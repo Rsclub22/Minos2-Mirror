@@ -136,6 +136,7 @@ const QColor SPOT_TO_MEMORY = Qt::blue;
 const QColor NO_SPOT_TO_MEMORY = Qt::black;
 const QColor NOT_WORKED_COLOUR = Qt::black;
 const QColor MARKED_SPOT_COLOUR = Qt::magenta;
+const QColor CLUSTER_SPOT_COLOUR = Qt::darkGreen;
 const QColor BANDMAP_NEW_COLOUR = Qt::blue;
 
 // Callsign Edit Shortcuts
