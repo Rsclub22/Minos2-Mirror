@@ -48,7 +48,7 @@ bool freqModeBandPlan::readFile(QString f)
     QJsonParseError err;
     QFile jf(f);
     QString s;
-    ModeFreqDetail mfl;
+    ModeFreqDetail<double> mfl;
 
 
     if (jf.open(QIODevice::ReadOnly))

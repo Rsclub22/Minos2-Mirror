@@ -417,6 +417,13 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         }
 
 
+        if (operatingFreqPlanOk)
+        {
+            // send operating freq to dial
+            bandmapView->setFreqOperatingInfo(contestBandStr, contestModeStr, operatingFreq, operatingFreqPlanOk);
+        }
+
+
 
 
 
@@ -724,10 +731,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
     {
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
+            bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
             if (spot->getCallsign().fullCall.getValue() == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString())
             {
-                if (static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt()) == bandmapSpotType::LOGGED
-                        && spot->getSpotType() == bandmapSpotType::SAVED)
+                if ((savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED || savedSpotType == bandmapSpotType::CLUSTER_MARKED) && spot->getSpotType() == bandmapSpotType::SAVED)
                 {
                     // we want to move the freq of the LOGGED spot
                     bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_STR_COL_NUM ), spot->getFreq() , BMP_DataStoredRole);

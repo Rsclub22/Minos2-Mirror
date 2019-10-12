@@ -28,7 +28,10 @@ BandmapFreqDial::BandmapFreqDial(int _width, int _height):
     fullBandHeight(2000),
     contestBandFlow(0),
     contestBandFhigh(0),
+    operatingFreq(nullptr),
+    operatingPlanOk(false),
     cursorColour(Qt::red)
+
 {
     changeBoundingRect(dialHeight, dialWidth);
 }
@@ -249,6 +252,50 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     painter->fillRect(freqSelRec, freqSelBackGndBrush);
 
     painter->drawLine(QPoint(dialWidth, 0 + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, dialHeight));
+
+    // draw non operating freqs
+
+    ModeFreqDetail<double> listOfFreqs;
+
+    if (operatingPlanOk)
+    {
+        int freqOk = operatingFreq->getFreqLimitsForDial(listOfFreqs, contestBandStr, contestModeStr);
+        if (freqOk == FREQ_OK)
+        {
+
+            QBrush noOperateFreqBackGndBrush(Qt::darkRed, Qt::SolidPattern);
+
+
+            for (int i = 0; i < listOfFreqs.count(); i++)
+            {
+                QList<double> freqs = listOfFreqs.freq[i];
+                if (freqs[1] > contestBandFhigh)
+                {
+                    freqs[1] = contestBandFhigh;
+                }
+
+                int x = dialWidth - NO_OP_FREQ_WIDTH;
+                int y = getYCoordOnDial(static_cast<qint64>(freqs[0] * 1000)) + dialData::DIAL_VERT_OFFSET;
+                int width = NO_OP_FREQ_WIDTH;
+                int height = getYCoordOnDial(static_cast<qint64>(freqs[1] * 1000)) - getYCoordOnDial(static_cast<qint64>(freqs[0] * 1000));
+                painter->fillRect(x, y, width, height, noOperateFreqBackGndBrush);
+            }
+
+        }
+        else if (freqOk == MODE_MISSING)
+        {
+            trace(QString("bandmapDial: operating freq Mode missing from file"));
+        }
+        else if (freqOk == BAND_MISSING)
+        {
+            trace(QString("bandmapDial: operating freq Band missing from file"));
+        }
+
+
+
+    }
+
+
 
     QPen markerPen(Qt::blue);
     markerPen.setWidth(1);
@@ -589,4 +636,17 @@ qint32 BandmapFreqDial::checkSelectedFreqTextOnDial(QPoint p)
     }
 
     return 0;
+}
+
+void BandmapFreqDial::setFreqOperatingInfo(const QString _contestBandStr, const QString _contestModeStr, CheckOperatingFreq *_operatingFreq, const bool _operatingPlanOk)
+{
+
+    if (_operatingPlanOk)
+    {
+        contestBandStr = _contestBandStr;
+        contestModeStr = _contestModeStr;
+        operatingFreq = _operatingFreq;
+        operatingPlanOk = _operatingPlanOk;
+    }
+
 }

@@ -73,6 +73,8 @@ public:
     void makeCursorVisibleInBandmap();
 
     void scrollBandmapCenterToFreq(qint64 freq);
+    void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
+
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 

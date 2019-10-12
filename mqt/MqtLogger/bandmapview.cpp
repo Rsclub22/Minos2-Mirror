@@ -1162,3 +1162,11 @@ QString BandmapView::assembleToolTip(int row, QString freq)
 }
 
 
+void BandmapView::setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk)
+{
+    if (operatingPlanOk)
+    {
+        dial->setFreqOperatingInfo(contestBandStr, contestModeStr, operatingFreq, operatingPlanOk);
+    }
+
+}
