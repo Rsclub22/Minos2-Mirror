@@ -255,7 +255,7 @@ bool SentSpotDataModel::setData(const QModelIndex & index, const QVariant & valu
 // NOTE! This needs modification of the for loop and rowData to trully support multiple rows!!
 bool SentSpotDataModel::insertRows(int row, int count, const QModelIndex &index)
 {
-    Q_UNUSED(index);
+    Q_UNUSED(index)
 
     beginInsertRows(QModelIndex(), row , row + count - 1);
     for (int i = 0; i < count; i++)

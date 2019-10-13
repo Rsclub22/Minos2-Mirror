@@ -4,7 +4,7 @@
 #include "freqmodebandplan.h"
 
 
-enum checkOperatingFreqError {NO_FILE, FREQ_OK, FREQ_NOT_OK, MODE_MISSING, BAND_MISSING};
+enum checkOperatingFreqError {NO_FILE, FREQ_OK, FREQ_NOT_OK, FREQ_NO_MATCH, MODE_MISSING, BAND_MISSING};
 
 
 class CheckOperatingFreq : public freqModeBandPlan

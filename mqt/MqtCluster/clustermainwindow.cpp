@@ -31,8 +31,8 @@ const QString RAW_DATA_TAB_TITLE = "Raw Data";
 
 #include <QDebug>
 
-//#define TXSPOT  // enable to actually send to cluster
-#define TEST_PLEASE_IGNORE // comment out to stop this in tx spot remarks
+#define TXSPOT  // enable to actually send to cluster
+//#define TEST_PLEASE_IGNORE // comment out to stop this in tx spot remarks
 
 ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -55,7 +55,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     trace(QString("AppName = %1").arg(appName));
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
-    Q_UNUSED(rpc);
+    Q_UNUSED(rpc)
 
     createCloseEvent();
 
@@ -1486,7 +1486,10 @@ void ClusterMainWindow::addSentSpotToDisplayQueue(bool spotStatus)
 
 QString ClusterMainWindow::assembleSpotForDXCluster(QString freq, QString call, QString loc)
 {
+#ifdef TEST_PLEASE_IGNORE
     bool testMsg = true;
+
+#endif
     sentComment = QString("%1< >%2").arg(setupCluster->getUserLocator()).arg(loc);
 
 
@@ -1820,7 +1823,7 @@ void ClusterMainWindow::handleStatusTimer()
     }
 
     // send status message if it has changed
-    else if (!status->text().isEmpty()  && clusterRpc->getServerListCount() > 0)
+    else if (!status->text().isEmpty() /* && clusterRpc->getServerListCount() > 0 */)
     {
         if (oldStatusMsg != status->text())
         {
