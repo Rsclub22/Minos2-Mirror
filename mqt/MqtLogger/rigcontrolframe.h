@@ -219,6 +219,7 @@ private slots:
     void clusterUpdateRigFreq(QString freq);
 
 
+    void freqStepComboChanged(const QString step);
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -255,6 +256,7 @@ private:
     bool radioError;
     bool freqEditOn;
     QString curFreq;
+    double curFStepButtonsFreq;
     QString curMode;
 
     bool ritEnable;
@@ -335,6 +337,8 @@ private:
     bool isFreqLegal(const double freq, const QString band, const QString mode);
     bool checkFreqIsLegal(const double freq, const QString mode);
     void setFreqTextLegalColour(const QString freq, QString mode);
+    void setFreqStepCombo(QString mode);
+    double getStepFreqFromComboText(const QString step);
 };
 
 

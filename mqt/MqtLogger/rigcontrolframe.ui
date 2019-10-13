@@ -131,12 +131,15 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
+           <widget class="QComboBox" name="freqStepCombo"/>
+          </item>
+          <item>
            <widget class="QToolButton" name="freqDown">
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
-             <string>- 5</string>
+             <string>-</string>
             </property>
            </widget>
           </item>
@@ -168,7 +171,7 @@
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
-             <string>+5</string>
+             <string>+</string>
             </property>
            </widget>
           </item>
