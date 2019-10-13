@@ -85,9 +85,9 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     ui->bandmapFrameTitle->setText("Bandmap");
 
-    int height = ui->bandmapGraphicsView->height();
-    int width = ui->bandmapGraphicsView->width();
-    qDebug() << "ui frame height = " << height << " ui frame width = " << width;
+    //int height = ui->bandmapGraphicsView->height();
+    //int width = ui->bandmapGraphicsView->width();
+    //qDebug() << "ui frame height = " << height << " ui frame width = " << width;
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
