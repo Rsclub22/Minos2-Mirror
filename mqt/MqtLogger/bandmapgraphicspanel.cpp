@@ -73,6 +73,14 @@ void BandmapGraphicsPanel::keyPressEvent(QKeyEvent *event)
     {
         emit nextSpot(false, false);
     }
+    else if (Key == Qt::Key_Up)
+    {
+        emit scrollMap(true);
+    }
+    else if (Key == Qt::Key_Down)
+    {
+        emit scrollMap(false);
+    }
 
     QWidget::keyPressEvent(event);
 

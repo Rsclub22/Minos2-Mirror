@@ -21,7 +21,7 @@
 const QChar DEG_SYMBOL = 0260; // octal value
 const int NO_SELECTED_ROWNUM = -1;
 
-
+const int KEY_SCROLL_STEP_SIZE = 50;
 
 
 class BandmapView : public QAbstractItemView
@@ -117,6 +117,7 @@ private slots:
     int findNextNonWorkedLocatorUpList(int curSpotViewNum);
     void on_vertScrollBandChanged(int);
 
+    void on_scrollMap(bool dir);
 private:
 
     QGraphicsScene *bandmapScene;

@@ -84,6 +84,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     connect(bandmapGraphicsView, SIGNAL(mouseDoubleClicked(QPoint)), this, SLOT(mouseDoubleClicked(QPoint)));
     connect(bandmapGraphicsView, SIGNAL(zoomMap(bool)), this, SLOT(zoomUpdated(bool)));
     connect(bandmapGraphicsView, SIGNAL(nextSpot(bool, bool)), this, SLOT(on_nextSpot(bool, bool)));
+    connect(bandmapGraphicsView, SIGNAL(scrollMap(bool)),this, SLOT(on_scrollMap(bool)));
 
     connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(on_vertScrollBandChanged(int)));
 
@@ -156,12 +157,35 @@ void BandmapView::on_vertScrollBandChanged(int value)
     //Q_UNUSED(value)
 
         dial->setViewPortStartEndFreq(value, getViewPortEndYCoordOnScene(), contestBandFlow);
+        trace(QString("Scroll changed: zoomlevel = %1").arg(zoomLevel));
         trace(QString("scroll changed: value = %1").arg(value));
         trace(QString("scroll changed: end Y coord = %1").arg(getViewPortEndYCoordOnScene()));
         bandmapUpdate();
+}
 
 
+void BandmapView::on_scrollMap(bool dir)
+{
+    int scrollValue = bandmapGraphicsView->verticalScrollBar()->value();
 
+    if (dir)
+    {
+       scrollValue -= KEY_SCROLL_STEP_SIZE;
+       if (scrollValue < bandmapGraphicsView->verticalScrollBar()->minimum())
+       {
+           scrollValue = bandmapGraphicsView->verticalScrollBar()->minimum();
+       }
+    }
+    else
+    {
+        scrollValue += KEY_SCROLL_STEP_SIZE;
+        if (scrollValue > bandmapGraphicsView->verticalScrollBar()->maximum())
+        {
+            scrollValue = bandmapGraphicsView->verticalScrollBar()->maximum();
+        }
+    }
+
+    bandmapGraphicsView->verticalScrollBar()->setValue(scrollValue);
 }
 
 void BandmapView::makeCursorVisibleInBandmap()
