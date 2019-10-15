@@ -16,6 +16,7 @@
 #include <QThread>
 #include "rotcontrol.h"
 #include <hamlib/rotator.h>
+#include "minosNetUtils.h"
 
 
 
@@ -143,7 +144,16 @@ int RotControl::init(srotParams &selectedAntenna)
     }
     else if (rig_port_e(selectedAntenna.portType) == RIG_PORT_NETWORK || rig_port_e(selectedAntenna.portType) == RIG_PORT_UDP_NETWORK)
     {
-        strncpy(my_rot->state.rotport.pathname, QString(selectedAntenna.networkAdd + ":" + selectedAntenna.networkPort).toLatin1().data(), FILPATHLEN);
+        QString netAdd;
+        if (selectedAntenna.networkAdd.isEmpty() || isHostLocal(selectedAntenna.networkAdd))
+        {
+            netAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
+        }
+        else
+        {
+            netAdd = selectedAntenna.networkAdd;
+        }
+        strncpy(my_rot->state.rotport.pathname, QString(netAdd + ":" + selectedAntenna.networkPort).toLatin1().data(), FILPATHLEN);
     }
     else if (rig_port_e(selectedAntenna.portType) == RIG_PORT_NONE)
     {

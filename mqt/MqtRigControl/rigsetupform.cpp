@@ -16,6 +16,7 @@
 #include "BandList.h"
 #include "addtransverterdialog.h"
 #include "rigutils.h"
+#include <QHostInfo>
 #include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -27,6 +28,10 @@
 
 
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
+
+
+
+
 
 
 RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
@@ -173,6 +178,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
                serialDataEntryVisible(false);
                networkDataEntryVisible(true);
                rigCtldNetworkVisible(false);
+               setRigctldCheckBoxVisible(false);
 
 
             }
@@ -516,7 +522,27 @@ int RigSetupForm::comportAvial(QString comport)
 void RigSetupForm::networkAddressSelected()
 {
 
-    processNetAddress(ui->networkAddBox, radioData->networkAdd);
+    QString savedAddress = radioData->networkAdd;
+    bool addressChanged = false;
+
+    bool addressOk = processNetAddress(ui->networkAddBox, savedAddress, addressChanged);
+
+    if (addressChanged)
+    {
+        if (addressOk)
+        {
+            radioData->networkAdd = ui->networkAddBox->text().trimmed();
+            radioValueChanged = true;
+        }
+        else
+        {
+            QMessageBox messageBox;
+            QString msg = "Invalid Network Address " + ui->networkAddBox->text();
+            messageBox.critical(this, "Network Address Entry Error", msg);
+            ui->networkAddBox->setFocus();
+        }
+    }
+
 
 }
 
@@ -770,7 +796,7 @@ void RigSetupForm::setLocTVSWComportVisible(bool visible)
 
 void RigSetupForm::rigCtldNetworkVisible(bool visible)
 {
-    rigCtldNetworkAddBoxVisible(false);
+    rigCtldNetworkAddBoxVisible(visible);
     rigCtldPortBoxVisible(visible);
 }
 
@@ -816,7 +842,27 @@ void RigSetupForm::setUseRigctldCheckbox(bool checked)
 
 void RigSetupForm::rigCtldNetworkAddressSelected()
 {
-    processNetAddress(ui->rigCtldNetworkAddBox, radioData->rigCtldNetworkAdd);
+
+    QString savedAddress = radioData->rigCtldNetworkAdd;
+    bool addressChanged = false;
+
+    bool addressOk = processNetAddress(ui->rigCtldNetworkAddBox, savedAddress, addressChanged);
+
+    if (addressChanged)
+    {
+        if (addressOk)
+        {
+            radioData->rigCtldNetworkAdd = ui->networkAddBox->text().trimmed();
+            radioValueChanged = true;
+        }
+        else
+        {
+            QMessageBox messageBox;
+            QString msg = "Invalid Network Address " + ui->rigCtldNetworkAddBox->text();
+            messageBox.critical(this, "Network Address Entry Error", msg);
+            ui->rigCtldNetworkAddBox->setFocus();
+        }
+    }
 }
 
 QString RigSetupForm::getRigctldNetworkAddress()
@@ -1306,29 +1352,47 @@ void RigSetupForm::transVertTabRemove(int tabNum)
     transVertTab.removeAt(tabNum);
 }
 
+
+/*
 void RigSetupForm::processNetAddress(QLineEdit* networkAddBox, QString& netAddress)
 {
-    if (networkAddBox->text() != netAddress)
+    bool addressOk = false;
+
+    if (networkAddBox->text().trimmed() != netAddress)
     {
-        QHostAddress address(networkAddBox->text());
-        if (QAbstractSocket::IPv4Protocol == address.protocol())
+        if (isHostLocal(networkAddBox->text().trimmed()))
+        {
+                addressOk = true;
+        }
+        else
+        {
+            QHostAddress address(networkAddBox->text().trimmed());
+            if (QAbstractSocket::IPv4Protocol == address.protocol())
+            {
+                addressOk = true;
+
+            }
+        }
+
+        if (addressOk)
         {
             netAddress = networkAddBox->text();
             radioValueChanged = true;
         }
         else
         {
-           QMessageBox messageBox;
-           QString msg = "Invalid Network Address " + networkAddBox->text();
-           messageBox.critical(this, "Network Address Entry Error", msg);
-           networkAddBox->setFocus();
+               QMessageBox messageBox;
+               QString msg = "Invalid Network Address " + networkAddBox->text();
+               messageBox.critical(this, "Network Address Entry Error", msg);
+               networkAddBox->setFocus();
         }
 
     }
 
+
 }
 
-
+*/
 void RigSetupForm::processPortNumber(QLineEdit* netPortBox, QString& portNumber)
 {
 

@@ -41,7 +41,7 @@ class MinosId
 //==============================================================================
 #define RXBUFFLEN 4096
 
-extern bool isHostLocal(const QString &host);
+//extern bool isHostLocal(const QString &host);
 class MinosCommonConnection: public QObject
 {
     Q_OBJECT

@@ -19,7 +19,7 @@
 
 extern bool closeApp;
 
-
+/*
 bool isHostLocal(const QString &host)
 {
     QHostInfo connaddr = QHostInfo::fromName( host );
@@ -29,6 +29,7 @@ bool isHostLocal(const QString &host)
     }
     return false;
 }
+*/
 //==============================================================================
 
 bool MinosId::empty()

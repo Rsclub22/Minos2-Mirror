@@ -15,6 +15,7 @@
 
 #include "rotsetupform.h"
 #include "ui_rotsetupform.h"
+#include "minosNetUtils.h"
 #include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -455,23 +456,29 @@ void rotSetupForm::setHandshake(int h)
 
 void rotSetupForm::comNetAddressSelected()
 {
-    if (antennaData->networkAdd != ui->netAddressBox->text())
+
+
+    QString savedAddress = antennaData->networkAdd;
+    bool addressChanged = false;
+
+    bool addressOk = processNetAddress(ui->netAddressBox, savedAddress, addressChanged);
+
+    if (addressChanged)
     {
-        QHostAddress address(ui->netAddressBox->text());
-        if (QAbstractSocket::IPv4Protocol == address.protocol())
+        if (addressOk)
         {
-            antennaData->networkAdd = ui->netAddressBox->text();
+            antennaData->networkAdd = ui->netAddressBox->text().trimmed();
             antennaValueChanged = true;
         }
         else
         {
-           QMessageBox messageBox;
-           QString msg = "Invalid Network Address " + ui->netAddressBox->text();
-           messageBox.critical(this, "Network Address Entry Error", msg);
-           ui->netAddressBox->setFocus();
+            QMessageBox messageBox;
+            QString msg = "Invalid Network Address " + ui->netAddressBox->text();
+            messageBox.critical(this, "Network Address Entry Error", msg);
+            ui->netAddressBox->setFocus();
         }
-
     }
+
 
 }
 
