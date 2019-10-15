@@ -4,7 +4,7 @@
 #include "freqmodebandplan.h"
 
 
-enum checkOperatingFreqError {NO_FILE, FREQ_OK, FREQ_NO_MATCH, MODE_MISSING, BAND_MISSING};
+enum checkOperatingFreqError {NO_FILE, FREQ_OK, FREQ_NOT_OK, FREQ_NO_MATCH, MODE_MISSING, BAND_MISSING};
 
 
 class CheckOperatingFreq : public freqModeBandPlan
@@ -14,6 +14,7 @@ public:
 
     int freqValid(const QString &band, const QString &mode, const double freq);
     bool modeExists(const QString &band, const QString &mode);
+    int getFreqLimitsForDial(ModeFreqDetail<double> &listOfFreqs, const QString &band, const QString &mode);
 };
 
 #endif // CHECKOPERATINGFREQ_H

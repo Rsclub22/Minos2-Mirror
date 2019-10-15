@@ -5,6 +5,7 @@
 #include <QGraphicsSceneWheelEvent>
 #include "base_pch.h"
 #include "bandmapcommon.h"
+#include "checkoperatingfreq.h"
 
 namespace dialData {
 
@@ -125,6 +126,7 @@ public:
 
 
     void setContestBandLimits(double flow, double fhigh);
+    void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
 signals:
     //void dialupdated();
     void zoomUpdated(bool);
@@ -157,6 +159,11 @@ private:
 
     qint32 contestBandFlow;
     qint32 contestBandFhigh;
+
+    QString contestBandStr;
+    QString contestModeStr;
+    CheckOperatingFreq *operatingFreq;
+    bool operatingPlanOk;
 
 
 

@@ -293,16 +293,16 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 break;
             case SPOT_TYPE_COL_NUM:
                 bandmapSpot->spotType = static_cast<bandmapSpotType::SPOT_TYPE>(value.toInt());
-            break;
+                break;
             case SPOT_IS_SELECTED_COL_NUM:
                 bandmapSpot->isSelected = value.toBool();
-            break;
+                break;
             case ROT_BEARING_COL_NUM:
                 bandmapSpot->rotBrg = value.toString();
-            break;
+                break;
             case ROT_CONNECTED_COL_NUM:
                 bandmapSpot->rotConnected = value.toBool();
-            break;
+                break;
 
             default:
                 return false;
@@ -314,7 +314,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
         emit dataChanged(index, index);
 
 
-            return true;
+        return true;
     }
 
 

@@ -85,9 +85,9 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     ui->bandmapFrameTitle->setText("Bandmap");
 
-    int height = ui->bandmapGraphicsView->height();
-    int width = ui->bandmapGraphicsView->width();
-    qDebug() << "ui frame height = " << height << " ui frame width = " << width;
+    //int height = ui->bandmapGraphicsView->height();
+    //int width = ui->bandmapGraphicsView->width();
+    //qDebug() << "ui frame height = " << height << " ui frame width = " << width;
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
@@ -417,6 +417,13 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         }
 
 
+        if (operatingFreqPlanOk)
+        {
+            // send operating freq to dial
+            bandmapView->setFreqOperatingInfo(contestBandStr, contestModeStr, operatingFreq, operatingFreqPlanOk);
+        }
+
+
 
 
 
@@ -523,6 +530,8 @@ bool BandmapClientFrame::isFreqLegal(const double freq, const QString band, cons
             retCode =  operatingFreq->freqValid(band, mode, freq);
             switch (retCode)
             {
+                case FREQ_NOT_OK:
+                    return false;
                 case FREQ_OK:
                     return true;
                 case FREQ_NO_MATCH:
@@ -558,26 +567,22 @@ void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 void BandmapClientFrame::dxSpots(QVector<QString> spotMsg)
 {
     // if contest is protected ignore
-    if (isProtected)
+    if (!isProtected)
     {
-        return;
-    }
-
-    //get spot Message from queue
-    for (int i = 0; i < spotMsg.count(); i++)
-    {
-        QString msg = spotMsg[i];
-
-        if (msg.contains(DXSPOT))
+        //get spot Message from queue
+        for (int i = 0; i < spotMsg.count(); i++)
         {
-            spotQueue += spotMsg[i];
+            QString msg = spotMsg[i];
+
+            if (msg.contains(DXSPOT))
+            {
+                spotQueue += spotMsg[i];
+
+            }
+
 
         }
-
-
     }
-
-
 
  }
 
@@ -728,10 +733,10 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
     {
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
+            bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
             if (spot->getCallsign().fullCall.getValue() == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString())
             {
-                if (static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt()) == bandmapSpotType::LOGGED
-                        && spot->getSpotType() == bandmapSpotType::SAVED)
+                if ((savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED || savedSpotType == bandmapSpotType::CLUSTER_MARKED) && spot->getSpotType() == bandmapSpotType::SAVED)
                 {
                     // we want to move the freq of the LOGGED spot
                     bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_STR_COL_NUM ), spot->getFreq() , BMP_DataStoredRole);
@@ -895,6 +900,7 @@ bool BandmapClientFrame::checkSpotInTable(QStringList &sl)
     QStringList spotlist = sl;
     QString dxCallsign = spotlist[DXCALL];
     QString dxFreq = spotlist[DXFREQ].remove('.');
+    //qint64 dxFreqInt64 = dxFreq.toLongLong();
     multFreq matchFreq;
     QVector<multFreq> listOfFreq;
 
@@ -905,14 +911,14 @@ bool BandmapClientFrame::checkSpotInTable(QStringList &sl)
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
 
-            if (dxCallsign == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), Qt::DisplayRole).toString())
+            if (dxCallsign == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString())
             {
                 bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), BMP_DataStoredRole).toInt());
-                if ( spotType == bandmapSpotType::LOGGED || spotType == bandmapSpotType::SAVED)
+                if ( spotType == bandmapSpotType::LOGGED || spotType == bandmapSpotType::SAVED || spotType == bandmapSpotType::CLUSTER_MARKED)
                 {
                     // move the logged or marked spot to new freq
-                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_STR_COL_NUM), dxFreq);
-                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_INT64_COL_NUM), dxFreq.toLongLong());
+                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_STR_COL_NUM), dxFreq, BMP_DataStoredRole);
+                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_INT64_COL_NUM), dxFreq.toLongLong(), BMP_DataStoredRole);
                     return  false;          // don't save this spot to the bandmap spot list
 
                 }else if (spotType == bandmapSpotType::CLUSTER)
@@ -928,14 +934,13 @@ bool BandmapClientFrame::checkSpotInTable(QStringList &sl)
         // check for multiple spots on the same freq
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
-            QModelIndex mi = bandmapDataModel->index(row, FREQ_STR_COL_NUM);
-            QString df = bandmapDataModel->data(mi, Qt::DisplayRole).toString();
-            if (dxFreq == bandmapDataModel->data(mi, Qt::DisplayRole).toString())
+
+            QString df = bandmapDataModel->data(bandmapDataModel->index(row, FREQ_STR_COL_NUM), BMP_DataStoredRole).toString();
+            if (dxFreq == bandmapDataModel->data(bandmapDataModel->index(row, FREQ_STR_COL_NUM), BMP_DataStoredRole).toString())
             {
                 // found a spot on this freq
                 matchFreq.setRow(row);
-                QModelIndex mit = bandmapDataModel->index(row, TIME_COL_NUM);
-                qint64 timeInt64 = bandmapDataModel->data(mit, Qt::DisplayRole).toLongLong();
+                qint64 timeInt64 = bandmapDataModel->data(bandmapDataModel->index(row, TIME_COL_NUM), BMP_DataStoredRole).toLongLong();
                 matchFreq.setTime(timeInt64);
                 listOfFreq.append(matchFreq);
 

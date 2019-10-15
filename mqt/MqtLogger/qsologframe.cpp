@@ -2116,7 +2116,7 @@ void QSOLogFrame::logScreenEntry( )
 
    // save for send spot to DX cluster
    lastLoggedCallsign = lct->cs;
-   ui->lastLoggedCallsignLbl->setText(lct->cs.realCall);
+   ui->lastLoggedCallsignLbl->setText(lct->cs.fullCall.getValue());
    lastLoggedLocator = lct->loc.loc.getValue();
    lastLoggedFreq = lct->frequency.getValue();
 

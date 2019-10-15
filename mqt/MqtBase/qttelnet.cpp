@@ -530,7 +530,7 @@ QByteArray QtTelnetPrivate::getSubOption(const QByteArray &data)
 
 void QtTelnetPrivate::parseSubNAWS(const QByteArray &data)
 {
-    Q_UNUSED(data);
+    Q_UNUSED(data)
 }
 
 void QtTelnetPrivate::parseSubTT(const QByteArray &data)

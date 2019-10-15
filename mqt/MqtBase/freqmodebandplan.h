@@ -5,14 +5,19 @@
 #include "clustercommon.h"
 
 
-
+template <class T>
 class ModeFreqDetail
 {
     //QString band;
     //QString mode;
 public:
 
-    QList<QList<double>> freq;
+    QList<QList<T>> freq;
+
+    int count() {return freq.count();}
+
+
+
 
 };
 
@@ -30,8 +35,8 @@ public:
     bool checkLoadedOk();
 
 protected:
-    QMap<QString, QMap<QString, ModeFreqDetail> > bandModeFreqList;
-    QMap<QString, ModeFreqDetail> modeFreqList;
+    QMap<QString, QMap<QString, ModeFreqDetail<double>> > bandModeFreqList;
+    QMap<QString, ModeFreqDetail<double>> modeFreqList;
 
 private:
 

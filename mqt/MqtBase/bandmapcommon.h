@@ -51,6 +51,7 @@ const bool BMP_BOOL_NO = false;
 
 const int SPOTMARKER_XOFFSET = 20;
 const int FREQ_SEL_WIDTH = 20;
+const int NO_OP_FREQ_WIDTH = 5;
 
 
 

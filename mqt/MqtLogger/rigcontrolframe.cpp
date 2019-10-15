@@ -1698,6 +1698,8 @@ bool RigControlFrame::isFreqLegal(const double freq, const QString band, const Q
             retCode =  operatingFreq->freqValid(band, mode, freq);
             switch (retCode)
             {
+                case FREQ_NOT_OK:
+                    return false;
                 case FREQ_OK:
                     return true;
                 case FREQ_NO_MATCH:
