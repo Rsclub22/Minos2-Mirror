@@ -23,7 +23,6 @@
 #include <QHostInfo>
 
 #include <QSettings>
-#include <QHostInfo>
 #include <QNetworkInterface>
 #include <QDateTime>
 
