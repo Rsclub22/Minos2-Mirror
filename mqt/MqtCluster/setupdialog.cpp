@@ -255,6 +255,10 @@ void SetupDialog::readGeneralSettings()
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("TimeToLive");
     timeToLive = config.value("timeToLive", "").toString();
+    if (timeToLive == "0")      // 0 as no purge removed.
+    {
+        timeToLive = "10";
+    }
     config.endGroup();
     config.beginGroup("CommandFile");
     enableStartCmdFiles = config.value("enableStartCommandFile", false).toBool();
