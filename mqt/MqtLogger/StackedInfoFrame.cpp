@@ -101,6 +101,8 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int /*arg1*/)
     locTreeFrame = nullptr;
     statsFrame = nullptr;
 
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
     switch ( getAuxEntryType(ui->infoCombo->currentText()) )
     {
     case aeClock:
@@ -136,6 +138,7 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int /*arg1*/)
         currStackFrame = rigMemFrame;
         layout()->addWidget(rigMemFrame);
         rigMemFrame->setContest(contest);
+        tslf->setMemoryLoaded(true);
         break;
 
     case aeLocatorMap:

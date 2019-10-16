@@ -338,14 +338,19 @@ void BandmapClientFrame::logActionSelected()
 
 void BandmapClientFrame::memoryActionSelected()
 {
-    memoryData::memData spotData;
-    spotData.callsign = selectedSpotData.dxCall;
-    spotData.time = selectedSpotData.spotTime;
-    spotData.freq = selectedSpotData.dxFreqStr;
-    spotData.locator = selectedSpotData.dxLocator;
-    spotData.bearing = selectedSpotData.dxBrg.toInt();
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf->isMemoryLoaded(ct))
+    {
+        memoryData::memData spotData;
+        spotData.callsign = selectedSpotData.dxCall;
+        spotData.time = selectedSpotData.spotTime;
+        spotData.freq = selectedSpotData.dxFreqStr;
+        spotData.locator = selectedSpotData.dxLocator;
+        spotData.bearing = selectedSpotData.dxBrg.toInt();
 
-    MinosLoggerEvents::SendSpotToMemory(spotData);
+        MinosLoggerEvents::SendSpotToMemory(spotData);
+    }
+
 }
 
 void BandmapClientFrame::clearSpotActionSelected()

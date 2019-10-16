@@ -49,6 +49,7 @@ public:
 
     void setCurrentFrameType(QString);
 
+
 private:
     Ui::StackedInfoFrame *ui;
 
