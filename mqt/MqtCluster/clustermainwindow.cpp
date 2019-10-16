@@ -1520,6 +1520,18 @@ QString ClusterMainWindow::assembleSpotForDXCluster(QString freq, QString call, 
 void ClusterMainWindow::closeEvent(QCloseEvent *event)
 {
 
+
+    if (nodeConnected)
+    {
+        if (setupCluster->getRunEndFileFlag())
+        {
+            handleEndFile();          // send user commands
+        }
+
+    }
+
+
+
     LogTimer.stop();
 
 
@@ -1624,9 +1636,23 @@ void ClusterMainWindow::userCmdButtonRead(int buttonNumber)
             {
                 if (!d[1].isEmpty())
                 {
-                    d[1].append('\n');
-                    trace(QString("UserCmdButton Read - Send Command to cluster = %1").arg(d[1]));
-                    txText(d[1]);
+                    if (nodeConnected)
+                    {
+                        d[1].append('\n');
+                        trace(QString("UserCmdButton Read - Send Command to cluster = %1").arg(d[1]));
+
+                        if (setupCluster->getRunEndFileFlag())
+                        {
+                            if (d[1].contains("bye", Qt::CaseInsensitive))
+                            {
+                                handleEndFile();
+                            }
+                        }
+
+                        txText(d[1]);
+
+
+                    }
                 }
             }
 
