@@ -176,13 +176,13 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     modeBandPlan = new checkModeAgainstFreq();
     if (modeBandPlan->loadFile(MODE_BANDPLAN_FILE))
     {
-        trace(QString("Bandmap Client: Mode frequency bandplan loaded OK"));
+        traceMsg(QString("Mode frequency bandplan loaded OK"));
         modeBandPlanOk = true;
 
     }
     else
     {
-        trace(QString("Bandmap Client: Mode frequency bandplan loaded failed to Load"));
+        traceMsg(QString("Mode frequency bandplan loaded failed to Load"));
         modeBandPlanOk = false;
 
     }
@@ -190,12 +190,12 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     operatingFreq = new CheckOperatingFreq();
     if (operatingFreq->loadFile(OPERATING_FREQ_FILE))
     {
-        trace(QString("Bandmap Client: Operating frequency bandplan loaded OK"));
+        traceMsg(QString("Operating frequency bandplan loaded OK"));
         operatingFreqPlanOk = true;
     }
     else
     {
-        trace(QString("Bandmap Client: Operating frequency bandplan failed to load"));
+        traceMsg(QString("Operating frequency bandplan failed to load"));
         operatingFreqPlanOk = false;
     }
 
@@ -372,7 +372,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
     if (ct != nullptr)
     {
         contestUuid = ct->uuid;
-        trace(QString("Cluster ClientFrame Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
+        traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->band.getValue();
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
@@ -479,6 +479,7 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
             contestBandFHigh = bi.fhigh;
             bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
             bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
+            traceMsg(QString("contestBand Freq low = %1, contestBand Freq high = %2").arg(contestBandFlow).arg(contestBandFHigh));
             break;
         }
     }
@@ -537,15 +538,15 @@ bool BandmapClientFrame::isFreqLegal(const double freq, const QString band, cons
                 case FREQ_NO_MATCH:
                     return false;
                 case MODE_MISSING:
-                    trace(QString("Bandmap isFreqLegal: mode is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    traceMsg(QString("isFreqLegal: mode is missing from file - band %1, mode %2").arg(band).arg(mode));
                     return true;
                 case BAND_MISSING:
-                    trace(QString("Bandmap isFreqLegal: band is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    traceMsg(QString("isFreqLegal: band is missing from file - band %1, mode %2").arg(band).arg(mode));
                     return true;
             }
     }
 
-    trace(QString("Bandmap isFreqLegal: Operating Freq file not loaded"));
+    traceMsg(QString("isFreqLegal: Operating Freq file not loaded"));
     return true;
 
 }
@@ -559,7 +560,7 @@ void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
         QString state = clusterStateIndicator[(*i).state] + " " + (*i).app + "\r\n";
-        trace(QString("bandmapClientServerList - state = %1").arg(state));
+        traceMsg(QString("bandmapClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }
 }
@@ -596,7 +597,7 @@ void BandmapClientFrame::checkNewBandMapSpots()
         for (int i = sqsize -1 ; i > -1; i--)
         {
              addDxSpotToBandmapTable(spotQueue[i]);
-             trace("Bandmapframe New Cluster Spot: " + spotQueue[i]);
+             traceMsg("New Cluster Spot: " + spotQueue[i]);
 
 
         }
@@ -610,7 +611,7 @@ void BandmapClientFrame::checkNewBandMapSpots()
             for (int i = 0; i < logSpotQueue.count(); i++)
             {
                 addLogSpotToBandmapTable(logSpotQueue[i]);
-                trace(QString("Bandmapframe New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq()).arg(logSpotQueue[i]->getLocator()));
+                traceMsg(QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq()).arg(logSpotQueue[i]->getLocator()));
                 delete logSpotQueue[i];
             }
 
@@ -1120,7 +1121,7 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
     {
 
         ui->statusIndicator->setToolTip(stateMsg);
-        trace(QString("Bandmap Cluster Status: %1").arg(stateMsg));
+        traceMsg(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
     {
@@ -1148,9 +1149,6 @@ void BandmapClientFrame::statusIndicatorToggle(bool on)
 
 void BandmapClientFrame::setFreq(QString freq)
 {
-    trace(QString("Bandmap frame Set Freq: = %1").arg(freq));
-
-
     if (lastfreq != freq)
     {
         lastfreq = freq;
@@ -1321,7 +1319,7 @@ void BandmapClientFrame::purgeSpots()
 void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq)
 {
     Q_UNUSED(c)
-
+    traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.fullCall.getValue()).arg(freq).arg(loc).arg(brg));
     //QString time = QDateTime::currentDateTimeUtc().time().toString("HH:MM");
     QDateTime time = QDateTime::currentDateTimeUtc();
 
@@ -1346,6 +1344,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
 void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString _freq, QString loc, QString brg)
 {
     Q_UNUSED(cs)
+    traceMsg(QString("mark freq add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq).arg(loc).arg(brg));
     QDateTime time = QDateTime::currentDateTimeUtc();
 
     QString logBandStr;
@@ -1369,8 +1368,8 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString _freq, QString l
 
 void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString _freq, QString loc, QString brg)
 {
-    Q_UNUSED(cs)
 
+    traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq).arg(loc).arg(brg));
     QDateTime time = QDateTime::currentDateTimeUtc();
 
     QString logBandStr;
@@ -1388,6 +1387,7 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString _freq, QString l
                                         freq, logBandStr, logBandMask,
                                         false, time, bandmapSpotType::SAVED);
     logSpotQueue.append(spot);
+
 }
 
 void BandmapClientFrame::setRotatorBearing(QString s)
@@ -1419,13 +1419,13 @@ QString BandmapClientFrame::readBandmapFreqLimit(QString band, QString mode)
     QFile limitFile(BANDPLAN_FREQ_LIMITS_FILE);
     if (limitFile.exists())
     {
-        trace(QString("bandmap: bandmapLimit file found - %").arg(BANDPLAN_FREQ_LIMITS_FILE));
+        traceMsg(QString("bandmapLimit file found - %").arg(BANDPLAN_FREQ_LIMITS_FILE));
         QString fileName = BANDPLAN_FREQ_LIMITS_FILE;
         QSettings settings(fileName, QSettings::IniFormat);
         QStringList limitBands = settings.childGroups();
         if (limitBands.contains(band))
         {
-            trace(QString("bandmap: bandmapLimit band = %1, mode = %2").arg(band).arg(mode));
+            traceMsg(QString("bandmapLimit band = %1, mode = %2").arg(band).arg(mode));
             if (mode.isEmpty())
             {
                 mode = "USB";
@@ -1439,4 +1439,10 @@ QString BandmapClientFrame::readBandmapFreqLimit(QString band, QString mode)
 
     return limitFreqs;
 
+}
+
+
+void BandmapClientFrame::traceMsg(QString msg)
+{
+    trace(QString("bandmapClientFrame: %1").arg(msg));
 }

@@ -1365,9 +1365,20 @@ void RigControlFrame::setRadioState(QString s)
 
     if (s != "")
     {
-        if (s == RIG_STATUS_CONNECTED)
+
+        if (s.contains(RIG_STATUS_ERROR))
+        {
+           radioError = true;
+           QStringList sl = s.split(':');
+           if (sl.count() == 2)
+           {
+               ui->errorMessageLbl->setText(QString("<font color = 'Red'> Error: %1</font>").arg(sl[1]));
+           }
+        }
+        else if (s == RIG_STATUS_CONNECTED)
         {
             radioConnected = true;
+            ui->errorMessageLbl->clear();
             int index = ui->radioNameSel->findText(radioName, Qt::MatchFixedString);
             if (index >= 0)
             {
@@ -1383,6 +1394,7 @@ void RigControlFrame::setRadioState(QString s)
         {
            radioConnected = false;
            radioError = false;
+           ui->errorMessageLbl->clear();
 
 
            ui->bandWarnLabel->setText("");
@@ -1401,10 +1413,7 @@ void RigControlFrame::setRadioState(QString s)
            emit radioDisconnected();
 
         }
-        else if (s == RIG_STATUS_ERROR)
-        {
-           radioError = true;
-        }
+
 
         ui->rigState->setText(s);
         radioState = s;
@@ -1588,7 +1597,7 @@ void RigControlFrame::freqLineEditFrameColour(bool status)
     int curPos = ui->freqInput->cursorPosition();
     if (status)
     {
-        ui->freqInput->setStyleSheet("border: 1px solid red");
+        ui->freqInput->setStyleSheet("border: 1px solid magenta");
         // restore cursor selection
         ui->freqInput->setSelection(curPos, 1);
     }

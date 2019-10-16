@@ -2606,7 +2606,7 @@ void RigControlMainWindow::hamlibError(int errorCode, QString cmd)
     }
     if(appName.count() > 0)
     {
-        sendStatusToLogError();
+        sendStatusToLogError(cmd);
     }
 
     rigErrorFlag = true;
@@ -2820,21 +2820,14 @@ void RigControlMainWindow::sendStatusToLogDisConnected()
 }
 
 
-void RigControlMainWindow::sendStatusToLogError()
+void RigControlMainWindow::sendStatusToLogError(QString errMsg)
 {
-    logMessage(QString("Send error status to logger"));
-    sendStatusLogger(RIG_STATUS_ERROR);
+    logMessage(QString("Send error status to logger - %1").arg(errMsg));
+    sendStatusLogger(QString("%1:%2").arg(RIG_STATUS_ERROR).arg(errMsg));
 }
 
 
-void RigControlMainWindow::sendErrorMessageToLogger(QString errMsg)
-{
 
-    logMessage(QString("Send error message to logger: %1").arg(errMsg));
-    PubSubName psname(setupRadio->currentRadio.radioName);
-    msg->rigCache.setStatus(psname, errMsg);
-
-}
 
 void RigControlMainWindow::sendFreqToLog(freq_t freq)
 {

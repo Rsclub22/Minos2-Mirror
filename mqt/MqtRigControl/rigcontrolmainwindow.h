@@ -194,10 +194,9 @@ private:
     void sendStatusLogger(const QString &message);
     void sendStatusToLogDisConnected();
     void sendStatusToLogConnected();
-    void sendStatusToLogError();
+    void sendStatusToLogError(QString);
     void sendTransVertOffsetToLogger(int tvNum);
     void sendTransVertSwitchToLogger(const QString &swNum);
-    void sendErrorMessageToLogger(QString errMsg);
     void sendFreqToLog(freq_t freq);
     void sendModeToLog(QString mode);
     void sendRitEnableStatus(bool status);
