@@ -46,6 +46,14 @@ static QKeySequence runButShiftShortCut[] {
 const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ;\n");
 const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ;\n");
 
+const QStringList USB_TUNING_STEPS = {"5 KHz", "10 KHz", "15 KHz", "20 Khz"};
+const QStringList MGM_TUNING_STEPS = {"100 Hz", "200 Hz", "300 Hz", "400 Hz", "500 Hz"};
+const QStringList CW_TUNING_STEPS = {"100 Hz", "200 Hz", "300 Hz", "400 Hz", "500 Hz"};
+const QStringList FM_TUNING_STEPS = {"5 KHz", "10 KHz", "12.5 KHz", "25 KHz"};
+const int USB_DEFAULT_STEP = 0;
+const int MGM_DEFAULT_STEP = 4;
+const int CW_DEFAULT_STEP = 4;
+const int FM_DEFAULT_STEP = 2;
 
 RigControlFrame::RigControlFrame(QWidget *parent):
     QFrame(parent),
@@ -56,6 +64,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     radioError(false),
     freqEditOn(false),
     curFreq(memDefData::DEFAULT_FREQ),
+    curFStepButtonsFreq(0),
     curMode(""),
     ritEnable(false),
     ritOn(false),
@@ -96,6 +105,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     freqEditShortKey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), parent);
     connect(freqEditShortKey, SIGNAL(activated()), this, SLOT(freqEditSelected()));
+
+    connect(ui->freqStepCombo, SIGNAL(currentIndexChanged(const QString)), this, SLOT(freqStepComboChanged(const QString)));
 
     freqPlusShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U), parent);
     connect(freqPlusShortCut, SIGNAL(activated()), this, SLOT(freqPlus_ShortCut()));
@@ -990,6 +1001,69 @@ void RigControlFrame::noRadioSetMode(QString m)
 }
 
 
+void RigControlFrame::setFreqStepCombo(QString mode)
+{
+    if (mode == "USB")
+    {
+        ui->freqStepCombo->clear();
+        ui->freqStepCombo->addItems(USB_TUNING_STEPS);
+        ui->freqStepCombo->setCurrentIndex(USB_DEFAULT_STEP);
+    }
+    else if (mode == "FM")
+    {
+        ui->freqStepCombo->clear();
+        ui->freqStepCombo->addItems(FM_TUNING_STEPS);
+        ui->freqStepCombo->setCurrentIndex(FM_DEFAULT_STEP);
+    }
+    else if (mode == "CW")
+    {
+        ui->freqStepCombo->clear();
+        ui->freqStepCombo->addItems(CW_TUNING_STEPS);
+        ui->freqStepCombo->setCurrentIndex(CW_DEFAULT_STEP);
+    }
+    else if (mode == "MGM")
+    {
+        ui->freqStepCombo->clear();
+        ui->freqStepCombo->addItems(MGM_TUNING_STEPS);
+        ui->freqStepCombo->setCurrentIndex(MGM_DEFAULT_STEP);
+    }
+
+
+    curFStepButtonsFreq = getStepFreqFromComboText(ui->freqStepCombo->currentText());
+
+}
+
+void RigControlFrame::freqStepComboChanged(const QString step)
+{
+    curFStepButtonsFreq = getStepFreqFromComboText(step);
+
+}
+
+
+double RigControlFrame::getStepFreqFromComboText(const QString step)
+{
+
+    double stepF = 0;
+    QStringList sl = step.split(" ");
+
+    if (sl.count() != 2)
+    {
+        stepF = 0;
+    }
+    else
+    {
+        if (curMode == "USB" || curMode == "FM")
+        {
+            stepF = sl[0].toDouble() * 1000;
+        }
+        else
+        {
+            stepF = sl[0].toDouble();
+        }
+    }
+
+    return stepF;
+}
 
 
 void RigControlFrame::setMode(QString m)
@@ -1014,6 +1088,7 @@ void RigControlFrame::setMode(QString m)
                     {
                        mgmLabelVisible(false);
                     }
+                    setFreqStepCombo(curMode);
                    return;
                 }
         }
@@ -1290,9 +1365,20 @@ void RigControlFrame::setRadioState(QString s)
 
     if (s != "")
     {
-        if (s == RIG_STATUS_CONNECTED)
+
+        if (s.contains(RIG_STATUS_ERROR))
+        {
+           radioError = true;
+           QStringList sl = s.split(':');
+           if (sl.count() == 2)
+           {
+               ui->errorMessageLbl->setText(QString("<font color = 'Red'> Error: %1</font>").arg(sl[1]));
+           }
+        }
+        else if (s == RIG_STATUS_CONNECTED)
         {
             radioConnected = true;
+            ui->errorMessageLbl->clear();
             int index = ui->radioNameSel->findText(radioName, Qt::MatchFixedString);
             if (index >= 0)
             {
@@ -1308,6 +1394,7 @@ void RigControlFrame::setRadioState(QString s)
         {
            radioConnected = false;
            radioError = false;
+           ui->errorMessageLbl->clear();
 
 
            ui->bandWarnLabel->setText("");
@@ -1326,10 +1413,7 @@ void RigControlFrame::setRadioState(QString s)
            emit radioDisconnected();
 
         }
-        else if (s == RIG_STATUS_ERROR)
-        {
-           radioError = true;
-        }
+
 
         ui->rigState->setText(s);
         radioState = s;
@@ -1513,7 +1597,7 @@ void RigControlFrame::freqLineEditFrameColour(bool status)
     int curPos = ui->freqInput->cursorPosition();
     if (status)
     {
-        ui->freqInput->setStyleSheet("border: 1px solid red");
+        ui->freqInput->setStyleSheet("border: 1px solid magenta");
         // restore cursor selection
         ui->freqInput->setSelection(curPos, 1);
     }
@@ -1561,7 +1645,7 @@ void RigControlFrame::freqNeg_ShortCut()
 void RigControlFrame::freqPlusShortCut_clicked(bool /*click*/)
 {
 
-    freqPlusMinusButton(5000.0);
+    freqPlusMinusButton(curFStepButtonsFreq);
 
 }
 
@@ -1570,7 +1654,7 @@ void RigControlFrame::freqPlusShortCut_clicked(bool /*click*/)
 void RigControlFrame::freqNegShortCut_clicked(bool /*click*/)
 {
 
-    freqPlusMinusButton(-5000.0);
+    freqPlusMinusButton(curFStepButtonsFreq * -1);
 
 }
 

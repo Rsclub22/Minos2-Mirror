@@ -5,6 +5,7 @@
 #include "rigcontrol.h"
 #include "transvertsetupform.h"
 #include "rigcommon.h"
+#include "minosNetUtils.h"
 #include "ui_rigsetupform.h"
 
 
@@ -215,7 +216,7 @@ private:
     bool radioSupportRit(int radioModelNumber);
 
 
-    void processNetAddress(QLineEdit *networkAddBox, QString& netAddress);
+    //void processNetAddress(QLineEdit *networkAddBox, QString& netAddress);
     void processPortNumber(QLineEdit *netPortBox, QString &portNumber);
 
 

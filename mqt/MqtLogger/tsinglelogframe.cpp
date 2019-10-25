@@ -47,7 +47,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     keyerLoaded(false),
     radioLoaded(false),
     contest(contest),
-    lastStanzaCount( 0 )
+    lastStanzaCount( 0 ),
+    auxMemoryLoaded(false)
 
 {
 #ifdef Q_OS_ANDROID
@@ -1313,6 +1314,9 @@ void TSingleLogFrame::on_GoToSerial(BaseContestLog *ct)
     }
 }
 //---------------------------------------------------------------------------
+
+// Memory
+
 void TSingleLogFrame::on_SetMemory(BaseContestLog *c, QString call, QString loc)
 {
     if (contest == c)
@@ -1352,6 +1356,24 @@ void TSingleLogFrame::on_SetMemory(BaseContestLog *c, QString call, QString loc)
            MinosLoggerEvents::sendUpdateMemories(ct);
        }
     }
+}
+
+bool TSingleLogFrame::isMemoryLoaded(BaseContestLog *c)
+{
+    if (contest == c)
+    {
+        return auxMemoryLoaded;
+    }
+    else
+    {
+        return false;
+    }
+
+}
+
+void TSingleLogFrame::setMemoryLoaded(bool loaded)
+{
+    auxMemoryLoaded = loaded;
 }
 
 //---------------------------------------------------------------------------

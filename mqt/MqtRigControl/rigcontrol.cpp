@@ -17,6 +17,7 @@
 #include <QStringList>
 #include "rigcontrol.h"
 #include <hamlib/rig.h>
+#include "minosNetUtils.h"
 
 
 
@@ -71,7 +72,7 @@ int RigControl::init(scatParams &currentRadio, bool useRigCtld)
 
     if (useRigCtld)
     {
-        if (currentRadio.rigCtldNetworkAdd.isEmpty())
+        if (currentRadio.rigCtldNetworkAdd.isEmpty() || isHostLocal(currentRadio.rigCtldNetworkAdd))
         {
             currentRadio.rigCtldNetworkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
         }
@@ -123,7 +124,16 @@ int RigControl::init(scatParams &currentRadio, bool useRigCtld)
         }
         else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
         {
-            strncpy(my_rig->state.rigport.pathname, QString(currentRadio.networkAdd + ":" + currentRadio.networkPort).toLatin1().data(), FILPATHLEN);
+            QString netAdd;
+            if (currentRadio.networkAdd.isEmpty() || isHostLocal(currentRadio.networkAdd))
+            {
+                netAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
+            }
+            else
+            {
+                netAdd = currentRadio.networkAdd;
+            }
+            strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio.networkPort).toLatin1().data(), FILPATHLEN);
         }
         else if (rig_port_e(currentRadio.portType) == RIG_PORT_NONE)
         {

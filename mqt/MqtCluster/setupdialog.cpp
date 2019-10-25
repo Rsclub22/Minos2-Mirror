@@ -160,15 +160,10 @@ void SetupDialog::timeToliveEditFinished()
         int ittl = ttl.toInt(&ok);
         if (ok)
         {
-            if (ittl == 0)
-            {
-                timeToLiveChanged = true;
-                return;
-            }
-            else if (ittl < MIN_TTL || ittl > MAX_TTL)
+            if (ittl < MIN_TTL || ittl > MAX_TTL)
             {
                 QMessageBox msgBox;
-                msgBox.setText(QString("%1 minutes has been entered\nThe time to live must be between %2 minutes and %3 minutes or 0 for no purge!").arg(ui->timeToLive->text()).arg(MIN_TTL).arg(MAX_TTL));
+                msgBox.setText(QString("%1 minutes has been entered\nThe time to live must be between %2 minutes and %3 minutes").arg(ui->timeToLive->text()).arg(MIN_TTL).arg(MAX_TTL));
                 msgBox.exec();
                 ui->timeToLive->setText(timeToLive);  // restore setting
                 return;
@@ -260,6 +255,10 @@ void SetupDialog::readGeneralSettings()
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("TimeToLive");
     timeToLive = config.value("timeToLive", "").toString();
+    if (timeToLive == "0")      // 0 as no purge removed.
+    {
+        timeToLive = "10";
+    }
     config.endGroup();
     config.beginGroup("CommandFile");
     enableStartCmdFiles = config.value("enableStartCommandFile", false).toBool();

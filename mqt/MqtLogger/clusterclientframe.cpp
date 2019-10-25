@@ -1125,22 +1125,29 @@ void ClusterClientFrame::logActionSelected()
 
 void ClusterClientFrame::memoryActionSelected()
 {
-    int curTab = ui->dxSpotTab->currentIndex();
+    //TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    //if (tslf->isMemoryLoaded(ct))
+    //{
+        int curTab = ui->dxSpotTab->currentIndex();
 
-    if (filterProxyModelList[curTab]->rowCount() > 0)
-    {
-        int currentRow = spotViewList[curTab]->currentIndex().row();
-        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
+        if (filterProxyModelList[curTab]->rowCount() > 0)
         {
-            // check if spot has been sent to memory
-            if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
+            int currentRow = spotViewList[curTab]->currentIndex().row();
+            if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
             {
-                sendSpotToMemory(filterProxyModelList[curTab], currentRow);
+                // check if spot has been sent to memory
+                if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
+                {
+                    sendSpotToMemory(filterProxyModelList[curTab], currentRow);
+                }
+
             }
 
         }
+    //}
 
-    }
+
+
 }
 
 // this sends spot to memory if it has allready been sent

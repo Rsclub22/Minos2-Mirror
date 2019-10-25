@@ -52,6 +52,7 @@ SOURCES += \
     MatchThisFrame.cpp \
     MatchThread.cpp \
     MatchTreeFrame.cpp \
+    minosNetUtils.cpp \
     minoskeyboard.cpp \
     MinosLines.cpp \
     MinosLoggerEvents.cpp \
@@ -127,6 +128,7 @@ HEADERS += \
     MatchThisFrame.h \
     MatchThread.h \
     MatchTreeFrame.h \
+    minosNetUtils.h \
     minoskeyboard.h \
     MinosLines.h \
     MinosLoggerEvents.h \

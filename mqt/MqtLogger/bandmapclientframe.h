@@ -247,6 +247,7 @@ private:
 
     QString readBandmapFreqLimit(QString band, QString mode);
     void getBandLimitsFromBandListXML();
+    void traceMsg(QString msg);
 protected:
 
 

@@ -234,8 +234,6 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     }
     scaleEndFreq = scaleStartFreq + freqRange;
 */
-    trace(QString("bandmapFreqDial: scale startFreq = %1").arg(scaleStartFreq));
-    trace(QString("bandmapFreqDial: scale endFreq = %1").arg(scaleEndFreq));
 
 
     QRect scaleRec(0, 0, dialWidth, dialHeight);
@@ -532,7 +530,6 @@ qint64 BandmapFreqDial::getViewPortFreq(int startPos, double contestBandFlow)
     qint64 calcFreq = 0;
     if (zoomLevel >= 0 && zoomLevel <= dialData::MAX_ZOOM_LEVEL)
     {
-        trace(QString("getViewFreq: zoomlevel = %1").arg(zoomLevel));
         qint64 offSetF = startPos / dialData::khzPixelStep[zoomLevel] * 1000;
         calcFreq = static_cast<qint64>(contestBandFlow) + offSetF;
     }
@@ -544,18 +541,10 @@ qint64 BandmapFreqDial::getViewPortFreq(int startPos, double contestBandFlow)
 void BandmapFreqDial::drawCursor(QPainter *painter, qint64 frequency)
 {
 
-    //int cursorY = getYCoordOnDial(frequency) + scaleStartYCoord;
     int cursorY = getYCoordOnDial(frequency);
-    trace(QString("bandmapFreqDial: cursor Freq = %1").arg(frequency));
-    trace(QString("bandmapFreqDial: cursor Freq y coord = %1").arg(cursorY));
 
     QPolygon freqCursor;
-/*
-    freqCursor << QPoint(60,cursorY-5 + dialData::DIAL_VERT_OFFSET);
-    freqCursor << QPoint(60,cursorY+10 + dialData::DIAL_VERT_OFFSET);
-    freqCursor << QPoint(70,cursorY +dialData::DIAL_VERT_OFFSET);
-    freqCursor << QPoint(60,cursorY-5 + dialData::DIAL_VERT_OFFSET);
-*/
+
     freqCursor << QPoint(dialWidth -  10, cursorY - 10 + dialData::DIAL_VERT_OFFSET);
     freqCursor << QPoint(dialWidth - 10, cursorY + 10 + dialData::DIAL_VERT_OFFSET);
     freqCursor << QPoint(dialWidth, cursorY + dialData::DIAL_VERT_OFFSET);
