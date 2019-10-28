@@ -79,7 +79,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
 
     //connect (dial, SIGNAL(dialupdated()), this, SLOT(drawBandMapSpots()));
     connect(dial, SIGNAL(zoomUpdated(bool)), this, SLOT(zoomUpdated(bool)));
-    connect(bandmapGraphicsView, SIGNAL(bandmapResize(int)), this, SLOT(bandmapResize(int)));
+    connect(bandmapGraphicsView, SIGNAL(bandmapResize(int, int)), this, SLOT(bandmapResize(int, int)));
     connect(bandmapGraphicsView, SIGNAL(leftMouseButtonPressed(QPoint)), this, SLOT(leftMouseButtonPressed(QPoint)));
     connect(bandmapGraphicsView, SIGNAL(mouseDoubleClicked(QPoint)), this, SLOT(mouseDoubleClicked(QPoint)));
     connect(bandmapGraphicsView, SIGNAL(zoomMap(bool)), this, SLOT(zoomUpdated(bool)));
@@ -644,13 +644,11 @@ void BandmapView::setFilter(BandmapClientFilterDialog* filter)
 
 
 
-void BandmapView::bandmapResize(int _height)
+void BandmapView::bandmapResize(int height, int width)
 {
-    int height = _height;
-    //int width = _width;
-    //qDebug() << "bandmap resize height " << height;
-    dial->setCurHeight(height);
-    bandmapUpdate();
+
+    //dial->setCurHeight(height);
+    //bandmapUpdate();
 
 
 }
