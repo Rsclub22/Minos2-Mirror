@@ -62,7 +62,8 @@ public:
     void getSpotData(int &selectedSpotDataRowNum, int displayedSpotNum, BandmapData &selectedSpot);
 
     void clearSpotData(BandmapData &selectedSpot);
-
+    int getSelectedSpotViewRowNum(){return selectedSpotViewRowNum;}
+    void clearSelectedSpot();
 
     void setFilter(BandmapClientFilterDialog *filter);
 
@@ -163,7 +164,6 @@ private:
     void bandmapSelectFreq(int y);
     void bandmapSelectSpot(QPoint p);
     void sendFreqToRig(QString freq);
-    void clearSelectedSpot();
     void setSelectedSpot(int displayedSpotNum);
 
     void clearListOfMarkers();

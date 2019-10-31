@@ -263,10 +263,10 @@ private slots:
 
      void on_contextMenuSelected(const QPoint &pos);
      void on_freqActionSelected();
-     void bearingActionSelected();
-     void logActionSelected();
-     void memoryActionSelected();
-     void clearSpotActionSelected();
+     void on_bearingActionSelected();
+     void on_logActionSelected();
+     void on_memoryActionSelected();
+     void on_clearSpotActionSelected();
      void sendBrgToRot(QString brg);
      void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq);
      void filterButtonSelected();
@@ -280,6 +280,9 @@ private slots:
      void addLogSpotToBandmapTable(LoggerSpots *spot);
      void mouseTimerCheckNewSpots();
      void on_FreqDisplayClicked();
+
+
+
 };
 
 

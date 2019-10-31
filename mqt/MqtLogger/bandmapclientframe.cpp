@@ -157,10 +157,10 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect( markSpotAction, SIGNAL( triggered() ), this, SLOT(on_markSpotActionSelected()) );
     connect( unMarkSpotAction, SIGNAL( triggered() ), this, SLOT(on_unMarkSpotActionSelected()) );
     connect( freqAction, SIGNAL( triggered() ), this, SLOT(on_freqActionSelected()) );
-    connect( bearingAction, SIGNAL( triggered() ), this, SLOT(bearingActionSelected()) );
-    connect( logAction, SIGNAL( triggered() ), this, SLOT(logActionSelected()) );
-    connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
-    connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
+    connect( bearingAction, SIGNAL( triggered() ), this, SLOT(on_bearingActionSelected()) );
+    connect( logAction, SIGNAL( triggered() ), this, SLOT(on_logActionSelected()) );
+    connect( memoryAction, SIGNAL( triggered() ), this, SLOT(on_memoryActionSelected()) );
+    connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(on_clearSpotActionSelected()) );
 
     connect(filterSetup, SIGNAL(filtersChanged(bool)), this, SLOT(on_FitersChanged(bool)));
 
@@ -233,7 +233,7 @@ void BandmapClientFrame::on_FontChanged()
 void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 {
     int selectedSpotViewRowNum = bandmapView->isClickInRegionOfSpot(pos);
-    if (selectedSpotViewRowNum != -1)
+    if (selectedSpotViewRowNum != NO_SELECTED_ROWNUM)
     {
         bandmapView->getSpotData(selectedSpotDataRowNum, selectedSpotViewRowNum, selectedSpotData);
         QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
@@ -245,10 +245,17 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
 }
 
 
-
+// this is for the Tool button Action Menu
 void BandmapClientFrame::onMenuShow()
 {
-   //ui->actionsButton->showMenu();
+    int selectedSpotViewRowNum = NO_SELECTED_ROWNUM;
+    if (bandmapView->getSelectedSpotViewRowNum() != NO_SELECTED_ROWNUM)
+    {
+        selectedSpotViewRowNum = bandmapView->getSelectedSpotViewRowNum();
+        bandmapView->getSpotData(selectedSpotDataRowNum, selectedSpotViewRowNum, selectedSpotData);
+
+    }
+
 }
 
 
@@ -264,22 +271,29 @@ void BandmapClientFrame::on_FitersChanged(bool state)
 
 void BandmapClientFrame::on_markSpotActionSelected()
 {
+
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
     if (spotType == bandmapSpotType::CLUSTER)
     {
         bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER_MARKED, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
+
 }
+
+
+
 
 void BandmapClientFrame::on_unMarkSpotActionSelected()
 {
+
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
     if (spotType == bandmapSpotType::CLUSTER_MARKED)
     {
         bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
+
 }
 
 void BandmapClientFrame::on_FreqDisplayClicked()
@@ -287,10 +301,15 @@ void BandmapClientFrame::on_FreqDisplayClicked()
     bandmapView->makeCursorVisibleInBandmap();
 }
 
+
+
+
 void BandmapClientFrame::on_freqActionSelected()
 {
-    QString freq = selectedSpotData.dxFreqStr;
-    sendFreqToRig(freq);
+
+     QString freq = selectedSpotData.dxFreqStr;
+     sendFreqToRig(freq);
+
 }
 
 void BandmapClientFrame::sendFreqToRig(QString freq)
@@ -299,8 +318,12 @@ void BandmapClientFrame::sendFreqToRig(QString freq)
     MinosLoggerEvents::SendFreqStrToRig(f);
 }
 
-void BandmapClientFrame::bearingActionSelected()
+
+
+
+void BandmapClientFrame::on_bearingActionSelected()
 {
+
     QString brg = selectedSpotData.dxBrg;
     QString loc = selectedSpotData.dxLocator;
     if (loc.count() < 6)
@@ -308,7 +331,9 @@ void BandmapClientFrame::bearingActionSelected()
         brg = brg.append(SHORTLOCATOR_IDENTIFIER);
 
     }
+
     sendBrgToRot(brg);
+
 }
 
 
@@ -322,8 +347,11 @@ void BandmapClientFrame::sendBrgToRot(QString brg)
 }
 
 
-void BandmapClientFrame::logActionSelected()
+
+
+void BandmapClientFrame::on_logActionSelected()
 {
+
     memoryData::memData spotData;
     spotData.callsign = selectedSpotData.dxCall;
     spotData.time = selectedSpotData.spotTime;
@@ -333,11 +361,17 @@ void BandmapClientFrame::logActionSelected()
     spotData.fromBandmap = true;
 
     MinosLoggerEvents::SendSpotToLog(spotData);
+
 }
 
 
-void BandmapClientFrame::memoryActionSelected()
+
+
+
+
+void BandmapClientFrame::on_memoryActionSelected()
 {
+
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf->isMemoryLoaded(ct))
     {
@@ -351,10 +385,16 @@ void BandmapClientFrame::memoryActionSelected()
         MinosLoggerEvents::SendSpotToMemory(spotData);
     }
 
+
 }
 
-void BandmapClientFrame::clearSpotActionSelected()
+
+
+
+
+void BandmapClientFrame::on_clearSpotActionSelected()
 {
+
 
     int ret = QMessageBox::warning(this, tr("Bandmap"),
                                    QString("Please confirm you want to delete this spot - %1?").arg(selectedSpotData.dxCall),
@@ -362,8 +402,10 @@ void BandmapClientFrame::clearSpotActionSelected()
     if (ret == QMessageBox::Yes)
     {
         bandmapSpotProxyModel->removeRows(selectedSpotDataRowNum, 1);
+        bandmapView->clearSelectedSpot();
         bandmapView->bandmapUpdate();
     }
+
 }
 
 void BandmapClientFrame::setContest(BaseContestLog *c)

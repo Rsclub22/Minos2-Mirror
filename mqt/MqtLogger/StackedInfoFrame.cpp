@@ -138,7 +138,7 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int /*arg1*/)
         currStackFrame = rigMemFrame;
         layout()->addWidget(rigMemFrame);
         rigMemFrame->setContest(contest);
-        tslf->setMemoryLoaded(true);
+        //tslf->setMemoryLoaded(true);
         break;
 
     case aeLocatorMap:
