@@ -438,7 +438,9 @@ void TSingleLogFrame::clearScreenLayout()
     otherMatchFrame->setContest(nullptr);
     archiveMatchFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
+    setClusterClientLoaded(false);
     bandmapControlFrame->setContest(nullptr);
+    setBandmapLoaded(false);
     wsjtxFrame->setContest(nullptr);
 
     while (singleLogFrameSplitter->count())

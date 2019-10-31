@@ -104,7 +104,7 @@ protected:
 
 
 private slots:
-    void bandmapResize(int);
+    void bandmapResize(int, int);
     void zoomUpdated(bool dir);
     void leftMouseButtonPressed(QPoint p);
     void mouseDoubleClicked(QPoint p);

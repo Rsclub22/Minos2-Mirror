@@ -6,6 +6,8 @@
 
 void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
 {
+    trace(QString("getMode: freq %1, dxBand %2, dxModeStr %3, dxModeMask %4").arg(freq).arg(dxBand).arg(dxModeStr).arg(dxModeMask));
+    trace(QString("getMode: modeBandPlan loaded Ok - %1").arg(modeBandPlan->checkLoadedOk() ? "true" : "false"));
     if (dxBand != "")
     {
 
@@ -15,10 +17,14 @@ void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dx
             QString b = dxBand;
 
             dxModeStr = modeBandPlan->getMode(b, f.remove('.').toDouble());
+            trace(QString("getMode: found dxModeStr - %1").arg(dxModeStr));
 
             int modeMask = clusterModes.indexOf(dxModeStr);
+            trace(QString("getMode: modeMask from clusterModes - %1").arg(QString::number(modeMask)));
+
             if (modeMask == -1)
             {
+                trace(QString("getmode: mode will be none"));
                 dxModeStr = "None";
                 dxModeMask = "0";
             }
@@ -31,6 +37,7 @@ void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dx
         else
         {
             // modeplan file missing
+            trace(QString("getMode - modeplan missing"));
             dxModeStr = "None";
             dxModeMask = "0";
 

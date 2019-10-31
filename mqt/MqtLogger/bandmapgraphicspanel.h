@@ -13,7 +13,7 @@ public:
     BandmapGraphicsPanel(QWidget *parent);
 
 signals:
-    void bandmapResize(int);
+    void bandmapResize(int, int);
     void leftMouseButtonPressed(QPoint);
     void mouseDoubleClicked(QPoint);
     void zoomMap(bool);

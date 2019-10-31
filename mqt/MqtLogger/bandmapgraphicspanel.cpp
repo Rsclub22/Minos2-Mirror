@@ -13,8 +13,8 @@ BandmapGraphicsPanel::BandmapGraphicsPanel(QWidget *parent)
 void BandmapGraphicsPanel::resizeEvent(QResizeEvent *)
 {
 
-    //qDebug() << "resize height " << size();
-    emit bandmapResize(size().height());
+    // do we need to keep this.....
+    emit bandmapResize(size().height(), size().width());
 
 }
 
