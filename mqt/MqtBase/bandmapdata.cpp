@@ -14,9 +14,8 @@
 
 BandmapData::BandmapData()
 {
-    rxTime = 0;
-    sentToMemory = false;
-    dxFreq = 0;
+    clear();
+
 }
 
 BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
@@ -106,4 +105,34 @@ void BandmapData::operator = (const BandmapData* bmd)
     spotComment = bmd->spotComment;
     spotType = bmd->spotType;
     isSelected = bmd->isSelected;
+}
+
+
+void BandmapData::clear()
+{
+
+    rxTime = 0;
+    spotTime = "";
+    dxFreqStr = "0";
+    dxFreq = 0;
+    dxBand = "";
+    dxBandMaskStr = "";
+    dxMode = "";
+    dxModeMaskStr = "";
+    dxCall = "";
+    dxLocator = "";
+    dxDist = "";
+    dxBrg = "";
+    rotBrg = "";
+    rotConnected = false;
+    dxCallWorked = false;
+    dxLocatorWorked = false;
+    sentToMemory = false;
+    spotterCall = "";
+    spotterLocator = "";
+    dxPropMode = "";
+    spotComment = "";
+    spotType = bandmapSpotType::NONE;
+    isSelected = false;
+
 }

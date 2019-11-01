@@ -91,7 +91,7 @@
          <item>
           <widget class="QCheckBox" name="displayPropCheckBox">
            <property name="text">
-            <string>Display Propogation Mode</string>
+            <string>Display Propagation Mode</string>
            </property>
           </widget>
          </item>

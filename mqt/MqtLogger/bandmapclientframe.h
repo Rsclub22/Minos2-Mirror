@@ -217,8 +217,21 @@ private:
     QAction* logAction;
     QAction* memoryAction;
     QAction* clearSpotAction;
-    BandmapData selectedSpotData;
-    int selectedSpotDataRowNum;
+
+    QMenu* contextSpotsMenu;
+    QAction* contextSpotsMenu_markSpotAction;
+    QAction* contextSpotsMenu_unMarkSpotAction;
+    QAction* contextSpotsMenu_freqAction;
+    QAction* contextSpotsMenu_bearingAction;
+    QAction* contextSpotsMenu_logAction;
+    QAction* contextSpotsMenu_memoryAction;
+    QAction* contextSpotsMenu_clearSpotAction;
+
+
+    //BandmapData actionMenuSelectedSpotData;
+    //int actionMenuSelectedSpotDataRowNum;
+    BandmapData contextMenuSelectedSpotData;
+    int contextMenuSelectedSpotDataRowNum;
 
     bool purgeSpotFlag;
     bool holdUpdateFlag;
@@ -248,6 +261,7 @@ private:
     QString readBandmapFreqLimit(QString band, QString mode);
     void getBandLimitsFromBandListXML();
     void traceMsg(QString msg);
+
 protected:
 
 
@@ -263,10 +277,10 @@ private slots:
 
      void on_contextMenuSelected(const QPoint &pos);
      void on_freqActionSelected();
-     void bearingActionSelected();
-     void logActionSelected();
-     void memoryActionSelected();
-     void clearSpotActionSelected();
+     void on_bearingActionSelected();
+     void on_logActionSelected();
+     void on_memoryActionSelected();
+     void on_clearSpotActionSelected();
      void sendBrgToRot(QString brg);
      void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq);
      void filterButtonSelected();
@@ -280,6 +294,16 @@ private slots:
      void addLogSpotToBandmapTable(LoggerSpots *spot);
      void mouseTimerCheckNewSpots();
      void on_FreqDisplayClicked();
+
+
+
+     void context_markSpotActionSelected();
+     void context_unMarkSpotActionSelected();
+     void context_freqActionSelected();
+     void context_logActionSelected();
+     void context_memoryActionSelected();
+     void context_clearSpotActionSelected();
+     void context_bearingActionSelected();
 };
 
 
