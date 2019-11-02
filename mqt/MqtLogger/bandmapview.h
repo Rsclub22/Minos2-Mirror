@@ -61,8 +61,13 @@ public:
 
     void getSpotData(int &selectedSpotDataRowNum, int displayedSpotNum, BandmapData &selectedSpot);
 
-    void clearSpotData(BandmapData &selectedSpot);
+    void clearSelectedSpotData();
 
+    int getSelectedSpotViewRowNum(){return selectedSpotViewRowNum;}
+    int getSelectedSpotDataRowNum(){return selectedSpotDataRowNum;}
+    BandmapData* getSelectedSpotDataPtr(){return &selectedSpot;}
+
+    void clearSelectedSpot();
 
     void setFilter(BandmapClientFilterDialog *filter);
 
@@ -163,7 +168,6 @@ private:
     void bandmapSelectFreq(int y);
     void bandmapSelectSpot(QPoint p);
     void sendFreqToRig(QString freq);
-    void clearSelectedSpot();
     void setSelectedSpot(int displayedSpotNum);
 
     void clearListOfMarkers();
@@ -173,6 +177,8 @@ private:
     int findNextNonWorkedLocatorDownList(int curSpotViewNum);
     int getViewPortStartYCoordOnScene();
     int getViewPortEndYCoordOnScene();
+    void traceMsg(QString msg);
+    void clearSpotData(BandmapData &selectedSpot);
 };
 
 #endif // BANDMAPVIEW_H

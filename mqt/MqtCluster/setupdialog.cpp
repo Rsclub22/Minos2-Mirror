@@ -77,7 +77,8 @@ SetupDialog::SetupDialog(QWidget *parent) :
 
     connect(clusterListModel, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(clusterListDataChanged(QStandardItem*)));
 
-
+    ui->displayModeCheckBox->setVisible(false);
+    ui->displayPropCheckBox->setVisible(false);
 
 }
 

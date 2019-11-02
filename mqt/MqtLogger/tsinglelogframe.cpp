@@ -1375,7 +1375,7 @@ bool TSingleLogFrame::isMemoryLoaded(BaseContestLog *c)
 
 void TSingleLogFrame::setMemoryLoaded(bool loaded)
 {
-    auxMemoryLoaded = loaded;
+    //auxMemoryLoaded = loaded;
 }
 
 //---------------------------------------------------------------------------
