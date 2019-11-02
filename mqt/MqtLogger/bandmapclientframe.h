@@ -134,6 +134,7 @@ public:
     void setFreq(QString);
     void setContest(BaseContestLog *c);
     void setHoldUpdateFlag(bool state);
+    bool getPurgeSpotFlag(){return purgeSpotFlag;}
     bool isSpotQueueEmpty();
     void buttonHandleDxSpots();
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -274,8 +275,9 @@ private slots:
      void on_FontChanged();
 
      void checkNewBandMapSpots();
+     void timerCheckNewBandMapSpots();
 
-     void on_contextMenuSelected(const QPoint &pos);
+     void on_contextMenuSelected(const QPoint &pos, const QPoint &mapP);
      void on_freqActionSelected();
      void on_bearingActionSelected();
      void on_logActionSelected();
@@ -304,6 +306,7 @@ private slots:
      void context_memoryActionSelected();
      void context_clearSpotActionSelected();
      void context_bearingActionSelected();
+
 };
 
 
@@ -332,10 +335,11 @@ public:
         else if (event->type() == QEvent::Leave)
         {
             bandmapFrame->mouseInFrameTimer->stop();
-            if (!bandmapFrame->isSpotQueueEmpty())
+            if (!bandmapFrame->getPurgeSpotFlag())
             {
-                bandmapFrame->buttonHandleDxSpots();
+               bandmapFrame->buttonHandleDxSpots();
             }
+
             bandmapFrame->setHoldUpdateFlag(false);
 
         }

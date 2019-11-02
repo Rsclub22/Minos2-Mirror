@@ -131,8 +131,6 @@ public:
     bool radioLoaded;
     bool isRadioLoaded();
 
-    bool isMemoryLoaded(BaseContestLog *c);
-    void setMemoryLoaded(bool);
 
     void setRotatorState( QString f );
     void setRotatorBearing( QString f );
@@ -167,8 +165,6 @@ private:
 
     QString clusterServerState;
     int lastStanzaCount;
-
-    bool auxMemoryLoaded;
 
     MatchTreeFrame *xferTree = nullptr;
 

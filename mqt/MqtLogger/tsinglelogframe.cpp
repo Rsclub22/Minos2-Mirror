@@ -47,8 +47,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     keyerLoaded(false),
     radioLoaded(false),
     contest(contest),
-    lastStanzaCount( 0 ),
-    auxMemoryLoaded(false)
+    lastStanzaCount( 0 )
+
 
 {
 #ifdef Q_OS_ANDROID
@@ -1360,23 +1360,7 @@ void TSingleLogFrame::on_SetMemory(BaseContestLog *c, QString call, QString loc)
     }
 }
 
-bool TSingleLogFrame::isMemoryLoaded(BaseContestLog *c)
-{
-    if (contest == c)
-    {
-        return auxMemoryLoaded;
-    }
-    else
-    {
-        return false;
-    }
 
-}
-
-void TSingleLogFrame::setMemoryLoaded(bool loaded)
-{
-    //auxMemoryLoaded = loaded;
-}
 
 //---------------------------------------------------------------------------
 void TSingleLogFrame::on_KeyerLoaded()
@@ -1941,3 +1925,6 @@ void TSingleLogFrame::presetTurn(QString b)
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
         FKHRotControlFrame->presetTurn(b);
 }
+
+//---------------------------------------------------------------------------
+

@@ -475,11 +475,14 @@ void BandmapView::mouseDoubleClicked(QPoint p)
 
 void BandmapView::on_bandmap_customContextMenuRequested( const QPoint& p)
 {
+    qDebug() << QString("1 - context select point x = %1, y = %2").arg(p.x()).arg(p.y());
+
     QPoint mapP = bandmapGraphicsView->mapToScene(p).toPoint();
 
     if (mapP.x() >= dial->getCurWidth() && mapP.x() <= bandmapGraphicsView->width())
     {
-        emit contextMenuSelected(mapP);
+        qDebug() << QString("2 - context select map to scene point x = %1, y = %2").arg(mapP.x()).arg(mapP.y());
+        emit contextMenuSelected(p, mapP);
     }
 }
 

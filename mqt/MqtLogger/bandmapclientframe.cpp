@@ -113,13 +113,13 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 
     checkNewSpotsTimer = new QTimer(this);
-    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewBandMapSpots()));
+    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(timerCheckNewBandMapSpots()));
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToBandmap(BaseContestLog *, Callsign, QString, QString, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString, QString, QString)));
 
-    connect( bandmapView, SIGNAL( contextMenuSelected( const QPoint& ) ), this, SLOT( on_contextMenuSelected( const QPoint& ) ) );
+    connect( bandmapView, SIGNAL( contextMenuSelected( const QPoint&, const QPoint& ) ), this, SLOT( on_contextMenuSelected( const QPoint&, const QPoint& ) ) );
     connect (ui->filtersPushBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
 
     checkNewFilters = new QTimer(this);
@@ -419,17 +419,16 @@ void BandmapClientFrame::on_memoryActionSelected()
     {
         traceMsg(QString("menu send to memory selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        if (tslf->isMemoryLoaded(ct))
-        {
-            memoryData::memData spotData;
-            spotData.callsign = bandmapView->getSelectedSpotDataPtr()->dxCall;
-            spotData.time = bandmapView->getSelectedSpotDataPtr()->spotTime;
-            spotData.freq = bandmapView->getSelectedSpotDataPtr()->dxFreqStr;
-            spotData.locator = bandmapView->getSelectedSpotDataPtr()->dxLocator;
-            spotData.bearing = bandmapView->getSelectedSpotDataPtr()->dxBrg.toInt();
 
-            MinosLoggerEvents::SendSpotToMemory(spotData);
-        }
+        memoryData::memData spotData;
+        spotData.callsign = bandmapView->getSelectedSpotDataPtr()->dxCall;
+        spotData.time = bandmapView->getSelectedSpotDataPtr()->spotTime;
+        spotData.freq = bandmapView->getSelectedSpotDataPtr()->dxFreqStr;
+        spotData.locator = bandmapView->getSelectedSpotDataPtr()->dxLocator;
+        spotData.bearing = bandmapView->getSelectedSpotDataPtr()->dxBrg.toInt();
+
+        MinosLoggerEvents::SendSpotToMemory(spotData);
+
     }
 
 
@@ -462,15 +461,17 @@ void BandmapClientFrame::on_clearSpotActionSelected()
 }
 
 
-void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos)
+void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos, const QPoint& mapP)
 {
-
-    int contextSelectedSpotViewRowNum = bandmapView->isClickInRegionOfSpot(pos);
+    qDebug() << QString("3 - context menu selected pos x = %1, y = %2").arg(pos.x()).arg(pos.y());
+    qDebug() << QString("4 - context menu selected mapP x = %1, y = %2").arg(mapP.x()).arg(mapP.y());
+    int contextSelectedSpotViewRowNum = bandmapView->isClickInRegionOfSpot(mapP);
     traceMsg(QString("Context Menu Selected - ViewRowNum %1").arg(contextSelectedSpotViewRowNum));
     if (contextSelectedSpotViewRowNum != NO_SELECTED_ROWNUM)
     {
         bandmapView->getSpotData(contextMenuSelectedSpotDataRowNum, contextSelectedSpotViewRowNum, contextMenuSelectedSpotData);
-        QPoint globalPos = ui->bandmapGraphicsView->mapToGlobal( pos );
+        QPoint globalPos = ui->bandmapGraphicsView->viewport()->mapToGlobal( pos );
+        qDebug() << QString("5 - context menu selected global pos x = %1, y = %2").arg(globalPos.x()).arg(globalPos.y());
         contextSpotsMenu->popup(globalPos);
 
     }
@@ -553,19 +554,15 @@ void BandmapClientFrame::context_logActionSelected()
 void BandmapClientFrame::context_memoryActionSelected()
 {
     traceMsg(QString("menu send to memory selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (tslf->isMemoryLoaded(ct))
-    {
-        memoryData::memData spotData;
-        spotData.callsign = contextMenuSelectedSpotData.dxCall;
-        spotData.time = contextMenuSelectedSpotData.spotTime;
-        spotData.freq = contextMenuSelectedSpotData.dxFreqStr;
-        spotData.locator = contextMenuSelectedSpotData.dxLocator;
-        spotData.bearing = contextMenuSelectedSpotData.dxBrg.toInt();
 
-        MinosLoggerEvents::SendSpotToMemory(spotData);
-    }
+    memoryData::memData spotData;
+    spotData.callsign = contextMenuSelectedSpotData.dxCall;
+    spotData.time = contextMenuSelectedSpotData.spotTime;
+    spotData.freq = contextMenuSelectedSpotData.dxFreqStr;
+    spotData.locator = contextMenuSelectedSpotData.dxLocator;
+    spotData.bearing = contextMenuSelectedSpotData.dxBrg.toInt();
 
+    MinosLoggerEvents::SendSpotToMemory(spotData);
 
 }
 
@@ -816,7 +813,7 @@ void BandmapClientFrame::dxSpots(QVector<QString> spotMsg)
  }
 
 
-void BandmapClientFrame::checkNewBandMapSpots()
+void BandmapClientFrame::timerCheckNewBandMapSpots()
 {
     if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
     {
@@ -852,6 +849,45 @@ void BandmapClientFrame::checkNewBandMapSpots()
 
     }
 }
+
+
+
+void BandmapClientFrame::checkNewBandMapSpots()
+{
+
+
+    // any cluster spots
+    if (!spotQueue.isEmpty())
+    {
+
+        int sqsize = spotQueue.count();
+        for (int i = sqsize -1 ; i > -1; i--)
+        {
+             addDxSpotToBandmapTable(spotQueue[i]);
+             traceMsg("New Cluster Spot: " + spotQueue[i]);
+
+
+        }
+
+        spotQueue.clear();
+    }
+
+
+    // any logger spots
+    if (!logSpotQueue.isEmpty())
+    {
+        for (int i = 0; i < logSpotQueue.count(); i++)
+        {
+            addLogSpotToBandmapTable(logSpotQueue[i]);
+            traceMsg(QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq()).arg(logSpotQueue[i]->getLocator()));
+            delete logSpotQueue[i];
+        }
+
+        logSpotQueue.clear();
+    }
+
+}
+
 
 
 void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
@@ -1434,7 +1470,7 @@ bool BandmapClientFrame::event(QEvent *event)
    else if (event->type() == QEvent::Leave)
    {
        mouseInFrameTimer->stop();
-       if (!spotQueue.isEmpty())
+       if (!purgeSpotFlag)
        {
            checkNewBandMapSpots();
        }
@@ -1505,7 +1541,7 @@ void BandmapClientFrame::mouseTimerCheckNewSpots()
 {
     if (holdUpdateFlag)
     {
-        if (!spotQueue.isEmpty())
+        if (!purgeSpotFlag)
         {
             checkNewBandMapSpots();
         }
@@ -1647,7 +1683,7 @@ QString BandmapClientFrame::readBandmapFreqLimit(QString band, QString mode)
     QFile limitFile(BANDPLAN_FREQ_LIMITS_FILE);
     if (limitFile.exists())
     {
-        traceMsg(QString("bandmapLimit file found - %").arg(BANDPLAN_FREQ_LIMITS_FILE));
+        traceMsg(QString("bandmapLimit file found - %1").arg(BANDPLAN_FREQ_LIMITS_FILE));
         QString fileName = BANDPLAN_FREQ_LIMITS_FILE;
         QSettings settings(fileName, QSettings::IniFormat);
         QStringList limitBands = settings.childGroups();
