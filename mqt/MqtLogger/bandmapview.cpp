@@ -690,12 +690,12 @@ void BandmapView::setFreq(double f, bool legalFreq)
     {
         // tuning up, move viewport
 
-        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart + 100);
+        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart + (dialData::khzPixelStep[zoomLevel] * 2));
     }
     else if (freqInt32 < dial->getScaleStartFreq())
     {
         // tuning down, move viewport
-        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart - 100);
+        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart - (dialData::khzPixelStep[zoomLevel] * 2));
     }
 
     dial->setCurFreq(f);
