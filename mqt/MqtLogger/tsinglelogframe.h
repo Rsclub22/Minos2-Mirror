@@ -291,6 +291,8 @@ public:
     void on_SetTransVertEnabled(bool status, PubSubName psn);
 
 
+    void setTuneAddBandMapSetting(bool state);
+    bool getTuneAddBandMapSetting();
 };
 
 #endif // TSINGLELOGFRAME_H

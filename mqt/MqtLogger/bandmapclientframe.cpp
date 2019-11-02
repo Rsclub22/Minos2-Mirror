@@ -1710,3 +1710,29 @@ void BandmapClientFrame::traceMsg(QString msg)
 {
     trace(QString("bandmapClientFrame: %1").arg(msg));
 }
+
+
+void BandmapClientFrame::saveTuneAddBandMapSetting(bool state)
+{
+    QString fileName = "./Configuration/bandmap.ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("Bandmap");
+    config.setValue("TuneAddBandmap", state);
+
+    config.endGroup();
+
+
+}
+
+bool BandmapClientFrame::readTuneAddBandMapSetting()
+{
+    QString fileName = "./Configuration/bandmap.ini";
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("Bandmap");
+    bool state = config.value("TuneAddBandmap", true).toBool();
+    config.endGroup();
+
+    return state;
+}

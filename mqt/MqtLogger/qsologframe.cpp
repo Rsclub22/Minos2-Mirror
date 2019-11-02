@@ -132,6 +132,8 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->qsoFrame->setStyleSheet(ssQsoFrameBlue);
     widgetStyles[ui->qsoFrame] = ssQsoFrameBlue;
 
+    connect(ui->tuningAddMapChkBox, SIGNAL(stateChanged(int)), this, SLOT(tuningAddMapChkBoxStateChange(int)));
+
 
 
 }
@@ -2655,10 +2657,70 @@ void QSOLogFrame::setBandMapControlsVisible(bool visible)
     ui->runToolButton->setVisible(visible);
     ui->bandmapMarkFreqPb->setVisible(visible);
     ui->bandmapSaveFreqPb->setVisible(visible);
+    ui->tuningAddMapChkBox->setVisible(visible);
 
 }
 
 
+void QSOLogFrame::tuningAddMapChkBoxStateChange(int state)
+{
+
+
+    if (state == Qt::Checked)
+    {
+        if (!getTuneAddBandMapSetting())
+        {
+            setTuneAddBandMapSetting(true);
+        }
+
+    }
+    else
+    {
+        if (getTuneAddBandMapSetting())
+        {
+            setTuneAddBandMapSetting(false);
+        }
+
+    }
+}
+
+void QSOLogFrame::setTuningAddMapChkBoxState()
+{
+    bool state = getTuneAddBandMapSetting();
+    if (state != ui->tuningAddMapChkBox->isChecked())
+    {
+        if (state)
+        {
+            ui->tuningAddMapChkBox->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            ui->tuningAddMapChkBox->setCheckState(Qt::Unchecked);
+        }
+    }
+
+}
+
+bool QSOLogFrame::getTuneAddBandMapSetting()
+{
+    bool state = false;
+    if (bandMapLoaded)
+    {
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        state = tslf->getTuneAddBandMapSetting();
+    }
+
+    return state;
+}
+
+void QSOLogFrame::setTuneAddBandMapSetting(bool state)
+{
+    if (bandMapLoaded)
+    {
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        tslf->setTuneAddBandMapSetting(state);
+    }
+}
 
 
 void QSOLogFrame::on_SpotPbClicked()
@@ -2806,6 +2868,7 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
     if (isBandMapLoaded())
     {
         setBandMapControlsVisible(true);
+        setTuningAddMapChkBoxState();
     }
     else
     {
@@ -3125,9 +3188,14 @@ void QSOLogFrame::on_FreqChanged(QString f)
             if (callsignEnterFreq != dialFreq)
             {
                 callsignEnterTextFreq = "00000000000";
-                on_bandmapSaveFreqPbClicked();
-                ui->CallsignEdit->clear();
-                ui->LocEdit->clear();
+
+                if (ui->tuningAddMapChkBox->isChecked())
+                {
+                    on_bandmapSaveFreqPbClicked();
+                    ui->CallsignEdit->clear();
+                    ui->LocEdit->clear();
+                }
+
             }
         }
     }

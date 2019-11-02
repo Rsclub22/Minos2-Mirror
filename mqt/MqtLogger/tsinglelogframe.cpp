@@ -1448,6 +1448,25 @@ bool TSingleLogFrame::isBandMapLoaded()
    return bandMapLoaded;
 }
 
+bool TSingleLogFrame::getTuneAddBandMapSetting()
+{
+    bool state = false;
+    if (bandmapControlFrame)
+    {
+        state = bandmapControlFrame->readTuneAddBandMapSetting();
+    }
+
+    return state;
+}
+
+void TSingleLogFrame::setTuneAddBandMapSetting(bool state)
+{
+    if (bandmapControlFrame)
+    {
+        bandmapControlFrame->saveTuneAddBandMapSetting(state);
+    }
+}
+
 //---------------------------------------------------------------------------
 
 // Cluster

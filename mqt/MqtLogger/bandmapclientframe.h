@@ -152,6 +152,9 @@ public:
 
     void setClusterServerLoaded(bool loaded);
 
+    void saveTuneAddBandMapSetting(bool state);
+    bool readTuneAddBandMapSetting();
+
 signals:
 
     void freqDisplayClicked();
