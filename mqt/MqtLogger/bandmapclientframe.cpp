@@ -418,7 +418,7 @@ void BandmapClientFrame::on_memoryActionSelected()
     if (bandmapView->getSelectedSpotDataPtr()->isSelected)
     {
         traceMsg(QString("menu send to memory selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        // TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
         memoryData::memData spotData;
         spotData.callsign = bandmapView->getSelectedSpotDataPtr()->dxCall;
@@ -427,7 +427,7 @@ void BandmapClientFrame::on_memoryActionSelected()
         spotData.locator = bandmapView->getSelectedSpotDataPtr()->dxLocator;
         spotData.bearing = bandmapView->getSelectedSpotDataPtr()->dxBrg.toInt();
 
-        MinosLoggerEvents::SendSpotToMemory(spotData);
+        MinosLoggerEvents::SendSpotToMemory(ct,spotData);
 
     }
 
@@ -562,7 +562,7 @@ void BandmapClientFrame::context_memoryActionSelected()
     spotData.locator = contextMenuSelectedSpotData.dxLocator;
     spotData.bearing = contextMenuSelectedSpotData.dxBrg.toInt();
 
-    MinosLoggerEvents::SendSpotToMemory(spotData);
+    MinosLoggerEvents::SendSpotToMemory(ct, spotData);
 
 }
 

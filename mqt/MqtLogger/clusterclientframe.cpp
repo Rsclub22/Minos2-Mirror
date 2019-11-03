@@ -1177,7 +1177,7 @@ void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyM
 
     memoryData::memData spotData = getSpotDataToMemoryVariable(spotProxyModel, row);
 
-    MinosLoggerEvents::SendSpotToMemory(spotData);
+    MinosLoggerEvents::SendSpotToMemory(ct, spotData);
     spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, DataStoredRole);
 
 }

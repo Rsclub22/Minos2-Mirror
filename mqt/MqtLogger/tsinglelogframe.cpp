@@ -81,6 +81,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)), this, SLOT(on_AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)));
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)));
     connect(&MinosLoggerEvents::mle, SIGNAL(setMemory(BaseContestLog *, QString, QString)), this, SLOT(on_SetMemory(BaseContestLog *, QString, QString)));
+    // from cluster frame or bandmap frame
+    connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToMemory(BaseContestLog *, memoryData::memData)), this, SLOT(on_dxSpotToMemory(BaseContestLog *, memoryData::memData)));
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ColumnsChanged()), this, SLOT(onColumnsChanged()));
@@ -1359,6 +1361,45 @@ void TSingleLogFrame::on_SetMemory(BaseContestLog *c, QString call, QString loc)
        }
     }
 }
+
+
+
+// send to memory from DXCluster frame or Bandmapframe
+
+void TSingleLogFrame::on_dxSpotToMemory(BaseContestLog *c, memoryData::memData dxData)
+{
+
+    if (contest == c)
+    {
+
+
+        int n = -1;
+        LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
+
+        int mcount = ct->rigMemories.size();
+        for (int i = 0; i <= mcount; i ++)  // <= - extra one gets blank
+        {
+            memoryData::memData m = ct->getRigMemoryData(i);
+
+            if ( m.callsign == memDefData::DEFAULT_CALLSIGN)
+            {
+                n = i;
+                break;
+            }
+        }
+
+        if (n == -1)
+        {
+            mShowMessage("Panic", this);
+            return;
+        }
+
+        ct->saveRigMemory(n, dxData);
+
+        MinosLoggerEvents::sendUpdateMemories(ct);
+    }
+}
+
 
 
 

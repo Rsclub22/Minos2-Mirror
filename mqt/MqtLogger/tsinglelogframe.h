@@ -278,6 +278,7 @@ private slots:
     void on_clusterServerLoaded();
     void on_SendSpotToClusterServer(QString freq, QString callsign, QString loc);
     void on_setClusterTXSpotEnableState(QString state);
+    void on_dxSpotToMemory(BaseContestLog *c, memoryData::memData dxData);
 public:
     void sendTpm(int t, QString f);
     
