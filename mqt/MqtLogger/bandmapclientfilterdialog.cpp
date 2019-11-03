@@ -215,7 +215,7 @@ void BandmapClientFilterDialog::setModeFilter(bool state, int mode)
 void BandmapClientFilterDialog::restoreModes()
 {
 
-    for (int i = 0; i < NUM_MODES; i++)
+    for (int i = 0; i < clusterModes.count(); i++)
     {
 
         modeChkBoxList[i]->setChecked(filterSettings.modeFilters[i]);
