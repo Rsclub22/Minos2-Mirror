@@ -45,15 +45,15 @@ void BandmapGraphicsPanel::keyPressEvent(QKeyEvent *event)
 {
     int Key = event->key();
     Qt::KeyboardModifiers mods = event->modifiers();
-    bool shift = mods & Qt::ShiftModifier;
+    //bool shift = mods & Qt::ShiftModifier;
     bool ctrl = mods & Qt::ControlModifier;
     bool alt = mods & Qt::AltModifier;
 
-    if (Key == Qt::Key_Plus && shift)
+    if (Key == Qt::Key_Plus)
     {
         emit zoomMap(false);
     }
-    else if (Key == Qt::Key_Underscore && shift)
+    else if (Key == Qt::Key_Minus)
     {
         emit zoomMap(true);
     }
