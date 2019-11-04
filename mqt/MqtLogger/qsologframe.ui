@@ -303,6 +303,13 @@ to</string>
           </layout>
          </item>
          <item>
+          <widget class="QCheckBox" name="tuningAddMapChkBox">
+           <property name="text">
+            <string>Tuning - Add Map</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="horizontalSpacer_5">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>

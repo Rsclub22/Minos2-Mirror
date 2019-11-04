@@ -80,6 +80,10 @@ public:
     void scrollBandmapCenterToFreq(qint64 freq);
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
 
+signals:
+
+    void contextMenuSelected(const QPoint&, const QPoint&);
+
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 
@@ -90,9 +94,6 @@ protected slots:
 
 
 
-signals:
-
-    void contextMenuSelected(const QPoint &p);
 
 
 protected:

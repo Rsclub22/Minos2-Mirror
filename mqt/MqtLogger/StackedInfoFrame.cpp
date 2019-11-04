@@ -36,6 +36,7 @@ AuxEntries getAuxEntryType(QString s)
     }
     return aeClock;
 }
+
 QString getAuxTypeString(AuxEntries t)
 {
     foreach(const AuxTypeOption &opt, auxoptions)
@@ -54,6 +55,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     ui(new Ui::StackedInfoFrame),
     stackInstance(instance),
     contest(nullptr)
+
 {
     ui->setupUi(this);
 
@@ -101,7 +103,7 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int /*arg1*/)
     locTreeFrame = nullptr;
     statsFrame = nullptr;
 
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
 
     switch ( getAuxEntryType(ui->infoCombo->currentText()) )
     {
@@ -138,7 +140,6 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int /*arg1*/)
         currStackFrame = rigMemFrame;
         layout()->addWidget(rigMemFrame);
         rigMemFrame->setContest(contest);
-        //tslf->setMemoryLoaded(true);
         break;
 
     case aeLocatorMap:
@@ -173,6 +174,8 @@ void StackedInfoFrame::on_infoCombo_currentIndexChanged(int /*arg1*/)
         contest->commonSave(false);
     }
 }
+
+
 
 void StackedInfoFrame::setContest(LoggerContestLog *ct)
 {

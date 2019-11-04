@@ -278,6 +278,10 @@ private:
     void showRunToolButtonOnFreq();
     QString getRunMemoryFreq(int memoryNumber);
 
+    bool getTuneAddBandMapSetting();
+    void setTuneAddBandMapSetting(bool state);
+
+    void setTuningAddMapChkBoxState();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
@@ -340,6 +344,7 @@ private slots:
 
 
 
+    void tuningAddMapChkBoxStateChange(int state);
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 

@@ -50,10 +50,12 @@ public:
     void setCurrentFrameType(QString);
 
 
+
 private:
     Ui::StackedInfoFrame *ui;
 
     int stackInstance = 0;
+
 
     LoggerContestLog *contest;
 
