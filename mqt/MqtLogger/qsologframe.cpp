@@ -1044,9 +1044,9 @@ void QSOLogFrame::showScreenEntry( )
       ui->SerTXEdit->setText(temp.serials.trimmed());
       ui->RSTRXEdit->setText(temp.repr.trimmed());
       ui->SerRXEdit->setText(temp.serialr.trimmed());
-      ui->LocEdit->setText(temp.loc.loc.getValue().trimmed());;  // also forces update of score etc
-      ui->QTHEdit->setText(temp.extraText.trimmed());;
-      ui->CommentsEdit->setText(temp.comments.trimmed());;
+      ui->LocEdit->setText(temp.loc.loc.getValue().trimmed());  // also forces update of score etc
+      ui->QTHEdit->setText(temp.extraText.trimmed());
+      ui->CommentsEdit->setText(temp.comments.trimmed());
       ui->NonScoreCheckBox->setChecked(temp.contactFlags & NON_SCORING);
       ui->DeletedCheckBox->setChecked(temp.contactFlags & DONT_PRINT);
       if (edit)
@@ -2725,23 +2725,38 @@ void QSOLogFrame::setTuneAddBandMapSetting(bool state)
 
 void QSOLogFrame::on_SpotPbClicked()
 {
-    if (runButtonOnFlag && radioOffRunFreq)     // don't send a spot when running a freq
+    if ((runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag)     // don't send a spot when running a freq
     {
         if (ui->lastLoggedChkBx->isChecked())
         {
             // send last spot logged
+            trace(QString("spotButton: send last logged call %1 to dxCluster").arg(lastLoggedCallsign.realCall));
             emit sendSpotToClusterServer( lastLoggedFreq.remove('.'), lastLoggedCallsign.realCall, lastLoggedLocator );
             ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq);
         }
         else
         {
-            memoryData::memData logData = getLogDetails();
-            if (!logData.callsign.isEmpty() || !logData.freq.isEmpty())
+            memoryData::memData logData;
+            if (getLogDetails(logData))
             {
-               emit sendSpotToClusterServer(logData.freq.remove('.'), logData.callsign, logData.locator);
-               ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq);
+                // callsign valid
+                if (!logData.callsign.isEmpty() || !logData.freq.isEmpty())
+                {
+                   trace(QString("spotButton: send logged call %1 to dxCluster").arg(logData.callsign));
+                    emit sendSpotToClusterServer(logData.freq.remove('.'), logData.callsign, logData.locator);
+                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq);
+                }
+                else
+                {
+                    trace(QString("spotButton: send logged invalid callsign %1").arg(logData.callsign));
+                }
             }
+
         }
+    }
+    else
+    {
+        trace(QString("spotButton: don't send spot, on run freq"));
     }
 
 
@@ -2749,17 +2764,35 @@ void QSOLogFrame::on_SpotPbClicked()
 
 void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 {
-    memoryData::memData logData = getLogDetails();
-    emit bandmapMarkFreq(lastLoggedCallsign.realCall, logData.freq, logData.locator, QString::number(logData.bearing));
+    memoryData::memData logData;
+    if(getLogDetails(logData))
+    {
+        trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
+        emit bandmapMarkFreq(lastLoggedCallsign.realCall, logData.freq, logData.locator, QString::number(logData.bearing));
+    }
+    else
+    {
+        trace(QString("bandmapMark: mark clicked invalid callsign %1").arg(logData.callsign));
+    }
+
 }
 
 
 void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 {
-    memoryData::memData logData = getLogDetails();
-    callsignEnterTextFreq = "00000000000";
-    ui->CallsignEdit->clear();
-    emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+    memoryData::memData logData;
+    if (getLogDetails(logData))
+    {
+        callsignEnterTextFreq = "00000000000";
+        ui->CallsignEdit->clear();
+        trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
+        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+    }
+    else
+    {
+        trace(QString("bandmapSave: save clicked invalid callsign %1").arg(logData.callsign));
+    }
+
 }
 
 void QSOLogFrame::showRunButtonOnOff(bool state)
@@ -2789,6 +2822,7 @@ void QSOLogFrame::showRunToolButtonOnFreq()
 }
 
 
+/*
 memoryData::memData QSOLogFrame::getLogDetails()
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -2797,6 +2831,40 @@ memoryData::memData QSOLogFrame::getLogDetails()
     tslf->getDetails(logData);
 
     return logData;
+
+}
+*/
+
+bool QSOLogFrame::getLogDetails(memoryData::memData &logData)
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    getScreenEntry();
+    calcLoc();
+
+    if (screenContact.cs.validate() != CS_OK)
+    {
+        logData.callsign = screenContact.cs.fullCall.getValue();
+        return false;
+
+    }
+    else
+    {
+        logData.callsign = screenContact.cs.fullCall.getValue();
+        logData.freq = curFreq;
+        logData.locator = screenContact.loc.loc.getValue().trimmed();
+        logData.mode = screenContact.mode;
+        if (screenContact.loc.loc.getValue().trimmed().isEmpty())
+        {
+            logData.bearing = tslf->getCurrentBearing();
+        }
+        else
+        {
+            logData.bearing = tslf->getBearingFrmQSOLog();
+        }
+    }
+
+    return true;
+
 
 }
 

@@ -1381,10 +1381,12 @@ void ClusterMainWindow::sendText()
 
 int ClusterMainWindow::txText(QString msg)
 {
+    trace(QString("txText: Sending text - %1 - to dxCluster").arg(msg));
     int error = 0;
     if (loginSuccess)
     {
        error = client->sendData(msg);
+
        echoCmd(msg);
        return error;
 
@@ -1439,43 +1441,64 @@ void ClusterMainWindow::LogTimerTimer()
 
 void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString loc)
 {
+
+
     bool spotStatus = false;
+    QString spotMsg = assembleSpotForDXCluster(freq, call, loc);
     if (setupCluster->getSendToDXClusterEnabled() && loginSuccess && !freq.isEmpty() && !call.isEmpty())
     {
+        trace(QString("SendSpotToDXCluster: sending spot, call %1, freq %2, locator %3").arg(call).arg(freq).arg(loc));
         if (checkValidBand(freq))
         {
-            QString spotMsg = assembleSpotForDXCluster(freq, call, loc);
+
 #ifdef TXSPOT
             int error = txText(spotMsg);
             if (error < 0)
             {
                 trace(QString("SendSpotToDXCluster: sending spot %1 failed to send").arg(spotMsg));
+                spotStatus = false;
+                addSentSpotToDisplayQueue(spotStatus, sendClusterReasonText[COMMS_ERR]);
             }
             else
             {
-                trace(QString("SendSpotToDXCluster: sending spot %1 failed to send").arg(spotMsg));
+                trace(QString("SendSpotToDXCluster: sending spot %1 sent Ok").arg(spotMsg));
                 spotStatus = true;
+                addSentSpotToDisplayQueue(spotStatus, sendClusterReasonText[TX_OK]);
             }
 #endif
-            addSentSpotToDisplayQueue(spotStatus);
+
 
         }
         else
         {
             trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq).arg(call));
+            spotStatus = false;
+            addSentSpotToDisplayQueue(false, sendClusterReasonText[FREQ_ERR]);
+        }
+    }
+    else
+    {
+        spotStatus = false;
+        if (!loginSuccess)
+        {
+           addSentSpotToDisplayQueue(false, sendClusterReasonText[NOT_LOGGED_ON]);
+        }
+        else if (!freq.isEmpty() || !call.isEmpty())
+        {
+           addSentSpotToDisplayQueue(false, sendClusterReasonText[CALL_LOC_EMPTY]);
         }
     }
 }
 
 
-void ClusterMainWindow::addSentSpotToDisplayQueue(bool spotStatus)
+void ClusterMainWindow::addSentSpotToDisplayQueue(bool spotStatus, QString reason)
 {
     QDateTime sentSpotDateTime = QDateTime::currentDateTimeUtc();
     qint64 rxTime = sentSpotDateTime.toMSecsSinceEpoch()/1000;
     QString sentSpotTime = sentSpotDateTime.toString("HH:MM");
     SentSpotData* sentSpotData = new SentSpotData(rxTime, sentSpotTime,
                                                    sentFreq, sentCallsign,
-                                                  sentLoc, sentComment, spotStatus);
+                                                  sentLoc, sentComment, spotStatus, reason);
 
     sentSpotDataModel->rowData = sentSpotData;
     sentSpotDataModel->insertRows(sentSpotDataModel->rowCount(), 1);

@@ -52,6 +52,8 @@ QVariant SentSpotDataModel::headerData(int section, Qt::Orientation orientation,
                     return tr("Comment");
                 case SENT_SPOT_STATUS_COL_NUM:
                     return tr("Status");
+                case SENT_SPOT_REASON_COL_NUM:
+                    return tr("Reason");
                 default:
                 return QVariant();
             }
@@ -152,6 +154,9 @@ QVariant SentSpotDataModel::data(const QModelIndex &index, int role) const
                 }
 
             break;
+            case SENT_SPOT_REASON_COL_NUM:
+                d = sentSpot->reason;
+            break;
 
             default:
                 d = "";
@@ -187,7 +192,9 @@ QVariant SentSpotDataModel::data(const QModelIndex &index, int role) const
             break;
             case SENT_SPOT_RXTIME_COL_NUM:
                 d = sentSpot->rxTime;
-
+            break;
+            case SENT_SPOT_REASON_COL_NUM:
+                d = sentSpot->reason;
             break;
 
 
@@ -230,6 +237,9 @@ bool SentSpotDataModel::setData(const QModelIndex & index, const QVariant & valu
                 break;
             case SENT_SPOT_STATUS_COL_NUM:
                 sentSpot->sentOk = value.toBool();
+            break;
+            case SENT_SPOT_REASON_COL_NUM:
+                sentSpot->reason = value.toBool();
             break;
 
 

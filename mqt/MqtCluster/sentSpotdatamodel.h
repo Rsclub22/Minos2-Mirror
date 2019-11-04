@@ -17,7 +17,7 @@
 #include "sentSpotdata.h"
 #include "clustercommon.h"
 
-const int sentSpotColCount = 7;
+const int sentSpotColCount = 8;
 
 const int SentDataStoredRole = Qt::UserRole + 0;
 
@@ -28,6 +28,7 @@ const int SENT_SPOT_DXLOC_COL_NUM = 3;
 const int SENT_SPOT_COMMENT_COL_NUM = 4;
 const int SENT_SPOT_STATUS_COL_NUM = 5;
 const int SENT_SPOT_RXTIME_COL_NUM = 6;
+const int SENT_SPOT_REASON_COL_NUM = 7;
 
 
 

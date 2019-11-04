@@ -878,6 +878,11 @@ bool RigControl::get_serialConnected()
      return serialData::handshakeCodes[index];
  }
 
+ enum serialData::serial_force_Lines_e RigControl::getSerialForceLineCode(int index)
+ {
+    return serialData::forceLinesCodes[index];
+ }
+
  QStringList RigControl::getParityCodeNames()
  {
     return serialData::parityStr;
@@ -886,6 +891,11 @@ bool RigControl::get_serialConnected()
  QStringList RigControl::getHandShakeNames()
  {
      return serialData::handshakeStr;
+ }
+
+ QStringList RigControl::getForceLinesNames()
+ {
+     return serialData::forceLinesStr;
  }
 
  QStringList RigControl::getBaudRateNames()
