@@ -973,8 +973,9 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
     {
         logData.bearing = tslf->getBearingFrmQSOLog();
     }
-    // load log data into memory
+
 }
+
 void RigControlFrame::getRigDetails(memoryData::memData &m)
 {
     m.freq = curFreq;

@@ -180,6 +180,8 @@ private slots:
     void useRigCtldSelected(bool selected);
     void rigCtldNetworkAddressSelected();
     void rigCtldNetworkPortSelected();
+    void on_forceDTRSelected();
+    void on_forceRTSSelected();
 private:
 
 
@@ -203,6 +205,7 @@ private:
     void fillDataBitsInfo();
     void fillSpeedInfo();
     //void fillPortsInfo();
+    void fillForceLinesInfo();
     void fillRadioModelInfo();
     void fillMgmModes();
 
@@ -222,6 +225,7 @@ private:
 
     void rigCtldNetworkAddBoxVisible(bool visible);
     void rigCtldPortBoxVisible(bool visible);
+
 };
 
 #endif // RIGSETUPFORM_H

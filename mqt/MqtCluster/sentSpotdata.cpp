@@ -20,7 +20,7 @@ SentSpotData::SentSpotData()
 
 SentSpotData::SentSpotData(qint64 _rxTime, QString _spotTime,
                    QString _dxFreq, QString _dxCall,
-                   QString _dxLocator, QString comment, bool _sentOk)
+                   QString _dxLocator, QString comment, bool _sentOk, QString _reason)
 {
 
     rxTime = _rxTime;
@@ -30,6 +30,8 @@ SentSpotData::SentSpotData(qint64 _rxTime, QString _spotTime,
     dxLocator = _dxLocator;
     spotComment = comment;
     sentOk  = _sentOk;
+    reason = _reason;
+
 }
 
 void SentSpotData::operator = (const SentSpotData& sspd)
@@ -41,6 +43,7 @@ void SentSpotData::operator = (const SentSpotData& sspd)
     dxLocator = sspd.dxLocator;
     spotComment = sspd.spotComment;
     sentOk  = sspd.sentOk;
+    reason = sspd.reason;
 }
 
 

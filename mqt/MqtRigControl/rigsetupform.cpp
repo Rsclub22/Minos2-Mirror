@@ -61,6 +61,7 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     fillStopBitsInfo();
     fillParityInfo();
     fillHandShakeInfo();
+    fillForceLinesInfo();
     fillPollInterValInfo();
     fillMgmModes();
     civSetToolTip();
@@ -75,6 +76,8 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     connect(ui->comStopBitsBox, SIGNAL(activated(int)), this, SLOT(comStopBitsSelected()));
     connect(ui->comParityBox, SIGNAL(activated(int)), this, SLOT(comParitySelected()));
     connect(ui->comHandShakeBox, SIGNAL(activated(int)), this, SLOT(comHandShakeSelected()));
+    connect(ui->forceDtrBox, SIGNAL(activated(int)), this, SLOT(on_forceDTRSelected()));
+    connect(ui->forceRtsBox, SIGNAL(activated(int)), this, SLOT(on_forceRTSSelected()));
     connect(ui->networkAddBox, SIGNAL(editingFinished()), this, SLOT(networkAddressSelected()));
     connect(ui->netPortBox, SIGNAL(editingFinished()), this, SLOT(networkPortSelected()));
     connect(ui->pollInterval, SIGNAL(activated(int)), this, SLOT(pollIntervalSelected()));
@@ -517,6 +520,29 @@ int RigSetupForm::comportAvial(QString comport)
 
 }
 
+/**************** Force DTR Line *************************************/
+
+void RigSetupForm::on_forceDTRSelected()
+{
+    if (radio->getSerialForceLineCode(ui->forceDtrBox->currentIndex()) != radioData->forceDtr)
+    {
+        radioData->forceDtr = radio->getSerialForceLineCode(ui->forceDtrBox->currentIndex());
+        radioValueChanged = true;
+    }
+}
+
+
+/**************** Force RTS Line *************************************/
+
+void RigSetupForm::on_forceRTSSelected()
+{
+    if (radio->getSerialForceLineCode(ui->forceRtsBox->currentIndex()) != radioData->forceRts)
+    {
+        radioData->forceRts = radio->getSerialForceLineCode(ui->forceRtsBox->currentIndex());
+        radioValueChanged = true;
+    }
+}
+
 /***************************** Network Address *************************/
 
 void RigSetupForm::networkAddressSelected()
@@ -911,6 +937,8 @@ void RigSetupForm::setEnableRigDataEntry(bool enable)
     ui->comParityBox->setEnabled(enable);
     ui->netPortBox->setEnabled(enable);
     ui->networkAddBox->setEnabled(enable);
+    ui->forceDtrBox->setEnabled(enable);
+    ui->forceRtsBox->setEnabled(enable);
     ui->pollInterval->setEnabled(enable);
     ui->mgmBox->setEnabled(enable);
     ui->enableTransVert->setEnabled(enable);
@@ -935,6 +963,10 @@ void RigSetupForm::serialDataEntryVisible(bool v)
     ui->parityLbl->setVisible(v);
     ui->comHandShakeBox->setVisible(v);
     ui->handshakeLbl->setVisible(v);
+    ui->forceDtrBox->setVisible(v);
+    ui->forceDtrLbl->setVisible(v);
+    ui->forceRtsBox->setVisible(v);
+    ui->forceRtsLbl->setVisible(v);
 }
 
 /*************************** Network Data Entry Visible ***************/
@@ -1050,6 +1082,13 @@ void RigSetupForm::fillHandShakeInfo()
     ui->comHandShakeBox->addItems(handshakeStr);
 }
 
+void RigSetupForm::fillForceLinesInfo()
+{
+    ui->forceDtrBox->clear();
+    ui->forceDtrBox->addItems(radio->getForceLinesNames());
+    ui->forceRtsBox->clear();
+    ui->forceRtsBox->addItems(radio->getForceLinesNames());
+}
 
 void RigSetupForm::fillMgmModes()
 {

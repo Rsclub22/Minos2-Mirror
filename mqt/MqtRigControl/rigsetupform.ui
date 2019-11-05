@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>889</width>
-    <height>309</height>
+    <width>914</width>
+    <height>236</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_12">
      <item>
@@ -204,6 +204,34 @@
        </item>
        <item>
         <widget class="QComboBox" name="comHandShakeBox"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="forceDtrLbl">
+         <property name="text">
+          <string>Force: DTR</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="forceDtrBox"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="forceRtsLbl">
+         <property name="text">
+          <string>Force: RTS</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="forceRtsBox"/>
        </item>
       </layout>
      </item>

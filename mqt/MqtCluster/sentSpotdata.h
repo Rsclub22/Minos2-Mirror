@@ -24,7 +24,7 @@ public:
     SentSpotData();
     SentSpotData(qint64 _rxTime, QString _spotTime,
              QString _dxFreq, QString _dxCall,
-             QString _dxLocator, QString comment, bool _sentOk);
+             QString _dxLocator, QString comment, bool _sentOk, QString _reason);
 
     void operator = (const SentSpotData& spd);
 
@@ -35,6 +35,7 @@ public:
     QString dxLocator;
     QString spotComment;
     bool sentOk;
+    QString reason;
 
 
 

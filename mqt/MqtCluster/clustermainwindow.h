@@ -81,6 +81,8 @@ const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
 
+const QStringList sendClusterReasonText = {"Ok", "Failed - comms error",  "Not Logged On", "Freq out of band", "Callsign or Locator Empty"};
+enum sendClusterReason_e {TX_OK, COMMS_ERR, NOT_LOGGED_ON, FREQ_ERR, CALL_LOC_EMPTY};
 
 class ClusterAddress
 {
@@ -296,7 +298,7 @@ private:
     QString assembleSpotForDXCluster(QString freq, QString call, QString loc);
 
     void removeInsertSendSpotTab(bool state);
-    void addSentSpotToDisplayQueue(bool spotStatus);
+    void addSentSpotToDisplayQueue(bool spotStatus, QString reason);
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
 private slots:
