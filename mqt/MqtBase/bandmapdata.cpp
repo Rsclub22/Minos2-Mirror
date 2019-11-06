@@ -14,7 +14,14 @@
 
 BandmapData::BandmapData()
 {
-    clear();
+    rxTime = 0;
+    dxFreq = 0;
+    rotConnected = false;
+    dxCallWorked = false;
+    dxLocatorWorked = false;
+    sentToMemory = false;
+    spotType = bandmapSpotType::NONE;
+    isSelected = false;
 
 }
 
@@ -108,30 +115,32 @@ void BandmapData::operator = (const BandmapData* bmd)
 }
 
 
+
+
 void BandmapData::clear()
 {
 
     rxTime = 0;
-    spotTime = "";
-    dxFreqStr = "0";
+    spotTime.clear();
+    dxFreqStr.clear();
     dxFreq = 0;
-    dxBand = "";
-    dxBandMaskStr = "";
-    dxMode = "";
-    dxModeMaskStr = "";
-    dxCall = "";
-    dxLocator = "";
-    dxDist = "";
-    dxBrg = "";
-    rotBrg = "";
+    dxBand.clear();
+    dxBandMaskStr.clear();
+    dxMode.clear();
+    dxModeMaskStr.clear();
+    dxCall.clear();
+    dxLocator.clear();
+    dxDist.clear();
+    dxBrg.clear();
+    rotBrg.clear();
     rotConnected = false;
     dxCallWorked = false;
     dxLocatorWorked = false;
     sentToMemory = false;
-    spotterCall = "";
-    spotterLocator = "";
-    dxPropMode = "";
-    spotComment = "";
+    spotterCall.clear();
+    spotterLocator.clear();
+    dxPropMode.clear();
+    spotComment.clear();
     spotType = bandmapSpotType::NONE;
     isSelected = false;
 

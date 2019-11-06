@@ -881,27 +881,7 @@ void BandmapView::drawBandMapSpots()
 
     traceMsg(QString("Drawspots: Start Drawing - Clear Map"));
 
-    if (!listOfMarkers.isEmpty())
-    {
-        traceMsg(QString("Drawspots: Remove %1 markers").arg(listOfMarkers.count()));
-        for (int i = 0; i < listOfMarkers.count(); i++)
-        {
-            if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
-            {
-                BandmapSpotMarker* s = listOfMarkers[i]->getSpotMarkerPtr();
-                bandmapScene->removeItem(listOfMarkers[i]->getSpotMarkerPtr());
-                delete s;
-            }
-            if (listOfMarkers[i]->getMarkerLinePtr() != nullptr)
-            {
-                QGraphicsLineItem* l = listOfMarkers[i]->getMarkerLinePtr();
-                bandmapScene->removeItem(listOfMarkers[i]->getMarkerLinePtr());
-                delete l;
-
-            }
-
-        }
-    }
+    deleteItemsFromMarkerList();
 
     clearListOfMarkers();
 
@@ -1036,6 +1016,35 @@ void BandmapView::drawBandMapSpots()
 
         }
 
+    }
+
+
+}
+
+
+void BandmapView::deleteItemsFromMarkerList()
+{
+
+    if (!listOfMarkers.isEmpty())
+    {
+        traceMsg(QString("Drawspots: Remove %1 markers").arg(listOfMarkers.count()));
+        for (int i = 0; i < listOfMarkers.count(); i++)
+        {
+            if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
+            {
+                BandmapSpotMarker* s = listOfMarkers[i]->getSpotMarkerPtr();
+                bandmapScene->removeItem(listOfMarkers[i]->getSpotMarkerPtr());
+                delete s;
+            }
+            if (listOfMarkers[i]->getMarkerLinePtr() != nullptr)
+            {
+                QGraphicsLineItem* l = listOfMarkers[i]->getMarkerLinePtr();
+                bandmapScene->removeItem(listOfMarkers[i]->getMarkerLinePtr());
+                delete l;
+
+            }
+
+        }
     }
 
 
