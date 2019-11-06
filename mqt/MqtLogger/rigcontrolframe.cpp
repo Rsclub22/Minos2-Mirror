@@ -1828,11 +1828,59 @@ void RigControlFrame::initRunMemoryButton()
     memoryData::memData m;
     runButtonMap[0] = new RunMemoryButton(ui->RunButton1, this, 0);
     connect( runButtonMap[0], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
+    connect( runButtonMap[0], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
 
     runButtonMap[1] = new RunMemoryButton(ui->RunButton2, this, 1);
     connect( runButtonMap[1], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
+    connect( runButtonMap[1], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
 
 }
+
+void RigControlFrame::runButActivated(int buttonNumber)
+{
+    if (runButtonOnNum == NO_RUN_BUTTON_ON || runButtonOnNum == RUN_BUTTON_1_ON || runButtonOnNum == RUN_BUTTON_2_ON)
+    {
+        switch (runButtonOnNum)
+        {
+            case NO_RUN_BUTTON_ON:
+            runButtonMap[buttonNumber]->showButtonOnOff(true);
+            runButtonOnNum = buttonNumber;
+            break;
+            case RUN_BUTTON_1_ON:
+            if (buttonNumber == RUN_BUTTON_1_ON)
+            {
+
+            }
+            else if (buttonNumber == RUN_BUTTON_2_ON)
+            {
+                runButtonMap[RUN_BUTTON_1_ON]->showButtonOnOff(false);
+                runButtonMap[buttonNumber]->showButtonOnOff(true);
+                runButtonOnNum = buttonNumber;
+
+            }
+            break;
+            case RUN_BUTTON_2_ON:
+            if (buttonNumber == RUN_BUTTON_2_ON)
+            {
+
+            }
+            else if (buttonNumber == RUN_BUTTON_1_ON)
+            {
+                runButtonMap[RUN_BUTTON_2_ON]->showButtonOnOff(false);
+                runButtonMap[RUN_BUTTON_2_ON]->setState(false);
+                runButtonMap[buttonNumber]->showButtonOnOff(true);
+                runButtonOnNum = buttonNumber;
+
+            }
+            break;
+
+        }
+
+
+    }
+
+}
+
 
 
 
@@ -2067,13 +2115,17 @@ RunMemoryButton::RunMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
     memoryMenu->addAction(clearAction);
     memButton->setMenu(memoryMenu);
 
-    connect(shortKey, SIGNAL(activated()), this, SLOT(readActionSelected()));
+    //connect(shortKey, SIGNAL(activated()), this, SLOT(readActionSelected()));
+    //connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
+    //connect(memButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
+    connect( readAction, SIGNAL( triggered() ), this, SLOT(buttonSelected()) );
+    connect(memButton, SIGNAL(clicked(bool)), this, SLOT(buttonSelected()));
+    connect(shortKey, SIGNAL(activated()), this, SLOT(buttonSelected()));
     connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShortCutSelected()));
-    connect(memButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
-    connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
     connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()) );
     connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()) );
     connect( clearAction, SIGNAL( triggered() ), this, SLOT(clearActionSelected()) );
+
 }
 RunMemoryButton::~RunMemoryButton()
 {
@@ -2106,6 +2158,40 @@ void RunMemoryButton::clearActionSelected()
 {
     emit clearActionSelected(memNo);
 }
+
+void RunMemoryButton::buttonSelected()
+{
+    emit buttonActivated(memNo);
+}
+
+void RunMemoryButton::showButtonOnOff(bool state)
+{
+    if (state)
+    {
+        memButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
+        memoryMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
+    }
+    else
+    {
+        memButton->setStyleSheet(RUN_BUTTON_OFF_STYLE);
+    }
+
+    setState(state);
+}
+
+
+void RunMemoryButton::showRunToolButtonOffFreq()
+{
+    memButton->setStyleSheet(RUN_BUTTON_OFF_FREQ_STYLE);
+    memoryMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
+}
+
+void RunMemoryButton::showRunToolButtonOnFreq()
+{
+    memButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
+    memoryMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
+}
+
 
 //*******************Tune Memory Button *************************//
 

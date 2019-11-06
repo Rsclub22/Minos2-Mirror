@@ -252,15 +252,11 @@ private:
     QString ssLineEditFrRedBkRed = "QLineEdit { background-color: red ; border-style: outset ; border-width: 1px ; border-color: red ; color : white }";
     QString ssLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
 
-    const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-    const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-    const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-
 
     QMap<QWidget *, QString> widgetStyles;
 
     void checkBandMapAndClusterLoaded();
-    void showRunButtonOnOff(bool state);
+
     bool getLogDetails(memoryData::memData&);
 
     Callsign lastLoggedCallsign;        // saved to send to cluster
@@ -274,8 +270,7 @@ private:
     void runButtonOn();
     void runButtonOff();
     void sendFreq(QString f);
-    void showRunToolButtonOffFreq();
-    void showRunToolButtonOnFreq();
+
     QString getRunMemoryFreq(int memoryNumber);
 
     bool getTuneAddBandMapSetting();

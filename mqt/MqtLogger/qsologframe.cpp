@@ -2654,7 +2654,7 @@ bool QSOLogFrame::isBandMapLoaded()
 
 void QSOLogFrame::setBandMapControlsVisible(bool visible)
 {
-    ui->runToolButton->setVisible(visible);
+    //ui->runToolButton->setVisible(visible);
     ui->bandmapMarkFreqPb->setVisible(visible);
     ui->bandmapSaveFreqPb->setVisible(visible);
     ui->tuningAddMapChkBox->setVisible(visible);
@@ -2796,31 +2796,8 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 
 }
 
-void QSOLogFrame::showRunButtonOnOff(bool state)
-{
-    if (state)
-    {
-        ui->runToolButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
-        runButtonMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
-    }
-    else
-    {
-        ui->runToolButton->setStyleSheet(RUN_BUTTON_OFF_STYLE);
-    }
-}
 
 
-void QSOLogFrame::showRunToolButtonOffFreq()
-{
-    ui->runToolButton->setStyleSheet(RUN_BUTTON_OFF_FREQ_STYLE);
-    runButtonMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
-}
-
-void QSOLogFrame::showRunToolButtonOnFreq()
-{
-    ui->runToolButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
-    runButtonMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
-}
 
 
 /*
@@ -3018,7 +2995,7 @@ void QSOLogFrame::on_ChkRunFreq()
                 if (!radioOffRunFreq)
                 {
                     radioOffRunFreq = true;
-                    showRunToolButtonOffFreq();
+                    //showRunToolButtonOffFreq();
                     setClusterSendSpotControlsVisible(true);
                 }
              }
@@ -3029,7 +3006,7 @@ void QSOLogFrame::on_ChkRunFreq()
                 if (radioOffRunFreq)
                 {
                     radioOffRunFreq = false;
-                    showRunToolButtonOnFreq();
+                    //showRunToolButtonOnFreq();
                     setClusterSendSpotControlsVisible(false);
                 }
 
@@ -3076,7 +3053,7 @@ void QSOLogFrame::runButtonOn()
         if (!chkRadioFreqOnRunFreq())
         {
             radioOffRunFreq = true;
-            showRunToolButtonOffFreq();
+            //showRunToolButtonOffFreq();
             if (sendSpotToClusterOn)
             {
                setClusterSendSpotControlsVisible(true);
@@ -3085,7 +3062,7 @@ void QSOLogFrame::runButtonOn()
         else
         {
             radioOffRunFreq = false;
-            showRunToolButtonOnFreq();
+            //showRunToolButtonOnFreq();
             if (sendSpotToClusterOn)
             {
                 setClusterSendSpotControlsVisible(false);
@@ -3108,7 +3085,7 @@ void QSOLogFrame::runButtonOff()
     runButtonOnFlag = false;
     chkRunFreqTimer->stop();
     //ui->spotPb->setDisabled(false);
-    showRunButtonOnOff(runButtonOnFlag);
+    //showRunButtonOnOff(runButtonOnFlag);
     if (sendSpotToClusterOn)
     {
         setClusterSendSpotControlsVisible(true);

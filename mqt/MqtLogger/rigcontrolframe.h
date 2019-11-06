@@ -32,6 +32,14 @@ namespace Ui {
 
 const int BANDLIST_TIMEOUT_DUR = 3000;
 
+const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+
+const int NO_RUN_BUTTON_ON = -1;
+const int RUN_BUTTON_1_ON = 0;
+const int RUN_BUTTON_2_ON = 1;
+
 class RigControlFrame;
 class RunMemoryButton : public QObject
 {
@@ -51,9 +59,15 @@ public:
     QAction* editAction;
     QAction* clearAction;
 
-    int memNo;
 
+    int getMemNo(){return memNo;}
 
+    void setState(bool on){state = on;}
+    bool getState(){return state;}
+
+    void showButtonOnOff(bool state);
+    void showRunToolButtonOffFreq();
+    void showRunToolButtonOnFreq();
 
 private slots:
     void memoryUpdate();
@@ -63,8 +77,21 @@ private slots:
     void editActionSelected();
     void writeActionSelected();
     void clearActionSelected();
+    void buttonSelected();
 signals:
     void clearActionSelected(int);
+    void buttonActivated(int);
+
+
+private:
+
+    bool state = false;
+    int memNo;
+
+
+
+
+
 
 
 };
@@ -220,6 +247,7 @@ private slots:
 
 
     void freqStepComboChanged(const QString step);
+    void runButActivated(int buttonNumber);
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -264,7 +292,7 @@ private:
     bool ritEditOn;
     //QString curRit;
 
-
+    int runButtonOnNum = NO_RUN_BUTTON_ON;
 
     QStringList listOfRadios;
     RadioDetails selRadioDetails;
