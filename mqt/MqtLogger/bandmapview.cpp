@@ -1152,7 +1152,7 @@ QString BandmapView::assembleSpotMsg(int row)
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    if (freq >= curFreq - 1 && freq <= curFreq +1)
+    if (freq == curFreq )
     {
         bLineStart = "<b>";
         bLineEnd = "</b>";
@@ -1175,7 +1175,7 @@ QString BandmapView::assembleSpotMsg(int row)
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
     QString elapsedTimeStr = QString::number(elapsedTime);
 
-    QString msg = QString("%1%2 @ .%3 %4  %5  %6%7%8 %9 min %10  %11").arg(bLineStart).arg(callsign).arg(extractKhz(freqStr)).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(bLineEnd).arg(elapsedTimeStr).arg(markSym).arg(newSpotMsg);
+    QString msg = QString("%1%2 @ .%3 %4  %5 km  %6%7%8 %9 min %10  %11").arg(bLineStart).arg(callsign).arg(extractKhz(freqStr)).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(bLineEnd).arg(elapsedTimeStr).arg(markSym).arg(newSpotMsg);
 
     if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
     {
