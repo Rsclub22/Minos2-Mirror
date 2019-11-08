@@ -318,18 +318,11 @@ private slots:
 
     void on_frequencyEdit_textChanged(const QString &arg1);
 
-    //void on_RunPushButtonClicked();
+
     void on_BandmapMarkFreqPbClicked();
     void on_bandmapSaveFreqPbClicked();
 
     void on_SpotPbClicked();
-
-   //void on_ChkRunFreq();
-
-    //void on_setRun1Action();
-    //void on_setRun2Action();
-   // void on_RunOnActionSelected();
-    //void on_RunOffActionSelected();
 
     void on_FreqChanged(QString f);
 
