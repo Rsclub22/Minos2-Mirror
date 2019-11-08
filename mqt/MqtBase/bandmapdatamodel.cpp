@@ -87,6 +87,10 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                     d = HtmlFontColour(CALLSIGN_WORKED_COLOUR);
                 }
                 d = d + bandmapSpot->dxCall;
+                if (bandmapSpot->dxCallWorked == BMP_BOOL_YES)
+                {
+                    d = d + HtmlFontColour(NOT_WORKED_COLOUR);
+                }
             break;
 
             case DXSPOT_MODE_COL_NUM:
