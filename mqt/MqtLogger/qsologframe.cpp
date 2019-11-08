@@ -2731,7 +2731,9 @@ void QSOLogFrame::on_SpotPbClicked()
         else
         {
             memoryData::memData logData;
-            if (getLogDetails(logData))
+            bool validCall = false;
+            getLogDetails(logData, validCall);
+            if (validCall)
             {
                 // callsign valid
                 if (!logData.callsign.isEmpty() || !logData.freq.isEmpty())
@@ -2742,8 +2744,12 @@ void QSOLogFrame::on_SpotPbClicked()
                 }
                 else
                 {
-                    trace(QString("spotButton: send logged invalid callsign %1").arg(logData.callsign));
+                    trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq));
                 }
+            }
+            else
+            {
+                trace(QString("spotButton: callsign - %1 invalid").arg(logData.callsign));
             }
 
         }
@@ -2759,15 +2765,11 @@ void QSOLogFrame::on_SpotPbClicked()
 void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 {
     memoryData::memData logData;
-    if(getLogDetails(logData))
-    {
-        trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
-        emit bandmapMarkFreq(lastLoggedCallsign.realCall, logData.freq, logData.locator, QString::number(logData.bearing));
-    }
-    else
-    {
-        trace(QString("bandmapMark: mark clicked invalid callsign %1").arg(logData.callsign));
-    }
+    bool validCall = false;
+    getLogDetails(logData, validCall);
+
+    trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
+    emit bandmapMarkFreq(lastLoggedCallsign.realCall, logData.freq, logData.locator, QString::number(logData.bearing));
 
 }
 
@@ -2775,7 +2777,9 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 {
     memoryData::memData logData;
-    if (getLogDetails(logData))
+    bool validCall = false;
+    getLogDetails(logData, validCall);
+    if (validCall)
     {
         logData.freq = callsignEnterTextFreq;
         callsignEnterTextFreq = "00000000000";
@@ -2785,8 +2789,9 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
     }
     else
     {
-        trace(QString("bandmapSave: save clicked invalid callsign %1").arg(logData.callsign));
+       trace(QString("bandmapSave: save clicked callsign %1 not valid").arg(logData.callsign));
     }
+
 
 }
 
@@ -2807,35 +2812,32 @@ memoryData::memData QSOLogFrame::getLogDetails()
 }
 */
 
-bool QSOLogFrame::getLogDetails(memoryData::memData &logData)
+void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     getScreenEntry();
     calcLoc();
-
+    validCall = true;
     if (screenContact.cs.validate() != CS_OK)
     {
         logData.callsign = screenContact.cs.fullCall.getValue();
-        return false;
+        validCall = false;
 
+    }
+
+    logData.callsign = screenContact.cs.fullCall.getValue();
+    logData.freq = curFreq;
+    logData.locator = screenContact.loc.loc.getValue().trimmed();
+    logData.mode = screenContact.mode;
+    if (screenContact.loc.loc.getValue().trimmed().isEmpty())
+    {
+        logData.bearing = tslf->getCurrentBearing();
     }
     else
     {
-        logData.callsign = screenContact.cs.fullCall.getValue();
-        logData.freq = curFreq;
-        logData.locator = screenContact.loc.loc.getValue().trimmed();
-        logData.mode = screenContact.mode;
-        if (screenContact.loc.loc.getValue().trimmed().isEmpty())
-        {
-            logData.bearing = tslf->getCurrentBearing();
-        }
-        else
-        {
-            logData.bearing = tslf->getBearingFrmQSOLog();
-        }
+        logData.bearing = tslf->getBearingFrmQSOLog();
     }
 
-    return true;
 
 
 }

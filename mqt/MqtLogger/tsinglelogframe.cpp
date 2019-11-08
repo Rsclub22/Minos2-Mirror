@@ -100,10 +100,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
 
-    // BandMap Updates
-
-    //connect(sendDM, SIGNAL(setBandMapLoaded()), this, SLOT(on_BandMapLoaded()));
-
 
     // RigControl Updates
     // From rig controller
@@ -125,8 +121,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     connect(FKHRigControlFrame, SIGNAL(sendRunOnFlag(bool)), this, SLOT(sendRunOnFlag(bool)));
     connect(FKHRigControlFrame, SIGNAL(sendRunOffFreqFlag(bool)), this, SLOT(sendRunOffFreqFlag(bool)));
-
-    //connect(FKHRigControlFrame, SIGNAL(sendIgnoreRunChkBoxState(int, bool)), this, SLOT(sendIgnoreRunChkBoxState(int, bool)));
 
 
     // Rotator updates
