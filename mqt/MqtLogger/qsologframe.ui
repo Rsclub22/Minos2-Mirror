@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1165</width>
-    <height>267</height>
+    <width>1068</width>
+    <height>274</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -177,6 +177,49 @@ to</string>
           </widget>
          </item>
          <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_17">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_16">
+             <item>
+              <widget class="QCheckBox" name="lastLoggedChkBx">
+               <property name="text">
+                <string>Spot Last Logged: </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lastLoggedCallsignLbl">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="spotPb">
+               <property name="text">
+                <string>Spot</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="lastSpotSentTitleLbl">
+             <property name="text">
+              <string>Last Spot Sent: </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lastSpotSentLbl">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -279,13 +322,6 @@ to</string>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_15">
-           <item>
-            <widget class="QToolButton" name="runToolButton">
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
            <item>
             <widget class="QPushButton" name="bandmapMarkFreqPb">
              <property name="text">
@@ -430,45 +466,6 @@ to</string>
          <property name="rightMargin">
           <number>2</number>
          </property>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_16">
-           <item>
-            <widget class="QCheckBox" name="lastLoggedChkBx">
-             <property name="text">
-              <string>Last Logged: </string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="lastLoggedCallsignLbl">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="spotPb">
-             <property name="text">
-              <string>Spot</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QLabel" name="lastSpotSentTitleLbl">
-           <property name="text">
-            <string>Last Spot Sent: </string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="lastSpotSentLbl">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
          <item>
           <spacer name="horizontalSpacer_8">
            <property name="orientation">

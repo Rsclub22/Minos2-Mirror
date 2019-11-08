@@ -39,7 +39,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , clusterServerConnected(false)
     , runButtonOnFlag(false)
     , radioOffRunFreq(false)
-    , curRunFreq("00000000000")
     , callsignEnterTextFreq("00000000000")
     , curFreq("00000000000")
 
@@ -410,11 +409,6 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     oldTimeOK = true;
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(on_TimeDisplayTimer()));
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
-
-    initLogRunButton();
-
-    chkRunFreqTimer = new QTimer(this);
-    connect(chkRunFreqTimer, SIGNAL(timeout()), this, SLOT(on_ChkRunFreq()));
 
 
     connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_BandmapMarkFreqPbClicked()));
@@ -2111,7 +2105,7 @@ void QSOLogFrame::logScreenEntry( )
    MinosLoggerEvents::SendAfterLogContact(ct);
    MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.loc.getValue());
 
-   if ((ui->runToolButton->isVisible() && runButtonOnFlag && radioOffRunFreq) || (ui->runToolButton && !runButtonOnFlag))
+   if ((runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag)
    {
        MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue());
    }
@@ -2913,7 +2907,7 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
 
     if (isBandMapLoaded())
     {
-        setBandMapControlsVisible(true);
+        setBandmapControlsState();
         setTuningAddMapChkBoxState();
     }
     else
@@ -2972,17 +2966,71 @@ QString QSOLogFrame::getBearing()
 
 
 
-
-void QSOLogFrame::setRunMemoryFreqUpdate(int num, QString freq)
+void QSOLogFrame::setRunOnFlag(bool runModeOn)
 {
-    Q_UNUSED(num)
+    if (runButtonOnFlag != runModeOn)
+    {
+        runButtonOnFlag = runModeOn;
+        if (!runButtonOnFlag)
+        {
+            setBandmapControlsState();
+            setClusterSendSpotControlsState();
+        }
+    }
+}
 
-    curRunFreq = freq;
-    ui->runToolButton->setText("Run ." + extractKhz(freq));
+void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
+{
+    if (radioOffRunFreq != offRunFreq)
+    {
+
+        radioOffRunFreq = offRunFreq;
+        setBandmapControlsState();
+        setClusterSendSpotControlsState();
+
+    }
 }
 
 
+void QSOLogFrame::setBandmapControlsState()
+{
+    if (runButtonOnFlag)
+    {
+        if (radioOffRunFreq)
+        {
+            setBandMapControlsVisible(true);
+        }
+        else
+        {
+            setBandMapControlsVisible(false);
+        }
+    }
+    else
+    {
+        setBandMapControlsVisible(true);
+    }
+}
 
+void QSOLogFrame::setClusterSendSpotControlsState()
+{
+    if (runButtonOnFlag)
+    {
+        if (radioOffRunFreq)
+        {
+            setClusterSendSpotControlsVisible(true);
+        }
+        else
+        {
+            setClusterSendSpotControlsVisible(false);
+        }
+    }
+    else
+    {
+        setClusterSendSpotControlsVisible(true);
+    }
+}
+
+/*
 void QSOLogFrame::on_ChkRunFreq()
 {
     if (runButtonOnFlag)
@@ -3142,26 +3190,26 @@ void QSOLogFrame::on_RunPushButtonClicked()
 
     }
 
-/*
-    qint64 curRunF = curRunFreq.toLongLong() / 100;
-    qint64 curF = curFreq.toLongLong() / 100;
+
+   // qint64 curRunF = curRunFreq.toLongLong() / 100;
+   // qint64 curF = curFreq.toLongLong() / 100;
     //runButtonOnFlag = true;
 
-    if (curF == 0 || curRunF == 0)
-    {
+   // if (curF == 0 || curRunF == 0)
+   // {
         return;
-    }
+   // }
 
 
-    if ((curF < (curRunF - RUN_TOLERANCE)) || (curF > (curRunF + RUN_TOLERANCE)))
-    {
-        sendFreq(curRunFreq);
-        radioOffRunFreq = true;
-    }
+   // if ((curF < (curRunF - RUN_TOLERANCE)) || (curF > (curRunF + RUN_TOLERANCE)))
+   // {
+   //     sendFreq(curRunFreq);
+  //      radioOffRunFreq = true;
+  //  }
 
     //showRunButtonOnOff(runButtonOnFlag);
 
-*/
+
 }
 
 
@@ -3220,6 +3268,8 @@ QString QSOLogFrame::getRunMemoryFreq(int memoryNumber)
 
     return m.freq;
 }
+
+*/
 
 void QSOLogFrame::on_FreqChanged(QString f)
 {

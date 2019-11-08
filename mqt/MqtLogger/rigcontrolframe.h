@@ -39,6 +39,8 @@ const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; bord
 const int NO_RUN_BUTTON_ON = -1;
 const int RUN_BUTTON_1_ON = 0;
 const int RUN_BUTTON_2_ON = 1;
+const int NUM_RUNBUTTONS = 2;
+const int CHECK_RUN_FREQ_POLLTIME = 1000;
 
 class RigControlFrame;
 class RunMemoryButton : public QObject
@@ -54,6 +56,7 @@ public:
     QMenu* memoryMenu;
     QShortcut* shortKey;
     QShortcut* shiftShortKey;
+    QAction* runOffAction;
     QAction* readAction;
     QAction* writeAction;
     QAction* editAction;
@@ -78,6 +81,7 @@ private slots:
     void writeActionSelected();
     void clearActionSelected();
     void buttonSelected();
+    void runOffActionSelected();
 signals:
     void clearActionSelected(int);
     void buttonActivated(int);
@@ -194,6 +198,7 @@ public:
 
 
 
+    void runButOffActionSelected(int buttonNumber);
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -205,9 +210,12 @@ signals:
     void sendRitFreq(int);
     void ritStatus(bool);
     void radioDisconnected();
+    void sendRunOnFlag(bool);
+    void sendRunOffFreqFlag(bool);
 
 
-    void runMemoryFreqUpdate(int, QString);
+
+
 
 
 
@@ -248,6 +256,7 @@ private slots:
 
     void freqStepComboChanged(const QString step);
     void runButActivated(int buttonNumber);
+    void on_ChkRunFreq();
 public slots:
     void returnChangeRadioFreq();
     void runButClearActSel(int buttonNumber);
@@ -316,6 +325,12 @@ private:
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
 
+
+    bool runButtonOnFlag;
+    bool radioOffRunFreq;
+    QString curRunFreq;
+    QTimer *chkRunFreqTimer;
+
     void sendModeToRadio(QString);
     void freqLineEditBkgnd(bool status);
     void freqLineEditFrameColour(bool status);
@@ -367,6 +382,7 @@ private:
     void setFreqTextLegalColour(const QString freq, QString mode);
     void setFreqStepCombo(QString mode);
     double getStepFreqFromComboText(const QString step);
+    bool chkRadioFreqOnRunFreq();
 };
 
 

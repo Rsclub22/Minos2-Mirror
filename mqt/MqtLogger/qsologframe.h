@@ -94,6 +94,9 @@ public:
     void setClusterTXSpotEnableState(bool txEnableState);
 
 
+    void setRunOnFlag(bool runModeOn);
+    void setRunOffFreqFlag(bool offRunFreq);
+
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -213,18 +216,9 @@ private:
     void SecondOpComboBox_Exit();
 
 
-    //QMap<int, bool> ignoreRunState;
+
     bool runButtonOnFlag;
     bool radioOffRunFreq;
-
-    QString curRunFreq;
-    QTimer *chkRunFreqTimer;
-    QToolButton *runButton;
-    QMenu *runButtonMenu;
-    QAction* setRun1Action;
-    QAction* setRun2Action;
-    QAction* runOnAction;
-    QAction* runOffAction;
 
     QString callsignEnterTextFreq;
 
@@ -277,6 +271,8 @@ private:
     void setTuneAddBandMapSetting(bool state);
 
     void setTuningAddMapChkBoxState();
+    void setBandmapControlsState();
+    void setClusterSendSpotControlsState();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
@@ -322,18 +318,18 @@ private slots:
 
     void on_frequencyEdit_textChanged(const QString &arg1);
 
-    void on_RunPushButtonClicked();
+    //void on_RunPushButtonClicked();
     void on_BandmapMarkFreqPbClicked();
     void on_bandmapSaveFreqPbClicked();
 
     void on_SpotPbClicked();
 
-   void on_ChkRunFreq();
+   //void on_ChkRunFreq();
 
-    void on_setRun1Action();
-    void on_setRun2Action();
-    void on_RunOnActionSelected();
-    void on_RunOffActionSelected();
+    //void on_setRun1Action();
+    //void on_setRun2Action();
+   // void on_RunOnActionSelected();
+    //void on_RunOffActionSelected();
 
     void on_FreqChanged(QString f);
 

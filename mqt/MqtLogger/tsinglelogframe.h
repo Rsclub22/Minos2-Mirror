@@ -272,7 +272,8 @@ private slots:
     void on_BandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
     void on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
     void on_rotatorConnected(bool connected);
-    void sendRunMemoryFreqUpdate(int runNum, QString f);
+    void sendRunOnFlag(bool);
+    void sendRunOffFreqFlag(bool);
     void on_ZoomMap(bool dir);
     void on_clusterServerState(QString state);
     void on_clusterServerLoaded();
