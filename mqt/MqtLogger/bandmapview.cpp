@@ -1098,15 +1098,17 @@ QRectF BandmapView::calculateSpotRect(const QString text, const QPoint spotCoord
 QString BandmapView::assembleSpotMsg(int row)
 {
 
-    QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+    QString dxCallsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+    bool callWkd = model()->data(model()->index(row,DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
     QString freqStr =  model()->data(model()->index(row, FREQ_STR_COL_NUM), BMP_DataStoredRole).toString();
     qint64 freq = freqStr.toLongLong();
     freq = freq / 1000;
     qint32 curFreq = dial->getCurFreqInt32();
-    QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), Qt::DisplayRole).toString();
-    QString dxDist = model()->data(model()->index(row, DXDIST_COL_NUM), Qt::DisplayRole).toString();
-    QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), Qt::DisplayRole).toString();
-    QString rotBrg = model()->data(model()->index(row, ROT_BEARING_COL_NUM), Qt::DisplayRole).toString();
+    QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
+    bool locWkd = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
+    QString dxDist = model()->data(model()->index(row, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
+    QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
+    QString rotBrg = model()->data(model()->index(row, ROT_BEARING_COL_NUM), BMP_DataStoredRole).toString();
     bool rotConnected = model()->data(model()->index(row, ROT_CONNECTED_COL_NUM), BMP_DataStoredRole).toBool();
 
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
@@ -1121,31 +1123,52 @@ QString BandmapView::assembleSpotMsg(int row)
         newSpotMsg = HtmlFontColour(BANDMAP_NEW_COLOUR) + "New" +  HtmlFontColour(NOT_WORKED_COLOUR);
     }
 
+    QString callsign;
+    if (callWkd)
+    {
+        callsign = QString("%1%2%3").arg(HtmlFontColour(CALLSIGN_WORKED_COLOUR)).arg(dxCallsign).arg(HtmlFontColour(NOT_WORKED_COLOUR));
+    }
+    else
+    {
+        callsign = dxCallsign;
+    }
+
+    QString locator;
+    if (locWkd)
+    {
+        locator = QString("%1%2%3").arg(HtmlFontColour(CALLSIGN_WORKED_COLOUR)).arg(dxLoc).arg(HtmlFontColour(NOT_WORKED_COLOUR));
+    }
+    else
+    {
+        if (!dxLoc.isEmpty())
+        {
+            locator = dxLoc;
+        }
+    }
 
     QChar degSym = QChar(DEG_SYMBOL);
+    QString bearing;
     if (dxLoc.isEmpty())
     {
        if (rotConnected)
        {
-           dxBrg = rotBrg;
+           bearing = QString("%1%2R").arg(rotBrg).arg(degSym);
        }
-       else
-       {
-           dxBrg = "";
-           degSym = QChar(' ');
-       }
+
     }
     else
     {
-    if (dxBrg.isEmpty())
+        if (!dxBrg.isEmpty())
+        {
+            bearing = QString("%1%2").arg(dxBrg).arg(degSym);
+        }
+    }
+
+    QString distance;
+    if (!dxDist.isEmpty())
     {
-        degSym = QChar(' ');
-            dxBrg = "";
+        distance = QString("%1 km").arg(dxDist);
     }
-    }
-
-
-
 
 
 
@@ -1173,9 +1196,9 @@ QString BandmapView::assembleSpotMsg(int row)
     }
 
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
-    QString elapsedTimeStr = QString::number(elapsedTime);
+    QString elapsedTimeStr = QString::number(elapsedTime) + "min";
 
-    QString msg = QString("%1%2 @ .%3 %4  %5 km  %6%7%8 %9 min %10  %11").arg(bLineStart).arg(callsign).arg(extractKhz(freqStr)).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(bLineEnd).arg(elapsedTimeStr).arg(markSym).arg(newSpotMsg);
+    QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart).arg(callsign).arg(extractKhz(freqStr)).arg(locator).arg(distance).arg(bearing).arg(elapsedTimeStr).arg(markSym).arg(newSpotMsg).arg(bLineEnd);
 
     if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
     {

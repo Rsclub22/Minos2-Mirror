@@ -107,11 +107,12 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                     d = HtmlFontColour(LOCATOR_WORKED_COLOUR);
                 }
 
-                d = d + bandmapSpot->dxLocator;
+                d = d + bandmapSpot->dxLocator + HtmlFontColour(NOT_WORKED_COLOUR);
             break;
             case DXDIST_COL_NUM:
-                d = HtmlFontColour(NOT_WORKED_COLOUR);
-                d = d + bandmapSpot->dxDist;
+                //d = HtmlFontColour(NOT_WORKED_COLOUR);
+                //d = d + bandmapSpot->dxDist;
+                d = bandmapSpot->dxDist;
             break;
             case DXBRG_COL_NUM:
                 d = bandmapSpot->dxBrg;
