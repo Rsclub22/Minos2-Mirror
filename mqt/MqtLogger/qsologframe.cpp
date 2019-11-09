@@ -834,12 +834,7 @@ void QSOLogFrame::on_MatchXferButton_clicked()
 {
     MinosLoggerEvents::sendXferPressed(contest, baseName);
 }
-/*
-void QSOLogFrame::on_BandMapButton_clicked()
-{
-    MinosLoggerEvents::SendBandMapPressed();
-}
-*/
+
 void QSOLogFrame::on_QTHEdit_textChanged(const QString &/*arg1*/)
 {
     doGJVEditChange( ui->QTHEdit );
@@ -2648,11 +2643,20 @@ bool QSOLogFrame::isBandMapLoaded()
 
 void QSOLogFrame::setBandMapControlsVisible(bool visible)
 {
-    //ui->runToolButton->setVisible(visible);
+
     ui->bandmapMarkFreqPb->setVisible(visible);
     ui->bandmapSaveFreqPb->setVisible(visible);
     ui->tuningAddMapChkBox->setVisible(visible);
 
+
+}
+
+void QSOLogFrame::setBandMapControlsDisabled(bool disabled)
+{
+    ui->bandmapMarkFreqPb->setDisabled(disabled);
+    ui->bandmapMarkFreqPb->setDisabled(disabled);
+    ui->bandmapSaveFreqPb->setDisabled(disabled);
+    ui->tuningAddMapChkBox->setDisabled(disabled);
 }
 
 
@@ -2798,20 +2802,6 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 
 
 
-
-/*
-memoryData::memData QSOLogFrame::getLogDetails()
-{
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-
-    memoryData::memData logData;
-    tslf->getDetails(logData);
-
-    return logData;
-
-}
-*/
-
 void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -2877,6 +2867,20 @@ void QSOLogFrame::setClusterSendSpotControlsVisible(bool visible)
     ui->spotPb->setVisible(visible);
     ui->lastSpotSentTitleLbl->setVisible(visible);
     ui->lastSpotSentLbl->setVisible(visible);
+    //if (visible)
+    //{
+    //    ui->spotPb->setDisabled(false);
+    //}
+
+}
+
+void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
+{
+    ui->lastLoggedChkBx->setDisabled(disabled);
+    ui->lastLoggedCallsignLbl->setDisabled(disabled);
+    ui->spotPb->setDisabled(disabled);
+    ui->lastSpotSentTitleLbl->setDisabled(disabled);
+    ui->lastSpotSentLbl->setDisabled(disabled);
     //if (visible)
     //{
     //    ui->spotPb->setDisabled(false);
@@ -2973,11 +2977,9 @@ void QSOLogFrame::setRunOnFlag(bool runModeOn)
     if (runButtonOnFlag != runModeOn)
     {
         runButtonOnFlag = runModeOn;
-        if (!runButtonOnFlag)
-        {
-            setBandmapControlsState();
-            setClusterSendSpotControlsState();
-        }
+        setBandmapControlsState();
+        setClusterSendSpotControlsState();
+
     }
 }
 
@@ -3000,16 +3002,17 @@ void QSOLogFrame::setBandmapControlsState()
     {
         if (radioOffRunFreq)
         {
-            setBandMapControlsVisible(true);
+            setBandMapControlsDisabled(false);
         }
         else
         {
-            setBandMapControlsVisible(false);
+            setBandMapControlsDisabled(true);
         }
     }
     else
     {
         setBandMapControlsVisible(true);
+        setBandMapControlsDisabled(false);
     }
 }
 
@@ -3019,259 +3022,21 @@ void QSOLogFrame::setClusterSendSpotControlsState()
     {
         if (radioOffRunFreq)
         {
-            setClusterSendSpotControlsVisible(true);
+            setClusterSendSpotControlsDisabled(false);
         }
         else
         {
-            setClusterSendSpotControlsVisible(false);
+            setClusterSendSpotControlsDisabled(true);
         }
     }
     else
     {
         setClusterSendSpotControlsVisible(true);
-    }
-}
-
-/*
-void QSOLogFrame::on_ChkRunFreq()
-{
-    if (runButtonOnFlag)
-    {
-        if (curRunFreq.toLongLong() != 0)
-        {
-            if (!chkRadioFreqOnRunFreq())
-            {
-                // off run freq
-                if (!radioOffRunFreq)
-                {
-                    radioOffRunFreq = true;
-                    //showRunToolButtonOffFreq();
-                    setClusterSendSpotControlsVisible(true);
-                }
-             }
-
-            else if (chkRadioFreqOnRunFreq())
-            {
-                // back on a run freq
-                if (radioOffRunFreq)
-                {
-                    radioOffRunFreq = false;
-                    //showRunToolButtonOnFreq();
-                    setClusterSendSpotControlsVisible(false);
-                }
-
-            }
-        }
-        else
-        {
-            // runFreq cleared
-            runButtonOff();
-
-        }
-
-    }
-
-
-
-}
-
-
-
-bool QSOLogFrame::chkRadioFreqOnRunFreq()
-{
-
-    qint64 curRunF = curRunFreq.toLongLong() / 100;
-    qint64 curF = curFreq.toLongLong() / 100;
-
-    if (curRunF != 0)
-    {
-        if ((curF >= (curRunF - RUN_TOLERANCE)) && (curF <= (curRunF + RUN_TOLERANCE)))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
-void QSOLogFrame::runButtonOn()
-{
-
-    if (curRunFreq.toLongLong() != 0)
-    {
-        if (!chkRadioFreqOnRunFreq())
-        {
-            radioOffRunFreq = true;
-            //showRunToolButtonOffFreq();
-            if (sendSpotToClusterOn)
-            {
-               setClusterSendSpotControlsVisible(true);
-            }
-        }
-        else
-        {
-            radioOffRunFreq = false;
-            //showRunToolButtonOnFreq();
-            if (sendSpotToClusterOn)
-            {
-                setClusterSendSpotControlsVisible(false);
-            }
-        }
-        runButtonOnFlag = true;
-        chkRunFreqTimer->start(CHECK_RUNMODE_TIMER);
-    }
-
-
-
-
-}
-
-
-void QSOLogFrame::runButtonOff()
-{
-
-
-    runButtonOnFlag = false;
-    chkRunFreqTimer->stop();
-    //ui->spotPb->setDisabled(false);
-    //showRunButtonOnOff(runButtonOnFlag);
-    if (sendSpotToClusterOn)
-    {
-        setClusterSendSpotControlsVisible(true);
-    }
-
-}
-
-
-void QSOLogFrame::initLogRunButton()
-{
-
-    runButton = ui->runToolButton;
-
-    runButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    runButton->setPopupMode(QToolButton::MenuButtonPopup);
-    runButton->setFocusPolicy(Qt::NoFocus);
-    runButton->setText("Run .***");
-
-
-    runButtonMenu = new QMenu(runButton);
-
-    setRun1Action = new QAction("Set Run1", runButton);
-    setRun2Action = new QAction("Set Run2", runButton);
-    runOnAction = new QAction("Run On", runButton);
-    runOffAction = new QAction("Run Off", runButton);
-    runButtonMenu->addAction(setRun1Action);
-    runButtonMenu->addAction(setRun2Action);
-    runButtonMenu->addAction(runOnAction);
-    runButtonMenu->addAction(runOffAction);
-
-    runButton->setMenu(runButtonMenu);
-
-    connect(runButton, SIGNAL(clicked(bool)), this, SLOT(on_RunPushButtonClicked()));
-    connect( setRun1Action, SIGNAL( triggered() ), this, SLOT(on_setRun1Action()) );
-    connect( setRun2Action, SIGNAL( triggered() ), this, SLOT(on_setRun2Action()) );
-    connect( runOnAction, SIGNAL( triggered() ), this, SLOT(on_RunOnActionSelected()) );
-    connect( runOffAction, SIGNAL( triggered() ), this, SLOT(on_RunOffActionSelected()) );
-
-
-}
-
-
-
-void QSOLogFrame::on_RunPushButtonClicked()
-{
-
-    if (runButtonOnFlag)
-    {
-        runButtonOff();
-    }
-    else
-    {
-        runButtonOn();
-
-    }
-
-
-   // qint64 curRunF = curRunFreq.toLongLong() / 100;
-   // qint64 curF = curFreq.toLongLong() / 100;
-    //runButtonOnFlag = true;
-
-   // if (curF == 0 || curRunF == 0)
-   // {
-        return;
-   // }
-
-
-   // if ((curF < (curRunF - RUN_TOLERANCE)) || (curF > (curRunF + RUN_TOLERANCE)))
-   // {
-   //     sendFreq(curRunFreq);
-  //      radioOffRunFreq = true;
-  //  }
-
-    //showRunButtonOnOff(runButtonOnFlag);
-
-
-}
-
-
-void QSOLogFrame::on_setRun1Action()
-{
-    if (getRunMemoryFreq(0).toLongLong() != 0)
-    {
-        curRunFreq = getRunMemoryFreq(0);
-        sendFreq(curRunFreq);
-        radioOffRunFreq = true;
-        ui->runToolButton->setText("Run ." + extractKhz(curRunFreq));
-    }
-
-}
-
-void QSOLogFrame::on_setRun2Action()
-{
-    if (getRunMemoryFreq(1).toLongLong() != 0)
-    {
-        curRunFreq = getRunMemoryFreq(1);
-        sendFreq(curRunFreq);
-        radioOffRunFreq = true;
-        ui->runToolButton->setText("Run ." + extractKhz(curRunFreq));
+        setClusterSendSpotControlsDisabled(false);
     }
 }
 
 
-
-
-void QSOLogFrame::on_RunOnActionSelected()
-{
-
-        runButtonOn();
-}
-
-
-void QSOLogFrame::on_RunOffActionSelected()
-{
-
-    runButtonOff();
-}
-
-
-
-QString QSOLogFrame::getRunMemoryFreq(int memoryNumber)
-{
-    memoryData::memData m;
-    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-    if (ct)
-    {
-        if (ct->runMemories.size() > memoryNumber)
-        {
-            m = ct->runMemories[memoryNumber].getValue();
-        }
-    }
-
-    return m.freq;
-}
-
-*/
 
 void QSOLogFrame::on_FreqChanged(QString f)
 {
