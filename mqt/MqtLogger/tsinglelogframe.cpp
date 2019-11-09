@@ -1088,7 +1088,7 @@ void TSingleLogFrame::transferDetails(memoryData::memData &m )
     {
        return ;
     }
-    GJVQSOLogFrame->transferDetails( m.callsign, m.locator, m.fromBandmap );
+    GJVQSOLogFrame->transferDetails( m.callsign, m.locator, m.fromBandmapOrMemory );
     FKHRigControlFrame->transferDetails(m);
 }
 void TSingleLogFrame::getDetails(memoryData::memData &m)

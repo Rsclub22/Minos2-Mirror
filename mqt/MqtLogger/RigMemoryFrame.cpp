@@ -517,6 +517,7 @@ void RigMemoryFrame::readActionSelected()
 
     // send detail to rotator control frame, locator will give bearing
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    m.fromBandmapOrMemory =true;        // prevent tuning removing details
     tslf->transferDetails(m);
     if (m.locator.isEmpty())
     {
