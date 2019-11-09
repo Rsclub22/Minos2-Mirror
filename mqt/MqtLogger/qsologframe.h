@@ -273,6 +273,8 @@ private:
     void setTuningAddMapChkBoxState();
     void setBandmapControlsState();
     void setClusterSendSpotControlsState();
+    void setBandMapControlsDisabled(bool disabled);
+    void setClusterSendSpotControlsDisabled(bool disabled);
 signals:
     void QSOFrameCancelled();
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );

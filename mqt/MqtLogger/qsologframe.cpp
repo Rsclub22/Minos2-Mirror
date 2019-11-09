@@ -2643,11 +2643,20 @@ bool QSOLogFrame::isBandMapLoaded()
 
 void QSOLogFrame::setBandMapControlsVisible(bool visible)
 {
-    //ui->runToolButton->setVisible(visible);
+
     ui->bandmapMarkFreqPb->setVisible(visible);
     ui->bandmapSaveFreqPb->setVisible(visible);
     ui->tuningAddMapChkBox->setVisible(visible);
 
+
+}
+
+void QSOLogFrame::setBandMapControlsDisabled(bool disabled)
+{
+    ui->bandmapMarkFreqPb->setDisabled(disabled);
+    ui->bandmapMarkFreqPb->setDisabled(disabled);
+    ui->bandmapSaveFreqPb->setDisabled(disabled);
+    ui->tuningAddMapChkBox->setDisabled(disabled);
 }
 
 
@@ -2865,6 +2874,20 @@ void QSOLogFrame::setClusterSendSpotControlsVisible(bool visible)
 
 }
 
+void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
+{
+    ui->lastLoggedChkBx->setDisabled(disabled);
+    ui->lastLoggedCallsignLbl->setDisabled(disabled);
+    ui->spotPb->setDisabled(disabled);
+    ui->lastSpotSentTitleLbl->setDisabled(disabled);
+    ui->lastSpotSentLbl->setDisabled(disabled);
+    //if (visible)
+    //{
+    //    ui->spotPb->setDisabled(false);
+    //}
+
+}
+
 void QSOLogFrame::setClusterServerState(QString stateMsg)
 {
     if (stateMsg.contains("Connected"))
@@ -2954,11 +2977,9 @@ void QSOLogFrame::setRunOnFlag(bool runModeOn)
     if (runButtonOnFlag != runModeOn)
     {
         runButtonOnFlag = runModeOn;
-        if (!runButtonOnFlag)
-        {
-            setBandmapControlsState();
-            setClusterSendSpotControlsState();
-        }
+        setBandmapControlsState();
+        setClusterSendSpotControlsState();
+
     }
 }
 
@@ -2981,16 +3002,17 @@ void QSOLogFrame::setBandmapControlsState()
     {
         if (radioOffRunFreq)
         {
-            setBandMapControlsVisible(true);
+            setBandMapControlsDisabled(false);
         }
         else
         {
-            setBandMapControlsVisible(false);
+            setBandMapControlsDisabled(true);
         }
     }
     else
     {
         setBandMapControlsVisible(true);
+        setBandMapControlsDisabled(false);
     }
 }
 
@@ -3000,16 +3022,17 @@ void QSOLogFrame::setClusterSendSpotControlsState()
     {
         if (radioOffRunFreq)
         {
-            setClusterSendSpotControlsVisible(true);
+            setClusterSendSpotControlsDisabled(false);
         }
         else
         {
-            setClusterSendSpotControlsVisible(false);
+            setClusterSendSpotControlsDisabled(true);
         }
     }
     else
     {
         setClusterSendSpotControlsVisible(true);
+        setClusterSendSpotControlsDisabled(false);
     }
 }
 
