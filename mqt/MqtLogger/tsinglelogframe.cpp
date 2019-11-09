@@ -100,10 +100,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
 
-    // BandMap Updates
-
-    //connect(sendDM, SIGNAL(setBandMapLoaded()), this, SLOT(on_BandMapLoaded()));
-
 
     // RigControl Updates
     // From rig controller
@@ -123,8 +119,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
-    connect(FKHRigControlFrame, SIGNAL(runMemoryFreqUpdate(int, QString)), this, SLOT(sendRunMemoryFreqUpdate(int, QString)));
-    //connect(FKHRigControlFrame, SIGNAL(sendIgnoreRunChkBoxState(int, bool)), this, SLOT(sendIgnoreRunChkBoxState(int, bool)));
+    connect(FKHRigControlFrame, SIGNAL(sendRunOnFlag(bool)), this, SLOT(sendRunOnFlag(bool)));
+    connect(FKHRigControlFrame, SIGNAL(sendRunOffFreqFlag(bool)), this, SLOT(sendRunOffFreqFlag(bool)));
 
 
     // Rotator updates
@@ -1445,9 +1441,14 @@ void TSingleLogFrame::on_BandmapSaveFreq(QString cs, QString freq, QString loc, 
     bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg);
 }
 
-void TSingleLogFrame::sendRunMemoryFreqUpdate(int runNum, QString f)
+void TSingleLogFrame::sendRunOnFlag(bool runModeOn)
 {
-    GJVQSOLogFrame->setRunMemoryFreqUpdate(runNum, f);
+    GJVQSOLogFrame->setRunOnFlag(runModeOn);
+}
+
+void TSingleLogFrame::sendRunOffFreqFlag(bool offRunFreq)
+{
+    GJVQSOLogFrame->setRunOffFreqFlag(offRunFreq);
 }
 
 void TSingleLogFrame::on_ZoomMap(bool dir)

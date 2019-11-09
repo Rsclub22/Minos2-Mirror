@@ -94,6 +94,9 @@ public:
     void setClusterTXSpotEnableState(bool txEnableState);
 
 
+    void setRunOnFlag(bool runModeOn);
+    void setRunOffFreqFlag(bool offRunFreq);
+
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -213,18 +216,9 @@ private:
     void SecondOpComboBox_Exit();
 
 
-    //QMap<int, bool> ignoreRunState;
+
     bool runButtonOnFlag;
     bool radioOffRunFreq;
-
-    QString curRunFreq;
-    QTimer *chkRunFreqTimer;
-    QToolButton *runButton;
-    QMenu *runButtonMenu;
-    QAction* setRun1Action;
-    QAction* setRun2Action;
-    QAction* runOnAction;
-    QAction* runOffAction;
 
     QString callsignEnterTextFreq;
 
@@ -252,16 +246,12 @@ private:
     QString ssLineEditFrRedBkRed = "QLineEdit { background-color: red ; border-style: outset ; border-width: 1px ; border-color: red ; color : white }";
     QString ssLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
 
-    const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-    const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-    const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-
 
     QMap<QWidget *, QString> widgetStyles;
 
     void checkBandMapAndClusterLoaded();
-    void showRunButtonOnOff(bool state);
-    bool getLogDetails(memoryData::memData&);
+
+    void getLogDetails(memoryData::memData&, bool& validCall);
 
     Callsign lastLoggedCallsign;        // saved to send to cluster
     QString lastLoggedLocator;
@@ -274,14 +264,15 @@ private:
     void runButtonOn();
     void runButtonOff();
     void sendFreq(QString f);
-    void showRunToolButtonOffFreq();
-    void showRunToolButtonOnFreq();
+
     QString getRunMemoryFreq(int memoryNumber);
 
     bool getTuneAddBandMapSetting();
     void setTuneAddBandMapSetting(bool state);
 
     void setTuningAddMapChkBoxState();
+    void setBandmapControlsState();
+    void setClusterSendSpotControlsState();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
@@ -327,18 +318,18 @@ private slots:
 
     void on_frequencyEdit_textChanged(const QString &arg1);
 
-    void on_RunPushButtonClicked();
+    //void on_RunPushButtonClicked();
     void on_BandmapMarkFreqPbClicked();
     void on_bandmapSaveFreqPbClicked();
 
     void on_SpotPbClicked();
 
-   void on_ChkRunFreq();
+   //void on_ChkRunFreq();
 
-    void on_setRun1Action();
-    void on_setRun2Action();
-    void on_RunOnActionSelected();
-    void on_RunOffActionSelected();
+    //void on_setRun1Action();
+    //void on_setRun2Action();
+   // void on_RunOnActionSelected();
+    //void on_RunOffActionSelected();
 
     void on_FreqChanged(QString f);
 

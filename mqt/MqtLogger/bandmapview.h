@@ -80,6 +80,8 @@ public:
     void scrollBandmapCenterToFreq(qint64 freq);
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
 
+
+
 signals:
 
     void contextMenuSelected(const QPoint&, const QPoint&);
@@ -180,6 +182,7 @@ private:
     int getViewPortEndYCoordOnScene();
     void traceMsg(QString msg);
     void clearSpotData(BandmapData &selectedSpot);
+    void deleteItemsFromMarkerList();
 };
 
 #endif // BANDMAPVIEW_H

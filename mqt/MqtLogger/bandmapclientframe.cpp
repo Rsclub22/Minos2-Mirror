@@ -241,6 +241,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 BandmapClientFrame::~BandmapClientFrame()
 {
+    //bandmapView->deleteItemsFromMarkerList();
     delete ui;
 
     delete bandmapDataModel;

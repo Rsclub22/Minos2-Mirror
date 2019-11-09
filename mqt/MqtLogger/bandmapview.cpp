@@ -14,6 +14,7 @@
 #include "bandmapview.h"
 #include "rigutils.h"
 #include "MinosLoggerEvents.h"
+#include "rigutils.h"
 
 
 #include <QDebug>
@@ -881,27 +882,7 @@ void BandmapView::drawBandMapSpots()
 
     traceMsg(QString("Drawspots: Start Drawing - Clear Map"));
 
-    if (!listOfMarkers.isEmpty())
-    {
-        traceMsg(QString("Drawspots: Remove %1 markers").arg(listOfMarkers.count()));
-        for (int i = 0; i < listOfMarkers.count(); i++)
-        {
-            if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
-            {
-                BandmapSpotMarker* s = listOfMarkers[i]->getSpotMarkerPtr();
-                bandmapScene->removeItem(listOfMarkers[i]->getSpotMarkerPtr());
-                delete s;
-            }
-            if (listOfMarkers[i]->getMarkerLinePtr() != nullptr)
-            {
-                QGraphicsLineItem* l = listOfMarkers[i]->getMarkerLinePtr();
-                bandmapScene->removeItem(listOfMarkers[i]->getMarkerLinePtr());
-                delete l;
-
-            }
-
-        }
-    }
+    deleteItemsFromMarkerList();
 
     clearListOfMarkers();
 
@@ -1042,6 +1023,35 @@ void BandmapView::drawBandMapSpots()
 }
 
 
+void BandmapView::deleteItemsFromMarkerList()
+{
+
+    if (!listOfMarkers.isEmpty())
+    {
+        traceMsg(QString("Drawspots: Remove %1 markers").arg(listOfMarkers.count()));
+        for (int i = 0; i < listOfMarkers.count(); i++)
+        {
+            if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
+            {
+                BandmapSpotMarker* s = listOfMarkers[i]->getSpotMarkerPtr();
+                bandmapScene->removeItem(listOfMarkers[i]->getSpotMarkerPtr());
+                delete s;
+            }
+            if (listOfMarkers[i]->getMarkerLinePtr() != nullptr)
+            {
+                QGraphicsLineItem* l = listOfMarkers[i]->getMarkerLinePtr();
+                bandmapScene->removeItem(listOfMarkers[i]->getMarkerLinePtr());
+                delete l;
+
+            }
+
+        }
+    }
+
+
+}
+
+
 
 bool BandmapView::matchMode(int sourceRow)
 {
@@ -1089,7 +1099,8 @@ QString BandmapView::assembleSpotMsg(int row)
 {
 
     QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
-    qint64 freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), BMP_DataStoredRole).toLongLong();
+    QString freqStr =  model()->data(model()->index(row, FREQ_STR_COL_NUM), BMP_DataStoredRole).toString();
+    qint64 freq = freqStr.toLongLong();
     freq = freq / 1000;
     qint32 curFreq = dial->getCurFreqInt32();
     QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), Qt::DisplayRole).toString();
@@ -1141,7 +1152,7 @@ QString BandmapView::assembleSpotMsg(int row)
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    if (freq >= curFreq - 1 && freq <= curFreq +1)
+    if (freq == curFreq )
     {
         bLineStart = "<b>";
         bLineEnd = "</b>";
@@ -1161,8 +1172,10 @@ QString BandmapView::assembleSpotMsg(int row)
         markSym = HtmlFontColour(CLUSTER_SPOT_COLOUR) + "*" + HtmlFontColour(MARKED_SPOT_COLOUR) + "#" + HtmlFontColour(NOT_WORKED_COLOUR);
     }
 
+    qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
+    QString elapsedTimeStr = QString::number(elapsedTime);
 
-    QString msg = QString("%1%2  %3  %4  %5%6%7 %8 %9").arg(bLineStart).arg(callsign).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(bLineEnd).arg(markSym).arg(newSpotMsg);
+    QString msg = QString("%1%2 @ .%3 %4  %5 km  %6%7%8 %9 min %10  %11").arg(bLineStart).arg(callsign).arg(extractKhz(freqStr)).arg(dxLoc).arg(dxDist).arg(dxBrg).arg(degSym).arg(bLineEnd).arg(elapsedTimeStr).arg(markSym).arg(newSpotMsg);
 
     if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
     {
