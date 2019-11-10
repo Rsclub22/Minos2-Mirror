@@ -29,7 +29,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , rotatorLoaded(false)
     , radioLoaded(false)
     , bandMapLoaded(false)
-    , logDataFromBandmap(false)
+    , logDataFromBandmapOrMemory(false)
     , keyerLoaded(false)
     , radioConnected(false)
     , radioError(false)
@@ -844,9 +844,13 @@ void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
 {
     doGJVEditChange( ui->CallsignEdit );
 
-    if (logDataFromBandmap)
+    if (logDataFromBandmapOrMemory)
     {
-        logDataFromBandmap = false;
+       if (ui->CallsignEdit->text().isEmpty())
+       {
+           logDataFromBandmapOrMemory = false;
+       }
+
     }
 
     if (text.count() > 0)
@@ -2344,14 +2348,14 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
    doGJVEditChange(ui->QTHEdit);
 }
 
-void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool fromBandmap )
+void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool fromBandmapOrMemory )
 {
     ui->CallsignEdit->setText(cs);
     ui->LocEdit->setText(loc);
 
-    if (fromBandmap)
+    if (fromBandmapOrMemory)
     {
-        logDataFromBandmap = true;
+        logDataFromBandmapOrMemory = true;
     }
 
     valid( cmCheckValid ); // make sure all single and cross field
@@ -2788,6 +2792,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
         logData.freq = callsignEnterTextFreq;
         callsignEnterTextFreq = "00000000000";
         ui->CallsignEdit->clear();
+        ui->LocEdit->clear();
         trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
         emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
     }
@@ -3041,7 +3046,7 @@ void QSOLogFrame::setClusterSendSpotControlsState()
 void QSOLogFrame::on_FreqChanged(QString f)
 {
 
-    if (!logDataFromBandmap)
+    if (!logDataFromBandmapOrMemory)
     {
         qint64 dialFreq = f.toLongLong() / 1000;
         qint64 callsignEnterFreq = callsignEnterTextFreq.toLongLong() / 1000;
@@ -3055,16 +3060,11 @@ void QSOLogFrame::on_FreqChanged(QString f)
                 if (ui->tuningAddMapChkBox->isChecked())
                 {
                     on_bandmapSaveFreqPbClicked();
-                    ui->CallsignEdit->clear();
-                    ui->LocEdit->clear();
+
                 }
 
             }
         }
-    }
-    else
-    {
-        logDataFromBandmap = false;
     }
 
 

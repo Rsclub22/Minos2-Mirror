@@ -399,7 +399,7 @@ void BandmapClientFrame::on_logActionSelected()
         spotData.freq = bandmapView->getSelectedSpotDataPtr()->dxFreqStr;
         spotData.locator = bandmapView->getSelectedSpotDataPtr()->dxLocator;
         spotData.bearing = bandmapView->getSelectedSpotDataPtr()->dxBrg.toInt();
-        spotData.fromBandmap = true;
+        spotData.fromBandmapOrMemory = true;
 
         MinosLoggerEvents::SendSpotToLog(spotData);
     }
@@ -544,7 +544,7 @@ void BandmapClientFrame::context_logActionSelected()
     spotData.freq = contextMenuSelectedSpotData.dxFreqStr;
     spotData.locator = contextMenuSelectedSpotData.dxLocator;
     spotData.bearing = contextMenuSelectedSpotData.dxBrg.toInt();
-    spotData.fromBandmap = true;
+    spotData.fromBandmapOrMemory = true;
 
     MinosLoggerEvents::SendSpotToLog(spotData);
 

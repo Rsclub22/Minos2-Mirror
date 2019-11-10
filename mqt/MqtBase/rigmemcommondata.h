@@ -126,7 +126,7 @@ public:
     int bearing = 0;
     QString time = "00:00";
     bool worked = false;
-    bool fromBandmap = false;
+    bool fromBandmapOrMemory = false;
 
     QColor headerColor = Qt::black;
 
@@ -137,7 +137,7 @@ public:
                 && mode.compare(rhs.mode, Qt::CaseInsensitive) == 0
                 && locator.compare(rhs.locator, Qt::CaseInsensitive) == 0
                 && worked == rhs.worked
-                && fromBandmap == rhs.fromBandmap
+                && fromBandmapOrMemory == rhs.fromBandmapOrMemory
                 && time.compare(rhs.time, Qt::CaseInsensitive) == 0
                 && bearing == rhs.bearing)
 
