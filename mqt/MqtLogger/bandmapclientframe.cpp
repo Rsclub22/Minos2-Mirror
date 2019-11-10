@@ -1663,7 +1663,7 @@ void BandmapClientFrame::setRotatorBearing(QString s)
         return;
     }
 
-    curRotBearing = sl[1];
+    curRotBearing = sl[0];
 }
 
 void BandmapClientFrame::setRotatorConnected(bool connected)
