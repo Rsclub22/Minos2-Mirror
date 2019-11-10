@@ -2792,6 +2792,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
         logData.freq = callsignEnterTextFreq;
         callsignEnterTextFreq = "00000000000";
         ui->CallsignEdit->clear();
+        ui->LocEdit->clear();
         trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
         emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
     }
@@ -3059,8 +3060,7 @@ void QSOLogFrame::on_FreqChanged(QString f)
                 if (ui->tuningAddMapChkBox->isChecked())
                 {
                     on_bandmapSaveFreqPbClicked();
-                    ui->CallsignEdit->clear();
-                    ui->LocEdit->clear();
+
                 }
 
             }

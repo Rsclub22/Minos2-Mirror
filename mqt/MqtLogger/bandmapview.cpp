@@ -652,7 +652,7 @@ void BandmapView::bandmapResize(int height, int width)
 {
 
     //dial->setCurHeight(height);
-    //bandmapUpdate();
+    bandmapUpdate();
 
 
 }
@@ -1152,7 +1152,7 @@ QString BandmapView::assembleSpotMsg(int row)
     {
        if (rotConnected)
        {
-           bearing = QString("%1%2R").arg(rotBrg).arg(degSym);
+           bearing = QString("%1%2 R").arg(rotBrg).arg(degSym);
        }
 
     }
@@ -1196,7 +1196,7 @@ QString BandmapView::assembleSpotMsg(int row)
     }
 
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
-    QString elapsedTimeStr = QString::number(elapsedTime) + "min";
+    QString elapsedTimeStr = QString::number(elapsedTime) + " min";
 
     QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart).arg(callsign).arg(extractKhz(freqStr)).arg(locator).arg(distance).arg(bearing).arg(elapsedTimeStr).arg(markSym).arg(newSpotMsg).arg(bLineEnd);
 
