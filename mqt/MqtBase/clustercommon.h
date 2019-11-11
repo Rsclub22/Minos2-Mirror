@@ -135,6 +135,7 @@ const QColor NOT_WORKED_COLOUR = Qt::black;
 const QColor MARKED_SPOT_COLOUR = Qt::magenta;
 const QColor CLUSTER_SPOT_COLOUR = Qt::darkGreen;
 const QColor BANDMAP_NEW_COLOUR = Qt::blue;
+const QColor CQ_FREQ_COLOUR = Qt::red;
 
 // Callsign Edit Shortcuts
 const QString ADD_CALLSIGN_KEY = "Ctrl-a";

@@ -1861,7 +1861,10 @@ void RigControlFrame::runButActivated(int buttonNumber)
                     runButtonMap[RUN_BUTTON_1_ON]->showButtonOnOff(false);
                     runButtonMap[RUN_BUTTON_1_ON]->setState(false);
                     runButtonOnFlag = false;
+                    oldRunButtonFlag = false;
+                    oldRadioOffRunFreq = false;
                     runButtonOnNum = NO_RUN_BUTTON_ON;
+                    emit sendCQFreq(curRunFreq, false);
                     chkRunFreqTimer->stop();
                 }
             }
@@ -1881,12 +1884,17 @@ void RigControlFrame::runButActivated(int buttonNumber)
                 runButReadActSel(buttonNumber);
                 runButtonMap[buttonNumber]->showButtonOnOff(true);
                 runButtonOnFlag = true;
+                oldRunButtonFlag = false;
+                oldRadioOffRunFreq = false;
                 //runButtonMap[buttonNumber]->setState(true);
                 chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
                 runButtonOnNum = buttonNumber;
+
+
             }
 
             emit sendRunOnFlag(runButtonOnFlag);
+
 
         }
     }
@@ -1909,6 +1917,7 @@ void RigControlFrame::runButActivated(int buttonNumber)
                     runButtonMap[RUN_BUTTON_2_ON]->setState(false);
                     runButtonOnFlag = false;
                     runButtonOnNum = NO_RUN_BUTTON_ON;
+                    emit sendCQFreq(curRunFreq, false);
                     chkRunFreqTimer->stop();
                 }
             }
@@ -1960,6 +1969,7 @@ void RigControlFrame::runButReadActSel(int buttonNumber)
 
                 sendFreq(m.freq);
                 curRunFreq = m.freq;
+                emit sendCQFreq(curRunFreq, true);
             }
 
 
@@ -2066,54 +2076,59 @@ void RigControlFrame::runButtonUpdate(int buttonNumber)
 
 void RigControlFrame::on_ChkRunFreq()
 {
+
+
     if (runButtonOnFlag)
     {
         if (curRunFreq.toLongLong() != 0)
         {
             if (!chkRadioFreqOnRunFreq())
             {
-                // off run freq
-                //if (!radioOffRunFreq)
-                //{
-                    radioOffRunFreq = true;
-                    if (runButtonOnNum >= 0 && runButtonOnNum < NUM_RUNBUTTONS)
-                    {
-                        runButtonMap[runButtonOnNum]->showRunToolButtonOffFreq();
-                    }
-                    qDebug() << QString("run flag 1 = %1").arg(radioOffRunFreq ? "true":"false");
+
+                radioOffRunFreq = true;
+                if (runButtonOnNum >= 0 && runButtonOnNum < NUM_RUNBUTTONS)
+                {
+                    runButtonMap[runButtonOnNum]->showRunToolButtonOffFreq();
+                }
+
+
+                if (oldRadioOffRunFreq != radioOffRunFreq)
+                {
+                    oldRadioOffRunFreq = radioOffRunFreq;
                     emit sendRunOffFreqFlag(radioOffRunFreq);
-               // }
+                    emit sendCQFreq(curRunFreq, false);
+                }
+
+
              }
 
             else if (chkRadioFreqOnRunFreq())
             {
                 // back on a run freq
-                //if (radioOffRunFreq)
-                //{
-                    radioOffRunFreq = false;
-                    if (runButtonOnNum >= 0 && runButtonOnNum < NUM_RUNBUTTONS)
-                    {
-                        runButtonMap[runButtonOnNum]->showRunToolButtonOnFreq();
-                    }
-                    qDebug() << QString("run flag 2 = %1").arg(radioOffRunFreq ? "true":"false");
 
+                radioOffRunFreq = false;
+                if (runButtonOnNum >= 0 && runButtonOnNum < NUM_RUNBUTTONS)
+                {
+                    runButtonMap[runButtonOnNum]->showRunToolButtonOnFreq();
+                }
+
+
+                if (oldRadioOffRunFreq != radioOffRunFreq)
+                {
+                    oldRadioOffRunFreq = radioOffRunFreq;
                     emit sendRunOffFreqFlag(radioOffRunFreq);
-                //}
+                    emit sendCQFreq(curRunFreq, true);
+                }
+
+
+
 
             }
-        }
-        else
-        {
-            // runFreq cleared
-            //runButtonOff();
-
         }
 
 
 
     }
-
-
 
 }
 

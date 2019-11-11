@@ -993,6 +993,13 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
 {
 
+    // is it a CQ Freq Spot
+    if (spot->getSpotType() == bandmapSpotType::CQ)
+    {
+        addRemoveCQSpot(spot);
+        return;
+    }
+
     // look for an existing spot if the marker is a LOGGED or SAVE type
 
     if (spot->getSpotType() == bandmapSpotType::LOGGED || spot->getSpotType() == bandmapSpotType::SAVED)
@@ -1081,7 +1088,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
 
     qint64 logTime = spot->getTime().toMSecsSinceEpoch() / 1000;
 
-    QString logTimeStr = spot->getTime().time().toString("HH:MM");
+    QString logTimeStr = spot->getTime().time().toString("HH:mm");
 
     // convert freq
     bool ok = false;
@@ -1105,6 +1112,49 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
 
 
 }
+
+void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
+{
+    // look for an existing CQ spot and remove
+    for (int row = 0; row < bandmapDataModel->rowCount(); row++)
+    {
+        bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+        if (savedSpotType == bandmapSpotType::CQ)
+        {
+            bandmapDataModel->removeRows(row, 1);
+        }
+    }
+
+
+    if (!spot->getFreq().isEmpty())
+    {
+        qint64 logTime = spot->getTime().toMSecsSinceEpoch() / 1000;
+
+        QString logTimeStr = spot->getTime().time().toString("HH:mm");
+
+        // convert freq
+        bool ok = false;
+        qint64 logFreq = spot->getFreq().toLongLong(&ok, 10);
+        if (!ok)
+        {
+            logFreq = 0;
+            return;     // we don't want to have CQ marker with freq = 0
+        }
+
+        bandmapDataModel->rowData = new BandmapData(logTime, logTimeStr,
+                                                spot->getFreq(), logFreq, spot->getbandStr(),  spot->getBandMask(),
+                                                spot->getModeStr(), spot->getModeMask(), spot->getCallsign().fullCall.getValue(),
+                                                spot->getWorked(), spot->getLocator(),
+                                                false, "",
+                                                spot->getBearing(), "", rotatorConnected, "",
+                                                "", "", "", spot->getSpotType());
+
+        bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+
+    }
+
+}
+
 
 //checks spot freq against stored freq, return the row number to insert before
 
@@ -1604,7 +1654,41 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
     logSpotQueue.append(spot);
 }
 
+void BandmapClientFrame::setCQFreq(QString runFreq, bool showMarker)
+{
+    traceMsg(QString("set CQFreq - runFreq %1, showMarker %2").arg(runFreq).arg(showMarker ? "True" : "False"));
+    QDateTime time = QDateTime::currentDateTimeUtc();
 
+    QString logBandStr;
+    QString logBandMask;
+    QString logModeStr;
+    QString logModeMask;
+
+    QString freq = runFreq.remove('.');
+
+    getBand(bands, freq, logBandStr, logBandMask);
+    getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+
+    if (showMarker)
+    {
+        LoggerSpots* spot = new LoggerSpots(Callsign("???"), "", "",
+                                            logModeStr, logModeMask,
+                                            freq, logBandStr, logBandMask,
+                                            false, time, bandmapSpotType::CQ);
+        logSpotQueue.append(spot);
+    }
+    else
+    {
+        // if off runFreq or runButton is off
+        // mark freq as zero to remove CQ marker
+        LoggerSpots* spot = new LoggerSpots(Callsign("???"), "", "",
+                                            logModeStr, logModeMask,
+                                            "0", logBandStr, logBandMask,
+                                            false, time, bandmapSpotType::CQ);
+        logSpotQueue.append(spot);
+    }
+
+}
 
 void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString _freq, QString loc, QString brg)
 {

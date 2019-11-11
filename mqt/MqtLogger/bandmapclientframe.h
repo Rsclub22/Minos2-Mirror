@@ -155,6 +155,7 @@ public:
     void saveTuneAddBandMapSetting(bool state);
     bool readTuneAddBandMapSetting();
 
+    void setCQFreq(QString runFreq, bool showMarker);
 signals:
 
     void freqDisplayClicked();
@@ -266,6 +267,7 @@ private:
     void getBandLimitsFromBandListXML();
     void traceMsg(QString msg);
 
+    void addRemoveCQSpot(LoggerSpots *spot);
 protected:
 
 
