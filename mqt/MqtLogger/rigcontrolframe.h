@@ -212,6 +212,7 @@ signals:
     void radioDisconnected();
     void sendRunOnFlag(bool);
     void sendRunOffFreqFlag(bool);
+    void sendCQFreq(QString, bool);
 
 
 
@@ -330,6 +331,10 @@ private:
     bool radioOffRunFreq;
     QString curRunFreq;
     QTimer *chkRunFreqTimer;
+
+    bool oldRunButtonFlag = false;    // used by on_ChkRunFreq()
+    bool oldRadioOffRunFreq = false;  // used by on_ChkRunFreq()
+
 
     void sendModeToRadio(QString);
     void freqLineEditBkgnd(bool status);

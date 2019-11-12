@@ -183,6 +183,8 @@ private:
     void traceMsg(QString msg);
     void clearSpotData(BandmapData &selectedSpot);
     void deleteItemsFromMarkerList();
+    QString assembleCqToolTip(int row, QString freq);
+    QString assembleCqMsg(int row);
 };
 
 #endif // BANDMAPVIEW_H
