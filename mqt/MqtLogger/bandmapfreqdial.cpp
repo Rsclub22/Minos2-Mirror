@@ -267,6 +267,8 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
             for (int i = 0; i < listOfFreqs.count(); i++)
             {
                 QList<double> freqs = listOfFreqs.freq[i];
+                if (freqs.count() == 0)
+                    continue;
                 if (freqs[1] > contestBandFhigh)
                 {
                     freqs[1] = contestBandFhigh;
