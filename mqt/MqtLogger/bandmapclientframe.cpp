@@ -464,15 +464,18 @@ void BandmapClientFrame::on_clearSpotActionSelected()
 
 void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos, const QPoint& mapP)
 {
-    qDebug() << QString("3 - context menu selected pos x = %1, y = %2").arg(pos.x()).arg(pos.y());
-    qDebug() << QString("4 - context menu selected mapP x = %1, y = %2").arg(mapP.x()).arg(mapP.y());
     int contextSelectedSpotViewRowNum = bandmapView->isClickInRegionOfSpot(mapP);
     traceMsg(QString("Context Menu Selected - ViewRowNum %1").arg(contextSelectedSpotViewRowNum));
+
     if (contextSelectedSpotViewRowNum != NO_SELECTED_ROWNUM)
     {
         bandmapView->getSpotData(contextMenuSelectedSpotDataRowNum, contextSelectedSpotViewRowNum, contextMenuSelectedSpotData);
+        if (contextMenuSelectedSpotData.spotType == bandmapSpotType::CQ)
+        {
+            traceMsg(QString("Context Menu Selected - ViewRowNum %1 - Error Selected CQ Marker").arg(contextSelectedSpotViewRowNum));
+            return;
+        }
         QPoint globalPos = ui->bandmapGraphicsView->viewport()->mapToGlobal( pos );
-        qDebug() << QString("5 - context menu selected global pos x = %1, y = %2").arg(globalPos.x()).arg(globalPos.y());
         contextSpotsMenu->popup(globalPos);
 
     }
