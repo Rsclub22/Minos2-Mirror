@@ -311,7 +311,12 @@ int BandmapView::findNextOccupiedMarkerUpList(int curSpotViewNum)
     {
         if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
         {
-            return i;
+            int row = listOfMarkers[i]->getModelRowNum();
+            bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+            if ( savedSpot != bandmapSpotType::CQ)
+            {
+                return i;
+            }
         }
     }
 
@@ -328,7 +333,12 @@ int BandmapView::findNextOccupiedMarkerDownList(int curSpotViewNum)
     {
         if (listOfMarkers[i]->getSpotMarkerPtr() != nullptr)
         {
-            return i;
+            int row = listOfMarkers[i]->getModelRowNum();
+            bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+            if ( savedSpot != bandmapSpotType::CQ)
+            {
+                return i;
+            }
         }
     }
 
@@ -348,7 +358,8 @@ int BandmapView::findNextNonWorkedLocatorUpList(int curSpotViewNum)
         {
             int row = listOfMarkers[i]->getModelRowNum();
             bool locWorked = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-            if (!locWorked)
+            bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+            if (!locWorked && savedSpot != bandmapSpotType::CQ)
             {
                 return i;
             }
@@ -370,11 +381,11 @@ int BandmapView::findNextNonWorkedLocatorDownList(int curSpotViewNum)
         {
             int row = listOfMarkers[i]->getModelRowNum();
             bool locWorked = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-            if (!locWorked)
+            bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+            if (!locWorked && savedSpot != bandmapSpotType::CQ)
             {
                 return i;
             }
-
         }
     }
 
@@ -764,12 +775,21 @@ void BandmapView::bandmapSelectSpot(QPoint p)
 {
     int spotViewNum = isClickInRegionOfSpot(p);
 
-    if (spotViewNum >= 0)
+    if (spotViewNum != -1)      // not in region
     {
-        clearSelectedSpot();       // clear any spot previously selected
-        setSelectedSpot(spotViewNum);        // mark new selected spot
+        bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(listOfMarkers[spotViewNum]->getModelRowNum(), SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+        if (spotType != bandmapSpotType::CQ)
+        {
 
-        MinosLoggerEvents::SendFreqStrToRig(selectedSpot.dxFreqStr);
+            if (spotViewNum >= 0)
+            {
+                clearSelectedSpot();       // clear any spot previously selected
+                setSelectedSpot(spotViewNum);        // mark new selected spot
+
+                MinosLoggerEvents::SendFreqStrToRig(selectedSpot.dxFreqStr);
+            }
+
+        }
     }
     else
     {

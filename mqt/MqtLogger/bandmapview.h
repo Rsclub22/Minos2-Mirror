@@ -64,7 +64,9 @@ public:
     void clearSelectedSpotData();
 
     int getSelectedSpotViewRowNum(){return selectedSpotViewRowNum;}
+
     int getSelectedSpotDataRowNum(){return selectedSpotDataRowNum;}
+
     BandmapData* getSelectedSpotDataPtr(){return &selectedSpot;}
 
     void clearSelectedSpot();

@@ -51,11 +51,11 @@ void BandmapGraphicsPanel::keyPressEvent(QKeyEvent *event)
 
     if (Key == Qt::Key_Plus)
     {
-        emit zoomMap(false);
+        //emit zoomMap(false);
     }
     else if (Key == Qt::Key_Minus)
     {
-        emit zoomMap(true);
+        //emit zoomMap(true);
     }
     else if (Key == Qt::Key_Up && ctrl && alt)
     {

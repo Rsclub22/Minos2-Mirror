@@ -480,7 +480,6 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos, const QPoint&
 
     }
 
-
 }
 
 
