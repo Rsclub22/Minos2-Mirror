@@ -32,6 +32,7 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
                    QString _dxLocator, bool _dxLocatorWorked,
                    QString _distance, QString _bearing, QString _rotBrg, bool _rotConnected,
                    QString _spotterCall, QString _spotterLocator, QString _dxPropMode,
+                   bool _runModeOn, bool _offRunFreq,
                    QString comment, bandmapSpotType::SPOT_TYPE _spotType)
 {
 
@@ -56,6 +57,8 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
     spotterLocator = _spotterLocator;
     dxPropMode = _dxPropMode;
     spotComment = comment;
+    runModeOn = _runModeOn;
+    offRunFreq = _offRunFreq;
     spotType = _spotType;
     isSelected = false;
 }
@@ -82,6 +85,8 @@ void BandmapData::operator = (const BandmapData& bmd)
     spotterCall = bmd.spotterCall;
     spotterLocator = bmd.spotterLocator;
     dxPropMode = bmd.dxPropMode;
+    runModeOn = bmd.runModeOn;
+    offRunFreq = bmd.offRunFreq;
     spotComment = bmd.spotComment;
     spotType = bmd.spotType;
     isSelected = bmd.isSelected;
@@ -109,6 +114,8 @@ void BandmapData::operator = (const BandmapData* bmd)
     spotterCall = bmd->spotterCall;
     spotterLocator = bmd->spotterLocator;
     dxPropMode = bmd->dxPropMode;
+    runModeOn = bmd->runModeOn;
+    offRunFreq = bmd->offRunFreq;
     spotComment = bmd->spotComment;
     spotType = bmd->spotType;
     isSelected = bmd->isSelected;
@@ -140,6 +147,8 @@ void BandmapData::clear()
     spotterCall.clear();
     spotterLocator.clear();
     dxPropMode.clear();
+    runModeOn = false;
+    offRunFreq = false;
     spotComment.clear();
     spotType = bandmapSpotType::NONE;
     isSelected = false;

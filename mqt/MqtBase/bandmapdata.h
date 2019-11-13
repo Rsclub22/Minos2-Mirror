@@ -37,6 +37,7 @@ public:
              bool _dxLocatorWorked, QString _distance,
              QString _bearing, QString _rotBrg, bool _rotConnected, QString _spotterCall,
              QString _spotterLocator, QString _dxPropMode,
+             bool _runModeOn, bool _offRunFreq,
              QString comment, bandmapSpotType::SPOT_TYPE _spotType);
 
     void operator = (const BandmapData& bmd);
@@ -62,6 +63,8 @@ public:
     QString spotterCall;
     QString spotterLocator;
     QString dxPropMode;
+    bool runModeOn;
+    bool offRunFreq;
     QString spotComment;
     bandmapSpotType::SPOT_TYPE spotType;
     bool isSelected;

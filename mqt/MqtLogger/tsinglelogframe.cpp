@@ -119,8 +119,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
-    connect(FKHRigControlFrame, SIGNAL(sendRunOnFlag(bool)), this, SLOT(sendRunOnFlag(bool)));
-    connect(FKHRigControlFrame, SIGNAL(sendRunOffFreqFlag(bool)), this, SLOT(sendRunOffFreqFlag(bool)));
+    connect(FKHRigControlFrame, SIGNAL(sendRunOnFlag(QString, bool)), this, SLOT(sendRunOnFlag(QString, bool)));
+    connect(FKHRigControlFrame, SIGNAL(sendRunOffFreqFlag(QString, bool)), this, SLOT(sendRunOffFreqFlag(QString, bool)));
 
 
     // Rotator updates
@@ -154,7 +154,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
             this, SLOT(on_BandmapMarkFreq(QString, QString, QString, QString)));
     connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, QString, QString, QString)),
             this, SLOT(on_BandmapSaveFreq(QString, QString, QString, QString)));
-    connect(FKHRigControlFrame, SIGNAL(sendCQFreq(QString, bool)), this, SLOT(on_SendCQFreq(QString, bool)));
+    //connect(FKHRigControlFrame, SIGNAL(sendCQFreq(QString, bool)), this, SLOT(on_SendCQFreq(QString, bool)));
 
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
@@ -1439,19 +1439,21 @@ void TSingleLogFrame::on_BandmapSaveFreq(QString cs, QString freq, QString loc, 
     bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg);
 }
 
-void TSingleLogFrame::on_SendCQFreq(QString runFreq, bool showMarker)
-{
-    bandmapControlFrame->setCQFreq(runFreq, showMarker);
-}
+//void TSingleLogFrame::on_SendCQFreq(QString runFreq, bool showMarker)
+//{
+//    bandmapControlFrame->setCQFreq(runFreq, showMarker);
+//}
 
-void TSingleLogFrame::sendRunOnFlag(bool runModeOn)
+void TSingleLogFrame::sendRunOnFlag(QString runFreq, bool runModeOn)
 {
     GJVQSOLogFrame->setRunOnFlag(runModeOn);
+    bandmapControlFrame->setRunOnFlag(runFreq, runModeOn);
 }
 
-void TSingleLogFrame::sendRunOffFreqFlag(bool offRunFreq)
+void TSingleLogFrame::sendRunOffFreqFlag(QString runFreq, bool offRunFreq)
 {
     GJVQSOLogFrame->setRunOffFreqFlag(offRunFreq);
+    bandmapControlFrame->setRunOffFreqFlag(runFreq, offRunFreq);
 }
 
 void TSingleLogFrame::on_ZoomMap(bool dir)

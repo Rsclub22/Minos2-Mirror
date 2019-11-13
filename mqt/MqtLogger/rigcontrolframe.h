@@ -210,9 +210,9 @@ signals:
     void sendRitFreq(int);
     void ritStatus(bool);
     void radioDisconnected();
-    void sendRunOnFlag(bool);
-    void sendRunOffFreqFlag(bool);
-    void sendCQFreq(QString, bool);
+    void sendRunOnFlag(QString, bool);
+    void sendRunOffFreqFlag(QString, bool);
+    //void sendCQFreq(QString, bool);
 
 
 

@@ -51,7 +51,7 @@ public:
     LoggerSpots(Callsign _cs, QString _loc,  QString _brg,
                 QString _modeStr, QString _modeMask,
                 QString _freq, QString _bandStr, QString _bandMask,
-                bool _worked, QDateTime _time, bandmapSpotType::SPOT_TYPE _spotType )
+                bool _worked, QDateTime _time, bool _runModeOn, bool _offRunFreq, bandmapSpotType::SPOT_TYPE _spotType )
     {
         cs = _cs;
         loc = _loc;
@@ -63,6 +63,8 @@ public:
         modeMask = _modeMask;
         worked = _worked;
         time = _time;
+        runModeOn = _runModeOn;
+        offRunFreq = _offRunFreq;
         spotType = _spotType;
 
     }
@@ -98,6 +100,14 @@ public:
     QDateTime getTime(){return time;}
     void setTime(QDateTime _time){time = _time;}
 
+    bool getRunModeOn(){return runModeOn;}
+    void setRunModeOn(bool _runModeOn){runModeOn = _runModeOn;}
+
+
+    bool getOffRunFreq(){return offRunFreq;}
+    void setOffRunFreq(bool _offRunFreq){offRunFreq = _offRunFreq;}
+
+
     bandmapSpotType::SPOT_TYPE getSpotType(){return spotType;}
     void setSpotType(bandmapSpotType::SPOT_TYPE _spotType){spotType = _spotType;}
 
@@ -113,6 +123,8 @@ private:
     QString bandMask;
     bool worked;
     QDateTime time;
+    bool runModeOn;
+    bool offRunFreq;
     bandmapSpotType::SPOT_TYPE spotType;
 };
 
@@ -155,7 +167,9 @@ public:
     void saveTuneAddBandMapSetting(bool state);
     bool readTuneAddBandMapSetting();
 
-    void setCQFreq(QString runFreq, bool showMarker);
+
+    void setRunOnFlag(QString _runFreq, bool _runModeOn);
+    void setRunOffFreqFlag(QString _runFreq, bool _offRunFreq);
 signals:
 
     void freqDisplayClicked();
@@ -196,6 +210,11 @@ private:
     QVector<QString> spotQueue;
     bool clusterServerLoaded;
     bool clusterServerConnected;
+
+    // CQ Frequency
+    QString runFreq;
+    bool runModeOn;
+    bool offRunFreq;
 
     // spots from logger
     QVector<LoggerSpots*> logSpotQueue;
@@ -267,7 +286,9 @@ private:
     void getBandLimitsFromBandListXML();
     void traceMsg(QString msg);
 
+    void setCQFreq();
     void addRemoveCQSpot(LoggerSpots *spot);
+
 protected:
 
 

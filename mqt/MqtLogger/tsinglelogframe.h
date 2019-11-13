@@ -272,15 +272,15 @@ private slots:
     void on_BandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
     void on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
     void on_rotatorConnected(bool connected);
-    void sendRunOnFlag(bool);
-    void sendRunOffFreqFlag(bool);
+    void sendRunOnFlag(QString, bool);
+    void sendRunOffFreqFlag(QString, bool);
     void on_ZoomMap(bool dir);
     void on_clusterServerState(QString state);
     void on_clusterServerLoaded();
     void on_SendSpotToClusterServer(QString freq, QString callsign, QString loc);
     void on_setClusterTXSpotEnableState(QString state);
     void on_dxSpotToMemory(BaseContestLog *c, memoryData::memData dxData);
-    void on_SendCQFreq(QString runFreq, bool showMarker);
+
 public:
     void sendTpm(int t, QString f);
     

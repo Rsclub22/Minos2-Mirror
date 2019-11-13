@@ -1864,7 +1864,7 @@ void RigControlFrame::runButActivated(int buttonNumber)
                     oldRunButtonFlag = false;
                     oldRadioOffRunFreq = false;
                     runButtonOnNum = NO_RUN_BUTTON_ON;
-                    emit sendCQFreq(curRunFreq, false);
+                    //emit sendCQFreq(curRunFreq, false);
                     chkRunFreqTimer->stop();
                 }
             }
@@ -1893,7 +1893,7 @@ void RigControlFrame::runButActivated(int buttonNumber)
 
             }
 
-            emit sendRunOnFlag(runButtonOnFlag);
+            emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
 
 
         }
@@ -1917,7 +1917,7 @@ void RigControlFrame::runButActivated(int buttonNumber)
                     runButtonMap[RUN_BUTTON_2_ON]->setState(false);
                     runButtonOnFlag = false;
                     runButtonOnNum = NO_RUN_BUTTON_ON;
-                    emit sendCQFreq(curRunFreq, false);
+                    //emit sendCQFreq(curRunFreq, false);
                     chkRunFreqTimer->stop();
                 }
             }
@@ -1942,7 +1942,7 @@ void RigControlFrame::runButActivated(int buttonNumber)
                 runButtonOnNum = buttonNumber;
             }
 
-            emit sendRunOnFlag(runButtonOnFlag);
+            emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
         }
     }
 
@@ -1969,7 +1969,7 @@ void RigControlFrame::runButReadActSel(int buttonNumber)
 
                 sendFreq(m.freq);
                 curRunFreq = m.freq;
-                emit sendCQFreq(curRunFreq, true);
+                //emit sendCQFreq(curRunFreq, true);
             }
 
 
@@ -2048,7 +2048,7 @@ void RigControlFrame::runButOffActionSelected(int buttonNumber)
         runButtonOnFlag = false;
         runButtonOnNum = NO_RUN_BUTTON_ON;
         chkRunFreqTimer->stop();
-        emit sendRunOnFlag(runButtonOnFlag);
+        emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
     }
 
 }
@@ -2095,8 +2095,8 @@ void RigControlFrame::on_ChkRunFreq()
                 if (oldRadioOffRunFreq != radioOffRunFreq)
                 {
                     oldRadioOffRunFreq = radioOffRunFreq;
-                    emit sendRunOffFreqFlag(radioOffRunFreq);
-                    emit sendCQFreq(curRunFreq, false);
+                    emit sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
+                    //emit sendCQFreq(curRunFreq, false);
                 }
 
 
@@ -2116,8 +2116,8 @@ void RigControlFrame::on_ChkRunFreq()
                 if (oldRadioOffRunFreq != radioOffRunFreq)
                 {
                     oldRadioOffRunFreq = radioOffRunFreq;
-                    emit sendRunOffFreqFlag(radioOffRunFreq);
-                    emit sendCQFreq(curRunFreq, true);
+                    emit sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
+                    //emit sendCQFreq(curRunFreq, true);
                 }
 
 

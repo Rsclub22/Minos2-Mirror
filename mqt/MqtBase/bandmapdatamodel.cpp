@@ -138,6 +138,12 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case ROT_CONNECTED_COL_NUM:
                 d = bandmapSpot->rotConnected;
             break;
+            case RUN_MODE_ON_COL_NUM:
+                d = bandmapSpot->runModeOn;
+            break;
+            case OFF_RUN_FREQ_COL_NUM:
+                d = bandmapSpot->offRunFreq;
+            break;
             default:
                 d = "";
         }
@@ -217,6 +223,12 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             break;
             case ROT_CONNECTED_COL_NUM:
                 d = bandmapSpot->rotConnected;
+            break;
+            case RUN_MODE_ON_COL_NUM:
+                d = bandmapSpot->runModeOn;
+            break;
+            case OFF_RUN_FREQ_COL_NUM:
+                d = bandmapSpot->offRunFreq;
             break;
             default:
             d = "";
@@ -308,6 +320,12 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             case ROT_CONNECTED_COL_NUM:
                 bandmapSpot->rotConnected = value.toBool();
                 break;
+            case RUN_MODE_ON_COL_NUM:
+                bandmapSpot->runModeOn = value.toBool();
+            break;
+            case OFF_RUN_FREQ_COL_NUM:
+                bandmapSpot->offRunFreq= value.toBool();
+            break;
 
             default:
                 return false;
