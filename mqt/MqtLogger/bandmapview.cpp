@@ -62,7 +62,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapGraphicsView = view;
     bandmapGraphicsView->setScene(bandmapScene);
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
-    bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded );
     bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
 
@@ -158,9 +158,9 @@ void BandmapView::on_vertScrollBandChanged(int value)
     //Q_UNUSED(value)
 
         dial->setViewPortStartEndFreq(value, getViewPortEndYCoordOnScene(), contestBandFlow);
-        trace(QString("Scroll changed: zoomlevel = %1").arg(zoomLevel));
-        trace(QString("scroll changed: value = %1").arg(value));
-        trace(QString("scroll changed: end Y coord = %1").arg(getViewPortEndYCoordOnScene()));
+        //trace(QString("Scroll changed: zoomlevel = %1").arg(zoomLevel));
+        //trace(QString("scroll changed: value = %1").arg(value));
+        //trace(QString("scroll changed: end Y coord = %1").arg(getViewPortEndYCoordOnScene()));
         bandmapUpdate();
 }
 

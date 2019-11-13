@@ -49,13 +49,13 @@ void BandmapGraphicsPanel::keyPressEvent(QKeyEvent *event)
     bool ctrl = mods & Qt::ControlModifier;
     bool alt = mods & Qt::AltModifier;
 
-    if (Key == Qt::Key_Plus)
+    if (Key == Qt::Key_Less)
     {
-        //emit zoomMap(false);
+        emit zoomMap(false);
     }
-    else if (Key == Qt::Key_Minus)
+    else if (Key == Qt::Key_Greater)
     {
-        //emit zoomMap(true);
+        emit zoomMap(true);
     }
     else if (Key == Qt::Key_Up && ctrl && alt)
     {
