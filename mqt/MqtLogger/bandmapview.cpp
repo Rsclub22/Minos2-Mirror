@@ -1164,11 +1164,11 @@ QString BandmapView::assembleCqMsg(int row)
     QString msgColourStart;
     if (offRunFreq)
     {
-        msgColourStart = HtmlFontColour("magenta");
+        msgColourStart = HtmlFontColour("blue");
     }
     else
     {
-        msgColourStart = HtmlFontColour("blue");
+        msgColourStart = HtmlFontColour("orange");
     }
 
     QString msgColourEnd = HtmlFontColour("black");

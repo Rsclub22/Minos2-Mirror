@@ -1917,7 +1917,6 @@ void RigControlFrame::runButActivated(int buttonNumber)
                     runButtonMap[RUN_BUTTON_2_ON]->setState(false);
                     runButtonOnFlag = false;
                     runButtonOnNum = NO_RUN_BUTTON_ON;
-                    //emit sendCQFreq(curRunFreq, false);
                     chkRunFreqTimer->stop();
                     emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
                 }
@@ -1927,7 +1926,6 @@ void RigControlFrame::runButActivated(int buttonNumber)
                 runButtonMap[RUN_BUTTON_1_ON]->showButtonOnOff(false);
                 runButtonMap[RUN_BUTTON_1_ON]->setState(false);
                 runButReadActSel(buttonNumber);
-                //runButtonMap[buttonNumber]->showButtonOnOff(true);
                 runButtonMap[buttonNumber]->setState(true);
                 runButtonOnFlag = true;
                 chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
@@ -1937,7 +1935,6 @@ void RigControlFrame::runButActivated(int buttonNumber)
             else
             {
                 runButReadActSel(buttonNumber);
-                //runButtonMap[buttonNumber]->showButtonOnOff(true);
                 runButtonOnFlag = true;
                 runButtonMap[buttonNumber]->setState(true);
                 chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
@@ -1969,13 +1966,10 @@ void RigControlFrame::runButReadActSel(int buttonNumber)
             ui->freqInput->clearFocus();
             if (m.freq.remove('.') != curFreq.remove('.'))
             {
-
                 sendFreq(m.freq);
-                curRunFreq = m.freq;
-                //emit sendCQFreq(curRunFreq, true);
             }
 
-
+            curRunFreq = m.freq;
 
             if (m.mode != curMode)
             {
@@ -2075,6 +2069,31 @@ void RigControlFrame::runButtonUpdate(int buttonNumber)
             + "Mode: " + m.mode + "\n";
 
     runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
+
+    if (buttonNumber == runButtonOnNum && runButtonOnFlag)
+    {
+        if (runButtonMap[buttonNumber]->memButton->text().contains(QChar('*')))
+        {
+            // cleared the active run freq - turn run off
+            runButtonMap[buttonNumber]->showButtonOnOff(false);
+            runButtonMap[buttonNumber]->setState(false);
+            runButtonOnFlag = false;
+            runButtonOnNum = NO_RUN_BUTTON_ON;
+            chkRunFreqTimer->stop();
+            emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
+        }
+        else
+        {
+            // update run freq
+            if (m.freq.remove('.') != curFreq.remove('.'))
+            {
+                sendFreq(m.freq);
+            }
+            curRunFreq = m.freq.remove('.');
+            emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
+        }
+    }
+
 }
 
 void RigControlFrame::on_ChkRunFreq()
