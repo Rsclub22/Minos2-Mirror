@@ -498,6 +498,16 @@ void RigSetupForm::comHandShakeSelected()
     if (radio->getSerialHandshakeCode(ui->comHandShakeBox->currentIndex()) != radioData->handshake)
     {
         radioData->handshake = radio->getSerialHandshakeCode(ui->comHandShakeBox->currentIndex());
+        if (radioData->handshake == 2)  // RTS/CTS selected
+        {
+           setForceRTSDisabled(true);
+
+        }
+        else
+        {
+           setForceRTSDisabled(false);
+
+        }
         radioValueChanged = true;
     }
 }
@@ -531,7 +541,10 @@ void RigSetupForm::on_forceDTRSelected()
     }
 }
 
-
+void RigSetupForm::setForceDTR(int n)
+{
+    ui->forceDtrBox->setCurrentIndex(n);
+}
 /**************** Force RTS Line *************************************/
 
 void RigSetupForm::on_forceRTSSelected()
@@ -541,6 +554,17 @@ void RigSetupForm::on_forceRTSSelected()
         radioData->forceRts = radio->getSerialForceLineCode(ui->forceRtsBox->currentIndex());
         radioValueChanged = true;
     }
+}
+
+void RigSetupForm::setForceRTSDisabled(bool state)
+{
+    ui->forceRtsBox->setDisabled(state);
+    ui->forceRtsLbl->setDisabled(state);
+}
+
+void RigSetupForm::setForceRTS(int n)
+{
+    ui->forceRtsBox->setCurrentIndex(n);
 }
 
 /***************************** Network Address *************************/

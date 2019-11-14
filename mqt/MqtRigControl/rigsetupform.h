@@ -145,6 +145,9 @@ public:
 
 
     void setRigctldCheckBoxVisible(bool visible);
+    void setForceDTR(int n);
+    void setForceRTS(int n);
+    void setForceRTSDisabled(bool state);
 signals:
     void transVertTabAdded(int);
 

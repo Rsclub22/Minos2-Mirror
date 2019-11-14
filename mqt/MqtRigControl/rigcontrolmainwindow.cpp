@@ -3031,6 +3031,8 @@ void RigControlMainWindow::aboutRigConfig()
         msg.append(QString("Stop bits = %1\n").arg(QString::number(setupRadio->currentRadio.stopbits)));
         msg.append(QString("Parity = %1\n").arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]));
         msg.append(QString("Handshake = %1\n").arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]));
+        msg.append(QString("ForceDTR = %1\n").arg(radio->getForceLinesNames()[setupRadio->currentRadio.forceDtr]));
+        msg.append(QString("ForceRTS = %1\n").arg(radio->getForceLinesNames()[setupRadio->currentRadio.forceRts]));
         if (setupRadio->currentRadio.rigCtldEnable)
         {
             msg.append(QString("\n"));
@@ -3109,6 +3111,9 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         trace(QString("Stop bits = %1").arg(QString::number(setupRadio->currentRadio.stopbits)));
         trace(QString("Parity = %1").arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]));
         trace(QString("Handshake = %1").arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]));
+        trace(QString("ForceDTR = %1").arg(radio->getForceLinesNames()[setupRadio->currentRadio.forceDtr]));
+        trace(QString("ForceRTS = %1").arg(radio->getForceLinesNames()[setupRadio->currentRadio.forceRts]));
+
         if (setupRadio->currentRadio.rigCtldEnable)
         {
             trace(QString("Using rigctld daemon = %1").arg(setupRadio->currentRadio.rigCtldEnable ? "True" : "False"));

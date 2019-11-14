@@ -190,6 +190,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     radioTab[tabNum]->setStopBits(QString::number(radioTab[tabNum]->getRadioData()->stopbits));
     radioTab[tabNum]->setParityBits(radioTab[tabNum]->getRadioData()->parity);
     radioTab[tabNum]->setHandshake(radioTab[tabNum]->getRadioData()->handshake);
+    radioTab[tabNum]->setForceDTR(radioTab[tabNum]->getRadioData()->forceDtr);
+    radioTab[tabNum]->setForceRTS(radioTab[tabNum]->getRadioData()->forceRts);
     radioTab[tabNum]->setNetAddress(radioTab[tabNum]->getRadioData()->networkAdd);
     radioTab[tabNum]->setNetPortNum(radioTab[tabNum]->getRadioData()->networkPort);
     radioTab[tabNum]->setPollInterval(radioTab[tabNum]->getRadioData()->pollInterval);
@@ -208,6 +210,15 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     {
         radioTab[tabNum]->serialDataEntryVisible(true);
         radioTab[tabNum]->networkDataEntryVisible(false);
+        if (radioTab[tabNum]->getRadioData()->handshake == 2) // CTS/RTS enabled
+        {
+            radioTab[tabNum]->setForceRTSDisabled(true);
+        }
+        else
+        {
+            radioTab[tabNum]->setForceRTSDisabled(false);
+        }
+
     }
     else if (rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_NONE)
     {
@@ -788,6 +799,8 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("parity", radioTab[radNum]->getRadioData()->parity);
     config.setValue("stopbits", radioTab[radNum]->getRadioData()->stopbits);
     config.setValue("handshake", radioTab[radNum]->getRadioData()->handshake);
+    config.setValue("forceDTR", radioTab[radNum]->getRadioData()->forceDtr);
+    config.setValue("forceRTS", radioTab[radNum]->getRadioData()->forceRts);
     config.setValue("radioPollInterval", radioTab[radNum]->getRadioData()->pollInterval);
     config.setValue("rigCtldEnable", radioTab[radNum]->getRadioData()->rigCtldEnable);
     config.setValue("rigCtldNetworkAddress", radioTab[radNum]->getRadioData()->rigCtldNetworkAdd);
@@ -825,6 +838,8 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->parity = config.value("parity", 0).toInt();
     radioTab[radNum]->getRadioData()->stopbits = config.value("stopbits", 1).toInt();
     radioTab[radNum]->getRadioData()->handshake = config.value("handshake", 0).toInt();
+    radioTab[radNum]->getRadioData()->forceDtr = config.value("forceDTR", 0).toInt();
+    radioTab[radNum]->getRadioData()->forceRts= config.value("forceRTS", 0).toInt();
     radioTab[radNum]->getRadioData()->pollInterval = config.value("radioPollInterval", "1").toString();
     radioTab[radNum]->getRadioData()->rigCtldEnable = config.value("rigCtldEnable", false).toBool();
     radioTab[radNum]->getRadioData()->rigCtldNetworkAdd = config.value("rigCtldNetworkAddress", "").toString();
