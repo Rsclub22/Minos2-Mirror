@@ -24,7 +24,6 @@
 #include <QHostInfo>
 
 #include <QSettings>
-#include <QHostInfo>
 #include <QNetworkInterface>
 
 #endif

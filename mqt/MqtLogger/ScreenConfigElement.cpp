@@ -1,6 +1,7 @@
 #include "ScreenConfigFile.h"
 #include "ScreenConfigRow.h"
 #include <QStandardItemModel>
+#include <QListView>
 
 #include "ScreenConfigElement.h"
 #include "ui_ScreenConfigElement.h"
@@ -117,6 +118,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     QStandardItemModel *model = dynamic_cast< QStandardItemModel * >( ui->elementTypeCombo->model() );
     QStandardItem *item = model->item( row, 0 );
     item->setEnabled( false );
+    qobject_cast<QListView *>(ui->elementTypeCombo->view())->setRowHidden(row, true);
 
     i = 0;
     foreach(const AuxTypeOption &opt, auxoptions)

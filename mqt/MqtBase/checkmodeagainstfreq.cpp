@@ -24,6 +24,8 @@ QString checkModeAgainstFreq::getMode(const QString &band, double freq)
             for (int fi = 0; fi < freqs.freq.count(); fi++)
             {
                 QList<double> freqLimits = freqs.freq[fi];
+                if (freqLimits.count() == 0)
+                    continue;
                 if (freq >= freqLimits[0] && freq <= freqLimits[1])
                 {
                     return i.key();       // found mode
@@ -53,6 +55,8 @@ int checkModeAgainstFreq::confirmMode(QString &band, QString &mode, double freq)
             for (int i = 0; i < freqs.freq.count(); i++)
             {
                 QList< double > freqLimits = freqs.freq[i];
+                if (freqLimits.count() == 0)
+                    continue;
                 if (freq >= freqLimits[0] && freq <= freqLimits[1])
                 {
                     return MODE_FREQ_MATCH;

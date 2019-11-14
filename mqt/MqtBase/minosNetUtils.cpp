@@ -1,9 +1,6 @@
 #include "minosNetUtils.h"
 
-
-
-
-
+#include <QLineEdit>
 
 bool isHostLocal(const QString &host)
 {
