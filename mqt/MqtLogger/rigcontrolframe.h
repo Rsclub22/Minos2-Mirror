@@ -332,7 +332,7 @@ private:
     QString curRunFreq;
     QTimer *chkRunFreqTimer;
 
-    bool oldRunButtonFlag = false;    // used by on_ChkRunFreq()
+
     bool oldRadioOffRunFreq = false;  // used by on_ChkRunFreq()
 
 

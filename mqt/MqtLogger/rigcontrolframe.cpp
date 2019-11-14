@@ -1861,11 +1861,10 @@ void RigControlFrame::runButActivated(int buttonNumber)
                     runButtonMap[RUN_BUTTON_1_ON]->showButtonOnOff(false);
                     runButtonMap[RUN_BUTTON_1_ON]->setState(false);
                     runButtonOnFlag = false;
-                    oldRunButtonFlag = false;
                     oldRadioOffRunFreq = false;
                     runButtonOnNum = NO_RUN_BUTTON_ON;
-                    //emit sendCQFreq(curRunFreq, false);
                     chkRunFreqTimer->stop();
+                    emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
                 }
             }
             else if (runButtonOnNum == RUN_BUTTON_2_ON)
@@ -1878,22 +1877,23 @@ void RigControlFrame::runButActivated(int buttonNumber)
                 runButtonMap[buttonNumber]->setState(true);
                 chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
                 runButtonOnNum = buttonNumber;
+                emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
             }
             else
             {
                 runButReadActSel(buttonNumber);
                 runButtonMap[buttonNumber]->showButtonOnOff(true);
                 runButtonOnFlag = true;
-                oldRunButtonFlag = false;
                 oldRadioOffRunFreq = false;
                 //runButtonMap[buttonNumber]->setState(true);
                 chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
                 runButtonOnNum = buttonNumber;
+                emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
 
 
             }
 
-            emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
+
 
 
         }
@@ -1919,6 +1919,7 @@ void RigControlFrame::runButActivated(int buttonNumber)
                     runButtonOnNum = NO_RUN_BUTTON_ON;
                     //emit sendCQFreq(curRunFreq, false);
                     chkRunFreqTimer->stop();
+                    emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
                 }
             }
             else if (runButtonOnNum == RUN_BUTTON_1_ON)
@@ -1931,6 +1932,7 @@ void RigControlFrame::runButActivated(int buttonNumber)
                 runButtonOnFlag = true;
                 chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
                 runButtonOnNum = buttonNumber;
+                emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
             }
             else
             {
@@ -1940,9 +1942,10 @@ void RigControlFrame::runButActivated(int buttonNumber)
                 runButtonMap[buttonNumber]->setState(true);
                 chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
                 runButtonOnNum = buttonNumber;
+                emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
             }
 
-            emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
+
         }
     }
 
@@ -2096,7 +2099,7 @@ void RigControlFrame::on_ChkRunFreq()
                 {
                     oldRadioOffRunFreq = radioOffRunFreq;
                     emit sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
-                    //emit sendCQFreq(curRunFreq, false);
+
                 }
 
 
@@ -2117,7 +2120,7 @@ void RigControlFrame::on_ChkRunFreq()
                 {
                     oldRadioOffRunFreq = radioOffRunFreq;
                     emit sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
-                    //emit sendCQFreq(curRunFreq, true);
+
                 }
 
 

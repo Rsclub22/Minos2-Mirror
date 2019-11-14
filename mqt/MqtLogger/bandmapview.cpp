@@ -87,6 +87,9 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     connect(bandmapGraphicsView, SIGNAL(nextSpot(bool, bool)), this, SLOT(on_nextSpot(bool, bool)));
     connect(bandmapGraphicsView, SIGNAL(scrollMap(bool)),this, SLOT(on_scrollMap(bool)));
 
+    connect(model(), SIGNAL(rowsRemoved(const QModelIndex, int, int)), SLOT(onRowsRemoved(const QModelIndex, int, int)));
+    connect(model(), SIGNAL(rowsInserted(const QModelIndex, int, int)), SLOT(onRowsInserted(const QModelIndex, int, int)));
+
     connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(on_vertScrollBandChanged(int)));
 
     bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -400,6 +403,8 @@ void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
 
 }
 
+
+
 void BandmapView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     // do nothing
@@ -423,6 +428,25 @@ void BandmapView::rowsAboutToBeRemoved(const QModelIndex &parent,
 {
 
     QAbstractItemView::rowsAboutToBeRemoved(parent, start, end);
+
+}
+
+void BandmapView::onRowsRemoved(const QModelIndex &parent, int first, int last)
+{
+    Q_UNUSED(parent)
+    Q_UNUSED(first)
+    Q_UNUSED(last)
+
+    bandmapUpdate();
+
+}
+
+// this is not used...
+void BandmapView::onRowsInserted(const QModelIndex &parent, int first, int last)
+{
+    Q_UNUSED(parent)
+    Q_UNUSED(first)
+    Q_UNUSED(last)
 }
 
 
@@ -1136,11 +1160,36 @@ QRectF BandmapView::calculateSpotRect(const QString text, const QPoint spotCoord
 
 QString BandmapView::assembleCqMsg(int row)
 {
-    QString bLineStart = HtmlFontColour(CQ_FREQ_COLOUR);
-    QString bLineEnd = HtmlFontColour(NOT_WORKED_COLOUR);
+    bool offRunFreq = model()->data(model()->index(row, OFF_RUN_FREQ_COL_NUM), BMP_DataStoredRole).toBool();
+    QString msgColourStart;
+    if (offRunFreq)
+    {
+        msgColourStart = HtmlFontColour("magenta");
+    }
+    else
+    {
+        msgColourStart = HtmlFontColour("blue");
+    }
+
+    QString msgColourEnd = HtmlFontColour("black");
+
 
     QString freqStr =  model()->data(model()->index(row, FREQ_STR_COL_NUM), BMP_DataStoredRole).toString();
-    QString msg = QString("%1CQ Frequency @ .%2%3").arg(bLineStart).arg(extractKhz(freqStr)).arg(bLineEnd);
+    qint64 freq = freqStr.toLongLong();
+    freq = freq / 1000;
+    qint32 curFreq = dial->getCurFreqInt32();
+
+    QString bLineStart = "";
+    QString bLineEnd = "";
+
+    if (freq == curFreq )
+    {
+        bLineStart = "<b>";
+        bLineEnd = "</b>";
+    }
+
+
+    QString msg = QString("%1%2CQ Frequency @ .%3%4%5").arg(bLineStart).arg(msgColourStart).arg(extractKhz(freqStr)).arg(msgColourEnd).arg(bLineEnd);
     return msg;
 }
 

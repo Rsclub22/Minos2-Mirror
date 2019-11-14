@@ -92,6 +92,7 @@ protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
 
     void rowsInserted(const QModelIndex &parent, int start, int end) override;
+
     void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
     void updateGeometries() override;
@@ -128,6 +129,8 @@ private slots:
     void on_vertScrollBandChanged(int);
 
     void on_scrollMap(bool dir);
+    void onRowsRemoved(const QModelIndex &parent, int first, int last);
+    void onRowsInserted(const QModelIndex &parent, int first, int last);
 private:
 
     QGraphicsScene *bandmapScene;

@@ -583,7 +583,7 @@ void BandmapClientFrame::context_clearSpotActionSelected()
     {
         traceMsg(QString("menu clear spot selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
         bandmapSpotProxyModel->removeRows(contextMenuSelectedSpotDataRowNum, 1);
-        bandmapView->bandmapUpdate();
+
     }
 
 }
@@ -1131,6 +1131,7 @@ void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
             if (savedSpotType == bandmapSpotType::CQ)
             {
                 bandmapDataModel->removeRows(row, 1);
+
             }
         }
     }
@@ -1183,6 +1184,7 @@ void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, RUN_MODE_ON_COL_NUM ), spot->getRunModeOn() ,BMP_DataStoredRole);
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, OFF_RUN_FREQ_COL_NUM ), spot->getOffRunFreq() ,BMP_DataStoredRole);
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, FREQ_INT64_COL_NUM ), logFreq ,BMP_DataStoredRole);
+            bandmapDataModel->setData(bandmapDataModel->index(rowNum, FREQ_STR_COL_NUM ), spot->getFreq() ,BMP_DataStoredRole);
         }
 
 
@@ -1693,11 +1695,9 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
 void BandmapClientFrame::setRunOnFlag(QString _runFreq, bool _runModeOn)
 {
     runFreq = _runFreq;
-    if (runModeOn   != _runModeOn)
-    {
-       runModeOn = _runModeOn;
-       setCQFreq();
-    }
+    runModeOn = _runModeOn;
+    setCQFreq();
+
 
 
 }
@@ -1705,11 +1705,9 @@ void BandmapClientFrame::setRunOnFlag(QString _runFreq, bool _runModeOn)
 void BandmapClientFrame::setRunOffFreqFlag(QString _runFreq, bool _offRunFreq)
 {
     runFreq = _runFreq;
-    if (offRunFreq != _offRunFreq)
-    {
-        offRunFreq = _offRunFreq;
-        setCQFreq();
-    }
+    offRunFreq = _offRunFreq;
+    setCQFreq();
+
 }
 
 

@@ -373,12 +373,6 @@ bool BandmapDataModel::insertColumns(int column, int count, const QModelIndex &p
 bool BandmapDataModel::removeRows(int _row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, _row, _row + count - 1);
-/*
-    for (int row =_row; row < _row + count; ++row)
-    {
-        dxSpotData.removeAt(row);
-    }
-*/
 
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
