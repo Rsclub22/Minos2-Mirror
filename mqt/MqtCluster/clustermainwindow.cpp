@@ -1495,7 +1495,7 @@ void ClusterMainWindow::addSentSpotToDisplayQueue(bool spotStatus, QString reaso
 {
     QDateTime sentSpotDateTime = QDateTime::currentDateTimeUtc();
     qint64 rxTime = sentSpotDateTime.toMSecsSinceEpoch()/1000;
-    QString sentSpotTime = sentSpotDateTime.toString("HH:MM");
+    QString sentSpotTime = sentSpotDateTime.toString("HH:mm");
     SentSpotData* sentSpotData = new SentSpotData(rxTime, sentSpotTime,
                                                    sentFreq, sentCallsign,
                                                   sentLoc, sentComment, spotStatus, reason);
