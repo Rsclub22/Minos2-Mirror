@@ -1166,7 +1166,7 @@ void BandmapView::assembleCqMsg(int row, QString& markerMsg)
     QString msgColourStart;
     if (offRunFreq)
     {
-        msgColourStart = HtmlFontColour("blue");
+        msgColourStart = HtmlFontColour("yellow");
     }
     else
     {
