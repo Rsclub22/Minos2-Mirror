@@ -694,8 +694,10 @@ void TSingleLogFrame::buildScreenLayout()
 
 void TSingleLogFrame::keyPressEvent( QKeyEvent* event )
 {
+
     GJVQSOLogFrame->doKeyPressEvent(event);
 }
+
 QString TSingleLogFrame::makeEntry( bool saveMinos )
 {
    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );

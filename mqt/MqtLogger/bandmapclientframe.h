@@ -16,6 +16,7 @@
 
 #include <QObject>
 #include <QFrame>
+#include <QShortcut>
 #include "dxspotdatamodel.h"
 #include "base_pch.h"
 #include "clusterClientServer.h"
@@ -251,6 +252,9 @@ private:
     QAction* contextSpotsMenu_memoryAction;
     QAction* contextSpotsMenu_clearSpotAction;
 
+    QShortcut* zoomIn;
+    QShortcut* zoomOut;
+
 
     //BandmapData actionMenuSelectedSpotData;
     //int actionMenuSelectedSpotDataRowNum;
@@ -333,6 +337,8 @@ private slots:
      void context_clearSpotActionSelected();
      void context_bearingActionSelected();
 
+     void on_zoomIn();
+     void on_zoomOut();
 };
 
 

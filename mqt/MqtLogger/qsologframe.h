@@ -283,7 +283,6 @@ signals:
     void bandmapSaveFreq(QString, QString, QString, QString);
     void sendFreqControl(QString);
     void freqChanged(QString);
-    void zoomMap(bool);
     void sendSpotToClusterServer(QString, QString, QString);
 
 private slots:

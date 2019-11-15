@@ -156,6 +156,12 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui->actionsButton->setMenu(spotsMenu);
     connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
 
+    zoomIn = new QShortcut(QKeySequence("Ctrl+<"), parent);   // Ctrl <
+    connect(zoomIn, SIGNAL(activated()), this, SLOT(on_zoomIn()));
+
+    zoomOut = new QShortcut(QKeySequence("Ctrl+>"), parent);   // Ctrl >
+    connect(zoomOut, SIGNAL(activated()), this, SLOT(on_zoomOut()));
+
 
 
     connect( markSpotAction, SIGNAL( triggered() ), this, SLOT(on_markSpotActionSelected()) );
@@ -240,6 +246,16 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
 }
 
+
+void BandmapClientFrame::on_zoomIn()
+{
+
+}
+
+void BandmapClientFrame::on_zoomOut()
+{
+
+}
 
 BandmapClientFrame::~BandmapClientFrame()
 {

@@ -16,7 +16,7 @@ signals:
     void bandmapResize(int, int);
     void leftMouseButtonPressed(QPoint);
     void mouseDoubleClicked(QPoint);
-    void zoomMap(bool);
+    //void zoomMap(bool);
     void nextSpot(bool, bool);
     void scrollMap(bool);
 
