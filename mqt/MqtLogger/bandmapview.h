@@ -169,8 +169,8 @@ private:
 
 
 
-    QString assembleSpotMsg(int row);
-    QString assembleToolTip(int row, QString freq);
+    void assembleSpotMsg(int row, QString& markerMsg);
+    void assembleToolTip(int row, QString freq, QString& toolTipMsg);
     QRectF viewportRectForRow(int row) const;
     QRectF calculateSpotRect(const QString text, const QPoint spotCoord);
     void bandmapSelectFreq(int y);
@@ -188,8 +188,8 @@ private:
     void traceMsg(QString msg);
     void clearSpotData(BandmapData &selectedSpot);
     void deleteItemsFromMarkerList();
-    QString assembleCqToolTip(int row, QString freq);
-    QString assembleCqMsg(int row);
+    void assembleCqToolTip(int row, QString freq, QString& toolTipMsg);
+    void assembleCqMsg(int row, QString& markerMsg);
 };
 
 #endif // BANDMAPVIEW_H

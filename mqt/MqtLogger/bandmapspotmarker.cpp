@@ -29,13 +29,19 @@ void BandmapSpotMarker::setSpotText(QString text)
 {
     displayText = text;
     setHtml(displayText);
-    update();
+    //update();
 }
 
 
 QString BandmapSpotMarker::getSpotText()
 {
     return displayText;
+}
+
+
+void BandmapSpotMarker::clearSpotText()
+{
+    displayText.clear();
 }
 
 
@@ -50,6 +56,10 @@ QString BandmapSpotMarker::getToolTipText()
     return auxText;
 }
 
+void BandmapSpotMarker::clearToolTipText()
+{
+    auxText.clear();
+}
 
 void BandmapSpotMarker::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
 {

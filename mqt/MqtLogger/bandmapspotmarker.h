@@ -27,12 +27,14 @@ public:
 
 
     void setSpotText(QString text);
+    QString getSpotText();
+    void clearSpotText();
 
     void setToolTipText(QString text);
-
-
     QString getToolTipText();
-    QString getSpotText();
+    void clearToolTipText();
+
+
 
 
 protected:
