@@ -158,5 +158,8 @@ static const QString rigLogVolLevel      = QT_TR_NOOP("LogVolLevel");
 static const QString rigVolStatus           = QT_TR_NOOP("VolStatus");
 static const QString rigTpm                 = QT_TR_NOOP("Tpm");
 
+// KSTClient
+static const QString KSTClientApp         = QT_TR_NOOP("mqtKSTClient");
+
 }
 #endif // RPCCOMMANDRCONSTANTS_H
