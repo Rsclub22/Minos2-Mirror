@@ -83,7 +83,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     connect(bandmapGraphicsView, SIGNAL(bandmapResize(int, int)), this, SLOT(bandmapResize(int, int)));
     connect(bandmapGraphicsView, SIGNAL(leftMouseButtonPressed(QPoint)), this, SLOT(leftMouseButtonPressed(QPoint)));
     connect(bandmapGraphicsView, SIGNAL(mouseDoubleClicked(QPoint)), this, SLOT(mouseDoubleClicked(QPoint)));
-    connect(bandmapGraphicsView, SIGNAL(zoomMap(bool)), this, SLOT(zoomUpdated(bool)));
+    //connect(bandmapClient, SIGNAL(zoomMap(bool)), this, SLOT(zoomUpdated(bool)));
     connect(bandmapGraphicsView, SIGNAL(nextSpot(bool, bool)), this, SLOT(on_nextSpot(bool, bool)));
     connect(bandmapGraphicsView, SIGNAL(scrollMap(bool)),this, SLOT(on_scrollMap(bool)));
 

@@ -249,12 +249,12 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 void BandmapClientFrame::on_zoomIn()
 {
-
+    bandmapView->zoomUpdated(true);
 }
 
 void BandmapClientFrame::on_zoomOut()
 {
-
+    bandmapView->zoomUpdated(false);
 }
 
 BandmapClientFrame::~BandmapClientFrame()
