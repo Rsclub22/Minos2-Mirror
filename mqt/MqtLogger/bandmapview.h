@@ -81,7 +81,7 @@ public:
 
     void scrollBandmapCenterToFreq(qint64 freq);
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
-
+    void zoomUpdated(bool dir);
 
 
 signals:
@@ -116,7 +116,7 @@ protected:
 
 private slots:
     void bandmapResize(int, int);
-    void zoomUpdated(bool dir);
+
     void leftMouseButtonPressed(QPoint p);
     void mouseDoubleClicked(QPoint p);
 
