@@ -1,6 +1,12 @@
+#include <QHostInfo>
+#include <QSettings>
+
+#include "cutils.h"
+
+#include "kstconfigure.h"
+
 #include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"
-#include "cutils.h"
 
 CallGridModel::CallGridModel()
 {
@@ -65,6 +71,19 @@ QVariant CallGridModel::headerData( int /*section*/, Qt::Orientation orientation
     if ( orientation == Qt::Horizontal && role == Qt::DisplayRole )
     {
         return "Callsign";
+    }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
+        {
+            // BUT the headers aren't drawn using the delegate, so this
+            // all fails to work
+
+            // Do we lose the vertical header?
+            QString s = "Memxx";
+            QSize r = delegate->docSize(s);
+            return r;
+        }
     }
     return QVariant();
 }
@@ -157,7 +176,7 @@ QVariant ChatGridModel::data( const QModelIndex &index, int role ) const
             cell = crec->source;
             break;
         case eccDTG:
-            cell = crec->dtg.toString("HH:mm:ss");
+            cell = crec->dtg;
             break;
         case eccCall:
             cell = crec->call;
@@ -174,7 +193,7 @@ QVariant ChatGridModel::data( const QModelIndex &index, int role ) const
         }
         return cell;
     }
-    if (role == Qt::ToolTipRole)
+    else if (role == Qt::ToolTipRole)
     {
         QSharedPointer<ChatLine> crec = chatVector->at(row);
         return crec->fullLine;
@@ -211,11 +230,18 @@ QVariant ChatGridModel::headerData( int section, Qt::Orientation orientation,
         }
         return cell;
     }
-    if ( orientation == Qt::Vertical && role == Qt::DisplayRole )
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
     {
-        QSharedPointer<ChatLine> crec = chatVector->at(section);
-        cell = crec->source;
-        return cell;
+        if (delegate)
+        {
+            // BUT the headers aren't drawn using the delegate, so this
+            // all fails to work
+
+            // Do we lose the vertical header?
+            QString s = "Memxx";
+            QSize r = delegate->docSize(s);
+            return r;
+        }
     }
     return QVariant();
 }
@@ -277,6 +303,31 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
 
+    messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+
+    cgm.delegate = messageDelegate;
+    clgm.delegate = CSDelegate;
+
+    ui->messageTable->setItemDelegate(messageDelegate.data());
+    ui->CSTable->setItemDelegate(CSDelegate.data());
+
+    QHeaderView *verticalHeader = ui->messageTable->verticalHeader();
+    verticalHeader->setVisible(false);
+    verticalHeader->setDefaultSectionSize(10);
+    verticalHeader->setMinimumSectionSize(10);
+
+    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    verticalHeader = ui->CSTable->verticalHeader();
+    verticalHeader->setVisible(false);
+    verticalHeader->setDefaultSectionSize(10);
+    verticalHeader->setMinimumSectionSize(10);
+
+    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+
+
     state = settings.value("CSTable/state").toByteArray();
     ui->CSTable->horizontalHeader()->restoreState(state);
 
@@ -287,6 +338,22 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     connect( ui->messageTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
+
+    tnclient = new QtTelnet(this);
+
+    connect(tnclient, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
+    //connect(tnclient, SIGNAL(connected(bool)), this, SLOT(connected(bool)));
+    connect(tnclient, SIGNAL(loginRequired()), this, SLOT(logIn()));
+    connect(tnclient, SIGNAL(connectionError(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
+    connect(tnclient, SIGNAL(loggedOut()), this, SLOT(loggedOut()));
+    connect(tnclient, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
+
+    hostname = settings.value("hostname", "www.on4kst.info").toString();
+    port = settings.value("port", "23000").toString();
+    username = settings.value("username", "").toString();
+    password = settings.value("password", "").toString();
+    service = settings.value("service", "1").toString();
+
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -305,7 +372,67 @@ void KSTMainWindow::moveEvent(QMoveEvent * event)
     settings.setValue("geometry/Main", saveGeometry());
     QWidget::moveEvent(event);
 }
+void KSTMainWindow::connectToHost()
+{
+    tnclient->login(QString("%1\r\n").arg(username), QString(password) + "\r\n");
+    tnclient->connectToHost("www.on4kst.info" , 23000);
 
+}
+
+
+void KSTMainWindow::connectionEstab()
+{
+    trace("connection to ON4KST established");
+    tnclient->login(QString("%1\r\n").arg(username), QString(password) + "\r\n");
+}
+
+void KSTMainWindow::connectionError(QAbstractSocket::SocketError error)
+{
+    QString msg = QString("ON4KST Connection failed error %1").arg(error);
+    trace(msg);
+}
+
+
+
+void KSTMainWindow::logIn()
+{
+    QString msg = QString("Login Start - Send logon message\n");
+    trace(msg);
+    //tnclient->login(QString("%1\r\n").arg("G0GJV"), "62rosehill");
+
+}
+
+void KSTMainWindow::loggedOut()
+{
+    QString msg = QString("Logged Out of ON4KST");
+    trace(QString(msg));
+}
+
+void KSTMainWindow::messageRx(QString msg)
+{
+    trace(QString("messageRx: %1").arg(msg));
+    if (setupComplete)
+    {
+        analyseTelnetMessage(msg);
+    }
+    else
+    {
+        if (!userLoggedIn)
+        {
+            if (msg.indexOf("Chat selection") >= 0)
+                 userLoggedIn = true;
+        }
+        if (userLoggedIn && !setupComplete)
+        {
+            int colon = msg.indexOf(":");
+            if (colon >= 0)
+            {
+                tnclient->sendData(service + "\r\n");
+                setupComplete = true;
+            }
+        }
+    }
+}
 bool loadStringListFromFile (QStringList &list, const QString fname )
 {
     QStringList stringsRead;
@@ -470,7 +597,7 @@ void TSVToStringList( const QString &qs, QStringList &sl )
     csv.parseCsvLine(qs, sl);
 }
 
-void KSTMainWindow::analyseMessage(QString atj)
+void KSTMainWindow::analyseFileMessage(QString atj)
 {
     QStringList slc;
     TSVToStringList( atj, slc );
@@ -489,7 +616,7 @@ void KSTMainWindow::analyseMessage(QString atj)
         QSharedPointer<ChatLine> kst(new ChatLine());
 
         kst->fullLine = atj;
-        kst->dtg = qdt;
+        kst->dtg = qdt.toString("HHmmZ");
 
         QString s2 = slc[1];
         s2.replace(QChar::Nbsp, QChar::Space);
@@ -577,7 +704,7 @@ void KSTMainWindow::on_analyseButton_clicked()
                     if ( !sl.at( j ).isEmpty() && sl.at( j ) [ 0 ] != '#' )
                     {
                         QString atj = QString::fromLatin1(sl.at( j ).toLatin1());
-                        analyseMessage(atj);
+                        analyseFileMessage(atj);
                     }
                 }
             }
@@ -585,9 +712,100 @@ void KSTMainWindow::on_analyseButton_clicked()
         //cgm.setChatVector(chatVector);
     }
 }
+void KSTMainWindow::analyseTelnetMessage(QString atj)
+{
+//    18:58:18.640 messageRx: 1858Z ES4RM Sergei> (OH3DP) i am on 1558
+//    18:58:44.037 messageRx: 1858Z OH3DP Hannu 2m, 70, 23> 1000
+
+
+    atj = atj.trimmed();
+
+    QStringList sl;
+    sl = atj.split(">");
+    if (sl.size() < 2)
+        return;
+    if (sl[1].isEmpty())
+        return;
+
+    QSharedPointer<ChatLine> kst(new ChatLine());
+
+    kst->fullLine = atj;
+
+    int part = 0;
+    int pstart = 0;
+    for (int i = 0; i < sl[0].length(); i++)
+    {
+        if (sl[0][i] == " ")
+        {
+            QString p = sl[0].mid(pstart, i - pstart);
+
+            while (sl[0][i] == " " && i < sl[0].length())
+            {
+                i++;
+            }
+            pstart = i;
+            if (part == 0)
+            {
+                kst->dtg = p;
+                part++;
+            }
+            else if (part == 1)
+            {
+                kst->call = p;
+                kst->name = sl[0].mid(pstart);
+                break;
+            }
+        }
+    }
+
+    QString s3 = sl[1].trimmed();
+    QString other;
+    QString text = s3;
+
+    if (s3[0] == '(')
+    {
+        while (s3[0] == '(')
+        {
+            s3 = s3.mid(1);
+        }
+        int closeBracket = s3.indexOf(')');
+        other = s3.mid(0, closeBracket).trimmed();
+
+        text = s3.mid(closeBracket + 1).trimmed();
+    }
+    else
+    {
+        QString temp = s3.section(' ', 0, 0);
+        Callsign cs(temp);
+        cs.validate();
+        if (cs.valRes == CS_OK)
+        {
+            other = temp.toUpper().trimmed();
+            text = s3.section(' ', 1).trimmed();
+        }
+    }
+    kst->otherCall = other;
+    kst->message = text;
+
+    cgm.appendRow(kst);
+    ui->messageTable->scrollToBottom();
+
+    if (!callVector->contains(kst->call))
+    {
+        clgm.appendRow(kst->call.toUpper());
+        clgsfm.sort(0);
+    }
+
+    if (!callVector->contains(kst->otherCall))
+    {
+        clgm.appendRow(kst->otherCall.toUpper());
+        clgsfm.sort(0);
+    }
+
+}
 void KSTMainWindow::on_connectButton_clicked()
 {
-
+    connectToHost();
 }
 void KSTMainWindow::on_closeButton_clicked()
 {
@@ -628,4 +846,32 @@ void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
     QModelIndex sourceIndex = clgsfm.mapToSource(index);
     QString call = callVector->at(sourceIndex.row());
     ui->messageFilter->setText(call);
+}
+
+void KSTMainWindow::on_configureButton_clicked()
+{
+    KSTConfigure conf;
+
+    conf.hostname = hostname;
+    conf.port = port;
+    conf.username = username;
+    conf.password = password;
+    conf.service = service;
+
+    if (conf.exec() == QDialog::Accepted)
+    {
+        hostname = conf.hostname;
+        port = conf.port;
+        username = conf.username;
+        password = conf.password;
+        service = conf.service;
+
+        QSettings settings;
+
+        settings.setValue("hostname", hostname);
+        settings.setValue("port", port);
+        settings.setValue("username", username);
+        settings.setValue("password", password);
+        settings.setValue("service", service);
+    }
 }

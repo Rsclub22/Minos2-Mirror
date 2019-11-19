@@ -6,7 +6,8 @@
 #include <QMainWindow>
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
-
+#include "qttelnet.h"
+#include "htmldelegate.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
@@ -22,6 +23,7 @@ class CallGridModel: public QAbstractItemModel
         virtual ~CallGridModel() override
         {}
         QSharedPointer<QStringList> callVector;
+        QSharedPointer<HtmlDelegate> delegate;
 
         void setCallVector(QSharedPointer<QStringList > pcallVector);
         QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
@@ -50,7 +52,7 @@ class ChatLine
 {
 public:
     QString source;
-    QDateTime dtg;
+    QString dtg;
     QString fullLine;
     QString call;
     QString name;
@@ -70,6 +72,7 @@ class ChatGridModel: public QAbstractItemModel
         virtual ~ChatGridModel() override
         {}
         QSharedPointer<QVector <QSharedPointer<ChatLine> > > chatVector;
+        QSharedPointer<HtmlDelegate> delegate;
 
         void setChatVector(QSharedPointer<QVector<QSharedPointer<ChatLine> > > pchatVector);
         QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
@@ -109,6 +112,21 @@ class KSTMainWindow : public QMainWindow
 
     QSharedPointer<QStringList > callVector;
 
+
+    QSharedPointer<HtmlDelegate> messageDelegate;
+    QSharedPointer<HtmlDelegate> CSDelegate;
+
+    QtTelnet* tnclient;
+
+    QString hostname;
+    QString port;
+    QString username;
+    QString password;
+    QString service;
+
+    bool userLoggedIn = false;
+    bool setupComplete = false;
+
 public:
     KSTMainWindow(QWidget *parent = nullptr);
     ~KSTMainWindow() override;
@@ -133,8 +151,18 @@ private slots:
     void on_sectionResized(int, int, int);
     void on_CSTable_clicked(const QModelIndex &index);
 
+    void connectToHost();
+    void connectionEstab();
+    void connectionError(QAbstractSocket::SocketError error);
+    void logIn();
+    void loggedOut();
+    void messageRx(QString msg);
+
+    void on_configureButton_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
-    void analyseMessage(QString atj);
+    void analyseFileMessage(QString atj);
+    void analyseTelnetMessage(QString atj);
 };
 #endif // KSTMAINWINDOW_H

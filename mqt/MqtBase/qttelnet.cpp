@@ -87,11 +87,15 @@
 #  include <netinet/in.h>
 #endif
 
-// #define QTTELNET_DEBUG
+//#define QTTELNET_DEBUG
 
 #ifdef QTTELNET_DEBUG
 #include <QtCore/QDebug>
+using namespace Auth;
+using namespace Common;
+using namespace LineMode;
 #endif
+
 
 class QtTelnetAuth
 {
@@ -191,7 +195,7 @@ private:
         case Echo:
             str = "ECHO";
             break;
-        case LineMode:
+        case Common::LineMode:
             str = "LINEMODE";
             break;
         case Status:
@@ -487,7 +491,7 @@ void QtTelnetPrivate::consume()
 {
     const QByteArray data = buffer.readAll();
     int currpos = 0;
-    int prevpos = -1;;
+    int prevpos = -1;
     while (prevpos < currpos && currpos < data.size()) {
         prevpos = currpos;
         const uchar c = uchar(data[currpos]);
@@ -675,6 +679,7 @@ int QtTelnetPrivate::parsePlaintext(const QByteArray &data)
                 firsttry = false;
             }
             if (!triedlogin) {
+                //QThread::msleep(1000);
                 q->sendData(login);
                 triedlogin = true;
             }
@@ -687,6 +692,9 @@ int QtTelnetPrivate::parsePlaintext(const QByteArray &data)
                 firsttry = false;
             }
             if (!triedpass) {
+                //QThread::msleep(1000);
+                emit q->message(text);    // Display the password prompt
+                text.clear();
                 q->sendData(pass);
                 triedpass = true;
                 // We don't have to store the password anymore
@@ -759,6 +767,7 @@ void QtTelnetPrivate::sendString(const QString &str)
     if (!connected || str.length() == 0)
         return;
 
+    trace(QString("sendString: %1").arg(str));
     socket->write(str.toLocal8Bit());
 }
 
@@ -774,6 +783,7 @@ void QtTelnetPrivate::sendCommand(const QByteArray &command)
             return;
         addSent(operation, option);
     }
+    trace(QString("sendCommand: %1").arg(QString(command.toHex(' '))));
     socket->write(command);
 }
 
@@ -821,7 +831,7 @@ void QtTelnetPrivate::socketConnected()
                                    QSocketNotifier::Exception, this);
     connect(notifier, SIGNAL(activated(int)),
             this, SLOT(socketException(int)));
-    sendOptions();
+    //sendOptions();
     emit sockConnected();
 }
 
@@ -1015,6 +1025,9 @@ int QtTelnet::sendData(const QString &data)
 
     QByteArray str = data.toLocal8Bit();
     charSent = d->socket->write(str);
+    trace(QString("sendData: %1").arg(QString(str)));
+    trace(QString("sendData hex: %1").arg(QString(str.toHex(' '))));
+
     if (charSent == str.count())
     {
         return 0;
@@ -1136,6 +1149,8 @@ void QtTelnet::sendSync()
                         // sending the SYNC sequence.
     QByteArray oob(Common::DM, 1);
     d->socket->write(oob);
+    trace(QString("sendSync: %1").arg(QString(oob.toHex())));
+
 //    int s = d->socket->socketDescriptor();
 //    char tosend = static_cast<char>(Common::DM);
 //    ::send(static_cast<SOCKET>(s), &tosend, 1, MSG_OOB); // Send the DATA MARK as out-of-band
