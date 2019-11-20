@@ -83,7 +83,7 @@
            <item>
             <widget class="QLabel" name="label_3">
              <property name="text">
-              <string>Server</string>
+              <string>Service</string>
              </property>
             </widget>
            </item>
@@ -162,7 +162,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="callEdit"/>
+          <widget class="QLineEdit" name="callEdit">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -176,7 +180,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="msgEdit"/>
+          <widget class="QLineEdit" name="msgEdit">
+           <property name="clearButtonEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

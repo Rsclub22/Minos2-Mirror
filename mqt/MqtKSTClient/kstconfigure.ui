@@ -28,6 +28,9 @@
        <property name="text">
         <string>www.on4kst.info</string>
        </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>
@@ -46,6 +49,9 @@
        <property name="text">
         <string>23000</string>
        </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>
@@ -60,7 +66,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="callsignEdit"/>
+      <widget class="QLineEdit" name="callsignEdit">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -74,7 +84,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="passwordEdit"/>
+      <widget class="QLineEdit" name="passwordEdit">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
