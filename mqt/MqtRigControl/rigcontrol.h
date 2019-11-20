@@ -118,10 +118,6 @@ public:
       dest.enableCAT = srce->enableCAT;
       dest.enableSerialPTT = srce->enableSerialPTT;
       dest.pttSerialPort = srce->pttSerialPort;
-      dest.activeRTS = srce->activeRTS;
-      dest.activeDTR = srce->activeDTR;
-      dest.nactiveRTS = srce->nactiveRTS;
-      dest.nactiveDTR = srce->nactiveDTR;
       dest.rigCtldEnable = srce->rigCtldEnable;
       dest.rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
       dest.rigCtldNetworkPort = srce->rigCtldNetworkPort;
@@ -180,10 +176,6 @@ public:
   bool enableCAT = false;
   bool enableSerialPTT  = false;
   QString pttSerialPort;
-  bool activeRTS  = false;
-  bool activeDTR  = false;
-  bool nactiveRTS  = false;
-  bool nactiveDTR  = false;
   bool rigCtldEnable = false;
   QString rigCtldNetworkAdd;
   QString rigCtldNetworkPort;
