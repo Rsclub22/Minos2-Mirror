@@ -171,6 +171,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
+    connect(ui->unworkedCallsignsChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedCallsignsCheckBox(int)));
     connect(ui->unworkedLocChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedLocCheckBox(int)));
 
     purgeTimer->start(PURGE_TIME);
