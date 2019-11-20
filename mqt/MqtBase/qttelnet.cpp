@@ -1025,7 +1025,13 @@ int QtTelnet::sendData(const QString &data)
 
     QByteArray str = data.toLocal8Bit();
     charSent = d->socket->write(str);
-    trace(QString("sendData: %1").arg(QString(str)));
+    QString traceMsg = QString(str).remove("\r");
+    if (traceMsg.endsWith("\n"))
+    {
+        traceMsg.chop(1);
+    }
+
+    trace(QString("sendData: %1").arg(traceMsg));
     trace(QString("sendData hex: %1").arg(QString(str.toHex(' '))));
 
     if (charSent == str.count())

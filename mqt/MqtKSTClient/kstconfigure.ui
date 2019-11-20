@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Minos KST Client Configuration</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -79,18 +79,11 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Service</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="serviceCombo"/>
-     </item>
-    </layout>
+    <widget class="QCheckBox" name="autoConnect">
+     <property name="text">
+      <string>Automatically connect on load</string>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

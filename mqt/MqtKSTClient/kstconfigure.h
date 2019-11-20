@@ -21,7 +21,7 @@ public:
     QString port;
     QString username;
     QString password;
-    QString service;
+    bool autoConnect;
 
 public Q_SLOTS:
         virtual int exec() override;

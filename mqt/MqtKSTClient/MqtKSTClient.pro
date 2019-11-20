@@ -25,13 +25,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 win32:LIBS += -lWs2_32
 
 SOURCES += \
+    kstcallgridmodel.cpp \
     kstconfigure.cpp \
+    kstmessagegridmodel.cpp \
     main.cpp \
     kstmainwindow.cpp
 
 HEADERS += \
+    kstcallgridmodel.h \
     kstconfigure.h \
-    kstmainwindow.h
+    kstmainwindow.h \
+    kstmessagegridmodel.h
 
 FORMS += \
     kstconfigure.ui \

@@ -8,269 +8,43 @@
 #include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"
 
-CallGridModel::CallGridModel()
-{
-
-}
-void CallGridModel::setCallVector(QSharedPointer<QStringList > pcallVector)
-{
-    beginResetModel();
-    callVector = pcallVector;
-    endResetModel();
-}
-QModelIndex CallGridModel::index( int row, int column,
-                              const QModelIndex &parent ) const
-{
-    if (!callVector)
-        return QModelIndex();
-
-    if ( row < 0 || row >= callVector->count() || ( parent.isValid() && parent.column() != 0 ) )
-        return QModelIndex();
-
-    return createIndex( row, column, nullptr );
-}
-QModelIndex CallGridModel::parent( const QModelIndex &/*index*/ ) const
-{
-    return QModelIndex();
-}
-
-int CallGridModel::rowCount( const QModelIndex &/*parent*/ ) const
-{
-    if (!callVector)
-        return 0;
-    return callVector->count();
-}
-
-void CallGridModel::appendRow(QString call)
-{
-    beginInsertRows(QModelIndex(), rowCount() , rowCount());
-    callVector->push_back(call);
-    endInsertRows();
-}
-
-QVariant CallGridModel::data( const QModelIndex &index, int role ) const
-{
-    if ( !index.isValid() )
-        return QVariant();
-
-    int row = index.row();
-
-    if (role == Qt::DisplayRole)
-    {
-        QString crec = callVector->at(row);
-
-        return crec;
-    }
-    return QVariant();
-}
-QVariant CallGridModel::headerData( int /*section*/, Qt::Orientation orientation,
-                     int role ) const
-{
-
-    QString cell;
-    if ( orientation == Qt::Horizontal && role == Qt::DisplayRole )
-    {
-        return "Callsign";
-    }
-    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
-    {
-        if (delegate)
-        {
-            // BUT the headers aren't drawn using the delegate, so this
-            // all fails to work
-
-            // Do we lose the vertical header?
-            QString s = "Memxx";
-            QSize r = delegate->docSize(s);
-            return r;
-        }
-    }
-    return QVariant();
-}
-int CallGridModel::columnCount( const QModelIndex & /*parent*/ ) const
-{
-    return 1;
-}
 //==========================================================================================
-bool CallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
-{
-    if (filterString.isEmpty())
-        return true;
+// /help command via telnet
 
-    CallGridModel *cgm = dynamic_cast<CallGridModel *>(sourceModel());
-    if (!cgm || sourceRow >= cgm->rowCount())
-        return false;
+// 14:18:29.314 sendData: /help
+// 14:18:29.314 sendData hex: 2f 68 65 6c 70 0d 0a
+// 14:18:29.335 messageRx: Web http://www.on4kst.com
+// /Help              The list of the commands available.
+// /CHAT  value       Login into another chat. Values are 50 50R2 50R3 144 144R2 144R3 GHZ EME HF KHZ WARC.
+// /CQ    call msg    To send a public msg seen in highlight by the callsign.
+// /DX    qrg call [info] To send a DX spot.
+// /SET   ANN         Allow announce messages to come out on your terminal.
+// /SET   DX          Allow DX messages to come out on your terminal.
+// /SET   DXCLX       Allow DX messages to come out on your terminal at CLX format.
+// /SET   HERE        Tell the system you are present at your terminal.
+// /SET   MYCLx value To give the cluster where to spot the DX.
+// /SET   NAme value  Set your name.
+// /SET   QRA value   Set your QRA Grid locator.
+// /SET   QRG value   Filter the DX spots. Values are 50 70 144 432 GHZ
+//                   e.g /SET QRG 50 144 to accept the 50 and 144 MHz dx spots.
+// /SET   WWC         Allow World Wide Converse messages to come out on your terminal.
+// /SHow  CLx         The list of the available DX clusters.
+// /SHow  CONFig      Show your personal settings.
+// /SHow  DX [nbr]    Get the last DX spots (QRG as your filter settings).
+// /SHow  MSG [nbr]   Get the last chat messages.
+// /SHow  MYCLx       To show the DX cluster where the DX spot is sent.
+// /SHow  LOC value   To show the locator of a station with QRB and QTF.
+// /SHow  NODes       To show the way to access to
+// (message broken into parts) 14:18:29.335 messageRx:  the chat from packet radio.
+// /SHow  USer [call] Show the users connected to this chat.
+// /UNSET ANN         Stop announce messages coming out on your terminal.
+// /UNSET DX          Stop DX messages coming out on your terminal.
+// /UNSET HERE        Tell the system you are absent from your terminal.
+// /UNSET QRG         Remove the QRG filter on DX spots.
+// /UNSET WWC         Stop World Wide Converse messages coming out on your terminal.
+// /UPDTLOC call loc  To ask to the sysop to update the locator of a station.
+// /Quit              Exit from the chat.
 
-    QString call = cgm->callVector->at(sourceRow);
-    if (call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
-
-    return false;
-}
-
-void CallGridSortFilterModel::setFilterString(QString f)
-{
-    filterString = f;
-    invalidateFilter();
-}
-//==========================================================================================
-
-ChatGridModel::ChatGridModel()
-{
-
-}
-void ChatGridModel::setChatVector(QSharedPointer<QVector <QSharedPointer<ChatLine> > > pchatVector)
-{
-    beginResetModel();
-    chatVector = pchatVector;
-    endResetModel();
-}
-QModelIndex ChatGridModel::index( int row, int column,
-                              const QModelIndex &parent ) const
-{
-    if (!chatVector)
-        return QModelIndex();
-
-    if ( row < 0 || row >= chatVector->count() || ( parent.isValid() && parent.column() != 0 ) )
-        return QModelIndex();
-
-    return createIndex( row, column, nullptr );
-}
-QModelIndex ChatGridModel::parent( const QModelIndex &/*index*/ ) const
-{
-    return QModelIndex();
-}
-
-int ChatGridModel::rowCount( const QModelIndex &/*parent*/ ) const
-{
-    if (!chatVector)
-        return 0;
-    return chatVector->count();
-}
-
-void ChatGridModel::appendRow(QSharedPointer<ChatLine> kstmsg)
-{
-    beginInsertRows(QModelIndex(), rowCount() , rowCount());
-    chatVector->push_back(kstmsg);
-    endInsertRows();
-}
-
-enum ChatColumns {eccSrc = 0, eccDTG, eccCall, eccName, eccOther, eccText, eccMaxColumn};
-QVariant ChatGridModel::data( const QModelIndex &index, int role ) const
-{
-    if ( !index.isValid() )
-        return QVariant();
-
-    int row = index.row();
-    int column = index.column();
-
-    if (role == Qt::DisplayRole)
-    {
-        //QSharedPointer<QVector <QSharedPointer<ChatLine> > > chatVector;
-        QSharedPointer<ChatLine> crec = chatVector->at(row);
-
-        QString cell;
-        switch (column)
-        {
-        case eccSrc:
-            cell = crec->source;
-            break;
-        case eccDTG:
-            cell = crec->dtg;
-            break;
-        case eccCall:
-            cell = crec->call;
-            break;
-        case eccName:
-            cell = crec->name;
-            break;
-        case eccOther:
-            cell = crec->otherCall;
-            break;
-        case eccText:
-            cell = crec->message;
-            break;
-        }
-        return cell;
-    }
-    else if (role == Qt::ToolTipRole)
-    {
-        QSharedPointer<ChatLine> crec = chatVector->at(row);
-        return crec->fullLine;
-    }
-    return QVariant();
-}
-QVariant ChatGridModel::headerData( int section, Qt::Orientation orientation,
-                     int role ) const
-{
-
-    QString cell;
-    if ( orientation == Qt::Horizontal && role == Qt::DisplayRole )
-    {
-        switch (section)
-        {
-        case eccSrc:
-            cell = "Source";
-            break;
-        case eccDTG:
-            cell = "DTG";
-            break;
-        case eccCall:
-            cell = "Call";
-            break;
-        case eccName:
-            cell = "Name";
-            break;
-        case eccOther:
-            cell = "Other Call";
-            break;
-        case eccText:
-            cell = "Text";
-            break;
-        }
-        return cell;
-    }
-    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
-    {
-        if (delegate)
-        {
-            // BUT the headers aren't drawn using the delegate, so this
-            // all fails to work
-
-            // Do we lose the vertical header?
-            QString s = "Memxx";
-            QSize r = delegate->docSize(s);
-            return r;
-        }
-    }
-    return QVariant();
-}
-int ChatGridModel::columnCount( const QModelIndex & /*parent*/ ) const
-{
-    return eccMaxColumn;
-}
-//==========================================================================================
-bool ChatGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
-{
-    if (filterString.isEmpty())
-        return true;
-
-    ChatGridModel *cgm = dynamic_cast<ChatGridModel *>(sourceModel());
-    if (!cgm || sourceRow >= cgm->rowCount())
-        return false;
-
-    QSharedPointer<ChatLine> kstmsg = cgm->chatVector->at(sourceRow);
-    if (kstmsg->fullLine.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
-
-    return false;
-}
-
-void ChatGridSortFilterModel::setFilterString(QString f)
-{
-    filterString = f;
-    invalidateFilter();
-}
 //==========================================================================================
 KSTMainWindow::KSTMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -283,36 +57,57 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QByteArray state = settings.value("kstSplitterState").toByteArray();
+    QByteArray state;
+    state = settings.value("kstSplitterState").toByteArray();
     ui->kstSplitter->restoreState(state);
 
-    chatVector = QSharedPointer<QVector <QSharedPointer<ChatLine> > >( new QVector<QSharedPointer<ChatLine> >);
-    cgm.setChatVector(chatVector);
+    state = settings.value("msgSplitterState").toByteArray();
+    ui->msgSplitter->restoreState(state);
 
-    cgsfm.setSourceModel(&cgm);
-    ui->messageTable->setModel(&cgsfm);
+    messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
+
+    kstMessageModel.setChatVector(messageVector);
+
+    kstMessageFilterModel.setSourceModel(&kstMessageModel);
+    ui->messageTable->setModel(&kstMessageFilterModel);
     ui->messageTable->horizontalHeader()->setStretchLastSection(true);
 
+    kstMeepModel.setChatVector(messageVector);
+
+    kstMeepFilterModel.setSourceModel(&kstMeepModel);
+    ui->meepTable->setModel(&kstMeepFilterModel);
+    ui->meepTable->horizontalHeader()->setStretchLastSection(true);
+
     callVector = QSharedPointer<QStringList >( new QStringList() );
-    clgm.setCallVector(callVector);
+    kstCallModel.setCallVector(callVector);
 
-    clgsfm.setSourceModel(&clgm);
-    ui->CSTable->setModel(&clgsfm);
+    kstCallFilterModel.setSourceModel(&kstCallModel);
+    ui->CSTable->setModel(&kstCallFilterModel);
 
-    clgsfm.sort(0);
+    kstCallFilterModel.sort(0);
 
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
 
+    meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
     messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
     CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
 
-    cgm.delegate = messageDelegate;
-    clgm.delegate = CSDelegate;
+    kstMeepModel.delegate = meepDelegate;
+    kstMessageModel.delegate = messageDelegate;
+    kstCallModel.delegate = CSDelegate;
 
+    ui->meepTable->setItemDelegate(meepDelegate.data());
     ui->messageTable->setItemDelegate(messageDelegate.data());
     ui->CSTable->setItemDelegate(CSDelegate.data());
 
-    QHeaderView *verticalHeader = ui->messageTable->verticalHeader();
+    QHeaderView *verticalHeader = ui->meepTable->verticalHeader();
+    verticalHeader->setVisible(false);
+    verticalHeader->setDefaultSectionSize(10);
+    verticalHeader->setMinimumSectionSize(10);
+
+    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    verticalHeader = ui->messageTable->verticalHeader();
     verticalHeader->setVisible(false);
     verticalHeader->setDefaultSectionSize(10);
     verticalHeader->setMinimumSectionSize(10);
@@ -334,9 +129,14 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     state = settings.value("messageTable/state").toByteArray();
     ui->messageTable->horizontalHeader()->restoreState(state);
 
+    state = settings.value("meepTable/state").toByteArray();
+    ui->meepTable->horizontalHeader()->restoreState(state);
+
     connect( ui->CSTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     connect( ui->messageTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
+    connect( ui->meepTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
 
     tnclient = new QtTelnet(this);
@@ -348,11 +148,33 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(tnclient, SIGNAL(loggedOut()), this, SLOT(loggedOut()));
     connect(tnclient, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
 
-    hostname = settings.value("hostname", "www.on4kst.info").toString();
-    port = settings.value("port", "23000").toString();
-    username = settings.value("username", "").toString();
+    serverName = settings.value("hostname", "www.on4kst.info").toString();
+    serverPort = settings.value("port", "23000").toString();
+    callsign = settings.value("username", "").toString();
     password = settings.value("password", "").toString();
-    service = settings.value("service", "1").toString();
+    kstChatSelection = settings.value("service", "1").toString();
+    autoConnect = settings.value("autoConnect", false).toBool();
+
+    QStringList services =
+    {"50/70 MHz..............1",
+    "144/432 MHz............2",
+    "Microwave..............3",
+    "EME/JT65...............4",
+    "Low Band...............5",
+    "50 MHz IARU Region 3...6",
+    "50 MHz IARU Region 2...7",
+    "144/432 MHz IARU R 2...8",
+    "144/432 MHz IARU R 3...9",
+    "kHz (2000-630m).......10",
+    "Warc (30,17,12m)......11"};
+
+    ui->serviceCombo->addItems(services);
+    int s = kstChatSelection.toInt();
+    ui->serviceCombo->setCurrentIndex(s - 1);
+
+
+    if (autoConnect)
+        connectToHost();
 
 }
 
@@ -374,7 +196,9 @@ void KSTMainWindow::moveEvent(QMoveEvent * event)
 }
 void KSTMainWindow::connectToHost()
 {
-    tnclient->login(QString("%1\r\n").arg(username), QString(password) + "\r\n");
+    ui->includeLabel->setText("Including " + callsign);
+    kstMeepFilterModel.setFilterString(callsign);
+    tnclient->login(QString("%1\r\n").arg(callsign), QString(password) + "\r\n");
     tnclient->connectToHost("www.on4kst.info" , 23000);
 
 }
@@ -383,7 +207,8 @@ void KSTMainWindow::connectToHost()
 void KSTMainWindow::connectionEstab()
 {
     trace("connection to ON4KST established");
-    tnclient->login(QString("%1\r\n").arg(username), QString(password) + "\r\n");
+    tnclient->login(QString("%1\r\n").arg(callsign), QString(password) + "\r\n");
+    ui->connectButton->setText("Disconnect");
 }
 
 void KSTMainWindow::connectionError(QAbstractSocket::SocketError error)
@@ -406,11 +231,19 @@ void KSTMainWindow::loggedOut()
 {
     QString msg = QString("Logged Out of ON4KST");
     trace(QString(msg));
+    userLoggedIn = false;
+    setupComplete = false;
+    ui->connectButton->setText("Connect");
 }
 
 void KSTMainWindow::messageRx(QString msg)
 {
-    trace(QString("messageRx: %1").arg(msg));
+    QString traceMsg = msg.remove("\r");
+    if (traceMsg.endsWith("\n"))
+    {
+        traceMsg.chop(1);
+    }
+    trace(QString("messageRx: %1").arg(traceMsg));
     if (setupComplete)
     {
         analyseTelnetMessage(msg);
@@ -427,7 +260,7 @@ void KSTMainWindow::messageRx(QString msg)
             int colon = msg.indexOf(":");
             if (colon >= 0)
             {
-                tnclient->sendData(service + "\r\n");
+                tnclient->sendData(kstChatSelection + "\r\n");
                 setupComplete = true;
             }
         }
@@ -613,7 +446,7 @@ void KSTMainWindow::analyseFileMessage(QString atj)
         if (!qdt.isValid())
             return;
 
-        QSharedPointer<ChatLine> kst(new ChatLine());
+        QSharedPointer<KstMessageLine> kst(new KstMessageLine());
 
         kst->fullLine = atj;
         kst->dtg = qdt.toString("HHmmZ");
@@ -654,18 +487,24 @@ void KSTMainWindow::analyseFileMessage(QString atj)
         kst->otherCall = other;
         kst->message = text;
 
-        cgm.appendRow(kst);
+        messageVector->push_back(kst);
+
+        kstMessageModel.appendLastRow();
+        kstMeepModel.appendLastRow();
+
+        ui->messageTable->scrollToBottom();
+        ui->meepTable->scrollToBottom();
 
         if (!callVector->contains(call))
         {
-            clgm.appendRow(call.toUpper());
-            clgsfm.sort(0);
+            kstCallModel.appendRow(call.toUpper());
+            kstCallFilterModel.sort(0);
         }
 
         if (!callVector->contains(other))
         {
-            clgm.appendRow(other.toUpper());
-            clgsfm.sort(0);
+            kstCallModel.appendRow(other.toUpper());
+            kstCallFilterModel.sort(0);
         }
     }
 }
@@ -725,9 +564,21 @@ void KSTMainWindow::analyseTelnetMessage(QString atj)
     if (sl.size() < 2)
         return;
     if (sl[1].isEmpty())
+    {
+        QStringList welcome = sl[0].split("\n");
+        for (int i = 0; i < welcome.size(); i++)
+        {
+            if (welcome[i].endsWith(" chat"))
+            {
+                QString t = welcome[i].mid(6);
+                setWindowTitle("Minos KST Client : " + t);
+                break;
+            }
+        }
         return;
+    }
 
-    QSharedPointer<ChatLine> kst(new ChatLine());
+    QSharedPointer<KstMessageLine> kst(new KstMessageLine());
 
     kst->fullLine = atj;
 
@@ -787,25 +638,39 @@ void KSTMainWindow::analyseTelnetMessage(QString atj)
     kst->otherCall = other;
     kst->message = text;
 
-    cgm.appendRow(kst);
+    messageVector->push_back(kst);
+
+    kstMessageModel.appendLastRow();
+
+    kstMeepModel.appendLastRow();
+
     ui->messageTable->scrollToBottom();
+    ui->meepTable->scrollToBottom();
 
     if (!callVector->contains(kst->call))
     {
-        clgm.appendRow(kst->call.toUpper());
-        clgsfm.sort(0);
+        kstCallModel.appendRow(kst->call.toUpper());
+        kstCallFilterModel.sort(0);
     }
 
     if (!callVector->contains(kst->otherCall))
     {
-        clgm.appendRow(kst->otherCall.toUpper());
-        clgsfm.sort(0);
+        kstCallModel.appendRow(kst->otherCall.toUpper());
+        kstCallFilterModel.sort(0);
     }
 
 }
 void KSTMainWindow::on_connectButton_clicked()
 {
-    connectToHost();
+    if (userLoggedIn)
+    {
+        tnclient->sendData("/Q\r\n");
+        tnclient->logout();
+    }
+    else
+    {
+        connectToHost();
+    }
 }
 void KSTMainWindow::on_closeButton_clicked()
 {
@@ -815,12 +680,12 @@ void KSTMainWindow::on_closeButton_clicked()
 
 void KSTMainWindow::on_messageFilter_textChanged(const QString &arg1)
 {
-    cgsfm.setFilterString(arg1);
+    kstMessageFilterModel.setFilterString(arg1);
 }
 
 void KSTMainWindow::on_CSFilter_textChanged(const QString &arg1)
 {
-    clgsfm.setFilterString(arg1);
+    kstCallFilterModel.setFilterString(arg1);
 }
 
 void KSTMainWindow::on_kstSplitter_splitterMoved(int /*pos*/, int /*index*/)
@@ -839,11 +704,14 @@ void KSTMainWindow::on_sectionResized(int, int, int)
 
     state = ui->messageTable->horizontalHeader()->saveState();
     settings.setValue("messageTable/state", state);
+
+    state = ui->meepTable->horizontalHeader()->saveState();
+    settings.setValue("meepTable/state", state);
 }
 
 void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
 {
-    QModelIndex sourceIndex = clgsfm.mapToSource(index);
+    QModelIndex sourceIndex = kstCallFilterModel.mapToSource(index);
     QString call = callVector->at(sourceIndex.row());
     ui->messageFilter->setText(call);
 }
@@ -852,26 +720,109 @@ void KSTMainWindow::on_configureButton_clicked()
 {
     KSTConfigure conf;
 
-    conf.hostname = hostname;
-    conf.port = port;
-    conf.username = username;
+    conf.hostname = serverName;
+    conf.port = serverPort;
+    conf.username = callsign;
     conf.password = password;
-    conf.service = service;
+    conf.autoConnect = autoConnect;
 
     if (conf.exec() == QDialog::Accepted)
     {
-        hostname = conf.hostname;
-        port = conf.port;
-        username = conf.username;
+        serverName = conf.hostname;
+        serverPort = conf.port;
+        callsign = conf.username;
         password = conf.password;
-        service = conf.service;
+        autoConnect = conf.autoConnect;
 
         QSettings settings;
 
-        settings.setValue("hostname", hostname);
-        settings.setValue("port", port);
-        settings.setValue("username", username);
+        settings.setValue("hostname", serverName);
+        settings.setValue("port", serverPort);
+        settings.setValue("username", callsign);
         settings.setValue("password", password);
-        settings.setValue("service", service);
+        settings.setValue("autoConnect", autoConnect);
+
+        reconnect();
+    }
+}
+void KSTMainWindow::reconnect()
+{
+    tnclient->sendData("/Q\r\n");
+    tnclient->logout();
+
+    QTimer *timer = new QTimer(this);
+    timer->setInterval(2000);
+    timer->setSingleShot(true);
+
+    connect(timer, &QTimer::timeout, [=]()
+    {
+        // NB a lambda function
+        connectToHost();
+        timer->deleteLater();
+    }
+    );
+
+    timer->start(100);
+}
+void KSTMainWindow::on_genmsgButton_clicked()
+{
+    QString msg = ui->msgEdit->text();
+    if (!msg.isEmpty())
+    {
+        tnclient->sendData(msg + "\r\n");
+    }
+}
+
+void KSTMainWindow::on_meepButton_clicked()
+{
+    QString msg = ui->msgEdit->text();
+    QString call = ui->callEdit->text();
+    if (!msg.isEmpty() && !call.isEmpty())
+    {
+        tnclient->sendData("/CQ " + call + " " + msg + "\r\n");
+    }
+}
+
+void KSTMainWindow::on_msgSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QSettings settings;
+    QByteArray state = ui->msgSplitter->saveState();
+    settings.setValue("msgSplitterState" , state);
+}
+
+void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
+{
+    QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
+    QSharedPointer<KstMessageLine> line = messageVector->at(sourceIndex.row());
+    QString call = line->call;
+    if (call.compare(callsign, Qt::CaseInsensitive) == 0)
+    {
+        call = line->otherCall;
+    }
+    ui->callEdit->setText(call);
+}
+
+void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
+{
+    QModelIndex sourceIndex = kstMeepFilterModel.mapToSource(index);
+    QSharedPointer<KstMessageLine> line = messageVector->at(sourceIndex.row());
+    QString call = line->call;
+    if (call.compare(callsign, Qt::CaseInsensitive) == 0)
+    {
+        call = line->otherCall;
+    }
+    ui->callEdit->setText(call);
+}
+
+void KSTMainWindow::on_serviceCombo_currentIndexChanged(int index)
+{
+    if (userLoggedIn)
+    {
+        kstChatSelection = QString::number(index + 1);
+
+        QSettings settings;
+        settings.setValue("service", kstChatSelection);
+
+        reconnect();
     }
 }

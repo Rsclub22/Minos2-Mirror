@@ -4,125 +4,45 @@
 #include "base_pch.h"
 
 #include <QMainWindow>
-#include <QAbstractItemModel>
-#include <QSortFilterProxyModel>
 #include "qttelnet.h"
-#include "htmldelegate.h"
+#include "kstcallgridmodel.h"
+#include "kstmessagegridmodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
 QT_END_NAMESPACE
 
-
-class CallGridModel: public QAbstractItemModel
-{
-    Q_OBJECT
-
-    public:
-        CallGridModel();
-        virtual ~CallGridModel() override
-        {}
-        QSharedPointer<QStringList> callVector;
-        QSharedPointer<HtmlDelegate> delegate;
-
-        void setCallVector(QSharedPointer<QStringList > pcallVector);
-        QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
-        QVariant headerData( int section, Qt::Orientation orientation,
-                             int role = Qt::DisplayRole ) const Q_DECL_OVERRIDE;
-        int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
-
-
-        QModelIndex index( int row, int column,
-                           const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
-        QModelIndex parent( const QModelIndex &index )const Q_DECL_OVERRIDE;
-
-        int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
-
-        void appendRow(QString kstmsg);
-};
-
-class CallGridSortFilterModel: public QSortFilterProxyModel
-{
-    QString filterString;
-public:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    void setFilterString(QString f);
-};
-class ChatLine
-{
-public:
-    QString source;
-    QString dtg;
-    QString fullLine;
-    QString call;
-    QString name;
-    QString otherCall;
-    QString message;
-
-    ChatLine(){}
-    ~ChatLine(){}
-};
-
-class ChatGridModel: public QAbstractItemModel
-{
-    Q_OBJECT
-
-    public:
-        ChatGridModel();
-        virtual ~ChatGridModel() override
-        {}
-        QSharedPointer<QVector <QSharedPointer<ChatLine> > > chatVector;
-        QSharedPointer<HtmlDelegate> delegate;
-
-        void setChatVector(QSharedPointer<QVector<QSharedPointer<ChatLine> > > pchatVector);
-        QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
-        QVariant headerData( int section, Qt::Orientation orientation,
-                             int role = Qt::DisplayRole ) const Q_DECL_OVERRIDE;
-        int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
-
-
-        QModelIndex index( int row, int column,
-                           const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
-        QModelIndex parent( const QModelIndex &index )const Q_DECL_OVERRIDE;
-
-        int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
-
-        void appendRow(QSharedPointer<ChatLine> kstmsg);
-};
-
-class ChatGridSortFilterModel: public QSortFilterProxyModel
-{
-    QString filterString;
-public:
-    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    void setFilterString(QString f);
-};
-
 class KSTMainWindow : public QMainWindow
 {
     Q_OBJECT
 
-    ChatGridModel cgm;
-    ChatGridSortFilterModel cgsfm;
+    KstMessageGridModel kstMessageModel;
+    KstMessageGridSortFilterModel kstMessageFilterModel;
 
-    QSharedPointer<QVector <QSharedPointer<ChatLine> > > chatVector;
+    KstMessageGridModel kstMeepModel;
+    KstMessageGridSortFilterModel kstMeepFilterModel;
 
-    CallGridModel clgm;
-    CallGridSortFilterModel clgsfm;
+    QSharedPointer<QVector <QSharedPointer<KstMessageLine> > > messageVector;
+
+    KstCallGridModel kstCallModel;
+    KstCallGridSortFilterModel kstCallFilterModel;
 
     QSharedPointer<QStringList > callVector;
 
 
+    QSharedPointer<HtmlDelegate> meepDelegate;
     QSharedPointer<HtmlDelegate> messageDelegate;
     QSharedPointer<HtmlDelegate> CSDelegate;
 
     QtTelnet* tnclient;
 
-    QString hostname;
-    QString port;
-    QString username;
+    QString serverName;
+    QString serverPort;
+    QString callsign;
     QString password;
-    QString service;
+    QString kstChatSelection;
+    bool autoConnect = false;
+
 
     bool userLoggedIn = false;
     bool setupComplete = false;
@@ -160,9 +80,23 @@ private slots:
 
     void on_configureButton_clicked();
 
+
+    void on_genmsgButton_clicked();
+
+    void on_meepButton_clicked();
+
+    void on_msgSplitter_splitterMoved(int pos, int index);
+
+    void on_messageTable_clicked(const QModelIndex &index);
+
+    void on_meepTable_clicked(const QModelIndex &index);
+
+    void on_serviceCombo_currentIndexChanged(int index);
+
 private:
     Ui::KSTMainWindow *ui;
     void analyseFileMessage(QString atj);
     void analyseTelnetMessage(QString atj);
+    void reconnect();
 };
 #endif // KSTMAINWINDOW_H
