@@ -81,7 +81,7 @@ public:
 
     void scrollBandmapCenterToFreq(qint64 freq);
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
-    void zoomUpdated(bool dir);
+
 
 
 signals:
@@ -131,6 +131,7 @@ private slots:
     void on_scrollMap(bool dir);
     void onRowsRemoved(const QModelIndex &parent, int first, int last);
     void onRowsInserted(const QModelIndex &parent, int first, int last);
+    void zoomUpdated(bool dir);
 private:
 
     QGraphicsScene *bandmapScene;
