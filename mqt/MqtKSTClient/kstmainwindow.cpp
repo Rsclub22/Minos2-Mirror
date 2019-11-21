@@ -246,7 +246,18 @@ void KSTMainWindow::messageRx(QString msg)
     trace(QString("messageRx: %1").arg(traceMsg));
     if (setupComplete)
     {
-        analyseTelnetMessage(msg);
+        // break into lines...
+        msgbuf.append(msg);
+
+        int p = msgbuf.indexOf("\n");
+        while (p >= 0)
+        {
+            QString m = msgbuf.left(p + 1);
+            msgbuf = msgbuf.mid(p + 1);
+            p = msgbuf.indexOf("\n");
+
+            analyseTelnetMessage(m);
+        }
     }
     else
     {

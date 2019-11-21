@@ -43,6 +43,7 @@ class KSTMainWindow : public QMainWindow
     QString kstChatSelection;
     bool autoConnect = false;
 
+    QString msgbuf;
 
     bool userLoggedIn = false;
     bool setupComplete = false;
