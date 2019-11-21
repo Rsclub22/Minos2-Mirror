@@ -111,16 +111,31 @@ int RigControl::init(scatParams &currentRadio, bool useRigCtld)
             my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
             my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
             my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
-            if (my_rig->state.rigport.parm.serial.handshake == RIG_HANDSHAKE_NONE)
+
+            if (getSerialForceLineCode(currentRadio.forceDtr) == serialData::FORCE_LINE_ON)
             {
                 my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_ON;
-                my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_ON;
             }
             else
             {
                 my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_UNSET;
-                my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
             }
+
+
+            if (my_rig->state.rigport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
+            {
+
+                if (currentRadio.forceRts)
+                {
+                    my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_ON;
+                }
+                else
+                {
+
+                    my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
+                }
+            }
+
         }
         else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
         {
