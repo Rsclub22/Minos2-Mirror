@@ -104,7 +104,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     memoryAction = new QAction("Send &Memory", this);
     clearSpotAction = new QAction("Clear &Spot", this);
     clearAllSpotsAction = new QAction("Clear &All Spots", this);
-    memoryActionOveride = new QAction("Force &Send Memory", this);
+    //memoryActionOveride = new QAction("Force &Send Memory", this);
 
     spotsMenu->addAction(freqAction);
     spotsMenu->addAction(bearingAction);
@@ -112,7 +112,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     spotsMenu->addAction(memoryAction);
     spotsMenu->addAction(clearSpotAction);
     spotsMenu->addAction(clearAllSpotsAction);
-    spotsMenu->addAction(memoryActionOveride);
+    //spotsMenu->addAction(memoryActionOveride);
 
     ui->actionsButton->setMenu(spotsMenu);
     connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
@@ -123,7 +123,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
-    connect( memoryActionOveride, SIGNAL( triggered() ), this, SLOT(memoryActionOverideSelected()) );
+    //connect( memoryActionOveride, SIGNAL( triggered() ), this, SLOT(memoryActionOverideSelected()) );
 
     //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
@@ -171,6 +171,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
+    connect(ui->unworkedCallsignsChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedCallsignsCheckBox(int)));
     connect(ui->unworkedLocChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedLocCheckBox(int)));
 
     purgeTimer->start(PURGE_TIME);
@@ -1150,6 +1151,7 @@ void ClusterClientFrame::memoryActionSelected()
 
 }
 
+/*
 // this sends spot to memory if it has allready been sent
 void ClusterClientFrame::memoryActionOverideSelected()
 {
@@ -1170,7 +1172,7 @@ void ClusterClientFrame::memoryActionOverideSelected()
 
     }
 }
-
+*/
 
 void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
@@ -1191,6 +1193,7 @@ memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFi
     spotData.mode = memDefData::DEFAULT_MODE;
     spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
     spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();
+    spotData.fromBandmapOrMemory = true;
     return spotData;
 }
 

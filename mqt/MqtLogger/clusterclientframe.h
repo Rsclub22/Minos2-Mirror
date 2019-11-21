@@ -209,7 +209,7 @@ private:
     QAction* memoryAction;
     QAction* clearSpotAction;
     QAction* clearAllSpotsAction;
-    QAction* memoryActionOveride;
+    //QAction* memoryActionOveride;
 
     QString contestUuid;
 
@@ -315,7 +315,7 @@ private slots:
 
     void on_clusterSplitter_splitterMoved(int pos, int index);
 
-    void memoryActionOverideSelected();
+    //void memoryActionOverideSelected();
 
     void on_doColumnChanges(BaseContestLog *);
     void on_doSplitterChanges(BaseContestLog *);
