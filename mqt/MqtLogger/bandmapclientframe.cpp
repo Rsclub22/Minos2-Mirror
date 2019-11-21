@@ -1607,7 +1607,7 @@ void BandmapClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse within frame! Updates paused for 5 secs.</font>");
+        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse within frame!<p> Updates paused for 5 secs.</font>");
     }
     else
     {

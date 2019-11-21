@@ -1681,7 +1681,7 @@ void ClusterClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->clusterClientFrameTitle->setText("Cluster - <font color='Red'>Mouse within frame! Updates paused for 5 secs</font>");
+        ui->clusterClientFrameTitle->setText("Cluster - <font color='Red'>Mouse within frame!<p> Updates paused for 5 secs</font>");
     }
     else
     {
