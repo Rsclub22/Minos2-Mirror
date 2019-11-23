@@ -84,7 +84,6 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     sendDM = new TSendDM(this);
 
-    sendDM->subscribeApps();
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 }
@@ -134,6 +133,7 @@ bool TLogContainer::show(int argc, char *argv[])
        close();
        return false;
     }
+    sendDM->subscribeApps();
 
     if ( contestAppLoadFiles() )
     {
@@ -536,6 +536,8 @@ QString TLogContainer::strippedName(const QString &fullFileName)
 void TLogContainer::HelpAboutActionExecute()
 {
     TAboutBox::ShowAboutBox(this, false);
+    // in case we are now running more apps
+    sendDM->subscribeApps();
 }
 void TLogContainer::HelpActionExecute()
 {
@@ -1160,6 +1162,8 @@ void TLogContainer::StartConfigActionExecute()
 {
     StartConfig configBox( this, false);
     configBox.exec();
+    // in case we are now running more apps
+    sendDM->subscribeApps();
 }
 void TLogContainer::listCompressionActionExecute()
 {
