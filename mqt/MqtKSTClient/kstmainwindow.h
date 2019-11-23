@@ -44,6 +44,8 @@ class KSTMainWindow : public QMainWindow
     bool autoConnect = false;
 
     QString msgbuf;
+    QStringList filelines;
+    int curline = 0;
 
     bool userLoggedIn = false;
     bool setupComplete = false;
@@ -94,9 +96,10 @@ private slots:
 
     void on_serviceCombo_currentIndexChanged(int index);
 
+    void on_clearButton_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
-    void analyseFileMessage(QString atj);
     void analyseTelnetMessage(QString atj);
     void reconnect();
 };

@@ -3,6 +3,12 @@ KstCallGridModel::KstCallGridModel()
 {
 
 }
+void KstCallGridModel::reset()
+{
+    beginResetModel();
+    callVector->clear();
+    endResetModel();
+}
 void KstCallGridModel::setCallVector(QSharedPointer<QStringList > pcallVector)
 {
     beginResetModel();
@@ -36,6 +42,11 @@ void KstCallGridModel::appendRow(QString call)
 {
     beginInsertRows(QModelIndex(), rowCount() , rowCount());
     callVector->push_back(call);
+    endInsertRows();
+}
+void KstCallGridModel::insertRow(int row)
+{
+    beginInsertRows(QModelIndex(), row , row);
     endInsertRows();
 }
 

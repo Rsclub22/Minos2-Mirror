@@ -1,9 +1,14 @@
 #include "kstmessagegridmodel.h"
 //==========================================================================================
 
-KstMessageGridModel::KstMessageGridModel()
+KstMessageGridModel::KstMessageGridModel():cacheSize(10, 10)
 {
-
+}
+void KstMessageGridModel::reset()
+{
+    beginResetModel();
+    messageVector->clear();
+    endResetModel();
 }
 void KstMessageGridModel::setChatVector(QSharedPointer<QVector <QSharedPointer<KstMessageLine> > > pchatVector)
 {
@@ -39,6 +44,12 @@ void KstMessageGridModel::appendLastRow()
     // data must have already been added tothe shared message vector
     beginInsertRows(QModelIndex(), rowCount() - 1 , rowCount() - 1);
     endInsertRows();
+}
+
+void KstMessageGridModel::setCacheSize()
+{
+    QString s = "Memxx";
+    cacheSize = delegate->docSize(s);
 }
 
 enum ChatColumns {eccSrc = 0, eccDTG, eccCall, eccName, eccOther, eccText, eccMaxColumn};
@@ -120,13 +131,7 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
     {
         if (delegate)
         {
-            // BUT the headers aren't drawn using the delegate, so this
-            // all fails to work
-
-            // Do we lose the vertical header?
-            QString s = "Memxx";
-            QSize r = delegate->docSize(s);
-            return r;
+            return cacheSize;
         }
     }
     return QVariant();

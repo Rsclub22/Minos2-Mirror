@@ -26,6 +26,7 @@ class KstMessageGridModel: public QAbstractItemModel
 {
     Q_OBJECT
 
+        QSize cacheSize;
     public:
         KstMessageGridModel();
         virtual ~KstMessageGridModel() override
@@ -47,6 +48,9 @@ class KstMessageGridModel: public QAbstractItemModel
         int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
 
         void appendLastRow();
+
+        void setCacheSize();
+        void reset();
 };
 
 class KstMessageGridSortFilterModel: public QSortFilterProxyModel

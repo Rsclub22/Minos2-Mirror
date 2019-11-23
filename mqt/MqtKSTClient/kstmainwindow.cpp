@@ -69,6 +69,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     kstMessageModel.setChatVector(messageVector);
 
     kstMessageFilterModel.setSourceModel(&kstMessageModel);
+
     ui->messageTable->setModel(&kstMessageFilterModel);
     ui->messageTable->horizontalHeader()->setStretchLastSection(true);
 
@@ -83,8 +84,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     kstCallFilterModel.setSourceModel(&kstCallModel);
     ui->CSTable->setModel(&kstCallFilterModel);
-
-    kstCallFilterModel.sort(0);
 
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
 
@@ -109,10 +108,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     verticalHeader = ui->messageTable->verticalHeader();
     verticalHeader->setVisible(false);
+
     verticalHeader->setDefaultSectionSize(10);
     verticalHeader->setMinimumSectionSize(10);
 
-    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
     verticalHeader = ui->CSTable->verticalHeader();
     verticalHeader->setVisible(false);
@@ -169,8 +169,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     "Warc (30,17,12m)......11"};
 
     ui->serviceCombo->addItems(services);
-    int s = kstChatSelection.toInt();
-    ui->serviceCombo->setCurrentIndex(s - 1);
+    int sel = kstChatSelection.toInt();
+    ui->serviceCombo->setCurrentIndex(sel - 1);
 
 
     if (autoConnect)
@@ -221,6 +221,8 @@ void KSTMainWindow::connectionError(QAbstractSocket::SocketError error)
 
 void KSTMainWindow::logIn()
 {
+    kstMessageModel.setCacheSize();
+
     QString msg = QString("Login Start - Send logon message\n");
     trace(msg);
     //tnclient->login(QString("%1\r\n").arg("G0GJV"), "62rosehill");
@@ -296,234 +298,14 @@ bool loadStringListFromFile (QStringList &list, const QString fname )
     }
     return false;
 }
-class CsvReader
-{
-public:
-    CsvReader(QChar sep = ',');
-
-    void parseCsvLine(const QString &line, QStringList &csv);
-    bool parseCsv(const QString &fileName, QList<QStringList> &csv);
-
-private:
-    QChar sep;
-    QStringList itemList;
-
-    void checkString(QString &temp, QChar character, QStringList &csv);
-    void checkString(QString &temp, QChar character, QList<QStringList> &csv);
-};
-CsvReader::CsvReader(QChar sep):sep(sep){}
-
-bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
-{
-    QFile file (fileName);
-    if (file.open(QIODevice::ReadOnly))
-    {
-        QString data = file.readAll();
-        data.remove( QRegExp("\r") ); //remove all ocurrences of CR (Carriage Return)
-        QString temp;
-        QChar character;
-        QTextStream textStream(&data);
-        while (!textStream.atEnd())
-        {
-            textStream >> character;
-            if (character == ',')
-            {
-                checkString(temp, character, csv);
-            }
-            else if (character == '\n')
-            {
-                checkString(temp, character, csv);
-            }
-            else if (textStream.atEnd())
-            {
-                temp.append(character);
-                checkString(temp, 0, csv);
-            }
-            else
-            {
-                temp.append(character);
-            }
-        }
-        itemList.clear();
-        return true;
-    }
-    return false;
-}
-void CsvReader::parseCsvLine(const QString &line, QStringList &csv)
-{
-     QString temp;
-     QChar character;
-
-     int lsize = line.length();
-     for (int i = 0; i < lsize; i++)
-     {
-         character = line[i];
-         if (character == sep)
-         {
-             checkString(temp, character, csv);
-         }
-         else if (character == '\n')
-         {
-             checkString(temp, character, csv);
-         }
-         else if (character == nullptr)
-         {
-             checkString(temp, 0, csv);
-         }
-         else
-         {
-             temp.append(character);
-         }
-     }
-     checkString(temp, 0, csv);
-}
-void CsvReader::checkString(QString &temp, QChar character, QStringList &csv)
-{
-    if(temp.count("\"")%2 == 0)
-    {
-        if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
-        {
-             temp.remove( QRegExp("^\"") );
-             temp.remove( QRegExp("\"$") );
-        }
-        //FIXME: will possibly fail if there are 4 or more reapeating double quotes
-        temp.replace("\"\"", "\"");
-        csv.append(temp.trimmed());
-        if (character != QChar(sep))
-        {
-            return;
-        }
-        temp.clear();
-    }
-    else
-    {
-        temp.append(character);
-    }
-}
-void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &csv)
-{
-    if(temp.count("\"")%2 == 0)
-    {
-        if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
-        {
-            temp.remove( QRegExp("^\"") );
-            temp.remove( QRegExp("\"$") );
-        }
-        temp.replace("\"\"", "\"");
-        itemList.append(temp.trimmed());
-        if (character != QChar(','))
-        {
-            csv.append(itemList);
-            itemList.clear();
-        }
-        temp.clear();
-    }
-    else
-    {
-        temp.append(character);
-    }
-}
-
-void CSVToStringList( const QString &qs, QStringList &sl )
-{
-    sl.clear();
-
-    CsvReader csv;
-
-    csv.parseCsvLine(qs, sl);
-}
-void TSVToStringList( const QString &qs, QStringList &sl )
-{
-    sl.clear();
-
-    CsvReader csv('\t');
-
-    csv.parseCsvLine(qs, sl);
-}
-
-void KSTMainWindow::analyseFileMessage(QString atj)
-{
-    QStringList slc;
-    TSVToStringList( atj, slc );
-
-    if (slc.size() == 3)
-    {
-        // get DTG; file format is 2018-01-16 22:30:56Z
-
-        QString dts = slc[0].left(19);
-
-        QDateTime qdt = QDateTime::fromString(dts, "yyyy-MM-dd hh:mm:ss");
-
-        if (!qdt.isValid())
-            return;
-
-        QSharedPointer<KstMessageLine> kst(new KstMessageLine());
-
-        kst->fullLine = atj;
-        kst->dtg = qdt.toString("HHmmZ");
-
-        QString s2 = slc[1];
-        s2.replace(QChar::Nbsp, QChar::Space);
-        QString call = s2.section(' ', 0, 0).trimmed();
-        QString name = s2.section(' ', 1).trimmed();
-
-        kst->call = call;
-        kst->name = name;
-
-        QString s3 = slc[2];
-        QString other;
-        QString text = s3;
-        if (s3[0] == '(')
-        {
-            while (s3[0] == '(')
-            {
-                s3 = s3.mid(1);
-            }
-            int closeBracket = s3.indexOf(')');
-            other = s3.mid(0, closeBracket - 1).trimmed();
-
-            text = s3.mid(closeBracket + 1).trimmed();
-        }
-        else
-        {
-            QString temp = s3.section(' ', 0, 0);
-            Callsign cs(temp);
-            cs.validate();
-            if (cs.valRes == CS_OK)
-            {
-                other = temp.toUpper().trimmed();
-                text = s3.section(' ', 1).trimmed();
-            }
-        }
-        kst->otherCall = other;
-        kst->message = text;
-
-        messageVector->push_back(kst);
-
-        kstMessageModel.appendLastRow();
-        kstMeepModel.appendLastRow();
-
-        ui->messageTable->scrollToBottom();
-        ui->meepTable->scrollToBottom();
-
-        if (!callVector->contains(call))
-        {
-            kstCallModel.appendRow(call.toUpper());
-            kstCallFilterModel.sort(0);
-        }
-
-        if (!callVector->contains(other))
-        {
-            kstCallModel.appendRow(other.toUpper());
-            kstCallFilterModel.sort(0);
-        }
-    }
-}
 void KSTMainWindow::on_analyseButton_clicked()
 {
-    QString InitialDir = GetCurrentDir();
+    filelines.clear();
+    kstMessageModel.setCacheSize();
 
-    QString Filter = "KST Chat Files (*.txt);;"
+    QString InitialDir/* = GetCurrentDir()*/;
+
+    QString Filter = "KST Chat Files (*.txt);Log Files (*.log);;"
                      "All Files (*.*)" ;
 
     QStringList KSTFileNames = QFileDialog::getOpenFileNames( this,
@@ -543,23 +325,48 @@ void KSTMainWindow::on_analyseButton_clicked()
         {
             QString fname = KSTFileNames[i].trimmed();
 
-            QStringList sl;
-            if (loadStringListFromFile ( sl, fname ))
+            if (loadStringListFromFile ( filelines, fname ))
             {
                 // list is in reverse time order, so reverse it; this will make things easier later
 
-                std::reverse(sl.begin(), sl.end());
-                for ( int j = 0; j < sl.size(); j++ )
+                // but .log is already i the right order
+                //std::reverse(filelines.begin(), filelines.end());
+
+                ui->includeLabel->setText("Including " + callsign);
+                kstMeepFilterModel.setFilterString(callsign);
+
+                QTimer *timer = new QTimer(this);
+
+                connect(timer, &QTimer::timeout, [=]()
                 {
-                    if ( !sl.at( j ).isEmpty() && sl.at( j ) [ 0 ] != '#' )
+                    // NB a lambda function
+                    if (curline < filelines.size())
                     {
-                        QString atj = QString::fromLatin1(sl.at( j ).toLatin1());
-                        analyseFileMessage(atj);
+                        if ( !filelines.at( curline ).isEmpty() && filelines.at( curline ) [ 0 ] != '#' )
+                        {
+                            QString atj = QString::fromLatin1(filelines.at( curline ).toLatin1());
+                            int p = atj.indexOf("messageRx") ;
+                            if (p >= 0)
+                            {
+                                atj = atj.mid( p + QString("messageRx: ").size());
+                            }
+                            analyseTelnetMessage(atj);
+                        }
+                        curline++;
+                    }
+                    else
+                    {
+                        timer->stop();
+                        timer->deleteLater();
+                        filelines.clear();
                     }
                 }
-            }
+                );
+
+                timer->start(0);
+
+             }
         }
-        //cgm.setChatVector(chatVector);
     }
 }
 void KSTMainWindow::analyseTelnetMessage(QString atj)
@@ -658,16 +465,18 @@ void KSTMainWindow::analyseTelnetMessage(QString atj)
     ui->messageTable->scrollToBottom();
     ui->meepTable->scrollToBottom();
 
-    if (!callVector->contains(kst->call))
+    if (!std::binary_search(callVector->begin(), callVector->end(), kst->call))
     {
-        kstCallModel.appendRow(kst->call.toUpper());
-        kstCallFilterModel.sort(0);
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), kst->call ) - callVector->begin());
+        callVector->insert(row, kst->call);
+        kstCallModel.insertRow(row);
     }
 
-    if (!callVector->contains(kst->otherCall))
+    if (!std::binary_search(callVector->begin(), callVector->end(), kst->otherCall))
     {
-        kstCallModel.appendRow(kst->otherCall.toUpper());
-        kstCallFilterModel.sort(0);
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), kst->otherCall ) - callVector->begin());
+        callVector->insert(row, kst->otherCall);
+        kstCallModel.insertRow(row);
     }
 
 }
@@ -692,6 +501,7 @@ void KSTMainWindow::on_closeButton_clicked()
 void KSTMainWindow::on_messageFilter_textChanged(const QString &arg1)
 {
     kstMessageFilterModel.setFilterString(arg1);
+    ui->messageTable->scrollToBottom();
 }
 
 void KSTMainWindow::on_CSFilter_textChanged(const QString &arg1)
@@ -836,4 +646,11 @@ void KSTMainWindow::on_serviceCombo_currentIndexChanged(int index)
 
         reconnect();
     }
+}
+
+void KSTMainWindow::on_clearButton_clicked()
+{
+    kstMessageModel.reset();
+    kstMeepModel.reset();
+    kstCallModel.reset();
 }

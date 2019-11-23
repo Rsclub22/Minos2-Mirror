@@ -32,6 +32,8 @@ class KstCallGridModel: public QAbstractItemModel
         int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
 
         void appendRow(QString kstmsg);
+        void insertRow(int row);
+        void reset();
 };
 
 class KstCallGridSortFilterModel: public QSortFilterProxyModel
