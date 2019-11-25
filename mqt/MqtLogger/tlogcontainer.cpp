@@ -213,7 +213,14 @@ void TLogContainer::on_TimeDisplayTimer( )
 }
 void TLogContainer::on_ReportOverstrike(bool overstrike, BaseContestLog *econtest )
 {
-   BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+    // this can be a "double queued Qt::QueuedConnection" event, and it can get
+    // delayed until we are closing down and TContestApp has already gone
+
+    TContestApp *tca = TContestApp::getContestApp();
+    if (!tca)
+        return;
+
+   BaseContestLog * ct = tca->getCurrentContest();
    if (ct == econtest)
    {
       sblabel1->setText(overstrike ? "Overwrite" : "Insert");
