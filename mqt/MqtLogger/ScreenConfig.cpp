@@ -72,6 +72,7 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
 
     }
     checkAddRowButton();
+    checkRowsAvailable();
 }
 
 ScreenConfig::~ScreenConfig()
@@ -171,6 +172,25 @@ SC ScreenConfig::getConfig()
         }
     }
     return sc;
+}
+void ScreenConfig::checkRowsAvailable()
+{
+    int rowCount = 0;
+    int vCt = vbl->count();
+    for (int i = 0; i < vCt; i++)
+    {
+        QWidget *w = vbl->itemAt(i)->widget();
+        ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+        if (row)
+        {
+            rowCount++;
+        }
+    }
+
+    bool ra = (rowCount > 1);
+
+    ui->addColumnLeftButton->setEnabled(ra);
+    ui->addColumnRightButton->setEnabled(ra);
 }
 void ScreenConfig::on_OKButton_clicked()
 {
@@ -283,6 +303,7 @@ void ScreenConfig::on_addRowButton_clicked()
 
     baseElement->addRowAfter(dynamic_cast<ScreenConfigRow *>(wlast));
     checkAddRowButton();
+    checkRowsAvailable();
 }
 void ScreenConfig::checkAddRowButton()
 {
@@ -319,12 +340,14 @@ void ScreenConfig::addColumnLeft(int top, int bottom)
 {
     ScreenConfigRow *newRow = combineRows(top, bottom);
     newRow->addLeft(nullptr);
+    checkRowsAvailable();
 }
 
 void ScreenConfig::addColumnRight(int top, int bottom)
 {
     ScreenConfigRow *newRow = combineRows(top, bottom);
     newRow->addRight(nullptr);
+    checkRowsAvailable();
 }
 
 int ScreenConfig::getTopRow()
@@ -356,6 +379,7 @@ int ScreenConfig::getBottomRow()
     }
     return -1;
 }
+
 void ScreenConfig::on_addColumnRightButton_clicked()
 {
     int topRow = getTopRow();

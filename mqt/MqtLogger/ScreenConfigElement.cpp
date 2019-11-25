@@ -270,12 +270,16 @@ void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
     vbl->insertWidget( pos, baseRow);
     baseRow->addLeft(nullptr);
     if (parentDialog)
+    {
         parentDialog->checkAddRowButton();
+        parentDialog->checkRowsAvailable();
+    }
 }
 void ScreenConfigElement::removeRow(ScreenConfigRow *r)
 {
     int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
+    int vct = vbl->count();
+    for (int i = 0; i < vct; i++)
     {
         if (vbl->itemAt(i)->widget() == r)
         {
@@ -293,6 +297,7 @@ void ScreenConfigElement::removeRow(ScreenConfigRow *r)
     if (parentDialog)
     {
         parentDialog->checkAddRowButton();
+        parentDialog->checkRowsAvailable();
     }
     else if (getIsSplitElement())
     {
@@ -319,7 +324,10 @@ void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
     vbl->insertWidget( pos + 1, baseRow);
     baseRow->addLeft(nullptr);
     if (parentDialog)
+    {
         parentDialog->checkAddRowButton();
+        parentDialog->checkRowsAvailable();
+    }
 }
 bool ScreenConfigElement::checkOk(ScreenConfigElement *e)
 {
