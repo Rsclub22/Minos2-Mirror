@@ -134,10 +134,11 @@ void ScreenConfigRow::unsplit()
     int ct = parentElement->vbl->count();
     ScreenConfigRow *rl = nullptr;
     QWidget *pw = nullptr;
+    QWidget *wl = nullptr;
     ScreenConfigElement *pelement = nullptr;
     for (int i = 0; i < ct; i++)
     {
-        QWidget *wl = parentElement->vbl->itemAt(i)->widget();
+        wl = parentElement->vbl->itemAt(i)->widget();
         if (wl == this)
         {
             rl = dynamic_cast<ScreenConfigRow *>(wl);

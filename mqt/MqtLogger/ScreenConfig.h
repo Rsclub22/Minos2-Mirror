@@ -67,4 +67,5 @@ private:
     int getBottomRow();
 };
 
+extern ScreenConfig *screenConfigDialog;
 #endif // SCREENCONFIG_H
