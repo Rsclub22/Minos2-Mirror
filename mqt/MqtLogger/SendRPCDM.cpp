@@ -1014,6 +1014,10 @@ void TSendDM::subscribeApps()
             catMap[rpcConstants::clusterClientServer].push_back((*i));
             catMap[rpcConstants::clusterCategory].push_back((*i));
         }
+        else if ((*i)->appType == "KSTClient")
+        {
+
+        }
     }
 
     if (!servers.contains(config->getThisServerName()))
