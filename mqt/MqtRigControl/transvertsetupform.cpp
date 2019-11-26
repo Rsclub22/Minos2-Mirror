@@ -63,6 +63,10 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject * /*obj*/, bool fIn, Q
             {
                 transVertData->transVertOffset = 0.0;
                 transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
+                if (transVertData->transVertOffsetStr.contains('?'))
+                {
+                    transVertData->transVertOffsetStr = QString("0.0");
+                }
                 // display
                 ui->offsetFreq->setText(transVertData->transVertOffsetStr);
                 return;
@@ -165,6 +169,10 @@ void TransVertSetupForm::calcOffset()
         transVertData->transVertOffset = transVertData->targetFreq - transVertData->radioFreq;
         //transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
         transVertData->transVertOffsetStr = convertFreqStrDispSingleNoTrailZero(convertFreqToStr(transVertData->transVertOffset));
+        if (transVertData->transVertOffsetStr.contains('?'))
+        {
+            transVertData->transVertOffsetStr = QString("0.0");
+        }
 
         // display
         ui->offsetFreq->setText(transVertData->transVertOffsetStr);
