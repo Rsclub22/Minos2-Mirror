@@ -11,6 +11,7 @@
 
 #include "ScreenConfig.h"
 #include "ui_ScreenConfig.h"
+ScreenConfig *screenConfigDialog = nullptr;
 
 void ScreenConfig::buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl)
 {
@@ -46,6 +47,7 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
     curConfigName(curConfigNamep)
 {
     ui->setupUi(this);
+    screenConfigDialog = this;
 
     QSettings settings;
     QByteArray geometry = settings.value("ScreenConfig/geometry").toByteArray();
@@ -78,6 +80,7 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
 ScreenConfig::~ScreenConfig()
 {
     delete ui;
+    screenConfigDialog = nullptr;
 }
 
 int ScreenConfig::topRowCount()
@@ -325,14 +328,16 @@ ScreenConfigRow *ScreenConfig::combineRows(int top, int bottom)
     split->setIsSplitElement(true);
     split->setType(sctSplit);
 
-    for (int i = top + 1; i <= bottom + 1; i++)
+    for (int i = top + 1; i <= bottom + 1; i++) // +1 as we added a new row before top
     {
         // keep taking the top of the old, and put it back at the bottom of the new
-        QLayoutItem *l = scr->parentElement->vbl->takeAt(top + 1);
+        QLayoutItem *l = vbl->takeAt(top + 1);
 
         split->vbl->addItem(l);
         // reset the parentage, or it all displays in the wrong place
         l->widget()->setParent(split);
+        ScreenConfigRow *newscr = dynamic_cast<ScreenConfigRow *>(l->widget());
+        newscr->parentElement = split;
     }
     return  newRow;
 }
