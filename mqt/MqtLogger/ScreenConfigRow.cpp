@@ -190,13 +190,11 @@ bool ScreenConfigRow::checkOk(ScreenConfigElement *e)
 {
     return parentElement->checkOk(e);
 }
-bool ScreenConfigRow::isTopLevelRow()
-{
-    return parentElement->isTopLevelRow(this);
-}
+
 void ScreenConfigRow::mousePressEvent(QMouseEvent *)
 {
-    if (isTopLevelRow())
+    QVector<ScreenConfigRow *> sel = screenConfigDialog->getSelected();
+    if ( sel.count() == 0 || sel[0]->parentElement == parentElement)
     {
         mouseDown = true;
     }
@@ -220,7 +218,7 @@ void ScreenConfigRow::mouseReleaseEvent(QMouseEvent *)
 }
 void ScreenConfigRow::leaveEvent(QEvent *)
 {
-    if (mouseDown && isTopLevelRow())
+    if (mouseDown )
     {
         mouseDown = false;
     }
