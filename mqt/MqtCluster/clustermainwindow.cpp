@@ -591,7 +591,7 @@ void ClusterMainWindow::logIn()
     QString msg = QString("Login Start - Send logon message\n");
     trace(msg);
     echoMsg(msg);
-    client->login(QString("%1\r\n").arg(currentUserCallsign), currentPassword);
+    client->login(QString("%1\r\n").arg(currentUserCallsign), currentPassword  + "\r\n");
     loginStart = true;
     echoMsg(QString("Logging in with callsign %1").arg(currentUserCallsign));
 
