@@ -34,6 +34,7 @@ public:
     void addColumnLeft(int top, int bottom);
     void addColumnRight(int top, int bottom);
     bool isTopLevelRow(ScreenConfigRow *scr);
+    void checkRowsAvailable();
 public slots:
     void reject() override;
     void accept() override;
@@ -66,4 +67,5 @@ private:
     int getBottomRow();
 };
 
+extern ScreenConfig *screenConfigDialog;
 #endif // SCREENCONFIG_H

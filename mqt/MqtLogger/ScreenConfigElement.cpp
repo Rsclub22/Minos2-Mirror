@@ -200,6 +200,9 @@ void ScreenConfigElement::on_removeButton_clicked()
             return;
     }
     parentRow->remove(this);
+
+    screenConfigDialog->checkAddRowButton();
+    screenConfigDialog->checkRowsAvailable();
 }
 
 void ScreenConfigElement::on_splitAboveButton_clicked()
@@ -269,13 +272,16 @@ void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
     vbl->insertWidget( pos, baseRow);
     baseRow->addLeft(nullptr);
-    if (parentDialog)
-        parentDialog->checkAddRowButton();
+
+    screenConfigDialog->checkAddRowButton();
+    screenConfigDialog->checkRowsAvailable();
+
 }
 void ScreenConfigElement::removeRow(ScreenConfigRow *r)
 {
     int pos = 0;
-    for (int i = 0; i < vbl->count(); i++)
+    int vct = vbl->count();
+    for (int i = 0; i < vct; i++)
     {
         if (vbl->itemAt(i)->widget() == r)
         {
@@ -290,10 +296,7 @@ void ScreenConfigElement::removeRow(ScreenConfigRow *r)
         taken->widget()->deleteLater();
         delete taken;
     }
-    if (parentDialog)
-    {
-        parentDialog->checkAddRowButton();
-    }
+
     else if (getIsSplitElement())
     {
         if (vbl->count() == 0)
@@ -302,6 +305,8 @@ void ScreenConfigElement::removeRow(ScreenConfigRow *r)
         }
     }
 
+    screenConfigDialog->checkAddRowButton();
+    screenConfigDialog->checkRowsAvailable();
 
 }
 void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
@@ -318,8 +323,10 @@ void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
     vbl->insertWidget( pos + 1, baseRow);
     baseRow->addLeft(nullptr);
-    if (parentDialog)
-        parentDialog->checkAddRowButton();
+
+    screenConfigDialog->checkAddRowButton();
+    screenConfigDialog->checkRowsAvailable();
+
 }
 bool ScreenConfigElement::checkOk(ScreenConfigElement *e)
 {

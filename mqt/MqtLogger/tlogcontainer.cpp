@@ -84,7 +84,6 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     sendDM = new TSendDM(this);
 
-    sendDM->subscribeApps();
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 }
@@ -134,6 +133,7 @@ bool TLogContainer::show(int argc, char *argv[])
        close();
        return false;
     }
+    sendDM->subscribeApps();
 
     if ( contestAppLoadFiles() )
     {
@@ -213,7 +213,14 @@ void TLogContainer::on_TimeDisplayTimer( )
 }
 void TLogContainer::on_ReportOverstrike(bool overstrike, BaseContestLog *econtest )
 {
-   BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+    // this can be a "double queued Qt::QueuedConnection" event, and it can get
+    // delayed until we are closing down and TContestApp has already gone
+
+    TContestApp *tca = TContestApp::getContestApp();
+    if (!tca)
+        return;
+
+   BaseContestLog * ct = tca->getCurrentContest();
    if (ct == econtest)
    {
       sblabel1->setText(overstrike ? "Overwrite" : "Insert");
@@ -536,6 +543,8 @@ QString TLogContainer::strippedName(const QString &fullFileName)
 void TLogContainer::HelpAboutActionExecute()
 {
     TAboutBox::ShowAboutBox(this, false);
+    // in case we are now running more apps
+    sendDM->subscribeApps();
 }
 void TLogContainer::HelpActionExecute()
 {
@@ -1160,6 +1169,8 @@ void TLogContainer::StartConfigActionExecute()
 {
     StartConfig configBox( this, false);
     configBox.exec();
+    // in case we are now running more apps
+    sendDM->subscribeApps();
 }
 void TLogContainer::listCompressionActionExecute()
 {

@@ -11,6 +11,7 @@
 
 #include "ScreenConfig.h"
 #include "ui_ScreenConfig.h"
+ScreenConfig *screenConfigDialog = nullptr;
 
 void ScreenConfig::buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl)
 {
@@ -46,6 +47,7 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
     curConfigName(curConfigNamep)
 {
     ui->setupUi(this);
+    screenConfigDialog = this;
 
     QSettings settings;
     QByteArray geometry = settings.value("ScreenConfig/geometry").toByteArray();
@@ -72,11 +74,13 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
 
     }
     checkAddRowButton();
+    checkRowsAvailable();
 }
 
 ScreenConfig::~ScreenConfig()
 {
     delete ui;
+    screenConfigDialog = nullptr;
 }
 
 int ScreenConfig::topRowCount()
@@ -171,6 +175,25 @@ SC ScreenConfig::getConfig()
         }
     }
     return sc;
+}
+void ScreenConfig::checkRowsAvailable()
+{
+    int rowCount = 0;
+    int vCt = vbl->count();
+    for (int i = 0; i < vCt; i++)
+    {
+        QWidget *w = vbl->itemAt(i)->widget();
+        ScreenConfigRow *row = dynamic_cast<ScreenConfigRow *>(w);
+        if (row)
+        {
+            rowCount++;
+        }
+    }
+
+    bool ra = (rowCount > 1);
+
+    ui->addColumnLeftButton->setEnabled(ra);
+    ui->addColumnRightButton->setEnabled(ra);
 }
 void ScreenConfig::on_OKButton_clicked()
 {
@@ -283,6 +306,7 @@ void ScreenConfig::on_addRowButton_clicked()
 
     baseElement->addRowAfter(dynamic_cast<ScreenConfigRow *>(wlast));
     checkAddRowButton();
+    checkRowsAvailable();
 }
 void ScreenConfig::checkAddRowButton()
 {
@@ -304,14 +328,16 @@ ScreenConfigRow *ScreenConfig::combineRows(int top, int bottom)
     split->setIsSplitElement(true);
     split->setType(sctSplit);
 
-    for (int i = top + 1; i <= bottom + 1; i++)
+    for (int i = top + 1; i <= bottom + 1; i++) // +1 as we added a new row before top
     {
         // keep taking the top of the old, and put it back at the bottom of the new
-        QLayoutItem *l = scr->parentElement->vbl->takeAt(top + 1);
+        QLayoutItem *l = vbl->takeAt(top + 1);
 
         split->vbl->addItem(l);
         // reset the parentage, or it all displays in the wrong place
         l->widget()->setParent(split);
+        ScreenConfigRow *newscr = dynamic_cast<ScreenConfigRow *>(l->widget());
+        newscr->parentElement = split;
     }
     return  newRow;
 }
@@ -319,12 +345,14 @@ void ScreenConfig::addColumnLeft(int top, int bottom)
 {
     ScreenConfigRow *newRow = combineRows(top, bottom);
     newRow->addLeft(nullptr);
+    checkRowsAvailable();
 }
 
 void ScreenConfig::addColumnRight(int top, int bottom)
 {
     ScreenConfigRow *newRow = combineRows(top, bottom);
     newRow->addRight(nullptr);
+    checkRowsAvailable();
 }
 
 int ScreenConfig::getTopRow()
@@ -356,6 +384,7 @@ int ScreenConfig::getBottomRow()
     }
     return -1;
 }
+
 void ScreenConfig::on_addColumnRightButton_clicked()
 {
     int topRow = getTopRow();

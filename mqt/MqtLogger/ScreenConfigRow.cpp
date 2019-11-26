@@ -86,8 +86,89 @@ void ScreenConfigRow::remove(ScreenConfigElement *e)
     {
         parentElement->removeRow(this);
     }
+    else if (hbl->count() == 1)
+    {
+        QWidget *w = hbl->itemAt(0)->widget();
+        ScreenConfigElement *ele = dynamic_cast<ScreenConfigElement *>(w);
+        if (ele->getIsSplitElement())
+        {
+            unsplit();
+        }
+    }
 }
+//ScreenConfigRow *ScreenConfig::combineRows(int top, int bottom)
+//{
+//    QWidget *qli = vbl->itemAt(top)->widget();
+//    ScreenConfigRow *scr = dynamic_cast<ScreenConfigRow *>(qli);
 
+//    scr->parentElement->addRowBefore(scr);
+//    ScreenConfigRow *newRow = dynamic_cast<ScreenConfigRow *>(scr->parentElement->vbl->itemAt(top)->widget());
+
+//    //new row needs a split element, to which we add our old rows
+
+//    QWidget *w = newRow->hbl->itemAt(0)->widget();
+//    ScreenConfigElement *split = dynamic_cast<ScreenConfigElement *>(w);
+//    split->setIsSplitElement(true);
+//    split->setType(sctSplit);
+
+//    for (int i = top + 1; i <= bottom + 1; i++)
+//    {
+//        // keep taking the top of the old, and put it back at the bottom of the new
+//        QLayoutItem *l = scr->parentElement->vbl->takeAt(top + 1);
+
+//        split->vbl->addItem(l);
+//        // reset the parentage, or it all displays in the wrong place
+//        l->widget()->setParent(split);
+//    }
+//    return  newRow;
+//}
+void ScreenConfigRow::unsplit()
+{
+    // we need to take the rows of the split element, and make them this rows rows
+    // we need to put in the same place as this row, in order
+
+    // "this" is the current row, containing split element and its rows
+    // parent element should be the next level up
+
+    int prowno = -1;
+    int ct = parentElement->vbl->count();
+    ScreenConfigRow *rl = nullptr;
+    QWidget *pw = nullptr;
+    QWidget *wl = nullptr;
+    ScreenConfigElement *pelement = nullptr;
+    for (int i = 0; i < ct; i++)
+    {
+        wl = parentElement->vbl->itemAt(i)->widget();
+        if (wl == this)
+        {
+            rl = dynamic_cast<ScreenConfigRow *>(wl);
+            pw = rl->parentWidget();
+            pelement = rl->parentElement;
+            prowno = i;
+            break;
+        }
+    }
+
+    QWidget *we = hbl->itemAt(0)->widget();
+    ScreenConfigElement *splitele = dynamic_cast<ScreenConfigElement *>(we);    // and this is its split widget
+
+    int inc = 1;
+    while (QLayoutItem *l = splitele->vbl->takeAt(0)) // ele->parentElement
+    {
+        parentElement->vbl->insertItem(prowno + inc, l);
+        QWidget *w = l->widget();
+        ScreenConfigRow *scr = dynamic_cast<ScreenConfigRow *>(w);
+        scr->parentElement = pelement;
+        w->setParent(pw);
+        w->setVisible(true);        // why isn't it visible?
+        inc++;
+    }
+    // and get rid of the split element/row (which is "this" so use deleteLater)
+    QLayoutItem *item = parentElement->vbl->takeAt(prowno);
+    QWidget* widget = item->widget();
+    widget->deleteLater();
+    delete item;
+}
 ScreenConfigElement *ScreenConfigRow::addRight(ScreenConfigElement *e)
 {
     int pos = 0;
