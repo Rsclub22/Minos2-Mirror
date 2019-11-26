@@ -767,7 +767,7 @@ void QtTelnetPrivate::sendString(const QString &str)
     if (!connected || str.length() == 0)
         return;
 
-    trace(QString("sendString: %1").arg(str));
+//    trace(QString("sendString: %1").arg(str));
     socket->write(str.toLocal8Bit());
 }
 
@@ -783,7 +783,7 @@ void QtTelnetPrivate::sendCommand(const QByteArray &command)
             return;
         addSent(operation, option);
     }
-    trace(QString("sendCommand: %1").arg(QString(command.toHex(' '))));
+//    trace(QString("sendCommand: %1").arg(QString(command.toHex(' '))));
     socket->write(command);
 }
 
@@ -1025,14 +1025,14 @@ int QtTelnet::sendData(const QString &data)
 
     QByteArray str = data.toLocal8Bit();
     charSent = d->socket->write(str);
-    QString traceMsg = QString(str).remove("\r");
-    if (traceMsg.endsWith("\n"))
-    {
-        traceMsg.chop(1);
-    }
+//    QString traceMsg = QString(str).remove("\r");
+//    if (traceMsg.endsWith("\n"))
+//    {
+//        traceMsg.chop(1);
+//    }
 
-    trace(QString("sendData: %1").arg(traceMsg));
-    trace(QString("sendData hex: %1").arg(QString(str.toHex(' '))));
+//    trace(QString("sendData: %1").arg(traceMsg));
+//    trace(QString("sendData hex: %1").arg(QString(str.toHex(' '))));
 
     if (charSent == str.count())
     {
@@ -1155,7 +1155,7 @@ void QtTelnet::sendSync()
                         // sending the SYNC sequence.
     QByteArray oob(Common::DM, 1);
     d->socket->write(oob);
-    trace(QString("sendSync: %1").arg(QString(oob.toHex())));
+//    trace(QString("sendSync: %1").arg(QString(oob.toHex())));
 
 //    int s = d->socket->socketDescriptor();
 //    char tosend = static_cast<char>(Common::DM);
