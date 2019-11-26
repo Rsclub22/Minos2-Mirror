@@ -16,7 +16,6 @@ class ScreenConfigRow : public QFrame
 {
     Q_OBJECT
 
-    bool isTopLevelRow();
     void unsplit();
 public:
     Ui::ScreenConfigRow *ui;

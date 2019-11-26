@@ -31,10 +31,10 @@ public:
     bool checkOk(ScreenConfigElement *e);
 
     void checkAddRowButton();
-    void addColumnLeft(int top, int bottom);
-    void addColumnRight(int top, int bottom);
-    bool isTopLevelRow(ScreenConfigRow *scr);
-    void checkRowsAvailable();
+    void addColumnLeft(ScreenConfigElement * e, int top, int bottom);
+    void addColumnRight(ScreenConfigElement * e, int top, int bottom);
+    void procRowSel(ScreenConfigRow *row, QVector<ScreenConfigRow *> &sel);
+    QVector<ScreenConfigRow *> getSelected();
 public slots:
     void reject() override;
     void accept() override;
@@ -62,9 +62,9 @@ private:
     void buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl);
     void procRow(ScreenConfigRow *row, SCRow &scrow);
     bool checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e, int &auxCount);
-    ScreenConfigRow *combineRows(int top, int bottom);
-    int getTopRow();
-    int getBottomRow();
+    ScreenConfigRow *combineRows(ScreenConfigElement * e, int top, int bottom);
+    int getTopRow(ScreenConfigElement * e);
+    int getBottomRow(ScreenConfigElement *e);
 };
 
 extern ScreenConfig *screenConfigDialog;

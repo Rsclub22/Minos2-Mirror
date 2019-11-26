@@ -133,11 +133,6 @@ ScreenConfigElement::~ScreenConfigElement()
     delete ui;
 }
 
-bool ScreenConfigElement::isTopLevelRow(ScreenConfigRow *scr)
-{
-    return parentDialog && parentDialog->isTopLevelRow(scr);
-}
-
 void ScreenConfigElement::setType(SCType t)
 {
     ui->elementTypeCombo->setCurrentText(getScreenTypeString(t));
@@ -202,7 +197,6 @@ void ScreenConfigElement::on_removeButton_clicked()
     parentRow->remove(this);
 
     screenConfigDialog->checkAddRowButton();
-    screenConfigDialog->checkRowsAvailable();
 }
 
 void ScreenConfigElement::on_splitAboveButton_clicked()
@@ -274,7 +268,6 @@ void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
     baseRow->addLeft(nullptr);
 
     screenConfigDialog->checkAddRowButton();
-    screenConfigDialog->checkRowsAvailable();
 
 }
 void ScreenConfigElement::removeRow(ScreenConfigRow *r)
@@ -306,7 +299,6 @@ void ScreenConfigElement::removeRow(ScreenConfigRow *r)
     }
 
     screenConfigDialog->checkAddRowButton();
-    screenConfigDialog->checkRowsAvailable();
 
 }
 void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
@@ -325,8 +317,6 @@ void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
     baseRow->addLeft(nullptr);
 
     screenConfigDialog->checkAddRowButton();
-    screenConfigDialog->checkRowsAvailable();
-
 }
 bool ScreenConfigElement::checkOk(ScreenConfigElement *e)
 {
