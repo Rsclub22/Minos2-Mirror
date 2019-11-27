@@ -30,7 +30,7 @@ public:
 
     bool checkOk(ScreenConfigElement *e);
 
-    void checkAddRowButton();
+    void checkAddButtons();
     void addColumnLeft(ScreenConfigElement * e, int top, int bottom);
     void addColumnRight(ScreenConfigElement * e, int top, int bottom);
     void procRowSel(ScreenConfigRow *row, QVector<ScreenConfigRow *> &sel);

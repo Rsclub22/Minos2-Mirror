@@ -73,7 +73,7 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
         buildRows(sc.baseElement->rows, baseElement, vbl);
 
     }
-    checkAddRowButton();
+    checkAddButtons();
 }
 
 ScreenConfig::~ScreenConfig()
@@ -330,11 +330,13 @@ void ScreenConfig::on_addRowButton_clicked()
     }
 
     baseElement->addRowAfter(dynamic_cast<ScreenConfigRow *>(wlast));
-    checkAddRowButton();
+    checkAddButtons();
 }
-void ScreenConfig::checkAddRowButton()
+void ScreenConfig::checkAddButtons()
 {
     ui->addRowButton->setVisible(vbl->count() == 0);
+    ui->addColumnLeftButton->setVisible(vbl->count() != 0);
+    ui->addColumnRightButton->setVisible(vbl->count() != 0);
 }
 
 ScreenConfigRow *ScreenConfig::combineRows(ScreenConfigElement * e, int top, int bottom)
