@@ -3,7 +3,7 @@ C:
 setlocal
 
 set QtTools=C:\Qt\Tools\mingw730_32\bin
-set QtKit="C:\Qt\5.12.5\mingw73_32\bin"
+set QtKit="C:\Qt\5.12.6\mingw73_32\bin"
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Tools\Licenses"
 
@@ -62,6 +62,7 @@ copy %MROOT%\build\MqtChat\release\MqtChat.exe Bin
 copy %MROOT%\build\MqtCluster\release\MqtCluster.exe Bin
 REM copy %MROOT%\build\MqtControl\release\MqtControl.exe Bin
 REM copy %MROOT%\build\MqtKeyer\release\MqtKeyer.exe Bin
+copy %MROOT%\build\MqtKeyer\release\MqtKSTClient.exe Bin
 copy %MROOT%\build\MqtLogger\release\MqtLogger.exe Bin
 copy %MROOT%\build\MqtMonitor\release\MqtMonitor.exe Bin
 copy %MROOT%\build\MqtRigControl\release\MqtRigControl.exe Bin
