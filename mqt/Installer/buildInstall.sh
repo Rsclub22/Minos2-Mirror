@@ -53,7 +53,7 @@ if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 	cp -r ../Minos2/build/MqtCluster/MqtCluster.app Bin
 	cp -r ../Minos2/build/MqtControl/MqtControl.app Bin
 	cp -r ../Minos2/build/MqtKeyer/MqtKeyer.app Bin
-	cp -r ../Minos2/build/MqtKeyer/MqtKSTClient.app Bin
+	cp -r ../Minos2/build/MqtKSTClient/MqtKSTClient.app Bin
 	cp -r ../Minos2/build/MqtLogger/MqtLogger.app Bin
 	cp -r ../Minos2/build/MqtMonitor/MqtMonitor.app Bin
 	cp -r ../Minos2/build/MqtRigControl/MqtRigControl.app Bin
@@ -66,7 +66,7 @@ else
 	cp ../Minos2/build/MqtCluster/MqtCluster Bin
 	cp ../Minos2/build/MqtControl/MqtControl Bin
 	cp ../Minos2/build/MqtKeyer/MqtKeyer Bin
-	cp ../Minos2/build/MqtKeyer/MqtKSTClient Bin
+	cp ../Minos2/build/MqtKSTClient/MqtKSTClient Bin
 	cp ../Minos2/build/MqtLogger/MqtLogger Bin
 	cp ../Minos2/build/MqtMonitor/MqtMonitor Bin
 	cp ../Minos2/build/MqtRigControl/MqtRigControl Bin
