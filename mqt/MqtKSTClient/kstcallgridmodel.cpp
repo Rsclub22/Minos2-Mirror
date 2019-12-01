@@ -1,4 +1,20 @@
 #include "kstcallgridmodel.h"
+
+// kst2me sort by
+// new before old
+// locator
+// distance
+// call
+bool KstUser::operator< ( const KstUser& rhs ) const
+{
+    // p1 is from list; p2 is the one being searched for
+
+    return call < rhs.call;
+}
+bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
+{
+    return (*i<*j);
+}
 KstCallGridModel::KstCallGridModel()
 {
 
@@ -9,7 +25,7 @@ void KstCallGridModel::reset()
     callVector->clear();
     endResetModel();
 }
-void KstCallGridModel::setCallVector(QSharedPointer<QStringList > pcallVector)
+void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > pcallVector)
 {
     beginResetModel();
     callVector = pcallVector;
@@ -38,7 +54,7 @@ int KstCallGridModel::rowCount( const QModelIndex &/*parent*/ ) const
     return callVector->count();
 }
 
-void KstCallGridModel::appendRow(QString call)
+void KstCallGridModel::appendRow(QSharedPointer<KstUser> call)
 {
     beginInsertRows(QModelIndex(), rowCount() , rowCount());
     callVector->push_back(call);
@@ -59,9 +75,18 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::DisplayRole)
     {
-        QString crec = callVector->at(row);
+        QSharedPointer<KstUser> crec = callVector->at(row);
+        QString call = crec->call;
+        if (crec->away)
+            call = "(" + call + ")";
 
-        return crec;
+        return call;
+    }
+    if (role == Qt::UserRole)
+    {
+        QSharedPointer<KstUser> crec = callVector->at(row);
+        QString call = crec->call;
+        return call;
     }
     return QVariant();
 }
@@ -103,8 +128,8 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     if (!cgm || sourceRow >= cgm->rowCount())
         return false;
 
-    QString call = cgm->callVector->at(sourceRow);
-    if (call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+    QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
+    if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
 
     return false;
@@ -116,3 +141,23 @@ void KstCallGridSortFilterModel::setFilterString(QString f)
     invalidateFilter();
 }
 
+bool KstCallGridSortFilterModel::lessThan(const QModelIndex &left,
+                      const QModelIndex &right) const
+{
+    //Model Indices are to the SOURCE model
+
+    int lrow = left.row();
+    int rrow = right.row();
+
+    if (lrow >= sourceModel()->rowCount())
+        return false;
+    if (rrow >= sourceModel()->rowCount())
+        return false;
+
+    QString ws1;
+    QString ws2;
+    ws1 = sourceModel()->data(left, Qt::UserRole).toString();
+    ws2 = sourceModel()->data(right, Qt::UserRole).toString();
+
+    return ws1 < ws2;
+}

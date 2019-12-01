@@ -27,7 +27,7 @@ class KSTMainWindow : public QMainWindow
     KstCallGridModel kstCallModel;
     KstCallGridSortFilterModel kstCallFilterModel;
 
-    QSharedPointer<QStringList > callVector;
+    QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
 
 
     QSharedPointer<HtmlDelegate> meepDelegate;
@@ -38,7 +38,7 @@ class KSTMainWindow : public QMainWindow
 
     QString serverName;
     QString serverPort;
-    QString callsign;
+    QString myCallsign;
     QString password;
     QString kstChatSelection;
     bool autoConnect = false;
@@ -49,6 +49,7 @@ class KSTMainWindow : public QMainWindow
 
     bool userLoggedIn = false;
     bool setupComplete = false;
+    bool bandChooseComplete = false;
 
 public:
     KSTMainWindow(QWidget *parent = nullptr);

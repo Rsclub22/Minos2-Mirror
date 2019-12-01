@@ -7,6 +7,20 @@
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
+class KstUser
+{
+public:
+    QString call;
+    QString loc;
+    QString name;
+    bool away = false;
+    bool notFound = false;
+
+    bool operator< ( const KstUser& rhs ) const;
+
+};
+extern bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j);
+
 class KstCallGridModel: public QAbstractItemModel
 {
     Q_OBJECT
@@ -15,10 +29,10 @@ class KstCallGridModel: public QAbstractItemModel
         KstCallGridModel();
         virtual ~KstCallGridModel() override
         {}
-        QSharedPointer<QStringList> callVector;
+        QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
         QSharedPointer<HtmlDelegate> delegate;
 
-        void setCallVector(QSharedPointer<QStringList > pcallVector);
+        void setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > pcallVector);
         QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
         QVariant headerData( int section, Qt::Orientation orientation,
                              int role = Qt::DisplayRole ) const Q_DECL_OVERRIDE;
@@ -31,7 +45,7 @@ class KstCallGridModel: public QAbstractItemModel
 
         int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
 
-        void appendRow(QString kstmsg);
+        void appendRow(QSharedPointer<KstUser> kstmsg);
         void insertRow(int row);
         void reset();
 };
@@ -42,6 +56,8 @@ class KstCallGridSortFilterModel: public QSortFilterProxyModel
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
+protected:
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };
 
 #endif // KSTCALLGRIDMODEL_H
