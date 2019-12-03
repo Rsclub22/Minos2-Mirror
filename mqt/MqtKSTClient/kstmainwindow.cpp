@@ -369,7 +369,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kst->fullLine = atj;
 
         QString unixTime = sl[2];
-        QDateTime dtg = QDateTime::fromSecsSinceEpoch(unixTime.toLongLong());
+        QDateTime dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
         kst->dtg = dtg.toString("HH:mm");
 
         kst->call = sl[3];
@@ -401,7 +401,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kst->fullLine = atj;
 
         QString unixTime = sl[2];
-        QDateTime dtg = QDateTime::fromSecsSinceEpoch(unixTime.toLongLong());
+        QDateTime dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
         kst->dtg = dtg.toString("HH:mm");
 
         kst->call = sl[3];
