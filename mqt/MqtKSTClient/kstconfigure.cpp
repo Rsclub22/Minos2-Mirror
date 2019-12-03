@@ -16,6 +16,7 @@ int KSTConfigure::exec()
     ui->callsignEdit->setText(username);
     ui->passwordEdit->setText(password);
 
+    ui->locatorEdit->setText(locator);
     ui->autoConnect->setChecked(autoConnect);
 
     return QDialog::exec();
@@ -37,8 +38,9 @@ void KSTConfigure::on_OKButton_clicked()
     username = ui->callsignEdit->text();
     password = ui->passwordEdit->text();
     autoConnect = ui->autoConnect->isChecked();
+    locator = ui->locatorEdit->text().toUpper();
 
-    if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty())
+    if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty() || locator.isEmpty())
         return;
 
     accept();

@@ -4,7 +4,7 @@
 #include "base_pch.h"
 
 #include <QMainWindow>
-#include "qttelnet.h"
+#include "QTcpSocket"
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
 
@@ -19,7 +19,6 @@ class KSTMainWindow : public QMainWindow
     KstMessageGridModel kstMessageModel;
     KstMessageGridSortFilterModel kstMessageFilterModel;
 
-    KstMessageGridModel kstMeepModel;
     KstMessageGridSortFilterModel kstMeepFilterModel;
 
     QSharedPointer<QVector <QSharedPointer<KstMessageLine> > > messageVector;
@@ -34,22 +33,26 @@ class KSTMainWindow : public QMainWindow
     QSharedPointer<HtmlDelegate> messageDelegate;
     QSharedPointer<HtmlDelegate> CSDelegate;
 
-    QtTelnet* tnclient;
+    QTcpSocket* kstclient;
 
     QString serverName;
     QString serverPort;
     QString myCallsign;
     QString password;
     QString kstChatSelection;
+    QString myLoc;
     bool autoConnect = false;
+
+    bool kstconnected = false;
+    bool started = false;
 
     QString msgbuf;
     QStringList filelines;
     int curline = 0;
 
-    bool userLoggedIn = false;
-    bool setupComplete = false;
-    bool bandChooseComplete = false;
+    void analyseKstMessage(QString atj);
+    void reconnect();
+    void connectToHost();
 
 public:
     KSTMainWindow(QWidget *parent = nullptr);
@@ -57,6 +60,7 @@ public:
 
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
+    virtual void changeEvent( QEvent* e ) override;
 
 private slots:
 
@@ -75,15 +79,12 @@ private slots:
     void on_sectionResized(int, int, int);
     void on_CSTable_clicked(const QModelIndex &index);
 
-    void connectToHost();
-    void connectionEstab();
+    void connected();
+    void disconnected();
     void connectionError(QAbstractSocket::SocketError error);
-    void logIn();
-    void loggedOut();
-    void messageRx(QString msg);
+    void onReadyRead();
 
     void on_configureButton_clicked();
-
 
     void on_genmsgButton_clicked();
 
@@ -101,7 +102,6 @@ private slots:
 
 private:
     Ui::KSTMainWindow *ui;
-    void analyseTelnetMessage(QString atj);
-    void reconnect();
+    void sendKST(QString msg);
 };
 #endif // KSTMAINWINDOW_H

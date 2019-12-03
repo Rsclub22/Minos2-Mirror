@@ -9,43 +9,6 @@
 #include "ui_kstmainwindow.h"
 
 //==========================================================================================
-// /help command via telnet
-
-// 14:18:29.314 sendData: /help
-// 14:18:29.314 sendData hex: 2f 68 65 6c 70 0d 0a
-// 14:18:29.335 messageRx: Web http://www.on4kst.com
-// /Help              The list of the commands available.
-// /CHAT  value       Login into another chat. Values are 50 50R2 50R3 144 144R2 144R3 GHZ EME HF KHZ WARC.
-// /CQ    call msg    To send a public msg seen in highlight by the callsign.
-// /DX    qrg call [info] To send a DX spot.
-// /SET   ANN         Allow announce messages to come out on your terminal.
-// /SET   DX          Allow DX messages to come out on your terminal.
-// /SET   DXCLX       Allow DX messages to come out on your terminal at CLX format.
-// /SET   HERE        Tell the system you are present at your terminal.
-// /SET   MYCLx value To give the cluster where to spot the DX.
-// /SET   NAme value  Set your name.
-// /SET   QRA value   Set your QRA Grid locator.
-// /SET   QRG value   Filter the DX spots. Values are 50 70 144 432 GHZ
-//                   e.g /SET QRG 50 144 to accept the 50 and 144 MHz dx spots.
-// /SET   WWC         Allow World Wide Converse messages to come out on your terminal.
-// /SHow  CLx         The list of the available DX clusters.
-// /SHow  CONFig      Show your personal settings.
-// /SHow  DX [nbr]    Get the last DX spots (QRG as your filter settings).
-// /SHow  MSG [nbr]   Get the last chat messages.
-// /SHow  MYCLx       To show the DX cluster where the DX spot is sent.
-// /SHow  LOC value   To show the locator of a station with QRB and QTF.
-// /SHow  NODes       To show the way to access to
-// (message broken into parts) 14:18:29.335 messageRx:  the chat from packet radio.
-// /SHow  USer [call] Show the users connected to this chat.
-// /UNSET ANN         Stop announce messages coming out on your terminal.
-// /UNSET DX          Stop DX messages coming out on your terminal.
-// /UNSET HERE        Tell the system you are absent from your terminal.
-// /UNSET QRG         Remove the QRG filter on DX spots.
-// /UNSET WWC         Stop World Wide Converse messages coming out on your terminal.
-// /UPDTLOC call loc  To ask to the sysop to update the locator of a station.
-// /Quit              Exit from the chat.
-
-//==========================================================================================
 KSTMainWindow::KSTMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::KSTMainWindow)
@@ -73,9 +36,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->messageTable->setModel(&kstMessageFilterModel);
     ui->messageTable->horizontalHeader()->setStretchLastSection(true);
 
-    kstMeepModel.setChatVector(messageVector);
-
-    kstMeepFilterModel.setSourceModel(&kstMeepModel);
+    kstMeepFilterModel.setSourceModel(&kstMessageModel);
     ui->meepTable->setModel(&kstMeepFilterModel);
     ui->meepTable->horizontalHeader()->setStretchLastSection(true);
 
@@ -91,7 +52,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
     CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
 
-    kstMeepModel.delegate = meepDelegate;
+    // these are used for sizing when adjust to content
     kstMessageModel.delegate = messageDelegate;
     kstCallModel.delegate = CSDelegate;
 
@@ -110,7 +71,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     verticalHeader->setVisible(false);
 
     QSize ms = messageDelegate->docSize("XX");
-    verticalHeader->setDefaultSectionSize(ms.height());
+    verticalHeader->setDefaultSectionSize(ms.height() *4/5);
     verticalHeader->setMinimumSectionSize(10);
 
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
@@ -140,21 +101,20 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect( ui->meepTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
 
-    tnclient = new QtTelnet(this);
+    kstclient = new QTcpSocket(this);
 
-    connect(tnclient, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
-    //connect(tnclient, SIGNAL(connected(bool)), this, SLOT(connected(bool)));
-    connect(tnclient, SIGNAL(loginRequired()), this, SLOT(logIn()));
-    connect(tnclient, SIGNAL(connectionError(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
-    connect(tnclient, SIGNAL(loggedOut()), this, SLOT(loggedOut()));
-    connect(tnclient, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
+    connect(kstclient, SIGNAL(connected()), this, SLOT(connected()));
+    connect(kstclient, SIGNAL(disconnected()), this, SLOT(disconnected()));
+    connect(kstclient, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
+    connect(kstclient, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 
     serverName = settings.value("hostname", "www.on4kst.info").toString();
-    serverPort = settings.value("port", "23000").toString();
+    serverPort = settings.value("port", "23001").toString();
     myCallsign = settings.value("username", "").toString();
     password = settings.value("password", "").toString();
     kstChatSelection = settings.value("service", "1").toString();
     autoConnect = settings.value("autoConnect", false).toBool();
+    myLoc = settings.value("locator", "").toString();
 
     QStringList services =
     {"50/70 MHz..............1",
@@ -173,6 +133,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     int sel = kstChatSelection.toInt();
     ui->serviceCombo->setCurrentIndex(sel - 1);
 
+    started = true;
 
     if (autoConnect)
         connectToHost();
@@ -195,21 +156,34 @@ void KSTMainWindow::moveEvent(QMoveEvent * event)
     settings.setValue("geometry/Main", saveGeometry());
     QWidget::moveEvent(event);
 }
+void KSTMainWindow::changeEvent( QEvent* e )
+{
+    if( e->type() == QEvent::WindowStateChange )
+    {
+        QSettings settings;
+        settings.setValue("geometry/Main", saveGeometry());
+    }
+}
 void KSTMainWindow::connectToHost()
 {
-    ui->includeLabel->setText("Including " + myCallsign);
-    kstMeepFilterModel.setFilterString(myCallsign);
-    tnclient->login(QString("%1\r\n").arg(myCallsign), QString(password) + "\r\n");
-    tnclient->connectToHost(serverName , serverPort.toInt());
-
+    kstCallModel.locator = myLoc;
+    kstclient->connectToHost(serverName, serverPort.toUShort());
 }
 
 
-void KSTMainWindow::connectionEstab()
+void KSTMainWindow::connected()
 {
     trace("connection to ON4KST established");
-    tnclient->login(QString("%1\r\n").arg(myCallsign), QString(password) + "\r\n");
+    ui->includeLabel->setText("Including " + myCallsign);
+    kstMeepFilterModel.setFilterString(myCallsign);
+    kstMessageModel.setCacheSize();
     ui->connectButton->setText("Disconnect");
+}
+
+
+void KSTMainWindow::disconnected()
+{
+    trace("Disconnected from ON4KST");
 }
 
 void KSTMainWindow::connectionError(QAbstractSocket::SocketError error)
@@ -218,67 +192,29 @@ void KSTMainWindow::connectionError(QAbstractSocket::SocketError error)
     trace(msg);
 }
 
-
-
-void KSTMainWindow::logIn()
+void KSTMainWindow::onReadyRead()
 {
-    kstMessageModel.setCacheSize();
+    QByteArray b = kstclient->readAll();
+    QString msg = QString(b);
 
-    QString msg = QString("Login Start - Send logon message\n");
-    trace(msg);
-    //tnclient->login(QString("%1\r\n").arg("G0GJV"), "62rosehill");
-
-}
-
-void KSTMainWindow::loggedOut()
-{
-    QString msg = QString("Logged Out of ON4KST");
-    trace(QString(msg));
-    userLoggedIn = false;
-    setupComplete = false;
-    bandChooseComplete = false;
-    ui->connectButton->setText("Connect");
-}
-
-void KSTMainWindow::messageRx(QString msg)
-{
     QString traceMsg = msg.remove("\r");
     if (traceMsg.endsWith("\n"))
     {
         traceMsg.chop(1);
     }
     trace(QString("messageRx: %1").arg(traceMsg));
-    if (setupComplete)
-    {
-        // break into lines...
-        msgbuf.append(msg);
 
-        int p = msgbuf.indexOf("\n");
-        while (p >= 0)
-        {
-            QString m = msgbuf.left(p + 1);
-            msgbuf = msgbuf.mid(p + 1);
-            p = msgbuf.indexOf("\n");
+    // break into lines...
+    msgbuf.append(msg);
 
-            analyseTelnetMessage(m);
-        }
-    }
-    else
+    int p = msgbuf.indexOf("\n");
+    while (p >= 0)
     {
-        if (!userLoggedIn)
-        {
-            if (msg.indexOf("Chat selection") >= 0)
-                 userLoggedIn = true;
-        }
-        if (userLoggedIn && !setupComplete)
-        {
-            int colon = msg.indexOf(":");
-            if (colon >= 0)
-            {
-                tnclient->sendData(kstChatSelection + "\r\n");
-                setupComplete = true;
-            }
-        }
+        QString m = msgbuf.left(p + 1);
+        msgbuf = msgbuf.mid(p + 1);
+        p = msgbuf.indexOf("\n");
+
+        analyseKstMessage(m);
     }
 }
 bool loadStringListFromFile (QStringList &list, const QString fname )
@@ -344,7 +280,7 @@ void KSTMainWindow::on_analyseButton_clicked()
                     // NB a lambda function
                     if (curline < filelines.size())
                     {
-                        if ( !filelines.at( curline ).isEmpty() && filelines.at( curline ) [ 0 ] != '#' )
+                        if ( !filelines.at( curline ).isEmpty() )
                         {
                             QString atj = QString::fromLatin1(filelines.at( curline ).toLatin1());
                             int p = atj.indexOf("messageRx") ;
@@ -352,7 +288,7 @@ void KSTMainWindow::on_analyseButton_clicked()
                             {
                                 atj = atj.mid( p + QString("messageRx: ").size());
                             }
-                            analyseTelnetMessage(atj);
+                            analyseKstMessage(atj);
                         }
                         curline++;
                     }
@@ -371,7 +307,12 @@ void KSTMainWindow::on_analyseButton_clicked()
         }
     }
 }
-void KSTMainWindow::analyseTelnetMessage(QString atj)
+void KSTMainWindow::sendKST(QString msg)
+{
+        kstclient->write((msg + "\r\n").toLocal8Bit());
+        trace("Send to KST: " + msg);
+}
+void KSTMainWindow::analyseKstMessage(QString atj)
 {
 //    18:58:18.640 messageRx: 1858Z ES4RM Sergei> (OH3DP) i am on 1558
 //    18:58:44.037 messageRx: 1858Z OH3DP Hannu 2m, 70, 23> 1000
@@ -379,175 +320,285 @@ void KSTMainWindow::analyseTelnetMessage(QString atj)
 
     atj = atj.trimmed();
 
-    QStringList sl;
-    sl = atj.split(">");
-    if (sl.size() >= 2)
+    if (!kstconnected && atj.contains(" login "))
     {
-        if (sl[0].endsWith(" chat"))
-        {
-            if (sl[1].isEmpty())
-            {
-                if (!bandChooseComplete)
-                {
-                    bandChooseComplete = true;
+//        11:28:01.769 Client read : LOGINC|G0GJV|62rosehill|2|KST2Me 1.2.0.0
+//        11:28:01.769 Client read : |20|20|1|0|0|
 
-                    // 1st prompt - just logged in
-                        QString t = sl[0].mid(6);
-                        setWindowTitle("Minos KST Client : " + t);
+        QString loginMessage = "LOGINC|"
+                + myCallsign
+                + "|" + password
+                + "|" + kstChatSelection
+                + "|" + "Minos 0.0.0.999"   // client software version
+                + "|20" // past messages
+                + "|20"  // past DX/map messages
+                + "|1"  // users list/update flags - If the users list/update flags = 0, no Uxx frames will be sent (even after the login)
+                + "|0"   // last Unix timestamp for messages
+                + "|0"   // last Unix timestamp for dx/map
+                + "|";
 
-                        tnclient->sendData(
-                                           "/set ann\r\n"   // announce messages - not useful
-                                           "/unset dx\r\n"    // dx messages - cluster - not useful
-                                           "/sh us\r\n"     // users
-                                           // "/sh msg 20\r\n" // last 20 messages - reversed, unfortunately
-                                           );
-                        // We seem to get the next prompt when we have all the info
-                }
-                return;
-            }
-            // it is a telnet prompt, so follows a command
+        sendKST(loginMessage);
 
-            sl.removeAt(0); // get rid of the prompt
-        }
-    }
+        //Optional allowed frames between LOGINC and SDONE are SDXQ, SMAQ, RDXQ and RMAQ.
+        // we don't need them - yet
 
-    if (sl.size() == 1)
-    {
-        // no chat message - it will be a command response or the initial blurb
-        // e.g. "1337Z DX de ve1sky: 144174.0 W1VD tu FT8"
-        // or G0GJV          IO91OK Mike io91
 
-        if (sl[0].indexOf(" DX de ") >= 0 || (sl[0].indexOf(" ALL de ") >= 0))
-        {
-            // DX cluster message
-            return;
-        }
-
-        QSharedPointer< KstUser > user(new KstUser());
-
-        int part = 0;
-        int pstart = 0;
-
-        for (int i = 0; i < sl[0].length(); i++)
-        {
-            if (sl[0][i] == " ")
-            {
-                QString p = sl[0].mid(pstart, i - pstart);
-
-                while (sl[0][i] == " " && i < sl[0].length())
-                {
-                    i++;
-                }
-                if (part == 0)
-                {
-                    user->call = p;
-                    if (user->call.startsWith("(") && user->call.endsWith(")"))
-                    {
-                        user->away = true;
-                        user->call = user->call.mid(1, user->call.size() - 2);
-                    }
-                    Callsign cs(user->call);
-                    cs.validate();
-                    if (cs.valRes == CS_OK)
-                    {
-                        pstart = i;
-                        part = 1;
-                    }
-                    else
-                        return;
-                }
-                else if (part == 1)
-                {
-                    user->loc = p;
-                    user->name = sl[0].mid(pstart);
-                    break;
-                }
-            }
-        }
-
-        if (!user->call.isEmpty())
-        {
-            if (!std::binary_search(callVector->begin(), callVector->end(), user, KstUserCompare))
-            {
-                int row = (std::lower_bound(callVector->begin(), callVector->end(), user, KstUserCompare ) - callVector->begin());
-                callVector->insert(row, user);
-                kstCallModel.insertRow(row);
-            }
-        }
-
+        kstconnected = true;
         return;
     }
 
+    QStringList sl;
+    sl = atj.split("|");
 
-    QSharedPointer<KstMessageLine> kst(new KstMessageLine());
-
-    kst->fullLine = atj;
-
-    int part = 0;
-    int pstart = 0;
-    for (int i = 0; i < sl[0].length(); i++)
+    if (sl[0] == "LOGSTAT")
     {
-        if (sl[0][i] == " ")
-        {
-            QString p = sl[0].mid(pstart, i - pstart);
+        // user config
+//        LOGSTATS if LOGINC:
+//        LOGSTAT|100|2|20040703a|239E038F12E685FB75C6C03A79A1DE8A|11|Alain/telnet|Stiévenart|JO20HI|on4kst@skynet.be|
+//        LOGSTAT|100|chat id|client software version|session key|config|first name|last name|locator|email|
+        QString sdone = "SDONE|" + kstChatSelection +"|";
+        sendKST(sdone);
+    }
+    else if (sl[0] == "CR")
+    {
+        // message frame at login
+        // CR|chat id|Unix time|callsign|firstname|destination|msg|highlight|
 
-            while (sl[0][i] == " " && i < sl[0].length())
-            {
-                i++;
-            }
-            pstart = i;
-            if (part == 0)
-            {
-                kst->dtg = p;
-                part++;
-            }
-            else if (part == 1)
-            {
-                kst->call = p;
-                kst->name = sl[0].mid(pstart);
-                break;
-            }
+        QSharedPointer<KstMessageLine> kst(new KstMessageLine());
+
+        kst->fullLine = atj;
+
+        QString unixTime = sl[2];
+        QDateTime dtg = QDateTime::fromSecsSinceEpoch(unixTime.toLongLong());
+        kst->dtg = dtg.toString("HH:mm");
+
+        kst->call = sl[3];
+        kst->name = sl[4];
+
+        kst->message = sl[6];
+        kst->otherCall = sl[7];
+        if (kst->otherCall == "0")
+            kst->otherCall.clear();
+
+        messageVector->push_front(kst);
+
+    }
+    else if (sl[0] == "CE")
+    {
+        // end of CR frames
+        kstMessageModel.setChatVector(messageVector);
+
+        ui->messageTable->scrollToBottom();
+        ui->meepTable->scrollToBottom();
+    }
+    else if (sl[0] == "CH")
+    {
+        // message frame after login
+        // CH|chat id|date|callsign|firstname|destination|msg|highlight|
+
+        QSharedPointer<KstMessageLine> kst(new KstMessageLine());
+
+        kst->fullLine = atj;
+
+        QString unixTime = sl[2];
+        QDateTime dtg = QDateTime::fromSecsSinceEpoch(unixTime.toLongLong());
+        kst->dtg = dtg.toString("HH:mm");
+
+        kst->call = sl[3];
+        kst->name = sl[4];
+        // 5 is destination
+        kst->message = sl[6];
+        kst->otherCall = sl[7];
+        if (kst->otherCall == "0")
+            kst->otherCall.clear();
+
+        kstMessageModel.appendLastRow(kst);
+
+        ui->messageTable->scrollToBottom();
+        ui->meepTable->scrollToBottom();
+
+    }
+    else if (sl[0] == "DL")
+    {
+        // DX frames for the DX window
+    }
+    else if (sl[0] == "DE")
+    {
+        // end of DX frames
+    }
+    else if (sl[0] == "ML")
+    {
+        // DX frames for the map window
+    }
+    else if (sl[0] == "ME")
+    {
+        // end of ML frames
+    }
+    else if (sl[0] == "DM")
+    {
+        // DX frames for the DX and the MAP windows
+    }
+    else if (sl[0] == "DF")
+    {
+        // end of DM frames
+    }
+    else if (sl[0] == "LOC")
+    {
+        //Locator update
+        // LOC|Unix time|callsign|locator|
+    }
+
+    else if (sl[0] == "UA0")
+    {
+        //    User frame at login
+//    UA0|chat id|callsign|firstname|locator|state|
+//    UA0|2|DK5EW|Erwin MMMonVHF|JN47NX|0|
+//    UA0|2|DK5OX|Boris 6/2m|JN59MO|2|
+//    UA0|2|DL3JIN|Peter|JO60LX|1|
+//    User state:
+//        bit 0: the user is away -displayed "(callsign)" -
+//        bit 1: logged within the last 5 minutes
+//        bit 2: sysop
+//        bit 3: it would be not used (user with privileges)
+
+        QSharedPointer<KstUser> test(new KstUser());
+        test->call = sl[2];
+        test->name = sl[3];
+        test->loc = sl[4];
+        QString state = sl[5];
+        int istate = state.toInt();
+        if (istate & 1)
+            test->away = true;
+        if (istate & 2)
+            test->recent = true;
+
+        if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+        {
+            int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+            callVector->insert(row, test);
         }
     }
 
-    QString s3 = sl[1].trimmed();
-    QString other;
-    QString text = s3;
-
-    if (s3[0] == '(')
+    else if (sl[0] == "UE")
     {
-        while (s3[0] == '(')
-        {
-            s3 = s3.mid(1);
-        }
-        int closeBracket = s3.indexOf(')');
-        other = s3.mid(0, closeBracket).trimmed();
+//    Users statistics/end of users frames
+//    UE|chat id|nb registered users|
+//    UE|2|4777|
 
-        text = s3.mid(closeBracket + 1).trimmed();
+        kstCallModel.setCallVector(callVector);
+
     }
-    else
+
+    else if (sl[0] == "US4")
     {
-        QString temp = s3.section(' ', 0, 0);
-        Callsign cs(temp);
-        cs.validate();
-        if (cs.valRes == CS_OK)
+//    User state (here/not here/more than 5 min logged)
+//    US4|chat id|callsign|state|
+//    US4|2|OH2JXA|state|
+
+        QSharedPointer<KstUser> test(new KstUser());
+        test->call = sl[2];
+        QString state = sl[3];
+        int istate = state.toInt();
+        if (istate & 1)
+            test->away = true;
+        if (istate & 2)
+            test->recent = true;
+
+        QVector<QSharedPointer<KstUser> >::iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        if (l != callVector->end() && l->data()->call == test->call)
         {
-            other = temp.toUpper().trimmed();
-            text = s3.section(' ', 1).trimmed();
+            // as it should be...
+            l->data()->away = test->away;
+            l->data()->recent = test->recent;
+            int row = l - callVector->begin();
+            emit kstCallModel.dataChanged(kstCallModel.index(row, ecscCall), kstCallModel.index(row, ecscDistance));
         }
     }
-    kst->otherCall = other;
-    kst->message = text;
 
-    messageVector->push_back(kst);
+    else if (sl[0] == "UM3")
+    {
+//    User already logged
+//    UM3|chat id|callsign|firstname|locator|state|
+//    UM3|2|OZ2M|Bo|JO65FR|2|
 
-    kstMessageModel.appendLastRow();
+        QSharedPointer<KstUser> test(new KstUser());
+        test->call = sl[2];
+        test->name = sl[3];
+        test->loc = sl[4];
+        QString state = sl[5];
+        int istate = state.toInt();
+        if (istate & 1)
+            test->away = true;
+        if (istate & 2)
+            test->recent = true;
 
-    kstMeepModel.appendLastRow();
+        QVector<QSharedPointer<KstUser> >::iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        if (l != callVector->end() && l->data()->call == test->call)
+        {
+            // as it should be...
+            l->data()->name = test->name;
+            l->data()->loc = test->loc;
+            l->data()->away = test->away;
+            l->data()->recent = test->recent;
+            int row = l - callVector->begin();
+            emit kstCallModel.dataChanged(kstCallModel.index(row, ecscCall), kstCallModel.index(row, ecscDistance));
 
-    ui->messageTable->scrollToBottom();
-    ui->meepTable->scrollToBottom();
+        }
 
+    }
+
+    else if (sl[0] == "UR6")
+    {
+//    User disconnected (to remove)
+//    UR6|chat id|callsign|
+//    UR6|2|RA3MR/3|
+        QSharedPointer<KstUser> test(new KstUser());
+        test->call = sl[2];
+
+        QVector<QSharedPointer<KstUser> >::iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        if (l != callVector->end() && l->data()->call == test->call)
+        {
+            // as it should be...
+
+            // if we remove the last row then the call model
+            // is one short as we have already removed it from the vector
+            int row = l - callVector->begin();
+
+            kstCallModel.removeRow(row);
+
+        }
+    }
+
+    else if (sl[0] == "UA5")
+    {
+//    UA5 user connected (to add)
+//    UA5|chat id|callsign|firstname|locator|state|
+//    UA5|2|PA0GUS|GUUS|JO23TA|2|
+
+        QSharedPointer<KstUser> test(new KstUser());
+        test->call = sl[2];
+        test->name = sl[3];
+        test->loc = sl[4];
+        QString state = sl[5];
+        int istate = state.toInt();
+        if (istate & 1)
+            test->away = true;
+        if (istate & 2)
+            test->recent = true;
+
+        if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+        {
+            int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+            kstCallModel.insertRow(row, test);
+        }
+
+    }
+    else if (sl[0] == "CK")
+    {
+        // link check
+        sendKST("\r\n");
+    }
+#ifdef RUBBISH
     if (!kst->call.isEmpty())
     {
         QSharedPointer<KstUser> test(new KstUser());
@@ -560,7 +611,7 @@ void KSTMainWindow::analyseTelnetMessage(QString atj)
         }
     }
 
-    if (!kst->call.isEmpty())
+    if (!kst->otherCall.isEmpty())
     {
         QSharedPointer<KstUser> test(new KstUser());
         test->call = kst->otherCall;
@@ -571,13 +622,15 @@ void KSTMainWindow::analyseTelnetMessage(QString atj)
             kstCallModel.insertRow(row);
         }
     }
+#endif
 }
 void KSTMainWindow::on_connectButton_clicked()
 {
-    if (userLoggedIn)
+    if (kstconnected)
     {
-        tnclient->sendData("/Q\r\n");
-        tnclient->logout();
+        // MSG|chat id|destination|command|0|
+        QString quitMsg = "MSG|" + kstChatSelection + "|0|/QUIT|0|";
+        sendKST(quitMsg);
     }
     else
     {
@@ -638,6 +691,7 @@ void KSTMainWindow::on_configureButton_clicked()
     conf.username = myCallsign;
     conf.password = password;
     conf.autoConnect = autoConnect;
+    conf.locator = myLoc;
 
     if (conf.exec() == QDialog::Accepted)
     {
@@ -646,6 +700,7 @@ void KSTMainWindow::on_configureButton_clicked()
         myCallsign = conf.username;
         password = conf.password;
         autoConnect = conf.autoConnect;
+        myLoc = conf.locator;
 
         QSettings settings;
 
@@ -654,17 +709,17 @@ void KSTMainWindow::on_configureButton_clicked()
         settings.setValue("username", myCallsign);
         settings.setValue("password", password);
         settings.setValue("autoConnect", autoConnect);
-
+        settings.setValue("locator", myLoc);
         reconnect();
     }
 }
 void KSTMainWindow::reconnect()
 {
-    tnclient->sendData("/Q\r\n");
-    tnclient->logout();
+    // MSG|chat id|destination|command|0|
+    QString quitMsg = "MSG|" + kstChatSelection + "|0|/QUIT|0|";
+    sendKST(quitMsg);
 
     QTimer *timer = new QTimer(this);
-    timer->setInterval(2000);
     timer->setSingleShot(true);
 
     connect(timer, &QTimer::timeout, [=]()
@@ -682,7 +737,8 @@ void KSTMainWindow::on_genmsgButton_clicked()
     QString msg = ui->msgEdit->text();
     if (!msg.isEmpty())
     {
-        tnclient->sendData(msg + "\r\n");
+        QString msg2 = "MSG|" + kstChatSelection + "|0|" + msg + "|0|";
+        sendKST(msg2);
     }
 }
 
@@ -692,7 +748,12 @@ void KSTMainWindow::on_meepButton_clicked()
     QString call = ui->callEdit->text();
     if (!msg.isEmpty() && !call.isEmpty())
     {
-        tnclient->sendData("/CQ " + call + " " + msg + "\r\n");
+        QString msg = ui->msgEdit->text();
+        if (!msg.isEmpty())
+        {
+            QString msg2 = "MSG|" + kstChatSelection + "|0|/CQ " + call + " " + msg + "|0|";
+            sendKST(msg2);
+        }
     }
 }
 
@@ -729,20 +790,20 @@ void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
 
 void KSTMainWindow::on_serviceCombo_currentIndexChanged(int index)
 {
-    if (userLoggedIn)
+    if (started)
     {
         kstChatSelection = QString::number(index + 1);
 
         QSettings settings;
         settings.setValue("service", kstChatSelection);
 
-        reconnect();
+        if (kstconnected)
+            reconnect();
     }
 }
 
 void KSTMainWindow::on_clearButton_clicked()
 {
     kstMessageModel.reset();
-    kstMeepModel.reset();
     kstCallModel.reset();
 }

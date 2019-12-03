@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 win32:LIBS += -lWs2_32
 
 SOURCES += \
+    KSTMinosParameters.cpp \
     kstcallgridmodel.cpp \
     kstconfigure.cpp \
     kstmessagegridmodel.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
     kstmainwindow.cpp
 
 HEADERS += \
+    KSTMinosParameters.h \
     kstcallgridmodel.h \
     kstconfigure.h \
     kstmainwindow.h \

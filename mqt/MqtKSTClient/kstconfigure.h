@@ -22,6 +22,7 @@ public:
     QString username;
     QString password;
     bool autoConnect;
+    QString locator;
 
 public Q_SLOTS:
         virtual int exec() override;

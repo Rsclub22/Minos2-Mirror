@@ -7,6 +7,8 @@
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
+enum CallColumns {ecscCall, ecscLoc, ecscDistance, ecscMaxColumn};
+
 class KstUser
 {
 public:
@@ -14,7 +16,8 @@ public:
     QString loc;
     QString name;
     bool away = false;
-    bool notFound = false;
+    bool recent = false;
+    int distance = -1;
 
     bool operator< ( const KstUser& rhs ) const;
 
@@ -26,6 +29,7 @@ class KstCallGridModel: public QAbstractItemModel
     Q_OBJECT
 
     public:
+        QString locator;
         KstCallGridModel();
         virtual ~KstCallGridModel() override
         {}
@@ -46,8 +50,9 @@ class KstCallGridModel: public QAbstractItemModel
         int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
 
         void appendRow(QSharedPointer<KstUser> kstmsg);
-        void insertRow(int row);
+        void insertRow(int row, QSharedPointer<KstUser> call);
         void reset();
+        void removeRow(int _row);
 };
 
 class KstCallGridSortFilterModel: public QSortFilterProxyModel

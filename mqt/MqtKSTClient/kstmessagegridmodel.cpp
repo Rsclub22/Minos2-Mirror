@@ -39,10 +39,10 @@ int KstMessageGridModel::rowCount( const QModelIndex &/*parent*/ ) const
     return messageVector->count();
 }
 
-void KstMessageGridModel::appendLastRow()
+void KstMessageGridModel::appendLastRow(QSharedPointer<KstMessageLine> msg)
 {
-    // data must have already been added tothe shared message vector
-    beginInsertRows(QModelIndex(), rowCount() - 1 , rowCount() - 1);
+    beginInsertRows(QModelIndex(), rowCount() , rowCount());
+    messageVector->push_back(msg);
     endInsertRows();
 }
 
@@ -52,7 +52,6 @@ void KstMessageGridModel::setCacheSize()
     cacheSize = delegate->docSize(s);
 }
 
-enum ChatColumns {eccSrc = 0, eccDTG, eccCall, eccName, eccOther, eccText, eccMaxColumn};
 QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
 {
     if ( !index.isValid() )
@@ -69,9 +68,6 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
         QString cell;
         switch (column)
         {
-        case eccSrc:
-            cell = crec->source;
-            break;
         case eccDTG:
             cell = crec->dtg;
             break;
@@ -106,11 +102,8 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
     {
         switch (section)
         {
-        case eccSrc:
-            cell = "Source";
-            break;
         case eccDTG:
-            cell = "DTG";
+            cell = "Time(Z)";
             break;
         case eccCall:
             cell = "Call";

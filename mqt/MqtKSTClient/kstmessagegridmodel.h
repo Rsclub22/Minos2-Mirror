@@ -7,6 +7,9 @@
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
+
+enum ChatColumns {eccDTG = 0, eccCall, eccName, eccOther, eccText, eccMaxColumn};
+
 class KstMessageLine
 {
 public:
@@ -47,7 +50,7 @@ class KstMessageGridModel: public QAbstractItemModel
 
         int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
 
-        void appendLastRow();
+        void appendLastRow(QSharedPointer<KstMessageLine>);
 
         void setCacheSize();
         void reset();
