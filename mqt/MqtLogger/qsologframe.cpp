@@ -2786,10 +2786,13 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
     {
         logData.freq = callsignEnterTextFreq;
         callsignEnterTextFreq = "00000000000";
-        ui->CallsignEdit->clear();
-        ui->LocEdit->clear();
+
+        doGJVCancelButton_clicked();
+
         trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
         emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+
+
     }
     else
     {
