@@ -25,6 +25,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="bandmapFrameTitle2">
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLineEdit" name="freqDisplay">
      <property name="font">
       <font>
