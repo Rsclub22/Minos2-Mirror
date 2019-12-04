@@ -86,6 +86,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui->setupUi(this);
 
     ui->bandmapFrameTitle->setText("Bandmap");
+    ui->bandmapFrameTitle2->clear();
 
     //int height = ui->bandmapGraphicsView->height();
     //int width = ui->bandmapGraphicsView->width();
@@ -1607,11 +1608,13 @@ void BandmapClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse within frame!<p> Updates paused for 5 secs.</font>");
+        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse within frame!</font>");
+        ui->bandmapFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
     }
     else
     {
         ui->bandmapFrameTitle->setText("Bandmap");
+        ui->bandmapFrameTitle2->clear();
     }
 }
 
