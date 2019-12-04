@@ -1218,7 +1218,7 @@ void RigControlFrame::setRadioFreq()
        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
        trace(QString("setRadioFreq: select frequency"));
        QString cb = ct->band.getValue().trimmed();
-
+       trace(QString("setRadioFreq: contest band = %1").arg(cb));
        BandList &blist = BandList::getBandList();
        BandInfo bi;
        bool bandOK = blist.findBand(cb, bi);
@@ -1280,7 +1280,7 @@ void RigControlFrame::setRadioFreq()
                     else
                     {
                         sendFreq(listOfBands[i].freq);
-                        trace(QString("setRadioFreq: Set defaut freq = %1").arg(listOfBands[i].freq));
+                        trace(QString("setRadioFreq: Set default freq = %1").arg(listOfBands[i].freq));
                     }
 
                     setRadioBandWarning("");
@@ -1294,7 +1294,11 @@ void RigControlFrame::setRadioFreq()
             sendFreq(NO_BAND_SUPPORT);
         }
 
+        trace(QString("setRadioFreq: band %1 not found").arg(cb));
+
       }
+
+        trace(QString("setRadioFreq: contest isn't the current contest!"));
 
 
 }

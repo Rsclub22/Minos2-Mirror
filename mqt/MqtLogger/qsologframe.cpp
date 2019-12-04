@@ -2276,6 +2276,8 @@ void QSOLogFrame::setDtgSection()
 
     timer->start(10);
 }
+
+
 void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct )
 {
    ui->CallsignEdit->setText(lct->cs.fullCall.getValue());
@@ -2341,13 +2343,15 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
 
 void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool fromBandmapOrMemory )
 {
+    if (fromBandmapOrMemory)
+    {
+        logDataFromBandmapOrMemory = fromBandmapOrMemory;
+    }
+
     ui->CallsignEdit->setText(cs);
     ui->LocEdit->setText(loc);
 
-    if (fromBandmapOrMemory)
-    {
-        logDataFromBandmapOrMemory = true;
-    }
+
 
     valid( cmCheckValid ); // make sure all single and cross field
     // validation has been done
