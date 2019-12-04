@@ -158,11 +158,11 @@ void BandmapView::on_vertScrollBandChanged(int value)
 {
     //Q_UNUSED(value)
 
-        dial->setViewPortStartEndFreq(value, getViewPortEndYCoordOnScene(), contestBandFlow);
-        //trace(QString("Scroll changed: zoomlevel = %1").arg(zoomLevel));
-        //trace(QString("scroll changed: value = %1").arg(value));
-        //trace(QString("scroll changed: end Y coord = %1").arg(getViewPortEndYCoordOnScene()));
-        bandmapUpdate();
+    dial->setViewPortStartEndFreq(value, getViewPortEndYCoordOnScene(), contestBandFlow);
+    //trace(QString("Scroll changed: zoomlevel = %1").arg(zoomLevel));
+    //trace(QString("scroll changed: value = %1").arg(value));
+    //trace(QString("scroll changed: end Y coord = %1").arg(getViewPortEndYCoordOnScene()));
+    bandmapUpdate();
 }
 
 
@@ -974,13 +974,13 @@ void BandmapView::drawBandMapSpots()
         traceMsg(QString("Drawspots: Number of Rows to Check = %1").arg(numrows));
 
         // this is for test
-        traceMsg(QString("dump list of spots and freq"));
-        for (int row = 0; row < numrows; row++)
-        {
-            QString freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), Qt::DisplayRole).toString().remove('.');
-            QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
-            traceMsg(QString("DB# = %1, Callsign = %2, Freq = %3").arg(row).arg(callsign).arg(freq));
-        }
+        //traceMsg(QString("dump list of spots and freq"));
+        //for (int row = 0; row < numrows; row++)
+       // {
+       //     QString freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), Qt::DisplayRole).toString().remove('.');
+       //     QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+       //     traceMsg(QString("DB# = %1, Callsign = %2, Freq = %3").arg(row).arg(callsign).arg(freq));
+       // }
 
 
 
@@ -1124,6 +1124,7 @@ void BandmapView::deleteItemsFromMarkerList()
 
 bool BandmapView::matchMode(int sourceRow)
 {
+
     bool ok = false;
     int modeMask = model()->data(model()->index(sourceRow, DXMODEMASK_COL_NUM), BMP_DataStoredRole).toString().toInt(&ok);
     QString callsign = model()->data(model()->index(sourceRow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
