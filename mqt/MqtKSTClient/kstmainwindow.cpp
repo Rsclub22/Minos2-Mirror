@@ -133,6 +133,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     int sel = kstChatSelection.toInt();
     ui->serviceCombo->setCurrentIndex(sel - 1);
 
+    ui->CSFilter->installEventFilter(this);
+    ui->messageFilter->installEventFilter(this);
     started = true;
 
     if (autoConnect)
@@ -184,6 +186,10 @@ void KSTMainWindow::connected()
 void KSTMainWindow::disconnected()
 {
     trace("Disconnected from ON4KST");
+    ui->includeLabel->clear();
+    kstMeepFilterModel.setFilterString("myCallsign""");
+    ui->connectButton->setText("Connect");
+    kstconnected = false;
 }
 
 void KSTMainWindow::connectionError(QAbstractSocket::SocketError error)
@@ -631,6 +637,8 @@ void KSTMainWindow::on_connectButton_clicked()
         // MSG|chat id|destination|command|0|
         QString quitMsg = "MSG|" + kstChatSelection + "|0|/QUIT|0|";
         sendKST(quitMsg);
+        kstclient->waitForBytesWritten(1000);
+        kstclient->disconnectFromHost();
     }
     else
     {
@@ -710,14 +718,24 @@ void KSTMainWindow::on_configureButton_clicked()
         settings.setValue("password", password);
         settings.setValue("autoConnect", autoConnect);
         settings.setValue("locator", myLoc);
-        reconnect();
+
+        if  (kstconnected)
+        {
+            reconnect();
+        }
     }
 }
 void KSTMainWindow::reconnect()
 {
-    // MSG|chat id|destination|command|0|
-    QString quitMsg = "MSG|" + kstChatSelection + "|0|/QUIT|0|";
-    sendKST(quitMsg);
+    if (kstconnected)
+    {
+        // MSG|chat id|destination|command|0|
+        QString quitMsg = "MSG|" + kstChatSelection + "|0|/QUIT|0|";
+        sendKST(quitMsg);
+
+        kstclient->waitForBytesWritten(1000);
+        kstclient->disconnectFromHost();
+    }
 
     QTimer *timer = new QTimer(this);
     timer->setSingleShot(true);
@@ -806,4 +824,24 @@ void KSTMainWindow::on_clearButton_clicked()
 {
     kstMessageModel.reset();
     kstCallModel.reset();
+}
+bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress )
+    {
+        QKeyEvent *ke = dynamic_cast<QKeyEvent *>(event);
+        if (ke->key() == Qt::Key_Escape)
+        {
+            if (obj == ui->messageFilter)
+            {
+                ui->messageFilter->clear();
+            }
+            else if (obj == ui->CSFilter)
+            {
+                ui->CSFilter->clear();
+            }
+        }
+    }
+
+   return false;
 }

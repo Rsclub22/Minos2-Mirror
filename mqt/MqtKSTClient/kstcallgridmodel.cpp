@@ -201,7 +201,11 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         return false;
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
+
     if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+
+    if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
 
     return false;

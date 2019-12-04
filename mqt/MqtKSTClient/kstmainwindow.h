@@ -50,9 +50,12 @@ class KSTMainWindow : public QMainWindow
     QStringList filelines;
     int curline = 0;
 
+    void sendKST(QString msg);
     void analyseKstMessage(QString atj);
     void reconnect();
     void connectToHost();
+    virtual bool eventFilter(QObject *obj, QEvent *event) override;
+
 
 public:
     KSTMainWindow(QWidget *parent = nullptr);
@@ -102,6 +105,5 @@ private slots:
 
 private:
     Ui::KSTMainWindow *ui;
-    void sendKST(QString msg);
 };
 #endif // KSTMAINWINDOW_H
