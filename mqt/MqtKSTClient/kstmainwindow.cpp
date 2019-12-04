@@ -27,6 +27,12 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     state = settings.value("msgSplitterState").toByteArray();
     ui->msgSplitter->restoreState(state);
 
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    createCloseEvent();
+    connect(&CloseTimer, SIGNAL(timeout()), this, SLOT(CloseTimerTimer()));
+    CloseTimer.start(100);
+
     messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
 
     kstMessageModel.setChatVector(messageVector);
@@ -117,17 +123,17 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     myLoc = settings.value("locator", "").toString();
 
     QStringList services =
-    {"50/70 MHz..............1",
-    "144/432 MHz............2",
-    "Microwave..............3",
-    "EME/JT65...............4",
-    "Low Band...............5",
-    "50 MHz IARU Region 3...6",
-    "50 MHz IARU Region 2...7",
-    "144/432 MHz IARU R 2...8",
-    "144/432 MHz IARU R 3...9",
-    "kHz (2000-630m).......10",
-    "Warc (30,17,12m)......11"};
+    {"50/70 MHz",
+    "144/432 MHz",
+    "Microwave",
+    "EME/JT65",
+    "Low Band",
+    "50 MHz IARU Region 3",
+    "50 MHz IARU Region 2",
+    "144/432 MHz IARU R 2",
+    "144/432 MHz IARU R 3",
+    "kHz (2000-630m)",
+    "Warc (30,17,12m)"};
 
     ui->serviceCombo->addItems(services);
     int sel = kstChatSelection.toInt();
@@ -166,6 +172,21 @@ void KSTMainWindow::changeEvent( QEvent* e )
         settings.setValue("geometry/Main", saveGeometry());
     }
 }
+
+void KSTMainWindow::CloseTimerTimer(  )
+{
+   static bool closed = false;
+   if ( !closed )
+   {
+      if ( checkCloseEvent() )
+      {
+          trace("closing down due to close signalled");
+         closed = true;
+         close();
+      }
+   }
+}
+
 void KSTMainWindow::connectToHost()
 {
     kstCallModel.locator = myLoc;

@@ -16,6 +16,8 @@ class KSTMainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    QTimer CloseTimer;
+
     KstMessageGridModel kstMessageModel;
     KstMessageGridSortFilterModel kstMessageFilterModel;
 
@@ -66,6 +68,7 @@ public:
     virtual void changeEvent( QEvent* e ) override;
 
 private slots:
+    void CloseTimerTimer();
 
     void on_analyseButton_clicked();
 
