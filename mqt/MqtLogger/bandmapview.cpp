@@ -497,6 +497,7 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         spotData.freq = selectedSpot.dxFreqStr;
         spotData.locator = selectedSpot.dxLocator;
         spotData.bearing = selectedSpot.dxBrg.toInt();
+        spotData.fromBandmapOrMemory = true;
 
         MinosLoggerEvents::SendSpotToLog(spotData);
 
