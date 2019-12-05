@@ -1529,6 +1529,7 @@ void BandmapClientFrame::setFreq(QString freq)
     if (lastfreq != freq)
     {
         lastfreq = freq;
+
         if (freq.count() >= 4)
         {
 
@@ -1548,6 +1549,13 @@ void BandmapClientFrame::setFreq(QString freq)
             }
 
 
+            ui->freqDisplay->setText(freq);
+        }
+        else
+        {
+            freqDisplayPalette->setColor(QPalette::Text, Qt::red);
+            ui->freqDisplay->setPalette(*freqDisplayPalette);
+            legalFreq = false;
             ui->freqDisplay->setText(freq);
         }
 

@@ -753,7 +753,12 @@ void BandmapView::setFreq(double f, bool legalFreq)
     {
         dial->setCursorColour(Qt::red);
     }
-    bandmapUpdate();
+
+    if (freqInt32 != 0)
+    {
+        bandmapUpdate();
+    }
+
 }
 
 void BandmapView::bandmapSelectFreq(int y)
