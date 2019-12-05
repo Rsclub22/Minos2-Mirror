@@ -111,7 +111,7 @@ public:
 
 //    void drawDial(QPainter *painter);
 
-    void calcStartEndFreq(qint32 frequency);
+//    void calcStartEndFreq(qint32 frequency);
     qint32 getCurFreqInt32();
     QString getFreqFromYCoordOnDial(int y);
     qint32 checkSelectedFreqTextOnDial(QPoint p);
