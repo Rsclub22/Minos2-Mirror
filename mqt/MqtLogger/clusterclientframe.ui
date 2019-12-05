@@ -47,6 +47,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="clusterClientFrameTitle2">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QLogTabWidget" name="dxSpotTab">
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
@@ -74,7 +81,7 @@
          <x>0</x>
          <y>0</y>
          <width>657</width>
-         <height>214</height>
+         <height>243</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">

@@ -380,13 +380,17 @@ void BandmapClientFrame::on_bearingActionSelected()
         traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(bandmapView->getSelectedSpotDataPtr()->dxCall).arg(bandmapView->getSelectedSpotDataPtr()->rotBrg));
         QString brg = bandmapView->getSelectedSpotDataPtr()->dxBrg;
         QString loc = bandmapView->getSelectedSpotDataPtr()->dxLocator;
-        if (loc.count() < 6)
+        if (!brg.isEmpty())
         {
-            brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+            if (loc.count() < 6)
+            {
+                brg = brg.append(SHORTLOCATOR_IDENTIFIER);
 
+            }
+
+            sendBrgToRot(brg);
         }
 
-        sendBrgToRot(brg);
     }
 
 }
@@ -543,13 +547,17 @@ void BandmapClientFrame::context_bearingActionSelected()
     traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(contextMenuSelectedSpotData.dxCall).arg(contextMenuSelectedSpotData.rotBrg));
     QString brg = contextMenuSelectedSpotData.dxBrg;
     QString loc = contextMenuSelectedSpotData.dxLocator;
-    if (loc.count() < 6)
+    if (!brg.isEmpty())
     {
-        brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+        if (loc.count() < 6)
+        {
+            brg = brg.append(SHORTLOCATOR_IDENTIFIER);
 
+        }
+
+        sendBrgToRot(brg);
     }
 
-    sendBrgToRot(brg);
 
 }
 
