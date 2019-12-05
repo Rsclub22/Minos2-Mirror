@@ -2803,6 +2803,7 @@ void RigControlMainWindow::sendStatusLogger(const QString &message )
         logMessage(QString("Send status to logger = %1").arg(message));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setStatus(psname, message);
+        msg->rigCache.publish();
     }
 }
 

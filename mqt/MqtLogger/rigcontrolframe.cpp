@@ -1381,17 +1381,19 @@ void RigControlFrame::setRadioState(QString s)
            QStringList sl = s.split(':');
            if (sl.count() == 2)
            {
-               ui->errorMessageLbl->setText(QString("<font color = 'Red'> Error: %1</font>").arg(sl[1]));
+               ui->rigState->setText(QString("<font color = 'Red'> Error: %1</font>").arg(sl[1]));
+               emit radioHasError(sl[1]);
            }
         }
         else if (s == RIG_STATUS_CONNECTED)
         {
             radioConnected = true;
-            ui->errorMessageLbl->clear();
+            ui->rigState->setText(s);
             int index = ui->radioNameSel->findText(radioName, Qt::MatchFixedString);
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);
+                emit radioIsConnected(true);
             }
             else
             {
@@ -1403,8 +1405,8 @@ void RigControlFrame::setRadioState(QString s)
         {
            radioConnected = false;
            radioError = false;
-           ui->errorMessageLbl->clear();
 
+           ui->rigState->setText(s);
 
            ui->bandWarnLabel->setText("");
            if (ui->radioNameSel->currentText() == "")
@@ -1418,13 +1420,15 @@ void RigControlFrame::setRadioState(QString s)
 
 
 
-
+           emit radioIsConnected(false);
            emit radioDisconnected();
 
         }
 
 
-        ui->rigState->setText(s);
+
+
+
         radioState = s;
     }
 }

@@ -72,6 +72,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     contestBandFlow(0),
     contestBandFHigh(0),
     contestMode(-1),
+    radioIsConnected(false),
     clusterServerLoaded(false),
     clusterServerConnected(false),
     runModeOn(false),
@@ -262,7 +263,7 @@ BandmapClientFrame::~BandmapClientFrame()
     //bandmapView->deleteItemsFromMarkerList();
     delete ui;
 
-    delete bandmapSpotProxyModel;
+
     delete bandmapDataModel;
     delete actionInObject;
     delete freqDisplayPalette;
@@ -1818,6 +1819,16 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString _freq, QString l
                                         false, time, false, false, bandmapSpotType::SAVED);
     logSpotQueue.append(spot);
 
+}
+
+void BandmapClientFrame::setBandmapRadioIsConnect(bool state)
+{
+    radioIsConnected = state;
+}
+
+void BandmapClientFrame::setBandmapRadioHasError(QString error)
+{
+    radioError = error;
 }
 
 void BandmapClientFrame::setRotatorBearing(QString s)
