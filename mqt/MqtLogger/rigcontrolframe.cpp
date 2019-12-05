@@ -502,7 +502,7 @@ void RigControlFrame::setFreq(QString freq)
 {
     traceMsg(QString("Rigcontrol frame Set Freq: = %1").arg(freq));
 
-            if (freq == "0" && freq == "-1")
+    if (freq == "0" && freq == "-1")
     {
         // this is force an update of freq, ignore
         traceMsg(QString("Force Freq Update Received - Ignore!"));
