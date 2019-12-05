@@ -156,6 +156,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
             this, SLOT(on_BandmapSaveFreq(QString, QString, QString, QString)));
     //connect(FKHRigControlFrame, SIGNAL(sendCQFreq(QString, bool)), this, SLOT(on_SendCQFreq(QString, bool)));
 
+    connect(FKHRigControlFrame, SIGNAL(radioIsConnected(bool)), this, SLOT(sendBandmapRadioIsConnected(bool)));
+    connect(FKHRigControlFrame, SIGNAL(radioHasError(QString)), this, SLOT(sendBandmapRadioHasError(QString)));
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
 
 
@@ -1440,6 +1442,16 @@ void TSingleLogFrame::on_BandmapMarkFreq(QString cs, QString freq, QString loc, 
 void TSingleLogFrame::on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg)
 {
     bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg);
+}
+
+void TSingleLogFrame::sendBandmapRadioIsConnected(bool state)
+{
+    bandmapControlFrame->setBandmapRadioIsConnect(state);
+}
+
+void TSingleLogFrame::sendBandmapRadioHasError(QString error)
+{
+    bandmapControlFrame->setBandmapRadioHasError(error);
 }
 
 //void TSingleLogFrame::on_SendCQFreq(QString runFreq, bool showMarker)

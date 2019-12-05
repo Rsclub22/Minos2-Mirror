@@ -171,6 +171,8 @@ public:
 
     void setRunOnFlag(QString _runFreq, bool _runModeOn);
     void setRunOffFreqFlag(QString _runFreq, bool _offRunFreq);
+    void setBandmapRadioIsConnect(bool state);
+    void setBandmapRadioHasError(QString error);
 signals:
 
     void freqDisplayClicked();
@@ -188,6 +190,8 @@ private:
     QString contestModeStr;
     int contestMode;
 
+    bool radioIsConnected;
+    QString radioError;
     QString lastfreq;
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
