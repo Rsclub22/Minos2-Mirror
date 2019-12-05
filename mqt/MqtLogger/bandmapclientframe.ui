@@ -27,7 +27,7 @@
    <item>
     <widget class="QLabel" name="bandmapFrameTitle2">
      <property name="text">
-      <string>TextLabel</string>
+      <string/>
      </property>
     </widget>
    </item>
