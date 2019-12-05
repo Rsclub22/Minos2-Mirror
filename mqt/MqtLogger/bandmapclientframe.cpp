@@ -312,10 +312,10 @@ void BandmapClientFrame::on_markSpotActionSelected()
     if (bandmapView->getSelectedSpotDataPtr()->isSelected)
     {
         traceMsg(QString("menu mark spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
-        bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+        bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
         if (spotType == bandmapSpotType::CLUSTER)
         {
-            bandmapDataModel->setData(bandmapDataModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER_MARKED, BMP_DataStoredRole);
+            bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER_MARKED, BMP_DataStoredRole);
             bandmapView->bandmapUpdate();
         }
     }
@@ -330,10 +330,10 @@ void BandmapClientFrame::on_unMarkSpotActionSelected()
     if (bandmapView->getSelectedSpotDataPtr()->isSelected)
     {
         traceMsg(QString("menu unmark spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
-        bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+        bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
         if (spotType == bandmapSpotType::CLUSTER_MARKED)
         {
-            bandmapDataModel->setData(bandmapDataModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
+            bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
             bandmapView->bandmapUpdate();
         }
     }
@@ -472,7 +472,7 @@ void BandmapClientFrame::on_clearSpotActionSelected()
         if (ret == QMessageBox::Yes)
         {
             traceMsg(QString("menu clear spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
-            bandmapDataModel->removeRows(bandmapView->getSelectedSpotDataRowNum(), 1);
+            bandmapSpotProxyModel->removeRows(bandmapView->getSelectedSpotDataRowNum(), 1);
             bandmapView->clearSelectedSpotData();
             bandmapView->bandmapUpdate();
         }
@@ -505,10 +505,10 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos, const QPoint&
 void BandmapClientFrame::context_markSpotActionSelected()
 {
     traceMsg(QString("menu mark spot selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
-    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
     if (spotType == bandmapSpotType::CLUSTER)
     {
-        bandmapDataModel->setData(bandmapDataModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER_MARKED, BMP_DataStoredRole);
+        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER_MARKED, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
 
@@ -519,10 +519,10 @@ void BandmapClientFrame::context_markSpotActionSelected()
 void BandmapClientFrame::context_unMarkSpotActionSelected()
 {
     traceMsg(QString("menu unmark spot selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
-    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
     if (spotType == bandmapSpotType::CLUSTER_MARKED)
     {
-        bandmapDataModel->setData(bandmapDataModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
+        bandmapSpotProxyModel->setData(bandmapDataModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
 
@@ -599,7 +599,7 @@ void BandmapClientFrame::context_clearSpotActionSelected()
     if (ret == QMessageBox::Yes)
     {
         traceMsg(QString("menu clear spot selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
-        bandmapDataModel->removeRows(contextMenuSelectedSpotDataRowNum, 1);
+        bandmapSpotProxyModel->removeRows(contextMenuSelectedSpotDataRowNum, 1);
 
     }
 
