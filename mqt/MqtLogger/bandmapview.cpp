@@ -92,7 +92,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     connect(model(), SIGNAL(rowsRemoved(const QModelIndex, int, int)), SLOT(onRowsRemoved(const QModelIndex, int, int)));
     connect(model(), SIGNAL(rowsInserted(const QModelIndex, int, int)), SLOT(onRowsInserted(const QModelIndex, int, int)));
 
-    connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(on_vertScrollBandChanged(int)));
+    //connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(on_vertScrollBandChanged(int)));
 
     bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( bandmapGraphicsView, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( on_bandmap_customContextMenuRequested( const QPoint& ) ) );
@@ -486,7 +486,10 @@ void BandmapView::leftMouseButtonPressed(QPoint p)
 
 void BandmapView::mouseDoubleClicked(QPoint p)
 {
-    int spotNum = isClickInRegionOfSpot(p);
+
+    QPoint mapP = bandmapGraphicsView->mapToScene(p).toPoint();
+
+    int spotNum = isClickInRegionOfSpot(mapP);
 
     if (spotNum >= 0)
     {
