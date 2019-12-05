@@ -66,6 +66,8 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
 
+
+
     dial = new BandmapFreqDial(70, bandmapGraphicsView->viewport()->height());
     //qDebug() << "bandmap height " << getBandmapFrameHeight();
     dialMinZoomLevel = dial->getMinZoomLevel();
@@ -158,12 +160,13 @@ void BandmapView::on_vertScrollBandChanged(int value)
 {
     //Q_UNUSED(value)
 
-    dial->setViewPortStartEndFreq(value, getViewPortEndYCoordOnScene(), contestBandFlow);
+    //dial->setViewPortStartEndFreq(value, getViewPortEndYCoordOnScene(), contestBandFlow);
     //trace(QString("Scroll changed: zoomlevel = %1").arg(zoomLevel));
     //trace(QString("scroll changed: value = %1").arg(value));
     //trace(QString("scroll changed: end Y coord = %1").arg(getViewPortEndYCoordOnScene()));
-    bandmapUpdate();
+    //bandmapUpdate();
 }
+
 
 
 void BandmapView::on_scrollMap(bool dir)
@@ -714,7 +717,8 @@ void BandmapView::setFreq(double f, bool legalFreq)
 {
     curFreq = f;
     qint32 freqInt32 = static_cast<qint32>(f / 1000);
-    dial->setViewPortStartEndFreq(bandmapGraphicsView->verticalScrollBar()->value(), getViewPortEndYCoordOnScene(), contestBandFlow);
+
+    //dial->setViewPortStartEndFreq(0, static_cast<int>(bandmapScene->height()), contestBandFlow);
 
     int viewportYStart = bandmapGraphicsView->verticalScrollBar()->value();
     //qDebug() << "freqInt32 " << freqInt32;
@@ -722,6 +726,7 @@ void BandmapView::setFreq(double f, bool legalFreq)
     //qDebug() << "dial end f" << dial->getScaleEndFreq();
     //qDebug() << "YcoordStart " << viewportYStart;
 
+/*
     if (freqInt32 > dial->getScaleEndFreq())
     {
         // tuning up, move viewport
@@ -733,6 +738,8 @@ void BandmapView::setFreq(double f, bool legalFreq)
         // tuning down, move viewport
         bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart - (dialData::khzPixelStep[zoomLevel] * 2));
     }
+
+*/
 
     dial->setCurFreq(f);
     if (legalFreq)
@@ -937,8 +944,12 @@ void BandmapView::drawBandMapSpots()
         return;
     }
 
-    qint32 startFreq = dial->getScaleStartFreq();
-    qint32 endFreq = dial->getScaleEndFreq();
+    //qint32 startFreq = dial->getScaleStartFreq();
+    //qint32 endFreq = dial->getScaleEndFreq();
+
+    qint32 startFreq = static_cast<qint32>(contestBandFlow / 1000);
+    qint32 endFreq = static_cast<qint32>(contestBandFhigh / 1000);
+
     int dialWidth = dial->getCurWidth();
     int dialHeight = dial->getCurHeight();
 
@@ -954,6 +965,7 @@ void BandmapView::drawBandMapSpots()
         return;
 
     maxNumSpots = dialHeight/fontHeight;
+
     if (maxNumSpots == 0)
         return;
 

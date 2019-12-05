@@ -200,6 +200,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
     //dialHeight = scaleHeight;
     dialHeight = fullBandHeight;
 
+
     int _fontHeight = getFontHeight();
     if (_fontHeight != fontHeight)
     {
@@ -428,7 +429,7 @@ void BandmapFreqDial::setViewPortStartEndFreq(int startPos, int endPos, double c
 
 
 
-
+/*
 
 void BandmapFreqDial::calcStartEndFreq(qint32 frequency)
 {
@@ -452,7 +453,7 @@ void BandmapFreqDial::calcStartEndFreq(qint32 frequency)
     //}
     scaleEndFreq = scaleStartFreq + freqRange;
 }
-
+*/
 
 QString BandmapFreqDial::convertFreqDialDisplay(qint32 freq)
 {
