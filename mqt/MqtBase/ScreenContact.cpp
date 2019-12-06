@@ -30,7 +30,14 @@ void ScreenContact::initialise( BaseContestLog *ct )
     if ( clp )
     {
         mode = clp->currentMode.getValue();
-        mgmSubmode.clear();
+        if (mode == hamlibData::MGM)
+        {
+            // don't clear submode - keep the old one
+        }
+        else
+        {
+            mgmSubmode.clear();
+        }
         ms = clp->maxSerial + 1;
     }
 
