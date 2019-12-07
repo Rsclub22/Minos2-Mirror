@@ -749,14 +749,28 @@ int RigControlMainWindow::openRigCtldRadio()
         traceCode = rigCtldTrace::rigCtldTraceCodes::VERBOSE;
     }
 
+    QString handshake;
     QString rtsState;
-    QString dtrState;
+
+    handshake = serialData::rigctldHandshakeStr[setupRadio->currentRadio.handshake];
+
+    if (handshake == serialData::rigctldHandshakeStr[RIG_HANDSHAKE_HARDWARE])
+    {
+        rtsState = serialData::rigctldForeLinesStr[serialData::FORCE_LINE_NONE];
+    }
+    else
+    {
+        rtsState = serialData::rigctldForeLinesStr[setupRadio->currentRadio.forceRts];
+    }
+
+    QString dtrState = serialData::rigctldForeLinesStr[setupRadio->currentRadio.forceDtr];
+
 
     // start rigctld
     trace(QString("openRigCtldRadio: starting rigctld"));
     runRigCtlDaemon(setupRadio->currentRadio.radioMfg_Name, QString::number(setupRadio->currentRadio.radioModelNumber), setupRadio->currentRadio.comport,
                                                QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.rigCtldNetworkAdd, setupRadio->currentRadio.rigCtldNetworkPort,
-                                               QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, "ON", "ON", traceCode);
+                                               QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, handshake, rtsState, dtrState, traceCode);
 
 
     // wait for rigctld to start
@@ -825,9 +839,9 @@ int RigControlMainWindow::openRigCtldRadio()
 
         if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
         {
-            showStatusMessage(QString("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, %8")
+            showStatusMessage(QString("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
                               .arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel).trimmed().arg(setupRadio->currentRadio.comport).arg(setupRadio->currentRadio.baudrate).arg(setupRadio->currentRadio.databits)
-                              .arg(setupRadio->currentRadio.stopbits).arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]).arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]));
+                              .arg(setupRadio->currentRadio.stopbits).arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]).arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceDtr]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceRts]));
         }
 
         /*
@@ -941,12 +955,7 @@ int RigControlMainWindow::openRadio()
 
     }
 
-    if (radio->get_serialConnected() && rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
-    {
-        // turn on DTR and RTS lines
-        retCode = radio->setDtrState(true);
-        retCode = radio->setRtsState(true);
-    }
+
 
 
     // let's see if we can get freq from radio and confirm comms
@@ -983,9 +992,9 @@ int RigControlMainWindow::openRadio()
 
         if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
         {
-            showStatusMessage(QString("Connected: %1 - %2, %3, %4, %5, %6, %7, %8")
+            showStatusMessage(QString("Connected: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
                               .arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel).trimmed().arg(setupRadio->currentRadio.comport).arg(setupRadio->currentRadio.baudrate).arg(setupRadio->currentRadio.databits)
-                              .arg(setupRadio->currentRadio.stopbits).arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]).arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]));
+                              .arg(setupRadio->currentRadio.stopbits).arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]).arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceDtr]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceRts]));
         }
         else if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_UDP_NETWORK)
         {
@@ -1645,9 +1654,9 @@ void RigControlMainWindow::clrRigctldNames()
 }
 
 
-void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QString& model, const QString& comport,
-                                           const QString& baudRate, const QString& dataBits, const QString& civ, const QString& netAdd, const QString& portNum,
-                                           const QString& stopBits, const int& parity, const QString& rtsState, const QString& dtrState,
+void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport,
+                                           const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum,
+                                           const QString stopBits, const int& parity, const QString handshake, const QString rtsState, const QString dtrState,
                                            rigCtldTrace::rigCtldTraceCodes diagnostics)
 {
 
@@ -1681,7 +1690,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
         parityNames = radio->getParityCodeNames();
         parityName = parityNames[parity];
         arguments << "-m" + model.trimmed() << "-r" + serPort  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
-                  << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
+                  << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=serial_handshake=" + handshake.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
 
         if (manufacturer == "Icom")
         {
@@ -1732,8 +1741,8 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
     }
 
 
-    trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, rtsState = %8, dtrState = %9, civ = %10, netaddress = %11, netPort = %12")
-          .arg(manufacturer).arg(model).arg(serPort).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
+    trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, handshake = %8, rtsState = %9, dtrState = %10, civ = %11, netaddress = %12, netPort = %13")
+          .arg(manufacturer).arg(model).arg(serPort).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(handshake).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
 
     rigCtldProcess->start(program, arguments);
 
