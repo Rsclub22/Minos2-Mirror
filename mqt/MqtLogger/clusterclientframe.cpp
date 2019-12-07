@@ -49,7 +49,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     ui->setupUi(this);
 
     ui->clusterClientFrameTitle->setText("Cluster");
-    ui->clusterClientFrameTitle2->clear();
+    statusIndicatorToggle(false);
 
     ui->clusterSplitter->setStretchFactor(0, 2);
     ui->clusterSplitter->setStretchFactor(1, 1);
@@ -1690,14 +1690,14 @@ void ClusterClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->clusterClientFrameTitle->setText("Bandmap - <font color='Red'>Mouse within frame!</font>");
-        ui->clusterClientFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
+        ui->clusterClientFrameTitle->setText("Cluster - <font color='Red'>Mouse in frame, updates paused</font>");
+        //ui->clusterClientFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
 
     }
     else
     {
         ui->clusterClientFrameTitle->setText("Cluster");
-        ui->clusterClientFrameTitle2->clear();
+        //ui->clusterClientFrameTitle2->clear();
     }
 }
 
