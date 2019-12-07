@@ -2604,15 +2604,18 @@ void RigControlMainWindow::hamlibError(int errorCode, QString cmd)
     {
         return;
     }
-    if(appName.count() > 0)
-    {
-        sendStatusToLogError(cmd);
-    }
+
 
     rigErrorFlag = true;
 
     errorCode *= -1;
     QString errorMsg = radio->gethamlibErrorMsg(errorCode);
+
+    if(appName.count() > 0)
+    {
+        sendStatusToLogError(errorMsg);
+    }
+
     logMessage(QString("Hamlib Error - Code = %1 - %2").arg(QString::number(errorCode)).arg(errorMsg));
 
     QMessageBox::critical(this, "RigControl hamlib Error - " + setupRadio->currentRadio.radioName, QString::number(errorCode) + " - " + errorMsg + "\n" + "Command - " + cmd);

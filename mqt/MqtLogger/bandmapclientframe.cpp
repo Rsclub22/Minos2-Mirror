@@ -87,7 +87,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui->setupUi(this);
 
     ui->bandmapFrameTitle->setText("Bandmap");
-    ui->bandmapFrameTitle2->clear();
+    clusterStatusIndicatorToggle(false);
+    radioStatusIndicatorToggle(false);
 
     //int height = ui->bandmapGraphicsView->height();
     //int width = ui->bandmapGraphicsView->width();
@@ -1484,13 +1485,13 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
 
     if (stateMsg.contains("Connected"))
     {
-         statusIndicatorToggle(true);
+         clusterStatusIndicatorToggle(true);
          clusterServerConnected = true;
 
     }
     else
     {
-         statusIndicatorToggle(false);
+         clusterStatusIndicatorToggle(false);
          clusterServerConnected = false;
 
     }
@@ -1498,12 +1499,12 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
     if (clusterServerLoaded)
     {
 
-        ui->statusIndicator->setToolTip(stateMsg);
+        ui->clusterStatusIndicator->setToolTip(stateMsg);
         traceMsg(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
     {
-        ui->statusIndicator->setToolTip("Cluster Server Not Running");
+        ui->clusterStatusIndicator->setToolTip("Cluster Server Not Running");
     }
 }
 
@@ -1512,15 +1513,31 @@ void BandmapClientFrame::setClusterServerLoaded(bool loaded)
     clusterServerLoaded = loaded;
 }
 
-void BandmapClientFrame::statusIndicatorToggle(bool on)
+void BandmapClientFrame::clusterStatusIndicatorToggle(bool on)
 {
     if (on)
     {
-        ui->statusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->clusterStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
     }
     else
     {
-       ui->statusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+       ui->clusterStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+    }
+
+}
+
+void BandmapClientFrame::radioStatusIndicatorToggle(bool on)
+{
+    if (on)
+    {
+        ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->radioStatusIndicator->setToolTip("Connected");
+
+    }
+    else
+    {
+       ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+       ui->radioStatusIndicator->setToolTip("Disconnected");
     }
 
 }
@@ -1530,6 +1547,10 @@ void BandmapClientFrame::setFreq(QString freq)
     if (lastfreq != freq)
     {
         lastfreq = freq;
+        curFreq = freq.toDouble();
+
+        // check freq matches contest band
+        checkContestBandMatch(curFreq);
 
         if (freq.count() >= 4)
         {
@@ -1560,7 +1581,7 @@ void BandmapClientFrame::setFreq(QString freq)
             ui->freqDisplay->setText(freq);
         }
 
-        curFreq = freq.toDouble();
+
         bandmapView->setFreq(curFreq, legalFreq);
 
 
@@ -1569,7 +1590,22 @@ void BandmapClientFrame::setFreq(QString freq)
 
 }
 
+bool BandmapClientFrame::checkContestBandMatch(double curFreq)
+{
 
+    if (curFreq >= contestBandFlow && curFreq <= contestBandFHigh)
+    {
+
+        ui->radioStatusMsg->clear();
+        return true;
+    }
+    else
+    {
+        ui->radioStatusMsg->setText("<font color='Red'>Freq out of band</font>");
+    }
+
+    return false;
+}
 
 void BandmapClientFrame::filterButtonSelected()
 {
@@ -1625,13 +1661,13 @@ void BandmapClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse within frame!</font>");
-        ui->bandmapFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
+        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse in frame, updates paused</font>");
+        //ui->bandmapFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
     }
     else
     {
         ui->bandmapFrameTitle->setText("Bandmap");
-        ui->bandmapFrameTitle2->clear();
+        //ui->bandmapFrameTitle2->clear();
     }
 }
 
@@ -1824,11 +1860,19 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString _freq, QString l
 void BandmapClientFrame::setBandmapRadioIsConnect(bool state)
 {
     radioIsConnected = state;
-}
+    radioStatusIndicatorToggle(state);
+    if (state)
+    {
+        ui->radioStatusMsg->clear();
+        radioError.clear();
+    }
+ }
 
 void BandmapClientFrame::setBandmapRadioHasError(QString error)
 {
     radioError = error;
+    ui->radioStatusMsg->setText(QString("<font color='Red'>%1</font>").arg(error));
+
 }
 
 void BandmapClientFrame::setRotatorBearing(QString s)
