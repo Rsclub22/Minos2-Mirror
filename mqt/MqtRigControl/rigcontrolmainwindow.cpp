@@ -749,6 +749,9 @@ int RigControlMainWindow::openRigCtldRadio()
         traceCode = rigCtldTrace::rigCtldTraceCodes::VERBOSE;
     }
 
+    QString rtsState;
+    QString dtrState;
+
     // start rigctld
     trace(QString("openRigCtldRadio: starting rigctld"));
     runRigCtlDaemon(setupRadio->currentRadio.radioMfg_Name, QString::number(setupRadio->currentRadio.radioModelNumber), setupRadio->currentRadio.comport,
@@ -1648,7 +1651,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString& manufacturer, const QS
                                            rigCtldTrace::rigCtldTraceCodes diagnostics)
 {
 
-    setupRadio->getRigCtldExePathFromFile();;
+    setupRadio->getRigCtldExePathFromFile();
 
 #if defined Q_OS_WIN32
     QString program = setupRadio->getRigCtldExePath() + RIGCTL_WIN32_EXE_FILENAME;
