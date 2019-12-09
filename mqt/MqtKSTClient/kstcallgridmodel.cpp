@@ -171,6 +171,9 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
 
         case ecscDistance:
             return "Dist";
+
+        case ecscName:
+            return "Name";
         }
     }
     else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
