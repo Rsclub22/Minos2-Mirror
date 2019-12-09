@@ -7,7 +7,7 @@
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
-enum CallColumns {ecscCall, ecscLoc, ecscDistance, ecscMaxColumn};
+enum CallColumns {ecscCall, ecscLoc, ecscDistance, ecscName, ecscMaxColumn};
 
 class KstUser
 {
