@@ -95,6 +95,8 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
 {
     ui->setupUi(this);
 
+    setStyleSheet("#ScreenConfigElement { border: 2px solid darkmagenta; }");
+
     if (parentDialog)
         vbl = parentDialog->vbl;
     else
