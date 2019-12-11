@@ -18,6 +18,7 @@ ScreenConfigRow::ScreenConfigRow(ScreenConfigElement *parentc) :
     ui->scrollAreaWidgetContents->setLayout(hbl);
 
     setStyleSheet("background-color: light grey;");
+    setStyleSheet("#ScreenConfigRow { border: 2px solid darkcyan; }");
 }
 
 ScreenConfigRow::~ScreenConfigRow()
