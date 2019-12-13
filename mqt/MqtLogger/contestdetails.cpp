@@ -733,7 +733,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    QString mode = ic.mode;
    if (mode.isEmpty())
    {
-      if (contest->MGMContestRules.getValue())
+      if (contest->MGMContestRules.getValue() || ic.specialRules.contains("S12"))
           mode = hamlibData::MGM;
       else
           mode = hamlibData::USB;
