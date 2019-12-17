@@ -127,6 +127,8 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             return "--";
 
         }
+        case ecscName:
+            return crec->name;
 
         }
     }
@@ -169,6 +171,9 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
 
         case ecscDistance:
             return "Dist";
+
+        case ecscName:
+            return "Name";
         }
     }
     else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
@@ -206,6 +211,9 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         return true;
 
     if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+
+    if (call->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
 
     return false;

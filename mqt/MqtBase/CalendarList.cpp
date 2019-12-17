@@ -34,23 +34,23 @@ QString CalendarYear::getURL()
 //---------------------------------------------------------------------------
 QString VHFCalendarYear::getSite()
 {
-    return "http://www.rsgbcc.org/vhf/";
+    return "https://www.rsgbcc.org/vhf/";
 }
 //---------------------------------------------------------------------------
 QString HFCalendarYear::getSite()
 {
     // Yes, the HF calendar is under the VHF directory!
-    return "http://www.rsgbcc.org/vhf/";
+    return "https://www.rsgbcc.org/vhf/";
 }
 //---------------------------------------------------------------------------
 QString HFBARTGCalendarYear::getSite()
 {
-    return "http://bartg.rsgbcc.org/";
+    return "https://bartg.rsgbcc.org/";
 }
 //---------------------------------------------------------------------------
 QString MicroCalendarYear::getSite()
 {
-    return "http://microwave.rsgbcc.org/";
+    return "https://microwave.rsgbcc.org/";
 }
 //---------------------------------------------------------------------------
 QString VHFOtherCalendarYear::getSite()
@@ -85,7 +85,7 @@ QString HFOtherCalendarYear::getURL()
 //---------------------------------------------------------------------------
 QString CTYCalendarYear::getSite()
 {
-    return "http://www.country-files.com/cty/cty.dat";
+    return "https://www.country-files.com/cty/cty.dat";
 }
 QString CTYCalendarYear::getPath()
 {

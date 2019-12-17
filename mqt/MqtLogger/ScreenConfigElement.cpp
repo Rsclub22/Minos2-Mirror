@@ -95,6 +95,9 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
 {
     ui->setupUi(this);
 
+    // colours from https://www.december.com/html/spec/colorsvg.html
+    setStyleSheet("#ScreenConfigElement { border: 2px solid darkmagenta; }");
+
     if (parentDialog)
         vbl = parentDialog->vbl;
     else

@@ -733,7 +733,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    QString mode = ic.mode;
    if (mode.isEmpty())
    {
-      if (contest->MGMContestRules.getValue())
+      if (contest->MGMContestRules.getValue() || ic.specialRules.contains("S12"))
           mode = hamlibData::MGM;
       else
           mode = hamlibData::USB;
@@ -1452,12 +1452,18 @@ void ContestDetails::on_RotatorList()
     ui->antennaNameEdit->clear();
     ui->antennaNameEdit->addItem("");
     ui->antennaNameEdit->addItems( LogContainer->sendDM->rotators());
-    ui->antennaNameEdit->setCurrentText(contest->antennaName.getValue().toString());
+    if (contest)
+    {
+        ui->antennaNameEdit->setCurrentText(contest->antennaName.getValue().toString());
+    }
 }
 void ContestDetails::on_SetRadioList()
 {
     ui->radioNameEdit->clear();
     ui->radioNameEdit->addItem("");
     ui->radioNameEdit->addItems( LogContainer->sendDM->rigs());
-    ui->radioNameEdit->setCurrentText(contest->radioName.getValue().toString());
+    if (contest)
+    {
+        ui->radioNameEdit->setCurrentText(contest->radioName.getValue().toString());
+    }
 }

@@ -18,6 +18,9 @@ ScreenConfigRow::ScreenConfigRow(ScreenConfigElement *parentc) :
     ui->scrollAreaWidgetContents->setLayout(hbl);
 
     setStyleSheet("background-color: light grey;");
+
+    // colours from https://www.december.com/html/spec/colorsvg.html
+    setStyleSheet("#ScreenConfigRow { border: 2px solid darkcyan; }");
 }
 
 ScreenConfigRow::~ScreenConfigRow()
