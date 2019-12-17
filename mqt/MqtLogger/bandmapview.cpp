@@ -710,25 +710,19 @@ int BandmapView::getBandmapFrameWidth()
 void BandmapView::setFreq(double f, bool legalFreq)
 {
     curFreq = f;
-    qint32 freqInt32 = static_cast<qint32>(f / 1000);
+    qint64 freqInt64 = static_cast<qint64>(f);
 
 
-    int viewportYStart = bandmapGraphicsView->verticalScrollBar()->value();
-
-    if (dialCursorWithinViewport(freqInt32) == DIAL_CURSOR_BELOW_VIEWSTART_FREQ)
+    if (dialCursorWithinViewport(freqInt64) == DIAL_CURSOR_BELOW_VIEWSTART_FREQ)
     {
         // tuning up, move viewport
-        qDebug() << "tuning up";
-        qDebug() << "Viewport start " << viewportYStart;
-        qDebug() << "zoomlevel " << zoomLevel;
-        qDebug() << "pixel khz step " << dialData::khzPixelStep[zoomLevel];
-
-        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart - (dialData::khzPixelStep[zoomLevel]));
+        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(freqInt64 - 1000));
     }
-    else if (dialCursorWithinViewport(freqInt32) == DIAL_CURSOR_ABOVE_VIEWSTART_FREQ)
+    else if (dialCursorWithinViewport(freqInt64) == DIAL_CURSOR_ABOVE_VIEWSTART_FREQ)
     {
         // tuning down, move viewport
-        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart + (dialData::khzPixelStep[zoomLevel]));
+        qint64 freqWidth = dial->getScaleEndFreq() - dial->getScaleStartFreq();
+        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(freqInt64 - freqWidth + 2000));
     }
 
 
@@ -743,7 +737,7 @@ void BandmapView::setFreq(double f, bool legalFreq)
         dial->setCursorColour(Qt::red);
     }
 
-    if (freqInt32 != 0)
+    if (freqInt64 != 0)
     {
         bandmapUpdate();
     }
@@ -751,7 +745,7 @@ void BandmapView::setFreq(double f, bool legalFreq)
 }
 
 
-int BandmapView::dialCursorWithinViewport(qint32 freq)
+int BandmapView::dialCursorWithinViewport(qint64 freq)
 {
     int sceneStartYCoord = bandmapGraphicsView->mapToScene(0,0).toPoint().y();
     int sceneEndYCoord = bandmapGraphicsView->mapToScene(0, bandmapGraphicsView->viewport()->height() - bandmapGraphicsView->horizontalScrollBar()->height()).toPoint().y();
@@ -764,13 +758,16 @@ int BandmapView::dialCursorWithinViewport(qint32 freq)
     if (freq < dial->getScaleStartFreq())
     {
         return DIAL_CURSOR_BELOW_VIEWSTART_FREQ;
+
     }
     else if (freq > dial->getScaleEndFreq())
     {
         return DIAL_CURSOR_ABOVE_VIEWSTART_FREQ;
+
     }
 
     return DIAL_CURSOR_WITHIN_VIEWPORT;
+
 }
 
 void BandmapView::bandmapSelectFreq(int y)
