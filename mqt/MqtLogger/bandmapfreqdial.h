@@ -15,7 +15,7 @@ const int khzStep[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 25, 50, 50, 50};
 const int khzPixelStep[] = {200, 150, 110, 85, 65, 50, 35, 25, 20, 15, 11, 8, 6, 4, 3, 2, 1};
 const int hzPixelStep[] = {5, 6, 9, 12, 15, 20, 28, 40, 50, 66, 90, 125, 166, 250, 333, 500, 1000};
 const int minorMarker[] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 3, 0, 0, 0};
-const int roundFactor[] = {0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 10, 10, 10};
+const int endScrollMult[] = {1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 5};
 
 const int fMajMrkXStart = 50;
 const int fMajMrkXEnd = 70;
@@ -91,8 +91,8 @@ public:
     int getMaxZoomLevel() {return dialData::MAX_ZOOM_LEVEL;}
     int getMinZoomLevel() {return dialData::MIN_ZOOM_LEVEL;}
 
-    qint32 getScaleStartFreq();
-    qint32 getScaleEndFreq();
+    qint64 getScaleStartFreq();
+    qint64 getScaleEndFreq();
 
 
     void setCurWidth(int width);
@@ -148,8 +148,8 @@ private:
     double currentFreqDbl;
 
     //qint32 currentFreq = 0;
-    qint32 scaleStartFreq = 0;
-    qint32 scaleEndFreq = 0;
+    qint64 scaleStartFreq = 0;
+    qint64 scaleEndFreq = 0;
     qint32 currentFreqInt32 = 0;
     qint64 currentFreqInt64 = 0;
 

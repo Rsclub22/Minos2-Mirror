@@ -169,12 +169,12 @@ int BandmapFreqDial::getFontHeight()
 
 }
 
-qint32 BandmapFreqDial::getScaleStartFreq()
+qint64 BandmapFreqDial::getScaleStartFreq()
 {
     return scaleStartFreq;
 }
 
-qint32 BandmapFreqDial::getScaleEndFreq()
+qint64 BandmapFreqDial::getScaleEndFreq()
 {
     return scaleEndFreq;
 }
@@ -417,8 +417,8 @@ void BandmapFreqDial::setViewPortStartEndFreq(int startPos, int endPos, double c
 {
     scaleStartYCoord = startPos ;
     scaleEndYCoord = endPos;
-    scaleStartFreq = static_cast<qint32>(getViewPortFreq(startPos, contestBandFlow)) / 1000;
-    scaleEndFreq = static_cast<qint32>(getViewPortFreq(endPos, contestBandFlow)) / 1000;
+    scaleStartFreq = getViewPortFreq(startPos, contestBandFlow);
+    scaleEndFreq = getViewPortFreq(endPos, contestBandFlow);
 
 }
 

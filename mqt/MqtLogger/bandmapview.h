@@ -191,7 +191,7 @@ private:
     void deleteItemsFromMarkerList();
     void assembleCqToolTip(int row, QString freq, QString& toolTipMsg);
     void assembleCqMsg(int row, QString& markerMsg);
-    int dialCursorWithinViewport(qint32 freq);
+    int dialCursorWithinViewport(qint64 freq);
 };
 
 #endif // BANDMAPVIEW_H
