@@ -415,7 +415,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
 
 void BandmapFreqDial::setViewPortStartEndFreq(int startPos, int endPos, double contestBandFlow)
 {
-    scaleStartYCoord = startPos;
+    scaleStartYCoord = startPos ;
     scaleEndYCoord = endPos;
     scaleStartFreq = static_cast<qint32>(getViewPortFreq(startPos, contestBandFlow)) / 1000;
     scaleEndFreq = static_cast<qint32>(getViewPortFreq(endPos, contestBandFlow)) / 1000;

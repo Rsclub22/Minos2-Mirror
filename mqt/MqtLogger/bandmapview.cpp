@@ -19,7 +19,9 @@
 
 #include <QDebug>
 
-
+const int DIAL_CURSOR_BELOW_VIEWSTART_FREQ = 0;
+const int DIAL_CURSOR_ABOVE_VIEWSTART_FREQ = 1;
+const int DIAL_CURSOR_WITHIN_VIEWPORT = 2;
 
 BandmapView::BandmapView(QWidget *parent) :
     QAbstractItemView(parent),
@@ -92,7 +94,6 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     connect(model(), SIGNAL(rowsRemoved(const QModelIndex, int, int)), SLOT(onRowsRemoved(const QModelIndex, int, int)));
     connect(model(), SIGNAL(rowsInserted(const QModelIndex, int, int)), SLOT(onRowsInserted(const QModelIndex, int, int)));
 
-    //connect(view->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(on_vertScrollBandChanged(int)));
 
     bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( bandmapGraphicsView, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( on_bandmap_customContextMenuRequested( const QPoint& ) ) );
@@ -156,16 +157,6 @@ void BandmapView::zoomUpdated(bool dir)
 
 }
 
-void BandmapView::on_vertScrollBandChanged(int value)
-{
-    //Q_UNUSED(value)
-
-    //dial->setViewPortStartEndFreq(value, getViewPortEndYCoordOnScene(), contestBandFlow);
-    //trace(QString("Scroll changed: zoomlevel = %1").arg(zoomLevel));
-    //trace(QString("scroll changed: value = %1").arg(value));
-    //trace(QString("scroll changed: end Y coord = %1").arg(getViewPortEndYCoordOnScene()));
-    //bandmapUpdate();
-}
 
 
 
@@ -721,28 +712,26 @@ void BandmapView::setFreq(double f, bool legalFreq)
     curFreq = f;
     qint32 freqInt32 = static_cast<qint32>(f / 1000);
 
-    //dial->setViewPortStartEndFreq(0, static_cast<int>(bandmapScene->height()), contestBandFlow);
 
     int viewportYStart = bandmapGraphicsView->verticalScrollBar()->value();
-    //qDebug() << "freqInt32 " << freqInt32;
-    //qDebug() << "dial start f " << dial->getScaleStartFreq();
-    //qDebug() << "dial end f" << dial->getScaleEndFreq();
-    //qDebug() << "YcoordStart " << viewportYStart;
 
-/*
-    if (freqInt32 > dial->getScaleEndFreq())
+    if (dialCursorWithinViewport(freqInt32) == DIAL_CURSOR_BELOW_VIEWSTART_FREQ)
     {
         // tuning up, move viewport
+        qDebug() << "tuning up";
+        qDebug() << "Viewport start " << viewportYStart;
+        qDebug() << "zoomlevel " << zoomLevel;
+        qDebug() << "pixel khz step " << dialData::khzPixelStep[zoomLevel];
 
-        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart + (dialData::khzPixelStep[zoomLevel] * 2));
+        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart - (dialData::khzPixelStep[zoomLevel]));
     }
-    else if (freqInt32 < dial->getScaleStartFreq())
+    else if (dialCursorWithinViewport(freqInt32) == DIAL_CURSOR_ABOVE_VIEWSTART_FREQ)
     {
         // tuning down, move viewport
-        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart - (dialData::khzPixelStep[zoomLevel] * 2));
+        bandmapGraphicsView->verticalScrollBar()->setValue(viewportYStart + (dialData::khzPixelStep[zoomLevel]));
     }
 
-*/
+
 
     dial->setCurFreq(f);
     if (legalFreq)
@@ -759,6 +748,29 @@ void BandmapView::setFreq(double f, bool legalFreq)
         bandmapUpdate();
     }
 
+}
+
+
+int BandmapView::dialCursorWithinViewport(qint32 freq)
+{
+    int sceneStartYCoord = bandmapGraphicsView->mapToScene(0,0).toPoint().y();
+    int sceneEndYCoord = bandmapGraphicsView->mapToScene(0, bandmapGraphicsView->viewport()->height() - bandmapGraphicsView->horizontalScrollBar()->height()).toPoint().y();
+
+    dial->setViewPortStartEndFreq(sceneStartYCoord, sceneEndYCoord, contestBandFlow);
+    qDebug() << "cur freq " << freq;
+    qDebug() << "dial startfreq " << dial->getScaleStartFreq();
+    qDebug() << "dial endfreq " << dial->getScaleEndFreq();
+
+    if (freq < dial->getScaleStartFreq())
+    {
+        return DIAL_CURSOR_BELOW_VIEWSTART_FREQ;
+    }
+    else if (freq > dial->getScaleEndFreq())
+    {
+        return DIAL_CURSOR_ABOVE_VIEWSTART_FREQ;
+    }
+
+    return DIAL_CURSOR_WITHIN_VIEWPORT;
 }
 
 void BandmapView::bandmapSelectFreq(int y)
