@@ -264,8 +264,11 @@ BandmapClientFrame::~BandmapClientFrame()
     //bandmapView->deleteItemsFromMarkerList();
     delete ui;
 
-
+    delete modeBandPlan;
+    delete operatingFreq;
     delete bandmapDataModel;
+    delete filterSetup;
+    //delete bandmapSpotProxyModel;
     delete actionInObject;
     delete freqDisplayPalette;
     bandmapView->deleteLater();
