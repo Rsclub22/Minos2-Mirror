@@ -211,6 +211,8 @@ signals:
     void sendModeToControl(QString);
     void sendRitFreq(int);
     void ritStatus(bool);
+    void radioIsConnected(bool);
+    void radioHasError(QString);
     void radioDisconnected();
     void sendRunOnFlag(QString, bool);
     void sendRunOffFreqFlag(QString, bool);

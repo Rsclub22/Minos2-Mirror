@@ -171,6 +171,8 @@ public:
 
     void setRunOnFlag(QString _runFreq, bool _runModeOn);
     void setRunOffFreqFlag(QString _runFreq, bool _offRunFreq);
+    void setBandmapRadioIsConnect(bool state);
+    void setBandmapRadioHasError(QString error);
 signals:
 
     void freqDisplayClicked();
@@ -188,6 +190,8 @@ private:
     QString contestModeStr;
     int contestMode;
 
+    bool radioIsConnected;
+    QString radioError;
     QString lastfreq;
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
@@ -274,7 +278,7 @@ private:
     int getModeOffSet(QString contestModeStr);
     void handleDxSpots(QVector<QString> &spotQueue);
     //void handleClusterStatusMessage(QString &msg);
-    void statusIndicatorToggle(bool on);
+    void clusterStatusIndicatorToggle(bool on);
     void addDxSpotToBandmapTable(const QString spot);
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
@@ -293,6 +297,8 @@ private:
     void setCQFreq();
     void addRemoveCQSpot(LoggerSpots *spot);
 
+    void radioStatusIndicatorToggle(bool on);
+    bool checkContestBandMatch(double curFreq);
 protected:
 
 

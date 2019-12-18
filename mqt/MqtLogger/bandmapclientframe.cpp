@@ -72,6 +72,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     contestBandFlow(0),
     contestBandFHigh(0),
     contestMode(-1),
+    radioIsConnected(false),
     clusterServerLoaded(false),
     clusterServerConnected(false),
     runModeOn(false),
@@ -86,7 +87,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui->setupUi(this);
 
     ui->bandmapFrameTitle->setText("Bandmap");
-    ui->bandmapFrameTitle2->clear();
+    clusterStatusIndicatorToggle(false);
+    radioStatusIndicatorToggle(false);
 
     //int height = ui->bandmapGraphicsView->height();
     //int width = ui->bandmapGraphicsView->width();
@@ -110,7 +112,6 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     bandmapSpotProxyModel->sort(FREQ_STR_COL_NUM, Qt::AscendingOrder);
 
     bandmapView->setModel(bandmapSpotProxyModel);
-
 
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
@@ -263,7 +264,11 @@ BandmapClientFrame::~BandmapClientFrame()
     //bandmapView->deleteItemsFromMarkerList();
     delete ui;
 
+    delete modeBandPlan;
+    delete operatingFreq;
     delete bandmapDataModel;
+    delete filterSetup;
+    //delete bandmapSpotProxyModel;
     delete actionInObject;
     delete freqDisplayPalette;
     bandmapView->deleteLater();
@@ -380,13 +385,17 @@ void BandmapClientFrame::on_bearingActionSelected()
         traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(bandmapView->getSelectedSpotDataPtr()->dxCall).arg(bandmapView->getSelectedSpotDataPtr()->rotBrg));
         QString brg = bandmapView->getSelectedSpotDataPtr()->dxBrg;
         QString loc = bandmapView->getSelectedSpotDataPtr()->dxLocator;
-        if (loc.count() < 6)
+        if (!brg.isEmpty())
         {
-            brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+            if (loc.count() < 6)
+            {
+                brg = brg.append(SHORTLOCATOR_IDENTIFIER);
 
+            }
+
+            sendBrgToRot(brg);
         }
 
-        sendBrgToRot(brg);
     }
 
 }
@@ -522,7 +531,7 @@ void BandmapClientFrame::context_unMarkSpotActionSelected()
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
     if (spotType == bandmapSpotType::CLUSTER_MARKED)
     {
-        bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
+        bandmapSpotProxyModel->setData(bandmapDataModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
 
@@ -543,13 +552,17 @@ void BandmapClientFrame::context_bearingActionSelected()
     traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(contextMenuSelectedSpotData.dxCall).arg(contextMenuSelectedSpotData.rotBrg));
     QString brg = contextMenuSelectedSpotData.dxBrg;
     QString loc = contextMenuSelectedSpotData.dxLocator;
-    if (loc.count() < 6)
+    if (!brg.isEmpty())
     {
-        brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+        if (loc.count() < 6)
+        {
+            brg = brg.append(SHORTLOCATOR_IDENTIFIER);
 
+        }
+
+        sendBrgToRot(brg);
     }
 
-    sendBrgToRot(brg);
 
 }
 
@@ -1475,13 +1488,13 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
 
     if (stateMsg.contains("Connected"))
     {
-         statusIndicatorToggle(true);
+         clusterStatusIndicatorToggle(true);
          clusterServerConnected = true;
 
     }
     else
     {
-         statusIndicatorToggle(false);
+         clusterStatusIndicatorToggle(false);
          clusterServerConnected = false;
 
     }
@@ -1489,12 +1502,12 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
     if (clusterServerLoaded)
     {
 
-        ui->statusIndicator->setToolTip(stateMsg);
+        ui->clusterStatusIndicator->setToolTip(stateMsg);
         traceMsg(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
     {
-        ui->statusIndicator->setToolTip("Cluster Server Not Running");
+        ui->clusterStatusIndicator->setToolTip("Cluster Server Not Running");
     }
 }
 
@@ -1503,15 +1516,31 @@ void BandmapClientFrame::setClusterServerLoaded(bool loaded)
     clusterServerLoaded = loaded;
 }
 
-void BandmapClientFrame::statusIndicatorToggle(bool on)
+void BandmapClientFrame::clusterStatusIndicatorToggle(bool on)
 {
     if (on)
     {
-        ui->statusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->clusterStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
     }
     else
     {
-       ui->statusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+       ui->clusterStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+    }
+
+}
+
+void BandmapClientFrame::radioStatusIndicatorToggle(bool on)
+{
+    if (on)
+    {
+        ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->radioStatusIndicator->setToolTip("Connected");
+
+    }
+    else
+    {
+       ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+       ui->radioStatusIndicator->setToolTip("Disconnected");
     }
 
 }
@@ -1521,6 +1550,11 @@ void BandmapClientFrame::setFreq(QString freq)
     if (lastfreq != freq)
     {
         lastfreq = freq;
+        curFreq = freq.toDouble();
+
+        // check freq matches contest band
+        checkContestBandMatch(curFreq);
+
         if (freq.count() >= 4)
         {
 
@@ -1542,8 +1576,15 @@ void BandmapClientFrame::setFreq(QString freq)
 
             ui->freqDisplay->setText(freq);
         }
+        else
+        {
+            freqDisplayPalette->setColor(QPalette::Text, Qt::red);
+            ui->freqDisplay->setPalette(*freqDisplayPalette);
+            legalFreq = false;
+            ui->freqDisplay->setText(freq);
+        }
 
-        curFreq = freq.toDouble();
+
         bandmapView->setFreq(curFreq, legalFreq);
 
 
@@ -1552,7 +1593,22 @@ void BandmapClientFrame::setFreq(QString freq)
 
 }
 
+bool BandmapClientFrame::checkContestBandMatch(double curFreq)
+{
 
+    if (curFreq >= contestBandFlow && curFreq <= contestBandFHigh)
+    {
+
+        ui->radioStatusMsg->clear();
+        return true;
+    }
+    else
+    {
+        ui->radioStatusMsg->setText("<font color='Red'>Freq out of band</font>");
+    }
+
+    return false;
+}
 
 void BandmapClientFrame::filterButtonSelected()
 {
@@ -1608,13 +1664,13 @@ void BandmapClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse within frame!</font>");
-        ui->bandmapFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
+        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse in frame, updates paused</font>");
+        //ui->bandmapFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
     }
     else
     {
         ui->bandmapFrameTitle->setText("Bandmap");
-        ui->bandmapFrameTitle2->clear();
+        //ui->bandmapFrameTitle2->clear();
     }
 }
 
@@ -1801,6 +1857,24 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString _freq, QString l
                                         freq, logBandStr, logBandMask,
                                         false, time, false, false, bandmapSpotType::SAVED);
     logSpotQueue.append(spot);
+
+}
+
+void BandmapClientFrame::setBandmapRadioIsConnect(bool state)
+{
+    radioIsConnected = state;
+    radioStatusIndicatorToggle(state);
+    if (state)
+    {
+        ui->radioStatusMsg->clear();
+        radioError.clear();
+    }
+ }
+
+void BandmapClientFrame::setBandmapRadioHasError(QString error)
+{
+    radioError = error;
+    ui->radioStatusMsg->setText(QString("<font color='Red'>%1</font>").arg(error));
 
 }
 

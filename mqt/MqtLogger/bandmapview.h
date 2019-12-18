@@ -126,12 +126,12 @@ private slots:
 
     void on_nextSpot(bool nextFreqUpDown, bool nextMult);
     int findNextNonWorkedLocatorUpList(int curSpotViewNum);
-    void on_vertScrollBandChanged(int);
 
     void on_scrollMap(bool dir);
     void onRowsRemoved(const QModelIndex &parent, int first, int last);
     void onRowsInserted(const QModelIndex &parent, int first, int last);
     void zoomUpdated(bool dir);
+
 private:
 
     QGraphicsScene *bandmapScene;
@@ -191,6 +191,7 @@ private:
     void deleteItemsFromMarkerList();
     void assembleCqToolTip(int row, QString freq, QString& toolTipMsg);
     void assembleCqMsg(int row, QString& markerMsg);
+    int dialCursorWithinViewport(qint64 freq);
 };
 
 #endif // BANDMAPVIEW_H

@@ -49,6 +49,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     ui->setupUi(this);
 
     ui->clusterClientFrameTitle->setText("Cluster");
+    statusIndicatorToggle(false);
 
     ui->clusterSplitter->setStretchFactor(0, 2);
     ui->clusterSplitter->setStretchFactor(1, 1);
@@ -502,11 +503,15 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     {
         QString brg = spotProxyModel->data(index, DataStoredRole).toString();
         QString loc = spotProxyModel->data(spotProxyModel->index(index.row(), DXLOC_COL_NUM), DataStoredRole).toString();
-        if (loc.count() < 6)
+        if (!brg.isEmpty())
         {
-            brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+            if (loc.count() < 6)
+            {
+                brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+            }
+            sendBrgToRot(brg);
         }
-        sendBrgToRot(brg);
+
     }
 }
 
@@ -1098,13 +1103,17 @@ void ClusterClientFrame::bearingActionSelected()
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
             QString brg = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXBRG_COL_NUM), DataStoredRole).toString();
-            QString loc = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXLOC_COL_NUM), DataStoredRole).toString();
-            if (loc.count() < 6)
+            if (!brg.isEmpty())
             {
-                brg = brg.append(SHORTLOCATOR_IDENTIFIER);
+                QString loc = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXLOC_COL_NUM), DataStoredRole).toString();
+                if (loc.count() < 6)
+                {
+                    brg = brg.append(SHORTLOCATOR_IDENTIFIER);
 
+                }
+                sendBrgToRot(brg);
             }
-            sendBrgToRot(brg);
+
         }
     }
 }
@@ -1681,11 +1690,14 @@ void ClusterClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->clusterClientFrameTitle->setText("Cluster - <font color='Red'>Mouse within frame!<p> Updates paused for 5 secs</font>");
+        ui->clusterClientFrameTitle->setText("Cluster - <font color='Red'>Mouse in frame, updates paused</font>");
+        //ui->clusterClientFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
+
     }
     else
     {
         ui->clusterClientFrameTitle->setText("Cluster");
+        //ui->clusterClientFrameTitle2->clear();
     }
 }
 
