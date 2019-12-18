@@ -1132,6 +1132,7 @@ void BandmapView::deleteItemsFromMarkerList()
                 BandmapSpotMarker* s = listOfMarkers[i]->getSpotMarkerPtr();
                 s->clearSpotText();
                 s->clearToolTipText();
+
                 bandmapScene->removeItem(listOfMarkers[i]->getSpotMarkerPtr());
                 delete s;
             }
@@ -1144,7 +1145,10 @@ void BandmapView::deleteItemsFromMarkerList()
             }
 
         }
+
+
     }
+
 
 
 }
