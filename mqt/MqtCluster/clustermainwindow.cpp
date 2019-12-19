@@ -202,6 +202,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXDIST_COL_NUM, true);
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
+
 
     // sent spot tab
 
