@@ -23,7 +23,7 @@ ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
         restoreGeometry(geometry);
 
 
-    scf.loadFile();
+    scf.loadFile(this);
     curConfigName = defaultLayoutName;
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();

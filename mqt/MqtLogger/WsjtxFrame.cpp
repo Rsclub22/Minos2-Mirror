@@ -233,6 +233,110 @@ public:
     }
 };
 
+void WsjtxFrame::process_decodes()
+{
+    int decodeEndSize = messages.size();
+    if (autoEnabled)
+    {
+        trace(QString("WsjtxFrame::process_decodes Checking decodes start %1 end %2").arg(decodeStartSize).arg(decodeEndSize));
+
+        if (decodeEndSize > decodeStartSize)
+        {
+            // iterate over the latest decodes, and select the best
+
+            int bestOffset = -1;
+            PointBonusMult bestPoints;
+            QString bestCs;
+            int currSn = -100;
+
+            int minpoints = ui->minPointsSpinner->value();
+            if (!ui->minPointsCheckBox->isChecked())
+                minpoints = 0;
+            int minsnr =  ui->snrSpinner->value();
+            if (!ui->snrCheckBox->isChecked())
+                minsnr = -100;
+
+            for (int i = decodeStartSize; i < decodeEndSize; i++)
+            {
+                decodeMessage &dc = messages[i];
+                if (dc.oldmsg)
+                    continue;
+
+                trace(QString("WsjtxFrame::process_decodes Checking %1 stage %2 tocall %3 fromcall %4")
+                      .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
+
+                 if (dc.points <= 0)
+                    continue;
+
+                 bool auto73 = ui->autosel73cb->isChecked();
+                 bool toMyCall = (dc.toCall == decoder.getMyCall());
+                 if (dc.mstage == emsCQ
+                         || (auto73 && dc.mstage == ems73 && !toMyCall)
+                         || (auto73 && dc.mstage == emsRRR && !toMyCall)
+                         || (dc.mstage == emsGrid && toMyCall)
+                   )
+                {
+                     PointBonusMult pbv(dc);
+
+                    if ( dc.snr >= minsnr
+                            && dc.points > minpoints
+                            && pbv > bestPoints
+                          )
+                    {
+                        trace(QString("WsjtxFrame::process_decodes Candidate %1").arg(messages[i].message));
+                        bestOffset = i;
+                        bestPoints = pbv;
+                        bestCs = dc.fromCall.fullCall.getValue();
+                        currSn = dc.snr;
+                    }
+                    else
+                    {
+                        if (bestOffset >= 0
+                            && dc.fromCall.fullCall.getValue() == bestCs
+                            && dc.snr > currSn
+                            )
+                        {
+                            trace(QString("WsjtxFrame::process_decodes Candidate - CS already seen %1").arg(messages[i].message));
+                            bestOffset = i;
+                            currSn = dc.snr;
+                        }
+                        else
+                        {
+                            trace(QString("WsjtxFrame::process_decodes NOT best %1").arg(messages[i].message));
+
+                        }
+                    }
+                }
+                else
+                {
+                    trace(QString("WsjtxFrame::process_decodes NOT Candidate %1").arg(messages[i].message));
+                }
+            }
+            for (int i = decodeStartSize; i < decodeEndSize; i++)
+            {
+                decodeMessage &dc = messages[i];
+                dc.best = (bestOffset == i);
+            }
+            if (bestOffset >= 0)
+                trace("WsjtxFrame::process_decodes best decode is " + messages[bestOffset].message);
+
+            emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
+            if (!currentlyTransmitting && ui->autoSelectButton->isChecked() && bestOffset >= 0 )
+            {
+                trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
+                messages[bestOffset].autoresp = true;
+                reply(messages[bestOffset]);
+            }
+        }
+    }
+    if (!columns_resized_)
+    {
+        ui->decodes_table_view_->resizeColumnsToContents ();
+        columns_resized_ = true;
+    }
+    ui->decodes_table_view_->scrollToBottom ();
+}
+
 void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
@@ -243,6 +347,9 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     if (ct != cc || cc == nullptr)
         return;
     id_ = id;
+
+    currentlyDecoding = decoding;
+    currentlyTransmitting = transmitting;
 
     trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
           .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
@@ -328,106 +435,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     {
         inDecode = false;
 
-        int decodeEndSize = messages.size();
-        if (autoEnabled)
-        {
-            trace(QString("WsjtxFrame::update_status Checking decodes start %1 end %2").arg(decodeStartSize).arg(decodeEndSize));
-
-            if (decodeEndSize > decodeStartSize)
-            {
-                // iterate over the latest decodes, and select the best
-
-                int bestOffset = -1;
-                PointBonusMult bestPoints;
-                QString bestCs;
-                int currSn = -100;
-
-                int minpoints = ui->minPointsSpinner->value();
-                if (!ui->minPointsCheckBox->isChecked())
-                    minpoints = 0;
-                int minsnr =  ui->snrSpinner->value();
-                if (!ui->snrCheckBox->isChecked())
-                    minsnr = -100;
-
-                for (int i = decodeStartSize; i < decodeEndSize; i++)
-                {
-                    decodeMessage &dc = messages[i];
-                    if (dc.oldmsg)
-                        continue;
-
-                    trace(QString("WsjtxFrame::update_status Checking %1 stage %2 tocall %3 fromcall %4")
-                          .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
-
-                     if (dc.points <= 0)
-                        continue;
-
-                     bool auto73 = ui->autosel73cb->isChecked();
-                     bool toMyCall = (dc.toCall == decoder.getMyCall());
-                     if (dc.mstage == emsCQ
-                             || (auto73 && dc.mstage == ems73 && !toMyCall)
-                             || (auto73 && dc.mstage == emsRRR && !toMyCall)
-                             || (dc.mstage == emsGrid && toMyCall)
-                       )
-                    {
-                         PointBonusMult pbv(dc);
-
-                        if ( dc.snr >= minsnr
-                                && dc.points > minpoints
-                                && pbv > bestPoints
-                              )
-                        {
-                            trace(QString("WsjtxFrame::update_status Candidate %1").arg(messages[i].message));
-                            bestOffset = i;
-                            bestPoints = pbv;
-                            bestCs = dc.fromCall.fullCall.getValue();
-                            currSn = dc.snr;
-                        }
-                        else
-                        {
-                            if (bestOffset >= 0
-                                && dc.fromCall.fullCall.getValue() == bestCs
-                                && dc.snr > currSn
-                                )
-                            {
-                                trace(QString("WsjtxFrame::update_status Candidate - CS already seen %1").arg(messages[i].message));
-                                bestOffset = i;
-                                currSn = dc.snr;
-                            }
-                            else
-                            {
-                                trace(QString("WsjtxFrame::update_status NOT best %1").arg(messages[i].message));
-
-                            }
-                        }
-                    }
-                    else
-                    {
-                        trace(QString("WsjtxFrame::update_status NOT Candidate %1").arg(messages[i].message));
-                    }
-                }
-                for (int i = decodeStartSize; i < decodeEndSize; i++)
-                {
-                    decodeMessage &dc = messages[i];
-                    dc.best = (bestOffset == i);
-                }
-                if (bestOffset >= 0)
-                    trace("WsjtxFrame::update_status best decode is " + messages[bestOffset].message);
-
-                emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
-                if (ui->autoSelectButton->isChecked() && bestOffset >= 0 )
-                {
-                    trace("WsjtxFrame::update_status auto replying to " + messages[bestOffset].message);
-                    messages[bestOffset].autoresp = true;
-                    reply(messages[bestOffset]);
-                }
-            }
-        }
-        if (!columns_resized_)
-        {
-            ui->decodes_table_view_->resizeColumnsToContents ();
-            columns_resized_ = true;
-        }
-        ui->decodes_table_view_->scrollToBottom ();
+        process_decodes();
     }
 }
 
@@ -498,6 +506,11 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
 
     decodes_model_->add_decode ();
 
+    if (!currentlyDecoding && !currentlyTransmitting && !inDecode)
+    {
+        // we can get "free standing" decodes, which we should process for best/auto
+        process_decodes();
+    }
 
 }
 void WsjtxFrame::decodes_cleared (QString const& client_id)
