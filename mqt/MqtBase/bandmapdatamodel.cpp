@@ -55,7 +55,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
 
     int col = index.column();
 
-    BandmapData* bandmapSpot = new BandmapData();
+//    BandmapData* bandmapSpot = new BandmapData();
 
     if (role == Qt::DisplayRole)
     {
@@ -67,7 +67,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
 
-        bandmapSpot = bandmapData.at(row);
+        BandmapData* bandmapSpot = bandmapData.at(row);
 
         QString d;
         switch (col)
@@ -153,7 +153,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
     if (role == BMP_DataStoredRole)
     {
 
-        bandmapSpot = bandmapData.at(index.row());
+        BandmapData* bandmapSpot = bandmapData.at(index.row());
 
         QVariant d;
         switch (col)
