@@ -646,11 +646,7 @@ void TSingleLogFrame::buildScreenLayout()
 {
 
     ScreenConfigFile scf;
-    if (!scf.loadFile())
-    {
-        mShowMessage("Invalid or missing screen configurations", this);
-        exit(1);
-    }
+    scf.loadFile(this);
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     QString curConfigName = ct->screenLayout.getValue();

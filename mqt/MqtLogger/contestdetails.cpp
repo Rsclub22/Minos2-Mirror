@@ -381,7 +381,7 @@ void ContestDetails::setDetails(  )
 
    ui->screenLayoutCombo->clear();
    ScreenConfigFile scf;
-   scf.loadFile();
+   scf.loadFile(this);
 
    QString curConfigName = contest->screenLayout.getValue();
    if (curConfigName.isEmpty())
