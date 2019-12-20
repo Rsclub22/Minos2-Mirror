@@ -57,15 +57,17 @@ public:
 
     ScreenConfigFile();
     ~ScreenConfigFile();
-    bool loadFile();
+    void loadFile(QWidget *parent);
     bool dumpFile();
 
     QMap <QString, SC> configs;
+    
 private:
-    bool readFile(QString s);
+    void readFile(QString s, QWidget *parent);
     bool writeFile(QString s);
     void procRows(QVector<SCRow> &elerows, QJsonArray &rows);
     void writeTypetoRow(SCElement &e, QJsonArray &scrow);
+    bool parseConfigString(QString s);
 };
 
 #endif // SCREENCONFIGFILE_H

@@ -34,12 +34,9 @@ ScreenConfigFile::~ScreenConfigFile()
 {
 
 }
-bool ScreenConfigFile::loadFile()
+void ScreenConfigFile::loadFile(QWidget *parent)
 {
-    bool ret = false;
-    ret = readFile("./Configuration/ScreenConfigs.json");
-
-    return ret;
+    readFile("./Configuration/ScreenConfigs.json", parent);
 }
 bool ScreenConfigFile::dumpFile()
 {
@@ -77,18 +74,27 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
         elerows.push_back(scrow);
     }
 }
-bool ScreenConfigFile::readFile(QString f)
+void ScreenConfigFile::readFile(QString f, QWidget *parent)
 {
-    QJsonParseError err;
     QFile jf(f);
     QString s;
+    bool retval = false;
     if (jf.open(QIODevice::ReadOnly))
     {
         s = jf.readAll();
+        retval = parseConfigString(s);
+        if (retval == false)
+        {
+            mShowMessage("Invalid or missing screen configurations; using built in defaults", parent);
+        }
     }
     else
     {
         trace("Failed to open " + f );
+    }
+    if (retval == false)
+    {
+        trace("Using default configuration");
         s = defaultConfig
                 .arg(defaultLayoutName)
                 .arg(getScreenTypeString(sctLog))
@@ -101,7 +107,12 @@ bool ScreenConfigFile::readFile(QString f)
                 .arg(getScreenTypeString(sctThisMatch))
                 .arg(getScreenTypeString(sctOtherMatch))
                 .arg(getScreenTypeString(sctArchiveMatch));
+        parseConfigString(s);
     }
+}
+bool ScreenConfigFile::parseConfigString(QString s)
+{
+    QJsonParseError err;
     QJsonDocument json = QJsonDocument::fromJson(s.toUtf8(), &err);
     if (!err.error)
     {
@@ -115,7 +126,6 @@ bool ScreenConfigFile::readFile(QString f)
                 QJsonObject namestruct = namearray[i].toObject();
                 QString name = namestruct.value("name").toString();
                 config.name = name;
-//                explicit ScreenConfigElement(QWidget *parent, ScreenConfigRow *parentrow);
                 config.baseElement = QSharedPointer<SCElement>(new SCElement());
                 QJsonArray rows = namestruct.value("rows").toArray();
                 procRows(config.baseElement->rows, rows);
@@ -134,7 +144,6 @@ bool ScreenConfigFile::readFile(QString f)
         trace("Err " + err.errorString() + " Bad Json document " + s);
         return false;
     }
-
 }
 void ScreenConfigFile::writeTypetoRow(SCElement &e, QJsonArray &scrow)
 {
