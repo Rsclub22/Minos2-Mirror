@@ -97,6 +97,9 @@ QString decodeMessage::getMStage() const
 bool decodeMessage::checkAsContact()
 {
     BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
+    if (!cc)
+        return false;
+
     ScreenContact scc;
     scc.initialise(cc);
     scc.cs = fromCall;
