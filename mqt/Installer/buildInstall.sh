@@ -84,10 +84,9 @@ cp ../Minos2/mqt/Help/*.* ./Help
 
 cd Configuration
 
-wget http://www.country-files.com/cty/cty.dat -O cty.dat
-wget http://www.rsgbcc.org/vhf/vhfcontests17.xml -O vhfcontests17.xml
-wget http://www.rsgbcc.org/vhf/vhfcontests18.xml -O vhfcontests18.xml
-wget http://www.rsgbcc.org/vhf/vhfcontests19.xml -O vhfcontests19.xml
+wget https://www.country-files.com/cty/cty.dat -O cty.dat
+wget https://www.rsgbcc.org/vhf/vhfcontests19.xml -O vhfcontests19.xml
+wget https://www.rsgbcc.org/vhf/vhfcontests20.xml -O vhfcontests20.xml
 
 cd ..
 
