@@ -2652,6 +2652,7 @@ void QSOLogFrame::setBandMapControlsVisible(bool visible)
 
 void QSOLogFrame::setBandMapControlsDisabled(bool disabled)
 {
+
     ui->bandmapMarkFreqPb->setDisabled(disabled);
     ui->bandmapMarkFreqPb->setDisabled(disabled);
     ui->bandmapSaveFreqPb->setDisabled(disabled);
@@ -2860,34 +2861,30 @@ bool QSOLogFrame::isClusterServerLoaded()
 void QSOLogFrame::setClusterTXSpotEnableState(bool txEnableState)
 {
     setClusterSendSpotControlsVisible(txEnableState);
+    setClusterSendSpotControlsDisabled(!txEnableState);
     sendSpotToClusterOn = txEnableState;
 }
 
 void QSOLogFrame::setClusterSendSpotControlsVisible(bool visible)
 {
+
     ui->lastLoggedChkBx->setVisible(visible);
     ui->lastLoggedCallsignLbl->setVisible(visible);
     ui->spotPb->setVisible(visible);
     ui->lastSpotSentTitleLbl->setVisible(visible);
     ui->lastSpotSentLbl->setVisible(visible);
-    //if (visible)
-    //{
-    //    ui->spotPb->setDisabled(false);
-    //}
+
 
 }
 
 void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
 {
+
     ui->lastLoggedChkBx->setDisabled(disabled);
     ui->lastLoggedCallsignLbl->setDisabled(disabled);
     ui->spotPb->setDisabled(disabled);
     ui->lastSpotSentTitleLbl->setDisabled(disabled);
     ui->lastSpotSentLbl->setDisabled(disabled);
-    //if (visible)
-    //{
-    //    ui->spotPb->setDisabled(false);
-    //}
 
 }
 
@@ -2923,15 +2920,6 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
     {
         setBandMapControlsVisible(false);
     }
-
-    //if (isClusterServerLoaded())
-    //{
-    //    setClusterControlsVisible(true);
-    //}
-    //else
-    //{
-    //    setClusterControlsVisible(false);
-    //}
 
 }
 
@@ -3014,8 +3002,12 @@ void QSOLogFrame::setBandmapControlsState()
     }
     else
     {
-        setBandMapControlsVisible(true);
-        setBandMapControlsDisabled(false);
+        if (isBandMapLoaded())
+        {
+            setBandMapControlsVisible(true);
+            setBandMapControlsDisabled(false);
+        }
+
     }
 }
 
@@ -3034,8 +3026,11 @@ void QSOLogFrame::setClusterSendSpotControlsState()
     }
     else
     {
-        setClusterSendSpotControlsVisible(true);
-        setClusterSendSpotControlsDisabled(false);
+        if (isClusterServerLoaded() && sendSpotToClusterOn)
+        {
+            setClusterSendSpotControlsVisible(true);
+            setClusterSendSpotControlsDisabled(false);
+        }
     }
 }
 
