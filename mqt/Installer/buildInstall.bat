@@ -83,10 +83,9 @@ xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Cluster .\Configuration\Clust
 
 cd Configuration
 
-call powershell.exe "& {Invoke-WebRequest http://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests18.xml -Outfile vhfcontests18.xml}"
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests19.xml -Outfile vhfcontests19.xml}"
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/vhfcontests20.xml -Outfile vhfcontests20.xml}"
+call powershell.exe "& {Invoke-WebRequest https://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests19.xml -Outfile vhfcontests19.xml}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests20.xml -Outfile vhfcontests20.xml}"
 
 
 cd ../Bin
