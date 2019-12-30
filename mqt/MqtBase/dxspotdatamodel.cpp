@@ -376,7 +376,7 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
         }
 
 
-        dxSpotData.replace(row, dxSpot);
+        // dxSpotData.replace(row, dxSpot); // not needed
         emit dataChanged(index, index);
 
 

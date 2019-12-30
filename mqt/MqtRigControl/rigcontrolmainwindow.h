@@ -115,7 +115,7 @@ private:
     bool supSignalStrength;
     const int PASSBAND_NOCHANGE = -1;
 
-    QVector<BandDetail*> bands;
+    QVector<BandDetail> bands;
     QStringList presetFreq;
 
     int *test_mem;

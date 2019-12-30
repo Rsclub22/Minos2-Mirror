@@ -324,7 +324,7 @@ private:
 
     TuneMemoryButton *curTuneButton = nullptr;
 
-    CheckOperatingFreq* operatingFreq;
+    CheckOperatingFreq *operatingFreq;
     bool operatingFreqPlanOk;
 
     QPalette *freqDisplayPalette;

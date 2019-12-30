@@ -201,7 +201,8 @@ RigControlFrame::~RigControlFrame()
     {
         delete b;
     }
-
+    delete operatingFreq;
+    delete freqDisplayPalette;
 }
 void RigControlFrame::on_FontChanged()
 {
