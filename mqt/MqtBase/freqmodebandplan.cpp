@@ -120,7 +120,9 @@ bool freqModeBandPlan::readFile(QString f)
                         {
 
                             bool ok = false;
-                            freqHighLow.append(freqArray[j].toString().remove('.').toDouble(&ok));
+                            QString faj = freqArray[j].toString();
+                            faj = faj.remove('.');
+                            freqHighLow.append(faj.toDouble(&ok));
 
                         }
 

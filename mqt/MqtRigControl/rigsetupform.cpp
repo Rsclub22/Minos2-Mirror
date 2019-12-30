@@ -34,7 +34,7 @@
 
 
 
-RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
+RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
     QWidget(parent),
     ui(new Ui::rigSetupForm),
     transverterRemoved(false)
@@ -1199,10 +1199,10 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
     radioData->transVertSettings[tabNum]->band = tabName;
     for (int i = 0; i < bands.count(); i++)
     {
-         if (bands[i]->name == tabName)
+         if (bands[i].name == tabName)
          {
-             radioData->transVertSettings[tabNum]->fLow = bands[i]->fLow;
-             radioData->transVertSettings[tabNum]->fHigh = bands[i]->fHigh;
+             radioData->transVertSettings[tabNum]->fLow = bands[i].fLow;
+             radioData->transVertSettings[tabNum]->fHigh = bands[i].fHigh;
              break;
          }
     }
@@ -1375,10 +1375,10 @@ void RigSetupForm::changeBand()
 
     for (int i = 0; i < bands.count(); i++)
     {
-         if (bands[i]->name == transVertName)
+         if (bands[i].name == transVertName)
          {
-             radioData->transVertSettings[tabNum]->fLow = bands[i]->fLow;
-             radioData->transVertSettings[tabNum]->fHigh = bands[i]->fHigh;
+             radioData->transVertSettings[tabNum]->fLow = bands[i].fLow;
+             radioData->transVertSettings[tabNum]->fHigh = bands[i].fHigh;
          }
     }
     //renamedTransVertTabs.append(oldName);

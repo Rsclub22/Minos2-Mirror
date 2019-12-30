@@ -46,7 +46,7 @@ class RigSetupDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RigSetupDialog(RigControl* rig, const QVector<BandDetail*> _bands, QWidget *parent = nullptr);
+    explicit RigSetupDialog(RigControl* rig, const QVector<BandDetail> &_bands, QWidget *parent = nullptr);
     ~RigSetupDialog();
 
 
@@ -57,7 +57,7 @@ public:
     QStringList availRadios;
     int numAvailRadios;
 
-    QVector<BandDetail*> bands;
+    QVector<BandDetail> bands;
 
     int getRadioId(QString rotator);
 

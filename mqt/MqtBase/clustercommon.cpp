@@ -46,16 +46,16 @@ void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dx
 }
 
 
-void getBand(QVector<BandDetail*> &bands, QString freq, QString &band, QString &bandMask)
+void getBand(QVector<BandDetail> &bands, QString freq, QString &band, QString &bandMask)
 {
     //double f = freq.append("000").remove('.').toDouble();
     double f = freq.remove('.').toDouble();
 
     for (int i = 0; i < bands.count(); i++)
     {
-        if (f <= bands[i]->fHigh && f >= bands[i]->fLow)
+        if (f <= bands[i].fHigh && f >= bands[i].fLow)
         {
-            band = bands[i]->name;
+            band = bands[i].name;
             bandMask = QString::number(i);
             break;
         }

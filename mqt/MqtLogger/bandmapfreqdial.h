@@ -178,7 +178,7 @@ private:
 
     int getFontHeight();
 
-    QList<DialFreqText*> dialFreqList;
+    QList< QSharedPointer<DialFreqText> > dialFreqList;
 };
 
 #endif // BANDMAPFREQDIAL_H

@@ -287,7 +287,7 @@ bool BandList::findBand(double freq, BandInfo &bi)
    return false;
 }
 
-void loadVhfAndUpBands(QVector<BandDetail*> &bands)
+void loadVhfAndUpBands(QVector<BandDetail> &bands)
 {
     BandList &blist = BandList::getBandList();
 
@@ -300,7 +300,7 @@ void loadVhfAndUpBands(QVector<BandDetail*> &bands)
 
         {
             if (blist.bandList[i].getType().compare("VHF", Qt::CaseInsensitive) == 0 || blist.bandList[i].getType().compare("MWave", Qt::CaseInsensitive) == 0)
-                bands.append(new BandDetail(blist.bandList[i].uk, blist.bandList[i].flow, blist.bandList[i].fhigh));
+                bands.append(BandDetail(blist.bandList[i].uk, blist.bandList[i].flow, blist.bandList[i].fhigh));
         }
     }
 
@@ -323,6 +323,8 @@ bool checkValidBand(QString freq)
     return bandOK;
 }
 
+BandDetail::BandDetail()
+{}
 BandDetail::BandDetail(QString _name, double _flow, double _fhigh)
 {
     name = _name;

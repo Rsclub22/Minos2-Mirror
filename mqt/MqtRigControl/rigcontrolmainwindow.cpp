@@ -1564,9 +1564,9 @@ QString RigControlMainWindow::getBand(freq_t freq)
 {
     for (int i = 0; i < setupRadio->bands.count(); i++)
     {
-        if (freq >= setupRadio->bands[i]->fLow && freq <= setupRadio->bands[i]->fHigh)
+        if (freq >= setupRadio->bands[i].fLow && freq <= setupRadio->bands[i].fHigh)
         {
-            return setupRadio->bands[i]->name;
+            return setupRadio->bands[i].name;
         }
     }
     return "";
@@ -1925,9 +1925,9 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
         {
             for (int i = 0; i < bands.count(); i++)
             {
-                if (findSupRadioBand(bands[i]->name, supBandsList) ||  findSupTransBand(bands[i]->name, radioIdx))
+                if (findSupRadioBand(bands[i].name, supBandsList) ||  findSupTransBand(bands[i].name, radioIdx))
                 {
-                    bandList.append(bands[i]->name);
+                    bandList.append(bands[i].name);
                 }
             }
         }
@@ -1955,9 +1955,9 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber, QStrin
 
         for (int i = 0; i < bands.count(); i++)
         {
-            if (radio->chkFreqRange(my_rig, bands[i]->fLow, "USB"))
+            if (radio->chkFreqRange(my_rig, bands[i].fLow, "USB"))
             {
-                supBandList.append(bands[i]->name);
+                supBandList.append(bands[i].name);
             }
         }
     }

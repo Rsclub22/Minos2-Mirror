@@ -27,7 +27,7 @@
 
 class BandDetail;
 
-void loadVhfAndUpBands(QVector<BandDetail*> &bands);
+void loadVhfAndUpBands(QVector<BandDetail> &bands);
 bool checkValidBand(QString freq);
 
 class BandInfo
@@ -69,6 +69,7 @@ class BandList
 class BandDetail
 {
 public:
+    BandDetail();
     BandDetail(QString _name, double _flow, double _fhigh);
 
 

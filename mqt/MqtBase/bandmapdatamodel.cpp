@@ -67,7 +67,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
 
-        BandmapData* bandmapSpot = bandmapData.at(row);
+        QSharedPointer<BandmapData> bandmapSpot = bandmapData.at(row);
 
         QString d;
         switch (col)
@@ -153,7 +153,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
     if (role == BMP_DataStoredRole)
     {
 
-        BandmapData* bandmapSpot = bandmapData.at(index.row());
+        QSharedPointer<BandmapData> bandmapSpot = bandmapData.at(index.row());
 
         QVariant d;
         switch (col)
@@ -253,7 +253,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
     if (index.isValid() && role == BMP_DataStoredRole)
     {
 
-        BandmapData* bandmapSpot = bandmapData.value(row);
+        QSharedPointer<BandmapData> bandmapSpot = bandmapData.value(row);
 
         switch (col)
         {
@@ -333,7 +333,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
         }
 
 
-        bandmapData.replace(row, bandmapSpot);
+        //bandmapData.replace(row, bandmapSpot);    // not needed as bandmapspot points to the data anyway
         emit dataChanged(index, index);
 
 
@@ -376,12 +376,8 @@ bool BandmapDataModel::removeRows(int _row, int count, const QModelIndex &parent
 
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
-        BandmapData* spotData = bandmapData[row];
+        QSharedPointer<BandmapData> spotData = bandmapData[row];
         bandmapData.removeAt(row);
-        if (spotData != nullptr)
-        {
-            delete(spotData);
-        }
     }
     endRemoveRows();
     return true;
@@ -396,7 +392,7 @@ bool BandmapDataModel::removeColumns(int column, int count, const QModelIndex &p
     return true;
 }
 
-BandmapData* BandmapDataModel::getBandmapDataRow(int row)
+QSharedPointer<BandmapData> BandmapDataModel::getBandmapDataRow(int row)
 {
     return bandmapData[row];
 }

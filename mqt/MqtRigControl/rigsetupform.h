@@ -22,7 +22,7 @@ class RigSetupForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail*> _bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
+    explicit RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
     ~RigSetupForm();
 
 
@@ -32,7 +32,7 @@ public:
 
     scatParams* getRadioData();
 
-    QVector<BandDetail*> bands;
+    QVector<BandDetail> bands;
 
 
 

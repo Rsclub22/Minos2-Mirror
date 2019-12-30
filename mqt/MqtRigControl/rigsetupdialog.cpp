@@ -34,7 +34,7 @@
 
 
 
-RigSetupDialog::RigSetupDialog(RigControl* _radio, const QVector<BandDetail*> _bands, QWidget *parent) :
+RigSetupDialog::RigSetupDialog(RigControl* _radio, const QVector<BandDetail> &_bands, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RigSetupDialog),
     radioRemoved(false)

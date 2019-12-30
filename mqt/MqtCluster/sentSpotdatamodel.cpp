@@ -249,7 +249,7 @@ bool SentSpotDataModel::setData(const QModelIndex & index, const QVariant & valu
         }
 
 
-        sentSpotData.replace(row, sentSpot);
+        // sentSpotData.replace(row, sentSpot); // not needed
         emit dataChanged(index, index);
 
 

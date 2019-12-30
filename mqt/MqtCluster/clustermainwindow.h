@@ -161,7 +161,7 @@ private:
     QString appName;
     QLabel* status;
 
-    QVector<BandDetail*> bands;
+    QVector<BandDetail> bands;
     checkModeAgainstFreq* modeBandPlan;
 
     const QStringList userCmdButtonLabels = {"&Send", "&New", "&Edit", "&Clear"};
