@@ -1077,9 +1077,9 @@ void BandmapView::drawBandMapSpots()
 
 
                                 spot->setSpotText(spotMsg);
-                                spotMsg.detach();
+                                //spotMsg.detach();
                                 spot->setToolTipText(spotTooltipText);
-                                spotTooltipText.detach();
+                                //spotTooltipText.detach();
                                 listOfMarkers[markNum]->setSpotMarkerPtr(spot);
 
                                 QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight);
@@ -1228,7 +1228,7 @@ void BandmapView::assembleCqMsg(int row, QString& markerMsg)
 
     QString msg = QString("%1%2CQ Frequency @ .%3%4%5").arg(bLineStart).arg(msgColourStart).arg(extractKhz(freqStr)).arg(msgColourEnd).arg(bLineEnd);
     markerMsg = msg;
-    msg.detach();
+    //msg.detach();
 }
 
 
@@ -1344,7 +1344,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     }
 
     markerMsg = msg;
-    msg.detach();
+    //msg.detach();
 
 }
 
@@ -1355,7 +1355,7 @@ void BandmapView::assembleCqToolTip(int row, QString freq, QString& toolTipMsg)
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     QString msg = QString("CQ Frequency = %1\nThe computed mode is %2").arg(convertFreqStrDisp(freq)).arg(computedMode);
     toolTipMsg = msg;
-    msg.detach();
+    //msg.detach();
 
 }
 
@@ -1375,7 +1375,7 @@ void BandmapView::assembleToolTip(int row, QString freq, QString& toolTipMsg)
     QString msg = QString("%1 - %2 [%3 %4 @ %5 min] \nThe computed mode is %6\n%7").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTimeStr).arg(computedMode).arg(spotterComment);
 
     toolTipMsg = msg;
-    msg.detach();
+    //msg.detach();
 
 }
 
