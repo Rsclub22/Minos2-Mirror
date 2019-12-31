@@ -37,6 +37,18 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
     delegate = QSharedPointer<HtmlDelegate> (new TestDelegate(1.0, lcf/100.0));
     ui->decodes_table_view_->setItemDelegate( delegate.data());
+
+
+    QSize ms = delegate->docSize("XX");
+    ui->decodes_table_view_->verticalHeader()->setDefaultSectionSize(ms.height() *4/5);
+    ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(10);
+
+    ui->decodes_table_view_->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+
+    ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
+    ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(1);
+
+//    ui->decodes_table_view_->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     decodes_model_->delegate = delegate;
     decodes_model_->messages = &messages;
 
@@ -71,10 +83,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     if (!autoEnabled)
         ui->decodes_table_view_->hideColumn (dcBest);
 
-    ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
-    ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(1);
 
-    ui->decodes_table_view_->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_log_ADIF, this, &WsjtxFrame::log_ADIF);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_add_client, this, &WsjtxFrame::add_client);
     connect (WsjtxServer::getWsjtxServer(), &WsjtxServer::do_remove_client, this, &WsjtxFrame::remove_client);
@@ -506,7 +515,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
 
     decodes_model_->add_decode ();
 
-    if (!currentlyDecoding && !currentlyTransmitting && !inDecode)
+    if (!currentlyDecoding && !currentlyTransmitting && !inDecode && is_new)
     {
         // we can get "free standing" decodes, which we should process for best/auto
         process_decodes();
