@@ -33,7 +33,6 @@ int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 
 
 
-
 class RotControl: public QObject
 {
 

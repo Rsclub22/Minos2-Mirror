@@ -151,6 +151,7 @@ const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-s
 const QStringList presetButtonLabels = {"&Read", "&New", "&Edit", "&Clear"};
 
 
+
 namespace serialData
 {
 
