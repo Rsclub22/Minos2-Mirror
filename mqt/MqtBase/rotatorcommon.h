@@ -29,6 +29,7 @@ public:
 };
 
 
+
 const QChar SHORTLOCATOR_IDENTIFIER = '#'; // add to bearing to identify that it has been calculated from short locator.
                                            // Used in bearing sent from memory and clusterframe.
 
@@ -148,5 +149,166 @@ const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-s
 const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 const QStringList presetButtonLabels = {"&Read", "&New", "&Edit", "&Clear"};
+
+
+namespace serialData
+{
+
+    /**
+     * \brief Port type
+     */
+    typedef enum rig_port {
+        RIG_PORT_NONE = 0,      /*!< No port */
+        RIG_PORT_SERIAL,        /*!< Serial */
+        RIG_PORT_NETWORK,       /*!< Network socket type */
+        RIG_PORT_DEVICE,        /*!< Device driver, like the WiNRADiO */
+        RIG_PORT_PACKET,        /*!< AX.25 network type, e.g. SV8CS protocol */
+        RIG_PORT_DTMF,          /*!< DTMF protocol bridge via another rig, eg. Kenwood Sky Cmd System */
+        RIG_PORT_ULTRA,         /*!< IrDA Ultra protocol! */
+        RIG_PORT_RPC,           /*!< RPC wrapper */
+        RIG_PORT_PARALLEL,      /*!< Parallel port */
+        RIG_PORT_USB,           /*!< USB port */
+        RIG_PORT_UDP_NETWORK,   /*!< UDP Network socket type */
+        RIG_PORT_CM108,         /*!< CM108 GPIO */
+        RIG_PORT_GPIO,          /*!< GPIO */
+        RIG_PORT_GPION,         /*!< GPIO inverted */
+    } rig_port_t;
+
+
+    /**
+     * \brief Serial parity
+     */
+    enum serial_parity {
+        RIG_PARITY_NONE = 0,    /*!< No parity */
+        RIG_PARITY_ODD,         /*!< Odd */
+        RIG_PARITY_EVEN,        /*!< Even */
+        RIG_PARITY_MARK,        /*!< Mark */
+        RIG_PARITY_SPACE        /*!< Space */
+    };
+
+
+    /**
+     * \brief Serial handshake
+     */
+    enum serial_handshake {
+        RIG_HANDSHAKE_NONE = 0, /*!< No handshake */
+        RIG_HANDSHAKE_XONXOFF,  /*!< Software XON/XOFF */
+        RIG_HANDSHAKE_HARDWARE  /*!< Hardware CTS/RTS */
+    };
+
+
+    /**
+     * \brief Serial control state
+     */
+    enum serial_control_state {
+        RIG_SIGNAL_UNSET = 0,   /*!< Unset or tri-state */
+        RIG_SIGNAL_ON,          /*!< ON */
+        RIG_SIGNAL_OFF          /*!< OFF */
+    };
+
+
+
+
+    const serial_parity parityCodes[] = {RIG_PARITY_NONE, RIG_PARITY_ODD, RIG_PARITY_EVEN, RIG_PARITY_MARK, RIG_PARITY_SPACE};
+    const serial_handshake handshakeCodes[] = { RIG_HANDSHAKE_NONE, RIG_HANDSHAKE_XONXOFF, RIG_HANDSHAKE_HARDWARE };
+
+
+}
+
+class srotParams
+{
+public:
+
+
+  static void copyRot(srotParams* srce, srotParams &dest)
+  {
+
+      dest.antennaName = srce->antennaName;
+      dest.antennaNumber = srce->antennaNumber;
+      dest.configLabel = srce->configLabel;
+      dest.comport = srce->comport;
+      dest.rotatorModel = srce->rotatorModel;
+      dest.rotatorManufacturer = srce->rotatorManufacturer;
+      dest.rotatorModelName = srce->rotatorModelName;
+      dest.rotatorModelNumber = srce->rotatorModelNumber;
+      dest.pollInterval = srce->pollInterval;
+      dest.min_azimuth = srce->min_azimuth;
+      dest.max_azimuth = srce->max_azimuth;
+      dest.endStopType = srce->endStopType;
+      dest.rotatorCWEndStop = srce->rotatorCWEndStop;
+      dest.rotatorCCWEndStop = srce->rotatorCCWEndStop;
+      dest.rotType = srce->rotType;
+      dest.min_elevation = srce->min_elevation;
+      dest.max_elevation = srce->max_elevation;
+      dest.southStopType = srce->southStopType;
+      dest.overRunFlag = srce->overRunFlag;
+      dest.supportCwCcwCmd = srce->supportCwCcwCmd;
+      dest.simCwCcwCmd = srce->simCwCcwCmd;
+      dest.antennaOffset = srce->antennaOffset;
+      dest.moving = srce->moving;
+      dest.portType = srce->portType;
+      dest.networkAdd = srce->networkAdd;
+      dest.networkPort = srce->networkPort;
+      dest.maxBaudRate = srce->maxBaudRate;
+      dest.minBaudRate = srce->minBaudRate;
+      dest.baudrate = srce->baudrate;
+      dest.parity = srce->parity;
+      dest.stopbits = srce->stopbits;
+      dest.databits = srce->databits;
+      dest.handshake = srce->handshake;
+      dest.enableRot = srce->enableRot;
+      dest.activeRTS = srce->activeRTS;
+      dest.activeDTR = srce->activeDTR;
+      dest.nactiveRTS = srce->nactiveRTS;
+      dest.nactiveDTR = srce->nactiveDTR;
+
+    }
+
+
+  QString antennaName;
+  QString antennaNumber;
+  QString configLabel;
+  QString comport;
+  QString rotatorModel;
+  QString rotatorManufacturer;
+  QString rotatorModelName;
+  int rotatorModelNumber = 0;
+  int rotatorCWEndStop = COMPASS_MIN0;  // actual rotator endstops
+  int rotatorCCWEndStop= COMPASS_MAX360;
+  endStop rotType = ROT_0_360;          // actual rotator type
+
+  QString pollInterval = ROT_DEFAULT_POLLINTERVAL;
+
+  int min_azimuth = 0;                   // working endstops
+  int max_azimuth = 0;
+  endStop endStopType = ROT_0_360;      //working endstop type
+
+  int min_elevation = 0.0;
+  int max_elevation = 0.0;
+  southStop southStopType = S_STOPOFF;
+  bool overRunFlag = false;
+  bool supportCwCcwCmd = true;
+  bool simCwCcwCmd = false;
+  int antennaOffset = 0;
+  bool moving = false;
+  int portType = RIG_PORT_NONE;
+  QString networkAdd;
+  QString networkPort;
+  int maxBaudRate = 0;
+  int minBaudRate = 0;
+  int baudrate = 0;
+  int parity = 0;
+  int stopbits = 0;
+  int databits = 0;
+  int handshake = 0;
+  bool enableRot = false;
+  bool activeRTS = false;
+  bool activeDTR = false;
+  bool nactiveRTS = false;
+  bool nactiveDTR = false;
+
+};
+
+
 
 #endif // ROTATORCOMMON_H

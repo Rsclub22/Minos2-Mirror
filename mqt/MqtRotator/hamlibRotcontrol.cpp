@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016
 //
 //
 // Hamlib Library
@@ -14,7 +14,7 @@
 #include <QDebug>
 #include <QStringList>
 #include <QThread>
-#include "rotcontrol.h"
+#include "hamlibRotcontrol.h"
 #include <hamlib/rotator.h>
 #include "minosNetUtils.h"
 
@@ -29,10 +29,10 @@ int collect(const rot_caps *caps,rig_ptr_t)
     return 1;
 }
 
-RotControl::RotControl(QObject *parent) : QObject(parent)
+HamlibRotControl::HamlibRotControl(QObject *parent) : QObject(parent)
 {
 
-
+//   getRotatorList();
    rot_azimuth = 0.0;
    rot_elevation = 0.0;
 
@@ -47,14 +47,14 @@ RotControl::RotControl(QObject *parent) : QObject(parent)
 
 
 
-RotControl::~RotControl()
+HamlibRotControl::~HamlibRotControl()
 {
     rot_close(my_rot); /* close port */
     rot_cleanup(my_rot); /* if you care about memory */
 }
 
 
-int RotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
+int HamlibRotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
 {
     int retCode = 0;
     ROT *my_rot;
@@ -77,7 +77,7 @@ int RotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
     return retCode;
 }
 
-int RotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
+int HamlibRotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
 {
     int retCode = 0;
     ROT *my_rot;
@@ -99,7 +99,7 @@ int RotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
 }
 
 
-int RotControl::init(srotParams &selectedAntenna)
+int HamlibRotControl::init(srotParams &selectedAntenna)
 {
     int retcode;
 
@@ -181,7 +181,7 @@ int RotControl::init(srotParams &selectedAntenna)
 }
 
 
-int RotControl::closeRotator()
+int HamlibRotControl::closeRotator()
 {
 
     if (my_rot->caps->rot_model == ROT_MODEL_SPID_ROT1PROG || my_rot->caps->rot_model == ROT_MODEL_SPID_ROT2PROG)
@@ -198,7 +198,7 @@ int RotControl::closeRotator()
 
 }
 
-void RotControl::getRotatorList()
+void HamlibRotControl::getRotatorList()
 {
 
     if(!rotatorlistLoaded)
@@ -211,7 +211,7 @@ void RotControl::getRotatorList()
     }
 }
 
-bool RotControl::getRotatorList(QComboBox *cb)
+bool HamlibRotControl::getRotatorList(QComboBox *cb)
 {
     int i;
     rig_port_e portType = RIG_PORT_NONE;
@@ -244,7 +244,7 @@ bool RotControl::getRotatorList(QComboBox *cb)
 }
 
 
-int RotControl::getPortType(int rotNumber, rig_port_e *portType)
+int HamlibRotControl::getPortType(int rotNumber, rig_port_e *portType)
 {
 
     int retCode = 0;
@@ -262,7 +262,7 @@ int RotControl::getPortType(int rotNumber, rig_port_e *portType)
 }
 
 
-int RotControl::getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName)
+int HamlibRotControl::getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName)
 {
     bool ok;
     int number;
@@ -292,7 +292,7 @@ int RotControl::getModelInfo(QString rotModel, int *rotModelNumber, QString *rot
 // stop azimuth rotation
 
 
-int RotControl::stop_rotation()
+int HamlibRotControl::stop_rotation()
 {
     int retCode = RIG_OK;
     retCode = rot_stop(my_rot);
@@ -305,7 +305,7 @@ int RotControl::stop_rotation()
 
 
 
-int RotControl::request_bearing()
+int HamlibRotControl::request_bearing()
 {
     int retCode = RIG_OK;
 
@@ -321,14 +321,14 @@ int RotControl::request_bearing()
 }
 
 
-azimuth_t RotControl::getRotatorAzimuth()
+int HamlibRotControl::getRotatorAzimuth()
 {
     return rot_azimuth;
 }
 
 
 
-int RotControl::rotateClockwise(int speed)
+int HamlibRotControl::rotateClockwise(int speed)
 {
 
     int retCode = RIG_OK;
@@ -341,7 +341,7 @@ int RotControl::rotateClockwise(int speed)
     return retCode;
 }
 
-int RotControl::rotateCClockwise(int speed)
+int HamlibRotControl::rotateCClockwise(int speed)
 {
     int retCode = RIG_OK;
     retCode = rot_move(my_rot, ROT_MOVE_LEFT , speed);
@@ -354,7 +354,7 @@ int RotControl::rotateCClockwise(int speed)
 }
 
 
-int RotControl::rotate_to_bearing(int bearing)
+int HamlibRotControl::rotate_to_bearing(int bearing)
 {
     int retCode = RIG_OK;
     float rotbearing = bearing;
@@ -369,18 +369,18 @@ int RotControl::rotate_to_bearing(int bearing)
 
 }
 
-void RotControl::set_rotatorSpeed(int speed)
+void HamlibRotControl::set_rotatorSpeed(int speed)
 {
     rot_speed = speed;
 }
 
-int RotControl::get_rotatorSpeed()
+int HamlibRotControl::get_rotatorSpeed()
 {
     return rot_speed;
 }
 
 
-void RotControl::set_serialConnected(bool connectFlag)
+void HamlibRotControl::set_serialConnected(bool connectFlag)
 {
     serialConnected = connectFlag;
 }
@@ -388,49 +388,49 @@ void RotControl::set_serialConnected(bool connectFlag)
 
 
 
-bool RotControl::get_serialConnected()
+bool HamlibRotControl::get_serialConnected()
 {
     return serialConnected;
 }
 
 
 
-enum serial_parity_e RotControl::getSerialParityCode(int index)
+enum serial_parity_e HamlibRotControl::getSerialParityCode(int index)
 {
 
     return serialData::parityCodes[index];
 
 }
 
-enum serial_handshake_e RotControl::getSerialHandshakeCode(int index)
+enum serial_handshake_e HamlibRotControl::getSerialHandshakeCode(int index)
 {
 
     return serialData::handshakeCodes[index];
 }
 
-QStringList RotControl::getParityCodeNames()
+QStringList HamlibRotControl::getParityCodeNames()
 {
    return serialData::parityStr;
 }
 
-QStringList RotControl::getHandShakeNames()
+QStringList HamlibRotControl::getHandShakeNames()
 {
     return serialData::handshakeStr;
 }
 
-QStringList RotControl::getBaudRateNames()
+QStringList HamlibRotControl::getBaudRateNames()
 {
 
 
     return serialData::baudrateStr;
 }
 
-QStringList RotControl::getDataBitsNames()
+QStringList HamlibRotControl::getDataBitsNames()
 {
     return serialData::databitsStr;
 }
 
-QStringList RotControl::getStopBitsNames()
+QStringList HamlibRotControl::getStopBitsNames()
 {
     return serialData::stopbitsStr;
 }
@@ -438,33 +438,33 @@ QStringList RotControl::getStopBitsNames()
 
 
 
-QString RotControl::gethamlibErrorMsg(int errorCode)
+QString HamlibRotControl::getErrorMsgText(int errorCode)
 {
-    if (errorCode > serialData::hamlibErrorMsg.count())
+    if (errorCode > errorMsgTxt.count())
     {
         return "hamlib Errorcode too large!";
     }
-    return serialData::hamlibErrorMsg[errorCode];
+    return errorMsgTxt[errorCode];
 }
 
 
-QStringList RotControl::gethamlibErrorMsg()
+QStringList HamlibRotControl::getErrorMsgList()
 {
 
-    return serialData::hamlibErrorMsg;
+    return errorMsgTxt;
 }
 
 
 
 
-QString RotControl::gethamlibVersion()
+QString HamlibRotControl::gethamlibVersion()
 {
     QString ver = hamlib_version;
     return ver;
 }
 
 
-void RotControl::enableTraceComms(bool state)
+void HamlibRotControl::enableTraceComms(bool state)
 {
     traceComms = state;
 }
@@ -473,7 +473,7 @@ void RotControl::enableTraceComms(bool state)
 
 
 // which passes the call to this method
-int RotControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const char *fmt, va_list ap)
+int HamlibRotControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const char *fmt, va_list ap)
 {
     char buf[1024];
 //    rig_debug_level_e dbl = debug_level;

@@ -15,6 +15,8 @@ TEMPLATE = app
 win32:RC_ICONS += ../MinosRotator.ico
 
 SOURCES += \
+    hamlibRotcontrol.cpp \
+    pstRotControl.cpp \
     skyscandialog.cpp \
     rotatormainwindow.cpp \
     minoscompass.cpp \
@@ -28,6 +30,8 @@ SOURCES += \
     rotsetupdialog.cpp
 
 HEADERS  += \
+    hamlibRotcontrol.h \
+    pstRotControl.h \
     skyscandialog.h \
     rotatormainwindow.h \
     minoscompass.h \
