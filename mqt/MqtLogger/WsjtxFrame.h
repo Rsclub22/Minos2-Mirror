@@ -44,10 +44,15 @@ private:
     int lastcol = 0;
     QTime lastTime;
 
+    bool currentlyTransmitting = false;
+    bool currentlyDecoding = false;
+
     WsjtxDecode decoder;
 
     void reply(decodeMessage &dc);
     void restoreSplitters();
+    void process_decodes();
+
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
