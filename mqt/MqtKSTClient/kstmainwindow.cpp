@@ -107,6 +107,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect( ui->meepTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
 
+    connect( ui->CSTable->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
+             this, SLOT( on_sortIndicatorChanged(int, Qt::SortOrder)));
+
+
     kstclient = new QTcpSocket(this);
 
     connect(kstclient, SIGNAL(connected()), this, SLOT(connected()));
@@ -865,4 +869,8 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
     }
 
    return false;
+}
+void KSTMainWindow::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder /*order*/)
+{
+    on_sectionResized(0, 0, 0);
 }

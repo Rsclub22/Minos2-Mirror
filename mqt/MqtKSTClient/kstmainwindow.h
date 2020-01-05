@@ -106,6 +106,7 @@ private slots:
 
     void on_clearButton_clicked();
 
+    void on_sortIndicatorChanged(int, Qt::SortOrder);
 private:
     Ui::KSTMainWindow *ui;
 };
