@@ -57,7 +57,7 @@ class KSTMainWindow : public QMainWindow
     void reconnect();
     void connectToHost();
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
-
+    void setNameFromCall(QString call);
 
 public:
     KSTMainWindow(QWidget *parent = nullptr);
@@ -66,6 +66,7 @@ public:
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
+
 
 private slots:
     void CloseTimerTimer();

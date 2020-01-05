@@ -815,6 +815,26 @@ void KSTMainWindow::on_msgSplitter_splitterMoved(int /*pos*/, int /*index*/)
     settings.setValue("msgSplitterState" , state);
 }
 
+void KSTMainWindow::setNameFromCall(QString call)
+{
+    QSharedPointer<KstUser> test(new KstUser());
+    test->call = call;
+    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    {
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+
+        QSharedPointer<KstUser> user = callVector->at(row);
+
+        QStringList name = user->name.split(' ');
+
+        ui->msgEdit->setText("Hi " + name[0] + " ");
+    }
+    else
+    {
+        ui->msgEdit->clear();
+    }
+}
+
 void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
@@ -824,7 +844,11 @@ void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
     {
         call = line->otherCall;
     }
+
+    setNameFromCall(call);
+
     ui->callEdit->setText(call);
+    ui->msgEdit->setFocus();
 }
 
 void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
@@ -836,7 +860,10 @@ void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
     {
         call = line->otherCall;
     }
+    setNameFromCall(call);
     ui->callEdit->setText(call);
+    ui->msgEdit->setFocus();
+
 }
 
 void KSTMainWindow::on_serviceCombo_currentIndexChanged(int index)
