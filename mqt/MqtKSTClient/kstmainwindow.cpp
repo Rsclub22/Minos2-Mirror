@@ -155,6 +155,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->genmsgButton->setDefault(true);
 
     ui->analyseButton->setVisible(false);
+    ui->messageFilter->setFocus();
 
 }
 
@@ -717,8 +718,14 @@ void KSTMainWindow::on_sectionResized(int, int, int)
 void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstCallFilterModel.mapToSource(index);
-    QString call = callVector->at(sourceIndex.row())->call;
+    QSharedPointer<KstUser> user = callVector->at(sourceIndex.row());
+    QString call = user->call;
+
+    setNameFromCall(call);
+
     ui->messageFilter->setText(call);
+    ui->callEdit->setText(call);
+    ui->msgEdit->setFocus();
 }
 
 void KSTMainWindow::on_configureButton_clicked()
@@ -930,4 +937,11 @@ void KSTMainWindow::on_callEdit_textChanged(const QString &/*arg1*/)
         ui->genmsgButton->setDefault(false);
         ui->meepButton->setDefault(true);
     }
+}
+
+void KSTMainWindow::on_clearMessageButton_clicked()
+{
+    ui->callEdit->clear();
+    ui->msgEdit->clear();
+    ui->messageFilter->setFocus();
 }

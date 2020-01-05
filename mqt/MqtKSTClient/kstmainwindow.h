@@ -110,6 +110,8 @@ private slots:
     void on_sortIndicatorChanged(int, Qt::SortOrder);
     void on_callEdit_textChanged(const QString &arg1);
 
+    void on_clearMessageButton_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
 };

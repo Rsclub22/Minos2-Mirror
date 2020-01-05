@@ -136,7 +136,7 @@
       <property name="frameShape">
        <enum>QFrame::Box</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,4">
+      <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,4,0">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
@@ -190,6 +190,13 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clearMessageButton">
+         <property name="text">
+          <string>Clear message</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
