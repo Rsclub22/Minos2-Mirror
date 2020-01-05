@@ -145,10 +145,14 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     ui->CSFilter->installEventFilter(this);
     ui->messageFilter->installEventFilter(this);
+    ui->callEdit->installEventFilter(this);
+    ui->msgEdit->installEventFilter(this);
     started = true;
 
     if (autoConnect)
         connectToHost();
+
+    ui->genmsgButton->setDefault(true);
 
 }
 
@@ -867,6 +871,14 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
             {
                 ui->CSFilter->clear();
             }
+            else if (obj == ui->callEdit)
+            {
+                ui->callEdit->clear();
+            }
+            else if (obj == ui->msgEdit)
+            {
+                ui->msgEdit->clear();
+            }
         }
     }
 
@@ -875,4 +887,18 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
 void KSTMainWindow::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder /*order*/)
 {
     on_sectionResized(0, 0, 0);
+}
+
+void KSTMainWindow::on_callEdit_textChanged(const QString &/*arg1*/)
+{
+    if (ui->callEdit->text().isEmpty())
+    {
+        ui->meepButton->setDefault(false);
+        ui->genmsgButton->setDefault(true);
+    }
+    else
+    {
+        ui->genmsgButton->setDefault(false);
+        ui->meepButton->setDefault(true);
+    }
 }
