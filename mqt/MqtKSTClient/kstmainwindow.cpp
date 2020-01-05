@@ -154,6 +154,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     ui->genmsgButton->setDefault(true);
 
+    ui->analyseButton->setVisible(false);
+
 }
 
 KSTMainWindow::~KSTMainWindow()
