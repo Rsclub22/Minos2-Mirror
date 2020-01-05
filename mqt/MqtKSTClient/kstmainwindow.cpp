@@ -783,6 +783,7 @@ void KSTMainWindow::on_genmsgButton_clicked()
         QString msg2 = "MSG|" + kstChatSelection + "|0|" + msg + "|0|";
         sendKST(msg2);
     }
+    ui->msgEdit->clear();
 }
 
 void KSTMainWindow::on_meepButton_clicked()
@@ -797,6 +798,7 @@ void KSTMainWindow::on_meepButton_clicked()
             QString msg2 = "MSG|" + kstChatSelection + "|0|/CQ " + call + " " + msg + "|0|";
             sendKST(msg2);
         }
+        ui->msgEdit->clear();
     }
 }
 
