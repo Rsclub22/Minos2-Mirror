@@ -636,31 +636,26 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         // link check
         sendKST("\r\n");
     }
-#ifdef RUBBISH
-    if (!kst->call.isEmpty())
+
+    QSharedPointer<KstUser> test(new KstUser());
+    test->call = myCallsign.toUpper();
+    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
     {
-        QSharedPointer<KstUser> test(new KstUser());
-        test->call = kst->call;
-        if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+
+        QSharedPointer<KstUser> user = callVector->at(row);
+
+        if (user->away)
         {
-            int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
-            callVector->insert(row, test);
-            kstCallModel.insertRow(row);
+            ui->awayButton->setText("Set Back");
+        }
+        else
+        {
+            ui->awayButton->setText("Set Away");
         }
     }
 
-    if (!kst->otherCall.isEmpty())
-    {
-        QSharedPointer<KstUser> test(new KstUser());
-        test->call = kst->otherCall;
-        if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
-        {
-            int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
-            callVector->insert(row, test);
-            kstCallModel.insertRow(row);
-        }
-    }
-#endif
+
 }
 void KSTMainWindow::on_connectButton_clicked()
 {
@@ -944,4 +939,28 @@ void KSTMainWindow::on_clearMessageButton_clicked()
     ui->callEdit->clear();
     ui->msgEdit->clear();
     ui->messageFilter->setFocus();
+}
+
+void KSTMainWindow::on_awayButton_clicked()
+{
+    QSharedPointer<KstUser> test(new KstUser());
+    test->call = myCallsign.toUpper();
+    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    {
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+
+        QSharedPointer<KstUser> user = callVector->at(row);
+
+        if (user->away)
+        {
+            QString msg = "MSG|" + kstChatSelection + "|0|/BACK|0|";
+            sendKST(msg);
+
+        }
+        else
+        {
+            QString msg = "MSG|" + kstChatSelection + "|0|/AWAY|0|";
+            sendKST(msg);
+        }
+    }
 }

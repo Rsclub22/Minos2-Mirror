@@ -112,6 +112,8 @@ private slots:
 
     void on_clearMessageButton_clicked();
 
+    void on_awayButton_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
 };

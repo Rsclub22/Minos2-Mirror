@@ -231,6 +231,13 @@
        </spacer>
       </item>
       <item>
+       <widget class="QPushButton" name="awayButton">
+        <property name="text">
+         <string>-</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="connectButton">
         <property name="text">
          <string>Connect</string>
