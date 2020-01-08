@@ -77,11 +77,11 @@ public:
     bool getRotatorList(QComboBox *cb);
     const char * getMfg_Name(int idx);
     const char * getModel_Name(int idx);
-    void set_rotatorSpeed(int speed);
-    int get_rotatorSpeed();
-    void set_serialConnected(bool connectFlag);
-    bool get_serialConnected();
-    int getRotatorAzimuth();
+    //void set_rotatorSpeed(int speed);
+    //int get_rotatorSpeed();
+    //void set_serialConnected(bool connectFlag);
+    //bool get_serialConnected();
+    //int getRotatorAzimuth();
     int request_bearing();
     int rotate_to_bearing(int bearing);
     int rotateCClockwise(int speed);
@@ -109,8 +109,8 @@ public:
 
     int getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName);
 
-    void enableTraceComms(bool state);
-
+    //void enableTraceComms(bool state);
+/*
 signals:
    void bearing_updated(int);
    void request_bearingError(int);
@@ -132,7 +132,7 @@ private:
     //int serialP;
 
     bool traceComms = false;
-
+*/
 
 
     //int retcode;		/* generic return code from functions */

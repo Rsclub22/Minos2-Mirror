@@ -158,7 +158,7 @@ namespace serialData
     /**
      * \brief Port type
      */
-    typedef enum rig_port {
+    enum rig_port_type {
         RIG_PORT_NONE = 0,      /*!< No port */
         RIG_PORT_SERIAL,        /*!< Serial */
         RIG_PORT_NETWORK,       /*!< Network socket type */
@@ -173,7 +173,7 @@ namespace serialData
         RIG_PORT_CM108,         /*!< CM108 GPIO */
         RIG_PORT_GPIO,          /*!< GPIO */
         RIG_PORT_GPION,         /*!< GPIO inverted */
-    } rig_port_t;
+    } ;
 
 
     /**
@@ -292,7 +292,7 @@ public:
   bool simCwCcwCmd = false;
   int antennaOffset = 0;
   bool moving = false;
-  int portType = RIG_PORT_NONE;
+  serialData::rig_port_type portType = serialData::RIG_PORT_NONE;
   QString networkAdd;
   QString networkPort;
   int maxBaudRate = 0;

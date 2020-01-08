@@ -29,12 +29,12 @@ int collect(const rot_caps *caps,rig_ptr_t)
     return 1;
 }
 
-HamlibRotControl::HamlibRotControl(QObject *parent) : QObject(parent)
+HamlibRotControl::HamlibRotControl(QObject *parent) : RotControl(parent)
 {
 
 //   getRotatorList();
    rot_azimuth = 0.0;
-   rot_elevation = 0.0;
+
 
    // set callback for debug messages
    // NB callback is the C function, not the class method.
@@ -369,6 +369,8 @@ int HamlibRotControl::rotate_to_bearing(int bearing)
 
 }
 
+/*
+
 void HamlibRotControl::set_rotatorSpeed(int speed)
 {
     rot_speed = speed;
@@ -393,7 +395,7 @@ bool HamlibRotControl::get_serialConnected()
     return serialConnected;
 }
 
-
+*/
 
 enum serial_parity_e HamlibRotControl::getSerialParityCode(int index)
 {
@@ -463,13 +465,14 @@ QString HamlibRotControl::gethamlibVersion()
     return ver;
 }
 
+/*
 
 void HamlibRotControl::enableTraceComms(bool state)
 {
     traceComms = state;
 }
 
-
+*/
 
 
 // which passes the call to this method

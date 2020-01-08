@@ -22,7 +22,6 @@ SOURCES += \
     minoscompass.cpp \
     main.cpp \
     logdialog.cpp \
-    rotcontrol.cpp \
     rotatorlog.cpp \
     rotatorRpc.cpp \
     rotsetupform.cpp \

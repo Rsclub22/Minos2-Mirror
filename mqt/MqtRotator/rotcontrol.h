@@ -39,7 +39,7 @@ class RotControl: public QObject
     Q_OBJECT
 
 public:
-
+    RotControl(QObject* parent);
     virtual ~RotControl() = default;
     virtual int init(srotParams &currentAntenna) = 0;
     virtual int closeRotator() = 0;
@@ -48,11 +48,11 @@ public:
     virtual bool getRotatorList(QComboBox *cb) = 0;
     //const char * getMfg_Name(int idx);
     //const char * getModel_Name(int idx);
-    virtual void set_rotatorSpeed(int speed) = 0;
-    virtual int get_rotatorSpeed() = 0;
-    virtual void set_serialConnected(bool connectFlag) = 0;
-    virtual bool get_serialConnected() = 0;
-    virtual int getRotatorAzimuth() = 0;
+    void set_rotatorSpeed(int speed);
+    int get_rotatorSpeed();
+    void set_serialConnected(bool connectFlag);
+    bool get_serialConnected();
+    int getRotatorAzimuth();
     virtual int request_bearing() = 0;
     virtual int rotate_to_bearing(int bearing) = 0;
     virtual int rotateCClockwise(int speed) = 0;
@@ -76,16 +76,16 @@ public:
 
     virtual int getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName) = 0;
 
-    virtual void enableTraceComms(bool state) = 0;
+    void enableTraceComms(bool state);
 
-/*
+
 signals:
    void bearing_updated(int);
    void request_bearingError(int);
    void debug_protocol(QString);
 
 
-private:
+protected:
     hamlib_port_t myport;
     ROT *my_rot = nullptr;            // handle to rig instance)
     azimuth_t rot_azimuth;  // azimuth from rotator
@@ -106,7 +106,7 @@ private:
     int retcode;		// generic return code from functions
     int exitcode;
 
-*/
+
 
 };
 
