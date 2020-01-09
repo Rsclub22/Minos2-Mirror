@@ -33,7 +33,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>CS Filter</string>
+             <string>User Filter</string>
             </property>
            </widget>
           </item>

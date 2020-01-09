@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QIntValidator>
+#include "cutils.h"
 
 namespace Ui {
 class KSTConfigure;
@@ -19,9 +20,13 @@ public:
     QString hostname;
     QString port;
     QString username;
+    UpperCaseValidator userValidator;
+
     QString password;
     bool autoConnect;
     QString locator;
+    UpperCaseValidator locValidator;
+
 
 public Q_SLOTS:
         virtual int exec() override;

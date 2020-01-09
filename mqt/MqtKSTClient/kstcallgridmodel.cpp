@@ -135,7 +135,9 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
     if (role == Qt::UserRole)
     {
         QSharedPointer<KstUser> crec = callVector->at(row);
-        if (index.column() == ecscCall)
+        switch (index.column())
+        {
+        case ecscCall:
         {
             QString call = crec->call;
             if (!crec->recent)
@@ -144,13 +146,25 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             }
             return call;
         }
-        if (index.column() == ecscLoc)
+
+        case ecscLoc:
         {
             QString loc = crec->loc;
             return loc;
         }
-        QVariant cell = data(index, Qt::DisplayRole);
-        return cell.toInt();
+
+        case ecscName:
+        {
+            QString name = crec->name;
+            return name;
+        }
+
+        case ecscDistance:
+        {
+            QVariant cell = data(index, Qt::DisplayRole);
+            return cell.toInt();
+        }
+        }
     }
     return QVariant();
 }

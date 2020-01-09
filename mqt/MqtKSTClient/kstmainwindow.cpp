@@ -147,6 +147,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->messageFilter->installEventFilter(this);
     ui->callEdit->installEventFilter(this);
     ui->msgEdit->installEventFilter(this);
+
+    installEventFilter(this);   // so we pick up return, and implement the default button
+
     started = true;
 
     if (autoConnect)
@@ -911,9 +914,20 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
                 ui->msgEdit->clear();
             }
         }
+        if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
+        {
+            if (ui->meepButton->isDefault())
+            {
+                ui->meepButton->click();
+            }
+            else if (ui->genmsgButton->isDefault())
+            {
+                ui->genmsgButton->click();
+            }
+        }
     }
 
-   return false;
+   return false;    // pass the event on
 }
 void KSTMainWindow::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder /*order*/)
 {
