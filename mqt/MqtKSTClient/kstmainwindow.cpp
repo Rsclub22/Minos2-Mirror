@@ -458,6 +458,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         ui->messageTable->scrollToBottom();
         ui->meepTable->scrollToBottom();
 
+        if (kst->otherCall == myCallsign)
+        {
+            QApplication::alert(this, 10000);   // 10 sec alert
+        }
+
     }
     else if (sl[0] == "DL")
     {
