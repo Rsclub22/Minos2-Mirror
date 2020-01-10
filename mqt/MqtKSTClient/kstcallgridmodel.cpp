@@ -1,5 +1,6 @@
 #include "kstcallgridmodel.h"
 #include "contest.h"
+#include "kstmainwindow.h"
 // kst2me sort by
 // new before old
 // locator
@@ -9,7 +10,9 @@ bool KstUser::operator< ( const KstUser& rhs ) const
 {
     // p1 is from list; p2 is the one being searched for
 
-    return call < rhs.call;
+    if (chat  == rhs.chat)
+        return call < rhs.call;
+    else return chat < rhs.chat;
 }
 bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
@@ -85,6 +88,12 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
         switch(index.column())
         {
+        case ecscChat:
+        if (crec->chat > 0 && crec->chat <= services.count())
+            return services[crec->chat - 1];
+        else
+            return "Unknown";
+
         case ecscCall:
         {
             QString call = crec->call;
@@ -137,6 +146,9 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
         QSharedPointer<KstUser> crec = callVector->at(row);
         switch (index.column())
         {
+        case ecscChat:
+            return crec->chat;
+
         case ecscCall:
         {
             QString call = crec->call;
@@ -177,6 +189,9 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
     {
         switch(section)
         {
+        case ecscChat:
+            return "Chat";
+
         case ecscCall:
             return "Callsign";
 
@@ -210,10 +225,20 @@ int KstCallGridModel::columnCount( const QModelIndex & /*parent*/ ) const
     return ecscMaxColumn;
 }
 //==========================================================================================
+void KstCallGridSortFilterModel::setShowChat(const QVector<int> &value)
+{
+    showChat = value;
+    invalidateFilter();
+}
+
+void KstCallGridSortFilterModel::setChatFilter(int value)
+{
+    chatFilter = value;
+    invalidateFilter();
+}
+
 bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    if (filterString.isEmpty())
-        return true;
 
     KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
     if (!cgm || sourceRow >= cgm->rowCount())
@@ -221,14 +246,21 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
 
-    if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
+    int chat = call->chat;
+    if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0 && showChat.contains(chat)))
+    {
+        if (filterString.isEmpty())
+            return true;
 
-    if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
+        if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
 
-    if (call->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
+        if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
+
+        if (call->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
+    }
 
     return false;
 }

@@ -8,12 +8,12 @@
 #include "htmldelegate.h"
 
 
-enum ChatColumns {eccDTG = 0, eccCall, eccName, eccOther, eccText, eccMaxColumn};
+enum ChatColumns {eccChat = 0, eccDTG, eccCall, eccName, eccOther, eccText, eccMaxColumn};
 
 class KstMessageLine
 {
 public:
-    QString source;
+    int chat;
     QString dtg;
     QString fullLine;
     QString call;
@@ -59,11 +59,21 @@ class KstMessageGridModel: public QAbstractItemModel
 class KstMessageGridSortFilterModel: public QSortFilterProxyModel
 {
     QString filterString;
+    QVector<int> showChat;
+    int chatFilter = 0;
+public:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    void setFilterString(QString f);
+    void setShowChat(const QVector<int> &value);
+    void setChatFilter(int value);
+};
+class KstMeepGridSortFilterModel: public QSortFilterProxyModel
+{
+    QString filterString;
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
 };
-
 
 
 #endif // KSTMESSAGEGRIDMODEL_H

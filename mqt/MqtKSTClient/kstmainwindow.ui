@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>713</width>
-    <height>623</height>
+    <height>697</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,138 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_7">
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <property name="topMargin">
+        <number>1</number>
+       </property>
+       <property name="bottomMargin">
+        <number>1</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Log In</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="login1cb">
+         <property name="text">
+          <string>50/70 MHz</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="login2cb">
+         <property name="text">
+          <string>144/432 MHz</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="login3cb">
+         <property name="text">
+          <string>Microwave</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="login4cb">
+         <property name="text">
+          <string>EME/JT65</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_2">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <property name="topMargin">
+        <number>1</number>
+       </property>
+       <property name="bottomMargin">
+        <number>1</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Show</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="show1cb">
+         <property name="text">
+          <string>50/70 MHz</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="show2cb">
+         <property name="text">
+          <string>144/432 MHz</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="show3cb">
+         <property name="text">
+          <string>Microwave</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="show4cb">
+         <property name="text">
+          <string>EME/JT65</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item>
      <widget class="MinosSplitter" name="kstSplitter">
       <property name="sizePolicy">
@@ -38,9 +170,19 @@
            </widget>
           </item>
           <item>
+           <widget class="QComboBox" name="CSChatFilter"/>
+          </item>
+          <item>
            <widget class="QLineEdit" name="CSFilter">
             <property name="clearButtonEnabled">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="clearUserFilter">
+            <property name="text">
+             <string>X</string>
             </property>
            </widget>
           </item>
@@ -77,6 +219,9 @@
             </widget>
            </item>
            <item>
+            <widget class="QComboBox" name="messageChatFilter"/>
+           </item>
+           <item>
             <widget class="QLineEdit" name="messageFilter">
              <property name="clearButtonEnabled">
               <bool>true</bool>
@@ -84,14 +229,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_3">
+            <widget class="QToolButton" name="clearMessageFilter">
              <property name="text">
-              <string>Service</string>
+              <string>X</string>
              </property>
             </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="serviceCombo"/>
            </item>
           </layout>
          </item>
@@ -129,6 +271,84 @@
         </layout>
        </widget>
       </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_3">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <property name="topMargin">
+        <number>1</number>
+       </property>
+       <property name="bottomMargin">
+        <number>1</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Active chat</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="active1rb">
+         <property name="text">
+          <string>50/70 MHz</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">activeChatGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="active2rb">
+         <property name="text">
+          <string>144/432 MHz</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">activeChatGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="active3rb">
+         <property name="text">
+          <string>Microwave</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">activeChatGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="active4rb">
+         <property name="text">
+          <string>EME/JT65</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">activeChatGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>
@@ -289,4 +509,7 @@
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="activeChatGroup"/>
+ </buttongroups>
 </ui>

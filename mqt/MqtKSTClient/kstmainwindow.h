@@ -12,6 +12,8 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
 QT_END_NAMESPACE
 
+extern QStringList services;
+
 class KSTMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -21,7 +23,7 @@ class KSTMainWindow : public QMainWindow
     KstMessageGridModel kstMessageModel;
     KstMessageGridSortFilterModel kstMessageFilterModel;
 
-    KstMessageGridSortFilterModel kstMeepFilterModel;
+    KstMeepGridSortFilterModel kstMeepFilterModel;
 
     QSharedPointer<QVector <QSharedPointer<KstMessageLine> > > messageVector;
 
@@ -41,7 +43,11 @@ class KSTMainWindow : public QMainWindow
     QString serverPort;
     QString myCallsign;
     QString password;
-    QString kstChatSelection;
+    QVector<int> kstChatSelection;
+    QVector<int> kstChatShow;
+    QVector<int> kstLoggedIn;
+    int activeChat = 1;
+
     QString myLoc;
     bool autoConnect = false;
 
@@ -52,12 +58,17 @@ class KSTMainWindow : public QMainWindow
     QStringList filelines;
     int curline = 0;
 
+    int messageChatFilter = 0;
+    int CSChatFilter = 0;
+
     void sendKST(QString msg);
     void analyseKstMessage(QString atj);
     void reconnect();
     void connectToHost();
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
     void setNameFromCall(QString call);
+    void doLoginChanges();
+    void setActive(int chat);
 
 public:
     KSTMainWindow(QWidget *parent = nullptr);
@@ -66,7 +77,6 @@ public:
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
-
 
 private slots:
     void CloseTimerTimer();
@@ -103,8 +113,6 @@ private slots:
 
     void on_meepTable_clicked(const QModelIndex &index);
 
-    void on_serviceCombo_currentIndexChanged(int index);
-
     void on_clearButton_clicked();
 
     void on_sortIndicatorChanged(int, Qt::SortOrder);
@@ -113,6 +121,16 @@ private slots:
     void on_clearMessageButton_clicked();
 
     void on_awayButton_clicked();
+
+    void logincb_stateChanged(int arg1);
+    void showcb_stateChanged(int arg1);
+    void activerb_toggled(bool);
+    void on_CSChatFilter_currentIndexChanged(int index);
+    void on_messageChatFilter_currentIndexChanged(int index);
+
+    void on_clearMessageFilter_clicked();
+
+    void on_clearUserFilter_clicked();
 
 private:
     Ui::KSTMainWindow *ui;

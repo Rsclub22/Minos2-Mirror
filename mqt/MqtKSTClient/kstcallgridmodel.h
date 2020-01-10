@@ -7,11 +7,12 @@
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
-enum CallColumns {ecscCall, ecscLoc, ecscDistance, ecscName, ecscMaxColumn};
+enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscName, ecscMaxColumn};
 
 class KstUser
 {
 public:
+    int chat;
     QString call;
     QString loc;
     QString name;
@@ -58,9 +59,15 @@ class KstCallGridModel: public QAbstractItemModel
 class KstCallGridSortFilterModel: public QSortFilterProxyModel
 {
     QString filterString;
+    QVector<int> showChat;
+    int chatFilter = 0;
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
+    void setShowChat(const QVector<int> &value);
+
+    void setChatFilter(int value);
+
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };
