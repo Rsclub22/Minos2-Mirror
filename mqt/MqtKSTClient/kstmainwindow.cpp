@@ -742,7 +742,8 @@ void KSTMainWindow::on_configureButton_clicked()
     conf.autoConnect = autoConnect;
     conf.locator = myLoc;
 
-    if (conf.exec() == QDialog::Accepted)
+    int ret = conf.exec();
+    if (ret == QDialog::Accepted)
     {
         serverName = conf.hostname;
         serverPort = conf.port;
