@@ -110,7 +110,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
                thisscore = 0;
             contactBuffs.scorebuff = QString::number(thisscore );
          }
-      contactBuffs.scorebuff.truncate(5);;
+      contactBuffs.scorebuff.truncate(5);
       multbuff.clear();
 
       if ( multCount )
