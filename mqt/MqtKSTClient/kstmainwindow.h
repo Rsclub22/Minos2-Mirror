@@ -137,5 +137,6 @@ private slots:
 
 private:
     Ui::KSTMainWindow *ui;
+    void clearConnection();
 };
 #endif // KSTMAINWINDOW_H

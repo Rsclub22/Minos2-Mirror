@@ -29,7 +29,7 @@ void KstCallGridModel::reset()
     callVector->clear();
     endResetModel();
 }
-void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > pcallVector)
+void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > &pcallVector)
 {
     beginResetModel();
     callVector = pcallVector;

@@ -221,7 +221,7 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
 
     if (filterString.isEmpty())
-        return true;
+        return false;
 
     if (kstmsg->fullLine.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;

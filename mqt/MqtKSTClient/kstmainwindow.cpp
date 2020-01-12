@@ -244,7 +244,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     started = true;
 
     if (autoConnect)
-        connectToHost();
+        doLoginChanges();
 
     ui->genmsgButton->setDefault(true);
 
@@ -300,8 +300,11 @@ void KSTMainWindow::connectToHost()
         if (!doConfiguration())
             return;
     }
-    kstCallModel.locator = myLoc;
-    kstclient->connectToHost(serverName, serverPort.toUShort());
+    if (kstChatSelection.count())
+    {
+        kstCallModel.locator = myLoc;
+        kstclient->connectToHost(serverName, serverPort.toUShort());
+    }
 }
 
 
@@ -315,19 +318,26 @@ void KSTMainWindow::connected()
 }
 
 
+void KSTMainWindow::clearConnection()
+{
+    ui->includeLabel->clear();
+    kstMeepFilterModel.setFilterString("");
+    ui->connectButton->setText("Connect");
+    kstconnected = false;
+    kstLoggedIn.clear();
+}
+
 void KSTMainWindow::disconnected()
 {
     trace("Disconnected from ON4KST");
-    ui->includeLabel->clear();
-    kstMeepFilterModel.setFilterString("myCallsign""");
-    ui->connectButton->setText("Connect");
-    kstconnected = false;
+    clearConnection();
 }
 
 void KSTMainWindow::connectionError(QAbstractSocket::SocketError error)
 {
     QString msg = QString("ON4KST Connection failed error %1").arg(error);
     trace(msg);
+    clearConnection();
 }
 
 void KSTMainWindow::onReadyRead()
@@ -469,7 +479,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 + "|" + QString::number(kstChatSelection[0])
                 + "|" + "Minos 0.0.0.999"   // client software version
                 + "|20" // past messages
-                + "|20"  // past DX/map messages
+                + "|0"  // past DX/map messages
                 + "|1"  // users list/update flags - If the users list/update flags = 0, no Uxx frames will be sent (even after the login)
                 + "|0"   // last Unix timestamp for messages
                 + "|0"   // last Unix timestamp for dx/map
@@ -687,7 +697,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             l->data()->away = test->away;
             l->data()->recent = test->recent;
             int row = l - callVector->begin();
-            emit kstCallModel.dataChanged(kstCallModel.index(row, ecscCall), kstCallModel.index(row, ecscDistance));
+            emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
         }
     }
 
@@ -718,7 +728,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             l->data()->away = test->away;
             l->data()->recent = test->recent;
             int row = l - callVector->begin();
-            emit kstCallModel.dataChanged(kstCallModel.index(row, ecscCall), kstCallModel.index(row, ecscDistance));
+            emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
 
         }
 
@@ -996,59 +1006,98 @@ void KSTMainWindow::setNameFromCall(QString call)
 
 void KSTMainWindow::doLoginChanges()
 {
+    bool detached = false;
     int j = 0;
-    for (int i = 0; i < 4; i++)
+    if (kstLoggedIn.count())
     {
-        bool loggedin = kstLoggedIn.contains(i+1);
-        bool loginWanted = kstChatSelection.contains(i+1);
-        if (!loggedin && loginWanted)
+        if (kstChatSelection.count())
         {
-            QTimer *timer = new QTimer(this);
-            timer->setSingleShot(true);
-
-            connect(timer, &QTimer::timeout, [=]()
+            for (int i = 0; i < 4; i++)
             {
-                // NB a lambda function
-                // add chat
-                QString attachMessage = QString("ACHAT")
-                        + "|" + QString::number(i + 1)
-                        + "|20"  // past messages
-                        + "|20"  // past DX/map messages
-                        + "|1"   // users list/update flags - If the users list/update flags = 0, no Uxx frames will be sent (even after the login)
-                        + "|0"   // last Unix timestamp for messages
-                        + "|0"   // last Unix timestamp for dx/map
-                        + "|";
-                sendKST(attachMessage);
-                timer->deleteLater();
+                bool loggedin = kstLoggedIn.contains(i+1);
+                bool loginWanted = kstChatSelection.contains(i+1);
+                if (!loggedin && loginWanted)
+                {
+                    QTimer *timer = new QTimer(this);
+                    timer->setSingleShot(true);
+
+                    connect(timer, &QTimer::timeout, [=]()
+                    {
+                        // NB a lambda function
+                        // add chat
+                        QString attachMessage = QString("ACHAT")
+                                + "|" + QString::number(i + 1)
+                                + "|20"  // past messages
+                                + "|0"  // past DX/map messages
+                                + "|1"   // users list/update flags - If the users list/update flags = 0, no Uxx frames will be sent (even after the login)
+                                + "|0"   // last Unix timestamp for messages
+                                + "|0"   // last Unix timestamp for dx/map
+                                + "|";
+                        sendKST(attachMessage);
+                        timer->deleteLater();
+                    }
+                    );
+
+                    timer->start(1000 * j);
+                    j++;
+
+                }
+                if (loggedin && !loginWanted)
+                {
+                    QTimer *timer = new QTimer(this);
+                    timer->setSingleShot(true);
+
+                    detached = true;
+                    connect(timer, &QTimer::timeout, [=]()
+                    {
+                        // NB a lambda function
+                        // detach chat
+                        QString detachMessage = QString("DCHAT")
+                                + "|" + QString::number(i + 1)
+                                + "|";
+                        sendKST(detachMessage);
+                        timer->deleteLater();
+                    }
+                    );
+
+                    timer->start(1000 * j);
+                    j++;
+                }
             }
-            );
-
-            timer->start(1000 * j);
-            j++;
-
+            kstLoggedIn = kstChatSelection;
         }
-        if (loggedin && !loginWanted)
+        else
         {
-            QTimer *timer = new QTimer(this);
-            timer->setSingleShot(true);
+            kstclient->disconnectFromHost();
+            kstLoggedIn.clear();
+            kstCallModel.reset();
+            callVector->clear();
 
-            connect(timer, &QTimer::timeout, [=]()
-            {
-                // NB a lambda function
-                // detach chat
-                QString detachMessage = QString("DCHAT")
-                        + "|" + QString::number(i + 1)
-                        + "|";
-                sendKST(detachMessage);
-                timer->deleteLater();
-            }
-            );
-
-            timer->start(1000 * j);
-            j++;
         }
     }
-    kstLoggedIn = kstChatSelection;
+    else
+    {
+        if (kstChatSelection.count())
+        {
+            kstCallModel.locator = myLoc;
+            kstclient->connectToHost(serverName, serverPort.toUShort());
+        }
+
+    }
+    if (detached)
+    {
+        QSharedPointer<QVector<QSharedPointer<KstUser> > > newCallVector(new QVector<QSharedPointer<KstUser> >);
+        for(QVector<QSharedPointer<KstUser> >::iterator i = callVector->begin(); i != callVector->end(); i++)
+        {
+            int c = (*i)->chat;
+            if (kstLoggedIn.contains(c))
+            {
+                newCallVector->push_back((*i));
+            }
+        }
+        kstCallModel.setCallVector(newCallVector);
+        callVector = newCallVector;
+    }
 }
 
 void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)

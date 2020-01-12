@@ -37,7 +37,7 @@ class KstCallGridModel: public QAbstractItemModel
         QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
         QSharedPointer<HtmlDelegate> delegate;
 
-        void setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > pcallVector);
+        void setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > &pcallVector);
         QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
         QVariant headerData( int section, Qt::Orientation orientation,
                              int role = Qt::DisplayRole ) const Q_DECL_OVERRIDE;
