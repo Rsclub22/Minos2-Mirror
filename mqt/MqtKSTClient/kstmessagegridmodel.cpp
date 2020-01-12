@@ -1,6 +1,14 @@
 #include "kstmessagegridmodel.h"
 #include "kstmainwindow.h"
 //==========================================================================================
+bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstMessageLine> q2 )
+{
+    int c = q1->dtg.compare(q2->dtg);
+    if (c == 0)
+        return q1->sequence < q2->sequence;
+    else
+        return c < 0;
+}
 
 KstMessageGridModel::KstMessageGridModel():cacheSize(10, 10)
 {
@@ -95,7 +103,7 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
     else if (role == Qt::ToolTipRole)
     {
         QSharedPointer<KstMessageLine> crec = messageVector->at(row);
-        return crec->fullLine;
+        return crec->message;
     }
     return QVariant();
 }
@@ -181,6 +189,26 @@ void KstMessageGridSortFilterModel::setFilterString(QString f)
     filterString = f;
     invalidateFilter();
 }
+//bool KstMessageGridSortFilterModel::lessThan(const QModelIndex &left,
+//                      const QModelIndex &right) const
+//{
+//    //Model Indices are to the SOURCE model
+
+//    int lrow = left.row();
+//    int rrow = right.row();
+
+//    if (lrow >= sourceModel()->rowCount())
+//        return false;
+//    if (rrow >= sourceModel()->rowCount())
+//        return false;
+
+//    QVariant ws1;
+//    QVariant ws2;
+//    ws1 = sourceModel()->data(left, Qt::UserRole);
+//    ws2 = sourceModel()->data(right, Qt::UserRole);
+
+//    return ws1 < ws2;
+//}
 //==========================================================================================
 
 bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const

@@ -61,6 +61,8 @@ class KSTMainWindow : public QMainWindow
     int messageChatFilter = 0;
     int CSChatFilter = 0;
 
+    int messageSequence = 0;
+
     void sendKST(QString msg);
     void analyseKstMessage(QString atj);
     void reconnect();
@@ -69,6 +71,7 @@ class KSTMainWindow : public QMainWindow
     void setNameFromCall(QString call);
     void doLoginChanges();
     void setActive(int chat);
+    bool doConfiguration();
 
 public:
     KSTMainWindow(QWidget *parent = nullptr);

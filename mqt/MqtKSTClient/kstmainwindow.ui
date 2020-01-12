@@ -17,6 +17,9 @@
    <layout class="QVBoxLayout" name="verticalLayout_7">
     <item>
      <widget class="QFrame" name="frame">
+      <property name="toolTip">
+       <string>Log in to these chats</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -38,30 +41,46 @@
         </widget>
        </item>
        <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QCheckBox" name="login1cb">
          <property name="text">
-          <string>50/70 MHz</string>
+          <string>-</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="login2cb">
          <property name="text">
-          <string>144/432 MHz</string>
+          <string>-</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="login3cb">
          <property name="text">
-          <string>Microwave</string>
+          <string>-</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="login4cb">
          <property name="text">
-          <string>EME/JT65</string>
+          <string>-</string>
          </property>
         </widget>
        </item>
@@ -83,6 +102,9 @@
     </item>
     <item>
      <widget class="QFrame" name="frame_2">
+      <property name="toolTip">
+       <string>Only show users and messages for these chats</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -104,30 +126,46 @@
         </widget>
        </item>
        <item>
+        <spacer name="horizontalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QCheckBox" name="show1cb">
          <property name="text">
-          <string>50/70 MHz</string>
+          <string>-</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="show2cb">
          <property name="text">
-          <string>144/432 MHz</string>
+          <string>-</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="show3cb">
          <property name="text">
-          <string>Microwave</string>
+          <string>-</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="show4cb">
          <property name="text">
-          <string>EME/JT65</string>
+          <string>-</string>
          </property>
         </widget>
        </item>
@@ -170,10 +208,17 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="CSChatFilter"/>
+           <widget class="QComboBox" name="CSChatFilter">
+            <property name="toolTip">
+             <string>Only show users for this band</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLineEdit" name="CSFilter">
+            <property name="toolTip">
+             <string>Look for this string in users</string>
+            </property>
             <property name="clearButtonEnabled">
              <bool>true</bool>
             </property>
@@ -181,6 +226,9 @@
           </item>
           <item>
            <widget class="QToolButton" name="clearUserFilter">
+            <property name="toolTip">
+             <string>Clear the user filters</string>
+            </property>
             <property name="text">
              <string>X</string>
             </property>
@@ -219,10 +267,17 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="messageChatFilter"/>
+            <widget class="QComboBox" name="messageChatFilter">
+             <property name="toolTip">
+              <string>Only show messages for this band</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLineEdit" name="messageFilter">
+             <property name="toolTip">
+              <string>Look for this string in messages</string>
+             </property>
              <property name="clearButtonEnabled">
               <bool>true</bool>
              </property>
@@ -230,6 +285,9 @@
            </item>
            <item>
             <widget class="QToolButton" name="clearMessageFilter">
+             <property name="toolTip">
+              <string>Clear the message filters</string>
+             </property>
              <property name="text">
               <string>X</string>
              </property>
@@ -275,6 +333,9 @@
     </item>
     <item>
      <widget class="QFrame" name="frame_3">
+      <property name="toolTip">
+       <string>Chat to which messages will be sent</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -296,9 +357,25 @@
         </widget>
        </item>
        <item>
+        <spacer name="horizontalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
         <widget class="QRadioButton" name="active1rb">
          <property name="text">
-          <string>50/70 MHz</string>
+          <string>-</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">activeChatGroup</string>
@@ -308,7 +385,7 @@
        <item>
         <widget class="QRadioButton" name="active2rb">
          <property name="text">
-          <string>144/432 MHz</string>
+          <string>-</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">activeChatGroup</string>
@@ -318,7 +395,7 @@
        <item>
         <widget class="QRadioButton" name="active3rb">
          <property name="text">
-          <string>Microwave</string>
+          <string>-</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">activeChatGroup</string>
@@ -328,7 +405,7 @@
        <item>
         <widget class="QRadioButton" name="active4rb">
          <property name="text">
-          <string>EME/JT65</string>
+          <string>-</string>
          </property>
          <attribute name="buttonGroup">
           <string notr="true">activeChatGroup</string>

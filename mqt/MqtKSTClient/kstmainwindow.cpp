@@ -294,6 +294,12 @@ void KSTMainWindow::CloseTimerTimer(  )
 
 void KSTMainWindow::connectToHost()
 {
+    kstLoggedIn.clear();
+    while (myLoc.isEmpty() || myCallsign.isEmpty())
+    {
+        if (!doConfiguration())
+            return;
+    }
     kstCallModel.locator = myLoc;
     kstclient->connectToHost(serverName, serverPort.toUShort());
 }
@@ -501,6 +507,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         QSharedPointer<KstMessageLine> kst(new KstMessageLine());
 
+        kst->sequence = messageSequence++;
+
         kst->chat = sl[1].toInt();
         kst->fullLine = atj;
 
@@ -510,13 +518,29 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         kst->call = sl[3];
         kst->name = sl[4];
-
+        QString destination = sl[5];
         kst->message = sl[6];
         kst->otherCall = sl[7];
         if (kst->otherCall == "0")
+        {
             kst->otherCall.clear();
-
-        messageVector->push_front(kst);
+            if (destination != "0")
+            {
+                kst->otherCall = destination;
+            }
+        }
+        bool found = false;
+        for(QVector<QSharedPointer<KstMessageLine> >::iterator i = messageVector->begin(); i != messageVector->end(); i++)
+        {
+            QSharedPointer<KstMessageLine> msg = (*i);
+            if (kst->fullLine == msg->fullLine)
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+            kstMessageModel.appendLastRow(kst);
 
     }
     else if (sl[0] == "CE")
@@ -534,6 +558,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         QSharedPointer<KstMessageLine> kst(new KstMessageLine());
 
+        kst->sequence = messageSequence++;
+
         kst->chat = sl[1].toInt();
         kst->fullLine = atj;
 
@@ -543,11 +569,17 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         kst->call = sl[3];
         kst->name = sl[4];
-        // 5 is destination
+        QString destination = sl[5];
         kst->message = sl[6];
         kst->otherCall = sl[7];
         if (kst->otherCall == "0")
+        {
             kst->otherCall.clear();
+            if (destination != "0")
+            {
+                kst->otherCall = destination;
+            }
+        }
 
         kstMessageModel.appendLastRow(kst);
 
@@ -745,6 +777,9 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         doLoginChanges();
         // link check
         sendKST("\r\n");
+        std::sort(messageVector->begin(), messageVector->end(), &compMessages);
+        emit kstMessageModel.dataChanged(kstMessageModel.index(0, 0), kstMessageModel.index(kstMessageModel.rowCount() - 1, kstMessageModel.columnCount() - 1));
+
     }
 
     QSharedPointer<KstUser> test(new KstUser());
@@ -777,6 +812,7 @@ void KSTMainWindow::on_connectButton_clicked()
         sendKST(quitMsg);
         kstclient->waitForBytesWritten(1000);
         kstclient->disconnectFromHost();
+        kstLoggedIn.clear();
     }
     else
     {
@@ -836,7 +872,7 @@ void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
     ui->messageChatFilter->setCurrentIndex(user->chat);
 }
 
-void KSTMainWindow::on_configureButton_clicked()
+bool KSTMainWindow::doConfiguration()
 {
     KSTConfigure conf;
 
@@ -870,7 +906,14 @@ void KSTMainWindow::on_configureButton_clicked()
         {
             reconnect();
         }
+        return true;
     }
+    return false;
+}
+
+void KSTMainWindow::on_configureButton_clicked()
+{
+    doConfiguration();
 }
 void KSTMainWindow::reconnect()
 {
@@ -1061,20 +1104,6 @@ void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
 
 }
 
-//void KSTMainWindow::on_serviceCombo_currentIndexChanged(int index)
-//{
-//    if (started)
-//    {
-//        kstChatSelection = QString::number(index + 1);
-
-//        QSettings settings;
-//        settings.setValue("service", kstChatSelection);
-
-//        if (kstconnected)
-//            reconnect();
-//    }
-//}
-
 void KSTMainWindow::on_clearButton_clicked()
 {
     kstMessageModel.reset();
@@ -1149,6 +1178,7 @@ void KSTMainWindow::on_awayButton_clicked()
 {
     QSharedPointer<KstUser> test(new KstUser());
     test->call = myCallsign.toUpper();
+    test->chat = activeChat;
     if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
     {
         int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());

@@ -12,7 +12,8 @@ bool KstUser::operator< ( const KstUser& rhs ) const
 
     if (chat  == rhs.chat)
         return call < rhs.call;
-    else return chat < rhs.chat;
+    else
+        return chat < rhs.chat;
 }
 bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
