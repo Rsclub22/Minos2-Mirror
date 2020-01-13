@@ -140,6 +140,11 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
         case ecscName:
             return crec->name;
 
+        case ecscCountryPrefix:
+            return crec->prefix;
+
+        case ecscCountryName:
+            return crec->country;
         }
     }
     if (role == Qt::UserRole)
@@ -177,6 +182,11 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             QVariant cell = data(index, Qt::DisplayRole);
             return cell.toInt();
         }
+        case ecscCountryPrefix:
+            return crec->prefix;
+
+        case ecscCountryName:
+            return crec->country;
         }
     }
     return QVariant();
@@ -204,6 +214,12 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
 
         case ecscName:
             return "Name";
+
+        case ecscCountryPrefix:
+            return "Prefix";
+
+        case ecscCountryName:
+            return "Country";
         }
     }
     else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
@@ -292,5 +308,10 @@ bool KstCallGridSortFilterModel::lessThan(const QModelIndex &left,
 
     //need to correct for locator and distance sorting
 
+    if (ws1 == ws2)
+    {
+        ws1 = sourceModel()->data(createIndex(lrow, ecscCall), Qt::UserRole);
+        ws2 = sourceModel()->data(createIndex(rrow, ecscCall), Qt::UserRole);
+    }
     return ws1 < ws2;
 }

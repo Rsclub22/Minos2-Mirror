@@ -659,6 +659,16 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
         {
+            Callsign cs(test->call);
+            cs.validate();
+            QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( cs.locCtryPrefix );
+            if ( syn )
+            {
+                test->prefix = syn->country->basePrefix;
+                test->country = syn->country->realName;
+            }
+
+
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             callVector->insert(row, test);
         }
@@ -777,6 +787,14 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
         {
+            Callsign cs(test->call);
+            cs.validate();
+            QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( cs.locCtryPrefix );
+            if ( syn )
+            {
+                test->prefix = syn->country->basePrefix;
+                test->country = syn->country->realName;
+            }
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             kstCallModel.insertRow(row, test);
         }

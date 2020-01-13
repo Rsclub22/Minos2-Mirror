@@ -2,12 +2,11 @@
 #define KSTCALLGRIDMODEL_H
 
 #include "base_pch.h"
-
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
-enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscName, ecscMaxColumn};
+enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
 
 class KstUser
 {
@@ -16,6 +15,8 @@ public:
     QString call;
     QString loc;
     QString name;
+    QString prefix;
+    QString country;
     bool away = false;
     bool recent = false;
     int distance = -1;
