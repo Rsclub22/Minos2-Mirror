@@ -1684,6 +1684,18 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     preloadBundle.setStringProfile(eppSession, sessName);
     preloadBundle.openSection(sessName);
     app ->writeContestList();	// to clear the unopened and changed ones
+
+    ui->menuLogs->clear();
+    menuLogsActions.clear();
+
+    ui->menuLogs->addAction(FileOpenAction);
+    ui->menuLogs->addMenu(recentFilesMenu);
+    ui->menuLogs->addAction(FileNewAction);
+    ui->menuLogs->addAction(FileCloseAction);
+    ui->menuLogs->addAction(CloseAllAction);
+    ui->menuLogs->addAction(CloseAllButAction);
+    ui->menuLogs->addSeparator();
+
     sessionsMenu = ui->menuLogs->addMenu("Contest Sets");
     updateSessionActions();
 
