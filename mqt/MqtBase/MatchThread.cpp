@@ -108,6 +108,7 @@ void TMatchThread::FinishMatchThread()
       trace( "WaitFor TMatchThread" );
       matchThread->wait(ULONG_MAX);
       delete matchThread;
+      matchThread = nullptr;
    }
    trace( "TMatchThread close complete" );
 }
@@ -190,6 +191,12 @@ void TMatchThread::Execute()
          if ( !thisLogMatch->idleMatch( 20 ) && !otherLogMatch->idleMatch( 20 ) && !listMatch->idleMatch( 20 ) )
             msleep(100);
       }
+
+      // make sure everything is cleared down, so we can stop matching while managing lists
+      replaceThisContestList(SharedMatchCollection(new TMatchCollection));
+      replaceOtherContestList(SharedMatchCollection(new TMatchCollection));
+      replaceListList(SharedMatchCollection(new TMatchCollection));
+
       delete thisLogMatch;
       thisLogMatch = nullptr;
       delete otherLogMatch;

@@ -32,6 +32,7 @@
 #include "minoscontestloaddialog.h"
 #include "ChatServer.h"
 #include "clusterClientServer.h"
+#include "MatchThread.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -1834,7 +1835,9 @@ void TLogContainer::ListOpenActionExecute()
 void TLogContainer::ManageListsActionExecute(  )
 {
    TManageListsDlg manageListsDlg(this );
+   TMatchThread::FinishMatchThread();
    manageListsDlg.exec();
+   TMatchThread::InitialiseMatchThread();
    enableActions();
 }
 //---------------------------------------------------------------------------
