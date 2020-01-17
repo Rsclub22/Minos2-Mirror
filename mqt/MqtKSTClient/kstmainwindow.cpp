@@ -493,7 +493,6 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         // we don't need them - yet
 
 
-        kstconnected = true;
         return;
     }
 
@@ -506,8 +505,22 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 //        LOGSTATS if LOGINC:
 //        LOGSTAT|100|2|20040703a|239E038F12E685FB75C6C03A79A1DE8A|11|Alain/telnet|Stiévenart|JO20HI|on4kst@skynet.be|
 //        LOGSTAT|100|chat id|client software version|session key|config|first name|last name|locator|email|
-        QString sdone = "SDONE|" + QString::number(kstChatSelection[0]) +"|";
-        sendKST(sdone);
+        if (sl[1] == "100")
+        {
+            kstconnected = true;
+            QString sdone = "SDONE|" + QString::number(kstChatSelection[0]) +"|";
+            sendKST(sdone);
+        }
+        else
+        {
+            //messageRx: LOGSTAT|101|Unknown user "XX0GJV".|
+            //messageRx: LOGSTAT|114|Wrong password!|
+            kstclient->disconnectFromHost();
+
+//            clearConnection();
+            mShowMessage(sl[2], this);
+            doConfiguration();
+        }
 
     }
     else if (sl[0] == "CR")
