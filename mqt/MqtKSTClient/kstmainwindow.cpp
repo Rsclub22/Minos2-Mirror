@@ -56,38 +56,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     }
     std::sort(kstChatSelection.begin(), kstChatSelection.end());
 
-
-    QString showChat = settings.value("show", "").toString();
-
-    QStringList shows = showChat.split(":");
-    for (int i = 0; i < shows.count(); i++)
-    {
-        int s = shows[i].toInt();
-        if (s <= 4 && s > 0)
-        {
-            kstChatShow.append(s);
-            switch(s)
-            {
-            case 1:
-                ui->show1cb->setChecked(true);
-                break;
-            case 2:
-                ui->show2cb->setChecked(true);
-                break;
-            case 3:
-                ui->show3cb->setChecked(true);
-                break;
-            case 4:
-                ui->show4cb->setChecked(true);
-                break;
-            }
-        }
-    }
-    std::sort(kstChatShow.begin(), kstChatShow.end());
-    kstMessageFilterModel.setShowChat(kstChatShow);
-    kstCallFilterModel.setShowChat(kstChatShow);
-
-
     activeChat = settings.value("active", "0").toInt();
     setActive(activeChat);
 
@@ -101,25 +69,17 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(ui->login3cb, SIGNAL(stateChanged(int)), this, SLOT(logincb_stateChanged(int)));
     connect(ui->login4cb, SIGNAL(stateChanged(int)), this, SLOT(logincb_stateChanged(int)));
 
-    ui->show1cb->setText(services[0]);
-    ui->show2cb->setText(services[1]);
-    ui->show3cb->setText(services[2]);
-    ui->show4cb->setText(services[3]);
-
-    connect(ui->show1cb, SIGNAL(stateChanged(int)), this, SLOT(showcb_stateChanged(int)));
-    connect(ui->show2cb, SIGNAL(stateChanged(int)), this, SLOT(showcb_stateChanged(int)));
-    connect(ui->show3cb, SIGNAL(stateChanged(int)), this, SLOT(showcb_stateChanged(int)));
-    connect(ui->show4cb, SIGNAL(stateChanged(int)), this, SLOT(showcb_stateChanged(int)));
-
     ui->active1rb->setText(services[0]);
     ui->active2rb->setText(services[1]);
     ui->active3rb->setText(services[2]);
     ui->active4rb->setText(services[3]);
 
-    connect(ui->active1rb, SIGNAL(toggled(bool)), this, SLOT(activerb_toggled(bool)));
-    connect(ui->active2rb, SIGNAL(toggled(bool)), this, SLOT(activerb_toggled(bool)));
-    connect(ui->active3rb, SIGNAL(toggled(bool)), this, SLOT(activerb_toggled(bool)));
-    connect(ui->active4rb, SIGNAL(toggled(bool)), this, SLOT(activerb_toggled(bool)));
+    connect(ui->active1rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
+    connect(ui->active2rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
+    connect(ui->active3rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
+    connect(ui->active4rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
+
+    checkActive();
 
     ui->CSChatFilter->addItem("");
     ui->CSChatFilter->addItems(services);
@@ -1035,6 +995,7 @@ void KSTMainWindow::setNameFromCall(QString call)
     }
 }
 
+
 void KSTMainWindow::doLoginChanges()
 {
     bool detached = false;
@@ -1129,6 +1090,8 @@ void KSTMainWindow::doLoginChanges()
         kstCallModel.setCallVector(newCallVector);
         callVector = newCallVector;
     }
+
+    checkActive();
 }
 
 void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
@@ -1150,24 +1113,34 @@ void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
 
 void KSTMainWindow::setActive(int chat)
 {
-    switch(chat)
+    if (kstChatSelection.contains(chat))
     {
-    case 1:
-        ui->active1rb->setChecked(true);
-        break;
-    case 2:
-        ui->active2rb->setChecked(true);
-        break;
-    case 3:
-        ui->active3rb->setChecked(true);
-        break;
-    case 4:
-        ui->active4rb->setChecked(true);
-        break;
+        switch(chat)
+        {
+        case 1:
+            ui->active1rb->setChecked(true);
+            break;
+        case 2:
+            ui->active2rb->setChecked(true);
+            break;
+        case 3:
+            ui->active3rb->setChecked(true);
+            break;
+        case 4:
+            ui->active4rb->setChecked(true);
+            break;
+        }
+        activeChat = chat;
     }
-    activeChat = chat;
 }
-
+void KSTMainWindow::checkActive()
+{
+    if (kstChatSelection.count() > 0 && !kstChatSelection.contains( activeChat))
+    {
+        int a = kstChatSelection[0];
+        setActive(a);
+    }
+}
 void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstMeepFilterModel.mapToSource(index);
@@ -1278,69 +1251,50 @@ void KSTMainWindow::on_awayButton_clicked()
         }
     }
 }
+void KSTMainWindow::resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a)
+{
+    if (!kstChatSelection.contains(c) && cb->isChecked())
+    {
+        // not selected -> selected
+        {
+            s.append(QString::number(c));
+            v.append(c);
+            rb->setVisible(true);
+            setActive(c);
+            a.append(c);
+        }
+    }
+    else if (kstChatSelection.contains(c) && !cb->isChecked())
+    {
+        // selected -> not selected
+        rb->setVisible(false);
+    }
+    else if (kstChatSelection.contains(c))
+    {
+        s.append(QString::number(c));
+        v.append(c);
+    }
+}
+
 void KSTMainWindow::logincb_stateChanged(int /*arg1*/)
 {
     QStringList s;
     QVector<int> v;
-    if (ui->login1cb->isChecked())
-    {
-        s.append("1");
-        v.append(1);
-    }
-    if (ui->login2cb->isChecked())
-    {
-        s.append("2");
-        v.append(2);
-    }
-    if (ui->login3cb->isChecked())
-    {
-        s.append("3");
-        v.append(3);
-    }
-    if (ui->login4cb->isChecked())
-    {
-        s.append("4");
-        v.append(4);
-    }
+    QVector<int> a;
+
+    resetVectors(ui->login1cb, ui->active1rb, 1, s, v, a);
+    resetVectors(ui->login2cb, ui->active2rb, 2, s, v, a);
+    resetVectors(ui->login3cb, ui->active3rb, 3, s, v, a);
+    resetVectors(ui->login4cb, ui->active4rb, 4, s, v, a);
+
     kstChatSelection = v;
+    if (a.count())
+        setActive(a[0]);
     doLoginChanges();
     QSettings settings;
     settings.setValue("service", s.join(":"));
 }
-void KSTMainWindow::showcb_stateChanged(int /*arg1*/)
-{
-    QStringList s;
-    QVector<int> v;
-    if (ui->show1cb->isChecked())
-    {
-        s.append("1");
-        v.append(1);
-    }
-    if (ui->show2cb->isChecked())
-    {
-        s.append("2");
-        v.append(2);
-    }
-    if (ui->show3cb->isChecked())
-    {
-        s.append("3");
-        v.append(3);
-    }
-    if (ui->show4cb->isChecked())
-    {
-        s.append("4");
-        v.append(4);
-    }
-    kstChatShow = v;
-
-    kstMessageFilterModel.setShowChat(v);
-    kstCallFilterModel.setShowChat(v);
-
-    QSettings settings;
-    settings.setValue("show", s.join(":"));
-}
-
-void KSTMainWindow::activerb_toggled(bool)
+void KSTMainWindow::activerb_clicked()
 {
     if (ui->active1rb->isChecked())
     {

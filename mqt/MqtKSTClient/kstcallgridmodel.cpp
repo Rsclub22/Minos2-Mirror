@@ -242,12 +242,6 @@ int KstCallGridModel::columnCount( const QModelIndex & /*parent*/ ) const
     return ecscMaxColumn;
 }
 //==========================================================================================
-void KstCallGridSortFilterModel::setShowChat(const QVector<int> &value)
-{
-    showChat = value;
-    invalidateFilter();
-}
-
 void KstCallGridSortFilterModel::setChatFilter(int value)
 {
     chatFilter = value;
@@ -264,7 +258,7 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
 
     int chat = call->chat;
-    if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0 && showChat.contains(chat)))
+    if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))
     {
         if (filterString.isEmpty())
             return true;

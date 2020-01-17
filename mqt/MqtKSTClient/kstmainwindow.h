@@ -4,7 +4,8 @@
 #include "base_pch.h"
 
 #include <QMainWindow>
-#include "QTcpSocket"
+#include <QTcpSocket>
+#include <QRadioButton>
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
 
@@ -44,7 +45,6 @@ class KSTMainWindow : public QMainWindow
     QString myCallsign;
     QString password;
     QVector<int> kstChatSelection;
-    QVector<int> kstChatShow;
     QVector<int> kstLoggedIn;
     int activeChat = 1;
 
@@ -126,8 +126,7 @@ private slots:
     void on_awayButton_clicked();
 
     void logincb_stateChanged(int arg1);
-    void showcb_stateChanged(int arg1);
-    void activerb_toggled(bool);
+    void activerb_clicked();
     void on_CSChatFilter_currentIndexChanged(int index);
     void on_messageChatFilter_currentIndexChanged(int index);
 
@@ -138,5 +137,7 @@ private slots:
 private:
     Ui::KSTMainWindow *ui;
     void clearConnection();
+    void checkActive();
+    void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
 };
 #endif // KSTMAINWINDOW_H
