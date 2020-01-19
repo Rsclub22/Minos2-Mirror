@@ -3,11 +3,10 @@
 //==========================================================================================
 bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstMessageLine> q2 )
 {
-    int c = q1->dtg.compare(q2->dtg);
-    if (c == 0)
+    if (q1->dtg == q2->dtg)
         return q1->sequence < q2->sequence;
     else
-        return c < 0;
+        return q1->dtg < q2->dtg;
 }
 
 KstMessageGridModel::KstMessageGridModel():cacheSize(10, 10)
@@ -83,7 +82,7 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
             else
                 return "Unknown";
         case eccDTG:
-            cell = crec->dtg;
+            cell = crec->dtg.toString("HH:mm");
             break;
         case eccCall:
             cell = crec->call;

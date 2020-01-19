@@ -15,7 +15,7 @@ class KstMessageLine
 public:
     int sequence;
     int chat;
-    QString dtg;
+    QDateTime dtg;
     QString fullLine;
     QString call;
     QString name;
