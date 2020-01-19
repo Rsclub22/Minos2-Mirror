@@ -139,5 +139,6 @@ private:
     void clearConnection();
     void checkActive();
     void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
+    void checkAwayButton();
 };
 #endif // KSTMAINWINDOW_H

@@ -29,6 +29,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     myCallsign = settings.value("username", "").toString();
     password = settings.value("password", "").toString();
 
+    callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
+    messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
+
     QString chatSelection = settings.value("service", "1").toString();
     QStringList selections = chatSelection.split(":");
     for (int i = 0; i < selections.count(); i++)
@@ -109,8 +112,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(&CloseTimer, SIGNAL(timeout()), this, SLOT(CloseTimerTimer()));
     CloseTimer.start(100);
 
-    messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
-
     kstMessageModel.setChatVector(messageVector);
 
     kstMessageFilterModel.setSourceModel(&kstMessageModel);
@@ -122,7 +123,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->meepTable->setModel(&kstMeepFilterModel);
     ui->meepTable->horizontalHeader()->setStretchLastSection(true);
 
-    callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
     kstCallModel.setCallVector(callVector);
 
     kstCallFilterModel.setSourceModel(&kstCallModel);
@@ -205,6 +205,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     if (autoConnect)
         doLoginChanges();
+
+    logincb_stateChanged(0);
 
     ui->genmsgButton->setDefault(true);
 
@@ -420,6 +422,28 @@ void KSTMainWindow::sendKST(QString msg)
         kstclient->write((msg + "\r\n").toLocal8Bit());
         trace("Send to KST: " + msg);
 }
+void KSTMainWindow::checkAwayButton()
+{
+    QSharedPointer<KstUser> test(new KstUser());
+    test->call = myCallsign.toUpper();
+    test->chat = activeChat;
+    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    {
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+
+        QSharedPointer<KstUser> user = callVector->at(row);
+
+        if (user->away)
+        {
+            ui->awayButton->setText("Set Back");
+        }
+        else
+        {
+            ui->awayButton->setText("Set Away");
+        }
+    }
+}
+
 void KSTMainWindow::analyseKstMessage(QString atj)
 {
 //    18:58:18.640 messageRx: 1858Z ES4RM Sergei> (OH3DP) i am on 1558
@@ -781,24 +805,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
     }
 
-    QSharedPointer<KstUser> test(new KstUser());
-    test->call = myCallsign.toUpper();
-    test->chat = activeChat;
-    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
-    {
-        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
-
-        QSharedPointer<KstUser> user = callVector->at(row);
-
-        if (user->away)
-        {
-            ui->awayButton->setText("Set Back");
-        }
-        else
-        {
-            ui->awayButton->setText("Set Away");
-        }
-    }
+    checkAwayButton();
 
 
 }
@@ -1130,6 +1137,7 @@ void KSTMainWindow::setActive(int chat)
         }
         activeChat = chat;
     }
+    checkAwayButton();
 }
 void KSTMainWindow::checkActive()
 {
@@ -1272,6 +1280,11 @@ void KSTMainWindow::resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QString
         s.append(QString::number(c));
         v.append(c);
     }
+    else if (!kstChatSelection.contains(c) && !cb->isChecked())
+    {
+        rb->setVisible(false);
+    }
+    checkAwayButton();
 }
 
 void KSTMainWindow::logincb_stateChanged(int /*arg1*/)
@@ -1312,6 +1325,7 @@ void KSTMainWindow::activerb_clicked()
     }
     QSettings settings;
     settings.setValue("active", QString::number(activeChat));
+    checkAwayButton();
 }
 void KSTMainWindow::on_messageChatFilter_currentIndexChanged(int index)
 {
