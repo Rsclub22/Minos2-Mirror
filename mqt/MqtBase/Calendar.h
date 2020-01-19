@@ -157,6 +157,8 @@ class IndividualContest
 class TiXmlElement;
 class Calendar
 {
+    Q_DECLARE_TR_FUNCTIONS(Calendar)
+
         int curYear;
         int calendarYear;
         QString getTypeName ( const QString &xmlName, CalType calType );
