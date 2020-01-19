@@ -382,7 +382,7 @@ QString TEntryOptionsForm::doFileSave( )
             }
             else
             {
-                break;;
+                break;
             }
         }
     }

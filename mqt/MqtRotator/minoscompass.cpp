@@ -232,7 +232,7 @@ void MinosCompass::mousePressEvent(QMouseEvent *event)
                 brg -= 360;
             emit sendClickBearing(static_cast<int>(brg) );
 
-//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;;
+//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;
         }
 
 //        qDebug() << "mouse position" << lastPoint;
@@ -264,7 +264,7 @@ void MinosCompass::mouseMoveEvent(QMouseEvent *event)
         mouseBearing = static_cast<int>(brg);
 
         update();
-//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;;
+//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;
     }
     else
     {
