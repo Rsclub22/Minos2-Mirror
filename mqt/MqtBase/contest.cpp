@@ -418,7 +418,7 @@ void BaseContestLog::getMatchText( QSharedPointer<BaseContact> pct, QString &dis
 {
    if ( DupSheet.isCurDup( pct ) )
    {
-      disp = "DUPLICATE OF ";
+      disp = tr("DUPLICATE OF ");
    }
    QString temp;
    pct->getText( temp, ct );
@@ -434,7 +434,7 @@ void BaseContestLog::getMatchField(QSharedPointer<BaseContact> pct, int col, QSt
 {
    if ( col ==0 && isCurDup( pct ) )
    {
-      disp = "DUP OF";
+      disp = tr("DUP OF");
       return ;
    }
    QString temp;
@@ -1350,7 +1350,7 @@ QString ContestScore::disp()
     QString buff;
     if (usesBonus == true)
     {
-        buff = QString( "Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8" )
+        buff = tr("Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8")
             .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2)
             .arg(bonus) .arg(nbonus)
             .arg(totalScore );
@@ -1358,12 +1358,12 @@ QString ContestScore::disp()
     else
     {
         /*
-        buff = QString( "Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10(%11/%12) locators %13 = %14" )
+        buff = tr( "Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10(%11/%12) locators %13 = %14" )
             .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2).arg(brcc3).arg(ndistrict)
             .arg(brcc4).arg(brloc1).arg(nlocs).arg(nGlocs).arg(nonGlocs).arg(brloc2)
             .arg(totalScore );
         */
-        buff = QString( "Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14" )
+        buff = tr( "Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14" )
             .arg(nqsos).arg(contestScore).arg(brcc1).arg(nctry).arg(brcc2).arg(brcc3).arg(ndistrict)
             .arg(brcc4).arg(brloc1).arg(nlocs).arg(brloc2)
             .arg(totalScore );

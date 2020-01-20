@@ -27,7 +27,7 @@ RotPresetDialog::RotPresetDialog(QWidget *parent, int buttonNumber, RotPresetDat
 
     editData = _editData;
     curData = _curData;
-    setWindowTitle(QString("Rotator Preset %1 - %2").arg(QString::number(buttonNumber + 1)).arg(name));
+    setWindowTitle(tr("Rotator Preset %1 - %2").arg(QString::number(buttonNumber + 1)).arg(name));
     ui->nameEdit->setText(curData->name);
     ui->bearingEdit->setText(curData->bearing);
     ui->nameEdit->setFocus();

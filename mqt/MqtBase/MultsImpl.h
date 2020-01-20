@@ -18,6 +18,8 @@
 template < class itemtype >
 class MultList : public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >
 {
+    Q_DECLARE_TR_FUNCTIONS(MultList)
+
     public:
       virtual int getWorked( int /*item*/, BaseContestLog * const /*ct*/ )
       {
@@ -206,6 +208,7 @@ class MultList : public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >
          return dest;
       }
 
+
 };
 class GlistList : public MultList < GlistEntry >
 {
@@ -261,6 +264,7 @@ class CountrySynonymList : public MultList < CountrySynonym >
       virtual ~CountrySynonymList();
       void load( );
       virtual bool procLine(QStringList );
+      static void makeCountrySynonym(const QString &ssyn, const QString &sprefix);
 };
 
 

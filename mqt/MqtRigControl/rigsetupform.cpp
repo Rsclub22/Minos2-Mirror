@@ -344,7 +344,7 @@ void RigSetupForm::civAddressFinished()
 void RigSetupForm::civSetToolTip()
 {
 
-        ui->CIVlineEdit->setToolTip(civToolTip);
+        ui->CIVlineEdit->setToolTip(tr(civToolTip.toUtf8().data()));
 
 }
 

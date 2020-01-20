@@ -805,7 +805,7 @@ void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = clusterStateIndicator[(*i).state] + " " + (*i).app + "\r\n";
+        QString state = QString(clusterStateIndicator[(*i).state]) + " " + (*i).app + "\r\n";
         traceMsg(QString("bandmapClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }

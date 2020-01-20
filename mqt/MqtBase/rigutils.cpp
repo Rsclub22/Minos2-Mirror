@@ -10,6 +10,12 @@
 #include "base_pch.h"
 #include "rigutils.h"
 
+// I've duplicated the strings to make their translation easier.
+
+const char * FREQ_EDIT_ERR_MSG = QT_TR_NOOP("Frequency has invalid characters or missing periods.\r\n\r\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\r\n");
+const char * RADIO_FREQ_EDIT_ERR_MSG = QT_TR_NOOP("Radio Frequency has invalid characters or missing periods.\r\n\r\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\r\n");
+const char * TARGET_FREQ_EDIT_ERR_MSG = QT_TR_NOOP("Target Frequency has invalid characters or missing periods.\r\n\r\nThe format required is (e.g.) 1296.3, 144.32 or 144.290123\r\n");
+
 // add delimiter to string for display
 // input string should just be digits
 

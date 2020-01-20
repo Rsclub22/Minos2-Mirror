@@ -2,8 +2,8 @@
 #define CHATSERVER_H
 #include "base_pch.h"
 
-extern QString stateIndicator[];
-extern QString stateList[];
+extern const char * stateIndicator[];
+extern const char * stateList[];
 
 class Server
 {

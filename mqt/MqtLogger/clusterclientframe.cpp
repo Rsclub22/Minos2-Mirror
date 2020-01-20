@@ -594,7 +594,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = clusterStateIndicator[(*i).state] + " " + (*i).app + "\r\n";
+        QString state = QString(clusterStateIndicator[(*i).state]) + " " + (*i).app + "\r\n";
         trace(QString("clusterClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }

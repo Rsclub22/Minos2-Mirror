@@ -5,17 +5,17 @@
 
 static bool syncstat = false;
 static QVector<QString> chatQueue;
-QString stateIndicator[] =
+const char * stateIndicator[] =
 {
-    "Available",
-    "NotAvailable",
-    "NoContact"
+    QT_TR_NOOP("Available"),
+    QT_TR_NOOP("NotAvailable"),
+    QT_TR_NOOP("NoContact")
 };
-QString stateList[] =
+const char * stateList[] =
 {
-   "Available",
-   "Not Available",
-   "No Contact"
+   QT_TR_NOOP("Available"),
+   QT_TR_NOOP("Not Available"),
+   QT_TR_NOOP("No Contact")
 };
 
 ChatServer *ChatServer::chatServer = nullptr;
@@ -101,7 +101,7 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
                     if ((*stat).state != an.getState())
                     {
                         (*stat).state = an.getState();
-                        QString mess = an.getKey() + " changed state to " + stateList[an.getState()];
+                        QString mess = QString("%1 changed state to  %2").arg(an.getKey().arg(tr(stateList[an.getState()])));
                         addChat( mess );
                         syncstat = true;
                     }
@@ -117,7 +117,7 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
                 s.state = an.getState();
                 s.app = an.getKey();
                 serverList.push_back( s );
-                QString mess = an.getKey() + " changed state to " + stateList[an.getState()];
+                QString mess = QString("%1 changed state to  %2").arg(an.getKey().arg(tr(stateList[an.getState()])));
                 addChat( mess );
                 syncstat = true;
             }

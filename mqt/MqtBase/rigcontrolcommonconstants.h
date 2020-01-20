@@ -122,7 +122,7 @@ const QString RIGCTLD_PATH_SETTING_NAME = "RigctldPath";
 
 // Tooltips
 
-const QString civToolTip = "Leave field blank for default radio CIV,\nor enter in the form 0xnn or nn, where nn is the radio CIV address in Hex.";
+const QString civToolTip = QT_TR_NOOP("Leave field blank for default radio CIV,\nor enter in the form 0xnn or nn, where nn is the radio CIV address in Hex.");
 
 
 

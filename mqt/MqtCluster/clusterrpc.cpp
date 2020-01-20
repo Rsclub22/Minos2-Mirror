@@ -7,19 +7,6 @@
 #include "clusterrpc.h"
 #include "clustercommon.h"
 
-static QString clusterStateIndicator[] =
-{
-    "Available",
-    "NotAvailable",
-    "NoContact"
-};
-static QString clusterStateList[] =
-{
-   "Available",
-   "Not Available",
-   "No Contact"
-};
-
 Clusterrpc::Clusterrpc()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();
@@ -139,7 +126,7 @@ void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         }
         if ( an.getCategory() == rpcConstants::clusterClientServer )
         {
-            trace( QString("***" + clusterStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
+            trace( QString("***") + clusterStateIndicator[an.getState()] + " " + an.getCategory() + " " + an.getKey());
             QVector<ClusterServer>::iterator stat;
             bool clusterFound = false;
             for ( stat = serverList.begin(); stat != serverList.end(); stat++ )

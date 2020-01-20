@@ -164,7 +164,7 @@ private:
     QVector<BandDetail> bands;
     checkModeAgainstFreq* modeBandPlan;
 
-    const QStringList userCmdButtonLabels = {"&Send", "&New", "&Edit", "&Clear"};
+    const QStringList userCmdButtonLabels = {QT_TR_NOOP("&Send"), QT_TR_NOOP("&New"), QT_TR_NOOP("&Edit"), QT_TR_NOOP("&Clear")};
     QList<RotPresetButton *> userCmdButton;
     QList<QShortcut *> shortCutKeyList;
     QList<QShortcut *> shiftShortCutKeyList;

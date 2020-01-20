@@ -21,7 +21,7 @@ MinosParameters *MinosParameters::getMinosParameters()
 {
    if ( !mp )
    {
-      mShowMessage( "MinosParameters not initialised", nullptr );
+      mShowMessage( tr("MinosParameters not initialised"), nullptr );
    }
    return mp;
 }

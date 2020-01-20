@@ -26,7 +26,7 @@ class RotPresetButton : public QObject
     Q_OBJECT
 
 public:
-    explicit RotPresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* shiftkey, QStringList buttonLabels);
+    explicit RotPresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* shiftkey, const QStringList buttonLabels);
 
     virtual ~RotPresetButton() override;
 

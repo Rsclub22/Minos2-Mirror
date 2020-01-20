@@ -207,7 +207,7 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
    {
       contactBuffs.buff = QString("%1 %2 %3")
                .arg(time.getTime( DTGDISP ), 5)
-               .arg(( contactFlags.getValue() & DONT_PRINT ) ? "DELETED" : ( contactFlags.getValue() & LOCAL_COMMENT ) ? "LOCAL COMMENT" : "COMMENT FOR ADJUDICATOR")
+               .arg(( contactFlags.getValue() & DONT_PRINT ) ? tr("DELETED") : ( contactFlags.getValue() & LOCAL_COMMENT ) ? tr("LOCAL COMMENT") : tr("COMMENT FOR ADJUDICATOR"))
                .arg(comments.getValue(), 60);
    }
    else
@@ -218,18 +218,18 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
       contactBuffs.qthbuff = extraText.getValue().left( 100 );
 
       if ( contactFlags.getValue() & MANUAL_SCORE )
-         contactBuffs.brgbuff = "MAN";
+         contactBuffs.brgbuff = tr("MAN");
 
       if ( contactFlags.getValue() & DONT_PRINT )
-         contactBuffs.scorebuff = "DEL";
+         contactBuffs.scorebuff = tr("DEL");
       else
          if ( contactFlags.getValue() & NON_SCORING )
-            contactBuffs.scorebuff = "N/S";
+            contactBuffs.scorebuff = tr("N/S");
          else
          {
             // look at the contest dup
             if ( ( cs.valRes == ERR_DUPCS ) && ( curcon == contest ) )
-               contactBuffs.scorebuff = "DUP";
+               contactBuffs.scorebuff = tr("DUP");
          }
    }
 
