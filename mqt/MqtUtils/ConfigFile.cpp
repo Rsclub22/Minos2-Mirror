@@ -138,7 +138,7 @@ void RunConfigElement::createProcess()
         QString program = commandLine;
         if (!FileExists(program))
         {
-            trace(name + ":program doesn't exist:" + program);
+            trace(name + tr(":program doesn't exist:") + program);
         }
 
         program += " ";
@@ -480,7 +480,7 @@ QString MinosConfig::checkConfig()
             {
                 if (serverPresent)
                 {
-                    reqErrs += "More than one server is defined and enabled";
+                    reqErrs += tr("More than one server is defined and enabled");
                 }
                 serverPresent = true;
             }
@@ -489,7 +489,7 @@ QString MinosConfig::checkConfig()
 
     if (eleListSize && !serverPresent)
     {
-        reqErrs += "A local server is required.\r\n\r\n" ;
+        reqErrs += tr("A local server is required.\r\n\r\n") ;
     }
 
     //Check that the name is not blank, and only has allowed characters
@@ -504,7 +504,7 @@ QString MinosConfig::checkConfig()
 
         if (elei->name.contains('[') || elei->name.contains(']'))
         {
-            reqErrs += elei->name + " contains bad characters [ and/or ]";
+            reqErrs += elei->name + tr(" contains bad characters [ and/or ]");
         }
         for ( QVector <QSharedPointer<RunConfigElement> >::iterator j = i; j != elelist.end(); j++ )
         {
@@ -519,7 +519,7 @@ QString MinosConfig::checkConfig()
 
             if (elei->name.compare(elej->name, Qt::CaseInsensitive) == 0)
             {
-                reqErrs += elei->name + " appears more than once (names are not case sensitive)";
+                reqErrs += elei->name + tr(" appears more than once (names are not case sensitive)");
                 break;
             }
         }
@@ -560,7 +560,7 @@ QString MinosConfig::checkConfig()
                     }
                     if (!reqFound)
                     {
-                        reqErrs += ele->appType + " requires a local " + req + "\n\n";
+                        reqErrs += tr("%1 requires a local %2\n\n").arg(ele->appType).arg(req);
                     }
                 }
             }
@@ -570,11 +570,11 @@ QString MinosConfig::checkConfig()
             {
                 if (!FileExists(ele->commandLine))
                 {
-                    reqErrs += ele->appType + " Executable path does not exist\n\n";
+                    reqErrs += ele->appType + tr(" Executable path does not exist\n\n");
                 }
                 if (ele->appType != "None" && !FileExists(ele->rundir + "/Configuration/MinosConfig.ini"))
                 {
-                    reqErrs += ele->appType + " Working directory is not valid - no Configuration/MinosConfig.ini\n\n";
+                    reqErrs += ele->appType + tr(" Working directory is not valid - no Configuration/MinosConfig.ini\n\n");
                 }
             }
         }
