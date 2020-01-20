@@ -132,7 +132,7 @@ class MinosRPCClient: public MinosRPCObj
    private:
       MinosRPCClient();            // don't allow default constructor
    public:
-      MinosRPCClient( const QString &methodName, TRPCFunctor *cb, bool gen = false ) : MinosRPCObj( methodName, cb, gen )
+      MinosRPCClient( const QString &mName, TRPCFunctor *cb, bool gen = false ) : MinosRPCObj( mName, cb, gen )
       {}
       virtual ~MinosRPCClient() override
       {}
@@ -154,7 +154,7 @@ class MinosRPCServer: public MinosRPCObj
    private:
       MinosRPCServer();            // don't allow default constructor
    public:
-      MinosRPCServer( const QString &methodName, TRPCFunctor *cb, bool gen = false ) : MinosRPCObj( methodName, cb, gen )
+      MinosRPCServer( const QString &mName, TRPCFunctor *cb, bool gen = false ) : MinosRPCObj( mName, cb, gen )
       {}
       virtual ~MinosRPCServer() override;
 
