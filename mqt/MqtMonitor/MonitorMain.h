@@ -57,6 +57,7 @@ struct MonitoredLogCmp
 enum NodeType{entRoot, entServer, entLog};
 class TreeNode
 {
+    Q_DECLARE_TR_FUNCTIONS(TreeNode)
     NodeType ntype;
 protected:
     QString NodeName;
