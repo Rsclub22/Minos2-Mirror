@@ -81,9 +81,6 @@ const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
 
-const QStringList sendClusterReasonText = {"Ok", "Failed - comms error",  "Not Logged On", "Freq out of band", "Callsign or Locator Empty"};
-enum sendClusterReason_e {TX_OK, COMMS_ERR, NOT_LOGGED_ON, FREQ_ERR, CALL_LOC_EMPTY};
-
 class ClusterAddress
 {
 
@@ -164,7 +161,6 @@ private:
     QVector<BandDetail> bands;
     checkModeAgainstFreq* modeBandPlan;
 
-    const QStringList userCmdButtonLabels = {QT_TR_NOOP("&Send"), QT_TR_NOOP("&New"), QT_TR_NOOP("&Edit"), QT_TR_NOOP("&Clear")};
     QList<RotPresetButton *> userCmdButton;
     QList<QShortcut *> shortCutKeyList;
     QList<QShortcut *> shiftShortCutKeyList;

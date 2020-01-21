@@ -151,8 +151,8 @@ void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
                 s.state = an.getState();
                 s.app = an.getKey();
                 serverList.push_back( s );
-                trace(QString("***" + an.getKey() + " changed state to " + clusterStateList[an.getState()] + " and added"));
                 QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()] + " and added";
+                trace(mess);
 
             }
         }
