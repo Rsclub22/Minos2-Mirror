@@ -8,9 +8,9 @@
 
 
 // Status messages sent to minos logger
-#define RIG_STATUS_CONNECTED "Connected"
-#define RIG_STATUS_DISCONNECTED "Disconnected"
-#define RIG_STATUS_ERROR "Error"
+extern const char * RIG_STATUS_CONNECTED;
+extern const char * RIG_STATUS_DISCONNECTED;
+extern const char * RIG_STATUS_ERROR;
 
 //#define TXVERT_ON "TXVERTON"
 //#define TXVERT_OFF "TXVERTOFF"

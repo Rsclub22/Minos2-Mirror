@@ -183,7 +183,7 @@ void TransVertSetupForm::calcOffset()
     else
     {
         QMessageBox msgBox;
-        msgBox.setText(QString("Target Freq. is out of band for %1").arg(transVertData->band));
+        msgBox.setText(tr("Target Freq. is out of band for %1").arg(transVertData->band));
         msgBox.exec();
         ui->targetFreq->setFocus();
         return;

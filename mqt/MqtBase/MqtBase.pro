@@ -69,6 +69,7 @@ SOURCES += \
     rigcommon.cpp \
     RigDetails.cpp \
     RigState.cpp \
+    rigcontrolcommonconstants.cpp \
     rigutils.cpp \
     RotatorCache.cpp \
     rotatorcommon.cpp \

@@ -152,7 +152,7 @@ bool FreqPresetDialog::checkInBand(double freq, freqPresetData::bandOffSet band)
     else
     {
         QMessageBox msgBox;
-        msgBox.setText(QString("Freq. is out of band for %1").arg(bands[band].name));
+        msgBox.setText(tr("Freq. is out of band for %1").arg(bands[band].name));
         msgBox.exec();
         return false;
     }
