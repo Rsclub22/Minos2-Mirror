@@ -201,25 +201,25 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
         switch(section)
         {
         case ecscChat:
-            return "Chat";
+            return tr("Chat");
 
         case ecscCall:
-            return "Callsign";
+            return tr("Callsign");
 
         case ecscLoc:
-            return "Loc";
+            return tr("Loc");
 
         case ecscDistance:
-            return "Dist";
+            return tr("Dist");
 
         case ecscName:
-            return "Name";
+            return tr("Name");
 
         case ecscCountryPrefix:
-            return "Prefix";
+            return tr("Prefix");
 
         case ecscCountryName:
-            return "Country";
+            return tr("Country");
         }
     }
     else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
