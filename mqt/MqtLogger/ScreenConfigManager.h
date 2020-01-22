@@ -10,6 +10,8 @@ class ScreenConfigManager;
 
 class QListWidgetItem;
 
+extern QString defLayoutText;
+
 class ScreenConfigManager : public QDialog
 {
     Q_OBJECT

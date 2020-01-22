@@ -12,6 +12,7 @@
 #include "base_pch.h"
 
 //---------------------------------------------------------------------------
+class LoggerContestLog;
 
 class PrintFileLine
 {

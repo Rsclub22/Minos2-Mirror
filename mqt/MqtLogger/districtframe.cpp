@@ -10,11 +10,11 @@
 
 static GridColumn DistrictTreeColumns[ ectMultMaxCol - 1 ] =
    {
-      GridColumn( ectCall, "XXXXXXX", "Code", taLeftJustify ),
-      GridColumn( ectWorked, "Wk CtX", "Wkd", taCenter ),
-      GridColumn( ectLocator, "MM00MM00", "Locator", taLeftJustify ),
-      GridColumn( ectBearing, "BRGXXX", "brg", taCenter ),
-      GridColumn( ectName, "This is a Very Very long District", "District", taLeftJustify ),
+      GridColumn( ectCall, "XXXXXXX", QT_TR_NOOP("Code"), taLeftJustify ),
+      GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
+      GridColumn( ectLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
+      GridColumn( ectBearing, "BRGXXX", QT_TR_NOOP("brg"), taCenter ),
+      GridColumn( ectName, "This is a Very Very long District", QT_TR_NOOP("District"), taLeftJustify ),
    };
 
 DistrictFrame::DistrictFrame(QWidget *parent) :
@@ -129,7 +129,7 @@ QVariant DistrictGridModel::headerData( int section, Qt::Orientation orientation
     {
         QString cell;
 
-        cell = DistrictTreeColumns[section].title;
+        cell = tr(DistrictTreeColumns[section].title);
 
         return cell;
     }

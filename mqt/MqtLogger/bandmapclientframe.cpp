@@ -136,13 +136,13 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     spotsMenu->installEventFilter(actionInObject);
 
 
-    markSpotAction = new QAction("M&ark Spot", this);
-    unMarkSpotAction = new QAction("&Unmark Spot", this);
-    freqAction = new QAction("Set &Freq", this);
-    bearingAction = new QAction("Set &Bearing", this);
-    logAction = new QAction("Send &Log", this);
-    memoryAction = new QAction("Send &Memory", this);
-    clearSpotAction = new QAction("Clear &Spot", this);
+    markSpotAction = new QAction(tr("M&ark Spot"), this);
+    unMarkSpotAction = new QAction(tr("&Unmark Spot"), this);
+    freqAction = new QAction(tr("Set &Freq"), this);
+    bearingAction = new QAction(tr("Set &Bearing"), this);
+    logAction = new QAction(tr("Send &Log"), this);
+    memoryAction = new QAction(tr("Send &Memory"), this);
+    clearSpotAction = new QAction(tr("Clear &Spot"), this);
 
     spotsMenu->addAction(markSpotAction);
     spotsMenu->addAction(unMarkSpotAction);
@@ -173,13 +173,13 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 
     contextSpotsMenu = new QMenu(this);
-    contextSpotsMenu_markSpotAction = new QAction("M&ark Spot", this);
-    contextSpotsMenu_unMarkSpotAction = new QAction("&Unmark Spot", this);
-    contextSpotsMenu_freqAction = new QAction("Set &Freq", this);
-    contextSpotsMenu_bearingAction = new QAction("Set &Bearing", this);
-    contextSpotsMenu_logAction = new QAction("Send &Log", this);
-    contextSpotsMenu_memoryAction = new QAction("Send &Memory", this);
-    contextSpotsMenu_clearSpotAction = new QAction("Clear &Spot", this);
+    contextSpotsMenu_markSpotAction = new QAction(tr("M&ark Spot"), this);
+    contextSpotsMenu_unMarkSpotAction = new QAction(tr("&Unmark Spot"), this);
+    contextSpotsMenu_freqAction = new QAction(tr("Set &Freq"), this);
+    contextSpotsMenu_bearingAction = new QAction(tr("Set &Bearing"), this);
+    contextSpotsMenu_logAction = new QAction(tr("Send &Log"), this);
+    contextSpotsMenu_memoryAction = new QAction(tr("Send &Memory"), this);
+    contextSpotsMenu_clearSpotAction = new QAction(tr("Clear &Spot"), this);
 
     contextSpotsMenu->addAction(contextSpotsMenu_markSpotAction);
     contextSpotsMenu->addAction(contextSpotsMenu_unMarkSpotAction);
@@ -462,7 +462,7 @@ void BandmapClientFrame::on_clearSpotActionSelected()
     if (bandmapView->getSelectedSpotDataPtr()->isSelected)
     {
         int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                       QString("Please confirm you want to delete this spot - %1?").arg(bandmapView->getSelectedSpotDataPtr()->dxCall),
+                                       tr("Please confirm you want to delete this spot - %1?").arg(bandmapView->getSelectedSpotDataPtr()->dxCall),
                                        QMessageBox::Yes | QMessageBox::No);
         if (ret == QMessageBox::Yes)
         {
@@ -593,7 +593,7 @@ void BandmapClientFrame::context_clearSpotActionSelected()
 
 
     int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                   QString("Please confirm you want to delete this spot - %1?").arg(contextMenuSelectedSpotData.dxCall),
+                                   tr("Please confirm you want to delete this spot - %1?").arg(contextMenuSelectedSpotData.dxCall),
                                    QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::Yes)
     {
@@ -805,7 +805,7 @@ void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = QString(clusterStateIndicator[(*i).state]) + " " + (*i).app + "\r\n";
+        QString state = tr(clusterStateIndicator[(*i).state]) + " " + (*i).app + "\r\n";
         traceMsg(QString("bandmapClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }
@@ -1484,7 +1484,7 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
     }
     else
     {
-        ui->clusterStatusIndicator->setToolTip("Cluster Server Not Running");
+        ui->clusterStatusIndicator->setToolTip(tr("Cluster Server Not Running"));
     }
 }
 
@@ -1511,13 +1511,13 @@ void BandmapClientFrame::radioStatusIndicatorToggle(bool on)
     if (on)
     {
         ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
-        ui->radioStatusIndicator->setToolTip("Connected");
+        ui->radioStatusIndicator->setToolTip(tr("Connected"));
 
     }
     else
     {
        ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
-       ui->radioStatusIndicator->setToolTip("Disconnected");
+       ui->radioStatusIndicator->setToolTip(tr("Disconnected"));
     }
 
 }
@@ -1581,7 +1581,7 @@ bool BandmapClientFrame::checkContestBandMatch(double curFreq)
     }
     else
     {
-        ui->radioStatusMsg->setText("<font color='Red'>Freq out of band</font>");
+        ui->radioStatusMsg->setText(tr("<font color='Red'>Freq out of band</font>"));
     }
 
     return false;
@@ -1641,12 +1641,12 @@ void BandmapClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->bandmapFrameTitle->setText("Bandmap - <font color='Red'>Mouse in frame, updates paused</font>");
-        //ui->bandmapFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
+        ui->bandmapFrameTitle->setText(tr("Bandmap - <font color='Red'>Mouse in frame, updates paused</font>"));
+        //ui->bandmapFrameTitle2->setText(tr("<font color='Red'>Updates paused for 5 secs.</font>"));
     }
     else
     {
-        ui->bandmapFrameTitle->setText("Bandmap");
+        ui->bandmapFrameTitle->setText(tr("Bandmap"));
         //ui->bandmapFrameTitle2->clear();
     }
 }

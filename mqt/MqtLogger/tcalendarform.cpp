@@ -88,19 +88,19 @@ void TCalendarForm::LoadGrid ( Calendar &cal )
 
     ui->CalendarGrid->setColumnCount( cc );
     int col = 0;
-    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( "Contest Name" ) );
-    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( "Band" ) );
-    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( "Start (UTC)" ) );
-    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( "Finish (UTC)" ) );
+    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( tr("Contest Name") ) );
+    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( tr("Band") ) );
+    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( tr("Start (UTC)") ) );
+    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( tr("Finish (UTC)") ) );
     if ( cal.calType == ectVHF )
     {
-        ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( "Scoring" ) );
-        ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( "Mults" ) );
+        ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( tr("Scoring") ) );
+        ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( tr("Mults") ) );
     }
-    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( "Sections" ) );
+    ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( tr("Sections") ) );
     if ( cal.calType == ectVHF )
     {
-        ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( "Special Rules" ) );
+        ui->CalendarGrid->setHorizontalHeaderItem( col++, new QTableWidgetItem( tr("Special Rules") ) );
     }
     int row = 0;
     int nextContest = -1;
@@ -115,7 +115,7 @@ void TCalendarForm::LoadGrid ( Calendar &cal )
 
         if ( cal.calType == ectVHF )
         {
-            ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).ppKmScoring ? "1Pt/Km" : "1Pt/QSO" ) );
+            ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).ppKmScoring ? tr("1Pt/Km") : tr("1Pt/QSO") ) );
             ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).mults ) );
         }
         ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).sections ) );
@@ -170,8 +170,8 @@ void TCalendarForm::FormShow ( )
 
         if ( !loaded )
         {
-            mShowMessage ( "Failed to load the HF calendar file", this );
-            ui->CalendarVersionLabel->setText( "No file loaded" );
+            mShowMessage ( tr("Failed to load the HF calendar file"), this );
+            ui->CalendarVersionLabel->setText( tr("No file loaded") );
             ui->CalendarGrid->setRowCount( 0 );
             return ; // don't close - they need a chance to download
         }
@@ -180,7 +180,7 @@ void TCalendarForm::FormShow ( )
     else
         if ( calType == ectHFBARTG )
         {
-            setWindowTitle ( "Select Contest from BARTG Calendar" );
+            setWindowTitle (tr("Select Contest from BARTG Calendar") );
             hfbartg = Calendar ( year, ectHFBARTG );
 
             yearList.clear();
@@ -193,8 +193,8 @@ void TCalendarForm::FormShow ( )
 
             if ( !loaded )
             {
-                mShowMessage ( "Failed to load the BARTG calendar file", this );
-                ui->CalendarVersionLabel->setText( "No file loaded" );
+                mShowMessage ( tr("Failed to load the BARTG calendar file"), this );
+                ui->CalendarVersionLabel->setText( tr("No file loaded") );
                 ui->CalendarGrid->setRowCount( 0 );
                 return ; // don't close - they need a chance to download
             }
@@ -203,7 +203,7 @@ void TCalendarForm::FormShow ( )
         else
             if ( calType == ectVHF )
             {
-                setWindowTitle ( "Select Contest from VHF Calendar" );
+                setWindowTitle ( tr("Select Contest from VHF Calendar") );
                 vhf = Calendar ( year, ectVHF );
 
                 yearList.clear();
@@ -216,8 +216,8 @@ void TCalendarForm::FormShow ( )
 
                 if ( !loaded )
                 {
-                    mShowMessage ( "Failed to load the VHF calendar file", this );
-                    ui->CalendarVersionLabel->setText( "No file loaded" );
+                    mShowMessage ( tr("Failed to load the VHF calendar file"), this );
+                    ui->CalendarVersionLabel->setText( tr("No file loaded") );
                     ui->CalendarGrid->setRowCount( 0 );
                     return ; // don't close - they need a chance to download
                 }
@@ -226,7 +226,7 @@ void TCalendarForm::FormShow ( )
             else
                 if ( calType == ectHFOther )
                 {
-                    setWindowTitle ( "Select Contest from HF other Calendar" );
+                    setWindowTitle ( tr("Select Contest from HF other Calendar") );
                     hfother = Calendar ( year, ectHFOther );
                     yearList.clear();
                     for ( int i = LOWYEAR; i <= HIGHYEAR; i++ )
@@ -238,8 +238,8 @@ void TCalendarForm::FormShow ( )
 
                     if ( !loaded )
                     {
-                        mShowMessage ( "Failed to load the HF other calendar file", this );
-                        ui->CalendarVersionLabel->setText( "No file loaded" );
+                        mShowMessage ( tr("Failed to load the HF other calendar file"), this );
+                        ui->CalendarVersionLabel->setText(tr( "No file loaded") );
                         ui->CalendarGrid->setRowCount( 0 );
                         return ; // don't close - they need a chance to download
                     }
@@ -248,7 +248,7 @@ void TCalendarForm::FormShow ( )
                 else
                     if ( calType == ectVHFOther )
                     {
-                        setWindowTitle ( "Select Contest from VHF other Calendar" );
+                        setWindowTitle ( tr("Select Contest from VHF other Calendar") );
                         vhfother = Calendar ( year, ectVHFOther );
 
                         yearList.clear();
@@ -260,8 +260,8 @@ void TCalendarForm::FormShow ( )
                         loaded = loadYear ( vhfother, year );
                         if ( !loaded )
                         {
-                            mShowMessage ( "Failed to load the VHF other calendar file", this );
-                            ui->CalendarVersionLabel->setText( "No file loaded" );
+                            mShowMessage ( tr("Failed to load the VHF other calendar file"), this );
+                            ui->CalendarVersionLabel->setText( tr("No file loaded") );
                             ui->CalendarGrid->setRowCount( 0 );
                             return ; // don't close - they need a chance to download
                         }
@@ -270,7 +270,7 @@ void TCalendarForm::FormShow ( )
                     else
                         if ( calType == ectMwave )
                         {
-                            setWindowTitle ( "Select Contest from Microwave Calendar" );
+                            setWindowTitle ( tr("Select Contest from Microwave Calendar") );
                             mwave = Calendar ( year, ectMwave );
 
                             yearList.clear();
@@ -283,8 +283,8 @@ void TCalendarForm::FormShow ( )
 
                             if ( !loaded )
                             {
-                                mShowMessage ( "Failed to load the Microwave calendar file for " + QString::number ( year ), this );
-                                ui->CalendarVersionLabel->setText( "No file loaded" );
+                                mShowMessage ( tr("Failed to load the Microwave calendar file"), this );
+                                ui->CalendarVersionLabel->setText( tr("No file loaded") );
                                 ui->CalendarGrid->setRowCount( 0 );
                                 return ; // don't close - they need a chance to download
                             }
@@ -295,7 +295,7 @@ void TCalendarForm::downloadFiles()
 {
     if (!QSslSocket::supportsSsl())
     {
-        mShowMessage("Something is wrong - SSL not supported on this system."
+        mShowMessage(tr("Something is wrong - SSL not supported on this system.")
                      , this);
 
         return;

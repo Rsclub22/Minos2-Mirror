@@ -133,8 +133,8 @@ void ScreenConfig::procRow(ScreenConfigRow *row, SCRow &scrow)
                 }
                 else
                 {
-                    scele.type = getScreenType(ele->getType());
-                    scele.auxType = getAuxEntryType(ele->getAuxType());
+                    scele.type = ScreenConfigElement::getScreenType(ele->getType());
+                    scele.auxType = StackedInfoFrame::getAuxEntryType(ele->getAuxType());
                 }
                 scrow.elements.append(scele);
             }
@@ -280,7 +280,7 @@ bool ScreenConfig::checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e
                 }
                 else if (type == etype)
                 {
-                    if (type == getScreenTypeString(sctAux))
+                    if (type == ScreenConfigElement::getScreenTypeString(sctAux))
                     {
                         auxCount++;
                     }
@@ -306,11 +306,11 @@ bool ScreenConfig::checkOk(ScreenConfigElement *e)
 
     }
     QString etype = e->getType();
-    if (etype != getScreenTypeString(sctAux) || auxCount < STACKITEMS)
+    if (etype != ScreenConfigElement::getScreenTypeString(sctAux) || auxCount < STACKITEMS)
     {
         return true;
     }
-    else if (etype != getScreenTypeString(sctCluster))
+    else if (etype != ScreenConfigElement::getScreenTypeString(sctCluster))
     {
         return true;
     }
@@ -425,8 +425,8 @@ void ScreenConfig::on_addColumnRightButton_clicked()
 
     if (topRow < 0 || topRow == bottomRow)
     {
-        mShowMessage("Please select (by mouse click) the top and bottom rows for the (right) column.\r\n"
-                     "The row background will change colour when selected.", this);
+        mShowMessage(tr("Please select (by mouse click) the top and bottom rows for the (right) column.\r\n"
+                     "The row background will change colour when selected."), this);
     }
     else
     {
@@ -457,8 +457,8 @@ void ScreenConfig::on_addColumnLeftButton_clicked()
     int bottomRow = getBottomRow(e);
     if (topRow < 0 || topRow == bottomRow)
     {
-        mShowMessage("Please select (by mouse click) the top and bottom rows for the (left) column.\r\n"
-                     "The row background will change colour when selected.", this);
+        mShowMessage(tr("Please select (by mouse click) the top and bottom rows for the (left) column.\r\n"
+                     "The row background will change colour when selected."), this);
     }
     else
     {

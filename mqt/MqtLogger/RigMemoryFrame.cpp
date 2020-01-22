@@ -16,12 +16,12 @@ enum eRigMemGridCols {ermCallsign, ermLocator, ermBearing, ermFreq, ermTime, erm
                    };
 static GridColumn RigMemoryColumns[ ermMaxCol ] =
    {
-      GridColumn( ermCallsign, "(GM4ABC/P) FBXX", "Callsign", taLeftJustify ),
-      GridColumn( ermLocator, "MM00MM00", "Locator", taLeftJustify ),
-      GridColumn( ermBearing, "BRGXXX", "Brg", taCenter ),
-      GridColumn( ermFreq, "144.000.000", "Freq", taLeftJustify ),
-      GridColumn( ermTime, "XX:XX", "Time", taLeftJustify ),
-      GridColumn( ermWorked, "Wk CtX", "Wkd", taCenter ),
+      GridColumn( ermCallsign, "(GM4ABC/P) FBXX", QT_TR_NOOP("Callsign"), taLeftJustify ),
+      GridColumn( ermLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
+      GridColumn( ermBearing, "BRGXXX", QT_TR_NOOP("Brg"), taCenter ),
+      GridColumn( ermFreq, "144.000.000", QT_TR_NOOP("Freq"), taLeftJustify ),
+      GridColumn( ermTime, "XX:XX", QT_TR_NOOP("Time"), taLeftJustify ),
+      GridColumn( ermWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
    };
 
 void RigMemoryFrame::traceMsg(QString msg)
@@ -75,15 +75,15 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
 
     ui->flushMemoriesButton->setFocusPolicy(Qt::NoFocus);
 
-    newAction = new QAction("&New", this);
-    bearingAction = new QAction("&Set Bearing", this);
-    readAction = new QAction("&Read", this);
-    writeAction = new QAction("&Write",this);
-    editAction = new QAction("&Edit", this);
-    clearAction = new QAction("&Clear",this);
+    newAction = new QAction(tr("&New"), this);
+    bearingAction = new QAction(tr("&Set Bearing"), this);
+    readAction = new QAction(tr("&Read"), this);
+    writeAction = new QAction(tr("&Write"),this);
+    editAction = new QAction(tr("&Edit"), this);
+    clearAction = new QAction(tr("&Clear"),this);
 
-    clearAllAction = new QAction("Clear &All",this);
-    clearWorkedAction = new QAction("Clear Wor&ked",this);
+    clearAllAction = new QAction(tr("Clear &All"),this);
+    clearWorkedAction = new QAction(tr("Clear Wor&ked"),this);
 
     memoryMenu->addAction(newAction);
     memoryMenu->addAction(bearingAction);
@@ -537,7 +537,7 @@ void RigMemoryFrame::writeMemory(int buttonNumber)
 
     RigMemDialog memDialog(this);
     memDialog.setLogData(&logData, buttonNumber, ct);
-    memDialog.setWindowTitle(QString("M%1 - Write").arg(QString::number(buttonNumber + 1)));
+    memDialog.setWindowTitle(tr("M%1 - Write").arg(QString::number(buttonNumber + 1)));
    if ( memDialog.exec() == QDialog::Accepted)
    {
        setRigMemoryData(buttonNumber, logData);
@@ -568,7 +568,7 @@ void RigMemoryFrame::editActionSelected()
     RigMemDialog memDialog(this);
 
     memDialog.setLogData(&logData, buttonNumber, ct);
-    memDialog.setWindowTitle(QString("M%1 - Edit").arg(QString::number(buttonNumber + 1)));
+    memDialog.setWindowTitle(tr("M%1 - Edit").arg(QString::number(buttonNumber + 1)));
 
     if ( memDialog.exec() == QDialog::Accepted)
     {
@@ -598,7 +598,7 @@ void RigMemoryFrame::clearActionSelected()
 }
 void RigMemoryFrame::clearAllActionSelected()
 {
-    if ( mShowOKCancelMessage( this, "Please confirm deleting all memories") )
+    if ( mShowOKCancelMessage( this, tr("Please confirm deleting all memories")) )
     {
 
         model.beginResetModel();
@@ -712,7 +712,7 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
                 break;
             }
             case ermWorked:
-                disp = m.worked?"Y":"N";
+                disp = m.worked?tr("Y"):tr("N");
                 break;
             case ermLocator:
                 disp = m.locator;
@@ -755,7 +755,7 @@ QVariant RigMemoryGridModel::headerData( int section, Qt::Orientation orientatio
         {
             QString cell;
 
-            cell = RigMemoryColumns[section].title;
+            cell = tr(RigMemoryColumns[section].title);
 
             return cell;
         }

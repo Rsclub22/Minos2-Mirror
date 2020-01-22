@@ -120,7 +120,7 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
         }
         else
         {
-            if ( mShowYesNoMessage( this, "Country not in CTY.DAT. Leave for now?") )
+            if ( mShowYesNoMessage( this, tr("Country not in CTY.DAT. Leave for now?")) )
             {
                 tryagain = false;
                 screenContact.contactFlags &= ~COUNTRY_FORCED;

@@ -76,11 +76,11 @@ int TQSOEditDlg::exec()
     ui->GJVQSOEditFrame->selectEntryForEdit( firstContact );   // first contact for the dialog to deal with
     if ( unfilled )
     {
-       setWindowTitle("Completing unfilled contacts");
+       setWindowTitle(tr("Completing unfilled contacts"));
     }
     else
     {
-       setWindowTitle("Editing QSO");
+       setWindowTitle(tr("Editing QSO"));
     }
     firstContact.reset();
 

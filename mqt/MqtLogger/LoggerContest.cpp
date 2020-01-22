@@ -286,7 +286,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                }
                else
                {
-                  MinosParameters::getMinosParameters() ->mshowMessage( "Not a known file type! (" + ext + ")" );
+                  MinosParameters::getMinosParameters() ->mshowMessage( tr("Not a known file type! (%1)").arg(ext) );
                   return false;
                }
    if ( !newFile )
@@ -306,7 +306,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       if (!contestFile->open(om))
       {
          QString lerr = contestFile->errorString();
-         QString emess = "Failed to open Contest file " + fn + " : " + lerr;
+         QString emess = tr("Failed to open Contest file %1 : %2 ").arg(fn).arg(lerr);
          MinosParameters::getMinosParameters() ->mshowMessage( emess );
          return false;
       }
@@ -384,7 +384,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
           if (!contestFile->open(om))
           {
              QString lerr = contestFile->errorString();
-             QString emess = "Failed to create Contest file " + fn + " : " + lerr;
+             QString emess = tr("Failed to create Contest file %1 : %2").arg(fn).arg(lerr);
              MinosParameters::getMinosParameters() ->mshowMessage( emess );
              return false;
           }
@@ -413,14 +413,14 @@ qint64 LoggerContestLog::readBlock( int bno )
     bool sres = GJVcontestFile->seek(bno * bsize);
    if ( !sres)
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "(read) seek failed!" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("(read) seek failed!") );
    }
 
    qint64 rsize = GJVcontestFile->read(diskBuffer, bsize);
 
    diskBuffer[ rsize ] = 0;
    if ( rsize < bsize )
-      MinosParameters::getMinosParameters() ->mshowMessage( "Short read" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("Short read") );
 
    return rsize;
 }
@@ -433,17 +433,17 @@ qint64 LoggerContestLog::writeBlock(QSharedPointer<QFile> fd, int bno )
 
    int n = atoi( diskBuffer );
    if ( n != bno )
-      MinosParameters::getMinosParameters() ->mshowMessage( "Invalid block number for write!!" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("Invalid block number for write!!") );
 
    bool sres = fd->seek(bno * bsize);
    if ( !sres )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "(write) seek failed!" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("(write) seek failed!") );
    }
    qint64 ret = fd->write(diskBuffer, bsize);
    if ( ret != bsize )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "bad reply from write!" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
    }
    return ret;
 }
@@ -530,7 +530,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
 
    if (!next)
    {
-      MinosParameters::getMinosParameters() ->mshowMessage("Attempt to insert after last contact - not allowed. Pease report a bug!");
+      MinosParameters::getMinosParameters() ->mshowMessage(tr("Attempt to insert after last contact - not allowed. Pease report a bug!"));
       return QSharedPointer<BaseContact>();
    }
    bool timenow = false;
@@ -683,7 +683,7 @@ bool LoggerContestLog::commonSave( bool newfile )
    {
       if ( GJVFile )
       {
-         MinosParameters::getMinosParameters() ->mshowMessage( "GJV should have been opened read only!" );
+         MinosParameters::getMinosParameters() ->mshowMessage( tr(".GJV should have been opened read only!") );
          return false; // it better be read only!
       }
       else
@@ -776,14 +776,14 @@ bool LoggerContestLog::GJVload( )
    buftostr( temp );
    if ( temp.toInt() != 0 )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "Invalid block 0 in Contest file" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("Invalid block 0 in .GJV Contest file") );
       return false;
    }
 
    buftostr( temp );
    if ( strnicmp( temp, GJVVERSION, VERLENGTH ) != 0 )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( QString( "Invalid Contest file format (" ) + temp + ", " + GJVVERSION + " expected)" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr( "Invalid Contest file format (%1, %2 expected)" ).arg(temp).arg(GJVVERSION) );
       return false;
    }
 
@@ -910,13 +910,13 @@ void LoggerContestLog::procUnknown(QSharedPointer<BaseContact> cct, writer &wr )
 
       // no district when required
       if ( countryMult.getValue() && cct->ctryMult == nullptr )   	// invalid country
-         lbuff = "Unknown Country  ";
+         lbuff = tr("Unknown Country  ");
 
       else
          if ( districtMult.getValue() && cct->ctryMult && cct->ctryMult->hasDistricts()     // continentals dont have counties
               && cct->districtMult == nullptr && !( cct->contactFlags.getValue() & VALID_DISTRICT ) )   	// invalid country
          {
-            lbuff = "Unknown District   ";
+            lbuff = tr("Unknown District   ");
          }
          else
             return ;
@@ -942,17 +942,15 @@ bool LoggerContestLog::exportGJV(QSharedPointer<QFile>fd )
 
    int mind = 1;
    int maxd = maxSerial;
-   if ( !enquireDialog(   /*Owner*/nullptr, "Please give first serial to be dumped", mind ) )
+   if ( !enquireDialog(   /*Owner*/nullptr,tr( "Please give first serial to be dumped"), mind ) )
       return false;
-   if ( !enquireDialog(   /*Owner*/nullptr, "Please give last serial to be dumped", maxd ) )
+   if ( !enquireDialog(   /*Owner*/nullptr, tr("Please give last serial to be dumped"), maxd ) )
       return false;
 
    int mindump = qMin( mind, maxd );
    int maxdump = qMax( mind, maxd );
 
-   // ????   if ( MessageBox( 0, "Do you wish to edit the file?", "Contest", MB_OKCANCEL ) != ID_CANCEL )
-   //   if (cmOK != messageBox(mfOKCancel|mfConfirmation, "Dumping all contacts between serials %d and %d inclusive", mindump, maxdump))
-   QString temp = QString( "Dumping all contacts between serials %1 and %2 inclusive" ).arg(mindump).arg(maxdump );
+   QString temp = tr( "Dumping all contacts between serials %1 and %2 inclusive" ).arg(mindump).arg(maxdump );
    if ( !MinosParameters::getMinosParameters() ->yesNoMessage( nullptr, temp ) )
       return false;
 
@@ -995,16 +993,16 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
    // ADIF format file entry
    // OP header
    // and EOH
-   QString header = QString("Exported by Minos VHF logging system Version ") + STRINGVERSION  + " " + PRERELEASETYPE + "\r\n\r\n";
+   QString header = tr("Exported by Minos VHF logging system Version %1 %2").arg(STRINGVERSION).arg(PRERELEASETYPE) + "\r\n\r\n";
 
-   header += QString( "From file " ) + cfileName + "\r\n\r\n";
+   header += tr( "From file %1" ).arg(cfileName) + "\r\n\r\n";
 
    header += "<EOH>\r\n";
 
    qint64 ret = expfd->write(header.toStdString().c_str());
    if (  ret != header.size() )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "bad reply from write!" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
    }
 
    for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
@@ -1016,13 +1014,13 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
          qint64 ret = expfd->write(l.toStdString().c_str());
          if (  ret != l.size() )
          {
-            MinosParameters::getMinosParameters() ->mshowMessage( "bad reply from write!" );
+            MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
          }
          const char *EOR = "<EOR>\r\n";
          ret = expfd->write(EOR, strlen( EOR ));
          if ( ret != static_cast< int >(strlen( EOR )) )
          {
-            MinosParameters::getMinosParameters() ->mshowMessage( "bad reply from write!" );
+            MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
          }
       }
    }
@@ -1089,17 +1087,15 @@ bool LoggerContestLog::exportMinos( QSharedPointer<QFile> expfd )
 {
    int mind = 1;
    int maxd = maxSerial;
-   if ( !enquireDialog(   /*Owner*/nullptr, "Please give first serial to be dumped", mind ) )
+   if ( !enquireDialog(   /*Owner*/nullptr,tr( "Please give first serial to be dumped"), mind ) )
       return false;
-   if ( !enquireDialog(   /*Owner*/nullptr, "Please give last serial to be dumped", maxd ) )
+   if ( !enquireDialog(   /*Owner*/nullptr, tr("Please give last serial to be dumped"), maxd ) )
       return false;
 
    int mindump = qMin( mind, maxd );
    int maxdump = qMax( mind, maxd );
 
-   // ????   if ( MessageBox( 0, "Do you wish to edit the file?", "Contest", MB_OKCANCEL ) != ID_CANCEL )
-   //   if (cmOK != messageBox(mfOKCancel|mfConfirmation, "Dumping all contacts between serials %d and %d inclusive", mindump, maxdump))
-   QString temp = QString( "Dumping all contacts between serials %1 and %2 inclusive" ).arg(mindump).arg(maxdump );
+   QString temp = tr( "Dumping all contacts between serials %1 and %2 inclusive" ).arg(mindump).arg(maxdump );
    if ( !MinosParameters::getMinosParameters() ->yesNoMessage( nullptr, temp ) )
       return false;
 
@@ -1672,14 +1668,14 @@ bool LoggerContestLog::getStanza( unsigned int stanza, QString &stanzaData )
    bool ret = contestFile.open(QIODevice::ReadOnly);
    if ( !ret )
    {
-      QString emess = "Failed to open Contest file for monitoring" + cfileName + " : " + contestFile.errorString();
+      QString emess = tr("Failed to open Contest file for monitoring %1 : %2").arg(cfileName).arg(contestFile.errorString());
       MinosParameters::getMinosParameters() ->mshowMessage( emess );
       return false;
    }
    ret = contestFile.seek( s->stanzaStart );
    if ( !ret )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "(write) seek failed!" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("(write) seek failed!") );
    }
    QByteArray buffer = contestFile.read( 8192 );
 
