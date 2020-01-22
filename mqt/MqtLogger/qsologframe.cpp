@@ -334,7 +334,7 @@ void QSOLogFrame::setAsEdit(bool s, QString b)
     if (s)
     {
         edit = true;
-        ui->GJVCancelButton->setText("Return to Log");
+        ui->GJVCancelButton->setText(tr("Return to Log"));
     }
 }
 
@@ -486,7 +486,7 @@ void QSOLogFrame::on_CatchupButton_clicked()
         catchup = false;
         ui->CatchupButton->setStyleSheet("");
         widgetStyles[ui->CatchupButton] = "";
-        ui->CatchupButton->setText("Catch-up (Post Entry)");
+        ui->CatchupButton->setText(tr("Catch-up (Post Entry)"));
 
         oldTimeOK = true;
     }
@@ -495,7 +495,7 @@ void QSOLogFrame::on_CatchupButton_clicked()
         catchup = true;
         ui->CatchupButton->setStyleSheet("background-color : coral;");
         widgetStyles[ui->CatchupButton] = "background-color : coral;";
-        ui->CatchupButton->setText("End Catch-up");
+        ui->CatchupButton->setText(tr("End Catch-up"));
 
     }
     // set the screencontact dtg as not entered
@@ -1673,10 +1673,10 @@ bool QSOLogFrame::checkAndLogEntry()
       if ( !( screenContact.contactFlags & TO_BE_ENTERED ) && !catchup )
       {
          mresp = mShowYesNoMessage( this,
-                             "This Contact has changed: Shall I log the changes?\n"
+                             tr("This Contact has changed: Shall I log the changes?\n"
                              "\n"
                              "Yes         - Log as shown\n"
-                             "No          - Discard changes"
+                             "No          - Discard changes")
                               );
       }
       if ( mresp )
@@ -2063,14 +2063,14 @@ void QSOLogFrame::logScreenEntry( )
           // ask if change...
           if ( !curmodeCW )
           {
-             if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, "Change mode to CW?" ) )
+             if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to CW?") ) )
              {
                 screenContact.mode = hamlibData::CW;
              }
           }
           else
           {
-             if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, "Change mode to USB?" ) )
+             if ( MinosParameters::getMinosParameters() ->yesNoMessage( this, tr("Change mode to USB?") ) )
              {
                 screenContact.mode = hamlibData::USB;
              }
@@ -2165,9 +2165,9 @@ void QSOLogFrame::logCurrentContact( )
    if ( ctno > contest->maxSerial + 1 )
    {
 
-      if ( mShowYesNoMessage( this, "\"Serial sent\" is too high - please confirm that this is correct?") )
+      if ( mShowYesNoMessage( this, tr("\"Serial sent\" is too high - please confirm that this is correct?")) )
       {
-         if ( mShowYesNoMessage( this, "Do you want to enter the missing contacts later?" ) )
+         if ( mShowYesNoMessage( this, tr("Do you want to enter the missing contacts later?") ) )
          {
              dtg ctTime(screenContact.time);
              QSharedPointer<BaseContact> pct;
@@ -2494,7 +2494,7 @@ void QSOLogFrame::on_PriorButton_clicked()
    }
    else
    {
-      mShowMessage( "Start of QSOs", this );
+      mShowMessage( tr("Start of QSOs"), this );
    }
 }
 //---------------------------------------------------------------------------
@@ -2529,7 +2529,7 @@ void QSOLogFrame::on_NextButton_clicked()
    }
    else
    {
-      mShowMessage( "End of QSOs", this );
+      mShowMessage( tr("End of QSOs"), this );
    }
 }
 

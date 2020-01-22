@@ -76,11 +76,11 @@ QString decodeMessage::getMStage() const
     switch (mstage)
     {
     case emsNone:
-        return "None";
+        return tr("None");
     case emsCQ:
         return "CQ";
     case emsGrid:
-        return "Grid";
+        return tr("Grid");
     case emsDb:
         return "db";
     case emsRplusDb:
@@ -90,7 +90,7 @@ QString decodeMessage::getMStage() const
     case ems73:
         return "73";
     case emsFree:
-        return "Free";
+        return tr("Free");
     }
     return "N/A";
 }

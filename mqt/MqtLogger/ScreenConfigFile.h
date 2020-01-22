@@ -53,6 +53,7 @@ public:
 
 class ScreenConfigFile
 {
+    Q_DECLARE_TR_FUNCTIONS(ScreenConfigFie)
 public:
 
     ScreenConfigFile();

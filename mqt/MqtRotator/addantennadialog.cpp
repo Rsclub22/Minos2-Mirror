@@ -42,7 +42,7 @@ void AddAntennaDialog::done(int r)
         if (ui->antennaName->text() == "")
         {
             QMessageBox msgBox;
-            msgBox.setText("Antenna Name Empty\nPlease enter a name for the antenna");
+            msgBox.setText(tr("Antenna Name Empty\nPlease enter a name for the antenna"));
             msgBox.exec();
             ui->antennaName->setFocus();
             return;
@@ -51,7 +51,7 @@ void AddAntennaDialog::done(int r)
         {
             QMessageBox msgBox;
             msgBox.setModal( true );
-            msgBox.setText("Antenna name contains invalid characters,\n please remove non-alpha or non-numeric characters");
+            msgBox.setText(tr("Antenna name contains invalid characters,\n please remove non-alpha or non-numeric characters"));
             msgBox.exec();
             return;
         }
@@ -59,7 +59,7 @@ void AddAntennaDialog::done(int r)
         {
             QMessageBox msgBox;
             msgBox.setModal( true );
-            msgBox.setText("Antenna name already exists,\n please use another name");
+            msgBox.setText(tr("Antenna name already exists,\n please use another name"));
             msgBox.exec();
             return;
         }

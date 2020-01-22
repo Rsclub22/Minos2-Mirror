@@ -418,7 +418,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         }
         if (cb != bi.uk)
         {
-            QString mess = QString("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
+            QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
             ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
         }
         else

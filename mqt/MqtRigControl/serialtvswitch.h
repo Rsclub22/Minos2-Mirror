@@ -47,11 +47,11 @@ private:
     QSerialPort *sComPort = nullptr;
     QByteArray m_msg;
     bool openFlag = false;
-    QStringList comportErrMsgs = { "No Error", "Device Not Found", "Permission Error"
-                                   ,"Open Error", "Parity Error", "Framing Error"
-                                   ,"Break Condition", "Write Error", "Read Error"
-                                   ,"Resource Error", "Unsupported Operation Error"
-                                   ,"Unknown Error", "Timeout Error", "Not Open Error"
+    QStringList comportErrMsgs = { tr("No Error"), tr("Device Not Found"), tr("Permission Error")
+                                   ,tr("Open Error"), tr("Parity Error"), tr("Framing Error")
+                                   ,tr("Break Condition"), tr("Write Error"), tr("Read Error")
+                                   ,tr("Resource Error"), tr("Unsupported Operation Error")
+                                   ,tr("Unknown Error"), tr("Timeout Error"), tr("Not Open Error")
                                   };
 
 

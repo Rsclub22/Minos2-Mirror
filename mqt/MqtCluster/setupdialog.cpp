@@ -164,7 +164,7 @@ void SetupDialog::timeToliveEditFinished()
             if (ittl < MIN_TTL || ittl > MAX_TTL)
             {
                 QMessageBox msgBox;
-                msgBox.setText(QString("%1 minutes has been entered\nThe time to live must be between %2 minutes and %3 minutes").arg(ui->timeToLive->text()).arg(MIN_TTL).arg(MAX_TTL));
+                msgBox.setText(tr("%1 minutes has been entered\nThe time to live must be between %2 minutes and %3 minutes").arg(ui->timeToLive->text()).arg(MIN_TTL).arg(MAX_TTL));
                 msgBox.exec();
                 ui->timeToLive->setText(timeToLive);  // restore setting
                 return;

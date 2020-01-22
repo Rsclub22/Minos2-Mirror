@@ -22,20 +22,6 @@
 
 static QVector<QString> spotQueue;
 
-QString clusterStateIndicator[] =
-{
-    "Available",
-    "NotAvailable",
-    "NoContact"
-};
-QString clusterStateList[] =
-{
-   "Available",
-   "Not Available",
-   "No Contact"
-};
-
-
 ClusterClientServer *ClusterClientServer::clusterClientServer = nullptr;
 
 

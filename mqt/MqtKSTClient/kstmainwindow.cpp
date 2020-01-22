@@ -276,7 +276,7 @@ void KSTMainWindow::connected()
     ui->includeLabel->setText("Including " + myCallsign);
     kstMeepFilterModel.setFilterString(myCallsign);
     kstMessageModel.setCacheSize();
-    ui->connectButton->setText("Disconnect");
+    ui->connectButton->setText(tr("Disconnect"));
 }
 
 
@@ -284,7 +284,7 @@ void KSTMainWindow::clearConnection()
 {
     ui->includeLabel->clear();
     kstMeepFilterModel.setFilterString("");
-    ui->connectButton->setText("Connect");
+    ui->connectButton->setText(tr("Connect"));
     kstconnected = false;
     kstLoggedIn.clear();
 }
@@ -353,11 +353,11 @@ void KSTMainWindow::on_analyseButton_clicked()
 
     QString InitialDir/* = GetCurrentDir()*/;
 
-    QString Filter = "KST Chat Files (*.txt);Log Files (*.log);;"
-                     "All Files (*.*)" ;
+    QString Filter = tr("KST Chat Files (*.txt);Log Files (*.log);;"
+                     "All Files (*.*)") ;
 
     QStringList KSTFileNames = QFileDialog::getOpenFileNames( this,
-                       "Chat dumps from KST",
+                       tr("Chat dumps from KST"),
                        InitialDir,                   // opendir
                        Filter );
 
@@ -380,7 +380,7 @@ void KSTMainWindow::on_analyseButton_clicked()
                 // but .log is already i the right order
                 //std::reverse(filelines.begin(), filelines.end());
 
-                ui->includeLabel->setText("Including " + myCallsign);
+                ui->includeLabel->setText(tr("Including %1").arg(myCallsign));
                 kstMeepFilterModel.setFilterString(myCallsign);
 
                 QTimer *timer = new QTimer(this);
@@ -435,11 +435,11 @@ void KSTMainWindow::checkAwayButton()
 
         if (user->away)
         {
-            ui->awayButton->setText("Set Back");
+            ui->awayButton->setText(tr("Set Back"));
         }
         else
         {
-            ui->awayButton->setText("Set Away");
+            ui->awayButton->setText(tr("Set Away"));
         }
     }
 }

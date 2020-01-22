@@ -2,103 +2,104 @@
 #define RPCCOMMANDRCONSTANTS_H
 #include <QString>
 
+// we DON'T want these translated - so QT_TR_NOOP in not required
 namespace rpcConstants
 {
 // PubSub
 
-static const QString publish            = QT_TR_NOOP("Minos:PubSub:Publish");
-static const QString serverSubscribe    = QT_TR_NOOP("Minos:PubSub:ServerSubscribe");
-static const QString remoteSubscribe    = QT_TR_NOOP("Minos:PubSub:RemoteSubscribe");
-static const QString subscribe          = QT_TR_NOOP("Minos:PubSub:Subscribe");
-static const QString serverNotify       = QT_TR_NOOP("Minos:PubSub:ServerNotify");
-static const QString clientNotify       = QT_TR_NOOP("Minos:PubSub:ClientNotify");
+static const QString publish            ("Minos:PubSub:Publish");
+static const QString serverSubscribe    ("Minos:PubSub:ServerSubscribe");
+static const QString remoteSubscribe    ("Minos:PubSub:RemoteSubscribe");
+static const QString subscribe          ("Minos:PubSub:Subscribe");
+static const QString serverNotify       ("Minos:PubSub:ServerNotify");
+static const QString clientNotify       ("Minos:PubSub:ClientNotify");
 
-static const QString selected           = QT_TR_NOOP("Selected");
-static const QString loggerUuid           = QT_TR_NOOP("logger");
+static const QString selected           ("Selected");
+static const QString loggerUuid           ("logger");
 
-static const QString paramName          = QT_TR_NOOP("Name");
-static const QString paramValue          = QT_TR_NOOP("Value");
+static const QString paramName          ("Name");
+static const QString paramValue          ("Value");
 
 // Server Categories
 
-static const QString StationCategory    = QT_TR_NOOP("Station");
-static const QString LocalStationCategory    = QT_TR_NOOP("LocalStation");
+static const QString StationCategory    ("Station");
+static const QString LocalStationCategory    ("LocalStation");
 // station name is the key, IP is the value
 
 // Logger
-static const QString loggerApp         = QT_TR_NOOP("MinosQtLogger");
-static const QString LoggerCategory    = QT_TR_NOOP("MinosLogger");
+static const QString loggerApp         ("MinosQtLogger");
+static const QString LoggerCategory    ("MinosLogger");
 
 // Monitor
-static const QString monitorApp         = QT_TR_NOOP("mqtMonitor");
-static const QString monitorLogCategory = QT_TR_NOOP("MonitorLog");
-static const QString loggerStanzaRequest = QT_TR_NOOP("Minos:Logger:GetStanza");
-static const QString loggerStanzaResponse = QT_TR_NOOP("Minos:Logger:StanzaReturned");
+static const QString monitorApp         ("mqtMonitor");
+static const QString monitorLogCategory ("MonitorLog");
+static const QString loggerStanzaRequest ("Minos:Logger:GetStanza");
+static const QString loggerStanzaResponse ("Minos:Logger:StanzaReturned");
 
 /*
 // Bandmap
-static const QString bandmapApp         = QT_TR_NOOP("mqtBandMap");
-static const QString bandmapMethod      = QT_TR_NOOP("Minos:BandMap");
+static const QString bandmapApp         ("mqtBandMap");
+static const QString bandmapMethod      ("Minos:BandMap");
 
-static const QString bandmapParamFreq   = QT_TR_NOOP("Freq");
-static const QString bandmapParamCallsign = QT_TR_NOOP("Callsign");
-static const QString bandmapParamLocator= QT_TR_NOOP("Locator");
-static const QString bandmapParamUTC    = QT_TR_NOOP("UTC");
-static const QString bandmapParamQTH    = QT_TR_NOOP("QTH");
+static const QString bandmapParamFreq   ("Freq");
+static const QString bandmapParamCallsign ("Callsign");
+static const QString bandmapParamLocator("Locator");
+static const QString bandmapParamUTC    ("UTC");
+static const QString bandmapParamQTH    ("QTH");
 
-static const QString BandMapCategory    = QT_TR_NOOP("BandMap");
-static const QString bandmapKeyLoaded    = QT_TR_NOOP("Loaded");
+static const QString BandMapCategory    ("BandMap");
+static const QString bandmapKeyLoaded    ("Loaded");
 
 */
 
 // Cluster
-static const QString clusterApp         = QT_TR_NOOP("mqtCluster");
-static const QString clusterMethod      = QT_TR_NOOP("Minos:Cluster");
-static const QString clusterClientServer= QT_TR_NOOP("MinosClusterClientServer");
-static const QString sendClusterSpot    = QT_TR_NOOP("SendClusterSpot");
-static const QString txSpotToCluster    = QT_TR_NOOP("txSpotToCluster");
-static const QString txSpotParamFreq    = QT_TR_NOOP("Freq");
-static const QString txSpotParamCallsign = QT_TR_NOOP("Callsign");
-static const QString txSpotParamLocator = QT_TR_NOOP("Locator");
-static const QString txSpotParamUTC    = QT_TR_NOOP("UTC");
-static const QString clusterCategory    = QT_TR_NOOP("ClusterCategory");
-static const QString clusterReport      = QT_TR_NOOP("Report");
-static const QString clusterTXSpotEnableState = QT_TR_NOOP("ClusterTXSpotEnableState");
+static const QString clusterApp         ("mqtCluster");
+static const QString clusterMethod      ("Minos:Cluster");
+static const QString clusterClientServer("MinosClusterClientServer");
+static const QString sendClusterSpot    ("SendClusterSpot");
+static const QString txSpotToCluster    ("txSpotToCluster");
+static const QString txSpotParamFreq    ("Freq");
+static const QString txSpotParamCallsign ("Callsign");
+static const QString txSpotParamLocator ("Locator");
+static const QString txSpotParamUTC    ("UTC");
+static const QString clusterCategory    ("ClusterCategory");
+static const QString clusterReport      ("Report");
+static const QString clusterTXSpotEnableState ("ClusterTXSpotEnableState");
 
 // Chat
-static const QString chatApp            = QT_TR_NOOP("mqtChat");
-static const QString chatMethod         = QT_TR_NOOP("Minos:Chat");
-static const QString SendChatMessage    = QT_TR_NOOP("SendChatMessage");
-static const QString ChatResult         = QT_TR_NOOP("ChatResult");
-static const QString ChatCategory       = QT_TR_NOOP("MinosChat");
-static const QString ChatServer         = QT_TR_NOOP("MinosChatServer");
-static const QString ChatServerFrequency= QT_TR_NOOP("MinosChatServerFrequency");
+static const QString chatApp            ("mqtChat");
+static const QString chatMethod         ("Minos:Chat");
+static const QString SendChatMessage    ("SendChatMessage");
+static const QString ChatResult         ("ChatResult");
+static const QString ChatCategory       ("MinosChat");
+static const QString ChatServer         ("MinosChatServer");
+static const QString ChatServerFrequency("MinosChatServerFrequency");
 
 // Keyer
-static const QString keyerApp           = QT_TR_NOOP("mqtKeyer");
-static const QString keyerMethod        = QT_TR_NOOP("Minos:KeyerControl");
-static const QString keyerPlayFile      = QT_TR_NOOP("PlayFile");
-static const QString keyerRecordFile    = QT_TR_NOOP("RecordFile");
-static const QString keyerTone          = QT_TR_NOOP("Tone");
-static const QString keyerTwoTone       = QT_TR_NOOP("TwoTone");
-static const QString keyerStop          = QT_TR_NOOP("Stop");
+static const QString keyerApp           ("mqtKeyer");
+static const QString keyerMethod        ("Minos:KeyerControl");
+static const QString keyerPlayFile      ("PlayFile");
+static const QString keyerRecordFile    ("RecordFile");
+static const QString keyerTone          ("Tone");
+static const QString keyerTwoTone       ("TwoTone");
+static const QString keyerStop          ("Stop");
 
-static const QString KeyerCategory      = QT_TR_NOOP("Keyer");
-static const QString keyerReport     = QT_TR_NOOP("Report");
+static const QString KeyerCategory      ("Keyer");
+static const QString keyerReport     ("Report");
 
 // Control
-static const QString controlApp         = QT_TR_NOOP("mqtControl");
-static const QString lineControlCategory = QT_TR_NOOP("LineControl");
+static const QString controlApp         ("mqtControl");
+static const QString lineControlCategory ("LineControl");
 
-static const QString controlParamName   = QT_TR_NOOP("Name");
-static const QString controlParamLine   = QT_TR_NOOP("Line");
-static const QString controlResult      = QT_TR_NOOP("ControlResult");
-static const QString controlLineState   = QT_TR_NOOP("LineState");
-static const QString controlState       = QT_TR_NOOP("CtrlState");
-static const QString controlGetLine     = QT_TR_NOOP("GetLine");
-static const QString controlSetLine     = QT_TR_NOOP("SetLine");
-static const QString controlSetTransverter = QT_TR_NOOP("SetTransverter");
-static const QString lineSet            = QT_TR_NOOP("set");
+static const QString controlParamName   ("Name");
+static const QString controlParamLine   ("Line");
+static const QString controlResult      ("ControlResult");
+static const QString controlLineState   ("LineState");
+static const QString controlState       ("CtrlState");
+static const QString controlGetLine     ("GetLine");
+static const QString controlSetLine     ("SetLine");
+static const QString controlSetTransverter ("SetTransverter");
+static const QString lineSet            ("set");
 
 
 
@@ -106,60 +107,60 @@ static const QString lineSet            = QT_TR_NOOP("set");
 
 enum RotateDirection :int {eRotateLeft, eRotateDirect, eRotateRight, eRotateStop};
 
-static const QString rotatorApp         = QT_TR_NOOP("mqtRotator");
-static const QString rotatorMethod      = QT_TR_NOOP("Minos:Rotator");
-static const QString rotatorResult      = QT_TR_NOOP("RotatorResult");
+static const QString rotatorApp         ("mqtRotator");
+static const QString rotatorMethod      ("Minos:Rotator");
+static const QString rotatorResult      ("RotatorResult");
 
-static const QString rotatorParamDirection    = QT_TR_NOOP("RotatorDirection");
-static const QString rotatorParamAngle  = QT_TR_NOOP("RotatorAngle");
+static const QString rotatorParamDirection    ("RotatorDirection");
+static const QString rotatorParamAngle  ("RotatorAngle");
 
-static const QString RotatorCategory    = QT_TR_NOOP("Rotator");
-static const QString rotatorDetailCategory    = QT_TR_NOOP("RotatorDetail");
-static const QString rotatorStateCategory    = QT_TR_NOOP("RotatorState");
-static const QString rotatorPresetsCategory = QT_TR_NOOP("RotatorPresets");
-static const QString rotatorStatus       = QT_TR_NOOP("RotStatus");
-static const QString rotatorBearing     = QT_TR_NOOP("Bearing");
-static const QString rotatorList        = QT_TR_NOOP("rotList");
-static const QString rotPreset  = QT_TR_NOOP("RotPreset");
-static const QString rotPresetList  = QT_TR_NOOP("RotPresetList");
-static const QString rotCwCcwCmdEnable = QT_TR_NOOP("RotCwCcwCmdEnable");
+static const QString RotatorCategory    ("Rotator");
+static const QString rotatorDetailCategory    ("RotatorDetail");
+static const QString rotatorStateCategory    ("RotatorState");
+static const QString rotatorPresetsCategory ("RotatorPresets");
+static const QString rotatorStatus       ("RotStatus");
+static const QString rotatorBearing     ("Bearing");
+static const QString rotatorList        ("rotList");
+static const QString rotPreset  ("RotPreset");
+static const QString rotPresetList  ("RotPresetList");
+static const QString rotCwCcwCmdEnable ("RotCwCcwCmdEnable");
 
-static const QString rotatorSelectAntennaName = QT_TR_NOOP("SelectAntennaName");
-static const QString rotatorMaxAzimuth  = QT_TR_NOOP("MaxAzimuth");
-static const QString rotatorMinAzimuth  = QT_TR_NOOP("MinAzimuth");
+static const QString rotatorSelectAntennaName ("SelectAntennaName");
+static const QString rotatorMaxAzimuth  ("MaxAzimuth");
+static const QString rotatorMinAzimuth  ("MinAzimuth");
 
 // Rig Control
-static const QString rigControlApp         = QT_TR_NOOP("mqtRigControl");
-static const QString rigControlResult      = QT_TR_NOOP("RigControlResult");
-static const QString rigControlMethod      = QT_TR_NOOP("Minos:RigControl");
-static const QString rigControlCategory    = QT_TR_NOOP("RigControl");
-static const QString rigStateCategory      = QT_TR_NOOP("RigState");
-static const QString rigDetailsCategory    = QT_TR_NOOP("RigDetails");
-static const QString rigControlRadioList   = QT_TR_NOOP("RadioList");
-static const QString rigControlBandList    = QT_TR_NOOP("BandList");
-static const QString rigControlStatus      = QT_TR_NOOP("RigStatus");
-static const QString rigControlErrorMsg    = QT_TR_NOOP("ErrorMsg");
-static const QString rigControlRadioFreq   = QT_TR_NOOP("RadioFrequency");
-static const QString rigControlLogFreq     = QT_TR_NOOP("LogFrequency");
-static const QString rigControlRadioMode   = QT_TR_NOOP("RadioMode");
-static const QString rigControlLogMode     = QT_TR_NOOP("LogMode");
-static const QString rigControlSelectRadioName   = QT_TR_NOOP("SelectRadioName");
-static const QString rigControlTxVertEnabled = QT_TR_NOOP("TransVertEnabled");
-static const QString rigControlTxVertStatus = QT_TR_NOOP("TransVertStatus");
-static const QString rigControlTxVertOffsetFreq = QT_TR_NOOP("TransVertOffSetFreq");
-static const QString rigControlTxVertSwitch = QT_TR_NOOP("TransVertSwitch");
-static const QString rigControlRadioRitFreq      = QT_TR_NOOP("RadioRitFrequency");
-static const QString rigControlLogRitFreq      = QT_TR_NOOP("LogRitFrequency");
-static const QString rigRitOnOffStatus      = QT_TR_NOOP("RitOnOffStatus");
-static const QString rigRitEnableStatus     = QT_TR_NOOP("RitEnableStatus");
-static const QString rigRitRadioStatus     = QT_TR_NOOP("RitRadioStatus");
-static const QString rigRadioVolLevel      = QT_TR_NOOP("RadioVolLevel");
-static const QString rigLogVolLevel      = QT_TR_NOOP("LogVolLevel");
-static const QString rigVolStatus           = QT_TR_NOOP("VolStatus");
-static const QString rigTpm                 = QT_TR_NOOP("Tpm");
+static const QString rigControlApp         ("mqtRigControl");
+static const QString rigControlResult      ("RigControlResult");
+static const QString rigControlMethod      ("Minos:RigControl");
+static const QString rigControlCategory    ("RigControl");
+static const QString rigStateCategory      ("RigState");
+static const QString rigDetailsCategory    ("RigDetails");
+static const QString rigControlRadioList   ("RadioList");
+static const QString rigControlBandList    ("BandList");
+static const QString rigControlStatus      ("RigStatus");
+static const QString rigControlErrorMsg    ("ErrorMsg");
+static const QString rigControlRadioFreq   ("RadioFrequency");
+static const QString rigControlLogFreq     ("LogFrequency");
+static const QString rigControlRadioMode   ("RadioMode");
+static const QString rigControlLogMode     ("LogMode");
+static const QString rigControlSelectRadioName   ("SelectRadioName");
+static const QString rigControlTxVertEnabled ("TransVertEnabled");
+static const QString rigControlTxVertStatus ("TransVertStatus");
+static const QString rigControlTxVertOffsetFreq ("TransVertOffSetFreq");
+static const QString rigControlTxVertSwitch ("TransVertSwitch");
+static const QString rigControlRadioRitFreq      ("RadioRitFrequency");
+static const QString rigControlLogRitFreq      ("LogRitFrequency");
+static const QString rigRitOnOffStatus      ("RitOnOffStatus");
+static const QString rigRitEnableStatus     ("RitEnableStatus");
+static const QString rigRitRadioStatus     ("RitRadioStatus");
+static const QString rigRadioVolLevel      ("RadioVolLevel");
+static const QString rigLogVolLevel      ("LogVolLevel");
+static const QString rigVolStatus           ("VolStatus");
+static const QString rigTpm                 ("Tpm");
 
 // KSTClient
-static const QString KSTClientApp         = QT_TR_NOOP("mqtKSTClient");
+static const QString KSTClientApp         ("mqtKSTClient");
 
 }
 #endif // RPCCOMMANDRCONSTANTS_H

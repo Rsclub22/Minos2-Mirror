@@ -80,7 +80,7 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
             if (crec->chat > 0 && crec->chat <= services.count())
                 return services[crec->chat - 1];
             else
-                return "Unknown";
+                return tr("Unknown");
         case eccDTG:
             cell = crec->dtg.toString("HH:mm");
             break;
@@ -116,21 +116,21 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
         switch (section)
         {
         case eccChat:
-            return "Chat";
+            return tr("Chat");
         case eccDTG:
-            cell = "Time(Z)";
+            cell = tr("Time(Z)");
             break;
         case eccCall:
-            cell = "Call";
+            cell = tr("Call");
             break;
         case eccName:
-            cell = "Name";
+            cell = tr("Name");
             break;
         case eccOther:
-            cell = "Other Call";
+            cell = tr("Other Call");
             break;
         case eccText:
-            cell = "Text";
+            cell = tr("Text");
             break;
         }
         return cell;

@@ -316,7 +316,7 @@ void RigSetupForm::civAddressFinished()
         int hexValue = civNum.toInt(&Ok, 16);
         if (Ok &&  (hexValue < 0 || hexValue > 255))
         {
-            QMessageBox::critical(this, "CIV Error", QString(ui->CIVlineEdit->text()) + " CIV number out of range 0 - FF");
+            QMessageBox::critical(this,tr( "CIV Error"), QString(ui->CIVlineEdit->text()) + tr(" CIV number out of range 0 - FF"));
             //ui->CIVlineEdit->setText("");
             return;
         }
@@ -344,7 +344,7 @@ void RigSetupForm::civAddressFinished()
 void RigSetupForm::civSetToolTip()
 {
 
-        ui->CIVlineEdit->setToolTip(civToolTip);
+        ui->CIVlineEdit->setToolTip(tr(civToolTip.toUtf8().data()));
 
 }
 
@@ -587,8 +587,8 @@ void RigSetupForm::networkAddressSelected()
         else
         {
             QMessageBox messageBox;
-            QString msg = "Invalid Network Address " + ui->networkAddBox->text();
-            messageBox.critical(this, "Network Address Entry Error", msg);
+            QString msg = tr("Invalid Network Address %1").arg( ui->networkAddBox->text());
+            messageBox.critical(this, tr("Network Address Entry Error"), msg);
             ui->networkAddBox->setFocus();
         }
     }
@@ -1273,7 +1273,7 @@ void RigSetupForm::removeTransVerter()
     {
         // can't remove transverter on current RadioName
         QMessageBox msgBox;
-        msgBox.setText(QString("You can not remove this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
+        msgBox.setText(tr("You can not remove this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
         msgBox.exec();
         return;
     }
@@ -1335,7 +1335,7 @@ void RigSetupForm::changeBand()
     {
         // can't change transverter band on current RadioName
         QMessageBox msgBox;
-        msgBox.setText(QString("You can not change band on this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
+        msgBox.setText(tr("You can not change band on this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
         msgBox.exec();
         return;
     }
@@ -1469,8 +1469,8 @@ void RigSetupForm::processPortNumber(QLineEdit* netPortBox, QString& portNumber)
          else
          {
              QMessageBox messageBox;
-             QString msg = "Invalid Network Port Number " + netPortBox->text();
-             messageBox.critical(this, "Network Port Number out of range", msg);
+             QString msg = tr("Invalid Network Port Number %1").arg(netPortBox->text());
+             messageBox.critical(this, tr("Network Port Number out of range"), msg);
              netPortBox->setFocus();
          }
 

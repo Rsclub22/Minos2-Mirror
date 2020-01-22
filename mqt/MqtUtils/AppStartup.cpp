@@ -98,7 +98,7 @@ void appStartup(const QString &pappName)
             }
             QString destDir = QFileDialog::getExistingDirectory(
                         nullptr,
-                        "Set Minos Working Directory",
+                        QCoreApplication::translate("appStartup", "Set Minos Working Directory"),
                         fpath,
                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
                         );

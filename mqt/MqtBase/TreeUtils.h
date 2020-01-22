@@ -24,9 +24,9 @@ class GridColumn
    public:
       int fieldId;
       QString width;
-      QString title;
+      const char * title;
       TAlignment alignment;
-      GridColumn( int fieldId, QString width, QString title, TAlignment alignment ) :
+      GridColumn( int fieldId, QString width, const char * title, TAlignment alignment ) :
             fieldId( fieldId ), width( width ), title( title ), alignment( alignment )
       {}
 };

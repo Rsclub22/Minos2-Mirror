@@ -30,40 +30,40 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
 
     QStringList vlabels =
     {
-        "Date Range (Calculated)",
-        "Contest Name",
-        "Band",
-        "Band Points Multiplier",
-        "Entrant name (or group)",
-        "Station QTH 1",
-        "Station QTH 2",
-        "Section",
-        "Callsign as sent",
-        "Locator as sent",
-        "Exchange/code/QTH as sent",
-        "Transmitter",
-        "Transmit Power",
-        "Receiver",
-        "Antenna",
-        "Height above ground",
-        "Height above sea level",
-        "(From QSOs) Operators Line 1",
-        "(From QSOs) Operators Line 2",
-        "(Entry)Operators Line 1",
-        "(Entry)Operators Line 2",
-        "Conditions/Comments",
-        "Conditions/Comments",
-        "Conditions/Comments",
-        "Conditions/Comments",
-        "Name for Correspondence",
-        "Callsign for Correspondence",
-        "Address 1 for Correspondence",
-        "Address 2 for Correspondence",
-        "City for Correspondence",
-        "Country for Correspondence",
-        "Postcode for Correspondence",
-        "Phone number for queries",
-        "email address for queries"
+        tr("Date Range (Calculated)"),
+        tr("Contest Name"),
+        tr("Band"),
+        tr("Band Points Multiplier"),
+        tr("Entrant name (or group)"),
+        tr("Station QTH 1"),
+        tr("Station QTH 2"),
+        tr("Section"),
+        tr("Callsign as sent"),
+        tr("Locator as sent"),
+        tr("Exchange/code/QTH as sent"),
+        tr("Transmitter"),
+        tr("Transmit Power"),
+        tr("Receiver"),
+        tr("Antenna"),
+        tr("Height above ground"),
+        tr("Height above sea level"),
+        tr("(From QSOs) Operators Line 1"),
+        tr("(From QSOs) Operators Line 2"),
+        tr("(Entry)Operators Line 1"),
+        tr("(Entry)Operators Line 2"),
+        tr("Conditions/Comments"),
+        tr("Conditions/Comments"),
+        tr("Conditions/Comments"),
+        tr("Conditions/Comments"),
+        tr("Name for Correspondence"),
+        tr("Callsign for Correspondence"),
+        tr("Address 1 for Correspondence"),
+        tr("Address 2 for Correspondence"),
+        tr("City for Correspondence"),
+        tr("Country for Correspondence"),
+        tr("Postcode for Correspondence"),
+        tr("Phone number for queries"),
+        tr("email address for queries")
     };
 
     ui->OptionsScrollBox->horizontalHeader()->hide();
@@ -294,36 +294,36 @@ QString TEntryOptionsForm::doFileSave( )
         {
         case EG0GJV:
             defext = "gjv";
-            filter = "GJV ContestLog files (*.gjv);;All Files (*.*);;" ;
-            title = "Save contest in GJV format as...";
+            filter = tr("GJV ContestLog files (*.gjv);;All Files (*.*);;") ;
+            title = tr("Save contest in GJV format as...");
             break;
         case EMINOS:
             defext = "minos";
-            filter = "Minos ContestLog files (*.minos *.Minos);;All Files (*.*);;" ;
-            title = "Save contest in .minos format as...";
+            filter = tr("Minos ContestLog files (*.minos *.Minos);;All Files (*.*);;") ;
+            title = tr("Save contest in .minos format as...");
             break;
         case EADIF:
             defext = "adi";
-            filter = "ADIF files (*.adi);;All Files (*.*);;" ;
-            title = "Save contest in ADIF format as...";
+            filter = tr("ADIF files (*.adi);;All Files (*.*);;") ;
+            title = tr("Save contest in ADIF format as...");
             break;
         case EKML:
             defext = "kml";
-            filter = "KML(GoogleEarth) files (*.kml);;All Files (*.*);;" ;
-            title = "Save contest in KML(GoogleEarth) format as...";
+            filter = tr("KML(GoogleEarth) files (*.kml);;All Files (*.*);;") ;
+            title = tr("Save contest in KML(GoogleEarth) format as...");
             break;
         case EREG1TEST:
             defext = "edi";
             ct->mycall.valRes = CS_NOT_VALIDATED;
             ct->mycall.validate( );
-            filter = "Region 1 EDI files (*.edi);;All Files (*.*);;" ;
-            title = "Save contest in Region 1 EDI file format as...";
+            filter =tr( "Region 1 EDI files (*.edi);;All Files (*.*);;") ;
+            title = tr("Save contest in Region 1 EDI file format as...");
             break;
         case EPRINTFILE:
         {
             defext = "txt";
-            filter = "Text output (*.txt);;All Files (*.*);;" ;
-            title = "Save contest in ptintable text format as...";
+            filter = tr("Text output (*.txt);;All Files (*.*);;" );
+            title = tr("Save contest in ptintable text format as...");
         }
             break;
         }
@@ -348,7 +348,7 @@ QString TEntryOptionsForm::doFileSave( )
                 // open the export file
                 if ( FileAccessible(expName) && !FileWriteable(expName) )
                 {
-                        MinosParameters::getMinosParameters() ->mshowMessage( "File is Read Only", this );
+                        MinosParameters::getMinosParameters() ->mshowMessage( tr("File is Read Only"), this );
                         continue;
                 }
                 if ( MinosParameters::getMinosParameters() ->isContestOpen( expName ) )
@@ -363,7 +363,7 @@ QString TEntryOptionsForm::doFileSave( )
                 if (!contestFile->open(om))
                 {
                    QString lerr = contestFile->errorString();
-                   QString emess = "Failed to open Contest export file " + expName + " : " + lerr;
+                   QString emess = tr("Failed to open Contest export file%1 : %2 ").arg(expName).arg(lerr);
                    MinosParameters::getMinosParameters() ->mshowMessage( emess, this );
                    continue;
                 }

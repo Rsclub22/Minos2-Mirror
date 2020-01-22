@@ -53,7 +53,7 @@ class ErrEntry
       ErrEntry()
             : priority( 0 ), errStr( "" )
       {}
-      ErrEntry( unsigned int c, QString s )
+      ErrEntry( unsigned int c, const char * s )
             : priority( c ), errStr( s )
       {}
 
@@ -64,17 +64,17 @@ class ErrEntry
       }
       unsigned int priority;
       /*const*/
-      QString errStr;
+      const char * errStr;
 
       bool operator==( const ErrEntry& e2 ) const
       {
-         if ( ( priority == e2.priority ) && errStr.compare(e2.errStr ) == 0 )
+         if ( ( priority == e2.priority ) && QString(errStr).compare(e2.errStr ) == 0 )
             return true;
          return false;
       }
       bool operator!=( const ErrEntry& e2 ) const
       {
-         if ( ( priority != e2.priority ) || errStr.compare(e2.errStr) != 0 )
+         if ( ( priority != e2.priority ) || QString(errStr).compare(e2.errStr) != 0 )
             return true;
          return false;
       }
@@ -84,7 +84,7 @@ class ErrEntry
             return true;
 
          if ( priority == e2.priority )
-            return ( errStr.compare(e2.errStr) < 0 );
+            return ( QString(errStr).compare(e2.errStr) < 0 );
 
          return false;
       }

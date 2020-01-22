@@ -13,14 +13,16 @@
 #include "printfile.h"
 
 //==============================================================================
-static QString fileHeader = "<!--\r\n"
+// This (printfile) will be in english...
+
+static QString fileHeader =
                          "====================================================\r\n"
                          "\r\nDO NOT SEND THIS FILE AS YOUR ENTRY!\r\n\r\n"
                          "Use \"File\" | \"Produce Entry/Export File...\"\r\n"
                          "Export as Reg1Test(entry)\r\n"
                          "and send the .EDI file produced.\r\n"
                          "====================================================\r\n"
-                         "-->\r\n";
+                         ;
 //==============================================================================
 enum PrintFile_order
 {

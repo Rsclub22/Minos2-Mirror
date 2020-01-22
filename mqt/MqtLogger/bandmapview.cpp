@@ -1152,7 +1152,7 @@ void BandmapView::assembleCqMsg(int row, QString& markerMsg)
     }
 
 
-    QString msg = QString("%1%2CQ Frequency @ .%3%4%5").arg(bLineStart).arg(msgColourStart).arg(extractKhz(freqStr)).arg(msgColourEnd).arg(bLineEnd);
+    QString msg = tr("%1%2CQ Frequency @ .%3%4%5").arg(bLineStart).arg(msgColourStart).arg(extractKhz(freqStr)).arg(msgColourEnd).arg(bLineEnd);
     markerMsg = msg;
     //msg.detach();
 }
@@ -1183,7 +1183,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString newSpotMsg = "";
     if (!olderThan3Min)
     {
-        newSpotMsg = HtmlFontColour(BANDMAP_NEW_COLOUR) + "New" +  HtmlFontColour(NOT_WORKED_COLOUR);
+        newSpotMsg = HtmlFontColour(BANDMAP_NEW_COLOUR) + tr("New") +  HtmlFontColour(NOT_WORKED_COLOUR);
     }
 
     QString callsign;
@@ -1259,7 +1259,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     }
 
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
-    QString elapsedTimeStr = QString::number(elapsedTime) + " min";
+    QString elapsedTimeStr = QString::number(elapsedTime) + " " + tr("min");
 
     QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart).arg(callsign).arg(extractKhz(freqStr)).arg(locator).arg(distance).arg(bearing).arg(elapsedTimeStr).arg(markSym).arg(newSpotMsg).arg(bLineEnd);
 
@@ -1279,7 +1279,7 @@ void BandmapView::assembleCqToolTip(int row, QString freq, QString& toolTipMsg)
 {
 
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
-    QString msg = QString("CQ Frequency = %1\nThe computed mode is %2").arg(convertFreqStrDisp(freq)).arg(computedMode);
+    QString msg = tr("CQ Frequency = %1\nThe computed mode is %2").arg(convertFreqStrDisp(freq)).arg(computedMode);
     toolTipMsg = msg;
     //msg.detach();
 
@@ -1298,7 +1298,7 @@ void BandmapView::assembleToolTip(int row, QString freq, QString& toolTipMsg)
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
     QString elapsedTimeStr = QString::number(elapsedTime);
 
-    QString msg = QString("%1 - %2 [%3 %4 @ %5 min] \nThe computed mode is %6\n%7").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTimeStr).arg(computedMode).arg(spotterComment);
+    QString msg = tr("%1 - %2 [%3 %4 @ %5 min] \nThe computed mode is %6\n%7").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTimeStr).arg(computedMode).arg(spotterComment);
 
     toolTipMsg = msg;
     //msg.detach();

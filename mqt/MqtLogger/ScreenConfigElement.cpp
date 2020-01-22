@@ -8,24 +8,24 @@
 
 static QVector <SCTypeOption> scoptions =
 {
-    {sctAux, "Auxiliary", "Auxiiary Display"},
-    {sctChat, "Chat Display", "Chat Display"},
-    {sctCluster, "Cluster Display", "Cluster Display"},
-    {sctLog, "Log List", "QSO Log List"},
-    {sctNextQSODetails, "Next QSO Details", "Next QSO details"},
-    {sctQSOEdit, "QSO Edit", "QSO Edit"},
-    {sctRigControl, "Rig Control", "Rig Control"},
-    {sctRotControl, "Rotator Control", "Rotator Control"},
-    {sctRotPresets, "Rotator Presets", "Rotator Presets"},
-    {sctThisMatch, "This Contest Match", "This Contest Matches"},
-    {sctOtherMatch, "Other Contest Match", "Other Contest Matches" },
-    {sctArchiveMatch, "Archive Match", "Archive List Matches" },
-    {sctWsjtx, "WSJT-X Connector", "WSJT-X Connector" },
-    {sctBandmap, "Bandmap Display", "Bandmap Display"},
-    {sctSplit, "HSplit", "Horizontally split element"},
-    {sctNone, "None", "Not in use"}
+    {sctAux, QT_TR_NOOP("Auxiliary"), QT_TR_NOOP("Auxiliary Display")},
+    {sctChat, QT_TR_NOOP("Chat Display"), QT_TR_NOOP("Chat Display")},
+    {sctCluster, QT_TR_NOOP("Cluster Display"), QT_TR_NOOP("Cluster Display")},
+    {sctLog, QT_TR_NOOP("Log List"), QT_TR_NOOP("QSO Log List")},
+    {sctNextQSODetails, QT_TR_NOOP("Next QSO Details"), QT_TR_NOOP("Next QSO details")},
+    {sctQSOEdit, QT_TR_NOOP("QSO Edit"), QT_TR_NOOP("QSO Edit")},
+    {sctRigControl, QT_TR_NOOP("Rig Control"), QT_TR_NOOP("Rig Control")},
+    {sctRotControl, QT_TR_NOOP("Rotator Control"), QT_TR_NOOP("Rotator Control")},
+    {sctRotPresets, QT_TR_NOOP("Rotator Presets"), QT_TR_NOOP("Rotator Presets")},
+    {sctThisMatch, QT_TR_NOOP("This Contest Match"), QT_TR_NOOP("This Contest Matches")},
+    {sctOtherMatch, QT_TR_NOOP("Other Contest Match"), QT_TR_NOOP("Other Contest Matches") },
+    {sctArchiveMatch, QT_TR_NOOP("Archive Match"), QT_TR_NOOP("Archive List Matches") },
+    {sctWsjtx, QT_TR_NOOP("WSJT-X Connector"), QT_TR_NOOP("WSJT-X Connector") },
+    {sctBandmap, QT_TR_NOOP("Bandmap Display"), QT_TR_NOOP("Bandmap Display")},
+    {sctSplit, QT_TR_NOOP("HSplit"), QT_TR_NOOP("Horizontally split element")},
+    {sctNone, QT_TR_NOOP("None"), QT_TR_NOOP("Not in use")}
 };
-SCType getScreenType(QString s)
+SCType ScreenConfigElement::getScreenType(QString s)
 {
     foreach(const SCTypeOption &opt, scoptions)
     {
@@ -34,12 +34,12 @@ SCType getScreenType(QString s)
     }
     return sctNone;
 }
-QString getScreenTypeString(SCType t)
+QString ScreenConfigElement::getScreenTypeString(SCType t)
 {
     foreach(const SCTypeOption &opt, scoptions)
     {
         if (opt.type == t)
-            return opt.s;
+            return tr(opt.s);
     }
     return getScreenTypeString(sctNone);
 
@@ -149,7 +149,7 @@ QString ScreenConfigElement::getType() const
 
 void ScreenConfigElement::setAuxType(AuxEntries ae)
 {
-    ui->auxTypeCombo->setCurrentText(getAuxTypeString(ae));
+    ui->auxTypeCombo->setCurrentText(StackedInfoFrame::getAuxTypeString(ae));
 }
 QString ScreenConfigElement::getAuxType() const
 {
@@ -226,7 +226,7 @@ void ScreenConfigElement::on_splitAboveButton_clicked()
     ScreenConfigElement *e = newRow->addLeft(nullptr);
 
     e->setType(getScreenType(t));
-    e->setAuxType(getAuxEntryType(aux));
+    e->setAuxType(StackedInfoFrame::getAuxEntryType(aux));
 }
 
 void ScreenConfigElement::on_splitBelowButton_clicked()
@@ -253,7 +253,7 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
     newRow->addLeft(nullptr);
 
     e->setType(getScreenType(t));
-    e->setAuxType(getAuxEntryType(aux));
+    e->setAuxType(StackedInfoFrame::getAuxEntryType(aux));
 }
 void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
 {

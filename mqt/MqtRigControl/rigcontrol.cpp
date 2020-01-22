@@ -19,8 +19,27 @@
 #include <hamlib/rig.h>
 #include "minosNetUtils.h"
 
-
-
+namespace serialData
+{
+static const char * hamlibErrorMsg[] = {QT_TR_NOOP("No Error, operation completed sucessfully"),
+                                    QT_TR_NOOP("Invalid parameter"),
+                                    QT_TR_NOOP("Invalid configuration"),
+                                    QT_TR_NOOP("Memory shortage"),
+                                    QT_TR_NOOP("Function not implemented"),
+                                    QT_TR_NOOP("Communication timed out"),
+                                    QT_TR_NOOP("IO error, including open failed"),
+                                    QT_TR_NOOP("Internal Hamlib error"),
+                                    QT_TR_NOOP("Protocol error"),
+                                    QT_TR_NOOP("Command rejected by the rig"),
+                                    QT_TR_NOOP("Command performed, but arg truncated"),
+                                    QT_TR_NOOP("Function not available"),
+                                    QT_TR_NOOP("VFO not targetable"),
+                                    QT_TR_NOOP("Error talking on the bus"),
+                                    QT_TR_NOOP("Collision on the bus"),
+                                    QT_TR_NOOP("NULL RIG handle or any invalid pointer parameter in get arg"),
+                                    QT_TR_NOOP("Invalid VFO"),
+                                    "RIG_EDOM"};
+}
 
 
 static QList<const rig_caps *> capsList;
@@ -932,19 +951,19 @@ bool RigControl::get_serialConnected()
 
 QString RigControl::gethamlibErrorMsg(int errorCode)
 {
-    if (errorCode > serialData::hamlibErrorMsg.count())
+    if (errorCode > static_cast<int>(sizeof(serialData::hamlibErrorMsg)/sizeof(const char *)))
     {
-        return "hamlib Errorcode too large!";
+        return tr("hamlib Errorcode too large!");
     }
-    return serialData::hamlibErrorMsg[errorCode];
+    return tr(serialData::hamlibErrorMsg[errorCode]);
 }
 
 
-QStringList RigControl::gethamlibErrorMsg()
-{
+//QStringList RigControl::gethamlibErrorMsg()
+//{
 
-    return serialData::hamlibErrorMsg;
-}
+//    return serialData::hamlibErrorMsg;
+//}
 
 QString RigControl::gethamlibVersion()
 {

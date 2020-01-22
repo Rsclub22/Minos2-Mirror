@@ -8,14 +8,17 @@
 
 static bool started = false;
 
-static QString welcomeText = QString("<br><h1>Welcome to Minos Version ") + STRINGVERSION  + " " + PRERELEASETYPE + "</h1>"
+static QString welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + "</h1>"
                                "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
                                "<br><br>";
 
-static QString creditsText = QString("<br><h2>Credits</h2>"
+static const char * wpart = QT_TR_NOOP("Welcome to Minos Version");
+
+static QString creditsText = QString("<br><h2>%1</h2>"
                               "<br>Mike Goodey G0GJV; David Balharrie M0DGB/G8FKH; Neil Yorke M0NKE"
                               "<br>Dave Sergeant G3YMC; Peter Burton G3ZPB, Ken Punshon G4APJ"
                               "<br><br>");
+static const char *cpart = QT_TR_NOOP("Credits");
 static QString MinosText =
    "The Inferno, Dante, (trans Dorothy L Sayers, Penguin Classics); Canto 5.\r\n"
    "\r\n"
@@ -92,12 +95,12 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
 
     ui->PageControl1->setCurrentWidget(ui->AboutTabSheet);
 
-    ui->AboutMemo->setText(welcomeText);
+    ui->AboutMemo->setText(welcomeText.arg(tr(wpart)));
     ui->AboutMemo->setTextFormat(Qt::RichText);
     ui->AboutMemo->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
     ui->CreditsMemo->setTextFormat(Qt::RichText);
-    ui->CreditsMemo->setText(creditsText);
+    ui->CreditsMemo->setText(creditsText.arg(cpart));
 
     ui->MinosMemo->setText(MinosText);
 

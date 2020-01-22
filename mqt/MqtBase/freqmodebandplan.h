@@ -25,6 +25,8 @@ public:
 
 class freqModeBandPlan
 {
+    Q_DECLARE_TR_FUNCTIONS(freqModeBandPlan)
+
 public:
     freqModeBandPlan();
 

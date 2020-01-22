@@ -78,6 +78,8 @@ const short FORCE_LOG = 0x0001;		// Force logged into log
 
 class BaseContact
 {
+    Q_DECLARE_TR_FUNCTIONS(BaseContact)
+
       QVector < QSharedPointer<BaseContact> > history;
    protected:
       BaseContestLog *contest;

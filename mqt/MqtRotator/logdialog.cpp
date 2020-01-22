@@ -41,7 +41,7 @@ LogDialog::~LogDialog()
 
 void LogDialog::on_logDirBrowsePb_clicked()
 {
-    QString dir = QFileDialog::getExistingDirectory(nullptr, ("Select Bearing Log Folder"), "./Configuration/BearingLog");
+    QString dir = QFileDialog::getExistingDirectory(nullptr, tr("Select Bearing Log Folder"), "./Configuration/BearingLog");
     if (dir != directory)
     {
         directory = dir;

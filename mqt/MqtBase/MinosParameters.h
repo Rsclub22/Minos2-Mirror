@@ -20,6 +20,8 @@ class BaseContestLog;
 class ContactList;
 class MinosParameters
 {
+    Q_DECLARE_TR_FUNCTIONS(MinosParameters)
+
    private:
       static MinosParameters *mp;
    protected:

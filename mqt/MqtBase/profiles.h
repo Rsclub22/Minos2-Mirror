@@ -31,14 +31,16 @@ class ProfileEntry
       bool RO;
 
       void createEntry( SettingsBundle * );
-      ProfileEntry(int id, const  char *name, const char *def, const char *dispname, const char *hint, bool RO );
-      ProfileEntry(int id, const  char *name, int def, const  char *dispname, const  char *hint, bool RO );
-      ProfileEntry(int id, const char *name, bool def, const char *dispname, const char *hint, bool RO );
+      ProfileEntry(int id, const  char *name, const char * def, QString dispname, QString hint, bool RO );
+      ProfileEntry(int id, const  char *name, int def, QString dispname, QString hint, bool RO );
+      ProfileEntry(int id, const char *name, bool def, QString dispname, QString hint, bool RO );
 };
 class INIFile;
 
 class BundleFile
 {
+    Q_DECLARE_TR_FUNCTIONS(BundleFile)
+
    private:
       QString bundleName;
    public:

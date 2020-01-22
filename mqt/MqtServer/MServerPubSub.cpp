@@ -133,6 +133,8 @@ class ServerSubscriber
 // each of which has a list of keys, and a subscriber can subscribe at either level
 class Published
 {
+    Q_DECLARE_TR_FUNCTIONS(Published)
+
    protected:
       QString pubId;
       bool localOnly;
@@ -395,7 +397,7 @@ void Published::buildPublishedTree(QTreeWidget *tree)
 {
     tree->clear();
     tree->setColumnCount(3);
-    QStringList h = {"key", "state", "value"};
+    QStringList h = {tr("key"), tr("state"), tr("value")};
     tree->setHeaderLabels(h);    for ( PublishedCategoryListIterator i = Published::publist.begin(); i != Published::publist.end(); i++ )
     {
         QString cat = (*i)->getCategory();
@@ -692,8 +694,8 @@ void PublishedCategory::serverPublish( const QString &pubId, const QString &svr,
       }
    }
 }
-PublishedCategory::PublishedCategory( const QString &pubId, const QString &category ) :
-      Published( pubId, false ), category( category )
+PublishedCategory::PublishedCategory( const QString &publId, const QString &category ) :
+      Published( publId, false ), category( category )
 {}
 PublishedCategory::~PublishedCategory()
 {
@@ -754,8 +756,8 @@ ServerSubscriber * PublishedCategory::getServerSubscribed( const QString &subId 
    return nullptr;
 }
 //---------------------------------------------------------------------------
-PublishedKey::PublishedKey( bool local, const QString &pubId, const QString &svr, PublishedCategory *pcat, const QString &key, PublishState pState ) :
-      Published( pubId, local )
+PublishedKey::PublishedKey( bool local, const QString &publId, const QString &svr, PublishedCategory *pcat, const QString &key, PublishState pState ) :
+      Published( publId, local )
     , server( svr )
     , key( key )
     , state ( pState )

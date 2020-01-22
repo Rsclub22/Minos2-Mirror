@@ -78,6 +78,7 @@ class BaseContestLog: public BaseLogList
       // which hold slightly different info, and more importantly handle backing store
       // totally differently
 
+      Q_DECLARE_TR_FUNCTIONS(BaseContestLog)
 
    public:
       QString uuid;
@@ -359,6 +360,8 @@ protected:
 };
 class ContestScore
 {
+    Q_DECLARE_TR_FUNCTIONS(ContestScore)
+
    public:
       char brcc1;
       char brcc2;

@@ -17,8 +17,11 @@
 class RPCParam;
 class RPCParamStruct;
 class RPCRequest;
+class LoggerContestLog;
+class BaseContact;
 class MinosTestExport
 {
+    Q_DECLARE_TR_FUNCTIONS(MinosTestExport)
    private:
       LoggerContestLog *ct;
 

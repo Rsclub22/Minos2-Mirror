@@ -32,15 +32,15 @@ ContestDetails::ContestDetails(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    ui->ExchangeComboBox->addItem("No Exchange Required");
-    ui->ExchangeComboBox->addItem("PostCode Multipliers");
-    ui->ExchangeComboBox->addItem("Other Exchange Multiplier");
-    ui->ExchangeComboBox->addItem("Exchange Required (no multiplier)");
+    ui->ExchangeComboBox->addItem(tr("No Exchange Required"));
+    ui->ExchangeComboBox->addItem(tr("PostCode Multipliers"));
+    ui->ExchangeComboBox->addItem(tr("Other Exchange Multiplier"));
+    ui->ExchangeComboBox->addItem(tr("Exchange Required (no multiplier)"));
 
-    ui->BonusComboBox->addItem("None");
-    ui->BonusComboBox->addItem("UKAC Bonuses (B2)");
-    ui->BonusComboBox->addItem("UKAC Bonuses (B4)");
-    ui->BonusComboBox->addItem("NAC Bonuses");
+    ui->BonusComboBox->addItem(tr("None"));
+    ui->BonusComboBox->addItem(tr("UKAC Bonuses (B2)"));
+    ui->BonusComboBox->addItem(tr("UKAC Bonuses (B4)"));
+    ui->BonusComboBox->addItem(tr("NAC Bonuses"));
 
     ui->ModeComboBox->addItem(hamlibData::CW);
     ui->ModeComboBox->addItem(hamlibData::USB);
@@ -113,9 +113,9 @@ int ContestDetails::exec()
     contest->stationBundle.checkLoaded();
     contest->entryBundle.checkLoaded();
 
-    ui->QTHBundleFrame->initialise( this, "QTH", &contest->QTHBundle, &contest->QTHBundleName );
-    ui->StationBundleFrame->initialise(this,  "Station", &contest->stationBundle, &contest->stationBundleName );
-    ui->EntryBundleFrame->initialise(this,  "Entry", &contest->entryBundle, &contest->entryBundleName );
+    ui->QTHBundleFrame->initialise( this, tr("QTH"), &contest->QTHBundle, &contest->QTHBundleName );
+    ui->StationBundleFrame->initialise(this,  tr("Station"), &contest->stationBundle, &contest->stationBundleName );
+    ui->EntryBundleFrame->initialise(this,  tr("Entry"), &contest->entryBundle, &contest->entryBundleName );
     ui->ContestNameSelected->setText(contest->VHFContestName.getValue());
 
     contest->initialiseINI();
@@ -162,7 +162,7 @@ void ContestDetails::setDetails( LoggerContestLog * pcont )
 }
 void ContestDetails::setDetails(  )
 {
-   setWindowTitle( ("Details of Contest Entry - " + contest->cfileName));
+   setWindowTitle( (tr("Details of Contest Entry - %1").arg(contest->cfileName)));
 
    ui->ContestNameEdit->setText(contest->name.getValue());
 
@@ -435,7 +435,7 @@ void ContestDetails::refreshOps()
 void ContestDetails::setDetails( const IndividualContest &ic )
 {
 
-   setWindowTitle("Details of Contest Entry - " + contest->cfileName );
+   setWindowTitle(tr("Details of Contest Entry - %1").arg(contest->cfileName) );
 
    ui->ContestNameEdit->setText(ic.description);                      // contest
    contest->VHFContestName.setValue(ic.description);
@@ -1168,9 +1168,9 @@ void ContestDetails::on_OKButton_clicked()
 
     if (ui->ProtectedOption->isChecked() && ! contest->isProtected())
     {
-       if (!mShowYesNoMessage(this, "This contest will be marked as protected.\r\n"
+       if (!mShowYesNoMessage(this, tr("This contest will be marked as protected.\r\n"
                                      "This is a permanent change that may be temporarily overridden.\r\n"
-                                     "Please confirm this change by pressing \"Yes\"." ))
+                                     "Please confirm this change by pressing \"Yes\"." )))
        {
           return;
        }
@@ -1215,8 +1215,8 @@ void ContestDetails::on_CancelButton_clicked()
 }
 
 
-static QString BSHelpText =
-   "These settings are groups of settings that can "
+static const char * BSHelpText =
+   QT_TR_NOOP("These settings are groups of settings that can "
    "be applied to a contest all in one go."
    "\r\n\r\n"
    "There are four basic groups: - \r\n\r\n"
@@ -1239,21 +1239,21 @@ static QString BSHelpText =
    "and then its components are shown in the right hand pane, and "
    "can be edited individually.\r\n"
    "\r\n"
-   "Move between components of a group using the mouse or up/down arrow keys.\r\n"
+   "Move between components of a group using the mouse or up/down arrow keys.\r\n")
    ;
 
 void ContestDetails::on_BSHelpButton_clicked()
 {
     // Put up the help text on bundled settings
      TMinosBSHelpForm HelpForm( this );
-     HelpForm.setText(BSHelpText);
+     HelpForm.setText(tr(BSHelpText));
      HelpForm.exec();}
 
 void ContestDetails::on_VHFCalendarButton_clicked()
 {
     TCalendarForm CalendarDlg(this, ectVHF);
 
-    CalendarDlg.setWindowTitle( "VHF Calendar");
+    CalendarDlg.setWindowTitle( tr("VHF Calendar"));
     CalendarDlg.description = ui->ContestNameSelected->text();
 
     QString sdate = ui->StartDateEdit->date().toString("dd/MM/yyyy");
@@ -1393,14 +1393,14 @@ void ContestDetails::on_ProtectedOption_clicked()
        if (ui->ProtectedOption->isChecked() )
        {
           // move to protected
-          if (!mShowYesNoMessage(this, "Are you sure you want to protect this contest?" ))
+          if (!mShowYesNoMessage(this, tr("Are you sure you want to protect this contest?") ))
           {
              ui->ProtectedOption->setChecked(contest->isProtected() && !contest->isProtectedSuppressed());
           }
        }
        else // unchecked
        {
-          if (!mShowYesNoMessage(this, "Are you sure you want to disable protection for this contest?" ))
+          if (!mShowYesNoMessage(this, tr("Are you sure you want to disable protection for this contest?") ))
           {
              ui->ProtectedOption->setChecked(contest->isProtected() && !contest->isProtectedSuppressed());
           }
