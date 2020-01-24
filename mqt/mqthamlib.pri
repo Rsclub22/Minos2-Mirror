@@ -5,7 +5,7 @@
 # For example C:\Qt_Projects\hamlib-w32-4.0\bin
 
 
-//HAMLIBVER = $$(hamlib)
+HAMLIBVER = $$(hamlib)
 message(The hamlib version is $$HAMLIBVER)
 
 equals(HAMLIBVER, 40){
