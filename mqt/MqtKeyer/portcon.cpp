@@ -300,6 +300,10 @@ bool WinMonitor::linesModeChanged( int state )
       ( *WinLineCallback ) ( PTTState, PTTInState, L1State, L2State, linesMode );
    return true;
 }
+void WinMonitor::tickEvent()
+{
+    // not used
+}
 //==============================================================================
 LineCallBack LineEventsPort::WinLineCallback = nullptr;
 
