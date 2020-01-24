@@ -140,46 +140,47 @@ void MatchTreeFrame::on_matchTree_clicked(const QModelIndex &)
 }
 
 //=============================================================================
-static GridColumn ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
+
+GridColumn QSOMatchGridModel::ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
 {
-    GridColumn( egTime, "XXXXXXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
-    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
-    GridColumn( egRSTTx, "599XXX", QT_TR_NOOP("RepTx"), taLeftJustify ),                 // RST
-    GridColumn( egSNTx, "1234X", QT_TR_NOOP("SnTx"), taLeftJustify /*taRightJustify*/ ),   // serial
-    GridColumn( egRSTRx, "599XXX", QT_TR_NOOP("RepRx"), taLeftJustify ),                 // RST
-    GridColumn( egSNRx, "1234X", QT_TR_NOOP("SnRx"), taLeftJustify /*taRightJustify*/ ),   // Serial
-    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
-    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
-    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
-    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),    // QTH
-    GridColumn( egComments, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Comments"), taLeftJustify ),     // comments
-    GridColumn( egFrequency, "1.296.123.456XXX", QT_TR_NOOP("Freq"), taLeftJustify ),
-    GridColumn( egRotatorHeading, "XXXXXX", QT_TR_NOOP("Rot Heading"), taLeftJustify ),
-    GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
+    GridColumn( egTime, "XXXXXXXXXX", "UTC", taLeftJustify ),               // time
+    GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
+    GridColumn( egRSTTx, "599XXX", "RepTx", taLeftJustify ),                 // RST
+    GridColumn( egSNTx, "1234X", "SnTx", taLeftJustify /*taRightJustify*/ ),   // serial
+    GridColumn( egRSTRx, "599XXX", "RepRx", taLeftJustify ),                 // RST
+    GridColumn( egSNRx, "1234X", "SnRx", taLeftJustify /*taRightJustify*/ ),   // Serial
+    GridColumn( egLoc, "MM00MM00X", "Loc", taLeftJustify ),            // LOC
+    GridColumn( egScore, "12345XX", "dist", taLeftJustify /*taRightJustify*/ ),  // score
+    GridColumn( egBrg, "3601X", "brg", taLeftJustify ),                // bearing
+    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", "Exchange", taLeftJustify ),    // QTH
+    GridColumn( egComments, "XXXXXXXXXXXXXXXX", "Comments", taLeftJustify ),     // comments
+    GridColumn( egFrequency, "1.296.123.456XXX", "Freq", taLeftJustify ),
+    GridColumn( egRotatorHeading, "XXXXXX", "Rot Heading", taLeftJustify ),
+    GridColumn( egRigName, "XXXXXX", "Rig", taLeftJustify )
 };
 //---------------------------------------------------------------------------
-static GridColumn OtherMatchTreeColumns[ OTHERMATCHTREECOLS ] =
+GridColumn QSOMatchGridModel::OtherMatchTreeColumns[ OTHERMATCHTREECOLS ] =
 {
-    GridColumn( egTime, "XXXXXXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
-    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
-    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
-    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
-    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
-    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),    // QTH
-    GridColumn( egComments, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Comments"), taLeftJustify ),     // comments
-    GridColumn( egFrequency, "1.296.123.456XXX", QT_TR_NOOP("Freq"), taLeftJustify ),
-    GridColumn( egRotatorHeading, "XXXXXX", QT_TR_NOOP("Rot Heading"), taLeftJustify ),
-    GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
+    GridColumn( egTime, "XXXXXXXXXX", "UTC", taLeftJustify ),               // time
+    GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
+    GridColumn( egLoc, "MM00MM00X", "Loc", taLeftJustify ),            // LOC
+    GridColumn( egScore, "12345XX", "dist", taLeftJustify /*taRightJustify*/ ),  // score
+    GridColumn( egBrg, "3601X", "brg", taLeftJustify ),                // bearing
+    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", "Exchange", taLeftJustify ),    // QTH
+    GridColumn( egComments, "XXXXXXXXXXXXXXXX", "Comments", taLeftJustify ),     // comments
+    GridColumn( egFrequency, "1.296.123.456XXX", "Freq", taLeftJustify ),
+    GridColumn( egRotatorHeading, "XXXXXX", "Rot Heading", taLeftJustify ),
+    GridColumn( egRigName, "XXXXXX", "Rig", taLeftJustify )
 };
 //---------------------------------------------------------------------------
-static GridColumn ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ] =
+GridColumn QSOMatchGridModel::ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ] =
 {
-    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
-    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
-    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
-    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
-    GridColumn( egExchange, "XXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),     // exchange
-    GridColumn( egComments, "XXXX", QT_TR_NOOP("Comments"), taLeftJustify )     // comments
+    GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
+    GridColumn( egLoc, "MM00MM00X", "Loc", taLeftJustify ),            // LOC
+    GridColumn( egScore, "12345XX", "dist", taLeftJustify /*taRightJustify*/ ),  // score
+    GridColumn( egBrg, "3601X", "brg", taLeftJustify ),                // bearing
+    GridColumn( egExchange, "XXXXXX", "Exchange", taLeftJustify ),     // exchange
+    GridColumn( egComments, "XXXX", "Comments", taLeftJustify )     // comments
 };
 //---------------------------------------------------------------------------
 
@@ -383,7 +384,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                     {
                         QColor multhighlight = Qt::red;
                         bool setHighlight = false;
-                        switch ( QSOTreeColumns[ column ].fieldId )
+                        switch ( QSOGridModel::QSOTreeColumns[ column ].fieldId )
                         {
                         case egTime:
                             if (!contest->checkTime(ct->time))

@@ -159,6 +159,9 @@ class Calendar
 {
     Q_DECLARE_TR_FUNCTIONS(Calendar)
 
+    static const char * TypeVHFContest;
+    static const char * TypeMwaveContest;
+
         int curYear;
         int calendarYear;
         QString getTypeName ( const QString &xmlName, CalType calType );

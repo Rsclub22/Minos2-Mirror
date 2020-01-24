@@ -20,22 +20,22 @@
 // ??? add up/down on volume sliders, and reload/save ALSA?
 // match against enum LineModes
 static const char * lineModeStrings[] = {
-    QT_TR_NOOP("None"),
-    QT_TR_NOOP("Play 1/2 - Pip"),
-    QT_TR_NOOP("Play 1/2 - No Pip"),
-    QT_TR_NOOP("Tuning Tones 1/2"),
-    QT_TR_NOOP("Record 1/2"),
-    QT_TR_NOOP("Mode 5"),
-    QT_TR_NOOP("Mode 6"),
-    QT_TR_NOOP("Mode 7"),
-    QT_TR_NOOP("Mode 8"),
-    QT_TR_NOOP("Mode 9"),
-    QT_TR_NOOP("Mode 10"),
-    QT_TR_NOOP("Mode 11"),
-    QT_TR_NOOP("Mode 12"),
-    QT_TR_NOOP("MGM - Disable keyer"),
-    QT_TR_NOOP("Apps - Restart(1)/Close(2)"),
-    QT_TR_NOOP("OS - Restart(1)/Close(2)")
+    QT_TRANSLATE_NOOP("VoiceKeyer", "None"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 1/2 - Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 1/2 - No Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Tuning Tones 1/2"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Record 1/2"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 5"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 6"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 7"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 8"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 9"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 10"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 11"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 12"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "MGM - Disable keyer"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Apps - Restart(1)/Close(2)"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "OS - Restart(1)/Close(2)")
 };
 //==============================================================================
 

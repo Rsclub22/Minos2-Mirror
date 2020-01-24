@@ -16,15 +16,15 @@ ContList contlist[ CONTINENTS ] =
       {"NA", false},
    };
 
-QVector <AuxTypeOption> auxoptions = {
-    {aeClock, QT_TR_NOOP("Clock"), QT_TR_NOOP("Clock")},
-    {aeDXCC, QT_TR_NOOP("DXCC"), QT_TR_NOOP("DXCC")},
-    {aeDistrict, QT_TR_NOOP("District"), QT_TR_NOOP("District")},
-    {aeFilter, QT_TR_NOOP("Filter"), QT_TR_NOOP("Filter")},
-    {aeMemories, QT_TR_NOOP("Memories"), QT_TR_NOOP("Memories")},
-    {aeLocatorMap, QT_TR_NOOP("Locator Map"), QT_TR_NOOP("Locator Map")},
-    {aeLocatorTree, QT_TR_NOOP("Locator Tree"), QT_TR_NOOP("Locator Tree")},
-    {aeStats, QT_TR_NOOP("Stats"), QT_TR_NOOP("Stats")},
+QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
+    {aeClock, "Clock", "Clock"},
+    {aeDXCC, "DXCC", "DXCC"},
+    {aeDistrict, "District", "District"},
+    {aeFilter, "Filter", "Filter"},
+    {aeMemories, "Memories", "Memories"},
+    {aeLocatorMap, "Locator Map", "Locator Map"},
+    {aeLocatorTree, "Locator Tree", "Locator Tree"},
+    {aeStats, "Stats", "Stats"},
 };
 
 AuxEntries StackedInfoFrame::getAuxEntryType(QString s)

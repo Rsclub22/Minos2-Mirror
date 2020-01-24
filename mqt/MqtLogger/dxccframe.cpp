@@ -12,14 +12,14 @@
 
 extern ContList contlist[ CONTINENTS ];
 
-static GridColumn CountryTreeColumns[ ectMultMaxCol ] =
+GridColumn DXCCGridModel::CountryTreeColumns[ ectMultMaxCol ] =
    {
-      GridColumn( ectCall, "XXXXXX", QT_TR_NOOP("Call"), taLeftJustify ),
-      GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
-      GridColumn( ectLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
-      GridColumn( ectBearing, "BRGXXX", QT_TR_NOOP("brg"), taCenter ),
-      GridColumn( ectName, "This is a very long country", QT_TR_NOOP("Country"), taLeftJustify ),
-      GridColumn( ectOtherCalls, "This is a very very very very long country name", QT_TR_NOOP("Other calls"), taLeftJustify /*taRightJustify*/ )
+      GridColumn( ectCall, "XXXXXX", "Call", taLeftJustify ),
+      GridColumn( ectWorked, "Wk CtX", "Wkd", taCenter ),
+      GridColumn( ectLocator, "MM00MM00", "Locator", taLeftJustify ),
+      GridColumn( ectBearing, "BRGXXX", "brg", taCenter ),
+      GridColumn( ectName, "This is a very long country", "Country", taLeftJustify ),
+      GridColumn( ectOtherCalls, "This is a very very very very long country name", "Other calls", taLeftJustify /*taRightJustify*/ )
    };
 
 DXCCFrame::DXCCFrame(QWidget *parent) :

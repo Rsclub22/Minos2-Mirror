@@ -1450,7 +1450,7 @@ void TLogContainer::updateLayoutsMenu()
             QAction *act =  new QAction(this);
             if ((*i).name == defaultLayout)
             {
-                act->setText((*i).name + defLayoutText);
+                act->setText((*i).name + " " + ScreenConfigManager::defLayoutText);
             }
             else
             {
@@ -1484,11 +1484,7 @@ void TLogContainer::selectLayout()
         action->setChecked(true);
         lastLayoutSelected = action;
         QString selText = action->text();
-        if (selText.endsWith(defLayoutText))
-        {
-            selText.chop(defLayoutText.size());
-
-        }
+        selText = ScreenConfigManager::stripDefaultDecoration(selText);
         selectLayout(selText);
     }
 }

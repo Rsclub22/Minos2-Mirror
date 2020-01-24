@@ -72,13 +72,13 @@ typedef OperatorList::iterator OperatorIterator;
 
 class BaseContestLog: public BaseLogList
 {
+    Q_OBJECT
+
       friend class MinosTestImport;
       friend class MonitoredLog;
       // This is the basis behind all variants - currently we have Logger and Monitor
       // which hold slightly different info, and more importantly handle backing store
       // totally differently
-
-      Q_DECLARE_TR_FUNCTIONS(BaseContestLog)
 
    public:
       QString uuid;

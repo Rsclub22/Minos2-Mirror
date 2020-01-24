@@ -148,6 +148,7 @@ class RotControl: public QObject
 {
     Q_OBJECT
 
+    static const char * hamlibErrorMsg[];
 public:
     explicit RotControl(QObject *parent = nullptr);
     ~RotControl();

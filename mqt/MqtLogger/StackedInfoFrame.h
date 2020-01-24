@@ -35,13 +35,13 @@ public:
     const char * s;
     const char * hint;
 };
-extern QVector <AuxTypeOption> auxoptions ;
 
 class StackedInfoFrame : public QFrame
 {
     Q_OBJECT
 
 public:
+    static QVector <AuxTypeOption> auxoptions;
     explicit StackedInfoFrame(QWidget *parent = nullptr, int instance = 0);
     ~StackedInfoFrame();
 

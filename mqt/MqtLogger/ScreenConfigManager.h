@@ -10,17 +10,19 @@ class ScreenConfigManager;
 
 class QListWidgetItem;
 
-extern QString defLayoutText;
 
 class ScreenConfigManager : public QDialog
 {
     Q_OBJECT
 
 public:
+    static const char * defLayoutText;
     explicit ScreenConfigManager(QWidget *parent = nullptr);
     ~ScreenConfigManager() override;
 
     int exec() override;
+
+    static QString stripDefaultDecoration(QString s);
 
 public slots:
     void reject() override;

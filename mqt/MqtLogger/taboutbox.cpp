@@ -8,18 +8,18 @@
 
 static bool started = false;
 
-static QString welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + "</h1>"
+QString TAboutBox::welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + "</h1>"
                                "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
                                "<br><br>";
 
-static const char * wpart = QT_TR_NOOP("Welcome to Minos Version");
+const char * TAboutBox::wpart = QT_TR_NOOP("Welcome to Minos Version");
 
-static QString creditsText = QString("<br><h2>%1</h2>"
+QString TAboutBox::creditsText = QString("<br><h2>%1</h2>"
                               "<br>Mike Goodey G0GJV; David Balharrie M0DGB/G8FKH; Neil Yorke M0NKE"
                               "<br>Dave Sergeant G3YMC; Peter Burton G3ZPB, Ken Punshon G4APJ"
                               "<br><br>");
-static const char *cpart = QT_TR_NOOP("Credits");
-static QString MinosText =
+const char *TAboutBox::cpart = QT_TR_NOOP("Credits");
+QString TAboutBox::MinosText =
    "The Inferno, Dante, (trans Dorothy L Sayers, Penguin Classics); Canto 5.\r\n"
    "\r\n"
    "\"From the first circle thus I came descending\r\n"

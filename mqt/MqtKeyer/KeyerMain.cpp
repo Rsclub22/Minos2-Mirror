@@ -16,15 +16,15 @@ static bool inhibitCallbacks = false;
 
 // texts for displaying the current mixer set
 
-static const char *msets[emsMaxMixerSet] = {QT_TR_NOOP("Unloaded"), QT_TR_NOOP("No PTT"), QT_TR_NOOP("PassThrough"),
-                 QT_TR_NOOP("Replay"), QT_TR_NOOP("Pip"), QT_TR_NOOP("Replay Tone1"), QT_TR_NOOP("Replay Tone2"),
-                 QT_TR_NOOP("Voice Record"),
-                 QT_TR_NOOP("CW Transmit"), QT_TR_NOOP("CW PassThrough")
+static const char *msets[emsMaxMixerSet] = {QT_TRANSLATE_NOOP("VoiceKeyer", "Unloaded"), QT_TRANSLATE_NOOP("VoiceKeyer", "No PTT"), QT_TRANSLATE_NOOP("VoiceKeyer", "PassThrough"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "Replay"), QT_TRANSLATE_NOOP("VoiceKeyer", "Pip"), QT_TRANSLATE_NOOP("VoiceKeyer", "Replay Tone1"), QT_TRANSLATE_NOOP("VoiceKeyer", "Replay Tone2"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "Voice Record"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "CW Transmit"), QT_TRANSLATE_NOOP("VoiceKeyer", "CW PassThrough")
                 };
-static const char *levelLabels[emsMaxMixerSet] = {QT_TR_NOOP("none"), QT_TR_NOOP("none"), QT_TR_NOOP("output"),
-                 QT_TR_NOOP("output"), QT_TR_NOOP("output"), QT_TR_NOOP("output"), QT_TR_NOOP("output"),
-                 QT_TR_NOOP("input"),
-                 QT_TR_NOOP("output"), QT_TR_NOOP("output")
+static const char *levelLabels[emsMaxMixerSet] = {QT_TRANSLATE_NOOP("VoiceKeyer", "none"), QT_TRANSLATE_NOOP("VoiceKeyer", "none"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "input"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output")
                 };
 
 void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode )

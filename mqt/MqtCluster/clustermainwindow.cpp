@@ -25,16 +25,17 @@
 #include "BandList.h"
 #include "ui_clustermainwindow.h"
 
-static const char * sendClusterReasonText[] = {QT_TR_NOOP("Ok"), QT_TR_NOOP("Failed - comms error"),
-                                           QT_TR_NOOP("Not Logged On"), QT_TR_NOOP("Freq out of band"),
-                                           QT_TR_NOOP("Callsign or Locator Empty")};
+static const char * sendClusterReasonText[] = {QT_TRANSLATE_NOOP("cluster", "Ok"), QT_TRANSLATE_NOOP("cluster", "Failed - comms error"),
+                                           QT_TRANSLATE_NOOP("cluster", "Not Logged On"), QT_TRANSLATE_NOOP("cluster", "Freq out of band"),
+                                           QT_TRANSLATE_NOOP("cluster", "Callsign or Locator Empty")};
 enum sendClusterReason_e {TX_OK, COMMS_ERR, NOT_LOGGED_ON, FREQ_ERR, CALL_LOC_EMPTY};
 
-static const  char * DXSPOT_TAB_TITLE = QT_TR_NOOP("DX Spots");
-static const char * SENT_SPOT_TAB_TITLE = QT_TR_NOOP("Sent Spots");
-static const char * RAW_DATA_TAB_TITLE = QT_TR_NOOP("Raw Data");
+static const  char * DXSPOT_TAB_TITLE = QT_TRANSLATE_NOOP("cluster", "DX Spots");
+static const char * SENT_SPOT_TAB_TITLE = QT_TRANSLATE_NOOP("cluster", "Sent Spots");
+static const char * RAW_DATA_TAB_TITLE = QT_TRANSLATE_NOOP("cluster", "Raw Data");
 
-static const QStringList userCmdButtonLabels = {QT_TR_NOOP("&Send"), QT_TR_NOOP("&New"), QT_TR_NOOP("&Edit"), QT_TR_NOOP("&Clear")};
+static const QStringList userCmdButtonLabels = {QT_TRANSLATE_NOOP("cluster", "&Send"), QT_TRANSLATE_NOOP("cluster", "&New"),
+                                                QT_TRANSLATE_NOOP("cluster", "&Edit"), QT_TRANSLATE_NOOP("cluster", "&Clear")};
 
 
 #include <QDebug>

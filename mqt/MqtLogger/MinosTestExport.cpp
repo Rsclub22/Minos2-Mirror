@@ -14,14 +14,14 @@
 #include "MinosTestExport.h"
 
 //==============================================================================
-static const char * fileHeader =QT_TR_NOOP(
+const char * MinosTestExport::fileHeader =
                          "====================================================\r\n"
                          "\r\nDO NOT SEND THIS FILE AS YOUR ENTRY!\r\n\r\n"
                          "Use \"File\" | \"Produce Entry/Export File...\"\r\n"
                          "Export as Reg1Test(entry)\r\n"
                          "and send the .EDI file produced.\r\n"
                          "====================================================\r\n"
-                         );
+                         ;
 //==============================================================================
 MinosTestExport::MinosTestExport( LoggerContestLog * const ct ) : ct( ct ),
       exp_stanzaCount( ct->getCtStanzaCount() )

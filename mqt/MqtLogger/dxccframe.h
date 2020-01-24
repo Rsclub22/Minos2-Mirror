@@ -11,6 +11,7 @@ class LoggerContestLog;
 
 class DXCCGridModel: public QAbstractItemModel
 {
+        static GridColumn CountryTreeColumns[ ectMultMaxCol ] ;
     public:
         DXCCGridModel();
         ~DXCCGridModel() Q_DECL_OVERRIDE;

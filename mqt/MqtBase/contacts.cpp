@@ -192,6 +192,7 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
         ctryMult = csyn->country;
    return ctryMult;
 }
+
 void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) const
 {
    contactBuffs.scorebuff.clear();
@@ -205,9 +206,13 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
 
    if ( contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
    {
-      contactBuffs.buff = QString("%1 %2 %3")
+       QString locComment = tr("LOCAL COMMENT");
+       QString adjComment = tr("COMMENT FOR ADJUDICATOR");
+       QString deleted = tr("DELETED");
+
+       contactBuffs.buff = QString("%1 %2 %3")
                .arg(time.getTime( DTGDISP ), 5)
-               .arg(( contactFlags.getValue() & DONT_PRINT ) ? tr("DELETED") : ( contactFlags.getValue() & LOCAL_COMMENT ) ? tr("LOCAL COMMENT") : tr("COMMENT FOR ADJUDICATOR"))
+               .arg(( contactFlags.getValue() & DONT_PRINT ) ? deleted: ( contactFlags.getValue() & LOCAL_COMMENT ) ? locComment: adjComment)
                .arg(comments.getValue(), 60);
    }
    else

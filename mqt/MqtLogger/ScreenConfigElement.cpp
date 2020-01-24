@@ -6,24 +6,24 @@
 #include "ScreenConfigElement.h"
 #include "ui_ScreenConfigElement.h"
 
-static QVector <SCTypeOption> scoptions =
+QVector <SCTypeOption> ScreenConfigElement::scoptions =
 {
-    {sctAux, QT_TR_NOOP("Auxiliary"), QT_TR_NOOP("Auxiliary Display")},
-    {sctChat, QT_TR_NOOP("Chat Display"), QT_TR_NOOP("Chat Display")},
-    {sctCluster, QT_TR_NOOP("Cluster Display"), QT_TR_NOOP("Cluster Display")},
-    {sctLog, QT_TR_NOOP("Log List"), QT_TR_NOOP("QSO Log List")},
-    {sctNextQSODetails, QT_TR_NOOP("Next QSO Details"), QT_TR_NOOP("Next QSO details")},
-    {sctQSOEdit, QT_TR_NOOP("QSO Edit"), QT_TR_NOOP("QSO Edit")},
-    {sctRigControl, QT_TR_NOOP("Rig Control"), QT_TR_NOOP("Rig Control")},
-    {sctRotControl, QT_TR_NOOP("Rotator Control"), QT_TR_NOOP("Rotator Control")},
-    {sctRotPresets, QT_TR_NOOP("Rotator Presets"), QT_TR_NOOP("Rotator Presets")},
-    {sctThisMatch, QT_TR_NOOP("This Contest Match"), QT_TR_NOOP("This Contest Matches")},
-    {sctOtherMatch, QT_TR_NOOP("Other Contest Match"), QT_TR_NOOP("Other Contest Matches") },
-    {sctArchiveMatch, QT_TR_NOOP("Archive Match"), QT_TR_NOOP("Archive List Matches") },
-    {sctWsjtx, QT_TR_NOOP("WSJT-X Connector"), QT_TR_NOOP("WSJT-X Connector") },
-    {sctBandmap, QT_TR_NOOP("Bandmap Display"), QT_TR_NOOP("Bandmap Display")},
-    {sctSplit, QT_TR_NOOP("HSplit"), QT_TR_NOOP("Horizontally split element")},
-    {sctNone, QT_TR_NOOP("None"), QT_TR_NOOP("Not in use")}
+    {sctAux, "Auxiliary", "Auxiliary Display"},
+    {sctChat, "Chat Display", "Chat Display"},
+    {sctCluster, "Cluster Display", "Cluster Display"},
+    {sctLog, "Log List", "QSO Log List"},
+    {sctNextQSODetails, "Next QSO Details", "Next QSO details"},
+    {sctQSOEdit, "QSO Edit", "QSO Edit"},
+    {sctRigControl, "Rig Control", "Rig Control"},
+    {sctRotControl, "Rotator Control", "Rotator Control"},
+    {sctRotPresets, "Rotator Presets", "Rotator Presets"},
+    {sctThisMatch, "This Contest Match", "This Contest Matches"},
+    {sctOtherMatch, "Other Contest Match", "Other Contest Matches" },
+    {sctArchiveMatch, "Archive Match", "Archive List Matches" },
+    {sctWsjtx, "WSJT-X Connector", "WSJT-X Connector" },
+    {sctBandmap, "Bandmap Display", "Bandmap Display"},
+    {sctSplit, "HSplit", "Horizontally split element"},
+    {sctNone, "None", "Not in use"}
 };
 SCType ScreenConfigElement::getScreenType(QString s)
 {
@@ -124,7 +124,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     qobject_cast<QListView *>(ui->elementTypeCombo->view())->setRowHidden(row, true);
 
     i = 0;
-    foreach(const AuxTypeOption &opt, auxoptions)
+    foreach(const AuxTypeOption &opt, StackedInfoFrame::auxoptions)
     {
         ui->auxTypeCombo->addItem(opt.s, opt.type);
         ui->auxTypeCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );

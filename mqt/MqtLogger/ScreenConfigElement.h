@@ -21,7 +21,7 @@ class ScreenConfigElement;
 class ScreenConfigElement : public QFrame
 {
     Q_OBJECT
-
+    static QVector <SCTypeOption> scoptions;
 public:
     Ui::ScreenConfigElement *ui;
     QVBoxLayout *vbl = nullptr;

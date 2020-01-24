@@ -128,7 +128,7 @@ class RecBuffer
       }
 };
 
-class lineMonitor
+class lineMonitor: public QObject
 {
    private:
       commonPort *cp = nullptr;
@@ -173,6 +173,7 @@ private slots:
 // all keyers want timer ticks to sequence the state machine
 class commonKeyer: public lineMonitor, public timerTicker
 {
+    Q_OBJECT
    public:
       commonKeyer( const KeyerConfig &keyer, const PortConfig &port );
       ~commonKeyer() override;

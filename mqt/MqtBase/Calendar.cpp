@@ -3,9 +3,6 @@
 #include "BandList.h"
 #include "Calendar.h"
 
-static const char * TypeVHFContest(QT_TR_NOOP("<VHF from VHFContests.xml>"));
-static const char * TypeMwaveContest(QT_TR_NOOP("<Microwave from MicroContestsxx.xml>"));
-
 const QString monthTable[ 12 ] =
     {
         "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
@@ -19,6 +16,8 @@ static int monthLength[ 12 ] =
 //        "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
 //    };
 
+const char * Calendar::TypeVHFContest("<VHF from VHFContests.xml>");
+const char * Calendar::TypeMwaveContest("<Microwave from MicroContestsxx.xml>");
 
 QString Calendar::getTypeName ( const QString &xmlName, CalType calType )
 {

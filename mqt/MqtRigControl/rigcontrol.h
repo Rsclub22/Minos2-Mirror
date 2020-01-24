@@ -189,6 +189,8 @@ public:
 class RigControl : public QObject
 {
     Q_OBJECT
+
+    static const char * hamlibErrorMsg[];
 public:
     explicit RigControl(QObject *parent = nullptr);
     ~RigControl();

@@ -23,10 +23,8 @@ public:
 
 
 
-class freqModeBandPlan
+class freqModeBandPlan: public QObject
 {
-    Q_DECLARE_TR_FUNCTIONS(freqModeBandPlan)
-
 public:
     freqModeBandPlan();
 

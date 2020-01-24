@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QProcessEnvironment>
 #include <QMessageBox>
+#include <QTranslator>
 
 static bool appClosing = false;
 static QString appStartupName;
@@ -71,6 +72,7 @@ void appStartup(const QString &pappName)
     QApplication::QCoreApplication::setApplicationName( appStartupName );
 
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
+
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
     if (!DirectoryExists("./Configuration"))
@@ -98,7 +100,7 @@ void appStartup(const QString &pappName)
             }
             QString destDir = QFileDialog::getExistingDirectory(
                         nullptr,
-                        QCoreApplication::translate("appStartup", "Set Minos Working Directory"),
+                        "Set Minos Working Directory",      // we are pre-translation here...
                         fpath,
                         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
                         );
@@ -115,7 +117,14 @@ void appStartup(const QString &pappName)
 #endif
     }
 
+    QTranslator myappTranslator;
+    QString locfile = "Minos_" + QLocale::system().name();
+    bool loadOK = myappTranslator.load(locfile);
+    bool installOK = qa->installTranslator(&myappTranslator);
+
     enableTrace( "./TraceLog", appStartupName + "_" );
+
+    trace(QString("Translation file %1 loaded:%2 installed:%3").arg(locfile).arg(loadOK).arg(installOK));
 }
 
 void setAppFont()

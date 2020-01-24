@@ -29,11 +29,6 @@
 
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
-
-
-
-
-
 RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
     QWidget(parent),
     ui(new Ui::rigSetupForm),
@@ -343,8 +338,11 @@ void RigSetupForm::civAddressFinished()
 
 void RigSetupForm::civSetToolTip()
 {
+        const char * civToolTip = "Leave field blank for default radio CIV,\n"
+                            "or enter in the form 0xnn or nn, where nn is the radio CIV address in Hex.";
 
-        ui->CIVlineEdit->setToolTip(tr(civToolTip.toUtf8().data()));
+
+        ui->CIVlineEdit->setToolTip(tr(civToolTip));
 
 }
 

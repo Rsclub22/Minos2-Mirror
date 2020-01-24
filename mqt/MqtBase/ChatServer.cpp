@@ -5,17 +5,17 @@
 
 static bool syncstat = false;
 static QVector<QString> chatQueue;
-const char * stateIndicator[] =
+const char * ChatServer::stateIndicator[] =
 {
-    QT_TR_NOOP("Available"),
-    QT_TR_NOOP("NotAvailable"),
-    QT_TR_NOOP("NoContact")
+    "Available",
+    "NotAvailable",
+    "NoContact"
 };
-const char * stateList[] =
+const char * ChatServer::stateList[] =
 {
-   QT_TR_NOOP("Available"),
-   QT_TR_NOOP("Not Available"),
-   QT_TR_NOOP("No Contact")
+   "Available",
+   "Not Available",
+   "No Contact"
 };
 
 ChatServer *ChatServer::chatServer = nullptr;

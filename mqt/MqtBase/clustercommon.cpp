@@ -4,15 +4,15 @@
 
 const char * clusterStateIndicator[] =
 {
-    QT_TR_NOOP("Available"),
-    QT_TR_NOOP("NotAvailable"),
-    QT_TR_NOOP("NoContact")
+    QT_TRANSLATE_NOOP("clusterState", "Available"),
+    QT_TRANSLATE_NOOP("clusterState", "NotAvailable"),
+    QT_TRANSLATE_NOOP("clusterState", "NoContact")
 };
 const char * clusterStateList[] =
 {
-   QT_TR_NOOP("Available"),
-   QT_TR_NOOP("Not Available"),
-   QT_TR_NOOP("No Contact")
+   QT_TRANSLATE_NOOP("clusterState", "Available"),
+   QT_TRANSLATE_NOOP("clusterState", "Not Available"),
+   QT_TRANSLATE_NOOP("clusterState", "No Contact")
 };
 
 void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)

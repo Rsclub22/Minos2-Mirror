@@ -14,14 +14,14 @@
 enum eRigMemGridCols {ermCallsign, ermLocator, ermBearing, ermFreq, ermTime, ermWorked,
                     ermMaxCol
                    };
-static GridColumn RigMemoryColumns[ ermMaxCol ] =
+GridColumn RigMemoryGridModel::RigMemoryColumns[  ] =
    {
-      GridColumn( ermCallsign, "(GM4ABC/P) FBXX", QT_TR_NOOP("Callsign"), taLeftJustify ),
-      GridColumn( ermLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
-      GridColumn( ermBearing, "BRGXXX", QT_TR_NOOP("Brg"), taCenter ),
-      GridColumn( ermFreq, "144.000.000", QT_TR_NOOP("Freq"), taLeftJustify ),
-      GridColumn( ermTime, "XX:XX", QT_TR_NOOP("Time"), taLeftJustify ),
-      GridColumn( ermWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
+      GridColumn( ermCallsign, "(GM4ABC/P) FBXX", "Callsign", taLeftJustify ),
+      GridColumn( ermLocator, "MM00MM00", "Locator", taLeftJustify ),
+      GridColumn( ermBearing, "BRGXXX", "Brg", taCenter ),
+      GridColumn( ermFreq, "144.000.000", "Freq", taLeftJustify ),
+      GridColumn( ermTime, "XX:XX", "Time", taLeftJustify ),
+      GridColumn( ermWorked, "Wk CtX", "Wkd", taCenter ),
    };
 
 void RigMemoryFrame::traceMsg(QString msg)

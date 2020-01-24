@@ -9,16 +9,13 @@
 #include "ScreenConfigManager.h"
 #include "ui_ScreenConfigManager.h"
 
-static const char * raw_defLayoutText = QT_TR_NOOP(" (default)");
-QString defLayoutText;
+const char * ScreenConfigManager::defLayoutText = "(default)";
 
 ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ScreenConfigManager)
 {
     ui->setupUi(this);
-
-    defLayoutText = tr(raw_defLayoutText);
 
     QSettings settings;
     QByteArray geometry = settings.value("ScreenConfigManager/geometry").toByteArray();
@@ -59,7 +56,7 @@ void ScreenConfigManager::showDetails()
             crow = j;
         if ((*i).name ==  defaultConfigName)
         {
-            ui->layoutList->addItem((*i).name + defLayoutText);
+            ui->layoutList->addItem((*i).name + " " + tr(defLayoutText));
         }
         else
         {
@@ -96,12 +93,12 @@ void ScreenConfigManager::accept()
     doCloseEvent();
     QDialog::accept();
 }
-static QString stripDefaultDecoration(QString s)
+QString ScreenConfigManager::stripDefaultDecoration(QString s)
 {
-    if (s.endsWith(defLayoutText))
+    if (s.endsWith(tr(ScreenConfigManager::defLayoutText)))
     {
-        s.chop(defLayoutText.size());
-
+        s.chop(tr(ScreenConfigManager::defLayoutText).size());
+        s = s.trimmed();
     }
     return s;
 }

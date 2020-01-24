@@ -57,12 +57,10 @@ class ErrEntry
             : priority( c ), errStr( s )
       {}
 
-      ErrEntry( const ErrEntry &e )
+      ErrEntry( const ErrEntry &e ):priority(e.priority), errStr(e.errStr)
       {
-         priority = e.priority;
-         errStr = e.errStr;
       }
-      unsigned int priority;
+      unsigned int priority = 0;
       /*const*/
       const char * errStr;
 
@@ -91,9 +89,6 @@ class ErrEntry
 
 };
 
-extern ErrEntry errDefs[];
-extern bool allSpaces( const QString s );
-
 typedef QMap < ErrEntry *, ErrEntry *> ErrorList;
 typedef ErrorList::iterator ErrorIterator;
 
@@ -101,13 +96,16 @@ enum validTypes { /*cmNone, cmCancel, cmValid,*/ cmCheckValid, cmValidStatus /*,
 enum validatorTypes {vtNone, vtNotEmpty, vtNumeric, vtDate, vtTime, vtCallsign,
                      vtSN, vtRST, vtLoc, vtQTH, vtComments, vtFreq};
 
-class Validator
+class Validator: QObject
 {
+    Q_OBJECT
       static bool validNumber( const QString &S, bool trailingAlphaAllowed = false);
       static bool allSpaces( const QString &S );
       bool status;
       validatorTypes vt;
    public:
+      static ErrEntry errDefs[];
+
       Validator( validatorTypes vt );
       bool validate( const QString &, ScreenContact &screenContact);
       static bool validateRST( const QString &t );

@@ -1215,7 +1215,7 @@ void ContestDetails::on_CancelButton_clicked()
 }
 
 
-static const char * BSHelpText =
+const char * ContestDetails::BSHelpText =
    QT_TR_NOOP("These settings are groups of settings that can "
    "be applied to a contest all in one go."
    "\r\n\r\n"
