@@ -280,15 +280,15 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
         {
             if (msg.oldmsg)
             {
-                return "(old)";
+                return tr("(old)");
             }
             if (msg.best)
             {
                 if (msg.autoresp)
                 {
-                    return "Auto";
+                    return tr("Auto");
                 }
-                return "Best";
+                return tr("Best");
             }
             return "";
         }

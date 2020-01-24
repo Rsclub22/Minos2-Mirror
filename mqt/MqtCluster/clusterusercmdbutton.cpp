@@ -28,11 +28,11 @@ ClusterUserCmdButton::ClusterUserCmdButton(QToolButton *b, int num, QShortcut* k
 
     shortKey = key;
     shiftShortKey = shiftkey;
-    sendAction = new QAction("&Send", userCmdButton);
-    //writeAction = new QAction("&Write", userCmdButton);
-    newAction = new QAction("&New",userCmdButton);
-    editAction = new QAction("&Edit", userCmdButton);
-    clearAction = new QAction("&Clear",userCmdButton);
+    sendAction = new QAction(tr("&Send"), userCmdButton);
+    //writeAction = new QAction(tr("&Write"), userCmdButton);
+    newAction = new QAction(tr("&New"),userCmdButton);
+    editAction = new QAction(tr("&Edit"), userCmdButton);
+    clearAction = new QAction(tr("&Clear"),userCmdButton);
     presetMenu->addAction(sendAction);
     presetMenu->addAction(newAction);
     presetMenu->addAction(editAction);

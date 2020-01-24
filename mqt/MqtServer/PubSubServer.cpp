@@ -53,27 +53,27 @@ void RPCServerPubSub::close( )
 }
 
 //==================================================================================
-bool RPCServerSubscriber::isRemoteEqual( const QString &pServer, const QString &category )
+bool RPCServerSubscriber::isRemoteEqual( const QString &pServer, const QString &cat )
 {
-   return server == pServer && isEqual( category );
+   return server == pServer && isEqual( cat );
 }
-RPCServerSubscriber::RPCServerSubscriber(const QString &server, const QString &category)
-    : RPCSubscriber( category ), server( server )
+RPCServerSubscriber::RPCServerSubscriber(const QString &server, const QString &cat)
+    : RPCSubscriber( cat ), server( server )
 {}
 
-void RPCServerSubscriber::testAndSubscribe( const QString &server, const QString &category )
+void RPCServerSubscriber::testAndSubscribe( const QString &server, const QString &cat )
 {
     RPCServerSubscriber * sub = nullptr;
     for ( QVector<RPCServerSubscriber *>::iterator i = serverSubscribeList.begin(); i != serverSubscribeList.end(); i++ )
    {
-      if ( ( *i ) ->isRemoteEqual( server, category ) )
+      if ( ( *i ) ->isRemoteEqual( server, cat ) )
       {
          sub = ( *i );
       }
    }
    if ( !sub )
    {
-      sub = new RPCServerSubscriber( server, category );
+      sub = new RPCServerSubscriber( server, cat );
       serverSubscribeList.push_back( sub );
    }
    //if ( RPCPubSub::isConnected() )

@@ -15,7 +15,7 @@ class KstMessageLine
 public:
     int sequence;
     int chat;
-    QString dtg;
+    QDateTime dtg;
     QString fullLine;
     QString call;
     QString name;
@@ -62,15 +62,11 @@ class KstMessageGridModel: public QAbstractItemModel
 class KstMessageGridSortFilterModel: public QSortFilterProxyModel
 {
     QString filterString;
-    QVector<int> showChat;
     int chatFilter = 0;
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
-    void setShowChat(const QVector<int> &value);
     void setChatFilter(int value);
-//protected:
-//    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };
 class KstMeepGridSortFilterModel: public QSortFilterProxyModel
 {
@@ -78,7 +74,6 @@ class KstMeepGridSortFilterModel: public QSortFilterProxyModel
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
-
 };
 
 

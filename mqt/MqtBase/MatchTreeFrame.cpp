@@ -140,7 +140,8 @@ void MatchTreeFrame::on_matchTree_clicked(const QModelIndex &)
 }
 
 //=============================================================================
-static GridColumn ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
+
+GridColumn QSOMatchGridModel::ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
 {
     GridColumn( egTime, "XXXXXXXXXX", "UTC", taLeftJustify ),               // time
     GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
@@ -158,7 +159,7 @@ static GridColumn ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
     GridColumn( egRigName, "XXXXXX", "Rig", taLeftJustify )
 };
 //---------------------------------------------------------------------------
-static GridColumn OtherMatchTreeColumns[ OTHERMATCHTREECOLS ] =
+GridColumn QSOMatchGridModel::OtherMatchTreeColumns[ OTHERMATCHTREECOLS ] =
 {
     GridColumn( egTime, "XXXXXXXXXX", "UTC", taLeftJustify ),               // time
     GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
@@ -172,7 +173,7 @@ static GridColumn OtherMatchTreeColumns[ OTHERMATCHTREECOLS ] =
     GridColumn( egRigName, "XXXXXX", "Rig", taLeftJustify )
 };
 //---------------------------------------------------------------------------
-static GridColumn ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ] =
+GridColumn QSOMatchGridModel::ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ] =
 {
     GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
     GridColumn( egLoc, "MM00MM00X", "Loc", taLeftJustify ),            // LOC
@@ -383,7 +384,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                     {
                         QColor multhighlight = Qt::red;
                         bool setHighlight = false;
-                        switch ( QSOTreeColumns[ column ].fieldId )
+                        switch ( QSOGridModel::QSOTreeColumns[ column ].fieldId )
                         {
                         case egTime:
                             if (!contest->checkTime(ct->time))
@@ -475,15 +476,15 @@ QVariant QSOMatchGridModel::headerData( int section, Qt::Orientation orientation
             switch (type)
             {
             case ThisMatch:
-                cell = ThisMatchTreeColumns[ section ].title;
+                cell = tr(ThisMatchTreeColumns[ section ].title);
                 break;
 
             case OtherMatch:
-                cell = OtherMatchTreeColumns[ section ].title;
+                cell = tr(OtherMatchTreeColumns[ section ].title);
                 break;
 
             case ArchiveMatch:
-                cell = ArchiveMatchTreeColumns[ section ].title;
+                cell = tr(ArchiveMatchTreeColumns[ section ].title);
                 break;
             }
         }

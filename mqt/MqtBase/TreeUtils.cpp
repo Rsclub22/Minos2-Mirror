@@ -13,7 +13,7 @@
 #include "TreeUtils.h"
 #include "htmldelegate.h"
 
-GridColumn QSOTreeColumns[ LOGTREECOLS ] =
+GridColumn QSOGridModel::QSOTreeColumns[ LOGTREECOLS ] =
    {
       GridColumn( egTime, "XXXXXX", "UTC", taLeftJustify ),               // time
       GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
@@ -139,7 +139,7 @@ QVariant QSOGridModel::headerData( int section, Qt::Orientation orientation,
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
-        QString h = QSOTreeColumns[ section ].title;
+        QString h = tr(QSOTreeColumns[ section ].title);
         return h;
     }
     else if (role == Qt::TextAlignmentRole)

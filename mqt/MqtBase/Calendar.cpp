@@ -1,9 +1,7 @@
 #include "base_pch.h"
+#include "cutils.h"
 #include "BandList.h"
 #include "Calendar.h"
-
-const QString TypeVHFContest("<VHF from VHFContests.xml>");
-const QString TypeMwaveContest("<Microwave from MicroContestsxx.xml>");
 
 const QString monthTable[ 12 ] =
     {
@@ -13,11 +11,13 @@ static int monthLength[ 12 ] =
     {
         31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
     };
-const QString days[ 7 ] =
-    {
-        "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
-    };
+//const QString days[ 7 ] =
+//    {
+//        "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+//    };
 
+const char * Calendar::TypeVHFContest("<VHF from VHFContests.xml>");
+const char * Calendar::TypeMwaveContest("<Microwave from MicroContestsxx.xml>");
 
 QString Calendar::getTypeName ( const QString &xmlName, CalType calType )
 {
@@ -30,14 +30,14 @@ QString Calendar::getTypeName ( const QString &xmlName, CalType calType )
 
     if ( calType == ectVHF || calType == ectVHFOther )
     {
-        return TypeVHFContest;
+        return tr(TypeVHFContest);
     }
     if ( calType == ectMwave )
     {
-        return TypeMwaveContest;
+        return tr(TypeMwaveContest);
     }
 
-    return "Undefined";
+    return tr("Undefined");
 }
 
 void Calendar::setYear ( int y )
@@ -434,7 +434,7 @@ bool Calendar::parseFile ( const QString &fname )
                                 {
                                     continue;
                                 }
-                                size_t mls = s.value().monthList.size();
+                                int mls = s.value().monthList.size();
                                 if ( mls )
                                 {
                                     bool monthOK = false;
@@ -500,7 +500,7 @@ bool IndividualContest::operator< ( const IndividualContest& rhs ) const
     {
         return start < rhs.start;
     }
-    if (flow != rhs.flow)
+    if (!almost_equal( flow, rhs.flow, 2))
     {
         return flow <  rhs.flow ;
     }

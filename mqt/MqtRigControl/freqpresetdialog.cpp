@@ -122,7 +122,7 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band
 {
 
     QString freq = f_box->text().trimmed().remove( QRegExp("^[0]*"));
-    if (valInputFreq(freq, RADIO_FREQ_EDIT_ERR_MSG))
+    if (valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG)))
     {
        freq = convertFreqToFullDigit(freq).remove('.');
 
@@ -152,7 +152,7 @@ bool FreqPresetDialog::checkInBand(double freq, freqPresetData::bandOffSet band)
     else
     {
         QMessageBox msgBox;
-        msgBox.setText(QString("Freq. is out of band for %1").arg(bands[band].name));
+        msgBox.setText(tr("Freq. is out of band for %1").arg(bands[band].name));
         msgBox.exec();
         return false;
     }

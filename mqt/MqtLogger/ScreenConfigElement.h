@@ -10,12 +10,9 @@ class SCTypeOption
 {
 public:
     SCType type;
-    QString s;
-    QString hint;
+    const char * s;
+    const char * hint;
 };
-
-SCType getScreenType(QString s);
-QString getScreenTypeString(SCType s);
 
 namespace Ui {
 class ScreenConfigElement;
@@ -24,7 +21,7 @@ class ScreenConfigElement;
 class ScreenConfigElement : public QFrame
 {
     Q_OBJECT
-
+    static QVector <SCTypeOption> scoptions;
 public:
     Ui::ScreenConfigElement *ui;
     QVBoxLayout *vbl = nullptr;
@@ -48,6 +45,9 @@ public:
     void addRowAfter(ScreenConfigRow *r);
 
     bool checkOk(ScreenConfigElement *e);
+
+    static SCType getScreenType(QString s);
+    static QString getScreenTypeString(SCType s);
 private slots:
     void on_elementTypeCombo_activated(const QString &arg1);
 

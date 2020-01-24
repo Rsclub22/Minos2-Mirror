@@ -79,7 +79,7 @@
 
 
 #ifdef Q_OS_WIN
-#  include <winsock2.h>
+#  include <WinSock2.h>
 #endif
 #if defined (Q_OS_UNIX)
 #  include <sys/types.h>

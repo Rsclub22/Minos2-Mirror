@@ -67,7 +67,7 @@ GlistList::~GlistList()
 {}
 void GlistList::load( )
 {
-   loadEntries( "./Configuration/prefix.syn", "prefix synonyms file" );
+   loadEntries( "./Configuration/prefix.syn", tr("prefix synonyms file") );
 }
 bool GlistList::procLine( QStringList a )
 {
@@ -393,43 +393,6 @@ static QSharedPointer<CountrySynonym> searchCountrySynonym( const QString &syn )
       return cs->wt;
 
 }
-static void makeCountrySynonym( const QString &ssyn, const QString &sprefix )
-{
-   // search country list for the prefix
-
-   QString syn = ssyn.trimmed();
-   QString prefix = sprefix.trimmed();
-
-   if ( syn.indexOf( '-' ) >= 0 )
-   {
-      MinosParameters::getMinosParameters() ->mshowMessage( ( QString( "Synonym ranges no longer allowed : " ) + ssyn + " for " + sprefix ) );
-      return ;
-   }
-
-   QSharedPointer<CountryEntry> ctry;
-   for ( MultList < CountryEntry>::iterator i = MultListsImpl::getMultLists() ->ctryList.begin(); i != MultListsImpl::getMultLists() ->ctryList.end(); i++ )
-   {
-      if ( i->wt->basePrefix.compare( prefix, Qt::CaseInsensitive ) == 0 )
-      {
-         ctry = i->wt;
-         break;
-      }
-   }
-   if ( !ctry )
-      return ;		// as it will be unsuccessfull anyway
-
-   MapWrapper< CountrySynonym> cts(searchCountrySynonym ( syn ));
-   if ( cts.wt && ( cts.wt->country.data() == ctry.data() ) )
-      return ;		// as already there
-
-   cts = MapWrapper<CountrySynonym >(new CountrySynonym ( syn, prefix ));
-
-   if ( cts.wt->country )
-   {
-       if (!MultListsImpl::getMultLists() ->ctrySynList.contains(cts))
-           MultListsImpl::getMultLists() ->ctrySynList.insert ( cts, cts );   // must add to the syn list...
-   }
-}
 CountrySynonym::CountrySynonym( const QString &ssyn, const QString &sprefix ) :
       country( nullptr )
 {
@@ -515,7 +478,7 @@ int CountryList::slen( bool )
 }
 void CountryList::load( )
 {
-   loadEntries( "./Configuration/cty.dat", "CT9 Country File" );
+   loadEntries( "./Configuration/cty.dat", tr("CT9 Country File" ));
 
    int i = 0;
    for(  MultList<CountryEntry>::iterator ce = begin(); ce != end(); ce++)
@@ -602,7 +565,7 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
 
     if (!lf.open(QIODevice::ReadOnly|QIODevice::Text))
     {
-        QString ebuff = QString( "Failed to open %1 (%2)" ).arg(fmess).arg(fname );
+        QString ebuff = tr( "Failed to open %1 (%2)" ).arg(fmess).arg(fname );
         MinosParameters::getMinosParameters() ->mshowMessage( ebuff );
         return;
     }
@@ -672,7 +635,7 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
             int bracket = strcspn( b[ i ], "({[<" );
             if ( bracket >= 0 )
                b[ i ] = b[i].left(bracket);   // chop off the brackets
-            makeCountrySynonym( b[ i ], mainPrefix );
+            CountrySynonymList::makeCountrySynonym( b[ i ], mainPrefix );
             i++;
             part = b[i];
          }
@@ -696,7 +659,7 @@ CountrySynonymList::~CountrySynonymList()
 }
 void CountrySynonymList::load( )
 {
-   loadEntries( "./Configuration/cty.syn", "Country Synonym File" );
+   loadEntries( "./Configuration/cty.syn", tr("Country Synonym File") );
 }
 bool CountrySynonymList::procLine( QStringList a )
 {
@@ -707,6 +670,44 @@ bool CountrySynonymList::procLine( QStringList a )
 
    return true;
 }
+void CountrySynonymList::makeCountrySynonym( const QString &ssyn, const QString &sprefix )
+{
+   // search country list for the prefix
+
+   QString syn = ssyn.trimmed();
+   QString prefix = sprefix.trimmed();
+
+   if ( syn.indexOf( '-' ) >= 0 )
+   {
+      MinosParameters::getMinosParameters() ->mshowMessage( ( tr( "Synonym ranges no longer allowed : %1 for %2" ).arg(ssyn).arg(sprefix) ) );
+      return ;
+   }
+
+   QSharedPointer<CountryEntry> ctry;
+   for ( MultList < CountryEntry>::iterator i = MultListsImpl::getMultLists() ->ctryList.begin(); i != MultListsImpl::getMultLists() ->ctryList.end(); i++ )
+   {
+      if ( i->wt->basePrefix.compare( prefix, Qt::CaseInsensitive ) == 0 )
+      {
+         ctry = i->wt;
+         break;
+      }
+   }
+   if ( !ctry )
+      return ;		// as it will be unsuccessfull anyway
+
+   MapWrapper< CountrySynonym> cts(searchCountrySynonym ( syn ));
+   if ( cts.wt && ( cts.wt->country.data() == ctry.data() ) )
+      return ;		// as already there
+
+   cts = MapWrapper<CountrySynonym >(new CountrySynonym ( syn, prefix ));
+
+   if ( cts.wt->country )
+   {
+       if (!MultListsImpl::getMultLists() ->ctrySynList.contains(cts))
+           MultListsImpl::getMultLists() ->ctrySynList.insert ( cts, cts );   // must add to the syn list...
+   }
+}
+
 //======================================================================
 LocList::LocList( )
 

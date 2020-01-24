@@ -29,6 +29,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     myCallsign = settings.value("username", "").toString();
     password = settings.value("password", "").toString();
 
+    callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
+    messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
+
     QString chatSelection = settings.value("service", "1").toString();
     QStringList selections = chatSelection.split(":");
     for (int i = 0; i < selections.count(); i++)
@@ -56,38 +59,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     }
     std::sort(kstChatSelection.begin(), kstChatSelection.end());
 
-
-    QString showChat = settings.value("show", "").toString();
-
-    QStringList shows = showChat.split(":");
-    for (int i = 0; i < shows.count(); i++)
-    {
-        int s = shows[i].toInt();
-        if (s <= 4 && s > 0)
-        {
-            kstChatShow.append(s);
-            switch(s)
-            {
-            case 1:
-                ui->show1cb->setChecked(true);
-                break;
-            case 2:
-                ui->show2cb->setChecked(true);
-                break;
-            case 3:
-                ui->show3cb->setChecked(true);
-                break;
-            case 4:
-                ui->show4cb->setChecked(true);
-                break;
-            }
-        }
-    }
-    std::sort(kstChatShow.begin(), kstChatShow.end());
-    kstMessageFilterModel.setShowChat(kstChatShow);
-    kstCallFilterModel.setShowChat(kstChatShow);
-
-
     activeChat = settings.value("active", "0").toInt();
     setActive(activeChat);
 
@@ -101,25 +72,17 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(ui->login3cb, SIGNAL(stateChanged(int)), this, SLOT(logincb_stateChanged(int)));
     connect(ui->login4cb, SIGNAL(stateChanged(int)), this, SLOT(logincb_stateChanged(int)));
 
-    ui->show1cb->setText(services[0]);
-    ui->show2cb->setText(services[1]);
-    ui->show3cb->setText(services[2]);
-    ui->show4cb->setText(services[3]);
-
-    connect(ui->show1cb, SIGNAL(stateChanged(int)), this, SLOT(showcb_stateChanged(int)));
-    connect(ui->show2cb, SIGNAL(stateChanged(int)), this, SLOT(showcb_stateChanged(int)));
-    connect(ui->show3cb, SIGNAL(stateChanged(int)), this, SLOT(showcb_stateChanged(int)));
-    connect(ui->show4cb, SIGNAL(stateChanged(int)), this, SLOT(showcb_stateChanged(int)));
-
     ui->active1rb->setText(services[0]);
     ui->active2rb->setText(services[1]);
     ui->active3rb->setText(services[2]);
     ui->active4rb->setText(services[3]);
 
-    connect(ui->active1rb, SIGNAL(toggled(bool)), this, SLOT(activerb_toggled(bool)));
-    connect(ui->active2rb, SIGNAL(toggled(bool)), this, SLOT(activerb_toggled(bool)));
-    connect(ui->active3rb, SIGNAL(toggled(bool)), this, SLOT(activerb_toggled(bool)));
-    connect(ui->active4rb, SIGNAL(toggled(bool)), this, SLOT(activerb_toggled(bool)));
+    connect(ui->active1rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
+    connect(ui->active2rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
+    connect(ui->active3rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
+    connect(ui->active4rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
+
+    checkActive();
 
     ui->CSChatFilter->addItem("");
     ui->CSChatFilter->addItems(services);
@@ -149,8 +112,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(&CloseTimer, SIGNAL(timeout()), this, SLOT(CloseTimerTimer()));
     CloseTimer.start(100);
 
-    messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
-
     kstMessageModel.setChatVector(messageVector);
 
     kstMessageFilterModel.setSourceModel(&kstMessageModel);
@@ -162,7 +123,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->meepTable->setModel(&kstMeepFilterModel);
     ui->meepTable->horizontalHeader()->setStretchLastSection(true);
 
-    callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
     kstCallModel.setCallVector(callVector);
 
     kstCallFilterModel.setSourceModel(&kstCallModel);
@@ -246,6 +206,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     if (autoConnect)
         doLoginChanges();
 
+    logincb_stateChanged(0);
+
     ui->genmsgButton->setDefault(true);
 
     ui->analyseButton->setVisible(false);
@@ -314,7 +276,7 @@ void KSTMainWindow::connected()
     ui->includeLabel->setText("Including " + myCallsign);
     kstMeepFilterModel.setFilterString(myCallsign);
     kstMessageModel.setCacheSize();
-    ui->connectButton->setText("Disconnect");
+    ui->connectButton->setText(tr("Disconnect"));
 }
 
 
@@ -322,7 +284,7 @@ void KSTMainWindow::clearConnection()
 {
     ui->includeLabel->clear();
     kstMeepFilterModel.setFilterString("");
-    ui->connectButton->setText("Connect");
+    ui->connectButton->setText(tr("Connect"));
     kstconnected = false;
     kstLoggedIn.clear();
 }
@@ -391,11 +353,11 @@ void KSTMainWindow::on_analyseButton_clicked()
 
     QString InitialDir/* = GetCurrentDir()*/;
 
-    QString Filter = "KST Chat Files (*.txt);Log Files (*.log);;"
-                     "All Files (*.*)" ;
+    QString Filter = tr("KST Chat Files (*.txt);Log Files (*.log);;"
+                     "All Files (*.*)") ;
 
     QStringList KSTFileNames = QFileDialog::getOpenFileNames( this,
-                       "Chat dumps from KST",
+                       tr("Chat dumps from KST"),
                        InitialDir,                   // opendir
                        Filter );
 
@@ -418,7 +380,7 @@ void KSTMainWindow::on_analyseButton_clicked()
                 // but .log is already i the right order
                 //std::reverse(filelines.begin(), filelines.end());
 
-                ui->includeLabel->setText("Including " + myCallsign);
+                ui->includeLabel->setText(tr("Including %1").arg(myCallsign));
                 kstMeepFilterModel.setFilterString(myCallsign);
 
                 QTimer *timer = new QTimer(this);
@@ -460,6 +422,28 @@ void KSTMainWindow::sendKST(QString msg)
         kstclient->write((msg + "\r\n").toLocal8Bit());
         trace("Send to KST: " + msg);
 }
+void KSTMainWindow::checkAwayButton()
+{
+    QSharedPointer<KstUser> test(new KstUser());
+    test->call = myCallsign.toUpper();
+    test->chat = activeChat;
+    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    {
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+
+        QSharedPointer<KstUser> user = callVector->at(row);
+
+        if (user->away)
+        {
+            ui->awayButton->setText(tr("Set Back"));
+        }
+        else
+        {
+            ui->awayButton->setText(tr("Set Away"));
+        }
+    }
+}
+
 void KSTMainWindow::analyseKstMessage(QString atj)
 {
 //    18:58:18.640 messageRx: 1858Z ES4RM Sergei> (OH3DP) i am on 1558
@@ -493,7 +477,6 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         // we don't need them - yet
 
 
-        kstconnected = true;
         return;
     }
 
@@ -506,8 +489,22 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 //        LOGSTATS if LOGINC:
 //        LOGSTAT|100|2|20040703a|239E038F12E685FB75C6C03A79A1DE8A|11|Alain/telnet|Stiévenart|JO20HI|on4kst@skynet.be|
 //        LOGSTAT|100|chat id|client software version|session key|config|first name|last name|locator|email|
-        QString sdone = "SDONE|" + QString::number(kstChatSelection[0]) +"|";
-        sendKST(sdone);
+        if (sl[1] == "100")
+        {
+            kstconnected = true;
+            QString sdone = "SDONE|" + QString::number(kstChatSelection[0]) +"|";
+            sendKST(sdone);
+        }
+        else
+        {
+            //messageRx: LOGSTAT|101|Unknown user "XX0GJV".|
+            //messageRx: LOGSTAT|114|Wrong password!|
+            kstclient->disconnectFromHost();
+
+//            clearConnection();
+            mShowMessage(sl[2], this);
+            doConfiguration();
+        }
 
     }
     else if (sl[0] == "CR")
@@ -523,8 +520,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kst->fullLine = atj;
 
         QString unixTime = sl[2];
-        QDateTime dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
-        kst->dtg = dtg.toString("HH:mm");
+        kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
 
         kst->call = sl[3];
         kst->name = sl[4];
@@ -574,8 +570,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kst->fullLine = atj;
 
         QString unixTime = sl[2];
-        QDateTime dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
-        kst->dtg = dtg.toString("HH:mm");
+        kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
 
         kst->call = sl[3];
         kst->name = sl[4];
@@ -810,24 +805,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
     }
 
-    QSharedPointer<KstUser> test(new KstUser());
-    test->call = myCallsign.toUpper();
-    test->chat = activeChat;
-    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
-    {
-        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
-
-        QSharedPointer<KstUser> user = callVector->at(row);
-
-        if (user->away)
-        {
-            ui->awayButton->setText("Set Back");
-        }
-        else
-        {
-            ui->awayButton->setText("Set Away");
-        }
-    }
+    checkAwayButton();
 
 
 }
@@ -1022,6 +1000,7 @@ void KSTMainWindow::setNameFromCall(QString call)
     }
 }
 
+
 void KSTMainWindow::doLoginChanges()
 {
     bool detached = false;
@@ -1116,6 +1095,8 @@ void KSTMainWindow::doLoginChanges()
         kstCallModel.setCallVector(newCallVector);
         callVector = newCallVector;
     }
+
+    checkActive();
 }
 
 void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
@@ -1137,24 +1118,35 @@ void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
 
 void KSTMainWindow::setActive(int chat)
 {
-    switch(chat)
+    if (kstChatSelection.contains(chat))
     {
-    case 1:
-        ui->active1rb->setChecked(true);
-        break;
-    case 2:
-        ui->active2rb->setChecked(true);
-        break;
-    case 3:
-        ui->active3rb->setChecked(true);
-        break;
-    case 4:
-        ui->active4rb->setChecked(true);
-        break;
+        switch(chat)
+        {
+        case 1:
+            ui->active1rb->setChecked(true);
+            break;
+        case 2:
+            ui->active2rb->setChecked(true);
+            break;
+        case 3:
+            ui->active3rb->setChecked(true);
+            break;
+        case 4:
+            ui->active4rb->setChecked(true);
+            break;
+        }
+        activeChat = chat;
     }
-    activeChat = chat;
+    checkAwayButton();
 }
-
+void KSTMainWindow::checkActive()
+{
+    if (kstChatSelection.count() > 0 && !kstChatSelection.contains( activeChat))
+    {
+        int a = kstChatSelection[0];
+        setActive(a);
+    }
+}
 void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstMeepFilterModel.mapToSource(index);
@@ -1265,69 +1257,55 @@ void KSTMainWindow::on_awayButton_clicked()
         }
     }
 }
+void KSTMainWindow::resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a)
+{
+    if (!kstChatSelection.contains(c) && cb->isChecked())
+    {
+        // not selected -> selected
+        {
+            s.append(QString::number(c));
+            v.append(c);
+            rb->setVisible(true);
+            setActive(c);
+            a.append(c);
+        }
+    }
+    else if (kstChatSelection.contains(c) && !cb->isChecked())
+    {
+        // selected -> not selected
+        rb->setVisible(false);
+    }
+    else if (kstChatSelection.contains(c))
+    {
+        s.append(QString::number(c));
+        v.append(c);
+    }
+    else if (!kstChatSelection.contains(c) && !cb->isChecked())
+    {
+        rb->setVisible(false);
+    }
+    checkAwayButton();
+}
+
 void KSTMainWindow::logincb_stateChanged(int /*arg1*/)
 {
     QStringList s;
     QVector<int> v;
-    if (ui->login1cb->isChecked())
-    {
-        s.append("1");
-        v.append(1);
-    }
-    if (ui->login2cb->isChecked())
-    {
-        s.append("2");
-        v.append(2);
-    }
-    if (ui->login3cb->isChecked())
-    {
-        s.append("3");
-        v.append(3);
-    }
-    if (ui->login4cb->isChecked())
-    {
-        s.append("4");
-        v.append(4);
-    }
+    QVector<int> a;
+
+    resetVectors(ui->login1cb, ui->active1rb, 1, s, v, a);
+    resetVectors(ui->login2cb, ui->active2rb, 2, s, v, a);
+    resetVectors(ui->login3cb, ui->active3rb, 3, s, v, a);
+    resetVectors(ui->login4cb, ui->active4rb, 4, s, v, a);
+
     kstChatSelection = v;
+    if (a.count())
+        setActive(a[0]);
     doLoginChanges();
     QSettings settings;
     settings.setValue("service", s.join(":"));
 }
-void KSTMainWindow::showcb_stateChanged(int /*arg1*/)
-{
-    QStringList s;
-    QVector<int> v;
-    if (ui->show1cb->isChecked())
-    {
-        s.append("1");
-        v.append(1);
-    }
-    if (ui->show2cb->isChecked())
-    {
-        s.append("2");
-        v.append(2);
-    }
-    if (ui->show3cb->isChecked())
-    {
-        s.append("3");
-        v.append(3);
-    }
-    if (ui->show4cb->isChecked())
-    {
-        s.append("4");
-        v.append(4);
-    }
-    kstChatShow = v;
-
-    kstMessageFilterModel.setShowChat(v);
-    kstCallFilterModel.setShowChat(v);
-
-    QSettings settings;
-    settings.setValue("show", s.join(":"));
-}
-
-void KSTMainWindow::activerb_toggled(bool)
+void KSTMainWindow::activerb_clicked()
 {
     if (ui->active1rb->isChecked())
     {
@@ -1347,6 +1325,7 @@ void KSTMainWindow::activerb_toggled(bool)
     }
     QSettings settings;
     settings.setValue("active", QString::number(activeChat));
+    checkAwayButton();
 }
 void KSTMainWindow::on_messageChatFilter_currentIndexChanged(int index)
 {

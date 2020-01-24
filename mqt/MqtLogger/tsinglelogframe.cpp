@@ -525,7 +525,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
 
-                    f->setCurrentFrameType(getAuxTypeString(scele.auxType));
+                    f->setCurrentFrameType(StackedInfoFrame::getAuxTypeString(scele.auxType));
                     f->setContest(ct);
                     elementScrollArea->setWidget(f);
                     f->setVisible(true);
@@ -707,7 +707,7 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
    TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos  );
    if ( saveMinos )
    {
-      EntryDlg.setWindowTitle("Save imported log as a .minos file");
+      EntryDlg.setWindowTitle(tr("Save imported log as a .minos file"));
    }
    if ( EntryDlg.exec() == QDialog::Accepted )
    {
@@ -1261,7 +1261,7 @@ void TSingleLogFrame::goNextUnfilled()
    }
    else
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "No unfilled contacts" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("No unfilled contacts") );
    }
 
 }
@@ -1280,7 +1280,7 @@ void TSingleLogFrame::goSerial( )
     {
        if ( serial == -1 )
           serial = 0;
-       if ( !enquireDialog( this, "Please give serial wanted", serial ) )
+       if ( !enquireDialog( this, tr("Please give serial wanted"), serial ) )
           return ;
     }
     while ( serial == -1 );
@@ -1302,7 +1302,7 @@ void TSingleLogFrame::goSerial( )
        EditContact( cfu );
     }
     else
-       MinosParameters::getMinosParameters() ->mshowMessage( "Serial number " + QString::number( serial ) + " not found" );
+       MinosParameters::getMinosParameters() ->mshowMessage( tr("Serial number %1 not found").arg(serial) );
 }
 
 void TSingleLogFrame::on_GoToSerial(BaseContestLog *ct)

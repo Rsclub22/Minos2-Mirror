@@ -496,7 +496,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             res = time.getTime( DTGDISP );
             break;
          case egCall:
-            res = ( cf & DONT_PRINT ) ? "DELETED" : ( cf & LOCAL_COMMENT ) ? "LOCAL COMMENT" : "COMMENT FOR ADJUDICATOR";
+            res = ( cf & DONT_PRINT ) ? tr("DELETED") : ( cf & LOCAL_COMMENT ) ? tr("LOCAL COMMENT") : tr("COMMENT FOR ADJUDICATOR");
             break;
          case egRSTTx:
             res = comments.getValue();
@@ -547,7 +547,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                QString brgbuff;
 
                if ( contactFlags.getValue() & MANUAL_SCORE )
-                  brgbuff = "MAN";
+                  brgbuff = tr("MAN");
                else
                {
                   if ( loc.valRes == LOC_OK )
@@ -617,17 +617,17 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                QString scorebuff;
 
 			   if ( contactFlags.getValue() & DONT_PRINT )
-				  scorebuff = "DEL";
+                  scorebuff = tr("DEL");
 			   else
 				  if ( contactFlags.getValue() & NON_SCORING )
-					 scorebuff = "N/S";
+                     scorebuff = tr("N/S");
 				  else
 				  {
 					 if ( contest == curcon )
 					 {
 						// use the existing data
 						if ( ( cs.valRes == ERR_DUPCS ) && ( curcon == clp ) )
-						   scorebuff = "DUP";
+                           scorebuff = tr("DUP");
 						else
 						{
 						   int temp = contactScore.getValue();
@@ -708,7 +708,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                res.clear();
                if (cf & TO_BE_ENTERED)
                {
-                  res = "UNFILLED CONTACT ";
+                  res = tr("UNFILLED CONTACT ");
                }
                res += comments.getValue();
             }

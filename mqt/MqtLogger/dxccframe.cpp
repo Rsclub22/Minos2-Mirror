@@ -12,7 +12,7 @@
 
 extern ContList contlist[ CONTINENTS ];
 
-static GridColumn CountryTreeColumns[ ectMultMaxCol ] =
+GridColumn DXCCGridModel::CountryTreeColumns[ ectMultMaxCol ] =
    {
       GridColumn( ectCall, "XXXXXX", "Call", taLeftJustify ),
       GridColumn( ectWorked, "Wk CtX", "Wkd", taCenter ),
@@ -139,7 +139,7 @@ QVariant DXCCGridModel::headerData( int section, Qt::Orientation orientation,
     {
         QString cell;
 
-        cell = CountryTreeColumns[section].title;
+        cell = tr(CountryTreeColumns[section].title);
 
         return cell.trimmed();
     }

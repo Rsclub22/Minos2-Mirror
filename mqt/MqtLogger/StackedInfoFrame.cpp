@@ -16,7 +16,7 @@ ContList contlist[ CONTINENTS ] =
       {"NA", false},
    };
 
-QVector <AuxTypeOption> auxoptions = {
+QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
     {aeClock, "Clock", "Clock"},
     {aeDXCC, "DXCC", "DXCC"},
     {aeDistrict, "District", "District"},
@@ -27,22 +27,22 @@ QVector <AuxTypeOption> auxoptions = {
     {aeStats, "Stats", "Stats"},
 };
 
-AuxEntries getAuxEntryType(QString s)
+AuxEntries StackedInfoFrame::getAuxEntryType(QString s)
 {
     foreach(const AuxTypeOption &opt, auxoptions)
     {
-        if (opt.s == s)
+        if (tr(opt.s) == s)
             return opt.type;
     }
     return aeClock;
 }
 
-QString getAuxTypeString(AuxEntries t)
+QString StackedInfoFrame::getAuxTypeString(AuxEntries t)
 {
     foreach(const AuxTypeOption &opt, auxoptions)
     {
         if (opt.type == t)
-            return opt.s;
+            return tr(opt.s);
     }
     return getAuxTypeString(aeClock);
 }
@@ -63,8 +63,8 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     int i = 0;
     foreach(const AuxTypeOption &opt, auxoptions)
     {
-        ui->infoCombo->addItem(opt.s, opt.type);
-        ui->infoCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
+        ui->infoCombo->addItem(tr(opt.s), opt.type);
+        ui->infoCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
     }
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ScrollToCountry(QString,BaseContestLog*)), this, SLOT(on_ScrollToCountry(QString,BaseContestLog*)), Qt::QueuedConnection);

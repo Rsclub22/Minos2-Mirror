@@ -16,8 +16,6 @@
 #include <QObject>
 #include "base_pch.h"
 
-extern QString clusterStateIndicator[];
-extern QString clusterStateList[];
 
 class ClusterServer
 {

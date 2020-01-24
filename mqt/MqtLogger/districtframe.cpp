@@ -8,7 +8,7 @@
 #include "districtframe.h"
 #include "ui_districtframe.h"
 
-static GridColumn DistrictTreeColumns[ ectMultMaxCol - 1 ] =
+GridColumn DistrictGridModel::DistrictTreeColumns[ ectMultMaxCol - 1 ] =
    {
       GridColumn( ectCall, "XXXXXXX", "Code", taLeftJustify ),
       GridColumn( ectWorked, "Wk CtX", "Wkd", taCenter ),
@@ -129,7 +129,7 @@ QVariant DistrictGridModel::headerData( int section, Qt::Orientation orientation
     {
         QString cell;
 
-        cell = DistrictTreeColumns[section].title;
+        cell = tr(DistrictTreeColumns[section].title);
 
         return cell;
     }

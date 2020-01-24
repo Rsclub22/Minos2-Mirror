@@ -6,9 +6,9 @@
 #include "ScreenConfigElement.h"
 #include "ui_ScreenConfigElement.h"
 
-static QVector <SCTypeOption> scoptions =
+QVector <SCTypeOption> ScreenConfigElement::scoptions =
 {
-    {sctAux, "Auxiliary", "Auxiiary Display"},
+    {sctAux, "Auxiliary", "Auxiliary Display"},
     {sctChat, "Chat Display", "Chat Display"},
     {sctCluster, "Cluster Display", "Cluster Display"},
     {sctLog, "Log List", "QSO Log List"},
@@ -25,7 +25,7 @@ static QVector <SCTypeOption> scoptions =
     {sctSplit, "HSplit", "Horizontally split element"},
     {sctNone, "None", "Not in use"}
 };
-SCType getScreenType(QString s)
+SCType ScreenConfigElement::getScreenType(QString s)
 {
     foreach(const SCTypeOption &opt, scoptions)
     {
@@ -34,12 +34,12 @@ SCType getScreenType(QString s)
     }
     return sctNone;
 }
-QString getScreenTypeString(SCType t)
+QString ScreenConfigElement::getScreenTypeString(SCType t)
 {
     foreach(const SCTypeOption &opt, scoptions)
     {
         if (opt.type == t)
-            return opt.s;
+            return tr(opt.s);
     }
     return getScreenTypeString(sctNone);
 
@@ -124,7 +124,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     qobject_cast<QListView *>(ui->elementTypeCombo->view())->setRowHidden(row, true);
 
     i = 0;
-    foreach(const AuxTypeOption &opt, auxoptions)
+    foreach(const AuxTypeOption &opt, StackedInfoFrame::auxoptions)
     {
         ui->auxTypeCombo->addItem(opt.s, opt.type);
         ui->auxTypeCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
@@ -149,7 +149,7 @@ QString ScreenConfigElement::getType() const
 
 void ScreenConfigElement::setAuxType(AuxEntries ae)
 {
-    ui->auxTypeCombo->setCurrentText(getAuxTypeString(ae));
+    ui->auxTypeCombo->setCurrentText(StackedInfoFrame::getAuxTypeString(ae));
 }
 QString ScreenConfigElement::getAuxType() const
 {
@@ -226,7 +226,7 @@ void ScreenConfigElement::on_splitAboveButton_clicked()
     ScreenConfigElement *e = newRow->addLeft(nullptr);
 
     e->setType(getScreenType(t));
-    e->setAuxType(getAuxEntryType(aux));
+    e->setAuxType(StackedInfoFrame::getAuxEntryType(aux));
 }
 
 void ScreenConfigElement::on_splitBelowButton_clicked()
@@ -253,7 +253,7 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
     newRow->addLeft(nullptr);
 
     e->setType(getScreenType(t));
-    e->setAuxType(getAuxEntryType(aux));
+    e->setAuxType(StackedInfoFrame::getAuxEntryType(aux));
 }
 void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
 {

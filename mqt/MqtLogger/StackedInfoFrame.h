@@ -32,23 +32,23 @@ class AuxTypeOption
 {
 public:
     AuxEntries type;
-    QString s;
-    QString hint;
+    const char * s;
+    const char * hint;
 };
-extern QVector <AuxTypeOption> auxoptions ;
-extern AuxEntries getAuxEntryType(QString s);
-extern QString getAuxTypeString(AuxEntries t);
 
 class StackedInfoFrame : public QFrame
 {
     Q_OBJECT
 
 public:
+    static QVector <AuxTypeOption> auxoptions;
     explicit StackedInfoFrame(QWidget *parent = nullptr, int instance = 0);
     ~StackedInfoFrame();
 
     void setCurrentFrameType(QString);
 
+    static AuxEntries getAuxEntryType(QString s);
+    static QString getAuxTypeString(AuxEntries t);
 
 
 private:

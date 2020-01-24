@@ -10,7 +10,7 @@
 class RPCGeneralClient: public MinosRPCClient
 {
    public:
-    RPCGeneralClient( QString methodName) : MinosRPCClient( methodName, nullptr, true )
+    RPCGeneralClient( QString mName) : MinosRPCClient( mName, nullptr, true )
     {}
       RPCGeneralClient( TRPCFunctor *cb ) : MinosRPCClient( "", cb, true )
       {}

@@ -13,7 +13,7 @@
 #include "ScreenContact.h"
 #include "rigutils.h"
 
-ErrEntry errDefs[] =
+ErrEntry Validator::errDefs[] =
    {
       ErrEntry( 20, "null validator failed" ),   //ERR_0
       ErrEntry( 11, "Invalid time" ),        //ERR_1
@@ -39,7 +39,7 @@ ErrEntry errDefs[] =
       ErrEntry( 10, "QTH required" ),           //ERR_21
       ErrEntry( 10, "" ),         //ERR_22
       ErrEntry( 5, "Unknown Country" ),         //ERR_23
-      ErrEntry( 2, "!!! Non Scoring Contact !!!" ),         //ERR_24
+      ErrEntry( 2, "!!! Non Scoring Contact !!!"),         //ERR_24
       ErrEntry( 1, "!!! Comment Only !!!" ),         //ERR_25
       ErrEntry( 1, "!!! DELETED !!!" ),         //ERR_26
       ErrEntry( 90, "" ),         //ERR_27

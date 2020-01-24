@@ -18,33 +18,33 @@
 
 
 
-const int BMP_TIME_COL_NUM = 0;
-const int BMP_FREQ_COL_NUM = 1;
-const int BMP_DXSPOT_CALL_COL_NUM = 2;
-const int BMP_DXSPOT_CALL_WORKED_COL_NUM = 3;
-const int BMP_DXLOC_COL_NUM = 4;
-const int BMP_DXDIST_COL_NUM = 5;
-const int BMP_DXBRG_COL_NUM = 6;
-const int BMP_DXLOC_WORKED_COL_NUM = 7;
-const int BMP_SPOT_CALL_COL_NUM = 8;
-const int BMP_SPOTLOC_COL_NUM = 9;
-const int BMP_COMMENT_COL_NUM = 10;
-const int BMP_DXBANDMASK_COL_NUM = 11;
-const int BMP_MODEMASK_COL_NUM = 12;
-const int BMP_DXSPOT_TO_MEMORY_FLAG_COL_NUM = 13;
-const int BMP_RXTIME_COL_NUM = 14;
+//const int BMP_TIME_COL_NUM = 0;
+//const int BMP_FREQ_COL_NUM = 1;
+//const int BMP_DXSPOT_CALL_COL_NUM = 2;
+//const int BMP_DXSPOT_CALL_WORKED_COL_NUM = 3;
+//const int BMP_DXLOC_COL_NUM = 4;
+//const int BMP_DXDIST_COL_NUM = 5;
+//const int BMP_DXBRG_COL_NUM = 6;
+//const int BMP_DXLOC_WORKED_COL_NUM = 7;
+//const int BMP_SPOT_CALL_COL_NUM = 8;
+//const int BMP_SPOTLOC_COL_NUM = 9;
+//const int BMP_COMMENT_COL_NUM = 10;
+//const int BMP_DXBANDMASK_COL_NUM = 11;
+//const int BMP_MODEMASK_COL_NUM = 12;
+//const int BMP_DXSPOT_TO_MEMORY_FLAG_COL_NUM = 13;
+//const int BMP_RXTIME_COL_NUM = 14;
 
-const int BMP_TIME_COL_WIDTH = 40;
-const int BMP_FREQ_COL_WIDTH = 60;
-const int BMP_DXSPOT_CALL_COL_WIDTH = 60;
-const int BMP_DXSPOT_CALL_WKD_COL_WIDTH = 30;
-const int BMP_DXLOC_COL_WIDTH = 50;
-const int BMP_DXDIST_COL_WIDTH = 40;
-const int BMP_DXBRG_COL_WIDTH = 30;
-const int BMP_DXLOC_WKD_COL_WIDTH = 30;
-const int BMP_SPOT_CALL_COL_WIDTH = 60;
-const int BMP_SPOTLOC_COL_WIDTH = 50;
-const int BMP_COMMENT_COL_WIDTH = 170;
+//const int BMP_TIME_COL_WIDTH = 40;
+//const int BMP_FREQ_COL_WIDTH = 60;
+//const int BMP_DXSPOT_CALL_COL_WIDTH = 60;
+//const int BMP_DXSPOT_CALL_WKD_COL_WIDTH = 30;
+//const int BMP_DXLOC_COL_WIDTH = 50;
+//const int BMP_DXDIST_COL_WIDTH = 40;
+//const int BMP_DXBRG_COL_WIDTH = 30;
+//const int BMP_DXLOC_WKD_COL_WIDTH = 30;
+//const int BMP_SPOT_CALL_COL_WIDTH = 60;
+//const int BMP_SPOTLOC_COL_WIDTH = 50;
+//const int BMP_COMMENT_COL_WIDTH = 170;
 
 const bool BMP_BOOL_YES = true;
 const bool BMP_BOOL_NO = false;

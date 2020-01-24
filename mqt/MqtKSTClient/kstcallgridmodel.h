@@ -60,12 +60,10 @@ class KstCallGridModel: public QAbstractItemModel
 class KstCallGridSortFilterModel: public QSortFilterProxyModel
 {
     QString filterString;
-    QVector<int> showChat;
     int chatFilter = 0;
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
-    void setShowChat(const QVector<int> &value);
 
     void setChatFilter(int value);
 

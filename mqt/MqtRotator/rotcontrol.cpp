@@ -18,7 +18,24 @@
 #include <hamlib/rotator.h>
 #include "minosNetUtils.h"
 
-
+const char * RotControl::hamlibErrorMsg[] = {"No Error, operation completed sucessfully",
+                                    "Invalid parameter",
+                                    "Invalid configuration",
+                                    "Memory shortage",
+                                    "Function not implemented",
+                                    "Communication timed out",
+                                    "IO error, including open failed",
+                                    "Internal Hamlib error",
+                                    "Protocol error",
+                                    "Command rejected by the rig",
+                                    "Command performed, but arg truncated",
+                                    "Function not available",
+                                    "VFO not targetable",
+                                    "Error talking on the bus",
+                                    "Collision on the bus",
+                                    "NULL RIG handle or any invalid pointer parameter in get arg",
+                                    "Invalid VFO",
+                                    "RIG_EDOM"};
 
 
 static QList<const rot_caps *> capsList;
@@ -440,19 +457,19 @@ QStringList RotControl::getStopBitsNames()
 
 QString RotControl::gethamlibErrorMsg(int errorCode)
 {
-    if (errorCode > serialData::hamlibErrorMsg.count())
+    if (errorCode > static_cast<int>(sizeof(hamlibErrorMsg)/sizeof(const char *)))
     {
-        return "hamlib Errorcode too large!";
+        return tr("hamlib Errorcode too large!");
     }
-    return serialData::hamlibErrorMsg[errorCode];
+    return tr(hamlibErrorMsg[errorCode]);
 }
 
 
-QStringList RotControl::gethamlibErrorMsg()
-{
+//QStringList RotControl::gethamlibErrorMsg()
+//{
 
-    return serialData::hamlibErrorMsg;
-}
+//    return serialData::hamlibErrorMsg;
+//}
 
 
 

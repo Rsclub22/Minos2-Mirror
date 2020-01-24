@@ -47,7 +47,7 @@ void AddRadioDialog::done(int r)
         if (ui->radioName->text() == "")
         {
             QMessageBox msgBox;
-            msgBox.setText("Radio Name Empty\nPlease enter a name for the radio");
+            msgBox.setText(tr("Radio Name Empty\nPlease enter a name for the radio"));
             msgBox.exec();
             ui->radioName->setFocus();
             return;
@@ -56,7 +56,7 @@ void AddRadioDialog::done(int r)
         {
             QMessageBox msgBox;
             msgBox.setModal( true );
-            msgBox.setText("Radio name contains invalid characters,\n please remove non-alpha or non-numeric characters");
+            msgBox.setText(tr("Radio name contains invalid characters,\n please remove non-alpha or non-numeric characters"));
             msgBox.exec();
             return;
         }
@@ -64,7 +64,7 @@ void AddRadioDialog::done(int r)
         {
             QMessageBox msgBox;
             msgBox.setModal( true );
-            msgBox.setText("Radio name already exists,\n please use another name");
+            msgBox.setText(tr("Radio name already exists,\n please use another name"));
             msgBox.exec();
             return;
         }

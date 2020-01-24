@@ -3,11 +3,10 @@
 //==========================================================================================
 bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstMessageLine> q2 )
 {
-    int c = q1->dtg.compare(q2->dtg);
-    if (c == 0)
+    if (q1->dtg == q2->dtg)
         return q1->sequence < q2->sequence;
     else
-        return c < 0;
+        return q1->dtg < q2->dtg;
 }
 
 KstMessageGridModel::KstMessageGridModel():cacheSize(10, 10)
@@ -81,9 +80,9 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
             if (crec->chat > 0 && crec->chat <= services.count())
                 return services[crec->chat - 1];
             else
-                return "Unknown";
+                return tr("Unknown");
         case eccDTG:
-            cell = crec->dtg;
+            cell = crec->dtg.toString("HH:mm");
             break;
         case eccCall:
             cell = crec->call;
@@ -117,21 +116,21 @@ QVariant KstMessageGridModel::headerData( int section, Qt::Orientation orientati
         switch (section)
         {
         case eccChat:
-            return "Chat";
+            return tr("Chat");
         case eccDTG:
-            cell = "Time(Z)";
+            cell = tr("Time(Z)");
             break;
         case eccCall:
-            cell = "Call";
+            cell = tr("Call");
             break;
         case eccName:
-            cell = "Name";
+            cell = tr("Name");
             break;
         case eccOther:
-            cell = "Other Call";
+            cell = tr("Other Call");
             break;
         case eccText:
-            cell = "Text";
+            cell = tr("Text");
             break;
         }
         return cell;
@@ -150,12 +149,6 @@ int KstMessageGridModel::columnCount( const QModelIndex & /*parent*/ ) const
     return eccMaxColumn;
 }
 //==========================================================================================
-void KstMessageGridSortFilterModel::setShowChat(const QVector<int> &value)
-{
-    showChat = value;
-    invalidateFilter();
-}
-
 void KstMessageGridSortFilterModel::setChatFilter(int value)
 {
     chatFilter = value;
@@ -172,7 +165,7 @@ bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModel
     QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
 
     int chat = kstmsg->chat;
-    if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0 && showChat.contains(chat)))
+    if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0 ))
     {
         if (filterString.isEmpty())
             return true;

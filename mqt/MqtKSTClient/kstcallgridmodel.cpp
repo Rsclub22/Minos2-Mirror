@@ -201,25 +201,25 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
         switch(section)
         {
         case ecscChat:
-            return "Chat";
+            return tr("Chat");
 
         case ecscCall:
-            return "Callsign";
+            return tr("Callsign");
 
         case ecscLoc:
-            return "Loc";
+            return tr("Loc");
 
         case ecscDistance:
-            return "Dist";
+            return tr("Dist");
 
         case ecscName:
-            return "Name";
+            return tr("Name");
 
         case ecscCountryPrefix:
-            return "Prefix";
+            return tr("Prefix");
 
         case ecscCountryName:
-            return "Country";
+            return tr("Country");
         }
     }
     else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
@@ -242,12 +242,6 @@ int KstCallGridModel::columnCount( const QModelIndex & /*parent*/ ) const
     return ecscMaxColumn;
 }
 //==========================================================================================
-void KstCallGridSortFilterModel::setShowChat(const QVector<int> &value)
-{
-    showChat = value;
-    invalidateFilter();
-}
-
 void KstCallGridSortFilterModel::setChatFilter(int value)
 {
     chatFilter = value;
@@ -264,7 +258,7 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
 
     int chat = call->chat;
-    if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0 && showChat.contains(chat)))
+    if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))
     {
         if (filterString.isEmpty())
             return true;

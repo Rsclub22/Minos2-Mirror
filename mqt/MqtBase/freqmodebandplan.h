@@ -23,7 +23,7 @@ public:
 
 
 
-class freqModeBandPlan
+class freqModeBandPlan: public QObject
 {
 public:
     freqModeBandPlan();

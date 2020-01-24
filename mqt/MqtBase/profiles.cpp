@@ -29,40 +29,40 @@ BundleFile::BundleFile( PROFILES p )
     //       ProfileEntry(int id, const  char *name, const char *def, const char *dispname, const char *hint, bool RO );
     case epLOGGERPROFILE:
 
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpListDirectory, "List Directory", "./Lists", "", "Default archive list directory", false ) ) );
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpLogDirectory, "Log Directory", "./Logs", "", "Default logs directory", false ) ) );
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpListDirectory, "List Directory", "./Lists", QString(), tr("Default archive list directory"), false ) ) );
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpLogDirectory, "Log Directory", "./Logs", QString(), tr("Default logs directory"), false ) ) );
 
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpEntryFile, "EntryFile", "./Configuration/Entry.ini", "Entry settings file", "File containing entry settings", false ) ) );
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpStationFile, "StationFile", "./Configuration/Station.ini", "Station settings file", "File containing station settings", false ) ) );
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpQTHFile, "QTHFile", "./Configuration/QTH.ini", "QTH settings file", "File containing QTH settings", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpLocsFile, "LocsFile", "./Configuration/LocSquares.ini", "Country locators file", "File containing valid locators for countries", false ) ));
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpEntryFile, "EntryFile", "./Configuration/Entry.ini", tr("Entry settings file"), tr("File containing entry settings"), false ) ) );
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpStationFile, "StationFile", "./Configuration/Station.ini", tr("Station settings file"), tr("File containing station settings"), false ) ) );
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpQTHFile, "QTHFile", "./Configuration/QTH.ini", tr("QTH settings file"), tr("File containing QTH settings"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpLocsFile, "LocsFile", "./Configuration/LocSquares.ini", tr("Country locators file"), tr("File containing valid locators for countries"), false ) ));
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplayFile, "DisplayFile", "./Configuration/Display.ini", "Display settings file", "File containing saved display settings", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplaySection, "DisplaySection", "Default", "Display file section", "Section to use in display file", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpOperatorFile, "OperatorFile", "./Configuration/Operator.ini", "Operators file", "File containing operators", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpOperatorSection, "OperatorSection", "Default", "Operators file section", "section to use in operators file", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPreloadFile, "PreloadFile", "./Configuration/LogsPreload.ini", "Log preload file", "File containing log pre-loads", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPreloadSection, "PreloadSection", "Default", "Preload contests default section", "Section to use in preload file", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsFile, "ListsFile", "./Configuration/ListPreload.ini", "List preload file", "File containing list pre-loads", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsSection, "ListsSection", "Default", "Preload Lists file section", "Section to use in lists preload file", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplayFile, "DisplayFile", "./Configuration/Display.ini", tr("Display settings file"), tr("File containing saved display settings"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDisplaySection, "DisplaySection", "Default", tr("Display file section"), tr("Section to use in display file"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpOperatorFile, "OperatorFile", "./Configuration/Operator.ini", tr("Operators file"), tr("File containing operators"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpOperatorSection, "OperatorSection", "Default", tr("Operators file section"), tr("section to use in operators file"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPreloadFile, "PreloadFile", "./Configuration/LogsPreload.ini", tr("Log preload file"), tr("File containing log pre-loads"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPreloadSection, "PreloadSection", "Default", tr("Preload contests default section"), tr("Section to use in preload file"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsFile, "ListsFile", "./Configuration/ListPreload.ini", tr("List preload file"), tr("File containing list pre-loads"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsSection, "ListsSection", "Default", tr("Preload Lists file section"), tr("Section to use in lists preload file"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXEnabled, "WSJTXEnabled", true, "WSJTX Enabled", "WSJTX Enabled", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXPort, "WSJTXPort", 2237, "WSJTX Port", "WSJTX Port", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXGroupAddress, "WSJTXGroupAddress", "", "WSJTX Group Address", "WSJTX Group Address", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXAutoEnabled, "WSJTXAutoEnabled", false, "WSJTX Auto Enabled", "WSJTX Auto Enabled", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXTestEnabled, "WSJTXtestEnabled", false, "WSJTX Test Enabled", "WSJTX Test Enabled", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXEnabled, "WSJTXEnabled", true, tr("WSJTX Enabled"), tr("WSJTX Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXPort, "WSJTXPort", 2237, tr("WSJTX Port"), tr("WSJTX Port"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXGroupAddress, "WSJTXGroupAddress", "", tr("WSJTX Group Address"), tr("WSJTX Group Address"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXAutoEnabled, "WSJTXAutoEnabled", false, tr("WSJTX Auto Enabled"), tr("WSJTX Auto Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXTestEnabled, "WSJTXtestEnabled", false, tr("WSJTX Test Enabled"), tr("WSJTX Test Enabled"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpFile, "HelpFile", "./helpfiles/MinosHelp.qch", "Help file", "Help file", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpEntryURL, "HelpEntryPoint", "qthelp://Minos/Minos.html", "Help entry point", "Help entry point", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPDFFile, "PDFFile", "./Docs/Minos.pdf", "PDF documentation file", "PDF documentation file", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpFile, "HelpFile", "./helpfiles/MinosHelp.qch", tr("Help file"), tr("Help file"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpEntryURL, "HelpEntryPoint", "qthelp://Minos/Minos.html", tr("Help entry point"), tr("Help entry point"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPDFFile, "PDFFile", "./Docs/Minos.pdf", tr("PDF documentation file"), tr("PDF documentation file"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, "Auto Fill signal report", "Auto Fill signal report on return", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, tr("Auto Fill signal report"), tr("Auto Fill signal report on return"), false ) ) );
 
         break;
     case epPRELOADPROFILE:
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppCurrent, "CurrentLog", 0, nullptr, "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppDefSession, "DefaultSessionName", "Default Session", "Default Session", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppSession, "CurrentSession", "Default Session", "Default Session", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppCurrent, "CurrentLog", 0, nullptr, tr("hint"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppDefSession, "DefaultSessionName", "Default Session", tr("Default Session"), tr("hint"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppSession, "CurrentSession", "Default Session", tr("Default Session"), tr("hint"), false ) ) );
         break;
 
     case epLISTSPROFILE:
@@ -80,9 +80,9 @@ BundleFile::BundleFile( PROFILES p )
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowOperators, "ShowOperators", true, "", "hint", false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpEditor, "Editor", "Notepad.exe", "", "Default editor", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod1, "Statistics Period 1", 10, "", "Statistics Period 1", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod2, "Statistics Period 2", 60, "", "Statistics Period 2", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpEditor, "Editor", "Notepad.exe", "", tr("Default editor"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod1, "Statistics Period 1", 10, "", tr("Statistics Period 1"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod2, "Statistics Period 2", 60, "", tr("Statistics Period 2"), false ) ) );
 
         {
             QString temp = defaultLayoutName;
@@ -92,36 +92,36 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );
         break;
     case epENTRYPROFILE:
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepCall, "Call", "", "Call Used", "Call sign used", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepEntrant, "Entrant", "", "On Behalf Of (Club)", "Name of club/group", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyName, "MyName", "", "My Name", "Name of responsible operator", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyCall, "MyCall", "", "My Call", "Callsign of responsible operator", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepCall, "Call", "", tr("Call Used"), tr("Call sign used"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepEntrant, "Entrant", "", tr("On Behalf Of (Club)"), tr("Name of club/group"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyName, "MyName", "", tr("My Name"), tr("Name of responsible operator"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyCall, "MyCall", "", tr("My Call"), tr("Callsign of responsible operator"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyAddress1, "MyAddress1", "", "My Address Line 1", "Address line 1 of responsible operator", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyAddress2, "MyAddress2", "", "My Address Line 2", "Address line 2 of responsible operator", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyCity, "MyCity", "", "My City", "City of responsible operator", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyCountry, "MyCountry", "", "My Country", "Country of responsible operator", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyPostCode, "MyPostCode", "", "My Postcode", "Post Code of responsible operator", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyPhone, "MyPhone", "", "My Phone", "Phone no. of responsible operator", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyEmail, "MyEmail", "", "My Email", "eMail address of responsible operator", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyAddress1, "MyAddress1", "", tr("My Address Line 1"), tr("Address line 1 of responsible operator"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyAddress2, "MyAddress2", "", tr("My Address Line 2"), tr("Address line 2 of responsible operator"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyCity, "MyCity", "", tr("My City"), tr("City of responsible operator"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyCountry, "MyCountry", "",tr( "My Country"), tr("Country of responsible operator"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyPostCode, "MyPostCode", "", tr("My Postcode"), tr("Post Code of responsible operator"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyPhone, "MyPhone", "", tr("My Phone"), tr("Phone no. of responsible operator"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyEmail, "MyEmail", "", tr("My Email"), tr("eMail address of responsible operator"), false ) ) );
         break;
     case epQTHPROFILE:
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpLocator, "Locator", "", "Locator", "Locator", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpDistrict, "District", "", "District Exchange", "District Exchange", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpLocation, "Location", "", "Location Exchange", "Descriptive Location Exchange", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpStationQTH1, "StationQTH1", "", "Station QTH Line 1", "Address line 1/2 of station", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpStationQTH2, "StationQTH2", "", "Station QTH Line 2", "Address line 2/2 of station", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpASL, "ASL", 0, "QTH Height ASL (metres)", "QTH height ASL (metres)", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpLocator, "Locator", "", tr("Locator"), tr("Locator"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpDistrict, "District", "", tr("District Exchange"), tr("District Exchange"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpLocation, "Location", "", tr("Location Exchange"), tr("Descriptive Location Exchange"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpStationQTH1, "StationQTH1", "", tr("Station QTH Line 1"), tr("Address line 1/2 of station"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpStationQTH2, "StationQTH2", "", tr("Station QTH Line 2"), tr("Address line 2/2 of station"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpASL, "ASL", 0, tr("QTH Height ASL (metres)"), tr("QTH height ASL (metres)"), false ) ) );
         break;
     case epSTATIONPROFILE:
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espPower, "Power", 0, "Transmitter Power", "Transmit Power (Watts)", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espTransmitter, "Transmitter", "", "Transmit Equipment", "Transmit Equipment", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espReceiver, "Receiver", "", "Receive Equipment", "Receive Equipment", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espAntenna, "Antenna", "", "Antenna details", "Antenna details", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espAGL, "AGL", 0, "Antenna Height AGL (metres)", "Antenna Height AGL (metres)", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espOffset, "Bearing Offset", 0, "Antenna Bearing Offset", "Amount to offset antenna bearings", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espRadioName, "Radio", "", "Radio in Rig Control", "Radio in Rig Control", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espRotatorName, "rotator", "", "Rotator in Rotator Control", "Rotator in Rotator Control", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espPower, "Power", 0, tr("Transmitter Power"), tr("Transmit Power (Watts)"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espTransmitter, "Transmitter", "", tr("Transmit Equipment"), tr("Transmit Equipment"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espReceiver, "Receiver", "", tr("Receive Equipment"), tr("Receive Equipment"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espAntenna, "Antenna", "", tr("Antenna details"), tr("Antenna details"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espAGL, "AGL", 0, tr("Antenna Height AGL (metres)"), tr("Antenna Height AGL (metres)"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espOffset, "Bearing Offset", 0, tr("Antenna Bearing Offset"), tr("Amount to offset antenna bearings"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espRadioName, "Radio", "", tr("Radio in Rig Control"), tr("Radio in Rig Control"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espRotatorName, "rotator", "", tr("Rotator in Rotator Control"), tr("Rotator in Rotator Control"), false ) ) );
         break;
 
     case epLOCSQUARESPROFILE:
@@ -491,7 +491,7 @@ void SettingsBundle::flushProfile( )
    bundleFile->iniFile->writePrivateProfileString( "", "", "" );
 }
 //=============================================================================
-ProfileEntry::ProfileEntry(int id, const char *name, const char *def, const char *dispname, const char *hint, bool RO )
+ProfileEntry::ProfileEntry(int id, const char *name, const char *def, QString dispname, QString hint, bool RO )
       :
         pt( petString ),
         id( id ),
@@ -506,7 +506,7 @@ ProfileEntry::ProfileEntry(int id, const QString &n, const QString &d, const QSt
       : id( id ), name( n ), sdefaultval( d ), hint( h ), pt( petString ), dispname(dname), RO(RO)
 {}
 */
-ProfileEntry::ProfileEntry(int id, const char *name, int def, const char *dispname, const char *hint, bool RO )
+ProfileEntry::ProfileEntry(int id, const char *name, int def, QString dispname, QString hint, bool RO )
       :
         pt( petInteger ),
         id( id ),
@@ -517,7 +517,7 @@ ProfileEntry::ProfileEntry(int id, const char *name, int def, const char *dispna
         hint( hint ),
         RO(RO)
 {}
-ProfileEntry::ProfileEntry(int id, const char *name, bool def, const char *dispname, const char *hint, bool RO )
+ProfileEntry::ProfileEntry(int id, const char *name, bool def, QString dispname, QString hint, bool RO )
       :
         pt( petBool ),
         id( id ),

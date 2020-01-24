@@ -55,7 +55,7 @@ struct MonitoredLogCmp
 };
 //=============================================================================================
 enum NodeType{entRoot, entServer, entLog};
-class TreeNode
+class TreeNode: public QObject
 {
     NodeType ntype;
 protected:
@@ -125,6 +125,7 @@ public:
 };
 class LogTreeNode:public TreeNode
 {
+    Q_OBJECT
 public:
     LogTreeNode(TreeNode *parent, MonitoredLog *log):TreeNode(entLog, parent, log, parent->monmain)
     {
@@ -133,6 +134,8 @@ public:
 };
 class MonitorTreeModel: public QAbstractItemModel
 {
+    Q_OBJECT
+
     TreeNode *rootData;
 public:
     MonitorTreeModel();

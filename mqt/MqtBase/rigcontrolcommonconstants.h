@@ -8,9 +8,9 @@
 
 
 // Status messages sent to minos logger
-#define RIG_STATUS_CONNECTED "Connected"
-#define RIG_STATUS_DISCONNECTED "Disconnected"
-#define RIG_STATUS_ERROR "Error"
+extern const char * RIG_STATUS_CONNECTED;
+extern const char * RIG_STATUS_DISCONNECTED;
+extern const char * RIG_STATUS_ERROR;
 
 //#define TXVERT_ON "TXVERTON"
 //#define TXVERT_OFF "TXVERTOFF"
@@ -119,12 +119,6 @@ const QString RIGCTL_MAC_EXE_FILENAME = "rigctld";
 
 const QString RIGCTLD_GROUP_NAME = "Rigctld";
 const QString RIGCTLD_PATH_SETTING_NAME = "RigctldPath";
-
-// Tooltips
-
-const QString civToolTip = "Leave field blank for default radio CIV,\nor enter in the form 0xnn or nn, where nn is the radio CIV address in Hex.";
-
-
 
 // RadioName when no radio is connected
 //const QString NORADIO = "NoRadio";

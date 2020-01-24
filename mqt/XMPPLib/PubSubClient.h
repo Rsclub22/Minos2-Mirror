@@ -87,8 +87,8 @@ class RPCRemoteSubscriber : public RPCSubscriber
 {
    private:
       QString server;
-      RPCRemoteSubscriber( const QString &server, const QString &category )
-            : RPCSubscriber( category ), server( server )
+      RPCRemoteSubscriber( const QString &server, const QString &cat )
+            : RPCSubscriber( cat ), server( server )
       {}
       ~RPCRemoteSubscriber() override
       {}

@@ -69,6 +69,7 @@ SOURCES += \
     rigcommon.cpp \
     RigDetails.cpp \
     RigState.cpp \
+    rigcontrolcommonconstants.cpp \
     rigutils.cpp \
     RotatorCache.cpp \
     rotatorcommon.cpp \
@@ -83,7 +84,6 @@ SOURCES += \
     qttelnet.cpp \
     clusterClientServer.cpp \
     spotdata.cpp \
-    calllocinputdialog.cpp \
     helpbrowser.cpp \
     helptextbrowser.cpp \
     clustercommon.cpp \
@@ -163,7 +163,6 @@ HEADERS += \
     clustercommon.h \
     clusterClientServer.h \
     spotdata.h \
-    calllocinputdialog.h \
     rigmemcommondata.h \
     helpbrowser.h \
     helptextbrowser.h \
@@ -191,7 +190,6 @@ FORMS += \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \
-    calllocinputdialog.ui \
     helpbrowser.ui \
     callsigninputdialog.ui \
     locatorinputdialog.ui

@@ -2,7 +2,18 @@
 #include "checkmodeagainstfreq.h"
 #include "BandList.h"
 
-
+const char * clusterStateIndicator[] =
+{
+    QT_TRANSLATE_NOOP("clusterState", "Available"),
+    QT_TRANSLATE_NOOP("clusterState", "NotAvailable"),
+    QT_TRANSLATE_NOOP("clusterState", "NoContact")
+};
+const char * clusterStateList[] =
+{
+   QT_TRANSLATE_NOOP("clusterState", "Available"),
+   QT_TRANSLATE_NOOP("clusterState", "Not Available"),
+   QT_TRANSLATE_NOOP("clusterState", "No Contact")
+};
 
 void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
 {

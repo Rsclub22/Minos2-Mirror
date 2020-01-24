@@ -232,7 +232,7 @@ void RotControlFrame::turnTo(int angle)
             if (angle > COMPASS_MAX360)
             {
                 traceMsg(QString("TurnTo: Bearing too large"));
-                QString msg = "<font color='Red'>Bearing too large - " + QString::number(angle) + "</font>";
+                QString msg = tr("<font color='Red'>Bearing too large - %1</font>").arg(angle);
                 ui->rotatorStatMsg->setText(msg);
                 return;
             }
@@ -240,7 +240,7 @@ void RotControlFrame::turnTo(int angle)
             else if (angle < COMPASS_MIN0)
             {
                 traceMsg(QString("TurnTo: Bearing too small"));
-                QString msg = "<font color='Red'>Bearing too small - " + QString::number(angle) + "</font>";
+                QString msg = tr("<font color='Red'>Bearing too small - %1</font>").arg(angle);
                 ui->rotatorStatMsg->setText(msg);
                 return;
             }
@@ -505,14 +505,14 @@ void RotControlFrame::showTurnButOn()
 {
     //ui->Rotate->setPalette(*redText);
     ui->Rotate->setStyleSheet(BUTTON_ON_STYLE);
-    ui->Rotate->setText("Turn");
+    ui->Rotate->setText(tr("Turn"));
 }
 
 void RotControlFrame::showTurnButOff()
 {
     //ui->Rotate->setPalette(*blackText);
     ui->Rotate->setStyleSheet(BUTTON_OFF_STYLE);
-    ui->Rotate->setText("Turn");
+    ui->Rotate->setText(tr("Turn"));
 }
 
 
@@ -522,28 +522,28 @@ void RotControlFrame::showRotLeftButOn()
 {
     //ui->RotateLeft->setPalette(*redText);
     ui->RotateLeft->setStyleSheet(BUTTON_ON_STYLE);
-    ui->RotateLeft->setText("(CCW) Left");
+    ui->RotateLeft->setText(tr("(CCW) Left"));
 }
 
 void RotControlFrame::showRotLeftButOff()
 {
     //ui->RotateLeft->setPalette(*blackText);
     ui->RotateLeft->setStyleSheet(BUTTON_OFF_STYLE);
-    ui->RotateLeft->setText("(CCW) Left");
+    ui->RotateLeft->setText(tr("(CCW) Left"));
 }
 
 void RotControlFrame::showRotRightButOn()
 {
     //ui->RotateRight->setPalette(*redText);
     ui->RotateRight->setStyleSheet(BUTTON_ON_STYLE);
-    ui->RotateRight->setText("(CW) Right");
+    ui->RotateRight->setText(tr("(CW) Right"));
 }
 
 void RotControlFrame::showRotRightButOff()
 {
     //ui->RotateRight->setPalette(*blackText);
     ui->RotateRight->setStyleSheet(BUTTON_OFF_STYLE);
-    ui->RotateRight->setText("(CW) Right");
+    ui->RotateRight->setText(tr("(CW) Right"));
 }
 
 void RotControlFrame::on_StopRotate_clicked()
@@ -691,7 +691,7 @@ void RotControlFrame::setRotatorState(const QString &s)
        }
        if (sl.count() <= 1)     // will be a revoked state
        {
-           ui->rotConnectState->setText("Disconnected");
+           ui->rotConnectState->setText(tr("Disconnected"));
            rotError = false;
            rotConnected = false;
        }

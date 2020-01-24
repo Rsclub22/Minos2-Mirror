@@ -101,7 +101,7 @@ void TStatsDispFrame::reInitialiseStats()
       QString tempcs;
       tempcs = bestdx->cs.fullCall.getValue().trimmed() ;
 
-      QString buff = QString( "Best DX %1 Sn %2 %3(%4 kms). Average QSO is %5 Points" )
+      QString buff = tr( "Best DX %1 Sn %2 %3(%4 kms). Average QSO is %5 Points" )
                            //#define MAX_DISPLAY_TEST 1
    #ifndef MAX_DISPLAY_TEST
                            .arg( tempcs) .arg(bestdx->serials.getValue())
@@ -139,10 +139,10 @@ void TStatsDispFrame::reInitialiseStats()
             // Why the selection of period in this way?  kms1 is the distance for the first period; use that unless it is zero
             int period = ct->kms1 ? sp1 : sp2;
             double qmins = ( qmult * period ) / Qs;
-            temp = QString(" (%1 Mins)" ) .arg(qmins, 0, 'f', 1) ;
+            temp = tr(" (%1 Mins)" ) .arg(qmins, 0, 'f', 1) ;
          }
 
-         QString lbuff = QString( "%1\nOne New Multiplier is equivalent to %2 Average QSOs%3" ) .arg(buff)
+         QString lbuff = tr( "%1\nOne New Multiplier is equivalent to %2 Average QSOs%3" ) .arg(buff)
                                .arg(qmult, 0, 'f', 1) .arg(temp);
          buff = lbuff ;
       }
@@ -151,7 +151,7 @@ void TStatsDispFrame::reInitialiseStats()
 
       if (ct->usesBonus.getValue())
       {
-          lbuff = QString( "Last %1 Mins: %2 QSO %3 pts %4 bonus\r\n(Previous %5; %6; %7)"
+          lbuff = tr( "Last %1 Mins: %2 QSO %3 pts %4 bonus\r\n(Previous %5; %6; %7)"
                                "\nLast %8 Mins: %9 QSO %10 pts %11 bonus\r\n(Previous %12; %13; %14)" )
                               .arg(sp1)  .arg(ct->QSO1) .arg(ct->kms1) .arg(ct->bonus1)
                               .arg(ct->QSO1p) .arg(ct->kms1p) .arg(ct->bonus1p)
@@ -160,7 +160,7 @@ void TStatsDispFrame::reInitialiseStats()
       }
       else
       {
-        lbuff = QString( "Last %1 Mins: %2 QSO %3 pts %4 mults\r\n(Previous %5; %6; %7)"
+        lbuff = tr( "Last %1 Mins: %2 QSO %3 pts %4 mults\r\n(Previous %5; %6; %7)"
                              "\nLast %8 Mins: %9 QSO %10 pts %11 mults\r\n(Previous %12; %13; %14)" )
                             .arg(sp1)  .arg(ct->QSO1) .arg(ct->kms1) .arg(ct->mults1)
                             .arg(ct->QSO1p) .arg(ct->kms1p) .arg(ct->mults1p)
