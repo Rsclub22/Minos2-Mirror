@@ -13,7 +13,9 @@
 const double dtg::daySecs = 86400.0;	// 24 * 60 * 60
 
 //---------------------------------------------------------------------------
-BaseLogList::BaseLogList()
+BaseLogList::BaseLogList():QObject()
+{}
+BaseLogList::BaseLogList(const BaseLogList &):QObject()
 {}
 BaseLogList::~BaseLogList()
 {}
