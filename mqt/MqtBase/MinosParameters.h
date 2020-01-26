@@ -12,6 +12,7 @@
 
 #ifndef MinosParametersH
 #define MinosParametersH 
+#include <QCoreApplication>
 #include <QString>
 #include <QWidget>
 class BaseContestLog;
