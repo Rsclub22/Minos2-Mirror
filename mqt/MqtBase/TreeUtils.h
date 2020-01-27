@@ -48,6 +48,7 @@ enum eLogGridCols {egTime,
 
 class QSOGridModel: public QAbstractItemModel
 {
+    Q_OBJECT
     protected:
         BaseContestLog *contest;
     public:

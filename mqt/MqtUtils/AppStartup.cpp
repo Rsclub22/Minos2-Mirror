@@ -10,6 +10,8 @@ static bool appClosing = false;
 static QString appStartupName;
 static QString executableName;
 
+QSharedPointer<QTranslator> translator;
+
 QString getAppStartupName()
 {
     return appStartupName;
@@ -57,6 +59,51 @@ void myMessageOutput(QtMsgType type,
     }
 }
 
+QStringList getLanguages()
+{
+    QStringList locs;
+    QString searchString = GetCurrentDir() + "/Bin/translations";
+
+    QDirIterator files( searchString, QDir::Files | QDir::NoSymLinks , QDirIterator::NoIteratorFlags );
+    while ( files.hasNext() )
+    {
+        files.next();
+        QFileInfo finfo = files.fileName();
+
+        QString fileExt = finfo.suffix();
+
+        if ( fileExt.compare("qm") == 0 )
+        {
+            QString fname =finfo.baseName();
+            if (fname.startsWith(executableName))
+            {
+                int uscore = fname.indexOf('_');
+                QString loc = fname.mid(uscore + 1);
+                locs.push_back(loc);
+            }
+        }
+    }
+    locs.sort();
+    return locs;
+}
+void switchTranslation(QString loc)
+{
+    QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
+
+    QSharedPointer<QTranslator> myappTranslator(new QTranslator());    // which goes out of scope :(
+
+    QString locfile = "Bin/translations/" + executableName + "_" + loc;
+    bool loadOK = myappTranslator->load(locfile);
+    bool installOK = qa->installTranslator(myappTranslator.data());
+
+    if (translator)
+    {
+        qa->removeTranslator(translator.data());
+    }
+    translator = myappTranslator;
+    trace(QString("Translation file %1 loaded:%2 installed:%3").arg(locfile).arg(loadOK).arg(installOK));
+
+}
 void appStartup(const QString &pappName)
 {
     oldHandler = qInstallMessageHandler(myMessageOutput);
@@ -119,18 +166,11 @@ void appStartup(const QString &pappName)
         }
 #endif
     }
-
-
-    QTranslator *myappTranslator = new QTranslator();    // which goes out of scope :(
-
-    QString locfile = "Bin/translations/" + executableName + "_" + QLocale::system().name();
-    bool loadOK = myappTranslator->load(locfile);
-    bool installOK = qa->installTranslator(myappTranslator);
-
     enableTrace( "./TraceLog", appStartupName + "_" );
 
-    trace(QString("Translation file %1 loaded:%2 installed:%3").arg(locfile).arg(loadOK).arg(installOK));
+    switchTranslation(QLocale::system().name());
 }
+
 
 void setAppFont()
 {

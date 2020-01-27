@@ -5,6 +5,8 @@
 
 extern void appStartup(const QString &appName);
 extern QString getAppStartupName();
+extern QStringList getLanguages();
+extern void switchTranslation(QString loc);
 extern void setAppFont();
 extern void setAppClosing();
 

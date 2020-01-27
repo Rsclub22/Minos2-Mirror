@@ -139,6 +139,7 @@ private:
     QAction *ShowOperatorsAction;
     QAction *OptionsAction;
     QAction *FontEditAcceptAction;
+    QAction *LanguageAcceptAction;
     QAction *WSJTXConfigAction;
     QAction *ReportAutofillAction;
 
@@ -199,6 +200,7 @@ private slots:
     void ShowOperatorsActionExecute();
     void OptionsActionExecute();
     void FontEditAcceptActionExecute();
+    void LanguageAcceptActionExecute();
     void WsjtConfigActionExecute();
     void ReportAutofillActionExecute();
 

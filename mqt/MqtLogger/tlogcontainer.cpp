@@ -270,6 +270,13 @@ void TLogContainer::changeEvent( QEvent* e )
         QSettings settings;
         settings.setValue("geometry", saveGeometry());
     }
+
+    if (e->type() == QEvent::LanguageChange)
+    {
+        // when language changes force a complete rebuild
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+    }
 }
 QAction *TLogContainer::newAction( const QString &text, QMenu *m, const char *atype )
 {
@@ -343,13 +350,14 @@ void TLogContainer::setupMenus()
 
     screenLayoutMenu = ui->menuTools->addMenu(tr("Screen Layouts"));
     updateLayoutsMenu();
-
+    ui->menuTools->addSeparator();
+    FontEditAcceptAction = newAction(tr("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
+    LanguageAcceptAction = newAction(tr("Select &Language..."), ui->menuTools, SLOT(LanguageAcceptActionExecute()));
     ui->menuTools->addSeparator();
     LocCalcAction = newAction(tr("Locator Calculator"), ui->menuTools, SLOT(LocCalcActionExecute()));
 //    AnalyseMinosLogAction = newAction(tr("Analyse Minos Log"), ui->menuTools, SLOT(AnalyseMinosLogActionExecute()));
 //    ui->menuTools->addSeparator();
 
-    FontEditAcceptAction = newAction(tr("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
     WSJTXConfigAction = newAction(tr("WSJT-X link configuration"), ui->menuTools, SLOT(WsjtConfigActionExecute()));
     ReportAutofillAction = newCheckableAction(tr("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(tr("Correct Date/Time"), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
@@ -1087,6 +1095,14 @@ void TLogContainer::FontEditAcceptActionExecute()
 
             MinosLoggerEvents::SendFontChanged();
         }
+    }
+}
+void TLogContainer::LanguageAcceptActionExecute()
+{
+    QStringList locs = getLanguages();
+    if (locs.size())
+    {
+        switchTranslation(locs[0]);
     }
 }
 void TLogContainer::WsjtConfigActionExecute()
