@@ -8,6 +8,8 @@
 
 static bool appClosing = false;
 static QString appStartupName;
+static QString executableName;
+
 QString getAppStartupName()
 {
     return appStartupName;
@@ -58,6 +60,7 @@ void myMessageOutput(QtMsgType type,
 void appStartup(const QString &pappName)
 {
     oldHandler = qInstallMessageHandler(myMessageOutput);
+    executableName = QCoreApplication::instance()->applicationName();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appStartupName = env.value("MQTRPCNAME", "") ;
@@ -117,10 +120,12 @@ void appStartup(const QString &pappName)
 #endif
     }
 
-    QTranslator myappTranslator;
-    QString locfile = "Minos_" + QLocale::system().name();
-    bool loadOK = myappTranslator.load(locfile);
-    bool installOK = qa->installTranslator(&myappTranslator);
+
+    QTranslator *myappTranslator = new QTranslator();    // which goes out of scope :(
+
+    QString locfile = "Bin/translations/" + executableName + "_" + QLocale::system().name();
+    bool loadOK = myappTranslator->load(locfile);
+    bool installOK = qa->installTranslator(myappTranslator);
 
     enableTrace( "./TraceLog", appStartupName + "_" );
 

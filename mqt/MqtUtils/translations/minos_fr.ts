@@ -37,7 +37,9 @@
         <source> Executable path does not exist
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Test Executable path does not exist Test
+
+</translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="577"/>

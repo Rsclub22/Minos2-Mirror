@@ -2477,9 +2477,9 @@ The row background will change colour when selected.</source>
     </message>
     <message>
         <location filename="../taboutbox.ui" line="58"/>
-        <location filename="../taboutbox.cpp" line="21"/>
+        <location filename="../taboutbox.cpp" line="100"/>
         <source>Credits</source>
-        <translation type="unfinished"></translation>
+        <translation>Test Credits Test</translation>
     </message>
     <message>
         <location filename="../taboutbox.ui" line="75"/>
@@ -2507,7 +2507,7 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="15"/>
+        <location filename="../taboutbox.cpp" line="95"/>
         <source>Welcome to Minos Version</source>
         <translation type="unfinished"></translation>
     </message>

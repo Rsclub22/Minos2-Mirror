@@ -11,6 +11,7 @@ else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -
 DEFINES += _CRT_SECURE_NO_WARNINGS
 DEFINES *= QT_USE_QSTRINGBUILDER
 
+CONFIG += lrelease
 TRANSLATIONS += translations/minos_fr.ts
 
 # Others we may want eventually

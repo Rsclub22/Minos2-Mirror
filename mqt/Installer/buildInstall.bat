@@ -103,6 +103,62 @@ windeployqt.exe MqtRigControl.exe
 windeployqt.exe MqtRotator.exe
 windeployqt.exe MqtServer.exe
 
+REM bin\translations now exists... we can build our translations to there
+
+lconvert -o translations\MqtAppStarter_fr.qm  %MROOT%\build\MqtUtils\release\minos_fr.qm ^
+                                 %MROOT%\build\TinyXML\release\minos_fr.qm ^
+                                 %MROOT%\build\XMPPLib\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtBase\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtAppStarter\release\minos_fr.qm
+
+lconvert -o translations\MqtChat_fr.qm  %MROOT%\build\MqtUtils\release\minos_fr.qm ^
+                                 %MROOT%\build\TinyXML\release\minos_fr.qm ^
+                                 %MROOT%\build\XMPPLib\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtBase\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtChat\release\minos_fr.qm
+
+lconvert -o translations\MqtCluster_fr.qm  %MROOT%\build\MqtUtils\release\minos_fr.qm ^
+                                 %MROOT%\build\TinyXML\release\minos_fr.qm ^
+                                 %MROOT%\build\XMPPLib\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtBase\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtCluster\release\minos_fr.qm
+
+lconvert -o translations\MqtKSTClient_fr.qm  %MROOT%\build\MqtUtils\release\minos_fr.qm ^
+                                 %MROOT%\build\TinyXML\release\minos_fr.qm ^
+                                 %MROOT%\build\XMPPLib\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtBase\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtKSTClient\release\minos_fr.qm
+
+lconvert -o translations\MqtLogger_fr.qm  %MROOT%\build\MqtUtils\release\minos_fr.qm ^
+                                 %MROOT%\build\TinyXML\release\minos_fr.qm ^
+                                 %MROOT%\build\XMPPLib\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtBase\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtLogger\release\minos_fr.qm
+
+lconvert -o translations\MqtMonitor_fr.qm  %MROOT%\build\MqtUtils\release\minos_fr.qm ^
+                                 %MROOT%\build\TinyXML\release\minos_fr.qm ^
+                                 %MROOT%\build\XMPPLib\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtBase\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtMonitor\release\minos_fr.qm
+
+lconvert -o translations\MqtRigControl_fr.qm  %MROOT%\build\MqtUtils\release\minos_fr.qm ^
+                                 %MROOT%\build\TinyXML\release\minos_fr.qm ^
+                                 %MROOT%\build\XMPPLib\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtBase\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtRigControl\release\minos_fr.qm
+
+lconvert -o translations\MqtRotator_fr.qm  %MROOT%\build\MqtUtils\release\minos_fr.qm ^
+                                 %MROOT%\build\TinyXML\release\minos_fr.qm ^
+                                 %MROOT%\build\XMPPLib\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtBase\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtRotator\release\minos_fr.qm
+
+lconvert -o translations\MqtServer_fr.qm  %MROOT%\build\MqtUtils\release\minos_fr.qm ^
+                                 %MROOT%\build\TinyXML\release\minos_fr.qm ^
+                                 %MROOT%\build\XMPPLib\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtBase\release\minos_fr.qm ^
+                                 %MROOT%\build\MqtServer\release\minos_fr.qm
+
 cd ../..
 mkdir Installer
 
