@@ -12,12 +12,12 @@ DEFINES += _CRT_SECURE_NO_WARNINGS
 DEFINES *= QT_USE_QSTRINGBUILDER
 
 CONFIG += lrelease
-TRANSLATIONS += translations/minos_fr.ts
+TRANSLATIONS += translations/minos_en.ts \
+                translations/minos_fr.ts
 
 # Others we may want eventually
 #                translations/minos_da.ts \
 #                translations/minos_de.ts \
-#                translations/minos_en.ts \
 #                translations/minos_it.ts \
 #                translations/minos_nl.ts \
 #                translations/minos_no.ts \
