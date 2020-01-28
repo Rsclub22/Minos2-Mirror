@@ -805,7 +805,7 @@ void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = tr(clusterStateIndicator[(*i).state]) + " " + (*i).app + "\r\n";
+        QString state = tr(clusterStateList[(*i).state]) + " " + (*i).app + "\r\n";
         traceMsg(QString("bandmapClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }
@@ -1581,7 +1581,7 @@ bool BandmapClientFrame::checkContestBandMatch(double curFreq)
     }
     else
     {
-        ui->radioStatusMsg->setText(tr("<font color='Red'>Freq out of band</font>"));
+        ui->radioStatusMsg->setText(HtmlFontColour(Qt::red) + tr("Freq out of band"));
     }
 
     return false;
@@ -1641,13 +1641,11 @@ void BandmapClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->bandmapFrameTitle->setText(tr("Bandmap - <font color='Red'>Mouse in frame, updates paused</font>"));
-        //ui->bandmapFrameTitle2->setText(tr("<font color='Red'>Updates paused for 5 secs.</font>"));
+        ui->bandmapFrameTitle->setText(tr("Bandmap - %1Mouse in frame, updates paused").arg(HtmlFontColour(Qt::red)));
     }
     else
     {
         ui->bandmapFrameTitle->setText(tr("Bandmap"));
-        //ui->bandmapFrameTitle2->clear();
     }
 }
 
@@ -1852,7 +1850,7 @@ void BandmapClientFrame::setBandmapRadioIsConnect(bool state)
 void BandmapClientFrame::setBandmapRadioHasError(QString error)
 {
     radioError = error;
-    ui->radioStatusMsg->setText(QString("<font color='Red'>%1</font>").arg(error));
+    ui->radioStatusMsg->setText(HtmlFontColour(Qt::red) + error);
 
 }
 

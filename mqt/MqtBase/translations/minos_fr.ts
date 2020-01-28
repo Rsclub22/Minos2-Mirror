@@ -476,6 +476,16 @@
 <context>
     <name>Calendar</name>
     <message>
+        <location filename="../Calendar.cpp" line="19"/>
+        <source>&lt;VHF from VHFContests.xml&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Calendar.cpp" line="20"/>
+        <source>&lt;Microwave from MicroContestsxx.xml&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../Calendar.cpp" line="40"/>
         <source>Undefined</source>
         <translation type="unfinished"></translation>
@@ -509,6 +519,24 @@
     <message>
         <location filename="../ChatFrame.ui" line="117"/>
         <source>Send</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ChatServer</name>
+    <message>
+        <location filename="../ChatServer.cpp" line="10"/>
+        <source>Available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ChatServer.cpp" line="11"/>
+        <source>Not Available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ChatServer.cpp" line="12"/>
+        <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -603,6 +631,11 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="362"/>
         <source>Remote Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ConfigElementFrame.cpp" line="6"/>
+        <source>&lt;Deleted&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1171,6 +1204,168 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     </message>
 </context>
 <context>
+    <name>QSOGridModel</name>
+    <message>
+        <location filename="../TreeUtils.cpp" line="18"/>
+        <source>UTC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="19"/>
+        <source>Callsign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="20"/>
+        <source>RepTx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="21"/>
+        <source>SnTx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="22"/>
+        <source>RepRx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="23"/>
+        <source>SnRx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="24"/>
+        <source>Loc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="25"/>
+        <source>dist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="26"/>
+        <source>brg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="27"/>
+        <source>Exchange</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="28"/>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="29"/>
+        <source>Freq</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="30"/>
+        <source>Rot Heading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../TreeUtils.cpp" line="31"/>
+        <source>Rig</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QSOMatchGridModel</name>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="146"/>
+        <location filename="../MatchTreeFrame.cpp" line="164"/>
+        <source>UTC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="147"/>
+        <location filename="../MatchTreeFrame.cpp" line="165"/>
+        <location filename="../MatchTreeFrame.cpp" line="178"/>
+        <source>Callsign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="148"/>
+        <source>RepTx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="149"/>
+        <source>SnTx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="150"/>
+        <source>RepRx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="151"/>
+        <source>SnRx)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="152"/>
+        <location filename="../MatchTreeFrame.cpp" line="166"/>
+        <location filename="../MatchTreeFrame.cpp" line="179"/>
+        <source>Loc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="153"/>
+        <location filename="../MatchTreeFrame.cpp" line="167"/>
+        <location filename="../MatchTreeFrame.cpp" line="180"/>
+        <source>dist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="154"/>
+        <location filename="../MatchTreeFrame.cpp" line="168"/>
+        <location filename="../MatchTreeFrame.cpp" line="181"/>
+        <source>brg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="155"/>
+        <location filename="../MatchTreeFrame.cpp" line="169"/>
+        <location filename="../MatchTreeFrame.cpp" line="182"/>
+        <source>Exchange</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="156"/>
+        <location filename="../MatchTreeFrame.cpp" line="170"/>
+        <location filename="../MatchTreeFrame.cpp" line="183"/>
+        <source>Comments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="157"/>
+        <location filename="../MatchTreeFrame.cpp" line="171"/>
+        <source>Freq</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="158"/>
+        <location filename="../MatchTreeFrame.cpp" line="172"/>
+        <source>Rot Heading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="159"/>
+        <location filename="../MatchTreeFrame.cpp" line="173"/>
+        <source>Rig</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RotPresetDialog</name>
     <message>
         <location filename="../rotpresetdialog.ui" line="14"/>
@@ -1261,6 +1456,129 @@ Please enter another bearing</source>
     </message>
 </context>
 <context>
+    <name>Validator</name>
+    <message>
+        <location filename="../validators.cpp" line="18"/>
+        <source>null validator failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="19"/>
+        <source>Invalid time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="20"/>
+        <source>Invalid date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="21"/>
+        <source>Invalid power(0.01 - 1000 W)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="22"/>
+        <source>Invalid locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="23"/>
+        <source>Invalid Serial</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="24"/>
+        <source>Invalid RS(T)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="25"/>
+        <source>Invalid power(-40 - +40 dBW)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="26"/>
+        <source>Invalid district</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="27"/>
+        <source>Invalid band</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="28"/>
+        <source>!!! Callsign not validated !!!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="29"/>
+        <source>!!! No Callsign present !!!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="30"/>
+        <source>!!! Duplicate Callsign !!!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="31"/>
+        <source>Invalid Callsign!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="32"/>
+        <source>No RX Serial Number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="33"/>
+        <source>Locator probably not within country.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="36"/>
+        <source>No Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="37"/>
+        <source>!!Loc not AA00AA to RR99XX!!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="38"/>
+        <source>Invalid district multiplier</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="39"/>
+        <source>QTH required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="41"/>
+        <source>Unknown Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="42"/>
+        <source>!!! Non Scoring Contact !!!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="43"/>
+        <source>!!! Comment Only !!!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../validators.cpp" line="44"/>
+        <source>!!! DELETED !!!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>checkModeAgainstFreq</name>
     <message>
         <location filename="../checkmodeagainstfreq.cpp" line="38"/>
@@ -1272,27 +1590,16 @@ Please enter another bearing</source>
     <name>clusterState</name>
     <message>
         <location filename="../clustercommon.cpp" line="7"/>
-        <location filename="../clustercommon.cpp" line="13"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../clustercommon.cpp" line="8"/>
-        <source>NotAvailable</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clustercommon.cpp" line="9"/>
-        <source>NoContact</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clustercommon.cpp" line="14"/>
         <source>Not Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="15"/>
+        <location filename="../clustercommon.cpp" line="9"/>
         <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>

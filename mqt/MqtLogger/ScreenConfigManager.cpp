@@ -9,7 +9,7 @@
 #include "ScreenConfigManager.h"
 #include "ui_ScreenConfigManager.h"
 
-const char * ScreenConfigManager::defLayoutText = "(default)";
+const char * ScreenConfigManager::defLayoutText = QT_TR_NOOP("(default)");
 
 ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     QDialog(parent),

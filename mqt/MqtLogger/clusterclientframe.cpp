@@ -594,7 +594,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = QString(clusterStateIndicator[(*i).state]) + " " + (*i).app + "\r\n";
+        QString state = QString(clusterStateList[(*i).state]) + " " + (*i).app + "\r\n";
         trace(QString("clusterClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }
@@ -1690,14 +1690,12 @@ void ClusterClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->clusterClientFrameTitle->setText(tr("Cluster - <font color='Red'>Mouse in frame, updates paused</font>"));
-        //ui->clusterClientFrameTitle2->setText(tr("<font color='Red'>Updates paused for 5 secs.</font>)");
+        ui->clusterClientFrameTitle->setText( tr("Cluster - %1Mouse in frame, updates paused").arg(HtmlFontColour(Qt::red)));
 
     }
     else
     {
         ui->clusterClientFrameTitle->setText(tr("Cluster"));
-        //ui->clusterClientFrameTitle2->clear();
     }
 }
 

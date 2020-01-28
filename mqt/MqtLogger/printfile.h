@@ -27,8 +27,10 @@ class PrintFileLine
       PrintFileLine & operator = ( const PrintFileLine & );
 };
 
-class PrintFile
+class PrintFile:public QObject
 {
+    Q_OBJECT
+    static const char *fileHeader;
       LoggerContestLog * ct;
    public:
 

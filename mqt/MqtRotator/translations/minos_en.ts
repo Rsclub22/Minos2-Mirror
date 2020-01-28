@@ -86,6 +86,96 @@ Please enter a name for the antenna</source>
 <context>
     <name>RotControl</name>
     <message>
+        <location filename="../rotcontrol.cpp" line="21"/>
+        <source>No Error, operation completed sucessfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="22"/>
+        <source>Invalid parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="23"/>
+        <source>Invalid configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="24"/>
+        <source>Memory shortage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="25"/>
+        <source>Function not implemented</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="26"/>
+        <source>Communication timed out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="27"/>
+        <source>IO error, including open failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="28"/>
+        <source>Internal Hamlib error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="29"/>
+        <source>Protocol error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="30"/>
+        <source>Command rejected by the rig</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="31"/>
+        <source>Command performed, but arg truncated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="32"/>
+        <source>Function not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="33"/>
+        <source>VFO not targetable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="34"/>
+        <source>Error talking on the bus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="35"/>
+        <source>Collision on the bus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="36"/>
+        <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="37"/>
+        <source>Invalid VFO</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotcontrol.cpp" line="38"/>
+        <source>RIG_EDOM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rotcontrol.cpp" line="462"/>
         <source>hamlib Errorcode too large!</source>
         <translation type="unfinished"></translation>

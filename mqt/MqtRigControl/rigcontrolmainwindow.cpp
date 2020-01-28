@@ -31,7 +31,7 @@
 #include <QBitArray>
 #include <QDebug>
 
-
+#include "cutils.h"
 
 
 RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
@@ -211,7 +211,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         if (setupRadio->getCurrentRadioName() == "")
         {
             logMessage(QString("No radio selected for this appName, %1").arg(appName));
-            QString errmsg = "<font color='Red'>" + tr("Please select a radio!") + "</font>";
+            QString errmsg = HtmlFontColour(Qt::red) + tr("Please select a radio!");
             showStatusMessage(errmsg);
             sendStatusLogger(errmsg);
         }

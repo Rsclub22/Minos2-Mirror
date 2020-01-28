@@ -70,7 +70,7 @@
         <location filename="../bandmapclientframe.ui" line="27"/>
         <location filename="../bandmapclientframe.cpp" line="464"/>
         <location filename="../bandmapclientframe.cpp" line="595"/>
-        <location filename="../bandmapclientframe.cpp" line="1649"/>
+        <location filename="../bandmapclientframe.cpp" line="1648"/>
         <source>Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -164,12 +164,12 @@
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1584"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Freq out of band&lt;/font&gt;</source>
+        <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1644"/>
-        <source>Bandmap - &lt;font color=&apos;Red&apos;&gt;Mouse in frame, updates paused&lt;/font&gt;</source>
+        <source>Bandmap - %1Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -523,7 +523,7 @@ The computed mode is %6
         <location filename="../clusterclientframe.ui" line="45"/>
         <location filename="../clusterclientframe.cpp" line="1220"/>
         <location filename="../clusterclientframe.cpp" line="1247"/>
-        <location filename="../clusterclientframe.cpp" line="1699"/>
+        <location filename="../clusterclientframe.cpp" line="1698"/>
         <source>Cluster</source>
         <translation type="unfinished"></translation>
     </message>
@@ -624,7 +624,7 @@ The computed mode is %6
     </message>
     <message>
         <location filename="../clusterclientframe.cpp" line="1693"/>
-        <source>Cluster - &lt;font color=&apos;Red&apos;&gt;Mouse in frame, updates paused&lt;/font&gt;</source>
+        <source>Cluster - %1Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -992,6 +992,39 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
     </message>
 </context>
 <context>
+    <name>DXCCGridModel</name>
+    <message>
+        <location filename="../dxccframe.cpp" line="17"/>
+        <source>Call</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="18"/>
+        <source>Wkd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="19"/>
+        <source>Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="20"/>
+        <source>brg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="21"/>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="22"/>
+        <source>Other calls</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DecodesModel</name>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="55"/>
@@ -1120,6 +1153,34 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
     <message>
         <location filename="../districtframe.ui" line="14"/>
         <source>Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DistrictGridModel</name>
+    <message>
+        <location filename="../districtframe.cpp" line="13"/>
+        <source>Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../districtframe.cpp" line="14"/>
+        <source>Wkd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../districtframe.cpp" line="15"/>
+        <source>Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../districtframe.cpp" line="16"/>
+        <source>brg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../districtframe.cpp" line="17"/>
+        <source>District</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1465,6 +1526,19 @@ Continents only apply to DXCC</source>
 <context>
     <name>MinosTestExport</name>
     <message>
+        <location filename="../MinosTestExport.cpp" line="18"/>
+        <source>====================================================<byte value="xd"/>
+<byte value="xd"/>
+DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
+<byte value="xd"/>
+Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;<byte value="xd"/>
+Export as Reg1Test(entry)<byte value="xd"/>
+and send the .EDI file produced.<byte value="xd"/>
+====================================================<byte value="xd"/>
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../MinosTestExport.cpp" line="50"/>
         <source>(write) seek failed!</source>
         <translation type="unfinished"></translation>
@@ -1492,6 +1566,22 @@ Continents only apply to DXCC</source>
     <message>
         <location filename="../presetbuttondialog.ui" line="42"/>
         <source>Bearing</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PrintFile</name>
+    <message>
+        <location filename="../PrintFile.cpp" line="19"/>
+        <source>====================================================<byte value="xd"/>
+<byte value="xd"/>
+DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
+<byte value="xd"/>
+Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;<byte value="xd"/>
+Export as Reg1Test(entry)<byte value="xd"/>
+and send the .EDI file produced.<byte value="xd"/>
+====================================================<byte value="xd"/>
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1887,47 +1977,47 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1194"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Error Receiving Bandlist!&lt;/font&gt;</source>
+        <location filename="../rigcontrolframe.cpp" line="1192"/>
+        <source>Error Receiving Bandlist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1204"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Radio has no available bands&lt;/font&gt;</source>
+        <location filename="../rigcontrolframe.cpp" line="1202"/>
+        <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1293"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;No %1 Band found for this radio!&lt;/font&gt;</source>
+        <location filename="../rigcontrolframe.cpp" line="1291"/>
+        <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1385"/>
-        <source>&lt;font color = &apos;Red&apos;&gt; Error: %1&lt;/font&gt;</source>
+        <location filename="../rigcontrolframe.cpp" line="1383"/>
+        <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2002"/>
+        <location filename="../rigcontrolframe.cpp" line="2000"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2011"/>
+        <location filename="../rigcontrolframe.cpp" line="2009"/>
         <source>Run %1 - Write</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2028"/>
+        <location filename="../rigcontrolframe.cpp" line="2026"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2077"/>
+        <location filename="../rigcontrolframe.cpp" line="2075"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2078"/>
+        <location filename="../rigcontrolframe.cpp" line="2076"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2071,6 +2161,36 @@ No          - Discard changes</source>
 <context>
     <name>RigMemoryGridModel</name>
     <message>
+        <location filename="../RigMemoryFrame.cpp" line="19"/>
+        <source>Callsign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="20"/>
+        <source>Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="21"/>
+        <source>Brg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="22"/>
+        <source>Freq</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="23"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="24"/>
+        <source>Wkd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../RigMemoryFrame.cpp" line="715"/>
         <source>Y</source>
         <translation type="unfinished"></translation>
@@ -2142,13 +2262,18 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rotcontrolframe.cpp" line="225"/>
+        <source>Bearing empty or invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rotcontrolframe.cpp" line="235"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Bearing too large - %1&lt;/font&gt;</source>
+        <source>Bearing too large - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.cpp" line="243"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Bearing too small - %1&lt;/font&gt;</source>
+        <source>Bearing too small - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2227,27 +2352,27 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2298"/>
+        <location filename="../rigcontrolframe.cpp" line="2296"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2299"/>
+        <location filename="../rigcontrolframe.cpp" line="2297"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2300"/>
+        <location filename="../rigcontrolframe.cpp" line="2298"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2301"/>
+        <location filename="../rigcontrolframe.cpp" line="2299"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2302"/>
+        <location filename="../rigcontrolframe.cpp" line="2300"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2349,6 +2474,126 @@ The row background will change colour when selected.</source>
         <source>Split Below</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="11"/>
+        <source>Auxiliary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="11"/>
+        <source>Auxiliary Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="12"/>
+        <source>Chat Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="13"/>
+        <source>Cluster Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="14"/>
+        <source>Log List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="14"/>
+        <source>QSO Log List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="15"/>
+        <source>Next QSO Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="15"/>
+        <source>Next QSO details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="16"/>
+        <source>QSO Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="17"/>
+        <source>Rig Control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="18"/>
+        <source>Rotator Control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="19"/>
+        <source>Rotator Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="20"/>
+        <source>This Contest Match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="20"/>
+        <source>This Contest Matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="21"/>
+        <source>Other Contest Match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="21"/>
+        <source>Other Contest Matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="22"/>
+        <source>Archive Match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="22"/>
+        <source>Archive List Matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="23"/>
+        <source>WSJT-X Connector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="24"/>
+        <source>Bandmap Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="25"/>
+        <source>HSplit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="25"/>
+        <source>Horizontally split element</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="26"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="26"/>
+        <source>Not in use</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ScreenConfigFie</name>
@@ -2411,6 +2656,11 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ScreenConfigManager.cpp" line="12"/>
+        <source>(default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ScreenConfigManager.cpp" line="129"/>
         <source>Please give a new name for the layout</source>
         <translation type="unfinished"></translation>
@@ -2460,6 +2710,46 @@ The row background will change colour when selected.</source>
     <message>
         <location filename="../StackedInfoFrame.ui" line="43"/>
         <source>Auxiliary displays</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="20"/>
+        <source>Clock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="21"/>
+        <source>DXCC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="22"/>
+        <source>District</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="23"/>
+        <source>Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="24"/>
+        <source>Memories</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="25"/>
+        <source>Locator Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="26"/>
+        <source>Locator Tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="27"/>
+        <source>Stats</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3888,12 +4178,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 <context>
     <name>TuneMemoryButton</name>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2409"/>
+        <location filename="../rigcontrolframe.cpp" line="2407"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2410"/>
+        <location filename="../rigcontrolframe.cpp" line="2408"/>
         <source>&amp;Write</source>
         <translation type="unfinished"></translation>
     </message>

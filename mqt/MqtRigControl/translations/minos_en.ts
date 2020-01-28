@@ -116,6 +116,96 @@ Please enter a name for the radio</source>
 <context>
     <name>RigControl</name>
     <message>
+        <location filename="../rigcontrol.cpp" line="22"/>
+        <source>No Error, operation completed sucessfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="23"/>
+        <source>Invalid parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="24"/>
+        <source>Invalid configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="25"/>
+        <source>Memory shortage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="26"/>
+        <source>Function not implemented</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="27"/>
+        <source>Communication timed out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="28"/>
+        <source>IO error, including open failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="29"/>
+        <source>Internal Hamlib error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="30"/>
+        <source>Protocol error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="31"/>
+        <source>Command rejected by the rig</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="32"/>
+        <source>Command performed, but arg truncated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="33"/>
+        <source>Function not available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="34"/>
+        <source>VFO not targetable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="35"/>
+        <source>Error talking on the bus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="36"/>
+        <source>Collision on the bus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="37"/>
+        <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="38"/>
+        <source>Invalid VFO</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrol.cpp" line="39"/>
+        <source>RIG_EDOM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrol.cpp" line="952"/>
         <source>hamlib Errorcode too large!</source>
         <translation type="unfinished"></translation>

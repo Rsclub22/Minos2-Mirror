@@ -222,7 +222,7 @@ void RotControlFrame::turnTo(int angle)
             if (angle == COMPASS_ERROR)
             {
                 traceMsg(QString("TurnTo: Bearing empty or invalid"));
-                QString msg = "<font color='Red'>Bearing empty or invalid</font>";
+                QString msg = HtmlFontColour(Qt::red) + tr("Bearing empty or invalid");
                 ui->rotatorStatMsg->setText(msg);
                 return;
             }
@@ -232,7 +232,7 @@ void RotControlFrame::turnTo(int angle)
             if (angle > COMPASS_MAX360)
             {
                 traceMsg(QString("TurnTo: Bearing too large"));
-                QString msg = tr("<font color='Red'>Bearing too large - %1</font>").arg(angle);
+                QString msg = HtmlFontColour(Qt::red) + tr("Bearing too large - %1").arg(angle);
                 ui->rotatorStatMsg->setText(msg);
                 return;
             }
@@ -240,7 +240,7 @@ void RotControlFrame::turnTo(int angle)
             else if (angle < COMPASS_MIN0)
             {
                 traceMsg(QString("TurnTo: Bearing too small"));
-                QString msg = tr("<font color='Red'>Bearing too small - %1</font>").arg(angle);
+                QString msg = HtmlFontColour(Qt::red) + tr("Bearing too small - %1").arg(angle);
                 ui->rotatorStatMsg->setText(msg);
                 return;
             }

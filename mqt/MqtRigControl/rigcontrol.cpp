@@ -19,24 +19,24 @@
 #include <hamlib/rig.h>
 #include "minosNetUtils.h"
 
-const char * RigControl::hamlibErrorMsg[] = {"No Error, operation completed sucessfully",
-                                    "Invalid parameter",
-                                    "Invalid configuration",
-                                    "Memory shortage",
-                                    "Function not implemented",
-                                    "Communication timed out",
-                                    "IO error, including open failed",
-                                    "Internal Hamlib error",
-                                    "Protocol error",
-                                    "Command rejected by the rig",
-                                    "Command performed, but arg truncated",
-                                    "Function not available",
-                                    "VFO not targetable",
-                                    "Error talking on the bus",
-                                    "Collision on the bus",
-                                    "NULL RIG handle or any invalid pointer parameter in get arg",
-                                    "Invalid VFO",
-                                    "RIG_EDOM"};
+const char * RigControl::hamlibErrorMsg[] = {QT_TR_NOOP("No Error, operation completed sucessfully"),
+                                    QT_TR_NOOP("Invalid parameter"),
+                                    QT_TR_NOOP("Invalid configuration"),
+                                    QT_TR_NOOP("Memory shortage"),
+                                    QT_TR_NOOP("Function not implemented"),
+                                    QT_TR_NOOP("Communication timed out"),
+                                    QT_TR_NOOP("IO error, including open failed"),
+                                    QT_TR_NOOP("Internal Hamlib error"),
+                                    QT_TR_NOOP("Protocol error"),
+                                    QT_TR_NOOP("Command rejected by the rig"),
+                                    QT_TR_NOOP("Command performed, but arg truncated"),
+                                    QT_TR_NOOP("Function not available"),
+                                    QT_TR_NOOP("VFO not targetable"),
+                                    QT_TR_NOOP("Error talking on the bus"),
+                                    QT_TR_NOOP("Collision on the bus"),
+                                    QT_TR_NOOP("NULL RIG handle or any invalid pointer parameter in get arg"),
+                                    QT_TR_NOOP("Invalid VFO"),
+                                    QT_TR_NOOP("RIG_EDOM")};
 
 static QList<const rig_caps *> capsList;
 static bool riglistLoaded=false;

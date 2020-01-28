@@ -3,7 +3,7 @@
 #include "ConfigElementFrame.h"
 #include "ui_ConfigElementFrame.h"
 
-const char *ConfigElementFrame::deltext = "<Deleted>";
+const char *ConfigElementFrame::deltext = QT_TR_NOOP("<Deleted>");
 
 ConfigElementFrame::ConfigElementFrame(bool nele) :
     QFrame(nullptr),

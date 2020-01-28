@@ -10,7 +10,7 @@ static bool appClosing = false;
 static QString appStartupName;
 static QString executableName;
 
-QSharedPointer<QTranslator> translator;
+static QSharedPointer<QTranslator> translator;
 
 QString getAppStartupName()
 {

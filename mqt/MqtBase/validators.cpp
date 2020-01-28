@@ -15,33 +15,33 @@
 
 ErrEntry Validator::errDefs[] =
    {
-      ErrEntry( 20, "null validator failed" ),   //ERR_0
-      ErrEntry( 11, "Invalid time" ),        //ERR_1
-      ErrEntry( 10, "Invalid date" ),        //ERR_2
-      ErrEntry( 9, "Invalid power(0.01 - 1000 W)" ),      //ERR_3
-      ErrEntry( 15, "Invalid locator" ),     //ERR_4
-      ErrEntry( 14, "Invalid Serial" ),      //ERR_5
-      ErrEntry( 13, "Invalid RS(T)" ),       //ERR_6
-      ErrEntry( 9, "Invalid power(-40 - +40 dBW)" ),      //ERR_7
-      ErrEntry( 10, "Invalid district" ),      //ERR_8
-      ErrEntry( 10, "Invalid band" ),        //ERR_9
-      ErrEntry( 12, "!!! Callsign not validated !!!" ),   //ERR_10
-      ErrEntry( 12, "!!! No Callsign present !!!" ),   //ERR_11
-      ErrEntry( 1, "!!! Duplicate Callsign !!!" ),   //ERR_12
-      ErrEntry( 8, "Invalid Callsign!" ),         //ERR_13
-      ErrEntry( 10, "No RX Serial Number" ),      //ERR_14
-      ErrEntry( 15, "Locator probably not within country." ),   //ERR_15
+      ErrEntry( 20, QT_TR_NOOP("null validator failed" )),   //ERR_0
+      ErrEntry( 11, QT_TR_NOOP("Invalid time" )),        //ERR_1
+      ErrEntry( 10, QT_TR_NOOP("Invalid date" )),        //ERR_2
+      ErrEntry( 9, QT_TR_NOOP("Invalid power(0.01 - 1000 W)") ),      //ERR_3
+      ErrEntry( 15, QT_TR_NOOP("Invalid locator") ),     //ERR_4
+      ErrEntry( 14, QT_TR_NOOP("Invalid Serial") ),      //ERR_5
+      ErrEntry( 13, QT_TR_NOOP("Invalid RS(T)") ),       //ERR_6
+      ErrEntry( 9, QT_TR_NOOP("Invalid power(-40 - +40 dBW)") ),      //ERR_7
+      ErrEntry( 10, QT_TR_NOOP("Invalid district") ),      //ERR_8
+      ErrEntry( 10, QT_TR_NOOP("Invalid band") ),        //ERR_9
+      ErrEntry( 12, QT_TR_NOOP("!!! Callsign not validated !!!") ),   //ERR_10
+      ErrEntry( 12, QT_TR_NOOP("!!! No Callsign present !!!") ),   //ERR_11
+      ErrEntry( 1, QT_TR_NOOP("!!! Duplicate Callsign !!!") ),   //ERR_12
+      ErrEntry( 8, QT_TR_NOOP("Invalid Callsign!") ),         //ERR_13
+      ErrEntry( 10, QT_TR_NOOP("No RX Serial Number") ),      //ERR_14
+      ErrEntry( 15, QT_TR_NOOP("Locator probably not within country.") ),   //ERR_15
       ErrEntry( 10, FREQ_EDIT_ERR_MSG ),     //ERR_16
       ErrEntry( 10, "" ),   //ERR_17
-      ErrEntry( 20, "No Locator" ),             //ERR_18
-      ErrEntry( 2, "!!Loc not AA00AA to RR99XX!!" ),   //ERR_19
-      ErrEntry( 16, "Invalid district multiplier" ),          //ERR_20
-      ErrEntry( 10, "QTH required" ),           //ERR_21
+      ErrEntry( 20, QT_TR_NOOP("No Locator") ),             //ERR_18
+      ErrEntry( 2, QT_TR_NOOP("!!Loc not AA00AA to RR99XX!!") ),   //ERR_19
+      ErrEntry( 16, QT_TR_NOOP("Invalid district multiplier") ),          //ERR_20
+      ErrEntry( 10, QT_TR_NOOP("QTH required") ),           //ERR_21
       ErrEntry( 10, "" ),         //ERR_22
-      ErrEntry( 5, "Unknown Country" ),         //ERR_23
-      ErrEntry( 2, "!!! Non Scoring Contact !!!"),         //ERR_24
-      ErrEntry( 1, "!!! Comment Only !!!" ),         //ERR_25
-      ErrEntry( 1, "!!! DELETED !!!" ),         //ERR_26
+      ErrEntry( 5, QT_TR_NOOP("Unknown Country") ),         //ERR_23
+      ErrEntry( 2, QT_TR_NOOP("!!! Non Scoring Contact !!!")),         //ERR_24
+      ErrEntry( 1, QT_TR_NOOP("!!! Comment Only !!!") ),         //ERR_25
+      ErrEntry( 1, QT_TR_NOOP("!!! DELETED !!!") ),         //ERR_26
       ErrEntry( 90, "" ),         //ERR_27
       ErrEntry( 90, "" ),         //ERR_28
       ErrEntry( 0, "" )          //ERR_29

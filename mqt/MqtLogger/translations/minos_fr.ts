@@ -70,7 +70,7 @@
         <location filename="../bandmapclientframe.ui" line="27"/>
         <location filename="../bandmapclientframe.cpp" line="464"/>
         <location filename="../bandmapclientframe.cpp" line="595"/>
-        <location filename="../bandmapclientframe.cpp" line="1649"/>
+        <location filename="../bandmapclientframe.cpp" line="1648"/>
         <source>Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -164,12 +164,12 @@
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1584"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Freq out of band&lt;/font&gt;</source>
+        <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1644"/>
-        <source>Bandmap - &lt;font color=&apos;Red&apos;&gt;Mouse in frame, updates paused&lt;/font&gt;</source>
+        <source>Bandmap - %1Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -523,7 +523,7 @@ The computed mode is %6
         <location filename="../clusterclientframe.ui" line="45"/>
         <location filename="../clusterclientframe.cpp" line="1220"/>
         <location filename="../clusterclientframe.cpp" line="1247"/>
-        <location filename="../clusterclientframe.cpp" line="1699"/>
+        <location filename="../clusterclientframe.cpp" line="1698"/>
         <source>Cluster</source>
         <translation type="unfinished"></translation>
     </message>
@@ -624,7 +624,7 @@ The computed mode is %6
     </message>
     <message>
         <location filename="../clusterclientframe.cpp" line="1693"/>
-        <source>Cluster - &lt;font color=&apos;Red&apos;&gt;Mouse in frame, updates paused&lt;/font&gt;</source>
+        <source>Cluster - %1Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -992,6 +992,39 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
     </message>
 </context>
 <context>
+    <name>DXCCGridModel</name>
+    <message>
+        <location filename="../dxccframe.cpp" line="17"/>
+        <source>Call</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="18"/>
+        <source>Wkd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="19"/>
+        <source>Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="20"/>
+        <source>brg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="21"/>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="22"/>
+        <source>Other calls</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DecodesModel</name>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="55"/>
@@ -1120,6 +1153,34 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
     <message>
         <location filename="../districtframe.ui" line="14"/>
         <source>Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DistrictGridModel</name>
+    <message>
+        <location filename="../districtframe.cpp" line="13"/>
+        <source>Code</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../districtframe.cpp" line="14"/>
+        <source>Wkd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../districtframe.cpp" line="15"/>
+        <source>Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../districtframe.cpp" line="16"/>
+        <source>brg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../districtframe.cpp" line="17"/>
+        <source>District</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1465,6 +1526,19 @@ Continents only apply to DXCC</source>
 <context>
     <name>MinosTestExport</name>
     <message>
+        <location filename="../MinosTestExport.cpp" line="18"/>
+        <source>====================================================<byte value="xd"/>
+<byte value="xd"/>
+DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
+<byte value="xd"/>
+Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;<byte value="xd"/>
+Export as Reg1Test(entry)<byte value="xd"/>
+and send the .EDI file produced.<byte value="xd"/>
+====================================================<byte value="xd"/>
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../MinosTestExport.cpp" line="50"/>
         <source>(write) seek failed!</source>
         <translation type="unfinished"></translation>
@@ -1492,6 +1566,22 @@ Continents only apply to DXCC</source>
     <message>
         <location filename="../presetbuttondialog.ui" line="42"/>
         <source>Bearing</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PrintFile</name>
+    <message>
+        <location filename="../PrintFile.cpp" line="19"/>
+        <source>====================================================<byte value="xd"/>
+<byte value="xd"/>
+DO NOT SEND THIS FILE AS YOUR ENTRY!<byte value="xd"/>
+<byte value="xd"/>
+Use &quot;File&quot; | &quot;Produce Entry/Export File...&quot;<byte value="xd"/>
+Export as Reg1Test(entry)<byte value="xd"/>
+and send the .EDI file produced.<byte value="xd"/>
+====================================================<byte value="xd"/>
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1887,47 +1977,47 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1194"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Error Receiving Bandlist!&lt;/font&gt;</source>
+        <location filename="../rigcontrolframe.cpp" line="1192"/>
+        <source>Error Receiving Bandlist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1204"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Radio has no available bands&lt;/font&gt;</source>
+        <location filename="../rigcontrolframe.cpp" line="1202"/>
+        <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1293"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;No %1 Band found for this radio!&lt;/font&gt;</source>
+        <location filename="../rigcontrolframe.cpp" line="1291"/>
+        <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1385"/>
-        <source>&lt;font color = &apos;Red&apos;&gt; Error: %1&lt;/font&gt;</source>
+        <location filename="../rigcontrolframe.cpp" line="1383"/>
+        <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2002"/>
+        <location filename="../rigcontrolframe.cpp" line="2000"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2011"/>
+        <location filename="../rigcontrolframe.cpp" line="2009"/>
         <source>Run %1 - Write</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2028"/>
+        <location filename="../rigcontrolframe.cpp" line="2026"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2077"/>
+        <location filename="../rigcontrolframe.cpp" line="2075"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2078"/>
+        <location filename="../rigcontrolframe.cpp" line="2076"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2071,6 +2161,36 @@ No          - Discard changes</source>
 <context>
     <name>RigMemoryGridModel</name>
     <message>
+        <location filename="../RigMemoryFrame.cpp" line="19"/>
+        <source>Callsign</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="20"/>
+        <source>Locator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="21"/>
+        <source>Brg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="22"/>
+        <source>Freq</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="23"/>
+        <source>Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RigMemoryFrame.cpp" line="24"/>
+        <source>Wkd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../RigMemoryFrame.cpp" line="715"/>
         <source>Y</source>
         <translation type="unfinished"></translation>
@@ -2142,13 +2262,18 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rotcontrolframe.cpp" line="225"/>
+        <source>Bearing empty or invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rotcontrolframe.cpp" line="235"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Bearing too large - %1&lt;/font&gt;</source>
+        <source>Bearing too large - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.cpp" line="243"/>
-        <source>&lt;font color=&apos;Red&apos;&gt;Bearing too small - %1&lt;/font&gt;</source>
+        <source>Bearing too small - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2227,27 +2352,27 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2298"/>
+        <location filename="../rigcontrolframe.cpp" line="2296"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2299"/>
+        <location filename="../rigcontrolframe.cpp" line="2297"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2300"/>
+        <location filename="../rigcontrolframe.cpp" line="2298"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2301"/>
+        <location filename="../rigcontrolframe.cpp" line="2299"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2302"/>
+        <location filename="../rigcontrolframe.cpp" line="2300"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2349,6 +2474,126 @@ The row background will change colour when selected.</source>
         <source>Split Below</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="11"/>
+        <source>Auxiliary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="11"/>
+        <source>Auxiliary Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="12"/>
+        <source>Chat Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="13"/>
+        <source>Cluster Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="14"/>
+        <source>Log List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="14"/>
+        <source>QSO Log List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="15"/>
+        <source>Next QSO Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="15"/>
+        <source>Next QSO details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="16"/>
+        <source>QSO Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="17"/>
+        <source>Rig Control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="18"/>
+        <source>Rotator Control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="19"/>
+        <source>Rotator Presets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="20"/>
+        <source>This Contest Match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="20"/>
+        <source>This Contest Matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="21"/>
+        <source>Other Contest Match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="21"/>
+        <source>Other Contest Matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="22"/>
+        <source>Archive Match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="22"/>
+        <source>Archive List Matches</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="23"/>
+        <source>WSJT-X Connector</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="24"/>
+        <source>Bandmap Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="25"/>
+        <source>HSplit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="25"/>
+        <source>Horizontally split element</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="26"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="26"/>
+        <source>Not in use</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ScreenConfigFie</name>
@@ -2411,6 +2656,11 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../ScreenConfigManager.cpp" line="12"/>
+        <source>(default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ScreenConfigManager.cpp" line="129"/>
         <source>Please give a new name for the layout</source>
         <translation type="unfinished"></translation>
@@ -2462,6 +2712,46 @@ The row background will change colour when selected.</source>
         <source>Auxiliary displays</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="20"/>
+        <source>Clock</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="21"/>
+        <source>DXCC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="22"/>
+        <source>District</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="23"/>
+        <source>Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="24"/>
+        <source>Memories</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="25"/>
+        <source>Locator Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="26"/>
+        <source>Locator Tree</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StackedInfoFrame.cpp" line="27"/>
+        <source>Stats</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TAboutBox</name>
@@ -2479,7 +2769,7 @@ The row background will change colour when selected.</source>
         <location filename="../taboutbox.ui" line="58"/>
         <location filename="../taboutbox.cpp" line="100"/>
         <source>Credits</source>
-        <translation>Test Credits Test</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../taboutbox.ui" line="75"/>
@@ -3190,213 +3480,218 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="299"/>
+        <location filename="../tlogcontainer.cpp" line="306"/>
         <source>&amp;Open Contest...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="300"/>
+        <location filename="../tlogcontainer.cpp" line="307"/>
         <source>&amp;Import Contest...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="301"/>
+        <location filename="../tlogcontainer.cpp" line="308"/>
         <source>Reopen Contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="313"/>
+        <location filename="../tlogcontainer.cpp" line="320"/>
         <source>&amp;New Contest...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="314"/>
+        <location filename="../tlogcontainer.cpp" line="321"/>
         <source>Close Contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="315"/>
+        <location filename="../tlogcontainer.cpp" line="322"/>
         <source>Close all Contests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="316"/>
+        <location filename="../tlogcontainer.cpp" line="323"/>
         <source>Close all but this Contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="320"/>
+        <location filename="../tlogcontainer.cpp" line="327"/>
         <source>Contest Details...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="321"/>
+        <location filename="../tlogcontainer.cpp" line="328"/>
         <source>Produce Entry/Export File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="324"/>
+        <location filename="../tlogcontainer.cpp" line="331"/>
         <source>Append ADIF file to contest...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="327"/>
+        <location filename="../tlogcontainer.cpp" line="334"/>
         <source>Open &amp;Archive List...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="328"/>
+        <location filename="../tlogcontainer.cpp" line="335"/>
         <source>&amp;Manage Archive Lists...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="330"/>
+        <location filename="../tlogcontainer.cpp" line="337"/>
         <source>Options...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="332"/>
+        <location filename="../tlogcontainer.cpp" line="339"/>
         <source>E&amp;xit Minos Contest Logger and Clear registry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="335"/>
+        <location filename="../tlogcontainer.cpp" line="342"/>
         <source>E&amp;xit Minos Contest Logger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="338"/>
+        <location filename="../tlogcontainer.cpp" line="345"/>
         <source>&amp;Go To Contact Serial...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="339"/>
+        <location filename="../tlogcontainer.cpp" line="346"/>
         <source>Goto First Unfilled Contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="342"/>
+        <location filename="../tlogcontainer.cpp" line="349"/>
         <source>Startup Apps Configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="344"/>
+        <location filename="../tlogcontainer.cpp" line="351"/>
         <source>Screen Layouts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="348"/>
-        <source>Locator Calculator</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tlogcontainer.cpp" line="352"/>
+        <location filename="../tlogcontainer.cpp" line="354"/>
         <source>Select &amp;Font...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="353"/>
+        <location filename="../tlogcontainer.cpp" line="355"/>
+        <source>Select &amp;Language...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tlogcontainer.cpp" line="357"/>
+        <source>Locator Calculator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tlogcontainer.cpp" line="361"/>
         <source>WSJT-X link configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="354"/>
+        <location filename="../tlogcontainer.cpp" line="362"/>
         <source>Signal Report AutoFill</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="355"/>
+        <location filename="../tlogcontainer.cpp" line="363"/>
         <source>Correct Date/Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="359"/>
+        <location filename="../tlogcontainer.cpp" line="367"/>
         <source>Add as new memory...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="381"/>
+        <location filename="../tlogcontainer.cpp" line="389"/>
         <source>Show Operators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="384"/>
+        <location filename="../tlogcontainer.cpp" line="392"/>
         <source>Shift Active Tab Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="385"/>
+        <location filename="../tlogcontainer.cpp" line="393"/>
         <source>Shift Active Tab Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="390"/>
+        <location filename="../tlogcontainer.cpp" line="398"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="392"/>
+        <location filename="../tlogcontainer.cpp" line="400"/>
         <source>Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="393"/>
+        <location filename="../tlogcontainer.cpp" line="401"/>
         <source>Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="394"/>
+        <location filename="../tlogcontainer.cpp" line="402"/>
         <source>Tune</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="395"/>
+        <location filename="../tlogcontainer.cpp" line="403"/>
         <source>Two Tone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="396"/>
+        <location filename="../tlogcontainer.cpp" line="404"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="406"/>
+        <location filename="../tlogcontainer.cpp" line="414"/>
         <source>Help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="407"/>
+        <location filename="../tlogcontainer.cpp" line="415"/>
         <source>About...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="526"/>
+        <location filename="../tlogcontainer.cpp" line="534"/>
         <source>&amp;%1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="581"/>
+        <location filename="../tlogcontainer.cpp" line="589"/>
         <source>Documentation File %1 doesn&apos;t exist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="662"/>
-        <location filename="../tlogcontainer.cpp" line="747"/>
+        <location filename="../tlogcontainer.cpp" line="670"/>
+        <location filename="../tlogcontainer.cpp" line="755"/>
         <source>Failed to delete %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="705"/>
+        <location filename="../tlogcontainer.cpp" line="713"/>
         <source>Save new contest as</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="707"/>
+        <location filename="../tlogcontainer.cpp" line="715"/>
         <source>Minos contest files %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="715"/>
+        <location filename="../tlogcontainer.cpp" line="723"/>
         <source>%1 
 already exists.
 
@@ -3404,7 +3699,7 @@ Please choose a new name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="734"/>
+        <location filename="../tlogcontainer.cpp" line="742"/>
         <source>Failed to rename
 %1
  as 
@@ -3414,131 +3709,131 @@ Please choose a new name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="763"/>
-        <location filename="../tlogcontainer.cpp" line="1008"/>
+        <location filename="../tlogcontainer.cpp" line="771"/>
+        <location filename="../tlogcontainer.cpp" line="1016"/>
         <source>Minos contest files (*.minos *.Minos);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="767"/>
+        <location filename="../tlogcontainer.cpp" line="775"/>
         <source>Open contests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="796"/>
+        <location filename="../tlogcontainer.cpp" line="804"/>
         <source>Use this combo for file types (*.*);;Reg1Test Files (*.edi);;GJV contest files (*.gjv);;RSGB Log Files (*.log);;ADIF Files (*.adi);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="804"/>
+        <location filename="../tlogcontainer.cpp" line="812"/>
         <source>Import contests</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="913"/>
+        <location filename="../tlogcontainer.cpp" line="921"/>
         <source>This action will clear registry entries for all of the apps within the Minos V2 Logger.<byte value="xd"/>
 <byte value="xd"/>
 Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="926"/>
+        <location filename="../tlogcontainer.cpp" line="934"/>
         <source>Clear registry only works under Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="942"/>
+        <location filename="../tlogcontainer.cpp" line="950"/>
         <source>ADIF files (*.adi);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="946"/>
+        <location filename="../tlogcontainer.cpp" line="954"/>
         <source>Open ADIF for append</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="960"/>
+        <location filename="../tlogcontainer.cpp" line="968"/>
         <source>Failed to open ADIF file %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="968"/>
+        <location filename="../tlogcontainer.cpp" line="976"/>
         <source>Failed to append %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1012"/>
+        <location filename="../tlogcontainer.cpp" line="1020"/>
         <source>Open contest for Analysis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1024"/>
+        <location filename="../tlogcontainer.cpp" line="1032"/>
         <source>Failed to open Contest Log file %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1032"/>
+        <location filename="../tlogcontainer.cpp" line="1040"/>
         <source>Analysis of %1 complete; look in the trace log for analysis.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1057"/>
+        <location filename="../tlogcontainer.cpp" line="1065"/>
         <source>You may need to close and reload Minos to have these settings applied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1066"/>
+        <location filename="../tlogcontainer.cpp" line="1074"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1177"/>
+        <location filename="../tlogcontainer.cpp" line="1193"/>
         <source>Set List Spacing Compression Value as percentage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1189"/>
+        <location filename="../tlogcontainer.cpp" line="1205"/>
         <source>TLogContainer::on_ContestPageControl_currentChanged index %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1432"/>
+        <location filename="../tlogcontainer.cpp" line="1448"/>
         <source>Configure Screen Layouts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1433"/>
+        <location filename="../tlogcontainer.cpp" line="1449"/>
         <source>Set List Spacing Compression...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1528"/>
+        <location filename="../tlogcontainer.cpp" line="1544"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1693"/>
+        <location filename="../tlogcontainer.cpp" line="1709"/>
         <source>Contest Sets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1792"/>
+        <location filename="../tlogcontainer.cpp" line="1808"/>
         <source>Open List %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1813"/>
+        <location filename="../tlogcontainer.cpp" line="1829"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1817"/>
+        <location filename="../tlogcontainer.cpp" line="1833"/>
         <source>Open Archive List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1973"/>
-        <location filename="../tlogcontainer.cpp" line="1974"/>
+        <location filename="../tlogcontainer.cpp" line="1989"/>
+        <location filename="../tlogcontainer.cpp" line="1990"/>
         <source>Minos contest Logger Application</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3883,12 +4178,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 <context>
     <name>TuneMemoryButton</name>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2409"/>
+        <location filename="../rigcontrolframe.cpp" line="2407"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2410"/>
+        <location filename="../rigcontrolframe.cpp" line="2408"/>
         <source>&amp;Write</source>
         <translation type="unfinished"></translation>
     </message>

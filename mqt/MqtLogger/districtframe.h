@@ -11,6 +11,7 @@ class BaseContestLog;
 
 class DistrictGridModel: public QAbstractItemModel
 {
+    Q_OBJECT
     static GridColumn DistrictTreeColumns[ ectMultMaxCol - 1 ];
     public:
         DistrictGridModel();

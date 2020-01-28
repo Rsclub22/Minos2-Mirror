@@ -1466,7 +1466,7 @@ void TLogContainer::updateLayoutsMenu()
             QAction *act =  new QAction(this);
             if ((*i).name == defaultLayout)
             {
-                act->setText((*i).name + " " + ScreenConfigManager::defLayoutText);
+                act->setText((*i).name + " " + tr(ScreenConfigManager::defLayoutText));
             }
             else
             {

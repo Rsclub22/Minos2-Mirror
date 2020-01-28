@@ -193,7 +193,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
         if (setupAntenna->currentAntennaName == "")
         {
             logMessage(QString("No antenna selected or no antenna found for this appName, %1").arg(appName));
-            QString errmsg = QString("<font color='Red'>") + tr("Please select an antenna or no antenna found!") + "</font>";
+            QString errmsg = HtmlFontColour(Qt::red) + tr("Please select an antenna or no antenna found!");
             showStatusMessage(errmsg);
             statusMsg = errmsg;
             sendStatusLogger();

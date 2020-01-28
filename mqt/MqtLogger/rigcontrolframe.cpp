@@ -28,8 +28,6 @@
 #include "ritlineedit.h"
 #include "ui_rigcontrolframe.h"
 
-#define MODE_ERROR "<font color='Red'>Mode Error</font>"
-
 
 static QKeySequence runButShortCut[] {
     QKeySequence(Qt::CTRL + Qt::Key_BracketLeft),
@@ -716,7 +714,7 @@ void RigControlFrame::changeMainRadioFreq()
             }
             else
             {
-                QString f = QString("%1 %2 %3").arg("<font color='Red'>").arg(lastFreq).arg("</font>");
+                QString f =HtmlFontColour(Qt::red) + lastFreq;
                 trace("changeMainRadioFreq " + f);
                 ui->freqInput->setText(f);
             }
@@ -1101,7 +1099,7 @@ void RigControlFrame::setMode(QString m)
 
 
         // mode not supported by minos
-        ui->modelbl->setText(MODE_ERROR);
+        ui->modelbl->setText(HtmlFontColour(Qt::red) + "Mode Error");
     }
 
 
@@ -1191,7 +1189,7 @@ void RigControlFrame::setRadioFreq()
 
     if (selRadioDetails.getBandList().isEmpty())
     {
-        setRadioBandWarning(tr("<font color='Red'>Error Receiving Bandlist!</font>"));
+        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Error Receiving Bandlist!"));
         trace(QString("setRadioFreq:: Error Receiving Bandlist!"));
         sendFreq(NO_BAND_SUPPORT);
         return;
@@ -1201,7 +1199,7 @@ void RigControlFrame::setRadioFreq()
 
     if (listOfBands.isEmpty())
     {
-        setRadioBandWarning(tr("<font color='Red'>Radio has no available bands</font>"));
+        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Radio has no available bands"));
         trace(QString("setRadioFreq:: Error No available bands!"));
         sendFreq(NO_BAND_SUPPORT);
         return;
@@ -1290,7 +1288,7 @@ void RigControlFrame::setRadioFreq()
                 }
             }
             // warn no band for this radio
-            setRadioBandWarning(tr("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
+            setRadioBandWarning(HtmlFontColour(Qt::red) + tr("No %1 Band found for this radio!").arg(cb));
             trace(QString("SsetRadioFreq: %1 Band not found on this radio").arg(cb));
             sendFreq(NO_BAND_SUPPORT);
         }
@@ -1382,7 +1380,7 @@ void RigControlFrame::setRadioState(QString s)
            QStringList sl = s.split(':');
            if (sl.count() == 2)
            {
-               ui->rigState->setText(tr("<font color = 'Red'> Error: %1</font>").arg(sl[1]));
+               ui->rigState->setText(HtmlFontColour(Qt::red) + tr("Error: %1").arg(sl[1]));
                emit radioHasError(sl[1]);
            }
         }
