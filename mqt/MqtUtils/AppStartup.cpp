@@ -9,6 +9,7 @@
 static bool appClosing = false;
 static QString appStartupName;
 static QString executableName;
+static QString currentLanguage;
 
 static QSharedPointer<QTranslator> translator;
 
@@ -59,9 +60,9 @@ void myMessageOutput(QtMsgType type,
     }
 }
 
-QStringList getLanguages()
+QVector<Translation> getLanguages()
 {
-    QStringList locs;
+    QVector<Translation> locs;
     QString searchString = GetCurrentDir() + "/Bin/translations";
 
     QDirIterator files( searchString, QDir::Files | QDir::NoSymLinks , QDirIterator::NoIteratorFlags );
@@ -78,14 +79,21 @@ QStringList getLanguages()
             if (fname.startsWith(executableName))
             {
                 int uscore = fname.indexOf('_');
-                QString loc = fname.mid(uscore + 1);
-                locs.push_back(loc);
+                QString l = fname.mid(uscore + 1);
+                QLocale loc(l);
+                QString lname = loc.nativeLanguageName();
+                Translation t;
+                t.code = l;
+                t.dispName = lname;
+
+                locs.push_back(t);
             }
         }
     }
-    locs.sort();
+//    locs.sort();
     return locs;
 }
+
 void switchTranslation(QString loc)
 {
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
@@ -103,7 +111,32 @@ void switchTranslation(QString loc)
     translator = myappTranslator;
     trace(QString("Translation file %1 loaded:%2 installed:%3").arg(locfile).arg(loadOK).arg(installOK));
 
+    QSettings settings;
+    currentLanguage = loc;
+    if (loc == QLocale::system().name())
+    {
+        settings.remove("language");
+    }
+    else
+    {
+        settings.setValue( "language", loc );
+    }
 }
+static void setAppLanguage()
+{
+    QSettings settings;
+    QVariant qlang = settings.value( "language" );
+    if ( qlang == QVariant() )
+    {
+        qlang = QLocale::system().name();
+    }
+     switchTranslation(qlang.toString());
+}
+QString getCurrentLanguage()
+{
+    return currentLanguage;
+}
+
 void appStartup(const QString &pappName)
 {
     oldHandler = qInstallMessageHandler(myMessageOutput);
@@ -168,7 +201,7 @@ void appStartup(const QString &pappName)
     }
     enableTrace( "./TraceLog", appStartupName + "_" );
 
-    switchTranslation(QLocale::system().name());
+    setAppLanguage();
 }
 
 
@@ -181,6 +214,7 @@ void setAppFont()
         QApplication::setFont( qfont.value<QFont>() );
     }
 }
+
 void setAppClosing()
 {
     appClosing = true;

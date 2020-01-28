@@ -45,8 +45,6 @@ SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 TLogContainer::TLogContainer(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::TLogContainer)
-  , lastSessionSelected(nullptr)
-  , lastLayoutSelected(nullptr)
 {
     ui->setupUi(this);
 
@@ -352,11 +350,32 @@ void TLogContainer::setupMenus()
     updateLayoutsMenu();
     ui->menuTools->addSeparator();
     FontEditAcceptAction = newAction(tr("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
-    LanguageAcceptAction = newAction(tr("Select &Language..."), ui->menuTools, SLOT(LanguageAcceptActionExecute()));
+    languagesMenu = ui->menuTools->addMenu(tr("Select &Language..."));
+
+    QString currentLang = getCurrentLanguage();
+
+    QVector<Translation> languages = getLanguages();
+    foreach(const Translation &l, languages)
+    {
+        QAction *act =  new QAction(this);
+        act->setText(l.dispName);
+
+        connect(act, SIGNAL(triggered()),
+                this, SLOT(LanguageAcceptActionExecute()));
+        act->setCheckable(true);
+
+        languagesMenu->addAction(act);
+
+        if (l.code == currentLang)
+        {
+            act->setChecked(true);
+            lastLanguageSelected = act;
+        }
+
+    }
+
     ui->menuTools->addSeparator();
     LocCalcAction = newAction(tr("Locator Calculator"), ui->menuTools, SLOT(LocCalcActionExecute()));
-//    AnalyseMinosLogAction = newAction(tr("Analyse Minos Log"), ui->menuTools, SLOT(AnalyseMinosLogActionExecute()));
-//    ui->menuTools->addSeparator();
 
     WSJTXConfigAction = newAction(tr("WSJT-X link configuration"), ui->menuTools, SLOT(WsjtConfigActionExecute()));
     ReportAutofillAction = newCheckableAction(tr("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
@@ -1099,10 +1118,26 @@ void TLogContainer::FontEditAcceptActionExecute()
 }
 void TLogContainer::LanguageAcceptActionExecute()
 {
-    QStringList locs = getLanguages();
-    if (locs.size())
+    TWaitCursor wc(this);
+    QAction *action = qobject_cast<QAction *>(sender());
+
+    if (action)
     {
-        switchTranslation(locs[0]);
+        if (lastLanguageSelected)
+            lastLanguageSelected->setChecked(false);
+        action->setChecked(true);
+        lastLanguageSelected = action;
+        QString selText = action->text();
+
+        QVector<Translation> languages = getLanguages();
+        foreach(const Translation &l, languages)
+        {
+            if (l.dispName == selText)
+            {
+                switchTranslation(l.code);
+                break;
+            }
+        }
     }
 }
 void TLogContainer::WsjtConfigActionExecute()

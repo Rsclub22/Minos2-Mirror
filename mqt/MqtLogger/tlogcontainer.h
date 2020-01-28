@@ -83,6 +83,7 @@ private:
     QMenu *sessionsMenu;
     QMenu *keyerRecordMenu;
     QMenu *keyerPlaybackMenu;
+    QMenu *languagesMenu;
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
@@ -99,8 +100,9 @@ private:
     TSingleLogFrame *findLogFrame(int t);
     void selectTab(int t);
 
-    QAction *lastSessionSelected;
-    QAction *lastLayoutSelected;
+    QAction *lastSessionSelected = nullptr;
+    QAction *lastLayoutSelected = nullptr;
+    QAction *lastLanguageSelected = nullptr;
 
     QAction *newAction(const QString &text, QMenu *m, const char *atype );
     SetMemoryAction *newMemoryAction(const QString &text, QMenu *m, const char *atype );

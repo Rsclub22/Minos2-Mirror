@@ -151,6 +151,7 @@ void RunConfigElement::createProcess()
         {
             QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
             env.insert("MQTRPCNAME", name); // Add an environment variable for the RPC name to use
+            env.insert("LANG", getCurrentLanguage());
             runner->setProcessEnvironment(env);
         }
 
