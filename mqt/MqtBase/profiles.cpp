@@ -273,7 +273,7 @@ QString SettingsBundle::displayNameOf( int enumKey )
          {
             if (strlen(( *i )->dispname))
             {
-               return tr(( *i )->dispname);
+               return BundleFile::tr(( *i )->dispname);
             }
             return ( *i )->name;
          }
