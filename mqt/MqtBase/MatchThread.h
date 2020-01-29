@@ -21,6 +21,7 @@
 
 class Matcher
 {
+    Q_DECLARE_TR_FUNCTIONS(Matcher)
       bool matchRequired;  // use getter and setter below
    protected:
       enum MatchPhase {Exact, NoSuffix, NoLoc, Body, Country, District, Locator};

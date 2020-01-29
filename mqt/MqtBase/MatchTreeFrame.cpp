@@ -444,7 +444,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                 {
                     if (type == ThisMatch)
                     {
-                        QString res = "Current contest: " + TMatchThread::getThisMatchStatus();
+                        QString res = tr("Current contest: ") + TMatchThread::getThisMatchStatus();
                         return res;
                     }
                     if (type == OtherMatch)
