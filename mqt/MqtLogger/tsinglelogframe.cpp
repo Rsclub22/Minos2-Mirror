@@ -525,7 +525,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
 
-                    f->setCurrentFrameType(StackedInfoFrame::getAuxTypeString(scele.auxType));
+                    f->setCurrentFrameType(StackedInfoFrame::getTrAuxTypeString(scele.auxType));
                     f->setContest(ct);
                     elementScrollArea->setWidget(f);
                     f->setVisible(true);

@@ -29,21 +29,26 @@ SCType ScreenConfigElement::getScreenType(QString s)
 {
     foreach(const SCTypeOption &opt, scoptions)
     {
-        if (tr(opt.s) == s)
+        if ((opt.s == s) || (tr(opt.s) == s))
             return opt.type;
     }
     return sctNone;
 }
-QString ScreenConfigElement::getScreenTypeString(SCType t)
+const char * ScreenConfigElement::getRawScreenTypeString(SCType t)
 {
     foreach(const SCTypeOption &opt, scoptions)
     {
         if (opt.type == t)
-            return tr(opt.s);
+            return opt.s;
     }
-    return getScreenTypeString(sctNone);
+    return getRawScreenTypeString(sctNone);
 
 }
+QString ScreenConfigElement::getTrScreenTypeString(SCType t)
+{
+    return tr(getRawScreenTypeString(t));
+}
+
 void ScreenConfigElement::eraseLayout(QLayout * layout)
 {
     while(layout->count() > 0)
@@ -126,7 +131,8 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     i = 0;
     foreach(const AuxTypeOption &opt, StackedInfoFrame::auxoptions)
     {
-        ui->auxTypeCombo->addItem(tr(opt.s), opt.type);
+        QString s = StackedInfoFrame::getTrAuxTypeString(opt.type);
+        ui->auxTypeCombo->addItem(s, opt.type);
         ui->auxTypeCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
     }
 }
@@ -138,7 +144,7 @@ ScreenConfigElement::~ScreenConfigElement()
 
 void ScreenConfigElement::setType(SCType t)
 {
-    ui->elementTypeCombo->setCurrentText(getScreenTypeString(t));
+    ui->elementTypeCombo->setCurrentText(getTrScreenTypeString(t));
 
     ui->auxTypeCombo->setVisible(t == sctAux);
 }
@@ -149,7 +155,7 @@ QString ScreenConfigElement::getType() const
 
 void ScreenConfigElement::setAuxType(AuxEntries ae)
 {
-    ui->auxTypeCombo->setCurrentText(StackedInfoFrame::getAuxTypeString(ae));
+    ui->auxTypeCombo->setCurrentText(StackedInfoFrame::getTrAuxTypeString(ae));
 }
 QString ScreenConfigElement::getAuxType() const
 {

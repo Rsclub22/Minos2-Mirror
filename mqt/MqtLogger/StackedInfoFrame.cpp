@@ -31,20 +31,24 @@ AuxEntries StackedInfoFrame::getAuxEntryType(QString s)
 {
     foreach(const AuxTypeOption &opt, auxoptions)
     {
-        if (tr(opt.s) == s)
+        if (tr(opt.s) == s || (opt.s == s))
             return opt.type;
     }
     return aeClock;
 }
 
-QString StackedInfoFrame::getAuxTypeString(AuxEntries t)
+const char * StackedInfoFrame::getRawAuxTypeString(AuxEntries t)
 {
     foreach(const AuxTypeOption &opt, auxoptions)
     {
         if (opt.type == t)
-            return tr(opt.s);
+            return opt.s;
     }
-    return getAuxTypeString(aeClock);
+    return getRawAuxTypeString(aeClock);
+}
+QString StackedInfoFrame::getTrAuxTypeString(AuxEntries t)
+{
+    return tr(getRawAuxTypeString(t));
 }
 
 bool showWorked = false;
