@@ -1237,7 +1237,7 @@ void TLogContainer::listCompressionActionExecute()
 
 void TLogContainer::on_ContestPageControl_currentChanged(int index)
 {
-    trace(tr("TLogContainer::on_ContestPageControl_currentChanged index %1").arg(index));
+    trace(QString("TLogContainer::on_ContestPageControl_currentChanged index %1").arg(index));
     enableActions();
 
     if (index >= 0)
