@@ -274,23 +274,58 @@ void TLogContainer::changeEvent( QEvent* e )
         // when language changes force a complete rebuild
         TWaitCursor wc(this);
         selectSession(TContestApp::getContestApp()->currSession);
+
+        for(QMap<QMenu *, const char *>::iterator i = menuList.begin(); i != menuList.end(); i++)
+        {
+            i.key()->setTitle(tr(i.value()));
+        }
+        for(QMap<QAction *, const char *>::iterator i = actionList.begin(); i != actionList.end(); i++)
+        {
+            i.key()->setText(tr(i.value()));
+        }
+        ui->retranslateUi(this);
     }
+    QMainWindow::changeEvent(e);
 }
-QAction *TLogContainer::newAction( const QString &text, QMenu *m, const char *atype )
+QMenu *TLogContainer::newMenu(QMenu *m, const char *text)
 {
-    QAction * newAct = new QAction( text, this );
+    QMenu *menu = m->addMenu(tr(text));
+    menuList[menu] = text;
+    return menu;
+}
+QAction *TLogContainer::newAction( const char *text, QMenu *m, const char *atype )
+{
+    QAction * newAct = new QAction( tr(text), this );
+    actionList[newAct] = text;
     m->addAction( newAct );
     connect( newAct, SIGNAL( triggered() ), this, atype );
     return newAct;
 }
-SetMemoryAction *TLogContainer::newMemoryAction( const QString &text, QMenu *m, const char *atype )
+QAction *TLogContainer::newAction( int n, QMenu *m, const char *atype )
 {
-    SetMemoryAction * newAct = new SetMemoryAction( text, this );
+    QAction * newAct = new QAction( QString::number(n), this );
     m->addAction( newAct );
     connect( newAct, SIGNAL( triggered() ), this, atype );
     return newAct;
 }
-QAction *TLogContainer::newCheckableAction( const QString &text, QMenu *m, const char *atype )
+SetMemoryAction *TLogContainer::newMemoryAction(const char *text, QMenu *m, const char *atype )
+{
+    SetMemoryAction * newAct = new SetMemoryAction( tr(text), this );
+    actionList[newAct] = text;
+    m->addAction( newAct );
+    connect( newAct, SIGNAL( triggered() ), this, atype );
+    return newAct;
+}
+QAction *TLogContainer::newCheckableAction( const char *text, QMenu *m, const char *atype )
+{
+    QAction * newAct = new QAction( tr(text), this );
+    actionList[newAct] = text;
+    newAct->setCheckable( true );
+    m->addAction( newAct );
+    connect( newAct, SIGNAL( triggered( bool ) ), this, atype );
+    return newAct;
+}
+QAction *TLogContainer::newCheckableAction( const QString text, QMenu *m, const char *atype )
 {
     QAction * newAct = new QAction( text, this );
     newAct->setCheckable( true );
@@ -301,9 +336,9 @@ QAction *TLogContainer::newCheckableAction( const QString &text, QMenu *m, const
 
 void TLogContainer::setupMenus()
 {
-    FileOpenAction = newAction(tr("&Open Contest..."), ui->menuFile, SLOT(FileOpenActionExecute()));
-    FileImportAction = newAction(tr("&Import Contest..."), ui->menuFile, SLOT(FileImportActionExecute()));
-    recentFilesMenu = ui->menuFile->addMenu(tr("Reopen Contest"));
+    FileOpenAction = newAction(QT_TR_NOOP("&Open Contest..."), ui->menuFile, SLOT(FileOpenActionExecute()));
+    FileImportAction = newAction(QT_TR_NOOP("&Import Contest..."), ui->menuFile, SLOT(FileImportActionExecute()));
+    recentFilesMenu = newMenu(ui->menuFile, QT_TR_NOOP("Reopen Contest"));
 
     for (int i = 0; i < MaxRecentFiles; ++i)
     {
@@ -315,42 +350,42 @@ void TLogContainer::setupMenus()
     }
     updateRecentFileActions();
 
-    FileNewAction = newAction(tr("&New Contest..."), ui->menuFile, SLOT(FileNewActionExecute()));
-    FileCloseAction = newAction(tr("Close Contest"), ui->menuFile, SLOT(FileCloseActionExecute()));
-    CloseAllAction = newAction(tr("Close all Contests"), ui->menuFile, SLOT(CloseAllActionExecute()));
-    CloseAllButAction = newAction(tr("Close all but this Contest"), ui->menuFile, SLOT(CloseAllButActionExecute()));
+    FileNewAction = newAction(QT_TR_NOOP("&New Contest..."), ui->menuFile, SLOT(FileNewActionExecute()));
+    FileCloseAction = newAction(QT_TR_NOOP("Close Contest"), ui->menuFile, SLOT(FileCloseActionExecute()));
+    CloseAllAction = newAction(QT_TR_NOOP("Close all Contests"), ui->menuFile, SLOT(CloseAllActionExecute()));
+    CloseAllButAction = newAction(QT_TR_NOOP("Close all but this Contest"), ui->menuFile, SLOT(CloseAllButActionExecute()));
     ui->menuFile->addSeparator();
 
     ui->menuFile->addSeparator();
-    ContestDetailsAction = newAction(tr("Contest Details..."), ui->menuFile, SLOT(ContestDetailsActionExecute()));
-    MakeEntryAction = newAction(tr("Produce Entry/Export File..."), ui->menuFile, SLOT(MakeEntryActionExecute()));
+    ContestDetailsAction = newAction(QT_TR_NOOP("Contest Details..."), ui->menuFile, SLOT(ContestDetailsActionExecute()));
+    MakeEntryAction = newAction(QT_TR_NOOP("Produce Entry/Export File..."), ui->menuFile, SLOT(MakeEntryActionExecute()));
     ui->menuFile->addSeparator();
 
-    AppendAdifAction = newAction(tr("Append ADIF file to contest..."), ui->menuFile, SLOT(AppendAdifActionExecute()));
+    AppendAdifAction = newAction(QT_TR_NOOP("Append ADIF file to contest..."), ui->menuFile, SLOT(AppendAdifActionExecute()));
     ui->menuFile->addSeparator();
 
-    ListOpenAction = newAction(tr("Open &Archive List..."), ui->menuFile, SLOT(ListOpenActionExecute()));
-    ManageListsAction = newAction(tr("&Manage Archive Lists..."), ui->menuFile, SLOT(ManageListsActionExecute()));
+    ListOpenAction = newAction(QT_TR_NOOP("Open &Archive List..."), ui->menuFile, SLOT(ListOpenActionExecute()));
+    ManageListsAction = newAction(QT_TR_NOOP("&Manage Archive Lists..."), ui->menuFile, SLOT(ManageListsActionExecute()));
     ui->menuFile->addSeparator();
-    OptionsAction = newAction(tr("Options..."), ui->menuFile, SLOT(OptionsActionExecute()));
+    OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuFile, SLOT(OptionsActionExecute()));
 #ifdef Q_OS_WIN
-    ExitClearAction = newAction(tr("E&xit Minos Contest Logger and Clear registry"), ui->menuFile, SLOT(ExitClearActionExecute()));
+    ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry"), ui->menuFile, SLOT(ExitClearActionExecute()));
 #endif
     ui->menuFile->addSeparator();
-    ExitAction = newAction(tr("E&xit Minos Contest Logger"), ui->menuFile, SLOT(ExitActionExecute()));
+    ExitAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger"), ui->menuFile, SLOT(ExitActionExecute()));
 // end of file menu
 
-    GoToSerialAction = newAction(tr("&Go To Contact Serial..."), ui->menuSearch, SLOT(GoToSerialActionExecute()));
-    NextUnfilledAction = newAction(tr("Goto First Unfilled Contact"), ui->menuSearch, SLOT(NextUnfilledActionExecute()));
+    GoToSerialAction = newAction(QT_TR_NOOP("&Go To Contact Serial..."), ui->menuSearch, SLOT(GoToSerialActionExecute()));
+    NextUnfilledAction = newAction(QT_TR_NOOP("Goto First Unfilled Contact"), ui->menuSearch, SLOT(NextUnfilledActionExecute()));
 // end of search menu
 
-    startConfigAction = newAction(tr("Startup Apps Configuration"), ui->menuTools, SLOT(StartConfigActionExecute()));
+    startConfigAction = newAction(QT_TR_NOOP("Startup Apps Configuration"), ui->menuTools, SLOT(StartConfigActionExecute()));
 
-    screenLayoutMenu = ui->menuTools->addMenu(tr("Screen Layouts"));
+    screenLayoutMenu = newMenu(ui->menuTools, QT_TR_NOOP("Screen Layouts"));
     updateLayoutsMenu();
     ui->menuTools->addSeparator();
-    FontEditAcceptAction = newAction(tr("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
-    languagesMenu = ui->menuTools->addMenu(tr("Select &Language..."));
+    FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
+    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language..."));
 
     QString currentLang = getCurrentLanguage();
 
@@ -375,15 +410,15 @@ void TLogContainer::setupMenus()
     }
 
     ui->menuTools->addSeparator();
-    LocCalcAction = newAction(tr("Locator Calculator"), ui->menuTools, SLOT(LocCalcActionExecute()));
+    LocCalcAction = newAction(QT_TR_NOOP("Locator Calculator"), ui->menuTools, SLOT(LocCalcActionExecute()));
 
-    WSJTXConfigAction = newAction(tr("WSJT-X link configuration"), ui->menuTools, SLOT(WsjtConfigActionExecute()));
-    ReportAutofillAction = newCheckableAction(tr("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
-    CorrectDateTimeAction = newAction(tr("Correct Date/Time"), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
+    WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration"), ui->menuTools, SLOT(WsjtConfigActionExecute()));
+    ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
+    CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time"), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
 
     // end of tools manu
 
-    setMemoryAction = newMemoryAction(tr("Add as new memory..."), &TabPopup, SLOT(onSetMemoryActionExecute()));
+    setMemoryAction = newMemoryAction(QT_TR_NOOP("Add as new memory..."), &TabPopup, SLOT(onSetMemoryActionExecute()));
 
     TabPopup.addAction(FileOpenAction);
     TabPopup.addAction(FileImportAction);
@@ -405,33 +440,32 @@ void TLogContainer::setupMenus()
     TabPopup.addAction(NextUnfilledAction);
     TabPopup.addSeparator();
 
-    ShowOperatorsAction = newCheckableAction(tr("Show Operators"), &TabPopup, SLOT(ShowOperatorsActionExecute()));
+    ShowOperatorsAction = newCheckableAction(QT_TR_NOOP("Show Operators"), &TabPopup, SLOT(ShowOperatorsActionExecute()));
     TabPopup.addSeparator();
 
-    ShiftTabLeftAction = newAction(tr("Shift Active Tab Left"), &TabPopup, SLOT(ShiftTabLeftActionExecute()));
-    ShiftTabRightAction = newAction(tr("Shift Active Tab Right"), &TabPopup, SLOT(ShiftTabRightActionExecute()));
+    ShiftTabLeftAction = newAction(QT_TR_NOOP("Shift Active Tab Left"), &TabPopup, SLOT(ShiftTabLeftActionExecute()));
+    ShiftTabRightAction = newAction(QT_TR_NOOP("Shift Active Tab Right"), &TabPopup, SLOT(ShiftTabRightActionExecute()));
     TabPopup.addAction(CorrectDateTimeAction);
     TabPopup.addSeparator();
 
     //TabPopup.addAction(AnalyseMinosLogAction);
-    newAction( tr("Cancel"), &TabPopup, SLOT( CancelClick() ) );
+    newAction( QT_TR_NOOP("Cancel"), &TabPopup, SLOT( CancelClick() ) );
 
-    keyerRecordMenu = ui->menuKeyer->addMenu(tr("Record"));
-    keyerPlaybackMenu = ui->menuKeyer->addMenu(tr("Playback"));
-    KeyerToneAction = newAction(tr("Tune"), ui->menuKeyer, SLOT(KeyerToneActionExecute()));
-    KeyerTwoToneAction = newAction(tr("Two Tone"), ui->menuKeyer, SLOT(KeyerTwoToneActionExecute()));
-    KeyerStopAction = newAction(tr("Stop"), ui->menuKeyer, SLOT(KeyerStopActionExecute()));
+    keyerRecordMenu = newMenu(ui->menuKeyer, QT_TR_NOOP("Record"));
+    keyerPlaybackMenu = newMenu(ui->menuKeyer, QT_TR_NOOP("Playback"));
+    KeyerToneAction = newAction(QT_TR_NOOP("Tune"), ui->menuKeyer, SLOT(KeyerToneActionExecute()));
+    KeyerTwoToneAction = newAction(QT_TR_NOOP("Two Tone"), ui->menuKeyer, SLOT(KeyerTwoToneActionExecute()));
+    KeyerStopAction = newAction(QT_TR_NOOP("Stop"), ui->menuKeyer, SLOT(KeyerStopActionExecute()));
 
     for (int i = 1; i < 10; i++)
     {
-        QString s = QString::number(i);
-        KeyerRecordAction = newAction((s), keyerRecordMenu, SLOT(KeyerRecordActionExecute()));
+        KeyerRecordAction = newAction(i, keyerRecordMenu, SLOT(KeyerRecordActionExecute()));
         KeyerRecordAction->setData(i);
-        KeyerPlaybackAction = newAction((s), keyerPlaybackMenu, SLOT(KeyerPlaybackActionExecute()));
+        KeyerPlaybackAction = newAction(i, keyerPlaybackMenu, SLOT(KeyerPlaybackActionExecute()));
         KeyerPlaybackAction->setData(i);
     }
-    HelpAction = newAction(tr("Help..."), ui->menuHelp, SLOT(HelpActionExecute()));
-    HelpAboutAction = newAction(tr("About..."), ui->menuHelp, SLOT(HelpAboutActionExecute()));
+    HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, SLOT(HelpActionExecute()));
+    HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, SLOT(HelpAboutActionExecute()));
 }
 
 
@@ -550,7 +584,7 @@ void TLogContainer::updateRecentFileActions()
 
     for (int i = 0; i < numRecentFiles; ++i)
     {
-        QString text = tr("&%1 %2").arg(i + 1).arg(strippedName(files[i]));
+        QString text = QString("&%1 %2").arg(i + 1).arg(strippedName(files[i]));
         recentFileActs[i]->setText(text);
         recentFileActs[i]->setData(files[i]);
         recentFileActs[i]->setVisible(true);
@@ -1261,7 +1295,7 @@ void TLogContainer::on_ContestPageControl_currentChanged(int index)
     ui->menuLogs->addAction(CloseAllButAction);
     ui->menuLogs->addSeparator();
 
-    sessionsMenu = ui->menuLogs->addMenu("Contest Sets");
+    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
     updateSessionActions();
 
     for (int i = 0; i < ui->ContestPageControl->count(); i++)
@@ -1480,8 +1514,8 @@ QStringList TLogContainer::getSessions()
 void TLogContainer::updateLayoutsMenu()
 {
     screenLayoutMenu->clear();
-    ScreenConfigAction = newAction(tr("Configure Screen Layouts..."), screenLayoutMenu, SLOT(doScreenConfigAction()));
-    listCompressionAction = newAction(tr("Set List Spacing Compression..."), screenLayoutMenu, SLOT(listCompressionActionExecute()));
+    ScreenConfigAction = newAction(QT_TR_NOOP("Configure Screen Layouts..."), screenLayoutMenu, SLOT(doScreenConfigAction()));
+    listCompressionAction = newAction(QT_TR_NOOP("Set List Spacing Compression..."), screenLayoutMenu, SLOT(listCompressionActionExecute()));
 
     screenLayoutMenu->addSeparator();
 
@@ -1576,7 +1610,7 @@ void TLogContainer::updateSessionActions()
 
     sessionsMenu->clear();
 
-    sessionManagerAction  = newAction(tr("&Manage Contest Sets..."), sessionsMenu, SLOT(sessionManageExecute()));
+    sessionManagerAction  = newAction(QT_TR_NOOP("&Manage Contest Sets..."), sessionsMenu, SLOT(sessionManageExecute()));
     QStringList sessionlst = getSessions();
     for (int i = 0; i < sessionlst.size(); ++i)
     {
@@ -1741,7 +1775,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     ui->menuLogs->addAction(CloseAllButAction);
     ui->menuLogs->addSeparator();
 
-    sessionsMenu = ui->menuLogs->addMenu(tr("Contest Sets"));
+    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
     updateSessionActions();
 
     preloadBundle.endGroup();

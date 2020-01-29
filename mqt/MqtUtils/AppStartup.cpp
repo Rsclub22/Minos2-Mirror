@@ -122,6 +122,7 @@ void switchTranslation(QString loc)
 
     qtTranslator = myqtTranslator;
     translator = myappTranslator;
+    trace(QString("Translation file %1 loaded:%2 installed:%3").arg(qtlocfile).arg(qtloadOK).arg(qtinstallOK));
     trace(QString("Translation file %1 loaded:%2 installed:%3").arg(locfile).arg(loadOK).arg(installOK));
 
     QSettings settings;

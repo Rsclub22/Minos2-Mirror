@@ -67,13 +67,15 @@ public:
 
 
 
+    QAction *newAction(int n, QMenu *m, const char *atype);
 private:
     Ui::TLogContainer *ui;
 
     QTimer TimerUpdateQSOTimer;
-
-
     QMenu TabPopup;
+
+    QMap<QAction *, const char *> actionList;
+    QMap<QMenu *, const char *> menuList;
 
     QMenu *screenLayoutMenu;
     enum { MaxRecentFiles = 5 };
@@ -104,9 +106,11 @@ private:
     QAction *lastLayoutSelected = nullptr;
     QAction *lastLanguageSelected = nullptr;
 
-    QAction *newAction(const QString &text, QMenu *m, const char *atype );
-    SetMemoryAction *newMemoryAction(const QString &text, QMenu *m, const char *atype );
-    QAction *newCheckableAction( const QString &text, QMenu *m, const char *atype );
+    QAction *newAction(const char *text, QMenu *m, const char *atype );
+    QMenu *newMenu(QMenu *m, const char *text);
+    SetMemoryAction *newMemoryAction(const char *text, QMenu *m, const char *atype );
+    QAction *newCheckableAction(const char *text, QMenu *m, const char *atype );
+    QAction *newCheckableAction(const QString text, QMenu *m, const char *atype );
     void setupMenus();
 
     QAction *HelpAction;
