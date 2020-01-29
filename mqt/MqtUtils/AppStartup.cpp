@@ -12,6 +12,7 @@ static QString executableName;
 static QString currentLanguage;
 
 static QSharedPointer<QTranslator> translator;
+static QSharedPointer<QTranslator> qtTranslator;
 
 QString getAppStartupName()
 {
@@ -99,6 +100,12 @@ void switchTranslation(QString loc)
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
 
     QSharedPointer<QTranslator> myappTranslator(new QTranslator());    // which goes out of scope :(
+    QSharedPointer<QTranslator> myqtTranslator(new QTranslator());    // which goes out of scope :(
+
+
+    QString qtlocfile = QString("Bin/translations/") + "qt_" + loc;
+    bool qtloadOK = myqtTranslator->load(qtlocfile);
+    bool qtinstallOK = qa->installTranslator(myqtTranslator.data());
 
     QString locfile = "Bin/translations/" + executableName + "_" + loc;
     bool loadOK = myappTranslator->load(locfile);
@@ -108,6 +115,12 @@ void switchTranslation(QString loc)
     {
         qa->removeTranslator(translator.data());
     }
+    if (qtTranslator)
+    {
+        qa->removeTranslator(qtTranslator.data());
+    }
+
+    qtTranslator = myqtTranslator;
     translator = myappTranslator;
     trace(QString("Translation file %1 loaded:%2 installed:%3").arg(locfile).arg(loadOK).arg(installOK));
 
