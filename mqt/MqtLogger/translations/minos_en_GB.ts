@@ -2320,6 +2320,21 @@ No          - Discard changes</source>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../RotPresets.cpp" line="137"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RotPresets.cpp" line="180"/>
+        <source>New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RotPresets.cpp" line="207"/>
+        <source>Bearing = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RunButtonDialog</name>

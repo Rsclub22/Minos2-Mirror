@@ -94,7 +94,7 @@ void RotPresets::initPresetButtons()
     {
 
         // build array of buttons
-        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], presetButtonLabels));
+        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], RotPresetData::presetButtonLabels));
 
         connect(presetButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
         connect(presetButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
@@ -134,7 +134,7 @@ void RotPresets::presetEdit(int buttonNumber)
         RotPresetData curData(buttonNumber, rotPresetData[buttonNumber]->name, rotPresetData[buttonNumber]->bearing);
 
         traceMsg(QString("RotFrame: Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, "Edit");
+        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, tr("Edit"));
 
 
         if (presetDialog.exec() == QDialog::Accepted)
@@ -177,7 +177,7 @@ void RotPresets::presetWrite(int buttonNumber)
         RotPresetData curData(buttonNumber, "", "0");
 
         traceMsg(QString("RotFrame: Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, "New");
+        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, tr("New"));
 
 
         if (presetDialog.exec() == QDialog::Accepted)
@@ -204,7 +204,7 @@ void RotPresets::setRotPresetButData(int buttonNumber, RotPresetData& editData)
 void RotPresets::rotPresetButtonUpdate(int buttonNumber, RotPresetData& editData)
 {
     presetButton[buttonNumber]->presetButton->setText(QString("%1: %2\r\n%3").arg(QString::number(buttonNumber + 1)).arg(editData.name).arg(editData.bearing) );
-    QString tTipStr = "Bearing = " + editData.bearing;
+    QString tTipStr = tr("Bearing = %1").arg(editData.bearing);
     presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
 }
 

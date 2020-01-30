@@ -9,7 +9,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
+#include "rotatorcommon.h"
 #include "rotpresetbutton.h"
 
 
@@ -28,10 +28,10 @@ RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key, QShort
 
     shortKey = key;
     shiftShortKey = shiftkey;
-    readAction = new QAction(tr(buttonLabels[0].toUtf8().data()), presetButton);
-    writeAction = new QAction(tr(buttonLabels[1].toUtf8().data()),presetButton);
-    editAction = new QAction(tr(buttonLabels[2].toUtf8().data()), presetButton);
-    clearAction = new QAction(tr(buttonLabels[3].toUtf8().data()),presetButton);
+    readAction = new QAction(RotPresetData::tr(buttonLabels[0].toUtf8().data()), presetButton);
+    writeAction = new QAction(RotPresetData::tr(buttonLabels[1].toUtf8().data()),presetButton);
+    editAction = new QAction(RotPresetData::tr(buttonLabels[2].toUtf8().data()), presetButton);
+    clearAction = new QAction(RotPresetData::tr(buttonLabels[3].toUtf8().data()),presetButton);
     presetMenu->addAction(readAction);
     presetMenu->addAction(writeAction);
     presetMenu->addAction(editAction);

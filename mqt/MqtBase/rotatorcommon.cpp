@@ -12,10 +12,10 @@
 #include "base_pch.h"
 #include "rotatorcommon.h"
 
-const QStringList presetButtonLabels = {QT_TRANSLATE_NOOP("PresetButtonMenu", "&Read"),
-                                        QT_TRANSLATE_NOOP("PresetButtonMenu", "&New"),
-                                        QT_TRANSLATE_NOOP("PresetButtonMenu", "&Edit"),
-                                        QT_TRANSLATE_NOOP("PresetButtonMenu", "&Clear")};
+const QStringList RotPresetData::presetButtonLabels = {QT_TR_NOOP("&Read"),
+                                        QT_TR_NOOP("&New"),
+                                        QT_TR_NOOP("&Edit"),
+                                        QT_TR_NOOP("&Clear")};
 
 RotPresetData::RotPresetData(int _number, QString _name, QString _bearing)
 {

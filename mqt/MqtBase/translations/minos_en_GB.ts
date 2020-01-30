@@ -1199,29 +1199,6 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     </message>
 </context>
 <context>
-    <name>PresetButtonMenu</name>
-    <message>
-        <location filename="../rotatorcommon.cpp" line="15"/>
-        <source>&amp;Read</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rotatorcommon.cpp" line="16"/>
-        <source>&amp;New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rotatorcommon.cpp" line="17"/>
-        <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rotatorcommon.cpp" line="18"/>
-        <source>&amp;Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>QSOGridModel</name>
     <message>
         <location filename="../TreeUtils.cpp" line="18"/>
@@ -1385,6 +1362,29 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="447"/>
         <source>Current contest: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RotPresetData</name>
+    <message>
+        <location filename="../rotatorcommon.cpp" line="15"/>
+        <source>&amp;Read</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatorcommon.cpp" line="16"/>
+        <source>&amp;New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatorcommon.cpp" line="17"/>
+        <source>&amp;Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatorcommon.cpp" line="18"/>
+        <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
