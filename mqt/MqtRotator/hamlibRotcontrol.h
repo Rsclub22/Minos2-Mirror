@@ -69,14 +69,14 @@ public:
     explicit HamlibRotControl(QObject *parent);
     ~HamlibRotControl();
 
-    static register_rotators(RotatorFactory::Rotators *);
+    static void register_rotators(RotatorFactory::Rotators *);
 
     int init(srotParams &currentAntenna);
     int closeRotator();
     int getModelNumber(int idx);
     int getRotatorModelIndex();
-    void getRotatorList();
-    bool getRotatorList(QComboBox *cb);
+    //void getRotatorList();
+    //bool getRotatorList(QComboBox *cb);
     const char * getMfg_Name(int idx);
     const char * getModel_Name(int idx);
     //void set_rotatorSpeed(int speed);
@@ -112,6 +112,10 @@ public:
     int getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName);
 
     //void enableTraceComms(bool state);
+
+private:
+
+
 /*
 signals:
    void bearing_updated(int);
@@ -141,7 +145,8 @@ private:
     //int exitcode;
 
 
-
+    void getRotatorList();
+    int collect(const rot_caps *caps, void *);
 };
 
 #endif // HAMLIBROTCONTROL_H

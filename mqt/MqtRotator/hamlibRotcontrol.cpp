@@ -23,7 +23,7 @@
 
 static QList<const rot_caps *> capsList;
 
-int collect(const rot_caps *caps,rig_ptr_t)
+int collect(const rot_caps *caps, rig_ptr_t)
 {
     capsList.append(caps);
     return 1;
@@ -199,24 +199,27 @@ int HamlibRotControl::closeRotator()
 }
 
 
-HamlibRotControl::register_rotators(Rotators &rotatorsList)
+void HamlibRotControl::register_rotators(Rotators &rotatorsList)
 {
+    getRotatorList();
+
 
 }
+
 
 
 void HamlibRotControl::getRotatorList()
 {
 
-    if(!rotatorlistLoaded)
-    {
+
         capsList.clear();
         rot_load_all_backends();
         rot_list_foreach(collect, nullptr);
         qSort(capsList.begin(),capsList.end(),model_Sort);
-        rotatorlistLoaded=true;
-    }
+
 }
+
+
 
 bool HamlibRotControl::getRotatorList(QComboBox *cb)
 {
