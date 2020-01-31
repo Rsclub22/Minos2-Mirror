@@ -17,6 +17,8 @@ win32:RC_ICONS += ../MinosRotator.ico
 SOURCES += \
     hamlibRotcontrol.cpp \
     pstRotControl.cpp \
+    rotatorbase.cpp \
+    rotatorfactory.cpp \
     skyscandialog.cpp \
     rotatormainwindow.cpp \
     minoscompass.cpp \
@@ -31,6 +33,8 @@ SOURCES += \
 HEADERS  += \
     hamlibRotcontrol.h \
     pstRotControl.h \
+    rotatorbase.h \
+    rotatorfactory.h \
     skyscandialog.h \
     rotatormainwindow.h \
     minoscompass.h \

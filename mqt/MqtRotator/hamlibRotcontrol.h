@@ -3,14 +3,12 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2020
 //
 // Hamlib library
 //
 //
 /////////////////////////////////////////////////////////////////////////////
-
-
 
 
 
@@ -24,6 +22,8 @@
 
 #include "rotatorcommon.h"
 #include "rotcontrol.h"
+#include "rotatorfactory.h"
+#include "rotatorbase.h"
 
 
 #include <hamlib/rotator.h>
@@ -61,13 +61,15 @@ const QStringList errorMsgTxt = {"No Error, operation completed sucessfully",
 
 
 
-class HamlibRotControl: public RotControl
+class HamlibRotControl: public RotatorBase
 {
     Q_OBJECT
 
 public:
     explicit HamlibRotControl(QObject *parent);
     ~HamlibRotControl();
+
+    static register_rotators(RotatorFactory::Rotators *);
 
     int init(srotParams &currentAntenna);
     int closeRotator();

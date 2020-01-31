@@ -198,6 +198,13 @@ int HamlibRotControl::closeRotator()
 
 }
 
+
+HamlibRotControl::register_rotators(Rotators &rotatorsList)
+{
+
+}
+
+
 void HamlibRotControl::getRotatorList()
 {
 
