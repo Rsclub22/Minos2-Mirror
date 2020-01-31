@@ -30,12 +30,12 @@ static const char * sendClusterReasonText[] = {QT_TRANSLATE_NOOP("cluster", "Ok"
                                            QT_TRANSLATE_NOOP("cluster", "Callsign or Locator Empty")};
 enum sendClusterReason_e {TX_OK, COMMS_ERR, NOT_LOGGED_ON, FREQ_ERR, CALL_LOC_EMPTY};
 
-static const  char * DXSPOT_TAB_TITLE = QT_TRANSLATE_NOOP("cluster", "DX Spots");
-static const char * SENT_SPOT_TAB_TITLE = QT_TRANSLATE_NOOP("cluster", "Sent Spots");
-static const char * RAW_DATA_TAB_TITLE = QT_TRANSLATE_NOOP("cluster", "Raw Data");
+const char * ClusterMainWindow::DXSPOT_TAB_TITLE = QT_TR_NOOP("DX Spots");
+const char * ClusterMainWindow::SENT_SPOT_TAB_TITLE = QT_TR_NOOP("Sent Spots");
+const char * ClusterMainWindow::RAW_DATA_TAB_TITLE = QT_TR_NOOP("Raw Data");
 
-static const QStringList userCmdButtonLabels = {QT_TRANSLATE_NOOP("cluster", "&Send"), QT_TRANSLATE_NOOP("cluster", "&New"),
-                                                QT_TRANSLATE_NOOP("cluster", "&Edit"), QT_TRANSLATE_NOOP("cluster", "&Clear")};
+const char *ClusterMainWindow::userCmdButtonLabels[4] = {QT_TR_NOOP("&Send"), QT_TR_NOOP("&New"),
+                                                QT_TR_NOOP("&Edit"), QT_TR_NOOP("&Clear")};
 
 
 #include <QDebug>
@@ -1635,18 +1635,22 @@ void ClusterMainWindow::initUserCommandButtons()
 
 
 
-
+    QStringList buttonLabels;
+    for (unsigned int i = 0; i < sizeof(userCmdButtonLabels)/sizeof(const char *); i++)
+    {
+        buttonLabels.append(tr(userCmdButtonLabels[i]));
+    }
     for (int i = 0; i < ui_userCommandButtons.count(); i++)
     {
 
-        userCmdButton.append(new RotPresetButton(ui_userCommandButtons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], userCmdButtonLabels));
+        userCmdButton.append(new PresetButton(ui_userCommandButtons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], buttonLabels));
 
-        connect(userCmdButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {userCmdButtonRead(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showUserCmdButtonMenu(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetReadAction, [this, i]() {userCmdButtonRead(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetEditAction, [this, i]() {userCmdButtonEdit(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetWriteAction, [this, i]() {userCmdButtonWrite(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetClearAction, [this, i]() {userCmdButtonClear(i);});
+        connect(userCmdButton[i], &PresetButton::presetShortCutRecall, [this, i]() {userCmdButtonRead(i);});
+        connect(userCmdButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showUserCmdButtonMenu(i);});
+        connect(userCmdButton[i], &PresetButton::presetReadAction, [this, i]() {userCmdButtonRead(i);});
+        connect(userCmdButton[i], &PresetButton::presetEditAction, [this, i]() {userCmdButtonEdit(i);});
+        connect(userCmdButton[i], &PresetButton::presetWriteAction, [this, i]() {userCmdButtonWrite(i);});
+        connect(userCmdButton[i], &PresetButton::presetClearAction, [this, i]() {userCmdButtonClear(i);});
 
 
     }

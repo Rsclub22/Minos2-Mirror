@@ -218,6 +218,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../kstmainwindow.cpp" line="276"/>
         <location filename="../kstmainwindow.cpp" line="383"/>
         <source>Including %1</source>
         <translation type="unfinished"></translation>

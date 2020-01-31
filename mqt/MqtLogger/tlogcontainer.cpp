@@ -58,7 +58,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     // make the tab control fill the window
     ui->centralWidget->layout()->setContentsMargins(0,0,0,0);
 
-    setWindowTitle("Minos Contest Logger");
+    setWindowTitle(tr("Minos Contest Logger"));
 
     setupMenus();
 

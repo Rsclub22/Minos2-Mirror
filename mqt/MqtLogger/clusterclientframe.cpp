@@ -48,7 +48,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
-    ui->clusterClientFrameTitle->setText("Cluster");
+    ui->clusterClientFrameTitle->setText(tr("Cluster"));
     statusIndicatorToggle(false);
 
     ui->clusterSplitter->setStretchFactor(0, 2);
@@ -240,7 +240,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
     //dxSpotProxyModel->setDynamicSortFilter(true);
 
-    ui->dxSpotTab->addTab(dxSpotView, "DX Spots");
+    ui->dxSpotTab->addTab(dxSpotView, tr("DX Spots"));
     //dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
@@ -287,7 +287,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
     searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
-    ui->dxSpotTab->addTab(searchView, "Search Spots");
+    ui->dxSpotTab->addTab(searchView, tr("Search Spots"));
     searchView->setModel(searchSortProxyModel);
     searchView->setAlternatingRowColors(true);
     searchView->setSelectionMode( QAbstractItemView::SingleSelection );

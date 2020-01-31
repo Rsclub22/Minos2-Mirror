@@ -18,7 +18,7 @@ class RotPresetData
 {
     Q_DECLARE_TR_FUNCTIONS(RotPresetData)
 public:
-static const QStringList presetButtonLabels;
+static const char * presetButtonLabels[4];
 
 
     RotPresetData(int _number, QString _name, QString _bearing);

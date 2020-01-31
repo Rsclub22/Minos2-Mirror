@@ -12,7 +12,7 @@
 #include "base_pch.h"
 #include "rotatorcommon.h"
 
-const QStringList RotPresetData::presetButtonLabels = {QT_TR_NOOP("&Read"),
+const char * RotPresetData::presetButtonLabels[4] = {QT_TR_NOOP("&Read"),
                                         QT_TR_NOOP("&New"),
                                         QT_TR_NOOP("&Edit"),
                                         QT_TR_NOOP("&Clear")};

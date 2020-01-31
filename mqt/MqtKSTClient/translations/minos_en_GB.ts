@@ -203,6 +203,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../kstmainwindow.cpp" line="276"/>
+        <location filename="../kstmainwindow.cpp" line="383"/>
+        <source>Including %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../kstmainwindow.cpp" line="279"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
@@ -215,11 +221,6 @@
     <message>
         <location filename="../kstmainwindow.cpp" line="360"/>
         <source>Chat dumps from KST</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../kstmainwindow.cpp" line="383"/>
-        <source>Including %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

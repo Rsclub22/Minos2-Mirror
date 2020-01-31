@@ -69,8 +69,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../clustermainwindow.cpp" line="33"/>
+        <source>DX Spots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="34"/>
+        <source>Sent Spots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="35"/>
+        <source>Raw Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="37"/>
+        <source>&amp;Send</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="37"/>
+        <source>&amp;New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="38"/>
+        <source>&amp;Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="38"/>
+        <source>&amp;Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../clustermainwindow.cpp" line="83"/>
-        <location filename="../clustermainwindow.cpp" line="1907"/>
+        <location filename="../clustermainwindow.cpp" line="1911"/>
         <source>Minos Cluster Server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -181,42 +216,19 @@ Do you want to enter\change your details?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1739"/>
+        <location filename="../clustermainwindow.cpp" line="1743"/>
         <source>Cluster User Command Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1740"/>
+        <location filename="../clustermainwindow.cpp" line="1744"/>
         <source>Do you really want to clear cluster user command number:%1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1907"/>
+        <location filename="../clustermainwindow.cpp" line="1911"/>
         <source>Minos Rotator
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ClusterUserCmdButton</name>
-    <message>
-        <location filename="../clusterusercmdbutton.cpp" line="31"/>
-        <source>&amp;Send</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clusterusercmdbutton.cpp" line="33"/>
-        <source>&amp;New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clusterusercmdbutton.cpp" line="34"/>
-        <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clusterusercmdbutton.cpp" line="35"/>
-        <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -416,41 +428,6 @@ The time to live must be between %2 minutes and %3 minutes</source>
         <source>Callsign or Locator Empty</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../clustermainwindow.cpp" line="33"/>
-        <source>DX Spots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clustermainwindow.cpp" line="34"/>
-        <source>Sent Spots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clustermainwindow.cpp" line="35"/>
-        <source>Raw Data</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clustermainwindow.cpp" line="37"/>
-        <source>&amp;Send</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clustermainwindow.cpp" line="37"/>
-        <source>&amp;New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clustermainwindow.cpp" line="38"/>
-        <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../clustermainwindow.cpp" line="38"/>
-        <source>&amp;Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>userClusterCommandDialog</name>
@@ -467,6 +444,11 @@ The time to live must be between %2 minutes and %3 minutes</source>
     <message>
         <location filename="../userclustercommanddialog.ui" line="49"/>
         <source>Command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../userclustercommanddialog.cpp" line="54"/>
+        <source>Cluster User Command %1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

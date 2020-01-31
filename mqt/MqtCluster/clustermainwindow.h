@@ -17,7 +17,7 @@
 //#include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
 #include "checkmodeagainstfreq.h"
-#include "rotpresetbutton.h"
+#include "presetbutton.h"
 #include "clustercommon.h"
 #include "htmldelegate.h"
 
@@ -104,12 +104,15 @@ public:
 class ClusterMainWindow : public QMainWindow
 {
     Q_OBJECT
+    static const  char * DXSPOT_TAB_TITLE;
+    static const char * SENT_SPOT_TAB_TITLE;
+    static const char * RAW_DATA_TAB_TITLE;
 
 public:
     explicit ClusterMainWindow(QWidget *parent = nullptr);
     ~ClusterMainWindow();
 
-
+    static const char *userCmdButtonLabels[4];
 
 private slots:
     void connectionEstab();
@@ -161,7 +164,7 @@ private:
     QVector<BandDetail> bands;
     checkModeAgainstFreq* modeBandPlan;
 
-    QList<RotPresetButton *> userCmdButton;
+    QList<PresetButton *> userCmdButton;
     QList<QShortcut *> shortCutKeyList;
     QList<QShortcut *> shiftShortCutKeyList;
     QStringList startCommands;

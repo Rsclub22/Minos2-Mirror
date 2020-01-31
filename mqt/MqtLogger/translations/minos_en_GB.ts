@@ -521,6 +521,7 @@ The computed mode is %6
     </message>
     <message>
         <location filename="../clusterclientframe.ui" line="45"/>
+        <location filename="../clusterclientframe.cpp" line="51"/>
         <location filename="../clusterclientframe.cpp" line="1220"/>
         <location filename="../clusterclientframe.cpp" line="1247"/>
         <location filename="../clusterclientframe.cpp" line="1698"/>
@@ -600,6 +601,16 @@ The computed mode is %6
     <message>
         <location filename="../clusterclientframe.cpp" line="107"/>
         <source>Clear &amp;All Spots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clusterclientframe.cpp" line="243"/>
+        <source>DX Spots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clusterclientframe.cpp" line="290"/>
+        <source>Search Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2321,17 +2332,17 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RotPresets.cpp" line="137"/>
+        <location filename="../RotPresets.cpp" line="142"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RotPresets.cpp" line="180"/>
+        <location filename="../RotPresets.cpp" line="185"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RotPresets.cpp" line="207"/>
+        <location filename="../RotPresets.cpp" line="212"/>
         <source>Bearing = %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3482,6 +3493,11 @@ The row background will change colour when selected.</source>
     <message>
         <location filename="../tlogcontainer.ui" line="91"/>
         <source>Logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tlogcontainer.cpp" line="61"/>
+        <source>Minos Contest Logger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

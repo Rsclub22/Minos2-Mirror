@@ -107,7 +107,7 @@ REM bin\translations now exists... we can build our translations
 
 @ECHO OFF
 for %%i in (en_GB fr_FR) do (
-  for %%j in (MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtRigControl MqtRotator) do (
+  for %%j in (MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtRigControl MqtRotator MqtServer) do (
   lconvert -verbose -o translations\%%j_%%i.qm ^
   %MROOT%\build\MqtUtils\release\minos_%%i.qm ^
   %MROOT%\build\TinyXML\release\minos_%%i.qm ^

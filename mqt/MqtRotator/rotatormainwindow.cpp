@@ -2006,17 +2006,23 @@ void RotatorMainWindow::initPresetButtons()
     ui_presetbuttons << ui->presetButton0 << ui->presetButton1 << ui->presetButton2 << ui->presetButton3 << ui->presetButton4
                      << ui->presetButton5 << ui->presetButton6 << ui->presetButton7 << ui->presetButton8 << ui->presetButton9;
 
+    QStringList buttonLabels;
+    for (int i = 0; i < sizeof(RotPresetData::presetButtonLabels)/sizeof(const char *); i++)
+    {
+        buttonLabels.append(RotPresetData::tr(RotPresetData::presetButtonLabels[i]));
+    }
+
     for (int i = 0; i < ui_presetbuttons.count(); i++)
     {
 
-        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], RotPresetData::presetButtonLabels));
+        presetButton.append(new PresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], buttonLabels));
 
-        connect(presetButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
-        connect(presetButton[i], &RotPresetButton::presetReadAction, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &RotPresetButton::presetEditAction, [this, i]() {presetEdit(i);});
-        connect(presetButton[i], &RotPresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
-        connect(presetButton[i], &RotPresetButton::presetClearAction, [this, i]() {presetClear(i);});
+        connect(presetButton[i], &PresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
+        connect(presetButton[i], &PresetButton::presetReadAction, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetEditAction, [this, i]() {presetEdit(i);});
+        connect(presetButton[i], &PresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
+        connect(presetButton[i], &PresetButton::presetClearAction, [this, i]() {presetClear(i);});
 
 
     }

@@ -273,7 +273,7 @@ void KSTMainWindow::connectToHost()
 void KSTMainWindow::connected()
 {
     trace("connection to ON4KST established");
-    ui->includeLabel->setText("Including " + myCallsign);
+    ui->includeLabel->setText(tr("Including %1").arg(myCallsign));
     kstMeepFilterModel.setFilterString(myCallsign);
     kstMessageModel.setCacheSize();
     ui->connectButton->setText(tr("Disconnect"));
