@@ -280,7 +280,7 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData)
 
         if (rotator->getPortType(antennaData->rotatorModelNumber, &portType) != -1)
         {
-            antennaData->portType = portType;
+            //antennaData->portType = portType; *************************************
         }
         else
         {

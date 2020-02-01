@@ -32,7 +32,7 @@
 bool model_Sort(const rot_caps *caps1,const rot_caps *caps2);
 int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 
-
+int collect(const rot_caps *caps, void *);
 
 const QStringList errorMsgTxt = {"No Error, operation completed sucessfully",
                                 "Invalid parameter",
@@ -66,7 +66,7 @@ class HamlibRotControl: public RotatorBase
     Q_OBJECT
 
 public:
-    explicit HamlibRotControl(QObject *parent);
+    explicit HamlibRotControl(QObject *parent = nullptr);
     ~HamlibRotControl();
 
     static void register_rotators(RotatorFactory::Rotators *);
@@ -75,19 +75,19 @@ public:
     int closeRotator();
     int getModelNumber(int idx);
     int getRotatorModelIndex();
-    //void getRotatorList();
-    //bool getRotatorList(QComboBox *cb);
+    void getRotatorList();
+    bool getRotatorList(QComboBox *cb);
     const char * getMfg_Name(int idx);
     const char * getModel_Name(int idx);
-    //void set_rotatorSpeed(int speed);
-    //int get_rotatorSpeed();
+    void set_rotatorSpeed(int speed);
+    int get_rotatorSpeed();
     //void set_serialConnected(bool connectFlag);
     //bool get_serialConnected();
     //int getRotatorAzimuth();
     int request_bearing();
     int rotate_to_bearing(int bearing);
     int rotateCClockwise(int speed);
-    int rotateClockwise(int speed);
+    int rotateClockwise(int speed) ;
     int stop_rotation();
     serialData::serial_parity getSerialParityCode(int index);
     serialData::serial_handshake getSerialHandshakeCode(int index);
@@ -111,12 +111,12 @@ public:
 
     int getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName);
 
-    //void enableTraceComms(bool state);
+    void enableTraceComms(bool state);
 
 private:
 
 
-/*
+
 signals:
    void bearing_updated(int);
    void request_bearingError(int);
@@ -127,26 +127,26 @@ private:
     hamlib_port_t myport;
     ROT *my_rot = nullptr;            // handle to rig instance)
     azimuth_t rot_azimuth;  // azimuth from rotator
-    //elevation_t rot_elevation; // not used
+    elevation_t rot_elevation; // not used
 
     int rot_speed = 100;
     //bool rotControlEnabled;
-    bool serialConnected;
+    //bool serialConnected;
     //void errorMessage(int errorCode,QString command);
-    bool rotatorlistLoaded=false;
+    //bool rotatorlistLoaded=false;
     //srotParams curRotParams;   remove
     //int serialP;
 
     bool traceComms = false;
-*/
+
 
 
     //int retcode;		/* generic return code from functions */
     //int exitcode;
 
 
-    void getRotatorList();
-    int collect(const rot_caps *caps, void *);
+
+
 };
 
 #endif // HAMLIBROTCONTROL_H

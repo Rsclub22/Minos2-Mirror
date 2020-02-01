@@ -29,7 +29,7 @@ int collect(const rot_caps *caps, rig_ptr_t)
     return 1;
 }
 
-HamlibRotControl::HamlibRotControl(QObject *parent) : RotControl(parent)
+HamlibRotControl::HamlibRotControl(QObject *parent) : RotatorBase(parent)
 {
 
 //   getRotatorList();
@@ -166,14 +166,14 @@ int HamlibRotControl::init(srotParams &selectedAntenna)
     if (retcode >= 0)
     {
 
-        set_serialConnected(true);
+        setRotConnected(true);
 
 
     }
     else
     {
 
-        set_serialConnected(false);
+        setRotConnected(false);
     }
 
     return retcode;
@@ -193,15 +193,43 @@ int HamlibRotControl::closeRotator()
     retcode = rot_close (my_rot);
 
     retcode = rot_cleanup (my_rot);
-    set_serialConnected(false);
+    setRotConnected(false);
     return retcode;
 
 }
 
 
-void HamlibRotControl::register_rotators(Rotators &rotatorsList)
+void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
 {
-    getRotatorList();
+    RotatorFactory::RotCapabilities rotCap;
+
+    capsList.clear();
+    rot_load_all_backends();
+    rot_list_foreach(collect, nullptr);
+
+    for (int i = 0; i < capsList.count(); i++)
+    {
+        //QString t = QString::number(capsList[i]->rot_model);
+        QString key = QString("%1, %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
+        auto port_type = RotatorFactory::RotCapabilities::none;
+        switch(capsList[i]->port_type)
+        {
+            case RIG_PORT_SERIAL:
+                port_type = RotatorFactory::RotCapabilities::serial;
+            break;
+
+            case RIG_PORT_NETWORK:
+                port_type = RotatorFactory::RotCapabilities::network;
+            break;
+
+            case RIG_PORT_USB:
+                port_type = RotatorFactory::RotCapabilities::usb;
+            break;
+        }
+
+        (*rotatorsList)[key] = RotatorFactory::RotCapabilities(capsList[i]->rot_model);
+
+    }
 
 
 }
@@ -331,10 +359,10 @@ int HamlibRotControl::request_bearing()
 }
 
 
-int HamlibRotControl::getRotatorAzimuth()
-{
-    return rot_azimuth;
-}
+//int HamlibRotControl::getRotatorAzimuth()
+//{
+//    return rot_azimuth;
+//}
 
 
 
@@ -379,7 +407,7 @@ int HamlibRotControl::rotate_to_bearing(int bearing)
 
 }
 
-/*
+
 
 void HamlibRotControl::set_rotatorSpeed(int speed)
 {
@@ -390,7 +418,7 @@ int HamlibRotControl::get_rotatorSpeed()
 {
     return rot_speed;
 }
-
+/*
 
 void HamlibRotControl::set_serialConnected(bool connectFlag)
 {
@@ -406,6 +434,8 @@ bool HamlibRotControl::get_serialConnected()
 }
 
 */
+
+
 
 enum serial_parity_e HamlibRotControl::getSerialParityCode(int index)
 {
@@ -475,14 +505,14 @@ QString HamlibRotControl::gethamlibVersion()
     return ver;
 }
 
-/*
+
 
 void HamlibRotControl::enableTraceComms(bool state)
 {
     traceComms = state;
 }
 
-*/
+
 
 
 // which passes the call to this method
@@ -507,8 +537,8 @@ int HamlibRotControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, con
 int rig_message_cb(enum rig_debug_level_e debug_level, rig_ptr_t user_data, const char *fmt, va_list ap)
 {
     RotControl *rt = static_cast<RotControl *>(user_data);
-    return rt->rig_message_cb(debug_level, fmt, ap);
-
+    //return rt->rig_message_cb(debug_level, fmt, ap);
+    return 1; //********************************************
 }
 
 bool model_Sort(const rot_caps *caps1,const rot_caps *caps2)

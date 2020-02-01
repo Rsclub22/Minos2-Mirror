@@ -11,7 +11,7 @@ RotatorFactory::RotatorFactory(QObject *parent) : QObject(parent)
 
 #if defined (WIN32)
     // PSTRotator is only on Windows
-    PstRotControl::register_rotators(&rotatorsList, PSTRotatorId);
+    //PstRotControl::register_rotators(&rotatorsList, PSTRotatorId);
 #endif
 
 }

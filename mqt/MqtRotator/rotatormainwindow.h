@@ -42,7 +42,7 @@ class QLabel;
 class QComboBox;
 class RotSetupDialog;
 class MinosCompass;
-class RotControl;
+class HamlibRotControl;
 class EditPresetsDialog;
 class RotatorRpc;
 class RotatorLog;
@@ -112,7 +112,7 @@ private:
     QComboBox *selectAntenna;
     //QPushButton* presetButtons[NUM_PRESETS];
     QString appName = "";
-    RotControl  *rotator;
+    HamlibRotControl  *rotator;
     QLabel *status;
     QLabel *offSetlbl;
     QLabel *offSetDisplay;

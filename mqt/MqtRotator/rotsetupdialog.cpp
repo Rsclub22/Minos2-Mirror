@@ -482,7 +482,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->southStopType = southStop(config.value("southStopType", S_STOPOFF).toInt());
     availAntData[antNum]->overRunFlag = config.value("overRun", false).toBool();
     availAntData[antNum]->antennaOffset = config.value("antennaOffset", "").toInt();
-    availAntData[antNum]->portType = rig_port_e(config.value("portType", int(RIG_PORT_NONE)).toInt());
+    //availAntData[antNum]->portType = rig_port_e(config.value("portType", int(RIG_PORT_NONE)).toInt());
     availAntData[antNum]->comport = config.value("comport", "").toString();
     availAntData[antNum]->baudrate = config.value("baudrate", 9600).toInt();
     availAntData[antNum]->databits = config.value("databits", 8).toInt();

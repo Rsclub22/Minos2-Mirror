@@ -20,7 +20,8 @@
 #include "rotatorcommon.h"
 #include "ui_rotatormainwindow.h"
 #include "minoscompass.h"
-#include "rotcontrol.h"
+#include "hamlibRotcontrol.h"
+#include "rotatorfactory.h"
 #include "rotsetupdialog.h"
 #include "logdialog.h"
 #include <QString>
@@ -98,9 +99,12 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     initPresetButtons();
 
 
-    rotator = new RotControl();
-    rotator->getRotatorList();
-    setupAntenna = new RotSetupDialog(rotator);
+    rotator = new HamlibRotControl();
+    RotatorFactory rotatorFactory_;
+
+    //rotator->getRotatorList();
+    //setupAntenna = new RotSetupDialog(rotator);
+    setupAntenna = new RotSetupDialog(nullptr); //****************************************
     setupLog = new LogDialog;
     pollTimer = new QTimer(this);
 
@@ -136,7 +140,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     rot_left_button_off();
     rot_right_button_off();
 
-    rotator->set_serialConnected(false);
+    rotator->setRotConnected(false);
 
     refreshPresetLabels();
     initActionsConnections();
@@ -328,7 +332,7 @@ void RotatorMainWindow::onLoggerSetRotation(int direction, int angle)
 
     logMessage("Command From Logger command number = " + QString::number(direction) + ", angle = " + QString::number(angle));
     int dirCommand = direction;
-    if (rotator->get_serialConnected() && !rotErrorFlag)
+    if (rotator->getRotConnected() && !rotErrorFlag)
     {
         if (dirCommand == rpcConstants::eRotateDirect)
         {
@@ -438,7 +442,7 @@ void RotatorMainWindow::openRotator()
         {
             hamlibError(retCode, "Rotator Init");
         }
-    if (rotator->get_serialConnected())
+    if (rotator->getRotConnected())
     {
         // get poll interval timer
        if (setupAntenna->currentAntenna.pollInterval == "0.5")
@@ -491,7 +495,7 @@ void RotatorMainWindow::closeRotator()
 
     pollTimer->stop();
 
-    if (rotator->get_serialConnected())
+    if (rotator->getRotConnected())
     {
         rotator->closeRotator();
     }
@@ -947,7 +951,7 @@ void RotatorMainWindow::upDateAntenna()
 
             dumpRotatorToTraceLog();
 
-            if (rotator->get_serialConnected())
+            if (rotator->getRotConnected())
             {
                 sendStatusToLogConnected();
             }
@@ -1014,12 +1018,12 @@ void RotatorMainWindow::refreshAntenna()
             return;
         }
 
-        if (!rotator->get_serialConnected())
+        if (!rotator->getRotConnected())
         {
             openRotator();
         }
 
-        if (rotator->get_serialConnected())
+        if (rotator->getRotConnected())
         {
             sendStatusToLogConnected();
         }
@@ -1052,7 +1056,7 @@ void RotatorMainWindow::request_bearing()
     reqBearCmdflag = true;
     int retCode = 0;
     if (brakeflag || cwCcwCmdflag || rotCmdflag) return;
-    if (rotator->get_serialConnected())
+    if (rotator->getRotConnected())
     {
         retCode = rotator->request_bearing();
         logMessage(QString("Sent request bearing cmd - retcode = %1").arg(QString::number(retCode)));
@@ -1234,7 +1238,7 @@ void RotatorMainWindow::rotateTo(int bearing)
 
 
 
-    if (rotator->get_serialConnected())
+    if (rotator->getRotConnected())
     {
 
         retCode = rotator->rotate_to_bearing(rotateTo);
@@ -1415,13 +1419,13 @@ void RotatorMainWindow::stopButton()
 
     logMessage(QString("StopButton"));
 
-    stopRotation(rotator->get_serialConnected());
+    stopRotation(rotator->getRotConnected());
 }
 
 void RotatorMainWindow::stop_rotation()
 {
 
-    stopRotation(rotator->get_serialConnected());
+    stopRotation(rotator->getRotConnected());
 }
 
 void RotatorMainWindow::stopRotation(bool sendStop)
@@ -1495,7 +1499,7 @@ void RotatorMainWindow::rotateCW(bool /*clicked*/)
 
     cwCcwCmdflag = true;
     logMessage(QString("Start rotateCW"));
-    if (!rotator->get_serialConnected())
+    if (!rotator->getRotConnected())
     {
         logMessage(QString("rotateCW - Rotator not connected!"));
 
@@ -1535,7 +1539,7 @@ void RotatorMainWindow::rotateCW(bool /*clicked*/)
 
 
         int retCode = 0;
-        if (rotator->get_serialConnected())
+        if (rotator->getRotConnected())
         {
             if (setupAntenna->currentAntenna.supportCwCcwCmd)
             {
@@ -1590,7 +1594,7 @@ void RotatorMainWindow::rotateCCW(bool /*toggle*/)
     cwCcwCmdflag = true;
     logMessage(QString("Start rotateCCW"));
     // check connected
-    if (!rotator->get_serialConnected())
+    if (!rotator->getRotConnected())
     {
         logMessage(QString("rotateCCW - Rotator not connected!"));
 
@@ -1628,7 +1632,7 @@ void RotatorMainWindow::rotateCCW(bool /*toggle*/)
 
 
         int retCode = 0;
-        if (rotator->get_serialConnected())
+        if (rotator->getRotConnected())
         {
             if (setupAntenna->currentAntenna.supportCwCcwCmd)
             {
@@ -1765,7 +1769,7 @@ void RotatorMainWindow::hamlibError(int errorCode, QString cmd )
         sendStatusToLogError();
     }
     // log all errors
-    QString errorMsg = rotator->gethamlibErrorMsg(errorCode);
+    QString errorMsg = ""; // rotator->gethamlibErrorMsg(errorCode); *******************************************
     logMessage(QString("Hamlib Error - Code = %1 - %2").arg(errorCode).arg(errorMsg));
 
 

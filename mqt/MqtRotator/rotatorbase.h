@@ -9,6 +9,12 @@ class RotatorBase : public QObject
 public:
     explicit RotatorBase(QObject *parent = nullptr);
 
+    void setRotAzimuth(int rot_azimuth_){rot_azimuth = rot_azimuth_;}
+    int getRotAzimuth(){return rot_azimuth;}
+
+    void setRotConnected(bool rotConnected_){rotConnected = rotConnected_;}
+    bool getRotConnected(){return rotConnected;}
+
 signals:
 
 
@@ -20,6 +26,10 @@ protected:
     virtual int rotateClockwise(int speed) = 0;
     virtual int stop_rotation() = 0;
 
+private:
+
+    int rot_azimuth;
+    bool rotConnected;
 
 
 };
