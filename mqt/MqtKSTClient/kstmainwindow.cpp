@@ -1174,7 +1174,6 @@ void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
 void KSTMainWindow::on_clearButton_clicked()
 {
     kstMessageModel.reset();
-    kstCallModel.reset();
 }
 bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
 {

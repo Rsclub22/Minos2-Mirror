@@ -425,7 +425,7 @@
       <item>
        <widget class="QPushButton" name="clearButton">
         <property name="text">
-         <string>Clear All</string>
+         <string>Clear Messages</string>
         </property>
        </widget>
       </item>
