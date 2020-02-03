@@ -21,7 +21,6 @@
 #include "ui_rotatormainwindow.h"
 #include "minoscompass.h"
 #include "hamlibRotcontrol.h"
-#include "rotatorfactory.h"
 #include "rotsetupdialog.h"
 #include "logdialog.h"
 #include <QString>
@@ -100,11 +99,11 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
 
     rotator = new HamlibRotControl();
-    RotatorFactory rotatorFactory_;
+    rotFactory = new RotatorFactory();
 
     //rotator->getRotatorList();
     //setupAntenna = new RotSetupDialog(rotator);
-    setupAntenna = new RotSetupDialog(nullptr); //****************************************
+    setupAntenna = new RotSetupDialog(rotFactory);
     setupLog = new LogDialog;
     pollTimer = new QTimer(this);
 
@@ -457,9 +456,9 @@ void RotatorMainWindow::openRotator()
         pollTimer->start(pollTime);             // start timer to send message to controller
         if (rig_port_e(setupAntenna->currentAntenna.portType) == RIG_PORT_SERIAL)
         {
-            showStatusMessage(tr("Connected to: %1 - %2, %3, %4, %5, %6, %7, %8")
-                                  .arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.comport).arg(setupAntenna->currentAntenna.baudrate).arg(setupAntenna->currentAntenna.databits)
-                                  .arg(setupAntenna->currentAntenna.stopbits).arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]).arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+            //showStatusMessage(tr("Connected to: %1 - %2, %3, %4, %5, %6, %7, %8")
+            //                      .arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.comport).arg(setupAntenna->currentAntenna.baudrate).arg(setupAntenna->currentAntenna.databits)
+            //                      .arg(setupAntenna->currentAntenna.stopbits).arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]).arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
         }
         else if (rig_port_e(setupAntenna->currentAntenna.portType == RIG_PORT_NETWORK || rig_port_e(setupAntenna->currentAntenna.portType == RIG_PORT_UDP_NETWORK)))
         {
@@ -2229,8 +2228,8 @@ void RotatorMainWindow::aboutRotatorConfig()
         msg.append(QString("Baudrate = %1\n").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
         msg.append(QString("Databits = %1\n").arg(QString::number(setupAntenna->currentAntenna.databits)));
         msg.append(QString("Stop bits = %1\n").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
-        msg.append(QString("Parity = %1\n").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
-        msg.append(QString("Handshake = %1\n").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+        //msg.append(QString("Parity = %1\n").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
+        //msg.append(QString("Handshake = %1\n").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
         msg.append(QString("Antenna Offset = %1\n").arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));
         msg.append(QString("Current Rotator Type = %1\n").arg(endStopNames[setupAntenna->currentAntenna.endStopType]));
         msg.append(QString("Current Max Azimuth = %1\n").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)));
@@ -2239,8 +2238,6 @@ void RotatorMainWindow::aboutRotatorConfig()
         msg.append(QString("Overrun flag = %1\n").arg(overLapActiveflag ? "True" : "False"));
         msg.append(QString("Support CW and CCW Commands = %1\n").arg(setupAntenna->currentAntenna.supportCwCcwCmd ? "True" : "False"));
         msg.append(QString("Simulate CW and CCW Commands selected = %1\n").arg(setupAntenna->currentAntenna.simCwCcwCmd ? "True" : "False"));
-        msg.append(QString("Rotator Max Baudrate = %1\n").arg(QString::number(setupAntenna->currentAntenna.maxBaudRate)));
-        msg.append(QString("Rotator Min Baud rate = %1\n").arg(QString::number(setupAntenna->currentAntenna.minBaudRate)));
         msg.append(QString("Rotator Polltime = %1\n").arg(setupAntenna->currentAntenna.pollInterval));
         msg.append(QString("Tracelog = %1\n").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
 
@@ -2282,8 +2279,8 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
         trace(QString("Baudrate = %1").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
         trace(QString("Databits = %1").arg(QString::number(setupAntenna->currentAntenna.databits)));
         trace(QString("Stop bits = %1").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
-        trace(QString("Parity = %1").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
-        trace(QString("Handshake = %1").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+        //trace(QString("Parity = %1").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
+        //trace(QString("Handshake = %1").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
         trace(QString("Antenna Offset = %1").arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));
         trace(QString("Current Rotator Type = %1").arg(endStopNames[setupAntenna->currentAntenna.endStopType]));
         trace(QString("Current Max Azimuth = %1").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)));
@@ -2292,8 +2289,6 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
         trace(QString("Overrun flag = %1").arg(overLapActiveflag ? "True" : "False"));
         trace(QString("Support CW and CCW Commands = %1").arg(setupAntenna->currentAntenna.supportCwCcwCmd ? "True" : "False"));
         trace(QString("Simulate CW and CCW Commands selected = %1").arg(setupAntenna->currentAntenna.simCwCcwCmd ? "True" : "False"));
-        trace(QString("Rotator Max Baudrate = %1").arg(QString::number(setupAntenna->currentAntenna.maxBaudRate)));
-        trace(QString("Rotator Min Baud rate = %1").arg(QString::number(setupAntenna->currentAntenna.minBaudRate)));
         trace(QString("Rotator Polltime = %1").arg(setupAntenna->currentAntenna.pollInterval));
         trace(QString("Tracelog = %1").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
 

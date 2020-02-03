@@ -2,7 +2,7 @@
 #define ADDANTENNADIALOG_H
 
 #include <QDialog>
-#include "rotcontrol.h"
+#include "rotatorfactory.h"
 #include "cutils.h"
 
 namespace Ui {
@@ -14,7 +14,7 @@ class AddAntennaDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddAntennaDialog(QStringList _availAntennas, RotControl* rot, QWidget *parent = nullptr);
+    explicit AddAntennaDialog(QStringList _availAntennas, RotatorFactory *rotatorFactory, QWidget *parent = nullptr);
     ~AddAntennaDialog();
 
     QString getAntennaName();

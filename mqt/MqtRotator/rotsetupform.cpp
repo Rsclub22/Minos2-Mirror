@@ -16,6 +16,7 @@
 #include "rotsetupform.h"
 #include "ui_rotsetupform.h"
 #include "minosNetUtils.h"
+#include "rotatorfactory.h"
 #include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
@@ -29,7 +30,7 @@ static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 
 
-rotSetupForm::rotSetupForm(RotControl* _rotator, srotParams* _antennaData, QWidget *parent) :
+rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::rotSetupForm),
     antennaValueChanged(false),
@@ -42,7 +43,7 @@ rotSetupForm::rotSetupForm(RotControl* _rotator, srotParams* _antennaData, QWidg
     ui->netPortBox->setVisible(false);
     ui->portLbl->setVisible(false);
 
-    rotator = _rotator;
+    rotFactory = rotFactory_;
     antennaData = _antennaData;
 
     fillRotatorModelInfo();
@@ -97,117 +98,109 @@ void rotSetupForm::rotatorModelSelected()
 void rotSetupForm::setupRotatorModel(QString rotatorModel)
 {
 
-    int rm;
-    bool ok;
-    QString rotModelName;
-    QString rotMfgName;
+
+    int maxRot;
+    int minRot;
 
     if (ui->rotatorModelBox->currentText() != antennaData->rotatorModel)
     {
 
-        QString s = rotatorModel;
-        antennaData->rotatorModel = s;
-        ui->rotatorModelBox->setCurrentText(s);
-        s = s.trimmed();
-        QStringList antdetails = s.split(',');
-        s = antdetails[0];
-        antennaData->rotatorModelNumber = s.toInt(&ok, 10);
-        s = antdetails[1];
-        antennaData->rotatorManufacturer = s.trimmed();
-        s = antdetails[2];
-        antennaData->rotatorModelName = s.trimmed();
-
-
-        antennaData->rotatorModel = ui->rotatorModelBox->currentText();
-        if (rotator->getModelInfo(antennaData->rotatorModel, &rm, &rotMfgName, &rotModelName) == -1)
+        // need to do something is selection is empty!!!!!!!!!!!!!!!!!!!!!!!!
+        if (!ui->rotatorModelBox->currentText().isEmpty())
         {
-            // error
-            antennaData->rotatorModelNumber = 0;
-            antennaData->rotatorModelName = "";
-            antennaData->rotatorManufacturer = "";
-        }
-        else
-        {
-            antennaData->rotatorModelNumber = rm;
-            antennaData->rotatorModelName = rotModelName;
-            antennaData->rotatorManufacturer = rotMfgName;
-
-        }
-
-        pollIntervalVisible(true);
+            antennaData->rotatorModel = rotatorModel;
+            ui->rotatorModelBox->setCurrentText(antennaData->rotatorModel);
+            //RotatorFactory::Rotators *rList = rotatorsList;
+            RotCapabilities rotCap = rotFactory->supported_rotators()->value(antennaData->rotatorModel);
+            antennaData->rotatorModelNumber = rotCap.modelNumber;
+            antennaData->rotatorManufacturer = rotCap.rotatorManufacturer;
+            antennaData->rotatorModelName = rotCap.rotatorModelName;
+            maxRot = rotCap.maxRot;
+            minRot = rotCap.minRot;
+            antennaData->supportCwCcwCmd = rotCap.supportCwCCwCmd;
+            antennaData->portType = rotCap.portType;
 
 
-        antennaOffSetVisible(true);
+            antennaData->rotatorModel = ui->rotatorModelBox->currentText();
+
+            pollIntervalVisible(true);
 
 
-        if (setEndStopType(antennaData))
-        {
+            antennaOffSetVisible(true);
 
-            // set ui according to rotator
 
-            if (antennaData->endStopType == ROT_0_360)
+            if (setEndStopType(antennaData, minRot, maxRot))
             {
 
-                ui->chkOverrun->setVisible(false);
-                ui->chkOverrun->setChecked(false);
-                sStopButtonsVisible(true);
-                setSStopOffButChecked(true);
+                // set ui according to rotator
+
+                if (antennaData->endStopType == ROT_0_360)
+                {
+
+                    ui->chkOverrun->setVisible(false);
+                    ui->chkOverrun->setChecked(false);
+                    sStopButtonsVisible(true);
+                    setSStopOffButChecked(true);
 
 
+
+                }
+                else if (antennaData->endStopType == ROT_0_450)
+                {
+
+                    ui->chkOverrun->setVisible(true);
+                    ui->chkOverrun->setChecked(true);
+                    sStopButtonsVisible(false);
+                    setSStopOffButChecked(true);
+
+                }
+                else
+                {
+                    ui->chkOverrun->setVisible(false);
+                    ui->chkOverrun->setChecked(false);
+                    sStopButtonsVisible(false);
+                    setSStopOffButChecked(true);
+
+                }
+
+                if (antennaData->portType == RotCapContstants::PortType::network)
+                {
+                   serialDataEntryVisible(false);
+                   networkDataEntryVisible(true);
+                }
+                else if (antennaData->portType == RotCapContstants::PortType::serial)
+                {
+                    serialDataEntryVisible(true);
+                    networkDataEntryVisible(false);
+                }
+                else if (antennaData->portType == RotCapContstants::PortType::none)
+                {
+                    serialDataEntryVisible(false);
+                    networkDataEntryVisible(false);
+                }
+
+                if (antennaData->supportCwCcwCmd)
+                {
+                    setSimCW_CCWcmdVisible(false);
+                    //setSimCW_CCWcmdChecked(false);
+                    antennaData->simCwCcwCmd = false;
+                }
+                else
+                {
+                    setSimCW_CCWcmdVisible(true);
+                    setSimCW_CCWcmdChecked(true);
+                    antennaData->simCwCcwCmd = true;
+                }
+
+                antennaValueChanged = true;
 
             }
-            else if (antennaData->endStopType == ROT_0_450)
-            {
 
-                ui->chkOverrun->setVisible(true);
-                ui->chkOverrun->setChecked(true);
-                sStopButtonsVisible(false);
-                setSStopOffButChecked(true);
 
-            }
-            else
-            {
-                ui->chkOverrun->setVisible(false);
-                ui->chkOverrun->setChecked(false);
-                sStopButtonsVisible(false);
-                setSStopOffButChecked(true);
-
-            }
         }
 
 
-        if (antennaData->portType == RIG_PORT_NETWORK || antennaData->portType == RIG_PORT_UDP_NETWORK)
-        {
-           serialDataEntryVisible(false);
-           networkDataEntryVisible(true);
-        }
-        else if (antennaData->portType == RIG_PORT_SERIAL)
-        {
-            serialDataEntryVisible(true);
-            networkDataEntryVisible(false);
-        }
-        else if (antennaData->portType == RIG_PORT_NONE)
-        {
-            serialDataEntryVisible(false);
-            networkDataEntryVisible(false);
-        }
-
-        if (antennaData->supportCwCcwCmd)
-        {
-            setSimCW_CCWcmdVisible(false);
-            //setSimCW_CCWcmdChecked(false);
-            antennaData->simCwCcwCmd = false;
-        }
-        else
-        {
-            setSimCW_CCWcmdVisible(true);
-            setSimCW_CCWcmdChecked(true);
-            antennaData->simCwCcwCmd = true;
-        }
-
-        antennaValueChanged = true;
     }
-
 }
 
 
@@ -215,19 +208,11 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
 
 
 
-bool rotSetupForm::setEndStopType(srotParams* antennaData)
+
+bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRot)
 {
 
-    int minRot = 0.0;
-    int maxRot = 0.0;
 
-
-    if (getMaxMinRotationData(antennaData->rotatorModelNumber, &maxRot, &minRot) >= 0)
-    {
-        //antennaData->max_azimuth = maxRot;
-        //antennaData->min_azimuth = minRot;
-        antennaData->rotatorCWEndStop = maxRot;
-        antennaData->rotatorCCWEndStop = minRot;
 
         // define type of rotator
 
@@ -272,33 +257,17 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData)
             antennaData->overRunFlag = true;
             antennaData->southStopType = S_STOPOFF;
         }
-
-        // flag if rotator supports CW and CCW commands
-        antennaData->supportCwCcwCmd = getCwCcwCmdFlag(antennaData->rotatorModelNumber);
-
-        rig_port_e portType = RIG_PORT_NONE;
-
-        if (rotator->getPortType(antennaData->rotatorModelNumber, &portType) != -1)
-        {
-            //antennaData->portType = portType; *************************************
-        }
         else
         {
-            return false; // error
+            return false;
         }
 
 
-    }
-    else
-    {
-        // no rotator model selected
-        antennaData->rotatorModelNumber = 0;
-        antennaData->rotatorModelName = "";
-        antennaData->rotatorManufacturer = "";
-        return false;
-    }
+        return true;
 
-    return true;
+
+
+
 
 }
 
@@ -411,12 +380,14 @@ void rotSetupForm::setStopBits(QString stop)
 
 void rotSetupForm::comParityBitsSelected()
 {
+/*
     if (antennaData->parity != rotator->getSerialParityCode(ui->comParityBox->currentIndex()))
     {
         antennaData->parity = rotator->getSerialParityCode(ui->comParityBox->currentIndex());
         antennaValueChanged = true;
 
     }
+   */
 }
 
 QString rotSetupForm::getParityBits()
@@ -433,12 +404,14 @@ void rotSetupForm::setParityBits(int b)
 
 void rotSetupForm::comHandshakeSelected()
 {
+/*
     if (antennaData->handshake != rotator->getSerialHandshakeCode(ui->comHandShakeBox->currentIndex()))
     {
         antennaData->handshake = rotator->getSerialHandshakeCode(ui->comHandShakeBox->currentIndex());
         antennaValueChanged = true;
 
     }
+    */
 }
 
 QString rotSetupForm::getHandshake()
@@ -849,7 +822,15 @@ void rotSetupForm::networkDataEntryVisible(bool v)
 void rotSetupForm::fillRotatorModelInfo()
 {
     ui->rotatorModelBox->clear();
-    rotator->getRotatorList(ui->rotatorModelBox);
+    //rotator->getRotatorList(ui->rotatorModelBox);
+    ui->rotatorModelBox->addItem("");   // add blank at begining
+    for (auto r = rotFactory->supported_rotators()->cbegin(); r != rotFactory->supported_rotators()->cend(); ++r)
+    {
+        QString rotText = r.key();
+        ui->rotatorModelBox->addItem(rotText.remove("Hamlib "));
+    }
+
+
 }
 
 
@@ -901,38 +882,44 @@ void rotSetupForm::fillPortsInfo()
 
 void rotSetupForm::fillSpeedInfo()
 {
-
+/*
     QStringList baudrateStr = rotator->getBaudRateNames();
 
     ui->comSpeedBox->clear();
     ui->comSpeedBox->addItems(baudrateStr);
+    */
 }
 
 void rotSetupForm::fillDataBitsInfo()
 {
+    /*
     QStringList databitsStr = rotator->getDataBitsNames();
 
     ui->comDataBitsBox->clear();
     ui->comDataBitsBox->addItems(databitsStr);
+    */
 }
 
 void rotSetupForm::fillStopBitsInfo()
 {
+    /*
     QStringList stopbitsStr = rotator->getStopBitsNames();
 
     ui->comStopBitsBox->clear();
     ui->comStopBitsBox->addItems(stopbitsStr);
+    */
 }
 
 
 
 void rotSetupForm::fillParityBitsInfo()
 {
-
+/*
     QStringList parityStr = rotator->getParityCodeNames();
 
     ui->comParityBox->clear();
     ui->comParityBox->addItems(parityStr);
+    */
 
 }
 
@@ -940,11 +927,12 @@ void rotSetupForm::fillParityBitsInfo()
 
 void rotSetupForm::fillHandShakeInfo()
 {
-
+/*
     QStringList handshakeStr = rotator->getHandShakeNames();
 
     ui->comHandShakeBox->clear();
     ui->comHandShakeBox->addItems(handshakeStr);
+    */
 
 }
 
@@ -958,16 +946,17 @@ int rotSetupForm::comportAvial(QString comport)
 
 int rotSetupForm::getMaxMinRotationData(int rotatorNumber, int *maxRot, int *minRot)
 {
-
+/*
     int retCode = 0;
     retCode = rotator->getMaxMinRotation(rotatorNumber, maxRot, minRot);
 
     return retCode;
-
+*/
 }
 
 bool rotSetupForm::getCwCcwCmdFlag(int rotatorNumber)
 {
+/*
     int retCode = 0;
     bool value = false;
     retCode = rotator->getSupportCwCcwCmd(rotatorNumber, &value);
@@ -977,5 +966,6 @@ bool rotSetupForm::getCwCcwCmdFlag(int rotatorNumber)
     }
 
     return value;
+    */
 
 }

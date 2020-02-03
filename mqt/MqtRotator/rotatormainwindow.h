@@ -19,6 +19,7 @@
 
 #include "base_pch.h"
 #include "rotatorRpc.h"
+#include "rotatorfactory.h"
 #include "rotatorcommon.h"
 #include "rotpresetbutton.h"
 #include "rotpresetdialog.h"
@@ -100,6 +101,8 @@ private:
     StdInReader stdinReader;
 
     RotatorRpc *msg;
+
+    RotatorFactory* rotFactory;
 
     QTimer LogTimer;
     QTimer RotateTimer;

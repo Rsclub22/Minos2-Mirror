@@ -15,7 +15,10 @@
 #include <QStringList>
 #include <QThread>
 #include "hamlibRotcontrol.h"
+#include "rotatorfactory.h"
+#include "rotcapabilities.h"
 #include <hamlib/rotator.h>
+#include "hamlibCommon.h"
 #include "minosNetUtils.h"
 
 
@@ -53,6 +56,8 @@ HamlibRotControl::~HamlibRotControl()
     rot_cleanup(my_rot); /* if you care about memory */
 }
 
+
+/*
 
 int HamlibRotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
 {
@@ -98,7 +103,7 @@ int HamlibRotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
     return retCode;
 }
 
-
+*/
 int HamlibRotControl::init(srotParams &selectedAntenna)
 {
     int retcode;
@@ -129,8 +134,8 @@ int HamlibRotControl::init(srotParams &selectedAntenna)
         my_rot->state.rotport.parm.serial.rate = selectedAntenna.baudrate;
         my_rot->state.rotport.parm.serial.data_bits = selectedAntenna.databits;
         my_rot->state.rotport.parm.serial.stop_bits = selectedAntenna.stopbits;
-        my_rot->state.rotport.parm.serial.parity = getSerialParityCode(selectedAntenna.parity);
-        my_rot->state.rotport.parm.serial.handshake = getSerialHandshakeCode(selectedAntenna.handshake);
+        my_rot->state.rotport.parm.serial.parity = hamlibSerialData::getSerialParityCode(selectedAntenna.parity);
+        my_rot->state.rotport.parm.serial.handshake = hamlibSerialData::getSerialHandshakeCode(selectedAntenna.handshake);
         //if (my_rot->state.rotport.parm.serial.handshake == RIG_HANDSHAKE_NONE)
        // {
        //     my_rot->state.rotport.parm.serial.dtr_state = RIG_SIGNAL_ON;
@@ -199,9 +204,8 @@ int HamlibRotControl::closeRotator()
 }
 
 
-void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
+void HamlibRotControl::register_rotators(RotatorFactory *rotatorsList)
 {
-    RotatorFactory::RotCapabilities rotCap;
 
     capsList.clear();
     rot_load_all_backends();
@@ -210,26 +214,35 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
     for (int i = 0; i < capsList.count(); i++)
     {
         //QString t = QString::number(capsList[i]->rot_model);
-        QString key = QString("%1, %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
-        auto port_type = RotatorFactory::RotCapabilities::none;
+        QString key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
+        auto port_type = RotCapContstants::PortType::none;
         switch(capsList[i]->port_type)
         {
             case RIG_PORT_SERIAL:
-                port_type = RotatorFactory::RotCapabilities::serial;
+                port_type = RotCapContstants::PortType::serial;
             break;
 
             case RIG_PORT_NETWORK:
-                port_type = RotatorFactory::RotCapabilities::network;
+                port_type = RotCapContstants::PortType::network;
             break;
 
             case RIG_PORT_USB:
-                port_type = RotatorFactory::RotCapabilities::usb;
+                port_type = RotCapContstants::PortType::usb;
             break;
         }
 
-        (*rotatorsList)[key] = RotatorFactory::RotCapabilities(capsList[i]->rot_model);
+
+
+        (*rotatorsList->supported_rotators())[key] = RotCapabilities(capsList[i]->rot_model, port_type,
+                                                               capsList[i]->mfg_name, capsList[i]->model_name,
+                                                               capsList[i]->move != nullptr ? true : false,
+                                                               capsList[i]->min_az, capsList[i]->max_az,
+                                                               RotCapContstants::PollData::pollDataOn,
+                                                               RotCapContstants::RotatorDisplay::displayFull);
 
     }
+
+
 
 
 }
@@ -437,45 +450,12 @@ bool HamlibRotControl::get_serialConnected()
 
 
 
-enum serial_parity_e HamlibRotControl::getSerialParityCode(int index)
-{
-
-    return serialData::parityCodes[index];
-
-}
-
-enum serial_handshake_e HamlibRotControl::getSerialHandshakeCode(int index)
-{
-
-    return serialData::handshakeCodes[index];
-}
-
-QStringList HamlibRotControl::getParityCodeNames()
-{
-   return serialData::parityStr;
-}
-
-QStringList HamlibRotControl::getHandShakeNames()
-{
-    return serialData::handshakeStr;
-}
-
-QStringList HamlibRotControl::getBaudRateNames()
-{
 
 
-    return serialData::baudrateStr;
-}
 
-QStringList HamlibRotControl::getDataBitsNames()
-{
-    return serialData::databitsStr;
-}
 
-QStringList HamlibRotControl::getStopBitsNames()
-{
-    return serialData::stopbitsStr;
-}
+
+
 
 
 

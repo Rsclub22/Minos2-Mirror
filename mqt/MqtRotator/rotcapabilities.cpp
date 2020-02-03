@@ -1,0 +1,25 @@
+#include "rotcapabilities.h"
+
+
+RotCapabilities::RotCapabilities(int modelNumber_,
+                                 RotCapContstants::PortType portType_,
+                                 QString rotatorManufacturer_,
+                                 QString rotatorModelName_,
+                                 bool supportCwCCwCmd_ ,
+                                 int minRot_ ,
+                                 int maxRot_ ,
+                                 bool rotDisplay_,
+                                 bool pollData_ )
+
+               : modelNumber (modelNumber_),
+                 portType (portType_),
+                 rotatorManufacturer (rotatorManufacturer_),
+                 rotatorModelName (rotatorModelName_),
+                 supportCwCCwCmd (supportCwCCwCmd_),
+                 minRot (minRot_),
+                 maxRot (maxRot_),
+                 rotDisplay (rotDisplay_),
+                 pollData (pollData_)
+{
+
+}

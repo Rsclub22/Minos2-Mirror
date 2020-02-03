@@ -7,7 +7,7 @@
 
 RotatorFactory::RotatorFactory(QObject *parent) : QObject(parent)
 {
-    HamlibRotControl::register_rotators(&rotatorsList);
+    HamlibRotControl::register_rotators(this);
 
 #if defined (WIN32)
     // PSTRotator is only on Windows
@@ -20,3 +20,11 @@ RotatorFactory::~RotatorFactory()
 {
 
 }
+
+
+Rotators* RotatorFactory::supported_rotators()
+{
+    return &rotatorsList;
+}
+
+

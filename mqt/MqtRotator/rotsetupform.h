@@ -16,7 +16,8 @@
 #define ROTSETUPFORM_H
 
 #include <QWidget>
-#include "rotcontrol.h"
+#include "rotatorfactory.h"
+//#include "rotcontrol.h"
 
 namespace Ui {
 class rotSetupForm;
@@ -27,15 +28,10 @@ class rotSetupForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit rotSetupForm(RotControl* rotator, srotParams* _antennaData, QWidget *parent = nullptr);
+    explicit rotSetupForm(RotatorFactory *rotFactory_, srotParams* _antennaData, QWidget *parent = nullptr);
     ~rotSetupForm();
 
     srotParams *antennaData;
-    bool antennaValueChanged = false;
-    bool antennaNameChanged = false;
-
-
-
 
     QString getAntennaName();
     void setAntennaName(QString n);
@@ -70,6 +66,12 @@ public:
 
     QString getPollInterval();
     void setPollInterval(QString i);
+
+    bool getAntennaValueChanged(){return antennaValueChanged;}
+    void setAntennaValueChanged(bool state){antennaValueChanged = state;}
+
+    bool getAntennaNameChanged(){return antennaNameChanged;}
+    void setAntennaNameChanged(bool state){antennaNameChanged = state;}
 
     void fillPortsInfo();
 
@@ -107,7 +109,7 @@ public:
     void pollIntervalVisible(bool s);
 
 
-    bool setEndStopType(srotParams *antennaData);
+
     void setSimCW_CCWcmdVisible(bool visible);
     void setSimCW_CCWcmdChecked(bool checked);
 
@@ -139,7 +141,10 @@ private slots:
 private:
     Ui::rotSetupForm *ui;
 
-    RotControl *rotator;
+    bool antennaValueChanged;
+    bool antennaNameChanged;
+
+    RotatorFactory* rotFactory;
 
     const int minOffset = -90;
     const int maxOffset = 90;
@@ -159,6 +164,7 @@ private:
 
     bool getCwCcwCmdFlag(int rotatorNumber);
 
+    bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
 };
 
 #endif // ROTSETUPFORM_H

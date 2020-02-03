@@ -14,6 +14,7 @@
 
 #include "base_pch.h"
 
+
 class RotPresetData
 {
 
@@ -250,8 +251,8 @@ public:
       dest.portType = srce->portType;
       dest.networkAdd = srce->networkAdd;
       dest.networkPort = srce->networkPort;
-      dest.maxBaudRate = srce->maxBaudRate;
-      dest.minBaudRate = srce->minBaudRate;
+      //dest.maxBaudRate = srce->maxBaudRate;
+      //dest.minBaudRate = srce->minBaudRate;
       dest.baudrate = srce->baudrate;
       dest.parity = srce->parity;
       dest.stopbits = srce->stopbits;
@@ -284,19 +285,19 @@ public:
   int max_azimuth = 0;
   endStop endStopType = ROT_0_360;      //working endstop type
 
-  int min_elevation = 0.0;
-  int max_elevation = 0.0;
+  int min_elevation = 0;
+  int max_elevation = 0;
   southStop southStopType = S_STOPOFF;
   bool overRunFlag = false;
   bool supportCwCcwCmd = true;
   bool simCwCcwCmd = false;
   int antennaOffset = 0;
   bool moving = false;
-  serialData::rig_port_type portType = serialData::RIG_PORT_NONE;
+  int portType = 0;
   QString networkAdd;
   QString networkPort;
-  int maxBaudRate = 0;
-  int minBaudRate = 0;
+  //int maxBaudRate = 0;
+  //int minBaudRate = 0;
   int baudrate = 0;
   int parity = 0;
   int stopbits = 0;

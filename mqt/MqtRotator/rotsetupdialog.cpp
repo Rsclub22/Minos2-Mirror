@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016-2020
 //
 //
 // Hamlib Library
@@ -31,13 +31,13 @@
 
 
 
-RotSetupDialog::RotSetupDialog(RotControl* _rotator, QWidget *parent) :
+RotSetupDialog::RotSetupDialog(RotatorFactory* rotFactory_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RotSetupDialog)
 {
     ui->setupUi(this);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    rotator = _rotator;
+    rotatorFactory = rotFactory_;
 
     QSettings settings;
     QByteArray geometry = settings.value("RotControlSetup/geometry").toByteArray();
@@ -117,7 +117,7 @@ void RotSetupDialog::addTab(int tabNum, QString tabName)
     }
 
 
-    antennaTab.append(new rotSetupForm(rotator, availAntData[tabNum]));
+    antennaTab.append(new rotSetupForm(rotatorFactory, availAntData[tabNum]));
     ui->antennaTab->insertTab(tabNum, antennaTab[tabNum], tabName);
     ui->antennaTab->setTabColor(tabNum, Qt::darkBlue);
 
@@ -287,7 +287,7 @@ void RotSetupDialog::cancelButtonPushed()
     bool change = false;
     for (int i = 0; i < antennaTab.count(); i++)
     {
-        if (antennaTab[i]->antennaValueChanged)
+        if (antennaTab[i]->getAntennaValueChanged())
         {
             change = true;
             break;
@@ -345,7 +345,7 @@ void RotSetupDialog::saveSettings()
     for (int i = 0; i < numAvailAntennas; i++)
     {
 
-        if (antennaTab[i]->antennaValueChanged)
+        if (antennaTab[i]->getAntennaValueChanged())
         {
             config.beginGroup(availAntData[i]->antennaName);
             if (currentAntennaName == availAntData[i]->antennaName)
@@ -356,10 +356,10 @@ void RotSetupDialog::saveSettings()
 
 
             config.setValue("antennaName", availAntData[i]->antennaName);
-            if (antennaTab[i]->antennaNameChanged)
+            if (antennaTab[i]->getAntennaNameChanged())
             {
                 antennaNameChg = true;
-                antennaTab[i]->antennaNameChanged = false;
+                antennaTab[i]->setAntennaNameChanged(false);
             }
             config.setValue("antennaNumber", i+1);
             config.setValue("rotatorModel", availAntData[i]->rotatorModel);
@@ -388,7 +388,7 @@ void RotSetupDialog::saveSettings()
             config.setValue("netAddress", availAntData[i]->networkAdd);
             config.setValue("netPort", availAntData[i]->networkPort);
             config.endGroup();
-            antennaTab[i]->antennaValueChanged = false;
+            antennaTab[i]->setAntennaValueChanged(false);
 
         }
 
@@ -414,52 +414,7 @@ void RotSetupDialog::saveSettings()
 
 
 
-/*
 
-
-void RotSetupDialog::saveAntenna(int i)
-{
-
-    QString fileName;
-    fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
-    QSettings  config(fileName, QSettings::IniFormat);
-
-    config.beginGroup(availAntData[i]->antennaName);
-    config.setValue("antennaName", availAntData[i]->antennaName);
-    config.setValue("antennaNumber", i+1);
-    config.setValue("rotatorModel", availAntData[i]->rotatorModel);
-    config.setValue("rotatorModelName", availAntData[i]->rotatorModelName);
-    config.setValue("rotatorModelNumber", availAntData[i]->rotatorModelNumber);
-    config.setValue("rotatorManufacturer", availAntData[i]->rotatorManufacturer);
-    config.setValue("rotatorCWEndStop",double( availAntData[i]->rotatorCWEndStop));
-    config.setValue("rotatorCCWEndStop", double(availAntData[i]->rotatorCCWEndStop));
-    config.setValue("rotatorType", availAntData[i]->rotType);
-    config.setValue("endStopType", availAntData[i]->endStopType);
-    config.setValue("maxAzimuth", double(availAntData[i]->max_azimuth));
-    config.setValue("minAzimuth", double(availAntData[i]->min_azimuth));
-    config.setValue("supportCwCcwCmd", availAntData[i]->supportCwCcwCmd);
-    config.setValue("simulateCwCCw", availAntData[i]->simCwCcwCmd);
-    config.setValue("rotatorPollInterval", availAntData[i]->pollInterval);
-    config.setValue("southStopType", availAntData[i]->southStopType);
-    config.setValue("overRun", availAntData[i]->overRunFlag);
-    config.setValue("antennaOffset", availAntData[i]->antennaOffset);
-    config.setValue("portType", availAntData[i]->portType);
-    config.setValue("comport", availAntData[i]->comport);
-    config.setValue("baudrate", availAntData[i]->baudrate);
-    config.setValue("databits", availAntData[i]->databits);
-    config.setValue("parity", availAntData[i]->parity);
-    config.setValue("stopbits", availAntData[i]->stopbits);
-    config.setValue("handshake", availAntData[i]->handshake);
-    config.setValue("netAddress", availAntData[i]->networkAdd);
-    config.setValue("netPort", availAntData[i]->networkPort);
-    config.endGroup();
-
-
-
-
-
-}
-*/
 void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
 {
 
@@ -471,18 +426,18 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->rotatorModelNumber = config.value("rotatorModelNumber", "").toInt();
     availAntData[antNum]->rotatorManufacturer = config.value("rotatorManufacturer", "").toString();
     availAntData[antNum]->pollInterval = config.value("rotatorPollInterval", ROT_DEFAULT_POLLINTERVAL).toString();
-    availAntData[antNum]->rotatorCWEndStop = azimuth_t(config.value("rotatorCWEndStop", 360).toDouble());
-    availAntData[antNum]->rotatorCCWEndStop = azimuth_t(config.value("rotatorCCWEndStop", 0).toDouble());
+    availAntData[antNum]->rotatorCWEndStop = config.value("rotatorCWEndStop", 360).toInt();
+    availAntData[antNum]->rotatorCCWEndStop = config.value("rotatorCCWEndStop", 0).toInt();
     availAntData[antNum]->rotType = endStop(config.value("rotatorType", int(ROT_0_360)).toInt());
     availAntData[antNum]->endStopType = endStop(config.value("endStopType", int(ROT_0_360)).toInt());
-    availAntData[antNum]->max_azimuth = azimuth_t(config.value("maxAzimuth", 360).toDouble());
-    availAntData[antNum]->min_azimuth = azimuth_t(config.value("minAzimuth", 0).toDouble());
+    availAntData[antNum]->max_azimuth = config.value("maxAzimuth", 360).toInt();
+    availAntData[antNum]->min_azimuth = config.value("minAzimuth", 0).toInt();
     availAntData[antNum]->supportCwCcwCmd = config.value("supportCwCcwCmd", false).toBool();
     availAntData[antNum]->simCwCcwCmd = config.value("simulateCwCCw", true).toBool();
     availAntData[antNum]->southStopType = southStop(config.value("southStopType", S_STOPOFF).toInt());
     availAntData[antNum]->overRunFlag = config.value("overRun", false).toBool();
     availAntData[antNum]->antennaOffset = config.value("antennaOffset", "").toInt();
-    //availAntData[antNum]->portType = rig_port_e(config.value("portType", int(RIG_PORT_NONE)).toInt());
+    availAntData[antNum]->portType = (config.value("portType", int(RIG_PORT_NONE)).toInt());
     availAntData[antNum]->comport = config.value("comport", "").toString();
     availAntData[antNum]->baudrate = config.value("baudrate", 9600).toInt();
     availAntData[antNum]->databits = config.value("databits", 8).toInt();
@@ -643,7 +598,7 @@ void RotSetupDialog::setAppName(QString name)
 void RotSetupDialog::addAntenna()
 {
 
-    AddAntennaDialog getAntennaName_Rot(availAntennas, rotator);
+    AddAntennaDialog getAntennaName_Rot(availAntennas, rotatorFactory);
     getAntennaName_Rot.setWindowTitle("Add Antenna and Rotator Model");
     if (getAntennaName_Rot.exec() != QDialog::Accepted)
     {
@@ -666,8 +621,7 @@ void RotSetupDialog::addAntenna()
   antennaTab[tabNum]->setupRotatorModel(rotModel);
   antennaTab[tabNum]->setPollInterval(ROT_DEFAULT_POLLINTERVAL);
   loadAvailComportsToTab(tabNum);
-  //loadSettingsToTab(tabNum);
-  //saveAntenna(tabNum);
+
   ui->antennaTab->setCurrentIndex(tabNum);
   emit antennaTabChanged();
 
@@ -755,8 +709,8 @@ void RotSetupDialog::editAntennaName()
             {
                 availAntData[i]->antennaName = text;  // update with new name
                 availAntennas[i] = text;
-                antennaTab[i]->antennaNameChanged = true;
-                antennaTab[i]->antennaValueChanged = true;
+                antennaTab[i]->setAntennaNameChanged(true);
+                antennaTab[i]->setAntennaValueChanged(true);
             }
         }
     }

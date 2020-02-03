@@ -69,7 +69,7 @@ public:
     explicit HamlibRotControl(QObject *parent = nullptr);
     ~HamlibRotControl();
 
-    static void register_rotators(RotatorFactory::Rotators *);
+    static void register_rotators(RotatorFactory* rotFactory);
 
     int init(srotParams &currentAntenna);
     int closeRotator();
@@ -89,13 +89,6 @@ public:
     int rotateCClockwise(int speed);
     int rotateClockwise(int speed) ;
     int stop_rotation();
-    serialData::serial_parity getSerialParityCode(int index);
-    serialData::serial_handshake getSerialHandshakeCode(int index);
-    QStringList getParityCodeNames();
-    QStringList getHandShakeNames();
-    QStringList getBaudRateNames();
-    QStringList getDataBitsNames();
-    QStringList getStopBitsNames();
     QStringList getErrorMsgList();
     QString getErrorMsgText(int errorCode);
     QString gethamlibVersion();
@@ -105,8 +98,8 @@ public:
 
 
 
-    int getSupportCwCcwCmd(int rotNumber, bool *flag);
-    int getMaxMinRotation(int rotNumber, int *maxRot, int *minRot);
+    //int getSupportCwCcwCmd(int rotNumber, bool *flag);
+    //int getMaxMinRotation(int rotNumber, int *maxRot, int *minRot);
     int getPortType(int rotNumber, rig_port_e *portType);
 
     int getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName);

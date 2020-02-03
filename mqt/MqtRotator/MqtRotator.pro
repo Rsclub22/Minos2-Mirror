@@ -19,6 +19,7 @@ SOURCES += \
     pstRotControl.cpp \
     rotatorbase.cpp \
     rotatorfactory.cpp \
+    rotcapabilities.cpp \
     skyscandialog.cpp \
     rotatormainwindow.cpp \
     minoscompass.cpp \
@@ -35,6 +36,7 @@ HEADERS  += \
     pstRotControl.h \
     rotatorbase.h \
     rotatorfactory.h \
+    rotcapabilities.h \
     skyscandialog.h \
     rotatormainwindow.h \
     minoscompass.h \
