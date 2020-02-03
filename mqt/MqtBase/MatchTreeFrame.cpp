@@ -68,6 +68,12 @@ void MatchTreeFrame::setBaseName(QString b)
 void MatchTreeFrame::setContest(BaseContestLog *ct)
 {
     contest = ct;
+    if (!ct)
+    {
+        showThisMatchQSOs(SharedMatchCollection());
+        showOtherMatchQSOs(SharedMatchCollection());
+        showMatchList(SharedMatchCollection());
+    }
 }
 void MatchTreeFrame::restoreColumns()
 {
@@ -247,7 +253,7 @@ void QSOMatchGridModel::initialise(MatchType t, SharedMatchCollection pmatch )
         rootItem = nullptr;
     }
 
-    if (pmatch->contactCount() == 0)
+    if (!pmatch || pmatch->contactCount() == 0)
     {
         endResetModel();
         return;
@@ -365,7 +371,6 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
         }
         else
         {
-            const BaseContestLog *contest = matchContest->getContactLog();
             if (ct)
             {
                 if( column >= 0 && column < columnCount(p))
@@ -373,6 +378,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
 
                     QString line;
                     BaseContestLog * act = MinosParameters::getMinosParameters() ->getCurrentContest();
+                    const BaseContestLog *contest = matchContest->getContactLog();
 
 
                     if (type == ThisMatch)
@@ -449,6 +455,9 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                     }
                     if (type == OtherMatch)
                     {
+                        const BaseContestLog *contest = matchContest->getContactLog();
+                        //But we have just shut the "other" contest... so we are pointing at nothing
+                        //This is where we have an "other" match and we close the "other" contest
                         QString name = contest->name.getValue();
                         QString band = contest->band.getValue();
 

@@ -15,7 +15,7 @@ class MatchThisFrame : public MatchTreeFrame
     {
         return "ThisMatchTree";
     }
-    void showThisMatchQSOs(SharedMatchCollection matchCollection);
+    void showThisMatchQSOs(SharedMatchCollection matchCollection) override;
 public:
     explicit MatchThisFrame(QWidget *parent = nullptr);
     virtual void initialise() override;

@@ -19,12 +19,15 @@ void MatchArchiveFrame::initialise()
 
 void MatchArchiveFrame::showMatchList( SharedMatchCollection matchCollection )
 {
-    if (matchCollection->contactCount())
+    if (matchCollection && matchCollection->contactCount())
     {
         MinosLoggerEvents::sendXferEnabled(true, contest, baseName);
     }
     archiveMatchModel.initialise(ArchiveMatch, matchCollection);
     getTreeView()->setModel(&archiveMatchModel);
+    if (!matchCollection)
+        return;
+
     getTreeView()->expandAll();
     restoreColumns();
     for(int i = 0; i < archiveMatchModel.rowCount(); i++)

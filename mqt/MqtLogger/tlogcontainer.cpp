@@ -1471,7 +1471,11 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
              QString curPath = contest->cfileName;
              setCurrentFile( curPath );
           }
+
+          // clear down matching, as it may have pointers to this contest
+          TMatchThread::FinishMatchThread();
           f->closeContest();    // which should close the contest
+          TMatchThread::InitialiseMatchThread();
 
           QWidget *tab = ui->ContestPageControl->widget(t);
           tab->deleteLater();

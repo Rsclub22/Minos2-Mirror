@@ -13,7 +13,7 @@ class MatchArchiveFrame : public MatchTreeFrame
     {
         return "ArchiveMatchTree";
     }
-    void showMatchList(SharedMatchCollection matchCollection);
+    void showMatchList(SharedMatchCollection matchCollection) override;
 public:
     explicit MatchArchiveFrame(QWidget *parent = nullptr);
     virtual void initialise() override;
