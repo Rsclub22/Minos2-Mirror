@@ -882,12 +882,12 @@ void rotSetupForm::fillPortsInfo()
 
 void rotSetupForm::fillSpeedInfo()
 {
-/*
+
     QStringList baudrateStr = rotator->getBaudRateNames();
 
     ui->comSpeedBox->clear();
     ui->comSpeedBox->addItems(baudrateStr);
-    */
+
 }
 
 void rotSetupForm::fillDataBitsInfo()
