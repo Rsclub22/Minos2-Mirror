@@ -544,130 +544,144 @@ void ThisLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog *
 bool Matcher::reduceScanAccuracy()
 {
     bool EndScan = true;
-    switch ( matchPhase )
+    bool dropthrough = true;
+    while (dropthrough)
     {
-       case Exact:
-          {
-            // we strip back to the basic callsign, as prefixes and suffixes aren't
-            // enough to stop a callsign match in main contest
-             if ( matchcs.match )
-             {
-                bool dropthrough = false;
-                QString smstr = matchcs.mstr;
-                int c = 0;
-                // need to trim out any leading and trailing
-                while ( c < smstr.length() && smstr[c] != '/' )
-                   c++;
+        dropthrough = false;
+        switch ( matchPhase )
+        {
+           case Exact:
+              {
+                // we strip back to the basic callsign, as prefixes and suffixes aren't
+                // enough to stop a callsign match in main contest
+                 if ( matchcs.match )
+                 {
+                    QString smstr = matchcs.mstr;
+                    int c = 0;
+                    // need to trim out any leading and trailing
+                    while ( c < smstr.length() && smstr[c] != '/' )
+                       c++;
 
-                int c2 = c;
-                if ( c2 < smstr.length() )
-                   c2++;	// skip the first /
-                while ( c2 < smstr.length() && smstr[c2] != '/' )
-                   c2++;
+                    int c2 = c;
+                    if ( c2 < smstr.length() )
+                       c2++;	// skip the first /
+                    while ( c2 < smstr.length() && smstr[c2] != '/' )
+                       c2++;
 
-                if ( c < smstr.length() && c2 < smstr.length() )
-                {
-                   // both prefix and suffix found
-                   // main part of callsign - pa/g0gjv/p goes to g0gjv
-                   matchcs.mstr = smstr.mid(c, c2 - c );	// copy back over ourselves
-                }
-                else
-                   if ( c < smstr.length() && ( c < 3 ) && smstr.length() - c > 2  )
-                   {
-                       // e.g. pa/g0gjv
-                      // prefix less than 3 chars and suffix more than 1 character
-                      matchcs.mstr = smstr.mid( c );	// copy back over ourselves
-                   }
-                   else
-                      if ( smstr[c] == '/' )
-                      {
-                          // e.g. g0gjv/p
-                         // remove suffix
-                         matchcs.mstr = matchcs.mstr.left( c );	// copy back over ourselves
-                      }
-                      else
-                      {
-                         // neither leading or trailing /
-                         // want to drop through to reduce loc/qth
-                         dropthrough = true;
-                      }
+                    if ( c < smstr.length() && c2 < smstr.length() )
+                    {
+                       // both prefix and suffix found
+                       // main part of callsign - pa/g0gjv/p goes to g0gjv
+                       matchcs.mstr = smstr.mid(c + 1, c2 - c - 1 );	// copy back over ourselves
+                    }
+                    else
+                       if ( c < smstr.length() && ( c < 3 ) && smstr.length() - c > 2  )
+                       {
+                           // e.g. pa/g0gjv
+                          // prefix less than 3 chars and suffix more than 1 character
+                          matchcs.mstr = smstr.mid( c + 1 );	// copy back over ourselves
+                       }
+                       else
+                          if ( smstr[c] == '/' )
+                          {
+                              // e.g. g0gjv/p
+                             // remove suffix
+                             matchcs.mstr = matchcs.mstr.left( c );	// copy back over ourselves
+                          }
+                          else
+                          {
+                             // neither leading or trailing /
+                             // want to drop through to reduce loc/qth
+                             dropthrough = true;
+                          }
 
-                if ( !dropthrough )
-                {
-                   //TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No exact match") );
-                   matchPhase = NoSuffix;
-                   contestIndex = 0;
-                   contactIndex = 0;
-                   firstMatch = MainContest;
-                   EndScan = false;
-                   break;
-                }
-             }
-          }
-          // or no /P anyway, so drop through
+                    if ( !dropthrough )
+                    {
+                       //TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No exact match") );
+                       matchPhase = NoSuffix;
+                       contestIndex = 0;
+                       contactIndex = 0;
+                       firstMatch = MainContest;
+                       EndScan = false;
+                       break;
+                    }
+                 }
+              }
+            matchPhase = NoSuffix;
+            dropthrough = true;
+            break;
 
-       case NoSuffix:
-          {
-            // we have stripped back to a basic callsign
-             if ( matchcs.match && ( matchloc.match || matchqth.match ) )
-             {
-                matchloc.set( "" );
-                matchqth.set( "" );
-                matchPhase = NoLoc;
-                contestIndex = 0;
-                contactIndex = 0;
-                firstMatch = MainContest;
-                EndScan = false;
-                //TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No match No Suffix") );
-                break;
-             }
-          }
-          // or no loc anyway, so drop through
+           case NoSuffix:
+              {
+                // we have stripped back to a basic callsign
+                // or no /P anyway, so drop through
+                 if ( matchcs.match && ( matchloc.match || matchqth.match ) )
+                 {
+                    matchloc.set( "" );
+                    matchqth.set( "" );
+                    matchPhase = NoLoc;
+                    contestIndex = 0;
+                    contactIndex = 0;
+                    firstMatch = MainContest;
+                    EndScan = false;
+                    //TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No match No Suffix") );
+                    break;
+                 }
+              }
+            dropthrough = true;
+            matchPhase = NoLoc;
+            break;
 
-       case NoLoc:
-          {
-             if ( matchcs.match )
-             {
-                // We know that cs is not empty
-                // strip temp cs of its leading country and number
-                // e.g. g0gjv to gjv
-                QString smstrStart = matchcs.mstr;
-                int c = smstrStart.length();
+           case NoLoc:
+              {
+            // or no loc anyway, so drop through
+                 if ( matchcs.match )
+                 {
+                    // We know that cs is not empty
+                    // strip temp cs of its leading country and number
+                    // e.g. g0gjv to gjv
+                    QString smstrStart = matchcs.mstr;
+                    int c = smstrStart.length();
 
-                while ( c > 0 )
-                {
-                   if ( !smstrStart[c - 1].isDigit())
-                      c--;
-                   else
-                      break;
-                }
+                    while ( c > 0 )
+                    {
+                       if ( !smstrStart[c - 1].isDigit())
+                          c--;
+                       else
+                          break;
+                    }
 
-                if ( c > 0 )   	// i.e. we havent got back to the start
-                {
-                   if ( c < smstrStart.length() )   			// we would be left with something
-                   {
-                      matchcs.mstr = smstrStart.mid(c);	// copy back over
-                      matchPhase = Body;
-                      contestIndex = 0;
-                      contactIndex = 0;
-                      firstMatch = MainContest;
-                      EndScan = false;
-                      //TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No match No LOC") );
-                      break;
-                   }
-                }
-             }
-          }
-          // else we have already done what we can, so drop through
+                    if ( c > 0 )   	// i.e. we havent got back to the start
+                    {
+                       if ( c < smstrStart.length() )   			// we would be left with something
+                       {
+                          matchcs.mstr = smstrStart.mid(c);	// copy back over
+                          matchPhase = Body;
+                          contestIndex = 0;
+                          contactIndex = 0;
+                          firstMatch = MainContest;
+                          EndScan = false;
+                          //TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No match No LOC") );
+                          break;
+                       }
+                    }
+                 }
+              }
+            matchPhase = Body;
+            dropthrough = true;
+            break;
 
-       case Country:
-       case District:
-       case LocatorPhase:
-       case Body:
-          {
-             // we have finished.
-             break;
-          }
+
+           case Country:
+           case District:
+           case LocatorPhase:
+           case Body:
+              {
+            // else we have already done what we can, so drop through
+                 // we have finished.
+                 break;
+              }
+        }
     }
     return EndScan;
 }
