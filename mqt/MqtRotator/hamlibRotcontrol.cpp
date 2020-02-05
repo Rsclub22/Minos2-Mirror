@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
 //
 //
 // Hamlib Library
@@ -104,7 +104,7 @@ int HamlibRotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
 }
 
 */
-int HamlibRotControl::init(srotParams &selectedAntenna)
+int HamlibRotControl::rotInit(srotParams &selectedAntenna)
 {
     int retcode;
 
@@ -128,7 +128,7 @@ int HamlibRotControl::init(srotParams &selectedAntenna)
 
 
     // load rotator params to open
-    if (rig_port_e(selectedAntenna.portType) == RIG_PORT_SERIAL)
+    if ((selectedAntenna.portType) == RotCapContstants::PortType::serial)
     {
         strncpy(my_rot->state.rotport.pathname, comport.toLatin1().data(), comport.length());
         my_rot->state.rotport.parm.serial.rate = selectedAntenna.baudrate;
@@ -148,7 +148,7 @@ int HamlibRotControl::init(srotParams &selectedAntenna)
        // }
 
     }
-    else if (rig_port_e(selectedAntenna.portType) == RIG_PORT_NETWORK || rig_port_e(selectedAntenna.portType) == RIG_PORT_UDP_NETWORK)
+    else if (selectedAntenna.portType == RotCapContstants::PortType::network )
     {
         QString netAdd;
         if (selectedAntenna.networkAdd.isEmpty() || isHostLocal(selectedAntenna.networkAdd))
@@ -161,7 +161,7 @@ int HamlibRotControl::init(srotParams &selectedAntenna)
         }
         strncpy(my_rot->state.rotport.pathname, QString(netAdd + ":" + selectedAntenna.networkPort).toLatin1().data(), FILPATHLEN);
     }
-    else if (rig_port_e(selectedAntenna.portType) == RIG_PORT_NONE)
+    else if (selectedAntenna.portType == RotCapContstants::PortType::none)
     {
         strncpy(my_rot->state.rotport.pathname, QString("").toLatin1().data(), FILPATHLEN);
     }
@@ -379,7 +379,7 @@ int HamlibRotControl::request_bearing()
 
 
 
-int HamlibRotControl::rotateClockwise(int speed)
+int HamlibRotControl::rotateClockwise(const int speed)
 {
 
     int retCode = RIG_OK;
@@ -392,7 +392,7 @@ int HamlibRotControl::rotateClockwise(int speed)
     return retCode;
 }
 
-int HamlibRotControl::rotateCClockwise(int speed)
+int HamlibRotControl::rotateCClockwise(const int speed)
 {
     int retCode = RIG_OK;
     retCode = rot_move(my_rot, ROT_MOVE_LEFT , speed);
@@ -405,7 +405,7 @@ int HamlibRotControl::rotateCClockwise(int speed)
 }
 
 
-int HamlibRotControl::rotate_to_bearing(int bearing)
+int HamlibRotControl::rotate_to_bearing(const int bearing)
 {
     int retCode = RIG_OK;
     float rotbearing = bearing;
@@ -479,7 +479,7 @@ QStringList HamlibRotControl::getErrorMsgList()
 
 
 
-QString HamlibRotControl::gethamlibVersion()
+QString HamlibRotControl::getRotLibVersion()
 {
     QString ver = hamlib_version;
     return ver;

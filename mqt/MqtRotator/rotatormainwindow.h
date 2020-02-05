@@ -19,6 +19,7 @@
 
 #include "base_pch.h"
 #include "rotatorRpc.h"
+#include "rotatorbase.h"
 #include "rotatorfactory.h"
 #include "rotatorcommon.h"
 #include "rotpresetbutton.h"
@@ -103,6 +104,7 @@ private:
     RotatorRpc *msg;
 
     RotatorFactory* rotFactory;
+    RotatorBase* rotator;
 
     QTimer LogTimer;
     QTimer RotateTimer;
@@ -115,7 +117,6 @@ private:
     QComboBox *selectAntenna;
     //QPushButton* presetButtons[NUM_PRESETS];
     QString appName = "";
-    HamlibRotControl  *rotator;
     QLabel *status;
     QLabel *offSetlbl;
     QLabel *offSetDisplay;

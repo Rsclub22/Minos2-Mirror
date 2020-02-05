@@ -156,6 +156,7 @@ HEADERS += \
     rotpresetbutton.h \
     rotpresetdialog.h \
     ScreenContact.h \
+    serialCommonData.h \
     serialcomms.h \
     StartConfig.h \
     TreeUtils.h \

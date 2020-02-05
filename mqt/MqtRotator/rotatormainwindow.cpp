@@ -399,7 +399,7 @@ void RotatorMainWindow::openRotator()
         showStatusMessage("Please select an Antenna");
         return;
     }
-    if (rig_port_e(setupAntenna->currentAntenna.portType) == RIG_PORT_SERIAL)
+    if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::serial)
     {
         if(setupAntenna->comportAvial(setupAntenna->currentAntenna.comport) == -1)
         {
@@ -416,7 +416,7 @@ void RotatorMainWindow::openRotator()
         }
 
     }
-    if (rig_port_e(setupAntenna->currentAntenna.portType) == RIG_PORT_NETWORK || rig_port_e(setupAntenna->currentAntenna.portType == RIG_PORT_UDP_NETWORK))
+    if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::network )
     {
         if (setupAntenna->currentAntenna.networkAdd == "" || (setupAntenna->currentAntenna.networkPort == ""))
         {
@@ -434,13 +434,13 @@ void RotatorMainWindow::openRotator()
     }
 
 
-    //srotParams p = setupAntenna->getCurrentAntenna();
+    rotator = rotFactory->createRotator(rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModelName).RotCapabilities::modelNumber);
 
-    retCode = rotator->init(setupAntenna->currentAntenna);
-        if (retCode < 0)
-        {
+    retCode = rotator->rotInit(setupAntenna->currentAntenna);
+    if (retCode < 0)
+    {
             hamlibError(retCode, "Rotator Init");
-        }
+    }
     if (rotator->getRotConnected())
     {
         // get poll interval timer
@@ -454,17 +454,17 @@ void RotatorMainWindow::openRotator()
        }
 
         pollTimer->start(pollTime);             // start timer to send message to controller
-        if (rig_port_e(setupAntenna->currentAntenna.portType) == RIG_PORT_SERIAL)
+        if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::serial)
         {
-            //showStatusMessage(tr("Connected to: %1 - %2, %3, %4, %5, %6, %7, %8")
-            //                      .arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.comport).arg(setupAntenna->currentAntenna.baudrate).arg(setupAntenna->currentAntenna.databits)
-            //                      .arg(setupAntenna->currentAntenna.stopbits).arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]).arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+            showStatusMessage(tr("Connected to: %1 - %2, %3, %4, %5, %6, %7, %8")
+                                  .arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.comport).arg(setupAntenna->currentAntenna.baudrate).arg(setupAntenna->currentAntenna.databits)
+                                  .arg(setupAntenna->currentAntenna.stopbits).arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]).arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]));
         }
-        else if (rig_port_e(setupAntenna->currentAntenna.portType == RIG_PORT_NETWORK || rig_port_e(setupAntenna->currentAntenna.portType == RIG_PORT_UDP_NETWORK)))
+        else if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::serial )
         {
             showStatusMessage(QString("Connected to: %1 - %2, %3").arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.networkAdd + ":" + setupAntenna->currentAntenna.networkPort));
         }
-        else if (rig_port_e(setupAntenna->currentAntenna.portType) == RIG_PORT_NONE)
+        else if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::none)
         {
                 showStatusMessage(QString("Connected to: %1 - %2").arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel));
         }
@@ -497,6 +497,10 @@ void RotatorMainWindow::closeRotator()
     if (rotator->getRotConnected())
     {
         rotator->closeRotator();
+        if (rotator)
+        {
+            delete rotator;
+        }
     }
 
 
@@ -2212,7 +2216,7 @@ void RotatorMainWindow::aboutRotatorConfig()
     {
 
         msg.append(QString("App Instance Name  = %1\n").arg(appName));
-        msg.append(QString("Hamlib Version = %1\n").arg(rotator->gethamlibVersion()));
+        msg.append(QString("Hamlib Version = %1\n").arg(rotator->getRotLibVersion()));
         msg.append(QString("Antenna Name = %1\n").arg(setupAntenna->currentAntenna.antennaName));
         msg.append(QString("Antenna Number = %1\n").arg(setupAntenna->currentAntenna.antennaNumber));
         msg.append(QString("Rotator Model = %1\n").arg(setupAntenna->currentAntenna.rotatorModel));
@@ -2263,7 +2267,7 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
     {
         trace("*** Antenna Updated ***");
         trace(QString("App Instance Name  = %1").arg(appName));
-        trace(QString("Hamlib Version = %1").arg(rotator->gethamlibVersion()));
+        trace(QString("Hamlib Version = %1").arg(rotator->getRotLibVersion()));
         trace(QString("Antenna Name = %1").arg(setupAntenna->currentAntenna.antennaName));
         trace(QString("Antenna Number = %1").arg(setupAntenna->currentAntenna.antennaNumber));
         trace(QString("Rotator Model = %1").arg(setupAntenna->currentAntenna.rotatorModel));

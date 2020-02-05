@@ -1,8 +1,22 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rotator Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+//
+//
+// PSTRotator
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
 #include "pstRotControl.h"
+#include "rotatorfactory.h"
 
 
-PstRotControl::PstRotControl(QObject *parent) :
-    QObject(parent),
+PstRotControl::PstRotControl(QObject *parent) : RotatorBase(parent),
+
     pstNetAddress("127.0.0.1"),
     pstCommandPortNumber(12000),
     pstReportPortNumber(12001)
@@ -14,9 +28,47 @@ PstRotControl::PstRotControl(QObject *parent) :
 }
 
 
-void PstRotControl::initPstSockets()
+PstRotControl::~PstRotControl()
 {
 
+}
+
+
+void PstRotControl::register_rotators(RotatorFactory *rotators, int rotatorId)
+{
+
+    (*rotators->supported_rotators())["PSTRotator"] = RotCapabilities(rotatorId, RotCapContstants::PortType::network,
+                                                           "", "PSTRotator",
+                                                           false,
+                                                           COMPASS_MIN0, COMPASS_MAX360,
+                                                           RotCapContstants::PollData::pollDataOn,
+                                                           RotCapContstants::RotatorDisplay::displayPart);
+
+
+
+
+}
+
+
+
+int PstRotControl::rotInit(srotParams &selectedAntenna)
+{
+
+    int retCode = 0;
+
+    closeSockets();
+
+    pstAddress.setAddress(pstNetAddress);
+
+    pstReportSocket->bind(pstAddress, pstReportPortNumber);
+
+    return retCode;
+
+}
+
+
+void PstRotControl::closeSockets()
+{
     if (pstCommandSocket->state() == QAbstractSocket::BoundState)
     {
         pstCommandSocket->close();
@@ -26,14 +78,16 @@ void PstRotControl::initPstSockets()
     {
         pstReportSocket->close();
     }
-
-    pstAddress.setAddress(pstNetAddress);
-
-    pstReportSocket->bind(pstAddress, pstReportPortNumber);
+}
 
 
+int PstRotControl::closeRotator()
+{
+    int retCode = 0;
 
+    closeSockets();
 
+    return retCode;
 }
 
 
@@ -73,7 +127,7 @@ void PstRotControl::processPendingReportDatagrams()
             if (re.exactMatch(bl[1]))
             {
                 bearing = bl[1];
-                emit pstBearing(bearing.toInt());
+                emit bearing_updated(bearing.toInt());
             }
         }
     }
@@ -82,23 +136,42 @@ void PstRotControl::processPendingReportDatagrams()
 
 
 
-void PstRotControl::sendRequestBearing()
+int PstRotControl::request_bearing()
 {
+    int retCode = 0;
     sendCommandToPstRotator("<PST>AZ?</PST>");
+
+    return retCode;
 }
 
 
-void PstRotControl::sendRotateTo(const QString bearing)
+int PstRotControl::rotate_to_bearing(const int bearing)
 {
-    QString msg = "<PST><AZIMUTH>" + bearing + "</AZIMUTH></PST>";
+    int retCode = 0;
+    QString msg = "<PST><AZIMUTH>" + QString::number(bearing) + "</AZIMUTH></PST>";
     sendCommandToPstRotator(msg);
+    return retCode;
 
 }
 
-void PstRotControl::sendStop()
+int PstRotControl::stop_rotation()
 {
+    int retCode = 0;
     QString msg = "<PST><STOP>1</STOP></PST>";
     sendCommandToPstRotator(msg);
+    return retCode;
+}
+
+
+void PstRotControl::enableTraceComms(bool state)
+{
+    traceComms = state;
+}
+
+QString PstRotControl::getRotLibVersion()
+{
+    QString ver = QString("PSTRotator");
+    return ver;
 }
 
 void PstRotControl::sendCommandToPstRotator(const QString msg)
@@ -108,3 +181,28 @@ void PstRotControl::sendCommandToPstRotator(const QString msg)
     pstCommandSocket->writeDatagram(datagram, pstAddress, pstCommandPortNumber);
 
 }
+
+
+
+
+int PstRotControl::rotateCClockwise(const int speed)
+{
+    Q_UNUSED(speed)
+    return 0;
+}
+int PstRotControl::rotateClockwise(const int speed)
+{
+    Q_UNUSED(speed)
+    return 0;
+}
+
+void PstRotControl::set_rotatorSpeed(int speed)
+{
+    rot_speed = speed;
+}
+
+int PstRotControl::get_rotatorSpeed()
+{
+    return rot_speed;
+}
+

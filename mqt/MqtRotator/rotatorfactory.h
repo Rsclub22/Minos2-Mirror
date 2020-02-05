@@ -1,13 +1,26 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rotator Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+//
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef ROTATORFACTORY_H
 #define ROTATORFACTORY_H
 
 #include <QObject>
 #include "rotatorcommon.h"
 #include "rotcapabilities.h"
+#include "rotatorbase.h"
 
 
 
-enum        // supported non-hamlib rotator interfaces
+enum RotId      // supported non-hamlib rotator interfaces
 {
     NonHamlibBaseId = 9899,
     PSTRotatorId
@@ -30,13 +43,14 @@ public:
 
 
 
-
+    RotatorBase* createRotator(int rotatorId);
     Rotators* supported_rotators();
 
 signals:
 
 private:
     Rotators rotatorsList;
+
 
 
 };

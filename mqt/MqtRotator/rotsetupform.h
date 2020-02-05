@@ -17,7 +17,7 @@
 
 #include <QWidget>
 #include "rotatorfactory.h"
-//#include "rotcontrol.h"
+#include "serialCommonData.h"
 
 namespace Ui {
 class rotSetupForm;
@@ -102,7 +102,6 @@ public:
     void networkDataEntryVisible(bool v);
 
     int comportAvial(QString comport);
-    int getMaxMinRotationData(int rotatorNumber, int *maxRot, int *minRot);
 
 
     void antennaOffSetVisible(bool s);
@@ -162,7 +161,7 @@ private:
     void fillHandShakeInfo();
 
 
-    bool getCwCcwCmdFlag(int rotatorNumber);
+
 
     bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
 };

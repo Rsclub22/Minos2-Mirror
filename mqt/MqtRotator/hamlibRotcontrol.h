@@ -67,31 +67,33 @@ class HamlibRotControl: public RotatorBase
 
 public:
     explicit HamlibRotControl(QObject *parent = nullptr);
-    ~HamlibRotControl();
+    virtual ~HamlibRotControl();
 
     static void register_rotators(RotatorFactory* rotFactory);
 
-    int init(srotParams &currentAntenna);
-    int closeRotator();
+
     int getModelNumber(int idx);
     int getRotatorModelIndex();
     void getRotatorList();
     bool getRotatorList(QComboBox *cb);
     const char * getMfg_Name(int idx);
     const char * getModel_Name(int idx);
-    void set_rotatorSpeed(int speed);
-    int get_rotatorSpeed();
-    //void set_serialConnected(bool connectFlag);
-    //bool get_serialConnected();
-    //int getRotatorAzimuth();
-    int request_bearing();
-    int rotate_to_bearing(int bearing);
-    int rotateCClockwise(int speed);
-    int rotateClockwise(int speed) ;
-    int stop_rotation();
+
+    int rotInit(srotParams &currentAntenna) override;
+    int closeRotator() override;
+
+    int request_bearing() override;
+    int rotate_to_bearing(const int bearing) override;
+    int rotateCClockwise(const int speed) override;
+    int rotateClockwise(const int speed)  override;
+    int stop_rotation() override;
+
+    void set_rotatorSpeed(int speed)  override;
+    int get_rotatorSpeed()  override;
+
     QStringList getErrorMsgList();
     QString getErrorMsgText(int errorCode);
-    QString gethamlibVersion();
+    QString getRotLibVersion() override;
 
 
     int rig_message_cb(enum rig_debug_level_e debug_level, const char *fmt, va_list ap);
@@ -104,15 +106,15 @@ public:
 
     int getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName);
 
-    void enableTraceComms(bool state);
+    void enableTraceComms(bool state) override;
 
 private:
 
 
 
 signals:
-   void bearing_updated(int);
-   void request_bearingError(int);
+   //void bearing_updated(int);
+   //void request_bearingError(int);
    void debug_protocol(QString);
 
 

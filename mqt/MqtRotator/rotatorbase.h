@@ -2,6 +2,7 @@
 #define ROTATORBASE_H
 
 #include <QObject>
+#include "rotatorcommon.h"
 
 class RotatorBase : public QObject
 {
@@ -15,16 +16,26 @@ public:
     void setRotConnected(bool rotConnected_){rotConnected = rotConnected_;}
     bool getRotConnected(){return rotConnected;}
 
-signals:
-
-
-protected:
+    virtual int rotInit(srotParams &selectedAntenna) = 0;
 
     virtual int request_bearing() = 0;
-    virtual int rotate_to_bearing(int bearing) = 0;
-    virtual int rotateCClockwise(int speed) = 0;
-    virtual int rotateClockwise(int speed) = 0;
+    virtual int rotate_to_bearing(const int bearing) = 0;
+    virtual int rotateCClockwise(const int speed) = 0;
+    virtual int rotateClockwise(const int speed) = 0;
     virtual int stop_rotation() = 0;
+    virtual int closeRotator() = 0;
+    virtual void set_rotatorSpeed(int speed) = 0;
+    virtual int get_rotatorSpeed() = 0;
+    virtual void enableTraceComms(bool state ) = 0;
+    virtual QString getRotLibVersion() = 0;
+
+
+//protected:
+
+
+signals:
+   void bearing_updated(int);
+   void request_bearingError(int);
 
 private:
 
