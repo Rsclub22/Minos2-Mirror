@@ -91,7 +91,7 @@ void RotPresets::initPresetButtons()
                      << ui->presetButton5 << ui->presetButton6 << ui->presetButton7 << ui->presetButton8 << ui->presetButton9;
 
     QStringList buttonLabels;
-    for (int i = 0; i < sizeof(RotPresetData::presetButtonLabels)/sizeof(const char *); i++)
+    for (unsigned int i = 0; i < sizeof(RotPresetData::presetButtonLabels)/sizeof(const char *); i++)
     {
         buttonLabels.append(RotPresetData::tr(RotPresetData::presetButtonLabels[i]));
     }
