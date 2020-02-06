@@ -915,7 +915,7 @@ void RotatorMainWindow::upDateAntenna()
             if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
             {
                 closeRotator();
-                QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
+                QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure an antenna name and rotator model"));
                 return;
             }
 
@@ -1010,7 +1010,7 @@ void RotatorMainWindow::refreshAntenna()
         if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
         {
             closeRotator();
-            QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
+            QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure an antenna name and rotator model"));
             return;
         }
 
