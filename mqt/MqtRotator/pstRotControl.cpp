@@ -15,11 +15,11 @@
 #include "rotatorfactory.h"
 
 
-PstRotControl::PstRotControl(QObject *parent) : RotatorBase(parent),
+PstRotControl::PstRotControl(QObject *parent) : RotatorBase(parent)
 
-    pstNetAddress("127.0.0.1"),
-    pstCommandPortNumber(12000),
-    pstReportPortNumber(12001)
+    //pstNetAddress("127.0.0.1"),
+    //pstCommandPortNumber(12000),
+    //pstReportPortNumber(12001)
 {
     pstCommandSocket = new QUdpSocket(this);
     pstReportSocket = new QUdpSocket(this);
@@ -34,10 +34,10 @@ PstRotControl::~PstRotControl()
 }
 
 
-void PstRotControl::register_rotators(RotatorFactory *rotators, int rotatorId)
+void PstRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList, int rotatorId)
 {
 
-    (*rotators->supported_rotators())["PSTRotator"] = RotCapabilities(rotatorId, RotCapContstants::PortType::network,
+    (*rotatorsList)["PSTRotator"] = RotCapabilities(rotatorId, RotCapContstants::PortType::network,
                                                            "", "PSTRotator",
                                                            false,
                                                            COMPASS_MIN0, COMPASS_MAX360,
@@ -58,11 +58,33 @@ int PstRotControl::rotInit(srotParams &selectedAntenna)
 
     closeSockets();
 
+    setRotConnected(false);
+
+    pstNetAddress = selectedAntenna.networkAdd.trimmed();
+    pstCommandPortNumber = selectedAntenna.networkPort.trimmed().toUShort();
+    pstReportPortNumber = pstCommandPortNumber + 1;
+
     pstAddress.setAddress(pstNetAddress);
 
     pstReportSocket->bind(pstAddress, pstReportPortNumber);
 
+
+
+    if (retCode >= 0)
+    {
+
+        setRotConnected(true);
+
+
+    }
+    else
+    {
+
+        setRotConnected(false);
+    }
+
     return retCode;
+
 
 }
 
@@ -91,17 +113,7 @@ int PstRotControl::closeRotator()
 }
 
 
-void PstRotControl::setPstNetAddress(QString address)
-{
-    pstNetAddress = address;
-}
 
-void PstRotControl::setPstPortAddress(QString port)
-{
-    pstCommandPortNumber = port.toUShort();
-    pstReportPortNumber = pstCommandPortNumber + 1;
-
-}
 
 
 void PstRotControl::processPendingReportDatagrams()

@@ -119,6 +119,8 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
 
     comport.append(selectedAntenna.comport);
 
+    setRotConnected(false);
+
     my_rot = rot_init(selectedAntenna.rotatorModelNumber);
     if (!my_rot)
     {
@@ -204,7 +206,7 @@ int HamlibRotControl::closeRotator()
 }
 
 
-void HamlibRotControl::register_rotators(RotatorFactory *rotatorsList)
+void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
 {
 
     capsList.clear();
@@ -233,7 +235,7 @@ void HamlibRotControl::register_rotators(RotatorFactory *rotatorsList)
 
 
 
-        (*rotatorsList->supported_rotators())[key] = RotCapabilities(capsList[i]->rot_model, port_type,
+        (*rotatorsList)[key] = RotCapabilities(capsList[i]->rot_model, port_type,
                                                                capsList[i]->mfg_name, capsList[i]->model_name,
                                                                capsList[i]->move != nullptr ? true : false,
                                                                capsList[i]->min_az, capsList[i]->max_az,

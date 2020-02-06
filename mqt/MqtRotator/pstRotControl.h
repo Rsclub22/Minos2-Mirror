@@ -30,7 +30,7 @@ public:
     explicit PstRotControl(QObject *parent = nullptr);
     virtual ~PstRotControl();
 
-    static void register_rotators(RotatorFactory *rotators, int rotatorId);
+    static void register_rotators(RotatorFactory::Rotators *rotatorsList, int rotatorId);
     int rotInit(srotParams &selectedAntenna) override;
     int request_bearing() override;
     int rotate_to_bearing(const int bearing) override;

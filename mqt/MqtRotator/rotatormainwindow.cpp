@@ -98,7 +98,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     initPresetButtons();
 
 
-    rotator = new HamlibRotControl();
+    rotator = nullptr;
     rotFactory = new RotatorFactory();
 
     //rotator->getRotatorList();
@@ -139,7 +139,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     rot_left_button_off();
     rot_right_button_off();
 
-    rotator->setRotConnected(false);
+
 
     refreshPresetLabels();
     initActionsConnections();
@@ -435,6 +435,7 @@ void RotatorMainWindow::openRotator()
 
 
     rotator = rotFactory->createRotator(rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModelName).RotCapabilities::modelNumber);
+    connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
 
     retCode = rotator->rotInit(setupAntenna->currentAntenna);
     if (retCode < 0)
@@ -460,7 +461,7 @@ void RotatorMainWindow::openRotator()
                                   .arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.comport).arg(setupAntenna->currentAntenna.baudrate).arg(setupAntenna->currentAntenna.databits)
                                   .arg(setupAntenna->currentAntenna.stopbits).arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]).arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]));
         }
-        else if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::serial )
+        else if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::network )
         {
             showStatusMessage(QString("Connected to: %1 - %2, %3").arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.networkAdd + ":" + setupAntenna->currentAntenna.networkPort));
         }
@@ -493,6 +494,7 @@ void RotatorMainWindow::closeRotator()
     }
 
     pollTimer->stop();
+    disconnect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
 
     if (rotator->getRotConnected())
     {
@@ -592,7 +594,7 @@ void RotatorMainWindow::initActionsConnections()
 
     // display bearing
     connect(pollTimer, SIGNAL(timeout()), this, SLOT(request_bearing()));
-    connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
+    //connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
     connect(this, SIGNAL(sendCompassDial(int)), ui->compassDial, SLOT(compassDialUpdate(int)));
     connect(this, SIGNAL(sendBearing(QString)), ui->bearingDisplay, SLOT(setText(const QString &)));
     connect(this, SIGNAL(sendBackBearing(QString)), ui->backBearingDisplay, SLOT(setText(const QString &)));
@@ -921,7 +923,11 @@ void RotatorMainWindow::upDateAntenna()
 
             if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
             {
-                closeRotator();
+                if (!rotator)
+                {
+                  closeRotator();
+                }
+
                 QMessageBox::critical(this, tr("Antenna Error"), "Please configure a antenna name and rotator model");
                 return;
             }
@@ -930,7 +936,11 @@ void RotatorMainWindow::upDateAntenna()
 
             ui->antNameDisp->setText(setupAntenna->currentAntenna.antennaName);
 
-            closeRotator();
+            if (!rotator)
+            {
+                closeRotator();
+            }
+
 
             writeWindowTitle(appName);
             openRotator();

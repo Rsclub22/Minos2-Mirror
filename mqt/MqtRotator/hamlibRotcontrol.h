@@ -69,7 +69,7 @@ public:
     explicit HamlibRotControl(QObject *parent = nullptr);
     virtual ~HamlibRotControl();
 
-    static void register_rotators(RotatorFactory* rotFactory);
+    static void register_rotators(RotatorFactory::Rotators *);
 
 
     int getModelNumber(int idx);

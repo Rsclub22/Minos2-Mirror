@@ -28,14 +28,14 @@ enum RotId      // supported non-hamlib rotator interfaces
 
 
 
-typedef   QMap<QString, RotCapabilities> Rotators;
+
 
 class RotatorFactory : public QObject
 {
     Q_OBJECT
 public:
 
-
+    typedef   QMap<QString, RotCapabilities> Rotators;
 
 
     explicit RotatorFactory(QObject *parent = nullptr);
