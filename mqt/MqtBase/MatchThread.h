@@ -23,8 +23,8 @@ class Matcher
 {
       bool matchRequired;  // use getter and setter below
    protected:
-      enum MatchPhase {Exact, NoSuffix, NoLoc, Body, Country, District, LocatorPhase};
-      enum ContestPhase {Starting, MainContest, Rest};
+      enum MatchPhase {empExact, empNoSuffix, empNoLoc, empBody, empCountry, empDistrict, empLocator};
+      enum ContestPhase {ecpStarting, ecpMainContest, ecpRest};
 
       MatchPhase matchPhase;
       bool matchStarted;

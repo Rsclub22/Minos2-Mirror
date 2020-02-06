@@ -379,9 +379,9 @@ bool matchElement::checkMatch( const QString &s )
 
 Matcher::Matcher() :
       matchRequired( false ),
-      matchPhase( Exact ),
+      matchPhase( empExact ),
       matchStarted( false ),
-      firstMatch( Starting ),
+      firstMatch( ecpStarting ),
       tickct( 0 ),
       contestIndex( -1 ),
       contactIndex( -1 ),
@@ -482,20 +482,20 @@ void Matcher::initMatch( )
          }
          // we have something matchable, so go to it!
 
-         matchPhase = Exact;		// set phase
+         matchPhase = empExact;		// set phase
       }
       else
       {
          QSharedPointer<CountryEntry> c = countryEntry;	// preserve over cleardown
          clearmatchall();
-         matchPhase = Country;
+         matchPhase = empCountry;
          countryEntry = c;
       }
 
       contestIndex = 0;
       contactIndex = 0;
       matchStarted = true;
-      firstMatch = Starting;
+      firstMatch = ecpStarting;
    }
    catch ( ... )
    {
@@ -550,7 +550,7 @@ bool Matcher::reduceScanAccuracy()
         dropthrough = false;
         switch ( matchPhase )
         {
-           case Exact:
+           case empExact:
               {
                 // we strip back to the basic callsign, as prefixes and suffixes aren't
                 // enough to stop a callsign match in main contest
@@ -598,20 +598,20 @@ bool Matcher::reduceScanAccuracy()
                     if ( !dropthrough )
                     {
                        //TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No exact match") );
-                       matchPhase = NoSuffix;
+                       matchPhase = empNoSuffix;
                        contestIndex = 0;
                        contactIndex = 0;
-                       firstMatch = MainContest;
+                       firstMatch = ecpMainContest;
                        EndScan = false;
                        break;
                     }
                  }
               }
-            matchPhase = NoSuffix;
+            matchPhase = empNoSuffix;
             dropthrough = true;
             break;
 
-           case NoSuffix:
+           case empNoSuffix:
               {
                 // we have stripped back to a basic callsign
                 // or no /P anyway, so drop through
@@ -619,20 +619,20 @@ bool Matcher::reduceScanAccuracy()
                  {
                     matchloc.set( "" );
                     matchqth.set( "" );
-                    matchPhase = NoLoc;
+                    matchPhase = empNoLoc;
                     contestIndex = 0;
                     contactIndex = 0;
-                    firstMatch = MainContest;
+                    firstMatch = ecpMainContest;
                     EndScan = false;
                     //TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No match No Suffix") );
                     break;
                  }
               }
             dropthrough = true;
-            matchPhase = NoLoc;
+            matchPhase = empNoLoc;
             break;
 
-           case NoLoc:
+           case empNoLoc:
               {
             // or no loc anyway, so drop through
                  if ( matchcs.match )
@@ -656,10 +656,10 @@ bool Matcher::reduceScanAccuracy()
                        if ( c < smstrStart.length() )   			// we would be left with something
                        {
                           matchcs.mstr = smstrStart.mid(c);	// copy back over
-                          matchPhase = Body;
+                          matchPhase = empBody;
                           contestIndex = 0;
                           contactIndex = 0;
-                          firstMatch = MainContest;
+                          firstMatch = ecpMainContest;
                           EndScan = false;
                           //TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No match No LOC") );
                           break;
@@ -667,15 +667,15 @@ bool Matcher::reduceScanAccuracy()
                     }
                  }
               }
-            matchPhase = Body;
+            matchPhase = empBody;
             dropthrough = true;
             break;
 
 
-           case Country:
-           case District:
-           case LocatorPhase:
-           case Body:
+           case empCountry:
+           case empDistrict:
+           case empLocator:
+           case empBody:
               {
             // else we have already done what we can, so drop through
                  // we have finished.
@@ -695,12 +695,12 @@ bool ThisLogMatcher::idleMatch( int limit )
           return false;				// nothing to do (yet)
 
        int cnt = matchCollection->contactCount();
-       if ( ( firstMatch == Starting ) && ( ( matchPhase == Exact ) || ( matchPhase == Country ) ) )
+       if ( ( firstMatch == ecpStarting ) && ( ( matchPhase == empExact ) || ( matchPhase == empCountry ) ) )
        {
            // right at the start, we try for a pure match
           contestIndex = 0;
           contactIndex = 0;
-          firstMatch = MainContest;
+          firstMatch = ecpMainContest;
        }
        else
        {
@@ -724,7 +724,7 @@ bool ThisLogMatcher::idleMatch( int limit )
 
                 QString baseName = TMatchThread::getMatchThread() ->getBaseName();
                 BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
-                if (baseName == "Log" && bool( ct ) && ( matchPhase != Country )  && ( matchPhase != District )  && ( matchPhase != LocatorPhase ) )
+                if (baseName == "Log" && bool( ct ) && ( matchPhase != empCountry )  && ( matchPhase != empDistrict )  && ( matchPhase != empLocator ) )
                 {
                    addMatch( ct->DupSheet.getCurDup(), ct );	// in case it isn't already
                 }
@@ -738,22 +738,22 @@ bool ThisLogMatcher::idleMatch( int limit )
                    // conteste focused the top line of matches here
                    // want to manage plurals, and local/other contests
                    QString matchSuffix = tr("Possible");
-                   if (matchPhase == Country)
+                   if (matchPhase == empCountry)
                    {
                       matchSuffix = tr("Country");
                    }
-                   else if (matchPhase == District)
+                   else if (matchPhase == empDistrict)
                    {
                       matchSuffix = tr("District");
                    }
-                   else if (matchPhase == LocatorPhase)
+                   else if (matchPhase == empLocator)
                    {
                       matchSuffix = tr("Locator");
                    }
                    buff = tr( " - %1%2 %3 matches" )
                            .arg ( ( cnt > MATCH_LIM ) ? ">" : "" )
                            .arg(thisContestMatched)
-                           .arg( ( matchPhase == Exact ) ? "" : matchSuffix );
+                           .arg( ( matchPhase == empExact ) ? "" : matchSuffix );
                 }
                 else
                 {
@@ -790,14 +790,14 @@ bool ThisLogMatcher::idleMatch( int limit )
           }
           // now do the match
 
-          if ( matchPhase != Country && matchPhase != District && matchPhase != LocatorPhase )
+          if ( matchPhase != empCountry && matchPhase != empDistrict && matchPhase != empLocator )
           {
              bool csmatch = false;
              bool locmatch = false;
              bool qthmatch = false;
 
              QString matchPart;
-             if (matchPhase == Body)
+             if (matchPhase == empBody)
              {
                  matchPart = cct->cs.body;
              }
@@ -844,7 +844,7 @@ bool ThisLogMatcher::idleMatch( int limit )
                    break;
              }
           }
-          else if (matchPhase == Country)
+          else if (matchPhase == empCountry)
           {
              if ( cct->ctryMult && ( cct->ctryMult == countryEntry ) )
              {
@@ -854,7 +854,7 @@ bool ThisLogMatcher::idleMatch( int limit )
              }
 
           }
-          else if (matchPhase == District)
+          else if (matchPhase == empDistrict)
           {
  /*            if ( cct->ctryMult && ( cct->ctryMult == ce ) )
              {
@@ -864,7 +864,7 @@ bool ThisLogMatcher::idleMatch( int limit )
              }
  */
           }
-          else if (matchPhase == LocatorPhase)
+          else if (matchPhase == empLocator)
           {
  /*            if ( cct->ctryMult && ( cct->ctryMult == ce ) )
              {
@@ -948,11 +948,11 @@ bool OtherLogMatcher::idleMatch( int limit )
          return false;				// nothing to do (yet)
 
       int cnt = matchCollection->contactCount();
-      if ( ( firstMatch == Starting ) && ( ( matchPhase == Exact ) || ( matchPhase == Country ) ) )
+      if ( ( firstMatch == ecpStarting ) && ( ( matchPhase == empExact ) || ( matchPhase == empCountry ) ) )
       {
          contestIndex = 0;
          contactIndex = 0;
-         firstMatch = Rest;
+         firstMatch = ecpRest;
       }
       else
       {
@@ -1012,14 +1012,14 @@ bool OtherLogMatcher::idleMatch( int limit )
          }
          // now do the match
 
-         if ( matchPhase != Country && matchPhase != District && matchPhase != LocatorPhase )
+         if ( matchPhase != empCountry && matchPhase != empDistrict && matchPhase != empLocator )
          {
             bool csmatch = false;
             bool locmatch = false;
             bool qthmatch = false;
 
             QString matchPart;
-            if (matchPhase == Body)
+            if (matchPhase == empBody)
             {
                 matchPart = cct->cs.body;
             }
@@ -1066,7 +1066,7 @@ bool OtherLogMatcher::idleMatch( int limit )
                   break;
             }
          }
-         else if (matchPhase == Country)
+         else if (matchPhase == empCountry)
          {
             if ( cct->ctryMult && ( cct->ctryMult == countryEntry ) )
             {
@@ -1076,7 +1076,7 @@ bool OtherLogMatcher::idleMatch( int limit )
             }
 
          }
-         else if (matchPhase == District)
+         else if (matchPhase == empDistrict)
          {
 /*            if ( cct->ctryMult && ( cct->ctryMult == ce ) )
             {
@@ -1086,7 +1086,7 @@ bool OtherLogMatcher::idleMatch( int limit )
             }
 */
          }
-         else if (matchPhase == LocatorPhase)
+         else if (matchPhase == empLocator)
          {
 /*            if ( cct->ctryMult && ( cct->ctryMult == ce ) )
             {
@@ -1128,6 +1128,7 @@ void ListMatcher::addMatch( ListContact *cct, ContactList * ccon )
        ContestMatchList &contestMatchList = matchCollection->contestMatchList;
        MapWrapper<BaseMatchContest> wmc(new MatchContactList);
 
+       //trace(QString("Adding call %1 to list %2").arg(cct->cs.fullCall.getValue()).arg(ccon->cfileName));
 
        QSharedPointer<BaseMatchContest> found;
        foreach(MapWrapper<BaseMatchContest> test, contestMatchList)
@@ -1169,13 +1170,18 @@ bool ListMatcher::idleMatch( int limit )
          return false;
 
       int cnt = matchCollection->contactCount();
-      if ( ( firstMatch == Starting ) && ( ( matchPhase == Exact ) || ( matchPhase == Country ) || ( matchPhase == District ) || ( matchPhase == LocatorPhase ) ) )
+      if ( ( firstMatch == ecpStarting )
+           && ( ( matchPhase == empExact )
+                || ( matchPhase == empCountry )
+                || ( matchPhase == empDistrict )
+                || ( matchPhase == empLocator ) ) )
       {
          contestIndex = 0;
          contactIndex = 0;
-         firstMatch = MainContest;
+         firstMatch = ecpRest;
       }
       else
+      {
          if ( ( contestIndex >= MinosParameters::getMinosParameters() ->getListSlotCount() ) || ( cnt > MATCH_LIM ) )
          {
             bool EndScan = true;
@@ -1197,39 +1203,20 @@ bool ListMatcher::idleMatch( int limit )
                return false;
             }
          }
-
+      }
       ContactList *ccon = MinosParameters::getMinosParameters()->getListSlot(contestIndex);
 
       while ( limit > 0  && !countryEntry)
       {
-//         limit -= 1;
-         if ( !ccon ||
-              ( contactIndex >= ccon->getContactCount() )
-            )
+         if ( !ccon || ( contactIndex >= ccon->getContactCount() ) )
          {
             // we need to move on
 
-            bool next_needed = true;
-            contactIndex = 0;
+           // go to the next ContestLog
+           contestIndex++;
+           contactIndex = 0;
 
-            if ( firstMatch == MainContest )
-            {
-               // we have done the current ContestLog, go to the rest
-               firstMatch = Rest;
-               contestIndex = -1;	// as it gets ++ed lower down
-            }
-
-            if ( next_needed )
-            {
-               // go to the next ContestLog
-               contestIndex++;
-               if ( contestIndex < MinosParameters::getMinosParameters() ->getListSlotCount() )
-               {
-                  // ContestLog is valid, if it is a list set first part
-                  ccon = MinosParameters::getMinosParameters()->getListSlot(contestIndex);  // not used as we return true below
-               }
-            }
-            return true;
+           return true;
          }
          ListContact *cct = ccon->pcontactAt( contactIndex++ );
          if ( !cct )
@@ -1242,7 +1229,7 @@ bool ListMatcher::idleMatch( int limit )
          bool qthmatch = false;
 
          QString matchPart;
-         if (matchPhase == Body)
+         if (matchPhase == empBody)
          {
              matchPart = cct->cs.body;
          }
