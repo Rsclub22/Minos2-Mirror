@@ -464,28 +464,13 @@ bool HamlibRotControl::get_serialConnected()
 
 
 
-
-
-
-
-
-
-
-
-QString HamlibRotControl::getErrorMsgText(int errorCode)
+QString RotControl::gethamlibErrorMsg(int errorCode)
 {
-    if (errorCode > errorMsgTxt.count())
+    if (errorCode > static_cast<int>(sizeof(hamlibText::hamlibErrorMsg)/sizeof(const char *)))
     {
-        return "hamlib Errorcode too large!";
+        return tr("hamlib Errorcode too large!");
     }
-    return errorMsgTxt[errorCode];
-}
-
-
-QStringList HamlibRotControl::getErrorMsgList()
-{
-
-    return errorMsgTxt;
+    return tr(hamlibText::hamlibErrorMsg[errorCode]);
 }
 
 
