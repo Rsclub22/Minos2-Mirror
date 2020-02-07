@@ -167,14 +167,10 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     rotatorBearing = COMPASS_ERROR; // force first update
 
 
-
-
-
-    //setPolltime(POLLTIME);   // to allow variable controller polltime - not implemented! **************** remove ????
     rotTimeCount = 0;
     RotateTimer.start(200);  // to set timeout for antenna rotating
 
-    readTraceLogFlag();
+    //readTraceLogFlag(); **********************************************
 
     rotlog->getBearingLogConfig();
 

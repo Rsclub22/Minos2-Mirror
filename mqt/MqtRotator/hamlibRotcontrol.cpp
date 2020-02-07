@@ -49,7 +49,7 @@ HamlibRotControl::HamlibRotControl(QObject *parent) : RotatorBase(parent)
    // NB callback is the C function, not the class method.
    // user_data is used to point to our class.
 
-   rig_set_debug_callback (::rig_message_cb, static_cast<rig_ptr_t>(this));
+   //rig_set_debug_callback (::rig_message_cb, static_cast<rig_ptr_t>(this));
 
 }
 
@@ -214,6 +214,10 @@ int HamlibRotControl::closeRotator()
 
 void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
 {
+
+
+    //rig_set_debug_callback (::rig_message_cb, static_cast<rig_ptr_t>(this));
+    rig_set_debug_callback (::rig_message_cb, nullptr);
 
     capsList.clear();
     rot_load_all_backends();
@@ -497,7 +501,7 @@ QString HamlibRotControl::getRotLibVersion()
 
 void HamlibRotControl::enableTraceComms(bool state)
 {
-    traceComms = state;
+    //traceComms = state; ***********************************************
 }
 
 
