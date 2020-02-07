@@ -17,7 +17,6 @@
 #include "hamlibRotcontrol.h"
 #include "rotatorfactory.h"
 #include "rotcapabilities.h"
-#include <hamlib/rotator.h>
 #include "hamlibCommon.h"
 #include "minosNetUtils.h"
 
@@ -30,6 +29,13 @@ int collect(const rot_caps *caps, rig_ptr_t)
 {
     capsList.append(caps);
     return 1;
+}
+
+extern "C"
+{
+  //typedef struct rot RIG;
+  struct rot_caps;
+  //typedef int vfo_t;
 }
 
 HamlibRotControl::HamlibRotControl(QObject *parent) : RotatorBase(parent)

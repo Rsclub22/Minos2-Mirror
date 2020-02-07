@@ -1987,7 +1987,7 @@ void RotatorMainWindow::saveTraceLogFlag(bool state)
 
     // set state of hamlib commms tracing
 
-    rotator->enableTraceComms(state);
+    //rotator->enableTraceComms(state); ****************************************************
 
     // save to ini for restart
 
