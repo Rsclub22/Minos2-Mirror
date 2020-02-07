@@ -633,7 +633,7 @@ bool Matcher::reduceScanAccuracy()
             break;
 
            case empNoLoc:
-              {
+             {
             // or no loc anyway, so drop through
                  if ( matchcs.match )
                  {
@@ -653,7 +653,7 @@ bool Matcher::reduceScanAccuracy()
 
                     if ( c > 0 )   	// i.e. we havent got back to the start
                     {
-                       if ( c < smstrStart.length() )   			// we would be left with something
+                       if ( smstrStart.length() - c >= 2 )   			// we would be left with something
                        {
                           matchcs.mstr = smstrStart.mid(c);	// copy back over
                           matchPhase = empBody;
@@ -670,7 +670,6 @@ bool Matcher::reduceScanAccuracy()
             matchPhase = empBody;
             dropthrough = true;
             break;
-
 
            case empCountry:
            case empDistrict:
@@ -1237,6 +1236,7 @@ bool ListMatcher::idleMatch( int limit )
          {
              matchPart = cct->cs.fullCall.getValue();
          }
+
          csmatch = matchcs.checkMatch( matchPart );
 
          if ( csmatch )
