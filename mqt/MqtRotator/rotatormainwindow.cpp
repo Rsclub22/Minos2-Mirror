@@ -437,7 +437,7 @@ void RotatorMainWindow::openRotator()
     retCode = rotator->rotInit(setupAntenna->currentAntenna);
     if (retCode < 0)
     {
-            hamlibError(retCode, tr("Rotator Init"));
+            hamlibError(retCode, tr("Rotator Init Failed"));
     }
 
 
@@ -904,11 +904,15 @@ void RotatorMainWindow::upDateAntenna()
 
     trace(QString("updateAntenna to %1").arg(setupAntenna->currentAntennaName));
 
-    if (moving  || movingCCW || movingCW)
+    if (rotator)
     {
+        if (moving  || movingCCW || movingCW)
+        {
 
-        stopRotation(true);
+            stopRotation(true);
+        }
     }
+
 
     if (setupAntenna->currentAntennaName != "")
     {
@@ -919,28 +923,18 @@ void RotatorMainWindow::upDateAntenna()
             // found antenna, update currentAntenna with selected antenna data
             srotParams::copyRot(setupAntenna->availAntData[currentAntIdx], setupAntenna->currentAntenna);
 
+            if (rotator)
+            {
+              closeRotator();
+            }
 
             if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
             {
-
-                if (!rotator)
-                {
-                  closeRotator();
-                }
-
                 QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
                 return;
             }
 
-
-
             ui->antNameDisp->setText(setupAntenna->currentAntenna.antennaName);
-
-            if (!rotator)
-            {
-                closeRotator();
-            }
-
 
             writeWindowTitle(appName);
             openRotator();

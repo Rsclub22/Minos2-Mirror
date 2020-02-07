@@ -16,7 +16,7 @@
 
 #include "rotsetupdialog.h"
 #include "ui_rotsetupdialog.h"
-#include "rotcontrol.h"
+//#include "rotcontrol.h"
 #include "addantennadialog.h"
 
 #include <QComboBox>
@@ -182,17 +182,17 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->setNetAddress(availAntData[tabNum]->networkAdd);
         antennaTab[tabNum]->setNetPortNum(availAntData[tabNum]->networkPort);
 
-        if (availAntData[tabNum]->portType == RIG_PORT_NETWORK || availAntData[tabNum]->portType == RIG_PORT_UDP_NETWORK)
+        if (availAntData[tabNum]->portType == RotCapContstants::PortType::network)
         {
             antennaTab[tabNum]->serialDataEntryVisible(false);
             antennaTab[tabNum]->networkDataEntryVisible(true);
         }
-        else if (availAntData[tabNum]->portType == RIG_PORT_NONE)
+        else if (availAntData[tabNum]->portType == RotCapContstants::PortType::none)
         {
             antennaTab[tabNum]->serialDataEntryVisible(false);
             antennaTab[tabNum]->networkDataEntryVisible(false);
         }
-        else if (availAntData[tabNum]->portType == RIG_PORT_SERIAL)
+        else if (availAntData[tabNum]->portType == RotCapContstants::PortType::serial)
         {
             antennaTab[tabNum]->serialDataEntryVisible(true);
             antennaTab[tabNum]->networkDataEntryVisible(false);
@@ -437,7 +437,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->southStopType = southStop(config.value("southStopType", S_STOPOFF).toInt());
     availAntData[antNum]->overRunFlag = config.value("overRun", false).toBool();
     availAntData[antNum]->antennaOffset = config.value("antennaOffset", "").toInt();
-    availAntData[antNum]->portType = (config.value("portType", int(RIG_PORT_NONE)).toInt());
+    availAntData[antNum]->portType = (config.value("portType", RotCapContstants::PortType::none).toInt());
     availAntData[antNum]->comport = config.value("comport", "").toString();
     availAntData[antNum]->baudrate = config.value("baudrate", 9600).toInt();
     availAntData[antNum]->databits = config.value("databits", 8).toInt();

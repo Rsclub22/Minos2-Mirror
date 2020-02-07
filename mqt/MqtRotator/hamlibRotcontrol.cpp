@@ -30,6 +30,34 @@ int collect(const rot_caps *caps, rig_ptr_t)
     return 1;
 }
 
+int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char const * format, va_list ap)
+{
+  QString message;
+  static char constexpr fmt[] = "Hamlib: %s";
+  message = message.vsprintf (format, ap).trimmed ();
+
+  switch (level)
+    {
+    case RIG_DEBUG_BUG:
+      qFatal (fmt, message.toLocal8Bit ().data ());
+      break;
+
+    case RIG_DEBUG_ERR:
+      qCritical (fmt, message.toLocal8Bit ().data ());
+      break;
+
+    case RIG_DEBUG_WARN:
+      qWarning (fmt, message.toLocal8Bit ().data ());
+      break;
+
+    default:
+      qDebug (fmt, message.toLocal8Bit ().data ());
+      break;
+    }
+
+  return 0;
+}
+
 extern "C"
 {
   //typedef struct rot RIG;
@@ -216,7 +244,8 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
 
 
     //rig_set_debug_callback (::rig_message_cb, static_cast<rig_ptr_t>(this));
-    rig_set_debug_callback (::rig_message_cb, nullptr);
+    //rig_set_debug_callback (::rig_message_cb, nullptr);
+    rig_set_debug_callback (debug_callback, nullptr);
 
     capsList.clear();
     rot_load_all_backends();
@@ -483,11 +512,6 @@ QString HamlibRotControl::getErrorMsgText(int errorCode)
 }
 
 
-QStringList HamlibRotControl::getErrorMsgList()
-{
-    int errorCode = 0;
-    return tr(hamlibErrorTxt::hamlibErrorMsg[errorCode]);
-}
 
 
 //QStringList RotControl::gethamlibErrorMsg()
@@ -517,30 +541,31 @@ void HamlibRotControl::enableTraceComms(bool state)
 
 
 // which passes the call to this method
-int HamlibRotControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const char *fmt, va_list ap)
-{
-    char buf[1024];
+//int HamlibRotControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const char *fmt, va_list ap)
+//{
+//    char buf[1024];
 //    rig_debug_level_e dbl = debug_level;
 
-    vsprintf (buf, fmt, ap);
-    QString s = QString::fromLatin1(buf);
-    if (traceComms)
-    {
-        emit debug_protocol(s);
-    }
+//    vsprintf (buf, fmt, ap);
+//    QString s = QString::fromLatin1(buf);
+//    if (traceComms)
+//    {
+//        emit debug_protocol(s);
+//    }
 
 
-    return RIG_OK;
-}
+//    return RIG_OK;
+//}
 
 
 
-int rig_message_cb(enum rig_debug_level_e debug_level, rig_ptr_t user_data, const char *fmt, va_list ap)
-{
-    RotControl *rt = static_cast<RotControl *>(user_data);
-    //return rt->rig_message_cb(debug_level, fmt, ap);
-    return 1; //********************************************
-}
+//int rig_message_cb(enum rig_debug_level_e debug_level, rig_ptr_t user_data, const char *fmt, va_list ap)
+//{
+//    HamlibRotControl *rt = static_cast<HamlibRotControl *>(user_data);
+//    return rt->rig_message_cb(debug_level, fmt, ap);
+
+//}
+
 
 bool model_Sort(const rot_caps *caps1,const rot_caps *caps2)
 {
