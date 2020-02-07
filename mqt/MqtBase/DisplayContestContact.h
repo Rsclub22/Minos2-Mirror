@@ -16,6 +16,8 @@ class MinosTestImport;
 //----------------------------------------------------------------------------
 class DisplayContestContact: public BaseContact
 {
+    Q_OBJECT
+
       int modificationCount;
       unsigned long logSequence; // sparse sequence, used to provide sort key
    protected:

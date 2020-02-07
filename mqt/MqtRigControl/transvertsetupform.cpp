@@ -72,7 +72,7 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject * /*obj*/, bool fIn, Q
                 return;
             }
             QString txf = ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*"));
-            if (valInputFreq(txf, RADIO_FREQ_EDIT_ERR_MSG))
+            if (valInputFreq(txf, tr(RADIO_FREQ_EDIT_ERR_MSG)))
             {
                radioFreqOK = true;
                if (validateFreqTxtInput(convertFreqToFullDigit(ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*")))))
@@ -112,7 +112,7 @@ void TransVertSetupForm::targetFreqEditfocusChange(QObject * /*obj*/, bool fIn, 
                 return;
             }
             QString targetf = ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*"));
-            if (valInputFreq(targetf, TARGET_FREQ_EDIT_ERR_MSG))
+            if (valInputFreq(targetf, tr(TARGET_FREQ_EDIT_ERR_MSG)))
             {
                targetFreqOK = true;
                if (validateFreqTxtInput(convertFreqToFullDigit(ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*")))))
@@ -183,7 +183,7 @@ void TransVertSetupForm::calcOffset()
     else
     {
         QMessageBox msgBox;
-        msgBox.setText(QString("Target Freq. is out of band for %1").arg(transVertData->band));
+        msgBox.setText(tr("Target Freq. is out of band for %1").arg(transVertData->band));
         msgBox.exec();
         ui->targetFreq->setFocus();
         return;

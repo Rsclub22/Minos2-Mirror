@@ -22,7 +22,6 @@
 
 
 
-
 static QList<const rot_caps *> capsList;
 
 int collect(const rot_caps *caps, rig_ptr_t)
@@ -474,19 +473,29 @@ bool HamlibRotControl::get_serialConnected()
 
 QString HamlibRotControl::getErrorMsgText(int errorCode)
 {
-    if (errorCode > errorMsgTxt.count())
+
+    if (errorCode > static_cast<int>(sizeof(hamlibErrorTxt::hamlibErrorMsg)/sizeof(const char *)))
     {
-        return "hamlib Errorcode too large!";
+        return tr("hamlib Errorcode too large!");
     }
+
     return errorMsgTxt[errorCode];
 }
 
 
 QStringList HamlibRotControl::getErrorMsgList()
 {
-
-    return errorMsgTxt;
+    int errorCode = 0;
+    return tr(hamlibErrorTxt::hamlibErrorMsg[errorCode]);
 }
+
+
+//QStringList RotControl::gethamlibErrorMsg()
+//{
+
+//    return serialData::hamlibErrorMsg;
+//}
+
 
 
 

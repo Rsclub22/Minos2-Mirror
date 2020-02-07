@@ -78,7 +78,7 @@ void RotSetupDialog::initSetup()
         QString version = settings.value("Version/version", QString()).toString();
         if (version != "1")
         {
-            mShowMessage(QString("The Rotator configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
+            mShowMessage(tr("The Rotator configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
                          "Please delete them and set up the rotators again").arg(ANTENNA_PATH_LOGGER), parentWidget());
             exit(10);
         }
@@ -650,7 +650,7 @@ void RotSetupDialog::removeAntenna()
     {
         // can't remove current antennaName
         QMessageBox msgBox;
-        msgBox.setText("You can not remove the current antenna!");
+        msgBox.setText(tr("You can not remove the current antenna!"));
         msgBox.exec();
         return;
 
@@ -691,13 +691,13 @@ void RotSetupDialog::editAntennaName()
     {
         // can't change current antennaName
         QMessageBox msgBox;
-        msgBox.setText(QString("You can not change the name of the current antenna - %1!").arg(antName));
+        msgBox.setText(tr("You can not change the name of the current antenna - %1!").arg(antName));
         msgBox.exec();
         return;
     }
 
     bool ok;
-    QString text = QInputDialog::getText(this, QString("Edit Antenna Name - %1").arg(antName),
+    QString text = QInputDialog::getText(this, tr("Edit Antenna Name - %1").arg(antName),
                                          tr("New Antenna Name:"), QLineEdit::Normal,
                                          "", &ok);
     if (ok && !text.isEmpty())

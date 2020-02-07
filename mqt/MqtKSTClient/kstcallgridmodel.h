@@ -2,19 +2,21 @@
 #define KSTCALLGRIDMODEL_H
 
 #include "base_pch.h"
-
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
-enum CallColumns {ecscCall, ecscLoc, ecscDistance, ecscName, ecscMaxColumn};
+enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
 
 class KstUser
 {
 public:
+    int chat;
     QString call;
     QString loc;
     QString name;
+    QString prefix;
+    QString country;
     bool away = false;
     bool recent = false;
     int distance = -1;
@@ -36,7 +38,7 @@ class KstCallGridModel: public QAbstractItemModel
         QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
         QSharedPointer<HtmlDelegate> delegate;
 
-        void setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > pcallVector);
+        void setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > &pcallVector);
         QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
         QVariant headerData( int section, Qt::Orientation orientation,
                              int role = Qt::DisplayRole ) const Q_DECL_OVERRIDE;
@@ -58,9 +60,13 @@ class KstCallGridModel: public QAbstractItemModel
 class KstCallGridSortFilterModel: public QSortFilterProxyModel
 {
     QString filterString;
+    int chatFilter = 0;
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
+
+    void setChatFilter(int value);
+
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
 };

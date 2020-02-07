@@ -16,35 +16,39 @@ ContList contlist[ CONTINENTS ] =
       {"NA", false},
    };
 
-QVector <AuxTypeOption> auxoptions = {
-    {aeClock, "Clock", "Clock"},
-    {aeDXCC, "DXCC", "DXCC"},
-    {aeDistrict, "District", "District"},
-    {aeFilter, "Filter", "Filter"},
-    {aeMemories, "Memories", "Memories"},
-    {aeLocatorMap, "Locator Map", "Locator Map"},
-    {aeLocatorTree, "Locator Tree", "Locator Tree"},
-    {aeStats, "Stats", "Stats"},
+QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
+    {aeClock, QT_TR_NOOP("Clock"), QT_TR_NOOP("Clock")},
+    {aeDXCC, QT_TR_NOOP("DXCC"), QT_TR_NOOP("DXCC")},
+    {aeDistrict, QT_TR_NOOP("District"), QT_TR_NOOP("District")},
+    {aeFilter, QT_TR_NOOP("Filter"), QT_TR_NOOP("Filter")},
+    {aeMemories, QT_TR_NOOP("Memories"), QT_TR_NOOP("Memories")},
+    {aeLocatorMap, QT_TR_NOOP("Locator Map"), QT_TR_NOOP("Locator Map")},
+    {aeLocatorTree, QT_TR_NOOP("Locator Tree"), QT_TR_NOOP("Locator Tree")},
+    {aeStats, QT_TR_NOOP("Stats"), QT_TR_NOOP("Stats")},
 };
 
-AuxEntries getAuxEntryType(QString s)
+AuxEntries StackedInfoFrame::getAuxEntryType(QString s)
 {
     foreach(const AuxTypeOption &opt, auxoptions)
     {
-        if (opt.s == s)
+        if (tr(opt.s) == s || (opt.s == s))
             return opt.type;
     }
     return aeClock;
 }
 
-QString getAuxTypeString(AuxEntries t)
+const char * StackedInfoFrame::getRawAuxTypeString(AuxEntries t)
 {
     foreach(const AuxTypeOption &opt, auxoptions)
     {
         if (opt.type == t)
             return opt.s;
     }
-    return getAuxTypeString(aeClock);
+    return getRawAuxTypeString(aeClock);
+}
+QString StackedInfoFrame::getTrAuxTypeString(AuxEntries t)
+{
+    return tr(getRawAuxTypeString(t));
 }
 
 bool showWorked = false;
@@ -63,8 +67,8 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     int i = 0;
     foreach(const AuxTypeOption &opt, auxoptions)
     {
-        ui->infoCombo->addItem(opt.s, opt.type);
-        ui->infoCombo->setItemData( i++, opt.hint, Qt::ToolTipRole );
+        ui->infoCombo->addItem(tr(opt.s), opt.type);
+        ui->infoCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
     }
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ScrollToCountry(QString,BaseContestLog*)), this, SLOT(on_ScrollToCountry(QString,BaseContestLog*)), Qt::QueuedConnection);

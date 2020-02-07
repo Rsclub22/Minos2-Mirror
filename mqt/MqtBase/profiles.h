@@ -21,24 +21,26 @@ class ProfileEntry
    public:
       int id;
       QString name;
-      QString dispname;
+      const char * dispname;
 
       QString sdefaultval;
       int idefaultval;
       bool bdefaultval;
 
-      QString hint;
+      const char * hint;
       bool RO;
 
       void createEntry( SettingsBundle * );
-      ProfileEntry(int id, const  char *name, const char *def, const char *dispname, const char *hint, bool RO );
-      ProfileEntry(int id, const  char *name, int def, const  char *dispname, const  char *hint, bool RO );
-      ProfileEntry(int id, const char *name, bool def, const char *dispname, const char *hint, bool RO );
+      ProfileEntry(int id, const  char *name, const char * def, const char * dispname, const char * hint, bool RO );
+      ProfileEntry(int id, const  char *name, int def, const char * dispname, const char * hint, bool RO );
+      ProfileEntry(int id, const char *name, bool def, const char * dispname, const char * hint, bool RO );
 };
 class INIFile;
 
 class BundleFile
 {
+    Q_DECLARE_TR_FUNCTIONS(BundleFile)
+
    private:
       QString bundleName;
    public:
@@ -58,6 +60,7 @@ class BundleFile
 };
 class SettingsBundle
 {
+    Q_DECLARE_TR_FUNCTIONS(SettingsBundle)
    protected:
       QString currsection;
    public:

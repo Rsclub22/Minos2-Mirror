@@ -446,8 +446,8 @@ void rotSetupForm::comNetAddressSelected()
         else
         {
             QMessageBox messageBox;
-            QString msg = "Invalid Network Address " + ui->netAddressBox->text();
-            messageBox.critical(this, "Network Address Entry Error", msg);
+            QString msg = tr("Invalid Network Address %1").arg( ui->netAddressBox->text());
+            messageBox.critical(this, tr("Network Address Entry Error"), msg);
             ui->netAddressBox->setFocus();
         }
     }
@@ -478,8 +478,8 @@ void rotSetupForm::comNetPortNumSelected()
         else
         {
             QMessageBox messageBox;
-            QString msg = "Invalid Network Port Number " + ui->netPortBox->text();
-            messageBox.critical(this, "Network Port Number out of range", msg);
+            QString msg = tr("Invalid Network Port Number %1").arg( ui->netPortBox->text());
+            messageBox.critical(this, tr("Network Port Number out of range"), msg);
             ui->netPortBox->setFocus();
         }
 
@@ -751,8 +751,8 @@ void rotSetupForm::antennaOffSetSelected()
         if (offset < minOffset || offset > maxOffset)
         {
             ui->antOffset->setText("0");
-            QString msg = "Value must be between " + QString::number(minOffset) + " and " + QString::number(maxOffset);
-            messageBox.critical(this, "Antenna Offset Error", msg);
+            QString msg = tr("Value must be between %1 and %2").arg(minOffset).arg(maxOffset);
+            messageBox.critical(this, tr("Antenna Offset Error"), msg);
 
         }
         else

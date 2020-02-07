@@ -135,18 +135,21 @@ class WinMonitor: public lineMonitor
       static LineCallBack WinLineCallback;
 
       WinMonitor();
-      ~WinMonitor();
+      ~WinMonitor() override;
 
-      virtual void ptt( int state );
+      virtual void ptt( int state )override;
 
-      virtual bool pttChanged( int state );
-      virtual bool L1Changed( int state );
-      virtual bool L2Changed( int state );
-      virtual bool linesModeChanged(int lmode);
+      virtual bool pttChanged( int state )override;
+      virtual bool L1Changed( int state )override;
+      virtual bool L2Changed( int state )override;
+      virtual bool linesModeChanged(int lmode)override;
 
-      virtual bool initialise( const KeyerConfig &keyer, const PortConfig &port );
+      virtual bool initialise( const KeyerConfig &keyer, const PortConfig &port )override;
 
-      virtual void checkControls( );
+      virtual void checkControls( )override;
+
+      virtual void tickEvent() override;       // this will often be an interrupt routine
+
 };
 //==============================================================================
 

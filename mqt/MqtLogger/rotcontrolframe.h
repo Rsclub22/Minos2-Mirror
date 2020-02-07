@@ -19,7 +19,7 @@
 #include "MinosLoggerEvents.h"
 #include <QShortcut>
 #include "rotatorcommon.h"
-#include "rotpresetbutton.h"
+#include "presetbutton.h"
 #include "rigmemcommondata.h"
 #include "rotpresetdialog.h"
 

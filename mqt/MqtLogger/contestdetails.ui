@@ -30,7 +30,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>599</width>
+        <width>587</width>
         <height>551</height>
        </rect>
       </property>
@@ -901,6 +901,9 @@ Score between 4 fig loc centres</string>
       <widget class="QPushButton" name="OKButton">
        <property name="text">
         <string>OK</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

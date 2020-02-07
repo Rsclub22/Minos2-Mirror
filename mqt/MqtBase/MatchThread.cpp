@@ -108,6 +108,7 @@ void TMatchThread::FinishMatchThread()
       trace( "WaitFor TMatchThread" );
       matchThread->wait(ULONG_MAX);
       delete matchThread;
+      matchThread = nullptr;
    }
    trace( "TMatchThread close complete" );
 }
@@ -190,6 +191,12 @@ void TMatchThread::Execute()
          if ( !thisLogMatch->idleMatch( 20 ) && !otherLogMatch->idleMatch( 20 ) && !listMatch->idleMatch( 20 ) )
             msleep(100);
       }
+
+      // make sure everything is cleared down, so we can stop matching while managing lists
+      replaceThisContestList(SharedMatchCollection(new TMatchCollection));
+      replaceOtherContestList(SharedMatchCollection(new TMatchCollection));
+      replaceListList(SharedMatchCollection(new TMatchCollection));
+
       delete thisLogMatch;
       thisLogMatch = nullptr;
       delete otherLogMatch;
@@ -684,20 +691,20 @@ bool ThisLogMatcher::idleMatch( int limit )
                 {
                    // conteste focused the top line of matches here
                    // want to manage plurals, and local/other contests
-                   QString matchSuffix = "Possible";
+                   QString matchSuffix = tr("Possible");
                    if (mp == Country)
                    {
-                      matchSuffix = "Country";
+                      matchSuffix = tr("Country");
                    }
                    else if (mp == District)
                    {
-                      matchSuffix = "District";
+                      matchSuffix = tr("District");
                    }
                    else if (mp == Locator)
                    {
-                      matchSuffix = "Locator";
+                      matchSuffix = tr("Locator");
                    }
-                   buff = QString( " - %1%2 %3 matches" )
+                   buff = tr( " - %1%2 %3 matches" )
                            .arg ( ( cnt > MATCH_LIM ) ? ">" : "" )
                            .arg(thisContestMatched)
                            .arg( ( mp == Exact ) ? "" : matchSuffix );
@@ -950,7 +957,7 @@ bool OtherLogMatcher::idleMatch( int limit )
 
                       if ( !dropthrough )
                       {
-                         TMatchThread::getMatchThread() ->ShowThisMatchStatus( " - No exact match" );
+                         TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No exact match") );
                          mp = NoSuffix;
                          contestIndex = 0;
                          contactIndex = 0;
@@ -973,7 +980,7 @@ bool OtherLogMatcher::idleMatch( int limit )
                            contactIndex = 0;
                            firstMatch = Rest;
                            EndScan = false;
-                           TMatchThread::getMatchThread() ->ShowOtherMatchStatus( " - No match No Suffix" );
+                           TMatchThread::getMatchThread() ->ShowOtherMatchStatus( tr(" - No match No Suffix") );
                            break;
                         }
                      }
@@ -1006,7 +1013,7 @@ bool OtherLogMatcher::idleMatch( int limit )
                                   contactIndex = 0;
                                   firstMatch = MainContest;
                                   EndScan = false;
-                                  TMatchThread::getMatchThread() ->ShowThisMatchStatus( " - No match No LOC" );
+                                  TMatchThread::getMatchThread() ->ShowThisMatchStatus( tr(" - No match No LOC") );
                                   break;
                                }
                             }

@@ -16,9 +16,10 @@
 #include "cutils.h"
 
 template < class itemtype >
-class MultList : public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >
+class MultList : public QObject, public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >
 {
-    public:
+
+public:
       virtual int getWorked( int /*item*/, BaseContestLog * const /*ct*/ )
       {
          return 0;
@@ -206,9 +207,12 @@ class MultList : public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >
          return dest;
       }
 
+
 };
 class GlistList : public MultList < GlistEntry >
 {
+    Q_OBJECT
+
       // list of DistrictEntry
    public:
       GlistList( );
@@ -242,6 +246,8 @@ class DistrictSynonymList : public MultList < DistrictSynonym >
 
 class CountryList : public MultList < CountryEntry >
 {
+    Q_OBJECT
+
       // list of CountryEntry
    public:
       CountryList( );
@@ -255,12 +261,15 @@ class CountryList : public MultList < CountryEntry >
 
 class CountrySynonymList : public MultList < CountrySynonym >
 {
+    Q_OBJECT
+
       // list of CountrySynonym
    public:
       CountrySynonymList( );
       virtual ~CountrySynonymList();
       void load( );
       virtual bool procLine(QStringList );
+      static void makeCountrySynonym(const QString &ssyn, const QString &sprefix);
 };
 
 

@@ -11,6 +11,10 @@ class TAboutBox : public QDialog
 {
     Q_OBJECT
 
+    static QString welcomeText;
+    static QString creditsText;
+    static QString MinosText;
+
     Ui::TAboutBox *ui;
     explicit TAboutBox(QWidget *parent, bool onStartup );
     ~TAboutBox() override ;

@@ -227,7 +227,7 @@ void TSessionManager::on_NewSessionButton_clicked()
 {
     // create and enter a new session
     QString newName;
-    QString prompt = "Give name for new session";
+    QString prompt = tr("Give name for new session");
     if (enquireDialog(this, prompt, newName))
     {
         Session newSession;
@@ -244,7 +244,7 @@ void TSessionManager::on_CloneSessionButton_clicked()
     // copy the current session with  new name, enter it
     QString newName;
     Session newSession = sessionList.sessions[sessionList.currentSession];
-    QString prompt = "Give name for new log set";
+    QString prompt = tr("Give name for new log set");
     if (enquireDialog(this, prompt, newName))
     {
         newSession.sessionName = newName;
@@ -273,11 +273,11 @@ void TSessionManager::on_AddEntryButton_clicked()
 
     InitialDir = qf.canonicalFilePath();
 
-    QString Filter = "Minos contest files (*.minos *.Minos);;"
-                     "All Files (*.*)" ;
+    QString Filter = tr("Minos contest files (*.minos *.Minos);;"
+                     "All Files (*.*)") ;
 
     QStringList fnames = QFileDialog::getOpenFileNames( this,
-                       "Open contests",
+                       tr("Open contests"),
                        InitialDir,  // dir
                        Filter
                        );
@@ -331,7 +331,7 @@ void TSessionManager::on_RenameSessionButton_clicked()
 {
     // change the session name
     QString newName;
-    QString prompt = "Give new name for log set " + sessionList.sessions[sessionList.currentSession].sessionName;
+    QString prompt = tr("Give new name for log set %1").arg(sessionList.sessions[sessionList.currentSession].sessionName);
     if (enquireDialog(this, prompt, newName))
     {
         sessionList.sessions[sessionList.currentSession].sessionName = newName;

@@ -171,22 +171,22 @@ void MinosCompass::paintEvent(QPaintEvent *)
     int degreeRotate[] = {30,30,30,30,30,30,30,30,30,30,30,30};
     QStringList legendsList = degLegends.split(",");
 
-    QRect tr = painter.fontMetrics().boundingRect("XXX");
-    tr.adjust(-tr.width()/2, -75, -tr.width()/2, -75);
+    QRect trect = painter.fontMetrics().boundingRect("XXX");
+    trect.adjust(-trect.width()/2, -75, -trect.width()/2, -75);
 //    QRect textRect1(-8, -90, 20,15);
 
     for (int j = 0; j < 12; j++)
     {
-        painter.drawText(tr, Qt::AlignCenter,legendsList.value(j));
+        painter.drawText(trect, Qt::AlignCenter,legendsList.value(j));
 //        painter.drawText(textRect1,legendsList.value(j));
         painter.rotate(degreeRotate[j]);
     }
 
-    QString dirLegends = "N,E,S,W";
+    QString dirLegends = tr("N,E,S,W");
     QStringList dirLegendsList = dirLegends.split(",");
 
     QRect tr2 = painter.fontMetrics().boundingRect("XXX");
-    tr2.adjust(-tr.width()/2, -75, -tr.width()/2, -75);
+    tr2.adjust(-trect.width()/2, -75, -trect.width()/2, -75);
 //    QRect textRect2(-3, -90, 15,15);
 //    QFont textFont();
 //    textFont.setWeight( QFont::Bold );
@@ -232,7 +232,7 @@ void MinosCompass::mousePressEvent(QMouseEvent *event)
                 brg -= 360;
             emit sendClickBearing(static_cast<int>(brg) );
 
-//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;;
+//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;
         }
 
 //        qDebug() << "mouse position" << lastPoint;
@@ -264,7 +264,7 @@ void MinosCompass::mouseMoveEvent(QMouseEvent *event)
         mouseBearing = static_cast<int>(brg);
 
         update();
-//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;;
+//            qDebug() << "bearing " << (int)brg << " vec " << vec << "mouse position" << lastPoint;
     }
     else
     {

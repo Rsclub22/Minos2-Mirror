@@ -37,23 +37,8 @@ public:
        buff.clear();
    }
 };
-    extern ContactBuffs contactBuffs;
 
-class MatchContact;
-
-class TMatchCollection;
-class dupsheet;
-
-template < class itemtype >
-class MultList;
-class DistrictEntry;
-class DistrictSynonym;
-class DistrictList;
-class CountrySynonymList;
-class CountryEntry;
-class CountrySynonym;
-class CountryList;
-class ScreenContact;
+extern ContactBuffs contactBuffs;
 
 QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs );
 
@@ -76,8 +61,9 @@ const short TO_BE_ENTERED = 0x0004;		// auto spaced, to be gone back to later
 const short XBAND = 0x0002;		// Cross band - half score
 const short FORCE_LOG = 0x0001;		// Force logged into log
 
-class BaseContact
+class BaseContact: public QObject
 {
+    Q_OBJECT
       QVector < QSharedPointer<BaseContact> > history;
    protected:
       BaseContestLog *contest;
@@ -192,7 +178,6 @@ class BaseContact
       virtual void copyFromArg( ScreenContact & )
       {}
 
-}
-;
+};
 
 #endif

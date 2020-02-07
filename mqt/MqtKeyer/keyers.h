@@ -128,7 +128,23 @@ class RecBuffer
       }
 };
 
-class lineMonitor
+
+class timerTicker: public QObject
+{
+    Q_OBJECT
+      QTimer b;
+   public:
+      timerTicker();
+      ~timerTicker() override;
+      virtual void tickEvent() = 0;       // this will often be an interrupt routine
+
+private slots:
+      void tick()
+      {
+          tickEvent();
+      }
+};
+class lineMonitor: public timerTicker
 {
    private:
       commonPort *cp = nullptr;
@@ -155,24 +171,11 @@ class lineMonitor
 
       virtual void checkControls( );
 };
-class timerTicker: public QObject
+
+// all keyers want timer ticks to sequence the state machine
+class commonKeyer: public lineMonitor
 {
     Q_OBJECT
-      QTimer b;
-   public:
-      timerTicker();
-      ~timerTicker() override;
-      virtual void tickEvent() = 0;       // this will often be an interrupt routine
-
-private slots:
-      void tick()
-      {
-          tickEvent();
-      }
-};
-// all keyers want timer ticks to sequence the state machine
-class commonKeyer: public lineMonitor, public timerTicker
-{
    public:
       commonKeyer( const KeyerConfig &keyer, const PortConfig &port );
       ~commonKeyer() override;

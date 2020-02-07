@@ -53,7 +53,7 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
             SCElement scele;
             QJsonObject ele = elearray[k].toObject();
             QString eletype = ele.value("type").toString();
-            scele.type = getScreenType(eletype);
+            scele.type = ScreenConfigElement::getScreenType(eletype);
             if (scele.type == sctSplit)
             {
                 QJsonArray rows = ele.value("rows").toArray();
@@ -62,7 +62,7 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
             else if (scele.type == sctAux)
             {
                 QString auxtype = ele.value("auxtype").toString();
-                scele.auxType = getAuxEntryType(auxtype);
+                scele.auxType = StackedInfoFrame::getAuxEntryType(auxtype);
             }
             else
             {
@@ -85,7 +85,7 @@ void ScreenConfigFile::readFile(QString f, QWidget *parent)
         retval = parseConfigString(s);
         if (retval == false)
         {
-            mShowMessage("Invalid or missing screen configurations; using built in defaults", parent);
+            mShowMessage(tr("Invalid or missing screen configurations; using built in defaults"), parent);
         }
     }
     else
@@ -97,16 +97,16 @@ void ScreenConfigFile::readFile(QString f, QWidget *parent)
         trace("Using default configuration");
         s = defaultConfig
                 .arg(defaultLayoutName)
-                .arg(getScreenTypeString(sctLog))
-                .arg(getScreenTypeString(sctAux))
-                .arg(getScreenTypeString(sctRigControl))
-                .arg(getScreenTypeString(sctRotControl))
-                .arg(getScreenTypeString(sctRotPresets))
-                .arg(getScreenTypeString(sctQSOEdit))
-                .arg(getScreenTypeString(sctNextQSODetails))
-                .arg(getScreenTypeString(sctThisMatch))
-                .arg(getScreenTypeString(sctOtherMatch))
-                .arg(getScreenTypeString(sctArchiveMatch));
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctRigControl))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctRotControl))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctRotPresets))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctQSOEdit))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctNextQSODetails))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctThisMatch))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctOtherMatch))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctArchiveMatch));
         parseConfigString(s);
     }
 }
@@ -149,7 +149,7 @@ void ScreenConfigFile::writeTypetoRow(SCElement &e, QJsonArray &scrow)
 {
     QJsonObject scele;
     SCType sctype = e.type;
-    scele.insert("type", getScreenTypeString(sctype));
+    scele.insert("type", ScreenConfigElement::getRawScreenTypeString(sctype));
 
     if (sctype == sctSplit)
     {
@@ -168,7 +168,7 @@ void ScreenConfigFile::writeTypetoRow(SCElement &e, QJsonArray &scrow)
     }
     else if (sctype == sctAux)
     {
-        scele.insert("auxtype", getAuxTypeString(e.auxType));
+        scele.insert("auxtype", StackedInfoFrame::getRawAuxTypeString(e.auxType));
     }
     scrow.append(scele);
 }

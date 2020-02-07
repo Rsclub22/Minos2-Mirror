@@ -12,6 +12,11 @@
 #include "base_pch.h"
 #include "rotatorcommon.h"
 
+const char * RotPresetData::presetButtonLabels[4] = {QT_TR_NOOP("&Read"),
+                                        QT_TR_NOOP("&New"),
+                                        QT_TR_NOOP("&Edit"),
+                                        QT_TR_NOOP("&Clear")};
+
 RotPresetData::RotPresetData(int _number, QString _name, QString _bearing)
 {
     number = _number;

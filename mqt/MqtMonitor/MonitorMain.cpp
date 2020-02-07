@@ -95,7 +95,7 @@ QString LogTreeNode::data(int column)
     {
         QString state;
         if (mlog->getFrame())
-            state = "Monitoring";
+            state = tr("Monitoring");
         return state;
     }
     return "";
@@ -163,11 +163,11 @@ QVariant MonitorTreeModel::headerData( int section, Qt::Orientation orientation,
         switch (section)
         {
         case 1:
-            cell = "Contest Name";
+            cell = tr("Contest Name");
             break;
 
         case 0:
-            cell = "State";
+            cell = tr("State");
             break;
 
         default:
@@ -301,7 +301,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     ui->contestPageControl->setContextMenuPolicy( Qt::CustomContextMenu );
 
-    closeMonitoredLog = newAction("Close tab", &TabPopup, SLOT(on_closeMonitoredLog()));
+    closeMonitoredLog = newAction(tr("Close tab"), &TabPopup, SLOT(on_closeMonitoredLog()));
     newAction( "Cancel", &TabPopup, SLOT( CancelClick() ) );
 
     ui->callsignEdit->setValidator(&ucValidator);

@@ -10,6 +10,7 @@ const Locator &WsjtGetCallLoc(const Callsign &c);
 class WsjtxFrame;
 class decodeMessage
 {
+    Q_DECLARE_TR_FUNCTIONS(decodeMessage)
 public:
     // Can I populate this accurately?
     // Do I need the whole decode set to allow for reply?

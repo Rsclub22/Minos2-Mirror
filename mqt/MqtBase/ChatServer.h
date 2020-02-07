@@ -2,9 +2,6 @@
 #define CHATSERVER_H
 #include "base_pch.h"
 
-extern QString stateIndicator[];
-extern QString stateList[];
-
 class Server
 {
 public:
@@ -18,6 +15,10 @@ class ChatServer : public QObject
     Q_OBJECT
 
 public:
+    static const char * stateIndicator[];
+    static const char * stateList[];
+
+
     explicit ChatServer();
     virtual ~ChatServer();
     static ChatServer *getChatServer();

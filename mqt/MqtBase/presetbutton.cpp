@@ -9,12 +9,12 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "rotatorcommon.h"
+#include "presetbutton.h"
 
-#include "rotpresetbutton.h"
 
 
-
-RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* shiftkey, QStringList buttonLabels)
+PresetButton::PresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* shiftkey, const QStringList buttonLabels)
 {
     presetNum = num;
 
@@ -29,7 +29,6 @@ RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key, QShort
     shortKey = key;
     shiftShortKey = shiftkey;
     readAction = new QAction(buttonLabels[0], presetButton);
-    //writeAction = new QAction(buttonLabels[1],presetButton);
     writeAction = new QAction(buttonLabels[1],presetButton);
     editAction = new QAction(buttonLabels[2], presetButton);
     clearAction = new QAction(buttonLabels[3],presetButton);
@@ -51,47 +50,47 @@ RotPresetButton::RotPresetButton(QToolButton *b, int num, QShortcut* key, QShort
 }
 
 
-RotPresetButton::~RotPresetButton()
+PresetButton::~PresetButton()
 {
 //    delete memButton;
 }
 
 
-void RotPresetButton::memoryRecallShortCutSelected()
+void PresetButton::memoryRecallShortCutSelected()
 {
     emit presetShortCutRecall();
 }
 
-void RotPresetButton::memoryShiftShortCutSelected()
+void PresetButton::memoryShiftShortCutSelected()
 {
    emit presetShiftShortCutRecall();
 }
 
 
-void RotPresetButton::showButtonMenu()
+void PresetButton::showButtonMenu()
 {
     presetShortCutSelected();
 }
 
-void RotPresetButton::presetShortCutSelected()
+void PresetButton::presetShortCutSelected()
 {
 //    rigControlFrame->memoryShortCutSelected(memNo);
     presetButton->showMenu();
     //emit lostFocus();
 }
-void RotPresetButton::readActionSelected()
+void PresetButton::readActionSelected()
 {
     emit presetReadAction();
 }
-void RotPresetButton::editActionSelected()
+void PresetButton::editActionSelected()
 {
     emit presetEditAction();
 }
-void RotPresetButton::writeActionSelected()
+void PresetButton::writeActionSelected()
 {
     emit presetWriteAction();
 }
-void RotPresetButton::clearActionSelected()
+void PresetButton::clearActionSelected()
 {
     emit presetClearAction();
 }
@@ -99,12 +98,12 @@ void RotPresetButton::clearActionSelected()
 
 
 
-void RotPresetButton::setText(QString t)
+void PresetButton::setText(QString t)
 {
     presetButton->setText(t);
 }
 
-QString RotPresetButton::getText()
+QString PresetButton::getText()
 {
     return presetButton->text();
 }

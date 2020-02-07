@@ -188,34 +188,34 @@ RPCParamStruct::~RPCParamStruct()
    elements.clear(); // clears the shared pointers
 }
 
-void RPCParamStruct::addMember( QSharedPointer<RPCParam>p, const QString &name )
+void RPCParamStruct::addMember( QSharedPointer<RPCParam>p, const QString &mname )
 {
-   p->name = name;
+   p->name = mname;
    elements.push_back( p );
 }
-void RPCParamStruct::addMember( int v, const QString &name )
+void RPCParamStruct::addMember( int v, const QString &mname )
 {
-   addMember( QSharedPointer<RPCParam>(new RPCIntParam( v )), name );
+   addMember( QSharedPointer<RPCParam>(new RPCIntParam( v )), mname );
 }
-void RPCParamStruct::addMember( bool v, const QString &name )
+void RPCParamStruct::addMember( bool v, const QString &mname )
 {
-   addMember( QSharedPointer<RPCParam>(new RPCBooleanParam( v )), name );
+   addMember( QSharedPointer<RPCParam>(new RPCBooleanParam( v )), mname );
 }
-void RPCParamStruct::addMember( double v, const QString &name )
+void RPCParamStruct::addMember( double v, const QString &mname )
 {
-   addMember( QSharedPointer<RPCParam>(new RPCDoubleParam( v )), name );
+   addMember( QSharedPointer<RPCParam>(new RPCDoubleParam( v )), mname );
 }
-void RPCParamStruct::addMember( const QString &v, const QString &name )
+void RPCParamStruct::addMember( const QString &v, const QString &mname )
 {
-   addMember( QSharedPointer<RPCParam>(new RPCStringParam( v )), name );
+   addMember( QSharedPointer<RPCParam>(new RPCStringParam( v )), mname );
 }
-void RPCParamStruct::addBase64Member( const QString &v, const QString &name )
+void RPCParamStruct::addBase64Member( const QString &v, const QString &mname )
 {
-   addMember( QSharedPointer<RPCParam>(new RPCBase64Param( v )), name );
+   addMember( QSharedPointer<RPCParam>(new RPCBase64Param( v )), mname );
 }
-void RPCParamStruct::addDtgMember( const QString &v, const QString &name )
+void RPCParamStruct::addDtgMember( const QString &v, const QString &mname )
 {
-   addMember( QSharedPointer<RPCParam>(new RPCDtgParam( v )), name );
+   addMember( QSharedPointer<RPCParam>(new RPCDtgParam( v )), mname );
 }
 
 void RPCParamStruct::addNode( TiXmlElement &node )
@@ -286,11 +286,11 @@ QString RPCParamStruct::analyse()
    return s;
 }
 
-bool RPCParamStruct::getMember( const QString &name, QSharedPointer<RPCParam>&p )
+bool RPCParamStruct::getMember( const QString &mname, QSharedPointer<RPCParam>&p )
 {
    for ( QVector<QSharedPointer<RPCParam> >::iterator i = elements.begin(); i != elements.end(); i++ )
    {
-      if ( ( *i ) ->name == name )
+      if ( ( *i ) ->name == mname )
       {
          p = ( *i );
          return true;

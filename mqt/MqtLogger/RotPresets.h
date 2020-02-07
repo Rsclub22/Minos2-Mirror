@@ -7,7 +7,7 @@
 #include <QShortcut>
 #include "MinosLoggerEvents.h"
 #include "rotatorcommon.h"
-#include "rotpresetbutton.h"
+#include "presetbutton.h"
 #include "rigmemcommondata.h"
 #include "rotpresetdialog.h"
 
@@ -31,7 +31,7 @@ private:
     QString antennaName;
     LoggerContestLog *ct = nullptr;
 
-    QList<RotPresetButton *> presetButton;
+    QList<PresetButton *> presetButton;
     QVector<RotPresetData*> rotPresetData;
 
     QList<QShortcut *> shortCutKeyList;

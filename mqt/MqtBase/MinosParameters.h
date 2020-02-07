@@ -12,6 +12,7 @@
 
 #ifndef MinosParametersH
 #define MinosParametersH 
+#include <QCoreApplication>
 #include <QString>
 #include <QWidget>
 class BaseContestLog;
@@ -20,6 +21,8 @@ class BaseContestLog;
 class ContactList;
 class MinosParameters
 {
+    Q_DECLARE_TR_FUNCTIONS(MinosParameters)
+
    private:
       static MinosParameters *mp;
    protected:

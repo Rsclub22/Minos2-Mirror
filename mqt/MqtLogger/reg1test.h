@@ -10,6 +10,7 @@
 #define Reg1testH
 #include "base_pch.h"
 
+class LoggerContestLog;
 class reg1testLine
 {
    public:

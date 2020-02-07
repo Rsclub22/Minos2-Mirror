@@ -17,8 +17,13 @@
 class RPCParam;
 class RPCParamStruct;
 class RPCRequest;
+class LoggerContestLog;
+class BaseContact;
 class MinosTestExport
 {
+    Q_DECLARE_TR_FUNCTIONS(MinosTestExport)
+
+    static const char * fileHeader;
    private:
       LoggerContestLog *ct;
 

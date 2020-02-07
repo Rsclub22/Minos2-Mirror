@@ -21,7 +21,7 @@
 #include <QStringList>
 
 #include "rotatorcommon.h"
-#include "rotcontrol.h"
+//#include "rotcontrol.h"
 #include "rotatorfactory.h"
 #include "rotatorbase.h"
 

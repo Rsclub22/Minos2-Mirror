@@ -16,15 +16,15 @@ static bool inhibitCallbacks = false;
 
 // texts for displaying the current mixer set
 
-static const char *msets[emsMaxMixerSet] = {"Unloaded", "No PTT", "PassThrough",
-                 "Replay", "Pip", "Replay Tone1", "Replay Tone2",
-                 "Voice Record",
-                 "CW Transmit", "CW PassThrough"
+static const char *msets[emsMaxMixerSet] = {QT_TRANSLATE_NOOP("VoiceKeyer", "Unloaded"), QT_TRANSLATE_NOOP("VoiceKeyer", "No PTT"), QT_TRANSLATE_NOOP("VoiceKeyer", "PassThrough"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "Replay"), QT_TRANSLATE_NOOP("VoiceKeyer", "Pip"), QT_TRANSLATE_NOOP("VoiceKeyer", "Replay Tone1"), QT_TRANSLATE_NOOP("VoiceKeyer", "Replay Tone2"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "Voice Record"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "CW Transmit"), QT_TRANSLATE_NOOP("VoiceKeyer", "CW PassThrough")
                 };
-static const char *levelLabels[emsMaxMixerSet] = {"none", "none", "output",
-                 "output", "output", "output", "output",
-                 "input",
-                 "output", "output"
+static const char *levelLabels[emsMaxMixerSet] = {QT_TRANSLATE_NOOP("VoiceKeyer", "none"), QT_TRANSLATE_NOOP("VoiceKeyer", "none"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "input"),
+                 QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output")
                 };
 
 void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode )
@@ -229,7 +229,7 @@ void KeyerMain::LineTimerTimer( )
    KeyerServer::publishCommand( ui->recind->text() );
    eMixerSets m = mixer->GetCurrentMixerSet();
 
-   ui->levelLabel->setText(levelLabels[m]);
+   ui->levelLabel->setText(tr(levelLabels[m]));
 
    QString astate;
    getActionState( astate );
@@ -241,9 +241,9 @@ void KeyerMain::LineTimerTimer( )
 
    QString kstatus;
    if ( getKeyerStatus( kstatus ) )
-      setWindowTitle(QString( msets[ m ] ) + " : " + astate + " : " + kstatus + " : " + tswitch);
+      setWindowTitle(tr( msets[ m ] ) + " : " + astate + " : " + kstatus + " : " + tswitch);
    else
-      setWindowTitle(QString( msets[ m ] ) + " : " + astate + " : " + tswitch);
+      setWindowTitle(tr( msets[ m ] ) + " : " + astate + " : " + tswitch);
 
    static QString old;
 
@@ -266,7 +266,7 @@ void KeyerMain::on_recordButton_clicked()
     if ( fno >= 1 && fno <= 12 )
     {
        startRecordDVPFile( fno );
-       ui->recind->setText("Push PTT to Commence Recording");
+       ui->recind->setText(tr("Push PTT to Commence Recording"));
        KeyerServer::publishCommand( ui->recind->text() );
        recordWait = true;
     }
@@ -398,11 +398,11 @@ void KeyerMain::on_setupBrowseButton_clicked()
 {
     QString InitialDir = GetCurrentDir();
 
-    QString Filter = "Alsa Control Files (*.txt);;"
-                     "All Files (*.*)" ;
+    QString Filter = tr("Alsa Control Files") + " (*.txt);;" +
+                     tr("All Files") + " (*.*)" ;
 
     QString alsaFileName = QFileDialog::getOpenFileName( this,
-                       "File for mixer setup",
+                       tr("File for mixer setup"),
                        InitialDir,                   // opendir
                        Filter );
 
