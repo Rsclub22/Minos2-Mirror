@@ -138,7 +138,11 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="QComboBox" name="freqStepCombo"/>
+           <widget class="QComboBox" name="freqStepCombo">
+            <property name="focusPolicy">
+             <enum>Qt::ClickFocus</enum>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QToolButton" name="freqDown">
