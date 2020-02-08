@@ -19,6 +19,8 @@
 #include "rotcapabilities.h"
 #include "hamlibCommon.h"
 #include "minosNetUtils.h"
+#include "MTrace.h"
+
 
 
 
@@ -32,28 +34,13 @@ int collect(const rot_caps *caps, rig_ptr_t)
 
 int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char const * format, va_list ap)
 {
-  QString message;
-  static char constexpr fmt[] = "Hamlib: %s";
+  Q_UNUSED(level)
+   QString message;
+
+  static char constexpr fmt[] = "Hamlib: ";
   message = message.vsprintf (format, ap).trimmed ();
 
-  switch (level)
-    {
-    case RIG_DEBUG_BUG:
-      qFatal (fmt, message.toLocal8Bit ().data ());
-      break;
-
-    case RIG_DEBUG_ERR:
-      qCritical (fmt, message.toLocal8Bit ().data ());
-      break;
-
-    case RIG_DEBUG_WARN:
-      qWarning (fmt, message.toLocal8Bit ().data ());
-      break;
-
-    default:
-      qDebug (fmt, message.toLocal8Bit ().data ());
-      break;
-    }
+  trace(QString("%1 %2").arg(fmt).arg(message));
 
   return 0;
 }
