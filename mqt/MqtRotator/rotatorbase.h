@@ -36,6 +36,7 @@ public:
 signals:
    void bearing_updated(int);
    void request_bearingError(int);
+   void traceCommsMsg(QString);
 
 private:
 

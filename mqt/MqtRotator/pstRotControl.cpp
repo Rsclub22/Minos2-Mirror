@@ -16,10 +16,6 @@
 
 
 PstRotControl::PstRotControl(QObject *parent) : RotatorBase(parent)
-
-    //pstNetAddress("127.0.0.1"),
-    //pstCommandPortNumber(12000),
-    //pstReportPortNumber(12001)
 {
     pstCommandSocket = new QUdpSocket(this);
     pstReportSocket = new QUdpSocket(this);
@@ -54,11 +50,16 @@ void PstRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList, in
 int PstRotControl::rotInit(srotParams &selectedAntenna)
 {
 
+    traceMsg(QString("Initialise"));
+
     int retCode = 0;
 
     closeSockets();
 
     setRotConnected(false);
+
+    commsTimeoutTimer = new QTimer(this);
+    connect(commsTimeoutTimer, SIGNAL(timeout()), this, SLOT(onCommsTimeout()));
 
     pstNetAddress = selectedAntenna.networkAdd.trimmed();
     pstCommandPortNumber = selectedAntenna.networkPort.trimmed().toUShort();
@@ -66,7 +67,11 @@ int PstRotControl::rotInit(srotParams &selectedAntenna)
 
     pstAddress.setAddress(pstNetAddress);
 
-    pstReportSocket->bind(pstAddress, pstReportPortNumber);
+    if (!pstReportSocket->bind(pstAddress, pstReportPortNumber))
+    {
+        // failed to bind
+        retCode = BIND_FAILURE;
+    }
 
 
 
@@ -108,7 +113,7 @@ int PstRotControl::closeRotator()
     int retCode = 0;
 
     closeSockets();
-
+    traceMsg(QString("Close Rotator"));
     return retCode;
 }
 
@@ -118,6 +123,8 @@ int PstRotControl::closeRotator()
 
 void PstRotControl::processPendingReportDatagrams()
 {
+    commsTimeoutTimer->stop();
+
     QByteArray datagram;
     QString b;
     QStringList bl;
@@ -130,6 +137,9 @@ void PstRotControl::processPendingReportDatagrams()
 
     qDebug() << "Report = "  << datagram.data();
     b = QString(datagram.data());
+
+    traceMsg(QString("received message %1").arg(b));
+
     if (b.contains(':') && b.contains('\r'))
     {
         b.remove('\r');
@@ -139,7 +149,9 @@ void PstRotControl::processPendingReportDatagrams()
             if (re.exactMatch(bl[1]))
             {
                 bearing = bl[1];
+
                 emit bearing_updated(bearing.toInt());
+
             }
         }
     }
@@ -151,7 +163,11 @@ void PstRotControl::processPendingReportDatagrams()
 int PstRotControl::request_bearing()
 {
     int retCode = 0;
-    sendCommandToPstRotator("<PST>AZ?</PST>");
+    QString txMsg = QString("<PST>AZ?</PST>");
+    sendCommandToPstRotator(txMsg);
+    traceMsg(QString("request bearing %1").arg(txMsg));
+
+    commsTimeoutTimer->start(timeoutDur);
 
     return retCode;
 }
@@ -160,8 +176,9 @@ int PstRotControl::request_bearing()
 int PstRotControl::rotate_to_bearing(const int bearing)
 {
     int retCode = 0;
-    QString msg = "<PST><AZIMUTH>" + QString::number(bearing) + "</AZIMUTH></PST>";
-    sendCommandToPstRotator(msg);
+    QString txMsg = "<PST><AZIMUTH>" + QString::number(bearing) + "</AZIMUTH></PST>";
+    sendCommandToPstRotator(txMsg);
+    traceMsg(QString("rotate to bearing %1").arg(txMsg));
     return retCode;
 
 }
@@ -169,8 +186,9 @@ int PstRotControl::rotate_to_bearing(const int bearing)
 int PstRotControl::stop_rotation()
 {
     int retCode = 0;
-    QString msg = "<PST><STOP>1</STOP></PST>";
-    sendCommandToPstRotator(msg);
+    QString txMsg = "<PST><STOP>1</STOP></PST>";
+    sendCommandToPstRotator(txMsg);
+    traceMsg(QString("stop rotation %1").arg(txMsg));
     return retCode;
 }
 
@@ -218,3 +236,15 @@ int PstRotControl::get_rotatorSpeed()
     return rot_speed;
 }
 
+
+void PstRotControl::onCommsTimeout()
+{
+    commsTimeoutTimer->stop();
+    traceMsg(QString("commsTimeout - %1").arg(timeoutDur));
+}
+
+
+void PstRotControl::traceMsg(QString msg)
+{
+    emit traceCommsMsg(QString("[PstRotator] %1").arg(msg));
+}

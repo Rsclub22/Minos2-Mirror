@@ -85,8 +85,8 @@ HamlibRotControl::HamlibRotControl(QObject *parent) : RotatorBase(parent)
 
 HamlibRotControl::~HamlibRotControl()
 {
-    rot_close(my_rot); /* close port */
-    rot_cleanup(my_rot); /* if you care about memory */
+    //rot_close(my_rot); /* close port */
+    //rot_cleanup(my_rot); /* if you care about memory */
 }
 
 
@@ -231,7 +231,6 @@ int HamlibRotControl::closeRotator()
     }
     int retcode;
     retcode = rot_close (my_rot);
-
     retcode = rot_cleanup (my_rot);
     setRotConnected(false);
     return retcode;

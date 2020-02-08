@@ -12,7 +12,7 @@
 
 #include "rotatorfactory.h"
 #include "hamlibRotcontrol.h"
-#include "pstRotControl.h"
+
 
 #if defined (WIN32)
 #include "pstRotControl.h"

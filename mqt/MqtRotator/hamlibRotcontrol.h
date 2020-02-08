@@ -34,30 +34,6 @@ int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 
 int collect(const rot_caps *caps, void *);
 
-const QStringList errorMsgTxt = {"No Error, operation completed sucessfully",
-                                "Invalid parameter",
-                                "Invalid configuration",
-                                "Memory shortage", "Function not implemented",
-                                "Communication timed out",
-                                "IO error, including open failed",
-                                "Internal Hamlib error",
-                                "Protocol error",
-                                "Command rejected by the rig",
-                                "Command performed, but arg truncated",
-                                "Function not available",
-                                "VFO not targetable",
-                                "Error talking on the bus",
-                                "Collision on the bus",
-                                "NULL RIG handle or any invalid pointer parameter in get arg",
-                                "Invalid VFO",
-                                "RIG_EDOM",
-                                "Hamlib Init Fail"};
-
-
-
-
-
-
 
 
 

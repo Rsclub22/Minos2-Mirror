@@ -431,7 +431,11 @@ void RotatorMainWindow::openRotator()
 
 
     rotator = rotFactory->createRotator(rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModelName).RotCapabilities::modelNumber);
+
     connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
+    connect(rotator, SIGNAL(traceCommsMsg(QString)), this, SLOT(logMessage(QString)));
+    connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
+    connect(rotator, SIGNAL(bearing_updated(int)), rotlog, SLOT(saveBearingLog(int)));
 
 
     retCode = rotator->rotInit(setupAntenna->currentAntenna);
@@ -493,7 +497,11 @@ void RotatorMainWindow::closeRotator()
     }
 
     pollTimer->stop();
+
     disconnect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
+    disconnect(rotator, SIGNAL(traceCommsMsg(QString)), this, SLOT(logMessage(QString)));
+    disconnect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
+    disconnect(rotator, SIGNAL(bearing_updated(int)), rotlog, SLOT(saveBearingLog(int)));
 
     if (rotator->getRotConnected())
     {
@@ -593,7 +601,6 @@ void RotatorMainWindow::initActionsConnections()
 
     // display bearing
     connect(pollTimer, SIGNAL(timeout()), this, SLOT(request_bearing()));
-    //connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
     connect(this, SIGNAL(sendCompassDial(int)), ui->compassDial, SLOT(compassDialUpdate(int)));
     connect(this, SIGNAL(sendBearing(QString)), ui->bearingDisplay, SLOT(setText(const QString &)));
     connect(this, SIGNAL(sendBackBearing(QString)), ui->backBearingDisplay, SLOT(setText(const QString &)));
@@ -602,7 +609,6 @@ void RotatorMainWindow::initActionsConnections()
     // check endstop and turn to rotation stop
     connect(&RotateTimer, SIGNAL(timeout()), this, SLOT(rotatingTimer()));
     connect(this, SIGNAL(checkingEndStop()), this, SLOT(checkEndStop()));
-    connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
     //connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(closeSerialPort()));
 
 
@@ -620,9 +626,6 @@ void RotatorMainWindow::initActionsConnections()
     connect(ui->actionLog_Heading, SIGNAL(triggered()), setupLog, SLOT(loadLogConfig()));
     connect(setupLog, SIGNAL(showLogDialog()), setupLog, SLOT(show()));
     connect(setupLog, SIGNAL(bearingLogConfigChanged()), rotlog, SLOT(getBearingLogConfig()));
-    connect(rotator, SIGNAL(bearing_updated(int)), rotlog, SLOT(saveBearingLog(int)));
-
-    connect(rotator, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
 
     // Message from Logger
     connect(msg, SIGNAL(setRotation(int,int)), this, SLOT(onLoggerSetRotation(int,int)));

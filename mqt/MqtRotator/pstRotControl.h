@@ -22,6 +22,18 @@
 #include "rotatorfactory.h"
 #include "rotatorbase.h"
 
+//namespace pstRotatorText {
+//    const char * pstRotatorErrorMsg[] = {QT_TR_NOOP("Network Address failed to bind"),
+//                                    QT_TR_NOOP("")
+//                                    };
+//}
+
+
+enum pstErrorCode {BIND_FAILURE = -1};
+
+
+const int timeoutDur = 2000;
+
 
 class PstRotControl : public RotatorBase
 {
@@ -60,6 +72,8 @@ public slots:
 
     void processPendingReportDatagrams();
 
+private slots:
+    void onCommsTimeout();
 private:
 
     void sendCommandToPstRotator(const QString msg);
@@ -74,6 +88,7 @@ private:
     QUdpSocket* pstReportSocket;
     unsigned short pstReportPortNumber;
 
+    QTimer *commsTimeoutTimer;
     QString bearing;
     bool traceComms;
 
@@ -81,6 +96,7 @@ private:
 
 
 
+    void traceMsg(QString msg);
 };
 
 #endif // PSTROTCONTROL_H
