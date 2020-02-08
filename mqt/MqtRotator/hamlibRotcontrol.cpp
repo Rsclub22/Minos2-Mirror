@@ -269,6 +269,8 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
             case RIG_PORT_USB:
                 port_type = RotCapContstants::PortType::usb;
             break;
+            default:
+            {}
         }
 
 
