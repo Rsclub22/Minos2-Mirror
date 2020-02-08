@@ -30,15 +30,15 @@ void MinosContestLoadDialog::setLoadMessage(QString mess, bool newFile, bool lis
 {
     QString m = "<h2><center>";
 
-    m += newFile?"Creating ":"Loading ";
+    m += newFile?tr("Creating "):tr("Loading ");
 
-    m += list?"List file ":"Contest file ";
+    m += list?tr("List file "):tr("Contest file ");
     m += "<p>";
     m += mess;
 
     ui->contestNameLabel->setText(m);
 
-    trace("Progress Dialog add mesage for " + mess);
+    trace("Progress Dialog add message for " + mess);
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }

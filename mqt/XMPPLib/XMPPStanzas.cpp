@@ -97,11 +97,11 @@ QString getNodeValue( TiXmlElement *node, const QString &name )
    }
    return res;
 }
-RPCRequest::RPCRequest( const QString &to, const QString &mname ) : RPCAction( to, "" ), methodName( mname )
+RPCRequest::RPCRequest( const QString &pto, const QString &mname ) : RPCAction( pto, "" ), methodName( mname )
 {}
-RPCRequest::RPCRequest( const QString &to, const QString &from, const QString &mname ) : RPCAction( to, from ), methodName( mname )
+RPCRequest::RPCRequest( const QString &pto, const QString &pfrom, const QString &mname ) : RPCAction( pto, pfrom ), methodName( mname )
 {}
-RPCRequest::RPCRequest( const QString &from, TiXmlElement *node ) : RPCAction( "", from )
+RPCRequest::RPCRequest( const QString &pfrom, TiXmlElement *node ) : RPCAction( "", pfrom )
 {
    QString mname = getNodeValue( node, "methodName" );
    methodName = mname;

@@ -19,23 +19,23 @@
 //==============================================================================
 // ??? add up/down on volume sliders, and reload/save ALSA?
 // match against enum LineModes
-static QStringList lineModeStrings = {
-    "None",
-    "Play 1/2 - Pip",
-    "Play 1/2 - No Pip",
-    "Tuning Tones 1/2",
-    "Record 1/2",
-    "Mode 5",
-    "Mode 6",
-    "Mode 7",
-    "Mode 8",
-    "Mode 9",
-    "Mode 10",
-    "Mode 11",
-    "Mode 12",
-    "MGM - Disable keyer",
-    "Apps - Restart(1)/Close(2)",
-    "OS - Restart(1)/Close(2)"
+static const char * lineModeStrings[] = {
+    QT_TRANSLATE_NOOP("VoiceKeyer", "None"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 1/2 - Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 1/2 - No Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Tuning Tones 1/2"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Record 1/2"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 5"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 6"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 7"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 8"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 9"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 10"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 11"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 12"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "MGM - Disable keyer"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Apps - Restart(1)/Close(2)"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "OS - Restart(1)/Close(2)")
 };
 //==============================================================================
 
@@ -438,9 +438,9 @@ void commonKeyer::getActionState( QString &s )
    if ( sba )
       sba->getActionState( s );
    else
-      s = "No current actions";
+      s = tr("No current actions");
 
-   s = "<" + lineModeStrings[linesMode] + "> " + s;
+   s = "<" + tr(lineModeStrings[linesMode]) + "> " + s;
 }
 void commonKeyer::getTransverterSwitch( QString &buff )
 {
@@ -508,7 +508,7 @@ bool commonKeyer::linesModeChanged( int state )
       trace( "linesModeChanged(" + QString::number( state ) + ")" );
    }
    linesMode = static_cast<LineModes>(state);
-   trace("lineMode is now " + lineModeStrings[linesMode]);
+   trace("lineMode is now " + QString(lineModeStrings[linesMode]));
    return true;
 }
 
@@ -904,7 +904,6 @@ bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int p
    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( errmess, rate, pipTone, pipVolume, pipLength ,filterCorner ) )
    {
       trace( "sbdvp_init failed! " + errmess );
-      trace( errmess );
       return false;
    }
    return true;
@@ -1084,7 +1083,7 @@ void ToneAction::timeOut()
             currentKeyer->ptt( 0 );
          VKMixer::GetVKMixer()->SetCurrentMixerSet( emsPassThroughNoPTT );
          deleteAtTick = true;
-         ;
+
          break;
 
    }

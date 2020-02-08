@@ -5,6 +5,7 @@
 
 class checkModeAgainstFreq : public freqModeBandPlan
 {
+    Q_OBJECT
 public:
     checkModeAgainstFreq();
     int confirmMode(QString &band, QString &mode, double freq);

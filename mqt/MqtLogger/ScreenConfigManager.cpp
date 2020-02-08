@@ -9,7 +9,7 @@
 #include "ScreenConfigManager.h"
 #include "ui_ScreenConfigManager.h"
 
-static QString defLayoutText = " (default)";
+const char * ScreenConfigManager::defLayoutText = QT_TR_NOOP("(default)");
 
 ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     QDialog(parent),
@@ -56,7 +56,7 @@ void ScreenConfigManager::showDetails()
             crow = j;
         if ((*i).name ==  defaultConfigName)
         {
-            ui->layoutList->addItem((*i).name + defLayoutText);
+            ui->layoutList->addItem((*i).name + " " + tr(defLayoutText));
         }
         else
         {
@@ -93,12 +93,12 @@ void ScreenConfigManager::accept()
     doCloseEvent();
     QDialog::accept();
 }
-static QString stripDefaultDecoration(QString s)
+QString ScreenConfigManager::stripDefaultDecoration(QString s)
 {
-    if (s.endsWith(defLayoutText))
+    if (s.endsWith(tr(ScreenConfigManager::defLayoutText)))
     {
-        s.chop(defLayoutText.size());
-
+        s.chop(tr(ScreenConfigManager::defLayoutText).size());
+        s = s.trimmed();
     }
     return s;
 }
@@ -126,11 +126,11 @@ bool ScreenConfigManager::getNewName(QString &Value)
     while (firsttime || scf.configs.contains(Value))
     {
         firsttime = false;
-        if ( enquireDialog( this, "Please give a new name for the layout" , Value ) )
+        if ( enquireDialog( this, tr("Please give a new name for the layout") , Value ) )
         {
             if (scf.configs.contains(Value))
             {
-                MinosParameters::getMinosParameters() ->mshowMessage( Value + " already exists", this );
+                MinosParameters::getMinosParameters() ->mshowMessage(tr("%1 already exists").arg(Value), this );
             }
             else
             {
@@ -146,7 +146,7 @@ bool ScreenConfigManager::getNewName(QString &Value)
 }
 void ScreenConfigManager::on_newButton_clicked()
 {
-    QString value = "new layout";
+    QString value =tr("new layout");
     if (getNewName(value))
     {
         curConfigName = value;
@@ -162,7 +162,7 @@ void ScreenConfigManager::on_newButton_clicked()
 void ScreenConfigManager::on_cloneButton_clicked()
 {
     SC &sc = scf.configs[curConfigName];
-    QString value = "new layout";
+    QString value = tr("new layout");
     if (getNewName(value))
     {
         curConfigName = value;

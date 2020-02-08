@@ -13,14 +13,16 @@
 #include "printfile.h"
 
 //==============================================================================
-static QString fileHeader = "<!--\r\n"
-                         "====================================================\r\n"
+// This (printfile) will be in english...
+
+const char *PrintFile::fileHeader =
+                         QT_TR_NOOP( "====================================================\r\n"
                          "\r\nDO NOT SEND THIS FILE AS YOUR ENTRY!\r\n\r\n"
                          "Use \"File\" | \"Produce Entry/Export File...\"\r\n"
                          "Export as Reg1Test(entry)\r\n"
                          "and send the .EDI file produced.\r\n"
-                         "====================================================\r\n"
-                         "-->\r\n";
+                         "====================================================\r\n")
+                         ;
 //==============================================================================
 enum PrintFile_order
 {
@@ -147,7 +149,7 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
                : QString(";;");
    linelist[ static_cast< int> (CODXC) ] = PrintFileLine( "Best DX - Callsign; Locator; Distance   ", sbestdx ); /*, "(Best DX) Callsign; Locator; Distance"*/
 
-   wr.lwrite(fileHeader);
+   wr.lwrite(tr(fileHeader));
    wr.lwriteLine();
 
    for ( int i = 0; i < LineCount; i++ )

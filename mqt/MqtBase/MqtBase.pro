@@ -64,16 +64,17 @@ SOURCES += \
     mults.cpp \
     MultsImpl.cpp \
     mwin.cpp \
+    presetbutton.cpp \
     profiles.cpp \
     qlogtabwidget.cpp \
     RigCache.cpp \
     rigcommon.cpp \
     RigDetails.cpp \
     RigState.cpp \
+    rigcontrolcommonconstants.cpp \
     rigutils.cpp \
     RotatorCache.cpp \
     rotatorcommon.cpp \
-    rotpresetbutton.cpp \
     rotpresetdialog.cpp \
     ScreenContact.cpp \
     serialcomms.cpp \
@@ -84,7 +85,6 @@ SOURCES += \
     qttelnet.cpp \
     clusterClientServer.cpp \
     spotdata.cpp \
-    calllocinputdialog.cpp \
     helpbrowser.cpp \
     helptextbrowser.cpp \
     clustercommon.cpp \
@@ -142,6 +142,7 @@ HEADERS += \
     MultsImpl.h \
     mwin.h \
     ProfileEnums.h \
+    presetbutton.h \
     profiles.h \
     qlogtabwidget.h \
     RigCache.h \
@@ -153,7 +154,6 @@ HEADERS += \
     rigutils.h \
     RotatorCache.h \
     rotatorcommon.h \
-    rotpresetbutton.h \
     rotpresetdialog.h \
     ScreenContact.h \
     serialCommonData.h \
@@ -167,7 +167,6 @@ HEADERS += \
     clustercommon.h \
     clusterClientServer.h \
     spotdata.h \
-    calllocinputdialog.h \
     rigmemcommondata.h \
     helpbrowser.h \
     helptextbrowser.h \
@@ -195,7 +194,6 @@ FORMS += \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \
-    calllocinputdialog.ui \
     helpbrowser.ui \
     callsigninputdialog.ui \
     locatorinputdialog.ui

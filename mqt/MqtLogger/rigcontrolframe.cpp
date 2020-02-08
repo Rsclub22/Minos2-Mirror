@@ -28,8 +28,6 @@
 #include "ritlineedit.h"
 #include "ui_rigcontrolframe.h"
 
-#define MODE_ERROR "<font color='Red'>Mode Error</font>"
-
 
 static QKeySequence runButShortCut[] {
     QKeySequence(Qt::CTRL + Qt::Key_BracketLeft),
@@ -716,7 +714,7 @@ void RigControlFrame::changeMainRadioFreq()
             }
             else
             {
-                QString f = QString("%1 %2 %3").arg("<font color='Red'>").arg(lastFreq).arg("</font>");
+                QString f =HtmlFontColour(Qt::red) + lastFreq;
                 trace("changeMainRadioFreq " + f);
                 ui->freqInput->setText(f);
             }
@@ -1101,7 +1099,7 @@ void RigControlFrame::setMode(QString m)
 
 
         // mode not supported by minos
-        ui->modelbl->setText(MODE_ERROR);
+        ui->modelbl->setText(HtmlFontColour(Qt::red) + "Mode Error");
     }
 
 
@@ -1191,7 +1189,7 @@ void RigControlFrame::setRadioFreq()
 
     if (selRadioDetails.getBandList().isEmpty())
     {
-        setRadioBandWarning(QString("<font color='Red'>Error Receiving Bandlist!</font>"));
+        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Error Receiving Bandlist!"));
         trace(QString("setRadioFreq:: Error Receiving Bandlist!"));
         sendFreq(NO_BAND_SUPPORT);
         return;
@@ -1201,7 +1199,7 @@ void RigControlFrame::setRadioFreq()
 
     if (listOfBands.isEmpty())
     {
-        setRadioBandWarning(QString("<font color='Red'>Radio has no available bands</font>"));
+        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Radio has no available bands"));
         trace(QString("setRadioFreq:: Error No available bands!"));
         sendFreq(NO_BAND_SUPPORT);
         return;
@@ -1290,7 +1288,7 @@ void RigControlFrame::setRadioFreq()
                 }
             }
             // warn no band for this radio
-            setRadioBandWarning(QString("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
+            setRadioBandWarning(HtmlFontColour(Qt::red) + tr("No %1 Band found for this radio!").arg(cb));
             trace(QString("SsetRadioFreq: %1 Band not found on this radio").arg(cb));
             sendFreq(NO_BAND_SUPPORT);
         }
@@ -1382,7 +1380,7 @@ void RigControlFrame::setRadioState(QString s)
            QStringList sl = s.split(':');
            if (sl.count() == 2)
            {
-               ui->rigState->setText(QString("<font color = 'Red'> Error: %1</font>").arg(sl[1]));
+               ui->rigState->setText(HtmlFontColour(Qt::red) + tr("Error: %1").arg(sl[1]));
                emit radioHasError(sl[1]);
            }
         }
@@ -1999,7 +1997,7 @@ void RigControlFrame::runButWriteActSel(int buttonNumber)
 {
     traceMsg(QString("Memory Write Selected %1 = ").arg(QString::number(buttonNumber + 1)));
     memoryData::memData runData;
-    runData.callsign = "Run" + QString::number(buttonNumber + 1);
+    runData.callsign = tr("Run") + QString::number(buttonNumber + 1);
     runData.freq = curFreq;
     runData.locator = "";
     runData.mode = curMode;
@@ -2008,7 +2006,7 @@ void RigControlFrame::runButWriteActSel(int buttonNumber)
     // load run data into run memory
 
     RunButtonDialog runDialog(this);
-    runDialog.setWindowTitle(QString("Run %1 - Write").arg(QString::number(buttonNumber + 1)));
+    runDialog.setWindowTitle(tr("Run %1 - Write").arg(QString::number(buttonNumber + 1)));
     runDialog.setLogData(&runData, buttonNumber);
     if (runDialog.exec() == QDialog::Accepted)
     {
@@ -2025,7 +2023,7 @@ void RigControlFrame::runButEditActSel(int buttonNumber)
 
     traceMsg(QString("Run Button Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
     RunButtonDialog runDialog(this);
-    runDialog.setWindowTitle(QString("Run %1 - Edit").arg(QString::number(buttonNumber + 1)));
+    runDialog.setWindowTitle(tr("Run %1 - Edit").arg(QString::number(buttonNumber + 1)));
     runDialog.setLogData(&runData, buttonNumber);
 
     if (runDialog.exec() == QDialog::Accepted)
@@ -2074,8 +2072,8 @@ void RigControlFrame::runButtonUpdate(int buttonNumber)
     QString sc = ((buttonNumber == 0)?QString(" [ "):QString( " ] "));
 
     runButtonMap[buttonNumber]->memButton->setText("R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + " ");
-    QString tTipStr = "Freq: " + convertFreqStrDisp(m.freq) + "\n"
-            + "Mode: " + m.mode + "\n";
+    QString tTipStr = tr("Freq: ") + convertFreqStrDisp(m.freq) + "\n"
+            + tr("Mode: ") + m.mode + "\n";
 
     runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
 
@@ -2295,11 +2293,11 @@ RunMemoryButton::RunMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
 
     shortKey = new QShortcut(QKeySequence(runButShortCut[memNo]), memButton);
     shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), memButton);
-    runOffAction = new QAction("&Off", memButton);
-    readAction = new QAction("&Read", memButton);
-    writeAction = new QAction("&New",memButton);
-    editAction = new QAction("&Edit", memButton);
-    clearAction = new QAction("&Clear",memButton);
+    runOffAction = new QAction(tr("&Off"), memButton);
+    readAction = new QAction(tr("&Read"), memButton);
+    writeAction = new QAction(tr("&New"),memButton);
+    editAction = new QAction(tr("&Edit"), memButton);
+    clearAction = new QAction(tr("&Clear"),memButton);
     memoryMenu->addAction(runOffAction);
     memoryMenu->addAction(readAction);
     memoryMenu->addAction(writeAction);
@@ -2406,8 +2404,8 @@ TuneMemoryButton::TuneMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
     memButton->setPopupMode(QToolButton::MenuButtonPopup);
     memButton->setFocusPolicy(Qt::NoFocus);
 
-    readAction = new QAction("&Read", memButton);
-    writeAction = new QAction("&Write",memButton);
+    readAction = new QAction(tr("&Read"), memButton);
+    writeAction = new QAction(tr("&Write"),memButton);
     memoryMenu->addAction(readAction);
     memoryMenu->addAction(writeAction);
     memButton->setMenu(memoryMenu);

@@ -62,7 +62,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 {
 
 
-    setWindowTitle("Cluster Spot Filters");
+    setWindowTitle(tr("Cluster Spot Filters"));
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 
@@ -534,7 +534,7 @@ void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
 void ClusterClientFilterDialog::callsignAddClicked()
 {
 
-    CallsignInputDialog callsignDialog(this, QString(""), QString("Add Callsign Filter"), QString("Enter Callsign"));
+    CallsignInputDialog callsignDialog(this, QString(""), tr("Add Callsign Filter"), tr("Enter Callsign"));
     QString callsign;
     bool useCallsign = false;
 
@@ -620,8 +620,8 @@ void ClusterClientFilterDialog::callsignDelClicked()
     if (selItems.count() == 1)
     {
         int status = QMessageBox::question( this,
-        QString("Delete Callsign Filter"),
-        QString("Please confirm you want to delete callsign %1 ?").arg(callsignListWidget->currentItem()->text()),
+        tr("Delete Callsign Filter"),
+        tr("Please confirm you want to delete callsign %1 ?").arg(callsignListWidget->currentItem()->text()),
         QMessageBox::Yes|QMessageBox::Default,
         QMessageBox::No|QMessageBox::Escape,
         QMessageBox::NoButton);
@@ -645,8 +645,8 @@ void ClusterClientFilterDialog::callsignDelAllClicked()
     if (callsignListWidget->count() > 0)
     {
         int status = QMessageBox::question( this,
-        QString("Delete All Callsign Filters"),
-        QString("Please confirm you want to delete all callsigns?"),
+        tr("Delete All Callsign Filters"),
+        tr("Please confirm you want to delete all callsigns?"),
         QMessageBox::Yes|QMessageBox::Default,
         QMessageBox::No|QMessageBox::Escape,
         QMessageBox::NoButton);
@@ -666,7 +666,7 @@ void ClusterClientFilterDialog::callsignEditClicked()
     {
         int row = callsignListWidget->row(selItems[0]);
         QString currentCall = callsignListWidget->currentItem()->text();
-        CallsignInputDialog callsignDialog(this, currentCall, QString("Edit Callsign Filter"), QString("Edit Callsign"));
+        CallsignInputDialog callsignDialog(this, currentCall, tr("Edit Callsign Filter"), tr("Edit Callsign"));
         QString callsign;
         if (callsignDialog.exec() == QDialog::Accepted)
         {
@@ -713,7 +713,7 @@ void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
 
 void ClusterClientFilterDialog::locatorAddClicked()
 {
-    LocatorInputDialog locatorDialog(this, QString(""), QString("Add Locator Filter"), QString("Enter Locator"));
+    LocatorInputDialog locatorDialog(this, QString(""), tr("Add Locator Filter"), tr("Enter Locator"));
     locatorDialog.allowLoc4(true);
 
     QString locator;
@@ -779,7 +779,7 @@ void ClusterClientFilterDialog::locatorEditClicked()
     {
         int row = locatorListWidget->row(selItems[0]);
         QString currentLocator = locatorListWidget->currentItem()->text();
-        LocatorInputDialog callsignDialog(this, currentLocator, QString("Edit Locator Filter"), QString("Edit Locator"));
+        LocatorInputDialog callsignDialog(this, currentLocator, tr("Edit Locator Filter"), tr("Edit Locator"));
         QString locator;
         if (callsignDialog.exec() == QDialog::Accepted)
         {
@@ -805,8 +805,8 @@ void ClusterClientFilterDialog::locatorDelClicked()
     if (selItems.count() == 1)
     {
         int status = QMessageBox::question( this,
-        QString("Delete Locator Filter"),
-        QString("Do you want to delete locator %1 ?").arg(locatorListWidget->currentItem()->text()),
+        tr("Delete Locator Filter"),
+        tr("Do you want to delete locator %1 ?").arg(locatorListWidget->currentItem()->text()),
         QMessageBox::Yes|QMessageBox::Default,
         QMessageBox::No|QMessageBox::Escape,
         QMessageBox::NoButton);
@@ -829,8 +829,8 @@ void ClusterClientFilterDialog::locatorDelAllClicked()
     if (locatorListWidget->count() > 0)
     {
         int status = QMessageBox::question( this,
-        QString("Delete All Locator Filters"),
-        QString("Please confirm you want to delete all locators?"),
+        tr("Delete All Locator Filters"),
+        tr("Please confirm you want to delete all locators?"),
         QMessageBox::Yes|QMessageBox::Default,
         QMessageBox::No|QMessageBox::Escape,
         QMessageBox::NoButton);

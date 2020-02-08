@@ -24,9 +24,9 @@ class GridColumn
    public:
       int fieldId;
       QString width;
-      QString title;
+      const char * title;
       TAlignment alignment;
-      GridColumn( int fieldId, QString width, QString title, TAlignment alignment ) :
+      GridColumn( int fieldId, QString width, const char * title, TAlignment alignment ) :
             fieldId( fieldId ), width( width ), title( title ), alignment( alignment )
       {}
 };
@@ -45,13 +45,16 @@ enum eLogGridCols {egTime,
 #define THISMATCHTREECOLS egLogMaxCol
 #define OTHERMATCHTREECOLS egLogMaxCol - 4
 #define ARCHIVEMATCHTREECOLS egLogMaxCol - 8
-extern GridColumn QSOTreeColumns[ LOGTREECOLS ];
 
 class QSOGridModel: public QAbstractItemModel
 {
+    Q_OBJECT
     protected:
         BaseContestLog *contest;
     public:
+        static GridColumn QSOTreeColumns[ LOGTREECOLS ];
+
+
         QSOGridModel();
         ~QSOGridModel() Q_DECL_OVERRIDE;
         QSharedPointer<HtmlDelegate> delegate;

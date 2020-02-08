@@ -17,7 +17,7 @@
 //#include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
 #include "checkmodeagainstfreq.h"
-#include "rotpresetbutton.h"
+#include "presetbutton.h"
 #include "clustercommon.h"
 #include "htmldelegate.h"
 
@@ -81,9 +81,6 @@ const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
 
-const QStringList sendClusterReasonText = {"Ok", "Failed - comms error",  "Not Logged On", "Freq out of band", "Callsign or Locator Empty"};
-enum sendClusterReason_e {TX_OK, COMMS_ERR, NOT_LOGGED_ON, FREQ_ERR, CALL_LOC_EMPTY};
-
 class ClusterAddress
 {
 
@@ -107,12 +104,15 @@ public:
 class ClusterMainWindow : public QMainWindow
 {
     Q_OBJECT
+    static const  char * DXSPOT_TAB_TITLE;
+    static const char * SENT_SPOT_TAB_TITLE;
+    static const char * RAW_DATA_TAB_TITLE;
 
 public:
     explicit ClusterMainWindow(QWidget *parent = nullptr);
     ~ClusterMainWindow();
 
-
+    static const char *userCmdButtonLabels[4];
 
 private slots:
     void connectionEstab();
@@ -164,8 +164,7 @@ private:
     QVector<BandDetail> bands;
     checkModeAgainstFreq* modeBandPlan;
 
-    const QStringList userCmdButtonLabels = {"&Send", "&New", "&Edit", "&Clear"};
-    QList<RotPresetButton *> userCmdButton;
+    QList<PresetButton *> userCmdButton;
     QList<QShortcut *> shortCutKeyList;
     QList<QShortcut *> shiftShortCutKeyList;
     QStringList startCommands;

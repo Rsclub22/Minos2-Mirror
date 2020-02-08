@@ -29,7 +29,7 @@
 bool enquireDialog (QWidget *owner, const QString &prompt, QString &Value )
 {
     bool ok;
-    QString text = QInputDialog::getText( owner, "Please supply value",
+    QString text = QInputDialog::getText( owner, QCoreApplication::translate("enquireDialog", "Please supply value"),
                                           prompt, QLineEdit::Normal,
                                           Value, &ok );
     if ( ok && !text.isEmpty() )
@@ -41,7 +41,7 @@ bool enquireDialog (QWidget *owner, const QString &prompt, QString &Value )
 bool enquireDialog (QWidget *owner, const QString &prompt, int &Value, int minval, int maxval )
 {
     bool ok;
-    int val = QInputDialog::getInt(owner, "Please supply value",
+    int val = QInputDialog::getInt(owner, QCoreApplication::translate("enquireDialog", "Please supply value"),
                                           prompt, Value, minval, maxval,
                                            1, &ok );
     if ( ok )

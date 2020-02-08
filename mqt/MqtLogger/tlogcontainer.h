@@ -67,13 +67,15 @@ public:
 
 
 
+    QAction *newAction(int n, QMenu *m, const char *atype);
 private:
     Ui::TLogContainer *ui;
 
     QTimer TimerUpdateQSOTimer;
-
-
     QMenu TabPopup;
+
+    QMap<QAction *, const char *> actionList;
+    QMap<QMenu *, const char *> menuList;
 
     QMenu *screenLayoutMenu;
     enum { MaxRecentFiles = 5 };
@@ -83,6 +85,7 @@ private:
     QMenu *sessionsMenu;
     QMenu *keyerRecordMenu;
     QMenu *keyerPlaybackMenu;
+    QMenu *languagesMenu;
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
@@ -99,12 +102,15 @@ private:
     TSingleLogFrame *findLogFrame(int t);
     void selectTab(int t);
 
-    QAction *lastSessionSelected;
-    QAction *lastLayoutSelected;
+    QAction *lastSessionSelected = nullptr;
+    QAction *lastLayoutSelected = nullptr;
+    QAction *lastLanguageSelected = nullptr;
 
-    QAction *newAction(const QString &text, QMenu *m, const char *atype );
-    SetMemoryAction *newMemoryAction(const QString &text, QMenu *m, const char *atype );
-    QAction *newCheckableAction( const QString &text, QMenu *m, const char *atype );
+    QAction *newAction(const char *text, QMenu *m, const char *atype );
+    QMenu *newMenu(QMenu *m, const char *text);
+    SetMemoryAction *newMemoryAction(const char *text, QMenu *m, const char *atype );
+    QAction *newCheckableAction(const char *text, QMenu *m, const char *atype );
+    QAction *newCheckableAction(const QString text, QMenu *m, const char *atype );
     void setupMenus();
 
     QAction *HelpAction;
@@ -139,6 +145,7 @@ private:
     QAction *ShowOperatorsAction;
     QAction *OptionsAction;
     QAction *FontEditAcceptAction;
+    QAction *LanguageAcceptAction;
     QAction *WSJTXConfigAction;
     QAction *ReportAutofillAction;
 
@@ -199,6 +206,7 @@ private slots:
     void ShowOperatorsActionExecute();
     void OptionsActionExecute();
     void FontEditAcceptActionExecute();
+    void LanguageAcceptActionExecute();
     void WsjtConfigActionExecute();
     void ReportAutofillActionExecute();
 

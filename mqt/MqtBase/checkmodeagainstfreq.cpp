@@ -35,7 +35,7 @@ QString checkModeAgainstFreq::getMode(const QString &band, double freq)
 
     }
 
-    return "None";
+    return tr("None");
 }
 
 

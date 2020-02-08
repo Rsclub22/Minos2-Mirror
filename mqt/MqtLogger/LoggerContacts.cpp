@@ -71,21 +71,21 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       if ( contactFlags.getValue() & NON_SCORING )
       {
          contactBuffs.scorebuff = "0";
-         exp_buff = "No Score Claimed " ;
+         exp_buff = tr("No Score Claimed") + " " ;
       }
       else
          if ( cs.valRes == ERR_DUPCS )
          {
              contactBuffs.scorebuff = "0";
-             exp_buff = "Duplicate ";
+             exp_buff = tr("Duplicate") + " ";
          }
          else
          {
             if ( contactFlags.getValue() & VALID_DUPLICATE )
-               exp_buff = "BackPacker ";
+               exp_buff = tr("BackPacker") + " ";
 
             if ( contactFlags.getValue() & VALID_DISTRICT )
-               exp_buff += "No district code ";
+               exp_buff += tr("No district code") + " ";
 
             thisscore = contactScore.getValue();
             switch ( clp->scoreMode.getValue() )
@@ -110,7 +110,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
                thisscore = 0;
             contactBuffs.scorebuff = QString::number(thisscore );
          }
-      contactBuffs.scorebuff.truncate(5);;
+      contactBuffs.scorebuff.truncate(5);
       multbuff.clear();
 
       if ( multCount )
@@ -556,7 +556,7 @@ bool ContestContact::commonSave(QSharedPointer<BaseContact> tct)
    {
       if ( clp->isGJVFile() )
       {
-         MinosParameters::getMinosParameters() ->mshowMessage( "GJV file should have been opened read only!" );
+         MinosParameters::getMinosParameters() ->mshowMessage(tr("GJV file should have been opened read only!") );
          return false;
       }
       else
@@ -664,7 +664,7 @@ bool ContestContact::GJVload( int diskBlock )
    buftostr( temp );
    if ( temp.toInt() != diskBlock )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( "Invalid block number in contact block" );
+      MinosParameters::getMinosParameters() ->mshowMessage( tr("Invalid block number in contact block") );
       return false;
    }
 

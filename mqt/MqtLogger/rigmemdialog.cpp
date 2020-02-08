@@ -72,7 +72,7 @@ void RigMemDialog::onFreqEditFinish()
     {
         // error
         QMessageBox msgBox;
-        msgBox.setText(FREQ_EDIT_ERR_MSG);
+        msgBox.setText(tr(FREQ_EDIT_ERR_MSG));
         msgBox.exec();
 
     }

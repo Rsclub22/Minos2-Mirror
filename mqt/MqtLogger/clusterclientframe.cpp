@@ -48,7 +48,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
-    ui->clusterClientFrameTitle->setText("Cluster");
+    ui->clusterClientFrameTitle->setText(tr("Cluster"));
     statusIndicatorToggle(false);
 
     ui->clusterSplitter->setStretchFactor(0, 2);
@@ -99,13 +99,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     actionInObject = new MouseInObject(this, this);
     spotsMenu->installEventFilter(actionInObject);
 
-    freqAction = new QAction("Set &Freq", this);
-    bearingAction = new QAction("Set &Bearing", this);
-    logAction = new QAction("Send &Log", this);
-    memoryAction = new QAction("Send &Memory", this);
-    clearSpotAction = new QAction("Clear &Spot", this);
-    clearAllSpotsAction = new QAction("Clear &All Spots", this);
-    //memoryActionOveride = new QAction("Force &Send Memory", this);
+    freqAction = new QAction(tr("Set &Freq"), this);
+    bearingAction = new QAction(tr("Set &Bearing"), this);
+    logAction = new QAction(tr("Send &Log"), this);
+    memoryAction = new QAction(tr("Send &Memory"), this);
+    clearSpotAction = new QAction(tr("Clear &Spot"), this);
+    clearAllSpotsAction = new QAction(tr("Clear &All Spots"), this);
+    //memoryActionOveride = new QAction(tr("Force &Send Memory"), this);
 
     spotsMenu->addAction(freqAction);
     spotsMenu->addAction(bearingAction);
@@ -240,7 +240,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
     //dxSpotProxyModel->setDynamicSortFilter(true);
 
-    ui->dxSpotTab->addTab(dxSpotView, "DX Spots");
+    ui->dxSpotTab->addTab(dxSpotView, tr("DX Spots"));
     //dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
@@ -287,7 +287,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
     searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
-    ui->dxSpotTab->addTab(searchView, "Search Spots");
+    ui->dxSpotTab->addTab(searchView, tr("Search Spots"));
     searchView->setModel(searchSortProxyModel);
     searchView->setAlternatingRowColors(true);
     searchView->setSelectionMode( QAbstractItemView::SingleSelection );
@@ -334,7 +334,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignProxyModel->setSourceModel(dxSpotDataModel);
     callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
-    ui->dxSpotTab->addTab(callSignView, "Callsign Spots");
+    ui->dxSpotTab->addTab(callSignView, tr("Callsign Spots"));
 
     callSignView->setModel(callSignProxyModel);
     callSignView->setAlternatingRowColors(true);
@@ -381,7 +381,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorProxyModel->setSourceModel(dxSpotDataModel);
     locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
-    ui->dxSpotTab->addTab(locatorView, "Locator Spots");
+    ui->dxSpotTab->addTab(locatorView, tr("Locator Spots"));
     locatorView->setModel(locatorProxyModel);
     locatorView->setAlternatingRowColors(true);
     locatorView->setSelectionMode( QAbstractItemView::SingleSelection );
@@ -594,7 +594,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = clusterStateIndicator[(*i).state] + " " + (*i).app + "\r\n";
+        QString state = QString(clusterStateList[(*i).state]) + " " + (*i).app + "\r\n";
         trace(QString("clusterClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }
@@ -1690,14 +1690,12 @@ void ClusterClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->clusterClientFrameTitle->setText("Cluster - <font color='Red'>Mouse in frame, updates paused</font>");
-        //ui->clusterClientFrameTitle2->setText("<font color='Red'>Updates paused for 5 secs.</font>");
+        ui->clusterClientFrameTitle->setText( tr("Cluster - %1Mouse in frame, updates paused").arg(HtmlFontColour(Qt::red)));
 
     }
     else
     {
-        ui->clusterClientFrameTitle->setText("Cluster");
-        //ui->clusterClientFrameTitle2->clear();
+        ui->clusterClientFrameTitle->setText(tr("Cluster"));
     }
 }
 

@@ -1,5 +1,6 @@
 #include "kstcallgridmodel.h"
 #include "contest.h"
+#include "kstmainwindow.h"
 // kst2me sort by
 // new before old
 // locator
@@ -9,7 +10,10 @@ bool KstUser::operator< ( const KstUser& rhs ) const
 {
     // p1 is from list; p2 is the one being searched for
 
-    return call < rhs.call;
+    if (chat  == rhs.chat)
+        return call < rhs.call;
+    else
+        return chat < rhs.chat;
 }
 bool KstUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
@@ -25,7 +29,7 @@ void KstCallGridModel::reset()
     callVector->clear();
     endResetModel();
 }
-void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > pcallVector)
+void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUser> > > &pcallVector)
 {
     beginResetModel();
     callVector = pcallVector;
@@ -85,6 +89,12 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
         switch(index.column())
         {
+        case ecscChat:
+        if (crec->chat > 0 && crec->chat <= services.count())
+            return services[crec->chat - 1];
+        else
+            return "Unknown";
+
         case ecscCall:
         {
             QString call = crec->call;
@@ -130,12 +140,22 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
         case ecscName:
             return crec->name;
 
+        case ecscCountryPrefix:
+            return crec->prefix;
+
+        case ecscCountryName:
+            return crec->country;
         }
     }
     if (role == Qt::UserRole)
     {
         QSharedPointer<KstUser> crec = callVector->at(row);
-        if (index.column() == ecscCall)
+        switch (index.column())
+        {
+        case ecscChat:
+            return crec->chat;
+
+        case ecscCall:
         {
             QString call = crec->call;
             if (!crec->recent)
@@ -144,13 +164,30 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             }
             return call;
         }
-        if (index.column() == ecscLoc)
+
+        case ecscLoc:
         {
             QString loc = crec->loc;
             return loc;
         }
-        QVariant cell = data(index, Qt::DisplayRole);
-        return cell.toInt();
+
+        case ecscName:
+        {
+            QString name = crec->name;
+            return name;
+        }
+
+        case ecscDistance:
+        {
+            QVariant cell = data(index, Qt::DisplayRole);
+            return cell.toInt();
+        }
+        case ecscCountryPrefix:
+            return crec->prefix;
+
+        case ecscCountryName:
+            return crec->country;
+        }
     }
     return QVariant();
 }
@@ -163,17 +200,26 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
     {
         switch(section)
         {
+        case ecscChat:
+            return tr("Chat");
+
         case ecscCall:
-            return "Callsign";
+            return tr("Callsign");
 
         case ecscLoc:
-            return "Loc";
+            return tr("Loc");
 
         case ecscDistance:
-            return "Dist";
+            return tr("Dist");
 
         case ecscName:
-            return "Name";
+            return tr("Name");
+
+        case ecscCountryPrefix:
+            return tr("Prefix");
+
+        case ecscCountryName:
+            return tr("Country");
         }
     }
     else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
@@ -196,10 +242,14 @@ int KstCallGridModel::columnCount( const QModelIndex & /*parent*/ ) const
     return ecscMaxColumn;
 }
 //==========================================================================================
+void KstCallGridSortFilterModel::setChatFilter(int value)
+{
+    chatFilter = value;
+    invalidateFilter();
+}
+
 bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    if (filterString.isEmpty())
-        return true;
 
     KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
     if (!cgm || sourceRow >= cgm->rowCount())
@@ -207,14 +257,21 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
 
-    if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
+    int chat = call->chat;
+    if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))
+    {
+        if (filterString.isEmpty())
+            return true;
 
-    if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
+        if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
 
-    if (call->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
+        if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
+
+        if (call->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
+    }
 
     return false;
 }
@@ -245,5 +302,10 @@ bool KstCallGridSortFilterModel::lessThan(const QModelIndex &left,
 
     //need to correct for locator and distance sorting
 
+    if (ws1 == ws2)
+    {
+        ws1 = sourceModel()->data(createIndex(lrow, ecscCall), Qt::UserRole);
+        ws2 = sourceModel()->data(createIndex(rrow, ecscCall), Qt::UserRole);
+    }
     return ws1 < ws2;
 }

@@ -19,6 +19,7 @@ class LoggerContestLog;
 
 class ContestContact: public DisplayContestContact
 {
+    Q_OBJECT
    private:
       ContestContact( const ContestContact & );
       ContestContact& operator =( const ContestContact & );

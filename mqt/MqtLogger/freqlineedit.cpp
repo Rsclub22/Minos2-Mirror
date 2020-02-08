@@ -14,6 +14,7 @@
 #include "rigutils.h"
 #include "BandList.h"
 #include "freqlineedit.h"
+#include "cutils.h"
 
 FreqLineEdit::FreqLineEdit(QWidget *parent):
     QLineEdit(parent)
@@ -147,7 +148,7 @@ void FreqLineEdit::changeFreq(bool direction)
         }
         else
         {
-            setText(QString("%1 %2 %3").arg("<font color='Red'>").arg(convertFreqStrDisp(sfreq)).arg("</font>"));
+            setText(HtmlFontColour(Qt::red) + convertFreqStrDisp(sfreq));
         }
 
         setCursorPosition(pos);

@@ -36,8 +36,7 @@ SOURCES += main.cpp\
     setupdialog.cpp \
     cluster.cpp \
     clusterrpc.cpp \
-    userclustercommanddialog.cpp \
-    clusterusercmdbutton.cpp
+    userclustercommanddialog.cpp
 
 
 
@@ -47,8 +46,7 @@ HEADERS  += clustermainwindow.h \
     setupdialog.h \
     cluster.h \
     clusterrpc.h \
-    userclustercommanddialog.h \
-    clusterusercmdbutton.h
+    userclustercommanddialog.h
 
 
 

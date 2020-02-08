@@ -8,9 +8,9 @@
 
 
 // Status messages sent to minos logger
-#define RIG_STATUS_CONNECTED "Connected"
-#define RIG_STATUS_DISCONNECTED "Disconnected"
-#define RIG_STATUS_ERROR "Error"
+extern const char * RIG_STATUS_CONNECTED;
+extern const char * RIG_STATUS_DISCONNECTED;
+extern const char * RIG_STATUS_ERROR;
 
 //#define TXVERT_ON "TXVERTON"
 //#define TXVERT_OFF "TXVERTOFF"
@@ -62,7 +62,7 @@ namespace hamlibData
 
     const QStringList portTypeList = { "RIG_PORT_NONE", "RIG_PORT_SERIAL", "RIG_PORT_NETWORK", "RIG_PORT_DEVICE",
                                     "RIG_PORT_PACKET", "RIG_PORT_DTMF", "RIG_PORT_ULTRA", "RIG_PORT_RPC",
-                                    "RIG_PORT_PARALLEL, RIG_PORT_USB, RIG_PORT_UDP_NETWORK, RIG_PORT_CM108"};
+                                    "RIG_PORT_PARALLEL", "RIG_PORT_USB", "RIG_PORT_UDP_NETWORK", "RIG_PORT_CM108"};
 
     const int RIGCTL = 2;               // rigctl model number
 
@@ -119,12 +119,6 @@ const QString RIGCTL_MAC_EXE_FILENAME = "rigctld";
 
 const QString RIGCTLD_GROUP_NAME = "Rigctld";
 const QString RIGCTLD_PATH_SETTING_NAME = "RigctldPath";
-
-// Tooltips
-
-const QString civToolTip = "Leave field blank for default radio CIV,\nor enter in the form 0xnn or nn, where nn is the radio CIV address in Hex.";
-
-
 
 // RadioName when no radio is connected
 //const QString NORADIO = "NoRadio";

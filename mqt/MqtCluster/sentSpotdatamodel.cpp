@@ -146,11 +146,11 @@ QVariant SentSpotDataModel::data(const QModelIndex &index, int role) const
             case SENT_SPOT_STATUS_COL_NUM:
                 if (sentSpot->sentOk)
                 {
-                    d = "OK";
+                    d = tr("OK");
                 }
                 else
                 {
-                    d = "Failed";
+                    d = tr("Failed");
                 }
 
             break;

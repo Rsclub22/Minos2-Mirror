@@ -67,6 +67,7 @@ class Matcher
 };
 class ThisLogMatcher: public Matcher
 {
+    Q_DECLARE_TR_FUNCTIONS(ThisLogMatcher)
       virtual void matchDistrict( const QString &extraText );
       virtual void matchCountry( const QString &cs );
       virtual void replaceList(  );
@@ -79,6 +80,7 @@ class ThisLogMatcher: public Matcher
 };
 class OtherLogMatcher: public Matcher
 {
+    Q_DECLARE_TR_FUNCTIONS(OtherLogMatcher)
       virtual void matchDistrict( const QString &extraText );
       virtual void matchCountry( const QString &cs );
       virtual void replaceList( );
@@ -91,6 +93,7 @@ class OtherLogMatcher: public Matcher
 };
 class ListMatcher: public Matcher
 {
+    Q_DECLARE_TR_FUNCTIONS(ListMatcher)
       virtual void matchDistrict( const QString &extraText );
       virtual void matchCountry( const QString &cs );
       virtual void replaceList(  );

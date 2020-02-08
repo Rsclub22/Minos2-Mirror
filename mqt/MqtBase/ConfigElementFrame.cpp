@@ -3,6 +3,8 @@
 #include "ConfigElementFrame.h"
 #include "ui_ConfigElementFrame.h"
 
+const char *ConfigElementFrame::deltext = QT_TR_NOOP("<Deleted>");
+
 ConfigElementFrame::ConfigElementFrame(bool nele) :
     QFrame(nullptr),
     newElement(nele),
@@ -78,7 +80,7 @@ void ConfigElementFrame::setElement(QSharedPointer<RunConfigElement> c)
 
     if (c->deleted)
     {
-        ui->elementNameEdit->setText("<Deleted>");
+        ui->elementNameEdit->setText(tr(deltext));
     }
     else
     {
@@ -121,7 +123,7 @@ void ConfigElementFrame::saveElement()
         configElement->appType = ui->appTypeCombo->currentText();
 
         QString c = ui->elementNameEdit->text().trimmed();
-        if (c.compare("<Deleted>", Qt::CaseInsensitive) == 0)
+        if (c.compare(tr(deltext), Qt::CaseInsensitive) == 0)
         {
             configElement->deleted = true;
         }
@@ -153,7 +155,7 @@ void ConfigElementFrame::on_programBrowseButton_clicked()
     QDir cdir(GetCurrentDir());
     QString InitialDir = ExtractFileDir(ui->programNameEdit->text());
 
-    QFileDialog dialog(this, "Minos Component Program", InitialDir);
+    QFileDialog dialog(this, tr("Minos Component Program"), InitialDir);
 #if QT_VERSION >= 0x050600
     const QStringList schemes = QStringList(QStringLiteral("file"));
 
@@ -161,8 +163,8 @@ void ConfigElementFrame::on_programBrowseButton_clicked()
 #endif
 
 #ifdef Q_OS_WIN
-    QString Filter = "Executable Files (*.exe);;"
-                     "All Files (*.*)" ;
+    QString Filter = QString("Executable Files") + " (*.exe);;"
+                     + QString(tr("All Files")) + " (*.*)" ;
     dialog.setNameFilter(Filter);
 #else
     dialog.setFilter(QDir::AllDirs | QDir::Files | QDir::Dirs /*| QDir::Executable*/); //executable doesn't seem to work
@@ -189,7 +191,7 @@ void ConfigElementFrame::on_homeDirectoryBrowse_clicked()
 
     QString destDir = QFileDialog::getExistingDirectory(
                   nullptr,
-                  "Set Working Directory",
+                  tr("Set Working Directory"),
                   fpath,
                   QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
                    );
@@ -203,7 +205,7 @@ void ConfigElementFrame::on_homeDirectoryBrowse_clicked()
 void ConfigElementFrame::on_deleteButton_clicked()
 {
     // mark the element as deleted
-    ui->elementNameEdit->setText("<Deleted>");
+    ui->elementNameEdit->setText(tr(deltext));
     ui->enabledCheckbox->setChecked(false);
 }
 
@@ -229,7 +231,7 @@ void ConfigElementFrame::checkEnabled()
     }
     if (ui->rbRunLocally->isChecked())
     {
-        ui->LocalRemote->setText("Local");
+        ui->LocalRemote->setText(tr("Local"));
     }
     else
     {

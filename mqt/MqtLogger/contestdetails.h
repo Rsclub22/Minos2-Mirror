@@ -17,6 +17,7 @@ class ContestDetails : public QDialog
 {
     Q_OBJECT
 
+    static const char * BSHelpText;
 public:
     explicit ContestDetails(QWidget *parent = nullptr);
     ~ContestDetails() override;

@@ -12,6 +12,8 @@ class RigMemoryFrame;
 
 class RigMemoryGridModel: public QAbstractItemModel
 {
+    Q_OBJECT
+    static GridColumn RigMemoryColumns[ ];
     public:
         RigMemoryGridModel();
         ~RigMemoryGridModel() Q_DECL_OVERRIDE;

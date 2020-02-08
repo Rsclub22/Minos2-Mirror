@@ -32,13 +32,12 @@
 #include "minoscontestloaddialog.h"
 #include "ChatServer.h"
 #include "clusterClientServer.h"
+#include "MatchThread.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
 
 TLogContainer *LogContainer = nullptr;
-static QString defLayoutText = " (default)";
-
 
 SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 {}
@@ -46,8 +45,6 @@ SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 TLogContainer::TLogContainer(QWidget *parent) :
     QMainWindow(parent)
   , ui(new Ui::TLogContainer)
-  , lastSessionSelected(nullptr)
-  , lastLayoutSelected(nullptr)
 {
     ui->setupUi(this);
 
@@ -61,7 +58,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     // make the tab control fill the window
     ui->centralWidget->layout()->setContentsMargins(0,0,0,0);
 
-    setWindowTitle("Minos Contest Logger");
+    setWindowTitle(tr("Minos Contest Logger"));
 
     setupMenus();
 
@@ -223,7 +220,7 @@ void TLogContainer::on_ReportOverstrike(bool overstrike, BaseContestLog *econtes
    BaseContestLog * ct = tca->getCurrentContest();
    if (ct == econtest)
    {
-      sblabel1->setText(overstrike ? "Overwrite" : "Insert");
+      sblabel1->setText(overstrike ? tr("Overwrite") : tr("Insert"));
    }
 }
 
@@ -271,22 +268,64 @@ void TLogContainer::changeEvent( QEvent* e )
         QSettings settings;
         settings.setValue("geometry", saveGeometry());
     }
+
+    if (e->type() == QEvent::LanguageChange)
+    {
+        // when language changes force a complete rebuild
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+
+        for(QMap<QMenu *, const char *>::iterator i = menuList.begin(); i != menuList.end(); i++)
+        {
+            i.key()->setTitle(tr(i.value()));
+        }
+        for(QMap<QAction *, const char *>::iterator i = actionList.begin(); i != actionList.end(); i++)
+        {
+            i.key()->setText(tr(i.value()));
+        }
+        ui->retranslateUi(this);
+    }
+    QMainWindow::changeEvent(e);
 }
-QAction *TLogContainer::newAction( const QString &text, QMenu *m, const char *atype )
+QMenu *TLogContainer::newMenu(QMenu *m, const char *text)
 {
-    QAction * newAct = new QAction( text, this );
+    QMenu *menu = m->addMenu(tr(text));
+    menuList[menu] = text;
+    return menu;
+}
+QAction *TLogContainer::newAction( const char *text, QMenu *m, const char *atype )
+{
+    QAction * newAct = new QAction( tr(text), this );
+    actionList[newAct] = text;
     m->addAction( newAct );
     connect( newAct, SIGNAL( triggered() ), this, atype );
     return newAct;
 }
-SetMemoryAction *TLogContainer::newMemoryAction( const QString &text, QMenu *m, const char *atype )
+QAction *TLogContainer::newAction( int n, QMenu *m, const char *atype )
 {
-    SetMemoryAction * newAct = new SetMemoryAction( text, this );
+    QAction * newAct = new QAction( QString::number(n), this );
     m->addAction( newAct );
     connect( newAct, SIGNAL( triggered() ), this, atype );
     return newAct;
 }
-QAction *TLogContainer::newCheckableAction( const QString &text, QMenu *m, const char *atype )
+SetMemoryAction *TLogContainer::newMemoryAction(const char *text, QMenu *m, const char *atype )
+{
+    SetMemoryAction * newAct = new SetMemoryAction( tr(text), this );
+    actionList[newAct] = text;
+    m->addAction( newAct );
+    connect( newAct, SIGNAL( triggered() ), this, atype );
+    return newAct;
+}
+QAction *TLogContainer::newCheckableAction( const char *text, QMenu *m, const char *atype )
+{
+    QAction * newAct = new QAction( tr(text), this );
+    actionList[newAct] = text;
+    newAct->setCheckable( true );
+    m->addAction( newAct );
+    connect( newAct, SIGNAL( triggered( bool ) ), this, atype );
+    return newAct;
+}
+QAction *TLogContainer::newCheckableAction( const QString text, QMenu *m, const char *atype )
 {
     QAction * newAct = new QAction( text, this );
     newAct->setCheckable( true );
@@ -297,9 +336,9 @@ QAction *TLogContainer::newCheckableAction( const QString &text, QMenu *m, const
 
 void TLogContainer::setupMenus()
 {
-    FileOpenAction = newAction("&Open Contest...", ui->menuFile, SLOT(FileOpenActionExecute()));
-    FileImportAction = newAction("&Import Contest...", ui->menuFile, SLOT(FileImportActionExecute()));
-    recentFilesMenu = ui->menuFile->addMenu("Reopen Contest");
+    FileOpenAction = newAction(QT_TR_NOOP("&Open Contest..."), ui->menuFile, SLOT(FileOpenActionExecute()));
+    FileImportAction = newAction(QT_TR_NOOP("&Import Contest..."), ui->menuFile, SLOT(FileImportActionExecute()));
+    recentFilesMenu = newMenu(ui->menuFile, QT_TR_NOOP("Reopen Contest"));
 
     for (int i = 0; i < MaxRecentFiles; ++i)
     {
@@ -311,53 +350,75 @@ void TLogContainer::setupMenus()
     }
     updateRecentFileActions();
 
-    FileNewAction = newAction("&New Contest...", ui->menuFile, SLOT(FileNewActionExecute()));
-    FileCloseAction = newAction("Close Contest", ui->menuFile, SLOT(FileCloseActionExecute()));
-    CloseAllAction = newAction("Close all Contests", ui->menuFile, SLOT(CloseAllActionExecute()));
-    CloseAllButAction = newAction("Close all but this Contest", ui->menuFile, SLOT(CloseAllButActionExecute()));
+    FileNewAction = newAction(QT_TR_NOOP("&New Contest..."), ui->menuFile, SLOT(FileNewActionExecute()));
+    FileCloseAction = newAction(QT_TR_NOOP("Close Contest"), ui->menuFile, SLOT(FileCloseActionExecute()));
+    CloseAllAction = newAction(QT_TR_NOOP("Close all Contests"), ui->menuFile, SLOT(CloseAllActionExecute()));
+    CloseAllButAction = newAction(QT_TR_NOOP("Close all but this Contest"), ui->menuFile, SLOT(CloseAllButActionExecute()));
     ui->menuFile->addSeparator();
 
     ui->menuFile->addSeparator();
-    ContestDetailsAction = newAction("Contest Details...", ui->menuFile, SLOT(ContestDetailsActionExecute()));
-    MakeEntryAction = newAction("Produce Entry/Export File...", ui->menuFile, SLOT(MakeEntryActionExecute()));
+    ContestDetailsAction = newAction(QT_TR_NOOP("Contest Details..."), ui->menuFile, SLOT(ContestDetailsActionExecute()));
+    MakeEntryAction = newAction(QT_TR_NOOP("Produce Entry/Export File..."), ui->menuFile, SLOT(MakeEntryActionExecute()));
     ui->menuFile->addSeparator();
 
-    AppendAdifAction = newAction("Append ADIF file to contest...", ui->menuFile, SLOT(AppendAdifActionExecute()));
+    AppendAdifAction = newAction(QT_TR_NOOP("Append ADIF file to contest..."), ui->menuFile, SLOT(AppendAdifActionExecute()));
     ui->menuFile->addSeparator();
 
-    ListOpenAction = newAction("Open &Archive List...", ui->menuFile, SLOT(ListOpenActionExecute()));
-    ManageListsAction = newAction("&Manage Archive Lists...", ui->menuFile, SLOT(ManageListsActionExecute()));
+    ListOpenAction = newAction(QT_TR_NOOP("Open &Archive List..."), ui->menuFile, SLOT(ListOpenActionExecute()));
+    ManageListsAction = newAction(QT_TR_NOOP("&Manage Archive Lists..."), ui->menuFile, SLOT(ManageListsActionExecute()));
     ui->menuFile->addSeparator();
-    OptionsAction = newAction("Options...", ui->menuFile, SLOT(OptionsActionExecute()));
+    OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuFile, SLOT(OptionsActionExecute()));
 #ifdef Q_OS_WIN
-    ExitClearAction = newAction("E&xit Minos Contest Logger and Clear registry", ui->menuFile, SLOT(ExitClearActionExecute()));
+    ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry"), ui->menuFile, SLOT(ExitClearActionExecute()));
 #endif
     ui->menuFile->addSeparator();
-    ExitAction = newAction("E&xit Minos Contest Logger", ui->menuFile, SLOT(ExitActionExecute()));
+    ExitAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger"), ui->menuFile, SLOT(ExitActionExecute()));
 // end of file menu
 
-    GoToSerialAction = newAction("&Go To Contact Serial...", ui->menuSearch, SLOT(GoToSerialActionExecute()));
-    NextUnfilledAction = newAction("Goto First Unfilled Contact", ui->menuSearch, SLOT(NextUnfilledActionExecute()));
+    GoToSerialAction = newAction(QT_TR_NOOP("&Go To Contact Serial..."), ui->menuSearch, SLOT(GoToSerialActionExecute()));
+    NextUnfilledAction = newAction(QT_TR_NOOP("Goto First Unfilled Contact"), ui->menuSearch, SLOT(NextUnfilledActionExecute()));
 // end of search menu
 
-    startConfigAction = newAction("Startup Apps Configuration", ui->menuTools, SLOT(StartConfigActionExecute()));
+    startConfigAction = newAction(QT_TR_NOOP("Startup Apps Configuration"), ui->menuTools, SLOT(StartConfigActionExecute()));
 
-    screenLayoutMenu = ui->menuTools->addMenu("Screen Layouts");
+    screenLayoutMenu = newMenu(ui->menuTools, QT_TR_NOOP("Screen Layouts"));
     updateLayoutsMenu();
+    ui->menuTools->addSeparator();
+    FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
+    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language..."));
+
+    QString currentLang = getCurrentLanguage();
+
+    QVector<Translation> languages = getLanguages();
+    foreach(const Translation &l, languages)
+    {
+        QAction *act =  new QAction(this);
+        act->setText(l.dispName);
+
+        connect(act, SIGNAL(triggered()),
+                this, SLOT(LanguageAcceptActionExecute()));
+        act->setCheckable(true);
+
+        languagesMenu->addAction(act);
+
+        if (l.code == currentLang)
+        {
+            act->setChecked(true);
+            lastLanguageSelected = act;
+        }
+
+    }
 
     ui->menuTools->addSeparator();
-    LocCalcAction = newAction("Locator Calculator", ui->menuTools, SLOT(LocCalcActionExecute()));
-//    AnalyseMinosLogAction = newAction("Analyse Minos Log", ui->menuTools, SLOT(AnalyseMinosLogActionExecute()));
-//    ui->menuTools->addSeparator();
+    LocCalcAction = newAction(QT_TR_NOOP("Locator Calculator"), ui->menuTools, SLOT(LocCalcActionExecute()));
 
-    FontEditAcceptAction = newAction("Select &Font...", ui->menuTools, SLOT(FontEditAcceptActionExecute()));
-    WSJTXConfigAction = newAction("WSJT-X link configuration", ui->menuTools, SLOT(WsjtConfigActionExecute()));
-    ReportAutofillAction = newCheckableAction("Signal Report AutoFill", ui->menuTools, SLOT(ReportAutofillActionExecute()));
-    CorrectDateTimeAction = newAction("Correct Date/Time", ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
+    WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration"), ui->menuTools, SLOT(WsjtConfigActionExecute()));
+    ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
+    CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time"), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
 
     // end of tools manu
 
-    setMemoryAction = newMemoryAction(QString("Add as new memory..."), &TabPopup, SLOT(onSetMemoryActionExecute()));
+    setMemoryAction = newMemoryAction(QT_TR_NOOP("Add as new memory..."), &TabPopup, SLOT(onSetMemoryActionExecute()));
 
     TabPopup.addAction(FileOpenAction);
     TabPopup.addAction(FileImportAction);
@@ -379,33 +440,32 @@ void TLogContainer::setupMenus()
     TabPopup.addAction(NextUnfilledAction);
     TabPopup.addSeparator();
 
-    ShowOperatorsAction = newCheckableAction("Show Operators", &TabPopup, SLOT(ShowOperatorsActionExecute()));
+    ShowOperatorsAction = newCheckableAction(QT_TR_NOOP("Show Operators"), &TabPopup, SLOT(ShowOperatorsActionExecute()));
     TabPopup.addSeparator();
 
-    ShiftTabLeftAction = newAction("Shift Active Tab Left", &TabPopup, SLOT(ShiftTabLeftActionExecute()));
-    ShiftTabRightAction = newAction("Shift Active Tab Right", &TabPopup, SLOT(ShiftTabRightActionExecute()));
+    ShiftTabLeftAction = newAction(QT_TR_NOOP("Shift Active Tab Left"), &TabPopup, SLOT(ShiftTabLeftActionExecute()));
+    ShiftTabRightAction = newAction(QT_TR_NOOP("Shift Active Tab Right"), &TabPopup, SLOT(ShiftTabRightActionExecute()));
     TabPopup.addAction(CorrectDateTimeAction);
     TabPopup.addSeparator();
 
     //TabPopup.addAction(AnalyseMinosLogAction);
-    newAction( "Cancel", &TabPopup, SLOT( CancelClick() ) );
+    newAction( QT_TR_NOOP("Cancel"), &TabPopup, SLOT( CancelClick() ) );
 
-    keyerRecordMenu = ui->menuKeyer->addMenu("Record");
-    keyerPlaybackMenu = ui->menuKeyer->addMenu("Playback");
-    KeyerToneAction = newAction("Tune", ui->menuKeyer, SLOT(KeyerToneActionExecute()));
-    KeyerTwoToneAction = newAction("Two Tone", ui->menuKeyer, SLOT(KeyerTwoToneActionExecute()));
-    KeyerStopAction = newAction("Stop", ui->menuKeyer, SLOT(KeyerStopActionExecute()));
+    keyerRecordMenu = newMenu(ui->menuKeyer, QT_TR_NOOP("Record"));
+    keyerPlaybackMenu = newMenu(ui->menuKeyer, QT_TR_NOOP("Playback"));
+    KeyerToneAction = newAction(QT_TR_NOOP("Tune"), ui->menuKeyer, SLOT(KeyerToneActionExecute()));
+    KeyerTwoToneAction = newAction(QT_TR_NOOP("Two Tone"), ui->menuKeyer, SLOT(KeyerTwoToneActionExecute()));
+    KeyerStopAction = newAction(QT_TR_NOOP("Stop"), ui->menuKeyer, SLOT(KeyerStopActionExecute()));
 
     for (int i = 1; i < 10; i++)
     {
-        QString s = QString::number(i);
-        KeyerRecordAction = newAction((s), keyerRecordMenu, SLOT(KeyerRecordActionExecute()));
+        KeyerRecordAction = newAction(i, keyerRecordMenu, SLOT(KeyerRecordActionExecute()));
         KeyerRecordAction->setData(i);
-        KeyerPlaybackAction = newAction((s), keyerPlaybackMenu, SLOT(KeyerPlaybackActionExecute()));
+        KeyerPlaybackAction = newAction(i, keyerPlaybackMenu, SLOT(KeyerPlaybackActionExecute()));
         KeyerPlaybackAction->setData(i);
     }
-    HelpAction = newAction("Help...", ui->menuHelp, SLOT(HelpActionExecute()));
-    HelpAboutAction = newAction("About...", ui->menuHelp, SLOT(HelpAboutActionExecute()));
+    HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, SLOT(HelpActionExecute()));
+    HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, SLOT(HelpAboutActionExecute()));
 }
 
 
@@ -524,7 +584,7 @@ void TLogContainer::updateRecentFileActions()
 
     for (int i = 0; i < numRecentFiles; ++i)
     {
-        QString text = tr("&%1 %2").arg(i + 1).arg(strippedName(files[i]));
+        QString text = QString("&%1 %2").arg(i + 1).arg(strippedName(files[i]));
         recentFileActs[i]->setText(text);
         recentFileActs[i]->setData(files[i]);
         recentFileActs[i]->setVisible(true);
@@ -579,7 +639,7 @@ void TLogContainer::HelpActionExecute()
         }
         else
         {
-            mShowMessage(QString("Documentation File %1 doesn't exist.").arg(collectionFile), this);
+            mShowMessage(tr("Documentation File %1 doesn't exist.").arg(collectionFile), this);
         }
     }
 
@@ -660,7 +720,7 @@ void TLogContainer::FileNewActionExecute()
     {
        if ( !QFile::remove( initName ) )
        {
-          MinosParameters::getMinosParameters() ->mshowMessage( QString( "Failed to delete " ) + initName );
+          MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to delete %1" ).arg( initName) );
        }
        return;
     }
@@ -703,9 +763,9 @@ void TLogContainer::FileNewActionExecute()
    while ( repeatDialog )
    {
        QString fileName = QFileDialog::getSaveFileName( this,
-                          "Save new contest as",
+                          tr("Save new contest as"),
                           InitialDir + "/" + suggestedfName,
-                          "Minos contest files (*.minos *.Minos)",
+                          tr("Minos contest files %1").arg( "(*.minos *.Minos)"),
                           nullptr,
                           QFileDialog::DontConfirmOverwrite
                                                       );
@@ -713,7 +773,7 @@ void TLogContainer::FileNewActionExecute()
        {
            if (FileExists(fileName) )
            {
-               MinosParameters::getMinosParameters() ->mshowMessage( fileName + "\nalready exists.\n\nPlease choose a new name." );
+               MinosParameters::getMinosParameters() ->mshowMessage( tr("%1 \nalready exists.\n\nPlease choose a new name.").arg(fileName) );
 
                InitialDir = ExtractFilePath(fileName);
                QString sfname = InitialDir + nameBase + "_" + QString::number(fnum) + ".minos";
@@ -732,8 +792,7 @@ void TLogContainer::FileNewActionExecute()
           QDir r(creationDir);
           if ( !r.rename( initName, suggestedfName ) )
           {
-             MinosParameters::getMinosParameters() ->mshowMessage( QString( "Failed to rename\n" ) + initName + "\n as \n" + suggestedfName +
-                                                                   "\n\nPlease choose a new name." );
+             MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to rename\n%1\n as \n%2\n\nPlease choose a new name.").arg(initName).arg(suggestedfName) );
              suggestedfName = initName;
           }
 
@@ -746,7 +805,7 @@ void TLogContainer::FileNewActionExecute()
             repeatDialog = false;   // never go back to the dialog
             if ( !QFile::remove( initName ) )
             {
-                MinosParameters::getMinosParameters() ->mshowMessage( QString( "Failed to delete " ) + initName );
+                MinosParameters::getMinosParameters() ->mshowMessage( tr( "Failed to delete %1" ).arg(initName) );
             }
        }
     }
@@ -762,11 +821,11 @@ void TLogContainer::FileOpenActionExecute()
 
     InitialDir = qf.canonicalFilePath();
 
-    QString Filter = "Minos contest files (*.minos *.Minos);;"
-                     "All Files (*.*)" ;
+    QString Filter = tr("Minos contest files (*.minos *.Minos);;"
+                     "All Files (*.*)") ;
 
     QStringList fnames = QFileDialog::getOpenFileNames( this,
-                       "Open contests",
+                       tr("Open contests"),
                        InitialDir,  // dir
                        Filter
                        );
@@ -795,15 +854,15 @@ void TLogContainer::FileImportActionExecute()
 
     InitialDir = qf.canonicalFilePath();
 
-    QString Filter = "Use this combo for file types (*.*);;"
+    QString Filter = tr("Use this combo for file types (*.*);;"
                      "Reg1Test Files (*.edi);;"
                      "GJV contest files (*.gjv);;"
                      "RSGB Log Files (*.log);;"
                      "ADIF Files (*.adi);;"
-                     "All Files (*.*)" ;
+                     "All Files (*.*)") ;
 
     QStringList fnames = QFileDialog::getOpenFileNames( this,
-                       "Import contests",
+                       tr("Import contests"),
                        InitialDir,  // dir
                        Filter
                        );
@@ -912,8 +971,8 @@ void TLogContainer::ExitClearActionExecute()
     // Confirm...
 
 #ifdef Q_OS_WIN
-    if (!mShowYesNoMessage(this, "This action will clear registry entries for all of the apps within the Minos V2 Logger.\r\n\r\n"
-                                  "Please confirm this action by pressing \"Yes\"." ))
+    if (!mShowYesNoMessage(this, tr("This action will clear registry entries for all of the apps within the Minos V2 Logger.\r\n\r\n"
+                                  "Please confirm this action by pressing \"Yes\".") ))
     {
        return;
     }
@@ -925,7 +984,7 @@ void TLogContainer::ExitClearActionExecute()
 
     close();
 #else
-    mShowMessage("Clear registry only works under Windows", this);
+    mShowMessage(tr("Clear registry only works under Windows"), this);
 #endif
 }
 void TLogContainer::AppendAdifActionExecute()
@@ -941,11 +1000,11 @@ void TLogContainer::AppendAdifActionExecute()
 
     InitialDir = qf.canonicalFilePath();
 
-    QString Filter = "ADIF files (*.adi);;"
-                     "All Files (*.*)" ;
+    QString Filter = tr("ADIF files (*.adi);;"
+                     "All Files (*.*)") ;
 
     QString fname = QFileDialog::getOpenFileName( this,
-                       "Open ADIF for append",
+                       tr("Open ADIF for append"),
                        InitialDir,  // dir
                        Filter
                        );
@@ -959,7 +1018,7 @@ void TLogContainer::AppendAdifActionExecute()
         if (!adifFile->open(om))
         {
            QString lerr = adifFile->errorString();
-           QString emess = "Failed to open ADIF file " + fname + " : " + lerr;
+           QString emess = tr("Failed to open ADIF file %1 : %2").arg(fname).arg(lerr);
            MinosParameters::getMinosParameters() ->mshowMessage( emess );
            return;
         }
@@ -967,7 +1026,7 @@ void TLogContainer::AppendAdifActionExecute()
         int spoint = ct->ctList.count();
         if (! ADIFImport::doImportADIFLog(dynamic_cast<LoggerContestLog *>(ct),  adifFile ))
         {
-            MinosParameters::getMinosParameters() ->mshowMessage( "Failed to append " + fname );
+            MinosParameters::getMinosParameters() ->mshowMessage( tr("Failed to append %1").arg(fname) );
         }
         ct->scanContest();
         ct->validateLoc();
@@ -1007,11 +1066,11 @@ void TLogContainer::AnalyseMinosLogActionExecute()
 
     InitialDir = qf.canonicalFilePath();
 
-    QString Filter = "Minos contest files (*.minos *.Minos);;"
-                     "All Files (*.*)" ;
+    QString Filter = tr("Minos contest files (*.minos *.Minos);;"
+                     "All Files (*.*)") ;
 
     QString fname = QFileDialog::getOpenFileName( this,
-                       "Open contest for Analysis",
+                       tr("Open contest for Analysis"),
                        InitialDir,  // dir
                        Filter
                        );
@@ -1023,7 +1082,7 @@ void TLogContainer::AnalyseMinosLogActionExecute()
     if (!contestFile->open(om))
     {
        QString lerr = contestFile->errorString();
-       QString emess = "Failed to open Contest Log file " + fname + " : " + lerr;
+       QString emess = tr("Failed to open Contest Log file %1 : %2").arg(fname).arg(lerr);
        MinosParameters::getMinosParameters() ->mshowMessage( emess );
        return;
     }
@@ -1031,7 +1090,7 @@ void TLogContainer::AnalyseMinosLogActionExecute()
     MinosTestImport mt;
     mt.analyseTest( contestFile );
 
-    MinosParameters::getMinosParameters() ->mshowMessage( "Analysis of " + fname + " complete; look in the trace log for analysis." );
+    MinosParameters::getMinosParameters() ->mshowMessage( tr("Analysis of %1 complete; look in the trace log for analysis.").arg(fname) );
 }
 
 void TLogContainer::CorrectDateTimeActionExecute()
@@ -1056,7 +1115,7 @@ void TLogContainer::OptionsActionExecute()
     ed.ShowCurrentSectionOnly();
     if (ed.exec() == QDialog::Accepted)
     {
-       mShowMessage("You may need to close and reload Minos to have these settings applied", this);
+       mShowMessage(tr("You may need to close and reload Minos to have these settings applied"), this);
     }
 }
 
@@ -1065,7 +1124,7 @@ void TLogContainer::FontEditAcceptActionExecute()
     QString qpa = qgetenv("QT_QPA_PLATFORMTHEME");
     if (qpa.compare("qt5ct", Qt::CaseInsensitive) == 0)
     {
-        mShowMessage("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct", this);
+        mShowMessage(tr("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct"), this);
         QSettings settings;
         settings.remove( "font");
     }
@@ -1088,6 +1147,30 @@ void TLogContainer::FontEditAcceptActionExecute()
             settings.setValue( "font", font() );
 
             MinosLoggerEvents::SendFontChanged();
+        }
+    }
+}
+void TLogContainer::LanguageAcceptActionExecute()
+{
+    TWaitCursor wc(this);
+    QAction *action = qobject_cast<QAction *>(sender());
+
+    if (action)
+    {
+        if (lastLanguageSelected)
+            lastLanguageSelected->setChecked(false);
+        action->setChecked(true);
+        lastLanguageSelected = action;
+        QString selText = action->text();
+
+        QVector<Translation> languages = getLanguages();
+        foreach(const Translation &l, languages)
+        {
+            if (l.dispName == selText)
+            {
+                switchTranslation(l.code);
+                break;
+            }
         }
     }
 }
@@ -1176,7 +1259,7 @@ void TLogContainer::listCompressionActionExecute()
 {
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    if (enquireDialog(this, "Set List Spacing Compression Value as percentage", lcf, 50, 150))
+    if (enquireDialog(this, tr("Set List Spacing Compression Value as percentage"), lcf, 50, 150))
     {
         TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, lcf);
         MinosLoggerEvents::sendListCompressionChanged(lcf/100.0);
@@ -1212,7 +1295,7 @@ void TLogContainer::on_ContestPageControl_currentChanged(int index)
     ui->menuLogs->addAction(CloseAllButAction);
     ui->menuLogs->addSeparator();
 
-    sessionsMenu = ui->menuLogs->addMenu("Contest Sets");
+    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
     updateSessionActions();
 
     for (int i = 0; i < ui->ContestPageControl->count(); i++)
@@ -1431,8 +1514,8 @@ QStringList TLogContainer::getSessions()
 void TLogContainer::updateLayoutsMenu()
 {
     screenLayoutMenu->clear();
-    ScreenConfigAction = newAction("Configure Screen Layouts...", screenLayoutMenu, SLOT(doScreenConfigAction()));
-    listCompressionAction = newAction("Set List Spacing Compression...", screenLayoutMenu, SLOT(listCompressionActionExecute()));
+    ScreenConfigAction = newAction(QT_TR_NOOP("Configure Screen Layouts..."), screenLayoutMenu, SLOT(doScreenConfigAction()));
+    listCompressionAction = newAction(QT_TR_NOOP("Set List Spacing Compression..."), screenLayoutMenu, SLOT(listCompressionActionExecute()));
 
     screenLayoutMenu->addSeparator();
 
@@ -1452,7 +1535,7 @@ void TLogContainer::updateLayoutsMenu()
             QAction *act =  new QAction(this);
             if ((*i).name == defaultLayout)
             {
-                act->setText((*i).name + defLayoutText);
+                act->setText((*i).name + " " + tr(ScreenConfigManager::defLayoutText));
             }
             else
             {
@@ -1486,11 +1569,7 @@ void TLogContainer::selectLayout()
         action->setChecked(true);
         lastLayoutSelected = action;
         QString selText = action->text();
-        if (selText.endsWith(defLayoutText))
-        {
-            selText.chop(defLayoutText.size());
-
-        }
+        selText = ScreenConfigManager::stripDefaultDecoration(selText);
         selectLayout(selText);
     }
 }
@@ -1531,7 +1610,7 @@ void TLogContainer::updateSessionActions()
 
     sessionsMenu->clear();
 
-    sessionManagerAction  = newAction("&Manage Contest Sets...", sessionsMenu, SLOT(sessionManageExecute()));
+    sessionManagerAction  = newAction(QT_TR_NOOP("&Manage Contest Sets..."), sessionsMenu, SLOT(sessionManageExecute()));
     QStringList sessionlst = getSessions();
     for (int i = 0; i < sessionlst.size(); ++i)
     {
@@ -1684,7 +1763,19 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     preloadBundle.setStringProfile(eppSession, sessName);
     preloadBundle.openSection(sessName);
     app ->writeContestList();	// to clear the unopened and changed ones
-    sessionsMenu = ui->menuLogs->addMenu("Contest Sets");
+
+    ui->menuLogs->clear();
+    menuLogsActions.clear();
+
+    ui->menuLogs->addAction(FileOpenAction);
+    ui->menuLogs->addMenu(recentFilesMenu);
+    ui->menuLogs->addAction(FileNewAction);
+    ui->menuLogs->addAction(FileCloseAction);
+    ui->menuLogs->addAction(CloseAllAction);
+    ui->menuLogs->addAction(CloseAllButAction);
+    ui->menuLogs->addSeparator();
+
+    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
     updateSessionActions();
 
     preloadBundle.endGroup();
@@ -1783,7 +1874,7 @@ void TLogContainer::addListSlot( const QString &fname, int slotno, bool preload 
     if ( list && !preload )
     {
 
-        if (!mShowOKCancelMessage(this, "Open List " + list->name + "?") )
+        if (!mShowOKCancelMessage(this, tr("Open List %1?").arg(list->name) ))
         {
             TContestApp::getContestApp() ->closeListFile( list );
             list = nullptr;
@@ -1804,11 +1895,11 @@ void TLogContainer::ListOpenActionExecute()
     QFileInfo qf(InitialDir);
 
     InitialDir = qf.canonicalFilePath();
-    QString Filter = "Contact list files (*.csl);;"
-                     "All Files (*.*)" ;
+    QString Filter = tr("Contact list files (*.csl);;"
+                     "All Files (*.*)") ;
 
     QStringList fnames = QFileDialog::getOpenFileNames( this,
-                       "Open Archive List",
+                       tr("Open Archive List"),
                        InitialDir,
                        Filter
                        );
@@ -1822,7 +1913,9 @@ void TLogContainer::ListOpenActionExecute()
 void TLogContainer::ManageListsActionExecute(  )
 {
    TManageListsDlg manageListsDlg(this );
+   TMatchThread::FinishMatchThread();
    manageListsDlg.exec();
+   TMatchThread::InitialiseMatchThread();
    enableActions();
 }
 //---------------------------------------------------------------------------
@@ -1962,8 +2055,8 @@ void TLogContainer::setCaption(QString captionToSet)
          setWindowTitle(captionToSet);
    }
    else
-      if ( windowTitle() != "Minos contest Logger Application" )
-         setWindowTitle("Minos contest Logger Application");
+      if ( windowTitle() != tr("Minos contest Logger Application") )
+         setWindowTitle(tr("Minos contest Logger Application"));
 }
 //---------------------------------------------------------------------------
 TSingleLogFrame *TLogContainer::findContest(const QString &pubname )

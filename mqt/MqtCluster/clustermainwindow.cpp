@@ -25,9 +25,18 @@
 #include "BandList.h"
 #include "ui_clustermainwindow.h"
 
-const QString DXSPOT_TAB_TITLE = "DX Spots";
-const QString SENT_SPOT_TAB_TITLE = "Sent Spots";
-const QString RAW_DATA_TAB_TITLE = "Raw Data";
+static const char * sendClusterReasonText[] = {QT_TRANSLATE_NOOP("cluster", "Ok"), QT_TRANSLATE_NOOP("cluster", "Failed - comms error"),
+                                           QT_TRANSLATE_NOOP("cluster", "Not Logged On"), QT_TRANSLATE_NOOP("cluster", "Freq out of band"),
+                                           QT_TRANSLATE_NOOP("cluster", "Callsign or Locator Empty")};
+enum sendClusterReason_e {TX_OK, COMMS_ERR, NOT_LOGGED_ON, FREQ_ERR, CALL_LOC_EMPTY};
+
+const char * ClusterMainWindow::DXSPOT_TAB_TITLE = QT_TR_NOOP("DX Spots");
+const char * ClusterMainWindow::SENT_SPOT_TAB_TITLE = QT_TR_NOOP("Sent Spots");
+const char * ClusterMainWindow::RAW_DATA_TAB_TITLE = QT_TR_NOOP("Raw Data");
+
+const char *ClusterMainWindow::userCmdButtonLabels[4] = {QT_TR_NOOP("&Send"), QT_TR_NOOP("&New"),
+                                                QT_TR_NOOP("&Edit"), QT_TR_NOOP("&Clear")};
+
 
 #include <QDebug>
 
@@ -71,7 +80,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     getSpotsTimer->start(1000);
 
 
-    setWindowTitle("Minos Cluster Server");
+    setWindowTitle(tr("Minos Cluster Server"));
     status = new QLabel;
     ui->statusBar->addWidget(status);
 
@@ -243,9 +252,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     rawClusterDataView = new QPlainTextEdit();
     rawClusterDataView->setReadOnly(true);
 
-    ui->clusterViewsTab->addTab(dxSpotView, DXSPOT_TAB_TITLE);
-    //ui->clusterViewsTab->addTab(sentSpotView, SENT_SPOT_TAB_TITLE);
-    ui->clusterViewsTab->addTab(rawClusterDataView, RAW_DATA_TAB_TITLE);
+    ui->clusterViewsTab->addTab(dxSpotView, tr(DXSPOT_TAB_TITLE));
+    //ui->clusterViewsTab->addTab(sentSpotView, tr(SENT_SPOT_TAB_TITLE));
+    ui->clusterViewsTab->addTab(rawClusterDataView, tr(RAW_DATA_TAB_TITLE));
 
 
 
@@ -332,17 +341,17 @@ void ClusterMainWindow::removeInsertSendSpotTab(bool state)
         if (state)
         {
             // insert the tab
-            if (ui->clusterViewsTab->tabText(1) == SENT_SPOT_TAB_TITLE)
+            if (ui->clusterViewsTab->tabText(1) == tr(SENT_SPOT_TAB_TITLE))
             {
                 // tab must exist
                 return;
             }
             else
             {
-                ui->clusterViewsTab->insertTab(1, sentSpotView, SENT_SPOT_TAB_TITLE);
+                ui->clusterViewsTab->insertTab(1, sentSpotView, tr(SENT_SPOT_TAB_TITLE));
             }
         }
-        else if (ui->clusterViewsTab->tabText(1) != SENT_SPOT_TAB_TITLE)
+        else if (ui->clusterViewsTab->tabText(1) != tr(SENT_SPOT_TAB_TITLE))
         {
             // missing don't remove
             return;
@@ -497,8 +506,8 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
             loop.exec();
 
             // error if got here
-            showStatusMessage(QString("Disconnect Timeout"));
-            QString msg = QString("Connect to Node - Disconnect Timeout");
+            showStatusMessage(tr("Disconnect Timeout"));
+            QString msg = tr("Connect to Node - Disconnect Timeout");
             trace(msg);
             echoErrorMsg(msg);
         }
@@ -571,8 +580,8 @@ void ClusterMainWindow::connectToHost(QString hostName)
 void ClusterMainWindow::connectionEstab()
 {
     nodeConnected = true;
-    showStatusMessage(QString("Connected to: %1 %2 %3").arg(currentNodeName).arg(currentAddress).arg(currentPort));
-    QString msg = QString("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort);
+    showStatusMessage(tr("Connected to: %1 %2 %3").arg(currentNodeName).arg(currentAddress).arg(currentPort));
+    QString msg = tr("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort);
     trace(QString(msg));
     echoMsg(msg);
 
@@ -581,8 +590,8 @@ void ClusterMainWindow::connectionEstab()
 void ClusterMainWindow::connectionError(QAbstractSocket::SocketError error)
 {
     nodeConnected = false;
-    showStatusMessage(QString("Connection Error: Error Code %1").arg(QString::number(error)));
-    QString msg = QString("Connection failed error %1").arg(error);
+    showStatusMessage(tr("Connection Error: Error Code %1").arg(QString::number(error)));
+    QString msg = tr("Connection failed error %1").arg(error);
     trace(msg);
     echoErrorMsg(msg);
 }
@@ -591,25 +600,25 @@ void ClusterMainWindow::connectionError(QAbstractSocket::SocketError error)
 
 void ClusterMainWindow::logIn()
 {
-    QString msg = QString("Login Start - Send logon message\n");
+    QString msg = tr("Login Start - Send logon message\n");
     trace(msg);
     echoMsg(msg);
     client->login(QString("%1\r\n").arg(currentUserCallsign), currentPassword  + "\r\n");
     loginStart = true;
-    echoMsg(QString("Logging in with callsign %1").arg(currentUserCallsign));
+    echoMsg(tr("Logging in with callsign %1").arg(currentUserCallsign));
 
 }
 
 void ClusterMainWindow::loggedOut()
 {
-    QString msg = QString("Logged Out of node  %1").arg(currentNodeName);
+    QString msg = tr("Logged Out of node  %1").arg(currentNodeName);
     trace(QString(msg));
     echoErrorMsg(msg);
     nodeConnected = false;
     loginStart = false;
     loginSuccess = false;
     loginStatDetails = false;
-    showStatusMessage((QString("Disconnected")));
+    showStatusMessage((tr("Disconnected")));
     if (reconnectFlag)
     {
 
@@ -792,7 +801,7 @@ void ClusterMainWindow::handleCmdFile(QString fileName)
     //QString fileName = CLUSTER_PATH + CLUSTER_START_FILE;
     if (FileExists(fileName))
     {
-        QString msg = QString("handleCmdFile: Command file found - %1").arg(fileName);
+        QString msg = tr("handleCmdFile: Command file found - %1").arg(fileName);
         trace(msg);
         echoMsg(msg);
         QFile inputFile(fileName);
@@ -809,7 +818,7 @@ void ClusterMainWindow::handleCmdFile(QString fileName)
     }
     else
     {
-        QString msg = QString("handleCmdFile: Command File missing - %1!").arg(fileName);
+        QString msg = tr("handleCmdFile: Command File missing - %1!").arg(fileName);
         trace(msg);
         echoErrorMsg(msg);
         return;
@@ -817,7 +826,7 @@ void ClusterMainWindow::handleCmdFile(QString fileName)
 
     if (!listCmds.isEmpty())
     {
-        QString msg = QString("handleCmdFile: Sending Commands");
+        QString msg = tr("handleCmdFile: Sending Commands");
         trace(msg);
         echoMsg(msg);
         for (int i = 0; i < listCmds.count(); ++i)
@@ -832,14 +841,14 @@ void ClusterMainWindow::handleCmdFile(QString fileName)
             }
         }
 
-        msg = QString("handleCmdFile: Finished sending Commands");
+        msg = tr("handleCmdFile: Finished sending Commands");
         trace(msg);
         echoMsg(msg);
 
     }
     else
     {
-        QString msg = QString("handleCmdFile: Command file empty %1").arg(fileName);
+        QString msg = tr("handleCmdFile: Command file empty %1").arg(fileName);
         trace(msg);
         echoErrorMsg(msg);
     }
@@ -1396,7 +1405,7 @@ int ClusterMainWindow::txText(QString msg)
     }
     else
     {
-        QString err = "Sending command - Not logged in  - " + msg;
+        QString err = tr("Sending command - Not logged in  - %1").arg(msg);
         echoErrorMsg(err);
     }
 
@@ -1460,13 +1469,13 @@ void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString 
             {
                 trace(QString("SendSpotToDXCluster: sending spot %1 failed to send").arg(spotMsg));
                 spotStatus = false;
-                addSentSpotToDisplayQueue(spotStatus, sendClusterReasonText[COMMS_ERR]);
+                addSentSpotToDisplayQueue(spotStatus, tr(sendClusterReasonText[COMMS_ERR]));
             }
             else
             {
                 trace(QString("SendSpotToDXCluster: sending spot %1 sent Ok").arg(spotMsg));
                 spotStatus = true;
-                addSentSpotToDisplayQueue(spotStatus, sendClusterReasonText[TX_OK]);
+                addSentSpotToDisplayQueue(spotStatus, tr(sendClusterReasonText[TX_OK]));
             }
 #endif
 
@@ -1476,7 +1485,7 @@ void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString 
         {
             trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq).arg(call));
             spotStatus = false;
-            addSentSpotToDisplayQueue(false, sendClusterReasonText[FREQ_ERR]);
+            addSentSpotToDisplayQueue(false, tr(sendClusterReasonText[FREQ_ERR]));
         }
     }
     else
@@ -1484,11 +1493,11 @@ void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString 
         spotStatus = false;
         if (!loginSuccess)
         {
-           addSentSpotToDisplayQueue(false, sendClusterReasonText[NOT_LOGGED_ON]);
+           addSentSpotToDisplayQueue(false, tr(sendClusterReasonText[NOT_LOGGED_ON]));
         }
         else if (!freq.isEmpty() || !call.isEmpty())
         {
-           addSentSpotToDisplayQueue(false, sendClusterReasonText[CALL_LOC_EMPTY]);
+           addSentSpotToDisplayQueue(false, tr(sendClusterReasonText[CALL_LOC_EMPTY]));
         }
     }
 }
@@ -1626,18 +1635,22 @@ void ClusterMainWindow::initUserCommandButtons()
 
 
 
-
+    QStringList buttonLabels;
+    for (unsigned int i = 0; i < sizeof(userCmdButtonLabels)/sizeof(const char *); i++)
+    {
+        buttonLabels.append(tr(userCmdButtonLabels[i]));
+    }
     for (int i = 0; i < ui_userCommandButtons.count(); i++)
     {
 
-        userCmdButton.append(new RotPresetButton(ui_userCommandButtons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], userCmdButtonLabels));
+        userCmdButton.append(new PresetButton(ui_userCommandButtons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], buttonLabels));
 
-        connect(userCmdButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {userCmdButtonRead(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showUserCmdButtonMenu(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetReadAction, [this, i]() {userCmdButtonRead(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetEditAction, [this, i]() {userCmdButtonEdit(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetWriteAction, [this, i]() {userCmdButtonWrite(i);});
-        connect(userCmdButton[i], &RotPresetButton::presetClearAction, [this, i]() {userCmdButtonClear(i);});
+        connect(userCmdButton[i], &PresetButton::presetShortCutRecall, [this, i]() {userCmdButtonRead(i);});
+        connect(userCmdButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showUserCmdButtonMenu(i);});
+        connect(userCmdButton[i], &PresetButton::presetReadAction, [this, i]() {userCmdButtonRead(i);});
+        connect(userCmdButton[i], &PresetButton::presetEditAction, [this, i]() {userCmdButtonEdit(i);});
+        connect(userCmdButton[i], &PresetButton::presetWriteAction, [this, i]() {userCmdButtonWrite(i);});
+        connect(userCmdButton[i], &PresetButton::presetClearAction, [this, i]() {userCmdButtonClear(i);});
 
 
     }
@@ -1895,7 +1908,7 @@ void ClusterMainWindow::handleStatusTimer()
 
 void ClusterMainWindow::about()
 {
-    QMessageBox::about(this, "Minos Cluster Server", "Minos Rotator\nCopyright D Balharrie G8FKH/M0DGB 2016 - 2019");
+    QMessageBox::about(this, tr("Minos Cluster Server"), tr("Minos Rotator\nCopyright D Balharrie G8FKH/M0DGB 2016 - 2019"));
 }
 
 

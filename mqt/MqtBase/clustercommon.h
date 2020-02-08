@@ -6,6 +6,8 @@
 #include <QList>
 #include <QColor>
 
+extern const char * clusterStateList[];
+
 class checkModeAgainstFreq;
 class BandDetail;
 

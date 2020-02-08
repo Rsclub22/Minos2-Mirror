@@ -6,6 +6,12 @@ KSTConfigure::KSTConfigure(QWidget *parent) :
     ui(new Ui::KSTConfigure)
 {
     ui->setupUi(this);
+    ui->portFrame->setVisible(false);
+    ui->serverFrame->setVisible(false);
+
+    ui->callsignEdit->setValidator(&userValidator);
+    ui->locatorEdit->setValidator(&locValidator);
+
 }
 int KSTConfigure::exec()
 {

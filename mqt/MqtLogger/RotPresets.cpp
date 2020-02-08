@@ -90,18 +90,23 @@ void RotPresets::initPresetButtons()
     ui_presetbuttons << ui->presetButton0 << ui->presetButton1 << ui->presetButton2 << ui->presetButton3 << ui->presetButton4
                      << ui->presetButton5 << ui->presetButton6 << ui->presetButton7 << ui->presetButton8 << ui->presetButton9;
 
+    QStringList buttonLabels;
+    for (int i = 0; i < sizeof(RotPresetData::presetButtonLabels)/sizeof(const char *); i++)
+    {
+        buttonLabels.append(RotPresetData::tr(RotPresetData::presetButtonLabels[i]));
+    }
     for (int i = 0; i < ui_presetbuttons.count(); i++)
     {
 
         // build array of buttons
-        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], presetButtonLabels));
+        presetButton.append(new PresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], buttonLabels));
 
-        connect(presetButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
-        connect(presetButton[i], &RotPresetButton::presetReadAction, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &RotPresetButton::presetEditAction, [this, i]() {presetEdit(i);});
-        connect(presetButton[i], &RotPresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
-        connect(presetButton[i], &RotPresetButton::presetClearAction, [this, i]() {presetClear(i);});
+        connect(presetButton[i], &PresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
+        connect(presetButton[i], &PresetButton::presetReadAction, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetEditAction, [this, i]() {presetEdit(i);});
+        connect(presetButton[i], &PresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
+        connect(presetButton[i], &PresetButton::presetClearAction, [this, i]() {presetClear(i);});
 
     }
 }
@@ -134,7 +139,7 @@ void RotPresets::presetEdit(int buttonNumber)
         RotPresetData curData(buttonNumber, rotPresetData[buttonNumber]->name, rotPresetData[buttonNumber]->bearing);
 
         traceMsg(QString("RotFrame: Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, "Edit");
+        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, tr("Edit"));
 
 
         if (presetDialog.exec() == QDialog::Accepted)
@@ -177,7 +182,7 @@ void RotPresets::presetWrite(int buttonNumber)
         RotPresetData curData(buttonNumber, "", "0");
 
         traceMsg(QString("RotFrame: Preset Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, "New");
+        RotPresetDialog presetDialog(this, buttonNumber, &editData, &curData, tr("New"));
 
 
         if (presetDialog.exec() == QDialog::Accepted)
@@ -204,7 +209,7 @@ void RotPresets::setRotPresetButData(int buttonNumber, RotPresetData& editData)
 void RotPresets::rotPresetButtonUpdate(int buttonNumber, RotPresetData& editData)
 {
     presetButton[buttonNumber]->presetButton->setText(QString("%1: %2\r\n%3").arg(QString::number(buttonNumber + 1)).arg(editData.name).arg(editData.bearing) );
-    QString tTipStr = "Bearing = " + editData.bearing;
+    QString tTipStr = tr("Bearing = %1").arg(editData.bearing);
     presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
 }
 

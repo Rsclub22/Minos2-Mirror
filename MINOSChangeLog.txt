@@ -1,0 +1,39 @@
+Ver 2.3.0a (07/01/2020) - Maintenance release only
+1. Added new DLL to avoid occasional error when downloading a new Contest Calendar
+
+Ver 2.3.0.0 (23/12/2019) - New features, improved features and bug fixes
+1. New Bandmap introduced
+2. Added mode filtering to Cluster and Bandmap
+3. Added ability to send DX Cluster Spots from logger
+4. Fixed problem with completing unfilled contacts with no Rig or Rotator information
+5. Screen layout adding left/right column issues and other bug fixes
+6. Fixed problem with Rig missing during first contest create
+7. Added forceDTR and forceRTS lines in RigControl and rigctld to power USB adaptors and other bug fixes
+8. Fixed error messages not appearing in RigControl panel
+9. Allow the entry of localhost in network address boxes in RigControl and RotControl servers
+10. Fixed problem with Log growing too large to load if changing Operator
+11. Fixed problem with RigControl on restart with transverter connected
+12. Fixed problem with missing configuration file during installation
+13. Fixed problem with networked radios and rigctld
+14. Added ability to modify tuning increment from +5 / -5 KHz, which is mode dependent.
+15. Added "Frequency out of bounds" indication
+16. Added higher baud rates to RigControl and RotControl
+17. Fixed problem with Volume Control indication not always visible when starting a new contest
+18. Fixed problem with frequency change sometimes causes volume to change
+19. Allow click on compass rose (the ring part) to set the target bearing in RotControl
+20. Added Clear button on WSJT-X panel
+21. Fixed problems with invalid or empty bearing entries in RotControl
+22. Fixed long wait on loading Contests before any indication of progress
+23. Fixed Logger sometimes crashes on create new contest
+24. Fixed the warning 'Contest band xx not the same as WSJT-X band' does not get cleared
+25. Fixed the produce entry window closing so it stays open until you cancel (or "done") / X
+26. WSJT-X panel points column improved
+27. Fixed QSO panel content reappears after contact logged
+28. Added labels to all layout panels and other screen improvements
+29. Fixed rogue content appearing in Auxiliary Locator Tree panel
+30. Fixed problem with Screen layout handling of 'default'
+31. Fixed WSJT-X erase button doesn't always clear Minos copy
+32. Fixed problem with <ESC> handling fails if Minos loses focus
+33. Fixed not exporting MGM sub-mode to ADIF
+
+Previous version was 2.2.1 (22/03/2019)

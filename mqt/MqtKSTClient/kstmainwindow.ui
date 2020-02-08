@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>713</width>
-    <height>623</height>
+    <height>697</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,91 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_7">
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="toolTip">
+       <string>Log in to these chats</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <property name="topMargin">
+        <number>1</number>
+       </property>
+       <property name="bottomMargin">
+        <number>1</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Log In</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="login1cb">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="login2cb">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="login3cb">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="login4cb">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item>
      <widget class="MinosSplitter" name="kstSplitter">
       <property name="sizePolicy">
@@ -26,21 +111,41 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget">
+      <widget class="QWidget" name="layoutWidget1">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>CS Filter</string>
+             <string>User Filter</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="CSChatFilter">
+            <property name="toolTip">
+             <string>Only show users for this band</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLineEdit" name="CSFilter">
+            <property name="toolTip">
+             <string>Look for this string in users</string>
+            </property>
             <property name="clearButtonEnabled">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="clearUserFilter">
+            <property name="toolTip">
+             <string>Clear the user filters</string>
+            </property>
+            <property name="text">
+             <string>X</string>
             </property>
            </widget>
           </item>
@@ -65,7 +170,7 @@
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget2">
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -77,21 +182,31 @@
             </widget>
            </item>
            <item>
+            <widget class="QComboBox" name="messageChatFilter">
+             <property name="toolTip">
+              <string>Only show messages for this band</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLineEdit" name="messageFilter">
+             <property name="toolTip">
+              <string>Look for this string in messages</string>
+             </property>
              <property name="clearButtonEnabled">
               <bool>true</bool>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_3">
+            <widget class="QToolButton" name="clearMessageFilter">
+             <property name="toolTip">
+              <string>Clear the message filters</string>
+             </property>
              <property name="text">
-              <string>Service</string>
+              <string>X</string>
              </property>
             </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="serviceCombo"/>
            </item>
           </layout>
          </item>
@@ -107,7 +222,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QWidget" name="layoutWidget3">
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
           <widget class="QLabel" name="includeLabel">
@@ -132,11 +247,108 @@
      </widget>
     </item>
     <item>
+     <widget class="QFrame" name="frame_3">
+      <property name="toolTip">
+       <string>Chat to which messages will be sent</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <property name="topMargin">
+        <number>1</number>
+       </property>
+       <property name="bottomMargin">
+        <number>1</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Active chat</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="active1rb">
+         <property name="text">
+          <string>-</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">activeChatGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="active2rb">
+         <property name="text">
+          <string>-</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">activeChatGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="active3rb">
+         <property name="text">
+          <string>-</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">activeChatGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="active4rb">
+         <property name="text">
+          <string>-</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">activeChatGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <widget class="QFrame" name="messageFrame">
       <property name="frameShape">
        <enum>QFrame::Box</enum>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,4">
+      <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1,4,0">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
@@ -191,6 +403,13 @@
          </item>
         </layout>
        </item>
+       <item>
+        <widget class="QPushButton" name="clearMessageButton">
+         <property name="text">
+          <string>Clear message</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
@@ -222,6 +441,13 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="awayButton">
+        <property name="text">
+         <string>-</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="connectButton">
@@ -275,4 +501,7 @@
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="activeChatGroup"/>
+ </buttongroups>
 </ui>

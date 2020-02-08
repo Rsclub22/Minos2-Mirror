@@ -51,6 +51,11 @@ public:
 
 class QSOMatchGridModel: public QAbstractItemModel
 {
+    Q_OBJECT
+    static GridColumn ThisMatchTreeColumns[ THISMATCHTREECOLS ];
+    static GridColumn OtherMatchTreeColumns[ OTHERMATCHTREECOLS ];
+    static GridColumn ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ];
+
 protected:
     SharedMatchCollection match;
     MatchTreeItem * rootItem;

@@ -8,13 +8,14 @@
 #include "htmldelegate.h"
 
 
-enum ChatColumns {eccDTG = 0, eccCall, eccName, eccOther, eccText, eccMaxColumn};
+enum ChatColumns {eccChat = 0, eccDTG, eccCall, eccName, eccOther, eccText, eccMaxColumn};
 
 class KstMessageLine
 {
 public:
-    QString source;
-    QString dtg;
+    int sequence;
+    int chat;
+    QDateTime dtg;
     QString fullLine;
     QString call;
     QString name;
@@ -23,7 +24,9 @@ public:
 
     KstMessageLine(){}
     ~KstMessageLine(){}
+
 };
+bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstMessageLine> q2 );
 
 class KstMessageGridModel: public QAbstractItemModel
 {
@@ -59,11 +62,19 @@ class KstMessageGridModel: public QAbstractItemModel
 class KstMessageGridSortFilterModel: public QSortFilterProxyModel
 {
     QString filterString;
+    int chatFilter = 0;
+public:
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    void setFilterString(QString f);
+    void setChatFilter(int value);
+};
+class KstMeepGridSortFilterModel: public QSortFilterProxyModel
+{
+    QString filterString;
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
 };
-
 
 
 #endif // KSTMESSAGEGRIDMODEL_H

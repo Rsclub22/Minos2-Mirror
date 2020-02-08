@@ -22,7 +22,7 @@
 #include "rotatorbase.h"
 #include "rotatorfactory.h"
 #include "rotatorcommon.h"
-#include "rotpresetbutton.h"
+#include "presetbutton.h"
 #include "rotpresetdialog.h"
 #include <QMainWindow>
 #include <QObject>
@@ -109,7 +109,7 @@ private:
     QTimer LogTimer;
     QTimer RotateTimer;
 
-    QList<RotPresetButton *> presetButton;
+    QList<PresetButton *> presetButton;
     QVector<RotPresetData*> rotPresets;
     QList<QShortcut *> shortCutKeyList;
     QList<QShortcut *> shiftShortCutKeyList;

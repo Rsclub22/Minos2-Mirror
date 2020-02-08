@@ -11,7 +11,7 @@ class ConfigElementFrame;
 class ConfigElementFrame : public QFrame
 {
     Q_OBJECT
-
+static const char *deltext;
     QSharedPointer<RunConfigElement> configElement;
     bool newElement = false;
 

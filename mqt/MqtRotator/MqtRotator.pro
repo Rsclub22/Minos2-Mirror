@@ -41,7 +41,6 @@ HEADERS  += \
     rotatormainwindow.h \
     minoscompass.h \
     logdialog.h \
-    rotcontrol.h \
     rotatorlog.h \
     rotatorRpc.h \
     rotsetupform.h \

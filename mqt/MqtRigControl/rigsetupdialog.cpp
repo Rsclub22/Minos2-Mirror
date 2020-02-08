@@ -87,7 +87,7 @@ void RigSetupDialog::initSetup()
         QString version = settings.value("Version/version", QString()).toString();
         if (version != "1")
         {
-            mShowMessage(QString("The Radio configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
+            mShowMessage(tr("The Radio configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
                          "Please delete them and set up the radios again").arg(RADIO_PATH_LOGGER), parentWidget());
             exit(10);
         }
@@ -292,7 +292,7 @@ void RigSetupDialog::addRadio()
 {
 
     AddRadioDialog getRadioName_Rig(availRadios, radio);
-    getRadioName_Rig.setWindowTitle("Add Radio and Radio Model");
+    getRadioName_Rig.setWindowTitle(tr("Add Radio and Radio Model"));
     if (getRadioName_Rig.exec() != QDialog::Accepted)
     {
         return;
@@ -352,7 +352,7 @@ void RigSetupDialog::removeRadio()
     {
         // can't remove current RadioName
         QMessageBox msgBox;
-        msgBox.setText("You can not remove the current radio!");
+        msgBox.setText(tr("You can not remove the current radio!"));
         msgBox.exec();
         return;
 
@@ -397,13 +397,13 @@ void RigSetupDialog::editRadioName()
     {
         // can't change current antennaName
         QMessageBox msgBox;
-        msgBox.setText(QString("You can not change the name of the current radio - %1!").arg(radioName));
+        msgBox.setText(tr("You can not change the name of the current radio - %1!").arg(radioName));
         msgBox.exec();
         return;
     }
 
     bool ok;
-    QString text = QInputDialog::getText(this, QString("Edit Radio Name - %1").arg(radioName),
+    QString text = QInputDialog::getText(this, tr("Edit Radio Name - %1").arg(radioName),
                                          tr("Edit Radio Name:"), QLineEdit::Normal,
                                          radioName, &ok);
     if (ok && !text.isEmpty())
