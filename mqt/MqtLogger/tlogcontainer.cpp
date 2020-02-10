@@ -1157,6 +1157,12 @@ void TLogContainer::LanguageAcceptActionExecute()
 
     if (action)
     {
+        bool serverRunning = checkServerReady();
+        if (serverRunning)
+        {
+            MinosConfig::getMinosConfig() ->stop();
+        }
+
         if (lastLanguageSelected)
             lastLanguageSelected->setChecked(false);
         action->setChecked(true);
@@ -1171,6 +1177,10 @@ void TLogContainer::LanguageAcceptActionExecute()
                 switchTranslation(l.code);
                 break;
             }
+        }
+        if (serverRunning)
+        {
+            MinosConfig::getMinosConfig() ->bounce();
         }
     }
 }

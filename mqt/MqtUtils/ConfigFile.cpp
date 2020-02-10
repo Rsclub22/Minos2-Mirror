@@ -179,7 +179,14 @@ void RunConfigElement::stopProcess()
         runner->terminate();
     }
 }
-
+void RunConfigElement::bounceProcess()
+{
+    if (runner)
+    {
+        stopping = false;
+        runner->terminate();
+    }
+}
 void RunConfigElement::sendCommand(const QString & cmd)
 {
     if (runner && appType != "None" )
@@ -362,6 +369,17 @@ void MinosConfig::stop()
          logMessage( "subProcess killed", "" );
       }
    }
+}
+void MinosConfig::bounce()
+{
+    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    {
+       if ( ( *i ) )
+       {
+          logMessage( "Bouncing subProcess", "" );
+          ( *i ) ->bounceProcess();
+       }
+    }
 }
 void MinosConfig::setThisServerName( const QString &circle )
 {
