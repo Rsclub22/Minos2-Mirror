@@ -225,9 +225,13 @@ Le mode calculé est%6
         <translation>VHF</translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.ui" line="41"/>
         <source>50 Mhz</source>
-        <translation>50 MHz</translation>
+        <translation type="vanished">50 MHz</translation>
+    </message>
+    <message>
+        <location filename="../clusterclientfilterdialog.ui" line="41"/>
+        <source>50 MHz</source>
+        <translation type="unfinished">2300 MHz {50 ?}</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="48"/>
@@ -524,6 +528,7 @@ Le mode calculé est%6
     </message>
     <message>
         <location filename="../clusterclientframe.ui" line="45"/>
+        <location filename="../clusterclientframe.cpp" line="51"/>
         <location filename="../clusterclientframe.cpp" line="1220"/>
         <location filename="../clusterclientframe.cpp" line="1247"/>
         <location filename="../clusterclientframe.cpp" line="1698"/>
@@ -605,6 +610,16 @@ Le mode calculé est%6
         <location filename="../clusterclientframe.cpp" line="107"/>
         <source>Clear &amp;All Spots</source>
         <translation>Effacer &amp;Tous Spots</translation>
+    </message>
+    <message>
+        <location filename="../clusterclientframe.cpp" line="243"/>
+        <source>DX Spots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../clusterclientframe.cpp" line="290"/>
+        <source>Search Spots</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../clusterclientframe.cpp" line="337"/>
@@ -1422,9 +1437,13 @@ Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
         <translation>L&apos;écriture a échoué</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="533"/>
         <source>Attempt to insert after last contact - not allowed. Pease report a bug!</source>
-        <translation>Insérer après le dernier contact - non autorisé. Merci de signaler un bogue!</translation>
+        <translation type="vanished">Insérer après le dernier contact - non autorisé. Merci de signaler un bogue!</translation>
+    </message>
+    <message>
+        <location filename="../LoggerContest.cpp" line="533"/>
+        <source>Attempt to insert after last contact - not allowed. Please report a bug!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="686"/>
@@ -1682,189 +1701,189 @@ to</source>
         <translation>Premier QSO non rempli</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="186"/>
+        <location filename="../qsologframe.ui" line="189"/>
         <source>Spot Last Logged: </source>
         <translation>Dernière Spot enregistrée: </translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="200"/>
+        <location filename="../qsologframe.ui" line="206"/>
         <source>Spot</source>
         <translation>Spot</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="209"/>
+        <location filename="../qsologframe.ui" line="215"/>
         <source>Last Spot Sent: </source>
         <translation>Dernier Spot envoyé: </translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="269"/>
+        <location filename="../qsologframe.ui" line="275"/>
         <source>MGM Mode</source>
         <translation>Mode de MGM</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="286"/>
+        <location filename="../qsologframe.ui" line="292"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="299"/>
+        <location filename="../qsologframe.ui" line="305"/>
         <source>dd/MM/yy</source>
         <translation>dd/MM/yy</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="306"/>
+        <location filename="../qsologframe.ui" line="312"/>
         <source>Time</source>
         <translation>Heure</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="328"/>
+        <location filename="../qsologframe.ui" line="337"/>
         <source>Mark Freq</source>
         <translation>Marquer fréquence</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="335"/>
+        <location filename="../qsologframe.ui" line="347"/>
         <source>Save Freq</source>
         <translation>Enregistrer fréquence</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="344"/>
+        <location filename="../qsologframe.ui" line="359"/>
         <source>Tuning - Add Map</source>
         <translation>Réglage - ajouter à Bandmap</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="372"/>
+        <location filename="../qsologframe.ui" line="387"/>
         <source>Op1</source>
         <translation>Op1</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="392"/>
+        <location filename="../qsologframe.ui" line="407"/>
         <source>Op2</source>
         <translation>Op2</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="425"/>
+        <location filename="../qsologframe.ui" line="440"/>
         <source>dist</source>
         <translation>Distance</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="432"/>
+        <location filename="../qsologframe.ui" line="447"/>
         <source>(12345)</source>
         <translation>(12345)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="442"/>
+        <location filename="../qsologframe.ui" line="457"/>
         <source>brg</source>
         <translation>Relèvement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="449"/>
+        <location filename="../qsologframe.ui" line="464"/>
         <source>1234</source>
         <translation>1234</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="488"/>
+        <location filename="../qsologframe.ui" line="503"/>
         <source>Non Scoring</source>
         <translation>Exclure du total</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="514"/>
+        <location filename="../qsologframe.ui" line="529"/>
         <source>Deleted</source>
         <translation>Effacé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="552"/>
+        <location filename="../qsologframe.ui" line="567"/>
         <source>Callsign (F1)</source>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="582"/>
+        <location filename="../qsologframe.ui" line="597"/>
         <source>RS(T)Tx(F2)</source>
         <translation>RS(T)Tx(F2)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="612"/>
+        <location filename="../qsologframe.ui" line="627"/>
         <source>Serial Tx</source>
         <translation>Numéro Tx</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="645"/>
+        <location filename="../qsologframe.ui" line="660"/>
         <source>RS(T)Rx(F3)</source>
         <translation>RS(T)Rx(F3)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="675"/>
+        <location filename="../qsologframe.ui" line="690"/>
         <source>Serial Rx (F4)</source>
         <translation>Numéro Rx (F4)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="705"/>
+        <location filename="../qsologframe.ui" line="720"/>
         <source>Loc (F5)</source>
         <translation>Loc (F5)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="735"/>
+        <location filename="../qsologframe.ui" line="750"/>
         <source>Exchange (F6)</source>
         <translation>Échange (F6)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="774"/>
+        <location filename="../qsologframe.ui" line="789"/>
         <source>Comments</source>
         <translation>Commentaires</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="807"/>
+        <location filename="../qsologframe.ui" line="822"/>
         <source>Log the QSO, or move to next unfilled field</source>
         <translatorcomment>Entrez le QSO ou passez au champ vide suivant</translatorcomment>
         <translation>WHERE IS THIS</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="810"/>
+        <location filename="../qsologframe.ui" line="825"/>
         <source>Log</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="833"/>
+        <location filename="../qsologframe.ui" line="848"/>
         <source>Force logging the QSO, even when incomplete</source>
         <translation>Forcer la journalisation du QSO, même lorsqu&apos;il est incomplet</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="836"/>
+        <location filename="../qsologframe.ui" line="851"/>
         <source>Force...</source>
         <translation>Forcer...</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="865"/>
+        <location filename="../qsologframe.ui" line="880"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="888"/>
+        <location filename="../qsologframe.ui" line="903"/>
         <source>Get fields from current matching QSO</source>
         <translatorcomment>Obtenir les champs du QSO correspondant actuel</translatorcomment>
         <translation>Copier l&apos;entrée du QSO correspondant   </translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="891"/>
+        <location filename="../qsologframe.ui" line="906"/>
         <source>Match Xfer F12</source>
         <translation>Transférer l&apos;entrée correspondante F12</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="912"/>
+        <location filename="../qsologframe.ui" line="927"/>
         <source>Insert Before</source>
         <translation>Encarter avant</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="922"/>
+        <location filename="../qsologframe.ui" line="937"/>
         <source>Insert After</source>
         <translation>Encarter après</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="945"/>
+        <location filename="../qsologframe.ui" line="960"/>
         <source>Prior</source>
         <translation>Précédent</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="955"/>
+        <location filename="../qsologframe.ui" line="970"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
@@ -1934,96 +1953,96 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="70"/>
-        <location filename="../rigcontrolframe.ui" line="397"/>
-        <location filename="../rigcontrolframe.ui" line="410"/>
-        <location filename="../rigcontrolframe.ui" line="432"/>
-        <location filename="../rigcontrolframe.ui" line="445"/>
+        <location filename="../rigcontrolframe.ui" line="401"/>
+        <location filename="../rigcontrolframe.ui" line="414"/>
+        <location filename="../rigcontrolframe.ui" line="436"/>
+        <location filename="../rigcontrolframe.ui" line="449"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="149"/>
+        <location filename="../rigcontrolframe.ui" line="153"/>
         <source>-</source>
         <translation>-</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="165"/>
+        <location filename="../rigcontrolframe.ui" line="169"/>
         <source>99.999.999.999</source>
         <translation>99.999.999.999</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="168"/>
+        <location filename="../rigcontrolframe.ui" line="172"/>
         <source>00.000.000.000</source>
         <translation>00.000.000.000</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="181"/>
+        <location filename="../rigcontrolframe.ui" line="185"/>
         <source>+</source>
         <translation>+</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="195"/>
+        <location filename="../rigcontrolframe.ui" line="199"/>
         <source>RIT</source>
         <translation>RIT</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="205"/>
+        <location filename="../rigcontrolframe.ui" line="209"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="221"/>
+        <location filename="../rigcontrolframe.ui" line="225"/>
         <source>x9.99</source>
         <translation>x9.99</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="224"/>
+        <location filename="../rigcontrolframe.ui" line="228"/>
         <source>+0.00</source>
         <translation>+0.00</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="234"/>
+        <location filename="../rigcontrolframe.ui" line="238"/>
         <source>Clr</source>
         <translation>Réinitialiser</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="259"/>
+        <location filename="../rigcontrolframe.ui" line="263"/>
         <source>TxVert:</source>
         <translation>WHERE USED</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="300"/>
+        <location filename="../rigcontrolframe.ui" line="304"/>
         <source>Band Sel.</source>
         <translation>Sélection de bande</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="321"/>
+        <location filename="../rigcontrolframe.ui" line="325"/>
         <source>Mode:</source>
         <translation>Mode:</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="328"/>
-        <location filename="../rigcontrolframe.ui" line="342"/>
+        <location filename="../rigcontrolframe.ui" line="332"/>
+        <location filename="../rigcontrolframe.ui" line="346"/>
         <source>USB</source>
         <translation>USB</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="335"/>
+        <location filename="../rigcontrolframe.ui" line="339"/>
         <source>:</source>
         <translation>:</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="366"/>
+        <location filename="../rigcontrolframe.ui" line="370"/>
         <source>Vol</source>
         <translation>Vol</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="388"/>
+        <location filename="../rigcontrolframe.ui" line="392"/>
         <source>Call Freqs</source>
         <translation>Fréquences d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="423"/>
+        <location filename="../rigcontrolframe.ui" line="427"/>
         <source>Tune Freqs</source>
         <translation>Fréquences d&apos;accorder</translation>
     </message>
@@ -2370,6 +2389,21 @@ Non - Ignorer les modifications</translation>
         <location filename="../RotPresets.ui" line="161"/>
         <source>...</source>
         <translation>...</translation>
+    </message>
+    <message>
+        <location filename="../RotPresets.cpp" line="142"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RotPresets.cpp" line="185"/>
+        <source>New</source>
+        <translation type="unfinished">Nouveau</translation>
+    </message>
+    <message>
+        <location filename="../RotPresets.cpp" line="212"/>
+        <source>Bearing = %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3373,8 +3407,12 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="326"/>
+        <source>Save contest in printable text format as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Save contest in ptintable text format as...</source>
-        <translation>Enregistrer le concours au format texte imprimable sous ...   </translation>
+        <translation type="vanished">Enregistrer le concours au format texte imprimable sous ...   </translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="351"/>
@@ -3524,6 +3562,11 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <location filename="../tlogcontainer.ui" line="91"/>
         <source>Logs</source>
         <translation>Journaux</translation>
+    </message>
+    <message>
+        <location filename="../tlogcontainer.cpp" line="61"/>
+        <source>Minos Contest Logger</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="223"/>
@@ -3854,43 +3897,43 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.   </translation
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1298"/>
-        <location filename="../tlogcontainer.cpp" line="1778"/>
+        <location filename="../tlogcontainer.cpp" line="1782"/>
         <source>Contest Sets</source>
         <translation>Ensembles de concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1517"/>
+        <location filename="../tlogcontainer.cpp" line="1521"/>
         <source>Configure Screen Layouts...</source>
         <translation>Configurer la disposition de l&apos;écran</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1518"/>
+        <location filename="../tlogcontainer.cpp" line="1522"/>
         <source>Set List Spacing Compression...</source>
         <translation>Définir la valeur de compression d&apos;espacement de liste   </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1613"/>
+        <location filename="../tlogcontainer.cpp" line="1617"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation>&amp;Gérer les ensembles de concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1877"/>
+        <location filename="../tlogcontainer.cpp" line="1881"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1898"/>
+        <location filename="../tlogcontainer.cpp" line="1902"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1902"/>
+        <location filename="../tlogcontainer.cpp" line="1906"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des?? archives</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2058"/>
-        <location filename="../tlogcontainer.cpp" line="2059"/>
+        <location filename="../tlogcontainer.cpp" line="2062"/>
+        <location filename="../tlogcontainer.cpp" line="2063"/>
         <source>Minos contest Logger Application</source>
         <translation>Minos Enregistreur de Concours  </translation>
     </message>
@@ -3903,12 +3946,27 @@ Veuillez confirmer cette action en appuyant sur &quot;Oui&quot;.   </translation
         <translation>Maintenance de la liste d&apos;archives</translation>
     </message>
     <message>
-        <location filename="../tmanagelistsdlg.ui" line="63"/>
+        <location filename="../tmanagelistsdlg.ui" line="52"/>
+        <source>Move Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tmanagelistsdlg.ui" line="59"/>
+        <source>Move Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tmanagelistsdlg.ui" line="98"/>
         <source>Close Selected List</source>
         <translation>Fermer la liste sélectionnée</translation>
     </message>
     <message>
-        <location filename="../tmanagelistsdlg.ui" line="83"/>
+        <location filename="../tmanagelistsdlg.ui" line="118"/>
+        <source>Open List...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tmanagelistsdlg.ui" line="138"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>

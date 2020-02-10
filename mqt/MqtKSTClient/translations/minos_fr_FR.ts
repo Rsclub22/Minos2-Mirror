@@ -183,12 +183,16 @@
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="428"/>
+        <source>Clear Messages</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Clear All</source>
-        <translation>Effacer tous</translation>
+        <translation type="vanished">Effacer tous</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="455"/>
-        <location filename="../kstmainwindow.cpp" line="287"/>
+        <location filename="../kstmainwindow.cpp" line="292"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -203,32 +207,33 @@
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="279"/>
+        <location filename="../kstmainwindow.cpp" line="284"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="356"/>
+        <location filename="../kstmainwindow.cpp" line="361"/>
         <source>KST Chat Files (*.txt);Log Files (*.log);;All Files (*.*)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="360"/>
+        <location filename="../kstmainwindow.cpp" line="365"/>
         <source>Chat dumps from KST</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="383"/>
+        <location filename="../kstmainwindow.cpp" line="281"/>
+        <location filename="../kstmainwindow.cpp" line="388"/>
         <source>Including %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="438"/>
+        <location filename="../kstmainwindow.cpp" line="443"/>
         <source>Set Back</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="442"/>
+        <location filename="../kstmainwindow.cpp" line="447"/>
         <source>Set Away</source>
         <translation></translation>
     </message>
@@ -236,37 +241,42 @@
 <context>
     <name>KstCallGridModel</name>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="204"/>
+        <location filename="../kstcallgridmodel.cpp" line="218"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="207"/>
+        <location filename="../kstcallgridmodel.cpp" line="221"/>
         <source>Callsign</source>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="210"/>
+        <location filename="../kstcallgridmodel.cpp" line="224"/>
         <source>Loc</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="213"/>
+        <location filename="../kstcallgridmodel.cpp" line="227"/>
         <source>Dist</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="216"/>
+        <location filename="../kstcallgridmodel.cpp" line="230"/>
+        <source>Brg</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../kstcallgridmodel.cpp" line="233"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="219"/>
+        <location filename="../kstcallgridmodel.cpp" line="236"/>
         <source>Prefix</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="222"/>
+        <location filename="../kstcallgridmodel.cpp" line="239"/>
         <source>Country</source>
         <translation>Pays</translation>
     </message>

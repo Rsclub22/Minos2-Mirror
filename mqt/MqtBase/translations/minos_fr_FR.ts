@@ -16,7 +16,7 @@
     <message>
         <location filename="../contacts.cpp" line="212"/>
         <source>DELETED</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WHERE??</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="227"/>
@@ -1196,42 +1196,35 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
 <context>
     <name>OtherLogMatcher</name>
     <message>
-        <location filename="../MatchThread.cpp" line="960"/>
         <source> - No exact match</source>
-        <translation>- Aucune correspondance exacte</translation>
+        <translation type="vanished">- Aucune correspondance exacte</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="983"/>
         <source> - No match No Suffix</source>
-        <translation>- Pas de match Pas de suffixe            </translation>
+        <translation type="vanished">- Pas de match Pas de suffixe            </translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="1016"/>
         <source> - No match No LOC</source>
-        <translation>- Pas de match Pas de Locator            </translation>
+        <translation type="vanished">- Pas de match Pas de Locator            </translation>
     </message>
 </context>
 <context>
     <name>PresetButtonMenu</name>
     <message>
-        <location filename="../rotatorcommon.cpp" line="15"/>
         <source>&amp;Read</source>
-        <translation>&amp;Lire</translation>
+        <translation type="vanished">&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="16"/>
         <source>&amp;New</source>
-        <translation>&amp;Nouveau</translation>
+        <translation type="vanished">&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="17"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Modifier</translation>
+        <translation type="vanished">&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="18"/>
         <source>&amp;Clear</source>
-        <translation>&amp;Effacer</translation>
+        <translation type="vanished">&amp;Effacer</translation>
     </message>
 </context>
 <context>
@@ -1310,95 +1303,118 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
 <context>
     <name>QSOMatchGridModel</name>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="146"/>
-        <location filename="../MatchTreeFrame.cpp" line="164"/>
+        <location filename="../MatchTreeFrame.cpp" line="152"/>
+        <location filename="../MatchTreeFrame.cpp" line="170"/>
         <source>UTC</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="147"/>
-        <location filename="../MatchTreeFrame.cpp" line="165"/>
-        <location filename="../MatchTreeFrame.cpp" line="178"/>
+        <location filename="../MatchTreeFrame.cpp" line="153"/>
+        <location filename="../MatchTreeFrame.cpp" line="171"/>
+        <location filename="../MatchTreeFrame.cpp" line="184"/>
         <source>Callsign</source>
         <translation>Indicatif d&apos;appel  </translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="148"/>
+        <location filename="../MatchTreeFrame.cpp" line="154"/>
         <source>RepTx</source>
         <translation>Rapport Tx</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="149"/>
+        <location filename="../MatchTreeFrame.cpp" line="155"/>
         <source>SnTx</source>
         <translation>Nombre Tx</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="150"/>
+        <location filename="../MatchTreeFrame.cpp" line="156"/>
         <source>RepRx</source>
         <translation>Rapport Rx</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="151"/>
+        <location filename="../MatchTreeFrame.cpp" line="157"/>
         <source>SnRx)</source>
         <translation>Nombre Rx</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="152"/>
-        <location filename="../MatchTreeFrame.cpp" line="166"/>
-        <location filename="../MatchTreeFrame.cpp" line="179"/>
+        <location filename="../MatchTreeFrame.cpp" line="158"/>
+        <location filename="../MatchTreeFrame.cpp" line="172"/>
+        <location filename="../MatchTreeFrame.cpp" line="185"/>
         <source>Loc</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="153"/>
-        <location filename="../MatchTreeFrame.cpp" line="167"/>
-        <location filename="../MatchTreeFrame.cpp" line="180"/>
+        <location filename="../MatchTreeFrame.cpp" line="159"/>
+        <location filename="../MatchTreeFrame.cpp" line="173"/>
+        <location filename="../MatchTreeFrame.cpp" line="186"/>
         <source>dist</source>
         <translation>Distance</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="154"/>
-        <location filename="../MatchTreeFrame.cpp" line="168"/>
-        <location filename="../MatchTreeFrame.cpp" line="181"/>
+        <location filename="../MatchTreeFrame.cpp" line="160"/>
+        <location filename="../MatchTreeFrame.cpp" line="174"/>
+        <location filename="../MatchTreeFrame.cpp" line="187"/>
         <source>brg</source>
         <translation>Relèvement</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="155"/>
-        <location filename="../MatchTreeFrame.cpp" line="169"/>
-        <location filename="../MatchTreeFrame.cpp" line="182"/>
+        <location filename="../MatchTreeFrame.cpp" line="161"/>
+        <location filename="../MatchTreeFrame.cpp" line="175"/>
+        <location filename="../MatchTreeFrame.cpp" line="188"/>
         <source>Exchange</source>
         <translation>Échange</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="156"/>
-        <location filename="../MatchTreeFrame.cpp" line="170"/>
-        <location filename="../MatchTreeFrame.cpp" line="183"/>
+        <location filename="../MatchTreeFrame.cpp" line="162"/>
+        <location filename="../MatchTreeFrame.cpp" line="176"/>
+        <location filename="../MatchTreeFrame.cpp" line="189"/>
         <source>Comments</source>
         <translation>Commentaires</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="157"/>
-        <location filename="../MatchTreeFrame.cpp" line="171"/>
+        <location filename="../MatchTreeFrame.cpp" line="163"/>
+        <location filename="../MatchTreeFrame.cpp" line="177"/>
         <source>Freq</source>
         <translation>Fréquence</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="158"/>
-        <location filename="../MatchTreeFrame.cpp" line="172"/>
+        <location filename="../MatchTreeFrame.cpp" line="164"/>
+        <location filename="../MatchTreeFrame.cpp" line="178"/>
         <source>Rot Heading</source>
         <translation>Relèvement d&apos;appareil rotateur   </translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="159"/>
-        <location filename="../MatchTreeFrame.cpp" line="173"/>
+        <location filename="../MatchTreeFrame.cpp" line="165"/>
+        <location filename="../MatchTreeFrame.cpp" line="179"/>
         <source>Rig</source>
         <translation>Émetteur</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="447"/>
+        <location filename="../MatchTreeFrame.cpp" line="453"/>
         <source>Current contest: </source>
         <translation>Concours en cours:  </translation>
+    </message>
+</context>
+<context>
+    <name>RotPresetData</name>
+    <message>
+        <location filename="../rotatorcommon.cpp" line="15"/>
+        <source>&amp;Read</source>
+        <translation type="unfinished">&amp;Lire</translation>
+    </message>
+    <message>
+        <location filename="../rotatorcommon.cpp" line="16"/>
+        <source>&amp;New</source>
+        <translation type="unfinished">&amp;Nouveau</translation>
+    </message>
+    <message>
+        <location filename="../rotatorcommon.cpp" line="17"/>
+        <source>&amp;Edit</source>
+        <translation type="unfinished">&amp;Modifier</translation>
+    </message>
+    <message>
+        <location filename="../rotatorcommon.cpp" line="18"/>
+        <source>&amp;Clear</source>
+        <translation type="unfinished">&amp;Effacer</translation>
     </message>
 </context>
 <context>
@@ -1495,27 +1511,27 @@ Veuillez entrer un autre direction  </translation>
 <context>
     <name>ThisLogMatcher</name>
     <message>
-        <location filename="../MatchThread.cpp" line="694"/>
+        <location filename="../MatchThread.cpp" line="739"/>
         <source>Possible</source>
         <translation>Possible</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="697"/>
+        <location filename="../MatchThread.cpp" line="742"/>
         <source>Country</source>
         <translation>Pays</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="701"/>
+        <location filename="../MatchThread.cpp" line="746"/>
         <source>District</source>
         <translation>District</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="705"/>
+        <location filename="../MatchThread.cpp" line="750"/>
         <source>Locator</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="707"/>
+        <location filename="../MatchThread.cpp" line="752"/>
         <source> - %1%2 %3 matches</source>
         <translation> - %1%2 %3 correspondances  </translation>
     </message>

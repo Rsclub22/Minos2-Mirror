@@ -241,14 +241,12 @@ utiliser un autre nom SVP</translation>
         <translation>Bandes prises en charge</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="248"/>
         <source>2300 Mhz</source>
-        <translation>2300 Mhz</translation>
+        <translation type="vanished">2300 Mhz</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="255"/>
         <source>70 Mhz</source>
-        <translation>70 Mhz</translation>
+        <translation type="vanished">70 Mhz</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="278"/>
@@ -256,9 +254,8 @@ utiliser un autre nom SVP</translation>
         <translation>144 MHz</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="285"/>
         <source>50 Mhz</source>
-        <translation>50 Mhz</translation>
+        <translation type="vanished">50 Mhz</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="292"/>
@@ -266,9 +263,8 @@ utiliser un autre nom SVP</translation>
         <translation>1296 MHz</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="315"/>
         <source>432 Mhz</source>
-        <translation>432 Mhz</translation>
+        <translation type="vanished">432 Mhz</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="322"/>
@@ -281,9 +277,33 @@ utiliser un autre nom SVP</translation>
         <translation>5,6 GHz</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.ui" line="336"/>
         <source>10 Ghz</source>
-        <translation>10 Ghz</translation>
+        <translation type="vanished">10 Ghz</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.ui" line="248"/>
+        <source>2300 MHz</source>
+        <translation type="unfinished">1296 MHz {2300 ?}</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.ui" line="255"/>
+        <source>70 MHz</source>
+        <translation type="unfinished">1296 MHz {70 ?}</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.ui" line="285"/>
+        <source>50 MHz</source>
+        <translation type="unfinished">1296 MHz {50 ?}</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.ui" line="315"/>
+        <source>432 MHz</source>
+        <translation type="unfinished">1296 MHz {432 ?}</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolmainwindow.ui" line="336"/>
+        <source>10 GHz</source>
+        <translation type="unfinished">5,6 GHz {10 ?}</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="369"/>
@@ -1178,10 +1198,14 @@ utiliser un autre nom SVP</translation>
         <translation>Port COM</translation>
     </message>
     <message>
+        <source>Network Adress</source>
+        <translation type="vanished">Adresse réseau</translation>
+    </message>
+    <message>
         <location filename="../rigsetupform.ui" line="77"/>
         <location filename="../rigsetupform.ui" line="275"/>
-        <source>Network Adress</source>
-        <translation>Adresse réseau</translation>
+        <source>Network Address</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="103"/>

@@ -69,8 +69,43 @@
         <translation>A propos</translation>
     </message>
     <message>
+        <location filename="../clustermainwindow.cpp" line="33"/>
+        <source>DX Spots</source>
+        <translation type="unfinished">DX Spots</translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="34"/>
+        <source>Sent Spots</source>
+        <translation type="unfinished">Spots envoyés</translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="35"/>
+        <source>Raw Data</source>
+        <translation type="unfinished">Données brutes</translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="37"/>
+        <source>&amp;Send</source>
+        <translation type="unfinished">&amp;Envoyer</translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="37"/>
+        <source>&amp;New</source>
+        <translation type="unfinished">&amp;Nouveau</translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="38"/>
+        <source>&amp;Edit</source>
+        <translation type="unfinished">&amp;Modifier</translation>
+    </message>
+    <message>
+        <location filename="../clustermainwindow.cpp" line="38"/>
+        <source>&amp;Clear</source>
+        <translation type="unfinished">&amp;Effacer</translation>
+    </message>
+    <message>
         <location filename="../clustermainwindow.cpp" line="83"/>
-        <location filename="../clustermainwindow.cpp" line="1907"/>
+        <location filename="../clustermainwindow.cpp" line="1911"/>
         <source>Minos Cluster Server</source>
         <translation>Serveur de cluster Minos </translation>
     </message>
@@ -186,17 +221,17 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
         <translation>L&apos;envoi de Command  - Non connecté - %1</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1739"/>
+        <location filename="../clustermainwindow.cpp" line="1743"/>
         <source>Cluster User Command Clear</source>
         <translation>Utilisateur de cluster supprimer commande  CONTEXT????</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1740"/>
+        <location filename="../clustermainwindow.cpp" line="1744"/>
         <source>Do you really want to clear cluster user command number:%1?</source>
         <translation>Effacer le numéro de commande de l&apos;utilisateur du cluster: %1?</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1907"/>
+        <location filename="../clustermainwindow.cpp" line="1911"/>
         <source>Minos Rotator
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
         <translation>Minos Rotator
@@ -206,24 +241,20 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
 <context>
     <name>ClusterUserCmdButton</name>
     <message>
-        <location filename="../clusterusercmdbutton.cpp" line="31"/>
         <source>&amp;Send</source>
-        <translation>&amp;Envoyer</translation>
+        <translation type="vanished">&amp;Envoyer</translation>
     </message>
     <message>
-        <location filename="../clusterusercmdbutton.cpp" line="33"/>
         <source>&amp;New</source>
-        <translation>&amp;Nouveau</translation>
+        <translation type="vanished">&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../clusterusercmdbutton.cpp" line="34"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Modifier</translation>
+        <translation type="vanished">&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../clusterusercmdbutton.cpp" line="35"/>
         <source>&amp;Clear</source>
-        <translation>&amp;Effacer</translation>
+        <translation type="vanished">&amp;Effacer</translation>
     </message>
 </context>
 <context>
@@ -424,39 +455,32 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
         <translation>Indicatif d&apos;appel ou Locator manquant</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="33"/>
         <source>DX Spots</source>
-        <translation>DX Spots</translation>
+        <translation type="vanished">DX Spots</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="34"/>
         <source>Sent Spots</source>
-        <translation>Spots envoyés</translation>
+        <translation type="vanished">Spots envoyés</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="35"/>
         <source>Raw Data</source>
-        <translation>Données brutes</translation>
+        <translation type="vanished">Données brutes</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="37"/>
         <source>&amp;Send</source>
-        <translation>&amp;Envoyer</translation>
+        <translation type="vanished">&amp;Envoyer</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="37"/>
         <source>&amp;New</source>
-        <translation>&amp;Nouveau</translation>
+        <translation type="vanished">&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="38"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Modifier</translation>
+        <translation type="vanished">&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="38"/>
         <source>&amp;Clear</source>
-        <translation>&amp;Effacer</translation>
+        <translation type="vanished">&amp;Effacer</translation>
     </message>
 </context>
 <context>
@@ -475,6 +499,11 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
         <location filename="../userclustercommanddialog.ui" line="49"/>
         <source>Command</source>
         <translation>WHERE???  </translation>
+    </message>
+    <message>
+        <location filename="../userclustercommanddialog.cpp" line="54"/>
+        <source>Cluster User Command %1 - %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
