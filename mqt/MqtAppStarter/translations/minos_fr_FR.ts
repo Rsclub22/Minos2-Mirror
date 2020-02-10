@@ -6,17 +6,17 @@
     <message>
         <location filename="../MainWindow.ui" line="14"/>
         <source>Start Minos Apps</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer les applications Minos</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="34"/>
         <source>Apps</source>
-        <translation type="unfinished"></translation>
+        <translation>Applications</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="54"/>
         <source>Close All</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer tout</translation>
     </message>
 </context>
 </TS>
