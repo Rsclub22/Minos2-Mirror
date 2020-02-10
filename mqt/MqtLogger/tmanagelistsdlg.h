@@ -13,7 +13,7 @@ class TManageListsDlg : public QDialog
 
 public:
     explicit TManageListsDlg(QWidget *parent = nullptr);
-    ~TManageListsDlg();
+    ~TManageListsDlg() override;
 
 private slots:
     void on_CloseListButton_clicked();
@@ -26,10 +26,18 @@ private slots:
 
     void on_moveDownButton_clicked();
 
+    void on_ListsListBox_itemSelectionChanged();
+
+public Q_SLOTS:
+    virtual void accept() override;
+    virtual void reject() override;
+
 private:
     Ui::TManageListsDlg *ui;
     void DrawList();
     void enableActions();
+    void doCloseEvent();
+
 };
 
 #endif // TMANAGELISTSDLG_H
