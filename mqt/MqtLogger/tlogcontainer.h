@@ -182,7 +182,6 @@ private slots:
     void openRecentFile();
     void FileOpenActionExecute();
     void FileImportActionExecute();
-    void ListOpenActionExecute();
     void ManageListsActionExecute();
     void ContestDetailsActionExecute();
     void FileCloseActionExecute();
@@ -236,6 +235,7 @@ private slots:
     void doScreenConfigAction();
 public slots:
     void onArgsReceived(QString conarg);
+    void ListOpenActionExecute();
 
 signals:
     void sendKeyerPlay( int fno );

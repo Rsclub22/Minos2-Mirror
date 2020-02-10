@@ -2,6 +2,7 @@
 
 #include "ContestApp.h"
 #include "list.h"
+#include "tlogcontainer.h"
 #include "tmanagelistsdlg.h"
 #include "ui_tmanagelistsdlg.h"
 
@@ -45,6 +46,7 @@ void TManageListsDlg::DrawList()
    }
    if ( row > 0 )
    {
+       enableActions();
       //ui->ListsListBox->setItemIndex(0);
    }
    else
@@ -75,3 +77,39 @@ void TManageListsDlg::on_ExitButton_clicked()
 }
 
 
+
+void TManageListsDlg::on_openListButton_clicked()
+{
+    LogContainer->ListOpenActionExecute();
+    DrawList();
+}
+
+void TManageListsDlg::enableActions()
+{
+
+}
+void TManageListsDlg::on_moveUpButton_clicked()
+{
+    int tno = ui->ListsListBox->currentRow();
+    if ( tno > 0 )
+    {
+       QSharedPointer<ListSlot> cs = TContestApp::getContestApp() ->listSlotList[ tno ];
+       int s = cs->slotno;
+       QSharedPointer<ListSlot> csm1 = TContestApp::getContestApp() ->listSlotList[ tno - 1 ];
+       int sm1 = csm1->slotno;
+       TContestApp::getContestApp() ->listSlotList[ tno ] = csm1;
+       csm1->slotno = s;
+
+       TContestApp::getContestApp() ->listSlotList[ tno - 1 ] = cs;
+       cs->slotno = sm1;
+
+       TContestApp::getContestApp() ->writeListsList();
+
+       DrawList();
+    }
+}
+
+void TManageListsDlg::on_moveDownButton_clicked()
+{
+
+}

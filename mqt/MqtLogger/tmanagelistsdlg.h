@@ -20,9 +20,16 @@ private slots:
 
     void on_ExitButton_clicked();
 
+    void on_openListButton_clicked();
+
+    void on_moveUpButton_clicked();
+
+    void on_moveDownButton_clicked();
+
 private:
     Ui::TManageListsDlg *ui;
     void DrawList();
+    void enableActions();
 };
 
 #endif // TMANAGELISTSDLG_H
