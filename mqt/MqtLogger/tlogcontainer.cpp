@@ -245,6 +245,7 @@ void TLogContainer::closeEvent(QCloseEvent *event)
           TContestApp::getContestApp() ->closeListFile( ( *i ) ->slot );
        }
     }
+    MinosConfig::getMinosConfig() ->stop();
     closeContestApp();
 
     QWidget::closeEvent(event);
