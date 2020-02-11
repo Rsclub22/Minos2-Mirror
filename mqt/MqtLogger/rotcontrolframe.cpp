@@ -604,7 +604,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                lastConnectStat = sl[0];
                if (lastConnectStat == ROT_STATUS_CONNECTED)
                {
-                   ui->rotConnectState->setText(lastConnectStat);
+                   ui->rotConnectState->setText(tr("Connected"));
                    rotError = false;
                    rotConnected = true;
                    setRotatorAntennaName(ct->antennaName.getValue().toString()); // make sure the name appears
@@ -613,7 +613,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastConnectStat == ROT_STATUS_DISCONNECTED)
                {
-                   ui->rotConnectState->setText(lastConnectStat);
+                   ui->rotConnectState->setText(tr("Disconnected"));
                    rotError = false;
                    rotConnected = false;
                    emit rotatorConnected(false);     // tell bandmap
@@ -667,13 +667,13 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastStatus == ROT_STATUS_CONNECTED)
                {
-                   ui->rotConnectState->setText(lastStatus);
+                   ui->rotConnectState->setText(tr("Connected"));
                    rotError = false;
                    rotConnected = true;
                }
                else if (lastStatus == ROT_STATUS_DISCONNECTED)
                {
-                   ui->rotConnectState->setText(lastStatus);
+                   ui->rotConnectState->setText(tr("Disconnected"));
                    rotError = false;
                    rotConnected = false;
                }

@@ -1387,7 +1387,7 @@ void RigControlFrame::setRadioState(QString s)
         else if (s == RIG_STATUS_CONNECTED)
         {
             radioConnected = true;
-            ui->rigState->setText(s);
+            ui->rigState->setText(tr("Connected"));
             int index = ui->radioNameSel->findText(radioName, Qt::MatchFixedString);
             if (index >= 0)
             {
@@ -1405,7 +1405,7 @@ void RigControlFrame::setRadioState(QString s)
            radioConnected = false;
            radioError = false;
 
-           ui->rigState->setText(s);
+           ui->rigState->setText(tr("Disconnected"));
 
            ui->bandWarnLabel->setText("");
            if (ui->radioNameSel->currentText() == "")
