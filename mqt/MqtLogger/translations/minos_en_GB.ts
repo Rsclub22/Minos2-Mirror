@@ -458,7 +458,7 @@ The computed mode is %6
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="734"/>
-        <source>Locator may be invalid, do you still want to use the callsign?</source>
+        <source>The locator may be invalid, do you still want to use it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2025,7 +2025,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="2009"/>
-        <source>Run %1 - Write</source>
+        <source>Run %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

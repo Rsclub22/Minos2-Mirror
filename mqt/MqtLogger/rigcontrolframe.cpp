@@ -2006,7 +2006,7 @@ void RigControlFrame::runButWriteActSel(int buttonNumber)
     // load run data into run memory
 
     RunButtonDialog runDialog(this);
-    runDialog.setWindowTitle(tr("Run %1 - Write").arg(QString::number(buttonNumber + 1)));
+    runDialog.setWindowTitle(tr("Run %1 - New").arg(QString::number(buttonNumber + 1)));
     runDialog.setLogData(&runData, buttonNumber);
     if (runDialog.exec() == QDialog::Accepted)
     {

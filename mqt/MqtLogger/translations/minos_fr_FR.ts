@@ -461,8 +461,12 @@ Le mode calculé est%6
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="734"/>
+        <source>The locator may be invalid, do you still want to use it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Locator may be invalid, do you still want to use the callsign?</source>
-        <translation>Locator est peut-être invalide, voulez-vous toujours l&apos;utiliser?</translation>
+        <translation type="vanished">Locator est peut-être invalide, voulez-vous toujours l&apos;utiliser?</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="755"/>
@@ -2091,8 +2095,12 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="2009"/>
+        <source>Run %1 - New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Run %1 - Write</source>
-        <translation>Run %1 - Nouveau</translation>
+        <translation type="vanished">Run %1 - Nouveau</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="2026"/>
