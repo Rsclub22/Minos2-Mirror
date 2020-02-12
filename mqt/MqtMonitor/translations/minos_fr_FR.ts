@@ -52,7 +52,7 @@
     <message>
         <location filename="../MonitorMain.cpp" line="170"/>
         <source>State</source>
-        <translation>WHAT CONTEXT?  </translation>
+        <translation>WHAT CONTEXT?   </translation>
     </message>
 </context>
 <context>

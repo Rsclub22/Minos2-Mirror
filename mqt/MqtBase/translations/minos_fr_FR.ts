@@ -11,7 +11,7 @@
     <message>
         <location filename="../contacts.cpp" line="211"/>
         <source>COMMENT FOR ADJUDICATOR</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="212"/>
@@ -558,7 +558,7 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="38"/>
         <source>Hide when running</source>
-        <translation>Masquer pendant l&apos;exécution  </translation>
+        <translation>Masquer pendant l&apos;exécution</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="81"/>
@@ -630,7 +630,7 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="348"/>
         <source>Remote App Name</source>
-        <translation>Nom de Application éloigné  </translation>
+        <translation>Nom de Application éloigné</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="362"/>
@@ -660,7 +660,7 @@
     <message>
         <location filename="../ConfigElementFrame.cpp" line="234"/>
         <source>Local</source>
-        <translation>Local WHAT17</translation>
+        <translation>Locale</translation>
     </message>
 </context>
 <context>
@@ -668,12 +668,12 @@
     <message>
         <location filename="../contest.cpp" line="1353"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
-        <translation>QSO: %1; %2 pts: %3 %4 pays %5: bonus %6 (%7) = %8     </translation>
+        <translation>QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
     </message>
     <message>
         <location filename="../contest.cpp" line="1366"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
-        <translation>&lt;&lt;SCORE&gt;&gt;QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8%9%10 Locators %13 = %14     </translation>
+        <translation>Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
     </message>
 </context>
 <context>
@@ -1194,40 +1194,6 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     </message>
 </context>
 <context>
-    <name>OtherLogMatcher</name>
-    <message>
-        <source> - No exact match</source>
-        <translation type="vanished">- Aucune correspondance exacte</translation>
-    </message>
-    <message>
-        <source> - No match No Suffix</source>
-        <translation type="vanished">- Pas de match Pas de suffixe            </translation>
-    </message>
-    <message>
-        <source> - No match No LOC</source>
-        <translation type="vanished">- Pas de match Pas de Locator            </translation>
-    </message>
-</context>
-<context>
-    <name>PresetButtonMenu</name>
-    <message>
-        <source>&amp;Read</source>
-        <translation type="vanished">&amp;Lire</translation>
-    </message>
-    <message>
-        <source>&amp;New</source>
-        <translation type="vanished">&amp;Nouveau</translation>
-    </message>
-    <message>
-        <source>&amp;Edit</source>
-        <translation type="vanished">&amp;Modifier</translation>
-    </message>
-    <message>
-        <source>&amp;Clear</source>
-        <translation type="vanished">&amp;Effacer</translation>
-    </message>
-</context>
-<context>
     <name>QSOGridModel</name>
     <message>
         <location filename="../TreeUtils.cpp" line="18"/>
@@ -1247,7 +1213,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../TreeUtils.cpp" line="21"/>
         <source>SnTx</source>
-        <translation>Nombre Tx</translation>
+        <translation>Numéro Tx</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="22"/>
@@ -1257,7 +1223,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../TreeUtils.cpp" line="23"/>
         <source>SnRx</source>
-        <translation>Nombre Rx</translation>
+        <translation>Numéro Rx</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="24"/>
@@ -1292,7 +1258,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../TreeUtils.cpp" line="30"/>
         <source>Rot Heading</source>
-        <translation>Relèvement d&apos;appareil rotateur   </translation>
+        <translation>Direction du rotateur</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="31"/>
@@ -1313,7 +1279,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
         <location filename="../MatchTreeFrame.cpp" line="171"/>
         <location filename="../MatchTreeFrame.cpp" line="184"/>
         <source>Callsign</source>
-        <translation>Indicatif d&apos;appel  </translation>
+        <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="154"/>
@@ -1323,7 +1289,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="155"/>
         <source>SnTx</source>
-        <translation>Nombre Tx</translation>
+        <translation>Numéro Tx</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="156"/>
@@ -1333,7 +1299,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="157"/>
         <source>SnRx)</source>
-        <translation>Nombre Rx</translation>
+        <translation>Numéro Rx</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="158"/>
@@ -1380,7 +1346,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
         <location filename="../MatchTreeFrame.cpp" line="164"/>
         <location filename="../MatchTreeFrame.cpp" line="178"/>
         <source>Rot Heading</source>
-        <translation>Relèvement d&apos;appareil rotateur   </translation>
+        <translation>Relèvement du rotateur</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="165"/>
@@ -1391,7 +1357,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="453"/>
         <source>Current contest: </source>
-        <translation>Concours en cours:  </translation>
+        <translation>Concours en cours: </translation>
     </message>
 </context>
 <context>
@@ -1399,22 +1365,22 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../rotatorcommon.cpp" line="15"/>
         <source>&amp;Read</source>
-        <translation type="unfinished">&amp;Lire</translation>
+        <translation>&amp;Lire</translation>
     </message>
     <message>
         <location filename="../rotatorcommon.cpp" line="16"/>
         <source>&amp;New</source>
-        <translation type="unfinished">&amp;Nouveau</translation>
+        <translation>&amp;Nouveau</translation>
     </message>
     <message>
         <location filename="../rotatorcommon.cpp" line="17"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished">&amp;Modifier</translation>
+        <translation>&amp;Modifier</translation>
     </message>
     <message>
         <location filename="../rotatorcommon.cpp" line="18"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished">&amp;Effacer</translation>
+        <translation>&amp;Supprimer</translation>
     </message>
 </context>
 <context>
@@ -1664,7 +1630,7 @@ Veuillez entrer un autre direction  </translation>
     <message>
         <location filename="../checkmodeagainstfreq.cpp" line="38"/>
         <source>None</source>
-        <translation>Aucun  </translation>
+        <translation>Aucun</translation>
     </message>
 </context>
 <context>

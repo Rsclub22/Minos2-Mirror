@@ -16,7 +16,7 @@
     <message>
         <location filename="../addantennadialog.ui" line="40"/>
         <source>Rotator Model</source>
-        <translation>Type du rotateur  </translation>
+        <translation>Type du rotateur</translation>
     </message>
     <message>
         <location filename="../addantennadialog.cpp" line="45"/>
@@ -44,12 +44,12 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../logdialog.ui" line="14"/>
         <source>Rotator Position Logging</source>
-        <translation>Enregistrement de la position du rotateur </translation>
+        <translation>Enregistrement de la position du rotateur</translation>
     </message>
     <message>
         <location filename="../logdialog.ui" line="22"/>
         <source>Log Directory</source>
-        <translation>Répertoire des journaux </translation>
+        <translation>Dossier des journaux</translation>
     </message>
     <message>
         <location filename="../logdialog.ui" line="36"/>
@@ -59,22 +59,22 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../logdialog.ui" line="47"/>
         <source>Log Filename</source>
-        <translation>Nom du fichier du journal </translation>
+        <translation>Nom du fichier du journal</translation>
     </message>
     <message>
         <location filename="../logdialog.ui" line="71"/>
         <source>Bearing Difference</source>
-        <translation>Différence de direction  </translation>
+        <translation>Différence de direction</translation>
     </message>
     <message>
         <location filename="../logdialog.ui" line="78"/>
         <source>Logging Enabled</source>
-        <translation>Journalisation activée </translation>
+        <translation>Journalisation activée</translation>
     </message>
     <message>
         <location filename="../logdialog.cpp" line="44"/>
         <source>Select Bearing Log Folder</source>
-        <translation>Sélectionner le dossier du journal de relèvement  </translation>
+        <translation>Sélectionner le dossier du journal de le direction de rotateur</translation>
     </message>
 </context>
 <context>
@@ -115,7 +115,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rotcontrol.cpp" line="26"/>
         <source>Communication timed out</source>
-        <translation>Timeout de communication </translation>
+        <translation>Timeout de communication</translation>
     </message>
     <message>
         <location filename="../rotcontrol.cpp" line="27"/>
@@ -223,7 +223,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotsetupdialog.cpp" line="707"/>
         <source>Do you really want to remove antenna - %1?</source>
-        <translation>Supprimer l&apos;Antenne %1  </translation>
+        <translation>Supprimer l&apos;Antenne %1</translation>
     </message>
     <message>
         <location filename="../rotsetupdialog.cpp" line="740"/>
@@ -254,7 +254,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="33"/>
         <source>Main</source>
-        <translation>Principale (Main what?)     </translation>
+        <translation>Principale (En avant)</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="50"/>
@@ -280,7 +280,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="153"/>
         <source>TextLabel</source>
-        <translation>TextLabel WHAT??     </translation>
+        <translation>NOT USED ??</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="188"/>
@@ -304,7 +304,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="255"/>
         <source>Presets</source>
-        <translation>Préconfigurations </translation>
+        <translation>Préconfigurations</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="279"/>
@@ -349,7 +349,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="611"/>
         <source>Setup Antennas</source>
-        <translation>Configurerles Antennes </translation>
+        <translation>Configurer les Antennes</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="616"/>
@@ -359,7 +359,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="621"/>
         <source>Log Heading</source>
-        <translation>En-tête du journal WHAT???   </translation>
+        <translation>Définir le journal de relèvement</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="626"/>
@@ -443,14 +443,10 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <translation>Erreur d&apos;antenne</translation>
     </message>
     <message>
-        <source>Please configure a antenna name and rotator model</source>
-        <translation type="vanished">Configure antenna name and rotator model please  </translation>
-    </message>
-    <message>
         <location filename="../rotatormainwindow.cpp" line="918"/>
         <location filename="../rotatormainwindow.cpp" line="1013"/>
         <source>Please configure an antenna name and rotator model</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer un nom d&apos;antenne et un modèle de rotateur SVP</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1040"/>
@@ -482,7 +478,7 @@ Entrer %1 - %2 SVP</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1243"/>
         <source>Rotate to Bearing</source>
-        <translation>Tourner à un relevement  </translation>
+        <translation>Tourner à un relevement</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1693"/>
@@ -760,23 +756,23 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../skyscandialog.ui" line="22"/>
         <source>Start Bearing</source>
         <translatorcomment>Direction?</translatorcomment>
-        <translation>Relèvement de départ  </translation>
+        <translation>Relèvement de départ</translation>
     </message>
     <message>
         <location filename="../skyscandialog.ui" line="36"/>
         <source>End Bearing</source>
         <translatorcomment>Relèvement?</translatorcomment>
-        <translation>Direction finale  </translation>
+        <translation>Relèvement finale</translation>
     </message>
     <message>
         <location filename="../skyscandialog.ui" line="50"/>
         <source>Step</source>
-        <translation>Incrément </translation>
+        <translation>Incrément</translation>
     </message>
     <message>
         <location filename="../skyscandialog.ui" line="64"/>
         <source>Pause Time</source>
-        <translation>Intervalle de pause ????  </translation>
+        <translation>Intervalle de pause</translation>
     </message>
 </context>
 <context>
@@ -789,7 +785,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotsetupform.ui" line="24"/>
         <source>Rotator Model</source>
-        <translation>Type du rotateur  </translation>
+        <translation>Type du rotateur</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="41"/>

@@ -71,37 +71,37 @@
     <message>
         <location filename="../clustermainwindow.cpp" line="33"/>
         <source>DX Spots</source>
-        <translation type="unfinished">DX Spots</translation>
+        <translation>DX Spots</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="34"/>
         <source>Sent Spots</source>
-        <translation type="unfinished">Spots envoyés</translation>
+        <translation>Spots envoyés</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="35"/>
         <source>Raw Data</source>
-        <translation type="unfinished">Données brutes</translation>
+        <translation>Données brutes</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="37"/>
         <source>&amp;Send</source>
-        <translation type="unfinished">&amp;Envoyer</translation>
+        <translation>&amp;Envoyer</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="37"/>
         <source>&amp;New</source>
-        <translation type="unfinished">&amp;Nouveau</translation>
+        <translation>&amp;Nouveau</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="38"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished">&amp;Modifier</translation>
+        <translation>&amp;Modifier</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="38"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished">&amp;Effacer</translation>
+        <translation>&amp;Effacer</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="83"/>
@@ -236,25 +236,6 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
         <translation>Minos Rotator
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
-    </message>
-</context>
-<context>
-    <name>ClusterUserCmdButton</name>
-    <message>
-        <source>&amp;Send</source>
-        <translation type="vanished">&amp;Envoyer</translation>
-    </message>
-    <message>
-        <source>&amp;New</source>
-        <translation type="vanished">&amp;Nouveau</translation>
-    </message>
-    <message>
-        <source>&amp;Edit</source>
-        <translation type="vanished">&amp;Modifier</translation>
-    </message>
-    <message>
-        <source>&amp;Clear</source>
-        <translation type="vanished">&amp;Effacer</translation>
     </message>
 </context>
 <context>
@@ -454,34 +435,6 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
         <source>Callsign or Locator Empty</source>
         <translation>Indicatif d&apos;appel ou Locator manquant</translation>
     </message>
-    <message>
-        <source>DX Spots</source>
-        <translation type="vanished">DX Spots</translation>
-    </message>
-    <message>
-        <source>Sent Spots</source>
-        <translation type="vanished">Spots envoyés</translation>
-    </message>
-    <message>
-        <source>Raw Data</source>
-        <translation type="vanished">Données brutes</translation>
-    </message>
-    <message>
-        <source>&amp;Send</source>
-        <translation type="vanished">&amp;Envoyer</translation>
-    </message>
-    <message>
-        <source>&amp;New</source>
-        <translation type="vanished">&amp;Nouveau</translation>
-    </message>
-    <message>
-        <source>&amp;Edit</source>
-        <translation type="vanished">&amp;Modifier</translation>
-    </message>
-    <message>
-        <source>&amp;Clear</source>
-        <translation type="vanished">&amp;Effacer</translation>
-    </message>
 </context>
 <context>
     <name>userClusterCommandDialog</name>
@@ -498,12 +451,12 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
     <message>
         <location filename="../userclustercommanddialog.ui" line="49"/>
         <source>Command</source>
-        <translation>WHERE???  </translation>
+        <translation>WHERE???   </translation>
     </message>
     <message>
         <location filename="../userclustercommanddialog.cpp" line="54"/>
         <source>Cluster User Command %1 - %2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

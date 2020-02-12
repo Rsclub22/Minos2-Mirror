@@ -145,7 +145,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigcontrol.cpp" line="27"/>
         <source>Communication timed out</source>
-        <translation>Timeout de communication </translation>
+        <translation>Timeout de communication</translation>
     </message>
     <message>
         <location filename="../rigcontrol.cpp" line="28"/>
@@ -241,30 +241,14 @@ utiliser un autre nom SVP</translation>
         <translation>Bandes prises en charge</translation>
     </message>
     <message>
-        <source>2300 Mhz</source>
-        <translation type="vanished">2300 Mhz</translation>
-    </message>
-    <message>
-        <source>70 Mhz</source>
-        <translation type="vanished">70 Mhz</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="278"/>
         <source>144 MHz</source>
         <translation>144 MHz</translation>
     </message>
     <message>
-        <source>50 Mhz</source>
-        <translation type="vanished">50 Mhz</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="292"/>
         <source>1296 MHz</source>
         <translation>1296 MHz</translation>
-    </message>
-    <message>
-        <source>432 Mhz</source>
-        <translation type="vanished">432 Mhz</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="322"/>
@@ -277,33 +261,29 @@ utiliser un autre nom SVP</translation>
         <translation>5,6 GHz</translation>
     </message>
     <message>
-        <source>10 Ghz</source>
-        <translation type="vanished">10 Ghz</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="248"/>
         <source>2300 MHz</source>
-        <translation type="unfinished">1296 MHz {2300 ?}</translation>
+        <translation>2300 MHz</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="255"/>
         <source>70 MHz</source>
-        <translation type="unfinished">1296 MHz {70 ?}</translation>
+        <translation>70 MHz</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="285"/>
         <source>50 MHz</source>
-        <translation type="unfinished">1296 MHz {50 ?}</translation>
+        <translation>50 MHz</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="315"/>
         <source>432 MHz</source>
-        <translation type="unfinished">1296 MHz {432 ?}</translation>
+        <translation>432 MHz</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="336"/>
         <source>10 GHz</source>
-        <translation type="unfinished">5,6 GHz {10 ?}</translation>
+        <translation>10 GHz</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="369"/>
@@ -432,12 +412,12 @@ Actif</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="906"/>
         <source>Trace Data Comms</source>
-        <translation>Suivre communication de données  </translation>
+        <translation>Suivre communication de données</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="914"/>
         <source>Trace RigCtld Comms</source>
-        <translation>Suivre communication de RigCtld  </translation>
+        <translation>Suivre communication de RigCtld</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="214"/>
@@ -487,15 +467,14 @@ but nothing was received from the radio.
 
 Please check connections and/or settings.
 Some radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface.</source>
-        <translation>
-250/5000
-Tester la connexion radio via Rigctld
+        <translatorcomment>DUPE?</translatorcomment>
+        <translation>Tester la connexion radio via Rigctld
 
 Minos a essayé de lire la fréquence radio,
 mais rien n&apos;a été reçu de la radio.
 
 Vérifiez les connexions et / ou les paramètres.
-Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface.</translation>
+Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface. 1ST</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="838"/>
@@ -521,7 +500,7 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="906"/>
         <source>Opening Radio: %1</source>
-        <translation>Ouverture de la radio: %1   </translation>
+        <translation>Ouverture de la radio: %1</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="913"/>
@@ -562,14 +541,13 @@ but nothing was received from the radio.
 
 Please check connections and/or settings.
 Some radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface.</source>
-        <translation>
-Tester la connexion radio
+        <translation>Tester la connexion radio
 
 Minos a essayé de lire la fréquence radio,
 mais rien n&apos;a été reçu de la radio.
 
 Vérifiez les connexions et / ou les paramètres.
-Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface.</translation>
+Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface. 2ND</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="991"/>
@@ -579,7 +557,7 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="995"/>
         <source>Connected: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10</source>
-        <translation>Connecté: %1 - %2, %3:%4 - %5 %6, %7, Handshake %8 ForceDTR %9, ForceRTS %10  </translation>
+        <translation>Connecté: %1 - %2, %3:%4 - %5 %6, %7, Handshake %8 ForceDTR %9, ForceRTS %10</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1003"/>
@@ -614,17 +592,17 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1162"/>
         <source>Request Freq</source>
-        <translation>Demande le fréquence </translation>
+        <translation>Demande le fréquence</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1177"/>
         <source>Request Mode</source>
-        <translation>Demande la mode </translation>
+        <translation>Demande la mode</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1201"/>
         <source>Request RIT Freq</source>
-        <translation>Demande le fréquence RIT </translation>
+        <translation>Demande le fréquence RIT</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1220"/>
@@ -1198,14 +1176,10 @@ utiliser un autre nom SVP</translation>
         <translation>Port COM</translation>
     </message>
     <message>
-        <source>Network Adress</source>
-        <translation type="vanished">Adresse réseau</translation>
-    </message>
-    <message>
         <location filename="../rigsetupform.ui" line="77"/>
         <location filename="../rigsetupform.ui" line="275"/>
         <source>Network Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse réseau</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="103"/>

@@ -11,7 +11,7 @@
     <message>
         <location filename="../kstconfigure.ui" line="23"/>
         <source>Server</source>
-        <translation></translation>
+        <translation>Serveur</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="30"/>
@@ -46,7 +46,7 @@
     <message>
         <location filename="../kstconfigure.ui" line="116"/>
         <source>Automatically connect on load</source>
-        <translation></translation>
+        <translation>Connexion automatique lors du chargement</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="125"/>
@@ -64,7 +64,7 @@
     <message>
         <location filename="../kstmainwindow.ui" line="14"/>
         <source>Minos KST Client</source>
-        <translation>Client KST de Minos </translation>
+        <translation>Client KST de Minos</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="21"/>
@@ -97,7 +97,7 @@
     <message>
         <location filename="../kstmainwindow.ui" line="128"/>
         <source>Only show users for this band</source>
-        <translation>Afficher uniquement les utilisateurs de ce bande   </translation>
+        <translation>Afficher uniquement les utilisateurs de ce bande</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="135"/>
@@ -123,7 +123,7 @@
     <message>
         <location filename="../kstmainwindow.ui" line="187"/>
         <source>Only show messages for this band</source>
-        <translation>Afficher uniquement les messages de ce bande   </translation>
+        <translation>Afficher uniquement les messages de ce bande</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="194"/>
@@ -138,7 +138,7 @@
     <message>
         <location filename="../kstmainwindow.ui" line="230"/>
         <source>Including me</source>
-        <translation>CONTEXT? Inc me   </translation>
+        <translation>Including me</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="252"/>
@@ -184,11 +184,7 @@
     <message>
         <location filename="../kstmainwindow.ui" line="428"/>
         <source>Clear Messages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear All</source>
-        <translation type="vanished">Effacer tous</translation>
+        <translation>Effacer messages</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="455"/>
@@ -263,7 +259,7 @@
     <message>
         <location filename="../kstcallgridmodel.cpp" line="230"/>
         <source>Brg</source>
-        <translation type="unfinished"></translation>
+        <translation>Direction???  </translation>
     </message>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="233"/>

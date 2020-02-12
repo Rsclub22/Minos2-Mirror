@@ -16,7 +16,7 @@
     <message>
         <location filename="../MainWindow.ui" line="54"/>
         <source>Close All</source>
-        <translation>Fermer tout</translation>
+        <translation>Fermer toutes</translation>
     </message>
 </context>
 </TS>
