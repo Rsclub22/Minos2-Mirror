@@ -1285,7 +1285,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="157"/>
-        <source>SnRx)</source>
+        <source>SnRx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

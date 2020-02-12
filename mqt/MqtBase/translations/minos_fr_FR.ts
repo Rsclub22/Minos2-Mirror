@@ -1297,9 +1297,13 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
         <translation>Rapport Rx</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="157"/>
         <source>SnRx)</source>
-        <translation>Numéro Rx</translation>
+        <translation type="vanished">Numéro Rx</translation>
+    </message>
+    <message>
+        <location filename="../MatchTreeFrame.cpp" line="157"/>
+        <source>SnRx</source>
+        <translation type="unfinished">Numéro Rx</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="158"/>
