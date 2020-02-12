@@ -45,12 +45,13 @@ void TManageListsDlg::accept()
 void TManageListsDlg::DrawList()
 {
     QString currList;
+    int nlists = TContestApp::getContestApp() ->getListSlotCount();
     QList<QTableWidgetItem *> items = ui->ListsListBox->selectedItems();
-    if (items.count() > 0)
+    if (nlists && items.count() > 0)
     {
         int slotno = items[0]->data(Qt::UserRole).toInt();
         QSharedPointer<ListSlot> cs(TContestApp::getContestApp() ->listSlotList[ slotno ]);
-        if (cs->slot)
+        if (cs && cs->slot)
             currList = cs->slot->name;
     }
 

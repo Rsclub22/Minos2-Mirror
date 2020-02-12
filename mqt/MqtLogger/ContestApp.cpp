@@ -443,12 +443,15 @@ void TContestApp::writeContestList()
         ContestSlotList newContestSlotList;
         foreach ( QSharedPointer<ContestSlot> cs,  contestSlotList)
         {
-            BaseContestLog * ct = cs->slot;
-            if (ct)
+            if (cs)
             {
-                cs->slotno = newSlotNo;
-                newContestSlotList[newSlotNo] = cs;
-                newSlotNo++;
+                BaseContestLog * ct = cs->slot;
+                if (ct)
+                {
+                    cs->slotno = newSlotNo;
+                    newContestSlotList[newSlotNo] = cs;
+                    newSlotNo++;
+                }
             }
         }
         // replace the list
@@ -489,12 +492,15 @@ void TContestApp::writeListsList()
         ListSlotList newListSlotList;
         foreach ( QSharedPointer<ListSlot> cs,  listSlotList)
         {
-            ContactList * ct = cs->slot;
-            if (ct)
+            if (cs) // after all, we may have just got rid of one...
             {
-                cs->slotno = newSlotNo;
-                newListSlotList[newSlotNo] = cs;
-                newSlotNo++;
+                ContactList * ct = cs->slot;
+                if (ct)
+                {
+                    cs->slotno = newSlotNo;
+                    newListSlotList[newSlotNo] = cs;
+                    newSlotNo++;
+                }
             }
         }
         // replace the list
