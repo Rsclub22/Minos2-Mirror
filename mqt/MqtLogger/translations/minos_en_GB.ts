@@ -1039,123 +1039,123 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
 <context>
     <name>DecodesModel</name>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="55"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="47"/>
         <source>Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="57"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="49"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="58"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="50"/>
         <source>Snr</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="59"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="51"/>
         <source>DT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="60"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="52"/>
         <source>DF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="61"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="53"/>
         <source>Md</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="62"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="54"/>
         <source>Confidence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="63"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="55"/>
         <source>Live</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="65"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="57"/>
         <source>Seq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="66"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="58"/>
         <source>points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="67"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="59"/>
         <source>brg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="68"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="60"/>
         <source>distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="70"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="62"/>
         <source>Call</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="71"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="63"/>
         <source>Grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="72"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="64"/>
         <source>To Call</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="73"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="65"/>
         <source>To Grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="74"/>
-        <location filename="../WsjtxDecodesModel.cpp" line="291"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="66"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="281"/>
         <source>Best</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="76"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="68"/>
         <source>Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="83"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="75"/>
         <source>low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="83"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="75"/>
         <source>high</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="88"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="80"/>
         <source>no</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="88"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="80"/>
         <source>yes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="283"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="273"/>
         <source>(old)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="289"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="279"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
