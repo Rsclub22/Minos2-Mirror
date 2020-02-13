@@ -99,7 +99,8 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
 
     rotator = nullptr;
-    rotFactory = new RotatorFactory();
+    readTraceLogFlag();
+    rotFactory = new RotatorFactory(traceCommsFlag, this);
 
     //rotator->getRotatorList();
     //setupAntenna = new RotSetupDialog(rotator);
@@ -170,7 +171,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     rotTimeCount = 0;
     RotateTimer.start(200);  // to set timeout for antenna rotating
 
-    //readTraceLogFlag(); **********************************************
+
 
     rotlog->getBearingLogConfig();
 
@@ -437,6 +438,7 @@ void RotatorMainWindow::openRotator()
     connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
     connect(rotator, SIGNAL(bearing_updated(int)), rotlog, SLOT(saveBearingLog(int)));
 
+    rotator->setTraceComms(traceCommsFlag);
 
     retCode = rotator->rotInit(setupAntenna->currentAntenna);
     if (retCode < 0)
@@ -1977,15 +1979,18 @@ void RotatorMainWindow::readTraceLogFlag()
     config.endGroup();
 
     ui->actionTraceComms->setChecked(state);
-    rotator->enableTraceComms(state);             // set state of trace hamlib comms
+    traceCommsFlag = state;             // set state of trace hamlib comms
 }
 
 void RotatorMainWindow::saveTraceLogFlag(bool state)
 {
 
     // set state of hamlib commms tracing
+    if (rotator != nullptr)
+    {
+       rotator->setTraceComms(state);
+    }
 
-    //rotator->enableTraceComms(state); ****************************************************
 
     // save to ini for restart
 

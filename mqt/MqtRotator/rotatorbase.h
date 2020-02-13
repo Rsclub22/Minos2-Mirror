@@ -4,6 +4,8 @@
 #include <QObject>
 #include "rotatorcommon.h"
 
+
+
 class RotatorBase : public QObject
 {
     Q_OBJECT
@@ -16,6 +18,9 @@ public:
     void setRotConnected(bool rotConnected_){rotConnected = rotConnected_;}
     bool getRotConnected(){return rotConnected;}
 
+    virtual void setTraceComms(bool value) = 0;
+    virtual bool getTraceComms() = 0;
+
     virtual int rotInit(srotParams &selectedAntenna) = 0;
 
     virtual int request_bearing() = 0;
@@ -26,7 +31,7 @@ public:
     virtual int closeRotator() = 0;
     virtual void set_rotatorSpeed(int speed) = 0;
     virtual int get_rotatorSpeed() = 0;
-    virtual void enableTraceComms(bool state ) = 0;
+
     virtual QString getRotLibVersion() = 0;
 
 

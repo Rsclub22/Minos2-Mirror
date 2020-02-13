@@ -37,6 +37,10 @@ int collect(const rot_caps *caps, void *);
 
 
 
+
+
+
+
 class HamlibRotControl: public RotatorBase
 {
     Q_OBJECT
@@ -71,6 +75,9 @@ public:
     QString getErrorMsgText(int errorCode);
     QString getRotLibVersion() override;
 
+    static void setTraceCommsFlag(bool value);
+    void setTraceComms(bool value) override;
+    bool getTraceComms() override;
 
     int rig_message_cb(enum rig_debug_level_e debug_level, const char *fmt, va_list ap);
 
@@ -82,7 +89,6 @@ public:
 
     int getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName);
 
-    void enableTraceComms(bool state) override;
 
 private:
 
@@ -108,7 +114,7 @@ private:
     //srotParams curRotParams;   remove
     //int serialP;
 
-    bool traceComms = false;
+
 
 
 

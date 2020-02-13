@@ -57,7 +57,10 @@ public:
 
     int closeRotator() override;
 
-    void enableTraceComms(bool state ) override;
+
+    void setTraceComms(bool value) override;
+    bool getTraceComms() override;
+
     QString getRotLibVersion() override;
 
     void setPstNetAddress(QString address);

@@ -18,9 +18,12 @@
 #include "pstRotControl.h"
 #endif
 
-RotatorFactory::RotatorFactory(QObject *parent) : QObject(parent)
+RotatorFactory::RotatorFactory(bool tracecommFlag, QObject *parent) : QObject(parent)
 {
+
+    HamlibRotControl::setTraceCommsFlag(tracecommFlag);
     HamlibRotControl::register_rotators(&rotatorsList);
+
 
 #if defined (WIN32)
     // PSTRotator is only on Windows

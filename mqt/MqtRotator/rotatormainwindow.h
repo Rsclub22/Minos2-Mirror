@@ -147,6 +147,8 @@ private:
     bool rotCmdflag = false;
     bool reqBearCmdflag = false;
 
+    bool traceCommsFlag =  false;
+
     //endStop endStopType;
     overlapStat overLapStatus = NO_OVERLAP;
     bool overLapActiveflag = false;

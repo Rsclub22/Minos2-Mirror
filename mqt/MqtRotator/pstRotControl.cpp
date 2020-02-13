@@ -119,6 +119,15 @@ int PstRotControl::closeRotator()
 
 
 
+void PstRotControl::setTraceComms(bool value)
+{
+
+}
+
+bool PstRotControl::getTraceComms()
+{
+
+}
 
 
 void PstRotControl::processPendingReportDatagrams()
@@ -193,10 +202,7 @@ int PstRotControl::stop_rotation()
 }
 
 
-void PstRotControl::enableTraceComms(bool state)
-{
-    traceComms = state;
-}
+
 
 QString PstRotControl::getRotLibVersion()
 {

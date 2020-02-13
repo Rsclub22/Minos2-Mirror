@@ -32,6 +32,8 @@ int collect(const rot_caps *caps, rig_ptr_t)
     return 1;
 }
 
+bool traceComms = false;
+
 int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char const * format, va_list ap)
 {
   Q_UNUSED(level)
@@ -40,7 +42,11 @@ int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char cons
   static char constexpr fmt[] = "Hamlib: ";
   message = message.vsprintf (format, ap).trimmed ();
 
-  trace(QString("%1 %2").arg(fmt).arg(message));
+  if (traceComms)
+  {
+      trace(QString("%1 %2").arg(fmt).arg(message));
+  }
+
 
   return 0;
 }
@@ -231,6 +237,8 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
 
     //rig_set_debug_callback (::rig_message_cb, static_cast<rig_ptr_t>(this));
     //rig_set_debug_callback (::rig_message_cb, nullptr);
+
+
     rig_set_debug_callback (debug_callback, nullptr);
 
     capsList.clear();
@@ -273,6 +281,22 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
 
 
 
+}
+
+// static to init flag
+void HamlibRotControl::setTraceCommsFlag(bool value)
+{
+    traceComms = value;
+}
+
+void HamlibRotControl::setTraceComms(bool value)
+{
+    traceComms = value;
+}
+
+bool HamlibRotControl::getTraceComms()
+{
+    return traceComms;
 }
 
 
@@ -502,11 +526,6 @@ QString HamlibRotControl::getRotLibVersion()
 }
 
 
-
-void HamlibRotControl::enableTraceComms(bool state)
-{
-    //traceComms = state; ***********************************************
-}
 
 
 

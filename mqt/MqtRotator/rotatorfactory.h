@@ -38,7 +38,7 @@ public:
     typedef   QMap<QString, RotCapabilities> Rotators;
 
 
-    explicit RotatorFactory(QObject *parent = nullptr);
+    explicit RotatorFactory(bool tracecommFlag, QObject *parent = nullptr);
     ~RotatorFactory();
 
 
