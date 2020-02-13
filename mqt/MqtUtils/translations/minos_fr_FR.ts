@@ -4,6 +4,11 @@
 <context>
     <name>MinosConfig</name>
     <message>
+        <location filename="../ConfigFile.cpp" line="16"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../ConfigFile.cpp" line="502"/>
         <source>More than one server is defined and enabled</source>
         <translation>Plusieurs serveurs sont définis et activés</translation>

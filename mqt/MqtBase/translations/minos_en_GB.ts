@@ -6,37 +6,37 @@
     <message>
         <location filename="../contacts.cpp" line="210"/>
         <source>LOCAL COMMENT</source>
-        <translation type="unfinished"></translation>
+        <translation>aaaLOCAL COMMENTaaa</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="211"/>
         <source>COMMENT FOR ADJUDICATOR</source>
-        <translation type="unfinished"></translation>
+        <translation>aabCOMMENT FOR ADJUDICATORaab</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="212"/>
         <source>DELETED</source>
-        <translation type="unfinished"></translation>
+        <translation>aacDELETEDaac</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="227"/>
         <source>MAN</source>
-        <translation type="unfinished"></translation>
+        <translation>aadMANaad</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="230"/>
         <source>DEL</source>
-        <translation type="unfinished"></translation>
+        <translation>aaeDELaae</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="233"/>
         <source>N/S</source>
-        <translation type="unfinished"></translation>
+        <translation>aafN/Saaf</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="238"/>
         <source>DUP</source>
-        <translation type="unfinished"></translation>
+        <translation>aagDUPaag</translation>
     </message>
 </context>
 <context>
@@ -44,12 +44,12 @@
     <message>
         <location filename="../contest.cpp" line="421"/>
         <source>DUPLICATE OF </source>
-        <translation type="unfinished"></translation>
+        <translation>aahDUPLICATE OF aah</translation>
     </message>
     <message>
         <location filename="../contest.cpp" line="437"/>
         <source>DUP OF</source>
-        <translation type="unfinished"></translation>
+        <translation>aaiDUP OFaai</translation>
     </message>
 </context>
 <context>
@@ -57,420 +57,420 @@
     <message>
         <location filename="../profiles.cpp" line="32"/>
         <source>Default archive list directory</source>
-        <translation type="unfinished"></translation>
+        <translation>aajDefault archive list directoryaaj</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="33"/>
         <source>Default logs directory</source>
-        <translation type="unfinished"></translation>
+        <translation>aakDefault logs directoryaak</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="35"/>
         <source>Entry settings file</source>
-        <translation type="unfinished"></translation>
+        <translation>aalEntry settings fileaal</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="35"/>
         <source>File containing entry settings</source>
-        <translation type="unfinished"></translation>
+        <translation>aamFile containing entry settingsaam</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="36"/>
         <source>Station settings file</source>
-        <translation type="unfinished"></translation>
+        <translation>aanStation settings fileaan</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="36"/>
         <source>File containing station settings</source>
-        <translation type="unfinished"></translation>
+        <translation>aaoFile containing station settingsaao</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="37"/>
         <source>QTH settings file</source>
-        <translation type="unfinished"></translation>
+        <translation>aapQTH settings fileaap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="37"/>
         <source>File containing QTH settings</source>
-        <translation type="unfinished"></translation>
+        <translation>aaqFile containing QTH settingsaaq</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="38"/>
         <source>Country locators file</source>
-        <translation type="unfinished"></translation>
+        <translation>aarCountry locators fileaar</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="38"/>
         <source>File containing valid locators for countries</source>
-        <translation type="unfinished"></translation>
+        <translation>aasFile containing valid locators for countriesaas</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="40"/>
         <source>Display settings file</source>
-        <translation type="unfinished"></translation>
+        <translation>aatDisplay settings fileaat</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="40"/>
         <source>File containing saved display settings</source>
-        <translation type="unfinished"></translation>
+        <translation>aauFile containing saved display settingsaau</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="41"/>
         <source>Display file section</source>
-        <translation type="unfinished"></translation>
+        <translation>aavDisplay file sectionaav</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="41"/>
         <source>Section to use in display file</source>
-        <translation type="unfinished"></translation>
+        <translation>aawSection to use in display fileaaw</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="42"/>
         <source>Operators file</source>
-        <translation type="unfinished"></translation>
+        <translation>aaxOperators fileaax</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="42"/>
         <source>File containing operators</source>
-        <translation type="unfinished"></translation>
+        <translation>aayFile containing operatorsaay</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="43"/>
         <source>Operators file section</source>
-        <translation type="unfinished"></translation>
+        <translation>aazOperators file sectionaaz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="43"/>
         <source>section to use in operators file</source>
-        <translation type="unfinished"></translation>
+        <translation>abasection to use in operators fileaba</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="44"/>
         <source>Log preload file</source>
-        <translation type="unfinished"></translation>
+        <translation>abbLog preload fileabb</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="44"/>
         <source>File containing log pre-loads</source>
-        <translation type="unfinished"></translation>
+        <translation>abcFile containing log pre-loadsabc</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="45"/>
         <source>Preload contests default section</source>
-        <translation type="unfinished"></translation>
+        <translation>abdPreload contests default sectionabd</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="45"/>
         <source>Section to use in preload file</source>
-        <translation type="unfinished"></translation>
+        <translation>abeSection to use in preload fileabe</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="46"/>
         <source>List preload file</source>
-        <translation type="unfinished"></translation>
+        <translation>abfList preload fileabf</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="46"/>
         <source>File containing list pre-loads</source>
-        <translation type="unfinished"></translation>
+        <translation>abgFile containing list pre-loadsabg</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="47"/>
         <source>Preload Lists file section</source>
-        <translation type="unfinished"></translation>
+        <translation>abhPreload Lists file sectionabh</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="47"/>
         <source>Section to use in lists preload file</source>
-        <translation type="unfinished"></translation>
+        <translation>abiSection to use in lists preload fileabi</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="49"/>
         <source>WSJTX Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>abjWSJTX Enabledabj</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="50"/>
         <source>WSJTX Port</source>
-        <translation type="unfinished"></translation>
+        <translation>abkWSJTX Portabk</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="51"/>
         <source>WSJTX Group Address</source>
-        <translation type="unfinished"></translation>
+        <translation>ablWSJTX Group Addressabl</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="52"/>
         <source>WSJTX Auto Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>abmWSJTX Auto Enabledabm</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="53"/>
         <source>WSJTX Test Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>abnWSJTX Test Enabledabn</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="55"/>
         <source>Help file</source>
-        <translation type="unfinished"></translation>
+        <translation>aboHelp fileabo</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="56"/>
         <source>Help entry point</source>
-        <translation type="unfinished"></translation>
+        <translation>abpHelp entry pointabp</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="57"/>
         <source>PDF documentation file</source>
-        <translation type="unfinished"></translation>
+        <translation>abqPDF documentation fileabq</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="59"/>
         <source>Auto Fill signal report</source>
-        <translation type="unfinished"></translation>
+        <translation>abrAuto Fill signal reportabr</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="59"/>
         <source>Auto Fill signal report on return</source>
-        <translation type="unfinished"></translation>
+        <translation>absAuto Fill signal report on returnabs</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="63"/>
         <location filename="../profiles.cpp" line="64"/>
         <location filename="../profiles.cpp" line="65"/>
         <source>hint</source>
-        <translation type="unfinished"></translation>
+        <translation>abthintabt</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="64"/>
         <location filename="../profiles.cpp" line="65"/>
         <source>Default Session</source>
-        <translation type="unfinished"></translation>
+        <translation>abuDefault Sessionabu</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="83"/>
         <source>Default editor</source>
-        <translation type="unfinished"></translation>
+        <translation>abvDefault editorabv</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="84"/>
         <source>Statistics Period 1</source>
-        <translation type="unfinished"></translation>
+        <translation>abwStatistics Period 1abw</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="85"/>
         <source>Statistics Period 2</source>
-        <translation type="unfinished"></translation>
+        <translation>abxStatistics Period 2abx</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="95"/>
         <source>Call Used</source>
-        <translation type="unfinished"></translation>
+        <translation>abyCall Usedaby</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="95"/>
         <source>Call sign used</source>
-        <translation type="unfinished"></translation>
+        <translation>abzCall sign usedabz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="96"/>
         <source>On Behalf Of (Club)</source>
-        <translation type="unfinished"></translation>
+        <translation>acaOn Behalf Of (Club)aca</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="96"/>
         <source>Name of club/group</source>
-        <translation type="unfinished"></translation>
+        <translation>acbName of club/groupacb</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="97"/>
         <source>My Name</source>
-        <translation type="unfinished"></translation>
+        <translation>accMy Nameacc</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="97"/>
         <source>Name of responsible operator</source>
-        <translation type="unfinished"></translation>
+        <translation>acdName of responsible operatoracd</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="98"/>
         <source>My Call</source>
-        <translation type="unfinished"></translation>
+        <translation>aceMy Callace</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="98"/>
         <source>Callsign of responsible operator</source>
-        <translation type="unfinished"></translation>
+        <translation>acfCallsign of responsible operatoracf</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="100"/>
         <source>My Address Line 1</source>
-        <translation type="unfinished"></translation>
+        <translation>acgMy Address Line 1acg</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="100"/>
         <source>Address line 1 of responsible operator</source>
-        <translation type="unfinished"></translation>
+        <translation>achAddress line 1 of responsible operatorach</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="101"/>
         <source>My Address Line 2</source>
-        <translation type="unfinished"></translation>
+        <translation>aciMy Address Line 2aci</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="101"/>
         <source>Address line 2 of responsible operator</source>
-        <translation type="unfinished"></translation>
+        <translation>acjAddress line 2 of responsible operatoracj</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="102"/>
         <source>My City</source>
-        <translation type="unfinished"></translation>
+        <translation>ackMy Cityack</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="102"/>
         <source>City of responsible operator</source>
-        <translation type="unfinished"></translation>
+        <translation>aclCity of responsible operatoracl</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="103"/>
         <source>My Country</source>
-        <translation type="unfinished"></translation>
+        <translation>acmMy Countryacm</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="103"/>
         <source>Country of responsible operator</source>
-        <translation type="unfinished"></translation>
+        <translation>acnCountry of responsible operatoracn</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="104"/>
         <source>My Postcode</source>
-        <translation type="unfinished"></translation>
+        <translation>acoMy Postcodeaco</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="104"/>
         <source>Post Code of responsible operator</source>
-        <translation type="unfinished"></translation>
+        <translation>acpPost Code of responsible operatoracp</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="105"/>
         <source>My Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>acqMy Phoneacq</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="105"/>
         <source>Phone no. of responsible operator</source>
-        <translation type="unfinished"></translation>
+        <translation>acrPhone no. of responsible operatoracr</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="106"/>
         <source>My Email</source>
-        <translation type="unfinished"></translation>
+        <translation>acsMy Emailacs</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="106"/>
         <source>eMail address of responsible operator</source>
-        <translation type="unfinished"></translation>
+        <translation>acteMail address of responsible operatoract</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="109"/>
         <source>Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>acuLocatoracu</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="110"/>
         <source>District Exchange</source>
-        <translation type="unfinished"></translation>
+        <translation>acvDistrict Exchangeacv</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="111"/>
         <source>Location Exchange</source>
-        <translation type="unfinished"></translation>
+        <translation>acwLocation Exchangeacw</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="111"/>
         <source>Descriptive Location Exchange</source>
-        <translation type="unfinished"></translation>
+        <translation>acxDescriptive Location Exchangeacx</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="112"/>
         <source>Station QTH Line 1</source>
-        <translation type="unfinished"></translation>
+        <translation>acyStation QTH Line 1acy</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="112"/>
         <source>Address line 1/2 of station</source>
-        <translation type="unfinished"></translation>
+        <translation>aczAddress line 1/2 of stationacz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="113"/>
         <source>Station QTH Line 2</source>
-        <translation type="unfinished"></translation>
+        <translation>adaStation QTH Line 2ada</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="113"/>
         <source>Address line 2/2 of station</source>
-        <translation type="unfinished"></translation>
+        <translation>adbAddress line 2/2 of stationadb</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="114"/>
         <source>QTH Height ASL (metres)</source>
-        <translation type="unfinished"></translation>
+        <translation>adcQTH Height ASL (metres)adc</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="114"/>
         <source>QTH height ASL (metres)</source>
-        <translation type="unfinished"></translation>
+        <translation>addQTH height ASL (metres)add</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="117"/>
         <source>Transmitter Power</source>
-        <translation type="unfinished"></translation>
+        <translation>adeTransmitter Powerade</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="117"/>
         <source>Transmit Power (Watts)</source>
-        <translation type="unfinished"></translation>
+        <translation>adfTransmit Power (Watts)adf</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="118"/>
         <source>Transmit Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>adgTransmit Equipmentadg</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="119"/>
         <source>Receive Equipment</source>
-        <translation type="unfinished"></translation>
+        <translation>adhReceive Equipmentadh</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="120"/>
         <source>Antenna details</source>
-        <translation type="unfinished"></translation>
+        <translation>adiAntenna detailsadi</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="121"/>
         <source>Antenna Height AGL (metres)</source>
-        <translation type="unfinished"></translation>
+        <translation>adjAntenna Height AGL (metres)adj</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="122"/>
         <source>Antenna Bearing Offset</source>
-        <translation type="unfinished"></translation>
+        <translation>adkAntenna Bearing Offsetadk</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="122"/>
         <source>Amount to offset antenna bearings</source>
-        <translation type="unfinished"></translation>
+        <translation>adlAmount to offset antenna bearingsadl</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="123"/>
         <source>Radio in Rig Control</source>
-        <translation type="unfinished"></translation>
+        <translation>admRadio in Rig Controladm</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="124"/>
         <source>Rotator in Rotator Control</source>
-        <translation type="unfinished"></translation>
+        <translation>adnRotator in Rotator Controladn</translation>
     </message>
 </context>
 <context>
@@ -478,17 +478,17 @@
     <message>
         <location filename="../Calendar.cpp" line="19"/>
         <source>&lt;VHF from VHFContests.xml&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>ado&lt;VHF from VHFContests.xml&gt;ado</translation>
     </message>
     <message>
         <location filename="../Calendar.cpp" line="20"/>
         <source>&lt;Microwave from MicroContestsxx.xml&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>adp&lt;Microwave from MicroContestsxx.xml&gt;adp</translation>
     </message>
     <message>
         <location filename="../Calendar.cpp" line="40"/>
         <source>Undefined</source>
-        <translation type="unfinished"></translation>
+        <translation>adqUndefinedadq</translation>
     </message>
 </context>
 <context>
@@ -496,12 +496,12 @@
     <message>
         <location filename="../callsigninputdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>adrDialogadr</translation>
     </message>
     <message>
         <location filename="../callsigninputdialog.ui" line="22"/>
         <source>Callsign</source>
-        <translation type="unfinished"></translation>
+        <translation>adsCallsignads</translation>
     </message>
 </context>
 <context>
@@ -509,17 +509,17 @@
     <message>
         <location filename="../ChatFrame.ui" line="14"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>adtFrameadt</translation>
     </message>
     <message>
         <location filename="../ChatFrame.ui" line="89"/>
         <source>Type here</source>
-        <translation type="unfinished"></translation>
+        <translation>aduType hereadu</translation>
     </message>
     <message>
         <location filename="../ChatFrame.ui" line="117"/>
         <source>Send</source>
-        <translation type="unfinished"></translation>
+        <translation>advSendadv</translation>
     </message>
 </context>
 <context>
@@ -527,17 +527,17 @@
     <message>
         <location filename="../ChatServer.cpp" line="10"/>
         <source>Available</source>
-        <translation type="unfinished"></translation>
+        <translation>adwAvailableadw</translation>
     </message>
     <message>
         <location filename="../ChatServer.cpp" line="11"/>
         <source>Not Available</source>
-        <translation type="unfinished"></translation>
+        <translation>adxNot Availableadx</translation>
     </message>
     <message>
         <location filename="../ChatServer.cpp" line="12"/>
         <source>No Contact</source>
-        <translation type="unfinished"></translation>
+        <translation>adyNo Contactady</translation>
     </message>
 </context>
 <context>
@@ -545,118 +545,118 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="14"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>adzFrameadz</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="31"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>aeaEnabledaea</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="38"/>
         <source>Hide when running</source>
-        <translation type="unfinished"></translation>
+        <translation>aebHide when runningaeb</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="81"/>
         <source>Show Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>aecShow Advancedaec</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="92"/>
         <source>App Instance Name</source>
-        <translation type="unfinished"></translation>
+        <translation>aedApp Instance Nameaed</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="109"/>
         <source>App Type</source>
-        <translation type="unfinished"></translation>
+        <translation>aeeApp Typeaee</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="136"/>
         <source>Delete Entry</source>
-        <translation type="unfinished"></translation>
+        <translation>aefDelete Entryaef</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="145"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>aegAdvancedaeg</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="156"/>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>aehActionaeh</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="177"/>
         <source>Run Locally</source>
-        <translation type="unfinished"></translation>
+        <translation>aeiRun Locallyaei</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="187"/>
         <source>Connect Remote</source>
-        <translation type="unfinished"></translation>
+        <translation>aejConnect Remoteaej</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="249"/>
         <source>Program</source>
-        <translation type="unfinished"></translation>
+        <translation>aekProgramaek</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="263"/>
         <location filename="../ConfigElementFrame.ui" line="312"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>ael...ael</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="277"/>
         <source>Parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>aemParametersaem</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="298"/>
         <source>Home Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>aenHome Directoryaen</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="333"/>
         <source>Leave the app name and/or the server name empty to get information from any app on a server, any server, or any app on any server</source>
-        <translation type="unfinished"></translation>
+        <translation>aeoLeave the app name and/or the server name empty to get information from any app on a server, any server, or any app on any serveraeo</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="348"/>
         <source>Remote App Name</source>
-        <translation type="unfinished"></translation>
+        <translation>aepRemote App Nameaep</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="362"/>
         <source>Remote Server</source>
-        <translation type="unfinished"></translation>
+        <translation>aeqRemote Serveraeq</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.cpp" line="6"/>
         <source>&lt;Deleted&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>aer&lt;Deleted&gt;aer</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.cpp" line="158"/>
         <source>Minos Component Program</source>
-        <translation type="unfinished"></translation>
+        <translation>aesMinos Component Programaes</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.cpp" line="167"/>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>aetAll Filesaet</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.cpp" line="194"/>
         <source>Set Working Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>aeuSet Working Directoryaeu</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.cpp" line="234"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>aevLocalaev</translation>
     </message>
 </context>
 <context>
@@ -664,12 +664,12 @@
     <message>
         <location filename="../contest.cpp" line="1353"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
-        <translation type="unfinished"></translation>
+        <translation>aewScore: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8aew</translation>
     </message>
     <message>
         <location filename="../contest.cpp" line="1366"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
-        <translation type="unfinished"></translation>
+        <translation>aexScore: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14aex</translation>
     </message>
 </context>
 <context>
@@ -677,12 +677,12 @@
     <message>
         <location filename="../MultsImpl.cpp" line="481"/>
         <source>CT9 Country File</source>
-        <translation type="unfinished"></translation>
+        <translation>aeyCT9 Country Fileaey</translation>
     </message>
     <message>
         <location filename="../MultsImpl.cpp" line="568"/>
         <source>Failed to open %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>aezFailed to open %1 (%2)aez</translation>
     </message>
 </context>
 <context>
@@ -690,12 +690,12 @@
     <message>
         <location filename="../MultsImpl.cpp" line="662"/>
         <source>Country Synonym File</source>
-        <translation type="unfinished"></translation>
+        <translation>afaCountry Synonym Fileafa</translation>
     </message>
     <message>
         <location filename="../MultsImpl.cpp" line="682"/>
         <source>Synonym ranges no longer allowed : %1 for %2</source>
-        <translation type="unfinished"></translation>
+        <translation>afbSynonym ranges no longer allowed : %1 for %2afb</translation>
     </message>
 </context>
 <context>
@@ -703,42 +703,42 @@
     <message>
         <location filename="../DisplayContestContact.cpp" line="499"/>
         <source>DELETED</source>
-        <translation type="unfinished"></translation>
+        <translation>afcDELETEDafc</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="499"/>
         <source>LOCAL COMMENT</source>
-        <translation type="unfinished"></translation>
+        <translation>afdLOCAL COMMENTafd</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="499"/>
         <source>COMMENT FOR ADJUDICATOR</source>
-        <translation type="unfinished"></translation>
+        <translation>afeCOMMENT FOR ADJUDICATORafe</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="550"/>
         <source>MAN</source>
-        <translation type="unfinished"></translation>
+        <translation>affMANaff</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="620"/>
         <source>DEL</source>
-        <translation type="unfinished"></translation>
+        <translation>afgDELafg</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="623"/>
         <source>N/S</source>
-        <translation type="unfinished"></translation>
+        <translation>afhN/Safh</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="630"/>
         <source>DUP</source>
-        <translation type="unfinished"></translation>
+        <translation>afiDUPafi</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="711"/>
         <source>UNFILLED CONTACT </source>
-        <translation type="unfinished"></translation>
+        <translation>afjUNFILLED CONTACT afj</translation>
     </message>
 </context>
 <context>
@@ -746,79 +746,79 @@
     <message>
         <location filename="../dxspotdatamodel.cpp" line="44"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>afkUTCafk</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="46"/>
         <source>Freq</source>
-        <translation type="unfinished"></translation>
+        <translation>aflFreqafl</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="48"/>
         <source>Dx</source>
-        <translation type="unfinished"></translation>
+        <translation>afmDxafm</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="50"/>
         <location filename="../dxspotdatamodel.cpp" line="60"/>
         <source>Wkd</source>
-        <translation type="unfinished"></translation>
+        <translation>afnWkdafn</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="52"/>
         <source>Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>afoModeafo</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="54"/>
         <location filename="../dxspotdatamodel.cpp" line="64"/>
         <source>Loc</source>
-        <translation type="unfinished"></translation>
+        <translation>afpLocafp</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="56"/>
         <source>Dist</source>
-        <translation type="unfinished"></translation>
+        <translation>afqDistafq</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="58"/>
         <source>Brg</source>
-        <translation type="unfinished"></translation>
+        <translation>afrBrgafr</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="62"/>
         <source>Spotter</source>
-        <translation type="unfinished"></translation>
+        <translation>afsSpotterafs</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="66"/>
         <source>Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>aftCommentaft</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="68"/>
         <source>Band Mask</source>
-        <translation type="unfinished"></translation>
+        <translation>afuBand Maskafu</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="70"/>
         <source>mode Mask</source>
-        <translation type="unfinished"></translation>
+        <translation>afvmode Maskafv</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="72"/>
         <source>Spot to Mem Flag</source>
-        <translation type="unfinished"></translation>
+        <translation>afwSpot to Mem Flagafw</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="74"/>
         <source>Prop Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>afxProp Modeafx</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="89"/>
         <source>Mem</source>
-        <translation type="unfinished"></translation>
+        <translation>afyMemafy</translation>
     </message>
 </context>
 <context>
@@ -829,7 +829,10 @@
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation type="unfinished"></translation>
+        <translation>afzFrequency has invalid characters or missing periods.<byte value="xd"/>
+<byte value="xd"/>
+The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
+afz</translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="16"/>
@@ -837,7 +840,10 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation type="unfinished"></translation>
+        <translation>agaRadio Frequency has invalid characters or missing periods.<byte value="xd"/>
+<byte value="xd"/>
+The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
+aga</translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="17"/>
@@ -845,7 +851,10 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation type="unfinished"></translation>
+        <translation>agbTarget Frequency has invalid characters or missing periods.<byte value="xd"/>
+<byte value="xd"/>
+The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
+agb</translation>
     </message>
 </context>
 <context>
@@ -853,7 +862,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../MultsImpl.cpp" line="70"/>
         <source>prefix synonyms file</source>
-        <translation type="unfinished"></translation>
+        <translation>agcprefix synonyms fileagc</translation>
     </message>
 </context>
 <context>
@@ -861,79 +870,79 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../helpbrowser.ui" line="14"/>
         <source>Help Browser</source>
-        <translation type="unfinished"></translation>
+        <translation>agdHelp Browseragd</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="28"/>
         <source>Contents</source>
-        <translation type="unfinished"></translation>
+        <translation>ageContentsage</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="50"/>
         <source>Index</source>
-        <translation type="unfinished"></translation>
+        <translation>agfIndexagf</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="67"/>
         <source>Look for:</source>
-        <translation type="unfinished"></translation>
+        <translation>aggLook for:agg</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="88"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>aghCloseagh</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="103"/>
         <source>Back</source>
-        <translation type="unfinished"></translation>
+        <translation>agiBackagi</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="106"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>agjLeftagj</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="119"/>
         <source>Forward</source>
-        <translation type="unfinished"></translation>
+        <translation>agkForwardagk</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="122"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>aglRightagl</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="132"/>
         <location filename="../helpbrowser.ui" line="135"/>
         <source>Zoom In</source>
-        <translation type="unfinished"></translation>
+        <translation>agmZoom Inagm</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="138"/>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>agnDownagn</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="148"/>
         <location filename="../helpbrowser.ui" line="151"/>
         <source>Zoom Out</source>
-        <translation type="unfinished"></translation>
+        <translation>agoZoom Outago</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="154"/>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>agpUpagp</translation>
     </message>
     <message>
         <location filename="../helpbrowser.cpp" line="84"/>
         <source>Choose</source>
-        <translation type="unfinished"></translation>
+        <translation>agqChooseagq</translation>
     </message>
     <message>
         <location filename="../helpbrowser.cpp" line="84"/>
         <source>Select topic for: </source>
-        <translation type="unfinished"></translation>
+        <translation>agrSelect topic for: agr</translation>
     </message>
 </context>
 <context>
@@ -941,12 +950,12 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../locatorinputdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>agsDialogags</translation>
     </message>
     <message>
         <location filename="../locatorinputdialog.ui" line="22"/>
         <source>Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>agtLocatoragt</translation>
     </message>
 </context>
 <context>
@@ -954,222 +963,222 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../minoskeyboard.ui" line="14"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>aguFrameagu</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="28"/>
         <source>Esc</source>
-        <translation type="unfinished"></translation>
+        <translation>agvEscagv</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="48"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation>agw1agw</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="55"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation>agx2agx</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="62"/>
         <source>3</source>
-        <translation type="unfinished"></translation>
+        <translation>agy3agy</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="69"/>
         <source>4</source>
-        <translation type="unfinished"></translation>
+        <translation>agz4agz</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="76"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation>aha5aha</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="83"/>
         <source>6</source>
-        <translation type="unfinished"></translation>
+        <translation>ahb6ahb</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="90"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation>ahc7ahc</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="97"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation>ahd8ahd</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="104"/>
         <source>9</source>
-        <translation type="unfinished"></translation>
+        <translation>ahe9ahe</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="111"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation>ahf0ahf</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="131"/>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>ahgBackspaceahg</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="155"/>
         <source>Q</source>
-        <translation type="unfinished"></translation>
+        <translation>ahhQahh</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="162"/>
         <source>W</source>
-        <translation type="unfinished"></translation>
+        <translation>ahiWahi</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="169"/>
         <source>E</source>
-        <translation type="unfinished"></translation>
+        <translation>ahjEahj</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="176"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>ahkRahk</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="183"/>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation>ahlTahl</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="190"/>
         <source>Y</source>
-        <translation type="unfinished"></translation>
+        <translation>ahmYahm</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="197"/>
         <source>U</source>
-        <translation type="unfinished"></translation>
+        <translation>ahnUahn</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="204"/>
         <source>I</source>
-        <translation type="unfinished"></translation>
+        <translation>ahoIaho</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="211"/>
         <source>O</source>
-        <translation type="unfinished"></translation>
+        <translation>ahpOahp</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="218"/>
         <source>P</source>
-        <translation type="unfinished"></translation>
+        <translation>ahqPahq</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="238"/>
         <source>Del</source>
-        <translation type="unfinished"></translation>
+        <translation>ahrDelahr</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="262"/>
         <source>A</source>
-        <translation type="unfinished"></translation>
+        <translation>ahsAahs</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="269"/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>ahtSaht</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="276"/>
         <source>D</source>
-        <translation type="unfinished"></translation>
+        <translation>ahuDahu</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="283"/>
         <source>F</source>
-        <translation type="unfinished"></translation>
+        <translation>ahvFahv</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="290"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation>ahwGahw</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="297"/>
         <source>H</source>
-        <translation type="unfinished"></translation>
+        <translation>ahxHahx</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="304"/>
         <source>J</source>
-        <translation type="unfinished"></translation>
+        <translation>ahyJahy</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="311"/>
         <source>K</source>
-        <translation type="unfinished"></translation>
+        <translation>ahzKahz</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="318"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>aiaLaia</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="355"/>
         <source>Z</source>
-        <translation type="unfinished"></translation>
+        <translation>aibZaib</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="362"/>
         <source>X</source>
-        <translation type="unfinished"></translation>
+        <translation>aicXaic</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="369"/>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>aidCaid</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="376"/>
         <source>V</source>
-        <translation type="unfinished"></translation>
+        <translation>aieVaie</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="383"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>aifBaif</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="390"/>
         <source>N</source>
-        <translation type="unfinished"></translation>
+        <translation>aigNaig</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="397"/>
         <source>M</source>
-        <translation type="unfinished"></translation>
+        <translation>aihMaih</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="421"/>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>aiiTabaii</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="441"/>
         <source>Space Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>aijSpace Baraij</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="461"/>
         <source>/</source>
-        <translation type="unfinished"></translation>
+        <translation>aik/aik</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="468"/>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation>ailReturnail</translation>
     </message>
 </context>
 <context>
@@ -1177,7 +1186,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../MinosParameters.cpp" line="24"/>
         <source>MinosParameters not initialised</source>
-        <translation type="unfinished"></translation>
+        <translation>aimMinosParameters not initialisedaim</translation>
     </message>
 </context>
 <context>
@@ -1185,72 +1194,72 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../TreeUtils.cpp" line="18"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>ainUTCain</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="19"/>
         <source>Callsign</source>
-        <translation type="unfinished"></translation>
+        <translation>aioCallsignaio</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="20"/>
         <source>RepTx</source>
-        <translation type="unfinished"></translation>
+        <translation>aipRepTxaip</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="21"/>
         <source>SnTx</source>
-        <translation type="unfinished"></translation>
+        <translation>aiqSnTxaiq</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="22"/>
         <source>RepRx</source>
-        <translation type="unfinished"></translation>
+        <translation>airRepRxair</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="23"/>
         <source>SnRx</source>
-        <translation type="unfinished"></translation>
+        <translation>aisSnRxais</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="24"/>
         <source>Loc</source>
-        <translation type="unfinished"></translation>
+        <translation>aitLocait</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="25"/>
         <source>dist</source>
-        <translation type="unfinished"></translation>
+        <translation>aiudistaiu</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="26"/>
         <source>brg</source>
-        <translation type="unfinished"></translation>
+        <translation>aivbrgaiv</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="27"/>
         <source>Exchange</source>
-        <translation type="unfinished"></translation>
+        <translation>aiwExchangeaiw</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="28"/>
         <source>Comments</source>
-        <translation type="unfinished"></translation>
+        <translation>aixCommentsaix</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="29"/>
         <source>Freq</source>
-        <translation type="unfinished"></translation>
+        <translation>aiyFreqaiy</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="30"/>
         <source>Rot Heading</source>
-        <translation type="unfinished"></translation>
+        <translation>aizRot Headingaiz</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="31"/>
         <source>Rig</source>
-        <translation type="unfinished"></translation>
+        <translation>ajaRigaja</translation>
     </message>
 </context>
 <context>
@@ -1259,92 +1268,92 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
         <location filename="../MatchTreeFrame.cpp" line="152"/>
         <location filename="../MatchTreeFrame.cpp" line="170"/>
         <source>UTC</source>
-        <translation type="unfinished"></translation>
+        <translation>ajbUTCajb</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="153"/>
         <location filename="../MatchTreeFrame.cpp" line="171"/>
         <location filename="../MatchTreeFrame.cpp" line="184"/>
         <source>Callsign</source>
-        <translation type="unfinished"></translation>
+        <translation>ajcCallsignajc</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="154"/>
         <source>RepTx</source>
-        <translation type="unfinished"></translation>
+        <translation>ajdRepTxajd</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="155"/>
         <source>SnTx</source>
-        <translation type="unfinished"></translation>
+        <translation>ajeSnTxaje</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="156"/>
         <source>RepRx</source>
-        <translation type="unfinished"></translation>
+        <translation>ajfRepRxajf</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="157"/>
         <source>SnRx</source>
-        <translation type="unfinished"></translation>
+        <translation>ajgSnRxajg</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="158"/>
         <location filename="../MatchTreeFrame.cpp" line="172"/>
         <location filename="../MatchTreeFrame.cpp" line="185"/>
         <source>Loc</source>
-        <translation type="unfinished"></translation>
+        <translation>ajhLocajh</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="159"/>
         <location filename="../MatchTreeFrame.cpp" line="173"/>
         <location filename="../MatchTreeFrame.cpp" line="186"/>
         <source>dist</source>
-        <translation type="unfinished"></translation>
+        <translation>ajidistaji</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="160"/>
         <location filename="../MatchTreeFrame.cpp" line="174"/>
         <location filename="../MatchTreeFrame.cpp" line="187"/>
         <source>brg</source>
-        <translation type="unfinished"></translation>
+        <translation>ajjbrgajj</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="161"/>
         <location filename="../MatchTreeFrame.cpp" line="175"/>
         <location filename="../MatchTreeFrame.cpp" line="188"/>
         <source>Exchange</source>
-        <translation type="unfinished"></translation>
+        <translation>ajkExchangeajk</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="162"/>
         <location filename="../MatchTreeFrame.cpp" line="176"/>
         <location filename="../MatchTreeFrame.cpp" line="189"/>
         <source>Comments</source>
-        <translation type="unfinished"></translation>
+        <translation>ajlCommentsajl</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="163"/>
         <location filename="../MatchTreeFrame.cpp" line="177"/>
         <source>Freq</source>
-        <translation type="unfinished"></translation>
+        <translation>ajmFreqajm</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="164"/>
         <location filename="../MatchTreeFrame.cpp" line="178"/>
         <source>Rot Heading</source>
-        <translation type="unfinished"></translation>
+        <translation>ajnRot Headingajn</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="165"/>
         <location filename="../MatchTreeFrame.cpp" line="179"/>
         <source>Rig</source>
-        <translation type="unfinished"></translation>
+        <translation>ajoRigajo</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="453"/>
         <source>Current contest: </source>
-        <translation type="unfinished"></translation>
+        <translation>ajpCurrent contest: ajp</translation>
     </message>
 </context>
 <context>
@@ -1352,22 +1361,22 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../rotatorcommon.cpp" line="15"/>
         <source>&amp;Read</source>
-        <translation type="unfinished"></translation>
+        <translation>ajq&amp;Readajq</translation>
     </message>
     <message>
         <location filename="../rotatorcommon.cpp" line="16"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>ajr&amp;Newajr</translation>
     </message>
     <message>
         <location filename="../rotatorcommon.cpp" line="17"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>ajs&amp;Editajs</translation>
     </message>
     <message>
         <location filename="../rotatorcommon.cpp" line="18"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>ajt&amp;Clearajt</translation>
     </message>
 </context>
 <context>
@@ -1375,33 +1384,34 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../rotpresetdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>ajuDialogaju</translation>
     </message>
     <message>
         <location filename="../rotpresetdialog.ui" line="24"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>ajvNameajv</translation>
     </message>
     <message>
         <location filename="../rotpresetdialog.ui" line="38"/>
         <source>Bearing</source>
-        <translation type="unfinished"></translation>
+        <translation>ajwBearingajw</translation>
     </message>
     <message>
         <location filename="../rotpresetdialog.cpp" line="30"/>
         <source>Rotator Preset %1 - %2</source>
-        <translation type="unfinished"></translation>
+        <translation>ajxRotator Preset %1 - %2ajx</translation>
     </message>
     <message>
         <location filename="../rotpresetdialog.cpp" line="70"/>
         <source>Bearing Out of range</source>
-        <translation type="unfinished"></translation>
+        <translation>ajyBearing Out of rangeajy</translation>
     </message>
     <message>
         <location filename="../rotpresetdialog.cpp" line="71"/>
         <source>Bearing: %1, out of range, should be 0-360 
 Please enter another bearing</source>
-        <translation type="unfinished"></translation>
+        <translation>ajzBearing: %1, out of range, should be 0-360 
+Please enter another bearingajz</translation>
     </message>
 </context>
 <context>
@@ -1409,7 +1419,7 @@ Please enter another bearing</source>
     <message>
         <location filename="../rigcommon.h" line="20"/>
         <source>N/A</source>
-        <translation type="unfinished"></translation>
+        <translation>akaN/Aaka</translation>
     </message>
 </context>
 <context>
@@ -1417,75 +1427,75 @@ Please enter another bearing</source>
     <message>
         <location filename="../StartConfig.ui" line="14"/>
         <source>Minos App Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>akbMinos App Configurationakb</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="42"/>
         <source>Autostart</source>
-        <translation type="unfinished"></translation>
+        <translation>akcAutostartakc</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="62"/>
         <source>Save and Start Apps</source>
-        <translation type="unfinished"></translation>
+        <translation>akdSave and Start Appsakd</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="69"/>
         <source>Stop Apps</source>
-        <translation type="unfinished"></translation>
+        <translation>akeStop Appsake</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="76"/>
         <source>New Entry</source>
-        <translation type="unfinished"></translation>
+        <translation>akfNew Entryakf</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="87"/>
         <source>Server Name</source>
-        <translation type="unfinished"></translation>
+        <translation>akgServer Nameakg</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="101"/>
         <source>Set Server Name</source>
-        <translation type="unfinished"></translation>
+        <translation>akhSet Server Nameakh</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="112"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>akiCancelaki</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="132"/>
         <source>Save and Close</source>
-        <translation type="unfinished"></translation>
+        <translation>akjSave and Closeakj</translation>
     </message>
 </context>
 <context>
     <name>ThisLogMatcher</name>
     <message>
-        <location filename="../MatchThread.cpp" line="739"/>
+        <location filename="../MatchThread.cpp" line="740"/>
         <source>Possible</source>
-        <translation type="unfinished"></translation>
+        <translation>akkPossibleakk</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="742"/>
+        <location filename="../MatchThread.cpp" line="743"/>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>aklCountryakl</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="746"/>
+        <location filename="../MatchThread.cpp" line="747"/>
         <source>District</source>
-        <translation type="unfinished"></translation>
+        <translation>akmDistrictakm</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="750"/>
+        <location filename="../MatchThread.cpp" line="751"/>
         <source>Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>aknLocatorakn</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="752"/>
+        <location filename="../MatchThread.cpp" line="753"/>
         <source> - %1%2 %3 matches</source>
-        <translation type="unfinished"></translation>
+        <translation>ako - %1%2 %3 matchesako</translation>
     </message>
 </context>
 <context>
@@ -1493,122 +1503,122 @@ Please enter another bearing</source>
     <message>
         <location filename="../validators.cpp" line="18"/>
         <source>null validator failed</source>
-        <translation type="unfinished"></translation>
+        <translation>akpnull validator failedakp</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="19"/>
         <source>Invalid time</source>
-        <translation type="unfinished"></translation>
+        <translation>akqInvalid timeakq</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="20"/>
         <source>Invalid date</source>
-        <translation type="unfinished"></translation>
+        <translation>akrInvalid dateakr</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="21"/>
         <source>Invalid power(0.01 - 1000 W)</source>
-        <translation type="unfinished"></translation>
+        <translation>aksInvalid power(0.01 - 1000 W)aks</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="22"/>
         <source>Invalid locator</source>
-        <translation type="unfinished"></translation>
+        <translation>aktInvalid locatorakt</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="23"/>
         <source>Invalid Serial</source>
-        <translation type="unfinished"></translation>
+        <translation>akuInvalid Serialaku</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="24"/>
         <source>Invalid RS(T)</source>
-        <translation type="unfinished"></translation>
+        <translation>akvInvalid RS(T)akv</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="25"/>
         <source>Invalid power(-40 - +40 dBW)</source>
-        <translation type="unfinished"></translation>
+        <translation>akwInvalid power(-40 - +40 dBW)akw</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="26"/>
         <source>Invalid district</source>
-        <translation type="unfinished"></translation>
+        <translation>akxInvalid districtakx</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="27"/>
         <source>Invalid band</source>
-        <translation type="unfinished"></translation>
+        <translation>akyInvalid bandaky</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="28"/>
         <source>!!! Callsign not validated !!!</source>
-        <translation type="unfinished"></translation>
+        <translation>akz!!! Callsign not validated !!!akz</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="29"/>
         <source>!!! No Callsign present !!!</source>
-        <translation type="unfinished"></translation>
+        <translation>ala!!! No Callsign present !!!ala</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="30"/>
         <source>!!! Duplicate Callsign !!!</source>
-        <translation type="unfinished"></translation>
+        <translation>alb!!! Duplicate Callsign !!!alb</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="31"/>
         <source>Invalid Callsign!</source>
-        <translation type="unfinished"></translation>
+        <translation>alcInvalid Callsign!alc</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="32"/>
         <source>No RX Serial Number</source>
-        <translation type="unfinished"></translation>
+        <translation>aldNo RX Serial Numberald</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="33"/>
         <source>Locator probably not within country.</source>
-        <translation type="unfinished"></translation>
+        <translation>aleLocator probably not within country.ale</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="36"/>
         <source>No Locator</source>
-        <translation type="unfinished"></translation>
+        <translation>alfNo Locatoralf</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="37"/>
         <source>!!Loc not AA00AA to RR99XX!!</source>
-        <translation type="unfinished"></translation>
+        <translation>alg!!Loc not AA00AA to RR99XX!!alg</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="38"/>
         <source>Invalid district multiplier</source>
-        <translation type="unfinished"></translation>
+        <translation>alhInvalid district multiplieralh</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="39"/>
         <source>QTH required</source>
-        <translation type="unfinished"></translation>
+        <translation>aliQTH requiredali</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="41"/>
         <source>Unknown Country</source>
-        <translation type="unfinished"></translation>
+        <translation>aljUnknown Countryalj</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="42"/>
         <source>!!! Non Scoring Contact !!!</source>
-        <translation type="unfinished"></translation>
+        <translation>alk!!! Non Scoring Contact !!!alk</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="43"/>
         <source>!!! Comment Only !!!</source>
-        <translation type="unfinished"></translation>
+        <translation>all!!! Comment Only !!!all</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="44"/>
         <source>!!! DELETED !!!</source>
-        <translation type="unfinished"></translation>
+        <translation>alm!!! DELETED !!!alm</translation>
     </message>
 </context>
 <context>
@@ -1616,7 +1626,7 @@ Please enter another bearing</source>
     <message>
         <location filename="../checkmodeagainstfreq.cpp" line="38"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>alnNonealn</translation>
     </message>
 </context>
 <context>
@@ -1624,17 +1634,17 @@ Please enter another bearing</source>
     <message>
         <location filename="../clustercommon.cpp" line="7"/>
         <source>Available</source>
-        <translation type="unfinished"></translation>
+        <translation>aloAvailablealo</translation>
     </message>
     <message>
         <location filename="../clustercommon.cpp" line="8"/>
         <source>Not Available</source>
-        <translation type="unfinished"></translation>
+        <translation>alpNot Availablealp</translation>
     </message>
     <message>
         <location filename="../clustercommon.cpp" line="9"/>
         <source>No Contact</source>
-        <translation type="unfinished"></translation>
+        <translation>alqNo Contactalq</translation>
     </message>
 </context>
 </TS>

@@ -1481,27 +1481,27 @@ Veuillez entrer un autre direction  </translation>
 <context>
     <name>ThisLogMatcher</name>
     <message>
-        <location filename="../MatchThread.cpp" line="739"/>
+        <location filename="../MatchThread.cpp" line="740"/>
         <source>Possible</source>
         <translation>Possible</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="742"/>
+        <location filename="../MatchThread.cpp" line="743"/>
         <source>Country</source>
         <translation>Pays</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="746"/>
+        <location filename="../MatchThread.cpp" line="747"/>
         <source>District</source>
         <translation>District</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="750"/>
+        <location filename="../MatchThread.cpp" line="751"/>
         <source>Locator</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="752"/>
+        <location filename="../MatchThread.cpp" line="753"/>
         <source> - %1%2 %3 matches</source>
         <translation> - %1%2 %3 correspondances  </translation>
     </message>

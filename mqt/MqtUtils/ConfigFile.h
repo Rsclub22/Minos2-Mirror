@@ -109,6 +109,8 @@ public:  		// User declarations
 
     ~MinosConfig();
 
+    static const char * appNone;
+
     void reset();
 
     QVector <QSharedPointer<RunConfigElement> > elelist;
