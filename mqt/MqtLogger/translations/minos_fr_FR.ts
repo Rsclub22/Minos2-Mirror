@@ -1069,136 +1069,136 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
 <context>
     <name>DecodesModel</name>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="55"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="47"/>
         <source>Client</source>
         <translatorcomment>NOT USED?</translatorcomment>
         <translation>WHAT Client</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="57"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="49"/>
         <source>Time</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="58"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="50"/>
         <source>Snr</source>
         <translation>SNR</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="59"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="51"/>
         <source>DT</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>DT</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="60"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="52"/>
         <source>DF</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>DF</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="61"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="53"/>
         <source>Md</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>What is Md</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="62"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="54"/>
         <source>Confidence</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>Confiance -  WHAT?</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="63"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="55"/>
         <source>Live</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>What&apos;s Live</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="65"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="57"/>
         <source>Seq</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>???</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="66"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="58"/>
         <source>points</source>
         <translation>Points</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="67"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="59"/>
         <source>brg</source>
         <translation>Relèvement</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="68"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="60"/>
         <source>distance</source>
         <translatorcomment>NOT USED?</translatorcomment>
         <translation>Distance</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="70"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="62"/>
         <source>Call</source>
         <translatorcomment>NOT USED?</translatorcomment>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="71"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="63"/>
         <source>Grid</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="72"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="64"/>
         <source>To Call</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>???</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="73"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="65"/>
         <source>To Grid</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>???</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="74"/>
-        <location filename="../WsjtxDecodesModel.cpp" line="291"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="66"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="281"/>
         <source>Best</source>
         <translation>Meilleur</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="76"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="68"/>
         <source>Message</source>
         <translation>Message</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="83"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="75"/>
         <source>low</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>Bas</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="83"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="75"/>
         <source>high</source>
         <translatorcomment>NOT USED</translatorcomment>
         <translation>Haute</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="88"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="80"/>
         <source>no</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="88"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="80"/>
         <source>yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="283"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="273"/>
         <source>(old)</source>
         <translation>(Vieux)</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="289"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="279"/>
         <source>Auto</source>
         <translation>WHAT</translation>
     </message>
