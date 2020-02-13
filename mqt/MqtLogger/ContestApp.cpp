@@ -498,6 +498,7 @@ void TContestApp::writeListsList()
                 if (ct)
                 {
                     cs->slotno = newSlotNo;
+                    ct->setSlotNo(newSlotNo);
                     newListSlotList[newSlotNo] = cs;
                     newSlotNo++;
                 }

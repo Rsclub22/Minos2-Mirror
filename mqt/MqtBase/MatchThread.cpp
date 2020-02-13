@@ -391,7 +391,6 @@ Matcher::Matcher() :
 }
 Matcher::~Matcher()
 {
-   clearmatchall();
 }
 
 void Matcher::clearmatchall( )
@@ -506,7 +505,9 @@ void Matcher::initMatch( )
 ThisLogMatcher::ThisLogMatcher()
 {}
 ThisLogMatcher::~ThisLogMatcher()
-{}
+{
+    clearmatchall();
+}
 void ThisLogMatcher::matchDistrict( const QString &extraText )
 {
    TMatchThread::getMatchThread() ->matchDistrict( extraText );   // scroll to
@@ -890,7 +891,9 @@ void ThisLogMatcher::replaceList(  )
 OtherLogMatcher::OtherLogMatcher()
 {}
 OtherLogMatcher::~OtherLogMatcher()
-{}
+{
+    clearmatchall();
+}
 void OtherLogMatcher::matchDistrict( const QString &extraText )
 {
    TMatchThread::getMatchThread() ->matchDistrict( extraText );   // scroll to
@@ -1114,25 +1117,26 @@ void OtherLogMatcher::replaceList( )
 ListMatcher::ListMatcher()
 {}
 ListMatcher::~ListMatcher()
-{}
+{
+    clearmatchall();
+}
 void ListMatcher::matchDistrict( const QString &/*extraText*/ )
 {}
 void ListMatcher::matchCountry( const QString &/*cs*/ )
 {}
-void ListMatcher::addMatch( ListContact *cct, ContactList * ccon )
+void ListMatcher::addMatch( ListContact *lct, ContactList * clist )
 {
-       if ( !cct )
+       if ( !lct )
           return ;
 
        ContestMatchList &contestMatchList = matchCollection->contestMatchList;
-       MapWrapper<BaseMatchContest> wmc(new MatchContactList);
 
-       //trace(QString("Adding call %1 to list %2").arg(cct->cs.fullCall.getValue()).arg(ccon->cfileName));
+       MapWrapper<BaseMatchContest> wmc(new MatchContactList);
 
        QSharedPointer<BaseMatchContest> found;
        foreach(MapWrapper<BaseMatchContest> test, contestMatchList)
        {
-           if (test.wt->getContactList() == ccon)
+           if (test.wt->getContactList() == clist)
            {
                 found = test.wt;
                 break;
@@ -1140,16 +1144,16 @@ void ListMatcher::addMatch( ListContact *cct, ContactList * ccon )
        }
        if (!found)
        {
-           wmc.wt->matchedContest = ccon;
+           wmc.wt->matchedContest = clist;
            contestMatchList.insert(wmc, wmc);
        }
        found.reset();
        foreach(MapWrapper<BaseMatchContest> test, contestMatchList)
        {
-           if (test.wt->getContactList() == ccon)
+           if (test.wt->getContactList() == clist)
            {
                 found = test.wt;
-                MapWrapper<MatchContact> mct(new MatchListContact( ccon, cct ));
+                MapWrapper<MatchContact> mct(new MatchListContact( clist, lct ));
                 found->contactMatchList.insert( mct, mct );
                 break;
            }
@@ -1214,12 +1218,13 @@ bool ListMatcher::idleMatch( int limit )
            // go to the next ContestLog
            contestIndex++;
            contactIndex = 0;
-
            return true;
          }
          ListContact *cct = ccon->pcontactAt( contactIndex++ );
          if ( !cct )
+         {
             return true;
+         }
 
          // now do the match
 // And why aren't we doing a QTH match here?
@@ -1268,6 +1273,7 @@ bool ListMatcher::idleMatch( int limit )
              if ( csmatch && locmatch && qthmatch )
              {
                 addMatch( cct, ccon );
+
                 if ( matchCollection->contactCount() > MATCH_LIM )
                    break;
              }

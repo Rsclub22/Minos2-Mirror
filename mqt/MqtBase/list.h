@@ -41,6 +41,10 @@ class ContactList : public BaseLogList
       }
       ListContact *pcontactAt(int offset );
       int getSlotNo() const{return slotno;}
+      void setSlotNo(int n)
+      {
+          slotno = n;
+      }
 };
 
 
