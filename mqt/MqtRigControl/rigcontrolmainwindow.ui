@@ -245,14 +245,14 @@
             <item row="1" column="1">
              <widget class="QLabel" name="label_9">
               <property name="text">
-               <string>2300 Mhz</string>
+               <string>2300 MHz</string>
               </property>
              </widget>
             </item>
             <item row="0" column="3">
              <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>70 Mhz</string>
+               <string>70 MHz</string>
               </property>
              </widget>
             </item>
@@ -282,7 +282,7 @@
             <item row="0" column="1">
              <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>50 Mhz</string>
+               <string>50 MHz</string>
               </property>
              </widget>
             </item>
@@ -312,7 +312,7 @@
             <item row="0" column="7">
              <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>432 Mhz</string>
+               <string>432 MHz</string>
               </property>
              </widget>
             </item>
@@ -333,7 +333,7 @@
             <item row="1" column="7">
              <widget class="QLabel" name="label_12">
               <property name="text">
-               <string>10 Ghz</string>
+               <string>10 GHz</string>
               </property>
              </widget>
             </item>

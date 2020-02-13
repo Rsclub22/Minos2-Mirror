@@ -936,7 +936,12 @@ void RotatorMainWindow::upDateAntenna()
 
             if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
             {
+<<<<<<< HEAD
                 QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
+=======
+                closeRotator();
+                QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure an antenna name and rotator model"));
+>>>>>>> b6b07c0cd04a61a53105c0dd4491026627db2509
                 return;
             }
 
@@ -1027,7 +1032,7 @@ void RotatorMainWindow::refreshAntenna()
         if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
         {
             closeRotator();
-            QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
+            QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure an antenna name and rotator model"));
             return;
         }
 
@@ -2027,7 +2032,7 @@ void RotatorMainWindow::initPresetButtons()
                      << ui->presetButton5 << ui->presetButton6 << ui->presetButton7 << ui->presetButton8 << ui->presetButton9;
 
     QStringList buttonLabels;
-    for (int i = 0; i < sizeof(RotPresetData::presetButtonLabels)/sizeof(const char *); i++)
+    for (unsigned int i = 0; i < sizeof(RotPresetData::presetButtonLabels)/sizeof(const char *); i++)
     {
         buttonLabels.append(RotPresetData::tr(RotPresetData::presetButtonLabels[i]));
     }

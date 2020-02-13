@@ -74,7 +74,7 @@
          <item>
           <widget class="QLabel" name="networkAddLbl1">
            <property name="text">
-            <string>Network Adress</string>
+            <string>Network Address</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -272,7 +272,7 @@
      <item>
       <widget class="QLabel" name="rigCtldNetworkAddLbl">
        <property name="text">
-        <string>Network Adress</string>
+        <string>Network Address</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

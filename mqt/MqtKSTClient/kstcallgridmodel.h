@@ -6,7 +6,7 @@
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
-enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
+enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscBearing, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
 
 class KstUser
 {
@@ -20,6 +20,7 @@ public:
     bool away = false;
     bool recent = false;
     int distance = -1;
+    int bearing = -1;
 
     bool operator< ( const KstUser& rhs ) const;
 
@@ -30,7 +31,8 @@ class KstCallGridModel: public QAbstractItemModel
 {
     Q_OBJECT
 
-    public:
+    void checkDistBear(QSharedPointer<KstUser> crec) const;
+public:
         QString locator;
         KstCallGridModel();
         virtual ~KstCallGridModel() override

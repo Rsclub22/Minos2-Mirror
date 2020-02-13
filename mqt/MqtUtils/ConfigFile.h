@@ -72,6 +72,7 @@ public:  		// User declarations
 
     void createProcess();
     void stopProcess();
+    void bounceProcess();
     void sendCommand(const QString & cmd);
     bool isRunning()
     {
@@ -108,6 +109,8 @@ public:  		// User declarations
 
     ~MinosConfig();
 
+    static const char * appNone;
+
     void reset();
 
     QVector <QSharedPointer<RunConfigElement> > elelist;
@@ -130,7 +133,7 @@ public:  		// User declarations
     bool anyRunning();
 
     void checkAllStopped();
-public slots:
+    void bounce();
     void start();
     void stop();
 

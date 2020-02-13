@@ -240,12 +240,12 @@ Please enter a name for the radio</source>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="248"/>
-        <source>2300 Mhz</source>
+        <source>2300 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="255"/>
-        <source>70 Mhz</source>
+        <source>70 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -255,7 +255,7 @@ Please enter a name for the radio</source>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="285"/>
-        <source>50 Mhz</source>
+        <source>50 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -265,7 +265,7 @@ Please enter a name for the radio</source>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="315"/>
-        <source>432 Mhz</source>
+        <source>432 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -280,7 +280,7 @@ Please enter a name for the radio</source>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="336"/>
-        <source>10 Ghz</source>
+        <source>10 GHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1154,7 +1154,7 @@ Please enter another name</source>
     <message>
         <location filename="../rigsetupform.ui" line="77"/>
         <location filename="../rigsetupform.ui" line="275"/>
-        <source>Network Adress</source>
+        <source>Network Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

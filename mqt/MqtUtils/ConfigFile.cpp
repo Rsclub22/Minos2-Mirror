@@ -13,7 +13,7 @@ static bool terminated = false;
 
 QString RunLocal("RunLocal");
 QString ConnectServer("ConnectServer");
-
+const char * MinosConfig::appNone = QT_TR_NOOP("None");
 
 /*static*/
 MinosConfig *MinosConfig::thisDM = nullptr;
@@ -147,7 +147,7 @@ void RunConfigElement::createProcess()
         QString wdir = rundir;
         runner->setWorkingDirectory(wdir);
 
-        if (appType != "None" )
+        if (appType != MinosConfig::tr(MinosConfig::appNone) )
         {
             QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
             env.insert("MQTRPCNAME", name); // Add an environment variable for the RPC name to use
@@ -179,10 +179,17 @@ void RunConfigElement::stopProcess()
         runner->terminate();
     }
 }
-
+void RunConfigElement::bounceProcess()
+{
+    if (runner)
+    {
+        stopping = false;
+        runner->terminate();
+    }
+}
 void RunConfigElement::sendCommand(const QString & cmd)
 {
-    if (runner && appType != "None" )
+    if (runner && appType != MinosConfig::tr(MinosConfig::appNone) )
     {
         QByteArray command = (cmd + "\n").toUtf8();
         qint64 res = runner->write( command );
@@ -363,6 +370,17 @@ void MinosConfig::stop()
       }
    }
 }
+void MinosConfig::bounce()
+{
+    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    {
+       if ( ( *i ) )
+       {
+          logMessage( "Bouncing subProcess", "" );
+          ( *i ) ->bounceProcess();
+       }
+    }
+}
 void MinosConfig::setThisServerName( const QString &circle )
 {
    thisServerName = circle;
@@ -398,7 +416,7 @@ QStringList MinosConfig::getAppTypes()
         apps.append(appConfigList[i].appType);
     }
     apps.sort();
-    apps.insert(0, "None");
+    apps.insert(0, tr(appNone));
     apps.removeDuplicates();
     return apps;
 }
@@ -573,7 +591,7 @@ QString MinosConfig::checkConfig()
                 {
                     reqErrs += ele->appType + tr(" Executable path does not exist\n\n");
                 }
-                if (ele->appType != "None" && !FileExists(ele->rundir + "/Configuration/MinosConfig.ini"))
+                if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.ini"))
                 {
                     reqErrs += ele->appType + tr(" Working directory is not valid - no Configuration/MinosConfig.ini\n\n");
                 }

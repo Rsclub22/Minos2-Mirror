@@ -16,7 +16,7 @@ class matchElement
       matchElement( );
       unsigned char set
          ( const QString & );
-      unsigned char checkGreater( const QString & );
+      unsigned char checkGreater( const QString &, QString &match_temp  );
       bool checkMatch( const QString & );
 };
 

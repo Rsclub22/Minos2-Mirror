@@ -134,6 +134,7 @@ private slots:
 
     void on_clearUserFilter_clicked();
 
+    void on_sectionMoved(int, int, int);
 private:
     Ui::KSTMainWindow *ui;
     void clearConnection();

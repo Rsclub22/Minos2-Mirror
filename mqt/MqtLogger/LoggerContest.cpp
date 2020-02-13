@@ -530,7 +530,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
 
    if (!next)
    {
-      MinosParameters::getMinosParameters() ->mshowMessage(tr("Attempt to insert after last contact - not allowed. Pease report a bug!"));
+      MinosParameters::getMinosParameters() ->mshowMessage(tr("Attempt to insert after last contact - not allowed. Please report a bug!"));
       return QSharedPointer<BaseContact>();
    }
    bool timenow = false;

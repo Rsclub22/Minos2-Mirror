@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>367</width>
+    <width>380</width>
     <height>349</height>
    </rect>
   </property>
@@ -38,7 +38,7 @@
            <item>
             <widget class="QCheckBox" name="_50MHzCheckBox">
              <property name="text">
-              <string>50 Mhz</string>
+              <string>50 MHz</string>
              </property>
             </widget>
            </item>

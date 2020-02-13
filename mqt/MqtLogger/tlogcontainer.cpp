@@ -245,6 +245,7 @@ void TLogContainer::closeEvent(QCloseEvent *event)
           TContestApp::getContestApp() ->closeListFile( ( *i ) ->slot );
        }
     }
+    MinosConfig::getMinosConfig() ->stop();
     closeContestApp();
 
     QWidget::closeEvent(event);
@@ -487,8 +488,6 @@ void TLogContainer::enableActions()
    NextUnfilledAction->setEnabled(f);
    MakeEntryAction->setEnabled(f);
    AppendAdifAction->setEnabled(f);
-
-   ManageListsAction->setEnabled( TContestApp::getContestApp() ->getOccupiedListSlotCount() > 0 );
 
    if ( ui->ContestPageControl->currentIndex() >= 0 )
    {
@@ -1157,6 +1156,12 @@ void TLogContainer::LanguageAcceptActionExecute()
 
     if (action)
     {
+        bool serverRunning = checkServerReady();
+        if (serverRunning)
+        {
+            MinosConfig::getMinosConfig() ->stop();
+        }
+
         if (lastLanguageSelected)
             lastLanguageSelected->setChecked(false);
         action->setChecked(true);
@@ -1171,6 +1176,10 @@ void TLogContainer::LanguageAcceptActionExecute()
                 switchTranslation(l.code);
                 break;
             }
+        }
+        if (serverRunning)
+        {
+            MinosConfig::getMinosConfig() ->bounce();
         }
     }
 }
@@ -1471,7 +1480,11 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
              QString curPath = contest->cfileName;
              setCurrentFile( curPath );
           }
+
+          // clear down matching, as it may have pointers to this contest
+          TMatchThread::FinishMatchThread();
           f->closeContest();    // which should close the contest
+          TMatchThread::InitialiseMatchThread();
 
           QWidget *tab = ui->ContestPageControl->widget(t);
           tab->deleteLater();
@@ -1535,7 +1548,7 @@ void TLogContainer::updateLayoutsMenu()
             QAction *act =  new QAction(this);
             if ((*i).name == defaultLayout)
             {
-                act->setText((*i).name + " " + tr(ScreenConfigManager::defLayoutText));
+                act->setText((*i).name + " " + ScreenConfigManager::tr(ScreenConfigManager::defLayoutText));
             }
             else
             {
@@ -1838,6 +1851,8 @@ void TLogContainer::preloadLists( )
     // get all the keys
     TContestApp::getContestApp() ->listsPreloadBundle.startGroup();
     QStringList slotlst = TContestApp::getContestApp() ->listsPreloadBundle.getProfileEntries();
+    slotlst.sort();
+
     QStringList pathlst;
     for ( int i = 0; i < slotlst.count(); i++ )
     {
@@ -1853,16 +1868,18 @@ void TLogContainer::preloadLists( )
         int slotno = slotlst[i].toInt() - 1;
         if ( slotno >= 0 )
         {
-            addListSlot( pathlst[ i ], slotno, true );
+            addListSlot( this, pathlst[ i ], i, true );
         }
     }
     TContestApp::getContestApp() ->listsPreloadBundle.endGroup();
+
+    TContestApp::getContestApp() ->writeListsList();
 }
 
-void TLogContainer::addListSlot( const QString &fname, int slotno, bool preload )
+void TLogContainer::addListSlot( QWidget *p, const QString &fname, int slotno, bool preload )
 {
 
-    MinosContestLoadDialog progress(this);
+    MinosContestLoadDialog progress(p);
    //create and show a progress splash screen
     progress.setLoadMessage(fname, false, true);
     progress.doShow();
@@ -1888,6 +1905,10 @@ void TLogContainer::addListSlot( const QString &fname, int slotno, bool preload 
 
 void TLogContainer::ListOpenActionExecute()
 {
+    doListOpenActionExecute(this);
+}
+void TLogContainer::doListOpenActionExecute(QWidget *p)
+{
     // first choose file
 
     QString InitialDir = getDefaultDirectory( true );
@@ -1898,7 +1919,7 @@ void TLogContainer::ListOpenActionExecute()
     QString Filter = tr("Contact list files (*.csl);;"
                      "All Files (*.*)") ;
 
-    QStringList fnames = QFileDialog::getOpenFileNames( this,
+    QStringList fnames = QFileDialog::getOpenFileNames( p,
                        tr("Open Archive List"),
                        InitialDir,
                        Filter
@@ -1907,7 +1928,7 @@ void TLogContainer::ListOpenActionExecute()
     for (int i = 0; i < fnames.size(); i++)
     {
          QString fname = fnames[i];
-         addListSlot( fname, -1, false );
+         addListSlot( p, fname, -1, false );
     }
 }
 void TLogContainer::ManageListsActionExecute(  )

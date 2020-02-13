@@ -128,8 +128,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     kstCallFilterModel.setSourceModel(&kstCallModel);
     ui->CSTable->setModel(&kstCallFilterModel);
 
-    ui->CSTable->horizontalHeader()->setStretchLastSection(true);
-
     meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
     messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
     CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
@@ -176,12 +174,19 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     state = settings.value("meepTable/state").toByteArray();
     ui->meepTable->horizontalHeader()->restoreState(state);
 
+    ui->CSTable->horizontalHeader()->setStretchLastSection(true);
+    ui->CSTable->horizontalHeader()->setSectionsMovable( true );
+
     connect( ui->CSTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     connect( ui->messageTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     connect( ui->meepTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
+
+    connect( ui->CSTable->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
+             this, SLOT( on_sectionMoved(int, int , int)));
+
 
     connect( ui->CSTable->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
              this, SLOT( on_sortIndicatorChanged(int, Qt::SortOrder)));
@@ -862,7 +867,10 @@ void KSTMainWindow::on_sectionResized(int, int, int)
     state = ui->meepTable->horizontalHeader()->saveState();
     settings.setValue("meepTable/state", state);
 }
-
+void KSTMainWindow::on_sectionMoved(int, int, int)
+{
+    on_sectionResized(0, 0, 0);
+}
 void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstCallFilterModel.mapToSource(index);
@@ -1166,7 +1174,6 @@ void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
 void KSTMainWindow::on_clearButton_clicked()
 {
     kstMessageModel.reset();
-    kstCallModel.reset();
 }
 bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
 {

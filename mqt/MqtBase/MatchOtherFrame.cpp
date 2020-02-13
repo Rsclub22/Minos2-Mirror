@@ -18,12 +18,14 @@ void MatchOtherFrame::initialise()
 
 void MatchOtherFrame::showOtherMatchQSOs(SharedMatchCollection matchCollection )
 {
-    if (matchCollection->contactCount())
+    if (matchCollection && matchCollection->contactCount())
     {
         MinosLoggerEvents::sendXferEnabled(true, contest, baseName);
     }
     otherMatchModel.initialise(OtherMatch, matchCollection);
     getTreeView()->setModel(&otherMatchModel);
+    if (!matchCollection)
+        return;
     getTreeView()->expandAll();
     restoreColumns();
     int rc = otherMatchModel.rowCount();

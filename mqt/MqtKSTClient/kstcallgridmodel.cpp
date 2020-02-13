@@ -76,6 +76,27 @@ void KstCallGridModel::removeRow(int _row)
     callVector->removeAt(_row);
     endRemoveRows();
 }
+void KstCallGridModel::checkDistBear(QSharedPointer<KstUser> crec) const
+{
+    if (crec->distance < 0)
+    {
+        double dist = 0.0;
+        int brg;
+        double longitude = 0.0;
+        double latitude = 0.0;
+
+        BaseContestLog cnt;
+        cnt.myloc.loc.setValue( locator.toUpper() );
+        cnt.validateLoc();
+
+        if ( lonlat( crec->loc.toUpper(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
+        {
+            cnt.disbeara( longitude, latitude, dist, brg );
+            crec->distance = static_cast<int>(dist);
+            crec->bearing = brg;
+        }
+    }
+}
 QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 {
     if ( !index.isValid() )
@@ -115,27 +136,14 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
         case ecscDistance:
         {
-            if (crec->distance > 0)
-            {
-                return crec->distance;
-            }
-            double dist = 0.0;
-            int brg;
-            double longitude = 0.0;
-            double latitude = 0.0;
+            checkDistBear(crec);
+            return crec->distance;
 
-            BaseContestLog cnt;
-            cnt.myloc.loc.setValue( locator.toUpper() );
-            cnt.validateLoc();
-
-            if ( lonlat( crec->loc.toUpper(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
-            {
-                cnt.disbeara( longitude, latitude, dist, brg );
-                crec->distance = static_cast<int>(dist);
-                return QString::number(crec->distance);
-            }
-            return "--";
-
+        }
+        case ecscBearing:
+        {
+            checkDistBear(crec);
+            return crec->bearing;
         }
         case ecscName:
             return crec->name;
@@ -182,6 +190,12 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             QVariant cell = data(index, Qt::DisplayRole);
             return cell.toInt();
         }
+        case ecscBearing:
+        {
+            QVariant cell = data(index, Qt::DisplayRole);
+            return cell.toInt();
+        }
+
         case ecscCountryPrefix:
             return crec->prefix;
 
@@ -211,6 +225,9 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
 
         case ecscDistance:
             return tr("Dist");
+
+        case ecscBearing:
+            return tr("Brg");
 
         case ecscName:
             return tr("Name");

@@ -157,7 +157,10 @@ bool ContactList::cslLoad( )
               // a1, a2, a3 will all be set - but may point to null terminator!
 
               if (parts.size() > 0)
+              {
                   rct->cs.fullCall.setValue( parts[0].toUpper() );
+                  rct->cs.validate();
+              }
 
               if (parts.size() > 1)
               {

@@ -441,7 +441,7 @@ Please delete them and set up the rotators again</source>
     <message>
         <location filename="../rotatormainwindow.cpp" line="918"/>
         <location filename="../rotatormainwindow.cpp" line="1013"/>
-        <source>Please configure a antenna name and rotator model</source>
+        <source>Please configure an antenna name and rotator model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

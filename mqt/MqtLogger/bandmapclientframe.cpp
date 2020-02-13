@@ -86,7 +86,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
-    ui->bandmapFrameTitle->setText("Bandmap");
+    ui->bandmapFrameTitle->setText(tr("Bandmap"));
     clusterStatusIndicatorToggle(false);
     radioStatusIndicatorToggle(false);
 
