@@ -121,12 +121,12 @@ int PstRotControl::closeRotator()
 
 void PstRotControl::setTraceComms(bool value)
 {
-
+    traceCommsFlag = value;
 }
 
 bool PstRotControl::getTraceComms()
 {
-
+    return traceCommsFlag;
 }
 
 
@@ -144,10 +144,10 @@ void PstRotControl::processPendingReportDatagrams()
         pstReportSocket->readDatagram(datagram.data(), datagram.size());
     } while (pstReportSocket->hasPendingDatagrams());
 
-    qDebug() << "Report = "  << datagram.data();
+    //qDebug() << "Report = "  << datagram.data();
     b = QString(datagram.data());
 
-    traceMsg(QString("received message %1").arg(b));
+    traceCommsMsg(QString("received %1 chars, message %2").arg(b.count()).arg(b));
 
     if (b.contains(':') && b.contains('\r'))
     {
@@ -173,10 +173,10 @@ int PstRotControl::request_bearing()
 {
     int retCode = 0;
     QString txMsg = QString("<PST>AZ?</PST>");
-    sendCommandToPstRotator(txMsg);
-    traceMsg(QString("request bearing %1").arg(txMsg));
-
     commsTimeoutTimer->start(timeoutDur);
+
+    traceMsg(QString("request bearing %1").arg(txMsg));
+    retCode = sendCommandToPstRotator(txMsg);
 
     return retCode;
 }
@@ -186,8 +186,10 @@ int PstRotControl::rotate_to_bearing(const int bearing)
 {
     int retCode = 0;
     QString txMsg = "<PST><AZIMUTH>" + QString::number(bearing) + "</AZIMUTH></PST>";
-    sendCommandToPstRotator(txMsg);
-    traceMsg(QString("rotate to bearing %1").arg(txMsg));
+    traceCommsMsg(QString("rotate to bearing %1").arg(txMsg));
+
+    retCode = sendCommandToPstRotator(txMsg);
+
     return retCode;
 
 }
@@ -196,8 +198,9 @@ int PstRotControl::stop_rotation()
 {
     int retCode = 0;
     QString txMsg = "<PST><STOP>1</STOP></PST>";
-    sendCommandToPstRotator(txMsg);
-    traceMsg(QString("stop rotation %1").arg(txMsg));
+    traceCommsMsg(QString("stop rotation %1").arg(txMsg));
+    retCode= sendCommandToPstRotator(txMsg);
+
     return retCode;
 }
 
@@ -210,11 +213,21 @@ QString PstRotControl::getRotLibVersion()
     return ver;
 }
 
-void PstRotControl::sendCommandToPstRotator(const QString msg)
+int PstRotControl::sendCommandToPstRotator(const QString msg)
 {
     QByteArray datagram = msg.toLatin1();
-
-    pstCommandSocket->writeDatagram(datagram, pstAddress, pstCommandPortNumber);
+    qint64 bytesSent = 0;
+    bytesSent = pstCommandSocket->writeDatagram(datagram, pstAddress, pstCommandPortNumber);
+    if (bytesSent >= 0)
+    {
+        traceCommsMsg(QString("sendCommandToPstRotator Bytes Sent = %1").arg(QString::number(bytesSent)));
+        return PST_OK;
+    }
+    else
+    {
+        traceCommsMsg(QString("sendCommandToPstRotator Write Datagram Error"));
+        return DATAGRAM_WRITE_ERROR;
+    }
 
 }
 
@@ -253,4 +266,13 @@ void PstRotControl::onCommsTimeout()
 void PstRotControl::traceMsg(QString msg)
 {
     emit traceCommsMsg(QString("[PstRotator] %1").arg(msg));
+}
+
+
+void PstRotControl::traceCommsMsg(QString msg)
+{
+    if (traceCommsFlag)
+    {
+        traceMsg(msg);
+    }
 }

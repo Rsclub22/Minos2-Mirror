@@ -29,7 +29,7 @@
 //}
 
 
-enum pstErrorCode {BIND_FAILURE = -1};
+enum pstErrorCode {PST_OK = 0, BIND_FAILURE = -1, DATAGRAM_WRITE_ERROR = -2};
 
 
 const int timeoutDur = 2000;
@@ -79,7 +79,7 @@ private slots:
     void onCommsTimeout();
 private:
 
-    void sendCommandToPstRotator(const QString msg);
+    int sendCommandToPstRotator(const QString msg);
     void closeSockets();
 
     QString pstNetAddress;
@@ -93,13 +93,14 @@ private:
 
     QTimer *commsTimeoutTimer;
     QString bearing;
-    bool traceComms;
+    bool traceCommsFlag;
 
     int rot_speed = 100;
 
 
 
     void traceMsg(QString msg);
+    void traceCommsMsg(QString msg);
 };
 
 #endif // PSTROTCONTROL_H
