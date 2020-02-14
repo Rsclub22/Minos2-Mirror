@@ -1929,6 +1929,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
+        <location filename="../rigcontrolframe.cpp" line="659"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1986,6 +1987,11 @@ No          - Discard changes</source>
     <message>
         <location filename="../rigcontrolframe.ui" line="427"/>
         <source>Tune Freqs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="666"/>
+        <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

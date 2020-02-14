@@ -1998,6 +1998,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
+        <location filename="../rigcontrolframe.cpp" line="659"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
@@ -2056,6 +2057,11 @@ Non - Ignorer les modifications</translation>
         <location filename="../rigcontrolframe.ui" line="427"/>
         <source>Tune Freqs</source>
         <translation>Fréquences d&apos;accorder</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="666"/>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1192"/>
