@@ -160,6 +160,7 @@ private:
 
     QString appName;
     QLabel* status;
+    QString rawStatus;
 
     QVector<BandDetail> bands;
     checkModeAgainstFreq* modeBandPlan;
@@ -267,7 +268,7 @@ private:
     void setAllTabsColor(QColor c);
     QString extractLocator(const QString &text, const QRegExp fullLocExp, const QRegExp partLocExp);
 
-    void showStatusMessage(const QString &message);
+    void showStatusMessage(const QString &message, const QString &raw);
     void startDisconnectTimer(int time);
 
     void echoCmdRawTextWindow(QString cmd);
