@@ -506,7 +506,7 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
             loop.exec();
 
             // error if got here
-            showStatusMessage(tr("Disconnect Timeout"));
+            showStatusMessage(tr("Disconnect Timeout"), "Disconnect Timeout");
             QString msg = tr("Connect to Node - Disconnect Timeout");
             trace(msg);
             echoErrorMsg(msg);
@@ -580,9 +580,9 @@ void ClusterMainWindow::connectToHost(QString hostName)
 void ClusterMainWindow::connectionEstab()
 {
     nodeConnected = true;
-    showStatusMessage(tr("Connected to: %1 %2 %3").arg(currentNodeName).arg(currentAddress).arg(currentPort));
+    showStatusMessage(tr("Connected to: %1 %2 %3").arg(currentNodeName).arg(currentAddress).arg(currentPort), "Connected");
     QString msg = tr("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort);
-    trace(QString(msg));
+    trace(msg);
     echoMsg(msg);
 
 }
@@ -590,7 +590,7 @@ void ClusterMainWindow::connectionEstab()
 void ClusterMainWindow::connectionError(QAbstractSocket::SocketError error)
 {
     nodeConnected = false;
-    showStatusMessage(tr("Connection Error: Error Code %1").arg(QString::number(error)));
+    showStatusMessage(tr("Connection Error: Error Code %1").arg(QString::number(error)), "Connection Error");
     QString msg = tr("Connection failed error %1").arg(error);
     trace(msg);
     echoErrorMsg(msg);
@@ -618,7 +618,7 @@ void ClusterMainWindow::loggedOut()
     loginStart = false;
     loginSuccess = false;
     loginStatDetails = false;
-    showStatusMessage((tr("Disconnected")));
+    showStatusMessage((tr("Disconnected")), "Disconnected");
     if (reconnectFlag)
     {
 
@@ -1848,8 +1848,9 @@ void ClusterMainWindow:: saveUserCommandString(int buttonNumber, ClusterUserComm
 
 }
 
-void ClusterMainWindow::showStatusMessage(const QString &message)
+void ClusterMainWindow::showStatusMessage(const QString &message, const QString &raw)
 {
+    rawStatus = raw;
     status->setText(message);
     trace(QString("showStatusMessage: %1").arg(message));
 
@@ -1896,8 +1897,8 @@ void ClusterMainWindow::handleStatusTimer()
 
             // send status to clients
             trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(status->text()));
-            //sendSpotsQueue.append(createStatusToSend(status->text()));
-            clusterRpc->publishState(status->text());
+            //sendSpotsQueue.append(createStatusToSend(rawStatus));
+            clusterRpc->publishState(rawStatus);
         }
     }
 
