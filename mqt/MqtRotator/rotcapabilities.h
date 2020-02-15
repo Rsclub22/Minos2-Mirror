@@ -3,7 +3,7 @@
 
 #include "rotatorcommon.h"
 
-namespace RotCapContstants
+namespace RotCapConstants
 {
     enum PortType {none, serial, network, usb};
     enum RotatorDisplay {displayFull = true, displayPart = false};
@@ -15,18 +15,18 @@ class RotCapabilities
 {
 public:
     RotCapabilities(int modelNumber = 0,
-                    RotCapContstants::PortType portType_ = RotCapContstants::none,
+                    RotCapConstants::PortType portType_ = RotCapConstants::none,
                     QString rotatorManufacturer_ = "",
                     QString rotatorModelName_ = "",
                     bool supportCwCCwCmd_ = false,
                     int minRot_ = COMPASS_MIN0,
                     int maxRot_ = COMPASS_MAX360,
-                    bool rotDisplay_= RotCapContstants::displayFull,
-                    bool pollData_ = RotCapContstants::pollDataOn);
+                    bool rotDisplay_= RotCapConstants::displayFull,
+                    bool pollData_ = RotCapConstants::pollDataOn);
 
 
     int modelNumber;
-    RotCapContstants::PortType portType;
+    RotCapConstants::PortType portType;
     QString rotatorManufacturer;
     QString rotatorModelName;
     bool supportCwCCwCmd;

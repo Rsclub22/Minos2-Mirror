@@ -2,7 +2,7 @@
 
 
 RotCapabilities::RotCapabilities(int modelNumber_,
-                                 RotCapContstants::PortType portType_,
+                                 RotCapConstants::PortType portType_,
                                  QString rotatorManufacturer_,
                                  QString rotatorModelName_,
                                  bool supportCwCCwCmd_ ,

@@ -20,9 +20,13 @@ win32:RC_ICONS += ../MinosRig.ico
 
 
 SOURCES += main.cpp\
+    hamlibrigcontrol.cpp \
+    rigbase.cpp \
+    rigcapabilities.cpp \
         rigcontrolmainwindow.cpp \
     rigcontrol.cpp \
     rigcontrolrpc.cpp \
+    rigfactory.cpp \
     rigsetupform.cpp \
     transvertsetupform.cpp \
     addtransverterdialog.cpp \
@@ -34,8 +38,12 @@ SOURCES += main.cpp\
     rigctldclient.cpp
 
 HEADERS  += rigcontrolmainwindow.h \
+    hamlibrigcontrol.h \
+    rigbase.h \
+    rigcapabilities.h \
     rigcontrol.h \
     rigcontrolrpc.h \
+    rigfactory.h \
     rigsetupform.h \
     transvertsetupform.h \
     addtransverterdialog.h \

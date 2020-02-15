@@ -156,7 +156,7 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
 
 
     // load rotator params to open
-    if ((selectedAntenna.portType) == RotCapContstants::PortType::serial)
+    if ((selectedAntenna.portType) == RotCapConstants::PortType::serial)
     {
         strncpy(my_rot->state.rotport.pathname, comport.toLatin1().data(), comport.length());
         my_rot->state.rotport.parm.serial.rate = selectedAntenna.baudrate;
@@ -176,7 +176,7 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
        // }
 
     }
-    else if (selectedAntenna.portType == RotCapContstants::PortType::network )
+    else if (selectedAntenna.portType == RotCapConstants::PortType::network )
     {
         QString netAdd;
         if (selectedAntenna.networkAdd.isEmpty() || isHostLocal(selectedAntenna.networkAdd))
@@ -189,7 +189,7 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
         }
         strncpy(my_rot->state.rotport.pathname, QString(netAdd + ":" + selectedAntenna.networkPort).toLatin1().data(), FILPATHLEN);
     }
-    else if (selectedAntenna.portType == RotCapContstants::PortType::none)
+    else if (selectedAntenna.portType == RotCapConstants::PortType::none)
     {
         strncpy(my_rot->state.rotport.pathname, QString("").toLatin1().data(), FILPATHLEN);
     }
@@ -249,19 +249,19 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
     {
         //QString t = QString::number(capsList[i]->rot_model);
         QString key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
-        auto port_type = RotCapContstants::PortType::none;
+        auto port_type = RotCapConstants::PortType::none;
         switch(capsList[i]->port_type)
         {
             case RIG_PORT_SERIAL:
-                port_type = RotCapContstants::PortType::serial;
+                port_type = RotCapConstants::PortType::serial;
             break;
 
             case RIG_PORT_NETWORK:
-                port_type = RotCapContstants::PortType::network;
+                port_type = RotCapConstants::PortType::network;
             break;
 
             case RIG_PORT_USB:
-                port_type = RotCapContstants::PortType::usb;
+                port_type = RotCapConstants::PortType::usb;
             break;
             default:
             {}
