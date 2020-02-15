@@ -105,7 +105,7 @@
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="83"/>
-        <location filename="../clustermainwindow.cpp" line="1911"/>
+        <location filename="../clustermainwindow.cpp" line="1912"/>
         <source>Minos Cluster Server</source>
         <translation>Serveur de cluster Minos </translation>
     </message>
@@ -231,7 +231,7 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
         <translation>Effacer le numéro de commande de l&apos;utilisateur du cluster: %1?</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1911"/>
+        <location filename="../clustermainwindow.cpp" line="1912"/>
         <source>Minos Rotator
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
         <translation>Minos Rotator
