@@ -226,6 +226,7 @@ void TLogContainer::on_ReportOverstrike(bool overstrike, BaseContestLog *econtes
 
 void TLogContainer::closeEvent(QCloseEvent *event)
 {
+    trace("closeEvent:Start");
     TimerUpdateQSOTimer.stop();
 
     TContestApp::getContestApp() ->writeContestList();
@@ -237,6 +238,7 @@ void TLogContainer::closeEvent(QCloseEvent *event)
        // Keep closing the current (and hence visible) contest
        closeSlot(0, true);
     }
+    trace("closeEvent:Contest slots closed");
 
     for ( ListSlotIterator i = TContestApp::getContestApp() ->listSlotList.begin(); i != TContestApp::getContestApp() ->listSlotList.end(); i++ )
     {
@@ -245,7 +247,9 @@ void TLogContainer::closeEvent(QCloseEvent *event)
           TContestApp::getContestApp() ->closeListFile( ( *i ) ->slot );
        }
     }
+    trace("closeEvent:List slots closed");
     MinosConfig::getMinosConfig() ->stop();
+    trace("closeEvent:Apps closed");
     closeContestApp();
 
     QWidget::closeEvent(event);
@@ -963,6 +967,7 @@ void TLogContainer::CloseAllButActionExecute()
 
 void TLogContainer::ExitActionExecute()
 {
+    trace("ExitActionExecute");
     close();
 }
 void TLogContainer::ExitClearActionExecute()
