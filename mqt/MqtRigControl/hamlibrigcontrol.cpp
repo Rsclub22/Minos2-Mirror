@@ -156,8 +156,8 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             my_rig->state.rigport.parm.serial.rate = currentRadio.baudrate;
             my_rig->state.rigport.parm.serial.data_bits = currentRadio.databits;
             my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
-            my_rig->state.rigport.parm.serial.parity = hamlibSerialData::getSerialParityCode(currentRadio.parity);
-            my_rig->state.rigport.parm.serial.handshake = hamlibSerialData::getSerialHandshakeCode(currentRadio.handshake);
+            my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
+            my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
 
  //************************************************************
             /*
@@ -318,19 +318,24 @@ int HamlibRigControl::setMode(VFO vfo, MODE mode)
 }
 
 
-/*
+
 
 // Hamlib conversion
-QString RigControl::convertModeQstr(rmode_t mode)
+
+QString HamlibRigControl::convertModeQStr(MODE mode)
 {
-    return QString::fromLatin1(rig_strrmode(mode));
+    return QString::fromLatin1(rig_strrmode(mapMode(mode)));
 }
 
-rmode_t RigControl::convertQStrMode(QString mode)
+
+MODE HamlibRigControl::convertQStrMode(QString mode)
 {
-    return rig_parse_mode(mode.toLatin1());
+   rmode_t m = rig_parse_mode(mode.toLatin1());
+    return mapMode(m);
 
 }
+
+/*
 
 // rigControl conversion
 
@@ -984,30 +989,6 @@ int RigControl::getRigModelIndex()
 
 
 */
-
-
-
-
-
-
- enum serial_parity_e HamlibRigControl::getSerialParityCode(int index)
- {
-
-     return hamlibSerialData::parityCodes[index];
-
- }
-
- enum serial_handshake_e HamlibRigControl::getSerialHandshakeCode(int index)
- {
-
-     return hamlibSerialData::handshakeCodes[index];
- }
-
- enum hamlibSerialData::serial_force_Lines_e HamlibRigControl::getSerialForceLineCode(int index)
- {
-    return hamlibSerialData::forceLinesCodes[index];
- }
-
 
 
 

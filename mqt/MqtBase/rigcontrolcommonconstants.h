@@ -69,6 +69,7 @@ namespace hamlibData
 
 }
 
+const int Rig_OK = 0;
 const int OPEN_OK = 0;
 const int OPEN_FAILED = -1;
 const int RIGCTLD_FAILED = -2;

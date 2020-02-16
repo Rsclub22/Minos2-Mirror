@@ -24,7 +24,7 @@
 //#include "rotcontrol.h"
 #include "rotatorfactory.h"
 #include "rotatorbase.h"
-
+#include "hamlibCommon.h"
 
 #include <hamlib/rotator.h>
 #include <hamlib/rig.h>         // for debug
@@ -115,6 +115,9 @@ private:
     //int serialP;
 
 
+    serial_parity_e getSerialParityCode(int index){return hamlibSerialData::parityCodes[index];}
+    serial_handshake_e getSerialHandshakeCode(int index){return hamlibSerialData::handshakeCodes[index];}
+    hamlibSerialData::serial_force_Lines_e getSerialForceLineCode(int index){return hamlibSerialData::forceLinesCodes[index];}
 
 
 

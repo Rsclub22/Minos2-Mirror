@@ -813,12 +813,12 @@ int RigControlMainWindow::openRigCtldRadio()
     if (radio->getRigConnected())
     {
 
-        int retCode = RIG_OK;
+        int retCode = Rig_OK;
         showStatusMessage(tr("Attempting to communicate with radio via Rigctld - %1").arg(setupRadio->currentRadio.radioName));
         retCode = radio->getFrequency(VFO::CURRENT_VFO, rfrequency);
 
 
-        if (retCode < RIG_OK)
+        if (retCode < Rig_OK)
         {
             logMessage(QString("openRigctldRadio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
             hamlibError(retCode, tr("Test Radio Connection via Rigctld\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
@@ -841,7 +841,7 @@ int RigControlMainWindow::openRigCtldRadio()
         {
             showStatusMessage(QString("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
                               .arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel).trimmed().arg(setupRadio->currentRadio.comport).arg(setupRadio->currentRadio.baudrate).arg(setupRadio->currentRadio.databits)
-                              .arg(setupRadio->currentRadio.stopbits).arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]).arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceDtr]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceRts]));
+                              .arg(setupRadio->currentRadio.stopbits).arg(serialCommonData::parityStr[setupRadio->currentRadio.parity]).arg(serialCommonData::handshakeStr[setupRadio->currentRadio.handshake]).arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceDtr]).arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceRts]));
         }
 
         /*
@@ -962,13 +962,13 @@ int RigControlMainWindow::openRadio()
     if (radio->getRigConnected())
     {
 
-        int retCode = rigErrorCodes::RIG_OK;
+        int retCode = Rig_OK;
         showStatusMessage(tr("Attempting to communicate with radio - %1").arg(setupRadio->currentRadio.radioName));
         //delay(1);
         retCode = radio->getFrequency(VFO::CURRENT_VFO, rfrequency);
 
 
-        if (retCode < rigErrorCodes::RIG_OK)
+        if (retCode < Rig_OK)
         {
             logMessage(QString("Open Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
             hamlibError(retCode, tr("Test Radio Connection\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
@@ -994,7 +994,7 @@ int RigControlMainWindow::openRadio()
         {
             showStatusMessage(tr("Connected: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
                               .arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel).trimmed().arg(setupRadio->currentRadio.comport).arg(setupRadio->currentRadio.baudrate).arg(setupRadio->currentRadio.databits)
-                              .arg(setupRadio->currentRadio.stopbits).arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]).arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceDtr]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceRts]));
+                              .arg(setupRadio->currentRadio.stopbits).arg(serialCommonData::parityStr[setupRadio->currentRadio.parity]).arg(serialCommonData::handshakeStr[setupRadio->currentRadio.handshake]).arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceDtr]).arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceRts]));
         }
         else if (setupRadio->currentRadio.portType == RigCapConstants::PortType::network)
         {
@@ -1179,7 +1179,7 @@ void RigControlMainWindow::getRadioInfo()
         }
         else
         {
-            logMessage(QString("Got Mode = %1").arg(radio->convertModeQstr(rmode)));
+            logMessage(QString("Got Mode = %1").arg(radio->convertModeQStr(rmode)));
         }
     }
 
@@ -1443,7 +1443,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
         {
 
             retCode = radio->setFrequency(f, vfo);
-            if (retCode != rigErrorCodes::RIG_OK)
+            if (retCode != Rig_OK)
             {
                 if (retCode == -9)
                 {
@@ -1496,7 +1496,7 @@ int RigControlMainWindow::getAndSendFrequency(VFO vfo)
     bool b = false;
 
     retCode = radio->getFrequency(vfo, rfrequency);
-    if (retCode == rigErrorCodes::RIG_OK)
+    if (retCode == Rig_OK)
     {
         curVfoFrq = rfrequency;
         logMessage(QString("Get Freq: Read Freq from Radio = %1").arg(QString::number(curVfoFrq, 'f', 0)));
@@ -2021,12 +2021,12 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
     //hamlibData::pBandState pBState = modePbState[getMinosModeIndex(slogMode)];
     //QString spBState = QString::number(pBState);
 
-    if (retCode == rigErrorCodes::RIG_OK)
+    if (retCode == Rig_OK)
     {
-        logMessage(QString("Get Mode: From Rx mode = %1").arg(radio->convertModeQstr(rmode))));
+        logMessage(QString("Get Mode: From Rx mode = %1").arg(radio->convertModeQStr(rmode)));
         curMode = rmode;
 
-        sCurMode = radio->convertModeQstr(rmode);
+        sCurMode = radio->convertModeQStr(rmode);
 
         if (mgmModeFlag && sCurMode != setupRadio->currentRadio.mgmMode) // has mode been changed on the radio?
         {
@@ -2051,9 +2051,9 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
             }
             else
             {
-                displayModeVfo(radio->convertModeQstr(rmode));
+                displayModeVfo(radio->convertModeQStr(rmode));
                 //displayPassband(rwidth);
-                sendModeToLog(QString("%1:%2").arg(radio->convertModeQstr(rmode)).arg(" "));
+                sendModeToLog(QString("%1:%2").arg(radio->convertModeQStr(rmode)).arg(" "));
             }
 
 
@@ -2115,7 +2115,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
     //msg->rigCache.publish();
 }
 
-void RigControlMainWindow::setMode(QString mode, vfo_t vfo)
+void RigControlMainWindow::setMode(QString mode, VFO vfo)
 {
     int retCode = 0;
 
@@ -2126,15 +2126,15 @@ void RigControlMainWindow::setMode(QString mode, vfo_t vfo)
 
     if (radioCommsOK)
     {
-        retCode = radio->setMode(vfo, mCode, PASSBAND_NOCHANGE);
-        if (retCode == rigErrorCodes::RIG_OK)
+        retCode = radio->setMode(vfo, mCode);
+        if (retCode == Rig_OK)
         {
-            logMessage(QString("SetMode: changed! Mode = %1").arg(radio->convertModeQstr(mCode)));
+            logMessage(QString("SetMode: changed! Mode = %1").arg(radio->convertModeQStr(mCode)));
 
         }
         else
         {
-            logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode)).arg(radio->convertModeQstr(mCode)));
+            logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode)).arg(radio->convertModeQStr(mCode)));
             hamlibError(retCode, tr("Set Mode"));
         }
 

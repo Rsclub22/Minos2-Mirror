@@ -276,3 +276,8 @@ void PstRotControl::traceCommsMsg(QString msg)
         traceMsg(msg);
     }
 }
+
+QString PstRotControl::getErrorMsgText(int errorCode)
+{
+
+}

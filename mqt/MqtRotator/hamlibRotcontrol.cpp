@@ -17,7 +17,6 @@
 #include "hamlibRotcontrol.h"
 #include "rotatorfactory.h"
 #include "rotcapabilities.h"
-#include "hamlibCommon.h"
 #include "minosNetUtils.h"
 #include "MTrace.h"
 
@@ -162,8 +161,8 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
         my_rot->state.rotport.parm.serial.rate = selectedAntenna.baudrate;
         my_rot->state.rotport.parm.serial.data_bits = selectedAntenna.databits;
         my_rot->state.rotport.parm.serial.stop_bits = selectedAntenna.stopbits;
-        my_rot->state.rotport.parm.serial.parity = hamlibSerialData::getSerialParityCode(selectedAntenna.parity);
-        my_rot->state.rotport.parm.serial.handshake = hamlibSerialData::getSerialHandshakeCode(selectedAntenna.handshake);
+        my_rot->state.rotport.parm.serial.parity = getSerialParityCode(selectedAntenna.parity);
+        my_rot->state.rotport.parm.serial.handshake = getSerialHandshakeCode(selectedAntenna.handshake);
         //if (my_rot->state.rotport.parm.serial.handshake == RIG_HANDSHAKE_NONE)
        // {
        //     my_rot->state.rotport.parm.serial.dtr_state = RIG_SIGNAL_ON;

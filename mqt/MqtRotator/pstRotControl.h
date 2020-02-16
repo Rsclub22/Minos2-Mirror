@@ -62,6 +62,7 @@ public:
     bool getTraceComms() override;
 
     QString getRotLibVersion() override;
+    QString getErrorMsgText(int errorCode) override;
 
     void setPstNetAddress(QString address);
     void setPstPortAddress(QString port);

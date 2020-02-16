@@ -30,6 +30,7 @@
 #include "rigbase.h"
 #include "rigfactory.h"
 #include "rigcapabilities.h"
+#include "serialCommonData.h"
 
 
 class QLabel;

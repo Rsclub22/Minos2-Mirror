@@ -17,7 +17,7 @@
 #include "rigcommon.h"
 
 
-enum rigErrorCodes { RIG_OK};
+
 
 
 class RigBase : public QObject
@@ -40,6 +40,8 @@ public:
 
     virtual int getMode(VFO vfo, MODE& mode) = 0;
     virtual int setMode(VFO vfo, MODE mode) = 0;
+    virtual QString convertModeQStr(MODE mode) = 0;
+    virtual MODE convertQStrMode(QString mode) = 0;
 
     virtual QString getRigLibVersion() = 0;
     virtual QString getErrorMsgText(int errorCode) = 0;

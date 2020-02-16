@@ -48,7 +48,8 @@ public:
 
     int getMode(VFO vfo, MODE& mode) override;
     int setMode(VFO vfo, MODE mode) override;
-
+    QString convertModeQStr(MODE mode) override;
+    MODE convertQStrMode(QString mode) override;
 
 
     QString getRigLibVersion() override;
@@ -71,9 +72,13 @@ private:
 
     MODE mapMode(rmode_t m) const;
     rmode_t mapMode(MODE mode) const;
-    serial_parity_e getSerialParityCode(int index);
-    serial_handshake_e getSerialHandshakeCode(int index);
-    hamlibSerialData::serial_force_Lines_e getSerialForceLineCode(int index);
+
+    serial_parity_e getSerialParityCode(int index){return hamlibSerialData::parityCodes[index];}
+    serial_handshake_e getSerialHandshakeCode(int index){return hamlibSerialData::handshakeCodes[index];}
+    hamlibSerialData::serial_force_Lines_e getSerialForceLineCode(int index){return hamlibSerialData::forceLinesCodes[index];}
+
+
+
 };
 
 #endif // HAMLIBRIGCONTROL_H
