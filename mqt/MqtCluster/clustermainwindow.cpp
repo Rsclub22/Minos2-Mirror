@@ -1884,7 +1884,7 @@ void ClusterMainWindow::handleStatusTimer()
         // send status to clients
         trace(QString("handleStatusTimer: Cluster Client Count Changed old = %1, new = %2 - Send Status to Cluster Clients - %3").arg(oldServerListCount).arg(clusterRpc->getServerListCount()).arg(status->text()));
     //    sendSpotsQueue.append(createStatusToSend(status->text()));
-          clusterRpc->publishState(status->text());
+          clusterRpc->publishState(rawStatus, status->text());
           sendSpotToTxEnabled(setupCluster->getSendToDXClusterEnabled()); // wait for cluster client to open before sending this to qsologframe
     }
 
@@ -1898,7 +1898,7 @@ void ClusterMainWindow::handleStatusTimer()
             // send status to clients
             trace(QString("handleStatusTimer: Send Status to Cluster Clients - %1").arg(status->text()));
             //sendSpotsQueue.append(createStatusToSend(rawStatus));
-            clusterRpc->publishState(rawStatus);
+            clusterRpc->publishState(rawStatus, status->text());
         }
     }
 

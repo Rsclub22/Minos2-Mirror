@@ -159,14 +159,14 @@ void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
     }
 }
 //---------------------------------------------------------------------------
-void Clusterrpc::publishState( const QString &state )
+void Clusterrpc::publishState( const QString &raw, const QString &state )
 {
   //static QString old;
 
   //if ( state != old )
   //{
   //   old = state;
-  RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterReport, state, psPublished );
+  RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterReport, raw + "<>" + state, psPublished );
   //}
 }
 

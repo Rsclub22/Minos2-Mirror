@@ -1547,8 +1547,11 @@ void ClusterClientFrame::on_unworkedLocCheckBox(int state)
 
 void ClusterClientFrame::setClusterServerState(QString stateMsg)
 {
+    QStringList s = stateMsg.split("<>");
+    if (s.size() < 2)
+        return;
 
-    if (stateMsg.contains("Connected"))
+    if (s[0].contains("Connected"))
     {
          statusIndicatorToggle(true);
          clusterServerConnected = true;
@@ -1565,7 +1568,7 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     if (clusterServerLoaded)
     {
 
-        ui->statusIndicator->setToolTip(stateMsg);
+        ui->statusIndicator->setToolTip(s[1]);
         trace(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
