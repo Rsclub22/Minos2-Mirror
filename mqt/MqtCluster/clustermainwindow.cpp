@@ -1904,7 +1904,7 @@ void ClusterMainWindow::handleStatusTimer()
 
 void ClusterMainWindow::about()
 {
-    QMessageBox::about(this, tr("Minos Cluster Server"), tr("Minos Rotator\nCopyright D Balharrie G8FKH/M0DGB 2016 - 2019"));
+    QMessageBox::about(this, tr("Minos Cluster Server"), tr("Minos Cluster\nCopyright D Balharrie G8FKH/M0DGB 2016 - 2019"));
 }
 
 
