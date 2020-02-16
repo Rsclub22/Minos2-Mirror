@@ -16,12 +16,8 @@
 #include <QObject>
 #include "rigcommon.h"
 
-enum MODE {UNK, CW, CW_R, USB, LSB, FSK, FSK_R, DIG_U, DIG_L, AM, FM, DIG_FM};
-enum VFO {CURRENT_VFO, VFOA, VFOB};
-using  Frequency = quint64;
 
-
-
+enum rigErrorCodes { RIG_OK};
 
 
 class RigBase : public QObject
@@ -37,13 +33,16 @@ public:
     virtual bool getTraceComms() = 0;
 
     virtual int rigInit(scatParams &currentRadio, bool useRigCtld) = 0;
-    virtual int getFrequency(VFO vfo, Frequency*) = 0;
+    virtual int closeRig() = 0;
+
+    virtual int getFrequency(VFO vfo, Frequency&) = 0;
     virtual int setFrequency(Frequency freq, VFO vfo ) = 0;
 
-    virtual int getMode(VFO vfo, MODE* mode) = 0;
+    virtual int getMode(VFO vfo, MODE& mode) = 0;
     virtual int setMode(VFO vfo, MODE mode) = 0;
 
-    virtual QString getRotLibVersion() = 0;
+    virtual QString getRigLibVersion() = 0;
+    virtual QString getErrorMsgText(int errorCode) = 0;
 
 
 signals:

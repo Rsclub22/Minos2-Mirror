@@ -231,12 +231,8 @@ int HamlibRotControl::closeRotator()
 }
 
 
-void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
+void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
 {
-
-
-    //rig_set_debug_callback (::rig_message_cb, static_cast<rig_ptr_t>(this));
-    //rig_set_debug_callback (::rig_message_cb, nullptr);
 
 
     rig_set_debug_callback (debug_callback, nullptr);
@@ -245,10 +241,11 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
     rot_load_all_backends();
     rot_list_foreach(collect, nullptr);
 
+    QString key;
+
     for (int i = 0; i < capsList.count(); i++)
     {
-        //QString t = QString::number(capsList[i]->rot_model);
-        QString key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
+        key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
         auto port_type = RotCapConstants::PortType::none;
         switch(capsList[i]->port_type)
         {
@@ -273,8 +270,8 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList)
                                                                capsList[i]->mfg_name, capsList[i]->model_name,
                                                                capsList[i]->move != nullptr ? true : false,
                                                                capsList[i]->min_az, capsList[i]->max_az,
-                                                               RotCapContstants::PollData::pollDataOn,
-                                                               RotCapContstants::RotatorDisplay::displayFull);
+                                                               RotCapConstants::PollData::pollDataOn,
+                                                               RotCapConstants::RotatorDisplay::displayFull);
 
     }
 

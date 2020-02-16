@@ -2,11 +2,12 @@
 #define RIGSETUPFORM_H
 
 #include <QWidget>
-#include "rigcontrol.h"
 #include "transvertsetupform.h"
 #include "rigcommon.h"
 #include "minosNetUtils.h"
+#include "serialCommonData.h"
 #include "ui_rigsetupform.h"
+#include "rigfactory.h"
 
 
 namespace Ui {
@@ -22,7 +23,7 @@ class RigSetupForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
+    explicit RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
     ~RigSetupForm();
 
 
@@ -191,7 +192,7 @@ private:
 
 
     Ui::rigSetupForm *ui;
-    RigControl *radio;
+    RigFactory *rigFactory;
     scatParams *radioData;
 
     QLogTabWidget* ui_RadioTab;

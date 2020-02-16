@@ -39,7 +39,10 @@ public:
     RigCapConstants::PortType portType;
     QString rigManufacturer;
     QString rigModelName;
-    bool supportRit;
+    bool supportGetRit;
+    bool supportSetRit;
+    bool supportRitOnOff;
+    bool supportGetRitState;
     bool supportSmeter;
     bool supportPtt;
     bool supportVolume;

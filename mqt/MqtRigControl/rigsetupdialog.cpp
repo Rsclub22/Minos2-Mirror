@@ -18,7 +18,6 @@
 #include "ui_rigsetupdialog.h"
 #include "rigcontrolcommonconstants.h"
 #include "addradiodialog.h"
-#include "rigcontrol.h"
 #include "rigutils.h"
 #include <QSignalMapper>
 #include <QComboBox>
@@ -34,7 +33,7 @@
 
 
 
-RigSetupDialog::RigSetupDialog(RigControl* _radio, const QVector<BandDetail> &_bands, QWidget *parent) :
+RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<BandDetail> &_bands, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RigSetupDialog),
     radioRemoved(false)
@@ -42,7 +41,7 @@ RigSetupDialog::RigSetupDialog(RigControl* _radio, const QVector<BandDetail> &_b
 {
     ui->setupUi(this);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    radio = _radio;
+    rigFactory = rigFactory_;
     bands = _bands;
 
     QSettings settings;
@@ -167,7 +166,7 @@ void RigSetupDialog::addTab(int tabNum, QString tabName)
        availRadios.append(tabName);
     }
 
-    radioTab.append(new RigSetupForm(radio, availRadioData[tabNum], bands, ui->radioTab));
+    radioTab.append(new RigSetupForm(rigFactory, availRadioData[tabNum], bands, ui->radioTab));
     ui->radioTab->insertTab(tabNum, radioTab[tabNum], tabName);
     ui->radioTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
 
@@ -199,18 +198,18 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     radioTab[tabNum]->setEnableTransVertSw(radioTab[tabNum]->getRadioData()->enableTransSwitch);
     radioTab[tabNum]->setEnableLocalTransVertSw(radioTab[tabNum]->getRadioData()->enableLocTVSwMsg);
 
-    if (rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_NETWORK || rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_UDP_NETWORK)
+    if (radioTab[tabNum]->getRadioData()->portType == RigCapConstants::PortType::network)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(true);
         radioTab[tabNum]->setRigctldCheckBoxVisible(false);
         radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
     }
-    else if (rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_SERIAL)
+    else if (radioTab[tabNum]->getRadioData()->portType == RigCapConstants::PortType::serial)
     {
         radioTab[tabNum]->serialDataEntryVisible(true);
         radioTab[tabNum]->networkDataEntryVisible(false);
-        if (radioTab[tabNum]->getRadioData()->handshake == 2) // CTS/RTS enabled
+        if (radioTab[tabNum]->getRadioData()->handshake == serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE) // CTS/RTS enabled
         {
             radioTab[tabNum]->setForceRTSDisabled(true);
         }
@@ -220,7 +219,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
         }
 
     }
-    else if (rig_port_e(radioTab[tabNum]->getRadioData()->portType) == RIG_PORT_NONE)
+    else if (radioTab[tabNum]->getRadioData()->portType == RigCapConstants::PortType::none)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(false);
@@ -291,7 +290,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
 void RigSetupDialog::addRadio()
 {
 
-    AddRadioDialog getRadioName_Rig(availRadios, radio);
+    AddRadioDialog getRadioName_Rig(availRadios, rigFactory);
     getRadioName_Rig.setWindowTitle(tr("Add Radio and Radio Model"));
     if (getRadioName_Rig.exec() != QDialog::Accepted)
     {
@@ -831,7 +830,7 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->radioModelName = config.value("radioModelName", "").toString();
     radioTab[radNum]->getRadioData()->radioModelNumber = config.value("radioModelNumber", "").toInt();
     radioTab[radNum]->getRadioData()->civAddress = config.value("civAddress", "").toString();
-    radioTab[radNum]->getRadioData()->portType = config.value("portType", int(RIG_PORT_SERIAL)).toInt();
+    radioTab[radNum]->getRadioData()->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
     radioTab[radNum]->getRadioData()->comport = config.value("comport", "").toString();
     radioTab[radNum]->getRadioData()->baudrate = config.value("baudrate", 9600).toInt();
     radioTab[radNum]->getRadioData()->databits = config.value("databits", 8).toInt();

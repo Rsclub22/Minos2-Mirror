@@ -19,6 +19,14 @@
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
+enum MODE {UNK, CW, CW_R, USB, LSB, FSK, FSK_R, DIG_U, DIG_L, AM, FM, DIG_FM};
+enum VFO {CURRENT_VFO, VFOA, VFOB};
+using  Frequency = quint64;
+
+
+
+
+
 class TransVertParams
 {
 
@@ -27,13 +35,13 @@ public:
     QString transVertName;
     QString band;
     QString radioFreqStr;
-    freq_t radioFreq = 0.0;
+    Frequency radioFreq = 0;
     QString targetFreqStr;
-    freq_t targetFreq = 0.0;
-    freq_t fLow;
-    freq_t fHigh;
+    Frequency targetFreq = 0;
+    Frequency fLow;
+    Frequency fHigh;
     QString transVertOffsetStr;
-    freq_t transVertOffset = 0.0;
+    Frequency transVertOffset = 0;
     QString antSwitchNum = "0";
     QString transSwitchNum = "";
 
@@ -136,7 +144,7 @@ public:
   QString rigCtldNetworkAdd;
   QString rigCtldNetworkPort;
   QString mgmMode = "USB";
-  //ptt_type_t pttType;
+  int pttType;
   bool antSwitchAvail = false;
   //bool ritSupported = false;
   //bool ritEnable = false;

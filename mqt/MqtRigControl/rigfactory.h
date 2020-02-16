@@ -37,6 +37,7 @@ public:
     RigBase* createRigs(int rigId);
     Rigs* supported_rigs();
 
+    void populateComboRigList(QComboBox* comBox);
 signals:
 
 private:

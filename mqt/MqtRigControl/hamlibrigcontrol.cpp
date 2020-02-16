@@ -13,12 +13,13 @@
 
 
 #include "hamlibrigcontrol.h"
+#include "minosNetUtils.h"
 
-static QList<const rig_caps *> rigsList;
+static QList<const rig_caps *> capsList;
 
 int collect(const rig_caps *caps, rig_ptr_t)
 {
-    rigsList.append(caps);
+    capsList.append(caps);
     return 1;
 }
 
@@ -41,6 +42,8 @@ int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char cons
   return 0;
 }
 
+const int RIGCTLD_MODEL_NUMBER = 2;
+
 extern "C"
 {
   //typedef struct rot RIG;
@@ -61,6 +64,45 @@ HamlibRigControl::~HamlibRigControl()
 
 }
 
+
+void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
+{
+    rig_set_debug_callback (debug_callback, nullptr);
+
+    capsList.clear();
+    rig_load_all_backends();
+    rig_list_foreach(collect, nullptr);
+
+    QString key;
+
+    for (int i = 0; i < capsList.count(); i++)
+    {
+        key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
+        auto port_type = RigCapConstants::PortType::none;
+        switch(capsList[i]->port_type)
+        {
+            case RIG_PORT_SERIAL:
+                port_type = RigCapConstants::PortType::serial;
+            break;
+
+            case RIG_PORT_NETWORK:
+                port_type = RigCapConstants::PortType::network;
+            break;
+
+            case RIG_PORT_USB:
+                port_type = RigCapConstants::PortType::usb;
+            break;
+            default:
+            {}
+        }
+
+        (*rigsList)[key] = RigCapabilities(capsList[i]->rig_model);
+    }
+
+
+
+
+}
 
 
 int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
@@ -114,18 +156,20 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             my_rig->state.rigport.parm.serial.rate = currentRadio.baudrate;
             my_rig->state.rigport.parm.serial.data_bits = currentRadio.databits;
             my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
-            my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
-            my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
+            my_rig->state.rigport.parm.serial.parity = hamlibSerialData::getSerialParityCode(currentRadio.parity);
+            my_rig->state.rigport.parm.serial.handshake = hamlibSerialData::getSerialHandshakeCode(currentRadio.handshake);
 
-            if (getSerialForceLineCode(currentRadio.forceDtr) == serialData::FORCE_LINE_ON)
-            {
-                my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_ON;
+ //************************************************************
+            /*
+           if (getSerialForceLineCode(currentRadio.forceDtr) == serialData::FORCE_LINE_ON)
+           {
+               my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_ON;
             }
             else
             {
                 my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_UNSET;
             }
-
+*/
 
             if (my_rig->state.rigport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
             {
@@ -179,11 +223,11 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     retcode = rig_open(my_rig);
     if (retcode >= 0)
     {
-        set_serialConnected(true);
+        setRigConnected(true);
     }
     else
     {
-        set_serialConnected(false);
+        setRigConnected(false);
     }
 
     return retcode;
@@ -202,7 +246,7 @@ int HamlibRigControl::closeRig()
     retcode = rig_close(my_rig);
 
     retcode = rig_cleanup(my_rig);
-    set_serialConnected(false);
+    setRigConnected(false);
     return retcode;
 
 }
@@ -210,18 +254,25 @@ int HamlibRigControl::closeRig()
 /* ---------------------- Freq ------------------------------------ */
 
 
-int RigControl::getFrequency(vfo_t vfo, freq_t *frequency)
+int HamlibRigControl::getFrequency(VFO vfo, Frequency &frequency)
 {
-    return rig_get_freq(my_rig, vfo, frequency);
+    freq_t f;
+    int retCode = rig_get_freq(my_rig, vfos[vfo], &f);
+    if (retCode >= RIG_OK)
+    {
+        frequency = static_cast<Frequency>(f);
+    }
+
+    return retCode;
 }
 
 
-int RigControl::setFrequency(freq_t frequency, vfo_t vfo)
+int HamlibRigControl::setFrequency(Frequency frequency, VFO vfo)
 {
-    return (rig_set_freq(my_rig, vfo, frequency));
+    return (rig_set_freq(my_rig, vfos[vfo], static_cast<freq_t>(frequency)));
 }
 
-
+/*
 
 bool RigControl::checkFreqValid(freq_t freq, rmode_t mode)
 {
@@ -230,12 +281,12 @@ bool RigControl::checkFreqValid(freq_t freq, rmode_t mode)
     return (freq_range != nullptr)? true:false;
 
 }
-
+*/
 
 /* ---------------------- Freq Range ---------------------------------*/
 
 
-
+/*
 bool RigControl::chkFreqRange(RIG *my_rig, freq_t freq, QString modeStr)
 {
     rmode_t mode = convertQStrMode(modeStr);
@@ -244,17 +295,30 @@ bool RigControl::chkFreqRange(RIG *my_rig, freq_t freq, QString modeStr)
 
 }
 
+*/
+
 /* ---------------------- Mode ------------------------------------ */
 
-int RigControl::getMode(vfo_t vfo, rmode_t *mode, pbwidth_t *width)
+
+int HamlibRigControl::getMode(VFO vfo, MODE& mode)
 {
-    return rig_get_mode(my_rig, vfo, mode, width);
+    int retCode =  rig_get_mode(my_rig, vfos[vfo], &rmode, &rwidth);
+    if (retCode >= RIG_OK)
+    {
+        mode = mapMode(rmode);
+    }
+
+    return retCode;
+
 }
 
-int RigControl::setMode(vfo_t vfo, rmode_t mode, pbwidth_t passBandwidth)
+int HamlibRigControl::setMode(VFO vfo, MODE mode)
 {
-    return (rig_set_mode(my_rig, vfo, mode, passBandwidth));
+    return (rig_set_mode(my_rig, vfos[vfo], mapMode(mode), rwidth));
 }
+
+
+/*
 
 // Hamlib conversion
 QString RigControl::convertModeQstr(rmode_t mode)
@@ -282,9 +346,85 @@ int RigControl::rigConvertQStrMode(QString mode)
     return -1; //not found
 }
 
+*/
+
+
+MODE HamlibRigControl::mapMode (rmode_t m) const
+{
+  switch (m)
+    {
+    case RIG_MODE_AM:
+    case RIG_MODE_SAM:
+    case RIG_MODE_AMS:
+    case RIG_MODE_DSB:
+      return AM;
+
+    case RIG_MODE_CW:
+      return CW;
+
+    case RIG_MODE_CWR:
+      return CW_R;
+
+    case RIG_MODE_USB:
+    case RIG_MODE_ECSSUSB:
+    case RIG_MODE_SAH:
+    case RIG_MODE_FAX:
+      return USB;
+
+    case RIG_MODE_LSB:
+    case RIG_MODE_ECSSLSB:
+    case RIG_MODE_SAL:
+      return LSB;
+
+    case RIG_MODE_RTTY:
+      return FSK;
+
+    case RIG_MODE_RTTYR:
+      return FSK_R;
+
+    case RIG_MODE_PKTLSB:
+      return DIG_L;
+
+    case RIG_MODE_PKTUSB:
+      return DIG_U;
+
+    case RIG_MODE_FM:
+    case RIG_MODE_WFM:
+      return FM;
+
+    case RIG_MODE_PKTFM:
+      return DIG_FM;
+
+    default:
+      return UNK;
+    }
+}
+
+rmode_t HamlibRigControl::mapMode (MODE mode) const
+{
+  switch (mode)
+    {
+    case AM: return RIG_MODE_AM;
+    case CW: return RIG_MODE_CW;
+    case CW_R: return RIG_MODE_CWR;
+    case USB: return RIG_MODE_USB;
+    case LSB: return RIG_MODE_LSB;
+    case FSK: return RIG_MODE_RTTY;
+    case FSK_R: return RIG_MODE_RTTYR;
+    case DIG_L: return RIG_MODE_PKTLSB;
+    case DIG_U: return RIG_MODE_PKTUSB;
+    case FM: return RIG_MODE_FM;
+    case DIG_FM: return RIG_MODE_PKTFM;
+    default: break;
+    }
+  return RIG_MODE_USB;	// quieten compiler grumble
+}
+
+
 /* ---------------------- VFO ------------------------------------ */
 // Note not all radios support reading the VFO
 
+/*
 int RigControl::getVfo(vfo_t *vfo)
 {
 
@@ -305,13 +445,13 @@ QString RigControl::convertVfoQStr(vfo_t vfo)
 {
     return QString::fromLatin1(rig_strvfo(vfo));
 }
-
+*/
 
 /*************** RIT ********************************/
 
 
 
-
+/*
 
 int RigControl::getRit(vfo_t vfo, shortfreq_t *ritfreq)
 {
@@ -405,11 +545,11 @@ bool RigControl::supportGetRitState(int rigNumber)
 
     return false;
 }
-
+*/
 /*************** PTT Control  ********************************/
 
 
-
+/*
 int  RigControl::getPttStatus(vfo_t vfo, ptt_t *pttStatus)
 {
     return rig_get_ptt	(my_rig, vfo, pttStatus);
@@ -422,14 +562,14 @@ int RigControl::setPtt(vfo_t vfo, ptt_t ptt)
 }
 
 
-
+*/
 
 
 /*************** Passband ********************************/
 
 
 
-
+/*
 
 pbwidth_t RigControl::passbandNarrow(rmode_t mode)
 {
@@ -511,10 +651,11 @@ pbwidth_t RigControl::getPassBand()
 {
     return pbwidth;
 }
-
+*/
 
 /*************** Volume Level Control  ********************************/
 
+/*
 bool RigControl::supportVolControl(int rigNumber)
 {
     if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
@@ -545,9 +686,10 @@ int RigControl::getVolume(vfo_t vfo, value_t *val)
     return rigGetLevel(vfo, RIG_LEVEL_AF, val);
 }
 
-
+*/
 /*************** Signal Strength Level Control  ********************************/
 
+/*
 bool RigControl::supportSignalStrength(int modelNumber)
 {
 
@@ -561,10 +703,11 @@ int RigControl::getSignalStrength(vfo_t vfo, value_t *val)
     return rigGetLevel(vfo, RIG_LEVEL_STRENGTH, val);
 }
 
-
+*/
 
 /*************** Level Control  ********************************/
 
+/*
 setting_t RigControl::rigHasGetLevel(setting_t level)
 {
     return rig_has_get_level (my_rig, level);
@@ -617,8 +760,8 @@ int RigControl::rigGetLevel(vfo_t vfo, setting_t level, value_t *val)
     return rig_get_level (my_rig, vfo, level, val);
 }
 
-
-
+*/
+/*
 void RigControl::getRigList()
 {
 
@@ -669,10 +812,10 @@ bool RigControl::getRigList(QComboBox *cb)
    cb->addItems(sl);
    return true;
 }
-
+*/
 /********************** Antenna Switching ---------------------------------*/
 
-
+/*
 int RigControl::getAntSwNum(vfo_t vfo)
 {
     int antNum = 0;
@@ -721,11 +864,11 @@ int RigControl::supportAntSw(int rigNumber, bool *antSwFlag)
     return retCode = -14;
 
 }
-
+*/
 
 /**************************************** ***********************************************/
 
-
+/*
 int RigControl::getPortType(int rigNumber, rig_port_e *portType)
 {
 
@@ -776,33 +919,6 @@ int RigControl::setTimeoutDur(const QString timeoutDur)
 
 }
 
-/*
-int RigControl::getModelNumber(int idx)
-{
-    if(idx<0) return 0;
-    int num = capsList.at(idx)->rig_model;
-    return num;
-}
-
-
-const char * RigControl::getMfg_Name(int idx)
-{
-
-    if(idx<0) return 0;
-    return capsList.at(idx)->mfg_name;
-}
-
-
-
-
-const char * RigControl::getModel_Name(int idx)
-{
-
-    if(idx<0) return 0;
-    return capsList.at(idx)->model_name;
-}
-*/
-
 
 
 
@@ -836,7 +952,7 @@ int RigControl::getModelInfo(QString radioModel, int *radioModelNumber, QString 
 
 }
 
-
+*/
 
 /*
 
@@ -870,79 +986,41 @@ int RigControl::getRigModelIndex()
 */
 
 
-void RigControl::set_serialConnected(bool connectFlag)
-{
-    serialConnected = connectFlag;
-}
 
 
 
 
-bool RigControl::get_serialConnected()
-{
-    return serialConnected;
-}
-
-
-
- enum serial_parity_e RigControl::getSerialParityCode(int index)
+ enum serial_parity_e HamlibRigControl::getSerialParityCode(int index)
  {
 
-     return serialData::parityCodes[index];
+     return hamlibSerialData::parityCodes[index];
 
  }
 
- enum serial_handshake_e RigControl::getSerialHandshakeCode(int index)
+ enum serial_handshake_e HamlibRigControl::getSerialHandshakeCode(int index)
  {
 
-     return serialData::handshakeCodes[index];
+     return hamlibSerialData::handshakeCodes[index];
  }
 
- enum serialData::serial_force_Lines_e RigControl::getSerialForceLineCode(int index)
+ enum hamlibSerialData::serial_force_Lines_e HamlibRigControl::getSerialForceLineCode(int index)
  {
-    return serialData::forceLinesCodes[index];
+    return hamlibSerialData::forceLinesCodes[index];
  }
 
- QStringList RigControl::getParityCodeNames()
- {
-    return serialData::parityStr;
- }
 
- QStringList RigControl::getHandShakeNames()
- {
-     return serialData::handshakeStr;
- }
 
- QStringList RigControl::getForceLinesNames()
- {
-     return serialData::forceLinesStr;
- }
 
- QStringList RigControl::getBaudRateNames()
+ QString HamlibRigControl::getErrorMsgText(int errorCode)
  {
 
-
-     return serialData::baudrateStr;
+     if (errorCode > static_cast<int>(sizeof(hamlibText::hamlibErrorMsg)/sizeof(const char *)))
+     {
+         return tr("hamlib Errorcode too large!");
+     }
+     return tr(hamlibText::hamlibErrorMsg[errorCode]);
  }
 
- QStringList RigControl::getDataBitsNames()
- {
-     return serialData::databitsStr;
- }
-
- QStringList RigControl::getStopBitsNames()
- {
-     return serialData::stopbitsStr;
- }
-
-QString RigControl::gethamlibErrorMsg(int errorCode)
-{
-    if (errorCode > static_cast<int>(sizeof(hamlibErrorMsg)/sizeof(const char *)))
-    {
-        return tr("hamlib Errorcode too large!");
-    }
-    return tr(hamlibErrorMsg[errorCode]);
-}
 
 
 //QStringList RigControl::gethamlibErrorMsg()
@@ -951,7 +1029,7 @@ QString RigControl::gethamlibErrorMsg(int errorCode)
 //    return serialData::hamlibErrorMsg;
 //}
 
-QString RigControl::gethamlibVersion()
+QString HamlibRigControl::getRigLibVersion()
 {
     QString ver = hamlib_version;
     return ver;
@@ -970,16 +1048,21 @@ bool model_Sort(const rig_caps *caps1,const rig_caps *caps2)
 }
 
 
-void RigControl::enableTraceComms(bool state)
+// static to init flag
+void HamlibRigControl::setTraceCommsFlag(bool value)
 {
-    traceComms = state;
+    traceComms = value;
 }
 
-bool RigControl::getTraceState()
+void HamlibRigControl::setTraceComms(bool value)
+{
+    traceComms = value;
+}
+
+bool HamlibRigControl::getTraceComms()
 {
     return traceComms;
 }
-
 
 
 

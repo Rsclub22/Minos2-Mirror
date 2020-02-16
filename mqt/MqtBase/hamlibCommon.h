@@ -8,6 +8,8 @@ namespace hamlibSerialData
 {
 
 
+    enum serial_force_Lines_e {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
+    const serial_force_Lines_e forceLinesCodes[] = {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
 
     const serial_parity_e parityCodes[] = {RIG_PARITY_NONE, RIG_PARITY_ODD, RIG_PARITY_EVEN, RIG_PARITY_MARK, RIG_PARITY_SPACE};
     const serial_handshake_e handshakeCodes[] = { RIG_HANDSHAKE_NONE, RIG_HANDSHAKE_XONXOFF, RIG_HANDSHAKE_HARDWARE };
@@ -42,7 +44,7 @@ const char * hamlibErrorMsg[] = {QT_TR_NOOP("No Error, operation completed suces
 
 }
 
-
+/*
 namespace hamlibErrorTxt
 {
 
@@ -66,6 +68,6 @@ const char * hamlibErrorMsg[] = {QT_TR_NOOP("No Error, operation completed suces
                                     QT_TR_NOOP("RIG_EDOM")};
 
 }
-
+*/
 
 #endif // HAMLIBCOMMON_H

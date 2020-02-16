@@ -33,12 +33,12 @@ PstRotControl::~PstRotControl()
 void PstRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList, int rotatorId)
 {
 
-    (*rotatorsList)["PSTRotator"] = RotCapabilities(rotatorId, RotCapContstants::PortType::network,
+    (*rotatorsList)["PSTRotator"] = RotCapabilities(rotatorId, RotCapConstants::PortType::network,
                                                            "", "PSTRotator",
                                                            false,
                                                            COMPASS_MIN0, COMPASS_MAX360,
-                                                           RotCapContstants::PollData::pollDataOn,
-                                                           RotCapContstants::RotatorDisplay::displayPart);
+                                                           RotCapConstants::PollData::pollDataOn,
+                                                           RotCapConstants::RotatorDisplay::displayPart);
 
 
 

@@ -396,7 +396,7 @@ void RotatorMainWindow::openRotator()
         showStatusMessage(tr("Please select an Antenna"));
         return;
     }
-    if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::serial)
+    if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::serial)
     {
         if(setupAntenna->comportAvial(setupAntenna->currentAntenna.comport) == -1)
         {
@@ -413,7 +413,7 @@ void RotatorMainWindow::openRotator()
         }
 
     }
-    if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::network )
+    if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::network )
     {
         if (setupAntenna->currentAntenna.networkAdd == "" || (setupAntenna->currentAntenna.networkPort == ""))
         {
@@ -460,17 +460,17 @@ void RotatorMainWindow::openRotator()
        }
 
         pollTimer->start(pollTime);             // start timer to send message to controller
-        if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::serial)
+        if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::serial)
         {
             showStatusMessage(tr("Connected to: %1 - %2, %3, %4, %5, %6, %7, %8")
                                   .arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.comport).arg(setupAntenna->currentAntenna.baudrate).arg(setupAntenna->currentAntenna.databits)
                                   .arg(setupAntenna->currentAntenna.stopbits).arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]).arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]));
         }
-        else if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::network )
+        else if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::network )
         {
             showStatusMessage(tr("Connected to: %1 - %2, %3").arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.networkAdd + ":" + setupAntenna->currentAntenna.networkPort));
         }
-        else if (setupAntenna->currentAntenna.portType == RotCapContstants::PortType::none)
+        else if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::none)
         {
                 showStatusMessage(tr("Connected to: %1 - %2").arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel));
         }

@@ -3,7 +3,7 @@
 
 #include <QMessageBox>
 
-AddRadioDialog::AddRadioDialog(QStringList _availRadios, RigControl* rig, QWidget *parent) :
+AddRadioDialog::AddRadioDialog(QStringList _availRadios, RigFactory* rigFactory, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddRadioDialog)
 {
@@ -12,7 +12,7 @@ AddRadioDialog::AddRadioDialog(QStringList _availRadios, RigControl* rig, QWidge
 
 
 
-    rig->getRigList(ui->radioModel);
+    rigFactory->populateComboRigList(ui->radioModel);
     radioModel = ui->radioModel->currentText();
     connect (ui->radioModel, SIGNAL(currentIndexChanged(int)), this, SLOT(radioModelSelect(int)));
 

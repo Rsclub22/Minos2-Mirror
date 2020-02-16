@@ -72,7 +72,7 @@ public:
     int get_rotatorSpeed()  override;
 
     QStringList getErrorMsgList();
-    QString getErrorMsgText(int errorCode);
+    QString getErrorMsgText(int errorCode) override;
     QString getRotLibVersion() override;
 
     static void setTraceCommsFlag(bool value);

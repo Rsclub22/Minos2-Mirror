@@ -121,7 +121,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
         antennaData->portType = rotCap.portType;
 
 
-        antennaData->rotatorModel = ui->rotatorModelBox->currentText();
+        //antennaData->rotatorModel = ui->rotatorModelBox->currentText();
 
         pollIntervalVisible(true);
 
@@ -163,17 +163,17 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
 
             }
 
-            if (antennaData->portType == RotCapContstants::PortType::network)
+            if (antennaData->portType == RotCapConstants::PortType::network)
             {
                serialDataEntryVisible(false);
                networkDataEntryVisible(true);
             }
-            else if (antennaData->portType == RotCapContstants::PortType::serial)
+            else if (antennaData->portType == RotCapConstants::PortType::serial)
             {
                 serialDataEntryVisible(true);
                 networkDataEntryVisible(false);
             }
-            else if (antennaData->portType == RotCapContstants::PortType::none)
+            else if (antennaData->portType == RotCapConstants::PortType::none)
             {
                 serialDataEntryVisible(false);
                 networkDataEntryVisible(false);

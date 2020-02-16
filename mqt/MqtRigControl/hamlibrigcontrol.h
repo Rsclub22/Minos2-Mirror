@@ -16,6 +16,7 @@
 
 #include "rigbase.h"
 #include "rigfactory.h"
+#include "hamlibCommon.h"
 #include <hamlib/rig.h>
 
 
@@ -25,7 +26,7 @@ int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 int collect(const rig_caps *caps, void *);
 
 
-
+vfo_t vfos[3] = {RIG_VFO_CURR, RIG_VFO_A, RIG_VFO_B};
 
 
 
@@ -39,16 +40,19 @@ public:
 
     static void register_rigs(RigFactory::Rigs *);
 
-    int rigInit(scatParams &currentRadio, bool useRigCtld);
-    int getFrequency(VFO vfo, Frequency*);
-    int setFrequency(Frequency frequency, VFO vfo);
+    int rigInit(scatParams &currentRadio, bool useRigCtld) override;
+    int closeRig() override;
 
-    int getMode(VFO vfo, MODE *mode);
-    int setMode(VFO vfo, MODE mode);
+    int getFrequency(VFO vfo, Frequency& f) override;
+    int setFrequency(Frequency frequency, VFO vfo) override;
+
+    int getMode(VFO vfo, MODE& mode) override;
+    int setMode(VFO vfo, MODE mode) override;
 
 
 
-    QString getRotLibVersion() override;
+    QString getRigLibVersion() override;
+    QString getErrorMsgText(int errorCode) override;
 
     static void setTraceCommsFlag(bool value);
     void setTraceComms(bool value) override;
@@ -56,8 +60,20 @@ public:
 
     int rig_message_cb(enum rig_debug_level_e debug_level, const char *fmt, va_list ap);
 
+private:
+
+    hamlib_port_t myport;
+    RIG *my_rig = nullptr;
+
+    rmode_t rmode;          // read radio mode
+    pbwidth_t rwidth;        // read radio rx bw
 
 
+    MODE mapMode(rmode_t m) const;
+    rmode_t mapMode(MODE mode) const;
+    serial_parity_e getSerialParityCode(int index);
+    serial_handshake_e getSerialHandshakeCode(int index);
+    hamlibSerialData::serial_force_Lines_e getSerialForceLineCode(int index);
 };
 
 #endif // HAMLIBRIGCONTROL_H

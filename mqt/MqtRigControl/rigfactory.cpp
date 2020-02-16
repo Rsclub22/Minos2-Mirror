@@ -43,3 +43,15 @@ RigBase* RigFactory::createRigs(int rigId)
 
     return new HamlibRigControl();
 }
+
+
+void RigFactory::populateComboRigList(QComboBox* comBox )
+{
+    comBox->clear();
+    comBox->addItem("");
+    for (auto r = supported_rigs()->cbegin(); r != supported_rigs()->cend(); ++r)
+    {
+        QString rigText = r.key();
+        comBox->addItem(rigText.remove("Hamlib "));
+    }
+}

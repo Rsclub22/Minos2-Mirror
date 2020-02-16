@@ -2,7 +2,7 @@
 #define ADDRADIODIALOG_H
 
 #include <QDialog>
-#include "rigcontrol.h"
+#include "rigfactory.h"
 #include "cutils.h"
 
 namespace Ui {
@@ -14,7 +14,7 @@ class AddRadioDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddRadioDialog(QStringList _availRadios, RigControl* rig, QWidget *parent = nullptr);
+    explicit AddRadioDialog(QStringList _availRadios, RigFactory* rigFactory, QWidget *parent = nullptr);
     ~AddRadioDialog();
 
     QString getRadioName();

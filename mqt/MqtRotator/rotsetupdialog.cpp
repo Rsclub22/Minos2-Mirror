@@ -182,17 +182,17 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->setNetAddress(availAntData[tabNum]->networkAdd);
         antennaTab[tabNum]->setNetPortNum(availAntData[tabNum]->networkPort);
 
-        if (availAntData[tabNum]->portType == RotCapContstants::PortType::network)
+        if (availAntData[tabNum]->portType == RotCapConstants::PortType::network)
         {
             antennaTab[tabNum]->serialDataEntryVisible(false);
             antennaTab[tabNum]->networkDataEntryVisible(true);
         }
-        else if (availAntData[tabNum]->portType == RotCapContstants::PortType::none)
+        else if (availAntData[tabNum]->portType == RotCapConstants::PortType::none)
         {
             antennaTab[tabNum]->serialDataEntryVisible(false);
             antennaTab[tabNum]->networkDataEntryVisible(false);
         }
-        else if (availAntData[tabNum]->portType == RotCapContstants::PortType::serial)
+        else if (availAntData[tabNum]->portType == RotCapConstants::PortType::serial)
         {
             antennaTab[tabNum]->serialDataEntryVisible(true);
             antennaTab[tabNum]->networkDataEntryVisible(false);
@@ -437,7 +437,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->southStopType = southStop(config.value("southStopType", S_STOPOFF).toInt());
     availAntData[antNum]->overRunFlag = config.value("overRun", false).toBool();
     availAntData[antNum]->antennaOffset = config.value("antennaOffset", "").toInt();
-    availAntData[antNum]->portType = (config.value("portType", RotCapContstants::PortType::none).toInt());
+    availAntData[antNum]->portType = (config.value("portType", RotCapConstants::PortType::none).toInt());
     availAntData[antNum]->comport = config.value("comport", "").toString();
     availAntData[antNum]->baudrate = config.value("baudrate", 9600).toInt();
     availAntData[antNum]->databits = config.value("databits", 8).toInt();

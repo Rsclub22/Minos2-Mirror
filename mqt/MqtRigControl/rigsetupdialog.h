@@ -18,10 +18,9 @@
 #include <QDialog>
 #include <QStringList>
 #include <QVector>
-#include "rigcontrol.h"
 #include "rigsetupform.h"
 #include "transvertsetupform.h"
-
+#include "rigfactory.h"
 
 
 
@@ -46,7 +45,7 @@ class RigSetupDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RigSetupDialog(RigControl* rig, const QVector<BandDetail> &_bands, QWidget *parent = nullptr);
+    explicit RigSetupDialog(RigFactory* rigFactory, const QVector<BandDetail> &_bands, QWidget *parent = nullptr);
     ~RigSetupDialog();
 
 
@@ -105,7 +104,7 @@ private slots:
 private:
     Ui::RigSetupDialog *ui;
 
-    RigControl *radio;
+    RigFactory *rigFactory;
 
     QVector<RigSetupForm*> radioTab;
 
