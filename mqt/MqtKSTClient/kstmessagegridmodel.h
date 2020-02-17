@@ -32,6 +32,12 @@ class KstMessageGridModel: public QAbstractItemModel
 {
     Q_OBJECT
 
+    QString filterString;
+    int chatFilter = 0;
+    bool isFiltered() const
+    {
+        return !filterString.isEmpty() || chatFilter != 0;
+    }
         QSize cacheSize;
     public:
         KstMessageGridModel();
@@ -52,17 +58,25 @@ class KstMessageGridModel: public QAbstractItemModel
         QModelIndex parent( const QModelIndex &index )const Q_DECL_OVERRIDE;
 
         int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
+        int rawCount(const QModelIndex &parent = QModelIndex()) const;
 
         void appendLastRow(QSharedPointer<KstMessageLine>);
 
         void setCacheSize();
         void reset();
+        void setFilterString(QString f);
+        void setChatFilter(int value);
 };
 
 class KstMessageGridSortFilterModel: public QSortFilterProxyModel
 {
     QString filterString;
     int chatFilter = 0;
+    bool isFiltered() const
+    {
+        return !filterString.isEmpty() || chatFilter != 0;
+    }
+
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);

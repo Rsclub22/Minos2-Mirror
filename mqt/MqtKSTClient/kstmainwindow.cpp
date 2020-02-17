@@ -874,7 +874,11 @@ void KSTMainWindow::on_sectionMoved(int, int, int)
 void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstCallFilterModel.mapToSource(index);
-    QSharedPointer<KstUser> user = callVector->at(sourceIndex.row());
+    int row = sourceIndex.row();
+    if (row >= callVector->size())
+        return;
+    QSharedPointer<KstUser> user = callVector->at(row);
+
     QString call = user->call;
 
     setNameFromCall(call);
@@ -1110,7 +1114,10 @@ void KSTMainWindow::doLoginChanges()
 void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
-    QSharedPointer<KstMessageLine> line = messageVector->at(sourceIndex.row());
+    int row = sourceIndex.row();
+    if (row >= messageVector->size())
+        return;
+    QSharedPointer<KstMessageLine> line = messageVector->at(row);
     QString call = line->call;
     if (call.compare(myCallsign, Qt::CaseInsensitive) == 0)
     {

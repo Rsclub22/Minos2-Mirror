@@ -41,7 +41,7 @@ QModelIndex KstCallGridModel::index( int row, int column,
     if (!callVector)
         return QModelIndex();
 
-    if ( row < 0 || row >= callVector->count() || ( parent.isValid() && parent.column() != 0 ) )
+    if ( row < 0 || row >= rowCount() || ( parent.isValid() && parent.column() != 0 ) )
         return QModelIndex();
 
     return createIndex( row, column, nullptr );
@@ -55,12 +55,19 @@ int KstCallGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 {
     if (!callVector)
         return 0;
+    return callVector->count() + 1;
+}
+
+int KstCallGridModel::rawCount(const QModelIndex &/*parent*/) const
+{
+    if (!callVector)
+        return 0;
     return callVector->count();
 }
 
 void KstCallGridModel::appendRow(QSharedPointer<KstUser> call)
 {
-    beginInsertRows(QModelIndex(), rowCount() , rowCount());
+    beginInsertRows(QModelIndex(), rawCount() , rawCount());
     callVector->push_back(call);
     endInsertRows();
 }
@@ -75,6 +82,16 @@ void KstCallGridModel::removeRow(int _row)
     beginRemoveRows(QModelIndex(), _row, _row);
     callVector->removeAt(_row);
     endRemoveRows();
+}
+
+void KstCallGridModel::setFilterString(QString f)
+{
+    filterString = f;
+}
+
+void KstCallGridModel::setChatFilter(int value)
+{
+    chatFilter = value;
 }
 void KstCallGridModel::checkDistBear(QSharedPointer<KstUser> crec) const
 {
@@ -106,6 +123,9 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::DisplayRole)
     {
+        if (row >= rawCount())
+            return QVariant();
+
         QSharedPointer<KstUser> crec = callVector->at(row);
 
         switch(index.column())
@@ -157,6 +177,9 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
     }
     if (role == Qt::UserRole)
     {
+        if (row >= rawCount())
+            return QVariant();
+
         QSharedPointer<KstUser> crec = callVector->at(row);
         switch (index.column())
         {
@@ -201,6 +224,13 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
         case ecscCountryName:
             return crec->country;
+        }
+    }
+    if (role == Qt::BackgroundColorRole)
+    {
+        if (isFiltered())
+        {
+            return static_cast< QColor> ( 0x00FF80C0 ).lighter(135);        // Pink(ish)
         }
     }
     return QVariant();
@@ -261,6 +291,9 @@ int KstCallGridModel::columnCount( const QModelIndex & /*parent*/ ) const
 //==========================================================================================
 void KstCallGridSortFilterModel::setChatFilter(int value)
 {
+    KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setChatFilter(value);
     chatFilter = value;
     invalidateFilter();
 }
@@ -271,6 +304,9 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
     if (!cgm || sourceRow >= cgm->rowCount())
         return false;
+
+    if (sourceRow >= cgm->rawCount())
+        return isFiltered();
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
 
@@ -295,6 +331,9 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
 void KstCallGridSortFilterModel::setFilterString(QString f)
 {
+    KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setFilterString(f);
     filterString = f;
     invalidateFilter();
 }
@@ -304,13 +343,15 @@ bool KstCallGridSortFilterModel::lessThan(const QModelIndex &left,
 {
     //Model Indices are to the SOURCE model
 
+    KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
+
     int lrow = left.row();
     int rrow = right.row();
 
-    if (lrow >= sourceModel()->rowCount())
+    if (lrow >= cgm->rawCount())
         return false;
-    if (rrow >= sourceModel()->rowCount())
-        return false;
+    if (rrow >= cgm->rawCount())
+        return true;
 
     QVariant ws1;
     QVariant ws2;

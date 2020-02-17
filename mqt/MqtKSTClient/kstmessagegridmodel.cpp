@@ -30,7 +30,7 @@ QModelIndex KstMessageGridModel::index( int row, int column,
     if (!messageVector)
         return QModelIndex();
 
-    if ( row < 0 || row >= messageVector->count() || ( parent.isValid() && parent.column() != 0 ) )
+    if ( row < 0 || row >= rowCount() || ( parent.isValid() && parent.column() != 0 ) )
         return QModelIndex();
 
     return createIndex( row, column, nullptr );
@@ -44,12 +44,17 @@ int KstMessageGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 {
     if (!messageVector)
         return 0;
+    return messageVector->count() + 1;
+}
+int KstMessageGridModel::rawCount( const QModelIndex &/*parent*/ ) const
+{
+    if (!messageVector)
+        return 0;
     return messageVector->count();
 }
-
 void KstMessageGridModel::appendLastRow(QSharedPointer<KstMessageLine> msg)
 {
-    beginInsertRows(QModelIndex(), rowCount() , rowCount());
+    beginInsertRows(QModelIndex(), rawCount() , rawCount());
     messageVector->push_back(msg);
     endInsertRows();
 }
@@ -70,7 +75,9 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::DisplayRole)
     {
-        //QSharedPointer<QVector <QSharedPointer<ChatLine> > > chatVector;
+        if (row >= rawCount())
+            return QVariant();
+
         QSharedPointer<KstMessageLine> crec = messageVector->at(row);
 
         QString cell;
@@ -101,8 +108,19 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
     }
     else if (role == Qt::ToolTipRole)
     {
+        if (row >= rawCount())
+        {
+            return QVariant();
+        }
         QSharedPointer<KstMessageLine> crec = messageVector->at(row);
         return crec->message;
+    }
+    else if (role == Qt::BackgroundColorRole)
+    {
+        if (isFiltered())
+        {
+            return static_cast< QColor> ( 0x00FF80C0 ).lighter(135);        // Pink(ish)
+        }
     }
     return QVariant();
 }
@@ -148,9 +166,22 @@ int KstMessageGridModel::columnCount( const QModelIndex & /*parent*/ ) const
 {
     return eccMaxColumn;
 }
+void KstMessageGridModel::setFilterString(QString f)
+{
+    filterString = f;
+}
+
+void KstMessageGridModel::setChatFilter(int value)
+{
+    chatFilter = value;
+}
 //==========================================================================================
 void KstMessageGridSortFilterModel::setChatFilter(int value)
 {
+    KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setChatFilter(value);
+
     chatFilter = value;
     invalidateFilter();
 }
@@ -161,6 +192,9 @@ bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModel
     KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
     if (!cgm || sourceRow >= cgm->rowCount())
         return false;
+
+    if (sourceRow >= cgm->rawCount())
+        return isFiltered();
 
     QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
 
@@ -179,6 +213,9 @@ bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModel
 
 void KstMessageGridSortFilterModel::setFilterString(QString f)
 {
+    KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setFilterString(f);
     filterString = f;
     invalidateFilter();
 }
@@ -209,6 +246,9 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
     if (!cgm || sourceRow >= cgm->rowCount())
+        return false;
+
+    if (sourceRow >= cgm->rawCount())
         return false;
 
     QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
