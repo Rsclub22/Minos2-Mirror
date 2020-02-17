@@ -92,6 +92,14 @@ private:
 
 
 
+    setting_t rigHasGetLevel(setting_t level);
+    static setting_t rigHasGetLevel(int rigNumber, setting_t level);
+    setting_t rigHasSetLevel(setting_t level);
+    static setting_t rigHasSetLevel(int rigNumber, setting_t level);
+    int rigSetLevel(vfo_t vfo, setting_t level, value_t val);
+    int rigGetLevel(vfo_t vfo, setting_t level, value_t *val);
+    static bool supportSignalStrength(int modelNumber);
+    int getSignalStrength(vfo_t vfo, value_t *val);
 };
 
 #endif // HAMLIBRIGCONTROL_H

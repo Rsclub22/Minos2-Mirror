@@ -32,6 +32,14 @@ public:
                     RigCapConstants::PortType portType_ = RigCapConstants::none,
                     QString rigManufacturer_ = "",
                     QString rigModelName_ = "",
+                    bool supportGetRit_ = false,
+                    bool supportSetRit_ = false,
+                    bool supportSMeter_ = false,
+                    bool supportGetPtt_ = false,
+                    bool supportSetPtt_ = false,
+                    bool supportVolume_ = false,
+                    bool supportAntSw_ = false,
+                    bool supportRigCtld_ = false,
                     bool pollData_= RigCapConstants::pollDataOn);
 
 
@@ -39,14 +47,16 @@ public:
     RigCapConstants::PortType portType;
     QString rigManufacturer;
     QString rigModelName;
+    int rigModelNumber;
     bool supportGetRit;
     bool supportSetRit;
-    bool supportRitOnOff;
-    bool supportGetRitState;
-    bool supportSmeter;
+    bool supportSMeter;
+    bool supportGetPtt;
     bool supportPtt;
+    bool supportSetPtt;
     bool supportVolume;
-    bool supportAntennaSw;
+    bool supportAntSw;
+    bool supportRigCtld;
     bool pollData;
 
 

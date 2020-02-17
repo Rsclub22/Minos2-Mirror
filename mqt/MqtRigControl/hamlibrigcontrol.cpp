@@ -117,37 +117,46 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
             {}
         }
 
-        // support getRit
-
         bool supportGetRit = capsList[i]->get_rit ? true:false;
-
-
-        // support SetRit
 
         bool supportSetRit = capsList[i]->set_rit ? true:false;
 
-        // support RitOnOff
-        RIG *myRig;
-        //myRig = rig_init(capsList[i]->rig_number)
+        bool supportSMeter = HamlibRigControl::supportSignalStrength(capsList[i]->rig_model);
 
-        // support GetRitState
+        bool supportGetPtt = capsList[i]->get_ptt ? true:false;
 
+        bool supportSetPtt = capsList[i]->set_ptt ? true:false;
 
-        // support SMeter
+        bool supportVolume = false;
 
+        if (capsList[i]->rig_model != 237) // if rig is TS590G ignore volume as it has a bug..
+        {
+            if ((HamlibRigControl::rigHasGetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (HamlibRigControl::rigHasSetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF))
+            {
+                supportVolume =  true;
+            }
 
-        // support Ptt
-
-
-        // support Volume
-
+        }
 
         // support Antenna Switch
+        bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
 
 
         // support Poll Data
 
-        (*rigsList)[key] = RigCapabilities(capsList[i]->rig_model);
+        (*rigsList)[key] = RigCapabilities(capsList[i]->rig_model,
+                                           port_type,
+                                           capsList[i]->mfg_name,
+                                           capsList[i]->model_name,
+                                           supportGetRit,
+                                           supportSetRit,
+                                           supportSMeter,
+                                           supportGetPtt,
+                                           supportSetPtt,
+                                           supportVolume,
+                                           supportAntSw,
+                                           true,            // support RigCtld
+                                           true);    // support poll data
     }
 
 
@@ -745,8 +754,8 @@ int RigControl::getVolume(vfo_t vfo, value_t *val)
 */
 /*************** Signal Strength Level Control  ********************************/
 
-/*
-bool RigControl::supportSignalStrength(int modelNumber)
+
+bool HamlibRigControl::supportSignalStrength(int modelNumber)
 {
 
     return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
@@ -754,29 +763,29 @@ bool RigControl::supportSignalStrength(int modelNumber)
 
 
 
-int RigControl::getSignalStrength(vfo_t vfo, value_t *val)
+int HamlibRigControl::getSignalStrength(vfo_t vfo, value_t *val)
 {
     return rigGetLevel(vfo, RIG_LEVEL_STRENGTH, val);
 }
 
-*/
+
 
 /*************** Level Control  ********************************/
 
-/*
-setting_t RigControl::rigHasGetLevel(setting_t level)
+
+setting_t HamlibRigControl::rigHasGetLevel(setting_t level)
 {
     return rig_has_get_level (my_rig, level);
 }
 
-setting_t RigControl::rigHasGetLevel(int rigNumber, setting_t level)
+setting_t HamlibRigControl::rigHasGetLevel(int rigNumber, setting_t level)
 {
 
     RIG *myRig;
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        return rig_has_get_level (my_rig, level);
+        return rig_has_get_level (myRig, level);
     }
     else
     {
@@ -785,19 +794,19 @@ setting_t RigControl::rigHasGetLevel(int rigNumber, setting_t level)
 
 }
 
-setting_t RigControl::rigHasSetLevel(setting_t level)
+setting_t HamlibRigControl::rigHasSetLevel(setting_t level)
 {
     return rig_has_set_level (my_rig, level);
 }
 
-setting_t RigControl::rigHasSetLevel(int rigNumber, setting_t level)
+setting_t HamlibRigControl::rigHasSetLevel(int rigNumber, setting_t level)
 {
 
     RIG *myRig;
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        return rig_has_set_level (my_rig, level);
+        return rig_has_set_level (myRig, level);
     }
     else
     {
@@ -806,17 +815,17 @@ setting_t RigControl::rigHasSetLevel(int rigNumber, setting_t level)
 }
 
 
-int RigControl::rigSetLevel(vfo_t vfo, setting_t level, value_t val)
+int HamlibRigControl::rigSetLevel(vfo_t vfo, setting_t level, value_t val)
 {
     return rig_set_level (my_rig, vfo, level, val);
 }
 
-int RigControl::rigGetLevel(vfo_t vfo, setting_t level, value_t *val)
+int HamlibRigControl::rigGetLevel(vfo_t vfo, setting_t level, value_t *val)
 {
     return rig_get_level (my_rig, vfo, level, val);
 }
 
-*/
+
 /*
 void RigControl::getRigList()
 {
@@ -898,7 +907,7 @@ int RigControl::setAntSwNum(vfo_t vfo, ant_t antNum)
 }
 
 
-int RigControl::supportAntSw(int rigNumber, bool *antSwFlag)
+int HamlibRigControl::supportAntSw(int rigNumber, bool *antSwFlag)
 {
     int retCode = RIG_OK;
     RIG *myRig;

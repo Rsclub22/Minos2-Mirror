@@ -189,7 +189,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         for (int i = 0; i < radioData->numTransverters; i++)
         {
-            if (rigFactory->supported_rigs()->value(radioData->radioModel).supportAntennaSw)
+            if (rigFactory->supported_rigs()->value(radioData->radioModel).supportAntSw)
             {
                //transVertTab[i]->antSwNumVisible(true);
                radioData->antSwitchAvail = true;
@@ -1188,7 +1188,7 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
 
     // does this radio support antenna sw?
 
-    if (rigFactory->supported_rigs()->value(radioData->radioModel).supportAntennaSw)
+    if (rigFactory->supported_rigs()->value(radioData->radioModel).supportAntSw)
     {
        //transVertTab[tabNum]->antSwNumVisible(true);
        radioData->antSwitchAvail = true;

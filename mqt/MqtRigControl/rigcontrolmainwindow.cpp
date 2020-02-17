@@ -593,7 +593,7 @@ void RigControlMainWindow::upDateRadio()
 
                 // does the radio support signal strength meter
 
-                supSignalStrength = rigFactory->supported_rigs()->value(setupRadio->currentRadio.radioModel).supportSmeter;
+                supSignalStrength = rigFactory->supported_rigs()->value(setupRadio->currentRadio.radioModel).supportSMeter;
 
 
                 updateSupportedRadioIndicators();
