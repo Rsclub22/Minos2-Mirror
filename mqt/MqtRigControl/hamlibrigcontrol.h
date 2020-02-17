@@ -14,7 +14,7 @@
 #ifndef HAMLIBRIGCONTROL_H
 #define HAMLIBRIGCONTROL_H
 
-#include "hamlibCommon.h"
+//#include "hamlibCommon.h"
 #include "rigbase.h"
 #include "rigfactory.h"
 #include <hamlib/rig.h>
@@ -27,6 +27,12 @@ int collect(const rig_caps *caps, void *);
 
 
 
+enum serial_force_Lines_e {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
+const serial_force_Lines_e forceLinesCodes[] = {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
+
+const serial_parity_e parityCodes[] = {RIG_PARITY_NONE, RIG_PARITY_ODD, RIG_PARITY_EVEN, RIG_PARITY_MARK, RIG_PARITY_SPACE};
+const serial_handshake_e handshakeCodes[] = { RIG_HANDSHAKE_NONE, RIG_HANDSHAKE_XONXOFF, RIG_HANDSHAKE_HARDWARE };
+
 
 
 
@@ -37,6 +43,8 @@ class RigFactory;
 class HamlibRigControl : public RigBase
 {
     Q_OBJECT
+    static const char* hamlibErrorMsg[];
+
 public:
     HamlibRigControl(QObject *parent = nullptr);
     virtual ~HamlibRigControl();
@@ -78,9 +86,9 @@ private:
 
     vfo_t hamlibVfoNames[3] = {RIG_VFO_CURR, RIG_VFO_A, RIG_VFO_B};
 
-    serial_parity_e getSerialParityCode(int index){return hamlibSerialData::parityCodes[index];}
-    serial_handshake_e getSerialHandshakeCode(int index){return hamlibSerialData::handshakeCodes[index];}
-    hamlibSerialData::serial_force_Lines_e getSerialForceLineCode(int index){return hamlibSerialData::forceLinesCodes[index];}
+    serial_parity_e getSerialParityCode(int index){return parityCodes[index];}
+    serial_handshake_e getSerialHandshakeCode(int index){return handshakeCodes[index];}
+    serial_force_Lines_e getSerialForceLineCode(int index){return forceLinesCodes[index];}
 
 
 

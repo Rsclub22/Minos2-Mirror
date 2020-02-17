@@ -23,7 +23,7 @@
 #include "rotatorcommon.h"
 #include "rotatorfactory.h"
 #include "rotatorbase.h"
-#include "hamlibCommon.h"
+//#include "hamlibCommon.h"
 
 #include <hamlib/rotator.h>
 #include <hamlib/rig.h>         // for debug
@@ -35,6 +35,12 @@ int collect(const rot_caps *caps, void *);
 
 
 
+enum serial_force_Lines_e {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
+const serial_force_Lines_e forceLinesCodes[] = {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
+
+const serial_parity_e parityCodes[] = {RIG_PARITY_NONE, RIG_PARITY_ODD, RIG_PARITY_EVEN, RIG_PARITY_MARK, RIG_PARITY_SPACE};
+const serial_handshake_e handshakeCodes[] = { RIG_HANDSHAKE_NONE, RIG_HANDSHAKE_XONXOFF, RIG_HANDSHAKE_HARDWARE };
+
 
 
 
@@ -42,6 +48,8 @@ int collect(const rot_caps *caps, void *);
 class HamlibRotControl: public RotatorBase
 {
     Q_OBJECT
+
+    static const char* hamlibErrorMsg[];
 
 public:
     explicit HamlibRotControl(QObject *parent = nullptr);
@@ -113,9 +121,9 @@ private:
     //int serialP;
 
 
-    serial_parity_e getSerialParityCode(int index){return hamlibSerialData::parityCodes[index];}
-    serial_handshake_e getSerialHandshakeCode(int index){return hamlibSerialData::handshakeCodes[index];}
-    hamlibSerialData::serial_force_Lines_e getSerialForceLineCode(int index){return hamlibSerialData::forceLinesCodes[index];}
+    serial_parity_e getSerialParityCode(int index){return parityCodes[index];}
+    serial_handshake_e getSerialHandshakeCode(int index){return handshakeCodes[index];}
+    serial_force_Lines_e getSerialForceLineCode(int index){return forceLinesCodes[index];}
 
 
 

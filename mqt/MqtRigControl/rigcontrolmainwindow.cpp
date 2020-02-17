@@ -805,7 +805,7 @@ int RigControlMainWindow::openRigCtldRadio()
     {
         radio->closeRig();
         logMessage(QString("openRigCtldRadio: Error Opening Radio %1, Error Code = %2").arg(setupRadio->currentRadio.radioModel).arg(QString::number(retCode)));
-        hamlibError(retCode, tr("RigCtld Open Radio"));
+        radioError(retCode, tr("RigCtld Open Radio"));
         return OPEN_FAILED;
     }
 
@@ -821,7 +821,7 @@ int RigControlMainWindow::openRigCtldRadio()
         if (retCode < Rig_OK)
         {
             logMessage(QString("openRigctldRadio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
-            hamlibError(retCode, tr("Test Radio Connection via Rigctld\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
+            radioError(retCode, tr("Test Radio Connection via Rigctld\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
             //sendStatusToLogDisConnected();
             return OPEN_FAILED;
         }
@@ -949,7 +949,7 @@ int RigControlMainWindow::openRadio()
         {
             radio->closeRig();
             logMessage(QString("Error Opening Radio Error Code = %1").arg(QString::number(retCode)));
-            hamlibError(retCode, tr("Open Radio"));
+            radioError(retCode, tr("Open Radio"));
             return OPEN_FAILED;
         }
 
@@ -971,7 +971,7 @@ int RigControlMainWindow::openRadio()
         if (retCode < Rig_OK)
         {
             logMessage(QString("Open Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
-            hamlibError(retCode, tr("Test Radio Connection\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
+            radioError(retCode, tr("Test Radio Connection\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
             //sendStatusToLogDisConnected();
             return OPEN_FAILED;
         }
@@ -1159,7 +1159,7 @@ void RigControlMainWindow::getRadioInfo()
         {
             // error
             logMessage(QString("Get radioInfo: Get Freq error %1").arg(QString::number(retCode)));
-            hamlibError(retCode, tr("Request Freq"));
+            radioError(retCode, tr("Request Freq"));
 
         }
 
@@ -1174,7 +1174,7 @@ void RigControlMainWindow::getRadioInfo()
         {
             // error
             logMessage(QString("Get radioInfo: Get Mode error %1").arg(QString::number(retCode)));
-            hamlibError(retCode, tr("Request Mode"));
+            radioError(retCode, tr("Request Mode"));
 
         }
         else
@@ -1453,7 +1453,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
                 }
 
                 logMessage(QString("SetFreq: Error Setting Freq Code = %1").arg(retCode));
-                hamlibError(retCode, tr("SetFreq"));
+                radioError(retCode, tr("SetFreq"));
             }
             else
             {
@@ -1555,7 +1555,7 @@ int RigControlMainWindow::getAndSendFrequency(VFO vfo)
     else
     {
         logMessage(QString("Get radioInfo: Get Freq error, code = %1").arg(QString::number(retCode)));
-        hamlibError(retCode, tr("Request Frequency"));
+        radioError(retCode, tr("Request Frequency"));
     }
     return retCode;
 }
@@ -2135,7 +2135,7 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
         else
         {
             logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode)).arg(radio->convertModeQStr(mCode)));
-            hamlibError(retCode, tr("Set Mode"));
+            radioError(retCode, tr("Set Mode"));
         }
 
     }
@@ -2618,7 +2618,7 @@ void RigControlMainWindow::showStatusMessage(const QString &message)
     status->setText(message);
 }
 
-void RigControlMainWindow::hamlibError(int errorCode, QString cmd)
+void RigControlMainWindow::radioError(int errorCode, QString cmd)
 {
 
     pollTimer->stop();
@@ -2640,9 +2640,9 @@ void RigControlMainWindow::hamlibError(int errorCode, QString cmd)
         sendStatusToLogError(errorMsg);
     }
 
-    logMessage(QString("Hamlib Error - Code = %1 - %2").arg(QString::number(errorCode)).arg(errorMsg));
+    logMessage(QString("Radio library Error - Code = %1 - %2").arg(QString::number(errorCode)).arg(errorMsg));
 
-    QMessageBox::critical(this, tr("RigControl hamlib Error - ").arg(setupRadio->currentRadio.radioName), tr("%1 - %2\nCommand %3").arg(errorCode).arg(errorMsg).arg(cmd));
+    QMessageBox::critical(this, tr("RigControl library Error - ").arg(setupRadio->currentRadio.radioName), tr("%1 - %2\nCommand %3").arg(errorCode).arg(errorMsg).arg(cmd));
 
     closeRadio();
     rigErrorFlag = false;

@@ -15,6 +15,27 @@
 #include "hamlibrigcontrol.h"
 #include "minosNetUtils.h"
 
+
+const char* HamlibRigControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
+                                                QT_TR_NOOP("Invalid parameter"),
+                                                QT_TR_NOOP("Invalid configuration"),
+                                                QT_TR_NOOP("Memory shortage"),
+                                                QT_TR_NOOP("Function not implemented"),
+                                                QT_TR_NOOP("Communication timed out"),
+                                                QT_TR_NOOP("IO error, including open failed"),
+                                                QT_TR_NOOP("Internal Hamlib error"),
+                                                QT_TR_NOOP("Protocol error"),
+                                                QT_TR_NOOP("Command rejected by the rig"),
+                                                QT_TR_NOOP("Command performed, but arg truncated"),
+                                                QT_TR_NOOP("Function not available"),
+                                                QT_TR_NOOP("VFO not targetable"),
+                                                QT_TR_NOOP("Error talking on the bus"),
+                                                QT_TR_NOOP("Collision on the bus"),
+                                                QT_TR_NOOP("NULL RIG handle or any invalid pointer parameter in get arg"),
+                                                QT_TR_NOOP("Invalid VFO"),
+                                                QT_TR_NOOP("RIG_EDOM")};
+
+
 static QList<const rig_caps *> capsList;
 
 int collect(const rig_caps *caps, rig_ptr_t)
@@ -95,6 +116,36 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
             default:
             {}
         }
+
+        // support getRit
+
+        bool supportGetRit = capsList[i]->get_rit ? true:false;
+
+
+        // support SetRit
+
+        bool supportSetRit = capsList[i]->set_rit ? true:false;
+
+        // support RitOnOff
+        RIG *myRig;
+        //myRig = rig_init(capsList[i]->rig_number)
+
+        // support GetRitState
+
+
+        // support SMeter
+
+
+        // support Ptt
+
+
+        // support Volume
+
+
+        // support Antenna Switch
+
+
+        // support Poll Data
 
         (*rigsList)[key] = RigCapabilities(capsList[i]->rig_model);
     }
@@ -995,11 +1046,11 @@ int RigControl::getRigModelIndex()
  QString HamlibRigControl::getErrorMsgText(int errorCode)
  {
 
-     if (errorCode > static_cast<int>(sizeof(hamlibText::hamlibErrorMsg)/sizeof(const char *)))
+     if (errorCode > static_cast<int>(sizeof(hamlibErrorMsg)/sizeof(const char *)))
      {
          return tr("hamlib Errorcode too large!");
      }
-     return tr(hamlibText::hamlibErrorMsg[errorCode]);
+     return tr(hamlibErrorMsg[errorCode]);
  }
 
 
