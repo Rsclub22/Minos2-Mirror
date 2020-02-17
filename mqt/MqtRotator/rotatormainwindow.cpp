@@ -508,12 +508,13 @@ void RotatorMainWindow::closeRotator()
     if (rotator->getRotConnected())
     {
         rotator->closeRotator();
-        if (rotator)
-        {
-            delete rotator;
-        }
+
     }
 
+    if (rotator)
+    {
+        delete rotator;
+    }
 
     showStatusMessage(tr("Disconnected"));
     sendStatusToLogDisConnected();

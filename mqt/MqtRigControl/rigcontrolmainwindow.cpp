@@ -170,7 +170,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         testBoxesVisible(true);
         setRadioNameLabelVisible(false);
     }
-    test_mem = new int[3000];
+
 
     pollTimer = new QTimer(this);
 
@@ -178,7 +178,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     ui->statusBar->addWidget(status);
     ui->radioNameDisp->setText("");
 
-    radio->setRigConnected(false);
+
     initActionsConnections();
 
     initSelectRadioBox();
@@ -330,10 +330,6 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, SIGNAL(setTpm(int, QString)), this, SLOT(setTpm(int, QString)));
     connect(msg, SIGNAL(setVolume(int)), this, SLOT(loggerSetVolume(int)));
 
-
-
-    // Message from rigcontrol
-    connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
 
 
     // standalone test
@@ -940,6 +936,11 @@ int RigControlMainWindow::openRadio()
         return OPEN_FAILED;
     }
 
+    radio = rigFactory->createRigs(rigFactory->supported_rigs()->value(setupRadio->currentRadio.radioModelName).RigCapabilities::modelNumber);
+    radio->setTraceComms(traceCommsFlag);             // set state of trace hamlib comms
+
+    // Message from rigcontrol
+    //connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
 
     if (!radio->getRigConnected())
     {
@@ -1082,6 +1083,11 @@ void RigControlMainWindow::closeRadio()
     if (serialTVSw->getOpenFlag())
     {
         serialTVSw->closeComport();
+    }
+
+    if (radio)
+    {
+        delete radio;
     }
 
     showStatusMessage(tr("Disconnected"));
@@ -2717,11 +2723,10 @@ void RigControlMainWindow::readTraceLogFlag()
 
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("TraceLog");
-    bool state = config.value("TraceLog", false).toBool();
+    traceCommsFlag = config.value("TraceLog", false).toBool();
     config.endGroup();
 
-    ui->actionTraceComms->setChecked(state);
-    radio->setTraceComms(state);             // set state of trace hamlib comms
+    ui->actionTraceComms->setChecked(traceCommsFlag);
 }
 
 void RigControlMainWindow::saveTraceLogFlag(bool state)

@@ -99,6 +99,7 @@ private:
     int pollTime;
     bool rigErrorFlag;
     bool cmdLockFlag;
+    bool traceCommsFlag;
     // data from rigctld
     QProcess *rigCtldProcess;
     QString rigctld_radioNumber;
@@ -123,7 +124,7 @@ private:
     QVector<BandDetail> bands;
     QStringList presetFreq;
 
-    int *test_mem;
+
     // data from radio
     Frequency rfrequency;       // read frequency
     QString sfreq;          // read freq converted to string
