@@ -257,7 +257,7 @@ int HamlibRigControl::closeRig()
 int HamlibRigControl::getFrequency(VFO vfo, Frequency &frequency)
 {
     freq_t f;
-    int retCode = rig_get_freq(my_rig, vfos[vfo], &f);
+    int retCode = rig_get_freq(my_rig, hamlibVfoNames[vfo], &f);
     if (retCode >= RIG_OK)
     {
         frequency = static_cast<Frequency>(f);
@@ -269,7 +269,7 @@ int HamlibRigControl::getFrequency(VFO vfo, Frequency &frequency)
 
 int HamlibRigControl::setFrequency(Frequency frequency, VFO vfo)
 {
-    return (rig_set_freq(my_rig, vfos[vfo], static_cast<freq_t>(frequency)));
+    return (rig_set_freq(my_rig, hamlibVfoNames[vfo], static_cast<freq_t>(frequency)));
 }
 
 /*
@@ -302,7 +302,7 @@ bool RigControl::chkFreqRange(RIG *my_rig, freq_t freq, QString modeStr)
 
 int HamlibRigControl::getMode(VFO vfo, MODE& mode)
 {
-    int retCode =  rig_get_mode(my_rig, vfos[vfo], &rmode, &rwidth);
+    int retCode =  rig_get_mode(my_rig, hamlibVfoNames[vfo], &rmode, &rwidth);
     if (retCode >= RIG_OK)
     {
         mode = mapMode(rmode);
@@ -314,7 +314,7 @@ int HamlibRigControl::getMode(VFO vfo, MODE& mode)
 
 int HamlibRigControl::setMode(VFO vfo, MODE mode)
 {
-    return (rig_set_mode(my_rig, vfos[vfo], mapMode(mode), rwidth));
+    return (rig_set_mode(my_rig, hamlibVfoNames[vfo], mapMode(mode), rwidth));
 }
 
 

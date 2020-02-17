@@ -14,9 +14,9 @@
 #ifndef HAMLIBRIGCONTROL_H
 #define HAMLIBRIGCONTROL_H
 
+#include "hamlibCommon.h"
 #include "rigbase.h"
 #include "rigfactory.h"
-#include "hamlibCommon.h"
 #include <hamlib/rig.h>
 
 
@@ -26,10 +26,13 @@ int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 int collect(const rig_caps *caps, void *);
 
 
-vfo_t vfos[3] = {RIG_VFO_CURR, RIG_VFO_A, RIG_VFO_B};
 
 
 
+
+
+
+class RigFactory;
 
 class HamlibRigControl : public RigBase
 {
@@ -38,7 +41,7 @@ public:
     HamlibRigControl(QObject *parent = nullptr);
     virtual ~HamlibRigControl();
 
-    static void register_rigs(RigFactory::Rigs *);
+    static void register_rigs(RigFactory::Rigs*);
 
     int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
@@ -72,6 +75,8 @@ private:
 
     MODE mapMode(rmode_t m) const;
     rmode_t mapMode(MODE mode) const;
+
+    vfo_t hamlibVfoNames[3] = {RIG_VFO_CURR, RIG_VFO_A, RIG_VFO_B};
 
     serial_parity_e getSerialParityCode(int index){return hamlibSerialData::parityCodes[index];}
     serial_handshake_e getSerialHandshakeCode(int index){return hamlibSerialData::handshakeCodes[index];}

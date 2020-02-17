@@ -21,7 +21,6 @@
 #include <QStringList>
 
 #include "rotatorcommon.h"
-//#include "rotcontrol.h"
 #include "rotatorfactory.h"
 #include "rotatorbase.h"
 #include "hamlibCommon.h"
@@ -33,7 +32,6 @@ bool model_Sort(const rot_caps *caps1,const rot_caps *caps2);
 int rig_message_cb(enum rig_debug_level_e, rig_ptr_t, const char*, va_list);
 
 int collect(const rot_caps *caps, void *);
-
 
 
 
