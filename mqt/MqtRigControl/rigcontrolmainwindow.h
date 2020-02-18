@@ -91,6 +91,7 @@ private:
     RigSetupDialog *setupRadio;
     RigBase  *radio;
     RigFactory* rigFactory;
+    RigCapabilities rigCap;
     QString appName = "";
     QLabel *status;
     int radioIndex;
@@ -315,6 +316,7 @@ private:
     void getRigCtldConnectDelay();
 
 
+    MODE mapQStrMode(QString mode);
 private slots:
 
     void onStdInRead(QString);

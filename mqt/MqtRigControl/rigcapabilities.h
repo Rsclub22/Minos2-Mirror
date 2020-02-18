@@ -59,7 +59,7 @@ public:
     bool supportRigCtld;
     bool pollData;
 
-
+  RigCapabilities( const RigCapabilities &rigcap);
 
 
 };

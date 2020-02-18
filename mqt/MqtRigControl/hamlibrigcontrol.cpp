@@ -346,16 +346,22 @@ bool RigControl::checkFreqValid(freq_t freq, rmode_t mode)
 /* ---------------------- Freq Range ---------------------------------*/
 
 
-/*
-bool RigControl::chkFreqRange(RIG *my_rig, freq_t freq, QString modeStr)
+bool HamlibRigControl::checkFreqRange(int rigNumber, Frequency freq, MODE mode)
 {
-    rmode_t mode = convertQStrMode(modeStr);
-    const freq_range_t* freq_range = rig_get_range(my_rig->caps->rx_range_list1, freq, mode);
+    Q_UNUSED(rigNumber)
+    return chkFreqRange(my_rig, static_cast<freq_t>(freq), mode);
+}
+
+
+bool HamlibRigControl::chkFreqRange(RIG *my_rig, freq_t freq, MODE mode)
+{
+
+    const freq_range_t* freq_range = rig_get_range(my_rig->caps->rx_range_list1, freq, mapMode(mode));
     return (freq_range != nullptr)? true:false;
 
 }
 
-*/
+
 
 /* ---------------------- Mode ------------------------------------ */
 
@@ -374,7 +380,7 @@ int HamlibRigControl::getMode(VFO vfo, MODE& mode)
 
 int HamlibRigControl::setMode(VFO vfo, MODE mode)
 {
-    return (rig_set_mode(my_rig, hamlibVfoNames[vfo], mapMode(mode), rwidth));
+    return rig_set_mode(my_rig, hamlibVfoNames[vfo], mapMode(mode), rwidth);
 }
 
 
@@ -393,6 +399,11 @@ MODE HamlibRigControl::convertQStrMode(QString mode)
    rmode_t m = rig_parse_mode(mode.toLatin1());
     return mapMode(m);
 
+}
+
+rmode_t HamlibRigControl::convertQStrRmode_t(QString mode)
+{
+    return rig_parse_func(mode.toLatin1());
 }
 
 /*
@@ -483,6 +494,24 @@ rmode_t HamlibRigControl::mapMode (MODE mode) const
     default: break;
     }
   return RIG_MODE_USB;	// quieten compiler grumble
+}
+
+rmode_t HamlibRigControl::mapMode(QString mode) const
+{
+    if (mode == "AM") return RIG_MODE_AM;
+    if (mode == "CW") return RIG_MODE_CW;
+    if (mode == "CW_R") return RIG_MODE_CWR;
+    if (mode == "USB") return RIG_MODE_USB;
+    if (mode == "LSB") return RIG_MODE_LSB;
+    if (mode == "FSK") return RIG_MODE_RTTY;
+    if (mode == "FSK_R") return RIG_MODE_RTTYR;
+    if (mode == "DIG_L") return RIG_MODE_PKTLSB;
+    if (mode == "DIG_U") return RIG_MODE_PKTUSB;
+    if (mode == "FM") return RIG_MODE_FM;
+    if (mode == "DIG_FM") return RIG_MODE_PKTFM;
+    else return RIG_MODE_USB;
+
+
 }
 
 
@@ -738,20 +767,27 @@ bool RigControl::supportVolControl(int rigNumber)
         return false;
     }
 }
-
-int RigControl::setVolume(vfo_t vfo, float val)
+*/
+int HamlibRigControl::setVolume(VFO vfo, float val)
 {
     value_t value;
     value.f = val;
-    return rigSetLevel(vfo, RIG_LEVEL_AF, value);
+    return rigSetLevel(hamlibVfoNames[vfo], RIG_LEVEL_AF, value);
 }
 
-int RigControl::getVolume(vfo_t vfo, value_t *val)
+int HamlibRigControl::getVolume(VFO vfo, float *val)
 {
-    return rigGetLevel(vfo, RIG_LEVEL_AF, val);
+    value_t value;
+    int retCode = RIG_OK;
+    retCode = rigGetLevel(hamlibVfoNames[vfo], RIG_LEVEL_AF, &value);
+    if (retCode == RIG_OK)
+    {
+        *val = value.f;
+    }
+    return retCode;
 }
 
-*/
+
 /*************** Signal Strength Level Control  ********************************/
 
 
@@ -763,9 +799,17 @@ bool HamlibRigControl::supportSignalStrength(int modelNumber)
 
 
 
-int HamlibRigControl::getSignalStrength(vfo_t vfo, value_t *val)
+int HamlibRigControl::getSignalStrength(VFO vfo, int *value)
 {
-    return rigGetLevel(vfo, RIG_LEVEL_STRENGTH, val);
+    int retCode = RIG_OK;
+    value_t val;
+    retCode = rigGetLevel(hamlibVfoNames[vfo], RIG_LEVEL_STRENGTH, &val);
+    if (retCode == RIG_OK)
+    {
+        *value = val.i;
+    }
+
+    return retCode;
 }
 
 

@@ -407,11 +407,7 @@ void RigControlMainWindow::initSelectRadioBox()
         ui->selectRadioBox->addItem(setupRadio->availRadioData[i]->radioName);
     }
 
-    //if (appName.length() > 0)
-    //{
-    //    sendRadioListLogger();
 
-    //}
 }
 
 void RigControlMainWindow::selectRadio()
@@ -468,12 +464,12 @@ void RigControlMainWindow::upDateRadio()
                 closeRadio();
             }
 
-            if (setupRadio->currentRadio.radioModelNumber == 0)
-            {
+            //if (setupRadio->currentRadio.radioModelNumber == 0)
+            //{
                 //closeRadio();
-                QMessageBox::critical(this, tr("Radio Error"), tr("Please configure a radio name and model"));
-                return;
-            }
+            //    QMessageBox::critical(this, tr("Radio Error"), tr("Please configure a radio name and model"));
+            //    return;
+           // }
 
             if (setupRadio->currentRadio.rigCtldEnable)
             {
@@ -936,8 +932,11 @@ int RigControlMainWindow::openRadio()
         return OPEN_FAILED;
     }
 
-    radio = rigFactory->createRigs(rigFactory->supported_rigs()->value(setupRadio->currentRadio.radioModelName).RigCapabilities::modelNumber);
-    radio->setTraceComms(traceCommsFlag);             // set state of trace hamlib comms
+    radio = rigFactory->createRigs(rigFactory->supported_rigs()->value(setupRadio->currentRadio.radioModel).RigCapabilities::modelNumber);
+    radio->setTraceComms(traceCommsFlag);
+    rigCap = rigFactory->supported_rigs()->value(setupRadio->currentRadio.radioModel);
+
+    // set state of trace hamlib comms
 
     // Message from rigcontrol
     //connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
@@ -1241,32 +1240,32 @@ void RigControlMainWindow::getRadioInfo()
 
 
     }
-
-    if (radioCommsOK && supVolume)
-    {
-        retCode = getVolume(RIG_VFO_CURR);
-        if (retCode < 0)
-        {
-            // error
-            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
-            hamlibError(retCode, tr("Request Volume"));
-        }
-
-    }
-
-
-    if (radioCommsOK && supSignalStrength)
-    {
-        retCode = getSignalStrength(RIG_VFO_CURR);
-        if (retCode < 0)
-        {
-            // error
-            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
-            hamlibError(retCode, tr("Request Volume"));
-        }
-
-    }
 */
+    if (radioCommsOK && rigCap.supportVolume)
+    {
+        retCode = getVolume(VFO::CURRENT_VFO);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
+            radioError(retCode, tr("Request Volume"));
+        }
+
+    }
+
+
+    if (radioCommsOK && rigCap.supportSMeter)
+    {
+        retCode = getSignalStrength(VFO::CURRENT_VFO);
+        if (retCode < 0)
+        {
+            // error
+            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
+            radioError(retCode, tr("Request Volume"));
+        }
+
+    }
+
 /*
     if (radioCommsOK)
     {
@@ -1955,20 +1954,20 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
 void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber, QStringList& supBandList)
 {
 
-/*******************************************************************
-    RIG *my_rig = rig_init(radioModelNumber);
-    if (my_rig)
-    {
+
+    //RIG *my_rig = rig_init(radioModelNumber);
+    //if (my_rig)
+   // {
 
         for (int i = 0; i < bands.count(); i++)
         {
-            if (radio->chkFreqRange(my_rig, bands[i].fLow, "USB"))
+            if (radio->checkFreqRange(radioModelNumber, bands[i].fLow, MODE::USB))
             {
                 supBandList.append(bands[i].name);
             }
         }
-    }
-*/
+//    }
+
 }
 
 
@@ -2152,6 +2151,25 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
     cmdLockOff();
     // mode won't have changed yet
     //msg->rigCache.publish();
+}
+
+
+MODE RigControlMainWindow::mapQStrMode(QString mode)
+{
+    if (mode == "AM") return MODE::AM;
+    if (mode == "CW") return MODE::CW;
+    if (mode == "CW_R") return MODE::CW_R;
+    if (mode == "USB") return MODE::USB;
+    if (mode == "LSB") return MODE::LSB;
+    if (mode == "FSK") return MODE::FSK;
+    if (mode == "FSK_R") return MODE::FSK_R;
+    if (mode == "DIG_L") return MODE::DIG_L;
+    if (mode == "DIG_U") return MODE::DIG_U;
+    if (mode == "FM") return MODE::DIG_FM;
+    if (mode == "DIG_FM") return MODE::DIG_FM;
+    else return MODE::USB;
+
+
 }
 
 
@@ -2492,15 +2510,15 @@ void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
 
 int RigControlMainWindow::getVolume(VFO vfo)
 {
-/********************************************
     int retCode = 0;
-    value_t value;
+    float value;
     retCode = radio->getVolume(vfo, &value);
     if (retCode >= 0)
     {
         int vol = 0;
-        value.f = value.f * VOLMULT;
-        vol = qRound(value.f);
+        //value.f = value.f * VOLMULT;
+        //vol = qRound(value.f);
+        vol = qRound(value);
         if (vol > 200)
         {
             vol = 200;
@@ -2519,20 +2537,19 @@ int RigControlMainWindow::getVolume(VFO vfo)
 
 
     return retCode;
-*/
+
 }
 
 
 int RigControlMainWindow::setVolume(VFO vfo, int level)
 {
-/**************************************************************
     logMessage(QString("Set volume to level = %1").arg(level));
     int retCode = 0;
     float volLevel = level;
     volLevel = volLevel/VOLMULT;
     retCode = radio->setVolume(vfo, volLevel);
     return retCode;
-  */
+
 }
 
 
@@ -2541,21 +2558,21 @@ int RigControlMainWindow::setVolume(VFO vfo, int level)
 
 int RigControlMainWindow::getSignalStrength(VFO vfo)
 {
-/*
+
     int retCode = 0;
-    value_t value;
+    int value;
     retCode = radio->getSignalStrength(vfo, &value);
     if (retCode >= 0)
     {
-        if (curSignalStrength != value.i)
+        if (curSignalStrength != value)
         {
-            curSignalStrength = value.i;
+            curSignalStrength = value;
             displaySignalStrength(curSignalStrength);
         }
     }
 
     return retCode;
-*/
+
 }
 
 

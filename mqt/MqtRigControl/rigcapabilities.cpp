@@ -44,3 +44,24 @@ RigCapabilities::RigCapabilities(int modelNumber_,
 {
 
 }
+
+
+RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
+{
+    modelNumber = rigcap.modelNumber;
+    portType = rigcap.portType;
+    rigManufacturer = rigcap.rigManufacturer;
+    rigModelName = rigcap.rigModelName;
+    rigModelNumber = rigcap.rigModelNumber;
+    supportGetRit = rigcap.supportGetRit;
+    supportSetRit = rigcap.supportSetRit;
+    supportSMeter = rigcap.supportSMeter;
+    supportGetPtt = rigcap.supportGetPtt;
+    supportPtt = rigcap.supportPtt;
+    supportSetPtt = rigcap.supportSetPtt;
+    supportVolume = rigcap.supportVolume;
+    supportAntSw = rigcap.supportAntSw;
+    supportRigCtld = rigcap.supportRigCtld;
+    pollData = rigcap.pollData;
+
+}

@@ -62,6 +62,10 @@ public:
     QString convertModeQStr(MODE mode) override;
     MODE convertQStrMode(QString mode) override;
 
+    int setVolume(VFO vfo, float val) override;
+    int getVolume(VFO vfo, float *val) override;
+
+    int getSignalStrength(VFO vfo, int *value) override;
 
     QString getRigLibVersion() override;
     QString getErrorMsgText(int errorCode) override;
@@ -71,6 +75,9 @@ public:
     bool getTraceComms() override;
 
     int rig_message_cb(enum rig_debug_level_e debug_level, const char *fmt, va_list ap);
+
+    bool chkFreqRange(RIG *my_rig, freq_t freq, MODE mode);
+    bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) override;
 
 private:
 
@@ -83,6 +90,7 @@ private:
 
     MODE mapMode(rmode_t m) const;
     rmode_t mapMode(MODE mode) const;
+    rmode_t mapMode(QString mode) const;
 
     vfo_t hamlibVfoNames[3] = {RIG_VFO_CURR, RIG_VFO_A, RIG_VFO_B};
 
@@ -100,6 +108,8 @@ private:
     int rigGetLevel(vfo_t vfo, setting_t level, value_t *val);
     static bool supportSignalStrength(int modelNumber);
     int getSignalStrength(vfo_t vfo, value_t *val);
+    static rmode_t convertQStrRmode_t(QString mode);
+
 };
 
 #endif // HAMLIBRIGCONTROL_H
