@@ -436,6 +436,9 @@ Server=false
     QStringList apps = appConfig.getSections();
     for (int i = 0; i < apps.size(); i++)
     {
+        if (apps[i] == appNone)
+            apps[i] = tr(appNone);
+
         if (appConfig.getPrivateProfileBool(apps[i], "Enabled", false))  // only include those elements we are allowed to as possibilities
         {
             AppConfigElement ac;

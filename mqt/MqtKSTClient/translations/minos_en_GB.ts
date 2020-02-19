@@ -237,42 +237,42 @@
 <context>
     <name>KstCallGridModel</name>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="218"/>
+        <location filename="../kstcallgridmodel.cpp" line="248"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="221"/>
+        <location filename="../kstcallgridmodel.cpp" line="251"/>
         <source>Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="224"/>
+        <location filename="../kstcallgridmodel.cpp" line="254"/>
         <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="227"/>
+        <location filename="../kstcallgridmodel.cpp" line="257"/>
         <source>Dist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="230"/>
+        <location filename="../kstcallgridmodel.cpp" line="260"/>
         <source>Brg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="233"/>
+        <location filename="../kstcallgridmodel.cpp" line="263"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="236"/>
+        <location filename="../kstcallgridmodel.cpp" line="266"/>
         <source>Prefix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="239"/>
+        <location filename="../kstcallgridmodel.cpp" line="269"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
@@ -280,37 +280,37 @@
 <context>
     <name>KstMessageGridModel</name>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="83"/>
+        <location filename="../kstmessagegridmodel.cpp" line="90"/>
         <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="119"/>
+        <location filename="../kstmessagegridmodel.cpp" line="137"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="121"/>
+        <location filename="../kstmessagegridmodel.cpp" line="139"/>
         <source>Time(Z)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="124"/>
+        <location filename="../kstmessagegridmodel.cpp" line="142"/>
         <source>Call</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="127"/>
+        <location filename="../kstmessagegridmodel.cpp" line="145"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="130"/>
+        <location filename="../kstmessagegridmodel.cpp" line="148"/>
         <source>Other Call</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="133"/>
+        <location filename="../kstmessagegridmodel.cpp" line="151"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
     </message>
