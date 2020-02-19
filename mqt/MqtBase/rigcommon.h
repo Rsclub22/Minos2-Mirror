@@ -22,6 +22,7 @@ static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 enum MODE {UNK, CW, CW_R, USB, LSB, FSK, FSK_R, DIG_U, DIG_L, AM, FM, DIG_FM};
 enum VFO {CURRENT_VFO, VFOA, VFOB};
 using  Frequency = quint64;
+using ShortFreq = quint32;
 
 
 
@@ -88,10 +89,10 @@ public:
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
-      //dest.ritSupported = srce->ritSupported;
-      //dest.ritEnable = srce->ritEnable;
-      //dest.radioSupBands = srce->radioSupBands;
-      //dest.radioTransSupBands = srce->radioTransSupBands;
+      dest.ritSupported = srce->ritSupported;
+      dest.ritEnable = srce->ritEnable;
+      dest.radioSupBands = srce->radioSupBands;
+      dest.radioTransSupBands = srce->radioTransSupBands;
       dest.transVertEnable = srce->transVertEnable;
       dest.enableTransSwitch = srce->enableTransSwitch;
       dest.enableLocTVSwMsg = srce->enableLocTVSwMsg;
@@ -146,8 +147,8 @@ public:
   QString mgmMode = "USB";
   int pttType;
   bool antSwitchAvail = false;
-  //bool ritSupported = false;
-  //bool ritEnable = false;
+  bool ritSupported = false;
+  bool ritEnable = false;
   bool transVertEnable  = false;
   bool volAvail = false;
   QStringList transVertNames;

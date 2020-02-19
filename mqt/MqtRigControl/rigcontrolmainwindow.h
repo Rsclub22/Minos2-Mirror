@@ -137,7 +137,7 @@ private:
     QString sCurMode;
     bool mgmModeFlag;
     QStringList  mgmModes;
-    int rRitFreq;        // converted from hamlib long ritFreq
+    ShortFreq rRitFreq;
     int curVol;
     int curSignalStrength = 0;
 
@@ -145,8 +145,8 @@ private:
 
     bool radioSupGetRit;
     bool radioSupSetRit;
-    bool radioSupGetRitState;
-    bool radioSupRitOnOff;
+    //bool radioRitState;
+    //bool radioSupRitOnOff;
     bool radioRitOn;
 
     bool ritEnable;         // flag to enable rit
@@ -219,8 +219,8 @@ private:
     void chkRadioMgmModeChanged();
     void dumpRadioToTraceLog();
     void setRitFreqDisplayVisible(bool state);
-    //int getRitFreq(vfo_t vfo);
-    //int setRitFreq(vfo_t vfo, shortfreq_t ritFreq);
+    int getRitFreq(VFO vfo);
+    int setRitFreq(VFO vfo, ShortFreq ritFreq);
     void cmdLockOn();
     void cmdLockOff();
     int getMinosModeIndex(QString mode);
@@ -270,7 +270,7 @@ private:
 
 
 
-    void getRitSupportStatus(int modelNumber);
+    void getRitSupportStatus();
     void setRitGetSetFreqIndicatorVisible(bool state);
     void ritSetFreqIndicatorToggle(bool state);
     void ritGetFreqIndicatorToggle(bool state);
@@ -342,7 +342,7 @@ private slots:
     void onLaunchSetup();
     void setTpm(int tpm, QString f);
 
-    //void setRitFreq(int ritFreq); //*********************************
+    void setRitFreq(int ritFreq);
     void setRitLogStatus(bool status);
 
     void sendRadioListLogger();

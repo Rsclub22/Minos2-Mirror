@@ -70,6 +70,11 @@ public:
     QString getRigLibVersion() override;
     QString getErrorMsgText(int errorCode) override;
 
+    int getRit(VFO vfo, ShortFreq &ritfreq) override;
+    int setRit(VFO vfo, ShortFreq ritfreq) override;
+    int toggleRitState(VFO vfo, bool state) override;
+    int getRitState(VFO vfo, bool& state) override;
+
     static void setTraceCommsFlag(bool value);
     void setTraceComms(bool value) override;
     bool getTraceComms() override;

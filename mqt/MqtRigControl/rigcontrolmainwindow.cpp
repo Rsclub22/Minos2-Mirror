@@ -51,8 +51,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    curSignalStrength(0),
    radioSupGetRit(false),
    radioSupSetRit(false),
-   radioSupGetRitState(false),
-   radioSupRitOnOff(false),
+   //radioSupGetRitState(false),
+   //radioSupRitOnOff(false),
    radioRitOn(false),
    ritEnable(false),
    radioCommsOK(false)
@@ -592,7 +592,7 @@ void RigControlMainWindow::upDateRadio()
 
                 updateSupportedRadioIndicators();
 
-                getRitSupportStatus(modelNumber);
+                getRitSupportStatus();
 
                 if (radioSupSetRit)
                 {
@@ -688,8 +688,6 @@ void RigControlMainWindow::updateCurrentRadioFromAvailRadios(int ridx)
     setupRadio->currentRadio.rigModelName = rigCap.rigModelName;
     setupRadio->currentRadio.rigModelNumber = rigCap.modelNumber;
     setupRadio->currentRadio.portType = rigCap.portType;
-    qDebug() << "currentRadio " << rigCap.rigModelName << rigCap.modelNumber;
-
 
 }
 
@@ -1209,11 +1207,11 @@ void RigControlMainWindow::getRadioInfo()
     }
 
 
-/*
+
 
     if (radioCommsOK && radioSupSetRit && ritEnable)
     {
-        logMessage((QString("Poll RIT Info - Get Rit Freq = %1 - Get Rit State = %2").arg(radioSupGetRit ? "True" : "False").arg(radioSupGetRitState ?  "True" : "False")));
+        logMessage((QString("Poll RIT Info - Get Rit Freq = %1").arg(radioSupGetRit ? "True" : "False")));
 
 
         if (radioSupGetRit)
@@ -1223,7 +1221,7 @@ void RigControlMainWindow::getRadioInfo()
             {
                 // error
                 logMessage(QString("Get radioInfo: Get RIT Freq error").arg(QString::number(retCode)));
-                hamlibError(retCode, tr("Request RIT Freq"));
+                radioError(retCode, tr("Request RIT Freq"));
             }
             else
             {
@@ -1234,15 +1232,15 @@ void RigControlMainWindow::getRadioInfo()
 
 
 
-        if (radioSupGetRitState)
+        if (radioSupGetRit)
         {
             bool ritStatus = false;
-            retCode = getRitRadioStatus(RIG_VFO_CURR, &ritStatus);
+            retCode = getRitRadioStatus(VFO::CURRENT_VFO, &ritStatus);
             if (retCode < 0)
             {
                 //error
                 logMessage(QString("Get radioInfo: Get RIT state error").arg(QString::number(retCode)));
-                hamlibError(retCode, tr("Request RIT State"));
+                radioError(retCode, tr("Request RIT State"));
             }
             else
             {
@@ -1260,8 +1258,8 @@ void RigControlMainWindow::getRadioInfo()
 
 
     }
-*/
-    if (radioCommsOK && rigCap.supportVolume)
+
+    if (radioCommsOK && supVolume)
     {
         retCode = getVolume(VFO::CURRENT_VFO);
         if (retCode < 0)
@@ -1274,7 +1272,7 @@ void RigControlMainWindow::getRadioInfo()
     }
 
 
-    if (radioCommsOK && rigCap.supportSMeter)
+    if (radioCommsOK && supSignalStrength)
     {
         retCode = getSignalStrength(VFO::CURRENT_VFO);
         if (retCode < 0)
@@ -2222,23 +2220,23 @@ void RigControlMainWindow::clearSupportRitFlags()
 {
     radioSupGetRit = false;
     radioSupSetRit = false;
-    radioSupGetRitState = false;
-    radioSupRitOnOff = false;
+    //radioSupGetRitState = false;
+    //radioSupRitOnOff = false;
     radioRitOn = false;
     ritEnable = false;
 }
 
-void RigControlMainWindow::getRitSupportStatus(int modelNumber)
+void RigControlMainWindow::getRitSupportStatus()
 {
 
-/**********************************************************
+
     // Does radio support getting Rit Freq?
-    radioSupGetRit = radio->supportGetRit(modelNumber);
+    radioSupGetRit = rigCap.supportGetRit;
     logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(radioSupGetRit ? "True" : "False"));
 
 
     // Does radio support setting Rit Freq?
-    radioSupSetRit = radio->supportSetRit(modelNumber);
+    radioSupSetRit = rigCap.supportSetRit;
     logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(radioSupSetRit ? "True" : "False"));
     if (radioSupSetRit)
     {
@@ -2256,13 +2254,13 @@ void RigControlMainWindow::getRitSupportStatus(int modelNumber)
 
     // Does radio support turning Rit on/off
 
-    radioSupRitOnOff = radio->supportRitOnOff(modelNumber);
-    logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupRitOnOff ? "True" : "False"));
+    //radioSupRitOnOff = rigCap.supportRitOnOff;
+    //logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupRitOnOff ? "True" : "False"));
 
     // Does radio support getting Rit on/off state?
-    radioSupGetRitState = radio->supportGetRitState(modelNumber);
-    logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
-*/
+    //radioSupGetRitState = radio->supportGetRitState(modelNumber);
+    //logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
+
 }
 
 
@@ -2428,41 +2426,44 @@ void RigControlMainWindow::ritEnableChecked(int chkState)
     sendRitEnableStatusLogger();
 }
 
-/********************************************************
+
 int RigControlMainWindow::getRitFreq(VFO vfo)
 {
 
     int retCode = 0;
-    long ritFreq;
-    static int oldritFreq = 50000;
+    ShortFreq ritFreq;
+    static ShortFreq oldritFreq = 50000;
 
-    retCode = radio->getRit(vfo, &ritFreq);
-    if (retCode == rigErrorCodes::RIG_OK)
+    retCode = radio->getRit(vfo, ritFreq);
+    if (retCode == Rig_OK)
     {
-        int iRitFreq = static_cast<int>(ritFreq);
-        if (oldritFreq != iRitFreq)
+        //ShortFreq iRitFreq = ritFreq;
+        if (oldritFreq != ritFreq)
         {
-           rRitFreq = iRitFreq;
+           rRitFreq = ritFreq;
+           oldritFreq = ritFreq;
            ui->ritFreq->setText(convertRitFreqToStr(rRitFreq));
-           sendRitFreqLogger(rRitFreq);
+           sendRitFreqLogger(static_cast<int>(rRitFreq));
         }
     }
+
+
     return retCode;
 }
 
 
-void RigControlMainWindow::setRitFreq(int ritFreq)
+int RigControlMainWindow::setRitFreq(VFO vfo, ShortFreq ritFreq)
 {
     if (ritEnable)
     {
         int retCode = 0;
-        shortfreq_t rFreq = static_cast<long>(ritFreq);
-        retCode = setRitFreq(RIG_VFO_CURR, rFreq);
+
+        retCode = setRitFreq(vfo, ritFreq);
         if (retCode < 0)
         {
             // error
             logMessage(QString("Set RIT freq error").arg(QString::number(retCode)));
-            hamlibError(retCode, tr("Set RIT Freq."));
+            radioError(retCode, tr("Set RIT Freq."));
         }
         else
         {
@@ -2477,8 +2478,12 @@ void RigControlMainWindow::setRitFreq(int ritFreq)
     }
 }
 
+void RigControlMainWindow::setRitFreq(int freq)
+{
+    setRitFreq(VFO::CURRENT_VFO, static_cast<ShortFreq>(freq));
+}
 
-
+/*
 int RigControlMainWindow::setRitFreq(vfo_t vfo, shortfreq_t ritFreq)
 {
     int retCode = 0;
@@ -2487,13 +2492,18 @@ int RigControlMainWindow::setRitFreq(vfo_t vfo, shortfreq_t ritFreq)
     cmdLockOff();
     return retCode;
 }
-
-
-int  RigControlMainWindow::getRitRadioStatus(vfo_t vfo, bool *status)
+*/
+int  RigControlMainWindow::getRitRadioStatus(VFO vfo, bool *status)
 {
     cmdLockOn();
-    int retCode = radio->getRitState(vfo, status);
+    bool s;
+    int retCode = radio->getRitState(vfo, s);
     cmdLockOff();
+
+    if (retCode == Rig_OK)
+    {
+        *status = s;
+    }
     return retCode;
 }
 
@@ -2522,7 +2532,7 @@ void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
 }
 
 
-*/
+
 
 
 /************************** Volume *********************************/
@@ -3139,8 +3149,8 @@ void RigControlMainWindow::aboutRigConfig()
                 msg.append(tr("Rit Enable On = %1\n").arg(ritEnable  ? tr("True") : tr("False")));
                 msg.append(tr("Radio Supports Get RIT Freq = %1\n").arg(radioSupGetRit ? tr("True") : tr("False")));
                 msg.append(tr("Radio Supports Set RIT Freq = %1\n").arg(radioSupSetRit ? tr("True") : tr("False")));
-                msg.append(tr("Radio Supports Get RIT State On/Off = %1\n").arg(radioSupGetRitState ? tr("True") : tr("False")));
-                msg.append(tr("Radio Supports Set RIT State On/Off = %1\n").arg(radioSupRitOnOff ? tr("True") : tr("False")));
+                //msg.append(tr("Radio Supports Get RIT State On/Off = %1\n").arg(radioSupGetRitState ? tr("True") : tr("False")));
+                //msg.append(tr("Radio Supports Set RIT State On/Off = %1\n").arg(radioSupRitOnOff ? tr("True") : tr("False")));
             }
             msg.append(tr("Radio Polltime = %1\n").arg(setupRadio->currentRadio.pollInterval));
             msg.append(tr("Tracelog = %1\n").arg(ui->actionTraceComms->isChecked() ? tr("True") : tr("False")));
@@ -3227,8 +3237,8 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             trace(QString("Rit Enable On = %1").arg(ritEnable  ? "True" : "False"));
             trace(QString("Radio Supports Get RIT Freq = %1").arg(radioSupGetRit ? "True" : "False"));
             trace(QString("Radio Supports Set RIT Freq = %1").arg(radioSupSetRit ? "True" : "False"));
-            trace(QString("Radio Supports Get RIT State On/Off = %1").arg(radioSupGetRitState ? "True" : "False"));
-            trace(QString("Radio Supports Set RIT State On/Off = %1").arg(radioSupRitOnOff ? "True" : "False"));
+            //trace(QString("Radio Supports Get RIT State On/Off = %1").arg(radioSupGetRitState ? "True" : "False"));
+            //trace(QString("Radio Supports Set RIT State On/Off = %1").arg(radioSupRitOnOff ? "True" : "False"));
         }
 
         trace(QString("Radio Polltime = %1").arg(setupRadio->currentRadio.pollInterval));

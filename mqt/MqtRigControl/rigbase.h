@@ -46,6 +46,12 @@ public:
     virtual int setVolume(VFO vfo, float val) = 0;
     virtual int getVolume(VFO vfo, float *val) = 0;
 
+    virtual int getRit(VFO vfo, ShortFreq &ritfreq) = 0;
+    virtual int setRit(VFO vfo, ShortFreq ritfreq) = 0;
+    virtual int toggleRitState(VFO vfo, bool state) = 0;
+    virtual int getRitState(VFO vfo, bool& state) = 0;
+
+
     virtual int getSignalStrength(VFO vfo, int *value) = 0;
 
     virtual QString getRigLibVersion() = 0;

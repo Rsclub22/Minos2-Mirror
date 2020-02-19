@@ -141,9 +141,6 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
         // support Antenna Switch
         bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
 
-
-        qDebug() << key << capsList[i]->rig_model;
-
         (*rigsList)[key] = RigCapabilities(capsList[i]->rig_model,
                                            port_type,
                                            capsList[i]->mfg_name,
@@ -546,18 +543,26 @@ QString RigControl::convertVfoQStr(vfo_t vfo)
 
 
 
+
+
+int HamlibRigControl::getRit(VFO vfo, ShortFreq &ritfreq)
+{
+    shortfreq_t freq;
+    int retCode = rig_get_rit(my_rig, hamlibVfoNames[vfo], &freq);
+    if (retCode == RIG_OK)
+    {
+        ritfreq = static_cast<ShortFreq>(freq);
+    }
+
+    return retCode;
+}
+
+int HamlibRigControl::setRit(VFO vfo, ShortFreq ritfreq)
+{
+    return rig_set_rit(my_rig, hamlibVfoNames[vfo], static_cast<shortfreq_t>(ritfreq));
+}
+
 /*
-
-int RigControl::getRit(vfo_t vfo, shortfreq_t *ritfreq)
-{
-    return rig_get_rit(my_rig, vfo, ritfreq);
-}
-
-int RigControl::setRit(vfo_t vfo, shortfreq_t ritfreq)
-{
-    return rig_set_rit(my_rig, vfo, ritfreq);
-}
-
 bool RigControl::supportGetRit(int rigNumber)
 {
     RIG *myRig;
@@ -613,21 +618,23 @@ bool RigControl::supportRitOnOff(int rigNumber)
 
 }
 
-int RigControl::toggleRitState(vfo_t vfo, bool state)
+*/
+
+int HamlibRigControl::toggleRitState(VFO vfo, bool state)
 {
-    return rig_set_func(my_rig, vfo, RIG_FUNC_RIT, state);
+    return rig_set_func(my_rig, hamlibVfoNames[vfo], RIG_FUNC_RIT, state);
 }
 
-int RigControl::getRitState(vfo_t vfo, bool* state)
+int HamlibRigControl::getRitState(VFO vfo, bool& state)
 {
     int status = 0;
     int retCode = RIG_OK;
-    retCode = rig_get_func(my_rig, vfo, RIG_FUNC_RIT, &status);
-    *state = status ? true : false;
+    retCode = rig_get_func(my_rig, hamlibVfoNames[vfo], RIG_FUNC_RIT, &status);
+    state = status ? true : false;
     return retCode;
 }
 
-
+/*
 bool RigControl::supportGetRitState(int rigNumber)
 {
     RIG *myRig;
