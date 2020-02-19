@@ -317,6 +317,7 @@ private:
 
 
     MODE mapQStrMode(QString mode);
+    void updateCurrentRadioFromAvailRadios(int ridx);
 private slots:
 
     void onStdInRead(QString);

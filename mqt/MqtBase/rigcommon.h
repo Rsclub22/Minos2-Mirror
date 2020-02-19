@@ -63,10 +63,10 @@ public:
       dest.radioName = srce->radioName;
       dest.radioNumber = srce->radioNumber;
       dest.comport = srce->comport;
-      dest.radioMfg_Name = srce->radioMfg_Name;
-      dest.radioModel = srce->radioModel;
-      dest.radioModelName = srce->radioModelName;
-      dest.radioModelNumber = srce->radioModelNumber;
+      dest.rigMfg_Name = srce->rigMfg_Name;
+      dest.rigModel = srce->rigModel;
+      dest.rigModelName = srce->rigModelName;
+      dest.rigModelNumber = srce->rigModelNumber;
       dest.pollInterval = srce->pollInterval;
       dest.civAddress = srce->civAddress;
       dest.baudrate = srce->baudrate;
@@ -118,13 +118,13 @@ public:
   }
 
 
-  QString radioName;
-  QString radioNumber;
+  QString radioName;    //Minos Radio Name
+  QString radioNumber;  // Minos Radio Number
   QString comport; /**<  serial port device*/
-  QString radioMfg_Name;
-  QString radioModel;
-  QString radioModelName;
-  int radioModelNumber = 0;
+  QString rigMfg_Name;
+  QString rigModelName;
+  QString rigModel;       // used as key to select radio
+  int rigModelNumber = 0;
   QString pollInterval = RIG_DEFAULT_POLLINTERVAL;
   QString civAddress;
   int baudrate = 0; /**<  serial port baudrate*/

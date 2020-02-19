@@ -179,7 +179,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
 
     ui->radioTab->setTabText(tabNum, radioTab[tabNum]->getRadioData()->radioName);
 
-    radioTab[tabNum]->setRadioModel(radioTab[tabNum]->getRadioData()->radioModel);
+    radioTab[tabNum]->setRadioModel(radioTab[tabNum]->getRadioData()->rigModel);
 
     radioTab[tabNum]->setCIVAddress(radioTab[tabNum]->getRadioData()->civAddress);
     loadAvailComportsToTab(tabNum);                                                 // finds comports first
@@ -198,14 +198,17 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     radioTab[tabNum]->setEnableTransVertSw(radioTab[tabNum]->getRadioData()->enableTransSwitch);
     radioTab[tabNum]->setEnableLocalTransVertSw(radioTab[tabNum]->getRadioData()->enableLocTVSwMsg);
 
-    if (radioTab[tabNum]->getRadioData()->portType == RigCapConstants::PortType::network)
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab[tabNum]->getRadioData()->rigModel);
+
+
+    if (rigCap.portType == RigCapConstants::PortType::network)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(true);
         radioTab[tabNum]->setRigctldCheckBoxVisible(false);
         radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
     }
-    else if (radioTab[tabNum]->getRadioData()->portType == RigCapConstants::PortType::serial)
+    else if (rigCap.portType == RigCapConstants::PortType::serial)
     {
         radioTab[tabNum]->serialDataEntryVisible(true);
         radioTab[tabNum]->networkDataEntryVisible(false);
@@ -219,7 +222,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
         }
 
     }
-    else if (radioTab[tabNum]->getRadioData()->portType == RigCapConstants::PortType::none)
+    else if (rigCap.portType == RigCapConstants::PortType::none)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(false);
@@ -786,12 +789,12 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
 
     config.beginGroup(radioTab[radNum]->getRadioData()->radioName);
     config.setValue("radioName", radioTab[radNum]->getRadioData()->radioName);
-    config.setValue("radioMfgName", radioTab[radNum]->getRadioData()->radioMfg_Name);
-    config.setValue("radioModel", radioTab[radNum]->getRadioData()->radioModel);
-    config.setValue("radioModelName", radioTab[radNum]->getRadioData()->radioModelName);
-    config.setValue("radioModelNumber", radioTab[radNum]->getRadioData()->radioModelNumber);
+    //config.setValue("radioMfgName", radioTab[radNum]->getRadioData()->radioMfg_Name);
+    config.setValue("radioModel", radioTab[radNum]->getRadioData()->rigModel);
+    //config.setValue("radioModelName", radioTab[radNum]->getRadioData()->radioModelName);
+    //config.setValue("radioModelNumber", radioTab[radNum]->getRadioData()->radioModelNumber);
     config.setValue("civAddress", radioTab[radNum]->getRadioData()->civAddress);
-    config.setValue("portType", radioTab[radNum]->getRadioData()->portType);
+    //config.setValue("portType", radioTab[radNum]->getRadioData()->portType);
     config.setValue("comport", radioTab[radNum]->getRadioData()->comport);
     config.setValue("baudrate", radioTab[radNum]->getRadioData()->baudrate);
     config.setValue("databits", radioTab[radNum]->getRadioData()->databits);
@@ -825,12 +828,12 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     config.beginGroup(availRadios[radNum]);
     radioTab[radNum]->getRadioData()->radioName = config.value("radioName", "").toString();
     radioTab[radNum]->getRadioData()->radioNumber = config.value("radioNumber", QString::number(radNum)).toString();
-    radioTab[radNum]->getRadioData()->radioMfg_Name = config.value("radioMfgName", "").toString();
-    radioTab[radNum]->getRadioData()->radioModel = config.value("radioModel", "").toString();
-    radioTab[radNum]->getRadioData()->radioModelName = config.value("radioModelName", "").toString();
-    radioTab[radNum]->getRadioData()->radioModelNumber = config.value("radioModelNumber", "").toInt();
+    //radioTab[radNum]->getRadioData()->radioMfg_Name = config.value("radioMfgName", "").toString();
+    radioTab[radNum]->getRadioData()->rigModel = config.value("radioModel", "").toString();
+    //radioTab[radNum]->getRadioData()->radioModelName = config.value("radioModelName", "").toString();
+    //radioTab[radNum]->getRadioData()->radioModelNumber = config.value("radioModelNumber", "").toInt();
     radioTab[radNum]->getRadioData()->civAddress = config.value("civAddress", "").toString();
-    radioTab[radNum]->getRadioData()->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
+    //radioTab[radNum]->getRadioData()->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
     radioTab[radNum]->getRadioData()->comport = config.value("comport", "").toString();
     radioTab[radNum]->getRadioData()->baudrate = config.value("baudrate", 9600).toInt();
     radioTab[radNum]->getRadioData()->databits = config.value("databits", 8).toInt();

@@ -35,12 +35,10 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, cons
     transverterRemoved(false)
 {
 
-
     ui->setupUi(this);
 
-
-
     rigFactory = rigFactory_;
+
     radioData = _radioData;
 
     bands = _bands;
@@ -137,18 +135,21 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
 
 
-    if (radioModel != radioData->radioModel)
+    if (radioModel != radioData->rigModel)
     {
-        radioData->radioModel = radioModel;
+        radioData->rigModel = radioModel;
         ui->radioModelBox->setCurrentText(radioModel);
 
-        radioData->radioModelNumber = rigFactory->supported_rigs()->value(radioData->radioModel).modelNumber;
-        radioData->radioModelName = rigFactory->supported_rigs()->value(radioData->radioModel).rigModelName;
-        radioData->radioMfg_Name = rigFactory->supported_rigs()->value(radioData->radioModel).rigManufacturer;
-        radioData->portType = rigFactory->supported_rigs()->value(radioData->radioModel).portType;
+        RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioData->rigModel);
 
 
-        if (radioData->radioMfg_Name == "Icom")
+        //radioData->radioModelNumber = rigFactory->supported_rigs()->value(radioData->radioModel).modelNumber;
+        //radioData->radioModelName = rigFactory->supported_rigs()->value(radioData->radioModel).rigModelName;
+        //radioData->radioMfg_Name = rigFactory->supported_rigs()->value(radioData->radioModel).rigManufacturer;
+        //radioData->portType = rigFactory->supported_rigs()->value(radioData->radioModel).portType;
+
+
+        if (rigCap.rigManufacturer == "Icom")
         {
             CIVEditVisible(true);
         }
@@ -160,7 +161,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
 
 
-        if (radioData->portType == RigCapConstants::PortType::network)
+        if (rigCap.portType == RigCapConstants::PortType::network)
         {
                serialDataEntryVisible(false);
                networkDataEntryVisible(true);
@@ -169,7 +170,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
 
         }
-        else if (radioData->portType == RigCapConstants::PortType::serial)
+        else if (rigCap.portType == RigCapConstants::PortType::serial)
         {
                 serialDataEntryVisible(true);
                 networkDataEntryVisible(false);
@@ -189,7 +190,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         for (int i = 0; i < radioData->numTransverters; i++)
         {
-            if (rigFactory->supported_rigs()->value(radioData->radioModel).supportAntSw)
+            if (rigCap.supportAntSw)
             {
                //transVertTab[i]->antSwNumVisible(true);
                radioData->antSwitchAvail = true;
@@ -256,7 +257,10 @@ QString RigSetupForm::getRadioModel()
 void RigSetupForm::setRadioModel(QString m)
 {
     ui->radioModelBox->setCurrentIndex(ui->radioModelBox->findText(m));
-    if (radioData->radioMfg_Name == "Icom")
+
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(ui->radioModelBox->currentText());
+
+    if (rigCap.rigManufacturer == "Icom")
     {
         CIVEditVisible(true);
     }
@@ -1005,40 +1009,7 @@ void RigSetupForm::fillPollInterValInfo()
     ui->pollInterval->addItems(pollTimeStr);
 }
 
-/*
-void RigSetupForm::fillPortsInfo()
-{
 
-    ui->comPortBox->clear();
-
-    QString description;
-    QString manufacturer;
-    QString serialNumber;
-
-    ui->comPortBox->addItem("");
-
-    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
-        QStringList list;
-        description = info.description();
-        manufacturer = info.manufacturer();
-        serialNumber = info.serialNumber();
-        list << info.portName()
-             << (!description.isEmpty() ? description : blankString)
-             << (!manufacturer.isEmpty() ? manufacturer : blankString)
-             << (!serialNumber.isEmpty() ? serialNumber : blankString)
-             << info.systemLocation()
-             << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : blankString)
-             << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : blankString);
-
-
-        ui->comPortBox->addItem(list.first(), list);
-
-    }
-
-
-}
-
-*/
 
 
 void RigSetupForm::fillSpeedInfo()
@@ -1188,7 +1159,7 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
 
     // does this radio support antenna sw?
 
-    if (rigFactory->supported_rigs()->value(radioData->radioModel).supportAntSw)
+    if (rigFactory->supported_rigs()->value(radioData->rigModel).supportAntSw)
     {
        //transVertTab[tabNum]->antSwNumVisible(true);
        radioData->antSwitchAvail = true;

@@ -193,6 +193,8 @@ private:
 
     Ui::rigSetupForm *ui;
     RigFactory *rigFactory;
+
+
     scatParams *radioData;
 
     QLogTabWidget* ui_RadioTab;

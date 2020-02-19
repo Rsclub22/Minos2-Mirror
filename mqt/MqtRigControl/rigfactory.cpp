@@ -50,6 +50,6 @@ void RigFactory::populateComboRigList(QComboBox* comBox )
     for (auto r = supported_rigs()->cbegin(); r != supported_rigs()->cend(); ++r)
     {
         QString rigText = r.key();
-        comBox->addItem(rigText.remove("Hamlib "));
+        comBox->addItem(rigText);
     }
 }

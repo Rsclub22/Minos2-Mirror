@@ -31,6 +31,7 @@ public:
     RigCapabilities(int modelNumber = 0,
                     RigCapConstants::PortType portType_ = RigCapConstants::none,
                     QString rigManufacturer_ = "",
+                    QString rigName_ = "",
                     QString rigModelName_ = "",
                     bool supportGetRit_ = false,
                     bool supportSetRit_ = false,
@@ -46,7 +47,8 @@ public:
     int modelNumber;
     RigCapConstants::PortType portType;
     QString rigManufacturer;
-    QString rigModelName;
+    QString rigName;
+    QString rigModelName;       // combined manufacturer and rig names
     int rigModelNumber;
     bool supportGetRit;
     bool supportSetRit;

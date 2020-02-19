@@ -142,12 +142,13 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
         bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
 
 
-        // support Poll Data
+        qDebug() << key << capsList[i]->rig_model;
 
         (*rigsList)[key] = RigCapabilities(capsList[i]->rig_model,
                                            port_type,
                                            capsList[i]->mfg_name,
                                            capsList[i]->model_name,
+                                           key,
                                            supportGetRit,
                                            supportSetRit,
                                            supportSMeter,
@@ -192,7 +193,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     }
     else
     {
-        my_rig = rig_init(currentRadio.radioModelNumber);
+        my_rig = rig_init(currentRadio.rigModelNumber);
     }
 
 
