@@ -55,6 +55,15 @@ class KSTMainWindow : public QMainWindow
     QString myLoc;
     bool autoConnect = false;
 
+    int maxDistance = 99999;
+
+    bool ASActive = false;
+    ASBand ASActiveBand = asb144M;
+    QString ASServerName = "AS";
+    QString ASMyName = "Minos";
+    int ASMinDistance = 300;
+    int ASMaxDistance = 1000;
+
     bool kstconnected = false;
     bool started = false;
 
@@ -86,6 +95,22 @@ public:
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
+
+    int getMaxDistance() const;
+
+    bool getASActive() const;
+
+    ASBand getASActiveBand() const;
+
+    QString getASServerName() const;
+
+    QString getASMyName() const;
+
+    int getASMinDistance() const;
+
+    int calcDistance(QString c);
+
+    int getASMaxDistance() const;
 
 private slots:
     void CloseTimerTimer();
@@ -150,4 +175,6 @@ private:
     void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
     void checkAwayButton();
 };
+
+extern KSTMainWindow *mainWindow;
 #endif // KSTMAINWINDOW_H

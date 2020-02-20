@@ -33,6 +33,14 @@ void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUs
 {
     beginResetModel();
     callVector = pcallVector;
+    for (int i = 0; i < callVector->size(); i++)
+    {
+        QSharedPointer<KstUser> kstuser = callVector->at(i);
+        if (kstuser->distance == -2)
+        {
+            checkDistBear(kstuser);
+        }
+    }
     endResetModel();
 }
 QModelIndex KstCallGridModel::index( int row, int column,
@@ -309,6 +317,10 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         return isFiltered();
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
+
+    int m = mainWindow->getMaxDistance();
+    if (m > 0 && call->distance > m)
+        return false;
 
     int chat = call->chat;
     if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))

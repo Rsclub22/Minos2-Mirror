@@ -16,6 +16,8 @@ QStringList services =
 "Microwave",
 "EME/JT65",
 };
+
+KSTMainWindow *mainWindow = nullptr;
 //==========================================================================================
 KSTMainWindow::KSTMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,12 +25,22 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    mainWindow = this;
+
     QSettings settings;
 
     serverName = settings.value("hostname", "www.on4kst.info").toString();
     serverPort = settings.value("port", "23001").toString();
     myCallsign = settings.value("username", "").toString();
     password = settings.value("password", "").toString();
+    maxDistance = settings.value("maxDistance", 99999).toInt();
+
+    ASActive = settings.value("ASActive", false).toBool();
+    ASServerName = settings.value("ASServerName", "AS").toString();
+    ASMyName = settings.value("ASMyName", "Minos").toString();
+    ASActiveBand = static_cast<ASBand>(settings.value("ASActiveBand", 0).toInt());
+    ASMinDistance = settings.value("ASMinDistance", 300).toInt();
+    ASMaxDistance = settings.value("ASMaxDistance", 1000).toInt();
 
     callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
     messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
@@ -321,7 +333,24 @@ void KSTMainWindow::connectionError(QAbstractSocket::SocketError error)
     trace(msg);
     clearConnection();
 }
+int KSTMainWindow::calcDistance(QString c)
+{
+    if (!c.isEmpty())
+    {
+        QSharedPointer<KstUser> test(new KstUser());
+        test->call = c.toUpper();
+        test->chat = activeChat;
+        if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+        {
+            int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
 
+            QSharedPointer<KstUser> user = callVector->at(row);
+
+            return user->distance;
+        }
+    }
+    return -1;
+}
 void KSTMainWindow::onReadyRead()
 {
     QByteArray b = kstclient->readAll();
@@ -437,9 +466,44 @@ void KSTMainWindow::on_analyseButton_clicked()
         }
     }
 }
+int KSTMainWindow::getMaxDistance() const
+{
+    return maxDistance;
+}
+
+bool KSTMainWindow::getASActive() const
+{
+    return ASActive;
+}
+
+ASBand KSTMainWindow::getASActiveBand() const
+{
+    return ASActiveBand;
+}
+
+QString KSTMainWindow::getASServerName() const
+{
+    return ASServerName;
+}
+
+QString KSTMainWindow::getASMyName() const
+{
+    return ASMyName;
+}
+
+int KSTMainWindow::getASMinDistance() const
+{
+    return ASMinDistance;
+}
+
+int KSTMainWindow::getASMaxDistance() const
+{
+    return ASMaxDistance;
+}
+
 void KSTMainWindow::sendKST(QString msg)
 {
-        kstclient->write((msg + "\r\n").toLocal8Bit());
+    kstclient->write((msg + "\r\n").toLocal8Bit());
         trace("Send to KST: " + msg);
 }
 void KSTMainWindow::checkAwayButton()
@@ -543,6 +607,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
 
         kst->call = sl[3];
+        kst->distance = -2;
         kst->name = sl[4];
         QString destination = sl[5];
         kst->message = sl[6];
@@ -555,6 +620,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 kst->otherCall = destination;
             }
         }
+        kst->otherDistance = -2;
         bool found = false;
         for(QVector<QSharedPointer<KstMessageLine> >::iterator i = messageVector->begin(); i != messageVector->end(); i++)
         {
@@ -572,10 +638,6 @@ void KSTMainWindow::analyseKstMessage(QString atj)
     else if (sl[0] == "CE")
     {
         // end of CR frames
-        kstMessageModel.setChatVector(messageVector);
-
-        ui->messageTable->scrollToBottom();
-        ui->meepTable->scrollToBottom();
     }
     else if (sl[0] == "CH")
     {
@@ -593,6 +655,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
 
         kst->call = sl[3];
+        kst->distance = calcDistance(kst->call);
         kst->name = sl[4];
         QString destination = sl[5];
         kst->message = sl[6];
@@ -605,6 +668,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 kst->otherCall = destination;
             }
         }
+        kst->otherDistance = calcDistance(kst->otherCall);
 
         kstMessageModel.appendLastRow(kst);
 
@@ -682,6 +746,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 test->prefix = syn->country->basePrefix;
                 test->country = syn->country->realName;
                 test->baseCall = cs.realCall;
+                test->distance = -2;
             }
 
 
@@ -698,6 +763,13 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 //    UE|2|4777|
 
         kstCallModel.setCallVector(callVector);
+        kstMessageModel.setChatVector(messageVector);
+
+        kstCallFilterModel.invalidate();
+        kstMessageFilterModel.invalidate();
+
+        ui->messageTable->scrollToBottom();
+        ui->meepTable->scrollToBottom();
 
     }
 
@@ -919,6 +991,14 @@ bool KSTMainWindow::doConfiguration()
     conf.password = password;
     conf.autoConnect = autoConnect;
     conf.locator = myLoc;
+    conf.maxDistance = maxDistance;
+
+    conf.ASActive = ASActive;
+    conf.ASActiveBand = ASActiveBand;
+    conf.ASServerName = ASServerName;
+    conf.ASMyName = ASMyName;
+    conf.ASMinDistance = ASMinDistance;
+    conf.ASMaxDistance = ASMaxDistance;
 
     int ret = conf.exec();
     if (ret == QDialog::Accepted)
@@ -929,6 +1009,13 @@ bool KSTMainWindow::doConfiguration()
         password = conf.password;
         autoConnect = conf.autoConnect;
         myLoc = conf.locator;
+        maxDistance = conf.maxDistance;
+        ASActive = conf.ASActive;
+        ASActiveBand = conf.ASActiveBand;
+        ASServerName = conf.ASServerName;
+        ASMyName = conf.ASMyName;
+        ASMinDistance = conf.ASMinDistance;
+        ASMaxDistance = conf.ASMaxDistance;
 
         QSettings settings;
 
@@ -938,6 +1025,17 @@ bool KSTMainWindow::doConfiguration()
         settings.setValue("password", password);
         settings.setValue("autoConnect", autoConnect);
         settings.setValue("locator", myLoc);
+        settings.setValue("maxDistance", maxDistance);
+
+        settings.setValue("ASActive", ASActive);
+        settings.setValue("ASServerName", ASServerName);
+        settings.setValue("ASMyName", ASMyName);
+        settings.setValue("ASActiveBand", ASActiveBand);
+        settings.setValue("ASMinDistance", ASMinDistance);
+        settings.setValue("ASMaxDistance", ASMaxDistance);
+
+        kstCallFilterModel.invalidate();
+        kstMessageFilterModel.invalidate();
 
         if  (kstconnected)
         {

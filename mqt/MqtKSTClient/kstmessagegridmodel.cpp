@@ -22,6 +22,19 @@ void KstMessageGridModel::setChatVector(QSharedPointer<QVector <QSharedPointer<K
 {
     beginResetModel();
     messageVector = pchatVector;
+    for (int i = 0; i < messageVector->size(); i++)
+    {
+        QSharedPointer<KstMessageLine> kstline = messageVector->at(i);
+        if (kstline->distance == -2)
+        {
+            kstline->distance = mainWindow->calcDistance(kstline->call);
+        }
+        if (kstline->otherDistance == -2)
+        {
+            kstline->otherDistance = mainWindow->calcDistance(kstline->otherCall);
+        }
+    }
+
     endResetModel();
 }
 QModelIndex KstMessageGridModel::index( int row, int column,
@@ -79,6 +92,12 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
             return QVariant();
 
         QSharedPointer<KstMessageLine> crec = messageVector->at(row);
+
+        if (crec->distance == -2)
+        {
+            crec->distance = mainWindow->calcDistance(crec->call);
+            crec->otherDistance = mainWindow->calcDistance(crec->otherCall);
+        }
 
         QString cell;
         switch (column)
@@ -198,16 +217,22 @@ bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModel
 
     QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
 
-    int chat = kstmsg->chat;
-    if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0 ))
+    int m = mainWindow->getMaxDistance();
+    // How do we go about filtering for distance?
+    if (m == 0 || ((kstmsg->distance > 0 && kstmsg->distance < m)
+            || (kstmsg->otherDistance > 0 && kstmsg->otherDistance < m)
+            || (kstmsg->distance < 0 && kstmsg->otherDistance < 0)))
     {
-        if (filterString.isEmpty())
-            return true;
+        int chat = kstmsg->chat;
+        if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0 ))
+        {
+            if (filterString.isEmpty())
+                return true;
 
-        if (kstmsg->fullLine.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-            return true;
+            if (kstmsg->fullLine.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                return true;
+        }
     }
-
     return false;
 }
 

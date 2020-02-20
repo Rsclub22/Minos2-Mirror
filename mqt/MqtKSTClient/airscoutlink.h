@@ -14,6 +14,18 @@
 #include <QNetworkInterface>
 #include "kstcallgridmodel.h"
 
+enum ASBand {
+    asb144M,
+    asb432M,
+    asb13G,
+    asb24G,
+    asb34G,
+    asb57G,
+    asb10G,
+    asbMaxBand
+};
+
+
 class AirScoutLink: public QObject
 {
     Q_OBJECT

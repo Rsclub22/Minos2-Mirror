@@ -1,3 +1,4 @@
+#include "kstmainwindow.h"
 #include "airscoutlink.h"
 
 AirScoutLink::AirScoutLink():
@@ -7,7 +8,8 @@ AirScoutLink::AirScoutLink():
 
     connect(qus.data(), SIGNAL(readyRead( )), this, SLOT(onReadyRead()));
 
-    sendMessage( "ASSETPATH", "4320000,G0GJV,IO91OK,DF2JP,JO31CO");
+    if (mainWindow->getASActive())
+        sendMessage( "ASSETPATH", "4320000,G0GJV,IO91OK,DF2JP,JO31CO");
 }
 
 void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
@@ -40,7 +42,7 @@ void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
 
 qint64 AirScoutLink::sendMessage(QString messagetype, QString messageText)
 {
-    QString mess = messagetype + ": \"KST\" \"AS\" " + messageText;
+    QString mess = messagetype + ": \"" + mainWindow->getASMyName() + "\" \"" + mainWindow->getASServerName() +  "\" " + messageText;
 
     int cs = 0;
     QByteArray packet = QByteArray(mess.toUtf8());
@@ -49,7 +51,7 @@ qint64 AirScoutLink::sendMessage(QString messagetype, QString messageText)
         cs += c;
     }
 
-    packet += (cs | 0x80)&0xff;
+    packet += static_cast<char>((cs | 0x80)&0xff);
     packet += '\0';
     qint64 res = 0;
 
@@ -112,16 +114,16 @@ void AirScoutLink::onReadyRead()
         {
             cs = 0;
 
-            int limit = res - 1;
-            if (buf.at(limit) == 0)
+            qint64 limit = res - 1;
+            if (buf.at(static_cast<int>(limit)) == 0)
                limit--;
 
             for (int i = 0; i < limit; i++)
             {
                 cs += buf[i];
             }
-            lcs = (cs & 0x7f)|0x80;
-            lastbyte = buf.at(limit);
+            lcs = static_cast<char>((cs & 0x7f)|0x80);
+            lastbyte = buf.at(static_cast<int>(limit));
 
             // If "nearest", analyse for this call and any planes, update userlist
 
@@ -136,35 +138,39 @@ void AirScoutLink::onReadyRead()
 
 void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector, int chatId, QString filterString)
 {
-    watchList.clear();
-    watchList.append("4320000");        // band
-    for(QVector<QSharedPointer<KstUser> >::iterator user = callVector->begin(); user != callVector->end(); user++)
+    if (mainWindow->getASActive())
     {
-        if (chatId != 0 && user->data()->chat != chatId)
-            continue;
-
-        if (user->data()->distance < 200 || user->data()->distance > 1000)
-            continue;
-
-        if (user->data()->call.contains(filterString) || user->data()->loc.contains(filterString))
+        watchList.clear();
+        watchList.append("4320000");        // band
+        for(QVector<QSharedPointer<KstUser> >::iterator user = callVector->begin(); user != callVector->end(); user++)
         {
-            watchList.append(user->data()->baseCall);
-            watchList.append(user->data()->loc);
+            if (chatId != 0 && user->data()->chat != chatId)
+                continue;
+
+            int mind = mainWindow->getASMinDistance();
+            int maxd = mainWindow->getASMaxDistance();
+            if (user->data()->distance < mind ||( maxd > 0 && user->data()->distance > maxd))
+                continue;
+
+            if (user->data()->call.contains(filterString) || user->data()->loc.contains(filterString))
+            {
+                watchList.append(user->data()->baseCall);
+                watchList.append(user->data()->loc);
+            }
+        }
+        if (watchList.count() > 1)
+        {
+            QString watch = watchList.join(",");
+
+            if (watch != oldWatch)
+            {
+                QString watchText = /*"\"" +*/ watch /*+ "\""*/;
+
+                sendMessage("ASWATCHLIST", watchText);
+                oldWatch = watch;
+            }
         }
     }
-    if (watchList.count() > 1)
-    {
-        QString watch = watchList.join(",");
-
-        if (watch != oldWatch)
-        {
-            QString watchText = /*"\"" +*/ watch /*+ "\""*/;
-
-            sendMessage("ASWATCHLIST", watchText);
-            oldWatch = watch;
-        }
-    }
-
 }
 
 void AirScoutLink::askNearest(QString lastcall)
