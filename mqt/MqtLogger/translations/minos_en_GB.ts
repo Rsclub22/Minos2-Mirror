@@ -1557,8 +1557,7 @@ and send the .EDI file produced.<byte value="xd"/>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="55"/>
-        <location filename="../MinosTestExport.cpp" line="533"/>
-        <location filename="../MinosTestExport.cpp" line="561"/>
+        <location filename="../MinosTestExport.cpp" line="531"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
