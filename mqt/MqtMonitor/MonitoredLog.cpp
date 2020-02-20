@@ -97,7 +97,7 @@ void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
    if ( stanzasPulled.find( stanza ) == stanzasPulled.end() )
    {
       // we have a stanza - so pass it into the contest object
-      contest->ct_stanzaCount = mt->importTestBuffer( stanzaData );
+      contest->ct_stanzaCount = mt->importTestBuffer( stanzaData.toUtf8() );
       stanzasPulled.insert(stanza);
 
       if (frame)

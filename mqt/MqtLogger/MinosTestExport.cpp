@@ -520,6 +520,18 @@ int MinosTestExport::exportStackDisplay(QSharedPointer<QFile> expfd )
     }
     return exp_stanzaCount;
 }
+void MinosTestExport::writeFile(QSharedPointer<QFile> minosContestFile, QString lbuff)
+{
+    QByteArray bbuff = lbuff.toUtf8();
+    const char *cbuff = bbuff.data();
+    int cblen = static_cast<int>(strlen(cbuff));
+    qint64 ret = minosContestFile->write(cbuff, cblen);
+    if ( ret != cblen )
+    {
+       MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
+    }
+
+}
 int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bool newfile )
 {
    if ( newfile )
@@ -527,11 +539,9 @@ int MinosTestExport::exportAllDetails(QSharedPointer<QFile> minosContestFile, bo
       //      QString lbuff = "<?xml version='1.0'?><stream:stream xmlns:stream='http://etherx.jabber.org/streams' xmlns='jabber:client' version='1.0'>" ;
       QString lbuff = "<?xml version='1.0'?><stream:stream xmlns:stream='http://minos.goodey.org.uk/streams' xmlns='minos:client' version='1.0'>" ;
       lbuff += "\r\n<!--\r\n" + tr(fileHeader) + "-->\r\n";
-      qint64 ret = minosContestFile->write(lbuff.toStdString().c_str(), lbuff.length());
-      if ( ret != lbuff.length() )
-      {
-         MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
-      }
+
+      writeFile(minosContestFile, lbuff);
+
    }
    exportMode( minosContestFile );
    exportContest( minosContestFile );
@@ -555,11 +565,7 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
    exp_stanzaCount = 0;
    QString lbuff = "<?xml version='1.0'?><stream:stream xmlns:stream='http://minos.goodey.org.uk/streams' xmlns='minos:client' version='1.0'>" ;
    lbuff += "\r\n<!--\r\n" + tr(fileHeader) + "-->\r\n";
-   qint64 ret = expfd->write(lbuff.toStdString().c_str(), lbuff.length());
-   if (  ret != lbuff.length() )
-   {
-      MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
-   }
+   writeFile(expfd, lbuff);
 
    // export a sequence of Minos stanzas
 

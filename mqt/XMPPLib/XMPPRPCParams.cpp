@@ -596,7 +596,7 @@ void RPCStringParam::addNode( TiXmlElement &node )
 {
    TiXmlElement vNode( "string" );
 
-   TiXmlText tNode( value.toStdString().c_str() );
+   TiXmlText tNode( value.toStdString() );
    vNode.InsertEndChild( tNode );
    node.InsertEndChild( vNode );
 }
@@ -634,7 +634,7 @@ RPCDtgParam::~RPCDtgParam()
 void RPCDtgParam::addNode( TiXmlElement &node )
 {
    TiXmlElement vNode( "dateTime.iso8601" );
-   TiXmlText tNode( value.toStdString().c_str() );
+   TiXmlText tNode( value.toStdString() );
    vNode.InsertEndChild( tNode );
    node.InsertEndChild( vNode );
 }
@@ -680,7 +680,7 @@ RPCBase64Param::~RPCBase64Param()
 void RPCBase64Param::addNode( TiXmlElement &node )
 {
    TiXmlElement vNode( "base64" );
-   TiXmlText tNode( value.toStdString().c_str() );
+   TiXmlText tNode( value.toStdString() );
    vNode.InsertEndChild( tNode );
    node.InsertEndChild( vNode );
 }

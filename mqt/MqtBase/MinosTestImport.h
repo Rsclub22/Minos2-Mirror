@@ -45,7 +45,7 @@ class MinosTestImport: public RPCDispatcher
       virtual ~MinosTestImport() override;
 
       void startImportTest();
-      int importTestBuffer( const QString &buffer );
+      int importTestBuffer(const QByteArray &buffer );
       void endImportTest();
 
       int importTest( QSharedPointer<QFile> ctfile );

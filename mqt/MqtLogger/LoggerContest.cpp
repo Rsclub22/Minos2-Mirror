@@ -999,7 +999,7 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
 
    header += "<EOH>\r\n";
 
-   qint64 ret = expfd->write(header.toStdString().c_str());
+   qint64 ret = expfd->write(header.toUtf8());
    if (  ret != header.size() )
    {
       MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
@@ -1011,7 +1011,7 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
       QString l = lct ->getADIFLine();
       if ( l.size() )
       {
-         qint64 ret = expfd->write(l.toStdString().c_str());
+         qint64 ret = expfd->write(l.toUtf8());
          if (  ret != l.size() )
          {
             MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
@@ -1191,7 +1191,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
 
 
          char inputbuff[ 100 ];
-         strcpy( inputbuff, ct->loc.loc.getValue().toStdString().c_str() );
+         strcpy( inputbuff, ct->loc.loc.getValue().toUtf8().data() );
          l1.gridstyle = LOC;
          l1.datastring = inputbuff;
 
