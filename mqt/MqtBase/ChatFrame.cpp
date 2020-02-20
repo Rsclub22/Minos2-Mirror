@@ -39,7 +39,7 @@ void ChatFrame::ChatServerList(QVector<Server> serverList)
     ui->StationList->clear();
     for ( QVector<Server>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = tr(ChatServer::stateIndicator[(*i).state]) + " " + (*i).app + "\r\n" + (*i).freq;
+        QString state = ChatServer::tr(ChatServer::stateIndicator[(*i).state]) + " " + (*i).app + "\r\n" + (*i).freq;
         ui->StationList->addItem( state );
     }
 }

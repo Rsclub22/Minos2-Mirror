@@ -542,6 +542,12 @@
         <source>No Contact</source>
         <translation>Pas de contacts  </translation>
     </message>
+    <message>
+        <location filename="../ChatServer.cpp" line="99"/>
+        <location filename="../ChatServer.cpp" line="115"/>
+        <source>%1 changed state to %2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConfigElementFrame</name>
