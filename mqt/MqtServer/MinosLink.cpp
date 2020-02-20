@@ -85,13 +85,13 @@ static void serverSendAction( XStanza *a )
       QString from = ThisMinosServer::getThisMinosServer() ->getServerName();
       if ( from.length() )
       {
-         x->SetAttribute( "from", from.toStdString().c_str() );
+         x->SetAttribute( "from", from.toStdString() );
       }
    }
    QString to = a->getTo();
    if ( to.size() != 0 )
    {
-      x->SetAttribute( "to", to.toStdString().c_str() );
+      x->SetAttribute( "to", to.toStdString() );
    }
    // and now dispatch to its destination
 

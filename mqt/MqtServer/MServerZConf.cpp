@@ -468,7 +468,7 @@ bool UDPSocket::setup(QNetworkInterface &iface, QNetworkAddressEntry &addr)
 
 bool UDPSocket::sendMessage(const QString &mess )
 {
-    QByteArray packet = QByteArray(mess.toStdString().c_str());
+    QByteArray packet = mess.toUtf8();
 
     qint64 res = qus->writeDatagram(packet.data(), packet.length(), qua.broadcast(), UPNP_PORT);
 

@@ -55,7 +55,7 @@ bool MinosClientConnection::checkFrom( TiXmlElement *tix )
       QString from = makeJid();
       if ( from.size() )
       {
-         tix->SetAttribute( "from", from.toStdString().c_str() );
+         tix->SetAttribute( "from", from.toStdString() );
       }
    }
    else
