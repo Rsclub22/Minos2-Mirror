@@ -3,6 +3,8 @@
 
 #include "base_pch.h"
 
+#include "airscoutlink.h"
+
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QRadioButton>
@@ -20,6 +22,7 @@ class KSTMainWindow : public QMainWindow
     Q_OBJECT
 
     QTimer CloseTimer;
+    QTimer userCallTimer;
 
     KstMessageGridModel kstMessageModel;
     KstMessageGridSortFilterModel kstMessageFilterModel;
@@ -32,6 +35,7 @@ class KSTMainWindow : public QMainWindow
     KstCallGridSortFilterModel kstCallFilterModel;
 
     QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
+    bool callVectorChanged = false;
 
 
     QSharedPointer<HtmlDelegate> meepDelegate;
@@ -63,6 +67,8 @@ class KSTMainWindow : public QMainWindow
 
     int messageSequence = 0;
 
+    QSharedPointer<AirScoutLink> asl;
+
     void sendKST(QString msg);
     void analyseKstMessage(QString atj);
     void reconnect();
@@ -83,6 +89,8 @@ public:
 
 private slots:
     void CloseTimerTimer();
+
+    void userCallTimerTimer();
 
     void on_analyseButton_clicked();
 

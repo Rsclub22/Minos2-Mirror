@@ -13,6 +13,7 @@ class KstUser
 public:
     int chat;
     QString call;
+    QString baseCall;
     QString loc;
     QString name;
     QString prefix;

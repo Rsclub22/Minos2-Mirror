@@ -4,6 +4,7 @@
 #include "cutils.h"
 
 #include "kstconfigure.h"
+#include "airscoutlink.h"
 
 #include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"
@@ -112,6 +113,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(&CloseTimer, SIGNAL(timeout()), this, SLOT(CloseTimerTimer()));
     CloseTimer.start(100);
 
+    connect(&userCallTimer, SIGNAL(timeout()), this, SLOT(userCallTimerTimer()));
+    userCallTimer.start(5000);
+
     kstMessageModel.setChatVector(messageVector);
 
     kstMessageFilterModel.setSourceModel(&kstMessageModel);
@@ -218,6 +222,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->analyseButton->setVisible(false);
     ui->messageFilter->setFocus();
 
+    asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
+
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -257,6 +263,15 @@ void KSTMainWindow::CloseTimerTimer(  )
          close();
       }
    }
+}
+
+void KSTMainWindow::userCallTimerTimer()
+{
+    if (callVectorChanged)
+    {
+        asl->usersChanged(callVector, ui->CSChatFilter->currentIndex(), ui->callEdit->text());
+        callVectorChanged = false;
+    }
 }
 
 void KSTMainWindow::connectToHost()
@@ -666,11 +681,13 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             {
                 test->prefix = syn->country->basePrefix;
                 test->country = syn->country->realName;
+                test->baseCall = cs.realCall;
             }
 
 
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             callVector->insert(row, test);
+            callVectorChanged = true;
         }
     }
 
@@ -763,7 +780,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             int row = l - callVector->begin();
 
             kstCallModel.removeRow(row);
-
+            callVectorChanged = true;
         }
     }
 
@@ -794,9 +811,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             {
                 test->prefix = syn->country->basePrefix;
                 test->country = syn->country->realName;
+                test->baseCall = cs.realCall;
             }
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             kstCallModel.insertRow(row, test);
+            callVectorChanged = true;
         }
 
     }
@@ -1089,7 +1108,8 @@ void KSTMainWindow::doLoginChanges()
         if (kstChatSelection.count())
         {
             kstCallModel.locator = myLoc;
-            kstclient->connectToHost(serverName, serverPort.toUShort());
+            if (autoConnect)
+                kstclient->connectToHost(serverName, serverPort.toUShort());
         }
 
     }

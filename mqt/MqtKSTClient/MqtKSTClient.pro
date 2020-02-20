@@ -26,6 +26,7 @@ win32:LIBS += -lWs2_32
 
 SOURCES += \
     KSTMinosParameters.cpp \
+    airscoutlink.cpp \
     kstcallgridmodel.cpp \
     kstconfigure.cpp \
     kstmessagegridmodel.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
 
 HEADERS += \
     KSTMinosParameters.h \
+    airscoutlink.h \
     kstcallgridmodel.h \
     kstconfigure.h \
     kstmainwindow.h \
