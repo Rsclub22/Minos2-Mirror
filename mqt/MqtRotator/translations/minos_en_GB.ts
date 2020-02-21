@@ -373,6 +373,16 @@ Please delete them and set up the rotators again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rotatormainwindow.cpp" line="126"/>
+        <source>Actual: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatormainwindow.cpp" line="130"/>
+        <source>RawRot: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rotatormainwindow.cpp" line="196"/>
         <source>Please select an antenna or no antenna found!</source>
         <translation type="unfinished"></translation>

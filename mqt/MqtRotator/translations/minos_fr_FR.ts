@@ -377,6 +377,16 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <translation>À propos de la configuration du rotateur </translation>
     </message>
     <message>
+        <location filename="../rotatormainwindow.cpp" line="126"/>
+        <source>Actual: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rotatormainwindow.cpp" line="130"/>
+        <source>RawRot: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rotatormainwindow.cpp" line="196"/>
         <source>Please select an antenna or no antenna found!</source>
         <translation>Sélectionner un antenne SVP, ou aucune antenne trouvée!</translation>

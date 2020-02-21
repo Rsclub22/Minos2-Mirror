@@ -123,11 +123,11 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     ui->statusbar->addPermanentWidget(offSetDisplay);
 
     ui->statusbar->addPermanentWidget(actualRotatorlbl);
-    actualRotatorlbl->setText("Actual: ");
+    actualRotatorlbl->setText(tr("Actual: "));
     ui->statusbar->addPermanentWidget(actualRotatorDisplay);
 
     ui->statusbar->addPermanentWidget(rawRotatorlbl);
-    rawRotatorlbl->setText("RawRot: ");
+    rawRotatorlbl->setText(tr("RawRot: "));
     ui->statusbar->addPermanentWidget(rawRotatorDisplay);
 
     ui->overlaplineEdit->setFixedSize(60,20);
