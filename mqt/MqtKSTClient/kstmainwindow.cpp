@@ -279,7 +279,7 @@ void KSTMainWindow::CloseTimerTimer(  )
 
 void KSTMainWindow::userCallTimerTimer()
 {
-    if (callVectorChanged)
+    if (getASActive() && callVectorChanged)
     {
         asl->usersChanged(callVector, ui->CSChatFilter->currentIndex(), ui->callEdit->text());
         callVectorChanged = false;
@@ -501,10 +501,30 @@ int KSTMainWindow::getASMaxDistance() const
     return ASMaxDistance;
 }
 
+QString KSTMainWindow::getMyCallsign() const
+{
+    return myCallsign;
+}
+
+QString KSTMainWindow::getMyLoc() const
+{
+    return myLoc;
+}
+
+QSharedPointer<QVector<QSharedPointer<KstUser> > > KSTMainWindow::getCallVector() const
+{
+    return callVector;
+}
+
+int KSTMainWindow::getActiveChat() const
+{
+    return activeChat;
+}
+
 void KSTMainWindow::sendKST(QString msg)
 {
     kstclient->write((msg + "\r\n").toLocal8Bit());
-        trace("Send to KST: " + msg);
+    trace("Send to KST: " + msg);
 }
 void KSTMainWindow::checkAwayButton()
 {

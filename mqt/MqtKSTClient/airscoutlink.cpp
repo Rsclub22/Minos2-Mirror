@@ -1,6 +1,16 @@
 #include "kstmainwindow.h"
 #include "airscoutlink.h"
 
+static const char * bandFreqStrings[] = {
+    "1440000",
+    "4320000",
+    "12960000",
+    "23200000",
+    "34000000",
+    "57600000",
+    "103680000"
+
+};
 AirScoutLink::AirScoutLink():
     qus(new QUdpSocket())
 {
@@ -8,10 +18,13 @@ AirScoutLink::AirScoutLink():
 
     connect(qus.data(), SIGNAL(readyRead( )), this, SLOT(onReadyRead()));
 
-    if (mainWindow->getASActive())
-        sendMessage( "ASSETPATH", "4320000,G0GJV,IO91OK,DF2JP,JO31CO");
+//    if (mainWindow->getASActive())
+//        sendMessage( "ASSETPATH", "4320000,G0GJV,IO91OK,DF2JP,JO31CO");
 }
-
+bool ASUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
+{
+    return i->call < j->call;
+}
 void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
 {
     // Get network interfaces list
@@ -124,6 +137,7 @@ void AirScoutLink::onReadyRead()
             }
             lcs = static_cast<char>((cs & 0x7f)|0x80);
             lastbyte = buf.at(static_cast<int>(limit));
+            buf.chop(1);    // get rid of checksum
 
             // If "nearest", analyse for this call and any planes, update userlist
 
@@ -131,6 +145,46 @@ void AirScoutLink::onReadyRead()
             // for this call, and go on to the next. If we can't find it, go back to the start
 
             //processZConfString(dg, host, sendBeaconResponse);
+            QString sbuff = QString(buf);
+            QStringList args;
+
+            int sp = 0;
+            int sp1 = sbuff.indexOf(" ");
+            if (sp1 > 0)
+            {
+                args.append(sbuff.left(sp1));
+                sp = sp1 + 1;
+                sp1 = sbuff.indexOf(" ", sp);
+                if (sp1 > 0)
+                {
+                    args.append(sbuff.mid(sp, sp1 - sp));
+                    sp = sp1 + 1;
+                    sp1 = sbuff.indexOf(" ", sp);
+                    if (sp1 > 0)
+                    {
+                        args.append(sbuff.mid(sp, sp1 - sp));
+                        sp = sp1 + 1;
+                        args.append(sbuff.mid(sp));
+                    }
+                }
+
+            }
+
+            if (args[2] == '"' + mainWindow->getASMyName() + '"' && args[1] =='"' + mainWindow->getASServerName() + '"' && args[0] == "ASNEAREST:")
+            {
+                if (args[3].startsWith("\""))
+                {
+                    args[3] = args[3].remove(0, 1);
+                }
+                if (args[3].endsWith("\""))
+                {
+                    args[3].chop(1);
+                }
+                QStringList sl = args[3].split(",");
+                QString dxCall = sl[3];
+
+                askNearest(dxCall);
+            }
 
         }
     }
@@ -141,7 +195,7 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
     if (mainWindow->getASActive())
     {
         watchList.clear();
-        watchList.append("4320000");        // band
+        watchList.append(bandFreqStrings[mainWindow->getASActiveBand()]);        // band
         for(QVector<QSharedPointer<KstUser> >::iterator user = callVector->begin(); user != callVector->end(); user++)
         {
             if (chatId != 0 && user->data()->chat != chatId)
@@ -170,14 +224,31 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
                 oldWatch = watch;
             }
         }
+        askNearest(watchList[1]);
     }
 }
 
 void AirScoutLink::askNearest(QString lastcall)
 {
-    QString getpath = /*"\""  +*/ watchList[0] + ","
-            + "G0GJV,IO91OK,"
-            + watchList[11] + "," + watchList[12] /*+ "\""*/;
-    sendMessage("ASSETPATH", getpath);
+    QSharedPointer<KstUser> test(new KstUser());
+    test->call = lastcall.toUpper();
+    int row = (std::upper_bound(mainWindow->getCallVector()->begin(), mainWindow->getCallVector()->end(), test, ASUserCompare ) - mainWindow->getCallVector()->begin());
+
+    if (row >= mainWindow->getCallVector()->size() - 1)
+    {
+        row = 1;
+    }
+    QSharedPointer<KstUser> user = mainWindow->getCallVector()->at(row);
+    if (user->call == mainWindow->getMyCallsign())
+    {
+        askNearest(user->call);
+    }
+    else
+    {
+        QString getpath = /*"\""  +*/ watchList[0] + ","
+                + mainWindow->getMyCallsign() + "," + mainWindow->getMyLoc() + ","
+                + user->call + "," + user->loc /*+ "\""*/;
+        sendMessage("ASSETPATH", getpath);
+    }
 }
 

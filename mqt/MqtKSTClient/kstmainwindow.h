@@ -112,6 +112,14 @@ public:
 
     int getASMaxDistance() const;
 
+    QString getMyCallsign() const;
+
+    QString getMyLoc() const;
+
+    QSharedPointer<QVector<QSharedPointer<KstUser> > > getCallVector() const;
+
+    int getActiveChat() const;
+
 private slots:
     void CloseTimerTimer();
 
