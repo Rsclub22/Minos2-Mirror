@@ -43,6 +43,21 @@ RigBase* RigFactory::createRigs(int rigId)
 }
 
 
+bool RigFactory::checkForBands(int rigNumber, Frequency freq)
+{
+    if (rigNumber == OmniRigOneId)
+    {
+
+    }
+    else if (rigNumber == OmniRigTwoId)
+    {
+
+    }
+
+    return HamlibRigControl::checkFreqRange(rigNumber, freq);
+}
+
+
 void RigFactory::populateComboRigList(QComboBox* comBox )
 {
     comBox->clear();

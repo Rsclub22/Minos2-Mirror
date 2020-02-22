@@ -789,12 +789,12 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
 
     config.beginGroup(radioTab[radNum]->getRadioData()->radioName);
     config.setValue("radioName", radioTab[radNum]->getRadioData()->radioName);
-    //config.setValue("radioMfgName", radioTab[radNum]->getRadioData()->radioMfg_Name);
+    config.setValue("radioMfgName", radioTab[radNum]->getRadioData()->rigMfg_Name);
     config.setValue("radioModel", radioTab[radNum]->getRadioData()->rigModel);
-    //config.setValue("radioModelName", radioTab[radNum]->getRadioData()->radioModelName);
-    //config.setValue("radioModelNumber", radioTab[radNum]->getRadioData()->radioModelNumber);
+    config.setValue("radioModelName", radioTab[radNum]->getRadioData()->rigModelName);
+    config.setValue("radioModelNumber", radioTab[radNum]->getRadioData()->rigModelNumber);
     config.setValue("civAddress", radioTab[radNum]->getRadioData()->civAddress);
-    //config.setValue("portType", radioTab[radNum]->getRadioData()->portType);
+    config.setValue("portType", radioTab[radNum]->getRadioData()->portType);
     config.setValue("comport", radioTab[radNum]->getRadioData()->comport);
     config.setValue("baudrate", radioTab[radNum]->getRadioData()->baudrate);
     config.setValue("databits", radioTab[radNum]->getRadioData()->databits);
@@ -828,12 +828,12 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     config.beginGroup(availRadios[radNum]);
     radioTab[radNum]->getRadioData()->radioName = config.value("radioName", "").toString();
     radioTab[radNum]->getRadioData()->radioNumber = config.value("radioNumber", QString::number(radNum)).toString();
-    //radioTab[radNum]->getRadioData()->radioMfg_Name = config.value("radioMfgName", "").toString();
+    radioTab[radNum]->getRadioData()->rigMfg_Name = config.value("radioMfgName", "").toString();
     radioTab[radNum]->getRadioData()->rigModel = config.value("radioModel", "").toString();
-    //radioTab[radNum]->getRadioData()->radioModelName = config.value("radioModelName", "").toString();
-    //radioTab[radNum]->getRadioData()->radioModelNumber = config.value("radioModelNumber", "").toInt();
+    radioTab[radNum]->getRadioData()->rigModelName = config.value("radioModelName", "").toString();
+    radioTab[radNum]->getRadioData()->rigModelNumber = config.value("radioModelNumber", "").toInt();
     radioTab[radNum]->getRadioData()->civAddress = config.value("civAddress", "").toString();
-    //radioTab[radNum]->getRadioData()->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
+    radioTab[radNum]->getRadioData()->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
     radioTab[radNum]->getRadioData()->comport = config.value("comport", "").toString();
     radioTab[radNum]->getRadioData()->baudrate = config.value("baudrate", 9600).toInt();
     radioTab[radNum]->getRadioData()->databits = config.value("databits", 8).toInt();

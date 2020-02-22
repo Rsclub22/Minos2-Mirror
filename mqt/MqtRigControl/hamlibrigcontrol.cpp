@@ -121,6 +121,9 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         bool supportSetRit = capsList[i]->set_rit ? true:false;
 
+        bool supportGetRitState = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+        bool supportSetRitState = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+
         bool supportSMeter = HamlibRigControl::supportSignalStrength(capsList[i]->rig_model);
 
         bool supportGetPtt = capsList[i]->get_ptt ? true:false;
@@ -148,6 +151,8 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            key,
                                            supportGetRit,
                                            supportSetRit,
+                                           supportGetRitState,
+                                           supportSetRitState,
                                            supportSMeter,
                                            supportGetPtt,
                                            supportSetPtt,
@@ -344,18 +349,24 @@ bool RigControl::checkFreqValid(freq_t freq, rmode_t mode)
 /* ---------------------- Freq Range ---------------------------------*/
 
 
-bool HamlibRigControl::checkFreqRange(int rigNumber, Frequency freq, MODE mode)
-{
-    Q_UNUSED(rigNumber)
-    return chkFreqRange(my_rig, static_cast<freq_t>(freq), mode);
-}
 
 
-bool HamlibRigControl::chkFreqRange(RIG *my_rig, freq_t freq, MODE mode)
+
+bool HamlibRigControl::checkFreqRange(int rigNumber, Frequency freq)
 {
 
-    const freq_range_t* freq_range = rig_get_range(my_rig->caps->rx_range_list1, freq, mapMode(mode));
-    return (freq_range != nullptr)? true:false;
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        const freq_range_t* freq_range = rig_get_range(myRig->caps->rx_range_list1, static_cast<freq_t>(freq), RIG_MODE_USB);
+        return (freq_range != nullptr)? true:false;
+    }
+    else
+    {
+        return false;
+    }
+
 
 }
 
@@ -620,7 +631,7 @@ bool RigControl::supportRitOnOff(int rigNumber)
 
 */
 
-int HamlibRigControl::toggleRitState(VFO vfo, bool state)
+int HamlibRigControl::setRitState(VFO vfo, bool state)
 {
     return rig_set_func(my_rig, hamlibVfoNames[vfo], RIG_FUNC_RIT, state);
 }
@@ -875,6 +886,47 @@ int HamlibRigControl::rigSetLevel(vfo_t vfo, setting_t level, value_t val)
 int HamlibRigControl::rigGetLevel(vfo_t vfo, setting_t level, value_t *val)
 {
     return rig_get_level (my_rig, vfo, level, val);
+}
+
+/********************* Get/Set Func **********************************/
+
+
+setting_t HamlibRigControl::rigHasGetFunc(setting_t func)
+{
+   return rig_has_get_func(my_rig, func);
+}
+
+setting_t HamlibRigControl::rigHasGetFunc(int rigNumber, setting_t func)
+{
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        return rig_has_get_level (myRig, func);
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+setting_t HamlibRigControl::rigHasSetFunc(setting_t func)
+{
+    return rig_has_set_level (my_rig, func);
+}
+
+setting_t HamlibRigControl::rigHasSetFunc(int rigNumber, setting_t func)
+{
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        return rig_has_set_level (myRig, func);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 

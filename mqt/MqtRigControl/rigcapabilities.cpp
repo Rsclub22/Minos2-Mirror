@@ -22,6 +22,8 @@ RigCapabilities::RigCapabilities(int modelNumber_,
                                  QString rigModelName_,
                                  bool supportGetRit_,
                                  bool supportSetRit_,
+                                 bool supportGetRitState_,
+                                 bool supportSetRitState_,
                                  bool supportSMeter_,
                                  bool supportGetPtt_,
                                  bool supportSetPtt_,
@@ -36,6 +38,8 @@ RigCapabilities::RigCapabilities(int modelNumber_,
       rigModelName (rigModelName_),
       supportGetRit (supportGetRit_),
       supportSetRit (supportSetRit_),
+      supportGetRitState (supportGetRitState_),
+      supportSetRitState (supportSetRitState_),
       supportSMeter (supportSMeter_),
       supportGetPtt (supportGetPtt_),
       supportSetPtt (supportSetPtt_),
@@ -57,6 +61,8 @@ RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
     rigModelNumber = rigcap.rigModelNumber;
     supportGetRit = rigcap.supportGetRit;
     supportSetRit = rigcap.supportSetRit;
+    supportGetRitState = rigcap.supportGetRitState;
+    supportSetRitState = rigcap.supportSetRitState;
     supportSMeter = rigcap.supportSMeter;
     supportGetPtt = rigcap.supportGetPtt;
     supportPtt = rigcap.supportPtt;

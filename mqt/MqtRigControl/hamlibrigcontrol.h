@@ -50,6 +50,7 @@ public:
     virtual ~HamlibRigControl();
 
     static void register_rigs(RigFactory::Rigs*);
+    static bool checkFreqRange(int rigNumber, Frequency freq);
 
     int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
@@ -72,7 +73,7 @@ public:
 
     int getRit(VFO vfo, ShortFreq &ritfreq) override;
     int setRit(VFO vfo, ShortFreq ritfreq) override;
-    int toggleRitState(VFO vfo, bool state) override;
+    int setRitState(VFO vfo, bool state) override;
     int getRitState(VFO vfo, bool& state) override;
 
     static void setTraceCommsFlag(bool value);
@@ -81,8 +82,7 @@ public:
 
     int rig_message_cb(enum rig_debug_level_e debug_level, const char *fmt, va_list ap);
 
-    bool chkFreqRange(RIG *my_rig, freq_t freq, MODE mode);
-    bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) override;
+
 
 private:
 
@@ -103,6 +103,12 @@ private:
     serial_handshake_e getSerialHandshakeCode(int index){return handshakeCodes[index];}
     serial_force_Lines_e getSerialForceLineCode(int index){return forceLinesCodes[index];}
 
+
+    setting_t rigHasGetFunc(setting_t);
+    static setting_t rigHasGetFunc(int rigNumber, setting_t level);
+
+    setting_t rigHasSetFunc(setting_t);
+    static setting_t rigHasSetFunc(int rigNumber, setting_t);
 
 
     setting_t rigHasGetLevel(setting_t level);

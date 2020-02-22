@@ -48,7 +48,7 @@ public:
 
     virtual int getRit(VFO vfo, ShortFreq &ritfreq) = 0;
     virtual int setRit(VFO vfo, ShortFreq ritfreq) = 0;
-    virtual int toggleRitState(VFO vfo, bool state) = 0;
+    virtual int setRitState(VFO vfo, bool state) = 0;
     virtual int getRitState(VFO vfo, bool& state) = 0;
 
 
@@ -57,7 +57,7 @@ public:
     virtual QString getRigLibVersion() = 0;
     virtual QString getErrorMsgText(int errorCode) = 0;
 
-    virtual bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) = 0;
+    //virtual bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) = 0;
 
 
 signals:

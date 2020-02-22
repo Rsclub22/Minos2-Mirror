@@ -35,6 +35,8 @@ public:
                     QString rigModelName_ = "",
                     bool supportGetRit_ = false,
                     bool supportSetRit_ = false,
+                    bool supportGetRitState = false,
+                    bool supportSetRitState = false,
                     bool supportSMeter_ = false,
                     bool supportGetPtt_ = false,
                     bool supportSetPtt_ = false,
@@ -52,6 +54,8 @@ public:
     int rigModelNumber;
     bool supportGetRit;
     bool supportSetRit;
+    bool supportGetRitState;
+    bool supportSetRitState;
     bool supportSMeter;
     bool supportGetPtt;
     bool supportPtt;

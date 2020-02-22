@@ -36,6 +36,7 @@ public:
 
     RigBase* createRigs(int rigId);
     Rigs* supported_rigs();
+    bool checkForBands(int rigNumber, Frequency freq);
 
     void populateComboRigList(QComboBox* comBox);
 signals:

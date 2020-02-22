@@ -145,8 +145,8 @@ private:
 
     bool radioSupGetRit;
     bool radioSupSetRit;
-    //bool radioRitState;
-    //bool radioSupRitOnOff;
+    bool radioSupGetRitState;
+    bool radioSupSetRitState;
     bool radioRitOn;
 
     bool ritEnable;         // flag to enable rit

@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -51,8 +51,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    curSignalStrength(0),
    radioSupGetRit(false),
    radioSupSetRit(false),
-   //radioSupGetRitState(false),
-   //radioSupRitOnOff(false),
+   radioSupGetRitState(false),
+   radioSupSetRitState(false),
    radioRitOn(false),
    ritEnable(false),
    radioCommsOK(false)
@@ -451,9 +451,9 @@ void RigControlMainWindow::upDateRadio()
     int ridx = 0;
     if (setupRadio->getCurrentRadioName() != "")
     {
-        radioIndex = setupRadio->findCurrentRadio(setupRadio->getCurrentRadioName());
+        radioIndex = setupRadio->findCurrentRadio(setupRadio->getCurrentRadioName()); // make sure radio exits in available radios
         ridx = radioIndex;
-        if (ridx > -1 && ridx < setupRadio->numAvailRadios)  // find radio and update current radio pointer
+        if (ridx > -1 && ridx < setupRadio->numAvailRadios)
         {
             // found radio, update currentRadio from selected radiodata
             updateCurrentRadioFromAvailRadios(ridx);
@@ -504,7 +504,12 @@ void RigControlMainWindow::upDateRadio()
                         irigctld_radioNumber = 0;
                     }
                 }
+
+
 */
+
+
+
                 // setup local serial transvert switch
                 if (radioCommsOK && setupRadio->currentRadio.transVertEnable
                         && setupRadio->currentRadio.enableTransSwitch
@@ -581,13 +586,13 @@ void RigControlMainWindow::upDateRadio()
 
                 // does the radio support control of volume control
 
-                supVolume = rigFactory->supported_rigs()->value(setupRadio->getCurrentRadioName()).supportVolume;
+                supVolume = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModelName).supportVolume;
                 logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(supVolume ? "True" : "False"));
                 sendVolStatusToLog(ridx, supVolume);
 
                 // does the radio support signal strength meter
 
-                supSignalStrength = rigFactory->supported_rigs()->value(setupRadio->getCurrentRadioName()).supportSMeter;
+                supSignalStrength = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModelName).supportSMeter;
 
 
                 updateSupportedRadioIndicators();
@@ -623,6 +628,24 @@ void RigControlMainWindow::upDateRadio()
 
                 dumpRadioToTraceLog();
 
+                if (radio != nullptr)
+                {
+                    if (radio->getRigConnected())
+                    {
+                        if (setupRadio->currentRadio.pollInterval == "0.5")
+                        {
+                            pollTime = 500;
+                        }
+                        else
+                        {
+                            pollTime = 1000 * setupRadio->currentRadio.pollInterval.toInt();
+                        }
+
+                        pollTimer->start(pollTime);             // start timer to send poll radio
+
+                    }
+                }
+
 
             }
             else
@@ -647,6 +670,10 @@ void RigControlMainWindow::upDateRadio()
 
 
         }
+        else
+        {
+            trace(QString("Saved Current Radio %1 does not match saved available radios.").arg(setupRadio->getCurrentRadioName()));
+        }
     }
     else
     {   // no radio selected
@@ -658,19 +685,6 @@ void RigControlMainWindow::upDateRadio()
     }
 
 
-    if (radio->getRigConnected())
-    {
-        if (setupRadio->currentRadio.pollInterval == "0.5")
-        {
-            pollTime = 500;
-        }
-        else
-        {
-            pollTime = 1000 * setupRadio->currentRadio.pollInterval.toInt();
-        }
-
-        pollTimer->start(pollTime);             // start timer to send poll radio
-    }
 
     if (appName.length() > 0)
     {
@@ -681,13 +695,13 @@ void RigControlMainWindow::upDateRadio()
 void RigControlMainWindow::updateCurrentRadioFromAvailRadios(int ridx)
 {
     scatParams::copyRig(setupRadio->availRadioData[ridx], setupRadio->currentRadio);
-    RigCapabilities rigCap = rigFactory->supported_rigs()->value(setupRadio->availRadioData[ridx]->rigModel);
+    //gCapabilities rigCap = rigFactory->supported_rigs()->value(setupRadio->availRadioData[ridx]->rigModel);
     // this data isn't saved to availradios anymore
-    setupRadio->currentRadio.rigModel = setupRadio->availRadioData[ridx]->rigModel;
-    setupRadio->currentRadio.rigMfg_Name = rigCap.rigManufacturer;
-    setupRadio->currentRadio.rigModelName = rigCap.rigModelName;
-    setupRadio->currentRadio.rigModelNumber = rigCap.modelNumber;
-    setupRadio->currentRadio.portType = rigCap.portType;
+   //setupRadio->currentRadio.rigModel = setupRadio->availRadioData[ridx]->rigModel;
+    //setupRadio->currentRadio.rigMfg_Name = rigCap.rigManufacturer;
+    //setupRadio->currentRadio.rigModelName = rigCap.rigModelName;
+    //setupRadio->currentRadio.rigModelNumber = rigCap.modelNumber;
+    //setupRadio->currentRadio.portType = rigCap.portType;
 
 }
 
@@ -1051,21 +1065,26 @@ void RigControlMainWindow::closeRadio()
     pollTimer->stop();
     int retCode;
 
-    if (radio->getRigConnected())
+    if (radio != nullptr)
     {
-        logMessage(QString("closeRadio: closing radio"));
-        retCode = radio->closeRig();
-        if (retCode < 0)
+        if (radio->getRigConnected())
         {
-            logMessage(QString("closeRadio: error closing radio %1").arg(retCode));
-        }
-        else
-        {
-            logMessage(QString("closeRadio: radio closed successfully"));
-        }
+            logMessage(QString("closeRadio: closing radio"));
+            retCode = radio->closeRig();
+            if (retCode < 0)
+            {
+                logMessage(QString("closeRadio: error closing radio %1").arg(retCode));
+            }
+            else
+            {
+                logMessage(QString("closeRadio: radio closed successfully"));
+            }
 
 
+        }
     }
+
+
 
     if (setupRadio->currentRadio.rigCtldEnable)
     {
@@ -1105,6 +1124,7 @@ void RigControlMainWindow::closeRadio()
     {
         delete radio;
     }
+
 
     showStatusMessage(tr("Disconnected"));
     sendStatusToLogDisConnected();
@@ -1907,6 +1927,7 @@ void RigControlMainWindow::initCacheData()
             QStringList supBandList;
             int radioModelNumber = setupRadio->availRadioData[i]->rigModelNumber;
             buildSupBandList(i, radioModelNumber, supBandList);
+            qDebug() << "support list initCache" << supBandList;
             sendBandListLogger(i, supBandList);
             bool f = rigFactory->supported_rigs()->value(setupRadio->availRadioData[i]->radioName).supportVolume;
             sendVolStatusToLog(i, f);
@@ -1941,6 +1962,7 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
     // find the bands the radio supports
     QStringList supBandsList;
     buildSupportedRadioBands(radioModelNumber, supBandsList);
+    qDebug() << "buildSupBandList" << radioModelNumber << supBandsList;
 
     // merge radio bands and transverter bands
     if(setupRadio->availRadioData[radioIdx]->transVertEnable)
@@ -1979,7 +2001,7 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber, QStrin
 
         for (int i = 0; i < bands.count(); i++)
         {
-            if (radio->checkFreqRange(radioModelNumber, bands[i].fLow, MODE::USB))
+            if (rigFactory->checkForBands(radioModelNumber, bands[i].fLow))
             {
                 supBandList.append(bands[i].name);
             }
@@ -2220,8 +2242,8 @@ void RigControlMainWindow::clearSupportRitFlags()
 {
     radioSupGetRit = false;
     radioSupSetRit = false;
-    //radioSupGetRitState = false;
-    //radioSupRitOnOff = false;
+    radioSupGetRitState = false;
+    radioSupSetRitState = false;
     radioRitOn = false;
     ritEnable = false;
 }
@@ -2254,12 +2276,12 @@ void RigControlMainWindow::getRitSupportStatus()
 
     // Does radio support turning Rit on/off
 
-    //radioSupRitOnOff = rigCap.supportRitOnOff;
-    //logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupRitOnOff ? "True" : "False"));
+    radioSupSetRitState = rigCap.supportSetRitState;
+    logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupSetRitState ? "True" : "False"));
 
     // Does radio support getting Rit on/off state?
-    //radioSupGetRitState = radio->supportGetRitState(modelNumber);
-    //logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
+    radioSupGetRitState = rigCap.supportGetRitState;
+    logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
 
 }
 
@@ -2267,24 +2289,24 @@ void RigControlMainWindow::getRitSupportStatus()
 
 void RigControlMainWindow::setRitLogStatus(bool status)
 {
-/*******************************************************
+
 
     logRitOn = status;
     logMessage(QString("Logger RIT Status received = %1").arg(status ? "True" : "False"));
     int retCode = 0;
     ritIndicatorToggle(logRitOn);
 
-    if (radioSupRitOnOff)
+    if (radioSupGetRit || radioSupSetRit)
     {
         logMessage(QString("Radio Support RIT On/off switching"));
         if (radioCommsOK)
         {
             // radio supports turning RIT on and off
-            retCode = radio->toggleRitState(VFO::CURRENT_VFO, logRitOn);
+            retCode = radio->setRitState(VFO::CURRENT_VFO, logRitOn);
             if (retCode < 0)
             {
                 logMessage(QString("Error attempting to turn on/off RIT on Radio - Error = %1").arg(retCode));
-                hamlibError(retCode, tr("Turn Rit Off/On"));
+                radioError(retCode, tr("Turn Rit Off/On"));
             }
             else
             {
@@ -2311,7 +2333,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
         ritIndicatorToggle(logRitOn);
     }
 
-*/
+
  }
 
 
@@ -2826,8 +2848,9 @@ void RigControlMainWindow::sendRadioListLogger()
     logMessage(QString("Sending radiolist to logger"));
     for (int i = 0; i < radioList.count(); i++)
     {
-        logMessage(QString("Send radiolist - radio %1, name %2").arg(QString::number(i)).arg(radioList[i]));
+        logMessage(QString("Send radio %1, name %2").arg(QString::number(i)).arg(radioList[i]));
     }
+    logMessage(QString("radiolist complete"));
     msg->publishRadioNames(radioList);
 }
 

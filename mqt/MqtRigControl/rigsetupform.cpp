@@ -143,10 +143,10 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioData->rigModel);
 
 
-        //radioData->radioModelNumber = rigFactory->supported_rigs()->value(radioData->radioModel).modelNumber;
-        //radioData->radioModelName = rigFactory->supported_rigs()->value(radioData->radioModel).rigModelName;
-        //radioData->radioMfg_Name = rigFactory->supported_rigs()->value(radioData->radioModel).rigManufacturer;
-        //radioData->portType = rigFactory->supported_rigs()->value(radioData->radioModel).portType;
+        radioData->rigModelNumber = rigFactory->supported_rigs()->value(radioData->rigModel).modelNumber;
+        radioData->rigModelName = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelName;
+        radioData->rigMfg_Name = rigFactory->supported_rigs()->value(radioData->rigModel).rigManufacturer;
+        radioData->portType = rigFactory->supported_rigs()->value(radioData->rigModel).portType;
 
 
         if (rigCap.rigManufacturer == "Icom")
