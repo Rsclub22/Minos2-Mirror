@@ -238,6 +238,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
     connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
 
+    for(int i = 0; i < asbMaxBand; i++)
+    {
+        ui->asBandCombo->addItem(AirScoutLink::tr(AirScoutLink::ASBandStrings[i]));
+    }
+
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -281,9 +286,9 @@ void KSTMainWindow::CloseTimerTimer(  )
 
 void KSTMainWindow::userCallTimerTimer()
 {
-    if (getASActive() && callVectorChanged)
+    if (asl && getASActive() && callVectorChanged)
     {
-        asl->usersChanged(callVector, ui->CSChatFilter->currentIndex(), ui->callEdit->text());
+        asl->usersChanged(callVector, ui->CSChatFilter->currentIndex(), ui->CSFilter->text());
         callVectorChanged = false;
     }
 }
@@ -480,7 +485,8 @@ bool KSTMainWindow::getASActive() const
 
 ASBand KSTMainWindow::getASActiveBand() const
 {
-    return ASActiveBand;
+    ASBand b = static_cast<ASBand>(ui->asBandCombo->currentIndex());
+    return b;
 }
 
 QString KSTMainWindow::getASServerName() const
@@ -1523,4 +1529,51 @@ void KSTMainWindow::on_clearUserFilter_clicked()
 {
     ui->CSChatFilter->setCurrentIndex(0);
     ui->CSFilter->clear();
+}
+
+void KSTMainWindow::on_CSTable_doubleClicked(const QModelIndex &index)
+{
+    QModelIndex sourceIndex = kstCallFilterModel.mapToSource(index);
+
+    int column = sourceIndex.column();
+    int row = sourceIndex.row();
+
+    if (row < callVector->size() && column == ecscAirscout)
+    {
+        QSharedPointer<KstUser> user = callVector->at(row);
+        asl->asSelected(user);
+    }
+}
+
+void KSTMainWindow::on_asBandCombo_currentIndexChanged(int /*index*/)
+{
+    if (asl && getASActive())
+    {
+        for (int i = 0; i < callVector->size(); i++)
+        {
+            QSharedPointer<KstUser> kstuser = callVector->at(i);
+            kstuser->planes.clear();
+        }
+        callVectorChanged = true;
+        emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));
+
+        userCallTimerTimer();
+    }
+}
+
+void KSTMainWindow::on_ASActivecb_stateChanged(int /*arg1*/)
+{
+    if (asl && getASActive())
+    {
+        for (int i = 0; i < callVector->size(); i++)
+        {
+            QSharedPointer<KstUser> kstuser = callVector->at(i);
+            kstuser->planes.clear();
+        }
+        callVectorChanged = true;
+        emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));
+
+        asl->clearWatchList();
+        userCallTimerTimer();
+    }
 }

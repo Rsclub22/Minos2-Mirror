@@ -15,13 +15,18 @@
 #include "kstcallgridmodel.h"
 
 enum ASBand {
+    asb50M,
+    asb70M,
     asb144M,
     asb432M,
-    asb13G,
-    asb24G,
-    asb34G,
-    asb57G,
+    asb1p3G,
+    asb2p4G,
+    asb3p4G,
+    asb5p7G,
     asb10G,
+    asb24G,
+    asb47G,
+    asb74G,
     asbMaxBand
 };
 
@@ -64,19 +69,24 @@ class AirScoutLink: public QObject
     QString  oldWatch;
     QVector<QSharedPointer<KstUser> >  watchList;
 
-    QString watchFreq;
-
     // variablesfor checksums
     char lastbyte;
     int cs;
     char lcs;
+
+    bool assetPathInProgress = false;
 
     qint64 sendMessage(QString messagetype, QString messageText);
     void sendToAllBroadcast(QByteArray *packet);
     void askNearest(int row);
 public:
     AirScoutLink();
+
+    static const char *ASBandStrings[];
+
     void usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector, int chatId, QString filterString);
+    void asSelected(QSharedPointer<KstUser> user);
+    void clearWatchList();
 private slots:
     void onReadyRead();
 signals:

@@ -1,15 +1,35 @@
 #include "airscoutlink.h"
 #include "kstmainwindow.h"
 
+const char *AirScoutLink::ASBandStrings[] = {
+    QT_TR_NOOP("50MHz"),
+    QT_TR_NOOP("70MHz"),
+    QT_TR_NOOP("144MHz"),
+    QT_TR_NOOP("432MHz"),
+    QT_TR_NOOP("1.2GHz"),
+    QT_TR_NOOP("2.3GHz"),
+    QT_TR_NOOP("3.4GHz"),
+    QT_TR_NOOP("5.7GHz"),
+    QT_TR_NOOP("10GHz"),
+    QT_TR_NOOP("24GHz"),
+    QT_TR_NOOP("47GHz"),
+    QT_TR_NOOP("76GHz"),
+    nullptr
+};
+// frequencies are in 100 hz units
 static const char * bandFreqStrings[] = {
-    "1440000",
-    "4320000",
-    "12960000",
-    "23200000",
-    "34000000",
-    "57600000",
-    "103680000"
-
+       "500000",
+       "700000",
+      "1440000",
+      "4320000",
+     "12960000",
+     "23200000",
+     "34000000",
+    " 57600000",
+    "103680000",
+    "240480000",
+    "470880000",
+    "760320000"
 };
 AirScoutLink::AirScoutLink():
     qus(new QUdpSocket())
@@ -179,6 +199,8 @@ void AirScoutLink::onReadyRead()
 
             if (args[2] == '"' + mainWindow->getASMyName() + '"' && args[1] =='"' + mainWindow->getASServerName() + '"' && args[0] == "ASNEAREST:")
             {
+                assetPathInProgress = false;
+                trace ("assetPathInProgress = false;");
                 if (args[3].startsWith("\""))
                 {
                     args[3] = args[3].remove(0, 1);
@@ -236,6 +258,7 @@ void AirScoutLink::onReadyRead()
 
                 connect(timer, &QTimer::timeout, [=]()
                 {
+                    trace("lambda fired");
                     // NB a lambda function
                     askNearest(row);
                     timer->deleteLater();
@@ -270,15 +293,22 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
             if (user->data()->distance < mind ||( maxd > 0 && user->data()->distance > maxd))
                 continue;
 
-            if (user->data()->call.contains(filterString) || user->data()->loc.contains(filterString))
+            if (!filterString.isEmpty() && !(user->data()->call.contains(filterString) || user->data()->loc.contains(filterString)))
             {
-                watchList.append(*user);
+                continue;
             }
+            watchList.append(*user);
         }
+        int wls = watchList.size();
         std::sort(watchList.begin(), watchList.end(), WatchCompare);
         watchList.erase( std::unique( watchList.begin(), watchList.end(), WatchEquals ), watchList.end() );
 
-        watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+        if (watchList.size() == 1)
+        {
+            trace(QString("usersChanged - watchlist size %1").arg(watchList.size()));
+        }
+
+        QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
 
         if (watchList.count() > 1)
         {
@@ -297,24 +327,51 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
                 oldWatch = watch;
             }
         }
-        askNearest(-1);
+
+        if (!assetPathInProgress)
+            askNearest(-1);
     }
+}
+
+void AirScoutLink::asSelected(QSharedPointer<KstUser> user)
+{
+    QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+    QString getpath = /*"\""  +*/ watchFreq + ","
+            + mainWindow->getMyCallsign() + "," + mainWindow->getMyLoc() + ","
+            + user->baseCall + "," + user->loc /*+ "\""*/;
+    sendMessage("ASSHOWPATH", getpath);
+}
+
+void AirScoutLink::clearWatchList()
+{
+    oldWatch.clear();
 }
 
 void AirScoutLink::askNearest(int row)
 {
-    if (mainWindow->getASActive())
+    if (assetPathInProgress)
+        return;
+
+    if (mainWindow->getASActive() && watchList.size())
     {
         if ((row < 0) || (++row > watchList.size() - 1))
         {
             row = 0;
         }
+        QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
 
         QSharedPointer<KstUser> user = watchList[row];
         QString getpath = /*"\""  +*/ watchFreq + ","
                 + mainWindow->getMyCallsign() + "," + mainWindow->getMyLoc() + ","
                 + user->baseCall + "," + user->loc /*+ "\""*/;
         sendMessage("ASSETPATH", getpath);
+        assetPathInProgress = true;
+        trace ("assetPathInProgress = true;");
+    }
+    else
+    {
+        trace ("assetPathInProgress = false;");
+        assetPathInProgress = false;
     }
 }
 

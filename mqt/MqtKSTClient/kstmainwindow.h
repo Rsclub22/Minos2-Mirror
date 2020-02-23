@@ -178,6 +178,12 @@ private slots:
     void on_sectionMoved(int, int, int);
 
     void acChanged(QSharedPointer<KstUser>);
+    void on_CSTable_doubleClicked(const QModelIndex &index);
+
+    void on_asBandCombo_currentIndexChanged(int index);
+
+    void on_ASActivecb_stateChanged(int arg1);
+
 private:
     Ui::KSTMainWindow *ui;
     void clearConnection();

@@ -14,7 +14,6 @@ class KSTConfigure : public QDialog
 {
     Q_OBJECT
 
-    static const char *ASBandStrings[];
 public:
     explicit KSTConfigure(QWidget *parent = nullptr);
     ~KSTConfigure() override;
