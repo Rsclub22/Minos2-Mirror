@@ -289,6 +289,8 @@ void TLogContainer::changeEvent( QEvent* e )
             i.key()->setText(tr(i.value()));
         }
         ui->retranslateUi(this);
+        setWindowTitle(tr("Minos Contest Logger"));
+
     }
     QMainWindow::changeEvent(e);
 }

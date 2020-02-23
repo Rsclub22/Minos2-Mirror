@@ -69,7 +69,7 @@
     <message>
         <location filename="../kstmainwindow.ui" line="21"/>
         <source>Log in to these chats</source>
-        <translation>Connecter à ces chats</translation>
+        <translation>Connecter à ces bavardages</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="39"/>
@@ -87,7 +87,7 @@
         <location filename="../kstmainwindow.ui" line="323"/>
         <location filename="../kstmainwindow.ui" line="448"/>
         <source>-</source>
-        <translation>-</translation>
+        <translation>- Replaced by text?</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="121"/>
@@ -143,12 +143,12 @@
     <message>
         <location filename="../kstmainwindow.ui" line="252"/>
         <source>Chat to which messages will be sent</source>
-        <translation>Envoyer des messages à ce chat</translation>
+        <translation>Envoyer des messages à ce Bavardage</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="270"/>
         <source>Active chat</source>
-        <translation>Chat actif</translation>
+        <translation>Bavardage actif</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="357"/>
@@ -210,28 +210,28 @@
     <message>
         <location filename="../kstmainwindow.cpp" line="361"/>
         <source>KST Chat Files (*.txt);Log Files (*.log);;All Files (*.*)</source>
-        <translation></translation>
+        <translation>KST Fichiers de Bavardage (*.txt);Fichiers journaux  (*.log);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="365"/>
         <source>Chat dumps from KST</source>
-        <translation></translation>
+        <translation>Dumps de bavardage de KST</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="281"/>
         <location filename="../kstmainwindow.cpp" line="388"/>
         <source>Including %1</source>
-        <translation></translation>
+        <translation>%1 Compris</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="443"/>
         <source>Set Back</source>
-        <translation></translation>
+        <translation>Présent</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="447"/>
         <source>Set Away</source>
-        <translation></translation>
+        <translation>Absent</translation>
     </message>
 </context>
 <context>
@@ -239,7 +239,7 @@
     <message>
         <location filename="../kstcallgridmodel.cpp" line="248"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Bavardage</translation>
     </message>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="251"/>
@@ -254,12 +254,12 @@
     <message>
         <location filename="../kstcallgridmodel.cpp" line="257"/>
         <source>Dist</source>
-        <translation></translation>
+        <translation>Distance</translation>
     </message>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="260"/>
         <source>Brg</source>
-        <translation>Direction???  </translation>
+        <translation>Direction</translation>
     </message>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="263"/>
@@ -312,7 +312,7 @@
     <message>
         <location filename="../kstmessagegridmodel.cpp" line="151"/>
         <source>Text</source>
-        <translation></translation>
+        <translation>Texte du message</translation>
     </message>
 </context>
 </TS>

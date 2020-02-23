@@ -589,7 +589,6 @@ void RotControlFrame::setRotatorList()
     }
 }
 
-
 void RotControlFrame::setRotatorState(const QString &s)
 {
        traceMsg("Set Rotator State = " + s);
@@ -627,7 +626,7 @@ void RotControlFrame::setRotatorState(const QString &s)
 
                if (lastStatus == ROT_STATUS_STOP)
                {
-                   ui->rotatorStatMsg->setText(lastStatus);
+                   ui->rotatorStatMsg->setText(tr("Stop"));
                    rotError = false;
                    clearRotatorFlags();
                    showRotLeftButOff();
@@ -636,7 +635,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastStatus == ROT_STATUS_ROTATE_CCW)
                {
-                   ui->rotatorStatMsg->setText(lastStatus);
+                   ui->rotatorStatMsg->setText(HtmlFontColour("Green") + tr("Rotating CCW"));
                    rotError = false;
                    moving = false;
                    movingCW = false;
@@ -646,7 +645,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastStatus == ROT_STATUS_ROTATE_CW)
                {
-                   ui->rotatorStatMsg->setText(lastStatus);
+                   ui->rotatorStatMsg->setText(HtmlFontColour("Green") + tr("Rotating CW"));
                    rotError = false;
                    moving = false;
                    movingCW = true;
@@ -657,7 +656,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                else if (lastStatus == ROT_STATUS_TURN_TO)
                {
 
-                       ui->rotatorStatMsg->setText(lastStatus);
+                       ui->rotatorStatMsg->setText(HtmlFontColour("Green") + tr("Turning to bearing"));
                        rotError = false;
                        moving = true;
                        movingCW = false;
@@ -679,7 +678,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastStatus == ROT_STATUS_ERROR)
                {
-                   ui->rotatorStatMsg->setText(lastStatus);
+                   ui->rotatorStatMsg->setText(tr("Error"));
                    rotError = true;
                }
                else
