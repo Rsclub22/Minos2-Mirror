@@ -427,7 +427,8 @@ void TSingleLogFrame::clearScreenLayout()
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
-    trace("TSingleLogFrame::clearScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
+    QString msg = ct->name.getValue() + " uuid " + ct->uuid;
+    trace("TSingleLogFrame::clearScreenLayout starts for " + msg);
 
     FKHRigControlFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
@@ -441,6 +442,8 @@ void TSingleLogFrame::clearScreenLayout()
     setBandmapLoaded(false);
     wsjtxFrame->setContest(nullptr);
 
+    trace("TSingleLogFrame::clearScreenLayout start clearance for " + msg);
+
     while (singleLogFrameSplitter->count())
     {
         MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
@@ -450,6 +453,7 @@ void TSingleLogFrame::clearScreenLayout()
     }
     rowSplitters.clear();
     update();
+    trace("TSingleLogFrame::clearScreenLayout complete for " + msg);
 }
 void TSingleLogFrame::applyScreenLayout()
 {

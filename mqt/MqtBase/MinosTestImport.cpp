@@ -181,7 +181,7 @@ void MinosTestImport::processMinosStanza( RPCRequest *rq )
 // These are used for log monitoring
 void MinosTestImport::startImportTest()
 {}
-int MinosTestImport::importTestBuffer( const QString &buffer )
+int MinosTestImport::importTestBuffer( const QByteArray &buffer )
 {
    // called from monitoredLog when we get a "random" stanza in
 
@@ -219,24 +219,21 @@ int MinosTestImport::readTestFile(QSharedPointer<QFile> ctfile )
 
     startImportTest();
 
-    QString buffer;
+    QByteArray buffer;
 
     int bufOffset = 0;
 
-    QByteArray rdcbuffer;
     bool fileComplete = false;
 
     // NB - old versions might not have a proper header
 
     while ( !fileComplete )
     {
-        rdcbuffer = ctfile->read( IO_BUF_SIZE);
+        QByteArray rdcbuffer = ctfile->read( IO_BUF_SIZE);
         if ( rdcbuffer.size() > 0 )
         {
-            QString rdbuffer(rdcbuffer);
-
             try {
-            buffer += rdbuffer;
+            buffer += rdcbuffer;
             }
             catch(std::exception &/*a*/)
             {
@@ -255,8 +252,9 @@ int MinosTestImport::readTestFile(QSharedPointer<QFile> ctfile )
             while (curfstart >= 0 && curfend >= 0)
             {
                 curfpos = curfstart + bufOffset;
-                QString iqbuff = buffer.mid(curfstart, curfend - curfstart + 4 + 1);
-                stanzas = importTestBuffer(iqbuff);
+                QByteArray bbuff = buffer.mid(curfstart, curfend - curfstart + 4 + 1);
+
+                stanzas = importTestBuffer(bbuff);
                 curfpos = curfend + 4 + 1;
 
                 buffer = buffer.right(buffer.size() - (curfend + 4 + 1));

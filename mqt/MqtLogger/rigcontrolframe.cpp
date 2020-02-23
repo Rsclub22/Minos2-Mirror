@@ -656,14 +656,14 @@ void RigControlFrame::showRitButOn()
 {
     //ui->Rotate->setPalette(*redText);
     ui->RitButton->setStyleSheet(RIT_BUTTON_ON_STYLE);
-    ui->RitButton->setText("On");
+    ui->RitButton->setText(tr("On"));
 }
 
 void RigControlFrame::showRitButOff()
 {
     //ui->Rotate->setPalette(*blackText);
     ui->RitButton->setStyleSheet(RIT_BUTTON_OFF_STYLE);
-    ui->RitButton->setText("Off");
+    ui->RitButton->setText(tr("Off"));
 }
 
 

@@ -1461,9 +1461,11 @@ void BandmapClientFrame::checkSavedFilters()
 
 void BandmapClientFrame::setClusterServerState(QString stateMsg)
 {
+    QStringList s = stateMsg.split("<>");
+    if (s.size() < 2)
+        return;
 
-
-    if (stateMsg.contains("Connected"))
+    if (s[0].contains("Connected"))
     {
          clusterStatusIndicatorToggle(true);
          clusterServerConnected = true;
@@ -1476,10 +1478,10 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
 
     }
 
-    if (clusterServerLoaded)
+    if (clusterServerLoaded )
     {
 
-        ui->clusterStatusIndicator->setToolTip(stateMsg);
+        ui->clusterStatusIndicator->setToolTip(s[1]);
         traceMsg(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
