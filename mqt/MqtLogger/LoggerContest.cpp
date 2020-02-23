@@ -999,8 +999,10 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
 
    header += "<EOH>\r\n";
 
-   qint64 ret = expfd->write(header.toUtf8());
-   if (  ret != header.size() )
+   QByteArray bh = header.toUtf8();
+
+   qint64 ret = expfd->write(bh);
+   if (  ret != bh.size() )
    {
       MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
    }
@@ -1011,8 +1013,9 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
       QString l = lct ->getADIFLine();
       if ( l.size() )
       {
-         qint64 ret = expfd->write(l.toUtf8());
-         if (  ret != l.size() )
+         QByteArray bl = l.toUtf8();
+         qint64 ret = expfd->write(bl);
+         if (  ret != bl.size() )
          {
             MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
          }
