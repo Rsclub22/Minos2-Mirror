@@ -18,9 +18,16 @@ TEMPLATE = app
 
 win32:RC_ICONS += ../MinosRig.ico
 
+win32 {
+DEFINES += WIN32
+QT += axcontainer
+//TYPELIBS = $$system(dumpcpp -getfile {4FE359C5-A58F-459D-BE95-CA559FB4F270})
+TYPELIBS = $$system(dumpcpp OmniRig.tlb)
+}
 
 SOURCES += main.cpp\
     hamlibrigcontrol.cpp \
+    omnirigcontrol.cpp \
     rigbase.cpp \
     rigcapabilities.cpp \
         rigcontrolmainwindow.cpp \
@@ -38,6 +45,7 @@ SOURCES += main.cpp\
 
 HEADERS  += rigcontrolmainwindow.h \
     hamlibrigcontrol.h \
+    omnirigcontrol.h \
     rigbase.h \
     rigcapabilities.h \
     rigcontrolrpc.h \

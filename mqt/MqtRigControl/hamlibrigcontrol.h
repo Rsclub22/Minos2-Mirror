@@ -38,7 +38,7 @@ const serial_handshake_e handshakeCodes[] = { RIG_HANDSHAKE_NONE, RIG_HANDSHAKE_
 
 
 
-class RigFactory;
+//class RigFactory;
 
 class HamlibRigControl : public RigBase
 {
