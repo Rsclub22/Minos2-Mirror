@@ -1,5 +1,5 @@
-#include "kstmainwindow.h"
 #include "airscoutlink.h"
+#include "kstmainwindow.h"
 
 static const char * bandFreqStrings[] = {
     "1440000",
@@ -17,13 +17,20 @@ AirScoutLink::AirScoutLink():
     qus->bind(QHostAddress::Any, 9872, (QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint));
 
     connect(qus.data(), SIGNAL(readyRead( )), this, SLOT(onReadyRead()));
-
-//    if (mainWindow->getASActive())
-//        sendMessage( "ASSETPATH", "4320000,G0GJV,IO91OK,DF2JP,JO31CO");
 }
 bool ASUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
-    return i->call < j->call;
+    return i->baseCall < j->baseCall;
+}
+bool WatchEquals (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
+{
+    return i->baseCall == j->baseCall && i->loc == j->loc;
+}
+bool WatchCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
+{
+    if (i->baseCall == j->baseCall)
+        return i->loc < j->loc;
+    return i->baseCall < j->baseCall;
 }
 void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
 {
@@ -182,8 +189,60 @@ void AirScoutLink::onReadyRead()
                 }
                 QStringList sl = args[3].split(",");
                 QString dxCall = sl[3];
+                QString dxLoc = sl[4];
 
-                askNearest(dxCall);
+                QSharedPointer<KstUser> test(new KstUser());
+                test->baseCall = dxCall;
+                test->loc = dxLoc;
+                QSharedPointer<KstUser> user;
+                int row = 0;
+                if (std::binary_search(watchList.begin(), watchList.end(), test, WatchCompare))
+                {
+                    row = (std::lower_bound(watchList.begin(), watchList.end(), test, WatchCompare ) - watchList.begin());
+
+                    user = watchList.at(row);
+                }
+                if (user)
+                {
+                    user->planes.clear();
+                    int account = sl[5].toInt();
+
+                    int acstart = 6;
+
+                    if (account * 5 + acstart == sl.size())
+                    {
+
+                        for (int i = 0; i < account; i++)
+                        {
+                            int acoffset = acstart + i * 5;
+
+                            Aircraft ac(sl, acoffset);
+                            user->planes.push_back(ac);
+
+                        }
+                    }
+
+                    std::sort(user->planes.begin(), user->planes.end());
+                    foreach(const Aircraft &ac, user->planes)
+                    {
+                        ac.traceAircaft();
+                    }
+
+                    emit acChanged(user);
+
+                }
+                QTimer *timer = new QTimer(this);
+                timer->setSingleShot(true);
+
+                connect(timer, &QTimer::timeout, [=]()
+                {
+                    // NB a lambda function
+                    askNearest(row);
+                    timer->deleteLater();
+                }
+                );
+
+                timer->start(500);  // only ask airscout at a rate of 2 each second
             }
 
         }
@@ -195,10 +254,15 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
     if (mainWindow->getASActive())
     {
         watchList.clear();
-        watchList.append(bandFreqStrings[mainWindow->getASActiveBand()]);        // band
         for(QVector<QSharedPointer<KstUser> >::iterator user = callVector->begin(); user != callVector->end(); user++)
         {
             if (chatId != 0 && user->data()->chat != chatId)
+                continue;
+
+            if (user->data()->baseCall == mainWindow->getMyCallsign())
+                continue;
+
+            if (user->data()->baseCall.isEmpty() || user->data()->loc.isEmpty())
                 continue;
 
             int mind = mainWindow->getASMinDistance();
@@ -208,13 +272,22 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
 
             if (user->data()->call.contains(filterString) || user->data()->loc.contains(filterString))
             {
-                watchList.append(user->data()->baseCall);
-                watchList.append(user->data()->loc);
+                watchList.append(*user);
             }
         }
+        std::sort(watchList.begin(), watchList.end(), WatchCompare);
+        watchList.erase( std::unique( watchList.begin(), watchList.end(), WatchEquals ), watchList.end() );
+
+        watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+
         if (watchList.count() > 1)
         {
-            QString watch = watchList.join(",");
+            QString watch = watchFreq;
+            foreach(auto user, watchList)
+            {
+                QString ent = "," + user->baseCall + "," + user->loc;
+                watch.append(ent);
+            }
 
             if (watch != oldWatch)
             {
@@ -224,30 +297,23 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
                 oldWatch = watch;
             }
         }
-        askNearest(watchList[1]);
+        askNearest(-1);
     }
 }
 
-void AirScoutLink::askNearest(QString lastcall)
+void AirScoutLink::askNearest(int row)
 {
-    QSharedPointer<KstUser> test(new KstUser());
-    test->call = lastcall.toUpper();
-    int row = (std::upper_bound(mainWindow->getCallVector()->begin(), mainWindow->getCallVector()->end(), test, ASUserCompare ) - mainWindow->getCallVector()->begin());
+    if (mainWindow->getASActive())
+    {
+        if ((row < 0) || (++row > watchList.size() - 1))
+        {
+            row = 0;
+        }
 
-    if (row >= mainWindow->getCallVector()->size() - 1)
-    {
-        row = 1;
-    }
-    QSharedPointer<KstUser> user = mainWindow->getCallVector()->at(row);
-    if (user->call == mainWindow->getMyCallsign())
-    {
-        askNearest(user->call);
-    }
-    else
-    {
-        QString getpath = /*"\""  +*/ watchList[0] + ","
+        QSharedPointer<KstUser> user = watchList[row];
+        QString getpath = /*"\""  +*/ watchFreq + ","
                 + mainWindow->getMyCallsign() + "," + mainWindow->getMyLoc() + ","
-                + user->call + "," + user->loc /*+ "\""*/;
+                + user->baseCall + "," + user->loc /*+ "\""*/;
         sendMessage("ASSETPATH", getpath);
     }
 }

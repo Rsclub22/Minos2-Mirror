@@ -6,8 +6,10 @@
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
-enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscBearing, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
 
+enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscBearing, ecscAirscout, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
+
+class Aircraft;
 class KstUser
 {
 public:
@@ -22,6 +24,8 @@ public:
     bool recent = false;
     int distance = -1;
     int bearing = -1;
+
+    QVector<Aircraft> planes;
 
     bool operator< ( const KstUser& rhs ) const;
 

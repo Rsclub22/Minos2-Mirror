@@ -25,14 +25,46 @@ enum ASBand {
     asbMaxBand
 };
 
+class Aircraft
+{
+public:
+    Aircraft(){}
+    ~Aircraft(){}
+    Aircraft(QStringList sl, int acoffset)
+    {
+        call = sl[acoffset++].trimmed();
+        category = sl[acoffset++].trimmed();
+        distance = sl[acoffset++].toInt();
+        potential = sl[acoffset++].toInt();
+        minutes = sl[acoffset++].toInt();
+    }
+    void traceAircaft() const
+    {
+        trace(QString("Aircraft %1 category %2 distance %3 potential %4 minutes %5").arg(call).arg(category).arg(distance).arg(potential).arg(minutes) );
+    }
+    bool operator< ( const Aircraft& rhs ) const
+    {
+        if (minutes == rhs.minutes)
+            return potential < rhs.potential;
+        return minutes < rhs.minutes;
+    }
+
+    QString call;
+    QString category;
+    int distance;
+    int potential;
+    int minutes;
+};
 
 class AirScoutLink: public QObject
 {
     Q_OBJECT
 
     QSharedPointer<QUdpSocket> qus;
-    QString oldWatch;
-    QStringList watchList;
+    QString  oldWatch;
+    QVector<QSharedPointer<KstUser> >  watchList;
+
+    QString watchFreq;
 
     // variablesfor checksums
     char lastbyte;
@@ -41,12 +73,14 @@ class AirScoutLink: public QObject
 
     qint64 sendMessage(QString messagetype, QString messageText);
     void sendToAllBroadcast(QByteArray *packet);
-    void askNearest(QString lastcall);
+    void askNearest(int row);
 public:
     AirScoutLink();
     void usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector, int chatId, QString filterString);
 private slots:
     void onReadyRead();
+signals:
+    void acChanged(QSharedPointer<KstUser>);
 };
 
 #endif // AIRSCOUTLINK_H

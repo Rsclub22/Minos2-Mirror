@@ -176,6 +176,8 @@ private slots:
     void on_clearUserFilter_clicked();
 
     void on_sectionMoved(int, int, int);
+
+    void acChanged(QSharedPointer<KstUser>);
 private:
     Ui::KSTMainWindow *ui;
     void clearConnection();

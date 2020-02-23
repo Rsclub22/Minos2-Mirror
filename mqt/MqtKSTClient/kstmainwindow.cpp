@@ -234,7 +234,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->analyseButton->setVisible(false);
     ui->messageFilter->setFocus();
 
+    ui->ASActivecb->setChecked(ASActive);
     asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
+    connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
 
 }
 
@@ -473,7 +475,7 @@ int KSTMainWindow::getMaxDistance() const
 
 bool KSTMainWindow::getASActive() const
 {
-    return ASActive;
+    return ui->ASActivecb->isChecked();
 }
 
 ASBand KSTMainWindow::getASActiveBand() const
@@ -981,6 +983,12 @@ void KSTMainWindow::on_sectionResized(int, int, int)
 void KSTMainWindow::on_sectionMoved(int, int, int)
 {
     on_sectionResized(0, 0, 0);
+}
+
+void KSTMainWindow::acChanged(QSharedPointer<KstUser> user)
+{
+    int row = callVector->indexOf(user);
+    emit kstCallModel.dataChanged(kstCallModel.index(row, ecscAirscout), kstCallModel.index(row, ecscAirscout));
 }
 void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
 {
