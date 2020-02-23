@@ -171,8 +171,13 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="603"/>
+        <source>Login Start - Send logon message
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Login Start - Send logon message</source>
-        <translation>Ouverture de session - Envoyer un message de connexion
+        <translation type="vanished">Ouverture de session - Envoyer un message de connexion
 </translation>
     </message>
     <message>
