@@ -220,7 +220,7 @@ private:
     void dumpRadioToTraceLog();
     void setRitFreqDisplayVisible(bool state);
     int getRitFreq(VFO vfo);
-    int setRitFreq(VFO vfo, ShortFreq ritFreq);
+    void setRitFreq(VFO vfo, ShortFreq ritFreq);
     void cmdLockOn();
     void cmdLockOff();
     int getMinosModeIndex(QString mode);

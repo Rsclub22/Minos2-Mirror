@@ -2474,13 +2474,13 @@ int RigControlMainWindow::getRitFreq(VFO vfo)
 }
 
 
-int RigControlMainWindow::setRitFreq(VFO vfo, ShortFreq ritFreq)
+void RigControlMainWindow::setRitFreq(VFO vfo, ShortFreq ritFreq)
 {
     if (ritEnable)
     {
         int retCode = 0;
 
-        retCode = setRitFreq(vfo, ritFreq);
+        retCode = radio->setRit(vfo, ritFreq);
         if (retCode < 0)
         {
             // error
