@@ -16,12 +16,12 @@
     <message>
         <location filename="../contacts.cpp" line="212"/>
         <source>DELETED</source>
-        <translation type="unfinished">WHERE??</translation>
+        <translation>WHERE??</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="227"/>
         <source>MAN</source>
-        <translation type="unfinished"></translation>
+        <translation>MAN - where</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="230"/>
@@ -31,7 +31,7 @@
     <message>
         <location filename="../contacts.cpp" line="233"/>
         <source>N/S</source>
-        <translation type="unfinished"></translation>
+        <translation>N/S - where</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="238"/>
@@ -44,12 +44,12 @@
     <message>
         <location filename="../contest.cpp" line="421"/>
         <source>DUPLICATE OF </source>
-        <translation>WHERE9</translation>
+        <translation>Duplicata de - WHERE9 </translation>
     </message>
     <message>
         <location filename="../contest.cpp" line="437"/>
         <source>DUP OF</source>
-        <translation type="unfinished"></translation>
+        <translation>DUP OF???</translation>
     </message>
 </context>
 <context>
@@ -62,12 +62,12 @@
     <message>
         <location filename="../profiles.cpp" line="33"/>
         <source>Default logs directory</source>
-        <translation>Répertoire des journaux par défaut  </translation>
+        <translation>Répertoire des journaux par défaut</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="35"/>
         <source>Entry settings file</source>
-        <translation>Fichier de paramètres d&apos;éntrée </translation>
+        <translation>Fichier de paramètres d&apos;éntrée</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="35"/>
@@ -82,7 +82,7 @@
     <message>
         <location filename="../profiles.cpp" line="36"/>
         <source>File containing station settings</source>
-        <translation>Fichier contenant les paramètres de la Station  </translation>
+        <translation>Fichier contenant les paramètres de la Station</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="37"/>
@@ -92,7 +92,7 @@
     <message>
         <location filename="../profiles.cpp" line="37"/>
         <source>File containing QTH settings</source>
-        <translation>Fichier de paramètres QTH DUPE?  </translation>
+        <translation>Fichier de paramètres de QTH</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="38"/>
@@ -112,7 +112,7 @@
     <message>
         <location filename="../profiles.cpp" line="40"/>
         <source>File containing saved display settings</source>
-        <translation>Fichier contenant les paramètres dd&apos;écran  </translation>
+        <translation>Fichier contenant les paramètres d&apos;affichage enregistrés</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="41"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../profiles.cpp" line="44"/>
         <source>Log preload file</source>
-        <translation>Fichier de préchargement du journal  </translation>
+        <translation>Fichier de préchargement du journal</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="44"/>
@@ -169,7 +169,7 @@
     <message>
         <location filename="../profiles.cpp" line="46"/>
         <source>List preload file</source>
-        <translation>Fichier de préchargement de lists   </translation>
+        <translation>Fichier de préchargement de listes</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="46"/>
@@ -184,7 +184,7 @@
     <message>
         <location filename="../profiles.cpp" line="47"/>
         <source>Section to use in lists preload file</source>
-        <translation>Section à utiliser dans le fichier de listes   </translation>
+        <translation>Section à utiliser dans le fichier de listes</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="49"/>
@@ -224,7 +224,7 @@
     <message>
         <location filename="../profiles.cpp" line="57"/>
         <source>PDF documentation file</source>
-        <translation>Le fichier de documentation PDF</translation>
+        <translation>Fichier de documentation PDF (En anglais)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="59"/>
@@ -308,7 +308,7 @@
     <message>
         <location filename="../profiles.cpp" line="100"/>
         <source>My Address Line 1</source>
-        <translation>Mon Adresse 1     </translation>
+        <translation>Ligne 1 de mon adresse</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="100"/>
@@ -318,7 +318,7 @@
     <message>
         <location filename="../profiles.cpp" line="101"/>
         <source>My Address Line 2</source>
-        <translation>Mon Adresse 2     </translation>
+        <translation>Ligne 2 de mon adresse</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="101"/>
@@ -388,7 +388,7 @@
     <message>
         <location filename="../profiles.cpp" line="111"/>
         <source>Location Exchange</source>
-        <translation>HOW THIS diff from Locator     </translation>
+        <translation>Échange descriptif</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="111"/>
@@ -398,22 +398,22 @@
     <message>
         <location filename="../profiles.cpp" line="112"/>
         <source>Station QTH Line 1</source>
-        <translation>Station QTH 1</translation>
+        <translation>Ligne 1 de la station QTH</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="112"/>
         <source>Address line 1/2 of station</source>
-        <translation>Adresse 1/2 pour la station     </translation>
+        <translation>Ligne 1 de l&apos;adresse de la station</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="113"/>
         <source>Station QTH Line 2</source>
-        <translation>Station QTH 2</translation>
+        <translation>Ligne 2 de la station QTH</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="113"/>
         <source>Address line 2/2 of station</source>
-        <translation>Adresse 2/2 pour la station    </translation>
+        <translation>Ligne 2 de l&apos;adresse de la station</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="114"/>
@@ -468,12 +468,13 @@
     <message>
         <location filename="../profiles.cpp" line="123"/>
         <source>Radio in Rig Control</source>
-        <translation>Radio dan contrôle de l&apos;émetteur    </translation>
+        <translatorcomment>In settings editor for station details</translatorcomment>
+        <translation>Radio dans RigControl</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="124"/>
         <source>Rotator in Rotator Control</source>
-        <translation>Rotateur dans Contrôle d&apos;appareil rotateur     </translation>
+        <translation>Rotateur dans Rotator Control</translation>
     </message>
 </context>
 <context>
@@ -491,7 +492,7 @@
     <message>
         <location filename="../Calendar.cpp" line="40"/>
         <source>Undefined</source>
-        <translation>Undéfini ??? </translation>
+        <translation>Indéterminée</translation>
     </message>
 </context>
 <context>
@@ -540,7 +541,7 @@
     <message>
         <location filename="../ChatServer.cpp" line="12"/>
         <source>No Contact</source>
-        <translation>Pas de contacts  </translation>
+        <translation>Pas de contact</translation>
     </message>
     <message>
         <location filename="../ChatServer.cpp" line="99"/>
@@ -631,7 +632,7 @@
         <location filename="../ConfigElementFrame.ui" line="333"/>
         <source>Leave the app name and/or the server name empty to get information from any app on a server, any server, or any app on any server</source>
         <translatorcomment>Can surely be simplififed?</translatorcomment>
-        <translation>Laissez le nom de l&apos;application et / ou le nom du serveur vide pour obtenir des informations à partir de n&apos;importe quelle application sur un serveur, n&apos;importe quel serveur ou n&apos;importe quelle application sur n&apos;importe quel serveur     </translation>
+        <translation>Laissez le nom de l&apos;application et / ou le nom du serveur vide pour obtenir des informations à partir de n&apos;importe quelle application sur un serveur, n&apos;importe quel serveur ou n&apos;importe quelle application sur n&apos;importe quel serveur</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="348"/>
@@ -651,7 +652,7 @@
     <message>
         <location filename="../ConfigElementFrame.cpp" line="158"/>
         <source>Minos Component Program</source>
-        <translation>WHERE    </translation>
+        <translation>Minos Component Program - WHERE</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.cpp" line="167"/>
@@ -705,7 +706,7 @@
     <message>
         <location filename="../MultsImpl.cpp" line="682"/>
         <source>Synonym ranges no longer allowed : %1 for %2</source>
-        <translation>Les plages de synonymes ne sont plus autorisées: %1 pour %2    </translation>
+        <translation>Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
     </message>
 </context>
 <context>
@@ -718,7 +719,7 @@
     <message>
         <location filename="../DisplayContestContact.cpp" line="499"/>
         <source>LOCAL COMMENT</source>
-        <translation>LOCAL COMMENT WHERE   </translation>
+        <translation>LOCAL COMMENT WHERE</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="499"/>
@@ -818,7 +819,7 @@
     <message>
         <location filename="../dxspotdatamodel.cpp" line="72"/>
         <source>Spot to Mem Flag</source>
-        <translation>Indicateur Spot to Memory  </translation>
+        <translation>Indicateur Spot à Mémoire</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="74"/>
@@ -841,7 +842,8 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
         <translation>La fréquence comporte des caractères non valides ou des périodes manquantes.
 
-Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123</translation>
+Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123
+</translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="16"/>
@@ -851,7 +853,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
         <translation>La radiofréquence a des caractères invalides ou des périodes manquantes.
 
-Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
+Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123  </translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="17"/>
@@ -1269,7 +1271,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../TreeUtils.cpp" line="31"/>
         <source>Rig</source>
-        <translation>Émetteur</translation>
+        <translation>Appareil</translation>
     </message>
 </context>
 <context>
@@ -1309,7 +1311,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="157"/>
         <source>SnRx</source>
-        <translation type="unfinished">Numéro Rx</translation>
+        <translation>Numéro Rx</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="158"/>
@@ -1362,7 +1364,7 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
         <location filename="../MatchTreeFrame.cpp" line="165"/>
         <location filename="../MatchTreeFrame.cpp" line="179"/>
         <source>Rig</source>
-        <translation>Émetteur</translation>
+        <translation>Appareil</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="453"/>
@@ -1413,19 +1415,19 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
     <message>
         <location filename="../rotpresetdialog.cpp" line="30"/>
         <source>Rotator Preset %1 - %2</source>
-        <translation>Préconfiguration d&apos;appareil rotateur</translation>
+        <translation>Préconfiguration de  rotateur  %1 - %2</translation>
     </message>
     <message>
         <location filename="../rotpresetdialog.cpp" line="70"/>
         <source>Bearing Out of range</source>
-        <translation>Relèvement Hors de portée DUPE?   </translation>
+        <translation>Relèvement Hors de portée DUPE</translation>
     </message>
     <message>
         <location filename="../rotpresetdialog.cpp" line="71"/>
         <source>Bearing: %1, out of range, should be 0-360 
 Please enter another bearing</source>
         <translation>Relèvement: %1, hors plage, doit être compris entre 0 et 360
-Veuillez entrer un autre direction  </translation>
+Entrer un autre direction SVP</translation>
     </message>
 </context>
 <context>
@@ -1481,7 +1483,7 @@ Veuillez entrer un autre direction  </translation>
     <message>
         <location filename="../StartConfig.ui" line="132"/>
         <source>Save and Close</source>
-        <translation>Enregistrer et fermer   </translation>
+        <translation>Enregistrer et fermer</translation>
     </message>
 </context>
 <context>
@@ -1509,7 +1511,7 @@ Veuillez entrer un autre direction  </translation>
     <message>
         <location filename="../MatchThread.cpp" line="753"/>
         <source> - %1%2 %3 matches</source>
-        <translation> - %1%2 %3 correspondances  </translation>
+        <translation> - %1%2 %3 correspondances</translation>
     </message>
 </context>
 <context>
@@ -1517,7 +1519,7 @@ Veuillez entrer un autre direction  </translation>
     <message>
         <location filename="../validators.cpp" line="18"/>
         <source>null validator failed</source>
-        <translation>WHERE   </translation>
+        <translation>null validator failed - WHERE</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="19"/>
@@ -1572,7 +1574,7 @@ Veuillez entrer un autre direction  </translation>
     <message>
         <location filename="../validators.cpp" line="29"/>
         <source>!!! No Callsign present !!!</source>
-        <translation>!!! Aucun indicatif d&apos;appel présent !!!   </translation>
+        <translation>!!! Pas d&apos;indicatif d&apos;appel présent !!!</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="30"/>
@@ -1617,12 +1619,12 @@ Veuillez entrer un autre direction  </translation>
     <message>
         <location filename="../validators.cpp" line="41"/>
         <source>Unknown Country</source>
-        <translation>Pays inconnu  </translation>
+        <translation>Pays inconnu</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="42"/>
         <source>!!! Non Scoring Contact !!!</source>
-        <translation>!!! Contact sans points !!!    FIX   </translation>
+        <translation>!!! Contact exclu de total !!!</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="43"/>
@@ -1658,7 +1660,8 @@ Veuillez entrer un autre direction  </translation>
     <message>
         <location filename="../clustercommon.cpp" line="9"/>
         <source>No Contact</source>
-        <translation>Pas de contact  </translation>
+        <translatorcomment>Dupe?</translatorcomment>
+        <translation>Pas de contact</translation>
     </message>
 </context>
 </TS>

@@ -6,7 +6,7 @@
     <message>
         <location filename="../servermain.ui" line="14"/>
         <source>Minos Server</source>
-        <translation>Serveur Minos</translation>
+        <translation type="unfinished">Serveur Minos</translation>
     </message>
     <message>
         <location filename="../servermain.ui" line="25"/>
