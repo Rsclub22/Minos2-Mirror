@@ -25,7 +25,7 @@ public:
     OmnirigControl(QObject *parent = nullptr);
     virtual ~OmnirigControl();
 
-    static void register_rigs(RigFactory::Rigs*);
+    static void register_rigs(RigFactory::Rigs*, int, int);
 
     enum RigNumber {One = 1, Two};
 

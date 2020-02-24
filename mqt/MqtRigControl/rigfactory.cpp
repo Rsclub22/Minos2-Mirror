@@ -12,11 +12,14 @@
 
 #include "rigfactory.h"
 #include "hamlibrigcontrol.h"
+#include "omnirigcontrol.h"
 
 RigFactory::RigFactory(bool tracecommFlag, QObject *parent) : QObject(parent)
 {
     HamlibRigControl::setTraceCommsFlag(tracecommFlag);
     HamlibRigControl::register_rigs(&rigsList);
+
+    OmnirigControl::register_rigs(&rigsList, RigId::OmniRigOneId, RigId::OmniRigTwoId);
 }
 
 

@@ -19,8 +19,8 @@
 
 namespace
 {
-  auto constexpr OmniRig_transceiver_one_name = "OmniRig Rig 1";
-  auto constexpr OmniRig_transceiver_two_name = "OmniRig Rig 2";
+  auto constexpr OmniRigOneName = "OmniRig Rig 1";
+  auto constexpr OmniRigTwoName = "OmniRig Rig 2";
 }
 
 auto OmnirigControl::map_mode (OmniRig::RigParamX param) -> MODE
@@ -462,8 +462,46 @@ void OmnirigControl::onHandleCustomReply(int, QVariant const&, QVariant const&)
 }
 
 
-void OmnirigControl::register_rigs(RigFactory::Rigs*)
+void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
 {
+    (*rigsList)[OmniRigOneName] = RigCapabilities(
+                id1,
+                RigCapConstants::PortType::none,
+                "Afreet",
+                "Omnirig",
+                OmniRigOneName,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false);
+
+
+
+
+    (*rigsList)[OmniRigTwoName] = RigCapabilities(
+                id2,
+                RigCapConstants::PortType::none,
+                "Afreet",
+                "Omnirig",
+                OmniRigTwoName,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false,
+                false);
 
 }
 
