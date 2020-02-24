@@ -1454,15 +1454,15 @@ Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="441"/>
-        <location filename="../LoggerContest.cpp" line="1678"/>
+        <location filename="../LoggerContest.cpp" line="1681"/>
         <source>(write) seek failed!</source>
         <translation>(Écriture) la recherche a échoué!</translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="446"/>
-        <location filename="../LoggerContest.cpp" line="1005"/>
-        <location filename="../LoggerContest.cpp" line="1017"/>
-        <location filename="../LoggerContest.cpp" line="1023"/>
+        <location filename="../LoggerContest.cpp" line="1007"/>
+        <location filename="../LoggerContest.cpp" line="1020"/>
+        <location filename="../LoggerContest.cpp" line="1026"/>
         <source>bad reply from write!</source>
         <translation>L&apos;écriture a échoué</translation>
     </message>
@@ -1498,19 +1498,19 @@ Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="945"/>
-        <location filename="../LoggerContest.cpp" line="1090"/>
+        <location filename="../LoggerContest.cpp" line="1093"/>
         <source>Please give first serial to be dumped</source>
         <translation>Premier numéro de séquence à écrire</translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="947"/>
-        <location filename="../LoggerContest.cpp" line="1092"/>
+        <location filename="../LoggerContest.cpp" line="1095"/>
         <source>Please give last serial to be dumped</source>
         <translation>Dernier numéro de séquence à écrire</translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="953"/>
-        <location filename="../LoggerContest.cpp" line="1098"/>
+        <location filename="../LoggerContest.cpp" line="1101"/>
         <source>Dumping all contacts between serials %1 and %2 inclusive</source>
         <translation>Écriture de tous les contacts entre la séquence%1 et%2 inclus</translation>
     </message>
@@ -1525,7 +1525,7 @@ Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
         <translation>Depuis le fichier %1</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1671"/>
+        <location filename="../LoggerContest.cpp" line="1674"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation>Ouvrir le fichier pour la surveillance de %1 a échoué:%2</translation>
     </message>

@@ -1392,15 +1392,15 @@ Continents only apply to DXCC</source>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="441"/>
-        <location filename="../LoggerContest.cpp" line="1678"/>
+        <location filename="../LoggerContest.cpp" line="1681"/>
         <source>(write) seek failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="446"/>
-        <location filename="../LoggerContest.cpp" line="1005"/>
-        <location filename="../LoggerContest.cpp" line="1017"/>
-        <location filename="../LoggerContest.cpp" line="1023"/>
+        <location filename="../LoggerContest.cpp" line="1007"/>
+        <location filename="../LoggerContest.cpp" line="1020"/>
+        <location filename="../LoggerContest.cpp" line="1026"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1436,19 +1436,19 @@ Continents only apply to DXCC</source>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="945"/>
-        <location filename="../LoggerContest.cpp" line="1090"/>
+        <location filename="../LoggerContest.cpp" line="1093"/>
         <source>Please give first serial to be dumped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="947"/>
-        <location filename="../LoggerContest.cpp" line="1092"/>
+        <location filename="../LoggerContest.cpp" line="1095"/>
         <source>Please give last serial to be dumped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="953"/>
-        <location filename="../LoggerContest.cpp" line="1098"/>
+        <location filename="../LoggerContest.cpp" line="1101"/>
         <source>Dumping all contacts between serials %1 and %2 inclusive</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1463,7 +1463,7 @@ Continents only apply to DXCC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1671"/>
+        <location filename="../LoggerContest.cpp" line="1674"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
