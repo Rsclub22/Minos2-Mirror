@@ -16,7 +16,7 @@ const char *AirScoutLink::ASBandStrings[] = {
     QT_TR_NOOP("76GHz"),
     nullptr
 };
-// frequencies are in 100 hz units
+// frequencies are in 100 hz unit
 static const char * bandFreqStrings[] = {
        "500000",
        "700000",
@@ -226,7 +226,13 @@ void AirScoutLink::onReadyRead()
                 }
                 if (user)
                 {
+                    user->lastCalcTime = sl[0];
+                    user->fromCall = sl[1];
+                    user->fromLoc = sl[2];
+                    user->toCall = sl[3];
+                    user->toLoc = sl[4];
                     user->planes.clear();
+
                     int account = sl[5].toInt();
 
                     int acstart = 6;
@@ -272,16 +278,13 @@ void AirScoutLink::onReadyRead()
     }
 }
 
-void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector, int chatId, QString filterString)
+void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector)
 {
     if (mainWindow->getASActive())
     {
         watchList.clear();
         for(QVector<QSharedPointer<KstUser> >::iterator user = callVector->begin(); user != callVector->end(); user++)
         {
-            if (chatId != 0 && user->data()->chat != chatId)
-                continue;
-
             if (user->data()->baseCall == mainWindow->getMyCallsign())
                 continue;
 
@@ -293,24 +296,14 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
             if (user->data()->distance < mind ||( maxd > 0 && user->data()->distance > maxd))
                 continue;
 
-            if (!filterString.isEmpty() && !(user->data()->call.contains(filterString) || user->data()->loc.contains(filterString)))
-            {
-                continue;
-            }
             watchList.append(*user);
         }
-        int wls = watchList.size();
         std::sort(watchList.begin(), watchList.end(), WatchCompare);
         watchList.erase( std::unique( watchList.begin(), watchList.end(), WatchEquals ), watchList.end() );
 
-        if (watchList.size() == 1)
-        {
-            trace(QString("usersChanged - watchlist size %1").arg(watchList.size()));
-        }
-
         QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
 
-        if (watchList.count() > 1)
+        if (watchList.count() > 0)
         {
             QString watch = watchFreq;
             foreach(auto user, watchList)
@@ -345,6 +338,15 @@ void AirScoutLink::asSelected(QSharedPointer<KstUser> user)
 void AirScoutLink::clearWatchList()
 {
     oldWatch.clear();
+}
+
+void AirScoutLink::asShowPath(QSharedPointer<KstUser> user, QSharedPointer<KstUser> other)
+{
+    QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+    QString getpath = /*"\""  +*/ watchFreq + ","
+            + user->baseCall+ "," + user->loc + ","
+            + other->baseCall + "," + other->loc /*+ "\""*/;
+    sendMessage("ASSHOWPATH", getpath);
 }
 
 void AirScoutLink::askNearest(int row)

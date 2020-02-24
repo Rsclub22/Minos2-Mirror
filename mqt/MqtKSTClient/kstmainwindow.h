@@ -77,6 +77,7 @@ class KSTMainWindow : public QMainWindow
     int messageSequence = 0;
 
     QSharedPointer<AirScoutLink> asl;
+    QSharedPointer<KstUser> planeActive;
 
     void sendKST(QString msg);
     void analyseKstMessage(QString atj);
@@ -120,6 +121,9 @@ public:
 
     int getActiveChat() const;
 
+    void showPlanes(QSharedPointer<KstUser> user);
+
+    QSharedPointer<KstUser> getUser(QString call);
 private slots:
     void CloseTimerTimer();
 
@@ -178,11 +182,14 @@ private slots:
     void on_sectionMoved(int, int, int);
 
     void acChanged(QSharedPointer<KstUser>);
-    void on_CSTable_doubleClicked(const QModelIndex &index);
 
     void on_asBandCombo_currentIndexChanged(int index);
 
     void on_ASActivecb_stateChanged(int arg1);
+
+    void on_showInAS_clicked();
+
+    void on_showMPath_clicked();
 
 private:
     Ui::KSTMainWindow *ui;

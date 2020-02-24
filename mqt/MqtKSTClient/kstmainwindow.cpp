@@ -222,6 +222,25 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     installEventFilter(this);   // so we pick up return, and implement the default button
 
+    ui->ASActivecb->setChecked(ASActive);
+    ui->planesFrame->setVisible(ASActive);
+    if(ASActive)
+    {
+        ui->CSTable->showColumn(ecscAirscout);
+    }
+    else
+    {
+        ui->CSTable->hideColumn(ecscAirscout);
+    }
+    asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
+    connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
+
+    for(int i = 0; i < asbMaxBand; i++)
+    {
+        ui->asBandCombo->addItem(AirScoutLink::tr(AirScoutLink::ASBandStrings[i]));
+    }
+    ui->asBandCombo->setCurrentIndex(ASActiveBand);
+
     started = true;
 
     if (autoConnect)
@@ -233,16 +252,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     ui->analyseButton->setVisible(false);
     ui->messageFilter->setFocus();
-
-    ui->ASActivecb->setChecked(ASActive);
-    asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
-    connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
-
-    for(int i = 0; i < asbMaxBand; i++)
-    {
-        ui->asBandCombo->addItem(AirScoutLink::tr(AirScoutLink::ASBandStrings[i]));
-    }
-
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -288,7 +297,7 @@ void KSTMainWindow::userCallTimerTimer()
 {
     if (asl && getASActive() && callVectorChanged)
     {
-        asl->usersChanged(callVector, ui->CSChatFilter->currentIndex(), ui->CSFilter->text());
+        asl->usersChanged(callVector);
         callVectorChanged = false;
     }
 }
@@ -666,6 +675,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
     else if (sl[0] == "CE")
     {
         // end of CR frames
+        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+        ui->messageTable->scrollTo(mesIndex);
+
+        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
+        ui->meepTable->scrollTo(meepIndex);
     }
     else if (sl[0] == "CH")
     {
@@ -700,8 +714,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         kstMessageModel.appendLastRow(kst);
 
-        ui->messageTable->scrollToBottom();
-        ui->meepTable->scrollToBottom();
+        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+        ui->messageTable->scrollTo(mesIndex);
+
+        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
+        ui->meepTable->scrollTo(meepIndex);
 
         if (kst->otherCall == myCallsign)
         {
@@ -796,8 +813,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kstCallFilterModel.invalidate();
         kstMessageFilterModel.invalidate();
 
-        ui->messageTable->scrollToBottom();
-        ui->meepTable->scrollToBottom();
+        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+        ui->messageTable->scrollTo(mesIndex);
+
+        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
+        ui->meepTable->scrollTo(meepIndex);
 
     }
 
@@ -958,7 +978,8 @@ void KSTMainWindow::on_closeButton_clicked()
 void KSTMainWindow::on_messageFilter_textChanged(const QString &arg1)
 {
     kstMessageFilterModel.setFilterString(arg1);
-    ui->messageTable->scrollToBottom();
+    QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+    ui->messageTable->scrollTo(mesIndex);
 }
 
 void KSTMainWindow::on_CSFilter_textChanged(const QString &arg1)
@@ -995,24 +1016,51 @@ void KSTMainWindow::acChanged(QSharedPointer<KstUser> user)
 {
     int row = callVector->indexOf(user);
     emit kstCallModel.dataChanged(kstCallModel.index(row, ecscAirscout), kstCallModel.index(row, ecscAirscout));
+
+    if (user == planeActive)
+    {
+        showPlanes(user);
+    }
 }
+void KSTMainWindow::showPlanes(QSharedPointer<KstUser> user)
+{
+    planeActive = user;
+
+    ui->planesText->clear();
+    ui->planesText->append(QString("%1 %2 at %3 to %4 at %5").arg(user->lastCalcTime).arg(user->fromCall).arg(user->fromLoc).arg(user->toCall).arg(user->toLoc) );
+    ui->planesText->append(QString());
+    foreach(const Aircraft &ac, user->planes)
+    {
+        ui->planesText->append(ac.getAircraft() );
+    }
+    ui->planesText->moveCursor (QTextCursor::Start) ;
+    ui->planesText->ensureCursorVisible() ;
+}
+
 void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstCallFilterModel.mapToSource(index);
     int row = sourceIndex.row();
     if (row >= callVector->size())
         return;
+
     QSharedPointer<KstUser> user = callVector->at(row);
 
-    QString call = user->call;
+    if (!ui->noSetCallcb->isChecked())
+    {
+        // messages
+        QString call = user->call;
 
-    setNameFromCall(call);
+        setNameFromCall(call);
 
-    ui->messageFilter->setText(call);
-    ui->callEdit->setText(call);
-    ui->msgEdit->setFocus();
-    setActive(user->chat);
-    ui->messageChatFilter->setCurrentIndex(user->chat);
+        ui->messageFilter->setText(call);
+        ui->callEdit->setText(call);
+        ui->msgEdit->setFocus();
+        setActive(user->chat);
+        ui->messageChatFilter->setCurrentIndex(user->chat);
+    }
+    // Planes
+    showPlanes(user);
 }
 
 bool KSTMainWindow::doConfiguration()
@@ -1531,49 +1579,97 @@ void KSTMainWindow::on_clearUserFilter_clicked()
     ui->CSFilter->clear();
 }
 
-void KSTMainWindow::on_CSTable_doubleClicked(const QModelIndex &index)
+void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)
 {
-    QModelIndex sourceIndex = kstCallFilterModel.mapToSource(index);
-
-    int column = sourceIndex.column();
-    int row = sourceIndex.row();
-
-    if (row < callVector->size() && column == ecscAirscout)
+    if (started)
     {
+        if (asl && getASActive())
+        {
+            for (int i = 0; i < callVector->size(); i++)
+            {
+                QSharedPointer<KstUser> kstuser = callVector->at(i);
+                kstuser->planes.clear();
+            }
+            callVectorChanged = true;
+            emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));
+
+            userCallTimerTimer();
+        }
+        QSettings settings;
+
+        settings.setValue("ASActiveBand", band);
+    }
+}
+
+void KSTMainWindow::on_ASActivecb_stateChanged(int state)
+{
+    if (started)
+    {
+        if (asl && getASActive())
+        {
+            for (int i = 0; i < callVector->size(); i++)
+            {
+                QSharedPointer<KstUser> kstuser = callVector->at(i);
+                kstuser->planes.clear();
+            }
+            callVectorChanged = true;
+            emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));
+
+            asl->clearWatchList();
+            userCallTimerTimer();
+        }
+
+        QSettings settings;
+
+        settings.setValue("ASActive", state != 0);
+
+        ui->planesFrame->setVisible(state != 0);
+        if(state != 0)
+        {
+            ui->CSTable->showColumn(ecscAirscout);
+        }
+        else
+        {
+            ui->CSTable->hideColumn(ecscAirscout);
+        }
+    }
+}
+
+void KSTMainWindow::on_showInAS_clicked()
+{
+    asl->asSelected(planeActive);
+}
+QSharedPointer<KstUser> KSTMainWindow::getUser(QString call)
+{
+    QSharedPointer<KstUser> test(new KstUser());
+    test->call = call.toUpper();
+    test->chat = activeChat;
+    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    {
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+
         QSharedPointer<KstUser> user = callVector->at(row);
-        asl->asSelected(user);
+
+        return user;
     }
+    return QSharedPointer<KstUser>();
 }
-
-void KSTMainWindow::on_asBandCombo_currentIndexChanged(int /*index*/)
+void KSTMainWindow::on_showMPath_clicked()
 {
-    if (asl && getASActive())
+    QModelIndex index = ui->messageTable->currentIndex();
+    QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
+    int row = sourceIndex.row();
+    if (row >= messageVector->size())
+        return;
+    QSharedPointer<KstMessageLine> line = messageVector->at(row);
+    QString call = line->call;
+    QString otherCall = line->otherCall;
+
+    QSharedPointer<KstUser> user = getUser(call);
+    QSharedPointer<KstUser> other = getUser(otherCall);
+
+    if (user && other)
     {
-        for (int i = 0; i < callVector->size(); i++)
-        {
-            QSharedPointer<KstUser> kstuser = callVector->at(i);
-            kstuser->planes.clear();
-        }
-        callVectorChanged = true;
-        emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));
-
-        userCallTimerTimer();
-    }
-}
-
-void KSTMainWindow::on_ASActivecb_stateChanged(int /*arg1*/)
-{
-    if (asl && getASActive())
-    {
-        for (int i = 0; i < callVector->size(); i++)
-        {
-            QSharedPointer<KstUser> kstuser = callVector->at(i);
-            kstuser->planes.clear();
-        }
-        callVectorChanged = true;
-        emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));
-
-        asl->clearWatchList();
-        userCallTimerTimer();
+        asl->asShowPath(user, other);
     }
 }

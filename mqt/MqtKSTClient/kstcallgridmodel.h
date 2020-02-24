@@ -25,6 +25,11 @@ public:
     int distance = -1;
     int bearing = -1;
 
+    QString lastCalcTime;
+    QString fromCall;
+    QString fromLoc;
+    QString toCall;
+    QString toLoc;
     QVector<Aircraft> planes;
 
     bool operator< ( const KstUser& rhs ) const;

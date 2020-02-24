@@ -32,6 +32,7 @@ enum ASBand {
 
 class Aircraft
 {
+    Q_DECLARE_TR_FUNCTIONS(Aircraft)
 public:
     Aircraft(){}
     ~Aircraft(){}
@@ -43,14 +44,31 @@ public:
         potential = sl[acoffset++].toInt();
         minutes = sl[acoffset++].toInt();
     }
+    Aircraft(const Aircraft &ac):
+      call(ac.call),
+      category(ac.category),
+      distance(ac.distance),
+      potential(ac.potential),
+      minutes(ac.minutes)
+    {}
+
     void traceAircaft() const
     {
         trace(QString("Aircraft %1 category %2 distance %3 potential %4 minutes %5").arg(call).arg(category).arg(distance).arg(potential).arg(minutes) );
     }
+    QString getAircraft() const
+    {
+        return tr("Aircraft %1\tcategory %2\tdistance %3\tpotential %4\tminutes %5").arg(call, 10).arg(category, 10).arg(distance, 4).arg(potential, 2).arg(minutes);
+    }
     bool operator< ( const Aircraft& rhs ) const
     {
         if (minutes == rhs.minutes)
-            return potential < rhs.potential;
+        {
+            if (distance == rhs.distance)
+                return potential < rhs.potential;
+            else
+                return distance < rhs.distance;
+        }
         return minutes < rhs.minutes;
     }
 
@@ -84,9 +102,10 @@ public:
 
     static const char *ASBandStrings[];
 
-    void usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector, int chatId, QString filterString);
+    void usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector);
     void asSelected(QSharedPointer<KstUser> user);
     void clearWatchList();
+    void asShowPath(QSharedPointer<KstUser> user, QSharedPointer<KstUser> other);
 private slots:
     void onReadyRead();
 signals:

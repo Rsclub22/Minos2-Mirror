@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>713</width>
-    <height>697</height>
+    <height>909</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Minos KST Client</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_7">
+   <layout class="QVBoxLayout" name="verticalLayout_8">
     <item>
      <widget class="QFrame" name="frame">
       <property name="toolTip">
@@ -159,6 +159,9 @@
           <property name="selectionMode">
            <enum>QAbstractItemView::SingleSelection</enum>
           </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
           <property name="sortingEnabled">
            <bool>true</bool>
           </property>
@@ -219,6 +222,51 @@
             <enum>QAbstractItemView::SingleSelection</enum>
            </property>
           </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QFrame" name="planesFrame">
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <item>
+          <widget class="QTextEdit" name="planesText"/>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QCheckBox" name="noSetCallcb">
+             <property name="text">
+              <string>Don't set filter when user selected</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="showMPath">
+             <property name="text">
+              <string>Show Message Path in AirScout</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="showInAS">
+             <property name="text">
+              <string>Show Path in AirScout</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
