@@ -315,8 +315,10 @@ MonitorMain::MonitorMain(QWidget *parent) :
     TMatchThread::InitialiseMatchThread();
     ui->thisMatchFrame->initialise();
     ui->thisMatchFrame->setBaseName("Monitor");
+    ui->thisMatchFrame->restoreColumns();
     ui->otherMatchFrame->initialise();
     ui->otherMatchFrame->setBaseName("Monitor");
+    ui->otherMatchFrame->restoreColumns();
 
     ui->callsignEdit->setFocus();
 }
@@ -408,10 +410,7 @@ void MonitorMain::on_searchSplitter_splitterMoved(int /*pos*/, int /*index*/)
     QSettings settings;
     settings.setValue("SearchSplitter/state", state);
 }
-void MonitorMain::on_closeButton_clicked()
-{
-    close();
-}
+
 void MonitorMain::closeTab(MonitoringFrame *cttab)
 {
     for ( QVector<MonitoredStation *>::iterator i = stationList.begin(); i != stationList.end(); i++ )
