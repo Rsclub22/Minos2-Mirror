@@ -369,12 +369,12 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="639"/>
         <source>Trace Data Comms</source>
-        <translation>Suivre communication de données  </translation>
+        <translation>Suivre communication de données</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="644"/>
         <source>About Rotator Config</source>
-        <translation>À propos de la configuration du rotateur </translation>
+        <translation>À propos de la configuration du rotateur</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="126"/>
@@ -891,7 +891,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotsetupform.cpp" line="508"/>
         <source>Invalid Network Port Number %1</source>
-        <translation>Port de réseau nombre invalide  </translation>
+        <translation>Port de réseau nombre invalide %1</translation>
     </message>
     <message>
         <location filename="../rotsetupform.cpp" line="509"/>
@@ -901,12 +901,12 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotsetupform.cpp" line="781"/>
         <source>Value must be between %1 and %2</source>
-        <translation>La valeur doit être comprise entre %1 et %2  </translation>
+        <translation>La valeur doit être comprise entre %1 et %2</translation>
     </message>
     <message>
         <location filename="../rotsetupform.cpp" line="782"/>
         <source>Antenna Offset Error</source>
-        <translation>Erreur de décalage d&apos;antenne </translation>
+        <translation>Erreur de décalage d&apos;antenne</translation>
     </message>
 </context>
 </TS>

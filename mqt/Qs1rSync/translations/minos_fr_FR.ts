@@ -6,7 +6,7 @@
     <message>
         <location filename="../MainWindow.ui" line="14"/>
         <source>QS1R &lt;-&gt; Main Rig Sync</source>
-        <translation>DOES THIS NEED TRANSLATION  </translation>
+        <translation type="unfinished">DOES THIS NEED TRANSLATION </translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="25"/>

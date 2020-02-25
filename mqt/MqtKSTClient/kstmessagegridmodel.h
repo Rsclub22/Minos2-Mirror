@@ -18,8 +18,10 @@ public:
     QDateTime dtg;
     QString fullLine;
     QString call;
+    int distance;
     QString name;
     QString otherCall;
+    int otherDistance;
     QString message;
 
     KstMessageLine(){}

@@ -1,6 +1,8 @@
 #include "kstcallgridmodel.h"
 #include "contest.h"
 #include "kstmainwindow.h"
+#include "cutils.h"
+
 // kst2me sort by
 // new before old
 // locator
@@ -33,6 +35,14 @@ void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUs
 {
     beginResetModel();
     callVector = pcallVector;
+    for (int i = 0; i < callVector->size(); i++)
+    {
+        QSharedPointer<KstUser> kstuser = callVector->at(i);
+        if (kstuser->distance == -2)
+        {
+            checkDistBear(kstuser);
+        }
+    }
     endResetModel();
 }
 QModelIndex KstCallGridModel::index( int row, int column,
@@ -173,6 +183,57 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
         case ecscCountryName:
             return crec->country;
+
+        case ecscAirscout:
+        {
+            if (crec->distance > mainWindow->getASMaxDistance())
+                return "&gt;";
+            if (crec->distance < mainWindow->getASMinDistance())
+                return "&lt;";
+
+            int zcount = 0;
+            QString col;
+            if (crec->planes.count())
+            {
+                for (int i = 0; i < crec->planes.count(); i++)
+                {
+                    if (crec->planes[i].minutes != 0)
+                        break;
+                    zcount++;
+                }
+                if (zcount)
+                {
+//                    100 = magenta,
+//                    75 = red,
+//                    50 = orange,
+//                    <50 = grey
+                    switch(crec->planes[0].potential)
+                    {
+                    case 100:
+                        col = "magenta";
+                        break;
+
+                    case 75:
+                        col = "red";
+                        break;
+
+                    case 50:
+                        col = "orange";
+                        break;
+
+                    default:
+                        col = "gray";
+                        break;
+                    }
+                }
+            }
+            QString cell;
+            if (!col.isEmpty())
+                cell = HtmlFontColour(col) + QString::number(zcount);
+
+            cell +=  HtmlFontColour("black") + "(" + QString::number(crec->planes.count()) + ")";
+            return cell;
+        }
         }
     }
     if (role == Qt::UserRole)
@@ -224,6 +285,9 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
         case ecscCountryName:
             return crec->country;
+
+        case ecscAirscout:
+            break;
         }
     }
     if (role == Qt::BackgroundColorRole)
@@ -258,6 +322,9 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
 
         case ecscBearing:
             return tr("Brg");
+
+        case ecscAirscout:
+            return tr("AS");
 
         case ecscName:
             return tr("Name");
@@ -309,6 +376,10 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
         return isFiltered();
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
+
+    int m = mainWindow->getMaxDistance();
+    if (m > 0 && call->distance > m)
+        return false;
 
     int chat = call->chat;
     if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))

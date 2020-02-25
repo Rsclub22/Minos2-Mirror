@@ -107,7 +107,7 @@
         <location filename="../clustermainwindow.cpp" line="83"/>
         <location filename="../clustermainwindow.cpp" line="1912"/>
         <source>Minos Cluster Server</source>
-        <translation>Serveur de cluster Minos </translation>
+        <translation>Minos: Serveur de Cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="398"/>
@@ -173,12 +173,17 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
         <location filename="../clustermainwindow.cpp" line="603"/>
         <source>Login Start - Send logon message
 </source>
-        <translation>CONTEXT???   </translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login Start - Send logon message</source>
+        <translation type="vanished">Ouverture de session - Envoyer un message de connexion
+</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="608"/>
         <source>Logging in with callsign %1</source>
-        <translation>Connecter avec indicatif d&apos;appel %1 CONTEXT?</translation>
+        <translation>Ouvrant connexion avec l&apos;indicatif d&apos;appel %1</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="614"/>
@@ -223,12 +228,12 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
     <message>
         <location filename="../clustermainwindow.cpp" line="1743"/>
         <source>Cluster User Command Clear</source>
-        <translation>Utilisateur de cluster supprimer commande  CONTEXT????</translation>
+        <translation>Cluster: Effacer commande d&apos;utilisateur</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="1744"/>
         <source>Do you really want to clear cluster user command number:%1?</source>
-        <translation>Effacer le numéro de commande de l&apos;utilisateur du cluster: %1?</translation>
+        <translation>Effacer commande %1 du cluster?</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="1912"/>
@@ -451,7 +456,7 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
     <message>
         <location filename="../userclustercommanddialog.ui" line="49"/>
         <source>Command</source>
-        <translation>WHERE???   </translation>
+        <translation>Texte</translation>
     </message>
     <message>
         <location filename="../userclustercommanddialog.cpp" line="54"/>

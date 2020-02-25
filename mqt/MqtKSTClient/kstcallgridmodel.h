@@ -6,13 +6,16 @@
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
-enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscBearing, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
 
+enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscBearing, ecscAirscout, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
+
+class Aircraft;
 class KstUser
 {
 public:
     int chat;
     QString call;
+    QString baseCall;
     QString loc;
     QString name;
     QString prefix;
@@ -21,6 +24,13 @@ public:
     bool recent = false;
     int distance = -1;
     int bearing = -1;
+
+    QString lastCalcTime;
+    QString fromCall;
+    QString fromLoc;
+    QString toCall;
+    QString toLoc;
+    QVector<Aircraft> planes;
 
     bool operator< ( const KstUser& rhs ) const;
 

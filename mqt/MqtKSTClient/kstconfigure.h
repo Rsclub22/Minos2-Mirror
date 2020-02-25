@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QIntValidator>
 #include "cutils.h"
+#include "airscoutlink.h"
 
 namespace Ui {
 class KSTConfigure;
@@ -27,6 +28,14 @@ public:
     QString locator;
     UpperCaseValidator locValidator;
 
+    int maxDistance;
+
+    bool ASActive;
+    ASBand ASActiveBand;
+    QString ASServerName;
+    QString ASMyName;
+    int ASMinDistance;
+    int ASMaxDistance;
 
 public Q_SLOTS:
         virtual int exec() override;

@@ -61,8 +61,8 @@ BundleFile::BundleFile( PROFILES p )
         break;
     case epPRELOADPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppCurrent, "CurrentLog", 0, nullptr, QT_TR_NOOP("hint"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppDefSession, "DefaultSessionName", "Default Session", QT_TR_NOOP("Default Session"), QT_TR_NOOP("hint"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppSession, "CurrentSession", "Default Session", QT_TR_NOOP("Default Session"), QT_TR_NOOP("hint"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppDefSession, "DefaultSessionName", QT_TR_NOOP("Default Session"), QT_TR_NOOP("Default Session"), QT_TR_NOOP("hint"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppSession, "CurrentSession", QT_TR_NOOP("Default Session"), QT_TR_NOOP("Default Session"), QT_TR_NOOP("hint"), false ) ) );
         break;
 
     case epLISTSPROFILE:
@@ -447,7 +447,7 @@ QStringList SettingsBundle::getBundleHints( )
    {
       for ( QVector<QSharedPointer <ProfileEntry> >::iterator i = bundleFile->entries.begin(); i != bundleFile->entries.end(); i++ )
       {
-         e.append( tr(( *i )->hint) );
+         e.append( BundleFile::tr(( *i )->hint) );
       }
    }
    return e;
