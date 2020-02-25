@@ -88,7 +88,27 @@ OmniRig::RigParamX OmnirigControl::map_mode (MODE mode)
     case DIG_FM: return OmniRig::PM_FM;
     default: break;
     }
-  return OmniRig::PM_SSB_U; // quieten compiler grumble
+  return OmniRig::PM_SSB_U;
+}
+
+QString OmnirigControl::convertModeToQString(MODE mode)
+{
+    switch (mode)
+      {
+      case AM: return "AM";
+      case CW: return "CW";
+      case CW_R: return "CW_R";
+      case USB: return "USB";
+      case LSB: return "LSB";
+      case FSK: return "FSK";
+      case FSK_R: return "FSK_R";
+      case DIG_L: return "DIG_L";
+      case DIG_U: return "DIG_U";
+      case FM: return "FM";
+      case DIG_FM: return "DIG_FM";
+      default: break;
+      }
+    return "USB";
 }
 
 OmniRig::RigParamX OmnirigControl::map_mode(QString mode)
@@ -563,24 +583,37 @@ int OmnirigControl::closeRig()
 
 int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
 {
-
+    Q_UNUSED(vfo)
+    freq = static_cast<Frequency>(rig->GetRxFrequency());
+    traceMsg(QString("GetFrequency %1").arg(QString::number(freq)));
+    return omnirigError(OMNIRIG_OK);
 }
 
 int OmnirigControl::setFrequency(Frequency freq, VFO vfo)
 {
-
+    Q_UNUSED(vfo)
+    traceMsg(QString("SetFrequency = %1").arg(QString::number(freq)));
+    rig->SetFreq(static_cast<int>(freq));
+    return omnirigError(OMNIRIG_OK);
 }
 
 int OmnirigControl::getMode(VFO vfo, MODE &mode)
 {
+    Q_UNUSED(vfo)
+    mode = map_mode(rig->Mode());
+    traceMsg(QString("GetMode = %1").arg(convertModeToQString(mode)));
+    return omnirigError(OMNIRIG_OK);
 
 }
 
 int OmnirigControl::setMode(VFO vfo, MODE mode)
 {
-
+    Q_UNUSED(vfo)
+    traceMsg(QString("SetMode = %1").arg(convertModeToQString(mode)));
     OmniRig::RigParamX m = map_mode(mode);
     rig->SetMode(m);
+
+    return omnirigError(OMNIRIG_OK);
 
 }
 
@@ -588,17 +621,23 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
 
 int OmnirigControl::setVolume(VFO vfo, float val)
 {
-
+    Q_UNUSED(vfo)
+    Q_UNUSED(val)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
 int OmnirigControl::getVolume(VFO vfo, float *val)
 {
-
+    Q_UNUSED(vfo)
+    Q_UNUSED(val)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
 int OmnirigControl::getSignalStrength(VFO vfo, int *value)
 {
-
+    Q_UNUSED(vfo)
+    Q_UNUSED(value)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
 QString OmnirigControl::getRigLibVersion()

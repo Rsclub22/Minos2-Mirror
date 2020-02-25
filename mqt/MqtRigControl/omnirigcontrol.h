@@ -19,7 +19,7 @@
 #include "omniRig.h"
 
 
-enum omnirigErrorCode {OMNIRIG_OK = 0, OMNIRIG_COM_FAILED_START, OMNIRIG_ONE_FAILED_INITIALISE, OMNIRIG_TWO_FAILED_INITIALISE};
+enum omnirigErrorCode {OMNIRIG_OK = 0, OMNIRIG_NOT_SUPPORTED, OMNIRIG_COM_FAILED_START, OMNIRIG_ONE_FAILED_INITIALISE, OMNIRIG_TWO_FAILED_INITIALISE};
 
 
 class OmnirigControl : public RigBase
@@ -100,6 +100,7 @@ private:
 
     void traceMsg(QString msg);
     int omnirigError(omnirigErrorCode errNum);
+    QString convertModeToQString(MODE mode);
 };
 
 #endif // OMNIRIGCONTROL_H
