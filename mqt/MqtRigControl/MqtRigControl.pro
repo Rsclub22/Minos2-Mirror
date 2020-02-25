@@ -26,6 +26,7 @@ TYPELIBS = $$system(dumpcpp OmniRig.tlb)
 }
 
 SOURCES += main.cpp\
+    OmniWrapper.cpp \
     hamlibrigcontrol.cpp \
     omnirigcontrol.cpp \
     rigbase.cpp \
@@ -44,6 +45,7 @@ SOURCES += main.cpp\
     rigctldclient.cpp
 
 HEADERS  += rigcontrolmainwindow.h \
+    OmniWrapper.h \
     hamlibrigcontrol.h \
     omnirigcontrol.h \
     rigbase.h \

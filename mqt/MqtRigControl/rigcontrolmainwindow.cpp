@@ -610,10 +610,10 @@ void RigControlMainWindow::upDateRadio()
                     logMessage(QString("Update Radio: Set Mode USB Standalone"));
                     // initialise rig state
 
-                    slogMode = "USB";
+                    slogMode = USB_STR;
                     // set mode
                     //logMode = radio->convertQStrMode("USB");
-                    setMode("USB", VFO::CURRENT_VFO);
+                    setMode(USB_STR, VFO::CURRENT_VFO);
                 }
 
                 // build supported band list for this radio

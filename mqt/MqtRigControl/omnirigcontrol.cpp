@@ -67,7 +67,7 @@ auto OmnirigControl::map_mode (OmniRig::RigParamX param) -> MODE
       return FM;
     }
   trace(QString("OmniRigControl unrecognized mode"));
-  //throw_qstring (tr ("OmniRig: unrecognized mode"));
+
   return UNK;
 }
 
@@ -561,7 +561,7 @@ int OmnirigControl::closeRig()
 
 }
 
-int OmnirigControl::getFrequency(VFO vfo, Frequency &)
+int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
 {
 
 }
@@ -578,6 +578,9 @@ int OmnirigControl::getMode(VFO vfo, MODE &mode)
 
 int OmnirigControl::setMode(VFO vfo, MODE mode)
 {
+
+    OmniRig::RigParamX m = map_mode(mode);
+    rig->SetMode(m);
 
 }
 
@@ -600,7 +603,9 @@ int OmnirigControl::getSignalStrength(VFO vfo, int *value)
 
 QString OmnirigControl::getRigLibVersion()
 {
+    QString v = QString::number(omni_rig->SoftwareVersion()).toLocal8Bit ();
 
+    return QString("Omnirig V%1").arg(v);
 }
 
 QString OmnirigControl::getErrorMsgText(int errorCode)
