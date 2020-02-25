@@ -40,8 +40,8 @@ public:
 
     virtual int getMode(VFO vfo, MODE& mode) = 0;
     virtual int setMode(VFO vfo, MODE mode) = 0;
-    virtual QString convertModeQStr(MODE mode) = 0;
-    virtual MODE convertQStrMode(QString mode) = 0;
+    //virtual QString convertModeQStr(MODE mode) = 0;
+    //virtual MODE convertQStrMode(QString mode) = 0;
 
     virtual int setVolume(VFO vfo, float val) = 0;
     virtual int getVolume(VFO vfo, float *val) = 0;

@@ -15,7 +15,8 @@
 #include "base_pch.h"
 #include "mqtUtils_pch.h"
 #include "RPCCommandConstants.h"
-#include "rigcontrolcommonconstants.h"
+//#include "rigcontrolcommonconstants.h"
+#include "rigcommon.h"
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
 #include "freqpresetdialog.h"
@@ -270,6 +271,48 @@ void RigControlMainWindow::LogTimerTimer()
             close();
         }
     }
+}
+
+
+MODE RigControlMainWindow::convertQStringToMode(QString modeStr)
+{
+    if (modeStr == "AM") return AM;
+    if (modeStr == "CW") return CW;
+    if (modeStr == "CW_R") return CW_R;
+    if (modeStr == "USB") return USB;
+    if (modeStr == "LSB") return LSB;
+    if (modeStr == "RTTY") return FSK;
+    if (modeStr == "RTTYR") return FSK_R;
+    if (modeStr == "PKTLSB") return DIG_L;
+    if (modeStr == "PKTUSB") return DIG_U;
+    if (modeStr == "FM") return FM;
+    if (modeStr == "PKT_FM") return DIG_FM;
+
+    return USB; // default
+
+
+}
+
+
+QString RigControlMainWindow::convertModeToQString(MODE mode)
+{
+    switch (mode)
+      {
+      case AM: return "AM";
+      case CW: return "CW";
+      case CW_R: return "CW_R";
+      case USB: return "USB";
+      case LSB: return "LSB";
+      case FSK: return "RTTY";
+      case FSK_R: return "RTTYR";
+      case DIG_L: return "PKTLSB";
+      case DIG_U: return "PKTUSB";
+      case FM: return "FM";
+      case DIG_FM: return "PKTFM";
+      default: break;
+      }
+    return "USB";
+
 }
 
 void RigControlMainWindow::closeEvent(QCloseEvent *event)
@@ -628,23 +671,28 @@ void RigControlMainWindow::upDateRadio()
 
                 dumpRadioToTraceLog();
 
-                if (radio != nullptr)
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModelName).pollData)
                 {
-                    if (radio->getRigConnected())
+                    if (radio != nullptr)
                     {
-                        if (setupRadio->currentRadio.pollInterval == "0.5")
+                        if (radio->getRigConnected())
                         {
-                            pollTime = 500;
-                        }
-                        else
-                        {
-                            pollTime = 1000 * setupRadio->currentRadio.pollInterval.toInt();
-                        }
+                            if (setupRadio->currentRadio.pollInterval == "0.5")
+                            {
+                                pollTime = 500;
+                            }
+                            else
+                            {
+                                pollTime = 1000 * setupRadio->currentRadio.pollInterval.toInt();
+                            }
 
-                        pollTimer->start(pollTime);             // start timer to send poll radio
+                            pollTimer->start(pollTime);             // start timer to send poll radio
 
+                        }
                     }
                 }
+
+
 
 
             }
@@ -946,7 +994,7 @@ int RigControlMainWindow::openRadio()
 
     }
 
-    if (setupRadio->currentRadio.portType == RigCapConstants::PortType::network)
+    else if (setupRadio->currentRadio.portType == RigCapConstants::PortType::network)
     {
         if (setupRadio->currentRadio.networkAdd == "" || (setupRadio->currentRadio.networkPort == ""))
         {
@@ -1222,7 +1270,7 @@ void RigControlMainWindow::getRadioInfo()
         }
         else
         {
-            logMessage(QString("Got Mode = %1").arg(radio->convertModeQStr(rmode)));
+            logMessage(QString("Got Mode = %1").arg(convertModeToQString(rmode)));
         }
     }
 
@@ -2068,10 +2116,10 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
 
     if (retCode == Rig_OK)
     {
-        logMessage(QString("Get Mode: From Rx mode = %1").arg(radio->convertModeQStr(rmode)));
+        logMessage(QString("Get Mode: From Rx mode = %1").arg(convertModeToQString(rmode)));
         curMode = rmode;
 
-        sCurMode = radio->convertModeQStr(rmode);
+        sCurMode = convertModeToQString(rmode);
 
         if (mgmModeFlag && sCurMode != setupRadio->currentRadio.mgmMode) // has mode been changed on the radio?
         {
@@ -2096,9 +2144,9 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
             }
             else
             {
-                displayModeVfo(radio->convertModeQStr(rmode));
+                displayModeVfo(convertModeToQString(rmode));
                 //displayPassband(rwidth);
-                sendModeToLog(QString("%1:%2").arg(radio->convertModeQStr(rmode)).arg(" "));
+                sendModeToLog(QString("%1:%2").arg(convertModeToQString(rmode)).arg(" "));
             }
 
 
@@ -2133,7 +2181,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
             if (mgmModeFlag)
             {
                 logMessage(QString("Log SetMode: Mgm flag is set"));
-                if (curMode !=  radio->convertQStrMode(setupRadio->currentRadio.mgmMode))
+                if (curMode !=  convertQStringToMode(setupRadio->currentRadio.mgmMode))
                 {
                     setMode(setupRadio->currentRadio.mgmMode, VFO::CURRENT_VFO);
                     logMessage((QString("Log SetMode: MgmMode Flag alread set, Send to setmode MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
@@ -2167,19 +2215,19 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
     cmdLockOn();      // lock get radio info
     logMessage(QString("SetMode: Mode Requested = %1").arg(mode));
     mode = mode.left(mode.indexOf(":"));
-    MODE mCode = radio->convertQStrMode(mode);
+    MODE mCode = convertQStringToMode(mode);
 
     if (radioCommsOK)
     {
         retCode = radio->setMode(vfo, mCode);
         if (retCode == Rig_OK)
         {
-            logMessage(QString("SetMode: changed! Mode = %1").arg(radio->convertModeQStr(mCode)));
+            logMessage(QString("SetMode: changed! Mode = %1").arg(convertModeToQString(mCode)));
 
         }
         else
         {
-            logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode)).arg(radio->convertModeQStr(mCode)));
+            logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode)).arg(convertModeToQString(mCode)));
             radioError(retCode, tr("Set Mode"));
         }
 
@@ -2216,9 +2264,9 @@ MODE RigControlMainWindow::mapQStrMode(QString mode)
 int RigControlMainWindow::getMinosModeIndex(QString mode)
 {
     int index = 0;
-    for (int i = 0; i < hamlibData::supModeList.count(); i++)
+    for (int i = 0; i < supModeList.count(); i++)
     {
-        if (mode == hamlibData::supModeList[i])
+        if (mode == supModeList[i])
         {
             index = i;
             return index;

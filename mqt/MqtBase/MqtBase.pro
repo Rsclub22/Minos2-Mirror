@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 include($$PWD/../mqt.pri)
-include($$PWD/../mqthamlib.pri)
+//include($$PWD/../mqthamlib.pri)
 
 QT       += core gui
 QT       += widgets
@@ -117,7 +117,6 @@ HEADERS += \
     DisplayContestContact.h \
     focuswatcher.h \
     freqmodebandplan.h \
-    hamlibCommon.h \
     htmldelegate.h \
     KeyerState.h \
     latlong.h \

@@ -13,13 +13,29 @@
 #define RIGCOMMON_H
 
 #include <QComboBox>
-#include <QtSerialPort/QSerialPort>
-#include <QSerialPortInfo>
-
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 enum MODE {UNK, CW, CW_R, USB, LSB, FSK, FSK_R, DIG_U, DIG_L, AM, FM, DIG_FM};
+
+// radio modes
+
+const QString AM_STR = "AM";             // Amplitude Modulation
+const QString CW_STR =  "CW";            //  normal sideband
+const QString USB_STR = "USB";           // Upper Side Band
+const QString LSB_STR = "LSB";           // Lower Side Band
+const QString RTTY_STR = "RTTY";         //  Radio Teletype
+const QString FM_STR = "FM";             // "narrow" band FM
+const QString CW_R_STR = "CW_R";            //  "reverse" sideband
+const QString RTTY_R_STR = "RTTYR";       // RTTY "reverse" sideband
+const QString PKTLSB_STR = "PKTLSB";     // Packet/Digital LSB mode (dedicated port)
+const QString PKTUSB_STR = "PKTUSB";     // Packet/Digital USB mode (dedicated port)
+const QString PKTFM_FM = "PKTFM";       // Packet/Digital FM mode (dedicated port)
+
+const QString MGM_STR = "MGM";           // MGM generically
+
+const QStringList supModeList = { CW_STR, USB_STR, FM_STR, MGM_STR};
+
 enum VFO {CURRENT_VFO, VFOA, VFOB};
 using  Frequency = quint64;
 using ShortFreq = qint32;

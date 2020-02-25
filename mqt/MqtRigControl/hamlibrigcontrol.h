@@ -60,8 +60,6 @@ public:
 
     int getMode(VFO vfo, MODE& mode) override;
     int setMode(VFO vfo, MODE mode) override;
-    QString convertModeQStr(MODE mode) override;
-    MODE convertQStrMode(QString mode) override;
 
     int setVolume(VFO vfo, float val) override;
     int getVolume(VFO vfo, float *val) override;

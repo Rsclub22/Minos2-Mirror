@@ -1077,9 +1077,9 @@ void RigControlFrame::setMode(QString m)
     QStringList mode = m.split(':');
     if (mode.length() == 2 )
     {
-        for (int i = 0; i < hamlibData::supModeList.count(); i++)
+        for (int i = 0; i < supModeList.count(); i++)
         {
-                if (mode[0] == hamlibData::supModeList[i])
+                if (mode[0] == supModeList[i])
                 {
                     ui->modelbl->setText(mode[0]);
                     curMode = mode[0];
@@ -1541,9 +1541,9 @@ bool RigControlFrame::checkRadioState()
 int RigControlFrame::calcMinosMode(QString mode)
 {
     int iMode = -1;
-    for (int i = 0; i < hamlibData::supModeList.count(); i++ )
+    for (int i = 0; i < supModeList.count(); i++ )
     {
-        if (mode == hamlibData::supModeList[i])
+        if (mode == supModeList[i])
         {
             iMode = i;
             return iMode;

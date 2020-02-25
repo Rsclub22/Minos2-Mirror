@@ -16,6 +16,13 @@ extern const char * RIG_STATUS_ERROR;
 //#define TXVERT_OFF "TXVERTOFF"
 
 
+
+
+namespace radioData {
+
+}
+
+
 namespace hamlibData
 {
 

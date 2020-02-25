@@ -18,17 +18,27 @@
 #include "rigfactory.h"
 #include "omniRig.h"
 
+
+enum omnirigErrorCode {OMNIRIG_OK = 0, OMNIRIG_COM_FAILED_START, OMNIRIG_ONE_FAILED_INITIALISE, OMNIRIG_TWO_FAILED_INITIALISE};
+
+
 class OmnirigControl : public RigBase
 {
     Q_OBJECT
+
+    static const char* omnirigErrorMsg[];
 public:
-    OmnirigControl(QObject *parent = nullptr);
+    enum RigNumber {One = 1, Two};
+
+    OmnirigControl(RigNumber rig_number_, QObject *parent = nullptr);
     virtual ~OmnirigControl();
 
     static void register_rigs(RigFactory::Rigs*, int, int);
 
-    enum RigNumber {One = 1, Two};
 
+
+    void setRigConnected(bool rigConnected_){rigConnected = rigConnected_;}
+    bool getRigConnected(){return rigConnected;}
 
     int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
@@ -38,8 +48,6 @@ public:
 
     int getMode(VFO vfo, MODE &mode) override;
     int setMode(VFO vfo, MODE mode) override;
-    QString convertModeQStr(MODE mode) override;
-    MODE convertQStrMode(QString mode) override;
 
     int setVolume(VFO vfo, float val) override;
     int getVolume(VFO vfo, float *val) override;
@@ -57,6 +65,10 @@ public:
     static void setTraceCommsFlag(bool value);
     void setTraceComms(bool value) override;
     bool getTraceComms() override;
+
+
+
+    OmniRig::RigParamX map_mode(QString mode);
 
 
 
@@ -81,9 +93,13 @@ private:
     int readable_params;
     int writable_params;
 
+    bool rigConnected;
+
     static MODE map_mode (OmniRig::RigParamX param);
     static OmniRig::RigParamX map_mode (MODE mode);
 
+    void traceMsg(QString msg);
+    int omnirigError(omnirigErrorCode errNum);
 };
 
 #endif // OMNIRIGCONTROL_H

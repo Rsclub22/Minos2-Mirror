@@ -16,7 +16,8 @@
 
 #include "rigmemcommondata.h"
 #include "rigutils.h"
-#include "rigcontrolcommonconstants.h"
+//#include "rigcontrolcommonconstants.h"
+#include "rigcommon.h"
 #include "rotatorcommon.h"
 
 #include "runbuttondialog.h"
@@ -29,9 +30,9 @@ RunButtonDialog::RunButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    for (int i = 0; i < hamlibData::supModeList.count(); i++)
+    for (int i = 0; i < supModeList.count(); i++)
     {
-        ui->modecb->addItem(hamlibData::supModeList[i]);
+        ui->modecb->addItem(supModeList[i]);
     }
 
 

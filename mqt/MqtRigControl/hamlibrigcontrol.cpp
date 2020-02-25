@@ -397,18 +397,7 @@ int HamlibRigControl::setMode(VFO vfo, MODE mode)
 
 // Hamlib conversion
 
-QString HamlibRigControl::convertModeQStr(MODE mode)
-{
-    return QString::fromLatin1(rig_strrmode(mapMode(mode)));
-}
 
-
-MODE HamlibRigControl::convertQStrMode(QString mode)
-{
-   rmode_t m = rig_parse_mode(mode.toLatin1());
-    return mapMode(m);
-
-}
 
 rmode_t HamlibRigControl::convertQStrRmode_t(QString mode)
 {

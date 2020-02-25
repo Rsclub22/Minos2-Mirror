@@ -318,6 +318,10 @@ private:
 
     MODE mapQStrMode(QString mode);
     void updateCurrentRadioFromAvailRadios(int ridx);
+    MODE convertQStringToMode(QString modeStr);
+    QString convertModeToQString(MODE m);
+
+
 private slots:
 
     void onStdInRead(QString);

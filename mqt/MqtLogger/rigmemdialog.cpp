@@ -16,7 +16,8 @@
 
 #include "rigmemcommondata.h"
 #include "rigutils.h"
-#include "rigcontrolcommonconstants.h"
+//#include "rigcontrolcommonconstants.h"
+#include"rigcommon.h"
 #include "rotatorcommon.h"
 #include "LoggerContest.h"
 #include "tlogcontainer.h"
@@ -34,9 +35,9 @@ RigMemDialog::RigMemDialog(QWidget *parent) :
 
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    for (int i = 0; i < hamlibData::supModeList.count(); i++)
+    for (int i = 0; i < supModeList.count(); i++)
     {
-        ui->modecb->addItem(hamlibData::supModeList[i]);
+        ui->modecb->addItem(supModeList[i]);
     }
 
     ui->callSignLineEdit->setValidator(&ucValidator);

@@ -23,6 +23,7 @@
 #include <QShortcut>
 #include "RPCCommandConstants.h"
 #include "rigmemcommondata.h"
+#include "rigcommon.h"
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"
 
