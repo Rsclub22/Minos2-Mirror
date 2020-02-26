@@ -328,11 +328,14 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
 
 void AirScoutLink::asSelected(QSharedPointer<KstUser> user)
 {
-    QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
-    QString getpath = /*"\""  +*/ watchFreq + ","
-            + mainWindow->getMyCallsign() + "," + mainWindow->getMyLoc() + ","
-            + user->baseCall + "," + user->loc /*+ "\""*/;
-    sendMessage("ASSHOWPATH", getpath);
+    if (user)
+    {
+        QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+        QString getpath = /*"\""  +*/ watchFreq + ","
+                + mainWindow->getMyCallsign() + "," + mainWindow->getMyLoc() + ","
+                + user->baseCall + "," + user->loc /*+ "\""*/;
+        sendMessage("ASSHOWPATH", getpath);
+    }
 }
 
 void AirScoutLink::clearWatchList()
@@ -342,11 +345,14 @@ void AirScoutLink::clearWatchList()
 
 void AirScoutLink::asShowPath(QSharedPointer<KstUser> user, QSharedPointer<KstUser> other)
 {
-    QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
-    QString getpath = /*"\""  +*/ watchFreq + ","
-            + user->baseCall+ "," + user->loc + ","
-            + other->baseCall + "," + other->loc /*+ "\""*/;
-    sendMessage("ASSHOWPATH", getpath);
+    if (user && other)
+    {
+        QString watchFreq = bandFreqStrings[mainWindow->getASActiveBand()];        // band
+        QString getpath = /*"\""  +*/ watchFreq + ","
+                + user->baseCall+ "," + user->loc + ","
+                + other->baseCall + "," + other->loc /*+ "\""*/;
+        sendMessage("ASSHOWPATH", getpath);
+    }
 }
 
 void AirScoutLink::askNearest(int row)
