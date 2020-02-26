@@ -222,11 +222,6 @@
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="198"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../kstmainwindow.ui" line="218"/>
         <source>Show Call Path
  in AirScout</source>

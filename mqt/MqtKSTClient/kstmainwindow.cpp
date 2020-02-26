@@ -1068,12 +1068,19 @@ void KSTMainWindow::showPlanes(QSharedPointer<KstUser> user)
 {
     planeActive = user;
 
-    QString l = QString("%1\n%2 at %3\nto %4 at %5")
-            .arg(user->lastCalcTime)
-            .arg(user->fromCall).arg(user->fromLoc).arg(user->toCall)
-            .arg(user->toLoc);
+    if (user->lastCalcTime.isEmpty())
+    {
+        ui->planeslabel->setText(tr(""));
+    }
+    else
+    {
+        QString l = QString("%1\n%2 at %3\nto %4 at %5")
+                .arg(user->lastCalcTime)
+                .arg(user->fromCall).arg(user->fromLoc).arg(user->toCall)
+                .arg(user->toLoc);
 
-    ui->planeslabel->setText(l);
+        ui->planeslabel->setText(l);
+    }
     kstPlanesModel.setPlanesVector(user->planes);
 
 //    ui->planesText->clear();
