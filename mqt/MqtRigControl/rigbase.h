@@ -60,7 +60,14 @@ public:
     //virtual bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) = 0;
 
 
+
+
 signals:
+
+    // no polling signals
+    void newFreq();
+    void newMode();
+    void comError(QString, QString, QString, QString);
 
 
 private:

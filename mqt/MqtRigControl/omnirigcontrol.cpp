@@ -146,7 +146,8 @@ OmnirigControl::~OmnirigControl()
 
 void OmnirigControl::onHandleCOMException (int code, QString source, QString desc, QString help)
 {
-    qDebug() << QString("OmniRig COM/OLE error: %1 at %2: %3 (%4)").arg (QString::number(code)).arg(source). arg(desc). arg(help);
+    traceMsg(QString("COM/OLE error: %1 at %2: %3 (%4)").arg (QString::number(code)).arg(source). arg(desc). arg(help));
+    emit comError(QString::number(code), source, desc, help);
 }
 
 void OmnirigControl::onHandleVisibleChange()
@@ -163,16 +164,36 @@ void OmnirigControl::onHandleRigTypeChange(int rigNumber)
 {
     if (!omni_rig || omni_rig->isNull())
         return;
-    qDebug() << QString("OmniRig rig type change: rig = $1").arg(rigNumber);
+    qDebug() << "OmniRigTransceiver rig type change: rig =" << rigNumber;
+
+
 
 }
 
 
-void OmnirigControl::onHandleStatusChange(int)
+void OmnirigControl::onHandleStatusChange(int rigNumber)
 {
     if (!omni_rig || omni_rig->isNull())
         return;
-    qDebug() << QString("OmniRig status change for rig %1").arg (rig_number).toLocal8Bit ();
+    if (rig_number == rigNumber)
+    {
+        if (!rig || rig->isNull ())
+            return;
+
+        traceMsg(QString("Rig %1 Status Change: new status = %2").arg(rigNumber).arg(rig->StatusStr()));
+        if (OmniRig::ST_ONLINE != rig->Status())
+        {
+            setRigConnected(false);
+
+        }
+        else
+        {
+            setRigConnected(true);
+
+        }
+
+
+    }
 
 }
 
@@ -184,7 +205,7 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
     traceMsg(QString("OmniRig params change: params = 0x%1 for rig %2")
           .arg (params, 8, 16, QChar ('0'))
           .arg (rig_number).toLocal8Bit ());
-         // << "state before:" << state ());
+          //<< "state before:" << state ());
     if (rigNumber == rig_number)
     {
         if (!rig || rig->isNull ())
@@ -239,8 +260,8 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
         }
         if (params & OmniRig::PM_FREQ)
         {
-            qDebug() << QString("OmniRig FREQ");
-            //need_frequency = true;
+            traceMsg(QString("Parameter change PM_FREQ"));
+            emit newFreq();
         }
         if (params & OmniRig::PM_FREQA)
         {
@@ -379,43 +400,44 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
         }
         if (params & OmniRig::PM_CW_U)
         {
-            qDebug() << QString("OmniRig CW-R");
-            //update_mode (CW_R);
+            traceMsg(QString("Parameter change - mode PM_CW_U"));
+            emit newMode();
+
         }
         if (params & OmniRig::PM_CW_L)
         {
-            qDebug() << QString("OmniRig CW");
-            //update_mode (CW);
+           traceMsg(QString("Parameter change - mode PM_CW_L"));
+           emit newMode();
         }
         if (params & OmniRig::PM_SSB_U)
         {
-            qDebug() << QString("OmniRig USB");
-            //update_mode (USB);
+            traceMsg(QString("Parameter change - mode PM_SSB_U"));
+            emit newMode();
         }
         if (params & OmniRig::PM_SSB_L)
         {
-            qDebug() << QString("OmniRig LSB");
-            //update_mode (LSB);
+            traceMsg(QString("Parameter change - mode PM_SSB_L"));
+            emit newMode();
         }
         if (params & OmniRig::PM_DIG_U)
         {
-            qDebug() << QString("OmniRig DATA-U");
-            //update_mode (DIG_U);
+            traceMsg(QString("Parameter change - mode PM_DIG_U"));
+            emit newMode();
         }
         if (params & OmniRig::PM_DIG_L)
         {
-            qDebug() << QString("OmniRig DATA-L");
-            //update_mode (DIG_L);
+            traceMsg(QString("Parameter change - mode PM_DIG_L"));
+            emit newMode();
         }
         if (params & OmniRig::PM_AM)
         {
-            qDebug() << QString("OmniRig AM");
-            //update_mode (AM);
+            traceMsg(QString("Parameter change - mode PM_AM"));
+            emit newMode();
         }
         if (params & OmniRig::PM_FM)
         {
-            qDebug() << QString("OmniRig FM");
-            //update_mode (FM);
+            traceMsg(QString("Parameter change - mode PM_FM"));
+            emit newMode();
         }
 
         //if (old_state != state () || send_update_signal_)
@@ -584,36 +606,79 @@ int OmnirigControl::closeRig()
 int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
 {
     Q_UNUSED(vfo)
-    freq = static_cast<Frequency>(rig->GetRxFrequency());
-    traceMsg(QString("GetFrequency %1").arg(QString::number(freq)));
-    return omnirigError(OMNIRIG_OK);
+    if (!rig || rig->isNull ())
+    {
+        return omnirigError(OMNIRIG_RIG_NULL);
+    }
+
+    if (rigConnected)
+    {
+        freq = static_cast<Frequency>(rig->GetRxFrequency());
+        traceMsg(QString("GetFrequency %1").arg(QString::number(freq)));
+        return omnirigError(OMNIRIG_OK);
+    }
+
+    return omnirigError(OMNIRIG_OFFLINE);
 }
 
 int OmnirigControl::setFrequency(Frequency freq, VFO vfo)
 {
     Q_UNUSED(vfo)
-    traceMsg(QString("SetFrequency = %1").arg(QString::number(freq)));
-    rig->SetFreq(static_cast<int>(freq));
-    return omnirigError(OMNIRIG_OK);
+    if (!rig || rig->isNull ())
+    {
+        return omnirigError(OMNIRIG_RIG_NULL);
+    }
+
+
+    if (rigConnected)
+    {
+        traceMsg(QString("SetFrequency = %1").arg(QString::number(freq)));
+        rig->SetFreq(static_cast<int>(freq));
+        return omnirigError(OMNIRIG_OK);
+    }
+
+    return omnirigError(OMNIRIG_OFFLINE);
+
+
 }
 
 int OmnirigControl::getMode(VFO vfo, MODE &mode)
 {
     Q_UNUSED(vfo)
-    mode = map_mode(rig->Mode());
-    traceMsg(QString("GetMode = %1").arg(convertModeToQString(mode)));
-    return omnirigError(OMNIRIG_OK);
+    if (!rig || rig->isNull ())
+    {
+        return omnirigError(OMNIRIG_RIG_NULL);
+    }
+
+    if (rigConnected)
+    {
+        mode = map_mode(rig->Mode());
+        traceMsg(QString("GetMode = %1").arg(convertModeToQString(mode)));
+        return omnirigError(OMNIRIG_OK);
+    }
+
+     return omnirigError(OMNIRIG_OFFLINE);
 
 }
 
 int OmnirigControl::setMode(VFO vfo, MODE mode)
 {
     Q_UNUSED(vfo)
-    traceMsg(QString("SetMode = %1").arg(convertModeToQString(mode)));
-    OmniRig::RigParamX m = map_mode(mode);
-    rig->SetMode(m);
+    if (!rig || rig->isNull ())
+    {
+        return omnirigError(OMNIRIG_RIG_NULL);
+    }
 
-    return omnirigError(OMNIRIG_OK);
+    if (rigConnected)
+    {
+        traceMsg(QString("SetMode = %1").arg(convertModeToQString(mode)));
+        OmniRig::RigParamX m = map_mode(mode);
+        rig->SetMode(m);
+
+        return omnirigError(OMNIRIG_OK);
+    }
+
+    return omnirigError(OMNIRIG_OFFLINE);
 
 }
 

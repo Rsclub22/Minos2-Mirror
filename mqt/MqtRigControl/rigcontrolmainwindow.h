@@ -367,6 +367,8 @@ signals:
     void rigCtldErrorMessage();
     void rigCtldStarted();
     void rigCtldStatusTimeout();
+    void onNewFreq();
+    void onNewMode();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

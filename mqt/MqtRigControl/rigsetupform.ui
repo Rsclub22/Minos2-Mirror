@@ -7,13 +7,100 @@
     <x>0</x>
     <y>0</y>
     <width>914</width>
-    <height>236</height>
+    <height>285</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_14">
+     <item>
+      <widget class="QLabel" name="pollIntervalLbl">
+       <property name="text">
+        <string>Poll Interval</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="pollInterval"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>MGM Mode</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="mgmBox"/>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="useRigCtldChkBox">
+       <property name="text">
+        <string>Use RigCtld</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="rigCtldNetworkAddLbl">
+       <property name="text">
+        <string>Network Address</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="rigCtldNetworkAddBox">
+       <property name="maxLength">
+        <number>15</number>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="rigCtldNetPortLbl">
+       <property name="text">
+        <string>Port</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="rigCtldNetPortBox">
+       <property name="inputMask">
+        <string/>
+       </property>
+       <property name="maxLength">
+        <number>32767</number>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_7">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_12">
      <item>
@@ -241,79 +328,51 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_14">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLabel" name="pollIntervalLbl">
+      <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Poll Interval</string>
+        <string>Omnirig Supported Bands</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="pollInterval"/>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
+      <widget class="QCheckBox" name="sup50MhzChkbox">
        <property name="text">
-        <string>MGM Mode</string>
+        <string>50 MHz</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="mgmBox"/>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="useRigCtldChkBox">
+      <widget class="QCheckBox" name="sup70MhzChkbox">
        <property name="text">
-        <string>Use RigCtld</string>
+        <string>70 MHz</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="rigCtldNetworkAddLbl">
+      <widget class="QCheckBox" name="sup144MhzChkbox">
        <property name="text">
-        <string>Network Address</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <string>144 MHz</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="rigCtldNetworkAddBox">
-       <property name="maxLength">
-        <number>15</number>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="rigCtldNetPortLbl">
+      <widget class="QCheckBox" name="sup432MhzChkbox">
        <property name="text">
-        <string>Port</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <string>432 MHz</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="rigCtldNetPortBox">
-       <property name="inputMask">
-        <string/>
-       </property>
-       <property name="maxLength">
-        <number>32767</number>
-       </property>
-       <property name="clearButtonEnabled">
-        <bool>true</bool>
+      <widget class="QCheckBox" name="sup1956MhzChkbox">
+       <property name="text">
+        <string>1296MHz</string>
        </property>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_7">
+      <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

@@ -691,6 +691,15 @@ void RigControlMainWindow::upDateRadio()
                         }
                     }
                 }
+                else
+                {
+                    // not polling get initial values
+                    getAndSendFrequency(CURRENT_VFO);
+                    getAndSendMode(CURRENT_VFO);
+                    // connect signals for future updates
+                    connect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq()));
+                    connect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()));
+                }
 
 
 
@@ -1110,7 +1119,19 @@ int RigControlMainWindow::openRadio()
 
 void RigControlMainWindow::closeRadio()
 {
-    pollTimer->stop();
+
+    if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModelName).pollData)
+    {
+        pollTimer->stop();
+    }
+    else
+    {
+        disconnect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq));
+        disconnect(radio, SIGNAL(onNewMode()), this, SLOT(onNewMode()));
+    }
+
+
+
     int retCode;
 
     if (radio != nullptr)
@@ -1651,6 +1672,10 @@ int RigControlMainWindow::getAndSendFrequency(VFO vfo)
     return retCode;
 }
 
+void RigControlMainWindow::onNewFreq()
+{
+    getAndSendFrequency(CURRENT_VFO);
+}
 
 QString RigControlMainWindow::getBand(Frequency freq)
 {
@@ -2162,6 +2187,12 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
     }
 
     return retCode;
+}
+
+
+void RigControlMainWindow::onNewMode()
+{
+    getAndSendMode(CURRENT_VFO);
 }
 
 void RigControlMainWindow::loggerSetMode(QString mode)
