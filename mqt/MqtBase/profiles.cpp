@@ -12,7 +12,10 @@
 #include "INIFile.h"
 #include "profiles.h"
 //#include "ScreenConfigFile.h"
-const QString defaultLayoutName = QString("default");
+QString defaultLayoutName()
+{
+    return QCoreApplication::translate("Default Screen Config", "default");
+}
 
 AppSettingsBundle::AppSettingsBundle():
     SettingsBundle()
@@ -85,8 +88,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpStatisticsPeriod2, "Statistics Period 2", 60, "", QT_TR_NOOP("Statistics Period 2"), false ) ) );
 
         {
-            QString temp = defaultLayoutName;
-            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.toUtf8().constData(), defaultLayoutName.toUtf8(), "hint", false ) ) );
+            QByteArray temp = defaultLayoutName().toUtf8();
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.constData(), temp, "hint", false ) ) );
         }
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowTPM, "ShowTPM", false, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );

@@ -657,7 +657,7 @@ void TSingleLogFrame::buildScreenLayout()
     trace("TSingleLogFrame::buildScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid + " to layout " + curConfigName);
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
-        curConfigName = defaultLayoutName;
+        curConfigName = defaultLayoutName();
     }
     curScreenLayout = curConfigName;
     SC sc = scf.configs[curConfigName];

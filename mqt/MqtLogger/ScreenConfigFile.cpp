@@ -96,7 +96,7 @@ void ScreenConfigFile::readFile(QString f, QWidget *parent)
     {
         trace("Using default configuration");
         s = defaultConfig
-                .arg(defaultLayoutName)
+                .arg(defaultLayoutName())
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctRigControl))

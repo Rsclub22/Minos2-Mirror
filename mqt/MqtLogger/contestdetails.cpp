@@ -385,7 +385,7 @@ void ContestDetails::setDetails(  )
 
    QString curConfigName = contest->screenLayout.getValue();
    if (curConfigName.isEmpty())
-       curConfigName = defaultLayoutName;
+       curConfigName = defaultLayoutName();
 
    int j = 0;
    int crow = 0;
