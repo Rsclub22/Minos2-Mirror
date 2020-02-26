@@ -111,63 +111,135 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget1">
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>User Filter</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="CSChatFilter">
-            <property name="toolTip">
-             <string>Only show users for this band</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="CSFilter">
-            <property name="toolTip">
-             <string>Look for this string in users</string>
-            </property>
-            <property name="clearButtonEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="clearUserFilter">
-            <property name="toolTip">
-             <string>Clear the user filters</string>
-            </property>
-            <property name="text">
-             <string>X</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QTableView" name="CSTable">
-          <property name="alternatingRowColors">
-           <bool>true</bool>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::SingleSelection</enum>
-          </property>
-          <property name="selectionBehavior">
-           <enum>QAbstractItemView::SelectRows</enum>
-          </property>
-          <property name="sortingEnabled">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+      <widget class="MinosSplitter" name="callSplitter">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <widget class="QWidget" name="layoutWidget1">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>User Filter</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="CSChatFilter">
+             <property name="toolTip">
+              <string>Only show users for this band</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="CSFilter">
+             <property name="toolTip">
+              <string>Look for this string in users</string>
+             </property>
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="clearUserFilter">
+             <property name="toolTip">
+              <string>Clear the user filters</string>
+             </property>
+             <property name="text">
+              <string>X</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTableView" name="CSTable">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <property name="selectionBehavior">
+            <enum>QAbstractItemView::SelectRows</enum>
+           </property>
+           <property name="sortingEnabled">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QFrame" name="planesFrame">
+        <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="3,1">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QTableView" name="planesView"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QLabel" name="planeslabel">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="showInAS">
+             <property name="text">
+              <string>Show Call Path
+ in AirScout</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="showMPath">
+             <property name="text">
+              <string>Show Message 
+Path in AirScout</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="noSetCallcb">
+             <property name="text">
+              <string>Don't set filter
+when user selected</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
       </widget>
       <widget class="MinosSplitter" name="msgSplitter">
        <property name="orientation">
@@ -222,51 +294,6 @@
             <enum>QAbstractItemView::SingleSelection</enum>
            </property>
           </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QFrame" name="planesFrame">
-        <layout class="QVBoxLayout" name="verticalLayout_7">
-         <item>
-          <widget class="QTextEdit" name="planesText"/>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <widget class="QCheckBox" name="noSetCallcb">
-             <property name="text">
-              <string>Don't set filter when user selected</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="showMPath">
-             <property name="text">
-              <string>Show Message Path in AirScout</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="showInAS">
-             <property name="text">
-              <string>Show Path in AirScout</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
          </item>
         </layout>
        </widget>

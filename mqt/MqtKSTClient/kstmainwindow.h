@@ -10,6 +10,7 @@
 #include <QRadioButton>
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
+#include "kstplanesmodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
@@ -37,10 +38,13 @@ class KSTMainWindow : public QMainWindow
     QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
     bool callVectorChanged = false;
 
+    KstPlanesModel kstPlanesModel;
+    KstPlanesGridSortFilterModel kstPlanesFilterModel;
 
     QSharedPointer<HtmlDelegate> meepDelegate;
     QSharedPointer<HtmlDelegate> messageDelegate;
     QSharedPointer<HtmlDelegate> CSDelegate;
+    QSharedPointer<HtmlDelegate> PlanesDelegate;
 
     QTcpSocket* kstclient;
 
@@ -190,6 +194,8 @@ private slots:
     void on_showInAS_clicked();
 
     void on_showMPath_clicked();
+
+    void on_callSplitter_splitterMoved(int pos, int index);
 
 private:
     Ui::KSTMainWindow *ui;

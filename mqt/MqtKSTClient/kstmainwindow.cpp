@@ -119,6 +119,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     state = settings.value("msgSplitterState").toByteArray();
     ui->msgSplitter->restoreState(state);
 
+    state = settings.value("callSplitterState").toByteArray();
+    ui->callSplitter->restoreState(state);
+
+
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
@@ -144,9 +148,13 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     kstCallFilterModel.setSourceModel(&kstCallModel);
     ui->CSTable->setModel(&kstCallFilterModel);
 
+    kstPlanesFilterModel.setSourceModel(&kstPlanesModel);
+    ui->planesView->setModel(&kstPlanesFilterModel);
+
     meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
     messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
     CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    PlanesDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
 
     // these are used for sizing when adjust to content
     kstMessageModel.delegate = messageDelegate;
@@ -155,6 +163,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->meepTable->setItemDelegate(meepDelegate.data());
     ui->messageTable->setItemDelegate(messageDelegate.data());
     ui->CSTable->setItemDelegate(CSDelegate.data());
+    ui->planesView->setItemDelegate(PlanesDelegate.data());
 
     QHeaderView *verticalHeader = ui->meepTable->verticalHeader();
     verticalHeader->setVisible(false);
@@ -169,17 +178,23 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     QSize ms = messageDelegate->docSize("XX");
     verticalHeader->setDefaultSectionSize(ms.height() *4/5);
     verticalHeader->setMinimumSectionSize(10);
-
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
     verticalHeader = ui->CSTable->verticalHeader();
     verticalHeader->setVisible(false);
     verticalHeader->setDefaultSectionSize(10);
     verticalHeader->setMinimumSectionSize(10);
-
     verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    verticalHeader = ui->planesView->verticalHeader();
+    verticalHeader->setVisible(false);
+    verticalHeader->setDefaultSectionSize(10);
+    verticalHeader->setMinimumSectionSize(10);
+    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->planesView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    QVector<Aircraft> qva;
+    kstPlanesModel.setPlanesVector(qva);
 
     state = settings.value("CSTable/state").toByteArray();
     ui->CSTable->horizontalHeader()->restoreState(state);
@@ -190,6 +205,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     state = settings.value("meepTable/state").toByteArray();
     ui->meepTable->horizontalHeader()->restoreState(state);
 
+//    state = settings.value("planesView/state").toByteArray();
+//    ui->planesView->horizontalHeader()->restoreState(state);
+
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
     ui->CSTable->horizontalHeader()->setSectionsMovable( true );
 
@@ -198,6 +216,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect( ui->messageTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     connect( ui->meepTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
+    connect( ui->planesView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
 
     connect( ui->CSTable->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
@@ -219,6 +239,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->messageFilter->installEventFilter(this);
     ui->callEdit->installEventFilter(this);
     ui->msgEdit->installEventFilter(this);
+    ui->planesView->installEventFilter(this);
 
     installEventFilter(this);   // so we pick up return, and implement the default button
 
@@ -313,7 +334,13 @@ void KSTMainWindow::connectToHost()
     if (kstChatSelection.count())
     {
         kstCallModel.locator = myLoc;
-        kstclient->connectToHost(serverName, serverPort.toUShort());
+        if (kstclient->state() != QAbstractSocket::ConnectedState
+           && kstclient->state() != QAbstractSocket::ConnectingState
+           && kstclient->state() != QAbstractSocket::ClosingState
+           && kstclient->state() != QAbstractSocket::HostLookupState)
+        {
+            kstclient->connectToHost(serverName, serverPort.toUShort());
+        }
     }
 }
 
@@ -993,6 +1020,21 @@ void KSTMainWindow::on_kstSplitter_splitterMoved(int /*pos*/, int /*index*/)
     QByteArray state = ui->kstSplitter->saveState();
     settings.setValue("kstSplitterState" , state);
 }
+
+void KSTMainWindow::on_msgSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QSettings settings;
+    QByteArray state = ui->msgSplitter->saveState();
+    settings.setValue("msgSplitterState" , state);
+}
+
+void KSTMainWindow::on_callSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QSettings settings;
+    QByteArray state = ui->callSplitter->saveState();
+    settings.setValue("callSplitterState" , state);
+}
+
 void KSTMainWindow::on_sectionResized(int, int, int)
 {
     QSettings settings;
@@ -1026,15 +1068,23 @@ void KSTMainWindow::showPlanes(QSharedPointer<KstUser> user)
 {
     planeActive = user;
 
-    ui->planesText->clear();
-    ui->planesText->append(QString("%1 %2 at %3 to %4 at %5").arg(user->lastCalcTime).arg(user->fromCall).arg(user->fromLoc).arg(user->toCall).arg(user->toLoc) );
-    ui->planesText->append(QString());
-    foreach(const Aircraft &ac, user->planes)
-    {
-        ui->planesText->append(ac.getAircraft() );
-    }
-    ui->planesText->moveCursor (QTextCursor::Start) ;
-    ui->planesText->ensureCursorVisible() ;
+    QString l = QString("%1\n%2 at %3\nto %4 at %5")
+            .arg(user->lastCalcTime)
+            .arg(user->fromCall).arg(user->fromLoc).arg(user->toCall)
+            .arg(user->toLoc);
+
+    ui->planeslabel->setText(l);
+    kstPlanesModel.setPlanesVector(user->planes);
+
+//    ui->planesText->clear();
+//    ui->planesText->append(QString("%1 %2 at %3 to %4 at %5").arg(user->lastCalcTime).arg(user->fromCall).arg(user->fromLoc).arg(user->toCall).arg(user->toLoc) );
+//    ui->planesText->append(QString());
+//    foreach(const Aircraft &ac, user->planes)
+//    {
+//        ui->planesText->append(ac.getAircraft() );
+//    }
+//    ui->planesText->moveCursor (QTextCursor::Start) ;
+//    ui->planesText->ensureCursorVisible() ;
 }
 
 void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
@@ -1184,13 +1234,6 @@ void KSTMainWindow::on_meepButton_clicked()
     }
 }
 
-void KSTMainWindow::on_msgSplitter_splitterMoved(int /*pos*/, int /*index*/)
-{
-    QSettings settings;
-    QByteArray state = ui->msgSplitter->saveState();
-    settings.setValue("msgSplitterState" , state);
-}
-
 void KSTMainWindow::setNameFromCall(QString call)
 {
     QSharedPointer<KstUser> test(new KstUser());
@@ -1289,7 +1332,15 @@ void KSTMainWindow::doLoginChanges()
         {
             kstCallModel.locator = myLoc;
             if (autoConnect)
-                kstclient->connectToHost(serverName, serverPort.toUShort());
+            {
+                if (kstclient->state() != QAbstractSocket::ConnectedState
+                   && kstclient->state() != QAbstractSocket::ConnectingState
+                   && kstclient->state() != QAbstractSocket::ClosingState
+                   && kstclient->state() != QAbstractSocket::HostLookupState)
+                {
+                    kstclient->connectToHost(serverName, serverPort.toUShort());
+                }
+            }
         }
 
     }
