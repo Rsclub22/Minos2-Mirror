@@ -16,6 +16,10 @@ QString defaultLayoutName()
 {
     return QCoreApplication::translate("Default Screen Config", "default");
 }
+QString defaultSessionName()
+{
+    return QCoreApplication::translate("Default Log Session", "Default Session");
+}
 
 AppSettingsBundle::AppSettingsBundle():
     SettingsBundle()
@@ -64,8 +68,12 @@ BundleFile::BundleFile( PROFILES p )
         break;
     case epPRELOADPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppCurrent, "CurrentLog", 0, nullptr, QT_TR_NOOP("hint"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppDefSession, "DefaultSessionName", QT_TR_NOOP("Default Session"), QT_TR_NOOP("Default Session"), QT_TR_NOOP("hint"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppSession, "CurrentSession", QT_TR_NOOP("Default Session"), QT_TR_NOOP("Default Session"), QT_TR_NOOP("hint"), false ) ) );
+        {
+            QByteArray temp = defaultSessionName().toUtf8();
+
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppDefSession, "DefaultSessionName", temp.constData(), temp, QT_TR_NOOP("hint"), false ) ) );
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppSession, "CurrentSession", temp.constData(), temp, QT_TR_NOOP("hint"), false ) ) );
+        }
         break;
 
     case epLISTSPROFILE:
