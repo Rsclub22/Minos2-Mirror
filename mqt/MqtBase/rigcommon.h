@@ -102,6 +102,10 @@ public:
       dest.rigCtldEnable = srce->rigCtldEnable;
       dest.rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
       dest.rigCtldNetworkPort = srce->rigCtldNetworkPort;
+      dest.support50MHz = srce->support50MHz;
+      dest.support144MHz = srce->support144MHz;
+      dest.support432MHz = srce->support432MHz;
+      dest.support1296MHz = srce->support1296MHz;
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
@@ -167,6 +171,11 @@ public:
   bool ritEnable = false;
   bool transVertEnable  = false;
   bool volAvail = false;
+  bool support50MHz = false;        // for non hamlib radios
+  bool support70MHz = false;
+  bool support144MHz = false;
+  bool support432MHz = false;
+  bool support1296MHz = false;
   QStringList transVertNames;
   int numTransverters = 0;
   bool enableTransSwitch = false;

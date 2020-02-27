@@ -193,12 +193,24 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     radioTab[tabNum]->setForceRTS(radioTab[tabNum]->getRadioData()->forceRts);
     radioTab[tabNum]->setNetAddress(radioTab[tabNum]->getRadioData()->networkAdd);
     radioTab[tabNum]->setNetPortNum(radioTab[tabNum]->getRadioData()->networkPort);
+
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab[tabNum]->getRadioData()->rigModel);
+
+
     radioTab[tabNum]->setPollInterval(radioTab[tabNum]->getRadioData()->pollInterval);
+    if (rigCap.pollData)
+    {
+        radioTab[tabNum]->pollIntervalVisible(true);
+    }
+    else
+    {
+        radioTab[tabNum]->pollIntervalVisible(false);
+    }
+
     radioTab[tabNum]->setTransVertSelected(radioTab[tabNum]->getRadioData()->transVertEnable);
     radioTab[tabNum]->setEnableTransVertSw(radioTab[tabNum]->getRadioData()->enableTransSwitch);
     radioTab[tabNum]->setEnableLocalTransVertSw(radioTab[tabNum]->getRadioData()->enableLocTVSwMsg);
 
-    RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab[tabNum]->getRadioData()->rigModel);
 
 
     if (rigCap.portType == RigCapConstants::PortType::network)
@@ -230,6 +242,21 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
         radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
     }
     radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);
+
+    radioTab[tabNum]->setSupport50MHzChkBox(radioTab[tabNum]->getRadioData()->support50MHz);
+    radioTab[tabNum]->setSupport70MHzChkBox(radioTab[tabNum]->getRadioData()->support70MHz);
+    radioTab[tabNum]->setSupport144MHzChkBox(radioTab[tabNum]->getRadioData()->support144MHz);
+    radioTab[tabNum]->setSupport432MHzChkBox(radioTab[tabNum]->getRadioData()->support432MHz);
+    radioTab[tabNum]->setSupport1296MHzChkBox(radioTab[tabNum]->getRadioData()->support1296MHz);
+
+    if (rigCap.supportGetSupBands)
+    {
+        radioTab[tabNum]->setSupportBandCheckBoxVisible(false);
+    }
+    else
+    {
+        radioTab[tabNum]->setSupportBandCheckBoxVisible(true);
+    }
 
     radioTab[tabNum]->setUseRigctldCheckbox(radioTab[tabNum]->getRadioData()->rigCtldEnable);
     radioTab[tabNum]->rigCtldNetworkVisible(radioTab[tabNum]->getRadioData()->rigCtldEnable);
@@ -812,6 +839,11 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
     config.setValue("netPort", radioTab[radNum]->getRadioData()->networkPort);
     config.setValue("mgmMode", radioTab[radNum]->getRadioData()->mgmMode);
+    config.setValue("support50Mhz", radioTab[radNum]->getRadioData()->support50MHz);
+    config.setValue("support70Mhz", radioTab[radNum]->getRadioData()->support70MHz);
+    config.setValue("support144Mhz", radioTab[radNum]->getRadioData()->support144MHz);
+    config.setValue("support432Mhz", radioTab[radNum]->getRadioData()->support432MHz);
+    config.setValue("support1296Mhz", radioTab[radNum]->getRadioData()->support1296MHz);
     config.setValue("enableTransVertSw", radioTab[radNum]->getRadioData()->enableTransSwitch);
     config.setValue("locTransSwEnable", radioTab[radNum]->getRadioData()->enableLocTVSwMsg);
     config.setValue("locTransVertSwComport", radioTab[radNum]->getRadioData()->locTVSwComport);
@@ -851,6 +883,11 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->networkAdd = config.value("netAddress", "").toString();
     radioTab[radNum]->getRadioData()->networkPort = config.value("netPort", "").toString();
     radioTab[radNum]->getRadioData()->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
+    radioTab[radNum]->getRadioData()->support50MHz = config.value("support50Mhz", false).toBool();
+    radioTab[radNum]->getRadioData()->support70MHz = config.value("support70Mhz", false).toBool();
+    radioTab[radNum]->getRadioData()->support144MHz = config.value("support144Mhz", false).toBool();
+    radioTab[radNum]->getRadioData()->support432MHz = config.value("support432Mhz", false).toBool();
+    radioTab[radNum]->getRadioData()->support1296MHz = config.value("support1296Mhz", false).toBool();
     radioTab[radNum]->getRadioData()->enableTransSwitch = config.value("enableTransVertSw", false).toBool();
     radioTab[radNum]->getRadioData()->enableLocTVSwMsg = config.value("locTransSwEnable", false).toBool();
     radioTab[radNum]->getRadioData()->locTVSwComport = config.value("locTransVertSwComport", "").toString();

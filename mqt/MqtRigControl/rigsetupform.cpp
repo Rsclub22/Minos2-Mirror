@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2020
 //
 //
 //
@@ -82,6 +82,13 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, cons
     connect(ui->rigCtldNetworkAddBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkAddressSelected()));
     connect(ui->rigCtldNetPortBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkPortSelected()));
 
+    connect(ui->sup50MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup50MhzChkBoxClicked(bool)));
+    connect(ui->sup70MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup70MhzChkBoxClicked(bool)));
+    connect(ui->sup144MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup144MhzChkBoxClicked(bool)));
+    connect(ui->sup432MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup432MhzChkBoxClicked(bool)));
+    connect(ui->sup1296MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup1296MhzChkBoxClicked(bool)));
+
+
     // transvert
     connect(ui->enableTransVertSw, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSwSel(bool)));
     connect(ui->locTvConChk, SIGNAL(clicked(bool)), this, SLOT(localTransVertSwSel(bool)));
@@ -143,10 +150,20 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioData->rigModel);
 
 
-        radioData->rigModelNumber = rigFactory->supported_rigs()->value(radioData->rigModel).modelNumber;
+        radioData->rigModelNumber = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelNumber;
         radioData->rigModelName = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelName;
         radioData->rigMfg_Name = rigFactory->supported_rigs()->value(radioData->rigModel).rigManufacturer;
         radioData->portType = rigFactory->supported_rigs()->value(radioData->rigModel).portType;
+
+
+        if (rigCap.pollData)
+        {
+            pollIntervalVisible(true);
+        }
+        else
+        {
+            pollIntervalVisible(false);
+        }
 
 
         if (rigCap.rigManufacturer == "Icom")
@@ -183,7 +200,14 @@ void RigSetupForm::setupRadioModel(QString radioModel)
                 radioData->rigCtldEnable = false;
         }
 
-
+        if (rigCap.supportGetSupBands)
+        {
+            setSupportBandCheckBoxVisible(false);
+        }
+        else
+        {
+            setSupportBandCheckBoxVisible(true);
+        }
 
 
         // does this radio support antenna sw?
@@ -1076,7 +1100,103 @@ void RigSetupForm::fillMgmModes()
 
 
 
+/****************** Support Bands Checkbox ***************************/
 
+
+void RigSetupForm::onSup50MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup50MhzChkbox->isChecked();
+    if (radioData->support50MHz != checked)
+    {
+        radioData->support50MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onSup70MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup70MhzChkbox->isChecked();
+    if (radioData->support70MHz != checked)
+    {
+        radioData->support70MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onSup144MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup144MhzChkbox->isChecked();
+    if (radioData->support144MHz != checked)
+    {
+        radioData->support144MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onSup432MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup432MhzChkbox->isChecked();
+    if (radioData->support432MHz != checked)
+    {
+        radioData->support432MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onSup1296MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup1296MhzChkbox->isChecked();
+    if (radioData->support1296MHz != checked)
+    {
+        radioData->support1296MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::setSupport50MHzChkBox(bool checked)
+{
+    ui->sup50MhzChkbox->setChecked(checked);
+}
+
+void RigSetupForm::setSupport70MHzChkBox(bool checked)
+{
+     ui->sup50MhzChkbox->setChecked(checked);
+}
+
+void RigSetupForm::setSupport144MHzChkBox(bool checked)
+{
+     ui->sup50MhzChkbox->setChecked(checked);
+}
+
+void RigSetupForm::setSupport432MHzChkBox(bool checked)
+{
+     ui->sup50MhzChkbox->setChecked(checked);
+}
+
+void RigSetupForm::setSupport1296MHzChkBox(bool checked)
+{
+     ui->sup50MhzChkbox->setChecked(checked);
+}
+
+void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
+{
+    ui->sup50MhzChkbox->setVisible(visible);
+    ui->sup70MhzChkbox->setVisible(visible);
+    ui->sup144MhzChkbox->setVisible(visible);
+    ui->sup432MhzChkbox->setVisible(visible);
+    ui->sup1296MhzChkbox->setVisible(visible);
+    ui->supportedBandGroupBox->setVisible(visible);
+}
 
 
 

@@ -461,11 +461,12 @@ void OmnirigControl::onHandleCustomReply(int, QVariant const&, QVariant const&)
 void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
 {
     (*rigsList)[OmniRigOneName] = RigCapabilities(
-                id1,
                 RigCapConstants::PortType::none,
                 "Afreet",
                 "Omnirig",
                 OmniRigOneName,
+                id1,
+                false,
                 false,
                 false,
                 false,
@@ -482,11 +483,12 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
 
 
     (*rigsList)[OmniRigTwoName] = RigCapabilities(
-                id2,
                 RigCapConstants::PortType::none,
                 "Afreet",
                 "Omnirig",
                 OmniRigTwoName,
+                id2,
+                false,
                 false,
                 false,
                 false,

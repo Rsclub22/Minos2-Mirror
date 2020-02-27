@@ -1020,7 +1020,7 @@ int RigControlMainWindow::openRadio()
         return OPEN_FAILED;
     }
 
-    radio = rigFactory->createRigs(rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).RigCapabilities::modelNumber);
+    radio = rigFactory->createRigs(rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).RigCapabilities::rigModelNumber);
     radio->setTraceComms(traceCommsFlag);
     rigCap = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel);
 
@@ -2034,7 +2034,7 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
 
     // find the bands the radio supports
     QStringList supBandsList;
-    buildSupportedRadioBands(radioModelNumber, supBandsList);
+    buildSupportedRadioBands(radioIdx, radioModelNumber, supBandsList);
     qDebug() << "buildSupBandList" << radioModelNumber << supBandsList;
 
     // merge radio bands and transverter bands
@@ -2064,22 +2064,46 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
 
 
 // probe radio for supported bands
-void RigControlMainWindow::buildSupportedRadioBands(int radioModelNumber, QStringList& supBandList)
+void RigControlMainWindow::buildSupportedRadioBands(int radioIdx, int radioModelNumber, QStringList& supBandList)
 {
 
-
-    //RIG *my_rig = rig_init(radioModelNumber);
-    //if (my_rig)
-   // {
-
+    if (radioModelNumber <= RigId::NonHamlibBaseId)
+    {
         for (int i = 0; i < bands.count(); i++)
         {
+
             if (rigFactory->checkForBands(radioModelNumber, bands[i].fLow))
             {
                 supBandList.append(bands[i].name);
+
             }
         }
-//    }
+    }
+    else
+    {
+        // non hamlib radios
+        if (setupRadio->availRadioData[radioIdx]->support50MHz)
+        {
+            supBandList.append(bands[0].name);
+        }
+        if (setupRadio->availRadioData[radioIdx]->support70MHz)
+        {
+            supBandList.append(bands[1].name);
+        }
+        if (setupRadio->availRadioData[radioIdx]->support144MHz)
+        {
+            supBandList.append(bands[2].name);
+        }
+        if (setupRadio->availRadioData[radioIdx]->support432MHz)
+        {
+            supBandList.append(bands[3].name);
+        }
+        if (setupRadio->availRadioData[radioIdx]->support1296MHz)
+        {
+            supBandList.append(bands[4].name);
+        }
+
+    }
 
 }
 
@@ -3193,7 +3217,7 @@ void RigControlMainWindow::aboutRigConfig()
             msg.append(tr("Radio Name = %1\n").arg(rigCap.rigName));
             msg.append(tr("Radio Number = %1\n").arg(setupRadio->currentRadio.radioNumber));
             msg.append(tr("Rig Model = %1\n").arg(rigCap.rigModelName));
-            msg.append(tr("Rig Number = %1\n").arg(rigCap.modelNumber));
+            msg.append(tr("Rig Number = %1\n").arg(rigCap.rigModelNumber));
             msg.append(tr("Rig Manufacturer = %1\n").arg(rigCap.rigManufacturer));
             if (rigCap.rigManufacturer == "Icom")
             {
@@ -3288,7 +3312,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         trace(QString("Radio Name = %1").arg(rigCap.rigName));
         trace(QString("Radio Number = %1").arg(setupRadio->currentRadio.radioNumber));
         trace(QString("Rig Model = %1").arg(rigCap.rigModelName));
-        trace(QString("Rig Number = %1").arg(rigCap.modelNumber));
+        trace(QString("Rig Number = %1").arg(rigCap.rigModelNumber));
         trace(QString("Rig Manufacturer = %1").arg(rigCap.rigManufacturer));
         if (rigCap.rigManufacturer == "Icom")
         {

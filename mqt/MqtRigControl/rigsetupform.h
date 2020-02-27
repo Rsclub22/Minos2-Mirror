@@ -149,6 +149,14 @@ public:
     void setForceDTR(int n);
     void setForceRTS(int n);
     void setForceRTSDisabled(bool state);
+    void setSupport50MHzChkBox(bool checked);
+    void setSupport70MHzChkBox(bool checked);
+    void setSupport144MHzChkBox(bool checked);
+    void setSupport432MHzChkBox(bool checked);
+    void setSupport1296MHzChkBox(bool checked);
+
+    void setSupportBandCheckBoxVisible(bool visible);
+
 signals:
     void transVertTabAdded(int);
 
@@ -186,6 +194,13 @@ private slots:
     void rigCtldNetworkPortSelected();
     void on_forceDTRSelected();
     void on_forceRTSSelected();
+
+    void onSup50MhzChkBoxClicked(bool state);
+    void onSup70MhzChkBoxClicked(bool state);
+    void onSup144MhzChkBoxClicked(bool state);
+    void onSup432MhzChkBoxClicked(bool state);
+    void onSup1296MhzChkBoxClicked(bool state);
+
 private:
 
 
@@ -231,6 +246,7 @@ private:
 
     void rigCtldNetworkAddBoxVisible(bool visible);
     void rigCtldPortBoxVisible(bool visible);
+
 
 };
 

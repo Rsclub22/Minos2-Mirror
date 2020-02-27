@@ -28,11 +28,12 @@ namespace RigCapConstants
 class RigCapabilities
 {
 public:
-    RigCapabilities(int modelNumber = 0,
-                    RigCapConstants::PortType portType_ = RigCapConstants::none,
+    RigCapabilities(RigCapConstants::PortType portType_ = RigCapConstants::none,
                     QString rigManufacturer_ = "",
                     QString rigName_ = "",
                     QString rigModelName_ = "",
+                    int rigModelNumber_ = 0,
+                    bool supportGetSupBands_ = false,
                     bool supportGetRit_ = false,
                     bool supportSetRit_ = false,
                     bool supportGetRitState = false,
@@ -46,12 +47,13 @@ public:
                     bool pollData_= RigCapConstants::pollDataOn);
 
 
-    int modelNumber;
+
     RigCapConstants::PortType portType;
     QString rigManufacturer;
     QString rigName;
     QString rigModelName;       // combined manufacturer and rig names
     int rigModelNumber;
+    bool supportGetSupBands;
     bool supportGetRit;
     bool supportSetRit;
     bool supportGetRitState;

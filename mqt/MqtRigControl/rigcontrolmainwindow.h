@@ -289,7 +289,7 @@ private:
 
     bool readTestStandAloneFlag();
     void buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList);
-    void buildSupportedRadioBands(int radioModelNumber, QStringList& supBandList);
+    void buildSupportedRadioBands(int radioIdx, int radioModelNumber, QStringList& supBandList);
     bool findSupRadioBand(const QString band, const QStringList& supBandsList);
     bool findSupTransBand(const QString band, const int radioIdx);
     void sendBandListLogger(const int radioIdx, const QStringList &supBandList);

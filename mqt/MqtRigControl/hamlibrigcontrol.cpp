@@ -144,11 +144,12 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
         // support Antenna Switch
         bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
 
-        (*rigsList)[key] = RigCapabilities(capsList[i]->rig_model,
-                                           port_type,
+        (*rigsList)[key] = RigCapabilities(port_type,
                                            capsList[i]->mfg_name,
                                            capsList[i]->model_name,
                                            key,
+                                           capsList[i]->rig_model,
+                                           true,                // supports lookup supported bands
                                            supportGetRit,
                                            supportSetRit,
                                            supportGetRitState,

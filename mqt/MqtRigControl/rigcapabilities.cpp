@@ -15,11 +15,12 @@
 
 #include "rigcapabilities.h"
 
-RigCapabilities::RigCapabilities(int modelNumber_,
-                                 RigCapConstants::PortType portType_,
+RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  QString rigManufacturer_,
                                  QString rigName_,
                                  QString rigModelName_,
+                                 int rigModelNumber_,
+                                 bool supportGetSupBands_,
                                  bool supportGetRit_,
                                  bool supportSetRit_,
                                  bool supportGetRitState_,
@@ -31,11 +32,12 @@ RigCapabilities::RigCapabilities(int modelNumber_,
                                  bool supportAntSw_,
                                  bool supportRigCtld_,
                                  bool pollData_ )
-    : modelNumber (modelNumber_),
-      portType (portType_),
+    : portType (portType_),
       rigManufacturer (rigManufacturer_),
       rigName (rigName_),
       rigModelName (rigModelName_),
+      rigModelNumber (rigModelNumber_),
+      supportGetSupBands (supportGetSupBands_),
       supportGetRit (supportGetRit_),
       supportSetRit (supportSetRit_),
       supportGetRitState (supportGetRitState_),
@@ -54,11 +56,12 @@ RigCapabilities::RigCapabilities(int modelNumber_,
 
 RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
 {
-    modelNumber = rigcap.modelNumber;
+
     portType = rigcap.portType;
     rigManufacturer = rigcap.rigManufacturer;
     rigModelName = rigcap.rigModelName;
     rigModelNumber = rigcap.rigModelNumber;
+    supportGetSupBands = rigcap.supportGetSupBands;
     supportGetRit = rigcap.supportGetRit;
     supportSetRit = rigcap.supportSetRit;
     supportGetRitState = rigcap.supportGetRitState;
