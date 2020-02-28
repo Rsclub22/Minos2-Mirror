@@ -1627,10 +1627,8 @@ void TSingleLogFrame::on_SetFreq(QString f)
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
         GJVQSOLogFrame->setFreq(f);
-        //if (isBandMapLoaded())
-        //{
-           bandmapControlFrame->setFreq(f);
-       // }
+        bandmapControlFrame->setFreq(f);
+
 
         MinosLoggerEvents::sendRigFreqChanged(f, contest);
     }
