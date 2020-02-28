@@ -35,6 +35,10 @@ int KSTConfigure::exec()
     ui->ASMaxDistance->setValidator(new QIntValidator(0, 0xffff, this));
     ui->ASMinDistance->setText(QString::number(ASMinDistance));
     ui->ASMinDistance->setValidator(new QIntValidator(0, 0xffff, this));
+    ui->ASPort->setText(QString::number( ASPort));
+    ui->ASPort->setValidator(new QIntValidator(0, 0xffff, this));
+    ui->ASTimeout->setText(QString::number( ASTimeout));
+    ui->ASTimeout->setValidator(new QIntValidator(1, 60, this));
 
     return QDialog::exec();
 }
@@ -65,6 +69,8 @@ void KSTConfigure::on_OKButton_clicked()
     ASMaxDistance = ui->ASMaxDistance->text().toInt();
     ASMinDistance = ui->ASMinDistance->text().toInt();
 
+    ASPort = ui->ASPort->text().toInt();
+    ASTimeout = ui->ASTimeout->text().toInt();
 
     if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty() || locator.isEmpty())
         return;
