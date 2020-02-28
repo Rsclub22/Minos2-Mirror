@@ -41,6 +41,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ASActiveBand = static_cast<ASBand>(settings.value("ASActiveBand", 0).toInt());
     ASMinDistance = settings.value("ASMinDistance", 300).toInt();
     ASMaxDistance = settings.value("ASMaxDistance", 1000).toInt();
+    ASPort = settings.value("ASPort", 9872).toInt();
+    ASTimeout = settings.value("ASTimeout", 10).toInt();
 
     callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
     messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
@@ -563,6 +565,16 @@ QSharedPointer<QVector<QSharedPointer<KstUser> > > KSTMainWindow::getCallVector(
 int KSTMainWindow::getActiveChat() const
 {
     return activeChat;
+}
+
+int KSTMainWindow::getASPort() const
+{
+    return ASPort;
+}
+
+int KSTMainWindow::getASTimeout() const
+{
+    return ASTimeout;
 }
 
 void KSTMainWindow::sendKST(QString msg)
@@ -1138,6 +1150,8 @@ bool KSTMainWindow::doConfiguration()
     conf.ASMyName = ASMyName;
     conf.ASMinDistance = ASMinDistance;
     conf.ASMaxDistance = ASMaxDistance;
+    conf.ASPort = ASPort;
+    conf.ASTimeout = ASTimeout;
 
     int ret = conf.exec();
     if (ret == QDialog::Accepted)
@@ -1155,6 +1169,8 @@ bool KSTMainWindow::doConfiguration()
         ASMyName = conf.ASMyName;
         ASMinDistance = conf.ASMinDistance;
         ASMaxDistance = conf.ASMaxDistance;
+        ASPort = conf.ASPort;
+        ASTimeout = conf.ASTimeout;
 
         QSettings settings;
 
@@ -1172,10 +1188,19 @@ bool KSTMainWindow::doConfiguration()
         settings.setValue("ASActiveBand", ASActiveBand);
         settings.setValue("ASMinDistance", ASMinDistance);
         settings.setValue("ASMaxDistance", ASMaxDistance);
+        settings.setValue("ASPort", ASPort);
+        settings.setValue("ASTimeout", ASTimeout);
 
         kstCallFilterModel.invalidate();
         kstMessageFilterModel.invalidate();
 
+        if (getASActive())
+        {
+            asl.reset();
+
+            asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
+            connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
+        }
         if  (kstconnected)
         {
             reconnect();
@@ -1717,7 +1742,7 @@ void KSTMainWindow::on_showMPath_clicked()
     QModelIndex index = ui->messageTable->currentIndex();
     QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
     int row = sourceIndex.row();
-    if (row >= messageVector->size())
+    if (row < 0 || row >= messageVector->size())
         return;
     QSharedPointer<KstMessageLine> line = messageVector->at(row);
     QString call = line->call;

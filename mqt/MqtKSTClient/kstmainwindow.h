@@ -67,6 +67,8 @@ class KSTMainWindow : public QMainWindow
     QString ASMyName = "Minos";
     int ASMinDistance = 300;
     int ASMaxDistance = 1000;
+    int ASPort = 9872;
+    int ASTimeout = 10;
 
     bool kstconnected = false;
     bool started = false;
@@ -128,6 +130,10 @@ public:
     void showPlanes(QSharedPointer<KstUser> user);
 
     QSharedPointer<KstUser> getUser(QString call);
+    int getASPort() const;
+
+    int getASTimeout() const;
+
 private slots:
     void CloseTimerTimer();
 
