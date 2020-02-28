@@ -35,7 +35,10 @@ class Aircraft
     Q_DECLARE_TR_FUNCTIONS(Aircraft)
 public:
     Aircraft(){}
-    ~Aircraft(){}
+    ~Aircraft()
+    {
+
+    }
     Aircraft(QStringList sl, int acoffset)
     {
         call = sl[acoffset++].trimmed();
@@ -87,6 +90,10 @@ class AirScoutLink: public QObject
     QString  oldWatch;
     QVector<QSharedPointer<KstUser> >  watchList;
 
+    QTimer ASTimer;
+    QDateTime lastASSEnd;
+
+
     // variablesfor checksums
     char lastbyte;
     int cs;
@@ -99,6 +106,7 @@ class AirScoutLink: public QObject
     void askNearest(int row);
 public:
     AirScoutLink();
+    ~AirScoutLink();
 
     static const char *ASBandStrings[];
 
@@ -108,6 +116,7 @@ public:
     void asShowPath(QSharedPointer<KstUser> user, QSharedPointer<KstUser> other);
 private slots:
     void onReadyRead();
+    void onTimeout();
 signals:
     void acChanged(QSharedPointer<KstUser>);
 };

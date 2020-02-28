@@ -34,9 +34,30 @@ static const char * bandFreqStrings[] = {
 AirScoutLink::AirScoutLink():
     qus(new QUdpSocket())
 {
-    qus->bind(QHostAddress::Any, 9872, (QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint));
+    qus->bind(QHostAddress::Any, static_cast<quint16>(mainWindow->getASPort()), (QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint));
 
     connect(qus.data(), SIGNAL(readyRead( )), this, SLOT(onReadyRead()));
+
+    connect(&ASTimer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    ASTimer.start(1000);
+}
+AirScoutLink::~AirScoutLink()
+{
+    qus->abort();   // make sure we don't get any more reads passed
+}
+void AirScoutLink::onTimeout()
+{
+    if (mainWindow->getASActive())
+    {
+        QDateTime now = QDateTime::currentDateTime();
+        QDateTime timeoutTime = lastASSEnd.addSecs(mainWindow->getASTimeout());
+        if (lastASSEnd.isValid() && now > timeoutTime)
+        {
+            // send again...
+            assetPathInProgress = false;
+            askNearest(-1);
+        }
+    }
 }
 bool ASUserCompare (QSharedPointer<KstUser> i, QSharedPointer<KstUser> j)
 {
@@ -71,10 +92,13 @@ void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
         {
             if ((addrs[j].ip().protocol() == QAbstractSocket::IPv4Protocol) && (addrs[j].broadcast().toString() != ""))
             {
-                qint64 res = qus->writeDatagram(packet->data(), packet->length(), addrs[j].broadcast(), 9872);
+                qint64 res = qus->writeDatagram(packet->data(), packet->length(), addrs[j].broadcast(), static_cast<quint16>(mainWindow->getASPort()));
                 trace(QString("%1 bytes sent").arg(res));
                 if (res > 0)
+                {
+                    lastASSEnd = QDateTime::currentDateTime();
                     return;
+                }
             }
         }
     }
@@ -382,4 +406,3 @@ void AirScoutLink::askNearest(int row)
         assetPathInProgress = false;
     }
 }
-
