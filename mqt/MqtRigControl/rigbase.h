@@ -55,6 +55,7 @@ public:
     virtual int getSignalStrength(VFO vfo, int *value) = 0;
 
     virtual QString getRigLibVersion() = 0;
+    virtual QString getLibraryName() = 0;
     virtual QString getErrorMsgText(int errorCode) = 0;
 
     //virtual bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) = 0;

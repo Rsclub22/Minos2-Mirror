@@ -44,7 +44,7 @@ int collect(const rig_caps *caps, rig_ptr_t)
     return 1;
 }
 
-bool traceComms = false;
+bool hamlibTraceComms = false;
 
 int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char const * format, va_list ap)
 {
@@ -54,7 +54,7 @@ int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char cons
   static char constexpr fmt[] = "Hamlib: ";
   message = message.vsprintf (format, ap).trimmed ();
 
-  if (traceComms)
+  if (hamlibTraceComms)
   {
       trace(QString("%1 %2").arg(fmt).arg(message));
   }
@@ -301,6 +301,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
 int HamlibRigControl::closeRig()
 {
+
     int retcode;
     if (!my_rig)
     {
@@ -1157,6 +1158,10 @@ int RigControl::getRigModelIndex()
  }
 
 
+QString HamlibRigControl::getLibraryName()
+{
+    return QString("hamlib");
+}
 
 //QStringList RigControl::gethamlibErrorMsg()
 //{
@@ -1186,17 +1191,17 @@ bool model_Sort(const rig_caps *caps1,const rig_caps *caps2)
 // static to init flag
 void HamlibRigControl::setTraceCommsFlag(bool value)
 {
-    traceComms = value;
+    hamlibTraceComms = value;
 }
 
 void HamlibRigControl::setTraceComms(bool value)
 {
-    traceComms = value;
+    hamlibTraceComms = value;
 }
 
 bool HamlibRigControl::getTraceComms()
 {
-    return traceComms;
+    return hamlibTraceComms;
 }
 
 

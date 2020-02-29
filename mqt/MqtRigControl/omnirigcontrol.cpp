@@ -18,13 +18,17 @@
 
 
 const char* OmnirigControl::omnirigErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
+                                                QT_TR_NOOP("Radio Function not supported"),
                                                 QT_TR_NOOP("Omnirig Com Failed to start"),
                                                 QT_TR_NOOP("Omnirig rig One failed to initialise"),
-                                                QT_TR_NOOP("Omnirig rig Two failed to initialise")
+                                                QT_TR_NOOP("Omnirig rig Two failed to initialise"),
+                                                QT_TR_NOOP("Omnirig offline"),
+                                                QT_TR_NOOP("Omnirig rig pointer null")
+
                                                 };
 
 
-
+bool omnirigTraceComms = false;
 
 namespace
 {
@@ -35,37 +39,37 @@ namespace
 auto OmnirigControl::map_mode (OmniRig::RigParamX param) -> MODE
 {
   if (param & OmniRig::PM_CW_U)
-    {
+  {
       return CW_R;
-    }
+  }
   else if (param & OmniRig::PM_CW_L)
-    {
+  {
       return CW;
-    }
+  }
   else if (param & OmniRig::PM_SSB_U)
-    {
+  {
       return USB;
-    }
+  }
   else if (param & OmniRig::PM_SSB_L)
-    {
+  {
       return LSB;
-    }
+  }
   else if (param & OmniRig::PM_DIG_U)
-    {
+  {
       return DIG_U;
-    }
+  }
   else if (param & OmniRig::PM_DIG_L)
-    {
+  {
       return DIG_L;
-    }
+  }
   else if (param & OmniRig::PM_AM)
-    {
+  {
       return AM;
-    }
+  }
   else if (param & OmniRig::PM_FM)
-    {
+  {
       return FM;
-    }
+  }
   trace(QString("OmniRigControl unrecognized mode"));
 
   return UNK;
@@ -530,7 +534,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     }
 
     // COM/OLE exceptions get signaled
-    connect (&*omni_rig, SIGNAL (exception (int, QString, QString, QString)), this, SLOT (handle_COM_exception (int, QString, QString, QString)));
+    connect (&*omni_rig, SIGNAL (exception (int, QString, QString, QString)), this, SLOT (onHandleCOMException (int, QString, QString, QString)));
 
     // IOmniRigXEvent interface signals
     connect (&*omni_rig, SIGNAL (VisibleChange ()), this, SLOT (onHandleVisibleChange()));
@@ -539,7 +543,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     connect (&*omni_rig, SIGNAL (ParamsChange (int, int)), this, SLOT (onHandleParamsChange(int, int)));
     connect (&*omni_rig
              , SIGNAL (CustomReply (int, QVariant const&, QVariant const&))
-             , this, SLOT (handle_custom_reply (int, QVariant const&, QVariant const&)));
+             , this, SLOT (onHandleCustomReply (int, QVariant const&, QVariant const&)));
 
     QString v = QString::number(omni_rig->SoftwareVersion()).toLocal8Bit ();
     traceMsg(QString("Software Version %1").arg(v));
@@ -569,8 +573,11 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
         }
     }
 
+    serPort = (new OmniRig::PortBits(rig->PortBits()));
+
 
     rig_type = rig->RigType ();
+    currentRadio.rigModelName = rig_type;
     readable_params = rig->ReadableParams ();
     writable_params = rig->WriteableParams ();
 
@@ -594,15 +601,34 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
     return omnirigError(OMNIRIG_OK);
 
-    //rig->SetFreq(144300000);
-    //QThread::msleep (500);
-    //qDebug() << QString("Frequency = %1").arg(QString::number(rig->GetRxFrequency()));
-
 }
+
+
 
 int OmnirigControl::closeRig()
 {
+    QThread::msleep(200);       // leave time for pending commands
 
+    if (serPort !=nullptr)
+    {
+        serPort->Unlock();     // release serial port
+        serPort->clear();
+        serPort = nullptr;
+    }
+    if (omni_rig)
+    {
+        if (rig)
+        {
+            rig->clear();
+            rig = nullptr;
+        }
+        omni_rig->clear();
+    }
+
+    setRigConnected(false);
+
+    QThread::msleep(500); // allow time to close serial and com component
+    return OMNIRIG_OK;
 }
 
 int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
@@ -716,7 +742,17 @@ QString OmnirigControl::getRigLibVersion()
 
 QString OmnirigControl::getErrorMsgText(int errorCode)
 {
+    if (errorCode > static_cast<int>(sizeof(omnirigErrorMsg)/sizeof(const char *)))
+    {
+        return tr("Omnirig Errorcode too large!");
+    }
+    return tr(omnirigErrorMsg[errorCode]);
+}
 
+
+QString OmnirigControl::getLibraryName()
+{
+    return QString("Omnirig");
 }
 
 int OmnirigControl::getRit(VFO vfo, ShortFreq &ritfreq)
@@ -741,22 +777,26 @@ int OmnirigControl::getRitState(VFO vfo, bool& state)
 
 void OmnirigControl::setTraceCommsFlag(bool value)
 {
-
+    omnirigTraceComms = value;
 }
 
 void OmnirigControl::setTraceComms(bool value)
 {
-
+    omnirigTraceComms = value;
 }
 
 bool OmnirigControl::getTraceComms()
 {
-
+    return omnirigTraceComms;
 }
 
 
 void OmnirigControl::traceMsg(QString msg)
 {
-    trace(QString("Omnirig: %1").arg(msg));
+    if (omnirigTraceComms)
+    {
+       trace(QString("Omnirig: %1").arg(msg));
+    }
+
 }
 

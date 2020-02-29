@@ -319,6 +319,8 @@ private:
     QString convertModeToQString(MODE m);
 
 
+
+    void setSmeterVisible(bool visible);
 private slots:
 
     void onStdInRead(QString);

@@ -24,6 +24,8 @@ enum RigId          // supported non-hamlib rig interfaces
     OmniRigTwoId
 };
 
+
+
 class RigFactory : public QObject
 {
     Q_OBJECT

@@ -628,14 +628,15 @@ void RigControlMainWindow::upDateRadio()
 
                 // does the radio support control of volume control
 
-                supVolume = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModelName).supportVolume;
+                supVolume = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVolume;
                 logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(supVolume ? "True" : "False"));
                 sendVolStatusToLog(ridx, supVolume);
 
                 // does the radio support signal strength meter
 
-                supSignalStrength = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModelName).supportSMeter;
+                supSignalStrength = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportSMeter;
 
+                setSmeterVisible(supSignalStrength);
 
                 updateSupportedRadioIndicators();
 
@@ -670,7 +671,7 @@ void RigControlMainWindow::upDateRadio()
 
                 dumpRadioToTraceLog();
 
-                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModelName).pollData)
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).pollData)
                 {
                     if (radio != nullptr)
                     {
@@ -1117,14 +1118,18 @@ int RigControlMainWindow::openRadio()
 void RigControlMainWindow::closeRadio()
 {
 
-    if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModelName).pollData)
+    if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).pollData)
     {
         pollTimer->stop();
     }
     else
     {
-        disconnect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq));
-        disconnect(radio, SIGNAL(onNewMode()), this, SLOT(onNewMode()));
+        if (radio != nullptr)
+        {
+            disconnect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq));
+            disconnect(radio, SIGNAL(onNewMode()), this, SLOT(onNewMode()));
+        }
+
     }
 
 
@@ -1982,7 +1987,7 @@ void RigControlMainWindow::initCacheData()
             buildSupBandList(i, radioModelNumber, supBandList);
             qDebug() << "support list initCache" << supBandList;
             sendBandListLogger(i, supBandList);
-            bool f = rigFactory->supported_rigs()->value(setupRadio->availRadioData[i]->radioName).supportVolume;
+            bool f = rigFactory->supported_rigs()->value(setupRadio->availRadioData[i]->rigModel).supportVolume;
             sendVolStatusToLog(i, f);
         }
     }
@@ -2693,6 +2698,16 @@ int RigControlMainWindow::setVolume(VFO vfo, int level)
 /******************* Signal Strength **************************/
 
 
+void RigControlMainWindow::setSmeterVisible(bool visible)
+{
+    ui->sMeter->setVisible(visible);
+    ui->sMeterLabel->setVisible(visible);
+}
+
+
+
+
+
 int RigControlMainWindow::getSignalStrength(VFO vfo)
 {
 
@@ -2800,9 +2815,9 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
         sendStatusToLogError(errorMsg);
     }
 
-    logMessage(QString("Radio library Error - Code = %1 - %2").arg(QString::number(errorCode)).arg(errorMsg));
+    logMessage(QString("%1 library Error - Code = %2 - %3").arg(radio->getLibraryName()).arg(QString::number(errorCode)).arg(errorMsg));
 
-    QMessageBox::critical(this, tr("RigControl library Error - ").arg(setupRadio->currentRadio.radioName), tr("%1 - %2\nCommand %3").arg(errorCode).arg(errorMsg).arg(cmd));
+    QMessageBox::critical(this, tr("RigControl %1 library Error").arg(radio->getLibraryName()), tr("%1\n%2 - %3\nCommand %4").arg(setupRadio->currentRadio.radioName).arg(errorCode).arg(errorMsg).arg(cmd));
 
     closeRadio();
     rigErrorFlag = false;

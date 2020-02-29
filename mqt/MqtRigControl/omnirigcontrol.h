@@ -24,6 +24,7 @@ enum omnirigErrorCode {OMNIRIG_OK = 0, OMNIRIG_NOT_SUPPORTED, OMNIRIG_COM_FAILED
                       OMNIRIG_OFFLINE, OMNIRIG_RIG_NULL};
 
 
+
 class OmnirigControl : public RigBase
 {
     Q_OBJECT
@@ -57,6 +58,7 @@ public:
     int getSignalStrength(VFO vfo, int *value) override;
 
     QString getRigLibVersion() override;
+    QString getLibraryName() override;
     QString getErrorMsgText(int errorCode) override;
 
     int getRit(VFO vfo, ShortFreq &ritfreq) override;
@@ -94,6 +96,8 @@ private:
     QString rig_type;
     int readable_params;
     int writable_params;
+
+    OmniRig::PortBits* serPort;
 
     bool rigConnected;
 
