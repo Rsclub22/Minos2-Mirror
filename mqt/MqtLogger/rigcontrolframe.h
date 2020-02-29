@@ -65,9 +65,6 @@ public:
 
     int getMemNo(){return memNo;}
 
-    void setState(bool on){state = on;}
-    bool getState(){return state;}
-
     void showButtonOnOff(bool state);
     void showRunToolButtonOffFreq();
     void showRunToolButtonOnFreq();
@@ -88,16 +85,7 @@ signals:
 
 
 private:
-
-    bool state = false;
     int memNo;
-
-
-
-
-
-
-
 };
 
 class quickBandSelData
@@ -173,6 +161,14 @@ public:
 
 
     void runButOffActionSelected(int buttonNumber);
+    void setRunButtonActive(int buttonNumber);
+
+    void runModeOff(int buttonNumber);
+
+    void switchRunButton(int buttonNumber);
+
+    void setRunFreq(int buttonNumber);
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
