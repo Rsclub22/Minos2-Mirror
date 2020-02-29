@@ -67,7 +67,7 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
-Name: "minosAssociation"; Description: "Associate ""minos"" extension"; GroupDescription: File extensions:
+Name: "minosAssociation"; Description: ExpandConstant('{cm:AssociateExtensions}'); GroupDescription: ExpandConstant('{cm:Extensions}')
 
 [Files]
 Source: "*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion
@@ -146,6 +146,10 @@ french.PleaseSelect=Sélectionner le dossier pour Minos Logs SVP.
 LogsDir=Undefined
 english.LogsDir=Minos Logs Directory
 french.LogsDir=Dossier Minos Logs
+english.AssociateExtensions=Associate ""minos"" extension
+french.AssociateExtensions=Associer l'extension "minos"
+english.Extensions=File extensions:
+french.Extensions=Extensions de fichiers:
 
 [INI]
 Filename: "{app}\Configuration\MinosLogger.ini"; Section: "Default"; Key: "Log Directory"; String: "{code:GetLogsDir}"
