@@ -30,9 +30,9 @@ namespace Ui {
 
 const int BANDLIST_TIMEOUT_DUR = 3000;
 
-const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
+const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
+const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
 
 
 

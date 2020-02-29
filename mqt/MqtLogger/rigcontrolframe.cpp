@@ -2026,7 +2026,7 @@ void RigControlFrame::setRunButtonText(int buttonNumber)
     memoryData::memData m = getRunMemoryData(buttonNumber);
     QString sc = ((buttonNumber == 0)?QString(" [ "):QString( " ] "));
 
-    QString runText = "R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + " ";
+    QString runText = "R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + "   ";
     QString restoreText;
     if (!runButtonMap[buttonNumber]->returnFrequency.isEmpty())
     {
