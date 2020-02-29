@@ -62,6 +62,7 @@ public:
     QAction* editAction;
     QAction* clearAction;
 
+    QString returnFrequency;
 
     int getMemNo(){return memNo;}
 
@@ -168,6 +169,8 @@ public:
     void switchRunButton(int buttonNumber);
 
     void setRunFreq(int buttonNumber);
+
+    void setRunButtonText(int buttonNumber);
 
 signals:
     void selectRadio(QString, QString);
@@ -353,6 +356,7 @@ private:
     void setFreqStepCombo(QString mode);
     double getStepFreqFromComboText(const QString step);
     bool chkRadioFreqOnRunFreq();
+    int otherButton(int buttonNumber);
 };
 
 

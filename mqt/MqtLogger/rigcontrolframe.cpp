@@ -502,6 +502,8 @@ void RigControlFrame::setFreq(QString freq)
         }
         curFreq = freq;
         on_ChkRunFreq();
+        setRunButtonText(RUN_BUTTON_1_ON);
+        setRunButtonText(RUN_BUTTON_2_ON);
     }
     // an error here?
 
@@ -1789,20 +1791,45 @@ void RigControlFrame::initRunMemoryButton()
     connect( runButtonMap[1], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
 
 }
-
+int RigControlFrame::otherButton(int buttonNumber)
+{
+    return buttonNumber^1;
+}
 void RigControlFrame::setRunButtonActive(int buttonNumber)
 {
     // a run button is active; but we are not on a run frequency
     // select run freq for this button
+
+    // first, save the current frequency so we can return to it
+
+    runButtonMap[buttonNumber]->returnFrequency = curFreq;
+    runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
+
     runButReadActSel(buttonNumber);
     runButtonMap[buttonNumber]->showButtonOnOff(false);
 }
 
 void RigControlFrame::setRunFreq(int buttonNumber)
 {
-    runButReadActSel(buttonNumber);
-    runButtonMap[buttonNumber]->showButtonOnOff(true);
+    // run button not active
+    // make this one active
 
+    QString oldfreq = curFreq;
+
+    runButReadActSel(buttonNumber);
+
+    if (curFreq != oldfreq)
+    {
+        runButtonMap[buttonNumber]->returnFrequency = oldfreq;
+        runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
+    }
+    else
+    {
+        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
+        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
+    }
+
+    runButtonMap[buttonNumber]->showButtonOnOff(true);
     runButtonOnFlag = true;
     oldRadioOffRunFreq = false;
     chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
@@ -1812,18 +1839,37 @@ void RigControlFrame::setRunFreq(int buttonNumber)
 
 void RigControlFrame::runModeOff(int buttonNumber)
 {
+    // on run freq - return to prior frequency
+
+    QString rfreq = runButtonMap[buttonNumber]->returnFrequency;
+    runButtonMap[buttonNumber]->returnFrequency.clear();
+    runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
+
+    setFreq( rfreq);
+
     // on run Freq, turn off runmode
     runButtonMap[buttonNumber]->showButtonOnOff(false);
-    runButtonOnFlag = false;
-    oldRadioOffRunFreq = false;
-    runButtonOnNum = NO_RUN_BUTTON_ON;
-    chkRunFreqTimer->stop();
-    emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
+
+//    runButtonOnFlag = false;
+//    oldRadioOffRunFreq = false;
+//    runButtonOnNum = NO_RUN_BUTTON_ON;
+//    chkRunFreqTimer->stop();
+//    emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
 }
 
 void RigControlFrame::switchRunButton(int buttonNumber)
 {
-    // other run button frequency active
+    if (radioOffRunFreq)
+    {
+        runButtonMap[buttonNumber]->returnFrequency = curFreq;
+        runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
+    }
+    else
+    {
+        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
+        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
+    }
+    // other run button frequency active, so switch over
     runButtonMap[RUN_BUTTON_1_ON]->showButtonOnOff(false);
     runButtonMap[RUN_BUTTON_2_ON]->showButtonOnOff(false);
     runButReadActSel(buttonNumber);
@@ -1975,16 +2021,26 @@ void RigControlFrame::loadRunButtonLabels()
 }
 
 
-void RigControlFrame::runButtonUpdate(int buttonNumber)
+void RigControlFrame::setRunButtonText(int buttonNumber)
 {
     memoryData::memData m = getRunMemoryData(buttonNumber);
     QString sc = ((buttonNumber == 0)?QString(" [ "):QString( " ] "));
 
-    runButtonMap[buttonNumber]->memButton->setText("R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + " ");
+    QString runText = "R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + " ";
+    QString restoreText;
+    if (!runButtonMap[buttonNumber]->returnFrequency.isEmpty())
+    {
+        restoreText = "\n" + tr("Restore .%1    ").arg(extractKhz(runButtonMap[buttonNumber]->returnFrequency) );
+    }
+    runButtonMap[buttonNumber]->memButton->setText(runText + restoreText);
     QString tTipStr = tr("Freq: ") + convertFreqStrDisp(m.freq) + "\n"
             + tr("Mode: ") + m.mode + "\n";
-
     runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
+}
+
+void RigControlFrame::runButtonUpdate(int buttonNumber)
+{
+    setRunButtonText(buttonNumber);
 
     if (buttonNumber == runButtonOnNum && runButtonOnFlag)
     {
@@ -2000,6 +2056,7 @@ void RigControlFrame::runButtonUpdate(int buttonNumber)
         else
         {
             // update run freq
+            memoryData::memData m = getRunMemoryData(buttonNumber);
             if (m.freq.remove('.') != curFreq.remove('.'))
             {
                 sendFreq(m.freq);
