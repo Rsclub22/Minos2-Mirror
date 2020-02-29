@@ -311,11 +311,6 @@ void RigCache::setRadioRitStatus(const PubSubName &name, bool status)
     rigStates[name].setRitRadioStatus(status);
 }
 
-void RigCache::setTpm(const PubSubName &name, int tpm)
-{
-    rigStates[name].setTpm(tpm);
-}
-
 void RigCache::publishState()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();

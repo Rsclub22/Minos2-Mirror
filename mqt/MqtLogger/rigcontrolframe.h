@@ -1,6 +1,4 @@
-
 /////////////////////////////////////////////////////////////////////////////
-// $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
@@ -101,27 +99,6 @@ private:
 
 
 };
-class TuneMemoryButton : public QObject
-{
-    Q_OBJECT
-
-public:
-    explicit TuneMemoryButton(QToolButton *b, RigControlFrame *rcf, int no);
-    ~TuneMemoryButton();
-
-    RigControlFrame *rigControlFrame;
-    QToolButton* memButton;
-    QMenu* memoryMenu;
-    QAction* readAction;
-    QAction* writeAction;
-
-    int memNo;
-    QString freq;
-private slots:
-
-    void readActionSelected();
-    void writeActionSelected();
-};
 
 class quickBandSelData
 {
@@ -161,7 +138,6 @@ public:
     void setRitRadioStatus(bool);
     void setRadioName(QString, QString mode);
     void setRadioState(QString);
-    void setTpm(int);
     void setRitEnableState(bool s);
 
     bool isRadioLoaded();
@@ -172,10 +148,6 @@ public:
     void runButReadActSel(int buttonNumber);
     void runButWriteActSel(int buttonNumber);
     void runButEditActSel(int buttonNumber);
-
-    void tuneButtonUpdate(int);
-    void tuneButReadActSel(int buttonNumber);
-    void tuneButWriteActSel(int buttonNumber);
 
     QString getStrPassBandState(QString mode);
     int getIntPassBandState(QString mode);
@@ -279,7 +251,6 @@ private:
     QMap<int, RunMemoryButton *> runButtonMap;
     QMap<int, QCheckBox*> ignoreRunChkBoxMap;
 
-    QMap<int, TuneMemoryButton *> tuneButtonMap;
     QVector<quickBandSelData> listOfBands;
 
     QMap<PubSubName, RadioDetails> allRadioDetails;
@@ -322,8 +293,6 @@ private:
 
     QString lastFreq;
 
-    TuneMemoryButton *curTuneButton = nullptr;
-
     CheckOperatingFreq *operatingFreq;
     bool operatingFreqPlanOk;
 
@@ -355,11 +324,7 @@ private:
     void initRunMemoryButton();
     void loadRunButtonLabels();
 
-    void initTuneMemoryButton();
-    void updateTuneButtons();
-
     void traceMsg(QString msg);
-
 
     void loadMemories();
     void mgmLabelVisible(bool state);

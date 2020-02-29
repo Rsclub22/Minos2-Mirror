@@ -99,7 +99,6 @@ BundleFile::BundleFile( PROFILES p )
             QByteArray temp = defaultLayoutName().toUtf8();
             entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.constData(), temp, "hint", false ) ) );
         }
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpShowTPM, "ShowTPM", false, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );
         break;
     case epENTRYPROFILE:

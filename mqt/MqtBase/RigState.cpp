@@ -8,7 +8,6 @@ RigState::RigState()
     qRegisterMetaType< RigState > ( "RigState" );
     _radioFreq.setInitialValue(0.0);
     _logFreq.setInitialValue(0.0);
-    _tpm.setInitialValue(0);
     _radioVolLevel.setInitialValue(0);
     _logVolLevel.setInitialValue(0);
 }
@@ -32,8 +31,7 @@ bool RigState::isDirty() const
             _radioRitFreq.isDirty() ||
             _logRitFreq.isDirty() ||
             _ritOnOffStatus.isDirty() ||
-            _ritRadioStatus.isDirty() ||
-            _tpm.isDirty();
+            _ritRadioStatus.isDirty();
 }
 void RigState::clearDirty()
 {
@@ -49,7 +47,6 @@ void RigState::clearDirty()
     _logRitFreq.clearDirty();
     _ritOnOffStatus.clearDirty();
     _ritRadioStatus.clearDirty();
-    _tpm.clearDirty();
 }
 void RigState::setDirty()
 {
@@ -65,7 +62,6 @@ void RigState::setDirty()
     _logRitFreq.setDirty();
     _ritOnOffStatus.setDirty();
     _ritRadioStatus.setDirty();
-    _tpm.setDirty();
 }
 void RigState::setSelected(const QString &loggeruuid, const QString &selected)
 {
@@ -119,10 +115,6 @@ void RigState::setStatus(const QString &status)
     _status.setValue(status);
 }
 
-void RigState::setTpm(int tpm)
-{
-    _tpm.setValue(tpm);
-}
 QString RigState::pack() const
 {
     QJsonObject jv;
@@ -139,7 +131,6 @@ QString RigState::pack() const
     jv.insert(rpcConstants::rigLogVolLevel, logVolLevel().getValue());
     jv.insert(rpcConstants::rigRitOnOffStatus, ritOnOffStatus().getValue());
     jv.insert(rpcConstants::rigRitRadioStatus, ritRadioStatus().getValue());
-    jv.insert(rpcConstants::rigTpm, tpm().getValue());
 
     QJsonDocument json(jv);
 
@@ -166,7 +157,6 @@ void RigState::unpack(QString s)
         _logRitFreq.setValue(json.object().value(rpcConstants::rigControlLogRitFreq).toInt());
         _ritOnOffStatus.setValue(json.object().value(rpcConstants::rigRitOnOffStatus).toBool());
         _ritRadioStatus.setValue(json.object().value(rpcConstants::rigRitRadioStatus).toBool());
-        _tpm.setValue(json.object().value(rpcConstants::rigTpm).toInt());
     }
     else
     {
@@ -233,10 +223,6 @@ MinosItem<bool> RigState::ritRadioStatus() const
     return _ritRadioStatus;
 }
 
-MinosItem<int> RigState::tpm() const
-{
-    return _tpm;
-}
 QStringList RigState::getSelectedLoggers()
 {
     return _selected.getSelectedLoggers();

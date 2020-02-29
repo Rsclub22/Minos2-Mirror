@@ -1742,13 +1742,6 @@ void TSingleLogFrame::on_SetRadioStatus(QString s)
         GJVQSOLogFrame->setRadioState(s);
     }
 }
-void TSingleLogFrame::on_SetRadioTpm(int t)
-{
-    if ( this == LogContainer->getCurrentLogFrame() )
-    {
-        FKHRigControlFrame->setTpm(t);
-    }
-}
 
 /*
 
@@ -1809,16 +1802,6 @@ void TSingleLogFrame::sendRadioVolume(int level)
         LogContainer->sendDM->sendRigControlVolumeLevel(this, level);
     }
 }
-
-void TSingleLogFrame::sendTpm(int t, QString f)
-{
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-    {
-        sendKeyerStop();    // don't keep calling while tuning!
-        LogContainer->sendDM->sendRigControlTpm(this, t, f);
-    }
-}
-
 
 void TSingleLogFrame::sendRadioMode(QString mode)
 {
