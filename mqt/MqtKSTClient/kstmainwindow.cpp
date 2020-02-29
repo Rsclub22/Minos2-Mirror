@@ -4,6 +4,7 @@
 #include "cutils.h"
 
 #include "kstconfigure.h"
+#include "airscoutlink.h"
 
 #include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"
@@ -15,6 +16,8 @@ QStringList services =
 "Microwave",
 "EME/JT65",
 };
+
+KSTMainWindow *mainWindow = nullptr;
 //==========================================================================================
 KSTMainWindow::KSTMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,12 +25,24 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    mainWindow = this;
+
     QSettings settings;
 
     serverName = settings.value("hostname", "www.on4kst.info").toString();
     serverPort = settings.value("port", "23001").toString();
     myCallsign = settings.value("username", "").toString();
     password = settings.value("password", "").toString();
+    maxDistance = settings.value("maxDistance", 99999).toInt();
+
+    ASActive = settings.value("ASActive", false).toBool();
+    ASServerName = settings.value("ASServerName", "AS").toString();
+    ASMyName = settings.value("ASMyName", "Minos").toString();
+    ASActiveBand = static_cast<ASBand>(settings.value("ASActiveBand", 0).toInt());
+    ASMinDistance = settings.value("ASMinDistance", 300).toInt();
+    ASMaxDistance = settings.value("ASMaxDistance", 1000).toInt();
+    ASPort = settings.value("ASPort", 9872).toInt();
+    ASTimeout = settings.value("ASTimeout", 10).toInt();
 
     callVector =    QSharedPointer<QVector <QSharedPointer<KstUser> > >( new QVector<QSharedPointer<KstUser> > );
     messageVector = QSharedPointer<QVector <QSharedPointer<KstMessageLine> > >( new QVector<QSharedPointer<KstMessageLine> >);
@@ -106,11 +121,18 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     state = settings.value("msgSplitterState").toByteArray();
     ui->msgSplitter->restoreState(state);
 
+    state = settings.value("callSplitterState").toByteArray();
+    ui->callSplitter->restoreState(state);
+
+
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
     connect(&CloseTimer, SIGNAL(timeout()), this, SLOT(CloseTimerTimer()));
     CloseTimer.start(100);
+
+    connect(&userCallTimer, SIGNAL(timeout()), this, SLOT(userCallTimerTimer()));
+    userCallTimer.start(5000);
 
     kstMessageModel.setChatVector(messageVector);
 
@@ -128,11 +150,13 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     kstCallFilterModel.setSourceModel(&kstCallModel);
     ui->CSTable->setModel(&kstCallFilterModel);
 
-    ui->CSTable->horizontalHeader()->setStretchLastSection(true);
+    kstPlanesFilterModel.setSourceModel(&kstPlanesModel);
+    ui->planesView->setModel(&kstPlanesFilterModel);
 
     meepDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
     messageDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
     CSDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
+    PlanesDelegate = QSharedPointer<HtmlDelegate>( new HtmlDelegate(1.0, 1.0)) ;
 
     // these are used for sizing when adjust to content
     kstMessageModel.delegate = messageDelegate;
@@ -141,6 +165,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->meepTable->setItemDelegate(meepDelegate.data());
     ui->messageTable->setItemDelegate(messageDelegate.data());
     ui->CSTable->setItemDelegate(CSDelegate.data());
+    ui->planesView->setItemDelegate(PlanesDelegate.data());
 
     QHeaderView *verticalHeader = ui->meepTable->verticalHeader();
     verticalHeader->setVisible(false);
@@ -155,17 +180,23 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     QSize ms = messageDelegate->docSize("XX");
     verticalHeader->setDefaultSectionSize(ms.height() *4/5);
     verticalHeader->setMinimumSectionSize(10);
-
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
     verticalHeader = ui->CSTable->verticalHeader();
     verticalHeader->setVisible(false);
     verticalHeader->setDefaultSectionSize(10);
     verticalHeader->setMinimumSectionSize(10);
-
     verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    verticalHeader = ui->planesView->verticalHeader();
+    verticalHeader->setVisible(false);
+    verticalHeader->setDefaultSectionSize(10);
+    verticalHeader->setMinimumSectionSize(10);
+    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->planesView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    QVector<Aircraft> qva;
+    kstPlanesModel.setPlanesVector(qva);
 
     state = settings.value("CSTable/state").toByteArray();
     ui->CSTable->horizontalHeader()->restoreState(state);
@@ -176,12 +207,24 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     state = settings.value("meepTable/state").toByteArray();
     ui->meepTable->horizontalHeader()->restoreState(state);
 
+//    state = settings.value("planesView/state").toByteArray();
+//    ui->planesView->horizontalHeader()->restoreState(state);
+
+    ui->CSTable->horizontalHeader()->setStretchLastSection(true);
+    ui->CSTable->horizontalHeader()->setSectionsMovable( true );
+
     connect( ui->CSTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     connect( ui->messageTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
     connect( ui->meepTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
+    connect( ui->planesView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
+
+    connect( ui->CSTable->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
+             this, SLOT( on_sectionMoved(int, int , int)));
+
 
     connect( ui->CSTable->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
              this, SLOT( on_sortIndicatorChanged(int, Qt::SortOrder)));
@@ -198,8 +241,28 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->messageFilter->installEventFilter(this);
     ui->callEdit->installEventFilter(this);
     ui->msgEdit->installEventFilter(this);
+    ui->planesView->installEventFilter(this);
 
     installEventFilter(this);   // so we pick up return, and implement the default button
+
+    ui->ASActivecb->setChecked(ASActive);
+    ui->planesFrame->setVisible(ASActive);
+    if(ASActive)
+    {
+        ui->CSTable->showColumn(ecscAirscout);
+    }
+    else
+    {
+        ui->CSTable->hideColumn(ecscAirscout);
+    }
+    asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
+    connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
+
+    for(int i = 0; i < asbMaxBand; i++)
+    {
+        ui->asBandCombo->addItem(AirScoutLink::tr(AirScoutLink::ASBandStrings[i]));
+    }
+    ui->asBandCombo->setCurrentIndex(ASActiveBand);
 
     started = true;
 
@@ -212,7 +275,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     ui->analyseButton->setVisible(false);
     ui->messageFilter->setFocus();
-
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -254,6 +316,15 @@ void KSTMainWindow::CloseTimerTimer(  )
    }
 }
 
+void KSTMainWindow::userCallTimerTimer()
+{
+    if (asl && getASActive() && callVectorChanged)
+    {
+        asl->usersChanged(callVector);
+        callVectorChanged = false;
+    }
+}
+
 void KSTMainWindow::connectToHost()
 {
     kstLoggedIn.clear();
@@ -265,7 +336,13 @@ void KSTMainWindow::connectToHost()
     if (kstChatSelection.count())
     {
         kstCallModel.locator = myLoc;
-        kstclient->connectToHost(serverName, serverPort.toUShort());
+        if (kstclient->state() != QAbstractSocket::ConnectedState
+           && kstclient->state() != QAbstractSocket::ConnectingState
+           && kstclient->state() != QAbstractSocket::ClosingState
+           && kstclient->state() != QAbstractSocket::HostLookupState)
+        {
+            kstclient->connectToHost(serverName, serverPort.toUShort());
+        }
     }
 }
 
@@ -273,7 +350,7 @@ void KSTMainWindow::connectToHost()
 void KSTMainWindow::connected()
 {
     trace("connection to ON4KST established");
-    ui->includeLabel->setText("Including " + myCallsign);
+    ui->includeLabel->setText(tr("Including %1").arg(myCallsign));
     kstMeepFilterModel.setFilterString(myCallsign);
     kstMessageModel.setCacheSize();
     ui->connectButton->setText(tr("Disconnect"));
@@ -301,7 +378,24 @@ void KSTMainWindow::connectionError(QAbstractSocket::SocketError error)
     trace(msg);
     clearConnection();
 }
+int KSTMainWindow::calcDistance(QString c)
+{
+    if (!c.isEmpty())
+    {
+        QSharedPointer<KstUser> test(new KstUser());
+        test->call = c.toUpper();
+        test->chat = activeChat;
+        if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+        {
+            int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
 
+            QSharedPointer<KstUser> user = callVector->at(row);
+
+            return user->distance;
+        }
+    }
+    return -1;
+}
 void KSTMainWindow::onReadyRead()
 {
     QByteArray b = kstclient->readAll();
@@ -417,10 +511,76 @@ void KSTMainWindow::on_analyseButton_clicked()
         }
     }
 }
+int KSTMainWindow::getMaxDistance() const
+{
+    return maxDistance;
+}
+
+bool KSTMainWindow::getASActive() const
+{
+    return ui->ASActivecb->isChecked();
+}
+
+ASBand KSTMainWindow::getASActiveBand() const
+{
+    ASBand b = static_cast<ASBand>(ui->asBandCombo->currentIndex());
+    return b;
+}
+
+QString KSTMainWindow::getASServerName() const
+{
+    return ASServerName;
+}
+
+QString KSTMainWindow::getASMyName() const
+{
+    return ASMyName;
+}
+
+int KSTMainWindow::getASMinDistance() const
+{
+    return ASMinDistance;
+}
+
+int KSTMainWindow::getASMaxDistance() const
+{
+    return ASMaxDistance;
+}
+
+QString KSTMainWindow::getMyCallsign() const
+{
+    return myCallsign;
+}
+
+QString KSTMainWindow::getMyLoc() const
+{
+    return myLoc;
+}
+
+QSharedPointer<QVector<QSharedPointer<KstUser> > > KSTMainWindow::getCallVector() const
+{
+    return callVector;
+}
+
+int KSTMainWindow::getActiveChat() const
+{
+    return activeChat;
+}
+
+int KSTMainWindow::getASPort() const
+{
+    return ASPort;
+}
+
+int KSTMainWindow::getASTimeout() const
+{
+    return ASTimeout;
+}
+
 void KSTMainWindow::sendKST(QString msg)
 {
-        kstclient->write((msg + "\r\n").toLocal8Bit());
-        trace("Send to KST: " + msg);
+    kstclient->write((msg + "\r\n").toLocal8Bit());
+    trace("Send to KST: " + msg);
 }
 void KSTMainWindow::checkAwayButton()
 {
@@ -523,6 +683,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
 
         kst->call = sl[3];
+        kst->distance = -2;
         kst->name = sl[4];
         QString destination = sl[5];
         kst->message = sl[6];
@@ -535,6 +696,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 kst->otherCall = destination;
             }
         }
+        kst->otherDistance = -2;
         bool found = false;
         for(QVector<QSharedPointer<KstMessageLine> >::iterator i = messageVector->begin(); i != messageVector->end(); i++)
         {
@@ -552,10 +714,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
     else if (sl[0] == "CE")
     {
         // end of CR frames
-        kstMessageModel.setChatVector(messageVector);
+        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+        ui->messageTable->scrollTo(mesIndex);
 
-        ui->messageTable->scrollToBottom();
-        ui->meepTable->scrollToBottom();
+        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
+        ui->meepTable->scrollTo(meepIndex);
     }
     else if (sl[0] == "CH")
     {
@@ -573,6 +736,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kst->dtg = QDateTime::fromMSecsSinceEpoch(unixTime.toLongLong() * 1000);
 
         kst->call = sl[3];
+        kst->distance = calcDistance(kst->call);
         kst->name = sl[4];
         QString destination = sl[5];
         kst->message = sl[6];
@@ -585,11 +749,15 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 kst->otherCall = destination;
             }
         }
+        kst->otherDistance = calcDistance(kst->otherCall);
 
         kstMessageModel.appendLastRow(kst);
 
-        ui->messageTable->scrollToBottom();
-        ui->meepTable->scrollToBottom();
+        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+        ui->messageTable->scrollTo(mesIndex);
+
+        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
+        ui->meepTable->scrollTo(meepIndex);
 
         if (kst->otherCall == myCallsign)
         {
@@ -661,11 +829,14 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             {
                 test->prefix = syn->country->basePrefix;
                 test->country = syn->country->realName;
+                test->baseCall = cs.realCall;
+                test->distance = -2;
             }
 
 
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             callVector->insert(row, test);
+            callVectorChanged = true;
         }
     }
 
@@ -676,6 +847,16 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 //    UE|2|4777|
 
         kstCallModel.setCallVector(callVector);
+        kstMessageModel.setChatVector(messageVector);
+
+        kstCallFilterModel.invalidate();
+        kstMessageFilterModel.invalidate();
+
+        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+        ui->messageTable->scrollTo(mesIndex);
+
+        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
+        ui->meepTable->scrollTo(meepIndex);
 
     }
 
@@ -758,7 +939,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             int row = l - callVector->begin();
 
             kstCallModel.removeRow(row);
-
+            callVectorChanged = true;
         }
     }
 
@@ -789,9 +970,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             {
                 test->prefix = syn->country->basePrefix;
                 test->country = syn->country->realName;
+                test->baseCall = cs.realCall;
             }
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             kstCallModel.insertRow(row, test);
+            callVectorChanged = true;
         }
 
     }
@@ -834,7 +1017,8 @@ void KSTMainWindow::on_closeButton_clicked()
 void KSTMainWindow::on_messageFilter_textChanged(const QString &arg1)
 {
     kstMessageFilterModel.setFilterString(arg1);
-    ui->messageTable->scrollToBottom();
+    QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+    ui->messageTable->scrollTo(mesIndex);
 }
 
 void KSTMainWindow::on_CSFilter_textChanged(const QString &arg1)
@@ -848,6 +1032,21 @@ void KSTMainWindow::on_kstSplitter_splitterMoved(int /*pos*/, int /*index*/)
     QByteArray state = ui->kstSplitter->saveState();
     settings.setValue("kstSplitterState" , state);
 }
+
+void KSTMainWindow::on_msgSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QSettings settings;
+    QByteArray state = ui->msgSplitter->saveState();
+    settings.setValue("msgSplitterState" , state);
+}
+
+void KSTMainWindow::on_callSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QSettings settings;
+    QByteArray state = ui->callSplitter->saveState();
+    settings.setValue("callSplitterState" , state);
+}
+
 void KSTMainWindow::on_sectionResized(int, int, int)
 {
     QSettings settings;
@@ -862,20 +1061,75 @@ void KSTMainWindow::on_sectionResized(int, int, int)
     state = ui->meepTable->horizontalHeader()->saveState();
     settings.setValue("meepTable/state", state);
 }
+void KSTMainWindow::on_sectionMoved(int, int, int)
+{
+    on_sectionResized(0, 0, 0);
+}
+
+void KSTMainWindow::acChanged(QSharedPointer<KstUser> user)
+{
+    int row = callVector->indexOf(user);
+    emit kstCallModel.dataChanged(kstCallModel.index(row, ecscAirscout), kstCallModel.index(row, ecscAirscout));
+
+    if (user == planeActive)
+    {
+        showPlanes(user);
+    }
+}
+void KSTMainWindow::showPlanes(QSharedPointer<KstUser> user)
+{
+    planeActive = user;
+
+    if (user->lastCalcTime.isEmpty())
+    {
+        ui->planeslabel->setText(tr(""));
+    }
+    else
+    {
+        QString l = QString("%1\n%2 at %3\nto %4 at %5")
+                .arg(user->lastCalcTime)
+                .arg(user->fromCall).arg(user->fromLoc).arg(user->toCall)
+                .arg(user->toLoc);
+
+        ui->planeslabel->setText(l);
+    }
+    kstPlanesModel.setPlanesVector(user->planes);
+
+//    ui->planesText->clear();
+//    ui->planesText->append(QString("%1 %2 at %3 to %4 at %5").arg(user->lastCalcTime).arg(user->fromCall).arg(user->fromLoc).arg(user->toCall).arg(user->toLoc) );
+//    ui->planesText->append(QString());
+//    foreach(const Aircraft &ac, user->planes)
+//    {
+//        ui->planesText->append(ac.getAircraft() );
+//    }
+//    ui->planesText->moveCursor (QTextCursor::Start) ;
+//    ui->planesText->ensureCursorVisible() ;
+}
 
 void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstCallFilterModel.mapToSource(index);
-    QSharedPointer<KstUser> user = callVector->at(sourceIndex.row());
-    QString call = user->call;
+    int row = sourceIndex.row();
+    if (row >= callVector->size())
+        return;
 
-    setNameFromCall(call);
+    QSharedPointer<KstUser> user = callVector->at(row);
 
-    ui->messageFilter->setText(call);
-    ui->callEdit->setText(call);
-    ui->msgEdit->setFocus();
-    setActive(user->chat);
-    ui->messageChatFilter->setCurrentIndex(user->chat);
+    if (!ui->noSetCallcb->isChecked())
+    {
+        // messages
+        QString call = user->call;
+
+        setNameFromCall(call);
+
+        ui->messageFilter->setText(call);
+        ui->callEdit->setText(call);
+        ui->msgEdit->setFocus();
+        setActive(user->chat);
+        ui->messageChatFilter->setCurrentIndex(user->chat);
+    }
+    // Planes
+    showPlanes(user);
 }
 
 bool KSTMainWindow::doConfiguration()
@@ -888,6 +1142,16 @@ bool KSTMainWindow::doConfiguration()
     conf.password = password;
     conf.autoConnect = autoConnect;
     conf.locator = myLoc;
+    conf.maxDistance = maxDistance;
+
+    conf.ASActive = ASActive;
+    conf.ASActiveBand = ASActiveBand;
+    conf.ASServerName = ASServerName;
+    conf.ASMyName = ASMyName;
+    conf.ASMinDistance = ASMinDistance;
+    conf.ASMaxDistance = ASMaxDistance;
+    conf.ASPort = ASPort;
+    conf.ASTimeout = ASTimeout;
 
     int ret = conf.exec();
     if (ret == QDialog::Accepted)
@@ -898,6 +1162,15 @@ bool KSTMainWindow::doConfiguration()
         password = conf.password;
         autoConnect = conf.autoConnect;
         myLoc = conf.locator;
+        maxDistance = conf.maxDistance;
+        ASActive = conf.ASActive;
+        ASActiveBand = conf.ASActiveBand;
+        ASServerName = conf.ASServerName;
+        ASMyName = conf.ASMyName;
+        ASMinDistance = conf.ASMinDistance;
+        ASMaxDistance = conf.ASMaxDistance;
+        ASPort = conf.ASPort;
+        ASTimeout = conf.ASTimeout;
 
         QSettings settings;
 
@@ -907,7 +1180,27 @@ bool KSTMainWindow::doConfiguration()
         settings.setValue("password", password);
         settings.setValue("autoConnect", autoConnect);
         settings.setValue("locator", myLoc);
+        settings.setValue("maxDistance", maxDistance);
 
+        settings.setValue("ASActive", ASActive);
+        settings.setValue("ASServerName", ASServerName);
+        settings.setValue("ASMyName", ASMyName);
+        settings.setValue("ASActiveBand", ASActiveBand);
+        settings.setValue("ASMinDistance", ASMinDistance);
+        settings.setValue("ASMaxDistance", ASMaxDistance);
+        settings.setValue("ASPort", ASPort);
+        settings.setValue("ASTimeout", ASTimeout);
+
+        kstCallFilterModel.invalidate();
+        kstMessageFilterModel.invalidate();
+
+        if (getASActive())
+        {
+            asl.reset();
+
+            asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
+            connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
+        }
         if  (kstconnected)
         {
             reconnect();
@@ -971,13 +1264,6 @@ void KSTMainWindow::on_meepButton_clicked()
         }
         ui->msgEdit->clear();
     }
-}
-
-void KSTMainWindow::on_msgSplitter_splitterMoved(int /*pos*/, int /*index*/)
-{
-    QSettings settings;
-    QByteArray state = ui->msgSplitter->saveState();
-    settings.setValue("msgSplitterState" , state);
 }
 
 void KSTMainWindow::setNameFromCall(QString call)
@@ -1077,7 +1363,16 @@ void KSTMainWindow::doLoginChanges()
         if (kstChatSelection.count())
         {
             kstCallModel.locator = myLoc;
-            kstclient->connectToHost(serverName, serverPort.toUShort());
+            if (autoConnect)
+            {
+                if (kstclient->state() != QAbstractSocket::ConnectedState
+                   && kstclient->state() != QAbstractSocket::ConnectingState
+                   && kstclient->state() != QAbstractSocket::ClosingState
+                   && kstclient->state() != QAbstractSocket::HostLookupState)
+                {
+                    kstclient->connectToHost(serverName, serverPort.toUShort());
+                }
+            }
         }
 
     }
@@ -1102,7 +1397,10 @@ void KSTMainWindow::doLoginChanges()
 void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
 {
     QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
-    QSharedPointer<KstMessageLine> line = messageVector->at(sourceIndex.row());
+    int row = sourceIndex.row();
+    if (row >= messageVector->size())
+        return;
+    QSharedPointer<KstMessageLine> line = messageVector->at(row);
     QString call = line->call;
     if (call.compare(myCallsign, Qt::CaseInsensitive) == 0)
     {
@@ -1166,7 +1464,6 @@ void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
 void KSTMainWindow::on_clearButton_clicked()
 {
     kstMessageModel.reset();
-    kstCallModel.reset();
 }
 bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
 {
@@ -1363,4 +1660,99 @@ void KSTMainWindow::on_clearUserFilter_clicked()
 {
     ui->CSChatFilter->setCurrentIndex(0);
     ui->CSFilter->clear();
+}
+
+void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)
+{
+    if (started)
+    {
+        if (asl && getASActive())
+        {
+            for (int i = 0; i < callVector->size(); i++)
+            {
+                QSharedPointer<KstUser> kstuser = callVector->at(i);
+                kstuser->planes.clear();
+            }
+            callVectorChanged = true;
+            emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));
+
+            userCallTimerTimer();
+        }
+        QSettings settings;
+
+        settings.setValue("ASActiveBand", band);
+    }
+}
+
+void KSTMainWindow::on_ASActivecb_stateChanged(int state)
+{
+    if (started)
+    {
+        if (asl && getASActive())
+        {
+            for (int i = 0; i < callVector->size(); i++)
+            {
+                QSharedPointer<KstUser> kstuser = callVector->at(i);
+                kstuser->planes.clear();
+            }
+            callVectorChanged = true;
+            emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));
+
+            asl->clearWatchList();
+            userCallTimerTimer();
+        }
+
+        QSettings settings;
+
+        settings.setValue("ASActive", state != 0);
+
+        ui->planesFrame->setVisible(state != 0);
+        if(state != 0)
+        {
+            ui->CSTable->showColumn(ecscAirscout);
+        }
+        else
+        {
+            ui->CSTable->hideColumn(ecscAirscout);
+        }
+    }
+}
+
+void KSTMainWindow::on_showInAS_clicked()
+{
+    asl->asSelected(planeActive);
+}
+QSharedPointer<KstUser> KSTMainWindow::getUser(QString call)
+{
+    QSharedPointer<KstUser> test(new KstUser());
+    test->call = call.toUpper();
+    test->chat = activeChat;
+    if (std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
+    {
+        int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
+
+        QSharedPointer<KstUser> user = callVector->at(row);
+
+        return user;
+    }
+    return QSharedPointer<KstUser>();
+}
+void KSTMainWindow::on_showMPath_clicked()
+{
+    QModelIndex index = ui->messageTable->currentIndex();
+    QModelIndex sourceIndex = kstMessageFilterModel.mapToSource(index);
+    int row = sourceIndex.row();
+    if (row < 0 || row >= messageVector->size())
+        return;
+    QSharedPointer<KstMessageLine> line = messageVector->at(row);
+    QString call = line->call;
+    QString otherCall = line->otherCall;
+
+    QSharedPointer<KstUser> user = getUser(call);
+    QSharedPointer<KstUser> other = getUser(otherCall);
+
+    if (user && other)
+    {
+        asl->asShowPath(user, other);
+    }
 }

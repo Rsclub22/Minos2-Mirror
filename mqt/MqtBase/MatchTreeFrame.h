@@ -51,6 +51,7 @@ public:
 
 class QSOMatchGridModel: public QAbstractItemModel
 {
+    Q_OBJECT
     static GridColumn ThisMatchTreeColumns[ THISMATCHTREECOLS ];
     static GridColumn OtherMatchTreeColumns[ OTHERMATCHTREECOLS ];
     static GridColumn ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ];
@@ -114,9 +115,9 @@ protected:
     BaseContestLog *contest;
 
 
-    void showThisMatchQSOs(SharedMatchCollection matchCollection );
-    void showOtherMatchQSOs( SharedMatchCollection matchCollection );
-    void showMatchList(SharedMatchCollection matchCollection );
+    virtual void showThisMatchQSOs(SharedMatchCollection /*matchCollection*/ ){}
+    virtual void showOtherMatchQSOs( SharedMatchCollection /*matchCollection*/ ){}
+    virtual void showMatchList(SharedMatchCollection /*matchCollection*/ ){}
 
 private slots:
     virtual void on_matchTreeSelectionChanged(const QItemSelection &, const QItemSelection &){}

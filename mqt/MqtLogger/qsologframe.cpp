@@ -2890,19 +2890,18 @@ void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
 
 void QSOLogFrame::setClusterServerState(QString stateMsg)
 {
-    if (stateMsg.contains("Connected"))
+    QStringList s = stateMsg.split("<>");
+    if (s.size() < 2)
+        return;
+
+    if (s[0].contains("Connected"))
     {
-
          clusterServerConnected = true;
-
     }
     else
     {
-
          clusterServerConnected = false;
-
     }
-
 }
 
 

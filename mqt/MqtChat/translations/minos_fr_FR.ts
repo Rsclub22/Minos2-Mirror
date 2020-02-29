@@ -6,7 +6,7 @@
     <message>
         <location filename="../chatmain.ui" line="14"/>
         <source>Minos Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Minos Bavardage</translation>
     </message>
 </context>
 </TS>

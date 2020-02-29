@@ -12,7 +12,7 @@
 #include "base_pch.h"
 #include "ProfileEnums.h"
 //----------------------------------------------------------------------------
-extern const QString defaultLayoutName;
+extern QString defaultLayoutName();
 
 class SettingsBundle;
 class ProfileEntry
@@ -21,19 +21,19 @@ class ProfileEntry
    public:
       int id;
       QString name;
-      QString dispname;
+      const char * dispname;
 
       QString sdefaultval;
       int idefaultval;
       bool bdefaultval;
 
-      QString hint;
+      const char * hint;
       bool RO;
 
       void createEntry( SettingsBundle * );
-      ProfileEntry(int id, const  char *name, const char * def, QString dispname, QString hint, bool RO );
-      ProfileEntry(int id, const  char *name, int def, QString dispname, QString hint, bool RO );
-      ProfileEntry(int id, const char *name, bool def, QString dispname, QString hint, bool RO );
+      ProfileEntry(int id, const  char *name, const char * def, const char * dispname, const char * hint, bool RO );
+      ProfileEntry(int id, const  char *name, int def, const char * dispname, const char * hint, bool RO );
+      ProfileEntry(int id, const char *name, bool def, const char * dispname, const char * hint, bool RO );
 };
 class INIFile;
 
@@ -60,6 +60,7 @@ class BundleFile
 };
 class SettingsBundle
 {
+    Q_DECLARE_TR_FUNCTIONS(SettingsBundle)
    protected:
       QString currsection;
    public:

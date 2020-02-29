@@ -38,7 +38,7 @@ void MinosContestLoadDialog::setLoadMessage(QString mess, bool newFile, bool lis
 
     ui->contestNameLabel->setText(m);
 
-    trace("Progress Dialog add mesage for " + mess);
+    trace("Progress Dialog add message for " + mess);
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 }

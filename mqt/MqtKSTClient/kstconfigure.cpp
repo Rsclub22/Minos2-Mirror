@@ -1,6 +1,7 @@
 #include "kstconfigure.h"
 #include "ui_kstconfigure.h"
 
+
 KSTConfigure::KSTConfigure(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::KSTConfigure)
@@ -24,6 +25,20 @@ int KSTConfigure::exec()
 
     ui->locatorEdit->setText(locator);
     ui->autoConnect->setChecked(autoConnect);
+    ui->maxDistanceEdit->setText(QString::number(maxDistance));
+    ui->maxDistanceEdit->setValidator(new QIntValidator(0, 0xffff, this));
+
+    ui->ASServerName->setText(ASServerName);
+    ui->ASMyName->setText(ASMyName);
+
+    ui->ASMaxDistance->setText(QString::number(ASMaxDistance));
+    ui->ASMaxDistance->setValidator(new QIntValidator(0, 0xffff, this));
+    ui->ASMinDistance->setText(QString::number(ASMinDistance));
+    ui->ASMinDistance->setValidator(new QIntValidator(0, 0xffff, this));
+    ui->ASPort->setText(QString::number( ASPort));
+    ui->ASPort->setValidator(new QIntValidator(0, 0xffff, this));
+    ui->ASTimeout->setText(QString::number( ASTimeout));
+    ui->ASTimeout->setValidator(new QIntValidator(1, 60, this));
 
     return QDialog::exec();
 }
@@ -46,8 +61,21 @@ void KSTConfigure::on_OKButton_clicked()
     autoConnect = ui->autoConnect->isChecked();
     locator = ui->locatorEdit->text().toUpper();
 
+    maxDistance = ui->maxDistanceEdit->text().toInt();
+
+    ASServerName = ui->ASServerName->text();
+    ASMyName = ui->ASMyName->text();
+
+    ASMaxDistance = ui->ASMaxDistance->text().toInt();
+    ASMinDistance = ui->ASMinDistance->text().toInt();
+
+    ASPort = ui->ASPort->text().toInt();
+    ASTimeout = ui->ASTimeout->text().toInt();
+
     if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty() || locator.isEmpty())
         return;
+
+
 
     accept();
 }

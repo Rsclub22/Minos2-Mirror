@@ -3,11 +3,14 @@
 
 #include "base_pch.h"
 
+#include "airscoutlink.h"
+
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QRadioButton>
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
+#include "kstplanesmodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
@@ -20,6 +23,7 @@ class KSTMainWindow : public QMainWindow
     Q_OBJECT
 
     QTimer CloseTimer;
+    QTimer userCallTimer;
 
     KstMessageGridModel kstMessageModel;
     KstMessageGridSortFilterModel kstMessageFilterModel;
@@ -32,11 +36,15 @@ class KSTMainWindow : public QMainWindow
     KstCallGridSortFilterModel kstCallFilterModel;
 
     QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector;
+    bool callVectorChanged = false;
 
+    KstPlanesModel kstPlanesModel;
+    KstPlanesGridSortFilterModel kstPlanesFilterModel;
 
     QSharedPointer<HtmlDelegate> meepDelegate;
     QSharedPointer<HtmlDelegate> messageDelegate;
     QSharedPointer<HtmlDelegate> CSDelegate;
+    QSharedPointer<HtmlDelegate> PlanesDelegate;
 
     QTcpSocket* kstclient;
 
@@ -51,6 +59,17 @@ class KSTMainWindow : public QMainWindow
     QString myLoc;
     bool autoConnect = false;
 
+    int maxDistance = 99999;
+
+    bool ASActive = false;
+    ASBand ASActiveBand = asb144M;
+    QString ASServerName = "AS";
+    QString ASMyName = "Minos";
+    int ASMinDistance = 300;
+    int ASMaxDistance = 1000;
+    int ASPort = 9872;
+    int ASTimeout = 10;
+
     bool kstconnected = false;
     bool started = false;
 
@@ -62,6 +81,9 @@ class KSTMainWindow : public QMainWindow
     int CSChatFilter = 0;
 
     int messageSequence = 0;
+
+    QSharedPointer<AirScoutLink> asl;
+    QSharedPointer<KstUser> planeActive;
 
     void sendKST(QString msg);
     void analyseKstMessage(QString atj);
@@ -81,8 +103,41 @@ public:
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
 
+    int getMaxDistance() const;
+
+    bool getASActive() const;
+
+    ASBand getASActiveBand() const;
+
+    QString getASServerName() const;
+
+    QString getASMyName() const;
+
+    int getASMinDistance() const;
+
+    int calcDistance(QString c);
+
+    int getASMaxDistance() const;
+
+    QString getMyCallsign() const;
+
+    QString getMyLoc() const;
+
+    QSharedPointer<QVector<QSharedPointer<KstUser> > > getCallVector() const;
+
+    int getActiveChat() const;
+
+    void showPlanes(QSharedPointer<KstUser> user);
+
+    QSharedPointer<KstUser> getUser(QString call);
+    int getASPort() const;
+
+    int getASTimeout() const;
+
 private slots:
     void CloseTimerTimer();
+
+    void userCallTimerTimer();
 
     void on_analyseButton_clicked();
 
@@ -134,6 +189,20 @@ private slots:
 
     void on_clearUserFilter_clicked();
 
+    void on_sectionMoved(int, int, int);
+
+    void acChanged(QSharedPointer<KstUser>);
+
+    void on_asBandCombo_currentIndexChanged(int index);
+
+    void on_ASActivecb_stateChanged(int arg1);
+
+    void on_showInAS_clicked();
+
+    void on_showMPath_clicked();
+
+    void on_callSplitter_splitterMoved(int pos, int index);
+
 private:
     Ui::KSTMainWindow *ui;
     void clearConnection();
@@ -141,4 +210,6 @@ private:
     void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
     void checkAwayButton();
 };
+
+extern KSTMainWindow *mainWindow;
 #endif // KSTMAINWINDOW_H

@@ -48,7 +48,8 @@ public:
     void setCurrentFrameType(QString);
 
     static AuxEntries getAuxEntryType(QString s);
-    static QString getAuxTypeString(AuxEntries t);
+    static const char *getRawAuxTypeString(AuxEntries t);
+    static QString getTrAuxTypeString(AuxEntries t);
 
 
 private:

@@ -67,13 +67,16 @@ public:
 
 
 
+    QAction *newAction(int n, QMenu *m, const char *atype);
+    void doListOpenActionExecute(QWidget *p);
 private:
     Ui::TLogContainer *ui;
 
     QTimer TimerUpdateQSOTimer;
-
-
     QMenu TabPopup;
+
+    QMap<QAction *, const char *> actionList;
+    QMap<QMenu *, const char *> menuList;
 
     QMenu *screenLayoutMenu;
     enum { MaxRecentFiles = 5 };
@@ -83,6 +86,7 @@ private:
     QMenu *sessionsMenu;
     QMenu *keyerRecordMenu;
     QMenu *keyerPlaybackMenu;
+    QMenu *languagesMenu;
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
@@ -99,12 +103,15 @@ private:
     TSingleLogFrame *findLogFrame(int t);
     void selectTab(int t);
 
-    QAction *lastSessionSelected;
-    QAction *lastLayoutSelected;
+    QAction *lastSessionSelected = nullptr;
+    QAction *lastLayoutSelected = nullptr;
+    QAction *lastLanguageSelected = nullptr;
 
-    QAction *newAction(const QString &text, QMenu *m, const char *atype );
-    SetMemoryAction *newMemoryAction(const QString &text, QMenu *m, const char *atype );
-    QAction *newCheckableAction( const QString &text, QMenu *m, const char *atype );
+    QAction *newAction(const char *text, QMenu *m, const char *atype );
+    QMenu *newMenu(QMenu *m, const char *text);
+    SetMemoryAction *newMemoryAction(const char *text, QMenu *m, const char *atype );
+    QAction *newCheckableAction(const char *text, QMenu *m, const char *atype );
+    QAction *newCheckableAction(const QString text, QMenu *m, const char *atype );
     void setupMenus();
 
     QAction *HelpAction;
@@ -139,6 +146,7 @@ private:
     QAction *ShowOperatorsAction;
     QAction *OptionsAction;
     QAction *FontEditAcceptAction;
+    QAction *LanguageAcceptAction;
     QAction *WSJTXConfigAction;
     QAction *ReportAutofillAction;
 
@@ -157,7 +165,7 @@ private:
     BaseContestLog *loadSession(QString sessName);
     void preloadLists( );
     void preloadFiles( const QString &conarg );
-    void addListSlot(const QString &fname, int slotno , bool preload);
+    void addListSlot(QWidget *p, const QString &fname, int slotno , bool preload);
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;
@@ -175,7 +183,6 @@ private slots:
     void openRecentFile();
     void FileOpenActionExecute();
     void FileImportActionExecute();
-    void ListOpenActionExecute();
     void ManageListsActionExecute();
     void ContestDetailsActionExecute();
     void FileCloseActionExecute();
@@ -199,6 +206,7 @@ private slots:
     void ShowOperatorsActionExecute();
     void OptionsActionExecute();
     void FontEditAcceptActionExecute();
+    void LanguageAcceptActionExecute();
     void WsjtConfigActionExecute();
     void ReportAutofillActionExecute();
 
@@ -228,6 +236,7 @@ private slots:
     void doScreenConfigAction();
 public slots:
     void onArgsReceived(QString conarg);
+    void ListOpenActionExecute();
 
 signals:
     void sendKeyerPlay( int fno );

@@ -227,7 +227,7 @@ void StartConfig::on_newElementButton_clicked()
 
     QSharedPointer<RunConfigElement> c = QSharedPointer<RunConfigElement> (new RunConfigElement);
     c->runType = RunLocal;
-    c->appType = "None";
+    c->appType = MinosConfig::tr(MinosConfig::appNone);
     c->rEnabled = true;
 
     cef->setElement(c);

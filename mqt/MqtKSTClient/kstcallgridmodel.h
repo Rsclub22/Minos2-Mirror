@@ -6,13 +6,16 @@
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"
 
-enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
 
+enum CallColumns {ecscChat, ecscCall, ecscLoc, ecscDistance, ecscBearing, ecscAirscout, ecscName, ecscCountryPrefix, ecscCountryName, ecscMaxColumn};
+
+class Aircraft;
 class KstUser
 {
 public:
     int chat;
     QString call;
+    QString baseCall;
     QString loc;
     QString name;
     QString prefix;
@@ -20,6 +23,14 @@ public:
     bool away = false;
     bool recent = false;
     int distance = -1;
+    int bearing = -1;
+
+    QString lastCalcTime;
+    QString fromCall;
+    QString fromLoc;
+    QString toCall;
+    QString toLoc;
+    QVector<Aircraft> planes;
 
     bool operator< ( const KstUser& rhs ) const;
 
@@ -30,7 +41,15 @@ class KstCallGridModel: public QAbstractItemModel
 {
     Q_OBJECT
 
-    public:
+    QString filterString;
+    int chatFilter = 0;
+
+    void checkDistBear(QSharedPointer<KstUser> crec) const;
+    bool isFiltered() const
+    {
+        return !filterString.isEmpty() || chatFilter != 0;
+    }
+public:
         QString locator;
         KstCallGridModel();
         virtual ~KstCallGridModel() override
@@ -50,17 +69,26 @@ class KstCallGridModel: public QAbstractItemModel
         QModelIndex parent( const QModelIndex &index )const Q_DECL_OVERRIDE;
 
         int rowCount( const QModelIndex &parent = QModelIndex() )const Q_DECL_OVERRIDE;
+        int rawCount( const QModelIndex &parent = QModelIndex() )const;
 
         void appendRow(QSharedPointer<KstUser> kstmsg);
         void insertRow(int row, QSharedPointer<KstUser> call);
         void reset();
         void removeRow(int _row);
+
+        void setFilterString(QString f);
+        void setChatFilter(int value);
+
 };
 
 class KstCallGridSortFilterModel: public QSortFilterProxyModel
 {
     QString filterString;
     int chatFilter = 0;
+    bool isFiltered() const
+    {
+        return !filterString.isEmpty() || chatFilter != 0;
+    }
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);

@@ -16,8 +16,10 @@
 
 class RotPresetData
 {
-
+    Q_DECLARE_TR_FUNCTIONS(RotPresetData)
 public:
+static const char * presetButtonLabels[4];
+
 
     RotPresetData(int _number, QString _name, QString _bearing);
     RotPresetData();
@@ -102,13 +104,10 @@ const QString ROT_STATUS_CONNECTED  = "Connected";
 const QString ROT_STATUS_DISCONNECTED = "Disconnected";
 const QString ROT_STATUS_ERROR = "Error";
 
-const QString ROT_STATUS_ROTATE_CCW = "<font color='Green'>Rotating CCW</font>";
-const QString ROT_STATUS_ROTATE_CW = "<font color='Green'>Rotating CW</font>";
+const QString ROT_STATUS_ROTATE_CCW = "Rotating CCW";
+const QString ROT_STATUS_ROTATE_CW = "Rotating CW";
 const QString ROT_STATUS_STOP = "Stop";
-const QString ROT_STATUS_TURN_TO = "<font color='Green'>Turning to bearing</font>";
-
-const QString ROT_ACTIVE = "Rot_Active";
-const QString ROT_NOT_ACTIVE = "Rot_Not_Active";
+const QString ROT_STATUS_TURN_TO = "Turning to bearing";
 
 // Bearing Log
 const QString BEARINGLOG_FILETYPE = ".log";

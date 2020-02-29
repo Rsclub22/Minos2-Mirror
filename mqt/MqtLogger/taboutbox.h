@@ -12,11 +12,7 @@ class TAboutBox : public QDialog
     Q_OBJECT
 
     static QString welcomeText;
-
-    static const char * wpart;
-
     static QString creditsText;
-    static const char *cpart;
     static QString MinosText;
 
     Ui::TAboutBox *ui;

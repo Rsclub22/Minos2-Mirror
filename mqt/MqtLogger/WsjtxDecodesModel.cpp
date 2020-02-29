@@ -42,52 +42,42 @@
   What about the oher modes?
 
   */
-namespace
-{
-class DecodeHeading
-{
-public:
-    QString text;
-    Qt::AlignmentFlag alignment;
-};
 
-DecodeHeading const headings[dcMaxVal] = {
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Client"), Qt::AlignLeft},
+DecodeHeading const DecodesModel::headings[dcMaxVal] = {
+    {QT_TR_NOOP ("Client"), Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Time"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Snr"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "DT"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "DF"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Md"),Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Confidence"),Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Live"),Qt::AlignLeft},
+    {QT_TR_NOOP ("Time"), Qt::AlignLeft},
+    {QT_TR_NOOP ("Snr"), Qt::AlignLeft},
+    {QT_TR_NOOP ("DT"), Qt::AlignLeft},
+    {QT_TR_NOOP ("DF"), Qt::AlignLeft},
+    {QT_TR_NOOP ("Md"),Qt::AlignLeft},
+    {QT_TR_NOOP ("Confidence"),Qt::AlignLeft},
+    {QT_TR_NOOP ("Live"),Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Seq"),Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "points"),Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "brg"),Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "distance"),Qt::AlignLeft},
+    {QT_TR_NOOP ("Seq"),Qt::AlignLeft},
+    {QT_TR_NOOP ("points"),Qt::AlignLeft},
+    {QT_TR_NOOP ("brg"),Qt::AlignLeft},
+    {QT_TR_NOOP ("distance"),Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Call"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Grid"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "To Call"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "To Grid"), Qt::AlignLeft},
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Best"), Qt::AlignLeft},
+    {QT_TR_NOOP ("Call"), Qt::AlignLeft},
+    {QT_TR_NOOP ("Grid"), Qt::AlignLeft},
+    {QT_TR_NOOP ("To Call"), Qt::AlignLeft},
+    {QT_TR_NOOP ("To Grid"), Qt::AlignLeft},
+    {QT_TR_NOOP ("Best"), Qt::AlignLeft},
 
-    {QT_TRANSLATE_NOOP ("DecodesModel", "Message"), Qt::AlignLeft}
+    {QT_TR_NOOP ("Message"), Qt::AlignLeft}
 };
 
 QRegularExpression cq_re {"(CQ|CQDX|QRZ)[^A-Z0-9/]+"};
 
-QString confidence_string (bool low_confidence)
+QString DecodesModel::confidence_string (bool low_confidence) const
 {
-    return low_confidence ? QT_TRANSLATE_NOOP ("DecodesModel", "low") : QT_TRANSLATE_NOOP ("DecodesModel", "high");
+    return low_confidence ? tr ("low") : tr ("high");
 }
 
-QString live_string (bool off_air)
+QString DecodesModel::live_string (bool off_air) const
 {
-    return off_air ? QT_TRANSLATE_NOOP ("DecodesModel", "no") : QT_TRANSLATE_NOOP ("DecodesModel", "yes");
-}
-
+    return off_air ? tr ("no") : tr ("yes");
 }
 
 DecodesModel::DecodesModel ()
@@ -96,7 +86,7 @@ DecodesModel::DecodesModel ()
     int column {0};
     for (auto const& heading : headings)
     {
-        setHeaderData (column++, Qt::Horizontal, heading.text);
+        setHeaderData (column++, Qt::Horizontal, tr(heading.text));
     }
 }
 
@@ -306,7 +296,7 @@ QVariant DecodesModel::headerData (int section, Qt::Orientation orientation,
 {
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
-        QString h = headings[ section ].text;
+        QString h = tr(headings[ section ].text);
         return h;
     }
     else if (role == Qt::TextAlignmentRole)

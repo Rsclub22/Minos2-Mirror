@@ -68,6 +68,12 @@ void MatchTreeFrame::setBaseName(QString b)
 void MatchTreeFrame::setContest(BaseContestLog *ct)
 {
     contest = ct;
+    if (!ct)
+    {
+        showThisMatchQSOs(SharedMatchCollection());
+        showOtherMatchQSOs(SharedMatchCollection());
+        showMatchList(SharedMatchCollection());
+    }
 }
 void MatchTreeFrame::restoreColumns()
 {
@@ -143,44 +149,44 @@ void MatchTreeFrame::on_matchTree_clicked(const QModelIndex &)
 
 GridColumn QSOMatchGridModel::ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
 {
-    GridColumn( egTime, "XXXXXXXXXX", "UTC", taLeftJustify ),               // time
-    GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
-    GridColumn( egRSTTx, "599XXX", "RepTx", taLeftJustify ),                 // RST
-    GridColumn( egSNTx, "1234X", "SnTx", taLeftJustify /*taRightJustify*/ ),   // serial
-    GridColumn( egRSTRx, "599XXX", "RepRx", taLeftJustify ),                 // RST
-    GridColumn( egSNRx, "1234X", "SnRx", taLeftJustify /*taRightJustify*/ ),   // Serial
-    GridColumn( egLoc, "MM00MM00X", "Loc", taLeftJustify ),            // LOC
-    GridColumn( egScore, "12345XX", "dist", taLeftJustify /*taRightJustify*/ ),  // score
-    GridColumn( egBrg, "3601X", "brg", taLeftJustify ),                // bearing
-    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", "Exchange", taLeftJustify ),    // QTH
-    GridColumn( egComments, "XXXXXXXXXXXXXXXX", "Comments", taLeftJustify ),     // comments
-    GridColumn( egFrequency, "1.296.123.456XXX", "Freq", taLeftJustify ),
-    GridColumn( egRotatorHeading, "XXXXXX", "Rot Heading", taLeftJustify ),
-    GridColumn( egRigName, "XXXXXX", "Rig", taLeftJustify )
+    GridColumn( egTime, "XXXXXXXXXX",QT_TR_NOOP( "UTC"), taLeftJustify ),               // time
+    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
+    GridColumn( egRSTTx, "599XXX", QT_TR_NOOP("RepTx"), taLeftJustify ),                 // RST
+    GridColumn( egSNTx, "1234X", QT_TR_NOOP("SnTx"), taLeftJustify /*taRightJustify*/ ),   // serial
+    GridColumn( egRSTRx, "599XXX", QT_TR_NOOP("RepRx"), taLeftJustify ),                 // RST
+    GridColumn( egSNRx, "1234X", QT_TR_NOOP("SnRx"), taLeftJustify /*taRightJustify*/ ),   // Serial
+    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
+    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
+    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
+    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),    // QTH
+    GridColumn( egComments, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Comments"), taLeftJustify ),     // comments
+    GridColumn( egFrequency, "1.296.123.456XXX", QT_TR_NOOP("Freq"), taLeftJustify ),
+    GridColumn( egRotatorHeading, "XXXXXX", QT_TR_NOOP("Rot Heading"), taLeftJustify ),
+    GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
 };
 //---------------------------------------------------------------------------
 GridColumn QSOMatchGridModel::OtherMatchTreeColumns[ OTHERMATCHTREECOLS ] =
 {
-    GridColumn( egTime, "XXXXXXXXXX", "UTC", taLeftJustify ),               // time
-    GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
-    GridColumn( egLoc, "MM00MM00X", "Loc", taLeftJustify ),            // LOC
-    GridColumn( egScore, "12345XX", "dist", taLeftJustify /*taRightJustify*/ ),  // score
-    GridColumn( egBrg, "3601X", "brg", taLeftJustify ),                // bearing
-    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", "Exchange", taLeftJustify ),    // QTH
-    GridColumn( egComments, "XXXXXXXXXXXXXXXX", "Comments", taLeftJustify ),     // comments
-    GridColumn( egFrequency, "1.296.123.456XXX", "Freq", taLeftJustify ),
-    GridColumn( egRotatorHeading, "XXXXXX", "Rot Heading", taLeftJustify ),
-    GridColumn( egRigName, "XXXXXX", "Rig", taLeftJustify )
+    GridColumn( egTime, "XXXXXXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
+    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
+    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
+    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
+    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
+    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),    // QTH
+    GridColumn( egComments, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Comments"), taLeftJustify ),     // comments
+    GridColumn( egFrequency, "1.296.123.456XXX", QT_TR_NOOP("Freq"), taLeftJustify ),
+    GridColumn( egRotatorHeading, "XXXXXX", QT_TR_NOOP("Rot Heading"), taLeftJustify ),
+    GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
 };
 //---------------------------------------------------------------------------
 GridColumn QSOMatchGridModel::ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ] =
 {
-    GridColumn( egCall, "MMMMMMMMMMM", "Callsign", taLeftJustify ),         // call
-    GridColumn( egLoc, "MM00MM00X", "Loc", taLeftJustify ),            // LOC
-    GridColumn( egScore, "12345XX", "dist", taLeftJustify /*taRightJustify*/ ),  // score
-    GridColumn( egBrg, "3601X", "brg", taLeftJustify ),                // bearing
-    GridColumn( egExchange, "XXXXXX", "Exchange", taLeftJustify ),     // exchange
-    GridColumn( egComments, "XXXX", "Comments", taLeftJustify )     // comments
+    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
+    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
+    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
+    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
+    GridColumn( egExchange, "XXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),     // exchange
+    GridColumn( egComments, "XXXX", QT_TR_NOOP("Comments"), taLeftJustify )     // comments
 };
 //---------------------------------------------------------------------------
 
@@ -247,7 +253,7 @@ void QSOMatchGridModel::initialise(MatchType t, SharedMatchCollection pmatch )
         rootItem = nullptr;
     }
 
-    if (pmatch->contactCount() == 0)
+    if (!pmatch || pmatch->contactCount() == 0)
     {
         endResetModel();
         return;
@@ -365,7 +371,6 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
         }
         else
         {
-            const BaseContestLog *contest = matchContest->getContactLog();
             if (ct)
             {
                 if( column >= 0 && column < columnCount(p))
@@ -373,6 +378,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
 
                     QString line;
                     BaseContestLog * act = MinosParameters::getMinosParameters() ->getCurrentContest();
+                    const BaseContestLog *contest = matchContest->getContactLog();
 
 
                     if (type == ThisMatch)
@@ -444,11 +450,14 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                 {
                     if (type == ThisMatch)
                     {
-                        QString res = "Current contest: " + TMatchThread::getThisMatchStatus();
+                        QString res = tr("Current contest: ") + TMatchThread::getThisMatchStatus();
                         return res;
                     }
                     if (type == OtherMatch)
                     {
+                        const BaseContestLog *contest = matchContest->getContactLog();
+                        //But we have just shut the "other" contest... so we are pointing at nothing
+                        //This is where we have an "other" match and we close the "other" contest
                         QString name = contest->name.getValue();
                         QString band = contest->band.getValue();
 

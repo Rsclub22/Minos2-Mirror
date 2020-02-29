@@ -1,46 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="fr_FR">
+<TS version="2.1" language="en_GB">
 <context>
     <name>MinosConfig</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="483"/>
+        <location filename="../ConfigFile.cpp" line="16"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ConfigFile.cpp" line="505"/>
         <source>More than one server is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="492"/>
+        <location filename="../ConfigFile.cpp" line="514"/>
         <source>A local server is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="507"/>
+        <location filename="../ConfigFile.cpp" line="529"/>
         <source> contains bad characters [ and/or ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="522"/>
+        <location filename="../ConfigFile.cpp" line="544"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="563"/>
+        <location filename="../ConfigFile.cpp" line="585"/>
         <source>%1 requires a local %2
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="573"/>
+        <location filename="../ConfigFile.cpp" line="595"/>
         <source> Executable path does not exist
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="577"/>
+        <location filename="../ConfigFile.cpp" line="599"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.ini
 
 </source>

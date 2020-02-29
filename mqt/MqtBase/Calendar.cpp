@@ -16,8 +16,8 @@ static int monthLength[ 12 ] =
 //        "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
 //    };
 
-const char * Calendar::TypeVHFContest("<VHF from VHFContests.xml>");
-const char * Calendar::TypeMwaveContest("<Microwave from MicroContestsxx.xml>");
+const char * Calendar::TypeVHFContest = QT_TR_NOOP("<VHF from VHFContests.xml>");
+const char * Calendar::TypeMwaveContest = QT_TR_NOOP("<Microwave from MicroContestsxx.xml>");
 
 QString Calendar::getTypeName ( const QString &xmlName, CalType calType )
 {

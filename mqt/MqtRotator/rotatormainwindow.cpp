@@ -123,11 +123,11 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     ui->statusbar->addPermanentWidget(offSetDisplay);
 
     ui->statusbar->addPermanentWidget(actualRotatorlbl);
-    actualRotatorlbl->setText("Actual: ");
+    actualRotatorlbl->setText(tr("Actual: "));
     ui->statusbar->addPermanentWidget(actualRotatorDisplay);
 
     ui->statusbar->addPermanentWidget(rawRotatorlbl);
-    rawRotatorlbl->setText("RawRot: ");
+    rawRotatorlbl->setText(tr("RawRot: "));
     ui->statusbar->addPermanentWidget(rawRotatorDisplay);
 
     ui->overlaplineEdit->setFixedSize(60,20);
@@ -193,7 +193,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
         if (setupAntenna->currentAntennaName == "")
         {
             logMessage(QString("No antenna selected or no antenna found for this appName, %1").arg(appName));
-            QString errmsg = QString("<font color='Red'>") + tr("Please select an antenna or no antenna found!") + "</font>";
+            QString errmsg = HtmlFontColour(Qt::red) + tr("Please select an antenna or no antenna found!");
             showStatusMessage(errmsg);
             statusMsg = errmsg;
             sendStatusLogger();
@@ -915,7 +915,7 @@ void RotatorMainWindow::upDateAntenna()
             if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
             {
                 closeRotator();
-                QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
+                QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure an antenna name and rotator model"));
                 return;
             }
 
@@ -1010,7 +1010,7 @@ void RotatorMainWindow::refreshAntenna()
         if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
         {
             closeRotator();
-            QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
+            QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure an antenna name and rotator model"));
             return;
         }
 
@@ -2006,17 +2006,23 @@ void RotatorMainWindow::initPresetButtons()
     ui_presetbuttons << ui->presetButton0 << ui->presetButton1 << ui->presetButton2 << ui->presetButton3 << ui->presetButton4
                      << ui->presetButton5 << ui->presetButton6 << ui->presetButton7 << ui->presetButton8 << ui->presetButton9;
 
+    QStringList buttonLabels;
+    for (unsigned int i = 0; i < sizeof(RotPresetData::presetButtonLabels)/sizeof(const char *); i++)
+    {
+        buttonLabels.append(RotPresetData::tr(RotPresetData::presetButtonLabels[i]));
+    }
+
     for (int i = 0; i < ui_presetbuttons.count(); i++)
     {
 
-        presetButton.append(new RotPresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], presetButtonLabels));
+        presetButton.append(new PresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], buttonLabels));
 
-        connect(presetButton[i], &RotPresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &RotPresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
-        connect(presetButton[i], &RotPresetButton::presetReadAction, [this, i]() {presetRead(i);});
-        connect(presetButton[i], &RotPresetButton::presetEditAction, [this, i]() {presetEdit(i);});
-        connect(presetButton[i], &RotPresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
-        connect(presetButton[i], &RotPresetButton::presetClearAction, [this, i]() {presetClear(i);});
+        connect(presetButton[i], &PresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
+        connect(presetButton[i], &PresetButton::presetReadAction, [this, i]() {presetRead(i);});
+        connect(presetButton[i], &PresetButton::presetEditAction, [this, i]() {presetEdit(i);});
+        connect(presetButton[i], &PresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
+        connect(presetButton[i], &PresetButton::presetClearAction, [this, i]() {presetClear(i);});
 
 
     }

@@ -231,7 +231,6 @@ private slots:
     void on_SetRitRadioStatus(bool);
     void on_SetVolume(int level);
     void on_SetRadioStatus(QString);
-    void on_SetRadioTpm(int);
 
     void on_RotatorLoaded();
     void on_RotatorList();
@@ -284,8 +283,6 @@ private slots:
     void sendBandmapRadioIsConnected(bool state);
     void sendBandmapRadioHasError(QString error);
 public:
-    void sendTpm(int t, QString f);
-    
     void on_SetTransVertOffset(double offset, PubSubName psn);
     void on_SetTransVertSwitch(int switchNum, PubSubName psn);
     void on_SetTransVertStatus(bool status, PubSubName psn);

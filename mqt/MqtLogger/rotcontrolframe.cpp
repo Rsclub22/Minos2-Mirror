@@ -222,7 +222,7 @@ void RotControlFrame::turnTo(int angle)
             if (angle == COMPASS_ERROR)
             {
                 traceMsg(QString("TurnTo: Bearing empty or invalid"));
-                QString msg = "<font color='Red'>Bearing empty or invalid</font>";
+                QString msg = HtmlFontColour(Qt::red) + tr("Bearing empty or invalid");
                 ui->rotatorStatMsg->setText(msg);
                 return;
             }
@@ -232,7 +232,7 @@ void RotControlFrame::turnTo(int angle)
             if (angle > COMPASS_MAX360)
             {
                 traceMsg(QString("TurnTo: Bearing too large"));
-                QString msg = tr("<font color='Red'>Bearing too large - %1</font>").arg(angle);
+                QString msg = HtmlFontColour(Qt::red) + tr("Bearing too large - %1").arg(angle);
                 ui->rotatorStatMsg->setText(msg);
                 return;
             }
@@ -240,7 +240,7 @@ void RotControlFrame::turnTo(int angle)
             else if (angle < COMPASS_MIN0)
             {
                 traceMsg(QString("TurnTo: Bearing too small"));
-                QString msg = tr("<font color='Red'>Bearing too small - %1</font>").arg(angle);
+                QString msg = HtmlFontColour(Qt::red) + tr("Bearing too small - %1").arg(angle);
                 ui->rotatorStatMsg->setText(msg);
                 return;
             }
@@ -589,7 +589,6 @@ void RotControlFrame::setRotatorList()
     }
 }
 
-
 void RotControlFrame::setRotatorState(const QString &s)
 {
        traceMsg("Set Rotator State = " + s);
@@ -604,7 +603,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                lastConnectStat = sl[0];
                if (lastConnectStat == ROT_STATUS_CONNECTED)
                {
-                   ui->rotConnectState->setText(lastConnectStat);
+                   ui->rotConnectState->setText(tr("Connected"));
                    rotError = false;
                    rotConnected = true;
                    setRotatorAntennaName(ct->antennaName.getValue().toString()); // make sure the name appears
@@ -613,7 +612,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastConnectStat == ROT_STATUS_DISCONNECTED)
                {
-                   ui->rotConnectState->setText(lastConnectStat);
+                   ui->rotConnectState->setText(tr("Disconnected"));
                    rotError = false;
                    rotConnected = false;
                    emit rotatorConnected(false);     // tell bandmap
@@ -627,7 +626,7 @@ void RotControlFrame::setRotatorState(const QString &s)
 
                if (lastStatus == ROT_STATUS_STOP)
                {
-                   ui->rotatorStatMsg->setText(lastStatus);
+                   ui->rotatorStatMsg->setText(tr("Stop"));
                    rotError = false;
                    clearRotatorFlags();
                    showRotLeftButOff();
@@ -636,7 +635,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastStatus == ROT_STATUS_ROTATE_CCW)
                {
-                   ui->rotatorStatMsg->setText(lastStatus);
+                   ui->rotatorStatMsg->setText(HtmlFontColour("Green") + tr("Rotating CCW"));
                    rotError = false;
                    moving = false;
                    movingCW = false;
@@ -646,7 +645,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastStatus == ROT_STATUS_ROTATE_CW)
                {
-                   ui->rotatorStatMsg->setText(lastStatus);
+                   ui->rotatorStatMsg->setText(HtmlFontColour("Green") + tr("Rotating CW"));
                    rotError = false;
                    moving = false;
                    movingCW = true;
@@ -657,7 +656,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                else if (lastStatus == ROT_STATUS_TURN_TO)
                {
 
-                       ui->rotatorStatMsg->setText(lastStatus);
+                       ui->rotatorStatMsg->setText(HtmlFontColour("Green") + tr("Turning to bearing"));
                        rotError = false;
                        moving = true;
                        movingCW = false;
@@ -667,19 +666,19 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastStatus == ROT_STATUS_CONNECTED)
                {
-                   ui->rotConnectState->setText(lastStatus);
+                   ui->rotConnectState->setText(tr("Connected"));
                    rotError = false;
                    rotConnected = true;
                }
                else if (lastStatus == ROT_STATUS_DISCONNECTED)
                {
-                   ui->rotConnectState->setText(lastStatus);
+                   ui->rotConnectState->setText(tr("Disconnected"));
                    rotError = false;
                    rotConnected = false;
                }
                else if (lastStatus == ROT_STATUS_ERROR)
                {
-                   ui->rotatorStatMsg->setText(lastStatus);
+                   ui->rotatorStatMsg->setText(tr("Error"));
                    rotError = true;
                }
                else

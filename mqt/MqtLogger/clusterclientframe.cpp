@@ -48,7 +48,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
-    ui->clusterClientFrameTitle->setText("Cluster");
+    ui->clusterClientFrameTitle->setText(tr("Cluster"));
     statusIndicatorToggle(false);
 
     ui->clusterSplitter->setStretchFactor(0, 2);
@@ -240,7 +240,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
     //dxSpotProxyModel->setDynamicSortFilter(true);
 
-    ui->dxSpotTab->addTab(dxSpotView, "DX Spots");
+    ui->dxSpotTab->addTab(dxSpotView, tr("DX Spots"));
     //dxSpotView = ui->dxSpotView;
     dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
@@ -287,7 +287,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
     searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
-    ui->dxSpotTab->addTab(searchView, "Search Spots");
+    ui->dxSpotTab->addTab(searchView, tr("Search Spots"));
     searchView->setModel(searchSortProxyModel);
     searchView->setAlternatingRowColors(true);
     searchView->setSelectionMode( QAbstractItemView::SingleSelection );
@@ -594,7 +594,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     //ui->StationList->clear();
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
-        QString state = QString(clusterStateIndicator[(*i).state]) + " " + (*i).app + "\r\n";
+        QString state = QString(clusterStateList[(*i).state]) + " " + (*i).app + "\r\n";
         trace(QString("clusterClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }
@@ -1547,8 +1547,11 @@ void ClusterClientFrame::on_unworkedLocCheckBox(int state)
 
 void ClusterClientFrame::setClusterServerState(QString stateMsg)
 {
+    QStringList s = stateMsg.split("<>");
+    if (s.size() < 2)
+        return;
 
-    if (stateMsg.contains("Connected"))
+    if (s[0].contains("Connected"))
     {
          statusIndicatorToggle(true);
          clusterServerConnected = true;
@@ -1565,7 +1568,7 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     if (clusterServerLoaded)
     {
 
-        ui->statusIndicator->setToolTip(stateMsg);
+        ui->statusIndicator->setToolTip(s[1]);
         trace(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
@@ -1690,14 +1693,12 @@ void ClusterClientFrame::setHoldUpdateFlag(bool state)
     holdUpdateFlag = state;
     if (state)
     {
-        ui->clusterClientFrameTitle->setText(tr("Cluster - <font color='Red'>Mouse in frame, updates paused</font>"));
-        //ui->clusterClientFrameTitle2->setText(tr("<font color='Red'>Updates paused for 5 secs.</font>)");
+        ui->clusterClientFrameTitle->setText( tr("Cluster - %1Mouse in frame, updates paused").arg(HtmlFontColour(Qt::red)));
 
     }
     else
     {
         ui->clusterClientFrameTitle->setText(tr("Cluster"));
-        //ui->clusterClientFrameTitle2->clear();
     }
 }
 

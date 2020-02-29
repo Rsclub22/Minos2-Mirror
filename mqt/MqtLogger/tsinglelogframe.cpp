@@ -427,7 +427,8 @@ void TSingleLogFrame::clearScreenLayout()
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
-    trace("TSingleLogFrame::clearScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
+    QString msg = ct->name.getValue() + " uuid " + ct->uuid;
+    trace("TSingleLogFrame::clearScreenLayout starts for " + msg);
 
     FKHRigControlFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
@@ -441,6 +442,8 @@ void TSingleLogFrame::clearScreenLayout()
     setBandmapLoaded(false);
     wsjtxFrame->setContest(nullptr);
 
+    trace("TSingleLogFrame::clearScreenLayout start clearance for " + msg);
+
     while (singleLogFrameSplitter->count())
     {
         MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
@@ -450,6 +453,7 @@ void TSingleLogFrame::clearScreenLayout()
     }
     rowSplitters.clear();
     update();
+    trace("TSingleLogFrame::clearScreenLayout complete for " + msg);
 }
 void TSingleLogFrame::applyScreenLayout()
 {
@@ -525,7 +529,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
 
-                    f->setCurrentFrameType(StackedInfoFrame::getAuxTypeString(scele.auxType));
+                    f->setCurrentFrameType(StackedInfoFrame::getTrAuxTypeString(scele.auxType));
                     f->setContest(ct);
                     elementScrollArea->setWidget(f);
                     f->setVisible(true);
@@ -646,14 +650,19 @@ void TSingleLogFrame::buildScreenLayout()
 {
 
     ScreenConfigFile scf;
-    scf.loadFile(this);
+    scf.loadFile(false, this);
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     QString curConfigName = ct->screenLayout.getValue();
     trace("TSingleLogFrame::buildScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid + " to layout " + curConfigName);
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
-        curConfigName = defaultLayoutName;
+        curConfigName = defaultLayoutName();
+        if ( !scf.configs.contains(curConfigName))
+        {
+            //we need to get the built in default
+            scf.loadFile(true, this);
+        }
     }
     curScreenLayout = curConfigName;
     SC sc = scf.configs[curConfigName];
@@ -1739,13 +1748,6 @@ void TSingleLogFrame::on_SetRadioStatus(QString s)
         GJVQSOLogFrame->setRadioState(s);
     }
 }
-void TSingleLogFrame::on_SetRadioTpm(int t)
-{
-    if ( this == LogContainer->getCurrentLogFrame() )
-    {
-        FKHRigControlFrame->setTpm(t);
-    }
-}
 
 /*
 
@@ -1806,16 +1808,6 @@ void TSingleLogFrame::sendRadioVolume(int level)
         LogContainer->sendDM->sendRigControlVolumeLevel(this, level);
     }
 }
-
-void TSingleLogFrame::sendTpm(int t, QString f)
-{
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-    {
-        sendKeyerStop();    // don't keep calling while tuning!
-        LogContainer->sendDM->sendRigControlTpm(this, t, f);
-    }
-}
-
 
 void TSingleLogFrame::sendRadioMode(QString mode)
 {

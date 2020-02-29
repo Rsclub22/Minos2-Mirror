@@ -443,12 +443,15 @@ void TContestApp::writeContestList()
         ContestSlotList newContestSlotList;
         foreach ( QSharedPointer<ContestSlot> cs,  contestSlotList)
         {
-            BaseContestLog * ct = cs->slot;
-            if (ct)
+            if (cs)
             {
-                cs->slotno = newSlotNo;
-                newContestSlotList[newSlotNo] = cs;
-                newSlotNo++;
+                BaseContestLog * ct = cs->slot;
+                if (ct)
+                {
+                    cs->slotno = newSlotNo;
+                    newContestSlotList[newSlotNo] = cs;
+                    newSlotNo++;
+                }
             }
         }
         // replace the list
@@ -483,6 +486,28 @@ void TContestApp::writeListsList()
 {
     if (preloadComplete)
     {
+
+        // build a stripped, renumbered list
+        int newSlotNo = 0;
+        ListSlotList newListSlotList;
+        foreach ( QSharedPointer<ListSlot> cs,  listSlotList)
+        {
+            if (cs) // after all, we may have just got rid of one...
+            {
+                ContactList * ct = cs->slot;
+                if (ct)
+                {
+                    cs->slotno = newSlotNo;
+                    ct->setSlotNo(newSlotNo);
+                    newListSlotList[newSlotNo] = cs;
+                    newSlotNo++;
+                }
+            }
+        }
+        // replace the list
+        listSlotList = newListSlotList;
+
+        // and write it out
         listsPreloadBundle.clearProfileSection( false );
 
         for ( int i = 0; i < listSlotList.size(); i++ )

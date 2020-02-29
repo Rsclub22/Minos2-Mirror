@@ -32,7 +32,8 @@ BaseContact::BaseContact( BaseContestLog * contest, dtg time_now ) :
 {
 }
 BaseContact::BaseContact( const BaseContact &ct )
-      : updtime( false )
+      : QObject()
+      , updtime( false )
       , time( false )
 {
    *this = ct;

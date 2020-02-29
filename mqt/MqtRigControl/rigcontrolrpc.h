@@ -40,7 +40,6 @@ signals:
     void selectLoggerRadio(PubSubName, QString);
     void setRitFreq(int);
     void setRitStatus(bool);
-    void setTpm(int t, QString);
     void setVolume(int volLevel);
 
 private slots:

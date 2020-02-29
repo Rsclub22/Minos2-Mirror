@@ -63,6 +63,7 @@ SOURCES += \
     mults.cpp \
     MultsImpl.cpp \
     mwin.cpp \
+    presetbutton.cpp \
     profiles.cpp \
     qlogtabwidget.cpp \
     RigCache.cpp \
@@ -73,7 +74,6 @@ SOURCES += \
     rigutils.cpp \
     RotatorCache.cpp \
     rotatorcommon.cpp \
-    rotpresetbutton.cpp \
     rotpresetdialog.cpp \
     ScreenContact.cpp \
     serialcomms.cpp \
@@ -140,6 +140,7 @@ HEADERS += \
     MultsImpl.h \
     mwin.h \
     ProfileEnums.h \
+    presetbutton.h \
     profiles.h \
     qlogtabwidget.h \
     RigCache.h \
@@ -150,7 +151,6 @@ HEADERS += \
     rigutils.h \
     RotatorCache.h \
     rotatorcommon.h \
-    rotpresetbutton.h \
     rotpresetdialog.h \
     ScreenContact.h \
     serialcomms.h \

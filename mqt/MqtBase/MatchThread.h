@@ -23,10 +23,10 @@ class Matcher
 {
       bool matchRequired;  // use getter and setter below
    protected:
-      enum MatchPhase {Exact, NoSuffix, NoLoc, Body, Country, District, Locator};
-      enum ContestPhase {Starting, MainContest, Rest};
+      enum MatchPhase {empExact, empNoSuffix, empNoLoc, empBody, empCountry, empDistrict, empLocator};
+      enum ContestPhase {ecpStarting, ecpMainContest, ecpRest};
 
-      MatchPhase mp;
+      MatchPhase matchPhase;
       bool matchStarted;
       ContestPhase firstMatch;
       int tickct;
@@ -38,9 +38,12 @@ class Matcher
       matchElement matchloc;
       matchElement matchqth;
 
-      QSharedPointer<CountryEntry> ce;
+      QSharedPointer<CountryEntry> countryEntry;
 
       int thisContestMatched;
+
+      virtual bool reduceScanAccuracy();
+
       virtual void matchDistrict( const QString &extraText ) = 0;
       virtual void matchCountry( const QString &cs ) = 0;
       virtual void replaceList( ) = 0;
@@ -50,7 +53,7 @@ class Matcher
       virtual ~Matcher();
       SharedMatchCollection matchCollection;
 
-      void startMatch(QSharedPointer<CountryEntry> ce = QSharedPointer<CountryEntry>() );
+      void startMatch(QSharedPointer<CountryEntry> countryEntry = QSharedPointer<CountryEntry>() );
       void initMatch();
       void clearmatchall();
       virtual bool idleMatch( int limit ) = 0;
@@ -67,6 +70,7 @@ class Matcher
 };
 class ThisLogMatcher: public Matcher
 {
+    Q_DECLARE_TR_FUNCTIONS(ThisLogMatcher)
       virtual void matchDistrict( const QString &extraText );
       virtual void matchCountry( const QString &cs );
       virtual void replaceList(  );
@@ -76,9 +80,12 @@ class ThisLogMatcher: public Matcher
 
       virtual bool idleMatch( int limit );
       void addMatch(QSharedPointer<BaseContact>, BaseContestLog * );
+protected:
+      void doMatch();
 };
 class OtherLogMatcher: public Matcher
 {
+    Q_DECLARE_TR_FUNCTIONS(OtherLogMatcher)
       virtual void matchDistrict( const QString &extraText );
       virtual void matchCountry( const QString &cs );
       virtual void replaceList( );
@@ -91,6 +98,7 @@ class OtherLogMatcher: public Matcher
 };
 class ListMatcher: public Matcher
 {
+    Q_DECLARE_TR_FUNCTIONS(ListMatcher)
       virtual void matchDistrict( const QString &extraText );
       virtual void matchCountry( const QString &cs );
       virtual void replaceList(  );
@@ -127,13 +135,14 @@ private:
 
       QString thisMatchStatus;
       QString otherMatchStatus;
+      QString listMatchStatus;
 
       bool Terminated;
 
    protected:
       virtual void Execute();    // TThread method
    public:
-      ScreenContact * mct = nullptr;
+      ScreenContact * contactToMatch = nullptr;
       void Terminate()
       {
           Terminated = true;
@@ -147,8 +156,10 @@ private:
 
       void ShowThisMatchStatus( QString mess );
       void ShowOtherMatchStatus( QString mess );
+      void ShowListMatchStatus( QString mess );
       static QString getThisMatchStatus( );
       static QString getOtherMatchStatus( );
+      static QString getListMatchStatus( );
       static void InitialiseMatchThread();
       static void FinishMatchThread();
       static TMatchThread *getMatchThread()
@@ -162,7 +173,7 @@ private:
 protected:
       virtual void run() override;
 private slots:
-      void on_ScreenContactChanged(ScreenContact *mct, BaseContestLog *context, QString b);
+      void on_ScreenContactChanged(ScreenContact *contactToMatch, BaseContestLog *context, QString b);
       void on_CountrySelect(QString cty, BaseContestLog *c);
       void on_DistrictSelect(QString dist, BaseContestLog *c);
       void on_LocatorSelect(QString dist, BaseContestLog *c);

@@ -28,8 +28,6 @@
 #include "ritlineedit.h"
 #include "ui_rigcontrolframe.h"
 
-#define MODE_ERROR "<font color='Red'>Mode Error</font>"
-
 
 static QKeySequence runButShortCut[] {
     QKeySequence(Qt::CTRL + Qt::Key_BracketLeft),
@@ -84,7 +82,6 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     initRigFrame(parent);
 
     initRunMemoryButton();
-    initTuneMemoryButton();
 
     showRitButOff();
 
@@ -93,14 +90,6 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     setRadioTxVertEnabled(false);
     setRitEnableState(false);
     setRadioVolumeState(false);
-
-
-
-    bool tpm;
-    TContestApp::getContestApp() ->displayBundle.getBoolProfile( edpShowTPM, tpm );
-
-    ui->tpmBox->setVisible(tpm);
-
 
     // init memory button data before radio connection
     setRadioName(radioName, "");
@@ -126,17 +115,12 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ritFreqEditShortCut = new QShortcut(QKeySequence("Ctrl+i"), parent);
     connect(ritFreqEditShortCut, SIGNAL(activated()), this, SLOT(ritFreqEditShortCutInFocus()));
 
-
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
-
-
-
     on_FontChanged();
 
     traceMsg(QString("RigControlFrame Started"));
 
     // now check if we have the details to launch a radio selection
-
 
     if (listOfRadios.isEmpty() && LogContainer->sendDM->getRigCache()->getRigListCount() > 0)
     {
@@ -185,9 +169,6 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     launchRadioSelectCount = 5;     // wait five seconds
     connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
     launchRadioSelectTimer->start(1000);
-
-
-
 }
 
 RigControlFrame::~RigControlFrame()
@@ -197,10 +178,7 @@ RigControlFrame::~RigControlFrame()
     {
         delete b;
     }
-    foreach(auto b, tuneButtonMap)
-    {
-        delete b;
-    }
+
     delete operatingFreq;
     delete freqDisplayPalette;
 }
@@ -485,7 +463,6 @@ void RigControlFrame::setRadioLoaded()
    //     setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
    // }
 
-    setTpm(1);
 }
 
 bool RigControlFrame::isRadioLoaded()
@@ -509,24 +486,6 @@ void RigControlFrame::setFreq(QString freq)
         traceMsg(QString("Force Freq Update Received - Ignore!"));
         return;
     }
-
-
-
-//    if (tuneButtonMap[0]->freq.isEmpty() && tuneButtonMap[1]->freq.isEmpty())
-//    {
-//        tuneButtonMap[0]->freq = freq;
-//        tuneButtonMap[1]->freq = freq;
-//        curTuneButton = tuneButtonMap[0];
-//        trace(QString("setFreq: curTuneButton initialised to button 1 freq %1").arg(freq));
-//    }
-//    else
-    if (curTuneButton)
-    {
-        trace(QString("setFreq: curTuneButton %1 freq set to %2").arg(curTuneButton->memNo).arg(freq));
-        curTuneButton->freq = freq;
-    }
-
-    updateTuneButtons();
 
     if (lastFreq != freq)
     {
@@ -658,14 +617,14 @@ void RigControlFrame::showRitButOn()
 {
     //ui->Rotate->setPalette(*redText);
     ui->RitButton->setStyleSheet(RIT_BUTTON_ON_STYLE);
-    ui->RitButton->setText("On");
+    ui->RitButton->setText(tr("On"));
 }
 
 void RigControlFrame::showRitButOff()
 {
     //ui->Rotate->setPalette(*blackText);
     ui->RitButton->setStyleSheet(RIT_BUTTON_OFF_STYLE);
-    ui->RitButton->setText("Off");
+    ui->RitButton->setText(tr("Off"));
 }
 
 
@@ -716,7 +675,7 @@ void RigControlFrame::changeMainRadioFreq()
             }
             else
             {
-                QString f = QString("%1 %2 %3").arg("<font color='Red'>").arg(lastFreq).arg("</font>");
+                QString f =HtmlFontColour(Qt::red) + lastFreq;
                 trace("changeMainRadioFreq " + f);
                 ui->freqInput->setText(f);
             }
@@ -1101,7 +1060,7 @@ void RigControlFrame::setMode(QString m)
 
 
         // mode not supported by minos
-        ui->modelbl->setText(MODE_ERROR);
+        ui->modelbl->setText(HtmlFontColour(Qt::red) + "Mode Error");
     }
 
 
@@ -1191,7 +1150,7 @@ void RigControlFrame::setRadioFreq()
 
     if (selRadioDetails.getBandList().isEmpty())
     {
-        setRadioBandWarning(tr("<font color='Red'>Error Receiving Bandlist!</font>"));
+        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Error Receiving Bandlist!"));
         trace(QString("setRadioFreq:: Error Receiving Bandlist!"));
         sendFreq(NO_BAND_SUPPORT);
         return;
@@ -1201,7 +1160,7 @@ void RigControlFrame::setRadioFreq()
 
     if (listOfBands.isEmpty())
     {
-        setRadioBandWarning(tr("<font color='Red'>Radio has no available bands</font>"));
+        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Radio has no available bands"));
         trace(QString("setRadioFreq:: Error No available bands!"));
         sendFreq(NO_BAND_SUPPORT);
         return;
@@ -1294,7 +1253,7 @@ void RigControlFrame::setRadioFreq()
                 }
             }
             // warn no band for this radio
-            setRadioBandWarning(tr("<font color='Red'>No %1 Band found for this radio!</font>").arg(cb));
+            setRadioBandWarning(HtmlFontColour(Qt::red) + tr("No %1 Band found for this radio!").arg(cb));
             trace(QString("SsetRadioFreq: %1 Band not found on this radio").arg(cb));
             sendFreq(NO_BAND_SUPPORT);
         }
@@ -1386,14 +1345,14 @@ void RigControlFrame::setRadioState(QString s)
            QStringList sl = s.split(':');
            if (sl.count() == 2)
            {
-               ui->rigState->setText(tr("<font color = 'Red'> Error: %1</font>").arg(sl[1]));
+               ui->rigState->setText(HtmlFontColour(Qt::red) + tr("Error: %1").arg(sl[1]));
                emit radioHasError(sl[1]);
            }
         }
         else if (s == RIG_STATUS_CONNECTED)
         {
             radioConnected = true;
-            ui->rigState->setText(s);
+            ui->rigState->setText(tr("Connected"));
             int index = ui->radioNameSel->findText(radioName, Qt::MatchFixedString);
             if (index >= 0)
             {
@@ -1411,7 +1370,7 @@ void RigControlFrame::setRadioState(QString s)
            radioConnected = false;
            radioError = false;
 
-           ui->rigState->setText(s);
+           ui->rigState->setText(tr("Disconnected"));
 
            ui->bandWarnLabel->setText("");
            if (ui->radioNameSel->currentText() == "")
@@ -1460,24 +1419,6 @@ void RigControlFrame::setVolControlVisible(bool value)
 void RigControlFrame::setRadioVolumeState(bool state)
 {
     setVolControlVisible(state);
-}
-
-
-
-void RigControlFrame::setTpm(int t)
-{
-    // tpm change received from rig control
-    if (t > 0 && t <= tuneButData::NUM_TUNEBUTTONS)
-    {
-        trace(QString("%1 Current tune button set to button %2").arg(ct?ct->uuid:QString()).arg(t));
-        curTuneButton = tuneButtonMap[t - 1];
-    }
-    else
-    {
-        trace(QString("%1 Current tune button set to null").arg(ct?ct->uuid:QString()));
-        curTuneButton = nullptr;
-    }
-    updateTuneButtons();
 }
 
 void RigControlFrame::setRadioTxVertEnabled(bool s)
@@ -2012,7 +1953,7 @@ void RigControlFrame::runButWriteActSel(int buttonNumber)
     // load run data into run memory
 
     RunButtonDialog runDialog(this);
-    runDialog.setWindowTitle(tr("Run %1 - Write").arg(QString::number(buttonNumber + 1)));
+    runDialog.setWindowTitle(tr("Run %1 - New").arg(QString::number(buttonNumber + 1)));
     runDialog.setLogData(&runData, buttonNumber);
     if (runDialog.exec() == QDialog::Accepted)
     {
@@ -2184,70 +2125,7 @@ bool RigControlFrame::chkRadioFreqOnRunFreq()
 
     return false;
 }
-
-
-
-//********************** Tune point Buttons *******************************
-
-
-void RigControlFrame::initTuneMemoryButton()
-{
-    tuneButtonMap[0] = new TuneMemoryButton(ui->TuneButton1, this, 0);
-    tuneButtonMap[1] = new TuneMemoryButton(ui->TuneButton2, this, 1);
-
-    updateTuneButtons();
-}
-
-
-void RigControlFrame::tuneButReadActSel(int buttonNumber)
-{
-    traceMsg(QString("Tune Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    curTuneButton = tuneButtonMap[buttonNumber];
-    if (isRadioLoaded())
-    {
-        if (radioConnected && !radioError)
-        {
-            ui->freqInput->clearFocus();
-            if (curTuneButton->freq.remove('.') != curFreq.remove('.'))
-            {
-
-                tslf->sendTpm(buttonNumber + 1, curTuneButton->freq);
-            }
-        }
-    }
-    updateTuneButtons();
-}
-
-
-
-void RigControlFrame::tuneButWriteActSel(int buttonNumber)
-{
-    traceMsg(QString("Tune Button Write Selected = %1").arg(QString::number(buttonNumber + 1)));
-    curTuneButton = tuneButtonMap[buttonNumber];
-    curTuneButton->freq = curFreq;
-    updateTuneButtons();
-}
-
-void RigControlFrame::updateTuneButtons()
-{
-    for (int i = 0; i < tuneButData::NUM_TUNEBUTTONS; i++)
-    {
-        tuneButtonUpdate(i);
-    }
-}
-void RigControlFrame::tuneButtonUpdate(int buttonNumber)
-{
-    QString star = "  ";
-    if (curTuneButton == tuneButtonMap[buttonNumber])
-        star = "*";
-    tuneButtonMap[buttonNumber]->memButton->setText(star + "." + extractKhz(tuneButtonMap[buttonNumber]->freq) + star);
-    QString tTipStr = "Freq: " + convertFreqStrDisp(tuneButtonMap[buttonNumber]->freq);
-
-    tuneButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
-}
 //-----------------------------------------------------------------------------------
-
 
 void RigControlFrame::checkConnection()
 {
@@ -2392,45 +2270,4 @@ void RunMemoryButton::showRunToolButtonOnFreq()
 {
     memButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
     memoryMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
-}
-
-
-//*******************Tune Memory Button *************************//
-
-TuneMemoryButton::TuneMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
-{
-    memNo = no;
-    rigControlFrame = rcf;
-
-    memButton = b;
-
-    memoryMenu = new QMenu(memButton);
-
-    memButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    memButton->setPopupMode(QToolButton::MenuButtonPopup);
-    memButton->setFocusPolicy(Qt::NoFocus);
-
-    readAction = new QAction(tr("&Read"), memButton);
-    writeAction = new QAction(tr("&Write"),memButton);
-    memoryMenu->addAction(readAction);
-    memoryMenu->addAction(writeAction);
-    memButton->setMenu(memoryMenu);
-
-    connect(memButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
-    connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
-    connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()) );
-}
-TuneMemoryButton::~TuneMemoryButton()
-{
-//    delete memButton;
-}
-
-void TuneMemoryButton::readActionSelected()
-{
-    rigControlFrame->tuneButReadActSel(memNo);
-}
-
-void TuneMemoryButton::writeActionSelected()
-{
-    rigControlFrame->tuneButWriteActSel(memNo);
 }

@@ -62,11 +62,12 @@ Name: {code:GetLogsDir}; Check: not LogsDirExists; Flags: uninsneveruninstall; P
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
+Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
-Name: "minosAssociation"; Description: "Associate ""minos"" extension"; GroupDescription: File extensions:
+Name: "minosAssociation"; Description: ExpandConstant('{cm:AssociateExtensions}'); GroupDescription: ExpandConstant('{cm:Extensions}')
 
 [Files]
 Source: "*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion
@@ -114,9 +115,9 @@ procedure InitializeWizard;
 begin
   LogsDirPage := CreateInputDirPage(
     wpSelectDir,
-    'Minos Logs Directory',
+    ExpandConstant('{cm:LogsDir}'),
     '',
-    'Please Select the directory for Minos Logs.',
+    ExpandConstant('{cm:PleaseSelect}'),
     False,
     'Minos'
   );
@@ -137,6 +138,18 @@ begin
   { Find out if data dir already exists }
   Result := DirExists(GetLogsDir(''));
 end;
+
+[CustomMessages]
+PleaseSelect=Undefined //just in case (should be equal to English)
+english.PleaseSelect=Please Select the directory for Minos Logs.
+french.PleaseSelect=Sélectionner le dossier pour Minos Logs SVP.
+LogsDir=Undefined
+english.LogsDir=Minos Logs Directory
+french.LogsDir=Dossier Minos Logs
+english.AssociateExtensions=Associate ""minos"" extension
+french.AssociateExtensions=Associer l'extension "minos"
+english.Extensions=File extensions:
+french.Extensions=Extensions de fichiers:
 
 [INI]
 Filename: "{app}\Configuration\MinosLogger.ini"; Section: "Default"; Key: "Log Directory"; String: "{code:GetLogsDir}"

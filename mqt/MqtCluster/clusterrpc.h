@@ -26,7 +26,7 @@ public:
     void sendDXSpot(QString spot);
 
     int getServerListCount();
-    void publishState(const QString &state);
+    void publishState(const QString &raw, const QString &state);
 
     void publishTXEnable(const QString txOnOff);
 signals:

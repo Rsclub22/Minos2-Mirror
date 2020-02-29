@@ -47,7 +47,8 @@ public:
     bool checkOk(ScreenConfigElement *e);
 
     static SCType getScreenType(QString s);
-    static QString getScreenTypeString(SCType s);
+    static QString getTrScreenTypeString(SCType s);
+    static const char *getRawScreenTypeString(SCType t);
 private slots:
     void on_elementTypeCombo_activated(const QString &arg1);
 

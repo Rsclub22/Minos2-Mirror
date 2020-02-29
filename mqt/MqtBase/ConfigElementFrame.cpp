@@ -3,7 +3,7 @@
 #include "ConfigElementFrame.h"
 #include "ui_ConfigElementFrame.h"
 
-const char *ConfigElementFrame::deltext = "<Deleted>";
+const char *ConfigElementFrame::deltext = QT_TR_NOOP("<Deleted>");
 
 ConfigElementFrame::ConfigElementFrame(bool nele) :
     QFrame(nullptr),
@@ -15,7 +15,7 @@ ConfigElementFrame::ConfigElementFrame(bool nele) :
     inhibitIndexChange = true;
     QStringList appTypes = MinosConfig::getMinosConfig()->getAppTypes();
     ui->appTypeCombo->addItems(appTypes);
-    ui->appTypeCombo->setCurrentIndex(appTypes.indexOf("None"));
+    ui->appTypeCombo->setCurrentIndex(appTypes.indexOf(MinosConfig::tr(MinosConfig::appNone)));
     inhibitIndexChange = false;
 
     gradient.setColorAt(0.0, Qt::lightGray);

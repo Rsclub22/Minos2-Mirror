@@ -103,6 +103,23 @@ windeployqt.exe MqtRigControl.exe
 windeployqt.exe MqtRotator.exe
 windeployqt.exe MqtServer.exe
 
+REM bin\translations now exists... we can build our translations
+
+@ECHO OFF
+for %%i in (en_GB fr_FR) do (
+  for %%j in (MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtRigControl MqtRotator MqtServer) do (
+  lconvert -verbose -o translations\%%j_%%i.qm ^
+  %MROOT%\build\MqtUtils\release\minos_%%i.qm ^
+  %MROOT%\build\TinyXML\release\minos_%%i.qm ^
+  %MROOT%\build\XMPPLib\release\minos_%%i.qm ^
+  %MROOT%\build\MqtBase\release\minos_%%i.qm ^
+  %MROOT%\build\%%j\release\minos_%%i.qm
+  )
+)
+
+@ECHO ON
+
+REM translations finished
 cd ../..
 mkdir Installer
 

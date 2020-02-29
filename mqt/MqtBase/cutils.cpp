@@ -191,8 +191,8 @@ void writer::lwrite( const char *b )
 {
    QString l = QString( b ) + "\r\n";
 
-   qint64 ret = expfd->write(l.toStdString().c_str(), static_cast<int>(l.toStdString().size()));
-   if ( ret != static_cast<int >(l.toStdString().size()) )
+   qint64 ret = expfd->write(l.toUtf8());
+   if ( ret != static_cast<int >(l.toUtf8().size()) )
    {
       MinosParameters::getMinosParameters() ->mshowMessage( "bad reply from write!" );
    }

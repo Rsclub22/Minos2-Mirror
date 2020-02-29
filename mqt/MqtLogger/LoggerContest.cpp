@@ -530,7 +530,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
 
    if (!next)
    {
-      MinosParameters::getMinosParameters() ->mshowMessage(tr("Attempt to insert after last contact - not allowed. Pease report a bug!"));
+      MinosParameters::getMinosParameters() ->mshowMessage(tr("Attempt to insert after last contact - not allowed. Please report a bug!"));
       return QSharedPointer<BaseContact>();
    }
    bool timenow = false;
@@ -999,8 +999,10 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
 
    header += "<EOH>\r\n";
 
-   qint64 ret = expfd->write(header.toStdString().c_str());
-   if (  ret != header.size() )
+   QByteArray bh = header.toUtf8();
+
+   qint64 ret = expfd->write(bh);
+   if (  ret != bh.size() )
    {
       MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
    }
@@ -1011,8 +1013,9 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
       QString l = lct ->getADIFLine();
       if ( l.size() )
       {
-         qint64 ret = expfd->write(l.toStdString().c_str());
-         if (  ret != l.size() )
+         QByteArray bl = l.toUtf8();
+         qint64 ret = expfd->write(bl);
+         if (  ret != bl.size() )
          {
             MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
          }
@@ -1191,7 +1194,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
 
 
          char inputbuff[ 100 ];
-         strcpy( inputbuff, ct->loc.loc.getValue().toStdString().c_str() );
+         strcpy( inputbuff, ct->loc.loc.getValue().toUtf8().data() );
          l1.gridstyle = LOC;
          l1.datastring = inputbuff;
 

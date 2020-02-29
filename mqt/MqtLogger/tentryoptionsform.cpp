@@ -323,7 +323,7 @@ QString TEntryOptionsForm::doFileSave( )
         {
             defext = "txt";
             filter = tr("Text output (*.txt);;All Files (*.*);;" );
-            title = tr("Save contest in ptintable text format as...");
+            title = tr("Save contest in printable text format as...");
         }
             break;
         }

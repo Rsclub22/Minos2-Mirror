@@ -17,13 +17,26 @@ enum DecodeColumns
     dcBest,
     dcMessage, dcMaxVal
 };
-
+namespace
+{
+class DecodeHeading
+{
+public:
+    const char * text;
+    Qt::AlignmentFlag alignment;
+};
+}
 class DecodesModel
   : public QAbstractItemModel
 {
   Q_OBJECT
 
 private:
+
+    static DecodeHeading const headings[dcMaxVal];
+    QString confidence_string (bool low_confidence) const;
+    QString live_string (bool off_air) const;
+
   QString client_id_;
   QString call_;
   QRegularExpression base_call_re_;

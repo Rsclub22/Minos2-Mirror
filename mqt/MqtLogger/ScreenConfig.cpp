@@ -280,7 +280,7 @@ bool ScreenConfig::checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e
                 }
                 else if (type == etype)
                 {
-                    if (type == ScreenConfigElement::getScreenTypeString(sctAux))
+                    if (type == ScreenConfigElement::getTrScreenTypeString(sctAux))
                     {
                         auxCount++;
                     }
@@ -306,11 +306,11 @@ bool ScreenConfig::checkOk(ScreenConfigElement *e)
 
     }
     QString etype = e->getType();
-    if (etype != ScreenConfigElement::getScreenTypeString(sctAux) || auxCount < STACKITEMS)
+    if (etype != ScreenConfigElement::getTrScreenTypeString(sctAux) || auxCount < STACKITEMS)
     {
         return true;
     }
-    else if (etype != ScreenConfigElement::getScreenTypeString(sctCluster))
+    else if (etype != ScreenConfigElement::getTrScreenTypeString(sctCluster))
     {
         return true;
     }

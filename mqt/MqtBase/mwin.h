@@ -303,8 +303,7 @@ class BaseLogList: public QObject
 {
 public:
     BaseLogList();
-    BaseLogList(const BaseLogList &)
-    {}
+    BaseLogList(const BaseLogList &);
     virtual ~BaseLogList();
 };
 

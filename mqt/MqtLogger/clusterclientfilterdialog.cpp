@@ -731,7 +731,7 @@ void ClusterClientFilterDialog::locatorAddClicked()
             if (!locatorDialog.isValid())
             {
                  int ret = QMessageBox::information(this, tr("Add Locator Filter"),
-                                          tr("Locator may be invalid, do you still want to use the callsign?"),
+                                          tr("The locator may be invalid, do you still want to use it?"),
                                            QMessageBox::Yes|QMessageBox::No);
 
                  if (ret == QMessageBox::Yes)
