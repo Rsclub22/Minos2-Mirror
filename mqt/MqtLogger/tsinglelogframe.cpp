@@ -921,6 +921,7 @@ void TSingleLogFrame::HideTimerTimer(  )
     {
         if (FKHRigControlFrame->parent() != this)
             FKHRigControlFrame->setVisible(isRadioLoaded());
+
         if (FKHRotControlFrame->parent() != this)
             FKHRotControlFrame->setVisible(isRotatorLoaded());
         if (rotPresets->parent() != this)
