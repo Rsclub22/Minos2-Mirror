@@ -67,7 +67,7 @@ Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
-Name: "minosAssociation"; Description: ExpandConstant('{cm:AssociateExtensions}'); GroupDescription: ExpandConstant('{cm:Extensions}')
+Name: "minosAssociation"; Description: "{cm:AssociateExtensions}"; GroupDescription: "{cm:Extensions}"
 
 [Files]
 Source: "*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion
