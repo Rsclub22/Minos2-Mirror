@@ -370,7 +370,6 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, SIGNAL(setRitStatus(bool)), this, SLOT(setRitLogStatus(bool)));
     connect(msg, SIGNAL(setMode(QString)), this, SLOT(loggerSetMode(QString)));
     connect(msg, SIGNAL(selectLoggerRadio(PubSubName, QString)), this, SLOT(onSelectRadio(PubSubName, QString)));
-    connect(msg, SIGNAL(setTpm(int, QString)), this, SLOT(setTpm(int, QString)));
     connect(msg, SIGNAL(setVolume(int)), this, SLOT(loggerSetVolume(int)));
 
 
@@ -954,7 +953,6 @@ int RigControlMainWindow::openRigCtldRadio()
 
     PubSubName psname(setupRadio->currentRadio.radioName);
 
-    msg->rigCache.setTpm(psname, 1);
     msg->rigCache.publish();
     return OPEN_OK;
 
@@ -1112,7 +1110,6 @@ int RigControlMainWindow::openRadio()
 
     PubSubName psname(setupRadio->currentRadio.radioName);
 
-    msg->rigCache.setTpm(psname, 1);
     msg->rigCache.publish();
     return OPEN_OK;
 }
@@ -1417,23 +1414,14 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
     }
     msg->rigCache.invalidate();
 }
-void RigControlMainWindow::setTpm(int t, QString f)
-{
-    // tpm received from logger, with freq
-    logMessage(QString("Recieved tpm %1 from Logger, freq = %2").arg(t).arg(f));
-    tpm = t;
-    sendTpm(t);
-    logger_freq = f;
-    curVfoFrq = convertStrToFreq(f);
-    setFreq(f, VFO::CURRENT_VFO);
 
-}
+
 void RigControlMainWindow::loggerSetFreq(QString freq)
 {
     logMessage(QString("Recieved Freq from Logger = %1").arg(freq));
     if (radioCommsOK && !rigErrorFlag)
     {
-        logMessage(QString("new freq %1, old freq %2, old tpm %3").arg(freq).arg(logger_freq).arg(tpm));
+        logMessage(QString("new freq %1, old freq %2").arg(freq).arg(logger_freq));
         if (freq == NO_BAND_SUPPORT)
         {
             logMessage(QString("loggerSetFreq: No transverter found for this band"));
@@ -1441,14 +1429,6 @@ void RigControlMainWindow::loggerSetFreq(QString freq)
             return;
         }
 
-        double lf = convertStrToFreq(logger_freq);
-        double f = convertStrToFreq(freq);
-        if (!logger_freq.isEmpty() && std::abs(lf - f) > 1000.1)
-        {
-            logMessage("Setting tpm to null");
-            tpm = 0;
-            sendTpm(tpm);
-        }
         logger_freq = freq;
         setFreq(freq, VFO::CURRENT_VFO);
     }
@@ -3199,14 +3179,6 @@ void RigControlMainWindow::sendRitEnableStatus(bool status)
         msg->rigCache.publish();
 
     }
-}
-
-void RigControlMainWindow::sendTpm(int tpm)
-{
-    logMessage(QString("Send Tpm to logger = %1").arg(tpm));
-    PubSubName psname(setupRadio->currentRadio.radioName);
-    msg->rigCache.setTpm(psname, tpm);
-    msg->rigCache.publish();
 }
 
 

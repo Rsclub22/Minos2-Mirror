@@ -45,19 +45,19 @@ QVariant KstPlanesModel::headerData(int section, Qt::Orientation orientation, in
         switch(section)
         {
         case eplcCall:
-            return "Call";
+            return tr("Flight");
 
         case eplcCategory:
-            return "Category";
+            return tr("Category");
 
         case eplcDistance:
-            return "Dist";
+            return tr("Dist");
 
         case eplcPotential:
-            return "Pot";
+            return tr("Pot");
 
         case eplcMinutes:
-            return "Mins";
+            return tr("Mins");
         }
     }
     return QVariant();

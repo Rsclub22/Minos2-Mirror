@@ -34,9 +34,9 @@ ScreenConfigFile::~ScreenConfigFile()
 {
 
 }
-void ScreenConfigFile::loadFile(QWidget *parent)
+void ScreenConfigFile::loadFile(bool getDefault, QWidget *parent)
 {
-    readFile("./Configuration/ScreenConfigs.json", parent);
+    readFile("./Configuration/ScreenConfigs.json", getDefault, parent);
 }
 bool ScreenConfigFile::dumpFile()
 {
@@ -74,29 +74,32 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
         elerows.push_back(scrow);
     }
 }
-void ScreenConfigFile::readFile(QString f, QWidget *parent)
+void ScreenConfigFile::readFile(QString f, bool getDefault, QWidget *parent)
 {
-    QFile jf(f);
     QString s;
     bool retval = false;
-    if (jf.open(QIODevice::ReadOnly))
+    if (!getDefault)
     {
-        s = jf.readAll();
-        retval = parseConfigString(s);
-        if (retval == false)
+        QFile jf(f);
+        if (jf.open(QIODevice::ReadOnly))
         {
-            mShowMessage(tr("Invalid or missing screen configurations; using built in defaults"), parent);
+            s = jf.readAll();
+            retval = parseConfigString(s);
+            if (retval == false)
+            {
+                mShowMessage(tr("Invalid or missing screen configurations; using built in defaults"), parent);
+            }
         }
-    }
-    else
-    {
-        trace("Failed to open " + f );
+        else
+        {
+            trace("Failed to open " + f );
+        }
     }
     if (retval == false)
     {
         trace("Using default configuration");
         s = defaultConfig
-                .arg(defaultLayoutName)
+                .arg(defaultLayoutName())
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctRigControl))

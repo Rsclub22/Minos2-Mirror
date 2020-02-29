@@ -195,7 +195,7 @@
            <item>
             <widget class="QLabel" name="planeslabel">
              <property name="text">
-              <string>TextLabel</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -215,15 +215,15 @@
            <item>
             <widget class="QPushButton" name="showInAS">
              <property name="text">
-              <string>Show Call Path
- in AirScout</string>
+              <string>Show me-&gt;user
+Path in AirScout</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QPushButton" name="showMPath">
              <property name="text">
-              <string>Show Message 
+              <string>Show Message call-&gt;other
 Path in AirScout</string>
              </property>
             </widget>

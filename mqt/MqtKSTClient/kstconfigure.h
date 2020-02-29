@@ -36,6 +36,8 @@ public:
     QString ASMyName;
     int ASMinDistance;
     int ASMaxDistance;
+    int ASPort;
+    int ASTimeout;
 
 public Q_SLOTS:
         virtual int exec() override;

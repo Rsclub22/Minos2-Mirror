@@ -76,7 +76,6 @@ public:  		// User declarations
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);
       void sendRigControlRitFreq(TSingleLogFrame *tslf, int freq);
       void sendRigControlRitStatus(TSingleLogFrame *tslf,const bool &status);
-      void sendRigControlTpm(TSingleLogFrame *tslf,int tpm, QString &freq);
 
       QStringList rotators();
       QStringList rigs();

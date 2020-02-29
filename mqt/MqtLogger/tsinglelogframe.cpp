@@ -650,14 +650,19 @@ void TSingleLogFrame::buildScreenLayout()
 {
 
     ScreenConfigFile scf;
-    scf.loadFile(this);
+    scf.loadFile(false, this);
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     QString curConfigName = ct->screenLayout.getValue();
     trace("TSingleLogFrame::buildScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid + " to layout " + curConfigName);
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
-        curConfigName = defaultLayoutName;
+        curConfigName = defaultLayoutName();
+        if ( !scf.configs.contains(curConfigName))
+        {
+            //we need to get the built in default
+            scf.loadFile(true, this);
+        }
     }
     curScreenLayout = curConfigName;
     SC sc = scf.configs[curConfigName];
@@ -1741,13 +1746,6 @@ void TSingleLogFrame::on_SetRadioStatus(QString s)
         GJVQSOLogFrame->setRadioState(s);
     }
 }
-void TSingleLogFrame::on_SetRadioTpm(int t)
-{
-    if ( this == LogContainer->getCurrentLogFrame() )
-    {
-        FKHRigControlFrame->setTpm(t);
-    }
-}
 
 /*
 
@@ -1808,16 +1806,6 @@ void TSingleLogFrame::sendRadioVolume(int level)
         LogContainer->sendDM->sendRigControlVolumeLevel(this, level);
     }
 }
-
-void TSingleLogFrame::sendTpm(int t, QString f)
-{
-    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-    {
-        sendKeyerStop();    // don't keep calling while tuning!
-        LogContainer->sendDM->sendRigControlTpm(this, t, f);
-    }
-}
-
 
 void TSingleLogFrame::sendRadioMode(QString mode)
 {

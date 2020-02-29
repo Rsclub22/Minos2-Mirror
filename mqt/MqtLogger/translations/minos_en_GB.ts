@@ -1896,8 +1896,6 @@ No          - Discard changes</source>
         <location filename="../rigcontrolframe.ui" line="70"/>
         <location filename="../rigcontrolframe.ui" line="401"/>
         <location filename="../rigcontrolframe.ui" line="414"/>
-        <location filename="../rigcontrolframe.ui" line="436"/>
-        <location filename="../rigcontrolframe.ui" line="449"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1928,7 +1926,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="659"/>
+        <location filename="../rigcontrolframe.cpp" line="620"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1984,67 +1982,62 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="427"/>
-        <source>Tune Freqs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.cpp" line="666"/>
+        <location filename="../rigcontrolframe.cpp" line="627"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1192"/>
+        <location filename="../rigcontrolframe.cpp" line="1153"/>
         <source>Error Receiving Bandlist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1202"/>
+        <location filename="../rigcontrolframe.cpp" line="1163"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1291"/>
+        <location filename="../rigcontrolframe.cpp" line="1252"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1383"/>
+        <location filename="../rigcontrolframe.cpp" line="1344"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1390"/>
+        <location filename="../rigcontrolframe.cpp" line="1351"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1408"/>
+        <location filename="../rigcontrolframe.cpp" line="1369"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2000"/>
+        <location filename="../rigcontrolframe.cpp" line="1943"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2009"/>
+        <location filename="../rigcontrolframe.cpp" line="1952"/>
         <source>Run %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2026"/>
+        <location filename="../rigcontrolframe.cpp" line="1969"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2075"/>
+        <location filename="../rigcontrolframe.cpp" line="2018"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2076"/>
+        <location filename="../rigcontrolframe.cpp" line="2019"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2423,27 +2416,27 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2296"/>
+        <location filename="../rigcontrolframe.cpp" line="2176"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2297"/>
+        <location filename="../rigcontrolframe.cpp" line="2177"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2298"/>
+        <location filename="../rigcontrolframe.cpp" line="2178"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2299"/>
+        <location filename="../rigcontrolframe.cpp" line="2179"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2300"/>
+        <location filename="../rigcontrolframe.cpp" line="2180"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4255,19 +4248,6 @@ Last %8 Mins: %9 QSO %10 pts %11 bonus<byte value="xd"/>
 (Previous %5; %6; %7)
 Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 (Previous %12; %13; %14)</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TuneMemoryButton</name>
-    <message>
-        <location filename="../rigcontrolframe.cpp" line="2407"/>
-        <source>&amp;Read</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.cpp" line="2408"/>
-        <source>&amp;Write</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

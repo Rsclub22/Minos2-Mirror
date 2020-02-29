@@ -374,26 +374,6 @@ void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
     rpc.queueCall( rigSelected );
 }
 
-void TSendDM::sendRigControlTpm(TSingleLogFrame *tslf, int tpm, QString &freq)
-{
-    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setTpm(rigSelected, tpm);
-    rigCache.setLogFreq(rigSelected, convertStrToFreq(freq));
-
-    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
-
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
-    st->addMember( tpm, rpcConstants::rigTpm);
-    st->addMember( freq, rpcConstants::rigControlLogFreq );
-    rpc.getCallArgs() ->addParam( st );
-
-    rpc.queueCall( rigSelected );
-}
-
 void TSendDM::sendRotatorPreset(QString s)
 {
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
@@ -501,11 +481,6 @@ void TSendDM::notifyRigChanges()
                 if (selStateUuid == frameUuid)
                 {
                     trace("Rig state distribution for " + selStateUuid);
-                    if (selState.tpm().isDirty())
-                    {
-                        trace("SendRPC Rig set tpm " + QString::number(selState.tpm().getValue()));
-                        tslf->on_SetRadioTpm(selState.tpm().getValue());
-                    }
                     if (selState.radioMode().isDirty())
                     {
                         trace("SendRPC Rig set mode " + selState.radioMode().getValue());
