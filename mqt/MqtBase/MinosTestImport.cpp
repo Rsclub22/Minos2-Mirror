@@ -188,7 +188,7 @@ int MinosTestImport::importTestBuffer( const QByteArray &buffer )
    DispatchCallback oldcall = dispatchCallback;
    dispatchCallback = &MinosTestImport::analyseImportTest;
 
-   analyseNode( this, buffer.toStdString() );
+   analyseNode( this, QString(buffer).toStdString() );
 
    dispatchCallback = oldcall;
 
