@@ -1548,7 +1548,7 @@ void TLogContainer::updateLayoutsMenu()
         MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, defaultLayout );
 
         ScreenConfigFile scf;
-        scf.loadFile(this);
+        scf.loadFile(false, this);
         int j = 0;
         for(QMap<QString, SC>::iterator i = scf.configs.begin(); i != scf.configs.end(); i++ )
         {

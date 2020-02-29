@@ -650,7 +650,7 @@ void TSingleLogFrame::buildScreenLayout()
 {
 
     ScreenConfigFile scf;
-    scf.loadFile(this);
+    scf.loadFile(false, this);
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     QString curConfigName = ct->screenLayout.getValue();
@@ -658,6 +658,11 @@ void TSingleLogFrame::buildScreenLayout()
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
         curConfigName = defaultLayoutName();
+        if ( !scf.configs.contains(curConfigName))
+        {
+            //we need to get the built in default
+            scf.loadFile(true, this);
+        }
     }
     curScreenLayout = curConfigName;
     SC sc = scf.configs[curConfigName];
