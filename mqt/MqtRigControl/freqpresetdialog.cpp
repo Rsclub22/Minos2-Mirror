@@ -190,6 +190,7 @@ void FreqPresetDialog::saveSettings()
     config.setValue("10GHz", presetFreq[freqPresetData::_10GHZ]);
 
 
+
     config.endGroup();
 
 
@@ -219,7 +220,6 @@ void FreqPresetDialog::readSettings(QStringList& presetFreq)  // static
     presetFreq.append(config.value("3_4GHz", freqPresetData::bandFreq[freqPresetData::_3_4GHZ]).toString());
     presetFreq.append(config.value("5_6GHz", freqPresetData::bandFreq[freqPresetData::_5_6GHZ]).toString());
     presetFreq.append(config.value("10GHz", freqPresetData::bandFreq[freqPresetData::_10GHZ]).toString());
-
 
     config.endGroup();
 

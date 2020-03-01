@@ -1230,19 +1230,23 @@ void RigControlFrame::setRadioFreq()
                     }
 
 
-                    if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
+                    if (this->isVisible())  // only set freq on radio if rigcontrol panel is visible
                     {
-                        sendFreq(freq);
-                        trace(QString("setRadioFreq: Set previous freq = %1").arg(QString::number(cf)));
-                        if (ui->freqInput->text().toInt() == 0) // if display is zero update display locally
+                        if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
                         {
-                            setFreq(freq);
+                            sendFreq(freq);
+                            trace(QString("setRadioFreq: Set previous freq = %1").arg(QString::number(cf)));
+                            if (ui->freqInput->text().toInt() == 0) // if display is zero update display locally
+                            {
+                                setFreq(freq);
+                            }
                         }
-                    }
-                    else
-                    {
-                        sendFreq(listOfBands[i].freq);
-                        trace(QString("setRadioFreq: Set default freq = %1").arg(listOfBands[i].freq));
+                        else
+                        {
+
+                            sendFreq(listOfBands[i].freq);
+                            trace(QString("setRadioFreq: Set default freq = %1").arg(listOfBands[i].freq));
+                        }
                     }
 
                     setRadioBandWarning("");
