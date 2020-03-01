@@ -31,9 +31,9 @@ namespace Ui {
 
 const int BANDLIST_TIMEOUT_DUR = 3000;
 
-const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
+const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
+const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
 
 
 
@@ -42,64 +42,6 @@ const int RUN_BUTTON_1_ON = 0;
 const int RUN_BUTTON_2_ON = 1;
 const int NUM_RUNBUTTONS = 2;
 const int CHECK_RUN_FREQ_POLLTIME = 1000;
-
-class RigControlFrame;
-class RunMemoryButton : public QObject
-{
-    Q_OBJECT
-
-public:
-    explicit RunMemoryButton(QToolButton *b, RigControlFrame *rcf, int no);
-    ~RunMemoryButton();
-
-    RigControlFrame *rigControlFrame;
-    QToolButton* memButton;
-    QMenu* memoryMenu;
-    QShortcut* shortKey;
-    QShortcut* shiftShortKey;
-    QAction* runOffAction;
-    QAction* readAction;
-    QAction* writeAction;
-    QAction* editAction;
-    QAction* clearAction;
-
-
-    int getMemNo(){return memNo;}
-
-    void setState(bool on){state = on;}
-    bool getState(){return state;}
-
-    void showButtonOnOff(bool state);
-    void showRunToolButtonOffFreq();
-    void showRunToolButtonOnFreq();
-
-private slots:
-    void memoryUpdate();
-
-    void memoryShortCutSelected();
-    void readActionSelected();
-    void editActionSelected();
-    void writeActionSelected();
-    void clearActionSelected();
-    void buttonSelected();
-    void runOffActionSelected();
-signals:
-    void clearActionSelected(int);
-    void buttonActivated(int);
-
-
-private:
-
-    bool state = false;
-    int memNo;
-
-
-
-
-
-
-
-};
 
 class quickBandSelData
 {
@@ -115,7 +57,7 @@ public:
 class RigControlFrame : public QFrame
 {
     Q_OBJECT
-
+    friend class RunButtonsFrame;
 public:
     explicit RigControlFrame(QWidget *parent);
     ~RigControlFrame() override;
@@ -143,12 +85,7 @@ public:
 
     bool isRadioLoaded();
 
-
     void exitFreqEdit();
-    void runButtonUpdate(int);
-    void runButReadActSel(int buttonNumber);
-    void runButWriteActSel(int buttonNumber);
-    void runButEditActSel(int buttonNumber);
 
     QString getStrPassBandState(QString mode);
     int getIntPassBandState(QString mode);
@@ -171,9 +108,6 @@ public:
 
     void closeContest();
 
-
-
-    void runButOffActionSelected(int buttonNumber);
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -187,15 +121,6 @@ signals:
     void radioIsConnected(bool);
     void radioHasError(QString);
     void radioDisconnected();
-    void sendRunOnFlag(QString, bool);
-    void sendRunOffFreqFlag(QString, bool);
-    //void sendCQFreq(QString, bool);
-
-
-
-
-
-
 
 private slots:
     void on_FontChanged();
@@ -219,7 +144,6 @@ private slots:
     void ritClearButtonSelected(bool state);
     void ritFreqEditShortCutInFocus();
     void sendVolumeRadio(int level);
-    void sendFreq(QString f);
 
 
     void ritClearShortCutSelected();
@@ -233,24 +157,12 @@ private slots:
 
 
     void freqStepComboChanged(const QString step);
-    void runButActivated(int buttonNumber);
-    void on_ChkRunFreq();
 public slots:
     void returnChangeRadioFreq();
-    void runButClearActSel(int buttonNumber);
 private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
-
-    // memory buttons
-    memoryData::memData getRunMemoryData(int memoryNumber);
-
-    void setRunMemoryData(int memoryNumber, memoryData::memData m);
-
     LoggerContestLog *ct = nullptr;
-
-    QMap<int, RunMemoryButton *> runButtonMap;
-    QMap<int, QCheckBox*> ignoreRunChkBoxMap;
 
     QVector<quickBandSelData> listOfBands;
 
@@ -278,8 +190,6 @@ private:
     bool ritEditOn;
     //QString curRit;
 
-    int runButtonOnNum = NO_RUN_BUTTON_ON;
-
     QStringList listOfRadios;
     RadioDetails selRadioDetails;
     PubSubName selRadioName;
@@ -300,15 +210,8 @@ private:
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
 
-
-    bool runButtonOnFlag;
-    bool radioOffRunFreq;
-    QString curRunFreq;
-    QTimer *chkRunFreqTimer;
-
-
-    bool oldRadioOffRunFreq = false;  // used by on_ChkRunFreq()
-
+    void sendFreq(QString f);
+    QString getCurFreq() const;
 
     void sendModeToRadio(QString);
     void freqLineEditBkgnd(bool status);
@@ -322,12 +225,8 @@ private:
     void noRadioSendOutFreq(QString f);
     void noRadioSendOutMode(QString m);
 
-    void initRunMemoryButton();
-    void loadRunButtonLabels();
-
     void traceMsg(QString msg);
 
-    void loadMemories();
     void mgmLabelVisible(bool state);
     bool checkValidFreq(QString freq);
 
@@ -357,7 +256,7 @@ private:
     void setFreqTextLegalColour(const QString freq, QString mode);
     void setFreqStepCombo(QString mode);
     double getStepFreqFromComboText(const QString step);
-    bool chkRadioFreqOnRunFreq();
+    void clearFreqInputFocus();
 };
 
 

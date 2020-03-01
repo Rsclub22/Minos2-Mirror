@@ -176,6 +176,12 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../clustermainwindow.cpp" line="1912"/>
+        <source>Minos Cluster
+Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Login Start - Send logon message</source>
         <translation type="vanished">Ouverture de session - Envoyer un message de connexion
 </translation>
@@ -236,10 +242,9 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
         <translation>Effacer commande %1 du cluster?</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1912"/>
         <source>Minos Rotator
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
-        <translation>Minos Rotator
+        <translation type="vanished">Minos Rotator
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     </message>
 </context>

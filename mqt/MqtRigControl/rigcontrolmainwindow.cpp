@@ -3051,9 +3051,9 @@ void RigControlMainWindow::sendFreqToLog(Frequency freq)
     if (appName.length() > 0)
     {
         PubSubName psname(setupRadio->currentRadio.radioName);
+
         msg->rigCache.setRadioFreq(psname, static_cast<double>(freq));
         msg->rigCache.publish();
-
         logMessage(QString("Send freq to logger = %1 psn=%2").arg(convertFreqToStr(freq)).arg(psname.toString()));
     }
 }
@@ -3203,7 +3203,6 @@ void RigControlMainWindow::sendRitEnableStatus(bool status)
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setRitEnableStatus(psname, status);
         msg->rigCache.publish();
-
     }
 }
 

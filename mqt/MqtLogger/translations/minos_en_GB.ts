@@ -1894,8 +1894,6 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="70"/>
-        <location filename="../rigcontrolframe.ui" line="401"/>
-        <location filename="../rigcontrolframe.ui" line="414"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1926,7 +1924,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="620"/>
+        <location filename="../rigcontrolframe.cpp" line="594"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1977,68 +1975,38 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="392"/>
-        <source>Call Freqs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.cpp" line="627"/>
+        <location filename="../rigcontrolframe.cpp" line="601"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1153"/>
+        <location filename="../rigcontrolframe.cpp" line="1132"/>
         <source>Error Receiving Bandlist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1163"/>
+        <location filename="../rigcontrolframe.cpp" line="1142"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1252"/>
+        <location filename="../rigcontrolframe.cpp" line="1235"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1344"/>
+        <location filename="../rigcontrolframe.cpp" line="1319"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1351"/>
+        <location filename="../rigcontrolframe.cpp" line="1326"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1369"/>
+        <location filename="../rigcontrolframe.cpp" line="1344"/>
         <source>Disconnected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.cpp" line="1943"/>
-        <source>Run</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.cpp" line="1952"/>
-        <source>Run %1 - New</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.cpp" line="1969"/>
-        <source>Run %1 - Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.cpp" line="2018"/>
-        <source>Freq: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.cpp" line="2019"/>
-        <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2414,29 +2382,78 @@ No          - Discard changes</source>
     </message>
 </context>
 <context>
+    <name>RunButtonsFrame</name>
+    <message>
+        <location filename="../runbuttonsframe.ui" line="14"/>
+        <source>Call Freqs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.ui" line="17"/>
+        <source>Call Frequencies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.ui" line="26"/>
+        <location filename="../runbuttonsframe.ui" line="39"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="248"/>
+        <source>Run</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="257"/>
+        <source>Run %1 - New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="275"/>
+        <source>Run %1 - Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="326"/>
+        <source>Restore .%1    </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="329"/>
+        <source>Freq: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="330"/>
+        <source>Mode: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2176"/>
+        <location filename="../runbuttonsframe.cpp" line="475"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2177"/>
+        <location filename="../runbuttonsframe.cpp" line="476"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2178"/>
+        <location filename="../runbuttonsframe.cpp" line="477"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2179"/>
+        <location filename="../runbuttonsframe.cpp" line="478"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2180"/>
+        <location filename="../runbuttonsframe.cpp" line="479"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2590,71 +2607,76 @@ The row background will change colour when selected.</source>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="18"/>
-        <source>Rotator Control</source>
+        <source>Call Freq Buttons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="19"/>
+        <source>Rotator Control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="20"/>
         <source>Rotator Presets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="20"/>
+        <location filename="../ScreenConfigElement.cpp" line="21"/>
         <source>This Contest Match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="20"/>
+        <location filename="../ScreenConfigElement.cpp" line="21"/>
         <source>This Contest Matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="21"/>
+        <location filename="../ScreenConfigElement.cpp" line="22"/>
         <source>Other Contest Match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="21"/>
+        <location filename="../ScreenConfigElement.cpp" line="22"/>
         <source>Other Contest Matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="22"/>
+        <location filename="../ScreenConfigElement.cpp" line="23"/>
         <source>Archive Match</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="22"/>
+        <location filename="../ScreenConfigElement.cpp" line="23"/>
         <source>Archive List Matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="23"/>
+        <location filename="../ScreenConfigElement.cpp" line="24"/>
         <source>WSJT-X Connector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="24"/>
+        <location filename="../ScreenConfigElement.cpp" line="25"/>
         <source>Bandmap Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="25"/>
+        <location filename="../ScreenConfigElement.cpp" line="26"/>
         <source>HSplit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="25"/>
+        <location filename="../ScreenConfigElement.cpp" line="26"/>
         <source>Horizontally split element</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="26"/>
+        <location filename="../ScreenConfigElement.cpp" line="27"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="26"/>
+        <location filename="../ScreenConfigElement.cpp" line="27"/>
         <source>Not in use</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2662,7 +2684,7 @@ The row background will change colour when selected.</source>
 <context>
     <name>ScreenConfigFie</name>
     <message>
-        <location filename="../ScreenConfigFile.cpp" line="88"/>
+        <location filename="../ScreenConfigFile.cpp" line="90"/>
         <source>Invalid or missing screen configurations; using built in defaults</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4176,22 +4198,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="714"/>
+        <location filename="../tsinglelogframe.cpp" line="731"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1268"/>
+        <location filename="../tsinglelogframe.cpp" line="1288"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1287"/>
+        <location filename="../tsinglelogframe.cpp" line="1307"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1309"/>
+        <location filename="../tsinglelogframe.cpp" line="1329"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>

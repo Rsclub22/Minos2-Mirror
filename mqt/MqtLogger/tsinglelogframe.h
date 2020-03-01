@@ -17,6 +17,7 @@
 #include "rigcontrolframe.h"
 #include "rotcontrolframe.h"
 #include "RotPresets.h"
+#include "runbuttonsframe.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -58,6 +59,7 @@ class TSingleLogFrame : public QFrame
 
     QTableView *QSOTable;
     RigControlFrame *FKHRigControlFrame = nullptr;
+    RunButtonsFrame *runButtonsFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
 
     RotPresets *rotPresets = nullptr;

@@ -984,13 +984,16 @@ void RotatorMainWindow::upDateAntenna()
                trace(QString("Update Antenna - send to logger - maxAzimuth = %1, minAzimuth = %2, simulate CwCcwCmd = %3").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)).arg(QString::number(setupAntenna->currentAntenna.min_azimuth)).arg(setupAntenna->currentAntenna.supportCwCcwCmd  ? "True" : "False"));
                msg->rotatorCache.setMaxAzimuth(psname, setupAntenna->currentAntenna.max_azimuth);
                msg->rotatorCache.setMinAzimuth(psname, setupAntenna->currentAntenna.min_azimuth);
+               msg->rotatorCache.publish();
                if (setupAntenna->currentAntenna.supportCwCcwCmd)           // want to use simCwCccwCmd?
                {
                    msg->rotatorCache.setCwCcwCmdEnable(psname, true);
+                   msg->rotatorCache.publish();
                }
                else
                {
                    msg->rotatorCache.setCwCcwCmdEnable(psname, setupAntenna->currentAntenna.simCwCcwCmd);
+                   msg->rotatorCache.publish();
                }
 
            }
