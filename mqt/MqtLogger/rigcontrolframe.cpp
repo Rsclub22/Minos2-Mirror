@@ -1845,7 +1845,7 @@ void RigControlFrame::runModeOff(int buttonNumber)
     runButtonMap[buttonNumber]->returnFrequency.clear();
     runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
 
-    setFreq( rfreq);
+    sendFreq( rfreq);
 
     // on run Freq, turn off runmode
     runButtonMap[buttonNumber]->showButtonOnOff(false);
@@ -1917,6 +1917,11 @@ void RigControlFrame::runButActivated(int buttonNumber)
             switchRunButton(buttonNumber);
         }
     }
+    else
+    {
+        // not set - go to "new" action
+        runButWriteActSel(buttonNumber);
+    }
 }
 void RigControlFrame::runButReadActSel(int buttonNumber)
 {
@@ -1968,6 +1973,7 @@ void RigControlFrame::runButWriteActSel(int buttonNumber)
     {
         setRunMemoryData(buttonNumber, runData);
         runButtonUpdate(buttonNumber);
+        runButActivated(buttonNumber);
 
     }
 

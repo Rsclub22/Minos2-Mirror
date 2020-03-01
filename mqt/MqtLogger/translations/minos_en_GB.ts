@@ -2017,32 +2017,32 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1956"/>
+        <location filename="../rigcontrolframe.cpp" line="1961"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1965"/>
+        <location filename="../rigcontrolframe.cpp" line="1970"/>
         <source>Run %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1982"/>
+        <location filename="../rigcontrolframe.cpp" line="1988"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2033"/>
+        <location filename="../rigcontrolframe.cpp" line="2039"/>
         <source>Restore .%1    </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2036"/>
+        <location filename="../rigcontrolframe.cpp" line="2042"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2037"/>
+        <location filename="../rigcontrolframe.cpp" line="2043"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2421,27 +2421,27 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2198"/>
+        <location filename="../rigcontrolframe.cpp" line="2204"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2199"/>
+        <location filename="../rigcontrolframe.cpp" line="2205"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2200"/>
+        <location filename="../rigcontrolframe.cpp" line="2206"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2201"/>
+        <location filename="../rigcontrolframe.cpp" line="2207"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2202"/>
+        <location filename="../rigcontrolframe.cpp" line="2208"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
