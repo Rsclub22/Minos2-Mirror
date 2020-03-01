@@ -696,9 +696,10 @@ void RigControlMainWindow::upDateRadio()
                     // not polling get initial values
                     getAndSendFrequency(CURRENT_VFO);
                     getAndSendMode(CURRENT_VFO);
-                    // connect signals for future updates
-                    connect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq()));
-                    connect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()));
+                    // connect signals for future value updates and errors
+                    connect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq()), Qt::QueuedConnection); // QueuedConnection, ensure return to rigcontroller caller when not polling - eg Omnirig
+                    connect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)), Qt::QueuedConnection);
                 }
 
 
@@ -1128,6 +1129,7 @@ void RigControlMainWindow::closeRadio()
         {
             disconnect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq));
             disconnect(radio, SIGNAL(onNewMode()), this, SLOT(onNewMode()));
+            disconnect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)));
         }
 
     }
@@ -2793,6 +2795,15 @@ void RigControlMainWindow::showStatusMessage(const QString &message)
     status->setText(message);
 }
 
+
+void RigControlMainWindow::onRigStatus(int status, QString cmd)
+{
+    if (status < Rig_OK)
+    {
+        radioError(status, cmd);
+    }
+}
+
 void RigControlMainWindow::radioError(int errorCode, QString cmd)
 {
 
@@ -2817,7 +2828,7 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
 
     logMessage(QString("%1 library Error - Code = %2 - %3").arg(radio->getLibraryName()).arg(QString::number(errorCode)).arg(errorMsg));
 
-    QMessageBox::critical(this, tr("RigControl %1 library Error").arg(radio->getLibraryName()), tr("%1\n%2 - %3\nCommand %4").arg(setupRadio->currentRadio.radioName).arg(errorCode).arg(errorMsg).arg(cmd));
+    QMessageBox::critical(this, tr("RigControl %1 library Error").arg(radio->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(setupRadio->currentRadio.radioName).arg(errorCode).arg(errorMsg).arg(cmd));
 
     closeRadio();
     rigErrorFlag = false;

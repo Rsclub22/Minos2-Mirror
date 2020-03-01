@@ -21,7 +21,9 @@
 
 enum omnirigErrorCode {OMNIRIG_OK = 0, OMNIRIG_NOT_SUPPORTED, OMNIRIG_COM_FAILED_START,
                        OMNIRIG_ONE_FAILED_INITIALISE, OMNIRIG_TWO_FAILED_INITIALISE,
-                      OMNIRIG_OFFLINE, OMNIRIG_RIG_NULL};
+                      OMNIRIG_OFFLINE, OMNIRIG_ONLINE, OMINIRIG_COM_EXCEPTION,
+                      OMNIRIG_NOTCONFIGURED, OMNIRIG_DISABLED,
+                      OMNIRIG_PORTBUSY, OMNIRIG_NOTRESPONDING, OMNIRIG_RIG_NULL};
 
 
 
@@ -99,6 +101,7 @@ private:
 
     OmniRig::PortBits* serPort;
 
+    OmniRig::RigStatusX status;
     bool rigConnected;
 
     static MODE map_mode (OmniRig::RigParamX param);

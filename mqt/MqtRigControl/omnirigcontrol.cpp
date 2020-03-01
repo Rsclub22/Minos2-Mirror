@@ -22,8 +22,14 @@ const char* OmnirigControl::omnirigErrorMsg[] =  {QT_TR_NOOP("No Error, operatio
                                                 QT_TR_NOOP("Omnirig Com Failed to start"),
                                                 QT_TR_NOOP("Omnirig rig One failed to initialise"),
                                                 QT_TR_NOOP("Omnirig rig Two failed to initialise"),
-                                                QT_TR_NOOP("Omnirig offline"),
-                                                QT_TR_NOOP("Omnirig rig pointer null")
+                                                QT_TR_NOOP("Omnirig radio offline"),
+                                                QT_TR_NOOP("Omnirig radio online"),
+                                                QT_TR_NOOP("Omnirig COM Exception\nCheck Rigcontrol tracelog"),
+                                                QT_TR_NOOP("Omnirig not configured"),
+                                                QT_TR_NOOP("Omnirig disabled"),
+                                                QT_TR_NOOP("Omnirig port busy"),
+                                                QT_TR_NOOP("Omnirig not responding"),
+                                                  QT_TR_NOOP("Omnirig rig pointer null")
 
                                                 };
 
@@ -78,7 +84,7 @@ auto OmnirigControl::map_mode (OmniRig::RigParamX param) -> MODE
 OmniRig::RigParamX OmnirigControl::map_mode (MODE mode)
 {
   switch (mode)
-    {
+  {
     case AM: return OmniRig::PM_AM;
     case CW: return OmniRig::PM_CW_L;
     case CW_R: return OmniRig::PM_CW_U;
@@ -91,7 +97,7 @@ OmniRig::RigParamX OmnirigControl::map_mode (MODE mode)
     case FM: return OmniRig::PM_FM;
     case DIG_FM: return OmniRig::PM_FM;
     default: break;
-    }
+  }
   return OmniRig::PM_SSB_U;
 }
 
@@ -151,14 +157,14 @@ OmnirigControl::~OmnirigControl()
 void OmnirigControl::onHandleCOMException (int code, QString source, QString desc, QString help)
 {
     traceMsg(QString("COM/OLE error: %1 at %2: %3 (%4)").arg (QString::number(code)).arg(source). arg(desc). arg(help));
-    emit comError(QString::number(code), source, desc, help);
+    emit rigStatus(OMINIRIG_COM_EXCEPTION * -1, QString("COM Exception"));
 }
 
 void OmnirigControl::onHandleVisibleChange()
 {
     if (!omni_rig || omni_rig->isNull ())
         return;
-    qDebug() << QString("OmniRig visibility change: visibility = %1").arg(omni_rig->DialogVisible ());
+    traceMsg(QString("OmniRig visibility change: visibility = %1").arg(omni_rig->DialogVisible ()));
 }
 
 
@@ -168,7 +174,7 @@ void OmnirigControl::onHandleRigTypeChange(int rigNumber)
 {
     if (!omni_rig || omni_rig->isNull())
         return;
-    qDebug() << "OmniRigTransceiver rig type change: rig =" << rigNumber;
+    traceMsg(QString("OmniRigTransceiver rig type change: rig = %1").arg(rigNumber));
 
 
 
@@ -184,16 +190,40 @@ void OmnirigControl::onHandleStatusChange(int rigNumber)
         if (!rig || rig->isNull ())
             return;
 
+        status = rig->Status();
         traceMsg(QString("Rig %1 Status Change: new status = %2").arg(rigNumber).arg(rig->StatusStr()));
-        if (OmniRig::ST_ONLINE != rig->Status())
+        if (status != OmniRig::ST_ONLINE)
         {
             setRigConnected(false);
+            emit rigStatus(OMNIRIG_OFFLINE * -1, QString("Status"));
+
 
         }
-        else
+        else if (status == OmniRig::ST_ONLINE)
         {
             setRigConnected(true);
+            //emit rigStatus(OMNIRIG_ONLINE);
 
+        }
+        else if (status == OmniRig::ST_NOTCONFIGURED)
+        {
+            setRigConnected(false);
+            emit rigStatus(OMNIRIG_NOTCONFIGURED * -1, QString("Status"));
+        }
+        else if (status == OmniRig::ST_DISABLED)
+        {
+            setRigConnected(false);
+            emit rigStatus(OMNIRIG_DISABLED * -1, QString("Status"));
+        }
+        else if (status == OmniRig::ST_PORTBUSY)
+        {
+            setRigConnected(false);
+            emit rigStatus(OMNIRIG_PORTBUSY * -1, QString("Status"));
+        }
+        else if (status == OmniRig::ST_NOTRESPONDING)
+        {
+            setRigConnected(false);
+            emit rigStatus(OMNIRIG_NOTRESPONDING * -1, QString("Status"));
         }
 
 
@@ -209,7 +239,7 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
     traceMsg(QString("OmniRig params change: params = 0x%1 for rig %2")
           .arg (params, 8, 16, QChar ('0'))
           .arg (rig_number).toLocal8Bit ());
-          //<< "state before:" << state ());
+
     if (rigNumber == rig_number)
     {
         if (!rig || rig->isNull ())

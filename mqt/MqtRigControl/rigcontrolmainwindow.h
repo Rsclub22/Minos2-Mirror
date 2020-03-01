@@ -367,6 +367,7 @@ signals:
     void rigCtldStatusTimeout();
     void onNewFreq();
     void onNewMode();
+    void onRigStatus(int status, QString cmd);
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

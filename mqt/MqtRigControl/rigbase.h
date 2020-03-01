@@ -68,7 +68,8 @@ signals:
     // no polling signals
     void newFreq();
     void newMode();
-    void comError(QString, QString, QString, QString);
+    //void comError(QString, QString, QString, QString);
+    void rigStatus(int, QString);
 
 
 private:
