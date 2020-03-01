@@ -1997,52 +1997,52 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1254"/>
+        <location filename="../rigcontrolframe.cpp" line="1258"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1346"/>
+        <location filename="../rigcontrolframe.cpp" line="1350"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1353"/>
+        <location filename="../rigcontrolframe.cpp" line="1357"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1371"/>
+        <location filename="../rigcontrolframe.cpp" line="1375"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1961"/>
+        <location filename="../rigcontrolframe.cpp" line="1965"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1970"/>
+        <location filename="../rigcontrolframe.cpp" line="1974"/>
         <source>Run %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1988"/>
+        <location filename="../rigcontrolframe.cpp" line="1992"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2039"/>
+        <location filename="../rigcontrolframe.cpp" line="2043"/>
         <source>Restore .%1    </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2042"/>
+        <location filename="../rigcontrolframe.cpp" line="2046"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2043"/>
+        <location filename="../rigcontrolframe.cpp" line="2047"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2421,27 +2421,27 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2204"/>
+        <location filename="../rigcontrolframe.cpp" line="2208"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2205"/>
+        <location filename="../rigcontrolframe.cpp" line="2209"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2206"/>
+        <location filename="../rigcontrolframe.cpp" line="2210"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2207"/>
+        <location filename="../rigcontrolframe.cpp" line="2211"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2208"/>
+        <location filename="../rigcontrolframe.cpp" line="2212"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4186,17 +4186,17 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1273"/>
+        <location filename="../tsinglelogframe.cpp" line="1274"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1292"/>
+        <location filename="../tsinglelogframe.cpp" line="1293"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1314"/>
+        <location filename="../tsinglelogframe.cpp" line="1315"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>

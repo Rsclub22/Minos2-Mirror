@@ -227,7 +227,7 @@ Do you want to enter\change your details?</source>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="1912"/>
-        <source>Minos Rotator
+        <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
         <translation type="unfinished"></translation>
     </message>
