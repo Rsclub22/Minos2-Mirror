@@ -249,6 +249,12 @@ void TSingleLogFrame::createScreenComponents()
     FKHRigControlFrame->setVisible(false);
     FKHRigControlFrame->setContest(contest);
 
+    runButtonsFrame = new RunButtonsFrame(this);
+    runButtonsFrame->setObjectName(QStringLiteral("runButtonsFrame"));
+    runButtonsFrame->setVisible(false);
+    runButtonsFrame->setRigControl(FKHRigControlFrame);
+    runButtonsFrame->setContest(contest);
+
     FKHRotControlFrame = new RotControlFrame(this);
 
     FKHRotControlFrame->setObjectName(QStringLiteral("FKHRotControlFrame"));
@@ -546,6 +552,12 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     elementScrollArea->setWidget(FKHRigControlFrame);
                     FKHRigControlFrame->setContest(ct);
+                    break;
+                }
+                case sctRunButtons:
+                {
+                    elementScrollArea->setWidget(runButtonsFrame);
+                    runButtonsFrame->setContest(ct);
                     break;
                 }
                 case sctRotControl:
@@ -930,6 +942,8 @@ void TSingleLogFrame::HideTimerTimer(  )
     {
         if (FKHRigControlFrame->parent() != this)
             FKHRigControlFrame->setVisible(isRadioLoaded());
+        if (runButtonsFrame->parent() != this)
+            runButtonsFrame->setVisible(isRadioLoaded());
 
         if (FKHRotControlFrame->parent() != this)
             FKHRotControlFrame->setVisible(isRotatorLoaded());
@@ -1632,11 +1646,9 @@ void TSingleLogFrame::on_SetFreq(QString f)
 
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
+        runButtonsFrame->setFreq(f);
         GJVQSOLogFrame->setFreq(f);
-        //if (isBandMapLoaded())
-        //{
-           bandmapControlFrame->setFreq(f);
-       // }
+        bandmapControlFrame->setFreq(f);
 
         MinosLoggerEvents::sendRigFreqChanged(f, contest);
     }

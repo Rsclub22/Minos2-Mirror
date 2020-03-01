@@ -8,6 +8,7 @@ enum SCType
     sctAux,
     sctLog,
     sctRigControl,
+    sctRunButtons,
     sctRotControl,
     sctRotPresets,
     sctQSOEdit,

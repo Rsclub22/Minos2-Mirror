@@ -13,7 +13,7 @@
 [{"name": "default",
 "rows":[
 [{"type": "Log"},{"type": "Aux"}],
-[{"type": "Rig"},{"type": "Rot"},{"type": "RotP"}],
+[{"type": "Rig"},{"type": "Call"},{"type": "Rot"},{"type": "RotP"}],
 [{"type": "QSO"},{"type": "Crib"}],
 [{"type": "This"},{"type": "Other"},{"type": "Arch"}]
 ]}]
@@ -21,9 +21,9 @@
 static QString defaultConfig = "[{\"name\": \"%1\","
         "\"rows\":["
         "[{\"type\": \"%2\"},{\"type\": \"%3\"}],"
-        "[{\"type\": \"%4\"},{\"type\": \"%5\"},{\"type\": \"%6\"}],"
-        "[{\"type\": \"%7\"},{\"type\": \"%8\"}],"
-        "[{\"type\": \"%9\"},{\"type\": \"%10\"},{\"type\": \"%11\"}]"
+        "[{\"type\": \"%4\"},{\"type\": \"%5\"},{\"type\": \"%6\"},{\"type\": \"%7\"}],"
+        "[{\"type\": \"%8\"},{\"type\": \"%9\"}],"
+        "[{\"type\": \"%10\"},{\"type\": \"%11\"},{\"type\": \"%12\"}]"
         "]}]";
 
 ScreenConfigFile::ScreenConfigFile()
@@ -103,6 +103,7 @@ void ScreenConfigFile::readFile(QString f, bool getDefault, QWidget *parent)
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctRigControl))
+                .arg(ScreenConfigElement::getRawScreenTypeString(sctRunButtons))
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctRotControl))
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctRotPresets))
                 .arg(ScreenConfigElement::getRawScreenTypeString(sctQSOEdit))

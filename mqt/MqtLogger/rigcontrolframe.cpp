@@ -29,18 +29,6 @@
 #include "ui_rigcontrolframe.h"
 
 
-static QKeySequence runButShortCut[] {
-    QKeySequence(Qt::CTRL + Qt::Key_BracketLeft),
-    QKeySequence(Qt::CTRL + Qt::Key_BracketRight)
-
-};
-
-static QKeySequence runButShiftShortCut[] {
-    QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketLeft),
-    QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketRight)
-
-};
-
 const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ;\n");
 const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ;\n");
 
@@ -68,9 +56,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ritOn(false),
     ritEditOn(false),
     radioState("None"),
-    onContestPageChangedFlag(false),
-    runButtonOnFlag(false),
-    radioOffRunFreq(false)
+    onContestPageChangedFlag(false)
 
 {
     ui->setupUi(this);
@@ -80,8 +66,6 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ui->RitEdit->installEventFilter(this  );
 
     initRigFrame(parent);
-
-    initRunMemoryButton();
 
     showRitButOff();
 
@@ -160,10 +144,6 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     freqDisplayPalette = new QPalette();       // to change colour when tuning
 
-    chkRunFreqTimer = new QTimer(this);
-    connect(chkRunFreqTimer, SIGNAL(timeout()), this, SLOT(on_ChkRunFreq()));
-
-
     // start timer to wait for bandlist and rigdetails to launch
     launchRadioSelectTimer = new QTimer(this);
     launchRadioSelectCount = 5;     // wait five seconds
@@ -174,10 +154,6 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 RigControlFrame::~RigControlFrame()
 {
     delete ui;
-    foreach(auto b, runButtonMap)
-    {
-        delete b;
-    }
 
     delete operatingFreq;
     delete freqDisplayPalette;
@@ -192,6 +168,10 @@ void RigControlFrame::on_FontChanged()
     ui->freqInput->setFont(cf);
 }
 
+void RigControlFrame::clearFreqInputFocus()
+{
+    ui->freqInput->clearFocus();
+}
 
 void RigControlFrame::checkRigDetailsAvail()
 {
@@ -237,11 +217,6 @@ void RigControlFrame::checkRigDetailsAvail()
 void RigControlFrame::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
-
-    if (ct)
-    {
-        loadMemories();                 // mem and run should be independant of the radio!
-    }
 }
 
 void RigControlFrame::initRigFrame(QWidget * /*parent*/)
@@ -501,9 +476,6 @@ void RigControlFrame::setFreq(QString freq)
             ui->freqInput->setText(freq);
         }
         curFreq = freq;
-        on_ChkRunFreq();
-        setRunButtonText(RUN_BUTTON_1_ON);
-        setRunButtonText(RUN_BUTTON_2_ON);
     }
     // an error here?
 
@@ -821,6 +793,11 @@ bool RigControlFrame::eventFilter(QObject *obj, QEvent *event)
 
 
    return false;
+}
+
+QString RigControlFrame::getCurFreq() const
+{
+    return curFreq;
 }
 
 void RigControlFrame::exitFreqEdit()
@@ -1268,14 +1245,6 @@ void RigControlFrame::setRadioFreq()
 
 
 }
-
-
-void RigControlFrame::loadMemories()
-{
-    loadRunButtonLabels();
-}
-
-
 
 void RigControlFrame::setRadioList()
 {
@@ -1779,380 +1748,6 @@ void RigControlFrame::traceMsg(QString msg)
 }
 
 
-
-
-//********************** Run Buttons *******************************
-
-void RigControlFrame::initRunMemoryButton()
-{
-    memoryData::memData m;
-    runButtonMap[0] = new RunMemoryButton(ui->RunButton1, this, 0);
-    connect( runButtonMap[0], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
-    connect( runButtonMap[0], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
-
-    runButtonMap[1] = new RunMemoryButton(ui->RunButton2, this, 1);
-    connect( runButtonMap[1], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
-    connect( runButtonMap[1], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
-
-}
-int RigControlFrame::otherButton(int buttonNumber)
-{
-    return buttonNumber^1;
-}
-void RigControlFrame::setRunButtonActive(int buttonNumber)
-{
-    // a run button is active; but we are not on a run frequency
-    // select run freq for this button
-
-    // first, save the current frequency so we can return to it
-
-    runButtonMap[buttonNumber]->returnFrequency = curFreq;
-    runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
-
-    runButReadActSel(buttonNumber);
-    runButtonMap[buttonNumber]->showButtonOnOff(false);
-}
-
-void RigControlFrame::setRunFreq(int buttonNumber)
-{
-    // run button not active
-    // make this one active
-
-    QString oldfreq = curFreq;
-
-    runButReadActSel(buttonNumber);
-
-    if (curFreq != oldfreq)
-    {
-        runButtonMap[buttonNumber]->returnFrequency = oldfreq;
-        runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
-    }
-    else
-    {
-        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
-        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
-    }
-
-    runButtonMap[buttonNumber]->showButtonOnOff(true);
-    runButtonOnFlag = true;
-    oldRadioOffRunFreq = false;
-    chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
-    runButtonOnNum = buttonNumber;
-    emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
-}
-
-void RigControlFrame::runModeOff(int buttonNumber)
-{
-    // on run freq - return to prior frequency
-
-    QString rfreq = runButtonMap[buttonNumber]->returnFrequency;
-    runButtonMap[buttonNumber]->returnFrequency.clear();
-    runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
-
-    sendFreq( rfreq);
-
-    // on run Freq, turn off runmode
-    runButtonMap[buttonNumber]->showButtonOnOff(false);
-
-//    runButtonOnFlag = false;
-//    oldRadioOffRunFreq = false;
-//    runButtonOnNum = NO_RUN_BUTTON_ON;
-//    chkRunFreqTimer->stop();
-//    emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
-}
-
-void RigControlFrame::switchRunButton(int buttonNumber)
-{
-    if (radioOffRunFreq)
-    {
-        runButtonMap[buttonNumber]->returnFrequency = curFreq;
-        runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
-    }
-    else
-    {
-        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
-        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
-    }
-    // other run button frequency active, so switch over
-    runButtonMap[RUN_BUTTON_1_ON]->showButtonOnOff(false);
-    runButtonMap[RUN_BUTTON_2_ON]->showButtonOnOff(false);
-    runButReadActSel(buttonNumber);
-    runButtonOnFlag = true;
-    chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
-    runButtonOnNum = buttonNumber;
-    emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
-}
-
-void RigControlFrame::runButActivated(int buttonNumber)
-{
-    trace(QString("RigControlFrame::runButActivated buttonNumber %1 radioOffRunFreq %2 runButtonOnNum %3")
-          .arg(buttonNumber).arg(radioOffRunFreq).arg(runButtonOnNum));
-
-    if (buttonNumber != RUN_BUTTON_1_ON && buttonNumber != RUN_BUTTON_2_ON)
-        return;
-
-    if (!runButtonMap[buttonNumber]->memButton->text().contains(QChar('*')))
-    {
-        // "*" in the text means that no frequency has been set (yet)
-        // no freq set - press has no effect
-        if (runButtonOnNum == NO_RUN_BUTTON_ON)
-        {
-            // neither run button active
-            // NO_RUN_BUTTON_ON
-            setRunFreq(buttonNumber);
-        }
-        else if (runButtonOnNum == buttonNumber)
-        {
-            if(radioOffRunFreq)
-            {
-                // a run button is active; but we are not on a run frequency
-                // select run freq for this button
-                setRunButtonActive(buttonNumber);
-            }
-            else
-            {
-                // on run Freq, turn off runmode
-                runModeOff(buttonNumber);
-            }
-        }
-        else
-        {
-            // other run button frequency active
-            switchRunButton(buttonNumber);
-        }
-    }
-    else
-    {
-        // not set - go to "new" action
-        runButWriteActSel(buttonNumber);
-    }
-}
-void RigControlFrame::runButReadActSel(int buttonNumber)
-{
-    traceMsg(QString("Run Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
-    memoryData::memData m = getRunMemoryData(buttonNumber);
-    if (isRadioLoaded())
-    {
-        if (radioConnected && !radioError)
-        {
-            ui->freqInput->clearFocus();
-            if (m.freq.remove('.') != curFreq.remove('.'))
-            {
-                sendFreq(m.freq);
-            }
-
-            curRunFreq = m.freq;
-
-            if (m.mode != curMode)
-            {
-                sendModeToRadio(m.mode);
-            }
-
-        }
-        else if (!radioConnected && radioName.trimmed().isEmpty())
-        {
-            noRadioSendOutFreq(m.freq);
-        }
-    }
-}
-
-
-
-void RigControlFrame::runButWriteActSel(int buttonNumber)
-{
-    traceMsg(QString("Memory Write Selected %1 = ").arg(QString::number(buttonNumber + 1)));
-    memoryData::memData runData;
-    runData.callsign = tr("Run") + QString::number(buttonNumber + 1);
-    runData.freq = curFreq;
-    runData.locator = "";
-    runData.mode = curMode;
-    runData.bearing = COMPASS_ERROR;
-    runData.time = "00:00";
-    // load run data into run memory
-
-    RunButtonDialog runDialog(this);
-    runDialog.setWindowTitle(tr("Run %1 - New").arg(QString::number(buttonNumber + 1)));
-    runDialog.setLogData(&runData, buttonNumber);
-    if (runDialog.exec() == QDialog::Accepted)
-    {
-        setRunMemoryData(buttonNumber, runData);
-        runButtonUpdate(buttonNumber);
-        runButActivated(buttonNumber);
-
-    }
-
-}
-
-void RigControlFrame::runButEditActSel(int buttonNumber)
-{
-    memoryData::memData runData = getRunMemoryData(buttonNumber);
-
-    traceMsg(QString("Run Button Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-    RunButtonDialog runDialog(this);
-    runDialog.setWindowTitle(tr("Run %1 - Edit").arg(QString::number(buttonNumber + 1)));
-    runDialog.setLogData(&runData, buttonNumber);
-
-    if (runDialog.exec() == QDialog::Accepted)
-    {
-        setRunMemoryData(buttonNumber, runData);
-        runButtonUpdate(buttonNumber);
-    }
-}
-
-void RigControlFrame::runButClearActSel(int buttonNumber)
-{
-    traceMsg(QString("Run Button Clear Selected = %1").arg(QString::number(buttonNumber + 1)));
-
-    memoryData::memData m;
-    setRunMemoryData(buttonNumber, m);
-    runButtonUpdate(buttonNumber);
-}
-
-
-void RigControlFrame::runButOffActionSelected(int buttonNumber)
-{
-    if (buttonNumber == runButtonOnNum && runButtonOnFlag)
-    {
-        runButtonMap[buttonNumber]->showButtonOnOff(false);
-        runButtonOnFlag = false;
-        runButtonOnNum = NO_RUN_BUTTON_ON;
-        chkRunFreqTimer->stop();
-        emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
-    }
-
-}
-
-void RigControlFrame::loadRunButtonLabels()
-{
-    for (int i = 0; i < runButData::NUM_RUNBUTTONS; i++)
-    {
-        runButtonUpdate(i);
-    }
-}
-
-
-void RigControlFrame::setRunButtonText(int buttonNumber)
-{
-    memoryData::memData m = getRunMemoryData(buttonNumber);
-    QString sc = ((buttonNumber == 0)?QString(" [ "):QString( " ] "));
-
-    QString runText = "R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + "   ";
-    QString restoreText;
-    if (!runButtonMap[buttonNumber]->returnFrequency.isEmpty())
-    {
-        restoreText = "\n" + tr("Restore .%1    ").arg(extractKhz(runButtonMap[buttonNumber]->returnFrequency) );
-    }
-    runButtonMap[buttonNumber]->memButton->setText(runText + restoreText);
-    QString tTipStr = tr("Freq: ") + convertFreqStrDisp(m.freq) + "\n"
-            + tr("Mode: ") + m.mode + "\n";
-    runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
-}
-
-void RigControlFrame::runButtonUpdate(int buttonNumber)
-{
-    setRunButtonText(buttonNumber);
-
-    if (buttonNumber == runButtonOnNum && runButtonOnFlag)
-    {
-        if (runButtonMap[buttonNumber]->memButton->text().contains(QChar('*')))
-        {
-            // cleared the active run freq - turn run off
-            runButtonMap[buttonNumber]->showButtonOnOff(false);
-            runButtonOnFlag = false;
-            runButtonOnNum = NO_RUN_BUTTON_ON;
-            chkRunFreqTimer->stop();
-            emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
-        }
-        else
-        {
-            // update run freq
-            memoryData::memData m = getRunMemoryData(buttonNumber);
-            if (m.freq.remove('.') != curFreq.remove('.'))
-            {
-                sendFreq(m.freq);
-            }
-            curRunFreq = m.freq.remove('.');
-            emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
-        }
-    }
-
-}
-
-void RigControlFrame::on_ChkRunFreq()
-{
-
-
-    if (runButtonOnFlag)
-    {
-        if (curRunFreq.toLongLong() != 0)
-        {
-            if (!chkRadioFreqOnRunFreq())
-            {
-
-                radioOffRunFreq = true;
-                if (runButtonOnNum >= 0 && runButtonOnNum < NUM_RUNBUTTONS)
-                {
-                    runButtonMap[runButtonOnNum]->showRunToolButtonOffFreq();
-                }
-
-
-                if (oldRadioOffRunFreq != radioOffRunFreq)
-                {
-                    oldRadioOffRunFreq = radioOffRunFreq;
-                    emit sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
-
-                }
-
-
-             }
-
-            else if (chkRadioFreqOnRunFreq())
-            {
-                // back on a run freq
-
-                radioOffRunFreq = false;
-                if (runButtonOnNum >= 0 && runButtonOnNum < NUM_RUNBUTTONS)
-                {
-                    runButtonMap[runButtonOnNum]->showRunToolButtonOnFreq();
-                }
-
-
-                if (oldRadioOffRunFreq != radioOffRunFreq)
-                {
-                    oldRadioOffRunFreq = radioOffRunFreq;
-                    emit sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
-
-                }
-
-
-
-
-            }
-        }
-
-
-
-    }
-
-}
-
-
-bool RigControlFrame::chkRadioFreqOnRunFreq()
-{
-
-    qint64 curRunF = curRunFreq.toLongLong() / 100;
-    qint64 curF = curFreq.toLongLong() / 100;
-
-    if (curRunF != 0)
-    {
-        if ((curF >= (curRunF - RUN_TOLERANCE)) && (curF <= (curRunF + RUN_TOLERANCE)))
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
 //-----------------------------------------------------------------------------------
 
 void RigControlFrame::checkConnection()
@@ -2169,130 +1764,3 @@ void RigControlFrame::checkConnection()
 }
 
 
-memoryData::memData RigControlFrame::getRunMemoryData(int memoryNumber)
-{
-    memoryData::memData m;
-
-    if (ct->runMemories.size() > memoryNumber)
-    {
-       m = ct->runMemories[memoryNumber].getValue();
-
-    }
-    return m;
-}
-void RigControlFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
-{
-    ct->saveRunMemory(memoryNumber, m);
-
-}
-
-//*******************Run Memory Button *************************//
-
-
-RunMemoryButton::RunMemoryButton(QToolButton *b, RigControlFrame *rcf, int no)
-{
-    memNo = no;
-    rigControlFrame = rcf;
-
-    memButton = b;
-
-    memoryMenu = new QMenu(memButton);
-
-    memButton->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    memButton->setPopupMode(QToolButton::MenuButtonPopup);
-    memButton->setFocusPolicy(Qt::NoFocus);
-    memButton->setText(runButData::runButTitle[memNo]);
-
-    shortKey = new QShortcut(QKeySequence(runButShortCut[memNo]), memButton);
-    shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), memButton);
-    runOffAction = new QAction(tr("&Off"), memButton);
-    readAction = new QAction(tr("&Read"), memButton);
-    writeAction = new QAction(tr("&New"),memButton);
-    editAction = new QAction(tr("&Edit"), memButton);
-    clearAction = new QAction(tr("&Clear"),memButton);
-    memoryMenu->addAction(runOffAction);
-    memoryMenu->addAction(readAction);
-    memoryMenu->addAction(writeAction);
-    memoryMenu->addAction(editAction);
-    memoryMenu->addAction(clearAction);
-    memButton->setMenu(memoryMenu);
-
-    //connect(shortKey, SIGNAL(activated()), this, SLOT(readActionSelected()));
-    //connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
-    //connect(memButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
-    connect( readAction, SIGNAL( triggered() ), this, SLOT(buttonSelected()) );
-    connect(memButton, SIGNAL(clicked(bool)), this, SLOT(buttonSelected()));
-    connect(shortKey, SIGNAL(activated()), this, SLOT(buttonSelected()));
-    connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShortCutSelected()));
-    connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()) );
-    connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()) );
-    connect( clearAction, SIGNAL( triggered() ), this, SLOT(clearActionSelected()) );
-    connect( runOffAction, SIGNAL( triggered() ), this, SLOT(runOffActionSelected()) );
-
-}
-RunMemoryButton::~RunMemoryButton()
-{
-//    delete memButton;
-}
-void RunMemoryButton::memoryUpdate()
-{
-    rigControlFrame->runButtonUpdate(memNo);
-}
-
-void RunMemoryButton::memoryShortCutSelected()
-{
-//    rigControlFrame->memoryShortCutSelected(memNo);
-    memButton->showMenu();
-    //emit lostFocus();
-}
-void RunMemoryButton::readActionSelected()
-{
-    rigControlFrame->runButReadActSel(memNo);
-}
-void RunMemoryButton::editActionSelected()
-{
-    rigControlFrame->runButEditActSel(memNo);
-}
-void RunMemoryButton::writeActionSelected()
-{
-    rigControlFrame->runButWriteActSel(memNo);
-}
-void RunMemoryButton::clearActionSelected()
-{
-    emit clearActionSelected(memNo);
-}
-
-void RunMemoryButton::runOffActionSelected()
-{
-    rigControlFrame->runButOffActionSelected(memNo);
-}
-
-void RunMemoryButton::buttonSelected()
-{
-    emit buttonActivated(memNo);
-}
-
-void RunMemoryButton::showButtonOnOff(bool state)
-{
-    if (state)
-    {
-        showRunToolButtonOnFreq();
-    }
-    else
-    {
-        memButton->setStyleSheet(RUN_BUTTON_OFF_STYLE);
-    }
-}
-
-
-void RunMemoryButton::showRunToolButtonOffFreq()
-{
-    memButton->setStyleSheet(RUN_BUTTON_OFF_FREQ_STYLE);
-    //memoryMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
-}
-
-void RunMemoryButton::showRunToolButtonOnFreq()
-{
-    memButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
-   // memoryMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
-}
