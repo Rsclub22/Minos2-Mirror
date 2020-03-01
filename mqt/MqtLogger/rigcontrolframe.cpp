@@ -1849,7 +1849,7 @@ void RigControlFrame::runModeOff(int buttonNumber)
     runButtonMap[buttonNumber]->returnFrequency.clear();
     runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
 
-    setFreq( rfreq);
+    sendFreq( rfreq);
 
     // on run Freq, turn off runmode
     runButtonMap[buttonNumber]->showButtonOnOff(false);
