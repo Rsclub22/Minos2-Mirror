@@ -30,9 +30,9 @@ namespace Ui {
 
 const int BANDLIST_TIMEOUT_DUR = 3000;
 
-const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
+const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
+const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
 
 
 
@@ -62,11 +62,9 @@ public:
     QAction* editAction;
     QAction* clearAction;
 
+    QString returnFrequency;
 
     int getMemNo(){return memNo;}
-
-    void setState(bool on){state = on;}
-    bool getState(){return state;}
 
     void showButtonOnOff(bool state);
     void showRunToolButtonOffFreq();
@@ -88,16 +86,7 @@ signals:
 
 
 private:
-
-    bool state = false;
     int memNo;
-
-
-
-
-
-
-
 };
 
 class quickBandSelData
@@ -173,6 +162,16 @@ public:
 
 
     void runButOffActionSelected(int buttonNumber);
+    void setRunButtonActive(int buttonNumber);
+
+    void runModeOff(int buttonNumber);
+
+    void switchRunButton(int buttonNumber);
+
+    void setRunFreq(int buttonNumber);
+
+    void setRunButtonText(int buttonNumber);
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -357,6 +356,7 @@ private:
     void setFreqStepCombo(QString mode);
     double getStepFreqFromComboText(const QString step);
     bool chkRadioFreqOnRunFreq();
+    int otherButton(int buttonNumber);
 };
 
 
