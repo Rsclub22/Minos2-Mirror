@@ -2014,7 +2014,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="620"/>
+        <location filename="../rigcontrolframe.cpp" line="622"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
@@ -2074,63 +2074,68 @@ Non - Ignorer les modifications</translation>
         <translation type="vanished">Fréquences d&apos;accorder</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="627"/>
+        <location filename="../rigcontrolframe.cpp" line="629"/>
         <source>Off</source>
         <translation>Éteinte</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1153"/>
+        <location filename="../rigcontrolframe.cpp" line="1155"/>
         <source>Error Receiving Bandlist!</source>
         <translation>Erreur lors de la réception de la liste de bandes!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1163"/>
+        <location filename="../rigcontrolframe.cpp" line="1165"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1252"/>
+        <location filename="../rigcontrolframe.cpp" line="1254"/>
         <source>No %1 Band found for this radio!</source>
         <translation>AucuneBande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1344"/>
+        <location filename="../rigcontrolframe.cpp" line="1346"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1351"/>
+        <location filename="../rigcontrolframe.cpp" line="1353"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1369"/>
+        <location filename="../rigcontrolframe.cpp" line="1371"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1943"/>
+        <location filename="../rigcontrolframe.cpp" line="1956"/>
         <source>Run</source>
         <translatorcomment>NOT USED?</translatorcomment>
         <translation>RUN?</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1952"/>
+        <location filename="../rigcontrolframe.cpp" line="1965"/>
         <source>Run %1 - New</source>
         <translation>Run %1 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1969"/>
+        <location filename="../rigcontrolframe.cpp" line="1982"/>
         <source>Run %1 - Edit</source>
         <translation>Run %1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2018"/>
+        <location filename="../rigcontrolframe.cpp" line="2033"/>
+        <source>Restore .%1    </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="2036"/>
         <source>Freq: </source>
         <translation>Fréquence: </translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2019"/>
+        <location filename="../rigcontrolframe.cpp" line="2037"/>
         <source>Mode: </source>
         <translation>Mode: </translation>
     </message>
@@ -2509,27 +2514,27 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2176"/>
+        <location filename="../rigcontrolframe.cpp" line="2198"/>
         <source>&amp;Off</source>
         <translation>&amp;Éteinte</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2177"/>
+        <location filename="../rigcontrolframe.cpp" line="2199"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2178"/>
+        <location filename="../rigcontrolframe.cpp" line="2200"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2179"/>
+        <location filename="../rigcontrolframe.cpp" line="2201"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="2180"/>
+        <location filename="../rigcontrolframe.cpp" line="2202"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
