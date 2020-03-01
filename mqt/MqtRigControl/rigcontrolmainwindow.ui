@@ -822,9 +822,16 @@ Active</string>
     <property name="title">
      <string>Configure</string>
     </property>
+    <widget class="QMenu" name="menuDriver">
+     <property name="title">
+      <string>Driver</string>
+     </property>
+     <addaction name="actionOmnirig"/>
+    </widget>
     <addaction name="actionSetup_Radios"/>
     <addaction name="actionSetup_Band_Freq"/>
     <addaction name="actionTraceComms"/>
+    <addaction name="menuDriver"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -888,6 +895,14 @@ Active</string>
    </property>
    <property name="text">
     <string>Trace RigCtld Comms</string>
+   </property>
+  </action>
+  <action name="actionOmnirig">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Omnirig</string>
    </property>
   </action>
  </widget>
