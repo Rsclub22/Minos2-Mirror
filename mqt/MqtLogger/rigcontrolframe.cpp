@@ -1207,7 +1207,8 @@ void RigControlFrame::setRadioFreq()
                     }
 
 
-                    if (this->isVisible())  // only set freq on radio if rigcontrol panel is visible
+ //                   if (this->isVisible())  // only set freq on radio if rigcontrol panel is visible
+// This stops things working properly, so I'me removing it for now
                     {
                         if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
                         {
