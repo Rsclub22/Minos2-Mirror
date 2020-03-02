@@ -829,9 +829,9 @@ Active</string>
      <addaction name="actionOmnirig"/>
     </widget>
     <addaction name="actionSetup_Radios"/>
+    <addaction name="menuDriver"/>
     <addaction name="actionSetup_Band_Freq"/>
     <addaction name="actionTraceComms"/>
-    <addaction name="menuDriver"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">

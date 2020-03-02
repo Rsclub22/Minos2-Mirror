@@ -127,6 +127,7 @@ private:
     void closeEvent(QCloseEvent *event) override;
     void doCloseEvent();
     void loadAvailComportsToTab(int tabNum);
+    void updateAvailAntennasToVersion2(QSettings &settings);
 };
 
 #endif // SETUPDIALOG_H

@@ -76,7 +76,15 @@ void RotSetupDialog::initSetup()
     if (numAvailAntennas > 0)
     {
         QString version = settings.value("Version/version", QString()).toString();
-        if (version != "1")
+        if (version == "1")
+        {
+            updateAvailAntennasToVersion2(settings);
+        }
+
+        // check version again
+        version = settings.value("Version/version", QString()).toString();
+
+        if (version != "2")
         {
             mShowMessage(tr("The Rotator configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
                          "Please delete them and set up the rotators again").arg(ANTENNA_PATH_LOGGER), parentWidget());
@@ -99,7 +107,7 @@ void RotSetupDialog::initSetup()
     }
     else
     {
-        settings.setValue("Version/version", "1");
+        settings.setValue("Version/version", "2");
     }
 
 }
@@ -733,7 +741,29 @@ QString RotSetupDialog::getCurrentAntenna() const
 
 }
 
+void RotSetupDialog::updateAvailAntennasToVersion2(QSettings& settings)
+{
+    QString antennaModel;
+    QStringList spList;
+    QString antenna;
 
+    for (int i = 0; i < numAvailAntennas; i++)
+    {
+        antenna = availAntennas[i] + "/rotatorModel";
+        antennaModel = settings.value(antenna, QString()).toString();
+        if (antennaModel.contains(','))
+        {
+            spList = antennaModel.split(',');
+            if (spList.count() == 3)
+            {
+                antennaModel = spList[1].trimmed() + " " + spList[2].trimmed();
+                settings.setValue(antenna, antennaModel);
+            }
+        }
 
+    }
+
+    settings.setValue("Version/version", "2");
+}
 
 

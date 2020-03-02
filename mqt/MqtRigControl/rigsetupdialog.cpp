@@ -84,7 +84,15 @@ void RigSetupDialog::initSetup()
     if (numAvailRadios > 0)
     {
         QString version = settings.value("Version/version", QString()).toString();
-        if (version != "1")
+        if (version == "1")
+        {
+            updateAvailRadiosToVersion2(settings);
+        }
+
+        // check version again
+        version = settings.value("Version/version", QString()).toString();
+
+        if (version != "2")
         {
             mShowMessage(tr("The Radio configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
                          "Please delete them and set up the radios again").arg(RADIO_PATH_LOGGER), parentWidget());
@@ -123,7 +131,7 @@ void RigSetupDialog::initSetup()
     }
     else
     {
-        settings.setValue("Version/version", "1");
+        settings.setValue("Version/version", "2");
     }
 
 }
@@ -937,6 +945,33 @@ void RigSetupDialog::readTranVerterSetting(int radNum, int transVertNum, QSettin
     radioTab[radNum]->getRadioData()->transVertSettings[transVertNum]->antSwitchNum = config.value("antSwNumber", "0").toString();
     radioTab[radNum]->getRadioData()->transVertSettings[transVertNum]->transSwitchNum = config.value("transVertSw", "0").toString();
     config.endGroup();
+}
+
+
+
+void RigSetupDialog::updateAvailRadiosToVersion2(QSettings& settings)
+{
+    QString radioModel;
+    QStringList spList;
+    QString radio;
+
+    for (int i = 0; i < numAvailRadios; i++)
+    {
+        radio = availRadios[i] + "/radioModel";
+        radioModel = settings.value(radio, QString()).toString();
+        if (radioModel.contains(','))
+        {
+            spList = radioModel.split(',');
+            if (spList.count() == 3)
+            {
+                radioModel = spList[1].trimmed() + " " + spList[2].trimmed();
+                settings.setValue(radio, radioModel);
+            }
+        }
+
+    }
+
+    settings.setValue("Version/version", "2");
 }
 
 

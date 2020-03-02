@@ -155,6 +155,7 @@ private:
     void closeEvent(QCloseEvent *event);
     void doCloseEvent();
     void loadAvailComportsToTab(int tabNum);
+    void updateAvailRadiosToVersion2(QSettings &settings);
 };
 
 #endif // SETUPDIALOG_H
