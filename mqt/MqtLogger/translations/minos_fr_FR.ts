@@ -989,46 +989,29 @@ Click on the setting name on the left to select an existing setting and then its
 <byte value="xd"/>
 Move between components of a group using the mouse or up/down arrow keys.<byte value="xd"/>
 </source>
-        <translatorcomment>TO BE CHECKED CAREFULLY: something funny with leading/trailing whitespace
-Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.
+        <translatorcomment>WHITESPACE ISSUE
 
-Il existe quatre groupes de base: -
-
-Concours - pour la description, les groupes, les multiplicateurs et la durée d&apos;un concours
-Entrée - tous les bits supplémentaires pour une entrée réelle - indicatif, groupe, coordonnées.
-Station - Détails de l&apos;installation, antenne, hauteur de l&apos;antenne.
-QTH - où se trouve la station, hauteur au-dessus du niveau de la mer, Locator.
-
-Pour les utiliser, sélectionnez dans les listes déroulantes ou pour le concours, utilisez le bouton &quot;Calendrier VHF&quot;.
-Tout groupe défini sur &quot;&lt;aucun&gt;&quot; sera ignoré.
-
-Si le paramètre souhaité n&apos;est pas là, appuyez sur le bouton &quot;Modifier&quot; du groupe.
-
-Cela ouvre une boîte de dialogue dans laquelle vous pouvez définir un nouveau paramètre, copier un paramètre existant ou supprimer un paramètre existant
-
-Cliquez sur le nom du paramètre à gauche pour sélectionner un paramètre existant, puis ses composants sont affichés dans le volet de droite et peuvent être modifiés individuellement.
-
-Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris ou des touches fléchées haut / bas.
+TO BE CHECKED CAREFULLY:
 </translatorcomment>
-        <translation>These settings are groups of settings that can be applied to a contest all in one go.
-
-There are four basic groups: - 
-
-Contest - for the description, bands, multipliers and time of a contest
-Entry - all the extra bits for a real entry - callsign, group, contact details.
-Station - Rig details, antenna, antenna height.
-QTH - where the station is, height above sea level, Locator.
-
-To use them select from the drop down lists, or for Contest, use the &quot;VHF Calendar&quot; button.
-Any group set to &quot;&lt;none&gt;&quot; will be ignored.
-
-If the setting you want isn&apos;t there, press the &quot;Edit&quot; button for the group.
-
-This brings up a dialog where you can define a new setting, copy an existing setting, or delete an existing setting
-
-Click on the setting name on the left to select an existing setting and then its components are shown in the right hand pane, and can be edited individually.
-
-Move between components of a group using the mouse or up/down arrow keys.
+        <translation>Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.<byte value="xd"/>
+<byte value="xd"/>
+Il existe quatre groupes de base: -<byte value="xd"/>
+<byte value="xd"/>
+ * Concours - pour la description, les groupes, les multiplicateurs et la durée d&apos;un concours<byte value="xd"/>
+ * Entrée - tous les bits supplémentaires pour une entrée réelle - indicatif, groupe, coordonnées.<byte value="xd"/>
+ * Station - Détails de l&apos;installation, antenne, hauteur de l&apos;antenne.<byte value="xd"/>
+ * QTH - où se trouve la station, hauteur au-dessus du niveau de la mer, Locator.<byte value="xd"/>
+<byte value="xd"/>
+Pour les utiliser, sélectionnez dans les listes déroulantes ou pour le concours, utilisez le bouton &quot;Calendrier VHF&quot;.<byte value="xd"/>
+Tout groupe défini sur &quot;&lt;aucun&gt;&quot; sera ignoré.<byte value="xd"/>
+<byte value="xd"/>
+Si le paramètre souhaité n&apos;est pas là, appuyez sur le bouton &quot;Modifier&quot; du groupe.<byte value="xd"/>
+<byte value="xd"/>
+Cela ouvre une boîte de dialogue dans laquelle vous pouvez définir un nouveau paramètre, copier un paramètre existant ou supprimer un paramètre existant<byte value="xd"/>
+<byte value="xd"/>
+Cliquez sur le nom du paramètre à gauche pour sélectionner un paramètre existant, puis ses composants sont affichés dans le volet de droite et peuvent être modifiés individuellement.<byte value="xd"/>
+<byte value="xd"/>
+Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris ou des touches fléchées haut / bas.<byte value="xd"/>
 </translation>
     </message>
     <message>
@@ -1612,14 +1595,14 @@ and send the .EDI file produced.<byte value="xd"/>
 ====================================================<byte value="xd"/>
 </source>
         <translatorcomment>ANOTHER FUNNY WHITESPACE ISSUE</translatorcomment>
-        <translation>================================================== ==
-
-N&apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!
-
-Utilisez &quot;Fichier&quot; | &quot;Produire un fichier d&apos;entrée / d&apos;exportation ...&quot;
-Exporter en tant que Reg1Test (entrée)
-et envoyer le fichier .EDI produit.
-====================================================
+        <translation>====================================================<byte value="xd"/>
+<byte value="xd"/>
+N&apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!<byte value="xd"/>
+<byte value="xd"/>
+Utilisez &quot;Fichier&quot; | &quot;Produire un fichier d&apos;entrée / d&apos;exportation ...&quot;<byte value="xd"/>
+Exporter en tant que Reg1Test (entrée)<byte value="xd"/>
+et envoyer le fichier .EDI produit.<byte value="xd"/>
+====================================================<byte value="xd"/>
 </translation>
     </message>
     <message>
@@ -1666,14 +1649,14 @@ and send the .EDI file produced.<byte value="xd"/>
 ====================================================<byte value="xd"/>
 </source>
         <translatorcomment>ANOTHER FUNNY WHITESPACE ISSUE</translatorcomment>
-        <translation>====================================================
-
-N&apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!
-
-Utilisez &quot;Fichier&quot; | &quot;Produire un fichier d&apos;entrée / d&apos;exportation ...&quot;
-Exporter en tant que Reg1Test (entrée)
-et envoyer le fichier .EDI produit.
-====================================================
+        <translation>====================================================<byte value="xd"/>
+<byte value="xd"/>
+N&apos;ENVOYEZ PAS CE FICHIER COMME VOTRE ENTRÉE!<byte value="xd"/>
+<byte value="xd"/>
+Utilisez &quot;Fichier&quot; | &quot;Produire un fichier d&apos;entrée / d&apos;exportation ...&quot;<byte value="xd"/>
+Exporter en tant que Reg1Test (entrée)<byte value="xd"/>
+et envoyer le fichier .EDI produit.<byte value="xd"/>
+====================================================<byte value="xd"/>
 </translation>
     </message>
 </context>
@@ -2410,22 +2393,22 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../rotcontrolframe.cpp" line="638"/>
         <source>Rotating CCW</source>
-        <translation type="unfinished"></translation>
+        <translation>Tournant sens antihoraire</translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.cpp" line="648"/>
         <source>Rotating CW</source>
-        <translation type="unfinished"></translation>
+        <translation>Tournant sens horaire</translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.cpp" line="659"/>
         <source>Turning to bearing</source>
-        <translation type="unfinished"></translation>
+        <translation>Passant au cap</translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.cpp" line="681"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur</translation>
     </message>
 </context>
 <context>
@@ -2503,48 +2486,48 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../runbuttonsframe.ui" line="14"/>
         <source>Call Freqs</source>
-        <translation type="unfinished">Fréquences d&apos;appel</translation>
+        <translation>Fréquences d&apos;appel</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.ui" line="17"/>
         <source>Call Frequencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquences d&apos;appel</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.ui" line="26"/>
         <location filename="../runbuttonsframe.ui" line="39"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="248"/>
         <source>Run</source>
-        <translation type="unfinished">RUN?</translation>
+        <translation>RUN?</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="257"/>
         <source>Run %1 - New</source>
-        <translation type="unfinished">Run %1 - Nouveau</translation>
+        <translation>Run %1 - Nouveau</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="275"/>
         <source>Run %1 - Edit</source>
-        <translation type="unfinished">Run %1 - Modifier</translation>
+        <translation>Run %1 - Modifier</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="326"/>
         <source>Restore .%1    </source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurer .%1    </translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="329"/>
         <source>Freq: </source>
-        <translation type="unfinished">Fréquence: </translation>
+        <translation>Fréquence: </translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="330"/>
         <source>Mode: </source>
-        <translation type="unfinished">Mode: </translation>
+        <translation>Mode: </translation>
     </message>
 </context>
 <context>
@@ -2728,7 +2711,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../ScreenConfigElement.cpp" line="18"/>
         <source>Call Freq Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation>Boutons de fréquence d&apos;appel</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="19"/>
@@ -3007,7 +2990,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../taboutbox.cpp" line="95"/>
         <source>Welcome to Minos Version</source>
-        <translation>Bienvenue à Minos Version (FR 22 Feb 20)</translation>
+        <translation>Bienvenue à Minos Version (FR 03 Mar 20)</translation>
     </message>
 </context>
 <context>

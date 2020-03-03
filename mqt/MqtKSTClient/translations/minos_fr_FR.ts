@@ -6,62 +6,62 @@
     <message>
         <location filename="../airscoutlink.cpp" line="5"/>
         <source>50MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>50MHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="6"/>
         <source>70MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>70MHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="7"/>
         <source>144MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>144MHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="8"/>
         <source>432MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>432MHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="9"/>
         <source>1.2GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>1,2GHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="10"/>
         <source>2.3GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>2,3GHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="11"/>
         <source>3.4GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>3,4GHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="12"/>
         <source>5.7GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>5,7GHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="13"/>
         <source>10GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>10GHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="14"/>
         <source>24GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>24GHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="15"/>
         <source>47GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>47GHz</translation>
     </message>
     <message>
         <location filename="../airscoutlink.cpp" line="16"/>
         <source>76GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>76GHz</translation>
     </message>
 </context>
 <context>
@@ -69,7 +69,7 @@
     <message>
         <location filename="../airscoutlink.h" line="64"/>
         <source>Aircraft %1	category %2	distance %3	potential %4	minutes %5</source>
-        <translation type="unfinished"></translation>
+        <translation>Avion %1 catégorie %2 distance %3 potentiel %4 minutes %5</translation>
     </message>
 </context>
 <context>
@@ -82,7 +82,7 @@
     <message>
         <location filename="../kstconfigure.ui" line="20"/>
         <source>ON4KST</source>
-        <translation type="unfinished"></translation>
+        <translation>ON4KST</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="31"/>
@@ -127,42 +127,42 @@
     <message>
         <location filename="../kstconfigure.ui" line="173"/>
         <source>Max distance to show</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance maximale à afficher</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="205"/>
         <source>AirScout</source>
-        <translation type="unfinished"></translation>
+        <translation>AStest</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="215"/>
         <source>Server Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du Serveur</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="233"/>
         <source>My Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="255"/>
         <source>Server UDP Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port UDP du serveur</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="269"/>
         <source>Server timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Timeout du serveur</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="287"/>
         <source>Minimum distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance minimale</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="305"/>
         <source>Maximum distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance maximale</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="328"/>
@@ -203,7 +203,8 @@
         <location filename="../kstmainwindow.ui" line="398"/>
         <location filename="../kstmainwindow.ui" line="540"/>
         <source>-</source>
-        <translation>- Replaced by text?</translation>
+        <translatorcomment>Replaced by text?</translatorcomment>
+        <translation>-</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="125"/>
@@ -235,19 +236,24 @@
         <location filename="../kstmainwindow.ui" line="218"/>
         <source>Show me-&gt;user
 Path in AirScout</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le chemin dans AirScout
+entre moi et Spot</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="226"/>
         <source>Show Message call-&gt;other
 Path in AirScout</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le chemin dans AirScout
+entre Spot et autre indicatif d&apos;appel</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="234"/>
         <source>Don&apos;t set filter
 when user selected</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Ne pas définir de filtre
+lorsque l&apos;utilisateur a sélectionné</translatorcomment>
+        <translation>Ne pas filtrer
+l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="255"/>
@@ -287,12 +293,12 @@ when user selected</source>
     <message>
         <location filename="../kstmainwindow.ui" line="421"/>
         <source>AS Band</source>
-        <translation type="unfinished"></translation>
+        <translation>AS Bande</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="431"/>
         <source>AS Active</source>
-        <translation type="unfinished"></translation>
+        <translation>AS actif</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="449"/>
@@ -408,7 +414,7 @@ when user selected</source>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="327"/>
         <source>AS</source>
-        <translation type="unfinished"></translation>
+        <translation>AS</translation>
     </message>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="330"/>
@@ -436,7 +442,7 @@ when user selected</source>
     <message>
         <location filename="../kstmessagegridmodel.cpp" line="156"/>
         <source>Chat</source>
-        <translation>Chat</translation>
+        <translation>Bavardage</translation>
     </message>
     <message>
         <location filename="../kstmessagegridmodel.cpp" line="158"/>
@@ -469,27 +475,27 @@ when user selected</source>
     <message>
         <location filename="../kstplanesmodel.cpp" line="48"/>
         <source>Flight</source>
-        <translation type="unfinished"></translation>
+        <translation>Vol</translation>
     </message>
     <message>
         <location filename="../kstplanesmodel.cpp" line="51"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Catégorie</translation>
     </message>
     <message>
         <location filename="../kstplanesmodel.cpp" line="54"/>
         <source>Dist</source>
-        <translation type="unfinished">Distance</translation>
+        <translation>Distance</translation>
     </message>
     <message>
         <location filename="../kstplanesmodel.cpp" line="57"/>
         <source>Pot</source>
-        <translation type="unfinished"></translation>
+        <translation>Potentiel</translation>
     </message>
     <message>
         <location filename="../kstplanesmodel.cpp" line="60"/>
         <source>Mins</source>
-        <translation type="unfinished"></translation>
+        <translation>Minutes</translation>
     </message>
 </context>
 </TS>
