@@ -474,6 +474,7 @@ void RigControlFrame::setFreq(QString freq)
             ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
             setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setText(freq);
+            emit setFreqDisplay(freq, legalFreq);
         }
         curFreq = freq;
     }
@@ -652,6 +653,7 @@ void RigControlFrame::changeMainRadioFreq()
                 QString f =HtmlFontColour(Qt::red) + lastFreq;
                 trace("changeMainRadioFreq " + f);
                 ui->freqInput->setText(f);
+                emit setFreqDisplay(f, legalFreq);
             }
         }
     }
@@ -812,6 +814,7 @@ void RigControlFrame::exitFreqEdit()
         // up date display to current radio freq
         ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
         ui->freqInput->setText(curFreq);
+        emit setFreqDisplay(curFreq, legalFreq);
     }
 
 
@@ -1350,6 +1353,7 @@ void RigControlFrame::setRadioState(QString s)
                curFreq = "00000000000";
                ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
                ui->freqInput->setText(curFreq);
+               emit setFreqDisplay(curFreq, legalFreq);
                ui->bandSelCombo->clear();
            }
 
@@ -1601,6 +1605,7 @@ void RigControlFrame::freqPlusMinusButton(double f)
 
             setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setText(freq);
+            emit setFreqDisplay(freq, legalFreq);
 
            if (radioConnected && !radioError)
            {
