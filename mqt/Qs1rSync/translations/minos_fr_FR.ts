@@ -6,7 +6,7 @@
     <message>
         <location filename="../MainWindow.ui" line="14"/>
         <source>QS1R &lt;-&gt; Main Rig Sync</source>
-        <translation type="unfinished">DOES THIS NEED TRANSLATION </translation>
+        <translation>QSR1-1  DOES THIS NEED TRANSLATION</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="25"/>
@@ -51,12 +51,12 @@
     <message>
         <location filename="../MainWindow.ui" line="118"/>
         <source>Transfer 1-&gt; QS1R</source>
-        <translation type="unfinished"></translation>
+        <translation>QSR1-2  DOES THIS NEED TRANSLATION</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="125"/>
         <source>Transfer QS1R -&gt; 1</source>
-        <translation type="unfinished"></translation>
+        <translation>QSR1-3  DOES THIS NEED TRANSLATION</translation>
     </message>
 </context>
 </TS>

@@ -144,7 +144,7 @@
     <message>
         <location filename="../profiles.cpp" line="50"/>
         <source>section to use in operators file</source>
-        <translation>Section à utiliser dans le fichier des opérateurs  </translation>
+        <translation>Section à utiliser dans le fichier des opérateurs</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="51"/>
@@ -154,17 +154,17 @@
     <message>
         <location filename="../profiles.cpp" line="51"/>
         <source>File containing log pre-loads</source>
-        <translation>Fichier contenant le préchargement du journal  </translation>
+        <translation>Fichier contenant le préchargement du journal</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="52"/>
         <source>Preload contests default section</source>
-        <translation>Section défaut du préchargement des concours   </translation>
+        <translation>Section défaut du préchargement des concours</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="52"/>
         <source>Section to use in preload file</source>
-        <translation>Section à utiliser dans le fichier de préchargement   </translation>
+        <translation>Section à utiliser dans le fichier de préchargement</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="53"/>
@@ -174,12 +174,12 @@
     <message>
         <location filename="../profiles.cpp" line="53"/>
         <source>File containing list pre-loads</source>
-        <translation>Fichier contenant le préchargement de lists   </translation>
+        <translation>Fichier contenant le préchargement de lists</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="54"/>
         <source>Preload Lists file section</source>
-        <translation>Section fichier du préchargement de listes   </translation>
+        <translation>Section fichier du préchargement de listes</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="54"/>
@@ -204,7 +204,7 @@
     <message>
         <location filename="../profiles.cpp" line="59"/>
         <source>WSJTX Auto Enabled</source>
-        <translation>WSJTX activé automatiquement  </translation>
+        <translation>WSJTX activé automatiquement</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="60"/>
@@ -234,7 +234,7 @@
     <message>
         <location filename="../profiles.cpp" line="66"/>
         <source>Auto Fill signal report on return</source>
-        <translation>Rapport de signal remplissage automatique à l&apos;entrée  </translation>
+        <translation>Rapport de signal remplissage automatique à l&apos;entrée</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="70"/>
@@ -242,11 +242,7 @@
         <location filename="../profiles.cpp" line="75"/>
         <source>hint</source>
         <translatorcomment>indice??</translatorcomment>
-        <translation>un soupçon   </translation>
-    </message>
-    <message>
-        <source>Default Session</source>
-        <translation type="vanished">Session par défaut</translation>
+        <translation>Un soupçon</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="94"/>
@@ -391,7 +387,7 @@
     <message>
         <location filename="../profiles.cpp" line="121"/>
         <source>Descriptive Location Exchange</source>
-        <translation>Échange d&apos;emplacement descriptif    </translation>
+        <translation>Échange d&apos;emplacement descriptif</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="122"/>
@@ -446,7 +442,7 @@
     <message>
         <location filename="../profiles.cpp" line="130"/>
         <source>Antenna details</source>
-        <translation>Détails d&apos;antenne   </translation>
+        <translation>Détails d&apos;antenne</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="131"/>
@@ -545,7 +541,7 @@
         <location filename="../ChatServer.cpp" line="99"/>
         <location filename="../ChatServer.cpp" line="115"/>
         <source>%1 changed state to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 changé d&apos;état en %2</translation>
     </message>
 </context>
 <context>
@@ -712,7 +708,7 @@
     <message>
         <location filename="../profiles.cpp" line="21"/>
         <source>Default Session</source>
-        <translation type="unfinished">Session par défaut</translation>
+        <translation>Session par défaut</translation>
     </message>
 </context>
 <context>
@@ -720,7 +716,7 @@
     <message>
         <location filename="../profiles.cpp" line="17"/>
         <source>default</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut</translation>
     </message>
 </context>
 <context>
@@ -854,10 +850,12 @@
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation>La fréquence comporte des caractères non valides ou des périodes manquantes.
-
-Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123
-</translation>
+        <translatorcomment>Whitespace problems</translatorcomment>
+        <translation>La fréquence comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
+<byte value="xd"/>
+Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
+<byte value="xd"/>
+Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/></translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="16"/>
@@ -865,9 +863,12 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
+        <translatorcomment>Whitespace problems</translatorcomment>
         <translation>La radiofréquence a des caractères invalides ou des périodes manquantes.
 
-Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123  </translation>
+Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123
+
+Attention: &quot;.&quot; pas &quot;,&quot;</translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="17"/>
@@ -875,11 +876,12 @@ Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123  </translation>
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation>
-119/5000
-La fréquence cible comporte des caractères non valides ou des périodes manquantes.
-
-Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123   </translation>
+        <translatorcomment>Whitespace problems</translatorcomment>
+        <translation>La fréquence cible comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
+<byte value="xd"/>
+Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
+<byte value="xd"/>
+Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/></translation>
     </message>
 </context>
 <context>

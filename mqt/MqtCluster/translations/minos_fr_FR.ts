@@ -173,18 +173,15 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
         <location filename="../clustermainwindow.cpp" line="603"/>
         <source>Login Start - Send logon message
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Ouverture de session - Envoyer un message de connexion
+</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="1912"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login Start - Send logon message</source>
-        <translation type="vanished">Ouverture de session - Envoyer un message de connexion
-</translation>
+        <translation>Minos Cluster
+Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="608"/>
@@ -240,12 +237,6 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
         <location filename="../clustermainwindow.cpp" line="1744"/>
         <source>Do you really want to clear cluster user command number:%1?</source>
         <translation>Effacer commande %1 du cluster?</translation>
-    </message>
-    <message>
-        <source>Minos Rotator
-Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
-        <translation type="vanished">Minos Rotator
-Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     </message>
 </context>
 <context>
