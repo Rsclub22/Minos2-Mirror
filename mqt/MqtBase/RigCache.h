@@ -74,6 +74,8 @@ public:
     }
     
 
+    void setIgnorePresetFreq(const PubSubName &name, bool ignorePresetFreqFlag);
+    void setIgnorePreviousFreq(const PubSubName &name, bool ignorePreviousFreqFlag);
 };
 
 #endif // RIGCACHE_H

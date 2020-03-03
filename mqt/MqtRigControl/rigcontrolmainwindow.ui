@@ -846,8 +846,16 @@ Active</string>
     <property name="title">
      <string>Configure</string>
     </property>
+    <widget class="QMenu" name="menuSetup_Band_Freq">
+     <property name="title">
+      <string>Setup Band Freq.</string>
+     </property>
+     <addaction name="actionEdit_Preset_Freq"/>
+     <addaction name="actionContest_Start_Ignore_Preset_Freq"/>
+     <addaction name="actionContest_Change_Ignore_Previous_Freq"/>
+    </widget>
     <addaction name="actionSetup_Radios"/>
-    <addaction name="actionSetup_Band_Freq"/>
+    <addaction name="menuSetup_Band_Freq"/>
     <addaction name="actionTraceComms"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
@@ -890,11 +898,6 @@ Active</string>
     <string>About Radio Config</string>
    </property>
   </action>
-  <action name="actionSetup_Band_Freq">
-   <property name="text">
-    <string>Setup Band Freq.</string>
-   </property>
-  </action>
   <action name="actionTraceComms">
    <property name="checkable">
     <bool>true</bool>
@@ -912,6 +915,27 @@ Active</string>
    </property>
    <property name="text">
     <string>Trace RigCtld Comms</string>
+   </property>
+  </action>
+  <action name="actionEdit_Preset_Freq">
+   <property name="text">
+    <string>Edit Preset Freq</string>
+   </property>
+  </action>
+  <action name="actionContest_Start_Ignore_Preset_Freq">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Contest Start - Ignore Preset Freq</string>
+   </property>
+  </action>
+  <action name="actionContest_Change_Ignore_Previous_Freq">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Contest Change - Ignore Previous Freq</string>
    </property>
   </action>
  </widget>

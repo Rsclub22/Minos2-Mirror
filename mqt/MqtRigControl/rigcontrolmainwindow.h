@@ -117,6 +117,8 @@ private:
 
     QVector<BandDetail> bands;
     QStringList presetFreq;
+    bool ignorePresetFreq;           // on contest start
+    bool ignorePreviousFreq;        // on contest swap
 
     int *test_mem;
     // data from radio
@@ -306,6 +308,12 @@ private:
     void getRigCtldConnectDelay();
 
 
+    void sendIgnorePresetFreqToLog(bool status);
+    void sendIgnorePreviousFreqToLog(bool status);
+    bool readIgnorePresetFreqFlag();
+    bool readIgnorePreviousFreqFlag();
+    void saveIgnorePresetFreqFlag(bool state);
+    void saveIgnorePreviousFreqFlag(bool state);
 private slots:
 
     void onStdInRead(QString);
@@ -350,6 +358,8 @@ signals:
     void rigCtldErrorMessage();
     void rigCtldStarted();
     void rigCtldStatusTimeout();
+    void onIgnorePresetFreq();
+    void onIgnorePreviousFreq();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

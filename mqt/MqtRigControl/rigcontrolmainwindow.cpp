@@ -44,6 +44,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    logRitOn(false),
    supVolume(false),
    supSignalStrength(false),
+   ignorePresetFreq(false),
+   ignorePreviousFreq(false),
    curVfoFrq(0.0),
    curTransVertFrq(0.0),
    mgmModeFlag(false),
@@ -137,6 +139,13 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     config.endGroup();
 
+    ignorePresetFreq = readIgnorePresetFreqFlag();
+    ui->actionContest_Start_Ignore_Preset_Freq->setChecked(ignorePresetFreq);
+    sendIgnorePresetFreqToLog(ignorePresetFreq);
+
+    ignorePreviousFreq = readIgnorePreviousFreqFlag();
+    ui->actionContest_Change_Ignore_Previous_Freq->setChecked(ignorePreviousFreq);
+    sendIgnorePreviousFreqToLog(ignorePresetFreq);
 
     if (appName.length() > 0)
     {
@@ -305,7 +314,9 @@ void RigControlMainWindow::initActionsConnections()
 {
     connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio()));
     connect(ui->actionSetup_Radios, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
-    connect(ui->actionSetup_Band_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
+    connect(ui->actionEdit_Preset_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
+    connect(ui->actionContest_Start_Ignore_Preset_Freq, SIGNAL(triggered(bool)), this, SLOT(onIgnorePresetFreq()));
+    connect(ui->actionContest_Change_Ignore_Previous_Freq, SIGNAL(triggered(bool)), this, SLOT(onIgnorePreviousFreq()));
     connect(ui->actionTraceComms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
@@ -356,6 +367,24 @@ void RigControlMainWindow::setupBandFreq()
         logMessage(QString("RigControl: Band Freq Change, send new bandlist to logger"));
         //sendBandListLogger();
         freqPresetChanged = false;
+    }
+}
+
+void RigControlMainWindow::onIgnorePresetFreq()
+{
+    if(ui->actionContest_Start_Ignore_Preset_Freq->isChecked() != ignorePresetFreq)
+    {
+        ignorePresetFreq = ui->actionContest_Start_Ignore_Preset_Freq->isChecked();
+        sendIgnorePresetFreqToLog(ignorePresetFreq);
+    }
+}
+
+void RigControlMainWindow::onIgnorePreviousFreq()
+{
+    if(ui->actionContest_Change_Ignore_Previous_Freq->isChecked() != ignorePreviousFreq)
+    {
+        ignorePreviousFreq = ui->actionContest_Change_Ignore_Previous_Freq->isChecked();
+        sendIgnorePreviousFreqToLog(ignorePreviousFreq);
     }
 }
 
@@ -2719,6 +2748,83 @@ void RigControlMainWindow::saveTraceLogFlag(bool state)
     trace("Tracelog Changed in " + fileName + " = " + QString::number(state));
 }
 
+
+bool RigControlMainWindow::readIgnorePresetFreqFlag()
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePresetFreq", false).toBool();
+
+    return state;
+}
+
+void RigControlMainWindow::saveIgnorePresetFreqFlag(bool state)
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+
+    config.setValue("FreqFlags/IgnorePresetFreq", state);
+
+    trace("IgnorePresetFreqFlag saved in " + fileName + " = " + QString(state ? "True" : "False"));
+}
+
+bool RigControlMainWindow::readIgnorePreviousFreqFlag()
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePreviousFreq", false).toBool();
+
+    return state;
+}
+
+void RigControlMainWindow::saveIgnorePreviousFreqFlag(bool state)
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+
+    config.setValue("FreqFlags/IgnorePreviousFreq", state);
+
+    trace("IgnorePreviousFreqFlag saved in " + fileName + " = " + QString(state ? "True" : "False"));
+}
+
 void RigControlMainWindow::about()
 {
     QMessageBox::about(this, tr("Minos RigControl"), tr("Minos QT RigControl\nCopyright D Balharrie G8FKH/M0DGB 2019"));
@@ -2868,9 +2974,7 @@ void RigControlMainWindow::sendVolStatusToLog(const int radIdx, bool status)
 {
     if (appName.length() > 0)
     {
-        QString f = "";
-        status  ? f = "True" : f = "False";
-        logMessage(QString("Send Volume Status to logger = %1").arg(f));
+        logMessage(QString("Send Volume Status to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->availRadioData[radIdx]->radioName);
         msg->rigCache.setVolumeStatus(psname, status);
         msg->rigCache.publish();
@@ -2878,14 +2982,14 @@ void RigControlMainWindow::sendVolStatusToLog(const int radIdx, bool status)
     }
 }
 
+
+
 void RigControlMainWindow::sendTransVertEnabled(bool status)
 {
-    //QString flag;
+
     if (appName.length() > 0)
     {
-        QString f = "";
-        status  ? f = "True" : f = "False";
-        logMessage(QString("Send Transvert Enabled to logger = %1").arg(f));
+        logMessage(QString("Send Transvert Enabled to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setTransverterEnabled(psname, status);
         msg->rigCache.publish();
@@ -2900,13 +3004,33 @@ void RigControlMainWindow::sendTransVertStatusToLog(bool status)
     //QString flag;
     if (appName.length() > 0)
     {
-        QString f = "";
-        status  ? f = "True" : f = "False";
-        logMessage(QString("Send Transvert Status to logger = %1").arg(f));
+        logMessage(QString("Send Transvert Status to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setTransverterStatus(psname, status);
         msg->rigCache.publish();
 
+    }
+}
+
+void RigControlMainWindow::sendIgnorePresetFreqToLog(bool status)
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send IgnorePresetFreq flag to logger = %1").arg(status ? "True" : "False"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setIgnorePresetFreq(psname, status);
+        msg->rigCache.publish();
+    }
+}
+
+void RigControlMainWindow::sendIgnorePreviousFreqToLog(bool status)
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send IgnorePreviousFreq flag to logger = %1").arg(status ? "True" : "False"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setIgnorePreviousFreq(psname, status);
+        msg->rigCache.publish();
     }
 }
 

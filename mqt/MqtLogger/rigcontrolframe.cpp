@@ -400,6 +400,49 @@ void RigControlFrame::setRitEnableStatus(bool status, PubSubName psn)
     }
 }
 
+void RigControlFrame::setIgnorePresetFreqFlag(bool status, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setIgnorePresetFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setIgnorePresetFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+
+    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        ignorePresetFreqFlag = status;
+        selRadioDetails.setIgnorePresetFreq(status);
+    }
+}
+
+void RigControlFrame::setIgnorePreviousFreqFlag(bool status, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setIgnorePreviousFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setIgnorePreviousFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+
+    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        ignorePreviousFreqFlag = status;
+        selRadioDetails.setIgnorePreviousFreq(status);
+    }
+}
 void RigControlFrame::setBandList(QString s,PubSubName psn)
 {
     RadioDetails rd;
