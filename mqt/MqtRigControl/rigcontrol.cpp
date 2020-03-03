@@ -249,7 +249,15 @@ bool RigControl::checkFreqValid(freq_t freq, rmode_t mode)
 bool RigControl::chkFreqRange(RIG *my_rig, freq_t freq, QString modeStr)
 {
     rmode_t mode = convertQStrMode(modeStr);
-    const freq_range_t* freq_range = rig_get_range(my_rig->caps->rx_range_list1, freq, mode);
+    const freq_range_t* freq_range = nullptr;
+    if (my_rig->caps->rig_model == RIG_MODEL_IC9700)
+    {
+         freq_range = rig_get_range(my_rig->caps->tx_range_list2, freq, mode);
+    }
+    else
+    {
+        freq_range = rig_get_range(my_rig->caps->tx_range_list1, freq, mode);
+    }
     return (freq_range != nullptr)? true:false;
 
 }
@@ -687,12 +695,12 @@ int RigControl::getAntSwNum(vfo_t vfo)
 {
     int antNum = 0;
     int retCode = 0;
-
-    retCode = rig_get_ant(my_rig, vfo, &antNum);
-    if (retCode < 0)
-    {
-        return retCode;
-    }
+    // api has changed *********************************************************
+    //retCode = rig_get_ant(my_rig, vfo, &antNum);
+    //if (retCode < 0)
+    //{
+    //    return retCode;
+    //}
 
     return antNum;
 
@@ -703,8 +711,8 @@ int RigControl::getAntSwNum(vfo_t vfo)
 int RigControl::setAntSwNum(vfo_t vfo, ant_t antNum)
 {
     int retCode = 0;
-
-    retCode = rig_set_ant(my_rig, vfo, antNum);
+    // api has changed *********************************************************
+    //retCode = rig_set_ant(my_rig, vfo, antNum);
     return retCode;
 }
 
