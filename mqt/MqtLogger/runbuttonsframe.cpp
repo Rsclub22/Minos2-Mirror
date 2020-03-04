@@ -57,12 +57,35 @@ void RunButtonsFrame::setRigControl(RigControlFrame *rc)
 {
     rigControl = rc;
     connect(rc, SIGNAL(setFreqDisplay(QString, bool)), this, SLOT(setFreqDisplay(QString, bool)), Qt::UniqueConnection);
+    connect(rc, SIGNAL(radioIsConnected(bool)), this, SLOT(radioIsConnected(bool)));
+
+}
+void RunButtonsFrame::radioIsConnected(bool on)
+{
+    if (on)
+    {
+        ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->radioStatusIndicator->setToolTip(tr("Connected"));
+
+    }
+    else
+    {
+       ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+       ui->radioStatusIndicator->setToolTip(tr("Disconnected"));
+    }
+
 }
 void RunButtonsFrame::setFreq(QString /*freq*/)
 {
     on_ChkRunFreq();
     setRunButtonText(RUN_BUTTON_1_ON);
     setRunButtonText(RUN_BUTTON_2_ON);
+
+    if (!chkRadioFreqOnRunFreq())
+    {
+        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
+        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
+    }
 }
 //********************** Run Buttons *******************************
 
