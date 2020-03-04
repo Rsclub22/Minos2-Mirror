@@ -149,6 +149,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     launchRadioSelectCount = 5;     // wait five seconds
     connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
     launchRadioSelectTimer->start(1000);
+//    trace(QString("constructor: launchRadioSelectTimer 1000 count is %1 contest n/a").arg(launchRadioSelectCount));
 }
 
 RigControlFrame::~RigControlFrame()
@@ -179,6 +180,7 @@ void RigControlFrame::checkRigDetailsAvail()
     launchRadioSelectCount--;
     if (launchRadioSelectCount == 0)
     {
+//        trace(QString("checkRigDetailsAvail: launchRadioSelectTimer stopped count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
         // timed out waiting for rigdetails
         launchRadioSelectTimer->stop();
         trace(QString("rigControlFrame: Timed out waiting for rigdetails"));
@@ -186,7 +188,8 @@ void RigControlFrame::checkRigDetailsAvail()
     }
     else if (ct && ( ct->isProtected() || ct != TContestApp::getContestApp() ->getCurrentContest()))
     {
-        launchRadioSelectTimer->stop();
+        //trace(QString("checkRigDetailsAvail: launchRadioSelectTimer stopped protected or not current contest count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
+        //launchRadioSelectTimer->stop();
         return;
     }
 
@@ -198,6 +201,7 @@ void RigControlFrame::checkRigDetailsAvail()
             {
                if (allRadioDetails[ct->radioName.getValue().toString()].getBandListCount() > 0)
                {
+//                   trace(QString("checkRigDetailsAvail: launchRadioSelectTimer stopped rig found count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
                    launchRadioSelectTimer->stop();
                    trace(QString("rigControlFrame: start select radio %1, mode %2").arg(ct->radioName.getValue().toString()).arg(ct->currentMode.getValue()));
                    setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
@@ -1252,7 +1256,7 @@ void RigControlFrame::setRadioFreq()
 
 void RigControlFrame::setRadioList()
 {
-    if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (ct && !ct->isProtected() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
     {
         listOfRadios = LogContainer->sendDM->rigs();
 
@@ -1265,6 +1269,7 @@ void RigControlFrame::setRadioList()
             trace(QString("setRadioList: rigControl restart? reconnecting"));
             launchRadioSelectCount = 5;     // wait five seconds
             launchRadioSelectTimer->start(1000);
+//            trace(QString("setRadioList: launchRadioSelectTimer restarted count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
         }
     }
 }
