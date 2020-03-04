@@ -284,11 +284,11 @@ private:
     void buildSupportedRadioBands(int radioModelNumber, QStringList& supBandList);
     bool findSupRadioBand(const QString band, const QStringList& supBandsList);
     bool findSupTransBand(const QString band, const int radioIdx);
-    void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
+    //void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
 
     void initCacheData();
 
-    void sendVolStatusToLog(const int radIdx, bool status);
+    void addVolStatusToRigCache(const int radIdx, bool status);
     void sendTransVertEnabled(bool status);
 
 
@@ -308,12 +308,17 @@ private:
     void getRigCtldConnectDelay();
 
 
-    void sendIgnorePresetFreqToLog(bool status);
-    void sendIgnorePreviousFreqToLog(bool status);
+    //void sendIgnorePresetFreqToLog(bool status);
+    //void sendIgnorePreviousFreqToLog(bool status);
+    void addIgnorePresetFreqToRigCache(bool status);
+    void addIgnorePreviousFreqToRigCache(bool status);
     bool readIgnorePresetFreqFlag();
     bool readIgnorePreviousFreqFlag();
     void saveIgnorePresetFreqFlag(bool state);
     void saveIgnorePreviousFreqFlag(bool state);
+    void addBandListToRigCache(const int radioIdx, const QStringList &supBandList);
+
+
 private slots:
 
     void onStdInRead(QString);

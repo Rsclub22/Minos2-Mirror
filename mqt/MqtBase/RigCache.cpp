@@ -292,7 +292,7 @@ void RigCache::setIgnorePresetFreq(const PubSubName &name, bool ignorePresetFreq
 }
 void RigCache::setIgnorePreviousFreq(const PubSubName &name, bool ignorePreviousFreqFlag)
 {
-    rigDetails[name].setIgnorePresetFreqFlag(ignorePreviousFreqFlag);
+    rigDetails[name].setIgnorePreviousFreqFlag(ignorePreviousFreqFlag);
 }
 void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {

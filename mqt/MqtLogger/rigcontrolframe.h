@@ -193,8 +193,6 @@ private:
     bool ritEditOn;
     //QString curRit;
 
-    bool ignorePresetFreqFlag;
-    bool ignorePreviousFreqFlag;
 
     QStringList listOfRadios;
     RadioDetails selRadioDetails;

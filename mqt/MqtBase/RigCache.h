@@ -67,6 +67,8 @@ public:
     void setRitOnOffStatus(const PubSubName &name, bool status);
     void setRadioRitStatus(const PubSubName &name, bool status);
     void addRigList(const QString &s);
+    void setIgnorePresetFreq(const PubSubName &name, bool ignorePresetFreqFlag);
+    void setIgnorePreviousFreq(const PubSubName &name, bool ignorePreviousFreqFlag);
 
     QVector<PubSubName> getRigList()
     {
@@ -74,8 +76,7 @@ public:
     }
     
 
-    void setIgnorePresetFreq(const PubSubName &name, bool ignorePresetFreqFlag);
-    void setIgnorePreviousFreq(const PubSubName &name, bool ignorePreviousFreqFlag);
+
 };
 
 #endif // RIGCACHE_H

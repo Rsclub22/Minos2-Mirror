@@ -145,16 +145,14 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         ignorePresetFreq = readIgnorePresetFreqFlag();
         logMessage(QString("Read IgnorePresetFreqFlag = %1").arg(ignorePresetFreq ? "True" : "False"));
         ui->actionContest_Start_Ignore_Preset_Freq->setChecked(ignorePresetFreq);
-        sendIgnorePresetFreqToLog(ignorePresetFreq);
 
         ignorePreviousFreq = readIgnorePreviousFreqFlag();
         logMessage(QString("Read IgnorePreviousFreqFlag = %1").arg(ignorePreviousFreq ? "True" : "False"));
         ui->actionContest_Change_Ignore_Previous_Freq->setChecked(ignorePreviousFreq);
-        sendIgnorePreviousFreqToLog(ignorePresetFreq);
 
         initCacheData();
 
-        msg->rigCache.publish();
+       // msg->rigCache.publish();
     }
 
 
@@ -376,7 +374,8 @@ void RigControlMainWindow::onIgnorePresetFreq()
     {
         ignorePresetFreq = ui->actionContest_Start_Ignore_Preset_Freq->isChecked();
         logMessage(QString("RigControl: IgnorePresetFreq Changed = %1").arg(ignorePresetFreq ? "True" : "False"));
-        sendIgnorePresetFreqToLog(ignorePresetFreq);
+        addIgnorePresetFreqToRigCache(ignorePresetFreq);
+        msg->rigCache.publish();
         saveIgnorePresetFreqFlag(ignorePresetFreq);
     }
 }
@@ -387,7 +386,8 @@ void RigControlMainWindow::onIgnorePreviousFreq()
     {
         ignorePreviousFreq = ui->actionContest_Change_Ignore_Previous_Freq->isChecked();
         logMessage(QString("RigControl: IgnorePreviousFreq Changed = %1").arg(ignorePreviousFreq ? "True" : "False"));
-        sendIgnorePreviousFreqToLog(ignorePreviousFreq);
+        addIgnorePreviousFreqToRigCache(ignorePreviousFreq);
+        msg->rigCache.publish();
         saveIgnorePreviousFreqFlag(ignorePreviousFreq);
     }
 }
@@ -527,6 +527,7 @@ void RigControlMainWindow::upDateRadio()
 
             if (radioOpenStat == OPEN_OK)
             {
+                initCacheData();        /// ***************************** this may not be the best place for this
 
  /*               if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)     // is it rigctl?
                 {
@@ -619,9 +620,9 @@ void RigControlMainWindow::upDateRadio()
 
                 // does the radio support control of volume control
 
-                supVolume = radio->supportVolControl(modelNumber);
-                logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(supVolume ? "True" : "False"));
-                sendVolStatusToLog(ridx, supVolume);
+                //supVolume = radio->supportVolControl(modelNumber);
+                //logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(supVolume ? "True" : "False"));
+                //sendVolStatusToLog(ridx, supVolume);
 
                 // does the radio support signal strength meter
 
@@ -1894,9 +1895,14 @@ void RigControlMainWindow::initCacheData()
             QStringList supBandList;
             int radioModelNumber = setupRadio->availRadioData[i]->radioModelNumber;
             buildSupBandList(i, radioModelNumber, supBandList);
-            sendBandListLogger(i, supBandList);
+            addBandListToRigCache(i, supBandList);
+
+            addIgnorePresetFreqToRigCache(ignorePresetFreq);
+            addIgnorePreviousFreqToRigCache(ignorePreviousFreq);
+
             bool f = radio->supportVolControl(radioModelNumber);
-            sendVolStatusToLog(i, f);
+            addVolStatusToRigCache(i, f);
+            msg->rigCache.publish();
         }
     }
 
@@ -2856,7 +2862,7 @@ void RigControlMainWindow::sendRadioListLogger()
     msg->publishRadioNames(radioList);
 }
 
-void RigControlMainWindow::sendBandListLogger(const int radioIdx, const QStringList& supBandList)
+void RigControlMainWindow::addBandListToRigCache(const int radioIdx, const QStringList& supBandList)
 {
     QString fileName;
     fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
@@ -2891,16 +2897,20 @@ void RigControlMainWindow::sendBandListLogger(const int radioIdx, const QStringL
 
         PubSubName psname(setupRadio->availRadioData[radioIdx]->radioName);
         QString bands = bandList.join(":");
-        logMessage(QString("Send bandlist to logger: for radio %1 - %2").arg(setupRadio->availRadioData[radioIdx]->radioName).arg(bands));
+        logMessage(QString("Add bandlist to rigcache for radio %1 - %2").arg(setupRadio->availRadioData[radioIdx]->radioName).arg(bands));
         msg->rigCache.setBandList(psname, bands);
-        msg->rigCache.publish();
+
     }
     else
     {
-        logMessage(QString("Send bandlist to logger: error radio bandlist empty"));
+        logMessage(QString("error radio bandlist empty"));
     }
     config.endGroup();
 }
+
+
+
+
 
 void RigControlMainWindow::sendStatusLogger(const QString &message )
 {
@@ -2974,14 +2984,14 @@ void RigControlMainWindow::sendVolToLog(int level)
 }
 
 
-void RigControlMainWindow::sendVolStatusToLog(const int radIdx, bool status)
+void RigControlMainWindow::addVolStatusToRigCache(const int radIdx, bool status)
 {
     if (appName.length() > 0)
     {
-        logMessage(QString("Send Volume Status to logger = %1").arg(status  ? "True" : "False"));
+        logMessage(QString("Add Volume Status to rigcache = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->availRadioData[radIdx]->radioName);
         msg->rigCache.setVolumeStatus(psname, status);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
 
     }
 }
@@ -3016,25 +3026,32 @@ void RigControlMainWindow::sendTransVertStatusToLog(bool status)
     }
 }
 
-void RigControlMainWindow::sendIgnorePresetFreqToLog(bool status)
+void RigControlMainWindow::addIgnorePresetFreqToRigCache(bool status)
 {
     if (appName.length() > 0)
     {
         logMessage(QString("Send IgnorePresetFreq flag to logger = %1").arg(status ? "True" : "False"));
-        PubSubName psname(setupRadio->currentRadio.radioName);
-        msg->rigCache.setIgnorePresetFreq(psname, status);
-        msg->rigCache.publish();
+        for (int i = 0; i < setupRadio->availRadios.count(); i ++)
+        {
+            PubSubName psname(setupRadio->availRadioData[i]->radioName);
+            msg->rigCache.setIgnorePresetFreq(psname, status);
+        }
+
+        //msg->rigCache.publish();
     }
 }
 
-void RigControlMainWindow::sendIgnorePreviousFreqToLog(bool status)
+void RigControlMainWindow::addIgnorePreviousFreqToRigCache(bool status)
 {
     if (appName.length() > 0)
     {
         logMessage(QString("Send IgnorePreviousFreq flag to logger = %1").arg(status ? "True" : "False"));
-        PubSubName psname(setupRadio->currentRadio.radioName);
-        msg->rigCache.setIgnorePreviousFreq(psname, status);
-        msg->rigCache.publish();
+        for (int i = 0; i < setupRadio->availRadios.count(); i ++)
+        {
+            PubSubName psname(setupRadio->availRadioData[i]->radioName);
+            msg->rigCache.setIgnorePreviousFreq(psname, status);
+        }
+        //msg->rigCache.publish();
     }
 }
 
