@@ -132,26 +132,26 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("MGM_Modes");
-
-
-    mgmModes = config.value("MgmModes", "").toStringList();
-
-    config.endGroup();
-
-    ignorePresetFreq = readIgnorePresetFreqFlag();
-    ui->actionContest_Start_Ignore_Preset_Freq->setChecked(ignorePresetFreq);
-    sendIgnorePresetFreqToLog(ignorePresetFreq);
-
-    ignorePreviousFreq = readIgnorePreviousFreqFlag();
-    ui->actionContest_Change_Ignore_Previous_Freq->setChecked(ignorePreviousFreq);
-    sendIgnorePreviousFreqToLog(ignorePresetFreq);
+    //config.beginGroup("MGM_Modes");
+    mgmModes = config.value("MGM_Modes/MgmModes", "").toStringList();
+    //config.endGroup();
 
     if (appName.length() > 0)
     {
         // init cache with radio data
         trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
         sendRadioListLogger();
+
+        ignorePresetFreq = readIgnorePresetFreqFlag();
+        logMessage(QString("Read IgnorePresetFreqFlag = %1").arg(ignorePresetFreq ? "True" : "False"));
+        ui->actionContest_Start_Ignore_Preset_Freq->setChecked(ignorePresetFreq);
+        sendIgnorePresetFreqToLog(ignorePresetFreq);
+
+        ignorePreviousFreq = readIgnorePreviousFreqFlag();
+        logMessage(QString("Read IgnorePreviousFreqFlag = %1").arg(ignorePreviousFreq ? "True" : "False"));
+        ui->actionContest_Change_Ignore_Previous_Freq->setChecked(ignorePreviousFreq);
+        sendIgnorePreviousFreqToLog(ignorePresetFreq);
+
         initCacheData();
 
         msg->rigCache.publish();
@@ -315,8 +315,8 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio()));
     connect(ui->actionSetup_Radios, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
     connect(ui->actionEdit_Preset_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
-    connect(ui->actionContest_Start_Ignore_Preset_Freq, SIGNAL(triggered(bool)), this, SLOT(onIgnorePresetFreq()));
-    connect(ui->actionContest_Change_Ignore_Previous_Freq, SIGNAL(triggered(bool)), this, SLOT(onIgnorePreviousFreq()));
+    connect(ui->actionContest_Start_Ignore_Preset_Freq, SIGNAL(changed()), this, SLOT(onIgnorePresetFreq()));
+    connect(ui->actionContest_Change_Ignore_Previous_Freq, SIGNAL(changed()), this, SLOT(onIgnorePreviousFreq()));
     connect(ui->actionTraceComms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
@@ -375,7 +375,9 @@ void RigControlMainWindow::onIgnorePresetFreq()
     if(ui->actionContest_Start_Ignore_Preset_Freq->isChecked() != ignorePresetFreq)
     {
         ignorePresetFreq = ui->actionContest_Start_Ignore_Preset_Freq->isChecked();
+        logMessage(QString("RigControl: IgnorePresetFreq Changed = %1").arg(ignorePresetFreq ? "True" : "False"));
         sendIgnorePresetFreqToLog(ignorePresetFreq);
+        saveIgnorePresetFreqFlag(ignorePresetFreq);
     }
 }
 
@@ -384,7 +386,9 @@ void RigControlMainWindow::onIgnorePreviousFreq()
     if(ui->actionContest_Change_Ignore_Previous_Freq->isChecked() != ignorePreviousFreq)
     {
         ignorePreviousFreq = ui->actionContest_Change_Ignore_Previous_Freq->isChecked();
+        logMessage(QString("RigControl: IgnorePreviousFreq Changed = %1").arg(ignorePreviousFreq ? "True" : "False"));
         sendIgnorePreviousFreqToLog(ignorePreviousFreq);
+        saveIgnorePreviousFreqFlag(ignorePreviousFreq);
     }
 }
 
