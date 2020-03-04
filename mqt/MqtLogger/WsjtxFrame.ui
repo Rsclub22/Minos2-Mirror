@@ -50,6 +50,9 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
@@ -254,6 +257,9 @@
                </item>
                <item>
                 <widget class="QCheckBox" name="autosel73cb">
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
                   <string>Auto Select 73/RR73</string>
                  </property>
@@ -347,6 +353,9 @@
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
                <widget class="QPushButton" name="clearLocalDecodesButton">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="text">
                  <string>Clear Local Decodes</string>
                 </property>
@@ -354,6 +363,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="clearDecodesButton">
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
+                </property>
                 <property name="text">
                  <string>Clear All Decodes</string>
                 </property>
@@ -376,6 +388,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="testButton">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string>test</string>
               </property>
