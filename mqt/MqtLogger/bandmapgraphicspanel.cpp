@@ -5,6 +5,8 @@
 BandmapGraphicsPanel::BandmapGraphicsPanel(QWidget *parent)
 {
     Q_UNUSED(parent)
+
+    setFocusPolicy(Qt::NoFocus);
 }
 
 
