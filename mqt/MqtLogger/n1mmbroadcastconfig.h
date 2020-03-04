@@ -13,10 +13,21 @@ class N1MMBroadcastConfig : public QDialog
 
 public:
     explicit N1MMBroadcastConfig(QWidget *parent = nullptr);
-    ~N1MMBroadcastConfig();
+    virtual ~N1MMBroadcastConfig() override;
+
+private slots:
+    void on_OKButton_clicked();
+
+    void on_cancelButton_clicked();
 
 private:
     Ui::N1MMBroadcastConfig *ui;
+    void doCloseEvent();
+
+public Q_SLOTS:
+    virtual void accept() override;
+    virtual void reject() override;
+
 };
 
 #endif // N1MMBROADCASTCONFIG_H
