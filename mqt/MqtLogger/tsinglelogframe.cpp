@@ -119,8 +119,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
-    connect(FKHRigControlFrame, SIGNAL(sendRunOnFlag(QString, bool)), this, SLOT(sendRunOnFlag(QString, bool)));
-    connect(FKHRigControlFrame, SIGNAL(sendRunOffFreqFlag(QString, bool)), this, SLOT(sendRunOffFreqFlag(QString, bool)));
+    connect(runButtonsFrame, SIGNAL(sendRunOnFlag(QString, bool)), this, SLOT(sendRunOnFlag(QString, bool)));
+    connect(runButtonsFrame, SIGNAL(sendRunOffFreqFlag(QString, bool)), this, SLOT(sendRunOffFreqFlag(QString, bool)));
 
 
     // Rotator updates

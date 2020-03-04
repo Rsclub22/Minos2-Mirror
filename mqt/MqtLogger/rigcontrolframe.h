@@ -123,6 +123,8 @@ signals:
     void radioHasError(QString);
     void radioDisconnected();
 
+    void setFreqDisplay(QString, bool);
+
 private slots:
     void on_FontChanged();
 

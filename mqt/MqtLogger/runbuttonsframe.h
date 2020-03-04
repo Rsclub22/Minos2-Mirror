@@ -43,8 +43,6 @@ public:
     void showRunToolButtonOnFreq();
 
 private slots:
-    void memoryUpdate();
-
     void memoryShortCutSelected();
     void readActionSelected();
     void editActionSelected();
@@ -115,6 +113,8 @@ signals:
 private slots:
     void runButActivated(int buttonNumber);
     void on_ChkRunFreq();
+    void setFreqDisplay(QString, bool);
+    void radioIsConnected(bool on);
 public slots:
     void runButClearActSel(int buttonNumber);
 
