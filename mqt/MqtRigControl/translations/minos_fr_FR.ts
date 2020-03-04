@@ -482,6 +482,11 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
         <translation>Radio ouverte Rigctld: %1</translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="841"/>
+        <source>Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="862"/>
         <source>Connected via Rigctld: %1 - %2</source>
         <translation>Connecté via Rigctld: %1 - %2</translation>
