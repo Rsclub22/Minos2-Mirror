@@ -755,14 +755,14 @@ int RigControlMainWindow::openRigCtldRadio()
 
     if (handshake == serialData::rigctldHandshakeStr[RIG_HANDSHAKE_HARDWARE])
     {
-        rtsState = serialData::rigctldForeLinesStr[serialData::FORCE_LINE_NONE];
+        rtsState = serialData::rigctldForceLinesStr[serialData::FORCE_LINE_NONE];
     }
     else
     {
-        rtsState = serialData::rigctldForeLinesStr[setupRadio->currentRadio.forceRts];
+        rtsState = serialData::rigctldForceLinesStr[setupRadio->currentRadio.forceRts];
     }
 
-    QString dtrState = serialData::rigctldForeLinesStr[setupRadio->currentRadio.forceDtr];
+    QString dtrState = serialData::rigctldForceLinesStr[setupRadio->currentRadio.forceDtr];
 
 
     // start rigctld
