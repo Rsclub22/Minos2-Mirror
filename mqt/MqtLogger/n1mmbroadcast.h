@@ -12,15 +12,15 @@ class N1MMBroadcast:public QObject
 
     QUdpSocket bc;
 
-    bool contactsSelect;
-    bool extCSSelect;
-    bool wsjtxRbSelect;
+    bool contactsSelect = false;
+    bool extCSSelect = false;
+    bool wsjtxRbSelect = false;
     QString contactsAddr;
-    quint16 contactsPort;
+    quint16 contactsPort = 0;
     QString extCSAddr;
-    quint16 extCSPort;
+    quint16 extCSPort = 0;
     QString wsjtxRbAddr;
-    quint16 wsjtxRbPort;
+    quint16 wsjtxRbPort = 0;
 
     QHostAddress contactsHost;
     QHostAddress extCSHost;

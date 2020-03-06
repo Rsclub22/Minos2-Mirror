@@ -1,6 +1,6 @@
 #include "MinosLoggerEvents.h"
 #include "ContestApp.h"
-
+#include "cutils.h"
 #include "n1mmbroadcast.h"
 
 N1MMBroadcast::N1MMBroadcast()
@@ -129,10 +129,15 @@ void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
 //        </lookup>
 
 //}
+QString makeTag(const QString &tag, const QString &arg)
+{
+    QString temp = "<" + tag + ">" +  escapeXML(arg) + "</" + tag + ">\n";
+    return temp;
+}
 QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *c, QSharedPointer<BaseContact> tct)
 {
-//    <?xml version="1.0" encoding="utf-8"?>
-//    <contactinfo>
+    QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+                  + "<" + type + ">\n"
 //        <contestname>DXPEDITION</contestname>
 //        <contestnr>10</contestnr>
 //        <timestamp>2016-04-10 16:17:41</timestamp>
@@ -176,6 +181,8 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *c, QShared
 //        <Run1Run2></Run1Run2>
 //        <ContactType></ContactType>
 //        <StationName>PHONE-15M</StationName>
-//    </contactinfo>
+            + "</" + type + ">\n";
+
+    return xml;
 
 }
