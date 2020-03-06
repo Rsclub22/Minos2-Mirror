@@ -1680,4 +1680,54 @@ Entrer un autre direction SVP</translation>
         <translation>Pas de contact</translation>
     </message>
 </context>
+<context>
+    <name>serialData</name>
+    <message>
+        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="7"/>
+        <location filename="../serialdata.cpp" line="9"/>
+        <source>None</source>
+        <translation type="unfinished">Aucun</translation>
+    </message>
+    <message>
+        <location filename="../serialdata.cpp" line="6"/>
+        <source>Odd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serialdata.cpp" line="6"/>
+        <source>Even</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serialdata.cpp" line="6"/>
+        <source>Mark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serialdata.cpp" line="6"/>
+        <source>Space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serialdata.cpp" line="7"/>
+        <source>XON/XOFF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serialdata.cpp" line="7"/>
+        <source>CTS/RTS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serialdata.cpp" line="9"/>
+        <source>High</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../serialdata.cpp" line="9"/>
+        <source>Low</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

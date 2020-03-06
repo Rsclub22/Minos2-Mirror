@@ -56,7 +56,6 @@ public:
     QString getStopBits();
     void setStopBits(QString stop);
 
-    QString getParityBits();
     void setParityBits(int b);
 
     QString getHandshake();

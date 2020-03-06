@@ -81,22 +81,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="122"/>
+        <location filename="../bandmapclientframe.ui" line="125"/>
         <source>00:000:000:000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="164"/>
+        <location filename="../bandmapclientframe.ui" line="171"/>
         <source>Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="171"/>
+        <location filename="../bandmapclientframe.ui" line="178"/>
         <source>Cluster Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="210"/>
+        <location filename="../bandmapclientframe.ui" line="220"/>
         <source>Filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -530,47 +530,47 @@ The computed mode is %6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.ui" line="87"/>
+        <location filename="../clusterclientframe.ui" line="90"/>
         <source>Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.ui" line="96"/>
+        <location filename="../clusterclientframe.ui" line="99"/>
         <source>Search</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.ui" line="117"/>
+        <location filename="../clusterclientframe.ui" line="120"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.ui" line="150"/>
+        <location filename="../clusterclientframe.ui" line="153"/>
         <source> Spot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.ui" line="183"/>
+        <location filename="../clusterclientframe.ui" line="186"/>
         <source>Call</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.ui" line="216"/>
+        <location filename="../clusterclientframe.ui" line="219"/>
         <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.ui" line="266"/>
+        <location filename="../clusterclientframe.ui" line="272"/>
         <source>Unworked Callsigns</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.ui" line="273"/>
+        <location filename="../clusterclientframe.ui" line="282"/>
         <source>Unworked Locators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.ui" line="285"/>
+        <location filename="../clusterclientframe.ui" line="294"/>
         <source>Filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1924,7 +1924,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="594"/>
+        <location filename="../rigcontrolframe.cpp" line="599"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1975,37 +1975,37 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="601"/>
+        <location filename="../rigcontrolframe.cpp" line="606"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1132"/>
+        <location filename="../rigcontrolframe.cpp" line="1139"/>
         <source>Error Receiving Bandlist!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1142"/>
+        <location filename="../rigcontrolframe.cpp" line="1149"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1235"/>
+        <location filename="../rigcontrolframe.cpp" line="1243"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1319"/>
+        <location filename="../rigcontrolframe.cpp" line="1328"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1326"/>
+        <location filename="../rigcontrolframe.cpp" line="1335"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1344"/>
+        <location filename="../rigcontrolframe.cpp" line="1353"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2394,38 +2394,48 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.ui" line="26"/>
-        <location filename="../runbuttonsframe.ui" line="39"/>
+        <location filename="../runbuttonsframe.ui" line="65"/>
+        <location filename="../runbuttonsframe.ui" line="78"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="248"/>
+        <location filename="../runbuttonsframe.cpp" line="68"/>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="74"/>
+        <source>Disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="271"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="257"/>
+        <location filename="../runbuttonsframe.cpp" line="280"/>
         <source>Run %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="275"/>
+        <location filename="../runbuttonsframe.cpp" line="298"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="326"/>
+        <location filename="../runbuttonsframe.cpp" line="349"/>
         <source>Restore .%1    </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="329"/>
+        <location filename="../runbuttonsframe.cpp" line="352"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="330"/>
+        <location filename="../runbuttonsframe.cpp" line="353"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2433,27 +2443,27 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="475"/>
+        <location filename="../runbuttonsframe.cpp" line="488"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="476"/>
+        <location filename="../runbuttonsframe.cpp" line="489"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="477"/>
+        <location filename="../runbuttonsframe.cpp" line="490"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="478"/>
+        <location filename="../runbuttonsframe.cpp" line="491"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="479"/>
+        <location filename="../runbuttonsframe.cpp" line="492"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4319,61 +4329,61 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="100"/>
-        <location filename="../WsjtxFrame.ui" line="107"/>
-        <location filename="../WsjtxFrame.ui" line="114"/>
-        <location filename="../WsjtxFrame.ui" line="121"/>
-        <location filename="../WsjtxFrame.ui" line="128"/>
-        <location filename="../WsjtxFrame.ui" line="135"/>
-        <location filename="../WsjtxFrame.ui" line="142"/>
-        <location filename="../WsjtxFrame.ui" line="149"/>
-        <location filename="../WsjtxFrame.ui" line="156"/>
-        <location filename="../WsjtxFrame.ui" line="163"/>
+        <location filename="../WsjtxFrame.ui" line="103"/>
+        <location filename="../WsjtxFrame.ui" line="110"/>
+        <location filename="../WsjtxFrame.ui" line="117"/>
+        <location filename="../WsjtxFrame.ui" line="124"/>
+        <location filename="../WsjtxFrame.ui" line="131"/>
+        <location filename="../WsjtxFrame.ui" line="138"/>
+        <location filename="../WsjtxFrame.ui" line="145"/>
+        <location filename="../WsjtxFrame.ui" line="152"/>
+        <location filename="../WsjtxFrame.ui" line="159"/>
+        <location filename="../WsjtxFrame.ui" line="166"/>
         <source>.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="242"/>
+        <location filename="../WsjtxFrame.ui" line="245"/>
         <source>Auto Select Reply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="258"/>
+        <location filename="../WsjtxFrame.ui" line="264"/>
         <source>Auto Select 73/RR73</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="272"/>
+        <location filename="../WsjtxFrame.ui" line="278"/>
         <source>Ignore &lt; (points)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="295"/>
+        <location filename="../WsjtxFrame.ui" line="301"/>
         <source>Ignore &lt; (SNR)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="330"/>
+        <location filename="../WsjtxFrame.ui" line="336"/>
         <source>Halt TX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="340"/>
+        <location filename="../WsjtxFrame.ui" line="346"/>
         <source>Disable Tx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="351"/>
+        <location filename="../WsjtxFrame.ui" line="360"/>
         <source>Clear Local Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="358"/>
+        <location filename="../WsjtxFrame.ui" line="370"/>
         <source>Clear All Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="380"/>
+        <location filename="../WsjtxFrame.ui" line="395"/>
         <source>test</source>
         <translation type="unfinished"></translation>
     </message>

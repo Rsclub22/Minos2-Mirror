@@ -789,14 +789,14 @@ int RigControlMainWindow::openRigCtldRadio()
 
     if (handshake == serialData::rigctldHandshakeStr[RIG_HANDSHAKE_HARDWARE])
     {
-        rtsState = serialData::rigctldForeLinesStr[serialData::FORCE_LINE_NONE];
+        rtsState = serialData::rigctldForceLinesStr[serialData::FORCE_LINE_NONE];
     }
     else
     {
-        rtsState = serialData::rigctldForeLinesStr[setupRadio->currentRadio.forceRts];
+        rtsState = serialData::rigctldForceLinesStr[setupRadio->currentRadio.forceRts];
     }
 
-    QString dtrState = serialData::rigctldForeLinesStr[setupRadio->currentRadio.forceDtr];
+    QString dtrState = serialData::rigctldForceLinesStr[setupRadio->currentRadio.forceDtr];
 
 
     // start rigctld
@@ -872,7 +872,7 @@ int RigControlMainWindow::openRigCtldRadio()
 
         if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
         {
-            showStatusMessage(QString("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
+            showStatusMessage(tr("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
                               .arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel).trimmed().arg(setupRadio->currentRadio.comport).arg(setupRadio->currentRadio.baudrate).arg(setupRadio->currentRadio.databits)
                               .arg(setupRadio->currentRadio.stopbits).arg(radio->getParityCodeNames()[setupRadio->currentRadio.parity]).arg(radio->getHandShakeNames()[setupRadio->currentRadio.handshake]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceDtr]).arg(serialData::forceLinesStr[setupRadio->currentRadio.forceRts]));
         }
@@ -882,11 +882,11 @@ int RigControlMainWindow::openRigCtldRadio()
         {
             if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)
             {
-                showStatusMessage(QString("Connected: %1 - %2, %3:%4 - %5 %6").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()).arg(setupRadio->currentRadio.networkAdd).arg(setupRadio->currentRadio.networkPort).arg(rigctld_radioMfg).arg(rigctld_radioName));
+                showStatusMessage(tr("Connected: %1 - %2, %3:%4 - %5 %6").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()).arg(setupRadio->currentRadio.networkAdd).arg(setupRadio->currentRadio.networkPort).arg(rigctld_radioMfg).arg(rigctld_radioName));
             }
             else
             {
-                showStatusMessage(QString("Connected: %1 - %2, %3:%4").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()).arg(setupRadio->currentRadio.networkAdd).arg(setupRadio->currentRadio.networkPort));
+                showStatusMessage(tr("Connected: %1 - %2, %3:%4").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()).arg(setupRadio->currentRadio.networkAdd).arg(setupRadio->currentRadio.networkPort));
             }
 
         }

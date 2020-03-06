@@ -119,7 +119,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     ui->statusbar->addWidget(status);
 
     ui->statusbar->addPermanentWidget(offSetlbl);
-    offSetlbl->setText("Offset: ");
+    offSetlbl->setText(tr("Offset: "));
     ui->statusbar->addPermanentWidget(offSetDisplay);
 
     ui->statusbar->addPermanentWidget(actualRotatorlbl);

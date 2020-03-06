@@ -482,6 +482,11 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
         <translation>Radio ouverte Rigctld: %1</translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="841"/>
+        <source>Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="862"/>
         <source>Connected via Rigctld: %1 - %2</source>
         <translation>Connecté via Rigctld: %1 - %2</translation>
@@ -1057,56 +1062,56 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <translation> Nombre CIV hors plage 0 - FF</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="588"/>
+        <location filename="../rigsetupform.cpp" line="583"/>
         <source>Invalid Network Address %1</source>
         <translation>Adresse réseau invalide %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="589"/>
+        <location filename="../rigsetupform.cpp" line="584"/>
         <source>Network Address Entry Error</source>
         <translation>Erreur d&apos;entrée d&apos;adresse réseau</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1175"/>
-        <location filename="../rigsetupform.cpp" line="1360"/>
+        <location filename="../rigsetupform.cpp" line="1170"/>
+        <location filename="../rigsetupform.cpp" line="1355"/>
         <source>Transverter Name Exists</source>
         <translation>Le nom du convertisseur existe</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1176"/>
-        <location filename="../rigsetupform.cpp" line="1361"/>
+        <location filename="../rigsetupform.cpp" line="1171"/>
+        <location filename="../rigsetupform.cpp" line="1356"/>
         <source>Transverter Name: %1, already exists 
 Please enter another name</source>
         <translation>Convertisseur %1 existe déjà,
 utiliser un autre nom SVP</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1274"/>
+        <location filename="../rigsetupform.cpp" line="1269"/>
         <source>You can not remove this transverter - %1, while it is the current radio - %2!</source>
         <translation>Vous ne pouvez pas supprimer ce convertisseur - %1, alors qu&apos;il s&apos;agit de la radio actuelle - %2!</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1283"/>
+        <location filename="../rigsetupform.cpp" line="1278"/>
         <source>Remove Transverter</source>
         <translation>Supprimer le transverter</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1284"/>
+        <location filename="../rigsetupform.cpp" line="1279"/>
         <source>Do you really want to remove transverter - %1?</source>
         <translation>Confirmer la suppression du transverter %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1336"/>
+        <location filename="../rigsetupform.cpp" line="1331"/>
         <source>You can not change band on this transverter - %1, while it is the current radio - %2!</source>
         <translation>Radio actuelle -%2! Invalide de changer bande de transverter %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1470"/>
+        <location filename="../rigsetupform.cpp" line="1465"/>
         <source>Invalid Network Port Number %1</source>
         <translation>Port de réseau numéro invalide %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1471"/>
+        <location filename="../rigsetupform.cpp" line="1466"/>
         <source>Network Port Number out of range</source>
         <translation>Port de réseau nombre hors plage</translation>
     </message>
@@ -1114,72 +1119,72 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>SerialTVSwitch</name>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
+        <location filename="../serialtvswitch.h" line="49"/>
         <source>No Error</source>
         <translation>Pas d&apos; erreur</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
+        <location filename="../serialtvswitch.h" line="49"/>
         <source>Device Not Found</source>
         <translation>Appareil non trouvé</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
+        <location filename="../serialtvswitch.h" line="49"/>
         <source>Permission Error</source>
         <translation>Erreur d&apos;autorisation</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
+        <location filename="../serialtvswitch.h" line="50"/>
         <source>Open Error</source>
         <translation>Erreur d&apos;ouverture</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
+        <location filename="../serialtvswitch.h" line="50"/>
         <source>Parity Error</source>
         <translation>Erreur de parité</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
+        <location filename="../serialtvswitch.h" line="50"/>
         <source>Framing Error</source>
         <translation>Erreur de tramage/de frame</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
+        <location filename="../serialtvswitch.h" line="51"/>
         <source>Break Condition</source>
         <translation>Condition de rupture (WHAT??) is this</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
+        <location filename="../serialtvswitch.h" line="51"/>
         <source>Write Error</source>
         <translation>Erreur de écrire</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
+        <location filename="../serialtvswitch.h" line="51"/>
         <source>Read Error</source>
         <translation>Erreur de lire</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="53"/>
+        <location filename="../serialtvswitch.h" line="52"/>
         <source>Resource Error</source>
         <translation>Erreur de ressource</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="53"/>
+        <location filename="../serialtvswitch.h" line="52"/>
         <source>Unsupported Operation Error</source>
         <translation>Erreur d&apos;opération non prise en charge</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="54"/>
+        <location filename="../serialtvswitch.h" line="53"/>
         <source>Unknown Error</source>
         <translation>Erreur inconnue</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="54"/>
+        <location filename="../serialtvswitch.h" line="53"/>
         <source>Timeout Error</source>
         <translation>Erreur de temporisation TIMEOUT</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="54"/>
+        <location filename="../serialtvswitch.h" line="53"/>
         <source>Not Open Error</source>
         <translation>Erreur non ouverte (WHAT IS not open)</translation>
     </message>
