@@ -152,7 +152,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
         initCacheData();
 
-       // msg->rigCache.publish();
+        msg->rigCache.publish();
     }
 
 

@@ -126,6 +126,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
                 setVolumeStatus(selDetail.volumeStatus().getValue(), psn);
                 setRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 setBandList(selDetail.bandList().getValue(), psn);
+                setIgnorePresetFreqFlag(selDetail.ignorePresetFreqFlag().getValue(), psn);
+                setIgnorePreviousFreqFlag(selDetail.ignorePreviousFreqFlag().getValue(), psn);
             }
         }
     }
