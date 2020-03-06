@@ -373,6 +373,11 @@ Please delete them and set up the rotators again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rotatormainwindow.cpp" line="122"/>
+        <source>Offset: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rotatormainwindow.cpp" line="126"/>
         <source>Actual: </source>
         <translation type="unfinished"></translation>
@@ -868,32 +873,32 @@ Do you want to reload the settings for the antenna now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="476"/>
+        <location filename="../rotsetupform.cpp" line="471"/>
         <source>Invalid Network Address %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="477"/>
+        <location filename="../rotsetupform.cpp" line="472"/>
         <source>Network Address Entry Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="508"/>
+        <location filename="../rotsetupform.cpp" line="503"/>
         <source>Invalid Network Port Number %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="509"/>
+        <location filename="../rotsetupform.cpp" line="504"/>
         <source>Network Port Number out of range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="781"/>
+        <location filename="../rotsetupform.cpp" line="776"/>
         <source>Value must be between %1 and %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="782"/>
+        <location filename="../rotsetupform.cpp" line="777"/>
         <source>Antenna Offset Error</source>
         <translation type="unfinished"></translation>
     </message>

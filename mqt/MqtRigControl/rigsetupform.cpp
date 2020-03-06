@@ -479,11 +479,6 @@ void RigSetupForm::comParitySelected()
     }
 }
 
-QString RigSetupForm::getParityBits()
-{
-    return ui->comParityBox->currentText();
-}
-
 void RigSetupForm::setParityBits(int b)
 {
     ui->comParityBox->setCurrentIndex(b);

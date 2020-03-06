@@ -17,7 +17,6 @@
 #include <QObject>
 #include <QSerialPort>
 #include <QByteArray>
-#include "serialcomms.h"
 
 class SerialTVSwitch: public QObject
 {

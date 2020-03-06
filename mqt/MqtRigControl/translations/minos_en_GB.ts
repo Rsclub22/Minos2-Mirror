@@ -999,55 +999,55 @@ Please delete them and set up the radios again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="588"/>
+        <location filename="../rigsetupform.cpp" line="583"/>
         <source>Invalid Network Address %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="589"/>
+        <location filename="../rigsetupform.cpp" line="584"/>
         <source>Network Address Entry Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1175"/>
-        <location filename="../rigsetupform.cpp" line="1360"/>
+        <location filename="../rigsetupform.cpp" line="1170"/>
+        <location filename="../rigsetupform.cpp" line="1355"/>
         <source>Transverter Name Exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1176"/>
-        <location filename="../rigsetupform.cpp" line="1361"/>
+        <location filename="../rigsetupform.cpp" line="1171"/>
+        <location filename="../rigsetupform.cpp" line="1356"/>
         <source>Transverter Name: %1, already exists 
 Please enter another name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1274"/>
+        <location filename="../rigsetupform.cpp" line="1269"/>
         <source>You can not remove this transverter - %1, while it is the current radio - %2!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1283"/>
+        <location filename="../rigsetupform.cpp" line="1278"/>
         <source>Remove Transverter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1284"/>
+        <location filename="../rigsetupform.cpp" line="1279"/>
         <source>Do you really want to remove transverter - %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1336"/>
+        <location filename="../rigsetupform.cpp" line="1331"/>
         <source>You can not change band on this transverter - %1, while it is the current radio - %2!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1470"/>
+        <location filename="../rigsetupform.cpp" line="1465"/>
         <source>Invalid Network Port Number %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1471"/>
+        <location filename="../rigsetupform.cpp" line="1466"/>
         <source>Network Port Number out of range</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1055,72 +1055,72 @@ Please enter another name</source>
 <context>
     <name>SerialTVSwitch</name>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
+        <location filename="../serialtvswitch.h" line="49"/>
         <source>No Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
+        <location filename="../serialtvswitch.h" line="49"/>
         <source>Device Not Found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
+        <location filename="../serialtvswitch.h" line="49"/>
         <source>Permission Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
+        <location filename="../serialtvswitch.h" line="50"/>
         <source>Open Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
+        <location filename="../serialtvswitch.h" line="50"/>
         <source>Parity Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
+        <location filename="../serialtvswitch.h" line="50"/>
         <source>Framing Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
+        <location filename="../serialtvswitch.h" line="51"/>
         <source>Break Condition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
+        <location filename="../serialtvswitch.h" line="51"/>
         <source>Write Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
+        <location filename="../serialtvswitch.h" line="51"/>
         <source>Read Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="53"/>
+        <location filename="../serialtvswitch.h" line="52"/>
         <source>Resource Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="53"/>
+        <location filename="../serialtvswitch.h" line="52"/>
         <source>Unsupported Operation Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="54"/>
+        <location filename="../serialtvswitch.h" line="53"/>
         <source>Unknown Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="54"/>
+        <location filename="../serialtvswitch.h" line="53"/>
         <source>Timeout Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="54"/>
+        <location filename="../serialtvswitch.h" line="53"/>
         <source>Not Open Error</source>
         <translation type="unfinished"></translation>
     </message>

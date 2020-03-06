@@ -419,11 +419,6 @@ void rotSetupForm::comParityBitsSelected()
     }
 }
 
-QString rotSetupForm::getParityBits()
-{
-    return ui->comParityBox->currentText();
-}
-
 void rotSetupForm::setParityBits(int b)
 {
     ui->comParityBox->setCurrentIndex(b);
