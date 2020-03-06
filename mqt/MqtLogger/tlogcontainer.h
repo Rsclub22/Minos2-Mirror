@@ -3,6 +3,7 @@
 
 #include "base_pch.h"
 #include "helpbrowser.h"
+#include "n1mmbroadcast.h"
 
 namespace Ui {
 class TLogContainer;
@@ -34,6 +35,7 @@ public:
     ~TLogContainer() override;
 
     TSendDM *sendDM;
+    N1MMBroadcast n1mmBroadcast;
 
     void selectContest(BaseContestLog *pc, QSharedPointer<BaseContact> pct );
     bool show(int argc, char *argv[]);

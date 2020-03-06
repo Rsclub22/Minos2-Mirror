@@ -263,3 +263,19 @@ void MinosLoggerEvents::sendListCompressionChanged(qreal hmult)
 {
     emit mle.listCompressionChanged(hmult);
 }
+//---------------------------------------------------------------------------
+
+void MinosLoggerEvents::sendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct)
+{
+    emit mle.afterQSOSaved(c, tct);
+}
+
+void MinosLoggerEvents::sendWsjtxDatagram(QByteArray *datagram)
+{
+    emit mle.wsjtxDatagram(datagram);
+}
+
+void MinosLoggerEvents::sendCallsignLookup(BaseContestLog *l, QString c)
+{
+    emit mle.callsignLookup(l, c);
+}

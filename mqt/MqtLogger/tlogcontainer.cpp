@@ -148,6 +148,7 @@ bool TLogContainer::show(int argc, char *argv[])
     }
     TContestApp::getContestApp()->setPreloadComplete();
 
+    n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();
 
     return true;
@@ -1196,7 +1197,10 @@ void TLogContainer::UDPConfigActionExecute()
 {
     N1MMBroadcastConfig udpConfig;
 
-    udpConfig.exec();
+    if (udpConfig.exec() == QDialog::Accepted)
+    {
+        n1mmBroadcast.configure();
+    }
 }
 void TLogContainer::WsjtConfigActionExecute()
 {
