@@ -1,6 +1,10 @@
 #include "MinosLoggerEvents.h"
 #include "ContestApp.h"
 #include "cutils.h"
+#include "contest.h"
+#include "contacts.h"
+#include "LoggerContest.h"
+#include "BandList.h"
 #include "n1mmbroadcast.h"
 
 N1MMBroadcast::N1MMBroadcast()
@@ -20,27 +24,51 @@ void N1MMBroadcast::configure()
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpcontactsAddr, contactsAddr );
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpcontactsPort, temp );
     contactsPort = static_cast<quint16>(temp);
+    if (contactsAddr.isEmpty())
+    {
+        contactsAddr = "127.0.0.1";
+    }
+    if (contactsPort == 0)
+    {
+        contactsPort = 12060;
+    }
     if (!contactsHost.setAddress(contactsAddr))
     {
-
+        contactsSelect = false;
     }
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpextCSSelect, extCSSelect );
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpextCSAddr, extCSAddr );
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpextCSPort, temp );
     extCSPort = static_cast<quint16>(temp);
+    if (extCSAddr.isEmpty())
+    {
+        extCSAddr = "127.0.0.1";
+    }
+    if (extCSPort == 0)
+    {
+        extCSPort = 12060;
+    }
     if (!extCSHost.setAddress(extCSAddr))
     {
-
+        extCSSelect = false;
     }
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpwsjtxRbSelect, wsjtxRbSelect );
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpwsjtxRbAddr, wsjtxRbAddr );
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpwsjtxRbPort, temp );
     wsjtxRbPort = static_cast<quint16>(temp);
+    if (wsjtxRbAddr.isEmpty())
+    {
+        wsjtxRbAddr = "127.0.0.1";
+    }
+    if (wsjtxRbPort == 0)
+    {
+        wsjtxRbPort = 12060;
+    }
     if (!wsjtxRbHost.setAddress(wsjtxRbAddr))
     {
-
+        wsjtxRbSelect = false;
     }
 
 
@@ -50,8 +78,9 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
     // This can generate modified, deleted/recreated, or straight contact
     if (contactsSelect)
     {
-        QString stanza = genContactStanza("contact", c, tct);
+        QString stanza = genContactStanza("contactinfo", c, tct);
         bc.writeDatagram(stanza.toUtf8(), extCSHost, extCSPort);
+        trace("afterQSOSaved Datagram written " + stanza);
     }
 }
 
@@ -74,113 +103,87 @@ void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
         tct->cs = Callsign(call);
         tct->cs.validate();
 
-        QString stanza = genContactStanza("lookup", c, tct);
-        bc.writeDatagram(stanza.toUtf8(), extCSHost, extCSPort);
+        tct->ctryMult = findCtryPrefix( tct->cs );
+
+
+        QString stanza = genContactStanza("lookupinfo", c, tct);
+        qint64 res = bc.writeDatagram(stanza.toUtf8(), extCSHost, extCSPort);
+        if (res <= 0)
+        {
+            trace("broadcast failed");
+        }
+        trace("callsignLookup Datagram written " + stanza);
     }
 }
 
-//QString N1MMBroadcast::genLookupStanza(BaseContestLog *c, QString call)
-//{
-//    <?xml version="1.0" encoding="utf-8"?>
-//        <lookup>
-//            <contestname>DXPEDITION</contestname>
-//            <contestnr>10</contestnr>
-//            <timestamp>2016-04-10 16:17:41</timestamp>
-//            <mycall>K8UT</mycall>
-//            <band>21</band>
-//            <rxfreq>2125500</rxfreq>
-//            <txfreq>2125500</txfreq>
-//            <operator>K8UT</operator>
-//            <mode>USB</mode>
-//            <call>W2BBB</call>
-//            <countryprefix>K</countryprefix>
-//            <wpxprefix>W2</wpxprefix>
-//            <stationprefix>K8UT</stationprefix>
-//            <continent>NA</continent>
-//            <snt>59</snt>
-//            <sntnr>2</sntnr>
-//            <rcv>59</rcv>
-//            <rcvnr>0</rcvnr>
-//            <gridsquare></gridsquare>
-//            <exchange1></exchange1>
-//            <section></section>
-//            <comment></comment>
-//            <qth></qth>
-//            <name></name>
-//            <power></power>
-//            <misctext></misctext>
-//            <zone>5</zone>
-//            <prec></prec>
-//            <ck>0</ck>
-//            <ismultiplier1>0</ismultiplier1>
-//            <ismultiplier2>0</ismultiplier2>
-//            <ismultiplier3>0</ismultiplier3>
-//            <points>1</points>
-//            <radionr>1</radionr>
-//            <RoverLocation></RoverLocation>
-//            <RadioInterfaced>0</RadioInterfaced>
-//            <NetworkedCompNr>0</NetworkedCompNr>
-//            <IsOriginal>True</IsOriginal>
-//            <NetBiosName>DEV-PC</NetBiosName>
-//            <IsRunQSO>0</IsRunQSO>
-//            <Run1Run2></Run1Run2>
-//            <ContactType></ContactType>
-//            <StationName>PHONE-15M</StationName>
-//        </lookup>
-
-//}
 QString makeTag(const QString &tag, const QString &arg)
 {
     QString temp = "<" + tag + ">" +  escapeXML(arg) + "</" + tag + ">\n";
     return temp;
 }
-QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *c, QSharedPointer<BaseContact> tct)
+QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QSharedPointer<BaseContact> tct)
 {
+    LoggerContestLog *c = dynamic_cast<LoggerContestLog *>(b);
+
+    QString cband = c->band.getValue();
+
+    QString cb = cband.trimmed();
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    bool bandOK = blist.findBand(cb, bi);
+    if (bandOK)
+    {
+        cb = bi.adif;
+    }
+
+    QString continent = (tct->ctryMult?tct->ctryMult->continent:QString());
+
     QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
                   + "<" + type + ">\n"
-//        <contestname>DXPEDITION</contestname>
-//        <contestnr>10</contestnr>
-//        <timestamp>2016-04-10 16:17:41</timestamp>
-//        <mycall>K8UT</mycall>
-//        <band>21</band>
-//        <rxfreq>2125500</rxfreq>
-//        <txfreq>2125500</txfreq>
-//        <operator>K8UT</operator>
-//        <mode>USB</mode>
-//        <call>W2BBB</call>
-//        <countryprefix>K</countryprefix>
-//        <wpxprefix>W2</wpxprefix>
-//        <stationprefix>K8UT</stationprefix>
-//        <continent>NA</continent>
-//        <snt>59</snt>
-//        <sntnr>2</sntnr>
-//        <rcv>59</rcv>
-//        <rcvnr>0</rcvnr>
-//        <gridsquare></gridsquare>
-//        <exchange1></exchange1>
-//        <section></section>
-//        <comment></comment>
-//        <qth></qth>
-//        <name></name>
-//        <power></power>
-//        <misctext></misctext>
-//        <zone>5</zone>
-//        <prec></prec>
-//        <ck>0</ck>
-//        <ismultiplier1>0</ismultiplier1>
-//        <ismultiplier2>0</ismultiplier2>
-//        <ismultiplier3>0</ismultiplier3>
-//        <points>1</points>
-//        <radionr>1</radionr>
-//        <RoverLocation></RoverLocation>
-//        <RadioInterfaced>0</RadioInterfaced>
-//        <NetworkedCompNr>0</NetworkedCompNr>
-//        <IsOriginal>True</IsOriginal>
-//        <NetBiosName>DEV-PC</NetBiosName>
-//        <IsRunQSO>0</IsRunQSO>
-//        <Run1Run2></Run1Run2>
-//        <ContactType></ContactType>
-//        <StationName>PHONE-15M</StationName>
+                   + makeTag("app", "Minos")
+                   + makeTag("contestname", c->name.getValue())         //        <contestname>DXPEDITION</contestname>
+                   + makeTag("contestnr", "0")                          //        <contestnr>10</contestnr>
+                   + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
+                   + makeTag("mycall", c->mycall.fullCall.getValue())   //        <mycall>K8UT</mycall>
+                   + makeTag("band", cb)                                //        <band>21</band>
+                   + makeTag("rxfreq", tct->frequency.getValue())       //        <rxfreq>2125500</rxfreq>
+                   + makeTag("txfreq", tct->frequency.getValue())       //        <txfreq>2125500</txfreq>
+                   + makeTag("operator", tct->op1.getValue())           //        <operator>K8UT</operator>
+                   + makeTag("mode", tct->mode.getValue())              //        <mode>USB</mode>
+                   + makeTag("call", tct->cs.fullCall.getValue())       //        <call>W2BBB</call>
+                   + makeTag("countryprefix", tct->cs.locCtryPrefix)    //        <countryprefix>K</countryprefix>
+                   + makeTag("wpxprefix", tct->cs.wpxPrefix)            //        <wpxprefix>W2</wpxprefix>
+                   + makeTag("stationprefix",c->mycall.fullCall.getValue()) //    <stationprefix>K8UT</stationprefix>
+                   + makeTag("continent", continent)                    //        <continent>NA</continent>
+                   + makeTag("snt", tct->reps.getValue())               //        <snt>59</snt>
+                   + makeTag("sntnr", tct->serials.getValue())          //        <sntnr>2</sntnr>
+                   + makeTag("rcv", tct->repr.getValue())               //        <rcv>59</rcv>
+                   + makeTag("rcvnr", tct->serialr.getValue())          //        <rcvnr>0</rcvnr>
+                   + makeTag("gridsquare", tct->loc.loc.getValue())     //        <gridsquare></gridsquare>
+                   + makeTag("exchange1", tct->extraText.getValue())    //        <exchange1></exchange1>
+                   + makeTag("section", c->entSect.getValue())          //        <section></section>
+                   + makeTag("comment", tct->comments.getValue())       //        <comment></comment>
+                   + makeTag("qth", "")                                 //        <qth></qth>
+                   + makeTag("name", "")                                //        <name></name>
+                   + makeTag("power", c->power.getValue())              //        <power></power>
+                   + makeTag("misctext", "")                            //        <misctext></misctext>
+                   + makeTag("zone", "")                                //        <zone>5</zone>
+                   + makeTag("prec", "")                                //        <prec></prec>
+                   + makeTag("ck", "")                                  //        <ck>0</ck>
+                   + makeTag("ismultiplier1", "")                       //        <ismultiplier1>0</ismultiplier1>
+                   + makeTag("ismultiplier2", "")                       //        <ismultiplier2>0</ismultiplier2>
+                   + makeTag("ismultiplier3", "")                       //        <ismultiplier3>0</ismultiplier3>
+                   + makeTag("points", "")                              //        <points>1</points>
+                   + makeTag("radionr", "")                             //        <radionr>1</radionr>
+                   + makeTag("RoverLocation", "")                       //        <RoverLocation></RoverLocation>
+                   + makeTag("RadioInterfaced", "")                     //        <RadioInterfaced>0</RadioInterfaced>
+                   + makeTag("NetworkedCompNr", "")                     //        <NetworkedCompNr>0</NetworkedCompNr>
+                   + makeTag("IsOriginal", "True")                      //        <IsOriginal>True</IsOriginal>
+                   + makeTag("NetBiosName", "")                         //        <NetBiosName>DEV-PC</NetBiosName>
+                   + makeTag("IsRunQSO", "0")                           //        <IsRunQSO>0</IsRunQSO>
+//                   + makeTag("Run1Run2", "")                          //        <Run1Run2></Run1Run2>
+//                   + makeTag("ContactType", "")                       //        <ContactType></ContactType>
+                   + makeTag("StationName", "")                         //        <StationName>PHONE-15M</StationName>
             + "</" + type + ">\n";
 
     return xml;
