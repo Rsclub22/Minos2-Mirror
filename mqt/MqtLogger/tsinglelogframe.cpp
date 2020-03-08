@@ -551,7 +551,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctRigControl:
                 {
                     elementScrollArea->setWidget(FKHRigControlFrame);
-                    FKHRigControlFrame->setContest(ct);
+                    // don't set contest here
                     break;
                 }
                 case sctRunButtons:
@@ -689,6 +689,7 @@ void TSingleLogFrame::buildScreenLayout()
     // ALWAYS link the wsjt frame to the contest; then we can log
     // even without showing it
     wsjtxFrame->setContest(ct);
+    FKHRigControlFrame->setContest(ct);
     verticalLayout->addWidget(singleLogFrameSplitter);
 
     getSplitters();
