@@ -1686,49 +1686,49 @@ Entrer un autre direction SVP</translation>
 <context>
     <name>serialData</name>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
-        <location filename="../serialdata.cpp" line="7"/>
-        <location filename="../serialdata.cpp" line="9"/>
+        <location filename="../serialdata.cpp" line="12"/>
+        <location filename="../serialdata.cpp" line="13"/>
+        <location filename="../serialdata.cpp" line="14"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Odd</source>
         <translation>Impaire</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Even</source>
         <translation>Paire</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Mark</source>
         <translation>Marque</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Space</source>
         <translation>Espace</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="7"/>
+        <location filename="../serialdata.cpp" line="13"/>
         <source>XON/XOFF</source>
         <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="7"/>
+        <location filename="../serialdata.cpp" line="13"/>
         <source>CTS/RTS</source>
         <translation>CTS/RTS</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="9"/>
+        <location filename="../serialdata.cpp" line="14"/>
         <source>High</source>
         <translation>Haut</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="9"/>
+        <location filename="../serialdata.cpp" line="14"/>
         <source>Low</source>
         <translation>Bas</translation>
     </message>

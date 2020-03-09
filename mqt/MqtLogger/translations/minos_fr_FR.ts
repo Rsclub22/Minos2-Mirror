@@ -4295,22 +4295,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <translation>Frame</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="731"/>
+        <location filename="../tsinglelogframe.cpp" line="735"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le journal importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1288"/>
+        <location filename="../tsinglelogframe.cpp" line="1292"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non rempli</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1307"/>
+        <location filename="../tsinglelogframe.cpp" line="1311"/>
         <source>Please give serial wanted</source>
         <translation>Donner série recherchée</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1329"/>
+        <location filename="../tsinglelogframe.cpp" line="1333"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1introuvable</translation>
     </message>

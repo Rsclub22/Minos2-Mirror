@@ -60,6 +60,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    serialData::translateSerialData();
 
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
