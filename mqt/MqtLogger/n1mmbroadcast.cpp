@@ -5,6 +5,7 @@
 #include "contacts.h"
 #include "LoggerContest.h"
 #include "BandList.h"
+#include "rigutils.h"
 #include "n1mmbroadcast.h"
 
 N1MMBroadcast::N1MMBroadcast()
@@ -125,6 +126,7 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
 {
     LoggerContestLog *c = dynamic_cast<LoggerContestLog *>(b);
 
+    QString txfreq = tct->frequency.getValue().remove('.');
     QString cband = c->band.getValue();
 
     QString cb = cband.trimmed();
@@ -134,7 +136,17 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
     if (bandOK)
     {
         cb = bi.adif;
+        if (txfreq.isEmpty())
+        {
+            txfreq = QString::number(bi.flow);
+        }
     }
+
+    long freq = static_cast<long>(convertStrToFreq(txfreq)/10.0);
+
+    // freq sent is only to the tens digit...
+
+    txfreq = QString::number(freq);
 
     QString continent = (tct->ctryMult?tct->ctryMult->continent:QString());
 
@@ -146,8 +158,8 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
                    + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
                    + makeTag("mycall", c->mycall.fullCall.getValue())   //        <mycall>K8UT</mycall>
                    + makeTag("band", cb)                                //        <band>21</band>
-                   + makeTag("rxfreq", tct->frequency.getValue())       //        <rxfreq>2125500</rxfreq>
-                   + makeTag("txfreq", tct->frequency.getValue())       //        <txfreq>2125500</txfreq>
+                   + makeTag("rxfreq", txfreq)                          //        <rxfreq>2125500</rxfreq>
+                   + makeTag("txfreq", txfreq)                          //        <txfreq>2125500</txfreq>
                    + makeTag("operator", tct->op1.getValue())           //        <operator>K8UT</operator>
                    + makeTag("mode", tct->mode.getValue())              //        <mode>USB</mode>
                    + makeTag("call", tct->cs.fullCall.getValue())       //        <call>W2BBB</call>
