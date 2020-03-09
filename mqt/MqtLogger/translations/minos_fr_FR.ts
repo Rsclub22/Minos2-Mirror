@@ -2046,14 +2046,6 @@ Non - Ignorer les modifications</translation>
         <translation>Vol</translation>
     </message>
     <message>
-        <source>Call Freqs</source>
-        <translation type="vanished">Fréquences d&apos;appel</translation>
-    </message>
-    <message>
-        <source>Tune Freqs</source>
-        <translation type="vanished">Fréquences d&apos;accorder</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolframe.cpp" line="606"/>
         <source>Off</source>
         <translation>Éteinte</translation>
@@ -2087,27 +2079,6 @@ Non - Ignorer les modifications</translation>
         <location filename="../rigcontrolframe.cpp" line="1353"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
-    </message>
-    <message>
-        <source>Run</source>
-        <translatorcomment>NOT USED?</translatorcomment>
-        <translation type="vanished">RUN?</translation>
-    </message>
-    <message>
-        <source>Run %1 - New</source>
-        <translation type="vanished">Run %1 - Nouveau</translation>
-    </message>
-    <message>
-        <source>Run %1 - Edit</source>
-        <translation type="vanished">Run %1 - Modifier</translation>
-    </message>
-    <message>
-        <source>Freq: </source>
-        <translation type="vanished">Fréquence: </translation>
-    </message>
-    <message>
-        <source>Mode: </source>
-        <translation type="vanished">Mode: </translation>
     </message>
 </context>
 <context>
@@ -2502,12 +2473,12 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../runbuttonsframe.cpp" line="68"/>
         <source>Connected</source>
-        <translation type="unfinished">Connecté</translation>
+        <translation>Connecté</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="74"/>
         <source>Disconnected</source>
-        <translation type="unfinished">Débranché</translation>
+        <translation>Débranché</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="271"/>
@@ -3000,7 +2971,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../taboutbox.cpp" line="95"/>
         <source>Welcome to Minos Version</source>
-        <translation>Bienvenue à Minos Version (FR 03 Mar 20)</translation>
+        <translation>Bienvenue à Minos Version (FR 08 Mar 20)</translation>
     </message>
 </context>
 <context>
@@ -4404,17 +4375,6 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 (%5; %6; %7  précédents)
 %8 dernières minutes:%9 QSO%10 pts%11 mults
 (%12;%13;%14 précédents)</translation>
-    </message>
-</context>
-<context>
-    <name>TuneMemoryButton</name>
-    <message>
-        <source>&amp;Read</source>
-        <translation type="vanished">&amp;Lire</translation>
-    </message>
-    <message>
-        <source>&amp;Write</source>
-        <translation type="vanished">&amp;Écrire</translation>
     </message>
 </context>
 <context>

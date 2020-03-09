@@ -223,7 +223,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotsetupdialog.cpp" line="707"/>
         <source>Do you really want to remove antenna - %1?</source>
-        <translation>Supprimer l&apos;Antenne %1</translation>
+        <translation>Supprimer l&apos;Antenne %1?</translation>
     </message>
     <message>
         <location filename="../rotsetupdialog.cpp" line="740"/>
@@ -379,7 +379,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="122"/>
         <source>Offset: </source>
-        <translation type="unfinished"></translation>
+        <translation>Décalage: </translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="126"/>

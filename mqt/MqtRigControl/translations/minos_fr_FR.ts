@@ -484,7 +484,7 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="841"/>
         <source>Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecté via Rigctld: %1 - %2, %3:%4 - %5 %6, %7, Handshake %8 ForceDTR %9, ForceRTS %10</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="862"/>
@@ -1286,7 +1286,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigsetupform.ui" line="335"/>
         <source>Enable Transvert</source>
-        <translation>Activer la conversion</translation>
+        <translation>Activer le Transverter</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="342"/>
