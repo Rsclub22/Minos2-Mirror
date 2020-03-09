@@ -21,6 +21,7 @@ public:
     static const serial_handshake_e handshakeCodes[];
     static const serial_force_Lines_e forceLinesCodes[];
     static QStringList parityStr;
+    static QStringList rigctldParityStr;
     static QStringList handshakeStr;
     static QStringList rigctldHandshakeStr;
     static QStringList forceLinesStr;

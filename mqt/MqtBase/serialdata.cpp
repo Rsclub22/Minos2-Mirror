@@ -5,6 +5,7 @@ const serial_handshake_e serialData::handshakeCodes[] = { RIG_HANDSHAKE_NONE, RI
 const serialData::serial_force_Lines_e serialData::forceLinesCodes[] = {serialData::FORCE_LINE_NONE, serialData::FORCE_LINE_OFF, serialData::FORCE_LINE_ON};
 
 QStringList serialData::parityStr;
+QStringList serialData::rigctldParityStr;
 QStringList serialData::handshakeStr;
 QStringList serialData::rigctldHandshakeStr;
 QStringList serialData::forceLinesStr;
@@ -17,6 +18,7 @@ void serialData::translateSerialData()
 {
     rigctldHandshakeStr = (QStringList() << "None" << "XONXOFF" << "Hardware");   // passed to rigctld
     rigctldForceLinesStr = QStringList() << "Unset" << "ON" << "OFF";   // passed to rigctld
+    rigctldParityStr = (QStringList() << "None" << "Odd" << "Even" << "Mark" << "Space");
 
     parityStr = (QStringList() << tr("None") << tr("Odd") << tr("Even") << tr("Mark") << tr("Space"));
     handshakeStr = (QStringList() << tr("None") << tr("XON/XOFF") << tr("CTS/RTS"));

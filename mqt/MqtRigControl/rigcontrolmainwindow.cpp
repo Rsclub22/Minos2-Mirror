@@ -765,12 +765,14 @@ int RigControlMainWindow::openRigCtldRadio()
 
     QString dtrState = serialData::rigctldForceLinesStr[setupRadio->currentRadio.forceDtr];
 
+    QString parity = serialData::rigctldParityStr[setupRadio->currentRadio.parity];
+
 
     // start rigctld
     trace(QString("openRigCtldRadio: starting rigctld"));
     runRigCtlDaemon(setupRadio->currentRadio.radioMfg_Name, QString::number(setupRadio->currentRadio.radioModelNumber), setupRadio->currentRadio.comport,
                                                QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.rigCtldNetworkAdd, setupRadio->currentRadio.rigCtldNetworkPort,
-                                               QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, handshake, rtsState, dtrState, traceCode);
+                                               QString::number(setupRadio->currentRadio.stopbits), parity, handshake, rtsState, dtrState, traceCode);
 
 
     // wait for rigctld to start
@@ -1635,7 +1637,7 @@ void RigControlMainWindow::clrRigctldNames()
 
 void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport,
                                            const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum,
-                                           const QString stopBits, const int& parity, const QString handshake, const QString rtsState, const QString dtrState,
+                                           const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState,
                                            rigCtldTrace::rigCtldTraceCodes diagnostics)
 {
 
@@ -1667,7 +1669,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
     if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
     {
         parityNames = radio->getParityCodeNames();
-        parityName = parityNames[parity];
+        parityName = parity;
         arguments << "-m" + model.trimmed() << "-r" + serPort  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
                   << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=serial_handshake=" + handshake.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
 
@@ -1723,6 +1725,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
     trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, handshake = %8, rtsState = %9, dtrState = %10, civ = %11, netaddress = %12, netPort = %13")
           .arg(manufacturer).arg(model).arg(serPort).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(handshake).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
 
+//    trace(arguments.join(" ; "));
     rigCtldProcess->start(program, arguments);
 
 
@@ -2611,7 +2614,7 @@ void RigControlMainWindow::hamlibError(int errorCode, QString cmd)
 
     logMessage(QString("Hamlib Error - Code = %1 - %2").arg(QString::number(errorCode)).arg(errorMsg));
 
-    QMessageBox::critical(this, tr("RigControl hamlib Error - ").arg(setupRadio->currentRadio.radioName), tr("%1 - %2\nCommand %3").arg(errorCode).arg(errorMsg).arg(cmd));
+    QMessageBox::critical(this, tr("RigControl hamlib Error - %1").arg(setupRadio->currentRadio.radioName), tr("%1 - %2\nCommand %3").arg(errorCode).arg(errorMsg).arg(cmd));
 
     closeRadio();
     rigErrorFlag = false;
