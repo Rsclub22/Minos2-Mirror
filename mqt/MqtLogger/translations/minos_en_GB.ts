@@ -4208,22 +4208,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="731"/>
+        <location filename="../tsinglelogframe.cpp" line="735"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1288"/>
+        <location filename="../tsinglelogframe.cpp" line="1292"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1307"/>
+        <location filename="../tsinglelogframe.cpp" line="1311"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1329"/>
+        <location filename="../tsinglelogframe.cpp" line="1333"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>

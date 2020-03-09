@@ -1656,49 +1656,49 @@ Please enter another bearing</source>
 <context>
     <name>serialData</name>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
-        <location filename="../serialdata.cpp" line="7"/>
-        <location filename="../serialdata.cpp" line="9"/>
+        <location filename="../serialdata.cpp" line="12"/>
+        <location filename="../serialdata.cpp" line="13"/>
+        <location filename="../serialdata.cpp" line="14"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Odd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Even</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Mark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="7"/>
+        <location filename="../serialdata.cpp" line="13"/>
         <source>XON/XOFF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="7"/>
+        <location filename="../serialdata.cpp" line="13"/>
         <source>CTS/RTS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="9"/>
+        <location filename="../serialdata.cpp" line="14"/>
         <source>High</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="9"/>
+        <location filename="../serialdata.cpp" line="14"/>
         <source>Low</source>
         <translation type="unfinished"></translation>
     </message>
