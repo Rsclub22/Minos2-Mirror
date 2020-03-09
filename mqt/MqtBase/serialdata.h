@@ -2,6 +2,8 @@
 #define SERIALDATA_H
 
 #include <QObject>
+#include <QStringList>
+
 #include "hamlib/rig.h"
 class serialData: public QObject
 {
@@ -18,14 +20,16 @@ public:
     static const serial_parity_e parityCodes[];
     static const serial_handshake_e handshakeCodes[];
     static const serial_force_Lines_e forceLinesCodes[];
-    static const QStringList parityStr;
-    static const QStringList handshakeStr;
-    static const QStringList rigctldHandshakeStr;
-    static const QStringList forceLinesStr;
-    static const QStringList rigctldForceLinesStr;
-    static const QStringList baudrateStr;
-    static const QStringList databitsStr;
-    static const QStringList stopbitsStr;
+    static QStringList parityStr;
+    static QStringList handshakeStr;
+    static QStringList rigctldHandshakeStr;
+    static QStringList forceLinesStr;
+    static QStringList rigctldForceLinesStr;
+    static QStringList baudrateStr;
+    static QStringList databitsStr;
+    static QStringList stopbitsStr;
+
+    static void translateSerialData();
 };
 
 #endif // SERIALDATA_H

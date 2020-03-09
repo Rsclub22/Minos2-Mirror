@@ -855,7 +855,8 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <byte value="xd"/>
 Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
 <byte value="xd"/>
-Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/></translation>
+Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
+</translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="16"/>
@@ -864,11 +865,12 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/></translation>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
         <translatorcomment>Whitespace problems</translatorcomment>
-        <translation>La radiofréquence a des caractères invalides ou des périodes manquantes.
-
-Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123
-
-Attention: &quot;.&quot; pas &quot;,&quot;</translation>
+        <translation>La radiofréquence a des caractères invalides ou des périodes manquantes.<byte value="xd"/>
+<byte value="xd"/>
+Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
+<byte value="xd"/>
+Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
+</translation>
     </message>
     <message>
         <location filename="../rigutils.cpp" line="17"/>
@@ -881,7 +883,8 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <byte value="xd"/>
 Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
 <byte value="xd"/>
-Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/></translation>
+Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
+</translation>
     </message>
 </context>
 <context>
@@ -1683,51 +1686,51 @@ Entrer un autre direction SVP</translation>
 <context>
     <name>serialData</name>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
-        <location filename="../serialdata.cpp" line="7"/>
-        <location filename="../serialdata.cpp" line="9"/>
+        <location filename="../serialdata.cpp" line="12"/>
+        <location filename="../serialdata.cpp" line="13"/>
+        <location filename="../serialdata.cpp" line="14"/>
         <source>None</source>
-        <translation type="unfinished">Aucun</translation>
+        <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Odd</source>
-        <translation type="unfinished"></translation>
+        <translation>Impaire</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Even</source>
-        <translation type="unfinished"></translation>
+        <translation>Paire</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Marque</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="6"/>
+        <location filename="../serialdata.cpp" line="12"/>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Espace</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="7"/>
+        <location filename="../serialdata.cpp" line="13"/>
         <source>XON/XOFF</source>
-        <translation type="unfinished"></translation>
+        <translation>XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="7"/>
+        <location filename="../serialdata.cpp" line="13"/>
         <source>CTS/RTS</source>
-        <translation type="unfinished"></translation>
+        <translation>CTS/RTS</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="9"/>
+        <location filename="../serialdata.cpp" line="14"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Haut</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="9"/>
+        <location filename="../serialdata.cpp" line="14"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Bas</translation>
     </message>
 </context>
 </TS>

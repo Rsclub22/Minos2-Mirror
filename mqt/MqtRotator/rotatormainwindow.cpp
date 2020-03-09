@@ -41,6 +41,9 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     ui(new Ui::RotatorMainWindow)
 {
     ui->setupUi(this);
+
+    serialData::translateSerialData();
+
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     for (int i = 0; i < presetShortCutKeys.count(); i++)
