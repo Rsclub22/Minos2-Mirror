@@ -59,6 +59,18 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXAutoEnabled, "WSJTXAutoEnabled", false, QT_TR_NOOP("WSJTX Auto Enabled"), QT_TR_NOOP("WSJTX Auto Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXTestEnabled, "WSJTXtestEnabled", false, QT_TR_NOOP("WSJTX Test Enabled"), QT_TR_NOOP("WSJTX Test Enabled"), false ) ) );
 
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpcontactsSelect, "UDPContactsEnabled", false, QT_TR_NOOP("UDP Contacts Enabled"), QT_TR_NOOP("UDP Contacts Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSSelect, "UDPextCSEnabled", false, QT_TR_NOOP("UDP External Callsign Lookup Enabled"), QT_TR_NOOP("UDP External Callsign Lookup Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpwsjtxRbSelect, "WSJTXRbEnabled", false, QT_TR_NOOP("WSJTX re-broadcast Enabled"), QT_TR_NOOP("WSJTX re-broadcast  Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpcontactsAddr, "UDPContactsAddr", "", QT_TR_NOOP("UDP Contacts Address"), QT_TR_NOOP("UDP Contacts Address"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpcontactsPort, "UDPContactsPort", 12060, QT_TR_NOOP("UDP Contacts Port"), QT_TR_NOOP("UDP Contacts Port"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSAddr, "UDPExtCSAddress", "", QT_TR_NOOP("UDP External Callsign Lookup Address"), QT_TR_NOOP("UDP External Callsign Lookup  Address"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSPort, "UDPExtCSPort", 12060, QT_TR_NOOP("UDP External Callsign Lookup  Port"), QT_TR_NOOP("UDP External Callsign Lookup  Port"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpwsjtxRbAddr,"WSJTXRbAddress", "", QT_TR_NOOP("WSJTX re-broadcast Address"), QT_TR_NOOP("WSJTX re-broadcast Address"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpwsjtxRbPort, "WSJTXRbPort", 12060, QT_TR_NOOP("WSJTX re-broadcast Port"), QT_TR_NOOP("WSJTX re-broadcast Port"), false ) ) );
+
+
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpFile, "HelpFile", "./helpfiles/MinosHelp.qch", QT_TR_NOOP("Help file"), QT_TR_NOOP("Help file"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpHelpEntryURL, "HelpEntryPoint", "qthelp://Minos/Minos.html", QT_TR_NOOP("Help entry point"), QT_TR_NOOP("Help entry point"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPDFFile, "PDFFile", "./Docs/Minos.pdf", QT_TR_NOOP("PDF documentation file"), QT_TR_NOOP("PDF documentation file"), false ) ) );

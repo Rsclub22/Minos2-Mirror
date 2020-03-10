@@ -8,6 +8,8 @@
 #include <QTimer>
 #include <QHash>
 
+#include "MinosLoggerEvents.h"
+
 #include "WsjtxRadio.hpp"
 #include "WsjtxNetworkMessage.hpp"
 #include "Wsjtx_qt_helpers.hpp"
@@ -160,6 +162,8 @@ void MessageServer::impl::pending_datagrams ()
       if (0 <= readDatagram (datagram.data (), datagram.size (), &sender_address, &sender_port))
         {
           parse_message (sender_address, sender_port, datagram);
+
+          MinosLoggerEvents::sendWsjtxDatagram(&datagram);
         }
     }
 }

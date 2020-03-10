@@ -63,6 +63,8 @@ SOURCES += \
     locframe.cpp \
     main.cpp \
     minoscontestloaddialog.cpp \
+    n1mmbroadcast.cpp \
+    n1mmbroadcastconfig.cpp \
     qsologframe.cpp \
     reg1test.cpp \
     rigcontrolframe.cpp \
@@ -139,6 +141,8 @@ HEADERS  += \
     locTreeFrame.h \
     locframe.h \
     minoscontestloaddialog.h \
+    n1mmbroadcast.h \
+    n1mmbroadcastconfig.h \
     printfile.h \
     qsologframe.h \
     reg1test.h \
@@ -193,6 +197,7 @@ FORMS    += \
     locframe.ui \
     locTreeFrame.ui \
     minoscontestloaddialog.ui \
+    n1mmbroadcastconfig.ui \
     presetbuttondialog.ui \
     qsologframe.ui \
     rigcontrolframe.ui \
