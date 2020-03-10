@@ -203,6 +203,8 @@ private slots:
 
     void on_callSplitter_splitterMoved(int pos, int index);
 
+    void on_maxDistanceButton_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
     void clearConnection();
