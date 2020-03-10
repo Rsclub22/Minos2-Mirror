@@ -1,3 +1,4 @@
+#include <QHostInfo>
 #include "MinosLoggerEvents.h"
 #include "ContestApp.h"
 #include "cutils.h"
@@ -18,6 +19,23 @@ N1MMBroadcast::N1MMBroadcast()
             this, SLOT(callsignLookup(BaseContestLog *, QString)));
 
 }
+bool N1MMBroadcast::setAddress(QString addr, QHostAddress &host)
+{
+    QHostInfo haddr = QHostInfo::fromName( addr );
+    for (int i = 0; i < haddr.addresses().count(); i++)
+    {
+        bool ok;
+        quint32 iaddr;
+        iaddr = haddr.addresses()[i].toIPv4Address(&ok);
+        if (ok)
+        {
+            host.setAddress(iaddr);
+            return true;
+        }
+    }
+    return false;
+}
+
 void N1MMBroadcast::configure()
 {
     int temp;
@@ -33,9 +51,9 @@ void N1MMBroadcast::configure()
     {
         contactsPort = 12060;
     }
-    if (!contactsHost.setAddress(contactsAddr))
+    if (contactsSelect)
     {
-        contactsSelect = false;
+        setAddress(contactsAddr, contactsHost);
     }
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpextCSSelect, extCSSelect );
@@ -50,9 +68,9 @@ void N1MMBroadcast::configure()
     {
         extCSPort = 12060;
     }
-    if (!extCSHost.setAddress(extCSAddr))
+    if (extCSSelect)
     {
-        extCSSelect = false;
+        setAddress(extCSAddr, extCSHost);
     }
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpwsjtxRbSelect, wsjtxRbSelect );
@@ -67,9 +85,10 @@ void N1MMBroadcast::configure()
     {
         wsjtxRbPort = 12060;
     }
-    if (!wsjtxRbHost.setAddress(wsjtxRbAddr))
+
+    if (wsjtxRbSelect)
     {
-        wsjtxRbSelect = false;
+        setAddress(wsjtxRbAddr, wsjtxRbHost);
     }
 
 
@@ -77,10 +96,10 @@ void N1MMBroadcast::configure()
 void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct)
 {
     // This can generate modified, deleted/recreated, or straight contact
-    if (contactsSelect)
+    if (contactsSelect && !contactsHost.isNull())
     {
         QString stanza = genContactStanza("contactinfo", c, tct);
-        bc.writeDatagram(stanza.toUtf8(), extCSHost, extCSPort);
+        bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
         trace("afterQSOSaved Datagram written " + stanza);
     }
 }
@@ -88,7 +107,7 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
 void N1MMBroadcast::wsjtxDatagram(QByteArray *datagram)
 {
     // rebroadcast wsjt-x datagram
-    if (wsjtxRbSelect)
+    if (wsjtxRbSelect && !wsjtxRbHost.isNull())
     {
         bc.writeDatagram(*datagram, wsjtxRbHost, wsjtxRbPort);
     }
@@ -97,7 +116,7 @@ void N1MMBroadcast::wsjtxDatagram(QByteArray *datagram)
 void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
 {
     // contact stanza but with callsign only
-    if (extCSSelect)
+    if (extCSSelect && !extCSHost.isNull())
     {
         QSharedPointer<BaseContact> tct(new BaseContact(c, true));
 
@@ -108,11 +127,7 @@ void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
 
 
         QString stanza = genContactStanza("lookupinfo", c, tct);
-        qint64 res = bc.writeDatagram(stanza.toUtf8(), extCSHost, extCSPort);
-        if (res <= 0)
-        {
-            trace("broadcast failed");
-        }
+        bc.writeDatagram(stanza.toUtf8(), extCSHost, extCSPort);
         trace("callsignLookup Datagram written " + stanza);
     }
 }

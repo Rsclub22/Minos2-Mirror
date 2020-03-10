@@ -31,6 +31,8 @@ public:
     N1MMBroadcast();
 
     void configure();
+    bool setAddress(QString addr, QHostAddress &host);
+    
 private slots:
     void afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
     void wsjtxDatagram(QByteArray *);
