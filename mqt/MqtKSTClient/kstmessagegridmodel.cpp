@@ -292,3 +292,14 @@ void KstMeepGridSortFilterModel::setFilterString(QString f)
     filterString = f;
     invalidateFilter();
 }
+
+QVariant KstMeepGridSortFilterModel::data(const QModelIndex &index, int role) const
+{
+    if (role != Qt::BackgroundColorRole)
+    {
+        KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
+        return cgm->data(index, role);
+
+    }
+    return QColor(Qt::green).lighter(135);
+}
