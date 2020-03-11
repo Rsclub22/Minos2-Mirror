@@ -112,6 +112,8 @@ BundleFile::BundleFile( PROFILES p )
             entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.constData(), temp, "hint", false ) ) );
         }
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpQSOFieldFont, "QSO Field Expansion Factor", 100, "", "hint", false ) ) );
+
         break;
     case epENTRYPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepCall, "Call", "", QT_TR_NOOP("Call Used"), QT_TR_NOOP("Call sign used"), false ) ) );

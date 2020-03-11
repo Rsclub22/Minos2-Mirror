@@ -466,6 +466,8 @@ void TSingleLogFrame::clearScreenLayout()
 void TSingleLogFrame::applyScreenLayout()
 {
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
+    if (!ct)
+        return;
     trace("TSingleLogFrame::applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
     hide();
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);

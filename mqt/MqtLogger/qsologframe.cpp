@@ -132,13 +132,27 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     widgetStyles[ui->qsoFrame] = ssQsoFrameBlue;
 
     connect(ui->tuningAddMapChkBox, SIGNAL(stateChanged(int)), this, SLOT(tuningAddMapChkBoxStateChange(int)));
-
-
-
 }
 
 void QSOLogFrame::on_FontChanged()
 {
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpQSOFieldFont, lcf);
+
+    QFont cf = QApplication::font();
+    qreal fs = cf.pointSizeF();
+    int fsi = static_cast<int>(fs * lcf/100.0);
+    cf.setPointSize(fsi);
+    ui->CallsignEdit->setFont(cf);
+
+    ui->RSTTXEdit->setFont(cf);
+    ui->SerTXEdit->setFont(cf);
+    ui->RSTRXEdit->setFont(cf);
+    ui->SerRXEdit->setFont(cf);
+    ui->LocEdit->setFont(cf);
+    ui->QTHEdit->setFont(cf);
+
+
     for (QMap<QWidget *, QString>::iterator i = widgetStyles.begin(); i != widgetStyles.end(); i++)
     {
         QWidget *w = i.key();

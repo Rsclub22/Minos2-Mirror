@@ -163,22 +163,22 @@ Through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="269"/>
+        <location filename="../KeyerMain.cpp" line="271"/>
         <source>Push PTT to Commence Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="401"/>
+        <location filename="../KeyerMain.cpp" line="403"/>
         <source>Alsa Control Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="402"/>
+        <location filename="../KeyerMain.cpp" line="404"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="405"/>
+        <location filename="../KeyerMain.cpp" line="407"/>
         <source>File for mixer setup</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1297,6 +1297,20 @@ void TLogContainer::listCompressionActionExecute()
     }
 }
 
+void TLogContainer::QSOFieldFontActionExecute()
+{
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpQSOFieldFont, lcf);
+    if (enquireDialog(this, tr("QSO Field expansion as percentage"), lcf, 100, 200))
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpQSOFieldFont, lcf);
+        MinosLoggerEvents::SendFontChanged();
+
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+    }
+}
+
 void TLogContainer::on_ContestPageControl_currentChanged(int index)
 {
     trace(QString("TLogContainer::on_ContestPageControl_currentChanged index %1").arg(index));
@@ -1547,6 +1561,7 @@ void TLogContainer::updateLayoutsMenu()
 {
     screenLayoutMenu->clear();
     ScreenConfigAction = newAction(QT_TR_NOOP("Configure Screen Layouts..."), screenLayoutMenu, SLOT(doScreenConfigAction()));
+    QSOFieldFontAction = newAction(QT_TR_NOOP("Set extra QSO field size..."), screenLayoutMenu, SLOT(QSOFieldFontActionExecute()));
     listCompressionAction = newAction(QT_TR_NOOP("Set List Spacing Compression..."), screenLayoutMenu, SLOT(listCompressionActionExecute()));
 
     screenLayoutMenu->addSeparator();

@@ -1755,7 +1755,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="165"/>
-        <location filename="../qsologframe.cpp" line="489"/>
+        <location filename="../qsologframe.cpp" line="503"/>
         <source>Catch-up (Post Entry)</source>
         <translation>Rattrapage (post-entrée)</translation>
     </message>
@@ -1952,17 +1952,17 @@ to</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="337"/>
+        <location filename="../qsologframe.cpp" line="351"/>
         <source>Return to Log</source>
         <translation>Retourner au journal</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="498"/>
+        <location filename="../qsologframe.cpp" line="512"/>
         <source>End Catch-up</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1681"/>
+        <location filename="../qsologframe.cpp" line="1695"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -1973,32 +1973,32 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2071"/>
+        <location filename="../qsologframe.cpp" line="2085"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2078"/>
+        <location filename="../qsologframe.cpp" line="2092"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2173"/>
+        <location filename="../qsologframe.cpp" line="2187"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2175"/>
+        <location filename="../qsologframe.cpp" line="2189"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2502"/>
+        <location filename="../qsologframe.cpp" line="2516"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2537"/>
+        <location filename="../qsologframe.cpp" line="2551"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -4053,44 +4053,54 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <translation>Définir la valeur de compression d&apos;espacement de liste en pourcentage</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1326"/>
-        <location filename="../tlogcontainer.cpp" line="1810"/>
+        <location filename="../tlogcontainer.cpp" line="1304"/>
+        <source>QSO Field expansion as percentage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tlogcontainer.cpp" line="1340"/>
+        <location filename="../tlogcontainer.cpp" line="1825"/>
         <source>Contest Sets</source>
         <translation>Ensembles de concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1549"/>
+        <location filename="../tlogcontainer.cpp" line="1563"/>
         <source>Configure Screen Layouts...</source>
         <translation>Configurer la disposition de l&apos;écran</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1550"/>
+        <location filename="../tlogcontainer.cpp" line="1564"/>
+        <source>Set extra QSO field size...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tlogcontainer.cpp" line="1565"/>
         <source>Set List Spacing Compression...</source>
         <translation>Définir la valeur de compression d&apos;espacement de liste</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1645"/>
+        <location filename="../tlogcontainer.cpp" line="1660"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation>&amp;Gérer les ensembles de concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1913"/>
+        <location filename="../tlogcontainer.cpp" line="1928"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1938"/>
+        <location filename="../tlogcontainer.cpp" line="1953"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1942"/>
+        <location filename="../tlogcontainer.cpp" line="1957"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des?? archives</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2098"/>
-        <location filename="../tlogcontainer.cpp" line="2099"/>
+        <location filename="../tlogcontainer.cpp" line="2113"/>
+        <location filename="../tlogcontainer.cpp" line="2114"/>
         <source>Minos contest Logger Application</source>
         <translation>Minos Enregistreur de Concours</translation>
     </message>
@@ -4372,22 +4382,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <translation>Frame</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="735"/>
+        <location filename="../tsinglelogframe.cpp" line="737"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le journal importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1292"/>
+        <location filename="../tsinglelogframe.cpp" line="1294"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non rempli</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1311"/>
+        <location filename="../tsinglelogframe.cpp" line="1313"/>
         <source>Please give serial wanted</source>
         <translation>Donner série recherchée</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1333"/>
+        <location filename="../tsinglelogframe.cpp" line="1335"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1introuvable</translation>
     </message>
