@@ -288,11 +288,6 @@ void RigControlMainWindow::closeEvent(QCloseEvent *event)
     QWidget::closeEvent(event);
 }
 
-
-
-
-
-
 void RigControlMainWindow::onStdInRead(QString cmd)
 {
     trace("Command read from stdin: " + cmd);
@@ -300,6 +295,8 @@ void RigControlMainWindow::onStdInRead(QString cmd)
         setShowServers(true);
     if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
+    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
+        setAppFont(cmd);
 }
 
 void RigControlMainWindow::initActionsConnections()

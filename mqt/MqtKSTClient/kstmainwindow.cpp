@@ -26,6 +26,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->setupUi(this);
 
     mainWindow = this;
+    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    stdinReader.start();
 
     QSettings settings;
 
@@ -284,6 +286,16 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 KSTMainWindow::~KSTMainWindow()
 {
     delete ui;
+}
+void KSTMainWindow::onStdInRead(QString cmd)
+{
+    trace("Command read from stdin: " + cmd);
+    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
+        setShowServers(true);
+    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
+        setShowServers(false);
+    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
+        setAppFont(cmd);
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
 {

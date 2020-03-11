@@ -228,6 +228,8 @@ void RotatorMainWindow::onStdInRead(QString cmd)
         setShowServers(true);
     if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
+    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
+        setAppFont(cmd);
 }
 
 void RotatorMainWindow::closeEvent(QCloseEvent *event)

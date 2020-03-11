@@ -16,6 +16,7 @@ extern QVector<Translation> getLanguages();
 extern void switchTranslation(QString loc);
 extern QString getCurrentLanguage();
 extern void setAppFont();
+void setAppFont(QString fs);
 extern void setAppClosing();
 
 #endif // APPSTARTUP_H

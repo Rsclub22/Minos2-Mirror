@@ -228,6 +228,23 @@ void setAppFont()
         QApplication::setFont( qfont.value<QFont>() );
     }
 }
+void setAppFont(QString fs)
+{
+    if (fs.startsWith("Font "))
+    {
+        fs = fs.remove(0, 5);
+    }
+    QFont f;
+    if (f.fromString(fs))
+    {
+        trace(QString("Setting font to %1").arg(fs));
+        QApplication::setFont( f );
+    }
+    else
+    {
+        trace(QString("Failed Setting font to %1").arg(fs));
+    }
+}
 
 void setAppClosing()
 {

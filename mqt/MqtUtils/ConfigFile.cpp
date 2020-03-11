@@ -169,6 +169,9 @@ void RunConfigElement::createProcess()
         else
             sendCommand("ShowServers");
 
+        QString fontCommand = "Font " + QApplication::font().toString();
+        sendCommand(fontCommand);
+
     }
 }
 void RunConfigElement::stopProcess()

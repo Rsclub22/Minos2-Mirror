@@ -44,6 +44,8 @@ void TMinosChatForm::onStdInRead(QString cmd)
         setShowServers(true);
     if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
+    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
+        setAppFont(cmd);
 }
 void TMinosChatForm::CloseTimerTimer(  )
 {
