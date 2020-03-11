@@ -1,4 +1,6 @@
 #include "base_pch.h"
+#include <QFontDialog>
+#include <QFont>
 #include "ConfigFile.h"
 #include "StartConfig.h"
 #include "MainWindow.h"
@@ -23,6 +25,34 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     connect(MinosConfig::getMinosConfig(), SIGNAL(stdOutLine(QString)), this, SLOT(on_stdOutLine(QString)));
+
+    ExitAction = newAction(QT_TR_NOOP("E&xit Minos Application Starter"), ui->menuFile, SLOT(ExitActionExecute()));
+    FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
+    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language..."));
+
+    QString currentLang = getCurrentLanguage();
+
+    QVector<Translation> languages = getLanguages();
+    foreach(const Translation &l, languages)
+    {
+        QAction *act =  new QAction(this);
+        act->setText(l.dispName);
+
+        connect(act, SIGNAL(triggered()),
+                this, SLOT(LanguageAcceptActionExecute()));
+        act->setCheckable(true);
+
+        languagesMenu->addAction(act);
+
+        if (l.code == currentLang)
+        {
+            act->setChecked(true);
+            lastLanguageSelected = act;
+        }
+
+    }
+
+
 }
 
 MainWindow::~MainWindow()
@@ -51,6 +81,113 @@ void MainWindow::changeEvent( QEvent* e )
     {
         QSettings settings;
         settings.setValue("geometry", saveGeometry());
+    }
+    if (e->type() == QEvent::LanguageChange)
+    {
+        // when language changes force a complete rebuild
+        TWaitCursor wc(this);
+
+        for(QMap<QMenu *, const char *>::iterator i = menuList.begin(); i != menuList.end(); i++)
+        {
+            i.key()->setTitle(tr(i.value()));
+        }
+        for(QMap<QAction *, const char *>::iterator i = actionList.begin(); i != actionList.end(); i++)
+        {
+            i.key()->setText(tr(i.value()));
+        }
+        ui->retranslateUi(this);
+        setWindowTitle(tr("Start Minos Apps"));
+
+    }
+}
+QMenu *MainWindow::newMenu(QMenu *m, const char *text)
+{
+    QMenu *menu = m->addMenu(tr(text));
+    menuList[menu] = text;
+    return menu;
+}
+QAction *MainWindow::newAction( const char *text, QMenu *m, const char *atype )
+{
+    QAction * newAct = new QAction( tr(text), this );
+    m->addAction( newAct );
+    actionList[newAct] = text;
+    connect( newAct, SIGNAL( triggered() ), this, atype );
+    return newAct;
+}
+void MainWindow::ExitActionExecute()
+{
+    trace("ExitActionExecute");
+    close();
+}
+void MainWindow::FontEditAcceptActionExecute()
+{
+    QString qpa = qgetenv("QT_QPA_PLATFORMTHEME");
+    if (qpa.compare("qt5ct", Qt::CaseInsensitive) == 0)
+    {
+        mShowMessage(tr("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct"), this);
+        QSettings settings;
+        settings.remove( "font");
+    }
+    else
+    {
+        QFont f = font();
+        bool ok;
+        f = QFontDialog::getFont( &ok, f );
+        if (ok)
+        {
+            QApplication::setFont( f );
+
+            foreach ( QWidget * widget, QApplication::allWidgets() )
+            {
+                widget->setFont(f);
+                widget->update();
+            }
+
+            QSettings settings;
+            settings.setValue( "font", font() );
+
+            QString fs = f.toString();
+
+            bool serverRunning = checkServerReady();
+            if (serverRunning)
+            {
+                MinosConfig::getMinosConfig() ->bounce();
+            }
+        }
+    }
+}
+void MainWindow::LanguageAcceptActionExecute()
+{
+    TWaitCursor wc(this);
+    QAction *action = qobject_cast<QAction *>(sender());
+
+    if (action)
+    {
+        bool serverRunning = checkServerReady();
+        if (serverRunning)
+        {
+            MinosConfig::getMinosConfig() ->stop();
+        }
+
+        if (lastLanguageSelected)
+            lastLanguageSelected->setChecked(false);
+        action->setChecked(true);
+        lastLanguageSelected = action;
+        QString selText = action->text();
+
+        QVector<Translation> languages = getLanguages();
+        foreach(const Translation &l, languages)
+        {
+            if (l.dispName == selText)
+            {
+                switchTranslation(l.code);
+                break;
+            }
+        }
+        if (serverRunning)
+        {
+            MinosConfig::getMinosConfig() ->bounce();
+        }
     }
 }
 
