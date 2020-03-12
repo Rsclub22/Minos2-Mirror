@@ -447,6 +447,8 @@ void TSingleLogFrame::clearScreenLayout()
     bandmapControlFrame->setContest(nullptr);
     setBandmapLoaded(false);
     wsjtxFrame->setContest(nullptr);
+    runButtonsFrame->setContest(nullptr);
+    rotPresets->setContest(nullptr);
 
     trace("TSingleLogFrame::clearScreenLayout start clearance for " + msg);
 
@@ -551,7 +553,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctRigControl:
                 {
                     elementScrollArea->setWidget(FKHRigControlFrame);
-                    FKHRigControlFrame->setContest(ct);
+                    // don't set contest here
                     break;
                 }
                 case sctRunButtons:
@@ -563,7 +565,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctRotControl:
                 {
                     elementScrollArea->setWidget(FKHRotControlFrame);
-                    FKHRotControlFrame->setContest(ct);
+                    // don't set contest here
                     break;
                 }
                 case sctRotPresets:
@@ -689,6 +691,8 @@ void TSingleLogFrame::buildScreenLayout()
     // ALWAYS link the wsjt frame to the contest; then we can log
     // even without showing it
     wsjtxFrame->setContest(ct);
+    FKHRigControlFrame->setContest(ct);
+    FKHRotControlFrame->setContest(ct);
     verticalLayout->addWidget(singleLogFrameSplitter);
 
     getSplitters();

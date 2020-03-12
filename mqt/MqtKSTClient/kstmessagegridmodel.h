@@ -90,6 +90,7 @@ class KstMeepGridSortFilterModel: public QSortFilterProxyModel
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
+    QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
 };
 
 

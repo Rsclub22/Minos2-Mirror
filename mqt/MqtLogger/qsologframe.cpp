@@ -1186,6 +1186,11 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
       getScreenEntry(); // make sure it is saved
       valid( cmCheckValid ); // make sure all single and cross field
       doAutofill();           // should only be time to be filled
+
+      if (current == ui->CallsignEdit)
+      {
+          MinosLoggerEvents::sendCallsignLookup(contest, ui->CallsignEdit->text());
+      }
    }
 }
     //---------------------------------------------------------------------------

@@ -12,6 +12,7 @@
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
 #include "ContestApp.h"
+#include "MinosLoggerEvents.h"
 
 ContestContact::ContestContact( LoggerContestLog * ct, bool time_now ) : DisplayContestContact( ct, time_now )
 {}
@@ -582,6 +583,7 @@ bool ContestContact::minosSave(QSharedPointer<BaseContact> tct )
 {
    LoggerContestLog * clp = dynamic_cast<LoggerContestLog *>( contest );
    clp->minosSaveContestContact( tct );
+   MinosLoggerEvents::sendAfterQSOSaved(clp, tct);
    QSharedPointer<BaseContact> bc( new BaseContact(*this ));
    bc->updtime = dtg( true ); // update time is now
    getHistory().push_back( bc );

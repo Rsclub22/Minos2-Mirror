@@ -86,6 +86,10 @@ signals:
 
    void FontChanged();
    void listCompressionChanged(qreal hmult);
+
+   void afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
+   void wsjtxDatagram(QByteArray *);
+   void callsignLookup(BaseContestLog *l, QString c);
 public:
    static MinosLoggerEvents mle;
 
@@ -145,6 +149,11 @@ public:
     static void sendXferPressed(BaseContestLog *c, QString basename);
     static void sendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
     static void sendListCompressionChanged(qreal hmult);
+
+    static void sendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
+    static void sendWsjtxDatagram(QByteArray *);
+    static void sendCallsignLookup(BaseContestLog *, QString);
+
 };
 //---------------------------------------------------------------------------
 #endif

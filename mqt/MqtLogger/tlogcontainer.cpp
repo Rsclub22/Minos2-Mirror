@@ -33,6 +33,7 @@
 #include "ChatServer.h"
 #include "clusterClientServer.h"
 #include "MatchThread.h"
+#include "n1mmbroadcastconfig.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -147,6 +148,7 @@ bool TLogContainer::show(int argc, char *argv[])
     }
     TContestApp::getContestApp()->setPreloadComplete();
 
+    n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();
 
     return true;
@@ -376,7 +378,7 @@ void TLogContainer::setupMenus()
     ui->menuFile->addSeparator();
     OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuFile, SLOT(OptionsActionExecute()));
 #ifdef Q_OS_WIN
-    ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry"), ui->menuFile, SLOT(ExitClearActionExecute()));
+    ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, SLOT(ExitClearActionExecute()));
 #endif
     ui->menuFile->addSeparator();
     ExitAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger"), ui->menuFile, SLOT(ExitActionExecute()));
@@ -386,7 +388,7 @@ void TLogContainer::setupMenus()
     NextUnfilledAction = newAction(QT_TR_NOOP("Goto First Unfilled Contact"), ui->menuSearch, SLOT(NextUnfilledActionExecute()));
 // end of search menu
 
-    startConfigAction = newAction(QT_TR_NOOP("Startup Apps Configuration"), ui->menuTools, SLOT(StartConfigActionExecute()));
+    startConfigAction = newAction(QT_TR_NOOP("Startup Apps Configuration..."), ui->menuTools, SLOT(StartConfigActionExecute()));
 
     screenLayoutMenu = newMenu(ui->menuTools, QT_TR_NOOP("Screen Layouts"));
     updateLayoutsMenu();
@@ -417,11 +419,12 @@ void TLogContainer::setupMenus()
     }
 
     ui->menuTools->addSeparator();
-    LocCalcAction = newAction(QT_TR_NOOP("Locator Calculator"), ui->menuTools, SLOT(LocCalcActionExecute()));
+    LocCalcAction = newAction(QT_TR_NOOP("Locator Calculator..."), ui->menuTools, SLOT(LocCalcActionExecute()));
 
-    WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration"), ui->menuTools, SLOT(WsjtConfigActionExecute()));
+    UDPConfigAction = newAction(QT_TR_NOOP("UDP broadcast configuration..."), ui->menuTools, SLOT(UDPConfigActionExecute()));
+    WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration..."), ui->menuTools, SLOT(WsjtConfigActionExecute()));
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
-    CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time"), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
+    CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
 
     // end of tools manu
 
@@ -1188,6 +1191,15 @@ void TLogContainer::LanguageAcceptActionExecute()
         {
             MinosConfig::getMinosConfig() ->bounce();
         }
+    }
+}
+void TLogContainer::UDPConfigActionExecute()
+{
+    N1MMBroadcastConfig udpConfig;
+
+    if (udpConfig.exec() == QDialog::Accepted)
+    {
+        n1mmBroadcast.configure();
     }
 }
 void TLogContainer::WsjtConfigActionExecute()

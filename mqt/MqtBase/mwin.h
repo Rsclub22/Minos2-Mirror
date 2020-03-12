@@ -196,6 +196,8 @@ class dtg
       QString getIsoDTG( ) const;
       void setIsoDTG( const QString & );
 
+      QString getN1mmDTG();
+
       QDate getDate();
       QTime getTime();
 
@@ -259,6 +261,7 @@ class Callsign
       QString suffix; // <mm> (p) [P]trailer
 
       QString realCall; // the actual calsign, stripped of decorations
+      QString wpxPrefix;
       int valRes;   // current validation result
 
       Callsign( );

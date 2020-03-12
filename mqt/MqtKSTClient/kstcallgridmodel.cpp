@@ -287,7 +287,27 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             return crec->country;
 
         case ecscAirscout:
-            break;
+            if (crec->distance > mainWindow->getASMaxDistance())
+                return "000001";
+            if (crec->distance < mainWindow->getASMinDistance())
+                return "000000";
+
+            int zcount = 0;
+            QString col;
+            if (crec->planes.count())
+            {
+                for (int i = 0; i < crec->planes.count(); i++)
+                {
+                    if (crec->planes[i].minutes != 0)
+                        break;
+                    zcount++;
+                }
+                QString z = QString::number(zcount);
+                QString a = QString::number(crec->planes.count());
+                QString cell = QString("%1%2").arg(z, 2, '0').arg(a, 4, '0');
+                return cell;
+            }
+            return "000002";
         }
     }
     if (role == Qt::BackgroundColorRole)
