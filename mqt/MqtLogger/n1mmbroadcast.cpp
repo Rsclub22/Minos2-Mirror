@@ -24,9 +24,15 @@ bool N1MMBroadcast::setAddress(QString addr, QHostAddress &host)
     QHostInfo haddr = QHostInfo::fromName( addr );
     for (int i = 0; i < haddr.addresses().count(); i++)
     {
-        bool ok;
+        bool ok = true;
         quint32 iaddr;
-        iaddr = haddr.addresses()[i].toIPv4Address(&ok);
+
+        // This is a guess as to when the change came in
+        iaddr = haddr.addresses()[i].toIPv4Address(
+            #if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
+                    &ok
+            #endif
+                    );
         if (ok)
         {
             host.setAddress(iaddr);
