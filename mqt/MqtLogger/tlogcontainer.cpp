@@ -377,7 +377,6 @@ void TLogContainer::setupMenus()
     ListOpenAction = newAction(QT_TR_NOOP("Open &Archive List..."), ui->menuFile, SLOT(ListOpenActionExecute()));
     ManageListsAction = newAction(QT_TR_NOOP("&Manage Archive Lists..."), ui->menuFile, SLOT(ManageListsActionExecute()));
     ui->menuFile->addSeparator();
-    OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuFile, SLOT(OptionsActionExecute()));
 #ifdef Q_OS_WIN
     ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, SLOT(ExitClearActionExecute()));
 #endif
@@ -426,6 +425,8 @@ void TLogContainer::setupMenus()
     WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration..."), ui->menuTools, SLOT(WsjtConfigActionExecute()));
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
+    ui->menuTools->addSeparator();
+    OptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, SLOT(OptionsActionExecute()));
 
     // end of tools manu
 
