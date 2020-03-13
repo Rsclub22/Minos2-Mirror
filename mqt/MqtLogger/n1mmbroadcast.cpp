@@ -91,7 +91,23 @@ void N1MMBroadcast::configure()
         setAddress(wsjtxRbAddr, wsjtxRbHost);
     }
 
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpADIFSelect, ADIFSelect );
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpADIFAddr, ADIFAddr );
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpADIFPort, temp );
+    ADIFPort = static_cast<quint16>(temp);
+    if (ADIFAddr.isEmpty())
+    {
+        ADIFAddr = "127.0.0.1";
+    }
+    if (ADIFPort == 0)
+    {
+        ADIFPort = 12060;
+    }
 
+    if (ADIFSelect)
+    {
+        setAddress(ADIFAddr, ADIFHost);
+    }
 }
 void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct)
 {
@@ -101,6 +117,16 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
         QString stanza = genContactStanza("contactinfo", c, tct);
         bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
         trace("afterQSOSaved Datagram written " + stanza);
+    }
+    if (ADIFSelect && !ADIFHost.isNull())
+    {
+        QString header = tr("Exported by Minos VHF logging system Version %1 %2").arg(STRINGVERSION).arg(PRERELEASETYPE) + "\r\n";
+
+        header += "<EOH>\r\n";
+
+        QString adif = tct->getADIFLine();
+
+        bc.writeDatagram((header + adif).toUtf8(), ADIFHost, ADIFPort);
     }
 }
 
@@ -115,6 +141,9 @@ void N1MMBroadcast::wsjtxDatagram(QByteArray *datagram)
 
 void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
 {
+    if (call.isEmpty())
+        return;
+
     // contact stanza but with callsign only
     if (extCSSelect && !extCSHost.isNull())
     {

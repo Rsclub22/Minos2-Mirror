@@ -395,20 +395,15 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
       sdest += 'D';
 }
 
-// this is the "archive" copy that forms the real log
-
-// we form our log by having a TSortedCollection derivative (class LoggerContestLog)
-// this has to be sorted on the logSequence field
-
-
 QString ContestContact::getADIFLine()
 {
-    //band
-    //power
     //date
     //time
-    //call
+    //band
+    //freq
     //mode
+    //power
+    //call
     //RST sent
     //SN sent
     //RST Received
