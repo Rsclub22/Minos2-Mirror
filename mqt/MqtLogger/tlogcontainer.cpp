@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include <QStyleFactory>
 #include "MinosLoggerEvents.h"
 
 #include <QFontDialog>
@@ -1283,6 +1284,19 @@ void TLogContainer::StartConfigActionExecute()
     // in case we are now running more apps
     sendDM->subscribeApps();
 }
+void TLogContainer::styleActionExecute()
+{
+    QStringList keys = QStyleFactory::keys();
+    QString styleName = QApplication::style()->objectName();
+    if (enquireDialog(this, tr("Qt style"), styleName, keys, false))
+    {
+        QStyle *s = QStyleFactory::create(styleName);
+        styleName = s->objectName();
+        QApplication::setStyle(s);
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+    }
+}
 void TLogContainer::listCompressionActionExecute()
 {
     int lcf;
@@ -1561,6 +1575,9 @@ void TLogContainer::updateLayoutsMenu()
 {
     screenLayoutMenu->clear();
     ScreenConfigAction = newAction(QT_TR_NOOP("Configure Screen Layouts..."), screenLayoutMenu, SLOT(doScreenConfigAction()));
+#ifndef NDEBUG
+    styleAction = newAction(QT_TR_NOOP("Set style..."), screenLayoutMenu, SLOT(styleActionExecute()));
+#endif
     QSOFieldFontAction = newAction(QT_TR_NOOP("Set extra QSO field size..."), screenLayoutMenu, SLOT(QSOFieldFontActionExecute()));
     listCompressionAction = newAction(QT_TR_NOOP("Set List Spacing Compression..."), screenLayoutMenu, SLOT(listCompressionActionExecute()));
 

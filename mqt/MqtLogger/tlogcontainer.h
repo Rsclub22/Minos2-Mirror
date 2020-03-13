@@ -142,6 +142,7 @@ private:
     QAction *startConfigAction;
     QAction *listCompressionAction;
     QAction *QSOFieldFontAction;
+    QAction *styleAction;
     QAction *LocCalcAction;
     QAction *AnalyseMinosLogAction;
     QAction *CorrectDateTimeAction;
@@ -229,6 +230,7 @@ private slots:
     void StartConfigActionExecute();
     void listCompressionActionExecute();
     void QSOFieldFontActionExecute();
+    void styleActionExecute();
 
     void on_ContestPageControl_currentChanged(int index);
     void on_ContestPageControl_tabBarDoubleClicked(int index);
