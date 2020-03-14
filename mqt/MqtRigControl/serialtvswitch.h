@@ -17,6 +17,7 @@
 #include <QObject>
 #include <QSerialPort>
 #include <QByteArray>
+#include <QStringList>
 
 class SerialTVSwitch: public QObject
 {
