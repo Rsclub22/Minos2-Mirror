@@ -107,6 +107,13 @@ void switchTranslation(QString loc)
     bool qtloadOK = myqtTranslator->load(qtlocfile);
     bool qtinstallOK = qa->installTranslator(myqtTranslator.data());
 
+    if (!qtloadOK || !qtinstallOK)
+    {
+        qtlocfile = QString("Bin/translations/") + "qt_" + loc.left(2);
+        qtloadOK = myqtTranslator->load(qtlocfile);
+        qtinstallOK = qa->installTranslator(myqtTranslator.data());
+    }
+
     QString locfile = "Bin/translations/" + executableName + "_" + loc;
     bool loadOK = myappTranslator->load(locfile);
     bool installOK = qa->installTranslator(myappTranslator.data());
@@ -146,6 +153,15 @@ static void setAppLanguage()
     }
      switchTranslation(qlang.toString());
 }
+void setAppLanguage(QString loc)
+{
+    if (loc.startsWith("LANG "))
+    {
+        loc = loc.remove(0, 5);
+    }
+    switchTranslation(loc);
+}
+
 QString getCurrentLanguage()
 {
     return currentLanguage;
@@ -249,5 +265,18 @@ void setAppFont(QString fs)
 void setAppClosing()
 {
     appClosing = true;
+}
+
+void executeStdIn(QString cmd)
+{
+    trace("Command read from stdin: " + cmd);
+    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
+        setShowServers(true);
+    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
+        setShowServers(false);
+    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
+        setAppFont(cmd);
+    if (cmd.indexOf("LANG ", 0, Qt::CaseInsensitive) >= 0)
+        setAppLanguage(cmd);
 }
 

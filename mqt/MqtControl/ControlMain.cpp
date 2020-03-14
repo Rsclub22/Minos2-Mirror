@@ -51,14 +51,7 @@ ControlMain::ControlMain(QWidget *parent) :
 }
 void ControlMain::onStdInRead(QString cmd)
 {
-    trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(true);
-    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(false);
-    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
-        setAppFont(cmd);
-
+    executeStdIn(cmd);
 }
 void ControlMain::on_formShown( )
 {

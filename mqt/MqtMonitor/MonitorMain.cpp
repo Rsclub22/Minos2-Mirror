@@ -385,13 +385,7 @@ bool MonitorMain::eventFilter(QObject * /*obj*/, QEvent *event)
 }
 void MonitorMain::onStdInRead(QString cmd)
 {
-    trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(true);
-    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(false);
-    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
-        setAppFont(cmd);
+    executeStdIn(cmd);
 }
 
 void MonitorMain::on_monitorSplitter_splitterMoved(int /*pos*/, int /*index*/)
