@@ -67,7 +67,7 @@ do
     $DIR/build/${j}/translations/minos_${i}.qm
   done
 done
-cp /usr/share/qt5/translations/qt_*.qm Bin/translations
+cp /usr/share/qt5/translations/qt*.qm Bin/translations
 
 echo $OSTYPE
 
