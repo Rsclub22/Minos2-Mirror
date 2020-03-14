@@ -108,13 +108,6 @@ void switchTranslation(QString loc)
     bool qtloadOK = myqtTranslator->load(qtlocfile);
     bool qtinstallOK = qa->installTranslator(myqtTranslator.data());
 
-    if (!qtloadOK || !qtinstallOK)
-    {
-        qtlocfile = QString("Bin/translations/") + "qt_" + loc.left(2);
-        qtloadOK = myqtTranslator->load(qtlocfile);
-        qtinstallOK = qa->installTranslator(myqtTranslator.data());
-    }
-
     QString locfile = "Bin/translations/" + executableName + "_" + loc;
     bool loadOK = myappTranslator->load(locfile);
     bool installOK = qa->installTranslator(myappTranslator.data());
