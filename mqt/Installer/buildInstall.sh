@@ -13,7 +13,11 @@ fi
 
 cd build
 
-qmake ../mqt/mqt.pro
+if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
+  qmake ../mqt/mqt.pro  -spec linux-g++          # this may not be correct!
+else
+  qmake ../mqt/mqt.pro  -spec linux-g++
+
 retVal=$?
 if [ $retVal -ne 0 ]; then
     echo "qmake failed; please fix errors and rebuild"
@@ -41,8 +45,22 @@ mkdir Configuration
 mkdir Lists
 mkdir Logs
 mkdir Bin
+mkdir Bin/translations
 mkdir Docs
 mkdir Help
+
+for i in en_GB fr_FR
+do
+  for j in MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtRigControl MqtRotator MqtServer
+  do
+    lconvert -verbose -o Bin/translations/${j}_${i}.qm \
+    $DIR/build/MqtUtils/.qm/minos_${i}.qm \
+    $DIR/build/TinyXML/release/minos_${i}.qm \
+    $DIR/build/XMPPLib/release/minos_${i}.qm \
+    $DIR/build/MqtBase/release/minos_${i}.qm \
+    $DIR/build/${j}/release/minos_${i}.qm
+  done
+done
 
 echo $OSTYPE
 
