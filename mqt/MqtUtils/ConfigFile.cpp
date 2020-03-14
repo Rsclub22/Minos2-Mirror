@@ -142,6 +142,13 @@ void RunConfigElement::createProcess()
         }
 
         program += " ";
+
+        QString locale = getCurrentLanguage();
+        if (!locale.isEmpty())
+        {
+            program += "--lang " + locale + " ";
+        }
+
         program += params;
 
         QString wdir = rundir;
@@ -170,10 +177,6 @@ void RunConfigElement::createProcess()
 
         QString fontCommand = "Font " + QApplication::font().toString();
         sendCommand(fontCommand);
-
-        QString locale = getCurrentLanguage();
-        sendCommand("LANG " + locale);
-
     }
 }
 void RunConfigElement::stopProcess()

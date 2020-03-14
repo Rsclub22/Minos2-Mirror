@@ -1,6 +1,7 @@
 #include "mqtUtils_pch.h"
 #include <QPalette>
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QFileDialog>
 #include <QProcessEnvironment>
 #include <QMessageBox>
@@ -186,6 +187,19 @@ void appStartup(const QString &pappName)
 
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
 
+    QCommandLineParser parser;
+
+    QString languageName;
+    QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
+    parser.addOption(languageOption);
+
+    parser.parse(QCoreApplication::instance()->arguments());
+
+    if (parser.isSet(languageOption))
+    {
+        languageName = parser.value(languageOption);
+    }
+
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
     if (!DirectoryExists("./Configuration"))
@@ -276,7 +290,5 @@ void executeStdIn(QString cmd)
         setShowServers(false);
     if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
         setAppFont(cmd);
-    if (cmd.indexOf("LANG ", 0, Qt::CaseInsensitive) >= 0)
-        setAppLanguage(cmd);
 }
 
