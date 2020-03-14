@@ -422,40 +422,40 @@ Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="365"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="2725"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3076"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="359"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="2719"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3070"/>
         <source>Minos RigControl</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="366"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="360"/>
         <source>The settings for the current radio have been changed. 
 Do you want to reload the settings for the radio now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="475"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="469"/>
         <source>Radio Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="475"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="469"/>
         <source>Please configure a radio name and model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="807"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="801"/>
         <source>RigCtld Open Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="816"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="810"/>
         <source>Attempting to communicate with radio via Rigctld - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="823"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="817"/>
         <source>Test Radio Connection via Rigctld
 
 Minos tried to read the radio frequency,
@@ -466,68 +466,68 @@ Some radios/interfaces may require Force DTR or Force RTS to be set High, to pow
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="837"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="831"/>
         <source>Radio Opened Rigctld: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="841"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="835"/>
         <source>Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="862"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="856"/>
         <source>Connected via Rigctld: %1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="870"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="1019"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="864"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1013"/>
         <source>Radio Open error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="899"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="893"/>
         <source>Please select a Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="904"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="898"/>
         <source>Opening Radio: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="911"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="905"/>
         <source>Comport %1 no longer configured on computer?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="918"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="912"/>
         <source>Please select a Comport</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="929"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="923"/>
         <source>Please enter a network Address and Port Number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="937"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="931"/>
         <source>Please select a radio model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="950"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="944"/>
         <source>Open Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="964"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="958"/>
         <source>Attempting to communicate with radio - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="972"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="966"/>
         <source>Test Radio Connection
 
 Minos tried to read the radio frequency,
@@ -538,389 +538,389 @@ Some radios/interfaces may require Force DTR or Force RTS to be set High, to pow
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="989"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="983"/>
         <source>Radio Opened: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="993"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="987"/>
         <source>Connected: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1001"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="995"/>
         <source>Connected: %1 - %2, %3:%4 - %5 %6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1005"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="999"/>
         <source>Connected: %1 - %2, %3:%4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1011"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1005"/>
         <source>Connected: %1 - %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1084"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1078"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1107"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1101"/>
         <source>Minos Rig Control - %1 - Logger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1111"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1105"/>
         <source>Minos Rig Control - Local</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1159"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1153"/>
         <source>Request Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1174"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1168"/>
         <source>Request Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1198"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1192"/>
         <source>Request RIT Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1217"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1211"/>
         <source>Request RIT State</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1243"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="1256"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1237"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1250"/>
         <source>Request Volume</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1433"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1427"/>
         <source>SetFreq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="1535"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1529"/>
         <source>Request Frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="2115"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="2109"/>
         <source>Set Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="2219"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="2213"/>
         <source>Turn Rit Off/On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="2392"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="2386"/>
         <source>Set RIT Freq.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="2614"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="2608"/>
         <source>%1 - %2
 Command %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="2614"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="2608"/>
         <source>RigControl hamlib Error - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="2725"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="2719"/>
         <source>Minos QT RigControl
 Copyright D Balharrie G8FKH/M0DGB 2019</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3004"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="2998"/>
         <source>App Instance Name  = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3005"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="2999"/>
         <source>Hamlib Version = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3006"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3000"/>
         <source>Radio Name = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3007"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3001"/>
         <source>Radio Number = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3008"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3002"/>
         <source>Rig Model = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3009"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3003"/>
         <source>Rig Number = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3010"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3004"/>
         <source>Rig Manufacturer = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3015"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3009"/>
         <source>Icom CIV address = Using Default CIV Address
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3019"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3013"/>
         <source>Icom CIV address = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3024"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3018"/>
         <source>Rig PortType = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3025"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3019"/>
         <source>Network Address = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3026"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3020"/>
         <source>Network Port = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3027"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3021"/>
         <source>Comport = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3028"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3022"/>
         <source>Baudrate = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3029"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3023"/>
         <source>Stop bits = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3030"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3024"/>
         <source>Parity = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3031"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3025"/>
         <source>Handshake = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3032"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3026"/>
         <source>ForceDTR = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3033"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3027"/>
         <source>ForceRTS = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3037"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3031"/>
         <source>Using rigctld daemon = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3037"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3045"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3056"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3031"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3039"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3050"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3054"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3057"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3058"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3059"/>
         <location filename="../rigcontrolmainwindow.cpp" line="3060"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3063"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3061"/>
         <location filename="../rigcontrolmainwindow.cpp" line="3064"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3065"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3066"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3067"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3070"/>
         <source>True</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3037"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3045"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3056"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3031"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3039"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3050"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3054"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3057"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3058"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3059"/>
         <location filename="../rigcontrolmainwindow.cpp" line="3060"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3063"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3061"/>
         <location filename="../rigcontrolmainwindow.cpp" line="3064"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3065"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3066"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3067"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="3070"/>
         <source>False</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3038"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3032"/>
         <source>Rigctld path = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3039"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3033"/>
         <source>Rigctld network address = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3040"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3034"/>
         <source>Rigctld port address = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3041"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3035"/>
         <source>Rigctld Connect delay = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3045"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3039"/>
         <source>TransVert Enable = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3046"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3040"/>
         <source>Number of TransVerters = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3051"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3045"/>
         <source>Transverter %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3052"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3046"/>
         <source>Transverter Name = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3053"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3047"/>
         <source>Transverter Band = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3054"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3048"/>
         <source>Transverter Offset = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3055"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3049"/>
         <source>Transverter Switch num = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3056"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3050"/>
         <source>Transverter Switch enable = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3060"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3054"/>
         <source>Radio Supports RIT = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3063"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3057"/>
         <source>Rit Enable On = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3064"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3058"/>
         <source>Radio Supports Get RIT Freq = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3065"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3059"/>
         <source>Radio Supports Set RIT Freq = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3066"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3060"/>
         <source>Radio Supports Get RIT State On/Off = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3067"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3061"/>
         <source>Radio Supports Set RIT State On/Off = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3069"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3063"/>
         <source>Radio Polltime = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3070"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3064"/>
         <source>Tracelog = %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3074"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3068"/>
         <source>No Radio selected
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="3319"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="3313"/>
         <source>Invalid freq!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1055,72 +1055,72 @@ Please enter another name</source>
 <context>
     <name>SerialTVSwitch</name>
     <message>
-        <location filename="../serialtvswitch.h" line="49"/>
+        <location filename="../serialtvswitch.h" line="50"/>
         <source>No Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="49"/>
+        <location filename="../serialtvswitch.h" line="50"/>
         <source>Device Not Found</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="49"/>
+        <location filename="../serialtvswitch.h" line="50"/>
         <source>Permission Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
+        <location filename="../serialtvswitch.h" line="51"/>
         <source>Open Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
+        <location filename="../serialtvswitch.h" line="51"/>
         <source>Parity Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
+        <location filename="../serialtvswitch.h" line="51"/>
         <source>Framing Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
+        <location filename="../serialtvswitch.h" line="52"/>
         <source>Break Condition</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
+        <location filename="../serialtvswitch.h" line="52"/>
         <source>Write Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
+        <location filename="../serialtvswitch.h" line="52"/>
         <source>Read Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
+        <location filename="../serialtvswitch.h" line="53"/>
         <source>Resource Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
+        <location filename="../serialtvswitch.h" line="53"/>
         <source>Unsupported Operation Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="53"/>
+        <location filename="../serialtvswitch.h" line="54"/>
         <source>Unknown Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="53"/>
+        <location filename="../serialtvswitch.h" line="54"/>
         <source>Timeout Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="53"/>
+        <location filename="../serialtvswitch.h" line="54"/>
         <source>Not Open Error</source>
         <translation type="unfinished"></translation>
     </message>

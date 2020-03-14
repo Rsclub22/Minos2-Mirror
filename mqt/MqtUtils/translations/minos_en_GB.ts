@@ -9,43 +9,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="508"/>
+        <location filename="../ConfigFile.cpp" line="513"/>
         <source>More than one server is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="517"/>
+        <location filename="../ConfigFile.cpp" line="522"/>
         <source>A local server is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="532"/>
+        <location filename="../ConfigFile.cpp" line="537"/>
         <source> contains bad characters [ and/or ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="547"/>
+        <location filename="../ConfigFile.cpp" line="552"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="588"/>
+        <location filename="../ConfigFile.cpp" line="593"/>
         <source>%1 requires a local %2
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="598"/>
+        <location filename="../ConfigFile.cpp" line="603"/>
         <source> Executable path does not exist
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="602"/>
+        <location filename="../ConfigFile.cpp" line="607"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.ini
 
 </source>
