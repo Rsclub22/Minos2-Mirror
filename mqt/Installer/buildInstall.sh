@@ -13,10 +13,7 @@ fi
 
 cd build
 
-if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
-  qmake ../mqt/mqt.pro  -spec linux-g++          # this may not be correct!
-else
-  qmake ../mqt/mqt.pro  -spec linux-g++
+qmake ../mqt/mqt.pro
 
 retVal=$?
 if [ $retVal -ne 0 ]; then
@@ -30,6 +27,15 @@ if [ $retVal -ne 0 ]; then
     echo "make failed; please fix errors and rebuild"
     exit $retVal
 fi
+
+  for j in TinyXML XMPPLib MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtRigControl MqtRotator MqtServer
+  do
+    lrelease -verbose ../mqt/${j}/${j}.pro
+    if [ ! -d ${j}/translations ]; then
+        mkdir ${j}/translations
+    fi
+    mv ../mqt/${j}/translations/*.qm ${j}/translations
+  done
 
 cd ../..
 
@@ -54,51 +60,52 @@ do
   for j in MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtRigControl MqtRotator MqtServer
   do
     lconvert -verbose -o Bin/translations/${j}_${i}.qm \
-    $DIR/build/MqtUtils/.qm/minos_${i}.qm \
-    $DIR/build/TinyXML/release/minos_${i}.qm \
-    $DIR/build/XMPPLib/release/minos_${i}.qm \
-    $DIR/build/MqtBase/release/minos_${i}.qm \
-    $DIR/build/${j}/release/minos_${i}.qm
+    $DIR/build/MqtUtils/translations/minos_${i}.qm \
+    $DIR/build/TinyXML/translations/minos_${i}.qm \
+    $DIR/build/XMPPLib/translations/minos_${i}.qm \
+    $DIR/build/MqtBase/translations/minos_${i}.qm \
+    $DIR/build/${j}/translations/minos_${i}.qm
   done
 done
+cp /usr/share/qt5/translations/qt_*.qm Bin/translations
 
 echo $OSTYPE
 
 if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 
-	cp -r ../Minos2/build/MqtAppStarter/MqtAppStarter.app Bin
-	cp -r ../Minos2/build/MqtChat/MqtChat.app Bin
-	cp -r ../Minos2/build/MqtCluster/MqtCluster.app Bin
-	cp -r ../Minos2/build/MqtControl/MqtControl.app Bin
-	cp -r ../Minos2/build/MqtKeyer/MqtKeyer.app Bin
-	cp -r ../Minos2/build/MqtKSTClient/MqtKSTClient.app Bin
-	cp -r ../Minos2/build/MqtLogger/MqtLogger.app Bin
-	cp -r ../Minos2/build/MqtMonitor/MqtMonitor.app Bin
-	cp -r ../Minos2/build/MqtRigControl/MqtRigControl.app Bin
-	cp -r ../Minos2/build/MqtRotator/MqtRotator.app Bin
-	cp -r ../Minos2/build/MqtServer/MqtServer.app Bin
+	cp -r $DIR/build/MqtAppStarter/MqtAppStarter.app Bin
+	cp -r $DIR/build/MqtChat/MqtChat.app Bin
+	cp -r $DIR/build/MqtCluster/MqtCluster.app Bin
+	cp -r $DIR/build/MqtControl/MqtControl.app Bin
+	cp -r $DIR/build/MqtKeyer/MqtKeyer.app Bin
+	cp -r $DIR/build/MqtKSTClient/MqtKSTClient.app Bin
+	cp -r $DIR/build/MqtLogger/MqtLogger.app Bin
+	cp -r $DIR/build/MqtMonitor/MqtMonitor.app Bin
+	cp -r $DIR/build/MqtRigControl/MqtRigControl.app Bin
+	cp -r $DIR/build/MqtRotator/MqtRotator.app Bin
+	cp -r $DIR/build/MqtServer/MqtServer.app Bin
 
 else
-	cp ../Minos2/build/MqtAppStarter/MqtAppStarter Bin
-	cp ../Minos2/build/MqtChat/MqtChat Bin
-	cp ../Minos2/build/MqtCluster/MqtCluster Bin
-	cp ../Minos2/build/MqtControl/MqtControl Bin
-	cp ../Minos2/build/MqtKeyer/MqtKeyer Bin
-	cp ../Minos2/build/MqtKSTClient/MqtKSTClient Bin
-	cp ../Minos2/build/MqtLogger/MqtLogger Bin
-	cp ../Minos2/build/MqtMonitor/MqtMonitor Bin
-	cp ../Minos2/build/MqtRigControl/MqtRigControl Bin
-	cp ../Minos2/build/MqtRotator/MqtRotator Bin
-	cp ../Minos2/build/MqtServer/MqtServer Bin
+	cp $DIR/build/MqtAppStarter/MqtAppStarter Bin
+	cp $DIR/build/MqtChat/MqtChat Bin
+	cp $DIR/build/MqtCluster/MqtCluster Bin
+	cp $DIR/build/MqtControl/MqtControl Bin
+	cp $DIR/build/MqtKeyer/MqtKeyer Bin
+	cp $DIR/build/MqtKSTClient/MqtKSTClient Bin
+	cp $DIR/build/MqtLogger/MqtLogger Bin
+	cp $DIR/build/MqtMonitor/MqtMonitor Bin
+	cp $DIR/build/MqtRigControl/MqtRigControl Bin
+	cp $DIR/build/MqtRotator/MqtRotator Bin
+	cp $DIR/build/MqtServer/MqtServer Bin
 fi
 
-cp -r ../Minos2/mqt/ControlFiles/Configuration/* ./Configuration
-cp -r ../Minos2/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
+cp -r $DIR/mqt/ControlFiles/Configuration/* ./Configuration
+cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
 rm -rf ./Configuration/WindowsFiles
 rm -rf ./Configuration/LinuxFiles
-cp ../Minos2/mqt/Installer/Minos.sh . 
-cp ../Minos2/mqt/Docs/*.* ./Docs
-cp ../Minos2/mqt/Help/*.* ./Help
+cp $DIR/mqt/Installer/Minos.sh . 
+cp $DIR/mqt/Docs/*.* ./Docs
+cp $DIR/mqt/Help/*.* ./Help
 
 cd Configuration
 
@@ -119,4 +126,9 @@ esac
 
 
 cp -rv Bin ~/runtime
+
+read -n 1 -p "Do you want to copy the configuration to ~/runtime (press y/n)? " ans;
+
+
+cp -rv Configuration ~/runtime
 
