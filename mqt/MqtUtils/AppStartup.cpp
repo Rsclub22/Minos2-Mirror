@@ -143,7 +143,7 @@ void switchTranslation(QString loc)
         settings.setValue( "language", loc );
     }
 }
-static void setAppLanguage()
+static QString getAppLanguage()
 {
     QSettings settings;
     QVariant qlang = settings.value( "language" );
@@ -151,7 +151,7 @@ static void setAppLanguage()
     {
         qlang = QLocale::system().name();
     }
-     switchTranslation(qlang.toString());
+    return qlang.toString();
 }
 void setAppLanguage(QString loc)
 {
@@ -188,7 +188,7 @@ void appStartup(const QString &pappName)
 
     QCommandLineParser parser;
 
-    QString languageName;
+    QString languageName = getAppLanguage();
     QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
     parser.addOption(languageOption);
 
@@ -244,7 +244,7 @@ void appStartup(const QString &pappName)
     }
     enableTrace( "./TraceLog", appStartupName + "_" );
 
-    setAppLanguage();
+    setAppLanguage(languageName);
 }
 
 
