@@ -32,6 +32,7 @@ class N1MMBroadcast:public QObject
 
     QString genContactStanza(QString type, BaseContestLog *c, QSharedPointer<BaseContact> tct);
     
+    QString genDeleteStanza(QSharedPointer<BaseContact> tct);
 public:
     N1MMBroadcast();
 

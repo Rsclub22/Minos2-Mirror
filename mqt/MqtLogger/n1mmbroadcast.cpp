@@ -120,9 +120,26 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
     // This can generate modified, deleted/recreated, or straight contact
     if (contactsSelect && !contactsHost.isNull())
     {
-        QString stanza = genContactStanza("contactinfo", c, tct);
-        bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
-        trace("afterQSOSaved Datagram written " + stanza);
+        if (tct->getHistory().size())
+        {
+            // history doesn't get set up until after the QSO has ben saved,
+            //and this message sent
+
+            // check if callsign has changed
+            QSharedPointer<BaseContact> h = tct->getHistory().at(tct->getHistory().size() - 1);
+            if (h->cs.fullCall.getValue() != tct->cs.fullCall.getValue() || h->time.getIsoDTG() != tct->time.getIsoDTG())
+            {
+                QString stanza = genDeleteStanza(h);
+                bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+            }
+            QString stanza = genContactStanza("contactreplace", c, tct);
+            bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+        }
+        else
+        {
+            QString stanza = genContactStanza("contactinfo", c, tct);
+            bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+        }
     }
     if (ADIFSelect && !ADIFHost.isNull())
     {
@@ -173,7 +190,27 @@ QString makeTag(const QString &tag, const QString &arg)
     return temp;
 }
 
+QString N1MMBroadcast::genDeleteStanza(QSharedPointer<BaseContact> tct)
+{
+    //                <?xml version="l.0" encoding="utf-8"?>
+    //                <contactdelete>
+    //                    <app>N1MM</app>
+    //                    <timestamp>2020-01-17 16 :43:38</timestamp>
+    //                    <call>WlAW</call>
+    //                    <contestnr>73</contestnr>
+    //                    <StationName>CONTEST-PC</StationName>
+    //                </contactdelete>
+    QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+                  + "<contactdelete>\n"
+                   + makeTag("app", "Minos")
+                   + makeTag("contestnr", "0")                          //        <contestnr>10</contestnr>
+                   + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
+                   + makeTag("call", tct->cs.fullCall.getValue())       //        <call>W2BBB</call>
+                   + makeTag("StationName", "")                         //        <StationName>PHONE-15M</StationName>
+            + "</contactdelete>\n";
 
+    return xml;
+}
 QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QSharedPointer<BaseContact> tct)
 {
     LoggerContestLog *c = dynamic_cast<LoggerContestLog *>(b);
