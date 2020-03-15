@@ -4,37 +4,37 @@
 <context>
     <name>BaseContact</name>
     <message>
-        <location filename="../contacts.cpp" line="210"/>
+        <location filename="../contacts.cpp" line="236"/>
         <source>LOCAL COMMENT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="211"/>
+        <location filename="../contacts.cpp" line="237"/>
         <source>COMMENT FOR ADJUDICATOR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="212"/>
+        <location filename="../contacts.cpp" line="238"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="227"/>
+        <location filename="../contacts.cpp" line="253"/>
         <source>MAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="230"/>
+        <location filename="../contacts.cpp" line="256"/>
         <source>DEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="233"/>
+        <location filename="../contacts.cpp" line="259"/>
         <source>N/S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="238"/>
+        <location filename="../contacts.cpp" line="264"/>
         <source>DUP</source>
         <translation type="unfinished"></translation>
     </message>

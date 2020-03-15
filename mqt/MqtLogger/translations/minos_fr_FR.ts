@@ -667,12 +667,12 @@ Le mode calculé est%6
         <translation>Pas de code de district</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="555"/>
+        <location filename="../LoggerContacts.cpp" line="541"/>
         <source>GJV file should have been opened read only!</source>
         <translation>.GJV aurait dû être ouvert en lecture seule!</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="664"/>
+        <location filename="../LoggerContacts.cpp" line="650"/>
         <source>Invalid block number in contact block</source>
         <translation>Numéro de bloc non valide dans le bloc de contacts</translation>
     </message>
@@ -4088,7 +4088,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1355"/>
-        <location filename="../tlogcontainer.cpp" line="1843"/>
+        <location filename="../tlogcontainer.cpp" line="1846"/>
         <source>Contest Sets</source>
         <translation>Ensembles de concours</translation>
     </message>
@@ -4118,23 +4118,23 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <translation>&amp;Gérer les ensembles de concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1946"/>
+        <location filename="../tlogcontainer.cpp" line="1949"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1971"/>
+        <location filename="../tlogcontainer.cpp" line="1974"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1975"/>
+        <location filename="../tlogcontainer.cpp" line="1978"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des?? archives</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2131"/>
-        <location filename="../tlogcontainer.cpp" line="2132"/>
+        <location filename="../tlogcontainer.cpp" line="2134"/>
+        <location filename="../tlogcontainer.cpp" line="2135"/>
         <source>Minos contest Logger Application</source>
         <translation>Minos Enregistreur de Concours</translation>
     </message>
