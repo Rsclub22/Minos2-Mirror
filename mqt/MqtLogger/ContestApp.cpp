@@ -126,7 +126,7 @@ bool TContestApp::initialise()
     BundleFile::bundleFiles[ epLOCSQUARESPROFILE ] = QSharedPointer<BundleFile>( new BundleFile( epLOCSQUARESPROFILE ) );
 
     //----------------------------------
-    BundleFile::bundleFiles[ epLOGGERPROFILE ] ->openProfile( "./Configuration/MinosLogger.ini", "Logger Defaults" );
+    BundleFile::bundleFiles[ epLOGGERPROFILE ] ->openProfile( "./Configuration/MinosLogger.ini", tr("Advanced Options") );
     loggerBundle.setProfile( BundleFile::bundleFiles[ epLOGGERPROFILE ] );
     loggerBundle.openSection( "Default" );
 
@@ -166,17 +166,17 @@ bool TContestApp::initialise()
 
     QString entfile;
     loggerBundle.getStringProfile( elpEntryFile, entfile );
-    BundleFile::bundleFiles[ epENTRYPROFILE ] ->openProfile( entfile, "Contest Entry Details" );
+    BundleFile::bundleFiles[ epENTRYPROFILE ] ->openProfile( entfile, tr("Contest Entry Details") );
     //----------------------------------
 
     QString qthfile;
     loggerBundle.getStringProfile( elpQTHFile, qthfile );
-    BundleFile::bundleFiles[ epQTHPROFILE ] ->openProfile( qthfile, "QTH Details" );
+    BundleFile::bundleFiles[ epQTHPROFILE ] ->openProfile( qthfile, tr("QTH Details") );
     //----------------------------------
 
     QString stationfile;
     loggerBundle.getStringProfile( elpStationFile, stationfile );
-    BundleFile::bundleFiles[ epSTATIONPROFILE ] ->openProfile( stationfile, "Station Details" );
+    BundleFile::bundleFiles[ epSTATIONPROFILE ] ->openProfile( stationfile, tr("Station Details") );
     //----------------------------------
 
     QString locsfile;
