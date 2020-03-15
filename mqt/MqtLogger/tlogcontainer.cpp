@@ -1751,6 +1751,9 @@ void TLogContainer::closeSession()
 }
 void TLogContainer::selectSession(QString sessName)
 {
+    if (sessName.isEmpty())
+        return;
+
     TContestApp *app = TContestApp::getContestApp();
     app->suppressWritePreload = true;
 
