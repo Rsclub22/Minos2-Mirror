@@ -1620,7 +1620,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
 <context>
     <name>N1MMBroadcast</name>
     <message>
-        <location filename="../n1mmbroadcast.cpp" line="129"/>
+        <location filename="../n1mmbroadcast.cpp" line="146"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation type="unfinished">Exporté par Minos Logger Version %1 %2</translation>
     </message>
@@ -3287,6 +3287,29 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <location filename="../TClockFrame.ui" line="20"/>
         <source>Frame</source>
         <translation>Frame</translation>
+    </message>
+</context>
+<context>
+    <name>TContestApp</name>
+    <message>
+        <location filename="../ContestApp.cpp" line="129"/>
+        <source>Advanced Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestApp.cpp" line="169"/>
+        <source>Contest Entry Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestApp.cpp" line="174"/>
+        <source>QTH Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestApp.cpp" line="179"/>
+        <source>Station Details</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

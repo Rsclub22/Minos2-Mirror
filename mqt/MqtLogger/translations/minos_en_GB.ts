@@ -1565,7 +1565,7 @@ and send the .EDI file produced.<byte value="xd"/>
 <context>
     <name>N1MMBroadcast</name>
     <message>
-        <location filename="../n1mmbroadcast.cpp" line="129"/>
+        <location filename="../n1mmbroadcast.cpp" line="146"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3210,6 +3210,29 @@ The row background will change colour when selected.</source>
     <message>
         <location filename="../TClockFrame.ui" line="20"/>
         <source>Frame</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TContestApp</name>
+    <message>
+        <location filename="../ContestApp.cpp" line="129"/>
+        <source>Advanced Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestApp.cpp" line="169"/>
+        <source>Contest Entry Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestApp.cpp" line="174"/>
+        <source>QTH Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestApp.cpp" line="179"/>
+        <source>Station Details</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
