@@ -106,6 +106,7 @@ class BaseContact: public QObject
       {
           return QString();
       }
+      long getTxFreq(QString &cb);
 
       // These CONTAIN minositems
 

@@ -172,31 +172,18 @@ QString makeTag(const QString &tag, const QString &arg)
     QString temp = "<" + tag + ">" +  escapeXML(arg) + "</" + tag + ">\n";
     return temp;
 }
+
+
 QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QSharedPointer<BaseContact> tct)
 {
     LoggerContestLog *c = dynamic_cast<LoggerContestLog *>(b);
 
-    QString txfreq = tct->frequency.getValue().remove('.');
-    QString cband = c->band.getValue();
-
-    QString cb = cband.trimmed();
-    BandList &blist = BandList::getBandList();
-    BandInfo bi;
-    bool bandOK = blist.findBand(cb, bi);
-    if (bandOK)
-    {
-        cb = bi.adif;
-        if (txfreq.isEmpty())
-        {
-            txfreq = QString::number(bi.flow);
-        }
-    }
-
-    long freq = static_cast<long>(convertStrToFreq(txfreq)/10.0);
+    QString cb;
+    long freq = tct->getTxFreq(cb);
 
     // freq sent is only to the tens digit...
-
-    txfreq = QString::number(freq);
+    freq = static_cast<long>(freq/10);
+    QString sfreq = QString::number(freq);
 
     QString continent = (tct->ctryMult?tct->ctryMult->continent:QString());
 
@@ -208,8 +195,8 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
                    + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
                    + makeTag("mycall", c->mycall.fullCall.getValue())   //        <mycall>K8UT</mycall>
                    + makeTag("band", cb)                                //        <band>21</band>
-                   + makeTag("rxfreq", txfreq)                          //        <rxfreq>2125500</rxfreq>
-                   + makeTag("txfreq", txfreq)                          //        <txfreq>2125500</txfreq>
+                   + makeTag("rxfreq", sfreq)                          //        <rxfreq>2125500</rxfreq>
+                   + makeTag("txfreq", sfreq)                          //        <txfreq>2125500</txfreq>
                    + makeTag("operator", tct->op1.getValue())           //        <operator>K8UT</operator>
                    + makeTag("mode", tct->mode.getValue())              //        <mode>USB</mode>
                    + makeTag("call", tct->cs.fullCall.getValue())       //        <call>W2BBB</call>

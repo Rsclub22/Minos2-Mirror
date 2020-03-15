@@ -31,6 +31,7 @@ class N1MMBroadcast:public QObject
     QHostAddress ADIFHost;
 
     QString genContactStanza(QString type, BaseContestLog *c, QSharedPointer<BaseContact> tct);
+    
 public:
     N1MMBroadcast();
 

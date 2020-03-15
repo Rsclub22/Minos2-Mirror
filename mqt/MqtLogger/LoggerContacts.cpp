@@ -434,29 +434,15 @@ QString ContestContact::getADIFLine()
 
     outstr += makeADIFField( "TIME_ON", exp_buff );
 
-    QString cband = clp->band.getValue();
 
-    QString cb = cband.trimmed();
-    BandList &blist = BandList::getBandList();
-    BandInfo bi;
-    bool bandOK = blist.findBand(cb, bi);
-    if (bandOK)
-    {
-        cb = bi.adif;
-    }
-
+    QString cb;
+    long txfreq = getTxFreq(cb);
     outstr += makeADIFField( "BAND", cb );
 
-    QString freq = frequency.getValue();
-    if (!freq.isEmpty())
-    {
-        QString newfreq = freq.trimmed().remove('.');
-        double dfreq = convertStrToFreq(newfreq);
-        dfreq = dfreq/1000000.0;  // MHz
+    double dfreq = txfreq/1000000.0;  // MHz
 
-        freq = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
-        outstr += makeADIFField("FREQ", freq);
-    }
+    QString freq = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
+    outstr += makeADIFField("FREQ", freq);
 
     QString smode = mode.getValue().toUpper();
     QString smgmSubmode = mgmSubmode.getValue();
