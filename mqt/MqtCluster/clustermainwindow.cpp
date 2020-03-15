@@ -199,7 +199,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     restoreDxSpotViewColumns();
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_dxSpotView_sectionResized(int, int , int)));
+             this, SLOT( dxSpotView_sectionResized(int, int , int)));
 
 
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
@@ -243,7 +243,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     restoreSentSpotViewColumns();
     sentSpotView->horizontalHeader()->setStretchLastSection(true);
     connect( sentSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sentSpotView_sectionResized(int, int , int)));
+             this, SLOT( sentSpotView_sectionResized(int, int , int)));
 
     sentSpotView->setColumnHidden(SENT_SPOT_RXTIME_COL_NUM, true);
 
@@ -434,7 +434,7 @@ void ClusterMainWindow::onSpotTabChanged(int index)
 
 
 
-void ClusterMainWindow::on_dxSpotView_sectionResized(int, int, int)
+void ClusterMainWindow::dxSpotView_sectionResized(int, int, int)
 {
     QSettings settings;
     QByteArray state;
@@ -445,7 +445,7 @@ void ClusterMainWindow::on_dxSpotView_sectionResized(int, int, int)
 }
 
 
-void ClusterMainWindow::on_sentSpotView_sectionResized(int, int, int)
+void ClusterMainWindow::sentSpotView_sectionResized(int, int, int)
 {
     QSettings settings;
     QByteArray state;
