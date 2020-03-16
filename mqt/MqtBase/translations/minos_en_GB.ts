@@ -265,6 +265,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../profiles.cpp" line="39"/>
+        <source>List Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../profiles.cpp" line="40"/>
+        <source>Log Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../profiles.cpp" line="76"/>
         <source>WSJTX re-broadcast Address</source>
         <translation type="unfinished"></translation>

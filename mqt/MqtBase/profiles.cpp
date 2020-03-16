@@ -36,8 +36,8 @@ BundleFile::BundleFile( PROFILES p )
     //       ProfileEntry(int id, const  char *name, const char *def, const char *dispname, const char *hint, bool RO );
     case epLOGGERPROFILE:
 
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpListDirectory, "List Directory", "./Lists", "", QT_TR_NOOP("Default archive list directory"), false ) ) );
-        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpLogDirectory, "Log Directory", "./Logs", "", QT_TR_NOOP("Default logs directory"), false ) ) );
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpListDirectory, "List Directory", "./Lists", QT_TR_NOOP("List Directory"), QT_TR_NOOP("Default archive list directory"), false ) ) );
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpLogDirectory, "Log Directory", "./Logs", QT_TR_NOOP("Log Directory"), QT_TR_NOOP("Default logs directory"), false ) ) );
 
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpEntryFile, "EntryFile", "./Configuration/Entry.ini", QT_TR_NOOP("Entry settings file"), QT_TR_NOOP("File containing entry settings"), false ) ) );
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry( elpStationFile, "StationFile", "./Configuration/Station.ini", QT_TR_NOOP("Station settings file"), QT_TR_NOOP("File containing station settings"), false ) ) );
@@ -68,7 +68,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSAddr, "UDPExtCSAddress", "", QT_TR_NOOP("UDP External Callsign Lookup Address"), QT_TR_NOOP("UDP External Callsign Lookup  Address"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpextCSPort, "UDPExtCSPort", 12060, QT_TR_NOOP("UDP External Callsign Lookup  Port"), QT_TR_NOOP("UDP External Callsign Lookup  Port"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpADIFSelect, "ADIFEnabled", false, QT_TR_NOOP("UDP ADIF Enabled"), QT_TR_NOOP("UDP ADIF Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpADIFSelect, "UDPADIFEnabled", false, QT_TR_NOOP("UDP ADIF Enabled"), QT_TR_NOOP("UDP ADIF Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpADIFAddr, "UDPADIFAddr", "", QT_TR_NOOP("UDP ADIF Address"), QT_TR_NOOP("UDP ADIF Address"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpADIFPort, "UDPADIFPort", 12060, QT_TR_NOOP("UDP ADIF Port"), QT_TR_NOOP("UDP ADIF Port"), false ) ) );
 
