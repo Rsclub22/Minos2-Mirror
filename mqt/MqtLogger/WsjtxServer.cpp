@@ -14,33 +14,105 @@ WsjtxServer *WsjtxServer::getWsjtxServer()
     return wsjtxServer;
 }
 WsjtxServer::WsjtxServer():
- server_ {new MessageServer {this}}
+  server_1 {new MessageServer {this}}
+, server_2 {new MessageServer {this}}
+, server_3 {new MessageServer {this}}
+, server_4 {new MessageServer {this}}
 {
-    connect (server_, &MessageServer::status_update, this, &WsjtxServer::update_status);
+    connect (server_1, &MessageServer::status_update, this, &WsjtxServer::update_status);
     //connect (server_, &MessageServer::qso_logged, this, &WsjtxServer::log_qso);
-    connect (server_, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
-    connect (server_, &MessageServer::client_opened, this, &WsjtxServer::add_client);
-    connect (server_, &MessageServer::client_closed, this, &WsjtxServer::remove_client);
-    connect (server_, &MessageServer::decode, this, &WsjtxServer::decode_added);
-    connect (server_, &MessageServer::decodes_cleared,  this, &WsjtxServer::decodes_cleared);
+    connect (server_1, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
+    connect (server_1, &MessageServer::client_opened, this, &WsjtxServer::add_client);
+    connect (server_1, &MessageServer::client_closed, this, &WsjtxServer::remove_client);
+    connect (server_1, &MessageServer::decode, this, &WsjtxServer::decode_added);
+    connect (server_1, &MessageServer::decodes_cleared,  this, &WsjtxServer::decodes_cleared);
 
+    connect (server_2, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
+    connect (server_3, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
+    connect (server_4, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
 }
 void WsjtxServer::start ( )
 {
-
-    bool enabled;
-    int port = 0;
-    QString multicast_group_address;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXEnabled, enabled );
-    if (enabled)
     {
-        TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpWSJTXPort, port );
-        TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTXGroupAddress, multicast_group_address );
+        bool enabled;
+        int port = 0;
+        QString multicast_group_address;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1Enabled, enabled );
+        if (enabled)
+        {
+            TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpWSJTX1Port, port );
+            TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX1GroupAddress, multicast_group_address );
+
+            trace(QString("WsjtxServer::start  1 port %1 address %2").arg(port).arg(multicast_group_address));
+
+            server_1->start(static_cast<port_type>( port), QHostAddress {multicast_group_address});
+        }
+        else
+        {
+            // start port 0 should stop it
+            server_1->start(static_cast<port_type>( 0), QHostAddress {multicast_group_address});
+        }
     }
+    {
+        bool enabled;
+        int port = 0;
+        QString multicast_group_address;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX2Enabled, enabled );
+        if (enabled)
+        {
+            TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpWSJTX2Port, port );
+            TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX2GroupAddress, multicast_group_address );
 
-    trace(QString("WsjtxServer::start port %1 address %2").arg(port).arg(multicast_group_address));
+            trace(QString("WsjtxServer::start 2 port %1 address %2").arg(port).arg(multicast_group_address));
 
-    server_->start(static_cast<port_type>( port), QHostAddress {multicast_group_address});
+            server_2->start(static_cast<port_type>( port), QHostAddress {multicast_group_address});
+        }
+        else
+        {
+            // start port 0 should stop it
+            server_2->start(static_cast<port_type>( 0), QHostAddress {multicast_group_address});
+        }
+    }
+    {
+        bool enabled;
+        int port = 0;
+        QString multicast_group_address;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX3Enabled, enabled );
+        if (enabled)
+        {
+            TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpWSJTX3Port, port );
+            TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX3GroupAddress, multicast_group_address );
+
+            trace(QString("WsjtxServer::start 3 port %1 address %2").arg(port).arg(multicast_group_address));
+
+            server_3->start(static_cast<port_type>( port), QHostAddress {multicast_group_address});
+        }
+        else
+        {
+            // start port 0 should stop it
+            server_3->start(static_cast<port_type>( 0), QHostAddress {multicast_group_address});
+        }
+    }
+    {
+        bool enabled;
+        int port = 0;
+        QString multicast_group_address;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX4Enabled, enabled );
+        if (enabled)
+        {
+            TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpWSJTX4Port, port );
+            TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX4GroupAddress, multicast_group_address );
+
+            trace(QString("WsjtxServer::start 4 port %1 address %2").arg(port).arg(multicast_group_address));
+
+            server_4->start(static_cast<port_type>( port), QHostAddress {multicast_group_address});
+        }
+        else
+        {
+            // start port 0 should stop it
+            server_3->start(static_cast<port_type>( 0), QHostAddress {multicast_group_address});
+        }
+    }
 }
 //void WsjtxServer::log_qso (QString const& id, QDateTime time_off, QString const& dx_call
 //                                           , QString const& dx_grid, Frequency dial_frequency, QString const& mode
@@ -61,7 +133,7 @@ void WsjtxServer::add_client (QString const& id, QString const& version, QString
 {
     trace(QString("WsjtxServer::add_client"));
     emit do_add_client(id, version, revision);
-    server_->replay (id);         // request decodes and status
+    server_1->replay (id);         // request decodes and status
 }
 
 void WsjtxServer::remove_client (QString const& id)
@@ -98,7 +170,7 @@ void WsjtxServer::reply (QString const& id, QTime time, qint32 snr, float delta_
                    , QString const& mode, QString const& message, bool low_confidence, quint8 modifiers)
 {
     trace(QString("WsjtxServer::reply to " + message));
-    server_->reply(id, time, snr, delta_time, delta_frequency, mode, message, low_confidence, modifiers);
+    server_1->reply(id, time, snr, delta_time, delta_frequency, mode, message, low_confidence, modifiers);
 }
 
 void WsjtxServer::do_halt_tx (QString const& id, bool auto_only)
@@ -108,9 +180,9 @@ void WsjtxServer::do_halt_tx (QString const& id, bool auto_only)
     else
         trace("WsjtxServer Halt TX");
 
-    server_->halt_tx(id, auto_only);
+    server_1->halt_tx(id, auto_only);
 }
 void WsjtxServer::do_clear_decodes (QString const& id, quint8 window)
 {
-    server_->clear_decodes(id, window);
+    server_1->clear_decodes(id, window);
 }

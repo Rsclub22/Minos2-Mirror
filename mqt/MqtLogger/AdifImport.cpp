@@ -10,6 +10,7 @@
 #include "rigutils.h"
 #include "LoggerContest.h"
 #include "contacts.h"
+#include "BandList.h"
 #include "AdifImport.h"
 
 //====================================================================
@@ -190,13 +191,52 @@ void ADIFImport::ADIFImportEndOfRecord( )
     if ( !c )
        return false;
 
-    ADIFImport aimp( c, QSharedPointer<QFile>() );
+    bool qsoOK = true;
+    {
+        LoggerContestLog test;
+        ADIFImport aimp( &test, QSharedPointer<QFile>() );
 
-    aimp.fileContent = adif;
-    aimp.limit = aimp.fileContent.size();
-    aimp.offset = 0;
+        aimp.fileContent = adif;
+        aimp.limit = aimp.fileContent.size();
+        aimp.offset = 0;
 
-    return aimp.executeImport();
+        if (aimp.executeImport())
+        {
+            QSharedPointer<BaseContact> bct = test.pcontactAt(0);
+            dtg d = bct->time;
+            if (c->checkTime(d))
+            {
+                QString freq = bct->frequency.getValue();
+                if (!freq.isEmpty())
+                {
+                    if (!checkValidBand(freq))
+                    {
+                        trace("ADIF frequency not in contest band");
+                        qsoOK = false;
+                    }
+                }
+            }
+            else
+            {
+                trace("ADIF date/time not in contest period");
+                qsoOK = false;
+            }
+
+        }
+        else
+            qsoOK = false;
+    }
+    if (qsoOK)
+    {
+        ADIFImport aimp( c, QSharedPointer<QFile>() );
+
+        aimp.fileContent = adif;
+        aimp.limit = aimp.fileContent.size();
+        aimp.offset = 0;
+
+        return aimp.executeImport();
+    }
+    return false;
 }
 //====================================================================
 bool ADIFImport::getNextChar( char &ic )

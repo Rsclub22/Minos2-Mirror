@@ -53,12 +53,23 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsFile, "ListsFile", "./Configuration/ListPreload.ini", QT_TR_NOOP("List preload file"), QT_TR_NOOP("File containing list pre-loads"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpListsSection, "ListsSection", "Default", QT_TR_NOOP("Preload Lists file section"), QT_TR_NOOP("Section to use in lists preload file"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXEnabled, "WSJTXEnabled", true, QT_TR_NOOP("WSJTX Enabled"), QT_TR_NOOP("WSJTX Enabled"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXPort, "WSJTXPort", 2237, QT_TR_NOOP("WSJTX Port"), QT_TR_NOOP("WSJTX Port"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXGroupAddress, "WSJTXGroupAddress", "", QT_TR_NOOP("WSJTX Group Address"), QT_TR_NOOP("WSJTX Group Address"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXAutoEnabled, "WSJTXAutoEnabled", false, QT_TR_NOOP("WSJTX Auto Enabled"), QT_TR_NOOP("WSJTX Auto Enabled"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTXTestEnabled, "WSJTXtestEnabled", false, QT_TR_NOOP("WSJTX Test Enabled"), QT_TR_NOOP("WSJTX Test Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1Enabled, "WSJTX1Enabled", true, QT_TR_NOOP("WSJTX 1 Enabled"), QT_TR_NOOP("WSJTX 1 Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1Port, "WSJTX1Port", 2237, QT_TR_NOOP("WSJTX 1 Port"), QT_TR_NOOP("WSJTX 1 Port"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1GroupAddress, "WSJTX1GroupAddress", "", QT_TR_NOOP("WSJTX 1 Group Address"), QT_TR_NOOP("WSJTX 1 Group Address"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1AutoEnabled, "WSJTX1AutoEnabled", false, QT_TR_NOOP("WSJTX 1 Auto Enabled"), QT_TR_NOOP("WSJTX 1 Auto Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1TestEnabled, "WSJTX1testEnabled", false, QT_TR_NOOP("WSJTX 1 Test Enabled"), QT_TR_NOOP("WSJTX 1 Test Enabled"), false ) ) );
 
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX2Enabled, "WSJTX2Enabled", false, QT_TR_NOOP("WSJTX 2 Enabled"), QT_TR_NOOP("WSJTX 2 Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX2Port, "WSJTX2Port", 2238, QT_TR_NOOP("WSJTX 2 Port"), QT_TR_NOOP("WSJTX 2 Port"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX2GroupAddress, "WSJTX2GroupAddress", "", QT_TR_NOOP("WSJTX 2 Group Address"), QT_TR_NOOP("WSJTX 2 Group Address"), false ) ) );
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX3Enabled, "WSJTX3Enabled", false, QT_TR_NOOP("WSJTX 3 Enabled"), QT_TR_NOOP("WSJTX 3 Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX3Port, "WSJTX3Port", 2239, QT_TR_NOOP("WSJTX 3 Port"), QT_TR_NOOP("WSJTX 3 Port"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX3GroupAddress, "WSJTX3GroupAddress", "", QT_TR_NOOP("WSJTX 3 Group Address"), QT_TR_NOOP("WSJTX 3 Group Address"), false ) ) );
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX4Enabled, "WSJTX4Enabled", false, QT_TR_NOOP("WSJTX 4 Enabled"), QT_TR_NOOP("WSJTX 4 Enabled"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX4Port, "WSJTX4Port", 2240, QT_TR_NOOP("WSJTX 4 Port"), QT_TR_NOOP("WSJTX 4 Port"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX4GroupAddress, "WSJTX4GroupAddress", "", QT_TR_NOOP("WSJTX 4 Group Address"), QT_TR_NOOP("WSJTX 4 Group Address"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpcontactsSelect, "UDPContactsEnabled", false, QT_TR_NOOP("UDP Contacts Enabled"), QT_TR_NOOP("UDP Contacts Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpcontactsAddr, "UDPContactsAddr", "", QT_TR_NOOP("UDP Contacts Address"), QT_TR_NOOP("UDP Contacts Address"), false ) ) );
