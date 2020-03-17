@@ -41,7 +41,7 @@
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="31"/>
-        <source>Select &amp;Language...</source>
+        <source>Select &amp;Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

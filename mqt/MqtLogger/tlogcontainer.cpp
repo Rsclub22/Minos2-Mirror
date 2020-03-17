@@ -35,6 +35,7 @@
 #include "clusterClientServer.h"
 #include "MatchThread.h"
 #include "n1mmbroadcastconfig.h"
+#include "defdirsdlg.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -394,7 +395,7 @@ void TLogContainer::setupMenus()
     updateLayoutsMenu();
     ui->menuTools->addSeparator();
     FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
-    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language..."));
+    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language"));
 
     QString currentLang = getCurrentLanguage();
 
@@ -426,6 +427,7 @@ void TLogContainer::setupMenus()
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
+    DefDirsAction = newAction(QT_TR_NOOP("Configure Default Directories..."), ui->menuTools, SLOT(DefDirsActionExecute()));
     OptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, SLOT(OptionsActionExecute()));
 
     // end of tools manu
@@ -1119,6 +1121,11 @@ void TLogContainer::ShowOperatorsActionExecute()
     MinosLoggerEvents::SendShowOperators();
 }
 
+void TLogContainer::DefDirsActionExecute()
+{
+    DefDirsDlg ed(this);
+    ed.exec();
+}
 void TLogContainer::OptionsActionExecute()
 {
     TSettingsEditDlg ed(this, &TContestApp::getContestApp() ->loggerBundle );
