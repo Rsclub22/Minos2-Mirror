@@ -194,6 +194,10 @@ void ADIFImport::ADIFImportEndOfRecord( )
     bool qsoOK = true;
     {
         LoggerContestLog test;
+        test.band = c->band;
+        test.DTGStart = c->DTGStart;
+        test.DTGEnd = c->DTGEnd;
+
         ADIFImport aimp( &test, QSharedPointer<QFile>() );
 
         aimp.fileContent = adif;
@@ -209,7 +213,25 @@ void ADIFImport::ADIFImportEndOfRecord( )
                 QString freq = bct->frequency.getValue();
                 if (!freq.isEmpty())
                 {
-                    if (!checkValidBand(freq))
+                    bool ok = false;
+                    BandList &blist = BandList::getBandList();
+                    BandInfo bi;
+                    bool bandOK = false;
+                    QString sfreq = freq.trimmed();
+
+                    ok = blist.findBand(test.band.getValue(), bi);
+
+                    if (ok)
+                    {
+                        double dfreq = sfreq.toDouble(&ok);
+                        dfreq *= 1000000.0;
+                        if (dfreq <= bi.fhigh && dfreq >= bi.flow)
+                        {
+                            bandOK = true;
+                        }
+                    }
+
+                    if (!bandOK )
                     {
                         trace("ADIF frequency not in contest band");
                         qsoOK = false;
