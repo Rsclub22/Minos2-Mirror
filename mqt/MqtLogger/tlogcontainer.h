@@ -50,7 +50,7 @@ public:
     QVector<TSingleLogFrame *> getLogFrames();
     int getLogFrameCount();
 
-    QString getDefaultDirectory( bool IsList );
+    static QString getDefaultDirectory( bool IsList );
 
     bool isShowOperators();
 
@@ -141,11 +141,14 @@ private:
 
     QAction *startConfigAction;
     QAction *listCompressionAction;
+    QAction *QSOFieldFontAction;
+    QAction *styleAction;
     QAction *LocCalcAction;
     QAction *AnalyseMinosLogAction;
     QAction *CorrectDateTimeAction;
     QAction *ScreenConfigAction;
     QAction *ShowOperatorsAction;
+    QAction *DefDirsAction;
     QAction *OptionsAction;
     QAction *FontEditAcceptAction;
     QAction *LanguageAcceptAction;
@@ -207,6 +210,7 @@ private slots:
     void AnalyseMinosLogActionExecute();
     void CorrectDateTimeActionExecute();
     void ShowOperatorsActionExecute();
+    void DefDirsActionExecute();
     void OptionsActionExecute();
     void FontEditAcceptActionExecute();
     void LanguageAcceptActionExecute();
@@ -227,6 +231,8 @@ private slots:
 
     void StartConfigActionExecute();
     void listCompressionActionExecute();
+    void QSOFieldFontActionExecute();
+    void styleActionExecute();
 
     void on_ContestPageControl_currentChanged(int index);
     void on_ContestPageControl_tabBarDoubleClicked(int index);

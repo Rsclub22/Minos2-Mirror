@@ -151,11 +151,7 @@ KeyerMain::~KeyerMain()
 }
 void KeyerMain::onStdInRead(QString cmd)
 {
-    trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(true);
-    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(false);
+    executeStdIn(cmd);
 }
 
 void KeyerMain::closeEvent(QCloseEvent *event)

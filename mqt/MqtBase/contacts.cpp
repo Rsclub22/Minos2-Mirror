@@ -10,6 +10,8 @@
 #include "cutils.h"
 #include "contest.h"
 #include "contacts.h"
+#include "rigutils.h"
+#include "BandList.h"
 //============================================================
 ContactBuffs contactBuffs;
 //==========================================================================
@@ -120,6 +122,30 @@ void BaseContact::setDirty()
    op2.setDirty();
    contactScore.setDirty();
 }
+//==========================================================================
+long BaseContact::getTxFreq(QString &cb)
+{
+    QString txfreq = frequency.getValue().remove('.');
+    long freq = static_cast<long>(convertStrToFreq(txfreq));
+
+    QString cband = contest->band.getValue();
+
+    cb = cband.trimmed();
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    bool bandOK = blist.findBand(cb, bi);
+    if (bandOK)
+    {
+        cb = bi.adif;
+        if (txfreq.isEmpty() || freq < 100)
+        {
+            freq = static_cast<long>(bi.flow);
+        }
+    }
+
+    return freq;
+}
+
 //==========================================================================
 QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
 {

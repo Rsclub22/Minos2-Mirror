@@ -205,8 +205,10 @@ private slots:
 
     void on_maxDistanceButton_clicked();
 
+    void onStdInRead(QString cmd);
 private:
     Ui::KSTMainWindow *ui;
+    StdInReader stdinReader;
     void clearConnection();
     void checkActive();
     void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);

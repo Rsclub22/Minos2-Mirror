@@ -598,10 +598,17 @@ int Callsign::validate( )
 
     for ( int i = 0; i < cslen; i++ )
     {
-        if ( ( cs[ i ] != '/' ) && ( !cs[ i ].isLetterOrNumber() ) )
-        {
-            return valRes;
-        }
+        QChar c = cs[i];
+
+        if (c.isDigit())
+            continue;
+
+        if (c == '/')
+            continue;
+
+        if ( c>= 0x40 && c <= 0x5A) // Basic ASCII uppercase
+            continue;
+        return valRes;
     }
 
     locCtryPrefix.clear();

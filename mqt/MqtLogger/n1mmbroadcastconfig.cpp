@@ -19,17 +19,21 @@ N1MMBroadcastConfig::N1MMBroadcastConfig(QWidget *parent) :
     ui->contactsPort->setValidator(new QIntValidator(0, 0xffff, this));
     ui->extCSPort->setValidator(new QIntValidator(0, 0xffff, this));
     ui->wsjtxPort->setValidator(new QIntValidator(0, 0xffff, this));
+    ui->ADIFPort->setValidator(new QIntValidator(0, 0xffff, this));
 
 
     bool contactsSelect;
     bool extCSSelect;
     bool wsjtxRbSelect;
+    bool ADIFSelect;
     QString contactsAddr;
     int contactsPort;
     QString extCSAddr;
     int extCSPort;
     QString wsjtxRbAddr;
     int wsjtxRbPort;
+    QString ADIFAddr;
+    int ADIFPort;
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpcontactsSelect, contactsSelect );
     TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpcontactsAddr, contactsAddr );
@@ -52,6 +56,12 @@ N1MMBroadcastConfig::N1MMBroadcastConfig(QWidget *parent) :
     ui->wsjtxAddr->setText(wsjtxRbAddr);
     ui->wsjtxPort->setText(QString::number(wsjtxRbPort));
 
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpADIFSelect, ADIFSelect );
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpADIFAddr, ADIFAddr );
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpADIFPort, ADIFPort );
+    ui->ADIFSelect->setChecked(ADIFSelect);
+    ui->ADIFAddr->setText(ADIFAddr);
+    ui->ADIFPort->setText(QString::number(ADIFPort));
 }
 
 N1MMBroadcastConfig::~N1MMBroadcastConfig()
@@ -100,6 +110,13 @@ void N1MMBroadcastConfig::accept()
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpwsjtxRbSelect, wsjtxRbSelect );
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpwsjtxRbAddr, wsjtxRbAddr );
     TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpwsjtxRbPort, wsjtxRbPort );
+
+    bool ADIFSelect = ui->ADIFSelect->isChecked();
+    QString ADIFAddr = ui->ADIFAddr->text();
+    int ADIFPort = ui->ADIFPort->text().toInt();
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpADIFSelect, ADIFSelect );
+    TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpADIFAddr, ADIFAddr );
+    TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpADIFPort, ADIFPort );
 
     doCloseEvent();
     QDialog::accept();

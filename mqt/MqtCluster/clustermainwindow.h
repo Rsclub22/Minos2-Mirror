@@ -125,8 +125,8 @@ private slots:
     void connectToNode(const QString &nodeName);
     void logIn();
     void checkStationDetails(QString msg);
-    void on_dxSpotView_sectionResized(int, int, int);
-    void on_sentSpotView_sectionResized(int, int, int);
+    void dxSpotView_sectionResized(int, int, int);
+    void sentSpotView_sectionResized(int, int, int);
     void LogTimerTimer();
 
     void onStdInRead(QString cmd);

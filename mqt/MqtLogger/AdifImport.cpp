@@ -10,6 +10,7 @@
 #include "rigutils.h"
 #include "LoggerContest.h"
 #include "contacts.h"
+#include "BandList.h"
 #include "AdifImport.h"
 
 //====================================================================
@@ -190,13 +191,74 @@ void ADIFImport::ADIFImportEndOfRecord( )
     if ( !c )
        return false;
 
-    ADIFImport aimp( c, QSharedPointer<QFile>() );
+    bool qsoOK = true;
+    {
+        LoggerContestLog test;
+        test.band = c->band;
+        test.DTGStart = c->DTGStart;
+        test.DTGEnd = c->DTGEnd;
 
-    aimp.fileContent = adif;
-    aimp.limit = aimp.fileContent.size();
-    aimp.offset = 0;
+        ADIFImport aimp( &test, QSharedPointer<QFile>() );
 
-    return aimp.executeImport();
+        aimp.fileContent = adif;
+        aimp.limit = aimp.fileContent.size();
+        aimp.offset = 0;
+
+        if (aimp.executeImport())
+        {
+            QSharedPointer<BaseContact> bct = test.pcontactAt(0);
+            dtg d = bct->time;
+            if (c->checkTime(d))
+            {
+                QString freq = bct->frequency.getValue();
+                if (!freq.isEmpty())
+                {
+                    bool ok = false;
+                    BandList &blist = BandList::getBandList();
+                    BandInfo bi;
+                    bool bandOK = false;
+                    QString sfreq = freq.trimmed();
+
+                    ok = blist.findBand(test.band.getValue(), bi);
+
+                    if (ok)
+                    {
+                        double dfreq = sfreq.toDouble(&ok);
+                        dfreq *= 1000000.0;
+                        if (dfreq <= bi.fhigh && dfreq >= bi.flow)
+                        {
+                            bandOK = true;
+                        }
+                    }
+
+                    if (!bandOK )
+                    {
+                        trace("ADIF frequency not in contest band");
+                        qsoOK = false;
+                    }
+                }
+            }
+            else
+            {
+                trace("ADIF date/time not in contest period");
+                qsoOK = false;
+            }
+
+        }
+        else
+            qsoOK = false;
+    }
+    if (qsoOK)
+    {
+        ADIFImport aimp( c, QSharedPointer<QFile>() );
+
+        aimp.fileContent = adif;
+        aimp.limit = aimp.fileContent.size();
+        aimp.offset = 0;
+
+        return aimp.executeImport();
+    }
+    return false;
 }
 //====================================================================
 bool ADIFImport::getNextChar( char &ic )

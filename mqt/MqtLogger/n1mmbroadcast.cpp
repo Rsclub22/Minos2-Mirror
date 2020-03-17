@@ -24,9 +24,15 @@ bool N1MMBroadcast::setAddress(QString addr, QHostAddress &host)
     QHostInfo haddr = QHostInfo::fromName( addr );
     for (int i = 0; i < haddr.addresses().count(); i++)
     {
-        bool ok;
+        bool ok = true;
         quint32 iaddr;
-        iaddr = haddr.addresses()[i].toIPv4Address(&ok);
+
+        // This is a guess as to when the change came in
+        iaddr = haddr.addresses()[i].toIPv4Address(
+            #if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
+                    &ok
+            #endif
+                    );
         if (ok)
         {
             host.setAddress(iaddr);
@@ -91,16 +97,59 @@ void N1MMBroadcast::configure()
         setAddress(wsjtxRbAddr, wsjtxRbHost);
     }
 
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpADIFSelect, ADIFSelect );
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpADIFAddr, ADIFAddr );
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpADIFPort, temp );
+    ADIFPort = static_cast<quint16>(temp);
+    if (ADIFAddr.isEmpty())
+    {
+        ADIFAddr = "127.0.0.1";
+    }
+    if (ADIFPort == 0)
+    {
+        ADIFPort = 12060;
+    }
 
+    if (ADIFSelect)
+    {
+        setAddress(ADIFAddr, ADIFHost);
+    }
 }
 void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct)
 {
     // This can generate modified, deleted/recreated, or straight contact
     if (contactsSelect && !contactsHost.isNull())
     {
-        QString stanza = genContactStanza("contactinfo", c, tct);
-        bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
-        trace("afterQSOSaved Datagram written " + stanza);
+        if (tct->getHistory().size())
+        {
+            // history doesn't get set up until after the QSO has ben saved,
+            //and this message sent
+
+            // check if callsign has changed
+            QSharedPointer<BaseContact> h = tct->getHistory().at(tct->getHistory().size() - 1);
+            if (h->cs.fullCall.getValue() != tct->cs.fullCall.getValue() || h->time.getIsoDTG() != tct->time.getIsoDTG())
+            {
+                QString stanza = genDeleteStanza(h);
+                bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+            }
+            QString stanza = genContactStanza("contactreplace", c, tct);
+            bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+        }
+        else
+        {
+            QString stanza = genContactStanza("contactinfo", c, tct);
+            bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+        }
+    }
+    if (ADIFSelect && !ADIFHost.isNull())
+    {
+        QString header = tr("Exported by Minos VHF logging system Version %1 %2").arg(STRINGVERSION).arg(PRERELEASETYPE) + "\r\n";
+
+        header += "<EOH>\r\n";
+
+        QString adif = tct->getADIFLine();
+
+        bc.writeDatagram((header + adif).toUtf8(), ADIFHost, ADIFPort);
     }
 }
 
@@ -115,6 +164,9 @@ void N1MMBroadcast::wsjtxDatagram(QByteArray *datagram)
 
 void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
 {
+    if (call.isEmpty())
+        return;
+
     // contact stanza but with callsign only
     if (extCSSelect && !extCSHost.isNull())
     {
@@ -137,31 +189,38 @@ QString makeTag(const QString &tag, const QString &arg)
     QString temp = "<" + tag + ">" +  escapeXML(arg) + "</" + tag + ">\n";
     return temp;
 }
+
+QString N1MMBroadcast::genDeleteStanza(QSharedPointer<BaseContact> tct)
+{
+    //                <?xml version="l.0" encoding="utf-8"?>
+    //                <contactdelete>
+    //                    <app>N1MM</app>
+    //                    <timestamp>2020-01-17 16 :43:38</timestamp>
+    //                    <call>WlAW</call>
+    //                    <contestnr>73</contestnr>
+    //                    <StationName>CONTEST-PC</StationName>
+    //                </contactdelete>
+    QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+                  + "<contactdelete>\n"
+                   + makeTag("app", "Minos")
+                   + makeTag("contestnr", "0")                          //        <contestnr>10</contestnr>
+                   + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
+                   + makeTag("call", tct->cs.fullCall.getValue())       //        <call>W2BBB</call>
+                   + makeTag("StationName", "")                         //        <StationName>PHONE-15M</StationName>
+            + "</contactdelete>\n";
+
+    return xml;
+}
 QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QSharedPointer<BaseContact> tct)
 {
     LoggerContestLog *c = dynamic_cast<LoggerContestLog *>(b);
 
-    QString txfreq = tct->frequency.getValue().remove('.');
-    QString cband = c->band.getValue();
-
-    QString cb = cband.trimmed();
-    BandList &blist = BandList::getBandList();
-    BandInfo bi;
-    bool bandOK = blist.findBand(cb, bi);
-    if (bandOK)
-    {
-        cb = bi.adif;
-        if (txfreq.isEmpty())
-        {
-            txfreq = QString::number(bi.flow);
-        }
-    }
-
-    long freq = static_cast<long>(convertStrToFreq(txfreq)/10.0);
+    QString cb;
+    long freq = tct->getTxFreq(cb);
 
     // freq sent is only to the tens digit...
-
-    txfreq = QString::number(freq);
+    freq = static_cast<long>(freq/10);
+    QString sfreq = QString::number(freq);
 
     QString continent = (tct->ctryMult?tct->ctryMult->continent:QString());
 
@@ -173,8 +232,8 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
                    + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
                    + makeTag("mycall", c->mycall.fullCall.getValue())   //        <mycall>K8UT</mycall>
                    + makeTag("band", cb)                                //        <band>21</band>
-                   + makeTag("rxfreq", txfreq)                          //        <rxfreq>2125500</rxfreq>
-                   + makeTag("txfreq", txfreq)                          //        <txfreq>2125500</txfreq>
+                   + makeTag("rxfreq", sfreq)                          //        <rxfreq>2125500</rxfreq>
+                   + makeTag("txfreq", sfreq)                          //        <txfreq>2125500</txfreq>
                    + makeTag("operator", tct->op1.getValue())           //        <operator>K8UT</operator>
                    + makeTag("mode", tct->mode.getValue())              //        <mode>USB</mode>
                    + makeTag("call", tct->cs.fullCall.getValue())       //        <call>W2BBB</call>

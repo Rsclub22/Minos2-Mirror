@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include <QStyleFactory>
 #include "MinosLoggerEvents.h"
 
 #include <QFontDialog>
@@ -34,6 +35,7 @@
 #include "clusterClientServer.h"
 #include "MatchThread.h"
 #include "n1mmbroadcastconfig.h"
+#include "defdirsdlg.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -376,7 +378,6 @@ void TLogContainer::setupMenus()
     ListOpenAction = newAction(QT_TR_NOOP("Open &Archive List..."), ui->menuFile, SLOT(ListOpenActionExecute()));
     ManageListsAction = newAction(QT_TR_NOOP("&Manage Archive Lists..."), ui->menuFile, SLOT(ManageListsActionExecute()));
     ui->menuFile->addSeparator();
-    OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuFile, SLOT(OptionsActionExecute()));
 #ifdef Q_OS_WIN
     ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, SLOT(ExitClearActionExecute()));
 #endif
@@ -394,7 +395,7 @@ void TLogContainer::setupMenus()
     updateLayoutsMenu();
     ui->menuTools->addSeparator();
     FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
-    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language..."));
+    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language"));
 
     QString currentLang = getCurrentLanguage();
 
@@ -425,6 +426,9 @@ void TLogContainer::setupMenus()
     WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration..."), ui->menuTools, SLOT(WsjtConfigActionExecute()));
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
+    ui->menuTools->addSeparator();
+    DefDirsAction = newAction(QT_TR_NOOP("Configure Default Directories..."), ui->menuTools, SLOT(DefDirsActionExecute()));
+    OptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, SLOT(OptionsActionExecute()));
 
     // end of tools manu
 
@@ -1117,6 +1121,11 @@ void TLogContainer::ShowOperatorsActionExecute()
     MinosLoggerEvents::SendShowOperators();
 }
 
+void TLogContainer::DefDirsActionExecute()
+{
+    DefDirsDlg ed(this);
+    ed.exec();
+}
 void TLogContainer::OptionsActionExecute()
 {
     TSettingsEditDlg ed(this, &TContestApp::getContestApp() ->loggerBundle );
@@ -1283,6 +1292,19 @@ void TLogContainer::StartConfigActionExecute()
     // in case we are now running more apps
     sendDM->subscribeApps();
 }
+void TLogContainer::styleActionExecute()
+{
+    QStringList keys = QStyleFactory::keys();
+    QString styleName = QApplication::style()->objectName();
+    if (enquireDialog(this, tr("Qt style"), styleName, keys, false))
+    {
+        QStyle *s = QStyleFactory::create(styleName);
+        styleName = s->objectName();
+        QApplication::setStyle(s);
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+    }
+}
 void TLogContainer::listCompressionActionExecute()
 {
     int lcf;
@@ -1291,6 +1313,20 @@ void TLogContainer::listCompressionActionExecute()
     {
         TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, lcf);
         MinosLoggerEvents::sendListCompressionChanged(lcf/100.0);
+
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+    }
+}
+
+void TLogContainer::QSOFieldFontActionExecute()
+{
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpQSOFieldFont, lcf);
+    if (enquireDialog(this, tr("QSO Field expansion as percentage"), lcf, 100, 200))
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpQSOFieldFont, lcf);
+        MinosLoggerEvents::SendFontChanged();
 
         TWaitCursor wc(this);
         selectSession(TContestApp::getContestApp()->currSession);
@@ -1547,6 +1583,10 @@ void TLogContainer::updateLayoutsMenu()
 {
     screenLayoutMenu->clear();
     ScreenConfigAction = newAction(QT_TR_NOOP("Configure Screen Layouts..."), screenLayoutMenu, SLOT(doScreenConfigAction()));
+#ifndef NDEBUG
+    styleAction = newAction(QT_TR_NOOP("Set style..."), screenLayoutMenu, SLOT(styleActionExecute()));
+#endif
+    QSOFieldFontAction = newAction(QT_TR_NOOP("Set extra QSO field size..."), screenLayoutMenu, SLOT(QSOFieldFontActionExecute()));
     listCompressionAction = newAction(QT_TR_NOOP("Set List Spacing Compression..."), screenLayoutMenu, SLOT(listCompressionActionExecute()));
 
     screenLayoutMenu->addSeparator();
@@ -1718,6 +1758,9 @@ void TLogContainer::closeSession()
 }
 void TLogContainer::selectSession(QString sessName)
 {
+    if (sessName.isEmpty())
+        return;
+
     TContestApp *app = TContestApp::getContestApp();
     app->suppressWritePreload = true;
 

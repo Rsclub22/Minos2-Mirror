@@ -50,3 +50,18 @@ bool enquireDialog (QWidget *owner, const QString &prompt, int &Value, int minva
     return ok;
 }
 
+bool enquireDialog (QWidget *owner, const QString &prompt, QString &Value, const QStringList sl, bool edittable )
+{
+    bool ok = false;
+
+    int offset = sl.indexOf(Value);
+    // IF sl IS EMPTY THEN YOU DON'T GET A COMBO...
+
+    QString text = QInputDialog::getItem( owner, "Please supply value",
+                                          prompt, sl,
+                                          offset, edittable, &ok );
+    if ( ok )
+        Value = text;
+
+    return ok;
+}

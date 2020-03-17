@@ -15,18 +15,24 @@ class N1MMBroadcast:public QObject
     bool contactsSelect = false;
     bool extCSSelect = false;
     bool wsjtxRbSelect = false;
+    bool ADIFSelect = false;
     QString contactsAddr;
     quint16 contactsPort = 0;
     QString extCSAddr;
     quint16 extCSPort = 0;
     QString wsjtxRbAddr;
     quint16 wsjtxRbPort = 0;
+    QString ADIFAddr;
+    quint16 ADIFPort = 0;
 
     QHostAddress contactsHost;
     QHostAddress extCSHost;
     QHostAddress wsjtxRbHost;
+    QHostAddress ADIFHost;
 
     QString genContactStanza(QString type, BaseContestLog *c, QSharedPointer<BaseContact> tct);
+    
+    QString genDeleteStanza(QSharedPointer<BaseContact> tct);
 public:
     N1MMBroadcast();
 

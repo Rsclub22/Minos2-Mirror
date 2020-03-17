@@ -26,6 +26,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->setupUi(this);
 
     mainWindow = this;
+    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    stdinReader.start();
 
     QSettings settings;
 
@@ -284,6 +286,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 KSTMainWindow::~KSTMainWindow()
 {
     delete ui;
+}
+void KSTMainWindow::onStdInRead(QString cmd)
+{
+    executeStdIn(cmd);
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
 {

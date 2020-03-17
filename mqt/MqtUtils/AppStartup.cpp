@@ -1,6 +1,7 @@
 #include "mqtUtils_pch.h"
 #include <QPalette>
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QFileDialog>
 #include <QProcessEnvironment>
 #include <QMessageBox>
@@ -102,10 +103,16 @@ void switchTranslation(QString loc)
     QSharedPointer<QTranslator> myappTranslator(new QTranslator());    // which goes out of scope :(
     QSharedPointer<QTranslator> myqtTranslator(new QTranslator());    // which goes out of scope :(
 
-
-    QString qtlocfile = QString("Bin/translations/") + "qt_" + loc;
+    QString qtlocfile = QString("Bin/translations/") + "qtbase_" + loc;
     bool qtloadOK = myqtTranslator->load(qtlocfile);
     bool qtinstallOK = qa->installTranslator(myqtTranslator.data());
+
+    if (!qtloadOK || qtinstallOK)
+    {
+        qtlocfile = QString("Bin/translations/") + "qt_" + loc;
+        qtloadOK = myqtTranslator->load(qtlocfile);
+        qtinstallOK = qa->installTranslator(myqtTranslator.data());
+    }
 
     QString locfile = "Bin/translations/" + executableName + "_" + loc;
     bool loadOK = myappTranslator->load(locfile);
@@ -136,7 +143,7 @@ void switchTranslation(QString loc)
         settings.setValue( "language", loc );
     }
 }
-static void setAppLanguage()
+static QString getAppLanguage()
 {
     QSettings settings;
     QVariant qlang = settings.value( "language" );
@@ -144,8 +151,17 @@ static void setAppLanguage()
     {
         qlang = QLocale::system().name();
     }
-     switchTranslation(qlang.toString());
+    return qlang.toString();
 }
+void setAppLanguage(QString loc)
+{
+    if (loc.startsWith("LANG "))
+    {
+        loc = loc.remove(0, 5);
+    }
+    switchTranslation(loc);
+}
+
 QString getCurrentLanguage()
 {
     return currentLanguage;
@@ -169,6 +185,19 @@ void appStartup(const QString &pappName)
     QApplication::QCoreApplication::setApplicationName( appStartupName );
 
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
+
+    QCommandLineParser parser;
+
+    QString languageName = getAppLanguage();
+    QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
+    parser.addOption(languageOption);
+
+    parser.parse(QCoreApplication::instance()->arguments());
+
+    if (parser.isSet(languageOption))
+    {
+        languageName = parser.value(languageOption);
+    }
 
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
@@ -215,7 +244,7 @@ void appStartup(const QString &pappName)
     }
     enableTrace( "./TraceLog", appStartupName + "_" );
 
-    setAppLanguage();
+    setAppLanguage(languageName);
 }
 
 
@@ -228,9 +257,37 @@ void setAppFont()
         QApplication::setFont( qfont.value<QFont>() );
     }
 }
+void setAppFont(QString fs)
+{
+    if (fs.startsWith("Font "))
+    {
+        fs = fs.remove(0, 5);
+    }
+    QFont f;
+    if (f.fromString(fs))
+    {
+        trace(QString("Setting font to %1").arg(fs));
+        QApplication::setFont( f );
+    }
+    else
+    {
+        trace(QString("Failed Setting font to %1").arg(fs));
+    }
+}
 
 void setAppClosing()
 {
     appClosing = true;
+}
+
+void executeStdIn(QString cmd)
+{
+    trace("Command read from stdin: " + cmd);
+    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
+        setShowServers(true);
+    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
+        setShowServers(false);
+    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
+        setAppFont(cmd);
 }
 
