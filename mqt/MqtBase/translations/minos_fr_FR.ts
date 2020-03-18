@@ -117,13 +117,12 @@
     <message>
         <location filename="../profiles.cpp" line="48"/>
         <source>Display file section</source>
-        <translatorcomment>la section écran</translatorcomment>
-        <translation>HUH?   </translation>
+        <translation>Section du fichier de paramètres d&apos;écran</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="48"/>
         <source>Section to use in display file</source>
-        <translation>HUH?   </translation>
+        <translation>Section à utiliser dans le fichier de paramètres d&apos;écran</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="49"/>
@@ -138,8 +137,7 @@
     <message>
         <location filename="../profiles.cpp" line="50"/>
         <source>Operators file section</source>
-        <translatorcomment>Section du fichier des opérateurs</translatorcomment>
-        <translation>HUH?   </translation>
+        <translation>Section du fichier des opérateurs</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="50"/>
@@ -209,147 +207,150 @@
     <message>
         <location filename="../profiles.cpp" line="74"/>
         <source>UDP Contacts Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Contacts UDP activés</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="78"/>
         <source>UDP External Callsign Lookup Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatif d&apos;appel recherche externe (UDP) activée</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="86"/>
         <source>WSJTX re-broadcast Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX rediffusion Activée</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="82"/>
         <source>UDP ADIF Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP ADIF activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="75"/>
         <source>UDP Contacts Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Contacts UDP adresse</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="76"/>
         <source>UDP Contacts Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Contacts UDP numéro de port</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="79"/>
         <source>UDP External Callsign Lookup Address</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Indicatif d&apos;appel  recherche externe (UDP)  Adresse</translatorcomment>
+        <translation>Recherche externe d&apos;Indicatif d&apos;appel: Adresse</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="79"/>
         <source>UDP External Callsign Lookup  Address</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Indicatif d&apos;appel  recherche externe (UDP)  Adresse (DUPLICATE)</translatorcomment>
+        <translation>Recherche externe d&apos;Indicatif d&apos;appel: Adresse</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="83"/>
         <source>UDP ADIF Address</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP ADIF adresse</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="84"/>
         <source>UDP ADIF Port</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP ADIF numéro de port</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="80"/>
         <source>UDP External Callsign Lookup  Port</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Port (UDP) pour la recherche externe d&apos;Indicatif d&apos;appel</translatorcomment>
+        <translation>Recherche externe d&apos;Indicatif d&apos;appel: Port</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="39"/>
         <source>List Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire de liste</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="40"/>
         <source>Log Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire des journaux</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="56"/>
         <source>WSJTX 1 Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX 1 activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="57"/>
         <source>WSJTX 1 Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port de WSJTX 1</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="58"/>
         <source>WSJTX 1 Group Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse du groupe de WSJT-X 1</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="59"/>
         <source>WSJTX 1 Auto Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX 1 activé automatiquement</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="60"/>
         <source>WSJTX 1 Test Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX 1 Test  activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="62"/>
         <source>WSJTX 2 Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX 2 activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="63"/>
         <source>WSJTX 2 Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port de WSJTX 2</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="64"/>
         <source>WSJTX 2 Group Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse du groupe de WSJT-X 2</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="66"/>
         <source>WSJTX 3 Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX 3 activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="67"/>
         <source>WSJTX 3 Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port de WSJTX 3</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="68"/>
         <source>WSJTX 3 Group Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse du groupe de WSJT-X 3</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="70"/>
         <source>WSJTX 4 Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX 4 activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="71"/>
         <source>WSJTX 4 Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port de WSJTX 4</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="72"/>
         <source>WSJTX 4 Group Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse du groupe de WSJT-X 4</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="87"/>
         <source>WSJTX re-broadcast Address</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX Adresse de rediffusion</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="88"/>
         <source>WSJTX re-broadcast Port</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX Port de rediffusion</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="91"/>
@@ -1594,7 +1595,7 @@ Entrer un autre direction SVP</translation>
     <message>
         <location filename="../profiles.cpp" line="206"/>
         <source>&lt;None&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun</translation>
     </message>
 </context>
 <context>

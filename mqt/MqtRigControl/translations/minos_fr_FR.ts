@@ -659,7 +659,7 @@ Command %3 WHAT</translation>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="2608"/>
         <source>RigControl hamlib Error - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Contrôle d&apos;Appareil, Erreur de Hamlib - %1</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="2719"/>
