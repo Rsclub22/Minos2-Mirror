@@ -1153,6 +1153,7 @@ void TLogContainer::FontEditAcceptActionExecute()
         f = QFontDialog::getFont( &ok, f );
         if (ok)
         {
+            bool serverRunning = checkServerReady();
             QApplication::setFont( f );
 
             foreach ( QWidget * widget, QApplication::allWidgets() )
@@ -1165,6 +1166,10 @@ void TLogContainer::FontEditAcceptActionExecute()
             settings.setValue( "font", font() );
 
             MinosLoggerEvents::SendFontChanged();
+            if (serverRunning)
+            {
+                MinosConfig::getMinosConfig() ->bounce();
+            }
         }
     }
 }
