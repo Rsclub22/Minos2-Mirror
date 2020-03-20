@@ -110,7 +110,7 @@ void WsjtxServer::start ( )
         else
         {
             // start port 0 should stop it
-            server_3->start(static_cast<port_type>( 0), QHostAddress {multicast_group_address});
+            server_4->start(static_cast<port_type>( 0), QHostAddress {multicast_group_address});
         }
     }
 }
