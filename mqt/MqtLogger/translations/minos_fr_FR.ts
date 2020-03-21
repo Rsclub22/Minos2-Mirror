@@ -1208,43 +1208,43 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../defdirsdlg.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialogue</translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="22"/>
         <source>Logs Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire des journaux</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="32"/>
         <location filename="../defdirsdlg.ui" line="53"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="43"/>
         <source>Lists Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire de liste</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="64"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="84"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.cpp" line="89"/>
         <source>Set Default Logs Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir le répertoire défaut des journaux </translation>
     </message>
     <message>
         <location filename="../defdirsdlg.cpp" line="98"/>
         <source>Set Default Lists Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir le répertoire défaut de liste  </translation>
     </message>
 </context>
 <context>
@@ -1666,7 +1666,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     <message>
         <location filename="../n1mmbroadcast.cpp" line="146"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
-        <translation type="unfinished">Exporté par Minos Logger Version %1 %2</translation>
+        <translation>Exporté par Minos Logger Version %1 %2</translation>
     </message>
 </context>
 <context>
@@ -1674,17 +1674,17 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialogue</translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="20"/>
         <source>Leave Address blank for this machine.</source>
-        <translation type="unfinished"></translation>
+        <translation>Laisser l&apos;adresse vide pour cette machine.</translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="79"/>
         <source>Contacts</source>
-        <translation type="unfinished"></translation>
+        <translation>Contacts                                              </translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="55"/>
@@ -1692,7 +1692,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
         <location filename="../n1mmbroadcastconfig.ui" line="146"/>
         <location filename="../n1mmbroadcastconfig.ui" line="190"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse IP</translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="65"/>
@@ -1700,37 +1700,37 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
         <location filename="../n1mmbroadcastconfig.ui" line="156"/>
         <location filename="../n1mmbroadcastconfig.ui" line="200"/>
         <source>Port</source>
-        <translation type="unfinished">Connexion</translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="35"/>
         <source>External Callsign Lookup</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechercher externe d&apos;Indicatif d&apos;appel</translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="27"/>
         <source>N1MM+ style messages</source>
-        <translation type="unfinished"></translation>
+        <translation>Messages en style N1MM +</translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="126"/>
         <source>ADIF contacts</source>
-        <translation type="unfinished"></translation>
+        <translation>Contacts ADIF                                     </translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="170"/>
         <source>WSJT-X re-broadcast</source>
-        <translation type="unfinished"></translation>
+        <translation>Rediffusion WSJT-X                             </translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="214"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../n1mmbroadcastconfig.ui" line="234"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
@@ -3087,7 +3087,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../taboutbox.cpp" line="95"/>
         <source>Welcome to Minos Version</source>
-        <translation>Bienvenue à Minos Version (FR 08 Mar 20)</translation>
+        <translation>Bienvenue à Minos Version (FR 18 Mar 20)</translation>
     </message>
 </context>
 <context>
@@ -3338,22 +3338,22 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../ContestApp.cpp" line="129"/>
         <source>Advanced Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Options avancées...</translation>
     </message>
     <message>
         <location filename="../ContestApp.cpp" line="169"/>
         <source>Contest Entry Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Détails de l&apos;entree au concours</translation>
     </message>
     <message>
         <location filename="../ContestApp.cpp" line="174"/>
         <source>QTH Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Détails du QTH</translation>
     </message>
     <message>
         <location filename="../ContestApp.cpp" line="179"/>
         <source>Station Details</source>
-        <translation type="unfinished"></translation>
+        <translation>Détails de la station</translation>
     </message>
 </context>
 <context>
@@ -3918,47 +3918,47 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tlogcontainer.cpp" line="382"/>
         <source>E&amp;xit Minos Contest Logger and Clear registry...</source>
-        <translation type="unfinished"></translation>
+        <translation>F&amp;ermer Minos Enregistreur et effacer le registre</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="392"/>
         <source>Startup Apps Configuration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer les applications</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="398"/>
         <source>Select &amp;Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner &amp;Langue...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="423"/>
         <source>Locator Calculator...</source>
-        <translation type="unfinished"></translation>
+        <translation>Calcul du Locator Maidenhead</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="425"/>
         <source>UDP broadcast configuration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration de diffusion UDP ...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="426"/>
         <source>WSJT-X link configuration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration de la liaison WSJT-X</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="428"/>
         <source>Correct Date/Time...</source>
-        <translation type="unfinished"></translation>
+        <translation>Corriger date / heure</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="430"/>
         <source>Configure Default Directories...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer les répertoires défaut ...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="431"/>
         <source>Advanced Options...</source>
-        <translation type="unfinished"></translation>
+        <translation>Options avancées...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="435"/>
@@ -4150,7 +4150,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="1299"/>
         <source>Qt style</source>
-        <translation type="unfinished"></translation>
+        <translation>Style Qt</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1312"/>
@@ -4160,7 +4160,8 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="1326"/>
         <source>QSO Field expansion as percentage</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Definir</translatorcomment>
+        <translation>Expansion du détails du QSO en pourcentage</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1362"/>
@@ -4176,12 +4177,12 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="1587"/>
         <source>Set style...</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir Style (QT?)...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1589"/>
         <source>Set extra QSO field size...</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir QSO supplémentaire ... WHAT   </translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1590"/>
@@ -4584,7 +4585,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../WsjtxConfigure.ui" line="20"/>
         <source>Full WSJT-X link</source>
-        <translation type="unfinished"></translation>
+        <translation>Lien WSJT-X complet  </translation>
     </message>
     <message>
         <location filename="../WsjtxConfigure.ui" line="26"/>
@@ -4613,7 +4614,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../WsjtxConfigure.ui" line="64"/>
         <source>Secondary (ADIF only) links</source>
-        <translation type="unfinished"></translation>
+        <translation>Liens secondaires (ADIF uniquement)  </translation>
     </message>
     <message>
         <location filename="../WsjtxConfigure.ui" line="192"/>

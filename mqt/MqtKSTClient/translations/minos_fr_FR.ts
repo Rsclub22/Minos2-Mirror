@@ -125,10 +125,6 @@
         <translation>Connexion automatique lors du chargement</translation>
     </message>
     <message>
-        <source>Max distance to show</source>
-        <translation type="vanished">Distance maximale à afficher</translation>
-    </message>
-    <message>
         <location filename="../kstconfigure.ui" line="174"/>
         <source>AirScout</source>
         <translation>AStest</translation>
@@ -234,12 +230,12 @@
     <message>
         <location filename="../kstmainwindow.ui" line="182"/>
         <source>Max distance to show</source>
-        <translation type="unfinished">Distance maximale à afficher</translation>
+        <translation>Distance maximale à afficher</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="196"/>
         <source>Set max distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir la distance maximale</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="259"/>
