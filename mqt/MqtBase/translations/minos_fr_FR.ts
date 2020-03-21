@@ -633,9 +633,8 @@
 <context>
     <name>CallsignInputDialog</name>
     <message>
-        <location filename="../callsigninputdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialogue</translation>
+        <translation type="vanished">Dialogue</translation>
     </message>
     <message>
         <location filename="../callsigninputdialog.ui" line="22"/>
@@ -646,9 +645,8 @@
 <context>
     <name>ChatFrame</name>
     <message>
-        <location filename="../ChatFrame.ui" line="14"/>
         <source>Frame</source>
-        <translation>Frame</translation>
+        <translation type="vanished">Frame</translation>
     </message>
     <message>
         <location filename="../ChatFrame.ui" line="89"/>
@@ -688,9 +686,8 @@
 <context>
     <name>ConfigElementFrame</name>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="14"/>
         <source>Frame</source>
-        <translation>Frame</translation>
+        <translation type="vanished">Frame</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="31"/>
@@ -1120,9 +1117,8 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>LocatorInputDialog</name>
     <message>
-        <location filename="../locatorinputdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialogue</translation>
+        <translation type="vanished">Dialogue</translation>
     </message>
     <message>
         <location filename="../locatorinputdialog.ui" line="22"/>
@@ -1133,9 +1129,8 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>MinosKeyboard</name>
     <message>
-        <location filename="../minoskeyboard.ui" line="14"/>
         <source>Frame</source>
-        <translation>Frame</translation>
+        <translation type="vanished">Frame</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="28"/>
@@ -1558,9 +1553,8 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>RotPresetDialog</name>
     <message>
-        <location filename="../rotpresetdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialogue</translation>
+        <translation type="vanished">Dialogue</translation>
     </message>
     <message>
         <location filename="../rotpresetdialog.ui" line="24"/>

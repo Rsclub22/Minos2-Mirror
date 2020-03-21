@@ -4,9 +4,13 @@
 <context>
     <name>AddRadioDialog</name>
     <message>
-        <location filename="../addradiodialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialogue</translation>
+        <translation type="vanished">Dialogue</translation>
+    </message>
+    <message>
+        <location filename="../addradiodialog.ui" line="14"/>
+        <source>Add Radio</source>
+        <translation type="unfinished">Ajouter une radio</translation>
     </message>
     <message>
         <location filename="../addradiodialog.ui" line="22"/>
@@ -1204,9 +1208,8 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>rigSetupForm</name>
     <message>
-        <location filename="../rigsetupform.ui" line="14"/>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="vanished">Form</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="24"/>
@@ -1321,9 +1324,8 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>transVertSetupForm</name>
     <message>
-        <location filename="../transvertsetupform.ui" line="14"/>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="vanished">Form</translation>
     </message>
     <message>
         <location filename="../transvertsetupform.ui" line="22"/>

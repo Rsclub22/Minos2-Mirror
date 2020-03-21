@@ -201,7 +201,6 @@ FORMS    += \
     locTreeFrame.ui \
     minoscontestloaddialog.ui \
     n1mmbroadcastconfig.ui \
-    presetbuttondialog.ui \
     qsologframe.ui \
     rigcontrolframe.ui \
     rigmemdialog.ui \

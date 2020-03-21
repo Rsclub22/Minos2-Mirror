@@ -608,11 +608,6 @@
 <context>
     <name>CallsignInputDialog</name>
     <message>
-        <location filename="../callsigninputdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../callsigninputdialog.ui" line="22"/>
         <source>Callsign</source>
         <translation type="unfinished"></translation>
@@ -620,11 +615,6 @@
 </context>
 <context>
     <name>ChatFrame</name>
-    <message>
-        <location filename="../ChatFrame.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../ChatFrame.ui" line="89"/>
         <source>Type here</source>
@@ -662,11 +652,6 @@
 </context>
 <context>
     <name>ConfigElementFrame</name>
-    <message>
-        <location filename="../ConfigElementFrame.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="31"/>
         <source>Enabled</source>
@@ -1075,11 +1060,6 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <context>
     <name>LocatorInputDialog</name>
     <message>
-        <location filename="../locatorinputdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../locatorinputdialog.ui" line="22"/>
         <source>Locator</source>
         <translation type="unfinished"></translation>
@@ -1087,11 +1067,6 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </context>
 <context>
     <name>MinosKeyboard</name>
-    <message>
-        <location filename="../minoskeyboard.ui" line="14"/>
-        <source>Frame</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../minoskeyboard.ui" line="28"/>
         <source>Esc</source>
@@ -1508,11 +1483,6 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </context>
 <context>
     <name>RotPresetDialog</name>
-    <message>
-        <location filename="../rotpresetdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../rotpresetdialog.ui" line="24"/>
         <source>Name</source>

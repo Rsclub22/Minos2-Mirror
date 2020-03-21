@@ -5,7 +5,7 @@
     <name>ClusterMainWindow</name>
     <message>
         <location filename="../clustermainwindow.ui" line="14"/>
-        <source>ClusterMainWindow</source>
+        <source>Minos Cluster Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -431,11 +431,6 @@ The time to live must be between %2 minutes and %3 minutes</source>
 </context>
 <context>
     <name>userClusterCommandDialog</name>
-    <message>
-        <location filename="../userclustercommanddialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../userclustercommanddialog.ui" line="22"/>
         <source>Name:</source>
