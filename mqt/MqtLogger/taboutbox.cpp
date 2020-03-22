@@ -12,10 +12,26 @@ QString TAboutBox::welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " +
                                "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
                                "<br><br>";
 
-QString TAboutBox::creditsText = QString("<br><h2>%1</h2>"
-                              "<br>Mike Goodey G0GJV; David Balharrie M0DGB/G8FKH; Neil Yorke M0NKE"
-                              "<br>Dave Sergeant G3YMC; Peter Burton G3ZPB, Ken Punshon G4APJ"
-                              "<br><br>");
+QString TAboutBox::creditsText = QString(
+    "<br><center><h2>%1</h2>"
+
+    "<br><h3>%2</h3>"
+    "<br>Mike Goodey G0GJV; David Balharrie M0DGB/G8FKH"
+    "<br><h3>%3</h3>"
+    "<br>Ken Punshon G4APJ"
+    "<br><h3>%4</h3>"
+    "<br>Ken Punshon G4APJ"
+    "<br><h3>%5</h3>"
+    "Phil Taylor M0VSE, Andy Cunningham M0HAK"
+    "<br><h3>%6</h3>"
+    "<br> Neil Yorke M0NKE"
+    "<br><h3>%7</h3>"
+    "<br> Peter Burton G3ZPB"
+    "<br><h3>%8</h3>"
+    "<br>Ken Punshon G4APJ"
+    "<br><h3>%9</h3>"
+    "<br>Dave Sergeant G3YMC"
+     );
 QString TAboutBox::MinosText =
    "The Inferno, Dante, (trans Dorothy L Sayers, Penguin Classics); Canto 5.\r\n"
    "\r\n"
@@ -96,9 +112,20 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
     ui->AboutMemo->setTextFormat(Qt::RichText);
     ui->AboutMemo->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
-    ui->CreditsMemo->setTextFormat(Qt::RichText);
-    QString credits = tr("Credits");
-    ui->CreditsMemo->setText(creditsText.arg(credits));
+    ui->creditsLabel->setTextFormat(Qt::RichText);
+
+    ui->creditsLabel->setText(creditsText
+                       .arg(tr("Credits"))
+                       .arg(tr("Main Developers"))
+                       .arg(tr("Testing"))
+                       .arg(tr("Documentation"))
+                       .arg(tr("MAC port"))
+                       .arg(tr("Icons"))
+                       .arg(tr("Rig testing"))
+                       .arg(tr("French Translation"))
+                       .arg(tr("Web Site"))
+
+                       );
 
     ui->MinosMemo->setText(MinosText);
 

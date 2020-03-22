@@ -26,7 +26,7 @@
       <attribute name="title">
        <string>About</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,1">
+      <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2">
        <item>
         <widget class="QLabel" name="AboutMemo">
          <property name="frameShape">
@@ -43,28 +43,6 @@
          </property>
          <property name="margin">
           <number>20</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="CreditsMemo">
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Sunken</enum>
-         </property>
-         <property name="text">
-          <string>Credits</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <property name="margin">
-          <number>9</number>
          </property>
         </widget>
        </item>
@@ -103,6 +81,39 @@
              </property>
              <property name="openExternalLinks">
               <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="creditsTabSheet">
+      <attribute name="title">
+       <string>Credits</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QScrollArea" name="scrollArea_2">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>320</width>
+            <height>175</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QLabel" name="creditsLabel">
+             <property name="text">
+              <string>TextLabel</string>
              </property>
             </widget>
            </item>
