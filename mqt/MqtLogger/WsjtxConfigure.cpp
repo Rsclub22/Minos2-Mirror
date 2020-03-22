@@ -87,6 +87,17 @@ WsjtxConfigure::WsjtxConfigure(QWidget *parent) :
         ui->portSpinBox_4->setValue(port);
         ui->groupAddrEdit_4->setText(addr);
     }
+    ui->wsjtxPort->setValidator(new QIntValidator(0, 0xffff, this));
+    bool wsjtxRbSelect;
+    QString wsjtxRbAddr;
+    int wsjtxRbPort;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpwsjtxRbSelect, wsjtxRbSelect );
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpwsjtxRbAddr, wsjtxRbAddr );
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpwsjtxRbPort, wsjtxRbPort );
+    ui->wsjtxSelect->setChecked(wsjtxRbSelect);
+    ui->wsjtxAddr->setText(wsjtxRbAddr);
+    ui->wsjtxPort->setText(QString::number(wsjtxRbPort));
+
 
 }
 
@@ -140,6 +151,13 @@ void WsjtxConfigure::on_OKButton_clicked()
         TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpWSJTX4Port, port );
         TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpWSJTX4GroupAddress, addr );
     }
+
+    bool wsjtxRbSelect = ui->wsjtxSelect->isChecked();
+    QString wsjtxRbAddr = ui->wsjtxAddr->text();
+    int wsjtxRbPort = ui->wsjtxPort->text().toInt();
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpwsjtxRbSelect, wsjtxRbSelect );
+    TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpwsjtxRbAddr, wsjtxRbAddr );
+    TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpwsjtxRbPort, wsjtxRbPort );
 
     WsjtxServer::getWsjtxServer()->start();
 
