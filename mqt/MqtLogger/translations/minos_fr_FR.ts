@@ -3062,7 +3062,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     </message>
     <message>
         <location filename="../taboutbox.ui" line="95"/>
-        <location filename="../taboutbox.cpp" line="118"/>
+        <location filename="../taboutbox.cpp" line="120"/>
         <source>Credits</source>
         <translation>Crédits</translation>
     </message>
@@ -3098,48 +3098,53 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>Applications</translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="111"/>
+        <location filename="../taboutbox.cpp" line="113"/>
         <source>Welcome to Minos Version</source>
         <translation>Bienvenue à Minos Version (FR 18 Mar 20)</translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="119"/>
+        <location filename="../taboutbox.cpp" line="121"/>
         <source>Main Developers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="120"/>
+        <location filename="../taboutbox.cpp" line="122"/>
         <source>Testing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="121"/>
+        <location filename="../taboutbox.cpp" line="123"/>
         <source>Documentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="122"/>
+        <location filename="../taboutbox.cpp" line="124"/>
         <source>MAC port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="123"/>
+        <location filename="../taboutbox.cpp" line="125"/>
         <source>Icons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="124"/>
+        <location filename="../taboutbox.cpp" line="126"/>
         <source>Rig testing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="125"/>
+        <location filename="../taboutbox.cpp" line="127"/>
         <source>French Translation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.cpp" line="126"/>
+        <location filename="../taboutbox.cpp" line="128"/>
         <source>Web Site</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../taboutbox.cpp" line="129"/>
+        <source>And last (but not least) our long suffering wives</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
