@@ -4,13 +4,9 @@
 <context>
     <name>AddRadioDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
         <location filename="../addradiodialog.ui" line="14"/>
         <source>Add Radio</source>
-        <translation type="unfinished">Ajouter une radio</translation>
+        <translation>Ajouter une radio</translation>
     </message>
     <message>
         <location filename="../addradiodialog.ui" line="22"/>
@@ -650,10 +646,6 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
         <translation>Défenir la fréquence de RIT</translation>
     </message>
     <message>
-        <source>RigControl hamlib Error - </source>
-        <translation type="vanished">Contrôle d&apos;Appareil, Erreur de Hamlib - </translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="2608"/>
         <source>%1 - %2
 Command %3</source>
@@ -1208,10 +1200,6 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>rigSetupForm</name>
     <message>
-        <source>Form</source>
-        <translation type="vanished">Form</translation>
-    </message>
-    <message>
         <location filename="../rigsetupform.ui" line="24"/>
         <source>Radio Model</source>
         <translation>Type de la radio</translation>
@@ -1323,10 +1311,6 @@ utiliser un autre nom SVP</translation>
 </context>
 <context>
     <name>transVertSetupForm</name>
-    <message>
-        <source>Form</source>
-        <translation type="vanished">Form</translation>
-    </message>
     <message>
         <location filename="../transvertsetupform.ui" line="22"/>
         <source>Radio Freq.</source>
