@@ -429,6 +429,7 @@ void TLogContainer::setupMenus()
     ui->menuTools->addSeparator();
     DefDirsAction = newAction(QT_TR_NOOP("Configure Default Directories..."), ui->menuTools, SLOT(DefDirsActionExecute()));
     OptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, SLOT(OptionsActionExecute()));
+    OptionsAction->setVisible(false);
 
     // end of tools manu
 

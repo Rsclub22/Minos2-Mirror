@@ -5,7 +5,7 @@
     <name>AddRadioDialog</name>
     <message>
         <location filename="../addradiodialog.ui" line="14"/>
-        <source>Dialog</source>
+        <source>Add Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1136,11 +1136,6 @@ Please enter another name</source>
 <context>
     <name>rigSetupForm</name>
     <message>
-        <location filename="../rigsetupform.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rigsetupform.ui" line="24"/>
         <source>Radio Model</source>
         <translation type="unfinished"></translation>
@@ -1251,11 +1246,6 @@ Please enter another name</source>
 </context>
 <context>
     <name>transVertSetupForm</name>
-    <message>
-        <location filename="../transvertsetupform.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../transvertsetupform.ui" line="22"/>
         <source>Radio Freq.</source>

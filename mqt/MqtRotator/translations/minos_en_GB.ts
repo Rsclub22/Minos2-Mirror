@@ -5,7 +5,7 @@
     <name>AddAntennaDialog</name>
     <message>
         <location filename="../addantennadialog.ui" line="14"/>
-        <source>Dialog</source>
+        <source>Add Antenna</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -782,11 +782,6 @@ Do you want to reload the settings for the antenna now?</source>
 </context>
 <context>
     <name>rotSetupForm</name>
-    <message>
-        <location filename="../rotsetupform.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../rotsetupform.ui" line="24"/>
         <source>Rotator Model</source>
