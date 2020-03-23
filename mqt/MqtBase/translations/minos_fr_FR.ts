@@ -185,26 +185,6 @@
         <translation>Section à utiliser dans le fichier de listes</translation>
     </message>
     <message>
-        <source>WSJTX Enabled</source>
-        <translation type="vanished">WSJTX activé</translation>
-    </message>
-    <message>
-        <source>WSJTX Port</source>
-        <translation type="vanished">Port de WSJTX</translation>
-    </message>
-    <message>
-        <source>WSJTX Group Address</source>
-        <translation type="vanished">Adresse du groupe de WSJT-X</translation>
-    </message>
-    <message>
-        <source>WSJTX Auto Enabled</source>
-        <translation type="vanished">WSJTX activé automatiquement</translation>
-    </message>
-    <message>
-        <source>WSJTX Test Enabled</source>
-        <translation type="vanished">WSJTX Test  activé</translation>
-    </message>
-    <message>
         <location filename="../profiles.cpp" line="74"/>
         <source>UDP Contacts Enabled</source>
         <translation>Contacts UDP activés</translation>
@@ -633,10 +613,6 @@
 <context>
     <name>CallsignInputDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
         <location filename="../callsigninputdialog.ui" line="22"/>
         <source>Callsign</source>
         <translation>Indicatif d&apos;appel</translation>
@@ -644,10 +620,6 @@
 </context>
 <context>
     <name>ChatFrame</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Frame</translation>
-    </message>
     <message>
         <location filename="../ChatFrame.ui" line="89"/>
         <source>Type here</source>
@@ -685,10 +657,6 @@
 </context>
 <context>
     <name>ConfigElementFrame</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Frame</translation>
-    </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="31"/>
         <source>Enabled</source>
@@ -1117,10 +1085,6 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>LocatorInputDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
         <location filename="../locatorinputdialog.ui" line="22"/>
         <source>Locator</source>
         <translation>Maidenhead Locator</translation>
@@ -1128,10 +1092,6 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 </context>
 <context>
     <name>MinosKeyboard</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Frame</translation>
-    </message>
     <message>
         <location filename="../minoskeyboard.ui" line="28"/>
         <source>Esc</source>
@@ -1460,10 +1420,6 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
         <translation>Rapport Rx</translation>
     </message>
     <message>
-        <source>SnRx)</source>
-        <translation type="vanished">Numéro Rx</translation>
-    </message>
-    <message>
         <location filename="../MatchTreeFrame.cpp" line="157"/>
         <source>SnRx</source>
         <translation>Numéro Rx</translation>
@@ -1552,10 +1508,6 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 </context>
 <context>
     <name>RotPresetDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
     <message>
         <location filename="../rotpresetdialog.ui" line="24"/>
         <source>Name</source>

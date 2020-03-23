@@ -31,6 +31,8 @@ QString TAboutBox::creditsText = QString(
     "<br>Ken Punshon G4APJ"
     "<br><h3>%9</h3>"
     "<br>Dave Sergeant G3YMC"
+    "<br><h3>%10</h3>"
+    "<br>Jacqui Goodey G6XSY, Mrs Balharrie, Sue Punshon"
      );
 QString TAboutBox::MinosText =
    "The Inferno, Dante, (trans Dorothy L Sayers, Penguin Classics); Canto 5.\r\n"
@@ -124,7 +126,7 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
                        .arg(tr("Rig testing"))
                        .arg(tr("French Translation"))
                        .arg(tr("Web Site"))
-
+                       .arg(tr("And last (but not least) our long suffering wives"))
                        );
 
     ui->MinosMemo->setText(MinosText);
