@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Frame</string>
+   <string/>
   </property>
   <property name="frameShape">
    <enum>QFrame::StyledPanel</enum>
@@ -84,7 +84,7 @@
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

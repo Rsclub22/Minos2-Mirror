@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ExitAction = newAction(QT_TR_NOOP("E&xit Minos Application Starter"), ui->menuFile, SLOT(ExitActionExecute()));
     FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
-    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language..."));
+    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language"));
 
     QString currentLang = getCurrentLanguage();
 

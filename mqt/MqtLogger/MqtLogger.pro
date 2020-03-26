@@ -55,6 +55,7 @@ SOURCES += \
     bandmapgraphicspanel.cpp \
     bandmapspotmarker.cpp \
     contestdetails.cpp \
+    defdirsdlg.cpp \
     districtframe.cpp \
     dxccframe.cpp \
     enqdlg.cpp \
@@ -134,6 +135,7 @@ HEADERS  += \
     bandmapgraphicspanel.h \
     bandmapspotmarker.h \
     contestdetails.h \
+    defdirsdlg.h \
     districtframe.h \
     dxccframe.h \
     enqdlg.h \
@@ -190,6 +192,7 @@ HEADERS  += \
 FORMS    += \
     bandmapclientfilterdialog.ui \
     contestdetails.ui \
+    defdirsdlg.ui \
     districtframe.ui \
     dxccframe.ui \
     FilterFrame.ui \
@@ -198,7 +201,6 @@ FORMS    += \
     locTreeFrame.ui \
     minoscontestloaddialog.ui \
     n1mmbroadcastconfig.ui \
-    presetbuttondialog.ui \
     qsologframe.ui \
     rigcontrolframe.ui \
     rigmemdialog.ui \

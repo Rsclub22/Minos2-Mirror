@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Frame</string>
+   <string/>
   </property>
   <property name="frameShape">
    <enum>QFrame::StyledPanel</enum>
@@ -288,7 +288,7 @@
   <customwidget>
    <class>BearingLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>bearinglineedit.h</header>
+   <header location="global">bearinglineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Frame</string>
+   <string/>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -304,15 +304,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MinosSplitter</class>
-   <extends>QSplitter</extends>
-   <header>minossplitter.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>QLogTabWidget</class>
    <extends>QTabWidget</extends>
    <header>qlogtabwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MinosSplitter</class>
+   <extends>QSplitter</extends>
+   <header>minossplitter.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -5,8 +5,8 @@
     <name>ClusterMainWindow</name>
     <message>
         <location filename="../clustermainwindow.ui" line="14"/>
-        <source>ClusterMainWindow</source>
-        <translation>Fenêtre principale du cluster</translation>
+        <source>Minos Cluster Client</source>
+        <translation>Minos: Client de Cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="23"/>
@@ -439,11 +439,6 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
 </context>
 <context>
     <name>userClusterCommandDialog</name>
-    <message>
-        <location filename="../userclustercommanddialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation>Dialogue</translation>
-    </message>
     <message>
         <location filename="../userclustercommanddialog.ui" line="22"/>
         <source>Name:</source>

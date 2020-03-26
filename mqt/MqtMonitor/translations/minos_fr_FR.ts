@@ -58,9 +58,8 @@
 <context>
     <name>MonitoringFrame</name>
     <message>
-        <location filename="../MonitoringFrame.ui" line="14"/>
         <source>Frame</source>
-        <translation>Frame</translation>
+        <translation type="vanished">Frame</translation>
     </message>
     <message>
         <location filename="../MonitoringFrame.ui" line="48"/>

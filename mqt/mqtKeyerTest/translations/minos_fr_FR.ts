@@ -21,7 +21,7 @@
     <message>
         <location filename="../mqtktMainWindow.ui" line="53"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>
