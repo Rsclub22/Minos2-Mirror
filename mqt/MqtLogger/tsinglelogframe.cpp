@@ -51,6 +51,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
 
 {
+    qRegisterMetaType< QSharedPointer<BaseContact> > ( "QSharedPointer<BaseContact>" );
+
 #ifdef Q_OS_ANDROID
     splitterHandleWidth = 20;
 #else
@@ -78,7 +80,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(PublishTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(HideTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(MakeEntry(BaseContestLog*)), this, SLOT(on_MakeEntry(BaseContestLog*)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)), this, SLOT(on_AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)), this, SLOT(on_AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)));
     connect(&MinosLoggerEvents::mle, SIGNAL(setMemory(BaseContestLog *, QString, QString)), this, SLOT(on_SetMemory(BaseContestLog *, QString, QString)));
     // from cluster frame or bandmap frame
@@ -1188,13 +1190,29 @@ void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, Bas
 {
     if (ct == contest && !lct)
     {
-        QSOTable->scrollToBottom();
-        int row = QSOTable->model()->rowCount() - 1;
-        if (row >= 0)
+        // use a lambda on a short timer as when contest is first opened, it doesn't actually scroll
+        QTimer *timer = new QTimer(this);
+        timer->setSingleShot(true);
+
+        connect(timer, &QTimer::timeout, [=]()
         {
-            QModelIndex index = QSOTable->model()->index( row, 0 );
-            QSOTable->setCurrentIndex(index);
+            // NB a lambda function
+            QSOTable->scrollToBottom();
+            int row = QSOTable->model()->rowCount() - 1;
+            if (row >= 0)
+            {
+                QModelIndex oldIndex = QSOTable->currentIndex();
+                if (oldIndex.row() != row)
+                {
+                    QModelIndex index = QSOTable->model()->index( row, 0 );
+                    QSOTable->setCurrentIndex(index);
+                }
+            }
+            timer->deleteLater();
         }
+        );
+
+        timer->start(100);
     }
 }
 void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)
