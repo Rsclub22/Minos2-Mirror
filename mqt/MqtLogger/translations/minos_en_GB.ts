@@ -1547,7 +1547,7 @@ and send the .EDI file produced.<byte value="xd"/>
 <context>
     <name>N1MMBroadcast</name>
     <message>
-        <location filename="../n1mmbroadcast.cpp" line="146"/>
+        <location filename="../n1mmbroadcast.cpp" line="148"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation type="unfinished"></translation>
     </message>

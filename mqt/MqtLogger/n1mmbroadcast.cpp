@@ -127,18 +127,20 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
 
             // check if callsign has changed
             QSharedPointer<BaseContact> h = tct->getHistory().at(tct->getHistory().size() - 1);
-            if (h->cs.fullCall.getValue() != tct->cs.fullCall.getValue() || h->time.getIsoDTG() != tct->time.getIsoDTG())
-            {
-                QString stanza = genDeleteStanza(h);
-                bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
-            }
-            QString stanza = genContactStanza("contactreplace", c, tct);
+
+            QString stanza = genDeleteStanza(h);
             bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+            //trace(stanza);
+
+            stanza = genContactStanza("contactreplace", c, tct);
+            bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+            //trace(stanza);
         }
         else
         {
             QString stanza = genContactStanza("contactinfo", c, tct);
             bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+            trace(stanza);
         }
     }
     if (ADIFSelect && !ADIFHost.isNull())

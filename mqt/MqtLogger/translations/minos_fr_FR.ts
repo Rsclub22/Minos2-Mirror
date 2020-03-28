@@ -1602,7 +1602,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
 <context>
     <name>N1MMBroadcast</name>
     <message>
-        <location filename="../n1mmbroadcast.cpp" line="146"/>
+        <location filename="../n1mmbroadcast.cpp" line="148"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation>Exporté par Minos Logger Version %1 %2</translation>
     </message>
