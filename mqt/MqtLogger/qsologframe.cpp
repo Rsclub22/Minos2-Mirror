@@ -580,8 +580,12 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 
     if ( screenContact.contactFlags & ( LOCAL_COMMENT | DONT_PRINT | COMMENT_ONLY ) )
     {
-       logCurrentContact( );
-       return;
+        if ( !checkAndLogEntry() )  // if it is the same, then don't log
+        {
+           return;
+        }
+//       logCurrentContact( );
+//       return;
     }
 
     // validate the entry; if still invalid, spin round the invalid
