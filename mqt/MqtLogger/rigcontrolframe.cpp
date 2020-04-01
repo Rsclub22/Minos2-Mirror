@@ -126,6 +126,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
                 setVolumeStatus(selDetail.volumeStatus().getValue(), psn);
                 setRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 setBandList(selDetail.bandList().getValue(), psn);
+                setIgnorePresetFreqFlag(selDetail.ignorePresetFreqFlag().getValue(), psn);
+                setIgnorePreviousFreqFlag(selDetail.ignorePreviousFreqFlag().getValue(), psn);
             }
         }
     }
@@ -149,6 +151,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     launchRadioSelectCount = 5;     // wait five seconds
     connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
     launchRadioSelectTimer->start(1000);
+//    trace(QString("constructor: launchRadioSelectTimer 1000 count is %1 contest n/a").arg(launchRadioSelectCount));
 }
 
 RigControlFrame::~RigControlFrame()
@@ -179,6 +182,7 @@ void RigControlFrame::checkRigDetailsAvail()
     launchRadioSelectCount--;
     if (launchRadioSelectCount == 0)
     {
+//        trace(QString("checkRigDetailsAvail: launchRadioSelectTimer stopped count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
         // timed out waiting for rigdetails
         launchRadioSelectTimer->stop();
         trace(QString("rigControlFrame: Timed out waiting for rigdetails"));
@@ -186,7 +190,8 @@ void RigControlFrame::checkRigDetailsAvail()
     }
     else if (ct && ( ct->isProtected() || ct != TContestApp::getContestApp() ->getCurrentContest()))
     {
-        launchRadioSelectTimer->stop();
+        //trace(QString("checkRigDetailsAvail: launchRadioSelectTimer stopped protected or not current contest count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
+        //launchRadioSelectTimer->stop();
         return;
     }
 
@@ -198,6 +203,7 @@ void RigControlFrame::checkRigDetailsAvail()
             {
                if (allRadioDetails[ct->radioName.getValue().toString()].getBandListCount() > 0)
                {
+//                   trace(QString("checkRigDetailsAvail: launchRadioSelectTimer stopped rig found count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
                    launchRadioSelectTimer->stop();
                    trace(QString("rigControlFrame: start select radio %1, mode %2").arg(ct->radioName.getValue().toString()).arg(ct->currentMode.getValue()));
                    setRadioName(ct->radioName.getValue().toString(), ct->currentMode.getValue());
@@ -281,6 +287,7 @@ void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
 
 void RigControlFrame::setTransVertOffset(double offset, PubSubName psn)
 {
+    traceMsg(QString("set transvertOffset %1 for radio %2").arg(QString::number(offset)).arg(psn.toString()));
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -297,6 +304,8 @@ void RigControlFrame::setTransVertOffset(double offset, PubSubName psn)
 
 void RigControlFrame::setTransVertSwitch(int switchNum, PubSubName psn)
 {
+    traceMsg(QString("set transvertSwitch Number = %1 for radio %2").arg(QString::number(switchNum)).arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -313,6 +322,8 @@ void RigControlFrame::setTransVertSwitch(int switchNum, PubSubName psn)
 
 void RigControlFrame::setTransVertEnabled(bool status, PubSubName psn)
 {
+    traceMsg(QString("set transvertEnabled = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -338,6 +349,9 @@ void RigControlFrame::setTransVertEnabled(bool status, PubSubName psn)
 
 void RigControlFrame::setTransVertStatus(bool status, PubSubName psn)
 {
+
+    traceMsg(QString("set transvertStatus = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -359,6 +373,8 @@ void RigControlFrame::setTransVertStatus(bool status, PubSubName psn)
 
 void RigControlFrame::setVolumeStatus(bool status, PubSubName psn)
 {
+    traceMsg(QString("set volumeStatus = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -380,6 +396,8 @@ void RigControlFrame::setVolumeStatus(bool status, PubSubName psn)
 
 void RigControlFrame::setRitEnableStatus(bool status, PubSubName psn)
 {
+    traceMsg(QString("set RitEnableStatus = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -400,8 +418,56 @@ void RigControlFrame::setRitEnableStatus(bool status, PubSubName psn)
     }
 }
 
+void RigControlFrame::setIgnorePresetFreqFlag(bool status, PubSubName psn)
+{
+    traceMsg(QString("set IgnorePresetFreqFlag = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setIgnorePresetFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setIgnorePresetFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+
+    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        selRadioDetails.setIgnorePresetFreq(status);
+    }
+}
+
+void RigControlFrame::setIgnorePreviousFreqFlag(bool status, PubSubName psn)
+{
+    traceMsg(QString("set IgnorePreviousFreqFlag = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setIgnorePreviousFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setIgnorePreviousFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+
+    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+         selRadioDetails.setIgnorePreviousFreq(status);
+    }
+}
 void RigControlFrame::setBandList(QString s,PubSubName psn)
 {
+    traceMsg(QString("set BandList = %1 for radio %2").arg(s).arg(psn.toString()));
+
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -474,6 +540,7 @@ void RigControlFrame::setFreq(QString freq)
             ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
             setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setText(freq);
+            emit setFreqDisplay(freq, legalFreq);
         }
         curFreq = freq;
     }
@@ -652,6 +719,7 @@ void RigControlFrame::changeMainRadioFreq()
                 QString f =HtmlFontColour(Qt::red) + lastFreq;
                 trace("changeMainRadioFreq " + f);
                 ui->freqInput->setText(f);
+                emit setFreqDisplay(f, legalFreq);
             }
         }
     }
@@ -812,6 +880,7 @@ void RigControlFrame::exitFreqEdit()
         // up date display to current radio freq
         ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
         ui->freqInput->setText(curFreq);
+        emit setFreqDisplay(curFreq, legalFreq);
     }
 
 
@@ -1207,9 +1276,11 @@ void RigControlFrame::setRadioFreq()
                     }
 
 
-                    if (this->isVisible())  // only set freq on radio if rigcontrol panel is visible
+
+
+                    if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
                     {
-                        if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
+                        if (!selRadioDetails.getIgnorePreviousFreq())     // don't return to previous freq when swapping contests
                         {
                             sendFreq(freq);
                             trace(QString("setRadioFreq: Set previous freq = %1").arg(QString::number(cf)));
@@ -1218,13 +1289,19 @@ void RigControlFrame::setRadioFreq()
                                 setFreq(freq);
                             }
                         }
-                        else
-                        {
 
+                    }
+                    else
+                    {
+
+                        if (!selRadioDetails.getIgnorePresetFreq())     // don't go to preset freq
+                        {
                             sendFreq(listOfBands[i].freq);
                             trace(QString("setRadioFreq: Set default freq = %1").arg(listOfBands[i].freq));
                         }
+
                     }
+
 
                     setRadioBandWarning("");
 
@@ -1248,7 +1325,7 @@ void RigControlFrame::setRadioFreq()
 
 void RigControlFrame::setRadioList()
 {
-    if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (ct && !ct->isProtected() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
     {
         listOfRadios = LogContainer->sendDM->rigs();
 
@@ -1261,6 +1338,7 @@ void RigControlFrame::setRadioList()
             trace(QString("setRadioList: rigControl restart? reconnecting"));
             launchRadioSelectCount = 5;     // wait five seconds
             launchRadioSelectTimer->start(1000);
+//            trace(QString("setRadioList: launchRadioSelectTimer restarted count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
         }
     }
 }
@@ -1349,6 +1427,7 @@ void RigControlFrame::setRadioState(QString s)
                curFreq = "00000000000";
                ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
                ui->freqInput->setText(curFreq);
+               emit setFreqDisplay(curFreq, legalFreq);
                ui->bandSelCombo->clear();
            }
 
@@ -1600,6 +1679,7 @@ void RigControlFrame::freqPlusMinusButton(double f)
 
             setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setText(freq);
+            emit setFreqDisplay(freq, legalFreq);
 
            if (radioConnected && !radioError)
            {

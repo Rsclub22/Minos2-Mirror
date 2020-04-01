@@ -357,17 +357,27 @@ bool RigControl::checkFreqValid(freq_t freq, rmode_t mode)
 bool HamlibRigControl::checkFreqRange(int rigNumber, Frequency freq)
 {
 
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
+    RIG *myRig = rig_init(rigNumber);
     if (myRig)
     {
-        const freq_range_t* freq_range = rig_get_range(myRig->caps->rx_range_list1, static_cast<freq_t>(freq), RIG_MODE_USB);
+        rmode_t mode = convertQStrRmode_t("USB");
+
+        const freq_range_t* freq_range = nullptr;
+        if (myRig->caps->rig_model == RIG_MODEL_IC9700)
+        {
+             freq_range = rig_get_range(myRig->caps->tx_range_list2, freq, mode);
+        }
+        else
+        {
+            freq_range = rig_get_range(myRig->caps->tx_range_list1, freq, mode);
+        }
+
         return (freq_range != nullptr)? true:false;
     }
-    else
-    {
-        return false;
-    }
+
+
+    return false;
+
 
 
 }
@@ -980,12 +990,12 @@ int RigControl::getAntSwNum(vfo_t vfo)
 {
     int antNum = 0;
     int retCode = 0;
-
-    retCode = rig_get_ant(my_rig, vfo, &antNum);
-    if (retCode < 0)
-    {
-        return retCode;
-    }
+    // api has changed *********************************************************
+    //retCode = rig_get_ant(my_rig, vfo, &antNum);
+    //if (retCode < 0)
+    //{
+    //    return retCode;
+    //}
 
     return antNum;
 
@@ -996,8 +1006,8 @@ int RigControl::getAntSwNum(vfo_t vfo)
 int RigControl::setAntSwNum(vfo_t vfo, ant_t antNum)
 {
     int retCode = 0;
-
-    retCode = rig_set_ant(my_rig, vfo, antNum);
+    // api has changed *********************************************************
+    //retCode = rig_set_ant(my_rig, vfo, antNum);
     return retCode;
 }
 

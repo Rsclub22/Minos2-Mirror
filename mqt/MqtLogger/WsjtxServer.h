@@ -25,7 +25,10 @@ public:
 
 private:
     static WsjtxServer *wsjtxServer;
-    MessageServer * server_ = nullptr;
+    MessageServer * server_1 = nullptr;
+    MessageServer * server_2 = nullptr;
+    MessageServer * server_3 = nullptr;
+    MessageServer * server_4 = nullptr;
     bool fast_mode_ = false;
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);

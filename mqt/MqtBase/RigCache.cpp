@@ -286,6 +286,14 @@ void RigCache::setVolumeStatus(const PubSubName &name, bool volumeStatus)
 {
     rigDetails[name].setVolumeStatus(volumeStatus);
 }
+void RigCache::setIgnorePresetFreq(const PubSubName &name, bool ignorePresetFreqFlag)
+{
+    rigDetails[name].setIgnorePresetFreqFlag(ignorePresetFreqFlag);
+}
+void RigCache::setIgnorePreviousFreq(const PubSubName &name, bool ignorePreviousFreqFlag)
+{
+    rigDetails[name].setIgnorePreviousFreqFlag(ignorePreviousFreqFlag);
+}
 void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {
     rigDetails[name].setBandList(bands);

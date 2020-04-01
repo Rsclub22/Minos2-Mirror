@@ -133,12 +133,59 @@ QString dtg::getIsoDTG( bool &d ) const
          temp_date[ i ] = ' ';
 
    d = dateDirty || timeDirty;
-   return QString( temp_date );
+   return temp_date;
 }
 QString dtg::getIsoDTG( ) const
 {
    bool dirty;
    return getIsoDTG( dirty );
+}
+QString dtg::getN1mmDTG()
+{
+    // 2016-04-10 16:17:41
+    QString temp_date;
+    QString prefix = "20";
+
+    bool dateDirty = false;
+    bool timeDirty = false;
+
+    QString dateValue = sdate.getValue( dateDirty );    //yyMMdd
+    dateValue += "            ";
+
+    QString timeValue = stime.getValue( timeDirty );    //HHmmss
+    timeValue += "            ";
+
+    if ( dateValue [ 0 ] >= '8' )
+       prefix = "19";
+
+    dateValue = prefix + dateValue;
+
+    temp_date += dateValue[0];
+    temp_date += dateValue[1];
+    temp_date += dateValue[2];
+    temp_date += dateValue[3];
+    temp_date += "-";
+    temp_date += dateValue[4];
+    temp_date += dateValue[5];
+    temp_date += "-";
+    temp_date += dateValue[6];
+    temp_date += dateValue[7];
+    temp_date += " ";
+    temp_date += timeValue [ 0 ];
+    temp_date += timeValue [ 1 ];
+    temp_date += ':';
+    temp_date += timeValue [ 2 ];
+    temp_date += timeValue [ 3 ];
+    temp_date += ':';
+    temp_date += timeValue [ 4 ];
+    temp_date += timeValue [ 5 ];
+
+    for ( int i = 0; i < temp_date.size(); i++ )
+       if ( temp_date[ i ].unicode() == 0 )
+          temp_date[ i ] = ' ';
+
+    return temp_date;
+
 }
 QString dtg::getDate( DTG dstyle, bool &d ) const
 {
@@ -551,10 +598,17 @@ int Callsign::validate( )
 
     for ( int i = 0; i < cslen; i++ )
     {
-        if ( ( cs[ i ] != '/' ) && ( !cs[ i ].isLetterOrNumber() ) )
-        {
-            return valRes;
-        }
+        QChar c = cs[i];
+
+        if (c.isDigit())
+            continue;
+
+        if (c == '/')
+            continue;
+
+        if ( c>= 0x40 && c <= 0x5A) // Basic ASCII uppercase
+            continue;
+        return valRes;
     }
 
     locCtryPrefix.clear();
@@ -753,6 +807,24 @@ int Callsign::validate( )
     body = call.mid(callOffset);
 
     realCall = dupPrefix + number + body;
+
+    /*
+     From CQWW WPX rules...
+        1. A PREFIX is the letter/numeral combination which forms the first part of the amateur call.
+        Examples: N8, W8, WD8, HG1, HG19, KC2, OE2, OE25, LY1000, etc. Any difference in the numbering,
+        lettering, or order of same shall count as a separate prefix. A station operating from a DXCC entity
+        different from that indicated by its call sign is required to sign portable. The portable prefix
+        must be an authorized prefix of the country/call area of operation. In cases of portable operation,
+        the portable designator will then become the prefix. Example: N8BJQ operating from Wake Island would
+        sign N8BJQ/KH9 or N8BJQ/NH9. KH6XXX operating from Ohio must use an authorized prefix for the U.S.
+        8th district (/W8, /AD8, etc.). Portable designators without numbers will be assigned a zero (Ø)
+        after the second letter of the portable designator to form the prefix. Example: PA/N8BJQ would become
+        PAØ. All calls without numbers will be assigned a zero (Ø) after the first two letters to form the prefix.
+        Example: XEFTJW would count as XEØ. Maritime mobile, mobile, /A, /E, /J, /P, or other license class
+        identifiers do not count as prefixes.
+     */
+
+    wpxPrefix = dupPrefix + number;     // for now...
 
     for (int i = 0; i < body.count(); i++)
     {

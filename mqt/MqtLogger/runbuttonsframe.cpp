@@ -31,7 +31,6 @@ RunButtonsFrame::RunButtonsFrame(QWidget *parent) :
 
     chkRunFreqTimer = new QTimer(this);
     connect(chkRunFreqTimer, SIGNAL(timeout()), this, SLOT(on_ChkRunFreq()));
-
 }
 
 RunButtonsFrame::~RunButtonsFrame()
@@ -57,12 +56,36 @@ void RunButtonsFrame::setContest(BaseContestLog *c)
 void RunButtonsFrame::setRigControl(RigControlFrame *rc)
 {
     rigControl = rc;
+    connect(rc, SIGNAL(setFreqDisplay(QString, bool)), this, SLOT(setFreqDisplay(QString, bool)), Qt::UniqueConnection);
+    connect(rc, SIGNAL(radioIsConnected(bool)), this, SLOT(radioIsConnected(bool)));
+
+}
+void RunButtonsFrame::radioIsConnected(bool on)
+{
+    if (on)
+    {
+        ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->radioStatusIndicator->setToolTip(tr("Connected"));
+
+    }
+    else
+    {
+       ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+       ui->radioStatusIndicator->setToolTip(tr("Disconnected"));
+    }
+
 }
 void RunButtonsFrame::setFreq(QString /*freq*/)
 {
     on_ChkRunFreq();
     setRunButtonText(RUN_BUTTON_1_ON);
     setRunButtonText(RUN_BUTTON_2_ON);
+
+    if (!chkRadioFreqOnRunFreq())
+    {
+        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
+        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
+    }
 }
 //********************** Run Buttons *******************************
 
@@ -360,33 +383,35 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
     }
 
 }
+void RunButtonsFrame::setFreqDisplay(QString f, bool legalFreq)
+{
+    QString freq;
+    if (!legalFreq)
+    {
+        freq = HtmlFontColour(Qt::red);
+    }
+    ui->freqDisplay->setText(freq + convertFreqStrDisp(f));
+}
 
 void RunButtonsFrame::on_ChkRunFreq()
 {
-
-
     if (runButtonOnFlag)
     {
         if (curRunFreq.toLongLong() != 0)
         {
             if (!chkRadioFreqOnRunFreq())
             {
-
                 radioOffRunFreq = true;
                 if (runButtonOnNum >= 0 && runButtonOnNum < NUM_RUNBUTTONS)
                 {
                     runButtonMap[runButtonOnNum]->showRunToolButtonOffFreq();
                 }
 
-
                 if (oldRadioOffRunFreq != radioOffRunFreq)
                 {
                     oldRadioOffRunFreq = radioOffRunFreq;
                     emit sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
-
                 }
-
-
              }
 
             else if (chkRadioFreqOnRunFreq())
@@ -399,30 +424,18 @@ void RunButtonsFrame::on_ChkRunFreq()
                     runButtonMap[runButtonOnNum]->showRunToolButtonOnFreq();
                 }
 
-
                 if (oldRadioOffRunFreq != radioOffRunFreq)
                 {
                     oldRadioOffRunFreq = radioOffRunFreq;
                     emit sendRunOffFreqFlag(curRunFreq, radioOffRunFreq);
-
                 }
-
-
-
-
             }
         }
-
-
-
     }
-
 }
-
 
 bool RunButtonsFrame::chkRadioFreqOnRunFreq()
 {
-
     qint64 curRunF = curRunFreq.toLongLong() / 100;
     qint64 curF = rigControl->getCurFreq().toLongLong() / 100;
 
@@ -500,10 +513,6 @@ RunMemoryButton::RunMemoryButton(QToolButton *b, RunButtonsFrame *rcf, int no)
 RunMemoryButton::~RunMemoryButton()
 {
 //    delete memButton;
-}
-void RunMemoryButton::memoryUpdate()
-{
-    rigControlFrame->runButtonUpdate(memNo);
 }
 
 void RunMemoryButton::memoryShortCutSelected()

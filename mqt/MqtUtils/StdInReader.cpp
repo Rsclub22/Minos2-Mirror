@@ -5,12 +5,7 @@
 
 StdInReader::StdInReader()
 {
-    trace("Arguments");
-    foreach (QString arg, QCoreApplication::instance()->arguments())
-    {
-        trace(arg);
-    }
-    trace("End of Arguments");
+
 }
 StdInReader::~StdInReader()
 {

@@ -447,6 +447,22 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->on_SetRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 }
             }
+            if (selDetail.ignorePresetFreqFlag().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetIgnorePresetFreqFlag(selDetail.ignorePresetFreqFlag().getValue(), psn);
+                }
+            }
+            if (selDetail.ignorePreviousFreqFlag().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetIgnorePreviousFreqFlag(selDetail.ignorePreviousFreqFlag().getValue(), psn);
+                }
+            }
             if (selDetail.bandList().isDirty())
             {
                 for (int i = 0; i < frames.size(); i++)

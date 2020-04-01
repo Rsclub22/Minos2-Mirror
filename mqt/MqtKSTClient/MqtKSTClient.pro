@@ -8,7 +8,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = MqtKSTClient
 TEMPLATE = app
 
-#win32:RC_ICONS += ../MinosDXC.ico
+win32:RC_ICONS += ../MinosKST.ico
 
 
 # The following define makes your compiler emit warnings if you use

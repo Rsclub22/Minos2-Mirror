@@ -27,7 +27,7 @@ class QString;
 class UDP_EXPORT MessageServer
   : public QObject
 {
-  Q_OBJECT;
+  Q_OBJECT
 
 public:
   using port_type = quint16;

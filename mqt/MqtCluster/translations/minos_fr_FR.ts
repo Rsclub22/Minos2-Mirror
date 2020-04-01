@@ -5,8 +5,8 @@
     <name>ClusterMainWindow</name>
     <message>
         <location filename="../clustermainwindow.ui" line="14"/>
-        <source>ClusterMainWindow</source>
-        <translation>Fenêtre principale du cluster</translation>
+        <source>Minos Cluster Client</source>
+        <translation>Minos: Client de Cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="23"/>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="83"/>
-        <location filename="../clustermainwindow.cpp" line="1912"/>
+        <location filename="../clustermainwindow.cpp" line="1908"/>
         <source>Minos Cluster Server</source>
         <translation>Minos: Serveur de Cluster</translation>
     </message>
@@ -173,18 +173,15 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
         <location filename="../clustermainwindow.cpp" line="603"/>
         <source>Login Start - Send logon message
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Ouverture de session - Envoyer un message de connexion
+</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1912"/>
+        <location filename="../clustermainwindow.cpp" line="1908"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Login Start - Send logon message</source>
-        <translation type="vanished">Ouverture de session - Envoyer un message de connexion
-</translation>
+        <translation>Minos Cluster
+Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="608"/>
@@ -232,20 +229,14 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
         <translation>L&apos;envoi de Command  - Non connecté - %1</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1743"/>
+        <location filename="../clustermainwindow.cpp" line="1739"/>
         <source>Cluster User Command Clear</source>
         <translation>Cluster: Effacer commande d&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1744"/>
+        <location filename="../clustermainwindow.cpp" line="1740"/>
         <source>Do you really want to clear cluster user command number:%1?</source>
         <translation>Effacer commande %1 du cluster?</translation>
-    </message>
-    <message>
-        <source>Minos Rotator
-Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
-        <translation type="vanished">Minos Rotator
-Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     </message>
 </context>
 <context>
@@ -448,11 +439,6 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
 </context>
 <context>
     <name>userClusterCommandDialog</name>
-    <message>
-        <location filename="../userclustercommanddialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation>Dialogue</translation>
-    </message>
     <message>
         <location filename="../userclustercommanddialog.ui" line="22"/>
         <source>Name:</source>

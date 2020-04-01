@@ -27,10 +27,10 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->splitter->setStretchFactor(0, 2);
     ui->splitter->setStretchFactor(1, 1);
     remove_client(QString());    // kill off the ratshit
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXTestEnabled, showTest );
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1TestEnabled, showTest );
     ui->testButton->setVisible(showTest);
 
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXAutoEnabled, autoEnabled );
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1AutoEnabled, autoEnabled );
     ui->autoSelectReplyFrame->setVisible(autoEnabled);
 
     int lcf;
@@ -162,17 +162,21 @@ void WsjtxFrame::setContest(BaseContestLog *c)
 void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 {
     id_ = id;
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc || ct->isProtected())
+
+    if (ct->isProtected())
         return;
 
     trace("WsjtxFrame::log_ADIF " + QString(ADIF));
 
     ui->replyto_label->setText("");
     int spoint = ct->ctList.count();
+
+    // we will try to log the ADIF to ALL open contests; it will fail if the date/time or requency are wrong
     if (! ADIFImport::doImportADIFString(dynamic_cast<LoggerContestLog *>(ct),  ADIF ))
     {
-        MinosParameters::getMinosParameters() ->mshowMessage( "Failed to append ADIF from " + id );
+        // failure may be because frequency or time don't match
+        trace( "Failed to append ADIF from " + id );
+        return;
     }
     ct->scanContest();
     ct->validateLoc();

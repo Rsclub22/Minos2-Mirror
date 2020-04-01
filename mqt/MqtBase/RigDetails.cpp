@@ -33,6 +33,8 @@ bool RigDetails::isDirty() const
             _volumeStatus.isDirty() ||
             _bandList.isDirty() ||
             _ritEnableStatus.isDirty();
+            _ignorePresetFreqFlag.isDirty();
+            _ignorePreviousFreqFlag.isDirty();
 }
 void RigDetails::clearDirty()
 {
@@ -44,6 +46,8 @@ void RigDetails::clearDirty()
     _volumeStatus.clearDirty();
     _bandList.clearDirty();
     _ritEnableStatus.clearDirty();
+    _ignorePresetFreqFlag.clearDirty();
+    _ignorePreviousFreqFlag.clearDirty();
 
 }
 void RigDetails::setDirty()
@@ -56,6 +60,8 @@ void RigDetails::setDirty()
     _volumeStatus.setDirty();
     _bandList.setDirty();
     _ritEnableStatus.setDirty();
+    _ignorePresetFreqFlag.setDirty();
+    _ignorePreviousFreqFlag.setDirty();
 
 }
 
@@ -92,6 +98,15 @@ void RigDetails::setRitEnableStatus(bool ritEnableStatus)
     _ritEnableStatus.setValue(ritEnableStatus);
 }
 
+void RigDetails::setIgnorePresetFreqFlag(bool ignorePresetFreqFlag)
+{
+    _ignorePresetFreqFlag.setValue(ignorePresetFreqFlag);
+}
+
+void RigDetails::setIgnorePreviousFreqFlag(bool ignorePreviousFreqFlag)
+{
+    _ignorePreviousFreqFlag.setValue(ignorePreviousFreqFlag);
+}
 
 void RigDetails::setBandList(const QString &bandList)
 {
@@ -109,6 +124,8 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigControlTxVertStatus, transverterStatus().getValue());
     jv.insert(rpcConstants::rigVolStatus, volumeStatus().getValue());
     jv.insert(rpcConstants::rigControlBandList, bandList().getValue());
+    jv.insert(rpcConstants::rigIgnorePresetFreqFlag, ignorePresetFreqFlag().getValue());
+    jv.insert(rpcConstants::rigIgnorePreviousFreqFlag, ignorePreviousFreqFlag().getValue());
     jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
 
 
@@ -131,6 +148,8 @@ void RigDetails::unpack(QString s)
         _transverterEnabled.setValue(json.object().value(rpcConstants::rigControlTxVertEnabled).toBool());
         _transverterStatus.setValue(json.object().value(rpcConstants::rigControlTxVertStatus).toBool());
         _volumeStatus.setValue(json.object().value(rpcConstants::rigVolStatus).toBool());
+        _ignorePresetFreqFlag.setValue(json.object().value(rpcConstants::rigIgnorePresetFreqFlag).toBool());
+        _ignorePreviousFreqFlag.setValue(json.object().value(rpcConstants::rigIgnorePreviousFreqFlag).toBool());
         _bandList.setValue(json.object().value(rpcConstants::rigControlBandList).toString());
         _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toBool());
 
@@ -176,4 +195,11 @@ MinosItem<bool> RigDetails::ritEnableStatus() const
 {
     return _ritEnableStatus;
 }
-
+MinosItem<bool> RigDetails::ignorePresetFreqFlag() const
+{
+    return _ignorePresetFreqFlag;
+}
+MinosItem<bool> RigDetails::ignorePreviousFreqFlag() const
+{
+    return _ignorePreviousFreqFlag;
+}

@@ -142,6 +142,13 @@ void RunConfigElement::createProcess()
         }
 
         program += " ";
+
+        QString locale = getCurrentLanguage();
+        if (!locale.isEmpty())
+        {
+            program += "--lang " + locale + " ";
+        }
+
         program += params;
 
         QString wdir = rundir;
@@ -151,7 +158,6 @@ void RunConfigElement::createProcess()
         {
             QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
             env.insert("MQTRPCNAME", name); // Add an environment variable for the RPC name to use
-            env.insert("LANG", getCurrentLanguage());
             runner->setProcessEnvironment(env);
         }
 
@@ -169,6 +175,8 @@ void RunConfigElement::createProcess()
         else
             sendCommand("ShowServers");
 
+        QString fontCommand = "Font " + QApplication::font().toString();
+        sendCommand(fontCommand);
     }
 }
 void RunConfigElement::stopProcess()

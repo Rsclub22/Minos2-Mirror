@@ -23,6 +23,7 @@
 #include "hamlibRotcontrol.h"
 #include "rotsetupdialog.h"
 #include "logdialog.h"
+#include "serialdata.h"
 #include <QString>
 #include <QLabel>
 #include <QMessageBox>
@@ -41,6 +42,9 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     ui(new Ui::RotatorMainWindow)
 {
     ui->setupUi(this);
+
+    serialData::translateSerialData();
+
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     for (int i = 0; i < presetShortCutKeys.count(); i++)
@@ -123,7 +127,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     ui->statusbar->addWidget(status);
 
     ui->statusbar->addPermanentWidget(offSetlbl);
-    offSetlbl->setText("Offset: ");
+    offSetlbl->setText(tr("Offset: "));
     ui->statusbar->addPermanentWidget(offSetDisplay);
 
     ui->statusbar->addPermanentWidget(actualRotatorlbl);
@@ -220,11 +224,7 @@ void RotatorMainWindow::logMessage( QString s )
 
 void RotatorMainWindow::onStdInRead(QString cmd)
 {
-    trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(true);
-    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(false);
+    executeStdIn(cmd);
 }
 
 void RotatorMainWindow::closeEvent(QCloseEvent *event)

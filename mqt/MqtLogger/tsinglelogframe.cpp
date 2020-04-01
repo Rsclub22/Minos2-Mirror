@@ -119,8 +119,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
-    connect(FKHRigControlFrame, SIGNAL(sendRunOnFlag(QString, bool)), this, SLOT(sendRunOnFlag(QString, bool)));
-    connect(FKHRigControlFrame, SIGNAL(sendRunOffFreqFlag(QString, bool)), this, SLOT(sendRunOffFreqFlag(QString, bool)));
+    connect(runButtonsFrame, SIGNAL(sendRunOnFlag(QString, bool)), this, SLOT(sendRunOnFlag(QString, bool)));
+    connect(runButtonsFrame, SIGNAL(sendRunOffFreqFlag(QString, bool)), this, SLOT(sendRunOffFreqFlag(QString, bool)));
 
 
     // Rotator updates
@@ -447,6 +447,8 @@ void TSingleLogFrame::clearScreenLayout()
     bandmapControlFrame->setContest(nullptr);
     setBandmapLoaded(false);
     wsjtxFrame->setContest(nullptr);
+    runButtonsFrame->setContest(nullptr);
+    rotPresets->setContest(nullptr);
 
     trace("TSingleLogFrame::clearScreenLayout start clearance for " + msg);
 
@@ -464,6 +466,8 @@ void TSingleLogFrame::clearScreenLayout()
 void TSingleLogFrame::applyScreenLayout()
 {
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
+    if (!ct)
+        return;
     trace("TSingleLogFrame::applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
     hide();
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
@@ -551,7 +555,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctRigControl:
                 {
                     elementScrollArea->setWidget(FKHRigControlFrame);
-                    FKHRigControlFrame->setContest(ct);
+                    // don't set contest here
                     break;
                 }
                 case sctRunButtons:
@@ -563,7 +567,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctRotControl:
                 {
                     elementScrollArea->setWidget(FKHRotControlFrame);
-                    FKHRotControlFrame->setContest(ct);
+                    // don't set contest here
                     break;
                 }
                 case sctRotPresets:
@@ -689,6 +693,8 @@ void TSingleLogFrame::buildScreenLayout()
     // ALWAYS link the wsjt frame to the contest; then we can log
     // even without showing it
     wsjtxFrame->setContest(ct);
+    FKHRigControlFrame->setContest(ct);
+    FKHRotControlFrame->setContest(ct);
     verticalLayout->addWidget(singleLogFrameSplitter);
 
     getSplitters();
@@ -1745,6 +1751,15 @@ void TSingleLogFrame::on_SetRitEnableStatus(bool status, PubSubName psn)
     FKHRigControlFrame->setRitEnableStatus(status, psn);
 }
 
+void TSingleLogFrame::on_SetIgnorePresetFreqFlag(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setIgnorePresetFreqFlag(status, psn);
+}
+
+void TSingleLogFrame::on_SetIgnorePreviousFreqFlag(bool status, PubSubName psn)
+{
+    FKHRigControlFrame->setIgnorePreviousFreqFlag(status, psn);
+}
 
 void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
 {

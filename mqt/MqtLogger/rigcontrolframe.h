@@ -108,6 +108,8 @@ public:
 
     void closeContest();
 
+    void setIgnorePresetFreqFlag(bool status, PubSubName psn);
+    void setIgnorePreviousFreqFlag(bool status, PubSubName psn);
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -121,6 +123,8 @@ signals:
     void radioIsConnected(bool);
     void radioHasError(QString);
     void radioDisconnected();
+
+    void setFreqDisplay(QString, bool);
 
 private slots:
     void on_FontChanged();
@@ -189,6 +193,7 @@ private:
     bool ritOn;
     bool ritEditOn;
     //QString curRit;
+
 
     QStringList listOfRadios;
     RadioDetails selRadioDetails;

@@ -8,6 +8,8 @@
 #include <QTimer>
 #include <QHash>
 
+#include "MinosLoggerEvents.h"
+
 #include "WsjtxRadio.hpp"
 #include "WsjtxNetworkMessage.hpp"
 #include "Wsjtx_qt_helpers.hpp"
@@ -36,7 +38,9 @@ public:
     connect (this, static_cast<void (impl::*) (SocketError)> (&impl::error)
              , [this] (SocketError /* e */)
              {
-               Q_EMIT self_->error (errorString ());
+               QString err = errorString();
+               trace("WSJT-X error: " + err);
+               Q_EMIT self_->error (err);
              });
     connect (clock_, &QTimer::timeout, this, &impl::tick);
     clock_->start (NetworkMessage::pulse * 1000);
@@ -154,12 +158,15 @@ void MessageServer::impl::pending_datagrams ()
   while (hasPendingDatagrams ())
     {
       QByteArray datagram;
-      datagram.resize (pendingDatagramSize ());
+      int l = static_cast<int>(pendingDatagramSize ());
+      datagram.resize (l);
       QHostAddress sender_address;
       port_type sender_port;
       if (0 <= readDatagram (datagram.data (), datagram.size (), &sender_address, &sender_port))
         {
           parse_message (sender_address, sender_port, datagram);
+
+          MinosLoggerEvents::sendWsjtxDatagram(&datagram);
         }
     }
 }

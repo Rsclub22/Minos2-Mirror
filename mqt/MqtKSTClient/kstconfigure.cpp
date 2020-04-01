@@ -25,8 +25,6 @@ int KSTConfigure::exec()
 
     ui->locatorEdit->setText(locator);
     ui->autoConnect->setChecked(autoConnect);
-    ui->maxDistanceEdit->setText(QString::number(maxDistance));
-    ui->maxDistanceEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
     ui->ASServerName->setText(ASServerName);
     ui->ASMyName->setText(ASMyName);
@@ -60,8 +58,6 @@ void KSTConfigure::on_OKButton_clicked()
     password = ui->passwordEdit->text();
     autoConnect = ui->autoConnect->isChecked();
     locator = ui->locatorEdit->text().toUpper();
-
-    maxDistance = ui->maxDistanceEdit->text().toInt();
 
     ASServerName = ui->ASServerName->text();
     ASMyName = ui->ASMyName->text();

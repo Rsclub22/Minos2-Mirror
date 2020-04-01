@@ -4,6 +4,7 @@
 #
 #-------------------------------------------------
 include($$PWD/../mqt.pri)
+include($$PWD/../mqthamlib.pri)
 
 
 QT       += core gui
@@ -77,9 +78,9 @@ SOURCES += \
     rotatorcommon.cpp \
     rotpresetdialog.cpp \
     ScreenContact.cpp \
-    serialcomms.cpp \
     StartConfig.cpp \
     TreeUtils.cpp \
+    serialdata.cpp \
     validators.cpp \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
@@ -155,10 +156,9 @@ HEADERS += \
     rotatorcommon.h \
     rotpresetdialog.h \
     ScreenContact.h \
-    serialCommonData.h \
-    serialcomms.h \
     StartConfig.h \
     TreeUtils.h \
+    serialdata.h \
     validators.h \
     waitcursor.h \
     dxspotdatamodel.h \

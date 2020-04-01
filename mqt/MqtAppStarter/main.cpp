@@ -9,6 +9,9 @@ int main(int argc, char *argv[])
     appStartup("MinosQtAppStarter");
 
     MainWindow w;
+
+    setAppFont();
+
     w.show();
 
     return a.exec();

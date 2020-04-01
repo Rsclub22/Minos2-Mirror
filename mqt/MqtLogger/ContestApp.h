@@ -41,6 +41,8 @@ typedef ListSlotList::iterator ListSlotIterator;
 
 class TContestApp : public MinosParameters
 {
+    Q_DECLARE_TR_FUNCTIONS(TContestApp)
+
    private:
 
       BaseContestLog * currentContest;

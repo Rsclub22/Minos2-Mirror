@@ -24,6 +24,7 @@
 #include "rigcontrolrpc.h"
 #include "rigutils.h"
 #include "rigctldclient.h"
+#include "serialdata.h"
 #include <QTimer>
 #include <QMessageBox>
 #include <QProcessEnvironment>
@@ -44,6 +45,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    logRitOn(false),
    supVolume(false),
    supSignalStrength(false),
+   ignorePresetFreq(false),
+   ignorePreviousFreq(false),
    curVfoFrq(0.0),
    curTransVertFrq(0.0),
    mgmModeFlag(false),
@@ -60,6 +63,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    serialData::translateSerialData();
 
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
@@ -131,19 +135,24 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("MGM_Modes");
-
-
-    mgmModes = config.value("MgmModes", "").toStringList();
-
-    config.endGroup();
-
+    //config.beginGroup("MGM_Modes");
+    mgmModes = config.value("MGM_Modes/MgmModes", "").toStringList();
+    //config.endGroup();
 
     if (appName.length() > 0)
     {
         // init cache with radio data
         trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
         sendRadioListLogger();
+
+        ignorePresetFreq = readIgnorePresetFreqFlag();
+        logMessage(QString("Read IgnorePresetFreqFlag = %1").arg(ignorePresetFreq ? "True" : "False"));
+        ui->actionContest_Start_Ignore_Preset_Freq->setChecked(ignorePresetFreq);
+
+        ignorePreviousFreq = readIgnorePreviousFreqFlag();
+        logMessage(QString("Read IgnorePreviousFreqFlag = %1").arg(ignorePreviousFreq ? "True" : "False"));
+        ui->actionContest_Change_Ignore_Previous_Freq->setChecked(ignorePreviousFreq);
+
         initCacheData();
 
         msg->rigCache.publish();
@@ -330,25 +339,18 @@ void RigControlMainWindow::closeEvent(QCloseEvent *event)
     QWidget::closeEvent(event);
 }
 
-
-
-
-
-
 void RigControlMainWindow::onStdInRead(QString cmd)
 {
-    trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(true);
-    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowServers(false);
+    executeStdIn(cmd);
 }
 
 void RigControlMainWindow::initActionsConnections()
 {
     connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio()));
     connect(ui->actionSetup_Radios, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
-    connect(ui->actionSetup_Band_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
+    connect(ui->actionEdit_Preset_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
+    connect(ui->actionContest_Start_Ignore_Preset_Freq, SIGNAL(changed()), this, SLOT(onIgnorePresetFreq()));
+    connect(ui->actionContest_Change_Ignore_Previous_Freq, SIGNAL(changed()), this, SLOT(onIgnorePreviousFreq()));
     connect(ui->actionTraceComms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
@@ -395,6 +397,30 @@ void RigControlMainWindow::setupBandFreq()
         logMessage(QString("RigControl: Band Freq Change, send new bandlist to logger"));
         //sendBandListLogger();
         freqPresetChanged = false;
+    }
+}
+
+void RigControlMainWindow::onIgnorePresetFreq()
+{
+    if(ui->actionContest_Start_Ignore_Preset_Freq->isChecked() != ignorePresetFreq)
+    {
+        ignorePresetFreq = ui->actionContest_Start_Ignore_Preset_Freq->isChecked();
+        logMessage(QString("RigControl: IgnorePresetFreq Changed = %1").arg(ignorePresetFreq ? "True" : "False"));
+        addIgnorePresetFreqToRigCache(ignorePresetFreq);
+        msg->rigCache.publish();
+        saveIgnorePresetFreqFlag(ignorePresetFreq);
+    }
+}
+
+void RigControlMainWindow::onIgnorePreviousFreq()
+{
+    if(ui->actionContest_Change_Ignore_Previous_Freq->isChecked() != ignorePreviousFreq)
+    {
+        ignorePreviousFreq = ui->actionContest_Change_Ignore_Previous_Freq->isChecked();
+        logMessage(QString("RigControl: IgnorePreviousFreq Changed = %1").arg(ignorePreviousFreq ? "True" : "False"));
+        addIgnorePreviousFreqToRigCache(ignorePreviousFreq);
+        msg->rigCache.publish();
+        saveIgnorePreviousFreqFlag(ignorePreviousFreq);
     }
 }
 
@@ -531,6 +557,7 @@ void RigControlMainWindow::upDateRadio()
 
             if (radioOpenStat == OPEN_OK)
             {
+                initCacheData();        /// ***************************** this may not be the best place for this
 
  /*               if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)     // is it rigctl?
                 {
@@ -628,9 +655,11 @@ void RigControlMainWindow::upDateRadio()
 
                 // does the radio support control of volume control
 
+
                 supVolume = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVolume;
                 logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(supVolume ? "True" : "False"));
-                sendVolStatusToLog(ridx, supVolume);
+                //sendVolStatusToLog(ridx, supVolume); //*************************************************
+
 
                 // does the radio support signal strength meter
 
@@ -835,6 +864,7 @@ int RigControlMainWindow::openRigCtldRadio()
 //  need to sort this for rigctld **********************************************
 //    handshake = serialData::rigctldHandshakeStr[setupRadio->currentRadio.handshake];
 
+
 //    if (handshake == serialData::rigctldHandshakeStr[RIG_HANDSHAKE_HARDWARE])
 //    {
 //        rtsState = serialData::rigctldForeLinesStr[serialData::FORCE_LINE_NONE];
@@ -849,9 +879,11 @@ int RigControlMainWindow::openRigCtldRadio()
 
     // start rigctld
     trace(QString("openRigCtldRadio: starting rigctld"));
+
 //    runRigCtlDaemon(setupRadio->currentRadio.radioMfg_Name, QString::number(setupRadio->currentRadio.radioModelNumber), setupRadio->currentRadio.comport,
 //                                               QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.rigCtldNetworkAdd, setupRadio->currentRadio.rigCtldNetworkPort,
 //                                               QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, handshake, rtsState, dtrState, traceCode);
+
 
 
     // wait for rigctld to start
@@ -920,6 +952,7 @@ int RigControlMainWindow::openRigCtldRadio()
 
         if (setupRadio->currentRadio.portType == RigCapConstants::PortType::serial)
         {
+
             showStatusMessage(QString("Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10")
                               .arg(setupRadio->currentRadio.rigMfg_Name).arg(setupRadio->currentRadio.rigModelName).trimmed().arg(setupRadio->currentRadio.comport).arg(setupRadio->currentRadio.baudrate).arg(setupRadio->currentRadio.databits)
                               .arg(setupRadio->currentRadio.stopbits).arg(serialCommonData::parityStr[setupRadio->currentRadio.parity]).arg(serialCommonData::handshakeStr[setupRadio->currentRadio.handshake]).arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceDtr]).arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceRts]));
@@ -930,11 +963,11 @@ int RigControlMainWindow::openRigCtldRadio()
         {
             if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)
             {
-                showStatusMessage(QString("Connected: %1 - %2, %3:%4 - %5 %6").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()).arg(setupRadio->currentRadio.networkAdd).arg(setupRadio->currentRadio.networkPort).arg(rigctld_radioMfg).arg(rigctld_radioName));
+                showStatusMessage(tr("Connected: %1 - %2, %3:%4 - %5 %6").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()).arg(setupRadio->currentRadio.networkAdd).arg(setupRadio->currentRadio.networkPort).arg(rigctld_radioMfg).arg(rigctld_radioName));
             }
             else
             {
-                showStatusMessage(QString("Connected: %1 - %2, %3:%4").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()).arg(setupRadio->currentRadio.networkAdd).arg(setupRadio->currentRadio.networkPort));
+                showStatusMessage(tr("Connected: %1 - %2, %3:%4").arg(setupRadio->currentRadio.radioName).arg(setupRadio->currentRadio.radioModel.trimmed()).arg(setupRadio->currentRadio.networkAdd).arg(setupRadio->currentRadio.networkPort));
             }
 
         }
@@ -1760,7 +1793,7 @@ void RigControlMainWindow::clrRigctldNames()
 
 void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport,
                                            const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum,
-                                           const QString stopBits, const int& parity, const QString handshake, const QString rtsState, const QString dtrState,
+                                           const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState,
                                            rigCtldTrace::rigCtldTraceCodes diagnostics)
 {
 
@@ -1792,7 +1825,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
     if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
     {
         parityNames = radio->getParityCodeNames();
-        parityName = parityNames[parity];
+        parityName = parity;
         arguments << "-m" + model.trimmed() << "-r" + serPort  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
                   << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=serial_handshake=" + handshake.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
 
@@ -1848,6 +1881,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
     trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, handshake = %8, rtsState = %9, dtrState = %10, civ = %11, netaddress = %12, netPort = %13")
           .arg(manufacturer).arg(model).arg(serPort).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(handshake).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
 
+//    trace(arguments.join(" ; "));
     rigCtldProcess->start(program, arguments);
 
 */
@@ -1987,10 +2021,18 @@ void RigControlMainWindow::initCacheData()
             QStringList supBandList;
             int radioModelNumber = setupRadio->availRadioData[i]->rigModelNumber;
             buildSupBandList(i, radioModelNumber, supBandList);
+
             qDebug() << "support list initCache" << supBandList;
-            sendBandListLogger(i, supBandList);
-            bool f = rigFactory->supported_rigs()->value(setupRadio->availRadioData[i]->rigModel).supportVolume;
-            sendVolStatusToLog(i, f);
+
+            addBandListToRigCache(i, supBandList);
+
+            addIgnorePresetFreqToRigCache(ignorePresetFreq);
+            addIgnorePreviousFreqToRigCache(ignorePreviousFreq);
+
+            //bool f = radio->supportVolControl(radioModelNumber); //*********************
+            //addVolStatusToRigCache(i, f); //*********************************
+            msg->rigCache.publish();
+
         }
     }
 
@@ -2828,7 +2870,9 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
 
     logMessage(QString("%1 library Error - Code = %2 - %3").arg(radio->getLibraryName()).arg(QString::number(errorCode)).arg(errorMsg));
 
+
     QMessageBox::critical(this, tr("RigControl %1 library Error").arg(radio->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(setupRadio->currentRadio.radioName).arg(errorCode).arg(errorMsg).arg(cmd));
+
 
     closeRadio();
     rigErrorFlag = false;
@@ -2937,6 +2981,83 @@ void RigControlMainWindow::saveTraceLogFlag(bool state)
     trace("Tracelog Changed in " + fileName + " = " + QString::number(state));
 }
 
+
+bool RigControlMainWindow::readIgnorePresetFreqFlag()
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePresetFreq", false).toBool();
+
+    return state;
+}
+
+void RigControlMainWindow::saveIgnorePresetFreqFlag(bool state)
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+
+    config.setValue("FreqFlags/IgnorePresetFreq", state);
+
+    trace("IgnorePresetFreqFlag saved in " + fileName + " = " + QString(state ? "True" : "False"));
+}
+
+bool RigControlMainWindow::readIgnorePreviousFreqFlag()
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePreviousFreq", false).toBool();
+
+    return state;
+}
+
+void RigControlMainWindow::saveIgnorePreviousFreqFlag(bool state)
+{
+    QString fileName;
+    if (appName == "")
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
+    }
+    else
+    {
+        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    }
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+
+    config.setValue("FreqFlags/IgnorePreviousFreq", state);
+
+    trace("IgnorePreviousFreqFlag saved in " + fileName + " = " + QString(state ? "True" : "False"));
+}
+
 void RigControlMainWindow::about()
 {
     QMessageBox::about(this, tr("Minos RigControl"), tr("Minos QT RigControl\nCopyright D Balharrie G8FKH/M0DGB 2019"));
@@ -2965,7 +3086,7 @@ void RigControlMainWindow::sendRadioListLogger()
     msg->publishRadioNames(radioList);
 }
 
-void RigControlMainWindow::sendBandListLogger(const int radioIdx, const QStringList& supBandList)
+void RigControlMainWindow::addBandListToRigCache(const int radioIdx, const QStringList& supBandList)
 {
     QString fileName;
     fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
@@ -3000,16 +3121,20 @@ void RigControlMainWindow::sendBandListLogger(const int radioIdx, const QStringL
 
         PubSubName psname(setupRadio->availRadioData[radioIdx]->radioName);
         QString bands = bandList.join(":");
-        logMessage(QString("Send bandlist to logger: for radio %1 - %2").arg(setupRadio->availRadioData[radioIdx]->radioName).arg(bands));
+        logMessage(QString("Add bandlist to rigcache for radio %1 - %2").arg(setupRadio->availRadioData[radioIdx]->radioName).arg(bands));
         msg->rigCache.setBandList(psname, bands);
-        msg->rigCache.publish();
+
     }
     else
     {
-        logMessage(QString("Send bandlist to logger: error radio bandlist empty"));
+        logMessage(QString("error radio bandlist empty"));
     }
     config.endGroup();
 }
+
+
+
+
 
 void RigControlMainWindow::sendStatusLogger(const QString &message )
 {
@@ -3084,28 +3209,26 @@ void RigControlMainWindow::sendVolToLog(int level)
 }
 
 
-void RigControlMainWindow::sendVolStatusToLog(const int radIdx, bool status)
+void RigControlMainWindow::addVolStatusToRigCache(const int radIdx, bool status)
 {
     if (appName.length() > 0)
     {
-        QString f = "";
-        status  ? f = "True" : f = "False";
-        logMessage(QString("Send Volume Status to logger = %1").arg(f));
+        logMessage(QString("Add Volume Status to rigcache = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->availRadioData[radIdx]->radioName);
         msg->rigCache.setVolumeStatus(psname, status);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
 
     }
 }
 
+
+
 void RigControlMainWindow::sendTransVertEnabled(bool status)
 {
-    //QString flag;
+
     if (appName.length() > 0)
     {
-        QString f = "";
-        status  ? f = "True" : f = "False";
-        logMessage(QString("Send Transvert Enabled to logger = %1").arg(f));
+        logMessage(QString("Send Transvert Enabled to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setTransverterEnabled(psname, status);
         msg->rigCache.publish();
@@ -3120,13 +3243,40 @@ void RigControlMainWindow::sendTransVertStatusToLog(bool status)
     //QString flag;
     if (appName.length() > 0)
     {
-        QString f = "";
-        status  ? f = "True" : f = "False";
-        logMessage(QString("Send Transvert Status to logger = %1").arg(f));
+        logMessage(QString("Send Transvert Status to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setTransverterStatus(psname, status);
         msg->rigCache.publish();
 
+    }
+}
+
+void RigControlMainWindow::addIgnorePresetFreqToRigCache(bool status)
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send IgnorePresetFreq flag to logger = %1").arg(status ? "True" : "False"));
+        for (int i = 0; i < setupRadio->availRadios.count(); i ++)
+        {
+            PubSubName psname(setupRadio->availRadioData[i]->radioName);
+            msg->rigCache.setIgnorePresetFreq(psname, status);
+        }
+
+        //msg->rigCache.publish();
+    }
+}
+
+void RigControlMainWindow::addIgnorePreviousFreqToRigCache(bool status)
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send IgnorePreviousFreq flag to logger = %1").arg(status ? "True" : "False"));
+        for (int i = 0; i < setupRadio->availRadios.count(); i ++)
+        {
+            PubSubName psname(setupRadio->availRadioData[i]->radioName);
+            msg->rigCache.setIgnorePreviousFreq(psname, status);
+        }
+        //msg->rigCache.publish();
     }
 }
 

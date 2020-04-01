@@ -26,6 +26,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->setupUi(this);
 
     mainWindow = this;
+    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    stdinReader.start();
 
     QSettings settings;
 
@@ -264,6 +266,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     }
     ui->asBandCombo->setCurrentIndex(ASActiveBand);
 
+    ui->maxDistanceEdit->setText(QString::number(maxDistance));
+    ui->maxDistanceEdit->setValidator(new QIntValidator(0, 0xffff, this));
+
+
     started = true;
 
     if (autoConnect)
@@ -280,6 +286,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 KSTMainWindow::~KSTMainWindow()
 {
     delete ui;
+}
+void KSTMainWindow::onStdInRead(QString cmd)
+{
+    executeStdIn(cmd);
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
 {
@@ -1654,6 +1664,8 @@ void KSTMainWindow::on_clearMessageFilter_clicked()
 {
     ui->messageChatFilter->setCurrentIndex(0);
     ui->messageFilter->clear();
+
+    kstMeepFilterModel.invalidate();    // try to get rid of the colouring in the meep table
 }
 
 void KSTMainWindow::on_clearUserFilter_clicked()
@@ -1755,4 +1767,14 @@ void KSTMainWindow::on_showMPath_clicked()
     {
         asl->asShowPath(user, other);
     }
+}
+
+void KSTMainWindow::on_maxDistanceButton_clicked()
+{
+    maxDistance = ui->maxDistanceEdit->text().toInt();
+    QSettings settings;
+    settings.setValue("maxDistance", maxDistance);
+
+    kstCallFilterModel.invalidate();
+    kstMessageFilterModel.invalidate();
 }

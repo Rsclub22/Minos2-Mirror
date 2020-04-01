@@ -3,6 +3,7 @@
 
 #include "base_pch.h"
 #include "helpbrowser.h"
+#include "n1mmbroadcast.h"
 
 namespace Ui {
 class TLogContainer;
@@ -34,6 +35,7 @@ public:
     ~TLogContainer() override;
 
     TSendDM *sendDM;
+    N1MMBroadcast n1mmBroadcast;
 
     void selectContest(BaseContestLog *pc, QSharedPointer<BaseContact> pct );
     bool show(int argc, char *argv[]);
@@ -48,7 +50,7 @@ public:
     QVector<TSingleLogFrame *> getLogFrames();
     int getLogFrameCount();
 
-    QString getDefaultDirectory( bool IsList );
+    static QString getDefaultDirectory( bool IsList );
 
     bool isShowOperators();
 
@@ -139,14 +141,18 @@ private:
 
     QAction *startConfigAction;
     QAction *listCompressionAction;
+    QAction *QSOFieldFontAction;
+    QAction *styleAction;
     QAction *LocCalcAction;
     QAction *AnalyseMinosLogAction;
     QAction *CorrectDateTimeAction;
     QAction *ScreenConfigAction;
     QAction *ShowOperatorsAction;
+    QAction *DefDirsAction;
     QAction *OptionsAction;
     QAction *FontEditAcceptAction;
     QAction *LanguageAcceptAction;
+    QAction *UDPConfigAction;
     QAction *WSJTXConfigAction;
     QAction *ReportAutofillAction;
 
@@ -204,9 +210,11 @@ private slots:
     void AnalyseMinosLogActionExecute();
     void CorrectDateTimeActionExecute();
     void ShowOperatorsActionExecute();
+    void DefDirsActionExecute();
     void OptionsActionExecute();
     void FontEditAcceptActionExecute();
     void LanguageAcceptActionExecute();
+    void UDPConfigActionExecute();
     void WsjtConfigActionExecute();
     void ReportAutofillActionExecute();
 
@@ -223,6 +231,8 @@ private slots:
 
     void StartConfigActionExecute();
     void listCompressionActionExecute();
+    void QSOFieldFontActionExecute();
+    void styleActionExecute();
 
     void on_ContestPageControl_currentChanged(int index);
     void on_ContestPageControl_tabBarDoubleClicked(int index);

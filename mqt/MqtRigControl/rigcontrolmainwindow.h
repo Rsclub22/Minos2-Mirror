@@ -124,6 +124,8 @@ private:
 
     QVector<BandDetail> bands;
     QStringList presetFreq;
+    bool ignorePresetFreq;           // on contest start
+    bool ignorePreviousFreq;        // on contest swap
 
 
     // data from radio
@@ -289,15 +291,15 @@ private:
     void buildSupportedRadioBands(int radioIdx, int radioModelNumber, QStringList& supBandList);
     bool findSupRadioBand(const QString band, const QStringList& supBandsList);
     bool findSupTransBand(const QString band, const int radioIdx);
-    void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
+    //void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
 
     void initCacheData();
 
-    void sendVolStatusToLog(const int radIdx, bool status);
+    void addVolStatusToRigCache(const int radIdx, bool status);
     void sendTransVertEnabled(bool status);
 
 
-    void runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport, const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum, const QString stopBits, const int &parity, const QString handshake, const QString rtsState, const QString dtrState, rigCtldTrace::rigCtldTraceCodes diagnostics);
+    void runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport, const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum, const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState, rigCtldTrace::rigCtldTraceCodes diagnostics);
 
 
     int openRigCtldRadio();
@@ -313,6 +315,7 @@ private:
     void getRigCtldConnectDelay();
 
 
+
     MODE mapQStrMode(QString mode);
     void updateCurrentRadioFromAvailRadios(int ridx);
     MODE convertQStringToMode(QString modeStr);
@@ -321,6 +324,19 @@ private:
 
 
     void setSmeterVisible(bool visible);
+
+    //void sendIgnorePresetFreqToLog(bool status);
+    //void sendIgnorePreviousFreqToLog(bool status);
+    void addIgnorePresetFreqToRigCache(bool status);
+    void addIgnorePreviousFreqToRigCache(bool status);
+    bool readIgnorePresetFreqFlag();
+    bool readIgnorePreviousFreqFlag();
+    void saveIgnorePresetFreqFlag(bool state);
+    void saveIgnorePreviousFreqFlag(bool state);
+    void addBandListToRigCache(const int radioIdx, const QStringList &supBandList);
+
+
+
 private slots:
 
     void onStdInRead(QString);
@@ -365,9 +381,14 @@ signals:
     void rigCtldErrorMessage();
     void rigCtldStarted();
     void rigCtldStatusTimeout();
+
     void onNewFreq();
     void onNewMode();
     void onRigStatus(int status, QString cmd);
+
+    void onIgnorePresetFreq();
+    void onIgnorePreviousFreq();
+
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

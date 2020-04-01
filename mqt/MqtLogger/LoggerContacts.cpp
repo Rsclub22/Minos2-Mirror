@@ -12,6 +12,7 @@
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
 #include "ContestApp.h"
+#include "MinosLoggerEvents.h"
 
 ContestContact::ContestContact( LoggerContestLog * ct, bool time_now ) : DisplayContestContact( ct, time_now )
 {}
@@ -394,20 +395,15 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
       sdest += 'D';
 }
 
-// this is the "archive" copy that forms the real log
-
-// we form our log by having a TSortedCollection derivative (class LoggerContestLog)
-// this has to be sorted on the logSequence field
-
-
 QString ContestContact::getADIFLine()
 {
-    //band
-    //power
     //date
     //time
-    //call
+    //band
+    //freq
     //mode
+    //power
+    //call
     //RST sent
     //SN sent
     //RST Received
@@ -438,29 +434,15 @@ QString ContestContact::getADIFLine()
 
     outstr += makeADIFField( "TIME_ON", exp_buff );
 
-    QString cband = clp->band.getValue();
 
-    QString cb = cband.trimmed();
-    BandList &blist = BandList::getBandList();
-    BandInfo bi;
-    bool bandOK = blist.findBand(cb, bi);
-    if (bandOK)
-    {
-        cb = bi.adif;
-    }
-
+    QString cb;
+    long txfreq = getTxFreq(cb);
     outstr += makeADIFField( "BAND", cb );
 
-    QString freq = frequency.getValue();
-    if (!freq.isEmpty())
-    {
-        QString newfreq = freq.trimmed().remove('.');
-        double dfreq = convertStrToFreq(newfreq);
-        dfreq = dfreq/1000000.0;  // MHz
+    double dfreq = txfreq/1000000.0;  // MHz
 
-        freq = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
-        outstr += makeADIFField("FREQ", freq);
-    }
+    QString freq = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
+    outstr += makeADIFField("FREQ", freq);
 
     QString smode = mode.getValue().toUpper();
     QString smgmSubmode = mgmSubmode.getValue();
@@ -582,6 +564,7 @@ bool ContestContact::minosSave(QSharedPointer<BaseContact> tct )
 {
    LoggerContestLog * clp = dynamic_cast<LoggerContestLog *>( contest );
    clp->minosSaveContestContact( tct );
+   MinosLoggerEvents::sendAfterQSOSaved(clp, tct);
    QSharedPointer<BaseContact> bc( new BaseContact(*this ));
    bc->updtime = dtg( true ); // update time is now
    getHistory().push_back( bc );

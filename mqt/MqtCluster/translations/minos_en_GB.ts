@@ -5,7 +5,7 @@
     <name>ClusterMainWindow</name>
     <message>
         <location filename="../clustermainwindow.ui" line="14"/>
-        <source>ClusterMainWindow</source>
+        <source>Minos Cluster Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -105,7 +105,7 @@
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="83"/>
-        <location filename="../clustermainwindow.cpp" line="1912"/>
+        <location filename="../clustermainwindow.cpp" line="1908"/>
         <source>Minos Cluster Server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,17 +216,17 @@ Do you want to enter\change your details?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1743"/>
+        <location filename="../clustermainwindow.cpp" line="1739"/>
         <source>Cluster User Command Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1744"/>
+        <location filename="../clustermainwindow.cpp" line="1740"/>
         <source>Do you really want to clear cluster user command number:%1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1912"/>
+        <location filename="../clustermainwindow.cpp" line="1908"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
         <translation type="unfinished"></translation>
@@ -431,11 +431,6 @@ The time to live must be between %2 minutes and %3 minutes</source>
 </context>
 <context>
     <name>userClusterCommandDialog</name>
-    <message>
-        <location filename="../userclustercommanddialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../userclustercommanddialog.ui" line="22"/>
         <source>Name:</source>

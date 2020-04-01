@@ -152,69 +152,69 @@ extern const QStringList presetButtonLabels;
 
 
 
-namespace serialData
-{
+//namespace serialData
+//{
 
-    /**
-     * \brief Port type
-     */
-    enum rig_port_type {
-        RIG_PORT_NONE = 0,      /*!< No port */
-        RIG_PORT_SERIAL,        /*!< Serial */
-        RIG_PORT_NETWORK,       /*!< Network socket type */
-        RIG_PORT_DEVICE,        /*!< Device driver, like the WiNRADiO */
-        RIG_PORT_PACKET,        /*!< AX.25 network type, e.g. SV8CS protocol */
-        RIG_PORT_DTMF,          /*!< DTMF protocol bridge via another rig, eg. Kenwood Sky Cmd System */
-        RIG_PORT_ULTRA,         /*!< IrDA Ultra protocol! */
-        RIG_PORT_RPC,           /*!< RPC wrapper */
-        RIG_PORT_PARALLEL,      /*!< Parallel port */
-        RIG_PORT_USB,           /*!< USB port */
-        RIG_PORT_UDP_NETWORK,   /*!< UDP Network socket type */
-        RIG_PORT_CM108,         /*!< CM108 GPIO */
-        RIG_PORT_GPIO,          /*!< GPIO */
-        RIG_PORT_GPION,         /*!< GPIO inverted */
-    } ;
-
-
-    /**
-     * \brief Serial parity
-     */
-    enum serial_parity {
-        RIG_PARITY_NONE = 0,    /*!< No parity */
-        RIG_PARITY_ODD,         /*!< Odd */
-        RIG_PARITY_EVEN,        /*!< Even */
-        RIG_PARITY_MARK,        /*!< Mark */
-        RIG_PARITY_SPACE        /*!< Space */
-    };
+//    /**
+//     * \brief Port type
+//     */
+//    enum rig_port_type {
+//        RIG_PORT_NONE = 0,      /*!< No port */
+//        RIG_PORT_SERIAL,        /*!< Serial */
+//        RIG_PORT_NETWORK,       /*!< Network socket type */
+//        RIG_PORT_DEVICE,        /*!< Device driver, like the WiNRADiO */
+//        RIG_PORT_PACKET,        /*!< AX.25 network type, e.g. SV8CS protocol */
+//        RIG_PORT_DTMF,          /*!< DTMF protocol bridge via another rig, eg. Kenwood Sky Cmd System */
+//        RIG_PORT_ULTRA,         /*!< IrDA Ultra protocol! */
+//        RIG_PORT_RPC,           /*!< RPC wrapper */
+//        RIG_PORT_PARALLEL,      /*!< Parallel port */
+//        RIG_PORT_USB,           /*!< USB port */
+//        RIG_PORT_UDP_NETWORK,   /*!< UDP Network socket type */
+//        RIG_PORT_CM108,         /*!< CM108 GPIO */
+//        RIG_PORT_GPIO,          /*!< GPIO */
+//        RIG_PORT_GPION,         /*!< GPIO inverted */
+//    } ;
 
 
-    /**
-     * \brief Serial handshake
-     */
-    enum serial_handshake {
-        RIG_HANDSHAKE_NONE = 0, /*!< No handshake */
-        RIG_HANDSHAKE_XONXOFF,  /*!< Software XON/XOFF */
-        RIG_HANDSHAKE_HARDWARE  /*!< Hardware CTS/RTS */
-    };
+//    /**
+//     * \brief Serial parity
+//     */
+//    enum serial_parity {
+//        RIG_PARITY_NONE = 0,    /*!< No parity */
+//        RIG_PARITY_ODD,         /*!< Odd */
+//        RIG_PARITY_EVEN,        /*!< Even */
+//        RIG_PARITY_MARK,        /*!< Mark */
+//        RIG_PARITY_SPACE        /*!< Space */
+//    };
 
 
-    /**
-     * \brief Serial control state
-     */
-    enum serial_control_state {
-        RIG_SIGNAL_UNSET = 0,   /*!< Unset or tri-state */
-        RIG_SIGNAL_ON,          /*!< ON */
-        RIG_SIGNAL_OFF          /*!< OFF */
-    };
+//    /**
+//     * \brief Serial handshake
+//     */
+//    enum serial_handshake {
+//        RIG_HANDSHAKE_NONE = 0, /*!< No handshake */
+//        RIG_HANDSHAKE_XONXOFF,  /*!< Software XON/XOFF */
+//        RIG_HANDSHAKE_HARDWARE  /*!< Hardware CTS/RTS */
+//    };
+
+
+//    /**
+//    * \brief Serial control state
+//     */
+//    enum serial_control_state {
+//        RIG_SIGNAL_UNSET = 0,   /*!< Unset or tri-state */
+//        RIG_SIGNAL_ON,          /*!< ON */
+//        RIG_SIGNAL_OFF          /*!< OFF */
+//    };
 
 
 
 
-    const serial_parity parityCodes[] = {RIG_PARITY_NONE, RIG_PARITY_ODD, RIG_PARITY_EVEN, RIG_PARITY_MARK, RIG_PARITY_SPACE};
-    const serial_handshake handshakeCodes[] = { RIG_HANDSHAKE_NONE, RIG_HANDSHAKE_XONXOFF, RIG_HANDSHAKE_HARDWARE };
+//    const serial_parity parityCodes[] = {RIG_PARITY_NONE, RIG_PARITY_ODD, RIG_PARITY_EVEN, RIG_PARITY_MARK, RIG_PARITY_SPACE};
+//    const serial_handshake handshakeCodes[] = { RIG_HANDSHAKE_NONE, RIG_HANDSHAKE_XONXOFF, RIG_HANDSHAKE_HARDWARE };
 
 
-}
+//}
 
 class srotParams
 {
