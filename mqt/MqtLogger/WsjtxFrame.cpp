@@ -95,9 +95,17 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     // this to change - get the item, and use the message decode data
     connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
 
+    reloadColumns();
+
+    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+
+    connect( ui->decodes_table_view_->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
+             this, SLOT( on_sectionMoved(int, int , int)));
+    connect( ui->decodes_table_view_->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sectionResized(int, int , int)));
+
     restoreSplitters();
     connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
-
 }
 WsjtxFrame::~WsjtxFrame()
 {
@@ -634,4 +642,48 @@ void WsjtxFrame::on_doSplitterChanges(BaseContestLog *b)
     {
         restoreSplitters();
     }
+}
+void WsjtxFrame::saveAllColumnWidthsAndPositions()
+{
+    if (!suppressSaveColumns)
+    {
+        QSettings settings;
+        QByteArray state;
+
+        state = ui->decodes_table_view_->horizontalHeader()->saveState();
+        settings.setValue("decodes_table_view_/state", state);
+
+        //And we need to send this out to all other instances
+
+        MinosLoggerEvents::SendColumnsChanged();
+
+    }
+}
+void WsjtxFrame::reloadColumns()
+{
+    QSettings settings;
+    QByteArray state = settings.value("decodes_table_view_/state").toByteArray();
+    if (state.size())
+    {
+        suppressSaveColumns = true;
+        // this will fire signals, so... don't save at the same time
+        ui->decodes_table_view_->horizontalHeader()->restoreState(state);
+        suppressSaveColumns = false;
+    }
+}
+void WsjtxFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == ct)
+    {
+        reloadColumns();
+    }
+}
+void WsjtxFrame:: on_sectionMoved(int /*logicalIndex*/, int /*oldVisualIndex*/, int /*newVisualIndex*/)
+{
+    saveAllColumnWidthsAndPositions();
+}
+
+void WsjtxFrame::on_sectionResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/)
+{
+    saveAllColumnWidthsAndPositions();
 }
