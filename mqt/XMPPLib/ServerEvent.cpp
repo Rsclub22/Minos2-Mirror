@@ -29,6 +29,8 @@ void makeServerEvent( bool create )
     {
         ServerEvent.detach();
     }
+#else
+    Q_UNUSED(create)
 #endif
 }
 #ifndef Q_OS_WIN
@@ -100,7 +102,7 @@ bool checkServerReady()
         int err = kill(pid, 0);
         if (err == 0 || err == EPERM)
         {
-            return 0;
+            return true;
         }
     }
 #endif
