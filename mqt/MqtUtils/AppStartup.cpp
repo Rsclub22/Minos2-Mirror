@@ -268,6 +268,11 @@ void setAppFont(QString fs)
     {
         trace(QString("Setting font to %1").arg(fs));
         QApplication::setFont( f );
+        foreach ( QWidget * widget, QApplication::allWidgets() )
+        {
+            widget->setFont(f);
+            widget->update();
+        }
     }
     else
     {
@@ -288,6 +293,8 @@ void executeStdIn(QString cmd)
     if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
     if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
+    {
         setAppFont(cmd);
+    }
 }
 
