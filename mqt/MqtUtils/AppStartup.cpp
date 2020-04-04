@@ -268,11 +268,14 @@ void setAppFont(QString fs)
     {
         trace(QString("Setting font to %1").arg(fs));
         QApplication::setFont( f );
+#ifndef Q_OS_WIN
+// as timings are different under linux
         foreach ( QWidget * widget, QApplication::allWidgets() )
         {
             widget->setFont(f);
             widget->update();
         }
+#endif
     }
     else
     {
