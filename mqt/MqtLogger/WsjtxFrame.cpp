@@ -48,7 +48,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
     ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(1);
 
-//    ui->decodes_table_view_->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->decodes_table_view_->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     decodes_model_->delegate = delegate;
     decodes_model_->messages = &messages;
 
@@ -350,11 +350,7 @@ void WsjtxFrame::process_decodes()
             }
         }
     }
-    if (!columns_resized_)
-    {
-        ui->decodes_table_view_->resizeColumnsToContents ();
-        columns_resized_ = true;
-    }
+
     ui->decodes_table_view_->scrollToBottom ();
 }
 
@@ -540,8 +536,6 @@ void WsjtxFrame::decodes_cleared (QString const& client_id)
 
     id_ = client_id;
     decodes_model_->clear();
-
-    columns_resized_ = false;
 }
 void WsjtxFrame::reply(decodeMessage &dc)
 {

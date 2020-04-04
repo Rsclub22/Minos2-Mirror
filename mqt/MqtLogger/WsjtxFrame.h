@@ -36,7 +36,6 @@ private:
     DecodesModel * decodes_model_ = nullptr;
     bool fast_mode_ = false;
     QString id_;
-    bool columns_resized_ = false;
     QSharedPointer<HtmlDelegate> delegate;
     bool autoEnabled = false;
     bool showTest = false;
