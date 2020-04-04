@@ -8,11 +8,13 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include "XMPP_pch.h"
-#include <dirent.h>
-#include <fstream>
 
 #ifdef Q_OS_WIN
     static QSharedMemory ServerEvent;
+#else
+    #include <signal.h>
+    #include <dirent.h>
+    #include <fstream>
 #endif
 void makeServerEvent( bool create )
 {
@@ -48,7 +50,7 @@ static int getProcIdByName(QString procName)
             if (id > 0)
             {
                 // Read contents of virtual /proc/{pid}/cmdline file
-                QString cmdPath = QString("/proc/") + dirp->d_name + "/cmdline";
+                QString cmdPath = QString("/proc/%1/cmdline").arg( dirp->d_name);
 
                 QFile data(cmdPath);
                 if (data.open(QFile::ReadOnly))
