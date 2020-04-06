@@ -133,7 +133,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     rawRotatorlbl->setText(tr("RawRot: "));
     ui->statusbar->addPermanentWidget(rawRotatorDisplay);
 
-    ui->overlaplineEdit->setFixedSize(60,20);
+//    ui->overlaplineEdit->setFixedSize(60,20);
     ui->antNameDisp->setText("");
 
     rot_left_button_off();
@@ -760,6 +760,7 @@ void RotatorMainWindow::displayBearing(int bearing)
         {
             bearing += COMPASS_MAX360;
             logMessage(QString("OverLapOn Negative Overlap - Rotator Bearing = %1").arg(QString::number(bearing)));
+            overLapStatus = NEG_OVERLAP;
         }
         else
         {
@@ -1860,30 +1861,36 @@ void RotatorMainWindow::about()
 
 void RotatorMainWindow::overLapDisplayBox(overlapStat status)
 {
-    QPalette palette;
-
+    QString style;
+    QString btext;
     if (status == POS_OVERLAP)
     {
-        palette.setColor(QPalette::Base,Qt::red);
+        style = "background-color: red; color black; font-weight: bold;\n";
+        btext = "Positive Overlap";
     }
     else if (status == NEG_OVERLAP)
     {
-        palette.setColor(QPalette::Base,Qt::green);
+        style = "background-color: green; color black; font-weight: bold;\n";
+        btext = "Negative Overlap";
     }
     else
     {
-        palette.setColor(QPalette::Base,Qt::lightGray);
+        style = "background-color: lightGrey; color lightGrey\n";
+        btext = "No Overlap";
     }
 
-    ui->overlaplineEdit->setPalette(palette);
+    ui->overlapIndicator->setStyleSheet(style);
+    ui->overlapIndicator->setText(btext);
+
+    update();
 }
 
 
 void RotatorMainWindow::toggleOverLapDisplay(bool toggle)
 {
     // don't display overlap if rotator doesn't support or user turned off overlap
-    ui->overlap->setVisible(toggle);
-    ui->overlaplineEdit->setVisible(toggle);
+//    ui->overlap->setVisible(toggle);
+    ui->overlapIndicator->setVisible(toggle);
 
 }
 

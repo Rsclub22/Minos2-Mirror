@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>RotatorMainWindow</class>
  <widget class="QMainWindow" name="RotatorMainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -489,40 +492,18 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
-           <widget class="QLabel" name="overlap">
-            <property name="font">
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
+           <widget class="QPushButton" name="overlapIndicator">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
-             <string>Overlap</string>
+             <string>No Overlap</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="overlaplineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>60</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maxLength">
-             <number>10</number>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
+            <property name="flat">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
