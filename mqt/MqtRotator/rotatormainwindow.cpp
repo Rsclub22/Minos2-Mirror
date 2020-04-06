@@ -1866,17 +1866,17 @@ void RotatorMainWindow::overLapDisplayBox(overlapStat status)
     if (status == POS_OVERLAP)
     {
         style = "background-color: red; color black; font-weight: bold;\n";
-        btext = "Positive Overlap";
+        btext = tr("Positive Overlap");
     }
     else if (status == NEG_OVERLAP)
     {
         style = "background-color: green; color black; font-weight: bold;\n";
-        btext = "Negative Overlap";
+        btext = tr("Negative Overlap");
     }
     else
     {
         style = "background-color: lightGrey; color lightGrey\n";
-        btext = "No Overlap";
+        btext = tr("No Overlap");
     }
 
     ui->overlapIndicator->setStyleSheet(style);

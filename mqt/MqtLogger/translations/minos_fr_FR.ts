@@ -1752,7 +1752,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="165"/>
-        <location filename="../qsologframe.cpp" line="503"/>
+        <location filename="../qsologframe.cpp" line="514"/>
         <source>Catch-up (Post Entry)</source>
         <translation>Rattrapage (post-entrée)</translation>
     </message>
@@ -1949,17 +1949,17 @@ to</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="351"/>
+        <location filename="../qsologframe.cpp" line="362"/>
         <source>Return to Log</source>
         <translation>Retourner au journal</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="512"/>
+        <location filename="../qsologframe.cpp" line="523"/>
         <source>End Catch-up</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1699"/>
+        <location filename="../qsologframe.cpp" line="1710"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -1970,32 +1970,32 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2089"/>
+        <location filename="../qsologframe.cpp" line="2100"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2096"/>
+        <location filename="../qsologframe.cpp" line="2107"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2191"/>
+        <location filename="../qsologframe.cpp" line="2202"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2193"/>
+        <location filename="../qsologframe.cpp" line="2204"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2520"/>
+        <location filename="../qsologframe.cpp" line="2531"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2555"/>
+        <location filename="../qsologframe.cpp" line="2566"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -4587,7 +4587,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="425"/>
+        <location filename="../WsjtxFrame.cpp" line="429"/>
         <source>&lt;h1&gt;&lt;b&gt;Contest band %1 not the same as %2 band %3</source>
         <translation>&lt;h1&gt; &lt;b&gt; La bande du concours %1 n&apos;est pas la même que la bande %2 %3</translation>
     </message>
