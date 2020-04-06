@@ -184,7 +184,11 @@ void RunConfigElement::stopProcess()
     if (runner)
     {
         stopping = true;
-        runner->terminate();
+        sendCommand("Shutdown");
+        if (!runner->waitForFinished(10000))
+        {
+            runner->terminate();
+        }
     }
 }
 void RunConfigElement::bounceProcess()
@@ -192,7 +196,7 @@ void RunConfigElement::bounceProcess()
     if (runner)
     {
         stopping = false;
-        runner->terminate();
+        sendCommand("Shutdown");
     }
 }
 void RunConfigElement::sendCommand(const QString & cmd)

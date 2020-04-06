@@ -299,5 +299,9 @@ void executeStdIn(QString cmd)
     {
         setAppFont(cmd);
     }
+    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+    {
+        QApplication::closeAllWindows();
+    }
 }
 
