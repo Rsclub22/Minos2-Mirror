@@ -274,11 +274,6 @@ Please delete them and set up the rotators again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="156"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rotatormainwindow.ui" line="191"/>
         <source>Target</source>
         <translation type="unfinished"></translation>

@@ -55,12 +55,4 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
-<context>
-    <name>MonitoringFrame</name>
-    <message>
-        <location filename="../MonitoringFrame.ui" line="48"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
 </TS>

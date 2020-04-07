@@ -1092,7 +1092,7 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="66"/>
-        <location filename="../WsjtxDecodesModel.cpp" line="281"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="334"/>
         <source>Best</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1122,12 +1122,12 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="273"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="326"/>
         <source>(old)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="279"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="332"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1489,11 +1489,6 @@ Continents only apply to DXCC</source>
     <message>
         <location filename="../minoscontestloaddialog.ui" line="14"/>
         <source>Loading...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../minoscontestloaddialog.ui" line="20"/>
-        <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2862,11 +2857,6 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="116"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../taboutbox.ui" line="133"/>
         <source>Logger Only</source>
         <translation type="unfinished"></translation>
@@ -4043,11 +4033,6 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     <message>
         <location filename="../tminosbshelpform.ui" line="14"/>
         <source>Minos Help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tminosbshelpform.ui" line="23"/>
-        <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

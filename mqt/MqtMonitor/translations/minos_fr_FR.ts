@@ -62,9 +62,8 @@
         <translation type="vanished">Frame</translation>
     </message>
     <message>
-        <location filename="../MonitoringFrame.ui" line="48"/>
         <source>TextLabel</source>
-        <translation>TextLabel</translation>
+        <translation type="vanished">TextLabel</translation>
     </message>
 </context>
 </TS>

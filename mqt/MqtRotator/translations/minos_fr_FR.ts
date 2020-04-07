@@ -278,10 +278,9 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <translation>Antenne:</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.ui" line="156"/>
         <source>TextLabel</source>
         <translatorcomment>NOT USED ??</translatorcomment>
-        <translation>TextLabel</translation>
+        <translation type="vanished">TextLabel</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="191"/>

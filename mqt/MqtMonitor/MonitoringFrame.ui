@@ -45,7 +45,7 @@
    <item>
     <widget class="QLabel" name="scoreLabel">
      <property name="text">
-      <string>TextLabel</string>
+      <string/>
      </property>
     </widget>
    </item>
