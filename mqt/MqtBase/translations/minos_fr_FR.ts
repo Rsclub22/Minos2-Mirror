@@ -6,37 +6,37 @@
     <message>
         <location filename="../contacts.cpp" line="236"/>
         <source>LOCAL COMMENT</source>
-        <translation>WHERE - IN ENGLISH??</translation>
+        <translation>COMMENTAIRE LOCALE</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="237"/>
         <source>COMMENT FOR ADJUDICATOR</source>
-        <translation></translation>
+        <translation>COMMENTAIRE POUR L&apos;ARBITRE</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="238"/>
         <source>DELETED</source>
-        <translation>WHERE??</translation>
+        <translation>SUPPRIMÉ</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="253"/>
         <source>MAN</source>
-        <translation>MAN - where</translation>
+        <translation>MANUELLE</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="256"/>
         <source>DEL</source>
-        <translation>Supprimé</translation>
+        <translation>SUPPRIMÉ</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="259"/>
         <source>N/S</source>
-        <translation>N/S - where</translation>
+        <translation>SANS NOTATION</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="264"/>
         <source>DUP</source>
-        <translation>Dupliquer</translation>
+        <translation>DUPLIQUER</translation>
     </message>
 </context>
 <context>
@@ -44,12 +44,12 @@
     <message>
         <location filename="../contest.cpp" line="421"/>
         <source>DUPLICATE OF </source>
-        <translation>Duplicata de - WHERE9 </translation>
+        <translation>Duplicata de </translation>
     </message>
     <message>
         <location filename="../contest.cpp" line="437"/>
         <source>DUP OF</source>
-        <translation>DUP OF???</translation>
+        <translation>Duplicata de</translation>
     </message>
 </context>
 <context>
@@ -538,7 +538,7 @@
     <message>
         <location filename="../profiles.cpp" line="155"/>
         <source>QTH height ASL (metres)</source>
-        <translation>DUPLICATE?</translation>
+        <translation>QTH Hauteur au-dessus de la mer (metres)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="158"/>
@@ -548,7 +548,7 @@
     <message>
         <location filename="../profiles.cpp" line="158"/>
         <source>Transmit Power (Watts)</source>
-        <translation>USED??</translation>
+        <translation>Puissance d&apos;Émetteur (Watts)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="159"/>
@@ -752,7 +752,7 @@
     <message>
         <location filename="../ConfigElementFrame.cpp" line="158"/>
         <source>Minos Component Program</source>
-        <translation>Minos Component Program - WHERE</translation>
+        <translation>Minos Component Program - WHERE APJ01</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.cpp" line="167"/>
@@ -830,42 +830,42 @@
     <message>
         <location filename="../DisplayContestContact.cpp" line="499"/>
         <source>DELETED</source>
-        <translation>WHERE??</translation>
+        <translation>SUPPRIMÉ</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="499"/>
         <source>LOCAL COMMENT</source>
-        <translation>LOCAL COMMENT WHERE</translation>
+        <translation>COMMENTAIRE LOCALE</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="499"/>
         <source>COMMENT FOR ADJUDICATOR</source>
-        <translation></translation>
+        <translation>COMMENTAIRE POUR L&apos;ARBITRE</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="550"/>
         <source>MAN</source>
-        <translation></translation>
+        <translation>MANUELLE</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="620"/>
         <source>DEL</source>
-        <translation></translation>
+        <translation>SUPPRIMÉ</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="623"/>
         <source>N/S</source>
-        <translation></translation>
+        <translation>SANS NOTATION</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="630"/>
         <source>DUP</source>
-        <translation></translation>
+        <translation>DUPLIQUER</translation>
     </message>
     <message>
         <location filename="../DisplayContestContact.cpp" line="711"/>
         <source>UNFILLED CONTACT </source>
-        <translation></translation>
+        <translation>CONTACT NON REMPLI </translation>
     </message>
 </context>
 <context>
@@ -1006,7 +1006,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../helpbrowser.ui" line="14"/>
         <source>Help Browser</source>
-        <translation>CONTEXT?</translation>
+        <translation>Navigateur d&apos;aide</translation>
     </message>
     <message>
         <location filename="../helpbrowser.ui" line="28"/>
@@ -1095,7 +1095,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../minoskeyboard.ui" line="28"/>
         <source>Esc</source>
-        <translation>Échap.</translation>
+        <translation>Échap</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="48"/>
@@ -1633,7 +1633,7 @@ Entrer un autre direction SVP</translation>
     <message>
         <location filename="../validators.cpp" line="18"/>
         <source>null validator failed</source>
-        <translation>null validator failed - WHERE</translation>
+        <translation>null validator failed - WHERE APJ02</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="19"/>
@@ -1698,7 +1698,7 @@ Entrer un autre direction SVP</translation>
     <message>
         <location filename="../validators.cpp" line="31"/>
         <source>Invalid Callsign!</source>
-        <translation>Indicatif  non valide</translation>
+        <translation>Indicatif  non valide!</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="32"/>

@@ -135,7 +135,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rotcontrol.cpp" line="30"/>
         <source>Command rejected by the rig</source>
-        <translation>Commande rejetée par l&apos;émitteur  RIG????</translation>
+        <translation>Commande rejetée par l&apos;émitteur  RIG???? APJ17</translation>
     </message>
     <message>
         <location filename="../rotcontrol.cpp" line="31"/>
@@ -150,7 +150,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rotcontrol.cpp" line="33"/>
         <source>VFO not targetable</source>
-        <translation>VFO???????? non ciblable  </translation>
+        <translation>VFO???????? non ciblable  APJ18</translation>
     </message>
     <message>
         <location filename="../rotcontrol.cpp" line="34"/>
@@ -165,17 +165,17 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rotcontrol.cpp" line="36"/>
         <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
-        <translation>WHAT ???     (AND WHY?)   </translation>
+        <translation>WHAT ???     (AND WHY?)   APJ19</translation>
     </message>
     <message>
         <location filename="../rotcontrol.cpp" line="37"/>
         <source>Invalid VFO</source>
-        <translation>VFO?????? invalide   </translation>
+        <translation>VFO?????? invalide   APJ20</translation>
     </message>
     <message>
         <location filename="../rotcontrol.cpp" line="38"/>
         <source>RIG_EDOM</source>
-        <translation>RIG_EDOM WHAT????   </translation>
+        <translation>RIG_EDOM WHAT????   APJ21</translation>
     </message>
     <message>
         <location filename="../rotcontrol.cpp" line="462"/>
@@ -238,7 +238,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotsetupdialog.cpp" line="747"/>
         <source>New Antenna Name:</source>
-        <translation>Nom de la nouvelle antenne</translation>
+        <translation>Nom de la nouvelle antenne:</translation>
     </message>
 </context>
 <context>
@@ -280,7 +280,8 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="156"/>
         <source>TextLabel</source>
-        <translation>NOT USED ??</translation>
+        <translatorcomment>NOT USED ??</translatorcomment>
+        <translation>TextLabel</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="191"/>
@@ -325,10 +326,6 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <location filename="../rotatormainwindow.cpp" line="1879"/>
         <source>No Overlap</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Overlap</source>
-        <translation type="vanished">Chevauchement</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="554"/>

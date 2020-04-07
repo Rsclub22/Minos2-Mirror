@@ -429,7 +429,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="353"/>
         <source>Prefix</source>
-        <translation></translation>
+        <translation>Préfixe</translation>
     </message>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="356"/>

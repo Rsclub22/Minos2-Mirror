@@ -42,7 +42,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="31"/>
         <source>Select &amp;Language</source>
-        <translation>Choisir la &amp;Langue ...</translation>
+        <translation>Choisir la &amp;Langue</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="127"/>
