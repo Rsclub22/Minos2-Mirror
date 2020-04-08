@@ -22,15 +22,13 @@
 #include "rotatorfactory.h"
 #include "rotatorbase.h"
 
-//namespace pstRotatorText {
-//    const char * pstRotatorErrorMsg[] = {QT_TR_NOOP("Network Address failed to bind"),
-//                                    QT_TR_NOOP("")
-//                                    };
-//}
 
 
-enum pstErrorCode {PST_OK = 0, BIND_FAILURE = -1, DATAGRAM_WRITE_ERROR = -2};
 
+
+enum pstErrorCode {PST_OK = 0, BIND_FAILURE = -1, DATAGRAM_WRITE_ERROR = -2, REQ_BEARING_CMD_TIMEOUT = -3, ROT_TO_BEARING_CMD_TIMEOUT = -4, STOP_CMD_TIMEOUT = -5};
+
+enum pstCmdSent {NO_CMDSENT = 0, REQ_BEARING_CMDSENT, ROT_TO_BEARING_CMDSENT, STOP_ROTATION_CMDSENT};
 
 const int timeoutDur = 2000;
 
@@ -38,6 +36,8 @@ const int timeoutDur = 2000;
 class PstRotControl : public RotatorBase
 {
     Q_OBJECT
+
+    static const char* pstRotatorErrorMsg[];
 public:
     explicit PstRotControl(QObject *parent = nullptr);
     virtual ~PstRotControl();
@@ -96,6 +96,9 @@ private:
     QTimer *commsTimeoutTimer;
     QString bearing;
     bool traceCommsFlag;
+
+    pstCmdSent cmdSent;
+
 
     int rot_speed = 100;
 

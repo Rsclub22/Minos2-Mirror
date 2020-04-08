@@ -14,12 +14,23 @@
 #include "pstRotControl.h"
 #include "rotatorfactory.h"
 
+const char * PstRotControl::pstRotatorErrorMsg[] = {QT_TR_NOOP("Network Address failed to bind"),
+                                     QT_TR_NOOP("Datagram Write Error"),
+                                     QT_TR_NOOP("Request Bearing Command Timeout"),
+                                     QT_TR_NOOP("Rotate to Bearing Command Timeout"),
+                                     QT_TR_NOOP("Stop Commond Timeout"),
+
+
+                                    };
+
+
 
 PstRotControl::PstRotControl(QObject *parent) : RotatorBase(parent)
 {
     pstCommandSocket = new QUdpSocket(this);
     pstReportSocket = new QUdpSocket(this);
     connect(pstReportSocket, SIGNAL(readyRead()), this, SLOT(processPendingReportDatagrams()));
+    cmdSent = pstCmdSent::NO_CMDSENT;
 
 }
 
@@ -133,6 +144,7 @@ bool PstRotControl::getTraceComms()
 void PstRotControl::processPendingReportDatagrams()
 {
     commsTimeoutTimer->stop();
+    cmdSent = pstCmdSent::NO_CMDSENT;
 
     QByteArray datagram;
     QString b;
@@ -172,11 +184,16 @@ void PstRotControl::processPendingReportDatagrams()
 int PstRotControl::request_bearing()
 {
     int retCode = 0;
-    QString txMsg = QString("<PST>AZ?</PST>");
-    commsTimeoutTimer->start(timeoutDur);
+    if (cmdSent == pstCmdSent::NO_CMDSENT)
+    {
+        cmdSent = pstCmdSent::REQ_BEARING_CMDSENT;
+        QString txMsg = QString("<PST>AZ?</PST>");
+        commsTimeoutTimer->start(timeoutDur);
 
-    traceMsg(QString("request bearing %1").arg(txMsg));
-    retCode = sendCommandToPstRotator(txMsg);
+        traceMsg(QString("request bearing %1").arg(txMsg));
+        retCode = sendCommandToPstRotator(txMsg);
+    }
+
 
     return retCode;
 }
@@ -260,6 +277,7 @@ void PstRotControl::onCommsTimeout()
 {
     commsTimeoutTimer->stop();
     traceMsg(QString("commsTimeout - %1").arg(timeoutDur));
+    cmdSent = pstCmdSent::NO_CMDSENT;
 }
 
 
@@ -279,7 +297,11 @@ void PstRotControl::traceCommsMsg(QString msg)
 
 QString PstRotControl::getErrorMsgText(int errorCode)
 {
-
+    if (errorCode > static_cast<int>(sizeof(pstRotatorErrorMsg)/sizeof(const char *)))
+    {
+        return tr("pstRotator Errorcode too large!");
+    }
+    return tr(pstRotatorErrorMsg[errorCode]);
 }
 
 QString PstRotControl::getLibraryName()
