@@ -747,6 +747,8 @@ void RotSetupDialog::updateAvailAntennasToVersion2(QSettings& settings)
     QStringList spList;
     QString antenna;
 
+
+
     for (int i = 0; i < numAvailAntennas; i++)
     {
         antenna = availAntennas[i] + "/rotatorModel";
@@ -760,6 +762,7 @@ void RotSetupDialog::updateAvailAntennasToVersion2(QSettings& settings)
                 settings.setValue(antenna, antennaModel);
             }
         }
+
 
     }
 

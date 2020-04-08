@@ -176,7 +176,7 @@ private:
 
 
 
-    void openRotator();
+    int openRotator();
     void closeRotator();
 
     void refreshPresetLabels();
@@ -199,7 +199,7 @@ private:
 
 
 
-    void hamlibError(int errorCode, QString cmd);
+    void rotatorError(int errorCode, QString cmd);
 
     void rotatorActive();
 

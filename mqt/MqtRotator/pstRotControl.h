@@ -63,6 +63,7 @@ public:
 
     QString getRotLibVersion() override;
     QString getErrorMsgText(int errorCode) override;
+    QString getLibraryName() override;
 
     void setPstNetAddress(QString address);
     void setPstPortAddress(QString port);

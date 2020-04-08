@@ -79,6 +79,7 @@ public:
 
     QStringList getErrorMsgList();
     QString getErrorMsgText(int errorCode) override;
+    QString getLibraryName() override;
     QString getRotLibVersion() override;
 
     static void setTraceCommsFlag(bool value);

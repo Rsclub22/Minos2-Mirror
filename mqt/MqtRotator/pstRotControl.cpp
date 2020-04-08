@@ -281,3 +281,8 @@ QString PstRotControl::getErrorMsgText(int errorCode)
 {
 
 }
+
+QString PstRotControl::getLibraryName()
+{
+    return QString("PstRotControl");
+}

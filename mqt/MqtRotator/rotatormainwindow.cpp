@@ -385,7 +385,7 @@ void RotatorMainWindow::onLoggerSetPreset(QString presetMsg)
 
 
 
-void RotatorMainWindow::openRotator()
+int RotatorMainWindow::openRotator()
 {
 
     int retCode = 0;
@@ -394,7 +394,7 @@ void RotatorMainWindow::openRotator()
     {
         logMessage(QString("Open Rotator: No rotator name!"));
         showStatusMessage(tr("Please select an Antenna"));
-        return;
+        return  OPEN_FAILED;
     }
     if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::serial)
     {
@@ -402,14 +402,14 @@ void RotatorMainWindow::openRotator()
         {
             logMessage(QString("Open Rotator: Check comport - defined port %1 not available on computer").arg(setupAntenna->currentAntenna.comport));
             showStatusMessage(tr("Comport %1 no longer configured on computer?").arg(setupAntenna->currentAntenna.comport));
-            return;
+            return OPEN_FAILED;
         }
 
         if (setupAntenna->currentAntenna.comport == "")
         {
             logMessage(QString("Open Rotator: No comport"));
             showStatusMessage(tr("Please select a Comport"));
-            return;
+            return OPEN_FAILED;
         }
 
     }
@@ -419,7 +419,7 @@ void RotatorMainWindow::openRotator()
         {
             logMessage(QString("Open Rotator: No network or Port Number"));
             showStatusMessage(tr("Please enter a network Address and Port Number"));
-            return;
+            return OPEN_FAILED;
         }
 
     }
@@ -427,7 +427,7 @@ void RotatorMainWindow::openRotator()
     {
         logMessage(QString("Open Rotator: No rotator model"));
         showStatusMessage(tr("Please select a rotator model"));
-        return;
+        return OPEN_FAILED;
     }
 
 
@@ -443,7 +443,7 @@ void RotatorMainWindow::openRotator()
     retCode = rotator->rotInit(setupAntenna->currentAntenna);
     if (retCode < 0)
     {
-            hamlibError(retCode, tr("Rotator Init Failed"));
+            return retCode;
     }
 
 
@@ -487,7 +487,7 @@ void RotatorMainWindow::openRotator()
         sendStatusToLogDisConnected();
     }
 
-
+    return OPEN_OK;
 
 }
 
@@ -945,7 +945,12 @@ void RotatorMainWindow::upDateAntenna()
             ui->antNameDisp->setText(setupAntenna->currentAntenna.antennaName);
 
             writeWindowTitle(appName);
-            openRotator();
+
+            if (openRotator() != OPEN_OK)
+            {
+                return;
+            }
+
             offSetDisplay->setText(QString::number(setupAntenna->currentAntenna.antennaOffset));
 
             // don't display overlap if rotator doesn't support or user turned off overlap
@@ -963,6 +968,7 @@ void RotatorMainWindow::upDateAntenna()
             {
                 cwCCWControlVisible(setupAntenna->currentAntenna.simCwCcwCmd);
             }
+
 
             dumpRotatorToTraceLog();
 
@@ -997,6 +1003,9 @@ void RotatorMainWindow::upDateAntenna()
                }
 
            }
+
+
+
         }
     }
     else
@@ -1038,7 +1047,11 @@ void RotatorMainWindow::refreshAntenna()
 
         if (!rotator->getRotConnected())
         {
-            openRotator();
+
+            if (openRotator() != OPEN_OK)
+            {
+                return;
+            }
         }
 
         if (rotator->getRotConnected())
@@ -1081,7 +1094,7 @@ void RotatorMainWindow::request_bearing()
         if (retCode < 0)
         {
             logMessage(QString("Request bearing: error"));
-            hamlibError(retCode, tr("Request Bearing"));
+            rotatorError(retCode, tr("Request Bearing"));
         }
     }
     reqBearCmdflag = false;
@@ -1262,7 +1275,7 @@ void RotatorMainWindow::rotateTo(int bearing)
         retCode = rotator->rotate_to_bearing(rotateTo);
         if (retCode < 0)
         {
-            hamlibError(retCode, tr("Rotate to Bearing"));
+            rotatorError(retCode, tr("Rotate to Bearing"));
         }
         else
         {
@@ -1474,7 +1487,7 @@ void RotatorMainWindow::stopRotation(bool sendStop)
 
         if (retCode < 0)
         {
-            hamlibError(retCode, "Stop Rotation");
+            rotatorError(retCode, "Stop Rotation");
             sendStatusToLogError();
 
         }
@@ -1573,7 +1586,7 @@ void RotatorMainWindow::rotateCW(bool /*clicked*/)
             }
             if (retCode < 0)
             {
-                hamlibError(retCode, "Rotate CW");
+                rotatorError(retCode, "Rotate CW");
                 movingCW = false;
                 sendStatusToLogError();
 
@@ -1666,7 +1679,7 @@ void RotatorMainWindow::rotateCCW(bool /*toggle*/)
 
             if (retCode < 0)
             {
-                hamlibError(retCode, "Rotate CCW");
+                rotatorError(retCode, "Rotate CCW");
                 movingCCW = false;
                 sendStatusToLogError();
 
@@ -1772,7 +1785,7 @@ int RotatorMainWindow::getPolltime()
 }
 
 
-void RotatorMainWindow::hamlibError(int errorCode, QString cmd )
+void RotatorMainWindow::rotatorError(int errorCode, QString cmd )
 {
 
     if ( errorCode >= 0)
@@ -1787,13 +1800,14 @@ void RotatorMainWindow::hamlibError(int errorCode, QString cmd )
         sendStatusToLogError();
     }
     // log all errors
-    QString errorMsg = ""; // rotator->gethamlibErrorMsg(errorCode); *******************************************
-    logMessage(QString("Hamlib Error - Code = %1 - %2").arg(errorCode).arg(errorMsg));
+    QString errorMsg = rotator->getErrorMsgText(errorCode);
+    logMessage(QString("%1 library Error - Code = %2 - %3").arg(rotator->getLibraryName()).arg(QString::number(errorCode)).arg(errorMsg));
 
 
      pollTimer->stop();
 
-     QMessageBox::critical(this, tr("Rotator hamlib Error - %1").arg( setupAntenna->currentAntennaName), tr("%1 - %2\nCommand - %3").arg(errorCode).arg(errorMsg).arg(cmd));
+     QMessageBox::critical(this, tr("Rotator %1 library Error").arg(rotator->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(setupAntenna->currentAntenna.antennaName).arg(errorCode).arg(errorMsg).arg(cmd));
+
 
      closeRotator();
      rotErrorFlag = false;

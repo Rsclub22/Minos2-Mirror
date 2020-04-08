@@ -46,6 +46,7 @@ public:
     virtual int get_rotatorSpeed() = 0;
 
     virtual QString getRotLibVersion() = 0;
+    virtual QString getLibraryName() = 0;
     virtual QString getErrorMsgText(int errorCode) = 0;
 
 

@@ -528,7 +528,10 @@ QString HamlibRotControl::getErrorMsgText(int errorCode)
 }
 
 
-
+QString HamlibRotControl::getLibraryName()
+{
+    return QString("hamlib");
+}
 
 
 
