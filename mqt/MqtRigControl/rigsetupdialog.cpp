@@ -955,6 +955,7 @@ void RigSetupDialog::updateAvailRadiosToVersion2(QSettings& settings)
     QStringList spList;
     QString radio;
 
+
     for (int i = 0; i < numAvailRadios; i++)
     {
         radio = availRadios[i] + "/radioModel";
@@ -966,7 +967,11 @@ void RigSetupDialog::updateAvailRadiosToVersion2(QSettings& settings)
             {
                 radioModel = spList[1].trimmed() + " " + spList[2].trimmed();
                 settings.setValue(radio, radioModel);
+                // update to new rig modelNumber
+                RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioModel);
+                settings.setValue(availRadios[i] + "/radioModelNumber", QString::number(rigFactory->supported_rigs()->value(radioModel).rigModelNumber));
             }
+
         }
 
     }
