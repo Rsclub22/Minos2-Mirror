@@ -30,6 +30,8 @@ enum pstErrorCode {PST_OK = 0, BIND_FAILURE = -1, DATAGRAM_WRITE_ERROR = -2, REQ
 
 enum pstCmdSent {NO_CMDSENT = 0, REQ_BEARING_CMDSENT, ROT_TO_BEARING_CMDSENT, STOP_ROTATION_CMDSENT};
 
+const pstErrorCode cmdSentErrorCodes[] = {PST_OK, REQ_BEARING_CMD_TIMEOUT, ROT_TO_BEARING_CMD_TIMEOUT, STOP_CMD_TIMEOUT};
+const QString cmdSentString[] = {"Request Bearing Command", "Rotate To Bearing Command", "Stop Command"};
 const int timeoutDur = 2000;
 
 
@@ -106,6 +108,7 @@ private:
 
     void traceMsg(QString msg);
     void traceCommsMsg(QString msg);
+
 };
 
 #endif // PSTROTCONTROL_H

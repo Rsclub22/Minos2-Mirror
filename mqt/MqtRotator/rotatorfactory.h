@@ -27,7 +27,8 @@ enum RotId      // supported non-hamlib rotator interfaces
 };
 
 
-
+const QString HAMLIB_API = "hamlib";
+const QString PSTROTATOR_API = "pstRotator";
 
 
 class RotatorFactory : public QObject

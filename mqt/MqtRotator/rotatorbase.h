@@ -55,7 +55,7 @@ public:
 
 signals:
    void bearing_updated(int);
-   void request_bearingError(int);
+   void sentCommandError(int, QString);
    void traceCommsMsg(QString);
 
 private:

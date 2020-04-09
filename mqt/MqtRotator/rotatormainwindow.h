@@ -262,6 +262,7 @@ private slots:
 
 
     void showPresetMenu(int buttonNumber);
+    void onSentCommandError(int errorCode, QString cmd);
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);

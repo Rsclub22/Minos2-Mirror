@@ -14,14 +14,15 @@
 #include "pstRotControl.h"
 #include "rotatorfactory.h"
 
-const char * PstRotControl::pstRotatorErrorMsg[] = {QT_TR_NOOP("Network Address failed to bind"),
-                                     QT_TR_NOOP("Datagram Write Error"),
-                                     QT_TR_NOOP("Request Bearing Command Timeout"),
-                                     QT_TR_NOOP("Rotate to Bearing Command Timeout"),
-                                     QT_TR_NOOP("Stop Commond Timeout"),
+const char * PstRotControl::pstRotatorErrorMsg[] = { QT_TR_NOOP("PSTRotator Command OK"),
+                                                     QT_TR_NOOP("Network Address failed to bind"),
+                                                     QT_TR_NOOP("Datagram Write Error"),
+                                                     QT_TR_NOOP("Request Bearing Command Timeout"),
+                                                     QT_TR_NOOP("Rotate to Bearing Command Timeout"),
+                                                     QT_TR_NOOP("Stop Commond Timeout"),
 
 
-                                    };
+                                                    };
 
 
 
@@ -276,7 +277,8 @@ int PstRotControl::get_rotatorSpeed()
 void PstRotControl::onCommsTimeout()
 {
     commsTimeoutTimer->stop();
-    traceMsg(QString("commsTimeout - %1").arg(timeoutDur));
+    traceMsg(QString("commsTimeout - %1, errorcode %2").arg(timeoutDur).arg(cmdSent));
+    emit sentCommandError(cmdSentErrorCodes[cmdSent], cmdSentString[cmdSent]);
     cmdSent = pstCmdSent::NO_CMDSENT;
 }
 
@@ -306,5 +308,7 @@ QString PstRotControl::getErrorMsgText(int errorCode)
 
 QString PstRotControl::getLibraryName()
 {
-    return QString("PstRotControl");
+    return QString(PSTROTATOR_API);
 }
+
+

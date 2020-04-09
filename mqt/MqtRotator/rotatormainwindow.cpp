@@ -438,6 +438,11 @@ int RotatorMainWindow::openRotator()
     connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
     connect(rotator, SIGNAL(bearing_updated(int)), rotlog, SLOT(saveBearingLog(int)));
 
+    if (rotator->getLibraryName() == PSTROTATOR_API)
+    {
+        connect(rotator, SIGNAL(sentCommandError(int, QString)), this, SLOT(onSentCommandError(int, QString) ), Qt::QueuedConnection);
+    }
+
     rotator->setTraceComms(traceCommsFlag);
 
     retCode = rotator->rotInit(setupAntenna->currentAntenna);
@@ -500,20 +505,28 @@ void RotatorMainWindow::closeRotator()
 
     pollTimer->stop();
 
-    disconnect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
-    disconnect(rotator, SIGNAL(traceCommsMsg(QString)), this, SLOT(logMessage(QString)));
-    disconnect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
-    disconnect(rotator, SIGNAL(bearing_updated(int)), rotlog, SLOT(saveBearingLog(int)));
-
-    if (rotator->getRotConnected())
-    {
-        rotator->closeRotator();
-
-    }
-
     if (rotator)
     {
+        disconnect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
+        disconnect(rotator, SIGNAL(traceCommsMsg(QString)), this, SLOT(logMessage(QString)));
+        disconnect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
+        disconnect(rotator, SIGNAL(bearing_updated(int)), rotlog, SLOT(saveBearingLog(int)));
+
+        if (rotator->getLibraryName() == PSTROTATOR_API)
+        {
+            disconnect(rotator, SIGNAL(sentCommandError(int, QString)), this, SLOT(onSentCommandError(int, QString)));
+
+        }
+
+        if (rotator->getRotConnected())
+        {
+            rotator->closeRotator();
+
+        }
+
+
         delete rotator;
+        rotator = nullptr;
     }
 
     showStatusMessage(tr("Disconnected"));
@@ -1783,6 +1796,13 @@ int RotatorMainWindow::getPolltime()
 
     return pollTime;
 }
+
+void RotatorMainWindow::onSentCommandError(int errorCode, QString cmd)
+{
+    rotatorError(errorCode, cmd);
+
+}
+
 
 
 void RotatorMainWindow::rotatorError(int errorCode, QString cmd )
