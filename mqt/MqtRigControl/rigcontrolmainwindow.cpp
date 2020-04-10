@@ -1226,10 +1226,30 @@ void RigControlMainWindow::closeRadio()
         serialTVSw->closeComport();
     }
 
+
     if (radio != nullptr)
     {
+        if (radio->getRigConnected())
+        {
+            logMessage(QString("closeRadio: closing radio"));
+            retCode = radio->closeRig();
+            if (retCode < 0)
+            {
+                logMessage(QString("closeRadio: error closing radio %1").arg(retCode));
+            }
+            else
+            {
+                logMessage(QString("closeRadio: radio closed successfully"));
+            }
+
+
+        }
+
         delete radio;
+        radio = nullptr;
     }
+
+
 
 
     showStatusMessage(tr("Disconnected"));
