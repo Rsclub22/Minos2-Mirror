@@ -467,7 +467,11 @@ void MessageServer::start (port_type port, QHostAddress const& multicast_group_a
         }
     }
 }
-
+void MessageServer::stop()
+{
+    m_->close();
+    m_->disconnect();
+}
 void MessageServer::clear_decodes (QString const& id, quint8 window)
 {
   auto iter = m_->clients_.find (id);

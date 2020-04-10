@@ -360,7 +360,10 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , QString const& de_call, QString const& de_grid, QString const& dx_grid
                                 , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
+    MinosParameters *mp = MinosParameters::getMinosParameters();
+    if (!mp)
+        return;
+    BaseContestLog * cc = mp ->getCurrentContest();
     if (ct != cc || cc == nullptr)
         return;
     id_ = id;

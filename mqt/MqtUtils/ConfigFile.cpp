@@ -183,12 +183,14 @@ void RunConfigElement::stopProcess()
 {
     if (runner)
     {
+        logMessage( "Killing subProcess", "" );
         stopping = true;
         sendCommand("Shutdown");
         if (!runner->waitForFinished(10000))
         {
             runner->terminate();
         }
+        logMessage( "subProcess killed", "" );
     }
 }
 void RunConfigElement::bounceProcess()
@@ -376,9 +378,7 @@ void MinosConfig::stop()
    {
       if ( ( *i ) )
       {
-         logMessage( "Killing subProcess", "" );
          ( *i ) ->stopProcess();
-         logMessage( "subProcess killed", "" );
       }
    }
 }

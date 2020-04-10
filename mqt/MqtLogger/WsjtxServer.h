@@ -13,6 +13,7 @@ class WsjtxServer : public QObject
     Q_OBJECT
 public:
     WsjtxServer();
+    ~WsjtxServer();
     static WsjtxServer *getWsjtxServer();
 
     void start ();

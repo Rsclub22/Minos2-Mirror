@@ -107,7 +107,7 @@ void MinosAppConnection::on_connected()
 
 void MinosAppConnection::on_disconnected()
 {
-    trace("on_disconnected");
+    trace("MinosAppConnection::on_disconnected");
     closeDaemonThread();
 }
 

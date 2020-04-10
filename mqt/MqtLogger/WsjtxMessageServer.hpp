@@ -101,6 +101,7 @@ public:
   // this signal is emitted when a network error occurs
   Q_SIGNAL void error (QString const&) const;
 
+  void stop();
 private:
   class UDP_NO_EXPORT impl;
   pimpl<impl> m_;

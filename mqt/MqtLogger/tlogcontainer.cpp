@@ -99,7 +99,6 @@ TLogContainer::~TLogContainer()
     {
         delete ChatServer::getChatServer();
         delete ClusterClientServer::getClusterClientServer();
-        delete WsjtxServer::getWsjtxServer();
 
         delete MinosRPC::getMinosRPC();
         delete MinosAppConnection::minosAppConnection;
@@ -232,6 +231,8 @@ void TLogContainer::closeEvent(QCloseEvent *event)
 {
     trace("closeEvent:Start");
     TimerUpdateQSOTimer.stop();
+
+    delete WsjtxServer::getWsjtxServer();
 
     TContestApp::getContestApp() ->writeContestList();
     TContestApp::getContestApp() ->suppressWritePreload = true;

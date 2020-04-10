@@ -3688,239 +3688,239 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="64"/>
-        <location filename="../tlogcontainer.cpp" line="296"/>
+        <location filename="../tlogcontainer.cpp" line="297"/>
         <source>Minos Contest Logger</source>
         <translation>Minos Enregistreur du Concourse</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="227"/>
+        <location filename="../tlogcontainer.cpp" line="226"/>
         <source>Overwrite</source>
         <translation>Écraser</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="227"/>
+        <location filename="../tlogcontainer.cpp" line="226"/>
         <source>Insert</source>
         <translation>Encarter</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="350"/>
+        <location filename="../tlogcontainer.cpp" line="351"/>
         <source>&amp;Open Contest...</source>
         <translation>&amp;Ouvrir concours...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="351"/>
+        <location filename="../tlogcontainer.cpp" line="352"/>
         <source>&amp;Import Contest...</source>
         <translation>&amp;Importer concour...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="352"/>
+        <location filename="../tlogcontainer.cpp" line="353"/>
         <source>Reopen Contest</source>
         <translation>Rouvrir le concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="364"/>
+        <location filename="../tlogcontainer.cpp" line="365"/>
         <source>&amp;New Contest...</source>
         <translation>&amp;Nouveau concours...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="365"/>
+        <location filename="../tlogcontainer.cpp" line="366"/>
         <source>Close Contest</source>
         <translation>Fermer le concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="366"/>
+        <location filename="../tlogcontainer.cpp" line="367"/>
         <source>Close all Contests</source>
         <translation>Fermer tous les concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="367"/>
+        <location filename="../tlogcontainer.cpp" line="368"/>
         <source>Close all but this Contest</source>
         <translation>Fermer tous les concours sauf celui-ci</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="371"/>
+        <location filename="../tlogcontainer.cpp" line="372"/>
         <source>Contest Details...</source>
         <translation>Détails du concours...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="372"/>
+        <location filename="../tlogcontainer.cpp" line="373"/>
         <source>Produce Entry/Export File...</source>
         <translation>Produire un fichier d&apos;entrée / d&apos;exportation ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="375"/>
+        <location filename="../tlogcontainer.cpp" line="376"/>
         <source>Append ADIF file to contest...</source>
         <translation>Ajouter le fichier ADIF au concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="378"/>
+        <location filename="../tlogcontainer.cpp" line="379"/>
         <source>Open &amp;Archive List...</source>
         <translation>Ouvrir la liste des &amp;Archives...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="379"/>
+        <location filename="../tlogcontainer.cpp" line="380"/>
         <source>&amp;Manage Archive Lists...</source>
         <translation>&amp;Maintenance de la liste d&apos;archives...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="385"/>
+        <location filename="../tlogcontainer.cpp" line="386"/>
         <source>E&amp;xit Minos Contest Logger</source>
         <translation>F&amp;ermer Minos Enregistreur</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="388"/>
+        <location filename="../tlogcontainer.cpp" line="389"/>
         <source>&amp;Go To Contact Serial...</source>
         <translation>&amp;Aller au numéro de série ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="389"/>
+        <location filename="../tlogcontainer.cpp" line="390"/>
         <source>Goto First Unfilled Contact</source>
         <translation>Aller au premier contact non rempli</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="394"/>
+        <location filename="../tlogcontainer.cpp" line="395"/>
         <source>Screen Layouts</source>
         <translation>Dispositions de l&apos;écran</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="397"/>
+        <location filename="../tlogcontainer.cpp" line="398"/>
         <source>Select &amp;Font...</source>
         <translation>Sélectionner &amp;Police...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="427"/>
+        <location filename="../tlogcontainer.cpp" line="428"/>
         <source>Signal Report AutoFill</source>
         <translation>Rapport de signal remplissage automatique</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="382"/>
+        <location filename="../tlogcontainer.cpp" line="383"/>
         <source>E&amp;xit Minos Contest Logger and Clear registry...</source>
         <translation>Effacer le &amp;Registre et Fermer Minos Enregistreur...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="392"/>
+        <location filename="../tlogcontainer.cpp" line="393"/>
         <source>Startup Apps Configuration...</source>
         <translation>Configurer les applications...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="398"/>
+        <location filename="../tlogcontainer.cpp" line="399"/>
         <source>Select &amp;Language</source>
         <translation>Sélectionner &amp;Langue</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="423"/>
+        <location filename="../tlogcontainer.cpp" line="424"/>
         <source>Locator Calculator...</source>
         <translation>Calcul du Locator Maidenhead...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="425"/>
+        <location filename="../tlogcontainer.cpp" line="426"/>
         <source>UDP broadcast configuration...</source>
         <translation>Configuration de diffusion UDP ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="426"/>
+        <location filename="../tlogcontainer.cpp" line="427"/>
         <source>WSJT-X link configuration...</source>
         <translation>Configuration de la liaison WSJT-X...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="428"/>
+        <location filename="../tlogcontainer.cpp" line="429"/>
         <source>Correct Date/Time...</source>
         <translation>Corriger date / heure...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="430"/>
+        <location filename="../tlogcontainer.cpp" line="431"/>
         <source>Configure Default Directories...</source>
         <translation>Configurer les répertoires défaut ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="431"/>
+        <location filename="../tlogcontainer.cpp" line="432"/>
         <source>Advanced Options...</source>
         <translation>Options avancées...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="436"/>
+        <location filename="../tlogcontainer.cpp" line="437"/>
         <source>Add as new memory...</source>
         <translation>Ajouter comme nouvelle mémoire ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="458"/>
+        <location filename="../tlogcontainer.cpp" line="459"/>
         <source>Show Operators</source>
         <translatorcomment>Visualiser les opérateurs</translatorcomment>
         <translation>Visualiser les opérateurs</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="461"/>
+        <location filename="../tlogcontainer.cpp" line="462"/>
         <source>Shift Active Tab Left</source>
         <translation>Déplacer l&apos;onglet actif vers la gauche</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="462"/>
+        <location filename="../tlogcontainer.cpp" line="463"/>
         <source>Shift Active Tab Right</source>
         <translation>Déplacer l&apos;onglet actif vers la droite</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="467"/>
+        <location filename="../tlogcontainer.cpp" line="468"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="469"/>
+        <location filename="../tlogcontainer.cpp" line="470"/>
         <source>Record</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="470"/>
+        <location filename="../tlogcontainer.cpp" line="471"/>
         <source>Playback</source>
         <translation>Relecture</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="471"/>
+        <location filename="../tlogcontainer.cpp" line="472"/>
         <source>Tune</source>
         <translation>Accorder l&apos;émetteur</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="472"/>
+        <location filename="../tlogcontainer.cpp" line="473"/>
         <source>Two Tone</source>
         <translation>Deux tons</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="473"/>
+        <location filename="../tlogcontainer.cpp" line="474"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="482"/>
+        <location filename="../tlogcontainer.cpp" line="483"/>
         <source>Help...</source>
         <translation>Aide...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="483"/>
+        <location filename="../tlogcontainer.cpp" line="484"/>
         <source>About...</source>
         <translation>A propos...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="655"/>
+        <location filename="../tlogcontainer.cpp" line="656"/>
         <source>Documentation File %1 doesn&apos;t exist.</source>
         <translation>Le fichier de documentation %1 n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="736"/>
-        <location filename="../tlogcontainer.cpp" line="821"/>
+        <location filename="../tlogcontainer.cpp" line="737"/>
+        <location filename="../tlogcontainer.cpp" line="822"/>
         <source>Failed to delete %1</source>
         <translation>Échec de supprimer %1</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="779"/>
+        <location filename="../tlogcontainer.cpp" line="780"/>
         <source>Save new contest as</source>
         <translation>Enregistrer le nouveau concours sous</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="781"/>
+        <location filename="../tlogcontainer.cpp" line="782"/>
         <source>Minos contest files %1</source>
         <translation>Fichiers du concours Minos %1</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="789"/>
+        <location filename="../tlogcontainer.cpp" line="790"/>
         <source>%1 
 already exists.
 
@@ -3931,7 +3931,7 @@ existe déjà.
 Veuillez choisir un nouveau nom.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="808"/>
+        <location filename="../tlogcontainer.cpp" line="809"/>
         <source>Failed to rename
 %1
  as 
@@ -3945,28 +3945,28 @@ Please choose a new name.</source>
 Veuillez choisir un nouveau nom.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="837"/>
-        <location filename="../tlogcontainer.cpp" line="1083"/>
+        <location filename="../tlogcontainer.cpp" line="838"/>
+        <location filename="../tlogcontainer.cpp" line="1084"/>
         <source>Minos contest files (*.minos *.Minos);;All Files (*.*)</source>
         <translation>Fichiers du concours Minos (* .minos * .Minos) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="841"/>
+        <location filename="../tlogcontainer.cpp" line="842"/>
         <source>Open contests</source>
         <translation>Ouvrir concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="870"/>
+        <location filename="../tlogcontainer.cpp" line="871"/>
         <source>Use this combo for file types (*.*);;Reg1Test Files (*.edi);;GJV contest files (*.gjv);;RSGB Log Files (*.log);;ADIF Files (*.adi);;All Files (*.*)</source>
         <translation>Utiliser ce combo pour les types de fichiers (*. *) ;; Fichiers Reg1Test (* .edi) ;; Fichiers GJV Concours(* .gjv) ;; Fichiers RSGB Log (* .log) ;; Fichiers ADIF (* .adi); ;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="878"/>
+        <location filename="../tlogcontainer.cpp" line="879"/>
         <source>Import contests</source>
         <translation>Importer concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="988"/>
+        <location filename="../tlogcontainer.cpp" line="989"/>
         <source>This action will clear registry entries for all of the apps within the Minos V2 Logger.<byte value="xd"/>
 <byte value="xd"/>
 Please confirm this action by pressing &quot;Yes&quot;.</source>
@@ -3975,121 +3975,121 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1001"/>
+        <location filename="../tlogcontainer.cpp" line="1002"/>
         <source>Clear registry only works under Windows</source>
         <translation>Effacer le registre ne fonctionne que sous Windows</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1017"/>
+        <location filename="../tlogcontainer.cpp" line="1018"/>
         <source>ADIF files (*.adi);;All Files (*.*)</source>
         <translation>Fichiers ADIF (* .adi) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1021"/>
+        <location filename="../tlogcontainer.cpp" line="1022"/>
         <source>Open ADIF for append</source>
         <translation>Ouvrir ADIF pour ajouter</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1035"/>
+        <location filename="../tlogcontainer.cpp" line="1036"/>
         <source>Failed to open ADIF file %1 : %2</source>
         <translation>L&apos;ouverture du fichier ADIF %1 a échoué : %2</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1043"/>
+        <location filename="../tlogcontainer.cpp" line="1044"/>
         <source>Failed to append %1</source>
         <translation>Échec de l&apos;ajout de %1</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1087"/>
+        <location filename="../tlogcontainer.cpp" line="1088"/>
         <source>Open contest for Analysis</source>
         <translation>Ouvrir concours pour analyser</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1099"/>
+        <location filename="../tlogcontainer.cpp" line="1100"/>
         <source>Failed to open Contest Log file %1 : %2</source>
         <translation>L&apos;ouverture du fichier %1 a échoué : %2</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1107"/>
+        <location filename="../tlogcontainer.cpp" line="1108"/>
         <source>Analysis of %1 complete; look in the trace log for analysis.</source>
         <translation>Analyse de %1 terminée; regarder dans le journal de suivi pour l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1137"/>
+        <location filename="../tlogcontainer.cpp" line="1138"/>
         <source>You may need to close and reload Minos to have these settings applied</source>
         <translation>Vous devrez peut-être redémarrer Minos pour appliquer ces paramètres</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1146"/>
+        <location filename="../tlogcontainer.cpp" line="1147"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation>Le paramètre de police ne fonctionnera pas lorsque la variable d&apos;environnement QT_QPA_PLATFORMTHEME est définie sur qt5ct</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1301"/>
+        <location filename="../tlogcontainer.cpp" line="1302"/>
         <source>Qt style</source>
         <translation>Style Qt</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1314"/>
+        <location filename="../tlogcontainer.cpp" line="1315"/>
         <source>Set List Spacing Compression Value as percentage</source>
         <translation>Définir la valeur de compression d&apos;espacement de liste en pourcentage</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1328"/>
+        <location filename="../tlogcontainer.cpp" line="1329"/>
         <source>QSO Field expansion as percentage</source>
         <translatorcomment>Definir</translatorcomment>
         <translation>Expansion du détails du QSO en pourcentage</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1364"/>
-        <location filename="../tlogcontainer.cpp" line="1855"/>
+        <location filename="../tlogcontainer.cpp" line="1365"/>
+        <location filename="../tlogcontainer.cpp" line="1856"/>
         <source>Contest Sets</source>
         <translation>Ensembles de concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1587"/>
+        <location filename="../tlogcontainer.cpp" line="1588"/>
         <source>Configure Screen Layouts...</source>
         <translation>Configurer la disposition de l&apos;écran...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1589"/>
+        <location filename="../tlogcontainer.cpp" line="1590"/>
         <source>Set style...</source>
         <translation>Définir Style (QT?)...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1591"/>
+        <location filename="../tlogcontainer.cpp" line="1592"/>
         <source>Set extra QSO field size...</source>
         <translatorcomment>WHERE USED</translatorcomment>
         <translation>Expansion du détails du QSO en pourcentage...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1592"/>
+        <location filename="../tlogcontainer.cpp" line="1593"/>
         <source>Set List Spacing Compression...</source>
         <translation>Définir la valeur de compression d&apos;espacement de liste...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1687"/>
+        <location filename="../tlogcontainer.cpp" line="1688"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation>&amp;Gérer les ensembles de concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1958"/>
+        <location filename="../tlogcontainer.cpp" line="1959"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1983"/>
+        <location filename="../tlogcontainer.cpp" line="1984"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1987"/>
+        <location filename="../tlogcontainer.cpp" line="1988"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des?? archives</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2143"/>
         <location filename="../tlogcontainer.cpp" line="2144"/>
+        <location filename="../tlogcontainer.cpp" line="2145"/>
         <source>Minos contest Logger Application</source>
         <translation>Minos Enregistreur de Concours</translation>
     </message>
@@ -4567,7 +4567,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="429"/>
+        <location filename="../WsjtxFrame.cpp" line="432"/>
         <source>&lt;h1&gt;&lt;b&gt;Contest band %1 not the same as %2 band %3</source>
         <translation>&lt;h1&gt; &lt;b&gt; La bande du concours %1 n&apos;est pas la même que la bande %2 %3</translation>
     </message>
