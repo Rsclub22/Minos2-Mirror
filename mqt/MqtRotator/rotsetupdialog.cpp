@@ -67,8 +67,8 @@ void RotSetupDialog::initSetup()
 {
 
     // get the number of available antennas
-    QString fileName;
-    fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
+
+    QString fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
     QSettings settings(fileName, QSettings::IniFormat);
 
     availAntennas = settings.childGroups();

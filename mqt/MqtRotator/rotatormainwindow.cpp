@@ -149,6 +149,8 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     refreshPresetLabels();
     initActionsConnections();
 
+    checkTestBearingBox();
+
     selectAntenna = ui->selectAntennaBox;
 
     setupAntenna->setAppName(appName);
@@ -627,7 +629,8 @@ void RotatorMainWindow::initActionsConnections()
     connect(this, SIGNAL(checkingEndStop()), this, SLOT(checkEndStop()));
     //connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(closeSerialPort()));
 
-
+    // Test Bearing Box
+    connect(ui->testBearing, SIGNAL(returnPressed()), this, SLOT(onTestBearingEnter()));
 
     // setup antennas
     connect(ui->actionSetup_Antennas, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
@@ -1097,6 +1100,16 @@ void RotatorMainWindow::writeWindowTitle(QString appName)
 void RotatorMainWindow::request_bearing()
 {
     logMessage(QString("Request Bearing"));
+
+
+    if (ui->testBearing->isVisible())
+    {
+
+        logMessage("Using Test Bearing Box");
+        return;
+    }
+
+
     reqBearCmdflag = true;
     int retCode = 0;
     if (brakeflag || cwCcwCmdflag || rotCmdflag) return;
@@ -2261,8 +2274,39 @@ void RotatorMainWindow::updatePresetLabels()
 //    update();
 }
 
+// this is used to allow entry of bearings for test
+
+void RotatorMainWindow::checkTestBearingBox()
+{
+    QSettings config(CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE, QSettings::IniFormat);
+    config.beginGroup("TestBearings");
+
+    if (config.value("testbearing", false).toBool())
+    {
+        ui->testBearing->setVisible(true);
+        logMessage(QString("enabling test bearing box"));
+    }
+    else
+    {
+        ui->testBearing->setVisible(false);
+    }
+    config.endGroup();
+}
 
 
+void RotatorMainWindow::onTestBearingEnter()
+{
+
+
+    bool ok = false;
+    int brg = ui->testBearing->text().toInt(&ok);
+
+    if (ok)
+    {
+        logMessage(QString("Test Bearing = %1").arg(brg));
+        displayBearing(brg);
+    }
+}
 
 void RotatorMainWindow::aboutRotatorConfig()
 {

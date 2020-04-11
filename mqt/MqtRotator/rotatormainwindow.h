@@ -263,6 +263,7 @@ private slots:
 
     void showPresetMenu(int buttonNumber);
     void onSentCommandError(int errorCode, QString cmd);
+    void onTestBearingEnter();
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
@@ -293,6 +294,7 @@ private:
     void cwCCWControlVisible(bool visible);
     void savePreset(RotPresetData &editData);
 
+    void checkTestBearingBox();
 };
 
 #endif // ROTATORMAINWINDOW_H

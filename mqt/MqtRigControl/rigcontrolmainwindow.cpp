@@ -2978,7 +2978,7 @@ void RigControlMainWindow::saveTraceLogFlag(bool state)
 
     // set state of hamlib commms tracing
 
-    radio->setTraceComms(state);
+    //radio->setTraceComms(state);
 
     // save to ini for restart
 
