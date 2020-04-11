@@ -16,7 +16,7 @@
 #include "rigbase.h"
 #include "rigcommon.h"
 #include "rigfactory.h"
-#include "omniRig.h"
+#include "OmniWrapper.h"
 
 
 enum omnirigErrorCode {OMNIRIG_OK = 0, OMNIRIG_NOT_SUPPORTED, OMNIRIG_COM_FAILED_START,
