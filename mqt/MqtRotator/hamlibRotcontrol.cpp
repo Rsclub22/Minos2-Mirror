@@ -281,10 +281,20 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
         }
 
         int min_az = 0; // hamlib V4.0 sets min azimuth to -180 for Yaesu rotators, override to 0.
-        if (capsList[i]->rot_model != 601 || capsList[i]->rot_model != 603 || capsList[i]->rot_model != 605 || capsList[i]->rot_model != 606)
+        int max = capsList[i]->max_az;
+        int min = capsList[i]->min_az;
+        if (capsList[i]->max_az == 450)
+        {
+           if ( capsList[i]->min_az == -180)
+           {
+
+                min_az = 0;
+           }
+
+        }
+        else
         {
             min_az = capsList[i]->min_az;
-
         }
 
 
