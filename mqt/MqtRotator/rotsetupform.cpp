@@ -528,8 +528,7 @@ void rotSetupForm::pollIntervalVisible(bool s)
 
 void rotSetupForm::sStopOffButSelected()
 {
-//    if (!chkloadflg)
-//    {
+
 
     antennaData->southStopType = S_STOPOFF;
     antennaData->max_azimuth = COMPASS_MAX360;
@@ -538,7 +537,7 @@ void rotSetupForm::sStopOffButSelected()
 
     antennaValueChanged = true;
 
-//    }
+
 }
 
 

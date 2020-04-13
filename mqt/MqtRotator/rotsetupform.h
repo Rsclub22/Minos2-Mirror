@@ -115,6 +115,8 @@ public:
 
 
     void setupRotatorModel(QString rotatorModel);
+
+    bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
 private slots:
 
     void rotatorModelSelected();
@@ -162,7 +164,7 @@ private:
 
 
 
-    bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
+
 };
 
 #endif // ROTSETUPFORM_H
