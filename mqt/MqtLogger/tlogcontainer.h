@@ -50,10 +50,16 @@ public:
     QVector<TSingleLogFrame *> getLogFrames();
     int getLogFrameCount();
 
+    SetMemoryAction *setMemoryAction;
+
     static QString getDefaultDirectory( bool IsList );
 
     bool isShowOperators();
 
+    bool isLoggerClosing()
+    {
+        return loggerClosing;
+    }
     void setCaption( QString );
 
     void getCurrSession();
@@ -64,10 +70,6 @@ public:
 
     void applyScreenLayouts();
     void selectLayout(QString layout);
-
-    SetMemoryAction *setMemoryAction;
-
-
 
     QAction *newAction(int n, QMenu *m, const char *atype);
     void doListOpenActionExecute(QWidget *p);

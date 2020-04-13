@@ -453,16 +453,18 @@ void TSingleLogFrame::clearScreenLayout()
     rotPresets->setContest(nullptr);
 
     trace("TSingleLogFrame::clearScreenLayout start clearance for " + msg);
-
-    while (singleLogFrameSplitter->count())
+    if (!LogContainer->isLoggerClosing())
     {
-        MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
-        clearSplitter(s);
-        s->setParent(nullptr);
-        s->deleteLater();
+        while (singleLogFrameSplitter->count())
+        {
+            MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
+            clearSplitter(s);
+            s->setParent(nullptr);
+            s->deleteLater();
+        }
+        rowSplitters.clear();
+        update();
     }
-    rowSplitters.clear();
-    update();
     trace("TSingleLogFrame::clearScreenLayout complete for " + msg);
 }
 void TSingleLogFrame::applyScreenLayout()
