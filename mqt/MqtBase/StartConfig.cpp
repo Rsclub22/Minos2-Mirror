@@ -155,7 +155,8 @@ void StartConfig::on_StartButton_clicked()
 
 void StartConfig::on_StopButton_clicked()
 {
-    MinosConfig::getMinosConfig() ->stop();
+    MinosConfig::getMinosConfig() ->askStop();
+    MinosConfig::getMinosConfig() ->forceStop();
     checkEnabled();
 }
 

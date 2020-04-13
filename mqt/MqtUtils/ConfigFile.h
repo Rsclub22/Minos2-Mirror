@@ -71,7 +71,9 @@ public:  		// User declarations
     QSharedPointer<Connectable> connectable();
 
     void createProcess();
-    void stopProcess();
+    void askStopProcess();
+    void forceStopProcess();
+
     void bounceProcess();
     void sendCommand(const QString & cmd);
     bool isRunning()
@@ -135,8 +137,9 @@ public:  		// User declarations
     void checkAllStopped();
     void bounce();
     void start();
-    void stop();
+    void askStop();
 
+    void forceStop();
 signals:
     void    stdOutLine(QString);
     void    allStopped();

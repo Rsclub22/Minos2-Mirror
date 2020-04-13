@@ -61,6 +61,9 @@ MainWindow::~MainWindow()
 }
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    MinosConfig::getMinosConfig()->askStop();
+    MinosConfig::getMinosConfig()->forceStop();
+
     QMainWindow::closeEvent(event);
 }
 void MainWindow::moveEvent(QMoveEvent *event)
@@ -164,10 +167,6 @@ void MainWindow::LanguageAcceptActionExecute()
     if (action)
     {
         bool serverRunning = checkServerReady();
-        if (serverRunning)
-        {
-            MinosConfig::getMinosConfig() ->stop();
-        }
 
         if (lastLanguageSelected)
             lastLanguageSelected->setChecked(false);
@@ -225,7 +224,8 @@ void MainWindow::on_stdOutLine(QString line)
                                         m_connection =  QMetaObject::Connection();
                                         MinosConfig::getMinosConfig()->start();
                                     });
-            MinosConfig::getMinosConfig()->stop();
+            MinosConfig::getMinosConfig()->askStop();
+            MinosConfig::getMinosConfig()->forceStop();
         }
         else if (l[1] == "CloseApps")
         {
@@ -235,7 +235,8 @@ void MainWindow::on_stdOutLine(QString line)
                                         m_connection =  QMetaObject::Connection();
                                         this->close();
                                     });
-            MinosConfig::getMinosConfig()->stop();
+            MinosConfig::getMinosConfig()->askStop();
+            MinosConfig::getMinosConfig()->forceStop();
         }
         else if (l[1] == "RestartOS")
         {
@@ -246,7 +247,8 @@ void MainWindow::on_stdOutLine(QString line)
                                         system("systemctl reboot");
                                         this->close();
                                     });
-            MinosConfig::getMinosConfig()->stop();
+            MinosConfig::getMinosConfig()->askStop();
+            MinosConfig::getMinosConfig()->forceStop();
         }
         else if (l[1] == "CloseOS")
         {
@@ -257,7 +259,8 @@ void MainWindow::on_stdOutLine(QString line)
                                         system("systemctl poweroff");
                                         this->close();
                                     });
-            MinosConfig::getMinosConfig()->stop();
+            MinosConfig::getMinosConfig()->askStop();
+            MinosConfig::getMinosConfig()->forceStop();
         }
     }
 }

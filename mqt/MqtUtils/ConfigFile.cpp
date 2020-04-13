@@ -179,17 +179,20 @@ void RunConfigElement::createProcess()
         sendCommand(fontCommand);
     }
 }
-void RunConfigElement::stopProcess()
+void RunConfigElement::askStopProcess()
 {
     if (runner)
     {
-        logMessage( "Killing subProcess", "" );
+        logMessage( "Closing subProcess", "" );
         stopping = true;
         sendCommand("Shutdown");
-        if (!runner->waitForFinished(10000))
-        {
-            runner->terminate();
-        }
+    }
+}
+void RunConfigElement::forceStopProcess()
+{
+    if (runner && !runner->waitForFinished(5000))
+    {
+        runner->terminate();
         logMessage( "subProcess killed", "" );
     }
 }
@@ -279,7 +282,7 @@ MinosConfig::MinosConfig( )
 MinosConfig::~MinosConfig()
 {
    if ( !terminated )
-      stop();
+      forceStop();
 
    elelist.clear();
 }
@@ -370,7 +373,7 @@ void MinosConfig::start()
    }
 }
 
-void MinosConfig::stop()
+void MinosConfig::askStop()
 {
    terminated = true;
 
@@ -378,10 +381,23 @@ void MinosConfig::stop()
    {
       if ( ( *i ) )
       {
-         ( *i ) ->stopProcess();
+         ( *i ) ->askStopProcess();
       }
    }
 }
+void MinosConfig::forceStop()
+{
+   terminated = true;
+
+   for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+   {
+      if ( ( *i ) )
+      {
+         ( *i ) ->forceStopProcess();
+      }
+   }
+}
+
 void MinosConfig::bounce()
 {
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )

@@ -757,11 +757,11 @@ void TSingleLogFrame::closeContest()
     {
        FKHRigControlFrame->closeContest();          // this disconnects rig on last closing contest
        FKHRotControlFrame->closeContest();
+       GJVQSOLogFrame->closeContest();
        RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
 
        clearScreenLayout();
        TContestApp::getContestApp() ->closeFile( contest );
-       GJVQSOLogFrame->closeContest();
        qsoModel.initialise(nullptr);
 
        contest = nullptr;

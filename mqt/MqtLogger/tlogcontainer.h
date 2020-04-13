@@ -92,6 +92,8 @@ private:
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
+    bool loggerClosing = false;
+
     void enableActions();
 
     QString getCurrentFile();
