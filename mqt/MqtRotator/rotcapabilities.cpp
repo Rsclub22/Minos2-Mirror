@@ -20,6 +20,7 @@ RotCapabilities::RotCapabilities(int modelNumber_,
                  maxRot (maxRot_),
                  rotDisplay (rotDisplay_),
                  pollData (pollData_)
+
 {
 
 }

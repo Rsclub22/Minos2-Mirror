@@ -117,6 +117,9 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
         antennaData->rotatorModelName = rotCap.rotatorModelName;
         maxRot = rotCap.maxRot;
         minRot = rotCap.minRot;
+        antennaData->rotatorCWEndStop = rotCap.maxRot;
+        antennaData->rotatorCCWEndStop = rotCap.minRot;
+
         antennaData->supportCwCcwCmd = rotCap.supportCwCCwCmd;
         antennaData->portType = rotCap.portType;
 
@@ -236,19 +239,20 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
             antennaData->overRunFlag = false;
             antennaData->southStopType = S_STOPOFF;
         }
-        else if (maxRot > COMPASS_MAX360 && minRot == COMPASS_MIN0 )
-        {
+        else if (maxRot > COMPASS_MAX360 && minRot == COMPASS_MIN0)
+        {                                                                                                               // ROT_0_450, mainly GS232B rotator
 
             antennaData->rotType = ROT_0_450;
             antennaData->endStopType = ROT_0_450;
             antennaData->max_azimuth = maxRot;
+
             antennaData->min_azimuth = minRot;
             antennaData->overRunFlag = true;
             antennaData->southStopType = S_STOPOFF;
 
          }
-        else if (maxRot > COMPASS_MAX360 && minRot < COMPASS_MIN0 )
-        {
+         else if (maxRot > COMPASS_MAX360 && minRot < COMPASS_MIN0 )
+         {
 
             antennaData->max_azimuth = maxRot;
             antennaData->min_azimuth = minRot;
@@ -256,11 +260,11 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
             antennaData->endStopType = ROT_NEG180_540;
             antennaData->overRunFlag = true;
             antennaData->southStopType = S_STOPOFF;
-        }
-        else
-        {
-            return false;
-        }
+          }
+          else
+          {
+             return false;
+          }
 
 
         return true;

@@ -33,7 +33,6 @@
 #include <QProcessEnvironment>
 #include <QtDebug>
 
-// QPushButton:clicked{\n	background-color: red;\n	border-style: outset;\n	border-width: 1px;\n	border-radius: 5px;\n	border-color: black;\n	min-width: 5em;\n	padding: 3px;\n}
 
 
 
@@ -699,14 +698,7 @@ void RotatorMainWindow::displayBearing(int bearing)
         return;
     }
 
-
-    // support a south stop with compass modue 0 - 360
-    //if (setupAntenna->currentAntenna.southStopType == S_STOPCOMP && bearing > COMPASS_HALF && bearing <= COMPASS_MAX360)
-    //{
-    //    rotatorBearing = bearing - COMPASS_MAX360;
-    //}
-    //else if (setupAntenna->currentAntenna.southStopType == S_STOPINV)
-    if (setupAntenna->currentAntenna.southStopType == S_STOPINV)
+     if (setupAntenna->currentAntenna.southStopType == S_STOPINV)
     {
         rotatorBearing = bearing;
         if (bearing >= COMPASS_MIN0 && bearing <= COMPASS_HALF)
@@ -2281,7 +2273,7 @@ void RotatorMainWindow::checkTestBearingBox()
     QSettings config(CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE, QSettings::IniFormat);
     config.beginGroup("TestBearings");
 
-    if (config.value("testbearing", false).toBool())
+    if (config.value("testbearings", false).toBool())
     {
         ui->testBearing->setVisible(true);
         logMessage(QString("enabling test bearing box"));
