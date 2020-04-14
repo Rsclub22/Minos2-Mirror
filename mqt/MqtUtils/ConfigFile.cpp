@@ -183,7 +183,7 @@ void RunConfigElement::askStopProcess()
 {
     if (runner)
     {
-        logMessage( "Closing subProcess", "" );
+        trace( QString("Closing subProcess %1").arg(name) );
         stopping = true;
         sendCommand("Shutdown");
     }
@@ -193,7 +193,7 @@ void RunConfigElement::forceStopProcess()
     if (runner && !runner->waitForFinished(5000))
     {
         runner->terminate();
-        logMessage( "subProcess killed", "" );
+        trace( QString("subProcess %1 killed").arg(name) );
     }
 }
 void RunConfigElement::bounceProcess()
@@ -212,11 +212,11 @@ void RunConfigElement::sendCommand(const QString & cmd)
         qint64 res = runner->write( command );
         if (res < 0)
         {
-            trace("Failed to write " + cmd + " to runner");
+            trace(QString("Failed to write %1 to runner %2").arg(cmd).arg(name));
         }
         else
         {
-            trace("Wrote " + cmd + " to runner");
+            trace(QString("Wrote %1 to runner %2").arg(cmd).arg(name));
         }
     }
 }
