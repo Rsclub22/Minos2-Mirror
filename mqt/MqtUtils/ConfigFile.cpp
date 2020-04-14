@@ -206,7 +206,7 @@ void RunConfigElement::bounceProcess()
 }
 void RunConfigElement::sendCommand(const QString & cmd)
 {
-    if (runner && appType != MinosConfig::tr(MinosConfig::appNone) )
+    if (runner /*&& appType != MinosConfig::tr(MinosConfig::appNone)*/ )
     {
         QByteArray command = (cmd + "\n").toUtf8();
         qint64 res = runner->write( command );
