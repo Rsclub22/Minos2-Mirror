@@ -9,43 +9,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="533"/>
+        <location filename="../ConfigFile.cpp" line="17"/>
+        <source>Other</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ConfigFile.cpp" line="563"/>
         <source>More than one server is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="542"/>
+        <location filename="../ConfigFile.cpp" line="572"/>
         <source>A local server is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="557"/>
+        <location filename="../ConfigFile.cpp" line="587"/>
         <source> contains bad characters [ and/or ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="572"/>
+        <location filename="../ConfigFile.cpp" line="602"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="613"/>
+        <location filename="../ConfigFile.cpp" line="643"/>
         <source>%1 requires a local %2
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="623"/>
+        <location filename="../ConfigFile.cpp" line="653"/>
         <source> Executable path does not exist
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="627"/>
+        <location filename="../ConfigFile.cpp" line="657"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.ini
 
 </source>
@@ -55,7 +60,7 @@
 <context>
     <name>RunConfigElement</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="141"/>
+        <location filename="../ConfigFile.cpp" line="146"/>
         <source>:program doesn&apos;t exist:</source>
         <translation type="unfinished"></translation>
     </message>

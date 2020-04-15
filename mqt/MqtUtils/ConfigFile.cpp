@@ -14,6 +14,7 @@ static bool terminated = false;
 QString RunLocal("RunLocal");
 QString ConnectServer("ConnectServer");
 const char * MinosConfig::appNone = QT_TR_NOOP("None");
+const char * MinosConfig::appOther = QT_TR_NOOP("Other");
 
 /*static*/
 MinosConfig *MinosConfig::thisDM = nullptr;
@@ -77,6 +78,10 @@ bool RunConfigElement::initialise(INIFile &config, QString sect )
     requiresApps = ace.requiresApps;
     localOK = ace.localOK;
     remoteOK = ace.remoteOK;
+    if (ace.appType == tr(MinosConfig::appOther))
+    {
+        showAdvanced = true;
+    }
 
     return true;
 }
@@ -206,7 +211,7 @@ void RunConfigElement::bounceProcess()
 }
 void RunConfigElement::sendCommand(const QString & cmd)
 {
-    if (runner /*&& appType != MinosConfig::tr(MinosConfig::appNone)*/ )
+    if (runner && appType != MinosConfig::tr(MinosConfig::appNone) )
     {
         QByteArray command = (cmd + "\n").toUtf8();
         qint64 res = runner->write( command );
@@ -441,10 +446,14 @@ QStringList MinosConfig::getAppTypes()
     QStringList apps;
     for (int i = 0; i < appConfigList.size(); i++)
     {
-        apps.append(appConfigList[i].appType);
+        if (appConfigList[i].appType != tr(appNone) && appConfigList[i].appType != tr(appOther))
+        {
+            apps.append(appConfigList[i].appType);
+        }
     }
     apps.sort();
-    apps.insert(0, tr(appNone));
+    apps.prepend( tr(appNone));
+    apps.append(tr(appOther));
     apps.removeDuplicates();
     return apps;
 }
@@ -466,15 +475,29 @@ Server=false
     {
         if (apps[i] == appNone)
             apps[i] = tr(appNone);
+        if (apps[i] == appOther)
+            apps[i] = tr(appOther);
 
-        if (appConfig.getPrivateProfileBool(apps[i], "Enabled", false))  // only include those elements we are allowed to as possibilities
+        bool otherApp = false;
+
+        bool enabled = appConfig.getPrivateProfileBool(apps[i], "Enabled", false);
+        if (apps[i] == tr(appOther))
+        {
+            otherApp = true;
+            enabled = true;
+        }
+
+        if (enabled)  // only include those elements we are allowed to as possibilities
         {
             AppConfigElement ac;
 
             ac.appType = apps[i].trimmed();
             appConfig.getPrivateProfileString(apps[i], "Path", "", ac.appPath);
 #ifdef Q_OS_WIN
-            ac.appPath += ".exe";
+            if (!ac.appPath.isEmpty())
+            {
+                ac.appPath += ".exe";
+            }
 #endif
             ac.server = appConfig.getPrivateProfileBool(apps[i], "Server", false);
             ac.defaultHide = appConfig.getPrivateProfileBool(apps[i], "HideApp", false);
@@ -496,6 +519,13 @@ Server=false
             else
             {
                 ac.remoteOK = false;
+            }
+            if (otherApp)
+            {
+                ac.server = true;
+                ac.defaultHide = false;
+                ac.localOK = true;
+                ac.remoteOK = true;
             }
 
 

@@ -112,6 +112,7 @@ public:  		// User declarations
     ~MinosConfig();
 
     static const char * appNone;
+    static const char * appOther;
 
     void reset();
 
