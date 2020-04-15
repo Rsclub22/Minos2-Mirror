@@ -656,42 +656,41 @@ void rotSetupForm::setCompassButVisible(bool s)
 
 void rotSetupForm::overlapSelected()
 {
-//    if (!chkloadflg)
-//    {
 
         antennaData->overRunFlag = ui->chkOverrun->isChecked();
 
-        if (antennaData->overRunFlag && (antennaData->endStopType == ROT_0_360 || antennaData->endStopType == ROT_180_180))
-        {
-            // restore to ROT_0_450 type
-            antennaData->max_azimuth = antennaData->rotatorCWEndStop;
-            antennaData->min_azimuth = antennaData->rotatorCCWEndStop;
-            antennaData->endStopType = antennaData->rotType;
-            sStopButtonsVisible(false);
-            setSStopOffButChecked(true);
-            antennaData->southStopType = S_STOPOFF;
-
-        }
-        else if (!antennaData->overRunFlag && antennaData->endStopType == ROT_0_450)
-        {
-            antennaData->max_azimuth = COMPASS_MAX360;
-            antennaData->min_azimuth = COMPASS_MIN0;
-            antennaData->endStopType = ROT_0_360;
-            sStopButtonsVisible(true);
-            setSStopOffButChecked(true);
-            antennaData->southStopType = S_STOPOFF;
-
-        }
-
-
-
+        setOverlapEndStop(antennaData, antennaData->overRunFlag);
 
         antennaValueChanged = true;
 
 
+}
 
-//    }
 
+void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overrunState)
+{
+
+    if (overrunState && (antennaData->endStopType == ROT_0_360 || antennaData->endStopType == ROT_180_180))
+    {
+        // restore to ROT_0_450 type
+        antennaData->max_azimuth = antennaData->rotatorCWEndStop;
+        antennaData->min_azimuth = antennaData->rotatorCCWEndStop;
+        antennaData->endStopType = antennaData->rotType;
+        sStopButtonsVisible(false);
+        setSStopOffButChecked(true);
+        antennaData->southStopType = S_STOPOFF;
+
+    }
+    else if (!overrunState && antennaData->endStopType == ROT_0_450)
+    {
+        antennaData->max_azimuth = COMPASS_MAX360;
+        antennaData->min_azimuth = COMPASS_MIN0;
+        antennaData->endStopType = ROT_0_360;
+        sStopButtonsVisible(true);
+        setSStopOffButChecked(true);
+        antennaData->southStopType = S_STOPOFF;
+
+    }
 
 }
 

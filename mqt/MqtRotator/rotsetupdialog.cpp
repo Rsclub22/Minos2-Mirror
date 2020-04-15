@@ -108,8 +108,9 @@ void RotSetupDialog::initSetup()
             availAntData[i]->rotatorCWEndStop = rotatorFactory->supported_rotators()->value(availAntData[i]->rotatorModel).maxRot;
             availAntData[i]->rotatorCCWEndStop = rotatorFactory->supported_rotators()->value(availAntData[i]->rotatorModel).minRot;
 
+            bool overrunState = availAntData[i]->overRunFlag;   // save as it is changed in setEndStopType
             antennaTab[i]->setEndStopType(availAntData[i], availAntData[i]->rotatorCCWEndStop, availAntData[i]->rotatorCWEndStop);
-
+            antennaTab[i]->setOverlapEndStop(availAntData[i], overrunState);
             loadSettingsToTab(i);
         }
         chkloadflg = false;
@@ -158,6 +159,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->setPollInterval(availAntData[tabNum]->pollInterval);
         antennaTab[tabNum]->pollIntervalVisible(true);
         //antennaTab[tabNum]->setCheckStop(availAntData[tabNum]->southStopType);
+        bool f = availAntData[tabNum]->overRunFlag;
         antennaTab[tabNum]->setCheckOverrun(availAntData[tabNum]->overRunFlag);
         antennaTab[tabNum]->setSimCW_CCWcmdChecked(availAntData[tabNum]->simCwCcwCmd);
 

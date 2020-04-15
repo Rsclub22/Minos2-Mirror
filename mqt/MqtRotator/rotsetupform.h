@@ -117,6 +117,8 @@ public:
     void setupRotatorModel(QString rotatorModel);
 
     bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
+    void setOverlapEndStop(srotParams *antennaData, bool overrunState);
+
 private slots:
 
     void rotatorModelSelected();
