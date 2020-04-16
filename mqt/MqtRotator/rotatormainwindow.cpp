@@ -294,6 +294,9 @@ void RotatorMainWindow::onLoggerSelectAntenna(PubSubName s)
     setupAntenna->currentAntennaName = s.key();
     setupAntenna->saveCurrentAntenna();
 
+    logMessage(QString("Logger Selected Antenna - %1").arg(setupAntenna->currentAntennaName));
+    dumpRotatorToTraceLog();
+
     if (!s.isEmpty() && s.key() == oldAntenna)
     {
         refreshAntenna();
@@ -978,7 +981,7 @@ void RotatorMainWindow::upDateAntenna()
             }
 
 
-            dumpRotatorToTraceLog();
+
 
             if (rotator->getRotConnected())
             {
@@ -1072,7 +1075,7 @@ void RotatorMainWindow::refreshAntenna()
         }
 
     }
-    dumpRotatorToTraceLog();
+
     msg->rotatorCache.publish();
 }
 
@@ -2308,7 +2311,7 @@ void RotatorMainWindow::aboutRotatorConfig()
 
     if (setupAntenna->currentAntenna.antennaName != "")
     {
-
+        RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
 
         msg.append(tr("App Instance Name  = %1\n").arg(appName));
         msg.append(tr("Hamlib Version = %1\n").arg(rotator->getRotLibVersion()));
@@ -2321,14 +2324,20 @@ void RotatorMainWindow::aboutRotatorConfig()
         msg.append(tr("Rotator CW EndStop = %1\n").arg(QString::number(setupAntenna->currentAntenna.rotatorCWEndStop)));
         msg.append(tr("Rotator CCW EndStop = %1\n").arg(QString::number(setupAntenna->currentAntenna.rotatorCCWEndStop)));
         msg.append(tr("Rotator PortType = %1\n").arg(hamlibData::portTypeList[setupAntenna->currentAntenna.portType]));
-        msg.append(tr("Network Address = %1\n").arg(setupAntenna->currentAntenna.networkAdd));
-        msg.append(tr("Network Port = %1\n").arg(setupAntenna->currentAntenna.networkPort));
-        msg.append(tr("Rotator Comport = %1\n").arg(setupAntenna->currentAntenna.comport));
-        msg.append(tr("Baudrate = %1\n").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
-        msg.append(tr("Databits = %1\n").arg(QString::number(setupAntenna->currentAntenna.databits)));
-        msg.append(tr("Stop bits = %1\n").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
-        //msg.append(tr("Parity = %1\n").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
-        //msg.append(tr("Handshake = %1\n").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+        if (rotCap.portType == RotCapConstants::PortType::network)
+        {
+            msg.append(tr("Network Address = %1\n").arg(setupAntenna->currentAntenna.networkAdd));
+            msg.append(tr("Network Port = %1\n").arg(setupAntenna->currentAntenna.networkPort));
+        }
+        if (rotCap.portType == RotCapConstants::PortType::serial)
+        {
+            msg.append(tr("Rotator Comport = %1\n").arg(setupAntenna->currentAntenna.comport));
+            msg.append(tr("Baudrate = %1\n").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
+            msg.append(tr("Databits = %1\n").arg(QString::number(setupAntenna->currentAntenna.databits)));
+            msg.append(tr("Stop bits = %1\n").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
+            //msg.append(tr("Parity = %1\n").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
+            //msg.append(tr("Handshake = %1\n").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+        }
         msg.append(tr("Antenna Offset = %1\n").arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));
         msg.append(tr("Current Rotator Type = %1\n").arg(endStopNames[setupAntenna->currentAntenna.endStopType]));
         msg.append(tr("Current Max Azimuth = %1\n").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)));
@@ -2358,9 +2367,15 @@ void RotatorMainWindow::aboutRotatorConfig()
 void RotatorMainWindow::dumpRotatorToTraceLog()
 {
 
+    RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
+
     if (setupAntenna->currentAntenna.antennaName != "")
     {
-        trace("*** Antenna Updated ***");
+
+        RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
+
+
+        trace("*** Antenna Selected ***");
         trace(QString("App Instance Name  = %1").arg(appName));
         trace(QString("Library Version = %1").arg(rotator->getRotLibVersion()));
         trace(QString("Antenna Name = %1").arg(setupAntenna->currentAntenna.antennaName));
@@ -2372,14 +2387,22 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
         trace(QString("Rotator CW EndStop = %1").arg(QString::number(setupAntenna->currentAntenna.rotatorCWEndStop)));
         trace(QString("Rotator CCW EndStop = %1").arg(QString::number(setupAntenna->currentAntenna.rotatorCCWEndStop)));
         trace(QString("Rotator PortType = %1").arg(hamlibData::portTypeList[setupAntenna->currentAntenna.portType]));
-        trace(QString("Network Address = %1").arg(setupAntenna->currentAntenna.networkAdd));
-        trace(QString("Network Port = %1").arg(setupAntenna->currentAntenna.networkPort));
-        trace(QString("Rotator Comport = %1").arg(setupAntenna->currentAntenna.comport));
-        trace(QString("Baudrate = %1").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
-        trace(QString("Databits = %1").arg(QString::number(setupAntenna->currentAntenna.databits)));
-        trace(QString("Stop bits = %1").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
-        //trace(QString("Parity = %1").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
-        //trace(QString("Handshake = %1").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+
+        if (rotCap.portType == RotCapConstants::PortType::network)
+        {
+            trace(QString("Network Address = %1").arg(setupAntenna->currentAntenna.networkAdd));
+            trace(QString("Network Port = %1").arg(setupAntenna->currentAntenna.networkPort));
+        }
+        if (rotCap.portType == RotCapConstants::PortType::serial)
+        {
+            trace(QString("Rotator Comport = %1").arg(setupAntenna->currentAntenna.comport));
+            trace(QString("Baudrate = %1").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
+            trace(QString("Databits = %1").arg(QString::number(setupAntenna->currentAntenna.databits)));
+            trace(QString("Stop bits = %1").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
+            //trace(QString("Parity = %1").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
+            //trace(QString("Handshake = %1").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+
+        }
         trace(QString("Antenna Offset = %1").arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));
         trace(QString("Current Rotator Type = %1").arg(endStopNames[setupAntenna->currentAntenna.endStopType]));
         trace(QString("Current Max Azimuth = %1").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)));

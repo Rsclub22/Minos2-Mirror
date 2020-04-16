@@ -778,49 +778,6 @@ void RotSetupDialog::updateAvailAntennasToVersion2()
         }
 
         // remove redundant settings
-/*
-
-        if (settings.value("rotatorModelName").toInt() == 0)
-        {
-            settings.remove("rotatorModelName");
-        }
-        if (settings.value("rotatorModelName").toInt() == 0)
-        {
-            settings.remove("rotatorModelName");
-        }
-        if (settings.value("rotatorModelNumber").toInt() == 0)
-        {
-            settings.remove("rotatorModelNumber");
-        }
-        if (settings.value("rotatorManufacturer").toInt() == 0)
-        {
-            settings.remove("rotatorManufacturer");
-        }
-        if (settings.value("rotatorCWEndStop").toInt() == 0)
-        {
-            settings.remove("rotatorCWEndStop");
-        }
-        if (settings.value("rotatorCCWEndStop").toInt() == 0)
-        {
-            settings.remove("rotatorCCWEndStop");
-        }
-        if (settings.value("rotatorType").toInt() == 0)
-        {
-            settings.remove("rotatorType");
-        }
-        if (settings.value("endStopType").toInt() == 0)
-        {
-            settings.remove("endStopType");
-        }
-        if (settings.value("maxAzimuth").toInt() == 0)
-        {
-            settings.remove("maxAzimuth");
-        }
-        if (settings.value("minAzimuth").toInt() == 0)
-        {
-            settings.remove("southStopType");
-        }
-*/
 
         settings.remove("rotatorModelName");
         settings.remove("rotatorModelName");
