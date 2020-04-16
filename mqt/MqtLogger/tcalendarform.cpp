@@ -324,7 +324,7 @@ void TCalendarForm::downloadFiles()
         }
     }
 
-    mShowMessage( QString::number ( fileCount ) + " of " + QString::number( yearList.size() ) + " files downloaded. We don't expect to load them all.", LogContainer );
+    mShowMessage( tr("%1 of %2 files downloaded. We don't expect to load them all.").arg(fileCount).arg(yearList.size()), this);
 }
 //---------------------------------------------------------------------------
 

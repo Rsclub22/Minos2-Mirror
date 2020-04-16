@@ -3097,6 +3097,11 @@ The row background will change colour when selected.</source>
         <source>Something is wrong - SSL not supported on this system.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../tcalendarform.cpp" line="327"/>
+        <source>%1 of %2 files downloaded. We don&apos;t expect to load them all.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TClockDlg</name>

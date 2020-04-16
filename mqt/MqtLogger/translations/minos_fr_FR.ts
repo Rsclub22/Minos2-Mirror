@@ -3166,6 +3166,11 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <source>Something is wrong - SSL not supported on this system.</source>
         <translation>SSL n&apos;est pas pris en charge sur ce système.</translation>
     </message>
+    <message>
+        <location filename="../tcalendarform.cpp" line="327"/>
+        <source>%1 of %2 files downloaded. We don&apos;t expect to load them all.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TClockDlg</name>
