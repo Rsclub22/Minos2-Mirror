@@ -78,7 +78,7 @@ void RotSetupDialog::initSetup()
         QString version = settings.value("Version/version", QString()).toString();
         if (version == "1")
         {
-            updateAvailAntennasToVersion2(settings);
+            updateAvailAntennasToVersion2();
         }
 
         // check version again
@@ -110,7 +110,9 @@ void RotSetupDialog::initSetup()
 
             bool overrunState = availAntData[i]->overRunFlag;   // save as it is changed in setEndStopType
             antennaTab[i]->setEndStopType(availAntData[i], availAntData[i]->rotatorCCWEndStop, availAntData[i]->rotatorCWEndStop);
+            availAntData[i]->overRunFlag = overrunState;  //restore
             antennaTab[i]->setOverlapEndStop(availAntData[i], overrunState);
+
             loadSettingsToTab(i);
         }
         chkloadflg = false;
@@ -159,7 +161,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->setPollInterval(availAntData[tabNum]->pollInterval);
         antennaTab[tabNum]->pollIntervalVisible(true);
         //antennaTab[tabNum]->setCheckStop(availAntData[tabNum]->southStopType);
-        bool f = availAntData[tabNum]->overRunFlag;
+
         antennaTab[tabNum]->setCheckOverrun(availAntData[tabNum]->overRunFlag);
         antennaTab[tabNum]->setSimCW_CCWcmdChecked(availAntData[tabNum]->simCwCcwCmd);
 
@@ -750,27 +752,91 @@ QString RotSetupDialog::getCurrentAntenna() const
 
 }
 
-void RotSetupDialog::updateAvailAntennasToVersion2(QSettings& settings)
+void RotSetupDialog::updateAvailAntennasToVersion2()
 {
+
+    QString fileName = ANTENNA_PATH_LOGGER + FILENAME_AVAIL_ANTENNAS;
+    QSettings settings(fileName, QSettings::IniFormat);
+
     QString antennaModel;
     QStringList spList;
-    QString antenna;
-
-
 
     for (int i = 0; i < numAvailAntennas; i++)
     {
-        antenna = availAntennas[i] + "/rotatorModel";
-        antennaModel = settings.value(antenna, QString()).toString();
+
+        settings.beginGroup(availAntennas[i]);
+
+        antennaModel = settings.value("rotatorModel", QString()).toString();
         if (antennaModel.contains(','))
         {
             spList = antennaModel.split(',');
             if (spList.count() == 3)
             {
                 antennaModel = spList[1].trimmed() + " " + spList[2].trimmed();
-                settings.setValue(antenna, antennaModel);
+                settings.setValue("rotatorModel", antennaModel);
             }
         }
+
+        // remove redundant settings
+/*
+
+        if (settings.value("rotatorModelName").toInt() == 0)
+        {
+            settings.remove("rotatorModelName");
+        }
+        if (settings.value("rotatorModelName").toInt() == 0)
+        {
+            settings.remove("rotatorModelName");
+        }
+        if (settings.value("rotatorModelNumber").toInt() == 0)
+        {
+            settings.remove("rotatorModelNumber");
+        }
+        if (settings.value("rotatorManufacturer").toInt() == 0)
+        {
+            settings.remove("rotatorManufacturer");
+        }
+        if (settings.value("rotatorCWEndStop").toInt() == 0)
+        {
+            settings.remove("rotatorCWEndStop");
+        }
+        if (settings.value("rotatorCCWEndStop").toInt() == 0)
+        {
+            settings.remove("rotatorCCWEndStop");
+        }
+        if (settings.value("rotatorType").toInt() == 0)
+        {
+            settings.remove("rotatorType");
+        }
+        if (settings.value("endStopType").toInt() == 0)
+        {
+            settings.remove("endStopType");
+        }
+        if (settings.value("maxAzimuth").toInt() == 0)
+        {
+            settings.remove("maxAzimuth");
+        }
+        if (settings.value("minAzimuth").toInt() == 0)
+        {
+            settings.remove("southStopType");
+        }
+*/
+
+        settings.remove("rotatorModelName");
+        settings.remove("rotatorModelName");
+        settings.remove("rotatorModelNumber");
+        settings.remove("rotatorManufacturer");
+        settings.remove("rotatorCWEndStop");
+        settings.remove("rotatorCCWEndStop");
+        settings.remove("rotatorType");
+        settings.remove("endStopType");
+        settings.remove("maxAzimuth");
+        settings.remove("minAzimuth");
+        settings.remove("southStopType");
+
+
+
+        settings.endGroup();
 
 
     }

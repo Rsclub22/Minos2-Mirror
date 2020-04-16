@@ -672,7 +672,7 @@ void rotSetupForm::setOverlapEndStop(srotParams* antennaData, bool overrunState)
 
     if (overrunState && (antennaData->endStopType == ROT_0_360 || antennaData->endStopType == ROT_180_180))
     {
-        // restore to ROT_0_450 type
+
         antennaData->max_azimuth = antennaData->rotatorCWEndStop;
         antennaData->min_azimuth = antennaData->rotatorCCWEndStop;
         antennaData->endStopType = antennaData->rotType;
