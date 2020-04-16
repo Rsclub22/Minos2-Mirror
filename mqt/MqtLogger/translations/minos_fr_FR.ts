@@ -1043,8 +1043,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="47"/>
         <source>Client</source>
-        <translatorcomment>NOT USED?</translatorcomment>
-        <translation>WHAT Client APJ03</translation>
+        <translation>Client</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="49"/>
@@ -1071,26 +1070,22 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="53"/>
         <source>Md</source>
-        <translatorcomment>NOT USED</translatorcomment>
-        <translation>What is Md APJ04</translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="54"/>
         <source>Confidence</source>
-        <translatorcomment>NOT USED</translatorcomment>
-        <translation>Confiance -  WHAT?APJ05</translation>
+        <translation>Confiance</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="55"/>
         <source>Live</source>
-        <translatorcomment>NOT USED</translatorcomment>
-        <translation>What&apos;s LiveAPJ06</translation>
+        <translation>En direct</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="57"/>
         <source>Seq</source>
-        <translatorcomment>NOT USED</translatorcomment>
-        <translation>???APJ07</translation>
+        <translation>Étape du message</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="58"/>
@@ -1122,14 +1117,12 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="64"/>
         <source>To Call</source>
-        <translatorcomment>NOT USED</translatorcomment>
-        <translation>???APJ08</translation>
+        <translation>Appel de destination</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="65"/>
         <source>To Grid</source>
-        <translatorcomment>NOT USED?</translatorcomment>
-        <translation>???APJ09</translation>
+        <translation>Locator de destination</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="66"/>
@@ -1172,7 +1165,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="332"/>
         <source>Auto</source>
-        <translation>WHATAPJ10</translation>
+        <translation>Automatique</translation>
     </message>
 </context>
 <context>
@@ -1535,10 +1528,6 @@ Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
         <location filename="../minoscontestloaddialog.ui" line="14"/>
         <source>Loading...</source>
         <translation>Chargement...</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation type="vanished">WHERE SHOW1 APJ11</translation>
     </message>
     <message>
         <location filename="../minoscontestloaddialog.cpp" line="33"/>
@@ -2485,8 +2474,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../runbuttonsframe.cpp" line="271"/>
         <source>Run</source>
-        <translatorcomment>Where used?</translatorcomment>
-        <translation>Exécuter*WHERE APJ11</translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="280"/>
@@ -2937,10 +2925,6 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>Pourquoi Minos?</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation type="vanished">TextLabel</translation>
-    </message>
-    <message>
         <location filename="../taboutbox.ui" line="133"/>
         <source>Logger Only</source>
         <translatorcomment>uniquement?</translatorcomment>
@@ -2964,7 +2948,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../taboutbox.cpp" line="113"/>
         <source>Welcome to Minos Version</source>
-        <translation>Bienvenue à Minos Version (.fr 07 Apr 20)</translation>
+        <translation>Bienvenue à Minos Version (.fr 16 apr 20)</translation>
     </message>
     <message>
         <location filename="../taboutbox.cpp" line="121"/>
@@ -4133,10 +4117,6 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <location filename="../tminosbshelpform.ui" line="14"/>
         <source>Minos Help</source>
         <translation>Aide&gt;</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation type="vanished">WHERE SHOW APJ12</translation>
     </message>
     <message>
         <location filename="../tminosbshelpform.ui" line="48"/>

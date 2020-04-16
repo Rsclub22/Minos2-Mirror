@@ -195,7 +195,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigcontrol.cpp" line="37"/>
         <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
-        <translation>WHAT IS NULL RIG handle or any invalid pointer parameter in get arg APJ12</translation>
+        <translation>Erreur interne - NULL RIG handle or any invalid pointer parameter in get arg</translation>
     </message>
     <message>
         <location filename="../rigcontrol.cpp" line="38"/>
@@ -205,7 +205,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigcontrol.cpp" line="39"/>
         <source>RIG_EDOM</source>
-        <translation>WHAT is RIG_EDOM APJ13</translation>
+        <translation>Erreur interne - RIG_EDOM</translation>
     </message>
     <message>
         <location filename="../rigcontrol.cpp" line="952"/>
@@ -520,7 +520,7 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="923"/>
         <source>Please enter a network Address and Port Number</source>
-        <translation>Entrée un adresse réseau et nombre de port SVP</translation>
+        <translation>Entrée un adresse réseau et numéro de port SVP</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="931"/>
@@ -650,7 +650,7 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
         <source>%1 - %2
 Command %3</source>
         <translation>%1 - %2
-Command %3 WHAT APJ14</translation>
+Command %3</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="2608"/>
@@ -689,7 +689,7 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="3001"/>
         <source>Radio Number = %1
 </source>
-        <translation>Nombre de la Radio = %1 WHAT APJ15
+        <translation>Numéro de la Radio = %1
 </translation>
     </message>
     <message>
@@ -703,7 +703,7 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="3003"/>
         <source>Rig Number = %1
 </source>
-        <translation>Nombre de l&apos;Appareil = %1 WHAT APJ15
+        <translation>Numéro de l&apos;Appareil = %1
 </translation>
     </message>
     <message>
@@ -907,7 +907,7 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="3049"/>
         <source>Transverter Switch num = %1
 </source>
-        <translation>Nombre d&apos;interrupteur de Transverter = %1
+        <translation>Numéro d&apos;interrupteur de Transverter = %1
 </translation>
     </message>
     <message>
@@ -963,7 +963,7 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="3063"/>
         <source>Radio Polltime = %1
 </source>
-        <translation>Radio Polltime = %1 POLL RATE???   where APJ15
+        <translation>Radio Polltime = %1
 </translation>
     </message>
     <message>
@@ -1059,7 +1059,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rigsetupform.cpp" line="314"/>
         <source> CIV number out of range 0 - FF</source>
-        <translation> Nombre CIV hors plage 0 - FF</translation>
+        <translation> Numéro CIV hors plage 0 - FF</translation>
     </message>
     <message>
         <location filename="../rigsetupform.cpp" line="583"/>
@@ -1113,7 +1113,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigsetupform.cpp" line="1466"/>
         <source>Network Port Number out of range</source>
-        <translation>Port de réseau nombre hors plage</translation>
+        <translation>Port de réseau numéro hors plage</translation>
     </message>
 </context>
 <context>
@@ -1151,7 +1151,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../serialtvswitch.h" line="52"/>
         <source>Break Condition</source>
-        <translation>Condition de rupture (WHAT??) is this APJ16</translation>
+        <translation>Condition de rupture</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="52"/>
@@ -1181,12 +1181,12 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../serialtvswitch.h" line="54"/>
         <source>Timeout Error</source>
-        <translation>Erreur de temporisation TIMEOUTAPJ16</translation>
+        <translation>Erreur d&apos;expiration</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="54"/>
         <source>Not Open Error</source>
-        <translation>Erreur non ouverte (WHAT IS not open) APJ16</translation>
+        <translation>Erreur - port non ouvert</translation>
     </message>
 </context>
 <context>
@@ -1335,7 +1335,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../transvertsetupform.ui" line="96"/>
         <source>Transvert Switch Number</source>
-        <translation>Nombre d&apos;interrupteur de Transverter</translation>
+        <translation>Numéro d&apos;interrupteur de Transverter</translation>
     </message>
 </context>
 </TS>

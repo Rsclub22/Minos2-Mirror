@@ -55,15 +55,4 @@
         <translation>Serveurs/état</translation>
     </message>
 </context>
-<context>
-    <name>MonitoringFrame</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Frame</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation type="vanished">TextLabel</translation>
-    </message>
-</context>
 </TS>

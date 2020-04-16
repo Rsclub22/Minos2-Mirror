@@ -752,7 +752,7 @@
     <message>
         <location filename="../ConfigElementFrame.cpp" line="158"/>
         <source>Minos Component Program</source>
-        <translation>Minos Component Program - WHERE APJ01</translation>
+        <translation>Sélectionner le programme Minos</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.cpp" line="167"/>
@@ -1633,7 +1633,7 @@ Entrer un autre direction SVP</translation>
     <message>
         <location filename="../validators.cpp" line="18"/>
         <source>null validator failed</source>
-        <translation>null validator failed - WHERE APJ02</translation>
+        <translation>Erreur interne - validateur null a échoué</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="19"/>

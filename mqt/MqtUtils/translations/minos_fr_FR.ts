@@ -11,7 +11,7 @@
     <message>
         <location filename="../ConfigFile.cpp" line="17"/>
         <source>Other</source>
-        <translation type="unfinished"></translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="563"/>

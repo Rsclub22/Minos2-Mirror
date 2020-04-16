@@ -135,7 +135,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rotcontrol.cpp" line="30"/>
         <source>Command rejected by the rig</source>
-        <translation>Commande rejetée par l&apos;émitteur  RIG???? APJ17</translation>
+        <translation>Commande rejetée par l&apos;appareil</translation>
     </message>
     <message>
         <location filename="../rotcontrol.cpp" line="31"/>
@@ -150,7 +150,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rotcontrol.cpp" line="33"/>
         <source>VFO not targetable</source>
-        <translation>VFO???????? non ciblable  APJ18</translation>
+        <translation>VFO not targetable</translation>
     </message>
     <message>
         <location filename="../rotcontrol.cpp" line="34"/>
@@ -278,11 +278,6 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <translation>Antenne:</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translatorcomment>NOT USED ??</translatorcomment>
-        <translation type="vanished">TextLabel</translation>
-    </message>
-    <message>
         <location filename="../rotatormainwindow.ui" line="191"/>
         <source>Target</source>
         <translation>Cible</translation>
@@ -324,7 +319,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <location filename="../rotatormainwindow.ui" line="503"/>
         <location filename="../rotatormainwindow.cpp" line="1879"/>
         <source>No Overlap</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de chevauchement</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="554"/>
@@ -531,12 +526,12 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2018</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1869"/>
         <source>Positive Overlap</source>
-        <translation type="unfinished"></translation>
+        <translation>Chevauchement positif</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1874"/>
         <source>Negative Overlap</source>
-        <translation type="unfinished"></translation>
+        <translation>Chevauchement négatif</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1904"/>
@@ -584,7 +579,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2229"/>
         <source>Antenna Number = %1
 </source>
-        <translation>Nombre de l&apos;antenne = %1
+        <translation>Numéro de l&apos;antenne = %1
 </translation>
     </message>
     <message>
@@ -598,7 +593,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2231"/>
         <source>Rotator Number = %1
 </source>
-        <translation>Nombre du rotateur = %1
+        <translation>Numéro du rotateur = %1
 </translation>
     </message>
     <message>
