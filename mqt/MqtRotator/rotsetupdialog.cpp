@@ -692,7 +692,9 @@ void RotSetupDialog::removeAntenna()
     ui->antennaTab->removeTab(currentIndex);
     availAntData.remove(currentIndex);
     availAntennas.removeAt(currentIndex);
+    antennaTab.removeAt(currentIndex);
     numAvailAntennas--;
+
 
     //emit antennaTabChanged();
 
