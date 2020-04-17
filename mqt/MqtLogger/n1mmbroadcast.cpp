@@ -125,15 +125,27 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
             // history doesn't get set up until after the QSO has ben saved,
             //and this message sent
 
-            // check if callsign has changed
             QSharedPointer<BaseContact> h = tct->getHistory().at(tct->getHistory().size() - 1);
-            if (h->cs.fullCall.getValue() != tct->cs.fullCall.getValue() || h->time.getIsoDTG() != tct->time.getIsoDTG())
+
+            QString stanza = genDeleteStanza(h);
+            bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+
+            if (!(tct->contactFlags.getValue() & DONT_PRINT) && (h->contactFlags.getValue() & DONT_PRINT))
             {
-                QString stanza = genDeleteStanza(h);
+                // was deleted, now isn't
+                stanza = genContactStanza("contactinfo", c, tct);
                 bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
             }
-            QString stanza = genContactStanza("contactreplace", c, tct);
-            bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+            else if ((tct->contactFlags.getValue() & DONT_PRINT) && !(h->contactFlags.getValue() & DONT_PRINT))
+            {
+                // was not deleted, now is - just need delete
+            }
+            else
+            {
+                // ordinary edit
+                stanza = genContactStanza("contactreplace", c, tct);
+                bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
+            }
         }
         else
         {

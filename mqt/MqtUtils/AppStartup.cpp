@@ -268,6 +268,14 @@ void setAppFont(QString fs)
     {
         trace(QString("Setting font to %1").arg(fs));
         QApplication::setFont( f );
+#ifndef Q_OS_WIN
+// as timings are different under linux
+        foreach ( QWidget * widget, QApplication::allWidgets() )
+        {
+            widget->setFont(f);
+            widget->update();
+        }
+#endif
     }
     else
     {
@@ -288,6 +296,12 @@ void executeStdIn(QString cmd)
     if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
         setShowServers(false);
     if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
+    {
         setAppFont(cmd);
+    }
+    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+    {
+        QApplication::closeAllWindows();
+    }
 }
 

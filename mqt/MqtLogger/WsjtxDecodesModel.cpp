@@ -125,9 +125,54 @@ void DecodesModel::rx_df (int df)
         endResetModel ();
     }
 }
+
+// WSJT-X highlighting for decodes
+//struct HighlightInfo final
+//{
+//  Highlight type_;
+//  bool enabled_;
+//  QBrush foreground_;
+//  QBrush background_;
+//};
+// colours are #AARRGGBB
+//case Highlight::CQ: return "CQ in message";
+//case Highlight::MyCall: return "My Call in message";
+//case Highlight::Tx: return "Transmitted message";
+//case Highlight::DXCC: return "New DXCC";
+//case Highlight::DXCCBand: return "New DXCC on Band";
+//case Highlight::Grid: return "New Grid";
+//case Highlight::GridBand: return "New Grid on Band";
+//case Highlight::Call: return "New Call";
+//case Highlight::CallBand: return "New Call on Band";
+//case Highlight::Continent: return "New Continent";
+//case Highlight::ContinentBand: return "New Continent on Band";
+//case Highlight::CQZone: return "New CQ Zone";
+//case Highlight::CQZoneBand: return "New CQ Zone on Band";
+//case Highlight::ITUZone: return "New ITU Zone";
+//case Highlight::ITUZoneBand: return "New ITU Zone on Band";
+//case Highlight::LotW: return "LotW User";
+
+//QList<DecodeHighlightingModel::HighlightInfo> const DecodeHighlightingModel::impl::defaults_ = {
+//  {Highlight::MyCall, true, {}, {{0xff, 0x66, 0x66}}}
+//  , {Highlight::Continent, true, {}, {{0xff, 0x00, 0x63}}}
+//  , {Highlight::ContinentBand, true, {}, {{0xff, 0x99, 0xc2}}}
+//  , {Highlight::CQZone, true, {}, {{0xff, 0xbf, 0x00}}}
+//  , {Highlight::CQZoneBand, true, {}, {{0xff, 0xe4, 0x99}}}
+//  , {Highlight::ITUZone, false, {}, {{0xa6, 0xff, 0x00}}}
+//  , {Highlight::ITUZoneBand, false, {}, {{0xdd, 0xff, 0x99}}}
+//  , {Highlight::DXCC, true, {}, {{0xff, 0x00, 0xff}}}
+//  , {Highlight::DXCCBand, true, {}, {{0xff, 0xaa, 0xff}}}
+//  , {Highlight::Grid, false, {}, {{0xff, 0x80, 0x00}}}
+//  , {Highlight::GridBand, false, {}, {{0xff, 0xcc, 0x99}}}
+//  , {Highlight::Call, false, {}, {{0x00, 0xff, 0xff}}}
+//  , {Highlight::CallBand, false, {}, {{0x99, 0xff, 0xff}}}
+//  , {Highlight::LotW, false, {{0x99, 0x00, 0x00}}, {}}
+//  , {Highlight::CQ, true, {}, {{0x66, 0xff, 0x66}}}
+//  , {Highlight::Tx, true, {}, {{Qt::yellow}}}
+//};
+
 QVariant DecodesModel::data (QModelIndex const& index, int role) const
 {
-
     const decodeMessage &msg = messages->at(index.row());
     if (role == Qt::BackgroundRole)
     {
@@ -135,17 +180,25 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
         {
         case dcMessage:                 // message
         {
+            // we don't see transmitted messages, unfortunately
             auto message = data (index).toString ();
             if (base_call_re_.pattern ().size ()
                     && message.contains (base_call_re_))
             {
                 // my call in message - colour red(ish)
-                return QColor {255,200,200};
+                return QColor {0xff, 0x66, 0x66};
             }
             if (message.contains (cq_re))
             {
-                // CQ call in message - colour green(ish)
-                return QColor {200, 255, 200};
+                if (msg.points > 0)
+                {
+                    return QColor {0x00, 0xff, 0xff};
+                }
+                else
+                {
+                    // CQ call in message - colour green(ish)
+                    return QColor {0x66, 0xff, 0x66};
+                }
             }
         }
             break;
@@ -154,7 +207,7 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             if (qAbs (data (index).toInt () - rx_df_) <= 10)
             {
                 // near my freq  - colour red(ish)
-                return QColor {255, 200, 200};
+                return QColor {0xff, 0x66, 0x66};
             }
             break;
 

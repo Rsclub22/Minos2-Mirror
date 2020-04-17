@@ -99,7 +99,6 @@ TLogContainer::~TLogContainer()
     {
         delete ChatServer::getChatServer();
         delete ClusterClientServer::getClusterClientServer();
-        delete WsjtxServer::getWsjtxServer();
 
         delete MinosRPC::getMinosRPC();
         delete MinosAppConnection::minosAppConnection;
@@ -231,7 +230,12 @@ void TLogContainer::on_ReportOverstrike(bool overstrike, BaseContestLog *econtes
 void TLogContainer::closeEvent(QCloseEvent *event)
 {
     trace("closeEvent:Start");
+    loggerClosing = true;
+    MinosConfig::getMinosConfig() ->askStop();
+
     TimerUpdateQSOTimer.stop();
+
+    delete WsjtxServer::getWsjtxServer();
 
     TContestApp::getContestApp() ->writeContestList();
     TContestApp::getContestApp() ->suppressWritePreload = true;
@@ -252,7 +256,9 @@ void TLogContainer::closeEvent(QCloseEvent *event)
        }
     }
     trace("closeEvent:List slots closed");
-    MinosConfig::getMinosConfig() ->stop();
+    // no need to force close apps - when logger terminates they will be killed
+    // but they may need to close cleanly
+    MinosConfig::getMinosConfig() ->forceStop();
     trace("closeEvent:Apps closed");
     closeContestApp();
 
@@ -991,7 +997,8 @@ void TLogContainer::ExitClearActionExecute()
        return;
     }
 
-    MinosConfig::getMinosConfig() ->stop();
+    MinosConfig::getMinosConfig() ->askStop();
+    MinosConfig::getMinosConfig() ->forceStop();
     SingleApplication *sa = dynamic_cast<SingleApplication *>(QApplication::instance());
 
     QObject::connect(sa, SIGNAL(aboutToQuit()), sa, SLOT(clearRegistry()));
@@ -1182,10 +1189,6 @@ void TLogContainer::LanguageAcceptActionExecute()
     if (action)
     {
         bool serverRunning = checkServerReady();
-        if (serverRunning)
-        {
-            MinosConfig::getMinosConfig() ->stop();
-        }
 
         if (lastLanguageSelected)
             lastLanguageSelected->setChecked(false);
@@ -1342,6 +1345,10 @@ void TLogContainer::QSOFieldFontActionExecute()
 void TLogContainer::on_ContestPageControl_currentChanged(int index)
 {
     trace(QString("TLogContainer::on_ContestPageControl_currentChanged index %1").arg(index));
+    if (loggerClosing)
+    {
+        return;
+    }
     enableActions();
 
     if (index >= 0)
@@ -1545,7 +1552,10 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
           // clear down matching, as it may have pointers to this contest
           TMatchThread::FinishMatchThread();
           f->closeContest();    // which should close the contest
-          TMatchThread::InitialiseMatchThread();
+          if (!loggerClosing)
+          {
+            TMatchThread::InitialiseMatchThread();
+          }
 
           QWidget *tab = ui->ContestPageControl->widget(t);
           tab->deleteLater();

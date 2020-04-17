@@ -100,6 +100,7 @@ MainWindow::~MainWindow()
 }
 void MainWindow::onStdInRead(QString cmd)
 {
+    trace(QString("MainWindow::onStdInRead %1").arg(cmd));
     executeStdIn(cmd);
 }
 void MainWindow::closeEvent(QCloseEvent *event)

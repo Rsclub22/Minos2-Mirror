@@ -70,11 +70,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="134"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../KeyerMain.ui" line="158"/>
         <source>Output Lines</source>
         <translation type="unfinished"></translation>

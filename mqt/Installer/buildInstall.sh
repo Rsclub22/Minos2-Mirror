@@ -104,8 +104,10 @@ cp -r $DIR/mqt/ControlFiles/Configuration/LinuxFiles/* ./Configuration
 rm -rf ./Configuration/WindowsFiles
 rm -rf ./Configuration/LinuxFiles
 cp $DIR/mqt/Installer/Minos.sh . 
+cp $DIR/mqt/Installer/runAppStarter.sh .
 cp $DIR/mqt/Docs/*.* ./Docs
 cp $DIR/mqt/Help/*.* ./Help
+cp $DIR/mqt/*.ico .
 
 cd Configuration
 
@@ -124,8 +126,13 @@ case $ans in
         exit;;
 esac
 
-
+if [ ! -d .~/runtime ]; then
+   mkdir ~/runtime
+fi
 cp -rv Bin ~/runtime
+cp *.ico ~/runtime
+cp runAppStarter.sh ~/runtime
+cp Minos.sh ~/runtime
 
 read -n 1 -p "Do you want to copy the configuration to ~/runtime (press y/n)? " ans;
 

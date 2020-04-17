@@ -32,10 +32,14 @@
 <!--ALL lines must be defined!!! or they aren't reported upwards -->
   	<Line name="PTTIn" direction = "in" port="PiGPIO" line="26" />
   	<Line name="PTTOut" direction = "out" port="PiGPIO" line="25" />
+  	<Line name="T1" direction = "out" port="PiGPIO" line="27" />
+  	<Line name="T2" direction = "out" port="PiGPIO" line="22" />
   	<Line name="L1" direction = "in" port="PiGPIO" line="23" />
   	<Line name="L2" direction = "in" port="PiGPIO" line="24" />
-  	<Line name="L3" direction = "in" port="PiGPIO" line="17" />
-  	<Line name="L4" direction = "in" port="PiGPIO" line="27" />
+  	<Line name="L3" direction = "in" port="PiGPIO" line="11" />
+  	<Line name="L4" direction = "in" port="PiGPIO" line="10" />
+  	<Line name="L5" direction = "in" port="PiGPIO" line="9" />
+  	<Line name="L6" direction = "in" port="PiGPIO" line="8" />
   </Lines>
 <!--
    <Enable port="PiGPIO"/>

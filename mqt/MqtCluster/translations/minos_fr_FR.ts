@@ -101,7 +101,7 @@
     <message>
         <location filename="../clustermainwindow.cpp" line="38"/>
         <source>&amp;Clear</source>
-        <translation>&amp;Effacer</translation>
+        <translation>&amp;Supprimer</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="83"/>
@@ -117,7 +117,7 @@
     <message>
         <location filename="../clustermainwindow.cpp" line="399"/>
         <source>Please confirm you want to delete all the spots?</source>
-        <translation>Confirmer effacer tous les spots SVP</translation>
+        <translation>Voulez-vous vraiment supprimer tous les spots?</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="509"/>
@@ -206,7 +206,7 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     <message>
         <location filename="../clustermainwindow.cpp" line="821"/>
         <source>handleCmdFile: Command File missing - %1!</source>
-        <translation>handleCmdFile: Fichier de commandes manquant - %1</translation>
+        <translation>handleCmdFile: Fichier de commandes manquant - %1!</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="829"/>
@@ -442,7 +442,7 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
     <message>
         <location filename="../userclustercommanddialog.ui" line="22"/>
         <source>Name:</source>
-        <translation>Nom</translation>
+        <translation>Nom:</translation>
     </message>
     <message>
         <location filename="../userclustercommanddialog.ui" line="49"/>
@@ -452,7 +452,7 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
     <message>
         <location filename="../userclustercommanddialog.cpp" line="54"/>
         <source>Cluster User Command %1 - %2</source>
-        <translation></translation>
+        <translation>Cluster: Effacer commande %1 - %2</translation>
     </message>
 </context>
 </TS>

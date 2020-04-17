@@ -14,6 +14,7 @@ static bool terminated = false;
 QString RunLocal("RunLocal");
 QString ConnectServer("ConnectServer");
 const char * MinosConfig::appNone = QT_TR_NOOP("None");
+const char * MinosConfig::appOther = QT_TR_NOOP("Other");
 
 /*static*/
 MinosConfig *MinosConfig::thisDM = nullptr;
@@ -77,6 +78,10 @@ bool RunConfigElement::initialise(INIFile &config, QString sect )
     requiresApps = ace.requiresApps;
     localOK = ace.localOK;
     remoteOK = ace.remoteOK;
+    if (ace.appType == tr(MinosConfig::appOther))
+    {
+        showAdvanced = true;
+    }
 
     return true;
 }
@@ -179,12 +184,21 @@ void RunConfigElement::createProcess()
         sendCommand(fontCommand);
     }
 }
-void RunConfigElement::stopProcess()
+void RunConfigElement::askStopProcess()
 {
     if (runner)
     {
+        trace( QString("Closing subProcess %1").arg(name) );
         stopping = true;
+        sendCommand("Shutdown");
+    }
+}
+void RunConfigElement::forceStopProcess()
+{
+    if (runner && !runner->waitForFinished(5000))
+    {
         runner->terminate();
+        trace( QString("subProcess %1 killed").arg(name) );
     }
 }
 void RunConfigElement::bounceProcess()
@@ -192,7 +206,7 @@ void RunConfigElement::bounceProcess()
     if (runner)
     {
         stopping = false;
-        runner->terminate();
+        sendCommand("Shutdown");
     }
 }
 void RunConfigElement::sendCommand(const QString & cmd)
@@ -203,11 +217,11 @@ void RunConfigElement::sendCommand(const QString & cmd)
         qint64 res = runner->write( command );
         if (res < 0)
         {
-            trace("Failed to write " + cmd + " to runner");
+            trace(QString("Failed to write %1 to runner %2").arg(cmd).arg(name));
         }
         else
         {
-            trace("Wrote " + cmd + " to runner");
+            trace(QString("Wrote %1 to runner %2").arg(cmd).arg(name));
         }
     }
 }
@@ -273,7 +287,7 @@ MinosConfig::MinosConfig( )
 MinosConfig::~MinosConfig()
 {
    if ( !terminated )
-      stop();
+      forceStop();
 
    elelist.clear();
 }
@@ -364,7 +378,7 @@ void MinosConfig::start()
    }
 }
 
-void MinosConfig::stop()
+void MinosConfig::askStop()
 {
    terminated = true;
 
@@ -372,12 +386,23 @@ void MinosConfig::stop()
    {
       if ( ( *i ) )
       {
-         logMessage( "Killing subProcess", "" );
-         ( *i ) ->stopProcess();
-         logMessage( "subProcess killed", "" );
+         ( *i ) ->askStopProcess();
       }
    }
 }
+void MinosConfig::forceStop()
+{
+   terminated = true;
+
+   for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+   {
+      if ( ( *i ) )
+      {
+         ( *i ) ->forceStopProcess();
+      }
+   }
+}
+
 void MinosConfig::bounce()
 {
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
@@ -421,10 +446,14 @@ QStringList MinosConfig::getAppTypes()
     QStringList apps;
     for (int i = 0; i < appConfigList.size(); i++)
     {
-        apps.append(appConfigList[i].appType);
+        if (appConfigList[i].appType != tr(appNone) && appConfigList[i].appType != tr(appOther))
+        {
+            apps.append(appConfigList[i].appType);
+        }
     }
     apps.sort();
-    apps.insert(0, tr(appNone));
+    apps.prepend( tr(appNone));
+    apps.append(tr(appOther));
     apps.removeDuplicates();
     return apps;
 }
@@ -446,15 +475,29 @@ Server=false
     {
         if (apps[i] == appNone)
             apps[i] = tr(appNone);
+        if (apps[i] == appOther)
+            apps[i] = tr(appOther);
 
-        if (appConfig.getPrivateProfileBool(apps[i], "Enabled", false))  // only include those elements we are allowed to as possibilities
+        bool otherApp = false;
+
+        bool enabled = appConfig.getPrivateProfileBool(apps[i], "Enabled", false);
+        if (apps[i] == tr(appOther))
+        {
+            otherApp = true;
+            enabled = true;
+        }
+
+        if (enabled)  // only include those elements we are allowed to as possibilities
         {
             AppConfigElement ac;
 
             ac.appType = apps[i].trimmed();
             appConfig.getPrivateProfileString(apps[i], "Path", "", ac.appPath);
 #ifdef Q_OS_WIN
-            ac.appPath += ".exe";
+            if (!ac.appPath.isEmpty())
+            {
+                ac.appPath += ".exe";
+            }
 #endif
             ac.server = appConfig.getPrivateProfileBool(apps[i], "Server", false);
             ac.defaultHide = appConfig.getPrivateProfileBool(apps[i], "HideApp", false);
@@ -476,6 +519,13 @@ Server=false
             else
             {
                 ac.remoteOK = false;
+            }
+            if (otherApp)
+            {
+                ac.server = true;
+                ac.defaultHide = false;
+                ac.localOK = true;
+                ac.remoteOK = true;
             }
 
 

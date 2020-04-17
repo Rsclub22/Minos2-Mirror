@@ -57,6 +57,10 @@ ServerMain::~ServerMain()
 }
 void ServerMain::onStdInRead(QString cmd)
 {
+    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+    {
+        closeApp = true;
+    }
     executeStdIn(cmd);
 }
 

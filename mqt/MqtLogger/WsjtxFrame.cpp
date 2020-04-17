@@ -48,7 +48,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->decodes_table_view_->horizontalHeader ()->setStretchLastSection (true);
     ui->decodes_table_view_->verticalHeader()->setMinimumSectionSize(1);
 
-//    ui->decodes_table_view_->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->decodes_table_view_->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     decodes_model_->delegate = delegate;
     decodes_model_->messages = &messages;
 
@@ -95,9 +95,17 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     // this to change - get the item, and use the message decode data
     connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
 
+    reloadColumns();
+
+    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+
+    connect( ui->decodes_table_view_->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
+             this, SLOT( on_sectionMoved(int, int , int)));
+    connect( ui->decodes_table_view_->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
+             this, SLOT( on_sectionResized(int, int , int)));
+
     restoreSplitters();
     connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
-
 }
 WsjtxFrame::~WsjtxFrame()
 {
@@ -342,11 +350,7 @@ void WsjtxFrame::process_decodes()
             }
         }
     }
-    if (!columns_resized_)
-    {
-        ui->decodes_table_view_->resizeColumnsToContents ();
-        columns_resized_ = true;
-    }
+
     ui->decodes_table_view_->scrollToBottom ();
 }
 
@@ -356,7 +360,10 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , QString const& de_call, QString const& de_grid, QString const& dx_grid
                                 , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
+    MinosParameters *mp = MinosParameters::getMinosParameters();
+    if (!mp)
+        return;
+    BaseContestLog * cc = mp ->getCurrentContest();
     if (ct != cc || cc == nullptr)
         return;
     id_ = id;
@@ -532,8 +539,6 @@ void WsjtxFrame::decodes_cleared (QString const& client_id)
 
     id_ = client_id;
     decodes_model_->clear();
-
-    columns_resized_ = false;
 }
 void WsjtxFrame::reply(decodeMessage &dc)
 {
@@ -634,4 +639,48 @@ void WsjtxFrame::on_doSplitterChanges(BaseContestLog *b)
     {
         restoreSplitters();
     }
+}
+void WsjtxFrame::saveAllColumnWidthsAndPositions()
+{
+    if (!suppressSaveColumns)
+    {
+        QSettings settings;
+        QByteArray state;
+
+        state = ui->decodes_table_view_->horizontalHeader()->saveState();
+        settings.setValue("decodes_table_view_/state", state);
+
+        //And we need to send this out to all other instances
+
+        MinosLoggerEvents::SendColumnsChanged();
+
+    }
+}
+void WsjtxFrame::reloadColumns()
+{
+    QSettings settings;
+    QByteArray state = settings.value("decodes_table_view_/state").toByteArray();
+    if (state.size())
+    {
+        suppressSaveColumns = true;
+        // this will fire signals, so... don't save at the same time
+        ui->decodes_table_view_->horizontalHeader()->restoreState(state);
+        suppressSaveColumns = false;
+    }
+}
+void WsjtxFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == ct)
+    {
+        reloadColumns();
+    }
+}
+void WsjtxFrame:: on_sectionMoved(int /*logicalIndex*/, int /*oldVisualIndex*/, int /*newVisualIndex*/)
+{
+    saveAllColumnWidthsAndPositions();
+}
+
+void WsjtxFrame::on_sectionResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/)
+{
+    saveAllColumnWidthsAndPositions();
 }

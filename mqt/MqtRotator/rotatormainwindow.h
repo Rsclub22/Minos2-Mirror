@@ -151,7 +151,7 @@ private:
 
     //endStop endStopType;
     overlapStat overLapStatus = NO_OVERLAP;
-    bool overLapActiveflag = false;
+    bool overLapActiveflag = true;
     //bool southStopActiveflag;
     bool rotErrorFlag = false;
     //bool supportCwCcwCmd;

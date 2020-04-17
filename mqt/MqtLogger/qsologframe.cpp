@@ -54,47 +54,58 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     CallsignLabelString = ui->Callsignlabel->text();
     ui->CallsignEdit->setValidator(&ucValidator);
     ui->CallsignEdit->installEventFilter(this);
+    ui->Callsignlabel->setText("<b>" + CallsignLabelString);
 
     RSTTXFW = new FocusWatcher(ui->RSTTXEdit);
     RSTTXLabelString = ui->RSTTXLabel->text();
     ui->RSTTXEdit->setValidator(&ucValidator);
     ui->RSTTXEdit->installEventFilter(this);
+    ui->RSTTXLabel->setText("<b>" + RSTTXLabelString);
 
     SerTXFW = new FocusWatcher(ui->SerTXEdit);
     SerTXLabelString = ui->SerTXLabel->text();
     ui->SerTXEdit->setValidator(&ucValidator);
     ui->SerTXEdit->installEventFilter(this);
+    ui->SerTXLabel->setText("<b>" + SerTXLabelString);
 
     RSTRXFW = new FocusWatcher(ui->RSTRXEdit);
     RSTRXLabelString = ui->RSTRXLabel->text();
     ui->RSTRXEdit->setValidator(&ucValidator);
     ui->RSTRXEdit->installEventFilter(this);
+    ui->RSTRXLabel->setText("<b>" + RSTRXLabelString);
 
     SerRXFW = new FocusWatcher(ui->SerRXEdit);
     SerRXLabelString = ui->SerRXLabel->text();
     ui->SerRXEdit->setValidator(&ucValidator);
     ui->SerRXEdit->installEventFilter(this);
+    ui->SerRXLabel->setText("<b>" + SerRXLabelString);
 
     LocFW = new FocusWatcher(ui->LocEdit);
     LocLabelString = ui->LocLabel->text();
     ui->LocEdit->setValidator(&ucValidator);
     ui->LocEdit->installEventFilter(this);
+    ui->LocLabel->setText("<b>" + LocLabelString);
 
     QTHFW = new FocusWatcher(ui->QTHEdit);
     QTHLabelString = ui->QTHLabel->text();
     ui->QTHEdit->setValidator(&ucValidator);
     ui->QTHEdit->installEventFilter(this);
+    ui->QTHLabel->setText("<b>" + QTHLabelString);
 
     CommentsFW = new FocusWatcher(ui->CommentsEdit);
     CommentsLabelString = ui->CommentsLabel->text();
     ui->CommentsEdit->installEventFilter(this);
+    ui->CommentsLabel->setText("<b>" + CommentsLabelString);
 
     MainOpFW = new FocusWatcher(ui->MainOpComboBox);
     ui->MainOpComboBox->setValidator(&ucValidator);
     Op1String = ui->OperatorLabel->text();
+    ui->OperatorLabel->setText("<b>" + Op1String);
+
     SecondOpFW = new FocusWatcher(ui->SecondOpComboBox);
     ui->SecondOpComboBox->setValidator(&ucValidator);
     Op2String = ui->SecondOpLabel->text();
+    ui->SecondOpLabel->setText("<b>" + Op2String);
 
     freqFW = new FocusWatcher(ui->frequencyEdit);
     freqString = ui->freqLabel->text();
@@ -285,7 +296,7 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
         EditControlExit(obj);
 
     QColor colour = in?Qt::blue:Qt::black;
-    QString colStr = HtmlFontColour(colour);
+    QString colStr = HtmlFontColour(colour) + "<b>";
 
     if (obj == ui->CallsignEdit)
     {
@@ -581,8 +592,12 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 
     if ( screenContact.contactFlags & ( LOCAL_COMMENT | DONT_PRINT | COMMENT_ONLY ) )
     {
-       logCurrentContact( );
-       return;
+        if ( !checkAndLogEntry() )  // if it is the same, then don't log
+        {
+           return;
+        }
+//       logCurrentContact( );
+//       return;
     }
 
     // validate the entry; if still invalid, spin round the invalid

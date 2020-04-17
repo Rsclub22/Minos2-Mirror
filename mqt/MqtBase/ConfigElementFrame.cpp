@@ -261,6 +261,11 @@ void ConfigElementFrame::on_appTypeCombo_currentIndexChanged(const QString &valu
         AppConfigElement ace = MinosConfig::getMinosConfig()->getAppConfigElement(value);
         ui->programNameEdit->setText(ace.appPath);
 
+        if (value == tr(MinosConfig::appOther))
+        {
+            ui->advancedCheckbox->setChecked(true);
+        }
+
         if (ui->homeDirectoryEdit->text().isEmpty())
             ui->homeDirectoryEdit->setText(".");
 

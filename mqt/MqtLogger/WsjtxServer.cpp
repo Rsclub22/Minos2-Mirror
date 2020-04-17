@@ -31,6 +31,21 @@ WsjtxServer::WsjtxServer():
     connect (server_3, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
     connect (server_4, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
 }
+
+WsjtxServer::~WsjtxServer()
+{
+    server_1->stop();
+    server_2->stop();
+    server_3->stop();
+    server_4->stop();
+
+    trace("WsjtxServer::~WsjtxServer() Message servers all stopped");
+
+    server_1->deleteLater();
+    server_2->deleteLater();
+    server_3->deleteLater();
+    server_4->deleteLater();
+}
 void WsjtxServer::start ( )
 {
     {

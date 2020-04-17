@@ -36,13 +36,13 @@ private:
     DecodesModel * decodes_model_ = nullptr;
     bool fast_mode_ = false;
     QString id_;
-    bool columns_resized_ = false;
     QSharedPointer<HtmlDelegate> delegate;
     bool autoEnabled = false;
     bool showTest = false;
     bool inDecode = false;
     int lastcol = 0;
     QTime lastTime;
+    bool suppressSaveColumns = false;
 
     bool currentlyTransmitting = false;
     bool currentlyDecoding = false;
@@ -53,6 +53,8 @@ private:
     void restoreSplitters();
     void process_decodes();
     
+    void saveAllColumnWidthsAndPositions();
+    void reloadColumns();
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
@@ -94,6 +96,9 @@ private slots:
     void on_halt_tx_button__clicked();
     void on_auto_off_button__clicked();
     void on_doSplitterChanges(BaseContestLog *b);
+    void on_doColumnChanges(BaseContestLog *b);
+    void on_sectionMoved(int, int, int);
+    void on_sectionResized(int, int, int);
 };
 
 #endif // WSJTXFRAME_H

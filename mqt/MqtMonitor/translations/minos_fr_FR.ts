@@ -55,16 +55,4 @@
         <translation>Serveurs/état</translation>
     </message>
 </context>
-<context>
-    <name>MonitoringFrame</name>
-    <message>
-        <source>Frame</source>
-        <translation type="vanished">Frame</translation>
-    </message>
-    <message>
-        <location filename="../MonitoringFrame.ui" line="48"/>
-        <source>TextLabel</source>
-        <translation>TextLabel</translation>
-    </message>
-</context>
 </TS>

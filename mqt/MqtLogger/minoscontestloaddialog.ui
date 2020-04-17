@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="contestNameLabel">
      <property name="text">
-      <string>TextLabel</string>
+      <string/>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
