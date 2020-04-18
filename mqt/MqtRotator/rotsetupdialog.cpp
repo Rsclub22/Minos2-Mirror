@@ -209,16 +209,26 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         if (availAntData[tabNum]->portType == RotCapConstants::PortType::network)
         {
             antennaTab[tabNum]->serialDataEntryVisible(false);
+            antennaTab[tabNum]->advancedSerialDataEntryVisible(false);
+            antennaTab[tabNum]->setAdvancedCommsChkBoxVisible(false);
             antennaTab[tabNum]->networkDataEntryVisible(true);
+            antennaTab[tabNum]->advancedSerialDataEntryVisible(false);
         }
         else if (availAntData[tabNum]->portType == RotCapConstants::PortType::none)
         {
             antennaTab[tabNum]->serialDataEntryVisible(false);
+            antennaTab[tabNum]->advancedSerialDataEntryVisible(false);
+            antennaTab[tabNum]->setAdvancedCommsChkBoxVisible(false);
             antennaTab[tabNum]->networkDataEntryVisible(false);
+            antennaTab[tabNum]->advancedSerialDataEntryVisible(false);
         }
         else if (availAntData[tabNum]->portType == RotCapConstants::PortType::serial)
         {
             antennaTab[tabNum]->serialDataEntryVisible(true);
+            antennaTab[tabNum]->advancedSerialDataEntryVisible(availAntData[tabNum]->advancedCommsFlag);
+            antennaTab[tabNum]->setAdvancedCommsChkBoxVisible(true);
+            antennaTab[tabNum]->checkAdvancedCommsCheckBox(availAntData[tabNum]->advancedCommsFlag);
+            antennaTab[tabNum]->advancedSerialDataEntryVisible(true);
             antennaTab[tabNum]->networkDataEntryVisible(false);
         }
 
@@ -409,6 +419,7 @@ void RotSetupDialog::saveSettings()
             config.setValue("parity", availAntData[i]->parity);
             config.setValue("stopbits", availAntData[i]->stopbits);
             config.setValue("handshake", availAntData[i]->handshake);
+            config.setValue("advancedComms", availAntData[i]->advancedCommsFlag);
             config.setValue("netAddress", availAntData[i]->networkAdd);
             config.setValue("netPort", availAntData[i]->networkPort);
             config.endGroup();
@@ -465,6 +476,8 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->handshake = config.value("handshake", 0).toInt();
     availAntData[antNum]->networkAdd = config.value("netAddress", "").toString();
     availAntData[antNum]->networkPort = config.value("netPort", "").toString();
+    availAntData[antNum]->advancedCommsFlag = config.value("advancedComms", false).toBool();
+
     config.endGroup();
 
 }

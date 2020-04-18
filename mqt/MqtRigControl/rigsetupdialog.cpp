@@ -224,6 +224,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     if (rigCap.portType == RigCapConstants::PortType::network)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
+        radioTab[tabNum]->advancedSerialDataEntryVisible(false);
+        radioTab[tabNum]->setAdvancedCommsChkBoxVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(true);
         radioTab[tabNum]->setRigctldCheckBoxVisible(false);
         radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
@@ -231,6 +233,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     else if (rigCap.portType == RigCapConstants::PortType::serial)
     {
         radioTab[tabNum]->serialDataEntryVisible(true);
+        radioTab[tabNum]->advancedSerialDataEntryVisible(radioTab[tabNum]->getRadioData()->advancedCommsFlag);
+        radioTab[tabNum]->setAdvancedCommsChkBoxVisible(true);
         radioTab[tabNum]->networkDataEntryVisible(false);
         if (radioTab[tabNum]->getRadioData()->handshake == serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE) // CTS/RTS enabled
         {
@@ -245,6 +249,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     else if (rigCap.portType == RigCapConstants::PortType::none)
     {
         radioTab[tabNum]->serialDataEntryVisible(false);
+        radioTab[tabNum]->advancedSerialDataEntryVisible(false);
+        radioTab[tabNum]->setAdvancedCommsChkBoxVisible(false);
         radioTab[tabNum]->networkDataEntryVisible(false);
         radioTab[tabNum]->setRigctldCheckBoxVisible(false);
         radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
@@ -350,6 +356,7 @@ void RigSetupDialog::addRadio()
     int tabNum = numAvailRadios;
     addTab(tabNum, radioName);
     numAvailRadios++;
+    radioTab[tabNum]->setAdvancedCommsFlag(false);
     radioTab[tabNum]->setupRadioModel(radioModel);
     radioTab[tabNum]->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 
@@ -830,6 +837,7 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("radioModelNumber", radioTab[radNum]->getRadioData()->rigModelNumber);
     config.setValue("civAddress", radioTab[radNum]->getRadioData()->civAddress);
     config.setValue("portType", radioTab[radNum]->getRadioData()->portType);
+    config.setValue("advancedComms", radioTab[radNum]->getRadioData()->advancedCommsFlag);
     config.setValue("comport", radioTab[radNum]->getRadioData()->comport);
     config.setValue("baudrate", radioTab[radNum]->getRadioData()->baudrate);
     config.setValue("databits", radioTab[radNum]->getRadioData()->databits);
@@ -874,6 +882,7 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->rigModelNumber = config.value("radioModelNumber", "").toInt();
     radioTab[radNum]->getRadioData()->civAddress = config.value("civAddress", "").toString();
     radioTab[radNum]->getRadioData()->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
+    radioTab[radNum]->getRadioData()->advancedCommsFlag = config.value("advancedComms", false).toBool();
     radioTab[radNum]->getRadioData()->comport = config.value("comport", "").toString();
     radioTab[radNum]->getRadioData()->baudrate = config.value("baudrate", 9600).toInt();
     radioTab[radNum]->getRadioData()->databits = config.value("databits", 8).toInt();

@@ -248,6 +248,7 @@ public:
       dest.antennaOffset = srce->antennaOffset;
       dest.moving = srce->moving;
       dest.portType = srce->portType;
+      dest.advancedCommsFlag = srce->advancedCommsFlag;
       dest.networkAdd = srce->networkAdd;
       dest.networkPort = srce->networkPort;
       //dest.maxBaudRate = srce->maxBaudRate;
@@ -293,6 +294,7 @@ public:
   int antennaOffset = 0;
   bool moving = false;
   int portType = 0;
+  bool advancedCommsFlag;
   QString networkAdd;
   QString networkPort;
   //int maxBaudRate = 0;

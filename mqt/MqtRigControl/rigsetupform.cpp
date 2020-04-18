@@ -71,6 +71,7 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, cons
     connect(ui->comHandShakeBox, SIGNAL(activated(int)), this, SLOT(comHandShakeSelected()));
     connect(ui->forceDtrBox, SIGNAL(activated(int)), this, SLOT(on_forceDTRSelected()));
     connect(ui->forceRtsBox, SIGNAL(activated(int)), this, SLOT(on_forceRTSSelected()));
+    connect(ui->advancedCommsChkBox, SIGNAL(clicked(bool)),this, SLOT(onAdvancedCommsSelected(bool)));
     connect(ui->networkAddBox, SIGNAL(editingFinished()), this, SLOT(networkAddressSelected()));
     connect(ui->netPortBox, SIGNAL(editingFinished()), this, SLOT(networkPortSelected()));
     connect(ui->pollInterval, SIGNAL(activated(int)), this, SLOT(pollIntervalSelected()));
@@ -181,6 +182,8 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         if (rigCap.portType == RigCapConstants::PortType::network)
         {
                serialDataEntryVisible(false);
+               advancedSerialDataEntryVisible(false);
+               setAdvancedCommsChkBoxVisible(false);
                networkDataEntryVisible(true);
                rigCtldNetworkVisible(false);
                setRigctldCheckBoxVisible(false);
@@ -190,11 +193,17 @@ void RigSetupForm::setupRadioModel(QString radioModel)
         else if (rigCap.portType == RigCapConstants::PortType::serial)
         {
                 serialDataEntryVisible(true);
+                advancedSerialDataEntryVisible(radioData->advancedCommsFlag);
+                checkAdvancedCommsCheckBox(radioData->advancedCommsFlag);
+                setAdvancedCommsChkBoxVisible(true);
                 networkDataEntryVisible(false);
+
         }
         else // RIG_PORT_NONE
         {
                 serialDataEntryVisible(false);
+                advancedSerialDataEntryVisible(false);
+                setAdvancedCommsChkBoxVisible(false);
                 networkDataEntryVisible(false);
                 setRigctldCheckBoxVisible(false);
                 radioData->rigCtldEnable = false;
@@ -575,6 +584,10 @@ void RigSetupForm::setForceRTS(int n)
     ui->forceRtsBox->setCurrentIndex(n);
 }
 
+
+
+
+
 /***************************** Network Address *************************/
 
 void RigSetupForm::networkAddressSelected()
@@ -883,6 +896,8 @@ void RigSetupForm::useRigCtldSelected(bool /*selected*/)
 }
 
 
+
+
 void RigSetupForm::setUseRigctldCheckbox(bool checked)
 {
     if (checked)
@@ -987,6 +1002,41 @@ void RigSetupForm::serialDataEntryVisible(bool v)
     ui->comportLbl->setVisible(v);
     ui->comSpeedBox->setVisible(v);
     ui->speedLbl->setVisible(v);
+
+    ui->advancedCommsChkBox->setVisible(v);
+}
+
+
+
+
+/********************* Advanced Comms CheckBox *******************/
+
+
+void RigSetupForm::onAdvancedCommsSelected(bool selected)
+{
+    Q_UNUSED(selected)
+    bool checked = ui->advancedCommsChkBox->isChecked();
+    if (radioData->advancedCommsFlag != checked)
+    {
+        radioData->advancedCommsFlag = checked;
+        advancedSerialDataEntryVisible(checked);
+        radioValueChanged = true;
+
+    }
+}
+
+void RigSetupForm::setAdvancedCommsFlag(bool state)
+{
+    radioData->advancedCommsFlag = state;
+}
+
+void RigSetupForm::setAdvancedCommsChkBoxVisible(bool visible)
+{
+    ui->advancedCommsChkBox->setVisible(visible);
+}
+
+void RigSetupForm::advancedSerialDataEntryVisible(bool v)
+{
     ui->comDataBitsBox->setVisible(v);
     ui->dataLbll->setVisible(v);
     ui->comStopBitsBox->setVisible(v);
@@ -999,6 +1049,11 @@ void RigSetupForm::serialDataEntryVisible(bool v)
     ui->forceDtrLbl->setVisible(v);
     ui->forceRtsBox->setVisible(v);
     ui->forceRtsLbl->setVisible(v);
+}
+
+void RigSetupForm::checkAdvancedCommsCheckBox(bool checked)
+{
+    ui->advancedCommsChkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
 }
 
 /*************************** Network Data Entry Visible ***************/

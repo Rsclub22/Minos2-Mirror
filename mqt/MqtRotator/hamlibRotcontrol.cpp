@@ -330,7 +330,7 @@ bool HamlibRotControl::getTraceComms()
 }
 
 
-
+/*
 void HamlibRotControl::getRotatorList()
 {
 
@@ -376,6 +376,7 @@ bool HamlibRotControl::getRotatorList(QComboBox *cb)
     return true;
 }
 
+*/
 
 int HamlibRotControl::getPortType(int rotNumber, rig_port_e *portType)
 {

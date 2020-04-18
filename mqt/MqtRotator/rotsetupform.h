@@ -119,6 +119,10 @@ public:
     bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
     void setOverlapEndStop(srotParams *antennaData, bool overrunState);
 
+    void setAdvancedCommsFlag(bool state);
+    void advancedSerialDataEntryVisible(bool v);
+    void checkAdvancedCommsCheckBox(bool checked);
+    void setAdvancedCommsChkBoxVisible(bool visible);
 private slots:
 
     void rotatorModelSelected();
@@ -140,6 +144,7 @@ private slots:
 
 
 
+    void onAdvancedCommsSelected(bool selected);
 private:
     Ui::rotSetupForm *ui;
 

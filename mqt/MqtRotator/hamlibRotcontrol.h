@@ -60,8 +60,8 @@ public:
 
     int getModelNumber(int idx);
     int getRotatorModelIndex();
-    void getRotatorList();
-    bool getRotatorList(QComboBox *cb);
+    //void getRotatorList();
+    //bool getRotatorList(QComboBox *cb);
     const char * getMfg_Name(int idx);
     const char * getModel_Name(int idx);
 

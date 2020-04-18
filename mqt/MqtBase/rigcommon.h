@@ -94,6 +94,7 @@ public:
       dest.forceDtr = srce->forceDtr;
       dest.forceRts = srce->forceRts;
       dest.portType = srce->portType;
+      dest.advancedCommsFlag = srce->advancedCommsFlag;
       dest.networkAdd = srce->networkAdd;
       dest.networkPort = srce->networkPort;
       dest.enableCAT = srce->enableCAT;
@@ -156,6 +157,7 @@ public:
   int forceDtr = 0;
   int forceRts = 0;
   int portType = 0;
+  bool advancedCommsFlag;
   QString networkAdd;
   QString networkPort;
   bool enableCAT = false;

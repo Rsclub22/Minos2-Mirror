@@ -90,6 +90,7 @@ public:
 
     void networkDataEntryVisible(bool v);
     void serialDataEntryVisible(bool v);
+    void advancedSerialDataEntryVisible(bool v);
 
 
     bool getTransVertSelected();
@@ -156,6 +157,9 @@ public:
 
     void setSupportBandCheckBoxVisible(bool visible);
 
+    void checkAdvancedCommsCheckBox(bool checked);
+    void setAdvancedCommsFlag(bool state);
+    void setAdvancedCommsChkBoxVisible(bool visible);
 signals:
     void transVertTabAdded(int);
 
@@ -200,6 +204,7 @@ private slots:
     void onSup432MhzChkBoxClicked(bool state);
     void onSup1296MhzChkBoxClicked(bool state);
 
+    void onAdvancedCommsSelected(bool selected);
 private:
 
 

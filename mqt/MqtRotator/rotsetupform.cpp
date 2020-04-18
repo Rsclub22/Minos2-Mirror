@@ -66,6 +66,7 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
     connect(ui->comStopBitsBox, SIGNAL(activated(int)), this, SLOT(comStopBitsSelected()));
     connect(ui->comParityBox, SIGNAL(activated(int)), this, SLOT(comParityBitsSelected()));
     connect(ui->comHandShakeBox, SIGNAL(activated(int)), this, SLOT(comHandshakeSelected()));
+    connect(ui->advancedCommsChkBox, SIGNAL(clicked(bool)),this, SLOT(onAdvancedCommsSelected(bool)));
     connect(ui->netAddressBox, SIGNAL(editingFinished()), this, SLOT(comNetAddressSelected()));
     connect(ui->netPortBox, SIGNAL(editingFinished()), this, SLOT(comNetPortNumSelected()));
     connect(ui->pollInterval, SIGNAL(activated(int)), this, SLOT(pollIntervalSelected()));
@@ -169,16 +170,25 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
             if (antennaData->portType == RotCapConstants::PortType::network)
             {
                serialDataEntryVisible(false);
+               advancedSerialDataEntryVisible(false);
+               setAdvancedCommsChkBoxVisible(false);
+               checkAdvancedCommsCheckBox(antennaData->advancedCommsFlag);
                networkDataEntryVisible(true);
             }
             else if (antennaData->portType == RotCapConstants::PortType::serial)
             {
                 serialDataEntryVisible(true);
+                advancedSerialDataEntryVisible(antennaData->advancedCommsFlag);
+                setAdvancedCommsChkBoxVisible(true);
+                checkAdvancedCommsCheckBox(antennaData->advancedCommsFlag);
                 networkDataEntryVisible(false);
             }
             else if (antennaData->portType == RotCapConstants::PortType::none)
             {
                 serialDataEntryVisible(false);
+                advancedSerialDataEntryVisible(false);
+                setAdvancedCommsChkBoxVisible(false);
+                checkAdvancedCommsCheckBox(antennaData->advancedCommsFlag);
                 networkDataEntryVisible(false);
             }
 
@@ -792,6 +802,38 @@ void rotSetupForm::serialDataEntryVisible(bool v)
     ui->comportLbl->setVisible(v);
     ui->comSpeedBox->setVisible(v);
     ui->speedLbl->setVisible(v);
+
+}
+
+
+/********************* Advanced Comms CheckBox *******************/
+
+void rotSetupForm::onAdvancedCommsSelected(bool selected)
+{
+    Q_UNUSED(selected)
+    bool checked = ui->advancedCommsChkBox->isChecked();
+    if (antennaData->advancedCommsFlag != checked)
+    {
+        antennaData->advancedCommsFlag = checked;
+        advancedSerialDataEntryVisible(checked);
+        antennaValueChanged = true;
+
+    }
+}
+
+void rotSetupForm::setAdvancedCommsFlag(bool state)
+{
+    antennaData->advancedCommsFlag = state;
+}
+
+void rotSetupForm::setAdvancedCommsChkBoxVisible(bool visible)
+{
+    ui->advancedCommsChkBox->setVisible(visible);
+}
+
+
+void rotSetupForm::advancedSerialDataEntryVisible(bool v)
+{
     ui->comDataBitsBox->setVisible(v);
     ui->dBitsLbl->setVisible(v);
     ui->comStopBitsBox->setVisible(v);
@@ -800,7 +842,18 @@ void rotSetupForm::serialDataEntryVisible(bool v)
     ui->parityLbl->setVisible(v);
     ui->comHandShakeBox->setVisible(v);
     ui->handLbl->setVisible(v);
+    ui->forceDtrBox->setVisible(v);
+    ui->forceDtrLbl->setVisible(v);
+    ui->forceRtsBox->setVisible(v);
+    ui->forceRtsLbl->setVisible(v);
 }
+
+void rotSetupForm::checkAdvancedCommsCheckBox(bool checked)
+{
+    ui->advancedCommsChkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
+}
+
+
 
 /*************************** Network Data Entry Visible ***************/
 
@@ -823,7 +876,11 @@ void rotSetupForm::fillRotatorModelInfo()
     for (auto r = rotFactory->supported_rotators()->cbegin(); r != rotFactory->supported_rotators()->cend(); ++r)
     {
         QString rotText = r.key();
-        ui->rotatorModelBox->addItem(rotText.remove("Hamlib "));
+        if (!rotText.contains("rotctl"))
+        {
+            ui->rotatorModelBox->addItem(rotText);
+        }
+
     }
 
 
