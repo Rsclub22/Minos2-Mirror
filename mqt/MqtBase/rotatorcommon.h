@@ -258,11 +258,10 @@ public:
       dest.stopbits = srce->stopbits;
       dest.databits = srce->databits;
       dest.handshake = srce->handshake;
-      dest.enableRot = srce->enableRot;
-      dest.activeRTS = srce->activeRTS;
-      dest.activeDTR = srce->activeDTR;
-      dest.nactiveRTS = srce->nactiveRTS;
-      dest.nactiveDTR = srce->nactiveDTR;
+      //dest.enableRot = srce->enableRot;
+      dest.forceDtr = srce->forceDtr;
+      dest.forceRts = srce->forceRts;
+
 
     }
 
@@ -304,11 +303,10 @@ public:
   int stopbits = 0;
   int databits = 0;
   int handshake = 0;
-  bool enableRot = false;
-  bool activeRTS = false;
-  bool activeDTR = false;
-  bool nactiveRTS = false;
-  bool nactiveDTR = false;
+  int forceDtr = 0;
+  int forceRts = 0;
+  //bool enableRot = false;
+
 
 };
 

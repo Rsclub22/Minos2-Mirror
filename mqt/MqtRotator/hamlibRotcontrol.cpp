@@ -191,6 +191,21 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
        //     my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
        // }
 
+        if (my_rot->state.rotport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
+        {
+
+            if (selectedAntenna.forceRts)
+            {
+                my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_ON;
+            }
+            else
+            {
+
+                my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
+            }
+        }
+
+
     }
     else if (selectedAntenna.portType == RotCapConstants::PortType::network )
     {

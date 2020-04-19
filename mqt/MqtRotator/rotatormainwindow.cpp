@@ -471,9 +471,9 @@ int RotatorMainWindow::openRotator()
         pollTimer->start(pollTime);             // start timer to send message to controller
         if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::serial)
         {
-            showStatusMessage(tr("Connected to: %1 - %2, %3, %4, %5, %6, %7, %8")
+            showStatusMessage(tr("Connected to: %1 - %2, %3, %4, %5, %6, %7,  Handshake %8, ForceDTR %9, ForceRTS %10")
                                   .arg(setupAntenna->currentAntenna.antennaName).arg(setupAntenna->currentAntenna.rotatorModel).arg(setupAntenna->currentAntenna.comport).arg(setupAntenna->currentAntenna.baudrate).arg(setupAntenna->currentAntenna.databits)
-                                  .arg(setupAntenna->currentAntenna.stopbits).arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]).arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]));
+                                  .arg(setupAntenna->currentAntenna.stopbits).arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]).arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]).arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]).arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]));
         }
         else if (setupAntenna->currentAntenna.portType == RotCapConstants::PortType::network )
         {
@@ -2342,8 +2342,10 @@ void RotatorMainWindow::aboutRotatorConfig()
             msg.append(tr("Baudrate = %1\n").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
             msg.append(tr("Databits = %1\n").arg(QString::number(setupAntenna->currentAntenna.databits)));
             msg.append(tr("Stop bits = %1\n").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
-            //msg.append(tr("Parity = %1\n").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
-            //msg.append(tr("Handshake = %1\n").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+            msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]));
+            msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]));
+            msg.append(tr("ForceDTR = %1\n").arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]));
+            msg.append(tr("ForceRTS = %1\n").arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]));
         }
         msg.append(tr("Antenna Offset = %1\n").arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));
         msg.append(tr("Current Rotator Type = %1\n").arg(endStopNames[setupAntenna->currentAntenna.endStopType]));
@@ -2406,8 +2408,11 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
             trace(QString("Baudrate = %1").arg(QString::number(setupAntenna->currentAntenna.baudrate)));
             trace(QString("Databits = %1").arg(QString::number(setupAntenna->currentAntenna.databits)));
             trace(QString("Stop bits = %1").arg(QString::number(setupAntenna->currentAntenna.stopbits)));
-            //trace(QString("Parity = %1").arg(rotator->getParityCodeNames()[setupAntenna->currentAntenna.parity]));
-            //trace(QString("Handshake = %1").arg(rotator->getHandShakeNames()[setupAntenna->currentAntenna.handshake]));
+            trace(QString("Parity = %1").arg(serialCommonData::parityStr[setupAntenna->currentAntenna.parity]));
+            trace(QString("Handshake = %1").arg(serialCommonData::handshakeStr[setupAntenna->currentAntenna.handshake]));
+            trace(QString("ForceDTR = %1").arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceDtr]));
+            trace(QString("ForceRTS = %1").arg(serialCommonData::forceLinesStr[setupAntenna->currentAntenna.forceRts]));
+
 
         }
         trace(QString("Antenna Offset = %1").arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));

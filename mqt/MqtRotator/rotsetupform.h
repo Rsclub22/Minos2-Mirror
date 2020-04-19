@@ -123,6 +123,11 @@ public:
     void advancedSerialDataEntryVisible(bool v);
     void checkAdvancedCommsCheckBox(bool checked);
     void setAdvancedCommsChkBoxVisible(bool visible);
+    void setForceRTS(int n);
+    void setForceRTSDisabled(bool state);
+    void on_forceRTSSelected();
+    void setForceDTR(int n);
+    void on_forceDTRSelected();
 private slots:
 
     void rotatorModelSelected();

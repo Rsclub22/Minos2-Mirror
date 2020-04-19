@@ -985,6 +985,41 @@ int rotSetupForm::comportAvial(QString comport)
 }
 
 
+/**************** Force DTR Line *************************************/
 
+void rotSetupForm::on_forceDTRSelected()
+{
+    if (serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()] != antennaData->forceDtr)
+    {
+        antennaData->forceDtr = serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()];
+        antennaValueChanged = true;
+    }
+}
+
+void rotSetupForm::setForceDTR(int n)
+{
+    ui->forceDtrBox->setCurrentIndex(n);
+}
+/**************** Force RTS Line *************************************/
+
+void rotSetupForm::on_forceRTSSelected()
+{
+    if (serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()] != antennaData->forceRts)
+    {
+        antennaData->forceRts = serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()];
+        antennaValueChanged = true;
+    }
+}
+
+void rotSetupForm::setForceRTSDisabled(bool state)
+{
+    ui->forceRtsBox->setDisabled(state);
+    ui->forceRtsLbl->setDisabled(state);
+}
+
+void rotSetupForm::setForceRTS(int n)
+{
+    ui->forceRtsBox->setCurrentIndex(n);
+}
 
 
