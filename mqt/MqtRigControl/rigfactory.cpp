@@ -43,8 +43,15 @@ RigBase* RigFactory::createRigs(int rigId)
     {
         return new OmnirigControl(OmnirigControl::Two, this);
     }
+    else if (rigId <= HamlibRigCtld)
+    {
+        return new HamlibRigControl(this);
+    }
 
-    return new HamlibRigControl(this);
+    return nullptr;
+
+
+
 }
 
 

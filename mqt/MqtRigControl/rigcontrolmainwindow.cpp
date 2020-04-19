@@ -859,30 +859,49 @@ int RigControlMainWindow::openRigCtldRadio()
         traceCode = rigCtldTrace::rigCtldTraceCodes::VERBOSE;
     }
 
+    QString parity;
     QString handshake;
     QString rtsState;
-//  need to sort this for rigctld **********************************************
-//    handshake = serialData::rigctldHandshakeStr[setupRadio->currentRadio.handshake];
+
+    parity = serialData::parityStr[setupRadio->currentRadio.parity];
+
+    handshake = serialData::rigctldHandshakeStr[setupRadio->currentRadio.handshake];
 
 
-//    if (handshake == serialData::rigctldHandshakeStr[RIG_HANDSHAKE_HARDWARE])
-//    {
-//        rtsState = serialData::rigctldForeLinesStr[serialData::FORCE_LINE_NONE];
-//    }
-//    else
-//    {
-//        rtsState = serialData::rigctldForeLinesStr[setupRadio->currentRadio.forceRts];
-//    }
+    if (handshake == serialData::rigctldHandshakeStr[RIG_HANDSHAKE_HARDWARE])
+    {
+        rtsState = serialData::rigctldForceLinesStr[serialData::FORCE_LINE_NONE];
+    }
+    else
+    {
+        rtsState = serialData::rigctldForceLinesStr[setupRadio->currentRadio.forceRts];
+    }
 
-//    QString dtrState = serialData::rigctldForeLinesStr[setupRadio->currentRadio.forceDtr];
+    QString dtrState = serialData::rigctldForceLinesStr[setupRadio->currentRadio.forceDtr];
 
 
     // start rigctld
     trace(QString("openRigCtldRadio: starting rigctld"));
+    trace(QString("rigctld parameters - %1, %2, %3, %4, %5, %6, %7, %8, %9, %10, %11, %12, %13, %14, %15")
+                                            .arg(setupRadio->currentRadio.rigMfg_Name)
+                                            .arg(QString::number(setupRadio->currentRadio.rigModelNumber))
+                                            .arg(setupRadio->currentRadio.comport)
+                                            .arg(QString::number(setupRadio->currentRadio.baudrate))
+                                            .arg(QString::number(setupRadio->currentRadio.databits))
+                                            .arg(setupRadio->currentRadio.civAddress)
+                                            .arg(setupRadio->currentRadio.rigCtldNetworkAdd)
+                                            .arg(setupRadio->currentRadio.rigCtldNetworkPort)
+                                            .arg(QString::number(setupRadio->currentRadio.stopbits))
+                                            .arg(QString::number(setupRadio->currentRadio.stopbits))
+                                            .arg(parity)
+                                            .arg(handshake)
+                                            .arg(rtsState)
+                                            .arg(dtrState)
+                                            .arg(traceCode));
 
-//    runRigCtlDaemon(setupRadio->currentRadio.radioMfg_Name, QString::number(setupRadio->currentRadio.radioModelNumber), setupRadio->currentRadio.comport,
-//                                               QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.rigCtldNetworkAdd, setupRadio->currentRadio.rigCtldNetworkPort,
-//                                               QString::number(setupRadio->currentRadio.stopbits), setupRadio->currentRadio.parity, handshake, rtsState, dtrState, traceCode);
+    runRigCtlDaemon(setupRadio->currentRadio.rigMfg_Name, QString::number(setupRadio->currentRadio.rigModelNumber), setupRadio->currentRadio.comport,
+                                               QString::number(setupRadio->currentRadio.baudrate), QString::number(setupRadio->currentRadio.databits), setupRadio->currentRadio.civAddress, setupRadio->currentRadio.rigCtldNetworkAdd, setupRadio->currentRadio.rigCtldNetworkPort,
+                                               QString::number(setupRadio->currentRadio.stopbits), parity, handshake, rtsState, dtrState, traceCode);
 
 
 
@@ -912,6 +931,17 @@ int RigControlMainWindow::openRigCtldRadio()
     }
 
     // now open radio using rigctld model
+
+    radio = rigFactory->createRigs(HamlibRigCtld);
+
+    if (radio == nullptr)
+    {
+        logMessage(QString("Error Creating a rig in the factory - rigctld"));
+        QMessageBox::critical(this, tr("RigControl Open Radio Error"), tr("Failed to created a radio"));
+        return OPEN_FAILED;
+    }
+
+
     trace(QString("openRigCtldRadio: Open radio = %1, via Rigctld").arg(setupRadio->currentRadio.rigModel));
     retCode = radio->rigInit(setupRadio->currentRadio, RIGCTLD_ON);
     if (retCode < 0)
@@ -1054,6 +1084,14 @@ int RigControlMainWindow::openRadio()
     }
 
     radio = rigFactory->createRigs(rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).RigCapabilities::rigModelNumber);
+
+    if (radio == nullptr)
+    {
+        logMessage(QString("Error Creating a rig in the factory"));
+        QMessageBox::critical(this, tr("RigControl Open Radio Error"), tr("Failed to created a radio"));
+        return OPEN_FAILED;
+    }
+
     radio->setTraceComms(traceCommsFlag);
     rigCap = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel);
 
@@ -1061,6 +1099,7 @@ int RigControlMainWindow::openRadio()
 
     // Message from rigcontrol
     //connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
+
 
     if (!radio->getRigConnected())
     {
@@ -1075,6 +1114,7 @@ int RigControlMainWindow::openRadio()
         }
 
     }
+
 
 
 

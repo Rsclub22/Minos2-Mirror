@@ -14,7 +14,8 @@ namespace serialCommonData
 
     enum forceLinesCodes {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
     const forceLinesCodes forceLinesCodesList[] = {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
-    const QStringList forceLinesStr = QStringList() << "" << "High" << "Low";
+    const QStringList forceLinesStr = QStringList() << "None" << "High" << "Low";
+    const QStringList forceLinstStr_Trans = QStringList() << "None" << "High" << "Low";
 
     const QStringList baudrateStr = (QStringList() << "" << "1200" << "2400" << "4800" << "9600" << "19200" << "38400" << "57600" << "115200");
     const QStringList databitsStr = (QStringList() << "" << "7" << "8" );

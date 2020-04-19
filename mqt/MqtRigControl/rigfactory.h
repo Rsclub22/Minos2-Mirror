@@ -20,6 +20,7 @@
 enum RigId          // supported non-hamlib rig interfaces
 {
     NonHamlibBaseId = 10000,
+    HamlibRigCtld,
     OmniRigOneId,
     OmniRigTwoId
 };
