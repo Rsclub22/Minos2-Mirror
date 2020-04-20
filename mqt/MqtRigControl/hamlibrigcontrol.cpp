@@ -223,17 +223,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
             my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
 
- //************************************************************
-            /*
-           if (getSerialForceLineCode(currentRadio.forceDtr) == serialData::FORCE_LINE_ON)
-           {
-               my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_ON;
-            }
-            else
-            {
-                my_rig->state.rigport.parm.serial.dtr_state = RIG_SIGNAL_UNSET;
-            }
-*/
+
 
             if (my_rig->state.rigport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
             {
