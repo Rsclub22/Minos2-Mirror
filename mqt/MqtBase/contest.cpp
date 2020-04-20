@@ -305,10 +305,10 @@ void BaseContestLog::disbearc( double lon, double lat, double &dist, int &brg ) 
       ca = pi - ca ;
    double dx = 6371.291 * ca ;       /* 6371.291 is approved radius of earth */
 
-   // and then the bearing
+   // and then the bearing - but use the full loc for us!
 
-   double si = sin( lon - odec ) * coscos ;
-   co = sinlat - sinodnc * cos( ca );
+   double si = sin( lon - odea ) * coscos ;
+   co = sinlat - sinodna * cos( ca );
    double az = atan( fabs( si / co ) );
    if ( co < 0.0 )
       az = pi - az ;
