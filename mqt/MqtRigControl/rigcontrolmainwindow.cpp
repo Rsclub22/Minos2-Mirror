@@ -1881,13 +1881,13 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
     QString parityName;
     QString networkAdd = netAdd.trimmed();
     QString networkPort = portNum.trimmed();
-/* ******************************************************************
-    if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_SERIAL)
+
+    if (setupRadio->currentRadio.portType == RigCapConstants::PortType::serial)
     {
-        parityNames = radio->getParityCodeNames();
-        parityName = parity;
+        //parityNames = radio->getParityCodeNames();
+        //parityName = parity;
         arguments << "-m" + model.trimmed() << "-r" + serPort  << "-s" + baudRate.trimmed() << "--set-conf=data_bits=" + dataBits.trimmed() << "--set-conf=stop_bits=" + stopBits.trimmed()
-                  << "--set-conf=serial_parity=" + parityName.trimmed() << "--set-conf=serial_handshake=" + handshake.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
+                  << "--set-conf=serial_parity=" + parity.trimmed() << "--set-conf=serial_handshake=" + handshake.trimmed() << "--set-conf=rts_state=" + rtsState.trimmed() << "--set-conf=dtr_state=" + dtrState.trimmed();
 
         if (manufacturer == "Icom")
         {
@@ -1900,7 +1900,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
             }
         }
     }
-    else if (rig_port_e(setupRadio->currentRadio.portType) == RIG_PORT_NONE)
+    else if (setupRadio->currentRadio.portType == RigCapConstants::PortType::none)
     {
         // for dummy radio
         arguments << "-m" + model.trimmed();
@@ -1944,7 +1944,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
 //    trace(arguments.join(" ; "));
     rigCtldProcess->start(program, arguments);
 
-*/
+
 }
 
 
