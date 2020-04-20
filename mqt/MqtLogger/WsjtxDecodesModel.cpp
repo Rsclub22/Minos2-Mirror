@@ -39,7 +39,7 @@
 
   We need to "age" decodes ?? no more than 10 decode periods?
 
-  What about the oher modes?
+  What about the other modes?
 
   */
 
@@ -68,7 +68,7 @@ DecodeHeading const DecodesModel::headings[dcMaxVal] = {
     {QT_TR_NOOP ("Message"), Qt::AlignLeft}
 };
 
-QRegularExpression cq_re {"(CQ|CQDX|QRZ)[^A-Z0-9/]+"};
+static QRegularExpression cq_re {"(CQ|CQDX|QRZ)[^A-Z0-9/]+"};
 
 QString DecodesModel::confidence_string (bool low_confidence) const
 {
@@ -192,7 +192,16 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             {
                 if (msg.points > 0)
                 {
-                    return QColor {0x00, 0xff, 0xff};
+                    if (msg.bonus || msg.mults)
+                    {
+                        // brown(ish) - new multiplier/bonus
+                        return QColor {0xff, 0xcc, 0x99};
+                    }
+                    else
+                    {
+                        // blue(ish) - new call on band
+                        return QColor {0x99, 0xff, 0xff};
+                    }
                 }
                 else
                 {
