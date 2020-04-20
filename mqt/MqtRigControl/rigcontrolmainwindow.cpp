@@ -559,7 +559,7 @@ void RigControlMainWindow::upDateRadio()
             {
                 initCacheData();        /// ***************************** this may not be the best place for this
 
- /*               if (setupRadio->currentRadio.radioModelNumber == hamlibData::RIGCTL)     // is it rigctl?
+                if (setupRadio->currentRadio.rigModelNumber == hamlibData::RIGCTL)     // is it rigctl?
                 {
                     getRigctldNames(setupRadio->currentRadio.networkAdd, setupRadio->currentRadio.networkPort.toUShort());
                     bool ok = false;
@@ -575,7 +575,7 @@ void RigControlMainWindow::upDateRadio()
                 }
 
 
-*/
+
 
 
 
@@ -854,7 +854,7 @@ int RigControlMainWindow::openRigCtldRadio()
     }
 
     rigCtldTrace::rigCtldTraceCodes traceCode = rigCtldTrace::rigCtldTraceCodes::NONE;
-    if (radio->getTraceComms())
+    if (ui->actionTraceComms->isChecked())
     {
         traceCode = rigCtldTrace::rigCtldTraceCodes::VERBOSE;
     }
