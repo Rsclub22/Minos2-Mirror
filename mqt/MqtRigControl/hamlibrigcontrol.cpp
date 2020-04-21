@@ -403,7 +403,7 @@ int HamlibRigControl::setMode(VFO vfo, MODE mode)
 
 rmode_t HamlibRigControl::convertQStrRmode_t(QString mode)
 {
-    return rig_parse_func(mode.toLatin1());
+    return rig_parse_mode(mode.toLatin1());
 }
 
 /*
