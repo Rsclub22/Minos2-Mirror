@@ -660,7 +660,7 @@ void RigControlMainWindow::upDateRadio()
 
                 supVolume = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVolume;
                 logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(supVolume ? "True" : "False"));
-                //sendVolStatusToLog(ridx, supVolume); //*************************************************
+                addVolStatusToRigCache(ridx, supVolume);
 
 
                 // does the radio support signal strength meter
