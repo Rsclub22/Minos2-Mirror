@@ -171,12 +171,13 @@ void DecodesModel::rx_df (int df)
 //  , {Highlight::Tx, true, {}, {{Qt::yellow}}}
 //};
 
-QVariant DecodesModel::data (QModelIndex const& index, int role) const
+QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
 {
-    const decodeMessage &msg = messages->at(index.row());
+    const decodeMessage &msg = messages->at(pindex.row());
     if (role == Qt::BackgroundRole)
     {
-        switch (index.column ())
+        QColor c ( 0, 0, 0);
+        switch (pindex.column ())
         {
         case dcPoints:
         case dcBearing:
@@ -185,42 +186,42 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
         case dcMessage:                 // message
         {
             // we don't see transmitted messages, unfortunately
-            auto message = data (index).toString ();
+            auto message = data (index(pindex.row(), dcMessage)).toString ();
             if (base_call_re_.pattern ().size ()
                     && message.contains (base_call_re_))
             {
                 // my call in message - colour red(ish)
-                return (QColor {0xff, 0x66, 0x66}).lighter();
+                c = (QColor(0xff, 0x66, 0x66));
             }
-            if (message.contains (cq_re))
+            else if (message.contains (cq_re))
             {
                 if (msg.points > 0)
                 {
                     if (msg.bonus || msg.mults)
                     {
                         // brown(ish) - new multiplier/bonus
-                        return (QColor {0xff, 0xcc, 0x99}).lighter();
+                        c = (QColor (0xff, 0xcc, 0x99));
                     }
                     else
                     {
                         // blue(ish) - new call on band
-                        return (QColor {0x99, 0xff, 0xff}).lighter();
+                        c = (QColor (0x99, 0xff, 0xff));
                     }
                 }
                 else
                 {
                     // CQ call in message - colour green(ish)
-                    return (QColor {0x66, 0xff, 0x66}).lighter();
+                    c = (QColor (0x66, 0xff, 0x66));
                 }
             }
         }
-            break;
+        break;
 
         case dcDF:                 // DF
-            if (qAbs (data (index).toInt () - rx_df_) <= 10)
+            if (qAbs (data (pindex).toInt () - rx_df_) <= 10)
             {
                 // near my freq  - colour red(ish)
-                return QColor {0xff, 0x66, 0x66};
+                c = QColor (0xff, 0x66, 0x66);
             }
             break;
 
@@ -228,19 +229,19 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
             {
                 if (msg.colOffset == 0)
                 {
-                    return QColor(Qt::red).lighter();
+                    c = QColor(Qt::red).lighter();
                 }
                 else if (msg.colOffset  == 1)
                 {
-                    return QColor(Qt::green).lighter();
+                    c = QColor(Qt::green).lighter();
                 }
                 else if (msg.colOffset  == 2)
                 {
-                    return QColor(Qt::blue).lighter();
+                    c = QColor(Qt::blue).lighter();
                 }
                 else if (msg.colOffset  == 3)
                 {
-                    return QColor(Qt::yellow).lighter();
+                    c = QColor(Qt::yellow).lighter();
                 }
             }
             break;
@@ -248,10 +249,14 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
         default:
             break;
         }
+        if (c != (QColor (0, 0, 0)))
+            return c;
+
+        return QVariant();
     }
     if (role == Qt::DisplayRole)
     {
-        switch (index.column())
+        switch (pindex.column())
         {
         case dcId:
             return msg.id;
