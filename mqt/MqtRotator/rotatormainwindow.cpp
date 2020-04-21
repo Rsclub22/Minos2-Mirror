@@ -223,6 +223,10 @@ void RotatorMainWindow::logMessage( QString s )
 
 void RotatorMainWindow::onStdInRead(QString cmd)
 {
+    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+    {
+        closeApp = true;
+    }
     executeStdIn(cmd);
 }
 
@@ -287,6 +291,9 @@ void RotatorMainWindow::onSelectAntennaBox()
 
 void RotatorMainWindow::onLoggerSelectAntenna(PubSubName s)
 {
+    if (closeApp)
+        return;
+
     QString oldAntenna = setupAntenna->currentAntennaName;
     ui->selectAntennaBox->setCurrentText(s.key());
     setupAntenna->currentAntennaName = s.key();
@@ -324,6 +331,8 @@ void RotatorMainWindow::setAntennaNameLabelVisible(bool visible)
 
 void RotatorMainWindow::onLoggerSetRotation(int direction, int angle)
 {
+    if (closeApp)
+        return;
 
     logMessage("Command From Logger command number = " + QString::number(direction) + ", angle = " + QString::number(angle));
     int dirCommand = direction;
@@ -364,6 +373,10 @@ void RotatorMainWindow::onLoggerSetRotation(int direction, int angle)
 
 void RotatorMainWindow::onLoggerSetPreset(QString presetMsg)
 {
+    if (closeApp)
+        return;
+
+
     QStringList msg = presetMsg.split(':');
     if (msg.count() != 3)
     {

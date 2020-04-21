@@ -1126,7 +1126,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="66"/>
-        <location filename="../WsjtxDecodesModel.cpp" line="347"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="352"/>
         <source>Best</source>
         <translation>Meilleur</translation>
     </message>
@@ -1158,12 +1158,12 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="339"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="344"/>
         <source>(old)</source>
         <translation>(Vieux)</translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="345"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="350"/>
         <source>Auto</source>
         <translation>Automatique</translation>
     </message>

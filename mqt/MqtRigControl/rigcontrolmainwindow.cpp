@@ -294,6 +294,11 @@ void RigControlMainWindow::closeEvent(QCloseEvent *event)
 
 void RigControlMainWindow::onStdInRead(QString cmd)
 {
+    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+    {
+        trace("setting closeapp");
+        closeApp = true;
+    }
     executeStdIn(cmd);
 }
 
@@ -1276,6 +1281,9 @@ void RigControlMainWindow::getRadioInfo()
 
 void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
 {
+    trace(QString("RigControlMainWindow::onSelectRadio closeApp is %1").arg(closeApp));
+    if (closeApp)
+        return;
 
     logMessage(QString("Recieved SelectRadio from Logger = %1, mode = %2").arg(s.toString()).arg(mode));
 
@@ -1301,6 +1309,9 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
 }
 void RigControlMainWindow::loggerSetFreq(QString freq)
 {
+    if (closeApp)
+        return;
+
     logMessage(QString("Recieved Freq from Logger = %1").arg(freq));
     if (radioCommsOK && !rigErrorFlag)
     {
@@ -2048,6 +2059,9 @@ int RigControlMainWindow::getAndSendMode(vfo_t vfo)
 
 void RigControlMainWindow::loggerSetMode(QString mode)
 {
+    if (closeApp)
+        return;
+
     logMessage(QString("Log SetMode:: Mode Recieved from Logger = %1").arg(mode));
     //int retCode = RIG_OK;
 
@@ -2140,6 +2154,8 @@ int RigControlMainWindow::getMinosModeIndex(QString mode)
 
 void RigControlMainWindow::loggerSetVolume(int level)
 {
+    if (closeApp)
+        return;
 
     logMessage(QString("Set Volume: From Logger, level = %1").arg(level));
     setVolume(RIG_VFO_CURR, level);
@@ -2199,6 +2215,9 @@ void RigControlMainWindow::getRitSupportStatus(int modelNumber)
 
 void RigControlMainWindow::setRitLogStatus(bool status)
 {
+    if (closeApp)
+        return;
+
     logRitOn = status;
     logMessage(QString("Logger RIT Status received = %1").arg(status ? "True" : "False"));
     int retCode = 0;
@@ -2378,6 +2397,9 @@ int RigControlMainWindow::getRitFreq(vfo_t vfo)
 
 void RigControlMainWindow::setRitFreq(int ritFreq)
 {
+    if (closeApp)
+        return;
+
     if (ritEnable)
     {
         int retCode = 0;

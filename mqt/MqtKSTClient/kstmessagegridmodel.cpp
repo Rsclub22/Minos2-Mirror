@@ -281,7 +281,13 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     if (filterString.isEmpty())
         return false;
 
-    if (kstmsg->fullLine.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+    if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+    if (kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+    if (kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+    if (kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
 
     return false;

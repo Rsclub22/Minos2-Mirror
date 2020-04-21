@@ -343,7 +343,7 @@ l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="588"/>
-        <location filename="../kstmainwindow.cpp" line="374"/>
+        <location filename="../kstmainwindow.cpp" line="386"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -358,33 +358,33 @@ l&apos;indicatif sélectionné</translation>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="366"/>
+        <location filename="../kstmainwindow.cpp" line="378"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="460"/>
+        <location filename="../kstmainwindow.cpp" line="472"/>
         <source>KST Chat Files (*.txt);Log Files (*.log);;All Files (*.*)</source>
         <translation>KST Fichiers de Bavardage (*.txt);Fichiers journaux  (*.log);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="464"/>
+        <location filename="../kstmainwindow.cpp" line="476"/>
         <source>Chat dumps from KST</source>
         <translation>Dumps de bavardage de KST</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="363"/>
-        <location filename="../kstmainwindow.cpp" line="487"/>
+        <location filename="../kstmainwindow.cpp" line="375"/>
+        <location filename="../kstmainwindow.cpp" line="499"/>
         <source>Including %1</source>
         <translation>%1 Compris</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="608"/>
+        <location filename="../kstmainwindow.cpp" line="620"/>
         <source>Set Back</source>
         <translation>Présent</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="612"/>
+        <location filename="../kstmainwindow.cpp" line="624"/>
         <source>Set Away</source>
         <translation>Absent</translation>
     </message>

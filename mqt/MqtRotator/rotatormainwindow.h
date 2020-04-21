@@ -99,6 +99,7 @@ private:
 
     StdInReader stdinReader;
 
+    bool closeApp = false;
     RotatorRpc *msg;
 
     QTimer LogTimer;

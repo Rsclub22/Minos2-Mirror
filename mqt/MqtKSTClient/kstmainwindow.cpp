@@ -311,7 +311,19 @@ void KSTMainWindow::changeEvent( QEvent* e )
         settings.setValue("geometry/Main", saveGeometry());
     }
 }
+void KSTMainWindow::closeEvent(QCloseEvent *event)
+{
+    trace("KSTMainWindow::closeEvent");
 
+    userCallTimer.stop();
+
+    // and tidy up all loose ends
+
+    QSettings settings;
+    settings.setValue("geometry/Main", saveGeometry());
+    trace("KSTMainWindow Closing");
+    QWidget::closeEvent(event);
+}
 void KSTMainWindow::CloseTimerTimer(  )
 {
    static bool closed = false;
