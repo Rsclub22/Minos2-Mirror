@@ -178,6 +178,10 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
     {
         switch (index.column ())
         {
+        case dcPoints:
+        case dcBearing:
+        case dcFromGrid:
+        case dcBest:
         case dcMessage:                 // message
         {
             // we don't see transmitted messages, unfortunately
@@ -186,7 +190,7 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
                     && message.contains (base_call_re_))
             {
                 // my call in message - colour red(ish)
-                return QColor {0xff, 0x66, 0x66};
+                return (QColor {0xff, 0x66, 0x66}).lighter();
             }
             if (message.contains (cq_re))
             {
@@ -195,18 +199,18 @@ QVariant DecodesModel::data (QModelIndex const& index, int role) const
                     if (msg.bonus || msg.mults)
                     {
                         // brown(ish) - new multiplier/bonus
-                        return QColor {0xff, 0xcc, 0x99};
+                        return (QColor {0xff, 0xcc, 0x99}).lighter();
                     }
                     else
                     {
                         // blue(ish) - new call on band
-                        return QColor {0x99, 0xff, 0xff};
+                        return (QColor {0x99, 0xff, 0xff}).lighter();
                     }
                 }
                 else
                 {
                     // CQ call in message - colour green(ish)
-                    return QColor {0x66, 0xff, 0x66};
+                    return (QColor {0x66, 0xff, 0x66}).lighter();
                 }
             }
         }
