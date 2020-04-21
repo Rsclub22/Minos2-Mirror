@@ -125,6 +125,11 @@ void RigSetupDialog::initSetup()
             }
 
             getRadioSetting(i, settings);
+
+            radioTab[i]->getRadioData()->rigMfg_Name = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigManufacturer;
+            radioTab[i]->getRadioData()->rigModelName = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigModelName;
+            radioTab[i]->getRadioData()->rigModelNumber = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigModelNumber;
+
             loadSettingsToTab(i);
         }
         chkloadflg = false;
@@ -831,10 +836,10 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
 
     config.beginGroup(radioTab[radNum]->getRadioData()->radioName);
     config.setValue("radioName", radioTab[radNum]->getRadioData()->radioName);
-    config.setValue("radioMfgName", radioTab[radNum]->getRadioData()->rigMfg_Name);
+    //config.setValue("radioMfgName", radioTab[radNum]->getRadioData()->rigMfg_Name);
     config.setValue("radioModel", radioTab[radNum]->getRadioData()->rigModel);
-    config.setValue("radioModelName", radioTab[radNum]->getRadioData()->rigModelName);
-    config.setValue("radioModelNumber", radioTab[radNum]->getRadioData()->rigModelNumber);
+    //config.setValue("radioModelName", radioTab[radNum]->getRadioData()->rigModelName);
+   // config.setValue("radioModelNumber", radioTab[radNum]->getRadioData()->rigModelNumber);
     config.setValue("civAddress", radioTab[radNum]->getRadioData()->civAddress);
     config.setValue("portType", radioTab[radNum]->getRadioData()->portType);
     config.setValue("advancedComms", radioTab[radNum]->getRadioData()->advancedCommsFlag);
@@ -850,7 +855,7 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("rigCtldEnable", radioTab[radNum]->getRadioData()->rigCtldEnable);
     config.setValue("rigCtldNetworkAddress", radioTab[radNum]->getRadioData()->rigCtldNetworkAdd);
     config.setValue("rigCtldPortNumber", radioTab[radNum]->getRadioData()->rigCtldNetworkPort);
-    config.setValue("antSwitchAvail", radioTab[radNum]->getRadioData()->antSwitchAvail);
+    //config.setValue("antSwitchAvail", radioTab[radNum]->getRadioData()->antSwitchAvail);
     config.setValue("transVertEnable", radioTab[radNum]->getRadioData()->transVertEnable);
     config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
     config.setValue("netPort", radioTab[radNum]->getRadioData()->networkPort);
@@ -875,11 +880,11 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
 {
     config.beginGroup(availRadios[radNum]);
     radioTab[radNum]->getRadioData()->radioName = config.value("radioName", "").toString();
-    radioTab[radNum]->getRadioData()->radioNumber = config.value("radioNumber", QString::number(radNum)).toString();
-    radioTab[radNum]->getRadioData()->rigMfg_Name = config.value("radioMfgName", "").toString();
+    //radioTab[radNum]->getRadioData()->radioNumber = config.value("radioNumber", QString::number(radNum)).toString();
+    //radioTab[radNum]->getRadioData()->rigMfg_Name = config.value("radioMfgName", "").toString();
     radioTab[radNum]->getRadioData()->rigModel = config.value("radioModel", "").toString();
-    radioTab[radNum]->getRadioData()->rigModelName = config.value("radioModelName", "").toString();
-    radioTab[radNum]->getRadioData()->rigModelNumber = config.value("radioModelNumber", "").toInt();
+    //radioTab[radNum]->getRadioData()->rigModelName = config.value("radioModelName", "").toString();
+    //radioTab[radNum]->getRadioData()->rigModelNumber = config.value("radioModelNumber", "").toInt();
     radioTab[radNum]->getRadioData()->civAddress = config.value("civAddress", "").toString();
     radioTab[radNum]->getRadioData()->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
     radioTab[radNum]->getRadioData()->advancedCommsFlag = config.value("advancedComms", false).toBool();
@@ -976,12 +981,18 @@ void RigSetupDialog::updateAvailRadiosToVersion2(QSettings& settings)
             {
                 radioModel = spList[1].trimmed() + " " + spList[2].trimmed();
                 settings.setValue(radio, radioModel);
-                // update to new rig modelNumber
-                RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioModel);
-                settings.setValue(availRadios[i] + "/radioModelNumber", QString::number(rigFactory->supported_rigs()->value(radioModel).rigModelNumber));
+
             }
 
         }
+
+        // remove redundant settings
+        radio = availRadios[i];
+        settings.remove(radio + "/radioMfgName");
+        settings.remove(radio + "/radioModelName");
+        settings.remove(radio + "/radioModelName");
+        settings.remove(radio + "/radioModelNumber");
+
 
     }
 
