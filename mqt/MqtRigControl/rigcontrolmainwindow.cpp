@@ -523,16 +523,18 @@ void RigControlMainWindow::upDateRadio()
         ridx = radioIndex;
         if (ridx > -1 && ridx < setupRadio->numAvailRadios)
         {
+            if (radioCommsOK)
+            {
+                closeRadio();
+            }
+
+
             // found radio, update currentRadio from selected radiodata
             updateCurrentRadioFromAvailRadios(ridx);
 
             //scatParams::copyRig(setupRadio->availRadioData[ridx], setupRadio->currentRadio);
             setupRadio->currentRadio.radioNumber = QString::number(ridx);           // save radio number
 
-            if (radioCommsOK)
-            {
-                closeRadio();
-            }
 
             //if (setupRadio->currentRadio.radioModelNumber == 0)
             //{
