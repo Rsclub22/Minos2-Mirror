@@ -238,7 +238,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
 RigControlMainWindow::~RigControlMainWindow()
 {
-
+    trace("RigControlMainWindow::~RigControlMainWindow()");
     delete ui;
     delete msg;
 }
@@ -267,6 +267,7 @@ void RigControlMainWindow::LogTimerTimer()
     {
         if ( checkCloseEvent() )
         {
+            trace("close event seen");
             closed = true;
             close();
         }
@@ -275,8 +276,11 @@ void RigControlMainWindow::LogTimerTimer()
 
 void RigControlMainWindow::closeEvent(QCloseEvent *event)
 {
+    trace("MinosRigControl::closeEvent");
 
     LogTimer.stop();
+    pollTimer->stop();
+    RigCtldStatusTimer->stop();
 
     closeRadio();
 
