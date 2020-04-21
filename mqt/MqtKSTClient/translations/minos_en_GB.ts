@@ -337,7 +337,7 @@ when user selected</source>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="588"/>
-        <location filename="../kstmainwindow.cpp" line="374"/>
+        <location filename="../kstmainwindow.cpp" line="386"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -352,33 +352,33 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="363"/>
-        <location filename="../kstmainwindow.cpp" line="487"/>
+        <location filename="../kstmainwindow.cpp" line="375"/>
+        <location filename="../kstmainwindow.cpp" line="499"/>
         <source>Including %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="366"/>
+        <location filename="../kstmainwindow.cpp" line="378"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="460"/>
+        <location filename="../kstmainwindow.cpp" line="472"/>
         <source>KST Chat Files (*.txt);Log Files (*.log);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="464"/>
+        <location filename="../kstmainwindow.cpp" line="476"/>
         <source>Chat dumps from KST</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="608"/>
+        <location filename="../kstmainwindow.cpp" line="620"/>
         <source>Set Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="612"/>
+        <location filename="../kstmainwindow.cpp" line="624"/>
         <source>Set Away</source>
         <translation type="unfinished"></translation>
     </message>

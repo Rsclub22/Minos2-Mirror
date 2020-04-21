@@ -281,7 +281,13 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     if (filterString.isEmpty())
         return false;
 
-    if (kstmsg->fullLine.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+    if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+    if (kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+    if (kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+        return true;
+    if (kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
 
     return false;
@@ -295,11 +301,11 @@ void KstMeepGridSortFilterModel::setFilterString(QString f)
 
 QVariant KstMeepGridSortFilterModel::data(const QModelIndex &index, int role) const
 {
-    if (role != Qt::BackgroundColorRole)
+    if (role == Qt::BackgroundColorRole)
     {
-        KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
-        return cgm->data(index, role);
-
+        return QColor(Qt::green).lighter(135);
     }
-    return QColor(Qt::green).lighter(135);
+
+     KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
+     return cgm->data(index, role);
 }

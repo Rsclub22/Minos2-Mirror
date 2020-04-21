@@ -86,6 +86,7 @@ private:
 
     Ui::RigControlMainWindow *ui;
     StdInReader stdinReader;
+    bool closeApp = false;
     RigControlRpc *msg = nullptr;
 
     RigSetupDialog *setupRadio;

@@ -247,7 +247,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
 RigControlMainWindow::~RigControlMainWindow()
 {
-
+    trace("RigControlMainWindow::~RigControlMainWindow()");
     delete ui;
     delete msg;
 }
@@ -276,6 +276,7 @@ void RigControlMainWindow::LogTimerTimer()
     {
         if ( checkCloseEvent() )
         {
+            trace("close event seen");
             closed = true;
             close();
         }
@@ -326,8 +327,11 @@ QString RigControlMainWindow::convertModeToQString(MODE mode)
 
 void RigControlMainWindow::closeEvent(QCloseEvent *event)
 {
+    trace("MinosRigControl::closeEvent");
 
     LogTimer.stop();
+    pollTimer->stop();
+    RigCtldStatusTimer->stop();
 
     closeRadio();
 
@@ -341,6 +345,10 @@ void RigControlMainWindow::closeEvent(QCloseEvent *event)
 
 void RigControlMainWindow::onStdInRead(QString cmd)
 {
+    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+    {
+        closeApp = true;
+    }
     executeStdIn(cmd);
 }
 
@@ -1493,8 +1501,11 @@ void RigControlMainWindow::getRadioInfo()
 
 void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
 {
+    trace(QString("RigControlMainWindow::onSelectRadio closeApp is %1").arg(closeApp));
+    if (closeApp)
+        return;
 
-    logMessage(QString("Recieved SelectRadio from Logger = %1, mode = %2").arg(s.toString()).arg(mode));
+    logMessage(QString("Received SelectRadio from Logger = %1, mode = %2").arg(s.toString()).arg(mode));
 
 
     if (!mode.isEmpty())
@@ -1520,7 +1531,10 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
 
 void RigControlMainWindow::loggerSetFreq(QString freq)
 {
-    logMessage(QString("Recieved Freq from Logger = %1").arg(freq));
+    if (closeApp)
+        return;
+
+    logMessage(QString("Received Freq from Logger = %1").arg(freq));
     if (radioCommsOK && !rigErrorFlag)
     {
         logMessage(QString("new freq %1, old freq %2").arg(freq).arg(logger_freq));
@@ -1822,7 +1836,7 @@ void RigControlMainWindow::getRigctldNames(QString address, quint16 port)
                         loop.exec();
                     }
 
-                    if (client->getRetCode() >=0 && client->checkMsgRecieved())
+                    if (client->getRetCode() >=0 && client->checkMsgReceived())
                     {
                         rigctld_radioNumber = client->getRadioModel();
                         rigctld_radioName = client->getRadioModelName();
@@ -2312,7 +2326,10 @@ void RigControlMainWindow::onNewMode()
 
 void RigControlMainWindow::loggerSetMode(QString mode)
 {
-    logMessage(QString("Log SetMode:: Mode Recieved from Logger = %1").arg(mode));
+    if (closeApp)
+        return;
+
+    logMessage(QString("Log SetMode:: Mode Received from Logger = %1").arg(mode));
     //int retCode = RIG_OK;
 
     if (radioCommsOK && !rigErrorFlag)
@@ -2423,6 +2440,8 @@ int RigControlMainWindow::getMinosModeIndex(QString mode)
 
 void RigControlMainWindow::loggerSetVolume(int level)
 {
+    if (closeApp)
+        return;
 
     logMessage(QString("Set Volume: From Logger, level = %1").arg(level));
     setVolume(VFO::CURRENT_VFO, level);
@@ -2483,6 +2502,10 @@ void RigControlMainWindow::getRitSupportStatus()
 
 void RigControlMainWindow::setRitLogStatus(bool status)
 {
+
+
+    if (closeApp)
+        return;
 
 
     logRitOn = status;
@@ -2670,6 +2693,9 @@ int RigControlMainWindow::getRitFreq(VFO vfo)
 
 void RigControlMainWindow::setRitFreq(VFO vfo, ShortFreq ritFreq)
 {
+    if (closeApp)
+        return;
+
     if (ritEnable)
     {
         int retCode = 0;

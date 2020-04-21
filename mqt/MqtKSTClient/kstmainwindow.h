@@ -85,6 +85,8 @@ class KSTMainWindow : public QMainWindow
     QSharedPointer<AirScoutLink> asl;
     QSharedPointer<KstUser> planeActive;
 
+    void closeEvent(QCloseEvent *event) override;
+
     void sendKST(QString msg);
     void analyseKstMessage(QString atj);
     void reconnect();

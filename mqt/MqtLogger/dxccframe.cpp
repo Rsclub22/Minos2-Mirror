@@ -115,13 +115,6 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
 
     if (ct)
     {
-        if (role == Qt::BackgroundRole)
-        {
-            return QVariant();
-        }
-        if ( role != Qt::DisplayRole && role != Qt::EditRole )
-            return QVariant();
-
         if (role == Qt::DisplayRole)
         {
             QString disp = MultLists::getMultLists() ->getCtryListText( index.row(), CountryTreeColumns[ index.column() ].fieldId, ct );

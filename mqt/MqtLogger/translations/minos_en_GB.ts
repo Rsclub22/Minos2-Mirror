@@ -1092,7 +1092,7 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="66"/>
-        <location filename="../WsjtxDecodesModel.cpp" line="334"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="352"/>
         <source>Best</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1122,12 +1122,12 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="326"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="344"/>
         <source>(old)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecodesModel.cpp" line="332"/>
+        <location filename="../WsjtxDecodesModel.cpp" line="350"/>
         <source>Auto</source>
         <translation type="unfinished"></translation>
     </message>
