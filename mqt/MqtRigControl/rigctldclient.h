@@ -13,7 +13,7 @@ public:
 
     bool connectToHost(QString host, quint16 port);
     void disconnectFromHost();
-    bool checkMsgRecieved();
+    bool checkMsgReceived();
     bool checkConnected();
 
     bool writeData(const QByteArray &data);

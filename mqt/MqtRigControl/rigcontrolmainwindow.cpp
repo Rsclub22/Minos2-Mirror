@@ -296,7 +296,6 @@ void RigControlMainWindow::onStdInRead(QString cmd)
 {
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
-        trace("setting closeapp");
         closeApp = true;
     }
     executeStdIn(cmd);
@@ -1285,7 +1284,7 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
     if (closeApp)
         return;
 
-    logMessage(QString("Recieved SelectRadio from Logger = %1, mode = %2").arg(s.toString()).arg(mode));
+    logMessage(QString("Received SelectRadio from Logger = %1, mode = %2").arg(s.toString()).arg(mode));
 
 
     if (!mode.isEmpty())
@@ -1312,7 +1311,7 @@ void RigControlMainWindow::loggerSetFreq(QString freq)
     if (closeApp)
         return;
 
-    logMessage(QString("Recieved Freq from Logger = %1").arg(freq));
+    logMessage(QString("Received Freq from Logger = %1").arg(freq));
     if (radioCommsOK && !rigErrorFlag)
     {
         logMessage(QString("new freq %1, old freq %2").arg(freq).arg(logger_freq));
@@ -1610,7 +1609,7 @@ void RigControlMainWindow::getRigctldNames(QString address, quint16 port)
                         loop.exec();
                     }
 
-                    if (client->getRetCode() >=0 && client->checkMsgRecieved())
+                    if (client->getRetCode() >=0 && client->checkMsgReceived())
                     {
                         rigctld_radioNumber = client->getRadioModel();
                         rigctld_radioName = client->getRadioModelName();
@@ -2062,7 +2061,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
     if (closeApp)
         return;
 
-    logMessage(QString("Log SetMode:: Mode Recieved from Logger = %1").arg(mode));
+    logMessage(QString("Log SetMode:: Mode Received from Logger = %1").arg(mode));
     //int retCode = RIG_OK;
 
     if (radioCommsOK && !rigErrorFlag)

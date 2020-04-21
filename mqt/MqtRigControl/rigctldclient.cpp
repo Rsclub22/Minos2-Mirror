@@ -140,7 +140,7 @@ int RigCtldClient::getRetCode()
 }
 
 
-bool RigCtldClient::checkMsgRecieved()
+bool RigCtldClient::checkMsgReceived()
 {
     return msgComplete;
 }
