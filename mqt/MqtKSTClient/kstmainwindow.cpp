@@ -1781,7 +1781,7 @@ void KSTMainWindow::on_showMPath_clicked()
     }
 }
 
-void KSTMainWindow::on_maxDistanceButton_clicked()
+void KSTMainWindow::on_maxDistanceEdit_editingFinished()
 {
     maxDistance = ui->maxDistanceEdit->text().toInt();
     QSettings settings;
