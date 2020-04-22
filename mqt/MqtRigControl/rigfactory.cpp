@@ -111,6 +111,6 @@ bool RigFactory::checkOmniRigInstalled()
     trace(QString("looking for Omnirig here - %1").arg(fileName));
 
     bool fileExists = QFileInfo::exists(fileName) && QFileInfo(fileName).isFile();
-    trace(QString("Omnirig found %1").arg(fileExists ? "true":"false"));
+    trace(QString("Omnirig found = %1").arg(fileExists ? "true":"false"));
     return fileExists;
 }
