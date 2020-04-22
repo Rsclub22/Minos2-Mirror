@@ -2113,8 +2113,6 @@ void RigControlMainWindow::initCacheData()
             int radioModelNumber = setupRadio->availRadioData[i]->rigModelNumber;
             buildSupBandList(i, radioModelNumber, supBandList);
 
-            qDebug() << "support list initCache" << supBandList;
-
             addBandListToRigCache(i, supBandList);
 
             addIgnorePresetFreqToRigCache(ignorePresetFreq);
@@ -2155,7 +2153,7 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
     // find the bands the radio supports
     QStringList supBandsList;
     buildSupportedRadioBands(radioIdx, radioModelNumber, supBandsList);
-    qDebug() << "buildSupBandList" << radioModelNumber << supBandsList;
+
 
     // merge radio bands and transverter bands
     if(setupRadio->availRadioData[radioIdx]->transVertEnable)
