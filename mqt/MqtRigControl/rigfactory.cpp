@@ -19,7 +19,17 @@ RigFactory::RigFactory(bool tracecommFlag, QObject *parent) : QObject(parent)
     HamlibRigControl::setTraceCommsFlag(tracecommFlag);
     HamlibRigControl::register_rigs(&rigsList);
 
-    OmnirigControl::register_rigs(&rigsList, RigId::OmniRigOneId, RigId::OmniRigTwoId);
+    if (checkOmniRigInstalled())
+    {
+        trace("OmniRig installed - add to riglist");
+        OmnirigControl::register_rigs(&rigsList, RigId::OmniRigOneId, RigId::OmniRigTwoId);
+    }
+    else
+    {
+        trace(QString("OmniRig is not installed"));
+    }
+
+
 }
 
 
@@ -83,4 +93,24 @@ void RigFactory::populateComboRigList(QComboBox* comBox )
         }
 
     }
+}
+
+
+bool RigFactory::checkOmniRigInstalled()
+{
+
+    QString fileName = RADIO_PATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings  config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("Omnirig");
+    QString omnirigFilePath = config.value("omnirigPath", "C:/Program Files (x86)/Afreet/OmniRig/").toString();
+    QString omnirigFileName = config.value("omnirigExe", "OmniRig.exe").toString();
+    config.endGroup();
+
+    fileName = omnirigFilePath + omnirigFileName;
+    trace(QString("looking for Omnirig here - %1").arg(fileName));
+
+    bool fileExists = QFileInfo::exists(fileName) && QFileInfo(fileName).isFile();
+    trace(QString("Omnirig found %1").arg(fileExists ? "true":"false"));
+    return fileExists;
 }

@@ -2025,11 +2025,11 @@ void RigControlMainWindow::setRigCltdIndicatorVisible(bool visible)
 
 void RigControlMainWindow::setRigCtldIndicator(RIGCTLD_INDICATOR_ID idNum)
 {
-    if (RIGCTLD_IND_INT)
+    if (idNum == RIGCTLD_IND_INT)
     {
         ui->rigCtldIndicator->setStyleSheet(RIGCTLD_INDICATOR_INTERNAL);
     }
-    else if (RIGCTLD_IND_EXT)
+    else if (idNum ==RIGCTLD_IND_EXT)
     {
         ui->rigCtldIndicator->setStyleSheet(RIGCTLD_INDICATOR_EXTERNAL);
     }

@@ -42,10 +42,14 @@ public:
     bool checkForBands(int rigNumber, Frequency freq);
 
     void populateComboRigList(QComboBox* comBox);
+
+
 signals:
 
 private:
     Rigs rigsList;
+    bool checkOmniRigInstalled();
+
 
 };
 

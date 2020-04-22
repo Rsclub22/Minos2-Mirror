@@ -109,8 +109,8 @@ void RigSetupDialog::initSetup()
             addTab(i, availRadios[i]);
 
             // find transverters
-            QString fileName;
-            fileName = TRANSVERT_PATH_LOGGER + availRadios[i] + FILENAME_TRANSVERT_RADIOS;
+
+            QString fileName = TRANSVERT_PATH_LOGGER + availRadios[i] + FILENAME_TRANSVERT_RADIOS;
             QSettings  configTransvert(fileName, QSettings::IniFormat);
 
             radioTab[i]->getRadioData()->transVertNames = configTransvert.childGroups();  // get transvert names for this radio
