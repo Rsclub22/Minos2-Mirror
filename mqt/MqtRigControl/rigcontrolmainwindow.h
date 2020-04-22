@@ -303,9 +303,9 @@ private:
     void runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport, const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum, const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState, rigCtldTrace::rigCtldTraceCodes diagnostics);
 
 
-    int openRigCtldRadio();
+    int openRigCtldRadio(bool localRigCtld);
     void setRigCltdIndicatorVisible(bool visible);
-    void rigCtldIndicatorToggle(bool state);
+    void setRigCtldIndicator(RIGCTLD_INDICATOR_ID idNum);
 
 
     bool rigCtldKill();

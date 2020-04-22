@@ -301,6 +301,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QCheckBox" name="startMinosRigCtldChkBox">
+       <property name="text">
+        <string>Start Minos  RigCtld</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QLabel" name="rigCtldNetworkAddLbl">
        <property name="text">
         <string>Network Address</string>

@@ -60,7 +60,7 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, cons
     civSetToolTip();
 
     ui->useRigCtldChkBox->setCheckState(Qt::CheckState::Unchecked);
-    rigCtldNetworkVisible(false);
+    rigCtldItemsVisible(false);
 
     connect(ui->radioModelBox, SIGNAL(activated(int)), this, SLOT(radioModelSelected()));
     connect(ui->comPortBox, SIGNAL(activated(int)), this, SLOT(comportSelected()));
@@ -80,6 +80,7 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, cons
     connect(ui->CIVlineEdit, SIGNAL(editingFinished()), this, SLOT(civAddressFinished()));
 
     connect(ui->useRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(useRigCtldSelected(bool)));
+    connect(ui->startMinosRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(onStartMinosRigCtldChkBox(bool)));
     connect(ui->rigCtldNetworkAddBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkAddressSelected()));
     connect(ui->rigCtldNetPortBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkPortSelected()));
 
@@ -185,8 +186,9 @@ void RigSetupForm::setupRadioModel(QString radioModel)
                advancedSerialDataEntryVisible(false);
                setAdvancedCommsChkBoxVisible(false);
                networkDataEntryVisible(true);
-               rigCtldNetworkVisible(false);
+               rigCtldItemsVisible(false);
                setRigctldCheckBoxVisible(false);
+               setStartMinosRigctldCheckbox(true);
 
 
         }
@@ -632,7 +634,7 @@ void RigSetupForm::setNetAddress(QString netAdd)
 void RigSetupForm::networkPortSelected()
 {
 
-    processPortNumber(ui->netPortBox, radioData->networkPort);
+    processPortNumber(ui->networkAddBox, ui->netPortBox, radioData->networkPort);
 
 
 }
@@ -865,10 +867,11 @@ void RigSetupForm::setLocTVSWComportVisible(bool visible)
 
 /************** RigCtld Setup ****************************************/
 
-void RigSetupForm::rigCtldNetworkVisible(bool visible)
+void RigSetupForm::rigCtldItemsVisible(bool visible)
 {
     rigCtldNetworkAddBoxVisible(visible);
     rigCtldPortBoxVisible(visible);
+    ui->startMinosRigCtldChkBox->setVisible(visible);
 }
 
 void RigSetupForm::rigCtldNetworkAddBoxVisible(bool visible)
@@ -889,7 +892,7 @@ void RigSetupForm::useRigCtldSelected(bool /*selected*/)
     if(radioData->rigCtldEnable != checked)
     {
         radioData->rigCtldEnable = checked;
-        rigCtldNetworkVisible(checked);
+        rigCtldItemsVisible(checked);
     }
 
     radioValueChanged = true;
@@ -911,7 +914,31 @@ void RigSetupForm::setUseRigctldCheckbox(bool checked)
     }
 }
 
+void RigSetupForm::onStartMinosRigCtldChkBox(bool /*selected*/)
+{
+    bool checked = ui->useRigCtldChkBox->isChecked();
+    if(radioData->startMinosRigCtld != checked)
+    {
+        radioData->startMinosRigCtld = checked;
+        rigCtldItemsVisible(checked);
+    }
 
+    radioValueChanged = true;
+}
+
+
+void RigSetupForm::setStartMinosRigctldCheckbox(bool checked)
+{
+    if (checked)
+    {
+
+        ui->startMinosRigCtldChkBox->setCheckState(Qt::CheckState::Checked);
+    }
+    else
+    {
+       ui->startMinosRigCtldChkBox->setCheckState(Qt::CheckState::Unchecked);
+    }
+}
 
 void RigSetupForm::rigCtldNetworkAddressSelected()
 {
@@ -950,7 +977,7 @@ void RigSetupForm::setRigctldNetworkAddress(const QString& address)
 
 void RigSetupForm::rigCtldNetworkPortSelected()
 {
-    processPortNumber(ui->rigCtldNetPortBox, radioData->rigCtldNetworkPort);
+    processPortNumber(ui->rigCtldNetworkAddBox, ui->rigCtldNetPortBox, radioData->rigCtldNetworkPort);
 }
 
 
@@ -1566,12 +1593,18 @@ void RigSetupForm::processNetAddress(QLineEdit* networkAddBox, QString& netAddre
 }
 
 */
-void RigSetupForm::processPortNumber(QLineEdit* netPortBox, QString& portNumber)
+void RigSetupForm::processPortNumber(QLineEdit* netAddBox, QLineEdit* netPortBox, QString& portNumber)
 {
 
     if (netPortBox->text() != portNumber)
-     {
-         if (netPortBox->text().toInt() >= 1 && netPortBox->text().toInt() <= 65535)
+    {
+         if (netAddBox->text().isEmpty())
+         {
+             portNumber = netPortBox->text();
+             radioValueChanged = true;
+         }
+
+         else if (netPortBox->text().toInt() >= 1 && netPortBox->text().toInt() <= 65535)
          {
              portNumber = netPortBox->text();
              radioValueChanged = true;

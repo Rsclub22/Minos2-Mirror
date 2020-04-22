@@ -101,6 +101,7 @@ public:
       dest.enableSerialPTT = srce->enableSerialPTT;
       dest.pttSerialPort = srce->pttSerialPort;
       dest.rigCtldEnable = srce->rigCtldEnable;
+      dest.startMinosRigCtld = srce->startMinosRigCtld;
       dest.rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
       dest.rigCtldNetworkPort = srce->rigCtldNetworkPort;
       dest.support50MHz = srce->support50MHz;
@@ -164,6 +165,7 @@ public:
   bool enableSerialPTT  = false;
   QString pttSerialPort;
   bool rigCtldEnable = false;
+  bool startMinosRigCtld = true;
   QString rigCtldNetworkAdd;
   QString rigCtldNetworkPort;
   QString mgmMode = "USB";

@@ -278,7 +278,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     }
 
     radioTab[tabNum]->setUseRigctldCheckbox(radioTab[tabNum]->getRadioData()->rigCtldEnable);
-    radioTab[tabNum]->rigCtldNetworkVisible(radioTab[tabNum]->getRadioData()->rigCtldEnable);
+    radioTab[tabNum]->setStartMinosRigctldCheckbox(radioTab[tabNum]->getRadioData()->startMinosRigCtld);
+    radioTab[tabNum]->rigCtldItemsVisible(radioTab[tabNum]->getRadioData()->rigCtldEnable);
     radioTab[tabNum]->setRigctldNetworkAddress(radioTab[tabNum]->getRadioData()->rigCtldNetworkAdd);
     radioTab[tabNum]->setRigctldPortNumber(radioTab[tabNum]->getRadioData()->rigCtldNetworkPort);
 
@@ -853,6 +854,7 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("forceRTS", radioTab[radNum]->getRadioData()->forceRts);
     config.setValue("radioPollInterval", radioTab[radNum]->getRadioData()->pollInterval);
     config.setValue("rigCtldEnable", radioTab[radNum]->getRadioData()->rigCtldEnable);
+    config.setValue("startMinosRigCtld", radioTab[radNum]->getRadioData()->startMinosRigCtld);
     config.setValue("rigCtldNetworkAddress", radioTab[radNum]->getRadioData()->rigCtldNetworkAdd);
     config.setValue("rigCtldPortNumber", radioTab[radNum]->getRadioData()->rigCtldNetworkPort);
     //config.setValue("antSwitchAvail", radioTab[radNum]->getRadioData()->antSwitchAvail);
@@ -898,6 +900,7 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->forceRts= config.value("forceRTS", 0).toInt();
     radioTab[radNum]->getRadioData()->pollInterval = config.value("radioPollInterval", "1").toString();
     radioTab[radNum]->getRadioData()->rigCtldEnable = config.value("rigCtldEnable", false).toBool();
+    radioTab[radNum]->getRadioData()->startMinosRigCtld = config.value("startMinosRigCtld", true).toBool();
     radioTab[radNum]->getRadioData()->rigCtldNetworkAdd = config.value("rigCtldNetworkAddress", "").toString();
     radioTab[radNum]->getRadioData()->rigCtldNetworkPort = config.value("rigCtldPortNumber", "").toString();
     radioTab[radNum]->getRadioData()->transVertEnable = config.value("transVertEnable", false).toBool();

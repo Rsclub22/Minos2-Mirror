@@ -142,7 +142,7 @@ public:
     QString getRigctldPortNumber();
     void setRigctldPortNumber(const QString &port);
     void setUseRigctldCheckbox(bool checked);
-    void rigCtldNetworkVisible(bool enable);
+    void rigCtldItemsVisible(bool enable);
 
 
     void setRigctldCheckBoxVisible(bool visible);
@@ -160,6 +160,7 @@ public:
     void checkAdvancedCommsCheckBox(bool checked);
     void setAdvancedCommsFlag(bool state);
     void setAdvancedCommsChkBoxVisible(bool visible);
+    void setStartMinosRigctldCheckbox(bool checked);
 signals:
     void transVertTabAdded(int);
 
@@ -205,6 +206,7 @@ private slots:
     void onSup1296MhzChkBoxClicked(bool state);
 
     void onAdvancedCommsSelected(bool selected);
+    void onStartMinosRigCtldChkBox(bool);
 private:
 
 
@@ -245,7 +247,7 @@ private:
 
 
     //void processNetAddress(QLineEdit *networkAddBox, QString& netAddress);
-    void processPortNumber(QLineEdit *netPortBox, QString &portNumber);
+    void processPortNumber(QLineEdit *netAddBox, QLineEdit *netPortBox, QString &portNumber);
 
 
     void rigCtldNetworkAddBoxVisible(bool visible);
