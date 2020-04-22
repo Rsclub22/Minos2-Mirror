@@ -306,6 +306,7 @@ QVariant KstMeepGridSortFilterModel::data(const QModelIndex &index, int role) co
         return QColor(Qt::green).lighter(135);
     }
 
+    QModelIndex sourceIndex = mapToSource(index);
      KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
-     return cgm->data(index, role);
+     return cgm->data(sourceIndex, role);
 }
