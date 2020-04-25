@@ -283,6 +283,8 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
 
         case dcPoints:
         {
+            if (msg.txrx == eTX)
+                return "";
             bool highlight = false;
 
             if (msg.mstage != emsCQ && msg.mstage != emsGrid && msg.mstage != ems73 && msg.mstage != emsRRR )
@@ -316,6 +318,9 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             return  pts;
         }
         case dcBearing:
+            if (msg.txrx == eTX)
+                return "";
+
             if (msg.mstage != emsCQ && msg.mstage != emsGrid && msg.mstage != ems73 && msg.mstage != emsRRR)
             {
                 return "";
@@ -330,19 +335,31 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             }
             return QString::number(msg.bearing);
         case dcDistance:
+            if (msg.txrx == eTX)
+                return "";
             return QString::number(msg.distance);
 
         case dcFromCall:
+            if (msg.txrx == eTX)
+                return "";
             return msg.fromCall.realCall;
         case dcFromGrid:
+            if (msg.txrx == eTX)
+                return "";
             return msg.fromGrid.loc.getValue();
         case dcToCall:
+            if (msg.txrx == eTX)
+                return "";
             return msg.toCall.realCall;
         case dcToGrid:
+            if (msg.txrx == eTX)
+                return "";
             return msg.toGrid.loc.getValue();
 
         case dcBest:
         {
+            if (msg.txrx == eTX)
+                return "";
             if (msg.oldmsg)
             {
                 return tr("(old)");

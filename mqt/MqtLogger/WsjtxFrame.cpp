@@ -376,6 +376,7 @@ void WsjtxFrame::getAllTxtEnd()
 }
 void WsjtxFrame::scrapeAllTxt()
 {
+    trace("WsjtxFrame::scrapeAllTxt()");
     if (alltxt.isOpen())
     {
         while (!alltxtstr.atEnd())
@@ -397,6 +398,7 @@ void WsjtxFrame::scrapeAllTxt()
 
 //          bool is_new;
 
+            trace(atline);
             QString id = "WSJTX";
             QTime time;
             qint32 snr;
@@ -408,7 +410,7 @@ void WsjtxFrame::scrapeAllTxt()
 
             QStringList sl = atline.trimmed().split(' ', QString::SkipEmptyParts);
             if (sl[2] != "Tx")
-                return;
+                continue;
 
             trace("Tx scraped: " + atline);
             time = QDateTime::fromString(sl[0], "yyMMdd_HHmmss").time();
