@@ -100,6 +100,9 @@ bool decodeMessage::checkAsContact()
     if (!cc)
         return false;
 
+    if (txrx == eTX)
+        return false;
+
     ScreenContact scc;
     scc.initialise(cc);
     scc.cs = fromCall;
@@ -173,12 +176,13 @@ static bool isNumeric ( const QString &s )
     }
     return true;
 }
-decodeMessage WsjtxDecode::decode(const QString &id, QTime time, qint32 snr, float delta_time, quint32 delta_frequency,
+decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32 snr, float delta_time, quint32 delta_frequency,
                                   const QString &mode, const QString &message_text, bool low_confidence, bool off_air)
 {
     decodeMessage dc;
 
     dc.id = id;
+    dc.txrx = tr;
     dc.time = time;
     dc.snr = snr;
     dc.delta_time = delta_time;

@@ -4,6 +4,7 @@
 
 enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73, emsFree};
 enum SpecialOperatingActivity {NONE, NA_VHF, EU_VHF, FIELD_DAY, RTTY, FOX, HOUND};
+enum TxRx {eTX, eRX};
 
 const Locator &WsjtGetCallLoc(const Callsign &c);
 
@@ -44,6 +45,7 @@ public:
     // extra info needed for reply
 
     QString id;
+    TxRx txrx;
     QTime time;
     qint32 snr;
     float delta_time;
@@ -61,7 +63,7 @@ class WsjtxDecode
 public:
     WsjtxDecode();
 
-    decodeMessage decode(QString const& id, QTime time, qint32 snr, float delta_time
+    decodeMessage decode(QString const& id, TxRx tr, QTime time, qint32 snr, float delta_time
                          , quint32 delta_frequency, QString const& mode
                          , QString const& message_text, bool low_confidence, bool off_air);
 

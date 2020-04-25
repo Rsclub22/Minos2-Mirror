@@ -106,6 +106,8 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 
     restoreSplitters();
     connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
+
+    getAllTxtEnd();
 }
 WsjtxFrame::~WsjtxFrame()
 {
@@ -353,7 +355,88 @@ void WsjtxFrame::process_decodes()
 
     ui->decodes_table_view_->scrollToBottom ();
 }
+void WsjtxFrame::getAllTxtEnd()
+{
+    QString fname = WsjtxServer::getDataPath() + "/ALL.TXT";
+    alltxt.setFileName(fname);
 
+    if (!alltxt.open(QIODevice::ReadOnly|QIODevice::Text))
+    {
+        QString ebuff = tr( "Failed to open %1" ).arg(fname);
+        trace(ebuff);
+        return;
+    }
+    alltxt.seek(alltxt.size());
+    alltxtstr.setDevice(&alltxt);
+    while (!alltxtstr.atEnd())
+    {
+
+      alltxtstr.readLine(255);
+    }
+}
+void WsjtxFrame::scrapeAllTxt()
+{
+    if (alltxt.isOpen())
+    {
+        while (!alltxtstr.atEnd())
+        {
+
+          QString atline = alltxtstr.readLine(255);
+          // now we need to parse for transmissions
+// 200425_110345    50.313 Tx FT8      0  0.0 1500 CQ G0GJV IO91
+
+// 200424_160138     7.048 Rx FT4    -10  0.0  817 CQ YO4NF KN44
+// 200424_160138     7.048 Rx FT4      2 -0.1 1399 AM4WARD <DL9DAJ> 73
+// 200424_160138     7.048 Rx FT4     -8  0.2 2798 CQ R9SDO LO91
+// 200424_160138     7.048 Rx FT4     -9  0.0  292 CQ ON5ZZ JO11                       ? a1
+// 200424_160145     7.048 Rx FT4      1 -0.0  504 R9SDO R2ASY +05
+
+// "? a1" is about a priori decodes and their possible validity
+
+// date-time rigfreq txrx mode s/n dt df message
+
+//          bool is_new;
+
+            QString id = "WSJTX";
+            QTime time;
+            qint32 snr;
+            float delta_time;
+            quint32 delta_frequency;
+            QString mode;
+            QString message;
+            bool low_confidence = false;    // we sent it, after all
+
+            QStringList sl = atline.trimmed().split(' ', QString::SkipEmptyParts);
+            if (sl[2] != "Tx")
+                return;
+
+            trace("Tx scraped: " + atline);
+            time = QDateTime::fromString(sl[0], "yyMMdd_HHmmss").time();
+            //double rigfreq = sl[1].toDouble();
+            // sl[2] == Tx
+            mode = sl[3];
+            snr = 0;    //sl[4]
+            delta_time = 0.0;   //sl[5]
+            delta_frequency = sl[6].toUInt();
+
+            for (int i = 0; i < 7; i++)
+            {
+                sl.removeFirst();
+            }
+            message = sl.join(' ');
+
+
+            decodeMessage dc = decoder.decode(id, eTX, time, snr, delta_time
+                                            , delta_frequency, mode
+                                            , message, low_confidence, true);
+            messages.push_back(dc);
+
+            decodes_model_->add_decode ();
+
+            // ?? process_decodes();
+        }
+    }
+}
 void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
@@ -368,6 +451,11 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         return;
     id_ = id;
 
+    if (transmitting && !currentlyTransmitting)
+    {
+        // try scraping the transmissions from the all.txt file
+        scrapeAllTxt();
+    }
     currentlyDecoding = decoding;
     currentlyTransmitting = transmitting;
 
@@ -470,7 +558,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
         return;
     id_ = id;
 
-    decodeMessage dc = decoder.decode(id, time, snr, delta_time
+    decodeMessage dc = decoder.decode(id, eRX, time, snr, delta_time
                                       , delta_frequency, mode
                                       , message, low_confidence, off_air);
 

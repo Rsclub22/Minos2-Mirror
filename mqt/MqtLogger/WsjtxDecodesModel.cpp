@@ -187,7 +187,11 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         {
             // we don't see transmitted messages, unfortunately
             auto message = data (index(pindex.row(), dcMessage)).toString ();
-            if (base_call_re_.pattern ().size ()
+            if (msg.txrx == eTX)
+            {
+                c = QColor(Qt::yellow);
+            }
+            else if (base_call_re_.pattern ().size ()
                     && message.contains (base_call_re_))
             {
                 // my call in message - colour red(ish)

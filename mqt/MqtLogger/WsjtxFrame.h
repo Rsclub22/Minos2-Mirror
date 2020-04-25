@@ -49,12 +49,17 @@ private:
 
     WsjtxDecode decoder;
 
+    QFile alltxt;
+    QTextStream alltxtstr;
+
     void reply(decodeMessage &dc);
     void restoreSplitters();
     void process_decodes();
     
     void saveAllColumnWidthsAndPositions();
     void reloadColumns();
+    void scrapeAllTxt();
+    void getAllTxtEnd();
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 

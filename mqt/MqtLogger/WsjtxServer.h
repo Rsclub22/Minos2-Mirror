@@ -24,6 +24,7 @@ public:
     void do_halt_tx (QString const& id, bool auto_only);
     void do_clear_decodes (QString const& id, quint8 window);
 
+    static QString getDataPath();
 private:
     static WsjtxServer *wsjtxServer;
     MessageServer * server_1 = nullptr;
