@@ -117,12 +117,14 @@ WsjtxFrame::~WsjtxFrame()
 
 void WsjtxFrame::on_halt_tx_button__clicked()
 {
+    trace("do_halt_tx");
     ui->replyto_label->setText("");
     WsjtxServer::getWsjtxServer()->do_halt_tx(id_, true);
 }
 
 void WsjtxFrame::on_auto_off_button__clicked()
 {
+    trace("disable tx clicked");
     ui->replyto_label->setText("");
     WsjtxServer::getWsjtxServer()->do_halt_tx(id_, false);
 }
@@ -466,7 +468,6 @@ void WsjtxFrame::getAllTxtEnd()
 }
 decodeMessage *WsjtxFrame::scrapeAllTxt()
 {
-    trace("WsjtxFrame::scrapeAllTxt()");
     decodeMessage *last = nullptr;
     if (alltxt.isOpen())
     {
@@ -487,9 +488,6 @@ decodeMessage *WsjtxFrame::scrapeAllTxt()
 
 // date-time rigfreq txrx mode s/n dt df message
 
-//          bool is_new;
-
-            trace(atline);
             QString id = "WSJTX";
             QTime time;
             qint32 snr;
@@ -503,7 +501,7 @@ decodeMessage *WsjtxFrame::scrapeAllTxt()
             if (sl[2] != "Tx")
                 continue;
 
-            trace("Tx scraped: " + atline);
+            //trace("Tx scraped: " + atline);
             time = QDateTime::fromString(sl[0], "yyMMdd_HHmmss").time();
             //double rigfreq = sl[1].toDouble();
             // sl[2] == Tx
@@ -523,8 +521,8 @@ decodeMessage *WsjtxFrame::scrapeAllTxt()
                                             , delta_frequency, mode
                                             , message, low_confidence, true);
 
-            trace(QString("WsjtxFrame::scrapeAllTxt - time %1 stage %2")
-                  .arg(time.toString("HH:mm:ss")).arg(dc.getMStage()));
+            trace(QString("WsjtxFrame::scrapeAllTxt - time %1 stage %2 %3")
+                  .arg(time.toString("HH:mm:ss")).arg(dc.getMStage(), atline));
 
             currTxStage = dc.mstage;
 
@@ -551,6 +549,9 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     if (ct != cc || cc == nullptr)
         return;
     id_ = id;
+
+    trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
+          .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
 
     decodeMessage *lastTx = nullptr;
     if (transmitting && !currentlyTransmitting)
@@ -619,9 +620,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         trace(QString("WsjtxFrame::update_status last tx stage %1 calling <%2> working <%3>").arg(lastTx->getMStage()).arg(callingCall).arg(workingCall));
     }
 
-
-    trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
-          .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
     QColor fcolour = Qt::black;
     if (transmitting)
         fcolour = Qt::red;
