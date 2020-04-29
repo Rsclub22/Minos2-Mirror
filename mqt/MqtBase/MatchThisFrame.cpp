@@ -30,7 +30,7 @@ void MatchThisFrame::on_ReplaceThisLogList(SharedMatchCollection matchCollection
     if (b == baseName && contest && contest == MinosParameters::getMinosParameters() ->getCurrentContest())
         showThisMatchQSOs( matchCollection );
 }
-void MatchThisFrame::on_matchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
+void MatchThisFrame::on_MatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
 {
     MinosLoggerEvents::sendMatchTreeSelected(ThisMatch, contest, baseName, selected);
 }
@@ -50,7 +50,7 @@ void MatchThisFrame::afterMatchTreeClicked()
         }
     }
 }
-void MatchThisFrame::on_matchTree_doubleClicked(const QModelIndex &index)
+void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
 {
     MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem *>(index.internalPointer());
 

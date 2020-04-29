@@ -64,12 +64,12 @@ void MatchArchiveFrame::afterMatchTreeClicked()
         }
     }
 }
-void MatchArchiveFrame::on_matchTree_doubleClicked(const QModelIndex &/*index*/)
+void MatchArchiveFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &/*index*/)
 {
     MinosLoggerEvents::sendXferPressed(contest, baseName);
 }
 
-void MatchArchiveFrame::on_matchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
+void MatchArchiveFrame::on_MatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
 {
     MinosLoggerEvents::sendMatchTreeSelected(ArchiveMatch, contest, baseName, selected);
 }

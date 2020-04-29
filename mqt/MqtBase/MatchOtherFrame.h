@@ -26,9 +26,9 @@ public:
     }
 private slots:
 
-    virtual void on_matchTreeSelectionChanged(const QItemSelection &, const QItemSelection &) override;
+    virtual void on_MatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &) override;
 
-    virtual void on_matchTree_doubleClicked(const QModelIndex &index) override;
+    virtual void on_MatchTreeFrame_doubleClicked(const QModelIndex &index) override;
 
     virtual void afterMatchTreeClicked() override;
 

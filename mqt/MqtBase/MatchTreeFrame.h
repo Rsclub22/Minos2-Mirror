@@ -120,11 +120,11 @@ protected:
     virtual void showMatchList(SharedMatchCollection /*matchCollection*/ ){}
 
 private slots:
-    virtual void on_matchTreeSelectionChanged(const QItemSelection &, const QItemSelection &){}
+    virtual void on_MatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &){}
 
-    virtual void on_matchTree_doubleClicked(const QModelIndex &){}
+    virtual void on_MatchTreeFrame_doubleClicked(const QModelIndex &){}
 
-    virtual void on_matchTree_clicked(const QModelIndex &);
+    virtual void on_MatchTreeFrame_clicked(const QModelIndex &);
 
     virtual void afterMatchTreeClicked(){}
 
