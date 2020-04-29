@@ -235,7 +235,7 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
 }
 class PointBonusMult
 {
-    int points = 0;
+    int points = -1;
     int bonus = 0;
     int mults = 0;
 public:
@@ -317,12 +317,17 @@ void WsjtxFrame::process_decodes()
                  if (currTxStage == emsRRR && toMyCall && dcFromCall == workingCall)
                  {
                      // this is best, and WSJT-X should automatically respond
+                     // so long as autoseq is sent
                  }
                  else if (toMyCall && (currTxStage == emsCQ || currTxStage == emsRRR))
                  {
                      // look for best candidate of those calling us - don't limit by snr or points
+                     // If they are starting with Tx2, e can miss the loc - and so their score will
+                     // be miniscule (probably 0)
+                     // so start bestpoints at -1...
                      if ( pbv > bestPoints  )
                      {
+                         // which might not be the most profitable
                          trace(QString("WsjtxFrame::process_decodes (lasttx) Candidate %1").arg(messages[i].message));
                          bestOffset = i;
                          bestPoints = pbv;
