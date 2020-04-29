@@ -260,10 +260,17 @@ public:
 
 void WsjtxFrame::process_decodes()
 {
-    int decodeEndSize = messages.size();
     if (autoEnabled)
     {
-        trace(QString("WsjtxFrame::process_decodes Checking decodes start %1 end %2").arg(decodeStartSize).arg(decodeEndSize));
+        int decodeEndSize = messages.size();
+        int minpoints = ui->minPointsSpinner->value();
+        if (!ui->minPointsCheckBox->isChecked())
+            minpoints = 0;
+        int minsnr =  ui->snrSpinner->value();
+        if (!ui->snrCheckBox->isChecked())
+            minsnr = -100;
+        trace(QString("WsjtxFrame::process_decodes Checking decodes start %1 end %2 autoselect %3 minPoints %4 minSnr %5")
+              .arg(decodeStartSize).arg(decodeEndSize).arg(ui->autoSelectButton->isChecked()).arg(minpoints).arg(minsnr));
 
         if (decodeEndSize > decodeStartSize)
         {
@@ -274,12 +281,7 @@ void WsjtxFrame::process_decodes()
             QString bestCs;
             int currSn = -100;
 
-            int minpoints = ui->minPointsSpinner->value();
-            if (!ui->minPointsCheckBox->isChecked())
-                minpoints = 0;
-            int minsnr =  ui->snrSpinner->value();
-            if (!ui->snrCheckBox->isChecked())
-                minsnr = -100;
+            bool autoReplyAllowed = !currentlyTransmitting;
 
             for (int i = decodeStartSize; i < decodeEndSize; i++)
             {
@@ -326,6 +328,8 @@ void WsjtxFrame::process_decodes()
                          bestPoints = pbv;
                          bestCs = dcFromCall;
                          currSn = dc.snr;
+
+                         autoReplyAllowed = true;
                      }
                      else
                      {
@@ -436,11 +440,15 @@ void WsjtxFrame::process_decodes()
             }
 
             emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
-            if (!currentlyTransmitting && ui->autoSelectButton->isChecked() && bestOffset >= 0 )
+            if (autoReplyAllowed && ui->autoSelectButton->isChecked() && bestOffset >= 0 )
             {
                 trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
                 messages[bestOffset].autoresp = true;
                 reply(messages[bestOffset]);
+
+                // we are assuming that autoseq is enabled, call 1st isn't
+                // but we can't enforce either
+                // things may be messy if we are not set this way
             }
         }
     }
