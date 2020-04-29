@@ -47,6 +47,10 @@ private:
     bool currentlyTransmitting = false;
     bool currentlyDecoding = false;
 
+    MessageStage currTxStage = emsNone;
+    QString callingCall;
+    QString workingCall;
+
     WsjtxDecode decoder;
 
     QFile alltxt;
@@ -58,7 +62,7 @@ private:
     
     void saveAllColumnWidthsAndPositions();
     void reloadColumns();
-    void scrapeAllTxt();
+    decodeMessage *scrapeAllTxt();
     void getAllTxtEnd();
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
