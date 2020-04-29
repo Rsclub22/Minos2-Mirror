@@ -307,8 +307,8 @@ void WsjtxFrame::process_decodes()
                 // if we are calling CQ or RR73, and we are toCall, we have a set of candidates for best
                 // work these before lookng for others
 
-                 if (dc.points <= 0)    // e.g. duplicate
-                    continue;
+//                 if (dc.points <= 0)    // we need to look at them allm as we might be working them
+//                    continue;
 
                  PointBonusMult pbv(dc);
                  bool toMyCall = (dc.toCall == decoder.getMyCall());
