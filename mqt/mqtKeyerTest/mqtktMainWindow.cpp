@@ -280,3 +280,20 @@ void mqtktMainWindow::on_closeButton_clicked()
 {
     close();
 }
+
+void mqtktMainWindow::on_toneButton_clicked()
+{
+    // we want to draw the tone. Actually, we'd like to FFT it!
+    int samples = 49000;    // 1 secs worth
+    int tone = 1000;
+
+    int ramptime = 0;
+
+    originalSeries = new QLineSeries();
+    processedSeries = new QLineSeries();
+
+    int16_t *toneptr = new int16_t [ samples * 2 ];
+    int16_t *toneop = new int16_t [ samples * 2 ];
+
+    const double volmult = 32767.0 * 100.0 / 100.0;
+    genTone( toneptr, tone, samples, samples, ramptime, volmult );}
