@@ -423,9 +423,7 @@ void SoundSystemDriver::genTone(int16_t *dest, bool add
              + QString::number( volmult ) + ")" );
    }
 
-   double deltaAngle = 2 * pi / rate;
-
-   double phaseStep = deltaAngle * tone;
+   double phaseStep = (2 * pi * tone) / rate;
    double phase = 0.0;
 
 #define CHUNKSIZE 1024
