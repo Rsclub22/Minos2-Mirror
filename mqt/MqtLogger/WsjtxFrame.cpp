@@ -175,6 +175,9 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 {
     id_ = id;
 
+    if (!bandOK)
+        return;
+
     if (ct->isProtected())
         return;
 
@@ -260,6 +263,9 @@ public:
 
 void WsjtxFrame::process_decodes()
 {
+    if (!bandOK)
+        return;
+
     if (autoEnabled)
     {
         int decodeEndSize = messages.size();
@@ -488,6 +494,10 @@ decodeMessage *WsjtxFrame::scrapeAllTxt()
         {
 
           QString atline = alltxtstr.readLine(255);
+
+          if (!bandOK)
+              continue;
+
           // now we need to parse for transmissions
 // 200425_110345    50.313 Tx FT8      0  0.0 1500 CQ G0GJV IO91
 
@@ -555,12 +565,53 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , QString const& de_call, QString const& de_grid, QString const& dx_grid
                                 , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 {
-    MinosParameters *mp = MinosParameters::getMinosParameters();
-    if (!mp)
+//    MinosParameters *mp = MinosParameters::getMinosParameters();
+//    if (!mp)
+//        return;
+//    BaseContestLog * cc = mp ->getCurrentContest();
+//    if (ct != cc || cc == nullptr)
+//        return;
+
+    // protected contests aren't interesting
+    if (ct->isReadOnly())
         return;
-    BaseContestLog * cc = mp ->getCurrentContest();
-    if (ct != cc || cc == nullptr)
+
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    double df = f;
+    bandOK = blist.findBand(df, bi);
+    if (bandOK)
+    {
+        QString cb = ct->band.getValue().trimmed();
+        BandInfo cbi;
+        bool bandOK = blist.findBand(cb, cbi);
+        if (bandOK)
+        {
+            cb = cbi.uk;
+        }
+        if (cb != bi.uk)
+        {
+            QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
+            ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+        }
+        else
+        {
+            ui->bandErrorLabel->clear();
+        }
+    }
+
+    // if the band is wrong, then we shouldn't be looking at it; certainly not for auto...
+    // it should be going to the contest that IS on the correct band, even if it isn't
+    // the current contest
+
+    // there should NEVER be two simultaneous contest on the same band. Although Ken may test it...
+
+    if (!bandOK)
+    {
+        scrapeAllTxt(); // move to EOF withut doing anything
         return;
+    }
+
     id_ = id;
 
     trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
@@ -674,30 +725,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
     ui->frequency_label_->setText (HtmlFontColour(fcolour) + "QRG: " + Radio::pretty_frequency_MHz_string (f));
 
-    BandList &blist = BandList::getBandList();
-    BandInfo bi;
-    double df = f;
-    bool bandOK = blist.findBand(df, bi);
-    if (bandOK)
-    {
-        QString cb = cc->band.getValue().trimmed();
-        BandInfo cbi;
-        bool bandOK = blist.findBand(cb, cbi);
-        if (bandOK)
-        {
-            cb = cbi.uk;
-        }
-        if (cb != bi.uk)
-        {
-            QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
-            ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
-        }
-        else
-        {
-            ui->bandErrorLabel->clear();
-        }
-    }
-
     ui->dx_label_->setText (dx_call.size () >= 0 ? QString {"DX: %1%2"}.arg (dx_call)
                                                    .arg (dx_grid.size () ? '(' + dx_grid + ')' : QString {}) : QString {});
     ui->rx_df_label_->setText (rx_df >= 0 ? QString {HtmlFontColour(tcolour) + "Rx: %1"}.arg (rx_df) : "");
@@ -725,9 +752,11 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
                                , QString const& message, bool low_confidence
                                , bool off_air)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
+    if (!bandOK)
         return;
+    if (ct->isReadOnly())
+        return;
+
     id_ = id;
 
     decodeMessage dc = decoder.decode(id, eRX, time, snr, delta_time

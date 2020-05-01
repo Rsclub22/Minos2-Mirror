@@ -56,6 +56,8 @@ private:
     QFile alltxt;
     QTextStream alltxtstr;
 
+    bool bandOK = false;
+
     void reply(decodeMessage &dc);
     void restoreSplitters();
     void process_decodes();
