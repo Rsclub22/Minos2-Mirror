@@ -14,6 +14,8 @@
 #include "contacts.h"
 #include "ScreenContact.h"
 #include "MinosTestImport.h"
+#include "rigutils.h"
+#include "BandList.h"
 
 #include "contest.h"
 
@@ -95,6 +97,31 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequ
    }
    return QSharedPointer<BaseContact>();
 }
+long BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
+{
+    //QString txfreq = frequency.getValue().remove('.');
+    long freq = static_cast<long>(convertStrToFreq(txfreq));
+
+    QString cband = band.getValue();
+
+    cb = cband.trimmed();
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    bool bandOK = blist.findBand(cb, bi);
+    if (bandOK)
+    {
+        cb = bi.adif;
+        if (txfreq.isEmpty() || freq < 100)
+        {
+            freq = static_cast<long>(bi.flow);
+        }
+    }
+
+    return freq;
+}
+
+//==========================================================================
+
 void BaseContestLog::clearDirty()
 {
    protectedContest.clearDirty();
@@ -857,24 +884,34 @@ bool DupContact::operator<( const DupContact& rhs ) const
    Callsign * c1 = nullptr;    // search item
    Callsign *c2 = nullptr;    // collection item
 
+   QString b1;
+   QString b2;
+
    if ( dct )
    {
       c1 = &dct->cs;
+      dct->contest->getTxFreqBand(dct->frequency.getValue(), b1);
    }
    else
       if ( sct )
       {
          c1 = &sct->cs;
+         sct->contest->getTxFreqBand(sct->frequency, b1);
       }
    if ( rhs.dct )
    {
       c2 = &rhs.dct->cs;
+      rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
    }
    else
       if ( rhs.sct )
       {
          c2 = &rhs.sct->cs;
+         rhs.sct->contest->getTxFreqBand(rhs.sct->frequency, b2);
       }
+
+   if (*c1 == *c2)
+       return b1 < b2;
 
    return (*c1 < *c2);
 }
@@ -883,26 +920,34 @@ bool DupContact::operator==( const DupContact& rhs ) const
    Callsign * c1 = nullptr;    // search item
    Callsign *c2 = nullptr;    // collection item
 
+   QString b1;
+   QString b2;
+
    if ( dct )
    {
       c1 = &dct->cs;
+      dct->contest->getTxFreqBand(dct->frequency.getValue(), b1);
    }
    else
       if ( sct )
       {
          c1 = &sct->cs;
+         sct->contest->getTxFreqBand(sct->frequency, b1);
       }
    if ( rhs.dct )
    {
       c2 = &rhs.dct->cs;
+      rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
    }
    else
       if ( rhs.sct )
       {
          c2 = &rhs.sct->cs;
+         rhs.sct->contest->getTxFreqBand(rhs.sct->frequency, b2);
       }
 
-   return (*c1 == *c2);
+
+   return (*c1 == *c2 && b1 == b2);
 }
 bool DupContact::operator!=( const DupContact& rhs ) const
 {

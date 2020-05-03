@@ -3,6 +3,7 @@
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
 
+#include "ContestApp.h"
 #include "Calendar.h"
 #include "CalendarList.h"
 #include "BandList.h"
@@ -169,10 +170,17 @@ void ContestDetails::setDetails(  )
    ui->BandComboBox->clear();
    // need to get legal bands from ContestLog
 
+  bool allowHF = false;
+  TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+
   BandList &blist = BandList::getBandList();
+  if (allowHF)
+  {
+    ui->BandComboBox->addItem( tr("All HF") );
+  }
   for (QVector<BandInfo>::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
   {
-     if ((*i).getType() != "HF")
+     if (allowHF || (*i).getType() != "HF")
      {
         ui->BandComboBox->addItem( (*i).uk );
      }

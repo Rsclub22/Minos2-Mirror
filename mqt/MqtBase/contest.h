@@ -93,6 +93,7 @@ class BaseContestLog: public BaseLogList
       {
          return ct_stanzaCount;
       }
+      long getTxFreqBand(QString txf, QString &cb);
 
       // The contest details
 

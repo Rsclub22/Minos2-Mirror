@@ -52,7 +52,8 @@ enum LOGGERPROFILE {
    elpADIFPort,
    elpHelpFile, elpHelpEntryURL,
    elpPDFFile,
-   elpAutoFill
+   elpAutoFill,
+   elpAllowHF
 };
 enum PRELOADPROFILE {eppSession, eppCurrent, eppDefSession};
 
