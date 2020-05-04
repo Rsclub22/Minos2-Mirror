@@ -228,7 +228,7 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
     LoggerContestLog *c = dynamic_cast<LoggerContestLog *>(b);
 
     QString cb;
-    long freq = c->getTxFreqBand(tct->frequency.getValue(), cb);
+    long freq = c->getAdifFreqBand(tct->frequency.getValue(), cb);
 
     // freq sent is only to the tens digit...
     freq = static_cast<long>(freq/10);

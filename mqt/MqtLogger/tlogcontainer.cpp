@@ -758,7 +758,7 @@ void TLogContainer::FileNewActionExecute()
    {
       suggestedfName += QDate::currentDate().toString( "yyyy_MM_dd" );
    }
-   QString band = c->band.getValue();
+   QString band = c->contestBands.getValue();
    if ( band.size() )
    {
       suggestedfName += '_';

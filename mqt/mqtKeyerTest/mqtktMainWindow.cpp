@@ -293,7 +293,7 @@ void mqtktMainWindow::on_toneButton_clicked()
     processedSeries = new QLineSeries();
 
     int16_t *toneptr = new int16_t [ samples * 2 ];
-    int16_t *toneop = new int16_t [ samples * 2 ];
+    //int16_t *toneop = new int16_t [ samples * 2 ];
 
     const double volmult = 32767.0 * 100.0 / 100.0;
     genTone( toneptr, tone, samples, samples, ramptime, volmult );}

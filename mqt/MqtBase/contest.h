@@ -79,6 +79,8 @@ class BaseContestLog: public BaseLogList
       // This is the basis behind all variants - currently we have Logger and Monitor
       // which hold slightly different info, and more importantly handle backing store
       // totally differently
+      QMap<QString, QSharedPointer<int> > districtWorked;
+      QMap<QString, QSharedPointer<int> > countryWorked;
 
    public:
       QString uuid;
@@ -94,6 +96,10 @@ class BaseContestLog: public BaseLogList
          return ct_stanzaCount;
       }
       long getTxFreqBand(QString txf, QString &cb);
+      long getAdifFreqBand(QString txfreq, QString &cb);
+
+
+      void setCurrentBand(QString);
 
       // The contest details
 
@@ -118,7 +124,8 @@ class BaseContestLog: public BaseLogList
       MinosStringItem<QString> power;
       MinosStringItem<QString> currentMode;
 
-      MinosStringItem<QString> band;
+      MinosStringItem<QString> contestBands;
+      MinosStringItem<QString> currentBand;
       MinosItem<bool> otherExchange;
       MinosItem<bool> countryMult;
       MinosItem<bool> nonGCountryMult;
@@ -236,13 +243,6 @@ class BaseContestLog: public BaseLogList
       int NonUKloc_multiplier = 0;
       int UKloc_multiplier = 0;
       
-      int nctry = 0;
-      int ndistrict = 0;
-      int nlocs = 0;
-
-      int nbonus = 0;
-      int bonus = 0;
-
       int multsAsBonuses = 0;
       int bonusYearLoaded = 0;
       QString bonusTypeLoaded;
@@ -250,18 +250,49 @@ class BaseContestLog: public BaseLogList
       void loadBonusList();
       int getSquareBonus(QString sloc) const;
 
-      QSharedPointer<int> districtWorked;
-      QSharedPointer<int> countryWorked;
-      LocList locs;
-
       int getDistrictsWorked( int item )
       {
-         return districtWorked.data()[ item ];
+          int n = 0;
+          foreach(const QSharedPointer<int> nc, districtWorked)
+          {
+              n += nc.data()[item];
+          }
+         return n;
       }
       int getCountriesWorked( int item )
       {
-         return countryWorked.data()[ item ];
+          int n = 0;
+          foreach(const QSharedPointer<int> nc, countryWorked)
+          {
+              n += nc.data()[item];
+          }
+         return n;
       }
+      int getDistrictsWorked( QString band, int item )
+      {
+          if (districtWorked.contains(band))
+          {
+              return districtWorked[band].data()[item];
+          }
+         return 0;
+      }
+      int getCountriesWorked( QString band, int item )
+      {
+          if (countryWorked.contains(band))
+          {
+              return countryWorked[band].data()[item];
+          }
+         return 0;
+      }
+      QMap<QString, LocList > locs;
+
+      QMap<QString, int > nctry;
+      QMap<QString, int > ndistrict;
+      QMap<QString, int > nlocs;
+
+      QMap<QString, int > nbonus;
+      QMap<QString, int>  bonus;
+
       int getValidQSOs();
 
       // stats data
@@ -344,8 +375,22 @@ class BaseContestLog: public BaseLogList
       bool checkTime(const QDateTime &t) const;
 
 
+      void addCountryWorked(QString band, int ctry);
+
+      void addDistrictWorked(QString band, int dist);
+
+      int getNctry() const;
+
+      int getNdistrict() const;
+
+      int getNlocs() const;
+
+      int getNbonus() const;
+
+      int getBonus() const;
+
 protected:
-   unsigned long nextBlock = 1;
+      unsigned long nextBlock = 1;
    int ct_stanzaCount = 0;
    bool suppressProtected = false;
    bool unwriteable = false;

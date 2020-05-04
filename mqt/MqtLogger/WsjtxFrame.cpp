@@ -582,7 +582,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     bandOK = blist.findBand(df, bi);
     if (bandOK)
     {
-        QString cb = ct->band.getValue().trimmed();
+        QString cb = ct->contestBands.getValue().trimmed();
         BandInfo cbi;
         bool bandOK = blist.findBand(cb, cbi);
         if (bandOK)

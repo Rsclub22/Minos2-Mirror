@@ -118,7 +118,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     power = ct->power;
     currentMode = ct->currentMode;
 
-    band = ct->band;
+    contestBands = ct->contestBands;
+    currentBand = ct->currentBand;
     otherExchange = ct->otherExchange;
     countryMult = ct->countryMult;
     nonGCountryMult = ct->nonGCountryMult;
@@ -223,7 +224,8 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->power = power;
     ct->currentMode = currentMode;
 
-    ct->band = band;
+    ct->contestBands = contestBands;
+    ct->currentBand = currentBand;
     ct->otherExchange = otherExchange;
     ct->countryMult = countryMult;
     ct->nonGCountryMult = nonGCountryMult;

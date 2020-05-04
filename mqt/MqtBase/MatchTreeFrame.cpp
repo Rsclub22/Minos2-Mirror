@@ -459,7 +459,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                         //But we have just shut the "other" contest... so we are pointing at nothing
                         //This is where we have an "other" match and we close the "other" contest
                         QString name = contest->name.getValue();
-                        QString band = contest->band.getValue();
+                        QString band = contest->contestBands.getValue();
 
                         QString cell = "[" + band + "] " + name;
                         if (currentModel && baseName.compare("Monitor") != 0)

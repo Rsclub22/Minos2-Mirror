@@ -70,7 +70,8 @@ private:
     MinosStringItem<QString> power;
     MinosStringItem<QString> currentMode;
 
-    MinosStringItem<QString> band;
+    MinosStringItem<QString> contestBands;
+    MinosStringItem<QString> currentBand;
     MinosItem<bool> otherExchange;
     MinosItem<bool> countryMult;
     MinosItem<bool> nonGCountryMult;

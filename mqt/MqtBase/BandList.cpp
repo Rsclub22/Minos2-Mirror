@@ -259,7 +259,7 @@ bool BandList::findBand ( const QString &psfreq, BandInfo &bi )
 }
 
 
-bool BandList::findBand(int freq, BandInfo &bi)
+bool BandList::findBand(long freq, BandInfo &bi)
 {
    for (QVector<BandInfo>::iterator i = bandList.begin(); i != bandList.end(); i++)
    {

@@ -167,15 +167,16 @@ void LocFrame::reInitialiseLocators()
     QString ctLocE = l_add(ctLoc, 3, 0);
     QString ELoc = QString(ctLocE[0]) + ctLocE[2];
 
-    for (int k = 0; k < ct->locs.llist.size(); k++)
+
+    for (int k = 0; k < ct->locs[ct->currentBand.getValue()].llist.size(); k++)
     {
-        QString locStart = ct->locs.itemAt(k) ->loc;
+        QString locStart = ct->locs[ct->currentBand.getValue()].itemAt(k) ->loc;
 
         for (int j = 0; j < 10; j++)
         {
             for (int i = 0; i < 10; i++)
             {
-                LocCount *lc = ct->locs.itemAt(k) ->map( j * 10 + i );
+                LocCount *lc = ct->locs[ct->currentBand.getValue()].itemAt(k) ->map( j * 10 + i );
                 QString disp = QString("%1").arg(j * 10 + i, 2, 10, QChar('0'));
 
                 if ( lc && (lc->UKLocCount || lc->nonUKLocCount))

@@ -307,6 +307,37 @@ void ScreenContact::score()
 
         // now we want to look for mults and bonuses
 
+        QString band;
+        contest->getTxFreqBand(frequency, band);
+
+        if ( districtMult && districtMult->country1)
+        {
+           int n = contest->getDistrictsWorked(band, districtMult->listOffset) + 1;
+           if ( n < districtMult->country1->districtLimit() )
+          if ( contest->districtMult.getValue() )
+          {
+             multCount++;
+          }
+          newDistrict = true;
+       }
+
+        if ( ctryMult)
+        {
+            int n = contest->getCountriesWorked(band, ctryMult->listOffset);
+            if ( n == 1 )
+            {
+                if (!contest->nonGCountryMult.getValue() || !cs.isUK())
+                {
+                   if ( contest->countryMult.getValue() )
+                   {
+                       multCount++;
+                   }
+                   newCtry = true;
+                }
+            }
+        }
+
+/*
         if ( districtMult )
         {
            if ( districtMult->country1 &&
@@ -336,6 +367,7 @@ void ScreenContact::score()
               }
            }
         }
+        */
 
         if ( !( contactFlags & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
         {
@@ -391,7 +423,7 @@ void ScreenContact::score()
 
            LocSquare *ls = nullptr;
 
-           for ( LocSquareIterator i = contest->locs.llist.begin(); i != contest->locs.llist.end(); i++ )
+           for ( LocSquareIterator i = contest->locs[band].llist.begin(); i != contest->locs[band].llist.end(); i++ )
            {
                LocSquare *locsq = ( *i ).wt.data();
                if ( strnicmp ( locsq ->loc, letters, 2 ) == 0 )
@@ -408,8 +440,8 @@ void ScreenContact::score()
               {
                  ls = new LocSquare ( letters );
                  MapWrapper<LocSquare> wls(ls);
-                 if (!contest->locs.llist.contains(wls))
-                     contest->locs.llist.insert ( wls, wls );
+                 if (!contest->locs[band].llist.contains(wls))
+                     contest->locs[band].llist.insert ( wls, wls );
               }
            }
 

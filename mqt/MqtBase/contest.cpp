@@ -19,6 +19,30 @@
 
 #include "contest.h"
 
+void BaseContestLog::addCountryWorked(QString band, int ctry)
+{
+    if (!countryWorked.contains(band))
+    {
+        int nc = MultLists::getMultLists() ->getCtryListSize();
+        countryWorked.insert(band, QSharedPointer<int>( new int[ nc ]));
+        for ( int i = 0; i < nc; i++ )
+           countryWorked[band].data()[ i ] = 0;
+    }
+    countryWorked[band].data()[ ctry ]++;
+}
+
+void BaseContestLog::addDistrictWorked(QString band, int dist)
+{
+    if (!districtWorked.contains(band))
+    {
+        int nc = MultLists::getMultLists() ->getDistListSize();
+        districtWorked.insert(band, QSharedPointer<int>(new int[ nc ]));
+        for (int i = 0; i < nc; i++ )
+           districtWorked[band].data()[ i ] = 0;
+    }
+    districtWorked[band].data()[ dist ]++;
+}
+
 BaseContestLog::BaseContestLog( )
 {
     static int inst = 0;
@@ -45,16 +69,6 @@ BaseContestLog::BaseContestLog( )
   powerWatts.setValue( true );
   MGMContestRules.setValue(false);
   bandPointsMultiplier.setValue(1);
-
-   int nc = MultLists::getMultLists() ->getCtryListSize();
-   countryWorked =QSharedPointer<int>( new int[ nc ]);
-   for ( int i = 0; i < nc; i++ )
-      countryWorked.data()[ i ] = 0;
-
-   nc = MultLists::getMultLists() ->getDistListSize();
-   districtWorked = QSharedPointer<int>(new int[ nc ]);
-   for (int i = 0; i < nc; i++ )
-      districtWorked.data()[ i ] = 0;
 
 }
 BaseContestLog::~BaseContestLog()
@@ -97,12 +111,15 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequ
    }
    return QSharedPointer<BaseContact>();
 }
-long BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
+long BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
 {
-    //QString txfreq = frequency.getValue().remove('.');
+    // get a tx freq, even when we don't have
+    // rig control, and the proper ADIF name of the band
+
+    txfreq = txfreq.remove('.');
     long freq = static_cast<long>(convertStrToFreq(txfreq));
 
-    QString cband = band.getValue();
+    QString cband = contestBands.getValue();
 
     cb = cband.trimmed();
     BandList &blist = BandList::getBandList();
@@ -118,6 +135,51 @@ long BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
     }
 
     return freq;
+}
+long BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
+{
+    // we now want to get the band associated with the current freq
+    // so we can get the correct map value for mults etc
+
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    bool bandOK;
+
+    txfreq = txfreq.remove('.');
+    long freq = static_cast<long>(convertStrToFreq(txfreq));
+
+    if (txfreq.isEmpty() || freq < 100)
+    {
+        QString cband = contestBands.getValue().trimmed();
+        bandOK = blist.findBand(cband, bi);
+        if (bandOK)
+        {
+            cb = bi.uk;
+            freq = static_cast<long>(bi.flow);
+        }
+        else
+        {
+            cb = "XXX";
+        }
+        return freq;
+    }
+
+    bandOK = blist.findBand(freq, bi);
+    if (bandOK)
+    {
+        cb = bi.uk;
+    }
+    else
+    {
+        cb = "XXX";     // a standard value for no known band
+    }
+
+    return freq;
+}
+
+void BaseContestLog::setCurrentBand(QString cb)
+{
+    currentBand.setValue(cb);
 }
 
 //==========================================================================
@@ -137,7 +199,8 @@ void BaseContestLog::clearDirty()
    locatorMandatoryField.clearDirty();
    power.clearDirty();
    currentMode.clearDirty();
-   band.clearDirty();
+   contestBands.clearDirty();
+   currentBand.clearDirty();
    otherExchange.clearDirty();
    countryMult.clearDirty();
    nonGCountryMult.clearDirty();
@@ -177,7 +240,8 @@ void BaseContestLog::setDirty()
    locatorMandatoryField.setDirty();
    power.setDirty();
    currentMode.setDirty();
-   band.setDirty();
+   contestBands.setDirty();
+   currentBand.setDirty();
    otherExchange.setDirty();
    countryMult.setDirty();
    nonGCountryMult.setDirty();
@@ -663,30 +727,20 @@ void BaseContestLog::scanContest( )
 {
    DupSheet.clear();
 
-   locs.llist.clear();
+   locs.clear();
 
    districtWorked.clear();
    countryWorked.clear();
-
-   int nc = MultLists::getMultLists() ->getDistListSize();
-   districtWorked = QSharedPointer<int>(new int[ nc ]);
-   int si = static_cast<int>(sizeof (int));
-   memset( districtWorked.data(), 0, static_cast<size_t>(nc * si) );
-
-   nc = MultLists::getMultLists() ->getCtryListSize();
-   countryWorked = QSharedPointer<int>(new int[ nc ]);
-   memset( countryWorked.data(), 0, static_cast<size_t>(nc * si) );
 
    // set up for the idle loop scan
    // NB we may need to clear e.g. the accumulated score
 
    // we will need to clear the multiplier work counts
 
-
    contestScore = 0;
-   ndistrict = 0;
-   nctry = 0;
-   nlocs = 0;
+   ndistrict.clear();
+   nctry.clear();
+   nlocs.clear();
 
    nextScan = -1;
    unfilledCount = 0;
@@ -1081,7 +1135,10 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
    if ( methodName == "MinosLogContest" )
    {
       mt->getStructArgMemberValue( "name", name );
-      mt->getStructArgMemberValue( "band", band );
+      mt->getStructArgMemberValue( "band", contestBands );
+      mt->getStructArgMemberValue( "currentBand", currentBand );
+      if (currentBand.getValue().isEmpty())
+          currentBand = contestBands;
 
       bool btemp;
       if ( mt->getStructArgMemberValue( "scoreKms", btemp ) )
@@ -1373,6 +1430,55 @@ int BaseContestLog::getSquareBonus(QString sloc) const
         }
     }
     return bonus;
+}
+
+int BaseContestLog::getBonus() const
+{
+    int tot = 0;
+    foreach(int n, bonus)
+    {
+        tot += n;
+    }
+    return tot;
+}
+
+int BaseContestLog::getNbonus() const
+{
+    int tot = 0;
+    foreach(int n, nbonus)
+    {
+        tot += n;
+    }
+    return tot;}
+
+int BaseContestLog::getNlocs() const
+{
+    int tot = 0;
+    foreach(int n, nlocs)
+    {
+        tot += n;
+    }
+    return tot;
+}
+
+int BaseContestLog::getNdistrict() const
+{
+    int tot = 0;
+    foreach(int n, ndistrict)
+    {
+        tot += n;
+    }
+    return tot;
+}
+
+int BaseContestLog::getNctry() const
+{
+    int tot = 0;
+    foreach(int n, nctry)
+    {
+        tot += n;
+    }
+    return tot;
 }
 
 //====================================================================

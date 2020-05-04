@@ -186,7 +186,7 @@ void ContestDetails::setDetails(  )
      }
   }
 
-  QString cb = contest->band.getValue().trimmed();
+  QString cb = contest->contestBands.getValue().trimmed();
 
   BandInfo bi;
    bool bandOK = blist.findBand(cb, bi);
@@ -203,7 +203,7 @@ void ContestDetails::setDetails(  )
    }
    else
    {
-      ui->BandComboBox->setCurrentText(contest->band.getValue());
+      ui->BandComboBox->setCurrentText(contest->contestBands.getValue());
    }
 
    if (!contest->currentMode.getValue().isEmpty())
@@ -853,7 +853,7 @@ QWidget * ContestDetails::getDetails( )
     QWidget *nextD = getNextFocus();
 
     contest->name.setValue( ui->ContestNameEdit->text() );
-    contest->band.setValue( ui->BandComboBox->currentText() );
+    contest->contestBands.setValue( ui->BandComboBox->currentText() );
     contest->entSect.setValue( ui->SectionComboBox->currentText() );
     contest->sectionList.setValue( sectionList );
 

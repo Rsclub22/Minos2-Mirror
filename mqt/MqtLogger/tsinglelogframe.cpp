@@ -882,7 +882,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
 {
     if ( contest )
     {
-        QString cb = contest->band.getValue().trimmed();
+        QString cb = contest->contestBands.getValue().trimmed();
         BandList &blist = BandList::getBandList();
         BandInfo bi;
         bool bandOK = blist.findBand(cb, bi);
@@ -932,7 +932,7 @@ void TSingleLogFrame::PublishTimerTimer(  )
          // name filename(?)
          // value stanzaCount
           QString name = contest->name.getValue();
-          QString band = contest->band.getValue();
+          QString band = contest->contestBands.getValue();
 
           QString cell = QString::number( stanzaCount ) + ";[" + band + "] " + name;
 

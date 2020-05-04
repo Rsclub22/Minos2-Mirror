@@ -194,7 +194,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
     bool qsoOK = true;
     {
         LoggerContestLog test;
-        test.band = c->band;
+        test.contestBands = c->contestBands;
         test.DTGStart = c->DTGStart;
         test.DTGEnd = c->DTGEnd;
 
@@ -219,7 +219,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
                     bool bandOK = false;
                     QString sfreq = freq.trimmed();
 
-                    ok = blist.findBand(test.band.getValue(), bi);
+                    ok = blist.findBand(test.contestBands.getValue(), bi);
 
                     if (ok)
                     {
