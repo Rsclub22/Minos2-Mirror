@@ -583,20 +583,28 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     if (bandOK)
     {
         QString cb = ct->contestBands.getValue().trimmed();
-        BandInfo cbi;
-        bool bandOK = blist.findBand(cb, cbi);
-        if (bandOK)
+        if (cb == allHF)
         {
-            cb = cbi.uk;
-        }
-        if (cb != bi.uk)
-        {
-            QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
-            ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+            cb = bi.uk;
+            ct->setCurrentBand(cb);
         }
         else
         {
-            ui->bandErrorLabel->clear();
+            BandInfo cbi;
+            bool cbandOK = blist.findBand(cb, cbi);
+            if (cbandOK)
+            {
+                cb = cbi.uk;
+            }
+            if (cb != bi.uk)
+            {
+                QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
+                ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+            }
+            else
+            {
+                ui->bandErrorLabel->clear();
+            }
         }
     }
 
