@@ -36,6 +36,7 @@
 #include "MatchThread.h"
 #include "n1mmbroadcastconfig.h"
 #include "defdirsdlg.h"
+#include "BandList.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -302,7 +303,6 @@ void TLogContainer::changeEvent( QEvent* e )
         }
         ui->retranslateUi(this);
         setWindowTitle(tr("Minos Contest Logger"));
-
     }
     QMainWindow::changeEvent(e);
 }

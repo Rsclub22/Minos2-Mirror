@@ -882,19 +882,28 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
 {
     if ( contest )
     {
+        QColor bic = Qt::black;
         QString cb = contest->contestBands.getValue().trimmed();
-        BandList &blist = BandList::getBandList();
-        BandInfo bi;
-        bool bandOK = blist.findBand(cb, bi);
-        if (bandOK)
+        if (cb != allHF)
         {
-            cb = bi.uk;
+            BandList &blist = BandList::getBandList();
+            BandInfo bi;
+            bool bandOK = blist.findBand(cb, bi);
+            if (bandOK)
+            {
+                cb = bi.uk;
+                bic = bi.bandColour;
+            }
+        }
+        else
+        {
+            cb = tr("All HF");
         }
 
         //we want to put a line across, and colour the bands - need a map of band->colour
         // ideally we want it configurable...
 
-        CurrentBandLabel->setText( HtmlFontColour(bi.bandColour) + "<b><center><nobr><p><big><h1>" + cb);
+        CurrentBandLabel->setText( HtmlFontColour(bic) + "<b><center><nobr><p><big><h1>" + cb);
 
         if ( contest->isReadOnly() )
         {

@@ -23,6 +23,7 @@
 #include "BandList.h"
 #include "cutils.h"
 //---------------------------------------------------------------------------
+const QString allHF{"ALLHF"}; // not to be translated
 
 void BandInfo::setType ( const QString &t )
 {

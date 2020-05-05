@@ -24,6 +24,7 @@
 
 #include "base_pch.h"
 //---------------------------------------------------------------------------
+extern const QString allHF;
 
 class BandDetail;
 

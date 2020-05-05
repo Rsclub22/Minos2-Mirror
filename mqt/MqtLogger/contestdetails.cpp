@@ -170,31 +170,36 @@ void ContestDetails::setDetails(  )
    ui->BandComboBox->clear();
    // need to get legal bands from ContestLog
 
-  bool allowHF = false;
-  TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+   bool allowHF = false;
+   TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
 
-  BandList &blist = BandList::getBandList();
-  if (allowHF)
-  {
-    ui->BandComboBox->addItem( tr("All HF") );
-  }
-  for (QVector<BandInfo>::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
-  {
-     if (allowHF || (*i).getType() != "HF")
-     {
-        ui->BandComboBox->addItem( (*i).uk );
-     }
-  }
-
-  QString cb = contest->contestBands.getValue().trimmed();
-
-  BandInfo bi;
-   bool bandOK = blist.findBand(cb, bi);
-   if (bandOK)
+   BandList &blist = BandList::getBandList();
+   if (allowHF)
    {
-      cb = bi.uk;
+       ui->BandComboBox->addItem( tr("All HF") );
+   }
+   for (QVector<BandInfo>::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
+   {
+       if (allowHF || (*i).getType() != "HF")
+       {
+           ui->BandComboBox->addItem( (*i).uk );
+       }
    }
 
+   QString cb = contest->contestBands.getValue().trimmed();
+   if (cb == allHF)
+   {
+       cb = tr("All HF");
+   }
+   else
+   {
+       BandInfo bi;
+       bool bandOK = blist.findBand(cb, bi);
+       if (bandOK)
+       {
+           cb = bi.uk;
+       }
+   }
    int b = ui->BandComboBox->findText( cb );        // contest
 
    if ( b >= 0 )
@@ -853,7 +858,12 @@ QWidget * ContestDetails::getDetails( )
     QWidget *nextD = getNextFocus();
 
     contest->name.setValue( ui->ContestNameEdit->text() );
-    contest->contestBands.setValue( ui->BandComboBox->currentText() );
+    QString cb = ui->BandComboBox->currentText();
+    if (cb == tr("All HF"))
+    {
+        cb = allHF;
+    }
+    contest->contestBands.setValue( cb );
     contest->entSect.setValue( ui->SectionComboBox->currentText() );
     contest->sectionList.setValue( sectionList );
 
