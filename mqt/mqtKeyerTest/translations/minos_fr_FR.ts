@@ -19,7 +19,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mqtktMainWindow.ui" line="53"/>
+        <location filename="../mqtktMainWindow.ui" line="40"/>
+        <source>Tone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mqtktMainWindow.ui" line="60"/>
         <source>Close</source>
         <translation></translation>
     </message>
