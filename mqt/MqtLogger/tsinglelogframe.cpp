@@ -883,21 +883,19 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
     if ( contest )
     {
         QColor bic = Qt::black;
-        QString cb = contest->contestBands.getValue().trimmed();
-        if (cb != allHF)
+        QString cb = contest->currentBand.getValue().trimmed();
+
+        BandList &blist = BandList::getBandList();
+        BandInfo bi;
+        bool bandOK = blist.findBand(cb, bi);
+        if (bandOK)
         {
-            BandList &blist = BandList::getBandList();
-            BandInfo bi;
-            bool bandOK = blist.findBand(cb, bi);
-            if (bandOK)
-            {
-                cb = bi.uk;
-                bic = bi.bandColour;
-            }
+            cb = bi.uk;
+            bic = bi.bandColour;
         }
         else
         {
-            cb = tr("All HF");
+            bic = Qt::red;
         }
 
         //we want to put a line across, and colour the bands - need a map of band->colour
