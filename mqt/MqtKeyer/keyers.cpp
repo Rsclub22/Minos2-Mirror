@@ -21,16 +21,16 @@
 // match against enum LineModes
 static const char * lineModeStrings[] = {
     QT_TRANSLATE_NOOP("VoiceKeyer", "None"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Tuning Tones 1/2"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 1/2 - Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 1/2 - No Pip"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Tuning Tones 1/2"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Record 1/2"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 5"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 6"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 7"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 8"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 9"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 10"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 3/4 - Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 3/4 - No Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Record 3/4"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 5/6 - Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 5/6 - No Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Record 5/6"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 11"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 12"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "MGM - Disable keyer"),
@@ -660,11 +660,15 @@ bool voiceKeyer::pttChanged( int state )
             // no current action...
              switch (linesMode)
              {
-             case elmPlayPip:
+             case elmPlay12Pip:
+             case elmPlay34Pip:
+             case elmPlay56Pip:
                  setPipEnabled(true);
                  break;
 
-             case elmPlayNoPip:
+             case elmPlay12NoPip:
+             case elmPlay34NoPip:
+             case elmPlay56NoPip:
                  setPipEnabled(false);
                  break;
 
@@ -697,17 +701,23 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
 
        switch (linesMode)
        {
-       case elmRecord:
+       case elm12Record:
+       case elm34Record:
+       case elm56Record:
            if (!state && !ca)
                 (new BoxRecordAction()) ->LxChanged( sbc, state );
            return true;
 
-       case elmPlayPip:
+       case elmPlay12Pip:
+       case elmPlay34Pip:
+       case elmPlay56Pip:
            if (!state && !ca)
                setPipEnabled(true);
            break;
 
-       case elmPlayNoPip:
+       case elmPlay12NoPip:
+       case elmPlay34NoPip:
+       case elmPlay56NoPip:
            if (!state && !ca)
                setPipEnabled(false);
            break;
@@ -758,11 +768,6 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
 
        default:
        case elmNone:
-       case elm6:
-       case elm7:
-       case elm8:
-       case elm9:
-       case elm10:
        case elm11:
        case elm12:
        case elmMGM:
@@ -771,7 +776,54 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
        }
       if ( !state && !recPending && !boxRecPending )
       {
-         QString cqWavFile = (sbc == eL1)?"CQF1.WAV":"CQF2.WAV";
+         QString cqWavFile;
+         switch(sbc)
+         {
+            case eL1:
+             {
+                 switch(linesMode)
+                 {
+                 case elmPlay12Pip:
+                 case elmPlay12NoPip:
+                     cqWavFile = "CQF1.WAV";
+                     break;
+
+                 case elmPlay34Pip:
+                 case elmPlay34NoPip:
+                     cqWavFile = "CQF3.WAV";
+                     break;
+                 case elmPlay56Pip:
+                 case elmPlay56NoPip:
+                     cqWavFile = "CQF5.WAV";
+                     break;
+                 default:
+                     break;
+                 }
+             }
+         case eL2:
+          {
+              switch(linesMode)
+              {
+              case elmPlay12Pip:
+              case elmPlay12NoPip:
+                  cqWavFile = "CQF2.WAV";
+                  break;
+
+              case elmPlay34Pip:
+              case elmPlay34NoPip:
+                  cqWavFile = "CQF4.WAV";
+                  break;
+              case elmPlay56Pip:
+              case elmPlay56NoPip:
+                  cqWavFile = "CQF6.WAV";
+                  break;
+              default:
+                  break;
+              }
+          }
+         default:
+             break;
+         }
          if ( !ca || !ca->playingFile( cqWavFile ) )
          {
             KeyerAction::currentAction.clear_after( ca );
@@ -1767,14 +1819,41 @@ void BoxRecordAction::LxChanged( int line, bool state )
    }
    if ( line == eL1 && state == true )
    {
-      new RecordAction( "CQF1.WAV" );
+       switch(currentKeyer->linesMode)
+       {
+       case elm12Record:
+           new RecordAction( "CQF1.WAV" );
+           break;
+       case elm34Record:
+           new RecordAction( "CQF3.WAV" );
+           break;
+       case elm56Record:
+           new RecordAction( "CQF5.WAV" );
+           break;
+        default:
+           break;
+       }
+
       currentKeyer->boxRecPending = false;
       deleteAtTick = true;
    }
    else
       if ( line == eL2 && state == true )
       {
-         new RecordAction( "CQF2.WAV" );
+          switch(currentKeyer->linesMode)
+          {
+          case elm12Record:
+              new RecordAction( "CQF2.WAV" );
+              break;
+          case elm34Record:
+              new RecordAction( "CQF4.WAV" );
+              break;
+          case elm56Record:
+              new RecordAction( "CQF6.WAV" );
+              break;
+           default:
+              break;
+          }
          currentKeyer->boxRecPending = false;
          deleteAtTick = true;
       }
