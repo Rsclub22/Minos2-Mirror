@@ -444,6 +444,10 @@ QString ContestContact::getADIFLine()
     QString freq = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
     outstr += makeADIFField("FREQ", freq);
 
+    outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.fullCall.getValue());
+    outstr += makeADIFField("OPERATOR", clp->currentOp1.getValue());
+    outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.loc.getValue());
+
     QString smode = mode.getValue().toUpper();
     QString smgmSubmode = mgmSubmode.getValue();
     if (  smode.compare( hamlibData::CW ) == 0 )
