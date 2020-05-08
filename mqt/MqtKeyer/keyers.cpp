@@ -704,8 +704,12 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
        case elm12Record:
        case elm34Record:
        case elm56Record:
-           if (!state && !ca)
-                (new BoxRecordAction()) ->LxChanged( sbc, state );
+           if (state && !ca)
+           {
+               // trigger record on push, not release
+               BoxRecordAction *bra = new BoxRecordAction();
+               bra->LxChanged( sbc, state );
+           }
            return true;
 
        case elmPlay12Pip:
@@ -1865,7 +1869,8 @@ void BoxRecordAction::LxChanged( int line, bool state )
           case elmPlay56Pip:
           case elmPlay56NoPip:
               new RecordAction( "CQF6.WAV" );
-              break;           default:
+              break;
+          default:
               break;
           }
          currentKeyer->boxRecPending = false;
