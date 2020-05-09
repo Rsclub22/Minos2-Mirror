@@ -119,14 +119,14 @@ void WsjtxFrame::on_halt_tx_button__clicked()
 {
     trace("do_halt_tx");
     ui->replyto_label->setText("");
-    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, true);
+    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, false);
 }
 
 void WsjtxFrame::on_auto_off_button__clicked()
 {
     trace("disable tx clicked");
     ui->replyto_label->setText("");
-    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, false);
+    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, true);
 }
 void WsjtxFrame::on_clearDecodesButton_clicked()
 {
@@ -259,6 +259,13 @@ public:
 
         return false;
     }
+    bool operator==(PointBonusMult &rhs)
+    {
+        if ((mults == rhs.mults) && (points + bonus == rhs.points + rhs.bonus))
+            return true;
+
+        return false;
+    }
 };
 
 void WsjtxFrame::process_decodes()
@@ -320,7 +327,7 @@ void WsjtxFrame::process_decodes()
                  bool toMyCall = (dc.toCall == decoder.getMyCall());
                  QString dcFromCall = dc.fromCall.fullCall.getValue();
 
-                 if (currTxStage == emsRRR && toMyCall && dcFromCall == workingCall)
+                 if (toMyCall && currTxStage == emsRRR && dcFromCall == workingCall)
                  {
                      // this is best, and WSJT-X should automatically respond
                      // so long as autoseq is sent
@@ -344,14 +351,15 @@ void WsjtxFrame::process_decodes()
                      }
                      else
                      {
-                         if (bestOffset >= 0
-                             && dcFromCall == bestCs
-                             && dc.snr > currSn
-                             )
+                         if (pbv == bestPoints && dc.snr > currSn)
                          {
-                             trace(QString("WsjtxFrame::process_decodes (lasttx) Candidate - CS already seen %1").arg(messages[i].message));
+                             trace(QString("WsjtxFrame::process_decodes (lasttx) Candidate %1 (better SNR)").arg(messages[i].message));
                              bestOffset = i;
+                             bestPoints = pbv;
+                             bestCs = dcFromCall;
                              currSn = dc.snr;
+
+                             autoReplyAllowed = true;
                          }
                          else
                          {
@@ -368,9 +376,9 @@ void WsjtxFrame::process_decodes()
                         // If they are calling CQ and we are "grid" we can carry on calling them
                         // don't kill tx unless there is a better option - using the general best search
                      }
-                     if (currTxStage > emsGrid)
+                     else if (currTxStage >= emsGrid)
                      {
-                         // If our stage is later than grid, (their stage is irrelevant)
+                         // If our stage is grid or later, (their stage is irrelevant)
                          // someone else appears to be in QSO with them - stop transmission
                          on_halt_tx_button__clicked();
                          continue;  // this won't be an option for "best"!
@@ -417,14 +425,14 @@ void WsjtxFrame::process_decodes()
                         }
                         else
                         {
-                            if (bestOffset >= 0
-                                && dcFromCall == bestCs
-                                && dc.snr > currSn
-                                )
+                            if (pbv == bestPoints && dc.snr > currSn)
                             {
-                                trace(QString("WsjtxFrame::process_decodes Candidate - CS already seen %1").arg(messages[i].message));
+                                trace(QString("WsjtxFrame::process_decodes Candidate %1 (better SNR)").arg(messages[i].message));
                                 bestOffset = i;
+                                bestPoints = pbv;
+                                bestCs = dcFromCall;
                                 currSn = dc.snr;
+
                             }
                             else
                             {
@@ -883,7 +891,7 @@ void WsjtxFrame::on_testButton_clicked()
 //        , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 
 
-            update_status ("test", 12345, "FT8", "","0", "FT8", false, false, true, 0, 0
+            update_status ("test", 14070060, "FT8", "","0", "FT8", false, false, true, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0);
 
@@ -899,12 +907,15 @@ void WsjtxFrame::on_testButton_clicked()
 //19:30:14.690 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G8KWX IO91 stage Grid points 50 snr -15
 //19:30:14.733 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G3ZPB IO91 stage Grid points 50 snr -15
             QTime now = QTime::currentTime();
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
-            decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
-            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
-            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB RR73", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
+//            decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
+//            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
+//            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB RR73", false, true);
+            decode_added(true, "test", now, -19, 0, 0, "FT8", "<GB1945PJ> SP9DEM JO90", false, true);
+            decode_added(true, "test", now, -19, 0, 0, "FT8", "<...> RW3SK KO94", false, true);
 
-            update_status ("test", 12345, "FT8", "","0", "FT8", false, false, false, 0, 0
+
+            update_status ("test", 14070060, "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0);
 

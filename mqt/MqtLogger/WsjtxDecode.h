@@ -75,6 +75,7 @@ private:
     Callsign myCall;
     Locator myGrid;
 
+    QString stripBrackets(QString cs);
 };
 
 #endif // WSJTXDECODE_H

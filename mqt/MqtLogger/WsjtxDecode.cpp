@@ -51,7 +51,7 @@ static Locator nullLoc;
 
 static void addCall(const Callsign &c, const Locator &l)
 {
-    if (c.valRes == CS_OK && (l.valRes == LOC_OK || l.valRes == LOC_PARTIAL) )
+    if (c.fullCall.getValue() != "..." && c.valRes == CS_OK && (l.valRes == LOC_OK || l.valRes == LOC_PARTIAL) )
     {
         GridCallMap[c.realCall] = l;
     }
@@ -176,6 +176,12 @@ static bool isNumeric ( const QString &s )
     }
     return true;
 }
+QString WsjtxDecode::stripBrackets(QString cs)
+{
+    cs.replace("<", "");
+    cs.replace(">", "");
+    return cs;
+}
 decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32 snr, float delta_time, quint32 delta_frequency,
                                   const QString &mode, const QString &message_text, bool low_confidence, bool off_air)
 {
@@ -228,7 +234,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // NB we can get bad decodes
         if (callIndex + 1 < sl.count())
         {
-            dc.fromCall = Callsign(sl[callIndex]);
+            dc.fromCall = Callsign(stripBrackets(sl[callIndex]));
             dc.fromCall.validate();
             dc.fromGrid = Locator(sl[callIndex + 1]);
             dc.fromGrid.validate();
@@ -241,8 +247,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // G0XYZ K1ABC RR73
         // PA9XYZ G4ABC/P RR73
         dc.mstage = emsRRR;
-        dc.toCall = Callsign(sl[0]);
-        dc.fromCall = Callsign(sl[1]);
+        dc.toCall = Callsign(stripBrackets(sl[0]));
+        dc.fromCall = Callsign(stripBrackets(sl[1]));
     }
     else if (sl.count() == 3 && sl[2] == "73")
     {
@@ -250,8 +256,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // K1ABC G0XYZ 73
         // G4ABC/P PA9XYZ 73
         dc.mstage = ems73;
-        dc.toCall = Callsign(sl[0]);
-        dc.fromCall = Callsign(sl[1]);
+        dc.toCall = Callsign(stripBrackets(sl[0]));
+        dc.fromCall = Callsign(stripBrackets(sl[1]));
     }
     else if (sl.count() == 3 && sl[2].indexOf('R') == 0)
     {
@@ -259,8 +265,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // K1ABC G0XYZ R-22
         // G4ABC/P R 570007 JO22DB
         dc.mstage = emsRplusDb;
-        dc.toCall = Callsign(sl[0]);
-        dc.fromCall = Callsign(sl[1]);
+        dc.toCall = Callsign(stripBrackets(sl[0]));
+        dc.fromCall = Callsign(stripBrackets(sl[1]));
     }
     else if (sl.count() == 4 && sl[1] == "R")
     {
@@ -269,7 +275,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // G4ABC/P R 570007 JO22DB
         dc.mstage = emsRplusDb;
         dc.opMode = EU_VHF;
-        dc.toCall = Callsign(sl[0]);
+        dc.toCall = Callsign(stripBrackets(sl[0]));
         dc.fromGrid = Locator(sl[3]);
 
         //how do we get fromCall? From previous grid, db calls?
@@ -285,8 +291,12 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         //G0XYZ K1ABC –19
         //PA9XYZ 590003 IO91NP
 
-        dc.toCall = Callsign(sl[0]);
+        dc.toCall = Callsign(stripBrackets(sl[0]));
         dc.toCall.validate();
+        if (dc.toCall.fullCall.getValue() == "...")
+        {
+            dc.toCall.valRes = CS_OK;
+        }
 
         if (sl.count() != 3 || dc.toCall.valRes != CS_OK)
         {
@@ -294,11 +304,16 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         }
         else
         {
-            Callsign c(sl[1]);
+            Callsign c(stripBrackets(sl[1]));
             Locator l1(sl[2]);
 
             c.validate();
             l1.validate();
+
+            if (c.fullCall.getValue() == "...")
+            {
+                c.valRes = CS_OK;
+            }
 
             if (c.valRes == CS_OK && (l1.valRes == LOC_OK || l1.valRes == LOC_PARTIAL))
             {
@@ -307,9 +322,9 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
                 // G4ABC/P PA9XYZ JO22
                 dc.mstage = emsGrid;
                 dc.fromCall = c;
-                dc.fromCall.validate();
+                //dc.fromCall.validate();
                 dc.fromGrid = l1;
-                dc.fromGrid.validate();
+                //dc.fromGrid.validate();
                 addCall(dc.fromCall, dc.fromGrid);
             }
             else if (isNumeric(sl[1])

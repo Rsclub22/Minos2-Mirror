@@ -406,8 +406,11 @@ void ScreenContact::score()
                  break;
 
               case PPQSO:
-                 break;
-
+               if ( contactScore > 0 )
+                  contactScore = 1;
+               else
+                  contactScore = 0;
+               break;
            }
         }
 
