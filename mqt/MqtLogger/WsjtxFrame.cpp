@@ -573,7 +573,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 //        return;
 
     // protected contests aren't interesting
-    if (ct->isReadOnly())
+    if (!ct || ct->isReadOnly())
         return;
 
     BandList &blist = BandList::getBandList();
@@ -762,7 +762,7 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
 {
     if (!bandOK)
         return;
-    if (ct->isReadOnly())
+    if (!ct || ct->isReadOnly())
         return;
 
     id_ = id;
