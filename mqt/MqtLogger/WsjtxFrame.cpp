@@ -561,6 +561,7 @@ decodeMessage *WsjtxFrame::scrapeAllTxt()
             last = messages.end() - 1;
 
             decodes_model_->add_decode ();
+            ui->decodes_table_view_->scrollToBottom (); // which normally happens in process_decodes
 
             // process_decodes(); - not wanted, we've just started transmitting; previous process_decodes should have stopped us!
         }
