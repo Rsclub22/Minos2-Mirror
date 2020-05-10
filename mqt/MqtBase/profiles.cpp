@@ -154,6 +154,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpStationQTH1, "StationQTH1", "", QT_TR_NOOP("Station QTH Line 1"), QT_TR_NOOP("Address line 1/2 of station"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpStationQTH2, "StationQTH2", "", QT_TR_NOOP("Station QTH Line 2"), QT_TR_NOOP("Address line 2/2 of station"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpASL, "ASL", 0, QT_TR_NOOP("QTH Height ASL (metres)"), QT_TR_NOOP("QTH height ASL (metres)"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpITUZone, "ITU Zone", 27, QT_TR_NOOP("ITU Zone"), QT_TR_NOOP("ITU Zone"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpCQZone, "CQ Zone", 14, QT_TR_NOOP("CQ Zone"), QT_TR_NOOP("CQ Zone"), false ) ) );
         break;
     case epSTATIONPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espPower, "Power", 0, QT_TR_NOOP("Transmitter Power"), QT_TR_NOOP("Transmit Power (Watts)"), false ) ) );

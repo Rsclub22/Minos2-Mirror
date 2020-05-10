@@ -417,6 +417,9 @@ QString ContestContact::getADIFLine()
     BaseContestLog * clp = contest;
     if ( !bool( clp ) )
         return outstr;
+    LoggerContestLog *lcl = dynamic_cast<LoggerContestLog *>(clp);
+    if (!bool(lcl))
+        return  outstr;
 
     QString exp_buff;
 
@@ -447,6 +450,11 @@ QString ContestContact::getADIFLine()
     outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.fullCall.getValue());
     outstr += makeADIFField("OPERATOR", clp->currentOp1.getValue());
     outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.loc.getValue());
+    int zone = 0;
+    lcl->QTHBundle.getIntProfile(eqpITUZone, zone);
+    outstr+= makeADIFField("ITUZ", zone);
+    lcl->QTHBundle.getIntProfile(eqpCQZone, zone);
+    outstr+= makeADIFField("CQZ", zone);
 
     QString smode = mode.getValue().toUpper();
     QString smgmSubmode = mgmSubmode.getValue();
