@@ -890,6 +890,9 @@ void RigSetupForm::useRigCtldSelected(bool /*selected*/)
     if(radioData->rigCtldEnable != checked)
     {
         radioData->rigCtldEnable = checked;
+        setStartMinosRigctldCheckbox(true);
+        radioData->startMinosRigCtld = true;
+
         rigCtldItemsVisible(checked);
     }
 
@@ -917,6 +920,8 @@ void RigSetupForm::onStartMinosRigCtldChkBox(bool /*selected*/)
     bool checked = ui->useRigCtldChkBox->isChecked();
     if(radioData->startMinosRigCtld != checked)
     {
+        radioData->startMinosRigCtld = checked;
+        setStartMinosRigctldCheckbox(checked);
         radioData->startMinosRigCtld = checked;
         rigCtldItemsVisible(checked);
     }
