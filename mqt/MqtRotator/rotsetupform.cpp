@@ -1022,4 +1022,3 @@ void rotSetupForm::setForceRTS(int n)
     ui->forceRtsBox->setCurrentIndex(n);
 }
 
-

@@ -588,8 +588,6 @@ void RigSetupForm::setForceRTS(int n)
 
 
 
-
-
 /***************************** Network Address *************************/
 
 void RigSetupForm::networkAddressSelected()

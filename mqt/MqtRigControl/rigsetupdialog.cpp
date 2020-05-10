@@ -367,10 +367,24 @@ void RigSetupDialog::addRadio()
     radioTab[tabNum]->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 
     loadAvailComportsToTab(tabNum);
+
+    // initial settings
     radioTab[tabNum]->setDataSpeed("9600");
-    radioTab[tabNum]->setDataBits("1");
-    radioTab[tabNum]->setStopBits("0");
+    radioTab[tabNum]->comSpeedSelected();
+
+    radioTab[tabNum]->setDataBits("8");
+    radioTab[tabNum]->comDataBitsSelected();
+
+    radioTab[tabNum]->setStopBits("1");
+    radioTab[tabNum]->comStopBitsSelected();
+
     radioTab[tabNum]->setParityBits(0);
+    radioTab[tabNum]->comParitySelected();
+
+
+    radioTab[tabNum]->setForceRTS(1);
+    radioTab[tabNum]->on_forceRTSSelected();
+
 
 
     ui->radioTab->setCurrentIndex(tabNum);

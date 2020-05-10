@@ -148,6 +148,7 @@ public:
     void setRigctldCheckBoxVisible(bool visible);
     void setForceDTR(int n);
     void setForceRTS(int n);
+
     void setForceRTSDisabled(bool state);
     void setSupport50MHzChkBox(bool checked);
     void setSupport70MHzChkBox(bool checked);
@@ -161,6 +162,14 @@ public:
     void setAdvancedCommsFlag(bool state);
     void setAdvancedCommsChkBoxVisible(bool visible);
     void setStartMinosRigctldCheckbox(bool checked);
+
+public slots:
+    void comSpeedSelected();
+    void comDataBitsSelected();
+    void comStopBitsSelected();
+    void comParitySelected();
+    void on_forceRTSSelected();
+
 signals:
     void transVertTabAdded(int);
 
@@ -170,10 +179,7 @@ private slots:
 
     void radioModelSelected();
     void comportSelected();
-    void comSpeedSelected();
-    void comDataBitsSelected();
-    void comStopBitsSelected();
-    void comParitySelected();
+
     void comHandShakeSelected();
     void networkAddressSelected();
     void networkPortSelected();
@@ -197,7 +203,7 @@ private slots:
     void rigCtldNetworkAddressSelected();
     void rigCtldNetworkPortSelected();
     void on_forceDTRSelected();
-    void on_forceRTSSelected();
+
 
     void onSup50MhzChkBoxClicked(bool state);
     void onSup70MhzChkBoxClicked(bool state);
