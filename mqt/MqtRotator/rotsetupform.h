@@ -125,17 +125,30 @@ public:
     void setAdvancedCommsChkBoxVisible(bool visible);
     void setForceRTS(int n);
     void setForceRTSDisabled(bool state);
-    void on_forceRTSSelected();
-    void setForceDTR(int n);
-    void on_forceDTRSelected();
-private slots:
 
-    void rotatorModelSelected();
-    void comportSelected();
+    void setForceDTR(int n);
+
+
+public slots:
+
     void comDataSpeedSelected();
     void comDataBitsSelected();
     void comStopBitsSelected();
     void comParityBitsSelected();
+    void on_forceRTSSelected();
+    void on_forceDTRSelected();
+
+
+
+
+
+
+
+
+private slots:
+
+    void rotatorModelSelected();
+    void comportSelected();
     void comHandshakeSelected();
     void comNetAddressSelected();
     void comNetPortNumSelected();
@@ -172,6 +185,7 @@ private:
     void fillStopBitsInfo();
     void fillParityBitsInfo();
     void fillHandShakeInfo();
+    void fillForceLinesInfo();
 
 
 

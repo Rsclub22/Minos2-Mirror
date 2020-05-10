@@ -54,6 +54,7 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
     fillStopBitsInfo();
     fillParityBitsInfo();
     fillHandShakeInfo();
+    fillForceLinesInfo();
 
 
     networkDataEntryVisible(false);
@@ -178,9 +179,9 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
             else if (antennaData->portType == RotCapConstants::PortType::serial)
             {
                 serialDataEntryVisible(true);
-                advancedSerialDataEntryVisible(antennaData->advancedCommsFlag);
+                advancedSerialDataEntryVisible(false);
                 setAdvancedCommsChkBoxVisible(true);
-                checkAdvancedCommsCheckBox(antennaData->advancedCommsFlag);
+                checkAdvancedCommsCheckBox(false);
                 networkDataEntryVisible(false);
             }
             else if (antennaData->portType == RotCapConstants::PortType::none)
@@ -188,7 +189,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                 serialDataEntryVisible(false);
                 advancedSerialDataEntryVisible(false);
                 setAdvancedCommsChkBoxVisible(false);
-                checkAdvancedCommsCheckBox(antennaData->advancedCommsFlag);
+                checkAdvancedCommsCheckBox(false);
                 networkDataEntryVisible(false);
             }
 
@@ -976,6 +977,14 @@ void rotSetupForm::fillHandShakeInfo()
     ui->comHandShakeBox->addItems(serialCommonData::handshakeStr);
 
 
+}
+
+void rotSetupForm::fillForceLinesInfo()
+{
+    ui->forceDtrBox->clear();
+    ui->forceDtrBox->addItems(serialCommonData::forceLinesStr);
+    ui->forceRtsBox->clear();
+    ui->forceRtsBox->addItems(serialCommonData::forceLinesStr);
 }
 
 // returns -1 if no text found

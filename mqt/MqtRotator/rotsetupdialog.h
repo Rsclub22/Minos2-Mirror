@@ -76,6 +76,8 @@ public:
     void setTabToCurrentAntenna();
     void loadAvailComports();
 
+
+
 signals:
 
     void currentAntennaSettingChanged(QString);

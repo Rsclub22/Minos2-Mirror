@@ -661,6 +661,24 @@ void RotSetupDialog::addAntenna()
   antennaTab[tabNum]->setPollInterval(ROT_DEFAULT_POLLINTERVAL);
   loadAvailComportsToTab(tabNum);
 
+  // initial settings
+  antennaTab[tabNum]->setDataSpeed("9600");
+  antennaTab[tabNum]->comDataSpeedSelected();
+
+  antennaTab[tabNum]->setDataBits("8");
+  antennaTab[tabNum]->comDataBitsSelected();
+
+  antennaTab[tabNum]->setStopBits("1");
+  antennaTab[tabNum]->comStopBitsSelected();
+
+  antennaTab[tabNum]->setParityBits(0);
+  antennaTab[tabNum]->comParityBitsSelected();
+
+
+  antennaTab[tabNum]->setForceRTS(1);
+  antennaTab[tabNum]->on_forceRTSSelected();
+
+
   ui->antennaTab->setCurrentIndex(tabNum);
   emit antennaTabChanged();
 
