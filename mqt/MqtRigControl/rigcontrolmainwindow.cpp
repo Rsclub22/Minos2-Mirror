@@ -297,6 +297,7 @@ void RigControlMainWindow::onStdInRead(QString cmd)
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
         closeApp = true;
+        closeRadio();
     }
     executeStdIn(cmd);
 }
@@ -1141,6 +1142,9 @@ void RigControlMainWindow::cmdLockOff()
 
 void RigControlMainWindow::getRadioInfo()
 {
+    if (closeApp)
+        return;
+
     logMessage(QString("Request radio info"));
     if (cmdLockFlag)
     {
