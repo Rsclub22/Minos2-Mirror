@@ -197,7 +197,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
                 // my call in message - colour red(ish)
                 c = (QColor(0xff, 0x66, 0x66));
             }
-            else if (message.contains (cq_re))
+            else if (msg.mstage == emsCQ)
             {
                 if (msg.points > 0)
                 {
