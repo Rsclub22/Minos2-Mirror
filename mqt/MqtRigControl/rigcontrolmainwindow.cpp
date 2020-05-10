@@ -536,6 +536,8 @@ void RigControlMainWindow::upDateRadio()
                 closeRadio();
             }
 
+            logMessage(QString("Attempting to open this radio"));
+            dumpRadioToTraceLog();
 
             // found radio, update currentRadio from selected radiodata
             updateCurrentRadioFromAvailRadios(ridx);
@@ -708,7 +710,7 @@ void RigControlMainWindow::upDateRadio()
                 writeWindowTitle(appName);
                 sendStatusToLogConnected();
 
-                dumpRadioToTraceLog();
+
 
                 if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).pollData)
                 {
@@ -1212,8 +1214,8 @@ void RigControlMainWindow::closeRadio()
     {
         if (radio != nullptr)
         {
-            disconnect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq));
-            disconnect(radio, SIGNAL(onNewMode()), this, SLOT(onNewMode()));
+            disconnect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq()));
+            disconnect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()));
             disconnect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)));
         }
 
