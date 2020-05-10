@@ -536,22 +536,15 @@ void RigControlMainWindow::upDateRadio()
                 closeRadio();
             }
 
-            logMessage(QString("Attempting to open this radio"));
-            dumpRadioToTraceLog();
+
 
             // found radio, update currentRadio from selected radiodata
             updateCurrentRadioFromAvailRadios(ridx);
 
-            //scatParams::copyRig(setupRadio->availRadioData[ridx], setupRadio->currentRadio);
             setupRadio->currentRadio.radioNumber = QString::number(ridx);           // save radio number
 
 
-            //if (setupRadio->currentRadio.radioModelNumber == 0)
-            //{
-                //closeRadio();
-            //    QMessageBox::critical(this, tr("Radio Error"), tr("Please configure a radio name and model"));
-            //    return;
-           // }
+            dumpRadioToTraceLog();
 
             if (setupRadio->currentRadio.rigCtldEnable)
             {
@@ -569,7 +562,7 @@ void RigControlMainWindow::upDateRadio()
 
             if (radioOpenStat == OPEN_OK)
             {
-                initCacheData();        /// ***************************** this may not be the best place for this
+                initCacheData();
 
                 if (setupRadio->currentRadio.rigModelNumber == hamlibData::RIGCTL)     // is it rigctl?
                 {
@@ -585,8 +578,6 @@ void RigControlMainWindow::upDateRadio()
                         irigctld_radioNumber = 0;
                     }
                 }
-
-
 
 
 
@@ -636,6 +627,8 @@ void RigControlMainWindow::upDateRadio()
                 setupRadio->saveCurrentRadio();
 
                 ui->radioNameDisp->setText(setupRadio->currentRadio.radioName);
+
+
 
                 if (appName.count() > 0)
                 {
@@ -3469,6 +3462,8 @@ void RigControlMainWindow::onLaunchSetup()
 
 void RigControlMainWindow::aboutRigConfig()
 {
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel);
+
     QString msg = QString("*** Rig Configuration ***\n\n");
 
     if (setupRadio->currentRadio.radioName != "")
@@ -3477,8 +3472,16 @@ void RigControlMainWindow::aboutRigConfig()
         msg.append(tr("App Instance Name  = %1\n").arg(appName));
         if (radio != nullptr)
         {
-            msg.append(tr("Hamlib Version = %1\n").arg(radio->getRigLibVersion()));
-            msg.append(tr("Radio Name = %1\n").arg(rigCap.rigName));
+            if (radio != nullptr)
+            {
+                msg.append(tr("Hamlib Version = %1\n").arg(radio->getRigLibVersion()));
+            }
+            else
+            {
+                msg.append(tr("Unable to determine library version at this time!\n"));
+            }
+
+            msg.append(tr("Radio Name = %1\n").arg(setupRadio->currentRadio.radioName));
             msg.append(tr("Radio Number = %1\n").arg(setupRadio->currentRadio.radioNumber));
             msg.append(tr("Rig Model = %1\n").arg(rigCap.rigModelName));
             msg.append(tr("Rig Number = %1\n").arg(rigCap.rigModelNumber));
@@ -3496,16 +3499,27 @@ void RigControlMainWindow::aboutRigConfig()
 
             }
             msg.append(QString("\n"));
-            msg.append(tr("Rig PortType = %1\n").arg(hamlibData::portTypeList[setupRadio->currentRadio.portType]));
-            msg.append(tr("Network Address = %1\n").arg(setupRadio->currentRadio.networkAdd));
-            msg.append(tr("Network Port = %1\n").arg(setupRadio->currentRadio.networkPort));
-            msg.append(tr("Comport = %1\n").arg(setupRadio->currentRadio.comport));
-            msg.append(tr("Baudrate = %1\n").arg(setupRadio->currentRadio.baudrate));
-            msg.append(tr("Stop bits = %1\n").arg(QString::number(setupRadio->currentRadio.stopbits)));
-            msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[setupRadio->currentRadio.parity]));
-            msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[setupRadio->currentRadio.handshake]));
-            msg.append(tr("ForceDTR = %1\n").arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceDtr]));
-            msg.append(tr("ForceRTS = %1\n").arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceRts]));
+
+            //msg.append(tr("Rig PortType = %1\n").arg(hamlibData::portTypeList[setupRadio->currentRadio.portType]));
+
+            if (rigCap.portType == RigCapConstants::PortType::network)
+            {
+                msg.append(tr("Network Address = %1\n").arg(setupRadio->currentRadio.networkAdd));
+                msg.append(tr("Network Port = %1\n").arg(setupRadio->currentRadio.networkPort));
+
+            }
+
+            if (rigCap.portType == RigCapConstants::PortType::serial)
+            {
+                msg.append(tr("Comport = %1\n").arg(setupRadio->currentRadio.comport));
+                msg.append(tr("Baudrate = %1\n").arg(setupRadio->currentRadio.baudrate));
+                msg.append(tr("Stop bits = %1\n").arg(QString::number(setupRadio->currentRadio.stopbits)));
+                msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[setupRadio->currentRadio.parity]));
+                msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[setupRadio->currentRadio.handshake]));
+                msg.append(tr("ForceDTR = %1\n").arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceDtr]));
+                msg.append(tr("ForceRTS = %1\n").arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceRts]));
+
+            }
 
             if (setupRadio->currentRadio.rigCtldEnable)
             {
@@ -3542,7 +3556,12 @@ void RigControlMainWindow::aboutRigConfig()
                 //msg.append(tr("Radio Supports Get RIT State On/Off = %1\n").arg(radioSupGetRitState ? tr("True") : tr("False")));
                 //msg.append(tr("Radio Supports Set RIT State On/Off = %1\n").arg(radioSupRitOnOff ? tr("True") : tr("False")));
             }
-            msg.append(tr("Radio Polltime = %1\n").arg(setupRadio->currentRadio.pollInterval));
+
+            if (rigCap.pollData)
+            {
+                msg.append(tr("Radio Polltime = %1\n").arg(setupRadio->currentRadio.pollInterval));
+            }
+
             msg.append(tr("Tracelog = %1\n").arg(ui->actionTraceComms->isChecked() ? tr("True") : tr("False")));
         }
         else
@@ -3567,13 +3586,23 @@ void RigControlMainWindow::aboutRigConfig()
 
 void RigControlMainWindow::dumpRadioToTraceLog()
 {
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel);
 
-    if (setupRadio->currentRadio.radioName != "" && radio != nullptr)
+
+    if (setupRadio->currentRadio.radioName != "" )
     {
         trace("*** Radio Update ***");
         trace(QString("App Instance Name  = %1").arg(appName));
-        trace(QString("Hamlib Version = %1").arg(radio->getRigLibVersion()));
-        trace(QString("Radio Name = %1").arg(rigCap.rigName));
+        if (radio != nullptr)
+        {
+           trace(QString("Library Version = %1").arg(radio->getRigLibVersion()));
+        }
+        else
+        {
+            trace(QString("Not able to determine library version at this time"));
+        }
+
+        trace(QString("Radio Name = %1").arg(setupRadio->currentRadio.radioName));
         trace(QString("Radio Number = %1").arg(setupRadio->currentRadio.radioNumber));
         trace(QString("Rig Model = %1").arg(rigCap.rigModelName));
         trace(QString("Rig Number = %1").arg(rigCap.rigModelNumber));
@@ -3590,16 +3619,26 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             }
 
         }
-        trace(QString("Rig PortType = %1").arg(hamlibData::portTypeList[setupRadio->currentRadio.portType]));
-        trace(QString("Network Address = %1").arg(setupRadio->currentRadio.networkAdd));
-        trace(QString("Network Port = %1").arg(setupRadio->currentRadio.networkPort));
-        trace(QString("Comport = %1").arg(setupRadio->currentRadio.comport));
-        trace(QString("Baudrate = %1").arg(setupRadio->currentRadio.baudrate));
-        trace(QString("Stop bits = %1").arg(QString::number(setupRadio->currentRadio.stopbits)));
-        trace(QString("Parity = %1").arg(serialCommonData::parityStr[setupRadio->currentRadio.parity]));
-        trace(QString("Handshake = %1").arg(serialCommonData::handshakeStr[setupRadio->currentRadio.handshake]));
-        trace(QString("ForceDTR = %1").arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceDtr]));
-        trace(QString("ForceRTS = %1").arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceRts]));
+        //trace(QString("Rig PortType = %1").arg(hamlibData::portTypeList[setupRadio->currentRadio.portType]));
+        if (rigCap.portType == RigCapConstants::PortType::network)
+        {
+            trace(QString("Network Address = %1").arg(setupRadio->currentRadio.networkAdd));
+            trace(QString("Network Port = %1").arg(setupRadio->currentRadio.networkPort));
+
+        }
+
+
+        if (rigCap.portType == RigCapConstants::PortType::serial)
+        {
+            trace(QString("Comport = %1").arg(setupRadio->currentRadio.comport));
+            trace(QString("Baudrate = %1").arg(setupRadio->currentRadio.baudrate));
+            trace(QString("Stop bits = %1").arg(QString::number(setupRadio->currentRadio.stopbits)));
+            trace(QString("Parity = %1").arg(serialCommonData::parityStr[setupRadio->currentRadio.parity]));
+            trace(QString("Handshake = %1").arg(serialCommonData::handshakeStr[setupRadio->currentRadio.handshake]));
+            trace(QString("ForceDTR = %1").arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceDtr]));
+            trace(QString("ForceRTS = %1").arg(serialCommonData::forceLinesStr[setupRadio->currentRadio.forceRts]));
+
+        }
 
         if (setupRadio->currentRadio.rigCtldEnable)
         {
@@ -3631,9 +3670,13 @@ void RigControlMainWindow::dumpRadioToTraceLog()
             //trace(QString("Radio Supports Set RIT State On/Off = %1").arg(radioSupRitOnOff ? "True" : "False"));
         }
 
-        trace(QString("Radio Polltime = %1").arg(setupRadio->currentRadio.pollInterval));
-        trace(QString("Tracelog = %1").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
+        if (rigCap.pollData)
+        {
+            trace(QString("Radio Polltime = %1").arg(setupRadio->currentRadio.pollInterval));
+        }
 
+        trace(QString("Tracelog = %1").arg(ui->actionTraceComms->isChecked() ? "True" : "False"));
+        trace("*** ***** ***");
     }
     else
     {

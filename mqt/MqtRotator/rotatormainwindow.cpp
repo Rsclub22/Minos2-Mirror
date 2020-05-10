@@ -2334,7 +2334,16 @@ void RotatorMainWindow::aboutRotatorConfig()
         RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
 
         msg.append(tr("App Instance Name  = %1\n").arg(appName));
-        msg.append(tr("Hamlib Version = %1\n").arg(rotator->getRotLibVersion()));
+        if (rotator != nullptr)
+        {
+            msg.append(tr("Hamlib Version = %1\n").arg(rotator->getRotLibVersion()));
+
+        }
+        else
+        {
+            msg.append(tr("Unable to determine library version at this time!\n"));
+
+        }
         msg.append(tr("Antenna Name = %1\n").arg(setupAntenna->currentAntenna.antennaName));
         msg.append(tr("Antenna Number = %1\n").arg(setupAntenna->currentAntenna.antennaNumber));
         msg.append(tr("Rotator Model = %1\n").arg(setupAntenna->currentAntenna.rotatorModel));
@@ -2394,11 +2403,19 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
     if (setupAntenna->currentAntenna.antennaName != "")
     {
 
-        RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
-
-
         trace("*** Antenna Selected ***");
         trace(QString("App Instance Name  = %1").arg(appName));
+        if (rotator != nullptr)
+        {
+            trace(QString("Library Version = %1").arg(rotator->getRotLibVersion()));
+
+        }
+        else
+        {
+            trace(QString("Unable to determine library version at this time!"));
+
+        }
+
         trace(QString("Library Version = %1").arg(rotator->getRotLibVersion()));
         trace(QString("Antenna Name = %1").arg(setupAntenna->currentAntenna.antennaName));
         trace(QString("Antenna Number = %1").arg(setupAntenna->currentAntenna.antennaNumber));
