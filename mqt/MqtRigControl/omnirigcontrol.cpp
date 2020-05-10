@@ -548,18 +548,18 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 {
     Q_UNUSED(useRigCtld)
 
-    traceMsg(QString("Omnirig starting"));
+    trace(QString("Omnirig: Trying to start COM server"));
 
     omni_rig = new OmniRig::OmniRigX(this);
 
     if (omni_rig->isNull())
     {
-        traceMsg(QString("Failed to start Omnirig COM server"));
+        trace(QString("Failed to start Omnirig COM server"));
         return omnirigError(OMNIRIG_COM_FAILED_START);
     }
     else
     {
-        traceMsg(QString("Omnirig COM server started"));
+        trace(QString("Omnirig: COM server started"));
 
     }
 
@@ -576,7 +576,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
              , this, SLOT (onHandleCustomReply (int, QVariant const&, QVariant const&)));
 
     QString v = QString::number(omni_rig->SoftwareVersion()).toLocal8Bit ();
-    traceMsg(QString("Software Version %1").arg(v));
+    trace(QString("Omnirig: Software Version %1").arg(v));
 
 
     switch (rig_number)
@@ -593,12 +593,12 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     {
         if (rig_number == One)
         {
-            traceMsg(QString("Rig %1 failed to initialise").arg(QString::number(rig_number)));
+            trace(QString("Omnirig: Rig %1 failed to initialise").arg(QString::number(rig_number)));
             return omnirigError(OMNIRIG_ONE_FAILED_INITIALISE);
         }
         else
         {
-            traceMsg(QString("Rig %1 initialised").arg(QString::number(rig_number)));
+            trace(QString("Omnirig: Rig %1 initialised").arg(QString::number(rig_number)));
             return omnirigError(OMNIRIG_TWO_FAILED_INITIALISE);
         }
     }
@@ -611,22 +611,34 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     readable_params = rig->ReadableParams ();
     writable_params = rig->WriteableParams ();
 
-    traceMsg(QString("Rig initial rig type: %1 readable params = 0x%2 writable params = 0x%3 for rig %4")
+    trace(QString("Omnirig: Rig initial rig type: %1 readable params = 0x%2 writable params = 0x%3 for rig %4")
                 .arg (rig_type)
                 .arg (readable_params, 8, 16, QChar ('0'))
                 .arg (writable_params, 8, 16, QChar ('0'))
                 .arg (rig_number).toLocal8Bit ());
 
+    // wait to come on-line
+    bool ok = false;
+    for (int i = 0; i < 10; i++)
+    {
+        if (OmniRig::ST_ONLINE == rig->Status ())
+        {
+            ok = true;
+            break;
+        }
 
-    if (OmniRig::ST_ONLINE == rig->Status())
+        QThread::msleep(500);
+    }
+
+    if (ok)
     {
         setRigConnected(true);
-        traceMsg(QString("Rig %1 online").arg(QString::number(rig_number)));
+        trace(QString("Omnirig: Rig %1 online").arg(QString::number(rig_number)));
     }
     else
     {
         setRigConnected(false);
-        traceMsg(QString("Rig %1 offline").arg(QString::number(rig_number)));
+        trace(QString("Omnirig: Rig %1 offline").arg(QString::number(rig_number)));
     }
 
     return omnirigError(OMNIRIG_OK);
@@ -637,16 +649,21 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
 int OmnirigControl::closeRig()
 {
+    trace(QString("Omnirig: Closing Rig"));
+
     QThread::msleep(200);       // leave time for pending commands
 
     if (serPort !=nullptr)
     {
+        trace(QString("Omnirig: Closing Serial Port"));
         serPort->Unlock();     // release serial port
         serPort->clear();
         serPort = nullptr;
     }
     if (omni_rig)
     {
+        trace(QString("Omnirig: Closing COM Component"));
+
         if (rig)
         {
             rig->clear();

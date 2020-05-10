@@ -302,6 +302,7 @@ int HamlibRigControl::closeRig()
 
     retcode = rig_cleanup(my_rig);
     setRigConnected(false);
+
     return retcode;
 
 }
