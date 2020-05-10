@@ -171,7 +171,24 @@ void WsjtxConfigure::on_CancelButton_clicked()
     doClose();
 }
 
-void WsjtxConfigure::on_toolButton_clicked()
+void WsjtxConfigure::on_alltxtBrowseButton_clicked()
 {
     // search for WSJT-X data dir (which contains ALL.TXT)
+    QDir cdir(GetCurrentDir());
+
+    QString fpath =  ui->wsjtxPath->text();
+
+    QString destDir = QFileDialog::getExistingDirectory(
+                  this,
+                  tr("Directory Containing ALL.TXT for WSJT-X"),
+                  fpath,
+                // NB Windows won't show files in a directory chooser
+                  /*QFileDialog::ShowDirsOnly | */QFileDialog::DontResolveSymlinks
+                   );
+    if (!destDir.isEmpty())
+    {
+        QString rpath = cdir.relativeFilePath(destDir);
+        ui->wsjtxPath->setText(rpath);
+    }
+
 }
