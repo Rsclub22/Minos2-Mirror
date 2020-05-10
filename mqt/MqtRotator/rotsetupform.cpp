@@ -173,7 +173,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                serialDataEntryVisible(false);
                advancedSerialDataEntryVisible(false);
                setAdvancedCommsChkBoxVisible(false);
-               checkAdvancedCommsCheckBox(antennaData->advancedCommsFlag);
+               checkAdvancedCommsCheckBox(false);
                networkDataEntryVisible(true);
             }
             else if (antennaData->portType == RotCapConstants::PortType::serial)
