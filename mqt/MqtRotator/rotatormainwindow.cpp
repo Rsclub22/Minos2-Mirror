@@ -223,11 +223,15 @@ void RotatorMainWindow::logMessage( QString s )
 
 void RotatorMainWindow::onStdInRead(QString cmd)
 {
+    bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
         closeApp = true;
+        doClose = true;
     }
     executeStdIn(cmd);
+    if (doClose)
+        close();
 }
 
 void RotatorMainWindow::closeEvent(QCloseEvent *event)

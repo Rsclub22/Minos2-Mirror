@@ -1584,7 +1584,16 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 
 void ClusterMainWindow::onStdInRead(QString cmd)
 {
+    bool doClose = false;
+    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+    {
+//        closeApp = true;
+        doClose = true;
+    }
     executeStdIn(cmd);
+    if (doClose)
+        close();
+
 }
 
 
