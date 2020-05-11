@@ -321,8 +321,8 @@ void WsjtxFrame::process_decodes()
                 if (dc.oldmsg)
                     continue;
 
-                trace(QString("WsjtxFrame::process_decodes Checking against lastTx %1 stage %2 tocall %3 fromcall %4")
-                      .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
+                trace(QString("WsjtxFrame::process_decodes Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
+                      .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()).arg(callingCall).arg(workingCall));
 
 
                 // NB we need to "re-arm" auto or we can't work someone else
@@ -340,10 +340,13 @@ void WsjtxFrame::process_decodes()
                  bool toMyCall = (dc.toCall == decoder.getMyCall());
                  QString dcFromCall = dc.fromCall.fullCall.getValue();
 
-                 if (toMyCall && currTxStage == emsRRR && dcFromCall == workingCall)
+                 if (toMyCall && /*currTxStage == emsRRR && */(dcFromCall == workingCall || dcFromCall == callingCall) )
                  {
                      // this is best, and WSJT-X should automatically respond
                      // so long as autoseq is sent
+
+                     ui->decodes_table_view_->scrollToBottom ();
+                     return;
                  }
                  else if (toMyCall && (currTxStage == emsCQ || currTxStage == emsRRR))
                  {
@@ -381,7 +384,7 @@ void WsjtxFrame::process_decodes()
                          }
                      }
                  }
-                 else if ((dcFromCall == callingCall || dcFromCall == workingCall) && !toMyCall)
+                 else if (!toMyCall && (dcFromCall == callingCall || dcFromCall == workingCall) )
                  {
                      // we are trying to work them, and they aren't working us
                      if (dc.mstage == emsCQ && currTxStage == emsGrid)

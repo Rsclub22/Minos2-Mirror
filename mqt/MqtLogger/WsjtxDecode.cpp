@@ -1,6 +1,7 @@
 #include "WsjtxDecode.h"
 #include "ScreenContact.h"
 #include "contest.h"
+#include "rigutils.h"
 
 /*
 enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73, emsFree};
@@ -108,6 +109,8 @@ bool decodeMessage::checkAsContact()
     scc.cs = fromCall;
     scc.loc = fromGrid;
     scc.time = dtg(true);
+    QString cb;
+    scc.frequency = convertFreqToStr(static_cast<int>(cc->getTxFreqBand("", cb)));
 
     scc.checkScreenContact();
     csret = scc.cs.valRes;
@@ -225,6 +228,10 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         {
             dc.CQCall = sl[0] + " " + sl[1];
             callIndex = 2;
+        }
+        else
+        {
+            dc.CQCall = sl[0];
         }
 
         // NB we can get bad decodes

@@ -119,7 +119,7 @@ long BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
     txfreq = txfreq.remove('.');
     long freq = static_cast<long>(convertStrToFreq(txfreq));
 
-    QString cband = contestBands.getValue();
+    QString cband = currentBand.getValue();
 
     cb = cband.trimmed();
     BandList &blist = BandList::getBandList();
@@ -150,7 +150,7 @@ long BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
 
     if (txfreq.isEmpty() || freq < 100)
     {
-        QString cband = contestBands.getValue().trimmed();
+        QString cband = currentBand.getValue().trimmed();
         bandOK = blist.findBand(cband, bi);
         if (bandOK)
         {
