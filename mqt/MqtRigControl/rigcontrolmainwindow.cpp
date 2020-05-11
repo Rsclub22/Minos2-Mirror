@@ -1098,6 +1098,10 @@ int RigControlMainWindow::openRadio()
         QMessageBox::critical(this, tr("RigControl Open Radio Error"), tr("Failed to created a radio"));
         return OPEN_FAILED;
     }
+    else
+    {
+        logMessage(QString("Rig Created in the factory Ok"));
+    }
 
     radio->setTraceComms(traceCommsFlag);
     rigCap = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel);
@@ -1107,10 +1111,13 @@ int RigControlMainWindow::openRadio()
     // Message from rigcontrol
     //connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
 
+    logMessage(QString("Radio Connected? %1").arg(radio->getRigConnected() ? "yes" : "no"));
 
     if (!radio->getRigConnected())
     {
+
         // if radio is already open, don't reinit it
+        logMessage(QString("Running rigInit"));
         retCode = radio->rigInit(setupRadio->currentRadio, RIGCTLD_OFF);
         if (retCode < 0)
         {
