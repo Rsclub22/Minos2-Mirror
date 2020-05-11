@@ -53,6 +53,10 @@ private:
 
     WsjtxDecode decoder;
 
+    QStringList testCQCalls;
+    QStringList nonTestCQCalls;
+    qint8 special_op_mode;
+
     QFile alltxt;
     QTextStream alltxtstr;
 
@@ -66,6 +70,7 @@ private:
     void reloadColumns();
     decodeMessage *scrapeAllTxt();
     void getAllTxtEnd();
+    void getCQStrings();
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
@@ -110,6 +115,7 @@ private slots:
     void on_doColumnChanges(BaseContestLog *b);
     void on_sectionMoved(int, int, int);
     void on_sectionResized(int, int, int);
+    void on_configCQButton_clicked();
 };
 
 #endif // WSJTXFRAME_H

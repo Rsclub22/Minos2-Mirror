@@ -99,4 +99,32 @@ public:
     {}
     QValidator::State validate(QString & input, int & /*pos*/) const override;
 };
+
+//class CsvReader
+//{
+//    void checkString(QString &temp, QChar character, QList<QStringList> &csv);
+//    QStringList itemList;
+//public:
+//    CsvReader();
+
+//    bool parseCsv(const QString &fileName, QList<QStringList> &csv);
+//};
+class CsvReader
+{
+public:
+    CsvReader(QChar sep = ',');
+
+    void parseCsvLine(const QString &line, QStringList &csv);
+    bool parseCsv(const QString &fileName, QList<QStringList> &csv);
+
+private:
+    QChar sep;
+    QStringList itemList;
+
+    void checkString(QString &temp, QChar character, QStringList &csv);
+    void checkString(QString &temp, QChar character, QList<QStringList> &csv);
+};
+void CSVToStringList( const QString &s, QStringList &sl );
+void TSVToStringList( const QString &s, QStringList &sl );
+
 #endif

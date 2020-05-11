@@ -22,7 +22,7 @@ public:
 
     MessageStage mstage{emsNone};
     QString getMStage() const;
-    SpecialOperatingActivity opMode = NONE;
+    QString CQCall;
 
     QTime decodeTime;
     QString message;

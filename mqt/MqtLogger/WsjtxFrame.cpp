@@ -13,6 +13,7 @@
 #include "Wsjtx_qt_helpers.hpp"
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxServer.h"
+#include "WsjtxConfigureCQ.h"
 
 #include "WsjtxFrame.h"
 #include "ui_WsjtxFrame.h"
@@ -108,13 +109,25 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
 
     getAllTxtEnd();
+    getCQStrings();
 }
 WsjtxFrame::~WsjtxFrame()
 {
     delete ui;
     delete decodes_model_;
 }
+void WsjtxFrame::getCQStrings()
+{
+    QString testCQ;
+    QString nontestCQ;
 
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX1TestCQ, testCQ );
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX1NonTestCQ, nontestCQ );
+
+
+    CSVToStringList(testCQ, testCQCalls);
+    CSVToStringList(nontestCQ, nonTestCQCalls);
+}
 void WsjtxFrame::on_halt_tx_button__clicked()
 {
     trace("do_halt_tx");
@@ -381,6 +394,7 @@ void WsjtxFrame::process_decodes()
                          // If our stage is grid or later, (their stage is irrelevant)
                          // someone else appears to be in QSO with them - stop transmission
                          on_halt_tx_button__clicked();
+                         bestOffset = -1;   // so we can call someone else
                          continue;  // this won't be an option for "best"!
                      }
                  }
@@ -412,6 +426,37 @@ void WsjtxFrame::process_decodes()
                              || (dc.mstage == emsGrid && toMyCall)
                        )
                     {
+                         if (dc.mstage == emsCQ)
+                         {
+                             bool inTest = false;
+                             switch (special_op_mode)
+                             {
+                             case 1:
+                             case 2:
+                                 inTest = true;
+                                 break;
+
+                             default:
+                                 break;
+                             }
+                             if (inTest)
+                             {
+                                if (!testCQCalls.contains(dc.CQCall))
+                                {
+                                    trace(QString("WsjtxFrame::process_decodes %1 wrong CQ call").arg(messages[i].message));
+                                    continue;
+                                }
+                             }
+                             else
+                             {
+                                 if (!nonTestCQCalls.contains(dc.CQCall))
+                                 {
+                                     trace(QString("WsjtxFrame::process_decodes %1 wrong CQ call").arg(messages[i].message));
+                                     continue;
+                                 }
+
+                             }
+                         }
                         if ( dc.snr >= minsnr
                                 && dc.points > minpoints
                                 && pbv > bestPoints
@@ -572,7 +617,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                 , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
+                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 so_mode)
 {
 //    MinosParameters *mp = MinosParameters::getMinosParameters();
 //    if (!mp)
@@ -581,6 +626,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 //    if (ct != cc || cc == nullptr)
 //        return;
 
+    special_op_mode = so_mode;
     // protected contests aren't interesting
     if (!ct || ct->isReadOnly())
         return;
@@ -992,4 +1038,13 @@ void WsjtxFrame:: on_sectionMoved(int /*logicalIndex*/, int /*oldVisualIndex*/, 
 void WsjtxFrame::on_sectionResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/)
 {
     saveAllColumnWidthsAndPositions();
+}
+
+void WsjtxFrame::on_configCQButton_clicked()
+{
+    WsjtxConfigureCQ wccq(this);
+
+    wccq.exec();
+
+    getCQStrings();
 }

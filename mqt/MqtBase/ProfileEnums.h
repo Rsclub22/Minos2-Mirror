@@ -26,6 +26,8 @@ enum LOGGERPROFILE {
    elpWSJTX1AutoEnabled,
    elpWSJTX1DataPath,
    elpWSJTX1TestEnabled,
+    elpWSJTX1TestCQ,
+    elpWSJTX1NonTestCQ,
 
     elpWSJTX2Enabled,
     elpWSJTX2Port,

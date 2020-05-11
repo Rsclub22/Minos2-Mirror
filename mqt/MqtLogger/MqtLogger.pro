@@ -51,6 +51,7 @@ SOURCES += \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
     TSessionManager.cpp \
+    WsjtxConfigureCQ.cpp \
     bandmapclientfilterdialog.cpp \
     bandmapgraphicspanel.cpp \
     bandmapspotmarker.cpp \
@@ -131,6 +132,7 @@ HEADERS  += \
     StackedInfoFrame.h \
     TClockFrame.h \
     TSessionManager.h \
+    WsjtxConfigureCQ.h \
     bandmapclientfilterdialog.h \
     bandmapgraphicspanel.h \
     bandmapspotmarker.h \
@@ -190,6 +192,7 @@ HEADERS  += \
     bandmapview.h
 
 FORMS    += \
+    WsjtxConfigureCQ.ui \
     bandmapclientfilterdialog.ui \
     contestdetails.ui \
     defdirsdlg.ui \

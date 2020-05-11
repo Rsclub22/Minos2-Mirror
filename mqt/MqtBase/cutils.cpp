@@ -390,3 +390,197 @@ QString escapeXML ( const QString &value )
 
     return escaped;
 }
+CsvReader::CsvReader(QChar sep):sep(sep){}
+
+bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
+{
+    QFile file (fileName);
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QString data = file.readAll();
+        data.remove( QRegExp("\r") ); //remove all ocurrences of CR (Carriage Return)
+        QString temp;
+        QChar character;
+        QTextStream textStream(&data);
+        while (!textStream.atEnd())
+        {
+            textStream >> character;
+            if (character == ',')
+            {
+                checkString(temp, character, csv);
+            }
+            else if (character == '\n')
+            {
+                checkString(temp, character, csv);
+            }
+            else if (textStream.atEnd())
+            {
+                temp.append(character);
+                checkString(temp, 0, csv);
+            }
+            else
+            {
+                temp.append(character);
+            }
+        }
+        itemList.clear();
+        return true;
+    }
+    return false;
+}
+void CsvReader::parseCsvLine(const QString &line, QStringList &csv)
+{
+     QString temp;
+     QChar character;
+
+     int lsize = line.length();
+     for (int i = 0; i < lsize; i++)
+     {
+         character = line[i];
+         if (character == sep)
+         {
+             checkString(temp, character, csv);
+         }
+         else if (character == '\n')
+         {
+             checkString(temp, character, csv);
+         }
+         else if (character == nullptr)
+         {
+             checkString(temp, 0, csv);
+         }
+         else
+         {
+             temp.append(character);
+         }
+     }
+     checkString(temp, 0, csv);
+}
+void CsvReader::checkString(QString &temp, QChar character, QStringList &csv)
+{
+    if(temp.count("\"")%2 == 0)
+    {
+        if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
+        {
+             temp.remove( QRegExp("^\"") );
+             temp.remove( QRegExp("\"$") );
+        }
+        //FIXME: will possibly fail if there are 4 or more reapeating double quotes
+        temp.replace("\"\"", "\"");
+        csv.append(temp.trimmed());
+        if (character != QChar(sep))
+        {
+            return;
+        }
+        temp.clear();
+    }
+    else
+    {
+        temp.append(character);
+    }
+}
+void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &csv)
+{
+    if(temp.count("\"")%2 == 0)
+    {
+        if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
+        {
+            temp.remove( QRegExp("^\"") );
+            temp.remove( QRegExp("\"$") );
+        }
+        temp.replace("\"\"", "\"");
+        itemList.append(temp.trimmed());
+        if (character != QChar(','))
+        {
+            csv.append(itemList);
+            itemList.clear();
+        }
+        temp.clear();
+    }
+    else
+    {
+        temp.append(character);
+    }
+}
+
+void CSVToStringList( const QString &qs, QStringList &sl )
+{
+    sl.clear();
+
+    CsvReader csv;
+
+    csv.parseCsvLine(qs, sl);
+}
+void TSVToStringList( const QString &qs, QStringList &sl )
+{
+    sl.clear();
+
+    CsvReader csv('\t');
+
+    csv.parseCsvLine(qs, sl);
+}
+#ifdef RUBBISH
+CsvReader::CsvReader(){}
+
+bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
+{
+    QFile file (fileName);
+     if (file.open(QIODevice::ReadOnly))
+     {
+         QString data = file.readAll();
+         data.remove( QRegExp("\r") ); //remove all ocurrences of CR (Carriage Return)
+         QString temp;
+         QChar character;
+         QTextStream textStream(&data);
+         while (!textStream.atEnd())
+         {
+             textStream >> character;
+             if (character == ',')
+             {
+                 checkString(temp, character, csv);
+             }
+             else if (character == '\n')
+             {
+                 checkString(temp, character, csv);
+             }
+             else if (textStream.atEnd())
+             {
+                 temp.append(character);
+                 checkString(temp, 0, csv);
+             }
+             else
+             {
+                 temp.append(character);
+             }
+         }
+         itemList.clear();
+         return true;
+     }
+     return false;
+}
+void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &csv)
+{
+    if(temp.count("\"")%2 == 0)
+    {
+        if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
+        {
+             temp.remove( QRegExp("^\"") );
+             temp.remove( QRegExp("\"$") );
+        }
+        temp.replace("\"\"", "\"");
+        itemList.append(temp.trimmed());
+        if (character != QChar(','))
+        {
+            csv.append(itemList);
+            itemList.clear();
+        }
+        temp.clear();
+    }
+    else
+    {
+        temp.append(character);
+    }
+}
+
+
+#endif

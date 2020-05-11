@@ -60,6 +60,9 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1AutoEnabled, "WSJTXAutoEnabled", false, QT_TR_NOOP("WSJTX 1 Auto Enabled"), QT_TR_NOOP("WSJTX 1 Auto Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1TestEnabled, "WSJTXtestEnabled", false, QT_TR_NOOP("WSJTX 1 Test Enabled"), QT_TR_NOOP("WSJTX 1 Test Enabled"), false ) ) );
 
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1TestCQ, "WSJTXTestCQ", "", QT_TR_NOOP("CQ types in test mode"), QT_TR_NOOP("CQ types in test mode"), "" ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1NonTestCQ, "WSJTXNonTestCQ", "\"\"", QT_TR_NOOP("CQ types in ordinary mode"), QT_TR_NOOP("CQ types in ordinary mode"), "" ) ) );
+
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX2Enabled, "WSJTX2Enabled", false, QT_TR_NOOP("WSJTX 2 Enabled"), QT_TR_NOOP("WSJTX 2 Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX2Port, "WSJTX2Port", 2238, QT_TR_NOOP("WSJTX 2 Port"), QT_TR_NOOP("WSJTX 2 Port"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX2GroupAddress, "WSJTX2GroupAddress", "", QT_TR_NOOP("WSJTX 2 Group Address"), QT_TR_NOOP("WSJTX 2 Group Address"), false ) ) );

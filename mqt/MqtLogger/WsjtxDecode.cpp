@@ -220,15 +220,11 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // CQ TEST G4ABC/P IO91
         dc.mstage = emsCQ;
         int callIndex = 1;
-        dc.opMode = NONE;
 
         if (sl.count() == 4)
         {
+            dc.CQCall = sl[0] + " " + sl[1];
             callIndex = 2;
-            if (sl[1] == "TEST")
-            {
-                dc.opMode = EU_VHF;
-            }
         }
 
         // NB we can get bad decodes
@@ -274,7 +270,6 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // K1ABC G0XYZ R-22
         // G4ABC/P R 570007 JO22DB
         dc.mstage = emsRplusDb;
-        dc.opMode = EU_VHF;
         dc.toCall = Callsign(stripBrackets(sl[0]));
         dc.fromGrid = Locator(sl[3]);
 
@@ -333,7 +328,6 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
                 // not repliable
                 //PA9XYZ 590003 IO91NP
                 dc.mstage = emsDb;
-                dc.opMode = EU_VHF;
                 dc.fromGrid = l1;
 
                 // who is fromCall? need previous CQ, grid
