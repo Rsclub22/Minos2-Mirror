@@ -395,7 +395,11 @@ void WsjtxFrame::process_decodes()
                          // someone else appears to be in QSO with them - stop transmission
                          on_halt_tx_button__clicked();
                          bestOffset = -1;   // so we can call someone else
-                         continue;  // this won't be an option for "best"!
+                         if (ui->autoRearmcb->isChecked())
+                         {
+                             ui->autoSelectButton->setChecked(reArmValue);
+                         }
+                         break;  // this won't be an option for "best"!
                      }
                  }
             }
@@ -713,6 +717,12 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             // CQ K1ABC FN42
             // CQ DX K1ABC FN42
             // CQ TEST G4ABC/P IO91
+
+            if (ui->autoRearmcb->isChecked())
+            {
+                ui->autoSelectButton->setChecked(reArmValue);
+            }
+            break;
         case ems73:
             // after this may still get far end RRR or RR73
             // repliable to "from"
@@ -894,6 +904,8 @@ void WsjtxFrame::decodes_cleared (QString const& client_id)
 }
 void WsjtxFrame::reply(decodeMessage &dc)
 {
+    reArmValue = ui->autoSelectButton->isChecked();
+
     ui->autoSelectButton->setChecked(false);
     //ui->autoSelectButton->setArrowType(Qt::NoArrow);
     WsjtxServer::getWsjtxServer()->reply(dc.id, dc.time, dc.snr, dc.delta_time, dc.delta_frequency, dc.mode, dc.message, dc.low_confidence,  QApplication::keyboardModifiers () >> 24);

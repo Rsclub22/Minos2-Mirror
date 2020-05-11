@@ -38,6 +38,7 @@ private:
     QString id_;
     QSharedPointer<HtmlDelegate> delegate;
     bool autoEnabled = false;
+    bool reArmValue = false;
     bool showTest = false;
     bool inDecode = false;
     int lastcol = 0;
