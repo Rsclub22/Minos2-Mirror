@@ -392,7 +392,7 @@ void WsjtxFrame::process_decodes()
                      {
                          ui->autoSelectButton->setChecked(reArmValue);
                      }
-                     if (!ui->autoSelectButton->isChecked())
+                     if (ui->autoSelectButton->isChecked())
                      {
                          on_halt_tx_button__clicked();          // kill the automatic sequencing
                      }
