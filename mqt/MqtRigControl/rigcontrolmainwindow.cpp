@@ -1119,6 +1119,7 @@ int RigControlMainWindow::openRadio()
         // if radio is already open, don't reinit it
         logMessage(QString("Running rigInit"));
         retCode = radio->rigInit(setupRadio->currentRadio, RIGCTLD_OFF);
+        logMessage(QString("RigInit Error Code = %1").arg(retCode));
         if (retCode < 0)
         {
             radio->closeRig();
@@ -1130,7 +1131,7 @@ int RigControlMainWindow::openRadio()
     }
 
 
-
+    logMessage(QString("Connect Status after init = %1").arg(radio->getRigConnected() ? "yes" : "no"));
 
 
     // let's see if we can get freq from radio and confirm comms

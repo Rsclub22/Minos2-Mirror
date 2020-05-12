@@ -22,7 +22,7 @@ const char* OmnirigControl::omnirigErrorMsg[] =  {QT_TR_NOOP("No Error, operatio
                                                 QT_TR_NOOP("Omnirig Com Failed to start"),
                                                 QT_TR_NOOP("Omnirig rig One failed to initialise"),
                                                 QT_TR_NOOP("Omnirig rig Two failed to initialise"),
-                                                QT_TR_NOOP("Omnirig radio offline"),
+                                                QT_TR_NOOP("Omnirig rig is offline"),
                                                 QT_TR_NOOP("Omnirig radio online"),
                                                 QT_TR_NOOP("Omnirig COM Exception\nCheck Rigcontrol tracelog"),
                                                 QT_TR_NOOP("Omnirig not configured"),
@@ -639,6 +639,8 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     {
         setRigConnected(false);
         trace(QString("Omnirig: Rig %1 offline").arg(QString::number(rig_number)));
+        return omnirigError(OMNIRIG_OFFLINE);
+
     }
 
     return omnirigError(OMNIRIG_OK);
@@ -725,14 +727,17 @@ int OmnirigControl::getMode(VFO vfo, MODE &mode)
         return omnirigError(OMNIRIG_RIG_NULL);
     }
 
-    if (rigConnected)
+    if (!rigConnected)
     {
-        mode = map_mode(rig->Mode());
-        traceMsg(QString("GetMode = %1").arg(convertModeToQString(mode)));
-        return omnirigError(OMNIRIG_OK);
+        return omnirigError(OMNIRIG_OFFLINE);
+
     }
 
-     return omnirigError(OMNIRIG_OFFLINE);
+    mode = map_mode(rig->Mode());
+    traceMsg(QString("GetMode = %1").arg(convertModeToQString(mode)));
+
+    return omnirigError(OMNIRIG_OK);
+
 
 }
 
@@ -744,16 +749,17 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
         return omnirigError(OMNIRIG_RIG_NULL);
     }
 
-    if (rigConnected)
+    if (!rigConnected)
     {
+        return omnirigError(OMNIRIG_OFFLINE);
+
+    }
         traceMsg(QString("SetMode = %1").arg(convertModeToQString(mode)));
         OmniRig::RigParamX m = map_mode(mode);
         rig->SetMode(m);
 
         return omnirigError(OMNIRIG_OK);
-    }
 
-    return omnirigError(OMNIRIG_OFFLINE);
 
 }
 
