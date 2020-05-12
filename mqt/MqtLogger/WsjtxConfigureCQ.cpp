@@ -42,12 +42,12 @@ WsjtxConfigureCQ::~WsjtxConfigureCQ()
 void WsjtxConfigureCQ::on_OKButton_clicked()
 {
     QStringList sl;
-    QString s = ui->testCQ->toPlainText();
+    QString s = ui->testCQ->toPlainText().trimmed().toUpper();
     s.remove("\r");
     sl = s.split("\n", QString::SkipEmptyParts);
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpWSJTX1TestCQ, sl.join(",") );
 
-    s = ui->notTestCQ->toPlainText();
+    s = ui->notTestCQ->toPlainText().trimmed().toUpper();
     s.remove("\r");
     sl = s.split("\n", QString::SkipEmptyParts);
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpWSJTX1NonTestCQ, sl.join(",") );

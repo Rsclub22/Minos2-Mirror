@@ -17,7 +17,8 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>CQ xxx Callsign Locator - xxx is allowed in...</string>
+      <string>CQ xxx Callsign Locator - xxx is allowed in...r
+Include the CQ as well as the type</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -36,7 +37,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="testCQ"/>
+        <widget class="QPlainTextEdit" name="testCQ">
+         <property name="plainText">
+          <string notr="true"/>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

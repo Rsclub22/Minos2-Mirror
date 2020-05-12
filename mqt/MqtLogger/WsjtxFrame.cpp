@@ -325,30 +325,14 @@ void WsjtxFrame::process_decodes()
                       .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()).arg(callingCall).arg(workingCall));
 
 
-                // NB we need to "re-arm" auto or we can't work someone else
-
-                // Is auto now a tristate? active, inactive, able to be re-activated (or two checkboxes to make it clearer)
-                // Does this go beyond permissable automation?
-
                 // if we are calling CQ or RR73, and we are toCall, we have a set of candidates for best
                 // work these before lookng for others
-
-//                 if (dc.points <= 0)    // we need to look at them allm as we might be working them
-//                    continue;
 
                  PointBonusMult pbv(dc);
                  bool toMyCall = (dc.toCall == decoder.getMyCall());
                  QString dcFromCall = dc.fromCall.fullCall.getValue();
 
-                 if (toMyCall && /*currTxStage == emsRRR && */(dcFromCall == workingCall || dcFromCall == callingCall) )
-                 {
-                     // this is best, and WSJT-X should automatically respond
-                     // so long as autoseq is sent
-
-                     ui->decodes_table_view_->scrollToBottom ();
-                     return;
-                 }
-                 else if (toMyCall && (currTxStage == emsCQ || currTxStage == emsRRR))
+                 if (toMyCall && (currTxStage == emsCQ || currTxStage == emsRRR)) // calling CQ or waiting for 73
                  {
                      // look for best candidate of those calling us - don't limit by snr or points
                      // If they are starting with Tx2, e can miss the loc - and so their score will
@@ -384,26 +368,36 @@ void WsjtxFrame::process_decodes()
                          }
                      }
                  }
+                 else if (toMyCall && (dcFromCall == workingCall || dcFromCall == callingCall) )
+                 {
+                     // this is best, and WSJT-X should automatically respond
+                     // so long as autoseq is set in WSJT-X
+
+                     ui->decodes_table_view_->scrollToBottom ();
+                     return;
+                 }
+
                  else if (!toMyCall && (dcFromCall == callingCall || dcFromCall == workingCall) )
                  {
-                     // we are trying to work them, and they aren't working us
-                     if (dc.mstage == emsCQ && currTxStage == emsGrid)
+                     // we are trying to work them, and they aren't working us - still CQ, or working someone else
+
+                     // If they are calling CQ and we are "grid" we can carry on calling them
+                    // don't kill tx unless there is a better option - using the general best search
+
+                     // bestOffset should already be -1 unless there is someone else calling us
+                     // in which case we will switch to them
+
+                     trace(QString("WsjtxFrame::process_decodes (lasttx) stop response, look again"));
+                     if (ui->autoRearmcb->isChecked())
                      {
-                        // If they are calling CQ and we are "grid" we can carry on calling them
-                        // don't kill tx unless there is a better option - using the general best search
+                         ui->autoSelectButton->setChecked(reArmValue);
                      }
-                     else if (currTxStage >= emsGrid)
+                     if (!ui->autoSelectButton->isChecked())
                      {
-                         // If our stage is grid or later, (their stage is irrelevant)
-                         // someone else appears to be in QSO with them - stop transmission
-                         on_halt_tx_button__clicked();
-                         bestOffset = -1;   // so we can call someone else
-                         if (ui->autoRearmcb->isChecked())
-                         {
-                             ui->autoSelectButton->setChecked(reArmValue);
-                         }
-                         break;  // this won't be an option for "best"!
+                         on_halt_tx_button__clicked();          // kill the automatic sequencing
                      }
+                     break;
+
                  }
             }
 
