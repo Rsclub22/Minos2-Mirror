@@ -972,6 +972,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
         return OPEN_FAILED;
     }
 
+    logMessage(QString("Open Radio is connected = %1").arg(radio->getRigConnected() ? "yes" : "no"));
     // let's see if we can get freq from radio and confirm comms
     if (radio->getRigConnected())
     {

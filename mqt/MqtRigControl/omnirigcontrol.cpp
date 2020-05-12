@@ -643,6 +643,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
     }
 
+    trace(QString("Omnirig Init: connected = %1").arg(getRigConnected() ? "yes" : "no"));
     return omnirigError(OMNIRIG_OK);
 
 }
@@ -682,6 +683,7 @@ int OmnirigControl::closeRig()
 
 int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
 {
+    traceMsg(QString("Get Frequency"));
     Q_UNUSED(vfo)
     if (!rig || rig->isNull ())
     {
@@ -700,6 +702,7 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
 
 int OmnirigControl::setFrequency(Frequency freq, VFO vfo)
 {
+    traceMsg(QString("Set Frequency = %1").arg(QString::number(freq)));
     Q_UNUSED(vfo)
     if (!rig || rig->isNull ())
     {
@@ -721,6 +724,7 @@ int OmnirigControl::setFrequency(Frequency freq, VFO vfo)
 
 int OmnirigControl::getMode(VFO vfo, MODE &mode)
 {
+    traceMsg(QString("Get mode"));
     Q_UNUSED(vfo)
     if (!rig || rig->isNull ())
     {
@@ -743,6 +747,7 @@ int OmnirigControl::getMode(VFO vfo, MODE &mode)
 
 int OmnirigControl::setMode(VFO vfo, MODE mode)
 {
+    traceMsg(QString("SetMode "));
     Q_UNUSED(vfo)
     if (!rig || rig->isNull ())
     {
@@ -767,6 +772,7 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
 
 int OmnirigControl::setVolume(VFO vfo, float val)
 {
+    traceMsg(QString("SetVolume = %1 ").arg(QString::number(val)));
     Q_UNUSED(vfo)
     Q_UNUSED(val)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
@@ -774,6 +780,7 @@ int OmnirigControl::setVolume(VFO vfo, float val)
 
 int OmnirigControl::getVolume(VFO vfo, float *val)
 {
+    traceMsg(QString("GetVolume"));
     Q_UNUSED(vfo)
     Q_UNUSED(val)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
@@ -781,6 +788,7 @@ int OmnirigControl::getVolume(VFO vfo, float *val)
 
 int OmnirigControl::getSignalStrength(VFO vfo, int *value)
 {
+    traceMsg(QString("GetSignal Strength"));
     Q_UNUSED(vfo)
     Q_UNUSED(value)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
