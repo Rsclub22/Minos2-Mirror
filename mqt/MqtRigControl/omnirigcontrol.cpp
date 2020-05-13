@@ -5,7 +5,7 @@
 //                      Omnirig Rig Control
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
 //
-//
+//  Insperation for some of this code from the WSJT-X Project.
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ const char* OmnirigControl::omnirigErrorMsg[] =  {QT_TR_NOOP("No Error, operatio
                                                 QT_TR_NOOP("Omnirig disabled"),
                                                 QT_TR_NOOP("Omnirig port busy"),
                                                 QT_TR_NOOP("Omnirig not responding"),
-                                                  QT_TR_NOOP("Omnirig rig pointer null")
+                                                QT_TR_NOOP("Omnirig rig pointer null")
 
                                                 };
 
