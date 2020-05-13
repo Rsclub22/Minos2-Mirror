@@ -647,20 +647,23 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
 
     // also allow time to get freq
-    ok = false;
+    traceMsg(QString("Rig Init - try to get freq"));
     auto f = rig->GetRxFrequency();
+    traceMsg(QString("Rig Init - first getFres = %1").arg(QString::number(f)));
     for (int i = 0; (f == 0) && (i < 10); i++)
     {
         traceMsg(QString("Rig Init getFreq i = %1").arg(i));
         f = rig->GetRxFrequency ();
         if (f != 0)
         {
-            ok = true;
+            break;
         }
         QThread::msleep(500);
     }
 
-    if (ok)
+    traceMsg(QString("Rig Init - freq after delay = %1").arg(QString::number(f)));
+
+    if (f != 0)
     {
         setRigConnected(true);
         traceMsg(QString(" Rig init, get freq = %1").arg(QString::number(f)));
