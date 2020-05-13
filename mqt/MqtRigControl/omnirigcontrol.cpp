@@ -142,10 +142,10 @@ OmniRig::RigParamX OmnirigControl::map_mode(QString mode)
 
 
 OmnirigControl::OmnirigControl(RigNumber rig_number_, QObject *parent)  : RigBase(parent),
-    rig_number(rig_number_),
-    rigConnected(false)
-{
+    rig_number(rig_number_)
 
+{
+    setRigConnected(false);
 }
 
 OmnirigControl::~OmnirigControl()
@@ -546,17 +546,7 @@ int OmnirigControl::omnirigError(omnirigErrorCode errNum)
 }
 
 
-void OmnirigControl::setRigConnected(bool rigConnected_)
-{
-    trace(QString("SetRigConnected = %1").arg(rigConnected_ ? "true" : "false"));
-    rigConnected = rigConnected_;
-}
 
-bool OmnirigControl::getRigConnected()
-{
-    trace(QString("GetRigConnected = %1").arg(rigConnected ? "true" : "false"));
-    return rigConnected;
-}
 
 int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 {
@@ -894,6 +884,18 @@ void OmnirigControl::setTraceComms(bool value)
 bool OmnirigControl::getTraceComms()
 {
     return omnirigTraceComms;
+}
+
+void OmnirigControl::setRigConnected(bool rigConnected_)
+{
+    trace(QString("Omnirig: setRigConnected = %1").arg(rigConnected_ ? "true" : "false"));
+    rigConnected = rigConnected_;
+}
+
+bool OmnirigControl::getRigConnected()
+{
+    trace(QString("Omnirig: getRigConnected = %1").arg(rigConnected ? "true" : "false"));
+    return rigConnected;
 }
 
 

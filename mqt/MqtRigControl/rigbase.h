@@ -26,8 +26,8 @@ class RigBase : public QObject
 public:
     explicit RigBase(QObject *parent = nullptr);
 
-    void setRigConnected(bool rigConnected_){rigConnected = rigConnected_;}
-    bool getRigConnected(){return rigConnected;}
+    virtual void setRigConnected(bool rigConnected_) = 0;
+    virtual bool getRigConnected() = 0;
 
     virtual void setTraceComms(bool value) = 0;
     virtual bool getTraceComms() = 0;
@@ -74,7 +74,7 @@ signals:
 
 private:
 
-    bool rigConnected;
+    //bool rigConnected;
 
 };
 

@@ -55,6 +55,9 @@ public:
     int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
 
+    void setRigConnected(bool rigConnected_) override;
+    bool getRigConnected() override;
+
     int getFrequency(VFO vfo, Frequency& f) override;
     int setFrequency(Frequency frequency, VFO vfo) override;
 
@@ -102,6 +105,7 @@ private:
     serial_handshake_e getSerialHandshakeCode(int index){return handshakeCodes[index];}
     serial_force_Lines_e getSerialForceLineCode(int index){return forceLinesCodes[index];}
 
+    bool rigConnected;
 
     setting_t rigHasGetFunc(setting_t);
     static setting_t rigHasGetFunc(int rigNumber, setting_t level);

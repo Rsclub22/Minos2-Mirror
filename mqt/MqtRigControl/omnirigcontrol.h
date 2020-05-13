@@ -40,10 +40,8 @@ public:
 
     static void register_rigs(RigFactory::Rigs*, int, int);
 
-
-
-    void setRigConnected(bool rigConnected_);
-    bool getRigConnected();
+    void setRigConnected(bool rigConnected_) override;
+    bool getRigConnected() override;
 
     int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
