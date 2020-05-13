@@ -545,6 +545,19 @@ int OmnirigControl::omnirigError(omnirigErrorCode errNum)
     return  errNum * -1;
 }
 
+
+void OmnirigControl::setRigConnected(bool rigConnected_)
+{
+    trace(QString("SetRigConnected = %1").arg(rigConnected_ ? "true" : "false"));
+    rigConnected = rigConnected_;
+}
+
+bool OmnirigControl::getRigConnected()
+{
+    trace(QString("GetRigConnected = %1").arg(rigConnected ? "true" : "false"));
+    return rigConnected;
+}
+
 int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 {
     Q_UNUSED(useRigCtld)

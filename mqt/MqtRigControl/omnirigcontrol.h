@@ -42,8 +42,8 @@ public:
 
 
 
-    void setRigConnected(bool rigConnected_){rigConnected = rigConnected_;}
-    bool getRigConnected(){return rigConnected;}
+    void setRigConnected(bool rigConnected_);
+    bool getRigConnected();
 
     int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
