@@ -24,6 +24,7 @@ const char* OmnirigControl::omnirigErrorMsg[] =  {QT_TR_NOOP("No Error, operatio
                                                 QT_TR_NOOP("Omnirig rig Two failed to initialise"),
                                                 QT_TR_NOOP("Omnirig rig is offline"),
                                                 QT_TR_NOOP("Omnirig radio online"),
+                                                QT_TR_NOOP("Omnirig get freq fail"),
                                                 QT_TR_NOOP("Omnirig COM Exception\nCheck Rigcontrol tracelog"),
                                                 QT_TR_NOOP("Omnirig not configured"),
                                                 QT_TR_NOOP("Omnirig disabled"),
@@ -76,7 +77,7 @@ auto OmnirigControl::map_mode (OmniRig::RigParamX param) -> MODE
   {
       return FM;
   }
-  trace(QString("OmniRigControl unrecognized mode"));
+  trace(QString("Omnirig: unrecognized mode"));
 
   return UNK;
 }
@@ -164,7 +165,7 @@ void OmnirigControl::onHandleVisibleChange()
 {
     if (!omni_rig || omni_rig->isNull ())
         return;
-    traceMsg(QString("OmniRig visibility change: visibility = %1").arg(omni_rig->DialogVisible ()));
+    traceMsg(QString(" visibility change: visibility = %1").arg(omni_rig->DialogVisible ()));
 }
 
 
@@ -643,7 +644,35 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
     }
 
-    trace(QString("Omnirig Init: connected = %1").arg(getRigConnected() ? "yes" : "no"));
+
+
+    // also allow time to get freq
+    ok = false;
+    auto f = rig->GetRxFrequency();
+    for (int i = 0; (f == 0) && (i < 10); i++)
+    {
+        traceMsg(QString("Rig Init getFreq i = %1").arg(i));
+        f = rig->GetRxFrequency ();
+        if (f != 0)
+        {
+            ok = true;
+        }
+        QThread::msleep(500);
+    }
+
+    if (ok)
+    {
+        setRigConnected(true);
+        traceMsg(QString(" Rig init, get freq = %1").arg(QString::number(f)));
+    }
+    else
+    {
+        setRigConnected(false);
+        traceMsg(QString(" Rig init, get freq failed"));
+        return omnirigError(OMNIRIG_GETFREQ_FAIL);
+    }
+
+    traceMsg(QString(" Rig init: connected = %1").arg(getRigConnected() ? "yes" : "no"));
     return omnirigError(OMNIRIG_OK);
 
 }
@@ -652,20 +681,20 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
 int OmnirigControl::closeRig()
 {
-    trace(QString("Omnirig: Closing Rig"));
+    traceMsg(QString(" Closing Rig"));
 
     QThread::msleep(200);       // leave time for pending commands
 
     if (serPort !=nullptr)
     {
-        trace(QString("Omnirig: Closing Serial Port"));
+        traceMsg(QString(" Closing Serial Port"));
         serPort->Unlock();     // release serial port
         serPort->clear();
         serPort = nullptr;
     }
     if (omni_rig)
     {
-        trace(QString("Omnirig: Closing COM Component"));
+        traceMsg(QString(" Closing COM Component"));
 
         if (rig)
         {
@@ -772,7 +801,7 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
 
 int OmnirigControl::setVolume(VFO vfo, float val)
 {
-    traceMsg(QString("SetVolume = %1 ").arg(QString::number(val)));
+    traceMsg(QString(" SetVolume = %1 ").arg(QString::number(val)));
     Q_UNUSED(vfo)
     Q_UNUSED(val)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
@@ -780,7 +809,7 @@ int OmnirigControl::setVolume(VFO vfo, float val)
 
 int OmnirigControl::getVolume(VFO vfo, float *val)
 {
-    traceMsg(QString("GetVolume"));
+    traceMsg(QString(" GetVolume"));
     Q_UNUSED(vfo)
     Q_UNUSED(val)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
@@ -788,7 +817,7 @@ int OmnirigControl::getVolume(VFO vfo, float *val)
 
 int OmnirigControl::getSignalStrength(VFO vfo, int *value)
 {
-    traceMsg(QString("GetSignal Strength"));
+    traceMsg(QString(" GetSignal Strength"));
     Q_UNUSED(vfo)
     Q_UNUSED(value)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
@@ -852,12 +881,19 @@ bool OmnirigControl::getTraceComms()
 }
 
 
-void OmnirigControl::traceMsg(QString msg)
+void OmnirigControl::traceCommsMsg(QString msg)
 {
     if (omnirigTraceComms)
     {
-       trace(QString("Omnirig: %1").arg(msg));
+       traceMsg(msg);
     }
 
 }
 
+void OmnirigControl::traceMsg(QString msg)
+{
+
+       trace(QString("Omnirig: %1").arg(msg));
+
+
+}
