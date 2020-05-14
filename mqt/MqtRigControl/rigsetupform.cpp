@@ -1245,27 +1245,65 @@ void RigSetupForm::onSup1296MhzChkBoxClicked(bool state)
 
 void RigSetupForm::setSupport50MHzChkBox(bool checked)
 {
-    ui->sup50MhzChkbox->setChecked(checked);
+    if (checked)
+    {
+        ui->sup50MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup50MhzChkbox->setCheckState(Qt::Unchecked);
+    }
+
 }
 
 void RigSetupForm::setSupport70MHzChkBox(bool checked)
 {
-     ui->sup50MhzChkbox->setChecked(checked);
+    if (checked)
+    {
+        ui->sup70MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup70MhzChkbox->setCheckState(Qt::Unchecked);
+    }
+
+
 }
 
 void RigSetupForm::setSupport144MHzChkBox(bool checked)
 {
-     ui->sup50MhzChkbox->setChecked(checked);
+    if (checked)
+    {
+        ui->sup144MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup144MhzChkbox->setCheckState(Qt::Unchecked);
+    }
 }
 
 void RigSetupForm::setSupport432MHzChkBox(bool checked)
 {
-     ui->sup50MhzChkbox->setChecked(checked);
+    if (checked)
+    {
+        ui->sup432MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup432MhzChkbox->setCheckState(Qt::Unchecked);
+    }
 }
 
 void RigSetupForm::setSupport1296MHzChkBox(bool checked)
 {
-     ui->sup50MhzChkbox->setChecked(checked);
+    if (checked)
+    {
+        ui->sup1296MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup1296MhzChkbox->setCheckState(Qt::Unchecked);
+    }
 }
 
 void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
