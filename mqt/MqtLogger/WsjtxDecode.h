@@ -2,7 +2,7 @@
 #define WSJTXDECODE_H
 #include "base_pch.h"
 
-enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73, emsFree};
+enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusGrid, emsRplusDb, emsRRR, ems73, emsFree};
 enum SpecialOperatingActivity {NONE, NA_VHF, EU_VHF, FIELD_DAY, RTTY, FOX, HOUND};
 enum TxRx {eTX, eRX};
 
@@ -26,6 +26,7 @@ public:
 
     QTime decodeTime;
     QString message;
+    QString decodeInd;
     bool best = false;
     bool autoresp = false;
     Callsign toCall;

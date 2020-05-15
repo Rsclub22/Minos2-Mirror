@@ -6,39 +6,44 @@
 /*
 enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73, emsFree};
 
-  // Normal
-CQ K1ABC FN42                          #K1ABC calls CQ                  emsCQ
-                  K1ABC G0XYZ IO91     #G0XYZ answers                   emsGrid
-G0XYZ K1ABC –19                        #K1ABC sends report              emsDB
-                  K1ABC G0XYZ R-22     #G0XYZ sends R+report            emsRplusDb
-G0XYZ K1ABC RR73                       #K1ABC sends RRR - or RR73       emsRRR
-                  K1ABC G0XYZ 73       #G0XYZ sends 73                  ems73
-  */
-
-/*
-  // EU VHF Contest
-CQ TEST G4ABC/P IO91                                                    emsCQ
-                                   G4ABC/P PA9XYZ JO22                  emsGrid
-PA9XYZ 590003 IO91NP                                                    emsDB
-                                   G4ABC/P R 570007 JO22DB              emsRplusDb
-PA9XYZ G4ABC/P RR73                                                     emsRRR
-                                   G4ABC/P PA9XYZ 73                    ems73
-
- PA9XYZ 590003 IO91NP (emsDb)
-
- Look for previous grid message from PA9XYZ, which gives "CQ" call and PA9XYZ partial locator
-
- Look for previous CQ message for "CQ" call - check DF is in range and locator is compatible
- (as otherwise it could be someone else who is sending the DB message)
-
- G4ABC/P R 570007 JO22DB (emsRplusDb)
-
- This gives the CQ call
- Look for previous grid message on frequency with matching CQ call and matching partial loc; this gives responding call
- Intervening should be a DB message to responder from CQ call
+// Normal
+CQ K1ABC FN42                          #K1ABC calls CQ                 emsCQ
+                  K1ABC G0XYZ IO91     #G0XYZ answers                  emsGrid
+G0XYZ K1ABC –19                        #K1ABC sends report             emsDB
+                  K1ABC G0XYZ R-22     #G0XYZ sends R+report           emsRplusDb
+G0XYZ K1ABC RR73                       #K1ABC sends RRR - or RR73      emsRRR
+                  K1ABC G0XYZ 73       #G0XYZ sends 73                 ems73
 
 
-  */
+// EU VHF Contest
+
+CQ TEST G4ABC/P IO91                                                   emsCQ
+                                   G4ABC/P PA9XYZ JO22                 emsGrid
+PA9XYZ 590003 IO91NP                                                   emsDB
+                                   G4ABC/P R 570007 JO22DB             emsRplusDb
+PA9XYZ G4ABC/P RR73                                                    emsRRR
+                                   G4ABC/P PA9XYZ 73                   ems73
+
+And in 2.2 (both callsigns, hashed)
+(Either callsign (or both) may have /P appended.)
+
+CQ TEST G4ABC IO91
+                                G4ABC PA9XYZ JO22
+<PA9XYZ> <G4ABC> 570123 IO91NP
+                                <G4ABC> <PA9XYZ> R 580071 JO22DB
+PA9XYZ G4ABC RR73
+
+
+// NA VHF Contest
+(Either callsign (or both) may have /R appended. You can use RR73 in place of RRR, and the final 73 is optional)
+
+CQ TEST K1ABC FN42                                                     emsCQ
+                     K1ABC W9XYZ EN37                                  emsGrid
+W9XYZ K1ABC R FN42                                                     emsRplusGrid
+                     K1ABC W9XYZ RR73                                  emsRRR
+W9XYZ K1ABC 73                                                         ems73
+
+*/
 
 /*
   Feed in decoded message
@@ -86,6 +91,8 @@ QString decodeMessage::getMStage() const
         return "db";
     case emsRplusDb:
         return "R+db";
+    case emsRplusGrid:
+        return "R+grid";
     case emsRRR:
         return "RRR";
     case ems73:
@@ -202,9 +209,15 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
     
     // there shouldn't be any spare spaces but...
 
-    int spoff = message_text.trimmed().indexOf("   ");
+    int spoff = message_text.trimmed().indexOf("      ");
     if (spoff > 0)
+    {
         dc.message = message_text.left(spoff + 1).trimmed();
+        // looking for e.g.
+        // G0GJV GM8MJV IO85                   ? a3
+        // G0GJV GM8MJV IO85                     a3
+        dc.decodeInd = message_text.mid(spoff + 2).trimmed();
+    }
     else
     {
         dc.message= message_text.trimmed();
@@ -292,6 +305,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // db is aything else? or it may be a free text message
         //G0XYZ K1ABC –19
         //PA9XYZ 590003 IO91NP
+        //G0GJV MM3AWD R IO87
 
         dc.toCall = Callsign(stripBrackets(sl[0]));
         dc.toCall.validate();
