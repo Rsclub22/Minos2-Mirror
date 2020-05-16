@@ -167,6 +167,8 @@ private slots:
 
 
     void onAdvancedCommsSelected(bool selected);
+    void onCompasDialVisibleChecked(bool selected);
+
 private:
     Ui::rotSetupForm *ui;
 
@@ -195,7 +197,7 @@ private:
 
 
 
-    void onCompasDialVisibleSelected(bool selected);
+
 
 };
 

@@ -77,7 +77,7 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
     connect(ui->chkOverrun, SIGNAL(stateChanged(int)), this, SLOT(overlapSelected()));
     connect(ui->antOffset, SIGNAL(editingFinished()), this, SLOT(antennaOffSetSelected()));
     connect(ui->simCW_CCWcmd, SIGNAL(clicked(bool)), this, SLOT(simCWCCWCmdSelected()));
-    connect(ui->showCompDialChkBox, SIGNAL(clicked(bool)), this, SLOT(onCompasDialVisibleSelected(bool)));
+    connect(ui->showCompDialChkBox, SIGNAL(clicked(bool)), this, SLOT(onCompasDialVisibleChecked(bool)));
 }
 
 rotSetupForm::~rotSetupForm()
@@ -153,7 +153,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                 else
                 {
                     sStopButtonsVisible(false);
-                    setSStopOffButChecked(false);
+                    setSStopOffButChecked(true);
                 }
 
 
@@ -818,14 +818,14 @@ void rotSetupForm::antennaOffSetVisible(bool s)
 /*********************** Compass Dial Visible *************************/
 
 
-void rotSetupForm::onCompasDialVisibleSelected(bool selected)
+void rotSetupForm::onCompasDialVisibleChecked(bool selected)
 {
     Q_UNUSED(selected)
     bool checked = ui->showCompDialChkBox->isChecked();
     if (antennaData->showCompassDialFlag != checked)
     {
         antennaData->showCompassDialFlag = checked;
-        setCompassDialChkBoxVisible(checked);
+        checkCompassDialChkBox(checked);
         antennaValueChanged = true;
 
     }
