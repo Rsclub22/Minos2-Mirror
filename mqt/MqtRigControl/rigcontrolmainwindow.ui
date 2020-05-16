@@ -43,6 +43,26 @@
          </widget>
         </item>
         <item>
+         <widget class="QLabel" name="usingLbl">
+          <property name="font">
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Using: </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="usingLibText">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="radioNameDispLbl">
           <property name="font">
            <font>
@@ -822,7 +842,7 @@ Active</string>
     <property name="title">
      <string>Configure</string>
     </property>
-  <widget class="QMenu" name="menuSetup_Band_Freq">
+    <widget class="QMenu" name="menuSetup_Band_Freq">
      <property name="title">
       <string>Setup Band Freq.</string>
      </property>
@@ -907,13 +927,11 @@ Active</string>
    </property>
   </action>
   <action name="actionContest_Change_Ignore_Previous_Freq">
-    <property name="checkable">
+   <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-
     <string>Contest Change - Ignore Previous Freq</string>
-
    </property>
   </action>
  </widget>

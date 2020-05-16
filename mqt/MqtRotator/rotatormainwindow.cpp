@@ -981,6 +981,8 @@ void RotatorMainWindow::upDateAntenna()
                 return;
             }
 
+            ui->usingLibText->setText(rotator->getLibraryName());
+
             offSetDisplay->setText(QString::number(setupAntenna->currentAntenna.antennaOffset));
 
             // don't display overlap if rotator doesn't support or user turned off overlap
@@ -1051,6 +1053,7 @@ void RotatorMainWindow::upDateAntenna()
     {   // no antenna selected
         trace("No antenna selected");
         ui->antNameDisp->setText("");
+        ui->usingLibText->setText(rotator->getLibraryName());
         closeRotator();
         if (appName.length() > 0)
         {

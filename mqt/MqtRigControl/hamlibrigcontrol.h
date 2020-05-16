@@ -88,6 +88,7 @@ public:
 
 private:
 
+
     hamlib_port_t myport;
     RIG *my_rig = nullptr;
 

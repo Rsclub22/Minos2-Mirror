@@ -564,6 +564,8 @@ void RigControlMainWindow::upDateRadio()
             {
                 initCacheData();
 
+                ui->usingLibText->setText(radio->getLibraryName());
+
                 if (setupRadio->currentRadio.rigModelNumber == hamlibData::RIGCTL)     // is it rigctl?
                 {
                     getRigctldNames(setupRadio->currentRadio.networkAdd, setupRadio->currentRadio.networkPort.toUShort());
@@ -772,6 +774,7 @@ void RigControlMainWindow::upDateRadio()
         trace("No radio selected");
         setupRadio->saveCurrentRadio();
         ui->radioNameDisp->setText("");
+        ui->usingLibText->setText("");
         closeRadio();
         writeWindowTitle(appName);
     }

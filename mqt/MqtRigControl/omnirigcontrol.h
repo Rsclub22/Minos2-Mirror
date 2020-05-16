@@ -87,6 +87,7 @@ private slots:
 
 private:
 
+
     RigNumber rig_number;
 
     int omnirigStart ();

@@ -145,6 +145,32 @@
                </spacer>
               </item>
               <item>
+               <widget class="QLabel" name="usinglbl">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Using:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="usingLibText">
+                <property name="font">
+                 <font>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QLabel" name="antNameDispLbl">
                 <property name="font">
                  <font>
