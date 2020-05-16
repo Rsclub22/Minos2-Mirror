@@ -1053,7 +1053,7 @@ void RotatorMainWindow::upDateAntenna()
     {   // no antenna selected
         trace("No antenna selected");
         ui->antNameDisp->setText("");
-        ui->usingLibText->setText(rotator->getLibraryName());
+        ui->usingLibText->setText("");
         closeRotator();
         if (appName.length() > 0)
         {
@@ -1128,7 +1128,7 @@ void RotatorMainWindow::request_bearing()
     logMessage(QString("Request Bearing"));
 
 
-    if (ui->testBearing->isVisible())
+    if (ui->testBearing->isVisible() && ui->testBearingChkbox->isChecked())
     {
 
         logMessage("Using Test Bearing Box");
@@ -2316,11 +2316,13 @@ void RotatorMainWindow::checkTestBearingBox()
     if (config.value("testbearings", false).toBool())
     {
         ui->testBearing->setVisible(true);
+        ui->testBearingChkbox->setVisible(true);
         logMessage(QString("enabling test bearing box"));
     }
     else
     {
         ui->testBearing->setVisible(false);
+        ui->testBearingChkbox->setVisible(false);
     }
     config.endGroup();
 }

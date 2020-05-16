@@ -320,7 +320,8 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
                                                min_az,
                                                capsList[i]->max_az,
                                                RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial,
-                                               RotCapConstants::PollData::pollDataOn);
+                                               RotCapConstants::PollData::pollDataOn,
+                                               true);
     }
 
 

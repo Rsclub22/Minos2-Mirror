@@ -22,7 +22,8 @@ public:
                     int minRot_ = COMPASS_MIN0,
                     int maxRot_ = COMPASS_MAX360,
                     bool enableSelectDisplayDial_= RotCapConstants::disableSelectDisplayDial,
-                    bool pollData_ = RotCapConstants::pollDataOn);
+                    bool pollData_ = RotCapConstants::pollDataOn,
+                    bool allowSouthStopConfig_ = true);
 
 
     int modelNumber;
@@ -34,6 +35,7 @@ public:
     int maxRot;
     bool enableSelectDisplayDial;
     bool pollData;
+    bool allowSouthStopConfig;
 
 
 };

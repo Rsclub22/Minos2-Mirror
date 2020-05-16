@@ -51,7 +51,8 @@ void PstRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList, in
                                                            false,
                                                            COMPASS_MIN0, COMPASS_MAX360,
                                                            RotCapConstants::PollData::pollDataOn,
-                                                           RotCapConstants::SelectDisplayCompass::enableSelectDisplayDial);
+                                                           RotCapConstants::SelectDisplayCompass::enableSelectDisplayDial,
+                                                           false);
 
 
 
@@ -315,7 +316,7 @@ void PstRotControl::onCommsTimeout()
 
 void PstRotControl::traceMsg(QString msg)
 {
-    emit traceCommsMsg(QString("[PstRotator] %1").arg(msg));
+    trace(QString("[PstRotator] %1").arg(msg));
 }
 
 

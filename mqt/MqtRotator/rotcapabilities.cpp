@@ -9,7 +9,8 @@ RotCapabilities::RotCapabilities(int modelNumber_,
                                  int minRot_ ,
                                  int maxRot_ ,
                                  bool enableSelectDisplayDial_,
-                                 bool pollData_ )
+                                 bool pollData_,
+                                 bool allowSouthStopConfig_)
 
                : modelNumber (modelNumber_),
                  portType (portType_),
@@ -19,7 +20,8 @@ RotCapabilities::RotCapabilities(int modelNumber_,
                  minRot (minRot_),
                  maxRot (maxRot_),
                  enableSelectDisplayDial (enableSelectDisplayDial_),
-                 pollData (pollData_)
+                 pollData (pollData_),
+                 allowSouthStopConfig(allowSouthStopConfig_)
 
 {
 

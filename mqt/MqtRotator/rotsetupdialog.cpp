@@ -152,6 +152,7 @@ void RotSetupDialog::addTab(int tabNum, QString tabName)
 void RotSetupDialog::loadSettingsToTab(int tabNum)
 {
 
+    RotCapabilities rotCap = rotatorFactory->supported_rotators()->value(availAntData[tabNum]->rotatorModel);
 
     ui->antennaTab->setTabText(tabNum, availAntData[tabNum]->antennaName);
 
@@ -169,8 +170,18 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
 
         if (availAntData[tabNum]->rotType == ROT_0_360)
         {
-           antennaTab[tabNum]->sStopButtonsVisible(true);
-           antennaTab[tabNum]->setSStopButtons(availAntData[tabNum]->southStopType);
+           if (rotCap.allowSouthStopConfig)
+           {
+              antennaTab[tabNum]->sStopButtonsVisible(true);
+              antennaTab[tabNum]->setSStopButtons(availAntData[tabNum]->southStopType);
+
+           }
+           else
+           {
+               antennaTab[tabNum]->sStopButtonsVisible(false);
+               antennaTab[tabNum]->setSStopButtons(availAntData[tabNum]->southStopType);
+           }
+
            antennaTab[tabNum]->setOverRunFlagVisible(false);
         }
         else if (availAntData[tabNum]->rotType == ROT_0_450)

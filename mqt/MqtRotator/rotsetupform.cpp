@@ -145,8 +145,16 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
 
                 ui->chkOverrun->setVisible(false);
                 ui->chkOverrun->setChecked(false);
-                sStopButtonsVisible(true);
-                setSStopOffButChecked(true);
+                if (rotCap.allowSouthStopConfig)
+                {
+                    sStopButtonsVisible(true);
+                    setSStopOffButChecked(true);
+                }
+                else
+                {
+                    sStopButtonsVisible(false);
+                    setSStopOffButChecked(false);
+                }
 
 
 
