@@ -8,7 +8,7 @@ RotCapabilities::RotCapabilities(int modelNumber_,
                                  bool supportCwCCwCmd_ ,
                                  int minRot_ ,
                                  int maxRot_ ,
-                                 bool rotDisplay_,
+                                 bool enableSelectDisplayDial_,
                                  bool pollData_ )
 
                : modelNumber (modelNumber_),
@@ -18,7 +18,7 @@ RotCapabilities::RotCapabilities(int modelNumber_,
                  supportCwCCwCmd (supportCwCCwCmd_),
                  minRot (minRot_),
                  maxRot (maxRot_),
-                 rotDisplay (rotDisplay_),
+                 enableSelectDisplayDial (enableSelectDisplayDial_),
                  pollData (pollData_)
 
 {

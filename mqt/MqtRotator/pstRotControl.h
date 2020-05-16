@@ -63,6 +63,9 @@ public:
     void setTraceComms(bool value) override;
     bool getTraceComms() override;
 
+    void setRotConnected(bool rotConnected) override;
+    bool getRotConnected() override;
+
     QString getRotLibVersion() override;
     QString getErrorMsgText(int errorCode) override;
     QString getLibraryName() override;
@@ -98,6 +101,7 @@ private:
     QTimer *commsTimeoutTimer;
     QString bearing;
     bool traceCommsFlag;
+    bool rotConnected;
 
     pstCmdSent cmdSent;
 

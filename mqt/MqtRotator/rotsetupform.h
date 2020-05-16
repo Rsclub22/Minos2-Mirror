@@ -129,6 +129,10 @@ public:
     void setForceDTR(int n);
 
 
+    void setCompassDialChkBoxVisible(bool s);
+    void checkCompassDialChkBox(bool checked);
+
+
 public slots:
 
     void comDataSpeedSelected();
@@ -190,6 +194,8 @@ private:
 
 
 
+
+    void onCompasDialVisibleSelected(bool selected);
 
 };
 

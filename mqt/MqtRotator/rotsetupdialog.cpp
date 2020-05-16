@@ -248,6 +248,15 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
 
         }
 
+        if (rotatorFactory->supported_rotators()->value(availAntData[tabNum]->rotatorModel).enableSelectDisplayDial)
+        {
+            antennaTab[tabNum]->setCompassDialChkBoxVisible(true);
+            antennaTab[tabNum]->checkCompassDialChkBox(availAntData[tabNum]->showCompassDialFlag);
+        }
+        else
+        {
+            antennaTab[tabNum]->setCompassDialChkBoxVisible(false);
+        }
 
 
 
@@ -264,6 +273,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         antennaTab[tabNum]->antennaOffSetVisible(false);
         antennaTab[tabNum]->serialDataEntryVisible(false);
         antennaTab[tabNum]->setSimCW_CCWcmdVisible(false);
+        antennaTab[tabNum]->setCompassDialChkBoxVisible(false);
 
     }
 
@@ -427,6 +437,7 @@ void RotSetupDialog::saveSettings()
             config.setValue("advancedComms", availAntData[i]->advancedCommsFlag);
             config.setValue("netAddress", availAntData[i]->networkAdd);
             config.setValue("netPort", availAntData[i]->networkPort);
+            config.setValue("showCompassDial", availAntData[i]->showCompassDialFlag);
             config.endGroup();
             antennaTab[i]->setAntennaValueChanged(false);
 
@@ -484,6 +495,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->networkAdd = config.value("netAddress", "").toString();
     availAntData[antNum]->networkPort = config.value("netPort", "").toString();
     availAntData[antNum]->advancedCommsFlag = config.value("advancedComms", false).toBool();
+    availAntData[antNum]->showCompassDialFlag = config.value("showCompassDial",true).toBool();
 
     config.endGroup();
 

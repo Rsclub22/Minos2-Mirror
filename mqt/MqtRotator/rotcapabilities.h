@@ -6,7 +6,7 @@
 namespace RotCapConstants
 {
     enum PortType {none, serial, network, usb};
-    enum RotatorDisplay {displayFull = true, displayPart = false};
+    enum SelectDisplayCompass {enableSelectDisplayDial = true, disableSelectDisplayDial = false};
     enum PollData {pollDataOn = true, pollDataOff = false};
 
 }
@@ -21,7 +21,7 @@ public:
                     bool supportCwCCwCmd_ = false,
                     int minRot_ = COMPASS_MIN0,
                     int maxRot_ = COMPASS_MAX360,
-                    bool rotDisplay_= RotCapConstants::displayFull,
+                    bool enableSelectDisplayDial_= RotCapConstants::disableSelectDisplayDial,
                     bool pollData_ = RotCapConstants::pollDataOn);
 
 
@@ -32,7 +32,7 @@ public:
     bool supportCwCCwCmd;
     int minRot;
     int maxRot;
-    bool rotDisplay;
+    bool enableSelectDisplayDial;
     bool pollData;
 
 

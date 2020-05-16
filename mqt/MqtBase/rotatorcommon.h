@@ -247,6 +247,7 @@ public:
       dest.simCwCcwCmd = srce->simCwCcwCmd;
       dest.antennaOffset = srce->antennaOffset;
       dest.moving = srce->moving;
+      dest.showCompassDialFlag = srce->showCompassDialFlag;
       dest.portType = srce->portType;
       dest.advancedCommsFlag = srce->advancedCommsFlag;
       dest.networkAdd = srce->networkAdd;
@@ -292,6 +293,7 @@ public:
   bool simCwCcwCmd = false;
   int antennaOffset = 0;
   bool moving = false;
+  bool showCompassDialFlag;
   int portType = 0;
   bool advancedCommsFlag;
   QString networkAdd;

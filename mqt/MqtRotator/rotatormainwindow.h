@@ -296,6 +296,7 @@ private:
     void savePreset(RotPresetData &editData);
 
     void checkTestBearingBox();
+    void setCompassDialVisible(bool visible);
 };
 
 #endif // ROTATORMAINWINDOW_H

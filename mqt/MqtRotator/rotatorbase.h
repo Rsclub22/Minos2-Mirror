@@ -28,8 +28,8 @@ public:
     void setRotAzimuth(int rot_azimuth_){rot_azimuth = rot_azimuth_;}
     int getRotAzimuth(){return rot_azimuth;}
 
-    void setRotConnected(bool rotConnected_){rotConnected = rotConnected_;}
-    bool getRotConnected(){return rotConnected;}
+    virtual void setRotConnected(bool rotConnected) = 0;
+    virtual bool getRotConnected() = 0;
 
     virtual void setTraceComms(bool value) = 0;
     virtual bool getTraceComms() = 0;

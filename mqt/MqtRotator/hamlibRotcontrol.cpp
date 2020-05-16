@@ -319,7 +319,7 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
                                                capsList[i]->move != nullptr ? true : false,
                                                min_az,
                                                capsList[i]->max_az,
-                                               RotCapConstants::RotatorDisplay::displayFull,
+                                               RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial,
                                                RotCapConstants::PollData::pollDataOn);
     }
 
@@ -529,22 +529,22 @@ int HamlibRotControl::get_rotatorSpeed()
 {
     return rot_speed;
 }
-/*
 
-void HamlibRotControl::set_serialConnected(bool connectFlag)
+
+void HamlibRotControl::setRotConnected(bool connectFlag)
 {
-    serialConnected = connectFlag;
+    rotConnected = connectFlag;
 }
 
 
 
 
-bool HamlibRotControl::get_serialConnected()
+bool HamlibRotControl::getRotConnected()
 {
-    return serialConnected;
+    return rotConnected;
 }
 
-*/
+
 
 
 

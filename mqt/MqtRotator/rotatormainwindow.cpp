@@ -333,6 +333,11 @@ void RotatorMainWindow::setAntennaNameLabelVisible(bool visible)
 
 }
 
+void RotatorMainWindow::setCompassDialVisible(bool visible)
+{
+    ui->compassDial->setVisible(visible);
+}
+
 
 void RotatorMainWindow::onLoggerSetRotation(int direction, int angle)
 {
@@ -994,6 +999,15 @@ void RotatorMainWindow::upDateAntenna()
                 cwCCWControlVisible(setupAntenna->currentAntenna.simCwCcwCmd);
             }
 
+            RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
+            if (rotCap.enableSelectDisplayDial && !setupAntenna->currentAntenna.showCompassDialFlag)
+            {
+                setCompassDialVisible(false);
+            }
+            else
+            {
+                setCompassDialVisible(true);
+            }
 
 
 

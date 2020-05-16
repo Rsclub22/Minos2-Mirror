@@ -57,6 +57,8 @@ public:
 
     static void register_rotators(RotatorFactory::Rotators *);
 
+    void setRotConnected(bool rigConnected) override;
+    bool getRotConnected() override;
 
     int getModelNumber(int idx);
     int getRotatorModelIndex();
@@ -115,7 +117,7 @@ private:
 
     int rot_speed = 100;
     //bool rotControlEnabled;
-    //bool serialConnected;
+    bool rotConnected;
     //void errorMessage(int errorCode,QString command);
     //bool rotatorlistLoaded=false;
     //srotParams curRotParams;   remove

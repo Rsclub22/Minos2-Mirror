@@ -13,6 +13,7 @@
 
 #include "pstRotControl.h"
 #include "rotatorfactory.h"
+#include "minosNetUtils.h"
 
 const char * PstRotControl::pstRotatorErrorMsg[] = { QT_TR_NOOP("PSTRotator Command OK"),
                                                      QT_TR_NOOP("Network Address failed to bind"),
@@ -50,7 +51,7 @@ void PstRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList, in
                                                            false,
                                                            COMPASS_MIN0, COMPASS_MAX360,
                                                            RotCapConstants::PollData::pollDataOn,
-                                                           RotCapConstants::RotatorDisplay::displayPart);
+                                                           RotCapConstants::SelectDisplayCompass::enableSelectDisplayDial);
 
 
 
@@ -73,8 +74,23 @@ int PstRotControl::rotInit(srotParams &selectedAntenna)
     commsTimeoutTimer = new QTimer(this);
     connect(commsTimeoutTimer, SIGNAL(timeout()), this, SLOT(onCommsTimeout()));
 
+
     pstNetAddress = selectedAntenna.networkAdd.trimmed();
-    pstCommandPortNumber = selectedAntenna.networkPort.trimmed().toUShort();
+    //if (pstNetAddress.isEmpty() || isHostLocal(pstNetAddress))
+    //{
+    //    pstNetAddress = "127.0.0.1";
+    //}
+
+    //if (selectedAntenna.networkPort.trimmed().isEmpty())
+    //{
+        pstCommandPortNumber = 12000;
+    //}
+   // else
+    //{
+        pstCommandPortNumber = selectedAntenna.networkPort.trimmed().toUShort();
+
+   // }
+
     pstReportPortNumber = pstCommandPortNumber + 1;
 
     pstAddress.setAddress(pstNetAddress);
@@ -123,6 +139,7 @@ void PstRotControl::closeSockets()
 int PstRotControl::closeRotator()
 {
     int retCode = 0;
+    setRotConnected(false);
 
     closeSockets();
     traceMsg(QString("Close Rotator"));
@@ -273,6 +290,19 @@ int PstRotControl::get_rotatorSpeed()
     return rot_speed;
 }
 
+
+
+
+void PstRotControl::setRotConnected(bool connectFlag)
+{
+    rotConnected = connectFlag;
+}
+
+
+bool PstRotControl::getRotConnected()
+{
+    return rotConnected;
+}
 
 void PstRotControl::onCommsTimeout()
 {
