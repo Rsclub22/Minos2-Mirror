@@ -312,15 +312,15 @@ void DisplayContestContact::checkContact( bool inScan)
    {
       clp->addDistrictWorked(band, districtMult->listOffset);
       int n = clp->getDistrictsWorked(band, districtMult->listOffset);
-      if ( n < districtMult->country1->districtLimit() )
+      if ( n <= districtMult->country1->districtLimit() )
       {
          clp->ndistrict[band]++;
          if ( clp->districtMult.getValue() )
          {
             multCount++;
          }
+         newDistrict = true;
       }
-     newDistrict = true;
   }
 
    if ( ctryMult)
