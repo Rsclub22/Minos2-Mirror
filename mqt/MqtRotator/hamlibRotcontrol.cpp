@@ -564,7 +564,7 @@ QString HamlibRotControl::getErrorMsgText(int errorCode)
 
 QString HamlibRotControl::getLibraryName()
 {
-    return QString(HAMLIB_API);
+    return QString("Hamlib");
 }
 
 

@@ -980,10 +980,10 @@ void RotatorMainWindow::upDateAntenna()
             }
 
 
-            ui->antNameDisp->setText(setupAntenna->currentAntenna.antennaName);
+
 
             writeWindowTitle(appName);
-
+            ui->antNameDisp->setText(setupAntenna->currentAntenna.antennaName);
             ui->usingLibText->setText(rotator->getLibraryName());
 
             offSetDisplay->setText(QString::number(setupAntenna->currentAntenna.antennaOffset));
