@@ -132,7 +132,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         bool supportVolume = false;
 
-        if (capsList[i]->rig_model != 237) // if rig is TS590G ignore volume as it has a bug..
+        if (capsList[i]->rig_model != RIG_MODEL_TS590SG) // if rig is TS590G ignore volume as it has a bug..
         {
             if ((HamlibRigControl::rigHasGetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (HamlibRigControl::rigHasSetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF))
             {

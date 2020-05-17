@@ -19,6 +19,9 @@ RigFactory::RigFactory(bool tracecommFlag, QObject *parent) : QObject(parent)
     HamlibRigControl::setTraceCommsFlag(tracecommFlag);
     HamlibRigControl::register_rigs(&rigsList);
 
+
+#if defined (WIN32)
+    // Omnirig is only on Windows
     if (checkOmniRigInstalled())
     {
         trace("OmniRig installed - add to riglist");
@@ -28,7 +31,7 @@ RigFactory::RigFactory(bool tracecommFlag, QObject *parent) : QObject(parent)
     {
         trace(QString("OmniRig is not installed"));
     }
-
+#endif
 
 }
 

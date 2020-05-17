@@ -965,21 +965,24 @@ void RotatorMainWindow::upDateAntenna()
               closeRotator();
             }
 
-            if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
-            {
+            //if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
+            //{
 
-                QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
-                return;
-            }
+            //    QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
+            //    return;
+            //}
 
-            ui->antNameDisp->setText(setupAntenna->currentAntenna.antennaName);
 
-            writeWindowTitle(appName);
 
             if (openRotator() != OPEN_OK)
             {
                 return;
             }
+
+
+            ui->antNameDisp->setText(setupAntenna->currentAntenna.antennaName);
+
+            writeWindowTitle(appName);
 
             ui->usingLibText->setText(rotator->getLibraryName());
 
@@ -1525,7 +1528,7 @@ void RotatorMainWindow::stopRotation(bool sendStop)
 
 
         // if it is a Prosistel Rotator - to stop use rotate_to_bearing = 999
-        if (setupAntenna->currentAntenna.rotatorModelNumber == 1701)
+        if (setupAntenna->currentAntenna.rotatorModelNumber == ROT_MODEL_PROSISTEL)
         {
             logMessage(QString("Stop Rotation: Prosistel Rotator"));
             //retCode = rotator->rotate_to_bearing(999);
@@ -2435,7 +2438,11 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
 
         }
 
-        trace(QString("Library Version = %1").arg(rotator->getRotLibVersion()));
+        if (rotator != nullptr)
+        {
+            trace(QString("Library Version = %1").arg(rotator->getRotLibVersion()));
+        }
+
         trace(QString("Antenna Name = %1").arg(setupAntenna->currentAntenna.antennaName));
         trace(QString("Antenna Number = %1").arg(setupAntenna->currentAntenna.antennaNumber));
         trace(QString("Rotator Model = %1").arg(setupAntenna->currentAntenna.rotatorModel));
