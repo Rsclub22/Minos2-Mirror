@@ -245,193 +245,110 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
     {
         if (!rig || rig->isNull ())
             return;
-        //      starting_ = false;
-        //TransceiverState old_state {state ()};
-        //auto need_frequency = false;
 
         if (params & OmniRig::PM_VFOAA)
         {
-            qDebug() << QString("OmniRig VFOAA");
-            //update_split (false);
-            //reversed_ = false;
-            //update_rx_frequency (rig_->FreqA ());
-            //update_other_frequency (rig_->FreqB ());
+            traceMsg(QString("OmniRig params change: OmniRig VFOAA"));
+
         }
         if (params & OmniRig::PM_VFOAB)
          {
-            qDebug() << QString("OmniRig VFOAB");
-            //update_split (true);
-            //reversed_ = false;
-            //update_rx_frequency (rig_->FreqA ());
-            //update_other_frequency (rig_->FreqB ());
+            traceMsg(QString("OmniRig params change: OmniRig VFOAB"));
+
         }
         if (params & OmniRig::PM_VFOBA)
         {
-            qDebug() << QString("OmniRig VFOBA");
-            //update_split (true);
-            //reversed_ = true;
-            //update_other_frequency (rig_->FreqA ());
-            //update_rx_frequency (rig_->FreqB ());
+            traceMsg(QString("OmniRig params change: OmniRig VFOBA"));
+
         }
         if (params & OmniRig::PM_VFOBB)
         {
-            qDebug() << QString("OmniRig VFOBB");
-            //update_split (false);
-            //reversed_ = true;
-            //update_other_frequency (rig_->FreqA ());
-            //update_rx_frequency (rig_->FreqB ());
+            traceMsg(QString("OmniRig params change: OmniRig VFOBB"));
+
         }
         if (params & OmniRig::PM_VFOA)
         {
-            qDebug() << QString("OmniRig VFOA");
-            //reversed_ = false;
-            //need_frequency = true;
+            traceMsg(QString("OmniRig params change: OmniRig VFOA"));
+
         }
         if (params & OmniRig::PM_VFOB)
         {
-            qDebug() << QString("OmniRig VFOB");
-            //reversed_ = true;
-            //need_frequency = true;
+            traceMsg(QString("OmniRig params change: OmniRig VFOB"));
+
         }
         if (params & OmniRig::PM_FREQ)
         {
-            traceMsg(QString("Parameter change PM_FREQ"));
+            traceMsg(QString("OmniRig params change:  PM_FREQ"));
             emit newFreq();
         }
         if (params & OmniRig::PM_FREQA)
         {
             auto f = rig->FreqA ();
-            qDebug() << QString("OmniRig FREQA = %1").arg(QString::number(f));
-            //if (reversed_)
-            //  {
-            //    update_other_frequency (f);
-            //  }
-            //else
-            //  {
-            //    update_rx_frequency (f);
-            //  }
+            traceMsg(QString("OmniRig params change: OmniRig FREQA = %1").arg(QString::number(f)));
+
         }
         if (params & OmniRig::PM_FREQB)
         {
             auto f = rig->FreqB ();
-            qDebug() << QString("OmniRig FREQB = ").arg(QString::number(f));
-            //if (reversed_)
-            //  {
-            //    update_rx_frequency (f);
-            //  }
-            //else
-            //  {
-            //    update_other_frequency (f);
-            //  }
+            traceMsg(QString("OmniRig params change: OmniRig FREQB = ").arg(QString::number(f)));
+
         }
-/*        if (need_frequency)
-          {
-            if (readable_params_ & OmniRig::PM_FREQA)
-              {
-                auto f = rig_->FreqA ();
-                if (f)
-                  {
-                    TRACE_CAT ("OmniRigTransceiver", "FREQA = " << f);
-                    if (reversed_)
-                      {
-                        update_other_frequency (f);
-                      }
-                    else
-                      {
-                        update_rx_frequency (f);
-                      }
-                  }
-              }
-            if (readable_params_ & OmniRig::PM_FREQB)
-              {
-                auto f = rig_->FreqB ();
-                if (f)
-                  {
-                    TRACE_CAT ("OmniRigTransceiver", "FREQB = " << f);
-                    if (reversed_)
-                      {
-                        update_rx_frequency (f);
-                      }
-                    else
-                      {
-                        update_other_frequency (f);
-                      }
-                  }
-              }
-            if (readable_params_ & OmniRig::PM_FREQ && !state ().ptt ())
-              {
-                auto f = rig_->Freq ();
-                if (f)
-                  {
-                    TRACE_CAT ("OmniRigTransceiver", "FREQ = " << f);
-                    update_rx_frequency (f);
-                  }
-              }
-          }
-*/      if (params & OmniRig::PM_PITCH)
+        if (params & OmniRig::PM_PITCH)
         {
-            qDebug() << QString("OmniRig PITCH");
+            traceMsg(QString("OmniRig params change: OmniRig PITCH"));
         }
         if (params & OmniRig::PM_RITOFFSET)
         {
-            qDebug() << QString("OmniRig RITOFFSET");
+            traceMsg(QString("OmniRig params change: OmniRig RITOFFSET"));
         }
         if (params & OmniRig::PM_RIT0)
         {
-            qDebug() << QString("OmniRig RIT0");
+            traceMsg(QString("OmniRig params change: OmniRig RIT0"));
         }
         if (params & OmniRig::PM_VFOEQUAL)
         {
-            //auto f = readable_params_ & OmniRig::PM_FREQA ? rig->FreqA () : rig->Freq ();
-            //auto m = map_mode (rig->Mode ());
-            //TRACE_CAT ("OmniRigTransceiver", QString {"VFOEQUAL f=%1 m=%2"}.arg (f).arg (m));
-            //update_rx_frequency (f);
-            //update_other_frequency (f);
-            //update_mode (m);
+            traceMsg(QString("OmniRig params change: OmniRig PM_VFOEQUAL"));
         }
         if (params & OmniRig::PM_VFOSWAP)
         {
-            qDebug() << QString("OmniRig VFOSWAP");
-            //auto f = state ().tx_frequency ();
-            //update_other_frequency (state ().frequency ());
-            //update_rx_frequency (f);
-            //update_mode (map_mode (rig_->Mode ()));
+            traceMsg(QString("OmniRig params change: OmniRig VFOSWAP"));
+
         }
         if (params & OmniRig::PM_SPLITON)
         {
-            qDebug() << QString("OmniRig SPLITON");
-            //update_split (true);
+            traceMsg(QString("OmniRig params change: OmniRig SPLITON"));
+
         }
         if (params & OmniRig::PM_SPLITOFF)
         {
-            qDebug() << QString("OmniRig SPLITOFF");
-            //update_split (false);
+            traceMsg(QString("OmniRig params change: OmniRig SPLITOFF"));
+
         }
         if (params & OmniRig::PM_RITON)
         {
-            qDebug() << QString("OmniRig RITON");
+            traceMsg(QString("OmniRig params change: OmniRig RITON"));
         }
         if (params & OmniRig::PM_RITOFF)
         {
-            qDebug() << QString("OmniRig RITOFF");
+            traceMsg(QString("OmniRig params change: OmniRig RITOFF"));
         }
         if (params & OmniRig::PM_XITON)
         {
-            qDebug() << QString("OmniRig XITON");
+            traceMsg(QString("OmniRig params change: OmniRig XITON"));
         }
         if (params & OmniRig::PM_XITOFF)
         {
-            qDebug() << QString("OmniRig XITOFF");
+            traceMsg(QString("OmniRig params change: OmniRig XITOFF"));
         }
         if (params & OmniRig::PM_RX)
         {
-            qDebug() << QString("OmniRig RX");
-            //update_PTT (false);
+            traceMsg(QString("OmniRig params change: OmniRig RX"));
+
         }
         if (params & OmniRig::PM_TX)
         {
-            qDebug() << QString("OmniRig TX");
-            //update_PTT ();
+            traceMsg(QString("OmniRig params change: OmniRig TX"));
+
         }
         if (params & OmniRig::PM_CW_U)
         {
@@ -475,14 +392,9 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
             emit newMode();
         }
 
-        //if (old_state != state () || send_update_signal_)
-        //  {
-        //    update_complete ();
-        //    send_update_signal_ = false;
-        //  }
-        //TRACE_CAT ("OmniRigTransceiver", "OmniRig params change: state after:" << state ());
+
     }
-    //Q_EMIT notified ();
+
 
 }
 
@@ -501,20 +413,21 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 "Omnirig",
                 OmniRigOneName,
                 id1,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false);
+                false,      // support getSupBands
+                false,      // support get rit
+                false,      // support set rit
+                false,      // support get rit state
+                false,      // support set rit state
+                false,      // support s-meter
+                false,      // support get Ptt
+                false,      // support set Ptt
+                false,      // support volume
+                false,      // support antenna switch
+                false,      // support rigctld
+                false);     // polldata flag
 
-
+    // note the library may support these features, but Minos chooses not to use them
+    // or is yet to implement the feature
 
 
     (*rigsList)[OmniRigTwoName] = RigCapabilities(
@@ -523,18 +436,19 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 "Omnirig",
                 OmniRigTwoName,
                 id2,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false,
-                false);
+                false,      // support getSupBands
+                false,      // support get rit
+                false,      // support set rit
+                false,      // support get rit state
+                false,      // support set rit state
+                false,      // support s-meter
+                false,      // support get Ptt
+                false,      // support set Ptt
+                false,      // support volume
+                false,      // support antenna switch
+                false,      // support rigctld
+                false);     // polldata flag
+
 
 }
 
