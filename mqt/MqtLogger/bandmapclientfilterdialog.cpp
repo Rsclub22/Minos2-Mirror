@@ -69,7 +69,7 @@ void BandmapClientFilterDialog::initCheckFilterTab()
     setWindowTitle("Bandmap Spot Filters");
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-
+    ui->bandmapFilterTab->setCurrentIndex(0);
 
     modeChkBoxList << ui->noneModeChkBox << ui->cwModeChkBox << ui->usbModeChkBox << ui->fmModeChkBox << ui->rttyModeChkBox << ui->psk31ModeChkBox << ui->ft8ModeChkBox << ui->msk144ModeChkBox << ui->jt65ModeChkBox;
 
