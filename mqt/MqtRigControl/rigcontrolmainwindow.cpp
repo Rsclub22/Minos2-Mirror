@@ -645,7 +645,6 @@ void RigControlMainWindow::upDateRadio()
 
                     slogMode = USB_STR;
                     // set mode
-                    //logMode = radio->convertQStrMode("USB");
                     setMode(USB_STR, VFO::CURRENT_VFO);
                 }
 

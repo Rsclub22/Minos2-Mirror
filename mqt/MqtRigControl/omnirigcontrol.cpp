@@ -47,11 +47,11 @@ auto OmnirigControl::map_mode (OmniRig::RigParamX param) -> MODE
 {
   if (param & OmniRig::PM_CW_U)
   {
-      return CW_R;
+      return CW;
   }
   else if (param & OmniRig::PM_CW_L)
   {
-      return CW;
+      return CW_R;
   }
   else if (param & OmniRig::PM_SSB_U)
   {

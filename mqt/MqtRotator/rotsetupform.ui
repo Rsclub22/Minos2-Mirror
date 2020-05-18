@@ -340,7 +340,7 @@
          <item>
           <widget class="QCheckBox" name="showCompDialChkBox">
            <property name="text">
-            <string>Show Cpmpass Dial</string>
+            <string>Show Compass Dial</string>
            </property>
           </widget>
          </item>
