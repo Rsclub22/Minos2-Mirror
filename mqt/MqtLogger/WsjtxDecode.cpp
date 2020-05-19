@@ -59,7 +59,8 @@ static void addCall(const Callsign &c, const Locator &l)
 {
     if (c.fullCall.getValue() != "..." && c.valRes == CS_OK && (l.valRes == LOC_OK || l.valRes == LOC_PARTIAL) )
     {
-        GridCallMap[c.realCall] = l;
+        if (GridCallMap[c.realCall].valRes != LOC_OK)
+            GridCallMap[c.realCall] = l;
     }
 }
 
@@ -78,7 +79,8 @@ decodeMessage::decodeMessage()
 }
 QString decodeMessage::getMStage() const
 {
-//    enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73, emsFree};
+//enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsDbGrid, emsRplusGrid, emsRplusDb, emsRplusDbGrid, emsRRR, ems73, emsFree};
+
     switch (mstage)
     {
     case emsNone:
@@ -89,10 +91,14 @@ QString decodeMessage::getMStage() const
         return tr("Grid");
     case emsDb:
         return "db";
+    case emsDbGrid:
+        return "Db+grid";
     case emsRplusDb:
         return "R+db";
     case emsRplusGrid:
         return "R+grid";
+    case emsRplusDbGrid:
+        return "R+db+grid";
     case emsRRR:
         return "RRR";
     case ems73:
@@ -140,6 +146,21 @@ bool decodeMessage::checkAsContact()
     }
 
     return false;
+}
+void decodeMessage::validate()
+{
+    fromCall.validate();
+    toCall.validate();
+    fromGrid.validate();
+
+    if (fromCall.fullCall.getValue() == "...")
+    {
+        fromCall.valRes = CS_OK;
+    }
+    if (toCall.fullCall.getValue() == "...")
+    {
+        toCall.valRes = CS_OK;
+    }
 }
 
 void WsjtxDecode::setMyCallGrid(const QString &c, const QString &l)
@@ -207,7 +228,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
     dc.low_confidence = low_confidence;
     dc.off_air = off_air;
     
-    // there shouldn't be any spare spaces but...
+    // there shouldn't be any spare spaces unless there is a decode indicator
 
     int spoff = message_text.trimmed().indexOf("      ");
     if (spoff > 0)
@@ -230,7 +251,6 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
 
     if  (sl[0] == "CQ" || sl[0] == "QRZ")
     {
-        // repliable to "from"
         // CQ K1ABC FN42
         // CQ DX K1ABC FN42
         // CQ TEST G4ABC/P IO91
@@ -251,61 +271,89 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         if (callIndex + 1 < sl.count())
         {
             dc.fromCall = Callsign(stripBrackets(sl[callIndex]));
-            dc.fromCall.validate();
             dc.fromGrid = Locator(sl[callIndex + 1]);
-            dc.fromGrid.validate();
+            dc.validate();
             addCall(dc.fromCall, dc.fromGrid);
         }
     }
     else if (sl.count() == 3 && (sl[2] == "RR73" || sl[2] == "RRR"))
     {
-        // repliable to "from"
         // G0XYZ K1ABC RR73
         // PA9XYZ G4ABC/P RR73
         dc.mstage = emsRRR;
         dc.toCall = Callsign(stripBrackets(sl[0]));
         dc.fromCall = Callsign(stripBrackets(sl[1]));
+        dc.validate();
+
     }
     else if (sl.count() == 3 && sl[2] == "73")
     {
-        // repliable to "from"
         // K1ABC G0XYZ 73
         // G4ABC/P PA9XYZ 73
         dc.mstage = ems73;
         dc.toCall = Callsign(stripBrackets(sl[0]));
         dc.fromCall = Callsign(stripBrackets(sl[1]));
+        dc.validate();
+
     }
     else if (sl.count() == 3 && sl[2].indexOf('R') == 0)
     {
-        // repliable to "from" - but may have to wait for 73
         // K1ABC G0XYZ R-22
-        // G4ABC/P R 570007 JO22DB
         dc.mstage = emsRplusDb;
         dc.toCall = Callsign(stripBrackets(sl[0]));
         dc.fromCall = Callsign(stripBrackets(sl[1]));
+        dc.validate();
+
+    }
+    else if (sl.count() == 4 && sl[2] == "R")
+    {
+        // G0GJV 2E0EVM R IO80
+        dc.mstage = emsRplusGrid;
+        dc.toCall = Callsign(stripBrackets(sl[0]));
+        dc.fromCall = Callsign(stripBrackets(sl[1]));
+        dc.fromGrid = Locator(sl[3]);
+        dc.validate();
+
+    }
+    else if (sl.count() == 5 && sl[2] == "R")
+    {
+       // <G4ABC> <PA9XYZ> R 580071 JO22DB
+        dc.mstage = emsRplusDbGrid;
+        dc.toCall = Callsign(stripBrackets(sl[0]));
+        dc.fromCall = Callsign(stripBrackets(sl[1]));
+        dc.fromGrid = Locator(sl[4]);
+        dc.validate();
+        addCall(dc.fromCall, dc.fromGrid);
     }
     else if (sl.count() == 4 && sl[1] == "R")
     {
-        // repliable to "from" - but may have to wait for 73
-        // K1ABC G0XYZ R-22
+        // this will disappear with wsjt-x 2.2
         // G4ABC/P R 570007 JO22DB
-        dc.mstage = emsRplusDb;
+        dc.mstage = emsRplusDbGrid;
         dc.toCall = Callsign(stripBrackets(sl[0]));
         dc.fromGrid = Locator(sl[3]);
+        dc.validate();
+        addCall(dc.fromCall, dc.fromGrid);
 
-        //how do we get fromCall? From previous grid, db calls?
+        // how do we get fromCall? From previous grid, db calls?
+        // this is why it is changing...
     }
     else
     {
-        // now we are left with grid or db
+        // now we are left with grid or db or dbGrid
         // grid is sl[2] is 4 fig loc
+
+        // grid
         // K1ABC G0XYZ IO91
         // G4ABC/P PA9XYZ JO22
 
-        // db is aything else? or it may be a free text message
+        // db
         //G0XYZ K1ABC –19
+        //G0XYZ K1ABC 2
+
+        // dbGrid
         //PA9XYZ 590003 IO91NP
-        //G0GJV MM3AWD R IO87
+        //<PA9XYZ> <G4ABC> 570123 IO91NP
 
         dc.toCall = Callsign(stripBrackets(sl[0]));
         dc.toCall.validate();
@@ -314,62 +362,54 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
             dc.toCall.valRes = CS_OK;
         }
 
-        if (sl.count() != 3 || dc.toCall.valRes != CS_OK)
+        Callsign c0(stripBrackets(sl[0]));
+        Callsign c1(stripBrackets(sl[1]));
+        Locator l1(sl[2]);
+
+        if (sl.count() == 3)
         {
-            dc.mstage = emsFree;
-        }
-        else
-        {
-            Callsign c(stripBrackets(sl[1]));
-            Locator l1(sl[2]);
-
-            c.validate();
-            l1.validate();
-
-            if (c.fullCall.getValue() == "...")
+            if (isNumeric(sl[1]))
             {
-                c.valRes = CS_OK;
-            }
-
-            if (c.valRes == CS_OK && (l1.valRes == LOC_OK || l1.valRes == LOC_PARTIAL))
-            {
-                // repliable to "from" if we are "to"
-                // K1ABC G0XYZ IO91
-                // G4ABC/P PA9XYZ JO22
-                dc.mstage = emsGrid;
-                dc.fromCall = c;
-                //dc.fromCall.validate();
+                // old style EU VHF
+                dc.toCall = c0;
+                dc.mstage = emsDbGrid;
                 dc.fromGrid = l1;
-                //dc.fromGrid.validate();
+                dc.validate();
                 addCall(dc.fromCall, dc.fromGrid);
-            }
-            else if (isNumeric(sl[1])
-                     && l1.valRes == LOC_OK)
-            {
-                // not repliable
-                //PA9XYZ 590003 IO91NP
-                dc.mstage = emsDb;
-                dc.fromGrid = l1;
-
-                // who is fromCall? need previous CQ, grid
-            }
-            else if (c.valRes == CS_OK
-                     && isNumeric(sl[2]))
-            {
-                // not repliable
-                //G0XYZ K1ABC –19
-                dc.mstage = emsDb;
-                dc.fromCall = c;
             }
             else
             {
-                dc.mstage = emsFree;
+                dc.toCall = c0;
+                dc.fromCall = c1;
+                QChar sl20 = sl[2][0];
+                if (sl20.isLetter())
+                {
+                    dc.fromGrid = l1;
+                    dc.mstage = emsGrid;
+                    dc.validate();
+                    addCall(dc.fromCall, dc.fromGrid);
+                }
+                else if (sl20.isDigit() || (sl20 == QChar('-')))
+                {
+                    dc.validate();
+                    dc.mstage = emsDb;
+                }
+                else
+                {
+                    dc.mstage = emsFree;
+                }
             }
         }
+        else if (sl.count() == 4)
+        {
+            // new style EU VHF
+            dc.toCall = c0;
+            dc.fromCall = c1;
+            dc.fromGrid = l1;
+            dc.validate();
+            dc.mstage = emsDbGrid;
+        }
     }
-    dc.fromCall.validate();
-    dc.toCall.validate();
-    dc.fromGrid.validate();
 
     if (dc.fromCall.valRes == CS_OK && dc.fromGrid.valRes != LOC_OK && dc.fromGrid.valRes != LOC_PARTIAL)
     {
