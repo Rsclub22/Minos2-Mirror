@@ -168,7 +168,7 @@ void PstRotControl::processPendingReportDatagrams()
     QByteArray datagram;
     QString b;
     QStringList bl;
-    QRegExp re("\\d*");
+
     do
     {
         datagram.resize(pstReportSocket->pendingDatagramSize());
@@ -186,13 +186,22 @@ void PstRotControl::processPendingReportDatagrams()
         bl = b.split(':');
         if (bl.count() == 2)
         {
-            if (re.exactMatch(bl[1]))
-            {
-                bearing = bl[1];
+             bool ok;
+             float bearingFl = bl[1].toFloat(&ok);
+             if (ok)
+             {
 
-                emit bearing_updated(bearing.toInt());
+                 int bearing = static_cast<int>(bearingFl);
+                 traceCommsMsg(QString("extracted bearing = %1 ok, send to dial").arg(bearing));
+                 emit bearing_updated(bearing);
 
-            }
+             }
+
+
+        }
+        else
+        {
+            traceCommsMsg(QString("error splitting received message"));
         }
     }
 

@@ -1635,8 +1635,14 @@ void RotatorMainWindow::rotateCW(bool /*clicked*/)
             else
             {
 
-                logMessage(QString("Send rotate to maxAzimuth, instead of CW rotator command, maxAzimuth = %1").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)));
-                retCode = rotator->rotate_to_bearing(setupAntenna->currentAntenna.max_azimuth);
+                int bearing = setupAntenna->currentAntenna.max_azimuth;
+                if (rotator->getLibraryName() == PSTROTATOR_API)
+                {
+                    bearing -=  1;  // PSTrotator doesn't like 360
+                }
+
+                retCode = rotator->rotate_to_bearing(bearing);
+                logMessage(QString("Send rotate to maxAzimuth, instead of CW rotator command, maxAzimuth = %1").arg(QString::number(bearing)));
 
             }
             if (retCode < 0)
