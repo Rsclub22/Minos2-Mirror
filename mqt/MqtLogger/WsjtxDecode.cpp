@@ -362,12 +362,13 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
             dc.toCall.valRes = CS_OK;
         }
 
-        Callsign c0(stripBrackets(sl[0]));
-        Callsign c1(stripBrackets(sl[1]));
-        Locator l1(sl[2]);
 
         if (sl.count() == 3)
         {
+            Callsign c0(stripBrackets(sl[0]));
+            Callsign c1(stripBrackets(sl[1]));
+            Locator l1(sl[2]);
+
             if (isNumeric(sl[1]))
             {
                 // old style EU VHF
@@ -402,6 +403,10 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         }
         else if (sl.count() == 4)
         {
+            Callsign c0(stripBrackets(sl[0]));
+            Callsign c1(stripBrackets(sl[1]));
+            Locator l1(sl[2]);
+
             // new style EU VHF
             dc.toCall = c0;
             dc.fromCall = c1;
