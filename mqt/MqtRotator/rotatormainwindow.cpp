@@ -2296,7 +2296,7 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
         trace(QString("App Instance Name  = %1").arg(appName));
         if (rotator != nullptr)
         {
-            trace(QString("Library Version = %1").arg(rotator->getRotLibVersion()));
+            trace(QString("Library Version = %1").arg(rotator->gethamlibVersion()));
 
         }
         else
