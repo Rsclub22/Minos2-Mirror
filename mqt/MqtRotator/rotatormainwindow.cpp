@@ -2294,7 +2294,17 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
     {
         trace("*** Antenna Updated ***");
         trace(QString("App Instance Name  = %1").arg(appName));
-        trace(QString("Hamlib Version = %1").arg(rotator->gethamlibVersion()));
+        if (rotator != nullptr)
+        {
+            trace(QString("Library Version = %1").arg(rotator->getRotLibVersion()));
+
+        }
+        else
+        {
+            trace(QString("Unable to determine library version at this time!"));
+
+        }
+
         trace(QString("Antenna Name = %1").arg(setupAntenna->currentAntenna.antennaName));
         trace(QString("Antenna Number = %1").arg(setupAntenna->currentAntenna.antennaNumber));
         trace(QString("Rotator Model = %1").arg(setupAntenna->currentAntenna.rotatorModel));
