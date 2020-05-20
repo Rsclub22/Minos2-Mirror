@@ -105,7 +105,7 @@
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="83"/>
-        <location filename="../clustermainwindow.cpp" line="1908"/>
+        <location filename="../clustermainwindow.cpp" line="1917"/>
         <source>Minos Cluster Server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -216,17 +216,17 @@ Do you want to enter\change your details?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1739"/>
+        <location filename="../clustermainwindow.cpp" line="1748"/>
         <source>Cluster User Command Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1740"/>
+        <location filename="../clustermainwindow.cpp" line="1749"/>
         <source>Do you really want to clear cluster user command number:%1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1908"/>
+        <location filename="../clustermainwindow.cpp" line="1917"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
         <translation type="unfinished"></translation>

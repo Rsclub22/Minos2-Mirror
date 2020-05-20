@@ -643,12 +643,12 @@ The computed mode is %6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="541"/>
+        <location filename="../LoggerContacts.cpp" line="553"/>
         <source>GJV file should have been opened read only!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="650"/>
+        <location filename="../LoggerContacts.cpp" line="662"/>
         <source>Invalid block number in contact block</source>
         <translation type="unfinished"></translation>
     </message>
@@ -662,7 +662,7 @@ The computed mode is %6
     </message>
     <message>
         <location filename="../contestdetails.ui" line="107"/>
-        <location filename="../contestdetails.cpp" line="1256"/>
+        <location filename="../contestdetails.cpp" line="1274"/>
         <source>VHF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -873,75 +873,82 @@ Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="35"/>
+        <location filename="../contestdetails.cpp" line="36"/>
         <source>No Exchange Required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="36"/>
+        <location filename="../contestdetails.cpp" line="37"/>
         <source>PostCode Multipliers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="37"/>
+        <location filename="../contestdetails.cpp" line="38"/>
         <source>Other Exchange Multiplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="38"/>
+        <location filename="../contestdetails.cpp" line="39"/>
         <source>Exchange Required (no multiplier)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="40"/>
+        <location filename="../contestdetails.cpp" line="41"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="41"/>
+        <location filename="../contestdetails.cpp" line="42"/>
         <source>UKAC Bonuses (B2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="42"/>
+        <location filename="../contestdetails.cpp" line="43"/>
         <source>UKAC Bonuses (B4)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="43"/>
+        <location filename="../contestdetails.cpp" line="44"/>
         <source>NAC Bonuses</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="116"/>
+        <location filename="../contestdetails.cpp" line="117"/>
         <source>QTH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="117"/>
+        <location filename="../contestdetails.cpp" line="118"/>
         <source>Station</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="118"/>
+        <location filename="../contestdetails.cpp" line="119"/>
         <source>Entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="165"/>
-        <location filename="../contestdetails.cpp" line="438"/>
+        <location filename="../contestdetails.cpp" line="166"/>
+        <location filename="../contestdetails.cpp" line="451"/>
         <source>Details of Contest Entry - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1171"/>
+        <location filename="../contestdetails.cpp" line="179"/>
+        <location filename="../contestdetails.cpp" line="192"/>
+        <location filename="../contestdetails.cpp" line="862"/>
+        <source>All HF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../contestdetails.cpp" line="1189"/>
         <source>This contest will be marked as protected.<byte value="xd"/>
 This is a permanent change that may be temporarily overridden.<byte value="xd"/>
 Please confirm this change by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1219"/>
+        <location filename="../contestdetails.cpp" line="1237"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
 <byte value="xd"/>
 There are four basic groups: - <byte value="xd"/>
@@ -965,12 +972,12 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1396"/>
+        <location filename="../contestdetails.cpp" line="1414"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1403"/>
+        <location filename="../contestdetails.cpp" line="1421"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1374,15 +1381,15 @@ Continents only apply to DXCC</source>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="441"/>
-        <location filename="../LoggerContest.cpp" line="1681"/>
+        <location filename="../LoggerContest.cpp" line="1683"/>
         <source>(write) seek failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="446"/>
-        <location filename="../LoggerContest.cpp" line="1007"/>
-        <location filename="../LoggerContest.cpp" line="1020"/>
-        <location filename="../LoggerContest.cpp" line="1026"/>
+        <location filename="../LoggerContest.cpp" line="1008"/>
+        <location filename="../LoggerContest.cpp" line="1021"/>
+        <location filename="../LoggerContest.cpp" line="1027"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1397,55 +1404,55 @@ Continents only apply to DXCC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="779"/>
+        <location filename="../LoggerContest.cpp" line="780"/>
         <source>Invalid block 0 in .GJV Contest file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="786"/>
+        <location filename="../LoggerContest.cpp" line="787"/>
         <source>Invalid Contest file format (%1, %2 expected)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="913"/>
+        <location filename="../LoggerContest.cpp" line="914"/>
         <source>Unknown Country  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="919"/>
+        <location filename="../LoggerContest.cpp" line="920"/>
         <source>Unknown District   </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="945"/>
-        <location filename="../LoggerContest.cpp" line="1093"/>
+        <location filename="../LoggerContest.cpp" line="946"/>
+        <location filename="../LoggerContest.cpp" line="1094"/>
         <source>Please give first serial to be dumped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="947"/>
-        <location filename="../LoggerContest.cpp" line="1095"/>
+        <location filename="../LoggerContest.cpp" line="948"/>
+        <location filename="../LoggerContest.cpp" line="1096"/>
         <source>Please give last serial to be dumped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="953"/>
-        <location filename="../LoggerContest.cpp" line="1101"/>
+        <location filename="../LoggerContest.cpp" line="954"/>
+        <location filename="../LoggerContest.cpp" line="1102"/>
         <source>Dumping all contacts between serials %1 and %2 inclusive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="996"/>
+        <location filename="../LoggerContest.cpp" line="997"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="998"/>
+        <location filename="../LoggerContest.cpp" line="999"/>
         <source>From file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1674"/>
+        <location filename="../LoggerContest.cpp" line="1676"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1534,7 +1541,7 @@ and send the .EDI file produced.<byte value="xd"/>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="55"/>
-        <location filename="../MinosTestExport.cpp" line="531"/>
+        <location filename="../MinosTestExport.cpp" line="533"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3605,18 +3612,18 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="64"/>
-        <location filename="../tlogcontainer.cpp" line="304"/>
+        <location filename="../tlogcontainer.cpp" line="65"/>
+        <location filename="../tlogcontainer.cpp" line="305"/>
         <source>Minos Contest Logger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="226"/>
+        <location filename="../tlogcontainer.cpp" line="227"/>
         <source>Overwrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="226"/>
+        <location filename="../tlogcontainer.cpp" line="227"/>
         <source>Insert</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4272,17 +4279,17 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1314"/>
+        <location filename="../tsinglelogframe.cpp" line="1321"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1333"/>
+        <location filename="../tsinglelogframe.cpp" line="1340"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1355"/>
+        <location filename="../tsinglelogframe.cpp" line="1362"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4404,6 +4411,45 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../WsjtxConfigure.cpp" line="183"/>
+        <source>ALL.TXT for WSJT-X</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>WsjtxConfigureCQ</name>
+    <message>
+        <location filename="../WsjtxConfigureCQ.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxConfigureCQ.ui" line="20"/>
+        <source>CQ xxx Callsign Locator - xxx is allowed in...r
+Include the CQ as well as the type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxConfigureCQ.ui" line="35"/>
+        <source>In Special mode &quot;test&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxConfigureCQ.ui" line="53"/>
+        <source>In other modes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxConfigureCQ.ui" line="69"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxConfigureCQ.ui" line="89"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WsjtxFrame</name>
@@ -4427,57 +4473,67 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="245"/>
+        <location filename="../WsjtxFrame.ui" line="212"/>
         <source>Auto Select Reply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="264"/>
+        <location filename="../WsjtxFrame.ui" line="228"/>
         <source>Auto Select 73/RR73</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="278"/>
+        <location filename="../WsjtxFrame.ui" line="235"/>
+        <source>Auto Rearm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxFrame.ui" line="246"/>
+        <source>Config CQ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxFrame.ui" line="256"/>
         <source>Ignore &lt; (points)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="301"/>
+        <location filename="../WsjtxFrame.ui" line="279"/>
         <source>Ignore &lt; (SNR)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="336"/>
+        <location filename="../WsjtxFrame.ui" line="314"/>
         <source>Halt TX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="346"/>
+        <location filename="../WsjtxFrame.ui" line="324"/>
         <source>Disable Tx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="360"/>
+        <location filename="../WsjtxFrame.ui" line="338"/>
         <source>Clear Local Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="370"/>
+        <location filename="../WsjtxFrame.ui" line="348"/>
         <source>Clear All Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="395"/>
+        <location filename="../WsjtxFrame.ui" line="373"/>
         <source>test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="476"/>
+        <location filename="../WsjtxFrame.cpp" line="517"/>
         <source>Failed to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="594"/>
+        <location filename="../WsjtxFrame.cpp" line="644"/>
         <source>&lt;h1&gt;&lt;b&gt;Contest band %1 not the same as %2 band %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4485,17 +4541,17 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 <context>
     <name>decodeMessage</name>
     <message>
-        <location filename="../WsjtxDecode.cpp" line="79"/>
+        <location filename="../WsjtxDecode.cpp" line="87"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecode.cpp" line="83"/>
+        <location filename="../WsjtxDecode.cpp" line="91"/>
         <source>Grid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxDecode.cpp" line="93"/>
+        <location filename="../WsjtxDecode.cpp" line="107"/>
         <source>Free</source>
         <translation type="unfinished"></translation>
     </message>
