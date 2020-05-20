@@ -186,7 +186,16 @@ public:
         modeFilterPSK31MODE(false),
         modeFilterFT8MODE(false),
         modeFilterMSK144MODE(false),
-        modeFilterJT65MODE(false)
+        modeFilterJT65MODE(false),
+        distanceFilter50Mhz(0),
+        distanceFilter70Mhz(0),
+        distanceFilter144Mhz(0),
+        distanceFilter432Mhz(0),
+        distanceFilter1296Mhz(0),
+        distanceFilter2300Mhz(0),
+        distanceFilter3_4Ghz(0),
+        distanceFilter5_6Ghz(0),
+        distanceFilter10Ghz(0)
     {
 
 
@@ -208,6 +217,10 @@ public:
                                  &modeFilterRTTYMODE, &modeFilterPSK31MODE, &modeFilterFT8MODE,
                                 &modeFilterMSK144MODE, &modeFilterJT65MODE};
 
+    QList<int*> distanceFilters = {&distanceFilter50Mhz, &distanceFilter70Mhz, &distanceFilter144Mhz,
+                                   &distanceFilter432Mhz, &distanceFilter1296Mhz, &distanceFilter2300Mhz,
+                                   &distanceFilter3_4Ghz, &distanceFilter5_6Ghz, &distanceFilter10Ghz};
+
 
     bool bandFilter50Mhz;
     bool bandFilter70Mhz;
@@ -228,6 +241,16 @@ public:
     bool modeFilterFT8MODE;
     bool modeFilterMSK144MODE;
     bool modeFilterJT65MODE;
+
+    int distanceFilter50Mhz;
+    int distanceFilter70Mhz;
+    int distanceFilter144Mhz;
+    int distanceFilter432Mhz;
+    int distanceFilter1296Mhz;
+    int distanceFilter2300Mhz;
+    int distanceFilter3_4Ghz;
+    int distanceFilter5_6Ghz;
+    int distanceFilter10Ghz;
 
 
 
@@ -324,6 +347,16 @@ void operator= (const ClusterClientFilterSettings& ccfs)
     modeFilterFT8MODE = ccfs.modeFilterFT8MODE;
     modeFilterMSK144MODE = ccfs.modeFilterMSK144MODE;
     modeFilterJT65MODE = ccfs.modeFilterJT65MODE;
+    distanceFilter50Mhz = ccfs.distanceFilter50Mhz;
+    distanceFilter70Mhz = ccfs.distanceFilter70Mhz;
+    distanceFilter144Mhz = ccfs.distanceFilter144Mhz;
+    distanceFilter432Mhz = ccfs.distanceFilter432Mhz;
+    distanceFilter1296Mhz = ccfs.distanceFilter1296Mhz;
+    distanceFilter2300Mhz = ccfs.distanceFilter2300Mhz;
+    distanceFilter3_4Ghz = ccfs.distanceFilter3_4Ghz;
+    distanceFilter5_6Ghz = ccfs.distanceFilter5_6Ghz;
+    distanceFilter10Ghz = ccfs.distanceFilter10Ghz;
+
 
 }
 
@@ -349,7 +382,16 @@ bool operator==( const ClusterClientFilterSettings& ccfs ) const
          modeFilterPSK31MODE == ccfs.modeFilterPSK31MODE &&
          modeFilterFT8MODE == ccfs.modeFilterFT8MODE &&
          modeFilterMSK144MODE == ccfs.modeFilterMSK144MODE &&
-         modeFilterJT65MODE == ccfs.modeFilterJT65MODE)
+         modeFilterJT65MODE == ccfs.modeFilterJT65MODE &&
+         distanceFilter50Mhz == ccfs.distanceFilter50Mhz &&
+         distanceFilter70Mhz == ccfs.distanceFilter70Mhz &&
+         distanceFilter144Mhz == ccfs.distanceFilter144Mhz &&
+         distanceFilter432Mhz == ccfs.distanceFilter432Mhz &&
+         distanceFilter1296Mhz == ccfs.distanceFilter1296Mhz &&
+         distanceFilter2300Mhz == ccfs.distanceFilter2300Mhz &&
+         distanceFilter3_4Ghz == ccfs.distanceFilter3_4Ghz &&
+         distanceFilter5_6Ghz == ccfs.distanceFilter5_6Ghz &&
+         distanceFilter10Ghz == ccfs.distanceFilter10Ghz)
     {
         return true;
     }
@@ -415,7 +457,10 @@ public:
         modeFilterPSK31MODE(false),
         modeFilterFT8MODE(false),
         modeFilterMSK144MODE(false),
-        modeFilterJT65MODE(false)
+        modeFilterJT65MODE(false),
+        distanceFilter(0),
+        ignoreDistanceFlag(false)
+
     {
 
 
@@ -439,6 +484,11 @@ public:
     bool modeFilterFT8MODE;
     bool modeFilterMSK144MODE;
     bool modeFilterJT65MODE;
+
+    int distanceFilter;
+
+    bool ignoreDistanceFlag;
+
 
 
 
@@ -470,6 +520,23 @@ void setModeFilter(bool setting, int mode)
     *modeFilters[mode] = setting;
 }
 
+bool getDistanceFilter(int distance)
+{
+    if (distance < distanceFilter || distanceFilter == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void setDistanceFilter(int distance)
+{
+    distanceFilter = distance;
+}
+
 void operator= (const BandmapClientFilterSettings& bcfs)
 {
 
@@ -482,6 +549,9 @@ void operator= (const BandmapClientFilterSettings& bcfs)
     modeFilterFT8MODE = bcfs.modeFilterFT8MODE;
     modeFilterMSK144MODE = bcfs.modeFilterMSK144MODE;
     modeFilterJT65MODE = bcfs.modeFilterJT65MODE;
+    distanceFilter = bcfs.distanceFilter;
+    ignoreDistanceFlag = bcfs.ignoreDistanceFlag;
+
 
 }
 
@@ -496,7 +566,10 @@ bool operator==( const BandmapClientFilterSettings& bcfs ) const
          modeFilterPSK31MODE == bcfs.modeFilterPSK31MODE &&
          modeFilterFT8MODE == bcfs.modeFilterFT8MODE &&
          modeFilterMSK144MODE == bcfs.modeFilterMSK144MODE &&
-         modeFilterJT65MODE == bcfs.modeFilterJT65MODE)
+         modeFilterJT65MODE == bcfs.modeFilterJT65MODE &&
+         distanceFilter == bcfs.distanceFilter &&
+         ignoreDistanceFlag == bcfs.ignoreDistanceFlag)
+
     {
         return true;
     }

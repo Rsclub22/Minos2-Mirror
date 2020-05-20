@@ -955,7 +955,7 @@ void BandmapView::drawBandMapSpots()
         for (int row = 0; row < numrows; ++row)
         {
            // check mode against the filter settings
-            if (matchMode(row))
+            if (matchMode(row) && matchDistance(row))
             {
 
                 QString freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), Qt::DisplayRole).toString().remove('.');
@@ -1106,7 +1106,18 @@ bool BandmapView::matchMode(int sourceRow)
 
 }
 
+bool BandmapView::matchDistance(int sourceRow)
+{
+    bool ok = false;
 
+    int distance = model()->data(model()->index(sourceRow, DXDIST_COL_NUM), BMP_DataStoredRole).toString().toInt(&ok);
+    if (ok)
+    {
+        return filterSetup->filterSettings.getDistanceFilter(distance);
+    }
+
+    return true;
+}
 
 
 QRectF BandmapView::calculateSpotRect(const QString text, const QPoint spotCoord)

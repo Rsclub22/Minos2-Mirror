@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 // $Id$
 //
-// PROJECT NAME 		Minos Amateur RadRotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+// PROJECT NAME 		Minos Amateur Radio Bandmap Filter Dialog
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019 - 2020
 //
 //
 //
@@ -75,7 +75,8 @@ void BandmapClientFilterDialog::initCheckFilterTab()
 
    connect(ui->modeSelectBut, SIGNAL(clicked()), this, SLOT(modeButtonSelected()));
 
-
+    connect(ui->spotDistanceEdit, SIGNAL(editingFinished()), this, SLOT(onDistanceEditFinished()));
+    connect(ui->ignoreNoDistanceChkBox, SIGNAL(stateChanged(int)), this, SLOT(onIgnoreDistanceCheckBoxStateChanged(int)));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
 
@@ -147,6 +148,42 @@ void BandmapClientFilterDialog::filtersRejected()
 }
 
 
+void BandmapClientFilterDialog::onDistanceEditFinished()
+{
+    bool ok;
+    int distance = 0;
+    if(!ui->spotDistanceEdit->text().isEmpty())
+    {
+        distance = ui->spotDistanceEdit->text().toInt(&ok);
+        if (ok)
+        {
+            if (distance != filterSettings.distanceFilter)
+            {
+                filterSettings.distanceFilter = distance;
+            }
+        }
+        else
+        {
+            QMessageBox::information(this, tr("Distance Filter"),
+                                     tr("Please enter a number > 0!"),
+                                      QMessageBox::Ok|QMessageBox::Default,
+                                      QMessageBox::NoButton, QMessageBox::NoButton);
+        }
+    }
+}
+
+
+void BandmapClientFilterDialog::loadDistanceFilterEditBox(int distance)
+{
+    ui->spotDistanceEdit->setText(QString::number(distance));
+}
+
+void BandmapClientFilterDialog::onIgnoreDistanceCheckBoxStateChanged(int state)
+{
+
+}
+
+
 void BandmapClientFilterDialog::saveBandmapFilterToContest()
 {
     ct->saveBandmapFilter(filterSettings);
@@ -181,6 +218,9 @@ void BandmapClientFilterDialog::copyModeFiltersToDialog()
         modeChkBoxList[i]->setChecked(*filterSettings.modeFilters[i]);
     }
 }
+
+
+
 
 
 void BandmapClientFilterDialog::clearModes()

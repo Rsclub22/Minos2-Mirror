@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="bandmapFilterTab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="modeTab">
       <attribute name="title">

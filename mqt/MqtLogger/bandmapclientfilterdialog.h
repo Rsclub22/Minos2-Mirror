@@ -67,6 +67,7 @@ private:
 
     void doCloseEvent();
 
+    void loadDistanceFilterEditBox(int distance);
 private slots:
 
     void modeButtonSelected();
@@ -75,6 +76,8 @@ private slots:
     void filtersRejected();
 
 
+    void onDistanceEditFinished();
+    void onIgnoreDistanceCheckBoxStateChanged(int state);
 };
 
 #endif // BANDMAPCLIENTFILTERDIALOG_H

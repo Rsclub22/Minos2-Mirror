@@ -192,6 +192,7 @@ private:
     void assembleCqToolTip(int row, QString freq, QString& toolTipMsg);
     void assembleCqMsg(int row, QString& markerMsg);
     int dialCursorWithinViewport(qint64 freq);
+    bool matchDistance(int sourceRow);
 };
 
 #endif // BANDMAPVIEW_H
