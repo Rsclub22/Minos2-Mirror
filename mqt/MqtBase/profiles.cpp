@@ -56,8 +56,12 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1Enabled, "WSJTXEnabled", true, QT_TR_NOOP("WSJTX 1 Enabled"), QT_TR_NOOP("WSJTX 1 Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1Port, "WSJTXPort", 2237, QT_TR_NOOP("WSJTX 1 Port"), QT_TR_NOOP("WSJTX 1 Port"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1GroupAddress, "WSJTXGroupAddress", "", QT_TR_NOOP("WSJTX 1 Group Address"), QT_TR_NOOP("WSJTX 1 Group Address"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1DataPath, "WSJTXDataPath", "", QT_TR_NOOP("WSJTX Path to ALL.TXT"), QT_TR_NOOP("WSJTX Path to ALL.TXT"), "" ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1AutoEnabled, "WSJTXAutoEnabled", false, QT_TR_NOOP("WSJTX 1 Auto Enabled"), QT_TR_NOOP("WSJTX 1 Auto Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1TestEnabled, "WSJTXtestEnabled", false, QT_TR_NOOP("WSJTX 1 Test Enabled"), QT_TR_NOOP("WSJTX 1 Test Enabled"), false ) ) );
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1TestCQ, "WSJTXTestCQ", "", QT_TR_NOOP("CQ types in test mode"), QT_TR_NOOP("CQ types in test mode"), "" ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX1NonTestCQ, "WSJTXNonTestCQ", "\"\"", QT_TR_NOOP("CQ types in ordinary mode"), QT_TR_NOOP("CQ types in ordinary mode"), "" ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX2Enabled, "WSJTX2Enabled", false, QT_TR_NOOP("WSJTX 2 Enabled"), QT_TR_NOOP("WSJTX 2 Enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpWSJTX2Port, "WSJTX2Port", 2238, QT_TR_NOOP("WSJTX 2 Port"), QT_TR_NOOP("WSJTX 2 Port"), false ) ) );
@@ -93,6 +97,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpPDFFile, "PDFFile", "./Docs/Minos.pdf", QT_TR_NOOP("PDF documentation file"), QT_TR_NOOP("PDF documentation file"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, QT_TR_NOOP("Auto Fill signal report"), QT_TR_NOOP("Auto Fill signal report on return"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAllowHF, "AllowHF", false, QT_TR_NOOP("Allow HF Bands"), QT_TR_NOOP("Allow HF Bands"), false ) ) );
 
         break;
     case epPRELOADPROFILE:
@@ -153,6 +158,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpStationQTH1, "StationQTH1", "", QT_TR_NOOP("Station QTH Line 1"), QT_TR_NOOP("Address line 1/2 of station"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpStationQTH2, "StationQTH2", "", QT_TR_NOOP("Station QTH Line 2"), QT_TR_NOOP("Address line 2/2 of station"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpASL, "ASL", 0, QT_TR_NOOP("QTH Height ASL (metres)"), QT_TR_NOOP("QTH height ASL (metres)"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpITUZone, "ITU Zone", 27, QT_TR_NOOP("ITU Zone"), QT_TR_NOOP("ITU Zone"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eqpCQZone, "CQ Zone", 14, QT_TR_NOOP("CQ Zone"), QT_TR_NOOP("CQ Zone"), false ) ) );
         break;
     case epSTATIONPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( espPower, "Power", 0, QT_TR_NOOP("Transmitter Power"), QT_TR_NOOP("Transmit Power (Watts)"), false ) ) );

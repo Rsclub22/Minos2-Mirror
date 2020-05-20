@@ -36,6 +36,7 @@
 #include "MatchThread.h"
 #include "n1mmbroadcastconfig.h"
 #include "defdirsdlg.h"
+#include "BandList.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -231,7 +232,7 @@ void TLogContainer::closeEvent(QCloseEvent *event)
 {
     trace("closeEvent:Start");
     loggerClosing = true;
-    MinosConfig::getMinosConfig() ->askStop();
+//    MinosConfig::getMinosConfig() ->askStop();
 
     TimerUpdateQSOTimer.stop();
 
@@ -247,6 +248,8 @@ void TLogContainer::closeEvent(QCloseEvent *event)
        closeSlot(0, true);
     }
     trace("closeEvent:Contest slots closed");
+
+    MinosConfig::getMinosConfig() ->askStop();
 
     for ( ListSlotIterator i = TContestApp::getContestApp() ->listSlotList.begin(); i != TContestApp::getContestApp() ->listSlotList.end(); i++ )
     {
@@ -300,7 +303,6 @@ void TLogContainer::changeEvent( QEvent* e )
         }
         ui->retranslateUi(this);
         setWindowTitle(tr("Minos Contest Logger"));
-
     }
     QMainWindow::changeEvent(e);
 }
@@ -756,7 +758,7 @@ void TLogContainer::FileNewActionExecute()
    {
       suggestedfName += QDate::currentDate().toString( "yyyy_MM_dd" );
    }
-   QString band = c->band.getValue();
+   QString band = c->contestBands.getValue();
    if ( band.size() )
    {
       suggestedfName += '_';

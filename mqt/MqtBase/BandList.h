@@ -24,6 +24,7 @@
 
 #include "base_pch.h"
 //---------------------------------------------------------------------------
+extern const QString allHF;
 
 class BandDetail;
 
@@ -57,8 +58,8 @@ class BandList
         QVector<BandInfo> bandList;
         bool parseFile ( const QString &bandFile );
         bool findBand ( const QString &freq, BandInfo & );
-        bool findBand ( int freq, BandInfo & );
-        bool findBand(double freq, BandInfo &bi);
+        bool findBand ( long freq, BandInfo & );
+        bool findBand ( double freq, BandInfo &bi);
 
         static BandList &getBandList();
 

@@ -423,10 +423,8 @@ void SoundSystemDriver::genTone(int16_t *dest, bool add
              + QString::number( volmult ) + ")" );
    }
 
-   double deltaAngle = 2 * pi * tone / rate;
-   double yk = 2 * cos( deltaAngle );
-   double y1 = sin ( -2 * deltaAngle );
-   double y2 = sin ( -deltaAngle );
+   double phaseStep = (2 * pi * tone) / rate;
+   double phase = 0.0;
 
 #define CHUNKSIZE 1024
 
@@ -439,12 +437,12 @@ void SoundSystemDriver::genTone(int16_t *dest, bool add
       unsigned long i;
       for ( i = 0; i < CHUNKSIZE && buffstart + i*2 < samples * 2; i++ )
       {
-         double y3 = yk * y2 - y1;
-         y1 = y2;
-         y2 = y3;
+          double x = volmult * sin(phase);
          if ( buffstart + i * 2 < rtime * 2 )
          {
-            buff[ i ] = int16_t( y3 * ( ( volmult * (( buffstart + i )/2) ) / rtime ) );	// not full volume
+             // ramp up
+             int offset = ( buffstart + i * 2)/2;
+            buff[ i ] = int16_t( x * (offset / rtime) );
             if (abs(buff[i]) > 32767)
             {
                mShowMessage( "Big sum...", nullptr );
@@ -454,7 +452,9 @@ void SoundSystemDriver::genTone(int16_t *dest, bool add
          {
             if ( buffstart + i * 2 > ( samples - rtime ) * 2 )
             {
-               buff[ i ] = int16_t( y3 * ( ( volmult * (( samples * 2 - ( buffstart + i*2 ) )/2) ) / rtime ) );	// not full volume
+                // ramp down
+                int offset = (samples * 2 - ( buffstart + i * 2 ) )/2;
+               buff[ i ] = int16_t( x * ( offset / rtime ) );
                if (abs(buff[i]) > 32767)
                {
                   mShowMessage( "Big sum...", nullptr );
@@ -462,12 +462,19 @@ void SoundSystemDriver::genTone(int16_t *dest, bool add
             }
             else
             {
-               buff[ i ] = int16_t( y3 * volmult );	// not full volume
+                // constant level
+               buff[ i ] = int16_t( x );	// not full volume
                if (abs(buff[i]) > 32767)
                {
                   mShowMessage( "Big sum...", nullptr );
                }
             }
+         }
+
+         phase += phaseStep;
+         while(phase > 2*pi)
+         {
+             phase -= 2*pi;
          }
 
       }

@@ -45,12 +45,12 @@ void MatchOtherFrame::on_ReplaceOtherLogList( SharedMatchCollection matchCollect
     if (b == baseName && contest && contest == MinosParameters::getMinosParameters() ->getCurrentContest())
         showOtherMatchQSOs( matchCollection );
 }
-void MatchOtherFrame::on_matchTree_doubleClicked(const QModelIndex &/*index*/)
+void MatchOtherFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &/*index*/)
 {
     // needs to be a MinosLogEvent, including Log/Edit
     MinosLoggerEvents::sendXferPressed(contest, baseName);
 }
-void MatchOtherFrame::on_matchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
+void MatchOtherFrame::on_MatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
 {
     MinosLoggerEvents::sendMatchTreeSelected(OtherMatch, contest, baseName, selected);
 }

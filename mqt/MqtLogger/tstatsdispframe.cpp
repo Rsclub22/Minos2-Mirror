@@ -87,11 +87,11 @@ void TStatsDispFrame::reInitialiseStats()
 
    int ltot = 0;
    if ( ct->countryMult.getValue() )
-      ltot += ct->nctry ;
+      ltot += ct->getNctry() ;
    if ( ct->districtMult.getValue() )
-      ltot += ct->ndistrict;
+      ltot += ct->getNdistrict();
    if ( ct->locMult.getValue() )
-      ltot += ct->nlocs;
+      ltot += ct->getNlocs();
 
    ct->updateStats(ct->statsPeriod1.getValue() * 60, ct->statsPeriod2.getValue() * 60);
    int nvalid = ct->getValidQSOs();

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>811</width>
-    <height>388</height>
+    <height>486</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -80,7 +80,7 @@
          <x>0</x>
          <y>0</y>
          <width>793</width>
-         <height>122</height>
+         <height>157</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -185,7 +185,7 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
            <widget class="QFrame" name="autoSelectReplyFrame">
             <property name="sizePolicy">
@@ -201,58 +201,22 @@
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout">
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QFrame" name="frame">
-                 <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
+                <widget class="QCheckBox" name="autoSelectButton">
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
                  </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
+                 <property name="text">
+                  <string>Auto Select Reply</string>
                  </property>
-                 <property name="lineWidth">
-                  <number>2</number>
+                 <property name="checkable">
+                  <bool>true</bool>
                  </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_5">
-                  <property name="spacing">
-                   <number>0</number>
-                  </property>
-                  <property name="leftMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="bottomMargin">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <widget class="QCheckBox" name="autoSelectButton">
-                    <property name="focusPolicy">
-                     <enum>Qt::NoFocus</enum>
-                    </property>
-                    <property name="text">
-                     <string>Auto Select Reply</string>
-                    </property>
-                    <property name="checkable">
-                     <bool>true</bool>
-                    </property>
-                    <property name="checked">
-                     <bool>false</bool>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
+                 <property name="checked">
+                  <bool>false</bool>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -265,10 +229,24 @@
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QCheckBox" name="autoRearmcb">
+                 <property name="text">
+                  <string>Auto Rearm</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </item>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QPushButton" name="configCQButton">
+                 <property name="text">
+                  <string>Config CQ</string>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QCheckBox" name="minPointsCheckBox">
                  <property name="focusPolicy">

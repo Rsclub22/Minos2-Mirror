@@ -619,7 +619,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
     {
         contestUuid = ct->uuid;
         traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
-        contestBandStr = ct->band.getValue();
+        contestBandStr = ct->currentBand.getValue();
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);

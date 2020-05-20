@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>713</width>
-    <height>669</height>
+    <height>693</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_8">
     <item>
-     <widget class="QFrame" name="frame">
+     <widget class="QFrame" name="frame1">
       <property name="toolTip">
        <string>Log in to these chats</string>
       </property>
@@ -115,7 +115,7 @@
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QFrame" name="">
+       <widget class="QFrame" name="frame2">
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -187,13 +187,6 @@
             <widget class="QLineEdit" name="maxDistanceEdit">
              <property name="clearButtonEnabled">
               <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="maxDistanceButton">
-             <property name="text">
-              <string>Set max distance</string>
              </property>
             </widget>
            </item>

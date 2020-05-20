@@ -719,7 +719,8 @@ bool LoggerContestLog::GJVsave( GJVParams &gp )
 
    strtobuf( "0" );    // block number for LoggerContestLog block
    strtobuf( GJVVERSION );
-   strtobuf( band );
+   strtobuf( contestBands );
+   setCurrentBand(contestBands.getValue());
    strtobuf( name );
    strtobuf( mycall.fullCall );
    strtobuf( myloc.loc );
@@ -787,7 +788,7 @@ bool LoggerContestLog::GJVload( )
       return false;
    }
 
-   buftostr( band );
+   buftostr( contestBands );
    buftostr( name );
    buftostr( temp );
    mycall = Callsign( temp.toUpper() );
@@ -1036,7 +1037,7 @@ bool LoggerContestLog::exportREG1TEST(QSharedPointer<QFile>expfd, bool noSerials
 
    // band
 
-   QString cb = band.getValue().trimmed();
+   QString cb = currentBand.getValue().trimmed();
    BandList &blist = BandList::getBandList();
    BandInfo bi;
    bool bandOK = blist.findBand(cb, bi);
@@ -1304,7 +1305,8 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
             else
                if (  stemp.toUpper().indexOf( "BAND IN MHZ" ) == 0 )
                {
-                  band.setValue( text );
+                  contestBands.setValue( text );
+                  setCurrentBand(text);
                }
                else
                   if ( stemp.toUpper().indexOf( "SECTION ENTERED" ) == 0 )

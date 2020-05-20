@@ -43,7 +43,7 @@ class SoundSystemDriver
       int isave = -1;
 
       void unload( );
-   public:
+public:
       volatile int recording = false;
       bool ready = false;
       bool loadFailed = false;

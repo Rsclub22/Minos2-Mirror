@@ -13,6 +13,7 @@
 #include "Wsjtx_qt_helpers.hpp"
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxServer.h"
+#include "WsjtxConfigureCQ.h"
 
 #include "WsjtxFrame.h"
 #include "ui_WsjtxFrame.h"
@@ -106,23 +107,39 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 
     restoreSplitters();
     connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
+
+    getAllTxtEnd();
+    getCQStrings();
 }
 WsjtxFrame::~WsjtxFrame()
 {
     delete ui;
     delete decodes_model_;
 }
+void WsjtxFrame::getCQStrings()
+{
+    QString testCQ;
+    QString nontestCQ;
 
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX1TestCQ, testCQ );
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX1NonTestCQ, nontestCQ );
+
+
+    CSVToStringList(testCQ, testCQCalls);
+    CSVToStringList(nontestCQ, nonTestCQCalls);
+}
 void WsjtxFrame::on_halt_tx_button__clicked()
 {
+    trace("do_halt_tx");
     ui->replyto_label->setText("");
-    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, true);
+    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, false);
 }
 
 void WsjtxFrame::on_auto_off_button__clicked()
 {
+    trace("disable tx clicked");
     ui->replyto_label->setText("");
-    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, false);
+    WsjtxServer::getWsjtxServer()->do_halt_tx(id_, true);
 }
 void WsjtxFrame::on_clearDecodesButton_clicked()
 {
@@ -170,6 +187,9 @@ void WsjtxFrame::setContest(BaseContestLog *c)
 void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
 {
     id_ = id;
+
+    if (!bandOK)
+        return;
 
     if (ct->isProtected())
         return;
@@ -229,25 +249,40 @@ void WsjtxFrame::remove_client (QString const& /*id*/)
         ui->autoSelectButton->toggle();
     id_.clear();
 }
-class PointBonusMult
+class PointBonusMultSnr
 {
-    int points = 0;
+    int points = -1;
     int bonus = 0;
     int mults = 0;
+    int snr = -100;
 public:
-    PointBonusMult()
+    PointBonusMultSnr()
     {
 
     }
-    PointBonusMult(decodeMessage &dc):points(dc.points), bonus(dc.bonus), mults(dc.mults)
+    PointBonusMultSnr(decodeMessage &dc):points(dc.points), bonus(dc.bonus), mults(dc.mults), snr(dc.snr)
     {
 
     }
-    bool operator>(PointBonusMult &rhs)
+    bool operator>(PointBonusMultSnr &rhs)
     {
         if (mults > rhs.mults)
             return true;
-        if (points + bonus > rhs.points + rhs.bonus)
+        else if (mults == rhs.mults)
+        {
+            if (points + bonus > rhs.points + rhs.bonus)
+                return true;
+            else if (points + bonus == rhs.points + rhs.bonus)
+            {
+                if (snr > rhs.snr)
+                    return true;
+            }
+        }
+        return false;
+    }
+    bool operator==(PointBonusMultSnr &rhs)
+    {
+        if ((mults == rhs.mults) && (points + bonus == rhs.points + rhs.bonus) && snr == rhs.snr)
             return true;
 
         return false;
@@ -256,123 +291,460 @@ public:
 
 void WsjtxFrame::process_decodes()
 {
-    int decodeEndSize = messages.size();
+    if (!bandOK)
+        return;
+
     if (autoEnabled)
     {
-        trace(QString("WsjtxFrame::process_decodes Checking decodes start %1 end %2").arg(decodeStartSize).arg(decodeEndSize));
+        int decodeEndSize = messages.size();
+        int minpoints = ui->minPointsSpinner->value();
+        if (!ui->minPointsCheckBox->isChecked())
+            minpoints = 0;
+        int minsnr =  ui->snrSpinner->value();
+        if (!ui->snrCheckBox->isChecked())
+            minsnr = -100;
+        trace(QString("WsjtxFrame::process_decodes Checking decodes start %1 end %2 autoselect %3 minPoints %4 minSnr %5")
+              .arg(decodeStartSize).arg(decodeEndSize).arg(ui->autoSelectButton->isChecked()).arg(minpoints).arg(minsnr));
 
         if (decodeEndSize > decodeStartSize)
         {
             // iterate over the latest decodes, and select the best
 
             int bestOffset = -1;
-            PointBonusMult bestPoints;
-            QString bestCs;
-            int currSn = -100;
+            PointBonusMultSnr bestPoints;
 
-            int minpoints = ui->minPointsSpinner->value();
-            if (!ui->minPointsCheckBox->isChecked())
-                minpoints = 0;
-            int minsnr =  ui->snrSpinner->value();
-            if (!ui->snrCheckBox->isChecked())
-                minsnr = -100;
+            bool autoReplyAllowed = !currentlyTransmitting;
 
-            for (int i = decodeStartSize; i < decodeEndSize; i++)
+            // first, look at messages against our transmit status
+            // NB we go to emsNone when (!transmitting && !tx_enabled)
+            // which when rr73/73 has been sent, at end of
+            // update_status()
+
+            if (currTxStage != emsNone)
             {
-                decodeMessage &dc = messages[i];
-                if (dc.oldmsg)
-                    continue;
-
-                trace(QString("WsjtxFrame::process_decodes Checking %1 stage %2 tocall %3 fromcall %4")
-                      .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
-
-                 if (dc.points <= 0)
-                    continue;
-
-                 bool auto73 = ui->autosel73cb->isChecked();
-                 bool toMyCall = (dc.toCall == decoder.getMyCall());
-                 if (dc.mstage == emsCQ
-                         || (auto73 && dc.mstage == ems73 && !toMyCall)
-                         || (auto73 && dc.mstage == emsRRR && !toMyCall)
-                         || (dc.mstage == emsGrid && toMyCall)
-                   )
+                for (int i = decodeStartSize; i < decodeEndSize; i++)
                 {
-                     PointBonusMult pbv(dc);
 
-                    if ( dc.snr >= minsnr
-                            && dc.points > minpoints
-                            && pbv > bestPoints
-                          )
+                    decodeMessage &dc = messages[i];
+                    if (dc.oldmsg)
+                        continue;
+                    if (dc.decodeInd[0] == "?")
+                        continue;   // potentially bad decode
+
+                    trace(QString("WsjtxFrame::process_decodes Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
+                          .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()).arg(callingCall).arg(workingCall));
+
+                    // if we are calling CQ or RR73 or 73, and we are toCall, we have a set of candidates for best
+                    // work these before lookng for others
+
+                     PointBonusMultSnr pbv(dc);
+                     bool toMyCall = (dc.toCall == decoder.getMyCall());
+                     QString dcFromCall = dc.fromCall.fullCall.getValue();
+
+                     if (toMyCall)
+                     {
+                         if (currTxStage == emsCQ || currTxStage == emsRRR || currTxStage == ems73) // calling CQ or waiting for 73
+                         {
+                             // look for best candidate of those calling us - don't limit by snr or points
+                             // If they are starting with Tx2, we can miss the loc - and so their score will
+                             // be miniscule (probably 0)
+                             // so start bestpoints at -1...
+                             if ( pbv > bestPoints  )
+                             {
+                                 // which might not be the most profitable
+                                 trace(QString("WsjtxFrame::process_decodes (lasttx) Candidate %1").arg(messages[i].message));
+                                 bestOffset = i;
+                                 bestPoints = pbv;
+
+                                 autoReplyAllowed = true;
+                             }
+                             else
+                             {
+                                 trace(QString("WsjtxFrame::process_decodes (lasttx) NOT best %1").arg(messages[i].message));
+                             }
+                         }
+                         else if (dcFromCall == workingCall || dcFromCall == callingCall)
+                         {
+                             // this is best, and WSJT-X should automatically respond
+                             // so long as autoseq is set in WSJT-X
+
+                             ui->decodes_table_view_->scrollToBottom ();
+                             return;
+                         }
+                         else
+                         {
+                            // ignore it - random caller with us in mid QSO
+                             continue;
+                         }
+                     }
+                     else if (dcFromCall == callingCall || dcFromCall == workingCall)
+                     {
+                         // we are trying to work them, and they aren't working us - still CQ, or working someone else
+
+                         // If they are calling CQ and we are "grid" we can carry on calling them
+                        // don't kill tx unless there is a better option - using the general best search
+
+                         // bestOffset should already be -1 unless there is someone else calling us
+                         // in which case we will switch to them
+
+                         trace(QString("WsjtxFrame::process_decodes (lasttx) stop response, look again"));
+                         if (ui->autoRearmcb->isChecked())
+                         {
+                             ui->autoSelectButton->setChecked(reArmValue);
+                         }
+                         if (ui->autoSelectButton->isChecked())
+                         {
+                             on_halt_tx_button__clicked();          // kill the automatic sequencing
+                         }
+                         break;
+
+                     }
+                }
+            }
+             if (bestOffset < 0)
+             {
+                 // we don't already have a best
+                 for (int i = decodeStartSize; i < decodeEndSize; i++)
+                 {
+                     decodeMessage &dc = messages[i];
+                     if (dc.oldmsg)
+                         continue;
+                     if (dc.decodeInd[0] == "?")
+                         continue;
+
+                     trace(QString("WsjtxFrame::process_decodes Checking %1 stage %2 tocall %3 fromcall %4")
+                           .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
+
+                     if (dc.points <= 0)    // e.g. duplicate
+                        continue;
+
+                     PointBonusMultSnr pbv(dc);
+                     bool toMyCall = (dc.toCall == decoder.getMyCall());
+                     QString dcFromCall = dc.fromCall.fullCall.getValue();
+
+                     bool auto73 = ui->autosel73cb->isChecked();
+                     if ((dc.mstage == emsCQ)   // CQ calls aren't "to" anyone
+                             || (auto73 && (dc.mstage == ems73) && !toMyCall)
+                             || (auto73 && (dc.mstage == emsRRR) && !toMyCall)
+                             || ((dc.mstage == emsGrid) && toMyCall)
+                       )
                     {
-                        trace(QString("WsjtxFrame::process_decodes Candidate %1").arg(messages[i].message));
-                        bestOffset = i;
-                        bestPoints = pbv;
-                        bestCs = dc.fromCall.fullCall.getValue();
-                        currSn = dc.snr;
-                    }
-                    else
-                    {
-                        if (bestOffset >= 0
-                            && dc.fromCall.fullCall.getValue() == bestCs
-                            && dc.snr > currSn
-                            )
+                         if (dc.mstage == emsCQ)
+                         {
+                             bool inTest = false;
+                             switch (special_op_mode)
+                             {
+                             case 1:
+                             case 2:
+                                 inTest = true;
+                                 break;
+
+                             default:
+                                 break;
+                             }
+                             if (inTest)
+                             {
+                                if (!testCQCalls.contains(dc.CQCall))
+                                {
+                                    trace(QString("WsjtxFrame::process_decodes %1 wrong CQ call").arg(messages[i].message));
+                                    continue;
+                                }
+                             }
+                             else
+                             {
+                                 if (!nonTestCQCalls.contains(dc.CQCall))
+                                 {
+                                     trace(QString("WsjtxFrame::process_decodes %1 wrong CQ call").arg(messages[i].message));
+                                     continue;
+                                 }
+
+                             }
+                         }
+                        if ( dc.snr >= minsnr
+                                && dc.points > minpoints
+                                && pbv > bestPoints
+                              )
                         {
-                            trace(QString("WsjtxFrame::process_decodes Candidate - CS already seen %1").arg(messages[i].message));
+                            trace(QString("WsjtxFrame::process_decodes Candidate %1").arg(messages[i].message));
                             bestOffset = i;
-                            currSn = dc.snr;
+                            bestPoints = pbv;
                         }
                         else
                         {
                             trace(QString("WsjtxFrame::process_decodes NOT best %1").arg(messages[i].message));
-
                         }
                     }
-                }
-                else
-                {
-                    trace(QString("WsjtxFrame::process_decodes NOT Candidate %1").arg(messages[i].message));
+                    else
+                    {
+                        trace(QString("WsjtxFrame::process_decodes NOT Candidate %1").arg(messages[i].message));
+                    }
                 }
             }
-            for (int i = decodeStartSize; i < decodeEndSize; i++)
-            {
-                decodeMessage &dc = messages[i];
-                dc.best = (bestOffset == i);
-            }
-            if (bestOffset >= 0)
-                trace("WsjtxFrame::process_decodes best decode is " + messages[bestOffset].message);
 
-            emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
-            if (!currentlyTransmitting && ui->autoSelectButton->isChecked() && bestOffset >= 0 )
+            if (bestOffset >= 0)
+            {
+                for (int i = decodeStartSize; i < decodeEndSize; i++)
+                {
+                    decodeMessage &dc = messages[i];
+                    dc.best = (bestOffset == i);
+                }
+                trace("WsjtxFrame::process_decodes best decode is " + messages[bestOffset].message);
+            }
+
+            if (autoReplyAllowed && ui->autoSelectButton->isChecked() && bestOffset >= 0 )
             {
                 trace("WsjtxFrame::process_decodes auto replying to " + messages[bestOffset].message);
                 messages[bestOffset].autoresp = true;
                 reply(messages[bestOffset]);
+
+                // we are assuming that autoseq is enabled, call 1st isn't
+                // but we can't enforce either
+                // things may be messy if we are not set this way
             }
+            emit decodes_model_->dataChanged(decodes_model_->index(decodeStartSize, dcBest), decodes_model_->index(decodeEndSize, dcBest));
         }
     }
 
     ui->decodes_table_view_->scrollToBottom ();
 }
+void WsjtxFrame::getAllTxtEnd()
+{
+    QString fname = WsjtxServer::getDataPath() + "/ALL.TXT";
+    alltxt.setFileName(fname);
 
+    if (!alltxt.open(QIODevice::ReadOnly|QIODevice::Text))
+    {
+        QString ebuff = tr( "Failed to open %1" ).arg(fname);
+        trace(ebuff);
+        return;
+    }
+    alltxt.seek(alltxt.size());
+    alltxtstr.setDevice(&alltxt);
+    while (!alltxtstr.atEnd())
+    {
+
+      alltxtstr.readLine(255);
+    }
+}
+decodeMessage *WsjtxFrame::scrapeAllTxt()
+{
+    decodeMessage *last = nullptr;
+    if (alltxt.isOpen())
+    {
+        while (!alltxtstr.atEnd())
+        {
+
+          QString atline = alltxtstr.readLine(255);
+
+          if (!bandOK)
+              continue;
+
+          // now we need to parse for transmissions
+// 200425_110345    50.313 Tx FT8      0  0.0 1500 CQ G0GJV IO91
+
+// 200424_160138     7.048 Rx FT4    -10  0.0  817 CQ YO4NF KN44
+// 200424_160138     7.048 Rx FT4      2 -0.1 1399 AM4WARD <DL9DAJ> 73
+// 200424_160138     7.048 Rx FT4     -8  0.2 2798 CQ R9SDO LO91
+// 200424_160138     7.048 Rx FT4     -9  0.0  292 CQ ON5ZZ JO11                       ? a1
+// 200424_160145     7.048 Rx FT4      1 -0.0  504 R9SDO R2ASY +05
+
+// "? a1" is about a priori decodes and their possible validity
+
+// date-time rigfreq txrx mode s/n dt df message
+
+            QString id = "WSJTX";
+            QTime time;
+            qint32 snr;
+            float delta_time;
+            quint32 delta_frequency;
+            QString mode;
+            QString message;
+            bool low_confidence = false;    // we sent it, after all
+
+            QStringList sl = atline.trimmed().split(' ', QString::SkipEmptyParts);
+            if (sl[2] != "Tx")
+                continue;
+
+            //trace("Tx scraped: " + atline);
+            time = QDateTime::fromString(sl[0], "yyMMdd_HHmmss").time();
+            //double rigfreq = sl[1].toDouble();
+            // sl[2] == Tx
+            mode = sl[3];
+            snr = 0;    //sl[4]
+            delta_time = 0.0;   //sl[5]
+            delta_frequency = sl[6].toUInt();
+
+            for (int i = 0; i < 7; i++)
+            {
+                sl.removeFirst();
+            }
+            message = sl.join(' ');
+
+
+            decodeMessage dc = decoder.decode(id, eTX, time, snr, delta_time
+                                            , delta_frequency, mode
+                                            , message, low_confidence, true);
+
+            trace(QString("WsjtxFrame::scrapeAllTxt - time %1 stage %2 %3")
+                  .arg(time.toString("HH:mm:ss")).arg(dc.getMStage(), atline));
+
+            currTxStage = dc.mstage;
+
+            messages.push_back(dc);
+            last = messages.end() - 1;
+
+            decodes_model_->add_decode ();
+            ui->decodes_table_view_->scrollToBottom (); // which normally happens in process_decodes
+
+            // process_decodes(); - not wanted, we've just started transmitting; previous process_decodes should have stopped us!
+        }
+    }
+    return last;
+}
 void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                 , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
+                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 so_mode)
 {
-    MinosParameters *mp = MinosParameters::getMinosParameters();
-    if (!mp)
-        return;
-    BaseContestLog * cc = mp ->getCurrentContest();
-    if (ct != cc || cc == nullptr)
-        return;
-    id_ = id;
+//    MinosParameters *mp = MinosParameters::getMinosParameters();
+//    if (!mp)
+//        return;
+//    BaseContestLog * cc = mp ->getCurrentContest();
+//    if (ct != cc || cc == nullptr)
+//        return;
 
-    currentlyDecoding = decoding;
-    currentlyTransmitting = transmitting;
+    special_op_mode = so_mode;
+    // protected contests aren't interesting
+    if (!ct || ct->isReadOnly())
+        return;
+
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    double df = f;
+    bandOK = blist.findBand(df, bi);
+    if (bandOK)
+    {
+        QString cb = ct->contestBands.getValue().trimmed();
+        if (cb == allHF)
+        {
+            cb = bi.uk;
+            ct->setCurrentBand(cb);
+        }
+        else
+        {
+            BandInfo cbi;
+            bool cbandOK = blist.findBand(cb, cbi);
+            if (cbandOK)
+            {
+                cb = cbi.uk;
+            }
+            if (cb != bi.uk)
+            {
+                QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
+                ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+            }
+            else
+            {
+                ui->bandErrorLabel->clear();
+            }
+        }
+    }
+
+    // if the band is wrong, then we shouldn't be looking at it; certainly not for auto...
+    // it should be going to the contest that IS on the correct band, even if it isn't
+    // the current contest
+
+    // there should NEVER be two simultaneous contest on the same band. Although Ken may test it...
+
+    if (!bandOK)
+    {
+        scrapeAllTxt(); // move to EOF withut doing anything
+        return;
+    }
+
+    id_ = id;
 
     trace(QString("WsjtxFrame::update_status dx_call %1 dx_grid %2 transmitting %3 decoding %4 tx_enabled %5")
           .arg(dx_call).arg(dx_grid).arg(transmitting).arg(decoding).arg(tx_enabled));
+
+    decodeMessage *lastTx = nullptr;
+    if (transmitting && !currentlyTransmitting)
+    {
+        // try scraping the transmissions from the all.txt file
+        lastTx = scrapeAllTxt();
+    }
+    currentlyDecoding = decoding;
+    currentlyTransmitting = transmitting;
+
+    if (!transmitting && !tx_enabled)
+    {
+        currTxStage = emsNone;
+        callingCall.clear();
+        workingCall.clear();
+        lastTx = nullptr;
+    }
+    else if (lastTx)
+    {
+        currTxStage = lastTx->mstage;
+        callingCall.clear();
+        workingCall.clear();
+        // we transmitted in the last period
+        // set calling call - if we are
+        // set working call - if we are
+        switch (lastTx->mstage)
+        {
+        case emsNone:
+            // shouldn't happen...
+        case emsCQ:
+            // repliable to "from"
+            // CQ K1ABC FN42
+            // CQ DX K1ABC FN42
+            // CQ TEST G4ABC/P IO91
+
+            if (ui->autoRearmcb->isChecked())
+            {
+                ui->autoSelectButton->setChecked(reArmValue);
+            }
+            break;
+        case ems73:
+            // after this may still get far end RRR or RR73
+            // repliable to "from"
+            // K1ABC G0XYZ 73
+            // G4ABC/P PA9XYZ 73
+        case emsFree:
+            // no calls involved
+            break;
+
+        case emsGrid:
+            // grid is sl[2] is 4 fig loc
+            // K1ABC G0XYZ IO91
+            // G4ABC/P PA9XYZ JO22
+            callingCall = dx_call;
+            break;
+
+        case emsDb:
+            // db is aything else? or it may be a free text message
+            //G0XYZ K1ABC –19
+            //PA9XYZ 590003 IO91NP
+        case emsRplusDb:
+            // repliable to "from" - but may have to wait for 73
+            // K1ABC G0XYZ R-22
+            // G4ABC/P R 570007 JO22DB
+        case emsRplusGrid:
+            // similar to emsRplusDb
+        case emsRplusDbGrid:
+        case emsDbGrid:
+        case emsRRR:
+            // repliable to "from"
+            // G0XYZ K1ABC RR73
+            // PA9XYZ G4ABC/P RR73
+            workingCall = dx_call;
+            break;
+        }
+        trace(QString("WsjtxFrame::update_status last tx stage %1 calling <%2> working <%3>").arg(lastTx->getMStage()).arg(callingCall).arg(workingCall));
+    }
+
     QColor fcolour = Qt::black;
     if (transmitting)
         fcolour = Qt::red;
@@ -414,30 +786,6 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
     ui->frequency_label_->setText (HtmlFontColour(fcolour) + "QRG: " + Radio::pretty_frequency_MHz_string (f));
 
-    BandList &blist = BandList::getBandList();
-    BandInfo bi;
-    double df = f;
-    bool bandOK = blist.findBand(df, bi);
-    if (bandOK)
-    {
-        QString cb = cc->band.getValue().trimmed();
-        BandInfo cbi;
-        bool bandOK = blist.findBand(cb, cbi);
-        if (bandOK)
-        {
-            cb = cbi.uk;
-        }
-        if (cb != bi.uk)
-        {
-            QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
-            ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
-        }
-        else
-        {
-            ui->bandErrorLabel->clear();
-        }
-    }
-
     ui->dx_label_->setText (dx_call.size () >= 0 ? QString {"DX: %1%2"}.arg (dx_call)
                                                    .arg (dx_grid.size () ? '(' + dx_grid + ')' : QString {}) : QString {});
     ui->rx_df_label_->setText (rx_df >= 0 ? QString {HtmlFontColour(tcolour) + "Rx: %1"}.arg (rx_df) : "");
@@ -465,12 +813,14 @@ void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
                                , QString const& message, bool low_confidence
                                , bool off_air)
 {
-    BaseContestLog * cc = MinosParameters::getMinosParameters() ->getCurrentContest();
-    if (ct != cc)
+    if (!bandOK)
         return;
+    if (!ct || ct->isReadOnly())
+        return;
+
     id_ = id;
 
-    decodeMessage dc = decoder.decode(id, time, snr, delta_time
+    decodeMessage dc = decoder.decode(id, eRX, time, snr, delta_time
                                       , delta_frequency, mode
                                       , message, low_confidence, off_air);
 
@@ -542,6 +892,8 @@ void WsjtxFrame::decodes_cleared (QString const& client_id)
 }
 void WsjtxFrame::reply(decodeMessage &dc)
 {
+    reArmValue = ui->autoSelectButton->isChecked();
+
     ui->autoSelectButton->setChecked(false);
     //ui->autoSelectButton->setArrowType(Qt::NoArrow);
     WsjtxServer::getWsjtxServer()->reply(dc.id, dc.time, dc.snr, dc.delta_time, dc.delta_frequency, dc.mode, dc.message, dc.low_confidence,  QApplication::keyboardModifiers () >> 24);
@@ -586,7 +938,7 @@ void WsjtxFrame::on_testButton_clicked()
 //        , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 
 
-            update_status ("test", 12345, "FT8", "","0", "FT8", false, false, true, 0, 0
+            update_status ("test", 14070060, "FT8", "","0", "FT8", false, false, true, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0);
 
@@ -602,12 +954,56 @@ void WsjtxFrame::on_testButton_clicked()
 //19:30:14.690 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G8KWX IO91 stage Grid points 50 snr -15
 //19:30:14.733 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G3ZPB IO91 stage Grid points 50 snr -15
             QTime now = QTime::currentTime();
+
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC -19", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "<G4ABC> <PA9XYZ> R 580071 JO22DB", false, true);
+
             decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
             decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
             decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
             decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB RR73", false, true);
+            decode_added(true, "test", now, -19, 0, 0, "FT8", "<GB1945PJ> SP9DEM JO90", false, true);
+            decode_added(true, "test", now, -19, 0, 0, "FT8", "<...> RW3SK KO94", false, true);
 
-            update_status ("test", 12345, "FT8", "","0", "FT8", false, false, false, 0, 0
+
+            // Normal
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ K1ABC FN42", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ IO91", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC -19", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ R-22", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC RR73", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ 73", false, true);
+
+
+            // EU VHF Contest
+
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ TEST G4ABC/P IO91", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC/P PA9XYZ JO22", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "PA9XYZ 590003 IO91NP", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC/P R 570007 JO22DB", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "PA9XYZ G4ABC/P RR73", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC/P PA9XYZ 73", false, true);
+
+            //And in 2.2 (both callsigns, hashed)
+            //(Either callsign (or both) may have /P appended.)
+
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ TEST G4ABC IO91", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC PA9XYZ JO22", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "<PA9XYZ> <G4ABC> 570123 IO91NP", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "<G4ABC> <PA9XYZ> R 580071 JO22DB", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "PA9XYZ G4ABC RR73", false, true);
+
+
+            // NA VHF Contest
+            //(Either callsign (or both) may have /R appended. You can use RR73 in place of RRR, and the final 73 is optional)
+
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ TEST K1ABC FN42", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC W9XYZ EN37", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "W9XYZ K1ABC R FN42", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC W9XYZ RR73", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "W9XYZ K1ABC 73", false, true);
+
+            update_status ("test", 14070060, "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0);
 
@@ -683,4 +1079,13 @@ void WsjtxFrame:: on_sectionMoved(int /*logicalIndex*/, int /*oldVisualIndex*/, 
 void WsjtxFrame::on_sectionResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/)
 {
     saveAllColumnWidthsAndPositions();
+}
+
+void WsjtxFrame::on_configCQButton_clicked()
+{
+    WsjtxConfigureCQ wccq(this);
+
+    wccq.exec();
+
+    getCQStrings();
 }

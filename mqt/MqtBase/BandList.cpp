@@ -23,6 +23,7 @@
 #include "BandList.h"
 #include "cutils.h"
 //---------------------------------------------------------------------------
+const QString allHF{"ALLHF"}; // not to be translated
 
 void BandInfo::setType ( const QString &t )
 {
@@ -259,7 +260,7 @@ bool BandList::findBand ( const QString &psfreq, BandInfo &bi )
 }
 
 
-bool BandList::findBand(int freq, BandInfo &bi)
+bool BandList::findBand(long freq, BandInfo &bi)
 {
    for (QVector<BandInfo>::iterator i = bandList.begin(); i != bandList.end(); i++)
    {

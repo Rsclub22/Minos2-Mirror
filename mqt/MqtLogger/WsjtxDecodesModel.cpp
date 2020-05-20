@@ -187,13 +187,17 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         {
             // we don't see transmitted messages, unfortunately
             auto message = data (index(pindex.row(), dcMessage)).toString ();
-            if (base_call_re_.pattern ().size ()
+            if (msg.txrx == eTX)
+            {
+                c = QColor(Qt::yellow);
+            }
+            else if (base_call_re_.pattern ().size ()
                     && message.contains (base_call_re_))
             {
                 // my call in message - colour red(ish)
                 c = (QColor(0xff, 0x66, 0x66));
             }
-            else if (message.contains (cq_re))
+            else if (msg.mstage == emsCQ)
             {
                 if (msg.points > 0)
                 {
@@ -279,6 +283,8 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
 
         case dcPoints:
         {
+            if (msg.txrx == eTX)
+                return "";
             bool highlight = false;
 
             if (msg.mstage != emsCQ && msg.mstage != emsGrid && msg.mstage != ems73 && msg.mstage != emsRRR )
@@ -312,6 +318,9 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             return  pts;
         }
         case dcBearing:
+            if (msg.txrx == eTX)
+                return "";
+
             if (msg.mstage != emsCQ && msg.mstage != emsGrid && msg.mstage != ems73 && msg.mstage != emsRRR)
             {
                 return "";
@@ -326,19 +335,31 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             }
             return QString::number(msg.bearing);
         case dcDistance:
+            if (msg.txrx == eTX)
+                return "";
             return QString::number(msg.distance);
 
         case dcFromCall:
+            if (msg.txrx == eTX)
+                return "";
             return msg.fromCall.realCall;
         case dcFromGrid:
+            if (msg.txrx == eTX)
+                return "";
             return msg.fromGrid.loc.getValue();
         case dcToCall:
+            if (msg.txrx == eTX)
+                return "";
             return msg.toCall.realCall;
         case dcToGrid:
+            if (msg.txrx == eTX)
+                return "";
             return msg.toGrid.loc.getValue();
 
         case dcBest:
         {
+            if (msg.txrx == eTX)
+                return "";
             if (msg.oldmsg)
             {
                 return tr("(old)");

@@ -3,6 +3,7 @@
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
 
+#include "ContestApp.h"
 #include "Calendar.h"
 #include "CalendarList.h"
 #include "BandList.h"
@@ -169,24 +170,36 @@ void ContestDetails::setDetails(  )
    ui->BandComboBox->clear();
    // need to get legal bands from ContestLog
 
-  BandList &blist = BandList::getBandList();
-  for (QVector<BandInfo>::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
-  {
-     if ((*i).getType() != "HF")
-     {
-        ui->BandComboBox->addItem( (*i).uk );
-     }
-  }
+   bool allowHF = false;
+   TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
 
-  QString cb = contest->band.getValue().trimmed();
-
-  BandInfo bi;
-   bool bandOK = blist.findBand(cb, bi);
-   if (bandOK)
+   BandList &blist = BandList::getBandList();
+   if (allowHF)
    {
-      cb = bi.uk;
+       ui->BandComboBox->addItem( tr("All HF") );
+   }
+   for (QVector<BandInfo>::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
+   {
+       if (allowHF || (*i).getType() != "HF")
+       {
+           ui->BandComboBox->addItem( (*i).uk );
+       }
    }
 
+   QString cb = contest->contestBands.getValue().trimmed();
+   if (cb == allHF)
+   {
+       cb = tr("All HF");
+   }
+   else
+   {
+       BandInfo bi;
+       bool bandOK = blist.findBand(cb, bi);
+       if (bandOK)
+       {
+           cb = bi.uk;
+       }
+   }
    int b = ui->BandComboBox->findText( cb );        // contest
 
    if ( b >= 0 )
@@ -195,7 +208,7 @@ void ContestDetails::setDetails(  )
    }
    else
    {
-      ui->BandComboBox->setCurrentText(contest->band.getValue());
+      ui->BandComboBox->setCurrentText(contest->contestBands.getValue());
    }
 
    if (!contest->currentMode.getValue().isEmpty())
@@ -845,7 +858,12 @@ QWidget * ContestDetails::getDetails( )
     QWidget *nextD = getNextFocus();
 
     contest->name.setValue( ui->ContestNameEdit->text() );
-    contest->band.setValue( ui->BandComboBox->currentText() );
+    QString cb = ui->BandComboBox->currentText();
+    if (cb == tr("All HF"))
+    {
+        cb = allHF;
+    }
+    contest->contestBands.setValue( cb );
     contest->entSect.setValue( ui->SectionComboBox->currentText() );
     contest->sectionList.setValue( sectionList );
 

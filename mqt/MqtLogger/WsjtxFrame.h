@@ -38,6 +38,7 @@ private:
     QString id_;
     QSharedPointer<HtmlDelegate> delegate;
     bool autoEnabled = false;
+    bool reArmValue = false;
     bool showTest = false;
     bool inDecode = false;
     int lastcol = 0;
@@ -47,7 +48,20 @@ private:
     bool currentlyTransmitting = false;
     bool currentlyDecoding = false;
 
+    MessageStage currTxStage = emsNone;
+    QString callingCall;
+    QString workingCall;
+
     WsjtxDecode decoder;
+
+    QStringList testCQCalls;
+    QStringList nonTestCQCalls;
+    qint8 special_op_mode;
+
+    QFile alltxt;
+    QTextStream alltxtstr;
+
+    bool bandOK = false;
 
     void reply(decodeMessage &dc);
     void restoreSplitters();
@@ -55,6 +69,9 @@ private:
     
     void saveAllColumnWidthsAndPositions();
     void reloadColumns();
+    decodeMessage *scrapeAllTxt();
+    void getAllTxtEnd();
+    void getCQStrings();
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
@@ -99,6 +116,7 @@ private slots:
     void on_doColumnChanges(BaseContestLog *b);
     void on_sectionMoved(int, int, int);
     void on_sectionResized(int, int, int);
+    void on_configCQButton_clicked();
 };
 
 #endif // WSJTXFRAME_H

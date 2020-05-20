@@ -16,7 +16,6 @@ class ScreenContact
 {
       unsigned long logSequence = 0L; // sparse sequence, used to provide
    protected:
-      BaseContestLog *contest =nullptr;
    public:
       ScreenContact();
       virtual ~ScreenContact();
@@ -37,6 +36,7 @@ class ScreenContact
 
       void score();
 
+      BaseContestLog *contest =nullptr;
 
       Callsign cs;   //CONTAIN MinosItem
       Locator loc;   //CONTAIN MinosItem

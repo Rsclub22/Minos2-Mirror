@@ -192,11 +192,11 @@
         <location filename="../kstmainwindow.ui" line="69"/>
         <location filename="../kstmainwindow.ui" line="76"/>
         <location filename="../kstmainwindow.ui" line="83"/>
-        <location filename="../kstmainwindow.ui" line="409"/>
-        <location filename="../kstmainwindow.ui" line="419"/>
-        <location filename="../kstmainwindow.ui" line="429"/>
-        <location filename="../kstmainwindow.ui" line="439"/>
-        <location filename="../kstmainwindow.ui" line="581"/>
+        <location filename="../kstmainwindow.ui" line="402"/>
+        <location filename="../kstmainwindow.ui" line="412"/>
+        <location filename="../kstmainwindow.ui" line="422"/>
+        <location filename="../kstmainwindow.ui" line="432"/>
+        <location filename="../kstmainwindow.ui" line="574"/>
         <source>-</source>
         <translatorcomment>Replaced by text?</translatorcomment>
         <translation>-</translation>
@@ -223,7 +223,7 @@
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="155"/>
-        <location filename="../kstmainwindow.ui" line="323"/>
+        <location filename="../kstmainwindow.ui" line="316"/>
         <source>X</source>
         <translation>X</translation>
     </message>
@@ -233,26 +233,25 @@
         <translation>Distance maximale à afficher</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="196"/>
         <source>Set max distance</source>
-        <translation>Définir la distance maximale</translation>
+        <translation type="vanished">Définir la distance maximale</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="259"/>
+        <location filename="../kstmainwindow.ui" line="252"/>
         <source>Show me-&gt;user
 Path in AirScout</source>
         <translation>Afficher le chemin dans AirScout
 entre moi et Spot</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="267"/>
+        <location filename="../kstmainwindow.ui" line="260"/>
         <source>Show Message call-&gt;other
 Path in AirScout</source>
         <translation>Afficher le chemin dans AirScout
 entre Spot et autre indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="275"/>
+        <location filename="../kstmainwindow.ui" line="268"/>
         <source>Don&apos;t set filter
 when user selected</source>
         <translatorcomment>Ne pas définir de filtre
@@ -261,99 +260,99 @@ lorsque l&apos;utilisateur a sélectionné</translatorcomment>
 l&apos;indicatif sélectionné</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="296"/>
+        <location filename="../kstmainwindow.ui" line="289"/>
         <source>Message Filter</source>
         <translation>Filtre de messages</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="303"/>
+        <location filename="../kstmainwindow.ui" line="296"/>
         <source>Only show messages for this band</source>
         <translation>Afficher uniquement les messages de ce bande</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="310"/>
+        <location filename="../kstmainwindow.ui" line="303"/>
         <source>Look for this string in messages</source>
         <translation>Rechercher cette chaîne de caractères dans les messages</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="320"/>
+        <location filename="../kstmainwindow.ui" line="313"/>
         <source>Clear the message filters</source>
         <translation>Effacer les filtres messages</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="346"/>
+        <location filename="../kstmainwindow.ui" line="339"/>
         <source>Including me</source>
         <translation>Including me</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="368"/>
+        <location filename="../kstmainwindow.ui" line="361"/>
         <source>Chat to which messages will be sent</source>
         <translation>Envoyer des messages à ce Bavardage</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="386"/>
+        <location filename="../kstmainwindow.ui" line="379"/>
         <source>Active chat</source>
         <translation>Bavardage actif</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="462"/>
+        <location filename="../kstmainwindow.ui" line="455"/>
         <source>AS Band</source>
         <translation>AS Bande</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="472"/>
+        <location filename="../kstmainwindow.ui" line="465"/>
         <source>AS Active</source>
         <translation>AS actif</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="490"/>
+        <location filename="../kstmainwindow.ui" line="483"/>
         <source>General message</source>
         <translation>Message général</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="497"/>
+        <location filename="../kstmainwindow.ui" line="490"/>
         <source>Meep</source>
         <translation>Meep</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="508"/>
+        <location filename="../kstmainwindow.ui" line="501"/>
         <source>Callsign</source>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="526"/>
+        <location filename="../kstmainwindow.ui" line="519"/>
         <source>Message</source>
         <translation>Message</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="542"/>
+        <location filename="../kstmainwindow.ui" line="535"/>
         <source>Clear message</source>
         <translation>Effacer message</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="554"/>
-        <location filename="../kstmainwindow.ui" line="623"/>
+        <location filename="../kstmainwindow.ui" line="547"/>
+        <location filename="../kstmainwindow.ui" line="616"/>
         <source>Configure</source>
         <translation>Configurer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="561"/>
+        <location filename="../kstmainwindow.ui" line="554"/>
         <source>Clear Messages</source>
         <translation>Effacer messages</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="588"/>
+        <location filename="../kstmainwindow.ui" line="581"/>
         <location filename="../kstmainwindow.cpp" line="386"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="595"/>
+        <location filename="../kstmainwindow.ui" line="588"/>
         <source>Analyse</source>
         <translation>Analyser</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="602"/>
+        <location filename="../kstmainwindow.ui" line="595"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

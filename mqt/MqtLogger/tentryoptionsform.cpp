@@ -84,7 +84,7 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
 
     ui->OptionsScrollBox->setItem(r++, 0, dateRangeItem);
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->name.getValue()));
-    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->band.getValue()));
+    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->contestBands.getValue()));
     int bpm = ct->bandPointsMultiplier.getValue();
     if (bpm == 0)
         bpm = 1;
@@ -170,7 +170,7 @@ void TEntryOptionsForm::on_CloseButton_clicked()
     r++;  // date range not editable
 
     ct->name.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
-    ct->band.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
+    ct->contestBands.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     int bpm = ui->OptionsScrollBox->item(r++, 0)->text().toInt();
     if (bpm == 0)
         bpm = 1;

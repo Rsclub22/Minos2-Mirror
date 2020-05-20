@@ -47,6 +47,8 @@ WsjtxConfigure::WsjtxConfigure(QWidget *parent) :
         ui->enabledcb->setChecked(enabled);
         ui->portSpinBox->setValue(port);
         ui->groupAddrEdit->setText(addr);
+
+        ui->wsjtxPath->setText(WsjtxServer::getDataPath());
     }
     {
         bool enabled;
@@ -167,4 +169,26 @@ void WsjtxConfigure::on_OKButton_clicked()
 void WsjtxConfigure::on_CancelButton_clicked()
 {
     doClose();
+}
+
+void WsjtxConfigure::on_alltxtBrowseButton_clicked()
+{
+    // search for WSJT-X data dir (which contains ALL.TXT)
+    //QDir cdir(GetCurrentDir());
+
+    QString fpath =  ui->wsjtxPath->text();
+
+    QString destFile = QFileDialog::getOpenFileName(
+                  this,
+                  tr("ALL.TXT for WSJT-X"),
+                  fpath,
+                  "ALL.TXT"
+                   );
+    if (!destFile.isEmpty())
+    {
+        QFileInfo fi(destFile);
+        fpath = fi.absolutePath();
+        ui->wsjtxPath->setText(fpath);
+    }
+
 }

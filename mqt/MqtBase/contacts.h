@@ -66,7 +66,6 @@ class BaseContact: public QObject
     Q_OBJECT
       QVector < QSharedPointer<BaseContact> > history;
    protected:
-      BaseContestLog *contest;
    public:
       BaseContact( const BaseContact & );
       BaseContact(BaseContestLog *contest, dtg time_now );
@@ -106,7 +105,7 @@ class BaseContact: public QObject
       {
           return QString();
       }
-      long getTxFreq(QString &cb);
+      BaseContestLog *contest;
 
       // These CONTAIN minositems
 

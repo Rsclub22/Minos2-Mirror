@@ -129,6 +129,22 @@ void WsjtxServer::start ( )
         }
     }
 }
+QString WsjtxServer::getDataPath()
+{
+    QString dataPath;
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX1DataPath, dataPath );
+    if (dataPath.isEmpty())
+    {
+        // This works on Windows - not sure what we do elsewhere
+        // %LOCALAPPDATA%/WSJT-X
+        dataPath = QString(qgetenv("LOCALAPPDATA")) + "/WSJT-X";
+        if (!DirectoryExists(dataPath))
+        {
+            return QString();
+        }
+    }
+    return dataPath;
+}
 //void WsjtxServer::log_qso (QString const& id, QDateTime time_off, QString const& dx_call
 //                                           , QString const& dx_grid, Frequency dial_frequency, QString const& mode
 //                                           , QString const& report_sent, QString const& report_received

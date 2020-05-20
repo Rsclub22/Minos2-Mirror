@@ -24,7 +24,10 @@ enum LOGGERPROFILE {
    elpWSJTX1Port,
    elpWSJTX1GroupAddress,
    elpWSJTX1AutoEnabled,
+   elpWSJTX1DataPath,
    elpWSJTX1TestEnabled,
+    elpWSJTX1TestCQ,
+    elpWSJTX1NonTestCQ,
 
     elpWSJTX2Enabled,
     elpWSJTX2Port,
@@ -51,7 +54,8 @@ enum LOGGERPROFILE {
    elpADIFPort,
    elpHelpFile, elpHelpEntryURL,
    elpPDFFile,
-   elpAutoFill
+   elpAutoFill,
+   elpAllowHF
 };
 enum PRELOADPROFILE {eppSession, eppCurrent, eppDefSession};
 
@@ -68,7 +72,7 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
 enum ENTRYPROFILE {eepCall, eepEntrant, eepMyName, eepMyCall,
                    eepMyAddress1, eepMyAddress2, eepMyCity, eepMyPostCode, eepMyCountry,
                    eepMyPhone, eepMyEmail};
-enum QTHPROFILE {eqpLocator, eqpDistrict, eqpLocation, eqpStationQTH1, eqpStationQTH2, eqpASL};
+enum QTHPROFILE {eqpLocator, eqpDistrict, eqpLocation, eqpStationQTH1, eqpStationQTH2, eqpASL, eqpITUZone, eqpCQZone};
 enum STATIONPROFILE {espPower, espTransmitter, espReceiver, espAntenna, espAGL, espOffset, espRadioName, espRotatorName};
 
 enum PROFILES {epLOGGERPROFILE, epPRELOADPROFILE, epLISTSPROFILE, epDISPLAYPROFILE,

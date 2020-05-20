@@ -229,6 +229,9 @@ void DisplayContestContact::checkContact( bool inScan)
       }
    }
 
+   QString band;
+   contest->getTxFreqBand(frequency.getValue(), band);
+
    // search for prefix in country synonym list. Have to allow for e.g. HB0 as a mult
 
    if ( contactFlags.getValue() & COUNTRY_FORCED )
@@ -305,37 +308,40 @@ void DisplayContestContact::checkContact( bool inScan)
 
    // same as ScreenContact::Check up to here
 
-   if ( districtMult )
+   if ( districtMult && districtMult->country1)
    {
-      if ( districtMult->country1 &&
-           ( ( clp->districtWorked.data()[ districtMult->listOffset ] ) ++ < districtMult->country1->districtLimit() ) )
+      clp->addDistrictWorked(band, districtMult->listOffset);
+      int n = clp->getDistrictsWorked(band, districtMult->listOffset);
+      if ( n <= districtMult->country1->districtLimit() )
       {
-         clp->ndistrict++;
+         clp->ndistrict[band]++;
          if ( clp->districtMult.getValue() )
          {
             multCount++;
          }
          newDistrict = true;
       }
+  }
+
+   if ( ctryMult)
+   {
+       clp->addCountryWorked(band, ctryMult->listOffset);
+       int n = clp->getCountriesWorked(band, ctryMult->listOffset);
+       if ( n == 1 )
+       {
+           clp->nctry[band]++;
+           if (!clp->nonGCountryMult.getValue() || !cs.isUK())
+           {
+              clp->nctry[band]++;
+              if ( clp->countryMult.getValue() )
+              {
+                  multCount++;
+              }
+              newCtry = true;
+           }
+       }
    }
 
-   if ( ctryMult )
-   {
-      if ( ( clp->countryWorked.data()[ ctryMult->listOffset ] ) ++ == 0 )
-      {
-         if (!clp->nonGCountryMult.getValue() || !cs.isUK())
-         {
-            clp->nctry++;
-            if ( clp->countryMult.getValue() )
-            {
-               {
-                  multCount++;
-               }
-            }
-            newCtry = true;
-         }
-      }
-   }
 
    bool dupContact = clp->DupSheet.checkCurDup( clp, clp->validationPoint, 0, true ); // add to duplicates list
    if (inScan)
@@ -395,7 +401,7 @@ void DisplayContestContact::checkContact( bool inScan)
 
       LocSquare *ls = nullptr;
 
-      for ( LocSquareIterator i = clp->locs.llist.begin(); i != clp->locs.llist.end(); i++ )
+      for ( LocSquareIterator i = clp->locs[band].llist.begin(); i != clp->locs[band].llist.end(); i++ )
       {
           LocSquare *locsq = ( *i ).wt.data();
           if ( strnicmp ( locsq ->loc, letters, 2 ) == 0 )
@@ -412,8 +418,8 @@ void DisplayContestContact::checkContact( bool inScan)
          {
             ls = new LocSquare ( letters );
             MapWrapper<LocSquare> wls(ls);
-            if (!clp->locs.llist.contains(wls))
-                clp->locs.llist.insert ( wls, wls );
+            if (!clp->locs[band].llist.contains(wls))
+                clp->locs[band].llist.insert ( wls, wls );
          }
       }
 
@@ -428,10 +434,10 @@ void DisplayContestContact::checkContact( bool inScan)
             {
                if (npt->UKLocCount == 0 &&  npt->nonUKLocCount == 0)
                {
-                  clp->bonus = clp->getSquareBonus(sloc);
+                  clp->bonus[band] = clp->getSquareBonus(sloc);
 
-                  bonus += clp->bonus;
-                  clp->nbonus = true;
+                  bonus += clp->bonus[band];
+                  clp->nbonus[band] = true;
                   newBonus = true;
                }
             }
@@ -446,7 +452,7 @@ void DisplayContestContact::checkContact( bool inScan)
                   if (npt->UKLocCount + npt->nonUKLocCount == 0)
                   {
                      // hasn't been worked at all
-                     clp->nlocs += 1;
+                     clp->nlocs[band] += 1;
                      multCount += clp->UKloc_multiplier;
                   }
                   else
@@ -463,7 +469,7 @@ void DisplayContestContact::checkContact( bool inScan)
             {
                if ( npt->UKLocCount + npt->nonUKLocCount == 0 )
                {
-                  clp->nlocs += 1;
+                  clp->nlocs[band] += 1;
                   multCount += clp->NonUKloc_multiplier;
                }
                if (npt->nonUKLocCount == 0)
@@ -812,7 +818,10 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "commentsRx", comments );
 
          mt->getStructArgMemberValue( "power", contest->power );
-         mt->getStructArgMemberValue( "band", contest->band );
+         mt->getStructArgMemberValue( "band", contest->contestBands );
+         mt->getStructArgMemberValue( "currentBand", contest->currentBand );
+         if (contest->currentBand.getValue().isEmpty())
+             contest->currentMode = contest->contestBands;
          mt->getStructArgMemberValue( "claimedScore", contactScore );
          mt->getStructArgMemberValue( "forcedMult", forcedMult );
          mt->getStructArgMemberValue( "frequency", frequency );

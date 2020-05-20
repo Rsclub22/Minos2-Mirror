@@ -12,68 +12,6 @@
 #include "ListContact.h"
 #include "list.h"
 
-CsvReader::CsvReader(){}
-
-bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
-{
-    QFile file (fileName);
-     if (file.open(QIODevice::ReadOnly))
-     {
-         QString data = file.readAll();
-         data.remove( QRegExp("\r") ); //remove all ocurrences of CR (Carriage Return)
-         QString temp;
-         QChar character;
-         QTextStream textStream(&data);
-         while (!textStream.atEnd())
-         {
-             textStream >> character;
-             if (character == ',')
-             {
-                 checkString(temp, character, csv);
-             }
-             else if (character == '\n')
-             {
-                 checkString(temp, character, csv);
-             }
-             else if (textStream.atEnd())
-             {
-                 temp.append(character);
-                 checkString(temp, 0, csv);
-             }
-             else
-             {
-                 temp.append(character);
-             }
-         }
-         itemList.clear();
-         return true;
-     }
-     return false;
-}
-void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &csv)
-{
-    if(temp.count("\"")%2 == 0)
-    {
-        if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
-        {
-             temp.remove( QRegExp("^\"") );
-             temp.remove( QRegExp("\"$") );
-        }
-        temp.replace("\"\"", "\"");
-        itemList.append(temp.trimmed());
-        if (character != QChar(','))
-        {
-            csv.append(itemList);
-            itemList.clear();
-        }
-        temp.clear();
-    }
-    else
-    {
-        temp.append(character);
-    }
-}
-
 
 ContactList::ContactList() :
   cslFile( false )

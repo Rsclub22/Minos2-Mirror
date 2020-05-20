@@ -71,18 +71,18 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
 
    if ( ct->countryMult.getValue() )
    {
-      ltot += ct->nctry ;
-      nctry = ct->nctry;
+       nctry = ct->getNctry();
+      ltot += nctry ;
    }
    if ( ct->districtMult.getValue() )
    {
-      ltot += ct->ndistrict;
-      ndistrict = ct->ndistrict;
+       ndistrict = ct->getNdistrict();
+      ltot += ndistrict;
    }
    if ( ct->locMult.getValue() )
    {
-      ltot += ct->nlocs;
-      nlocs = ct->nlocs;
+      nlocs = ct->getNlocs();
+      ltot += nlocs;
    }
 
    if ( ltot == 0 )
@@ -114,7 +114,7 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
    linelist[ static_cast< int> (PAdr1) ] = PrintFileLine( "Address line 1/2 of station             ", ct->sqth1.getValue()  /*, "Address line 1/2 of station"*/ );
    linelist[ static_cast< int> (PAdr2) ] = PrintFileLine( "Address line 2/2 of station             ", ct->sqth2.getValue()  /*, "Address line 2/2 of station"*/ );
    linelist[ static_cast< int> (PSect) ] = PrintFileLine( "Section Entered                         ", ct->entSect.getValue()  /*, "Section Entered"*/ );
-   linelist[ static_cast< int> (PBand) ] = PrintFileLine( "Band Used                               ", ct->band.getValue()  /*, "Band Used"*/ );
+   linelist[ static_cast< int> (PBand) ] = PrintFileLine( "Band Used                               ", ct->contestBands.getValue()  /*, "Band Used"*/ );
 
    linelist[ static_cast< int> (PClub) ] = PrintFileLine( "Name of club/group                      ", ct->entrant.getValue()  /*, "Name of club/group"*/ );
    linelist[ static_cast< int> (RName) ] = PrintFileLine( "Name of responsible operator            ", ct->entName.getValue()  /*, "Name of responsible operator"*/ );

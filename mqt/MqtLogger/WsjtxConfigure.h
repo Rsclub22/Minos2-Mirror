@@ -20,6 +20,8 @@ private slots:
 
     void on_CancelButton_clicked();
 
+    void on_alltxtBrowseButton_clicked();
+
 private:
     Ui::WsjtxConfigure *ui;
     void doClose();

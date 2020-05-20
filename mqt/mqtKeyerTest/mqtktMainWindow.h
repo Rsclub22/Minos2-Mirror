@@ -30,6 +30,8 @@ private slots:
 
     void on_closeButton_clicked();
 
+    void on_toneButton_clicked();
+
 private:
     Ui::mqtktMainWindow *ui;
 };

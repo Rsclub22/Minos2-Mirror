@@ -205,9 +205,9 @@ private slots:
 
     void on_callSplitter_splitterMoved(int pos, int index);
 
-    void on_maxDistanceButton_clicked();
-
     void onStdInRead(QString cmd);
+    void on_maxDistanceEdit_editingFinished();
+
 private:
     Ui::KSTMainWindow *ui;
     StdInReader stdinReader;

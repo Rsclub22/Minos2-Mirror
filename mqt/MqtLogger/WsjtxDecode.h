@@ -2,8 +2,9 @@
 #define WSJTXDECODE_H
 #include "base_pch.h"
 
-enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73, emsFree};
+enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsDbGrid, emsRplusGrid, emsRplusDb, emsRplusDbGrid, emsRRR, ems73, emsFree};
 enum SpecialOperatingActivity {NONE, NA_VHF, EU_VHF, FIELD_DAY, RTTY, FOX, HOUND};
+enum TxRx {eTX, eRX};
 
 const Locator &WsjtGetCallLoc(const Callsign &c);
 
@@ -21,10 +22,11 @@ public:
 
     MessageStage mstage{emsNone};
     QString getMStage() const;
-    SpecialOperatingActivity opMode = NONE;
+    QString CQCall;
 
     QTime decodeTime;
     QString message;
+    QString decodeInd;
     bool best = false;
     bool autoresp = false;
     Callsign toCall;
@@ -44,6 +46,7 @@ public:
     // extra info needed for reply
 
     QString id;
+    TxRx txrx;
     QTime time;
     qint32 snr;
     float delta_time;
@@ -54,6 +57,7 @@ public:
 
     decodeMessage();
     bool checkAsContact();
+    void validate();
 };
 
 class WsjtxDecode
@@ -61,7 +65,7 @@ class WsjtxDecode
 public:
     WsjtxDecode();
 
-    decodeMessage decode(QString const& id, QTime time, qint32 snr, float delta_time
+    decodeMessage decode(QString const& id, TxRx tr, QTime time, qint32 snr, float delta_time
                          , quint32 delta_frequency, QString const& mode
                          , QString const& message_text, bool low_confidence, bool off_air);
 
@@ -73,6 +77,7 @@ private:
     Callsign myCall;
     Locator myGrid;
 
+    QString stripBrackets(QString cs);
 };
 
 #endif // WSJTXDECODE_H

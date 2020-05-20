@@ -62,19 +62,20 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    int nlocs = 0;
    int bonus = 0;
 
-   if ( ct->countryMult.getValue() )   {
-      ltot += ct->nctry ;
-      nctry = ct->nctry;
+   if ( ct->countryMult.getValue() )
+   {
+       nctry = ct->getNctry();
+      ltot += nctry ;
    }
    if ( ct->districtMult.getValue() )
    {
-      ltot += ct->ndistrict;
-      ndistrict = ct->ndistrict;
+       ndistrict = ct->getNdistrict();
+      ltot += ndistrict;
    }
    if ( ct->locMult.getValue() )
    {
-      ltot += ct->nlocs;
-      nlocs = ct->nlocs;
+       nlocs = ct->getNlocs();
+      ltot += nlocs;
    }
 
    if ( ltot == 0 )
@@ -104,7 +105,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
       }
    }
    if (bonus)
-        nlocs = ct->nlocs;
+        nlocs = ct->getNlocs();
 
    // get the best DX contact
    QSharedPointer<BaseContact> bestdx = ct->getBestDX();
@@ -119,7 +120,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    linelist[ static_cast< int> (PAdr1 )] = reg1testLine( "PAdr1", ct->sqth1.getValue()  /*, "Address line 1/2 of station"*/ );
    linelist[ static_cast< int> (PAdr2 )] = reg1testLine( "PAdr2", ct->sqth2.getValue()  /*, "Address line 2/2 of station"*/ );
    linelist[ static_cast< int> (PSect )] = reg1testLine( "PSect", ct->entSect.getValue()  /*, "Section Entered"*/ );
-   linelist[ static_cast< int> (PBand )] = reg1testLine( "PBand", ct->band.getValue()  /*, "Band Used"*/ );
+   linelist[ static_cast< int> (PBand )] = reg1testLine( "PBand", ct->contestBands.getValue()  /*, "Band Used"*/ );
 
    linelist[ static_cast< int> (PClub )] = reg1testLine( "PClub", ct->entrant.getValue()  /*, "Name of club/group"*/ );
    linelist[ static_cast< int> (RName )] = reg1testLine( "RName", ct->entName.getValue()  /*, "Name of responsible operator"*/ );
@@ -286,7 +287,8 @@ bool reg1test::parseHeader(QString line )
                         if ( code == "PBAND" )
                         {
                            //PBand=145 MHz
-                           ct->band.setValue( a[ 1 ] );
+                           ct->contestBands.setValue( a[ 1 ] );
+                           ct->setCurrentBand( a[ 1 ] );
                         }
                         else
                            if ( code == "PCLUB" )

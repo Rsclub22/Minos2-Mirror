@@ -47,15 +47,4 @@ class ContactList : public BaseLogList
       }
 };
 
-
-class CsvReader
-{
-    void checkString(QString &temp, QChar character, QList<QStringList> &csv);
-    QStringList itemList;
-public:
-    CsvReader();
-
-    bool parseCsv(const QString &fileName, QList<QStringList> &csv);
-};
-
 #endif

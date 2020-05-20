@@ -1225,7 +1225,7 @@ void RigControlFrame::setRadioFreq()
        //And we want to select the frequency based on the contest band
        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
        trace(QString("setRadioFreq: select frequency"));
-       QString cb = ct->band.getValue().trimmed();
+       QString cb = ct->contestBands.getValue().trimmed();
        trace(QString("setRadioFreq: contest band = %1").arg(cb));
        BandList &blist = BandList::getBandList();
        BandInfo bi;

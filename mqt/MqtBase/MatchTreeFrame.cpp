@@ -42,7 +42,7 @@ void MatchTreeFrame::initialise()
     connect(this, SIGNAL(matchTreeClicked()), this, SLOT(afterMatchTreeClicked()), Qt::QueuedConnection);
 
     connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
-            this, SLOT(on_matchTreeSelectionChanged(const QItemSelection &, const QItemSelection &)), Qt::UniqueConnection);
+            this, SLOT(on_MatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &)), Qt::UniqueConnection);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
             this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
@@ -140,7 +140,7 @@ void MatchTreeFrame::on_doColumnChanges(BaseContestLog *b)
         restoreColumns();
     }
 }
-void MatchTreeFrame::on_matchTree_clicked(const QModelIndex &)
+void MatchTreeFrame::on_MatchTreeFrame_clicked(const QModelIndex &)
 {
     emit matchTreeClicked();
 }
@@ -459,7 +459,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                         //But we have just shut the "other" contest... so we are pointing at nothing
                         //This is where we have an "other" match and we close the "other" contest
                         QString name = contest->name.getValue();
-                        QString band = contest->band.getValue();
+                        QString band = contest->contestBands.getValue();
 
                         QString cell = "[" + band + "] " + name;
                         if (currentModel && baseName.compare("Monitor") != 0)

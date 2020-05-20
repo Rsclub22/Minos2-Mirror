@@ -93,7 +93,8 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    bool dirty = false;
 
    ct->name.addIfDirty( st, "name", dirty );
-   ct->band.addIfDirty( st, "band", dirty );
+   ct->contestBands.addIfDirty( st, "band", dirty );
+   ct->currentBand.addIfDirty( st, "currentBand", dirty );
    ct->entSect.addIfDirty( st, "section", dirty );
    ct->sectionList.addIfDirty( st, "sectionList", dirty );
    if ( ct->scoreMode.isDirty() )
@@ -360,7 +361,8 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    lct->mode.addIfDirty( st, "modeRx", dirty );
    lct->mgmSubmode.addIfDirty(st, "mgmSubmode", dirty);
    ct->power.addIfDirty( st, "power", dirty );
-   ct->band.addIfDirty( st, "band", dirty );
+   ct->contestBands.addIfDirty( st, "band", dirty );
+   ct->currentBand.addIfDirty( st, "currentBand", dirty );
    lct->forcedMult.addIfDirty( st, "forcedMult", dirty );
    lct->frequency.addIfDirty( st, "frequency", dirty );
    lct->rotatorHeading.addIfDirty( st, "rotatorHeading", dirty );
