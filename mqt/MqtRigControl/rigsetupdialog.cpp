@@ -636,7 +636,16 @@ void RigSetupDialog::saveSettings()
     int v = savedRadioNames.indexOf("Version");   // the section name
     savedRadioNames.removeAt(v);
 
-    if (savedRadioNames.count() > 0 && radioRemoved)
+    bool radioNameChanged = false;
+    for (int i = 0; i < savedRadioNames.count(); i ++)
+    {
+        if (radioTab[i]->radioValueChanged)
+        {
+            radioNameChanged = true;
+        }
+    }
+
+    if (savedRadioNames.count() > 0 && (radioRemoved || radioNameChanged))
     {
         radioRemoved = false;
         for (int i = 0; i < savedRadioNames.count(); i++)
