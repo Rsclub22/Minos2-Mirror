@@ -535,7 +535,7 @@ pbwidth_t RigControl::getPassBand()
 
 bool RigControl::supportVolControl(int rigNumber)
 {
-    if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
+    if (rigNumber == RIG_MODEL_TS590S || rigNumber == RIG_MODEL_TS590SG)   // if rig is TS590SG ignore volume as it has a bug...
     {
         return false;
     }
