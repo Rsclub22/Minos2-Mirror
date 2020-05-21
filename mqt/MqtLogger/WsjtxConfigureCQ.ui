@@ -17,7 +17,7 @@
    <item>
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>CQ xxx Callsign Locator - xxx is allowed in...r
+      <string>CQ xxx Callsign Locator - xxx is allowed in...
 Include the CQ as well as the type</string>
      </property>
      <property name="alignment">

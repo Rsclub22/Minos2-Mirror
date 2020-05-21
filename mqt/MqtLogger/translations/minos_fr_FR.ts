@@ -4516,7 +4516,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     </message>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="20"/>
-        <source>CQ xxx Callsign Locator - xxx is allowed in...r
+        <source>CQ xxx Callsign Locator - xxx is allowed in...
 Include the CQ as well as the type</source>
         <translation type="unfinished"></translation>
     </message>
