@@ -158,6 +158,7 @@ private:
     QAction *LanguageAcceptAction;
     QAction *UDPConfigAction;
     QAction *WSJTXConfigAction;
+    QAction *ClusterBandmapFilterConfigAction;
     QAction *ReportAutofillAction;
 
     QAction *GoToSerialAction;
@@ -248,6 +249,7 @@ private slots:
     void onTabMoved(int, int);
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
+    void ClusterBandmapConfigActionExecute();
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

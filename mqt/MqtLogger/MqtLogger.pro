@@ -32,6 +32,7 @@ INCLUDEPATH += $$PWD/../MqtBandMap
 
 SOURCES += \
     AdifImport.cpp \
+    Clusterbandmapconfigure.cpp \
     ContestApp.cpp \
     ContestDetailsTransferObject.cpp \
     FilterFrame.cpp \
@@ -104,7 +105,7 @@ SOURCES += \
     WsjtxRadio.cpp \
     WsjtxRadioMetaType.cpp \
     Wsjtx_qt_helpers.cpp \
-	bandmapclientframe.cpp \
+    bandmapclientframe.cpp \
     bandmapcallsignmarker.cpp \
     bandmapfreqdial.cpp	\
     bandmapview.cpp
@@ -114,6 +115,7 @@ SOURCES += \
 
 HEADERS  += \
     AdifImport.h \
+    Clusterbandmapconfigure.h \
     ContestApp.h \
     ContestDetailsTransferObject.h \
     FilterFrame.h \
@@ -192,7 +194,9 @@ HEADERS  += \
     bandmapview.h
 
 FORMS    += \
+
     WsjtxConfigureCQ.ui \
+    Clusterbandmapconfigure.ui \
     bandmapclientfilterdialog.ui \
     contestdetails.ui \
     defdirsdlg.ui \

@@ -424,7 +424,7 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
         RPCParamStruct * st = new RPCParamStruct;
         makeHeader( st, 1 );
 
-        st->addMember(bandmapFilter.getValue().modeFilterNONE, "modeFilterNONE");
+        st->addMember(bandmapFilter.getValue().modeFilterNONE, "modeFilterNONEMODE");
         st->addMember(bandmapFilter.getValue().modeFilterCW, "modeFilterCW");
         st->addMember(bandmapFilter.getValue().modeFilterUSBMODE, "modeFilterUSBMODE");
         st->addMember(bandmapFilter.getValue().modeFilterFMMODE, "modeFilterFMMODE");
@@ -434,7 +434,8 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
         st->addMember(bandmapFilter.getValue().modeFilterMSK144MODE, "modeFilterMSK144MODE");
         st->addMember(bandmapFilter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
         st->addMember(bandmapFilter.getValue().modeFilterNONE, "modeFilterNONEMODE");
-
+        st->addMember(bandmapFilter.getValue().distanceFilter, "distanceFilter");
+        st->addMember(bandmapFilter.getValue().ignoreDistanceFlag, "ignoreDistanceFlag");
         sendRequest(expfd, "MinosBandmapFilter", st);
 
     }

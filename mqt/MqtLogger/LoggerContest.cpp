@@ -1614,6 +1614,8 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("modeFilterMSK144MODE", bcfs.modeFilterMSK144MODE);
                                        mt->getStructArgMemberValue("modeFilterJT65MODE", bcfs.modeFilterJT65MODE);
                                        mt->getStructArgMemberValue("modeFilterNONEMODE", bcfs.modeFilterNONE);
+                                       mt->getStructArgMemberValue("distanceFilter", bcfs.distanceFilter);
+                                       mt->getStructArgMemberValue("ignoreDistanceFlag", bcfs.ignoreDistanceFlag);
 
                                        saveInitialBandmapFilter(bcfs);
 
