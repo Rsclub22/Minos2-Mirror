@@ -32,7 +32,6 @@ INCLUDEPATH += $$PWD/../MqtBandMap
 
 SOURCES += \
     AdifImport.cpp \
-    Clusterbandmapconfigure.cpp \
     ContestApp.cpp \
     ContestDetailsTransferObject.cpp \
     FilterFrame.cpp \
@@ -52,6 +51,7 @@ SOURCES += \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
     TSessionManager.cpp \
+    WsjtxConfigureCQ.cpp \
     bandmapclientfilterdialog.cpp \
     bandmapgraphicspanel.cpp \
     bandmapspotmarker.cpp \
@@ -96,7 +96,7 @@ SOURCES += \
     radiodetails.cpp \
     WsjtxFrame.cpp \
     WsjtxServer.cpp \
-    WsjtxConfigureCQ.cpp \
+    WsjtxConfigure.cpp \
     WsjtxDecode.cpp \
     WsjtxDecodesModel.cpp \
     WsjtxNetworkMessage.cpp \
@@ -104,17 +104,17 @@ SOURCES += \
     WsjtxRadio.cpp \
     WsjtxRadioMetaType.cpp \
     Wsjtx_qt_helpers.cpp \
-    bandmapclientframe.cpp \
+        bandmapclientframe.cpp \
     bandmapcallsignmarker.cpp \
     bandmapfreqdial.cpp	\
-    bandmapview.cpp
+    bandmapview.cpp \
+    Clusterbandmapconfigure.cpp
 
 
 
 
 HEADERS  += \
     AdifImport.h \
-    Clusterbandmapconfigure.h \
     ContestApp.h \
     ContestDetailsTransferObject.h \
     FilterFrame.h \
@@ -133,6 +133,7 @@ HEADERS  += \
     StackedInfoFrame.h \
     TClockFrame.h \
     TSessionManager.h \
+    WsjtxConfigureCQ.h \
     bandmapclientfilterdialog.h \
     bandmapgraphicspanel.h \
     bandmapspotmarker.h \
@@ -186,14 +187,14 @@ HEADERS  += \
     Wsjtx_pimpl_impl.hpp \
     Wsjtx_qt_helpers.hpp \
     WsjtxRadio.hpp \
-    WsjtxConfigureCQ.h
     bandmapclientframe.h \
     bandmapcallsignmarker.h \
     bandmapfreqdial.h	\
-    bandmapview.h
+    bandmapview.h \
+    Clusterbandmapconfigure.h
 
 FORMS    += \
-    Clusterbandmapconfigure.ui \
+    WsjtxConfigureCQ.ui \
     bandmapclientfilterdialog.ui \
     contestdetails.ui \
     defdirsdlg.ui \
@@ -239,8 +240,8 @@ FORMS    += \
     tminosbshelpform.ui \
     WsjtxFrame.ui \
     WsjtxConfigure.ui \
-    WsjtxConfigureCQ.ui \
-    bandmapclientframe.ui
+    bandmapclientframe.ui \
+    Clusterbandmapconfigure.ui
 
 
 DISTFILES += \
