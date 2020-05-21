@@ -1,3 +1,6 @@
+#include <QSignalMapper>
+
+#include "base_pch.h"
 #include "Clusterbandmapconfigure.h"
 #include "ui_Clusterbandmapconfigure.h"
 
@@ -6,9 +9,110 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
     ui(new Ui::ClusterBandmapConfigure)
 {
     ui->setupUi(this);
+
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    QSettings settings;
+    QByteArray geometry = settings.value("ClusterBandmpaConfigure/geometry/").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
+     distanceLineEdits << ui->distanceFilter1_8MHz << ui->distanceFilter3_5MHz << ui->distanceFilter7MHz
+                       << ui->distanceFilter14MHz << ui->distanceFilter21MHz << ui->distanceFilter28MHz
+                       << ui->distanceFilter50MHz << ui->distanceFilter70MHz << ui->distanceFilter144MHz
+                       << ui->distanceFilter432MHz << ui->distanceFilter1296MHz << ui->distanceFilter2300MHz
+                       << ui->distanceFilter3_4GHz << ui->distanceFilter5_6GHz << ui->distanceFilter10GHz;
+
+     QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+     config.beginGroup("distanceFilter");
+
+
+     for (int i = 0; i < distanceLineEdits.count(); i++)
+     {
+         distValue distItem;
+         distItem.distance = config.value(iniNames[i], DEFAULT_FILTER_DISTANCE).toInt();;
+         distanceLineEdits[i]->setText(QString::number(distItem.distance));
+         distItem.changed = false;
+         distanceValues.append(distItem);
+     }
+
+     config.endGroup();
+
+     QSignalMapper *signalMapper = new QSignalMapper(this);
+     connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(onDistanceEditingFinished(int)));
+
+     for (int i = 0; i < distanceLineEdits.count(); i++)
+     {
+         signalMapper->setMapping(distanceLineEdits[i], i);
+         connect(distanceLineEdits[i], SIGNAL(editingFinished()), signalMapper, SLOT(map()));
+     }
+
 }
 
 ClusterBandmapConfigure::~ClusterBandmapConfigure()
 {
     delete ui;
+}
+
+
+void ClusterBandmapConfigure::onDistanceEditingFinished(int idx)
+{
+    int distance = 0;
+    bool ok = false;
+    if (!distanceLineEdits[idx]->text().isEmpty())
+    {
+        distance = distanceLineEdits[idx]->text().toInt(&ok);
+        if (!ok || distance < 0 || distance > 40000)
+        {
+            QMessageBox messageBox;
+            QString msg = tr("Distance Error - %1. Please enter a distance 0 to max 40000").arg( distanceLineEdits[idx]->text());
+            messageBox.critical(this, tr("Network Address Entry Error"), msg);
+            return;
+        }
+        else
+        {
+            distanceValues[idx].distance = distance;
+            distanceValues[idx].changed = true;
+        }
+    }
+}
+
+void ClusterBandmapConfigure::on_OKButton_clicked()
+{
+
+    saveDistances();
+}
+
+void ClusterBandmapConfigure::on_CancelButton_clicked()
+{
+    doClose();
+}
+
+void ClusterBandmapConfigure::saveDistances()
+{
+
+
+    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    config.beginGroup("distanceFilter");
+
+    for (int i = 0; i < distanceLineEdits.count(); i++)
+    {
+        if (distanceValues[i].changed)
+        {
+            config.setValue(iniNames[i], distanceValues[i].distance);
+        }
+    }
+
+    config.endGroup();
+
+}
+
+
+void ClusterBandmapConfigure::doClose()
+{
+    QSettings settings;
+    settings.setValue("ClusterBandmapConfigure/geometry/", saveGeometry());
+
+    close();
 }

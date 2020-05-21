@@ -30,6 +30,7 @@
 #include "helpbrowser.h"
 #include "WsjtxServer.h"
 #include "WsjtxConfigure.h"
+#include "Clusterbandmapconfigure.h"
 #include "minoscontestloaddialog.h"
 #include "ChatServer.h"
 #include "clusterClientServer.h"
@@ -1229,7 +1230,9 @@ void TLogContainer::WsjtConfigActionExecute()
 }
 void TLogContainer::ClusterBandmapConfigActionExecute()
 {
+    ClusterBandmapConfigure clusterBandmapConfig;
 
+    clusterBandmapConfig.exec();
 }
 void TLogContainer::ReportAutofillActionExecute()
 {

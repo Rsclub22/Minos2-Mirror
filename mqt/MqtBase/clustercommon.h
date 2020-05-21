@@ -20,6 +20,9 @@ const QString CLUSTER_END_FILE = "cluster_end.txt";
 const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
 const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
 const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.ini";
+const QString CLUSTER_FILTER_FILE = "./Configuration/clusterFilter.ini/";
+
+
 
 const int NO_BANDS = -1;
 const int NUMBANDS = 9;
@@ -618,6 +621,14 @@ QStringList unpackFilterList(QString &sl)
 }
 
 };
+
+const int DEFAULT_FILTER_DISTANCE = 500;
+
+const QStringList iniNames = {"distance_1_8MHz", "distance_3_5MHz", "distance_7MHz",
+                             "distance_14MHz", "distance_21MHz", "distance_28MHz",
+                             "distance_50MHz", "distance_70MHz", "distance_144MHz",
+                             "distance_432MHz", "distance_1296MHz", "distance_2300MHz",
+                             "distance_3_4GHz", "distance_5_6GHz", "distance_10GHz"};
 
 
 #endif // CLUSTERCOMMON_H
