@@ -96,7 +96,7 @@ SOURCES += \
     radiodetails.cpp \
     WsjtxFrame.cpp \
     WsjtxServer.cpp \
-    WsjtxConfigure.cpp \
+    WsjtxConfigureCQ.cpp \
     WsjtxDecode.cpp \
     WsjtxDecodesModel.cpp \
     WsjtxNetworkMessage.cpp \
@@ -186,6 +186,7 @@ HEADERS  += \
     Wsjtx_pimpl_impl.hpp \
     Wsjtx_qt_helpers.hpp \
     WsjtxRadio.hpp \
+    WsjtxConfigureCQ.h
     bandmapclientframe.h \
     bandmapcallsignmarker.h \
     bandmapfreqdial.h	\
@@ -238,6 +239,7 @@ FORMS    += \
     tminosbshelpform.ui \
     WsjtxFrame.ui \
     WsjtxConfigure.ui \
+    WsjtxConfigureCQ.ui \
     bandmapclientframe.ui
 
 
