@@ -98,7 +98,7 @@ void ClusterBandmapConfigure::saveDistances()
 
     for (int i = 0; i < distanceLineEdits.count(); i++)
     {
-        if (distanceValues[i].changed)
+        if (distanceValues[i].changed && distanceValues[i].distance != DEFAULT_FILTER_DISTANCE)
         {
             config.setValue(iniNames[i], distanceValues[i].distance);
         }
