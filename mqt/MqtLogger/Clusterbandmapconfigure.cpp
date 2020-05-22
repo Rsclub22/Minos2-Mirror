@@ -1,4 +1,5 @@
 #include <QSignalMapper>
+#include "ContestApp.h"
 
 #include "base_pch.h"
 #include "Clusterbandmapconfigure.h"
@@ -11,6 +12,7 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowTitle(tr("Cluster/Bandmap Filter Configure"));
 
     QSettings settings;
     QByteArray geometry = settings.value("ClusterBandmpaConfigure/geometry/").toByteArray();
@@ -48,8 +50,16 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
          connect(distanceLineEdits[i], SIGNAL(editingFinished()), signalMapper, SLOT(map()));
      }
 
-     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(on_OKButton_clicked()));
-     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(on_CancelButton_clicked()));
+     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onAccepted()));
+     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(onRejected()));
+
+     bool allowHF = false;
+     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+
+
+      ui->hf_frame->setVisible(allowHF);
+
+
 
 }
 
@@ -81,13 +91,13 @@ void ClusterBandmapConfigure::onDistanceEditingFinished(int idx)
     }
 }
 
-void ClusterBandmapConfigure::on_OKButton_clicked()
+void ClusterBandmapConfigure::onAccepted()
 {
 
     saveDistances();
 }
 
-void ClusterBandmapConfigure::on_CancelButton_clicked()
+void ClusterBandmapConfigure::onRejected()
 {
     doClose();
 }

@@ -20,8 +20,8 @@ public:
 
 private slots:
     void onDistanceEditingFinished(int idx);
-    void on_OKButton_clicked();
-    void on_CancelButton_clicked();
+    void onAccepted();
+    void onRejected();
 private:
     Ui::ClusterBandmapConfigure *ui;
 
