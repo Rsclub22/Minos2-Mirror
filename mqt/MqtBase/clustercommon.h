@@ -20,7 +20,7 @@ const QString CLUSTER_END_FILE = "cluster_end.txt";
 const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
 const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
 const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.ini";
-const QString CLUSTER_FILTER_FILE = "./Configuration/clusterFilter.ini/";
+const QString CLUSTER_FILTER_FILE = "./Configuration/clusterBandmapFilter.ini";
 
 
 

@@ -295,6 +295,24 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>distanceFilterTab</tabstop>
+  <tabstop>distanceFilter1_8MHz</tabstop>
+  <tabstop>distanceFilter3_5MHz</tabstop>
+  <tabstop>distanceFilter7MHz</tabstop>
+  <tabstop>distanceFilter14MHz</tabstop>
+  <tabstop>distanceFilter21MHz</tabstop>
+  <tabstop>distanceFilter28MHz</tabstop>
+  <tabstop>distanceFilter50MHz</tabstop>
+  <tabstop>distanceFilter70MHz</tabstop>
+  <tabstop>distanceFilter144MHz</tabstop>
+  <tabstop>distanceFilter432MHz</tabstop>
+  <tabstop>distanceFilter1296MHz</tabstop>
+  <tabstop>distanceFilter2300MHz</tabstop>
+  <tabstop>distanceFilter3_4GHz</tabstop>
+  <tabstop>distanceFilter5_6GHz</tabstop>
+  <tabstop>distanceFilter10GHz</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
