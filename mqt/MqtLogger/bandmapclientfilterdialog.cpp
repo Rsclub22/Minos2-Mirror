@@ -14,16 +14,26 @@
 #include "ui_bandmapclientfilterdialog.h"
 #include "BandList.h"
 
-BandmapClientFilterDialog::BandmapClientFilterDialog(QWidget *parent) :
+BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings filterSettings_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BandmapClientFilterDialog),
-    modeButtonState(false)
+    modeButtonState(false),
+    distanceChanged(false),
+    distanceChkBoxChanged(false),
+    distanceEmptyChkBoxChanged(false),
+    settingsChanged(false)
+
 {
     ui->setupUi(this);
     QSettings settings;
     QByteArray geometry = settings.value("ClusterClientFilter/geometry").toByteArray();
     if (geometry.size() > 0)
+    {
         restoreGeometry(geometry);
+    }
+
+    filterSettings = filterSettings_;
+    ct = dynamic_cast<LoggerContestLog *>(c);
 
     initCheckFilterTab();
 }
@@ -82,14 +92,25 @@ void BandmapClientFilterDialog::initCheckFilterTab()
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
 
+    loadSettingsToDialogBox();
 
-    loadDistanceFilterEditBox();
 }
 
-
+/*
 void BandmapClientFilterDialog::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
+}
+*/
+
+void BandmapClientFilterDialog::loadSettingsToDialogBox()
+{
+
+    loadDistanceFilterEditBox();
+    loadIgnoreDistanceChkBoxState();
+    loadIgnoreEmptyDistanceValuesChkBoxState();
+    copyModeFiltersToDialog();
+
 }
 
 
@@ -128,12 +149,10 @@ void BandmapClientFilterDialog::filtersAccepted()
         }
         trace(QString("Save to log"));
         saveBandmapFilterToContest();
-        distanceChanged = false;
-        distanceChkBoxChanged = false;
-        distanceEmptyChkBoxChanged = false;
+        settingsChanged = true;
     }
 
-    emit filtersChanged(modefilterChanged);
+    //emit filtersChanged(modefilterChanged);
     doCloseEvent();
     close();
 }
@@ -142,7 +161,7 @@ void BandmapClientFilterDialog::filtersRejected()
 {
 
 
-    restoreModes();
+    //restoreModes();
     doCloseEvent();
     close();
 }
@@ -185,16 +204,15 @@ void BandmapClientFilterDialog::loadDistanceFilterEditBox()
 
 void BandmapClientFilterDialog::onIgnoreDistanceChkBoxStateChanged(int state)
 {
-    if (ui->distFilterIgnoreCheckBox->isChecked())
+    Q_UNUSED(state)
+    if (ui->distFilterIgnoreCheckBox->isChecked() != filterSettings.ignoreDistanceFlag)
     {
-        filterSettings.ignoreDistanceFlag = true;
-    }
-    else
-    {
-        filterSettings.ignoreDistanceFlag = false;
+        filterSettings.ignoreDistanceFlag = ui->distFilterIgnoreCheckBox->isChecked();
+        distanceChkBoxChanged = true;
     }
 
-    distanceChkBoxChanged = true;
+
+
 }
 
 void BandmapClientFilterDialog::loadIgnoreDistanceChkBoxState()
@@ -210,17 +228,13 @@ void BandmapClientFilterDialog::loadIgnoreDistanceChkBoxState()
 }
 void BandmapClientFilterDialog::onIgnoreEmptyDistanceValuesChkBoxStateChanged(int state)
 {
-    if (ui->ignoreEmptyDistanceValuesChkBox->isChecked())
-    {
-        filterSettings.ignoreEmptyDistanceFlag = true;
-    }
-    else
-    {
-        filterSettings.ignoreEmptyDistanceFlag = false;
-    }
+    Q_UNUSED(state)
 
-    distanceEmptyChkBoxChanged = true;
-
+    if (ui->ignoreEmptyDistanceValuesChkBox->isChecked() != filterSettings.ignoreEmptyDistanceFlag)
+    {
+        filterSettings.ignoreEmptyDistanceFlag = ui->ignoreEmptyDistanceValuesChkBox->isChecked();
+        distanceEmptyChkBoxChanged = true;
+    }
 }
 void BandmapClientFilterDialog::loadIgnoreEmptyDistanceValuesChkBoxState()
 {
@@ -294,6 +308,7 @@ void BandmapClientFilterDialog::setModes()
 
 }
 
+/*
 void BandmapClientFilterDialog::setModeFilter(bool state, int mode)
 {
     if (mode >= 0 && mode < clusterModes.count())
@@ -314,4 +329,4 @@ void BandmapClientFilterDialog::restoreModes()
     }
 }
 
-
+*/

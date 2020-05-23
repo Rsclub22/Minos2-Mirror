@@ -205,6 +205,8 @@ private:
     checkModeAgainstFreq* modeBandPlan;
     bool modeBandPlanOk;
 
+    BandmapClientFilterSettings filterSettings;
+
     CheckOperatingFreq* operatingFreq;
     bool operatingFreqPlanOk;
 

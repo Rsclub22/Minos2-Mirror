@@ -1629,6 +1629,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("ignoreDistanceFlag", bcfs.ignoreDistanceFlag);
                                        mt->getStructArgMemberValue("ignoreEmptyDistanceFlag", bcfs.ignoreEmptyDistanceFlag);
 
+
                                        saveInitialBandmapFilter(bcfs);
 
                                }
