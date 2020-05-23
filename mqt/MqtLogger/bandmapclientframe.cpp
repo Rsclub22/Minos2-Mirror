@@ -197,7 +197,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect( contextSpotsMenu_memoryAction, SIGNAL( triggered() ), this, SLOT(context_memoryActionSelected()) );
     connect( contextSpotsMenu_clearSpotAction, SIGNAL( triggered() ), this, SLOT(context_clearSpotActionSelected()) );
 
-    connect(filterSetup, SIGNAL(filtersChanged(bool)), this, SLOT(on_FitersChanged(bool)));
+    connect(filterSetup, SIGNAL(filtersChanged(bool)), this, SLOT(on_FiltersChanged(bool)));
 
     connect(this, SIGNAL(freqDisplayClicked()), this, SLOT(on_FreqDisplayClicked()));
 
@@ -289,7 +289,7 @@ void BandmapClientFrame::onMenuShow()
 }
 
 
-void BandmapClientFrame::on_FitersChanged(bool state)
+void BandmapClientFrame::on_FiltersChanged(bool state)
 {
     if (state)
     {

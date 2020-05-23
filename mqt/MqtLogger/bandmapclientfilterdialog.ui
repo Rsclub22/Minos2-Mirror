@@ -125,12 +125,19 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QCheckBox" name="distFilterIgnoreCheckBox">
+               <property name="text">
+                <string>Ignore</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
            <item>
-            <widget class="QCheckBox" name="ignoreNoDistanceChkBox">
+            <widget class="QCheckBox" name="ignoreEmptyDistanceValuesChkBox">
              <property name="text">
-              <string>Ignore Spots with no distance</string>
+              <string>Ignore Spots with no distance value</string>
              </property>
             </widget>
            </item>

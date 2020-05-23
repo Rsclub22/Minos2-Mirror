@@ -53,6 +53,7 @@ private:
     bool modeButtonState;
 
     QString contestUuid;
+    QString distanceIniName;
 
     void initCheckFilterTab();
 
@@ -67,7 +68,8 @@ private:
 
     void doCloseEvent();
 
-    void loadDistanceFilterEditBox(int distance);
+    void loadDistanceFilterEditBox();
+    void getCurrentBandDistanceIniName();
 private slots:
 
     void modeButtonSelected();
@@ -77,7 +79,8 @@ private slots:
 
 
     void onDistanceEditFinished();
-    void onIgnoreDistanceCheckBoxStateChanged(int state);
+    void onIgnoreDistanceChkBoxStateChanged(int state);
+    void onIgnoreEmptyDistanceValuesChkBoxStateChanged(int state);
 };
 
 #endif // BANDMAPCLIENTFILTERDIALOG_H

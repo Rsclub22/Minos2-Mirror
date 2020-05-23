@@ -324,6 +324,21 @@ bool checkValidBand(QString freq)
     return bandOK;
 }
 
+int getBandOffSet(QStringList supportedBands, QString contestBandStr)
+{
+    int i = 0;
+    while(i != supportedBands.count())
+    {
+        if (contestBandStr == supportedBands[i])
+        {
+            return i;
+        }
+        i++;
+    }
+
+    return -1;
+}
+
 BandDetail::BandDetail()
 {}
 BandDetail::BandDetail(QString _name, double _flow, double _fhigh)

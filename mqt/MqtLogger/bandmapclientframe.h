@@ -325,7 +325,7 @@ private slots:
      void checkSavedFilters();
      void onMenuShow();
 
-     void on_FitersChanged(bool state);
+     void on_FiltersChanged(bool state);
      void purgeSpots();
      void on_markSpotActionSelected();
      void on_unMarkSpotActionSelected();

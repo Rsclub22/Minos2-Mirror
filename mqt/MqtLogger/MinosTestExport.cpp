@@ -433,9 +433,9 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
         st->addMember(bandmapFilter.getValue().modeFilterFT8MODE, "modeFilterFT8MODE");
         st->addMember(bandmapFilter.getValue().modeFilterMSK144MODE, "modeFilterMSK144MODE");
         st->addMember(bandmapFilter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
-        st->addMember(bandmapFilter.getValue().modeFilterNONE, "modeFilterNONEMODE");
         st->addMember(bandmapFilter.getValue().distanceFilter, "distanceFilter");
         st->addMember(bandmapFilter.getValue().ignoreDistanceFlag, "ignoreDistanceFlag");
+        st->addMember(bandmapFilter.getValue().ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag");
         sendRequest(expfd, "MinosBandmapFilter", st);
 
     }

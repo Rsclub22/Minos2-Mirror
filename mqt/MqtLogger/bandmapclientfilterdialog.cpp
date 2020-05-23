@@ -12,6 +12,7 @@
 
 #include "bandmapclientfilterdialog.h"
 #include "ui_bandmapclientfilterdialog.h"
+#include "BandList.h"
 
 BandmapClientFilterDialog::BandmapClientFilterDialog(QWidget *parent) :
     QDialog(parent),
@@ -76,17 +77,19 @@ void BandmapClientFilterDialog::initCheckFilterTab()
    connect(ui->modeSelectBut, SIGNAL(clicked()), this, SLOT(modeButtonSelected()));
 
     connect(ui->spotDistanceEdit, SIGNAL(editingFinished()), this, SLOT(onDistanceEditFinished()));
-    connect(ui->ignoreNoDistanceChkBox, SIGNAL(stateChanged(int)), this, SLOT(onIgnoreDistanceCheckBoxStateChanged(int)));
+    connect(ui->distFilterIgnoreCheckBox, SIGNAL(stateChanged(int)), this, SLOT(onIgnoreDistanceChkBoxStateChanged(int)));
+    connect(ui->ignoreEmptyDistanceValuesChkBox, SIGNAL(stateChanged(int)), this, SLOT(onIgnoreEmptyDistanceValuesChkBoxStateChanged(int)));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
 
+
+    loadDistanceFilterEditBox();
 }
 
 
 void BandmapClientFilterDialog::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
-
 }
 
 
@@ -118,29 +121,7 @@ void BandmapClientFilterDialog::filtersAccepted()
 
 void BandmapClientFilterDialog::filtersRejected()
 {
- /*
-    if (bandFiltersChanged())
-    {
-        restoreBands();
-        restoreModes();
-    }
-    else if (callsignEditChanged)
-    {
-        // restore the callsignListWidget
-        callsignListWidget->clear();
-        callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
 
-    }
-    else if (locatorEditChanged)
-    {
-        // restore the locatorListWidget
-        locatorListWidget->clear();
-        locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
-
-    }
-
-    // restore settings on tab
-*/
 
     restoreModes();
     doCloseEvent();
@@ -165,7 +146,7 @@ void BandmapClientFilterDialog::onDistanceEditFinished()
         else
         {
             QMessageBox::information(this, tr("Distance Filter"),
-                                     tr("Please enter a number > 0!"),
+                                     tr("Please enter a number between %1 and %2!").arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE),
                                       QMessageBox::Ok|QMessageBox::Default,
                                       QMessageBox::NoButton, QMessageBox::NoButton);
         }
@@ -173,17 +154,29 @@ void BandmapClientFilterDialog::onDistanceEditFinished()
 }
 
 
-void BandmapClientFilterDialog::loadDistanceFilterEditBox(int distance)
-{
-    ui->spotDistanceEdit->setText(QString::number(distance));
-}
 
+
+
+void BandmapClientFilterDialog::loadDistanceFilterEditBox()
+{
+
+    ui->spotDistanceEdit->setText(QString::number(filterSettings.distanceFilter));
+}
+/*
 void BandmapClientFilterDialog::onIgnoreDistanceCheckBoxStateChanged(int state)
 {
 
 }
 
+void BandmapClientFilterDialog::loadIgnoreDistanceChkBoxState()
+{
 
+}
+void BandmapClientFilterDialog::onIgnoreEmptyDistanceValuesChkBoxStateChanged(int state)
+{
+
+}
+*/
 void BandmapClientFilterDialog::saveBandmapFilterToContest()
 {
     ct->saveBandmapFilter(filterSettings);

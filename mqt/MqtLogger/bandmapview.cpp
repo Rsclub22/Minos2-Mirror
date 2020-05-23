@@ -1095,7 +1095,7 @@ bool BandmapView::matchMode(int sourceRow)
     if (ok && modeMask >= 0)
     {
 
-        return filterSetup->filterSettings.getModeFilter(modeMask);
+        return filterSetup->filterSettings.testModeFilter(modeMask);
     }
     else
     {
@@ -1113,7 +1113,7 @@ bool BandmapView::matchDistance(int sourceRow)
     int distance = model()->data(model()->index(sourceRow, DXDIST_COL_NUM), BMP_DataStoredRole).toString().toInt(&ok);
     if (ok)
     {
-        return filterSetup->filterSettings.getDistanceFilter(distance);
+        return filterSetup->filterSettings.testDistanceFilter(distance);
     }
 
     return true;

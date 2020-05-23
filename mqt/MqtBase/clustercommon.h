@@ -462,7 +462,8 @@ public:
         modeFilterMSK144MODE(false),
         modeFilterJT65MODE(false),
         distanceFilter(0),
-        ignoreDistanceFlag(false)
+        ignoreDistanceFlag(false),
+        ignoreEmptyDistanceFlag(false)
 
     {
 
@@ -491,6 +492,7 @@ public:
     int distanceFilter;
 
     bool ignoreDistanceFlag;
+    bool ignoreEmptyDistanceFlag;
 
 
 
@@ -506,7 +508,7 @@ void setAllModeFilters(QList<bool> mfl)
 }
 
 
-bool getModeFilter(int mode)
+bool testModeFilter(int mode)
 {
     if (mode >= 0 && mode < modeFilters.count())
     {
@@ -523,7 +525,7 @@ void setModeFilter(bool setting, int mode)
     *modeFilters[mode] = setting;
 }
 
-bool getDistanceFilter(int distance)
+bool testDistanceFilter(int distance)
 {
     if (distance < distanceFilter || distanceFilter == 0)
     {
@@ -540,6 +542,27 @@ void setDistanceFilter(int distance)
     distanceFilter = distance;
 }
 
+bool getIgnoreDistanceFlag()
+{
+    return ignoreDistanceFlag;
+}
+
+void setIgnoreDistanceFlag(bool state)
+{
+    ignoreDistanceFlag = state;
+}
+
+
+bool getIgnoreEmptyDistanceFlag()
+{
+    return ignoreEmptyDistanceFlag;
+}
+
+void setIgnoreEmptyDistanceFlag(bool state)
+{
+    ignoreDistanceFlag = state;
+}
+
 void operator= (const BandmapClientFilterSettings& bcfs)
 {
 
@@ -554,6 +577,7 @@ void operator= (const BandmapClientFilterSettings& bcfs)
     modeFilterJT65MODE = bcfs.modeFilterJT65MODE;
     distanceFilter = bcfs.distanceFilter;
     ignoreDistanceFlag = bcfs.ignoreDistanceFlag;
+    ignoreEmptyDistanceFlag = bcfs.ignoreEmptyDistanceFlag;
 
 
 }
@@ -571,7 +595,8 @@ bool operator==( const BandmapClientFilterSettings& bcfs ) const
          modeFilterMSK144MODE == bcfs.modeFilterMSK144MODE &&
          modeFilterJT65MODE == bcfs.modeFilterJT65MODE &&
          distanceFilter == bcfs.distanceFilter &&
-         ignoreDistanceFlag == bcfs.ignoreDistanceFlag)
+         ignoreDistanceFlag == bcfs.ignoreDistanceFlag &&
+         ignoreEmptyDistanceFlag == bcfs.ignoreEmptyDistanceFlag)
 
     {
         return true;
@@ -623,8 +648,10 @@ QStringList unpackFilterList(QString &sl)
 };
 
 const int DEFAULT_FILTER_DISTANCE = 500;
+const int MIN_FILTER_DISTANCE = 100;
+const int MAX_FILTER_DISTANCE = 50000;
 
-const QStringList iniNames = {"distance_1_8MHz", "distance_3_5MHz", "distance_7MHz",
+const QStringList distanceIniNames = {"distance_1_8MHz", "distance_3_5MHz", "distance_7MHz",
                              "distance_14MHz", "distance_21MHz", "distance_28MHz",
                              "distance_50MHz", "distance_70MHz", "distance_144MHz",
                              "distance_432MHz", "distance_1296MHz", "distance_2300MHz",

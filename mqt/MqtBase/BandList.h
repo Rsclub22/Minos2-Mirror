@@ -30,6 +30,7 @@ class BandDetail;
 
 void loadVhfAndUpBands(QVector<BandDetail> &bands);
 bool checkValidBand(QString freq);
+int getBandOffSet(QStringList supportedBands, QString contestBandStr);
 
 class BandInfo
 {

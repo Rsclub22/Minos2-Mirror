@@ -33,7 +33,7 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
      for (int i = 0; i < distanceLineEdits.count(); i++)
      {
          distValue distItem;
-         distItem.distance = config.value(iniNames[i], DEFAULT_FILTER_DISTANCE).toInt();;
+         distItem.distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
          distanceLineEdits[i]->setText(QString::number(distItem.distance));
          distItem.changed = false;
          distanceValues.append(distItem);
@@ -76,11 +76,11 @@ void ClusterBandmapConfigure::onDistanceEditingFinished(int idx)
     if (!distanceLineEdits[idx]->text().isEmpty())
     {
         distance = distanceLineEdits[idx]->text().toInt(&ok);
-        if (!ok || distance < 0 || distance > 40000)
+        if (!ok || distance < MIN_FILTER_DISTANCE || distance > MAX_FILTER_DISTANCE)
         {
             QMessageBox messageBox;
-            QString msg = tr("Distance Error - %1. Please enter a distance 0 to max 40000").arg( distanceLineEdits[idx]->text());
-            messageBox.critical(this, tr("Network Address Entry Error"), msg);
+            QString msg = tr("Distance Error - %1. Please enter a distance %2 to max %3").arg( distanceLineEdits[idx]->text().arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE));
+            messageBox.critical(this, tr("Distance Entry Error"), msg);
             return;
         }
         else
@@ -113,7 +113,7 @@ void ClusterBandmapConfigure::saveDistances()
     {
         if (distanceValues[i].changed && distanceValues[i].distance != DEFAULT_FILTER_DISTANCE)
         {
-            config.setValue(iniNames[i], distanceValues[i].distance);
+            config.setValue(distanceIniNames[i], distanceValues[i].distance);
         }
     }
 
