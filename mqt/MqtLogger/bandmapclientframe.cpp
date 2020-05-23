@@ -1440,6 +1440,8 @@ void BandmapClientFrame::calcSpotDistanceBearing(const QString& _locator, double
 
 void BandmapClientFrame::checkSavedFilters()
 {
+/*
+
     // this looks for changed saved settings
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
     if (contest)
@@ -1452,6 +1454,8 @@ void BandmapClientFrame::checkSavedFilters()
 
         }
     }
+*/
+
 }
 
 
@@ -1593,7 +1597,9 @@ void BandmapClientFrame::filterButtonSelected()
 {
 
     filterSetup->copyModeFiltersToDialog();
-
+    filterSetup->loadDistanceFilterEditBox();
+    filterSetup->loadIgnoreDistanceChkBoxState();
+    filterSetup->loadIgnoreEmptyDistanceValuesChkBoxState();
     filterSetup->exec();
 
 }

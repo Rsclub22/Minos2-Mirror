@@ -40,6 +40,10 @@ public:
 
 
     void setModeFilter(bool state, int mode);
+    void loadDistanceFilterEditBox();
+    void loadIgnoreDistanceChkBoxState();
+    void loadIgnoreEmptyDistanceValuesChkBoxState();
+
 signals:
     void filtersChanged(bool);
 
@@ -51,6 +55,9 @@ private:
     QList<QCheckBox*> modeChkBoxList;
 
     bool modeButtonState;
+    bool distanceChanged = false;
+    bool distanceChkBoxChanged = false;
+    bool distanceEmptyChkBoxChanged = false;
 
     QString contestUuid;
     QString distanceIniName;
@@ -68,8 +75,9 @@ private:
 
     void doCloseEvent();
 
-    void loadDistanceFilterEditBox();
+
     void getCurrentBandDistanceIniName();
+
 private slots:
 
     void modeButtonSelected();

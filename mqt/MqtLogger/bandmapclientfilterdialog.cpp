@@ -106,12 +106,31 @@ void BandmapClientFilterDialog::filtersAccepted()
     }
 
 
-    if (modefilterChanged)
+    if (modefilterChanged || distanceChanged || distanceChkBoxChanged || distanceEmptyChkBoxChanged)
     {
+
         trace(QString("Bandmap Filters Changed - ContestUuid = %1").arg(contestUuid));
-        trace(QString("Mode Filters CW = %1, USBMode = %2, FMMode = %3, RTTYMode = %4, PSK31Mode = %5, FT8Mode = %6, MSK144Mode = %7, JT65Mode = %8").arg(*filterSettings.modeFilters[CW_MODE]).arg(*filterSettings.modeFilters[USB_MODE]).arg(*filterSettings.modeFilters[FM_MODE]).arg(*filterSettings.modeFilters[RTTY_MODE]).arg(*filterSettings.modeFilters[PSK31_MODE]).arg(*filterSettings.modeFilters[FT8_MODE]).arg(*filterSettings.modeFilters[MSK144_MODE]).arg(*filterSettings.modeFilters[JT65_MODE]));
+        if (modefilterChanged)
+        {
+            trace(QString("Mode Filters CW = %1, USBMode = %2, FMMode = %3, RTTYMode = %4, PSK31Mode = %5, FT8Mode = %6, MSK144Mode = %7, JT65Mode = %8").arg(*filterSettings.modeFilters[CW_MODE]).arg(*filterSettings.modeFilters[USB_MODE]).arg(*filterSettings.modeFilters[FM_MODE]).arg(*filterSettings.modeFilters[RTTY_MODE]).arg(*filterSettings.modeFilters[PSK31_MODE]).arg(*filterSettings.modeFilters[FT8_MODE]).arg(*filterSettings.modeFilters[MSK144_MODE]).arg(*filterSettings.modeFilters[JT65_MODE]));
+        }
+        if (distanceChanged)
+        {
+            trace(QString("Bandmap Filter Distance Changed = %1").arg(QString::number(filterSettings.distanceFilter)));
+        }
+        if (distanceChkBoxChanged)
+        {
+            trace(QString("Bandmap Filter Distance Checkbox Changed Ignore Distance = %1").arg(filterSettings.ignoreDistanceFlag ? "true" : "false"));
+        }
+        if (distanceEmptyChkBoxChanged)
+        {
+            trace(QString("Bandmap Filter Distance Checkbox Changed Ignore Empty Distance = %1, Ignore Empty Distance = %2").arg(filterSettings.ignoreEmptyDistanceFlag ? "true" : "false"));
+        }
         trace(QString("Save to log"));
         saveBandmapFilterToContest();
+        distanceChanged = false;
+        distanceChkBoxChanged = false;
+        distanceEmptyChkBoxChanged = false;
     }
 
     emit filtersChanged(modefilterChanged);
@@ -141,6 +160,7 @@ void BandmapClientFilterDialog::onDistanceEditFinished()
             if (distance != filterSettings.distanceFilter)
             {
                 filterSettings.distanceFilter = distance;
+                distanceChanged = true;
             }
         }
         else
@@ -162,21 +182,59 @@ void BandmapClientFilterDialog::loadDistanceFilterEditBox()
 
     ui->spotDistanceEdit->setText(QString::number(filterSettings.distanceFilter));
 }
-/*
-void BandmapClientFilterDialog::onIgnoreDistanceCheckBoxStateChanged(int state)
-{
 
+void BandmapClientFilterDialog::onIgnoreDistanceChkBoxStateChanged(int state)
+{
+    if (ui->distFilterIgnoreCheckBox->isChecked())
+    {
+        filterSettings.ignoreDistanceFlag = true;
+    }
+    else
+    {
+        filterSettings.ignoreDistanceFlag = false;
+    }
+
+    distanceChkBoxChanged = true;
 }
 
 void BandmapClientFilterDialog::loadIgnoreDistanceChkBoxState()
 {
-
+    if (filterSettings.ignoreDistanceFlag)
+    {
+        ui->distFilterIgnoreCheckBox->setCheckState(Qt::Checked );
+    }
+    else
+    {
+        ui->distFilterIgnoreCheckBox->setCheckState(Qt::Unchecked);
+    }
 }
 void BandmapClientFilterDialog::onIgnoreEmptyDistanceValuesChkBoxStateChanged(int state)
 {
+    if (ui->ignoreEmptyDistanceValuesChkBox->isChecked())
+    {
+        filterSettings.ignoreEmptyDistanceFlag = true;
+    }
+    else
+    {
+        filterSettings.ignoreEmptyDistanceFlag = false;
+    }
+
+    distanceEmptyChkBoxChanged = true;
 
 }
-*/
+void BandmapClientFilterDialog::loadIgnoreEmptyDistanceValuesChkBoxState()
+{
+    if (filterSettings.ignoreEmptyDistanceFlag)
+    {
+        ui->ignoreEmptyDistanceValuesChkBox->setCheckState(Qt::Checked );
+    }
+    else
+    {
+        ui->ignoreEmptyDistanceValuesChkBox->setCheckState(Qt::Unchecked);
+    }
+}
+
+
 void BandmapClientFilterDialog::saveBandmapFilterToContest()
 {
     ct->saveBandmapFilter(filterSettings);
