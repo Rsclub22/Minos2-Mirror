@@ -176,14 +176,6 @@ HEADERS += \
     bandmapdatamodel.h \
     bandmapcommon.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
-DISTFILES += \
-    MqtBase.pro.autosave
-
 FORMS += \
     ChatFrame.ui \
     ConfigElementFrame.ui \

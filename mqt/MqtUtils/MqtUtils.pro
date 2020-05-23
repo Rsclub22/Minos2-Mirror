@@ -46,8 +46,3 @@ HEADERS += \
     MMessageDialog.h \
     MShowMessageDlg.h \
     minossplitter.h
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}

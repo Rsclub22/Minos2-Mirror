@@ -52,7 +52,3 @@ HEADERS += \
     AnalysePubSubNotify.h \
     PublishState.h
     
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}

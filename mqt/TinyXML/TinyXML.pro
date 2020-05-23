@@ -21,7 +21,4 @@ SOURCES += tinyxml.cpp \
 
 HEADERS += tinyxml.h \
     TinyUtils.h
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
+
