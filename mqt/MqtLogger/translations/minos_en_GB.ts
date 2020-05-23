@@ -4421,7 +4421,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <name>WsjtxConfigureCQ</name>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="14"/>
-        <source>Dialog</source>
+        <source>Specify Permitted CQ Calls</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
