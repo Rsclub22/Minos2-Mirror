@@ -276,7 +276,7 @@ private:
 
 
 
-    int getBandOffSet(QString contestBandStr);
+    //int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);
     void handleDxSpots(QVector<QString> &spotQueue);
     //void handleClusterStatusMessage(QString &msg);

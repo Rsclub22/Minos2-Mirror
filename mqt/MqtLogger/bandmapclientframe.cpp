@@ -17,6 +17,7 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "checkoperatingfreq.h"
+#include "BandList.h"
 #include <QDebug>
 #include "ui_bandmapclientframe.h"
 
@@ -620,7 +621,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         contestUuid = ct->uuid;
         traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->currentBand.getValue();
-        contestBand = getBandOffSet(contestBandStr);
+        contestBand = getBandOffSet(clusterBands, contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 
@@ -672,31 +673,45 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
 
 
-
-        if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
+        if (contestBand != -1)
         {
 
-
-
-            if (contestModeStr == "MGM")       //  have mode settings been saved before?
+            if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
             {
-                for (int m = 4; m < clusterModes.count(); m++)
-                {
-                    //filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
-                    *filterSettings.modeFilters[m] = true; // set all the mgm modes in filter
 
+                // no, get default distanceFilter value
+                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+                config.beginGroup("distanceFilter");
+                filterSettings.distanceFilter = config.value(distanceIniNames[contestBand], DEFAULT_FILTER_DISTANCE).toInt();
+                config.endGroup();
+
+                //set current mode
+                if (contestModeStr == "MGM")       //  have mode settings been saved before?
+                {
+                    for (int m = 4; m < clusterModes.count(); m++)
+                    {
+                        //filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
+                        *filterSettings.modeFilters[m] = true; // set all the mgm modes in filter
+
+                    }
                 }
+                else
+                {
+                    // no, save current mode filter for this contest
+                    //filterSetup->setModeFilter(true, contestMode);
+                    *filterSettings.modeFilters[contestMode] = true;
+                }
+
+                //filterSetup->saveBandmapFilterToContest();
+                contest->saveBandmapFilter(filterSettings);
             }
             else
             {
-                // no, save current mode filter for this contest
-                //filterSetup->setModeFilter(true, contestMode);
-                *filterSettings.modeFilters[contestMode] = true;
+                filterSettings = contest->getBandmapFilter();
             }
 
-            //filterSetup->saveBandmapFilterToContest();
-            contest->saveBandmapFilter(filterSettings);
         }
+
 
         if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
         {
@@ -741,7 +756,7 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
 
 }
 
-
+/*
 int BandmapClientFrame::getBandOffSet(QString contestBandStr)
 {
     int i = 0;
@@ -756,6 +771,7 @@ int BandmapClientFrame::getBandOffSet(QString contestBandStr)
 
     return -1;
 }
+*/
 
 int BandmapClientFrame::getModeOffSet(QString contestModeStr)
 {
