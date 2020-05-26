@@ -117,20 +117,20 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
             {}
         }
 
-        bool supportGetRit = capsList[i]->get_rit ? true:false;
+        //bool supportGetRit = capsList[i]->get_rit ? true:false;
 
-        bool supportSetRit = capsList[i]->set_rit ? true:false;
+        //bool supportSetRit = capsList[i]->set_rit ? true:false;
 
-        bool supportGetRitState = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
-        bool supportSetRitState = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+        //bool supportGetRitState = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+        //bool supportSetRitState = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
 
-        bool supportSMeter = HamlibRigControl::supportSignalStrength(capsList[i]->rig_model);
+        //bool supportSMeter = HamlibRigControl::supportSignalStrength(capsList[i]->rig_model);
 
-        bool supportGetPtt = capsList[i]->get_ptt ? true:false;
+        //bool supportGetPtt = capsList[i]->get_ptt ? true:false;
 
-        bool supportSetPtt = capsList[i]->set_ptt ? true:false;
+        //bool supportSetPtt = capsList[i]->set_ptt ? true:false;
 
-        bool supportVolume = false;
+        //bool supportVolume = false;
 
         //
        //if (capsList[i]->rig_model != RIG_MODEL_TS590SG || capsList[i]->rig_model != RIG_MODEL_TS590S) // if rig is TS590G ignore volume as it has a bug..
@@ -143,7 +143,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
         //}
 
         // support Antenna Switch
-        bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
+        //bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
 
         (*rigsList)[key] = RigCapabilities(port_type,
                                            capsList[i]->mfg_name,
@@ -151,15 +151,15 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            key,
                                            capsList[i]->rig_model,
                                            true,                // supports lookup supported bands
-                                           supportGetRit,
-                                           supportSetRit,
-                                           supportGetRitState,
-                                           supportSetRitState,
-                                           supportSMeter,
-                                           supportGetPtt,
-                                           supportSetPtt,
-                                           supportVolume,
-                                           supportAntSw,
+                                           true,        // support get rit
+                                           true,        // support set rit
+                                           true,        // support get rit state
+                                           true,        // support set rit state
+                                           true,        // support s-meter
+                                           true,        // support get Ptt
+                                           true,        // support set Ptt
+                                           true,        // support volume
+                                           true,        // support antenna switch
                                            true,            // support RigCtld
                                            true);    // support poll data
     }
