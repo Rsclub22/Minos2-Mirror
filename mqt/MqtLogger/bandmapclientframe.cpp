@@ -483,16 +483,20 @@ void BandmapClientFrame::on_clearSpotActionSelected()
 void BandmapClientFrame::on_clearAllSpotsActionSelected()
 {
 
-    int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                   tr("Please confirm you want to delete all the spots in the bandmap1?"),
-                                   QMessageBox::Yes | QMessageBox::No);
-    if (ret == QMessageBox::Yes)
+    if (bandmapSpotProxyModel->rowCount() > 0)
     {
-        traceMsg(QString("menu clear all bandmap spots selected"));
-        bandmapSpotProxyModel->removeRows(0, bandmapSpotProxyModel->rowCount(), QModelIndex());
-        bandmapView->clearSelectedSpotData();
-        bandmapView->bandmapUpdate();
+        int ret = QMessageBox::warning(this, tr("Bandmap"),
+                                       tr("Please confirm you want to delete all the spots in the bandmap1?"),
+                                       QMessageBox::Yes | QMessageBox::No);
+        if (ret == QMessageBox::Yes)
+        {
+            traceMsg(QString("menu clear all bandmap spots selected"));
+            bandmapSpotProxyModel->removeRows(0, bandmapSpotProxyModel->rowCount(), QModelIndex());
+            bandmapView->clearSelectedSpotData();
+            bandmapView->bandmapUpdate();
+        }
     }
+
 
 
 }
@@ -1645,6 +1649,7 @@ void BandmapClientFrame::filterButtonSelected()
     if (filterSetup->getSettingsChangedFlag())
     {
         filterSettings = filterSetup->getFilterSettings();
+        bandmapView->bandmapUpdate();
     }
 
 }
