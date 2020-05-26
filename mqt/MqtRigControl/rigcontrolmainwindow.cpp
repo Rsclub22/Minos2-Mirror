@@ -2491,37 +2491,59 @@ void RigControlMainWindow::clearSupportRitFlags()
 void RigControlMainWindow::getRitSupportStatus()
 {
 
-
-    // Does radio support getting Rit Freq?
-    radioSupGetRit = rigCap.supportGetRit;
-    logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(radioSupGetRit ? "True" : "False"));
-
-
-    // Does radio support setting Rit Freq?
-    radioSupSetRit = rigCap.supportSetRit;
-    logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(radioSupSetRit ? "True" : "False"));
-    if (radioSupSetRit)
+    if (radio != nullptr)
     {
-        ritEnable = readRitEnableChk();
-        if (ritEnable)
+
+        if (rigCap.supportGetRit)
         {
-            ui->ritEnableChk->setCheckState(Qt::Checked);
+            // Does radio support getting Rit Freq?
+            radioSupGetRit = radio->supportReadRit(rigCap.rigModelNumber);
+            logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(radioSupGetRit ? "True" : "False"));
+
         }
-        else
+
+        if (rigCap.supportSetRit)
         {
-            ui->ritEnableChk->setCheckState(Qt::Unchecked);
+            // Does radio support setting Rit Freq?
+            radioSupSetRit = radio->supportWriteRit(rigCap.rigModelNumber);
+            logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(radioSupSetRit ? "True" : "False"));
+
         }
+
+        if (radioSupSetRit)
+        {
+            ritEnable = readRitEnableChk();
+            if (ritEnable)
+            {
+                ui->ritEnableChk->setCheckState(Qt::Checked);
+            }
+            else
+            {
+                ui->ritEnableChk->setCheckState(Qt::Unchecked);
+            }
+
+        }
+
+        // Does radio support turning Rit on/off
+
+        if (rigCap.supportSetRitState)
+        {
+            radioSupSetRitState = radio->supportWriteRit(rigCap.rigModelNumber);
+            logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupSetRitState ? "True" : "False"));
+
+        }
+
+        // Does radio support getting Rit on/off state?
+        radioSupGetRitState = rigCap.supportGetRitState;
+        logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
+
 
     }
+    else
+    {
+        logMessage(QString("Get Rit Support Status - radio ptr is null"));
 
-    // Does radio support turning Rit on/off
-
-    radioSupSetRitState = rigCap.supportSetRitState;
-    logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupSetRitState ? "True" : "False"));
-
-    // Does radio support getting Rit on/off state?
-    radioSupGetRitState = rigCap.supportGetRitState;
-    logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
+    }
 
 }
 

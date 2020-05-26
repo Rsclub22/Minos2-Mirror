@@ -52,17 +52,24 @@ public:
     int getMode(VFO vfo, MODE &mode) override;
     int setMode(VFO vfo, MODE mode) override;
 
+    bool supportVolControl(int rigNumber) override;
     int setVolume(VFO vfo, float val) override;
     int getVolume(VFO vfo, float *val) override;
 
+    bool supportSignalStrength(int modelNumber) override;
     int getSignalStrength(VFO vfo, int *value) override;
 
     QString getRigLibVersion() override;
     QString getLibraryName() override;
     QString getErrorMsgText(int errorCode) override;
 
+    bool supportReadRit(int rigModelNumber) override;
+    bool supportWriteRit(int rigModelNumber) override;
     int getRit(VFO vfo, ShortFreq &ritfreq) override;
     int setRit(VFO vfo, ShortFreq ritfreq) override;
+
+    bool supportReadRitState(int rigModelNumber) override;
+    bool supportWriteRitState(int rigModelNumber) override;
     int setRitState(VFO vfo, bool state) override;
     int getRitState(VFO vfo, bool& state) override;
     int clearRit(VFO vfo) override;
@@ -74,6 +81,8 @@ public:
 
 
     OmniRig::RigParamX map_mode(QString mode);
+
+
 
 
 private slots:

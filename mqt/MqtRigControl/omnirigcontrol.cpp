@@ -717,7 +717,11 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
 
 }
 
-
+bool OmnirigControl::supportVolControl(int rigNumber)
+{
+    // not supported
+    return false;
+}
 
 int OmnirigControl::setVolume(VFO vfo, float val)
 {
@@ -727,6 +731,9 @@ int OmnirigControl::setVolume(VFO vfo, float val)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
+
+
+
 int OmnirigControl::getVolume(VFO vfo, float *val)
 {
     traceMsg(QString(" GetVolume"));
@@ -735,6 +742,12 @@ int OmnirigControl::getVolume(VFO vfo, float *val)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
+bool OmnirigControl::supportSignalStrength(int modelNumber)
+{
+    Q_UNUSED(modelNumber)
+    // not supported
+    return false;
+}
 int OmnirigControl::getSignalStrength(VFO vfo, int *value)
 {
     traceMsg(QString(" GetSignal Strength"));
@@ -821,17 +834,33 @@ int OmnirigControl::clearRit(VFO vfo)
     return omnirigError(OMNIRIG_OK);
 }
 
-bool OmnirigControl::supportReadRit()
+bool OmnirigControl::supportReadRit(int rigModelNumber)
 {
+    Q_UNUSED(rigModelNumber)
     return rig->IsParamReadable(OmniRig::PM_RIT0);
 
 }
 
-bool OmnirigControl::supportWriteRit()
+bool OmnirigControl::supportWriteRit(int rigModelNumber)
 {
+    Q_UNUSED(rigModelNumber)
     return rig->IsParamWriteable(OmniRig::PM_RIT0);
 }
 
+bool OmnirigControl::supportReadRitState(int rigModelNumber)
+{
+    Q_UNUSED(rigModelNumber)
+
+    return rig->IsParamReadable(OmniRig::PM_RIT0);
+
+}
+
+bool OmnirigControl::supportWriteRitState(int rigModelNumber)
+{
+    Q_UNUSED(rigModelNumber)
+
+    return rig->IsParamWriteable(OmniRig::PM_RIT0);
+}
 
 void OmnirigControl::setTraceCommsFlag(bool value)
 {

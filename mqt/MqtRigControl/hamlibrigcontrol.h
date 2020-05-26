@@ -64,17 +64,24 @@ public:
     int getMode(VFO vfo, MODE& mode) override;
     int setMode(VFO vfo, MODE mode) override;
 
+    bool supportVolControl(int rigNumber) override;
     int setVolume(VFO vfo, float val) override;
     int getVolume(VFO vfo, float *val) override;
 
+    bool supportSignalStrength(int modelNumber) override;
     int getSignalStrength(VFO vfo, int *value) override;
 
     QString getRigLibVersion() override;
     QString getLibraryName() override;
     QString getErrorMsgText(int errorCode) override;
 
+    bool supportReadRit(int rigNumber) override;
+    bool supportWriteRit(int rigNumber) override;
     int getRit(VFO vfo, ShortFreq &ritfreq) override;
     int setRit(VFO vfo, ShortFreq ritfreq) override;
+
+    bool supportWriteRitState(int rigNumber) override;
+    bool supportReadRitState(int rigNumber) override;
     int setRitState(VFO vfo, bool state) override;
     int getRitState(VFO vfo, bool& state) override;
     int clearRit(VFO vfo) override;
@@ -84,6 +91,8 @@ public:
     bool getTraceComms() override;
 
     int rig_message_cb(enum rig_debug_level_e debug_level, const char *fmt, va_list ap);
+
+
 
 
 
@@ -122,7 +131,7 @@ private:
     static setting_t rigHasSetLevel(int rigNumber, setting_t level);
     int rigSetLevel(vfo_t vfo, setting_t level, value_t val);
     int rigGetLevel(vfo_t vfo, setting_t level, value_t *val);
-    static bool supportSignalStrength(int modelNumber);
+
     int getSignalStrength(vfo_t vfo, value_t *val);
     static rmode_t convertQStrRmode_t(QString mode);
 

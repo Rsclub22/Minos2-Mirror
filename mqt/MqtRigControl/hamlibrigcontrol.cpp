@@ -117,20 +117,20 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
             {}
         }
 
-        bool supportGetRit = capsList[i]->get_rit ? true:false;
+        //bool supportGetRit = capsList[i]->get_rit ? true:false;
 
-        bool supportSetRit = capsList[i]->set_rit ? true:false;
+        //bool supportSetRit = capsList[i]->set_rit ? true:false;
 
-        bool supportGetRitState = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
-        bool supportSetRitState = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+        //bool supportGetRitState = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+        //bool supportSetRitState = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
 
-        bool supportSMeter = HamlibRigControl::supportSignalStrength(capsList[i]->rig_model);
+        //bool supportSMeter = HamlibRigControl::supportSignalStrength(capsList[i]->rig_model);
 
-        bool supportGetPtt = capsList[i]->get_ptt ? true:false;
+        //bool supportGetPtt = capsList[i]->get_ptt ? true:false;
 
-        bool supportSetPtt = capsList[i]->set_ptt ? true:false;
+        //bool supportSetPtt = capsList[i]->set_ptt ? true:false;
 
-        bool supportVolume = false;
+        //bool supportVolume = false;
 
         //
        //if (capsList[i]->rig_model != RIG_MODEL_TS590SG || capsList[i]->rig_model != RIG_MODEL_TS590S) // if rig is TS590G ignore volume as it has a bug..
@@ -151,15 +151,15 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            key,
                                            capsList[i]->rig_model,
                                            true,                // supports lookup supported bands
-                                           supportGetRit,
-                                           supportSetRit,
-                                           supportGetRitState,
-                                           supportSetRitState,
-                                           supportSMeter,
-                                           supportGetPtt,
-                                           supportSetPtt,
-                                           supportVolume,
-                                           supportAntSw,
+                                           true,       // support get rit
+                                           true,       // support set rit
+                                           true,        // support get rit state
+                                           true,        // support set rit state
+                                           true,       // support s-meter
+                                           true,       // support get Ptt
+                                           true,       // support set Ptt
+                                           true,       // support volume
+                                           true,        // support antenna switch
                                            true,            // support RigCtld
                                            true);    // support poll data
     }
@@ -571,8 +571,8 @@ int HamlibRigControl::clearRit(VFO vfo)
     return rig_set_rit(my_rig, hamlibVfoNames[vfo], 0);
 }
 
-/*
-bool RigControl::supportGetRit(int rigNumber)
+
+bool HamlibRigControl::supportReadRit(int rigNumber)
 {
     RIG *myRig;
     myRig = rig_init(rigNumber);
@@ -591,7 +591,7 @@ bool RigControl::supportGetRit(int rigNumber)
 }
 
 
-bool RigControl::supportSetRit(int rigNumber)
+bool HamlibRigControl::supportWriteRit(int rigNumber)
 {
     RIG *myRig;
     myRig = rig_init(rigNumber);
@@ -613,7 +613,27 @@ bool RigControl::supportSetRit(int rigNumber)
 
 
 
-bool RigControl::supportRitOnOff(int rigNumber)
+
+int HamlibRigControl::setRitState(VFO vfo, bool state)
+{
+    return rig_set_func(my_rig, hamlibVfoNames[vfo], RIG_FUNC_RIT, state);
+}
+
+
+
+
+int HamlibRigControl::getRitState(VFO vfo, bool& state)
+{
+    int status = 0;
+    int retCode = RIG_OK;
+    retCode = rig_get_func(my_rig, hamlibVfoNames[vfo], RIG_FUNC_RIT, &status);
+    state = status ? true : false;
+    return retCode;
+}
+
+
+
+bool HamlibRigControl::supportWriteRitState(int rigNumber)
 {
     RIG *myRig;
     myRig = rig_init(rigNumber);
@@ -627,24 +647,10 @@ bool RigControl::supportRitOnOff(int rigNumber)
 
 }
 
-*/
 
-int HamlibRigControl::setRitState(VFO vfo, bool state)
-{
-    return rig_set_func(my_rig, hamlibVfoNames[vfo], RIG_FUNC_RIT, state);
-}
 
-int HamlibRigControl::getRitState(VFO vfo, bool& state)
-{
-    int status = 0;
-    int retCode = RIG_OK;
-    retCode = rig_get_func(my_rig, hamlibVfoNames[vfo], RIG_FUNC_RIT, &status);
-    state = status ? true : false;
-    return retCode;
-}
 
-/*
-bool RigControl::supportGetRitState(int rigNumber)
+bool HamlibRigControl::supportReadRitState(int rigNumber)
 {
     RIG *myRig;
     myRig = rig_init(rigNumber);
@@ -656,7 +662,7 @@ bool RigControl::supportGetRitState(int rigNumber)
 
     return false;
 }
-*/
+
 /*************** PTT Control  ********************************/
 
 
@@ -766,13 +772,13 @@ pbwidth_t RigControl::getPassBand()
 
 /*************** Volume Level Control  ********************************/
 
-/*
-bool RigControl::supportVolControl(int rigNumber)
+
+bool HamlibRigControl::supportVolControl(int rigNumber)
 {
-    if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
-    {
-        return false;
-    }
+    //if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
+    //{
+    //    return false;
+    //}
 
     if ((rigHasGetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (rigHasSetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF))
     {
@@ -784,7 +790,7 @@ bool RigControl::supportVolControl(int rigNumber)
         return false;
     }
 }
-*/
+
 int HamlibRigControl::setVolume(VFO vfo, float val)
 {
     value_t value;

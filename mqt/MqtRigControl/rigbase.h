@@ -43,16 +43,24 @@ public:
     //virtual QString convertModeQStr(MODE mode) = 0;
     //virtual MODE convertQStrMode(QString mode) = 0;
 
+    virtual bool supportVolControl(int rigNumber) = 0;
     virtual int setVolume(VFO vfo, float val) = 0;
     virtual int getVolume(VFO vfo, float *val) = 0;
 
+    virtual bool supportReadRit(int rigModelNumber) = 0;
+    virtual bool supportWriteRit(int rigModelNumber) = 0;
     virtual int getRit(VFO vfo, ShortFreq &ritfreq) = 0;
     virtual int setRit(VFO vfo, ShortFreq ritfreq) = 0;
+
+    virtual bool supportReadRitState(int rigModelNumber) = 0;
+    virtual bool supportWriteRitState(int rigModelNumber) = 0;
     virtual int setRitState(VFO vfo, bool state) = 0;
     virtual int getRitState(VFO vfo, bool& state) = 0;
+
     virtual int clearRit(VFO vfo) = 0;
 
 
+    virtual bool supportSignalStrength(int rigModelNumber) = 0;
     virtual int getSignalStrength(VFO vfo, int *value) = 0;
 
     virtual QString getRigLibVersion() = 0;
