@@ -77,6 +77,7 @@ public:
     int setRit(VFO vfo, ShortFreq ritfreq) override;
     int setRitState(VFO vfo, bool state) override;
     int getRitState(VFO vfo, bool& state) override;
+    int clearRit(VFO vfo) override;
 
     static void setTraceCommsFlag(bool value);
     void setTraceComms(bool value) override;

@@ -50,6 +50,7 @@ public:
     virtual int setRit(VFO vfo, ShortFreq ritfreq) = 0;
     virtual int setRitState(VFO vfo, bool state) = 0;
     virtual int getRitState(VFO vfo, bool& state) = 0;
+    virtual int clearRit(VFO vfo) = 0;
 
 
     virtual int getSignalStrength(VFO vfo, int *value) = 0;

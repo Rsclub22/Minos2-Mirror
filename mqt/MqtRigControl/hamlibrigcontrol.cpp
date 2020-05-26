@@ -132,14 +132,15 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         bool supportVolume = false;
 
-        if (capsList[i]->rig_model != RIG_MODEL_TS590SG) // if rig is TS590G ignore volume as it has a bug..
-        {
-            if ((HamlibRigControl::rigHasGetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (HamlibRigControl::rigHasSetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF))
-            {
-                supportVolume =  true;
-            }
+        //
+       //if (capsList[i]->rig_model != RIG_MODEL_TS590SG || capsList[i]->rig_model != RIG_MODEL_TS590S) // if rig is TS590G ignore volume as it has a bug..
+        //{
+        //    if ((HamlibRigControl::rigHasGetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (HamlibRigControl::rigHasSetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF))
+        //    {
+        //        supportVolume =  true;
+        //    }
 
-        }
+        //}
 
         // support Antenna Switch
         bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
@@ -563,6 +564,11 @@ int HamlibRigControl::getRit(VFO vfo, ShortFreq &ritfreq)
 int HamlibRigControl::setRit(VFO vfo, ShortFreq ritfreq)
 {
     return rig_set_rit(my_rig, hamlibVfoNames[vfo], static_cast<shortfreq_t>(ritfreq));
+}
+
+int HamlibRigControl::clearRit(VFO vfo)
+{
+    return rig_set_rit(my_rig, hamlibVfoNames[vfo], 0);
 }
 
 /*

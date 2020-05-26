@@ -20,8 +20,8 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
         restoreGeometry(geometry);
 
 
-     distanceLineEdits << ui->distanceFilter1_8MHz << ui->distanceFilter3_5MHz << ui->distanceFilter7MHz
-                       << ui->distanceFilter14MHz << ui->distanceFilter21MHz << ui->distanceFilter28MHz
+     distanceLineEdits /*<< ui->distanceFilter1_8MHz << ui->distanceFilter3_5MHz << ui->distanceFilter7MHz
+                       << ui->distanceFilter14MHz << ui->distanceFilter21MHz << ui->distanceFilter28MHz*/
                        << ui->distanceFilter50MHz << ui->distanceFilter70MHz << ui->distanceFilter144MHz
                        << ui->distanceFilter432MHz << ui->distanceFilter1296MHz << ui->distanceFilter2300MHz
                        << ui->distanceFilter3_4GHz << ui->distanceFilter5_6GHz << ui->distanceFilter10GHz;
@@ -53,11 +53,11 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
      connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onAccepted()));
      connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(onRejected()));
 
-     bool allowHF = false;
-     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+     //bool allowHF = false;
+     //TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
 
 
-      ui->hf_frame->setVisible(allowHF);
+      ui->hf_frame->setVisible(false);  // don't show Hf for this release
 
 
 

@@ -65,6 +65,7 @@ public:
     int setRit(VFO vfo, ShortFreq ritfreq) override;
     int setRitState(VFO vfo, bool state) override;
     int getRitState(VFO vfo, bool& state) override;
+    int clearRit(VFO vfo) override;
 
     static void setTraceCommsFlag(bool value);
     void setTraceComms(bool value) override;
@@ -75,8 +76,8 @@ public:
     OmniRig::RigParamX map_mode(QString mode);
 
 
-
 private slots:
+
     void onHandleVisibleChange();
     void onHandleRigTypeChange(int);
     void onHandleStatusChange(int);
@@ -110,6 +111,10 @@ private:
     int omnirigError(omnirigErrorCode errNum);
     QString convertModeToQString(MODE mode);
     void traceCommsMsg(QString msg);
+    bool supportReadRit();
+    bool supportWriteRit();
+
+
 };
 
 #endif // OMNIRIGCONTROL_H

@@ -2,3 +2,5 @@
 **/local.properties*
 **/*.pro.user*
 build*
+/mqt/MqtRigControl/omnirig.cpp
+/mqt/MqtRigControl/omnirig.h

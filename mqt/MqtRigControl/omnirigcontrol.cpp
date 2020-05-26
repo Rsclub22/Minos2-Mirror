@@ -767,23 +767,71 @@ QString OmnirigControl::getLibraryName()
 
 int OmnirigControl::getRit(VFO vfo, ShortFreq &ritfreq)
 {
-
+    Q_UNUSED(vfo)
+    int f = rig->RitOffset();
+    ritfreq = static_cast<ShortFreq>(f);
+    return omnirigError(OMNIRIG_OK);
 }
 
 int OmnirigControl::setRit(VFO vfo, ShortFreq ritfreq)
 {
-
+    Q_UNUSED(vfo)
+    rig->SetRitOffset(static_cast<int>(ritfreq));
+    return omnirigError(OMNIRIG_OK);
 }
+
 
 int OmnirigControl::setRitState(VFO vfo, bool state)
 {
+    Q_UNUSED(vfo)
+    if (state)
+    {
+        rig->SetRit(OmniRig::PM_RITON);
+    }
+    else
+    {
+        rig->SetRit(OmniRig::PM_RITOFF);
+    }
+
+    return omnirigError(OMNIRIG_OK);
 
 }
 
 int OmnirigControl::getRitState(VFO vfo, bool& state)
 {
+    Q_UNUSED(vfo)
+    OmniRig::RigParamX s = rig->Rit();
+    if (s == OmniRig::PM_RITON)
+    {
+        state = true;
+    }
+    else if (s == OmniRig::PM_RITOFF)
+    {
+        state = false;
+    }
+
+    return omnirigError(OMNIRIG_OK);
 
 }
+
+int OmnirigControl::clearRit(VFO vfo)
+{
+    Q_UNUSED(vfo)
+    rig->ClearRit();
+    return omnirigError(OMNIRIG_OK);
+}
+
+bool OmnirigControl::supportReadRit()
+{
+    return rig->IsParamReadable(OmniRig::PM_RIT0);
+
+}
+
+bool OmnirigControl::supportWriteRit()
+{
+    return rig->IsParamWriteable(OmniRig::PM_RIT0);
+}
+
 
 void OmnirigControl::setTraceCommsFlag(bool value)
 {

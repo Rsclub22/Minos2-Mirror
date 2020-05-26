@@ -1108,13 +1108,24 @@ bool BandmapView::matchMode(int sourceRow)
 
 bool BandmapView::matchDistance(int sourceRow)
 {
-    bool ok = false;
-
-    int distance = model()->data(model()->index(sourceRow, DXDIST_COL_NUM), BMP_DataStoredRole).toString().toInt(&ok);
-    if (ok)
+    if (!filterSettings->ignoreDistanceFlag)
     {
-        return filterSettings->testDistanceFilter(distance);
+        bool ok = false;
+
+        QString distanceStr = model()->data(model()->index(sourceRow, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
+        if (distanceStr.isEmpty() && filterSettings->getIgnoreEmptyDistanceFlag())
+        {
+            return false;
+        }
+
+        int distance = distanceStr.toInt(&ok);
+        if (ok)
+        {
+            return filterSettings->testDistanceFilter(distance);
+        }
     }
+
+
 
     return true;
 }
