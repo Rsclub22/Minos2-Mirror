@@ -144,6 +144,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     logAction = new QAction(tr("Send &Log"), this);
     memoryAction = new QAction(tr("Send &Memory"), this);
     clearSpotAction = new QAction(tr("Clear &Spot"), this);
+    clearAllSpotsAction = new QAction(tr("Clear All Spots"), this);
 
     spotsMenu->addAction(markSpotAction);
     spotsMenu->addAction(unMarkSpotAction);
@@ -152,6 +153,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     spotsMenu->addAction(logAction);
     spotsMenu->addAction(memoryAction);
     spotsMenu->addAction(clearSpotAction);
+    spotsMenu->addAction(clearAllSpotsAction);
 
     ui->actionsButton->setMenu(spotsMenu);
     connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
@@ -171,6 +173,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect( logAction, SIGNAL( triggered() ), this, SLOT(on_logActionSelected()) );
     connect( memoryAction, SIGNAL( triggered() ), this, SLOT(on_memoryActionSelected()) );
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(on_clearSpotActionSelected()) );
+    connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(on_clearAllSpotsActionSelected()) );
 
 
     contextSpotsMenu = new QMenu(this);
@@ -476,6 +479,23 @@ void BandmapClientFrame::on_clearSpotActionSelected()
 
 }
 
+
+void BandmapClientFrame::on_clearAllSpotsActionSelected()
+{
+
+    int ret = QMessageBox::warning(this, tr("Bandmap"),
+                                   tr("Please confirm you want to delete all the spots in the bandmap1?"),
+                                   QMessageBox::Yes | QMessageBox::No);
+    if (ret == QMessageBox::Yes)
+    {
+        traceMsg(QString("menu clear all bandmap spots selected"));
+        bandmapSpotProxyModel->removeRows(0, bandmapSpotProxyModel->rowCount(), QModelIndex());
+        bandmapView->clearSelectedSpotData();
+        bandmapView->bandmapUpdate();
+    }
+
+
+}
 
 void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos, const QPoint& mapP)
 {
