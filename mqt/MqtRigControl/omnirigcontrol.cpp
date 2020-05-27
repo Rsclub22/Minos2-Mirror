@@ -407,6 +407,7 @@ void OmnirigControl::onHandleCustomReply(int, QVariant const&, QVariant const&)
 
 void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
 {
+
     (*rigsList)[OmniRigOneName] = RigCapabilities(
                 RigCapConstants::PortType::none,
                 "Afreet",
@@ -426,8 +427,9 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support rigctld
                 false);     // polldata flag
 
-    // note the library may support these features, but Minos chooses not to use them
-    // or is yet to implement the feature
+    // note the library may support these features,
+    // but Omnirig should be polled to verify the radio supports the feature
+
 
 
     (*rigsList)[OmniRigTwoName] = RigCapabilities(

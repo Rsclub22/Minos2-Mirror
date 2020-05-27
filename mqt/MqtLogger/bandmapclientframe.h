@@ -248,6 +248,7 @@ private:
     QAction* logAction;
     QAction* memoryAction;
     QAction* clearSpotAction;
+    QAction* clearAllSpotsAction;
 
     QMenu* contextSpotsMenu;
     QAction* contextSpotsMenu_markSpotAction;
@@ -343,10 +344,12 @@ private slots:
      void context_logActionSelected();
      void context_memoryActionSelected();
      void context_clearSpotActionSelected();
+     void on_clearAllSpotsActionSelected();
      void context_bearingActionSelected();
 
      void on_zoomIn();
      void on_zoomOut();
+
 };
 
 

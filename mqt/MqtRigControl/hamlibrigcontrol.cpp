@@ -143,7 +143,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
         //}
 
         // support Antenna Switch
-        bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
+        //bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
 
         (*rigsList)[key] = RigCapabilities(port_type,
                                            capsList[i]->mfg_name,
