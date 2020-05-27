@@ -1141,30 +1141,40 @@ int RigControlMainWindow::openRadio()
 
     logMessage(QString("Connect Status after init = %1").arg(radio->getRigConnected() ? "yes" : "no"));
 
+    bool test = false;
 
-    // let's see if we can get freq from radio and confirm comms
-    if (radio->getRigConnected())
+    if (!test)      // ******************* for test
     {
-
-        int retCode = Rig_OK;
-        showStatusMessage(tr("Attempting to communicate with radio - %1").arg(setupRadio->currentRadio.radioName));
-        //delay(1);
-        retCode = radio->getFrequency(VFO::CURRENT_VFO, rfrequency);
-
-
-        if (retCode < Rig_OK)
+        // let's see if we can get freq from radio and confirm comms
+        if (radio->getRigConnected())
         {
-            logMessage(QString("Open Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
-            radioError(retCode, tr("Test Radio Connection\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
-            //sendStatusToLogDisConnected();
-            return OPEN_FAILED;
-        }
-        else
-        {
-            radioCommsOK = true;
-        }
 
+            int retCode = Rig_OK;
+            showStatusMessage(tr("Attempting to communicate with radio - %1").arg(setupRadio->currentRadio.radioName));
+            //delay(1);
+            retCode = radio->getFrequency(VFO::CURRENT_VFO, rfrequency);
+
+
+            if (retCode < Rig_OK)
+            {
+                logMessage(QString("Open Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
+                radioError(retCode, tr("Test Radio Connection\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
+                //sendStatusToLogDisConnected();
+                return OPEN_FAILED;
+            }
+            else
+            {
+                radioCommsOK = true;
+            }
+
+        }
     }
+    else
+    {
+        radioCommsOK = true;
+    }
+
+
 
 
 
@@ -2513,6 +2523,7 @@ void RigControlMainWindow::getRitSupportStatus()
         if (radioSupSetRit)
         {
             ritEnable = readRitEnableChk();
+            logMessage(QString("Get Rit Support - Rit Enabled = %1").arg(ritEnable ? "True" : "False"));
             if (ritEnable)
             {
                 ui->ritEnableChk->setCheckState(Qt::Checked);
@@ -2702,6 +2713,7 @@ void RigControlMainWindow::ritEnableChecked(int chkState)
     {
         saveRitEnableChk(ritEnable);
         setRitFreqDisplayVisible(ritEnable);
+        logMessage(QString("RitEnableChecked - is checked"));
 
     }
     else if (chkState == Qt::Checked)
@@ -2709,6 +2721,7 @@ void RigControlMainWindow::ritEnableChecked(int chkState)
         ritEnable = true;
         saveRitEnableChk(ritEnable);
         setRitFreqDisplayVisible(ritEnable);
+        logMessage(QString("RitEnableChecked - is unchecked"));
     }
 
     sendRitEnableStatusLogger();
@@ -2731,6 +2744,7 @@ int RigControlMainWindow::getRitFreq(VFO vfo)
            rRitFreq = ritFreq;
            oldritFreq = ritFreq;
            ui->ritFreq->setText(convertRitFreqToStr(rRitFreq));
+           logMessage(QString("GetRitFreq from radio = %1").arg(QString::number(rRitFreq)));
            sendRitFreqLogger(static_cast<int>(rRitFreq));
         }
     }
@@ -2748,8 +2762,10 @@ void RigControlMainWindow::setRitFreq(VFO vfo, ShortFreq ritFreq)
     if (ritEnable)
     {
         int retCode = 0;
-
+        logMessage(QString("Set Rit = %1").arg(QString::number(ritFreq)));
+        cmdLockOn();
         retCode = radio->setRit(vfo, ritFreq);
+        cmdLockOff();
         if (retCode < 0)
         {
             // error
@@ -2762,6 +2778,7 @@ void RigControlMainWindow::setRitFreq(VFO vfo, ShortFreq ritFreq)
             {
                 // get rit is not available, update local rit display
                 // and send to logger to update logger
+                logMessage(QString("Get Rit not available - update display %1").arg(QString::number(ritFreq)));
                 ui->ritFreq->setText(convertRitFreqToStr(ritFreq));
                 sendRitFreqLogger(ritFreq);
             }
@@ -2771,6 +2788,8 @@ void RigControlMainWindow::setRitFreq(VFO vfo, ShortFreq ritFreq)
 
 void RigControlMainWindow::setRitFreq(int freq)
 {
+
+    logMessage(QString("SetRit Freq from logger = %1").arg(QString::number(freq)));
     setRitFreq(VFO::CURRENT_VFO, static_cast<ShortFreq>(freq));
 }
 
@@ -2786,6 +2805,7 @@ int RigControlMainWindow::setRitFreq(vfo_t vfo, shortfreq_t ritFreq)
 */
 int  RigControlMainWindow::getRitRadioStatus(VFO vfo, bool *status)
 {
+    logMessage(QString("Get Rit RadioStatus"));
     cmdLockOn();
     bool s;
     int retCode = radio->getRitState(vfo, s);
@@ -2794,6 +2814,11 @@ int  RigControlMainWindow::getRitRadioStatus(VFO vfo, bool *status)
     if (retCode == Rig_OK)
     {
         *status = s;
+        logMessage(QString("Get Rit RadioStatus = %1").arg(s ? "True" : "False"));
+    }
+    else
+    {
+        logMessage(QString("Get Rit RadioStatus - failed with errorcode = %1").arg(QString::number(retCode)));
     }
     return retCode;
 }
