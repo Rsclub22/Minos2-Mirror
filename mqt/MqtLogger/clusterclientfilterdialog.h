@@ -98,7 +98,7 @@ private:
 
     QString contestUuid;
 
-    bool enableHFSpots;
+//    bool enableHFSpots;
 
     void initCheckFilterTab();
     void clearVHFBands();

@@ -233,7 +233,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView = new QTableView();
     dxSpotView->setFocusPolicy(Qt::NoFocus);
 
-    dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSettings);
+    dxSpotProxyModel = new DxSpotSortFilterProxyModel(&filterSettings);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
     //dxSpotProxyModel->setDynamicSortFilter(true);
@@ -281,7 +281,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView = new QTableView();
     searchView->setFocusPolicy(Qt::NoFocus);
 
-    searchSortProxyModel = new SearchSortFilterProxyModel(filterSettings);
+    searchSortProxyModel = new SearchSortFilterProxyModel(&filterSettings);
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
     searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -328,7 +328,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView = new QTableView();
     callSignView->setFocusPolicy(Qt::NoFocus);
 
-    callSignProxyModel = new CallsignSortFilterProxyModel(filterSettings);
+    callSignProxyModel = new CallsignSortFilterProxyModel(&filterSettings);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
     callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -375,7 +375,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView = new QTableView();
     locatorView->setFocusPolicy(Qt::NoFocus);
 
-    locatorProxyModel = new LocatorSortFilterProxyModel(filterSettings);
+    locatorProxyModel = new LocatorSortFilterProxyModel(&filterSettings);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
     locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -1765,9 +1765,9 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 
     if (ok && (bandMask >=0 && bandMask < NUMBANDS) )
     {
-       return filterSettings.getBandFilter(bandMask);
+       return filterSettings->getBandFilter(bandMask);
     }
-    else if (!ok && filterSetup->getEnableHFSpotsFlag())
+    else if (!ok && false/*filterSetup->getEnableHFSpotsFlag()*/) // need to modify this for HF
     {
         return true;        // if DXBandMask is empty it must be a HF Spot
     }
@@ -1784,7 +1784,7 @@ bool DxSpotSortFilterProxyModel::matchMode(int sourceRow) const
     int modeMask = sourceModel()->data(sourceModel()->index(sourceRow, DXMODEMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
     if (ok && modeMask >=0)
     {
-        return filterSettings.getModeFilter(modeMask);
+        return filterSettings->getModeFilter(modeMask);
     }
     else
     {
@@ -1865,13 +1865,13 @@ bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
 
-    if (!filterSetup->getCallsignFilterList().empty())
+    if (!filterSettings->unpackFilterList(filterSettings->callsignFilterList).empty())
     {
         if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
             Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
             spotCall.validate();
-            foreach (const QString &str, filterSetup->getCallsignFilterList())
+            foreach (const QString &str, filterSettings->unpackFilterList(filterSettings->callsignFilterList))
             {
                 if (spotCall.realCall.contains(str, Qt::CaseInsensitive))
                 {
@@ -1888,7 +1888,7 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
 
 bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    if (!filterSetup->getLocatorFilterList().empty())
+    if (!filterSettings->unpackFilterList(filterSettings->locatorFilterList).empty())
     {
         if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
@@ -1896,7 +1896,7 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
             QString locator = sourceModel()->data(index, DataStoredRole).toString().mid(0,4);
             if (locator != "")
             {
-                if (filterSetup->getLocatorFilterList().contains(locator))
+                if (filterSettings->unpackFilterList(filterSettings->locatorFilterList).contains(locator))
                 {
                     return true;
                 }

@@ -60,14 +60,14 @@ public:
     void setUnworkedCallsignFlag(bool state);
 
 
-    DxSpotSortFilterProxyModel(ClusterClientFilterSettings& filterSettings_) :
+    DxSpotSortFilterProxyModel(ClusterClientFilterSettings* filterSettings_) :
         unWorkedLocFlag(false),
         unWorkedCallsignFlag(false)
     {
         filterSettings = filterSettings_;
     }
 
-    ClusterClientFilterSettings filterSettings;
+    ClusterClientFilterSettings* filterSettings;
 
 
     bool unWorkedLocFlag;
@@ -88,7 +88,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    SearchSortFilterProxyModel(ClusterClientFilterSettings& filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
+    SearchSortFilterProxyModel(ClusterClientFilterSettings* filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
     {
 
     }
@@ -107,7 +107,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    CallsignSortFilterProxyModel(ClusterClientFilterSettings& filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
+    CallsignSortFilterProxyModel(ClusterClientFilterSettings* filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
     {
 
     }
@@ -122,7 +122,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    LocatorSortFilterProxyModel(ClusterClientFilterSettings& filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
+    LocatorSortFilterProxyModel(ClusterClientFilterSettings* filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
     {
         filterSettings = filterSettings_;
     }

@@ -28,8 +28,8 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, ClusterC
     callsignListWidgetCurrentRow(-1),
     vhfButtonState(false),
     mWaveButtonState(false),
-    modeButtonState(false),
-    enableHFSpots(false)
+    modeButtonState(false)
+    //enableHFSpots(false)
 {
     ui->setupUi(this);
     QSettings settings;
@@ -1050,10 +1050,10 @@ void ClusterClientFilterDialog::importFilterToWidgetList(QStringList &listOfFilt
 }
 
 
-bool ClusterClientFilterDialog::getEnableHFSpotsFlag()
-{
-    return enableHFSpots;
-}
+//bool ClusterClientFilterDialog::getEnableHFSpotsFlag()
+//{
+//    return enableHFSpots;
+//}
 
 
 void ClusterClientFilterDialog::enableDistanceFields()
