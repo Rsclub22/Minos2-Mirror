@@ -90,9 +90,10 @@
     <message>
         <location filename="../bandmapclientframe.ui" line="27"/>
         <location filename="../bandmapclientframe.cpp" line="90"/>
-        <location filename="../bandmapclientframe.cpp" line="465"/>
-        <location filename="../bandmapclientframe.cpp" line="596"/>
-        <location filename="../bandmapclientframe.cpp" line="1681"/>
+        <location filename="../bandmapclientframe.cpp" line="468"/>
+        <location filename="../bandmapclientframe.cpp" line="488"/>
+        <location filename="../bandmapclientframe.cpp" line="620"/>
+        <location filename="../bandmapclientframe.cpp" line="1706"/>
         <source>Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -123,74 +124,84 @@
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="140"/>
-        <location filename="../bandmapclientframe.cpp" line="177"/>
+        <location filename="../bandmapclientframe.cpp" line="180"/>
         <source>M&amp;ark Spot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="141"/>
-        <location filename="../bandmapclientframe.cpp" line="178"/>
+        <location filename="../bandmapclientframe.cpp" line="181"/>
         <source>&amp;Unmark Spot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="142"/>
-        <location filename="../bandmapclientframe.cpp" line="179"/>
+        <location filename="../bandmapclientframe.cpp" line="182"/>
         <source>Set &amp;Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="143"/>
-        <location filename="../bandmapclientframe.cpp" line="180"/>
+        <location filename="../bandmapclientframe.cpp" line="183"/>
         <source>Set &amp;Bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="144"/>
-        <location filename="../bandmapclientframe.cpp" line="181"/>
+        <location filename="../bandmapclientframe.cpp" line="184"/>
         <source>Send &amp;Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="145"/>
-        <location filename="../bandmapclientframe.cpp" line="182"/>
+        <location filename="../bandmapclientframe.cpp" line="185"/>
         <source>Send &amp;Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="146"/>
-        <location filename="../bandmapclientframe.cpp" line="183"/>
+        <location filename="../bandmapclientframe.cpp" line="186"/>
         <source>Clear &amp;Spot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="466"/>
-        <location filename="../bandmapclientframe.cpp" line="597"/>
+        <location filename="../bandmapclientframe.cpp" line="147"/>
+        <source>Clear All Spots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.cpp" line="469"/>
+        <location filename="../bandmapclientframe.cpp" line="621"/>
         <source>Please confirm you want to delete this spot - %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1516"/>
+        <location filename="../bandmapclientframe.cpp" line="489"/>
+        <source>Please confirm you want to delete all the spots in the bandmap1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.cpp" line="1540"/>
         <source>Cluster Server Not Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1543"/>
+        <location filename="../bandmapclientframe.cpp" line="1567"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1549"/>
+        <location filename="../bandmapclientframe.cpp" line="1573"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1613"/>
+        <location filename="../bandmapclientframe.cpp" line="1637"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1677"/>
+        <location filename="../bandmapclientframe.cpp" line="1702"/>
         <source>Bandmap - %1Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
