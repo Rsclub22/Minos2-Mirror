@@ -954,7 +954,7 @@ void BandmapView::drawBandMapSpots()
 
         for (int row = 0; row < numrows; ++row)
         {
-           // check mode against the filter settings
+           // check mode and distance against the filter settings
             if (matchMode(row) && matchDistance(row))
             {
 
