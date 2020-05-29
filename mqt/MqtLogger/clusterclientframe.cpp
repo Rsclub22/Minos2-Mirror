@@ -980,6 +980,10 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
 
             filterSetup->saveClusterFilterToContest();  // save these settings
         }
+        else
+        {
+            filterSetup->filterSettings = contest->getClusterFilter();
+        }
 
 
 
