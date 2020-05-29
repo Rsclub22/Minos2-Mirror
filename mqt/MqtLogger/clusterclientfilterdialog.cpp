@@ -21,7 +21,7 @@
 #include "locatorinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
-ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, ClusterClientFilterSettings filterSettings_, QWidget *parent) :
+ClusterClientFilterDialog::ClusterClientFilterDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
