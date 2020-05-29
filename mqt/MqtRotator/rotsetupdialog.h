@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016-2020
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -19,9 +19,10 @@
 #include <QLabel>
 #include <QVector>
 #include <QSettings>
-#include "rotcontrol.h"
+//#include "rotcontrol.h"
 #include "rotsetupform.h"
 #include "rotatorcommon.h"
+#include "rotatorfactory.h"
 
 
 
@@ -45,7 +46,7 @@ class RotSetupDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RotSetupDialog(RotControl* _rotator, QWidget *parent = nullptr);
+    explicit RotSetupDialog(RotatorFactory* rotFactoty, QWidget *parent = nullptr);
     ~RotSetupDialog() override;
 
 
@@ -75,6 +76,8 @@ public:
     void setTabToCurrentAntenna();
     void loadAvailComports();
 
+
+
 signals:
 
     void currentAntennaSettingChanged(QString);
@@ -93,7 +96,8 @@ private slots:
 private:
     Ui::RotSetupDialog *ui;
 
-    RotControl *rotator;
+    //RotControl *rotator;
+    RotatorFactory* rotatorFactory;
 
     QVector<rotSetupForm*> antennaTab;
 
@@ -125,6 +129,8 @@ private:
     void closeEvent(QCloseEvent *event) override;
     void doCloseEvent();
     void loadAvailComportsToTab(int tabNum);
+    void updateAvailAntennasToVersion2();
+
 };
 
 #endif // SETUPDIALOG_H

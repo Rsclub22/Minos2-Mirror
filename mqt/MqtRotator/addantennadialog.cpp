@@ -2,14 +2,19 @@
 #include "ui_addantennadialog.h"
 #include <QMessageBox>
 
-AddAntennaDialog::AddAntennaDialog(QStringList _availAntennas, RotControl* rot, QWidget *parent) :
+AddAntennaDialog::AddAntennaDialog(QStringList _availAntennas, RotatorFactory *rotatorFactory, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddAntennaDialog)
 {
     ui->setupUi(this);
     availAntennas = _availAntennas;
 
-    rot->getRotatorList(ui->rotatorModel);
+    ui->rotatorModel->addItem("");   // add blank at begining
+    for (auto r = rotatorFactory->supported_rotators()->cbegin(); r != rotatorFactory->supported_rotators()->cend(); ++r)
+    {
+        QString rotText = r.key();
+        ui->rotatorModel->addItem(rotText.remove("Hamlib "));
+    }
     rotatorModel = ui->rotatorModel->currentText();
     connect (ui->rotatorModel, SIGNAL(currentIndexChanged(int)), this, SLOT(rotatorModelSelect(int)));
 

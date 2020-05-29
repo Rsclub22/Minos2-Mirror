@@ -18,11 +18,22 @@ TEMPLATE = app
 
 win32:RC_ICONS += ../MinosRig.ico
 
+win32 {
+DEFINES += WIN32
+QT += axcontainer
+#TYPELIBS = $$system(dumpcpp -getfile {4FE359C5-A58F-459D-BE95-CA559FB4F270})
+TYPELIBS = $$system(dumpcpp OmniRig.tlb)
+}
 
 SOURCES += main.cpp\
+    OmniWrapper.cpp \
+    hamlibrigcontrol.cpp \
+    omnirigcontrol.cpp \
+    rigbase.cpp \
+    rigcapabilities.cpp \
         rigcontrolmainwindow.cpp \
-    rigcontrol.cpp \
     rigcontrolrpc.cpp \
+    rigfactory.cpp \
     rigsetupform.cpp \
     transvertsetupform.cpp \
     addtransverterdialog.cpp \
@@ -34,8 +45,13 @@ SOURCES += main.cpp\
     rigctldclient.cpp
 
 HEADERS  += rigcontrolmainwindow.h \
-    rigcontrol.h \
+    OmniWrapper.h \
+    hamlibrigcontrol.h \
+    omnirigcontrol.h \
+    rigbase.h \
+    rigcapabilities.h \
     rigcontrolrpc.h \
+    rigfactory.h \
     rigsetupform.h \
     transvertsetupform.h \
     addtransverterdialog.h \

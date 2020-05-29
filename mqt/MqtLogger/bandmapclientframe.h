@@ -205,6 +205,8 @@ private:
     checkModeAgainstFreq* modeBandPlan;
     bool modeBandPlanOk;
 
+    BandmapClientFilterSettings filterSettings;
+
     CheckOperatingFreq* operatingFreq;
     bool operatingFreqPlanOk;
 
@@ -274,7 +276,7 @@ private:
 
 
 
-    int getBandOffSet(QString contestBandStr);
+    //int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);
     void handleDxSpots(QVector<QString> &spotQueue);
     //void handleClusterStatusMessage(QString &msg);
@@ -325,7 +327,7 @@ private slots:
      void checkSavedFilters();
      void onMenuShow();
 
-     void on_FitersChanged(bool state);
+     void on_FiltersChanged(bool state);
      void purgeSpots();
      void on_markSpotActionSelected();
      void on_unMarkSpotActionSelected();

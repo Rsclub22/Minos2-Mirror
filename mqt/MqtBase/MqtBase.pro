@@ -6,6 +6,7 @@
 include($$PWD/../mqt.pri)
 include($$PWD/../mqthamlib.pri)
 
+
 QT       += core gui
 QT       += widgets
 QT       += network
@@ -145,6 +146,7 @@ HEADERS += \
     profiles.h \
     qlogtabwidget.h \
     RigCache.h \
+    rigRotSetupCommon.h \
     rigcommon.h \
     rigcontrolcommonconstants.h \
     RigDetails.h \

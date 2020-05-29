@@ -94,6 +94,16 @@ QString convertFreqToStr(int frequency)
 
 }
 
+QString convertFreqToStr(qint64 frequency)
+{
+    return QString::number(frequency, 10);
+}
+
+QString convertFreqToStr(quint64 frequency)
+{
+    return QString::number(frequency, 10);
+}
+
 
 double convertStrToFreq(QString frequency)
 {

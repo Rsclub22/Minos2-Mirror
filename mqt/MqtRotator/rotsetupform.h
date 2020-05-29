@@ -16,7 +16,8 @@
 #define ROTSETUPFORM_H
 
 #include <QWidget>
-#include "rotcontrol.h"
+#include "rotatorfactory.h"
+#include "serialCommonData.h"
 
 namespace Ui {
 class rotSetupForm;
@@ -27,15 +28,10 @@ class rotSetupForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit rotSetupForm(RotControl* rotator, srotParams* _antennaData, QWidget *parent = nullptr);
+    explicit rotSetupForm(RotatorFactory *rotFactory_, srotParams* _antennaData, QWidget *parent = nullptr);
     ~rotSetupForm();
 
     srotParams *antennaData;
-    bool antennaValueChanged = false;
-    bool antennaNameChanged = false;
-
-
-
 
     QString getAntennaName();
     void setAntennaName(QString n);
@@ -70,6 +66,12 @@ public:
     QString getPollInterval();
     void setPollInterval(QString i);
 
+    bool getAntennaValueChanged(){return antennaValueChanged;}
+    void setAntennaValueChanged(bool state){antennaValueChanged = state;}
+
+    bool getAntennaNameChanged(){return antennaNameChanged;}
+    void setAntennaNameChanged(bool state){antennaNameChanged = state;}
+
     void fillPortsInfo();
 
     bool getsStopOffBut();
@@ -99,14 +101,13 @@ public:
     void networkDataEntryVisible(bool v);
 
     int comportAvial(QString comport);
-    int getMaxMinRotationData(int rotatorNumber, int *maxRot, int *minRot);
 
 
     void antennaOffSetVisible(bool s);
     void pollIntervalVisible(bool s);
 
 
-    bool setEndStopType(srotParams *antennaData);
+
     void setSimCW_CCWcmdVisible(bool visible);
     void setSimCW_CCWcmdChecked(bool checked);
 
@@ -114,14 +115,44 @@ public:
 
 
     void setupRotatorModel(QString rotatorModel);
-private slots:
 
-    void rotatorModelSelected();
-    void comportSelected();
+    bool setEndStopType(srotParams *antennaData, int minRot, int maxRot);
+    void setOverlapEndStop(srotParams *antennaData, bool overrunState);
+
+    void setAdvancedCommsFlag(bool state);
+    void advancedSerialDataEntryVisible(bool v);
+    void checkAdvancedCommsCheckBox(bool checked);
+    void setAdvancedCommsChkBoxVisible(bool visible);
+    void setForceRTS(int n);
+    void setForceRTSDisabled(bool state);
+
+    void setForceDTR(int n);
+
+
+    void setCompassDialChkBoxVisible(bool s);
+    void checkCompassDialChkBox(bool checked);
+
+
+public slots:
+
     void comDataSpeedSelected();
     void comDataBitsSelected();
     void comStopBitsSelected();
     void comParityBitsSelected();
+    void on_forceRTSSelected();
+    void on_forceDTRSelected();
+
+
+
+
+
+
+
+
+private slots:
+
+    void rotatorModelSelected();
+    void comportSelected();
     void comHandshakeSelected();
     void comNetAddressSelected();
     void comNetPortNumSelected();
@@ -135,10 +166,16 @@ private slots:
 
 
 
+    void onAdvancedCommsSelected(bool selected);
+    void onCompasDialVisibleChecked(bool selected);
+
 private:
     Ui::rotSetupForm *ui;
 
-    RotControl *rotator;
+    bool antennaValueChanged;
+    bool antennaNameChanged;
+
+    RotatorFactory* rotFactory;
 
     const int minOffset = -90;
     const int maxOffset = 90;
@@ -154,9 +191,13 @@ private:
     void fillStopBitsInfo();
     void fillParityBitsInfo();
     void fillHandShakeInfo();
+    void fillForceLinesInfo();
 
 
-    bool getCwCcwCmdFlag(int rotatorNumber);
+
+
+
+
 
 };
 

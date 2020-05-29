@@ -2,10 +2,10 @@
 #define TRANSVERTSETUPFORM_H
 
 #include <QWidget>
-#include "rigcontrol.h"
 #include "ui_transvertsetupform.h"
 #include "BandList.h"
 #include "focuswatcher.h"
+#include "rigcommon.h"
 
 
 

@@ -126,6 +126,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
                 setVolumeStatus(selDetail.volumeStatus().getValue(), psn);
                 setRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 setBandList(selDetail.bandList().getValue(), psn);
+                setIgnorePresetFreqFlag(selDetail.ignorePresetFreqFlag().getValue(), psn);
+                setIgnorePreviousFreqFlag(selDetail.ignorePreviousFreqFlag().getValue(), psn);
             }
         }
     }
@@ -285,6 +287,7 @@ void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
 
 void RigControlFrame::setTransVertOffset(double offset, PubSubName psn)
 {
+    traceMsg(QString("set transvertOffset %1 for radio %2").arg(QString::number(offset)).arg(psn.toString()));
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -301,6 +304,8 @@ void RigControlFrame::setTransVertOffset(double offset, PubSubName psn)
 
 void RigControlFrame::setTransVertSwitch(int switchNum, PubSubName psn)
 {
+    traceMsg(QString("set transvertSwitch Number = %1 for radio %2").arg(QString::number(switchNum)).arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -317,6 +322,8 @@ void RigControlFrame::setTransVertSwitch(int switchNum, PubSubName psn)
 
 void RigControlFrame::setTransVertEnabled(bool status, PubSubName psn)
 {
+    traceMsg(QString("set transvertEnabled = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -342,6 +349,9 @@ void RigControlFrame::setTransVertEnabled(bool status, PubSubName psn)
 
 void RigControlFrame::setTransVertStatus(bool status, PubSubName psn)
 {
+
+    traceMsg(QString("set transvertStatus = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -363,6 +373,8 @@ void RigControlFrame::setTransVertStatus(bool status, PubSubName psn)
 
 void RigControlFrame::setVolumeStatus(bool status, PubSubName psn)
 {
+    traceMsg(QString("set volumeStatus = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -384,6 +396,8 @@ void RigControlFrame::setVolumeStatus(bool status, PubSubName psn)
 
 void RigControlFrame::setRitEnableStatus(bool status, PubSubName psn)
 {
+    traceMsg(QString("set RitEnableStatus = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -404,8 +418,56 @@ void RigControlFrame::setRitEnableStatus(bool status, PubSubName psn)
     }
 }
 
+void RigControlFrame::setIgnorePresetFreqFlag(bool status, PubSubName psn)
+{
+    traceMsg(QString("set IgnorePresetFreqFlag = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setIgnorePresetFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setIgnorePresetFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+
+    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        selRadioDetails.setIgnorePresetFreq(status);
+    }
+}
+
+void RigControlFrame::setIgnorePreviousFreqFlag(bool status, PubSubName psn)
+{
+    traceMsg(QString("set IgnorePreviousFreqFlag = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
+
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setIgnorePreviousFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setIgnorePreviousFreq(status);
+        allRadioDetails[psn] = rd;
+    }
+
+    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+         selRadioDetails.setIgnorePreviousFreq(status);
+    }
+}
 void RigControlFrame::setBandList(QString s,PubSubName psn)
 {
+    traceMsg(QString("set BandList = %1 for radio %2").arg(s).arg(psn.toString()));
+
+
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
     {
@@ -1024,9 +1086,9 @@ void RigControlFrame::setMode(QString m)
     QStringList mode = m.split(':');
     if (mode.length() == 2 )
     {
-        for (int i = 0; i < hamlibData::supModeList.count(); i++)
+        for (int i = 0; i < supModeList.count(); i++)
         {
-                if (mode[0] == hamlibData::supModeList[i])
+                if (mode[0] == supModeList[i])
                 {
                     ui->modelbl->setText(mode[0]);
                     curMode = mode[0];
@@ -1214,10 +1276,11 @@ void RigControlFrame::setRadioFreq()
                     }
 
 
- //                   if (this->isVisible())  // only set freq on radio if rigcontrol panel is visible
-// This stops things working properly, so I'me removing it for now
+
+
+                    if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
                     {
-                        if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
+                        if (!selRadioDetails.getIgnorePreviousFreq())     // don't return to previous freq when swapping contests
                         {
                             sendFreq(freq);
                             trace(QString("setRadioFreq: Set previous freq = %1").arg(QString::number(cf)));
@@ -1226,13 +1289,19 @@ void RigControlFrame::setRadioFreq()
                                 setFreq(freq);
                             }
                         }
-                        else
-                        {
 
+                    }
+                    else
+                    {
+
+                        if (!selRadioDetails.getIgnorePresetFreq())     // don't go to preset freq
+                        {
                             sendFreq(listOfBands[i].freq);
                             trace(QString("setRadioFreq: Set default freq = %1").arg(listOfBands[i].freq));
                         }
+
                     }
+
 
                     setRadioBandWarning("");
 
@@ -1469,9 +1538,9 @@ bool RigControlFrame::checkRadioState()
 int RigControlFrame::calcMinosMode(QString mode)
 {
     int iMode = -1;
-    for (int i = 0; i < hamlibData::supModeList.count(); i++ )
+    for (int i = 0; i < supModeList.count(); i++ )
     {
-        if (mode == hamlibData::supModeList[i])
+        if (mode == supModeList[i])
         {
             iMode = i;
             return iMode;

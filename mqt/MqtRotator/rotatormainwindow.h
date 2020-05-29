@@ -19,6 +19,8 @@
 
 #include "base_pch.h"
 #include "rotatorRpc.h"
+#include "rotatorbase.h"
+#include "rotatorfactory.h"
 #include "rotatorcommon.h"
 #include "presetbutton.h"
 #include "rotpresetdialog.h"
@@ -42,7 +44,7 @@ class QLabel;
 class QComboBox;
 class RotSetupDialog;
 class MinosCompass;
-class RotControl;
+class HamlibRotControl;
 class EditPresetsDialog;
 class RotatorRpc;
 class RotatorLog;
@@ -102,6 +104,9 @@ private:
     bool closeApp = false;
     RotatorRpc *msg;
 
+    RotatorFactory* rotFactory;
+    RotatorBase* rotator;
+
     QTimer LogTimer;
     QTimer RotateTimer;
 
@@ -113,7 +118,6 @@ private:
     QComboBox *selectAntenna;
     //QPushButton* presetButtons[NUM_PRESETS];
     QString appName = "";
-    RotControl  *rotator;
     QLabel *status;
     QLabel *offSetlbl;
     QLabel *offSetDisplay;
@@ -144,6 +148,8 @@ private:
     bool rotCmdflag = false;
     bool reqBearCmdflag = false;
 
+    bool traceCommsFlag =  false;
+
     //endStop endStopType;
     overlapStat overLapStatus = NO_OVERLAP;
     bool overLapActiveflag = true;
@@ -171,7 +177,7 @@ private:
 
 
 
-    void openRotator();
+    int openRotator();
     void closeRotator();
 
     void refreshPresetLabels();
@@ -194,7 +200,7 @@ private:
 
 
 
-    void hamlibError(int errorCode, QString cmd);
+    void rotatorError(int errorCode, QString cmd);
 
     void rotatorActive();
 
@@ -257,6 +263,8 @@ private slots:
 
 
     void showPresetMenu(int buttonNumber);
+    void onSentCommandError(int errorCode, QString cmd);
+    void onTestBearingEnter();
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
@@ -287,6 +295,8 @@ private:
     void cwCCWControlVisible(bool visible);
     void savePreset(RotPresetData &editData);
 
+    void checkTestBearingBox();
+    void setCompassDialVisible(bool visible);
 };
 
 #endif // ROTATORMAINWINDOW_H

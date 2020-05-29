@@ -25,7 +25,7 @@ public:
     static QStringList handshakeStr;
     static QStringList rigctldHandshakeStr;
     static QStringList forceLinesStr;
-    static QStringList rigctldForceLinesStr;
+    static QStringList rigctldForceLinesStr; // Don't translate
     static QStringList baudrateStr;
     static QStringList databitsStr;
     static QStringList stopbitsStr;

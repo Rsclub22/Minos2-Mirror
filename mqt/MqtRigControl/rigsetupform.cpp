@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2020
 //
 //
 //
@@ -29,18 +29,16 @@
 
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
-RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
+RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
     QWidget(parent),
     ui(new Ui::rigSetupForm),
     transverterRemoved(false)
 {
 
-
     ui->setupUi(this);
 
+    rigFactory = rigFactory_;
 
-
-    radio = _radio;
     radioData = _radioData;
 
     bands = _bands;
@@ -62,7 +60,7 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     civSetToolTip();
 
     ui->useRigCtldChkBox->setCheckState(Qt::CheckState::Unchecked);
-    rigCtldNetworkVisible(false);
+    rigCtldItemsVisible(false);
 
     connect(ui->radioModelBox, SIGNAL(activated(int)), this, SLOT(radioModelSelected()));
     connect(ui->comPortBox, SIGNAL(activated(int)), this, SLOT(comportSelected()));
@@ -73,6 +71,7 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     connect(ui->comHandShakeBox, SIGNAL(activated(int)), this, SLOT(comHandShakeSelected()));
     connect(ui->forceDtrBox, SIGNAL(activated(int)), this, SLOT(on_forceDTRSelected()));
     connect(ui->forceRtsBox, SIGNAL(activated(int)), this, SLOT(on_forceRTSSelected()));
+    connect(ui->advancedCommsChkBox, SIGNAL(clicked(bool)),this, SLOT(onAdvancedCommsSelected(bool)));
     connect(ui->networkAddBox, SIGNAL(editingFinished()), this, SLOT(networkAddressSelected()));
     connect(ui->netPortBox, SIGNAL(editingFinished()), this, SLOT(networkPortSelected()));
     connect(ui->pollInterval, SIGNAL(activated(int)), this, SLOT(pollIntervalSelected()));
@@ -81,8 +80,16 @@ RigSetupForm::RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVe
     connect(ui->CIVlineEdit, SIGNAL(editingFinished()), this, SLOT(civAddressFinished()));
 
     connect(ui->useRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(useRigCtldSelected(bool)));
+    connect(ui->startMinosRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(onStartMinosRigCtldChkBox(bool)));
     connect(ui->rigCtldNetworkAddBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkAddressSelected()));
     connect(ui->rigCtldNetPortBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkPortSelected()));
+
+    connect(ui->sup50MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup50MhzChkBoxClicked(bool)));
+    connect(ui->sup70MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup70MhzChkBoxClicked(bool)));
+    connect(ui->sup144MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup144MhzChkBoxClicked(bool)));
+    connect(ui->sup432MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup432MhzChkBoxClicked(bool)));
+    connect(ui->sup1296MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup1296MhzChkBoxClicked(bool)));
+
 
     // transvert
     connect(ui->enableTransVertSw, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSwSel(bool)));
@@ -133,31 +140,35 @@ void RigSetupForm::radioModelSelected()
 
 void RigSetupForm::setupRadioModel(QString radioModel)
 {
+// need to do something is selection is empty!!!!!!!!!!!!!!!!!!!!!!!!
 
-    int rm = 0;
-    QString radioModelName;
-    QString radioMfgName;
-    if (radioModel != radioData->radioModel)
+
+
+    if (radioModel != radioData->rigModel)
     {
-        radioData->radioModel = radioModel;
+        radioData->rigModel = radioModel;
         ui->radioModelBox->setCurrentText(radioModel);
 
-        if (radio->getModelInfo(radioData->radioModel, &rm, &radioMfgName, &radioModelName) == -1)
+        RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioData->rigModel);
+
+
+        radioData->rigModelNumber = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelNumber;
+        radioData->rigModelName = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelName;
+        radioData->rigMfg_Name = rigFactory->supported_rigs()->value(radioData->rigModel).rigManufacturer;
+        radioData->portType = rigFactory->supported_rigs()->value(radioData->rigModel).portType;
+
+
+        if (rigCap.pollData)
         {
-            // error
-            radioData->radioModelNumber = 0;
-            radioData->radioModelName = "";
-            radioData->radioMfg_Name = "";
+            pollIntervalVisible(true);
         }
         else
         {
-            radioData->radioModelNumber = rm;
-            radioData->radioModelName = radioModelName;
-            radioData->radioMfg_Name = radioMfgName;
-
+            pollIntervalVisible(false);
         }
 
-        if (radioData->radioMfg_Name == "Icom")
+
+        if (rigCap.rigManufacturer == "Icom")
         {
             CIVEditVisible(true);
         }
@@ -166,43 +177,55 @@ void RigSetupForm::setupRadioModel(QString radioModel)
             CIVEditVisible(false);
         }
 
-        rig_port_e portType = RIG_PORT_NONE;
 
-        if (radio->getPortType(radioData->radioModelNumber, &portType) != -1)
+
+
+        if (rigCap.portType == RigCapConstants::PortType::network)
         {
-            radioData->portType = int(portType);
-            if (portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK)
-            {
                serialDataEntryVisible(false);
+               advancedSerialDataEntryVisible(false);
+               setAdvancedCommsChkBoxVisible(false);
                networkDataEntryVisible(true);
-               rigCtldNetworkVisible(false);
+               rigCtldItemsVisible(false);
                setRigctldCheckBoxVisible(false);
+               setStartMinosRigctldCheckbox(true);
 
 
-            }
-            else if (portType == RIG_PORT_SERIAL)
-            {
+        }
+        else if (rigCap.portType == RigCapConstants::PortType::serial)
+        {
                 serialDataEntryVisible(true);
+                advancedSerialDataEntryVisible(radioData->advancedCommsFlag);
+                checkAdvancedCommsCheckBox(radioData->advancedCommsFlag);
+                setAdvancedCommsChkBoxVisible(true);
                 networkDataEntryVisible(false);
-            }
-            else // RIG_PORT_NONE
-            {
+
+        }
+        else // RIG_PORT_NONE
+        {
                 serialDataEntryVisible(false);
+                advancedSerialDataEntryVisible(false);
+                setAdvancedCommsChkBoxVisible(false);
                 networkDataEntryVisible(false);
                 setRigctldCheckBoxVisible(false);
                 radioData->rigCtldEnable = false;
-            }
+        }
+
+        if (rigCap.supportGetSupBands)
+        {
+            setSupportBandCheckBoxVisible(false);
+        }
+        else
+        {
+            setSupportBandCheckBoxVisible(true);
         }
 
 
-
         // does this radio support antenna sw?
-        bool antSwFlg = false;
-        int retCode = 0;
-        retCode = radio->supportAntSw(radioData->radioModelNumber, &antSwFlg);
+
         for (int i = 0; i < radioData->numTransverters; i++)
         {
-            if (retCode >= 0 && antSwFlg)
+            if (rigCap.supportAntSw)
             {
                //transVertTab[i]->antSwNumVisible(true);
                radioData->antSwitchAvail = true;
@@ -269,7 +292,10 @@ QString RigSetupForm::getRadioModel()
 void RigSetupForm::setRadioModel(QString m)
 {
     ui->radioModelBox->setCurrentIndex(ui->radioModelBox->findText(m));
-    if (radioData->radioMfg_Name == "Icom")
+
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(ui->radioModelBox->currentText());
+
+    if (rigCap.rigManufacturer == "Icom")
     {
         CIVEditVisible(true);
     }
@@ -472,9 +498,9 @@ void RigSetupForm::setStopBits(QString stop)
 
 void RigSetupForm::comParitySelected()
 {
-    if (radio->getSerialParityCode(ui->comParityBox->currentIndex()) != radioData->parity)
+    if (serialCommonData::parityCodesList[ui->comParityBox->currentIndex()] != radioData->parity)
     {
-        radioData->parity = radio->getSerialParityCode(ui->comParityBox->currentIndex());
+        radioData->parity = serialCommonData::parityCodesList[ui->comParityBox->currentIndex()];
         radioValueChanged = true;
     }
 }
@@ -488,10 +514,10 @@ void RigSetupForm::setParityBits(int b)
 
 void RigSetupForm::comHandShakeSelected()
 {
-    if (radio->getSerialHandshakeCode(ui->comHandShakeBox->currentIndex()) != radioData->handshake)
+    if (serialCommonData::handshakeCodesList[ui->comHandShakeBox->currentIndex()] != radioData->handshake)
     {
-        radioData->handshake = radio->getSerialHandshakeCode(ui->comHandShakeBox->currentIndex());
-        if (radioData->handshake == 2)  // RTS/CTS selected
+        radioData->handshake = serialCommonData::handshakeCodesList[ui->comHandShakeBox->currentIndex()];
+        if (radioData->handshake == serialCommonData::HANDSHAKE_HARDWARE)  // RTS/CTS selected
         {
            setForceRTSDisabled(true);
 
@@ -527,9 +553,9 @@ int RigSetupForm::comportAvial(QString comport)
 
 void RigSetupForm::on_forceDTRSelected()
 {
-    if (radio->getSerialForceLineCode(ui->forceDtrBox->currentIndex()) != radioData->forceDtr)
+    if (serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()] != radioData->forceDtr)
     {
-        radioData->forceDtr = radio->getSerialForceLineCode(ui->forceDtrBox->currentIndex());
+        radioData->forceDtr = serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()];
         radioValueChanged = true;
     }
 }
@@ -542,9 +568,9 @@ void RigSetupForm::setForceDTR(int n)
 
 void RigSetupForm::on_forceRTSSelected()
 {
-    if (radio->getSerialForceLineCode(ui->forceRtsBox->currentIndex()) != radioData->forceRts)
+    if (serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()] != radioData->forceRts)
     {
-        radioData->forceRts = radio->getSerialForceLineCode(ui->forceRtsBox->currentIndex());
+        radioData->forceRts = serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()];
         radioValueChanged = true;
     }
 }
@@ -559,6 +585,8 @@ void RigSetupForm::setForceRTS(int n)
 {
     ui->forceRtsBox->setCurrentIndex(n);
 }
+
+
 
 /***************************** Network Address *************************/
 
@@ -604,7 +632,7 @@ void RigSetupForm::setNetAddress(QString netAdd)
 void RigSetupForm::networkPortSelected()
 {
 
-    processPortNumber(ui->netPortBox, radioData->networkPort);
+    processPortNumber(ui->networkAddBox, ui->netPortBox, radioData->networkPort);
 
 
 }
@@ -837,10 +865,11 @@ void RigSetupForm::setLocTVSWComportVisible(bool visible)
 
 /************** RigCtld Setup ****************************************/
 
-void RigSetupForm::rigCtldNetworkVisible(bool visible)
+void RigSetupForm::rigCtldItemsVisible(bool visible)
 {
     rigCtldNetworkAddBoxVisible(visible);
     rigCtldPortBoxVisible(visible);
+    ui->startMinosRigCtldChkBox->setVisible(visible);
 }
 
 void RigSetupForm::rigCtldNetworkAddBoxVisible(bool visible)
@@ -861,11 +890,16 @@ void RigSetupForm::useRigCtldSelected(bool /*selected*/)
     if(radioData->rigCtldEnable != checked)
     {
         radioData->rigCtldEnable = checked;
-        rigCtldNetworkVisible(checked);
+        setStartMinosRigctldCheckbox(true);
+        radioData->startMinosRigCtld = true;
+
+        rigCtldItemsVisible(checked);
     }
 
     radioValueChanged = true;
 }
+
+
 
 
 void RigSetupForm::setUseRigctldCheckbox(bool checked)
@@ -881,7 +915,33 @@ void RigSetupForm::setUseRigctldCheckbox(bool checked)
     }
 }
 
+void RigSetupForm::onStartMinosRigCtldChkBox(bool /*selected*/)
+{
+    bool checked = ui->useRigCtldChkBox->isChecked();
+    if(radioData->startMinosRigCtld != checked)
+    {
+        radioData->startMinosRigCtld = checked;
+        setStartMinosRigctldCheckbox(checked);
+        radioData->startMinosRigCtld = checked;
+        rigCtldItemsVisible(checked);
+    }
 
+    radioValueChanged = true;
+}
+
+
+void RigSetupForm::setStartMinosRigctldCheckbox(bool checked)
+{
+    if (checked)
+    {
+
+        ui->startMinosRigCtldChkBox->setCheckState(Qt::CheckState::Checked);
+    }
+    else
+    {
+       ui->startMinosRigCtldChkBox->setCheckState(Qt::CheckState::Unchecked);
+    }
+}
 
 void RigSetupForm::rigCtldNetworkAddressSelected()
 {
@@ -920,7 +980,7 @@ void RigSetupForm::setRigctldNetworkAddress(const QString& address)
 
 void RigSetupForm::rigCtldNetworkPortSelected()
 {
-    processPortNumber(ui->rigCtldNetPortBox, radioData->rigCtldNetworkPort);
+    processPortNumber(ui->rigCtldNetworkAddBox, ui->rigCtldNetPortBox, radioData->rigCtldNetworkPort);
 }
 
 
@@ -972,6 +1032,41 @@ void RigSetupForm::serialDataEntryVisible(bool v)
     ui->comportLbl->setVisible(v);
     ui->comSpeedBox->setVisible(v);
     ui->speedLbl->setVisible(v);
+
+    ui->advancedCommsChkBox->setVisible(v);
+}
+
+
+
+
+/********************* Advanced Comms CheckBox *******************/
+
+
+void RigSetupForm::onAdvancedCommsSelected(bool selected)
+{
+    Q_UNUSED(selected)
+    bool checked = ui->advancedCommsChkBox->isChecked();
+    if (radioData->advancedCommsFlag != checked)
+    {
+        radioData->advancedCommsFlag = checked;
+        advancedSerialDataEntryVisible(checked);
+        radioValueChanged = true;
+
+    }
+}
+
+void RigSetupForm::setAdvancedCommsFlag(bool state)
+{
+    radioData->advancedCommsFlag = state;
+}
+
+void RigSetupForm::setAdvancedCommsChkBoxVisible(bool visible)
+{
+    ui->advancedCommsChkBox->setVisible(visible);
+}
+
+void RigSetupForm::advancedSerialDataEntryVisible(bool v)
+{
     ui->comDataBitsBox->setVisible(v);
     ui->dataLbll->setVisible(v);
     ui->comStopBitsBox->setVisible(v);
@@ -984,6 +1079,11 @@ void RigSetupForm::serialDataEntryVisible(bool v)
     ui->forceDtrLbl->setVisible(v);
     ui->forceRtsBox->setVisible(v);
     ui->forceRtsLbl->setVisible(v);
+}
+
+void RigSetupForm::checkAdvancedCommsCheckBox(bool checked)
+{
+    ui->advancedCommsChkBox->setCheckState(checked ? Qt::Checked : Qt::Unchecked);
 }
 
 /*************************** Network Data Entry Visible ***************/
@@ -1000,16 +1100,8 @@ void RigSetupForm::networkDataEntryVisible(bool v)
 
 void RigSetupForm::fillRadioModelInfo()
 {
-    ui->radioModelBox->clear();
-    radio->getRigList(ui->radioModelBox);
-    // remove rigCtl...
-    int idx = ui->radioModelBox->findText("    2, Hamlib, NET rigctl", Qt::MatchExactly);
-    if (idx != -1)
-    {
-       ui->radioModelBox->removeItem(idx);
-    }
 
-
+    rigFactory->populateComboRigList(ui->radioModelBox);
 }
 
 void RigSetupForm::fillPollInterValInfo()
@@ -1021,62 +1113,26 @@ void RigSetupForm::fillPollInterValInfo()
     ui->pollInterval->addItems(pollTimeStr);
 }
 
-/*
-void RigSetupForm::fillPortsInfo()
-{
 
-    ui->comPortBox->clear();
-
-    QString description;
-    QString manufacturer;
-    QString serialNumber;
-
-    ui->comPortBox->addItem("");
-
-    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
-        QStringList list;
-        description = info.description();
-        manufacturer = info.manufacturer();
-        serialNumber = info.serialNumber();
-        list << info.portName()
-             << (!description.isEmpty() ? description : blankString)
-             << (!manufacturer.isEmpty() ? manufacturer : blankString)
-             << (!serialNumber.isEmpty() ? serialNumber : blankString)
-             << info.systemLocation()
-             << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : blankString)
-             << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : blankString);
-
-
-        ui->comPortBox->addItem(list.first(), list);
-
-    }
-
-
-}
-
-*/
 
 
 void RigSetupForm::fillSpeedInfo()
 {
-    QStringList baudrateStr = radio->getBaudRateNames();
     ui->comSpeedBox->clear();
-    ui->comSpeedBox->addItems(baudrateStr);
+    ui->comSpeedBox->addItems(serialCommonData::baudrateStr);
 }
 
 void RigSetupForm::fillDataBitsInfo()
 {
 
-    QStringList databitsStr = radio->getDataBitsNames();
     ui->comDataBitsBox->clear();
-    ui->comDataBitsBox->addItems(databitsStr);
+    ui->comDataBitsBox->addItems(serialCommonData::databitsStr);
 }
 
 void RigSetupForm::fillStopBitsInfo()
 {
-    QStringList stopbitsStr = radio->getStopBitsNames();
     ui->comStopBitsBox->clear();
-    ui->comStopBitsBox->addItems(stopbitsStr);
+    ui->comStopBitsBox->addItems(serialCommonData::stopbitsStr);
 }
 
 
@@ -1084,9 +1140,8 @@ void RigSetupForm::fillStopBitsInfo()
 void RigSetupForm::fillParityInfo()
 {
 
-    QStringList parityStr = radio->getParityCodeNames();
     ui->comParityBox->clear();
-    ui->comParityBox->addItems(parityStr);
+    ui->comParityBox->addItems(serialCommonData::parityStr);
 }
 
 
@@ -1094,17 +1149,16 @@ void RigSetupForm::fillParityInfo()
 void RigSetupForm::fillHandShakeInfo()
 {
 
-    QStringList handshakeStr = radio->getHandShakeNames();
     ui->comHandShakeBox->clear();
-    ui->comHandShakeBox->addItems(handshakeStr);
+    ui->comHandShakeBox->addItems(serialCommonData::handshakeStr);
 }
 
 void RigSetupForm::fillForceLinesInfo()
 {
     ui->forceDtrBox->clear();
-    ui->forceDtrBox->addItems(radio->getForceLinesNames());
+    ui->forceDtrBox->addItems(serialCommonData::forceLinesStr);
     ui->forceRtsBox->clear();
-    ui->forceRtsBox->addItems(radio->getForceLinesNames());
+    ui->forceRtsBox->addItems(serialCommonData::forceLinesStr);
 }
 
 void RigSetupForm::fillMgmModes()
@@ -1126,7 +1180,141 @@ void RigSetupForm::fillMgmModes()
 
 
 
+/****************** Support Bands Checkbox ***************************/
 
+
+void RigSetupForm::onSup50MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup50MhzChkbox->isChecked();
+    if (radioData->support50MHz != checked)
+    {
+        radioData->support50MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onSup70MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup70MhzChkbox->isChecked();
+    if (radioData->support70MHz != checked)
+    {
+        radioData->support70MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onSup144MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup144MhzChkbox->isChecked();
+    if (radioData->support144MHz != checked)
+    {
+        radioData->support144MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onSup432MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup432MhzChkbox->isChecked();
+    if (radioData->support432MHz != checked)
+    {
+        radioData->support432MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onSup1296MhzChkBoxClicked(bool state)
+{
+    Q_UNUSED(state)
+    bool checked = ui->sup1296MhzChkbox->isChecked();
+    if (radioData->support1296MHz != checked)
+    {
+        radioData->support1296MHz = checked;
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::setSupport50MHzChkBox(bool checked)
+{
+    if (checked)
+    {
+        ui->sup50MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup50MhzChkbox->setCheckState(Qt::Unchecked);
+    }
+
+}
+
+void RigSetupForm::setSupport70MHzChkBox(bool checked)
+{
+    if (checked)
+    {
+        ui->sup70MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup70MhzChkbox->setCheckState(Qt::Unchecked);
+    }
+
+
+}
+
+void RigSetupForm::setSupport144MHzChkBox(bool checked)
+{
+    if (checked)
+    {
+        ui->sup144MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup144MhzChkbox->setCheckState(Qt::Unchecked);
+    }
+}
+
+void RigSetupForm::setSupport432MHzChkBox(bool checked)
+{
+    if (checked)
+    {
+        ui->sup432MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup432MhzChkbox->setCheckState(Qt::Unchecked);
+    }
+}
+
+void RigSetupForm::setSupport1296MHzChkBox(bool checked)
+{
+    if (checked)
+    {
+        ui->sup1296MhzChkbox->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        ui->sup1296MhzChkbox->setCheckState(Qt::Unchecked);
+    }
+}
+
+void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
+{
+    ui->sup50MhzChkbox->setVisible(visible);
+    ui->sup70MhzChkbox->setVisible(visible);
+    ui->sup144MhzChkbox->setVisible(visible);
+    ui->sup432MhzChkbox->setVisible(visible);
+    ui->sup1296MhzChkbox->setVisible(visible);
+    ui->supportedBandGroupBox->setVisible(visible);
+}
 
 
 
@@ -1208,11 +1396,8 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
     transVertTab[tabNum]->setEnableTransVertSwBoxVisible(false);
 
     // does this radio support antenna sw?
-    bool antSwFlg = false;
-    int retCode = 0;
-    retCode = radio->supportAntSw(radioData->radioModelNumber, &antSwFlg);
 
-    if (retCode >= 0 && antSwFlg)
+    if (rigFactory->supported_rigs()->value(radioData->rigModel).supportAntSw)
     {
        //transVertTab[tabNum]->antSwNumVisible(true);
        radioData->antSwitchAvail = true;
@@ -1449,12 +1634,18 @@ void RigSetupForm::processNetAddress(QLineEdit* networkAddBox, QString& netAddre
 }
 
 */
-void RigSetupForm::processPortNumber(QLineEdit* netPortBox, QString& portNumber)
+void RigSetupForm::processPortNumber(QLineEdit* netAddBox, QLineEdit* netPortBox, QString& portNumber)
 {
 
     if (netPortBox->text() != portNumber)
-     {
-         if (netPortBox->text().toInt() >= 1 && netPortBox->text().toInt() <= 65535)
+    {
+         if (netAddBox->text().isEmpty())
+         {
+             portNumber = netPortBox->text();
+             radioValueChanged = true;
+         }
+
+         else if (netPortBox->text().toInt() >= 1 && netPortBox->text().toInt() <= 65535)
          {
              portNumber = netPortBox->text();
              radioValueChanged = true;

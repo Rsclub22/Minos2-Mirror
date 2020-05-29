@@ -2,11 +2,12 @@
 #define RIGSETUPFORM_H
 
 #include <QWidget>
-#include "rigcontrol.h"
 #include "transvertsetupform.h"
 #include "rigcommon.h"
 #include "minosNetUtils.h"
+#include "serialCommonData.h"
 #include "ui_rigsetupform.h"
+#include "rigfactory.h"
 
 
 namespace Ui {
@@ -22,7 +23,7 @@ class RigSetupForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit RigSetupForm(RigControl* _radio, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
+    explicit RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
     ~RigSetupForm();
 
 
@@ -89,6 +90,7 @@ public:
 
     void networkDataEntryVisible(bool v);
     void serialDataEntryVisible(bool v);
+    void advancedSerialDataEntryVisible(bool v);
 
 
     bool getTransVertSelected();
@@ -140,13 +142,34 @@ public:
     QString getRigctldPortNumber();
     void setRigctldPortNumber(const QString &port);
     void setUseRigctldCheckbox(bool checked);
-    void rigCtldNetworkVisible(bool enable);
+    void rigCtldItemsVisible(bool enable);
 
 
     void setRigctldCheckBoxVisible(bool visible);
     void setForceDTR(int n);
     void setForceRTS(int n);
+
     void setForceRTSDisabled(bool state);
+    void setSupport50MHzChkBox(bool checked);
+    void setSupport70MHzChkBox(bool checked);
+    void setSupport144MHzChkBox(bool checked);
+    void setSupport432MHzChkBox(bool checked);
+    void setSupport1296MHzChkBox(bool checked);
+
+    void setSupportBandCheckBoxVisible(bool visible);
+
+    void checkAdvancedCommsCheckBox(bool checked);
+    void setAdvancedCommsFlag(bool state);
+    void setAdvancedCommsChkBoxVisible(bool visible);
+    void setStartMinosRigctldCheckbox(bool checked);
+
+public slots:
+    void comSpeedSelected();
+    void comDataBitsSelected();
+    void comStopBitsSelected();
+    void comParitySelected();
+    void on_forceRTSSelected();
+
 signals:
     void transVertTabAdded(int);
 
@@ -156,10 +179,7 @@ private slots:
 
     void radioModelSelected();
     void comportSelected();
-    void comSpeedSelected();
-    void comDataBitsSelected();
-    void comStopBitsSelected();
-    void comParitySelected();
+
     void comHandShakeSelected();
     void networkAddressSelected();
     void networkPortSelected();
@@ -183,14 +203,25 @@ private slots:
     void rigCtldNetworkAddressSelected();
     void rigCtldNetworkPortSelected();
     void on_forceDTRSelected();
-    void on_forceRTSSelected();
+
+
+    void onSup50MhzChkBoxClicked(bool state);
+    void onSup70MhzChkBoxClicked(bool state);
+    void onSup144MhzChkBoxClicked(bool state);
+    void onSup432MhzChkBoxClicked(bool state);
+    void onSup1296MhzChkBoxClicked(bool state);
+
+    void onAdvancedCommsSelected(bool selected);
+    void onStartMinosRigCtldChkBox(bool);
 private:
 
 
 
 
     Ui::rigSetupForm *ui;
-    RigControl *radio;
+    RigFactory *rigFactory;
+
+
     scatParams *radioData;
 
     QLogTabWidget* ui_RadioTab;
@@ -222,11 +253,12 @@ private:
 
 
     //void processNetAddress(QLineEdit *networkAddBox, QString& netAddress);
-    void processPortNumber(QLineEdit *netPortBox, QString &portNumber);
+    void processPortNumber(QLineEdit *netAddBox, QLineEdit *netPortBox, QString &portNumber);
 
 
     void rigCtldNetworkAddBoxVisible(bool visible);
     void rigCtldPortBoxVisible(bool visible);
+
 
 };
 

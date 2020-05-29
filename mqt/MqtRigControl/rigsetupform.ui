@@ -6,75 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>914</width>
-    <height>236</height>
+    <width>791</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_12">
+    <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_18">
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QLabel" name="label_19">
-         <property name="text">
-          <string>Radio Model</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="radioModelBox"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_19">
-       <item>
-        <widget class="QLabel" name="CIVLabel">
-         <property name="text">
-          <string>CIV</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="CIVlineEdit">
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_20">
-       <item>
-        <widget class="QLabel" name="comportLbl">
-         <property name="text">
-          <string>Comport</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comPortBox"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_15">
+        <layout class="QVBoxLayout" name="verticalLayout_18">
          <item>
-          <widget class="QLabel" name="networkAddLbl1">
+          <widget class="QLabel" name="label_19">
            <property name="text">
-            <string>Network Address</string>
+            <string>Radio Model</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -82,40 +31,16 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="networkAddBox">
-           <property name="maxLength">
-            <number>15</number>
-           </property>
-           <property name="clearButtonEnabled">
-            <bool>true</bool>
-           </property>
-          </widget>
+          <widget class="QComboBox" name="radioModelBox"/>
          </item>
         </layout>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_21">
        <item>
-        <widget class="QLabel" name="speedLbl">
-         <property name="text">
-          <string>Speed</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comSpeedBox"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QVBoxLayout" name="verticalLayout_19">
          <item>
-          <widget class="QLabel" name="netPortLbl">
+          <widget class="QLabel" name="CIVLabel">
            <property name="text">
-            <string>Port</string>
+            <string>CIV</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -123,13 +48,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="netPortBox">
-           <property name="inputMask">
-            <string/>
-           </property>
-           <property name="maxLength">
-            <number>32767</number>
-           </property>
+          <widget class="QLineEdit" name="CIVlineEdit">
            <property name="clearButtonEnabled">
             <bool>true</bool>
            </property>
@@ -137,106 +56,218 @@
          </item>
         </layout>
        </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_20">
+         <item>
+          <widget class="QLabel" name="comportLbl">
+           <property name="text">
+            <string>Comport</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comPortBox"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_15">
+           <item>
+            <widget class="QLabel" name="networkAddLbl1">
+             <property name="text">
+              <string>Network Address</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="networkAddBox">
+             <property name="maxLength">
+              <number>15</number>
+             </property>
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_21">
+         <item>
+          <widget class="QLabel" name="speedLbl">
+           <property name="text">
+            <string>Speed</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comSpeedBox"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLabel" name="netPortLbl">
+             <property name="text">
+              <string>Port</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="netPortBox">
+             <property name="inputMask">
+              <string/>
+             </property>
+             <property name="maxLength">
+              <number>32767</number>
+             </property>
+             <property name="clearButtonEnabled">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_22">
+         <item>
+          <widget class="QLabel" name="dataLbll">
+           <property name="text">
+            <string>Data Bits</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comDataBitsBox"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_23">
+         <item>
+          <widget class="QLabel" name="stopLbl">
+           <property name="text">
+            <string>Stop Bits</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comStopBitsBox"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_24">
+         <item>
+          <widget class="QLabel" name="parityLbl">
+           <property name="text">
+            <string>Parity</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comParityBox"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_25">
+         <item>
+          <widget class="QLabel" name="handshakeLbl">
+           <property name="text">
+            <string>Handshake</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comHandShakeBox"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="forceDtrLbl">
+           <property name="text">
+            <string>Force: DTR</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="forceDtrBox"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="forceRtsLbl">
+           <property name="text">
+            <string>Force: RTS</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="forceRtsBox"/>
+         </item>
+        </layout>
+       </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_22">
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QLabel" name="dataLbll">
-         <property name="text">
-          <string>Data Bits</string>
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="advancedCommsChkBox">
+         <property name="text">
+          <string>Advanced Comms Settings</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QComboBox" name="comDataBitsBox"/>
-       </item>
       </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_23">
-       <item>
-        <widget class="QLabel" name="stopLbl">
-         <property name="text">
-          <string>Stop Bits</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comStopBitsBox"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_24">
-       <item>
-        <widget class="QLabel" name="parityLbl">
-         <property name="text">
-          <string>Parity</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comParityBox"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_25">
-       <item>
-        <widget class="QLabel" name="handshakeLbl">
-         <property name="text">
-          <string>Handshake</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="comHandShakeBox"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QLabel" name="forceDtrLbl">
-         <property name="text">
-          <string>Force: DTR</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="forceDtrBox"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="QLabel" name="forceRtsLbl">
-         <property name="text">
-          <string>Force: RTS</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="forceRtsBox"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_60"/>
      </item>
     </layout>
    </item>
@@ -266,6 +297,13 @@
       <widget class="QCheckBox" name="useRigCtldChkBox">
        <property name="text">
         <string>Use RigCtld</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="startMinosRigCtldChkBox">
+       <property name="text">
+        <string>Start Minos  RigCtld</string>
        </property>
       </widget>
      </item>
@@ -326,6 +364,67 @@
       </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="supportedBandGroupBox">
+     <property name="title">
+      <string>Supported Native Bands on Rig</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QCheckBox" name="sup50MhzChkbox">
+          <property name="text">
+           <string>50 MHz</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="sup70MhzChkbox">
+          <property name="text">
+           <string>70 MHz</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="sup144MhzChkbox">
+          <property name="text">
+           <string>144 MHz</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="sup432MhzChkbox">
+          <property name="text">
+           <string>432 MHz</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="sup1296MhzChkbox">
+          <property name="text">
+           <string>1296MHz</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

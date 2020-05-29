@@ -23,6 +23,8 @@ QString convertFreqStrDispSingleNoTrailZero(QString sfreq);
 
 QString convertFreqToStr(double frequency);
 QString convertFreqToStr(int frequency);
+QString convertFreqToStr(qint64 frequency);
+QString convertFreqToStr(quint64 frequency);
 
 QString convertSinglePeriodFreqToFullDigit(QString f);
 

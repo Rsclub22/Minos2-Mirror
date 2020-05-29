@@ -30,6 +30,7 @@
 #include "helpbrowser.h"
 #include "WsjtxServer.h"
 #include "WsjtxConfigure.h"
+#include "Clusterbandmapconfigure.h"
 #include "minoscontestloaddialog.h"
 #include "ChatServer.h"
 #include "clusterClientServer.h"
@@ -432,6 +433,7 @@ void TLogContainer::setupMenus()
 
     UDPConfigAction = newAction(QT_TR_NOOP("UDP broadcast configuration..."), ui->menuTools, SLOT(UDPConfigActionExecute()));
     WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration..."), ui->menuTools, SLOT(WsjtConfigActionExecute()));
+    ClusterBandmapFilterConfigAction = newAction(QT_TR_NOOP("Cluster/Bandmap Filter configuration..."), ui->menuTools, SLOT(ClusterBandmapConfigActionExecute()));
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
@@ -1227,6 +1229,12 @@ void TLogContainer::WsjtConfigActionExecute()
     WsjtxConfigure wsjtConfig;
 
     wsjtConfig.exec();
+}
+void TLogContainer::ClusterBandmapConfigActionExecute()
+{
+    ClusterBandmapConfigure clusterBandmapConfig;
+
+    clusterBandmapConfig.exec();
 }
 void TLogContainer::ReportAutofillActionExecute()
 {

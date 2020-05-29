@@ -104,10 +104,11 @@ SOURCES += \
     WsjtxRadio.cpp \
     WsjtxRadioMetaType.cpp \
     Wsjtx_qt_helpers.cpp \
-	bandmapclientframe.cpp \
+        bandmapclientframe.cpp \
     bandmapcallsignmarker.cpp \
     bandmapfreqdial.cpp	\
-    bandmapview.cpp
+    bandmapview.cpp \
+    Clusterbandmapconfigure.cpp
 
 
 
@@ -189,7 +190,8 @@ HEADERS  += \
     bandmapclientframe.h \
     bandmapcallsignmarker.h \
     bandmapfreqdial.h	\
-    bandmapview.h
+    bandmapview.h \
+    Clusterbandmapconfigure.h
 
 FORMS    += \
     WsjtxConfigureCQ.ui \
@@ -238,7 +240,8 @@ FORMS    += \
     tminosbshelpform.ui \
     WsjtxFrame.ui \
     WsjtxConfigure.ui \
-    bandmapclientframe.ui
+    bandmapclientframe.ui \
+    Clusterbandmapconfigure.ui
 
 
 DISTFILES += \

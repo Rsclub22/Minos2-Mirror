@@ -17,7 +17,7 @@
    <string>Minos Rotator</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_9">
+   <layout class="QHBoxLayout" name="horizontalLayout_10">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_16">
       <item>
@@ -123,7 +123,58 @@
              <widget class="QComboBox" name="selectAntennaBox"/>
             </item>
             <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QLineEdit" name="testBearing">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="testBearingChkbox">
+                <property name="text">
+                 <string>Enter Test Bearing</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item>
              <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QLabel" name="usinglbl">
+                <property name="font">
+                 <font>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Using:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="usingLibText">
+                <property name="font">
+                 <font>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
               <item>
                <spacer name="horizontalSpacer_3">
                 <property name="orientation">

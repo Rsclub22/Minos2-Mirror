@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rotator Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
 //
 //
 // Hamlib Library
@@ -14,64 +14,94 @@
 #include <QDebug>
 #include <QStringList>
 #include <QThread>
-#include "rotcontrol.h"
-#include <hamlib/rotator.h>
+#include "hamlibRotcontrol.h"
+#include "rotatorfactory.h"
+#include "rotcapabilities.h"
 #include "minosNetUtils.h"
+#include "MTrace.h"
 
-const char * RotControl::hamlibErrorMsg[] = {QT_TR_NOOP("No Error, operation completed sucessfully"),
-                                    QT_TR_NOOP("Invalid parameter"),
-                                    QT_TR_NOOP("Invalid configuration"),
-                                    QT_TR_NOOP("Memory shortage"),
-                                    QT_TR_NOOP("Function not implemented"),
-                                    QT_TR_NOOP("Communication timed out"),
-                                    QT_TR_NOOP("IO error, including open failed"),
-                                    QT_TR_NOOP("Internal Hamlib error"),
-                                    QT_TR_NOOP("Protocol error"),
-                                    QT_TR_NOOP("Command rejected by the rig"),
-                                    QT_TR_NOOP("Command performed, but arg truncated"),
-                                    QT_TR_NOOP("Function not available"),
-                                    QT_TR_NOOP("VFO not targetable"),
-                                    QT_TR_NOOP("Error talking on the bus"),
-                                    QT_TR_NOOP("Collision on the bus"),
-                                    QT_TR_NOOP("NULL RIG handle or any invalid pointer parameter in get arg"),
-                                    QT_TR_NOOP("Invalid VFO"),
-                                    QT_TR_NOOP("RIG_EDOM")};
+const char* HamlibRotControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
+                                                QT_TR_NOOP("Invalid parameter"),
+                                                QT_TR_NOOP("Invalid configuration"),
+                                                QT_TR_NOOP("Memory shortage"),
+                                                QT_TR_NOOP("Function not implemented"),
+                                                QT_TR_NOOP("Communication timed out"),
+                                                QT_TR_NOOP("IO error, including open failed"),
+                                                QT_TR_NOOP("Internal Hamlib error"),
+                                                QT_TR_NOOP("Protocol error"),
+                                                QT_TR_NOOP("Command rejected by the rig"),
+                                                QT_TR_NOOP("Command performed, but arg truncated"),
+                                                QT_TR_NOOP("Function not available"),
+                                                QT_TR_NOOP("VFO not targetable"),
+                                                QT_TR_NOOP("Error talking on the bus"),
+                                                QT_TR_NOOP("Collision on the bus"),
+                                                QT_TR_NOOP("NULL RIG handle or any invalid pointer parameter in get arg"),
+                                                QT_TR_NOOP("Invalid VFO"),
+                                                QT_TR_NOOP("RIG_EDOM")};
 
 
 static QList<const rot_caps *> capsList;
 
-int collect(const rot_caps *caps,rig_ptr_t)
+int collect(const rot_caps *caps, rig_ptr_t)
 {
     capsList.append(caps);
     return 1;
 }
 
-RotControl::RotControl(QObject *parent) : QObject(parent)
+bool traceComms = false;
+
+int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char const * format, va_list ap)
+{
+  Q_UNUSED(level)
+   QString message;
+
+  static char constexpr fmt[] = "Hamlib: ";
+  message = message.vsprintf (format, ap).trimmed ();
+
+  if (traceComms)
+  {
+      trace(QString("%1 %2").arg(fmt).arg(message));
+  }
+
+
+  return 0;
+}
+
+extern "C"
+{
+  //typedef struct rot RIG;
+  struct rot_caps;
+  //typedef int vfo_t;
+}
+
+HamlibRotControl::HamlibRotControl(QObject *parent) : RotatorBase(parent)
 {
 
 //   getRotatorList();
    rot_azimuth = 0.0;
-   rot_elevation = 0.0;
+
 
    // set callback for debug messages
    // NB callback is the C function, not the class method.
    // user_data is used to point to our class.
 
-   rig_set_debug_callback (::rig_message_cb, static_cast<rig_ptr_t>(this));
+   //rig_set_debug_callback (::rig_message_cb, static_cast<rig_ptr_t>(this));
 
 }
 
 
 
 
-RotControl::~RotControl()
+HamlibRotControl::~HamlibRotControl()
 {
-    rot_close(my_rot); /* close port */
-    rot_cleanup(my_rot); /* if you care about memory */
+    //rot_close(my_rot); /* close port */
+    //rot_cleanup(my_rot); /* if you care about memory */
 }
 
 
-int RotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
+/*
+
+int HamlibRotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
 {
     int retCode = 0;
     ROT *my_rot;
@@ -94,7 +124,7 @@ int RotControl::getSupportCwCcwCmd(int rotNumber, bool *flag)
     return retCode;
 }
 
-int RotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
+int HamlibRotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
 {
     int retCode = 0;
     ROT *my_rot;
@@ -115,8 +145,8 @@ int RotControl::getMaxMinRotation(int rotNumber, int *maxRot, int *minRot)
     return retCode;
 }
 
-
-int RotControl::init(srotParams &selectedAntenna)
+*/
+int HamlibRotControl::rotInit(srotParams &selectedAntenna)
 {
     int retcode;
 
@@ -131,6 +161,8 @@ int RotControl::init(srotParams &selectedAntenna)
 
     comport.append(selectedAntenna.comport);
 
+    setRotConnected(false);
+
     my_rot = rot_init(selectedAntenna.rotatorModelNumber);
     if (!my_rot)
     {
@@ -140,7 +172,7 @@ int RotControl::init(srotParams &selectedAntenna)
 
 
     // load rotator params to open
-    if (rig_port_e(selectedAntenna.portType) == RIG_PORT_SERIAL)
+    if ((selectedAntenna.portType) == RotCapConstants::PortType::serial)
     {
         strncpy(my_rot->state.rotport.pathname, comport.toLatin1().data(), comport.length());
         my_rot->state.rotport.parm.serial.rate = selectedAntenna.baudrate;
@@ -159,8 +191,23 @@ int RotControl::init(srotParams &selectedAntenna)
        //     my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
        // }
 
+        if (my_rot->state.rotport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
+        {
+
+            if (selectedAntenna.forceRts)
+            {
+                my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_ON;
+            }
+            else
+            {
+
+                my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
+            }
+        }
+
+
     }
-    else if (rig_port_e(selectedAntenna.portType) == RIG_PORT_NETWORK || rig_port_e(selectedAntenna.portType) == RIG_PORT_UDP_NETWORK)
+    else if (selectedAntenna.portType == RotCapConstants::PortType::network )
     {
         QString netAdd;
         if (selectedAntenna.networkAdd.isEmpty() || isHostLocal(selectedAntenna.networkAdd))
@@ -173,7 +220,7 @@ int RotControl::init(srotParams &selectedAntenna)
         }
         strncpy(my_rot->state.rotport.pathname, QString(netAdd + ":" + selectedAntenna.networkPort).toLatin1().data(), FILPATHLEN);
     }
-    else if (rig_port_e(selectedAntenna.portType) == RIG_PORT_NONE)
+    else if (selectedAntenna.portType == RotCapConstants::PortType::none)
     {
         strncpy(my_rot->state.rotport.pathname, QString("").toLatin1().data(), FILPATHLEN);
     }
@@ -183,14 +230,14 @@ int RotControl::init(srotParams &selectedAntenna)
     if (retcode >= 0)
     {
 
-        set_serialConnected(true);
+        setRotConnected(true);
 
 
     }
     else
     {
 
-        set_serialConnected(false);
+        setRotConnected(false);
     }
 
     return retcode;
@@ -198,7 +245,7 @@ int RotControl::init(srotParams &selectedAntenna)
 }
 
 
-int RotControl::closeRotator()
+int HamlibRotControl::closeRotator()
 {
 
     if (my_rot->caps->rot_model == ROT_MODEL_SPID_ROT1PROG || my_rot->caps->rot_model == ROT_MODEL_SPID_ROT2PROG)
@@ -208,27 +255,112 @@ int RotControl::closeRotator()
     }
     int retcode;
     retcode = rot_close (my_rot);
-
     retcode = rot_cleanup (my_rot);
-    set_serialConnected(false);
+    setRotConnected(false);
     return retcode;
 
 }
 
-void RotControl::getRotatorList()
+
+void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
 {
 
-    if(!rotatorlistLoaded)
+
+    rig_set_debug_callback (debug_callback, nullptr);
+
+    capsList.clear();
+    rot_load_all_backends();
+    rot_list_foreach(collect, nullptr);
+
+    QString key;
+
+    for (int i = 0; i < capsList.count(); i++)
     {
+        key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
+        auto port_type = RotCapConstants::PortType::none;
+        switch(capsList[i]->port_type)
+        {
+            case RIG_PORT_SERIAL:
+                port_type = RotCapConstants::PortType::serial;
+            break;
+
+            case RIG_PORT_NETWORK:
+                port_type = RotCapConstants::PortType::network;
+            break;
+
+            case RIG_PORT_USB:
+                port_type = RotCapConstants::PortType::usb;
+            break;
+            default:
+            {}
+        }
+
+        int min_az = 0; // hamlib V4.0 sets min azimuth to -180 for Yaesu rotators, override to 0.
+
+        if (capsList[i]->max_az == 450)
+        {
+           if ( capsList[i]->min_az == -180)
+           {
+
+                min_az = 0;
+           }
+
+        }
+        else
+        {
+            min_az = capsList[i]->min_az;
+        }
+
+
+        (*rotatorsList)[key] = RotCapabilities(capsList[i]->rot_model,
+                                               port_type,
+                                               capsList[i]->mfg_name,
+                                               capsList[i]->model_name,
+                                               capsList[i]->move != nullptr ? true : false,
+                                               min_az,
+                                               capsList[i]->max_az,
+                                               RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial,
+                                               RotCapConstants::PollData::pollDataOn,
+                                               true);
+    }
+
+
+
+
+}
+
+// static to init flag
+void HamlibRotControl::setTraceCommsFlag(bool value)
+{
+    traceComms = value;
+}
+
+void HamlibRotControl::setTraceComms(bool value)
+{
+    traceComms = value;
+}
+
+bool HamlibRotControl::getTraceComms()
+{
+    return traceComms;
+}
+
+
+/*
+void HamlibRotControl::getRotatorList()
+{
+
+
         capsList.clear();
         rot_load_all_backends();
         rot_list_foreach(collect, nullptr);
         qSort(capsList.begin(),capsList.end(),model_Sort);
-        rotatorlistLoaded=true;
-    }
+
 }
 
-bool RotControl::getRotatorList(QComboBox *cb)
+
+
+bool HamlibRotControl::getRotatorList(QComboBox *cb)
 {
     int i;
     rig_port_e portType = RIG_PORT_NONE;
@@ -260,8 +392,9 @@ bool RotControl::getRotatorList(QComboBox *cb)
     return true;
 }
 
+*/
 
-int RotControl::getPortType(int rotNumber, rig_port_e *portType)
+int HamlibRotControl::getPortType(int rotNumber, rig_port_e *portType)
 {
 
     int retCode = 0;
@@ -279,7 +412,7 @@ int RotControl::getPortType(int rotNumber, rig_port_e *portType)
 }
 
 
-int RotControl::getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName)
+int HamlibRotControl::getModelInfo(QString rotModel, int *rotModelNumber, QString *rotMfgName, QString *rotModelName)
 {
     bool ok;
     int number;
@@ -309,7 +442,7 @@ int RotControl::getModelInfo(QString rotModel, int *rotModelNumber, QString *rot
 // stop azimuth rotation
 
 
-int RotControl::stop_rotation()
+int HamlibRotControl::stop_rotation()
 {
     int retCode = RIG_OK;
     retCode = rot_stop(my_rot);
@@ -322,7 +455,7 @@ int RotControl::stop_rotation()
 
 
 
-int RotControl::request_bearing()
+int HamlibRotControl::request_bearing()
 {
     int retCode = RIG_OK;
 
@@ -338,14 +471,14 @@ int RotControl::request_bearing()
 }
 
 
-azimuth_t RotControl::getRotatorAzimuth()
-{
-    return rot_azimuth;
-}
+//int HamlibRotControl::getRotatorAzimuth()
+//{
+//    return rot_azimuth;
+//}
 
 
 
-int RotControl::rotateClockwise(int speed)
+int HamlibRotControl::rotateClockwise(const int speed)
 {
 
     int retCode = RIG_OK;
@@ -358,7 +491,7 @@ int RotControl::rotateClockwise(int speed)
     return retCode;
 }
 
-int RotControl::rotateCClockwise(int speed)
+int HamlibRotControl::rotateCClockwise(const int speed)
 {
     int retCode = RIG_OK;
     retCode = rot_move(my_rot, ROT_MOVE_LEFT , speed);
@@ -371,7 +504,7 @@ int RotControl::rotateCClockwise(int speed)
 }
 
 
-int RotControl::rotate_to_bearing(int bearing)
+int HamlibRotControl::rotate_to_bearing(const int bearing)
 {
     int retCode = RIG_OK;
     float rotbearing = bearing;
@@ -386,77 +519,41 @@ int RotControl::rotate_to_bearing(int bearing)
 
 }
 
-void RotControl::set_rotatorSpeed(int speed)
+
+
+void HamlibRotControl::set_rotatorSpeed(int speed)
 {
     rot_speed = speed;
 }
 
-int RotControl::get_rotatorSpeed()
+int HamlibRotControl::get_rotatorSpeed()
 {
     return rot_speed;
 }
 
 
-void RotControl::set_serialConnected(bool connectFlag)
+void HamlibRotControl::setRotConnected(bool connectFlag)
 {
-    serialConnected = connectFlag;
+    rotConnected = connectFlag;
 }
 
 
 
 
-bool RotControl::get_serialConnected()
+bool HamlibRotControl::getRotConnected()
 {
-    return serialConnected;
-}
-
-
-
-enum serial_parity_e RotControl::getSerialParityCode(int index)
-{
-
-    return serialData::parityCodes[index];
-
-}
-
-enum serial_handshake_e RotControl::getSerialHandshakeCode(int index)
-{
-
-    return serialData::handshakeCodes[index];
-}
-
-QStringList RotControl::getParityCodeNames()
-{
-   return serialData::parityStr;
-}
-
-QStringList RotControl::getHandShakeNames()
-{
-    return serialData::handshakeStr;
-}
-
-QStringList RotControl::getBaudRateNames()
-{
-
-
-    return serialData::baudrateStr;
-}
-
-QStringList RotControl::getDataBitsNames()
-{
-    return serialData::databitsStr;
-}
-
-QStringList RotControl::getStopBitsNames()
-{
-    return serialData::stopbitsStr;
+    return rotConnected;
 }
 
 
 
 
-QString RotControl::gethamlibErrorMsg(int errorCode)
+
+
+
+QString HamlibRotControl::getErrorMsgText(int errorCode)
 {
+
     if (errorCode > static_cast<int>(sizeof(hamlibErrorMsg)/sizeof(const char *)))
     {
         return tr("hamlib Errorcode too large!");
@@ -465,55 +562,50 @@ QString RotControl::gethamlibErrorMsg(int errorCode)
 }
 
 
-//QStringList RotControl::gethamlibErrorMsg()
-//{
-
-//    return serialData::hamlibErrorMsg;
-//}
-
+QString HamlibRotControl::getLibraryName()
+{
+    return QString("Hamlib");
+}
 
 
 
-QString RotControl::gethamlibVersion()
+QString HamlibRotControl::getRotLibVersion()
 {
     QString ver = hamlib_version;
     return ver;
 }
 
 
-void RotControl::enableTraceComms(bool state)
-{
-    traceComms = state;
-}
 
 
 
 
 // which passes the call to this method
-int RotControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const char *fmt, va_list ap)
-{
-    char buf[1024];
+//int HamlibRotControl::rig_message_cb(enum rig_debug_level_e /*debug_level*/, const char *fmt, va_list ap)
+//{
+//    char buf[1024];
 //    rig_debug_level_e dbl = debug_level;
 
-    vsprintf (buf, fmt, ap);
-    QString s = QString::fromLatin1(buf);
-    if (traceComms)
-    {
-        emit debug_protocol(s);
-    }
+//    vsprintf (buf, fmt, ap);
+//    QString s = QString::fromLatin1(buf);
+//    if (traceComms)
+//    {
+//        emit debug_protocol(s);
+//    }
 
 
-    return RIG_OK;
-}
+//    return RIG_OK;
+//}
 
 
 
-int rig_message_cb(enum rig_debug_level_e debug_level, rig_ptr_t user_data, const char *fmt, va_list ap)
-{
-    RotControl *rt = static_cast<RotControl *>(user_data);
-    return rt->rig_message_cb(debug_level, fmt, ap);
+//int rig_message_cb(enum rig_debug_level_e debug_level, rig_ptr_t user_data, const char *fmt, va_list ap)
+//{
+//    HamlibRotControl *rt = static_cast<HamlibRotControl *>(user_data);
+//    return rt->rig_message_cb(debug_level, fmt, ap);
 
-}
+//}
+
 
 bool model_Sort(const rot_caps *caps1,const rot_caps *caps2)
 {

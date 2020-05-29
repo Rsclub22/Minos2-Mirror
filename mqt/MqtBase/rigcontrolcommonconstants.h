@@ -16,6 +16,13 @@ extern const char * RIG_STATUS_ERROR;
 //#define TXVERT_OFF "TXVERTOFF"
 
 
+
+
+namespace radioData {
+
+}
+
+
 namespace hamlibData
 {
 
@@ -69,6 +76,7 @@ namespace hamlibData
 
 }
 
+const int Rig_OK = 0;
 const int OPEN_OK = 0;
 const int OPEN_FAILED = -1;
 const int RIGCTLD_FAILED = -2;
@@ -217,7 +225,11 @@ const QString RIT_STATUS_OFF_STYLE = QString("background-color:  white;\n");
 const QString RIT_STATUS_ON_STYLE = QString("background-color:  orange;\n");
 const QString RIT_RADIO_GETSETFREQ_INDICATOR_FALSE = QString("background-color: white;\n");
 const QString RIT_RADIO_GETSETFREQ_INDICATOR_TRUE = QString("background-color: blue ;\n");
-const QString RIGCTLD_INDICATOR_ON = QString("background-color: orange;\n");
+
+enum RIGCTLD_INDICATOR_ID  {RIGCTLD_IND_EXT, RIGCTLD_IND_INT, RIGCTLD_IND_OFF};
+
+const QString RIGCTLD_INDICATOR_INTERNAL = QString("background-color: orange;\n");
+const QString RIGCTLD_INDICATOR_EXTERNAL = QString("background-color: blue;\n");
 const QString RIGCTLD_INDICATOR_OFF = QString("background-color: white;\n");
 
 const int RIGCTLD_STATUS_TIMER_DUR = 1000;

@@ -21,6 +21,7 @@
 #include <QShortcut>
 #include "RPCCommandConstants.h"
 #include "rigmemcommondata.h"
+#include "rigcommon.h"
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"
 
@@ -107,6 +108,8 @@ public:
 
     void closeContest();
 
+    void setIgnorePresetFreqFlag(bool status, PubSubName psn);
+    void setIgnorePreviousFreqFlag(bool status, PubSubName psn);
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -190,6 +193,7 @@ private:
     bool ritOn;
     bool ritEditOn;
     //QString curRit;
+
 
     QStringList listOfRadios;
     RadioDetails selRadioDetails;

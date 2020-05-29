@@ -10,7 +10,8 @@
 #include "tqsoeditdlg.h"
 #include "tforcelogdlg.h"
 #include "SendRPCDM.h"
-#include "rigcontrolcommonconstants.h"
+//#include "rigcontrolcommonconstants.h"
+#include "rigcommon.h"
 #include "rigutils.h"
 #include "qsologframe.h"
 #include "ui_qsologframe.h"
@@ -125,9 +126,9 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->dateEdit->installEventFilter(this);
 
 
-    for (int i = 0; i < hamlibData::supModeList.count(); i++)
+    for (int i = 0; i < supModeList.count(); i++)
     {
-        ui->ModeComboBoxGJV->addItem(hamlibData::supModeList[i]);
+        ui->ModeComboBoxGJV->addItem(supModeList[i]);
     }
 
     ui->ModeComboBoxGJV->setCurrentText(hamlibData::USB);
@@ -2035,9 +2036,9 @@ void QSOLogFrame::modeSentFromRig(QString m)
     }
     QString newMode = mlist[0];
 
-    for (int i = 0; i < hamlibData::supModeList.count(); i++)
+    for (int i = 0; i < supModeList.count(); i++)
     {
-        if (newMode == hamlibData::supModeList[i])
+        if (newMode == supModeList[i])
         {
             oldMode = ui->ModeComboBoxGJV->currentText();
             if (newMode == ui->ModeComboBoxGJV->currentText())
@@ -2601,16 +2602,16 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
     if (ui->ModeComboBoxGJV->currentText() == mode)
         return;
     oldMode = mode;
-    if (index < hamlibData::supModeList.count())
+    if (index < supModeList.count())
     {
-        mode = hamlibData::supModeList[index];
+        mode = supModeList[index];
 
         // send mode change to radio
         if (isRadioLoaded() && radioConnected && !radioError)
         {
 
             qsoLogModeFlag = true;  // stop updates from radio here
-            emit sendModeControl(hamlibData::supModeList[index]);
+            emit sendModeControl(supModeList[index]);
         }
     }
 

@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017 - 2020
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -23,10 +23,14 @@
 #include <QProcess>
 
 #include "mqtUtils_pch.h"
-#include "rigcontrol.h"
 #include "BandList.h"
 #include "serialtvswitch.h"
 #include "smeterbar.h"
+#include "rigcommon.h"
+#include "rigbase.h"
+#include "rigfactory.h"
+#include "rigcapabilities.h"
+#include "serialCommonData.h"
 
 
 class QLabel;
@@ -86,7 +90,9 @@ private:
     RigControlRpc *msg = nullptr;
 
     RigSetupDialog *setupRadio;
-    RigControl  *radio;
+    RigBase  *radio;
+    RigFactory* rigFactory;
+    RigCapabilities rigCap;
     QString appName = "";
     QLabel *status;
     int radioIndex;
@@ -95,6 +101,7 @@ private:
     int pollTime;
     bool rigErrorFlag;
     bool cmdLockFlag;
+    bool traceCommsFlag;
     // data from rigctld
     QProcess *rigCtldProcess;
     QString rigctld_radioNumber;
@@ -118,20 +125,22 @@ private:
 
     QVector<BandDetail> bands;
     QStringList presetFreq;
+    bool ignorePresetFreq;           // on contest start
+    bool ignorePreviousFreq;        // on contest swap
 
-    int *test_mem;
+
     // data from radio
-    freq_t rfrequency;       // read frequency
+    Frequency rfrequency;       // read frequency
     QString sfreq;          // read freq converted to string
-    rmode_t rmode;          // read radio mode
-    pbwidth_t rwidth;        // read radio rx bw
-    double curVfoFrq;
-    double curTransVertFrq;
-    rmode_t curMode;
+    MODE rmode;          // read radio mode
+    //pbwidth_t rwidth;        // read radio rx bw
+    Frequency curVfoFrq;
+    Frequency curTransVertFrq;
+    MODE curMode;
     QString sCurMode;
     bool mgmModeFlag;
     QStringList  mgmModes;
-    int rRitFreq;        // converted from hamlib long ritFreq
+    ShortFreq rRitFreq;
     int curVol;
     int curSignalStrength = 0;
 
@@ -140,7 +149,7 @@ private:
     bool radioSupGetRit;
     bool radioSupSetRit;
     bool radioSupGetRitState;
-    bool radioSupRitOnOff;
+    bool radioSupSetRitState;
     bool radioRitOn;
 
     bool ritEnable;         // flag to enable rit
@@ -162,17 +171,17 @@ private:
     void setRadioNameLabelVisible(bool visible);
     int openRadio();
     void closeRadio();
-    int getAndSendFrequency(vfo_t vfo);
-    int getAndSendMode(vfo_t vfo);
+    int getAndSendFrequency(VFO vfo);
+    int getAndSendMode(VFO vfo);
     //QString convertFreqString(double);
 
     void setPolltime(int);
     int getPolltime();
     void showStatusMessage(const QString &);
-    void hamlibError(int errorCode, QString cmd);
+    void radioError(int errorCode, QString cmd);
 //    void frequency_updated(double frequency);
 //    void mode_updated(QString);
-    void setFreq(QString, vfo_t vfo);
+    void setFreq(QString, VFO vfo);
     void displayFreqVfo(double);
 
     void displayModeVfo(QString);
@@ -196,22 +205,22 @@ private:
     void sendStatusToLogError(QString);
     void sendTransVertOffsetToLogger(int tvNum);
     void sendTransVertSwitchToLogger(const QString &swNum);
-    void sendFreqToLog(freq_t freq);
+    void sendFreqToLog(Frequency freq);
     void sendModeToLog(QString mode);
     void sendRitEnableStatus(bool status);
     void sendRitEnableStatusLogger();
     void sendVolToLog(int level);
     //void sendRxPbFlagToLog();
 
-    void setMode(QString mode, vfo_t vfo);
-    void displayPassband(pbwidth_t width);
+    void setMode(QString mode, VFO vfo);
+    //void displayPassband(pbwidth_t width);
 
 
     void chkRadioMgmModeChanged();
     void dumpRadioToTraceLog();
     void setRitFreqDisplayVisible(bool state);
-    int getRitFreq(vfo_t vfo);
-    int setRitFreq(vfo_t vfo, shortfreq_t ritFreq);
+    int getRitFreq(VFO vfo);
+    void setRitFreq(VFO vfo, ShortFreq ritFreq);
     void cmdLockOn();
     void cmdLockOff();
     int getMinosModeIndex(QString mode);
@@ -223,7 +232,7 @@ private:
 
     void refreshRadio();
 
-    QString getBand(freq_t freq);
+    QString getBand(Frequency freq);
 
     void testBoxesVisible(bool visible);
 
@@ -239,14 +248,14 @@ private:
     void setRitEnableDisplay(bool s);
     void ritIndicatorToggle(bool state);
     //void setRitStatusIndicatorsVisible(bool state);
-    int  getRitRadioStatus(vfo_t vfo, bool *status);
+    int  getRitRadioStatus(VFO vfo, bool *status);
     void sendRadioRitStatusLogger(bool status);
 
-    int getVolume(vfo_t vfo);
-    int setVolume(vfo_t vfo, int level);
+    int getVolume(VFO vfo);
+    int setVolume(VFO vfo, int level);
     //void sendVolStatusToLog(bool status);
 
-    int getSignalStrength(vfo_t vfo);
+    int getSignalStrength(VFO vfo);
     void displaySignalStrength(int level);
 
 
@@ -261,7 +270,7 @@ private:
 
 
 
-    void getRitSupportStatus(int modelNumber);
+    void getRitSupportStatus();
     void setRitGetSetFreqIndicatorVisible(bool state);
     void ritSetFreqIndicatorToggle(bool state);
     void ritGetFreqIndicatorToggle(bool state);
@@ -280,31 +289,53 @@ private:
 
     bool readTestStandAloneFlag();
     void buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList);
-    void buildSupportedRadioBands(int radioModelNumber, QStringList& supBandList);
+    void buildSupportedRadioBands(int radioIdx, int radioModelNumber, QStringList& supBandList);
     bool findSupRadioBand(const QString band, const QStringList& supBandsList);
     bool findSupTransBand(const QString band, const int radioIdx);
-    void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
+    //void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
 
     void initCacheData();
 
-    void sendVolStatusToLog(const int radIdx, bool status);
+    void addVolStatusToRigCache(const int radIdx, bool status);
     void sendTransVertEnabled(bool status);
 
 
     void runRigCtlDaemon(const QString manufacturer, const QString model, const QString comport, const QString baudRate, const QString dataBits, const QString civ, const QString netAdd, const QString portNum, const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState, rigCtldTrace::rigCtldTraceCodes diagnostics);
 
 
-    int openRigCtldRadio();
+    int openRigCtldRadio(bool localRigCtld);
     void setRigCltdIndicatorVisible(bool visible);
-    void rigCtldIndicatorToggle(bool state);
+    void setRigCtldIndicator(RIGCTLD_INDICATOR_ID idNum);
 
 
     bool rigCtldKill();
 
-    int getTXStatus(vfo_t vfo);
+    int getTXStatus(VFO vfo);
 
 
     void getRigCtldConnectDelay();
+
+
+
+    MODE mapQStrMode(QString mode);
+    void updateCurrentRadioFromAvailRadios(int ridx);
+    MODE convertQStringToMode(QString modeStr);
+    QString convertModeToQString(MODE m);
+
+
+
+    void setSmeterVisible(bool visible);
+
+    //void sendIgnorePresetFreqToLog(bool status);
+    //void sendIgnorePreviousFreqToLog(bool status);
+    void addIgnorePresetFreqToRigCache(bool status);
+    void addIgnorePreviousFreqToRigCache(bool status);
+    bool readIgnorePresetFreqFlag();
+    bool readIgnorePreviousFreqFlag();
+    void saveIgnorePresetFreqFlag(bool state);
+    void saveIgnorePreviousFreqFlag(bool state);
+    void addBandListToRigCache(const int radioIdx, const QStringList &supBandList);
+
 
 
 private slots:
@@ -351,6 +382,14 @@ signals:
     void rigCtldErrorMessage();
     void rigCtldStarted();
     void rigCtldStatusTimeout();
+
+    void onNewFreq();
+    void onNewMode();
+    void onRigStatus(int status, QString cmd);
+
+    void onIgnorePresetFreq();
+    void onIgnorePreviousFreq();
+
 };
 
 #endif // RIGCONTROLMAINWINDOW_H
