@@ -1551,7 +1551,7 @@ Please enter another bearing</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../rigcommon.h" line="20"/>
+        <location filename="../rigcommon.h" line="17"/>
         <source>N/A</source>
         <translation type="unfinished"></translation>
     </message>
