@@ -47,9 +47,9 @@ public:
     QStringList getCallsignFilterList();
     QStringList getLocatorFilterList();
 
-
-    void setContest(BaseContestLog *c);
-    ClusterClientFilterSettings filterSettings;
+    ClusterClientFilterSettings getFilterSettings(){return filterSettings;}
+    //void setContest(BaseContestLog *c);
+    //ClusterClientFilterSettings filterSettings;
 
     void setBandFilter(int band);
     bool getEnableHFSpotsFlag();
@@ -63,10 +63,25 @@ signals:
 private:
     Ui::ClusterClientFilterDialog *ui;
     LoggerContestLog *ct = nullptr;
+    ClusterClientFilterSettings filterSettings;
 
+    struct distValue{
+        int distance;
+        bool distChanged = false;
+        bool ignoreDistance = false;
+        bool ignoreDistChanged = false;
+        bool ignoreEmptyDistance = false;
+        bool ignoreEmptyDistanceChanged = false;
+    };
+
+    QList<distValue>  distanceValues;
 
     QList<QCheckBox*> bandChkBoxList;
     QList<QCheckBox*> modeChkBoxList;
+    QList<QLineEdit*> distanceLineEditsList;
+    QList<QCheckBox*> ignoreDistanceChkBoxList;
+    QList<QCheckBox*> ignoreEmptyDistanceChkBoxList;
+    QList<QLabel*> distanceLabelsList;
 
 
     QListWidget* callsignListWidget;
@@ -122,6 +137,7 @@ private:
 
 
     void doCloseEvent();
+    void enableDistanceFields();
 private slots:
     //void bandChecked(int checkBoxNum);
     //void modeChecked(int checkBoxNum);
@@ -150,6 +166,24 @@ private slots:
     void onLocatorListImport();
     void callsignDelAllClicked();
     void locatorDelAllClicked();
+    void onUhfClearAllIgnorePbClicked();
+    void onVhfClearAllIgnorePbClicked();
+
+    void onUhfSetAllIgnorePbClicked();
+    void onVhfSetAllIgnorePbClicked();
+
+    void onUhfSetDefDistPbClicked();
+    void onVhfSetDefDistPbClicked();
+
+    void onIgnoreDistanceChecked(int);
+    void onDistanceEditingFinished(int);
+    void onIgnoreEmptyDistanceChecked(int idx);
+
+    void onVhfSetAllEmptyPbClicked();
+    void onUhfSetAllEmptyPbClicked();
+
+    void onVhfClearAllEmptyDistPbClicked();
+    void onUhfClearAllEmptyDistPbClicked();
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H

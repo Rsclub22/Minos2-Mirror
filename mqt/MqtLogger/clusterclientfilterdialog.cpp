@@ -14,6 +14,7 @@
 
 #include <QStringListModel>
 #include <QMessageBox>
+#include <QSignalMapper>
 #include "cutils.h"
 #include "list.h"
 #include "clusterclientfilterdialog.h"
@@ -36,12 +37,16 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, ClusterC
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    filterSettings = filterSettings_;
+    ct = dynamic_cast<LoggerContestLog*>(c);
+
+
     // read enable hf spots flag
-    QString fileName = CLUSTER_SETTINGS_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("HFSpots");
-    enableHFSpots = config.value("enable", false).toBool();
-    config.endGroup();
+    //QString fileName = CLUSTER_SETTINGS_FILE;
+    //QSettings config(fileName, QSettings::IniFormat);
+    //config.beginGroup("HFSpots");
+   // enableHFSpots = config.value("enable", false).toBool();
+   // config.endGroup();
 
 
     initCheckFilterTab();
@@ -69,6 +74,79 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     bandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
+
+    distanceLineEditsList << ui->spotDistanceEdit_50MHz << ui->spotDistanceEdit_70MHz << ui->spotDistanceEdit_144MHz << ui->spotDistanceEdit_432MHz
+                          << ui->spotDistanceEdit_1296MHz << ui->spotDistanceEdit_2300MHz << ui->spotDistanceEdit_3_4GHz << ui->spotDistanceEdit_5_6GHz << ui->spotDistanceEdit_10GHz;
+
+
+    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    config.beginGroup("distanceFilter");
+
+
+    for (int i = 0; i < distanceLineEditsList.count(); i++)
+    {
+        distValue distItem;
+        distItem.distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+        distanceLineEditsList[i]->setText(QString::number(distItem.distance));
+        //distItem.changed = false;
+        distanceValues.append(distItem);
+    }
+
+    config.endGroup();
+
+    QSignalMapper *signalMapperDistEdit = new QSignalMapper(this);
+    connect(signalMapperDistEdit, SIGNAL(mapped(int)), this, SLOT(onDistanceEditingFinished(int)));
+
+    for (int i = 0; i < distanceLineEditsList.count(); i++)
+    {
+        signalMapperDistEdit->setMapping(distanceLineEditsList[i], i);
+        connect(distanceLineEditsList[i], SIGNAL(editingFinished()), signalMapperDistEdit, SLOT(map()));
+    }
+
+    ignoreDistanceChkBoxList << ui->distFilterIgnoreCheckBox_50MHz << ui->distFilterIgnoreCheckBox_70MHz << ui->distFilterIgnoreCheckBox_144MHz << ui->distFilterIgnoreCheckBox_432MHz
+                             << ui->distFilterIgnoreCheckBox_1296MHz << ui->distFilterIgnoreCheckBox_2300MHz << ui->distFilterIgnoreCheckBox_3_4GHz << ui->distFilterIgnoreCheckBox_5_6GHz << ui->distFilterIgnoreCheckBox_10GHz;
+
+    QSignalMapper *signalMapperIgnoreDist = new QSignalMapper(this);
+    connect(signalMapperIgnoreDist, SIGNAL(mapped(int)), this, SLOT(onIgnoreDistanceChecked(int)));
+
+    for (int i = 0; i < ignoreDistanceChkBoxList.count(); i++)
+    {
+        signalMapperDistEdit->setMapping(ignoreDistanceChkBoxList[i], i);
+        connect(ignoreDistanceChkBoxList[i], SIGNAL(stateChanged()), signalMapperDistEdit, SLOT(map()));
+    }
+
+    ignoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_50MHz << ui->ignoreEmptyDistanceValuesChkBox_70MHz << ui->ignoreEmptyDistanceValuesChkBox_144MHz << ui->ignoreEmptyDistanceValuesChkBox_432MHz
+                                  << ui->ignoreEmptyDistanceValuesChkBox_1296MHz << ui->ignoreEmptyDistanceValuesChkBox_2300MHz << ui->ignoreEmptyDistanceValuesChkBox_3_4GHz << ui->ignoreEmptyDistanceValuesChkBox_5_6GHz << ui->ignoreEmptyDistanceValuesChkBox_10GHz;
+
+    QSignalMapper *signalMapperIgnoreEmptyDist = new QSignalMapper(this);
+    connect(signalMapperIgnoreEmptyDist, SIGNAL(mapped(int)), this, SLOT(onIgnoreEmptyDistanceChecked(int)));
+
+    for (int i = 0; i < ignoreEmptyDistanceChkBoxList.count(); i++)
+    {
+        signalMapperDistEdit->setMapping(ignoreEmptyDistanceChkBoxList[i], i);
+        connect(ignoreEmptyDistanceChkBoxList[i], SIGNAL(stateChanged()), signalMapperDistEdit, SLOT(map()));
+    }
+
+    distanceLabelsList << ui->bandLabel_50MHz << ui->bandLabel_70MHz << ui->bandLabel_144MHz << ui->bandLabel_432MHz
+                       << ui->bandLabel_1296MHz << ui->bandLabel_2300MHz << ui->bandLabel_3_4GHz << ui->bandLabel_5_6GHz << ui->bandLabel_10GHz;
+
+    connect(ui->vhfSetAlDefaultDistPb, SIGNAL(clicked()), this, SLOT(onVhfSetDefDistPbClicked()));
+    connect(ui->uhfSetAlDefaultDistPb, SIGNAL(clicked()), this, SLOT(onUhfSetDefDistPbClicked()));
+
+    connect(ui->vhfSetAllIgnorePb, SIGNAL(clicked()), this, SLOT(onVhfSetAllIgnorePbClicked()));
+    connect(ui->uhfSetAllIgnorePb, SIGNAL(clicked()), this, SLOT(onUhfSetAllIgnorePbClicked()));
+
+
+    connect(ui->vhfClearAllIgnorePb, SIGNAL(clicked()), this, SLOT(onVhfClearAllIgnorePbClicked()));
+    connect(ui->uhfClearAllIgnorePb, SIGNAL(clicked()), this, SLOT(onUhfClearAllIgnorePbClicked()));
+
+
+    connect(ui->vhfSetAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onVhfSetAllEmptyPbClicked()));
+    connect(ui->uhfSetAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onUhfSetAllEmptybClicked()));
+
+    connect(ui->vhfClearAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onVhfClearAllEmptyDistPbClicked()));
+    connect(ui->uhfClearAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onUhfClearAllEmptyDistPbClicked()));
+
 
     modeChkBoxList << ui->noneModeChkBox << ui->cwModeChkBox << ui->usbModeChkBox << ui->fmModeChkBox << ui->rttyModeChkBox << ui->psk31ModeChkBox << ui->ft8ModeChkBox << ui->msk144ModeChkBox << ui->jt65ModeChkBox;
 
@@ -113,13 +191,13 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
 }
 
-
+/*
 void ClusterClientFilterDialog::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
 
 }
-
+*/
 
 
 void ClusterClientFilterDialog::filtersAccepted()
@@ -976,3 +1054,208 @@ bool ClusterClientFilterDialog::getEnableHFSpotsFlag()
 {
     return enableHFSpots;
 }
+
+
+void ClusterClientFilterDialog::enableDistanceFields()
+{
+    for (int i = 0; (i < bandChkBoxList.count() && i < distanceLineEditsList.count()); i++)
+    {
+        if (bandChkBoxList[i]->checkState() == Qt::Checked)
+        {
+            distanceLineEditsList[i]->setEnabled(true);
+            ignoreDistanceChkBoxList[i]->setEnabled(true);
+            ignoreEmptyDistanceChkBoxList[i]->setEnabled(true);
+            distanceLabelsList[i]->setEnabled(true);
+        }
+        else
+        {
+            distanceLabelsList[i]->setEnabled(false);
+            ignoreDistanceChkBoxList[i]->setEnabled(false);
+            ignoreEmptyDistanceChkBoxList[i]->setEnabled(false);
+            distanceLabelsList[i]->setEnabled(false);
+        }
+    }
+
+}
+
+void ClusterClientFilterDialog::onDistanceEditingFinished(int idx)
+{
+    bool ok;
+    int distance = 0;
+    if(!distanceLineEditsList[idx]->text().isEmpty())
+    {
+        distance = distanceLineEditsList[idx]->text().toInt(&ok);
+        if (ok)
+        {
+            if (distance != *filterSettings.distanceFilters[idx])
+            {
+                distanceValues[idx].distance = distance;
+                distanceValues[idx].distChanged = true;
+            }
+        }
+        else
+        {
+            QMessageBox::information(this, tr("Distance Filter"),
+                                     tr("Please enter a number between %1 and %2!").arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE),
+                                      QMessageBox::Ok|QMessageBox::Default,
+                                      QMessageBox::NoButton, QMessageBox::NoButton);
+        }
+    }
+}
+
+void ClusterClientFilterDialog::onIgnoreDistanceChecked(int idx)
+{
+    if (ignoreDistanceChkBoxList[idx]->isChecked() != *filterSettings.ignoreDistanceFlags[idx])
+    {
+        distanceValues[idx].ignoreDistance = ignoreDistanceChkBoxList[idx]->isChecked();
+        distanceValues[idx].ignoreDistChanged = true;
+    }
+}
+
+void ClusterClientFilterDialog::onIgnoreEmptyDistanceChecked(int idx)
+{
+    if (ignoreEmptyDistanceChkBoxList[idx]->isChecked() != *filterSettings.ignoreEmptyDistanceFlags[idx])
+    {
+        distanceValues[idx].ignoreEmptyDistance = ignoreEmptyDistanceChkBoxList[idx]->isChecked();
+        distanceValues[idx].ignoreEmptyDistanceChanged = true;
+    }
+}
+
+void ClusterClientFilterDialog::onVhfSetDefDistPbClicked()
+{
+    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    config.beginGroup("distanceFilter");
+
+    for (int i = 0; i < 4; i++)
+    {
+        distanceValues[i].distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+        distanceLineEditsList[i]->setText(QString::number(distanceValues[i].distance));
+        distanceValues[i].distChanged =true;
+    }
+
+    config.endGroup();
+
+}
+
+void ClusterClientFilterDialog::onUhfSetDefDistPbClicked()
+{
+    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    config.beginGroup("distanceFilter");
+
+    for (int i = 4; i < distanceLineEditsList.count(); i++)
+    {
+        distanceValues[i].distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+        distanceLineEditsList[i]->setText(QString::number(distanceValues[i].distance));
+        distanceValues[i].distChanged =true;
+    }
+
+    config.endGroup();
+}
+
+void ClusterClientFilterDialog::onVhfSetAllIgnorePbClicked()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Checked)
+        {
+            distanceValues[i].ignoreDistance = true;
+            distanceValues[i].ignoreDistChanged = true;
+            ignoreDistanceChkBoxList[i]->setChecked(true);
+        }
+
+    }
+}
+
+void ClusterClientFilterDialog::onUhfSetAllIgnorePbClicked()
+{
+    for (int i = 4; i < distanceLineEditsList.count(); i++)
+    {
+        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Checked)
+        {
+            distanceValues[i].ignoreDistance = true;
+            distanceValues[i].ignoreDistChanged = true;
+            ignoreDistanceChkBoxList[i]->setChecked(true);
+        }
+    }
+}
+
+void ClusterClientFilterDialog::onVhfClearAllIgnorePbClicked()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Unchecked)
+        {
+            distanceValues[i].ignoreDistance = false;
+            distanceValues[i].ignoreDistChanged = true;
+            ignoreDistanceChkBoxList[i]->setChecked(false);
+        }
+    }
+}
+
+void ClusterClientFilterDialog::onUhfClearAllIgnorePbClicked()
+{
+    for (int i = 4; i < distanceLineEditsList.count(); i++)
+    {
+        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Unchecked)
+        {
+            distanceValues[i].ignoreDistance = false;
+            distanceValues[i].ignoreDistChanged = true;
+            ignoreDistanceChkBoxList[i]->setChecked(false);
+        }
+    }
+}
+
+
+void ClusterClientFilterDialog::onVhfSetAllEmptyPbClicked()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Checked)
+        {
+            distanceValues[i].ignoreDistance = true;
+            distanceValues[i].ignoreDistChanged = true;
+            ignoreDistanceChkBoxList[i]->setChecked(true);
+        }
+
+    }
+}
+
+void ClusterClientFilterDialog::onUhfSetAllEmptyPbClicked()
+{
+    for (int i = 4; i < distanceLineEditsList.count(); i++)
+    {
+        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Checked)
+        {
+            distanceValues[i].ignoreDistance = true;
+            distanceValues[i].ignoreDistChanged = true;
+            ignoreDistanceChkBoxList[i]->setChecked(true);
+        }
+    }
+}
+
+void ClusterClientFilterDialog::onVhfClearAllEmptyDistPbClicked()
+{
+    for (int i = 0; i < 4; i++)
+    {
+        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Unchecked)
+        {
+            distanceValues[i].ignoreDistance = false;
+            distanceValues[i].ignoreDistChanged = true;
+            ignoreDistanceChkBoxList[i]->setChecked(false);
+        }
+    }
+}
+
+void ClusterClientFilterDialog::onUhfClearAllEmptyDistPbClicked()
+{
+    for (int i = 4; i < distanceLineEditsList.count(); i++)
+    {
+        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Unchecked)
+        {
+            distanceValues[i].ignoreDistance = false;
+            distanceValues[i].ignoreDistChanged = true;
+            ignoreDistanceChkBoxList[i]->setChecked(false);
+        }
+    }
+}
+

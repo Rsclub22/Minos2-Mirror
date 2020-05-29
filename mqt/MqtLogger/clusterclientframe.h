@@ -60,14 +60,14 @@ public:
     void setUnworkedCallsignFlag(bool state);
 
 
-    DxSpotSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) :
+    DxSpotSortFilterProxyModel(ClusterClientFilterSettings& filterSettings_) :
         unWorkedLocFlag(false),
         unWorkedCallsignFlag(false)
     {
-        filterSetup = _filterSetup;
+        filterSettings = filterSettings_;
     }
 
-    ClusterClientFilterDialog* filterSetup;
+    ClusterClientFilterSettings filterSettings;
 
 
     bool unWorkedLocFlag;
@@ -88,7 +88,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    SearchSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
+    SearchSortFilterProxyModel(ClusterClientFilterSettings& filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
     {
 
     }
@@ -107,7 +107,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    CallsignSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
+    CallsignSortFilterProxyModel(ClusterClientFilterSettings& filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
     {
 
     }
@@ -122,9 +122,9 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    LocatorSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
+    LocatorSortFilterProxyModel(ClusterClientFilterSettings& filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
     {
-        filterSetup = _filterSetup;
+        filterSettings = filterSettings_;
     }
 };
 
@@ -162,7 +162,7 @@ private:
     BaseContestLog *ct = nullptr;
     UpperCaseValidator ucValidator;
 
-    ClusterClientFilterDialog *filterSetup = nullptr;
+    ClusterClientFilterSettings filterSettings;
 
 
     HtmlDelegate *delegate = nullptr;

@@ -69,8 +69,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
 
-    filterSetup = new ClusterClientFilterDialog(this);
-
 
     purgeTimer = new QTimer(this);
 
@@ -170,7 +168,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
 
 
-    connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
+    //connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
     connect(ui->unworkedCallsignsChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedCallsignsCheckBox(int)));
     connect(ui->unworkedLocChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedLocCheckBox(int)));
@@ -235,7 +233,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView = new QTableView();
     dxSpotView->setFocusPolicy(Qt::NoFocus);
 
-    dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
+    dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSettings);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
     //dxSpotProxyModel->setDynamicSortFilter(true);
@@ -283,7 +281,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView = new QTableView();
     searchView->setFocusPolicy(Qt::NoFocus);
 
-    searchSortProxyModel = new SearchSortFilterProxyModel(filterSetup);
+    searchSortProxyModel = new SearchSortFilterProxyModel(filterSettings);
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
     searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -330,7 +328,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView = new QTableView();
     callSignView->setFocusPolicy(Qt::NoFocus);
 
-    callSignProxyModel = new CallsignSortFilterProxyModel(filterSetup);
+    callSignProxyModel = new CallsignSortFilterProxyModel(filterSettings);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
     callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -377,7 +375,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView = new QTableView();
     locatorView->setFocusPolicy(Qt::NoFocus);
 
-    locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
+    locatorProxyModel = new LocatorSortFilterProxyModel(filterSettings);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
     locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -419,11 +417,12 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 void ClusterClientFrame::filterButtonSelected()
 {
-    filterSetup->copyBandFiltersToDialog();
-    filterSetup->copyModeFiltersToDialog();
-    filterSetup->copyCallsignFilterListToListWidget();
-    filterSetup->copyLocatorFilterListToListWidget();
-    filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
+    //filterSetup->copyBandFiltersToDialog();
+    //filterSetup->copyModeFiltersToDialog();
+    //filterSetup->copyCallsignFilterListToListWidget();
+    //filterSetup->copyLocatorFilterListToListWidget();
+    //filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
+    ClusterClientFilterDialog *filterSetup = new ClusterClientFilterDialog(ct, filterSettings, this);
     filterSetup->exec();
 
 }
@@ -949,7 +948,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
 
     // set the contest in the filter dialog
-    filterSetup->setContest(c);
+    //filterSetup->setContest(c);
 
     if (ct != nullptr)
     {
@@ -1485,9 +1484,9 @@ void ClusterClientFrame::checkSavedFilters()
     {
         QString cUuuid = ct->uuid;
         ClusterClientFilterSettings cfs = contest->clusterFilterSettings.getValue();
-        if (cfs != filterSetup->filterSettings)
+        if (cfs != filterSettings)
         {
-            filterSetup->filterSettings = cfs;
+            filterSettings = cfs;
         }
     }
 }
@@ -1753,7 +1752,7 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 
     if (ok && (bandMask >=0 && bandMask < NUMBANDS) )
     {
-       return filterSetup->filterSettings.getBandFilter(bandMask);
+       return filterSettings.getBandFilter(bandMask);
     }
     else if (!ok && filterSetup->getEnableHFSpotsFlag())
     {
@@ -1772,7 +1771,7 @@ bool DxSpotSortFilterProxyModel::matchMode(int sourceRow) const
     int modeMask = sourceModel()->data(sourceModel()->index(sourceRow, DXMODEMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
     if (ok && modeMask >=0)
     {
-        return filterSetup->filterSettings.getModeFilter(modeMask);
+        return filterSettings.getModeFilter(modeMask);
     }
     else
     {

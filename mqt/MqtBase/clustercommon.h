@@ -170,36 +170,36 @@ class ClusterClientFilterSettings
 {
 
 public:
-    ClusterClientFilterSettings() :
+    ClusterClientFilterSettings()
+{
 
-        bandFilter50Mhz(false),
-        bandFilter70Mhz(false),
-        bandFilter144Mhz(false),
-        bandFilter432Mhz(false),
-        bandFilter1296Mhz(false),
-        bandFilter2300Mhz(false),
-        bandFilter3_4Ghz(false),
-        bandFilter5_6Ghz(false),
-        bandFilter10Ghz(false),
-        modeFilterNONE(false),
-        modeFilterCW(false),
-        modeFilterUSBMODE(false),
-        modeFilterFMMODE(false),
-        modeFilterRTTYMODE(false),
-        modeFilterPSK31MODE(false),
-        modeFilterFT8MODE(false),
-        modeFilterMSK144MODE(false),
-        modeFilterJT65MODE(false),
-        distanceFilter50Mhz(0),
-        distanceFilter70Mhz(0),
-        distanceFilter144Mhz(0),
-        distanceFilter432Mhz(0),
-        distanceFilter1296Mhz(0),
-        distanceFilter2300Mhz(0),
-        distanceFilter3_4Ghz(0),
-        distanceFilter5_6Ghz(0),
-        distanceFilter10Ghz(0)
-    {
+        for (int i = 0; i < bandFilters.count(); i++)
+        {
+            *bandFilters[i] = true;
+        }
+
+        for (int i = 0; i < modeFilters.count(); i++)
+        {
+            *modeFilters[i] = false;
+        }
+
+        for (int i = 0; i < distanceFilters.count(); i++)
+        {
+            *distanceFilters[i] = 0;
+        }
+
+
+        for (int i = 0; i < ignoreDistanceFlags.count(); i++)
+        {
+            *ignoreDistanceFlags[i] = false;
+        }
+
+        for (int i = 0; i < ignoreEmptyDistanceFlags.count(); i++)
+        {
+            *ignoreEmptyDistanceFlags[i] = false;
+        }
+
+
 
 
     }
@@ -223,6 +223,14 @@ public:
     QList<int*> distanceFilters = {&distanceFilter50Mhz, &distanceFilter70Mhz, &distanceFilter144Mhz,
                                    &distanceFilter432Mhz, &distanceFilter1296Mhz, &distanceFilter2300Mhz,
                                    &distanceFilter3_4Ghz, &distanceFilter5_6Ghz, &distanceFilter10Ghz};
+
+    QList<bool*> ignoreDistanceFlags = {&ignoreDistance_50MHz, &ignoreDistance_70MHz, &ignoreDistance_144MHz,
+                                        &ignoreDistance_432MHz, &ignoreDistance_1296MHz, &ignoreDistance_2300Mhz,
+                                        &ignoreDistance_3_4GHz, &ignoreDistance_5_6GHz, &ignoreDistance_10GHz};
+
+    QList<bool*> ignoreEmptyDistanceFlags = {&ignoreEmptyDistance_50MHz, &ignoreEmptyDistance_70MHz, &ignoreEmptyDistance_144MHz,
+                                             &ignoreEmptyDistance_432MHz, &ignoreEmptyDistance_1296MHz, &ignoreEmptyDistance_2300Mhz,
+                                             &ignoreEmptyDistance_3_4GHz, &ignoreEmptyDistance_5_6GHz, &ignoreEmptyDistance_10GHz};
 
 
     bool bandFilter50Mhz;
@@ -254,6 +262,26 @@ public:
     int distanceFilter3_4Ghz;
     int distanceFilter5_6Ghz;
     int distanceFilter10Ghz;
+
+    bool ignoreDistance_50MHz;
+    bool ignoreDistance_70MHz;
+    bool ignoreDistance_144MHz;
+    bool ignoreDistance_432MHz;
+    bool ignoreDistance_1296MHz;
+    bool ignoreDistance_2300Mhz;
+    bool ignoreDistance_3_4GHz;
+    bool ignoreDistance_5_6GHz;
+    bool ignoreDistance_10GHz;
+
+    bool ignoreEmptyDistance_50MHz;
+    bool ignoreEmptyDistance_70MHz;
+    bool ignoreEmptyDistance_144MHz;
+    bool ignoreEmptyDistance_432MHz;
+    bool ignoreEmptyDistance_1296MHz;
+    bool ignoreEmptyDistance_2300Mhz;
+    bool ignoreEmptyDistance_3_4GHz;
+    bool ignoreEmptyDistance_5_6GHz;
+    bool ignoreEmptyDistance_10GHz;
 
 
 
@@ -359,6 +387,24 @@ void operator= (const ClusterClientFilterSettings& ccfs)
     distanceFilter3_4Ghz = ccfs.distanceFilter3_4Ghz;
     distanceFilter5_6Ghz = ccfs.distanceFilter5_6Ghz;
     distanceFilter10Ghz = ccfs.distanceFilter10Ghz;
+    ignoreDistance_50MHz = ccfs.ignoreDistance_50MHz;
+    ignoreDistance_70MHz = ccfs.ignoreDistance_70MHz;
+    ignoreDistance_144MHz = ccfs.ignoreDistance_144MHz;
+    ignoreDistance_432MHz = ccfs.ignoreDistance_432MHz;
+    ignoreDistance_1296MHz = ccfs.ignoreDistance_1296MHz;
+    ignoreDistance_2300Mhz = ccfs.ignoreDistance_2300Mhz;
+    ignoreDistance_3_4GHz = ccfs.ignoreDistance_3_4GHz;
+    ignoreDistance_5_6GHz = ccfs.ignoreDistance_5_6GHz;
+    ignoreDistance_10GHz = ccfs.ignoreDistance_10GHz;
+    ignoreEmptyDistance_50MHz = ccfs.ignoreEmptyDistance_50MHz;
+    ignoreEmptyDistance_70MHz = ccfs.ignoreEmptyDistance_70MHz;
+    ignoreEmptyDistance_144MHz = ccfs.ignoreEmptyDistance_144MHz;
+    ignoreEmptyDistance_432MHz = ccfs.ignoreEmptyDistance_432MHz;
+    ignoreEmptyDistance_1296MHz = ccfs.ignoreEmptyDistance_1296MHz;
+    ignoreEmptyDistance_2300Mhz = ccfs.ignoreEmptyDistance_2300Mhz;
+    ignoreEmptyDistance_3_4GHz = ccfs.ignoreEmptyDistance_3_4GHz;
+    ignoreEmptyDistance_5_6GHz = ccfs.ignoreEmptyDistance_5_6GHz;
+    ignoreEmptyDistance_10GHz = ccfs.ignoreEmptyDistance_10GHz;
 
 
 }
@@ -394,7 +440,25 @@ bool operator==( const ClusterClientFilterSettings& ccfs ) const
          distanceFilter2300Mhz == ccfs.distanceFilter2300Mhz &&
          distanceFilter3_4Ghz == ccfs.distanceFilter3_4Ghz &&
          distanceFilter5_6Ghz == ccfs.distanceFilter5_6Ghz &&
-         distanceFilter10Ghz == ccfs.distanceFilter10Ghz)
+         distanceFilter10Ghz == ccfs.distanceFilter10Ghz &&
+         ignoreDistance_50MHz == ccfs.ignoreDistance_50MHz &&
+         ignoreDistance_70MHz == ccfs.ignoreDistance_70MHz &&
+         ignoreDistance_144MHz == ccfs.ignoreDistance_144MHz &&
+         ignoreDistance_432MHz == ccfs.ignoreDistance_432MHz &&
+         ignoreDistance_1296MHz == ccfs.ignoreDistance_1296MHz &&
+         ignoreDistance_2300Mhz == ccfs.ignoreDistance_2300Mhz &&
+         ignoreDistance_3_4GHz == ccfs.ignoreDistance_3_4GHz &&
+         ignoreDistance_5_6GHz == ccfs.ignoreDistance_5_6GHz &&
+         ignoreDistance_10GHz == ccfs.ignoreDistance_10GHz &&
+         ignoreEmptyDistance_50MHz == ccfs.ignoreEmptyDistance_50MHz &&
+         ignoreEmptyDistance_70MHz == ccfs.ignoreEmptyDistance_70MHz &&
+         ignoreEmptyDistance_144MHz == ccfs.ignoreEmptyDistance_144MHz &&
+         ignoreEmptyDistance_432MHz == ccfs.ignoreEmptyDistance_432MHz &&
+         ignoreEmptyDistance_1296MHz == ccfs.ignoreEmptyDistance_1296MHz &&
+         ignoreEmptyDistance_2300Mhz == ccfs.ignoreEmptyDistance_2300Mhz &&
+         ignoreEmptyDistance_3_4GHz == ccfs.ignoreEmptyDistance_3_4GHz &&
+         ignoreEmptyDistance_5_6GHz == ccfs.ignoreEmptyDistance_5_6GHz &&
+         ignoreEmptyDistance_10GHz == ccfs.ignoreEmptyDistance_10GHz)
     {
         return true;
     }

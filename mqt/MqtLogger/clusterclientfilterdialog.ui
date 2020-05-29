@@ -479,7 +479,7 @@
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_10">
                <item>
-                <widget class="QLabel" name="bandLabel__70MHz">
+                <widget class="QLabel" name="bandLabel_70MHz">
                  <property name="text">
                   <string>70 MHz</string>
                  </property>
@@ -613,7 +613,7 @@
               </widget>
              </item>
              <item row="1" column="2">
-              <widget class="QPushButton" name="vhfClearAllNoDistPb">
+              <widget class="QPushButton" name="vhfClearAllEmptyDistPb">
                <property name="text">
                 <string>Clear All No Distance</string>
                </property>
@@ -627,7 +627,7 @@
               </widget>
              </item>
              <item row="0" column="2">
-              <widget class="QPushButton" name="vhfSetAllNoDistPb">
+              <widget class="QPushButton" name="vhfSetAllEmptyDistPb">
                <property name="text">
                 <string>Set All No Distance</string>
                </property>
@@ -661,21 +661,21 @@
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="spotDistanceEdit_1296MHz_2"/>
+                <widget class="QLineEdit" name="spotDistanceEdit_1296MHz"/>
                </item>
               </layout>
              </item>
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_28">
                <item>
-                <widget class="QCheckBox" name="distFilterIgnoreCheckBox_1296MHz_2">
+                <widget class="QCheckBox" name="distFilterIgnoreCheckBox_1296MHz">
                  <property name="text">
                   <string>Ignore</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QCheckBox" name="ignoreEmptyDistanceValuesChkBox_1296MHz_2">
+                <widget class="QCheckBox" name="ignoreEmptyDistanceValuesChkBox_1296MHz">
                  <property name="text">
                   <string>Ignore Spots with no distance value</string>
                  </property>
@@ -888,14 +888,14 @@
               </widget>
              </item>
              <item row="0" column="2">
-              <widget class="QPushButton" name="uhfSetAllNoDistPb">
+              <widget class="QPushButton" name="uhfSetAllEmptyDistPb">
                <property name="text">
                 <string>Set All No Distance</string>
                </property>
               </widget>
              </item>
              <item row="1" column="2">
-              <widget class="QPushButton" name="uhfClearAllNoDistPb">
+              <widget class="QPushButton" name="uhfClearAllEmptyDistPb">
                <property name="text">
                 <string>Clear All No Distance</string>
                </property>
