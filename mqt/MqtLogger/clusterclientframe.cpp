@@ -959,26 +959,39 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 
-        if (!contest->clusterFilterSettingsExist)       // have band settings been saved before?
-        {
-            // no, save current band filter for this contest
-            filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
 
-            if (contestModeStr == "MGM")       //  have mode settings been saved before?
+        if (contestBand != -1)
+        {
+            if (!contest->clusterFilterSettingsExist)       // have band settings been saved before?
             {
-                for (int m = 4; m < clusterModes.count(); m++)
+                // no, save current band filter for this contest
+                //filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
+
+                if (contestModeStr == "MGM")       //  have mode settings been saved before?
                 {
-                    filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
+                    for (int m = 4; m < clusterModes.count(); m++)
+                    {
+                        //filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
+                        //*filterSettings.modeFilters[m] = true; // set all the mgm modes in filter
+                    }
                 }
+                else
+                {
+                    // no, save current mode filter for this contest
+                    //filterSetup->setModeFilter(true, contestMode);
+                    *filterSettings.modeFilters[contestMode] = true;
+                }
+
+                //filterSetup->saveClusterFilterToContest();  // save these settings
+                contest->saveClusterFilter(filterSettings);
             }
             else
             {
-                // no, save current mode filter for this contest
-                filterSetup->setModeFilter(true, contestMode);
+                filterSettings = contest->getClusterFilter();
             }
-
-            filterSetup->saveClusterFilterToContest();  // save these settings
         }
+
+
 
 
 

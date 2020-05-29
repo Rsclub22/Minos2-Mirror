@@ -321,6 +321,8 @@ bool getBandFilter(int band)
 }
 
 
+
+
 void setBandFilter(bool setting, int band)
 {
     *bandFilters[band] = setting;
@@ -354,6 +356,48 @@ void setModeFilter(bool setting, int mode)
 {
     *modeFilters[mode] = setting;
 }
+
+bool testDistanceFilter(int distance, int band)
+{
+    if (distance < *distanceFilters[band] || *distanceFilters[band] == 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void setDistanceFilter(int distance, int band)
+{
+    *distanceFilters[band] = distance;
+}
+
+
+bool getIgnoreDistanceFlag(int band)
+{
+    return *ignoreDistanceFlags[band];
+}
+
+void setIgnoreDistanceFlag(bool state, int band)
+{
+    *ignoreDistanceFlags[band] = state;
+}
+
+
+bool getIgnoreEmptyDistanceFlag(int band)
+{
+    return *ignoreEmptyDistanceFlags[band];
+}
+
+void setIgnoreEmptyDistanceFlag(bool state, int band)
+{
+    *ignoreEmptyDistanceFlags[band] = state;
+}
+
+
+
 
 void operator= (const ClusterClientFilterSettings& ccfs)
 {
