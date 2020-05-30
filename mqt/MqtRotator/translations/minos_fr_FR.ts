@@ -44,97 +44,97 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="23"/>
         <source>No Error, operation completed sucessfully</source>
-        <translation type="unfinished">Pas d&apos;erreur, l&apos;opération a réussi</translation>
+        <translation>Pas d&apos;erreur, l&apos;opération a réussi</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="24"/>
         <source>Invalid parameter</source>
-        <translation type="unfinished">Paramètre invalide</translation>
+        <translation>Paramètre invalide</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="25"/>
         <source>Invalid configuration</source>
-        <translation type="unfinished">Configuration invalide</translation>
+        <translation>Configuration invalide</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="26"/>
         <source>Memory shortage</source>
-        <translation type="unfinished">Manque de mémoire</translation>
+        <translation>Manque de mémoire</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="27"/>
         <source>Function not implemented</source>
-        <translation type="unfinished">Fonction non implémentée</translation>
+        <translation>Fonction non implémentée</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="28"/>
         <source>Communication timed out</source>
-        <translation type="unfinished">Timeout de communication</translation>
+        <translation>Timeout de communication</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="29"/>
         <source>IO error, including open failed</source>
-        <translation type="unfinished">Erreur d&apos;E/S, y compris l&apos;ouverture a échoué</translation>
+        <translation>Erreur d&apos;E/S, y compris l&apos;ouverture a échoué</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="30"/>
         <source>Internal Hamlib error</source>
-        <translation type="unfinished">Hamlib - Erreur interne</translation>
+        <translation>Hamlib - Erreur interne</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="31"/>
         <source>Protocol error</source>
-        <translation type="unfinished">Erreur de protocole</translation>
+        <translation>Erreur de protocole</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="32"/>
         <source>Command rejected by the rig</source>
-        <translation type="unfinished">Commande rejetée par l&apos;appareil</translation>
+        <translation>Commande rejetée par l&apos;appareil</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="33"/>
         <source>Command performed, but arg truncated</source>
-        <translation type="unfinished">Commande exécutée, mais l&apos;argument tronqué</translation>
+        <translation>Commande exécutée, mais l&apos;argument tronqué</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="34"/>
         <source>Function not available</source>
-        <translation type="unfinished">Fonction non disponible</translation>
+        <translation>Fonction non disponible</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="35"/>
         <source>VFO not targetable</source>
-        <translation type="unfinished">VFO not targetable</translation>
+        <translation>VFO???? not targetable</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="36"/>
         <source>Error talking on the bus</source>
-        <translation type="unfinished">Erreur de communication sur le bus</translation>
+        <translation>Erreur de communication sur le bus</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="37"/>
         <source>Collision on the bus</source>
-        <translation type="unfinished">Collision de données sur le bus</translation>
+        <translation>Collision de données sur le bus</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="38"/>
         <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
-        <translation type="unfinished">WHAT ???     (AND WHY?)   APJ19</translation>
+        <translation>WHAT ???     (AND WHY?)   APJ19</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="39"/>
         <source>Invalid VFO</source>
-        <translation type="unfinished">VFO?????? invalide   APJ20</translation>
+        <translation>VFO?????? invalide   APJ20</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="40"/>
         <source>RIG_EDOM</source>
-        <translation type="unfinished">RIG_EDOM WHAT????   APJ21</translation>
+        <translation>RIG_EDOM WHAT????   APJ21</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="559"/>
         <source>hamlib Errorcode too large!</source>
-        <translation type="unfinished">Code d&apos;erreur de hamlib trop grand!</translation>
+        <translation>Code d&apos;erreur de hamlib trop grand!</translation>
     </message>
 </context>
 <context>
@@ -188,116 +188,37 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../pstRotControl.cpp" line="18"/>
         <source>PSTRotator Command OK</source>
-        <translation type="unfinished"></translation>
+        <translation>PSTRotator: commande OK</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="19"/>
         <source>Network Address failed to bind</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse réseau: échec de la liaison</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="20"/>
         <source>Datagram Write Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;écriture de datagramme</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="21"/>
         <source>Request Bearing Command Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Demande direction: Timeout</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="22"/>
         <source>Rotate to Bearing Command Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir la direction: Timeout</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="23"/>
         <source>Stop Commond Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Commande d&apos;arrêt: Timeout</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="344"/>
         <source>pstRotator Errorcode too large!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RotControl</name>
-    <message>
-        <source>No Error, operation completed sucessfully</source>
-        <translation type="vanished">Pas d&apos;erreur, l&apos;opération a réussi</translation>
-    </message>
-    <message>
-        <source>Invalid parameter</source>
-        <translation type="vanished">Paramètre invalide</translation>
-    </message>
-    <message>
-        <source>Invalid configuration</source>
-        <translation type="vanished">Configuration invalide</translation>
-    </message>
-    <message>
-        <source>Memory shortage</source>
-        <translation type="vanished">Manque de mémoire</translation>
-    </message>
-    <message>
-        <source>Function not implemented</source>
-        <translation type="vanished">Fonction non implémentée</translation>
-    </message>
-    <message>
-        <source>Communication timed out</source>
-        <translation type="vanished">Timeout de communication</translation>
-    </message>
-    <message>
-        <source>IO error, including open failed</source>
-        <translation type="vanished">Erreur d&apos;E/S, y compris l&apos;ouverture a échoué</translation>
-    </message>
-    <message>
-        <source>Internal Hamlib error</source>
-        <translation type="vanished">Hamlib - Erreur interne</translation>
-    </message>
-    <message>
-        <source>Protocol error</source>
-        <translation type="vanished">Erreur de protocole</translation>
-    </message>
-    <message>
-        <source>Command rejected by the rig</source>
-        <translation type="vanished">Commande rejetée par l&apos;appareil</translation>
-    </message>
-    <message>
-        <source>Command performed, but arg truncated</source>
-        <translation type="vanished">Commande exécutée, mais l&apos;argument tronqué</translation>
-    </message>
-    <message>
-        <source>Function not available</source>
-        <translation type="vanished">Fonction non disponible</translation>
-    </message>
-    <message>
-        <source>VFO not targetable</source>
-        <translation type="vanished">VFO not targetable</translation>
-    </message>
-    <message>
-        <source>Error talking on the bus</source>
-        <translation type="vanished">Erreur de communication sur le bus</translation>
-    </message>
-    <message>
-        <source>Collision on the bus</source>
-        <translation type="vanished">Collision de données sur le bus</translation>
-    </message>
-    <message>
-        <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
-        <translation type="vanished">WHAT ???     (AND WHY?)   APJ19</translation>
-    </message>
-    <message>
-        <source>Invalid VFO</source>
-        <translation type="vanished">VFO?????? invalide   APJ20</translation>
-    </message>
-    <message>
-        <source>RIG_EDOM</source>
-        <translation type="vanished">RIG_EDOM WHAT????   APJ21</translation>
-    </message>
-    <message>
-        <source>hamlib Errorcode too large!</source>
-        <translation type="vanished">Code d&apos;erreur de hamlib trop grand!</translation>
+        <translation>Code d&apos;erreur de pstRotator trop grand!</translation>
     </message>
 </context>
 <context>
@@ -392,17 +313,17 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="130"/>
         <source>0</source>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="137"/>
         <source>Enter Test Bearing</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer direction d&apos;essai</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="161"/>
         <source>Using:</source>
-        <translation type="unfinished"></translation>
+        <translation>En utilisant:</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="200"/>
@@ -551,14 +472,6 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <translation>Sélectionner la type d&apos;antenne SVP</translation>
     </message>
     <message>
-        <source>Rotator Init</source>
-        <translation type="vanished">Initialisation du rotateur</translation>
-    </message>
-    <message>
-        <source>Connected to: %1 - %2, %3, %4, %5, %6, %7, %8</source>
-        <translation type="vanished">Connecté: %1 - %2, %3, %4, %5, %6, %7, %8</translation>
-    </message>
-    <message>
         <location filename="../rotatormainwindow.cpp" line="502"/>
         <source>Connected to: %1 - %2, %3</source>
         <translation>Connecté: %1 - %2, %3</translation>
@@ -633,31 +546,23 @@ Entrer %1 - %2 SVP</translation>
         <translation>Sens horaire (à droite)</translation>
     </message>
     <message>
-        <source>Rotator hamlib Error - %1</source>
-        <translation type="vanished">Contrôle du Rotateur, Erreur de Hamlib - %1</translation>
-    </message>
-    <message>
-        <source>%1 - %2
-Command - %3</source>
-        <translation type="vanished">%1 - %2
-Commande - %3</translation>
-    </message>
-    <message>
         <location filename="../rotatormainwindow.cpp" line="496"/>
         <source>Connected to: %1 - %2, %3, %4, %5, %6, %7,  Handshake %8, ForceDTR %9, ForceRTS %10</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecté: %1 - %2, %3:%4 - %5 %6, %7, Handshake %8 ForceDTR %9, ForceRTS %10</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1881"/>
         <source>Rotator %1 library Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotateurl: Erreur de bibliothèque %1</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1881"/>
         <source>%1
 %2 - %3
 Command: %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1
+%2 - %3
+Command: %4</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1963"/>
@@ -715,7 +620,8 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2376"/>
         <source>Unable to determine library version at this time!
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de déterminer la version de la bibliothèque pour le moment!
+</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="2379"/>
@@ -840,13 +746,15 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2401"/>
         <source>ForceDTR = %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>ForceDTR = %1
+</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="2402"/>
         <source>ForceRTS = %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>ForceRTS = %1
+</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="2404"/>
@@ -898,30 +806,10 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
 </translation>
     </message>
     <message>
-        <source>True</source>
-        <translation type="vanished">Vrai</translation>
-    </message>
-    <message>
-        <source>False</source>
-        <translation type="vanished">Faux</translation>
-    </message>
-    <message>
         <location filename="../rotatormainwindow.cpp" line="2411"/>
         <source>Simulate CW and CCW Commands selected = %1
 </source>
         <translation>Commandes le sens horaire et antihoraire sont simulés = %1
-</translation>
-    </message>
-    <message>
-        <source>Rotator Max Baudrate = %1
-</source>
-        <translation type="vanished">Baud maximum du Rotateur = %1
-</translation>
-    </message>
-    <message>
-        <source>Rotator Min Baud rate = %1
-</source>
-        <translation type="vanished">Baud minimum du Rotateur = %1
 </translation>
     </message>
     <message>
@@ -1035,17 +923,17 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotsetupform.ui" line="191"/>
         <source>Force: DTR</source>
-        <translation type="unfinished"></translation>
+        <translation>Forcer: DTR</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="208"/>
         <source>Force: RTS</source>
-        <translation type="unfinished"></translation>
+        <translation>Forcer: RTS</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="240"/>
         <source>Advanced Comms Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres de communication avancés</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="255"/>
@@ -1091,7 +979,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotsetupform.ui" line="343"/>
         <source>Show Compass Dial</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le cadran de la boussole</translation>
     </message>
     <message>
         <location filename="../rotsetupform.cpp" line="479"/>

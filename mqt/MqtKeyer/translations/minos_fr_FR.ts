@@ -52,17 +52,17 @@
         <location filename="../KeyerMain.ui" line="106"/>
         <location filename="../KeyerMain.ui" line="165"/>
         <source>PTT</source>
-        <translation type="unfinished"></translation>
+        <translation>PTT</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="113"/>
         <source>L1</source>
-        <translation type="unfinished"></translation>
+        <translation>L1</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="120"/>
         <source>L2</source>
-        <translation type="unfinished"></translation>
+        <translation>L2</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="127"/>
@@ -117,7 +117,7 @@
     <message>
         <location filename="../KeyerMain.ui" line="343"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="369"/>

@@ -6,7 +6,7 @@
     <message>
         <location filename="../mqtktMainWindow.ui" line="14"/>
         <source>mqtktMainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mqtktMainWindow.ui" line="26"/>
