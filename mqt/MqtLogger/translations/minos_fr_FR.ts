@@ -4,9 +4,9 @@
 <context>
     <name>BandmapClientFilterDialog</name>
     <message>
-        <location filename="../bandmapclientfilterdialog.ui" line="24"/>
+        <location filename="../bandmapclientfilterdialog.ui" line="22"/>
         <source>Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="32"/>
@@ -62,27 +62,27 @@
         <location filename="../bandmapclientfilterdialog.ui" line="109"/>
         <location filename="../bandmapclientfilterdialog.ui" line="124"/>
         <source>Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="131"/>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="140"/>
         <source>Ignore Spots with no distance value</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer les spots sans valeur de distance</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.cpp" line="187"/>
         <source>Distance Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre de distance</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.cpp" line="188"/>
         <source>Please enter a number between %1 and %2!</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer un nombre entre %1 et %2 SVP!</translation>
     </message>
 </context>
 <context>
@@ -90,10 +90,9 @@
     <message>
         <location filename="../bandmapclientframe.ui" line="27"/>
         <location filename="../bandmapclientframe.cpp" line="90"/>
-        <location filename="../bandmapclientframe.cpp" line="468"/>
-        <location filename="../bandmapclientframe.cpp" line="488"/>
-        <location filename="../bandmapclientframe.cpp" line="620"/>
-        <location filename="../bandmapclientframe.cpp" line="1706"/>
+        <location filename="../bandmapclientframe.cpp" line="465"/>
+        <location filename="../bandmapclientframe.cpp" line="596"/>
+        <location filename="../bandmapclientframe.cpp" line="1681"/>
         <source>Bandmap</source>
         <translation>Carte des bandes</translation>
     </message>
@@ -124,84 +123,74 @@
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="140"/>
-        <location filename="../bandmapclientframe.cpp" line="180"/>
+        <location filename="../bandmapclientframe.cpp" line="177"/>
         <source>M&amp;ark Spot</source>
         <translation>&amp;Sélectionner le spot</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="141"/>
-        <location filename="../bandmapclientframe.cpp" line="181"/>
+        <location filename="../bandmapclientframe.cpp" line="178"/>
         <source>&amp;Unmark Spot</source>
         <translation>&amp;Désélectionner le spot</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="142"/>
-        <location filename="../bandmapclientframe.cpp" line="182"/>
+        <location filename="../bandmapclientframe.cpp" line="179"/>
         <source>Set &amp;Freq</source>
         <translation>Définir &amp;Fréquences</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="143"/>
-        <location filename="../bandmapclientframe.cpp" line="183"/>
+        <location filename="../bandmapclientframe.cpp" line="180"/>
         <source>Set &amp;Bearing</source>
         <translation>Définir la &amp;Direction</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="144"/>
-        <location filename="../bandmapclientframe.cpp" line="184"/>
+        <location filename="../bandmapclientframe.cpp" line="181"/>
         <source>Send &amp;Log</source>
         <translation>Envoyer en &amp;Journeau</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="145"/>
-        <location filename="../bandmapclientframe.cpp" line="185"/>
+        <location filename="../bandmapclientframe.cpp" line="182"/>
         <source>Send &amp;Memory</source>
         <translation>Envoyer en &amp;Mémoire</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="146"/>
-        <location filename="../bandmapclientframe.cpp" line="186"/>
+        <location filename="../bandmapclientframe.cpp" line="183"/>
         <source>Clear &amp;Spot</source>
         <translation>Effacer &amp;Spot</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="147"/>
-        <source>Clear All Spots</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../bandmapclientframe.cpp" line="469"/>
-        <location filename="../bandmapclientframe.cpp" line="621"/>
+        <location filename="../bandmapclientframe.cpp" line="466"/>
+        <location filename="../bandmapclientframe.cpp" line="597"/>
         <source>Please confirm you want to delete this spot - %1?</source>
         <translation>Veuillez confirmer que vous souhaitez supprimer cette Spot - %1?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="489"/>
-        <source>Please confirm you want to delete all the spots in the bandmap1?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../bandmapclientframe.cpp" line="1540"/>
+        <location filename="../bandmapclientframe.cpp" line="1516"/>
         <source>Cluster Server Not Running</source>
         <translation>Serveur ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1567"/>
+        <location filename="../bandmapclientframe.cpp" line="1543"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1573"/>
+        <location filename="../bandmapclientframe.cpp" line="1549"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1637"/>
+        <location filename="../bandmapclientframe.cpp" line="1613"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1702"/>
+        <location filename="../bandmapclientframe.cpp" line="1677"/>
         <source>Bandmap - %1Mouse in frame, updates paused</source>
         <translation>Bandmapr - %1 Souris dans le cadre, mises à jour suspendues</translation>
     </message>
@@ -245,112 +234,112 @@ Le mode calculé est%6
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;&lt;REMOVE&gt;&gt;  </translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="42"/>
         <source>HF</source>
-        <translation type="unfinished"></translation>
+        <translation>HF</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="56"/>
         <source>7 MHz</source>
-        <translation type="unfinished">2300 MHz {7 ?}</translation>
+        <translation>2300 MHz {7 ?}</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="70"/>
         <source>1.8 MHz</source>
-        <translation type="unfinished">2300 MHz {1.8 ?}</translation>
+        <translation>1,8 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="84"/>
         <source>28 MHz</source>
-        <translation type="unfinished">2300 MHz {28 ?}</translation>
+        <translation>28 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="98"/>
         <source>21 MHz</source>
-        <translation type="unfinished">2300 MHz {21 ?}</translation>
+        <translation>21 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="112"/>
         <source>14 MHz</source>
-        <translation type="unfinished">2300 MHz {14 ?}</translation>
+        <translation>14 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="126"/>
         <source>3.5 MHz</source>
-        <translation type="unfinished">2300 MHz {3.5 ?}</translation>
+        <translation>3,5 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="159"/>
         <source>VHF/UHF</source>
-        <translation type="unfinished"></translation>
+        <translation>VHF/UHF</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="173"/>
         <source>144 MHz</source>
-        <translation type="unfinished">144 MHz</translation>
+        <translation>144 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="187"/>
         <source>2300 MHz</source>
-        <translation type="unfinished">2300 MHz</translation>
+        <translation>2300 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="201"/>
         <source>432 MHz</source>
-        <translation type="unfinished">432 MHz</translation>
+        <translation>432 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="215"/>
         <source>1296 MHz</source>
-        <translation type="unfinished">1296 MHz</translation>
+        <translation>1296 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="229"/>
         <source>3.4 GHz</source>
-        <translation type="unfinished">3,4 GHz</translation>
+        <translation>3,4 GHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="243"/>
         <source>70 MHz</source>
-        <translation type="unfinished">70 MHz</translation>
+        <translation>70 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="257"/>
         <source>50 MHz</source>
-        <translation type="unfinished">50 MHz</translation>
+        <translation>50 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="271"/>
         <source>5.6 GHz</source>
-        <translation type="unfinished">5,6 GHz</translation>
+        <translation>5,6 GHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="285"/>
         <source>10 GHz</source>
-        <translation type="unfinished">10 GHz</translation>
+        <translation>10 GHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="302"/>
         <source>Default Distance when creating a new contest</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance par défaut en concours nouvelle   </translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="15"/>
         <source>Cluster/Bandmap Filter Configure</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer le filtre de Cluster / Bandmap</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="82"/>
         <source>Distance Error - %1. Please enter a distance %2 to max %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de distance - %1. Entrer une distance entre %2 et %3 SVP</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="83"/>
         <source>Distance Entry Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;entrée de distance</translation>
     </message>
 </context>
 <context>
@@ -1098,7 +1087,7 @@ Marquer entre Locators de 4 caractères</translation>
         <location filename="../contestdetails.cpp" line="192"/>
         <location filename="../contestdetails.cpp" line="862"/>
         <source>All HF</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes HF</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="1189"/>
@@ -1263,7 +1252,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <location filename="../WsjtxDecodesModel.cpp" line="60"/>
         <source>distance</source>
         <translatorcomment>NOT USED?</translatorcomment>
-        <translation>Distance</translation>
+        <translation>distance</translation>
     </message>
     <message>
         <location filename="../WsjtxDecodesModel.cpp" line="62"/>
@@ -3110,7 +3099,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../taboutbox.cpp" line="113"/>
         <source>Welcome to Minos Version</source>
-        <translation>Bienvenue à Minos Version (.fr 16 apr 20)</translation>
+        <translation>Bienvenue à Minos Version (Beta 30 may 20)</translation>
     </message>
     <message>
         <location filename="../taboutbox.cpp" line="121"/>
@@ -3331,7 +3320,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tcalendarform.cpp" line="327"/>
         <source>%1 of %2 files downloaded. We don&apos;t expect to load them all.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 des fichiers%2 téléchargés. Nous ne nous attendons pas à les télécharger tous.</translation>
     </message>
 </context>
 <context>
@@ -3976,7 +3965,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tlogcontainer.cpp" line="436"/>
         <source>Cluster/Bandmap Filter configuration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer le filtre de Cluster / Bandmap ...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="438"/>
@@ -4629,12 +4618,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../WsjtxConfigure.ui" line="67"/>
         <source>Path to WSJT-X data (containing ALL.TXT)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin d&apos;accès aux données WSJT-X (contenant ALL.TXT)</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigure.ui" line="77"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigure.ui" line="89"/>
@@ -4664,7 +4653,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../WsjtxConfigure.cpp" line="183"/>
         <source>ALL.TXT for WSJT-X</source>
-        <translation type="unfinished"></translation>
+        <translation>ALL.TXT pour WSJT-X</translation>
     </message>
 </context>
 <context>
@@ -4672,33 +4661,34 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="14"/>
         <source>Specify Permitted CQ Calls</source>
-        <translation type="unfinished"></translation>
+        <translation>Spécifier les appels CQ autorisés</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="20"/>
         <source>CQ xxx Callsign Locator - xxx is allowed in...
 Include the CQ as well as the type</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;&lt;&lt;CONTEXT??&gt;&gt;    </translation>
     </message>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="35"/>
         <source>In Special mode &quot;test&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>En mode spécial &quot;test&quot;</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="53"/>
         <source>In other modes</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>En/Aux autres modes?</translatorcomment>
+        <translation>Des autres modes  </translation>
     </message>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="69"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="89"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
@@ -4735,12 +4725,12 @@ Include the CQ as well as the type</source>
     <message>
         <location filename="../WsjtxFrame.ui" line="235"/>
         <source>Auto Rearm</source>
-        <translation type="unfinished"></translation>
+        <translation>Réarmement automatique</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="246"/>
         <source>Config CQ</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer CQ??  </translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="256"/>
@@ -4780,7 +4770,7 @@ Include the CQ as well as the type</source>
     <message>
         <location filename="../WsjtxFrame.cpp" line="517"/>
         <source>Failed to open %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de ouvrir %1</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.cpp" line="644"/>

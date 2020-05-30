@@ -120,97 +120,97 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="19"/>
         <source>No Error, operation completed sucessfully</source>
-        <translation type="unfinished">Pas d&apos;erreur, l&apos;opération a réussi</translation>
+        <translation>Pas d&apos;erreur, l&apos;opération a réussi</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="20"/>
         <source>Invalid parameter</source>
-        <translation type="unfinished">Paramètre invalide</translation>
+        <translation>Paramètre invalide</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="21"/>
         <source>Invalid configuration</source>
-        <translation type="unfinished">Configuration invalide</translation>
+        <translation>Configuration invalide</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="22"/>
         <source>Memory shortage</source>
-        <translation type="unfinished">Manque de mémoire</translation>
+        <translation>Manque de mémoire</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="23"/>
         <source>Function not implemented</source>
-        <translation type="unfinished">Fonction non implémentée</translation>
+        <translation>Fonction non implémentée</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="24"/>
         <source>Communication timed out</source>
-        <translation type="unfinished">Timeout de communication</translation>
+        <translation>Timeout de communication</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="25"/>
         <source>IO error, including open failed</source>
-        <translation type="unfinished">Erreur d&apos;E/S, y compris l&apos;ouverture a échoué</translation>
+        <translation>Erreur d&apos;E/S, y compris l&apos;ouverture a échoué</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="26"/>
         <source>Internal Hamlib error</source>
-        <translation type="unfinished">Hamlib - Erreur interne</translation>
+        <translation>Hamlib - Erreur interne</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="27"/>
         <source>Protocol error</source>
-        <translation type="unfinished">Erreur de protocole</translation>
+        <translation>Erreur de protocole</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="28"/>
         <source>Command rejected by the rig</source>
-        <translation type="unfinished">Commande rejetée par l&apos;appareil</translation>
+        <translation>Commande rejetée par l&apos;appareil</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="29"/>
         <source>Command performed, but arg truncated</source>
-        <translation type="unfinished">Commande exécutée, mais l&apos;argument tronqué</translation>
+        <translation>Commande exécutée, mais l&apos;argument tronqué</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="30"/>
         <source>Function not available</source>
-        <translation type="unfinished">Fonction non disponible</translation>
+        <translation>Fonction non disponible</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="31"/>
         <source>VFO not targetable</source>
-        <translation type="unfinished">VFO non ciblable</translation>
+        <translation>VFO non ciblable</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="32"/>
         <source>Error talking on the bus</source>
-        <translation type="unfinished">Erreur de communication sur le bus</translation>
+        <translation>Erreur de communication sur le bus</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="33"/>
         <source>Collision on the bus</source>
-        <translation type="unfinished">Collision de données sur le bus</translation>
+        <translation>Collision de données sur le bus</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="34"/>
         <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
-        <translation type="unfinished">Erreur interne - NULL RIG handle or any invalid pointer parameter in get arg</translation>
+        <translation>Erreur interne - NULL RIG handle or any invalid pointer parameter in get arg</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="35"/>
         <source>Invalid VFO</source>
-        <translation type="unfinished">VFO invalide</translation>
+        <translation>VFO invalide</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="36"/>
         <source>RIG_EDOM</source>
-        <translation type="unfinished">Erreur interne - RIG_EDOM</translation>
+        <translation>Erreur interne - RIG_EDOM</translation>
     </message>
     <message>
         <location filename="../hamlibrigcontrol.cpp" line="1170"/>
         <source>hamlib Errorcode too large!</source>
-        <translation type="unfinished">Code d&apos;erreur de hamlib trop grand!</translation>
+        <translation>Code d&apos;erreur de hamlib trop grand!</translation>
     </message>
 </context>
 <context>
@@ -218,157 +218,79 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../omnirigcontrol.cpp" line="20"/>
         <source>No Error, operation completed sucessfully</source>
-        <translation type="unfinished">Pas d&apos;erreur, l&apos;opération a réussi</translation>
+        <translation>Pas d&apos;erreur, l&apos;opération a réussi</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="21"/>
         <source>Radio Function not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Fonction radio non soutenue</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="22"/>
         <source>Omnirig Com Failed to start</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: la communication n&apos;a pas pu démarrer</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="23"/>
         <source>Omnirig rig One failed to initialise</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: l&apos;appareil 1 n&apos;a pas pu s&apos;initialiser</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="24"/>
         <source>Omnirig rig Two failed to initialise</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: l&apos;appareil 2 n&apos;a pas pu s&apos;initialiser</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="25"/>
         <source>Omnirig rig is offline</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: l&apos;appareil est hors ligne</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="26"/>
         <source>Omnirig radio online</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: l&apos;appareil est en ligne</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="27"/>
         <source>Omnirig get freq fail</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: échec de l&apos;obtention de la fréquence </translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="28"/>
         <source>Omnirig COM Exception
 Check Rigcontrol tracelog</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: exception COM
+Vérifier le tracelog Rigcontrol</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="29"/>
         <source>Omnirig not configured</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: non configuré</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="30"/>
         <source>Omnirig disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: désactivé</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="31"/>
         <source>Omnirig port busy</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: port occupé</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="32"/>
         <source>Omnirig not responding</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: ne répond pas</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="33"/>
         <source>Omnirig rig pointer null</source>
-        <translation type="unfinished"></translation>
+        <translation>Omnirig: pointeur NULL</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="772"/>
+        <location filename="../omnirigcontrol.cpp" line="770"/>
         <source>Omnirig Errorcode too large!</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>RigControl</name>
-    <message>
-        <source>No Error, operation completed sucessfully</source>
-        <translation type="vanished">Pas d&apos;erreur, l&apos;opération a réussi</translation>
-    </message>
-    <message>
-        <source>Invalid parameter</source>
-        <translation type="vanished">Paramètre invalide</translation>
-    </message>
-    <message>
-        <source>Invalid configuration</source>
-        <translation type="vanished">Configuration invalide</translation>
-    </message>
-    <message>
-        <source>Memory shortage</source>
-        <translation type="vanished">Manque de mémoire</translation>
-    </message>
-    <message>
-        <source>Function not implemented</source>
-        <translation type="vanished">Fonction non implémentée</translation>
-    </message>
-    <message>
-        <source>Communication timed out</source>
-        <translation type="vanished">Timeout de communication</translation>
-    </message>
-    <message>
-        <source>IO error, including open failed</source>
-        <translation type="vanished">Erreur d&apos;E/S, y compris l&apos;ouverture a échoué</translation>
-    </message>
-    <message>
-        <source>Internal Hamlib error</source>
-        <translation type="vanished">Hamlib - Erreur interne</translation>
-    </message>
-    <message>
-        <source>Protocol error</source>
-        <translation type="vanished">Erreur de protocole</translation>
-    </message>
-    <message>
-        <source>Command rejected by the rig</source>
-        <translation type="vanished">Commande rejetée par l&apos;appareil</translation>
-    </message>
-    <message>
-        <source>Command performed, but arg truncated</source>
-        <translation type="vanished">Commande exécutée, mais l&apos;argument tronqué</translation>
-    </message>
-    <message>
-        <source>Function not available</source>
-        <translation type="vanished">Fonction non disponible</translation>
-    </message>
-    <message>
-        <source>VFO not targetable</source>
-        <translation type="vanished">VFO non ciblable</translation>
-    </message>
-    <message>
-        <source>Error talking on the bus</source>
-        <translation type="vanished">Erreur de communication sur le bus</translation>
-    </message>
-    <message>
-        <source>Collision on the bus</source>
-        <translation type="vanished">Collision de données sur le bus</translation>
-    </message>
-    <message>
-        <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
-        <translation type="vanished">Erreur interne - NULL RIG handle or any invalid pointer parameter in get arg</translation>
-    </message>
-    <message>
-        <source>Invalid VFO</source>
-        <translation type="vanished">VFO invalide</translation>
-    </message>
-    <message>
-        <source>RIG_EDOM</source>
-        <translation type="vanished">Erreur interne - RIG_EDOM</translation>
-    </message>
-    <message>
-        <source>hamlib Errorcode too large!</source>
-        <translation type="vanished">Code d&apos;erreur de hamlib trop grand!</translation>
+        <translation>Code d&apos;erreur de Omnirig trop grand!</translation>
     </message>
 </context>
 <context>
@@ -426,7 +348,7 @@ Check Rigcontrol tracelog</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="54"/>
         <source>Using: </source>
-        <translation type="unfinished"></translation>
+        <translation>En utilisant: </translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="275"/>
@@ -508,25 +430,18 @@ Check Rigcontrol tracelog</source>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="918"/>
         <source>Edit Preset Freq</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier la fréquence prédéfinie</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="926"/>
         <source>Contest Start - Ignore Preset Freq</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Debut du concours - Ignorer la fréquence prédéfinie</translatorcomment>
+        <translation>Début du concours - Ignorer la fréquence prédéfinie</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="934"/>
         <source>Contest Change - Ignore Previous Freq</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RX BW:</source>
-        <translation type="vanished">RX BW:</translation>
-    </message>
-    <message>
-        <source>0000</source>
-        <translation type="vanished">0000</translation>
+        <translation>Changement de concours - Ignorer la fréquence prédéfinie</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="676"/>
@@ -615,14 +530,6 @@ Do you want to reload the settings for the radio now?</source>
 Reload the settings for the radio now?</translation>
     </message>
     <message>
-        <source>Radio Error</source>
-        <translation type="vanished">Erreur à la radio</translation>
-    </message>
-    <message>
-        <source>Please configure a radio name and model</source>
-        <translation type="vanished">Configurer un nom et un type de radio</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="978"/>
         <source>RigCtld Open Radio</source>
         <translation>RigCtld ouvrir la radio</translation>
@@ -656,20 +563,16 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
         <translation>Radio ouverte Rigctld: %1</translation>
     </message>
     <message>
-        <source>Connected via RigCtld: %1 - %2, %3, %4, %5, %6, %7, Handshake %8, ForceDTR %9, ForceRTS %10</source>
-        <translation type="vanished">Connecté via Rigctld: %1 - %2, %3:%4 - %5 %6, %7, Handshake %8 ForceDTR %9, ForceRTS %10</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="967"/>
         <location filename="../rigcontrolmainwindow.cpp" line="1106"/>
         <source>RigControl Open Radio Error</source>
-        <translation type="unfinished"></translation>
+        <translation>RigControl: Erreur d&apos;ouverture de la radio</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="967"/>
         <location filename="../rigcontrolmainwindow.cpp" line="1106"/>
         <source>Failed to created a radio</source>
-        <translation type="unfinished"></translation>
+        <translation>Échoué de créer une radio</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1022"/>
@@ -833,24 +736,16 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="3036"/>
         <source>RigControl %1 library Error</source>
-        <translation type="unfinished"></translation>
+        <translation>RigControl: Erreur de bibliothèque %1</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="3036"/>
         <source>%1
 %2 - %3
 Command: %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 - %2
-Command %3</source>
-        <translation type="vanished">%1 - %2
-Command %3</translation>
-    </message>
-    <message>
-        <source>RigControl hamlib Error - %1</source>
-        <translation type="vanished">Contrôle d&apos;Appareil, Erreur de Hamlib - %1</translation>
+        <translation>%1
+%2 - %3
+Command: %4</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="3225"/>
@@ -877,7 +772,7 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="3547"/>
         <source>Unable to determine library version at this time!
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de déterminer la version de la bibliothèque pour le moment</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="3550"/>
@@ -926,12 +821,6 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
         <source>Icom CIV address = %1
 </source>
         <translation>Adresse ICOM CIV = %1
-</translation>
-    </message>
-    <message>
-        <source>Rig PortType = %1
-</source>
-        <translation type="vanished">Type de port d&apos;Appareil = %1
 </translation>
     </message>
     <message>
@@ -1139,18 +1028,6 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
         <source>Radio Supports Set RIT Freq = %1
 </source>
         <translation>Radio supporte Definir fréquence RIT = %1
-</translation>
-    </message>
-    <message>
-        <source>Radio Supports Get RIT State On/Off = %1
-</source>
-        <translation type="vanished">Radio supporte Obtenir l&apos;état RIT (activé / désactivé) = %1
-</translation>
-    </message>
-    <message>
-        <source>Radio Supports Set RIT State On/Off = %1
-</source>
-        <translation type="vanished">Radio supporte Definir l&apos;état RIT (activé / désactivé) = %1
 </translation>
     </message>
     <message>
@@ -1459,7 +1336,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigsetupform.ui" line="266"/>
         <source>Advanced Comms Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres de communication avancés</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="279"/>
@@ -1480,37 +1357,37 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigsetupform.ui" line="306"/>
         <source>Start Minos  RigCtld</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer Minos RigCtld</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="371"/>
         <source>Supported Native Bands on Rig</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandes natives supportées sur l&apos;appareil</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="379"/>
         <source>50 MHz</source>
-        <translation type="unfinished">50 MHz</translation>
+        <translation>50 MHz</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="386"/>
         <source>70 MHz</source>
-        <translation type="unfinished">70 MHz</translation>
+        <translation>70 MHz</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="393"/>
         <source>144 MHz</source>
-        <translation type="unfinished">144 MHz</translation>
+        <translation>144 MHz</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="400"/>
         <source>432 MHz</source>
-        <translation type="unfinished">432 MHz</translation>
+        <translation>432 MHz</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="407"/>
         <source>1296MHz</source>
-        <translation type="unfinished">1296MHz</translation>
+        <translation>1296MHz</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="434"/>

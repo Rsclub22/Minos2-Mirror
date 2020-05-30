@@ -233,10 +233,6 @@
         <translation>Distance maximale à afficher</translation>
     </message>
     <message>
-        <source>Set max distance</source>
-        <translation type="vanished">Définir la distance maximale</translation>
-    </message>
-    <message>
         <location filename="../kstmainwindow.ui" line="252"/>
         <source>Show me-&gt;user
 Path in AirScout</source>

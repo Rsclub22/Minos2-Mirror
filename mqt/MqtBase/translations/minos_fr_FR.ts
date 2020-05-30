@@ -270,7 +270,7 @@
     <message>
         <location filename="../profiles.cpp" line="59"/>
         <source>WSJTX Path to ALL.TXT</source>
-        <translation type="unfinished"></translation>
+        <translation>Chemin d&apos;accès a ALL.TXT</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="60"/>
@@ -285,12 +285,12 @@
     <message>
         <location filename="../profiles.cpp" line="63"/>
         <source>CQ types in test mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Types de CQ en mode test</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="64"/>
         <source>CQ types in ordinary mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Types de CQ en mode ordinaire</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="66"/>
@@ -375,7 +375,7 @@
     <message>
         <location filename="../profiles.cpp" line="100"/>
         <source>Allow HF Bands</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoriser les bandes HF</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="104"/>
@@ -563,12 +563,12 @@
     <message>
         <location filename="../profiles.cpp" line="161"/>
         <source>ITU Zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone ITU</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="162"/>
         <source>CQ Zone</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone CQ</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="165"/>
