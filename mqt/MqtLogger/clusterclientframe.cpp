@@ -417,33 +417,36 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 void ClusterClientFrame::filterButtonSelected()
 {
-    //filterSetup->copyBandFiltersToDialog();
-    //filterSetup->copyModeFiltersToDialog();
-    //filterSetup->copyCallsignFilterListToListWidget();
-    //filterSetup->copyLocatorFilterListToListWidget();
-    //filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
     ClusterClientFilterDialog *filterSetup = new ClusterClientFilterDialog(ct, filterSettings, this);
+    //filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
+
     filterSetup->exec();
+    if (filterSetup->getSettingsChangedFlag())
+    {
+        filterSettings = filterSetup->getFilterSettings();
+        //update views..
+        if (filterSetup->getBandFilterChangedFlag()
+         || filterSetup->getModeFilterChangedFlag()
+         || filterSetup->getDistanceFilterChangedFlag()
+         || filterSetup->getIgnoreDistChangedFlag()
+         || filterSetup->getIgnoreEmptyDistChangedFlag())
+        {
+            dxSpotProxyModel->setFilterRegExp("");
+        }
+        else if (filterSetup->getCallsignFilerChangedFlag())
+        {
+            callSignProxyModel->setFilterRegExp("");
+        }
+        else if (filterSetup->getLocatorFilterChangedFlag())
+        {
+            locatorProxyModel->setFilterRegExp("");
+        }
+
+    }
 
 }
 
-void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged)
-{
-    //update views..
-    if (bandfilterChanged || modefilterChanged)
-    {
-        dxSpotProxyModel->setFilterRegExp("");
-    }
-    else if (callsignfilterChanged)
-    {
-        callSignProxyModel->setFilterRegExp("");
-    }
-    else if (locatorfilterChanged)
-    {
-        locatorProxyModel->setFilterRegExp("");
-    }
 
-}
 
 void ClusterClientFrame::on_FontChanged()
 {

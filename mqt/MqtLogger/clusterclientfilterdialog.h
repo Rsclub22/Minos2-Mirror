@@ -36,8 +36,7 @@ public:
     bool checkBandMatch(int bandNum);
     bool checkModeMatch(int bandNum);
 
-    void copyBandFiltersToDialog();
-    void copyModeFiltersToDialog();
+
     void copyCallsignFilterListToListWidget();
     void copyLocatorFilterListToListWidget();
 
@@ -56,8 +55,19 @@ public:
 
     void saveClusterFilterToContest();
     void setModeFilter(bool state, int mode);
+
+    bool getBandFilterChangedFlag(){return bandfilterChanged;}
+    bool getModeFilterChangedFlag(){return modefilterChanged;}
+    bool getCallsignFilerChangedFlag(){return callsignfilterChanged;}
+    bool getLocatorFilterChangedFlag(){return locatorfilterChanged;}
+    bool getDistanceFilterChangedFlag(){return distancefilterChanged;}
+    bool getSettingsChangedFlag(){return settingsChanged;}
+    bool getIgnoreDistChangedFlag(){return ignoreDistChanged;}
+    bool getIgnoreEmptyDistChangedFlag(){return ignoreEmptyDistChanged;}
+
+
 signals:
-    void filtersChanged(bool, bool, bool, bool);
+    //void filtersChanged(bool, bool, bool, bool);
 
 
 private:
@@ -98,6 +108,16 @@ private:
 
     QString contestUuid;
 
+    bool bandfilterChanged = false;
+    bool modefilterChanged = false;
+    bool callsignfilterChanged = false;
+    bool locatorfilterChanged = false;
+    bool distancefilterChanged = false;
+    bool ignoreDistChanged = false;
+    bool ignoreEmptyDistChanged = false;
+    bool settingsChanged = false;
+
+
 //    bool enableHFSpots;
 
     void initCheckFilterTab();
@@ -114,7 +134,7 @@ private:
 
 
 
-    void restoreTabSettings();
+
 
     void closeEvent(QCloseEvent *event);
 
@@ -133,12 +153,16 @@ private:
     bool locatorFiltersChanged();
 
     void copyBandFiltersToFilterSettings();
+    void copyBandFiltersToDialog();
     void copyModeFiltersToFilterSettings();
 
 
     void doCloseEvent();
     void enableDistanceFields();
     void setDefaultDistValues(int start, int end, bool status);
+    bool distanceValuesChanged();
+    bool ignoreDistanceChanged();
+    bool ignoreEmptyDistanceChanged();
 private slots:
     //void bandChecked(int checkBoxNum);
     //void modeChecked(int checkBoxNum);

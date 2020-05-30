@@ -143,6 +143,19 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         connect(ignoreDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperDistEdit, SLOT(map()));
     }
 
+    for (int i = 0; i < ignoreDistanceChkBoxList.count(); i++)
+    {
+        if (*filterSettings.ignoreDistanceFlags[i])
+        {
+            ignoreDistanceChkBoxList[i]->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            ignoreDistanceChkBoxList[i]->setCheckState(Qt::Unchecked);
+        }
+
+    }
+
     ignoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_50MHz << ui->ignoreEmptyDistanceValuesChkBox_70MHz << ui->ignoreEmptyDistanceValuesChkBox_144MHz << ui->ignoreEmptyDistanceValuesChkBox_432MHz
                                   << ui->ignoreEmptyDistanceValuesChkBox_1296MHz << ui->ignoreEmptyDistanceValuesChkBox_2300MHz << ui->ignoreEmptyDistanceValuesChkBox_3_4GHz << ui->ignoreEmptyDistanceValuesChkBox_5_6GHz << ui->ignoreEmptyDistanceValuesChkBox_10GHz;
 
@@ -153,6 +166,19 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     {
         signalMapperDistEdit->setMapping(ignoreEmptyDistanceChkBoxList[i], i);
         connect(ignoreEmptyDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperDistEdit, SLOT(map()));
+    }
+
+    for (int i = 0; i < ignoreEmptyDistanceChkBoxList.count(); i++)
+    {
+        if (*filterSettings.ignoreEmptyDistanceFlags[i])
+        {
+            ignoreEmptyDistanceChkBoxList[i]->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            ignoreEmptyDistanceChkBoxList[i]->setCheckState(Qt::Unchecked);
+        }
+
     }
 
     distanceLabelsList << ui->bandLabel_50MHz << ui->bandLabel_70MHz << ui->bandLabel_144MHz << ui->bandLabel_432MHz
@@ -231,10 +257,6 @@ void ClusterClientFilterDialog::setContest(BaseContestLog *c)
 
 void ClusterClientFilterDialog::filtersAccepted()
 {
-    bool bandfilterChanged = false;
-    bool modefilterChanged = false;
-    bool callsignfilterChanged = false;
-    bool locatorfilterChanged = false;
 
 
     if (bandFiltersChanged())
@@ -265,20 +287,113 @@ void ClusterClientFilterDialog::filtersAccepted()
         locatorfilterChanged = true;
     }
 
-    if (bandfilterChanged || modefilterChanged || callsignfilterChanged || locatorfilterChanged)
+    if (distanceValuesChanged())
     {
-        trace(QString("Cluster Filters Changed - ContestUuid = %1").arg(contestUuid));
-        trace(QString("BandFilter Changed = %1, ModeFilter Changed = %2, CallsignFilter Changed = %3, LocatorFilter Changed = %4").arg(bandfilterChanged).arg(modefilterChanged).arg(callsignfilterChanged).arg(locatorfilterChanged));
-        trace(QString("Band 50Mhz = %1, Band 70Mhz = %2, Band 144Mhz = %3, Band 432Mhz = %4, Band = 1296Mhz = %5").arg(*filterSettings.bandFilters[_50M]).arg(*filterSettings.bandFilters[_70M]).arg(*filterSettings.bandFilters[_144M]).arg(*filterSettings.bandFilters[_432M]).arg(*filterSettings.bandFilters[_1296M]));
-        trace(QString("Band 2300Mhz = %1, Band 3.4Ghz = %2, Band 5.6Ghz = %3, Band 10Ghz = %4").arg(*filterSettings.bandFilters[_2300M]).arg(*filterSettings.bandFilters[_3_4G]).arg(*filterSettings.bandFilters[_5_6G]).arg(*filterSettings.bandFilters[_10G]));
-        //trace(QString("Mode Filters CW = %1, PhoneMode = %2, RTTYMode = %3, PSKMode = %4, MGMMode = %5").arg(*filterSettings.modeFilters[CWMODE]).arg(*filterSettings.modeFilters[PHONEMODE]).arg(*filterSettings.modeFilters[RTTYMODE]).arg(*filterSettings.modeFilters[PSKMODE]).arg(*filterSettings.modeFilters[MGMMODE]));
-        trace(QString("Callsign List = %1").arg(filterSettings.callsignFilterList));
-        trace(QString("Locator List = %1").arg(filterSettings.locatorFilterList));
-        trace(QString("Save to log"));
-        saveClusterFilterToContest();
+        for (int i = 0; i < distanceValues.count(); i++)
+        {
+            if (distanceValues[i].distChanged && *filterSettings.bandFilters[i])
+            {
+                *filterSettings.distanceFilters[i] = distanceValues[i].distance;
+                distancefilterChanged = true;
+            }
+
+        }
     }
 
-    emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
+    if (ignoreDistanceChanged())
+    {
+        for (int i = 0; i < distanceValues.count();i++)
+        {
+            if (distanceValues[i].ignoreDistChanged && *filterSettings.bandFilters[i])
+            {
+               *filterSettings.ignoreDistanceFlags[i] = distanceValues[i].ignoreDistance;
+               ignoreDistChanged = true;
+            }
+        }
+    }
+
+    if (ignoreEmptyDistanceChanged())
+    {
+        for (int i = 0; i < distanceValues.count();i++)
+        {
+            if (distanceValues[i].ignoreEmptyDistanceChanged && *filterSettings.bandFilters[i])
+            {
+               *filterSettings.ignoreEmptyDistanceFlags[i] = distanceValues[i].ignoreEmptyDistance;
+               ignoreEmptyDistChanged = true;
+            }
+        }
+    }
+
+    if (bandfilterChanged || modefilterChanged || callsignfilterChanged
+            || locatorfilterChanged || distancefilterChanged
+            || ignoreDistChanged || ignoreEmptyDistChanged)
+    {
+        trace(QString("Cluster Filters Changed - ContestUuid = %1").arg(contestUuid));
+        trace(QString("BandFilter Changed = %1, ModeFilter Changed = %2, CallsignFilter Changed = %3, LocatorFilter Changed = %4, DistanceFilter Changed = %5").arg(bandfilterChanged  ? "True" : "False").arg(modefilterChanged  ? "True" : "False").arg(callsignfilterChanged  ? "True" : "False").arg(locatorfilterChanged  ? "True" : "False").arg(distancefilterChanged ? "True" : "False"));
+        if (bandfilterChanged)
+        {
+            for (int i = 0; i < filterSettings.bandFilters.count(); i++)
+            {
+                trace(QString("Band Filter - band %1, setting = %2").arg(QString::number(i).arg(*filterSettings.bandFilters[i] ? "True" : "False")));
+            }
+        }
+        if (modefilterChanged)
+        {
+            for (int i = 0; i < filterSettings.modeFilters.count(); i++)
+            {
+                trace(QString("Mode Filter - band %1, setting = %2").arg(QString::number(i).arg(*filterSettings.modeFilters[i] ? "True" : "False")));
+            }
+
+        }
+        if (callsignfilterChanged)
+        {
+            trace(QString("Callsign List = %1").arg(filterSettings.callsignFilterList));
+        }
+        if (locatorfilterChanged)
+        {
+            trace(QString("Locator List = %1").arg(filterSettings.locatorFilterList));
+        }
+        if (distancefilterChanged)
+        {
+            for (int i = 0; i < distanceValues.count(); i++)
+            {
+                if (distanceValues[i].distChanged)
+                {
+                    trace(QString("Distance change for band %1, value %2").arg(QString::number(i)).arg(QString::number(distanceValues[i].distance)));
+                }
+            }
+        }
+
+        if (ignoreDistChanged)
+        {
+            for (int i = 0; i < distanceValues.count(); i++)
+            {
+                if (distanceValues[i].distChanged)
+                {
+                    trace(QString("Ignore Distance  change flag  for band %1, value %2").arg(QString::number(i)).arg(distanceValues[i].ignoreDistChanged ? "True" :"False"));
+                }
+            }
+        }
+        if (ignoreEmptyDistChanged)
+        {
+            for (int i = 0; i < distanceValues.count(); i++)
+            {
+                if (distanceValues[i].distChanged)
+                {
+                    trace(QString("Ignore Empty Distance change flag for band %1, value %2").arg(QString::number(i)).arg(distanceValues[i].ignoreEmptyDistanceChanged ? "True" :"False"));
+                }
+            }
+        }
+
+
+
+
+        saveClusterFilterToContest();
+        settingsChanged = true;
+
+    }
+
+    //emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
     doCloseEvent();
     close();
 }
@@ -352,6 +467,48 @@ bool ClusterClientFilterDialog::locatorFiltersChanged()
     }
     return false;
 }
+
+bool ClusterClientFilterDialog::distanceValuesChanged()
+{
+    for (int i = 0; i < distanceValues.count(); i++)
+    {
+        if (distanceValues[i].distChanged)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool ClusterClientFilterDialog::ignoreDistanceChanged()
+{
+    for (int i = 0; i < distanceValues.count(); i++)
+    {
+        if (distanceValues[i].ignoreDistChanged)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool ClusterClientFilterDialog::ignoreEmptyDistanceChanged()
+{
+    for (int i = 0; i < distanceValues.count(); i++)
+    {
+        if (distanceValues[i].ignoreEmptyDistanceChanged)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+
 void ClusterClientFilterDialog::filtersRejected()
 {
  /*
@@ -393,18 +550,11 @@ int ClusterClientFilterDialog::getTabCurrentIndex()
     return ui->ClusterClientFilterTab->currentIndex();
 }
 
-void ClusterClientFilterDialog::restoreTabSettings()
-{
-
-    copyBandFiltersToDialog();
-    copyModeFiltersToDialog();
-
-}
 
 
 void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
 {
-    restoreTabSettings();
+
     doCloseEvent();
     QWidget::closeEvent(event);
 }
@@ -433,13 +583,6 @@ void ClusterClientFilterDialog::copyModeFiltersToFilterSettings()
     }
 }
 
-void ClusterClientFilterDialog::copyModeFiltersToDialog()
-{
-    for (int i = 0; i < modeChkBoxList.count(); i++)
-    {
-        modeChkBoxList[i]->setChecked(*filterSettings.modeFilters[i]);
-    }
-}
 
 
 
@@ -1177,7 +1320,7 @@ void ClusterClientFilterDialog::setDefaultDistValues(int start, int end, bool st
 
     for (int i = start; i < end; i++)
     {
-        if (bandChkBoxList[i]->isEnabled())
+        if (bandChkBoxList[i]->isChecked())
         {
             distanceValues[i].distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
             distanceLineEditsList[i]->setText(QString::number(distanceValues[i].distance));
@@ -1192,7 +1335,7 @@ void ClusterClientFilterDialog::onVhfSetAllIgnorePbClicked()
 {
     for (int i = 0; i < 4; i++)
     {
-        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Checked)
+        if (bandChkBoxList[i]->isChecked())
         {
             distanceValues[i].ignoreDistance = true;
             distanceValues[i].ignoreDistChanged = true;
@@ -1206,7 +1349,7 @@ void ClusterClientFilterDialog::onUhfSetAllIgnorePbClicked()
 {
     for (int i = 4; i < distanceLineEditsList.count(); i++)
     {
-        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Checked)
+        if (bandChkBoxList[i]->isChecked())
         {
             distanceValues[i].ignoreDistance = true;
             distanceValues[i].ignoreDistChanged = true;
@@ -1219,7 +1362,7 @@ void ClusterClientFilterDialog::onVhfClearAllIgnorePbClicked()
 {
     for (int i = 0; i < 4; i++)
     {
-        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Unchecked)
+        if (bandChkBoxList[i]->isChecked())
         {
             distanceValues[i].ignoreDistance = false;
             distanceValues[i].ignoreDistChanged = true;
@@ -1232,7 +1375,7 @@ void ClusterClientFilterDialog::onUhfClearAllIgnorePbClicked()
 {
     for (int i = 4; i < distanceLineEditsList.count(); i++)
     {
-        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Unchecked)
+        if (bandChkBoxList[i]->isChecked())
         {
             distanceValues[i].ignoreDistance = false;
             distanceValues[i].ignoreDistChanged = true;
@@ -1246,7 +1389,7 @@ void ClusterClientFilterDialog::onVhfSetAllEmptyPbClicked()
 {
     for (int i = 0; i < 4; i++)
     {
-        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Checked)
+        if (bandChkBoxList[i]->isChecked())
         {
             distanceValues[i].ignoreDistance = true;
             distanceValues[i].ignoreDistChanged = true;
@@ -1260,7 +1403,7 @@ void ClusterClientFilterDialog::onUhfSetAllEmptyPbClicked()
 {
     for (int i = 4; i < distanceLineEditsList.count(); i++)
     {
-        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Checked)
+        if (bandChkBoxList[i]->isChecked())
         {
             distanceValues[i].ignoreDistance = true;
             distanceValues[i].ignoreDistChanged = true;
@@ -1273,7 +1416,7 @@ void ClusterClientFilterDialog::onVhfClearAllEmptyDistPbClicked()
 {
     for (int i = 0; i < 4; i++)
     {
-        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Unchecked)
+        if (bandChkBoxList[i]->isChecked())
         {
             distanceValues[i].ignoreDistance = false;
             distanceValues[i].ignoreDistChanged = true;
@@ -1286,7 +1429,7 @@ void ClusterClientFilterDialog::onUhfClearAllEmptyDistPbClicked()
 {
     for (int i = 4; i < distanceLineEditsList.count(); i++)
     {
-        if (ignoreDistanceChkBoxList[i]->checkState() != Qt::Unchecked)
+        if (bandChkBoxList[i]->isChecked())
         {
             distanceValues[i].ignoreDistance = false;
             distanceValues[i].ignoreDistChanged = true;

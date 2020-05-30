@@ -14,7 +14,7 @@
 #include "ui_bandmapclientfilterdialog.h"
 #include "BandList.h"
 
-BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings filterSettings_, QWidget *parent) :
+BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings &filterSettings_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BandmapClientFilterDialog),
     modeButtonState(false),

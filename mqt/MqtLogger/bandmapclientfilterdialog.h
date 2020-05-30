@@ -26,7 +26,7 @@ class BandmapClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings filterSettings, QWidget *parent = nullptr);
+    explicit BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings &filterSettings, QWidget *parent = nullptr);
     ~BandmapClientFilterDialog();
 
     bool checkBandMatch(int bandNum);
