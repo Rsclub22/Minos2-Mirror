@@ -138,6 +138,7 @@ private:
 
     void doCloseEvent();
     void enableDistanceFields();
+    void setDefaultDistValues(int start, int end, bool status);
 private slots:
     //void bandChecked(int checkBoxNum);
     //void modeChecked(int checkBoxNum);
@@ -184,6 +185,7 @@ private slots:
 
     void onVhfClearAllEmptyDistPbClicked();
     void onUhfClearAllEmptyDistPbClicked();
+    void onBandChkBoxChecked(int idx);
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H

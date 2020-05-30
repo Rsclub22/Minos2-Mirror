@@ -75,6 +75,16 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     bandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
 
+    QSignalMapper *signalMapperBandChkBox = new QSignalMapper(this);
+    connect(signalMapperBandChkBox, SIGNAL(mapped(int)), this, SLOT(onBandChkBoxChecked(int)));
+
+    for (int i = 0; i < bandChkBoxList.count(); i++)
+    {
+        signalMapperBandChkBox->setMapping(bandChkBoxList[i], i);
+        connect(bandChkBoxList[i], SIGNAL(clicked()), signalMapperBandChkBox, SLOT(map()));
+    }
+
+
     distanceLineEditsList << ui->spotDistanceEdit_50MHz << ui->spotDistanceEdit_70MHz << ui->spotDistanceEdit_144MHz << ui->spotDistanceEdit_432MHz
                           << ui->spotDistanceEdit_1296MHz << ui->spotDistanceEdit_2300MHz << ui->spotDistanceEdit_3_4GHz << ui->spotDistanceEdit_5_6GHz << ui->spotDistanceEdit_10GHz;
 
@@ -112,7 +122,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     for (int i = 0; i < ignoreDistanceChkBoxList.count(); i++)
     {
         signalMapperDistEdit->setMapping(ignoreDistanceChkBoxList[i], i);
-        connect(ignoreDistanceChkBoxList[i], SIGNAL(stateChanged()), signalMapperDistEdit, SLOT(map()));
+        connect(ignoreDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperDistEdit, SLOT(map()));
     }
 
     ignoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_50MHz << ui->ignoreEmptyDistanceValuesChkBox_70MHz << ui->ignoreEmptyDistanceValuesChkBox_144MHz << ui->ignoreEmptyDistanceValuesChkBox_432MHz
@@ -124,7 +134,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     for (int i = 0; i < ignoreEmptyDistanceChkBoxList.count(); i++)
     {
         signalMapperDistEdit->setMapping(ignoreEmptyDistanceChkBoxList[i], i);
-        connect(ignoreEmptyDistanceChkBoxList[i], SIGNAL(stateChanged()), signalMapperDistEdit, SLOT(map()));
+        connect(ignoreEmptyDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperDistEdit, SLOT(map()));
     }
 
     distanceLabelsList << ui->bandLabel_50MHz << ui->bandLabel_70MHz << ui->bandLabel_144MHz << ui->bandLabel_432MHz
@@ -188,6 +198,8 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
+
+    enableDistanceFields();
 
 }
 
@@ -1069,7 +1081,7 @@ void ClusterClientFilterDialog::enableDistanceFields()
         }
         else
         {
-            distanceLabelsList[i]->setEnabled(false);
+            distanceLineEditsList[i]->setEnabled(false);
             ignoreDistanceChkBoxList[i]->setEnabled(false);
             ignoreEmptyDistanceChkBoxList[i]->setEnabled(false);
             distanceLabelsList[i]->setEnabled(false);
@@ -1077,6 +1089,16 @@ void ClusterClientFilterDialog::enableDistanceFields()
     }
 
 }
+
+
+void ClusterClientFilterDialog::onBandChkBoxChecked(int idx)
+{
+    Q_UNUSED(idx)
+    enableDistanceFields();
+
+}
+
+
 
 void ClusterClientFilterDialog::onDistanceEditingFinished(int idx)
 {
@@ -1123,30 +1145,27 @@ void ClusterClientFilterDialog::onIgnoreEmptyDistanceChecked(int idx)
 
 void ClusterClientFilterDialog::onVhfSetDefDistPbClicked()
 {
-    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-    config.beginGroup("distanceFilter");
-
-    for (int i = 0; i < 4; i++)
-    {
-        distanceValues[i].distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
-        distanceLineEditsList[i]->setText(QString::number(distanceValues[i].distance));
-        distanceValues[i].distChanged =true;
-    }
-
-    config.endGroup();
-
+    setDefaultDistValues(0, 4, true);
 }
 
 void ClusterClientFilterDialog::onUhfSetDefDistPbClicked()
 {
+    setDefaultDistValues(4, distanceLineEditsList.count(), true);
+}
+
+void ClusterClientFilterDialog::setDefaultDistValues(int start, int end, bool status)
+{
     QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
     config.beginGroup("distanceFilter");
 
-    for (int i = 4; i < distanceLineEditsList.count(); i++)
+    for (int i = start; i < end; i++)
     {
-        distanceValues[i].distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
-        distanceLineEditsList[i]->setText(QString::number(distanceValues[i].distance));
-        distanceValues[i].distChanged =true;
+        if (bandChkBoxList[i]->isEnabled())
+        {
+            distanceValues[i].distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+            distanceLineEditsList[i]->setText(QString::number(distanceValues[i].distance));
+            distanceValues[i].distChanged = status;
+        }
     }
 
     config.endGroup();

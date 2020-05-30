@@ -424,13 +424,13 @@
        <item>
         <widget class="QTabWidget" name="filterDistancesTab">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="VHF_DistanceTab">
           <attribute name="title">
            <string>VHF</string>
           </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_26">
+          <layout class="QVBoxLayout" name="verticalLayout_16">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
              <item>
@@ -641,6 +641,16 @@
               </widget>
              </item>
             </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Enabled Fields Only</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -902,6 +912,16 @@
               </widget>
              </item>
             </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Enabled Fields Only</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>

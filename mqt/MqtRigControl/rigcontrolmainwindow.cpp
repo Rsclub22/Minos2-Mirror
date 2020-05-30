@@ -964,7 +964,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
     if (radio == nullptr)
     {
         logMessage(QString("Error Creating a rig in the factory - rigctld"));
-        QMessageBox::critical(this, tr("RigControl Open Radio Error"), tr("Failed to created a radio"));
+        QMessageBox::critical(this, tr("RigControl Open Radio Error"), tr("Failed to create a radio"));
         return OPEN_FAILED;
     }
 
@@ -1103,7 +1103,7 @@ int RigControlMainWindow::openRadio()
     if (radio == nullptr)
     {
         logMessage(QString("Error Creating a rig in the factory"));
-        QMessageBox::critical(this, tr("RigControl Open Radio Error"), tr("Failed to created a radio"));
+        QMessageBox::critical(this, tr("RigControl Open Radio Error"), tr("Failed to create a radio"));
         return OPEN_FAILED;
     }
     else
