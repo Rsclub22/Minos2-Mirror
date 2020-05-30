@@ -22,7 +22,7 @@
 #include "locatorinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
-ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, ClusterClientFilterSettings filterSettings_, QWidget *parent) :
+ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, ClusterClientFilterSettings &filterSettings_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
@@ -84,25 +84,43 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         connect(bandChkBoxList[i], SIGNAL(clicked()), signalMapperBandChkBox, SLOT(map()));
     }
 
+    for (int i = 0; i < bandChkBoxList.count(); i++)
+    {
+        if (*filterSettings.bandFilters[i])
+        {
+            bandChkBoxList[i]->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            bandChkBoxList[i]->setCheckState(Qt::Unchecked);
+        }
+    }
+
+    modeChkBoxList << ui->noneModeChkBox << ui->cwModeChkBox << ui->usbModeChkBox << ui->fmModeChkBox << ui->rttyModeChkBox << ui->psk31ModeChkBox << ui->ft8ModeChkBox << ui->msk144ModeChkBox << ui->jt65ModeChkBox;
+
+    for (int i = 0; i < modeChkBoxList.count(); i++)
+    {
+        if (*filterSettings.modeFilters[i])
+        {
+            modeChkBoxList[i]->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            modeChkBoxList[i]->setCheckState(Qt::Unchecked);
+        }
+    }
 
     distanceLineEditsList << ui->spotDistanceEdit_50MHz << ui->spotDistanceEdit_70MHz << ui->spotDistanceEdit_144MHz << ui->spotDistanceEdit_432MHz
                           << ui->spotDistanceEdit_1296MHz << ui->spotDistanceEdit_2300MHz << ui->spotDistanceEdit_3_4GHz << ui->spotDistanceEdit_5_6GHz << ui->spotDistanceEdit_10GHz;
 
 
-    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-    config.beginGroup("distanceFilter");
-
-
-    for (int i = 0; i < distanceLineEditsList.count(); i++)
+    for (int i = 0; i < filterSettings.distanceFilters.count(); i++)
     {
         distValue distItem;
-        distItem.distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
-        distanceLineEditsList[i]->setText(QString::number(distItem.distance));
-        //distItem.changed = false;
+        distanceLineEditsList[i]->setText(QString::number(*filterSettings.distanceFilters[i]));
+        distItem.distChanged = false;
         distanceValues.append(distItem);
     }
-
-    config.endGroup();
 
     QSignalMapper *signalMapperDistEdit = new QSignalMapper(this);
     connect(signalMapperDistEdit, SIGNAL(mapped(int)), this, SLOT(onDistanceEditingFinished(int)));
@@ -158,7 +176,6 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     connect(ui->uhfClearAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onUhfClearAllEmptyDistPbClicked()));
 
 
-    modeChkBoxList << ui->noneModeChkBox << ui->cwModeChkBox << ui->usbModeChkBox << ui->fmModeChkBox << ui->rttyModeChkBox << ui->psk31ModeChkBox << ui->ft8ModeChkBox << ui->msk144ModeChkBox << ui->jt65ModeChkBox;
 
 
     ui->ClusterClientFilterTab->setCurrentIndex(0);

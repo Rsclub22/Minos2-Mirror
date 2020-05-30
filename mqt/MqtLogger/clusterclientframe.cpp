@@ -56,7 +56,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     restoreSplitters();
 
-    trace(QString("ClusterClientFrame Starting"));
+    traceMsg(QString("Starting"));
 
     int lcf;
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
@@ -578,7 +578,7 @@ void ClusterClientFrame::sendFreqToRig(QString freq)
 
 void ClusterClientFrame::sendBrgToRot(QString brg)
 {
-    trace(QString("Send Bearing to Rot = %1").arg(brg));
+    traceMsg(QString("Send Bearing to Rot = %1").arg(brg));
     if (!brg.isEmpty())
     {
        MinosLoggerEvents::SendSpotBrgStrToRot(brg);
@@ -594,7 +594,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
         QString state = QString(clusterStateList[(*i).state]) + " " + (*i).app + "\r\n";
-        trace(QString("clusterClientServerList - state = %1").arg(state));
+        traceMsg(QString("clusterClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }
 }
@@ -635,7 +635,7 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
     for (int i = sqsize -1 ; i > -1; i--)
     {
        addDxSpotToTable(spotQueue[i]);
-       trace("syncSpots " + spotQueue[i]);
+       traceMsg("syncSpots " + spotQueue[i]);
     }
 
 
@@ -953,7 +953,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
     if (ct != nullptr)
     {
         contestUuid = ct->uuid;
-        trace(QString("Cluster ClientFrame Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
+        traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->contestBands.getValue();
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
@@ -965,14 +965,14 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
             if (!contest->clusterFilterSettingsExist)       // have band settings been saved before?
             {
                 // no, save current band filter for this contest
-                //filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
+                filterSettings.setBandFilter(true, contestBand);    // set cluster filter to current band - can be overidden
 
                 if (contestModeStr == "MGM")       //  have mode settings been saved before?
                 {
                     for (int m = 4; m < clusterModes.count(); m++)
                     {
                         //filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
-                        //*filterSettings.modeFilters[m] = true; // set all the mgm modes in filter
+                        *filterSettings.modeFilters[m] = true; // set all the mgm modes in filter
                     }
                 }
                 else
@@ -982,6 +982,16 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                     *filterSettings.modeFilters[contestMode] = true;
                 }
 
+                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+                config.beginGroup("distanceFilter");
+                for (int i = 0; i < filterSettings.distanceFilters.count(); i++)
+                {
+
+                    *filterSettings.distanceFilters[i] = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+                }
+
+                config.endGroup();
+
                 //filterSetup->saveClusterFilterToContest();  // save these settings
                 contest->saveClusterFilter(filterSettings);
             }
@@ -989,6 +999,10 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
             {
                 filterSettings = contest->getClusterFilter();
             }
+        }
+        else
+        {
+            traceMsg(QString("set Contest - ContestBand error %1").arg(contestBand));
         }
 
 
@@ -1581,7 +1595,7 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     {
 
         ui->statusIndicator->setToolTip(s[1]);
-        trace(QString("Cluster Status: %1").arg(stateMsg));
+        traceMsg(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
     {
@@ -1750,6 +1764,12 @@ void ClusterClientFrame::mouseTimerCheckNewSpots()
         }
         mouseInFrameTimer->start(MOUSE_IN_FRAME_TIMEOUT);
     }
+}
+
+
+void ClusterClientFrame::traceMsg(QString msg)
+{
+    trace(QString("ClusterClientFrame %1").arg(msg));
 }
 
 
