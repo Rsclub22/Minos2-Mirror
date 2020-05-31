@@ -139,8 +139,8 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     for (int i = 0; i < ignoreDistanceChkBoxList.count(); i++)
     {
-        signalMapperDistEdit->setMapping(ignoreDistanceChkBoxList[i], i);
-        connect(ignoreDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperDistEdit, SLOT(map()));
+        signalMapperIgnoreDist->setMapping(ignoreDistanceChkBoxList[i], i);
+        connect(ignoreDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperIgnoreDist, SLOT(map()));
     }
 
     for (int i = 0; i < ignoreDistanceChkBoxList.count(); i++)
@@ -164,8 +164,8 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     for (int i = 0; i < ignoreEmptyDistanceChkBoxList.count(); i++)
     {
-        signalMapperDistEdit->setMapping(ignoreEmptyDistanceChkBoxList[i], i);
-        connect(ignoreEmptyDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperDistEdit, SLOT(map()));
+        signalMapperIgnoreEmptyDist->setMapping(ignoreEmptyDistanceChkBoxList[i], i);
+        connect(ignoreEmptyDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperIgnoreEmptyDist, SLOT(map()));
     }
 
     for (int i = 0; i < ignoreEmptyDistanceChkBoxList.count(); i++)
@@ -196,7 +196,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
 
     connect(ui->vhfSetAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onVhfSetAllEmptyPbClicked()));
-    connect(ui->uhfSetAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onUhfSetAllEmptybClicked()));
+    connect(ui->uhfSetAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onUhfSetAllEmptyPbClicked()));
 
     connect(ui->vhfClearAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onVhfClearAllEmptyDistPbClicked()));
     connect(ui->uhfClearAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onUhfClearAllEmptyDistPbClicked()));
@@ -1391,9 +1391,9 @@ void ClusterClientFilterDialog::onVhfSetAllEmptyPbClicked()
     {
         if (bandChkBoxList[i]->isChecked())
         {
-            distanceValues[i].ignoreDistance = true;
-            distanceValues[i].ignoreDistChanged = true;
-            ignoreDistanceChkBoxList[i]->setChecked(true);
+            distanceValues[i].ignoreEmptyDistance = true;
+            distanceValues[i].ignoreEmptyDistanceChanged = true;
+            ignoreEmptyDistanceChkBoxList[i]->setChecked(true);
         }
 
     }
@@ -1405,9 +1405,9 @@ void ClusterClientFilterDialog::onUhfSetAllEmptyPbClicked()
     {
         if (bandChkBoxList[i]->isChecked())
         {
-            distanceValues[i].ignoreDistance = true;
-            distanceValues[i].ignoreDistChanged = true;
-            ignoreDistanceChkBoxList[i]->setChecked(true);
+            distanceValues[i].ignoreEmptyDistance = true;
+            distanceValues[i].ignoreEmptyDistanceChanged = true;
+            ignoreEmptyDistanceChkBoxList[i]->setChecked(true);
         }
     }
 }
@@ -1418,9 +1418,9 @@ void ClusterClientFilterDialog::onVhfClearAllEmptyDistPbClicked()
     {
         if (bandChkBoxList[i]->isChecked())
         {
-            distanceValues[i].ignoreDistance = false;
-            distanceValues[i].ignoreDistChanged = true;
-            ignoreDistanceChkBoxList[i]->setChecked(false);
+            distanceValues[i].ignoreEmptyDistance = false;
+            distanceValues[i].ignoreEmptyDistanceChanged = true;
+            ignoreEmptyDistanceChkBoxList[i]->setChecked(false);
         }
     }
 }
@@ -1431,9 +1431,9 @@ void ClusterClientFilterDialog::onUhfClearAllEmptyDistPbClicked()
     {
         if (bandChkBoxList[i]->isChecked())
         {
-            distanceValues[i].ignoreDistance = false;
-            distanceValues[i].ignoreDistChanged = true;
-            ignoreDistanceChkBoxList[i]->setChecked(false);
+            distanceValues[i].ignoreEmptyDistance = false;
+            distanceValues[i].ignoreEmptyDistanceChanged = true;
+            ignoreEmptyDistanceChkBoxList[i]->setChecked(false);
         }
     }
 }
