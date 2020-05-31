@@ -15,7 +15,7 @@
 #ifndef RIGCAPABILITIES_H
 #define RIGCAPABILITIES_H
 
-
+#include <QString>
 
 namespace RigCapConstants
 {

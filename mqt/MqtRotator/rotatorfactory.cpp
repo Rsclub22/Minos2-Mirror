@@ -46,11 +46,14 @@ RotatorFactory::Rotators* RotatorFactory::supported_rotators()
 
 RotatorBase* RotatorFactory::createRotator(int rotatorId)
 {
+#if defined (WIN32)
+
     if (rotatorId == PSTRotatorId)
     {
         return new PstRotControl();
     }
     else
+#endif
     {
         return new HamlibRotControl();
     }
