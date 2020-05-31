@@ -1778,7 +1778,7 @@ void ClusterClientFrame::traceMsg(QString msg)
 
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    return matchBand(sourceRow) && matchMode(sourceRow) && matchWorkedLoc(sourceRow) && matchWorkedCallsign(sourceRow);
+    return matchBand(sourceRow) && matchDistance(sourceRow) && matchMode(sourceRow) && matchWorkedLoc(sourceRow) && matchWorkedCallsign(sourceRow);
 }
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
@@ -1798,6 +1798,36 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
     {
         return false;
     }
+
+}
+
+
+bool DxSpotSortFilterProxyModel::matchDistance(int sourceRow) const
+{
+    bool ok = false;
+    int bandMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
+
+    if (ok && (bandMask >=0 && bandMask < NUMBANDS) )
+    {
+        if (!*filterSettings->ignoreDistanceFlags[bandMask])
+        {
+
+
+            QString distanceStr = sourceModel()->data(sourceModel()->index(sourceRow, DXDIST_COL_NUM), DataStoredRole).toString();
+            if (distanceStr.isEmpty() && *filterSettings->ignoreEmptyDistanceFlags[bandMask])
+            {
+                return false;
+            }
+
+            int distance = distanceStr.toInt(&ok);
+            if (ok)
+            {
+                return filterSettings->testDistanceFilter(distance, bandMask);
+            }
+        }
+    }
+
+    return true;
 
 }
 

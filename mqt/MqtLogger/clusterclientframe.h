@@ -51,6 +51,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool matchBand(int sourceRow) const;
     bool matchMode(int sourceRow) const;
+    bool matchDistance(int sourceRow) const;
     bool matchWorkedLoc(int sourceRow) const;
     bool matchWorkedCallsign(int sourceRow) const;
 
@@ -72,6 +73,8 @@ public:
 
     bool unWorkedLocFlag;
     bool unWorkedCallsignFlag;
+
+
 
 
 
