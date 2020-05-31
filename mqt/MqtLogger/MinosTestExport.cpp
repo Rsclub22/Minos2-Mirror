@@ -411,6 +411,42 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
         st->addMember(clusterFilter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
         st->addMember(clusterFilter.getValue().modeFilterNONE, "modeFilterNONEMODE");
 
+        st->addMember(clusterFilter.getValue().distanceFilter50MHz, "distanceFilter50MHz");
+        st->addMember(clusterFilter.getValue().ignoreDistanceFlag_50MHz, "ignoreDistanceFlag50MHz");
+        st->addMember(clusterFilter.getValue().ignoreEmptyDistanceFlag_50MHz, "ignoreEmptyDistanceFlag50MHz");
+
+        st->addMember(clusterFilter.getValue().distanceFilter70MHz, "distanceFilter70MHz");
+        st->addMember(clusterFilter.getValue().ignoreDistanceFlag_70MHz, "ignoreDistanceFlag70MHz");
+        st->addMember(clusterFilter.getValue().ignoreEmptyDistanceFlag_70MHz, "ignoreEmptyDistanceFlag70MHz");
+
+        st->addMember(clusterFilter.getValue().distanceFilter144MHz, "distanceFilter144MHz");
+        st->addMember(clusterFilter.getValue().ignoreDistanceFlag_144MHz, "ignoreDistanceFlag144MHz");
+        st->addMember(clusterFilter.getValue().ignoreEmptyDistanceFlag_144MHz, "ignoreEmptyDistanceFlag144MHz");
+
+        st->addMember(clusterFilter.getValue().distanceFilter432MHz, "distanceFilter432MHz");
+        st->addMember(clusterFilter.getValue().ignoreDistanceFlag_432MHz, "ignoreDistanceFlag432MHz");
+        st->addMember(clusterFilter.getValue().ignoreEmptyDistanceFlag_432MHz, "ignoreEmptyDistanceFlag432MHz");
+
+        st->addMember(clusterFilter.getValue().distanceFilter1296MHz, "distanceFilter1296MHz");
+        st->addMember(clusterFilter.getValue().ignoreDistanceFlag_1296MHz, "ignoreDistanceFlag1296MHz");
+        st->addMember(clusterFilter.getValue().ignoreEmptyDistanceFlag_1296MHz, "ignoreEmptyDistanceFlag1296MHz");
+
+        st->addMember(clusterFilter.getValue().distanceFilter2300MHz, "distanceFilter2300MHz");
+        st->addMember(clusterFilter.getValue().ignoreDistanceFlag_2300MHz, "ignoreDistanceFlag2300MHz");
+        st->addMember(clusterFilter.getValue().ignoreEmptyDistanceFlag_2300MHz, "ignoreEmptyDistanceFlag2300MHz");
+
+        st->addMember(clusterFilter.getValue().distanceFilter3_4GHz, "distanceFilter3_4GHz");
+        st->addMember(clusterFilter.getValue().ignoreDistanceFlag_3_4GHz, "ignoreDistanceFlag3_4GHz");
+        st->addMember(clusterFilter.getValue().ignoreEmptyDistanceFlag_3_4GHz, "ignoreEmptyDistanceFlag3_4GHz");
+
+        st->addMember(clusterFilter.getValue().distanceFilter5_6GHz, "distanceFilter5_6GHz");
+        st->addMember(clusterFilter.getValue().ignoreDistanceFlag_5_6GHz, "ignoreDistanceFlag5_6GHz");
+        st->addMember(clusterFilter.getValue().ignoreEmptyDistanceFlag_5_6GHz, "ignoreEmptyDistanceFlag5_6GHz");
+
+        st->addMember(clusterFilter.getValue().distanceFilter10GHz, "distanceFilter10GHz");
+        st->addMember(clusterFilter.getValue().ignoreDistanceFlag_10GHz, "ignoreDistanceFlag10GHz");
+        st->addMember(clusterFilter.getValue().ignoreEmptyDistanceFlag_10GHz, "ignoreEmptyDistanceFlag10GHz");
+
         sendRequest(expfd, "MinosClusterFilter", st);
 
     }

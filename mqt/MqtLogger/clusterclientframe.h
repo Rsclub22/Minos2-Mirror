@@ -51,6 +51,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     bool matchBand(int sourceRow) const;
     bool matchMode(int sourceRow) const;
+    bool matchDistance(int sourceRow) const;
     bool matchWorkedLoc(int sourceRow) const;
     bool matchWorkedCallsign(int sourceRow) const;
 
@@ -60,18 +61,20 @@ public:
     void setUnworkedCallsignFlag(bool state);
 
 
-    DxSpotSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) :
+    DxSpotSortFilterProxyModel(ClusterClientFilterSettings* filterSettings_) :
         unWorkedLocFlag(false),
         unWorkedCallsignFlag(false)
     {
-        filterSetup = _filterSetup;
+        filterSettings = filterSettings_;
     }
 
-    ClusterClientFilterDialog* filterSetup;
+    ClusterClientFilterSettings* filterSettings;
 
 
     bool unWorkedLocFlag;
     bool unWorkedCallsignFlag;
+
+
 
 
 
@@ -88,7 +91,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    SearchSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
+    SearchSortFilterProxyModel(ClusterClientFilterSettings* filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
     {
 
     }
@@ -107,7 +110,7 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    CallsignSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
+    CallsignSortFilterProxyModel(ClusterClientFilterSettings* filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
     {
 
     }
@@ -122,9 +125,9 @@ public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 
 
-    LocatorSortFilterProxyModel(ClusterClientFilterDialog* _filterSetup) : DxSpotSortFilterProxyModel(_filterSetup)
+    LocatorSortFilterProxyModel(ClusterClientFilterSettings* filterSettings_) : DxSpotSortFilterProxyModel(filterSettings_)
     {
-        filterSetup = _filterSetup;
+        filterSettings = filterSettings_;
     }
 };
 
@@ -162,7 +165,7 @@ private:
     BaseContestLog *ct = nullptr;
     UpperCaseValidator ucValidator;
 
-    ClusterClientFilterDialog *filterSetup = nullptr;
+    ClusterClientFilterSettings filterSettings;
 
 
     HtmlDelegate *delegate = nullptr;
@@ -297,7 +300,7 @@ private slots:
     void onCallsignSpotViewClicked(const QModelIndex &index);
     void onLocatorSpotViewClicked(const QModelIndex &index);
     void onSpotTabChanged(int index);
-    void filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged);
+    //void filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged);
     void onSearchEditingFinished();
     void onDXSpotVertHeaderClicked(int row);
     void onLocatorSpotVertHeaderClicked(int row);
