@@ -10,10 +10,14 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <QSettings>
+#include <QFileInfo>
+#include "MTrace.h"
 #include "rigfactory.h"
 #include "hamlibrigcontrol.h"
+#if defined (WIN32)
 #include "omnirigcontrol.h"
-
+#endif
 RigFactory::RigFactory(bool tracecommFlag, QObject *parent) : QObject(parent)
 {
     HamlibRigControl::setTraceCommsFlag(tracecommFlag);
@@ -48,6 +52,7 @@ RigFactory::Rigs* RigFactory::supported_rigs()
 
 RigBase* RigFactory::createRigs(int rigId)
 {
+#if defined (WIN32)
     if (rigId == OmniRigOneId)
     {
         return new OmnirigControl(OmnirigControl::One, this);
@@ -56,7 +61,9 @@ RigBase* RigFactory::createRigs(int rigId)
     {
         return new OmnirigControl(OmnirigControl::Two, this);
     }
-    else if (rigId <= HamlibRigCtld)
+    else
+#endif
+    if (rigId <= HamlibRigCtld)
     {
         return new HamlibRigControl(this);
     }

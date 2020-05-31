@@ -13,6 +13,7 @@
 #define RIGCOMMON_H
 
 #include <QComboBox>
+#include "rigcontrolcommonconstants.h"
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 

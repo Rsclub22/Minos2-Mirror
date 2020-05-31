@@ -14,7 +14,7 @@
 
 #include "hamlibrigcontrol.h"
 #include "minosNetUtils.h"
-
+#include "MTrace.h"
 
 const char* HamlibRigControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
                                                 QT_TR_NOOP("Invalid parameter"),
