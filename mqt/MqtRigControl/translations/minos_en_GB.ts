@@ -524,6 +524,12 @@ Do you want to reload the settings for the radio now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="967"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1106"/>
+        <source>Failed to create a radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="978"/>
         <source>RigCtld Open Radio</source>
         <translation type="unfinished"></translation>
@@ -553,12 +559,6 @@ Some radios/interfaces may require Force DTR or Force RTS to be set High, to pow
         <location filename="../rigcontrolmainwindow.cpp" line="967"/>
         <location filename="../rigcontrolmainwindow.cpp" line="1106"/>
         <source>RigControl Open Radio Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="967"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="1106"/>
-        <source>Failed to created a radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
