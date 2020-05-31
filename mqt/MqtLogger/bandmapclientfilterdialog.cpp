@@ -14,6 +14,8 @@
 #include "ui_bandmapclientfilterdialog.h"
 #include "BandList.h"
 
+int BandmapClientFilterDialog::mainTabIndex;
+
 BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings &filterSettings_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BandmapClientFilterDialog),
@@ -26,7 +28,7 @@ BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapC
 {
     ui->setupUi(this);
     QSettings settings;
-    QByteArray geometry = settings.value("ClusterClientFilter/geometry").toByteArray();
+    QByteArray geometry = settings.value("BandmapClientFilter/geometry").toByteArray();
     if (geometry.size() > 0)
     {
         restoreGeometry(geometry);
@@ -92,6 +94,9 @@ void BandmapClientFilterDialog::initCheckFilterTab()
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
 
+    connect(ui->bandmapFilterTab, SIGNAL(currentChanged(int)), this, SLOT(onFilterTabIndexChanged(int)));
+
+    setFilterTabCurrentIndex(mainTabIndex);
     loadSettingsToDialogBox();
 
 }
@@ -102,6 +107,24 @@ void BandmapClientFilterDialog::setContest(BaseContestLog *c)
     ct = dynamic_cast<LoggerContestLog *>( c);
 }
 */
+
+void BandmapClientFilterDialog::onFilterTabIndexChanged(int idx)
+{
+    mainTabIndex = idx;
+}
+
+
+
+void BandmapClientFilterDialog::setFilterTabCurrentIndex(int idx)
+{
+    ui->bandmapFilterTab->setCurrentIndex(idx);
+}
+
+int BandmapClientFilterDialog::getFilterTabCurrentIndex()
+{
+    return ui->bandmapFilterTab->currentIndex();
+}
+
 
 void BandmapClientFilterDialog::loadSettingsToDialogBox()
 {

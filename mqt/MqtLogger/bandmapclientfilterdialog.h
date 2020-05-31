@@ -29,6 +29,8 @@ public:
     explicit BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings &filterSettings, QWidget *parent = nullptr);
     ~BandmapClientFilterDialog();
 
+    static int mainTabIndex;
+
     bool checkBandMatch(int bandNum);
     bool checkModeMatch(int bandNum);
 
@@ -94,6 +96,9 @@ private slots:
     void onDistanceEditFinished();
     void onIgnoreDistanceChkBoxStateChanged(int state);
     void onIgnoreEmptyDistanceValuesChkBoxStateChanged(int state);
+    void setFilterTabCurrentIndex(int idx);
+    int getFilterTabCurrentIndex();
+    void onFilterTabIndexChanged(int idx);
 };
 
 #endif // BANDMAPCLIENTFILTERDIALOG_H
