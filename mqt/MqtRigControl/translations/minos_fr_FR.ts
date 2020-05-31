@@ -288,7 +288,7 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation>Omnirig: pointeur NULL</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="770"/>
+        <location filename="../omnirigcontrol.cpp" line="772"/>
         <source>Omnirig Errorcode too large!</source>
         <translation>Code d&apos;erreur de Omnirig trop grand!</translation>
     </message>
@@ -530,6 +530,12 @@ Do you want to reload the settings for the radio now?</source>
 Reload the settings for the radio now?</translation>
     </message>
     <message>
+        <location filename="../rigcontrolmainwindow.cpp" line="967"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="1106"/>
+        <source>Failed to create a radio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../rigcontrolmainwindow.cpp" line="978"/>
         <source>RigCtld Open Radio</source>
         <translation>RigCtld ouvrir la radio</translation>
@@ -569,10 +575,8 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
         <translation>RigControl: Erreur d&apos;ouverture de la radio</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="967"/>
-        <location filename="../rigcontrolmainwindow.cpp" line="1106"/>
         <source>Failed to created a radio</source>
-        <translation>Échoué de créer une radio</translation>
+        <translation type="vanished">Échoué de créer une radio</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1022"/>
