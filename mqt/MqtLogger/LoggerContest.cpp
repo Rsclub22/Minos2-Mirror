@@ -1640,16 +1640,8 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                else if (methodName == "MinosBandmapFilter")
                                {
 
-
                                        bandmapFilterSettingsExist = true;
                                        BandmapClientFilterSettings bcfs;
-
-                                       // get default distanceFilter value
-                                       int bandOffset = getBandOffSet(clusterBands, currentBand.getValue().trimmed());
-                                       QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-                                       config.beginGroup("distanceFilter");
-                                       bcfs.distanceFilter = config.value(distanceIniNames[bandOffset], DEFAULT_FILTER_DISTANCE).toInt();
-                                       config.endGroup();
 
 
                                        mt->getStructArgMemberValue("modeFilterCW", bcfs.modeFilterCW);
@@ -1667,6 +1659,8 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
 
 
                                        saveInitialBandmapFilter(bcfs);
+
+
 
                                }
                                else
