@@ -56,7 +56,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     restoreSplitters();
 
-    trace(QString("ClusterClientFrame Starting"));
+    traceMsg(QString("Starting"));
 
     int lcf;
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
@@ -68,8 +68,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     this->setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
-
-    filterSetup = new ClusterClientFilterDialog(this);
 
 
     purgeTimer = new QTimer(this);
@@ -170,7 +168,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
 
 
-    connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
+    //connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
     connect(ui->unworkedCallsignsChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedCallsignsCheckBox(int)));
     connect(ui->unworkedLocChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedLocCheckBox(int)));
@@ -235,7 +233,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView = new QTableView();
     dxSpotView->setFocusPolicy(Qt::NoFocus);
 
-    dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSetup);
+    dxSpotProxyModel = new DxSpotSortFilterProxyModel(&filterSettings);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
     //dxSpotProxyModel->setDynamicSortFilter(true);
@@ -283,7 +281,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView = new QTableView();
     searchView->setFocusPolicy(Qt::NoFocus);
 
-    searchSortProxyModel = new SearchSortFilterProxyModel(filterSetup);
+    searchSortProxyModel = new SearchSortFilterProxyModel(&filterSettings);
     searchSortProxyModel->setSourceModel(dxSpotDataModel);
     searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -330,7 +328,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView = new QTableView();
     callSignView->setFocusPolicy(Qt::NoFocus);
 
-    callSignProxyModel = new CallsignSortFilterProxyModel(filterSetup);
+    callSignProxyModel = new CallsignSortFilterProxyModel(&filterSettings);
     callSignProxyModel->setSourceModel(dxSpotDataModel);
     callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -377,7 +375,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView = new QTableView();
     locatorView->setFocusPolicy(Qt::NoFocus);
 
-    locatorProxyModel = new LocatorSortFilterProxyModel(filterSetup);
+    locatorProxyModel = new LocatorSortFilterProxyModel(&filterSettings);
     locatorProxyModel->setSourceModel(dxSpotDataModel);
     locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -419,32 +417,36 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 void ClusterClientFrame::filterButtonSelected()
 {
-    filterSetup->copyBandFiltersToDialog();
-    filterSetup->copyModeFiltersToDialog();
-    filterSetup->copyCallsignFilterListToListWidget();
-    filterSetup->copyLocatorFilterListToListWidget();
-    filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
+    ClusterClientFilterDialog *filterSetup = new ClusterClientFilterDialog(ct, filterSettings, this);
+    //filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
+
     filterSetup->exec();
+    if (filterSetup->getSettingsChangedFlag())
+    {
+        filterSettings = filterSetup->getFilterSettings();
+        //update views..
+        if (filterSetup->getBandFilterChangedFlag()
+         || filterSetup->getModeFilterChangedFlag()
+         || filterSetup->getDistanceFilterChangedFlag()
+         || filterSetup->getIgnoreDistChangedFlag()
+         || filterSetup->getIgnoreEmptyDistChangedFlag())
+        {
+            dxSpotProxyModel->setFilterRegExp("");
+        }
+        else if (filterSetup->getCallsignFilerChangedFlag())
+        {
+            callSignProxyModel->setFilterRegExp("");
+        }
+        else if (filterSetup->getLocatorFilterChangedFlag())
+        {
+            locatorProxyModel->setFilterRegExp("");
+        }
+
+    }
 
 }
 
-void ClusterClientFrame::filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged)
-{
-    //update views..
-    if (bandfilterChanged || modefilterChanged)
-    {
-        dxSpotProxyModel->setFilterRegExp("");
-    }
-    else if (callsignfilterChanged)
-    {
-        callSignProxyModel->setFilterRegExp("");
-    }
-    else if (locatorfilterChanged)
-    {
-        locatorProxyModel->setFilterRegExp("");
-    }
 
-}
 
 void ClusterClientFrame::on_FontChanged()
 {
@@ -579,7 +581,7 @@ void ClusterClientFrame::sendFreqToRig(QString freq)
 
 void ClusterClientFrame::sendBrgToRot(QString brg)
 {
-    trace(QString("Send Bearing to Rot = %1").arg(brg));
+    traceMsg(QString("Send Bearing to Rot = %1").arg(brg));
     if (!brg.isEmpty())
     {
        MinosLoggerEvents::SendSpotBrgStrToRot(brg);
@@ -595,7 +597,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
         QString state = QString(clusterStateList[(*i).state]) + " " + (*i).app + "\r\n";
-        trace(QString("clusterClientServerList - state = %1").arg(state));
+        traceMsg(QString("clusterClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }
 }
@@ -636,7 +638,7 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
     for (int i = sqsize -1 ; i > -1; i--)
     {
        addDxSpotToTable(spotQueue[i]);
-       trace("syncSpots " + spotQueue[i]);
+       traceMsg("syncSpots " + spotQueue[i]);
     }
 
 
@@ -949,37 +951,64 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
 
     // set the contest in the filter dialog
-    filterSetup->setContest(c);
+    //filterSetup->setContest(c);
 
     if (ct != nullptr)
     {
         contestUuid = ct->uuid;
-        trace(QString("Cluster ClientFrame Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
+        traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->contestBands.getValue();
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 
-        if (!contest->clusterFilterSettingsExist)       // have band settings been saved before?
-        {
-            // no, save current band filter for this contest
-            filterSetup->setBandFilter(contestBand);    // set cluster filter to current band - can be overidden
 
-            if (contestModeStr == "MGM")       //  have mode settings been saved before?
+        if (contestBand != -1)
+        {
+            if (!contest->clusterFilterSettingsExist)       // have band settings been saved before?
             {
-                for (int m = 4; m < clusterModes.count(); m++)
+                // no, save current band filter for this contest
+                filterSettings.setBandFilter(true, contestBand);    // set cluster filter to current band - can be overidden
+
+                if (contestModeStr == "MGM")       //  have mode settings been saved before?
                 {
-                    filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
+                    for (int m = 4; m < clusterModes.count(); m++)
+                    {
+                        //filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
+                        *filterSettings.modeFilters[m] = true; // set all the mgm modes in filter
+                    }
                 }
+                else
+                {
+                    // no, save current mode filter for this contest
+                    //filterSetup->setModeFilter(true, contestMode);
+                    *filterSettings.modeFilters[contestMode] = true;
+                }
+
+                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+                config.beginGroup("distanceFilter");
+                for (int i = 0; i < filterSettings.distanceFilters.count(); i++)
+                {
+
+                    *filterSettings.distanceFilters[i] = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+                }
+
+                config.endGroup();
+
+                //filterSetup->saveClusterFilterToContest();  // save these settings
+                contest->saveClusterFilter(filterSettings);
             }
             else
             {
-                // no, save current mode filter for this contest
-                filterSetup->setModeFilter(true, contestMode);
+                filterSettings = contest->getClusterFilter();
             }
-
-            filterSetup->saveClusterFilterToContest();  // save these settings
         }
+        else
+        {
+            traceMsg(QString("set Contest - ContestBand error %1").arg(contestBand));
+        }
+
+
 
 
 
@@ -1485,9 +1514,9 @@ void ClusterClientFrame::checkSavedFilters()
     {
         QString cUuuid = ct->uuid;
         ClusterClientFilterSettings cfs = contest->clusterFilterSettings.getValue();
-        if (cfs != filterSetup->filterSettings)
+        if (cfs != filterSettings)
         {
-            filterSetup->filterSettings = cfs;
+            filterSettings = cfs;
         }
     }
 }
@@ -1569,7 +1598,7 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     {
 
         ui->statusIndicator->setToolTip(s[1]);
-        trace(QString("Cluster Status: %1").arg(stateMsg));
+        traceMsg(QString("Cluster Status: %1").arg(stateMsg));
     }
     else
     {
@@ -1741,9 +1770,15 @@ void ClusterClientFrame::mouseTimerCheckNewSpots()
 }
 
 
+void ClusterClientFrame::traceMsg(QString msg)
+{
+    trace(QString("ClusterClientFrame %1").arg(msg));
+}
+
+
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    return matchBand(sourceRow) && matchMode(sourceRow) && matchWorkedLoc(sourceRow) && matchWorkedCallsign(sourceRow);
+    return matchBand(sourceRow) && matchDistance(sourceRow) && matchMode(sourceRow) && matchWorkedLoc(sourceRow) && matchWorkedCallsign(sourceRow);
 }
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
@@ -1753,9 +1788,9 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 
     if (ok && (bandMask >=0 && bandMask < NUMBANDS) )
     {
-       return filterSetup->filterSettings.getBandFilter(bandMask);
+       return filterSettings->getBandFilter(bandMask);
     }
-    else if (!ok && filterSetup->getEnableHFSpotsFlag())
+    else if (!ok && false/*filterSetup->getEnableHFSpotsFlag()*/) // need to modify this for HF
     {
         return true;        // if DXBandMask is empty it must be a HF Spot
     }
@@ -1766,13 +1801,43 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 
 }
 
+
+bool DxSpotSortFilterProxyModel::matchDistance(int sourceRow) const
+{
+    bool ok = false;
+    int bandMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
+
+    if (ok && (bandMask >=0 && bandMask < NUMBANDS) )
+    {
+        if (!*filterSettings->ignoreDistanceFlags[bandMask])
+        {
+
+
+            QString distanceStr = sourceModel()->data(sourceModel()->index(sourceRow, DXDIST_COL_NUM), DataStoredRole).toString();
+            if (distanceStr.isEmpty() && *filterSettings->ignoreEmptyDistanceFlags[bandMask])
+            {
+                return false;
+            }
+
+            int distance = distanceStr.toInt(&ok);
+            if (ok)
+            {
+                return filterSettings->testDistanceFilter(distance, bandMask);
+            }
+        }
+    }
+
+    return true;
+
+}
+
 bool DxSpotSortFilterProxyModel::matchMode(int sourceRow) const
 {
     bool ok = false;
     int modeMask = sourceModel()->data(sourceModel()->index(sourceRow, DXMODEMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
     if (ok && modeMask >=0)
     {
-        return filterSetup->filterSettings.getModeFilter(modeMask);
+        return filterSettings->getModeFilter(modeMask);
     }
     else
     {
@@ -1853,13 +1918,13 @@ bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
 
-    if (!filterSetup->getCallsignFilterList().empty())
+    if (!filterSettings->unpackFilterList(filterSettings->callsignFilterList).empty())
     {
         if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
             Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
             spotCall.validate();
-            foreach (const QString &str, filterSetup->getCallsignFilterList())
+            foreach (const QString &str, filterSettings->unpackFilterList(filterSettings->callsignFilterList))
             {
                 if (spotCall.realCall.contains(str, Qt::CaseInsensitive))
                 {
@@ -1876,7 +1941,7 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
 
 bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    if (!filterSetup->getLocatorFilterList().empty())
+    if (!filterSettings->unpackFilterList(filterSettings->locatorFilterList).empty())
     {
         if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
@@ -1884,7 +1949,7 @@ bool LocatorSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
             QString locator = sourceModel()->data(index, DataStoredRole).toString().mid(0,4);
             if (locator != "")
             {
-                if (filterSetup->getLocatorFilterList().contains(locator))
+                if (filterSettings->unpackFilterList(filterSettings->locatorFilterList).contains(locator))
                 {
                     return true;
                 }

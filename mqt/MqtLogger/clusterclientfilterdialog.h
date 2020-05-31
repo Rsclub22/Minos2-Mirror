@@ -30,43 +30,73 @@ class ClusterClientFilterDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ClusterClientFilterDialog(QWidget *parent);
+
+    explicit ClusterClientFilterDialog(BaseContestLog *c, ClusterClientFilterSettings &filterSettings_, QWidget *parent);
+
     ~ClusterClientFilterDialog();
+
+    static int mainTabIndex;
+    static int distanceTabIndex;
 
     bool checkBandMatch(int bandNum);
     bool checkModeMatch(int bandNum);
 
-    void copyBandFiltersToDialog();
-    void copyModeFiltersToDialog();
+
     void copyCallsignFilterListToListWidget();
     void copyLocatorFilterListToListWidget();
 
-    void setTabCurrentIndex(int i);
-    int getTabCurrentIndex();
+    //void setTabCurrentIndex(int i);
+    //int getTabCurrentIndex();
 
     QStringList getCallsignFilterList();
     QStringList getLocatorFilterList();
 
-
-    void setContest(BaseContestLog *c);
-    ClusterClientFilterSettings filterSettings;
+    ClusterClientFilterSettings getFilterSettings(){return filterSettings;}
+    //void setContest(BaseContestLog *c);
+    //ClusterClientFilterSettings filterSettings;
 
     void setBandFilter(int band);
     bool getEnableHFSpotsFlag();
 
     void saveClusterFilterToContest();
     void setModeFilter(bool state, int mode);
+
+    bool getBandFilterChangedFlag(){return bandfilterChanged;}
+    bool getModeFilterChangedFlag(){return modefilterChanged;}
+    bool getCallsignFilerChangedFlag(){return callsignfilterChanged;}
+    bool getLocatorFilterChangedFlag(){return locatorfilterChanged;}
+    bool getDistanceFilterChangedFlag(){return distancefilterChanged;}
+    bool getSettingsChangedFlag(){return settingsChanged;}
+    bool getIgnoreDistChangedFlag(){return ignoreDistChanged;}
+    bool getIgnoreEmptyDistChangedFlag(){return ignoreEmptyDistChanged;}
+
+
 signals:
-    void filtersChanged(bool, bool, bool, bool);
+    //void filtersChanged(bool, bool, bool, bool);
 
 
 private:
     Ui::ClusterClientFilterDialog *ui;
     LoggerContestLog *ct = nullptr;
+    ClusterClientFilterSettings filterSettings;
 
+    struct distValue{
+        int distance;
+        bool distChanged = false;
+        bool ignoreDistance = false;
+        bool ignoreDistChanged = false;
+        bool ignoreEmptyDistance = false;
+        bool ignoreEmptyDistanceChanged = false;
+    };
+
+    QList<distValue>  distanceValues;
 
     QList<QCheckBox*> bandChkBoxList;
     QList<QCheckBox*> modeChkBoxList;
+    QList<QLineEdit*> distanceLineEditsList;
+    QList<QCheckBox*> ignoreDistanceChkBoxList;
+    QList<QCheckBox*> ignoreEmptyDistanceChkBoxList;
+    QList<QLabel*> distanceLabelsList;
 
 
     QListWidget* callsignListWidget;
@@ -83,7 +113,17 @@ private:
 
     QString contestUuid;
 
-    bool enableHFSpots;
+    bool bandfilterChanged = false;
+    bool modefilterChanged = false;
+    bool callsignfilterChanged = false;
+    bool locatorfilterChanged = false;
+    bool distancefilterChanged = false;
+    bool ignoreDistChanged = false;
+    bool ignoreEmptyDistChanged = false;
+    bool settingsChanged = false;
+
+
+//    bool enableHFSpots;
 
     void initCheckFilterTab();
     void clearVHFBands();
@@ -99,7 +139,7 @@ private:
 
 
 
-    void restoreTabSettings();
+
 
     void closeEvent(QCloseEvent *event);
 
@@ -118,10 +158,22 @@ private:
     bool locatorFiltersChanged();
 
     void copyBandFiltersToFilterSettings();
+    void copyBandFiltersToDialog();
     void copyModeFiltersToFilterSettings();
 
 
     void doCloseEvent();
+    void enableDistanceFields();
+    void setDefaultDistValues(int start, int end, bool status);
+    bool distanceValuesChanged();
+    bool ignoreDistanceChanged();
+    bool ignoreEmptyDistanceChanged();
+
+    void setFilterTabCurrentIndex(int idx);
+    int getFilterTabCurrentIndex();
+    void setDistanceFilterTabCurrentIndex(int idx);
+    int getDistanceFilterTabCurrentIndex();
+
 private slots:
     //void bandChecked(int checkBoxNum);
     //void modeChecked(int checkBoxNum);
@@ -150,6 +202,27 @@ private slots:
     void onLocatorListImport();
     void callsignDelAllClicked();
     void locatorDelAllClicked();
+    void onUhfClearAllIgnorePbClicked();
+    void onVhfClearAllIgnorePbClicked();
+
+    void onUhfSetAllIgnorePbClicked();
+    void onVhfSetAllIgnorePbClicked();
+
+    void onUhfSetDefDistPbClicked();
+    void onVhfSetDefDistPbClicked();
+
+    void onIgnoreDistanceChecked(int);
+    void onDistanceEditingFinished(int);
+    void onIgnoreEmptyDistanceChecked(int idx);
+
+    void onVhfSetAllEmptyPbClicked();
+    void onUhfSetAllEmptyPbClicked();
+
+    void onVhfClearAllEmptyDistPbClicked();
+    void onUhfClearAllEmptyDistPbClicked();
+    void onBandChkBoxChecked(int idx);
+    void onFilterTabIndexChanged(int idx);
+    void onDistanceFilterTabIndexChanged(int idx);
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H
