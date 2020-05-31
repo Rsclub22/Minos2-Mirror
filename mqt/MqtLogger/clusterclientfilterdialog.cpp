@@ -22,6 +22,9 @@
 #include "locatorinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 
+int ClusterClientFilterDialog::mainTabIndex;
+int ClusterClientFilterDialog::distanceTabIndex;
+
 ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, ClusterClientFilterSettings &filterSettings_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
@@ -242,9 +245,28 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
 
+    connect(ui->ClusterClientFilterTab, SIGNAL(currentChanged(int)), this, SLOT(onFilterTabIndexChanged(int)));
+    connect(ui->filterDistancesTab,  SIGNAL(currentChanged(int)), this, SLOT(onDistanceFilterTabIndexChanged(int)));
+
+    setFilterTabCurrentIndex(mainTabIndex);
+    setDistanceFilterTabCurrentIndex(distanceTabIndex);
+
     enableDistanceFields();
 
+
 }
+
+
+void ClusterClientFilterDialog::onFilterTabIndexChanged(int idx)
+{
+    mainTabIndex = idx;
+}
+
+void ClusterClientFilterDialog::onDistanceFilterTabIndexChanged(int idx)
+{
+    distanceTabIndex = idx;
+}
+
 
 /*
 void ClusterClientFilterDialog::setContest(BaseContestLog *c)
@@ -540,17 +562,25 @@ void ClusterClientFilterDialog::filtersRejected()
 }
 
 
-void ClusterClientFilterDialog::setTabCurrentIndex(int i)
+void ClusterClientFilterDialog::setFilterTabCurrentIndex(int idx)
 {
-    ui->ClusterClientFilterTab->setCurrentIndex(i);
+    ui->ClusterClientFilterTab->setCurrentIndex(idx);
 }
 
-int ClusterClientFilterDialog::getTabCurrentIndex()
+int ClusterClientFilterDialog::getFilterTabCurrentIndex()
 {
     return ui->ClusterClientFilterTab->currentIndex();
 }
 
+void ClusterClientFilterDialog::setDistanceFilterTabCurrentIndex(int idx)
+{
+    ui->filterDistancesTab->setCurrentIndex(idx);
+}
 
+int ClusterClientFilterDialog::getDistanceFilterTabCurrentIndex()
+{
+    return ui->filterDistancesTab->currentIndex();
+}
 
 void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
 {

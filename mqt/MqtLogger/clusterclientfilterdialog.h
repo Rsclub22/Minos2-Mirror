@@ -33,6 +33,9 @@ public:
     explicit ClusterClientFilterDialog(BaseContestLog *c, ClusterClientFilterSettings &filterSettings_, QWidget *parent);
     ~ClusterClientFilterDialog();
 
+    static int mainTabIndex;
+    static int distanceTabIndex;
+
     bool checkBandMatch(int bandNum);
     bool checkModeMatch(int bandNum);
 
@@ -40,8 +43,8 @@ public:
     void copyCallsignFilterListToListWidget();
     void copyLocatorFilterListToListWidget();
 
-    void setTabCurrentIndex(int i);
-    int getTabCurrentIndex();
+    //void setTabCurrentIndex(int i);
+    //int getTabCurrentIndex();
 
     QStringList getCallsignFilterList();
     QStringList getLocatorFilterList();
@@ -163,6 +166,12 @@ private:
     bool distanceValuesChanged();
     bool ignoreDistanceChanged();
     bool ignoreEmptyDistanceChanged();
+
+    void setFilterTabCurrentIndex(int idx);
+    int getFilterTabCurrentIndex();
+    void setDistanceFilterTabCurrentIndex(int idx);
+    int getDistanceFilterTabCurrentIndex();
+
 private slots:
     //void bandChecked(int checkBoxNum);
     //void modeChecked(int checkBoxNum);
@@ -210,6 +219,8 @@ private slots:
     void onVhfClearAllEmptyDistPbClicked();
     void onUhfClearAllEmptyDistPbClicked();
     void onBandChkBoxChecked(int idx);
+    void onFilterTabIndexChanged(int idx);
+    void onDistanceFilterTabIndexChanged(int idx);
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H
