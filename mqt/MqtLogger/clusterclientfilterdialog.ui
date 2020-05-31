@@ -6,23 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-<<<<<<< HEAD
-    <width>380</width>
-    <height>349</height>
-=======
     <width>398</width>
     <height>505</height>
->>>>>>> 8fkh_master_beta_2_4_May_28th
    </rect>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_7">
+  <layout class="QVBoxLayout" name="verticalLayout_30">
    <item>
     <widget class="QTabWidget" name="ClusterClientFilterTab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="bandsFilter">
       <attribute name="title">
@@ -421,8 +416,6 @@
        </item>
       </layout>
      </widget>
-<<<<<<< HEAD
-=======
      <widget class="QWidget" name="distanceFilter">
       <attribute name="title">
        <string>Distance</string>
@@ -936,7 +929,6 @@
        </item>
       </layout>
      </widget>
->>>>>>> 8fkh_master_beta_2_4_May_28th
     </widget>
    </item>
    <item>

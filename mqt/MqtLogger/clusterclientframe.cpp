@@ -1007,10 +1007,6 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         {
             traceMsg(QString("set Contest - ContestBand error %1").arg(contestBand));
         }
-        else
-        {
-            filterSetup->filterSettings = contest->getClusterFilter();
-        }
 
 
 
