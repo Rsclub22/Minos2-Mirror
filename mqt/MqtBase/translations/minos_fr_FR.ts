@@ -1577,7 +1577,7 @@ Entrer un autre direction SVP</translation>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../rigcommon.h" line="17"/>
+        <location filename="../rigcommon.h" line="18"/>
         <source>N/A</source>
         <translation>N/A</translation>
     </message>
