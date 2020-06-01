@@ -163,17 +163,17 @@ Through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="397"/>
+        <location filename="../KeyerMain.cpp" line="405"/>
         <source>Alsa Control Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="398"/>
+        <location filename="../KeyerMain.cpp" line="406"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="401"/>
+        <location filename="../KeyerMain.cpp" line="409"/>
         <source>File for mixer setup</source>
         <translation type="unfinished"></translation>
     </message>
