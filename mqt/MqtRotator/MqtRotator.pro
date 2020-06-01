@@ -54,5 +54,5 @@ FORMS    += \
     rotsetupdialog.ui
 
 win32:{HEADERS +=     pstRotControl.h
-SOURCE += pstRotControl.h
+SOURCES += pstRotControl.cpp
 }
