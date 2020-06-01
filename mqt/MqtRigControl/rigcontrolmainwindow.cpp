@@ -664,17 +664,41 @@ void RigControlMainWindow::upDateRadio()
 
                 buildSupBandList(ridx, modelNumber, setupRadio->currentRadio.radioTransSupBands);
 
-                // does the radio support control of volume control
+                // does the library support control of volume control
 
 
-                supVolume = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVolume;
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVolume)
+                {
+                    // does the radio support volume control
+                    if (radio != nullptr)
+                    {
+                        supVolume = radio->supportVolControl(setupRadio->currentRadio.rigModelNumber);
+                    }
+                }
+                else
+                {
+                    supVolume = false;
+                }
+
                 logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(supVolume ? "True" : "False"));
                 addVolStatusToRigCache(ridx, supVolume);
 
 
-                // does the radio support signal strength meter
+                // does the library support signal strength meter
 
-                supSignalStrength = rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportSMeter;
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportSMeter)
+                {
+                   // does the radio support signal strength meter
+                   if (radio !=nullptr)
+                   {
+                       supSignalStrength = radio->supportSignalStrength(setupRadio->currentRadio.rigModelNumber);
+                   }
+
+                }
+                else
+                {
+                    supSignalStrength = false;
+                }
 
                 setSmeterVisible(supSignalStrength);
 
@@ -1500,8 +1524,8 @@ void RigControlMainWindow::getRadioInfo()
         if (retCode < 0)
         {
             // error
-            logMessage(QString("Get radioInfo: Get Volume error").arg(QString::number(retCode)));
-            radioError(retCode, tr("Request Volume"));
+            logMessage(QString("Get radioInfo: Get signal strength error").arg(QString::number(retCode)));
+            radioError(retCode, tr("Request Signal Strength"));
         }
 
     }
