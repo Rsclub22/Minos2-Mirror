@@ -6,7 +6,7 @@ set QtTools=C:\Qt\Tools\mingw730_32\bin
 set QtKit="C:\Qt\5.12.6\mingw73_32\bin"
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Tools\Licenses"
-set HamlibPath="C:\Projects\hamlib-w32-3.3"
+set HamlibPath="C:\Projects\hamlib-w32-4.0"
 
 if exist %QtKit% goto kitInstalled
 
