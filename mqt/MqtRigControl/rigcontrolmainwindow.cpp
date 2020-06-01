@@ -2890,6 +2890,7 @@ int RigControlMainWindow::getVolume(VFO vfo)
         int vol = 0;
         //value.f = value.f * VOLMULT;
         //vol = qRound(value.f);
+        value = value * VOLMULT;
         vol = qRound(value);
         if (vol > 200)
         {
