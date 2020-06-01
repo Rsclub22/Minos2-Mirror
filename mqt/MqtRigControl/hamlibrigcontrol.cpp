@@ -156,8 +156,8 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            true,        // support get rit state
                                            true,        // support set rit state
                                            true,       // support s-meter
-                                           true,       // support get Ptt
-                                           true,       // support set Ptt
+                                           false,       // support get Ptt
+                                           false,       // support set Ptt
                                            true,       // support volume
                                            true,        // support antenna switch
                                            true,            // support RigCtld
