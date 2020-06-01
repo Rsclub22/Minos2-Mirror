@@ -76,7 +76,7 @@ void TSettingsEditDlg::showSections(QString currSection)
    }
 
 
-   qSort(sections.begin(), sections.end(),
+   std::sort(sections.begin(), sections.end(),
              [this](const QString &first, const QString &second) { return sectionLessThan(bundle, first, second); });
 
    int offset = 0;
@@ -103,7 +103,7 @@ void TSettingsEditDlg::showSection()
    }
    else if ( offset >= 0 && offset < sections.size() )
    {
-      qSort(sections.begin(), sections.end(),
+      std::sort(sections.begin(), sections.end(),
            [this](const QString &first, const QString &second) { return sectionLessThan(bundle, first, second); });
       QString sect = sections[ offset ];
       bundle->openSection( sect );

@@ -1595,7 +1595,7 @@ QStringList TLogContainer::getSessions()
     TContestApp *app = TContestApp::getContestApp();
     QStringList sessionlst = app ->logsPreloadBundle.getSections();
     QStringList newSessionList;
-    qSort( sessionlst);
+    sessionlst.sort();
     for (int i = 0; i < sessionlst.size(); ++i)
     {
         if (sessionlst[i] != app ->logsPreloadBundle.noneBundle && sessionlst[i] != app->preloadsect)

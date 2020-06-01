@@ -156,7 +156,7 @@ void ConfigElementFrame::on_programBrowseButton_clicked()
     QString InitialDir = ExtractFileDir(ui->programNameEdit->text());
 
     QFileDialog dialog(this, tr("Minos Component Program"), InitialDir);
-#if QT_VERSION >= 0x050600
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
     const QStringList schemes = QStringList(QStringLiteral("file"));
 
     dialog.setSupportedSchemes(schemes);

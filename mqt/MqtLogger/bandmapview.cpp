@@ -1136,7 +1136,11 @@ QRectF BandmapView::calculateSpotRect(const QString text, const QPoint spotCoord
     QFontMetrics fm(font());
     const int rowHeight = fm.height();
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int textWidth = fm.horizontalAdvance(text);
+#else
     int textWidth = fm.width(text);
+#endif
     
     return QRectF(spotCoord.x(),spotCoord.y(), textWidth, rowHeight);
    

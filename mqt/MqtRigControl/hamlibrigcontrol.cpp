@@ -49,10 +49,9 @@ bool hamlibTraceComms = false;
 int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char const * format, va_list ap)
 {
   Q_UNUSED(level)
-   QString message;
 
   static char constexpr fmt[] = "Hamlib: ";
-  message = message.vsprintf (format, ap).trimmed ();
+  QString message = QString::vasprintf (format, ap).trimmed ();
 
   if (hamlibTraceComms)
   {

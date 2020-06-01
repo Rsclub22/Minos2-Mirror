@@ -244,7 +244,11 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         dc.message= message_text.trimmed();
     }
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QStringList sl = message_text.trimmed().split(' ', Qt::SkipEmptyParts);
+#else
     QStringList sl = message_text.trimmed().split(' ', QString::SkipEmptyParts);
+#endif
 
     if (sl.count() == 0)
         return dc;

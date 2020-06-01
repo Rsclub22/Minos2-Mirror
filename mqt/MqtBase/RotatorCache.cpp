@@ -99,7 +99,7 @@ void RotatorCache::addRotList(const QString &s)
             rotStates[psn] = AntennaState();
         }
     }
-    qSort(rotList);
+    std::sort(rotList.begin(), rotList.end());
 }
 
 AntennaState &RotatorCache::getState(const PubSubName &p)

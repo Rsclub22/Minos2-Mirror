@@ -35,7 +35,11 @@ public:
     Radio::register_types ();
 
     connect (this, &QIODevice::readyRead, this, &MessageServer::impl::pending_datagrams);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect (this, static_cast<void (impl::*) (SocketError)> (&impl::errorOccurred)
+#else
     connect (this, static_cast<void (impl::*) (SocketError)> (&impl::error)
+#endif
              , [this] (SocketError /* e */)
              {
                QString err = errorString();
@@ -101,7 +105,7 @@ MessageServer::impl::BindMode constexpr MessageServer::impl::bind_mode_;
 void MessageServer::impl::leave_multicast_group ()
 {
   if (!multicast_group_address_.isNull () && BoundState == state ()
-#if QT_VERSION >= 0x050600
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
       && multicast_group_address_.isMulticast ()
 #endif
       )

@@ -349,7 +349,11 @@ Published::Published( const QString &pubId, bool loc ) : pubId( pubId ), localOn
 QString Published::getPublisherServer()
 {
     QString publisherServer;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QStringList p = pubId.split(QChar('@'), Qt::KeepEmptyParts);
+#else
     QStringList p = pubId.split(QChar('@'), QString::KeepEmptyParts);
+#endif
     if (p.size() > 1)
     {
         publisherServer = p[1];
@@ -1002,7 +1006,11 @@ void TPubSubMain::disconnectServer(const QString &pubId)
       return;
    }
    QString publisherServer;
-   QStringList p = pubId.split(QChar('@'), QString::KeepEmptyParts);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QStringList p = pubId.split(QChar('@'), Qt::KeepEmptyParts);
+#else
+    QStringList p = pubId.split(QChar('@'), QString::KeepEmptyParts);
+#endif
    if (p.size() > 1)
    {
        publisherServer = p[1];

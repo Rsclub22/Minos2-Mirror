@@ -107,7 +107,7 @@ void RitLineEdit::changeFreq(bool direction)
 
 void RitLineEdit::wheelEvent(QWheelEvent *event)
 {
-    int numDegrees = event->delta() / 8;
+    int numDegrees = event->angleDelta().x() / 8;
     int numTicks = numDegrees / 15;
 
     if (numTicks == 1)

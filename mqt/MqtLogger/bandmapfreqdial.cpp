@@ -158,7 +158,12 @@ int BandmapFreqDial::checkFreqWidth(qint32 freq)
     //calc dial width
     QFont cf = QApplication::font();
     QFontMetrics fm(cf);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    return fm.horizontalAdvance(convertFreqDialDisplay(freq));
+#else
     return fm.width(convertFreqDialDisplay(freq));
+#endif
+
 }
 
 int BandmapFreqDial::getFontHeight()

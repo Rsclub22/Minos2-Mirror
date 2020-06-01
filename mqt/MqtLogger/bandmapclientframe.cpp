@@ -965,7 +965,11 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
     QStringList sl = spot.split(DXSPOT);
     if (sl.count() == 2)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        QStringList spotlist = sl[1].split(':', Qt::KeepEmptyParts);
+#else
         QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
+#endif
 
         if (!checkSpotInTable(spotlist))
         {

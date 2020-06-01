@@ -10,8 +10,6 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
 #include <QStringListModel>
 #include <QMessageBox>
 #include <QSignalMapper>
@@ -1199,14 +1197,15 @@ void ClusterClientFilterDialog::saveFilterToFile(QStringList listOfFilters, QStr
             while (i < listOfFilters.count())
             {
                 stream << listOfFilters[i];
-                if (i == listOfFilters.count() - 1)
+                if (i != listOfFilters.count() - 1)
                 {
-                    stream << endl;
+                   stream << FILTER_DELIMITER;
                 }
-                else
-                {
-                   stream << FILTER_DELIMITER << endl;
-                }
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+                stream << Qt::endl;
+#else
+                stream << endl;
+#endif
 
                 i++;
             }
