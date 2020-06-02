@@ -106,14 +106,30 @@ bool RigFactory::checkOmniRigInstalled()
     QSettings  config(fileName, QSettings::IniFormat);
 
     config.beginGroup("Omnirig");
-    QString omnirigFilePath = config.value("omnirigPath", "C:/Program Files (x86)/Afreet/OmniRig/").toString();
+    QString omnirigFilePathx86 = config.value("omnirigPathx86", "C:/Program Files (x86)/Afreet/OmniRig/").toString();
+    QString omnirigFilePath = config.value("omnirigPath", "C:/Program Files/Afreet/OmniRig/").toString();
+
     QString omnirigFileName = config.value("omnirigExe", "OmniRig.exe").toString();
     config.endGroup();
 
-    fileName = omnirigFilePath + omnirigFileName;
-    trace(QString("looking for Omnirig here - %1").arg(fileName));
+    QString fileNamex86 = omnirigFilePathx86 + omnirigFileName;
+    trace(QString("looking for Omnirig here - %1").arg(fileNamex86));
 
-    bool fileExists = QFileInfo::exists(fileName) && QFileInfo(fileName).isFile();
-    trace(QString("Omnirig found = %1").arg(fileExists ? "true":"false"));
-    return fileExists;
+    bool fileExistsx86 = QFileInfo::exists(fileNamex86) && QFileInfo(fileNamex86).isFile();
+    trace(QString("Omnirig found here %1 = %2").arg(fileNamex86).arg(fileExistsx86 ? "Yes" : "No"));
+
+    bool fileExists = false;
+    if (!fileExistsx86)
+    {
+        fileName = omnirigFilePath + omnirigFileName;
+        trace(QString("looking for Omnirig here - %1").arg(fileName));
+        fileExists = QFileInfo::exists(fileName) && QFileInfo(fileName).isFile();
+        trace(QString("Omnirig found here %1 = %2").arg(fileName).arg(fileExists ? "Yes" : "No"));
+    }
+
+    if (fileExists || fileExistsx86)
+    {
+        return true;
+    }
+    return false;
 }

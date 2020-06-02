@@ -121,6 +121,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    trace("Create Rigfactory and add rigs to list");
     radio = nullptr;
     rigFactory = new RigFactory(false, this);
 
