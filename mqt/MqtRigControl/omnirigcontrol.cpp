@@ -415,10 +415,10 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 OmniRigOneName,
                 id1,
                 false,      // support getSupBands
-                true,      // support get rit
-                true,      // support set rit
-                true,      // support get rit state
-                true,      // support set rit state
+                false,      // support get rit
+                false,      // support set rit
+                false,      // support get rit state
+                false,      // support set rit state
                 false,      // support s-meter
                 false,      // support get Ptt
                 false,      // support set Ptt
