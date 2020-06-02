@@ -759,6 +759,7 @@ void RigControlMainWindow::upDateRadio()
                 else
                 {
                     // not polling get initial values
+                    trace(QString("Not polling, get and sendFrequency and get and send mode"));
                     getAndSendFrequency(CURRENT_VFO);
                     getAndSendMode(CURRENT_VFO);
                     // connect signals for future value updates and errors
