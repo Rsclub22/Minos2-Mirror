@@ -767,6 +767,11 @@ void RigControlMainWindow::upDateRadio()
                     connect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq()), Qt::QueuedConnection); // QueuedConnection, ensure return to rigcontroller caller when not polling - eg Omnirig
                     connect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()), Qt::QueuedConnection);
                     connect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)), Qt::QueuedConnection);
+
+                    connect(radio, SIGNAL(ritOn()), this, SLOT(onRitOn()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(ritOff()), this, SLOT(onRitOff()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(ritOffset()), this, SLOT(onRitOffset()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(rit0()), this, SLOT(onRit0()), Qt::QueuedConnection);
                 }
 
 
@@ -2898,9 +2903,27 @@ void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
     }
 }
 
+// non polling Rit slots
 
+void RigControlMainWindow::onRitOn()
+{
 
+}
 
+void RigControlMainWindow::onRitOff()
+{
+
+}
+
+void RigControlMainWindow::onRitOffset()
+{
+
+}
+
+void RigControlMainWindow::onRit0()
+{
+
+}
 
 /************************** Volume *********************************/
 

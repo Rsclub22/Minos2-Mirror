@@ -300,10 +300,13 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
         if (params & OmniRig::PM_RITOFFSET)
         {
             traceMsg(QString("OmniRig params change: OmniRig RITOFFSET"));
+            //auto f = rig->RitOffset();
+            emit ritOffset();
         }
         if (params & OmniRig::PM_RIT0)
         {
             traceMsg(QString("OmniRig params change: OmniRig RIT0"));
+            emit rit0();
         }
         if (params & OmniRig::PM_VFOEQUAL)
         {
@@ -327,10 +330,12 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
         if (params & OmniRig::PM_RITON)
         {
             traceMsg(QString("OmniRig params change: OmniRig RITON"));
+            emit ritOn();
         }
         if (params & OmniRig::PM_RITOFF)
         {
             traceMsg(QString("OmniRig params change: OmniRig RITOFF"));
+            emit ritOff();
         }
         if (params & OmniRig::PM_XITON)
         {
