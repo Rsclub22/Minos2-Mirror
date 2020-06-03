@@ -1148,6 +1148,8 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                 trace(QString("setRadioName: Can't find %1 in radioNameSel").arg(radioName));
             }
 
+
+
             trace(QString("setRadioName:: Select Radio = %1 Mode = %2 on rigcontrol").arg(radioName).arg(mode));
 
             setRadioTxVertEnabled(false);
@@ -1166,22 +1168,27 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                 selRadioName = PubSubName(radioName);
                 if (allRadioDetails.contains(selRadioName))
                 {
-                    trace(QString("setRadioName:: Select Radio = %1 Mode = %2 on rigcontrol").arg(radioName).arg(mode));
                     selRadioDetails = allRadioDetails[selRadioName];
+                    trace(QString("setRadioName:: Select Radio - radio details for %1 in allRadioDetails").arg(radioName));
                     createActiveBandList(selRadioDetails.getBandList());
                     emit selectRadio(radioName, mode);  // send radio and mode.
 
                     setRadioFreq();
+
+
+                }
+                else
+                {
+                    trace(QString("setRadioName:: Select Radio for %1 , Bandlist is empty = %1").arg(radioName));
+                    setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Bandlist empty for this radio, please add a band or tranverter!"));
+                    // clear selection in rigcontrol
+                    emit selectRadio(radioName, mode);  // send radio and mode.
+                    selRadioDetails = RadioDetails();
+                    createActiveBandList(selRadioDetails.getBandList());
                 }
 
 
             }
-
-
-
-
-
-
 
     }
     else
@@ -1198,8 +1205,8 @@ void RigControlFrame::setRadioFreq()
 
     if (selRadioDetails.getBandList().isEmpty())
     {
-        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Error Receiving Bandlist!"));
-        trace(QString("setRadioFreq:: Error Receiving Bandlist!"));
+        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Radio Bandlist is empty!"));
+        trace(QString("setRadioFreq:: Radio Bandlist is empty!"));
         sendFreq(NO_BAND_SUPPORT);
         return;
     }
@@ -1370,8 +1377,10 @@ void RigControlFrame::createActiveBandList(QString b)
         ui->bandSelCombo->addItem("");
         ui->bandSelCombo->addItems(lb);
         ui->bandSelCombo->setCurrentText(currentBand); // restore for now
-
-
+    }
+    else
+    {
+        ui->bandSelCombo->clear();
     }
 }
 

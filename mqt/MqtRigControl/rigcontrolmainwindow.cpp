@@ -121,6 +121,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    trace("Create Rigfactory and add rigs to list");
     radio = nullptr;
     rigFactory = new RigFactory(false, this);
 
@@ -2895,6 +2896,7 @@ int RigControlMainWindow::getVolume(VFO vfo)
         int vol = 0;
         //value.f = value.f * VOLMULT;
         //vol = qRound(value.f);
+        value = value * VOLMULT;
         vol = qRound(value);
         if (vol > 200)
         {

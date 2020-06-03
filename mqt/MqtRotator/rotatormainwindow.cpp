@@ -103,6 +103,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
 
     rotator = nullptr;
     readTraceLogFlag();
+    trace(QString("Starting rotator factory and adding rotators to the list"));
     rotFactory = new RotatorFactory(traceCommsFlag, this);
 
     //rotator->getRotatorList();
