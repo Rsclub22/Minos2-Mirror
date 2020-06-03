@@ -534,6 +534,7 @@ void RigControlMainWindow::upDateRadio()
 
     clrRigctldNames();
     clearSupportRitFlags();
+    curTransVertFrq = 0;
 
     int ridx = 0;
     if (setupRadio->getCurrentRadioName() != "")
@@ -764,12 +765,18 @@ void RigControlMainWindow::upDateRadio()
                 else
                 {
                     // not polling get initial values
+                    trace(QString("Not polling, get and sendFrequency and get and send mode"));
                     getAndSendFrequency(CURRENT_VFO);
                     getAndSendMode(CURRENT_VFO);
                     // connect signals for future value updates and errors
                     connect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq()), Qt::QueuedConnection); // QueuedConnection, ensure return to rigcontroller caller when not polling - eg Omnirig
                     connect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()), Qt::QueuedConnection);
                     connect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)), Qt::QueuedConnection);
+
+                    connect(radio, SIGNAL(ritOn()), this, SLOT(onRitOn()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(ritOff()), this, SLOT(onRitOff()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(ritOffset()), this, SLOT(onRitOffset()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(rit0()), this, SLOT(onRit0()), Qt::QueuedConnection);
                 }
 
 
@@ -1618,14 +1625,17 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
     QString cb;
     int tvNum = 0;
 
+    bool usingTransVert = false;
 
     double f = sfreq.toDouble(&ok);
     logMessage(QString("SetFreq: Change to Freq = %1").arg(QString::number(f)));
 
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+
     if (ok)
     {
-        BandList &blist = BandList::getBandList();
-        BandInfo bi;
+
         bool bandOK = blist.findBand(f, bi);
         if (bandOK)
         {
@@ -1644,7 +1654,8 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
                 if (setupRadio->currentRadio.transVertSettings[tvNum]->band == cb)
                 {
                     b = true;
-                    logMessage(QString("SetFreq: Found Transverter %1 for this freq.").arg(setupRadio->currentRadio.transVertSettings[tvNum]->band));
+                    usingTransVert = true;
+                    logMessage(QString("SetFreq: Found Transverter %1 for this freq. = %2").arg(setupRadio->currentRadio.transVertSettings[tvNum]->band).arg(freq));
                     break;
                 }
                 tvNum++;
@@ -1724,6 +1735,23 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
                 logMessage(QString("SetFreq: Rig set to Freq = %1").arg(QString::number(f)));
             }
 
+            if (usingTransVert &&
+                    rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).pollData) // non polling radio
+            {
+                // using TransVert
+                // check curTransvert freq is same band
+                // when not polling radio for information
+                trace(QString("SetFreq: Check Transvert Freq at startup"));
+                bool tvBandOk = blist.findBand(static_cast<double>(curTransVertFrq), bi);
+                if (!tvBandOk)
+                {
+
+                    cmdLockOff();
+                    getRadioInfo();
+
+                }
+             }
+
         }
         else
         {
@@ -1743,6 +1771,7 @@ void RigControlMainWindow::clearTransVertSupport()
 {
     selTvBand = "";
     displayTransVertVfo(0.0);
+    curTransVertFrq = 0;
     ui->transVertBandDisp->setText("");
     transVertSwNum = TRANSSW_NUM_DEFAULT;
     ui->transVertSwNum->setText(TRANSSW_NUM_DEFAULT);
@@ -2879,9 +2908,27 @@ void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
     }
 }
 
+// non polling Rit slots
 
+void RigControlMainWindow::onRitOn()
+{
 
+}
 
+void RigControlMainWindow::onRitOff()
+{
+
+}
+
+void RigControlMainWindow::onRitOffset()
+{
+
+}
+
+void RigControlMainWindow::onRit0()
+{
+
+}
 
 /************************** Volume *********************************/
 
