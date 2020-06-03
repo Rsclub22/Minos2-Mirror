@@ -290,7 +290,7 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
         if (params & OmniRig::PM_FREQB)
         {
             auto f = rig->FreqB ();
-            traceMsg(QString("OmniRig params change: OmniRig FREQB = ").arg(QString::number(f)));
+            traceMsg(QString("OmniRig params change: OmniRig FREQB = %1").arg(QString::number(f)));
 
         }
         if (params & OmniRig::PM_PITCH)
@@ -722,6 +722,7 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
 bool OmnirigControl::supportVolControl(int rigNumber)
 {
     // not supported
+    Q_UNUSED(rigNumber)
     return false;
 }
 
