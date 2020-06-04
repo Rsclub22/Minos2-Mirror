@@ -75,7 +75,7 @@ public:
 signals:
 
     // no polling signals
-    void newFreq();
+    void newRxFreq(quint64 f);
     void newMode();
     void ritOn();
     void ritOff();

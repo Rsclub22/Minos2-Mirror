@@ -247,6 +247,8 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
         if (!rig || rig->isNull ())
             return;
 
+        auto need_frequency = false;
+
         if (params & OmniRig::PM_VFOAA)
         {
             traceMsg(QString("OmniRig params change: OmniRig VFOAA"));
@@ -286,19 +288,52 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
         if (params & OmniRig::PM_FREQ)
         {
             traceMsg(QString("OmniRig params change:  PM_FREQ"));
-            emit newFreq();
+            need_frequency = true;
+
         }
         if (params & OmniRig::PM_FREQA)
         {
             auto f = rig->FreqA ();
+            emit newRxFreq(static_cast<Frequency>(f));
             traceMsg(QString("OmniRig params change: OmniRig FREQA = %1").arg(QString::number(f)));
 
         }
         if (params & OmniRig::PM_FREQB)
         {
             auto f = rig->FreqB ();
+            emit newRxFreq(static_cast<Frequency>(f));
             traceMsg(QString("OmniRig params change: OmniRig FREQB = %1").arg(QString::number(f)));
 
+        }
+        if (need_frequency)
+        {
+            if (readable_params & OmniRig::PM_FREQA)
+            {
+                auto f = rig->FreqA();
+                if (f)
+                {
+                    traceMsg(QString("OmniRig Need Freq, FreqA = %1").arg(f));
+                    emit newRxFreq(static_cast<Frequency>(f));
+                }
+            }
+            if (readable_params & OmniRig::PM_FREQB)
+            {
+                auto f = rig->FreqB();
+                if (f)
+                {
+                    traceMsg(QString("OmniRig Need Freq, FreqA = %1").arg(f));
+                    emit newRxFreq(static_cast<Frequency>(f));
+                }
+            }
+            if (readable_params & OmniRig::PM_FREQ)
+            {
+                auto f = rig->Freq();
+                if (f)
+                {
+                    traceMsg(QString("OmniRig Need Freq, Freq = %1").arg(f));
+                    emit newRxFreq(static_cast<Frequency>(f));
+                }
+            }
         }
         if (params & OmniRig::PM_PITCH)
         {
