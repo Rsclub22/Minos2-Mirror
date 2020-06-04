@@ -758,6 +758,7 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
 bool OmnirigControl::supportVolControl(int rigNumber)
 {
     // not supported
+    Q_UNUSED(rigNumber)
     return false;
 }
 
