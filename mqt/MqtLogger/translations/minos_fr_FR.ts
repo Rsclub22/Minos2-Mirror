@@ -209,29 +209,29 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1181"/>
+        <location filename="../bandmapview.cpp" line="1183"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation>%1%2CQ Frequency @ .%3%4%5</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1212"/>
+        <location filename="../bandmapview.cpp" line="1214"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1288"/>
+        <location filename="../bandmapview.cpp" line="1290"/>
         <source>min</source>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1308"/>
+        <location filename="../bandmapview.cpp" line="1310"/>
         <source>CQ Frequency = %1
 The computed mode is %2</source>
         <translation>La fréquence CQ = %1
 Le mode calculé est %2</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1327"/>
+        <location filename="../bandmapview.cpp" line="1329"/>
         <source>%1 - %2 [%3 %4 @ %5 min] 
 The computed mode is %6
 %7</source>
@@ -2260,7 +2260,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="661"/>
+        <location filename="../rigcontrolframe.cpp" line="663"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
@@ -2311,37 +2311,46 @@ Non - Ignorer les modifications</translation>
         <translation>Vol</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="668"/>
+        <location filename="../rigcontrolframe.cpp" line="670"/>
         <source>Off</source>
         <translation>Éteinte</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1201"/>
         <source>Error Receiving Bandlist!</source>
-        <translation>Erreur lors de la réception de la liste de bandes!</translation>
+        <translation type="vanished">Erreur lors de la réception de la liste de bandes!</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="1186"/>
+        <source>Bandlist empty for this radio, please add a band or tranverter!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1211"/>
+        <source>Radio Bandlist is empty!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="1221"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1312"/>
+        <location filename="../rigcontrolframe.cpp" line="1322"/>
         <source>No %1 Band found for this radio!</source>
         <translation>AucuneBande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1397"/>
+        <location filename="../rigcontrolframe.cpp" line="1409"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1404"/>
+        <location filename="../rigcontrolframe.cpp" line="1416"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1422"/>
+        <location filename="../rigcontrolframe.cpp" line="1434"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
