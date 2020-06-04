@@ -390,6 +390,10 @@ signals:
     void onIgnorePresetFreq();
     void onIgnorePreviousFreq();
 
+    void onRitOn();
+    void onRitOff();
+    void onRitOffset();
+    void onRit0();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

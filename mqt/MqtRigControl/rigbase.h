@@ -77,6 +77,10 @@ signals:
     // no polling signals
     void newFreq();
     void newMode();
+    void ritOn();
+    void ritOff();
+    void ritOffset();
+    void rit0();
     //void comError(QString, QString, QString, QString);
     void rigStatus(int, QString);
 
