@@ -2316,32 +2316,41 @@ Non - Ignorer les modifications</translation>
         <translation>Éteinte</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1201"/>
         <source>Error Receiving Bandlist!</source>
-        <translation>Erreur lors de la réception de la liste de bandes!</translation>
+        <translation type="vanished">Erreur lors de la réception de la liste de bandes!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1211"/>
+        <location filename="../rigcontrolframe.cpp" line="1183"/>
+        <source>Bandlist empty for this radio, please add a band or tranverter!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="1208"/>
+        <source>Radio Bandlist is empty!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="1218"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1312"/>
+        <location filename="../rigcontrolframe.cpp" line="1319"/>
         <source>No %1 Band found for this radio!</source>
         <translation>AucuneBande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1397"/>
+        <location filename="../rigcontrolframe.cpp" line="1406"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1404"/>
+        <location filename="../rigcontrolframe.cpp" line="1413"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1422"/>
+        <location filename="../rigcontrolframe.cpp" line="1431"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
