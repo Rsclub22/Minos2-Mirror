@@ -156,6 +156,7 @@ private:
     void doCloseEvent();
     void loadAvailComportsToTab(int tabNum);
     void updateAvailRadiosToVersion2(QSettings &settings);
+    void isAnySupportedBandsAvail(QString &supRadNames);
 };
 
 #endif // SETUPDIALOG_H

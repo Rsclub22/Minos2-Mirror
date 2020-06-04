@@ -1314,9 +1314,35 @@ void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
     ui->sup432MhzChkbox->setVisible(visible);
     ui->sup1296MhzChkbox->setVisible(visible);
     ui->supportedBandGroupBox->setVisible(visible);
+    ui->nativeBandLabel->setVisible(visible);
 }
 
+bool RigSetupForm::isAnySupportBandChecked()
+{
+    if (ui->sup50MhzChkbox->isChecked())
+    {
 
+        return true;
+    }
+    else if (ui->sup70MhzChkbox->isChecked())
+    {
+        return true;
+    }
+    else if (ui->sup144MhzChkbox->isChecked())
+    {
+        return true;
+    }
+    else if (ui->sup432MhzChkbox->isChecked())
+    {
+        return true;
+    }
+    else if (ui->sup1296MhzChkbox->isChecked())
+    {
+        return true;
+    }
+
+    return false;
+}
 
 
 /******************* Transverter ***********************************/

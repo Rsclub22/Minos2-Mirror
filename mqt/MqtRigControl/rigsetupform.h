@@ -163,6 +163,8 @@ public:
     void setAdvancedCommsChkBoxVisible(bool visible);
     void setStartMinosRigctldCheckbox(bool checked);
 
+    bool isAnySupportBandChecked();
+
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
