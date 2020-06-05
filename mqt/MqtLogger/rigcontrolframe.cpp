@@ -279,8 +279,10 @@ void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
     // radio combo selected
     radioName = arg1;
 
-    trace(QString("on radioNameSel activated: radioName - %1 requested").arg(arg1));
+    trace(QString("on radioNameSel activated: radioName - %1 requested ***").arg(arg1));
     setRadioName(arg1, ct->currentMode.getValue());
+
+
 
 }
 
@@ -835,6 +837,7 @@ void RigControlFrame::on_ContestPageChanged()
         QString mode = ct->currentMode.getValue();
 
         onContestPageChangedFlag = true;
+
         setRadioName(radNam, mode);
 
 

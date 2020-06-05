@@ -1112,8 +1112,10 @@ bool BandmapView::matchDistance(int sourceRow)
     {
         bool ok = false;
 
+        bandmapSpotType::SPOT_TYPE savedSpot = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(sourceRow, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
         QString distanceStr = model()->data(model()->index(sourceRow, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
-        if (distanceStr.isEmpty() && filterSettings->getIgnoreEmptyDistanceFlag())
+        if (distanceStr.isEmpty() && filterSettings->getIgnoreEmptyDistanceFlag()
+            && savedSpot == bandmapSpotType::CLUSTER )
         {
             return false;
         }

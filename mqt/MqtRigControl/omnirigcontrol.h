@@ -108,6 +108,8 @@ private:
     int readable_params;
     int writable_params;
 
+    bool reversedVFO;
+
     OmniRig::PortBits* serPort;
 
     OmniRig::RigStatusX status;

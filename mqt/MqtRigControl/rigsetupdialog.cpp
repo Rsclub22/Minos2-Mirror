@@ -557,13 +557,42 @@ void RigSetupDialog::closeEvent (QCloseEvent *event)
 
 void RigSetupDialog::saveButtonPushed()
 {
+    QString supRadNames;
+    isAnySupportedBandsAvail(supRadNames);
+    if (supRadNames.isEmpty())
+    {
+        saveSettings();
+    }
+    else
+    {
+        QMessageBox::critical(this, tr("Radio Supported Bands Missing"),
+                                       tr("For Minos to work best with Radios,\n"
+                                          "Please add bands or transverters to\n"
+                                          "these radio definitions:\n"
+                                          "%1").arg(supRadNames),
+                                       QMessageBox::Ok);
+    }
 
-    saveSettings();
     doCloseEvent();
 
 }
 
+void RigSetupDialog::isAnySupportedBandsAvail(QString &supRadNames)
+{
 
+    for (int tabNum = 0; tabNum < numAvailRadios; tabNum++)
+    {
+        RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab[tabNum]->getRadioData()->rigModel);
+        if (!rigCap.supportGetSupBands)
+        {
+            if (!radioTab[tabNum]->isAnySupportBandChecked() && radioTab[tabNum]->getRadioData()->numTransverters == 0)
+            {
+                supRadNames.append(radioTab[tabNum]->getRadioData()->radioName + '\n');
+            }
+        }
+    }
+
+}
 
 void RigSetupDialog::cancelButtonPushed()
 {

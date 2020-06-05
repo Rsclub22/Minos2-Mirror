@@ -31,8 +31,10 @@
 
 #include <QBitArray>
 #include <QDebug>
+#include <QMetaType>
 
 #include "cutils.h"
+
 
 
 RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
@@ -62,6 +64,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    radioCommsOK(false)
 {
     ui->setupUi(this);
+
 
     serialData::translateSerialData();
 
@@ -534,6 +537,7 @@ void RigControlMainWindow::upDateRadio()
 
     clrRigctldNames();
     clearSupportRitFlags();
+    curTransVertFrq = 0;
 
     int ridx = 0;
     if (setupRadio->getCurrentRadioName() != "")
@@ -764,12 +768,18 @@ void RigControlMainWindow::upDateRadio()
                 else
                 {
                     // not polling get initial values
+                    trace(QString("Not polling, get and sendFrequency and get and send mode"));
                     getAndSendFrequency(CURRENT_VFO);
                     getAndSendMode(CURRENT_VFO);
                     // connect signals for future value updates and errors
-                    connect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq()), Qt::QueuedConnection); // QueuedConnection, ensure return to rigcontroller caller when not polling - eg Omnirig
+                    connect(radio, SIGNAL(newRxFreq(quint64)), this, SLOT(onNewRxFreq(quint64)), Qt::QueuedConnection); // QueuedConnection, ensure return to rigcontroller caller when not polling - eg Omnirig
                     connect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()), Qt::QueuedConnection);
                     connect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)), Qt::QueuedConnection);
+
+                    connect(radio, SIGNAL(ritOn()), this, SLOT(onRitOn()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(ritOff()), this, SLOT(onRitOff()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(ritOffset()), this, SLOT(onRitOffset()), Qt::QueuedConnection);
+                    connect(radio, SIGNAL(rit0()), this, SLOT(onRit0()), Qt::QueuedConnection);
                 }
 
 
@@ -1263,7 +1273,7 @@ void RigControlMainWindow::closeRadio()
     {
         if (radio != nullptr)
         {
-            disconnect(radio, SIGNAL(newFreq()), this, SLOT(onNewFreq()));
+            disconnect(radio, SIGNAL(newRxFreq(quint64)), this, SLOT(onNewRxFreq(quint64)));
             disconnect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()));
             disconnect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)));
         }
@@ -1618,14 +1628,17 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
     QString cb;
     int tvNum = 0;
 
+    bool usingTransVert = false;
 
     double f = sfreq.toDouble(&ok);
-    logMessage(QString("SetFreq: Change to Freq = %1").arg(QString::number(f)));
+    logMessage(QString("SetFreq: Change to Freq = %1").arg(QString::number(static_cast<int>(f))));
+
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
 
     if (ok)
     {
-        BandList &blist = BandList::getBandList();
-        BandInfo bi;
+
         bool bandOK = blist.findBand(f, bi);
         if (bandOK)
         {
@@ -1644,7 +1657,8 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
                 if (setupRadio->currentRadio.transVertSettings[tvNum]->band == cb)
                 {
                     b = true;
-                    logMessage(QString("SetFreq: Found Transverter %1 for this freq.").arg(setupRadio->currentRadio.transVertSettings[tvNum]->band));
+                    usingTransVert = true;
+                    logMessage(QString("SetFreq: Found Transverter %1 for this freq. = %2").arg(setupRadio->currentRadio.transVertSettings[tvNum]->band).arg(freq));
                     break;
                 }
                 tvNum++;
@@ -1653,6 +1667,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
             if (b)  // found a tranverter supporting this band
             {
                 selTvBand = cb;
+                logMessage(QString("SetFreq: Using transverter for band = %1").arg(selTvBand));
                 ui->transVertBandDisp->setText(cb);
                 showActiveTransVertIndicator(cb);
                 sendTransVertStatusToLog(true);
@@ -1685,7 +1700,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
 
                 // now calculate the freq
                 f = f - setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset;
-                logMessage(QString("SetFreq: Transvert Enabled Freq = %1").arg(QString::number(f)));
+                logMessage(QString("SetFreq: Transvert Enabled Freq = %1").arg(QString::number(static_cast<qint64>(f))));
 
                 sendTransVertOffsetToLogger(tvNum);
 
@@ -1711,7 +1726,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
             {
                 if (retCode == -9)
                 {
-                    logMessage(QString("SetFreq: Invalid Tx Freq for Radio, Freq = %1").arg(QString::number(f)));
+                    logMessage(QString("SetFreq: Invalid Tx Freq for Radio, Freq = %1").arg(QString::number(static_cast<qint64>(f))));
                     cmdLockOff();
                     return;
                 }
@@ -1721,8 +1736,17 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
             }
             else
             {
-                logMessage(QString("SetFreq: Rig set to Freq = %1").arg(QString::number(f)));
+                logMessage(QString("SetFreq: Rig set to Freq = %1").arg(QString::number(static_cast<qint64>(f))));
             }
+
+            if (!rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).pollData) // non polling radio
+            {
+                // when not polling radio for information
+                trace(QString("SetFreq: Check Transvert Freq at startup"));
+                cmdLockOff();
+                getRadioInfo();
+
+             }
 
         }
         else
@@ -1743,6 +1767,7 @@ void RigControlMainWindow::clearTransVertSupport()
 {
     selTvBand = "";
     displayTransVertVfo(0.0);
+    curTransVertFrq = 0;
     ui->transVertBandDisp->setText("");
     transVertSwNum = TRANSSW_NUM_DEFAULT;
     ui->transVertSwNum->setText(TRANSSW_NUM_DEFAULT);
@@ -1754,67 +1779,11 @@ void RigControlMainWindow::clearTransVertSupport()
 
 int RigControlMainWindow::getAndSendFrequency(VFO vfo)
 {
-    double transVertF = 0;
-    int retCode = 0;
-    int tvNum = 0;
-    bool b = false;
-
-    retCode = radio->getFrequency(vfo, rfrequency);
-    if (retCode == Rig_OK)
+    int retCode = getRxFreq(vfo);
+    if ( retCode == Rig_OK)
     {
-        curVfoFrq = rfrequency;
-        logMessage(QString("Get Freq: Read Freq from Radio = %1").arg(QString::number(curVfoFrq, 'f', 0)));
-        if (setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters > 0)
-        {
-            if (selTvBand != "")
-            {
-                logMessage(QString("Get Freq: Transvert enabled"));
-                // look for supporting transverter
-
-                while (tvNum < setupRadio->currentRadio.numTransverters)
-                {
-                    if (setupRadio->currentRadio.transVertSettings[tvNum]->band == selTvBand)
-                    {
-                        b = true;
-                        break;
-                    }
-                    tvNum++;
-                }
-
-                if (b)
-                {
-                    logMessage(QString("Transverter %1 name %2 offset %3 rfreq %4").arg(tvNum)
-                               .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertName)
-                               .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset)
-                               .arg(rfrequency)
-                               );
-
-                    transVertF = rfrequency + setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset;
-                    logMessage(QString("Get Freq: TransvertF = %1").arg(QString::number(transVertF)));
-                }
-
-                logMessage(QString("Get Freq: Transvert Freq. = %1").arg(QString::number(transVertF)));
-                curTransVertFrq = transVertF;
-                displayTransVertVfo(transVertF);
-
-            }
-            else
-            {
-                //setTransVertDisplayVisible(false);
-                logMessage(QString("GetFreq: No transvert band set for this freq = %1").arg(QString::number(curVfoFrq)));
-            }
-        }
-
-        displayFreqVfo(rfrequency);
-
-        if (setupRadio->currentRadio.transVertEnable && b)
-        {
-            sendFreqToLog(transVertF);
-        }
-        else
-        {
-            sendFreqToLog(rfrequency);
-        }
+        processRxFrequencyForDisplay();
+        return retCode;
     }
     else
     {
@@ -1824,9 +1793,87 @@ int RigControlMainWindow::getAndSendFrequency(VFO vfo)
     return retCode;
 }
 
-void RigControlMainWindow::onNewFreq()
+
+
+int RigControlMainWindow::getRxFreq(VFO vfo)
 {
-    getAndSendFrequency(CURRENT_VFO);
+
+    return radio->getFrequency(vfo, rfrequency);
+
+}
+
+
+void RigControlMainWindow::processRxFrequencyForDisplay()
+{
+    double transVertF = 0;
+    //int retCode = 0;
+    int tvNum = 0;
+    bool b = false;
+
+    //retCode = radio->getFrequency(vfo, rfrequency);
+    //if (retCode == Rig_OK)
+    //{
+    curVfoFrq = rfrequency;
+    logMessage(QString("Get Freq: Read Freq from Radio = %1").arg(QString::number(curVfoFrq, 'f', 0)));
+    if (setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters > 0)
+    {
+        if (selTvBand != "")
+        {
+            logMessage(QString("Get Freq: Transvert enabled"));
+            // look for supporting transverter
+
+            while (tvNum < setupRadio->currentRadio.numTransverters)
+            {
+                if (setupRadio->currentRadio.transVertSettings[tvNum]->band == selTvBand)
+                {
+                    b = true;
+                    break;
+                }
+                tvNum++;
+            }
+
+            if (b)
+            {
+                logMessage(QString("Found transverter for band = %1").arg(b));
+                logMessage(QString("Transverter %1 name %2 offset %3 rfreq %4").arg(tvNum)
+                           .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertName)
+                           .arg(setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset)
+                           .arg(rfrequency)
+                           );
+
+                transVertF = rfrequency + setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset;
+                logMessage(QString("Get Freq: TransvertF = %1").arg(QString::number(transVertF)));
+            }
+
+            logMessage(QString("Get Freq: Transvert Freq. = %1").arg(QString::number(transVertF)));
+            curTransVertFrq = transVertF;
+            displayTransVertVfo(transVertF);
+
+        }
+        else
+        {
+            //setTransVertDisplayVisible(false);
+            logMessage(QString("GetFreq: No transvert band set for this freq = %1").arg(QString::number(curVfoFrq)));
+        }
+    }
+
+    displayFreqVfo(rfrequency);
+
+    if (setupRadio->currentRadio.transVertEnable && b)
+    {
+        sendFreqToLog(transVertF);
+    }
+    else
+    {
+        sendFreqToLog(rfrequency);
+    }
+
+}
+
+void RigControlMainWindow::onNewRxFreq(Frequency f)
+{
+    rfrequency = f;
+    processRxFrequencyForDisplay();
 }
 
 QString RigControlMainWindow::getBand(Frequency freq)
@@ -2879,9 +2926,27 @@ void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
     }
 }
 
+// non polling Rit slots
 
+void RigControlMainWindow::onRitOn()
+{
 
+}
 
+void RigControlMainWindow::onRitOff()
+{
+
+}
+
+void RigControlMainWindow::onRitOffset()
+{
+
+}
+
+void RigControlMainWindow::onRit0()
+{
+
+}
 
 /************************** Volume *********************************/
 

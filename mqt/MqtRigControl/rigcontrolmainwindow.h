@@ -338,6 +338,8 @@ private:
 
 
 
+    int getRxFreq(VFO vfo);
+    void processRxFrequencyForDisplay();
 private slots:
 
     void onStdInRead(QString);
@@ -383,13 +385,17 @@ signals:
     void rigCtldStarted();
     void rigCtldStatusTimeout();
 
-    void onNewFreq();
+    void onNewRxFreq(quint64);
     void onNewMode();
     void onRigStatus(int status, QString cmd);
 
     void onIgnorePresetFreq();
     void onIgnorePreviousFreq();
 
+    void onRitOn();
+    void onRitOff();
+    void onRitOffset();
+    void onRit0();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H
