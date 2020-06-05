@@ -338,6 +338,8 @@ private:
 
 
 
+    int getRxFreq(VFO vfo);
+    void processRxFrequencyForDisplay();
 private slots:
 
     void onStdInRead(QString);
@@ -383,7 +385,7 @@ signals:
     void rigCtldStarted();
     void rigCtldStatusTimeout();
 
-    void onNewFreq();
+    void onNewRxFreq(quint64);
     void onNewMode();
     void onRigStatus(int status, QString cmd);
 
