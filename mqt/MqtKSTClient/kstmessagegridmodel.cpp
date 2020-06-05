@@ -229,7 +229,13 @@ bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModel
             if (filterString.isEmpty())
                 return true;
 
-            if (kstmsg->fullLine.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                return true;
+            if (kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                return true;
+            if (kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                return true;
+            if (kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
                 return true;
         }
     }
