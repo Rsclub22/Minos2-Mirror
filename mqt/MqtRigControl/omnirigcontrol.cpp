@@ -14,8 +14,9 @@
 
 #include <QObject>
 #include <QString>
+#if defined (WIN32)
 #include "omnirigcontrol.h"
-
+#endif
 
 const char* OmnirigControl::omnirigErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
                                                 QT_TR_NOOP("Radio Function not supported"),

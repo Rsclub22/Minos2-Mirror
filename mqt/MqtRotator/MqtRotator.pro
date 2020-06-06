@@ -16,7 +16,6 @@ win32:RC_ICONS += ../MinosRotator.ico
 
 SOURCES += \
     hamlibRotcontrol.cpp \
-    pstRotControl.cpp \
     rotatorbase.cpp \
     rotatorfactory.cpp \
     rotcapabilities.cpp \
@@ -33,7 +32,6 @@ SOURCES += \
 
 HEADERS  += \
     hamlibRotcontrol.h \
-    pstRotControl.h \
     rotatorbase.h \
     rotatorfactory.h \
     rotcapabilities.h \
@@ -55,3 +53,6 @@ FORMS    += \
     addantennadialog.ui \
     rotsetupdialog.ui
 
+win32:{HEADERS +=     pstRotControl.h
+SOURCES += pstRotControl.cpp
+}

@@ -7,8 +7,7 @@ include($$PWD/../mqt.pri)
 include($$PWD/../mqtapplibs.pri)
 
 QT       += core gui network sql
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += widgets
 
 TARGET = MqtCluster
 TEMPLATE = app

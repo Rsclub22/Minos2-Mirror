@@ -953,20 +953,20 @@ void TSingleLogFrame::HideTimerTimer(  )
     if (!contest)
         return;
 
-    bool controlsLoaded = isBandMapLoaded() || isRadioLoaded() || isRotatorLoaded();
+//    bool controlsLoaded = isBandMapLoaded() || isRadioLoaded() || isRotatorLoaded();
 
-    if (controlsLoaded && !contest->isReadOnly())
-    {
-        if (FKHRigControlFrame->parent() != this)
-            FKHRigControlFrame->setVisible(isRadioLoaded());
-        if (runButtonsFrame->parent() != this)
-            runButtonsFrame->setVisible(isRadioLoaded());
+//    if (controlsLoaded && !contest->isReadOnly())
+//    {
+//        if (FKHRigControlFrame->parent() != this)
+//            FKHRigControlFrame->setVisible(isRadioLoaded());
+//        if (runButtonsFrame->parent() != this)
+//            runButtonsFrame->setVisible(isRadioLoaded());
 
-        if (FKHRotControlFrame->parent() != this)
-            FKHRotControlFrame->setVisible(isRotatorLoaded());
-        if (rotPresets->parent() != this)
-            rotPresets->setVisible(isRotatorLoaded());
-    }
+//        if (FKHRotControlFrame->parent() != this)
+//            FKHRotControlFrame->setVisible(isRotatorLoaded());
+//        if (rotPresets->parent() != this)
+//            rotPresets->setVisible(isRotatorLoaded());
+//    }
 }
 
 void TSingleLogFrame::updateQSODisplay()

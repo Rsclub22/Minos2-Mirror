@@ -79,10 +79,10 @@ public:
     bool getTraceComms() override;
 
 
-
+#if defined (WIN32)
     OmniRig::RigParamX map_mode(QString mode);
 
-
+#endif
 
 
 private slots:

@@ -105,7 +105,7 @@
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="83"/>
-        <location filename="../clustermainwindow.cpp" line="1908"/>
+        <location filename="../clustermainwindow.cpp" line="1917"/>
         <source>Minos Cluster Server</source>
         <translation>Minos: Serveur de Cluster</translation>
     </message>
@@ -177,7 +177,7 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
 </translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1908"/>
+        <location filename="../clustermainwindow.cpp" line="1917"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
         <translation>Minos Cluster
@@ -229,12 +229,12 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
         <translation>L&apos;envoi de Command  - Non connecté - %1</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1739"/>
+        <location filename="../clustermainwindow.cpp" line="1748"/>
         <source>Cluster User Command Clear</source>
         <translation>Cluster: Effacer commande d&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1740"/>
+        <location filename="../clustermainwindow.cpp" line="1749"/>
         <source>Do you really want to clear cluster user command number:%1?</source>
         <translation>Effacer commande %1 du cluster?</translation>
     </message>

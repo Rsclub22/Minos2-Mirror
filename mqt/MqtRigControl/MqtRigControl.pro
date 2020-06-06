@@ -26,12 +26,10 @@ TYPELIBS = $$system(dumpcpp OmniRig.tlb)
 }
 
 SOURCES += main.cpp\
-    OmniWrapper.cpp \
     hamlibrigcontrol.cpp \
-    omnirigcontrol.cpp \
     rigbase.cpp \
     rigcapabilities.cpp \
-        rigcontrolmainwindow.cpp \
+    rigcontrolmainwindow.cpp \
     rigcontrolrpc.cpp \
     rigfactory.cpp \
     rigsetupform.cpp \
@@ -45,9 +43,7 @@ SOURCES += main.cpp\
     rigctldclient.cpp
 
 HEADERS  += rigcontrolmainwindow.h \
-    OmniWrapper.h \
     hamlibrigcontrol.h \
-    omnirigcontrol.h \
     rigbase.h \
     rigcapabilities.h \
     rigcontrolrpc.h \
@@ -62,7 +58,11 @@ HEADERS  += rigcontrolmainwindow.h \
     smeterbar.h \
     rigctldclient.h
 
-
+win32:{HEADERS +=  OmniWrapper.h \
+                   omnirigcontrol.h
+       SOURCES += OmniWrapper.cpp \
+       omnirigcontrol.cpp
+       }
 
 FORMS    += rigcontrolmainwindow.ui \
     rigsetupdialog.ui \

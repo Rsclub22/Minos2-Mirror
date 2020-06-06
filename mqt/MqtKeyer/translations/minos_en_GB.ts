@@ -253,17 +253,17 @@ Through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="24"/>
+        <location filename="../keyers.cpp" line="25"/>
         <source>Play 1/2 - Pip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="25"/>
+        <location filename="../keyers.cpp" line="26"/>
         <source>Play 1/2 - No Pip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="26"/>
+        <location filename="../keyers.cpp" line="24"/>
         <source>Tuning Tones 1/2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -274,32 +274,32 @@ Through</source>
     </message>
     <message>
         <location filename="../keyers.cpp" line="28"/>
-        <source>Mode 5</source>
+        <source>Play 3/4 - Pip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="29"/>
-        <source>Mode 6</source>
+        <source>Play 3/4 - No Pip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="30"/>
-        <source>Mode 7</source>
+        <source>Record 3/4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="31"/>
-        <source>Mode 8</source>
+        <source>Play 5/6 - Pip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="32"/>
-        <source>Mode 9</source>
+        <source>Play 5/6 - No Pip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="33"/>
-        <source>Mode 10</source>
+        <source>Record 5/6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

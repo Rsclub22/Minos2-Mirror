@@ -6,6 +6,7 @@ set QtTools=C:\Qt\Tools\mingw730_32\bin
 set QtKit="C:\Qt\5.12.6\mingw73_32\bin"
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Tools\Licenses"
+set HamlibPath="C:\Projects\hamlib-w32-4.0"
 
 if exist %QtKit% goto kitInstalled
 
@@ -69,7 +70,8 @@ copy %MROOT%\build\MqtRigControl\release\MqtRigControl.exe Bin
 copy %MROOT%\build\MqtRotator\release\MqtRotator.exe Bin
 copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
 
-copy C:\Projects\hamlib-w32-3.3\bin\*.dll Bin
+copy %HamlibPath%\bin\*.dll Bin
+copy %HamlibPath%\bin\*.exe Bin
 copy C:\Windows\SysWOW64\msvcr100.dll Bin 
 
 copy %QtOpenSSL%\*.DLL Bin

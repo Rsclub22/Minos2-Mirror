@@ -352,9 +352,14 @@ void RigControlMainWindow::onStdInRead(QString cmd)
     bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
+        trace("onStdInRead - Start shutdown");
         closeApp = true;
         closeRadio();
         doClose = true;
+
+        LogTimer.stop();
+        pollTimer->stop();
+        RigCtldStatusTimer->stop();
     }
     executeStdIn(cmd);
     if (doClose)

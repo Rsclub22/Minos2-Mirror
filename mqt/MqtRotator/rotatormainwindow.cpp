@@ -229,6 +229,8 @@ void RotatorMainWindow::onStdInRead(QString cmd)
     bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
+        trace("onStdInRead - Start shutdown");
+
         closeApp = true;
         doClose = true;
     }

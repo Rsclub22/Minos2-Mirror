@@ -14,7 +14,7 @@
 
 #include "hamlibrigcontrol.h"
 #include "minosNetUtils.h"
-
+#include "MTrace.h"
 
 const char* HamlibRigControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
                                                 QT_TR_NOOP("Invalid parameter"),
@@ -355,11 +355,13 @@ bool HamlibRigControl::checkFreqRange(int rigNumber, Frequency freq)
         rmode_t mode = convertQStrRmode_t("USB");
 
         const freq_range_t* freq_range = nullptr;
+#if defined(RIG_MODEL_IC9700)
         if (myRig->caps->rig_model == RIG_MODEL_IC9700)
         {
              freq_range = rig_get_range(myRig->caps->tx_range_list2, freq, mode);
         }
         else
+#endif
         {
             freq_range = rig_get_range(myRig->caps->tx_range_list1, freq, mode);
         }
