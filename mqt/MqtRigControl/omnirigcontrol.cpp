@@ -627,6 +627,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     {
         traceMsg(QString("Rig Init getFreq i = %1").arg(i));
         f = rig->GetRxFrequency ();
+        traceMsg(QString("Rig Init getRxFreq = %1").arg(f));
         if (f != 0)
         {
             break;

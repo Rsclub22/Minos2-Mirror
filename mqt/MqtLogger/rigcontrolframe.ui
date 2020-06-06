@@ -394,12 +394,12 @@
   <customwidget>
    <class>FreqLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>rigcontrolframe.h</header>
+   <header>freqlineedit.h</header>
   </customwidget>
   <customwidget>
    <class>RitLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>rigcontrolframe.h</header>
+   <header>ritlineedit.h</header>
   </customwidget>
   <customwidget>
    <class>VolumeSlider</class>
