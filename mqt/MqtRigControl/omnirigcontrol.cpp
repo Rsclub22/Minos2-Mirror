@@ -622,12 +622,16 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
     // also allow time to get freq
     traceMsg(QString("Rig Init - try to get freq"));
-    auto f = rig->GetRxFrequency();
+    //auto f = rig->GetRxFrequency();
+
+    Frequency f;
+    getFrequency(CURRENT_VFO, f);
     traceMsg(QString("Rig Init - first getFreq = %1").arg(QString::number(f)));
     for (int i = 0; (f == 0) && (i < 10); i++)
     {
         traceMsg(QString("Rig Init getFreq i = %1").arg(i));
-        f = rig->GetRxFrequency ();
+        getFrequency(CURRENT_VFO, f);
+        traceMsg(QString("Rig Init getRxFreq = %1").arg(f));
         if (f != 0)
         {
             break;
