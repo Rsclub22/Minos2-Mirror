@@ -65,6 +65,9 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 
     ui->decodes_table_view_->setModel (decodes_model_);
     ui->decodes_table_view_->verticalHeader ()->hide ();
+
+    reloadColumns();
+
     ui->decodes_table_view_->hideColumn (dcId);
     ui->decodes_table_view_->hideColumn (dcDT);
     ui->decodes_table_view_->hideColumn (dcDF);
@@ -81,7 +84,9 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->decodes_table_view_->hideColumn (dcToGrid);
 
 
-    if (!autoEnabled)
+    if (autoEnabled)
+        ui->decodes_table_view_->showColumn (dcBest);
+    else
         ui->decodes_table_view_->hideColumn (dcBest);
 
 
@@ -95,8 +100,6 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 
     // this to change - get the item, and use the message decode data
     connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
-
-    reloadColumns();
 
     connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
 
