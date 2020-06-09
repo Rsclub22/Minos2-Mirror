@@ -93,7 +93,7 @@
         <location filename="../bandmapclientframe.cpp" line="468"/>
         <location filename="../bandmapclientframe.cpp" line="488"/>
         <location filename="../bandmapclientframe.cpp" line="620"/>
-        <location filename="../bandmapclientframe.cpp" line="1710"/>
+        <location filename="../bandmapclientframe.cpp" line="1712"/>
         <source>Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -201,7 +201,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1706"/>
+        <location filename="../bandmapclientframe.cpp" line="1708"/>
         <source>Bandmap - %1Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -750,9 +750,9 @@ The computed mode is %6
     <message>
         <location filename="../clusterclientframe.ui" line="45"/>
         <location filename="../clusterclientframe.cpp" line="51"/>
-        <location filename="../clusterclientframe.cpp" line="1253"/>
-        <location filename="../clusterclientframe.cpp" line="1280"/>
-        <location filename="../clusterclientframe.cpp" line="1734"/>
+        <location filename="../clusterclientframe.cpp" line="1257"/>
+        <location filename="../clusterclientframe.cpp" line="1284"/>
+        <location filename="../clusterclientframe.cpp" line="1738"/>
         <source>Cluster</source>
         <translation type="unfinished"></translation>
     </message>
@@ -852,17 +852,17 @@ The computed mode is %6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1254"/>
+        <location filename="../clusterclientframe.cpp" line="1258"/>
         <source>Please confirm you want to delete this spot?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1281"/>
+        <location filename="../clusterclientframe.cpp" line="1285"/>
         <source>Please confirm you want to delete all the spots in the %1 tab?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1729"/>
+        <location filename="../clusterclientframe.cpp" line="1733"/>
         <source>Cluster - %1Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2253,37 +2253,37 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1186"/>
+        <location filename="../rigcontrolframe.cpp" line="1189"/>
         <source>Bandlist empty for this radio, please add a band or tranverter!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1211"/>
+        <location filename="../rigcontrolframe.cpp" line="1215"/>
         <source>Radio Bandlist is empty!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1221"/>
+        <location filename="../rigcontrolframe.cpp" line="1225"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1322"/>
+        <location filename="../rigcontrolframe.cpp" line="1326"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1409"/>
+        <location filename="../rigcontrolframe.cpp" line="1413"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1416"/>
+        <location filename="../rigcontrolframe.cpp" line="1420"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1434"/>
+        <location filename="../rigcontrolframe.cpp" line="1438"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4785,12 +4785,12 @@ Include the CQ as well as the type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="517"/>
+        <location filename="../WsjtxFrame.cpp" line="520"/>
         <source>Failed to open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="648"/>
+        <location filename="../WsjtxFrame.cpp" line="651"/>
         <source>&lt;h1&gt;&lt;b&gt;Contest band %1 not the same as %2 band %3</source>
         <translation type="unfinished"></translation>
     </message>

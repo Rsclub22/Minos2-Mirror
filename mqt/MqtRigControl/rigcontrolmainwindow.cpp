@@ -3119,17 +3119,26 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
     rigErrorFlag = true;
 
     errorCode *= -1;
-    QString errorMsg = radio->getErrorMsgText(errorCode);
-
-    if(appName.count() > 0)
+     QString errorMsg;
+    if (radio != nullptr)
     {
-        sendStatusToLogError(errorMsg);
+        errorMsg = radio->getErrorMsgText(errorCode);
+
+        if(appName.count() > 0)
+        {
+            sendStatusToLogError(errorMsg);
+        }
+
+        logMessage(QString("%1 library Error - Code = %2 - %3").arg(radio->getLibraryName()).arg(QString::number(errorCode)).arg(errorMsg));
+
+
+        QMessageBox::critical(this, tr("RigControl %1 library Error").arg(radio->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(setupRadio->currentRadio.radioName).arg(errorCode).arg(errorMsg).arg(cmd));
+
     }
-
-    logMessage(QString("%1 library Error - Code = %2 - %3").arg(radio->getLibraryName()).arg(QString::number(errorCode)).arg(errorMsg));
-
-
-    QMessageBox::critical(this, tr("RigControl %1 library Error").arg(radio->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(setupRadio->currentRadio.radioName).arg(errorCode).arg(errorMsg).arg(cmd));
+    else
+    {
+        errorMsg = QString("No radio defined to obtain error message");
+    }
 
 
     closeRadio();

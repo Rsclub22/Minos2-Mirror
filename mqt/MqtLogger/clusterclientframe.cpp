@@ -444,6 +444,10 @@ void ClusterClientFrame::filterButtonSelected()
 
     }
 
+
+    filterSetup->close();
+    delete filterSetup;
+
 }
 
 
