@@ -1182,12 +1182,16 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                 }
                 else
                 {
-                    trace(QString("setRadioName:: Select Radio for %1 , Bandlist is empty = %1").arg(radioName));
-                    setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Bandlist empty for this radio, please add a band or tranverter!"));
-                    // clear selection in rigcontrol
-                    emit selectRadio(radioName, mode);  // send radio and mode.
-                    selRadioDetails = RadioDetails();
-                    createActiveBandList(selRadioDetails.getBandList());
+                    if (!radioName.isEmpty())
+                    {
+
+                        trace(QString("setRadioName:: Select Radio for %1 , Bandlist is empty = %1").arg(radioName));
+                        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Bandlist empty for this radio, please add a band or tranverter!"));
+                        // clear selection in rigcontrol
+                        emit selectRadio(radioName, mode);  // send radio and mode.
+                        selRadioDetails = RadioDetails();
+                        createActiveBandList(selRadioDetails.getBandList());
+                    }
                 }
 
 
