@@ -193,7 +193,7 @@ private:
     bool isBandMapLoaded();
     void setBandMapControlsVisible(bool visible);
     bool logDataFromBandmapOrMemory;
-    int addToBandmapTuneTolerance = 4;
+    int addToBandmapTuneTolerance;
 
     bool keyerLoaded;
     bool isKeyerLoaded();

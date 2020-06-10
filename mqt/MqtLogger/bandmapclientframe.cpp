@@ -1974,7 +1974,7 @@ void BandmapClientFrame::traceMsg(QString msg)
 
 void BandmapClientFrame::saveTuneAddBandMapSetting(bool state)
 {
-    QString fileName = "./Configuration/bandmap.ini";
+    QString fileName = BANDMAP_INI_FILE;
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup("Bandmap");
@@ -1987,7 +1987,7 @@ void BandmapClientFrame::saveTuneAddBandMapSetting(bool state)
 
 bool BandmapClientFrame::readTuneAddBandMapSetting()
 {
-    QString fileName = "./Configuration/bandmap.ini";
+    QString fileName = BANDMAP_INI_FILE;
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup("Bandmap");

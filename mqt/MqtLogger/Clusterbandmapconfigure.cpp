@@ -1,5 +1,6 @@
 #include <QSignalMapper>
 #include "ContestApp.h"
+#include "bandmapcommon.h"
 
 #include "base_pch.h"
 #include "Clusterbandmapconfigure.h"
@@ -12,7 +13,7 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
     ui->setupUi(this);
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    setWindowTitle(tr("Cluster/Bandmap Filter Configure"));
+    setWindowTitle(tr("Cluster/Bandmap Configure"));
 
     QSettings settings;
     QByteArray geometry = settings.value("ClusterBandmpaConfigure/geometry/").toByteArray();
@@ -59,8 +60,22 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
 
       ui->hf_frame->setVisible(false);  // don't show Hf for this release
 
+    // get addBandmapTuningTolerance
 
+      QSettings config_tuning(BANDMAP_INI_FILE, QSettings::IniFormat);
+      config_tuning.beginGroup("Bandmap");
+      addBandmapTuningTolerance = config_tuning.value("addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE).toInt();
+      config_tuning.endGroup();
 
+      if (addBandmapTuningTolerance < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE || addBandmapTuningTolerance > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE)
+      {
+         addBandmapTuningTolerance =  ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE;
+      }
+
+      //connect(ui->addBandmapTuningTolSpinBox, SIGNAL(valueChanged(int)), this, SLOT(onFreqToleranceValueChanged(int)));
+      ui->addBandmapTuningTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE);
+
+      ui->addBandmapTuningTolSpinBox->setValue(addBandmapTuningTolerance);
 }
 
 ClusterBandmapConfigure::~ClusterBandmapConfigure()
@@ -91,10 +106,27 @@ void ClusterBandmapConfigure::onDistanceEditingFinished(int idx)
     }
 }
 
+
+void ClusterBandmapConfigure::onFreqToleranceValueChanged(int value)
+{
+
+
+
+}
 void ClusterBandmapConfigure::onAccepted()
 {
 
     saveDistances();
+
+    if (ui->addBandmapTuningTolSpinBox->value() != addBandmapTuningTolerance)
+    {
+        // changed save
+        QSettings config_tuning(BANDMAP_INI_FILE, QSettings::IniFormat);
+        config_tuning.beginGroup("Bandmap");
+        config_tuning.setValue("addBandmapTuningTolerance", addBandmapTuningTolerance);
+        config_tuning.endGroup();
+
+    }
 }
 
 void ClusterBandmapConfigure::onRejected()
