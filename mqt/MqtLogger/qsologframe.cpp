@@ -3073,22 +3073,34 @@ void QSOLogFrame::setClusterSendSpotControlsState()
 void QSOLogFrame::on_FreqChanged(QString f)
 {
 
-    if (!logDataFromBandmapOrMemory)
+    if (!logDataFromBandmapOrMemory && isBandMapLoaded() && ui->tuningAddMapChkBox->isChecked())
     {
         qint64 dialFreq = f.toLongLong() / 1000;
         qint64 callsignEnterFreq = callsignEnterTextFreq.toLongLong() / 1000;
-
+        int toleranceF = 0;
         if (callsignEnterFreq != 0)
         {
             if (callsignEnterFreq != dialFreq)
             {
-                //callsignEnterTextFreq = "00000000000";
-
-                if (ui->tuningAddMapChkBox->isChecked())
+                if (callsignEnterFreq < dialFreq)
                 {
-                    on_bandmapSaveFreqPbClicked();
+                    toleranceF = dialFreq - callsignEnterFreq;
 
                 }
+                else
+                {
+                    toleranceF = callsignEnterFreq - dialFreq;
+
+                }
+
+                if (toleranceF >= addToBandmapTuneTolerance)
+                {
+
+                    on_bandmapSaveFreqPbClicked();
+                }
+
+
+
 
             }
         }
