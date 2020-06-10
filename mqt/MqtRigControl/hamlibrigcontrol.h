@@ -135,6 +135,9 @@ private:
     int getSignalStrength(vfo_t vfo, value_t *val);
     static rmode_t convertQStrRmode_t(QString mode);
 
+    pbwidth_t passbandNarrow(rmode_t mode);
+    pbwidth_t passbandNormal(rmode_t mode);
+    pbwidth_t passbandWide(rmode_t mode);
 };
 
 #endif // HAMLIBRIGCONTROL_H
