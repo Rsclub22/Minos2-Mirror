@@ -244,6 +244,36 @@ void appStartup(const QString &pappName)
     }
     enableTrace( "./TraceLog", appStartupName + "_" );
 
+    QString Version = QString(STRINGVERSION)  + " " + PRERELEASETYPE ;
+
+    QString title = appStartupName;
+
+    QString compiler;
+#ifndef NDEBUG
+    compiler += " DEBUG ";
+#endif
+
+#define STRING(s) #s
+#ifdef __GNUC__
+
+        compiler += QString(" GCC");
+#endif
+#ifdef _MSC_FULL_VER
+        compiler += QString(" MSVC");
+#endif
+#ifdef Q_PROCESSOR_X86_32
+        title += " 32 bit X86 build Version ";
+#else
+#ifdef Q_PROCESSOR_X86_64
+        title += " 64 bit X86 build Version " ;
+#else
+        title += " Other build Version ";
+#endif
+#endif
+    title += Version + compiler;
+
+    trace(title);
+
     setAppLanguage(languageName);
 }
 
