@@ -760,7 +760,9 @@ QStringList unpackFilterList(QString &sl)
 const int DEFAULT_FILTER_DISTANCE = 500;
 const int MIN_FILTER_DISTANCE = 100;
 const int MAX_FILTER_DISTANCE = 50000;
-
+const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE = 5;   // khz
+const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE = 1;   // khz
+const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE = 10;   // khz
 const QStringList distanceIniNames = {"distance_50MHz", "distance_70MHz", "distance_144MHz",
                              "distance_432MHz", "distance_1296MHz", "distance_2300MHz",
                              "distance_3_4GHz", "distance_5_6GHz", "distance_10GHz"};
