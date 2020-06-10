@@ -433,7 +433,7 @@ void TLogContainer::setupMenus()
 
     UDPConfigAction = newAction(QT_TR_NOOP("UDP broadcast configuration..."), ui->menuTools, SLOT(UDPConfigActionExecute()));
     WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration..."), ui->menuTools, SLOT(WsjtConfigActionExecute()));
-    ClusterBandmapFilterConfigAction = newAction(QT_TR_NOOP("Cluster/Bandmap Filter configuration..."), ui->menuTools, SLOT(ClusterBandmapConfigActionExecute()));
+    ClusterBandmapFilterConfigAction = newAction(QT_TR_NOOP("Cluster/Bandmap configuration..."), ui->menuTools, SLOT(ClusterBandmapConfigActionExecute()));
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();

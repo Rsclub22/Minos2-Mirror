@@ -12,6 +12,7 @@
 #include "SendRPCDM.h"
 //#include "rigcontrolcommonconstants.h"
 #include "rigcommon.h"
+#include "bandmapcommon.h"
 #include "rigutils.h"
 #include "qsologframe.h"
 #include "ui_qsologframe.h"
@@ -144,6 +145,22 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     widgetStyles[ui->qsoFrame] = ssQsoFrameBlue;
 
     connect(ui->tuningAddMapChkBox, SIGNAL(stateChanged(int)), this, SLOT(tuningAddMapChkBoxStateChange(int)));
+
+    QSettings config(BANDMAP_INI_FILE, QSettings::IniFormat);
+    config.beginGroup("Bandmap");
+    addToBandmapTuneTolerance = config.value("addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE).toInt();
+    config.endGroup();
+
+    if (addToBandmapTuneTolerance < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE || addToBandmapTuneTolerance > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE)
+    {
+       addToBandmapTuneTolerance =  ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE;
+        trace(QString("addToBandmapTuneTolerance read in out of range = %1 khz, set default").arg(addToBandmapTuneTolerance));
+    }
+    else
+    {
+        trace(QString("addToBandmapTuneTolerance read in = %1 khz").arg(addToBandmapTuneTolerance));
+    }
+
 }
 
 void QSOLogFrame::on_FontChanged()
@@ -3073,22 +3090,34 @@ void QSOLogFrame::setClusterSendSpotControlsState()
 void QSOLogFrame::on_FreqChanged(QString f)
 {
 
-    if (!logDataFromBandmapOrMemory)
+    if (!logDataFromBandmapOrMemory && isBandMapLoaded() && ui->tuningAddMapChkBox->isChecked())
     {
         qint64 dialFreq = f.toLongLong() / 1000;
         qint64 callsignEnterFreq = callsignEnterTextFreq.toLongLong() / 1000;
-
+        int toleranceF = 0;
         if (callsignEnterFreq != 0)
         {
             if (callsignEnterFreq != dialFreq)
             {
-                //callsignEnterTextFreq = "00000000000";
-
-                if (ui->tuningAddMapChkBox->isChecked())
+                if (callsignEnterFreq < dialFreq)
                 {
-                    on_bandmapSaveFreqPbClicked();
+                    toleranceF = dialFreq - callsignEnterFreq;
 
                 }
+                else
+                {
+                    toleranceF = callsignEnterFreq - dialFreq;
+
+                }
+
+                if (toleranceF >= addToBandmapTuneTolerance)
+                {
+
+                    on_bandmapSaveFreqPbClicked();
+                }
+
+
+
 
             }
         }

@@ -454,11 +454,15 @@ memoryData::memData RunButtonsFrame::getRunMemoryData(int memoryNumber)
 {
     memoryData::memData m;
 
-    if (ct->runMemories.size() > memoryNumber)
+    if (ct != nullptr)
     {
-       m = ct->runMemories[memoryNumber].getValue();
+        if (ct->runMemories.size() > memoryNumber)
+        {
+           m = ct->runMemories[memoryNumber].getValue();
 
+        }
     }
+
     return m;
 }
 void RunButtonsFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)

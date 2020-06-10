@@ -22,6 +22,7 @@ private slots:
     void onDistanceEditingFinished(int idx);
     void onAccepted();
     void onRejected();
+    void onFreqToleranceValueChanged(int value);
 private:
     Ui::ClusterBandmapConfigure *ui;
 
@@ -32,6 +33,8 @@ private:
 
     QList<QLineEdit*> distanceLineEdits;
     QList<distValue> distanceValues;
+
+    int addBandmapTuningTolerance;
 
 
     void doClose();
