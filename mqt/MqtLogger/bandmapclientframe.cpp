@@ -1644,7 +1644,7 @@ void BandmapClientFrame::filterButtonSelected()
 {
 
     BandmapClientFilterDialog* filterSetup =  new BandmapClientFilterDialog(ct, filterSettings, this);
-    filterSetup->open();
+    filterSetup->exec();
 
     if (filterSetup->getSettingsChangedFlag())
     {

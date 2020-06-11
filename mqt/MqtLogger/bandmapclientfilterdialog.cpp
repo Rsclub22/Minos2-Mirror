@@ -177,7 +177,7 @@ void BandmapClientFilterDialog::filtersAccepted()
 
     //emit filtersChanged(modefilterChanged);
     doCloseEvent();
-    close();
+    //close();
 }
 
 void BandmapClientFilterDialog::filtersRejected()
@@ -186,7 +186,7 @@ void BandmapClientFilterDialog::filtersRejected()
 
     //restoreModes();
     doCloseEvent();
-    close();
+    //close();
 }
 
 
