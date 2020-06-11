@@ -394,7 +394,9 @@ int HamlibRigControl::getMode(VFO vfo, MODE& mode)
 
 int HamlibRigControl::setMode(VFO vfo, MODE mode)
 {
-    return rig_set_mode(my_rig, hamlibVfoNames[vfo], mapMode(mode), rwidth);
+    // we need to use passband, so set it to normal
+    pbwidth_t pb = passbandNormal(mapMode(mode));
+    return rig_set_mode(my_rig, hamlibVfoNames[vfo], mapMode(mode), pb);
 }
 
 
@@ -687,24 +689,24 @@ int RigControl::setPtt(vfo_t vfo, ptt_t ptt)
 
 
 
-/*
 
-pbwidth_t RigControl::passbandNarrow(rmode_t mode)
+
+pbwidth_t HamlibRigControl::passbandNarrow(rmode_t mode)
 {
     return rig_passband_narrow(my_rig, mode);
 }
 
-pbwidth_t RigControl::passbandNormal(rmode_t mode)
+pbwidth_t HamlibRigControl::passbandNormal(rmode_t mode)
 {
     return rig_passband_normal(my_rig, mode);
 }
 
-pbwidth_t RigControl::passbandWide(rmode_t mode)
+pbwidth_t HamlibRigControl::passbandWide(rmode_t mode)
 {
     return rig_passband_wide(my_rig, mode);
 }
 
-
+/*
 void RigControl::buildPassBandTable(QString mgmMode)
 {
 
