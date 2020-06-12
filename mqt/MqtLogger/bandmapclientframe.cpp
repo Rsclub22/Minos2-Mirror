@@ -486,7 +486,7 @@ void BandmapClientFrame::on_clearAllSpotsActionSelected()
     if (bandmapSpotProxyModel->rowCount() > 0)
     {
         int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                       tr("Please confirm you want to delete all the spots in the bandmap1?"),
+                                       tr("Please confirm you want to delete all the spots in the bandmap?"),
                                        QMessageBox::Yes | QMessageBox::No);
         if (ret == QMessageBox::Yes)
         {
@@ -1648,7 +1648,7 @@ void BandmapClientFrame::filterButtonSelected()
 {
 
     BandmapClientFilterDialog* filterSetup =  new BandmapClientFilterDialog(ct, filterSettings, this);
-    filterSetup->open();
+    filterSetup->exec();
 
     if (filterSetup->getSettingsChangedFlag())
     {

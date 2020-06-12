@@ -417,7 +417,7 @@ void ClusterClientFilterDialog::filtersAccepted()
 
     //emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
     doCloseEvent();
-    close();
+    //close();
 }
 
 
@@ -558,7 +558,7 @@ void ClusterClientFilterDialog::filtersRejected()
 */
     //restoreTabSettings();
     doCloseEvent();
-    close();
+    //close();
 }
 
 
