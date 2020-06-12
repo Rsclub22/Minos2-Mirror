@@ -152,13 +152,23 @@ void RunButtonsFrame::runModeOff(int buttonNumber)
     // on run freq - return to prior frequency
 
     QString rfreq = runButtonMap[buttonNumber]->returnFrequency;
-    runButtonMap[buttonNumber]->returnFrequency.clear();
-    runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
 
-    rigControl->sendFreq( rfreq);
+    if (!rfreq.isEmpty())
+    {
+        // go to restore freq
+        runButtonMap[buttonNumber]->returnFrequency.clear();
+        runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
 
-    // on run Freq, turn off runmode
-    runButtonMap[buttonNumber]->showButtonOnOff(false);
+        rigControl->sendFreq( rfreq);
+
+        // on run Freq, turn off runmode
+        runButtonMap[buttonNumber]->showButtonOnOff(false);
+    }
+    else
+    {
+        runButOffActionSelected(buttonNumber);
+    }
+
 
 //    runButtonOnFlag = false;
 //    oldRadioOffRunFreq = false;
@@ -323,6 +333,7 @@ void RunButtonsFrame::runButOffActionSelected(int buttonNumber)
         runButtonOnFlag = false;
         runButtonOnNum = NO_RUN_BUTTON_ON;
         chkRunFreqTimer->stop();
+
         emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
     }
 

@@ -1182,7 +1182,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                 }
                 else
                 {
-                    if (!radioName.isEmpty())
+                    if (!radioName.isEmpty() && isRadioLoaded())
                     {
 
                         trace(QString("setRadioName:: Select Radio for %1 , Bandlist is empty = %1").arg(radioName));
