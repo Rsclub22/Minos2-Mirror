@@ -135,8 +135,11 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
 
     if ( minosSave )
     {
+        // we have loaded from an alien format, and are about to export
+        // OR we are looking at contest details, and no export will be honoured
         ui->enrb3->setChecked( true );
-        ui->EntryGroupBox->setVisible( false);
+        ui->EntryGroupBox->setVisible( false );
+        ui->NACSerials->setVisible( false );
     }
     else
     {
