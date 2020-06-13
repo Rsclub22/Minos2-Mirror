@@ -177,7 +177,7 @@
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="489"/>
-        <source>Please confirm you want to delete all the spots in the bandmap1?</source>
+        <source>Please confirm you want to delete all the spots in the bandmap?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -245,107 +245,122 @@ The computed mode is %6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="42"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="24"/>
+        <source>Cluster/Bandmap Default Distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="45"/>
         <source>HF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="56"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="59"/>
         <source>7 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="70"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="73"/>
         <source>1.8 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="84"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="87"/>
         <source>28 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="98"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="101"/>
         <source>21 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="112"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="115"/>
         <source>14 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="126"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="129"/>
         <source>3.5 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="159"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="169"/>
         <source>VHF/UHF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="173"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="183"/>
         <source>144 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="187"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="197"/>
         <source>2300 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="201"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="211"/>
         <source>432 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="215"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="225"/>
         <source>1296 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="229"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="239"/>
         <source>3.4 GHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="243"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="253"/>
         <source>70 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="257"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="267"/>
         <source>50 MHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="271"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="281"/>
         <source>5.6 GHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="285"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="295"/>
         <source>10 GHz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="302"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="326"/>
         <source>Default Distance when creating a new contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.cpp" line="15"/>
-        <source>Cluster/Bandmap Filter Configure</source>
+        <location filename="../Clusterbandmapconfigure.ui" line="336"/>
+        <source>Bandmap General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.cpp" line="82"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="348"/>
+        <source>Add Spot to Bandmap Tuning Tolerance khz</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.cpp" line="16"/>
+        <source>Cluster/Bandmap Configure</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.cpp" line="97"/>
         <source>Distance Error - %1. Please enter a distance %2 to max %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.cpp" line="83"/>
+        <location filename="../Clusterbandmapconfigure.cpp" line="98"/>
         <source>Distance Entry Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1915,7 +1930,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="165"/>
-        <location filename="../qsologframe.cpp" line="515"/>
+        <location filename="../qsologframe.cpp" line="532"/>
         <source>Catch-up (Post Entry)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2110,17 +2125,17 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="363"/>
+        <location filename="../qsologframe.cpp" line="380"/>
         <source>Return to Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="524"/>
+        <location filename="../qsologframe.cpp" line="541"/>
         <source>End Catch-up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1711"/>
+        <location filename="../qsologframe.cpp" line="1728"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2128,32 +2143,32 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2101"/>
+        <location filename="../qsologframe.cpp" line="2118"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2108"/>
+        <location filename="../qsologframe.cpp" line="2125"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2203"/>
+        <location filename="../qsologframe.cpp" line="2220"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2205"/>
+        <location filename="../qsologframe.cpp" line="2222"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2532"/>
+        <location filename="../qsologframe.cpp" line="2549"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2567"/>
+        <location filename="../qsologframe.cpp" line="2584"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2668,32 +2683,32 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="271"/>
+        <location filename="../runbuttonsframe.cpp" line="281"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="280"/>
+        <location filename="../runbuttonsframe.cpp" line="290"/>
         <source>Run %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="298"/>
+        <location filename="../runbuttonsframe.cpp" line="308"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="349"/>
+        <location filename="../runbuttonsframe.cpp" line="360"/>
         <source>Restore .%1    </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="352"/>
+        <location filename="../runbuttonsframe.cpp" line="363"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="353"/>
+        <location filename="../runbuttonsframe.cpp" line="364"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2701,27 +2716,27 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="488"/>
+        <location filename="../runbuttonsframe.cpp" line="503"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="489"/>
+        <location filename="../runbuttonsframe.cpp" line="504"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="490"/>
+        <location filename="../runbuttonsframe.cpp" line="505"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="491"/>
+        <location filename="../runbuttonsframe.cpp" line="506"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="492"/>
+        <location filename="../runbuttonsframe.cpp" line="507"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3660,72 +3675,72 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="297"/>
+        <location filename="../tentryoptionsform.cpp" line="300"/>
         <source>GJV ContestLog files (*.gjv);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="298"/>
+        <location filename="../tentryoptionsform.cpp" line="301"/>
         <source>Save contest in GJV format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="302"/>
+        <location filename="../tentryoptionsform.cpp" line="305"/>
         <source>Minos ContestLog files (*.minos *.Minos);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="303"/>
+        <location filename="../tentryoptionsform.cpp" line="306"/>
         <source>Save contest in .minos format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="307"/>
+        <location filename="../tentryoptionsform.cpp" line="310"/>
         <source>ADIF files (*.adi);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="308"/>
+        <location filename="../tentryoptionsform.cpp" line="311"/>
         <source>Save contest in ADIF format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="312"/>
+        <location filename="../tentryoptionsform.cpp" line="315"/>
         <source>KML(GoogleEarth) files (*.kml);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="313"/>
+        <location filename="../tentryoptionsform.cpp" line="316"/>
         <source>Save contest in KML(GoogleEarth) format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="319"/>
+        <location filename="../tentryoptionsform.cpp" line="322"/>
         <source>Region 1 EDI files (*.edi);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="320"/>
+        <location filename="../tentryoptionsform.cpp" line="323"/>
         <source>Save contest in Region 1 EDI file format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="325"/>
+        <location filename="../tentryoptionsform.cpp" line="328"/>
         <source>Text output (*.txt);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="326"/>
+        <location filename="../tentryoptionsform.cpp" line="329"/>
         <source>Save contest in printable text format as...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="351"/>
+        <location filename="../tentryoptionsform.cpp" line="354"/>
         <source>File is Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="366"/>
+        <location filename="../tentryoptionsform.cpp" line="369"/>
         <source>Failed to open Contest export file%1 : %2 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -3965,6 +3980,11 @@ The row background will change colour when selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../tlogcontainer.cpp" line="436"/>
+        <source>Cluster/Bandmap configuration...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../tlogcontainer.cpp" line="437"/>
         <source>Signal Report AutoFill</source>
         <translation type="unfinished"></translation>
@@ -3997,11 +4017,6 @@ The row background will change colour when selected.</source>
     <message>
         <location filename="../tlogcontainer.cpp" line="435"/>
         <source>WSJT-X link configuration...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tlogcontainer.cpp" line="436"/>
-        <source>Cluster/Bandmap Filter configuration...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

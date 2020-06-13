@@ -208,7 +208,7 @@ utiliser un autre nom SVP</translation>
         <translation>Erreur interne - RIG_EDOM</translation>
     </message>
     <message>
-        <location filename="../hamlibrigcontrol.cpp" line="1170"/>
+        <location filename="../hamlibrigcontrol.cpp" line="1172"/>
         <source>hamlib Errorcode too large!</source>
         <translation>Code d&apos;erreur de hamlib trop grand!</translation>
     </message>
