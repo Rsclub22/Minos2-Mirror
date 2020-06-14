@@ -201,6 +201,7 @@ class LoggerContestLog : public BaseContestLog
       bool exportADIF( QSharedPointer<QFile> expfd );
       bool exportKML( QSharedPointer<QFile> expfd );
       bool exportREG1TEST(QSharedPointer<QFile> expfd, bool noSerials );
+      bool exportCabrillo(QSharedPointer<QFile> expfd );
       bool exportPrintFile( QSharedPointer<QFile> expfd );
       bool exportMinos(QSharedPointer<QFile> expfd );
 

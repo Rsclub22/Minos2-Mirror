@@ -75,6 +75,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QCheckBox" name="enrb6">
+           <property name="text">
+            <string>Cabrillo (Entry)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QCheckBox" name="enrb1">
            <property name="text">
             <string>ADIF (Export)</string>

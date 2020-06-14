@@ -43,7 +43,7 @@
 
 enum MatchType {ThisMatch, OtherMatch, ArchiveMatch};
 
-enum ExportType {EREG1TEST, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
+enum ExportType {EREG1TEST, ECABRILLO, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
 
 #define STACKITEMS 10
 

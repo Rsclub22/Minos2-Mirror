@@ -135,8 +135,11 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
 
     if ( minosSave )
     {
+        // we have loaded from an alien format, and are about to export
+        // OR we are looking at contest details, and no export will be honoured
         ui->enrb3->setChecked( true );
-        ui->EntryGroupBox->setVisible( false);
+        ui->EntryGroupBox->setVisible( false );
+        ui->NACSerials->setVisible( false );
     }
     else
     {
@@ -276,6 +279,10 @@ QString TEntryOptionsForm::doFileSave( )
     {
         exptypes.push_back(EPRINTFILE);
     }
+    if (ui->enrb6->isChecked())
+    {
+        exptypes.push_back(ECABRILLO);
+    }
 
     foreach(ExportType expformat, exptypes)
     {
@@ -285,7 +292,7 @@ QString TEntryOptionsForm::doFileSave( )
         QString ext = ExtractFileExt( ct->cfileName );
         fname = fname.left( fname.size() - ext.size() );
 
-        //enum ExportType {EREG1TEST, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
+        //enum ExportType {EREG1TEST, ECABRILLO, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
         QString defext;
         QString filter;
         QString title;
@@ -324,10 +331,18 @@ QString TEntryOptionsForm::doFileSave( )
             defext = "txt";
             filter = tr("Text output (*.txt);;All Files (*.*);;" );
             title = tr("Save contest in printable text format as...");
-        }
             break;
         }
-
+        case ECABRILLO:
+        {
+            defext = "cbr";
+            ct->mycall.valRes = CS_NOT_VALIDATED;
+            ct->mycall.validate( );
+            filter =tr( "Cabrillo files (*.cbr);;All Files (*.*);;") ;
+            title = tr("Save contest in Cabrillo file format as...");
+            break;
+        }
+        }
         bool Ok = false;
 
         while (!Ok)

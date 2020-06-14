@@ -55,6 +55,7 @@ SOURCES += \
     bandmapclientfilterdialog.cpp \
     bandmapgraphicspanel.cpp \
     bandmapspotmarker.cpp \
+    cabrillo.cpp \
     contestdetails.cpp \
     defdirsdlg.cpp \
     districtframe.cpp \
@@ -137,6 +138,7 @@ HEADERS  += \
     bandmapclientfilterdialog.h \
     bandmapgraphicspanel.h \
     bandmapspotmarker.h \
+    cabrillo.h \
     contestdetails.h \
     defdirsdlg.h \
     districtframe.h \
