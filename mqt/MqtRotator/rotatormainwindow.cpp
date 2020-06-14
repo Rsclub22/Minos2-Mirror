@@ -348,7 +348,7 @@ void RotatorMainWindow::setCompassDialVisible(bool visible)
 
 void RotatorMainWindow::onLoggerSetRotation(int direction, int angle)
 {
-    if (closeApp)
+    if (closeApp && rotator != nullptr)
         return;
 
     logMessage("Command From Logger command number = " + QString::number(direction) + ", angle = " + QString::number(angle));
@@ -462,6 +462,10 @@ int RotatorMainWindow::openRotator()
 
     rotator = rotFactory->createRotator(rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModelName).RotCapabilities::modelNumber);
 
+    if (rotator == nullptr)
+    {
+        logMessage(QString("Failed to create rotator from factory"));
+    }
     connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
     connect(rotator, SIGNAL(traceCommsMsg(QString)), this, SLOT(logMessage(QString)));
     connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
@@ -1135,31 +1139,36 @@ void RotatorMainWindow::writeWindowTitle(QString appName)
 
 void RotatorMainWindow::request_bearing()
 {
+
     logMessage(QString("Request Bearing"));
 
-
-    if (ui->testBearing->isVisible() && ui->testBearingChkbox->isChecked())
+    if (rotator)
     {
-
-        logMessage("Using Test Bearing Box");
-        return;
-    }
-
-
-    reqBearCmdflag = true;
-    int retCode = 0;
-    if (brakeflag || cwCcwCmdflag || rotCmdflag) return;
-    if (rotator->getRotConnected())
-    {
-        retCode = rotator->request_bearing();
-        logMessage(QString("Sent request bearing cmd - retcode = %1").arg(QString::number(retCode)));
-        if (retCode < 0)
+        if (ui->testBearing->isVisible() && ui->testBearingChkbox->isChecked())
         {
-            logMessage(QString("Request bearing: error"));
-            rotatorError(retCode, tr("Request Bearing"));
+
+            logMessage("Using Test Bearing Box");
+            return;
         }
+
+
+        reqBearCmdflag = true;
+        int retCode = 0;
+        if (brakeflag || cwCcwCmdflag || rotCmdflag) return;
+        if (rotator->getRotConnected())
+        {
+            retCode = rotator->request_bearing();
+            logMessage(QString("Sent request bearing cmd - retcode = %1").arg(QString::number(retCode)));
+            if (retCode < 0)
+            {
+                logMessage(QString("Request bearing: error"));
+                rotatorError(retCode, tr("Request Bearing"));
+            }
+        }
+        reqBearCmdflag = false;
     }
-    reqBearCmdflag = false;
+
+
 }
 
 
@@ -1280,74 +1289,84 @@ void RotatorMainWindow::rotateTo(int bearing)
     logMessage(QString("RotateTo Bearing = %1").arg(QString::number(bearing)));
 
 
-
-    // adjust bearing with offset
-    if (setupAntenna->currentAntenna.antennaOffset < 0)
+    if (rotator)
     {
-        rotateTo = rotateTo - setupAntenna->currentAntenna.antennaOffset;
-        if (rotateTo >= COMPASS_MAX360)
+
+        // adjust bearing with offset
+        if (setupAntenna->currentAntenna.antennaOffset < 0)
         {
-            rotateTo = rotateTo - COMPASS_MAX360;
+            rotateTo = rotateTo - setupAntenna->currentAntenna.antennaOffset;
+            if (rotateTo >= COMPASS_MAX360)
+            {
+                rotateTo = rotateTo - COMPASS_MAX360;
+            }
+        }
+        else
+        {
+            rotateTo = rotateTo - setupAntenna->currentAntenna.antennaOffset;
+            if (rotateTo < COMPASS_MIN0)
+            {
+                rotateTo = COMPASS_MAX360 + rotateTo;
+            }
+        }
+
+
+        logMessage(QString("Rotate to Bearing = %1, adjusted with offset = %2").arg(QString::number(rotateTo)).arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));
+
+
+
+        if (rotateTo > COMPASS_MAX360 || rotateTo < COMPASS_MIN0)
+        {
+            logMessage(QString("Error - Rotate To Bearing = %1").arg(QString::number(rotateTo)));
+            return; //error
+        }
+
+
+
+        // calculate target bearing based on current position
+        rotateTo  = northCalcTarget(rotateTo);
+
+        logMessage(QString("rotateTo calculated bearing %1").arg(QString::number(rotateTo)));
+
+        // check if we are already at bearing
+        if (rotateTo == rotatorBearing)
+        {
+            return;
+        }
+
+        if (movingCW || movingCCW)
+        {
+
+            stopRotation(true);
+        }
+
+
+
+        if (rotator->getRotConnected())
+        {
+
+            retCode = rotator->rotate_to_bearing(rotateTo);
+            if (retCode < 0)
+            {
+                rotatorError(retCode, tr("Rotate to Bearing"));
+            }
+            else
+            {
+                moving = true;
+                turn_button_on();
+                sendStatusToLogTurn();
+                rotTimeCount = 0;           // clear timer count
+            }
+
         }
     }
     else
     {
-        rotateTo = rotateTo - setupAntenna->currentAntenna.antennaOffset;
-        if (rotateTo < COMPASS_MIN0)
-        {
-            rotateTo = COMPASS_MAX360 + rotateTo;
-        }
-    }
-
-
-    logMessage(QString("Rotate to Bearing = %1, adjusted with offset = %2").arg(QString::number(rotateTo)).arg(QString::number(setupAntenna->currentAntenna.antennaOffset)));
-
-
-
-    if (rotateTo > COMPASS_MAX360 || rotateTo < COMPASS_MIN0)
-    {
-        logMessage(QString("Error - Rotate To Bearing = %1").arg(QString::number(rotateTo)));
-        return; //error
+        logMessage(QString("rotator = nullptr"));
     }
 
 
 
-    // calculate target bearing based on current position
-    rotateTo  = northCalcTarget(rotateTo);
-
-    logMessage(QString("rotateTo calculated bearing %1").arg(QString::number(rotateTo)));
-
-    // check if we are already at bearing
-    if (rotateTo == rotatorBearing)
-    {
-        return;
-    }
-
-    if (movingCW || movingCCW)
-    {
-
-        stopRotation(true);
-    }
-
-
-
-    if (rotator->getRotConnected())
-    {
-
-        retCode = rotator->rotate_to_bearing(rotateTo);
-        if (retCode < 0)
-        {
-            rotatorError(retCode, tr("Rotate to Bearing"));
-        }
-        else
-        {
-            moving = true;
-            turn_button_on();
-            sendStatusToLogTurn();
-            rotTimeCount = 0;           // clear timer count
-        }
-
-    }
 
 }
 
@@ -1511,73 +1530,97 @@ void RotatorMainWindow::stopButton()
 {
 
     logMessage(QString("StopButton"));
+    if (rotator)
+    {
+        stopRotation(rotator->getRotConnected());
+    }
+    else
+    {
+        logMessage(QString("rotator = nullptr"));
+    }
 
-    stopRotation(rotator->getRotConnected());
 }
 
 void RotatorMainWindow::stop_rotation()
 {
 
-    stopRotation(rotator->getRotConnected());
+    logMessage(QString("stop_rotation"));
+    if (rotator)
+    {
+        stopRotation(rotator->getRotConnected());
+    }
+    else
+    {
+        logMessage(QString("rotator = nullptr"));
+    }
+
 }
 
 void RotatorMainWindow::stopRotation(bool sendStop)
 {
 
     logMessage(QString("Stop Rotation"));
-    int retCode = 0;
-    stop_button_on();
-    brakeflag = true;
-    stopCmdflag = true;
-
-    if (sendStop)
+    if (rotator)
     {
+        int retCode = 0;
+        stop_button_on();
+        brakeflag = true;
+        stopCmdflag = true;
 
-
-        // if it is a Prosistel Rotator - to stop use rotate_to_bearing = 999
-        if (setupAntenna->currentAntenna.rotatorModelNumber == ROT_MODEL_PROSISTEL)
+        if (sendStop)
         {
-            logMessage(QString("Stop Rotation: Prosistel Rotator"));
-            //retCode = rotator->rotate_to_bearing(999);
 
+
+            // if it is a Prosistel Rotator - to stop use rotate_to_bearing = 999
+            if (setupAntenna->currentAntenna.rotatorModelNumber == ROT_MODEL_PROSISTEL)
+            {
+                logMessage(QString("Stop Rotation: Prosistel Rotator"));
+                //retCode = rotator->rotate_to_bearing(999);
+
+            }
+            else
+            {
+                retCode = rotator->stop_rotation();
+                logMessage(QString("Stop cmd sent to rotator - retcode = %1").arg(QString::number(retCode)));
+            }
+
+            if (retCode < 0)
+            {
+                rotatorError(retCode, "Stop Rotation");
+                sendStatusToLogError();
+
+            }
         }
-        else
+
+
+        if (rot_left_button_status)
         {
-            retCode = rotator->stop_rotation();
-            logMessage(QString("Stop cmd sent to rotator - retcode = %1").arg(QString::number(retCode)));
+            rot_left_button_off();
         }
-
-        if (retCode < 0)
+        if (rot_right_button_status)
         {
-            rotatorError(retCode, "Stop Rotation");
-            sendStatusToLogError();
-
+            rot_right_button_off();
         }
+        if (turn_button_status)
+        {
+            turn_button_off();
+        }
+
+        sendStatusToLogStop();
+        sleepFor(brakedelay);
+        brakeflag = false;
+        moving = false;
+        movingCW = false;
+        movingCCW = false;
+        stopCmdflag = false;
+        stop_button_off();
+        logMessage(QString("Stop Cmd Successful"));
+    }
+    else
+    {
+        logMessage(QString("rotator = nullptr"));
     }
 
-
-    if (rot_left_button_status)
-    {
-        rot_left_button_off();
-    }
-    if (rot_right_button_status)
-    {
-        rot_right_button_off();
-    }
-    if (turn_button_status)
-    {
-        turn_button_off();
-    }
-
-    sendStatusToLogStop();
-    sleepFor(brakedelay);
-    brakeflag = false;
-    moving = false;
-    movingCW = false;
-    movingCCW = false;
-    stopCmdflag = false;
-    stop_button_off();
-    logMessage(QString("Stop Cmd Successful"));
 
 }
 
@@ -1585,99 +1628,110 @@ void RotatorMainWindow::stopRotation(bool sendStop)
 void RotatorMainWindow::rotateCW(bool /*clicked*/)
 {
 
+    logMessage(QString("Start rotateCW"));
+
     if (brakeflag)
     {
+        logMessage(QString("Brakeflag = %1").arg(brakeflag ? "True" : "False"));
         return;
     }
 
-    cwCcwCmdflag = true;
-    logMessage(QString("Start rotateCW"));
-    if (!rotator->getRotConnected())
+    if (rotator)
     {
-        logMessage(QString("rotateCW - Rotator not connected!"));
+        cwCcwCmdflag = true;
 
-    }
-    else if (rot_right_button_status)
-    {
-        // button on, turn off
-        stopButton();
-    }
-    else
-    {
-
-        // check if at endstop
-        if (setupAntenna->currentAntenna.southStopType == S_STOPCOMP)
+        if (!rotator->getRotConnected())
         {
-            if (rotatorBearing == setupAntenna->currentAntenna.max_azimuth)
+            logMessage(QString("rotateCW - Rotator not connected!"));
+
+        }
+        else if (rot_right_button_status)
+        {
+            // button on, turn off
+            stopButton();
+        }
+        else
+        {
+
+            // check if at endstop
+            if (setupAntenna->currentAntenna.southStopType == S_STOPCOMP)
             {
-                logMessage(QString("CCW - S_STOPCMP - Max Endstop"));
+                if (rotatorBearing == setupAntenna->currentAntenna.max_azimuth)
+                {
+                    logMessage(QString("CCW - S_STOPCMP - Max Endstop"));
+                    cwCcwCmdflag = false;
+                    return;
+                }
+
+            }
+            else if (rotatorBearing >= setupAntenna->currentAntenna.max_azimuth)
+            {
+                logMessage(QString("Rotator Bearing > currentMaxAzimuth"));
                 cwCcwCmdflag = false;
                 return;
             }
 
-        }
-        else if (rotatorBearing >= setupAntenna->currentAntenna.max_azimuth)
-        {
-            logMessage(QString("Rotator Bearing > currentMaxAzimuth"));
-            cwCcwCmdflag = false;
-            return;
-        }
 
-
-        if (moving || movingCW || movingCCW)
-        {
-            logMessage(QString("RotateCW - rotator already moving - stop"));
-            stopButton();
-        }
-
-
-        int retCode = 0;
-        if (rotator->getRotConnected())
-        {
-            if (setupAntenna->currentAntenna.supportCwCcwCmd)
+            if (moving || movingCW || movingCCW)
             {
-                logMessage(QString("Send CW rotator command, rotator speed = %1").arg(QString::number(rotator->get_rotatorSpeed())));
-                retCode = rotator->rotateClockwise(rotator->get_rotatorSpeed());
+                logMessage(QString("RotateCW - rotator already moving - stop"));
+                stopButton();
             }
-            else
-            {
 
-                int bearing = setupAntenna->currentAntenna.max_azimuth;
-                if (rotator->getLibraryName() == PSTROTATOR_API)
+
+            int retCode = 0;
+            if (rotator->getRotConnected())
+            {
+                if (setupAntenna->currentAntenna.supportCwCcwCmd)
                 {
-                    bearing -=  1;  // PSTrotator doesn't like 360
+                    logMessage(QString("Send CW rotator command, rotator speed = %1").arg(QString::number(rotator->get_rotatorSpeed())));
+                    retCode = rotator->rotateClockwise(rotator->get_rotatorSpeed());
                 }
-
-                retCode = rotator->rotate_to_bearing(bearing);
-                logMessage(QString("Send rotate to maxAzimuth, instead of CW rotator command, maxAzimuth = %1").arg(QString::number(bearing)));
-
-            }
-            if (retCode < 0)
-            {
-                rotatorError(retCode, "Rotate CW");
-                movingCW = false;
-                sendStatusToLogError();
-
-            }
-            else
-            {
-
-                movingCW = true;
-                if (!setupAntenna->currentAntenna.supportCwCcwCmd)
+                else
                 {
-                    moving = true;
-                }
-                sendStatusToLogRotCW();
-                rot_right_button_on();
 
-                logMessage(QString("RotateCW Successful"));
+                    int bearing = setupAntenna->currentAntenna.max_azimuth;
+                    if (rotator->getLibraryName() == PSTROTATOR_API)
+                    {
+                        bearing -=  1;  // PSTrotator doesn't like 360
+                    }
+
+                    retCode = rotator->rotate_to_bearing(bearing);
+                    logMessage(QString("Send rotate to maxAzimuth, instead of CW rotator command, maxAzimuth = %1").arg(QString::number(bearing)));
+
+                }
+                if (retCode < 0)
+                {
+                    rotatorError(retCode, "Rotate CW");
+                    movingCW = false;
+                    sendStatusToLogError();
+
+                }
+                else
+                {
+
+                    movingCW = true;
+                    if (!setupAntenna->currentAntenna.supportCwCcwCmd)
+                    {
+                        moving = true;
+                    }
+                    sendStatusToLogRotCW();
+                    rot_right_button_on();
+
+                    logMessage(QString("RotateCW Successful"));
+                }
             }
         }
+
+
+
+        cwCcwCmdflag = false;
+    }
+    else
+    {
+        logMessage(QString("rotator = nullptr"));
     }
 
-
-
-    cwCcwCmdflag = false;
 }
 
 
@@ -1685,89 +1739,102 @@ void RotatorMainWindow::rotateCW(bool /*clicked*/)
 
 void RotatorMainWindow::rotateCCW(bool /*toggle*/)
 {
+
+    logMessage(QString("Start rotateCCW"));
+
     if (brakeflag)
     {
+        logMessage(QString("Brakeflag = %1").arg(brakeflag ? "True" : "False"));
         return;
     }
 
-    cwCcwCmdflag = true;
-    logMessage(QString("Start rotateCCW"));
-    // check connected
-    if (!rotator->getRotConnected())
+    if (rotator)
     {
-        logMessage(QString("rotateCCW - Rotator not connected!"));
+        cwCcwCmdflag = true;
+        logMessage(QString("Start rotateCCW"));
+        // check connected
+        if (!rotator->getRotConnected())
+        {
+            logMessage(QString("rotateCCW - Rotator not connected!"));
 
-    }
-    else if (rot_left_button_status)
-    {
-        // button on, turn off
-        stopButton();
+        }
+        else if (rot_left_button_status)
+        {
+            // button on, turn off
+            stopButton();
+        }
+        else
+        {
+            // check if at endstop
+            if (setupAntenna->currentAntenna.southStopType == S_STOPCOMP)
+            {
+                if (rotatorBearing == setupAntenna->currentAntenna.min_azimuth)
+                {
+                    logMessage(QString("CCW - S_STOPCMP - Min Endstop"));
+                    cwCcwCmdflag = false;
+                    return;
+                }
+
+            }
+            else if (rotatorBearing < setupAntenna->currentAntenna.min_azimuth)
+            {
+                logMessage(QString("CCW - Rotator Bearing < currentMinAzimuth"));
+
+            }
+
+
+            if (moving || movingCW || movingCCW)
+            {
+                logMessage(QString("RotateCCW - rotator already moving - stop"));
+                stopButton();
+            }
+
+
+            int retCode = 0;
+            if (rotator->getRotConnected())
+            {
+                if (setupAntenna->currentAntenna.supportCwCcwCmd)
+                {
+                    logMessage(QString("Send CCW rotator command, rotator speed = " + QString::number(rotator->get_rotatorSpeed())));
+                    retCode = rotator->rotateCClockwise(rotator->get_rotatorSpeed());
+                }
+                else
+                {
+
+                    logMessage(QString("Send rotate to minAzimuth, instead of CCW rotator command, minAzimuth = %1").arg(QString::number(setupAntenna->currentAntenna.min_azimuth)));
+                    retCode = rotator->rotate_to_bearing(setupAntenna->currentAntenna.min_azimuth);
+                }
+
+                if (retCode < 0)
+                {
+                    rotatorError(retCode, "Rotate CCW");
+                    movingCCW = false;
+                    sendStatusToLogError();
+
+                }
+                else
+                {
+
+                    movingCCW = true;
+                    if (!setupAntenna->currentAntenna.supportCwCcwCmd)
+                    {
+                        moving = true;
+                    }
+                    sendStatusToLogRotCCW();
+                    rot_left_button_on();
+                    logMessage(QString("RotateCCW Successful"));
+                }
+            }
+        }
+
+        cwCcwCmdflag = false;
     }
     else
     {
-        // check if at endstop
-        if (setupAntenna->currentAntenna.southStopType == S_STOPCOMP)
-        {
-            if (rotatorBearing == setupAntenna->currentAntenna.min_azimuth)
-            {
-                logMessage(QString("CCW - S_STOPCMP - Min Endstop"));
-                cwCcwCmdflag = false;
-                return;
-            }
-
-        }
-        else if (rotatorBearing < setupAntenna->currentAntenna.min_azimuth)
-        {
-            logMessage(QString("CCW - Rotator Bearing < currentMinAzimuth"));
-
-        }
-
-
-        if (moving || movingCW || movingCCW)
-        {
-            logMessage(QString("RotateCCW - rotator already moving - stop"));
-            stopButton();
-        }
-
-
-        int retCode = 0;
-        if (rotator->getRotConnected())
-        {
-            if (setupAntenna->currentAntenna.supportCwCcwCmd)
-            {
-                logMessage(QString("Send CCW rotator command, rotator speed = " + QString::number(rotator->get_rotatorSpeed())));
-                retCode = rotator->rotateCClockwise(rotator->get_rotatorSpeed());
-            }
-            else
-            {
-
-                logMessage(QString("Send rotate to minAzimuth, instead of CCW rotator command, minAzimuth = %1").arg(QString::number(setupAntenna->currentAntenna.min_azimuth)));
-                retCode = rotator->rotate_to_bearing(setupAntenna->currentAntenna.min_azimuth);
-            }
-
-            if (retCode < 0)
-            {
-                rotatorError(retCode, "Rotate CCW");
-                movingCCW = false;
-                sendStatusToLogError();
-
-            }
-            else
-            {
-
-                movingCCW = true;
-                if (!setupAntenna->currentAntenna.supportCwCcwCmd)
-                {
-                    moving = true;
-                }
-                sendStatusToLogRotCCW();
-                rot_left_button_on();
-                logMessage(QString("RotateCCW Successful"));
-            }
-        }
+        logMessage(QString("rotator = nullptr"));
     }
 
-    cwCcwCmdflag = false;
+
 }
 
 
@@ -1875,13 +1942,22 @@ void RotatorMainWindow::rotatorError(int errorCode, QString cmd )
         sendStatusToLogError();
     }
     // log all errors
-    QString errorMsg = rotator->getErrorMsgText(errorCode);
-    logMessage(QString("%1 library Error - Code = %2 - %3").arg(rotator->getLibraryName()).arg(QString::number(errorCode)).arg(errorMsg));
+    QString errorMsg;
+    if (rotator)
+    {
+        errorMsg = rotator->getErrorMsgText(errorCode);
+        logMessage(QString("%1 library Error - Code = %2 - %3").arg(rotator->getLibraryName()).arg(QString::number(errorCode)).arg(errorMsg));
+
+    }
 
 
      pollTimer->stop();
 
-     QMessageBox::critical(this, tr("Rotator %1 library Error").arg(rotator->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(setupAntenna->currentAntenna.antennaName).arg(errorCode).arg(errorMsg).arg(cmd));
+     if (rotator)
+     {
+         QMessageBox::critical(this, tr("Rotator %1 library Error").arg(rotator->getLibraryName()), tr("%1\n%2 - %3\nCommand: %4").arg(setupAntenna->currentAntenna.antennaName).arg(errorCode).arg(errorMsg).arg(cmd));
+
+     }
 
 
      closeRotator();
