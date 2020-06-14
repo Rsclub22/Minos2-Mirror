@@ -94,7 +94,7 @@ void ClusterBandmapConfigure::onDistanceEditingFinished(int idx)
         if (!ok || distance < MIN_FILTER_DISTANCE || distance > MAX_FILTER_DISTANCE)
         {
             QMessageBox messageBox;
-            QString msg = tr("Distance Error - %1. Please enter a distance %2 to max %3").arg( distanceLineEdits[idx]->text().arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE));
+            QString msg = tr("Distance Error - %1. Please enter a distance %2 to max %3").arg( distanceLineEdits[idx]->text()).arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE);
             messageBox.critical(this, tr("Distance Entry Error"), msg);
             return;
         }
