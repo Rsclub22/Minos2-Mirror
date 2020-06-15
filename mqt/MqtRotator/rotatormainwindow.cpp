@@ -1101,7 +1101,7 @@ void RotatorMainWindow::refreshAntenna()
             return;
         }
 
-        if (!rotator->getRotConnected())
+        if (rotator == nullptr)
         {
 
             if (openRotator() != OPEN_OK)
@@ -1976,6 +1976,7 @@ void RotatorMainWindow::rotatorError(int errorCode, QString cmd )
 void RotatorMainWindow::sendStatusToLogConnected()
 {
     connectStat = ROT_STATUS_CONNECTED;
+    statusMsg = "";
     sendStatusLogger();
 }
 
