@@ -187,6 +187,49 @@ QString dtg::getN1mmDTG()
     return temp_date;
 
 }
+QString dtg::getCabrilloDTG()
+{
+    // 2016-04-10 1617
+    QString temp_date;
+    QString prefix = "20";
+
+    bool dateDirty = false;
+    bool timeDirty = false;
+
+    QString dateValue = sdate.getValue( dateDirty );    //yyMMdd
+    dateValue += "            ";
+
+    QString timeValue = stime.getValue( timeDirty );    //HHmmss
+    timeValue += "            ";
+
+    if ( dateValue [ 0 ] >= '8' )
+       prefix = "19";
+
+    dateValue = prefix + dateValue;
+
+    temp_date += dateValue[0];
+    temp_date += dateValue[1];
+    temp_date += dateValue[2];
+    temp_date += dateValue[3];
+    temp_date += "-";
+    temp_date += dateValue[4];
+    temp_date += dateValue[5];
+    temp_date += "-";
+    temp_date += dateValue[6];
+    temp_date += dateValue[7];
+    temp_date += " ";
+    temp_date += timeValue [ 0 ];
+    temp_date += timeValue [ 1 ];
+    temp_date += timeValue [ 2 ];
+    temp_date += timeValue [ 3 ];
+
+    for ( int i = 0; i < temp_date.size(); i++ )
+       if ( temp_date[ i ].unicode() == 0 )
+          temp_date[ i ] = ' ';
+
+    return temp_date;
+
+}
 QString dtg::getDate( DTG dstyle, bool &d ) const
 {
    QString temp_date;

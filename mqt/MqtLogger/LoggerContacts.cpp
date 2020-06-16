@@ -394,7 +394,98 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    if ( cs.valRes == ERR_DUPCS )
       sdest += 'D';
 }
+void ContestContact::getCabrilloText(QString &outstr )
+{
+    /*
+QSO: qso-data
+QSO data as specified by the Cabrillo QSO data format.
+    All QSO lines must appear in chronological order.
+    See QSO data specification.
 
+X-QSO: qso-data
+    Any QSO marked with this tag will be ignored in your log.
+    Use to mark QSOs made that you do not want to count toward your score.
+
+                              --------info sent------- -------info rcvd--------
+QSO:  freq mo date       time call          rst exch   call          rst exch   t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO:  3799 PH 1999-03-06 0711 HC8N           59 700    W1AW           59 CT     0
+QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     0
+*/
+
+    BaseContestLog * clp = contest;
+    if ( !bool( clp ) )
+        return;
+    LoggerContestLog *lcl = dynamic_cast<LoggerContestLog *>(clp);
+    if (!bool(lcl))
+        return;
+
+    if ( contactFlags.getValue() & ( LOCAL_COMMENT | DONT_PRINT ) )
+        return;
+
+    if ( contactFlags.getValue() & NON_SCORING)
+        outstr += "X-QSO: ";
+    else
+        outstr += "QSO: ";
+
+    outstr += contest->getCabrilloFreqBand(frequency.getValue());
+
+    outstr += " ";
+
+    QString smode = mode.getValue().toUpper();
+    if (smode == "USB" || smode == "LSB" || smode == "FM")
+        smode = "PH";
+    else if (smode == "MGM")
+        smode = "DG";
+    else
+        smode = "CW";
+
+    outstr += smode;
+    outstr += " ";
+
+    outstr += time.getCabrilloDTG();
+    outstr += " ";
+
+    outstr +=lcl->mycall.fullCall.getValue();
+    outstr += " ";
+
+    if (lcl->RSTMandatoryField.getValue())
+    {
+        outstr += reps.getValue();
+        outstr += " ";
+    }
+    if (lcl->serialMandatoryField.getValue())
+    {
+        outstr += serials.getValue();
+        outstr += " ";
+    }
+    // loc - or other exchange
+    if (lcl->locatorMandatoryField.getValue())
+    {
+        outstr += lcl->myloc.loc.getValue();
+        outstr += " ";
+    }
+
+    outstr += cs.fullCall.getValue();
+    outstr += " ";
+
+    if (lcl->RSTMandatoryField.getValue())
+    {
+        outstr += repr.getValue();
+        outstr += " ";
+    }
+    if (lcl->serialMandatoryField.getValue())
+    {
+        outstr += serialr.getValue();
+        outstr += " ";
+    }
+    // loc - or other exchange
+    if (lcl->locatorMandatoryField.getValue())
+    {
+        outstr += loc.loc.getValue();
+        outstr += " ";
+    }
+}
 QString ContestContact::getADIFLine()
 {
     //date

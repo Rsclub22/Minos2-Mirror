@@ -197,6 +197,7 @@ class dtg
       void setIsoDTG( const QString & );
 
       QString getN1mmDTG();
+      QString getCabrilloDTG();
 
       QDate getDate();
       QTime getTime();

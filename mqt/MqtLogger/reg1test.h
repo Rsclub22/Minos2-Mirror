@@ -11,18 +11,6 @@
 #include "base_pch.h"
 
 class LoggerContestLog;
-class reg1testLine
-{
-   public:
-      QString prefix;
-      QString data;
-
-      reg1testLine( const QString &, const QString &dat );
-      reg1testLine( );
-      ~reg1testLine();
-
-      reg1testLine & operator = ( const reg1testLine & );
-};
 
 class reg1test
 {

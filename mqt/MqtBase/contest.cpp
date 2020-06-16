@@ -136,6 +136,38 @@ long BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
 
     return freq;
 }
+QString BaseContestLog::getCabrilloFreqBand(QString txfreq )
+{
+    // get a tx freq, even when we don't have
+    // rig control, and the proper Cabrillo name of the band
+
+    txfreq = txfreq.remove('.');
+    long freq = static_cast<long>(convertStrToFreq(txfreq));
+
+    QString cband = currentBand.getValue();
+
+    QString cb = cband.trimmed();
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    bool bandOK = blist.findBand(cb, bi);
+    if (bandOK)
+    {
+        cb = bi.cabrillo;
+        if (txfreq.isEmpty() || freq < 100)
+        {
+            return cb;
+        }
+
+        if (bi.getType() != "HF")
+        {
+            return cb;
+        }
+        freq = freq/1000;
+        return QString::number(freq);
+    }
+    return "XXX";
+}
+
 long BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
 {
     // we now want to get the band associated with the current freq

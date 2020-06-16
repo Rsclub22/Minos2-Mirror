@@ -14,11 +14,23 @@
 
 enum reg1test_order
 {
-   TName, TdDate, PCall, PWWLo, PExch, PAdr1, PAdr2, PSect, PBand,
+   TName, TDate, PCall, PWWLo, PExch, PAdr1, PAdr2, PSect, PBand,
    PClub, RName, RCall, RAdr1, RAdr2, RPoCo, RCity, RCoun, RPhon,
    RHBBS, MOpe1, MOpe2, STXEq, SPowe, SRXEq, SAnte, SAntH, CQSOs,
    CQSOP, CWWLs, CWWLB, CExcs, CExcB, CDXCs, CDXCB, CToSc, CODXC,
    LineCount
+};
+class reg1testLine
+{
+   public:
+      QString prefix;
+      QString data;
+
+      reg1testLine( const QString &, const QString &dat );
+      reg1testLine( );
+      ~reg1testLine();
+
+      reg1testLine & operator = ( const reg1testLine & );
 };
 
 reg1testLine::reg1testLine(const QString &pre, const QString &dat ) :
@@ -113,7 +125,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    reg1testLine linelist[ static_cast<int>(LineCount) ];
    linelist[ static_cast< int> (TName) ] = reg1testLine( "TName", ct->name.getValue()  /*, "Contest Name"*/ );
 
-   linelist[ static_cast< int> (TdDate )] = reg1testLine( "TDate", ct->dateRange( DTGFULL )  /*, "Start Date;End Date"*/ );
+   linelist[ static_cast< int> (TDate )] = reg1testLine( "TDate", ct->dateRange( DTGFULL )  /*, "Start Date;End Date"*/ );
    linelist[ static_cast< int> (PCall )] = reg1testLine( "PCall", ct->mycall.fullCall.getValue()  /*, "Callsign Used"*/ );
    linelist[ static_cast< int> (PWWLo )] = reg1testLine( "PWWLo", ct->myloc.loc.getValue()  /*, "Locator Used"*/ );
    linelist[ static_cast< int> (PExch )] = reg1testLine( "PExch", ct->location.getValue()  /*, "Exchange Used"*/ );

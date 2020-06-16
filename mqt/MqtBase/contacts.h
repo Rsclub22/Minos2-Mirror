@@ -99,6 +99,8 @@ class BaseContact: public QObject
       {}
       virtual void getReg1TestText( QString &, bool /*noSerials*/ )
       {}
+      virtual void getCabrilloText( QString & )
+      {}
       virtual void getPrintFileText(QString &, short )
       {}
       virtual QString getADIFLine()

@@ -98,6 +98,7 @@ class BaseContestLog: public BaseLogList
       long getTxFreqBand(QString txf, QString &cb);
       long getAdifFreqBand(QString txfreq, QString &cb);
 
+      QString getCabrilloFreqBand(QString txfreq);
 
       void setCurrentBand(QString);
 
