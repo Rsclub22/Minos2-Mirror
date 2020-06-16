@@ -533,7 +533,7 @@ Reload the settings for the radio now?</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="1007"/>
         <location filename="../rigcontrolmainwindow.cpp" line="1146"/>
         <source>Failed to create a radio</source>
-        <translation type="unfinished"></translation>
+        <translation>Échoué de créer une radio</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1018"/>
