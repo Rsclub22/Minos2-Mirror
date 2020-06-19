@@ -321,6 +321,7 @@ void RunButtonsFrame::runButClearActSel(int buttonNumber)
 
     memoryData::memData m;
     setRunMemoryData(buttonNumber, m);
+    runButtonMap[buttonNumber]->returnFrequency.clear();
     runButtonUpdate(buttonNumber);
 }
 
