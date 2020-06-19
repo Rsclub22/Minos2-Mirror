@@ -197,6 +197,11 @@ void OmnirigControl::onHandleStatusChange(int rigNumber)
         traceMsg(QString("Rig %1 Status Change: new status = %2").arg(rigNumber).arg(rig->StatusStr()));
         if (status != OmniRig::ST_ONLINE)
         {
+            if (!offlineTimer->isActive())  // to cover for rogue offlines
+            {
+                offlineTimer->start(5000);
+            }
+
             setRigConnected(false);
             emit rigStatus(OMNIRIG_OFFLINE * -1, QString("Status"));
 
@@ -204,6 +209,9 @@ void OmnirigControl::onHandleStatusChange(int rigNumber)
         }
         else if (status == OmniRig::ST_ONLINE)
         {
+
+            offlineTimer->stop();
+
             setRigConnected(true);
             //emit rigStatus(OMNIRIG_ONLINE);
 
@@ -234,6 +242,17 @@ void OmnirigControl::onHandleStatusChange(int rigNumber)
 
 }
 
+
+void OmnirigControl::onOffLineTimeout()
+{
+
+    offlineTimer->stop();
+    setRigConnected(false);
+    emit rigStatus(OMNIRIG_OFFLINE * -1, QString("Status"));
+
+
+
+}
 
 void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
 {
@@ -530,6 +549,11 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
         trace(QString("Omnirig: COM server started"));
 
     }
+
+    offlineTimer =  new QTimer(this);
+    offlineTimer->setSingleShot (true);
+    connect (offlineTimer, SIGNAL(timeout()), this,  SLOT(onOffLineTimeout()));
+
 
     // COM/OLE exceptions get signaled
     connect (&*omni_rig, SIGNAL (exception (int, QString, QString, QString)), this, SLOT (onHandleCOMException (int, QString, QString, QString)));

@@ -96,6 +96,11 @@ public:
 
 
 
+    int getVfo(vfo_t *vfo);
+    int setVfo(vfo_t vfo);
+    QString convertVfoQStr(vfo_t vfo);
+
+
 private:
 
 
@@ -138,6 +143,7 @@ private:
     pbwidth_t passbandNarrow(rmode_t mode);
     pbwidth_t passbandNormal(rmode_t mode);
     pbwidth_t passbandWide(rmode_t mode);
+
 };
 
 #endif // HAMLIBRIGCONTROL_H
