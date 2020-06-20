@@ -2226,7 +2226,7 @@ void TLogContainer::onIgnorePreviousFreqChecked(bool checked)
     {
         QWidget *w = ui->ContestPageControl->widget(i);
         TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
-        f->setIgnorePresetFreqChecked(checked);
+        f->setIgnorePreviousFreqChecked(checked);
     }
 }
 
@@ -2236,7 +2236,7 @@ void TLogContainer::onIgnorePresetFreqChecked(bool checked)
     {
         QWidget *w = ui->ContestPageControl->widget(i);
         TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
-        f->setIgnorePreviousFreqChecked(checked);
+        f->setIgnorePresetFreqChecked(checked);
     }
 }
 
