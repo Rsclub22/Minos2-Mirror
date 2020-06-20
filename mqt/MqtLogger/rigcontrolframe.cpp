@@ -126,8 +126,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
                 setVolumeStatus(selDetail.volumeStatus().getValue(), psn);
                 setRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 setBandList(selDetail.bandList().getValue(), psn);
-                setIgnorePresetFreqFlag(selDetail.ignorePresetFreqFlag().getValue(), psn);
-                setIgnorePreviousFreqFlag(selDetail.ignorePreviousFreqFlag().getValue(), psn);
+                //setIgnorePresetFreqFlag(selDetail.ignorePresetFreqFlag().getValue(), psn);
+                //setIgnorePreviousFreqFlag(selDetail.ignorePreviousFreqFlag().getValue(), psn);
             }
         }
     }
@@ -1842,6 +1842,57 @@ void RigControlFrame::traceMsg(QString msg)
 {
     trace(QString("RigcontrolFrame: %1 - %2 ").arg(radioName).arg(msg));
 }
+
+
+
+bool RigControlFrame::readIgnorePresetFreqFlag()
+{
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePresetFreq", false).toBool();
+
+    return state;
+}
+
+void RigControlFrame::saveIgnorePresetFreqFlag(bool state)
+{
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.setValue("FreqFlags/IgnorePresetFreq", state);
+
+    trace("IgnorePresetFreqFlag saved in " + fileName + " = " + QString(state ? "True" : "False"));
+}
+
+bool RigControlFrame::readIgnorePreviousFreqFlag()
+{
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePreviousFreq", false).toBool();
+
+    return state;
+}
+
+void RigControlFrame::saveIgnorePreviousFreqFlag(bool state)
+{
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.setValue("FreqFlags/IgnorePreviousFreq", state);
+
+    trace("IgnorePreviousFreqFlag saved in " + fileName + " = " + QString(state ? "True" : "False"));
+}
+
+
 
 
 //-----------------------------------------------------------------------------------

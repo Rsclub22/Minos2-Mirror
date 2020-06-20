@@ -326,14 +326,6 @@ private:
 
     void setSmeterVisible(bool visible);
 
-    //void sendIgnorePresetFreqToLog(bool status);
-    //void sendIgnorePreviousFreqToLog(bool status);
-    void addIgnorePresetFreqToRigCache(bool status);
-    void addIgnorePreviousFreqToRigCache(bool status);
-    bool readIgnorePresetFreqFlag();
-    bool readIgnorePreviousFreqFlag();
-    void saveIgnorePresetFreqFlag(bool state);
-    void saveIgnorePreviousFreqFlag(bool state);
     void addBandListToRigCache(const int radioIdx, const QStringList &supBandList);
 
 
@@ -388,9 +380,6 @@ signals:
     void onNewRxFreq(quint64);
     void onNewMode();
     void onRigStatus(int status, QString cmd);
-
-    void onIgnorePresetFreq();
-    void onIgnorePreviousFreq();
 
     void onRitOn();
     void onRitOff();

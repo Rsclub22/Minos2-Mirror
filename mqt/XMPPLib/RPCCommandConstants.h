@@ -157,8 +157,6 @@ static const QString rigRitRadioStatus     ("RitRadioStatus");
 static const QString rigRadioVolLevel      ("RadioVolLevel");
 static const QString rigLogVolLevel      ("LogVolLevel");
 static const QString rigVolStatus           ("VolStatus");
-static const QString rigIgnorePresetFreqFlag ("IgnorePresetFreqFlag");
-static const QString rigIgnorePreviousFreqFlag ("IgnorePreviousFreqFlag");
 
 // KSTClient
 static const QString KSTClientApp         ("mqtKSTClient");

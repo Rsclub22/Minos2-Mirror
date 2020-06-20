@@ -262,6 +262,10 @@ private:
     void setFreqStepCombo(QString mode);
     double getStepFreqFromComboText(const QString step);
     void clearFreqInputFocus();
+    bool readIgnorePresetFreqFlag();
+    void saveIgnorePresetFreqFlag(bool state);
+    bool readIgnorePreviousFreqFlag();
+    void saveIgnorePreviousFreqFlag(bool state);
 };
 
 

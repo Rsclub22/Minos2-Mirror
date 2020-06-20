@@ -1777,7 +1777,7 @@ void TSingleLogFrame::on_SetRitEnableStatus(bool status, PubSubName psn)
 {
     FKHRigControlFrame->setRitEnableStatus(status, psn);
 }
-
+/*
 void TSingleLogFrame::on_SetIgnorePresetFreqFlag(bool status, PubSubName psn)
 {
     FKHRigControlFrame->setIgnorePresetFreqFlag(status, psn);
@@ -1787,7 +1787,7 @@ void TSingleLogFrame::on_SetIgnorePreviousFreqFlag(bool status, PubSubName psn)
 {
     FKHRigControlFrame->setIgnorePreviousFreqFlag(status, psn);
 }
-
+*/
 void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
 {
     FKHRigControlFrame->setBandList(s, psn);
@@ -1904,9 +1904,16 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
     }
 }
 
+void TSingleLogFrame::setIgnorePresetFreqChecked(bool state)
+{
+
+}
+
+void TSingleLogFrame::setIgnorePreviousFreqChecked(bool state)
+{
 
 
-
+}
 //void TSingleLogFrame::sendIgnoreRunChkBoxState(int num, bool checked)
 //{
 //    GJVQSOLogFrame->setIgnoreRunChkBoxState(num, checked);

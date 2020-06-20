@@ -91,6 +91,7 @@ private:
     QMenu *keyerRecordMenu;
     QMenu *keyerPlaybackMenu;
     QMenu *languagesMenu;
+    QMenu *radioMenu;
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
@@ -250,6 +251,8 @@ private slots:
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
     void ClusterBandmapConfigActionExecute();
+    void onIgnorePreviousFreqChecked();
+    void onIgnorePresetFreqChecked();
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

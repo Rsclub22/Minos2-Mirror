@@ -149,13 +149,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
         sendRadioListLogger();
 
-        ignorePresetFreq = readIgnorePresetFreqFlag();
-        logMessage(QString("Read IgnorePresetFreqFlag = %1").arg(ignorePresetFreq ? "True" : "False"));
-        ui->actionContest_Start_Ignore_Preset_Freq->setChecked(ignorePresetFreq);
-
-        ignorePreviousFreq = readIgnorePreviousFreqFlag();
-        logMessage(QString("Read IgnorePreviousFreqFlag = %1").arg(ignorePreviousFreq ? "True" : "False"));
-        ui->actionContest_Change_Ignore_Previous_Freq->setChecked(ignorePreviousFreq);
 
         initCacheData();
 
@@ -422,29 +415,7 @@ void RigControlMainWindow::setupBandFreq()
     }
 }
 
-void RigControlMainWindow::onIgnorePresetFreq()
-{
-    if(ui->actionContest_Start_Ignore_Preset_Freq->isChecked() != ignorePresetFreq)
-    {
-        ignorePresetFreq = ui->actionContest_Start_Ignore_Preset_Freq->isChecked();
-        logMessage(QString("RigControl: IgnorePresetFreq Changed = %1").arg(ignorePresetFreq ? "True" : "False"));
-        addIgnorePresetFreqToRigCache(ignorePresetFreq);
-        msg->rigCache.publish();
-        saveIgnorePresetFreqFlag(ignorePresetFreq);
-    }
-}
 
-void RigControlMainWindow::onIgnorePreviousFreq()
-{
-    if(ui->actionContest_Change_Ignore_Previous_Freq->isChecked() != ignorePreviousFreq)
-    {
-        ignorePreviousFreq = ui->actionContest_Change_Ignore_Previous_Freq->isChecked();
-        logMessage(QString("RigControl: IgnorePreviousFreq Changed = %1").arg(ignorePreviousFreq ? "True" : "False"));
-        addIgnorePreviousFreqToRigCache(ignorePreviousFreq);
-        msg->rigCache.publish();
-        saveIgnorePreviousFreqFlag(ignorePreviousFreq);
-    }
-}
 
 void RigControlMainWindow::currentRadioSettingChanged(QString radioName)
 {
@@ -2233,8 +2204,6 @@ void RigControlMainWindow::initCacheData()
 
             addBandListToRigCache(i, supBandList);
 
-            addIgnorePresetFreqToRigCache(ignorePresetFreq);
-            addIgnorePreviousFreqToRigCache(ignorePreviousFreq);
 
             //bool f = radio->supportVolControl(radioModelNumber); //*********************
             //addVolStatusToRigCache(i, f); //*********************************
@@ -3327,81 +3296,7 @@ void RigControlMainWindow::saveTraceLogFlag(bool state)
 }
 
 
-bool RigControlMainWindow::readIgnorePresetFreqFlag()
-{
-    QString fileName;
-    if (appName == "")
-    {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
-    }
-    else
-    {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
-    }
 
-    QSettings config(fileName, QSettings::IniFormat);
-    bool state = config.value("FreqFlags/IgnorePresetFreq", false).toBool();
-
-    return state;
-}
-
-void RigControlMainWindow::saveIgnorePresetFreqFlag(bool state)
-{
-    QString fileName;
-    if (appName == "")
-    {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
-    }
-    else
-    {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
-    }
-
-    QSettings config(fileName, QSettings::IniFormat);
-
-
-    config.setValue("FreqFlags/IgnorePresetFreq", state);
-
-    trace("IgnorePresetFreqFlag saved in " + fileName + " = " + QString(state ? "True" : "False"));
-}
-
-bool RigControlMainWindow::readIgnorePreviousFreqFlag()
-{
-    QString fileName;
-    if (appName == "")
-    {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
-    }
-    else
-    {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
-    }
-
-    QSettings config(fileName, QSettings::IniFormat);
-    bool state = config.value("FreqFlags/IgnorePreviousFreq", false).toBool();
-
-    return state;
-}
-
-void RigControlMainWindow::saveIgnorePreviousFreqFlag(bool state)
-{
-    QString fileName;
-    if (appName == "")
-    {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOCAL + MINOS_RADIO_CONFIG_FILE;
-    }
-    else
-    {
-        fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
-    }
-
-    QSettings config(fileName, QSettings::IniFormat);
-
-
-    config.setValue("FreqFlags/IgnorePreviousFreq", state);
-
-    trace("IgnorePreviousFreqFlag saved in " + fileName + " = " + QString(state ? "True" : "False"));
-}
 
 void RigControlMainWindow::about()
 {
@@ -3596,34 +3491,7 @@ void RigControlMainWindow::sendTransVertStatusToLog(bool status)
     }
 }
 
-void RigControlMainWindow::addIgnorePresetFreqToRigCache(bool status)
-{
-    if (appName.length() > 0)
-    {
-        logMessage(QString("Send IgnorePresetFreq flag to logger = %1").arg(status ? "True" : "False"));
-        for (int i = 0; i < setupRadio->availRadios.count(); i ++)
-        {
-            PubSubName psname(setupRadio->availRadioData[i]->radioName);
-            msg->rigCache.setIgnorePresetFreq(psname, status);
-        }
 
-        //msg->rigCache.publish();
-    }
-}
-
-void RigControlMainWindow::addIgnorePreviousFreqToRigCache(bool status)
-{
-    if (appName.length() > 0)
-    {
-        logMessage(QString("Send IgnorePreviousFreq flag to logger = %1").arg(status ? "True" : "False"));
-        for (int i = 0; i < setupRadio->availRadios.count(); i ++)
-        {
-            PubSubName psname(setupRadio->availRadioData[i]->radioName);
-            msg->rigCache.setIgnorePreviousFreq(psname, status);
-        }
-        //msg->rigCache.publish();
-    }
-}
 
 void RigControlMainWindow::sendTransVertOffsetToLogger(int tvNum)
 {
