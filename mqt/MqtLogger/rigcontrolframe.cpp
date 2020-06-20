@@ -56,7 +56,9 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ritOn(false),
     ritEditOn(false),
     radioState("None"),
-    onContestPageChangedFlag(false)
+    onContestPageChangedFlag(false),
+    ignorePreviousFreqFlag(false),
+    ignorePresetFreqFlag(false)
 
 {
     ui->setupUi(this);
@@ -126,11 +128,12 @@ RigControlFrame::RigControlFrame(QWidget *parent):
                 setVolumeStatus(selDetail.volumeStatus().getValue(), psn);
                 setRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 setBandList(selDetail.bandList().getValue(), psn);
-                //setIgnorePresetFreqFlag(selDetail.ignorePresetFreqFlag().getValue(), psn);
-                //setIgnorePreviousFreqFlag(selDetail.ignorePreviousFreqFlag().getValue(), psn);
             }
         }
     }
+
+    ignorePresetFreqFlag = readIgnorePresetFreqFlag();
+    ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
 
     operatingFreq = new CheckOperatingFreq();
     if (operatingFreq->loadFile("./Configuration/operating_frequencies.json"))
@@ -1294,7 +1297,7 @@ void RigControlFrame::setRadioFreq()
 
                     if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
                     {
-                        if (!selRadioDetails.getIgnorePreviousFreq())     // don't return to previous freq when swapping contests
+                        if (!ignorePreviousFreqFlag)     // don't return to previous freq when swapping contests
                         {
                             sendFreq(freq);
                             trace(QString("setRadioFreq: Set previous freq = %1").arg(QString::number(cf)));
@@ -1308,7 +1311,7 @@ void RigControlFrame::setRadioFreq()
                     else
                     {
 
-                        if (!selRadioDetails.getIgnorePresetFreq())     // don't go to preset freq
+                        if (!ignorePresetFreqFlag)     // don't go to preset freq
                         {
                             sendFreq(listOfBands[i].freq);
                             trace(QString("setRadioFreq: Set default freq = %1").arg(listOfBands[i].freq));
@@ -1892,7 +1895,23 @@ void RigControlFrame::saveIgnorePreviousFreqFlag(bool state)
     trace("IgnorePreviousFreqFlag saved in " + fileName + " = " + QString(state ? "True" : "False"));
 }
 
+void RigControlFrame::setIgnorePresetFreqChecked(bool state)
+{
+    if (readIgnorePresetFreqFlag() != state)
+    {
+        ignorePresetFreqFlag = state;
+        saveIgnorePresetFreqFlag(state);
+    }
+}
 
+void RigControlFrame::setIgnorePreviousFreqChecked(bool state)
+{
+    if (readIgnorePreviousFreqFlag() != state)
+    {
+        ignorePreviousFreqFlag = state;
+        saveIgnorePreviousFreqFlag(state);
+    }
+}
 
 
 //-----------------------------------------------------------------------------------

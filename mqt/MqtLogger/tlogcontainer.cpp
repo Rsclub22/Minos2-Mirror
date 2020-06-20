@@ -437,19 +437,21 @@ void TLogContainer::setupMenus()
 
     radioMenu = newMenu(ui->menuTools, QT_TR_NOOP("Radio"));
 
-    QAction *ignorePresetFreqContestStart = new QAction(this);
+    ignorePresetFreqContestStart = new QAction(this);
     ignorePresetFreqContestStart->setText(QT_TR_NOOP("Contest Start - Ignore Preset Frequency"));
     connect(ignorePresetFreqContestStart, SIGNAL(triggered()),
             this, SLOT(onIgnorePresetFreqChecked()));
     ignorePresetFreqContestStart->setCheckable(true);
     radioMenu->addAction(ignorePresetFreqContestStart);
+    ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
 
-    QAction *ignorePreviousFreqContestChange = new QAction(this);
+    ignorePreviousFreqContestChange = new QAction(this);
     ignorePreviousFreqContestChange->setText(QT_TR_NOOP("Contest Change - Ignore Previous Frequency"));
     connect(ignorePreviousFreqContestChange, SIGNAL(triggered()),
             this, SLOT(onIgnorePreviousFreqChecked()));
     ignorePreviousFreqContestChange->setCheckable(true);
     radioMenu->addAction(ignorePreviousFreqContestChange);
+    ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
 
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
@@ -2224,10 +2226,8 @@ void TLogContainer::onIgnorePreviousFreqChecked()
     {
         QWidget *w = ui->ContestPageControl->widget(i);
         TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
-        f->setIgnorePresetFreqChecked(radioMenu->ignorePresetFreqContestStart->isChecked());
+        f->setIgnorePresetFreqChecked(ignorePresetFreqContestStart->isChecked());
     }
-
-
 }
 
 void TLogContainer::onIgnorePresetFreqChecked()
@@ -2238,6 +2238,29 @@ void TLogContainer::onIgnorePresetFreqChecked()
         TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
         f->setIgnorePreviousFreqChecked(ignorePreviousFreqContestChange->isChecked());
     }
+}
+
+bool TLogContainer::readIgnorePreviousFreqFlag()
+{
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePreviousFreq", false).toBool();
+
+    return state;
+}
+
+bool TLogContainer::readIgnorePresetFreqFlag()
+{
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePresetFreq", false).toBool();
+
+    return state;
 }
 
 //---------------------------------------------------------------------------

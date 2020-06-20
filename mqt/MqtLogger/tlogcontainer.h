@@ -114,6 +114,9 @@ private:
     QAction *lastLayoutSelected = nullptr;
     QAction *lastLanguageSelected = nullptr;
 
+    QAction *ignorePresetFreqContestStart = nullptr;
+    QAction *ignorePreviousFreqContestChange = nullptr;
+
     QAction *newAction(const char *text, QMenu *m, const char *atype );
     QMenu *newMenu(QMenu *m, const char *text);
     SetMemoryAction *newMemoryAction(const char *text, QMenu *m, const char *atype );
@@ -185,6 +188,8 @@ private:
     virtual void changeEvent( QEvent* e ) override;
 
     void updateLayoutsMenu();
+    bool readIgnorePreviousFreqFlag();
+    bool readIgnorePresetFreqFlag();
 private slots:
     void CancelClick();
     void HelpActionExecute();

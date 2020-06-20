@@ -110,6 +110,8 @@ public:
 
     void setIgnorePresetFreqFlag(bool status, PubSubName psn);
     void setIgnorePreviousFreqFlag(bool status, PubSubName psn);
+    void setIgnorePresetFreqChecked(bool state);
+    void setIgnorePreviousFreqChecked(bool state);
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -203,6 +205,8 @@ private:
     QString radioState;
 
     bool onContestPageChangedFlag;
+    bool ignorePreviousFreqFlag;
+    bool ignorePresetFreqFlag;
 
     QTimer *launchRadioSelectTimer;
     int launchRadioSelectCount;
