@@ -35,7 +35,7 @@
 
 #include "cutils.h"
 
-
+//#define RIGCONTROL_TEST
 
 RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    QMainWindow(parent),

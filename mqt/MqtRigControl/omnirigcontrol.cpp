@@ -228,13 +228,15 @@ void OmnirigControl::onHandleStatusChange(int rigNumber)
         }
         else if (status == OmniRig::ST_PORTBUSY)
         {
-            setRigConnected(false);
-            emit rigStatus(OMNIRIG_PORTBUSY * -1, QString("Status"));
+            //setRigConnected(false);
+            //emit rigStatus(OMNIRIG_PORTBUSY * -1, QString("Status"));
+            traceMsg(QString("Rig %1 port is busy").arg(rigNumber));
         }
         else if (status == OmniRig::ST_NOTRESPONDING)
         {
-            setRigConnected(false);
-            emit rigStatus(OMNIRIG_NOTRESPONDING * -1, QString("Status"));
+            //setRigConnected(false);
+            //emit rigStatus(OMNIRIG_NOTRESPONDING * -1, QString("Status"));
+            traceMsg(QString("Rig %1 is not responding").arg(rigNumber));
         }
 
 
