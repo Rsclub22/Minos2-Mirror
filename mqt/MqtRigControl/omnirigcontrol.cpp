@@ -199,11 +199,10 @@ void OmnirigControl::onHandleStatusChange(int rigNumber)
         {
             if (!offlineTimer->isActive())  // to cover for rogue offlines
             {
-                offlineTimer->start(5000);
+                offlineTimer->start(10000);
             }
 
-            setRigConnected(false);
-            emit rigStatus(OMNIRIG_OFFLINE * -1, QString("Status"));
+
 
 
         }
@@ -216,6 +215,8 @@ void OmnirigControl::onHandleStatusChange(int rigNumber)
             //emit rigStatus(OMNIRIG_ONLINE);
 
         }
+
+/*
         else if (status == OmniRig::ST_NOTCONFIGURED)
         {
             setRigConnected(false);
@@ -238,7 +239,7 @@ void OmnirigControl::onHandleStatusChange(int rigNumber)
             //emit rigStatus(OMNIRIG_NOTRESPONDING * -1, QString("Status"));
             traceMsg(QString("Rig %1 is not responding").arg(rigNumber));
         }
-
+*/
 
     }
 

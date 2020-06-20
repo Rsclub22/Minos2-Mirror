@@ -439,16 +439,16 @@ void TLogContainer::setupMenus()
 
     ignorePresetFreqContestStart = new QAction(this);
     ignorePresetFreqContestStart->setText(QT_TR_NOOP("Contest Start - Ignore Preset Frequency"));
-    connect(ignorePresetFreqContestStart, SIGNAL(triggered()),
-            this, SLOT(onIgnorePresetFreqChecked()));
+    connect(ignorePresetFreqContestStart, SIGNAL(triggered(bool)),
+            this, SLOT(onIgnorePresetFreqChecked(bool)));
     ignorePresetFreqContestStart->setCheckable(true);
     radioMenu->addAction(ignorePresetFreqContestStart);
     ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
 
     ignorePreviousFreqContestChange = new QAction(this);
     ignorePreviousFreqContestChange->setText(QT_TR_NOOP("Contest Change - Ignore Previous Frequency"));
-    connect(ignorePreviousFreqContestChange, SIGNAL(triggered()),
-            this, SLOT(onIgnorePreviousFreqChecked()));
+    connect(ignorePreviousFreqContestChange, SIGNAL(triggered(bool)),
+            this, SLOT(onIgnorePreviousFreqChecked(bool)));
     ignorePreviousFreqContestChange->setCheckable(true);
     radioMenu->addAction(ignorePreviousFreqContestChange);
     ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
@@ -2220,23 +2220,23 @@ TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
    return nullptr;
 }
 
-void TLogContainer::onIgnorePreviousFreqChecked()
+void TLogContainer::onIgnorePreviousFreqChecked(bool checked)
 {
     for (int i = 0; i < ui->ContestPageControl->count(); i++)
     {
         QWidget *w = ui->ContestPageControl->widget(i);
         TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
-        f->setIgnorePresetFreqChecked(ignorePresetFreqContestStart->isChecked());
+        f->setIgnorePresetFreqChecked(checked);
     }
 }
 
-void TLogContainer::onIgnorePresetFreqChecked()
+void TLogContainer::onIgnorePresetFreqChecked(bool checked)
 {
     for (int i = 0; i < ui->ContestPageControl->count(); i++)
     {
         QWidget *w = ui->ContestPageControl->widget(i);
         TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
-        f->setIgnorePreviousFreqChecked(ignorePreviousFreqContestChange->isChecked());
+        f->setIgnorePreviousFreqChecked(checked);
     }
 }
 

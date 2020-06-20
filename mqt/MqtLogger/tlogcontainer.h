@@ -256,8 +256,8 @@ private slots:
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
     void ClusterBandmapConfigActionExecute();
-    void onIgnorePreviousFreqChecked();
-    void onIgnorePresetFreqChecked();
+    void onIgnorePreviousFreqChecked(bool);
+    void onIgnorePresetFreqChecked(bool);
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();
