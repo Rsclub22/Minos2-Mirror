@@ -205,6 +205,8 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
         return retcode = -14;
     }
 
+
+
     // load cat params
     if (useRigCtld)
     {
@@ -278,6 +280,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     if (retcode >= 0)
     {
         setRigConnected(true);
+
     }
     else
     {
@@ -523,8 +526,8 @@ rmode_t HamlibRigControl::mapMode(QString mode) const
 /* ---------------------- VFO ------------------------------------ */
 // Note not all radios support reading the VFO
 
-/*
-int RigControl::getVfo(vfo_t *vfo)
+
+int HamlibRigControl::getVfo(vfo_t *vfo)
 {
 
     return rig_get_vfo(my_rig, vfo);
@@ -532,7 +535,7 @@ int RigControl::getVfo(vfo_t *vfo)
 
 
 
-int RigControl::setVfo(vfo_t vfo)
+int HamlibRigControl::setVfo(vfo_t vfo)
 {
     return rig_set_vfo(my_rig, vfo);
 }
@@ -540,11 +543,11 @@ int RigControl::setVfo(vfo_t vfo)
 
 
 
-QString RigControl::convertVfoQStr(vfo_t vfo)
+QString HamlibRigControl::convertVfoQStr(vfo_t vfo)
 {
     return QString::fromLatin1(rig_strvfo(vfo));
 }
-*/
+
 
 /*************** RIT ********************************/
 

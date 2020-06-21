@@ -434,6 +434,25 @@ void TLogContainer::setupMenus()
     UDPConfigAction = newAction(QT_TR_NOOP("UDP broadcast configuration..."), ui->menuTools, SLOT(UDPConfigActionExecute()));
     WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration..."), ui->menuTools, SLOT(WsjtConfigActionExecute()));
     ClusterBandmapFilterConfigAction = newAction(QT_TR_NOOP("Cluster/Bandmap configuration..."), ui->menuTools, SLOT(ClusterBandmapConfigActionExecute()));
+
+    radioMenu = newMenu(ui->menuTools, QT_TR_NOOP("Radio"));
+
+    ignorePresetFreqContestStart = new QAction(this);
+    ignorePresetFreqContestStart->setText(QT_TR_NOOP("Contest Start - Ignore Preset Frequency"));
+    connect(ignorePresetFreqContestStart, SIGNAL(triggered(bool)),
+            this, SLOT(onIgnorePresetFreqChecked(bool)));
+    ignorePresetFreqContestStart->setCheckable(true);
+    radioMenu->addAction(ignorePresetFreqContestStart);
+    ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
+
+    ignorePreviousFreqContestChange = new QAction(this);
+    ignorePreviousFreqContestChange->setText(QT_TR_NOOP("Contest Change - Ignore Previous Frequency"));
+    connect(ignorePreviousFreqContestChange, SIGNAL(triggered(bool)),
+            this, SLOT(onIgnorePreviousFreqChecked(bool)));
+    ignorePreviousFreqContestChange->setCheckable(true);
+    radioMenu->addAction(ignorePreviousFreqContestChange);
+    ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
+
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
@@ -2200,6 +2219,50 @@ TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
 
    return nullptr;
 }
+
+void TLogContainer::onIgnorePreviousFreqChecked(bool checked)
+{
+    for (int i = 0; i < ui->ContestPageControl->count(); i++)
+    {
+        QWidget *w = ui->ContestPageControl->widget(i);
+        TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
+        f->setIgnorePreviousFreqChecked(checked);
+    }
+}
+
+void TLogContainer::onIgnorePresetFreqChecked(bool checked)
+{
+    for (int i = 0; i < ui->ContestPageControl->count(); i++)
+    {
+        QWidget *w = ui->ContestPageControl->widget(i);
+        TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
+        f->setIgnorePresetFreqChecked(checked);
+    }
+}
+
+bool TLogContainer::readIgnorePreviousFreqFlag()
+{
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePreviousFreq", false).toBool();
+
+    return state;
+}
+
+bool TLogContainer::readIgnorePresetFreqFlag()
+{
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool state = config.value("FreqFlags/IgnorePresetFreq", false).toBool();
+
+    return state;
+}
+
 //---------------------------------------------------------------------------
 
 QVector<TSingleLogFrame *> TLogContainer::getLogFrames()

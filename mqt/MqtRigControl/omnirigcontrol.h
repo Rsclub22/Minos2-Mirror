@@ -95,6 +95,7 @@ private slots:
     void onHandleCustomReply(int, const QVariant &, const QVariant &);
 
 
+    void onOffLineTimeout();
 private:
 
 
@@ -114,6 +115,7 @@ private:
 
     OmniRig::RigStatusX status;
     bool rigConnected;
+    QTimer* offlineTimer;
 
     static MODE map_mode (OmniRig::RigParamX param);
     static OmniRig::RigParamX map_mode (MODE mode);
