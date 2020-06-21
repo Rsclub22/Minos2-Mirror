@@ -91,6 +91,7 @@ private:
     QMenu *keyerRecordMenu;
     QMenu *keyerPlaybackMenu;
     QMenu *languagesMenu;
+    QMenu *radioMenu;
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
@@ -112,6 +113,9 @@ private:
     QAction *lastSessionSelected = nullptr;
     QAction *lastLayoutSelected = nullptr;
     QAction *lastLanguageSelected = nullptr;
+
+    QAction *ignorePresetFreqContestStart = nullptr;
+    QAction *ignorePreviousFreqContestChange = nullptr;
 
     QAction *newAction(const char *text, QMenu *m, const char *atype );
     QMenu *newMenu(QMenu *m, const char *text);
@@ -184,6 +188,8 @@ private:
     virtual void changeEvent( QEvent* e ) override;
 
     void updateLayoutsMenu();
+    bool readIgnorePreviousFreqFlag();
+    bool readIgnorePresetFreqFlag();
 private slots:
     void CancelClick();
     void HelpActionExecute();
@@ -250,6 +256,8 @@ private slots:
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
     void ClusterBandmapConfigActionExecute();
+    void onIgnorePreviousFreqChecked(bool);
+    void onIgnorePresetFreqChecked(bool);
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

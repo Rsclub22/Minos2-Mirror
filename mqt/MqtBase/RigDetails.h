@@ -23,8 +23,6 @@ class RigDetails: public PubSubValue
     MinosItem<bool> _transverterStatus;
     MinosItem<bool> _volumeStatus;
     MinosItem<bool> _ritEnableStatus;
-    MinosItem<bool> _ignorePresetFreqFlag;
-    MinosItem<bool> _ignorePreviousFreqFlag;
     MinosStringItem<QString> _bandList;
 
 public:
@@ -47,8 +45,6 @@ public:
     MinosItem<bool> transverterStatus() const;
     MinosItem<bool> volumeStatus() const;
     MinosItem<bool> ritEnableStatus() const;
-    MinosItem<bool> ignorePresetFreqFlag() const;
-    MinosItem<bool> ignorePreviousFreqFlag() const;
     MinosStringItem<QString> bandList() const;
 
     void setSelected(const QString &loggeruuid, const QString &selected);
@@ -61,8 +57,7 @@ public:
     void setRitEnableStatus(bool ritEnableStatus);
 
 
-    void setIgnorePresetFreqFlag(bool ignorePresetFreqFlag);
-    void setIgnorePreviousFreqFlag(bool ignorePreviousFreqFlag);
+
 };
 
 

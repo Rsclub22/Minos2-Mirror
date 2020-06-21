@@ -293,11 +293,11 @@ public:
     void on_SetRitEnableStatus(bool status, PubSubName psn);
     void on_SetBandList(QString s, PubSubName psn);
     void on_SetTransVertEnabled(bool status, PubSubName psn);
-    void on_SetIgnorePresetFreqFlag(bool status, PubSubName psn);
-    void on_SetIgnorePreviousFreqFlag(bool status, PubSubName psn);
 
     void setTuneAddBandMapSetting(bool state);
     bool getTuneAddBandMapSetting();
+    void setIgnorePresetFreqChecked(bool state);
+    void setIgnorePreviousFreqChecked(bool state);
 };
 
 #endif // TSINGLELOGFRAME_H
