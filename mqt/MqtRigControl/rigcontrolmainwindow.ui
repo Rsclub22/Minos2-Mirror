@@ -847,8 +847,6 @@ Active</string>
       <string>Setup Band Freq.</string>
      </property>
      <addaction name="actionEdit_Preset_Freq"/>
-     <addaction name="actionContest_Start_Ignore_Preset_Freq"/>
-     <addaction name="actionContest_Change_Ignore_Previous_Freq"/>
     </widget>
     <addaction name="actionSetup_Radios"/>
     <addaction name="menuSetup_Band_Freq"/>
