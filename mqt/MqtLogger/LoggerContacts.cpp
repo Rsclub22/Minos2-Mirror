@@ -476,7 +476,11 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     }
     if (lcl->serialMandatoryField.getValue())
     {
-        outstr += serialr.getValue();
+        QString srbuff;
+        int sr = serialr.getValue().toInt();
+        if ( sr )
+            srbuff = QString("%1").arg(sr, 3, 10, QChar('0') );
+        outstr += srbuff;   // RX sno
         outstr += " ";
     }
     // loc - or other exchange
