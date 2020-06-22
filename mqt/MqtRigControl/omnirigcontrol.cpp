@@ -300,12 +300,15 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
         {
             traceMsg(QString("OmniRig params change: OmniRig VFOA"));
             reversedVFO = false;
+            need_frequency = true;
 
         }
         if (params & OmniRig::PM_VFOB)
         {
             traceMsg(QString("OmniRig params change: OmniRig VFOB"));
-            reversedVFO = false;
+            reversedVFO = true;
+            need_frequency = true;
+
 
         }
         if (params & OmniRig::PM_FREQ)
