@@ -732,7 +732,7 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
 
     if (rigConnected)
     {
-        freq = static_cast<Frequency>(rig->GetRxFrequency());
+        //freq = static_cast<Frequency>(rig->GetRxFrequency());
 
         if (readable_params & OmniRig::PM_FREQA)
         {
