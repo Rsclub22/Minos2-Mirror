@@ -364,8 +364,6 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio()));
     connect(ui->actionSetup_Radios, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
     connect(ui->actionEdit_Preset_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
-    connect(ui->actionContest_Start_Ignore_Preset_Freq, SIGNAL(changed()), this, SLOT(onIgnorePresetFreq()));
-    connect(ui->actionContest_Change_Ignore_Previous_Freq, SIGNAL(changed()), this, SLOT(onIgnorePreviousFreq()));
     connect(ui->actionTraceComms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));

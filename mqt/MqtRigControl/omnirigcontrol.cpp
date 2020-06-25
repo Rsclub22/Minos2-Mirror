@@ -265,12 +265,16 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
           .arg (params, 8, 16, QChar ('0'))
           .arg (rig_number).toLocal8Bit ());
 
+
+
     if (rigNumber == rig_number)
     {
         if (!rig || rig->isNull ())
             return;
 
         auto need_frequency = false;
+
+
 
         if (params & OmniRig::PM_VFOAA)
         {
@@ -348,7 +352,7 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
                 if (f)
                 {
                     traceMsg(QString("OmniRig Need Freq, PM_FREQB = %1").arg(f));
-                    emit newRxFreq(static_cast<Frequency>(f));
+                    //emit newRxFreq(static_cast<Frequency>(f));
                 }
             }
             if (readable_params & OmniRig::PM_FREQ)
@@ -732,7 +736,7 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
 
     if (rigConnected)
     {
-        //freq = static_cast<Frequency>(rig->GetRxFrequency());
+        freq = static_cast<Frequency>(rig->GetRxFrequency());
 
         if (readable_params & OmniRig::PM_FREQA)
         {
@@ -743,6 +747,7 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
                 freq = static_cast<Frequency>(f);
             }
         }
+        /*
         if (readable_params & OmniRig::PM_FREQB)
         {
             auto f = rig->FreqB();
@@ -752,6 +757,7 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
                 freq = static_cast<Frequency>(f);
             }
         }
+        */
         if (readable_params & OmniRig::PM_FREQ)
         {
             auto f = rig->Freq();
