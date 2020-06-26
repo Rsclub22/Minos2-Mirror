@@ -1698,18 +1698,35 @@ bool BandmapClientFrame::eventFilter(QObject *obj, QEvent *event)
    return false;
 }
 
+static void setTextToLabel(QLabel *label, QString text1, QString col, QString text2)
+{
+    QFontMetrics metrix(label->font());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int width1 = metrix.horizontalAdvance(text1);
+#else
+    int width1 = metrix.width(text1);
+#endif
 
+    int width = label->width() - width1 - 2;
+    QString clippedText;
+    if (width > 0)
+        clippedText = col + metrix.elidedText(text2, Qt::ElideRight, width);
+    label->setText(text1 + clippedText);
+
+    label->setToolTip(text1 + col + text2);
+}
 void BandmapClientFrame::setHoldUpdateFlag(bool state)
 {
-
+    QString clText = tr("Bandmap");
     holdUpdateFlag = state;
     if (state)
     {
-        ui->bandmapFrameTitle->setText(tr("Bandmap - %1Mouse in frame, updates paused").arg(HtmlFontColour(Qt::red)));
+        setTextToLabel(ui->bandmapFrameTitle, clText, HtmlFontColour(Qt::red), tr(" - Mouse in frame, updates paused"));
     }
     else
     {
-        ui->bandmapFrameTitle->setText(tr("Bandmap"));
+        ui->bandmapFrameTitle->setText(clText);
+        ui->bandmapFrameTitle->setToolTip(clText);  // not really needed, as if we hover we must be in frame
     }
 }
 
