@@ -1258,7 +1258,7 @@ void TSingleLogFrame::getSplitters()
 
     // and reset some of the saved state
 
-    singleLogFrameSplitter->setChildrenCollapsible(false);
+    singleLogFrameSplitter->setChildrenCollapsible(true);
     singleLogFrameSplitter->setHandleWidth(splitterHandleWidth);
 
     foreach(MinosSplitter *s, rowSplitters)
@@ -1268,7 +1268,7 @@ void TSingleLogFrame::getSplitters()
         sstate = settings.value("Splitters/" + name + "/state/" + curScreenLayout, sstate).toByteArray();
         s->restoreState(sstate);
         s->setHandleWidth(splitterHandleWidth);
-        s->setChildrenCollapsible(false);
+        s->setChildrenCollapsible(true);
     }
 }
 void TSingleLogFrame::onSplittersChanged()
