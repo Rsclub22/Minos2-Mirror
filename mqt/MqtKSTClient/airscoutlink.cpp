@@ -93,11 +93,11 @@ void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
             if ((addrs[j].ip().protocol() == QAbstractSocket::IPv4Protocol) && (addrs[j].broadcast().toString() != ""))
             {
                 qint64 res = qus->writeDatagram(packet->data(), packet->length(), addrs[j].broadcast(), static_cast<quint16>(mainWindow->getASPort()));
-                trace(QString("%1 bytes sent").arg(res));
                 if (res > 0)
                 {
+                    trace(QString("%1 bytes sent to %2").arg(res).arg(addrs[j].broadcast().toString()));
                     lastASSEnd = QDateTime::currentDateTime();
-                    return;
+                    break;
                 }
             }
         }
