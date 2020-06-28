@@ -12,6 +12,7 @@
 #include "MinosTestImport.h"
 #include "ScreenContact.h"
 #include "DisplayContestContact.h"
+#include "BandList.h"
 //==========================================================================
 DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now )
       : BaseContact( ct, time_now ),
@@ -27,8 +28,40 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
 
    if (curmode != hamlibData::MGM)
    {
-       repr.setInitialValue( "5  " );
-       reps.setInitialValue( "5  " );
+       QString cb = clp->currentBand.getValue().trimmed();
+       BandList &blist = BandList::getBandList();
+       BandInfo bi;
+       bool bandOK = blist.findBand(cb, bi);
+       bool hf = false;
+       if (bandOK)
+       {
+          hf = bi.getType() == "HF";
+       }
+       else
+       {
+           if (cb == allHF)
+           {
+               hf = true;
+           }
+       }
+       if (hf)
+       {
+            if (curmode == hamlibData::CW)
+            {
+                repr.setInitialValue( "599" );
+                reps.setInitialValue( "599" );
+            }
+            else
+            {
+                repr.setInitialValue( "59 " );
+                reps.setInitialValue( "59 " );
+            }
+       }
+       else
+       {
+           repr.setInitialValue( "5  " );
+           reps.setInitialValue( "5  " );
+       }
    }
    else
    {
