@@ -160,7 +160,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     {
         trace(QString("addToBandmapTuneTolerance read in = %1 khz").arg(addToBandmapTuneTolerance));
     }
-
 }
 
 void QSOLogFrame::on_FontChanged()
@@ -1867,14 +1866,24 @@ void QSOLogFrame::updateQSODisplay()
    {
 //      ui->QTHEdit->CharCase = ecNormal;
    }
+   //CallsignEdit->Enabled = false; // leave this enabled in protected to allow searching
    bool notProtected = !contest->isReadOnly();
    ui->RSTTXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->RSTTxFrame->setVisible(contest->RSTMandatoryField.getValue());
    ui->SerTXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
+   ui->SerTxFrame->setVisible(contest->serialMandatoryField.getValue());
    ui->RSTRXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->RSTRxFrame->setVisible(contest->RSTMandatoryField.getValue());
    ui->SerRXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
-   //CallsignEdit->Enabled = false; // leave these to allow searching
-   ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());
+   ui->SerRxFrame->setVisible(contest->serialMandatoryField.getValue());
+   ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());  // loc remains enabled in protected to enable searching
+   ui->LocFrame->setVisible(contest->locatorMandatoryField.getValue());
+   bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue() || contest->otherOptionalExchange.getValue();
+   ui->QTHEdit->setEnabled( exchangeNeeded );
+   ui->QTHFrame->setVisible(exchangeNeeded);
    ui->CommentsEdit->setEnabled(notProtected);
+
+
    ui->ModeComboBoxGJV->setEnabled(notProtected);
    ui->MGMSubModeFrame->setEnabled(notProtected);
    ui->NonScoreCheckBox->setEnabled(notProtected);
@@ -1884,9 +1893,6 @@ void QSOLogFrame::updateQSODisplay()
    ui->radioEdit->setEnabled(notProtected);
    ui->frequencyEdit->setEnabled(notProtected);
    ui->rotatorHeadingEdit->setEnabled(notProtected);
-
-   bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue() || contest->otherOptionalExchange.getValue();
-   ui->QTHEdit->setEnabled( exchangeNeeded );
 
    ui->ModeButton->setEnabled(notProtected);
    ui->SecondOpComboBox->setEnabled(notProtected);
