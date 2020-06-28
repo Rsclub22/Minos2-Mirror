@@ -58,6 +58,7 @@ BaseContestLog::BaseContestLog( )
   serialMandatoryField.setValue( true );
   locatorMandatoryField.setValue( true );
   otherExchange.setValue( false );
+  otherOptionalExchange.setValue( false );
   countryMult.setValue( false );
   nonGCountryMult.setValue( false );
   districtMult.setValue( false );
@@ -234,6 +235,7 @@ void BaseContestLog::clearDirty()
    contestBands.clearDirty();
    currentBand.clearDirty();
    otherExchange.clearDirty();
+   otherOptionalExchange.clearDirty();
    countryMult.clearDirty();
    nonGCountryMult.clearDirty();
    locMult.clearDirty();
@@ -275,6 +277,7 @@ void BaseContestLog::setDirty()
    contestBands.setDirty();
    currentBand.setDirty();
    otherExchange.setDirty();
+   otherOptionalExchange.setDirty();
    countryMult.setDirty();
    nonGCountryMult.setDirty();
    locMult.setDirty();
@@ -1185,6 +1188,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "locMult", locMult );
       mt->getStructArgMemberValue( "GLocMult", GLocMult );
       mt->getStructArgMemberValue( "QTHReq", otherExchange );
+      mt->getStructArgMemberValue( "QTHOpt", otherOptionalExchange );
       mt->getStructArgMemberValue( "AllowLoc4", allowLoc4 );
       mt->getStructArgMemberValue( "AllowLoc8", allowLoc8 );
       mt->getStructArgMemberValue( "currentMode", currentMode);

@@ -36,6 +36,7 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->ExchangeComboBox->addItem(tr("No Exchange Required"));
     ui->ExchangeComboBox->addItem(tr("PostCode Multipliers"));
     ui->ExchangeComboBox->addItem(tr("Other Exchange Multiplier"));
+    ui->ExchangeComboBox->addItem(tr("Optional Exchange Multiplier"));
     ui->ExchangeComboBox->addItem(tr("Exchange Required (no multiplier)"));
 
     ui->BonusComboBox->addItem(tr("None"));
@@ -90,6 +91,10 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
     connect(LogContainer->sendDM, SIGNAL(RotatorList()), this, SLOT(on_RotatorList()));
+
+    ui->NonGCtryMult->setVisible(false);
+    ui->GLocMult->setVisible(false);
+    ui->M7LocatorMults->setVisible(false);
 }
 void ContestDetails::doCloseEvent()
 {
@@ -327,6 +332,7 @@ void ContestDetails::setDetails(  )
       No Exchange Required
       PostCode Multipliers
       Other Exchange Multiplier
+      Optional Exchange Muktiplier
       Exchange Required (no multiplier)
    */
 
@@ -337,12 +343,17 @@ void ContestDetails::setDetails(  )
    else
       if ( contest->otherExchange.getValue() )
       {
-          ui->ExchangeComboBox->setCurrentIndex( 3);
+          ui->ExchangeComboBox->setCurrentIndex( 4);
       }
       else
-      {
-          ui->ExchangeComboBox->setCurrentIndex( 0);
-      }
+          if ( contest->otherOptionalExchange.getValue() )
+          {
+              ui->ExchangeComboBox->setCurrentIndex( 3);
+          }
+          else
+              {
+                  ui->ExchangeComboBox->setCurrentIndex( 0);
+              }
    ui->DXCCMult->setChecked( contest->countryMult.getValue()) ;
    ui->NonGCtryMult->setChecked( contest->nonGCountryMult.getValue()) ;
 
@@ -709,6 +720,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
       No Exchange Required
       PostCode Multipliers
       Other Exchange Multiplier
+      Optional Exchange Multilier
       Exchange Required (no multiplier)
    */
 
@@ -719,12 +731,17 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    else
       if ( contest->otherExchange.getValue() )
       {
-         ui->ExchangeComboBox->setCurrentIndex(3);
+         ui->ExchangeComboBox->setCurrentIndex(4);
       }
       else
-      {
-         ui->ExchangeComboBox->setCurrentIndex(0);
-      }
+          if ( contest->otherOptionalExchange.getValue() )
+          {
+             ui->ExchangeComboBox->setCurrentIndex(3);
+          }
+          else
+              {
+                 ui->ExchangeComboBox->setCurrentIndex(0);
+              }
    ui->NonGCtryMult->setChecked(contest->nonGCountryMult.getValue()) ;
    ui->DXCCMult->setChecked(contest->countryMult.getValue()) ;
 
@@ -1052,27 +1069,38 @@ QWidget * ContestDetails::getDetails( )
       No Exchange Required
       PostCode Multipliers
       Other Exchange Multiplier
+      Optional Exchange Multiplier
       Exchange Required (no multiplier)
    */
     switch ( ui->ExchangeComboBox->currentIndex() )
     {
     case 0:
         contest->otherExchange.setValue( false );
+        contest->otherOptionalExchange.setValue( false );
         contest->districtMult.setValue( false );
         break;
 
     case 1:
         contest->otherExchange.setValue( true );
+        contest->otherOptionalExchange.setValue( false );
         contest->districtMult.setValue( true );
         break;
 
     case 2:
         contest->otherExchange.setValue( true );
+        contest->otherOptionalExchange.setValue( false );
         contest->districtMult.setValue( false );
         break;
 
     case 3:
+        contest->otherExchange.setValue( false );
+        contest->otherOptionalExchange.setValue( true );
+        contest->districtMult.setValue( false );
+        break;
+
+    case 4:
         contest->otherExchange.setValue( true );
+        contest->otherOptionalExchange.setValue( false );
         contest->districtMult.setValue( false );
         break;
 

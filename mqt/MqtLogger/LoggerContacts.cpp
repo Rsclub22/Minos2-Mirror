@@ -347,7 +347,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
          sdest += districtMult->districtCode;
    }
    else
-      if ( clp->otherExchange.getValue() )
+      if ( clp->otherExchange.getValue() || clp->otherOptionalExchange.getValue() )
       {
          sdest += extraText.getValue();
       }

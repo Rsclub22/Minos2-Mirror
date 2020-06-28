@@ -1885,7 +1885,7 @@ void QSOLogFrame::updateQSODisplay()
    ui->frequencyEdit->setEnabled(notProtected);
    ui->rotatorHeadingEdit->setEnabled(notProtected);
 
-   bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue();
+   bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue() || contest->otherOptionalExchange.getValue();
    ui->QTHEdit->setEnabled( exchangeNeeded );
 
    ui->ModeButton->setEnabled(notProtected);
@@ -2337,10 +2337,11 @@ void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const B
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
-   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
+   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
    {
       if ( ( contest->districtMult.getValue() && matct->districtMult.getValue() ) ||
-           ( contest->otherExchange.getValue() && matct->otherExchange.getValue() )
+           ( contest->otherExchange.getValue() && matct->otherExchange.getValue() ) ||
+           ( contest->otherOptionalExchange.getValue() && matct->otherOptionalExchange.getValue() )
          )
       {
         QString exch = lct->extraText.getValue();
@@ -2369,7 +2370,7 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
-   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
+   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
    {
       if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
       {

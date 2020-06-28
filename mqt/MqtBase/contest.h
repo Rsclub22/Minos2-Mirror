@@ -128,6 +128,7 @@ class BaseContestLog: public BaseLogList
       MinosStringItem<QString> contestBands;
       MinosStringItem<QString> currentBand;
       MinosItem<bool> otherExchange;
+      MinosItem<bool> otherOptionalExchange;
       MinosItem<bool> countryMult;
       MinosItem<bool> nonGCountryMult;
       MinosItem<bool> locMult;

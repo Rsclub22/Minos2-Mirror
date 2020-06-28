@@ -109,6 +109,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->locMult.addIfDirty( st, "locMult", dirty );
    ct->GLocMult.addIfDirty( st, "GLocMult", dirty );
    ct->otherExchange.addIfDirty( st, "QTHReq", dirty );
+   ct->otherOptionalExchange.addIfDirty( st, "QTHOpt", dirty );
    ct->allowLoc4.addIfDirty( st, "AllowLoc4", dirty );
    ct->allowLoc8.addIfDirty( st, "AllowLoc8", dirty );
    ct->currentMode.addIfDirty(st, "currentMode", dirty);
