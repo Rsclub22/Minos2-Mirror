@@ -583,7 +583,7 @@ bool Matcher::reduceScanAccuracy()
                           matchcs.mstr = smstr.mid( c + 1 );	// copy back over ourselves
                        }
                        else
-                          if ( smstr[c] == '/' )
+                          if ( c < smstr.length() && smstr[c] == '/' )
                           {
                               // e.g. g0gjv/p
                              // remove suffix
