@@ -799,7 +799,7 @@ int Callsign::validate( )
     }
 
 
-    while ( call[callOffset].isDigit() )     // central number (0 of 2E0)
+    while ( callOffset < csize && call[callOffset].isDigit() )     // central number (0 of 2E0)
         number += call[callOffset++];
 
 
