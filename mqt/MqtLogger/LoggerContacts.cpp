@@ -394,6 +394,15 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    if ( cs.valRes == ERR_DUPCS )
       sdest += 'D';
 }
+static QString getCabrilloField(QString s, int len)
+{
+    QString outstr = s;
+    s += QString(' ', len);
+    if (s.isEmpty())
+        s = QString('-', len);
+
+    return s + " ";
+}
 void ContestContact::getCabrilloText(QString &outstr )
 {
     /*
@@ -426,16 +435,14 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     if ( contactFlags.getValue() & NON_SCORING)
         outstr += "X-QSO: ";
     else
-        outstr += "QSO: ";
+        outstr += "QSO:   ";
 
-    outstr += contest->getCabrilloFreqBand(frequency.getValue());
-
-    outstr += " ";
+    outstr += getCabrilloField(contest->getCabrilloFreqBand(frequency.getValue()), 5);
 
     QString smode = mode.getValue().toUpper();
-    if (smode == "USB" || smode == "LSB" || smode == "FM")
+    if (smode == hamlibData::USB || smode == hamlibData::LSB || smode == hamlibData::FM)
         smode = "PH";
-    else if (smode == "MGM")
+    else if (smode == hamlibData::MGM)
         smode = "DG";
     else
         smode = "CW";
@@ -443,51 +450,42 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     outstr += smode;
     outstr += " ";
 
-    outstr += time.getCabrilloDTG();
-    outstr += " ";
+    outstr += getCabrilloField(time.getCabrilloDTG(), 15);
 
-    outstr +=lcl->mycall.fullCall.getValue();
-    outstr += " ";
+    outstr += getCabrilloField(lcl->mycall.fullCall.getValue(), 13);
 
     if (lcl->RSTMandatoryField.getValue())
     {
-        outstr += reps.getValue();
-        outstr += " ";
+        outstr += getCabrilloField(reps.getValue(), 3);
     }
     if (lcl->serialMandatoryField.getValue())
     {
-        outstr += serials.getValue();
-        outstr += " ";
+        outstr += getCabrilloField(serials.getValue(), 6);
     }
     // loc - or other exchange
     if (lcl->locatorMandatoryField.getValue())
     {
-        outstr += lcl->myloc.loc.getValue();
-        outstr += " ";
+        outstr += getCabrilloField(lcl->myloc.loc.getValue(), 6);
     }
 
-    outstr += cs.fullCall.getValue();
-    outstr += " ";
+    outstr += getCabrilloField(cs.fullCall.getValue(), 13);
 
     if (lcl->RSTMandatoryField.getValue())
     {
-        outstr += repr.getValue();
-        outstr += " ";
+        outstr += getCabrilloField(repr.getValue(), 3);
     }
     if (lcl->serialMandatoryField.getValue())
     {
         QString srbuff;
         int sr = serialr.getValue().toInt();
         if ( sr )
-            srbuff = QString("%1").arg(sr, 3, 10, QChar('0') );
-        outstr += srbuff;   // RX sno
-        outstr += " ";
+            srbuff = QString("%1").arg(sr, 4, 10, QChar('0') );
+        outstr += getCabrilloField(srbuff, 6);   // RX sno
     }
     // loc - or other exchange
     if (lcl->locatorMandatoryField.getValue())
     {
-        outstr += loc.loc.getValue();
-        outstr += " ";
+        outstr += getCabrilloField(loc.loc.getValue(), 6);
     }
 }
 QString ContestContact::getADIFLine()

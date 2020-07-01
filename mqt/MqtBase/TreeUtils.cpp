@@ -12,6 +12,7 @@
 #include "contest.h"
 #include "TreeUtils.h"
 #include "htmldelegate.h"
+#include "BandList.h"
 
 GridColumn QSOGridModel::QSOTreeColumns[ LOGTREECOLS ] =
    {
@@ -63,6 +64,23 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::BackgroundRole)
     {
+        if (column == egTime)
+        {
+            QString cb = ct->frequency.getValue().trimmed();
+            BandList &blist = BandList::getBandList();
+            BandInfo bi;
+            bool bandOK = blist.findBand(cb, bi);
+            bool hf = false;
+            if (bandOK)
+            {
+               hf = bi.getType() == "HF";
+               if (hf)
+               {
+                   QColor colour = QColor(bi.bandColour);
+                   return colour;
+               }
+            }
+        }
         if ( ct->contactFlags.getValue() & FORCE_LOG )
         {
            return static_cast< QColor> ( 0x00FF80C0 );        // Pink(ish)
@@ -82,7 +100,7 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::DisplayRole)
     {
-        if ( ct && column >= 0 && column < columnCount())
+        if ( column >= 0 && column < columnCount())
         {
            QString line = ct->getField( QSOTreeColumns[ column ].fieldId, contest );
            QColor multhighlight = Qt::red;
