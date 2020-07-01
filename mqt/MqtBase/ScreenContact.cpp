@@ -331,7 +331,9 @@ void ScreenContact::score()
 {
     // check shouldalready have run
 
-    QString gridref = loc.loc.getValue();
+    QString gridref = loc.loc.getValue().trimmed();
+    if (gridref.isEmpty())
+        return;
 
     double latitude;
     double longitude;
