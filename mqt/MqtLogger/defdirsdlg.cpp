@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "ContestApp.h"
 #include "tlogcontainer.h"
 #include "defdirsdlg.h"
 #include "ui_defdirsdlg.h"
@@ -38,6 +39,15 @@ void DefDirsDlg::reject()
 }
 void DefDirsDlg::accept()
 {
+    QString temp;
+
+    temp = ui->logsDirEdit->text().trimmed();
+    TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpLogDirectory, temp );
+
+
+    temp = ui->listsDirEdit->text().trimmed();
+    TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpListDirectory, temp );
+
     doCloseEvent();
     QDialog::accept();
 }
