@@ -883,6 +883,29 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
 
 }
 
+
+bool OmnirigControl::supportReadVfo(int rigNumber)
+{
+
+}
+
+bool OmnirigControl::supportWriteVfo(int rigNumber)
+{
+
+}
+
+int OmnirigControl::setVfo(VFO vfo)
+{
+
+}
+
+int OmnirigControl::getVfo(VFO *vfo)
+{
+
+
+
+}
+
 bool OmnirigControl::supportVolControl(int rigNumber)
 {
     // not supported

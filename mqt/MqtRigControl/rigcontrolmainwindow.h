@@ -134,6 +134,9 @@ private:
     QString sfreq;          // read freq converted to string
     MODE rmode;          // read radio mode
     //pbwidth_t rwidth;        // read radio rx bw
+    VFO curVfo;
+    bool supportGetVfo = false;
+    bool supportSetVfo = false;
     Frequency curVfoFrq;
     Frequency curTransVertFrq;
     MODE curMode;
@@ -332,6 +335,7 @@ private:
 
     int getRxFreq(VFO vfo);
     void processRxFrequencyForDisplay();
+    QString vfoToStr(VFO curVfo);
 private slots:
 
     void onStdInRead(QString);
