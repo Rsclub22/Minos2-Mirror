@@ -1,3 +1,4 @@
+
 /////////////////////////////////////////////////////////////////////////////
 // $Id$
 //
@@ -115,6 +116,7 @@ private:
     int readable_params;
     int writable_params;
 
+    VFO curVfo;
     bool reversedVFO;
 
     OmniRig::PortBits* serPort;

@@ -751,10 +751,12 @@ void RigControlMainWindow::upDateRadio()
                 {
                     // not polling get initial values
                     trace(QString("Not polling, get and sendFrequency and get and send mode"));
-                    getAndSendFrequency(CURRENT_VFO);
-                    getAndSendMode(CURRENT_VFO);
+                    getAndSendVfo();
+                    getAndSendFrequency(curVfo);
+                    getAndSendMode(curVfo);
                     // connect signals for future value updates and errors
                     connect(radio, SIGNAL(newRxFreq(quint64)), this, SLOT(onNewRxFreq(quint64)), Qt::QueuedConnection); // QueuedConnection, ensure return to rigcontroller caller when not polling - eg Omnirig
+                    connect(radio, SIGNAL(newVfo(QString)), this, SLOT(onNewVfo(QString)), Qt::QueuedConnection);
                     connect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()), Qt::QueuedConnection);
                     connect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)), Qt::QueuedConnection);
 
@@ -1256,6 +1258,7 @@ void RigControlMainWindow::closeRadio()
         if (radio != nullptr)
         {
             disconnect(radio, SIGNAL(newRxFreq(quint64)), this, SLOT(onNewRxFreq(quint64)));
+            disconnect(radio, SIGNAL(newVfo(QString)), this, SLOT(onNewVfo(QString)));
             disconnect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()));
             disconnect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)));
         }
@@ -1404,23 +1407,7 @@ void RigControlMainWindow::cmdLockOff()
     logMessage(QString("Lockoff: Command Lock Off"));
 }
 
-QString RigControlMainWindow::vfoToStr(VFO curVfo)
-{
-    if (curVfo == VFO::VFOA)
-    {
-        return "VFOA";
-    }
-    else if (curVfo == VFO::VFOB)
-    {
-        return "VFOB";
-    }
-    else if (curVfo == VFO::CURRENT_VFO)
-    {
-       return "CURRENT_VFO";
-    }
 
-    return "CURRENT_VFO";
-}
 
 void RigControlMainWindow::getRadioInfo()
 {
@@ -1435,22 +1422,16 @@ void RigControlMainWindow::getRadioInfo()
     }
     chkRadioMgmModeChanged();
 
-    if (supportGetVfo)
-    {
-        radio->getVfo(&curVfo);
-        trace(QString("Read VFO = %1").arg(vfoToStr(curVfo)));
-    }
-    else
-    {
-        curVfo = VFO::CURRENT_VFO;
-        trace(QString("Radio doesn't support read VFO - set Current_Vfo"));
-    }
-
-    ui->vfo_state_label->setText(vfoToStr(curVfo));
-
-
-
     int retCode;
+
+    if (radioCommsOK)
+    {
+        retCode = getAndSendVfo();
+    }
+
+
+
+
     if (radioCommsOK)
     {
         logMessage(QString("Get radio frequency"));
@@ -1584,6 +1565,15 @@ void RigControlMainWindow::getRadioInfo()
 */
     msg->rigCache.publish();
 }
+
+
+void RigControlMainWindow::onNewVfo(QString omniRigVfo)
+{
+    curVfo = strToVfo(omniRigVfo);
+    ui->vfo_state_label->setText(omniRigVfo);
+
+}
+
 
 
 void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
@@ -1809,6 +1799,24 @@ void RigControlMainWindow::clearTransVertSupport()
     sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
     sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
     updateSupportedRadioIndicators();
+}
+
+
+int RigControlMainWindow::getAndSendVfo()
+{
+    if (supportGetVfo)
+    {
+        radio->getVfo(&curVfo);
+        trace(QString("Read VFO = %1").arg(vfoToStr(curVfo)));
+    }
+    else
+    {
+        curVfo = VFO::CURRENT_VFO;
+        trace(QString("Radio doesn't support read VFO - set Current_Vfo"));
+    }
+
+    ui->vfo_state_label->setText(vfoToStr(curVfo));
+
 }
 
 int RigControlMainWindow::getAndSendFrequency(VFO vfo)

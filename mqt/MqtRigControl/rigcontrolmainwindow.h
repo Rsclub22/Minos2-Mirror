@@ -335,7 +335,8 @@ private:
 
     int getRxFreq(VFO vfo);
     void processRxFrequencyForDisplay();
-    QString vfoToStr(VFO curVfo);
+
+    int getAndSendVfo();
 private slots:
 
     void onStdInRead(QString);
@@ -389,6 +390,7 @@ signals:
     void onRitOff();
     void onRitOffset();
     void onRit0();
+    void onNewVfo(QString omniRigVfo);
 };
 
 #endif // RIGCONTROLMAINWINDOW_H
