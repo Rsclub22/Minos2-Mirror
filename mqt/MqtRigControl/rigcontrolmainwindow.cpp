@@ -642,7 +642,7 @@ void RigControlMainWindow::upDateRadio()
 
                     slogMode = USB_STR;
                     // set mode
-                    setMode(USB_STR, VFO::CURRENT_VFO);
+                    setMode(USB_STR, curVfo);
                 }
 
                 // build supported band list for this radio
@@ -1448,6 +1448,8 @@ void RigControlMainWindow::getRadioInfo()
 
     ui->vfo_state_label->setText(vfoToStr(curVfo));
 
+
+
     int retCode;
     if (radioCommsOK)
     {
@@ -1462,6 +1464,8 @@ void RigControlMainWindow::getRadioInfo()
         }
 
     }
+
+
 
     if (radioCommsOK)
     {
@@ -1491,7 +1495,7 @@ void RigControlMainWindow::getRadioInfo()
 
         if (radioSupGetRit)
         {
-            retCode = getRitFreq(VFO::CURRENT_VFO);
+            retCode = getRitFreq(curVfo);
             if (retCode < 0)
             {
                 // error
@@ -1509,8 +1513,9 @@ void RigControlMainWindow::getRadioInfo()
 
         if (radioSupGetRit)
         {
+
             bool ritStatus = false;
-            retCode = getRitRadioStatus(VFO::CURRENT_VFO, &ritStatus);
+            retCode = getRitRadioStatus(curVfo, &ritStatus);
             if (retCode < 0)
             {
                 //error
@@ -1536,7 +1541,8 @@ void RigControlMainWindow::getRadioInfo()
 
     if (radioCommsOK && supVolume)
     {
-        retCode = getVolume(VFO::CURRENT_VFO);
+
+        retCode = getVolume(curVfo);
         if (retCode < 0)
         {
             // error
@@ -1549,6 +1555,8 @@ void RigControlMainWindow::getRadioInfo()
 
     if (radioCommsOK && supSignalStrength)
     {
+
+
         retCode = getSignalStrength(curVfo);
         if (retCode < 0)
         {
