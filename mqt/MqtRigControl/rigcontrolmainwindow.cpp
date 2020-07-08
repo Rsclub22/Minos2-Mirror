@@ -1804,9 +1804,10 @@ void RigControlMainWindow::clearTransVertSupport()
 
 int RigControlMainWindow::getAndSendVfo()
 {
+    int retCode = 0;
     if (supportGetVfo)
     {
-        radio->getVfo(&curVfo);
+        retCode = radio->getVfo(&curVfo);
         trace(QString("Read VFO = %1").arg(vfoToStr(curVfo)));
     }
     else
@@ -1816,6 +1817,8 @@ int RigControlMainWindow::getAndSendVfo()
     }
 
     ui->vfo_state_label->setText(vfoToStr(curVfo));
+
+    return retCode;
 
 }
 
