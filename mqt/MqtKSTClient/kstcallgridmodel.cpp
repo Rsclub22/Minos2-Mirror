@@ -228,10 +228,17 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
                 }
             }
             QString cell;
-            if (!col.isEmpty())
-                cell = HtmlFontColour(col) + QString::number(zcount);
+            if (crec->planeResponseSeen)
+            {
+                if (!col.isEmpty())
+                    cell = HtmlFontColour(col) + QString::number(zcount);
 
-            cell +=  HtmlFontColour("black") + "(" + QString::number(crec->planes.count()) + ")";
+                cell +=  HtmlFontColour("black") + "(" + QString::number(crec->planes.count()) + ")";
+            }
+            else
+            {
+                cell = "--";
+            }
             return cell;
         }
         }
