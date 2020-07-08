@@ -763,9 +763,41 @@ const int MAX_FILTER_DISTANCE = 50000;
 const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE = 5;   // khz
 const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE = 1;   // khz
 const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE = 10;   // khz
-const QStringList distanceIniNames = {"distance_50MHz", "distance_70MHz", "distance_144MHz",
-                             "distance_432MHz", "distance_1296MHz", "distance_2300MHz",
-                             "distance_3_4GHz", "distance_5_6GHz", "distance_10GHz"};
+
+
+class ClusterFilterIdAndNames
+{
+public:
+    LOGGERPROFILE getDefaultFilterId(int i){return defaultFilterId[i];}
+    QString getDefaultFilterName(int i){return defaultFilterName[i];}
+    int getDefaultFilterNameCount(){return defaultFilterName.count();}
+
+
+private:
+
+    const LOGGERPROFILE defaultFilterId [9] {elpDefaultFilterDistance_50MHz,
+                                elpDefaultFilterDistance_70MHz,
+                                elpDefaultFilterDistance_144MHz,
+                                elpDefaultFilterDistance_432MHz,
+                                elpDefaultFilterDistance_1296MHz,
+                                elpDefaultFilterDistance_2300MHz,
+                                elpDefaultFilterDistance_3_4GHz,
+                                elpDefaultFilterDistance_5_6GHz,
+                                elpDefaultFilterDistance_10GHz};
+
+    const QStringList defaultFilterName  {"defaultFilterDistance_50MHz",
+                                "defaultFilterDistance_70MHz",
+                                "defaultFilterDistance_144MHz",
+                                "defaultFilterDistance_432MHz",
+                                "defaultFilterDistance_1296MHz",
+                                "defaultFilterDistance_2300MHz",
+                                "defaultFilterDistance_3_4GHz",
+                                "defaultFilterDistance_5_6GHz",
+                                "defaultFilterDistance_10GHz"};
+
+
+};
+
 
 
 #endif // CLUSTERCOMMON_H

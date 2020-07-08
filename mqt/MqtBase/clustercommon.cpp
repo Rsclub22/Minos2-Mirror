@@ -9,6 +9,9 @@ const char * clusterStateList[] =
    QT_TRANSLATE_NOOP("clusterState", "No Contact")
 };
 
+
+
+
 void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
 {
     trace(QString("getMode: freq %1, dxBand %2, dxModeStr %3, dxModeMask %4").arg(freq).arg(dxBand).arg(dxModeStr).arg(dxModeMask));

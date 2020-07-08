@@ -99,6 +99,20 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, QT_TR_NOOP("Auto Fill signal report"), QT_TR_NOOP("Auto Fill signal report on return"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAllowHF, "AllowHF", false, QT_TR_NOOP("Allow HF Bands"), QT_TR_NOOP("Allow HF Bands"), false ) ) );
 
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningTolerance , "addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE, QT_TR_NOOP("Add to Bandmap tuning tolerance"), QT_TR_NOOP("Add to Bandmap tuning tolerance"), false ) ) );
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_50MHz , "defaultFilterDistance_50MHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 50MHz"), QT_TR_NOOP("Default Filter Distance 50MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_70MHz , "defaultFilterDistance_70MHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 70MHz"), QT_TR_NOOP("Default Filter Distance 70MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_144MHz , "defaultFilterDistance_144MHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 144MHz"), QT_TR_NOOP("Default Filter Distance 144MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_432MHz , "defaultFilterDistance_432MHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 432MHz"), QT_TR_NOOP("Default Filter Distance 432MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_1296MHz , "defaultFilterDistance_1296MHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 1296MHz"), QT_TR_NOOP("Default Filter Distance 1296MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_2300MHz , "defaultFilterDistance_2300MHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 2300MHz"), QT_TR_NOOP("Default Filter Distance 2300MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_3_4GHz , "defaultFilterDistance_3_4GHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 3.4GHz"), QT_TR_NOOP("Default Filter Distance 3.4GHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_5_6GHz , "defaultFilterDistance_5_6GHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 5.6GHz"), QT_TR_NOOP("Default Filter Distance 5.6GHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_10GHz , "defaultFilterDistance_10GHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 10GHz"), QT_TR_NOOP("Default Filter Distance 10GHz"), false ) ) );
+
+
+
         break;
     case epPRELOADPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eppCurrent, "CurrentLog", 0, nullptr, QT_TR_NOOP("hint"), false ) ) );
