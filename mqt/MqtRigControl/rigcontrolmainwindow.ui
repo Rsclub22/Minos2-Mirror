@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1011</width>
-    <height>338</height>
+    <width>1020</width>
+    <height>320</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -578,6 +578,30 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_17">
+               <item>
+                <widget class="QLabel" name="vfo_title_label">
+                 <property name="text">
+                  <string>Vfo:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="vfo_state_label">
+                 <property name="font">
+                  <font>
+                   <weight>75</weight>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string> </string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_15">
                <item>
                 <widget class="QLabel" name="modeATitle">
@@ -834,7 +858,7 @@ Active</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1011</width>
+     <width>1020</width>
      <height>21</height>
     </rect>
    </property>

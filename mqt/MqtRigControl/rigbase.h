@@ -59,6 +59,12 @@ public:
 
     virtual int clearRit(VFO vfo) = 0;
 
+    virtual bool supportReadVfo(int rigModelNumber) = 0;
+    virtual bool supportWriteVfo(int rigModelNumber) = 0;
+
+    virtual int setVfo(VFO vfo) = 0;
+    virtual int getVfo(VFO *vfo) = 0;
+
 
     virtual bool supportSignalStrength(int rigModelNumber) = 0;
     virtual int getSignalStrength(VFO vfo, int *value) = 0;

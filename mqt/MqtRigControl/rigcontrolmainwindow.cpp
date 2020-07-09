@@ -364,8 +364,6 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio()));
     connect(ui->actionSetup_Radios, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
     connect(ui->actionEdit_Preset_Freq, SIGNAL(triggered(bool)), this, SLOT(setupBandFreq()));
-    connect(ui->actionContest_Start_Ignore_Preset_Freq, SIGNAL(changed()), this, SLOT(onIgnorePresetFreq()));
-    connect(ui->actionContest_Change_Ignore_Previous_Freq, SIGNAL(changed()), this, SLOT(onIgnorePreviousFreq()));
     connect(ui->actionTraceComms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
@@ -546,9 +544,22 @@ void RigControlMainWindow::upDateRadio()
             }
 
 
-            if (radioOpenStat == OPEN_OK)
+            if (radioOpenStat == OPEN_OK && radio)
             {
                 initCacheData();
+
+                supportGetVfo = radio->supportReadVfo(setupRadio->currentRadio.rigModelNumber);
+                supportSetVfo = radio->supportWriteVfo(setupRadio->currentRadio.rigModelNumber);
+
+                if (supportGetVfo)
+                {
+                    // get current VFO
+                    radio->getVfo(&curVfo);
+                }
+                else
+                {
+                    curVfo = CURRENT_VFO;
+                }
 
                 ui->usingLibText->setText(radio->getLibraryName());
 
@@ -631,7 +642,7 @@ void RigControlMainWindow::upDateRadio()
 
                     slogMode = USB_STR;
                     // set mode
-                    setMode(USB_STR, VFO::CURRENT_VFO);
+                    setMode(USB_STR, curVfo);
                 }
 
                 // build supported band list for this radio
@@ -1393,6 +1404,24 @@ void RigControlMainWindow::cmdLockOff()
     logMessage(QString("Lockoff: Command Lock Off"));
 }
 
+QString RigControlMainWindow::vfoToStr(VFO curVfo)
+{
+    if (curVfo == VFO::VFOA)
+    {
+        return "VFOA";
+    }
+    else if (curVfo == VFO::VFOB)
+    {
+        return "VFOB";
+    }
+    else if (curVfo == VFO::CURRENT_VFO)
+    {
+       return "CURRENT_VFO";
+    }
+
+    return "CURRENT_VFO";
+}
+
 void RigControlMainWindow::getRadioInfo()
 {
     if (closeApp)
@@ -1406,11 +1435,26 @@ void RigControlMainWindow::getRadioInfo()
     }
     chkRadioMgmModeChanged();
 
+    if (supportGetVfo)
+    {
+        radio->getVfo(&curVfo);
+        trace(QString("Read VFO = %1").arg(vfoToStr(curVfo)));
+    }
+    else
+    {
+        curVfo = VFO::CURRENT_VFO;
+        trace(QString("Radio doesn't support read VFO - set Current_Vfo"));
+    }
+
+    ui->vfo_state_label->setText(vfoToStr(curVfo));
+
+
+
     int retCode;
     if (radioCommsOK)
     {
         logMessage(QString("Get radio frequency"));
-        retCode = getAndSendFrequency(VFO::CURRENT_VFO);
+        retCode = getAndSendFrequency(curVfo);
         if (retCode < 0)
         {
             // error
@@ -1421,11 +1465,13 @@ void RigControlMainWindow::getRadioInfo()
 
     }
 
+
+
     if (radioCommsOK)
     {
 
         logMessage("Get radio mode");
-        retCode = getAndSendMode(VFO::CURRENT_VFO);
+        retCode = getAndSendMode(curVfo);
         if (retCode < 0)
         {
             // error
@@ -1449,7 +1495,7 @@ void RigControlMainWindow::getRadioInfo()
 
         if (radioSupGetRit)
         {
-            retCode = getRitFreq(VFO::CURRENT_VFO);
+            retCode = getRitFreq(curVfo);
             if (retCode < 0)
             {
                 // error
@@ -1467,8 +1513,9 @@ void RigControlMainWindow::getRadioInfo()
 
         if (radioSupGetRit)
         {
+
             bool ritStatus = false;
-            retCode = getRitRadioStatus(VFO::CURRENT_VFO, &ritStatus);
+            retCode = getRitRadioStatus(curVfo, &ritStatus);
             if (retCode < 0)
             {
                 //error
@@ -1494,7 +1541,8 @@ void RigControlMainWindow::getRadioInfo()
 
     if (radioCommsOK && supVolume)
     {
-        retCode = getVolume(VFO::CURRENT_VFO);
+
+        retCode = getVolume(curVfo);
         if (retCode < 0)
         {
             // error
@@ -1507,7 +1555,9 @@ void RigControlMainWindow::getRadioInfo()
 
     if (radioCommsOK && supSignalStrength)
     {
-        retCode = getSignalStrength(VFO::CURRENT_VFO);
+
+
+        retCode = getSignalStrength(curVfo);
         if (retCode < 0)
         {
             // error
@@ -1583,11 +1633,15 @@ void RigControlMainWindow::loggerSetFreq(QString freq)
         }
 
         logger_freq = freq;
-        setFreq(freq, VFO::CURRENT_VFO);
+        setFreq(freq, curVfo);
     }
     // but the rig hasn't updated...
     msg->rigCache.publish();
 }
+
+
+
+
 
 
 void RigControlMainWindow::setFreq(QString freq, VFO vfo)
@@ -2431,7 +2485,7 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
 
 void RigControlMainWindow::onNewMode()
 {
-    getAndSendMode(CURRENT_VFO);
+    getAndSendMode(curVfo);
 }
 
 void RigControlMainWindow::loggerSetMode(QString mode)
@@ -2456,7 +2510,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
                 logMessage(QString("Log SetMode: Mgm flag is set"));
                 if (curMode !=  convertQStringToMode(setupRadio->currentRadio.mgmMode))
                 {
-                    setMode(setupRadio->currentRadio.mgmMode, VFO::CURRENT_VFO);
+                    setMode(setupRadio->currentRadio.mgmMode, curVfo);
                     logMessage((QString("Log SetMode: MgmMode Flag alread set, Send to setmode MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
 
                 }
@@ -2464,7 +2518,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
             else
             {
                 mgmModeFlag = true;
-                setMode(setupRadio->currentRadio.mgmMode, VFO::CURRENT_VFO);
+                setMode(setupRadio->currentRadio.mgmMode, curVfo);
 
                 logMessage((QString("Log SetMode: Set MgmMode Flag, Send to setmode MGM Mode = %1").arg(setupRadio->currentRadio.mgmMode)));
             }
@@ -2473,7 +2527,7 @@ void RigControlMainWindow::loggerSetMode(QString mode)
         {
             mgmModeFlag = false;
             logMessage(QString("Log SetMode: Clear mgmModeFlag, Set mode = %1").arg(mode));
-            setMode(mode, VFO::CURRENT_VFO);
+            setMode(mode, curVfo);
 
         }
     }
@@ -2558,7 +2612,7 @@ void RigControlMainWindow::loggerSetVolume(int level)
         return;
 
     logMessage(QString("Set Volume: From Logger, level = %1").arg(level));
-    setVolume(VFO::CURRENT_VFO, level);
+    setVolume(curVfo, level);
 
 }
 
@@ -2658,7 +2712,7 @@ void RigControlMainWindow::setRitLogStatus(bool status)
             if (radioCommsOK)
             {
                 // radio supports turning RIT on and off
-                retCode = radio->setRitState(VFO::CURRENT_VFO, logRitOn);
+                retCode = radio->setRitState(curVfo, logRitOn);
                 if (retCode < 0)
                 {
                     logMessage(QString("Error attempting to turn on/off RIT on Radio - Error = %1").arg(retCode));
@@ -2888,7 +2942,7 @@ void RigControlMainWindow::setRitFreq(int freq)
 {
 
     logMessage(QString("SetRit Freq from logger = %1").arg(QString::number(freq)));
-    setRitFreq(VFO::CURRENT_VFO, static_cast<ShortFreq>(freq));
+    setRitFreq(curVfo, static_cast<ShortFreq>(freq));
 }
 
 /*
@@ -3969,7 +4023,7 @@ void RigControlMainWindow::selFreqClicked()
     {
         // convert radio freq
         f = convertSinglePeriodFreqToFullDigit(f).remove('.');
-        setFreq(f, VFO::CURRENT_VFO);
+        setFreq(f, curVfo);
     }
 }
 
