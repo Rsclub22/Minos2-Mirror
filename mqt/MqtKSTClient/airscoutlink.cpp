@@ -256,6 +256,7 @@ void AirScoutLink::onReadyRead()
                     user->toCall = sl[3];
                     user->toLoc = sl[4];
                     user->planes.clear();
+                    user->planeResponseSeen = true;
 
                     int account = sl[5].toInt();
 
