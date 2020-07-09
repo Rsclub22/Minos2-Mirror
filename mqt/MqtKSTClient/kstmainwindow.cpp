@@ -269,7 +269,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->maxDistanceEdit->setText(QString::number(maxDistance));
     ui->maxDistanceEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
-
+    while (myLoc.isEmpty() || myCallsign.isEmpty())
+    {
+        if (!doConfiguration())
+            break;
+    }
     started = true;
 
     if (autoConnect)
@@ -1696,6 +1700,7 @@ void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)
             {
                 QSharedPointer<KstUser> kstuser = callVector->at(i);
                 kstuser->planes.clear();
+                kstuser->planeResponseSeen = false;
             }
             callVectorChanged = true;
             emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));
@@ -1718,6 +1723,7 @@ void KSTMainWindow::on_ASActivecb_stateChanged(int state)
             {
                 QSharedPointer<KstUser> kstuser = callVector->at(i);
                 kstuser->planes.clear();
+                kstuser->planeResponseSeen = false;
             }
             callVectorChanged = true;
             emit kstCallModel.dataChanged(kstCallModel.index(0, ecscAirscout), kstCallModel.index(callVector->size(), ecscAirscout));

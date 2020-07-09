@@ -253,7 +253,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../omnirigcontrol.cpp" line="28"/>
         <source>Omnirig get freq fail</source>
-        <translation>Omnirig: échec de l&apos;obtention de la fréquence </translation>
+        <translation>Omnirig: échec de l&apos;obtention de la fréquence</translation>
     </message>
     <message>
         <location filename="../omnirigcontrol.cpp" line="29"/>
@@ -714,7 +714,7 @@ Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour ê
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1544"/>
         <source>Request Signal Strength</source>
-        <translation type="unfinished"></translation>
+        <translation>Demander l&apos;intensité du signal</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1744"/>
@@ -780,7 +780,8 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="3730"/>
         <source>Unable to determine library version at this time!
 </source>
-        <translation>Impossible de déterminer la version de la bibliothèque pour le moment</translation>
+        <translation>Impossible de déterminer la version de la bibliothèque pour le moment!
+</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="3733"/>
@@ -1130,7 +1131,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rigsetupdialog.cpp" line="568"/>
         <source>Radio Supported Bands Missing</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;&lt;Check context&gt;&gt;  </translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="569"/>
@@ -1383,7 +1384,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigsetupform.ui" line="371"/>
         <source>Supported Native Bands on Radio</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandes natives supportées sur la radio</translation>
     </message>
     <message>
         <source>Supported Native Bands on Rig</source>
@@ -1417,7 +1418,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigsetupform.ui" line="414"/>
         <source>Please select a band or add transverters</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner une bande ou ajouter des transverters SVP</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="441"/>
@@ -1480,3 +1481,4 @@ utiliser un autre nom SVP</translation>
     </message>
 </context>
 </TS>
+

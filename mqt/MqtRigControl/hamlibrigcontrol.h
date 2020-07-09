@@ -96,8 +96,12 @@ public:
 
 
 
-    int getVfo(vfo_t *vfo);
-    int setVfo(vfo_t vfo);
+    int getVfo(VFO *vfo) override;
+    int setVfo(VFO vfo) override;
+
+    bool supportReadVfo(int rigNumber) override;
+    bool supportWriteVfo(int rigNumber) override;
+
     QString convertVfoQStr(vfo_t vfo);
 
 
@@ -143,6 +147,9 @@ private:
     pbwidth_t passbandNarrow(rmode_t mode);
     pbwidth_t passbandNormal(rmode_t mode);
     pbwidth_t passbandWide(rmode_t mode);
+
+    VFO convert_Vfo_t_To_VFO(vfo_t vfo);
+    vfo_t convert_VFO_to_vfo_t(VFO vfo);
 
 };
 
