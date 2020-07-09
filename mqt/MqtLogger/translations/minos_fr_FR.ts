@@ -167,7 +167,7 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="147"/>
         <source>Clear All Spots</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer tous Spots</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="469"/>
@@ -178,7 +178,7 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="489"/>
         <source>Please confirm you want to delete all the spots in the bandmap1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous vraiment supprimer tous les Spots de Bandmap?</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1544"/>
@@ -245,7 +245,7 @@ Le mode calculé est%6
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="14"/>
         <source>Dialog</source>
-        <translation>&lt;&lt;REMOVE&gt;&gt;  </translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="42"/>
@@ -335,7 +335,7 @@ Le mode calculé est%6
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="302"/>
         <source>Default Distance when creating a new contest</source>
-        <translation>Distance par défaut en concours nouvelle   </translation>
+        <translation>Distance par défaut en concours nouvelle</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="15"/>
@@ -543,7 +543,7 @@ Le mode calculé est%6
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="421"/>
         <source>Distance</source>
-        <translation type="unfinished">Distance</translation>
+        <translation>Distance</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="455"/>
@@ -556,7 +556,7 @@ Le mode calculé est%6
         <location filename="../clusterclientfilterdialog.ui" line="812"/>
         <location filename="../clusterclientfilterdialog.ui" line="855"/>
         <source>Ignore</source>
-        <translation type="unfinished">Ignorer</translation>
+        <translation>Ignorer</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="462"/>
@@ -569,48 +569,48 @@ Le mode calculé est%6
         <location filename="../clusterclientfilterdialog.ui" line="819"/>
         <location filename="../clusterclientfilterdialog.ui" line="862"/>
         <source>Ignore Spots with no distance value</source>
-        <translation type="unfinished">Ignorer les spots sans valeur de distance</translation>
+        <translation>Ignorer les spots sans valeur de distance</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="611"/>
         <location filename="../clusterclientfilterdialog.ui" line="896"/>
         <source>Set All Default Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer tout &apos;Distance par défaut&apos;</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="618"/>
         <location filename="../clusterclientfilterdialog.ui" line="910"/>
         <source>Clear All No Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer tout «Aucun Distance»</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="625"/>
         <location filename="../clusterclientfilterdialog.ui" line="882"/>
         <source>Clear All Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer tout «Ignorer»</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="632"/>
         <location filename="../clusterclientfilterdialog.ui" line="903"/>
         <source>Set All No Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer tous «Pas de Distance»</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="639"/>
         <location filename="../clusterclientfilterdialog.ui" line="889"/>
         <source>Set All Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer tout «Ignorer»</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="648"/>
         <location filename="../clusterclientfilterdialog.ui" line="919"/>
         <source>Enabled Fields Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Champs activés uniquement</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="659"/>
         <source>UHF</source>
-        <translation type="unfinished"></translation>
+        <translation>UHF</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="73"/>
@@ -740,12 +740,12 @@ Le mode calculé est%6
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="1311"/>
         <source>Distance Filter</source>
-        <translation type="unfinished">Filtre de distance</translation>
+        <translation>Filtre de distance</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="1312"/>
         <source>Please enter a number between %1 and %2!</source>
-        <translation type="unfinished">Entrer un nombre entre %1 et %2 SVP!</translation>
+        <translation>Entrer un nombre entre %1 et %2 SVP!</translation>
     </message>
 </context>
 <context>
@@ -2322,12 +2322,13 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1189"/>
         <source>Bandlist empty for this radio, please add a band or tranverter!</source>
-        <translation type="unfinished"></translation>
+        <translation>La liste des bandes est vide pour cette radio, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1215"/>
         <source>Radio Bandlist is empty!</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Liste des bandes est vide!</translatorcomment>
+        <translation>La liste des bandes est vide!</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1225"/>
@@ -3211,7 +3212,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../taboutbox.cpp" line="113"/>
         <source>Welcome to Minos Version</source>
-        <translation>Bienvenue à Minos Version (Beta 30 may 20)</translation>
+        <translation>Bienvenue à Minos Version</translation>
     </message>
     <message>
         <location filename="../taboutbox.cpp" line="121"/>
@@ -4779,7 +4780,8 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <location filename="../WsjtxConfigureCQ.ui" line="20"/>
         <source>CQ xxx Callsign Locator - xxx is allowed in...
 Include the CQ as well as the type</source>
-        <translation>&lt;&lt;&lt;CONTEXT??&gt;&gt;    </translation>
+        <translation>CQ xxx Callsign Locator - xxx est autorisé dans ...
+Inclurer le &quot;CQ&quot; ainsi que le type</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="35"/>
@@ -4790,7 +4792,7 @@ Include the CQ as well as the type</source>
         <location filename="../WsjtxConfigureCQ.ui" line="53"/>
         <source>In other modes</source>
         <translatorcomment>En/Aux autres modes?</translatorcomment>
-        <translation>Des autres modes  </translation>
+        <translation>En autres modes</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigureCQ.ui" line="69"/>
@@ -4842,7 +4844,7 @@ Include the CQ as well as the type</source>
     <message>
         <location filename="../WsjtxFrame.ui" line="246"/>
         <source>Config CQ</source>
-        <translation>Configurer CQ??  </translation>
+        <translation>Configuration de CQ</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="256"/>
@@ -4919,3 +4921,4 @@ Include the CQ as well as the type</source>
     </message>
 </context>
 </TS>
+

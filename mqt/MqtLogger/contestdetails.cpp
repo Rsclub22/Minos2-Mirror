@@ -1225,7 +1225,7 @@ void ContestDetails::on_OKButton_clicked()
 void ContestDetails::on_EntDetailButton_clicked()
 {
     getDetails( );   // override from the window
-    TEntryOptionsForm EntryDlg( this, contest, nullptr, false );    // no save back to contest from this route
+    TEntryOptionsForm EntryDlg( this, contest, nullptr, true );    // don't show the export options
     if ( EntryDlg.exec() == QDialog::Accepted )
        setDetails( );
 
