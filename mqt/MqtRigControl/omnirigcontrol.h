@@ -78,11 +78,17 @@ public:
     void setTraceComms(bool value) override;
     bool getTraceComms() override;
 
+    bool supportReadVfo(int rigNumber) override;
+    bool supportWriteVfo(int rigNumber) override;
+    int setVfo(VFO vfo) override;
+    int getVfo(VFO *vfo) override;
+
 
 #if defined (WIN32)
     OmniRig::RigParamX map_mode(QString mode);
 
 #endif
+
 
 
 private slots:
@@ -126,6 +132,7 @@ private:
     void traceCommsMsg(QString msg);
     bool supportReadRit();
     bool supportWriteRit();
+
 
 
 };

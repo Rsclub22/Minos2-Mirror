@@ -528,17 +528,59 @@ rmode_t HamlibRigControl::mapMode(QString mode) const
 // Note not all radios support reading the VFO
 
 
-int HamlibRigControl::getVfo(vfo_t *vfo)
+bool HamlibRigControl::supportReadVfo(int rigNumber)
 {
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        if (myRig->caps->get_vfo == nullptr)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 
-    return rig_get_vfo(my_rig, vfo);
+    return false;
+}
+
+
+bool HamlibRigControl::supportWriteVfo(int rigNumber)
+{
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        if (myRig->caps->set_vfo == nullptr)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+int HamlibRigControl::getVfo(VFO *vfo)
+{
+    int retCode;
+    vfo_t hamlibVfo;
+    retCode = rig_get_vfo(my_rig, &hamlibVfo);
+    *vfo = convert_Vfo_t_To_VFO(hamlibVfo);
+    return retCode;
 }
 
 
 
-int HamlibRigControl::setVfo(vfo_t vfo)
+int HamlibRigControl::setVfo(VFO vfo)
 {
-    return rig_set_vfo(my_rig, vfo);
+    return rig_set_vfo(my_rig, convert_VFO_to_vfo_t(vfo));
 }
 
 
@@ -549,8 +591,45 @@ QString HamlibRigControl::convertVfoQStr(vfo_t vfo)
     return QString::fromLatin1(rig_strvfo(vfo));
 }
 
+VFO HamlibRigControl::convert_Vfo_t_To_VFO(vfo_t vfo)
+{
+    if (vfo == RIG_VFO_A)
+    {
+        return VFO::VFOA;
+    }
+    else if (vfo == RIG_VFO_B)
+    {
+        return VFO::VFOB;
+    }
+    else if (vfo == RIG_VFO_CURR)
+    {
+        return VFO::CURRENT_VFO;
+    }
+
+    return VFO::CURRENT_VFO;
+}
+
+vfo_t HamlibRigControl::convert_VFO_to_vfo_t(VFO vfo)
+{
+    if (vfo == VFO::VFOA)
+    {
+        return RIG_VFO_A;
+    }
+    else if (vfo == VFO::VFOB)
+    {
+        return RIG_VFO_B;
+    }
+    else if (vfo == VFO::CURRENT_VFO)
+    {
+        return RIG_VFO_CURR;
+    }
+
+    return RIG_VFO_CURR;
+}
+
 
 /*************** RIT ********************************/
+
 
 
 
