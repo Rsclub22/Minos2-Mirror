@@ -154,14 +154,14 @@ bool TLogContainer::show(int argc, char *argv[])
     n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();
 
-    setWindowState(Qt::WindowState::WindowActive);
+    setWindowState(windowState() | Qt::WindowState::WindowActive);
 
     return true;
 }
 void TLogContainer::onArgsReceived(QString conarg)
 {
     preloadFiles( conarg );
-    setWindowState(Qt::WindowState::WindowActive);
+    setWindowState(windowState() | Qt::WindowState::WindowActive);
 }
 
 void TLogContainer::on_TimeDisplayTimer( )
