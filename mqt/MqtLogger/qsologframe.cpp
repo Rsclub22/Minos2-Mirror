@@ -1868,18 +1868,18 @@ void QSOLogFrame::updateQSODisplay()
    }
    //CallsignEdit->Enabled = false; // leave this enabled in protected to allow searching
    bool notProtected = !contest->isReadOnly();
-   ui->RSTTXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->RSTTxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
    ui->RSTTxFrame->setVisible(contest->RSTMandatoryField.getValue());
-   ui->SerTXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
+   ui->SerTxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
    ui->SerTxFrame->setVisible(contest->serialMandatoryField.getValue());
-   ui->RSTRXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->RSTRxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
    ui->RSTRxFrame->setVisible(contest->RSTMandatoryField.getValue());
-   ui->SerRXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
+   ui->SerRxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
    ui->SerRxFrame->setVisible(contest->serialMandatoryField.getValue());
    ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());  // loc remains enabled in protected to enable searching
    ui->LocFrame->setVisible(contest->locatorMandatoryField.getValue());
    bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue() || contest->otherOptionalExchange.getValue();
-   ui->QTHEdit->setEnabled( exchangeNeeded );
+   ui->QTHFrame->setEnabled( exchangeNeeded );
    ui->QTHFrame->setVisible(exchangeNeeded);
    ui->CommentsEdit->setEnabled(notProtected);
 
