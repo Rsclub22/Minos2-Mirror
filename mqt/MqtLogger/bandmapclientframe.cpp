@@ -719,7 +719,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
                     }
                 }
-                else
+                else if (contestMode >= 0)
                 {
                     // no, save current mode filter for this contest
                     //filterSetup->setModeFilter(true, contestMode);
