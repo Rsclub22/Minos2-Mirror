@@ -547,18 +547,21 @@ void RigControlMainWindow::upDateRadio()
             if (radioOpenStat == OPEN_OK && radio)
             {
                 initCacheData();
+                int retCode;
 
                 supportGetVfo = radio->supportReadVfo(setupRadio->currentRadio.rigModelNumber);
                 trace(QString("Supports reading Vfo = %1").arg(supportGetVfo ? "true" : "false"));
 
-                supportSetVfo = radio->supportWriteVfo(setupRadio->currentRadio.rigModelNumber);
-                trace(QString("Supports writing Vfo = %1").arg(supportSetVfo ? "true" : "false"));
-
-                int retCode;
                 if (supportGetVfo)
                 {
+                    // get current VFO
+                    retCode = radio->getVfo(&curVfo);
+
+                    trace(QString("Get initial vfo = %1").arg(vfoToStr(curVfo)));
+
                     // this is a test for hamlib, check radio supports targetted VFO's in hamlib
                     // FT857 and FT897 don't in hamlib
+                    trace(QString("Check radio can setMode with supported VFO, curVfo = %1").arg(vfoToStr(curVfo)));
                     retCode = radio->setMode(curVfo, MODE::USB);
                     if (retCode != RIG_OK)
                     {
@@ -566,19 +569,19 @@ void RigControlMainWindow::upDateRadio()
                         trace(QString("Does not support targetted Vfo, use Current_VFO"));
                         supportGetVfo = false;
                         curVfo = CURRENT_VFO;
+                        supportGetVfo = false;      // don't bother with Vfo selection
+                        supportSetVfo = false;
                     }
-                    else
-                    {
-                        // get current VFO
-                        retCode = radio->getVfo(&curVfo);
-
-                    }
-
                 }
                 else
                 {
                     curVfo = CURRENT_VFO;
                 }
+
+                supportSetVfo = radio->supportWriteVfo(setupRadio->currentRadio.rigModelNumber);
+                trace(QString("Supports writing Vfo = %1").arg(supportSetVfo ? "true" : "false"));
+
+
 
                 trace(QString("VFO = %1").arg(vfoToStr(curVfo)));
 
@@ -1456,6 +1459,7 @@ void RigControlMainWindow::getRadioInfo()
     if (radioCommsOK)
     {
         logMessage(QString("Get radio frequency"));
+
         retCode = getAndSendFrequency(curVfo);
         if (retCode < 0)
         {
@@ -1853,7 +1857,7 @@ int RigControlMainWindow::getAndSendFrequency(VFO vfo)
     }
     else
     {
-        logMessage(QString("Get radioInfo: Get Freq error, code = %1").arg(QString::number(retCode)));
+        logMessage(QString("Get radioInfo: Get Freq error, code = %1, vfo = %2").arg(QString::number(retCode)).arg(vfoToStr(curVfo)));
         radioError(retCode, tr("Request Frequency"));
     }
     return retCode;
@@ -1866,6 +1870,7 @@ int RigControlMainWindow::getRxFreq(VFO vfo)
     int retCode = 0;
     if (radio)
     {
+        qDebug() << "getRxFreq vfo = " << vfoToStr(vfo);
         retCode = radio->getFrequency(vfo, rfrequency);
     }
     else
@@ -2448,7 +2453,7 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
 {
 
     int retCode = 0;
-    logMessage(QString("getAndSendMode"));
+    logMessage(QString("getAndSendMode, vfo = $1").arg(vfoToStr(vfo)));
 
     if (radio)
     {
@@ -2575,7 +2580,7 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
     if (radio)
     {
         cmdLockOn();      // lock get radio info
-        logMessage(QString("SetMode: Mode Requested = %1").arg(mode));
+        logMessage(QString("SetMode: Mode Requested = %1, vfo = %2").arg(mode).arg(vfoToStr(vfo)));
         mode = mode.left(mode.indexOf(":"));
         MODE mCode = convertQStringToMode(mode);
 
@@ -2584,12 +2589,12 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
             retCode = radio->setMode(vfo, mCode);
             if (retCode == Rig_OK)
             {
-                logMessage(QString("SetMode: changed! Mode = %1").arg(convertModeToQString(mCode)));
+                logMessage(QString("SetMode: changed! Mode = %1 , vfo = %2").arg(convertModeToQString(mCode)));
 
             }
             else
             {
-                logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode)).arg(convertModeToQString(mCode)));
+                logMessage(QString("SetMode: Change Error Code = %1, Mode = %2").arg(QString::number(retCode)).arg(convertModeToQString(mCode)).arg(convertModeToQString(mCode)));
                 radioError(retCode, tr("Set Mode"));
             }
 
