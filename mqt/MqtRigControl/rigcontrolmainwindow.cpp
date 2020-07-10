@@ -549,17 +549,38 @@ void RigControlMainWindow::upDateRadio()
                 initCacheData();
 
                 supportGetVfo = radio->supportReadVfo(setupRadio->currentRadio.rigModelNumber);
-                supportSetVfo = radio->supportWriteVfo(setupRadio->currentRadio.rigModelNumber);
+                trace(QString("Supports reading Vfo = %1").arg(supportGetVfo ? "true" : "false"));
 
+                supportSetVfo = radio->supportWriteVfo(setupRadio->currentRadio.rigModelNumber);
+                trace(QString("Supports writing Vfo = %1").arg(supportSetVfo ? "true" : "false"));
+
+                int retCode;
                 if (supportGetVfo)
                 {
-                    // get current VFO
-                    radio->getVfo(&curVfo);
+                    // this is a test for hamlib, check radio supports targetted VFO's in hamlib
+                    // FT857 and FT897 don't in hamlib
+                    retCode = radio->setMode(curVfo, MODE::USB);
+                    if (retCode != RIG_OK)
+                    {
+                        // no doesn't support targetted Vfo, default to Current Vfo
+                        trace(QString("Does not support targetted Vfo, use Current_VFO"));
+                        supportGetVfo = false;
+                        curVfo = CURRENT_VFO;
+                    }
+                    else
+                    {
+                        // get current VFO
+                        retCode = radio->getVfo(&curVfo);
+
+                    }
+
                 }
                 else
                 {
                     curVfo = CURRENT_VFO;
                 }
+
+                trace(QString("VFO = %1").arg(vfoToStr(curVfo)));
 
                 ui->usingLibText->setText(radio->getLibraryName());
 
@@ -2681,14 +2702,18 @@ void RigControlMainWindow::getRitSupportStatus()
 
         if (rigCap.supportSetRitState)
         {
-            radioSupSetRitState = radio->supportWriteRit(rigCap.rigModelNumber);
+            radioSupSetRitState = radio->supportWriteRitState(rigCap.rigModelNumber);
             logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupSetRitState ? "True" : "False"));
 
         }
 
-        // Does radio support getting Rit on/off state?
-        radioSupGetRitState = rigCap.supportGetRitState;
-        logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
+        if (rigCap.supportGetRitState)
+        {
+            // Does radio support getting Rit on/off state?
+            radioSupGetRitState = radio->supportReadRitState(rigCap.rigModelNumber);
+            logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
+
+        }
 
 
     }
@@ -2717,9 +2742,9 @@ void RigControlMainWindow::setRitLogStatus(bool status)
     {
         ritIndicatorToggle(logRitOn);
 
-        if (radioSupGetRit || radioSupSetRit)
+        if (radioSupSetRitState)
         {
-            logMessage(QString("Radio Support RIT On/off switching"));
+            logMessage(QString("Radio Support RIT On/off switching - turn off"));
             if (radioCommsOK)
             {
                 // radio supports turning RIT on and off
