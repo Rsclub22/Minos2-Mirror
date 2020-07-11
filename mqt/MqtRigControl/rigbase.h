@@ -83,6 +83,7 @@ signals:
     // no polling signals
     void newRxFreq(quint64 f);
     void newMode();
+    void newVfo(QString);
     void ritOn();
     void ritOff();
     void ritOffset();

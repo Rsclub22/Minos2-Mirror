@@ -38,6 +38,11 @@ const QString MGM_STR = "MGM";           // MGM generically
 const QStringList supModeList = { CW_STR, USB_STR, FM_STR, MGM_STR};
 
 enum VFO {CURRENT_VFO, VFOA, VFOB};
+
+
+QString vfoToStr(VFO curVfo);
+VFO strToVfo(QString vfo);
+
 using  Frequency = quint64;
 using ShortFreq = qint32;
 
