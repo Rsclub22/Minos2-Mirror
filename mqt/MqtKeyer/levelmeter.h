@@ -43,6 +43,7 @@
 
 #include <QTime>
 #include <QWidget>
+#include <QElapsedTimer>
 
 /**
  * Widget which displays a vertical audio level meter, indicating the
@@ -89,7 +90,7 @@ private:
     /**
      * Time at which m_peakLevel was last changed.
      */
-    QTime m_peakLevelChanged;
+    QElapsedTimer m_peakLevelChanged;
 
     /**
      * Rate at which peak level bar decays.
@@ -106,7 +107,7 @@ private:
     /**
      * Time at which m_peakHoldLevel was last changed.
      */
-    QTime m_peakHoldLevelChanged;
+    QElapsedTimer m_peakHoldLevelChanged;
 
     QTimer *m_redrawTimer;
 

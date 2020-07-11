@@ -228,10 +228,17 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
                 }
             }
             QString cell;
-            if (!col.isEmpty())
-                cell = HtmlFontColour(col) + QString::number(zcount);
+            if (crec->planeResponseSeen)
+            {
+                if (!col.isEmpty())
+                    cell = HtmlFontColour(col) + QString::number(zcount);
 
-            cell +=  HtmlFontColour("black") + "(" + QString::number(crec->planes.count()) + ")";
+                cell +=  HtmlFontColour("black") + "(" + QString::number(crec->planes.count()) + ")";
+            }
+            else
+            {
+                cell = "--";
+            }
             return cell;
         }
         }
@@ -288,9 +295,9 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
 
         case ecscAirscout:
             if (crec->distance > mainWindow->getASMaxDistance())
-                return "000001";
+                return QString("000001");
             if (crec->distance < mainWindow->getASMinDistance())
-                return "000000";
+                return QString("000000");
 
             int zcount = 0;
             QString col;
@@ -307,7 +314,7 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
                 QString cell = QString("%1%2").arg(z, 2, '0').arg(a, 4, '0');
                 return cell;
             }
-            return "000002";
+            return QString("000002");
         }
     }
     if (role == Qt::BackgroundColorRole)
@@ -456,5 +463,13 @@ bool KstCallGridSortFilterModel::lessThan(const QModelIndex &left,
         ws1 = sourceModel()->data(createIndex(lrow, ecscCall), Qt::UserRole);
         ws2 = sourceModel()->data(createIndex(rrow, ecscCall), Qt::UserRole);
     }
-    return ws1 < ws2;
+    if (ws1.type() == QVariant::Type::Int)
+    {
+        return ws1.toInt() < ws2.toInt();
+    }
+    else if (ws1.type() == QVariant::Type::String)
+    {
+        return ws1.toString() < ws2.toString();
+    }
+    return false;
 }

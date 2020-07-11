@@ -38,6 +38,9 @@
     WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 /************************************************************************/
+#ifndef _MSC_FULL_VER
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
 
 // RtAudio: Version 5.1.0
 

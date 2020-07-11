@@ -969,8 +969,11 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
     dxLocator = "";
     spotLocator = "";
     dxPropMode = "";
-
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    dxMsg = txt.split(QRegExp("\\s+"), Qt::SkipEmptyParts);
+#else
     dxMsg = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+#endif
 
     if (dxMsg.count() > 4)
     {

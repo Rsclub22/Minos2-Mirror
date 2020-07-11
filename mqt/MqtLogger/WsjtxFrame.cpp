@@ -65,6 +65,9 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 
     ui->decodes_table_view_->setModel (decodes_model_);
     ui->decodes_table_view_->verticalHeader ()->hide ();
+
+    reloadColumns();
+
     ui->decodes_table_view_->hideColumn (dcId);
     ui->decodes_table_view_->hideColumn (dcDT);
     ui->decodes_table_view_->hideColumn (dcDF);
@@ -81,7 +84,9 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     ui->decodes_table_view_->hideColumn (dcToGrid);
 
 
-    if (!autoEnabled)
+    if (autoEnabled)
+        ui->decodes_table_view_->showColumn (dcBest);
+    else
         ui->decodes_table_view_->hideColumn (dcBest);
 
 
@@ -95,8 +100,6 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
 
     // this to change - get the item, and use the message decode data
     connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
-
-    reloadColumns();
 
     connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
 
@@ -561,7 +564,11 @@ decodeMessage *WsjtxFrame::scrapeAllTxt()
             QString message;
             bool low_confidence = false;    // we sent it, after all
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+            QStringList sl = atline.trimmed().split(' ', Qt::SkipEmptyParts);
+#else
             QStringList sl = atline.trimmed().split(' ', QString::SkipEmptyParts);
+#endif
             if (sl[2] != "Tx")
                 continue;
 

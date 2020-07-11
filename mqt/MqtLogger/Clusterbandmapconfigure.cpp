@@ -1,4 +1,3 @@
-#include <QSignalMapper>
 #include "ContestApp.h"
 #include "bandmapcommon.h"
 
@@ -44,13 +43,9 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
 
      //config.endGroup();
 
-     QSignalMapper *signalMapper = new QSignalMapper(this);
-     connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(onDistanceEditingFinished(int)));
-
      for (int i = 0; i < distanceLineEdits.count(); i++)
      {
-         signalMapper->setMapping(distanceLineEdits[i], i);
-         connect(distanceLineEdits[i], SIGNAL(editingFinished()), signalMapper, SLOT(map()));
+         connect(distanceLineEdits[i], &QLineEdit::editingFinished, [=]() {onDistanceEditingFinished(i);});
      }
 
      connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onAccepted()));

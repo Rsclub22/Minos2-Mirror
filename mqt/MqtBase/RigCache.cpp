@@ -113,7 +113,7 @@ void RigCache::addRigList(const QString &s)
         }
     }
 
-    qSort(rigList);
+    std::sort(rigList.begin(), rigList.end());
 }
 RigState &RigCache::getState(const PubSubName &p)
 {

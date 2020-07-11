@@ -302,6 +302,8 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
                     return "";
                 }
             }
+            if (msg.points <= 0)
+                return "";
             QString points = QString::number(msg.points);
 
             if (msg.bonus)
@@ -325,7 +327,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             {
                 return "";
             }
-            if (msg.points == 0)
+            if (msg.points <= 0)
             {
                 return "";
             }
@@ -337,6 +339,10 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         case dcDistance:
             if (msg.txrx == eTX)
                 return "";
+            if (msg.distance <= 0)
+            {
+                return "";
+            }
             return QString::number(msg.distance);
 
         case dcFromCall:

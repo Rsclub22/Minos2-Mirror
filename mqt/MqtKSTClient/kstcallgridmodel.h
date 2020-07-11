@@ -31,6 +31,7 @@ public:
     QString toCall;
     QString toLoc;
     QVector<Aircraft> planes;
+    bool planeResponseSeen = false;
 
     bool operator< ( const KstUser& rhs ) const;
 

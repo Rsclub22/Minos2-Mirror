@@ -10,11 +10,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
 #include <QStringListModel>
 #include <QMessageBox>
-#include <QSignalMapper>
 #include "ContestApp.h"
 #include "cutils.h"
 #include "list.h"
@@ -81,13 +78,9 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     bandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
 
-    QSignalMapper *signalMapperBandChkBox = new QSignalMapper(this);
-    connect(signalMapperBandChkBox, SIGNAL(mapped(int)), this, SLOT(onBandChkBoxChecked(int)));
-
     for (int i = 0; i < bandChkBoxList.count(); i++)
     {
-        signalMapperBandChkBox->setMapping(bandChkBoxList[i], i);
-        connect(bandChkBoxList[i], SIGNAL(clicked()), signalMapperBandChkBox, SLOT(map()));
+        connect(bandChkBoxList[i], &QCheckBox::clicked, [=](){onBandChkBoxChecked(i);});
     }
 
     for (int i = 0; i < bandChkBoxList.count(); i++)
@@ -128,25 +121,17 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         distanceValues.append(distItem);
     }
 
-    QSignalMapper *signalMapperDistEdit = new QSignalMapper(this);
-    connect(signalMapperDistEdit, SIGNAL(mapped(int)), this, SLOT(onDistanceEditingFinished(int)));
-
     for (int i = 0; i < distanceLineEditsList.count(); i++)
     {
-        signalMapperDistEdit->setMapping(distanceLineEditsList[i], i);
-        connect(distanceLineEditsList[i], SIGNAL(editingFinished()), signalMapperDistEdit, SLOT(map()));
+        connect(distanceLineEditsList[i], &QLineEdit::editingFinished,  [=](){onDistanceEditingFinished(i);});
     }
 
     ignoreDistanceChkBoxList << ui->distFilterIgnoreCheckBox_50MHz << ui->distFilterIgnoreCheckBox_70MHz << ui->distFilterIgnoreCheckBox_144MHz << ui->distFilterIgnoreCheckBox_432MHz
                              << ui->distFilterIgnoreCheckBox_1296MHz << ui->distFilterIgnoreCheckBox_2300MHz << ui->distFilterIgnoreCheckBox_3_4GHz << ui->distFilterIgnoreCheckBox_5_6GHz << ui->distFilterIgnoreCheckBox_10GHz;
 
-    QSignalMapper *signalMapperIgnoreDist = new QSignalMapper(this);
-    connect(signalMapperIgnoreDist, SIGNAL(mapped(int)), this, SLOT(onIgnoreDistanceChecked(int)));
-
     for (int i = 0; i < ignoreDistanceChkBoxList.count(); i++)
     {
-        signalMapperIgnoreDist->setMapping(ignoreDistanceChkBoxList[i], i);
-        connect(ignoreDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperIgnoreDist, SLOT(map()));
+        connect(ignoreDistanceChkBoxList[i], &QCheckBox::clicked, [=](){onIgnoreDistanceChecked(i);});
     }
 
     for (int i = 0; i < ignoreDistanceChkBoxList.count(); i++)
@@ -165,13 +150,9 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     ignoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_50MHz << ui->ignoreEmptyDistanceValuesChkBox_70MHz << ui->ignoreEmptyDistanceValuesChkBox_144MHz << ui->ignoreEmptyDistanceValuesChkBox_432MHz
                                   << ui->ignoreEmptyDistanceValuesChkBox_1296MHz << ui->ignoreEmptyDistanceValuesChkBox_2300MHz << ui->ignoreEmptyDistanceValuesChkBox_3_4GHz << ui->ignoreEmptyDistanceValuesChkBox_5_6GHz << ui->ignoreEmptyDistanceValuesChkBox_10GHz;
 
-    QSignalMapper *signalMapperIgnoreEmptyDist = new QSignalMapper(this);
-    connect(signalMapperIgnoreEmptyDist, SIGNAL(mapped(int)), this, SLOT(onIgnoreEmptyDistanceChecked(int)));
-
     for (int i = 0; i < ignoreEmptyDistanceChkBoxList.count(); i++)
     {
-        signalMapperIgnoreEmptyDist->setMapping(ignoreEmptyDistanceChkBoxList[i], i);
-        connect(ignoreEmptyDistanceChkBoxList[i], SIGNAL(clicked()), signalMapperIgnoreEmptyDist, SLOT(map()));
+        connect(ignoreEmptyDistanceChkBoxList[i], &QCheckBox::clicked, [=](){onIgnoreEmptyDistanceChecked(i);});
     }
 
     for (int i = 0; i < ignoreEmptyDistanceChkBoxList.count(); i++)
@@ -1200,14 +1181,15 @@ void ClusterClientFilterDialog::saveFilterToFile(QStringList listOfFilters, QStr
             while (i < listOfFilters.count())
             {
                 stream << listOfFilters[i];
-                if (i == listOfFilters.count() - 1)
+                if (i != listOfFilters.count() - 1)
                 {
-                    stream << endl;
+                   stream << FILTER_DELIMITER;
                 }
-                else
-                {
-                   stream << FILTER_DELIMITER << endl;
-                }
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+                stream << Qt::endl;
+#else
+                stream << endl;
+#endif
 
                 i++;
             }

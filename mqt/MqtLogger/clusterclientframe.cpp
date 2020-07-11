@@ -657,7 +657,11 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
     QStringList sl = spot.split(DXSPOT);
     if (sl.count() == 2)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        QStringList spotlist = sl[1].split(':', Qt::KeepEmptyParts);
+#else
         QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
+#endif
 
         if (spotlist.count() == TTLVALUE +1)
         {
@@ -1721,19 +1725,36 @@ bool ClusterClientFrame::event(QEvent *event)
     return QWidget::event(event);
 }
 
+static void setTextToLabel(QLabel *label, QString text1, QString col, QString text2)
+{
+    QFontMetrics metrix(label->font());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int width1 = metrix.horizontalAdvance(text1);
+#else
+    int width1 = metrix.width(text1);
+#endif
 
+    int width = label->width() - width1 - 2;
+    QString clippedText;
+    if (width > 0)
+        clippedText = col + metrix.elidedText(text2, Qt::ElideRight, width);
+    label->setText(text1 + clippedText);
+
+    label->setToolTip(text1 + col + text2);
+}
 void ClusterClientFrame::setHoldUpdateFlag(bool state)
 {
-
+    QString clText = tr("Cluster");
     holdUpdateFlag = state;
     if (state)
     {
-        ui->clusterClientFrameTitle->setText( tr("Cluster - %1Mouse in frame, updates paused").arg(HtmlFontColour(Qt::red)));
+        setTextToLabel(ui->clusterClientFrameTitle, clText, HtmlFontColour(Qt::red), tr(" - Mouse in frame, updates paused"));
 
     }
     else
     {
-        ui->clusterClientFrameTitle->setText(tr("Cluster"));
+        ui->clusterClientFrameTitle->setText(clText);
+        ui->clusterClientFrameTitle->setToolTip(clText);  // not really needed, as if we hover we must be in frame
     }
 }
 
