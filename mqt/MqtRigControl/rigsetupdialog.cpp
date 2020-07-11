@@ -19,13 +19,10 @@
 #include "rigcontrolcommonconstants.h"
 #include "addradiodialog.h"
 #include "rigutils.h"
-#include <QSignalMapper>
 #include <QComboBox>
 #include <QMessageBox>
 #include <QLineEdit>
 #include <QCheckBox>
-//#include <QtSerialPort/QSerialPort>
-//#include <QSerialPortInfo>
 #include <QSettings>
 #include <QInputDialog>
 
