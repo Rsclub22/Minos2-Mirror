@@ -1111,6 +1111,23 @@ bool OmnirigControl::supportWriteRitState(int rigModelNumber)
     return rig->IsParamWriteable(OmniRig::PM_RIT0);
 }
 
+int OmnirigControl::setConfigurationParameter(CONFIG_PARAM cfgparam, QString value)
+{
+    Q_UNUSED(cfgparam)
+    Q_UNUSED(value)
+    int retCode = Rig_OK;
+    return retCode;
+}
+int OmnirigControl::getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value)
+{
+    Q_UNUSED(cfgparam)
+    Q_UNUSED(value)
+    int retCode = Rig_OK;
+    return retCode;
+}
+
+
+
 void OmnirigControl::setTraceCommsFlag(bool value)
 {
     omnirigTraceComms = value;

@@ -1019,6 +1019,41 @@ setting_t HamlibRigControl::rigHasSetFunc(int rigNumber, setting_t func)
 }
 
 
+/********** set_conf ***********************/
+
+// set configuration parameters..
+
+
+
+int HamlibRigControl::setConfigurationParameter(CONFIG_PARAM cfgparam, QString value)
+{
+
+    return rig_set_conf(my_rig, convertConfigParam(cfgparam), value.toLatin1());
+
+}
+
+int HamlibRigControl::getConfigurationParameter(CONFIG_PARAM cfgparam, QString* value)
+{
+    char* val = nullptr;
+    int retCode =  rig_get_conf(my_rig, convertConfigParam(cfgparam), val);
+
+    value->fromLatin1(val);
+
+    return retCode;
+
+
+}
+
+
+token_t HamlibRigControl::convertConfigParam(CONFIG_PARAM cfgparam)
+{
+    if (cfgparam == CONFIG_PARAM::post_write_delay)
+    {
+        return post_write_delay;
+    }
+}
+
+
 /*
 void RigControl::getRigList()
 {
