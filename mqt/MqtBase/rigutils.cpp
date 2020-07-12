@@ -535,15 +535,15 @@ QString convertSinglePeriodFreqToMultiPeriod(QString f)
 
 
 
-
+// modified for tens khz
 
 QString convertRitFreqToStr(int freq)
 {
 
     bool negNum = false;
-    if (freq == 0 && freq <= 9)
+    if (freq == 0 && freq <= 9)  // not interested in Hz
     {
-        return QString("+0.00");
+        return QString("+00.00");
     }
 
     QString rfreq = convertFreqToStr(freq);
@@ -555,19 +555,32 @@ QString convertRitFreqToStr(int freq)
         rfreq = rfreq.remove('-');
     }
 
+    if (freq < 1000)
+    {
+        rfreq.prepend("00.");
+    }
+    else if (freq < 10000)
+    {
+        rfreq.insert(1, '.');
+    }
+    else if (freq >= 10000)
+    {
+        rfreq.insert(2, '.');
+    }
+/*
     if (rfreq.count() == 2)
     {
-        rfreq = QString("0.0" + rfreq).left(4);
+        rfreq = QString("00.0" + rfreq).left(4);
     }
     else if (rfreq.count() == 3)
     {
-        rfreq = QString("0." + rfreq).left(4);
+        rfreq = QString("00." + rfreq).left(4);
     }
     else if (rfreq.count() == 4)
     {
         rfreq = rfreq.insert(1, '.').left(4);
     }
-
+*/
     if (negNum)
     {
         rfreq = rfreq.prepend('-');
