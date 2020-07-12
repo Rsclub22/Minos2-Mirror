@@ -12,6 +12,7 @@
 
 #include <QStringListModel>
 #include <QMessageBox>
+#include "ContestApp.h"
 #include "cutils.h"
 #include "list.h"
 #include "clusterclientfilterdialog.h"
@@ -1329,20 +1330,23 @@ void ClusterClientFilterDialog::onUhfSetDefDistPbClicked()
 
 void ClusterClientFilterDialog::setDefaultDistValues(int start, int end, bool status)
 {
-    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-    config.beginGroup("distanceFilter");
+    //QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    //config.beginGroup("distanceFilter");
+    ClusterFilterIdAndNames clustId;
 
     for (int i = start; i < end; i++)
     {
         if (bandChkBoxList[i]->isChecked())
         {
-            distanceValues[i].distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+            //distanceValues[i].distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+            TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getDefaultFilterId(i), distanceValues[i].distance );
+
             distanceLineEditsList[i]->setText(QString::number(distanceValues[i].distance));
             distanceValues[i].distChanged = status;
         }
     }
 
-    config.endGroup();
+    //config.endGroup();
 }
 
 void ClusterClientFilterDialog::onVhfSetAllIgnorePbClicked()

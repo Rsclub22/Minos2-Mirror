@@ -14,6 +14,7 @@
 
 
 #include "rigcapabilities.h"
+#include <hamlib/rig.h>
 
 RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  QString rigManufacturer_,
@@ -67,6 +68,10 @@ RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
     supportGetRitState = rigcap.supportGetRitState;
     supportSetRitState = rigcap.supportSetRitState;
     supportSMeter = rigcap.supportSMeter;
+    if (rigManufacturer == "Yaesu")
+    {
+        supportSMeter = false;
+    }
     supportGetPtt = rigcap.supportGetPtt;
     supportPtt = rigcap.supportPtt;
     supportSetPtt = rigcap.supportSetPtt;

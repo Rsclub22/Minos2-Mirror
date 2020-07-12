@@ -146,10 +146,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     connect(ui->tuningAddMapChkBox, SIGNAL(stateChanged(int)), this, SLOT(tuningAddMapChkBoxStateChange(int)));
 
-    QSettings config(BANDMAP_INI_FILE, QSettings::IniFormat);
-    config.beginGroup("Bandmap");
-    addToBandmapTuneTolerance = config.value("addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE).toInt();
-    config.endGroup();
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addToBandmapTuneTolerance );
 
     if (addToBandmapTuneTolerance < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE || addToBandmapTuneTolerance > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE)
     {

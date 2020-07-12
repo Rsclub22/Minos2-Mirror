@@ -678,7 +678,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                }
                else if (lastStatus == ROT_STATUS_ERROR)
                {
-                   ui->rotatorStatMsg->setText(tr("Error"));
+                   ui->rotatorStatMsg->setText(HtmlFontColour("Red") + tr("Error"));
                    rotError = true;
                }
                else

@@ -26,20 +26,22 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
                        << ui->distanceFilter432MHz << ui->distanceFilter1296MHz << ui->distanceFilter2300MHz
                        << ui->distanceFilter3_4GHz << ui->distanceFilter5_6GHz << ui->distanceFilter10GHz;
 
-     QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-     config.beginGroup("distanceFilter");
-
+     //QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+     //config.beginGroup("distanceFilter");
+     ClusterFilterIdAndNames clustId;
 
      for (int i = 0; i < distanceLineEdits.count(); i++)
      {
          distValue distItem;
-         distItem.distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+         //distItem.distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+         TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getDefaultFilterId(i), distItem.distance );
+
          distanceLineEdits[i]->setText(QString::number(distItem.distance));
          distItem.changed = false;
          distanceValues.append(distItem);
      }
 
-     config.endGroup();
+     //config.endGroup();
 
      for (int i = 0; i < distanceLineEdits.count(); i++)
      {
@@ -57,10 +59,8 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
 
     // get addBandmapTuningTolerance
 
-      QSettings config_tuning(BANDMAP_INI_FILE, QSettings::IniFormat);
-      config_tuning.beginGroup("Bandmap");
-      addBandmapTuningTolerance = config_tuning.value("addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE).toInt();
-      config_tuning.endGroup();
+      TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addBandmapTuningTolerance );
+
 
       if (addBandmapTuningTolerance < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE || addBandmapTuningTolerance > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE)
       {
@@ -116,10 +116,7 @@ void ClusterBandmapConfigure::onAccepted()
     if (ui->addBandmapTuningTolSpinBox->value() != addBandmapTuningTolerance)
     {
         // changed save
-        QSettings config_tuning(BANDMAP_INI_FILE, QSettings::IniFormat);
-        config_tuning.beginGroup("Bandmap");
-        config_tuning.setValue("addBandmapTuningTolerance", addBandmapTuningTolerance);
-        config_tuning.endGroup();
+        TContestApp::getContestApp()->loggerBundle.setIntProfile(elpAddBandMapTuningTolerance, ui->addBandmapTuningTolSpinBox->value());
 
     }
 }
@@ -132,20 +129,15 @@ void ClusterBandmapConfigure::onRejected()
 void ClusterBandmapConfigure::saveDistances()
 {
 
-
-    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-    config.beginGroup("distanceFilter");
-
+    ClusterFilterIdAndNames clustId;
     for (int i = 0; i < distanceLineEdits.count(); i++)
     {
         if (distanceValues[i].changed && distanceValues[i].distance != DEFAULT_FILTER_DISTANCE)
         {
-            config.setValue(distanceIniNames[i], distanceValues[i].distance);
+            TContestApp::getContestApp()->loggerBundle.setIntProfile(clustId.getDefaultFilterId(i), distanceValues[i].distance);
+
         }
     }
-
-    config.endGroup();
-
 }
 
 

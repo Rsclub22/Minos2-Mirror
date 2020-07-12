@@ -970,6 +970,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 
+        ClusterFilterIdAndNames clustId;
 
         if (contestBand != -1)
         {
@@ -993,15 +994,16 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                     *filterSettings.modeFilters[contestMode] = true;
                 }
 
-                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-                config.beginGroup("distanceFilter");
+                //QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+                //config.beginGroup("distanceFilter");
                 for (int i = 0; i < filterSettings.distanceFilters.count(); i++)
                 {
 
-                    *filterSettings.distanceFilters[i] = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+                    TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getDefaultFilterId(i), *filterSettings.distanceFilters[i]);
+
                 }
 
-                config.endGroup();
+                //config.endGroup();
 
                 //filterSetup->saveClusterFilterToContest();  // save these settings
                 contest->saveClusterFilter(filterSettings);
