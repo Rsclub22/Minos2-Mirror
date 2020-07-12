@@ -85,7 +85,11 @@ int Calendar::getDate ( int month, int day, int week )
     // return the date of the month/day/week
 
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
     QDateTime startMonth ( QDate( curYear, month, 1 ) );
+#else
+    QDateTime startMonth  = QDate( curYear, month, 1 ).startOfDay(Qt::UTC);
+#endif
     int dw = getDayOfWeek ( startMonth ) - 1;   // make it 0 based
 
     // So now we need to go through
@@ -403,8 +407,11 @@ bool Calendar::parseFile ( const QString &fname )
                             ic.shortDescription = sdesc;
                             ic.bands = ( *bl ).name;
                             ic.mode = mode;
-
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
                             ic.start = QDateTime ( QDate( curYear, sm, istartDate ) );
+#else
+                            ic.start = QDate( curYear, sm, istartDate ).startOfDay(Qt::UTC);
+#endif
                             int h = ( *tl ).startTime.left( 2 ).toInt();
                             int m = ( *tl ).startTime.mid( 2, 2 ).toInt();
 
@@ -488,7 +495,7 @@ bool Calendar::parseFile ( const QString &fname )
         // (the band NAME is against each level, we want the canonical band)
         // and for each section
     }
-    qSort(calendar );
+    std::sort(calendar.begin(), calendar.end() );
     return true;
 
 }

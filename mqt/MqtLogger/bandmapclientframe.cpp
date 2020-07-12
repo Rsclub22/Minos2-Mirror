@@ -703,11 +703,10 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
             {
 
-                // no, get default distanceFilter value
-                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-                config.beginGroup("distanceFilter");
-                filterSettings.distanceFilter = config.value(distanceIniNames[contestBand], DEFAULT_FILTER_DISTANCE).toInt();
-                config.endGroup();
+                ClusterFilterIdAndNames clustId;
+                TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getDefaultFilterId(contestBand), filterSettings.distanceFilter );
+
+                //config.endGroup();
 
                 //set current mode
                 if (contestModeStr == "MGM")       //  have mode settings been saved before?
@@ -965,7 +964,11 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
     QStringList sl = spot.split(DXSPOT);
     if (sl.count() == 2)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        QStringList spotlist = sl[1].split(':', Qt::KeepEmptyParts);
+#else
         QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
+#endif
 
         if (!checkSpotInTable(spotlist))
         {

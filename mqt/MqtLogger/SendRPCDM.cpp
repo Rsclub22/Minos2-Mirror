@@ -847,7 +847,7 @@ QStringList TSendDM::rotators()
         QString antname = psn.toString();
         sl.append(antname);
     }
-    qSort(sl);
+    sl.sort();
     return  sl;
 }
 QStringList TSendDM::rigs()
@@ -859,7 +859,7 @@ QStringList TSendDM::rigs()
         QString rigname = psn.toString();
         sl.append(rigname);
     }
-    qSort(sl);
+    sl.sort();
     return  sl;
 }
 const RigState &TSendDM::getRigState(const QString &name)

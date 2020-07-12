@@ -657,7 +657,11 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
     QStringList sl = spot.split(DXSPOT);
     if (sl.count() == 2)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        QStringList spotlist = sl[1].split(':', Qt::KeepEmptyParts);
+#else
         QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
+#endif
 
         if (spotlist.count() == TTLVALUE +1)
         {
@@ -966,6 +970,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 
+        ClusterFilterIdAndNames clustId;
 
         if (contestBand != -1)
         {
@@ -989,15 +994,16 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                     *filterSettings.modeFilters[contestMode] = true;
                 }
 
-                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-                config.beginGroup("distanceFilter");
+                //QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+                //config.beginGroup("distanceFilter");
                 for (int i = 0; i < filterSettings.distanceFilters.count(); i++)
                 {
 
-                    *filterSettings.distanceFilters[i] = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
+                    TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getDefaultFilterId(i), *filterSettings.distanceFilters[i]);
+
                 }
 
-                config.endGroup();
+                //config.endGroup();
 
                 //filterSetup->saveClusterFilterToContest();  // save these settings
                 contest->saveClusterFilter(filterSettings);

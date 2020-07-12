@@ -564,7 +564,11 @@ decodeMessage *WsjtxFrame::scrapeAllTxt()
             QString message;
             bool low_confidence = false;    // we sent it, after all
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+            QStringList sl = atline.trimmed().split(' ', Qt::SkipEmptyParts);
+#else
             QStringList sl = atline.trimmed().split(' ', QString::SkipEmptyParts);
+#endif
             if (sl[2] != "Tx")
                 continue;
 

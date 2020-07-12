@@ -11,6 +11,45 @@ rigcommon::rigcommon()
 }
 
 
+QString vfoToStr(VFO curVfo)
+{
+    if (curVfo == VFO::VFOA)
+    {
+        return "VFOA";
+    }
+    else if (curVfo == VFO::VFOB)
+    {
+        return "VFOB";
+    }
+    else if (curVfo == VFO::CURRENT_VFO)
+    {
+       return "CURRENT_VFO";
+    }
+
+    return "CURRENT_VFO";
+}
+
+VFO strToVfo(QString vfo)
+{
+
+    if (vfo == "VFOA")
+    {
+        return VFO::VFOA;
+    }
+    else if (vfo == "VFOB")
+    {
+        return VFO::VFOB;
+    }
+    else if (vfo == "CURRENT_VFO")
+    {
+        return VFO::CURRENT_VFO;
+    }
+
+    return VFO::CURRENT_VFO;
+
+}
+
+
 void fillPortsInfo(QComboBox* comportSel)
 {
 

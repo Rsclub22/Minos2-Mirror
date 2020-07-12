@@ -154,11 +154,14 @@ bool TLogContainer::show(int argc, char *argv[])
     n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();
 
+    setWindowState(Qt::WindowState::WindowActive);
+
     return true;
 }
 void TLogContainer::onArgsReceived(QString conarg)
 {
     preloadFiles( conarg );
+    setWindowState(Qt::WindowState::WindowActive);
 }
 
 void TLogContainer::on_TimeDisplayTimer( )
@@ -1614,7 +1617,7 @@ QStringList TLogContainer::getSessions()
     TContestApp *app = TContestApp::getContestApp();
     QStringList sessionlst = app ->logsPreloadBundle.getSections();
     QStringList newSessionList;
-    qSort( sessionlst);
+    sessionlst.sort();
     for (int i = 0; i < sessionlst.size(); ++i)
     {
         if (sessionlst[i] != app ->logsPreloadBundle.noneBundle && sessionlst[i] != app->preloadsect)

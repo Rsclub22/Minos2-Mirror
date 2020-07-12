@@ -173,7 +173,14 @@ void RunConfigElement::createProcess()
         connect (runner, SIGNAL(readyReadStandardError()), this, SLOT(on_readyReadStandardError()));
         connect (runner, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readyReadStandardOutput()));
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        QStringList progArgs = runner->splitCommand(program);
+        const QString prog = progArgs.takeFirst();
+
+        runner->start(prog, progArgs);
+#else
         runner->start(program);
+#endif
 
         if (hideApp)
             sendCommand("HideServers");
@@ -356,7 +363,7 @@ void MinosConfig::saveAll()
     config.startGroup();
     config.clear();
     QVector <QSharedPointer<RunConfigElement> > newList = elelist;
-    qSort(newList.begin(), newList.end(), configSort);
+    std::sort(newList.begin(), newList.end(), configSort);
     for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = newList.begin(); i != newList.end(); i++ )
     {
         (*i)->save(config);
@@ -532,7 +539,11 @@ Server=false
             // NB using comma in value give a string list! Single value will also go to list if desired
             QString reqs;
             appConfig.getPrivateProfileString(apps[i], "Requires",  "", reqs);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+            ac.requiresApps = reqs.split(',', Qt::SkipEmptyParts);
+#else
             ac.requiresApps = reqs.split(',', QString::SkipEmptyParts);
+#endif
 
             for(auto& str : ac.requiresApps)    // trim all elements of leading and trailing spaces
                 str = str.trimmed();

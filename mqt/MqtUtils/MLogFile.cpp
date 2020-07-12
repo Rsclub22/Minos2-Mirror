@@ -102,7 +102,11 @@ void MLogFile::tidyFiles (const QString &Prefix, int KeepDays )
     {
         files.next();
         QFileInfo fi(files.filePath());
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
         QDateTime fd(fi.created());
+#else
+        QDateTime fd(fi.birthTime());
+#endif
 
         if (fd < kdt)
         {

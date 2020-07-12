@@ -227,7 +227,11 @@ void ContestDetails::setDetails(  )
    ui->SectionComboBox->clear();
    if ( sectionList.size() )
    {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+       QStringList sl = sectionList.split(",", Qt::SkipEmptyParts);
+#else
        QStringList sl = sectionList.split(",", QString::SkipEmptyParts);
+#endif
        ui->SectionComboBox->addItems(sl);
    }
 

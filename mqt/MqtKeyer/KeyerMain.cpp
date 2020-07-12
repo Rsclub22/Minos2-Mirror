@@ -360,7 +360,15 @@ void KeyerMain::runAlsaScript(const QString &alsaFileName, const QString &comman
 
 
     QString commandLine = "alsactl -f " + alsaFileName + " " + command;// <card>
-    runner->start(commandLine);
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        QStringList progArgs = runner->splitCommand(commandLine);
+        const QString prog = progArgs.takeFirst();
+
+        runner->start(prog, progArgs);
+#else
+        runner->start(commandLine);
+#endif
 }
 void KeyerMain::on_started()
 {

@@ -34,7 +34,7 @@ FreqLineEdit::~FreqLineEdit()
 
 void FreqLineEdit::wheelEvent(QWheelEvent *event)
 {
-    int numDegrees = event->delta() / 8;
+    int numDegrees = event->angleDelta().y() / 8;
     int numTicks = numDegrees / 15;
 
     if (numTicks == 1)

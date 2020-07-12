@@ -31,15 +31,15 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     QSettings settings;
 
-    serverName = settings.value("hostname", "www.on4kst.info").toString();
-    serverPort = settings.value("port", "23001").toString();
-    myCallsign = settings.value("username", "").toString();
-    password = settings.value("password", "").toString();
+    serverName = settings.value("hostname", "www.on4kst.info").toString().trimmed();
+    serverPort = settings.value("port", "23001").toString().trimmed();
+    myCallsign = settings.value("username", "").toString().trimmed();
+    password = settings.value("password", "").toString().trimmed();
     maxDistance = settings.value("maxDistance", 99999).toInt();
 
     ASActive = settings.value("ASActive", false).toBool();
-    ASServerName = settings.value("ASServerName", "AS").toString();
-    ASMyName = settings.value("ASMyName", "Minos").toString();
+    ASServerName = settings.value("ASServerName", "AS").toString().trimmed();
+    ASMyName = settings.value("ASMyName", "Minos").toString().trimmed();
     ASActiveBand = static_cast<ASBand>(settings.value("ASActiveBand", 0).toInt());
     ASMinDistance = settings.value("ASMinDistance", 300).toInt();
     ASMaxDistance = settings.value("ASMaxDistance", 1000).toInt();
@@ -1182,17 +1182,17 @@ bool KSTMainWindow::doConfiguration()
     int ret = conf.exec();
     if (ret == QDialog::Accepted)
     {
-        serverName = conf.hostname;
-        serverPort = conf.port;
-        myCallsign = conf.username;
-        password = conf.password;
+        serverName = conf.hostname.trimmed();
+        serverPort = conf.port.trimmed();
+        myCallsign = conf.username.trimmed();
+        password = conf.password.trimmed();
         autoConnect = conf.autoConnect;
-        myLoc = conf.locator;
+        myLoc = conf.locator.trimmed();
         maxDistance = conf.maxDistance;
         ASActive = conf.ASActive;
         ASActiveBand = conf.ASActiveBand;
-        ASServerName = conf.ASServerName;
-        ASMyName = conf.ASMyName;
+        ASServerName = conf.ASServerName.trimmed();
+        ASMyName = conf.ASMyName.trimmed();
         ASMinDistance = conf.ASMinDistance;
         ASMaxDistance = conf.ASMaxDistance;
         ASPort = conf.ASPort;

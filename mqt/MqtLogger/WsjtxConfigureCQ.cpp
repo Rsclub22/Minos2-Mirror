@@ -44,12 +44,20 @@ void WsjtxConfigureCQ::on_OKButton_clicked()
     QStringList sl;
     QString s = ui->testCQ->toPlainText().trimmed().toUpper();
     s.remove("\r");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    sl = s.split("\n", Qt::SkipEmptyParts);
+#else
     sl = s.split("\n", QString::SkipEmptyParts);
+#endif
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpWSJTX1TestCQ, sl.join(",") );
 
     s = ui->notTestCQ->toPlainText().trimmed().toUpper();
     s.remove("\r");
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    sl = s.split("\n", Qt::SkipEmptyParts);
+#else
     sl = s.split("\n", QString::SkipEmptyParts);
+#endif
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpWSJTX1NonTestCQ, sl.join(",") );
 
     accept();

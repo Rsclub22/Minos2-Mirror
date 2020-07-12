@@ -55,7 +55,18 @@ enum LOGGERPROFILE {
    elpHelpFile, elpHelpEntryURL,
    elpPDFFile,
    elpAutoFill,
-   elpAllowHF
+   elpAllowHF,
+    elpAddBandMapTuningTolerance,
+    elpDefaultFilterDistance_50MHz,
+    elpDefaultFilterDistance_70MHz,
+    elpDefaultFilterDistance_144MHz,
+    elpDefaultFilterDistance_432MHz,
+    elpDefaultFilterDistance_1296MHz,
+    elpDefaultFilterDistance_2300MHz,
+    elpDefaultFilterDistance_3_4GHz,
+    elpDefaultFilterDistance_5_6GHz,
+    elpDefaultFilterDistance_10GHz
+
 };
 enum PRELOADPROFILE {eppSession, eppCurrent, eppDefSession};
 
