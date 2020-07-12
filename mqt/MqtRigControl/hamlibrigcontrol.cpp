@@ -154,6 +154,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            true,       // support set rit
                                            true,        // support get rit state
                                            true,        // support set rit state
+                                           true,       // support get rit max Khz
                                            true,       // support s-meter
                                            false,       // support get Ptt
                                            false,       // support set Ptt

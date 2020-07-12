@@ -39,12 +39,32 @@ void RitLineEdit::setRitOnFlag(bool state)
 }
 
 
+
+void RitLineEdit::setTensKhz(bool tensKhz)
+{
+    // if true support +/- 99Khz
+    // false support +/- 9khz
+    ritTenKHz = tensKhz;
+}
+
+void RitLineEdit::setMaxRit(int maxRit_)
+{
+    maxRit = maxRit_;
+}
+
+void RitLineEdit::setMinRit(int minRit_)
+{
+    minRit = minRit_;
+}
+
+
 void RitLineEdit::changeFreq(bool direction)
 {
     if (ritOn)
     {
 
-        static const int tuningData[] = {0, 1000, 0, 100, 10};  // 0 is either +/- position or . position in display
+        static const int tuningData1[] = {0, 1000, 0, 100, 10};  // 0 is either +/- position or . position in display
+        static const int tuningData2[] = {0, 10000, 1000, 0, 100, 10};  // 0 is either +/- position or . position in display
 
         bool ok = false;
         QString sfreq = text();
@@ -54,7 +74,17 @@ void RitLineEdit::changeFreq(bool direction)
         {
             return;
         }
-        const int tuneStep = tuningData[pos];
+
+        int tuneStep;
+
+        if (ritTenKHz)
+        {
+            tuneStep = tuningData2[pos];    // support +/- 99KHz
+        }
+        else
+        {
+            tuneStep = tuningData1[pos];    // support +/- 9KHz
+        }
 
 
         sfreq = sfreq.trimmed().remove('.');
@@ -67,7 +97,7 @@ void RitLineEdit::changeFreq(bool direction)
             if (direction)
             {
                 freq += tuneStep;
-                if (freq >= 10000)
+                if (freq >= maxRit)
                 {
                     freq -= tuneStep;
                 }
@@ -75,14 +105,14 @@ void RitLineEdit::changeFreq(bool direction)
             else
             {
                 freq -= tuneStep;
-                if (freq <= -10000)
+                if (freq <= minRit)
                 {
                     freq += tuneStep;
                 }
             }
 
             // display rit freq
-            sfreq = convertRitFreqToStr(freq);
+            sfreq = convertRitFreqToStr(freq, ritTenKHz);
             trace(QString("Change Rit Freq: Rit Tuning = %1").arg(sfreq));
             setText(sfreq);
 

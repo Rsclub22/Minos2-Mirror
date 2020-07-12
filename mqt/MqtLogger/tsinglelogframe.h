@@ -110,7 +110,7 @@ public:
     // From rigcontrol
     QString sCurFreq;
     QString sSavedCurFreq;
-    QString sCurRitFreq;
+    int curRitFreq;
     QString sCurMode;
 
     bool isBandMapLoaded();
@@ -229,7 +229,7 @@ private slots:
     void on_SetRadioList();
     void on_SetMode(QString);
     void on_SetFreq(QString);
-    void on_SetRitFreq(QString);
+    void on_SetRitFreq(int);
     void on_SetRitRadioStatus(bool);
     void on_SetVolume(int level);
     void on_SetRadioStatus(QString);
@@ -291,6 +291,8 @@ public:
     void on_SetVolumeStatus(bool status, PubSubName psn);
 
     void on_SetRitEnableStatus(bool status, PubSubName psn);
+    void on_SetRitMaxKHzFreq(int maxRitFreq, PubSubName psn);
+
     void on_SetBandList(QString s, PubSubName psn);
     void on_SetTransVertEnabled(bool status, PubSubName psn);
 
@@ -298,6 +300,7 @@ public:
     bool getTuneAddBandMapSetting();
     void setIgnorePresetFreqChecked(bool state);
     void setIgnorePreviousFreqChecked(bool state);
+
 };
 
 #endif // TSINGLELOGFRAME_H
