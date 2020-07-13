@@ -55,6 +55,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ritEnable(false),
     ritOn(false),
     ritEditOn(false),
+    maxRitFreq(9999),
     radioState("None"),
     onContestPageChangedFlag(false),
     ignorePreviousFreqFlag(false),
@@ -149,12 +150,18 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     freqDisplayPalette = new QPalette();       // to change colour when tuning
 
+    setRitMaxKHzFreq(9999); // initial maxRitFreq
+
     // start timer to wait for bandlist and rigdetails to launch
     launchRadioSelectTimer = new QTimer(this);
     launchRadioSelectCount = 5;     // wait five seconds
     connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
     launchRadioSelectTimer->start(1000);
+
+
 //    trace(QString("constructor: launchRadioSelectTimer 1000 count is %1 contest n/a").arg(launchRadioSelectCount));
+
+
 }
 
 RigControlFrame::~RigControlFrame()
@@ -423,6 +430,30 @@ void RigControlFrame::setRitEnableStatus(bool status, PubSubName psn)
     }
 }
 
+void RigControlFrame::setRitMaxKHzFreq(int maxRitFreq, PubSubName psn)
+{
+    traceMsg(QString("set RitMaxKHzFreq = %1 for radio %2").arg(maxRitFreq).arg(psn.toString()));
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setRitMaxKHzFreq(maxRitFreq);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setRitMaxKHzFreq(maxRitFreq);
+        allRadioDetails[psn] = rd;
+    }
+
+    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        setRitMaxKHzFreq(maxRitFreq);
+        selRadioDetails.setRitMaxKHzFreq(maxRitFreq);
+    }
+}
+
+
 void RigControlFrame::setIgnorePresetFreqFlag(bool status, PubSubName psn)
 {
     traceMsg(QString("set IgnorePresetFreqFlag = %1 for radio %2").arg(status ? "True" : "False").arg(psn.toString()));
@@ -556,11 +587,11 @@ void RigControlFrame::setFreq(QString freq)
 
 // from rigcontrol
 
-void RigControlFrame::setRitFreq(QString freq)
+void RigControlFrame::setRitFreq(int freq)
 {
     if (!ritEditOn)
     {
-      ui->RitEdit->setText(freq);
+      ui->RitEdit->setText(convertRitFreqToStr(freq, ritKHzFlag));
     }
 }
 
@@ -587,7 +618,7 @@ void RigControlFrame::setRitRadioStatus(bool status)
 
 void RigControlFrame::changeRitRadioFreq(int freq)
 {
-    traceMsg(QString("Change Rit Freq = %1").arg(convertRitFreqToStr(freq)));
+    traceMsg(QString("Change Rit Freq = %1").arg(convertRitFreqToStr(freq, ritKHzFlag)));
     if (ritEnable && ritOn)
     {
         emit sendRitFreq(freq);
@@ -611,7 +642,7 @@ void RigControlFrame::ritClearButtonSelected(bool /*state*/)
     {
         int pos = ui->RitEdit->cursorPosition();
         changeRitRadioFreq(0);  // turns off rit in hamlib
-        QString sfreq = convertRitFreqToStr(0);       // set rit display to zero
+        QString sfreq = convertRitFreqToStr(0, ritKHzFlag);       // set rit display to zero
         ui->RitEdit->setText(sfreq);
         ui->RitEdit->setCursorPosition(pos);
     }
@@ -1540,6 +1571,29 @@ void RigControlFrame::setRitEnableState(bool s)
     {
         ritButtonOff();
     }
+}
+
+void RigControlFrame::setRitMaxKHzFreq(int maxRitFreq_)
+{
+    maxRitFreq = maxRitFreq_;
+    if (maxRitFreq >= 10000)
+    {
+        ui->RitEdit->setTensKhz(true);
+        ui->RitEdit->setInputMask("x99.99");
+        ui->RitEdit->setText("+00.00");
+        ritKHzFlag = true;
+
+    }
+    else
+    {
+        ui->RitEdit->setTensKhz(false);
+        ui->RitEdit->setInputMask("x9.99");
+        ui->RitEdit->setText("+0.00");
+        ritKHzFlag = false;
+    }
+
+    ui->RitEdit->setMaxRit(maxRitFreq);
+    ui->RitEdit->setMinRit(maxRitFreq * -1);
 }
 
 bool RigControlFrame::checkRadioState()

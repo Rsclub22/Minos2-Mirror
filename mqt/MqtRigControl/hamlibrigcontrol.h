@@ -86,6 +86,10 @@ public:
     int getRitState(VFO vfo, bool& state) override;
     int clearRit(VFO vfo) override;
 
+    int setConfigurationParameter(CONFIG_PARAM cfgparam, QString value) override;
+    int getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value) override;
+
+
     static void setTraceCommsFlag(bool value);
     void setTraceComms(bool value) override;
     bool getTraceComms() override;
@@ -105,7 +109,7 @@ public:
     QString convertVfoQStr(vfo_t vfo);
 
 
-private:
+    private:
 
 
     hamlib_port_t myport;
@@ -151,6 +155,7 @@ private:
     VFO convert_Vfo_t_To_VFO(vfo_t vfo);
     vfo_t convert_VFO_to_vfo_t(VFO vfo);
 
+    token_t convertConfigParam(CONFIG_PARAM cfgparam);
 };
 
 #endif // HAMLIBRIGCONTROL_H

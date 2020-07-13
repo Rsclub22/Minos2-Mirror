@@ -77,7 +77,7 @@ public:
     void setMode(QString);
     void setVolume(int level);
     void setFreq(QString);
-    void setRitFreq(QString);
+    void setRitFreq(int);
     void setRitRadioStatus(bool);
     void setRadioName(QString, QString mode);
     void setRadioState(QString);
@@ -101,6 +101,7 @@ public:
     void setTransVertStatus(bool status, PubSubName psn);
     void setVolumeStatus(bool status, PubSubName psn);
     void setRitEnableStatus(bool status, PubSubName psn);
+    void setRitMaxKHzFreq(int maxRitFreq, PubSubName psn);
     void setBandList(QString s, PubSubName psn);
     void createActiveBandList(QString);
 
@@ -112,6 +113,7 @@ public:
     void setIgnorePreviousFreqFlag(bool status, PubSubName psn);
     void setIgnorePresetFreqChecked(bool state);
     void setIgnorePreviousFreqChecked(bool state);
+
 signals:
     void selectRadio(QString, QString);
     void sendRadioName(QString);
@@ -194,6 +196,8 @@ private:
     bool ritEnable;
     bool ritOn;
     bool ritEditOn;
+    int maxRitFreq;
+    bool ritKHzFlag;
     //QString curRit;
 
 
@@ -270,6 +274,7 @@ private:
     void saveIgnorePresetFreqFlag(bool state);
     bool readIgnorePreviousFreqFlag();
     void saveIgnorePreviousFreqFlag(bool state);
+    void setRitMaxKHzFreq(int maxRitFreq);
 };
 
 

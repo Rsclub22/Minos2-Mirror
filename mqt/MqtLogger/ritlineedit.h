@@ -16,6 +16,10 @@ public:
     void changeFreq(bool direction);
     void setRitOnFlag(bool state);
 
+    void setTensKhz(bool tensKhz);
+    void setMaxRit(int maxRit_);
+    void setMinRit(int minRit_);
+
 signals:
     void receivedFocus() ;
     void lostFocus();
@@ -24,6 +28,9 @@ signals:
 private:
 
     bool ritOn = false;
+    bool ritTenKHz = false;
+    int maxRit = 9999;
+    int minRit = -9999;
     void wheelEvent(QWheelEvent *event);
     void keyPressEvent(QKeyEvent *event);
 

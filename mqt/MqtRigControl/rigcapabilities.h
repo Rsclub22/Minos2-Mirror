@@ -38,6 +38,7 @@ public:
                     bool supportSetRit_ = false,
                     bool supportGetRitState = false,
                     bool supportSetRitState = false,
+                    bool supportGetRitMax = false,
                     bool supportSMeter_ = false,
                     bool supportGetPtt_ = false,
                     bool supportSetPtt_ = false,
@@ -58,6 +59,7 @@ public:
     bool supportSetRit;
     bool supportGetRitState;
     bool supportSetRitState;
+    bool supportGetRitMax;
     bool supportSMeter;
     bool supportGetPtt;
     bool supportPtt;

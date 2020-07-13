@@ -39,7 +39,7 @@ bool valInputFreq(QString f, QString errMsg);
 QString convertSinglePeriodFreqToMultiPeriod(QString f);
 QString convertFreqToFullDigit(QString f);
 
-QString convertRitFreqToStr(int freq);
+QString convertRitFreqToStr(int freq, bool ritKHzFlag);
 
 QString convertKhzToMhz(QString f);
 QString alignFreqRight(QString f);

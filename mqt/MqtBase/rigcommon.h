@@ -46,8 +46,9 @@ VFO strToVfo(QString vfo);
 using  Frequency = quint64;
 using ShortFreq = qint32;
 
-
-
+// These are used in hamlib
+// post_write_delay disables ACK/NAK in FT817
+enum CONFIG_PARAM {post_write_delay};
 
 
 class TransVertParams

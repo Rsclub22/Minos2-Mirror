@@ -511,6 +511,7 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support set rit
                 false,      // support get rit state
                 false,      // support set rit state
+                false,      // get Rit Max Khz
                 false,      // support s-meter
                 false,      // support get Ptt
                 false,      // support set Ptt
@@ -1110,6 +1111,23 @@ bool OmnirigControl::supportWriteRitState(int rigModelNumber)
 
     return rig->IsParamWriteable(OmniRig::PM_RIT0);
 }
+
+int OmnirigControl::setConfigurationParameter(CONFIG_PARAM cfgparam, QString value)
+{
+    Q_UNUSED(cfgparam)
+    Q_UNUSED(value)
+    int retCode = Rig_OK;
+    return retCode;
+}
+int OmnirigControl::getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value)
+{
+    Q_UNUSED(cfgparam)
+    Q_UNUSED(value)
+    int retCode = Rig_OK;
+    return retCode;
+}
+
+
 
 void OmnirigControl::setTraceCommsFlag(bool value)
 {

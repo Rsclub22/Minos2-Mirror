@@ -1688,12 +1688,12 @@ void TSingleLogFrame::on_SetFreq(QString f)
 
 }
 
-void TSingleLogFrame::on_SetRitFreq(QString f)
+void TSingleLogFrame::on_SetRitFreq(int f)
 {
-    if (sCurRitFreq != f)
+    if (curRitFreq != f)
         if ( this == LogContainer->getCurrentLogFrame() )
         {
-            sCurRitFreq = f;
+            curRitFreq = f;
             FKHRigControlFrame->setRitFreq(f);
         }
 }
@@ -1778,6 +1778,10 @@ void TSingleLogFrame::on_SetRitEnableStatus(bool status, PubSubName psn)
     FKHRigControlFrame->setRitEnableStatus(status, psn);
 }
 
+void TSingleLogFrame::on_SetRitMaxKHzFreq(int maxRitFreq, PubSubName psn)
+{
+    FKHRigControlFrame->setRitMaxKHzFreq(maxRitFreq, psn);
+}
 void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
 {
     FKHRigControlFrame->setBandList(s, psn);
