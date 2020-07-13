@@ -8,6 +8,7 @@ RadioDetails::RadioDetails()
   setTransVertStatus(false);
   setVolumeStatus(false);
   setRitEnableStatus(false);
+  setRitMaxKHzFreq(9999);
   setIgnorePresetFreq(false);
   setIgnorePreviousFreq(false);
 
@@ -65,6 +66,16 @@ void RadioDetails::setRitEnableStatus(bool status)
 bool RadioDetails::getRitEnableStatus()
 {
     return ritEnableStatus;
+}
+
+void RadioDetails::setRitMaxKHzFreq(int maxRitFreq_)
+{
+    maxRitFreq = maxRitFreq_;
+}
+
+int RadioDetails::getRitMaxKHzFreq()
+{
+    return maxRitFreq;
 }
 void RadioDetails::setBandList(QString _bandList)
 {

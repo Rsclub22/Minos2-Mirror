@@ -222,10 +222,10 @@
                 <enum>Qt::ClickFocus</enum>
                </property>
                <property name="inputMask">
-                <string>x9.99</string>
+                <string/>
                </property>
                <property name="text">
-                <string>+0.00</string>
+                <string/>
                </property>
               </widget>
              </item>

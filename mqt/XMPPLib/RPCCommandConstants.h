@@ -154,6 +154,7 @@ static const QString rigControlLogRitFreq      ("LogRitFrequency");
 static const QString rigRitOnOffStatus      ("RitOnOffStatus");
 static const QString rigRitEnableStatus     ("RitEnableStatus");
 static const QString rigRitRadioStatus     ("RitRadioStatus");
+static const QString rigRitMaxKHz ("RitMaxKHz");
 static const QString rigRadioVolLevel      ("RadioVolLevel");
 static const QString rigLogVolLevel      ("LogVolLevel");
 static const QString rigVolStatus           ("VolStatus");

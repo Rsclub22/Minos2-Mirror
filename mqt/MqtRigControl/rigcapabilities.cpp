@@ -26,6 +26,7 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  bool supportSetRit_,
                                  bool supportGetRitState_,
                                  bool supportSetRitState_,
+                                 bool supportGetRitMax_,
                                  bool supportSMeter_,
                                  bool supportGetPtt_,
                                  bool supportSetPtt_,
@@ -43,6 +44,7 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
       supportSetRit (supportSetRit_),
       supportGetRitState (supportGetRitState_),
       supportSetRitState (supportSetRitState_),
+      supportGetRitMax (supportGetRitMax_),
       supportSMeter (supportSMeter_),
       supportGetPtt (supportGetPtt_),
       supportSetPtt (supportSetPtt_),
@@ -67,11 +69,8 @@ RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
     supportSetRit = rigcap.supportSetRit;
     supportGetRitState = rigcap.supportGetRitState;
     supportSetRitState = rigcap.supportSetRitState;
+    supportGetRitMax = rigcap.supportGetRitMax;
     supportSMeter = rigcap.supportSMeter;
-    if (rigManufacturer == "Yaesu")
-    {
-        supportSMeter = false;
-    }
     supportGetPtt = rigcap.supportGetPtt;
     supportPtt = rigcap.supportPtt;
     supportSetPtt = rigcap.supportSetPtt;

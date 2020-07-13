@@ -447,6 +447,15 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->on_SetRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 }
             }
+            if (selDetail.ritMaxKHzFreq().isDirty())
+            {
+                for (int i =0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->on_SetRitMaxKHzFreq(selDetail.ritMaxKHzFreq().getValue(), psn);
+
+                }
+            }
 
             if (selDetail.bandList().isDirty())
             {
@@ -494,8 +503,8 @@ void TSendDM::notifyRigChanges()
                     }
                     if (selState.radioRitFreq().isDirty())
                     {
-                        trace("SendRPC Rig set ritFreq " + convertRitFreqToStr(selState.radioRitFreq().getValue()));
-                        tslf->on_SetRitFreq(convertRitFreqToStr(selState.radioRitFreq().getValue()));
+                        trace("SendRPC Rig set ritFreq " + QString::number(selState.radioRitFreq().getValue()));
+                        tslf->on_SetRitFreq(selState.radioRitFreq().getValue());
                     }
                     if (selState.ritRadioStatus().isDirty())
                     {

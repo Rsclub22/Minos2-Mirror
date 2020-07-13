@@ -84,11 +84,15 @@ public:
     int setVfo(VFO vfo) override;
     int getVfo(VFO *vfo) override;
 
+    int setConfigurationParameter(CONFIG_PARAM cfgparam, QString value) override;
+    int getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value) override;
+
 
 #if defined (WIN32)
     OmniRig::RigParamX map_mode(QString mode);
 
 #endif
+
 
 
 

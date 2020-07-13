@@ -28,6 +28,9 @@ public:
     bool getIgnorePreviousFreq();
 
 
+    void setRitMaxKHzFreq(int maxRitFreq_);
+    int getRitMaxKHzFreq();
+
 private:
 
 double transVerterOffset;
@@ -36,6 +39,7 @@ bool transVertEnabled;
 bool transVertStatus;
 bool volumeStatus;
 bool ritEnableStatus;
+int maxRitFreq;
 bool ignorePresetFreq;
 bool ignorePreviousFreq;
 QString bandList;

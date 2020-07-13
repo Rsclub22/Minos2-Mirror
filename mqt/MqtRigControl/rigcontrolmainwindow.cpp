@@ -143,6 +143,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     mgmModes = config.value("MGM_Modes/MgmModes", "").toStringList();
     //config.endGroup();
 
+    maxRitFreq = 9999;
+    ritKHzFlag = false;
+
     if (appName.length() > 0)
     {
         // init cache with radio data
@@ -1510,7 +1513,7 @@ void RigControlMainWindow::getRadioInfo()
             }
             else
             {
-                logMessage(QString("Get radioInfo: Get RIT Freq = %1").arg(convertRitFreqToStr(rRitFreq)));
+                logMessage(QString("Get radioInfo: Get RIT Freq = %1").arg(convertRitFreqToStr(rRitFreq, ritKHzFlag)));
             }
 
         }
@@ -1870,7 +1873,6 @@ int RigControlMainWindow::getRxFreq(VFO vfo)
     int retCode = 0;
     if (radio)
     {
-        qDebug() << "getRxFreq vfo = " << vfoToStr(vfo);
         retCode = radio->getFrequency(vfo, rfrequency);
     }
     else
@@ -2926,7 +2928,7 @@ int RigControlMainWindow::getRitFreq(VFO vfo)
             {
                rRitFreq = ritFreq;
                oldritFreq = ritFreq;
-               ui->ritFreq->setText(convertRitFreqToStr(rRitFreq));
+               ui->ritFreq->setText(convertRitFreqToStr(rRitFreq, ritKHzFlag));
                logMessage(QString("GetRitFreq from radio = %1").arg(QString::number(rRitFreq)));
                sendRitFreqLogger(static_cast<int>(rRitFreq));
             }
@@ -2966,7 +2968,7 @@ void RigControlMainWindow::setRitFreq(VFO vfo, ShortFreq ritFreq)
                     // get rit is not available, update local rit display
                     // and send to logger to update logger
                     logMessage(QString("Get Rit not available - update display %1").arg(QString::number(ritFreq)));
-                    ui->ritFreq->setText(convertRitFreqToStr(ritFreq));
+                    ui->ritFreq->setText(convertRitFreqToStr(ritFreq, ritKHzFlag));
                     sendRitFreqLogger(ritFreq);
                 }
             }
@@ -3046,7 +3048,7 @@ void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setRadioRitFreq(psname, ritFreq);
         msg->rigCache.publish();
-        logMessage(QString("Send Rit freq to logger = %1 psn=%2").arg(convertRitFreqToStr(ritFreq)).arg(psname.toString()));
+        logMessage(QString("Send Rit freq to logger = %1 psn=%2").arg(convertRitFreqToStr(ritFreq, ritKHzFlag)).arg(psname.toString()));
 
     }
 }

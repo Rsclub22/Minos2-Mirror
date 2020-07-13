@@ -535,15 +535,25 @@ QString convertSinglePeriodFreqToMultiPeriod(QString f)
 
 
 
+// modified for tens khz
+// if tensKHz is true - support +/- 99KHz
+// false support +/- 9KHz
 
-
-QString convertRitFreqToStr(int freq)
+QString convertRitFreqToStr(int freq, bool ritKHzFlag)
 {
 
     bool negNum = false;
-    if (freq == 0 && freq <= 9)
+    if (freq == 0 && freq <= 9)  // not interested in Hz
     {
-        return QString("+0.00");
+        if (ritKHzFlag)
+        {
+           return QString("+00.00");
+        }
+        else
+        {
+            return QString ("+0.00");
+        }
+
     }
 
     QString rfreq = convertFreqToStr(freq);
@@ -555,18 +565,35 @@ QString convertRitFreqToStr(int freq)
         rfreq = rfreq.remove('-');
     }
 
-    if (rfreq.count() == 2)
+    if (ritKHzFlag)
     {
-        rfreq = QString("0.0" + rfreq).left(4);
+        if (freq < 1000)
+        {
+            rfreq.prepend("00.");
+        }
+        else if (freq < 10000)
+        {
+            rfreq.insert(1, '.').prepend('0');
+
+        }
+        else if (freq >= 10000)
+        {
+            rfreq.insert(2, '.');
+        }
     }
-    else if (rfreq.count() == 3)
+    else
     {
-        rfreq = QString("0." + rfreq).left(4);
+        if (freq < 1000)
+        {
+            rfreq.prepend(("0."));
+        }
+        if (freq >= 1000)
+        {
+            rfreq.insert(1, '.');
+        }
+
     }
-    else if (rfreq.count() == 4)
-    {
-        rfreq = rfreq.insert(1, '.').left(4);
-    }
+
 
     if (negNum)
     {

@@ -12,6 +12,7 @@ RigDetails::RigDetails()
     _transverterStatus.setInitialValue(false);
     _volumeStatus.setInitialValue(false);
     _ritEnableStatus.setInitialValue(false);
+    _ritMaxKHzFreq.setInitialValue(9999);
 
 
 }
@@ -32,7 +33,8 @@ bool RigDetails::isDirty() const
             _transverterStatus.isDirty() ||
             _volumeStatus.isDirty() ||
             _bandList.isDirty() ||
-            _ritEnableStatus.isDirty();
+            _ritEnableStatus.isDirty() ||
+            _ritMaxKHzFreq.isDirty();
 
 }
 void RigDetails::clearDirty()
@@ -45,6 +47,7 @@ void RigDetails::clearDirty()
     _volumeStatus.clearDirty();
     _bandList.clearDirty();
     _ritEnableStatus.clearDirty();
+    _ritMaxKHzFreq.clearDirty();
 
 }
 void RigDetails::setDirty()
@@ -57,6 +60,7 @@ void RigDetails::setDirty()
     _volumeStatus.setDirty();
     _bandList.setDirty();
     _ritEnableStatus.setDirty();
+    _ritMaxKHzFreq.setDirty();
 
 }
 
@@ -93,6 +97,11 @@ void RigDetails::setRitEnableStatus(bool ritEnableStatus)
     _ritEnableStatus.setValue(ritEnableStatus);
 }
 
+void RigDetails::setRitMaxKHzFreq(int maxKHzFreq)
+{
+    _ritMaxKHzFreq.setValue(maxKHzFreq);
+}
+
 void RigDetails::setBandList(const QString &bandList)
 {
     _bandList.setValue( bandList);
@@ -110,7 +119,7 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigVolStatus, volumeStatus().getValue());
     jv.insert(rpcConstants::rigControlBandList, bandList().getValue());
     jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
-
+    jv.insert(rpcConstants::rigRitMaxKHz, ritMaxKHzFreq().getValue());
 
     QJsonDocument json(jv);
 
@@ -133,7 +142,7 @@ void RigDetails::unpack(QString s)
         _volumeStatus.setValue(json.object().value(rpcConstants::rigVolStatus).toBool());
         _bandList.setValue(json.object().value(rpcConstants::rigControlBandList).toString());
         _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toBool());
-
+        _ritMaxKHzFreq.setValue(json.object().value(rpcConstants::rigRitMaxKHz).toInt());
     }
     else
     {
@@ -175,5 +184,9 @@ MinosStringItem<QString> RigDetails::bandList() const
 MinosItem<bool> RigDetails::ritEnableStatus() const
 {
     return _ritEnableStatus;
+}
+MinosItem<int> RigDetails::ritMaxKHzFreq() const
+{
+    return _ritMaxKHzFreq;
 }
 

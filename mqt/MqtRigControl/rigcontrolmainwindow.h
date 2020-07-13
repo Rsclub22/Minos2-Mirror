@@ -144,6 +144,8 @@ private:
     bool mgmModeFlag;
     QStringList  mgmModes;
     ShortFreq rRitFreq;
+    int maxRitFreq;
+    bool ritKHzFlag;
     int curVol;
     int curSignalStrength = 0;
 
