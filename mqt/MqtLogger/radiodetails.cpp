@@ -1,4 +1,5 @@
 #include "radiodetails.h"
+#include "rigcommon.h"
 
 RadioDetails::RadioDetails()
 {
@@ -8,7 +9,7 @@ RadioDetails::RadioDetails()
   setTransVertStatus(false);
   setVolumeStatus(false);
   setRitEnableStatus(false);
-  setRitMaxKHzFreq(9999);
+  setRitMaxKHzFreq(MAX_RITFREQ);
   setIgnorePresetFreq(false);
   setIgnorePreviousFreq(false);
 

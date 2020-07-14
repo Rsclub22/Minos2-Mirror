@@ -1,5 +1,6 @@
 #include "base_pch.h"
 #include "RigDetails.h"
+#include "rigcommon.h"
 
 
 RigDetails::RigDetails()
@@ -12,7 +13,7 @@ RigDetails::RigDetails()
     _transverterStatus.setInitialValue(false);
     _volumeStatus.setInitialValue(false);
     _ritEnableStatus.setInitialValue(false);
-    _ritMaxKHzFreq.setInitialValue(9999);
+    _ritMaxKHzFreq.setInitialValue(MAX_RITFREQ);
 
 
 }

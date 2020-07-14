@@ -55,7 +55,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     ritEnable(false),
     ritOn(false),
     ritEditOn(false),
-    maxRitFreq(9999),
+    maxRitFreq(MAX_RITFREQ),
     radioState("None"),
     onContestPageChangedFlag(false),
     ignorePreviousFreqFlag(false),
@@ -150,7 +150,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     freqDisplayPalette = new QPalette();       // to change colour when tuning
 
-    setRitMaxKHzFreq(9999); // initial maxRitFreq
+    setRitMaxKHzFreq(MAX_RITFREQ); // initial maxRitFreq
 
     // start timer to wait for bandlist and rigdetails to launch
     launchRadioSelectTimer = new QTimer(this);
