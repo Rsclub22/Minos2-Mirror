@@ -996,6 +996,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
 
                 //QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
                 //config.beginGroup("distanceFilter");
+
                 for (int i = 0; i < filterSettings.distanceFilters.count(); i++)
                 {
 

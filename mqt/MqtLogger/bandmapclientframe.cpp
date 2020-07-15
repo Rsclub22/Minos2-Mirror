@@ -1920,11 +1920,11 @@ void BandmapClientFrame::setBandmapRadioIsConnect(bool state)
 {
     radioIsConnected = state;
     radioStatusIndicatorToggle(state);
-    if (state)
-    {
+    //if (state)
+    //{
         ui->radioStatusMsg->clear();
         radioError.clear();
-    }
+    //}
  }
 
 void BandmapClientFrame::setBandmapRadioHasError(QString error)

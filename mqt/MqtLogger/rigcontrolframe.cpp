@@ -872,6 +872,8 @@ void RigControlFrame::on_ContestPageChanged()
 
         onContestPageChangedFlag = true;
 
+        qDebug() << "contest change mode = " << mode;
+
         setRadioName(radNam, mode);
 
 
