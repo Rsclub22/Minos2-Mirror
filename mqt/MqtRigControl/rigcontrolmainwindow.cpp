@@ -1524,24 +1524,31 @@ void RigControlMainWindow::getRadioInfo()
         {
 
             bool ritStatus = false;
-            retCode = getRitRadioStatus(curVfo, &ritStatus);
-            if (retCode < 0)
+            if (radioSupGetRitState)
             {
-                //error
-                logMessage(QString("Get radioInfo: Get RIT state error").arg(QString::number(retCode)));
-                radioError(retCode, tr("Request RIT State"));
-            }
-            else
-            {
-                if (ritStatus != radioRitOn)
+                retCode = getRitRadioStatus(curVfo, &ritStatus);
+                if (retCode < 0)
                 {
-                    radioRitOn = ritStatus;
-                    logMessage(QString("Get radioInfo: Radio Rit Status = %1").arg(radioRitOn ? "On" : "Off"));
-                    ritIndicatorToggle(radioRitOn);
-                    sendRadioRitStatusLogger(radioRitOn);
+                    //error
+                    logMessage(QString("Get radioInfo: Get RIT state error").arg(QString::number(retCode)));
+                    radioError(retCode, tr("Request RIT State"));
+                }
+                else
+                {
+                    if (ritStatus != radioRitOn)
+                    {
+                        radioRitOn = ritStatus;
+                        logMessage(QString("Get radioInfo: Radio Rit Status = %1").arg(radioRitOn ? "On" : "Off"));
+                        ritIndicatorToggle(radioRitOn);
+                        sendRadioRitStatusLogger(radioRitOn);
+                    }
+
                 }
 
+
             }
+
+
 
         }
 
@@ -3025,6 +3032,7 @@ int RigControlMainWindow::setRitFreq(vfo_t vfo, shortfreq_t ritFreq)
 int  RigControlMainWindow::getRitRadioStatus(VFO vfo, bool *status)
 {
     logMessage(QString("Get Rit RadioStatus"));
+
     cmdLockOn();
     bool s;
     int retCode = 0;

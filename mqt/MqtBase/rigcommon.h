@@ -50,7 +50,7 @@ using ShortFreq = qint32;
 // post_write_delay disables ACK/NAK in FT817
 enum CONFIG_PARAM {post_write_delay};
 
-const int MAX_RITFREQ = 9990;
+const int MAX_RITFREQ = 9999;
 
 class TransVertParams
 {
