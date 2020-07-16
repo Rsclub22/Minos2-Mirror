@@ -22,10 +22,7 @@ public:
     void setBandList(QString bandList);
     QString getBandList();
     int getBandListCount();
-    void setIgnorePresetFreq(bool status);
-    bool getIgnorePresetFreq();
-    void setIgnorePreviousFreq(bool status);
-    bool getIgnorePreviousFreq();
+
 
 
     void setRitMaxKHzFreq(int maxRitFreq_);
@@ -40,8 +37,6 @@ bool transVertStatus;
 bool volumeStatus;
 bool ritEnableStatus;
 int maxRitFreq;
-bool ignorePresetFreq;
-bool ignorePreviousFreq;
 QString bandList;
 
 };

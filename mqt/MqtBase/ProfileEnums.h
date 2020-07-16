@@ -65,7 +65,9 @@ enum LOGGERPROFILE {
     elpDefaultFilterDistance_2300MHz,
     elpDefaultFilterDistance_3_4GHz,
     elpDefaultFilterDistance_5_6GHz,
-    elpDefaultFilterDistance_10GHz
+    elpDefaultFilterDistance_10GHz,
+    elpContestStartIgnorePresetFreq,
+    elpContestChangeIgnorePreviousFreq
 
 };
 enum PRELOADPROFILE {eppSession, eppCurrent, eppDefSession};

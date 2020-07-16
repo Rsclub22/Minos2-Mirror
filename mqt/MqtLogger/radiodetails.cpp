@@ -10,8 +10,6 @@ RadioDetails::RadioDetails()
   setVolumeStatus(false);
   setRitEnableStatus(false);
   setRitMaxKHzFreq(MAX_RITFREQ);
-  setIgnorePresetFreq(false);
-  setIgnorePreviousFreq(false);
 
 
 }
@@ -90,21 +88,6 @@ int RadioDetails::getBandListCount()
 {
     return bandList.count();
 }
-void RadioDetails::setIgnorePresetFreq(bool status)
-{
-    ignorePresetFreq = status;
-}
-bool RadioDetails::getIgnorePresetFreq()
-{
-    return ignorePresetFreq;
-}
-void RadioDetails::setIgnorePreviousFreq(bool status)
-{
-    ignorePreviousFreq = status;
-}
-bool RadioDetails::getIgnorePreviousFreq()
-{
-    return ignorePreviousFreq;
-}
+
 
 
