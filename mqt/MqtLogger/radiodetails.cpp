@@ -1,4 +1,5 @@
 #include "radiodetails.h"
+#include "rigcommon.h"
 
 RadioDetails::RadioDetails()
 {
@@ -8,9 +9,7 @@ RadioDetails::RadioDetails()
   setTransVertStatus(false);
   setVolumeStatus(false);
   setRitEnableStatus(false);
-  setRitMaxKHzFreq(9999);
-  setIgnorePresetFreq(false);
-  setIgnorePreviousFreq(false);
+  setRitMaxKHzFreq(MAX_RITFREQ);
 
 
 }
@@ -89,21 +88,6 @@ int RadioDetails::getBandListCount()
 {
     return bandList.count();
 }
-void RadioDetails::setIgnorePresetFreq(bool status)
-{
-    ignorePresetFreq = status;
-}
-bool RadioDetails::getIgnorePresetFreq()
-{
-    return ignorePresetFreq;
-}
-void RadioDetails::setIgnorePreviousFreq(bool status)
-{
-    ignorePreviousFreq = status;
-}
-bool RadioDetails::getIgnorePreviousFreq()
-{
-    return ignorePreviousFreq;
-}
+
 
 

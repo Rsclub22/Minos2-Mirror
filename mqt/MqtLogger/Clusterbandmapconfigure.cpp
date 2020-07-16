@@ -26,8 +26,7 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
                        << ui->distanceFilter432MHz << ui->distanceFilter1296MHz << ui->distanceFilter2300MHz
                        << ui->distanceFilter3_4GHz << ui->distanceFilter5_6GHz << ui->distanceFilter10GHz;
 
-     //QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-     //config.beginGroup("distanceFilter");
+
      ClusterFilterIdAndNames clustId;
 
      for (int i = 0; i < distanceLineEdits.count(); i++)
@@ -41,7 +40,7 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
          distanceValues.append(distItem);
      }
 
-     //config.endGroup();
+
 
      for (int i = 0; i < distanceLineEdits.count(); i++)
      {

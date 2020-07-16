@@ -51,6 +51,7 @@ public:
     virtual bool supportWriteRit(int rigModelNumber) = 0;
     virtual int getRit(VFO vfo, ShortFreq &ritfreq) = 0;
     virtual int setRit(VFO vfo, ShortFreq ritfreq) = 0;
+    virtual int getMaxRitFreq(int rigNumber) = 0;
 
     virtual bool supportReadRitState(int rigModelNumber) = 0;
     virtual bool supportWriteRitState(int rigModelNumber) = 0;

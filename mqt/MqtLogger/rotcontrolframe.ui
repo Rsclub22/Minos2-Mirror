@@ -80,7 +80,7 @@
      <item>
       <widget class="QLabel" name="rotatorStatMsg">
        <property name="text">
-        <string>Stop</string>
+        <string/>
        </property>
       </widget>
      </item>

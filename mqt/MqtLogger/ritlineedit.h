@@ -2,6 +2,7 @@
 #define RITLINEEDIT_H
 
 #include <QLineEdit>
+#include "rigcommon.h"
 
 
 
@@ -29,8 +30,8 @@ private:
 
     bool ritOn = false;
     bool ritTenKHz = false;
-    int maxRit = 9999;
-    int minRit = -9999;
+    int maxRit = MAX_RITFREQ;
+    int minRit = MAX_RITFREQ * -1;
     void wheelEvent(QWheelEvent *event);
     void keyPressEvent(QKeyEvent *event);
 

@@ -68,6 +68,7 @@ public:
     bool supportWriteRit(int rigModelNumber) override;
     int getRit(VFO vfo, ShortFreq &ritfreq) override;
     int setRit(VFO vfo, ShortFreq ritfreq) override;
+    int getMaxRitFreq(int rigNumber) override;
 
     bool supportReadRitState(int rigModelNumber) override;
     bool supportWriteRitState(int rigModelNumber) override;

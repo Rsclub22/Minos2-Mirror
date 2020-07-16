@@ -307,6 +307,10 @@ void RigCache::setRitOnOffStatus(const PubSubName &name, bool status)
 {
     rigStates[name].setRitOnOffStatus(status);
 }
+void RigCache::setRitMaxKHzFreq(const PubSubName &name, int ritMaxKHzFreq)
+{
+    rigDetails[name].setRitMaxKHzFreq(ritMaxKHzFreq);
+}
 void RigCache::setRadioRitStatus(const PubSubName &name, bool status)
 {
     rigStates[name].setRitRadioStatus(status);

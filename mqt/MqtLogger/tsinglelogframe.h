@@ -298,8 +298,7 @@ public:
 
     void setTuneAddBandMapSetting(bool state);
     bool getTuneAddBandMapSetting();
-    void setIgnorePresetFreqChecked(bool state);
-    void setIgnorePreviousFreqChecked(bool state);
+
 
 };
 

@@ -63,6 +63,7 @@ public:
     void setBandList(const PubSubName &name, const QString &bands);
     void setRadioRitFreq(const PubSubName &name, int freq);
     void setLogRitFreq(const PubSubName &name, int freq);
+    void setRitMaxKHzFreq(const PubSubName &name, int ritMaxKHzFreq);
     void setRitEnableStatus(const PubSubName &name, bool ritEnableStatus);
     void setRitOnOffStatus(const PubSubName &name, bool status);
     void setRadioRitStatus(const PubSubName &name, bool status);
@@ -75,6 +76,7 @@ public:
         return rigList;
     }
     
+
 
 
 };

@@ -1898,19 +1898,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
     }
 }
 
-void TSingleLogFrame::setIgnorePresetFreqChecked(bool state)
-{
-    FKHRigControlFrame->setIgnorePresetFreqChecked(state);
-}
 
-void TSingleLogFrame::setIgnorePreviousFreqChecked(bool state)
-{
-    FKHRigControlFrame->setIgnorePreviousFreqChecked(state);
-}
-//void TSingleLogFrame::sendIgnoreRunChkBoxState(int num, bool checked)
-//{
-//    GJVQSOLogFrame->setIgnoreRunChkBoxState(num, checked);
-//}
 
 void TSingleLogFrame::invalidateCacheOnDisconnect()
 {

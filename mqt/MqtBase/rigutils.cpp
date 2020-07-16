@@ -543,6 +543,94 @@ QString convertRitFreqToStr(int freq, bool ritKHzFlag)
 {
 
     bool negNum = false;
+
+    QString rfreq = convertFreqToStr(freq);
+
+
+
+
+    if (rfreq[0] == '-')
+    {
+        negNum = true;
+        rfreq = rfreq.remove('-');
+        freq = freq * -1;
+    }
+
+    if (ritKHzFlag)
+    {
+        if (freq < 9)
+        {
+            rfreq = QString("+00.00");
+            return rfreq;
+        }
+
+        if (freq < 1000)
+        {
+            rfreq.prepend("00.");
+        }
+        else if (freq < 10000)
+        {
+            rfreq.insert(1, '.').prepend('0');
+
+        }
+        else if (freq >= 10000)
+        {
+            rfreq.insert(2, '.');
+        }
+    }
+    else
+    {
+        if (freq < 9)
+        {
+            rfreq = QString("+0.00");
+            return rfreq;
+        }
+        if (freq < 1000)
+        {
+            rfreq.prepend(("0."));
+        }
+        if (freq >= 1000)
+        {
+            rfreq.insert(1, '.');
+        }
+
+    }
+
+
+    if (negNum)
+    {
+        rfreq = rfreq.prepend('-');
+    }
+    else
+    {
+        rfreq = rfreq.prepend('+');
+    }
+
+    if (ritKHzFlag)
+    {
+
+        rfreq = rfreq.mid(0,6);  // get rid of tens digit
+    }
+    else
+    {
+        rfreq = rfreq.mid(0,5);  // get rid of tens digit
+    }
+
+    return rfreq;
+
+}
+
+
+
+/*
+// modified for tens khz
+// if tensKHz is true - support +/- 99KHz
+// false support +/- 9KHz
+
+QString convertRitFreqToStr(int freq, bool ritKHzFlag)
+{
+
+    bool negNum = false;
     if (freq == 0 && freq <= 9)  // not interested in Hz
     {
         if (ritKHzFlag)
@@ -608,6 +696,7 @@ QString convertRitFreqToStr(int freq, bool ritKHzFlag)
     return rfreq;
 
 }
+*/
 
 // remove hundreds hz and hz from freq for cluster display
 QString removeHundredHzAndHzDigits(QString f)
