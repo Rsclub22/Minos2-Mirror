@@ -12,6 +12,7 @@
 #include "base_pch.h"
 #include "ProfileEnums.h"
 #include "clustercommon.h"
+#include "bandmapcommon.h"
 //----------------------------------------------------------------------------
 extern QString defaultLayoutName();
 

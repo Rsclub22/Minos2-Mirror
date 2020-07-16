@@ -121,8 +121,12 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToBandmap(BaseContestLog *, Callsign, QString, QString, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString, QString, QString)));
 
-    connect( bandmapView, SIGNAL( contextMenuSelected( const QPoint&, const QPoint& ) ), this, SLOT( on_contextMenuSelected( const QPoint&, const QPoint& ) ) );
+    connect(bandmapView, SIGNAL( contextMenuSelected( const QPoint&, const QPoint& ) ), this, SLOT( on_contextMenuSelected( const QPoint&, const QPoint& ) ) );
+    connect(bandmapView, SIGNAL(newZoomlevel(int)), this, SLOT(on_newZoomlevel(int)));
+
     connect (ui->filtersPushBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
+
+
 
     checkNewFilters = new QTimer(this);
     connect (checkNewFilters, SIGNAL(timeout()), this, SLOT(checkSavedFilters()));
@@ -143,6 +147,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     bearingAction = new QAction(tr("Set &Bearing"), this);
     logAction = new QAction(tr("Send &Log"), this);
     memoryAction = new QAction(tr("Send &Memory"), this);
+    saveZoomLevel = new QAction(tr("Save ZoomLevel"), this);
+    readSavedZoomLevel = new QAction(tr("Read Saved ZoomLevel"), this);
     clearSpotAction = new QAction(tr("Clear &Spot"), this);
     clearAllSpotsAction = new QAction(tr("Clear All Spots"), this);
 
@@ -152,6 +158,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     spotsMenu->addAction(bearingAction);
     spotsMenu->addAction(logAction);
     spotsMenu->addAction(memoryAction);
+    spotsMenu->addAction(saveZoomLevel);
+    spotsMenu->addAction(readSavedZoomLevel);
     spotsMenu->addAction(clearSpotAction);
     spotsMenu->addAction(clearAllSpotsAction);
 
@@ -172,6 +180,9 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect( bearingAction, SIGNAL( triggered() ), this, SLOT(on_bearingActionSelected()) );
     connect( logAction, SIGNAL( triggered() ), this, SLOT(on_logActionSelected()) );
     connect( memoryAction, SIGNAL( triggered() ), this, SLOT(on_memoryActionSelected()) );
+    connect( saveZoomLevel, SIGNAL( triggered() ), this, SLOT(on_saveZoomLevelActionSelected()) );
+    connect( readSavedZoomLevel, SIGNAL( triggered() ), this, SLOT(on_readZoomLevelActionSelected()) );
+
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(on_clearSpotActionSelected()) );
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(on_clearAllSpotsActionSelected()) );
 
@@ -630,7 +641,19 @@ void BandmapClientFrame::context_clearSpotActionSelected()
 }
 
 
+void BandmapClientFrame::on_saveZoomLevelActionSelected()
+{
+    int level = bandmapView->getDialZoomLevel();
+    saveBandmapZoomLevel(level);
+}
 
+void BandmapClientFrame::on_readZoomLevelActionSelected()
+{
+    int zoomLevel = readBandmapZoomLevel();
+    bandmapView->setBandmapZoom(zoomLevel);
+
+
+}
 
 void BandmapClientFrame::setContest(BaseContestLog *c)
 {
@@ -649,6 +672,9 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 
+        int zoomLevel = readBandmapZoomLevel();     // set zoom to saved zoomlevel
+        bandmapView->setBandmapZoom(zoomLevel);
+        setZoomLevelLabelText(zoomLevel);
 
         QString bandplanLimits = readBandmapFreqLimit(contestBandStr, contestModeStr);
 
@@ -2015,4 +2041,50 @@ bool BandmapClientFrame::readTuneAddBandMapSetting()
     config.endGroup();
 
     return state;
+}
+
+
+
+void BandmapClientFrame::saveBandmapZoomLevel(int &level)
+{
+    if (contestBand == -1)
+    {
+        trace(QString("BandmapFreqDial - Error, set Bandmap zoom contestband = %1").arg(contestBand));
+        return;
+    }
+
+    BandmapZoomLevelIdAndNames bandmapId;
+    TContestApp::getContestApp()->loggerBundle.setIntProfile(bandmapId.getStartZoomLevelId(contestBand), level);
+
+}
+
+
+int BandmapClientFrame::readBandmapZoomLevel()
+{
+    if (contestBand == -1)
+    {
+        return dialData::MAX_ZOOM_LEVEL;
+    }
+
+    BandmapZoomLevelIdAndNames bandmapId;
+    int zoomLevel;
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( bandmapId.getStartZoomLevelId(contestBand), zoomLevel );
+    return zoomLevel;
+
+
+}
+
+void BandmapClientFrame::on_newZoomlevel(int level)
+{
+    setZoomLevelLabelText(level);
+}
+
+void BandmapClientFrame::setZoomLevelLabelText(int level)
+{
+    QString levStr = QString::number(level);
+    if (level < 10)
+    {
+        levStr.prepend('0');
+    }
+    ui->zoomLevelLabel->setText(QString("Zoom - %1").arg(levStr));
 }

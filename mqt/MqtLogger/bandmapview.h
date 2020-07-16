@@ -82,11 +82,15 @@ public:
     void scrollBandmapCenterToFreq(qint64 freq);
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
 
+    int getDialZoomLevel();
+    void setBandmapZoom(int level);
+
 
 
 signals:
 
     void contextMenuSelected(const QPoint&, const QPoint&);
+    void newZoomlevel(int);
 
 protected slots:
     void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles) override;
@@ -193,6 +197,7 @@ private:
     void assembleCqMsg(int row, QString& markerMsg);
     int dialCursorWithinViewport(qint64 freq);
     bool matchDistance(int sourceRow);
+
 };
 
 #endif // BANDMAPVIEW_H

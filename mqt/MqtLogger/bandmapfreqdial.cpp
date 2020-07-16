@@ -10,6 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+
 #include "bandmapfreqdial.h"
 
 #include <QFontMetrics>
@@ -34,6 +35,7 @@ BandmapFreqDial::BandmapFreqDial(int _width, int _height):
 
 {
     changeBoundingRect(dialHeight, dialWidth);
+
 }
 
 void BandmapFreqDial::onFontChanged(QFont cf)
@@ -637,3 +639,7 @@ void BandmapFreqDial::setFreqOperatingInfo(const QString _contestBandStr, const 
     }
 
 }
+
+
+
+
