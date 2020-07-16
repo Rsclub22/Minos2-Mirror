@@ -2462,7 +2462,7 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
 {
 
     int retCode = 0;
-    logMessage(QString("getAndSendMode, vfo = $1").arg(vfoToStr(vfo)));
+    logMessage(QString("getAndSendMode, vfo = %1").arg(vfoToStr(vfo)));
 
     if (radio)
     {
@@ -2598,7 +2598,7 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
             retCode = radio->setMode(vfo, mCode);
             if (retCode == Rig_OK)
             {
-                logMessage(QString("SetMode: changed! Mode = %1 , vfo = %2").arg(convertModeToQString(mCode)));
+                logMessage(QString("SetMode: changed! Mode = %1 , vfo = %2").arg(convertModeToQString(mCode)).arg(vfoToStr(vfo)));
 
             }
             else
@@ -2683,7 +2683,7 @@ void RigControlMainWindow::getRitSupportStatus()
     if (radio != nullptr)
     {
 
-        ritMaxKHzFreq = radio->getMaxRitFreq(rigCap.rigModelNumber);
+        ritMaxKHzFreq = radio->getMaxRitFreq(setupRadio->currentRadio.rigModelNumber);
         logMessage(QString("Rit MaxFreq = %1").arg(ritMaxKHzFreq));
         if (ritMaxKHzFreq != 0)
         {
@@ -2702,7 +2702,7 @@ void RigControlMainWindow::getRitSupportStatus()
             if (rigCap.supportGetRit)
             {
                 // Does radio support getting Rit Freq?
-                radioSupGetRit = radio->supportReadRit(rigCap.rigModelNumber);
+                radioSupGetRit = radio->supportReadRit(setupRadio->currentRadio.rigModelNumber);
                 logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(radioSupGetRit ? "True" : "False"));
 
             }
@@ -2710,7 +2710,7 @@ void RigControlMainWindow::getRitSupportStatus()
             if (rigCap.supportSetRit)
             {
                 // Does radio support setting Rit Freq?
-                radioSupSetRit = radio->supportWriteRit(rigCap.rigModelNumber);
+                radioSupSetRit = radio->supportWriteRit(setupRadio->currentRadio.rigModelNumber);
                 logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(radioSupSetRit ? "True" : "False"));
 
             }
@@ -2734,7 +2734,7 @@ void RigControlMainWindow::getRitSupportStatus()
 
             if (rigCap.supportSetRitState)
             {
-                radioSupSetRitState = radio->supportWriteRitState(rigCap.rigModelNumber);
+                radioSupSetRitState = radio->supportWriteRitState(setupRadio->currentRadio.rigModelNumber);
                 logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupSetRitState ? "True" : "False"));
 
             }
@@ -2742,7 +2742,7 @@ void RigControlMainWindow::getRitSupportStatus()
             if (rigCap.supportGetRitState)
             {
                 // Does radio support getting Rit on/off state?
-                radioSupGetRitState = radio->supportReadRitState(rigCap.rigModelNumber);
+                radioSupGetRitState = radio->supportReadRitState(setupRadio->currentRadio.rigModelNumber);
                 logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
 
             }
