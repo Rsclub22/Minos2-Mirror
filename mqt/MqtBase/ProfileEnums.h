@@ -66,8 +66,22 @@ enum LOGGERPROFILE {
     elpDefaultFilterDistance_3_4GHz,
     elpDefaultFilterDistance_5_6GHz,
     elpDefaultFilterDistance_10GHz,
+
+
+    elpBandmapStartZoomLevel_50MHz,
+    elpBandmapStartZoomLevel_70MHz,
+    elpBandmapStartZoomLevel_144MHz,
+    elpBandmapStartZoomLevel_432MHz,
+    elpBandmapStartZoomLevel_1296MHz,
+    elpBandmapStartZoomLevel_2300MHz,
+    elpBandmapStartZoomLevel_3_4GHz,
+    elpBandmapStartZoomLevel_5_6GHz,
+    elpBandmapStartZoomLevel_10GHz,
+
     elpContestStartIgnorePresetFreq,
     elpContestChangeIgnorePreviousFreq
+
+
 
 };
 enum PRELOADPROFILE {eppSession, eppCurrent, eppDefSession};

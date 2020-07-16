@@ -72,6 +72,13 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QLabel" name="zoomLevelLabel">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
