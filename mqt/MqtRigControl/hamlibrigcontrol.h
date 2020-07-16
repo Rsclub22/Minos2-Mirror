@@ -85,6 +85,7 @@ public:
     int setRitState(VFO vfo, bool state) override;
     int getRitState(VFO vfo, bool& state) override;
     int clearRit(VFO vfo) override;
+    int getMaxRitFreq(int rigNumber) override;
 
     int setConfigurationParameter(CONFIG_PARAM cfgparam, QString value) override;
     int getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value) override;
@@ -109,7 +110,8 @@ public:
     QString convertVfoQStr(vfo_t vfo);
 
 
-    private:
+
+private:
 
 
     hamlib_port_t myport;

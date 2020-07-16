@@ -1112,6 +1112,14 @@ bool OmnirigControl::supportWriteRitState(int rigModelNumber)
     return rig->IsParamWriteable(OmniRig::PM_RIT0);
 }
 
+
+int OmnirigControl::getMaxRitFreq(int rigModelNumber)
+{
+    Q_UNUSED(rigModelNumber);
+
+    return 9990;
+}
+
 int OmnirigControl::setConfigurationParameter(CONFIG_PARAM cfgparam, QString value)
 {
     Q_UNUSED(cfgparam)

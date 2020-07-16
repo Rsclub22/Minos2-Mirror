@@ -591,9 +591,10 @@ void RotControlFrame::setRotatorList()
 
 void RotControlFrame::setRotatorState(const QString &s)
 {
+
+
        traceMsg("Set Rotator State = " + s);
        // split the message
-
        QStringList sl = s.split(':');
 
        if (sl.count() < 3)
@@ -694,6 +695,9 @@ void RotControlFrame::setRotatorState(const QString &s)
            rotError = false;
            rotConnected = false;
        }
+
+
+
 }
 
 void RotControlFrame::setRotatorAntennaName(const QString &s)

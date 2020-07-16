@@ -143,7 +143,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     mgmModes = config.value("MGM_Modes/MgmModes", "").toStringList();
     //config.endGroup();
 
-    maxRitFreq = 9999;
+    ritMaxKHzFreq = MAX_RITFREQ;
     ritKHzFlag = false;
 
     if (appName.length() > 0)
@@ -1524,24 +1524,31 @@ void RigControlMainWindow::getRadioInfo()
         {
 
             bool ritStatus = false;
-            retCode = getRitRadioStatus(curVfo, &ritStatus);
-            if (retCode < 0)
+            if (radioSupGetRitState)
             {
-                //error
-                logMessage(QString("Get radioInfo: Get RIT state error").arg(QString::number(retCode)));
-                radioError(retCode, tr("Request RIT State"));
-            }
-            else
-            {
-                if (ritStatus != radioRitOn)
+                retCode = getRitRadioStatus(curVfo, &ritStatus);
+                if (retCode < 0)
                 {
-                    radioRitOn = ritStatus;
-                    logMessage(QString("Get radioInfo: Radio Rit Status = %1").arg(radioRitOn ? "On" : "Off"));
-                    ritIndicatorToggle(radioRitOn);
-                    sendRadioRitStatusLogger(radioRitOn);
+                    //error
+                    logMessage(QString("Get radioInfo: Get RIT state error").arg(QString::number(retCode)));
+                    radioError(retCode, tr("Request RIT State"));
+                }
+                else
+                {
+                    if (ritStatus != radioRitOn)
+                    {
+                        radioRitOn = ritStatus;
+                        logMessage(QString("Get radioInfo: Radio Rit Status = %1").arg(radioRitOn ? "On" : "Off"));
+                        ritIndicatorToggle(radioRitOn);
+                        sendRadioRitStatusLogger(radioRitOn);
+                    }
+
                 }
 
+
             }
+
+
 
         }
 
@@ -2666,6 +2673,8 @@ void RigControlMainWindow::clearSupportRitFlags()
     radioSupSetRitState = false;
     radioRitOn = false;
     ritEnable = false;
+    ritKHzFlag = false;
+    ritMaxKHzFreq = MAX_RITFREQ;
 }
 
 void RigControlMainWindow::getRitSupportStatus()
@@ -2674,54 +2683,76 @@ void RigControlMainWindow::getRitSupportStatus()
     if (radio != nullptr)
     {
 
-        if (rigCap.supportGetRit)
+        ritMaxKHzFreq = radio->getMaxRitFreq(rigCap.rigModelNumber);
+        logMessage(QString("Rit MaxFreq = %1").arg(ritMaxKHzFreq));
+        if (ritMaxKHzFreq != 0)
         {
-            // Does radio support getting Rit Freq?
-            radioSupGetRit = radio->supportReadRit(rigCap.rigModelNumber);
-            logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(radioSupGetRit ? "True" : "False"));
 
-        }
-
-        if (rigCap.supportSetRit)
-        {
-            // Does radio support setting Rit Freq?
-            radioSupSetRit = radio->supportWriteRit(rigCap.rigModelNumber);
-            logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(radioSupSetRit ? "True" : "False"));
-
-        }
-
-        if (radioSupSetRit)
-        {
-            ritEnable = readRitEnableChk();
-            logMessage(QString("Get Rit Support - Rit Enabled = %1").arg(ritEnable ? "True" : "False"));
-            if (ritEnable)
+            if (ritMaxKHzFreq <= MAX_RITFREQ)
             {
-                ui->ritEnableChk->setCheckState(Qt::Checked);
+                ritKHzFlag = false;
             }
             else
             {
-                ui->ritEnableChk->setCheckState(Qt::Unchecked);
+                ritKHzFlag = true;      // rx rit > +/-10Khz
             }
 
+            sendMaxRitFreqLogger();
+
+            if (rigCap.supportGetRit)
+            {
+                // Does radio support getting Rit Freq?
+                radioSupGetRit = radio->supportReadRit(rigCap.rigModelNumber);
+                logMessage(QString("Get Rit Support Status - getRit support is  = %1").arg(radioSupGetRit ? "True" : "False"));
+
+            }
+
+            if (rigCap.supportSetRit)
+            {
+                // Does radio support setting Rit Freq?
+                radioSupSetRit = radio->supportWriteRit(rigCap.rigModelNumber);
+                logMessage(QString("Get Rit Support Status - setRit support is  = %1").arg(radioSupSetRit ? "True" : "False"));
+
+            }
+
+            if (radioSupSetRit)
+            {
+                ritEnable = readRitEnableChk();
+                logMessage(QString("Get Rit Support - Rit Enabled = %1").arg(ritEnable ? "True" : "False"));
+                if (ritEnable)
+                {
+                    ui->ritEnableChk->setCheckState(Qt::Checked);
+                }
+                else
+                {
+                    ui->ritEnableChk->setCheckState(Qt::Unchecked);
+                }
+
+            }
+
+            // Does radio support turning Rit on/off
+
+            if (rigCap.supportSetRitState)
+            {
+                radioSupSetRitState = radio->supportWriteRitState(rigCap.rigModelNumber);
+                logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupSetRitState ? "True" : "False"));
+
+            }
+
+            if (rigCap.supportGetRitState)
+            {
+                // Does radio support getting Rit on/off state?
+                radioSupGetRitState = radio->supportReadRitState(rigCap.rigModelNumber);
+                logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
+
+            }
+
+
         }
-
-        // Does radio support turning Rit on/off
-
-        if (rigCap.supportSetRitState)
+        else
         {
-            radioSupSetRitState = radio->supportWriteRitState(rigCap.rigModelNumber);
-            logMessage(QString("Get Rit Support Status - set Rit on/off support is  = %1").arg(radioSupSetRitState ? "True" : "False"));
-
+            logMessage(QString("Read Rit Max Freq = 0, disable Rit"));
         }
-
-        if (rigCap.supportGetRitState)
-        {
-            // Does radio support getting Rit on/off state?
-            radioSupGetRitState = radio->supportReadRitState(rigCap.rigModelNumber);
-            logMessage(QString("Get Rit Support Status - Rit On/Off state support is  = %1").arg(radioSupGetRitState ? "True" : "False"));
-
-        }
-
 
     }
     else
@@ -3001,6 +3032,7 @@ int RigControlMainWindow::setRitFreq(vfo_t vfo, shortfreq_t ritFreq)
 int  RigControlMainWindow::getRitRadioStatus(VFO vfo, bool *status)
 {
     logMessage(QString("Get Rit RadioStatus"));
+
     cmdLockOn();
     bool s;
     int retCode = 0;
@@ -3666,6 +3698,17 @@ void RigControlMainWindow::sendRitEnableStatus(bool status)
     }
 }
 
+
+void RigControlMainWindow::sendMaxRitFreqLogger()
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send RitMaxFreq = %1 to logger").arg(ritMaxKHzFreq));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setRitMaxKHzFreq(psname, ritMaxKHzFreq);
+        msg->rigCache.publish();
+    }
+}
 
 void RigControlMainWindow::onLaunchSetup()
 {

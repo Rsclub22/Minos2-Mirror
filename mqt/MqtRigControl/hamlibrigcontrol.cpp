@@ -749,6 +749,13 @@ bool HamlibRigControl::supportReadRitState(int rigNumber)
     return false;
 }
 
+int HamlibRigControl::getMaxRitFreq(int rigNumber)
+{
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    return static_cast<int>(myRig->caps->max_rit);
+}
+
 /*************** PTT Control  ********************************/
 
 

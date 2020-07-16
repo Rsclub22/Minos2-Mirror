@@ -109,10 +109,9 @@ public:
 
     void closeContest();
 
-    void setIgnorePresetFreqFlag(bool status, PubSubName psn);
-    void setIgnorePreviousFreqFlag(bool status, PubSubName psn);
-    void setIgnorePresetFreqChecked(bool state);
-    void setIgnorePreviousFreqChecked(bool state);
+
+
+
 
 signals:
     void selectRadio(QString, QString);
@@ -271,9 +270,7 @@ private:
     double getStepFreqFromComboText(const QString step);
     void clearFreqInputFocus();
     bool readIgnorePresetFreqFlag();
-    void saveIgnorePresetFreqFlag(bool state);
     bool readIgnorePreviousFreqFlag();
-    void saveIgnorePreviousFreqFlag(bool state);
     void setRitMaxKHzFreq(int maxRitFreq);
 };
 

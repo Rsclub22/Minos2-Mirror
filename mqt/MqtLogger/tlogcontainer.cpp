@@ -2225,44 +2225,29 @@ TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
 
 void TLogContainer::onIgnorePreviousFreqChecked(bool checked)
 {
-    for (int i = 0; i < ui->ContestPageControl->count(); i++)
-    {
-        QWidget *w = ui->ContestPageControl->widget(i);
-        TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
-        f->setIgnorePreviousFreqChecked(checked);
-    }
+    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeIgnorePreviousFreq, checked);
+
 }
 
 void TLogContainer::onIgnorePresetFreqChecked(bool checked)
 {
-    for (int i = 0; i < ui->ContestPageControl->count(); i++)
-    {
-        QWidget *w = ui->ContestPageControl->widget(i);
-        TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
-        f->setIgnorePresetFreqChecked(checked);
-    }
+    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestStartIgnorePresetFreq, checked);
+
 }
 
 bool TLogContainer::readIgnorePreviousFreqFlag()
 {
 
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
-
-    QSettings config(fileName, QSettings::IniFormat);
-    bool state = config.value("FreqFlags/IgnorePreviousFreq", false).toBool();
-
+    bool state;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeIgnorePreviousFreq, state );
     return state;
 }
 
 bool TLogContainer::readIgnorePresetFreqFlag()
 {
 
-    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
-
-
-    QSettings config(fileName, QSettings::IniFormat);
-    bool state = config.value("FreqFlags/IgnorePresetFreq", false).toBool();
-
+    bool state;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestStartIgnorePresetFreq, state );
     return state;
 }
 

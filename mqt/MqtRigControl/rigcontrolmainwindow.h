@@ -144,7 +144,7 @@ private:
     bool mgmModeFlag;
     QStringList  mgmModes;
     ShortFreq rRitFreq;
-    int maxRitFreq;
+    int ritMaxKHzFreq;
     bool ritKHzFlag;
     int curVol;
     int curSignalStrength = 0;
@@ -339,6 +339,7 @@ private:
     void processRxFrequencyForDisplay();
 
     int getAndSendVfo();
+    void sendMaxRitFreqLogger();
 private slots:
 
     void onStdInRead(QString);

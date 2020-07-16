@@ -323,7 +323,7 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Default Distance when creating a new contest</string>
+            <string>Default Distance when creating a new contest, you can change the distance during a contest, using the Filter Button.</string>
            </property>
           </widget>
          </item>
