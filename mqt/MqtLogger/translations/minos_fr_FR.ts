@@ -178,16 +178,12 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="489"/>
         <source>Please confirm you want to delete all the spots in the bandmap?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous vraiment supprimer tous les Spots de Bandmap?</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1723"/>
         <source> - Mouse in frame, updates paused</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please confirm you want to delete all the spots in the bandmap1?</source>
-        <translation type="vanished">Voulez-vous vraiment supprimer tous les Spots de Bandmap?</translation>
+        <translation> - Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1543"/>
@@ -208,10 +204,6 @@
         <location filename="../bandmapclientframe.cpp" line="1640"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
-    </message>
-    <message>
-        <source>Bandmap - %1Mouse in frame, updates paused</source>
-        <translation type="vanished">Bandmapr - %1 Souris dans le cadre, mises à jour suspendues</translation>
     </message>
 </context>
 <context>
@@ -258,7 +250,7 @@ Le mode calculé est%6
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="24"/>
         <source>Cluster/Bandmap Default Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance par défaut de Cluster / Bandmap</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="45"/>
@@ -353,21 +345,18 @@ Le mode calculé est%6
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="336"/>
         <source>Bandmap General</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap général</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="348"/>
         <source>Add Spot to Bandmap Tuning Tolerance khz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cluster/Bandmap Filter Configure</source>
-        <translation type="vanished">Configurer le filtre de Cluster / Bandmap</translation>
+        <translatorcomment>???</translatorcomment>
+        <translation>Ajouter Spot à Bandmap: tolérance de réglage (Khz) </translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="15"/>
         <source>Cluster/Bandmap Configure</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer Cluster/Bandmap</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="92"/>
@@ -895,11 +884,7 @@ Le mode calculé est%6
     <message>
         <location filename="../clusterclientframe.cpp" line="1751"/>
         <source> - Mouse in frame, updates paused</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cluster - %1Mouse in frame, updates paused</source>
-        <translation type="vanished">Cluster - %1 Souris dans le cadre, mises à jour suspendues</translation>
+        <translation> - Souris dans le cadre, mises à jour suspendues</translation>
     </message>
 </context>
 <context>
@@ -2345,10 +2330,6 @@ Non - Ignorer les modifications</translation>
         <location filename="../rigcontrolframe.cpp" line="673"/>
         <source>Off</source>
         <translation>Éteinte</translation>
-    </message>
-    <message>
-        <source>Error Receiving Bandlist!</source>
-        <translation type="vanished">Erreur lors de la réception de la liste de bandes!</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1192"/>
@@ -4074,22 +4055,22 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tlogcontainer.cpp" line="439"/>
         <source>Cluster/Bandmap configuration...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration de Cluster / Bandmap ...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="441"/>
         <source>Radio</source>
-        <translation type="unfinished">Radio</translation>
+        <translation>Radio</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="444"/>
         <source>Contest Start - Ignore Preset Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Début du concours - Ignorer la fréquence prédéfinie </translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="452"/>
         <source>Contest Change - Ignore Previous Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Changement de concours - Ignorer la fréquence précédente </translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="459"/>
@@ -4125,10 +4106,6 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <location filename="../tlogcontainer.cpp" line="438"/>
         <source>WSJT-X link configuration...</source>
         <translation>Configuration de la liaison WSJT-X...</translation>
-    </message>
-    <message>
-        <source>Cluster/Bandmap Filter configuration...</source>
-        <translation type="vanished">Configurer le filtre de Cluster / Bandmap ...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="460"/>

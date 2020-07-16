@@ -409,7 +409,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="585"/>
         <source>Vfo:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vfo:</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="609"/>
@@ -1144,7 +1144,11 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
 Please add bands or transverters to
 these radio definitions:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>&lt;Context&gt;&gt;??</translatorcomment>
+        <translation>Pour que Minos fonctionne mieux avec les radios,
+Veuillez ajouter des bandes ou des convertisseurs à
+ces définitions radio:
+%1   </translation>
     </message>
 </context>
 <context>

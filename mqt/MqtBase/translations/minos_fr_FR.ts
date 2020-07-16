@@ -380,52 +380,52 @@
     <message>
         <location filename="../profiles.cpp" line="102"/>
         <source>Add to Bandmap tuning tolerance</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: Ajouter à la tolérance de réglage  </translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="104"/>
         <source>Default Filter Distance 50MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance de filtre par défaut (50 MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="105"/>
         <source>Default Filter Distance 70MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance de filtre par défaut (70 MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="106"/>
         <source>Default Filter Distance 144MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance de filtre par défaut (144 MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="107"/>
         <source>Default Filter Distance 432MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance de filtre par défaut (432 MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="108"/>
         <source>Default Filter Distance 1296MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance de filtre par défaut (1296 MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="109"/>
         <source>Default Filter Distance 2300MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance de filtre par défaut (2300 MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="110"/>
         <source>Default Filter Distance 3.4GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance de filtre par défaut (3,4 GHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="111"/>
         <source>Default Filter Distance 5.6GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance de filtre par défaut (5,6 GHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="112"/>
         <source>Default Filter Distance 10GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance de filtre par défaut (10 GHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="118"/>
