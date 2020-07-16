@@ -247,6 +247,9 @@ private:
     QAction* bearingAction;
     QAction* logAction;
     QAction* memoryAction;
+    QAction* saveZoomLevel;
+    QAction* readSavedZoomLevel;
+
     QAction* clearSpotAction;
     QAction* clearAllSpotsAction;
 
@@ -302,6 +305,9 @@ private:
 
     void radioStatusIndicatorToggle(bool on);
     bool checkContestBandMatch(double curFreq);
+    void saveBandmapZoomLevel(int &level);
+    int readBandmapZoomLevel();
+    void setZoomLevelLabelText(int level);
 protected:
 
 
@@ -350,6 +356,9 @@ private slots:
      void on_zoomIn();
      void on_zoomOut();
 
+     void on_saveZoomLevelActionSelected();
+     void on_readZoomLevelActionSelected();
+     void on_newZoomlevel(int level);
 };
 
 

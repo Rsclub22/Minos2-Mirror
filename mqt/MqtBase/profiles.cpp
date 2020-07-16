@@ -11,6 +11,7 @@
 #include "MLogFile.h"
 #include "INIFile.h"
 #include "profiles.h"
+
 //#include "ScreenConfigFile.h"
 QString defaultLayoutName()
 {
@@ -113,6 +114,16 @@ BundleFile::BundleFile( PROFILES p )
 
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestStartIgnorePresetFreq, "contestStartIgnorePresetFreq", false, QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), false)));
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestChangeIgnorePreviousFreq, "contestChangeIgnorePreviousFreq", false, QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), false)));
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_50MHz , "bandmapStartZoomLevel_50MHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 50MHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 50MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_70MHz , "bandmapStartZoomLevel_70MHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 70MHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 70MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_144MHz , "bandmapStartZoomLevel_144MHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 144MHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 144MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_432MHz , "bandmapStartZoomLevel_432MHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 432MHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 432MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_1296MHz , "bandmapStartZoomLevel_1296MHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 1296MHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 1296MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_2300MHz , "bandmapStartZoomLevel_2300MHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 2300MHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 2300MHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_3_4GHz , "bandmapStartZoomLevel_3_4GHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 3.4GHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 3.4GHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_5_6GHz , "bandmapStartZoomLevel_5_6GHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 5.6GHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 5.6GHz"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_10GHz , "bandmapStartZoomLevel_10GHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 10GHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 10GHz"), false ) ) );
 
 
         break;
