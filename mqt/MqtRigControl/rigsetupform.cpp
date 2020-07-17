@@ -917,7 +917,7 @@ void RigSetupForm::setUseRigctldCheckbox(bool checked)
 
 void RigSetupForm::onStartMinosRigCtldChkBox(bool /*selected*/)
 {
-    bool checked = ui->useRigCtldChkBox->isChecked();
+    bool checked = ui->startMinosRigCtldChkBox->isChecked();
     if(radioData->startMinosRigCtld != checked)
     {
         radioData->startMinosRigCtld = checked;
