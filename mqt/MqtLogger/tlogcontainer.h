@@ -116,6 +116,7 @@ private:
 
     QAction *ignorePresetFreqContestStart = nullptr;
     QAction *ignorePreviousFreqContestChange = nullptr;
+    QAction *restoreContestModeContestChange = nullptr;
 
     QAction *newAction(const char *text, QMenu *m, const char *atype );
     QMenu *newMenu(QMenu *m, const char *text);
@@ -190,6 +191,7 @@ private:
     void updateLayoutsMenu();
     bool readIgnorePreviousFreqFlag();
     bool readIgnorePresetFreqFlag();
+    bool readRestoreContestModeFlag();
 private slots:
     void CancelClick();
     void HelpActionExecute();
@@ -258,6 +260,8 @@ private slots:
     void ClusterBandmapConfigActionExecute();
     void onIgnorePreviousFreqChecked(bool);
     void onIgnorePresetFreqChecked(bool);
+    void onRestorContestModeChecked(bool checked);
+
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

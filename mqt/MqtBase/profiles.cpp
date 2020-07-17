@@ -114,6 +114,7 @@ BundleFile::BundleFile( PROFILES p )
 
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestStartIgnorePresetFreq, "contestStartIgnorePresetFreq", false, QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), false)));
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestChangeIgnorePreviousFreq, "contestChangeIgnorePreviousFreq", false, QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), false)));
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestChangeRestoreContestMode, "contestChangeRestoreContestMode", false, QT_TR_NOOP("Contest Change - Restore Contest Mode"), QT_TR_NOOP("Contest Change - Restore Contest Mode"), false)));
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_50MHz , "bandmapStartZoomLevel_50MHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 50MHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 50MHz"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_70MHz , "bandmapStartZoomLevel_70MHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 70MHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 70MHz"), false ) ) );
