@@ -125,6 +125,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_5_6GHz , "bandmapStartZoomLevel_5_6GHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 5.6GHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 5.6GHz"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapStartZoomLevel_10GHz , "bandmapStartZoomLevel_10GHz", dialData::START_ZOOM_LEVEL, QT_TR_NOOP("Bandmap Start Zoomlevel 10GHz"), QT_TR_NOOP("Bandmap Start Zoomlevel 10GHz"), false ) ) );
 
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapTurnOffOperatingFreqStrip , "bandmapTurnOffOperatingFreqStrip", false, QT_TR_NOOP("Bandmap Turn Off Operating Freq Colour Strip"), QT_TR_NOOP("Bandmap Turn Off Operating Freq Colour Strip"), false ) ) );
 
         break;
     case epPRELOADPROFILE:

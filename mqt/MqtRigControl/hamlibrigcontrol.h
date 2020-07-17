@@ -87,8 +87,8 @@ public:
     int clearRit(VFO vfo) override;
     int getMaxRitFreq(int rigNumber) override;
 
-    int setConfigurationParameter(CONFIG_PARAM cfgparam, QString value) override;
-    int getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value) override;
+    //int setConfigurationParameter(CONFIG_PARAM cfgparam, QString value) override;
+    //int getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value) override;
 
 
     static void setTraceCommsFlag(bool value);
