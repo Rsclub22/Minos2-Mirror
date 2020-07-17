@@ -12,7 +12,7 @@
 
 
 #include "bandmapfreqdial.h"
-
+#include "ContestApp.h"
 #include <QFontMetrics>
 
 
@@ -256,7 +256,11 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
 
     ModeFreqDetail<double> listOfFreqs;
 
-    if (operatingPlanOk)
+    bool operatingFreqFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTurnOffOperatingFreqStrip, operatingFreqFlag );
+
+
+    if (operatingPlanOk && !operatingFreqFlag)
     {
         int freqOk = operatingFreq->getFreqLimitsForDial(listOfFreqs, contestBandStr, contestModeStr);
         if (freqOk == FREQ_OK)

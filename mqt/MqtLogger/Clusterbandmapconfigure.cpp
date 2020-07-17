@@ -70,6 +70,11 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
       ui->addBandmapTuningTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE);
 
       ui->addBandmapTuningTolSpinBox->setValue(addBandmapTuningTolerance);
+
+      // get bandmap Operating Freq Flag
+      bool operatingFreqFlag;
+      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTurnOffOperatingFreqStrip, operatingFreqFlag );
+      ui->operatingFreqChkBox->setCheckState(operatingFreqFlag ? Qt::Checked : Qt::Unchecked);
 }
 
 ClusterBandmapConfigure::~ClusterBandmapConfigure()
@@ -118,6 +123,22 @@ void ClusterBandmapConfigure::onAccepted()
         TContestApp::getContestApp()->loggerBundle.setIntProfile(elpAddBandMapTuningTolerance, ui->addBandmapTuningTolSpinBox->value());
 
     }
+
+    bool savedOperatingFreqFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTurnOffOperatingFreqStrip, savedOperatingFreqFlag );
+    bool checkedOperatingFreqFlag = false;
+
+    if (ui->operatingFreqChkBox->checkState() == Qt::Checked)
+    {
+        checkedOperatingFreqFlag = true;
+    }
+
+    if (savedOperatingFreqFlag != checkedOperatingFreqFlag)
+    {
+        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapTurnOffOperatingFreqStrip,  checkedOperatingFreqFlag);
+
+    }
+
 }
 
 void ClusterBandmapConfigure::onRejected()
