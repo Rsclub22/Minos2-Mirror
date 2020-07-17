@@ -456,6 +456,14 @@ void TLogContainer::setupMenus()
     radioMenu->addAction(ignorePreviousFreqContestChange);
     ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
 
+    restoreContestModeContestChange = new QAction(this);
+    restoreContestModeContestChange->setText(QT_TR_NOOP("Contest Change - Restore Contest Mode"));
+    connect(restoreContestModeContestChange, SIGNAL(triggered(bool)),
+            this, SLOT(onRestorContestModeChecked(bool)));
+    restoreContestModeContestChange->setCheckable(true);
+    radioMenu->addAction(restoreContestModeContestChange);
+    restoreContestModeContestChange->setChecked(readRestoreContestModeFlag());
+
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
@@ -2248,6 +2256,19 @@ bool TLogContainer::readIgnorePresetFreqFlag()
 
     bool state;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestStartIgnorePresetFreq, state );
+    return state;
+}
+
+void TLogContainer::onRestorContestModeChecked(bool checked)
+{
+    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeRestoreContestMode, checked);
+
+}
+
+bool TLogContainer::readRestoreContestModeFlag()
+{
+    bool state;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeRestoreContestMode, state );
     return state;
 }
 
