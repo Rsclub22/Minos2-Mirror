@@ -848,6 +848,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
     // save current freq as notifyRigChange writes incorrect contest freq to this frame
     // with a contest change
     sSavedCurFreq = sCurFreq;
+    sSavedCurMode = sCurMode;
     trace(QString("on_ContestPageChanged:: save current freq = %1, for frame = %2").arg(sSavedCurFreq).arg(ct->name.getValue() + " uuid " + ct->uuid));
     LogContainer->sendDM->notifyRigChanges();
     LogContainer->sendDM->notifyRotChanges();

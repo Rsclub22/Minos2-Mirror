@@ -828,8 +828,6 @@ void RigControlFrame::on_ContestPageChanged()
 
         onContestPageChangedFlag = true;
 
-        qDebug() << "contest change mode = " << mode;
-
         setRadioName(radNam, mode);
 
 
@@ -1166,7 +1164,21 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                     selRadioDetails = allRadioDetails[selRadioName];
                     trace(QString("setRadioName:: Select Radio - radio details for %1 in allRadioDetails").arg(radioName));
                     createActiveBandList(selRadioDetails.getBandList());
-                    emit selectRadio(radioName, mode);  // send radio and mode.
+
+                    bool restoreModeFlag = false;
+                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeRestoreContestMode, restoreModeFlag );
+
+                    if (onContestPageChangedFlag && !restoreModeFlag)
+                    {
+                        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+                        emit selectRadio(radioName, tslf->sSavedCurMode);  // send radio and previous mode.
+                    }
+                    else
+                    {
+                        emit selectRadio(radioName, mode);
+                    }
+
 
                     setRadioFreq();
 

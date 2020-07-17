@@ -112,6 +112,7 @@ public:
     QString sSavedCurFreq;
     int curRitFreq;
     QString sCurMode;
+    QString sSavedCurMode;
 
     bool isBandMapLoaded();
     bool bandMapLoaded;

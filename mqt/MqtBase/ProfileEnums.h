@@ -80,6 +80,7 @@ enum LOGGERPROFILE {
 
     elpContestStartIgnorePresetFreq,
     elpContestChangeIgnorePreviousFreq,
+    elpContestChangeRestoreContestMode,
 
     elpBandMapTurnOffOperatingFreqStrip
 
