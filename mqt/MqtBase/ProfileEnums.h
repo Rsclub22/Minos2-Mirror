@@ -79,7 +79,9 @@ enum LOGGERPROFILE {
     elpBandmapStartZoomLevel_10GHz,
 
     elpContestStartIgnorePresetFreq,
-    elpContestChangeIgnorePreviousFreq
+    elpContestChangeIgnorePreviousFreq,
+
+    elpBandMapTurnOffOperatingFreqStrip
 
 
 

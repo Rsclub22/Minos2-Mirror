@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>861</width>
-    <height>330</height>
+    <width>870</width>
+    <height>339</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterBandmapConfiguretabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="clusterBandmapTab">
       <attribute name="title">
@@ -343,16 +343,16 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Add Spot to Bandmap Tuning Tolerance khz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QSpinBox" name="addBandmapTuningTolSpinBox"/>
              </item>
             </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Add Spot to Bandmap Tuning Tolerance khz</string>
+             </property>
+            </widget>
            </item>
            <item>
             <spacer name="horizontalSpacer">
@@ -368,6 +368,13 @@
             </spacer>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="operatingFreqChkBox">
+           <property name="text">
+            <string>Turn Off Operating Freq Colour Band</string>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="verticalSpacer">
