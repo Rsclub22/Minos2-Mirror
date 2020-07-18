@@ -41,8 +41,8 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , clusterServerConnected(false)
     , runButtonOnFlag(false)
     , radioOffRunFreq(false)
-    , callsignEnterTextFreq("00000000000")
-    , curFreq("00000000000")
+    , callsignEnterTextFreq(ZEROFREQ)
+    , curFreq(ZEROFREQ)
 
 
 {
@@ -893,7 +893,7 @@ void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
     }
     else
     {
-        callsignEnterTextFreq = "00000000000";
+        callsignEnterTextFreq = ZEROFREQ;
     }
 
 }
@@ -2842,7 +2842,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
     if (validCall)
     {
         logData.freq = callsignEnterTextFreq;
-        callsignEnterTextFreq = "00000000000";
+        callsignEnterTextFreq = ZEROFREQ;
 
         doGJVCancelButton_clicked();
 
