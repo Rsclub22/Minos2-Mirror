@@ -923,7 +923,7 @@ void RigSetupForm::onStartMinosRigCtldChkBox(bool /*selected*/)
         radioData->startMinosRigCtld = checked;
         setStartMinosRigctldCheckbox(checked);
         radioData->startMinosRigCtld = checked;
-        rigCtldItemsVisible(checked);
+        //rigCtldItemsVisible(checked);
     }
 
     radioValueChanged = true;
