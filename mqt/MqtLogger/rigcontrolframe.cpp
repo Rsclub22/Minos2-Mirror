@@ -49,7 +49,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     radioConnected(false),
     radioError(false),
     freqEditOn(false),
-    curFreq(memDefData::DEFAULT_FREQ),
+    curFreq(ZEROFREQ),
     curFStepButtonsFreq(0),
     curMode(""),
     ritEnable(false),
@@ -1213,61 +1213,160 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
 void RigControlFrame::setRadioFreq()
 {
+    traceMsg(QString("setRadioFreq: enter function"));
 
     if (selRadioDetails.getBandList().isEmpty())
     {
         setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Radio Bandlist is empty!"));
-        trace(QString("setRadioFreq:: Radio Bandlist is empty!"));
+        traceMsg(QString("setRadioFreq:: Radio Bandlist is empty!"));
         sendFreq(NO_BAND_SUPPORT);
         return;
     }
 
-    //createActiveBandList(selRadioDetails.getBandList());
 
     if (listOfBands.isEmpty())
     {
         setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Radio has no available bands"));
-        trace(QString("setRadioFreq:: Error No available bands!"));
+        traceMsg(QString("setRadioFreq:: Error No available bands!"));
         sendFreq(NO_BAND_SUPPORT);
         return;
-
-
-
     }
 
     setRadioBandWarning(QString(""));
-    trace(QString("setRadioFreq: list of bands for radio %1 is %2").arg(selRadioName.toString()).arg(selRadioDetails.getBandList()));
+    traceMsg(QString("setRadioFreq: list of bands for radio %1 is %2").arg(selRadioName.toString()).arg(selRadioDetails.getBandList()));
 
     if (ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-       //And we want to select the frequency based on the contest band
-       TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-       trace(QString("setRadioFreq: select frequency"));
-       QString cb = ct->contestBands.getValue().trimmed();
-       trace(QString("setRadioFreq: contest band = %1").arg(cb));
-       BandList &blist = BandList::getBandList();
-       BandInfo bi;
-       bool bandOK = blist.findBand(cb, bi);
-       if (bandOK)
+
+
+       if (onContestPageChangedFlag && curFreq == ZEROFREQ) // is it contest frame starting
        {
+           onContestPageChangedFlag = false;
 
-            for (int i = 0; i < listOfBands.size(); i++)
-            {
-                if (listOfBands[i].band == cb)
-                {
-                    trace(QString("setRadioFreq: found band %1 on radio, set band select").arg(cb));
-                    ui->bandSelCombo->setCurrentIndex(i + 1);
+           traceMsg(QString("setRadioFreq: curFreq default - starting contest"));
 
-                    QString freq;
 
+           ignorePresetFreqFlag = readIgnorePresetFreqFlag();
+           if (ignorePresetFreqFlag)
+           {
+               traceMsg(QString("setRadioFreq: ignoring preset freq"));
+               return;
+           }
+           else
+           {
+               traceMsg(QString("setRadioFreq: using preset freq"));
+           }
+
+           //We want to select the frequency based on the contest band
+
+
+           QString cb = ct->contestBands.getValue().trimmed();
+           traceMsg(QString("setRadioFreq: contest band = %1").arg(cb));
+
+           BandList &blist = BandList::getBandList();
+           BandInfo bi;
+           bool bandOK = blist.findBand(cb, bi);
+           if (bandOK)
+           {
+
+               for (int i = 0; i < listOfBands.size(); i++)
+               {
+                   if (listOfBands[i].band == cb)
+                   {
+                       traceMsg(QString("setRadioFreq: found band %1 on radio, set band select").arg(cb));
+                       ui->bandSelCombo->setCurrentIndex(i + 1);
+
+                       QString freq = listOfBands[i].freq;
+
+                       traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq));
+                       if (checkValidFreq(freq))
+                       {
+                           traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq));
+                           sendFreq(freq);
+
+                       }
+                       else
+                       {
+                           traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq));
+                           sendFreq(freq);
+
+                       }
+
+                       return;
+
+                   }
+
+               }
+           }
+           else
+           {
+               // warn no band for this radio
+               setRadioBandWarning(HtmlFontColour(Qt::red) + tr("No %1 Band found for this radio!").arg(cb));
+               traceMsg(QString("SsetRadioFreq: %1 Band not found on this radio").arg(cb));
+               sendFreq(NO_BAND_SUPPORT);
+           }
+
+
+
+       }
+       else if (onContestPageChangedFlag && curFreq != memDefData::DEFAULT_FREQ)
+       {
+           onContestPageChangedFlag = false;
+
+           QString freq;
+           traceMsg(QString("setRadioFreq: onContestPageChanged and not default curFreq"));
+           TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+           ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
+           if (ignorePreviousFreqFlag)
+           {
+               traceMsg(QString("setRadioFreq: ignorePreviousFreqflag set "));
+               return;
+           }
+           else
+           {
+               freq = tslf->sSavedCurFreq;
+               if (checkValidFreq(freq))
+               {
+                   traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq));
+                   sendFreq(freq);
+                   return;
+               }
+               else
+               {
+                   traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq));
+                   sendFreq(freq);
+               }
+           }
+       }
+    }
+    else
+    {
+        traceMsg(QString("setRadioFreq: contest isn't the current contest!"));
+
+    }
+
+
+}
+
+
+
+
+
+
+/*
+
+
+                    ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
                     if (onContestPageChangedFlag)
                     {
-                        onContestPageChangedFlag = false;
+                        //onContestPageChangedFlag = false;
                         freq = tslf->sSavedCurFreq;
+
                     }
                     else
                     {
                        freq = lastFreq;
+
                     }
 
 
@@ -1298,25 +1397,34 @@ void RigControlFrame::setRadioFreq()
 
                     if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
                     {
-                        ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
-                        if (!ignorePreviousFreqFlag)     // don't return to previous freq when swapping contests
+
+                        if (!ignorePreviousFreqFlag && onContestPageChangedFlag)     // don't return to previous freq when swapping contests
                         {
+                            qDebug() << "send freq ignore previous";
                             sendFreq(freq);
                             trace(QString("setRadioFreq: Set previous freq = %1").arg(QString::number(cf)));
                             if (ui->freqInput->text().toInt() == 0) // if display is zero update display locally
                             {
                                 setFreq(freq);
                             }
+
+                            onContestPageChangedFlag = false;
+                            return;
+
                         }
+
 
                     }
                     else
                     {
                         ignorePresetFreqFlag = readIgnorePresetFreqFlag();
-                        if (!ignorePresetFreqFlag)     // don't go to preset freq
+                        if (!ignorePresetFreqFlag && onContestPageChangedFlag)     // don't go to preset freq
                         {
+                            qDebug() << "send freq ignore preset ";
                             sendFreq(listOfBands[i].freq);
                             trace(QString("setRadioFreq: Set default freq = %1").arg(listOfBands[i].freq));
+                            onContestPageChangedFlag = false;
+                            return;
                         }
 
                     }
@@ -1337,10 +1445,7 @@ void RigControlFrame::setRadioFreq()
 
       }
 
-        trace(QString("setRadioFreq: contest isn't the current contest!"));
-
-
-}
+*/
 
 void RigControlFrame::setRadioList()
 {
@@ -1445,7 +1550,7 @@ void RigControlFrame::setRadioState(QString s)
            ui->bandWarnLabel->setText("");
            if (ui->radioNameSel->currentText() == "")
            {
-               curFreq = "00000000000";
+               curFreq = ZEROFREQ;
                ui->freqInput->setInputMask(maskData::freqMask[curFreq.count() - 4]);
                ui->freqInput->setText(curFreq);
                emit setFreqDisplay(curFreq, legalFreq);
