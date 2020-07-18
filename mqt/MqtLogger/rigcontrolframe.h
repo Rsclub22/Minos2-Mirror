@@ -276,6 +276,7 @@ private:
     void setRitMaxKHzFreq(int maxRitFreq);
     int setBandSelComboIndex(QString band);
     void restoreRadioFreq();
+    void displayFreqOnFreqEditDisplay(QString freq);
 };
 
 

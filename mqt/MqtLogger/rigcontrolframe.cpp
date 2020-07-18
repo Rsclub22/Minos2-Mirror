@@ -513,7 +513,7 @@ void RigControlFrame::noRadioSetFreq(QString f)
 
 void RigControlFrame::setFreq(QString freq)
 {
-    traceMsg(QString("Rigcontrol frame Set Freq: = %1").arg(freq));
+    traceMsg(QString("Set Freq: = %1").arg(freq));
 
     if (freq == "0" && freq == "-1")
     {
@@ -528,17 +528,26 @@ void RigControlFrame::setFreq(QString freq)
     }
     if (freq.count() >= 4)
     {
-        if (!freqEditOn)
-        {
-            trace(QString("setFreq: Display Freq = %1").arg(freq));
-            ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
-            setFreqTextLegalColour(freq, curMode);
-            ui->freqInput->setText(freq);
-            emit setFreqDisplay(freq, legalFreq);
-        }
+        displayFreqOnFreqEditDisplay(freq);
         curFreq = freq;
+        emit setFreqDisplay(freq, legalFreq);
     }
     // an error here?
+
+}
+
+
+void RigControlFrame::displayFreqOnFreqEditDisplay(QString freq)
+{
+
+    if (!freqEditOn)
+    {
+        trace(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(freq));
+        ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
+        setFreqTextLegalColour(freq, curMode);
+        ui->freqInput->setText(freq);
+
+    }
 
 }
 
@@ -1293,7 +1302,7 @@ void RigControlFrame::setRadioFreq()
                        else
                        {
                            traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq));
-                           sendFreq(freq);
+                           //sendFreq(freq);
 
                        }
 
@@ -1333,6 +1342,9 @@ void RigControlFrame::setRadioFreq()
                if (checkValidFreq(freq))
                {
                    traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq));
+
+                   displayFreqOnFreqEditDisplay(freq);
+
                    sendFreq(freq);
 
                    return;
@@ -1340,7 +1352,7 @@ void RigControlFrame::setRadioFreq()
                else
                {
                    traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq));
-                   sendFreq(freq);
+                   //sendFreq(freq);
                }
            }
        }
@@ -1366,6 +1378,7 @@ void RigControlFrame::restoreRadioFreq()
 
         if (freq != ZEROFREQ)
         {
+            disconnectFreq = ZEROFREQ;
             QString cb = ct->contestBands.getValue().trimmed();
             int err = setBandSelComboIndex(cb);
             if (err >= 0 )
@@ -1503,7 +1516,7 @@ void RigControlFrame::setRadioState(QString s)
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);
-                restoreRadioFreq();
+                //restoreRadioFreq();
                 emit radioIsConnected(true);
             }
             else
