@@ -189,6 +189,8 @@ private:
     bool radioError;
     bool freqEditOn;
     QString curFreq;
+    QString lastFreq;
+    QString disconnectFreq;
     double curFStepButtonsFreq;
     QString curMode;
 
@@ -214,7 +216,7 @@ private:
     QTimer *launchRadioSelectTimer;
     int launchRadioSelectCount;
 
-    QString lastFreq;
+
 
     CheckOperatingFreq *operatingFreq;
     bool operatingFreqPlanOk;
@@ -272,6 +274,8 @@ private:
     bool readIgnorePresetFreqFlag();
     bool readIgnorePreviousFreqFlag();
     void setRitMaxKHzFreq(int maxRitFreq);
+    int setBandSelComboIndex(QString band);
+    void restoreRadioFreq();
 };
 
 

@@ -50,6 +50,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     radioError(false),
     freqEditOn(false),
     curFreq(ZEROFREQ),
+    lastFreq(ZEROFREQ),
+    disconnectFreq(ZEROFREQ),
     curFStepButtonsFreq(0),
     curMode(""),
     ritEnable(false),
@@ -1269,6 +1271,9 @@ void RigControlFrame::setRadioFreq()
            if (bandOK)
            {
 
+
+
+
                for (int i = 0; i < listOfBands.size(); i++)
                {
                    if (listOfBands[i].band == cb)
@@ -1309,7 +1314,7 @@ void RigControlFrame::setRadioFreq()
 
 
        }
-       else if (onContestPageChangedFlag && curFreq != memDefData::DEFAULT_FREQ)
+       else if (onContestPageChangedFlag && curFreq != ZEROFREQ)
        {
            onContestPageChangedFlag = false;
 
@@ -1329,6 +1334,7 @@ void RigControlFrame::setRadioFreq()
                {
                    traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq));
                    sendFreq(freq);
+
                    return;
                }
                else
@@ -1348,104 +1354,69 @@ void RigControlFrame::setRadioFreq()
 
 }
 
+// restore after rigcontrol restart
 
+void RigControlFrame::restoreRadioFreq()
+{
+    if (ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
 
+        QString freq = disconnectFreq;
+        traceMsg(QString("restorRadioFreq: restore Freq for this contest"));
 
+        if (freq != ZEROFREQ)
+        {
+            QString cb = ct->contestBands.getValue().trimmed();
+            int err = setBandSelComboIndex(cb);
+            if (err >= 0 )
+            {
 
-
-/*
-
-
-                    ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
-                    if (onContestPageChangedFlag)
-                    {
-                        //onContestPageChangedFlag = false;
-                        freq = tslf->sSavedCurFreq;
-
-                    }
-                    else
-                    {
-                       freq = lastFreq;
-
-                    }
-
-
-                    trace(QString("setRadioFreq: found band %1 on radio, freq %2").arg(cb).arg(freq));
-
-
-                    QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
-                    if (!re.exactMatch(freq))
-                    {
-                        freq = "0";
-                    }
-
-                    double cf = convertStrToFreq(freq);
-                    QString cfstr;
-                    // find band for current freq
-                    for (int i = 0; i < blist.bandList.count(); i++)
-                    {
-                        if (cf >= blist.bandList[i].flow && cf <= blist.bandList[i].fhigh)
-                        {
-                            cfstr = blist.bandList[i].uk;
-                            break;
-                        }
-
-                    }
-
-
-
-
-                    if ((cf > bi.flow && cf < bi.fhigh) && (cb == cfstr))
-                    {
-
-                        if (!ignorePreviousFreqFlag && onContestPageChangedFlag)     // don't return to previous freq when swapping contests
-                        {
-                            qDebug() << "send freq ignore previous";
-                            sendFreq(freq);
-                            trace(QString("setRadioFreq: Set previous freq = %1").arg(QString::number(cf)));
-                            if (ui->freqInput->text().toInt() == 0) // if display is zero update display locally
-                            {
-                                setFreq(freq);
-                            }
-
-                            onContestPageChangedFlag = false;
-                            return;
-
-                        }
-
-
-                    }
-                    else
-                    {
-                        ignorePresetFreqFlag = readIgnorePresetFreqFlag();
-                        if (!ignorePresetFreqFlag && onContestPageChangedFlag)     // don't go to preset freq
-                        {
-                            qDebug() << "send freq ignore preset ";
-                            sendFreq(listOfBands[i].freq);
-                            trace(QString("setRadioFreq: Set default freq = %1").arg(listOfBands[i].freq));
-                            onContestPageChangedFlag = false;
-                            return;
-                        }
-
-                    }
-
-
-                    setRadioBandWarning("");
-
-                    return;
+                if (checkValidFreq(freq))
+                {
+                  traceMsg(QString("restoreRadioFreq: restoring this freq = %1").arg(freq));
+                  sendFreq(freq);
                 }
+                else
+                {
+                   traceMsg(QString("restoreRadioFreq: freq %1 invalid").arg(curFreq));
+                }
+
             }
-            // warn no band for this radio
-            setRadioBandWarning(HtmlFontColour(Qt::red) + tr("No %1 Band found for this radio!").arg(cb));
-            trace(QString("SsetRadioFreq: %1 Band not found on this radio").arg(cb));
-            sendFreq(NO_BAND_SUPPORT);
+            else
+            {
+                traceMsg(QString("restoreRadioFreq: error finding band =  %1, in bandsel combo").arg(cb));
+            }
+
         }
 
-        trace(QString("setRadioFreq: band %1 not found").arg(cb));
+    }
 
-      }
 
-*/
+
+}
+
+
+int RigControlFrame::setBandSelComboIndex(QString band)
+{
+
+
+    if (ui->bandSelCombo->count() > 0)
+    {
+        for (int i = 0; i < ui->bandSelCombo->count(); i++)
+        {
+            if (ui->bandSelCombo->itemText(i) == band)
+            {
+                ui->bandSelCombo->setCurrentIndex(i);
+                return 0;
+            }
+        }
+    }
+
+
+    return -1; //error
+
+
+}
 
 void RigControlFrame::setRadioList()
 {
@@ -1532,6 +1503,7 @@ void RigControlFrame::setRadioState(QString s)
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);
+                restoreRadioFreq();
                 emit radioIsConnected(true);
             }
             else
@@ -1547,7 +1519,10 @@ void RigControlFrame::setRadioState(QString s)
 
            ui->rigState->setText(tr("Disconnected"));
 
+           disconnectFreq = lastFreq;
+
            ui->bandWarnLabel->setText("");
+
            if (ui->radioNameSel->currentText() == "")
            {
                curFreq = ZEROFREQ;
