@@ -1855,24 +1855,28 @@ void BandmapClientFrame::purgeSpots()
 void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq)
 {
     Q_UNUSED(c)
-    traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.fullCall.getValue()).arg(freq).arg(loc).arg(brg));
-    //QString time = QDateTime::currentDateTimeUtc().time().toString("HH:MM");
-    QDateTime time = QDateTime::currentDateTimeUtc();
+    if (!isProtected)
+    {
 
-    QString logBandStr;
-    QString logBandMask;
-    QString logModeStr;
-    QString logModeMask;
+        traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.fullCall.getValue()).arg(freq).arg(loc).arg(brg));
+        //QString time = QDateTime::currentDateTimeUtc().time().toString("HH:MM");
+        QDateTime time = QDateTime::currentDateTimeUtc();
 
-    getBand(bands, freq, logBandStr, logBandMask);
-    getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+        QString logBandStr;
+        QString logBandMask;
+        QString logModeStr;
+        QString logModeMask;
+
+        getBand(bands, freq, logBandStr, logBandMask);
+        getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
 
-    LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
-                                        logModeStr, logModeMask,
-                                        freq.remove('.'), logBandStr, logBandMask,
-                                        true, time, false, false, bandmapSpotType::LOGGED);
-    logSpotQueue.append(spot);
+        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
+                                            logModeStr, logModeMask,
+                                            freq.remove('.'), logBandStr, logBandMask,
+                                            true, time, false, false, bandmapSpotType::LOGGED);
+        logSpotQueue.append(spot);
+    }
 }
 
 
@@ -1897,24 +1901,28 @@ void BandmapClientFrame::setRunOffFreqFlag(QString _runFreq, bool _offRunFreq)
 
 void BandmapClientFrame::setCQFreq()
 {
-    traceMsg(QString("set CQFreq - runFreq %1, runModeOn %2, offRunFreq %3").arg(runFreq).arg(runModeOn ? "True" : "False").arg(offRunFreq ? "True" : "False"));
-    QDateTime time = QDateTime::currentDateTimeUtc();
+    if (!isProtected)
+    {
+        traceMsg(QString("set CQFreq - runFreq %1, runModeOn %2, offRunFreq %3").arg(runFreq).arg(runModeOn ? "True" : "False").arg(offRunFreq ? "True" : "False"));
+        QDateTime time = QDateTime::currentDateTimeUtc();
 
-    QString logBandStr;
-    QString logBandMask;
-    QString logModeStr;
-    QString logModeMask;
+        QString logBandStr;
+        QString logBandMask;
+        QString logModeStr;
+        QString logModeMask;
 
-    QString freq = runFreq.remove('.');
+        QString freq = runFreq.remove('.');
 
-    getBand(bands, freq, logBandStr, logBandMask);
-    getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+        getBand(bands, freq, logBandStr, logBandMask);
+        getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
-    LoggerSpots* spot = new LoggerSpots(Callsign("???"), "", "",
-                                            logModeStr, logModeMask,
-                                            freq, logBandStr, logBandMask,
-                                            false, time, runModeOn, offRunFreq, bandmapSpotType::CQ);
-    logSpotQueue.append(spot);
+        LoggerSpots* spot = new LoggerSpots(Callsign("???"), "", "",
+                                                logModeStr, logModeMask,
+                                                freq, logBandStr, logBandMask,
+                                                false, time, runModeOn, offRunFreq, bandmapSpotType::CQ);
+        logSpotQueue.append(spot);
+    }
+
 
 
 
@@ -1923,49 +1931,57 @@ void BandmapClientFrame::setCQFreq()
 void BandmapClientFrame::setBandmapMarkFreq(QString cs, QString _freq, QString loc, QString brg)
 {
     Q_UNUSED(cs)
-    traceMsg(QString("mark freq add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq).arg(loc).arg(brg));
-    QDateTime time = QDateTime::currentDateTimeUtc();
+    if (!isProtected)
+    {
+        traceMsg(QString("mark freq add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq).arg(loc).arg(brg));
+        QDateTime time = QDateTime::currentDateTimeUtc();
 
-    QString logBandStr;
-    QString logBandMask;
-    QString logModeStr;
-    QString logModeMask;
+        QString logBandStr;
+        QString logBandMask;
+        QString logModeStr;
+        QString logModeMask;
 
-    QString freq = _freq.remove('.');
+        QString freq = _freq.remove('.');
 
-    getBand(bands, freq, logBandStr, logBandMask);
-    getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+        getBand(bands, freq, logBandStr, logBandMask);
+        getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
 
-    LoggerSpots* spot = new LoggerSpots(Callsign("????"), loc, brg,
-                                        logModeStr, logModeMask,
-                                        freq, logBandStr, logBandMask,
-                                        false, time, false, false, bandmapSpotType::MARKED);
-    logSpotQueue.append(spot);
+        LoggerSpots* spot = new LoggerSpots(Callsign("????"), loc, brg,
+                                            logModeStr, logModeMask,
+                                            freq, logBandStr, logBandMask,
+                                            false, time, false, false, bandmapSpotType::MARKED);
+        logSpotQueue.append(spot);
+    }
+
 }
 
 
 void BandmapClientFrame::setBandmapSaveFreq(QString cs, QString _freq, QString loc, QString brg)
 {
 
-    traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq).arg(loc).arg(brg));
-    QDateTime time = QDateTime::currentDateTimeUtc();
+    if (!isProtected)
+    {
+        traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq).arg(loc).arg(brg));
+        QDateTime time = QDateTime::currentDateTimeUtc();
 
-    QString logBandStr;
-    QString logBandMask;
-    QString logModeStr;
-    QString logModeMask;
+        QString logBandStr;
+        QString logBandMask;
+        QString logModeStr;
+        QString logModeMask;
 
-    QString freq = _freq.remove('.');
+        QString freq = _freq.remove('.');
 
-    getBand(bands, freq, logBandStr, logBandMask);
-    getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+        getBand(bands, freq, logBandStr, logBandMask);
+        getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
-    LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
-                                        logModeStr, logModeMask,
-                                        freq, logBandStr, logBandMask,
-                                        false, time, false, false, bandmapSpotType::SAVED);
-    logSpotQueue.append(spot);
+        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
+                                            logModeStr, logModeMask,
+                                            freq, logBandStr, logBandMask,
+                                            false, time, false, false, bandmapSpotType::SAVED);
+        logSpotQueue.append(spot);
+    }
+
 
 }
 
