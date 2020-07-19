@@ -1182,8 +1182,16 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                     if (onContestPageChangedFlag && !restoreModeFlag)
                     {
                         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-
-                        emit selectRadio(radioName, tslf->sSavedCurMode);  // send radio and previous mode.
+                        QString m = tslf->sSavedCurMode;
+                        if (m.contains(':') && m.contains("MGM"))
+                        {
+                            QStringList ml = m.split(':');
+                            if (ml.count() == 2)
+                            {
+                                m = ml[0].trimmed();
+                            }
+                        }
+                        emit selectRadio(radioName, m);  // send radio and previous mode.
                     }
                     else
                     {
