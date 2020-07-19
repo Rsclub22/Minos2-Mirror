@@ -87,6 +87,7 @@ public:
 
 
 
+    void setDialRadioMode(QString mode);
 signals:
 
     void contextMenuSelected(const QPoint&, const QPoint&);

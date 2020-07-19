@@ -1652,6 +1652,9 @@ void BandmapClientFrame::setFreq(QString freq)
 
 }
 
+
+
+
 bool BandmapClientFrame::checkContestBandMatch(double curFreq)
 {
 
@@ -1667,6 +1670,30 @@ bool BandmapClientFrame::checkContestBandMatch(double curFreq)
     }
 
     return false;
+}
+
+
+void BandmapClientFrame::setMode(QString mode)
+{
+
+    if (!mode.isEmpty())
+    {
+        if (mode.contains(':') && mode.contains("MGM"))
+        {
+            QStringList ml = mode.split(':');
+            if (ml.count() == 2)
+            {
+                radioMode = ml[0].trimmed();
+            }
+        }
+        else
+        {
+            radioMode = mode.remove(':').trimmed();
+        }
+
+        bandmapView->setDialRadioMode(radioMode);
+    }
+
 }
 
 void BandmapClientFrame::filterButtonSelected()

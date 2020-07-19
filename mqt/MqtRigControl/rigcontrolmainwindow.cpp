@@ -47,8 +47,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    logRitOn(false),
    supVolume(false),
    supSignalStrength(false),
-   ignorePresetFreq(false),
-   ignorePreviousFreq(false),
    curVfoFrq(0.0),
    curTransVertFrq(0.0),
    mgmModeFlag(false),

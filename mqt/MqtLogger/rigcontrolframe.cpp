@@ -1383,7 +1383,15 @@ void RigControlFrame::restoreRadioFreq()
 
         QString freq = disconnectFreq;
         traceMsg(QString("restorRadioFreq: restore Freq for this contest"));
-
+/*
+        bool state;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeIgnorePreviousFreq, state );
+        if (state)
+        {
+           traceMsg(QString("restoreRadioFreq: Ignore Previous Freq Set, skip restor freq"));
+           return;
+        }
+*/
         if (freq != ZEROFREQ)
         {
             disconnectFreq = ZEROFREQ;
@@ -1524,7 +1532,7 @@ void RigControlFrame::setRadioState(QString s)
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);
-                //restoreRadioFreq();
+                restoreRadioFreq();
                 emit radioIsConnected(true);
             }
             else

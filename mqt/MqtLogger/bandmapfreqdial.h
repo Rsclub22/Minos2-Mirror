@@ -99,6 +99,7 @@ public:
     void setContestBandLimits(double flow, double fhigh);
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
 
+    void setRadioMode(QString mode);
 signals:
     //void dialupdated();
     void zoomUpdated(bool);
@@ -136,6 +137,8 @@ private:
     QString contestModeStr;
     CheckOperatingFreq *operatingFreq;
     bool operatingPlanOk;
+
+    QString radioMode;
 
 
 
