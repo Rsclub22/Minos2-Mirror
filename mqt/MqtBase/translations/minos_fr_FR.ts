@@ -430,67 +430,67 @@
     <message>
         <location filename="../profiles.cpp" line="115"/>
         <source>Contest Start - Ignore Preset Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Début du concours - Ignorer la fréquence prédéfinie</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="116"/>
         <source>Contest Change - Ignore Previous Frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Changement de concours - Ignorer la fréquence précédente</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="117"/>
         <source>Contest Change - Restore Contest Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Changement de concours - Restaurer la mode de concours</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="119"/>
         <source>Bandmap Start Zoomlevel 50MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: niveau de zoom initial (50MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="120"/>
         <source>Bandmap Start Zoomlevel 70MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: niveau de zoom initial (70MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="121"/>
         <source>Bandmap Start Zoomlevel 144MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: niveau de zoom initial (144MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="122"/>
         <source>Bandmap Start Zoomlevel 432MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: niveau de zoom initial (432MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="123"/>
         <source>Bandmap Start Zoomlevel 1296MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: niveau de zoom initial (1296MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="124"/>
         <source>Bandmap Start Zoomlevel 2300MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: niveau de zoom initial (2300MHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="125"/>
         <source>Bandmap Start Zoomlevel 3.4GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: niveau de zoom initial (3,4GHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="126"/>
         <source>Bandmap Start Zoomlevel 5.6GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: niveau de zoom initial (5,6GHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="127"/>
         <source>Bandmap Start Zoomlevel 10GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap: niveau de zoom initial (10GHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="129"/>
         <source>Bandmap Turn Off Operating Freq Colour Strip</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver la bande de couleur de fréquence</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="133"/>
@@ -1974,3 +1974,4 @@ Entrer un autre direction SVP</translation>
     </message>
 </context>
 </TS>
+

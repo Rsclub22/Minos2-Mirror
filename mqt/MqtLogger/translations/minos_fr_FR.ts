@@ -161,12 +161,12 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="150"/>
         <source>Save ZoomLevel</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer le niveau de zoom</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="151"/>
         <source>Read Saved ZoomLevel</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurer le niveau de zoom</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="152"/>
@@ -350,12 +350,12 @@ Le mode calculé est%6
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="326"/>
         <source>Default Distance when creating a new contest, you can change the distance during a contest, using the Filter Button.</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance par défaut en concours nouvelle. Modifier la distance pendant un concours par le bouton &apos;Filtre&apos;.</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="375"/>
         <source>Turn Off Operating Freq Colour Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver la bande de couleur de fréquence</translation>
     </message>
     <message>
         <source>Default Distance when creating a new contest</source>
@@ -370,7 +370,7 @@ Le mode calculé est%6
         <location filename="../Clusterbandmapconfigure.ui" line="353"/>
         <source>Add Spot to Bandmap Tuning Tolerance khz</source>
         <translatorcomment>???</translatorcomment>
-        <translation>Ajouter Spot à Bandmap: tolérance de réglage (Khz) </translation>
+        <translation>Ajouter Spot à Bandmap: Tolérance de réglage (Khz)</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="15"/>
@@ -4081,12 +4081,12 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tlogcontainer.cpp" line="444"/>
         <source>Contest Start - Ignore Preset Frequency</source>
-        <translation>Début du concours - Ignorer la fréquence prédéfinie </translation>
+        <translation>Début du concours - Ignorer la fréquence prédéfinie</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="452"/>
         <source>Contest Change - Ignore Previous Frequency</source>
-        <translation>Changement de concours - Ignorer la fréquence précédente </translation>
+        <translation>Changement de concours - Ignorer la fréquence précédente</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="467"/>
@@ -4126,7 +4126,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tlogcontainer.cpp" line="460"/>
         <source>Contest Change - Restore Contest Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modification du concours - Restaurer le mode concours</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="468"/>
@@ -4969,3 +4969,4 @@ Inclurer le &quot;CQ&quot; ainsi que le type</translation>
     </message>
 </context>
 </TS>
+
