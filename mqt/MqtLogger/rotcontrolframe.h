@@ -67,6 +67,8 @@ public:
 
     void checkConnection();
     void closeContest();
+    void setSupportStopCommandFlag(bool state);
+
 private:
 
     QShortcut *nudgeRight1;
@@ -88,6 +90,7 @@ private:
     bool rot_right_button_status;
     bool rotConnected = false;
     bool supportCwCcwCmd = true;
+    bool supportStopCommand = true;
     bool rotError = false;
 
     QString lastConnectStat;

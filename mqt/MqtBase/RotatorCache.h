@@ -76,6 +76,7 @@ public:
     }
 
     void rotatorPresetsClearDirty();
+    void setSupportStopCommand(const PubSubName &name, bool state);
 };
 
 #endif // ROTATORCACHE_H

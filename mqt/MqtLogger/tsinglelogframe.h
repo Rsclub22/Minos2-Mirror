@@ -301,6 +301,7 @@ public:
     bool getTuneAddBandMapSetting();
 
 
+    void on_SupportStopCommand(bool state);
 };
 
 #endif // TSINGLELOGFRAME_H

@@ -179,16 +179,7 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
         my_rot->state.rotport.parm.serial.stop_bits = selectedAntenna.stopbits;
         my_rot->state.rotport.parm.serial.parity = getSerialParityCode(selectedAntenna.parity);
         my_rot->state.rotport.parm.serial.handshake = getSerialHandshakeCode(selectedAntenna.handshake);
-        //if (my_rot->state.rotport.parm.serial.handshake == RIG_HANDSHAKE_NONE)
-       // {
-       //     my_rot->state.rotport.parm.serial.dtr_state = RIG_SIGNAL_ON;
-       //     my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_ON;
-       // }
-       // else
-       // {
-       //     my_rot->state.rotport.parm.serial.dtr_state = RIG_SIGNAL_UNSET;
-       //     my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
-       // }
+
 
         if (my_rot->state.rotport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
         {
@@ -295,6 +286,7 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
         }
 
         int min_az = 0; // hamlib V4.0 sets min azimuth to -180 for Yaesu rotators, override to 0.
+        int max_az = 360;
 
         if (capsList[i]->max_az == 450)
         {
@@ -310,14 +302,34 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
             min_az = capsList[i]->min_az;
         }
 
+        if (key == "Green Heron RT-21")
+        {
+            max_az = 360;
+        }
+        else
+        {
+            max_az = capsList[i]->max_az;
+        }
+/*
+        trace(QString("Manufacturer = %1, Model Name = %2, RotModel = %3, move = %4, stop = %5, minAz = %6, maxAz = %7")
+              .arg(capsList[i]->mfg_name)
+              .arg(capsList[i]->model_name)
+              .arg(capsList[i]->rot_model)
+              .arg(capsList[i]->move ? "True" : "False")
+              .arg(capsList[i]->stop  ? "True" : "False")
+              .arg(capsList[i]->min_az)
+              .arg(capsList[i]->max_az));
+*/
+
 
         (*rotatorsList)[key] = RotCapabilities(capsList[i]->rot_model,
                                                port_type,
                                                capsList[i]->mfg_name,
                                                capsList[i]->model_name,
                                                capsList[i]->move != nullptr ? true : false,
+                                               capsList[i]->stop != nullptr ? true : false,
                                                min_az,
-                                               capsList[i]->max_az,
+                                               max_az,
                                                RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial,
                                                RotCapConstants::PollData::pollDataOn,
                                                true);
@@ -449,6 +461,9 @@ int HamlibRotControl::stop_rotation()
 
     return retCode;
 }
+
+
+
 
 // request current bearing from controller
 
