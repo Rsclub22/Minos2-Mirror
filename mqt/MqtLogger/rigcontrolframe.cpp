@@ -1173,7 +1173,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                 if (allRadioDetails.contains(selRadioName))
                 {
                     selRadioDetails = allRadioDetails[selRadioName];
-                    trace(QString("setRadioName:: Select Radio - radio details for %1 in allRadioDetails").arg(radioName));
+                    traceMsg(QString("setRadioName:: Select Radio - radio details for %1 in allRadioDetails").arg(radioName));
                     createActiveBandList(selRadioDetails.getBandList());
 
                     bool restoreModeFlag = false;
@@ -1181,21 +1181,26 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
                     if (onContestPageChangedFlag && !restoreModeFlag)
                     {
+                        traceMsg(QString("setRadioName: onContestPageChangedFlag = %1, restoreModeFlag = %2").arg(onContestPageChangedFlag ? "true" : "false").arg(restoreModeFlag ? "true" : "false"));
                         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
                         QString m = tslf->sSavedCurMode;
+                        traceMsg(QString("setRadioName: SavedCurMode = %1").arg(tslf->sSavedCurMode));
                         if (m.contains(':') && m.contains("MGM"))
                         {
                             QStringList ml = m.split(':');
                             if (ml.count() == 2)
                             {
-                                m = ml[0].trimmed();
+                                m = ml[0].remove(':').trimmed();
                             }
+
                         }
+                        traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName).arg(m));
                         emit selectRadio(radioName, m);  // send radio and previous mode.
                     }
                     else
                     {
-                        emit selectRadio(radioName, mode);
+                        traceMsg(QString("setRadioName: Not onContestPageChange = %1, radioName = %2, mode =%3").arg(onContestPageChangedFlag ? "true" : "false").arg(radioName).arg(mode));
+                        emit selectRadio(radioName, mode.remove(':'));
                     }
 
 
