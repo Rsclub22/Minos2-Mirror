@@ -74,6 +74,7 @@ public:
     int rotate_to_bearing(const int bearing) override;
     int rotateCClockwise(const int speed) override;
     int rotateClockwise(const int speed)  override;
+
     int stop_rotation() override;
 
     void set_rotatorSpeed(int speed)  override;

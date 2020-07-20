@@ -48,6 +48,7 @@ public:
     int rotInit(srotParams &selectedAntenna) override;
     int request_bearing() override;
     int rotate_to_bearing(const int bearing) override;
+
     int stop_rotation() override;
 
     // these rotate methods are unused

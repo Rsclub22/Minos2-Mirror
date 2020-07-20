@@ -465,6 +465,7 @@ int RotatorMainWindow::openRotator()
     if (rotator == nullptr)
     {
         logMessage(QString("Failed to create rotator from factory"));
+        return OPEN_FAILED;
     }
     connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
     connect(rotator, SIGNAL(traceCommsMsg(QString)), this, SLOT(logMessage(QString)));
@@ -976,14 +977,6 @@ void RotatorMainWindow::upDateAntenna()
               closeRotator();
             }
 
-            //if (setupAntenna->currentAntenna.rotatorModelNumber == 0)
-            //{
-
-            //    QMessageBox::critical(this, tr("Antenna Error"), tr("Please configure a antenna name and rotator model"));
-            //    return;
-            //}
-
-
 
             if (openRotator() != OPEN_OK)
             {
@@ -1015,6 +1008,8 @@ void RotatorMainWindow::upDateAntenna()
                 cwCCWControlVisible(setupAntenna->currentAntenna.simCwCcwCmd);
             }
 
+
+
             RotCapabilities rotCap = rotFactory->supported_rotators()->value(setupAntenna->currentAntenna.rotatorModel);
             if (rotCap.enableSelectDisplayDial && !setupAntenna->currentAntenna.showCompassDialFlag)
             {
@@ -1023,6 +1018,17 @@ void RotatorMainWindow::upDateAntenna()
             else
             {
                 setCompassDialVisible(true);
+            }
+
+            if (rotCap.supportStopCommand)
+            {
+                supportStopCommandFlag = true;
+                ui->stopButton->setVisible(true);
+            }
+            else
+            {
+                supportStopCommandFlag = false;
+                ui->stopButton->setVisible(false);
             }
 
 
@@ -1045,17 +1051,20 @@ void RotatorMainWindow::upDateAntenna()
                trace(QString("Update Antenna - send to logger - maxAzimuth = %1, minAzimuth = %2, simulate CwCcwCmd = %3").arg(QString::number(setupAntenna->currentAntenna.max_azimuth)).arg(QString::number(setupAntenna->currentAntenna.min_azimuth)).arg(setupAntenna->currentAntenna.supportCwCcwCmd  ? "True" : "False"));
                msg->rotatorCache.setMaxAzimuth(psname, setupAntenna->currentAntenna.max_azimuth);
                msg->rotatorCache.setMinAzimuth(psname, setupAntenna->currentAntenna.min_azimuth);
-               msg->rotatorCache.publish();
+
                if (setupAntenna->currentAntenna.supportCwCcwCmd)           // want to use simCwCccwCmd?
                {
                    msg->rotatorCache.setCwCcwCmdEnable(psname, true);
-                   msg->rotatorCache.publish();
+
                }
                else
                {
                    msg->rotatorCache.setCwCcwCmdEnable(psname, setupAntenna->currentAntenna.simCwCcwCmd);
-                   msg->rotatorCache.publish();
+
                }
+
+               msg->rotatorCache.setSupportStopCommand(psname, supportStopCommandFlag);
+               msg->rotatorCache.publish();
 
            }
 

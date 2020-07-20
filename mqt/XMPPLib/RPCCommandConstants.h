@@ -128,6 +128,7 @@ static const QString rotCwCcwCmdEnable ("RotCwCcwCmdEnable");
 static const QString rotatorSelectAntennaName ("SelectAntennaName");
 static const QString rotatorMaxAzimuth  ("MaxAzimuth");
 static const QString rotatorMinAzimuth  ("MinAzimuth");
+static const QString supportStopCommand ("SupportStopCommand");
 
 // Rig Control
 static const QString rigControlApp         ("mqtRigControl");

@@ -310,6 +310,10 @@ void RotatorCache::setCwCcwCmdEnable(const PubSubName &name, bool cwCcwCmdEnable
 {
     rotDetails[name].setCwCcwCmdEnable(cwCcwCmdEnable);
 }
+void RotatorCache::setSupportStopCommand(const PubSubName &name, bool state)
+{
+    rotDetails[name].setSupportStopCommand(state);
+}
 void RotatorCache::setRotatorPresets(const PubSubName &name, const QString &p)
 {
     PubSubName n(name);
