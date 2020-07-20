@@ -813,6 +813,12 @@ void RotControlFrame::setRotatorMinAzimuth(const int minAz)
 
 }
 
+void RotControlFrame::setSupportStopCommandFlag(bool state)
+{
+    traceMsg((QString("Set Support Stop Command Flag = %1").arg(state ?  "True" : "False" )));
+    supportStopCommand = state;
+}
+
 
 void RotControlFrame::setCwCcwCmdEnable(bool s)
 {

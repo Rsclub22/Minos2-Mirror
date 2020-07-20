@@ -147,6 +147,7 @@ private:
     bool stopCmdflag = false;
     bool rotCmdflag = false;
     bool reqBearCmdflag = false;
+    bool supportStopCommandFlag = false;
 
     bool traceCommsFlag =  false;
 

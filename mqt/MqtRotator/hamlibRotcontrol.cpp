@@ -179,16 +179,7 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
         my_rot->state.rotport.parm.serial.stop_bits = selectedAntenna.stopbits;
         my_rot->state.rotport.parm.serial.parity = getSerialParityCode(selectedAntenna.parity);
         my_rot->state.rotport.parm.serial.handshake = getSerialHandshakeCode(selectedAntenna.handshake);
-        //if (my_rot->state.rotport.parm.serial.handshake == RIG_HANDSHAKE_NONE)
-       // {
-       //     my_rot->state.rotport.parm.serial.dtr_state = RIG_SIGNAL_ON;
-       //     my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_ON;
-       // }
-       // else
-       // {
-       //     my_rot->state.rotport.parm.serial.dtr_state = RIG_SIGNAL_UNSET;
-       //     my_rot->state.rotport.parm.serial.rts_state = RIG_SIGNAL_UNSET;
-       // }
+
 
         if (my_rot->state.rotport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
         {
@@ -311,11 +302,13 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
         }
 
 
+
         (*rotatorsList)[key] = RotCapabilities(capsList[i]->rot_model,
                                                port_type,
                                                capsList[i]->mfg_name,
                                                capsList[i]->model_name,
                                                capsList[i]->move != nullptr ? true : false,
+                                               capsList[i]->stop != nullptr ? true : false,
                                                min_az,
                                                capsList[i]->max_az,
                                                RotCapConstants::SelectDisplayCompass::disableSelectDisplayDial,
@@ -449,6 +442,9 @@ int HamlibRotControl::stop_rotation()
 
     return retCode;
 }
+
+
+
 
 // request current bearing from controller
 

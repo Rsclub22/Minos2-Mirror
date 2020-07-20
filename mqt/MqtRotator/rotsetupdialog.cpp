@@ -247,6 +247,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
         }
 
 
+
         if (availAntData[tabNum]->supportCwCcwCmd)
         {
             antennaTab[tabNum]->setSimCW_CCWcmdVisible(false);
@@ -258,6 +259,13 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
             antennaTab[tabNum]->setSimCW_CCWcmdChecked(availAntData[tabNum]->simCwCcwCmd);
 
         }
+
+        if (rotCap.supportStopCommand)
+        {
+            antennaTab[tabNum]->setSimCW_CCWcmdVisible(false);
+
+        }
+
 
         if (rotatorFactory->supported_rotators()->value(availAntData[tabNum]->rotatorModel).enableSelectDisplayDial)
         {

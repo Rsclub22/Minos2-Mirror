@@ -202,6 +202,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                 networkDataEntryVisible(false);
             }
 
+
             if (antennaData->supportCwCcwCmd)
             {
                 setSimCW_CCWcmdVisible(false);
@@ -214,6 +215,15 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                 setSimCW_CCWcmdChecked(true);
                 antennaData->simCwCcwCmd = true;
             }
+
+           if (rotCap.supportStopCommand)
+           {
+
+                setSimCW_CCWcmdVisible(false);
+
+           }
+
+
 
             if (rotCap.enableSelectDisplayDial)
             {
