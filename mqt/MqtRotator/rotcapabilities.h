@@ -19,6 +19,7 @@ public:
                     QString rotatorManufacturer_ = "",
                     QString rotatorModelName_ = "",
                     bool supportCwCCwCmd_ = false,
+                    bool supportStopCommand = true,
                     int minRot_ = COMPASS_MIN0,
                     int maxRot_ = COMPASS_MAX360,
                     bool enableSelectDisplayDial_= RotCapConstants::disableSelectDisplayDial,
@@ -31,6 +32,7 @@ public:
     QString rotatorManufacturer;
     QString rotatorModelName;
     bool supportCwCCwCmd;
+    bool supportStopCommand;
     int minRot;
     int maxRot;
     bool enableSelectDisplayDial;

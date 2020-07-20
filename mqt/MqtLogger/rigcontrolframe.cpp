@@ -1131,7 +1131,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 {
 
 
-    traceMsg(QString("setRadioName: Set RadioName = %1, mode = %2, contest = %3").arg(radNam).arg(mode).arg(ct?ct->uuid:""));
+    traceMsg(QString("setRadioName: Set RadioName = %1, mode = %2, contest = %3").arg(radNam).arg(mode).arg(ct ? ct->uuid : ""));
 
 
     if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
@@ -1169,7 +1169,17 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
             }
             else
             {
+                TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+                trace(QString("setRadioName: contest = %1, radioName = %2, contestMode = %3, savedMode = %4")
+                      .arg(ct ? ct->uuid : "")
+                      .arg(radioName)
+                      .arg(mode)
+                      .arg(tslf->sSavedCurMode));
+
                 selRadioName = PubSubName(radioName);
+
+
                 if (allRadioDetails.contains(selRadioName))
                 {
                     selRadioDetails = allRadioDetails[selRadioName];
@@ -1179,10 +1189,12 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                     bool restoreModeFlag = false;
                     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeRestoreContestMode, restoreModeFlag );
 
+
+
                     if (onContestPageChangedFlag && !restoreModeFlag)
                     {
                         traceMsg(QString("setRadioName: onContestPageChangedFlag = %1, restoreModeFlag = %2").arg(onContestPageChangedFlag ? "true" : "false").arg(restoreModeFlag ? "true" : "false"));
-                        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
                         QString m = tslf->sSavedCurMode;
                         traceMsg(QString("setRadioName: SavedCurMode = %1").arg(tslf->sSavedCurMode));
                         if (m.contains(':') && m.contains("MGM"))

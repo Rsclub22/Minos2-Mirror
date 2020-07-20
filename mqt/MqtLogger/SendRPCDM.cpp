@@ -580,6 +580,11 @@ void TSendDM::notifyRotChanges()
                         trace(QString("SendRPC Rotator set cwCcwCmdEnable %1").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False"));
                         tslf->on_cwCcwCmdEnable(selDetail.cwCcwCmdEnable().getValue());
                     }
+                    if (selDetail.supportStopCommand().isDirty())
+                    {
+                        trace(QString("SendRPC Rotator set supportStopCommand %1").arg(selDetail.supportStopCommand().getValue() ? "True" :"False"));
+                        tslf->on_SupportStopCommand(selDetail.supportStopCommand().getValue());
+                    }
                     selDetail.clearDirty();
 
                 }

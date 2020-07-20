@@ -49,7 +49,9 @@ void PstRotControl::register_rotators(RotatorFactory::Rotators *rotatorsList, in
     (*rotatorsList)["PSTRotator"] = RotCapabilities(rotatorId, RotCapConstants::PortType::network,
                                                            "", "PSTRotator",
                                                            false,
-                                                           COMPASS_MIN0, COMPASS_MAX360,
+                                                           true,        // support stop command
+                                                           COMPASS_MIN0,
+                                                           COMPASS_MAX360,
                                                            RotCapConstants::PollData::pollDataOn,
                                                            RotCapConstants::SelectDisplayCompass::enableSelectDisplayDial,
                                                            false);
@@ -248,6 +250,8 @@ int PstRotControl::stop_rotation()
 
     return retCode;
 }
+
+
 
 
 

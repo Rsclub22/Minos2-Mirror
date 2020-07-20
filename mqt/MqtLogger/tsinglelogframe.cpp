@@ -2014,6 +2014,14 @@ void TSingleLogFrame::on_RotatorMinAzimuth(int s)
     }
 }
 
+void TSingleLogFrame::on_SupportStopCommand(bool state)
+{
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+        FKHRotControlFrame->setSupportStopCommandFlag(state);
+    }
+}
+
 void TSingleLogFrame::on_cwCcwCmdEnable(bool s)
 {
     if (this == LogContainer->getCurrentLogFrame())
