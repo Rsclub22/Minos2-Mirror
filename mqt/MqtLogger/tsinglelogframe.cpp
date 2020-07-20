@@ -1668,6 +1668,7 @@ void TSingleLogFrame::on_SetMode(QString m)
             sCurMode = m;
             FKHRigControlFrame->setMode(m);
             GJVQSOLogFrame->modeSentFromRig(m);
+            bandmapControlFrame->setMode(m);
         }
     }
 }

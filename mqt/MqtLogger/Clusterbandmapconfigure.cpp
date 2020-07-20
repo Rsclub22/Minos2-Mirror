@@ -75,6 +75,11 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
       bool operatingFreqFlag;
       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTurnOffOperatingFreqStrip, operatingFreqFlag );
       ui->operatingFreqChkBox->setCheckState(operatingFreqFlag ? Qt::Checked : Qt::Unchecked);
+
+      // get bandmap Follow Radio Mode Operating Freq Flag
+      bool followRadioModeFlag;
+      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip, followRadioModeFlag );
+      ui->modeOperatingFreqChkBox->setCheckState(followRadioModeFlag ? Qt::Checked : Qt::Unchecked);
 }
 
 ClusterBandmapConfigure::~ClusterBandmapConfigure()
@@ -124,8 +129,11 @@ void ClusterBandmapConfigure::onAccepted()
 
     }
 
+
+    // operating freq strip on/off flag
     bool savedOperatingFreqFlag;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTurnOffOperatingFreqStrip, savedOperatingFreqFlag );
+
     bool checkedOperatingFreqFlag = false;
 
     if (ui->operatingFreqChkBox->checkState() == Qt::Checked)
@@ -136,6 +144,24 @@ void ClusterBandmapConfigure::onAccepted()
     if (savedOperatingFreqFlag != checkedOperatingFreqFlag)
     {
         TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapTurnOffOperatingFreqStrip,  checkedOperatingFreqFlag);
+
+    }
+
+    // follow radioMode flag
+    bool savedFollowRadioModeFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip, savedFollowRadioModeFlag);
+
+
+    bool checkedFollowRadioModeFlag = false;
+
+    if (ui->modeOperatingFreqChkBox->checkState() == Qt::Checked)
+    {
+        checkedFollowRadioModeFlag = true;
+    }
+
+    if (savedFollowRadioModeFlag != checkedFollowRadioModeFlag)
+    {
+        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip,  checkedFollowRadioModeFlag);
 
     }
 

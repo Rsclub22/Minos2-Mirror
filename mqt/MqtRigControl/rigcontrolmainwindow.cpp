@@ -47,8 +47,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    logRitOn(false),
    supVolume(false),
    supSignalStrength(false),
-   ignorePresetFreq(false),
-   ignorePreviousFreq(false),
    curVfoFrq(0.0),
    curTransVertFrq(0.0),
    mgmModeFlag(false),
@@ -1192,38 +1190,31 @@ int RigControlMainWindow::openRadio()
 
     logMessage(QString("Connect Status after init = %1").arg(radio->getRigConnected() ? "yes" : "no"));
 
-    bool test = false;
 
-    if (!test)      // ******************* for test
+    // let's see if we can get freq from radio and confirm comms
+    if (radio->getRigConnected())
     {
-        // let's see if we can get freq from radio and confirm comms
-        if (radio->getRigConnected())
+
+        int retCode = Rig_OK;
+        showStatusMessage(tr("Attempting to communicate with radio - %1").arg(setupRadio->currentRadio.radioName));
+        //delay(1);
+        retCode = radio->getFrequency(VFO::CURRENT_VFO, rfrequency);
+
+
+        if (retCode < Rig_OK)
         {
-
-            int retCode = Rig_OK;
-            showStatusMessage(tr("Attempting to communicate with radio - %1").arg(setupRadio->currentRadio.radioName));
-            //delay(1);
-            retCode = radio->getFrequency(VFO::CURRENT_VFO, rfrequency);
-
-
-            if (retCode < Rig_OK)
-            {
-                logMessage(QString("Open Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
-                radioError(retCode, tr("Test Radio Connection\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
-                //sendStatusToLogDisConnected();
-                return OPEN_FAILED;
-            }
-            else
-            {
-                radioCommsOK = true;
-            }
-
+            logMessage(QString("Open Radio: Test Communication - Get Freq error, code = %1").arg(QString::number(retCode)));
+            radioError(retCode, tr("Test Radio Connection\n\nMinos tried to read the radio frequency,\nbut nothing was received from the radio.\n\nPlease check connections and/or settings.\nSome radios/interfaces may require Force DTR or Force RTS to be set High, to power the interface."));
+            //sendStatusToLogDisConnected();
+            return OPEN_FAILED;
         }
+        else
+        {
+            radioCommsOK = true;
+        }
+
     }
-    else
-    {
-        radioCommsOK = true;
-    }
+
 
 
 
