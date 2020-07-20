@@ -216,7 +216,7 @@ void rotSetupForm::setupRotatorModel(QString rotatorModel)
                 antennaData->simCwCcwCmd = true;
             }
 
-           if (rotCap.supportStopCommand)
+           if (!rotCap.supportStopCommand)
            {
 
                 setSimCW_CCWcmdVisible(false);

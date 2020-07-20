@@ -260,7 +260,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
 
         }
 
-        if (rotCap.supportStopCommand)
+        if (!rotCap.supportStopCommand)
         {
             antennaTab[tabNum]->setSimCW_CCWcmdVisible(false);
 
@@ -429,19 +429,9 @@ void RotSetupDialog::saveSettings()
             }
             config.setValue("antennaNumber", i+1);
             config.setValue("rotatorModel", availAntData[i]->rotatorModel);
-            //config.setValue("rotatorModelName", availAntData[i]->rotatorModelName);
-            //config.setValue("rotatorModelNumber", availAntData[i]->rotatorModelNumber);
-            //config.setValue("rotatorManufacturer", availAntData[i]->rotatorManufacturer);
-            //config.setValue("rotatorCWEndStop", double(availAntData[i]->rotatorCWEndStop));
-            //config.setValue("rotatorCCWEndStop", double(availAntData[i]->rotatorCCWEndStop));
-            //config.setValue("rotatorType", availAntData[i]->rotType);
-            //config.setValue("endStopType", availAntData[i]->endStopType);
             config.setValue("supportCwCcwCmd", availAntData[i]->supportCwCcwCmd);
             config.setValue("rotatorPollInterval", availAntData[i]->pollInterval);
-            //config.setValue("maxAzimuth", double(availAntData[i]->max_azimuth));
-            //config.setValue("minAzimuth", double(availAntData[i]->min_azimuth));
             config.setValue("simulateCwCCw", availAntData[i]->simCwCcwCmd);
-            //config.setValue("southStopType", availAntData[i]->southStopType);
             config.setValue("overRun", availAntData[i]->overRunFlag);
             config.setValue("antennaOffset", availAntData[i]->antennaOffset);
             config.setValue("portType", availAntData[i]->portType);
@@ -493,13 +483,8 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->antennaNumber = config.value("antennaNumber", QString::number(antNum+1)).toString();
     availAntData[antNum]->rotatorModel = config.value("rotatorModel", "").toString();
     availAntData[antNum]->pollInterval = config.value("rotatorPollInterval", ROT_DEFAULT_POLLINTERVAL).toString();
-    //availAntData[antNum]->rotType = endStop(config.value("rotatorType", int(ROT_0_360)).toInt());
-    //availAntData[antNum]->endStopType = endStop(config.value("endStopType", int(ROT_0_360)).toInt());
-    //availAntData[antNum]->max_azimuth = config.value("maxAzimuth", 360).toInt();
-    //availAntData[antNum]->min_azimuth = config.value("minAzimuth", 0).toInt();
     availAntData[antNum]->supportCwCcwCmd = config.value("supportCwCcwCmd", false).toBool();
     availAntData[antNum]->simCwCcwCmd = config.value("simulateCwCCw", true).toBool();
-    //availAntData[antNum]->southStopType = southStop(config.value("southStopType", S_STOPOFF).toInt());
     availAntData[antNum]->overRunFlag = config.value("overRun", false).toBool();
     availAntData[antNum]->antennaOffset = config.value("antennaOffset", "").toInt();
     availAntData[antNum]->portType = (config.value("portType", RotCapConstants::PortType::none).toInt());
@@ -549,45 +534,6 @@ void RotSetupDialog::loadAvailComportsToTab(int tabNum)
     antennaTab[tabNum]->setComport(availAntData[tabNum]->comport);
 }
 
-//void RotSetupDialog::clearAvailRotators()
-//{
-//    srotParams nulParam;
-
-//    for (int i = 0; i < numAvailAntennas; i++)
-//    {
-//        availAntData[i] = nulParam;
-//    }
-
-
-
-
-//void RotSetupDialog::clearCurrentRotator()
-//{
-//    srotParams nulParam;
-//    currentAntenna = nulParam;
-//}
-
-
-//void RotSetupDialog::copyAntennaToCurrent(int antennaNumber)
-//{
-//    currentAntenna = availAntennas[antennaNumber];
-//}
-
-//void RotSetupDialog::clearAntennaValueChanged()
-//{
-//    for (int i = 0; i < NUM_ANTENNAS; i++)
-//    {
-//        antennaValueChanged[i] = false;
-//    }
-//}
-
-//void RotSetupDialog::clearAntennaNameChanged()
-//{
-//    for (int i = 0; i < NUM_ANTENNAS; i++)
-//    {
-//        antennaNameChanged[i] = false;
-//    }
-//}
 
 
 QString RotSetupDialog::getRotatorComPort(QString antennaName)
