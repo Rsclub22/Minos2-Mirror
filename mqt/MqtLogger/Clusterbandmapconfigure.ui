@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>870</width>
-    <height>339</height>
+    <width>839</width>
+    <height>347</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -373,6 +373,13 @@
           <widget class="QCheckBox" name="operatingFreqChkBox">
            <property name="text">
             <string>Turn Off Operating Freq Colour Band</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="modeOperatingFreqChkBox">
+           <property name="text">
+            <string>Follow Radio Mode Operating Freq Colour Band</string>
            </property>
           </widget>
          </item>

@@ -125,8 +125,6 @@ private:
 
     QVector<BandDetail> bands;
     QStringList presetFreq;
-    bool ignorePresetFreq;           // on contest start
-    bool ignorePreviousFreq;        // on contest swap
 
 
     // data from radio
