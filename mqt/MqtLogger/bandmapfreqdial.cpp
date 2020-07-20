@@ -101,7 +101,14 @@ void BandmapFreqDial::setCurFreq(double f)
         newFreqTextWidth = checkFreqWidth(currentFreqInt32);
     }
 
- }
+}
+
+
+void BandmapFreqDial::setRadioMode(QString mode)
+{
+
+    radioMode = mode;
+}
 
 
 double BandmapFreqDial::getCurFreq()
@@ -214,27 +221,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
         changeBoundingRect(fullBandHeight, dialWidth);
     }
 
-/*
-    qint32 freq = frequency;
 
-    int freqRange = dialHeight / dialData::khzPixelStep[zoomLevel];
-    int mid_freqRange = freqRange/2;
-    scaleStartFreq = freq - mid_freqRange;
-    if (dialData::roundFactor[zoomLevel] == 5)      //  round to nearest 5khz
-    {
-       scaleStartFreq =  ((scaleStartFreq + 2) / 5) * 5;
-    }
-    else if (dialData::roundFactor[zoomLevel] == 10)    // round to nearest 10khz
-    {
-       scaleStartFreq =  ((scaleStartFreq + 2) / 10) * 10;
-    }
-
-    if (scaleStartFreq < 144150)  //// ************************this needs to be the lower limit of the band
-    {
-        scaleStartFreq = 144150;
-    }
-    scaleEndFreq = scaleStartFreq + freqRange;
-*/
 
 
     QRect scaleRec(0, 0, dialWidth, dialHeight);
@@ -262,7 +249,22 @@ void BandmapFreqDial::drawScale(QPainter *painter, qint32 frequency, int scaleHe
 
     if (operatingPlanOk && !operatingFreqFlag)
     {
-        int freqOk = operatingFreq->getFreqLimitsForDial(listOfFreqs, contestBandStr, contestModeStr);
+        QString mode;
+        bool savedFollowRadioModeFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip, savedFollowRadioModeFlag);
+        if (savedFollowRadioModeFlag)
+        {
+            mode = radioMode;
+        }
+        else
+        {
+            mode = contestModeStr;
+        }
+
+
+        int freqOk = operatingFreq->getFreqLimitsForDial(listOfFreqs, contestBandStr, mode);
+
+
         if (freqOk == FREQ_OK)
         {
 

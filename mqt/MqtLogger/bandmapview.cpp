@@ -718,6 +718,13 @@ void BandmapView::setFreq(double f, bool legalFreq)
 }
 
 
+void BandmapView::setDialRadioMode(QString mode)
+{
+    dial->setRadioMode(mode);
+    bandmapUpdate();
+}
+
+
 int BandmapView::dialCursorWithinViewport(qint64 freq)
 {
     int sceneStartYCoord = bandmapGraphicsView->mapToScene(0,0).toPoint().y();
