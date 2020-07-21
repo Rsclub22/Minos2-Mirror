@@ -1176,6 +1176,8 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                       .arg(radioName)
                       .arg(mode)
                       .arg(tslf->sSavedCurMode));
+                qDebug() << "setRadioNAme " << "contest = " << ct->uuid << " contest mode = " << mode << " saved mode = " << tslf->sSavedCurMode;
+
 
                 selRadioName = PubSubName(radioName);
 
@@ -1196,6 +1198,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                         traceMsg(QString("setRadioName: onContestPageChangedFlag = %1, restoreModeFlag = %2").arg(onContestPageChangedFlag ? "true" : "false").arg(restoreModeFlag ? "true" : "false"));
 
                         QString m = tslf->sSavedCurMode;
+
                         traceMsg(QString("setRadioName: SavedCurMode = %1").arg(tslf->sSavedCurMode));
                         if (m.contains(':') && m.contains("MGM"))
                         {
@@ -1206,12 +1209,21 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                             }
 
                         }
+
+                        if (m.isEmpty())
+                        {
+                            m = mode;
+                            traceMsg(QString("setRadioName: saved mode is empty - revert to contest mode = %1").arg(m));
+                            qDebug() << "saved mode is empty - revert to contest mode = " << m;
+                        }
                         traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName).arg(m));
-                        emit selectRadio(radioName, m);  // send radio and previous mode.
+                        qDebug() << "setRadioNAme " << "contest = " << ct->uuid << " setting save mode = " << m;
+                        emit selectRadio(radioName, m.remove(':'));  // send radio and previous mode.
                     }
                     else
                     {
                         traceMsg(QString("setRadioName: Not onContestPageChange = %1, radioName = %2, mode =%3").arg(onContestPageChangedFlag ? "true" : "false").arg(radioName).arg(mode));
+                        qDebug() << "setRadioNAme " << "contest = " << ct->uuid << " setting contest mode = " << mode;
                         emit selectRadio(radioName, mode.remove(':'));
                     }
 
