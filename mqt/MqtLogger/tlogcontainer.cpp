@@ -117,6 +117,11 @@ bool TLogContainer::show(int argc, char *argv[])
     bool autoFill;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, autoFill );
     ReportAutofillAction->setChecked(autoFill);
+
+    ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
+    ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
+    restoreContestModeContestChange->setChecked(readRestoreContestModeFlag());
+
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
     TimerUpdateQSOTimer.start(1000);
@@ -154,14 +159,14 @@ bool TLogContainer::show(int argc, char *argv[])
     n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();
 
-    setWindowState(Qt::WindowState::WindowActive);
+    setWindowState(windowState() | Qt::WindowState::WindowActive);
 
     return true;
 }
 void TLogContainer::onArgsReceived(QString conarg)
 {
     preloadFiles( conarg );
-    setWindowState(Qt::WindowState::WindowActive);
+    setWindowState(windowState() | Qt::WindowState::WindowActive);
 }
 
 void TLogContainer::on_TimeDisplayTimer( )
@@ -440,29 +445,9 @@ void TLogContainer::setupMenus()
 
     radioMenu = newMenu(ui->menuTools, QT_TR_NOOP("Radio"));
 
-    ignorePresetFreqContestStart = new QAction(this);
-    ignorePresetFreqContestStart->setText(QT_TR_NOOP("Contest Start - Ignore Preset Frequency"));
-    connect(ignorePresetFreqContestStart, SIGNAL(triggered(bool)),
-            this, SLOT(onIgnorePresetFreqChecked(bool)));
-    ignorePresetFreqContestStart->setCheckable(true);
-    radioMenu->addAction(ignorePresetFreqContestStart);
-    ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
-
-    ignorePreviousFreqContestChange = new QAction(this);
-    ignorePreviousFreqContestChange->setText(QT_TR_NOOP("Contest Change - Ignore Previous Frequency"));
-    connect(ignorePreviousFreqContestChange, SIGNAL(triggered(bool)),
-            this, SLOT(onIgnorePreviousFreqChecked(bool)));
-    ignorePreviousFreqContestChange->setCheckable(true);
-    radioMenu->addAction(ignorePreviousFreqContestChange);
-    ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
-
-    restoreContestModeContestChange = new QAction(this);
-    restoreContestModeContestChange->setText(QT_TR_NOOP("Contest Change - Restore Contest Mode"));
-    connect(restoreContestModeContestChange, SIGNAL(triggered(bool)),
-            this, SLOT(onRestorContestModeChecked(bool)));
-    restoreContestModeContestChange->setCheckable(true);
-    radioMenu->addAction(restoreContestModeContestChange);
-    restoreContestModeContestChange->setChecked(readRestoreContestModeFlag());
+    ignorePresetFreqContestStart = newCheckableAction(QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), radioMenu, SLOT(onIgnorePresetFreqChecked(bool)));
+    ignorePreviousFreqContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), radioMenu, SLOT(onIgnorePreviousFreqChecked(bool)));
+    restoreContestModeContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Restore Contest Mode"), radioMenu, SLOT(onRestorContestModeChecked(bool)));
 
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
