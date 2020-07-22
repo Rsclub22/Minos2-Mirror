@@ -1692,6 +1692,7 @@ void BandmapClientFrame::setMode(QString mode)
         }
 
         bandmapView->setDialRadioMode(radioMode);
+        ui->mode->setText(radioMode);
     }
 
 }
