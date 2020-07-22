@@ -74,6 +74,8 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ContestPageChanged()), this, SLOT(on_ContestPageChanged()));
 
+    qDebug() << "starting frame = " << contest->uuid;
+
     //connect(&MinosLoggerEvents::mle, SIGNAL(BandMapPressed()), this, SLOT(on_BandMapPressed()));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(NextContactDetailsTimerTimer()));
@@ -849,6 +851,9 @@ void TSingleLogFrame::on_ContestPageChanged ()
     // with a contest change
     sSavedCurFreq = sCurFreq;
     sSavedCurMode = sCurMode;
+    qDebug() << "tslf contestpage changed = " << contest->uuid;
+    qDebug() << "curFreq = " << sCurFreq;
+    qDebug() << "curMode = " << sCurMode;
     trace(QString("on_ContestPageChanged:: save current freq = %1, for frame = %2").arg(sSavedCurFreq).arg(ct->name.getValue() + " uuid " + ct->uuid));
     LogContainer->sendDM->notifyRigChanges();
     LogContainer->sendDM->notifyRotChanges();
@@ -1678,6 +1683,9 @@ void TSingleLogFrame::on_SetFreq(QString f)
     trace(QString("Freq from radio = %1").arg(f));
     if ( this == LogContainer->getCurrentLogFrame() )
     {
+        qDebug() << "onsetFreq contest = " << contest->uuid;
+
+        qDebug() << "set Freq = " << f;
 
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
