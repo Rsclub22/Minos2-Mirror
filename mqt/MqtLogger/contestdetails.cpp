@@ -290,9 +290,34 @@ void ContestDetails::setDetails(  )
       contest->mycall.fullCall.setValue( call );
    }
    ui->CallsignEdit->setText(call);
+
+   QString mainop = contest->currentOp1.getValue();
+   if ( !mainop.size() )                                       // Entry
+   {
+      contest->entryBundle.getStringProfile( eepMainOp, mainop );
+
+   }
    if (contest->currentOp1.getValue().size()== 0)
    {
-      contest->currentOp1.setValue( contest->mycall.realCall);
+       if (mainop.size())
+       {
+           contest->currentOp1.setValue( mainop);
+       }
+       else
+       {
+           contest->currentOp1.setValue( contest->mycall.realCall);
+       }
+   }
+
+   QString secondop = contest->currentOp2.getValue();
+   if ( !secondop.size() )                                       // Entry
+   {
+      contest->entryBundle.getStringProfile( eepSecondOp, secondop );
+
+   }
+   if (contest->currentOp2.getValue().size()== 0)
+   {
+      contest->currentOp2.setValue( secondop);
    }
 
    contest->validateLoc();

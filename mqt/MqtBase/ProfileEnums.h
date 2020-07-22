@@ -100,7 +100,9 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
                      edpListCompression,
                      edpQSOFieldFont
                     };
-enum ENTRYPROFILE {eepCall, eepEntrant, eepMyName, eepMyCall,
+enum ENTRYPROFILE {eepCall,
+                   eepMainOp, eepSecondOp,
+                   eepEntrant, eepMyName, eepMyCall,
                    eepMyAddress1, eepMyAddress2, eepMyCity, eepMyPostCode, eepMyCountry,
                    eepMyPhone, eepMyEmail};
 enum QTHPROFILE {eqpLocator, eqpDistrict, eqpLocation, eqpStationQTH1, eqpStationQTH2, eqpASL, eqpITUZone, eqpCQZone};

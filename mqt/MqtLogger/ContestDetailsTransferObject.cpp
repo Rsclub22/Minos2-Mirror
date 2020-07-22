@@ -41,6 +41,8 @@ void ContestDetailsTransferObject::setINIDetails()
    {
       entryBundle.startGroup();
       entryBundle.getStringProfile( eepCall, mycall.fullCall );
+      entryBundle.getStringProfile( eepMainOp, currentOp1 );
+      entryBundle.getStringProfile( eepSecondOp, currentOp2 );
       entryBundle.getStringProfile( eepEntrant, entrant );
       entryBundle.getStringProfile( eepMyName, entName );
       entryBundle.getStringProfile( eepMyCall, entCall );
