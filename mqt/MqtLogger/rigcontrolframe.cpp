@@ -540,14 +540,18 @@ void RigControlFrame::setFreq(QString freq)
 void RigControlFrame::displayFreqOnFreqEditDisplay(QString freq)
 {
 
-    if (!freqEditOn)
+    if (checkValidBand(freq))  // prevent a crash with invalid freq
     {
-        trace(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(freq));
-        ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
-        setFreqTextLegalColour(freq, curMode);
-        ui->freqInput->setText(freq);
+        if (!freqEditOn)
+        {
+            trace(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(freq));
+            ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
+            setFreqTextLegalColour(freq, curMode);
+            ui->freqInput->setText(freq);
 
+        }
     }
+
 
 }
 
