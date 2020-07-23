@@ -14,6 +14,7 @@
 
 #include <QObject>
 #include <QString>
+#include "BandList.h"
 #if defined (WIN32)
 #include "omnirigcontrol.h"
 #endif
@@ -729,6 +730,17 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     }
 
     traceMsg(QString("Rig Init - freq after delay = %1").arg(QString::number(f)));
+
+    if (!checkValidBand(QString::number(f)))
+    {
+        f = 0;      // received freq not valid
+        traceMsg(QString("Rig Init - freq not in valid band"));
+    }
+    else
+    {
+        traceMsg(QString("Rig Init - freq in valid band"));
+    }
+
 
     if (f != 0)
     {
