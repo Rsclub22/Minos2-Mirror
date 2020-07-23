@@ -93,7 +93,7 @@
         <location filename="../bandmapclientframe.cpp" line="479"/>
         <location filename="../bandmapclientframe.cpp" line="499"/>
         <location filename="../bandmapclientframe.cpp" line="631"/>
-        <location filename="../bandmapclientframe.cpp" line="1772"/>
+        <location filename="../bandmapclientframe.cpp" line="1773"/>
         <source>Bandmap</source>
         <translation>Carte des bandes</translation>
     </message>
@@ -103,22 +103,27 @@
         <translation>Radio connectée</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="111"/>
+        <location filename="../bandmapclientframe.ui" line="60"/>
+        <source>Mode:</source>
+        <translation type="unfinished">Mode:</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.ui" line="129"/>
         <source>00:000:000:000</source>
         <translation>00:000:000:000</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="157"/>
+        <location filename="../bandmapclientframe.ui" line="175"/>
         <source>Actions</source>
         <translation>Actions</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="164"/>
+        <location filename="../bandmapclientframe.ui" line="182"/>
         <source>Cluster Connect</source>
         <translation>Réseau connectée</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="206"/>
+        <location filename="../bandmapclientframe.ui" line="224"/>
         <source>Filters</source>
         <translation>Filtres</translation>
     </message>
@@ -191,7 +196,7 @@
         <translation>Voulez-vous vraiment supprimer tous les Spots de Bandmap?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1776"/>
+        <location filename="../bandmapclientframe.cpp" line="1777"/>
         <source> - Mouse in frame, updates paused</source>
         <translation> - Souris dans le cadre, mises à jour suspendues</translation>
     </message>
@@ -2300,7 +2305,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="664"/>
+        <location filename="../rigcontrolframe.cpp" line="669"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
@@ -2349,43 +2354,43 @@ Non - Ignorer les modifications</translation>
         <translation>Vol</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="671"/>
+        <location filename="../rigcontrolframe.cpp" line="676"/>
         <source>Off</source>
         <translation>Éteinte</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1229"/>
+        <location filename="../rigcontrolframe.cpp" line="1246"/>
         <source>Bandlist empty for this radio, please add a band or tranverter!</source>
         <translation>La liste des bandes est vide pour cette radio, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1256"/>
+        <location filename="../rigcontrolframe.cpp" line="1273"/>
         <source>Radio Bandlist is empty!</source>
         <translatorcomment>Liste des bandes est vide!</translatorcomment>
         <translation>La liste des bandes est vide!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1265"/>
+        <location filename="../rigcontrolframe.cpp" line="1282"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1343"/>
+        <location filename="../rigcontrolframe.cpp" line="1367"/>
         <source>No %1 Band found for this radio!</source>
         <translation>AucuneBande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1540"/>
+        <location filename="../rigcontrolframe.cpp" line="1568"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1547"/>
+        <location filename="../rigcontrolframe.cpp" line="1575"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1566"/>
+        <location filename="../rigcontrolframe.cpp" line="1594"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
@@ -4672,22 +4677,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="741"/>
+        <location filename="../tsinglelogframe.cpp" line="743"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le journal importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1322"/>
+        <location filename="../tsinglelogframe.cpp" line="1327"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non rempli</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1341"/>
+        <location filename="../tsinglelogframe.cpp" line="1346"/>
         <source>Please give serial wanted</source>
         <translation>Donner série recherchée</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1363"/>
+        <location filename="../tsinglelogframe.cpp" line="1368"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1introuvable</translation>
     </message>

@@ -93,7 +93,7 @@
         <location filename="../bandmapclientframe.cpp" line="479"/>
         <location filename="../bandmapclientframe.cpp" line="499"/>
         <location filename="../bandmapclientframe.cpp" line="631"/>
-        <location filename="../bandmapclientframe.cpp" line="1772"/>
+        <location filename="../bandmapclientframe.cpp" line="1773"/>
         <source>Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -103,22 +103,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="111"/>
+        <location filename="../bandmapclientframe.ui" line="60"/>
+        <source>Mode:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.ui" line="129"/>
         <source>00:000:000:000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="157"/>
+        <location filename="../bandmapclientframe.ui" line="175"/>
         <source>Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="164"/>
+        <location filename="../bandmapclientframe.ui" line="182"/>
         <source>Cluster Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="206"/>
+        <location filename="../bandmapclientframe.ui" line="224"/>
         <source>Filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,7 +196,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1776"/>
+        <location filename="../bandmapclientframe.cpp" line="1777"/>
         <source> - Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2232,7 +2237,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="664"/>
+        <location filename="../rigcontrolframe.cpp" line="669"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2273,42 +2278,42 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="671"/>
+        <location filename="../rigcontrolframe.cpp" line="676"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1229"/>
+        <location filename="../rigcontrolframe.cpp" line="1246"/>
         <source>Bandlist empty for this radio, please add a band or tranverter!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1256"/>
+        <location filename="../rigcontrolframe.cpp" line="1273"/>
         <source>Radio Bandlist is empty!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1265"/>
+        <location filename="../rigcontrolframe.cpp" line="1282"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1343"/>
+        <location filename="../rigcontrolframe.cpp" line="1367"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1540"/>
+        <location filename="../rigcontrolframe.cpp" line="1568"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1547"/>
+        <location filename="../rigcontrolframe.cpp" line="1575"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1566"/>
+        <location filename="../rigcontrolframe.cpp" line="1594"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4575,22 +4580,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="741"/>
+        <location filename="../tsinglelogframe.cpp" line="743"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1322"/>
+        <location filename="../tsinglelogframe.cpp" line="1327"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1341"/>
+        <location filename="../tsinglelogframe.cpp" line="1346"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1363"/>
+        <location filename="../tsinglelogframe.cpp" line="1368"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
