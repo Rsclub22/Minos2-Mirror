@@ -233,7 +233,7 @@ void RigControlFrame::checkRigDetailsAvail()
 void RigControlFrame::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
-    qDebug() << "rigcontrol frame setting contest = " << ct->uuid;
+    //qDebug() << "rigcontrol frame setting contest = " << ct->uuid;
 }
 
 void RigControlFrame::initRigFrame(QWidget * /*parent*/)
@@ -1291,9 +1291,9 @@ void RigControlFrame::setRadioFreq()
     if (ct == TContestApp::getContestApp() ->getCurrentContest())
     {
 
-        qDebug() << "setradioFreq currentContest *** = " << ct->uuid;
-        qDebug() << "curFreq = " << curFreq;
-        qDebug() << "lastFreq = " << lastFreq;
+        //qDebug() << "setradioFreq currentContest *** = " << ct->uuid;
+        //qDebug() << "curFreq = " << curFreq;
+       // qDebug() << "lastFreq = " << lastFreq;
 
        if (onContestPageChangedFlag && (curFreq == ZEROFREQ || curFreq == "0"))// is it contest frame starting
        {
@@ -1336,10 +1336,10 @@ void RigControlFrame::setRadioFreq()
                        ui->bandSelCombo->setCurrentIndex(i + 1);
 
                        QString freq = listOfBands[i].freq;
-                       qDebug() << "contestchange contest = " << ct->uuid;
-                       qDebug() << "preset freq = " << freq;
-                       qDebug() << "curFreq = " << curFreq;
-                       qDebug() << "lastFreq = " << lastFreq;
+                       //qDebug() << "contestchange contest = " << ct->uuid;
+                       //qDebug() << "preset freq = " << freq;
+                       //qDebug() << "curFreq = " << curFreq;
+                       //qDebug() << "lastFreq = " << lastFreq;
 
                        traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq));
                        if (checkValidFreq(freq))
@@ -1388,10 +1388,10 @@ void RigControlFrame::setRadioFreq()
            else
            {
                freq = tslf->sSavedCurFreq;
-               qDebug() << "contestchange contest = " << ct->uuid;
-               qDebug() << "saved freq = " << freq;
-               qDebug() << "curFreq = " << curFreq;
-               qDebug() << "lastFreq = " << lastFreq;
+               //qDebug() << "contestchange contest = " << ct->uuid;
+               //qDebug() << "saved freq = " << freq;
+               //qDebug() << "curFreq = " << curFreq;
+               //qDebug() << "lastFreq = " << lastFreq;
                if (checkValidFreq(freq))
                {
                    traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq));
@@ -1577,7 +1577,7 @@ void RigControlFrame::setRadioState(QString s)
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);
-                restoreRadioFreq();
+                //restoreRadioFreq();
                 emit radioIsConnected(true);
             }
             else
