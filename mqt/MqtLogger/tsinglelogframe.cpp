@@ -113,7 +113,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     // To rig controller
 
     connect(FKHRigControlFrame, SIGNAL(radioDisconnected()), this, SLOT(invalidateCacheOnDisconnect()));
-    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
+    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString, QString)), this, SLOT(sendSelectRadio(QString, QString, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
@@ -849,8 +849,8 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     // save current freq as notifyRigChange writes incorrect contest freq to this frame
     // with a contest change
-    sSavedCurFreq = sCurFreq;
-    sSavedCurMode = sCurMode;
+    //sSavedCurFreq = sCurFreq;
+    //sSavedCurMode = sCurMode;
     //qDebug() << "tslf contestpage changed = " << contest->uuid;
     //qDebug() << "curFreq = " << sCurFreq;
     //qDebug() << "curMode = " << sCurMode;
@@ -1876,7 +1876,7 @@ void TSingleLogFrame::sendRadioMode(QString mode)
     }
 }
 
-void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mode)
+void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &freq, const QString &mode)
 {
 
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
@@ -1894,7 +1894,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
 
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             QString uuid = ct->uuid;
-            LogContainer->sendDM->changeRigSelectionTo(radName, mode, ct->uuid);  // send message including mode if it has been appended.
+            LogContainer->sendDM->changeRigSelectionTo(radName, freq, mode, ct->uuid);  // send message including mode if it has been appended.
 
 
 

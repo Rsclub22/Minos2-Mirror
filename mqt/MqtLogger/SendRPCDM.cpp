@@ -245,24 +245,25 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
     rpc.queueCall( s );
 }
 
-void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &mode, const QString &uuid)
+void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &freq, const QString &mode, const QString &uuid)
 {
     // we should de-select the cached uuid on all rig apps
 
-    trace(QString("Change rig selection to %1 %2 %3").arg(name.toString()).arg(mode).arg(uuid));
+    trace(QString("Change rig selection to name = %1, freq = %2, mode = %3, uuid = %4").arg(name.toString()).arg(freq).arg(mode).arg(uuid));
 
     PubSubName selected = rigCache.getSelected(loggerUuid);
 
     if (!selected.isEmpty() && selected != name)
     {
-        sendRigSelection(selected, "", "");
+        sendRigSelection(selected, "","", "");
     }
-    sendRigSelection(name, mode, uuid);
+    sendRigSelection(name, freq, mode, uuid);
 }
-void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const QString &uuid)
+void TSendDM::sendRigSelection(const PubSubName &s, const QString &freq, const QString &mode, const QString &uuid)
 {
     rigCache.setSelected(s, loggerUuid, uuid);
     rigCache.setLogMode(s, mode);
+    rigCache.setLogFreq(s, freq.toDouble());
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -272,6 +273,7 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &mode, const Q
     st->addMember( select, rpcConstants::selected );
 
     st->addMember( s.toString(), rpcConstants::rigControlSelectRadioName );
+    st->addMember(freq, rpcConstants::rigControlLogFreq);
     st->addMember( mode, rpcConstants::rigControlLogMode );
     rpc.getCallArgs() ->addParam( st );
 

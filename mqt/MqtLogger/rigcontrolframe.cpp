@@ -1168,13 +1168,18 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
             if (radioName.isEmpty())
             {
-                emit selectRadio(radioName, mode);  // send radio and mode.
+                emit selectRadio(radioName, "", mode);  // send radio and mode.
                 selRadioDetails = RadioDetails();
                 createActiveBandList(selRadioDetails.getBandList());
             }
             else
             {
                 TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+                // get freq to send
+                QString sendFreq;
+                setRadioFreq(sendFreq);
+
 
                 trace(QString("setRadioName: contest = %1, radioName = %2, contestMode = %3, savedMode = %4")
                       .arg(ct ? ct->uuid : "")
@@ -1223,17 +1228,17 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                         }
                         traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName).arg(m));
                         //qDebug() << "setRadioNAme " << "contest = " << ct->uuid << " setting save mode = " << m;
-                        emit selectRadio(radioName, m.remove(':'));  // send radio and previous mode.
+                        emit selectRadio(radioName, sendFreq, m.remove(':'));  // send radio and previous mode.
                     }
                     else
                     {
                         traceMsg(QString("setRadioName: Not onContestPageChange = %1, radioName = %2, mode =%3").arg(onContestPageChangedFlag ? "true" : "false").arg(radioName).arg(mode));
                         //qDebug() << "setRadioNAme " << "contest = " << ct->uuid << " setting contest mode = " << mode;
-                        emit selectRadio(radioName, mode.remove(':'));
+                        emit selectRadio(radioName, sendFreq,mode.remove(':'));
                     }
 
 
-                    setRadioFreq();
+
 
 
                 }
@@ -1245,7 +1250,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                         trace(QString("setRadioName:: Select Radio for %1 , Bandlist is empty = %1").arg(radioName));
                         setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Bandlist empty for this radio, please add a band or tranverter!"));
                         // clear selection in rigcontrol
-                        emit selectRadio(radioName, mode);  // send radio and mode.
+                        emit selectRadio(radioName, "", mode);  // send radio and mode.
                         selRadioDetails = RadioDetails();
                         createActiveBandList(selRadioDetails.getBandList());
                     }
@@ -1264,7 +1269,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
 
 
 
-void RigControlFrame::setRadioFreq()
+void RigControlFrame::setRadioFreq(QString &sendFreq)
 {
     traceMsg(QString("setRadioFreq: enter function"));
 
@@ -1272,7 +1277,7 @@ void RigControlFrame::setRadioFreq()
     {
         setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Radio Bandlist is empty!"));
         traceMsg(QString("setRadioFreq:: Radio Bandlist is empty!"));
-        sendFreq(NO_BAND_SUPPORT);
+        sendFreq = NO_BAND_SUPPORT;
         return;
     }
 
@@ -1281,7 +1286,7 @@ void RigControlFrame::setRadioFreq()
     {
         setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Radio has no available bands"));
         traceMsg(QString("setRadioFreq:: Error No available bands!"));
-        sendFreq(NO_BAND_SUPPORT);
+        sendFreq = NO_BAND_SUPPORT;
         return;
     }
 
@@ -1345,7 +1350,7 @@ void RigControlFrame::setRadioFreq()
                        if (checkValidFreq(freq))
                        {
                            traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq));
-                           sendFreq(freq);
+                           sendFreq = freq;
 
                        }
                        else
@@ -1356,9 +1361,7 @@ void RigControlFrame::setRadioFreq()
                        }
 
                        return;
-
                    }
-
                }
            }
            else
@@ -1366,7 +1369,7 @@ void RigControlFrame::setRadioFreq()
                // warn no band for this radio
                setRadioBandWarning(HtmlFontColour(Qt::red) + tr("No %1 Band found for this radio!").arg(cb));
                traceMsg(QString("SsetRadioFreq: %1 Band not found on this radio").arg(cb));
-               sendFreq(NO_BAND_SUPPORT);
+               sendFreq = NO_BAND_SUPPORT;
            }
 
 
@@ -1398,7 +1401,7 @@ void RigControlFrame::setRadioFreq()
 
                    displayFreqOnFreqEditDisplay(freq);
 
-                   sendFreq(freq);
+                   sendFreq = freq;
 
                    return;
                }

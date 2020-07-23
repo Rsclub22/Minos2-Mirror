@@ -385,7 +385,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, SIGNAL(setRitFreq(int)), this, SLOT(setRitFreq(int)));
     connect(msg, SIGNAL(setRitStatus(bool)), this, SLOT(setRitLogStatus(bool)));
     connect(msg, SIGNAL(setMode(QString)), this, SLOT(loggerSetMode(QString)));
-    connect(msg, SIGNAL(selectLoggerRadio(PubSubName, QString)), this, SLOT(onSelectRadio(PubSubName, QString)));
+    connect(msg, SIGNAL(selectLoggerRadio(PubSubName, QString, QString)), this, SLOT(onSelectRadio(PubSubName, QString, QString)));
     connect(msg, SIGNAL(setVolume(int)), this, SLOT(loggerSetVolume(int)));
 
 
@@ -656,7 +656,8 @@ void RigControlMainWindow::upDateRadio()
 
                 if (appName.count() > 0)
                 {
-                    logMessage(QString("Update Radio: Logger Set Mode to %1").arg(selRadioMode));
+                    logMessage(QString("Update Radio: Logger Set Freq = %1, Set Mode = %2").arg(selRadioFreq).arg(selRadioMode));
+                    loggerSetFreq(selRadioFreq);
                     loggerSetMode(selRadioMode);
                 }
                 else
@@ -868,6 +869,7 @@ void RigControlMainWindow::refreshRadio()
         {
             logMessage(QString("Refresh Radio: Logger Set Mode to %1").arg(selRadioMode));
             loggerSetMode(selRadioMode);
+            loggerSetFreq(selRadioFreq);
             writeWindowTitle(appName);
             sendStatusToLogConnected();
             dumpRadioToTraceLog();
@@ -1602,7 +1604,7 @@ void RigControlMainWindow::onNewVfo(QString omniRigVfo)
 
 
 
-void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
+void RigControlMainWindow::onSelectRadio(PubSubName s, QString freq, QString mode)
 {
     trace(QString("RigControlMainWindow::onSelectRadio closeApp is %1").arg(closeApp));
     if (closeApp)
@@ -1615,6 +1617,16 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString mode)
     {
         selRadioMode = mode;
     }
+
+    if (freq.isEmpty())
+    {
+        selRadioFreq = ZEROFREQ;
+    }
+    else
+    {
+        selRadioFreq = freq;
+    }
+
 
     QString oldRadio = setupRadio->getCurrentRadioName();
 

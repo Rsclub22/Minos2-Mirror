@@ -114,8 +114,7 @@ public:
 
 
 signals:
-    void selectRadio(QString, QString);
-    void sendRadioName(QString);
+    void selectRadio(QString, QString, QString);  // radio name, freq, mode
     void sendFreqControl(QString);
     void sendVolumeToRadio(int);
     void noRadioSendFreq(QString);
@@ -156,7 +155,7 @@ private slots:
     void ritClearShortCutSelected();
     //void bandListTimeout();
 
-    void setRadioFreq();
+    //void setRadioFreq();
 
 
     void checkRigDetailsAvail();
@@ -277,6 +276,7 @@ private:
     int setBandSelComboIndex(QString band);
     void restoreRadioFreq();
     void displayFreqOnFreqEditDisplay(QString freq);
+    void setRadioFreq(QString &sendFreq);
 };
 
 
