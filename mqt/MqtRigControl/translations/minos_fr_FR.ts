@@ -216,79 +216,79 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>OmnirigControl</name>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="21"/>
+        <location filename="../omnirigcontrol.cpp" line="22"/>
         <source>No Error, operation completed sucessfully</source>
         <translation>Pas d&apos;erreur, l&apos;opération a réussi</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="22"/>
+        <location filename="../omnirigcontrol.cpp" line="23"/>
         <source>Radio Function not supported</source>
         <translation>Fonction radio non soutenue</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="23"/>
+        <location filename="../omnirigcontrol.cpp" line="24"/>
         <source>Omnirig Com Failed to start</source>
         <translation>Omnirig: la communication n&apos;a pas pu démarrer</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="24"/>
+        <location filename="../omnirigcontrol.cpp" line="25"/>
         <source>Omnirig rig One failed to initialise</source>
         <translation>Omnirig: l&apos;appareil 1 n&apos;a pas pu s&apos;initialiser</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="25"/>
+        <location filename="../omnirigcontrol.cpp" line="26"/>
         <source>Omnirig rig Two failed to initialise</source>
         <translation>Omnirig: l&apos;appareil 2 n&apos;a pas pu s&apos;initialiser</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="26"/>
+        <location filename="../omnirigcontrol.cpp" line="27"/>
         <source>Omnirig rig is offline</source>
         <translation>Omnirig: l&apos;appareil est hors ligne</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="27"/>
+        <location filename="../omnirigcontrol.cpp" line="28"/>
         <source>Omnirig radio online</source>
         <translation>Omnirig: l&apos;appareil est en ligne</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="28"/>
+        <location filename="../omnirigcontrol.cpp" line="29"/>
         <source>Omnirig get freq fail</source>
         <translation>Omnirig: échec de l&apos;obtention de la fréquence</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="29"/>
+        <location filename="../omnirigcontrol.cpp" line="30"/>
         <source>Omnirig COM Exception
 Check Rigcontrol tracelog</source>
         <translation>Omnirig: exception COM
 Vérifier le tracelog Rigcontrol</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="30"/>
+        <location filename="../omnirigcontrol.cpp" line="31"/>
         <source>Omnirig not configured</source>
         <translation>Omnirig: non configuré</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="31"/>
+        <location filename="../omnirigcontrol.cpp" line="32"/>
         <source>Omnirig disabled</source>
         <translation>Omnirig: désactivé</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="32"/>
+        <location filename="../omnirigcontrol.cpp" line="33"/>
         <source>Omnirig port busy</source>
         <translation>Omnirig: port occupé</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="33"/>
+        <location filename="../omnirigcontrol.cpp" line="34"/>
         <source>Omnirig not responding</source>
         <translation>Omnirig: ne répond pas</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="34"/>
+        <location filename="../omnirigcontrol.cpp" line="35"/>
         <source>Omnirig rig pointer null</source>
         <translation>Omnirig: pointeur NULL</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="1020"/>
+        <location filename="../omnirigcontrol.cpp" line="1032"/>
         <source>Omnirig Errorcode too large!</source>
         <translation>Code d&apos;erreur de Omnirig trop grand!</translation>
     </message>
