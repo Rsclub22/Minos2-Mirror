@@ -499,6 +499,8 @@ void TSendDM::notifyRigChanges()
                     if (selState.radioFreq().isDirty())
                     {
                         trace("SendRPC Rig set freq " + convertFreqToStr(selState.radioFreq().getValue()));
+                        qDebug() << "##### contest id = " << selDetail.getSelectedContest(loggerUuid).getValue();
+                        qDebug() << "rpc rig freq = " << QString::number(selState.radioFreq().getValue());
                         tslf->on_SetFreq(convertFreqToStr(selState.radioFreq().getValue()));
                     }
                     if (selState.radioRitFreq().isDirty())

@@ -233,6 +233,7 @@ void RigControlFrame::checkRigDetailsAvail()
 void RigControlFrame::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
+    //qDebug() << "rigcontrol frame setting contest = " << ct->uuid;
 }
 
 void RigControlFrame::initRigFrame(QWidget * /*parent*/)
@@ -540,14 +541,18 @@ void RigControlFrame::setFreq(QString freq)
 void RigControlFrame::displayFreqOnFreqEditDisplay(QString freq)
 {
 
-    if (!freqEditOn)
+    if (checkValidBand(freq))  // prevent a crash with invalid freq
     {
-        trace(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(freq));
-        ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
-        setFreqTextLegalColour(freq, curMode);
-        ui->freqInput->setText(freq);
+        if (!freqEditOn)
+        {
+            trace(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(freq));
+            ui->freqInput->setInputMask(maskData::freqMask[freq.count() - 4]);
+            setFreqTextLegalColour(freq, curMode);
+            ui->freqInput->setText(freq);
 
+        }
     }
+
 
 }
 
@@ -1176,6 +1181,8 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                       .arg(radioName)
                       .arg(mode)
                       .arg(tslf->sSavedCurMode));
+                //qDebug() << "setRadioNAme " << "contest = " << ct->uuid << " contest mode = " << mode << " saved mode = " << tslf->sSavedCurMode;
+
 
                 selRadioName = PubSubName(radioName);
 
@@ -1196,6 +1203,7 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                         traceMsg(QString("setRadioName: onContestPageChangedFlag = %1, restoreModeFlag = %2").arg(onContestPageChangedFlag ? "true" : "false").arg(restoreModeFlag ? "true" : "false"));
 
                         QString m = tslf->sSavedCurMode;
+
                         traceMsg(QString("setRadioName: SavedCurMode = %1").arg(tslf->sSavedCurMode));
                         if (m.contains(':') && m.contains("MGM"))
                         {
@@ -1206,12 +1214,21 @@ void RigControlFrame::setRadioName(QString radNam, QString mode)
                             }
 
                         }
+
+                        if (m.isEmpty())
+                        {
+                            m = mode;
+                            traceMsg(QString("setRadioName: saved mode is empty - revert to contest mode = %1").arg(m));
+                            //qDebug() << "saved mode is empty - revert to contest mode = " << m;
+                        }
                         traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName).arg(m));
-                        emit selectRadio(radioName, m);  // send radio and previous mode.
+                        //qDebug() << "setRadioNAme " << "contest = " << ct->uuid << " setting save mode = " << m;
+                        emit selectRadio(radioName, m.remove(':'));  // send radio and previous mode.
                     }
                     else
                     {
                         traceMsg(QString("setRadioName: Not onContestPageChange = %1, radioName = %2, mode =%3").arg(onContestPageChangedFlag ? "true" : "false").arg(radioName).arg(mode));
+                        //qDebug() << "setRadioNAme " << "contest = " << ct->uuid << " setting contest mode = " << mode;
                         emit selectRadio(radioName, mode.remove(':'));
                     }
 
@@ -1274,8 +1291,11 @@ void RigControlFrame::setRadioFreq()
     if (ct == TContestApp::getContestApp() ->getCurrentContest())
     {
 
+        //qDebug() << "setradioFreq currentContest *** = " << ct->uuid;
+        //qDebug() << "curFreq = " << curFreq;
+       // qDebug() << "lastFreq = " << lastFreq;
 
-       if (onContestPageChangedFlag && curFreq == ZEROFREQ) // is it contest frame starting
+       if (onContestPageChangedFlag && (curFreq == ZEROFREQ || curFreq == "0"))// is it contest frame starting
        {
            onContestPageChangedFlag = false;
 
@@ -1316,6 +1336,10 @@ void RigControlFrame::setRadioFreq()
                        ui->bandSelCombo->setCurrentIndex(i + 1);
 
                        QString freq = listOfBands[i].freq;
+                       //qDebug() << "contestchange contest = " << ct->uuid;
+                       //qDebug() << "preset freq = " << freq;
+                       //qDebug() << "curFreq = " << curFreq;
+                       //qDebug() << "lastFreq = " << lastFreq;
 
                        traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq));
                        if (checkValidFreq(freq))
@@ -1364,6 +1388,10 @@ void RigControlFrame::setRadioFreq()
            else
            {
                freq = tslf->sSavedCurFreq;
+               //qDebug() << "contestchange contest = " << ct->uuid;
+               //qDebug() << "saved freq = " << freq;
+               //qDebug() << "curFreq = " << curFreq;
+               //qDebug() << "lastFreq = " << lastFreq;
                if (checkValidFreq(freq))
                {
                    traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq));
@@ -1549,7 +1577,7 @@ void RigControlFrame::setRadioState(QString s)
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);
-                restoreRadioFreq();
+                //restoreRadioFreq();
                 emit radioIsConnected(true);
             }
             else

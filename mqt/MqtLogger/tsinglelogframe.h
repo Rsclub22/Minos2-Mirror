@@ -108,8 +108,8 @@ public:
     bool splittersChanged;
 
     // From rigcontrol
-    QString sCurFreq;
-    QString sSavedCurFreq;
+    QString sCurFreq = ZEROFREQ;
+    QString sSavedCurFreq = ZEROFREQ;
     int curRitFreq;
     QString sCurMode;
     QString sSavedCurMode;
