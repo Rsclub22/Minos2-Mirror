@@ -121,7 +121,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 if (rigCache.setSelected(psn, loggeruuid, selContest))
                 {
                     QString mode;
-                    if ( args->getStructArgMember( 4, rpcConstants::rigControlLogMode, psMode ) )
+                    if ( args->getStructArgMember( 0, rpcConstants::rigControlLogMode, psMode ) )
                     {
                         if ( psMode->getString( mode ) )
                         {
@@ -131,7 +131,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                     }
 
                     QString freq;
-                    if ( args->getStructArgMember(3, rpcConstants::rigControlLogFreq, psFreq))
+                    if ( args->getStructArgMember(0, rpcConstants::rigControlLogFreq, psFreq))
                     {
                         if (psFreq->getString(freq))
                         {

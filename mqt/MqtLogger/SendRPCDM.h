@@ -95,6 +95,8 @@ public:  		// User declarations
       }
 
 
+
+
 private slots:
       void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
       void on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );

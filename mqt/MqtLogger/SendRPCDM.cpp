@@ -473,6 +473,9 @@ void TSendDM::notifyRigDetailChanges()
     }
 }
 
+
+
+
 void TSendDM::notifyRigChanges()
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
@@ -695,7 +698,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 rigCache.addRigList(an.getValue());
                 radioLoaded = true;
                 emit setRadioLoaded();
-                emit setRadioList();
+                //emit setRadioList();
             }
             else if ( an.getCategory() == rpcConstants::RotatorCategory && an.getKey() == rpcConstants::rotatorList )
             {

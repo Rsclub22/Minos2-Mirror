@@ -74,9 +74,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ContestPageChanged()), this, SLOT(on_ContestPageChanged()));
 
-    //qDebug() << "starting frame = " << contest->uuid;
-
-    //connect(&MinosLoggerEvents::mle, SIGNAL(BandMapPressed()), this, SLOT(on_BandMapPressed()));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(NextContactDetailsTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(PublishTimerTimer()));
@@ -847,14 +844,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
     LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
     LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
 
-    // save current freq as notifyRigChange writes incorrect contest freq to this frame
-    // with a contest change
-    //sSavedCurFreq = sCurFreq;
-    //sSavedCurMode = sCurMode;
-    //qDebug() << "tslf contestpage changed = " << contest->uuid;
-    //qDebug() << "curFreq = " << sCurFreq;
-    //qDebug() << "curMode = " << sCurMode;
-    trace(QString("on_ContestPageChanged:: save current freq = %1, for frame = %2").arg(sSavedCurFreq).arg(ct->name.getValue() + " uuid " + ct->uuid));
+
     LogContainer->sendDM->notifyRigChanges();
     LogContainer->sendDM->notifyRotChanges();
 
@@ -959,20 +949,7 @@ void TSingleLogFrame::HideTimerTimer(  )
     if (!contest)
         return;
 
-//    bool controlsLoaded = isBandMapLoaded() || isRadioLoaded() || isRotatorLoaded();
 
-//    if (controlsLoaded && !contest->isReadOnly())
-//    {
-//        if (FKHRigControlFrame->parent() != this)
-//            FKHRigControlFrame->setVisible(isRadioLoaded());
-//        if (runButtonsFrame->parent() != this)
-//            runButtonsFrame->setVisible(isRadioLoaded());
-
-//        if (FKHRotControlFrame->parent() != this)
-//            FKHRotControlFrame->setVisible(isRotatorLoaded());
-//        if (rotPresets->parent() != this)
-//            rotPresets->setVisible(isRotatorLoaded());
-//    }
 }
 
 void TSingleLogFrame::updateQSODisplay()
@@ -1683,10 +1660,6 @@ void TSingleLogFrame::on_SetFreq(QString f)
     trace(QString("Freq from radio = %1").arg(f));
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        //qDebug() << "onsetFreq contest = " << contest->uuid;
-
-        //qDebug() << "set Freq = " << f;
-
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
         runButtonsFrame->setFreq(f);

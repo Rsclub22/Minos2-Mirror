@@ -79,7 +79,7 @@ public:
     void setFreq(QString);
     void setRitFreq(int);
     void setRitRadioStatus(bool);
-    void setRadioName(QString, QString mode);
+    void setRadioName(QString, bool);
     void setRadioState(QString);
     void setRitEnableState(bool s);
 
@@ -183,6 +183,7 @@ private:
     QShortcut *ritClearShortCut;
     QShortcut *ritFreqEditShortCut;
 
+    bool rigFrameStartFlag;
     bool radioLoaded;
     bool radioConnected;
     bool radioError;
@@ -200,6 +201,7 @@ private:
     bool ritKHzFlag;
     //QString curRit;
 
+    bool rigDetailsLoaded = false;
 
     QStringList listOfRadios;
     RadioDetails selRadioDetails;
@@ -212,7 +214,7 @@ private:
     bool ignorePreviousFreqFlag;
     bool ignorePresetFreqFlag;
 
-    QTimer *launchRadioSelectTimer;
+    QTimer *launchRadioSelectTimer = nullptr;
     int launchRadioSelectCount;
 
 
@@ -276,7 +278,7 @@ private:
     int setBandSelComboIndex(QString band);
     void restoreRadioFreq();
     void displayFreqOnFreqEditDisplay(QString freq);
-    void setRadioFreq(QString &sendFreq);
+    void setRadioFreq(QString &sendFreq, bool &rigFrameStartFlag);
 };
 
 

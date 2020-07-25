@@ -149,11 +149,11 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         // init cache with radio data
         trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
         sendRadioListLogger();
-
+        msg->rigCache.publish();
 
         initCacheData();
 
-        msg->rigCache.publish();
+
     }
 
 
@@ -547,7 +547,7 @@ void RigControlMainWindow::upDateRadio()
 
             if (radioOpenStat == OPEN_OK && radio)
             {
-                initCacheData();
+                //initCacheData();
                 int retCode;
 
                 supportGetVfo = radio->supportReadVfo(setupRadio->currentRadio.rigModelNumber);
