@@ -72,7 +72,8 @@ public:
 
 
     void setRadioLoaded();
-    void setRadioList();
+    void setRadioListFromTslf();
+
 
     void setMode(QString);
     void setVolume(int level);
@@ -163,6 +164,7 @@ private slots:
 
 
     void freqStepComboChanged(const QString step);
+
 public slots:
     void returnChangeRadioFreq();
 private:
@@ -254,6 +256,8 @@ private:
 
     void showRitButOn();
     void showRitButOff();
+
+    void setRadioList();
 
     void setVolControlVisible(bool value);
 

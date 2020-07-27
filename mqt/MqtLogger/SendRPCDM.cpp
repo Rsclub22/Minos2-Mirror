@@ -504,8 +504,6 @@ void TSendDM::notifyRigChanges()
                     if (selState.radioFreq().isDirty())
                     {
                         trace("SendRPC Rig set freq " + convertFreqToStr(selState.radioFreq().getValue()));
-                        qDebug() << "##### contest id = " << selDetail.getSelectedContest(loggerUuid).getValue();
-                        qDebug() << "rpc rig freq = " << QString::number(selState.radioFreq().getValue());
                         tslf->on_SetFreq(convertFreqToStr(selState.radioFreq().getValue()));
                     }
                     if (selState.radioRitFreq().isDirty())
@@ -698,7 +696,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 rigCache.addRigList(an.getValue());
                 radioLoaded = true;
                 emit setRadioLoaded();
-                //emit setRadioList();
+                emit setRadioList();
             }
             else if ( an.getCategory() == rpcConstants::RotatorCategory && an.getKey() == rpcConstants::rotatorList )
             {
