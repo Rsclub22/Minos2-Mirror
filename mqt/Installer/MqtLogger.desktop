@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Minos Logger
+Comment=Minos Logger
+Exec=/home/mjg/runtime/Bin/MqtLogger
+Icon=/home/mjg/runtime/MinosLogger.ico
+Terminal=false
