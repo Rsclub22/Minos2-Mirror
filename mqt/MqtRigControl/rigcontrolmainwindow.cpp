@@ -37,6 +37,9 @@
 
 //#define RIGCONTROL_TEST
 
+const bool PUBLISH_NOW = true;
+const bool DONT_PUBLISH_NOW = false;
+
 RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    QMainWindow(parent),
    ui(new Ui::RigControlMainWindow),
@@ -368,7 +371,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->actionTraceComms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAbout_Radio_Config, SIGNAL(triggered()), this, SLOT(aboutRigConfig()));
-    connect(pollTimer, SIGNAL(timeout()), this, SLOT(getRadioInfo()));
+    connect(pollTimer, SIGNAL(timeout()), this, SLOT(pollRadioInfo()));
     connect(ui->ritEnableChk, SIGNAL(stateChanged(int)), this, SLOT(ritEnableChecked(int)));
 
 
@@ -396,6 +399,12 @@ void RigControlMainWindow::initActionsConnections()
 
 
 
+}
+
+
+void RigControlMainWindow::pollRadioInfo()
+{
+    getRadioInfo(PUBLISH_NOW);
 }
 
 void RigControlMainWindow::setupBandFreq()
@@ -652,8 +661,6 @@ void RigControlMainWindow::upDateRadio()
 
                 ui->radioNameDisp->setText(setupRadio->currentRadio.radioName);
 
-
-
                 if (appName.count() > 0)
                 {
                     logMessage(QString("Update Radio: Logger Set Freq = %1, Set Mode = %2").arg(selRadioFreq).arg(selRadioMode));
@@ -671,7 +678,9 @@ void RigControlMainWindow::upDateRadio()
                     setMode(USB_STR, curVfo);
                 }
 
-                // build supported band list for this radio
+
+                getRadioInfo(DONT_PUBLISH_NOW);
+
                 // if it is a rigctld model, then use the radio model number connected to rigctld
 
                 int modelNumber = setupRadio->currentRadio.rigModelNumber;
@@ -1429,7 +1438,7 @@ void RigControlMainWindow::cmdLockOff()
 
 
 
-void RigControlMainWindow::getRadioInfo()
+void RigControlMainWindow::getRadioInfo(bool pubNow)
 {
     if (closeApp)
         return;
@@ -1591,7 +1600,11 @@ void RigControlMainWindow::getRadioInfo()
     }
 
 */
-    msg->rigCache.publish();
+    if (pubNow)
+    {
+       msg->rigCache.publish();
+    }
+
 }
 
 
@@ -1663,8 +1676,7 @@ void RigControlMainWindow::loggerSetFreq(QString freq)
         logger_freq = freq;
         setFreq(freq, curVfo);
     }
-    // but the rig hasn't updated...
-    msg->rigCache.publish();
+
 }
 
 
@@ -1681,7 +1693,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
     QString cb;
     int tvNum = 0;
 
-    bool usingTransVert = false;
+    //bool usingTransVert = false;
 
     double f = sfreq.toDouble(&ok);
     logMessage(QString("SetFreq: Change to Freq = %1").arg(QString::number(static_cast<int>(f))));
@@ -1710,7 +1722,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
                 if (setupRadio->currentRadio.transVertSettings[tvNum]->band == cb)
                 {
                     b = true;
-                    usingTransVert = true;
+                    //usingTransVert = true;
                     logMessage(QString("SetFreq: Found Transverter %1 for this freq. = %2").arg(setupRadio->currentRadio.transVertSettings[tvNum]->band).arg(freq));
                     break;
                 }
@@ -1806,7 +1818,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
                 // when not polling radio for information
                 trace(QString("SetFreq: Check Transvert Freq at startup"));
                 cmdLockOff();
-                getRadioInfo();
+                getRadioInfo(DONT_PUBLISH_NOW);
 
              }
 
@@ -3070,7 +3082,7 @@ void RigControlMainWindow::sendRadioRitStatusLogger(bool status)
 
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setRadioRitStatus(psname, status);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
         logMessage(QString("Send Radio Rit status to logger = %1 psn=%2").arg(status ? "On" : "Off").arg(psname.toString()));
 
     }
@@ -3082,7 +3094,7 @@ void RigControlMainWindow::sendRitFreqLogger(int ritFreq)
     {
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setRadioRitFreq(psname, ritFreq);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
         logMessage(QString("Send Rit freq to logger = %1 psn=%2").arg(convertRitFreqToStr(ritFreq, ritKHzFlag)).arg(psname.toString()));
 
     }
@@ -3515,7 +3527,7 @@ void RigControlMainWindow::sendStatusLogger(const QString &message )
         logMessage(QString("Send status to logger = %1").arg(message));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setStatus(psname, message);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
     }
 }
 
@@ -3550,7 +3562,7 @@ void RigControlMainWindow::sendFreqToLog(Frequency freq)
         PubSubName psname(setupRadio->currentRadio.radioName);
 
         msg->rigCache.setRadioFreq(psname, static_cast<double>(freq));
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
         logMessage(QString("Send freq to logger = %1 psn=%2").arg(convertFreqToStr(freq)).arg(psname.toString()));
     }
 }
@@ -3565,7 +3577,7 @@ void RigControlMainWindow::sendModeToLog(QString mode)
         logMessage(QString("Send mode to logger = %1").arg(mode));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setRadioMode(psname, mode);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
     }
 }
 
@@ -3576,7 +3588,7 @@ void RigControlMainWindow::sendVolToLog(int level)
         logMessage(QString("Send volume to logger = %1").arg(QString::number(level)));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setRadioVolume(psname, level);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
     }
 }
 
@@ -3603,7 +3615,7 @@ void RigControlMainWindow::sendTransVertEnabled(bool status)
         logMessage(QString("Send Transvert Enabled to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setTransverterEnabled(psname, status);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
 
     }
 }
@@ -3618,7 +3630,7 @@ void RigControlMainWindow::sendTransVertStatusToLog(bool status)
         logMessage(QString("Send Transvert Status to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setTransverterStatus(psname, status);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
 
     }
 }
@@ -3631,7 +3643,9 @@ void RigControlMainWindow::sendTransVertOffsetToLogger(int tvNum)
     logMessage(QString("Send Transvert Offset to logger = %1%2").arg(setupRadio->currentRadio.transVertEnable ? f = "-" : f = "+").arg(f));
     PubSubName psname(setupRadio->currentRadio.radioName);
     msg->rigCache.setTransverterOffset(psname, setupRadio->currentRadio.transVertSettings[tvNum]->transVertOffset);
-    msg->rigCache.publish();
+    //msg->rigCache.publish();
+
+
 }
 
 void RigControlMainWindow::sendTransVertSwitchToLogger(const QString &swNum)
@@ -3645,7 +3659,8 @@ void RigControlMainWindow::sendTransVertSwitchToLogger(const QString &swNum)
     logMessage(QString("Send Transvert Switch Number to logger = %1").arg(swNum));
     PubSubName psname(setupRadio->currentRadio.radioName);
     msg->rigCache.setTransverterSwitch(psname, swNum.toInt());
-    msg->rigCache.publish();
+    //msg->rigCache.publish();
+
 }
 
 
@@ -3697,7 +3712,8 @@ void RigControlMainWindow::sendRitEnableStatus(bool status)
         logMessage(QString("Send Rit Enable Status to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setRitEnableStatus(psname, status);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
+
     }
 }
 
@@ -3709,7 +3725,8 @@ void RigControlMainWindow::sendMaxRitFreqLogger()
         logMessage(QString("Send RitMaxFreq = %1 to logger").arg(ritMaxKHzFreq));
         PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setRitMaxKHzFreq(psname, ritMaxKHzFreq);
-        msg->rigCache.publish();
+        //msg->rigCache.publish();
+
     }
 }
 

@@ -21,7 +21,7 @@ TSendDM::TSendDM(QWidget* Owner )
 {
     QString h = QHostInfo::localHostName();
     loggerUuid = /*makeUuid()*/h;
-    trace("logger uuid is " + loggerUuid);
+    traceMsg("logger uuid is " + loggerUuid);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
@@ -149,25 +149,7 @@ void TSendDM::sendKeyerStop(TSingleLogFrame *tslf)
 //---------------------------------------------------------------------------
 
 
-/*
-void TSendDM::sendBandMap(  TSingleLogFrame * tslf, const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth )
-{
-   RPCGeneralClient rpc(rpcConstants::bandmapMethod);
-   QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-   st->addMember( loggerUuid, rpcConstants::loggerUuid );
-   st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
-   //st->addMember( rpcConstants::bandmapApp, rpcConstants::bandmapParamName );
-   st->addMember( freq, rpcConstants::bandmapParamFreq );
-   st->addMember( call, rpcConstants::bandmapParamCallsign );
-   st->addMember( loc, rpcConstants::bandmapParamLocator );
-   st->addDtgMember( utc, rpcConstants::bandmapParamUTC );
-   st->addMember( qth, rpcConstants::bandmapParamQTH );
-
-   rpc.getCallArgs() ->addParam( st );
-//   rpc.queueCall( tslf->bandMapServerConnectable.remoteAppName + "@" + tslf->bandMapServerConnectable.serverName );
-}
-*/
 
 void TSendDM::sendSpotToClusterServer( const QString &freq, const QString &call, const QString &loc )
 {
@@ -215,7 +197,7 @@ void TSendDM::sendRotator(TSingleLogFrame *tslf, rpcConstants::RotateDirection d
 void TSendDM::changeRotatorSelectionTo(const PubSubName &name, const QString &uuid)
 {
     // we should de-select the cached uuid on all rotator apps
-    trace(QString("Change rotator selection to %1 %2").arg(name.toString()).arg(uuid));
+    traceMsg(QString("Change rotator selection to %1 %2").arg(name.toString()).arg(uuid));
 
     PubSubName selected = rotatorCache.getSelected(loggerUuid);
 
@@ -230,6 +212,8 @@ void TSendDM::changeRotatorSelectionTo(const PubSubName &name, const QString &uu
 }
 void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
 {
+    traceMsg(QString("Send rotator selection to %1 %2").arg(s.toString()).arg(uuid));
+
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -285,7 +269,7 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &freq, const Q
 
 void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
 {
-    trace(QString("SendDM sendRigControlFreq = %1").arg(freq));
+
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setLogFreq(rigSelected, convertStrToFreq(freq));
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
@@ -301,6 +285,7 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
+    traceMsg(QString("SendRigControlFreq = %1 uuid = %2").arg(freq).arg(tslf->getContest()->uuid));
 }
 
 
@@ -400,7 +385,7 @@ void TSendDM::notifyRigDetailChanges()
         RigDetails& selDetail = rigCache.getDetails(psn);
         if (selDetail.isDirty())
         {
-            trace(QString("notifyRigDetailChanges: %1 is dirty, send to rigcontrol").arg(psn.toString()));
+            traceMsg(QString("notifyRigDetailChanges: %1 is dirty, send to rigcontrol").arg(psn.toString()));
             if (selDetail.transverterOffset().isDirty())
             {
                 for (int i = 0; i < frames.size(); i++)
@@ -495,36 +480,36 @@ void TSendDM::notifyRigChanges()
 
                 if (selStateUuid == frameUuid)
                 {
-                    trace("Rig state distribution for " + selStateUuid);
+                    traceMsg(QString("Rig state distribution for %1").arg(selStateUuid));
                     if (selState.radioMode().isDirty())
                     {
-                        trace("SendRPC Rig set mode " + selState.radioMode().getValue());
+                        traceMsg(QString("Rig set mode = %1, uuid = %2").arg(selState.radioMode().getValue()).arg(selStateUuid));
                         tslf->on_SetMode(selState.radioMode().getValue());
                     }
                     if (selState.radioFreq().isDirty())
                     {
-                        trace("SendRPC Rig set freq " + convertFreqToStr(selState.radioFreq().getValue()));
+                        traceMsg(QString("Rig set freq = %1, uuid = %2").arg(convertFreqToStr(selState.radioFreq().getValue())).arg(selStateUuid));
                         tslf->on_SetFreq(convertFreqToStr(selState.radioFreq().getValue()));
                     }
                     if (selState.radioRitFreq().isDirty())
                     {
-                        trace("SendRPC Rig set ritFreq " + QString::number(selState.radioRitFreq().getValue()));
+                        traceMsg(QString("Rig set ritFreq = %1, uuid = %2").arg(QString::number(selState.radioRitFreq().getValue())).arg(selStateUuid));
                         tslf->on_SetRitFreq(selState.radioRitFreq().getValue());
                     }
                     if (selState.ritRadioStatus().isDirty())
                     {
                         QString s;
-                        trace("SendRPC Rig set ritRadioStatus " + (s = selState.ritRadioStatus().getValue() ? "On" : "Off"));
+                        traceMsg(QString("Rig set ritRadioStatus = %1, uuid = %2").arg((s = selState.ritRadioStatus().getValue() ? "On" : "Off")).arg(selStateUuid));
                         tslf->on_SetRitRadioStatus(selState.ritRadioStatus().getValue());
                     }
                     if (selState.radioVolLevel().isDirty())
                     {
-                        trace("SendRPC Rig set volume " + QString::number(selState.radioVolLevel().getValue()));
+                        traceMsg(QString("Rig set volume =  %1, uuid = %2").arg(QString::number(selState.radioVolLevel().getValue())).arg(selStateUuid));
                         tslf->on_SetVolume(selState.radioVolLevel().getValue());
                     }
                     if (selState.status().isDirty())
                     {
-                        trace("SendRPC Rig set status " + selState.status().getValue());
+                        traceMsg(QString("Rig set status = %1, uuid = %2").arg(selState.status().getValue()).arg(selStateUuid));
                         tslf->on_SetRadioStatus(selState.status().getValue());
                     }
                     selState.clearDirty();
@@ -553,41 +538,41 @@ void TSendDM::notifyRotChanges()
 
                 if (selStateUuid == frameUuid)
                 {
-                    trace("Rotator state distribution for " + selStateUuid);
+                    traceMsg(QString("Rotator state distribution for %1").arg(selStateUuid));
 
                     if (selState.bearing().isDirty())
                     {
-                        trace("SendRPC Rotator set bearing " + selState.bearing().getValue());
+                        traceMsg(QString("Rotator set bearing = %1, uuid = %2").arg(selState.bearing().getValue()).arg(selStateUuid));
                         tslf->on_RotatorBearing(selState.bearing().getValue());
                     }
                     if (selState.status().isDirty())
                     {
-                        trace("SendRPC Rotator set status " + selState.status().getValue());
+                        traceMsg(QString("Rotator set status = %1, uuid = %2").arg(selState.status().getValue()).arg(selStateUuid));
                         tslf->on_RotatorStatus(selState.status().getValue());
                     }
                     selState.clearDirty();
                 }
                 if (selDetailUuid == frameUuid)
                 {
-                    trace("Rotator details distribution for " + selDetailUuid);
+                    traceMsg(QString("Rotator details distribution for %1").arg(selDetailUuid));
                     if (selDetail.maxAzimuth().isDirty())
                     {
-                        trace(QString("SendRPC Rotator set maxAzimuth %1").arg(selDetail.maxAzimuth().getValue()));
+                        traceMsg(QString("Rotator set maxAzimuth = %1, uuid = %2").arg(selDetail.maxAzimuth().getValue()).arg(selStateUuid));
                         tslf->on_RotatorMaxAzimuth(selDetail.maxAzimuth().getValue());
                     }
                     if (selDetail.minAzimuth().isDirty())
                     {
-                        trace(QString("SendRPC Rotator set minAzimuth %1").arg(selDetail.minAzimuth().getValue()));
+                        traceMsg(QString("Rotator set minAzimuth = %1, uuid = %2").arg(selDetail.minAzimuth().getValue()).arg(selStateUuid));
                         tslf->on_RotatorMinAzimuth(selDetail.minAzimuth().getValue());
                     }
                     if (selDetail.cwCcwCmdEnable().isDirty())
                     {
-                        trace(QString("SendRPC Rotator set cwCcwCmdEnable %1").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False"));
+                        traceMsg(QString("SendRPC Rotator set cwCcwCmdEnable = %1, uuid = %2").arg(selDetail.cwCcwCmdEnable().getValue() ? "True" : "False").arg(selStateUuid));
                         tslf->on_cwCcwCmdEnable(selDetail.cwCcwCmdEnable().getValue());
                     }
                     if (selDetail.supportStopCommand().isDirty())
                     {
-                        trace(QString("SendRPC Rotator set supportStopCommand %1").arg(selDetail.supportStopCommand().getValue() ? "True" :"False"));
+                        traceMsg(QString("Rotator set supportStopCommand = %1, uuid = %2").arg(selDetail.supportStopCommand().getValue() ? "True" :"False").arg(selStateUuid));
                         tslf->on_SupportStopCommand(selDetail.supportStopCommand().getValue());
                     }
                     selDetail.clearDirty();
@@ -595,7 +580,7 @@ void TSendDM::notifyRotChanges()
                 }
                 if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
                 {
-                    trace("SendRPC Rotator set presets " + rotatorCache.getRotatorPresets(rotSelected));
+                    traceMsg(QString("Rotator set presets = %1").arg(rotatorCache.getRotatorPresets(rotSelected)).arg(selStateUuid));
                     tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
                 }
             }
@@ -608,7 +593,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
 {
     // PubSub notifications
     AnalysePubSubNotify an( err, mro );
-    trace( "Notify callback from " + from + ( err ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherServer());
+    traceMsg( "Notify callback from " + from + ( err ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherServer());
 
     // Need to check that the server/app is in the category map; if not, don't pass it on
     if ( an.getOK())
@@ -669,7 +654,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
         }
         if ( an.getState() == psPublished)
         {
-            trace(QString("SendRPC category %1 key %2").arg(an.getCategory()).arg(an.getKey()));
+            traceMsg(QString("Category %1 key %2").arg(an.getCategory()).arg(an.getKey()));
             if ( an.getCategory() == rpcConstants::rigStateCategory)
             {
                 rigCache.setStateString(an);
@@ -692,7 +677,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             }
             else if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlRadioList )
             {
-                trace("SendRPC set rigList and loaded " + an.getValue());
+                traceMsg(QString("Set rigList and loaded %1").arg(an.getValue()));
                 rigCache.addRigList(an.getValue());
                 radioLoaded = true;
                 emit setRadioLoaded();
@@ -700,7 +685,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             }
             else if ( an.getCategory() == rpcConstants::RotatorCategory && an.getKey() == rpcConstants::rotatorList )
             {
-                trace("SendRPC set rotList and loaded " + an.getValue());
+                traceMsg(QString("SendRPC set rotList and loaded %1").arg(an.getValue()));
                 rotatorCache.addRotList(an.getValue());
                 rotatorLoaded = true;
                 emit RotatorLoaded();
@@ -765,7 +750,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                 keyerApp = PubSubName(an);
             emit setKeyerLoaded();
             LogContainer->setCaption( an.getValue() );
-            trace( "KeyerReport " + an.getValue() );
+            traceMsg( "KeyerReport " + an.getValue() );
         }
 
         if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterReport )
@@ -792,8 +777,8 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
 void TSendDM::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
     // responds to pull calls from the monitoring client
-    trace( "request callback from " + from + ( err ? ":Error" : ":Normal" ) );
-    trace("method is " + mro->getMethodName());
+    traceMsg( "request callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    traceMsg("method is " + mro->getMethodName());
 
     // need to check "from" is correct
     if ( !err )
@@ -929,7 +914,7 @@ void TSendDM::subscribeApps()
         and check the app name before responding to it.
 
     */
-    trace("subscribeApps");
+    traceMsg("subscribeApps");
     invalidateCache();
 
     catMap.clear();
@@ -1033,4 +1018,10 @@ void TSendDM::subscribeApps()
             }
         }
     }
+}
+
+
+void TSendDM::traceMsg(QString msg)
+{
+    trace(QString("[SendRPCDM] %1").arg(msg));
 }

@@ -339,12 +339,14 @@ private:
 
     int getAndSendVfo();
     void sendMaxRitFreqLogger();
+
 private slots:
 
     void onStdInRead(QString);
     void saveTraceLogFlag(bool);
 
-    void getRadioInfo();
+    void getRadioInfo(bool pubNow);
+    //void getRadioInfo();
     void logMessage(QString s);
     void about();
     void LogTimerTimer();
@@ -393,6 +395,7 @@ signals:
     void onRitOffset();
     void onRit0();
     void onNewVfo(QString omniRigVfo);
+    void pollRadioInfo();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

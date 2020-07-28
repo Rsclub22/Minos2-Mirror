@@ -1809,6 +1809,7 @@ void TSingleLogFrame::sendRadioFreq(QString freq)
     {
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlFreq(this, freq);
+
     }
 }
 

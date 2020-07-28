@@ -36,6 +36,7 @@ class TSendDM : public QObject
       QString loggerUuid;
 
 
+      void traceMsg(QString msg);
 public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();
