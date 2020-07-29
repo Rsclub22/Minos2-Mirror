@@ -488,8 +488,16 @@ void TSendDM::notifyRigChanges()
                     }
                     if (selState.radioFreq().isDirty())
                     {
-                        traceMsg(QString("Rig set freq = %1, uuid = %2").arg(convertFreqToStr(selState.radioFreq().getValue())).arg(selStateUuid));
-                        tslf->on_SetFreq(convertFreqToStr(selState.radioFreq().getValue()));
+                        if (selState.radioFreq().getValue() == 0)
+                        {
+                            traceMsg(QString("Rig set freq = %1, uuid = %2 - ignore == 0").arg(convertFreqToStr(selState.radioFreq().getValue())).arg(selStateUuid));
+                        }
+                        else
+                        {
+                            traceMsg(QString("Rig set freq = %1, uuid = %2").arg(convertFreqToStr(selState.radioFreq().getValue())).arg(selStateUuid));
+                            tslf->on_SetFreq(convertFreqToStr(selState.radioFreq().getValue()));
+                        }
+
                     }
                     if (selState.radioRitFreq().isDirty())
                     {

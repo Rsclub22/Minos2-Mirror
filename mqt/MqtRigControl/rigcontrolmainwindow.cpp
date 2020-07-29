@@ -152,10 +152,10 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         // init cache with radio data
         trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
         sendRadioListLogger();
-        msg->rigCache.publish();
+
 
         initCacheData();
-
+        msg->rigCache.publish();
 
     }
 
@@ -785,10 +785,11 @@ void RigControlMainWindow::upDateRadio()
                 else
                 {
                     // not polling get initial values
-                    trace(QString("Not polling, get and sendFrequency and get and send mode"));
-                    getAndSendVfo();
-                    getAndSendFrequency(curVfo);
-                    getAndSendMode(curVfo);
+                    trace(QString("Not polling, set connections for future updates"));
+                    //trace(QString("Not polling, get and sendFrequency and get and send mode"));
+                    //getAndSendVfo();
+                    //getAndSendFrequency(curVfo);
+                    //getAndSendMode(curVfo);
                     // connect signals for future value updates and errors
                     connect(radio, SIGNAL(newRxFreq(quint64)), this, SLOT(onNewRxFreq(quint64)), Qt::QueuedConnection); // QueuedConnection, ensure return to rigcontroller caller when not polling - eg Omnirig
                     connect(radio, SIGNAL(newVfo(QString)), this, SLOT(onNewVfo(QString)), Qt::QueuedConnection);
@@ -846,6 +847,7 @@ void RigControlMainWindow::upDateRadio()
 
     if (appName.length() > 0)
     {
+        trace(QString("publish to logger"));
         msg->rigCache.publish();
     }
 }
@@ -882,6 +884,7 @@ void RigControlMainWindow::refreshRadio()
             writeWindowTitle(appName);
             sendStatusToLogConnected();
             dumpRadioToTraceLog();
+            msg->rigCache.publish();
         }
         else
         {
@@ -1623,37 +1626,35 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString freq, QString mod
     if (closeApp)
         return;
 
-    logMessage(QString("Received SelectRadio from Logger = %1, mode = %2").arg(s.toString()).arg(mode));
+    logMessage(QString("**** Received SelectRadio from Logger = %1, freq = %2, mode = %3 ****").arg(s.toString()).arg(freq).arg(mode));
 
 
-    if (!mode.isEmpty())
+    if (mode.isEmpty() || freq.isEmpty() || s.isEmpty())
     {
-        selRadioMode = mode;
+        QString("RadioName or Mode or Freq is empty - ignore");
     }
 
-    if (freq.isEmpty())
-    {
-        selRadioFreq = ZEROFREQ;
-    }
-    else
-    {
-        selRadioFreq = freq;
-    }
+    selRadioMode = mode;
+
+
+    selRadioFreq = freq;
+
 
 
     QString oldRadio = setupRadio->getCurrentRadioName();
 
     setupRadio->setCurrentRadioName(s.key());
 
-    if (!s.isEmpty() && s.key() == oldRadio)
-    {
-        refreshRadio();
-    }
-    else
-    {
+    //if (!s.isEmpty() && s.key() == oldRadio)
+   // {
+   //     refreshRadio();
+    //}
+   // else
+    //{
         upDateRadio();
-    }
-    msg->rigCache.invalidate();
+        msg->rigCache.invalidate();
+    //}
+
 }
 
 
@@ -2295,7 +2296,7 @@ void RigControlMainWindow::getRigCtldConnectDelay()
     {
         logMessage(QString("ERROR rigctld connect delay value = %1, too high, setting max delay = %2").arg(rigCtldConnectDelay).arg(MAX_RIGCTLD_CONNECT_DELAY));
         rigCtldConnectDelay = 5;
-        }
+    }
 
 
 }
@@ -2322,7 +2323,11 @@ void RigControlMainWindow::initCacheData()
 
             //bool f = radio->supportVolControl(radioModelNumber); //*********************
             //addVolStatusToRigCache(i, f); //*********************************
-            msg->rigCache.publish();
+
+
+            //msg->rigCache.publish();
+
+
 
         }
     }
