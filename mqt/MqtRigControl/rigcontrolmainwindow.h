@@ -159,6 +159,8 @@ private:
 
     bool radioCommsOK;
 
+    bool ritTestEnabled = false; // for test....
+
     SerialTVSwitch *serialTVSw = nullptr;
 
     QString geoStr;         // geometry registry location
@@ -338,6 +340,7 @@ private:
 
     int getAndSendVfo();
     void sendMaxRitFreqLogger();
+    void showRitTestControl(bool state);
 private slots:
 
     void onStdInRead(QString);
@@ -369,13 +372,10 @@ private slots:
     void ritEnableChecked(int state);
     void updateRigDetailsCache();
 
-#ifdef RIGCONTROL_TEST
 
-    void incRit();   // for test.... *************************
+
+    void testIncRit(int value);  // for test.... *************************
     void ritbuttontoggle();  // for test.... *************************
-signals:
-#endif
-
 
 
     void rigCtldMessage();
@@ -392,6 +392,9 @@ signals:
     void onRitOffset();
     void onRit0();
     void onNewVfo(QString omniRigVfo);
+
+
+
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

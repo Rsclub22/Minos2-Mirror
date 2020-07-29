@@ -35,7 +35,7 @@
 
 #include "cutils.h"
 
-//#define RIGCONTROL_TEST
+
 
 RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    QMainWindow(parent),
@@ -106,17 +106,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     ui->testRitButton->setVisible(false);
     ui->setRitSpinner->setVisible(false);
 
-#ifdef RIGCONTROL_TEST
-    // rit test
-    ui->testRitButton->setVisible(true);
-    ui->setRitSpinner->setVisible(true);
-    ui->setRitSpinner->setRange(-9000, 9000);
-    ui->setRitSpinner->setSingleStep(100);
-    connect(ui->setRitSpinner, SIGNAL(editingFinished()), this, SLOT(incRit()));
-    connect(ui->testRitButton, SIGNAL(clicked()), this, SLOT(ritbuttontoggle()));
-    //****************************************************************************************
 
-#endif
 
     QByteArray geometry = settings.value(geoStr).toByteArray();
     if (geometry.size() > 0)
@@ -137,9 +127,25 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
-    //config.beginGroup("MGM_Modes");
+
     mgmModes = config.value("MGM_Modes/MgmModes", "").toStringList();
-    //config.endGroup();
+
+    ritTestEnabled = config.value("Rit_Test_Control/Rit_test_on", false).toBool();
+    if (ritTestEnabled)
+    {
+        // rit test
+
+        ui->setRitSpinner->setSingleStep(100);
+        connect(ui->setRitSpinner, SIGNAL(valueChanged(int)), this, SLOT(testIncRit(int)));
+        connect(ui->testRitButton, SIGNAL(clicked()), this, SLOT(ritbuttontoggle()));
+
+    }
+    else
+    {
+        showRitTestControl(false);
+    }
+
+
 
     ritMaxKHzFreq = MAX_RITFREQ;
     ritKHzFlag = false;
@@ -729,6 +735,11 @@ void RigControlMainWindow::upDateRadio()
                     if (ritEnable)
                     {
                         setRitFreqDisplayVisible(true);
+                        if (ritTestEnabled)
+                        {
+
+                            showRitTestControl(true);
+                        }
                     }
 
                     setRitGetSetFreqIndicatorVisible(true);
@@ -2675,6 +2686,11 @@ void RigControlMainWindow::getRitSupportStatus()
     {
 
         ritMaxKHzFreq = radio->getMaxRitFreq(setupRadio->currentRadio.rigModelNumber);
+
+        // load rit test spinner
+        ui->setRitSpinner->setRange(ritMaxKHzFreq * -1, ritMaxKHzFreq);
+
+
         logMessage(QString("Rit MaxFreq = %1").arg(ritMaxKHzFreq));
         if (ritMaxKHzFreq != 0)
         {
@@ -4130,32 +4146,53 @@ void sleepFor(qint64 milliseconds)
 }
 
 
-#ifdef RIGCONTROL_TEST
 
-void RigControlMainWindow::incRit()
+/*
+void RigControlMainWindow::testIncRit(int )
 {
-    int retCode;
-    bool ok;
-    QString sFreq = ui->setRitSpinner->text();
-    long dFreq = sFreq.toLong(&ok);
-    retCode = setRitFreq(RIG_VFO_CURR, dFreq);
-    if (retCode < 0)
-    {
-        qDebug()<< "test set rit errror";
-    }
+
+        bool ok;
+        QString sFreq = ui->setRitSpinner->text();
+        ShortFreq dFreq = sFreq.toShort(&ok);
+        if (ok)
+        {
+            setRitFreq(curVfo, dFreq);
+        }
+        else
+        {
+            trace(QString("testIncRit: Invalid incRIT value = %1").arg(sFreq));
+        }
+
+
+}
+*/
+
+void RigControlMainWindow::testIncRit(int value)
+{
+
+
+        setRitFreq(value);
 
 }
 
 
 void RigControlMainWindow::ritbuttontoggle()
 {
-    bool status = !radioRitOn;
-    int retCode = 0;
-    retCode = radio->toggleRitState(RIG_VFO_CURR, status);
-    if (retCode < 0)
+    if (radio)
     {
-        qDebug() << "Rit toggle = " << retCode;
+        bool status = !radioRitOn;
+        int retCode = 0;
+        retCode = radio->setRitState(curVfo, status);
+        if (retCode < 0)
+        {
+            trace(QString("testRitButtontoggle: Rit on/off toggle error, code = %1").arg(retCode));
+        }
     }
+
 }
 
-#endif
+void RigControlMainWindow::showRitTestControl(bool state)
+{
+    ui->testRitButton->setVisible(state);
+    ui->setRitSpinner->setVisible(state);
+}
