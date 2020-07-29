@@ -142,7 +142,7 @@ QString BaseContestLog::getCabrilloFreqBand(QString txfreq )
     // rig control, and the proper Cabrillo name of the band
 
     txfreq = txfreq.remove('.');
-    long freq = static_cast<long>(convertStrToFreq(txfreq));
+    double freq = convertStrToFreq(txfreq);
 
     QString cband = currentBand.getValue();
 
@@ -162,8 +162,8 @@ QString BaseContestLog::getCabrilloFreqBand(QString txfreq )
         {
             return cb;
         }
-        freq = freq/1000;
-        return QString::number(freq);
+        freq = freq/1000.0;
+        return QString::number(freq, 'f', 0);
     }
     return "XXX";
 }

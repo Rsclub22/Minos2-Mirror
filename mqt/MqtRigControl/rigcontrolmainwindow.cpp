@@ -1672,7 +1672,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
     bool usingTransVert = false;
 
     double f = sfreq.toDouble(&ok);
-    logMessage(QString("SetFreq: Change to Freq = %1").arg(QString::number(static_cast<int>(f))));
+    logMessage(QString("SetFreq: Change to Freq = %1").arg(QString::number(f, 'f', 0)));
 
     BandList &blist = BandList::getBandList();
     BandInfo bi;
