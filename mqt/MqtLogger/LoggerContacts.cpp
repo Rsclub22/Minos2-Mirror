@@ -532,7 +532,7 @@ QString ContestContact::getADIFLine()
 
 
     QString cb;
-    long txfreq = contest->getAdifFreqBand(frequency.getValue(), cb);
+    double txfreq = contest->getAdifFreqBand(frequency.getValue(), cb);
     outstr += makeADIFField( "BAND", cb );
 
     double dfreq = txfreq/1000000.0;  // MHz
