@@ -112,13 +112,13 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequ
    }
    return QSharedPointer<BaseContact>();
 }
-long BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
+double BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
 {
     // get a tx freq, even when we don't have
     // rig control, and the proper ADIF name of the band
 
     txfreq = txfreq.remove('.');
-    long freq = static_cast<long>(convertStrToFreq(txfreq));
+    double freq = convertStrToFreq(txfreq);
 
     QString cband = currentBand.getValue();
 
@@ -131,10 +131,9 @@ long BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
         cb = bi.adif;
         if (txfreq.isEmpty() || freq < 100)
         {
-            freq = static_cast<long>(bi.flow);
+            freq = bi.flow;
         }
     }
-
     return freq;
 }
 QString BaseContestLog::getCabrilloFreqBand(QString txfreq )
@@ -169,7 +168,7 @@ QString BaseContestLog::getCabrilloFreqBand(QString txfreq )
     return "XXX";
 }
 
-long BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
+double BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
 {
     // we now want to get the band associated with the current freq
     // so we can get the correct map value for mults etc
@@ -179,7 +178,7 @@ long BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
     bool bandOK;
 
     txfreq = txfreq.remove('.');
-    long freq = static_cast<long>(convertStrToFreq(txfreq));
+    double freq = convertStrToFreq(txfreq);
 
     if (txfreq.isEmpty() || freq < 100)
     {
