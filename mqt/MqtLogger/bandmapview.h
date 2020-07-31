@@ -172,7 +172,7 @@ private:
 
     BandmapClientFilterSettings* filterSettings;
 
-
+    bool traceDebugFlag = false;
 
 
     void assembleSpotMsg(int row, QString& markerMsg);

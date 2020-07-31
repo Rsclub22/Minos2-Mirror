@@ -15,7 +15,7 @@
 #include "rigutils.h"
 #include "MinosLoggerEvents.h"
 #include "rigutils.h"
-
+#include "ContestApp.h"
 
 #include <QDebug>
 
@@ -47,6 +47,10 @@ BandmapView::BandmapView(QWidget *parent) :
 
     //horizontalScrollBar()->setRange(0, 0);
     //verticalScrollBar()->setRange(0, 0);
+
+    bool traceDebugFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
+
 
 
 }
@@ -937,8 +941,8 @@ void BandmapView::drawBandMapSpots()
     }
 
 
-    qint32 startFreq = static_cast<qint32>(contestBandFlow / 1000);
-    qint32 endFreq = static_cast<qint32>(contestBandFhigh / 1000);
+    qint64 startFreq = static_cast<qint64>(contestBandFlow);
+    qint64 endFreq = static_cast<qint64>(contestBandFhigh);
 
     int dialWidth = dial->getCurWidth();
     int dialHeight = dial->getCurHeight();
@@ -974,13 +978,17 @@ void BandmapView::drawBandMapSpots()
         traceMsg(QString("Drawspots: Number of Rows to Check = %1").arg(numrows));
 
         // this is for test
-        //traceMsg(QString("dump list of spots and freq"));
-        //for (int row = 0; row < numrows; row++)
-       // {
-       //     QString freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), Qt::DisplayRole).toString().remove('.');
-       //     QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
-       //     traceMsg(QString("DB# = %1, Callsign = %2, Freq = %3").arg(row).arg(callsign).arg(freq));
-       // }
+        if (traceDebugFlag)
+        {
+            traceMsg(QString("dump list of spots and freq"));
+            for (int row = 0; row < numrows; row++)
+            {
+                QString freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), Qt::DisplayRole).toString().remove('.');
+                QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+                traceMsg(QString("DB# = %1, Callsign = %2, Freq = %3").arg(row).arg(callsign).arg(freq));
+            }
+        }
+
 
 
 
@@ -992,9 +1000,8 @@ void BandmapView::drawBandMapSpots()
 
                 QString freq = model()->data(model()->index(row, FREQ_STR_COL_NUM), Qt::DisplayRole).toString().remove('.');
                 qint64 f_int64 = freq.toLongLong();
-                qint32 f_int32 = freq.toLong();
 
-                if (f_int32 >= startFreq * 1000 && f_int32 <= endFreq * 1000)
+                if (f_int64 >= startFreq && f_int64 <= endFreq)
                 {
                     yCoord = dial->getYCoordOnDial(f_int64);
                     for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
@@ -1379,5 +1386,5 @@ void BandmapView::setFreqOperatingInfo(const QString contestBandStr, const QStri
 
 void BandmapView::traceMsg(QString msg)
 {
-    trace(QString("bandmapView: %1").arg(msg));
+    trace(QString("[bandmapView] %1").arg(msg));
 }
