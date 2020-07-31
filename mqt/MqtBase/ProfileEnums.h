@@ -83,7 +83,9 @@ enum LOGGERPROFILE {
     elpContestChangeRestoreContestMode,
 
     elpBandMapTurnOffOperatingFreqStrip,
-    elpBandMapFollowRadioModeOperatingFreqStrip
+    elpBandMapFollowRadioModeOperatingFreqStrip,
+
+    elpBandMapTraceDebug
 
 
 

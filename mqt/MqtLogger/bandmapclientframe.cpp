@@ -2058,7 +2058,7 @@ QString BandmapClientFrame::readBandmapFreqLimit(QString band, QString mode)
 
 void BandmapClientFrame::traceMsg(QString msg)
 {
-    trace(QString("bandmapFrame: %1").arg(msg));
+    trace(QString("[bandmapFrame] %1").arg(msg));
 }
 
 
