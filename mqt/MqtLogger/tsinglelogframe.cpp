@@ -1694,6 +1694,7 @@ void TSingleLogFrame::on_SetFreq(QString f)
         bandmapControlFrame->setFreq(f);
 
         MinosLoggerEvents::sendRigFreqChanged(f, contest);
+        sendKeyerStop();    // if we have tuned, stop keyer
     }
 
 }
@@ -1843,7 +1844,6 @@ void TSingleLogFrame::sendRadioRitFreq(int freq)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
-        sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlRitFreq(this, freq);
     }
 }
@@ -1853,7 +1853,6 @@ void TSingleLogFrame::sendRadioRitStatus(bool status)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
-        sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlRitStatus(this, status);
     }
 }
@@ -1862,7 +1861,6 @@ void TSingleLogFrame::sendRadioVolume(int level)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
-        sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlVolumeLevel(this, level);
     }
 }
