@@ -1379,5 +1379,5 @@ void BandmapView::setFreqOperatingInfo(const QString contestBandStr, const QStri
 
 void BandmapView::traceMsg(QString msg)
 {
-    trace(QString("bandmapView: %1").arg(msg));
+    trace(QString("[bandmapView] %1").arg(msg));
 }

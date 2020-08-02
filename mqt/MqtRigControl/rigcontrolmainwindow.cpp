@@ -679,7 +679,6 @@ void RigControlMainWindow::upDateRadio()
                 }
 
 
-                getRadioInfo(DONT_PUBLISH_NOW);
 
                 // if it is a rigctld model, then use the radio model number connected to rigctld
 
@@ -755,6 +754,10 @@ void RigControlMainWindow::upDateRadio()
                     clearSupportRitFlags();
 
                 }
+
+
+                getRadioInfo(DONT_PUBLISH_NOW);
+
 
                 sendRitEnableStatusLogger();
                 writeWindowTitle(appName);

@@ -192,6 +192,7 @@ private:
     bool freqEditOn;
     QString curFreq;
     QString lastFreq;
+    QString sendFreq;
     QString disconnectFreq;
     double curFStepButtonsFreq;
     QString curMode;
@@ -227,7 +228,7 @@ private:
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
 
-    void sendFreq(QString f);
+    void sendRigFreq(QString f);
     QString getCurFreq() const;
 
     void sendModeToRadio(QString);
@@ -283,6 +284,7 @@ private:
     void restoreRadioFreq();
     void displayFreqOnFreqEditDisplay(QString freq);
     void setRadioFreq(QString &sendFreq, bool &rigFrameStartFlag);
+    int setBandSelComboFromFreq(QString freq);
 };
 
 

@@ -330,7 +330,7 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 void RigControlFrame::clusterUpdateRigFreq(QString freq)
 {
     ui->freqInput->clearFocus();
-    sendFreq(freq);
+    sendRigFreq(freq);
 }
 
 
@@ -580,6 +580,7 @@ void RigControlFrame::setFreq(QString freq)
     {
         traceMsg(QString("setFreq: update lastFreq = %1, setFreq = %2").arg(lastFreq).arg(freq));
         lastFreq = freq;
+
     }
     if (freq.count() >= 4)
     {
@@ -766,7 +767,7 @@ void RigControlFrame::changeMainRadioFreq()
                     {
                         if (radioConnected && !radioError)
                         {
-                            sendFreq(lastFreq);
+                            sendRigFreq(lastFreq);
                         }
                         else if (!radioConnected && radioName.trimmed().isEmpty())
                         {
@@ -826,7 +827,7 @@ void RigControlFrame::radioBandFreq(int index)
             {
                 if (radioConnected && !radioError)
                 {
-                    sendFreq(f);
+                    sendRigFreq(f);
                 }
                 else if (!radioConnected && radioName.trimmed() == "No Radio")
                 {
@@ -841,7 +842,7 @@ void RigControlFrame::radioBandFreq(int index)
     }
 }
 
-void RigControlFrame::sendFreq(QString f)
+void RigControlFrame::sendRigFreq(QString f)
 {
 
     if (f != NO_BAND_SUPPORT)
@@ -994,7 +995,7 @@ void RigControlFrame::transferDetails(memoryData::memData &m)
             if (!m.freq.isEmpty() &&m.freq != curFreq)
             {
                 traceMsg(QString("Memory Read: Send Freq"));
-                sendFreq(m.freq);
+                sendRigFreq(m.freq);
             }
 
             if (!m.mode.isEmpty() && m.mode != curMode)
@@ -1253,8 +1254,10 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     createActiveBandList(selRadioDetails.getBandList());
 
                     // get freq to send
-                    QString sendFreq;
                     setRadioFreq(sendFreq,  fromStartRigControl);
+
+                    // set Band Combo to band of Send Freq
+                    setBandSelComboFromFreq(sendFreq);
 
 
                     // now get mode
@@ -1391,15 +1394,12 @@ void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
            if (bandOK)
            {
 
-
-
-
                for (int i = 0; i < listOfBands.size(); i++)
                {
                    if (listOfBands[i].band == cb)
                    {
                        traceMsg(QString("setRadioFreq: found band %1 on radio, set band select").arg(cb));
-                       ui->bandSelCombo->setCurrentIndex(i + 1);
+                       //ui->bandSelCombo->setCurrentIndex(i + 1);
 
                        QString freq = listOfBands[i].freq;
 
@@ -1458,7 +1458,7 @@ void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
                {
                    traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq));
 
-                   displayFreqOnFreqEditDisplay(freq);
+                   //displayFreqOnFreqEditDisplay(freq);
 
                    sendFreq = freq;
 
@@ -1510,7 +1510,7 @@ void RigControlFrame::restoreRadioFreq()
                 if (checkValidFreq(freq))
                 {
                   traceMsg(QString("restoreRadioFreq: restoring this freq = %1").arg(freq));
-                  sendFreq(freq);
+                  sendRigFreq(freq);
                 }
                 else
                 {
@@ -1529,6 +1529,39 @@ void RigControlFrame::restoreRadioFreq()
 
 
 
+}
+
+int RigControlFrame::setBandSelComboFromFreq(QString freq)
+{
+    traceMsg(QString("setBandSelComboFromFreq = %1").arg(freq));
+
+
+    int retCode = 0;
+    BandList &blist = BandList::getBandList();
+    BandInfo bi;
+    bool ok;
+    double freqDbl = freq.toDouble(&ok);
+    if (ok)
+    {
+        if (blist.findBand(freqDbl, bi))
+        {
+            qDebug() << "combo text = " << ui->bandSelCombo->currentText();
+            qDebug() << "band = " << bi.uk;
+            if (ui->bandSelCombo->currentText() != bi.uk)
+            {
+                qDebug() << "set combo to band = " << bi.uk;
+                retCode = setBandSelComboIndex(bi.uk);
+                traceMsg(QString("setBandSelComboFromFreq = %1, band = %2, retCode = %3").arg(freq).arg(bi.uk).arg(retCode));
+
+            }
+
+            return retCode;
+        }
+    }
+
+    retCode = -1;
+    traceMsg(QString("setBandSelComboFromFreq retCode = %1").arg(retCode));
+    return retCode;
 }
 
 
@@ -1685,6 +1718,10 @@ void RigControlFrame::setRadioState(QString s)
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);
+                // set Display to sendFreq in case radio has been disconnected
+                displayFreqOnFreqEditDisplay(sendFreq);
+                setBandSelComboFromFreq(sendFreq);
+
                 //restoreRadioFreq();
                 emit radioIsConnected(true);
             }
