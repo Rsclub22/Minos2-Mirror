@@ -1969,10 +1969,13 @@ void RigControlMainWindow::processRxFrequencyForDisplay()
     if (setupRadio->currentRadio.transVertEnable && b)
     {
         sendFreqToLog(transVertF);
+        msg->rigCache.publish();
+
     }
     else
     {
         sendFreqToLog(rfrequency);
+        msg->rigCache.publish();
     }
 
 }
@@ -2555,6 +2558,7 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
 void RigControlMainWindow::onNewMode()
 {
     getAndSendMode(curVfo);
+    msg->rigCache.publish();
 }
 
 void RigControlMainWindow::loggerSetMode(QString mode)
@@ -3296,6 +3300,7 @@ void RigControlMainWindow::onRigStatus(int status, QString cmd)
     if (status < Rig_OK)
     {
         radioError(status, cmd);
+        msg->rigCache.publish();
     }
 }
 
