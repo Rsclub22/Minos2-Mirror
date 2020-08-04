@@ -115,6 +115,7 @@ private:
     QString logger_freq;
     QString slogMode;
     QString selRadioMode;   // onSelectRadio mode from logger at startup
+    QString selRadioFreq;
     //rmode_t logMode;
     QString selTvBand;      // selected band from radio
     QString transVertSwNum;
@@ -340,13 +341,18 @@ private:
 
     int getAndSendVfo();
     void sendMaxRitFreqLogger();
+
     void showRitTestControl(bool state);
+
+
+
 private slots:
 
     void onStdInRead(QString);
     void saveTraceLogFlag(bool);
 
-    void getRadioInfo();
+    void getRadioInfo(bool pubNow);
+    //void getRadioInfo();
     void logMessage(QString s);
     void about();
     void LogTimerTimer();
@@ -358,7 +364,7 @@ private slots:
     void updateSelectRadioBox();
     void aboutRigConfig();
 
-    void onSelectRadio(PubSubName, QString mode);
+    void onSelectRadio(PubSubName, QString freq, QString mode);
     void selFreqClicked();
     void setupBandFreq();
     void selectRadio();
@@ -394,6 +400,10 @@ private slots:
     void onNewVfo(QString omniRigVfo);
 
 
+
+
+
+    void pollRadioInfo();
 
 };
 

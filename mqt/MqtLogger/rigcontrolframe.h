@@ -72,14 +72,15 @@ public:
 
 
     void setRadioLoaded();
-    void setRadioList();
+    void setRadioListFromTslf();
+
 
     void setMode(QString);
     void setVolume(int level);
     void setFreq(QString);
     void setRitFreq(int);
     void setRitRadioStatus(bool);
-    void setRadioName(QString, QString mode);
+    void setRadioName(QString, bool);
     void setRadioState(QString);
     void setRitEnableState(bool s);
 
@@ -114,8 +115,7 @@ public:
 
 
 signals:
-    void selectRadio(QString, QString);
-    void sendRadioName(QString);
+    void selectRadio(QString, QString, QString);  // radio name, freq, mode
     void sendFreqControl(QString);
     void sendVolumeToRadio(int);
     void noRadioSendFreq(QString);
@@ -156,7 +156,7 @@ private slots:
     void ritClearShortCutSelected();
     //void bandListTimeout();
 
-    void setRadioFreq();
+    //void setRadioFreq();
 
 
     void checkRigDetailsAvail();
@@ -164,6 +164,7 @@ private slots:
 
 
     void freqStepComboChanged(const QString step);
+
 public slots:
     void returnChangeRadioFreq();
 private:
@@ -184,12 +185,14 @@ private:
     QShortcut *ritClearShortCut;
     QShortcut *ritFreqEditShortCut;
 
+    bool rigFrameStartFlag;
     bool radioLoaded;
     bool radioConnected;
     bool radioError;
     bool freqEditOn;
     QString curFreq;
     QString lastFreq;
+    QString sendFreq;
     QString disconnectFreq;
     double curFStepButtonsFreq;
     QString curMode;
@@ -201,6 +204,7 @@ private:
     bool ritKHzFlag;
     //QString curRit;
 
+    bool rigDetailsLoaded = false;
 
     QStringList listOfRadios;
     RadioDetails selRadioDetails;
@@ -213,7 +217,7 @@ private:
     bool ignorePreviousFreqFlag;
     bool ignorePresetFreqFlag;
 
-    QTimer *launchRadioSelectTimer;
+    QTimer *launchRadioSelectTimer = nullptr;
     int launchRadioSelectCount;
 
 
@@ -224,7 +228,7 @@ private:
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
 
-    void sendFreq(QString f);
+    void sendRigFreq(QString f);
     QString getCurFreq() const;
 
     void sendModeToRadio(QString);
@@ -254,6 +258,8 @@ private:
     void showRitButOn();
     void showRitButOff();
 
+    void setRadioList();
+
     void setVolControlVisible(bool value);
 
     void ritButtonOn();
@@ -277,6 +283,8 @@ private:
     int setBandSelComboIndex(QString band);
     void restoreRadioFreq();
     void displayFreqOnFreqEditDisplay(QString freq);
+    void setRadioFreq(QString &sendFreq, bool &rigFrameStartFlag);
+    int setBandSelComboFromFreq(QString freq);
 };
 
 

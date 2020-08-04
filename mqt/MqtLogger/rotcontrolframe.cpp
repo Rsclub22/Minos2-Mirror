@@ -837,7 +837,7 @@ void RotControlFrame::setCwCcW_Items_Visible(bool visible)
 
 void RotControlFrame::traceMsg(QString msg)
 {
-    trace(QString("RotcontrolFrame: %1 - %2").arg(antennaName).arg( msg));
+    trace(QString("[RotcontrolFrame] %1 - %2").arg(antennaName).arg( msg));
 }
 
 void RotControlFrame::on_antennaName_activated(const QString &arg1)

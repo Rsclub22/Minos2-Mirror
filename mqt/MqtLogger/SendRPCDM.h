@@ -36,6 +36,7 @@ class TSendDM : public QObject
       QString loggerUuid;
 
 
+      void traceMsg(QString msg);
 public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();
@@ -68,8 +69,8 @@ public:  		// User declarations
       void sendRotatorSelection(const PubSubName &name, const QString &uuid);
       void sendRotator(TSingleLogFrame *tslf,rpcConstants::RotateDirection direction, int angle );
 
-      void changeRigSelectionTo(const PubSubName &name, const QString &mode, const QString &uuid);
-      void sendRigSelection(const PubSubName &name, const QString &mode, const QString &uuid);
+      void changeRigSelectionTo(const PubSubName &name, const QString &freq, const QString &mode, const QString &uuid);
+      void sendRigSelection(const PubSubName &name, const QString &freq, const QString &mode, const QString &uuid);
       void sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq);
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
       void sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level);
@@ -93,6 +94,8 @@ public:  		// User declarations
       {
           return &rigCache;
       }
+
+
 
 
 private slots:

@@ -288,6 +288,8 @@ bool BandList::findBand(double freq, BandInfo &bi)
    return false;
 }
 
+
+
 void loadVhfAndUpBands(QVector<BandDetail> &bands)
 {
     BandList &blist = BandList::getBandList();
