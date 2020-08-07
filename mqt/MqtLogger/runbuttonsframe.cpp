@@ -159,7 +159,7 @@ void RunButtonsFrame::runModeOff(int buttonNumber)
         runButtonMap[buttonNumber]->returnFrequency.clear();
         runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
 
-        rigControl->sendFreq( rfreq);
+        rigControl->sendRigFreq( rfreq);
 
         // on run Freq, turn off runmode
         runButtonMap[buttonNumber]->showButtonOnOff(false);
@@ -254,7 +254,7 @@ void RunButtonsFrame::runButReadActSel(int buttonNumber)
             rigControl->clearFreqInputFocus();
             if (m.freq.remove('.') != rigControl->getCurFreq().remove('.'))
             {
-                rigControl->sendFreq(m.freq);
+                rigControl->sendRigFreq(m.freq);
             }
 
             curRunFreq = m.freq;
@@ -387,7 +387,7 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
             memoryData::memData m = getRunMemoryData(buttonNumber);
             if (m.freq.remove('.') != rigControl->getCurFreq().remove('.'))
             {
-                rigControl->sendFreq(m.freq);
+                rigControl->sendRigFreq(m.freq);
             }
             curRunFreq = m.freq.remove('.');
             emit sendRunOnFlag(curRunFreq, runButtonOnFlag);

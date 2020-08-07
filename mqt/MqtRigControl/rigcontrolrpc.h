@@ -37,7 +37,7 @@ public:
 signals:
     void setFreq(QString);
     void setMode(QString);
-    void selectLoggerRadio(PubSubName, QString);
+    void selectLoggerRadio(PubSubName, QString, QString);
     void setRitFreq(int);
     void setRitStatus(bool);
     void setVolume(int volLevel);

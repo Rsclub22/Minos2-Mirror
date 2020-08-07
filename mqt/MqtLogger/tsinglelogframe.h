@@ -195,6 +195,7 @@ private:
 
 
 
+    void traceMsg(QString msg);
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
@@ -258,7 +259,7 @@ private slots:
     void sendRadioMode(QString);
     void sendRadioRitStatus(bool status);
 
-    void sendSelectRadio(const QString &, const QString &mode);
+    void sendSelectRadio(const QString &, const QString &freq, const QString &mode);
     void sendSelectRotator(const QString &);
     void onSplitterMoved(int, int);
 
