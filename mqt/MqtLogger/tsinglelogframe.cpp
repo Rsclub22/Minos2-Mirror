@@ -74,9 +74,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ContestPageChanged()), this, SLOT(on_ContestPageChanged()));
 
-    //qDebug() << "starting frame = " << contest->uuid;
-
-    //connect(&MinosLoggerEvents::mle, SIGNAL(BandMapPressed()), this, SLOT(on_BandMapPressed()));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(NextContactDetailsTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(PublishTimerTimer()));
@@ -113,7 +110,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     // To rig controller
 
     connect(FKHRigControlFrame, SIGNAL(radioDisconnected()), this, SLOT(invalidateCacheOnDisconnect()));
-    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString)), this, SLOT(sendSelectRadio(QString, QString)));
+    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString, QString)), this, SLOT(sendSelectRadio(QString, QString, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
@@ -197,7 +194,7 @@ void TSingleLogFrame::createScreenComponents()
 {
     // create component frames, parentless
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
-    trace("TSingleLogFrame::createScreenComponents for " + ct->name.getValue() + " uuid " + ct->uuid);
+    traceMsg("createScreenComponents for " + ct->name.getValue() + " uuid " + ct->uuid);
 
     QSOTable = new QTableView(this);
     QSOTable->setObjectName(QStringLiteral("QSOTable"));
@@ -438,7 +435,7 @@ void TSingleLogFrame::clearScreenLayout()
     // BUT on contest creation, the contest address may change, so clear the contest
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     QString msg = ct->name.getValue() + " uuid " + ct->uuid;
-    trace("TSingleLogFrame::clearScreenLayout starts for " + msg);
+    traceMsg("clearScreenLayout starts for " + msg);
 
     FKHRigControlFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
@@ -454,7 +451,7 @@ void TSingleLogFrame::clearScreenLayout()
     runButtonsFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
 
-    trace("TSingleLogFrame::clearScreenLayout start clearance for " + msg);
+    traceMsg("clearScreenLayout start clearance for " + msg);
     if (!LogContainer->isLoggerClosing())
     {
         while (singleLogFrameSplitter->count())
@@ -467,14 +464,14 @@ void TSingleLogFrame::clearScreenLayout()
         rowSplitters.clear();
         update();
     }
-    trace("TSingleLogFrame::clearScreenLayout complete for " + msg);
+    traceMsg("clearScreenLayout complete for " + msg);
 }
 void TSingleLogFrame::applyScreenLayout()
 {
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     if (!ct)
         return;
-    trace("TSingleLogFrame::applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
+    traceMsg("applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
     hide();
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
@@ -676,7 +673,7 @@ void TSingleLogFrame::buildScreenLayout()
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     QString curConfigName = ct->screenLayout.getValue();
-    trace("TSingleLogFrame::buildScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid + " to layout " + curConfigName);
+    traceMsg("buildScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid + " to layout " + curConfigName);
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
         curConfigName = defaultLayoutName();
@@ -822,7 +819,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
     }
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
-    trace("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
+    traceMsg("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
     TContestApp::getContestApp() ->setCurrentContest( ct );
 
     if ( columnsChanged )
@@ -847,14 +844,7 @@ void TSingleLogFrame::on_ContestPageChanged ()
     LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
     LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
 
-    // save current freq as notifyRigChange writes incorrect contest freq to this frame
-    // with a contest change
-    sSavedCurFreq = sCurFreq;
-    sSavedCurMode = sCurMode;
-    //qDebug() << "tslf contestpage changed = " << contest->uuid;
-    //qDebug() << "curFreq = " << sCurFreq;
-    //qDebug() << "curMode = " << sCurMode;
-    trace(QString("on_ContestPageChanged:: save current freq = %1, for frame = %2").arg(sSavedCurFreq).arg(ct->name.getValue() + " uuid " + ct->uuid));
+
     LogContainer->sendDM->notifyRigChanges();
     LogContainer->sendDM->notifyRotChanges();
 
@@ -959,20 +949,7 @@ void TSingleLogFrame::HideTimerTimer(  )
     if (!contest)
         return;
 
-//    bool controlsLoaded = isBandMapLoaded() || isRadioLoaded() || isRotatorLoaded();
 
-//    if (controlsLoaded && !contest->isReadOnly())
-//    {
-//        if (FKHRigControlFrame->parent() != this)
-//            FKHRigControlFrame->setVisible(isRadioLoaded());
-//        if (runButtonsFrame->parent() != this)
-//            runButtonsFrame->setVisible(isRadioLoaded());
-
-//        if (FKHRotControlFrame->parent() != this)
-//            FKHRotControlFrame->setVisible(isRotatorLoaded());
-//        if (rotPresets->parent() != this)
-//            rotPresets->setVisible(isRotatorLoaded());
-//    }
 }
 
 void TSingleLogFrame::updateQSODisplay()
@@ -1680,13 +1657,9 @@ void TSingleLogFrame::on_SetMode(QString m)
 
 void TSingleLogFrame::on_SetFreq(QString f)
 {
-    trace(QString("Freq from radio = %1").arg(f));
+    traceMsg(QString("Freq from radio = %1").arg(f));
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        //qDebug() << "onsetFreq contest = " << contest->uuid;
-
-        //qDebug() << "set Freq = " << f;
-
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
         runButtonsFrame->setFreq(f);
@@ -1755,7 +1728,7 @@ bool TSingleLogFrame::isRadioLoaded()
 
 void TSingleLogFrame::on_SetRadioList()
 {
-    FKHRigControlFrame->setRadioList();
+    FKHRigControlFrame->setRadioListFromTslf();
 }
 
 void TSingleLogFrame::on_SetTransVertOffset(double offset, PubSubName psn)
@@ -1837,6 +1810,7 @@ void TSingleLogFrame::sendRadioFreq(QString freq)
     {
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlFreq(this, freq);
+
     }
 }
 
@@ -1874,7 +1848,7 @@ void TSingleLogFrame::sendRadioMode(QString mode)
     }
 }
 
-void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mode)
+void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &freq, const QString &mode)
 {
 
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
@@ -1892,8 +1866,8 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &mod
 
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             QString uuid = ct->uuid;
-            LogContainer->sendDM->changeRigSelectionTo(radName, mode, ct->uuid);  // send message including mode if it has been appended.
-
+            LogContainer->sendDM->changeRigSelectionTo(radName, freq, mode, ct->uuid);  // send message including mode if it has been appended.
+            traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName).arg(freq).arg(mode).arg(uuid));
 
 
 
@@ -2057,3 +2031,8 @@ void TSingleLogFrame::presetTurn(QString b)
 
 //---------------------------------------------------------------------------
 
+void TSingleLogFrame::traceMsg(QString msg)
+{
+
+     trace(QString("[TSingleLogFrame] %1").arg(msg));
+}

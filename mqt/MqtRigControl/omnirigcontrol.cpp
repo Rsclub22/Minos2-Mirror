@@ -714,7 +714,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     traceMsg(QString("Rig Init - try to get freq"));
     //auto f = rig->GetRxFrequency();
 
-    Frequency f;
+    Frequency f = 0;
     getFrequency(CURRENT_VFO, f);
     traceMsg(QString("Rig Init - first getFreq = %1").arg(QString::number(f)));
     for (int i = 0; (f == 0) && (i < 10); i++)
@@ -807,6 +807,7 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
         if (/*OmniRig::PM_UNKNOWN == rig->Vfo() && */(readable_params & OmniRig::PM_FREQ) || curVfo == VFO::CURRENT_VFO)
         {
             auto f = rig->Freq();
+            traceMsg(QString("Current VFO freq = %1").arg(f));
             if (f)
             {
                 traceMsg(QString("GetFrequency, PM_FREQ = %1").arg(f));
@@ -817,6 +818,7 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
         else if ((readable_params & OmniRig::PM_FREQA) && !reversedVFO )
         {
             auto f = rig->FreqA();
+            traceMsg(QString("VFOA freq = %1").arg(f));
             if (f)
             {
                 traceMsg(QString("GetFrequency, PM_FREQA = %1").arg(f));
@@ -826,6 +828,7 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
         else if ((readable_params & OmniRig::PM_FREQB) && reversedVFO)
         {
             auto f = rig->FreqB();
+            traceMsg(QString("VFOB freq = %1").arg(f));
             if (f)
             {
                 traceMsg(QString("GetFrequency, PM_FREQB = %1").arg(f));
