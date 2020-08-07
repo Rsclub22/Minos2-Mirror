@@ -224,29 +224,29 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1215"/>
+        <location filename="../bandmapview.cpp" line="1222"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation>%1%2CQ Frequency @ .%3%4%5</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1246"/>
+        <location filename="../bandmapview.cpp" line="1253"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1322"/>
+        <location filename="../bandmapview.cpp" line="1329"/>
         <source>min</source>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1342"/>
+        <location filename="../bandmapview.cpp" line="1349"/>
         <source>CQ Frequency = %1
 The computed mode is %2</source>
         <translation>La fréquence CQ = %1
 Le mode calculé est %2</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1361"/>
+        <location filename="../bandmapview.cpp" line="1368"/>
         <source>%1 - %2 [%3 %4 @ %5 min] 
 The computed mode is %6
 %7</source>
@@ -2310,7 +2310,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="669"/>
+        <location filename="../rigcontrolframe.cpp" line="724"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
@@ -2359,43 +2359,43 @@ Non - Ignorer les modifications</translation>
         <translation>Vol</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="676"/>
+        <location filename="../rigcontrolframe.cpp" line="731"/>
         <source>Off</source>
         <translation>Éteinte</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1246"/>
+        <location filename="../rigcontrolframe.cpp" line="1318"/>
         <source>Bandlist empty for this radio, please add a band or tranverter!</source>
         <translation>La liste des bandes est vide pour cette radio, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1273"/>
+        <location filename="../rigcontrolframe.cpp" line="1348"/>
         <source>Radio Bandlist is empty!</source>
         <translatorcomment>Liste des bandes est vide!</translatorcomment>
         <translation>La liste des bandes est vide!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1282"/>
+        <location filename="../rigcontrolframe.cpp" line="1357"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1367"/>
+        <location filename="../rigcontrolframe.cpp" line="1430"/>
         <source>No %1 Band found for this radio!</source>
         <translation>AucuneBande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1568"/>
+        <location filename="../rigcontrolframe.cpp" line="1709"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1575"/>
+        <location filename="../rigcontrolframe.cpp" line="1716"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1594"/>
+        <location filename="../rigcontrolframe.cpp" line="1739"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
@@ -4697,22 +4697,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="743"/>
+        <location filename="../tsinglelogframe.cpp" line="740"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le journal importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1327"/>
+        <location filename="../tsinglelogframe.cpp" line="1304"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non rempli</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1346"/>
+        <location filename="../tsinglelogframe.cpp" line="1323"/>
         <source>Please give serial wanted</source>
         <translation>Donner série recherchée</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1368"/>
+        <location filename="../tsinglelogframe.cpp" line="1345"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1introuvable</translation>
     </message>
