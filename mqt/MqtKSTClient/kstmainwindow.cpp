@@ -5,6 +5,7 @@
 
 #include "kstconfigure.h"
 #include "airscoutlink.h"
+#include "delayedaction.h"
 
 #include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"
@@ -504,6 +505,7 @@ void KSTMainWindow::on_analyseButton_clicked()
                 kstMeepFilterModel.setFilterString(myCallsign);
 
                 QTimer *timer = new QTimer(this);
+                timer->setSingleShot(true);
 
                 connect(timer, &QTimer::timeout, [=]()
                 {
@@ -524,6 +526,7 @@ void KSTMainWindow::on_analyseButton_clicked()
                     }
                     else
                     {
+                        // If it wasn't for this we could use delayedAction
                         timer->stop();
                         timer->deleteLater();
                         filelines.clear();
@@ -1252,18 +1255,12 @@ void KSTMainWindow::reconnect()
         kstclient->disconnectFromHost();
     }
 
-    QTimer *timer = new QTimer(this);
-    timer->setSingleShot(true);
-
-    connect(timer, &QTimer::timeout, [=]()
+    delayedAction(this, [=]()
     {
         // NB a lambda function
         connectToHost();
-        timer->deleteLater();
     }
     );
-
-    timer->start(100);
 }
 void KSTMainWindow::on_genmsgButton_clicked()
 {
@@ -1327,10 +1324,7 @@ void KSTMainWindow::doLoginChanges()
                 bool loginWanted = kstChatSelection.contains(i+1);
                 if (!loggedin && loginWanted)
                 {
-                    QTimer *timer = new QTimer(this);
-                    timer->setSingleShot(true);
-
-                    connect(timer, &QTimer::timeout, [=]()
+                    delayedAction(this, [=]()
                     {
                         // NB a lambda function
                         // add chat
@@ -1343,21 +1337,16 @@ void KSTMainWindow::doLoginChanges()
                                 + "|0"   // last Unix timestamp for dx/map
                                 + "|";
                         sendKST(attachMessage);
-                        timer->deleteLater();
                     }
+                    , 1000 * j
                     );
-
-                    timer->start(1000 * j);
                     j++;
 
                 }
                 if (loggedin && !loginWanted)
                 {
-                    QTimer *timer = new QTimer(this);
-                    timer->setSingleShot(true);
-
                     detached = true;
-                    connect(timer, &QTimer::timeout, [=]()
+                    delayedAction(this, [=]()
                     {
                         // NB a lambda function
                         // detach chat
@@ -1365,11 +1354,9 @@ void KSTMainWindow::doLoginChanges()
                                 + "|" + QString::number(i + 1)
                                 + "|";
                         sendKST(detachMessage);
-                        timer->deleteLater();
                     }
+                    , 1000 * j
                     );
-
-                    timer->start(1000 * j);
                     j++;
                 }
             }

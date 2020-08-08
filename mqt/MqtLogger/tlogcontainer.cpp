@@ -38,6 +38,7 @@
 #include "n1mmbroadcastconfig.h"
 #include "defdirsdlg.h"
 #include "BandList.h"
+#include "delayedaction.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -159,14 +160,14 @@ bool TLogContainer::show(int argc, char *argv[])
     n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();
 
-    setWindowState(windowState() | Qt::WindowState::WindowActive);
+    delayedAction(this, [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
 
     return true;
 }
 void TLogContainer::onArgsReceived(QString conarg)
 {
     preloadFiles( conarg );
-    setWindowState(windowState() | Qt::WindowState::WindowActive);
+    delayedAction(this, [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
 }
 
 void TLogContainer::on_TimeDisplayTimer( )
@@ -1196,6 +1197,7 @@ void TLogContainer::FontEditAcceptActionExecute()
             if (serverRunning)
             {
                 MinosConfig::getMinosConfig() ->bounce();
+                delayedAction(this, [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
             }
         }
     }
@@ -1220,6 +1222,7 @@ void TLogContainer::LanguageAcceptActionExecute()
         {
             if (l.dispName == selText)
             {
+                // this propagates a changeEvent that causes all contests to reload
                 switchTranslation(l.code);
                 break;
             }
@@ -1227,9 +1230,15 @@ void TLogContainer::LanguageAcceptActionExecute()
         if (serverRunning)
         {
             MinosConfig::getMinosConfig() ->bounce();
+
+            // this delayed action still happens too early. we need to wait for all apps to have stopped
+            // and then restarted.
+            delayedAction(this,  [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
+
         }
     }
 }
+
 void TLogContainer::UDPConfigActionExecute()
 {
     N1MMBroadcastConfig udpConfig;

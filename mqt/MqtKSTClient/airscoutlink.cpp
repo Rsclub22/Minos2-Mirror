@@ -1,4 +1,6 @@
 #include "airscoutlink.h"
+#include "delayedaction.h"
+
 #include "kstmainwindow.h"
 
 const char *AirScoutLink::ASBandStrings[] = {
@@ -284,19 +286,14 @@ void AirScoutLink::onReadyRead()
                     emit acChanged(user);
 
                 }
-                QTimer *timer = new QTimer(this);
-                timer->setSingleShot(true);
 
-                connect(timer, &QTimer::timeout, [=]()
+                delayedAction(this, [=]()
                 {
-                    trace("lambda fired");
                     // NB a lambda function
                     askNearest(row);
-                    timer->deleteLater();
                 }
+                , 500
                 );
-
-                timer->start(500);  // only ask airscout at a rate of 2 each second
             }
 
         }

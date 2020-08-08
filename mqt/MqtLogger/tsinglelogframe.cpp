@@ -34,6 +34,7 @@
 #include "ChatFrame.h"
 #include "clusterclientframe.h"
 #include "bandmapclientframe.h"
+#include "delayedaction.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -1183,10 +1184,7 @@ void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, Bas
     if (ct == contest && !lct)
     {
         // use a lambda on a short timer as when contest is first opened, it doesn't actually scroll
-        QTimer *timer = new QTimer(this);
-        timer->setSingleShot(true);
-
-        connect(timer, &QTimer::timeout, [=]()
+        delayedAction(this, [=]()
         {
             // NB a lambda function
             QSOTable->scrollToBottom();
@@ -1200,11 +1198,8 @@ void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, Bas
                     QSOTable->setCurrentIndex(index);
                 }
             }
-            timer->deleteLater();
         }
         );
-
-        timer->start(100);
     }
 }
 void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)

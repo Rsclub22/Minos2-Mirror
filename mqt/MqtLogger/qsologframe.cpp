@@ -14,6 +14,8 @@
 #include "rigcommon.h"
 #include "bandmapcommon.h"
 #include "rigutils.h"
+#include "delayedaction.h"
+
 #include "qsologframe.h"
 #include "ui_qsologframe.h"
 
@@ -2317,19 +2319,13 @@ void QSOLogFrame::updateQSOTime(bool fromTimer)
 }
 void QSOLogFrame::setDtgSection()
 {
-    QTimer *timer = new QTimer(this);
-    timer->setSingleShot(true);
-
-    connect(timer, &QTimer::timeout, [=]()
+    delayedAction(this, [=]()
     {
         // NB a lambda function
         ui->timeEdit->setCurrentSection(QDateTimeEdit::MinuteSection);
         ui->dateEdit->setCurrentSection(QDateTimeEdit::DaySection);
-        timer->deleteLater();
     }
     );
-
-    timer->start(10);
 }
 
 

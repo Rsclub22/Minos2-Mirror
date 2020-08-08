@@ -23,6 +23,8 @@
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
+#include "delayedaction.h"
+
 #include "ui_clusterclientframe.h"
 
 
@@ -212,18 +214,13 @@ void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs,
     // delay the search of the spots until the contact logging should have finished
     // and the screen been redrawn, or a lot of spots slows things down too much
 
-    QTimer *timer = new QTimer(this);
-    timer->setSingleShot(true);
-
-    connect(timer, &QTimer::timeout, [=]()
+    delayedAction(this, [=]()
     {
         // NB a lambda function
         on_AfterLogContact(c, cs, loc);
-        timer->deleteLater();
     }
+    , 50
     );
-
-    timer->start(50);
 }
 
 

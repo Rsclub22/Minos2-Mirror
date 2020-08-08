@@ -8,6 +8,8 @@
 #include "rigutils.h"
 #include "RigMemoryFrame.h"
 #include "htmldelegate.h"
+#include "delayedaction.h"
+
 #include "ui_RigMemoryFrame.h"
 
 
@@ -435,39 +437,26 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
               int sortCol = ui->rigMemTable->horizontalHeader()->sortIndicatorSection();
               bool sortOrder = ui->rigMemTable->horizontalHeader()->sortIndicatorOrder() == Qt::AscendingOrder;
 
+              delayedAction(this, [=]()
               {
-                  QTimer *timer = new QTimer(this);
-                  timer->setSingleShot(true);
-
-                  connect(timer, &QTimer::timeout, [=]()
-                  {
-                      // NB a lambda function
-                      suppressSaveColumns = true;
-                      ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
-                      suppressSaveColumns = false;
-                      timer->deleteLater();
-                  }
-                  );
-
-                  timer->start(10);
+                  // NB a lambda function
+                  suppressSaveColumns = true;
+                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
+                  suppressSaveColumns = false;
               }
+              , 10
+              );
 
+              delayedAction(this, [=]()
               {
-                  QTimer *timer2 = new QTimer(this);
-                  timer2->setSingleShot(true);
-
-                  connect(timer2, &QTimer::timeout, [=]()
-                  {
-                      // NB a lambda function
-                      suppressSaveColumns = true;
-                      ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
-                      suppressSaveColumns = false;
-                      timer2->deleteLater();
-                  }
-                  );
-
-                  timer2->start(20);
+                  // NB a lambda function
+                  suppressSaveColumns = true;
+                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
+                  suppressSaveColumns = false;
               }
+              , 20
+              );
+
               firstTime = false;
           }
 
