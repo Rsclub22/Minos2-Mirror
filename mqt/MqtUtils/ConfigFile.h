@@ -144,6 +144,7 @@ public:  		// User declarations
 signals:
     void    stdOutLine(QString);
     void    allStopped();
+    void    appStarted();
 };
 //---------------------------------------------------------------------------
 

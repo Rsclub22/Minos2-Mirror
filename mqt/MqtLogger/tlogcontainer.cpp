@@ -89,6 +89,8 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
+
+    connect(MinosConfig::getMinosConfig(), SIGNAL(appStarted()), this, SLOT(appStarted()));
 }
 TLogContainer::~TLogContainer()
 {
@@ -160,14 +162,11 @@ bool TLogContainer::show(int argc, char *argv[])
     n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();
 
-    delayedAction(this, [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
-
     return true;
 }
 void TLogContainer::onArgsReceived(QString conarg)
 {
     preloadFiles( conarg );
-    delayedAction(this, [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
 }
 
 void TLogContainer::on_TimeDisplayTimer( )
@@ -1197,7 +1196,6 @@ void TLogContainer::FontEditAcceptActionExecute()
             if (serverRunning)
             {
                 MinosConfig::getMinosConfig() ->bounce();
-                delayedAction(this, [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
             }
         }
     }
@@ -1230,11 +1228,6 @@ void TLogContainer::LanguageAcceptActionExecute()
         if (serverRunning)
         {
             MinosConfig::getMinosConfig() ->bounce();
-
-            // this delayed action still happens too early. we need to wait for all apps to have stopped
-            // and then restarted.
-            delayedAction(this,  [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
-
         }
     }
 }
@@ -2257,6 +2250,11 @@ void TLogContainer::onRestorContestModeChecked(bool checked)
 {
     TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeRestoreContestMode, checked);
 
+}
+
+void TLogContainer::appStarted()
+{
+    delayedAction(this,  [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
 }
 
 bool TLogContainer::readRestoreContestModeFlag()

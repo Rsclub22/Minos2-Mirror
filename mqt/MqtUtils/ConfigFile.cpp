@@ -189,6 +189,8 @@ void RunConfigElement::createProcess()
 
         QString fontCommand = "Font " + QApplication::font().toString();
         sendCommand(fontCommand);
+
+        emit MinosConfig::getMinosConfig()->appStarted();
     }
 }
 void RunConfigElement::askStopProcess()
