@@ -190,21 +190,24 @@ void SetupDialog::saveGeneralSettings()
             config.endGroup();
             timeToLiveChanged = false;
         }
-        else if (runStartCmdFilesChanged)
+
+        if (runStartCmdFilesChanged)
         {
             config.beginGroup("CommandFile");
             config.setValue("enableStartCommandFile", enableStartCmdFiles);
             config.endGroup();
             runStartCmdFilesChanged = false;
         }
-        else if (runEndCmdFilesChanged)
+
+        if (runEndCmdFilesChanged)
         {
             config.beginGroup("CommandFile");
             config.setValue("enableEndCommandFile", enableEndCmdFiles);
             config.endGroup();
             runEndCmdFilesChanged = false;
         }
-        else if (sendSpotsToDXClusterChanged)
+
+        if (sendSpotsToDXClusterChanged)
         {
             config.beginGroup("EnableSendSpotsToDXCluster");
             config.setValue("enableSendToDXCluster", sendSpotToDXCluster);
@@ -289,42 +292,70 @@ QString SetupDialog::getTimeToLive()
 
 void SetupDialog::runStartCmdFileChkBoxChanged(int state)
 {
-    runStartCmdFilesChanged = true;
+
     if (state ==  Qt::Checked)
     {
-        enableStartCmdFiles = true;
+        if (!enableStartCmdFiles)
+        {
+            enableStartCmdFiles = true;
+            runStartCmdFilesChanged = true;
+        }
     }
     else if (state == Qt::Unchecked)
     {
-        enableStartCmdFiles = false;
+        if (enableStartCmdFiles)
+        {
+            enableStartCmdFiles = false;
+            runStartCmdFilesChanged = true;
+        }
     }
 }
 
 
 void SetupDialog::runEndCmdFileChkBoxChanged(int state)
 {
-    runEndCmdFilesChanged = true;
+
     if (state ==  Qt::Checked)
     {
-        enableEndCmdFiles = true;
+        if (!enableEndCmdFiles)
+        {
+            enableEndCmdFiles = true;
+            runEndCmdFilesChanged = true;
+        }
+
     }
     else if (state == Qt::Unchecked)
     {
-        enableEndCmdFiles = false;
+        if (enableEndCmdFiles)
+        {
+           enableEndCmdFiles = false;
+           runEndCmdFilesChanged = true;
+        }
+
+
     }
 }
 
 void SetupDialog::sendSpotsToDXClusterChkBoxChanged(int state)
 {
-    sendSpotsToDXClusterChanged = true;
+
     if (state == Qt::Checked)
     {
-        sendSpotToDXCluster = true;
+        if (!sendSpotToDXCluster)
+        {
+            sendSpotToDXCluster = true;
+            sendSpotsToDXClusterChanged = true;
+        }
 
     }
     else if (state == Qt::Unchecked)
     {
-        sendSpotToDXCluster = false;
+        if (sendSpotToDXCluster)
+        {
+            sendSpotToDXCluster = false;
+            sendSpotsToDXClusterChanged = true;
+        }
+
     }
 
 

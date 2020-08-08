@@ -342,7 +342,7 @@ void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
     radioName = arg1;
 
     traceMsg(QString("on radioNameSel activated: radioName - %1 requested ***").arg(arg1));
-    setRadioName(arg1, true);       // set true here as we want to act like start and use preset freq
+    setRadioName(arg1, true);       // set true here as we want to act like start and use preset freq, except if a last freq is available
 
 
 
@@ -646,7 +646,7 @@ void RigControlFrame::setRitRadioStatus(bool status)
 void RigControlFrame::changeRitRadioFreq(int freq)
 {
     traceMsg(QString("Change Rit Freq = %1").arg(convertRitFreqToStr(freq, ritKHzFlag)));
-    if (ritEnable && ritOn)
+    if (ritEnable /*&& ritOn*/)
     {
         emit sendRitFreq(freq);
     }
@@ -665,7 +665,7 @@ void RigControlFrame::ritClearShortCutSelected()
 void RigControlFrame::ritClearButtonSelected(bool /*state*/)
 {
 
-    if (ritEnable && ritOn)
+    if (ritEnable /*&& ritOn*/)
     {
         int pos = ui->RitEdit->cursorPosition();
         changeRitRadioFreq(0);  // turns off rit in hamlib
@@ -1341,7 +1341,9 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
 void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
 {
-    traceMsg(QString("setRadioFreq: enter function"));
+    traceMsg(QString("setRadioFreq: enter function, fromStartRigControl = %1, onContestPageChangedFlag = %2, rigFrameStartFlag = %3, lastFreq = %4")
+             .arg(fromStartRigControl ? "True" : "False").arg(onContestPageChangedFlag ? "True" : "False")
+             .arg(rigFrameStartFlag ? "True" : "False").arg(lastFreq));
 
     if (selRadioDetails.getBandList().isEmpty())
     {
@@ -1365,13 +1367,27 @@ void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
 
     if (ct /*== TContestApp::getContestApp() ->getCurrentContest()*/)
     {
-       if (fromStartRigControl)   // it is a contest frame starting
+       ignorePresetFreqFlag = readIgnorePresetFreqFlag();
+       ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
+
+       if (fromStartRigControl && lastFreq != ZEROFREQ)
+       {
+           // frame has been running, so use lastFreq, except if ignorePreviousFreqFlag set
+           if (!ignorePreviousFreqFlag)
+           {
+               traceMsg(QString("frame has been running, using lastFreq = %1").arg(lastFreq));
+               sendFreq = lastFreq;
+           }
+
+           return;
+       }
+       else if (fromStartRigControl)   // it is a contest frame starting
        {
 
            traceMsg(QString("setRadioFreq: curFreq default - starting contest"));
 
 
-           ignorePresetFreqFlag = readIgnorePresetFreqFlag();
+
            if (ignorePresetFreqFlag)
            {
                traceMsg(QString("setRadioFreq: ignoring preset freq"));
@@ -1442,7 +1458,7 @@ void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
            QString freq;
            traceMsg(QString("setRadioFreq: onContestPageChanged and not default curFreq"));
 
-           ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
+
            if (ignorePreviousFreqFlag)
            {
                traceMsg(QString("setRadioFreq: ignorePreviousFreqflag set "));
