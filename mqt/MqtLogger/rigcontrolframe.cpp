@@ -1341,7 +1341,9 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
 void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
 {
-    traceMsg(QString("setRadioFreq: enter function"));
+    traceMsg(QString("setRadioFreq: enter function, fromStartRigControl = %1, onContestPageChangedFlag = %2, rigFrameStartFlag = %3, lastFreq = %4")
+             .arg(fromStartRigControl ? "True" : "False").arg(onContestPageChangedFlag ? "True" : "False")
+             .arg(rigFrameStartFlag ? "True" : "False").arg(lastFreq));
 
     if (selRadioDetails.getBandList().isEmpty())
     {
@@ -1365,11 +1367,18 @@ void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
 
     if (ct /*== TContestApp::getContestApp() ->getCurrentContest()*/)
     {
+       ignorePresetFreqFlag = readIgnorePresetFreqFlag();
+       ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
 
        if (fromStartRigControl && lastFreq != ZEROFREQ)
        {
-           // frame has been running, so use lastFreq
-           sendFreq = lastFreq;
+           // frame has been running, so use lastFreq, except if ignorePreviousFreqFlag set
+           if (!ignorePreviousFreqFlag)
+           {
+               traceMsg(QString("frame has been running, using lastFreq = %1").arg(lastFreq));
+               sendFreq = lastFreq;
+           }
+
            return;
        }
        else if (fromStartRigControl)   // it is a contest frame starting
@@ -1378,7 +1387,7 @@ void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
            traceMsg(QString("setRadioFreq: curFreq default - starting contest"));
 
 
-           ignorePresetFreqFlag = readIgnorePresetFreqFlag();
+
            if (ignorePresetFreqFlag)
            {
                traceMsg(QString("setRadioFreq: ignoring preset freq"));
@@ -1449,7 +1458,7 @@ void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
            QString freq;
            traceMsg(QString("setRadioFreq: onContestPageChanged and not default curFreq"));
 
-           ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
+
            if (ignorePreviousFreqFlag)
            {
                traceMsg(QString("setRadioFreq: ignorePreviousFreqflag set "));
