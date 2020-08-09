@@ -1207,21 +1207,14 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
     if (ct && !ct->isProtected() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
     {
-
-/*
-           if (!rigDetailsLoaded)
-            {
-                traceMsg(QString("setRadioName: rigdetails not loaded"));
-                return;
-            }
-            else
-            {
-                traceMsg(QString("setRadioName: rigdetails are loaded"));
-            }
-*/
             radioName = radNam;
+
+
             traceMsg(QString("setRadioName:: set radiocombosel to radioName  %1").arg(radioName));
             traceMsg(QString("setRadioName:: Looking for radio in combo sel"));
+
+
+            // set Radio Sel Combo
             int index = ui->radioNameSel->findText(radioName, Qt::MatchExactly);
             if (index >= 0)
             {
@@ -1244,6 +1237,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
             if (radioName.isEmpty())
             {
+                traceMsg(QString("setRadioName: radioName is empty clear radio in rigcontrol"));
                 emit selectRadio(radioName, ZEROFREQ, "");  // send radio and mode.
                 selRadioDetails = RadioDetails();
                 createActiveBandList(selRadioDetails.getBandList());
@@ -1267,7 +1261,6 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     setBandSelComboFromFreq(sendFreq);
 
 
-                    // now get mode
                     QString contestMode = ct->currentMode.getValue();
                     bool restoreModeFlag = false;
                     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeRestoreContestMode, restoreModeFlag );
@@ -1283,8 +1276,11 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     {
                         onContestPageChangedFlag = false;
 
+                        traceMsg(QString("setRadioName: onContestPageChanged flag set and rigFrameStartFlag clear"));
+
                         if (!restoreModeFlag)
                         {
+                            traceMsg(QString("setRadioName: restoreModeFlag clear"));
                             traceMsg(QString("setRadioName: onContestPageChangedFlag = %1, restoreModeFlag = %2").arg(onContestPageChangedFlag ? "true" : "false").arg(restoreModeFlag ? "true" : "false"));
 
                             QString m = curMode;
@@ -1312,8 +1308,9 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                         }
                         else
                         {
-                            traceMsg(QString("setRadioName: Not onContestPageChange = %1, radioName = %2, mode =%3").arg(onContestPageChangedFlag ? "true" : "false").arg(radioName).arg(curMode));
-                            emit selectRadio(radioName, sendFreq, curMode.remove(':'));
+                            traceMsg(QString("setRadioName: restoreModeFlag set"));
+                            traceMsg(QString("setRadioName: onContestPageChange = %1, radioName = %2, mode = %3").arg(onContestPageChangedFlag ? "true" : "false").arg(radioName).arg(contestMode));
+                            emit selectRadio(radioName, sendFreq, contestMode);
                         }
                     }
 
@@ -1321,8 +1318,8 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                 else if (!radioName.isEmpty() && isRadioLoaded())
                 {
 
-                        trace(QString("setRadioName:: Select Radio for %1 , Bandlist is empty = %1").arg(radioName));
-                        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Bandlist empty for this radio, please add a band or tranverter!"));
+                        trace(QString("setRadioName:: Select Radio for %1 , Radio wasn't found = %1").arg(radioName));
+                        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Selected radio details were not found, please add radio or restart rigcontrol!"));
                         // clear selection in rigcontrol
                         emit selectRadio(radioName, ZEROFREQ, curMode);  // send radio and mode.
                         selRadioDetails = RadioDetails();
