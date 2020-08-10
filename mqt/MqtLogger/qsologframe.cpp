@@ -1094,7 +1094,17 @@ void QSOLogFrame::showScreenEntry( )
           ui->frequencyEdit->setText(removeTrailingZeroes(freq));
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
-      setMode(temp.mode.trimmed());
+
+
+      if (mode.isEmpty()) // use contest mode
+      {
+        setMode(temp.mode.trimmed());
+      }
+      else
+      {
+          setMode(mode);    // use mode set in the frame
+      }
+
       ui->MGMSubModeEdit->setText(temp.mgmSubmode);
 
       // and now we want to put the selection on each at the END of the text
