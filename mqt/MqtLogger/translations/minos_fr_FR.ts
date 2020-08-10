@@ -2225,7 +2225,7 @@ to</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1725"/>
+        <location filename="../qsologframe.cpp" line="1735"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2236,32 +2236,32 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2115"/>
+        <location filename="../qsologframe.cpp" line="2125"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2122"/>
+        <location filename="../qsologframe.cpp" line="2132"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2217"/>
+        <location filename="../qsologframe.cpp" line="2227"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2219"/>
+        <location filename="../qsologframe.cpp" line="2229"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2546"/>
+        <location filename="../qsologframe.cpp" line="2556"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2581"/>
+        <location filename="../qsologframe.cpp" line="2591"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -2305,7 +2305,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="724"/>
+        <location filename="../rigcontrolframe.cpp" line="731"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
@@ -2354,43 +2354,47 @@ Non - Ignorer les modifications</translation>
         <translation>Vol</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="731"/>
+        <location filename="../rigcontrolframe.cpp" line="738"/>
         <source>Off</source>
         <translation>Éteinte</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1318"/>
         <source>Bandlist empty for this radio, please add a band or tranverter!</source>
-        <translation>La liste des bandes est vide pour cette radio, ajouter une bande ou transverter SVP!</translation>
+        <translation type="vanished">La liste des bandes est vide pour cette radio, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1348"/>
+        <location filename="../rigcontrolframe.cpp" line="1322"/>
+        <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="1354"/>
         <source>Radio Bandlist is empty!</source>
         <translatorcomment>Liste des bandes est vide!</translatorcomment>
         <translation>La liste des bandes est vide!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1357"/>
+        <location filename="../rigcontrolframe.cpp" line="1363"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1430"/>
+        <location filename="../rigcontrolframe.cpp" line="1450"/>
         <source>No %1 Band found for this radio!</source>
         <translation>AucuneBande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1709"/>
+        <location filename="../rigcontrolframe.cpp" line="1729"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1716"/>
+        <location filename="../rigcontrolframe.cpp" line="1736"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1739"/>
+        <location filename="../rigcontrolframe.cpp" line="1759"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
@@ -2764,42 +2768,42 @@ Non - Ignorer les modifications</translation>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="68"/>
+        <location filename="../runbuttonsframe.cpp" line="78"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="74"/>
+        <location filename="../runbuttonsframe.cpp" line="84"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="281"/>
+        <location filename="../runbuttonsframe.cpp" line="312"/>
         <source>Run</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="290"/>
+        <location filename="../runbuttonsframe.cpp" line="321"/>
         <source>Run %1 - New</source>
         <translation>R%1 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="308"/>
+        <location filename="../runbuttonsframe.cpp" line="339"/>
         <source>Run %1 - Edit</source>
         <translation>R%1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="361"/>
+        <location filename="../runbuttonsframe.cpp" line="389"/>
         <source>Restore .%1    </source>
         <translation>Restaurer .%1    </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="364"/>
+        <location filename="../runbuttonsframe.cpp" line="392"/>
         <source>Freq: </source>
         <translation>Fréquence: </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="365"/>
+        <location filename="../runbuttonsframe.cpp" line="393"/>
         <source>Mode: </source>
         <translation>Mode: </translation>
     </message>
@@ -2807,27 +2811,27 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="504"/>
+        <location filename="../runbuttonsframe.cpp" line="524"/>
         <source>&amp;Off</source>
         <translation>&amp;Éteinte</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="505"/>
+        <location filename="../runbuttonsframe.cpp" line="525"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="506"/>
+        <location filename="../runbuttonsframe.cpp" line="526"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="507"/>
+        <location filename="../runbuttonsframe.cpp" line="527"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="508"/>
+        <location filename="../runbuttonsframe.cpp" line="528"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
