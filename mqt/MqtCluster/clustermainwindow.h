@@ -110,6 +110,7 @@ class ClusterMainWindow : public QMainWindow
 
 public:
     explicit ClusterMainWindow(QWidget *parent = nullptr);
+    void doStartup();
     ~ClusterMainWindow();
 
     static const char *userCmdButtonLabels[4];

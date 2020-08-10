@@ -23,6 +23,8 @@
 #include "rigutils.h"
 #include "cutils.h"
 #include "BandList.h"
+#include "delayedaction.h"
+
 #include "ui_clustermainwindow.h"
 
 static const char * sendClusterReasonText[] = {QT_TRANSLATE_NOOP("cluster", "Ok"), QT_TRANSLATE_NOOP("cluster", "Failed - comms error"),
@@ -55,6 +57,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     enableHFSpots(false)
 {
     ui->setupUi(this);
+
+    delayedAction(this, [=](){
+        doStartup();
+    });
+}
+void ClusterMainWindow::doStartup()
+{
 
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
@@ -138,7 +147,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(sendSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromSendQueue()));
     sendSpotsTimer->start(SEND_SPOTS_DUR);
 
-    client = new QtTelnet(parent);
+    client = new QtTelnet(parent());
     dxCluster = new Cluster();
 
     if (!FileExists(CLUSTER_SETTINGS_FILE))
@@ -299,6 +308,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     // get current node from file and then connect to host
     currentNodeName = setupCluster->getCurrentNodeName();
+
     connectToHost(currentNodeName);
 
     connect(setupCluster, SIGNAL(sendSpotToTxEnabled(bool)), this, SLOT(sendSpotToTxEnabled(bool)));
