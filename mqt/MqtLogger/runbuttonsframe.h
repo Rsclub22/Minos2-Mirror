@@ -89,10 +89,11 @@ private:
     LoggerContestLog *ct = nullptr;
     RigControlFrame *rigControl = nullptr;
 
-    int runButtonOnNum = NO_RUN_BUTTON_ON;
+    QString curRadioFreq;
 
-    bool runButtonOnFlag;
-    bool radioOffRunFreq;
+    int runButtonOnNum;
+
+    bool radioOffRunFreq = false;
 
     bool oldRadioOffRunFreq = false;  // used by on_ChkRunFreq()
 
@@ -107,12 +108,13 @@ private:
     bool chkRadioFreqOnRunFreq();
     int otherButton(int buttonNumber);
 
+    void chkRunFreq();
 signals:
     void sendRunOnFlag(QString, bool);
     void sendRunOffFreqFlag(QString, bool);
 private slots:
     void runButActivated(int buttonNumber);
-    void on_ChkRunFreq();
+    void on_radioFreqCheckTimer();
     void setFreqDisplay(QString, bool);
     void radioIsConnected(bool on);
 public slots:
