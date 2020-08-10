@@ -192,7 +192,7 @@ private:
     bool ritKHzFlag;
     //QString curRit;
 
-    bool rigDetailsLoaded = false;
+
 
     QStringList listOfRadios;
     RadioDetails selRadioDetails;
