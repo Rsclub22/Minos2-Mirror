@@ -204,7 +204,8 @@ private:
     bool ritKHzFlag;
     //QString curRit;
 
-
+    double contestBandFLow = 0;
+    double contestBandFHigh = 0;
 
     QStringList listOfRadios;
     RadioDetails selRadioDetails;
@@ -285,6 +286,9 @@ private:
     void displayFreqOnFreqEditDisplay(QString freq);
     void setRadioFreq(QString &sendFreq, bool &rigFrameStartFlag);
     int setBandSelComboFromFreq(QString freq);
+    bool checkFreqOK(QString freq);
+    bool checkContestBandMatch(QString freq);
+    void setContestBandLimits(QString band);
 };
 
 

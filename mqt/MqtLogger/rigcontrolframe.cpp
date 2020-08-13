@@ -591,6 +591,7 @@ void RigControlFrame::setFreq(QString freq)
     }
     if (freq.count() >= 4)
     {
+        checkContestBandMatch(freq);        // to show error on panel
         displayFreqOnFreqEditDisplay(freq);
         curFreq = freq;
         emit setFreqDisplay(freq, legalFreq);
@@ -603,8 +604,9 @@ void RigControlFrame::setFreq(QString freq)
 void RigControlFrame::displayFreqOnFreqEditDisplay(QString freq)
 {
 
-    if (checkValidBand(freq))  // prevent a crash with invalid freq
+    if (checkFreqOK(freq))  // prevent a crash with invalid freq
     {
+
         if (!freqEditOn)
         {
             traceMsg(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(freq));
@@ -614,8 +616,6 @@ void RigControlFrame::displayFreqOnFreqEditDisplay(QString freq)
 
         }
     }
-
-
 }
 
 
@@ -1257,8 +1257,18 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     // get freq to send
                     setRadioFreq(sendFreq,  fromStartRigControl);
 
-                    // set Band Combo to band of Send Freq
-                    setBandSelComboFromFreq(sendFreq);
+                    // set Band Sel Combo to band of contest band
+                    QString contestBand = ct->contestBands.getValue();
+                    if (setBandSelComboIndex(contestBand) == -1)
+                    {
+                        traceMsg(QString("setRadioName: setBandSelCombo Band %1, not found").arg(contestBand));
+                    }
+                    else
+                    {
+                        traceMsg(QString("setRadioName: setBandSelCombo to contest band = %1").arg(contestBand));
+                        traceMsg(QString("setRadioName: set contest band limits for band = %1").arg(contestBand));
+                        setContestBandLimits(contestBand);
+                    }
 
 
                     QString contestMode = ct->currentMode.getValue();
@@ -1608,6 +1618,55 @@ int RigControlFrame::setBandSelComboIndex(QString band)
 }
 
 
+
+bool RigControlFrame::checkContestBandMatch(QString freq)
+{
+
+    bool ok;
+    double freqDbl = freq.toDouble(&ok);
+    if (ok)
+    {
+
+
+        if (freqDbl >= contestBandFLow && freqDbl <= contestBandFHigh)
+        {
+
+            setRadioBandWarning("");
+            return true;
+        }
+        else
+        {
+            setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Freq out of contest band"));
+
+        }
+    }
+
+
+
+    return false;
+}
+
+
+void RigControlFrame::setContestBandLimits(QString band)
+{
+    BandList &blist = BandList::getBandList();
+
+    for (int i = 0; i < blist.bandList.count(); i++)
+    {
+        if (band == blist.bandList[i].uk)
+        {
+            contestBandFLow = blist.bandList[i].flow;
+            contestBandFHigh = blist.bandList[i].fhigh;
+            return;
+        }
+    }
+
+    contestBandFLow = 0;
+    contestBandFHigh = 0;
+
+}
+
+
 void RigControlFrame::setRadioListFromTslf()
 {
     if (!rigFrameStartFlag || ui->radioNameSel->count() == 0)
@@ -1674,14 +1733,16 @@ void RigControlFrame::setRadioList()
 
 
 
+
+
+
 // create the active bands on selected radio
 
 void RigControlFrame::createActiveBandList(QString b)
 {
-    traceMsg("createActiveBandList " + b);
+    traceMsg(QString("createActiveBandList: %1").arg(b));
     if (!b.isEmpty())
     {
-        QString currentBand = ui->bandSelCombo->currentText();
         listOfBands.clear();
         QStringList lbf;
         QStringList lb;
@@ -1699,7 +1760,24 @@ void RigControlFrame::createActiveBandList(QString b)
         ui->bandSelCombo->clear();
         ui->bandSelCombo->addItem("");
         ui->bandSelCombo->addItems(lb);
-        ui->bandSelCombo->setCurrentText(currentBand); // restore for now
+        // set combo to current contest band
+        if (ct && !ct->isProtected())
+        {
+            QString contestBand = ct->contestBands.getValue();
+            // is band in combo sel
+            if (ui->bandSelCombo->findText(contestBand)>= 0)
+            {
+                ui->bandSelCombo->setCurrentText(contestBand);
+                traceMsg(QString("createActveBandList: restore currentBand = %1").arg(contestBand));
+
+            }
+            else
+            {
+                traceMsg(QString("createActveBandList: couldn't find contestBand = %1 in select combo").arg(contestBand));
+
+            }
+        }
+
     }
     else
     {
@@ -1740,7 +1818,7 @@ void RigControlFrame::setRadioState(QString s)
                 ui->radioNameSel->setCurrentIndex(index);
                 // set Display to sendFreq in case radio has been disconnected
                 displayFreqOnFreqEditDisplay(sendFreq);
-                setBandSelComboFromFreq(sendFreq);
+
 
                 //restoreRadioFreq();
                 emit radioIsConnected(true);
@@ -2173,6 +2251,23 @@ bool RigControlFrame::isFreqLegal(const double freq, const QString band, const Q
     traceMsg(QString("RigControl Frame isFreqLegal: Operating Freq file not loaded"));
     return true;
 
+}
+
+bool RigControlFrame::checkFreqOK(QString freq)
+{
+    bool ok = false;
+    qint64 fInt64 = freq.toLongLong(&ok);
+    if (ok)
+    {
+        if (fInt64 >=0 && fInt64 < 20000000000)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 
 void RigControlFrame::closeContest()
