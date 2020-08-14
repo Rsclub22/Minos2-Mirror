@@ -1655,6 +1655,11 @@ void TSingleLogFrame::on_SetFreq(QString f)
     traceMsg(QString("Freq from radio = %1").arg(f));
     if ( this == LogContainer->getCurrentLogFrame() )
     {
+        bool stopKeyer = false;
+        if (f != sCurFreq)
+        {
+            stopKeyer = true;
+        }
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
         runButtonsFrame->setFreq(f);
@@ -1662,7 +1667,9 @@ void TSingleLogFrame::on_SetFreq(QString f)
         bandmapControlFrame->setFreq(f);
 
         MinosLoggerEvents::sendRigFreqChanged(f, contest);
-        sendKeyerStop();    // if we have tuned, stop keyer
+
+        if (stopKeyer)
+            sendKeyerStop();    // if we have tuned, stop keyer
     }
 
 }
