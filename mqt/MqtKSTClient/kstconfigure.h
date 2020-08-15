@@ -22,6 +22,7 @@ public:
     QString port;
     QString username;
     UpperCaseValidator userValidator;
+    QString firstName;
 
     QString password;
     bool autoConnect;
