@@ -101,6 +101,9 @@ public:
 
 };
 
+
+
+
 class ClusterMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -211,20 +214,9 @@ private:
     QString sentComment;
 
     QStringList dxMsg;
-    QString dxCall;
-    QString dxFreq;
-    QString dxBandStr;
-    QString dxBandMask;
-    QString dxModeStr;
-    QString dxModeMask;
-    QString spotCall;
-    QString spotComment;
-    QString spotTime;
-    QString spotDate;
-    QDateTime spotDateTime;
-    QString dxLocator;
-    QString spotLocator;
-    QString dxPropMode;
+
+    SpotData curSpot;
+
 
     bool loginStart;
     bool loginSuccess;
@@ -244,7 +236,7 @@ private:
 
 
     int txText(QString msg);
-    int upackDxSpot(QString txt, QString &spotCall);
+    int upackDxSpot(QString txt, SpotData &newSpot);
     void loadNodesSelectBox(QStringList listOfNodes);
 
     void restoreDxSpotViewColumns();
@@ -277,8 +269,8 @@ private:
     void echoMsg(QString msg);
     QString createSpotToSend(QString spot);
     QString createStatusToSend(QString status);
-    int upackShowDxSpot(const QString txt, const QString spotCall);
-    bool checkShowDxMsg(const QString txt, QString &spotCall);
+    int upackShowDxSpot(const QString txt, SpotData &newSpot);
+    bool checkShowDxMsg(const QString txt, SpotData &newSpot);
 
     void handleStartFile();
     void handleEndFile();

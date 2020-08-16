@@ -15,7 +15,32 @@
 
 SpotData::SpotData()
 {
+    clear();
+}
 
+
+SpotData::SpotData(SpotData &spd)
+{
+    rxTime = spd.rxTime;
+    spotTime = spd.spotTime;
+    spotDate = spd.spotDate;
+    spotDateTime = spd.spotDateTime;
+    dxFreq = spd.dxFreq;
+    dxBandStr = spd.dxBandStr;
+    dxBandMask = spd.dxBandMask;
+    dxModeStr = spd.dxModeStr;
+    dxModeMask = spd.dxModeMask;
+    dxCall = spd.dxCall;
+    dxLocator = spd.dxLocator;
+    dxDist = spd.dxDist;
+    dxBrg = spd.dxDist;
+    dxCallWorked = spd.dxCallWorked;
+    dxLocatorWorked = spd.dxLocatorWorked;
+    sentToMemory = spd.sentToMemory;
+    spotterCall = spd.spotterCall;
+    spotterLocator = spd.spotterLocator;
+    dxPropMode = spd.dxPropMode;
+    spotComment = spd.spotComment;
 }
 
 SpotData::SpotData(qint64 _rxTime, QString _spotTime,
@@ -33,8 +58,8 @@ SpotData::SpotData(qint64 _rxTime, QString _spotTime,
     dxFreq = _dxFreq;
     dxBandStr = _dxBandStr;
     dxBandMask = _dxBandMask;
-    dxMode = _dxMode;
-    dxModeMaskStr = _dxModeMaskStr;
+    dxModeStr = _dxMode;
+    dxModeMask = _dxModeMaskStr;
     dxCall = _dxCall;
     dxLocator = _dxLocator;
     dxDist = distance;
@@ -48,15 +73,38 @@ SpotData::SpotData(qint64 _rxTime, QString _spotTime,
     spotComment = comment;
 }
 
+
+void SpotData::clear(){
+
+    dxCall.clear();
+    dxFreq.clear();
+    dxBandStr.clear();
+    dxBandMask.clear();
+    dxModeStr.clear();
+    dxModeMask.clear();
+    spotterCall.clear();
+    spotComment.clear();
+    spotTime.clear();
+    spotDateTime = QDateTime::currentDateTimeUtc();
+    spotDate.clear();
+    dxLocator.clear();
+    spotterLocator.clear();
+    dxPropMode.clear();
+}
+
+
+
 void SpotData::operator = (const SpotData& spd)
 {
     rxTime = spd.rxTime;
     spotTime = spd.spotTime;
+    spotDate = spd.spotDate;
+    spotDateTime = spd.spotDateTime;
     dxFreq = spd.dxFreq;
     dxBandStr = spd.dxBandStr;
     dxBandMask = spd.dxBandMask;
-    dxMode = spd.dxMode;
-    dxModeMaskStr = spd.dxModeMaskStr;
+    dxModeStr = spd.dxModeStr;
+    dxModeMask = spd.dxModeMask;
     dxCall = spd.dxCall;
     dxLocator = spd.dxLocator;
     dxDist = spd.dxDist;
