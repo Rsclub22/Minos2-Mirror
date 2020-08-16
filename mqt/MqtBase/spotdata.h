@@ -53,7 +53,7 @@ public:
     void setDxModeStr(QString dxModeStr_){dxModeStr = dxModeStr_;}
     QString getDxModeStr(){return dxModeStr;}
 
-    void setDxModeMask(QString dxModeMask_){dxModeStr = dxModeMask_;}
+    void setDxModeMask(QString dxModeMask_){dxModeMask = dxModeMask_;}
     QString getDxModeMask(){return dxModeMask;}
 
     void setSpotterCall(QString spotterCall_){spotterCall = spotterCall_;}

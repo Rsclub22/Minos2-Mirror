@@ -963,6 +963,9 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
         QString dxBandStr;
         QString dxBandMask;
         getBand(bands, newSpot.getDxFreq(), dxBandStr, dxBandMask);
+        newSpot.setDxBandStr(dxBandStr);
+        newSpot.setDxBandMask(dxBandMask);
+
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
             // discard spot as it is HF
@@ -973,6 +976,8 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
         QString dxModeStr;
         QString dxModeMask;
         getMode(modeBandPlan, newSpot.getDxFreq(), dxBandStr, dxModeStr, dxModeMask);
+        newSpot.setDxModeStr(dxModeStr);
+        newSpot.setDxModeMask(dxModeMask);
 
         newSpot.setDxCall(dxMsg[1]);
         newSpot.setSpotDate(dxMsg[2]);
@@ -1174,24 +1179,23 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         //dxFreq = convertKhzToMhz(dxMsg[3]);
         newSpot.setDxFreq(convertFreqStrDisp(f));
 
-        QString dxFreq;
+
         QString dxBandStr;
         QString dxBandMask;
-        getBand(bands, dxFreq, dxBandStr, dxBandMask);
-        newSpot.setDxFreq(dxFreq);
+        getBand(bands, newSpot.getDxFreq(), dxBandStr, dxBandMask);
         newSpot.setDxBandStr(dxBandStr);
         newSpot.setDxBandMask(dxBandMask);
 
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
             // discard spot as it is HF
-            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(dxFreq));
+            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot.getDxFreq()));
             return -3;
         }
 
         QString dxModeStr;
         QString dxModeMask;
-        getMode(modeBandPlan, dxFreq, dxBandStr, dxModeStr, dxModeMask);
+        getMode(modeBandPlan, newSpot.getDxFreq(), newSpot.getDxBandStr(), dxModeStr, dxModeMask);
 
         newSpot.setDxCall(dxMsg[4]);
         // find time
