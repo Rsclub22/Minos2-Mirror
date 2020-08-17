@@ -887,112 +887,48 @@ void ClusterMainWindow::parseDX(const QString txt)
                     retCode = upackShowDxSpot(line, newSpot);
                     trace(QString("ParseDx - Unpack ShowDxSpot retcode = %1").arg(retCode));
                 }
-
-                if (retCode >= 0)
-                {
-                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
-                    .arg(newSpot.getDxCall()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMask())
-                    .arg(newSpot.getSpotterCall()).arg(newSpot.getDxLocator()).arg(newSpot.getSpotterLocator()).arg(newSpot.getDxPropMode()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(setupCluster->getTimeToLive()));
-
-                    // do we have dxLocator
-                    if (newSpot.getDxLocator().isEmpty())
-                    {
-                        // no lets ask qrz
-                        trace(QString("dxLocator is empty, ask qrz for call %1").arg(newSpot.getDxCall()));
-                        txText(dxCluster->showQRZMsg(newSpot.getDxCall()));
-                        getQrzInfo = true;
-                        waitingForCallFromQrz = newSpot.getDxCall();
-                        // park spot for now
-                        spotListNoQra.insert(newSpot.getDxCall(), newSpot);
-                    }
-
-                }
-
-
                 // look for qrz info
                 else if (getQrzInfo)
                 {
                     bool qrzMsgOk = false;
                     retCode = getQrzReply(qrzMsgOk, line);
-                    if (!qrzMsgOk)
-                    {
-                        // still waiting
-                        return;
-                    }
-                    else
-                    {
-                        if (spotListNoQra.contains(qrzInfo.getUser()))
-                        {
-                            newSpot = spotListNoQra.value(qrzInfo.getUser());
-
-                            if (qrzInfo.getFound())
-                            {
-                                newSpot.setDxLocator(qrzInfo.getLocation());
-                            }
-
-                            spotListNoQra.remove(qrzInfo.getUser());
-                            qrzInfo.clear();
-                            getQrzInfo = false;
-                            waitingForCallFromQrz.clear();
-                            retCode = 0;
-                        }
-
-                    }
-                }
-
-
-
-
-
-                if (retCode >= 0)
-                {
-                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
-                    .arg(newSpot.getDxCall()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMask())
-                    .arg(newSpot.getSpotterCall()).arg(newSpot.getDxLocator()).arg(newSpot.getSpotterLocator()).arg(newSpot.getDxPropMode()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(setupCluster->getTimeToLive()));
-
-                    qint64 rxTime = newSpot.getSpotDateTime().toMSecsSinceEpoch()/1000;
-
-                    // is spot older than time to live time
-                    int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
-                    if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))
-                    {
-                        trace(QString("ParseDx: Spot within timeToLive - Send Spot to Queue"));
-                        if (currentUserCallsign != newSpot.getSpotterCall())
-                        {
-                            // send spot to clients if spotter isn't this station
-                            trace(QString("ParseDx: Spotter not this station, pass to clients"));
-                            sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(newSpot.getDxCall()).arg(newSpot.getDxLocator()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMask())
-                                                                   .arg(newSpot.getSpotterCall()).arg(newSpot.getSpotterLocator()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(newSpot.getDxPropMode()).arg(setupCluster->getTimeToLive())));
-                        }
-                        else
-                        {
-                            trace(QString("ParseDx: Spotter is this station, only display on server"));
-                        }
-
-
-                        trace(QString("ParseDx: rxTime = %1").arg(rxTime));
-                        trace(QString("ParseDx: Add spot for display"));
-                        spotsList += (new SpotData(newSpot));
-
-                    }
-                    else
-                    {
-                       trace(QString("ParseDx: Spot older than time to live time = %1 mins").arg(timeToLive/60));
-                    }
-
-
-
-                }
-                else if (retCode == -100)
-                {
-                    trace(QString("ParseDx - Not a valid spot retcode = %1").arg(retCode));
+                    //if (!qrzMsgOk)
+                   //{
+                   //     // still waiting
+                   //     return;
+                   // }
                 }
             }
-        } while (!line.isNull());
+       } while (!line.isNull());
     }
 
     trace(QString("ParseDx: Finished"));
 }
+
+
+ /*               else
+                {
+                    if (spotListNoQra.contains(qrzInfo.getUser()))
+                    {
+                        newSpot = spotListNoQra.value(qrzInfo.getUser());
+
+                        if (qrzInfo.getFound())
+                        {
+                            newSpot.setDxLocator(qrzInfo.getLocation());
+                        }
+
+                        spotListNoQra.remove(qrzInfo.getUser());
+                        qrzInfo.clear();
+                        getQrzInfo = false;
+                        waitingForCallFromQrz.clear();
+                        retCode = 0;
+                    }
+
+                }
+
+*/
+
+
 
 
 int ClusterMainWindow::getQrzReply(bool &qrzMsgOk, QString &line)
