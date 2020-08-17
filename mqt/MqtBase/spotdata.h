@@ -22,7 +22,7 @@ class SpotData
 {
 public:
     SpotData();
-    SpotData(SpotData &spd);
+    SpotData(const SpotData &spd);
     SpotData(qint64 _rxTime, QString _spotTime,
              QString _dxFreq, QString _dxBandStr, QString _dxBandMask,
              QString _dxMode, QString _dxModeMaskStr,

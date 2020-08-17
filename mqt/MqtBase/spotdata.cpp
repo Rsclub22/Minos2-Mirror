@@ -19,7 +19,7 @@ SpotData::SpotData()
 }
 
 
-SpotData::SpotData(SpotData &spd)
+SpotData::SpotData(const SpotData &spd)
 {
     rxTime = spd.rxTime;
     spotTime = spd.spotTime;

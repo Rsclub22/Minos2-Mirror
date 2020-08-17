@@ -14,6 +14,8 @@ public:
     QString setPageMsg(QString lineNum);
     QString showDxMsg(QString cmd);
     QString quit();
+    QString showQRZMsg(QString callsign);
+    QString pingMsg();
 };
 
 #endif // CLUSTER_H

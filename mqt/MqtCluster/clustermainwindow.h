@@ -102,7 +102,63 @@ public:
 };
 
 
+class ClusterQRZDetails
+{
+public:
+    ClusterQRZDetails()
+    {
+        clear();
+    }
 
+    void setUser(QString user_){user = user_;}
+    QString getUser(){return user;}
+
+    void setFound(bool found_){found = found_;}
+    bool getFound(){return found;}
+
+    void setName(QString name_){name = name_;}
+    QString getName(){return name;}
+
+    void setLastConnect(QString lastConnect_){lastConnect = lastConnect_;}
+    QString getLastConnect(){return lastConnect;}
+
+    void setQth(QString qth_){qth = qth_;}
+    QString getQth(){return qth;}
+
+    void setLocation(QString location_){location = location_;}
+    QString getLocation(){return location;}
+
+    void setHeading(QString heading_){heading = heading_;}
+    QString getHeading(){return heading;}
+
+
+    void setHomeNode(QString homeNode_){homeNode = homeNode_;}
+    QString getHomeNode(){return homeNode;}
+
+    void clear()
+    {
+        user.clear();
+        found = false;
+        name.clear();
+        lastConnect.clear();
+        qth.clear();
+        location.clear();
+        heading.clear();
+        homeNode.clear();
+    }
+
+private:
+
+    QString user;
+    bool found;
+    QString name;
+    QString lastConnect;
+    QString qth;
+    QString location;
+    QString heading;
+    QString homeNode;
+
+};
 
 class ClusterMainWindow : public QMainWindow
 {
@@ -217,6 +273,11 @@ private:
 
     SpotData curSpot;
 
+    ClusterQRZDetails qrzInfo;
+    bool getQrzInfo = false;
+    QString waitingForCallFromQrz;
+    QMap<QString, SpotData> spotListNoQra;
+
 
     bool loginStart;
     bool loginSuccess;
@@ -293,6 +354,7 @@ private:
     void addSentSpotToDisplayQueue(bool spotStatus, QString reason);
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
+    int getQrzReply(bool &qrzMsgOk, QString &line);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();

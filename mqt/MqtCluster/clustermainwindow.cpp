@@ -864,6 +864,7 @@ void ClusterMainWindow::parseDX(const QString txt)
 
     int retCode = -100;
     SpotData newSpot;
+    newSpot.clear();
 
     QString line;
     if (loginSuccess)
@@ -886,6 +887,60 @@ void ClusterMainWindow::parseDX(const QString txt)
                     retCode = upackShowDxSpot(line, newSpot);
                     trace(QString("ParseDx - Unpack ShowDxSpot retcode = %1").arg(retCode));
                 }
+
+                if (retCode >= 0)
+                {
+                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
+                    .arg(newSpot.getDxCall()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMask())
+                    .arg(newSpot.getSpotterCall()).arg(newSpot.getDxLocator()).arg(newSpot.getSpotterLocator()).arg(newSpot.getDxPropMode()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(setupCluster->getTimeToLive()));
+
+                    // do we have dxLocator
+                    if (newSpot.getDxLocator().isEmpty())
+                    {
+                        // no lets ask qrz
+                        trace(QString("dxLocator is empty, ask qrz for call %1").arg(newSpot.getDxCall()));
+                        txText(dxCluster->showQRZMsg(newSpot.getDxCall()));
+                        getQrzInfo = true;
+                        waitingForCallFromQrz = newSpot.getDxCall();
+                        // park spot for now
+                        spotListNoQra.insert(newSpot.getDxCall(), newSpot);
+                    }
+
+                }
+
+
+                // look for qrz info
+                else if (getQrzInfo)
+                {
+                    bool qrzMsgOk = false;
+                    retCode = getQrzReply(qrzMsgOk, line);
+                    if (!qrzMsgOk)
+                    {
+                        // still waiting
+                        return;
+                    }
+                    else
+                    {
+                        if (spotListNoQra.contains(qrzInfo.getUser()))
+                        {
+                            newSpot = spotListNoQra.value(qrzInfo.getUser());
+
+                            if (qrzInfo.getFound())
+                            {
+                                newSpot.setDxLocator(qrzInfo.getLocation());
+                            }
+
+                            spotListNoQra.remove(qrzInfo.getUser());
+                            qrzInfo.clear();
+                            getQrzInfo = false;
+                            waitingForCallFromQrz.clear();
+                            retCode = 0;
+                        }
+
+                    }
+                }
+
+
 
 
 
@@ -940,7 +995,80 @@ void ClusterMainWindow::parseDX(const QString txt)
 }
 
 
+int ClusterMainWindow::getQrzReply(bool &qrzMsgOk, QString &line)
+{
+    if (line.contains("not found") && line.contains("***"))
+    {
+        // callsign not found
+        QStringList nfl = line.split(' ');
+        if (nfl.count() > 4)
+        {
+            qrzInfo.setUser(nfl[4].trimmed());
+            qrzMsgOk = true;
+        }
+        return 0;
+    }
 
+    else if (line.contains("User") && line.contains(':'))
+    {
+        QStringList ul = line.split(':');
+        if (ul.count() == 2)
+        {
+            qrzInfo.setUser(ul[1].trimmed());
+            qrzInfo.setFound(true);
+
+        }
+    }
+    else if (line.contains("Name") && line.contains(':'))
+    {
+        QStringList nl = line.split(':');
+        if (nl.count() == 2)
+        {
+            qrzInfo.setName(nl[1].trimmed());
+
+        }
+    }
+    else if (line.contains("Last") && line.contains(':'))
+    {
+        QStringList ll = line.split(':');
+        if (ll.count() == 2)
+        {
+            qrzInfo.setLastConnect(ll[1].trimmed());
+
+        }
+    }
+    else if (line.contains("QTH") && line.contains(':'))
+    {
+        QStringList ql = line.split(':');
+        if (ql.count() == 2)
+        {
+            qrzInfo.setQth(ql[1].trimmed());
+
+        }
+    }
+    else if (line.contains("Location") && line.contains(':'))
+    {
+        QStringList locl = line.split(':');
+        if (locl.count() == 2)
+        {
+            qrzInfo.setLocation(locl[1].trimmed());
+
+        }
+    }
+    else if (line.contains("Home") && line.contains(':'))
+    {
+        QStringList hl = line.split(':');
+        if (hl.count() == 2)
+        {
+            qrzInfo.setHomeNode(hl[1].trimmed());
+            qrzMsgOk = true;
+            return 0;
+
+        }
+    }
+
+    return -100;
+}
 
 
 

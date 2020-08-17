@@ -50,6 +50,16 @@ QString Cluster::showDxMsg(QString cmd)
     return QString("show/dx %1\n").arg(cmd);
 }
 
+QString Cluster::showQRZMsg(QString callsign)
+{
+    return QString("show/qrz %1\n").arg(callsign);
+}
+
+QString Cluster::pingMsg()
+{
+    return QString("echo ping_cluster\n");
+}
+
 
 QString Cluster::quit()
 {
