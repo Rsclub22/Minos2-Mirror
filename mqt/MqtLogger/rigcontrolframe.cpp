@@ -1838,7 +1838,7 @@ void RigControlFrame::setRadioState(QString s)
 
            //disconnectFreq = lastFreq;
 
-           ui->bandWarnLabel->setText("");
+           //ui->bandWarnLabel->setText("");
 
            if (ui->radioNameSel->currentText() == "")
            {
