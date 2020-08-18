@@ -128,62 +128,67 @@
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="116"/>
+        <location filename="../kstconfigure.ui" line="120"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="134"/>
+        <location filename="../kstconfigure.ui" line="138"/>
         <source>First Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="150"/>
+        <location filename="../kstconfigure.ui" line="159"/>
+        <source>Leave &quot;First Name&quot; blank if you don&apos;t want it checked.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../kstconfigure.ui" line="171"/>
         <source>Automatically connect on load</source>
         <translation>Connexion automatique lors du chargement</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="175"/>
+        <location filename="../kstconfigure.ui" line="196"/>
         <source>AirScout</source>
         <translation>AStest</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="185"/>
+        <location filename="../kstconfigure.ui" line="206"/>
         <source>Server Name</source>
         <translation>Nom du Serveur</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="203"/>
+        <location filename="../kstconfigure.ui" line="224"/>
         <source>My Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="225"/>
+        <location filename="../kstconfigure.ui" line="246"/>
         <source>Server UDP Port</source>
         <translation>Port UDP du serveur</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="239"/>
+        <location filename="../kstconfigure.ui" line="264"/>
         <source>Server timeout</source>
         <translation>Timeout du serveur</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="257"/>
+        <location filename="../kstconfigure.ui" line="286"/>
         <source>Minimum distance</source>
         <translation>Distance minimale</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="275"/>
+        <location filename="../kstconfigure.ui" line="304"/>
         <source>Maximum distance</source>
         <translation>Distance maximale</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="298"/>
+        <location filename="../kstconfigure.ui" line="327"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="318"/>
+        <location filename="../kstconfigure.ui" line="347"/>
         <source>Ok</source>
         <translation>OK</translation>
     </message>
