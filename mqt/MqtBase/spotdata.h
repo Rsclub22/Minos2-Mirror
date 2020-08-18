@@ -23,78 +23,75 @@ class SpotData
 public:
     SpotData();
     SpotData(const SpotData &spd);
-    SpotData(qint64 _rxTime, QString _spotTime,
-             QString _dxFreq, QString _dxBandStr, QString _dxBandMask,
-             QString _dxMode, QString _dxModeMaskStr,
-             QString _dxCall, bool _dxCallWorked, QString _dxLocator,
-             bool _dxLocatorWorked, QString distance,
-             QString bearing, QString _spotterCall,
-             QString _spotterLocator, QString _dxPropMode, QString comment);
 
     void operator = (const SpotData& spd);
 
     void clear();
 
     void setRxTime(qint64 rxTime_){rxTime = rxTime_;}
-    qint64 getRxTime(){return rxTime;}
+    qint64 getRxTime()const {return rxTime;}
 
     void setDxCall(QString dxCall_){dxCall = dxCall_;}
-    QString getDxCall(){return dxCall;}
+    QString getDxCall()const {return dxCall;}
 
     void setDxFreq(QString dxFreq_){dxFreq = dxFreq_;}
-    QString getDxFreq(){return dxFreq;}
+    QString getDxFreq()const {return dxFreq;}
 
     void setDxBandStr(QString dxBandStr_){dxBandStr = dxBandStr_;}
-    QString getDxBandStr(){return dxBandStr;}
+    QString getDxBandStr()const {return dxBandStr;}
 
     void setDxBandMask(QString dxBandMask_){dxBandMask = dxBandMask_;}
-    QString getDxBandMask(){return dxBandMask;}
+    QString getDxBandMask()const {return dxBandMask;}
 
     void setDxModeStr(QString dxModeStr_){dxModeStr = dxModeStr_;}
-    QString getDxModeStr(){return dxModeStr;}
+    QString getDxModeStr()const {return dxModeStr;}
 
     void setDxModeMask(QString dxModeMask_){dxModeMask = dxModeMask_;}
-    QString getDxModeMask(){return dxModeMask;}
+    QString getDxModeMask()const {return dxModeMask;}
 
     void setSpotterCall(QString spotterCall_){spotterCall = spotterCall_;}
-    QString getSpotterCall(){return spotterCall;}
+    QString getSpotterCall()const {return spotterCall;}
 
     void setSpotComment(QString spotComment_){spotComment = spotComment_;}
-    QString getSpotComment(){return spotComment;}
+    QString getSpotComment()const {return spotComment;}
 
     void setSpotTime(QString spotTime_){spotTime = spotTime_;}
-    QString getSpotTime(){return spotTime;}
+    QString getSpotTime()const {return spotTime;}
 
     void setSpotDate(QString spotDate_){spotDate = spotDate_;}
-    QString getSpotDate(){return spotDate;}
+    QString getSpotDate()const {return spotDate;}
 
     void setSpotDateTime(QDateTime spotDateTime_){spotDateTime = spotDateTime_;}
-    QDateTime getSpotDateTime(){return spotDateTime;}
+    QDateTime getSpotDateTime()const {return spotDateTime;}
 
 
     void setDxLocator(QString dxLocator_){spotDate = dxLocator_;}
-    QString getDxLocator(){return dxLocator;}
+    QString getDxLocator() const {return dxLocator;}
+
+    void setAskQrz(const bool askQrz_){askQrz = askQrz_;}
+    bool getAskQrz()const {return askQrz;}
+
 
     void setSpotterLocator(QString spotterLocator_){spotterLocator = spotterLocator_;}
-    QString getSpotterLocator(){return spotterLocator;}
+    QString getSpotterLocator() const {return spotterLocator;}
 
     void setDxPropMode(QString dxPropMode_){dxPropMode = dxPropMode_;}
-    QString getDxPropMode(){return dxPropMode;}
+    QString getDxPropMode() const {return dxPropMode;}
 
     void setDxDist(QString dxDist_){dxDist = dxDist_;}
-    QString getDxDist(){return dxDist;}
+    QString getDxDist() const {return dxDist;}
 
     void setDxBrg(QString dxBrg_){dxBrg = dxBrg_;}
-    QString getDxBrg(){return dxBrg;}
+    QString getDxBrg() const {return dxBrg;}
 
     void setDxCallWorked(bool dxCallWorked_){dxCallWorked = dxCallWorked_;}
-    bool getDxCallWorked(){return dxCallWorked;}
+    bool getDxCallWorked() const {return dxCallWorked;}
 
     void setDxLocatorWorked(bool dxLocatorWorked_){dxLocatorWorked = dxLocatorWorked_;}
-    bool getDxLocatorWorked(){return dxLocatorWorked;}
+    bool getDxLocatorWorked()const {return dxLocatorWorked;}
 
     void setSentToMemory(bool sentToMemory_){sentToMemory = sentToMemory_;}
-    bool getSentToMemory(){return sentToMemory;}
+    bool getSentToMemory() const {return sentToMemory;}
 
 
 
@@ -111,6 +108,7 @@ private:
     QString dxModeMask;
     QString dxCall;
     QString dxLocator;
+    bool askQrz;
     QString dxDist;
     QString dxBrg;
     bool dxCallWorked;

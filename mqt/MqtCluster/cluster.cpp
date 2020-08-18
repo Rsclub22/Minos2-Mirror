@@ -55,6 +55,11 @@ QString Cluster::showQRZMsg(QString callsign)
     return QString("show/qrz %1\n").arg(callsign);
 }
 
+QString Cluster::showStationMsg(QString callsign)
+{
+    return QString("show/station %1\n").arg(callsign);
+}
+
 QString Cluster::pingMsg()
 {
     return QString("echo ping_cluster\n");

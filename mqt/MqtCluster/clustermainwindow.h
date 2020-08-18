@@ -102,10 +102,10 @@ public:
 };
 
 
-class ClusterQRZDetails
+class ClusterStationInfo
 {
 public:
-    ClusterQRZDetails()
+    ClusterStationInfo()
     {
         clear();
     }
@@ -115,6 +115,10 @@ public:
 
     void setFound(bool found_){found = found_;}
     bool getFound(){return found;}
+
+
+    void setGotAllData(bool gotAllData_){gotAllData = gotAllData_;}
+    bool getGotAllData(){return gotAllData;}
 
     void setName(QString name_){name = name_;}
     QString getName(){return name;}
@@ -139,6 +143,7 @@ public:
     {
         user.clear();
         found = false;
+        gotAllData = false;
         name.clear();
         lastConnect.clear();
         qth.clear();
@@ -151,6 +156,7 @@ private:
 
     QString user;
     bool found;
+    bool gotAllData;
     QString name;
     QString lastConnect;
     QString qth;
@@ -159,6 +165,94 @@ private:
     QString homeNode;
 
 };
+
+
+class ClusterQRZDetails
+{
+public:
+    ClusterQRZDetails()
+    {
+        clear();
+    }
+
+    void setCall(const QString call_){call = call_.trimmed();}
+    QString getCall()const {return call;}
+
+    void setAdif(const QString adif_){adif = adif_.trimmed();}
+    QString getAdif()const {return adif;}
+
+    void setError(const bool error_){error = error_;}
+    bool getError()const {return error;}
+
+    void setFound(const bool found_){found = found_;}
+    bool getFound()const {return found;}
+
+
+    void setGotAllData(const bool gotAllData_){gotAllData = gotAllData_;}
+    bool getGotAllData()const {return gotAllData;}
+
+    void setFname(const QString fname_){fname = fname_.trimmed();}
+    QString getFname()const{return fname;}
+
+    void setName(const QString name_){name = name_.trimmed();}
+    QString getName()const {return name;}
+
+    void setAddr2(const QString addr2_){addr2 = addr2_.trimmed();}
+    QString getAddr2()const {return addr2;}
+
+    void setCountry(const QString country_){country = country_.trimmed();}
+    QString getCountry(){return country;}
+
+    void setLat(const QString lat_){lat = lat_.trimmed();}
+    QString getLat()const {return lat;}
+
+    void setLon(const QString lon_){lon = lon_.trimmed();}
+    QString getLon()const {return lon;}
+
+    void setGrid(const QString grid_){grid = grid_.trimmed();}
+    QString getGrid()const{return grid;}
+
+
+    void setModdate(const QString moddate_){moddate = moddate_.trimmed();}
+    QString getHomeNode()const {return moddate;}
+
+    void clear()
+    {
+        call.clear();
+        adif.clear();
+        error = false;
+        found = false;
+        gotAllData = false;
+        fname.clear();
+        name.clear();
+        addr2.clear();
+        country.clear();
+        lat.clear();
+        lon.clear();
+        grid.clear();
+        moddate.clear();
+    }
+
+private:
+
+    QString call;
+    QString adif;
+    bool error;
+    bool found;
+    bool gotAllData;
+    QString fname;
+    QString name;
+    QString addr2;
+    QString country;
+    QString lat;
+    QString lon;
+    QString grid;
+    QString moddate;
+
+
+};
+
+
 
 class ClusterMainWindow : public QMainWindow
 {
@@ -277,7 +371,7 @@ private:
     bool getQrzInfo = false;
     QString waitingForCallFromQrz;
     QMap<QString, SpotData> spotListNoQra;
-
+    QTimer *askQrzTimer;
 
     bool loginStart;
     bool loginSuccess;
@@ -354,7 +448,9 @@ private:
     void addSentSpotToDisplayQueue(bool spotStatus, QString reason);
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
-    int getQrzReply(bool &qrzMsgOk, QString &line);
+
+    void processNewSpot(SpotData &newSpot);
+    int getQrzReply(QString &line);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
@@ -372,6 +468,7 @@ private slots:
 
 
 
+    void handAskQrzTimer();
 };
 
 #endif // CLUSTERMAINWINDOW_H

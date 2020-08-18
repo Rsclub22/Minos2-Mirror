@@ -715,14 +715,27 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
-            dxSpotDataModel->rowData = new SpotData(rxTime, spotlist[SPOTTIME],
-                                                    spotlist[DXFREQ], spotlist[DXBANDSTR], spotlist[DXBANDMASK],
-                                                    spotlist[DXMODESTR], spotlist[DXMODEMASK],
-                                                    spotlist[DXCALL],
-                                                    callWorked, spotlist[DXLOCATOR],
-                                                    locWorked, distance,
-                                                    bearing, spotlist[SPOTCALL],
-                                                    spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
+            SpotData* newSpot = new SpotData();
+
+            newSpot->setRxTime(rxTime);
+            newSpot->setSpotTime(spotlist[SPOTTIME]);
+            newSpot->setDxFreq(spotlist[DXFREQ]);
+            newSpot->setDxBandStr(spotlist[DXBANDSTR]);
+            newSpot->setDxBandMask(spotlist[DXBANDMASK]);
+            newSpot->setDxModeStr(spotlist[DXMODESTR]);
+            newSpot->setDxModeMask(spotlist[DXMODEMASK]);
+            newSpot->setDxCall(spotlist[DXCALL]);
+            newSpot->setDxCallWorked(callWorked);
+            newSpot->setDxLocator(spotlist[DXLOCATOR]);
+            newSpot->setDxLocatorWorked(locWorked);
+            newSpot->setDxDist(distance);
+            newSpot->setDxBrg(bearing);
+            newSpot->setSpotterCall(spotlist[SPOTCALL]);
+            newSpot->setSpotterLocator(spotlist[SPOTLOCATOR]);
+            newSpot->setDxPropMode(spotlist[DXPROPMODE]);
+            newSpot->setSpotComment(spotlist[SPOTCOMMENT]);
+
+            dxSpotDataModel->rowData = newSpot;
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
 

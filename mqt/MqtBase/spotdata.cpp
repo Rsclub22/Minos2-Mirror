@@ -41,37 +41,10 @@ SpotData::SpotData(const SpotData &spd)
     spotterLocator = spd.spotterLocator;
     dxPropMode = spd.dxPropMode;
     spotComment = spd.spotComment;
+    askQrz = spd.askQrz;
 }
 
-SpotData::SpotData(qint64 _rxTime, QString _spotTime,
-                   QString _dxFreq, QString _dxBandStr, QString _dxBandMask,
-                   QString _dxMode, QString _dxModeMaskStr,
-                   QString _dxCall, bool _dxCallWorked,
-                   QString _dxLocator, bool _dxLocatorWorked,
-                   QString distance, QString bearing,
-                   QString _spotterCall, QString _spotterLocator,
-                   QString _dxPropMode, QString comment)
-{
 
-    rxTime = _rxTime;
-    spotTime = _spotTime;
-    dxFreq = _dxFreq;
-    dxBandStr = _dxBandStr;
-    dxBandMask = _dxBandMask;
-    dxModeStr = _dxMode;
-    dxModeMask = _dxModeMaskStr;
-    dxCall = _dxCall;
-    dxLocator = _dxLocator;
-    dxDist = distance;
-    dxBrg = bearing;
-    dxCallWorked = _dxCallWorked;
-    dxLocatorWorked = _dxLocatorWorked;
-    sentToMemory = BOOL_NO;
-    spotterCall = _spotterCall;
-    spotterLocator = _spotterLocator;
-    dxPropMode = _dxPropMode;
-    spotComment = comment;
-}
 
 
 void SpotData::clear(){
@@ -90,6 +63,7 @@ void SpotData::clear(){
     dxLocator.clear();
     spotterLocator.clear();
     dxPropMode.clear();
+    askQrz = false;
 }
 
 
@@ -116,6 +90,7 @@ void SpotData::operator = (const SpotData& spd)
     spotterLocator = spd.spotterLocator;
     dxPropMode = spd.dxPropMode;
     spotComment = spd.spotComment;
+    askQrz = spd.askQrz;
 }
 
 

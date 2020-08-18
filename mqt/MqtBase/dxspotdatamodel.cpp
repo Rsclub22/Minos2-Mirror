@@ -26,11 +26,11 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
 
 DxSpotDataModel::~DxSpotDataModel()
 {
-    foreach(auto s, dxSpotData)
-    {
-        delete s;
-    }
-    dxSpotData.clear();
+    //foreach(auto s, dxSpotData)
+    //{
+    //    delete s;
+    //}
+    //dxSpotData.clear();
 }
 
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const

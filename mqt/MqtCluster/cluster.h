@@ -16,6 +16,7 @@ public:
     QString quit();
     QString showQRZMsg(QString callsign);
     QString pingMsg();
+    QString showStationMsg(QString callsign);
 };
 
 #endif // CLUSTER_H
