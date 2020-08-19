@@ -156,7 +156,7 @@
       <item>
        <widget class="QLabel" name="label_13">
         <property name="text">
-         <string>Leave &quot;First Name&quot; blank if you don't want it checked.</string>
+         <string>Leave Locator and/or First Name blank to keep their current ON4KST setting</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
