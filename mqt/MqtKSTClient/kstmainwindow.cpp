@@ -272,7 +272,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->maxDistanceEdit->setText(QString::number(maxDistance));
     ui->maxDistanceEdit->setValidator(new QIntValidator(0, 0xffff, this));
 
-    while (myLoc.isEmpty() || myCallsign.isEmpty())
+    while ( myCallsign.isEmpty())
     {
         if (!doConfiguration())
             break;
@@ -356,14 +356,13 @@ void KSTMainWindow::userCallTimerTimer()
 void KSTMainWindow::connectToHost()
 {
     kstLoggedIn.clear();
-    while (myLoc.isEmpty() || myCallsign.isEmpty())
+    while (myCallsign.isEmpty())
     {
         if (!doConfiguration())
             return;
     }
     if (kstChatSelection.count())
     {
-        kstCallModel.locator = myLoc;
         if (kstclient->state() != QAbstractSocket::ConnectedState
            && kstclient->state() != QAbstractSocket::ConnectingState
            && kstclient->state() != QAbstractSocket::ClosingState
@@ -493,6 +492,8 @@ QString KSTMainWindow::getMyCallsign() const
 
 QString KSTMainWindow::getMyLoc() const
 {
+    if (myLoc.isEmpty())
+        return recLoc;
     return myLoc;
 }
 
@@ -595,6 +596,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             sendKST(sdone);
             recName = sl[6];
             recLoc = sl[8];
+            kstCallModel.locator = recLoc;
         }
         else
         {
@@ -835,7 +837,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             reconnect();
 
         }
-        if (myLoc != recLoc)
+        if (!myLoc.isEmpty() && myLoc != recLoc)
         {
             // /SETLOC locator    To set his own locator.
             QString msg = "MSG|" + QString::number(activeChat) + "|0|/SETLOC " + myLoc + "|0|";

@@ -70,7 +70,7 @@ void KSTConfigure::on_OKButton_clicked()
     ASPort = ui->ASPort->text().toInt();
     ASTimeout = ui->ASTimeout->text().toInt();
 
-    if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty() || locator.isEmpty())
+    if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty())
         return;
 
 
