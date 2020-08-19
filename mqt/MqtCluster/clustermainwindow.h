@@ -80,6 +80,7 @@ const int PERSONAL_TABNUM = 1;
 const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
+const int ASKQRZ_QUEUE_TIMER_PERIOD = 5000;
 
 class ClusterAddress
 {

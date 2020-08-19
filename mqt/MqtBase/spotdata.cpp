@@ -33,7 +33,7 @@ SpotData::SpotData(const SpotData &spd)
     dxCall = spd.dxCall;
     dxLocator = spd.dxLocator;
     dxDist = spd.dxDist;
-    dxBrg = spd.dxDist;
+    dxBrg = spd.dxBrg;
     dxCallWorked = spd.dxCallWorked;
     dxLocatorWorked = spd.dxLocatorWorked;
     sentToMemory = spd.sentToMemory;
@@ -42,6 +42,7 @@ SpotData::SpotData(const SpotData &spd)
     dxPropMode = spd.dxPropMode;
     spotComment = spd.spotComment;
     askQrz = spd.askQrz;
+    dxLocatorFromQrz = spd.dxLocatorFromQrz;
 }
 
 
@@ -49,6 +50,7 @@ SpotData::SpotData(const SpotData &spd)
 
 void SpotData::clear(){
 
+    rxTime = 0;
     dxCall.clear();
     dxFreq.clear();
     dxBandStr.clear();
@@ -61,6 +63,12 @@ void SpotData::clear(){
     spotDateTime = QDateTime::currentDateTimeUtc();
     spotDate.clear();
     dxLocator.clear();
+    dxDist.clear();
+    dxBrg.clear();
+    dxCallWorked = false;
+    dxLocatorWorked = false;
+    dxLocatorFromQrz = false;
+    sentToMemory = false;
     spotterLocator.clear();
     dxPropMode.clear();
     askQrz = false;
@@ -82,7 +90,7 @@ void SpotData::operator = (const SpotData& spd)
     dxCall = spd.dxCall;
     dxLocator = spd.dxLocator;
     dxDist = spd.dxDist;
-    dxBrg = spd.dxDist;
+    dxBrg = spd.dxBrg;
     dxCallWorked = spd.dxCallWorked;
     dxLocatorWorked = spd.dxLocatorWorked;
     sentToMemory = spd.sentToMemory;
@@ -91,6 +99,7 @@ void SpotData::operator = (const SpotData& spd)
     dxPropMode = spd.dxPropMode;
     spotComment = spd.spotComment;
     askQrz = spd.askQrz;
+    dxLocatorFromQrz = spd.dxLocatorFromQrz;
 }
 
 

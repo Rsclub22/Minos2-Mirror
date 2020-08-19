@@ -286,7 +286,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     askQrzTimer = new QTimer(this);
     connect(askQrzTimer, SIGNAL(timeout()), this, SLOT(handAskQrzTimer()));
-    askQrzTimer->start(2);
+    askQrzTimer->start(ASKQRZ_QUEUE_TIMER_PERIOD);
 
     // get list of clusters
     loadNodesSelectBox(setupCluster->getListOfClusterNames());
@@ -928,6 +928,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                                 {
                                     trace(QString("ParseDx - qrzInfo no error, add locator to spot = %1").arg(qrzInfo.getGrid()));
                                     newSpot.setDxLocator(qrzInfo.getGrid());
+                                    newSpot.setDxLocatorFromQrz(true);
                                 }
                                 else
                                 {
@@ -975,11 +976,12 @@ void ClusterMainWindow::processNewSpot(SpotData &newSpot)
     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
     if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))
     {
-        trace(QString("ParseDx: Spot within timeToLive"));
+        trace(QString("ProcessNewSpot: Spot within timeToLive"));
         // does the spot have a dxLocator
         if (newSpot.getDxLocator().isEmpty())
         {
             // queue to ask Qrz for locator
+            trace(QString("ProcessNewSpot: No DxCall locator, queue to ask qrz call = %1").arg(newSpot.getDxCall()));
             spotListNoQra.insert(newSpot.getDxCall(), newSpot);
         }
         else
@@ -987,25 +989,25 @@ void ClusterMainWindow::processNewSpot(SpotData &newSpot)
             if (currentUserCallsign != newSpot.getSpotterCall())
             {
                 // send spot to clients if spotter isn't this station
-                trace(QString("ParseDx: Spotter not this station, pass to clients"));
+                trace(QString("ProcessNewSpot: Spotter not this station, pass to clients"));
                 sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(newSpot.getDxCall()).arg(newSpot.getDxLocator()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMask())
                                                        .arg(newSpot.getSpotterCall()).arg(newSpot.getSpotterLocator()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(newSpot.getDxPropMode()).arg(setupCluster->getTimeToLive())));
             }
             else
             {
-                trace(QString("ParseDx: Spotter is this station, only display on server"));
+                trace(QString("ProcessNewSpot: Spotter is this station, only display on server"));
             }
 
 
-            trace(QString("ParseDx: rxTime = %1").arg(rxTime));
-            trace(QString("ParseDx: Add spot for display"));
+            trace(QString("ProcessNewSpot: rxTime = %1").arg(rxTime));
+            trace(QString("ProcessNewSpot: Add spot for display"));
             spotsList += (new SpotData(newSpot));
 
         }
     }
     else
     {
-        trace(QString("ParseDx: Spot older than time to live time = %1 mins").arg(timeToLive/60));
+        trace(QString("ProcessNewSpot: Spot older than time to live time = %1 mins").arg(timeToLive/60));
     }
 
 
@@ -1470,6 +1472,9 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         QString spotLocator;
         QString dxLocator;
         findLocInComment(spotLocator, dxLocator, spotComment);
+        newSpot.setSpotterLocator(spotLocator);
+        newSpot.setDxLocator(dxLocator);
+
         newSpot.setDxPropMode(getPropMode(spotComment));
 
         // look for mode in comments, if found overide freq mode

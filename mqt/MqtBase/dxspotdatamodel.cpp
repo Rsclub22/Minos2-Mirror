@@ -159,7 +159,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
 
     int col = index.column();
 
-//    SpotData* dxSpot = new SpotData();
+
 
     if (role == Qt::DisplayRole)
     {
@@ -197,7 +197,15 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                     QColor colour = LOCATOR_WORKED_COLOUR;
                     d = HtmlFontColour(colour);
                 }
-                d = d + dxSpot->getDxLocator();
+                if (dxSpot->getDxLocatorFromQrz())
+                {
+                    d = d + "<i>" + dxSpot->getDxLocator() + "</i>";
+                }
+                else
+                {
+                    d = d + dxSpot->getDxLocator();
+                }
+
             break;
             case DXDIST_COL_NUM:
                 d = dxSpot->getDxDist();
