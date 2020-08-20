@@ -29,21 +29,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 win32:LIBS += -lWs2_32
 
 SOURCES += main.cpp\
+    clustercommands.cpp \
         clustermainwindow.cpp \
     sentSpotdata.cpp \
     sentSpotdatamodel.cpp \
     setupdialog.cpp \
-    cluster.cpp \
     clusterrpc.cpp \
     userclustercommanddialog.cpp
 
 
 
 HEADERS  += clustermainwindow.h \
+    clustercommands.h \
     sentSpotdata.h \
     sentSpotdatamodel.h \
     setupdialog.h \
-    cluster.h \
     clusterrpc.h \
     userclustercommanddialog.h
 

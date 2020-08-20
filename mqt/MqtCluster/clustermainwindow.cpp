@@ -24,6 +24,9 @@
 #include "cutils.h"
 #include "BandList.h"
 #include "ui_clustermainwindow.h"
+#include "latlong.h"
+
+
 
 static const char * sendClusterReasonText[] = {QT_TRANSLATE_NOOP("cluster", "Ok"), QT_TRANSLATE_NOOP("cluster", "Failed - comms error"),
                                            QT_TRANSLATE_NOOP("cluster", "Not Logged On"), QT_TRANSLATE_NOOP("cluster", "Freq out of band"),
@@ -139,7 +142,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     sendSpotsTimer->start(SEND_SPOTS_DUR);
 
     client = new QtTelnet(parent);
-    dxCluster = new Cluster();
+    dxClusterCommand = new ClusterCommands();
 
     if (!FileExists(CLUSTER_SETTINGS_FILE))
     {
@@ -288,6 +291,12 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(askQrzTimer, SIGNAL(timeout()), this, SLOT(handAskQrzTimer()));
     askQrzTimer->start(ASKQRZ_QUEUE_TIMER_PERIOD);
 
+    askQrzTimeout = new QTimer(this);
+    connect(askQrzTimeout, SIGNAL(timeout()), this, SLOT(handleAskQrzTimeout()));
+
+    //testQrzTimeout = new QTimer(this);
+    //connect(testQrzTimeout, SIGNAL(timeout()), this, SLOT(handleTestQrzTimeout()));
+
     // get list of clusters
     loadNodesSelectBox(setupCluster->getListOfClusterNames());
 
@@ -310,6 +319,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
 
+    QString line = "M0DGB CC: 61 IZ: 27 CZ: 14 LL: 52 46 N 1 28 W (M, England-G)";
+    QString callsign = "M0DGB";
+    getPrefixReply(line, callsign);
 }
 
 
@@ -650,7 +662,7 @@ void ClusterMainWindow::disconnectNode()
         {
             handleEndFile();          // send user commands
         }
-        QString msg = dxCluster->quit();
+        QString msg = dxClusterCommand->quit();
         txText(msg);
         echoCmd(msg);
     }
@@ -698,9 +710,9 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
         {
             loginSuccess = true;
             txText("set/echo enable\n");
-            txText(dxCluster->setNameMsg(currentUserName));
-            txText(dxCluster->setQthMsg(currentUserQTH));
-            txText(dxCluster->setQraMsg(currentUserLocator));
+            txText(dxClusterCommand->setNameMsg(currentUserName));
+            txText(dxClusterCommand->setQthMsg(currentUserQTH));
+            txText(dxClusterCommand->setQraMsg(currentUserLocator));
 
 
             //txText("SH/ST\n");      // ask for station details
@@ -766,15 +778,15 @@ void ClusterMainWindow::checkStationDetails(QString msg)
 
     if (!foundMatch[0])
     {
-        txText(dxCluster->setNameMsg(currentUserName));
+        txText(dxClusterCommand->setNameMsg(currentUserName));
     }
     else if (!foundMatch[1])
     {
-        txText(dxCluster->setQthMsg(currentUserQTH));
+        txText(dxClusterCommand->setQthMsg(currentUserQTH));
     }
     else if (!foundMatch[2])
     {
-        txText(dxCluster->setQraMsg(currentUserLocator));
+        txText(dxClusterCommand->setQraMsg(currentUserLocator));
     }
 
 
@@ -1027,8 +1039,9 @@ void ClusterMainWindow::handAskQrzTimer()
                spotListNoQra[i].setAskQrz(true);
                waitingForCallFromQrz = spotListNoQra[i].getDxCall();
                getQrzInfo = true;
-               // send message to cluster
-               txText(dxCluster->showQRZMsg(waitingForCallFromQrz));
+               askQrzTimeout->start(ASKQRZ_TIMEOUT);
+
+               txText(dxClusterCommand->showQRZMsg(waitingForCallFromQrz));
                trace(QString("Ask Cluster for QRZ details for callsign = %1").arg(waitingForCallFromQrz));
                return;
 
@@ -1043,6 +1056,19 @@ void ClusterMainWindow::handAskQrzTimer()
 
 
 }
+
+
+void ClusterMainWindow::handleAskQrzTimeout()
+{
+
+    askQrzTimeout->stop();
+    trace(QString("handleAsKQrzTimeout: timeout expired for callsign = %1").arg(waitingForCallFromQrz));
+
+
+}
+
+
+
 
 int ClusterMainWindow::getQrzReply(QString &line)
 {
@@ -1157,7 +1183,136 @@ int ClusterMainWindow::getQrzReply(QString &line)
     return -100;
 }
 
+int ClusterMainWindow::getPrefixReply(QString &line, QString &callsign)
+{
+    if (line.contains(callsign) && (line.contains("CC:") || line.contains("LL:")))
+    {
+        QString latLon;
+        QString qra;
+        QStringList sl = line.split(':');
 
+        if (sl.count() == 5)
+        {
+            latLon = sl[4].trimmed();
+            int pos = latLon.lastIndexOf(QRegExp("\\w\\w\\d\\d"));
+            if (pos >= 0)
+            {
+                // found a QRA
+                qra = latLon.mid(pos, 4);
+                return 0;
+
+
+            }
+            else
+            {
+                // no qra found extract lat and long
+
+                double latdeg;
+                double latmin;
+                double latitude;
+
+
+                double londeg;
+                double lonmin;
+                double longitude;
+
+                bool ok;
+
+                sl = latLon.split(' ');
+                if (sl.count() > 4)
+                {
+                    latdeg = sl[0].toDouble(&ok);
+                    if (ok)
+                    {
+                       latmin = sl[1].toDouble(&ok);
+                       if (ok)
+                       {
+                           latitude = latdeg + (latmin/60);
+
+                           if (sl[2] == "N" || sl[2] == "S")
+                           {
+                               if (sl[2] == "S")
+                               {
+                                   latitude = latitude * -1;
+                               }
+                           }
+                           else
+                           {
+                               ok = false;
+                           }
+                       }
+
+                    }
+
+                    if (ok)
+                    {
+                        londeg = sl[3].toDouble(&ok);
+                        if (ok)
+                        {
+                           lonmin = sl[4].toDouble(&ok);
+                           if (ok)
+                           {
+                               longitude = londeg + (lonmin/60);
+
+                               if (sl[5] == "W" || sl[5] == "E")
+                               {
+                                   if (sl[5] == "W")
+                                   {
+                                       longitude = longitude * -1;
+                                   }
+                               }
+                               else
+                               {
+                                   ok = false;
+                               }
+                           }
+
+                        }
+                    }
+                    if (ok)
+                    {
+                        geotoloc(latitude, longitude, qra);
+                        return 0;
+                    }
+
+                }
+
+
+            }
+        }
+    }
+
+    return -100;
+}
+
+
+int ClusterMainWindow::geotoloc( double lat, double longi, QString &gridref )
+{
+   // lat, longi to be in degrees, -ve for W or S
+
+   longi = longi / 360 + 0.5;
+   lat = lat / 180 + 0.5;
+
+   gridref = txgeoloc( &lat, &longi, 18, 'A' );
+   gridref += txgeoloc( &lat, &longi, 10, '0' );
+   gridref += txgeoloc( &lat, &longi, 24, 'A' );
+   gridref += txgeoloc( &lat, &longi, 10, '0' );
+
+   return ( GRIDOK );
+
+}
+
+QString ClusterMainWindow::txgeoloc( double *n, double *e, int f, char t)
+{
+   *e = f * ( *e - ( static_cast< int >  (* e) ) );
+   *n = f * ( *n - ( static_cast< int >  (* n) ) );
+
+    QString res;
+    res += static_cast< char >  ( static_cast< int >  ( *e ) + t );
+    res += static_cast< char >  ( static_cast< int >  ( *n ) + t );
+
+    return res;
+}
 
 
 int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)

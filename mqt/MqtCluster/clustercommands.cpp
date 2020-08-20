@@ -10,9 +10,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "cluster.h"
+#include "clustercommands.h"
 
-Cluster::Cluster()
+ClusterCommands::ClusterCommands()
 {
 
 }
@@ -20,53 +20,58 @@ Cluster::Cluster()
 
 
 
-QString Cluster::setQthMsg(QString qth)
+QString ClusterCommands::setQthMsg(QString qth)
 {
     return QString("set/qth %1\n").arg(qth);
 }
 
-QString Cluster::setQraMsg(QString qra)
+QString ClusterCommands::setQraMsg(QString qra)
 {
     return QString("set/qra %1\n").arg(qra);
 }
 
-QString Cluster::setNameMsg(QString name)
+QString ClusterCommands::setNameMsg(QString name)
 {
     return QString("set/name %1\n").arg(name);
 }
 
-QString Cluster::setDxGridMsg()
+QString ClusterCommands::setDxGridMsg()
 {
     return QString("set/dxgrid\n");
 }
 
-QString Cluster::setPageMsg(QString lineNum)
+QString ClusterCommands::setPageMsg(QString lineNum)
 {
     return QString("set/page %1\n").arg(lineNum);
 }
 
-QString Cluster::showDxMsg(QString cmd)
+QString ClusterCommands::showDxMsg(QString cmd)
 {
     return QString("show/dx %1\n").arg(cmd);
 }
 
-QString Cluster::showQRZMsg(QString callsign)
+QString ClusterCommands::showQRZMsg(QString callsign)
 {
     return QString("show/qrz %1\n").arg(callsign);
 }
 
-QString Cluster::showStationMsg(QString callsign)
+QString ClusterCommands::showStationMsg(QString callsign)
 {
     return QString("show/station %1\n").arg(callsign);
 }
 
-QString Cluster::pingMsg()
+QString ClusterCommands::showPrefix(QString callsign)
+{
+    return QString("show/prefix %1\n").arg(callsign);
+}
+
+QString ClusterCommands::pingMsg()
 {
     return QString("echo ping_cluster\n");
 }
 
 
-QString Cluster::quit()
+QString ClusterCommands::quit()
 {
     return QString("bye\n");
 }

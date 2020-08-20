@@ -9,7 +9,7 @@
 #include "BandList.h"
 #include "base_pch.h"
 #include "qttelnet.h"
-#include "cluster.h"
+#include "clustercommands.h"
 #include "setupdialog.h"
 #include "clusterrpc.h"
 #include "dxspotdatamodel.h"
@@ -81,6 +81,7 @@ const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
 const int ASKQRZ_QUEUE_TIMER_PERIOD = 5000;
+const int ASKQRZ_TIMEOUT = 10000;
 
 class ClusterAddress
 {
@@ -327,7 +328,7 @@ private:
 
     QtTelnet* client;
     Clusterrpc* clusterRpc;
-    Cluster* dxCluster;
+    ClusterCommands* dxClusterCommand;
 
     DxSpotDataModel* dxSpotDataModel;
     QSortFilterProxyModel* dxSpotProxyModel;        // use base as we are not doing custom filtering
@@ -370,9 +371,21 @@ private:
 
     ClusterQRZDetails qrzInfo;
     bool getQrzInfo = false;
+    bool qrzQueryAvail = false;
+    bool testQrzInfo = false;
+
+    bool getPrefixInfo = false;
+    bool prefixQueryAvail = false;
+    QString prefixQra;
+
+
+
     QString waitingForCallFromQrz;
     QMap<QString, SpotData> spotListNoQra;
     QTimer *askQrzTimer;
+    QTimer *askQrzTimeout;
+
+
 
     bool loginStart;
     bool loginSuccess;
@@ -452,6 +465,9 @@ private:
 
     void processNewSpot(SpotData &newSpot);
     int getQrzReply(QString &line);
+    int getPrefixReply(QString &line, QString &callsign);
+    QString txgeoloc(double *n, double *e, int f, char t);
+    int geotoloc(double lat, double longi, QString &gridref);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
@@ -470,6 +486,8 @@ private slots:
 
 
     void handAskQrzTimer();
+
+    void handleAskQrzTimeout();
 };
 
 #endif // CLUSTERMAINWINDOW_H

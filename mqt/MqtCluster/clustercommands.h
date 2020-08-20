@@ -1,12 +1,12 @@
-#ifndef CLUSTER_H
-#define CLUSTER_H
+#ifndef CLUSTERCOMMANDS_H
+#define CLUSTERCOMMANDS_H
 
 #include <QObject>
 
-class Cluster
+class ClusterCommands
 {
 public:
-    Cluster();
+    ClusterCommands();
     QString setQthMsg(QString qth);
     QString setQraMsg(QString qra);
     QString setNameMsg(QString name);
@@ -17,6 +17,7 @@ public:
     QString showQRZMsg(QString callsign);
     QString pingMsg();
     QString showStationMsg(QString callsign);
+    QString showPrefix(QString callsign);
 };
 
-#endif // CLUSTER_H
+#endif // CLUSTERCOMMANDS_H
