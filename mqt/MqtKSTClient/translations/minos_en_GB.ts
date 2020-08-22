@@ -139,7 +139,7 @@
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="159"/>
-        <source>Leave &quot;First Name&quot; blank if you don&apos;t want it checked.</source>
+        <source>Leave Locator and/or First Name blank to keep their current ON4KST setting</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -355,7 +355,7 @@ when user selected</source>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="581"/>
-        <location filename="../kstmainwindow.cpp" line="392"/>
+        <location filename="../kstmainwindow.cpp" line="391"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -365,22 +365,22 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="381"/>
+        <location filename="../kstmainwindow.cpp" line="380"/>
         <source>Including %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="384"/>
+        <location filename="../kstmainwindow.cpp" line="383"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="537"/>
+        <location filename="../kstmainwindow.cpp" line="538"/>
         <source>Set Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="541"/>
+        <location filename="../kstmainwindow.cpp" line="542"/>
         <source>Set Away</source>
         <translation type="unfinished"></translation>
     </message>

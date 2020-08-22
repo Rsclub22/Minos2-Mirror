@@ -105,7 +105,7 @@
     <message>
         <location filename="../bandmapclientframe.ui" line="60"/>
         <source>Mode:</source>
-        <translation type="unfinished">Mode:</translation>
+        <translation>Mode:</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.ui" line="129"/>
@@ -365,11 +365,7 @@ Le mode calculé est%6
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="382"/>
         <source>Follow Radio Mode Operating Freq Colour Band</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default Distance when creating a new contest</source>
-        <translation type="vanished">Distance par défaut en concours nouvelle</translation>
+        <translation>Suivre le mode radio pour la bande de couleurs</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="336"/>
@@ -2315,14 +2311,6 @@ Non - Ignorer les modifications</translation>
         <translation>Actif</translation>
     </message>
     <message>
-        <source>x9.99</source>
-        <translation type="vanished">x9.99</translation>
-    </message>
-    <message>
-        <source>+0.00</source>
-        <translation type="vanished">+0.00</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolframe.ui" line="238"/>
         <source>Clr</source>
         <translation>Réinitialiser</translation>
@@ -2364,13 +2352,9 @@ Non - Ignorer les modifications</translation>
         <translation>Éteinte</translation>
     </message>
     <message>
-        <source>Bandlist empty for this radio, please add a band or tranverter!</source>
-        <translation type="vanished">La liste des bandes est vide pour cette radio, ajouter une bande ou transverter SVP!</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolframe.cpp" line="1322"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio sélectionnée aucun détail trouvé, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1354"/>
@@ -2386,7 +2370,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1450"/>
         <source>No %1 Band found for this radio!</source>
-        <translation>AucuneBande %1 trouvée pour cette radio!</translation>
+        <translation>Aucune Bande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1729"/>
@@ -2958,12 +2942,12 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../ScreenConfigElement.cpp" line="14"/>
         <source>Log List</source>
-        <translation>Liste des journaux</translation>
+        <translation>QSO liste</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="14"/>
         <source>QSO Log List</source>
-        <translation>WHAT is QSO Log List</translation>
+        <translation>Journal des QSO</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="15"/>
