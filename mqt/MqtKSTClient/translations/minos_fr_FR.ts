@@ -82,7 +82,7 @@
     <message>
         <location filename="../changename.ui" line="20"/>
         <source>Changing first name...</source>
-        <translation type="unfinished"></translation>
+        <translation>Changement de prénom...</translation>
     </message>
 </context>
 <context>
@@ -135,12 +135,12 @@
     <message>
         <location filename="../kstconfigure.ui" line="138"/>
         <source>First Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Prénom</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="159"/>
         <source>Leave Locator and/or First Name blank to keep their current ON4KST setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Laisser le localisateur et / ou le prénom vides pour conserver leur paramètre ON4KST actuel</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="171"/>
@@ -366,10 +366,6 @@ l&apos;indicatif sélectionné</translation>
         <translation>Connecter</translation>
     </message>
     <message>
-        <source>Analyse</source>
-        <translation type="vanished">Analyser</translation>
-    </message>
-    <message>
         <location filename="../kstmainwindow.ui" line="588"/>
         <source>Close</source>
         <translation>Fermer</translation>
@@ -378,14 +374,6 @@ l&apos;indicatif sélectionné</translation>
         <location filename="../kstmainwindow.cpp" line="383"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
-    </message>
-    <message>
-        <source>KST Chat Files (*.txt);Log Files (*.log);;All Files (*.*)</source>
-        <translation type="vanished">KST Fichiers de Bavardage (*.txt);Fichiers journaux  (*.log);;Tous les fichiers (*.*)</translation>
-    </message>
-    <message>
-        <source>Chat dumps from KST</source>
-        <translation type="vanished">Dumps de bavardage de KST</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="380"/>
