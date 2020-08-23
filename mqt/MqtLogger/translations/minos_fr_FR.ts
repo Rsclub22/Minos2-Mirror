@@ -258,11 +258,6 @@ Le mode calculé est%6
 <context>
     <name>ClusterBandmapConfigure</name>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="14"/>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../Clusterbandmapconfigure.ui" line="24"/>
         <source>Cluster/Bandmap Default Distance</source>
         <translation>Distance par défaut de Cluster / Bandmap</translation>
@@ -379,6 +374,7 @@ Le mode calculé est%6
         <translation>Ajouter Spot à Bandmap: Tolérance de réglage (Khz)</translation>
     </message>
     <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="14"/>
         <location filename="../Clusterbandmapconfigure.cpp" line="15"/>
         <source>Cluster/Bandmap Configure</source>
         <translation>Configurer Cluster/Bandmap</translation>

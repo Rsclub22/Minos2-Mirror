@@ -255,11 +255,6 @@ The computed mode is %6
 <context>
     <name>ClusterBandmapConfigure</name>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../Clusterbandmapconfigure.ui" line="24"/>
         <source>Cluster/Bandmap Default Distance</source>
         <translation type="unfinished"></translation>
@@ -375,6 +370,7 @@ The computed mode is %6
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="14"/>
         <location filename="../Clusterbandmapconfigure.cpp" line="15"/>
         <source>Cluster/Bandmap Configure</source>
         <translation type="unfinished"></translation>
