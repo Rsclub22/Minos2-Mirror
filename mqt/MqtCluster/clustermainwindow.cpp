@@ -980,9 +980,9 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
     spotLocator = "";
     dxPropMode = "";
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    dxMsg = txt.split(QRegExp("\\s+"), Qt::SkipEmptyParts);
+    dxMsg = txt.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 #else
-    dxMsg = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    dxMsg = txt.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
 #endif
 
     if (dxMsg.count() > 4)
@@ -1198,7 +1198,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
     //    return -2;
     //}
 
-    dxMsg = txt.split(QRegExp("\\s+"));
+    dxMsg = txt.split(QRegularExpression("\\s+"));
 
     if (dxMsg.count() > 5)
     {
@@ -1364,7 +1364,7 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
 }
 
 
-QString ClusterMainWindow::extractLocator(const QString &text, const QRegExp fullLocExp, const QRegExp partLocExp)
+QString ClusterMainWindow::extractLocator(const QString &text, const QRegularExpression fullLocExp, const QRegularExpression partLocExp)
 {
     if (text.contains(fullLocExp))
     {

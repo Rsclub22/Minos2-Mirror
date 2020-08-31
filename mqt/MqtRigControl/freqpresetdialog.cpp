@@ -121,7 +121,7 @@ void FreqPresetDialog::b_10ghzSelected()
 void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band)
 {
 
-    QString freq = f_box->text().trimmed().remove( QRegExp("^[0]*"));
+    QString freq = f_box->text().trimmed().remove( QRegularExpression("^[0]*"));
     if (valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG)))
     {
        freq = convertFreqToFullDigit(freq).remove('.');

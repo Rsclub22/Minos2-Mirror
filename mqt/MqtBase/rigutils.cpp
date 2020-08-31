@@ -142,7 +142,7 @@ QString validateFreqTxtInput(QString f, bool* ok)
     }
 
 
-    QRegExp f1rx = QRegExp("\\d{1,5}\\.\\d{3,6}");  // match ghz_mhz.khz_hz
+    QRegularExpression f1rx = QRegularExpression("\\d{1,5}\\.\\d{3,6}");  // match ghz_mhz.khz_hz
 
     QString retFreq = "";
     if (f.count('.') != 1)
@@ -302,7 +302,7 @@ QString removeTrailingZeroes(QString sfreq)
     // remove trailing zero, apart from after period.
     QStringList fspl = sfreq.split('.');
     int last = fspl.count() - 1;
-    fspl[last].remove(QRegExp("0+$"));  //remove trailing zeros
+    fspl[last].remove(QRegularExpression("0+$"));  //remove trailing zeros
     if (fspl[last].count() == 0)
     {
         fspl[last] = "0";    // add back one zero
@@ -317,9 +317,10 @@ QString removeTrailingZeroes(QString sfreq)
 bool validateFreqTxtInput(QString f)
 {
 
-    //QRegExp f1rx = QRegExp("\\d{1,5}\\.\\d{3,6}");  // match ghz_mhz.khz_hz
-    QRegExp f1rx = QRegExp("\\d{1,5}\\.\\d{1,6}");  // match ghz_mhz.khz_hz
-    if (f1rx.exactMatch(f))
+    //QRegularExpression f1rx = QRegularExpression("\\d{1,5}\\.\\d{3,6}");  // match ghz_mhz.khz_hz
+    QRegularExpression f1rx = QRegularExpression(QRegularExpression::anchoredPattern("\\d{1,5}\\.\\d{1,6}"));  // match ghz_mhz.khz_hz
+    QRegularExpressionMatch f1rxm = f1rx.match(f);
+    if (f1rxm.hasMatch())
     {
         return true;
     }

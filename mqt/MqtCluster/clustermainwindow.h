@@ -267,7 +267,7 @@ private:
     void readUserCommandStrings();
     void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment);
     void setAllTabsColor(QColor c);
-    QString extractLocator(const QString &text, const QRegExp fullLocExp, const QRegExp partLocExp);
+    QString extractLocator(const QString &text, const QRegularExpression fullLocExp, const QRegularExpression partLocExp);
 
     void showStatusMessage(const QString &message, const QString &raw);
     void startDisconnectTimer(int time);

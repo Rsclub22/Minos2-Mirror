@@ -1024,7 +1024,7 @@ void QSOLogFrame::getScreenEntry()
    {
        screenContact.rigName = ui->radioEdit->text().trimmed();
 
-       QString f = ui->frequencyEdit->text().trimmed().remove( QRegExp("^[0]*")); //remove leading zeros
+       QString f = ui->frequencyEdit->text().trimmed().remove( QRegularExpression("^[0]*")); //remove leading zeros
        f = convertSinglePeriodFreqToMultiPeriod(convertSinglePeriodFreqToFullDigit(f));
        screenContact.frequency = f;
 

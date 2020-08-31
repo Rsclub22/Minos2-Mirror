@@ -58,7 +58,7 @@ RigMemDialog::~RigMemDialog()
 
 void RigMemDialog::onFreqEditFinish()
 {
-    QString f = ui->freqLineEdit->text().trimmed().remove( QRegExp("^[0]*"));
+    QString f = ui->freqLineEdit->text().trimmed().remove( QRegularExpression("^[0]*"));
     if (f.contains('.'))
     {
         QStringList fl = f.split('.');
@@ -136,7 +136,7 @@ void RigMemDialog::on_okButton_clicked()
     logData->worked = ui->workedCB->isChecked();
 
     //QString f = convertSinglePeriodFreqToMultiPeriod(ui->freqLineEdit->text());
-    QString f = ui->freqLineEdit->text().remove( QRegExp("^[0]*")); //remove periods and leading zeros
+    QString f = ui->freqLineEdit->text().remove( QRegularExpression("^[0]*")); //remove periods and leading zeros
     if (f.isEmpty())
     {
         logData->freq = f;

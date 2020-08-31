@@ -7,11 +7,10 @@ include($$PWD/../mqt.pri)
 include($$PWD/../mqtapplibs.pri)
 include($$PWD/../mqthamlib.pri)
 
-QT       += core gui serialport
+QT       += core gui
 QT       += widgets
 QT       += network
-
-
+QT       += serialport
 
 TARGET = MqtRigControl
 TEMPLATE = app

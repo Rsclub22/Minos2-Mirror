@@ -212,7 +212,7 @@ bool Validator::validate(const QString &str, ScreenContact &screenContact )
 
        case vtFreq:
        {
-           QString f = str.trimmed().remove( QRegExp("^[0]*"));
+           QString f = str.trimmed().remove( QRegularExpression("^[0]*"));
            if (f.isEmpty())
                return true;
            if (!validateFreqTxtInput(f))

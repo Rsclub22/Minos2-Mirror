@@ -4152,7 +4152,7 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
 void RigControlMainWindow::selFreqClicked()
 {
     // check freq valid format
-    QString f = ui->freqInputBox->text().trimmed().remove( QRegExp("^[0]*"));
+    QString f = ui->freqInputBox->text().trimmed().remove( QRegularExpression("^[0]*"));
 
     if (valInputFreq(f, tr("Invalid freq!")))
     {

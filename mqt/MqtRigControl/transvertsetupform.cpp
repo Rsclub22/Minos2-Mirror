@@ -71,11 +71,11 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject * /*obj*/, bool fIn, Q
                 ui->offsetFreq->setText(transVertData->transVertOffsetStr);
                 return;
             }
-            QString txf = ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*"));
+            QString txf = ui->radioFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
             if (valInputFreq(txf, tr(RADIO_FREQ_EDIT_ERR_MSG)))
             {
                radioFreqOK = true;
-               if (validateFreqTxtInput(convertFreqToFullDigit(ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*")))))
+               if (validateFreqTxtInput(convertFreqToFullDigit(ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*")))))
                {
                    targetFreqOK = true;
                    calcOffset();
@@ -111,11 +111,11 @@ void TransVertSetupForm::targetFreqEditfocusChange(QObject * /*obj*/, bool fIn, 
                 ui->offsetFreq->setText(transVertData->transVertOffsetStr);
                 return;
             }
-            QString targetf = ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*"));
+            QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
             if (valInputFreq(targetf, tr(TARGET_FREQ_EDIT_ERR_MSG)))
             {
                targetFreqOK = true;
-               if (validateFreqTxtInput(convertFreqToFullDigit(ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*")))))
+               if (validateFreqTxtInput(convertFreqToFullDigit(ui->radioFreq->text().trimmed().remove(QRegularExpression("^[0]*")))))
                {
                    radioFreqOK = true;
                    calcOffset();
@@ -151,8 +151,8 @@ void TransVertSetupForm::calcOffset()
 
     transVertOffsetOk = false;
 
-    QString txf = ui->radioFreq->text().trimmed().remove( QRegExp("^[0]*"));
-    QString targetf = ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*"));
+    QString txf = ui->radioFreq->text().trimmed().remove( QRegularExpression("^[0]*"));
+    QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
 
     // convert radio freq
     txf = convertFreqToFullDigit(txf).remove('.');
@@ -216,12 +216,12 @@ void TransVertSetupForm::setOffsetFreqLabel(QString f)
 
 void TransVertSetupForm::transVertSwNumSel()
 {
-    QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
     QString numSel = ui->transVertSwNum->text().trimmed();
     if (numSel != transVertData->transSwitchNum)
     {
-
-        if (re.exactMatch(numSel))
+        QRegularExpression re = QRegularExpression(QRegularExpression::anchoredPattern("\\d*"));    // a digit (\d), zero or more times (*)
+        QRegularExpressionMatch rem = re.match(numSel);
+        if (rem.hasMatch())
         {
             transVertData->transSwitchNum = numSel;
             transVertValueChanged = true;
@@ -267,7 +267,7 @@ void TransVertSetupForm::setEnableTransVertSwBoxVisible(bool visible)
 void TransVertSetupForm::antennaNumSwSel()
 {
     QString numSel = ui->radioAntSwNum->text().trimmed();
-    QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
+    QRegularExpression re("\\d*");  // a digit (\d), zero or more times (*)
     if (re.exactMatch(numSel))
     {
         transVertData->antSwitchNum = numSel;

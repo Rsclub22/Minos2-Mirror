@@ -759,7 +759,7 @@ void RigControlFrame::changeMainRadioFreq()
     {
         if (f > 0)
         {
-            newFreq.remove( QRegExp("^[0]*")); //remove periods and leading zeros
+            newFreq.remove( QRegularExpression("^[0]*")); //remove periods and leading zeros
         }
 
         if (newFreq != lastFreq)
