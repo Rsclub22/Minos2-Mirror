@@ -318,7 +318,7 @@ bool validateFreqTxtInput(QString f)
 {
 
     //QRegularExpression f1rx = QRegularExpression("\\d{1,5}\\.\\d{3,6}");  // match ghz_mhz.khz_hz
-    QRegularExpression f1rx = QRegularExpression(QRegularExpression::anchoredPattern("\\d{1,5}\\.\\d{1,6}"));  // match ghz_mhz.khz_hz
+    QRegularExpression f1rx = QRegularExpression("\\A\\d{1,5}\\.\\d{1,6}\\z");  // match ghz_mhz.khz_hz
     QRegularExpressionMatch f1rxm = f1rx.match(f);
     if (f1rxm.hasMatch())
     {

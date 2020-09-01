@@ -35,7 +35,7 @@ void BearingLineEdit::onTextChanged(const QString& brg)
 
     if (!bearingStr.isEmpty())
     {
-        QRegularExpression re = QRegularExpression(QRegularExpression::anchoredPattern("\\d*"));  // match ghz_mhz.khz_hz
+        QRegularExpression re = QRegularExpression("\\A\\d*\\Z");  // match ghz_mhz.khz_hz
         QRegularExpressionMatch rem = re.match(bearingStr.trimmed());
         if (rem.hasMatch())
         {

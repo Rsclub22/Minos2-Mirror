@@ -219,7 +219,7 @@ void TransVertSetupForm::transVertSwNumSel()
     QString numSel = ui->transVertSwNum->text().trimmed();
     if (numSel != transVertData->transSwitchNum)
     {
-        QRegularExpression re = QRegularExpression(QRegularExpression::anchoredPattern("\\d*"));    // a digit (\d), zero or more times (*)
+        QRegularExpression re = QRegularExpression("\\A\\d*\\z");    // a digit (\d), zero or more times (*)
         QRegularExpressionMatch rem = re.match(numSel);
         if (rem.hasMatch())
         {
