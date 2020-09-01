@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "base_pch.h"
+#include "cutils.h"
 #include "rigutils.h"
 
 // I've duplicated the strings to make their translation easier.
@@ -318,7 +319,7 @@ bool validateFreqTxtInput(QString f)
 {
 
     //QRegularExpression f1rx = QRegularExpression("\\d{1,5}\\.\\d{3,6}");  // match ghz_mhz.khz_hz
-    QRegularExpression f1rx = QRegularExpression("\\A\\d{1,5}\\.\\d{1,6}\\z");  // match ghz_mhz.khz_hz
+    QRegularExpression f1rx = QRegularExpression(anchoredPattern("\\d{1,5}\\.\\d{1,6}"));  // match ghz_mhz.khz_hz
     QRegularExpressionMatch f1rxm = f1rx.match(f);
     if (f1rxm.hasMatch())
     {

@@ -126,5 +126,6 @@ private:
 };
 void CSVToStringList( const QString &s, QStringList &sl );
 void TSVToStringList( const QString &s, QStringList &sl );
+QString anchoredPattern(const QString &expression);
 
 #endif

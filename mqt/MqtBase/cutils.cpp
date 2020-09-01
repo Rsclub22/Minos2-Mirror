@@ -584,3 +584,9 @@ void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &
 
 
 #endif
+QString anchoredPattern(const QString &expression)
+{
+    return QLatin1String("\\A(?:")
+           + expression
+           + QLatin1String(")\\z");
+}
