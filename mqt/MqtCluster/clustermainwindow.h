@@ -9,7 +9,7 @@
 #include "BandList.h"
 #include "base_pch.h"
 #include "qttelnet.h"
-#include "cluster.h"
+#include "clustercommands.h"
 #include "setupdialog.h"
 #include "clusterrpc.h"
 #include "dxspotdatamodel.h"
@@ -80,6 +80,8 @@ const int PERSONAL_TABNUM = 1;
 const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
+const int ASKQRZ_QUEUE_TIMER_PERIOD = 5000;
+const int ASKQRZ_TIMEOUT = 10000;
 
 class ClusterAddress
 {
@@ -100,6 +102,159 @@ public:
 
 
 };
+
+
+class ClusterStationInfo
+{
+public:
+    ClusterStationInfo()
+    {
+        clear();
+    }
+
+    void setUser(QString user_){user = user_;}
+    QString getUser(){return user;}
+
+    void setFound(bool found_){found = found_;}
+    bool getFound(){return found;}
+
+
+    void setGotAllData(bool gotAllData_){gotAllData = gotAllData_;}
+    bool getGotAllData(){return gotAllData;}
+
+    void setName(QString name_){name = name_;}
+    QString getName(){return name;}
+
+    void setLastConnect(QString lastConnect_){lastConnect = lastConnect_;}
+    QString getLastConnect(){return lastConnect;}
+
+    void setQth(QString qth_){qth = qth_;}
+    QString getQth(){return qth;}
+
+    void setLocation(QString location_){location = location_;}
+    QString getLocation(){return location;}
+
+    void setHeading(QString heading_){heading = heading_;}
+    QString getHeading(){return heading;}
+
+
+    void setHomeNode(QString homeNode_){homeNode = homeNode_;}
+    QString getHomeNode(){return homeNode;}
+
+    void clear()
+    {
+        user.clear();
+        found = false;
+        gotAllData = false;
+        name.clear();
+        lastConnect.clear();
+        qth.clear();
+        location.clear();
+        heading.clear();
+        homeNode.clear();
+    }
+
+private:
+
+    QString user;
+    bool found;
+    bool gotAllData;
+    QString name;
+    QString lastConnect;
+    QString qth;
+    QString location;
+    QString heading;
+    QString homeNode;
+
+};
+
+
+class ClusterQRZDetails
+{
+public:
+    ClusterQRZDetails()
+    {
+        clear();
+    }
+
+    void setCall(const QString call_){call = call_.trimmed();}
+    QString getCall()const {return call;}
+
+    void setAdif(const QString adif_){adif = adif_.trimmed();}
+    QString getAdif()const {return adif;}
+
+    void setError(const bool error_){error = error_;}
+    bool getError()const {return error;}
+
+    void setFound(const bool found_){found = found_;}
+    bool getFound()const {return found;}
+
+
+    void setGotAllData(const bool gotAllData_){gotAllData = gotAllData_;}
+    bool getGotAllData()const {return gotAllData;}
+
+    void setFname(const QString fname_){fname = fname_.trimmed();}
+    QString getFname()const{return fname;}
+
+    void setName(const QString name_){name = name_.trimmed();}
+    QString getName()const {return name;}
+
+    void setAddr2(const QString addr2_){addr2 = addr2_.trimmed();}
+    QString getAddr2()const {return addr2;}
+
+    void setCountry(const QString country_){country = country_.trimmed();}
+    QString getCountry(){return country;}
+
+    void setLat(const QString lat_){lat = lat_.trimmed();}
+    QString getLat()const {return lat;}
+
+    void setLon(const QString lon_){lon = lon_.trimmed();}
+    QString getLon()const {return lon;}
+
+    void setGrid(const QString grid_){grid = grid_.trimmed();}
+    QString getGrid()const{return grid;}
+
+
+    void setModdate(const QString moddate_){moddate = moddate_.trimmed();}
+    QString getHomeNode()const {return moddate;}
+
+    void clear()
+    {
+        call.clear();
+        adif.clear();
+        error = false;
+        found = false;
+        gotAllData = false;
+        fname.clear();
+        name.clear();
+        addr2.clear();
+        country.clear();
+        lat.clear();
+        lon.clear();
+        grid.clear();
+        moddate.clear();
+    }
+
+private:
+
+    QString call;
+    QString adif;
+    bool error;
+    bool found;
+    bool gotAllData;
+    QString fname;
+    QString name;
+    QString addr2;
+    QString country;
+    QString lat;
+    QString lon;
+    QString grid;
+    QString moddate;
+
+
+};
+
+
 
 class ClusterMainWindow : public QMainWindow
 {
@@ -173,7 +328,7 @@ private:
 
     QtTelnet* client;
     Clusterrpc* clusterRpc;
-    Cluster* dxCluster;
+    ClusterCommands* dxClusterCommand;
 
     DxSpotDataModel* dxSpotDataModel;
     QSortFilterProxyModel* dxSpotProxyModel;        // use base as we are not doing custom filtering
@@ -211,20 +366,26 @@ private:
     QString sentComment;
 
     QStringList dxMsg;
-    QString dxCall;
-    QString dxFreq;
-    QString dxBandStr;
-    QString dxBandMask;
-    QString dxModeStr;
-    QString dxModeMask;
-    QString spotCall;
-    QString spotComment;
-    QString spotTime;
-    QString spotDate;
-    QDateTime spotDateTime;
-    QString dxLocator;
-    QString spotLocator;
-    QString dxPropMode;
+
+    SpotData curSpot;
+
+    ClusterQRZDetails qrzInfo;
+    bool getQrzInfo = false;
+    bool qrzQueryAvail = false;
+    bool testQrzInfo = false;
+
+    bool getPrefixInfo = false;
+    bool prefixQueryAvail = false;
+    QString prefixQra;
+
+
+
+    QString waitingForCallFromQrz;
+    QMap<QString, SpotData> spotListNoQra;
+    QTimer *askQrzTimer;
+    QTimer *askQrzTimeout;
+
+
 
     bool loginStart;
     bool loginSuccess;
@@ -244,7 +405,7 @@ private:
 
 
     int txText(QString msg);
-    int upackDxSpot(QString txt, QString &spotCall);
+    int upackDxSpot(QString txt, SpotData &newSpot);
     void loadNodesSelectBox(QStringList listOfNodes);
 
     void restoreDxSpotViewColumns();
@@ -277,8 +438,8 @@ private:
     void echoMsg(QString msg);
     QString createSpotToSend(QString spot);
     QString createStatusToSend(QString status);
-    int upackShowDxSpot(const QString txt, const QString spotCall);
-    bool checkShowDxMsg(const QString txt, QString &spotCall);
+    int upackShowDxSpot(const QString txt, SpotData &newSpot);
+    bool checkShowDxMsg(const QString txt, SpotData &newSpot);
 
     void handleStartFile();
     void handleEndFile();
@@ -301,6 +462,12 @@ private:
     void addSentSpotToDisplayQueue(bool spotStatus, QString reason);
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
+
+    void processNewSpot(SpotData &newSpot);
+    int getQrzReply(QString &line);
+    int getPrefixReply(QString &line, QString &callsign);
+    QString txgeoloc(double *n, double *e, int f, char t);
+    int geotoloc(double lat, double longi, QString &gridref);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
@@ -318,6 +485,9 @@ private slots:
 
 
 
+    void handAskQrzTimer();
+
+    void handleAskQrzTimeout();
 };
 
 #endif // CLUSTERMAINWINDOW_H

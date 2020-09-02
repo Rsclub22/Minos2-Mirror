@@ -26,11 +26,11 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
 
 DxSpotDataModel::~DxSpotDataModel()
 {
-    foreach(auto s, dxSpotData)
-    {
-        delete s;
-    }
-    dxSpotData.clear();
+    //foreach(auto s, dxSpotData)
+    //{
+    //    delete s;
+    //}
+    //dxSpotData.clear();
 }
 
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -91,7 +91,7 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
        else if (role == Qt::ForegroundRole)
        {
            SpotData* dxSpot = dxSpotData.at(section);
-           if (dxSpot->sentToMemory)
+           if (dxSpot->getSentToMemory())
            {
                QColor c = SPOT_TO_MEMORY;
                return c;
@@ -159,7 +159,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
 
     int col = index.column();
 
-//    SpotData* dxSpot = new SpotData();
+
 
     if (role == Qt::DisplayRole)
     {
@@ -177,55 +177,63 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
         switch (col)
         {
             case TIME_COL_NUM:
-                d = dxSpot->spotTime;
+                d = dxSpot->getSpotTime();
             break;
             case FREQ_STR_COL_NUM:
-                d = removeHundredHzAndHzDigits(dxSpot->dxFreq);
+                d = removeHundredHzAndHzDigits(dxSpot->getDxFreq());
             break;
             case DXSPOT_CALL_COL_NUM:
-                if (dxSpot->dxCallWorked == BOOL_YES)
+                if (dxSpot->getDxCallWorked() == BOOL_YES)
                 {
                     QColor colour = CALLSIGN_WORKED_COLOUR;
                     d = HtmlFontColour(colour);
                 }
-                d = d + dxSpot->dxCall;
+                d = d + dxSpot->getDxCall();
             break;
 
             case DXLOC_COL_NUM:
-                if (dxSpot->dxLocatorWorked == BOOL_YES)
+                if (dxSpot->getDxLocatorWorked() == BOOL_YES)
                 {
                     QColor colour = LOCATOR_WORKED_COLOUR;
                     d = HtmlFontColour(colour);
                 }
-                d = d + dxSpot->dxLocator;
+                if (dxSpot->getDxLocatorFromQrz())
+                {
+                    d = d + "<i>" + dxSpot->getDxLocator() + "</i>";
+                }
+                else
+                {
+                    d = d + dxSpot->getDxLocator();
+                }
+
             break;
             case DXDIST_COL_NUM:
-                d = dxSpot->dxDist;
+                d = dxSpot->getDxDist();
             break;
 
             case DXBRG_COL_NUM:
-                d = dxSpot->dxBrg;
+                d = dxSpot->getDxBrg();
             break;
             case SPOT_CALL_COL_NUM:
-                d = dxSpot->spotterCall;
+                d = dxSpot->getSpotterCall();
             break;
             case SPOTLOC_COL_NUM:
-                d = dxSpot->spotterLocator;
+                d = dxSpot->getSpotterLocator();
             break;
             case COMMENT_COL_NUM:
-                d = escapeXML(dxSpot->spotComment);
+                d = escapeXML(dxSpot->getSpotComment());
             break;
             case RXTIME_COL_NUM:
-                d = QString::number(dxSpot->rxTime);
+                d = QString::number(dxSpot->getRxTime());
             break;
             case DXSPOT_MODE_COL_NUM:
-                d = dxSpot->dxMode;
+                d = dxSpot->getDxModeStr();
             break;
             case DXSPOT_PROP_MODE_COL_NUM:
-                d = dxSpot->dxPropMode;
+                d = dxSpot->getDxPropMode();
             break;
             case DXBANDSTR_COL_NUM:
-                d = dxSpot->dxBandStr;
+                d = dxSpot->getDxBandStr();
             break;
             default:
                 d = "";
@@ -242,58 +250,58 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
         switch (col)
         {
             case TIME_COL_NUM:
-                d = dxSpot->spotTime;
+                d = dxSpot->getSpotTime();
             break;
             case FREQ_STR_COL_NUM:
-                d = dxSpot->dxFreq;
+                d = dxSpot->getDxFreq();
             break;
             case DXSPOT_CALL_COL_NUM:
-                d = dxSpot->dxCall;
+                d = dxSpot->getDxCall();
             break;
             case DXLOC_COL_NUM:
-                d = dxSpot->dxLocator;
+                d = dxSpot->getDxLocator();
             break;
             case DXDIST_COL_NUM:
-                d = dxSpot->dxDist;
+                d = dxSpot->getDxDist();
             break;
             case DXBRG_COL_NUM:
-                d = dxSpot->dxBrg;
+                d = dxSpot->getDxBrg();
             break;
             case SPOT_CALL_COL_NUM:
-                d = dxSpot->spotterCall;
+                d = dxSpot->getSpotterCall();
             break;
             case SPOTLOC_COL_NUM:
-                d = dxSpot->spotterLocator;
+                d = dxSpot->getSpotterLocator();
             break;
             case COMMENT_COL_NUM:
-                d = dxSpot->spotComment;
+                d = dxSpot->getSpotComment();
             break;
             case DXSPOT_CALL_WORKED_COL_NUM:
-                d = dxSpot->dxCallWorked;
+                d = dxSpot->getDxCallWorked();
             break;
             case DXLOC_WORKED_COL_NUM:
-                d = dxSpot->dxLocatorWorked;
+                d = dxSpot->getDxLocatorWorked();
             break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
-                d = dxSpot->sentToMemory;
+                d = dxSpot->getSentToMemory();
             break;
             case DXBANDMASK_COL_NUM:
-                d = dxSpot->dxBandMask;
+                d = dxSpot->getDxBandMask();
             break;
             case DXMODEMASK_COL_NUM:
-                d = dxSpot->dxModeMaskStr;
+                d = dxSpot->getDxModeMask();
             break;
             case RXTIME_COL_NUM:
-                d = dxSpot->rxTime;
+                d = dxSpot->getRxTime();
             break;
             case DXSPOT_MODE_COL_NUM:
-                d = dxSpot->dxMode;
+                d = dxSpot->getDxModeStr();
             break;
             case DXSPOT_PROP_MODE_COL_NUM:
-                d = dxSpot->dxPropMode;
+                d = dxSpot->getDxPropMode();
             break;
             case DXBANDSTR_COL_NUM:
-                d = dxSpot->dxBandStr;
+                d = dxSpot->getDxBandStr();
             break;
 
 
@@ -320,55 +328,52 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
         switch (col)
         {
             case TIME_COL_NUM :
-                dxSpot->spotTime = value.toString();
+                dxSpot->setSpotTime(value.toString());
             break;
             case FREQ_STR_COL_NUM:
-                dxSpot->dxFreq = value.toString();
+                dxSpot->setDxFreq(value.toString());
             break;
             case DXSPOT_CALL_COL_NUM:
-                dxSpot->dxCall = value.toString();
+                dxSpot->setDxCall(value.toString());
             break;
             case DXSPOT_CALL_WORKED_COL_NUM:
-                dxSpot->dxCallWorked = value.toBool();
+                dxSpot->setDxCallWorked(value.toBool());
             break;
             case DXLOC_COL_NUM:
-                dxSpot->dxLocator = value.toString();
+                dxSpot->setDxLocator(value.toString());
             break;
             case DXDIST_COL_NUM:
-                dxSpot->dxDist = value.toString();
+                dxSpot->setDxDist(value.toString());
             break;
             case DXBRG_COL_NUM:
-                dxSpot->dxBrg = value.toString();
+                dxSpot->setDxBrg(value.toString());
             break;
             case DXLOC_WORKED_COL_NUM:
-                dxSpot->dxLocatorWorked = value.toBool();
+                dxSpot->setDxLocatorWorked(value.toBool());
             break;
             case SPOT_CALL_COL_NUM:
-                dxSpot->spotterCall = value.toString();
+                dxSpot->setSpotterCall(value.toString());
                 break;
             case SPOTLOC_COL_NUM:
-                dxSpot->spotterLocator = value.toString();
+                dxSpot->setSpotterLocator(value.toString( ));
                 break;
             case COMMENT_COL_NUM:
-                dxSpot->spotComment = value.toString();
+                dxSpot->setSpotComment(value.toString());
                 break;
             case DXBANDMASK_COL_NUM:
-                dxSpot->dxModeMaskStr = value.toString();
-            break;
-            case DXMODEMASK_COL_NUM:
-                dxSpot->dxModeMaskStr = value.toString();
+                dxSpot->setDxModeMask(value.toString());
             break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
-                dxSpot->sentToMemory = value.toBool();
+                dxSpot->setSentToMemory(value.toBool());
             break;
             case DXSPOT_MODE_COL_NUM:
-                dxSpot->dxMode  = value.toString();
+                dxSpot->setDxModeStr(value.toString());
             break;
             case DXSPOT_PROP_MODE_COL_NUM:
-                dxSpot->dxPropMode  = value.toString();
+                dxSpot->setDxPropMode(value.toString());
             break;
             case DXBANDSTR_COL_NUM:
-                dxSpot->dxBandStr = value.toString();
+                dxSpot->setDxBandStr(value.toString());
             break;
             default:
                 return false;
