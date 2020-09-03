@@ -2279,37 +2279,42 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1322"/>
+        <location filename="../rigcontrolframe.cpp" line="1332"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1354"/>
+        <location filename="../rigcontrolframe.cpp" line="1364"/>
         <source>Radio Bandlist is empty!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1363"/>
+        <location filename="../rigcontrolframe.cpp" line="1373"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1450"/>
+        <location filename="../rigcontrolframe.cpp" line="1460"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1729"/>
+        <location filename="../rigcontrolframe.cpp" line="1639"/>
+        <source>Freq out of contest band</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="1807"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1736"/>
+        <location filename="../rigcontrolframe.cpp" line="1814"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1759"/>
+        <location filename="../rigcontrolframe.cpp" line="1837"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
