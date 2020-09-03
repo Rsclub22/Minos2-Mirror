@@ -1657,7 +1657,21 @@ void TSingleLogFrame::on_SetMode(QString m)
 
 void TSingleLogFrame::on_SetFreq(QString f)
 {
-    traceMsg(QString("Freq from radio = %1").arg(f));
+    traceMsg(QString("on_SetFreq: freq from radio = %1").arg(f));
+
+    bool ok;
+    qint64 fInt64 = f.toLongLong(&ok);
+    if (!ok)
+    {
+       traceMsg(QString("on_SetFreq: freq not numeric"));
+       return;
+    }
+    else if (fInt64 == 0)
+    {
+        traceMsg(QString("onSetFreq: freq is zero"));
+        return;
+    }
+
     if ( this == LogContainer->getCurrentLogFrame() )
     {
         sCurFreq = f;

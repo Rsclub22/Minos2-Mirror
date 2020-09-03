@@ -1643,10 +1643,10 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString freq, QString mod
     logMessage(QString("**** Received SelectRadio from Logger = %1, freq = %2, mode = %3 ****").arg(s.toString()).arg(freq).arg(mode));
 
 
-    if (mode.isEmpty() || freq.isEmpty() || s.isEmpty())
-    {
-        QString("RadioName or Mode or Freq is empty - ignore");
-    }
+    //if (mode.isEmpty() || freq.isEmpty() || s.isEmpty())
+   // {
+   //     QString("RadioName or Mode or Freq is empty - ignore");
+   // }
 
     selRadioMode = mode;
 
@@ -1681,15 +1681,26 @@ void RigControlMainWindow::loggerSetFreq(QString freq)
     if (radioCommsOK && !rigErrorFlag)
     {
         logMessage(QString("new freq %1, old freq %2").arg(freq).arg(logger_freq));
-        if (freq == NO_BAND_SUPPORT)
-        {
-            logMessage(QString("loggerSetFreq: No transverter found for this band"));
-            clearTransVertSupport();
-            return;
-        }
+        //if (freq == NO_BAND_SUPPORT)
+        //{
+        //    logMessage(QString("loggerSetFreq: No transverter found for this band"));
+        //    clearTransVertSupport();
+        //    return;
+       // }
+
 
         logger_freq = freq;
-        setFreq(freq, curVfo);
+
+        if (!freq.isEmpty())
+        {
+           setFreq(freq, curVfo);
+        }
+        else
+        {
+            logMessage(QString("loggerSetFreq: freq empty ignore"));
+        }
+
+
     }
 
 }
