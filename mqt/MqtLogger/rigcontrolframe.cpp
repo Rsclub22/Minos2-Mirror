@@ -2268,6 +2268,7 @@ bool RigControlFrame::checkFreqOK(QString freq)
             return false;
         }
     }
+    return false;
 }
 
 void RigControlFrame::closeContest()
