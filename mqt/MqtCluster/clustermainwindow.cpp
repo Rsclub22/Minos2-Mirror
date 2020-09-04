@@ -280,6 +280,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(client, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(parseDX(QString)));
     connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
+    connect(client, SIGNAL(message(QString)), this, SLOT(cancelPingTimeOut(QString)));
     //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
     //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
 
@@ -294,8 +295,16 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     askQrzTimeout = new QTimer(this);
     connect(askQrzTimeout, SIGNAL(timeout()), this, SLOT(handleAskQrzTimeout()));
 
+
+
     //testQrzTimeout = new QTimer(this);
     //connect(testQrzTimeout, SIGNAL(timeout()), this, SLOT(handleTestQrzTimeout()));
+
+    pingClusterNodeTimer = new QTimer(this);
+    connect(pingClusterNodeTimer, SIGNAL(timeout()), this, SLOT(handlePingClusterNodeTimeout()));
+    pingOk = false;
+
+
 
     // get list of clusters
     loadNodesSelectBox(setupCluster->getListOfClusterNames());
@@ -723,6 +732,8 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
             {
                 handleStartFile();          // send user commands
             }
+
+            sendPingMessage();
 
         }
 
@@ -1286,6 +1297,9 @@ int ClusterMainWindow::getPrefixReply(QString &line, QString &callsign)
 }
 
 
+
+
+
 int ClusterMainWindow::geotoloc( double lat, double longi, QString &gridref )
 {
    // lat, longi to be in degrees, -ve for W or S
@@ -1462,9 +1476,51 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, SpotData &newSpot)
 }
 
 
+void ClusterMainWindow::cancelPingTimeOut(QString msg)
+{
+    if (msg.contains("ping_cluster"))
+    {
+        pingOk = true;
+        trace(QString("response to ping received ok"));
+    }
+
+
+}
+
+void ClusterMainWindow::sendPingMessage()
+{
+    pingOk = false;
+    txText(dxClusterCommand->pingMsg());
+    pingClusterNodeTimer->start(getPingTimeoutValue());
+    trace(QString("sent ping message to cluster node"));
+}
+
+void ClusterMainWindow::handlePingClusterNodeTimeout()
+{
+    if(pingOk)
+    {
+        // send a ping to test connection
+        trace(QString("ping received ok, ping timeout, send another ping"));
+        sendPingMessage();
+    }
+    else
+    {
+        trace(QString("ping response was not received ok - connection lost?"));
+    }
+
+}
 
 
 
+int ClusterMainWindow::getPingTimeoutValue()
+{
+    QString filename = "./Configuration/Cluster/ClusterSettings.ini";
+    QSettings settings(filename, QSettings::IniFormat);
+    settings.beginGroup("PingTimeout");
+    int timeout = settings.value("PingTimeout", 60000).toInt();
+    settings.endGroup();
+    return timeout;
+}
 
 QString ClusterMainWindow::createSpotToSend(QString spot)
 {

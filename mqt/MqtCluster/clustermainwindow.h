@@ -348,6 +348,8 @@ private:
     QStringList sendSpotsQueue;
     QTimer* sendSpotsTimer;
 
+    QTimer* pingClusterNodeTimer;
+    bool pingOk;
 
 
     QString currentNodeName;
@@ -468,6 +470,8 @@ private:
     int getPrefixReply(QString &line, QString &callsign);
     QString txgeoloc(double *n, double *e, int f, char t);
     int geotoloc(double lat, double longi, QString &gridref);
+    int getPingTimeoutValue();
+    void sendPingMessage();
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
@@ -488,6 +492,9 @@ private slots:
     void handAskQrzTimer();
 
     void handleAskQrzTimeout();
+    void cancelPingTimeOut(QString msg);
+    void handlePingClusterNodeTimeout();
+
 };
 
 #endif // CLUSTERMAINWINDOW_H
