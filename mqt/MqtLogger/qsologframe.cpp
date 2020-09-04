@@ -2157,7 +2157,7 @@ void QSOLogFrame::logScreenEntry( )
    if ((runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag)
    {
        QString mode = lct->mode.getValue() + ':' + lct->mgmSubmode.getValue();
-       MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue(), mode, "district");
+       MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue(), mode, lct->extraText.getValue());
    }
 
    // save for send spot to DX cluster
