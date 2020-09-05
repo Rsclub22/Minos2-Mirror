@@ -52,11 +52,14 @@ class KSTMainWindow : public QMainWindow
     QString serverPort;
     QString myCallsign;
     QString password;
+    QString firstName;
+    QString recName;
     QVector<int> kstChatSelection;
     QVector<int> kstLoggedIn;
     int activeChat = 1;
 
     QString myLoc;
+    QString recLoc;
     bool autoConnect = false;
 
     int maxDistance = 99999;
@@ -140,8 +143,6 @@ private slots:
     void CloseTimerTimer();
 
     void userCallTimerTimer();
-
-    void on_analyseButton_clicked();
 
     void on_closeButton_clicked();
 

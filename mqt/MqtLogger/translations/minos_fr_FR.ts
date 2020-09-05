@@ -93,7 +93,7 @@
         <location filename="../bandmapclientframe.cpp" line="479"/>
         <location filename="../bandmapclientframe.cpp" line="499"/>
         <location filename="../bandmapclientframe.cpp" line="631"/>
-        <location filename="../bandmapclientframe.cpp" line="1772"/>
+        <location filename="../bandmapclientframe.cpp" line="1773"/>
         <source>Bandmap</source>
         <translation>Carte des bandes</translation>
     </message>
@@ -103,22 +103,27 @@
         <translation>Radio connectée</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="111"/>
+        <location filename="../bandmapclientframe.ui" line="60"/>
+        <source>Mode:</source>
+        <translation>Mode:</translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.ui" line="129"/>
         <source>00:000:000:000</source>
         <translation>00:000:000:000</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="157"/>
+        <location filename="../bandmapclientframe.ui" line="175"/>
         <source>Actions</source>
         <translation>Actions</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="164"/>
+        <location filename="../bandmapclientframe.ui" line="182"/>
         <source>Cluster Connect</source>
         <translation>Réseau connectée</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.ui" line="206"/>
+        <location filename="../bandmapclientframe.ui" line="224"/>
         <source>Filters</source>
         <translation>Filtres</translation>
     </message>
@@ -191,7 +196,7 @@
         <translation>Voulez-vous vraiment supprimer tous les Spots de Bandmap?</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1776"/>
+        <location filename="../bandmapclientframe.cpp" line="1777"/>
         <source> - Mouse in frame, updates paused</source>
         <translation> - Souris dans le cadre, mises à jour suspendues</translation>
     </message>
@@ -219,29 +224,29 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1215"/>
+        <location filename="../bandmapview.cpp" line="1222"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation>%1%2CQ Frequency @ .%3%4%5</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1246"/>
+        <location filename="../bandmapview.cpp" line="1253"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1322"/>
+        <location filename="../bandmapview.cpp" line="1329"/>
         <source>min</source>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1342"/>
+        <location filename="../bandmapview.cpp" line="1349"/>
         <source>CQ Frequency = %1
 The computed mode is %2</source>
         <translation>La fréquence CQ = %1
 Le mode calculé est %2</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1361"/>
+        <location filename="../bandmapview.cpp" line="1368"/>
         <source>%1 - %2 [%3 %4 @ %5 min] 
 The computed mode is %6
 %7</source>
@@ -252,11 +257,6 @@ Le mode calculé est%6
 </context>
 <context>
     <name>ClusterBandmapConfigure</name>
-    <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="14"/>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="24"/>
         <source>Cluster/Bandmap Default Distance</source>
@@ -360,11 +360,7 @@ Le mode calculé est%6
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="382"/>
         <source>Follow Radio Mode Operating Freq Colour Band</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default Distance when creating a new contest</source>
-        <translation type="vanished">Distance par défaut en concours nouvelle</translation>
+        <translation>Suivre le mode radio pour la bande de couleurs</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="336"/>
@@ -378,6 +374,7 @@ Le mode calculé est%6
         <translation>Ajouter Spot à Bandmap: Tolérance de réglage (Khz)</translation>
     </message>
     <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="14"/>
         <location filename="../Clusterbandmapconfigure.cpp" line="15"/>
         <source>Cluster/Bandmap Configure</source>
         <translation>Configurer Cluster/Bandmap</translation>
@@ -2220,7 +2217,7 @@ to</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1725"/>
+        <location filename="../qsologframe.cpp" line="1735"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2231,32 +2228,32 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2115"/>
+        <location filename="../qsologframe.cpp" line="2125"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2122"/>
+        <location filename="../qsologframe.cpp" line="2132"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2217"/>
+        <location filename="../qsologframe.cpp" line="2227"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2219"/>
+        <location filename="../qsologframe.cpp" line="2229"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2546"/>
+        <location filename="../qsologframe.cpp" line="2556"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2581"/>
+        <location filename="../qsologframe.cpp" line="2591"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -2300,17 +2297,9 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="209"/>
-        <location filename="../rigcontrolframe.cpp" line="664"/>
+        <location filename="../rigcontrolframe.cpp" line="731"/>
         <source>On</source>
         <translation>Actif</translation>
-    </message>
-    <message>
-        <source>x9.99</source>
-        <translation type="vanished">x9.99</translation>
-    </message>
-    <message>
-        <source>+0.00</source>
-        <translation type="vanished">+0.00</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="238"/>
@@ -2349,43 +2338,48 @@ Non - Ignorer les modifications</translation>
         <translation>Vol</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="671"/>
+        <location filename="../rigcontrolframe.cpp" line="738"/>
         <source>Off</source>
         <translation>Éteinte</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1229"/>
-        <source>Bandlist empty for this radio, please add a band or tranverter!</source>
-        <translation>La liste des bandes est vide pour cette radio, ajouter une bande ou transverter SVP!</translation>
+        <location filename="../rigcontrolframe.cpp" line="1332"/>
+        <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
+        <translation>Radio sélectionnée aucun détail trouvé, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1256"/>
+        <location filename="../rigcontrolframe.cpp" line="1364"/>
         <source>Radio Bandlist is empty!</source>
         <translatorcomment>Liste des bandes est vide!</translatorcomment>
         <translation>La liste des bandes est vide!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1265"/>
+        <location filename="../rigcontrolframe.cpp" line="1373"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1343"/>
+        <location filename="../rigcontrolframe.cpp" line="1460"/>
         <source>No %1 Band found for this radio!</source>
-        <translation>AucuneBande %1 trouvée pour cette radio!</translation>
+        <translation>Aucune Bande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1540"/>
+        <location filename="../rigcontrolframe.cpp" line="1639"/>
+        <source>Freq out of contest band</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="1807"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1547"/>
+        <location filename="../rigcontrolframe.cpp" line="1814"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1566"/>
+        <location filename="../rigcontrolframe.cpp" line="1837"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
@@ -2759,42 +2753,42 @@ Non - Ignorer les modifications</translation>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="68"/>
+        <location filename="../runbuttonsframe.cpp" line="78"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="74"/>
+        <location filename="../runbuttonsframe.cpp" line="84"/>
         <source>Disconnected</source>
         <translation>Débranché</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="281"/>
+        <location filename="../runbuttonsframe.cpp" line="312"/>
         <source>Run</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="290"/>
+        <location filename="../runbuttonsframe.cpp" line="321"/>
         <source>Run %1 - New</source>
         <translation>R%1 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="308"/>
+        <location filename="../runbuttonsframe.cpp" line="339"/>
         <source>Run %1 - Edit</source>
         <translation>R%1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="361"/>
+        <location filename="../runbuttonsframe.cpp" line="389"/>
         <source>Restore .%1    </source>
         <translation>Restaurer .%1    </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="364"/>
+        <location filename="../runbuttonsframe.cpp" line="392"/>
         <source>Freq: </source>
         <translation>Fréquence: </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="365"/>
+        <location filename="../runbuttonsframe.cpp" line="393"/>
         <source>Mode: </source>
         <translation>Mode: </translation>
     </message>
@@ -2802,27 +2796,27 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="504"/>
+        <location filename="../runbuttonsframe.cpp" line="524"/>
         <source>&amp;Off</source>
         <translation>&amp;Éteinte</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="505"/>
+        <location filename="../runbuttonsframe.cpp" line="525"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="506"/>
+        <location filename="../runbuttonsframe.cpp" line="526"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="507"/>
+        <location filename="../runbuttonsframe.cpp" line="527"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="508"/>
+        <location filename="../runbuttonsframe.cpp" line="528"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
@@ -2944,12 +2938,12 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../ScreenConfigElement.cpp" line="14"/>
         <source>Log List</source>
-        <translation>Liste des journaux</translation>
+        <translation>QSO liste</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="14"/>
         <source>QSO Log List</source>
-        <translation>WHAT is QSO Log List</translation>
+        <translation>Journal des QSO</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="15"/>
@@ -4672,22 +4666,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="741"/>
+        <location filename="../tsinglelogframe.cpp" line="740"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le journal importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1322"/>
+        <location filename="../tsinglelogframe.cpp" line="1304"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non rempli</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1341"/>
+        <location filename="../tsinglelogframe.cpp" line="1323"/>
         <source>Please give serial wanted</source>
         <translation>Donner série recherchée</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1363"/>
+        <location filename="../tsinglelogframe.cpp" line="1345"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1introuvable</translation>
     </message>

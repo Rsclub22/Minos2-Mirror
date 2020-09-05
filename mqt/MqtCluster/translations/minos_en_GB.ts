@@ -236,25 +236,25 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
     <name>QObject</name>
     <message>
         <location filename="../setupdialog.cpp" line="137"/>
-        <location filename="../setupdialog.cpp" line="518"/>
+        <location filename="../setupdialog.cpp" line="549"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setupdialog.cpp" line="138"/>
-        <location filename="../setupdialog.cpp" line="519"/>
+        <location filename="../setupdialog.cpp" line="550"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setupdialog.cpp" line="139"/>
-        <location filename="../setupdialog.cpp" line="520"/>
+        <location filename="../setupdialog.cpp" line="551"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setupdialog.cpp" line="140"/>
-        <location filename="../setupdialog.cpp" line="521"/>
+        <location filename="../setupdialog.cpp" line="552"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>

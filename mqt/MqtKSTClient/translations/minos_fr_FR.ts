@@ -4,62 +4,62 @@
 <context>
     <name>AirScoutLink</name>
     <message>
-        <location filename="../airscoutlink.cpp" line="5"/>
+        <location filename="../airscoutlink.cpp" line="7"/>
         <source>50MHz</source>
         <translation>50MHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="6"/>
+        <location filename="../airscoutlink.cpp" line="8"/>
         <source>70MHz</source>
         <translation>70MHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="7"/>
+        <location filename="../airscoutlink.cpp" line="9"/>
         <source>144MHz</source>
         <translation>144MHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="8"/>
+        <location filename="../airscoutlink.cpp" line="10"/>
         <source>432MHz</source>
         <translation>432MHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="9"/>
+        <location filename="../airscoutlink.cpp" line="11"/>
         <source>1.2GHz</source>
         <translation>1,2GHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="10"/>
+        <location filename="../airscoutlink.cpp" line="12"/>
         <source>2.3GHz</source>
         <translation>2,3GHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="11"/>
+        <location filename="../airscoutlink.cpp" line="13"/>
         <source>3.4GHz</source>
         <translation>3,4GHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="12"/>
+        <location filename="../airscoutlink.cpp" line="14"/>
         <source>5.7GHz</source>
         <translation>5,7GHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="13"/>
+        <location filename="../airscoutlink.cpp" line="15"/>
         <source>10GHz</source>
         <translation>10GHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="14"/>
+        <location filename="../airscoutlink.cpp" line="16"/>
         <source>24GHz</source>
         <translation>24GHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="15"/>
+        <location filename="../airscoutlink.cpp" line="17"/>
         <source>47GHz</source>
         <translation>47GHz</translation>
     </message>
     <message>
-        <location filename="../airscoutlink.cpp" line="16"/>
+        <location filename="../airscoutlink.cpp" line="18"/>
         <source>76GHz</source>
         <translation>76GHz</translation>
     </message>
@@ -70,6 +70,15 @@
         <location filename="../airscoutlink.h" line="64"/>
         <source>Aircraft %1	category %2	distance %3	potential %4	minutes %5</source>
         <translation>Avion %1 catégorie %2 distance %3 potentiel %4 minutes %5</translation>
+    </message>
+</context>
+<context>
+    <name>ChangeName</name>
+    <message>
+        <location filename="../changename.ui" line="14"/>
+        <location filename="../changename.ui" line="20"/>
+        <source>Changing first name...</source>
+        <translation>Changement de prénom...</translation>
     </message>
 </context>
 <context>
@@ -115,57 +124,67 @@
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="116"/>
+        <location filename="../kstconfigure.ui" line="120"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="149"/>
+        <location filename="../kstconfigure.ui" line="138"/>
+        <source>First Name</source>
+        <translation>Prénom</translation>
+    </message>
+    <message>
+        <location filename="../kstconfigure.ui" line="159"/>
+        <source>Leave Locator and/or First Name blank to keep their current ON4KST setting</source>
+        <translation>Laisser le localisateur et / ou le prénom vides pour conserver leur paramètre ON4KST actuel</translation>
+    </message>
+    <message>
+        <location filename="../kstconfigure.ui" line="171"/>
         <source>Automatically connect on load</source>
         <translation>Connexion automatique lors du chargement</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="174"/>
+        <location filename="../kstconfigure.ui" line="196"/>
         <source>AirScout</source>
         <translation>AStest</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="184"/>
+        <location filename="../kstconfigure.ui" line="206"/>
         <source>Server Name</source>
         <translation>Nom du Serveur</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="202"/>
+        <location filename="../kstconfigure.ui" line="224"/>
         <source>My Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="224"/>
+        <location filename="../kstconfigure.ui" line="246"/>
         <source>Server UDP Port</source>
         <translation>Port UDP du serveur</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="238"/>
+        <location filename="../kstconfigure.ui" line="264"/>
         <source>Server timeout</source>
         <translation>Timeout du serveur</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="256"/>
+        <location filename="../kstconfigure.ui" line="286"/>
         <source>Minimum distance</source>
         <translation>Distance minimale</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="274"/>
+        <location filename="../kstconfigure.ui" line="304"/>
         <source>Maximum distance</source>
         <translation>Distance maximale</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="297"/>
+        <location filename="../kstconfigure.ui" line="327"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../kstconfigure.ui" line="317"/>
+        <location filename="../kstconfigure.ui" line="347"/>
         <source>Ok</source>
         <translation>OK</translation>
     </message>
@@ -327,7 +346,7 @@ l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="547"/>
-        <location filename="../kstmainwindow.ui" line="616"/>
+        <location filename="../kstmainwindow.ui" line="609"/>
         <source>Configure</source>
         <translation>Configurer</translation>
     </message>
@@ -338,48 +357,32 @@ l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="581"/>
-        <location filename="../kstmainwindow.cpp" line="390"/>
+        <location filename="../kstmainwindow.cpp" line="391"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="588"/>
-        <source>Analyse</source>
-        <translation>Analyser</translation>
-    </message>
-    <message>
-        <location filename="../kstmainwindow.ui" line="595"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="382"/>
+        <location filename="../kstmainwindow.cpp" line="383"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="476"/>
-        <source>KST Chat Files (*.txt);Log Files (*.log);;All Files (*.*)</source>
-        <translation>KST Fichiers de Bavardage (*.txt);Fichiers journaux  (*.log);;Tous les fichiers (*.*)</translation>
-    </message>
-    <message>
-        <location filename="../kstmainwindow.cpp" line="480"/>
-        <source>Chat dumps from KST</source>
-        <translation>Dumps de bavardage de KST</translation>
-    </message>
-    <message>
-        <location filename="../kstmainwindow.cpp" line="379"/>
-        <location filename="../kstmainwindow.cpp" line="503"/>
+        <location filename="../kstmainwindow.cpp" line="380"/>
         <source>Including %1</source>
         <translation>%1 Compris</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="624"/>
+        <location filename="../kstmainwindow.cpp" line="538"/>
         <source>Set Back</source>
         <translation>Présent</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="628"/>
+        <location filename="../kstmainwindow.cpp" line="542"/>
         <source>Set Away</source>
         <translation>Absent</translation>
     </message>

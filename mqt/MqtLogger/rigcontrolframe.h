@@ -31,18 +31,6 @@ namespace Ui {
 
 const int BANDLIST_TIMEOUT_DUR = 3000;
 
-const QString RUN_BUTTON_ON_FREQ_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
-const QString RUN_BUTTON_OFF_FREQ_STYLE = QString("background-color: yellow ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
-const QString RUN_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
-
-
-
-const int NO_RUN_BUTTON_ON = -1;
-const int RUN_BUTTON_1_ON = 0;
-const int RUN_BUTTON_2_ON = 1;
-const int NUM_RUNBUTTONS = 2;
-const int CHECK_RUN_FREQ_POLLTIME = 1000;
-
 class quickBandSelData
 {
 

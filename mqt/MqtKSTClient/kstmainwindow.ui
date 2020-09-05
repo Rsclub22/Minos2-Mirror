@@ -583,13 +583,6 @@ when user selected</string>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="analyseButton">
-        <property name="text">
-         <string>Analyse</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="closeButton">
         <property name="text">
          <string>Close</string>

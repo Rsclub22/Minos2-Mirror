@@ -24,6 +24,7 @@ int KSTConfigure::exec()
     ui->passwordEdit->setText(password);
 
     ui->locatorEdit->setText(locator);
+    ui->nameEdit->setText(firstName);
     ui->autoConnect->setChecked(autoConnect);
 
     ui->ASServerName->setText(ASServerName);
@@ -58,6 +59,7 @@ void KSTConfigure::on_OKButton_clicked()
     password = ui->passwordEdit->text();
     autoConnect = ui->autoConnect->isChecked();
     locator = ui->locatorEdit->text().toUpper();
+    firstName = ui->nameEdit->text();
 
     ASServerName = ui->ASServerName->text();
     ASMyName = ui->ASMyName->text();
@@ -68,7 +70,7 @@ void KSTConfigure::on_OKButton_clicked()
     ASPort = ui->ASPort->text().toInt();
     ASTimeout = ui->ASTimeout->text().toInt();
 
-    if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty() || locator.isEmpty())
+    if (hostname.isEmpty() || port.isEmpty() ||username.isEmpty() ||password.isEmpty())
         return;
 
 
