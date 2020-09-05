@@ -1355,9 +1355,22 @@ void BandmapView::assembleCqToolTip(int row, QString freq, QString& toolTipMsg)
 
 void BandmapView::assembleToolTip(int row, QString freq, QString& toolTipMsg)
 {
+    QChar degSym = QChar(DEG_SYMBOL);
     QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+    QString locator = model()->data(model()->index(row, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
+    QString bearing = model()->data(model()->index(row, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
+    if (!bearing.isEmpty())
+    {
+        bearing += degSym;
+    }
+    QString distance = model()->data(model()->index(row, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
+    if (!distance.isEmpty())
+    {
+        distance += " km";
+    }
     QString spotterCallsign =  model()->data(model()->index(row, SPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
     QString spotterLocator = model()->data(model()->index(row, SPOTLOC_COL_NUM), BMP_DataStoredRole).toString();
+
     QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), BMP_DataStoredRole).toString().replace('<', " (").replace('>', ") ");
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
 
@@ -1365,7 +1378,18 @@ void BandmapView::assembleToolTip(int row, QString freq, QString& toolTipMsg)
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
     QString elapsedTimeStr = QString::number(elapsedTime);
 
-    QString msg = tr("%1 - %2 [%3 %4 @ %5 min] \nThe computed mode is %6\n%7").arg(callsign).arg(convertFreqStrDisp(freq)).arg(spotterCallsign).arg(spotterLocator).arg(elapsedTimeStr).arg(computedMode).arg(spotterComment);
+    QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \nThe computed mode is %9\n%10")
+                                            .arg(callsign)
+                                            .arg(convertFreqStrDisp(freq))
+                                            .arg(locator)
+                                            .arg(bearing)
+                                            .arg(distance)
+
+                                            .arg(spotterCallsign)
+                                            .arg(spotterLocator)
+                                            .arg(elapsedTimeStr)
+                                            .arg(computedMode)
+                                            .arg(spotterComment);
 
     toolTipMsg = msg;
     //msg.detach();
