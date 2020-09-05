@@ -54,6 +54,8 @@ private:
 
 
 
+    bool checkPstRotatorInstalled();
+    void checkPstRotatorExists(QString fileName, bool &fileExists);
 };
 
 

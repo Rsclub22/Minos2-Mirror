@@ -521,11 +521,11 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
 void ClusterClientFrame::handleVertHeaderClickedItems(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
     // check if spot has been sent to memory
-    if (!spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
-    {
-        sendSpotToMemory(spotProxyModel, row);
+    //if (!spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
+    //{
+    sendSpotToMemory(spotProxyModel, row);
 
-    }
+    //}
 }
 
 
@@ -1183,10 +1183,10 @@ void ClusterClientFrame::memoryActionSelected()
             if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
             {
                 // check if spot has been sent to memory
-                if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
-                {
-                    sendSpotToMemory(filterProxyModelList[curTab], currentRow);
-                }
+                //if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
+                //{
+                sendSpotToMemory(filterProxyModelList[curTab], currentRow);
+                //}
 
             }
 
