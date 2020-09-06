@@ -117,8 +117,6 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
 
 RigMemoryFrame::~RigMemoryFrame()
 {
-    delete ct;
-    ct = nullptr;
     delete ui;
 }
 
@@ -803,13 +801,9 @@ QModelIndex RigMemoryGridModel::parent( const QModelIndex &/*index*/ ) const
 
 int RigMemoryGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 {
-    if (ct)
-    {
-        LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
-            if (c)
-                return c->rigMemories.size();
-    }
-
+    LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
+    if (c)
+       return c->rigMemories.size();
     return 0;
 }
 
