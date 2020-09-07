@@ -452,7 +452,7 @@ void TSingleLogFrame::clearScreenLayout()
     rotPresets->setContest(nullptr);
 
     traceMsg("clearScreenLayout start clearance for " + msg);
-    if (!LogContainer->isLoggerClosing())
+//    if (!LogContainer->isLoggerClosing())
     {
         while (singleLogFrameSplitter->count())
         {
