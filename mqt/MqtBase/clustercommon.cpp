@@ -87,6 +87,12 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
     QStringList dl = spotDate.split('-');
     if (dl.count() == 3)
     {
+        if (dl[0].toInt() < 10 && dl[0].toInt() >= 0)
+        {
+            dl[0].prepend('0');
+        }
+
+
         dt = QDateTime::fromString(dl[2] + dl[1] + dl[0] + spotTime + t, "yyyyMMMddHHmmss" );
         dt.setTimeSpec(Qt::UTC);
 
