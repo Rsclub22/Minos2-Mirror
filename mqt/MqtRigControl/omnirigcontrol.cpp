@@ -1134,23 +1134,25 @@ int OmnirigControl::getMaxRitFreq(int rigModelNumber)
 
     return 9990;
 }
-/*
-int OmnirigControl::setConfigurationParameter(CONFIG_PARAM cfgparam, QString value)
+
+int OmnirigControl::setConfigurationParameter(int rigNumber, QString cfgparam, QString value)
 {
+    Q_UNUSED(rigNumber)
     Q_UNUSED(cfgparam)
     Q_UNUSED(value)
     int retCode = Rig_OK;
     return retCode;
 }
-int OmnirigControl::getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value)
+int OmnirigControl::getConfigurationParameter(int rigNumber, QString cfgparam, QString *value)
 {
+    Q_UNUSED(rigNumber)
     Q_UNUSED(cfgparam)
     Q_UNUSED(value)
     int retCode = Rig_OK;
     return retCode;
 }
 
-*/
+
 
 void OmnirigControl::setTraceCommsFlag(bool value)
 {

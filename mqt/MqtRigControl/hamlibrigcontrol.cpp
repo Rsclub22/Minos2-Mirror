@@ -1031,28 +1031,46 @@ setting_t HamlibRigControl::rigHasSetFunc(int rigNumber, setting_t func)
 
 // set configuration parameters..
 
-/*
 
-int HamlibRigControl::setConfigurationParameter(CONFIG_PARAM cfgparam, QString value)
+
+int HamlibRigControl::setConfigurationParameter(int rigNumber, QString cfgparam, QString value)
 {
 
-    return rig_set_conf(my_rig, convertConfigParam(cfgparam), value.toLatin1());
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (!myRig)
+    {
+        return 0;
+    }
+
+    //return  rig_set_conf(myRig, rig_ext_token_lookup(myRig, cfgparam.toLatin1()), value.toLatin1());
+    QByteArray val = "2";
+    QByteArray par = "retry";
+    char* parm = par.data();
+    token_t tk = rig_ext_token_lookup(myRig, parm);
+    int retcode =  rig_set_conf(myRig, tk, val.data());
+    int a = 0;
 
 }
 
-int HamlibRigControl::getConfigurationParameter(CONFIG_PARAM cfgparam, QString* value)
+int HamlibRigControl::getConfigurationParameter(int rigNumber, QString cfgparam, QString* value)
 {
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (!myRig)
+    {
+        return 0;
+    }
+
     char* val = nullptr;
-    int retCode =  rig_get_conf(my_rig, convertConfigParam(cfgparam), val);
+    int retCode =  rig_get_conf(myRig, rig_ext_token_lookup(myRig, cfgparam.toLatin1()), val);
 
     value->fromLatin1(val);
 
     return retCode;
 
-
 }
 
-*/
 
 
 

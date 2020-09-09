@@ -85,8 +85,8 @@ public:
     int setVfo(VFO vfo) override;
     int getVfo(VFO *vfo) override;
 
-    //int setConfigurationParameter(CONFIG_PARAM cfgparam, QString value) override;
-    //int getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value) override;
+    int setConfigurationParameter(int rigNumber, QString cfgparam, QString value) override;
+    int getConfigurationParameter(int rigNumber, QString cfgparam, QString *value) override;
 
 
 #if defined (WIN32)

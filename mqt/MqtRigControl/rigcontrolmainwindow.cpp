@@ -1198,6 +1198,32 @@ int RigControlMainWindow::openRadio()
 
     logMessage(QString("Radio Connected? %1").arg(radio->getRigConnected() ? "yes" : "no"));
 
+    if (rigCap.rigModelNumber == RIG_MODEL_FT817 || rigCap.rigModelNumber == RIG_MODEL_FT818)
+    {
+        // set the timeouts for these radios
+        retCode = radio->setConfigurationParameter(rigCap.rigModelNumber, HAMLIB_RETRY, QString("2"));
+        if (retCode == RIG_OK)
+        {
+            logMessage(QString("set hamlib config param - retry set ok, value = %1").arg(QString("2")));
+        }
+        else
+        {
+            logMessage(QString("set hamlib config param - retry failed, error code = %1").arg(retCode));
+
+        }
+
+        retCode = radio->setConfigurationParameter(rigCap.rigModelNumber, HAMLIB_TIMEOUT, QString("500"));
+        if(retCode == RIG_OK)
+        {
+            logMessage(QString("set hamlib config param - timeout set ok, value = %1").arg(QString("500")));
+        }
+        else
+        {
+            logMessage(QString("set hamlib config param = timeout failed, error code = %1").arg(retCode));
+        }
+    }
+
+
     if (!radio->getRigConnected())
     {
 
@@ -2413,7 +2439,6 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
 
 
 }
-
 
 
 // probe radio for supported bands
