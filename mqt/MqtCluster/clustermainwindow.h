@@ -81,6 +81,14 @@ const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
 
+
+
+//const int SPOT_IS_HF = -3;
+//const int SPOT_DATE_TIME_IS_INVALID = -1;
+//const int TOO_FEW_PARTS = -1;
+//const int SPOTTIME_EMPTY = -2;
+
+
 class ClusterAddress
 {
 
