@@ -890,7 +890,7 @@ void ClusterMainWindow::parseDX(const QString txt)
 
                 if (retCode >= 0)
                 {
-                    trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
+                    trace(QString("Parse Dx - Extracted spot = %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
                     .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
                     .arg(spotCall).arg(dxLocator).arg(spotLocator).arg(dxPropMode).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
 
@@ -952,6 +952,9 @@ void ClusterMainWindow::parseDX(const QString txt)
 
 int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCall)
 {
+
+    trace(QString("UnpackShowDXSpot - %1").arg(txt));
+
     spotCall = _spotCall;
 
     // clear the rest of spot data
@@ -1163,7 +1166,7 @@ void ClusterMainWindow::getSpotsFromQueue()
 int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
 {
 
-
+    trace(QString("UnpackDXSpot - %1").arg(txt));
     int timePos = 0;
 
     // clear spot data
