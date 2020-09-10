@@ -70,8 +70,8 @@ public:
     virtual bool supportSignalStrength(int rigModelNumber) = 0;
     virtual int getSignalStrength(VFO vfo, int *value) = 0;
 
-    //virtual int setConfigurationParameter(CONFIG_PARAM cfgparam, QString value) = 0;
-    //virtual int getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value) = 0;
+    virtual int setConfigurationParameter(QString cfgparam, QString value) = 0;
+    virtual int getConfigurationParameter(QString cfgparam, QString *value) = 0;
 
 
     virtual QString getRigLibVersion() = 0;
