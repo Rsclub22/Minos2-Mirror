@@ -275,8 +275,6 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     }
 
 
-
-
     retcode = rig_open(my_rig);
     if (retcode >= 0)
     {
@@ -1033,37 +1031,19 @@ setting_t HamlibRigControl::rigHasSetFunc(int rigNumber, setting_t func)
 
 
 
-int HamlibRigControl::setConfigurationParameter(int rigNumber, QString cfgparam, QString value)
+int HamlibRigControl::setConfigurationParameter(QString cfgparam, QString value)
 {
 
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (!myRig)
-    {
-        return 0;
-    }
+    return  rig_set_conf(my_rig, rig_token_lookup(my_rig, cfgparam.toLatin1().data()), value.toLatin1().data());
 
-    //return  rig_set_conf(myRig, rig_ext_token_lookup(myRig, cfgparam.toLatin1()), value.toLatin1());
-    QByteArray val = "2";
-    QByteArray par = "retry";
-    char* parm = par.data();
-    token_t tk = rig_ext_token_lookup(myRig, parm);
-    int retcode =  rig_set_conf(myRig, tk, val.data());
-    int a = 0;
 
 }
 
-int HamlibRigControl::getConfigurationParameter(int rigNumber, QString cfgparam, QString* value)
+int HamlibRigControl::getConfigurationParameter(QString cfgparam, QString* value)
 {
-    RIG *myRig;
-    myRig = rig_init(rigNumber);
-    if (!myRig)
-    {
-        return 0;
-    }
 
     char* val = nullptr;
-    int retCode =  rig_get_conf(myRig, rig_ext_token_lookup(myRig, cfgparam.toLatin1()), val);
+    int retCode =  rig_get_conf(my_rig, rig_token_lookup(my_rig, cfgparam.toLatin1().data()), val);
 
     value->fromLatin1(val);
 

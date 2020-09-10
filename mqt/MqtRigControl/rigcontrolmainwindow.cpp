@@ -1198,30 +1198,6 @@ int RigControlMainWindow::openRadio()
 
     logMessage(QString("Radio Connected? %1").arg(radio->getRigConnected() ? "yes" : "no"));
 
-    if (rigCap.rigModelNumber == RIG_MODEL_FT817 || rigCap.rigModelNumber == RIG_MODEL_FT818)
-    {
-        // set the timeouts for these radios
-        retCode = radio->setConfigurationParameter(rigCap.rigModelNumber, HAMLIB_RETRY, QString("2"));
-        if (retCode == RIG_OK)
-        {
-            logMessage(QString("set hamlib config param - retry set ok, value = %1").arg(QString("2")));
-        }
-        else
-        {
-            logMessage(QString("set hamlib config param - retry failed, error code = %1").arg(retCode));
-
-        }
-
-        retCode = radio->setConfigurationParameter(rigCap.rigModelNumber, HAMLIB_TIMEOUT, QString("500"));
-        if(retCode == RIG_OK)
-        {
-            logMessage(QString("set hamlib config param - timeout set ok, value = %1").arg(QString("500")));
-        }
-        else
-        {
-            logMessage(QString("set hamlib config param = timeout failed, error code = %1").arg(retCode));
-        }
-    }
 
 
     if (!radio->getRigConnected())
@@ -1243,6 +1219,45 @@ int RigControlMainWindow::openRadio()
 
 
     logMessage(QString("Connect Status after init = %1").arg(radio->getRigConnected() ? "yes" : "no"));
+
+
+
+    // reduce the radio error timeouts from default
+    if (rigCap.rigModelNumber == RIG_MODEL_FT817 || rigCap.rigModelNumber == RIG_MODEL_FT818)
+    {
+
+        QString fileName = RADIO_PATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+        QSettings  settings(fileName, QSettings::IniFormat);
+        settings.beginGroup(setupRadio->currentRadio.radioName);
+        QString retryValue = settings.value("retry", DEFAULT_FT817_RADIO_RETRY).toString();
+
+        // set the timeouts for these radios
+        retCode = radio->setConfigurationParameter(HAMLIB_RETRY, retryValue);
+        if (retCode == RIG_OK)
+        {
+            logMessage(QString("set hamlib config param - retry set ok, value = %1").arg(retryValue));
+        }
+        else
+        {
+            logMessage(QString("set hamlib config param - retry failed, error code = %1").arg(retCode));
+
+        }
+
+        QString timeOutValue = settings.value("retry", DEFAULT_FT817_RADIO_TIMEOUT).toString();
+        settings.endGroup();
+        retCode = radio->setConfigurationParameter(HAMLIB_TIMEOUT, timeOutValue);
+        if(retCode == RIG_OK)
+        {
+            logMessage(QString("set hamlib config param - timeout set ok, value = %1").arg(timeOutValue));
+        }
+        else
+        {
+            logMessage(QString("set hamlib config param = timeout failed, error code = %1").arg(retCode));
+        }
+    }
+
+
+
 
 
     // let's see if we can get freq from radio and confirm comms
