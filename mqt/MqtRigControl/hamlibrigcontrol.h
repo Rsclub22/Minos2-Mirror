@@ -36,8 +36,6 @@ const serial_handshake_e handshakeCodes[] = { RIG_HANDSHAKE_NONE, RIG_HANDSHAKE_
 
 
 
-
-
 //class RigFactory;
 
 class HamlibRigControl : public RigBase
@@ -87,8 +85,8 @@ public:
     int clearRit(VFO vfo) override;
     int getMaxRitFreq(int rigNumber) override;
 
-    //int setConfigurationParameter(CONFIG_PARAM cfgparam, QString value) override;
-    //int getConfigurationParameter(CONFIG_PARAM cfgparam, QString *value) override;
+    int setConfigurationParameter(QString cfgparam, QString value) override;
+    int getConfigurationParameter(QString cfgparam, QString *value) override;
 
 
     static void setTraceCommsFlag(bool value);
@@ -157,7 +155,7 @@ private:
     VFO convert_Vfo_t_To_VFO(vfo_t vfo);
     vfo_t convert_VFO_to_vfo_t(VFO vfo);
 
-    token_t convertConfigParam(CONFIG_PARAM cfgparam);
+
 };
 
 #endif // HAMLIBRIGCONTROL_H

@@ -275,8 +275,6 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     }
 
 
-
-
     retcode = rig_open(my_rig);
     if (retcode >= 0)
     {
@@ -1031,28 +1029,28 @@ setting_t HamlibRigControl::rigHasSetFunc(int rigNumber, setting_t func)
 
 // set configuration parameters..
 
-/*
 
-int HamlibRigControl::setConfigurationParameter(CONFIG_PARAM cfgparam, QString value)
+
+int HamlibRigControl::setConfigurationParameter(QString cfgparam, QString value)
 {
 
-    return rig_set_conf(my_rig, convertConfigParam(cfgparam), value.toLatin1());
+    return  rig_set_conf(my_rig, rig_token_lookup(my_rig, cfgparam.toLatin1().data()), value.toLatin1().data());
+
 
 }
 
-int HamlibRigControl::getConfigurationParameter(CONFIG_PARAM cfgparam, QString* value)
+int HamlibRigControl::getConfigurationParameter(QString cfgparam, QString* value)
 {
+
     char* val = nullptr;
-    int retCode =  rig_get_conf(my_rig, convertConfigParam(cfgparam), val);
+    int retCode =  rig_get_conf(my_rig, rig_token_lookup(my_rig, cfgparam.toLatin1().data()), val);
 
     value->fromLatin1(val);
 
     return retCode;
 
-
 }
 
-*/
 
 
 

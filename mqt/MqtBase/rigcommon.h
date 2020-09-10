@@ -46,11 +46,10 @@ VFO strToVfo(QString vfo);
 using  Frequency = quint64;
 using ShortFreq = qint32;
 
+// hamlib conf token strings
+const QString HAMLIB_RETRY = "retry";
+const QString HAMLIB_TIMEOUT = "timeout";
 
-
-// These are used in hamlib
-// post_write_delay disables ACK/NAK in FT817
-enum CONFIG_PARAM {post_write_delay};
 
 const int MAX_RITFREQ = 9999;
 
