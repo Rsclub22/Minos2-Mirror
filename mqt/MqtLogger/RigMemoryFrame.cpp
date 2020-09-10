@@ -119,8 +119,6 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
 
 RigMemoryFrame::~RigMemoryFrame()
 {
-    delete ct;
-    ct = nullptr;
     delete ui;
 }
 
