@@ -653,6 +653,7 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 void ClusterClientFrame::addDxSpotToTable(const QString spot)
 {
 
+    traceMsg(QString("addDXSpotToTable: %1").arg(spot));
     QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
     QStringList sl = spot.split(DXSPOT);
     if (sl.count() == 2)
@@ -725,7 +726,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                                                     spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
-
+            traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));
        }
     }
 
@@ -1800,7 +1801,7 @@ void ClusterClientFrame::mouseTimerCheckNewSpots()
 
 void ClusterClientFrame::traceMsg(QString msg)
 {
-    trace(QString("ClusterClientFrame %1").arg(msg));
+    trace(QString("[ClusterClientFrame] %1").arg(msg));
 }
 
 
