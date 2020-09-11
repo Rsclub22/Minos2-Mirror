@@ -1,8 +1,11 @@
 #include "LoggerContest.h"
-#include "runbuttonsframe.h"
 #include "rotatorcommon.h"
 #include "runbuttondialog.h"
 #include "rigutils.h"
+#include "tlogcontainer.h"
+#include "tsinglelogframe.h"
+
+#include "runbuttonsframe.h"
 #include "ui_runbuttonsframe.h"
 
 const int RUN_TOLERANCE = 300; // Hz
@@ -284,6 +287,8 @@ void RunButtonsFrame::runButReadActSel(int buttonNumber)
                 rigControl->sendRigFreq(m.freq);
                  // pre-empt us being told; if it doesn't happen, we will get told later
                 curRadioFreq = m.freq;
+                TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+                tslf->sCurFreq = m.freq;
                 chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);  // reset the interval
 
             }
