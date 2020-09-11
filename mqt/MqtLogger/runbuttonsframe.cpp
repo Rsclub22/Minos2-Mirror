@@ -383,14 +383,16 @@ void RunButtonsFrame::setRunButtonText(int buttonNumber)
     QString sc = ((buttonNumber == 0)?QString(" [ "):QString( " ] "));
 
     QString runText = "R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + "   ";
+    QString tTipStr = tr("Freq: ") + convertFreqStrDisp(m.freq) + "\n"
+            + tr("Mode: ") + m.mode + "\n";
     QString restoreText;
     if (!runButtonMap[buttonNumber]->returnFrequency.isEmpty())
     {
         restoreText = "\n" + tr("Restore .%1    ").arg(extractKhz(runButtonMap[buttonNumber]->returnFrequency) );
+        tTipStr += tr("Restore freq: ") + convertFreqStrDisp(runButtonMap[buttonNumber]->returnFrequency) + "\n";
     }
     runButtonMap[buttonNumber]->memButton->setText(runText + restoreText);
-    QString tTipStr = tr("Freq: ") + convertFreqStrDisp(m.freq) + "\n"
-            + tr("Mode: ") + m.mode + "\n";
+
     runButtonMap[buttonNumber]->memButton->setToolTip(tTipStr);
 }
 
