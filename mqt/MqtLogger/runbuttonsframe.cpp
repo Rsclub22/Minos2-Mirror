@@ -124,7 +124,17 @@ void RunButtonsFrame::setRunButtonActive(int buttonNumber)
 
     // first, save the current frequency so we can return to it
 
-    runButtonMap[buttonNumber]->returnFrequency = rigControl->getCurFreq();
+    memoryData::memData m = getRunMemoryData(buttonNumber);
+    QString curFreq = rigControl->getCurFreq();
+
+    if (m.freq == curFreq)
+    {
+        runButtonMap[buttonNumber]->returnFrequency.clear();
+    }
+    else
+    {
+        runButtonMap[buttonNumber]->returnFrequency = curFreq;
+    }
     runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
 
     runButReadActSel(buttonNumber);
