@@ -1673,6 +1673,7 @@ void TSingleLogFrame::on_SetFreq(QString f)
         if (f != sCurFreq)
         {
             stopKeyer = true;
+            trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f).arg(sCurFreq));
         }
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
@@ -1683,7 +1684,10 @@ void TSingleLogFrame::on_SetFreq(QString f)
         MinosLoggerEvents::sendRigFreqChanged(f, contest);
 
         if (stopKeyer)
+        {
+            trace("sendKeyerStop from TSingleLogFrame::on_setFreq");
             sendKeyerStop();    // if we have tuned, stop keyer
+        }
     }
 
 }
@@ -1824,6 +1828,7 @@ void TSingleLogFrame::sendRadioFreq(QString freq)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
+        trace("sendKeyerStop from TSingleLogFrame::sendRadioFreq");
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlFreq(this, freq);
 
@@ -1859,6 +1864,7 @@ void TSingleLogFrame::sendRadioMode(QString mode)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
+        trace("sendKeyerStop from TSingleLogFrame::sendRadioMode");
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlMode(this, mode);
     }
