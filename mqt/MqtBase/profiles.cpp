@@ -130,6 +130,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapFollowRadioModeOperatingFreqStrip , "bandmapFollowRadioModeOperatingFreqStrip", true, QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapTraceDebug , "bandmapTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpClusterTraceDebug , "clusterTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
 
         break;
     case epPRELOADPROFILE:
