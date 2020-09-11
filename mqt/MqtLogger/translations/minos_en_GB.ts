@@ -245,10 +245,10 @@ The computed mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1368"/>
-        <source>%1 - %2 [%3 %4 @ %5 min] 
-The computed mode is %6
-%7</source>
+        <location filename="../bandmapview.cpp" line="1381"/>
+        <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
+The computed mode is %9
+%10</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2698,32 +2698,37 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="312"/>
+        <location filename="../runbuttonsframe.cpp" line="322"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="321"/>
+        <location filename="../runbuttonsframe.cpp" line="331"/>
         <source>Run %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="339"/>
+        <location filename="../runbuttonsframe.cpp" line="349"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="389"/>
+        <location filename="../runbuttonsframe.cpp" line="401"/>
         <source>Restore .%1    </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="392"/>
+        <location filename="../runbuttonsframe.cpp" line="402"/>
+        <source>Restore freq: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="396"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="393"/>
+        <location filename="../runbuttonsframe.cpp" line="397"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2731,27 +2736,27 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="524"/>
+        <location filename="../runbuttonsframe.cpp" line="536"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="525"/>
+        <location filename="../runbuttonsframe.cpp" line="537"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="526"/>
+        <location filename="../runbuttonsframe.cpp" line="538"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="527"/>
+        <location filename="../runbuttonsframe.cpp" line="539"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="528"/>
+        <location filename="../runbuttonsframe.cpp" line="540"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>

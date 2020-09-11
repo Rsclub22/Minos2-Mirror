@@ -246,11 +246,17 @@ The computed mode is %2</source>
 Le mode calculé est %2</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1368"/>
+        <location filename="../bandmapview.cpp" line="1381"/>
+        <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
+The computed mode is %9
+%10</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>%1 - %2 [%3 %4 @ %5 min] 
 The computed mode is %6
 %7</source>
-        <translation>%1 -%2 [%3 %4 @%5 min]
+        <translation type="vanished">%1 -%2 [%3 %4 @%5 min]
 Le mode calculé est%6
 %7</translation>
     </message>
@@ -2763,32 +2769,37 @@ Non - Ignorer les modifications</translation>
         <translation>Débranché</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="312"/>
+        <location filename="../runbuttonsframe.cpp" line="322"/>
         <source>Run</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="321"/>
+        <location filename="../runbuttonsframe.cpp" line="331"/>
         <source>Run %1 - New</source>
         <translation>R%1 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="339"/>
+        <location filename="../runbuttonsframe.cpp" line="349"/>
         <source>Run %1 - Edit</source>
         <translation>R%1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="389"/>
+        <location filename="../runbuttonsframe.cpp" line="401"/>
         <source>Restore .%1    </source>
         <translation>Restaurer .%1    </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="392"/>
+        <location filename="../runbuttonsframe.cpp" line="402"/>
+        <source>Restore freq: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="396"/>
         <source>Freq: </source>
         <translation>Fréquence: </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="393"/>
+        <location filename="../runbuttonsframe.cpp" line="397"/>
         <source>Mode: </source>
         <translation>Mode: </translation>
     </message>
@@ -2796,27 +2807,27 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="524"/>
+        <location filename="../runbuttonsframe.cpp" line="536"/>
         <source>&amp;Off</source>
         <translation>&amp;Éteinte</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="525"/>
+        <location filename="../runbuttonsframe.cpp" line="537"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="526"/>
+        <location filename="../runbuttonsframe.cpp" line="538"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="527"/>
+        <location filename="../runbuttonsframe.cpp" line="539"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="528"/>
+        <location filename="../runbuttonsframe.cpp" line="540"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
