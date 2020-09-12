@@ -9,7 +9,110 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "qs_defines.h"
+/*
 
+Bands and limits etc
+
+160m LSB    1840-2000
+160m CW     1810-1850
+160m DG
+160m FT
+
+80m LSB     3,600 - 3,775
+80m CW      3,510 - 3,570
+80m DG      PSK63:	3580-3590 kHz
+            RTTY:	3590-3620 kHz
+80m FT
+
+40m LSB     7,060 - 7,200
+40m CW      7,000 - 7,040
+40m DG
+40m FT
+
+20m USB     14,125-14,300
+20m CW      14,000-14,060
+20m DG
+20m FT
+
+15m USB 	21,151-21,450
+15m CW  	21,000-21,070
+15m DG
+15m FT
+
+10m USB 	28,320-29,000
+10m CW  	28,000-28,070
+10m DG
+10m FT
+
+6m USB  	50.100-50.300
+6m CW       50.000-50.100
+6m DG
+6m FT
+
+4m USB      70.100-70.250
+4m CW       70.100-70.250
+4m DG
+4m FT
+
+2m USB      144.150-144.400, 144.500-144.794
+2m CW       144.000-144.150
+2m DG
+2m FT
+
+70cm USB    432.1000-432.4000
+70cm CW     432.0000-432.1000
+70cm DG
+70cm FT
+
+23cm USB    1296.150-1296.800
+23cm CW     1296.000-1296.150
+23cm DG
+23cm FT
+*/
+/*
+DisplayFreqOffset Gets/Sets the display frequency
+offset value.
+Valid values are any number that
+can be represented with type
+double
+
+(centre frequency)
+Freq Gets/Sets the tuned frequency in
+Hz.
+fHz Gets/Sets the tuned frequency in
+Hz.
+fkHz Gets/Sets the tuned frequency in
+kHz.
+fMHz Gets/Sets the tuned frequency in
+MHz.
+
+(offset from centre frequency)
+ToneFrequency Gets/Sets the local oscillator
+frequency.
+tf Gets/Sets the local oscillator
+frequency
+
+Hide Hides the server window. This is a single word command.
+Show Shows the server window. This is a single word command.
+
+Mode Gets/Sets the current
+demodulation mode.
+See QSDEMODMODE in
+qs_defines.h below.
+
+SampleRate Gets/Sets the current sample
+rate.
+SupportedSampleRates Gets the supported sample rates
+
+
+
+
+
+
+
+
+
+*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
