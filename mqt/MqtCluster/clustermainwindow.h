@@ -82,7 +82,6 @@ const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
 
 
-
 //const int SPOT_IS_HF = -3;
 //const int SPOT_DATE_TIME_IS_INVALID = -1;
 //const int TOO_FEW_PARTS = -1;
@@ -147,7 +146,7 @@ private slots:
     void userCmdButtonWrite(int buttonNumber);
 
      void onClearAllSpots();
-     void getSpotsFromQueue();
+     void getSpotsFromDisplayQueue();
 
     void onSpotTabChanged(int index);
     void disconnectTimeout();
@@ -160,11 +159,14 @@ signals:
 private:
     Ui::ClusterMainWindow *ui;
     StdInReader stdinReader;
+
+
     class QTimer LogTimer;
     QTimer *disconnectTimer;
     QSharedPointer<HtmlDelegate> dxSpotViewDelegate;
     QSharedPointer<HtmlDelegate> sentSpotViewDelegate;
 
+    QTimer *startUpTimer;
 
     QString appName;
     QLabel* status;
@@ -326,6 +328,7 @@ private slots:
 
 
 
+    void startSendSpotsTimer();
 };
 
 #endif // CLUSTERMAINWINDOW_H

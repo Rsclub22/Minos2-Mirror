@@ -58,6 +58,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     traceMsg(QString("Starting"));
 
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpClusterTraceDebug, traceDebugFlag );
+
+
     int lcf;
     MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
     dxDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
@@ -234,6 +237,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setFocusPolicy(Qt::NoFocus);
 
     dxSpotProxyModel = new DxSpotSortFilterProxyModel(&filterSettings);
+    dxSpotProxyModel->traceDebugFlag = traceDebugFlag;
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
     //dxSpotProxyModel->setDynamicSortFilter(true);
@@ -653,6 +657,7 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
 void ClusterClientFrame::addDxSpotToTable(const QString spot)
 {
 
+    traceMsg(QString("addDXSpotToTable: %1").arg(spot));
     QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
     QStringList sl = spot.split(DXSPOT);
     if (sl.count() == 2)
@@ -725,7 +730,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                                                     spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
-
+            traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));
        }
     }
 
@@ -1800,13 +1805,31 @@ void ClusterClientFrame::mouseTimerCheckNewSpots()
 
 void ClusterClientFrame::traceMsg(QString msg)
 {
-    trace(QString("ClusterClientFrame %1").arg(msg));
+    trace(QString("[ClusterClientFrame] %1").arg(msg));
 }
 
 
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    return matchBand(sourceRow) && matchDistance(sourceRow) && matchMode(sourceRow) && matchWorkedLoc(sourceRow) && matchWorkedCallsign(sourceRow);
+    bool match_band = matchBand(sourceRow);
+    bool match_distance = matchDistance(sourceRow);
+    bool match_mode = matchMode(sourceRow);
+    bool match_WorkedLoc = matchWorkedLoc(sourceRow);
+    bool match_WorkedCallsign = matchWorkedCallsign(sourceRow);
+    bool matchFlag = match_band && match_distance && match_mode && match_WorkedLoc && match_WorkedCallsign;
+    if (traceDebugFlag)
+    {
+        trace(QString("[ClusterClientFrame] filter - callsign = %1, matchBand = %2, matchDistance = %3, matchmode = %4, matchWorkedLoc = %5, matchWorkedCallsign = %6, matchFlag = %7")
+            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString())
+            .arg(match_band ? "True" : "False")
+            .arg(match_distance ? "True" : "False")
+            .arg(match_mode ? "True" : "False")
+            .arg(match_WorkedLoc ? "True" : "False")
+            .arg(match_WorkedCallsign ? "True" : "False")
+            .arg(matchFlag ? "True" : "False"));
+
+    }
+    return matchFlag;
 }
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
