@@ -55,6 +55,8 @@ public:
     bool matchWorkedLoc(int sourceRow) const;
     bool matchWorkedCallsign(int sourceRow) const;
 
+    bool traceDebugFlag;
+
     void setUnworkedLocFlag(bool state);
 
 
@@ -189,6 +191,9 @@ private:
     QVector<QString> spotQueue;
     bool clusterServerLoaded;
     bool clusterServerConnected;
+
+    bool traceDebugFlag = false;
+
 
     DxSpotDataModel* dxSpotDataModel;
     DxSpotSortFilterProxyModel* dxSpotProxyModel;
