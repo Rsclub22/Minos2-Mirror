@@ -56,37 +56,37 @@ enum LOGGERPROFILE {
    elpPDFFile,
    elpAutoFill,
    elpAllowHF,
-    elpAddBandMapTuningTolerance,
-    elpDefaultFilterDistance_50MHz,
-    elpDefaultFilterDistance_70MHz,
-    elpDefaultFilterDistance_144MHz,
-    elpDefaultFilterDistance_432MHz,
-    elpDefaultFilterDistance_1296MHz,
-    elpDefaultFilterDistance_2300MHz,
-    elpDefaultFilterDistance_3_4GHz,
-    elpDefaultFilterDistance_5_6GHz,
-    elpDefaultFilterDistance_10GHz,
+   elpAddBandMapTuningTolerance,
+   elpDefaultFilterDistance_50MHz,
+   elpDefaultFilterDistance_70MHz,
+   elpDefaultFilterDistance_144MHz,
+   elpDefaultFilterDistance_432MHz,
+   elpDefaultFilterDistance_1296MHz,
+   elpDefaultFilterDistance_2300MHz,
+   elpDefaultFilterDistance_3_4GHz,
+   elpDefaultFilterDistance_5_6GHz,
+   elpDefaultFilterDistance_10GHz,
 
 
-    elpBandmapStartZoomLevel_50MHz,
-    elpBandmapStartZoomLevel_70MHz,
-    elpBandmapStartZoomLevel_144MHz,
-    elpBandmapStartZoomLevel_432MHz,
-    elpBandmapStartZoomLevel_1296MHz,
-    elpBandmapStartZoomLevel_2300MHz,
-    elpBandmapStartZoomLevel_3_4GHz,
-    elpBandmapStartZoomLevel_5_6GHz,
-    elpBandmapStartZoomLevel_10GHz,
+   elpBandmapStartZoomLevel_50MHz,
+   elpBandmapStartZoomLevel_70MHz,
+   elpBandmapStartZoomLevel_144MHz,
+   elpBandmapStartZoomLevel_432MHz,
+   elpBandmapStartZoomLevel_1296MHz,
+   elpBandmapStartZoomLevel_2300MHz,
+   elpBandmapStartZoomLevel_3_4GHz,
+   elpBandmapStartZoomLevel_5_6GHz,
+   elpBandmapStartZoomLevel_10GHz,
 
-    elpContestStartIgnorePresetFreq,
-    elpContestChangeIgnorePreviousFreq,
-    elpContestChangeRestoreContestMode,
+   elpContestStartIgnorePresetFreq,
+   elpContestChangeIgnorePreviousFreq,
+   elpContestChangeRestoreContestMode,
 
-    elpBandMapTurnOffOperatingFreqStrip,
-    elpBandMapFollowRadioModeOperatingFreqStrip,
+   elpBandMapTurnOffOperatingFreqStrip,
+   elpBandMapFollowRadioModeOperatingFreqStrip,
 
-    elpBandMapTraceDebug
-
+   elpBandMapTraceDebug,
+   elpClusterTraceDebug
 
 
 };

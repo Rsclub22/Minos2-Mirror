@@ -667,24 +667,6 @@ void RigControlMainWindow::upDateRadio()
 
                 ui->radioNameDisp->setText(setupRadio->currentRadio.radioName);
 
-                if (appName.count() > 0)
-                {
-                    logMessage(QString("Update Radio: Logger Set Freq = %1, Set Mode = %2").arg(selRadioFreq).arg(selRadioMode));
-                    loggerSetFreq(selRadioFreq);
-                    loggerSetMode(selRadioMode);
-                }
-                else
-                {
-
-                    logMessage(QString("Update Radio: Set Mode USB Standalone"));
-                    // initialise rig state
-
-                    slogMode = USB_STR;
-                    // set mode
-                    setMode(USB_STR, curVfo);
-                }
-
-
 
                 // if it is a rigctld model, then use the radio model number connected to rigctld
 
@@ -765,6 +747,25 @@ void RigControlMainWindow::upDateRadio()
                     clearSupportRitFlags();
 
                 }
+
+
+                if (appName.count() > 0)
+                {
+                    logMessage(QString("Update Radio: Logger Set Freq = %1, Set Mode = %2").arg(selRadioFreq).arg(selRadioMode));
+                    loggerSetFreq(selRadioFreq);
+                    loggerSetMode(selRadioMode);
+                }
+                else
+                {
+
+                    logMessage(QString("Update Radio: Set Mode USB Standalone"));
+                    // initialise rig state
+
+                    slogMode = USB_STR;
+                    // set mode
+                    setMode(USB_STR, curVfo);
+                }
+
 
 
                 getRadioInfo(DONT_PUBLISH_NOW);
@@ -1339,6 +1340,7 @@ void RigControlMainWindow::closeRadio()
     if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).pollData)
     {
         pollTimer->stop();
+
     }
     else
     {
@@ -1351,8 +1353,6 @@ void RigControlMainWindow::closeRadio()
         }
 
     }
-
-
 
     int retCode;
 

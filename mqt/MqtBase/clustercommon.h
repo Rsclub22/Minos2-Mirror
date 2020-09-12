@@ -361,6 +361,7 @@ void setModeFilter(bool setting, int mode)
 
 bool testDistanceFilter(int distance, int band)
 {
+
     if (distance < *distanceFilters[band] || *distanceFilters[band] == 0)
     {
         return true;
