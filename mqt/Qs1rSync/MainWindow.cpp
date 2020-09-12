@@ -12,7 +12,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    n1mmLink(parent)
 {
     ui->setupUi(this);
 
@@ -28,6 +29,9 @@ MainWindow::MainWindow(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    bool trackBand = settings.value("trackBand", false).toBool();
+    ui->trackBandcb->setChecked(trackBand);
+
     lastF = "OK\r\n"
             "fHz=28123456\r\n"
             "tf=-123456\r\n";
@@ -38,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         QString temp = lastF.mid(fOffset + 4, tfOffset - fOffset - 4);
         int l = temp.length();
-        while ((temp[l] == '\r') || (temp[l] == '\n'))
+        while (l > 0 && ((temp[l - 1] == '\r') || (temp[l - 1] == '\n')))
         {
             temp = temp.right(l - 1);
             l = temp.length();
@@ -46,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent) :
         fCentre = temp.toInt();
         temp = lastF.mid(tfOffset + 3, 100);
         l = temp.length();
-        while ((temp[l] == '\r') || (temp[l] == '\n'))
+        while (l > 0 && ((temp[l - 1] == '\r') || (temp[l - 1] == '\n')))
         {
             temp = temp.right( l - 1);
             l = temp.length();
@@ -92,6 +96,8 @@ MainWindow::MainWindow(QWidget *parent) :
         rpc->subscribeRemote( servers[i], rpcConstants::rigDetailsCategory );
         rpc->subscribeRemote( servers[i], rpcConstants::rigStateCategory );
     }
+
+    n1mmLink.initialise();
 }
 
 MainWindow::~MainWindow()
@@ -142,7 +148,6 @@ void MainWindow::SyncTimerTimer(  )
             close();
         }
     }
-    ui->QF1Label->setText(convertFreqToStr(freq));
     if (qs1rConnected)
     {
         ui->QS1RFLabel->setText(lastF);
@@ -151,6 +156,13 @@ void MainWindow::SyncTimerTimer(  )
     {
         ui->QS1RFLabel->setText("Not connected");
     }
+
+    if (n1mmLink.isConnected())
+    {
+        freq = convertStrToFreq(n1mmLink.getFrequency());
+        ui->Rig1Label->setText(n1mmLink.getRadioName());
+    }
+    ui->QF1Label->setText(convertFreqToStr(freq));
 }
 
 
@@ -248,26 +260,33 @@ void MainWindow::on_transfer21Button_clicked()
 {
     long lFreq = fCentre + ftf;
 
-    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
-
-    QStringList qsl = rigCache.getSelectedLoggers(rigSelected);
-    if (qsl.count())
+    if (n1mmLink.isConnected())
     {
-        QString loggerUuid = qsl[0];
+        n1mmLink.sendFrequencyRequest(lFreq);
+    }
+    else
+    {
+        RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-        st->addMember( logger, rpcConstants::loggerUuid );
+        QStringList qsl = rigCache.getSelectedLoggers(rigSelected);
+        if (qsl.count())
+        {
+            QString loggerUuid = qsl[0];
 
-        QString selc = rigCache.getSelectedContest(rigSelected, loggerUuid);
+            QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+            st->addMember( logger, rpcConstants::loggerUuid );
 
-        QSharedPointer<RPCParam>select(new RPCStringParam(selc ));
-        st->addMember( select, rpcConstants::selected );
+            QString selc = rigCache.getSelectedContest(rigSelected, loggerUuid);
 
-        st->addMember( convertFreqToStr(lFreq + transvertOffset), rpcConstants::rigControlLogFreq );
-        rpc.getCallArgs() ->addParam( st );
+            QSharedPointer<RPCParam>select(new RPCStringParam(selc ));
+            st->addMember( select, rpcConstants::selected );
 
-        rpc.queueCall( rigSelected);
+            st->addMember( convertFreqToStr(lFreq + transvertOffset), rpcConstants::rigControlLogFreq );
+            rpc.getCallArgs() ->addParam( st );
+
+            rpc.queueCall( rigSelected);
+        }
     }
 }
 
@@ -361,4 +380,10 @@ void MainWindow::on_trackQS1R_clicked()
 {
     // set rig to QS1R
     on_transfer21Button_clicked();
+}
+
+void MainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
+{
+    QSettings settings;
+    settings.setValue("trackBand", ui->trackBandcb->isChecked());
 }

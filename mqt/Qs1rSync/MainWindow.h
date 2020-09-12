@@ -3,6 +3,7 @@
 
 #include "base_pch.h"
 #include "RigCache.h"
+#include "n1mmlink.h"
 
 namespace Ui {
 class MainWindow;
@@ -42,9 +43,12 @@ private slots:
     void on_trackQS1R_clicked();
 
     void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
+    void on_trackBandcb_stateChanged(int);
+
 private:
     Ui::MainWindow *ui;
     RigCache rigCache;
+    N1MMLink n1mmLink;
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;

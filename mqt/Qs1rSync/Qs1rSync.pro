@@ -18,10 +18,12 @@ win32:RC_ICONS += ../minos.ico
 
 SOURCES += \
         main.cpp \
-        MainWindow.cpp
+        MainWindow.cpp \
+        n1mmlink.cpp
 
 HEADERS += \
         MainWindow.h \
+        n1mmlink.h \
         qs_defines.h
 
 FORMS += \

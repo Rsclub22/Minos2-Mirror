@@ -102,6 +102,13 @@
          </spacer>
         </item>
         <item>
+         <widget class="QCheckBox" name="trackBandcb">
+          <property name="text">
+           <string>Track band</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="closeButton">
           <property name="text">
            <string>Close</string>
