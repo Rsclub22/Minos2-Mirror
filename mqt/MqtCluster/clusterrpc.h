@@ -29,9 +29,11 @@ public:
     void publishState(const QString &raw, const QString &state);
 
     void publishTXEnable(const QString txOnOff);
+    void sendDXSpotToClient(QString spot, ClusterServer s);
 signals:
 
     void sendSpotToDXCluster(QString, QString, QString);
+    void newClusterClient(ClusterServer);
 
 private slots:
     void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &);

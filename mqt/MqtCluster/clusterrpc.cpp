@@ -39,13 +39,28 @@ void Clusterrpc::sendDXSpot(QString spot)
     // We need to send the message to all connected cluster clients, except the spot server
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
+
+        sendDXSpotToClient(spot, *i);
+ /*
         trace(QString("SendDxSpot to station = %1").arg((*i).app));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( spot, rpcConstants::sendClusterSpot );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( (*i).app );
+ */
     }
+}
+
+void Clusterrpc::sendDXSpotToClient(QString spot, ClusterServer s)
+{
+    trace(QString("SendDXSpot to station = %1").arg(s.app));
+    RPCGeneralClient rpc(rpcConstants::clusterMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+    st->addMember( spot, rpcConstants::sendClusterSpot );
+    rpc.getCallArgs() ->addParam( st );
+    rpc.queueCall( s.app );
+
 }
 
 void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
@@ -153,6 +168,8 @@ void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
                 serverList.push_back( s );
                 QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()] + " and added";
                 trace(mess);
+                emit newClusterClient(s);
+
 
             }
         }

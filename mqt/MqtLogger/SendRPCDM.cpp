@@ -582,7 +582,7 @@ void TSendDM::notifyRotChanges()
                 }
                 if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
                 {
-                    traceMsg(QString("Rotator set presets = %1").arg(rotatorCache.getRotatorPresets(rotSelected)).arg(selStateUuid));
+                    traceMsg(QString("Rotator set presets = %1 - %2").arg(rotatorCache.getRotatorPresets(rotSelected)).arg(selStateUuid));
                     tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
                 }
             }

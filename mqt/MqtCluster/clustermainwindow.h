@@ -311,6 +311,7 @@ private:
     void addSentSpotToDisplayQueue(bool spotStatus, QString reason);
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
+    QString getSpotFromDisplayDb(int row);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
     void getSpotsFromSendQueue();
@@ -328,7 +329,8 @@ private slots:
 
 
 
-    void startSendSpotsTimer();
+    //void startSendSpotsTimer();
+    void onNewClusterClient(ClusterServer s);
 };
 
 #endif // CLUSTERMAINWINDOW_H
