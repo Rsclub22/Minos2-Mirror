@@ -786,9 +786,9 @@ The computed mode is %9
     <message>
         <location filename="../clusterclientframe.ui" line="45"/>
         <location filename="../clusterclientframe.cpp" line="51"/>
-        <location filename="../clusterclientframe.cpp" line="1260"/>
-        <location filename="../clusterclientframe.cpp" line="1287"/>
-        <location filename="../clusterclientframe.cpp" line="1748"/>
+        <location filename="../clusterclientframe.cpp" line="1265"/>
+        <location filename="../clusterclientframe.cpp" line="1292"/>
+        <location filename="../clusterclientframe.cpp" line="1753"/>
         <source>Cluster</source>
         <translation type="unfinished"></translation>
     </message>
@@ -838,67 +838,67 @@ The computed mode is %9
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="100"/>
+        <location filename="../clusterclientframe.cpp" line="103"/>
         <source>Set &amp;Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="101"/>
+        <location filename="../clusterclientframe.cpp" line="104"/>
         <source>Set &amp;Bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="102"/>
+        <location filename="../clusterclientframe.cpp" line="105"/>
         <source>Send &amp;Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="103"/>
+        <location filename="../clusterclientframe.cpp" line="106"/>
         <source>Send &amp;Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="104"/>
+        <location filename="../clusterclientframe.cpp" line="107"/>
         <source>Clear &amp;Spot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="105"/>
+        <location filename="../clusterclientframe.cpp" line="108"/>
         <source>Clear &amp;All Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="241"/>
+        <location filename="../clusterclientframe.cpp" line="245"/>
         <source>DX Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="288"/>
+        <location filename="../clusterclientframe.cpp" line="292"/>
         <source>Search Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="335"/>
+        <location filename="../clusterclientframe.cpp" line="339"/>
         <source>Callsign Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="382"/>
+        <location filename="../clusterclientframe.cpp" line="386"/>
         <source>Locator Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1261"/>
+        <location filename="../clusterclientframe.cpp" line="1266"/>
         <source>Please confirm you want to delete this spot?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1288"/>
+        <location filename="../clusterclientframe.cpp" line="1293"/>
         <source>Please confirm you want to delete all the spots in the %1 tab?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1752"/>
+        <location filename="../clusterclientframe.cpp" line="1757"/>
         <source> - Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
