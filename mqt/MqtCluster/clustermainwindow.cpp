@@ -76,7 +76,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     spotsList.clear();
     getSpotsTimer = new QTimer();
-    connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromQueue()));
+    connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromDisplayQueue()));
     getSpotsTimer->start(1000);
 
 
@@ -136,7 +136,10 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     sendSpotsTimer = new QTimer();
     connect(sendSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromSendQueue()));
-    sendSpotsTimer->start(SEND_SPOTS_DUR);
+
+    // delay polling for spot to send to client, to allow clients to connect
+    QTimer::singleShot(15000, this, SLOT(startSendSpotsTimer()));
+
 
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
@@ -308,6 +311,12 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
 }
 
+
+void ClusterMainWindow::startSendSpotsTimer()
+{
+    sendSpotsTimer->start(SEND_SPOTS_DUR);
+
+}
 
 
 void ClusterMainWindow::clusterListChanged()
@@ -1115,16 +1124,30 @@ QString ClusterMainWindow::createStatusToSend(QString status)
 
 void ClusterMainWindow::getSpotsFromSendQueue()
 {
-    if (!sendSpotsQueue.isEmpty())
+    if (clusterRpc->getServerListCount() > 0)
     {
-        // get spots from queue and send to client
-        while (sendSpotsQueue.count() > 0)
+        if (!sendSpotsQueue.isEmpty())
         {
-            trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsQueue.count()).arg(sendSpotsQueue[0]));
-            clusterRpc->sendDXSpot(sendSpotsQueue[0]);
-            sendSpotsQueue.removeFirst();
+            // get spots from queue and send to client
+            trace(QString("getSpotsFromSendQueue: spots available = %1").arg(sendSpotsQueue.count()));
+            while (sendSpotsQueue.count() > 0)
+            {
+                trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsQueue.count()).arg(sendSpotsQueue[0]));
+                clusterRpc->sendDXSpot(sendSpotsQueue[0]);
+                sendSpotsQueue.removeFirst();
+            }
         }
     }
+    else
+    {
+        trace(QString("getSpotsFromSendQueue: no clients connected!"));
+        if (sendSpotsQueue.count() > 200)
+        {
+            trace(QString("getSpotsFromSendQueue: *** connection problem with client, spots in queue = %1, clearing queue").arg(sendSpotsQueue.count()));
+            sendSpotsQueue.clear();
+        }
+    }
+
 
 }
 
@@ -1133,11 +1156,11 @@ void ClusterMainWindow::getSpotsFromSendQueue()
 
 
 // this is the queue of spots for display
-void ClusterMainWindow::getSpotsFromQueue()
+void ClusterMainWindow::getSpotsFromDisplayQueue()
 {
     if (!spotsList.isEmpty())
     {
-        trace(QString("GetSpotsFromQueue: spots available = %1").arg(spotsList.count()));
+        trace(QString("GetSpotsFromDisplayQueue: spots available = %1").arg(spotsList.count()));
         // get spots from queue
         int slsize= spotsList.count();
         for (int i = slsize -1 ; i > -1; i--)
@@ -1145,7 +1168,7 @@ void ClusterMainWindow::getSpotsFromQueue()
 
             if (purgeSpotFlag)
             {
-                trace(QString("GetSpotsFromQueue: PurgeFlag On"));
+                trace(QString("GetSpotsFromDisplayQueue: PurgeFlag On"));
                 return;
             }
 
@@ -1153,12 +1176,12 @@ void ClusterMainWindow::getSpotsFromQueue()
             spotsList.remove(i);
             //dxSpotDataModel->insertRows(0, 1);
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
-            trace(QString("GetSpotsFromQueue: finished loop"));
+            trace(QString("GetSpotsFromDisplayQueue: finished loop"));
 
 
         }
 
-        trace(QString("GetSpotsFromQueue: finished"));
+        trace(QString("GetSpotsFromDisplayQueue: finished"));
     }
 }
 

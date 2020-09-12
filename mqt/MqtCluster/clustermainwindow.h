@@ -146,7 +146,7 @@ private slots:
     void userCmdButtonWrite(int buttonNumber);
 
      void onClearAllSpots();
-     void getSpotsFromQueue();
+     void getSpotsFromDisplayQueue();
 
     void onSpotTabChanged(int index);
     void disconnectTimeout();
@@ -159,11 +159,14 @@ signals:
 private:
     Ui::ClusterMainWindow *ui;
     StdInReader stdinReader;
+
+
     class QTimer LogTimer;
     QTimer *disconnectTimer;
     QSharedPointer<HtmlDelegate> dxSpotViewDelegate;
     QSharedPointer<HtmlDelegate> sentSpotViewDelegate;
 
+    QTimer *startUpTimer;
 
     QString appName;
     QLabel* status;
@@ -325,6 +328,7 @@ private slots:
 
 
 
+    void startSendSpotsTimer();
 };
 
 #endif // CLUSTERMAINWINDOW_H
