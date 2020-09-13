@@ -286,7 +286,7 @@ private slots:
 
     void sendBandmapRadioIsConnected(bool state);
     void sendBandmapRadioHasError(QString error);
-    void on_SendRequestSpotsResentFromClusterServer(QString cmd);
+    void on_ResendSpotsFromClusterCommand(QString cmd);
 public:
     void on_SetTransVertOffset(double offset, PubSubName psn);
     void on_SetTransVertSwitch(int switchNum, PubSubName psn);

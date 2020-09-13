@@ -104,7 +104,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
           QString cmd;
           if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd))
           {
-              if (psLoc->getString(cmd))
+              if (resendSpotCmd->getString(cmd))
               {
                   trace(QString("Cluster RPC: resendspots commnd to cluster = %1").arg(cmd));
               }

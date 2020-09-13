@@ -283,6 +283,12 @@ private:
 
     void setUnWorkedCallsignsCheckBoxVisible(bool state);
     void setUnworkedCheckboxesVisible(bool state);
+    bool checkDbRowForMatch(QString incomingVal, int row, const int colNum);
+    bool checkDbRowForMatch(qint64 incomingVal, int row, const int colNum);
+    bool checkDbRowForMatch(bool incomingVal, int row, const int colNum);
+
+    bool checkSpotMatchonRow(SpotData *spotData, int row);
+    bool checkspotExists(SpotData *spotData);
 private slots:
 
     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
@@ -329,6 +335,8 @@ private slots:
     void on_doSplitterChanges(BaseContestLog *);
     void on_unworkedLocCheckBox(int state);
     void on_unworkedCallsignsCheckBox(int state);
+    void requestSpots();
+    void on_pushbuttonClicked();  //*************** test remove
 };
 
 class MouseInObject : public QObject
