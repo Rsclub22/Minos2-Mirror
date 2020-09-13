@@ -198,12 +198,12 @@ private:
     SetupDialog *setupCluster;
 
     QVector<SpotData*> spotsList;
-    QTimer* getSpotsTimer;
+    //QTimer* getSpotsTimer;
 
-    QStringList sendSpotsQueue;
-    QTimer* sendSpotsTimer;
+    QStringList sendSpotsToClientQueue;
+    QTimer* sendSpotsToClientTimer;
 
-
+    QList<QString> resendSpotsToClientQueue;
 
     QString currentNodeName;
     QString currentAddress;
@@ -312,12 +312,17 @@ private:
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
     QString getSpotFromDisplayDb(int row);
+    void resendAllSpotsToClients();
+    void handleResendSpotToClientsCmds();
+    QString createResendSpotToSend(QString spot);
+    void getSpotsFromSendToClientQueue();
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
-    void getSpotsFromSendQueue();
+
     void clusterListChanged();
     void about();
     void handleStatusTimer();
+    void onResendSpotToClients(QString);
 
 
 #ifdef TEST_SPOTS
@@ -329,8 +334,9 @@ private slots:
 
 
 
-    //void startSendSpotsTimer();
-    void onNewClusterClient(ClusterServer s);
+
+
+    void getSpotsToSendToClientQueues();
 };
 
 #endif // CLUSTERMAINWINDOW_H

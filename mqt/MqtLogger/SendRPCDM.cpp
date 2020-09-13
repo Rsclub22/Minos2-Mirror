@@ -178,6 +178,26 @@ void TSendDM::sendSpotToClusterServer( const QString &freq, const QString &call,
 }
 
 
+void TSendDM::sendRequestSpotsResentFromClusterServer( const QString &cmd )
+{
+
+    if (!clusterApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::clusterMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::clusterResendSpots));
+        QSharedPointer<RPCParam>resendCmd(new RPCStringParam(cmd));
+
+        st->addMember( sName, rpcConstants::paramName );
+        st->addMember( resendCmd, rpcConstants::clusterResendSpotsCmd );
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( clusterApp  );
+    }
+
+
+}
+
+
 void TSendDM::sendRotator(TSingleLogFrame *tslf, rpcConstants::RotateDirection direction, int angle )
 {
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);

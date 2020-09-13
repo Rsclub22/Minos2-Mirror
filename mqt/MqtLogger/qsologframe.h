@@ -283,6 +283,7 @@ signals:
     void sendFreqControl(QString);
     void freqChanged(QString);
     void sendSpotToClusterServer(QString, QString, QString);
+    void sendRequestResendSpotsToClusterServer(QString);
 
 private slots:
     void focusChange(QObject *, bool, QFocusEvent *event);

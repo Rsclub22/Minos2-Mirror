@@ -116,6 +116,7 @@ const QString DXSPOT = "DXSPOT:";
 //const QString TIMETOLIVE = "TIMETOLIVE:";
 const QString CLUSTER_STATUS = "CLUSTER_STATUS!";
 const QChar CLUSTER_STAT_DELIMITER = '!';
+const QString RESENTSPOT = "RESENTSPOT:";
 
 // Filter entry delimiter
 const QChar FILTER_DELIMITER = ',';
@@ -154,6 +155,10 @@ const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: yellow ;\
 const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ;\n");
 const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yellow;\n");
 const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
+
+// resend clusterspots to client commands
+const QString RESEND_ALL_SPOTS = "resendAll";
+
 
 
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);

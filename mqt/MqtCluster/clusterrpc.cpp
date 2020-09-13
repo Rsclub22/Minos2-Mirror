@@ -40,28 +40,17 @@ void Clusterrpc::sendDXSpot(QString spot)
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
 
-        sendDXSpotToClient(spot, *i);
- /*
         trace(QString("SendDxSpot to station = %1").arg((*i).app));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( spot, rpcConstants::sendClusterSpot );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( (*i).app );
- */
+
     }
 }
 
-void Clusterrpc::sendDXSpotToClient(QString spot, ClusterServer s)
-{
-    trace(QString("SendDXSpot to station = %1").arg(s.app));
-    RPCGeneralClient rpc(rpcConstants::clusterMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
-    st->addMember( spot, rpcConstants::sendClusterSpot );
-    rpc.getCallArgs() ->addParam( st );
-    rpc.queueCall( s.app );
 
-}
 
 void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
@@ -70,41 +59,60 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
    if ( !err )
    {
       QSharedPointer<RPCParam> psName;
-      QSharedPointer<RPCParam>piValue;
       QSharedPointer<RPCParam> psFreq;
       QSharedPointer<RPCParam> psCall;
       QSharedPointer<RPCParam> psLoc;
+      QSharedPointer<RPCParam> resendSpotCmd;
       RPCArgs *args = mro->getCallArgs();
 
-      QString freq;
-      QString call;
-      QString loc;
-
-
-      if (args->getStructArgMember(0, rpcConstants::txSpotParamFreq, psFreq))
+      QString paraName;
+      args->getStructArgMember(0, rpcConstants::paramName, psName);
+      psName->getString(paraName);
+      if (paraName == rpcConstants::txSpotToCluster)
       {
-          if (psFreq->getString(freq))
+          QString freq;
+          QString call;
+          QString loc;
+
+          if (args->getStructArgMember(0, rpcConstants::txSpotParamFreq, psFreq))
           {
-              trace(QString("Cluster RPC: freq to send to cluster = %1").arg(freq));
+              if (psFreq->getString(freq))
+              {
+                  trace(QString("Cluster RPC: freq to send to cluster = %1").arg(freq));
+              }
           }
-      }
-      if (args->getStructArgMember(0, rpcConstants::txSpotParamCallsign, psCall))
-      {
-          if (psCall->getString(call))
+          if (args->getStructArgMember(0, rpcConstants::txSpotParamCallsign, psCall))
           {
-              trace(QString("Cluster RPC: callsign to send to cluster = %1").arg(call));
+              if (psCall->getString(call))
+              {
+                  trace(QString("Cluster RPC: callsign to send to cluster = %1").arg(call));
+              }
           }
-      }
-      if (args->getStructArgMember(0, rpcConstants::txSpotParamLocator, psLoc))
-      {
-          if (psLoc->getString(loc))
+          if (args->getStructArgMember(0, rpcConstants::txSpotParamLocator, psLoc))
           {
-              trace(QString("Cluster RPC: locator to send to cluster = %1").arg(loc));
+              if (psLoc->getString(loc))
+              {
+                  trace(QString("Cluster RPC: locator to send to cluster = %1").arg(loc));
+              }
+
           }
 
+          emit sendSpotToDXCluster(freq, call, loc);
+      }
+      else if (paraName == rpcConstants::clusterResendSpots)
+      {
+          QString cmd;
+          if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd))
+          {
+              if (psLoc->getString(cmd))
+              {
+                  trace(QString("Cluster RPC: resendspots commnd to cluster = %1").arg(cmd));
+              }
+
+          }
+          emit resendSpotToClients(cmd);
       }
 
-      emit sendSpotToDXCluster(freq, call, loc);
 
       mro->clearCallArgs();
       QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -168,8 +176,6 @@ void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
                 serverList.push_back( s );
                 QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()] + " and added";
                 trace(mess);
-                emit newClusterClient(s);
-
 
             }
         }

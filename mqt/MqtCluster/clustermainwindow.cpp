@@ -75,9 +75,9 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     LogTimer.start(100);
 
     spotsList.clear();
-    getSpotsTimer = new QTimer();
-    connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromDisplayQueue()));
-    getSpotsTimer->start(1000);
+    //getSpotsTimer = new QTimer();
+    //connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromDisplayQueue()));
+    //getSpotsTimer->start(1000);
 
 
     setWindowTitle(tr("Minos Cluster Server"));
@@ -132,15 +132,12 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     clusterRpc = new Clusterrpc();
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(QString, QString, QString)), this, SLOT(sendSpotToDXCluster(QString, QString, QString)));
+    connect(clusterRpc, SIGNAL(resendSpotToClients(QString)), this, SLOT(onResendSpotToClients(QString)));
 
 
-    sendSpotsTimer = new QTimer();
-    connect(sendSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromSendQueue()));
-    sendSpotsTimer->start(SEND_SPOTS_DUR);
-
-    // delay polling for spot to send to client, to allow clients to connect
-    //QTimer::singleShot(15000, this, SLOT(startSendSpotsTimer()));
-
+    sendSpotsToClientTimer = new QTimer();
+    connect(sendSpotsToClientTimer, SIGNAL(timeout()), this, SLOT(getSpotsToSendToClientQueues()));
+    sendSpotsToClientTimer->start(SEND_SPOTS_DUR);
 
     client = new QtTelnet(parent);
     dxCluster = new Cluster();
@@ -309,7 +306,6 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
-    connect(clusterRpc, SIGNAL(newClusterClient(ClusterServer)), this, SLOT(onNewClusterClient(ClusterServer)));
 
 
 }
@@ -917,7 +913,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                         {
                             // send spot to clients if spotter isn't this station
                             trace(QString("ParseDx: Spotter not this station, pass to clients"));
-                            sendSpotsQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
+                            sendSpotsToClientQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
                                                                    .arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(dxPropMode).arg(setupCluster->getTimeToLive())));
                         }
                         else
@@ -1111,15 +1107,41 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QString &spotCall)
 }
 
 
-void ClusterMainWindow::onNewClusterClient(ClusterServer s)
+void ClusterMainWindow::onResendSpotToClients(QString cmd)
 {
-    // new ClusterClient connected send the spots in the database
-    trace(QString("newClusterClient Connected = %1").arg(s.app));
+
+    resendSpotsToClientQueue.append(cmd);
+
+}
+
+
+void ClusterMainWindow::handleResendSpotToClientsCmds()
+{
+
+    if (!resendSpotsToClientQueue.isEmpty())
+    {
+
+        for (int i = 0; i < resendSpotsToClientQueue.count(); i++)
+        {
+            if (resendSpotsToClientQueue[i] == RESEND_ALL_SPOTS)
+            {
+               resendAllSpotsToClients();
+
+            }
+        }
+
+        resendSpotsToClientQueue.clear();
+    }
+}
+
+void ClusterMainWindow::resendAllSpotsToClients()
+{
     if (dxSpotDataModel->rowCount() > 0)
     {
         for (int i = 0; i < dxSpotDataModel->rowCount(); i ++)
         {
-            clusterRpc->sendDXSpotToClient(getSpotFromDisplayDb(i), s);
+            QString spot = createResendSpotToSend(getSpotFromDisplayDb(i));
+            clusterRpc->sendDXSpot(spot);
 
         }
     }
@@ -1145,9 +1167,9 @@ QString ClusterMainWindow::getSpotFromDisplayDb(int row)
     QString spotComment = dxSpotDataModel->data(dxSpotDataModel->index(row, COMMENT_COL_NUM), DataStoredRole).toString();
     QString dxPropMode = dxSpotDataModel->data(dxSpotDataModel->index(row, DXSPOT_PROP_MODE_COL_NUM), DataStoredRole).toString();
 
-    return createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr)
+    return QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr)
                     .arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
-                    .arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(dxPropMode).arg(setupCluster->getTimeToLive()));
+                    .arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(dxPropMode).arg(setupCluster->getTimeToLive());
 
 
 }
@@ -1164,19 +1186,38 @@ QString ClusterMainWindow::createStatusToSend(QString status)
     return CLUSTER_STATUS + status;
 }
 
-void ClusterMainWindow::getSpotsFromSendQueue()
+QString ClusterMainWindow::createResendSpotToSend(QString spot)
+{
+    return RESENTSPOT + spot;
+}
+
+
+void ClusterMainWindow::getSpotsToSendToClientQueues()
+{
+    getSpotsFromDisplayQueue();
+
+    getSpotsFromSendToClientQueue();
+
+    handleResendSpotToClientsCmds();
+
+
+}
+
+
+
+void ClusterMainWindow::getSpotsFromSendToClientQueue()
 {
 
-        if (!sendSpotsQueue.isEmpty())
+        if (!sendSpotsToClientQueue.isEmpty())
         {
 
             // get spots from queue and send to client
-            trace(QString("getSpotsFromSendQueue: spots available = %1").arg(sendSpotsQueue.count()));
-            while (sendSpotsQueue.count() > 0)
+            trace(QString("getSpotsFromSendQueue: spots available = %1").arg(sendSpotsToClientQueue.count()));
+            while (sendSpotsToClientQueue.count() > 0)
             {
-                trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsQueue.count()).arg(sendSpotsQueue[0]));
-                clusterRpc->sendDXSpot(sendSpotsQueue[0]);
-                sendSpotsQueue.removeFirst();
+                trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsToClientQueue.count()).arg(sendSpotsToClientQueue[0]));
+                clusterRpc->sendDXSpot(sendSpotsToClientQueue[0]);
+                sendSpotsToClientQueue.removeFirst();
             }
         }
 

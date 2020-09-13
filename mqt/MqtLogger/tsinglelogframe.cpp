@@ -143,6 +143,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     // to cluster server
     connect(GJVQSOLogFrame, SIGNAL(sendSpotToClusterServer(QString, QString, QString)), this, SLOT(on_SendSpotToClusterServer(QString, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(sendRequestResendSpotsToClusterServer(QString)), this, SLOT(on_SendRequestSpotsResentFromClusterServer(QString)));
 
     // from cluster server
     connect(LogContainer->sendDM, SIGNAL(setClusterServerLoaded()),this, SLOT(on_clusterServerLoaded()));
@@ -1103,6 +1104,17 @@ void TSingleLogFrame::on_SendSpotToClusterServer(QString freq, QString callsign,
         LogContainer->sendDM->sendSpotToClusterServer(freq, callsign, loc);
     }
 }
+
+void TSingleLogFrame::on_SendRequestSpotsResentFromClusterServer(QString cmd)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendRequestSpotsResentFromClusterServer(cmd );
+    }
+}
+
+
+
 
 void TSingleLogFrame::transferDetails(memoryData::memData &m )
 {
