@@ -289,12 +289,13 @@ private:
 
     bool checkSpotMatchonRow(SpotData *spotData, int row);
     bool checkspotExists(SpotData *spotData);
+
 private slots:
 
     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
 
     void clusterClientServerList(QVector<ClusterServer>);
-    void dxSpots(QVector<QString>);
+    void dxSpots(QVector<ClusterMessage>);
     void on_FontChanged();
     void filterButtonSelected();
     void purgeSpots();
@@ -336,7 +337,7 @@ private slots:
     void on_unworkedLocCheckBox(int state);
     void on_unworkedCallsignsCheckBox(int state);
     void requestSpots();
-    void on_pushbuttonClicked();  //*************** test remove
+    void on_pushbuttonPressed();  //*************** test remove
 };
 
 class MouseInObject : public QObject

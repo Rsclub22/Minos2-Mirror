@@ -172,6 +172,21 @@ void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dx
 
 void getBand(QVector<BandDetail> &bands, QString freq, QString &band, QString &bandMask);
 
+class ClusterMessage
+{
+public:
+    void setMessage(QString msg){message = msg;}
+    QString getMessage(){return message;}
+
+    void setLoggerUuid(QString uuid){loggerUuid = uuid;}
+    QString getLoggerUuid(){return loggerUuid;}
+
+private:
+    QString message;
+    QString loggerUuid;
+};
+
+
 class ClusterClientFilterSettings
 {
 

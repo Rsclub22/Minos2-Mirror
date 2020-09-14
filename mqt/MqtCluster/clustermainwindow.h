@@ -312,17 +312,21 @@ private:
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
     QString getSpotFromDisplayDb(int row);
-    void resendAllSpotsToClients();
+
     void handleResendSpotToClientsCmds();
-    QString createResendSpotToSend(QString spot);
+
     void getSpotsFromSendToClientQueue();
+    void resendAllSpotsToClients(QString cmd);
+
+    QString createResendSpotToSend(QString spot);
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
     void clusterListChanged();
     void about();
     void handleStatusTimer();
-    void onResendSpotToClients(QString);
+    void onResendSpotToClients(QString cmd, QString loggerUuid);
 
 
 #ifdef TEST_SPOTS

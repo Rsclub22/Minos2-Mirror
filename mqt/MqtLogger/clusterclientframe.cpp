@@ -84,7 +84,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect (checkNewFilters, SIGNAL(timeout()), this, SLOT(checkSavedFilters()));
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
-    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
+    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<ClusterMessage>)), this, SLOT(dxSpots(QVector<ClusterMessage>)));
 
     connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
 
@@ -188,8 +188,15 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
     //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
-    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(on_pushbuttonClicked()));
-    QTimer::singleShot(2000, this, SLOT(requestSpots()));
+    connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(on_pushbuttonPressed()));
+
+
+    if (!isProtected)
+    {
+        QTimer::singleShot(1000, this, SLOT(requestSpots()));
+        //requestSpots();
+    }
+
 
 
 
@@ -209,16 +216,20 @@ ClusterClientFrame::~ClusterClientFrame()
 
 }
 
-void ClusterClientFrame::on_pushbuttonClicked()
+void ClusterClientFrame::on_pushbuttonPressed()
 {
-    MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS);
+    MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, ct->uuid);
 }
 
 
 void ClusterClientFrame::requestSpots()
 {
-    MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS);
+
+    MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, ct->uuid);
+
 }
+
+
 
 
 void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs, QString loc)
@@ -287,7 +298,8 @@ void ClusterClientFrame::setupDXSpotView()
     //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-
+    dxSpotView->setColumnHidden(DATE_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 }
 
 
@@ -329,6 +341,8 @@ void ClusterClientFrame::setupSearchSpotView()
     //searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
+    searchView->setColumnHidden(DATE_COL_NUM, true);
+    searchView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 
 
 
@@ -379,7 +393,8 @@ void ClusterClientFrame::setupCallsignSpotView()
     //callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-
+    callSignView->setColumnHidden(DATE_COL_NUM, true);
+    callSignView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 
 
 
@@ -416,16 +431,16 @@ void ClusterClientFrame::setupLocatorSpotView()
     connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_locatorViewSectionResized(int, int , int)));
     locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+
     locatorView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
-    //locatorView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-
-
+    locatorView->setColumnHidden(DATE_COL_NUM, true);
+    locatorView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 }
 
 
@@ -621,7 +636,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     }
 }
 
-void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
+void ClusterClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
     // if contest is protected ignore
     if (isProtected)
@@ -632,13 +647,16 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
     //get spot Message from queue
     for (int i = 0; i < spotMsg.count(); i++)
     {
-        QString msg = spotMsg[i];
+        ClusterMessage msg = spotMsg[i];
 
-        if (msg.contains(DXSPOT) || msg.contains(RESENTSPOT))
+        // if loggerUuid is empty, message is for all frames
+        if (msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid)
         {
-            spotQueue += spotMsg[i];
+            if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
+            {
+                spotQueue += msg.getMessage();
+            }
         }
-
 
     }
 

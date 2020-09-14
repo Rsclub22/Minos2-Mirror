@@ -34,7 +34,7 @@ int Clusterrpc::getServerListCount()
 
 //---------------------------------------------------------------------------
 
-void Clusterrpc::sendDXSpot(QString spot)
+void Clusterrpc::sendDXSpot(QString spot, QString uuid)
 {
     // We need to send the message to all connected cluster clients, except the spot server
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
@@ -44,6 +44,7 @@ void Clusterrpc::sendDXSpot(QString spot)
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( spot, rpcConstants::sendClusterSpot );
+        st->addMember(uuid, rpcConstants::loggerUuid);
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( (*i).app );
 
@@ -62,6 +63,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
       QSharedPointer<RPCParam> psFreq;
       QSharedPointer<RPCParam> psCall;
       QSharedPointer<RPCParam> psLoc;
+      QSharedPointer<RPCParam> loggerUuid;
       QSharedPointer<RPCParam> resendSpotCmd;
       RPCArgs *args = mro->getCallArgs();
 
@@ -102,6 +104,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
       else if (paraName == rpcConstants::clusterResendSpots)
       {
           QString cmd;
+          QString logUuid;
           if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd))
           {
               if (resendSpotCmd->getString(cmd))
@@ -110,7 +113,16 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
               }
 
           }
-          emit resendSpotToClients(cmd);
+          if (args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid))
+          {
+              if (loggerUuid->getString(logUuid))
+              {
+                  trace(QString("Cluster RPC: resendspots commnd to cluster loggerUuid = %1").arg(logUuid));
+              }
+
+          }
+
+          emit resendSpotToClients(cmd, logUuid);
       }
 
 

@@ -132,7 +132,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     clusterRpc = new Clusterrpc();
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(QString, QString, QString)), this, SLOT(sendSpotToDXCluster(QString, QString, QString)));
-    connect(clusterRpc, SIGNAL(resendSpotToClients(QString)), this, SLOT(onResendSpotToClients(QString)));
+    connect(clusterRpc, SIGNAL(resendSpotToClients(QString, QString)), this, SLOT(onResendSpotToClients(QString, QString)));
 
 
     sendSpotsToClientTimer = new QTimer();
@@ -1107,10 +1107,10 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QString &spotCall)
 }
 
 
-void ClusterMainWindow::onResendSpotToClients(QString cmd)
+void ClusterMainWindow::onResendSpotToClients(QString cmd, QString loggerUuid)
 {
-
-    resendSpotsToClientQueue.append(cmd);
+    QString command = cmd + ':' + loggerUuid;
+    resendSpotsToClientQueue.append(command);
 
 }
 
@@ -1123,9 +1123,10 @@ void ClusterMainWindow::handleResendSpotToClientsCmds()
 
         for (int i = 0; i < resendSpotsToClientQueue.count(); i++)
         {
-            if (resendSpotsToClientQueue[i] == RESEND_ALL_SPOTS)
+            if (resendSpotsToClientQueue[i].contains(RESEND_ALL_SPOTS))
             {
-               resendAllSpotsToClients();
+
+                resendAllSpotsToClients(resendSpotsToClientQueue[i]);
 
             }
         }
@@ -1134,17 +1135,28 @@ void ClusterMainWindow::handleResendSpotToClientsCmds()
     }
 }
 
-void ClusterMainWindow::resendAllSpotsToClients()
+void ClusterMainWindow::resendAllSpotsToClients(QString cmd)
 {
-    if (dxSpotDataModel->rowCount() > 0)
-    {
-        for (int i = 0; i < dxSpotDataModel->rowCount(); i ++)
-        {
-            QString spot = createResendSpotToSend(getSpotFromDisplayDb(i));
-            clusterRpc->sendDXSpot(spot);
 
+    if (cmd.contains(':'))
+    {
+        QStringList cl = cmd.split(':');
+        if (cl.count() == 2)
+        {
+            if (dxSpotDataModel->rowCount() > 0)
+            {
+                for (int i = 0; i < dxSpotDataModel->rowCount(); i ++)
+                {
+                    QString spot = createResendSpotToSend(getSpotFromDisplayDb(i));
+                    clusterRpc->sendDXSpot(spot, cl[1]);   // send spot and loggeruuid
+
+                }
+            }
         }
+
     }
+
+
 }
 
 
@@ -1161,9 +1173,9 @@ QString ClusterMainWindow::getSpotFromDisplayDb(int row)
     QString spotCall = dxSpotDataModel->data(dxSpotDataModel->index(row, SPOT_CALL_COL_NUM), DataStoredRole).toString();
     QString spotLocator = dxSpotDataModel->data(dxSpotDataModel->index(row, SPOTLOC_COL_NUM), DataStoredRole).toString();
     QString spotTime = dxSpotDataModel->data(dxSpotDataModel->index(row, TIME_COL_NUM), DataStoredRole).toString();
-    qint64 rxTimeMsecs = dxSpotDataModel->data(dxSpotDataModel->index(row, RXTIME_COL_NUM), DataStoredRole).toLongLong();
-    QDateTime spotDateTime  = QDateTime::fromMSecsSinceEpoch(rxTimeMsecs);
-    QString spotDate = spotDateTime.date().toString();
+    //qint64 rxTimeMsecs = dxSpotDataModel->data(dxSpotDataModel->index(row, RXTIME_COL_NUM), DataStoredRole).toLongLong();
+    //QDateTime spotDateTime  = QDateTime::fromMSecsSinceEpoch(rxTimeMsecs);
+    QString spotDate = dxSpotDataModel->data(dxSpotDataModel->index(row, DATE_COL_NUM), DataStoredRole).toString();
     QString spotComment = dxSpotDataModel->data(dxSpotDataModel->index(row, COMMENT_COL_NUM), DataStoredRole).toString();
     QString dxPropMode = dxSpotDataModel->data(dxSpotDataModel->index(row, DXSPOT_PROP_MODE_COL_NUM), DataStoredRole).toString();
 
@@ -1216,7 +1228,7 @@ void ClusterMainWindow::getSpotsFromSendToClientQueue()
             while (sendSpotsToClientQueue.count() > 0)
             {
                 trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsToClientQueue.count()).arg(sendSpotsToClientQueue[0]));
-                clusterRpc->sendDXSpot(sendSpotsToClientQueue[0]);
+                clusterRpc->sendDXSpot(sendSpotsToClientQueue[0], "");      // uuid = space all logs
                 sendSpotsToClientQueue.removeFirst();
             }
         }

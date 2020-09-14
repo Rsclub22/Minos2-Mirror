@@ -23,7 +23,7 @@ class Clusterrpc : public QObject
 public:
     explicit Clusterrpc();
     ~Clusterrpc();
-    void sendDXSpot(QString spot);
+    void sendDXSpot(QString spot, QString uuid);
 
     int getServerListCount();
     void publishState(const QString &raw, const QString &state);
@@ -33,7 +33,7 @@ public:
 signals:
 
     void sendSpotToDXCluster(QString, QString, QString);
-    void resendSpotToClients(QString);
+    void resendSpotToClients(QString, QString);
 
 
 private slots:

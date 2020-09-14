@@ -196,6 +196,7 @@ private:
 
 
     void traceMsg(QString msg);
+
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
@@ -286,7 +287,7 @@ private slots:
 
     void sendBandmapRadioIsConnected(bool state);
     void sendBandmapRadioHasError(QString error);
-    void on_ResendSpotsFromClusterCommand(QString cmd);
+     void on_ResendSpotsFromClusterCommand(QString cmd, QString uuid);
 public:
     void on_SetTransVertOffset(double offset, PubSubName psn);
     void on_SetTransVertSwitch(int switchNum, PubSubName psn);
