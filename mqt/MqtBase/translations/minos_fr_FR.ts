@@ -380,7 +380,7 @@
     <message>
         <location filename="../profiles.cpp" line="103"/>
         <source>Add to Bandmap tuning tolerance</source>
-        <translation>Bandmap: Ajouter à la tolérance de réglage  </translation>
+        <translation>Bandmap: Ajouter à la tolérance de réglage</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="105"/>
@@ -495,7 +495,7 @@
     <message>
         <location filename="../profiles.cpp" line="130"/>
         <source>Bandmap Follow Radio Mode on Operating Freq Colour Strip</source>
-        <translation type="unfinished"></translation>
+        <translation>Suivre le mode radio pour la bande de couleur de fréquence</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="137"/>
@@ -1300,7 +1300,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../minoskeyboard.ui" line="131"/>
         <source>Backspace</source>
-        <translation>WHAT OF FRENCH LAYOUT?</translation>
+        <translation>Retour arrière</translation>
     </message>
     <message>
         <location filename="../minoskeyboard.ui" line="155"/>

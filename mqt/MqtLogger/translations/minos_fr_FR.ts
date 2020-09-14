@@ -250,15 +250,9 @@ Le mode calculé est %2</translation>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
 The computed mode is %9
 %10</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 - %2 [%3 %4 @ %5 min] 
-The computed mode is %6
-%7</source>
-        <translation type="vanished">%1 -%2 [%3 %4 @%5 min]
-Le mode calculé est%6
-%7</translation>
+        <translation>%1 -%2, %3, %4, %5 [%6 %7 @ %8 min]
+Le mode calculé est%9
+%10</translation>
     </message>
 </context>
 <context>
