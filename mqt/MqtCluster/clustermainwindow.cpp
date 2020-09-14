@@ -924,7 +924,7 @@ void ClusterMainWindow::parseDX(const QString txt)
 
                         trace(QString("ParseDx: rxTime = %1").arg(rxTime));
                         trace(QString("ParseDx: Add spot for display"));
-                        spotsList += (new SpotData(rxTime, spotTime,
+                        spotsList += (new SpotData(rxTime, spotTime, spotDate,
                                                       dxFreq, dxBandStr, dxBandMask,
                                                       dxModeStr, dxModeMask,
                                                       dxCall, false, dxLocator,

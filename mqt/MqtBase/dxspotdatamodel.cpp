@@ -295,6 +295,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXBANDSTR_COL_NUM:
                 d = dxSpot->dxBandStr;
             break;
+            case DATE_COL_NUM:
+                d = dxSpot->dxBandStr;
+            break;
 
 
         }

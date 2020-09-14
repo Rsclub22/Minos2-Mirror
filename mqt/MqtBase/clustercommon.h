@@ -81,13 +81,14 @@ const int DXMODEMASK_COL_NUM = 14;
 const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 15;
 const int DXSPOT_PROP_MODE_COL_NUM = 16;
 const int RXTIME_COL_NUM = 17;
-const int SPOT_TYPE_COL_NUM = 18;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 19;    // used in bandmap
-const int ROT_BEARING_COL_NUM = 20;
-const int ROT_CONNECTED_COL_NUM = 21;
-const int FREQ_INT64_COL_NUM = 22;      // used in bandmap, but not in display
-const int RUN_MODE_ON_COL_NUM = 23;     // used in bandmap
-const int OFF_RUN_FREQ_COL_NUM = 24;    // used in bandmap
+const int DATE_COL_NUM = 18;
+const int SPOT_TYPE_COL_NUM = 19;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 20;    // used in bandmap
+const int ROT_BEARING_COL_NUM = 21;
+const int ROT_CONNECTED_COL_NUM = 22;
+const int FREQ_INT64_COL_NUM = 23;      // used in bandmap, but not in display
+const int RUN_MODE_ON_COL_NUM = 24;     // used in bandmap
+const int OFF_RUN_FREQ_COL_NUM = 25;    // used in bandmap
 
 
 const bool BOOL_YES = true;
