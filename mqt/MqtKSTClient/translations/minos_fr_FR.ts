@@ -76,10 +76,6 @@
     <name>ChangeName</name>
     <message>
         <location filename="../changename.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../changename.ui" line="20"/>
         <source>Changing first name...</source>
         <translation>Changement de prénom...</translation>
