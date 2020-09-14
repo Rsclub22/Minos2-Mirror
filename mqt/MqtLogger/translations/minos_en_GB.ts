@@ -245,20 +245,15 @@ The computed mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1368"/>
-        <source>%1 - %2 [%3 %4 @ %5 min] 
-The computed mode is %6
-%7</source>
+        <location filename="../bandmapview.cpp" line="1381"/>
+        <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
+The computed mode is %9
+%10</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ClusterBandmapConfigure</name>
-    <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="24"/>
         <source>Cluster/Bandmap Default Distance</source>
@@ -375,6 +370,7 @@ The computed mode is %6
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="14"/>
         <location filename="../Clusterbandmapconfigure.cpp" line="15"/>
         <source>Cluster/Bandmap Configure</source>
         <translation type="unfinished"></translation>
@@ -790,9 +786,9 @@ The computed mode is %6
     <message>
         <location filename="../clusterclientframe.ui" line="45"/>
         <location filename="../clusterclientframe.cpp" line="53"/>
-        <location filename="../clusterclientframe.cpp" line="1257"/>
-        <location filename="../clusterclientframe.cpp" line="1284"/>
-        <location filename="../clusterclientframe.cpp" line="1745"/>
+        <location filename="../clusterclientframe.cpp" line="1262"/>
+        <location filename="../clusterclientframe.cpp" line="1289"/>
+        <location filename="../clusterclientframe.cpp" line="1750"/>
         <source>Cluster</source>
         <translation type="unfinished"></translation>
     </message>
@@ -842,67 +838,67 @@ The computed mode is %6
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="102"/>
+        <location filename="../clusterclientframe.cpp" line="105"/>
         <source>Set &amp;Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="103"/>
+        <location filename="../clusterclientframe.cpp" line="106"/>
         <source>Set &amp;Bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="104"/>
+        <location filename="../clusterclientframe.cpp" line="107"/>
         <source>Send &amp;Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="105"/>
+        <location filename="../clusterclientframe.cpp" line="108"/>
         <source>Send &amp;Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="106"/>
+        <location filename="../clusterclientframe.cpp" line="109"/>
         <source>Clear &amp;Spot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="107"/>
+        <location filename="../clusterclientframe.cpp" line="110"/>
         <source>Clear &amp;All Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="238"/>
+        <location filename="../clusterclientframe.cpp" line="242"/>
         <source>DX Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="285"/>
+        <location filename="../clusterclientframe.cpp" line="289"/>
         <source>Search Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="332"/>
+        <location filename="../clusterclientframe.cpp" line="336"/>
         <source>Callsign Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="379"/>
+        <location filename="../clusterclientframe.cpp" line="383"/>
         <source>Locator Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1258"/>
+        <location filename="../clusterclientframe.cpp" line="1263"/>
         <source>Please confirm you want to delete this spot?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1285"/>
+        <location filename="../clusterclientframe.cpp" line="1290"/>
         <source>Please confirm you want to delete all the spots in the %1 tab?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1749"/>
+        <location filename="../clusterclientframe.cpp" line="1754"/>
         <source> - Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2288,37 +2284,42 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1322"/>
+        <location filename="../rigcontrolframe.cpp" line="1332"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1354"/>
+        <location filename="../rigcontrolframe.cpp" line="1364"/>
         <source>Radio Bandlist is empty!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1363"/>
+        <location filename="../rigcontrolframe.cpp" line="1373"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1450"/>
+        <location filename="../rigcontrolframe.cpp" line="1460"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1729"/>
+        <location filename="../rigcontrolframe.cpp" line="1639"/>
+        <source>Freq out of contest band</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.cpp" line="1807"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1736"/>
+        <location filename="../rigcontrolframe.cpp" line="1814"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1759"/>
+        <location filename="../rigcontrolframe.cpp" line="1837"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2692,42 +2693,47 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="78"/>
+        <location filename="../runbuttonsframe.cpp" line="81"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="84"/>
+        <location filename="../runbuttonsframe.cpp" line="87"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="312"/>
+        <location filename="../runbuttonsframe.cpp" line="327"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="321"/>
+        <location filename="../runbuttonsframe.cpp" line="336"/>
         <source>Run %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="339"/>
+        <location filename="../runbuttonsframe.cpp" line="354"/>
         <source>Run %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="389"/>
+        <location filename="../runbuttonsframe.cpp" line="406"/>
         <source>Restore .%1    </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="392"/>
+        <location filename="../runbuttonsframe.cpp" line="407"/>
+        <source>Restore freq: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.cpp" line="401"/>
         <source>Freq: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="393"/>
+        <location filename="../runbuttonsframe.cpp" line="402"/>
         <source>Mode: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2735,27 +2741,27 @@ No          - Discard changes</source>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="524"/>
+        <location filename="../runbuttonsframe.cpp" line="541"/>
         <source>&amp;Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="525"/>
+        <location filename="../runbuttonsframe.cpp" line="542"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="526"/>
+        <location filename="../runbuttonsframe.cpp" line="543"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="527"/>
+        <location filename="../runbuttonsframe.cpp" line="544"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="528"/>
+        <location filename="../runbuttonsframe.cpp" line="545"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
