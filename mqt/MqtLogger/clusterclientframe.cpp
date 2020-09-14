@@ -634,7 +634,7 @@ void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
     {
         QString msg = spotMsg[i];
 
-        if (msg.contains(DXSPOT) || msg.contains(RESEND_ALL_SPOTS))
+        if (msg.contains(DXSPOT) || msg.contains(RESENTSPOT))
         {
             spotQueue += spotMsg[i];
         }
@@ -678,10 +678,10 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
     {
       sl = spot.split(DXSPOT);
     }
-    else if (spot.contains(RESEND_ALL_SPOTS))
+    else if (spot.contains(RESENTSPOT))
     {
         resentSpot = true;
-        sl = spot.split(RESEND_ALL_SPOTS);
+        sl = spot.split(RESENTSPOT);
     }
 
     if (sl.count() == 2)
