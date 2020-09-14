@@ -34,6 +34,15 @@ QString BandInfo::getType()
     return type;
 }
 
+void ModeInfo::setType ( const QString &t )
+{
+    type = t.toUpper();
+}
+QString ModeInfo::getType()
+{
+    return type;
+}
+
 
 BandList::BandList()
 {
@@ -110,71 +119,111 @@ bool BandList::parseFile (const QString &fname )
 bool BandList::parseBand ( TiXmlElement * e )
 {
     // we know we are on a band; get the attributes we want
-    BandInfo band;
+    QSharedPointer<BandInfo>  band(new BandInfo());
 
-    band.setType ( getAttribute ( e, "type" ) );
+    band->setType ( getAttribute ( e, "type" ) );
 
     QString unit = getAttribute ( e, "unit" );
     QString temp = getAttribute ( e, "flow" );
-    band.flow = temp.toInt();
+    band->fLow = temp.toInt();
     temp = getAttribute ( e, "fhigh" );
-    band.fhigh = temp.toInt();
+    band->fHigh = temp.toInt();
     if ( unit == "K" )
     {
-        band.flow *= 1000.0;
-        band.fhigh *= 1000.0;
+        band->fLow *= 1000.0;
+        band->fHigh *= 1000.0;
     }
     else
         if ( unit == "M" )
         {
-            band.flow *= 1000000.0;
-            band.fhigh *= 1000000.0;
+            band->fLow *= 1000000.0;
+            band->fHigh *= 1000000.0;
         }
         else
             if ( unit == "G" )
             {
-                band.flow *= 1000000000.0;
-                band.fhigh *= 1000000000.0;
+                band->fLow *= 1000000000.0;
+                band->fHigh *= 1000000000.0;
             }
 
-    band.wlen = getAttribute ( e, "wlen" );
-    band.uk = getAttribute ( e, "UK" );
-    band.reg1test = getAttribute ( e, "Reg1Test" );
-    band.adif = getAttribute ( e, "ADIF" );
-    band.cabrillo = getAttribute ( e, "Cabrillo" );
+    band->wlen = getAttribute ( e, "wlen" );
+    band->uk = getAttribute ( e, "UK" );
+    band->reg1test = getAttribute ( e, "Reg1Test" );
+    band->adif = getAttribute ( e, "ADIF" );
+    band->cabrillo = getAttribute ( e, "Cabrillo" );
 
-    band.bandColour = getAttribute(e, "Colour");
+    band->bandColour = getAttribute(e, "Colour");
 
-    if (band.bandColour.isEmpty())
+    if (band->bandColour.isEmpty())
     {
-        if (band.cabrillo=="1800")  band.bandColour="red";
-        if (band.cabrillo=="3500")  band.bandColour="green";
-        if (band.cabrillo=="7000")  band.bandColour="blue";
-        if (band.cabrillo=="14000") band.bandColour="teal";
-        if (band.cabrillo=="21000") band.bandColour="purple";
-        if (band.cabrillo=="28000") band.bandColour="navy";
-        if (band.cabrillo=="50")    band.bandColour="red";
-        if (band.cabrillo=="70")    band.bandColour="green";
-        if (band.cabrillo=="144")   band.bandColour="blue";
-        if (band.cabrillo=="432")   band.bandColour="teal";
-        if (band.cabrillo=="1.2G")  band.bandColour="purple";
-        if (band.cabrillo=="2.3G")  band.bandColour="navy";
-        if (band.cabrillo=="3.4G")  band.bandColour="black";
-        if (band.cabrillo=="5.7G")  band.bandColour="red";
-        if (band.cabrillo=="10G")   band.bandColour="green";
-        if (band.cabrillo=="24G")   band.bandColour="blue";
-        if (band.cabrillo=="47G")   band.bandColour="teal";
-        if (band.cabrillo=="76G")   band.bandColour="purple";
-        if (band.cabrillo=="120G")  band.bandColour="navy";
-        if (band.cabrillo=="134G")  band.bandColour="black";
-        if (band.cabrillo=="241G")  band.bandColour="red";
+        if (band->cabrillo=="1800")  band->bandColour="red";
+        if (band->cabrillo=="3500")  band->bandColour="green";
+        if (band->cabrillo=="7000")  band->bandColour="blue";
+        if (band->cabrillo=="14000") band->bandColour="teal";
+        if (band->cabrillo=="21000") band->bandColour="purple";
+        if (band->cabrillo=="28000") band->bandColour="navy";
+        if (band->cabrillo=="50")    band->bandColour="red";
+        if (band->cabrillo=="70")    band->bandColour="green";
+        if (band->cabrillo=="144")   band->bandColour="blue";
+        if (band->cabrillo=="432")   band->bandColour="teal";
+        if (band->cabrillo=="1.2G")  band->bandColour="purple";
+        if (band->cabrillo=="2.3G")  band->bandColour="navy";
+        if (band->cabrillo=="3.4G")  band->bandColour="black";
+        if (band->cabrillo=="5.7G")  band->bandColour="red";
+        if (band->cabrillo=="10G")   band->bandColour="green";
+        if (band->cabrillo=="24G")   band->bandColour="blue";
+        if (band->cabrillo=="47G")   band->bandColour="teal";
+        if (band->cabrillo=="76G")   band->bandColour="purple";
+        if (band->cabrillo=="120G")  band->bandColour="navy";
+        if (band->cabrillo=="134G")  band->bandColour="black";
+        if (band->cabrillo=="241G")  band->bandColour="red";
     }
 
+    for ( TiXmlElement * m = e->FirstChildElement(); m; m = m->NextSiblingElement() )
+    {
+        if ( checkElementName ( m, "Mode" ) )
+        {
+            if ( !parseMode ( band, unit, m ) )     // at the moment it always returns true
+            {
+                return false;
+            }
+        }
+    }
     bandList.push_back ( band );
 
     return true;
 }
-bool BandList::findBand ( const QString &psfreq, BandInfo &bi )
+bool BandList::parseMode (QSharedPointer<BandInfo> band, QString unit, TiXmlElement *e)
+{
+    QSharedPointer<ModeInfo> mode(new ModeInfo());
+    mode->setType ( getAttribute ( e, "type" ) );
+
+    QString temp = getAttribute ( e, "flow" );
+    mode->fLow = temp.toInt();
+    temp = getAttribute ( e, "fhigh" );
+    mode->fHigh = temp.toInt();
+    if ( unit == "K" )
+    {
+        mode->fLow *= 1000.0;
+        mode->fHigh *= 1000.0;
+    }
+    else
+        if ( unit == "M" )
+        {
+            mode->fLow *= 1000000.0;
+            mode->fHigh *= 1000000.0;
+        }
+        else
+            if ( unit == "G" )
+            {
+                mode->fLow *= 1000000000.0;
+                mode->fHigh *= 1000000000.0;
+            }
+
+    band->modes.push_back(mode);
+    return true;
+}
+bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
 {
     QString sfreq = psfreq.trimmed();
     if ( sfreq.size() == 0 )
@@ -193,11 +242,11 @@ bool BandList::findBand ( const QString &psfreq, BandInfo &bi )
     for ( int i = 0; i < bandList.size(); i++ )
     {
         if (
-                sfreq.compare(bandList[ i ].uk ) == 0
-                || sfreq.compare(bandList[ i ].wlen ) == 0
-                || sfreq.compare(bandList[ i ].adif ) == 0
-                || sfreq.compare(bandList[ i ].cabrillo ) == 0
-                || sfreq.compare(bandList[ i ].reg1test ) == 0
+                sfreq.compare(bandList[ i ]->uk ) == 0
+                || sfreq.compare(bandList[ i ]->wlen ) == 0
+                || sfreq.compare(bandList[ i ]->adif ) == 0
+                || sfreq.compare(bandList[ i ]->cabrillo ) == 0
+                || sfreq.compare(bandList[ i ]->reg1test ) == 0
            )
         {
             bi = bandList[ i ];
@@ -206,9 +255,9 @@ bool BandList::findBand ( const QString &psfreq, BandInfo &bi )
     }
     for ( int i = 0; i < bandList.size(); i++ )
     {
-        QString bandType = bandList[ i ].getType();
-        double bfhigh = bandList[ i ].fhigh;
-        double bflow = bandList[ i ].flow;
+        QString bandType = bandList[ i ]->getType();
+        double bfhigh = bandList[ i ]->fHigh;
+        double bflow = bandList[ i ]->fLow;
 
         if ( bandType == "HF" )
         {
@@ -245,11 +294,11 @@ bool BandList::findBand ( const QString &psfreq, BandInfo &bi )
     for ( int i = 0; i < bandList.size(); i++ )
     {
         // find in string isn't a massively good idea! But we are doing it after everything else has failed
-        if ( bandList[ i ].uk.indexOf ( sfreq ) != -1
-             || bandList[ i ].uk.indexOf ( sfreq ) != -1
-             || bandList[ i ].adif.indexOf ( sfreq ) != -1
-             || bandList[ i ].cabrillo.indexOf ( sfreq ) != -1
-             || bandList[ i ].reg1test.indexOf ( sfreq ) != -1
+        if ( bandList[ i ]->uk.indexOf ( sfreq ) != -1
+             || bandList[ i ]->uk.indexOf ( sfreq ) != -1
+             || bandList[ i ]->adif.indexOf ( sfreq ) != -1
+             || bandList[ i ]->cabrillo.indexOf ( sfreq ) != -1
+             || bandList[ i ]->reg1test.indexOf ( sfreq ) != -1
            )
         {
             bi = bandList[ i ];
@@ -260,11 +309,11 @@ bool BandList::findBand ( const QString &psfreq, BandInfo &bi )
 }
 
 
-bool BandList::findBand(long freq, BandInfo &bi)
+bool BandList::findBand(long freq, QSharedPointer<BandInfo> &bi)
 {
-   for (QVector<BandInfo>::iterator i = bandList.begin(); i != bandList.end(); i++)
+   for (QVector<QSharedPointer<BandInfo> >::iterator i = bandList.begin(); i != bandList.end(); i++)
    {
-      if ((*i).flow <= freq && (*i).fhigh >= freq)
+      if ((*i)->fLow <= freq && (*i)->fHigh >= freq)
       {
          bi = (*i);
          return true;
@@ -275,11 +324,11 @@ bool BandList::findBand(long freq, BandInfo &bi)
 
 
 
-bool BandList::findBand(double freq, BandInfo &bi)
+bool BandList::findBand(double freq, QSharedPointer<BandInfo> &bi)
 {
-   for (QVector<BandInfo>::iterator i = bandList.begin(); i != bandList.end(); i++)
+   for (QVector<QSharedPointer<BandInfo> >::iterator i = bandList.begin(); i != bandList.end(); i++)
    {
-      if ((*i).flow <= freq && (*i).fhigh >= freq)
+      if ((*i)->fLow <= freq && (*i)->fHigh >= freq)
       {
          bi = (*i);
          return true;
@@ -290,20 +339,21 @@ bool BandList::findBand(double freq, BandInfo &bi)
 
 
 
-void loadVhfAndUpBands(QVector<BandDetail> &bands)
+void loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 {
     BandList &blist = BandList::getBandList();
 
     for (int i = 0; i < blist.bandList.size(); i++)   // just load VHF/UHF bands
     {
         // don't use bands > 10GHz (can't support Freq display)
-        if ( blist.bandList[i].uk != "24 GHz" && blist.bandList[i].uk != "47 GHz"
-             && blist.bandList[i].uk != "76 GHz" && blist.bandList[i].uk != "120 GHz"
-             && blist.bandList[i].uk != "134 GHz" && blist.bandList[i].uk != "248 GHz")
+        if ( blist.bandList[i]->uk != "24 GHz" && blist.bandList[i]->uk != "47 GHz"
+             && blist.bandList[i]->uk != "76 GHz" && blist.bandList[i]->uk != "120 GHz"
+             && blist.bandList[i]->uk != "134 GHz" && blist.bandList[i]->uk != "248 GHz")
 
         {
-            if (blist.bandList[i].getType().compare("VHF", Qt::CaseInsensitive) == 0 || blist.bandList[i].getType().compare("MWave", Qt::CaseInsensitive) == 0)
-                bands.append(BandDetail(blist.bandList[i].uk, blist.bandList[i].flow, blist.bandList[i].fhigh));
+            if (blist.bandList[i]->getType().compare("VHF", Qt::CaseInsensitive) == 0
+                    || blist.bandList[i]->getType().compare("MWave", Qt::CaseInsensitive) == 0)
+                bands.append(blist.bandList[i]);
         }
     }
 
@@ -313,7 +363,7 @@ bool checkValidBand(QString freq)
 {
     bool ok = false;
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOK = false;
     QString sfreq = freq.trimmed();
 
@@ -341,13 +391,5 @@ int getBandOffSet(QStringList supportedBands, QString contestBandStr)
     return -1;
 }
 
-BandDetail::BandDetail()
-{}
-BandDetail::BandDetail(QString _name, double _flow, double _fhigh)
-{
-    name = _name;
-    fLow = _flow;
-    fHigh = _fhigh;
-}
 
 

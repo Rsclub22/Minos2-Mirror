@@ -783,17 +783,17 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
 
     // use band list file
     BandList blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
 
 
     for (int i = 0; i < blist.bandList.count(); i++)
     {
         bi = blist.bandList[i];
-        if (bi.uk == contestBandStr)
+        if (bi->uk == contestBandStr)
         {
 
-            contestBandFlow = bi.flow;
-            contestBandFHigh = bi.fhigh;
+            contestBandFlow = bi->fLow;
+            contestBandFHigh = bi->fHigh;
             bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
             bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
             traceMsg(QString("contestBand Freq low = %1, contestBand Freq high = %2").arg(contestBandFlow).arg(contestBandFHigh));

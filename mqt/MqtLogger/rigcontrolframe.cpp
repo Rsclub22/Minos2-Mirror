@@ -801,7 +801,7 @@ bool RigControlFrame::checkValidFreq(QString freq)
 {
     bool ok = false;
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOK = false;
     QString sfreq = freq.trimmed();
 
@@ -1419,7 +1419,7 @@ void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
            traceMsg(QString("setRadioFreq: contest band = %1").arg(cb));
 
            BandList &blist = BandList::getBandList();
-           BandInfo bi;
+           QSharedPointer<BandInfo>  bi;
            bool bandOK = blist.findBand(cb, bi);
            if (bandOK)
            {
@@ -1568,7 +1568,7 @@ int RigControlFrame::setBandSelComboFromFreq(QString freq)
 
     int retCode = 0;
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool ok;
     double freqDbl = freq.toDouble(&ok);
     if (ok)
@@ -1576,12 +1576,12 @@ int RigControlFrame::setBandSelComboFromFreq(QString freq)
         if (blist.findBand(freqDbl, bi))
         {
             qDebug() << "combo text = " << ui->bandSelCombo->currentText();
-            qDebug() << "band = " << bi.uk;
-            if (ui->bandSelCombo->currentText() != bi.uk)
+            qDebug() << "band = " << bi->uk;
+            if (ui->bandSelCombo->currentText() != bi->uk)
             {
-                qDebug() << "set combo to band = " << bi.uk;
-                retCode = setBandSelComboIndex(bi.uk);
-                traceMsg(QString("setBandSelComboFromFreq = %1, band = %2, retCode = %3").arg(freq).arg(bi.uk).arg(retCode));
+                qDebug() << "set combo to band = " << bi->uk;
+                retCode = setBandSelComboIndex(bi->uk);
+                traceMsg(QString("setBandSelComboFromFreq = %1, band = %2, retCode = %3").arg(freq).arg(bi->uk).arg(retCode));
 
             }
 
@@ -1653,10 +1653,10 @@ void RigControlFrame::setContestBandLimits(QString band)
 
     for (int i = 0; i < blist.bandList.count(); i++)
     {
-        if (band == blist.bandList[i].uk)
+        if (band == blist.bandList[i]->uk)
         {
-            contestBandFLow = blist.bandList[i].flow;
-            contestBandFHigh = blist.bandList[i].fhigh;
+            contestBandFLow = blist.bandList[i]->fLow;
+            contestBandFHigh = blist.bandList[i]->fHigh;
             return;
         }
     }
@@ -2141,7 +2141,7 @@ QString RigControlFrame::calcNewFreq(double incFreq)
 {
 
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool ok = false;
     bool bandOk = false;
     QString sfreq = "";
@@ -2202,12 +2202,12 @@ void RigControlFrame::setFreqTextLegalColour(const QString _freq, QString mode)
 bool RigControlFrame::checkFreqIsLegal(const double freq, const QString mode)
 {
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOk = false;
 
 
     bandOk = blist.findBand(freq, bi);
-    QString band = bi.uk;
+    QString band = bi->uk;
     if (bandOk)
     {
         return isFreqLegal(freq, band, mode);

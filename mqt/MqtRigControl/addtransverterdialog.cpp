@@ -2,7 +2,7 @@
 #include "ui_addtransverterdialog.h"
 #include "BandList.h"
 
-AddTransVerterDialog::AddTransVerterDialog(QVector<BandDetail> &_bands, QStringList& _transVertNames, QWidget *parent) :
+AddTransVerterDialog::AddTransVerterDialog(QVector<QSharedPointer<BandInfo> > &_bands, QStringList& _transVertNames, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddTransVerterDialog)
 {
@@ -26,11 +26,11 @@ void AddTransVerterDialog::loadBandSel()
     ui->bandSel->clear();
     for (int i = 0; i < bands.count(); i++ )
     {
-        if (!checkBandUsed(bands[i].name, transVerterNames))
+        if (!checkBandUsed(bands[i]->name(), transVerterNames))
         {
-            if (bands[i].name != "28 MHz")
+            if (bands[i]->name() != "28 MHz")
             {
-                ui->bandSel->addItem(bands[i].name);
+                ui->bandSel->addItem(bands[i]->name());
             }
 
         }

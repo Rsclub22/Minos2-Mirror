@@ -30,7 +30,7 @@
 
 
 
-RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<BandDetail> &_bands, QWidget *parent) :
+RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RigSetupDialog),
     radioRemoved(false)

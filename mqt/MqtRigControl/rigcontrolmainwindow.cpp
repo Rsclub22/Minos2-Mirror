@@ -1766,7 +1766,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
     logMessage(QString("SetFreq: Change to Freq = %1").arg(QString::number(f, 'f', 0)));
 
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
 
     if (ok)
     {
@@ -1774,7 +1774,7 @@ void RigControlMainWindow::setFreq(QString freq, VFO vfo)
         bool bandOK = blist.findBand(f, bi);
         if (bandOK)
         {
-            cb = bi.uk;
+            cb = bi->uk;
             logMessage(QString("SetFreq: Band found = %1").arg(cb));
         }
 
@@ -2053,9 +2053,9 @@ QString RigControlMainWindow::getBand(Frequency freq)
 {
     for (int i = 0; i < setupRadio->bands.count(); i++)
     {
-        if (freq >= setupRadio->bands[i].fLow && freq <= setupRadio->bands[i].fHigh)
+        if (freq >= setupRadio->bands[i]->fLow && freq <= setupRadio->bands[i]->fHigh)
         {
-            return setupRadio->bands[i].name;
+            return setupRadio->bands[i]->name();
         }
     }
     return "";
@@ -2438,9 +2438,9 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
         {
             for (int i = 0; i < bands.count(); i++)
             {
-                if (findSupRadioBand(bands[i].name, supBandsList) ||  findSupTransBand(bands[i].name, radioIdx))
+                if (findSupRadioBand(bands[i]->name(), supBandsList) ||  findSupTransBand(bands[i]->name(), radioIdx))
                 {
-                    bandList.append(bands[i].name);
+                    bandList.append(bands[i]->name());
                 }
             }
         }
@@ -2465,9 +2465,9 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioIdx, int radioModel
         for (int i = 0; i < bands.count(); i++)
         {
 
-            if (rigFactory->checkForBands(radioModelNumber, bands[i].fLow))
+            if (rigFactory->checkForBands(radioModelNumber, bands[i]->fLow))
             {
-                supBandList.append(bands[i].name);
+                supBandList.append(bands[i]->name());
 
             }
         }
@@ -2477,23 +2477,23 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioIdx, int radioModel
         // non hamlib radios
         if (setupRadio->availRadioData[radioIdx]->support50MHz)
         {
-            supBandList.append(bands[0].name);
+            supBandList.append(bands[0]->name());
         }
         if (setupRadio->availRadioData[radioIdx]->support70MHz)
         {
-            supBandList.append(bands[1].name);
+            supBandList.append(bands[1]->name());
         }
         if (setupRadio->availRadioData[radioIdx]->support144MHz)
         {
-            supBandList.append(bands[2].name);
+            supBandList.append(bands[2]->name());
         }
         if (setupRadio->availRadioData[radioIdx]->support432MHz)
         {
-            supBandList.append(bands[3].name);
+            supBandList.append(bands[3]->name());
         }
         if (setupRadio->availRadioData[radioIdx]->support1296MHz)
         {
-            supBandList.append(bands[4].name);
+            supBandList.append(bands[4]->name());
         }
 
     }

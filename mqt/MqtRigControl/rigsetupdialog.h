@@ -45,7 +45,7 @@ class RigSetupDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RigSetupDialog(RigFactory* rigFactory, const QVector<BandDetail> &_bands, QWidget *parent = nullptr);
+    explicit RigSetupDialog(RigFactory* rigFactory, const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent = nullptr);
     ~RigSetupDialog();
 
 
@@ -56,7 +56,7 @@ public:
     QStringList availRadios;
     int numAvailRadios;
 
-    QVector<BandDetail> bands;
+    QVector<QSharedPointer<BandInfo> > bands;
 
     int getRadioId(QString rotator);
 

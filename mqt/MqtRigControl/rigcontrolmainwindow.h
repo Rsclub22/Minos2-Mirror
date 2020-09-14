@@ -124,7 +124,7 @@ private:
     bool supSignalStrength;
     const int PASSBAND_NOCHANGE = -1;
 
-    QVector<BandDetail> bands;
+    QVector<QSharedPointer<BandInfo>  > bands;
     QStringList presetFreq;
 
 

@@ -1,26 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bandlist>
-	<Version date='2019-01-27' version='2.1'/>
+	<Version date='2020-09-13' version='2.2'/>
 <!-- Bands as allowed by UK contests -->
- <Band type='HF'    flow='1810'   fhigh='2000'   unit='K' wlen='160m'   UK='1.8 MHz'  Reg1Test=''        ADIF='160m'   Cabrillo='1800'  Colour='red'/>
- <Band type='HF'    flow='3500'   fhigh='3800'   unit='K' wlen='80m'    UK='3.5 MHz'  Reg1Test=''        ADIF='80m'    Cabrillo='3500'  Colour='green'/>
- <Band type='HF'    flow='7000'   fhigh='7200'   unit='K' wlen='40m'    UK='7 MHz'    Reg1Test=''        ADIF='40m'    Cabrillo='7000'  Colour='blue'/>
- <Band type='HF'    flow='14000'  fhigh='14350'  unit='K' wlen='20m'    UK='14 MHz'   Reg1Test=''        ADIF='20m'    Cabrillo='14000' Colour='teal'/>
- <Band type='HF'    flow='21000'  fhigh='21450'  unit='K' wlen='15m'    UK='21 MHz'   Reg1Test=''        ADIF='15m'    Cabrillo='21000' Colour='purple'/>
- <Band type='HF'    flow='28000'  fhigh='29700'  unit='K' wlen='10m'    UK='28 MHz'   Reg1Test=''        ADIF='10m'    Cabrillo='28000' Colour='navy'/>
- <Band type='VHF'   flow='50000'  fhigh='52000'  unit='K' wlen='6m'     UK='50 MHz'   Reg1Test='50 MHz'  ADIF='6m'     Cabrillo='50'    Colour='red'/>
- <Band type='VHF'   flow='70000'  fhigh='70500'  unit='K' wlen='4m'     UK='70 MHz'   Reg1Test='70 MHz'  ADIF='4m'     Cabrillo='70'    Colour='green'/>
- <Band type='VHF'   flow='144'    fhigh='146'    unit='M' wlen='2m'     UK='144 MHz'  Reg1Test='145 MHz' ADIF='2m'     Cabrillo='144'   Colour='blue'/>
- <Band type='VHF'   flow='430'    fhigh='440'    unit='M' wlen='70cm'   UK='432 MHz'  Reg1Test='435 MHz' ADIF='70cm'   Cabrillo='432'   Colour='teal'/>
- <Band type='MWave' flow='1240'   fhigh='1325'   unit='M' wlen='23cm'   UK='1296 MHz' Reg1Test='1,3 GHz' ADIF='23cm'   Cabrillo='1.2G'  Colour='purple'/>
- <Band type='MWave' flow='2300'   fhigh='2450'   unit='M' wlen='13cm'   UK='2300 MHz' Reg1Test='2,3 GHz' ADIF='13cm'   Cabrillo='2.3G'  Colour='navy'/>
- <Band type='MWave' flow='3400'   fhigh='3475'   unit='M' wlen='9cm'    UK='3.4 GHz'  Reg1Test='3,4 GHz' ADIF='9cm'    Cabrillo='3.4G'  Colour='black'/>
- <Band type='MWave' flow='5650'   fhigh='5850'   unit='M' wlen='6cm'    UK='5.6 GHz'  Reg1Test='5,7 GHz' ADIF='6cm'    Cabrillo='5.7G'  Colour='red'/>
- <Band type='MWave' flow='10000'  fhigh='10500'  unit='M' wlen='3cm'    UK='10 GHz'   Reg1Test='10 GHz'  ADIF='3cm'    Cabrillo='10G'   Colour='green'/>
- <Band type='MWave' flow='24000'  fhigh='24250'  unit='M' wlen='1.25cm' UK='24 GHz'   Reg1Test='24 GHz'  ADIF='1.25cm' Cabrillo='24G'   Colour='blue'/>
- <Band type='MWave' flow='47000'  fhigh='47200'  unit='M' wlen='6mm'    UK='47 GHz'   Reg1Test='47 GHz'  ADIF='6mm'    Cabrillo='47G'   Colour='teal'/>
- <Band type='MWave' flow='75500'  fhigh='81000'  unit='M' wlen='4mm'    UK='76 GHz'   Reg1Test='76 GHz'  ADIF='4mm'    Cabrillo='76G'   Colour='purple'/>
- <Band type='MWave' flow='122250' fhigh='123000' unit='M' wlen='2.5mm'  UK='120 GHz'  Reg1Test='120 GHz' ADIF='2.5mm'  Cabrillo='120G'  Colour='navy'/>
- <Band type='MWave' flow='134'    fhigh='141'    unit='G' wlen='2mm'    UK='134 GHz'  Reg1Test='134 GHz' ADIF='2mm'    Cabrillo='134G'  Colour='black'/>
- <Band type='MWave' flow='241'    fhigh='250'    unit='G' wlen='1mm'    UK='248 GHz'  Reg1Test='248 GHz' ADIF='1mm'    Cabrillo='241G'  Colour='red'/>
+<Band type='HF'    flow='1810'   fhigh='2000'   unit='K' wlen='160m'   UK='1.8 MHz'  Reg1Test=''        ADIF='160m'   Cabrillo='1800'  Colour='red'>
+    <Mode type='CW' flow='1810' fclow1='1810' fchigh1='1840' fhigh='1840'/>
+    <Mode type='LSB' flow='1840' fclow1='1840' fchigh1='2000' fhigh='2000'/>
+</Band>
+<Band type='HF'    flow='3500'   fhigh='3800'   unit='K' wlen='80m'    UK='3.5 MHz'  Reg1Test=''        ADIF='80m'    Cabrillo='3500'  Colour='green'>
+    <Mode type='CW' flow='3500' fclow1='3510' fchigh1='3560' fhigh='3570'/>
+    <Mode type='LSB' flow='3600' fclow1='3600' fchigh1='3650' fclow2='3700' fchigh2='3800' fhigh='3800'/>
+</Band>
+<Band type='HF'    flow='7000'   fhigh='7200'   unit='K' wlen='40m'    UK='7 MHz'    Reg1Test=''        ADIF='40m'    Cabrillo='7000'  Colour='blue'>
+    <Mode type='CW' flow='7000' fclow1='7000' fchigh1='7040' fhigh='7040'/>
+    <Mode type='LSB' flow='7050' fclow1='7060' fchigh1='7100' fclow2='7130' fchigh2='7200' fhigh='7200'/>
+</Band>
+<Band type='HF'    flow='14000'  fhigh='14350'  unit='K' wlen='20m'    UK='14 MHz'   Reg1Test=''        ADIF='20m'    Cabrillo='14000' Colour='teal'>
+    <Mode type='CW' flow='14000' fclow1='14000' fchigh1='14060' fhigh='14070'/>
+    <Mode type='USB' flow='14101' fclow1='14125' fchigh1='14300' fhigh='14350'/>
+</Band>
+<Band type='HF'    flow='21000'  fhigh='21450'  unit='K' wlen='15m'    UK='21 MHz'   Reg1Test=''        ADIF='15m'    Cabrillo='21000' Colour='purple'>
+    <Mode type='CW' flow='21000' fclow1='21000' fchigh1='21070' fhigh='21070'/>
+    <Mode type='USB' flow='21151' fclow1='21151' fchigh1='21450' fhigh='21450'/>
+</Band>
+<Band type='HF'    flow='28000'  fhigh='29700'  unit='K' wlen='10m'    UK='28 MHz'   Reg1Test=''        ADIF='10m'    Cabrillo='28000' Colour='navy'>
+    <Mode type='CW' flow='28000' fclow1='28000' fchigh1='28070' fhigh='28070'/>
+    <Mode type='USB' flow='28320' fclow1='28320' fchigh1='29000' fhigh='29000'/>
+</Band>
+<Band type='VHF'   flow='50000'  fhigh='52000'  unit='K' wlen='6m'     UK='50 MHz'   Reg1Test='50 MHz'  ADIF='6m'     Cabrillo='50'    Colour='red'>
+    <Mode type='CW' flow='50030' fclow1='50030' fchigh1='50100' fhigh='50100'/>
+    <Mode type='USB' flow='50100' fclow1='50130' fchigh1='50300' fhigh='50300'/>
+</Band>
+<Band type='VHF'   flow='70000'  fhigh='70500'  unit='K' wlen='4m'     UK='70 MHz'   Reg1Test='70 MHz'  ADIF='4m'     Cabrillo='70'    Colour='green'>
+    <Mode type='CW' flow='70100' fclow1='70100' fchigh1='70250' fhigh='70250'/>
+    <Mode type='USB' flow='70100' fclow1='70100' fchigh1='70250' fhigh='70250'/>
+</Band>
+<Band type='VHF'   flow='144000'    fhigh='146000'    unit='K' wlen='2m'     UK='144 MHz'  Reg1Test='145 MHz' ADIF='2m'     Cabrillo='144'   Colour='blue'>
+    <Mode type='CW' flow='144000' fclow1='144025' fchigh1='144150' fhigh='144150'/>
+    <Mode type='USB' flow='144150' fclow1='144150' fchigh1='144400' fhigh='144400'/>
+    <Mode type='FM' flow='144500' fclow1='144500' fchigh1='144794' fhigh='144794'/>
+</Band>
+<Band type='VHF'   flow='430000'    fhigh='440000'    unit='K' wlen='70cm'   UK='432 MHz'  Reg1Test='435 MHz' ADIF='70cm'   Cabrillo='432'   Colour='teal'>
+    <Mode type='CW' flow='432000' fclow1='432000' fchigh1='432100' fhigh='432100'/>
+    <Mode type='USB' flow='432100' fclow1='432100' fchigh1='432400' fhigh='432400'/>
+    <Mode type='FM' flow='432500' fclow1='432500' fchigh1='432994' fhigh='432994'/>
+</Band>
+<Band type='MWave' flow='1240000'   fhigh='1325000'   unit='K' wlen='23cm'   UK='1296 MHz' Reg1Test='1,3 GHz' ADIF='23cm'   Cabrillo='1.2G'  Colour='purple'>
+    <Mode type='CW' flow='1296000' fclow1='1296000' fchigh1='1296150' fhigh='1296150'/>
+    <Mode type='USB' flow='1296150' fclow1='1296150' fchigh1='1296800' fhigh='1296800'/>
+</Band>
+<Band type='MWave' flow='2300'   fhigh='2450'   unit='M' wlen='13cm'   UK='2300 MHz' Reg1Test='2,3 GHz' ADIF='13cm'   Cabrillo='2.3G'  Colour='navy'>
+</Band>
+<Band type='MWave' flow='3400'   fhigh='3475'   unit='M' wlen='9cm'    UK='3.4 GHz'  Reg1Test='3,4 GHz' ADIF='9cm'    Cabrillo='3.4G'  Colour='black'>
+</Band>
+<Band type='MWave' flow='5650'   fhigh='5850'   unit='M' wlen='6cm'    UK='5.6 GHz'  Reg1Test='5,7 GHz' ADIF='6cm'    Cabrillo='5.7G'  Colour='red'>
+</Band>
+<Band type='MWave' flow='10000'  fhigh='10500'  unit='M' wlen='3cm'    UK='10 GHz'   Reg1Test='10 GHz'  ADIF='3cm'    Cabrillo='10G'   Colour='green'>
+</Band>
+<Band type='MWave' flow='24000'  fhigh='24250'  unit='M' wlen='1.25cm' UK='24 GHz'   Reg1Test='24 GHz'  ADIF='1.25cm' Cabrillo='24G'   Colour='blue'>
+</Band>
+<Band type='MWave' flow='47000'  fhigh='47200'  unit='M' wlen='6mm'    UK='47 GHz'   Reg1Test='47 GHz'  ADIF='6mm'    Cabrillo='47G'   Colour='teal'>
+</Band>
+<Band type='MWave' flow='75500'  fhigh='81000'  unit='M' wlen='4mm'    UK='76 GHz'   Reg1Test='76 GHz'  ADIF='4mm'    Cabrillo='76G'   Colour='purple'>
+</Band>
+<Band type='MWave' flow='122250' fhigh='123000' unit='M' wlen='2.5mm'  UK='120 GHz'  Reg1Test='120 GHz' ADIF='2.5mm'  Cabrillo='120G'  Colour='navy'>
+</Band>
+<Band type='MWave' flow='134'    fhigh='141'    unit='G' wlen='2mm'    UK='134 GHz'  Reg1Test='134 GHz' ADIF='2mm'    Cabrillo='134G'  Colour='black'>
+</Band>
+<Band type='MWave' flow='241'    fhigh='250'    unit='G' wlen='1mm'    UK='248 GHz'  Reg1Test='248 GHz' ADIF='1mm'    Cabrillo='241G'  Colour='red'>
+</Band>
 </Bandlist>

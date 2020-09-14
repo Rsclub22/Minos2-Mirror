@@ -98,7 +98,7 @@ void FreqLineEdit::changeFreq(bool direction)
 
 
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOK = false;
 
     bool ok = false;

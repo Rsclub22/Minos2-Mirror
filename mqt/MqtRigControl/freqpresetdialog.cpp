@@ -19,7 +19,7 @@
 #include "freqpresetdialog.h"
 #include "ui_freqpresetdialog.h"
 
-FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<BandDetail> &band, bool* _freqPresetChanged, QWidget *parent) :
+FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<QSharedPointer<BandInfo> > &band, bool* _freqPresetChanged, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FreqPresetDialog)
 {
@@ -145,17 +145,18 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band
 
 bool FreqPresetDialog::checkInBand(double freq, freqPresetData::bandOffSet band)
 {
-    if (freq >= bands[band].fLow && freq <= bands[band].fHigh)
+    if (freq >= bands[band]->fLow && freq <= bands[band]->fHigh)
     {
         return true;
     }
     else
     {
         QMessageBox msgBox;
-        msgBox.setText(tr("Freq. is out of band for %1").arg(bands[band].name));
+        msgBox.setText(tr("Freq. is out of band for %1").arg(bands[band]->name()));
         msgBox.exec();
         return false;
     }
+    return false;
 }
 
 

@@ -183,11 +183,11 @@ void ContestDetails::setDetails(  )
    {
        ui->BandComboBox->addItem( tr("All HF") );
    }
-   for (QVector<BandInfo>::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
+   for (QVector<QSharedPointer<BandInfo> >::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
    {
-       if (allowHF || (*i).getType() != "HF")
+       if (allowHF || (*i)->getType() != "HF")
        {
-           ui->BandComboBox->addItem( (*i).uk );
+           ui->BandComboBox->addItem( (*i)->uk );
        }
    }
 
@@ -198,11 +198,11 @@ void ContestDetails::setDetails(  )
    }
    else
    {
-       BandInfo bi;
+       QSharedPointer<BandInfo>  bi;
        bool bandOK = blist.findBand(cb, bi);
        if (bandOK)
        {
-           cb = bi.uk;
+           cb = bi->uk;
        }
    }
    int b = ui->BandComboBox->findText( cb );        // contest
@@ -501,11 +501,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->BandComboBox->clear();
 
    BandList &blist = BandList::getBandList();
-   BandInfo bi;
+   QSharedPointer<BandInfo>  bi;
     bool bandOK = blist.findBand(ic.reg1band, bi);
     if (bandOK)
     {
-        ui->BandComboBox->addItem( bi.uk );
+        ui->BandComboBox->addItem( bi->uk );
     }
    else
     {

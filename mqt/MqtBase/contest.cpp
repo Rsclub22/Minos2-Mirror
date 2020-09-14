@@ -124,14 +124,14 @@ double BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
 
     cb = cband.trimmed();
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOK = blist.findBand(cb, bi);
     if (bandOK)
     {
-        cb = bi.adif;
+        cb = bi->adif;
         if (txfreq.isEmpty() || freq < 100)
         {
-            freq = bi.flow;
+            freq = bi->fLow;
         }
     }
     return freq;
@@ -148,17 +148,17 @@ QString BaseContestLog::getCabrilloFreqBand(QString txfreq )
 
     QString cb = cband.trimmed();
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOK = blist.findBand(cb, bi);
     if (bandOK)
     {
-        cb = bi.cabrillo;
+        cb = bi->cabrillo;
         if (txfreq.isEmpty() || freq < 100)
         {
             return cb;
         }
 
-        if (bi.getType() != "HF")
+        if (bi->getType() != "HF")
         {
             return cb;
         }
@@ -174,7 +174,7 @@ double BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
     // so we can get the correct map value for mults etc
 
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOK;
 
     txfreq = txfreq.remove('.');
@@ -186,8 +186,8 @@ double BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
         bandOK = blist.findBand(cband, bi);
         if (bandOK)
         {
-            cb = bi.uk;
-            freq = static_cast<long>(bi.flow);
+            cb = bi->uk;
+            freq = static_cast<long>(bi->fLow);
         }
         else
         {
@@ -199,7 +199,7 @@ double BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
     bandOK = blist.findBand(freq, bi);
     if (bandOK)
     {
-        cb = bi.uk;
+        cb = bi->uk;
     }
     else
     {

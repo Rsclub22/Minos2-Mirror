@@ -216,7 +216,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
                 {
                     bool ok = false;
                     BandList &blist = BandList::getBandList();
-                    BandInfo bi;
+                    QSharedPointer<BandInfo>  bi;
                     bool bandOK = false;
                     QString sfreq = freq.trimmed();
                     QString current = test.currentBand.getValue();
@@ -227,7 +227,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
                     {
                         double dfreq = sfreq.toDouble(&ok);
                         dfreq *= 1000000.0;
-                        if (dfreq <= bi.fhigh && dfreq >= bi.flow)
+                        if (dfreq <= bi->fHigh && dfreq >= bi->fLow)
                         {
                             bandOK = true;
                         }

@@ -68,15 +68,15 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
         {
             QString cb = ct->frequency.getValue().trimmed();
             BandList &blist = BandList::getBandList();
-            BandInfo bi;
+            QSharedPointer<BandInfo>  bi;
             bool bandOK = blist.findBand(cb, bi);
             bool hf = false;
             if (bandOK)
             {
-               hf = bi.getType() == "HF";
+               hf = bi->getType() == "HF";
                if (hf)
                {
-                   QColor colour = QColor(bi.bandColour);
+                   QColor colour = QColor(bi->bandColour);
                    return colour;
                }
             }

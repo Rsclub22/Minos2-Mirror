@@ -26,18 +26,32 @@
 //---------------------------------------------------------------------------
 extern const QString allHF;
 
-class BandDetail;
+class BandInfo;
 
-void loadVhfAndUpBands(QVector<BandDetail> &bands);
+void loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands);
 bool checkValidBand(QString freq);
 int getBandOffSet(QStringList supportedBands, QString contestBandStr);
+
+class ModeInfo
+{
+    QString type;
+public:
+    double fLow = 0.0;
+    double fHigh = 0.0;
+    double fcLow1 = 0.0;
+    double fcHigh1 = 0.0;
+    double fcLow2 = 0.0;
+    double fcHigh2 = 0.0;
+    void setType ( const QString &t );
+    QString getType();
+};
 
 class BandInfo
 {
         QString type;
     public:
-        double flow;
-        double fhigh;
+        double fLow = 0.0;
+        double fHigh = 0.0;
         QString wlen;
         QString uk;
         QString cabrillo;
@@ -46,38 +60,33 @@ class BandInfo
 
         QString bandColour;
 
+        QVector<QSharedPointer<ModeInfo> > modes;
+
         void setType ( const QString &t );
         QString getType();
+
+        QString name()
+        {
+            return uk;
+        }
 };
 class TiXmlElement;
 class BandList
 {
-        bool parseBand ( TiXmlElement * e );
     public:
         BandList();
         ~BandList();
-        QVector<BandInfo> bandList;
+        QVector<QSharedPointer<BandInfo> > bandList;
         bool parseFile ( const QString &bandFile );
-        bool findBand ( const QString &freq, BandInfo & );
-        bool findBand ( long freq, BandInfo & );
-        bool findBand ( double freq, BandInfo &bi);
+        bool findBand (const QString &freq, QSharedPointer<BandInfo> & );
+        bool findBand ( long freq, QSharedPointer<BandInfo>  & );
+        bool findBand ( double freq, QSharedPointer<BandInfo>  &bi);
 
         static BandList &getBandList();
 
-
+private:
+        bool parseBand ( TiXmlElement * e );
+        bool parseMode(QSharedPointer<BandInfo> band, QString unit, TiXmlElement *tix);
 };
 
-
-class BandDetail
-{
-public:
-    BandDetail();
-    BandDetail(QString _name, double _flow, double _fhigh);
-
-
-    QString name;
-    double fLow = 0.0;
-    double fHigh = 0.0;
-
-};
 #endif

@@ -173,7 +173,7 @@ private:
     QLabel* status;
     QString rawStatus;
 
-    QVector<BandDetail> bands;
+    QVector<QSharedPointer<BandInfo> > bands;
     checkModeAgainstFreq* modeBandPlan;
 
     QList<PresetButton *> userCmdButton;

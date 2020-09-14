@@ -883,12 +883,12 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         QString cb = contest->currentBand.getValue().trimmed();
 
         BandList &blist = BandList::getBandList();
-        BandInfo bi;
+        QSharedPointer<BandInfo>  bi;
         bool bandOK = blist.findBand(cb, bi);
         if (bandOK)
         {
-            cb = bi.uk;
-            bic = bi.bandColour;
+            cb = bi->uk;
+            bic = bi->bandColour;
         }
         else
         {

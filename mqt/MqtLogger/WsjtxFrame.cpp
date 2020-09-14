@@ -627,7 +627,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         return;
 
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     double df = f;
     bandOK = blist.findBand(df, bi);
     if (bandOK)
@@ -635,20 +635,20 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         QString cb = ct->contestBands.getValue().trimmed();
         if (cb == allHF)
         {
-            cb = bi.uk;
+            cb = bi->uk;
             ct->setCurrentBand(cb);
         }
         else
         {
-            BandInfo cbi;
+            QSharedPointer<BandInfo>  cbi;
             bool cbandOK = blist.findBand(cb, cbi);
             if (cbandOK)
             {
-                cb = cbi.uk;
+                cb = cbi->uk;
             }
-            if (cb != bi.uk)
+            if (cb != bi->uk)
             {
-                QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
+                QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi->uk);
                 ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
             }
             else

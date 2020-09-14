@@ -206,7 +206,7 @@ private:
     QTimer* checkNewSpotsTimer;
     QTimer* checkNewFilters;
 
-    QVector<BandDetail> bands;
+    QVector<QSharedPointer<BandInfo> > bands;
     checkModeAgainstFreq* modeBandPlan;
     bool modeBandPlanOk;
 

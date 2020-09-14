@@ -30,12 +30,12 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
    {
        QString cb = clp->currentBand.getValue().trimmed();
        BandList &blist = BandList::getBandList();
-       BandInfo bi;
+       QSharedPointer<BandInfo>  bi;
        bool bandOK = blist.findBand(cb, bi);
        bool hf = false;
        if (bandOK)
        {
-          hf = bi.getType() == "HF";
+          hf = bi->getType() == "HF";
        }
        else
        {

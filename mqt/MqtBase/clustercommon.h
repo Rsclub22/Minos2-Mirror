@@ -9,7 +9,7 @@
 extern const char * clusterStateList[];
 
 class checkModeAgainstFreq;
-class BandDetail;
+class BandInfo;
 
 // Files
 const QString CLUSTER_PATH = "./Configuration/Cluster/";
@@ -164,7 +164,7 @@ qlonglong spotElapsedTime(qlonglong spotTime);
 
 void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
 
-void getBand(QVector<BandDetail> &bands, QString freq, QString &band, QString &bandMask);
+void getBand(QVector<QSharedPointer<BandInfo> > &bands, QString freq, QString &band, QString &bandMask);
 
 class ClusterClientFilterSettings
 {
