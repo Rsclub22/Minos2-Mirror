@@ -476,35 +476,40 @@ void MainWindow::trackBand()
     }
     lastBandMode = mi;
 
-    double fLow = mi->fLow;
-    double fHigh = mi->fHigh;
-    double bandWidth = fHigh - fLow;
-    double centre = fLow + bandWidth/2;
-
-    // search for nearest matching bandwidth on QS1R
-
-    double sampleRate = 0.0;
-
-    for(int i = 0; i < bws.size(); i++)
+    if (qs1rConnected)
     {
-        if (bws[i].bandWidth >= bandWidth)
+
+        double fLow = mi->fLow;
+        double fHigh = mi->fHigh;
+        double bandWidth = fHigh - fLow;
+        double centre = fLow + bandWidth/2;
+
+        // search for nearest matching bandwidth on QS1R
+
+        double sampleRate = 0.0;
+
+        for(int i = 0; i < bws.size(); i++)
         {
-            sampleRate = bws[i].sampleRate;
-            break;
+            if (bws[i].bandWidth >= bandWidth)
+            {
+                sampleRate = bws[i].sampleRate;
+                break;
+            }
+        }
+        if (sampleRate > 0)
+        {
+            long lFreq = static_cast<long>(mainRigFreq - transvertOffset);
+            fCentre = centre - transvertOffset;
+
+            QString mess;
+
+            mess += ">SampleRate " + QString::number(sampleRate);
+            mess += ">fHz " + QString::number(fCentre) + "\n";
+            mess += ">tf " + QString::number(lFreq - fCentre) + "\n";
+
+            ClientSocket1.write( mess.toLatin1().data(), mess.length() );
         }
     }
-    if (sampleRate > 0)
-    {
-        long lFreq = static_cast<long>(mainRigFreq - transvertOffset);
-        fCentre = centre - transvertOffset;
-
-        QString mess;
-
-        mess += ">SampleRate " + QString::number(sampleRate);
-        mess += ">fHz " + QString::number(fCentre) + "\n";
-        mess += ">tf " + QString::number(lFreq - fCentre) + "\n";
-
-        ClientSocket1.write( mess.toLatin1().data(), mess.length() );    }
 }
 
 void MainWindow::on_noTrack_clicked()
