@@ -156,6 +156,7 @@ void TSendDM::sendSpotToClusterServer( const QString &freq, const QString &call,
 
     if (!clusterApp.isEmpty())
     {
+        traceMsg(QString("Send Spot To Cluster Server - call = %1").arg(call));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::txSpotToCluster ));
@@ -183,6 +184,7 @@ void TSendDM::sendRequestSpotsResentFromClusterServer( const QString &cmd, const
 
     if (!clusterApp.isEmpty())
     {
+        traceMsg(QString("Send Request Spot Resend Command = %1, loggerUuid %2").arg(cmd).arg(uuid));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::clusterResendSpots));

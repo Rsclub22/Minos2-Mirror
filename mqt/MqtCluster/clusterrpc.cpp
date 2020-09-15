@@ -105,24 +105,18 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
       {
           QString cmd;
           QString logUuid;
-          if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd))
+          if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd) &&
+                  args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid))
           {
-              if (resendSpotCmd->getString(cmd))
-              {
-                  trace(QString("Cluster RPC: resendspots commnd to cluster = %1").arg(cmd));
-              }
+              resendSpotCmd->getString(cmd);
+              loggerUuid->getString(logUuid);
 
-          }
-          if (args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid))
-          {
-              if (loggerUuid->getString(logUuid))
-              {
-                  trace(QString("Cluster RPC: resendspots commnd to cluster loggerUuid = %1").arg(logUuid));
-              }
+              trace(QString("Cluster RPC: resendspots command to cluster = %1, from loggerUuid = %2").arg(cmd).arg(logUuid));
+              emit resendSpotToClients(cmd, logUuid);
 
           }
 
-          emit resendSpotToClients(cmd, logUuid);
+
       }
 
 

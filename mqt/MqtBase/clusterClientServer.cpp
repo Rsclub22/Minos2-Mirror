@@ -71,7 +71,7 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
 
                 psMess->getString(pmess);
                 loggerUuid->getString(uuid);
-                trace(QString("ClusterClientServer: on_serverCall - spot = %1, uuid = %2").arg(pmess).arg(uuid));
+                trace(QString("ClusterClientServer: on_serverCall - receive cluster spot = %1, uuid = %2").arg(pmess).arg(uuid));
                 ClusterMessage msg;
                 msg.setMessage(pmess);
                 msg.setLoggerUuid(uuid);

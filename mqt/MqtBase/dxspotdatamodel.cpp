@@ -182,7 +182,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->spotTime;
             break;
             case DATE_COL_NUM:
-                d = dxSpot->dxBandStr;
+                d = dxSpot->spotDate;
             break;
             case FREQ_STR_COL_NUM:
                 d = removeHundredHzAndHzDigits(dxSpot->dxFreq);
@@ -301,7 +301,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->dxBandStr;
             break;
             case DATE_COL_NUM:
-                d = dxSpot->dxBandStr;
+                d = dxSpot->spotDate;
             break;
 
 
@@ -331,7 +331,7 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
                 dxSpot->spotTime = value.toString();
             break;
             case DATE_COL_NUM:
-                dxSpot->dxBandStr = value.toString();
+                dxSpot->spotDate = value.toString();
             break;
             case FREQ_STR_COL_NUM:
                 dxSpot->dxFreq = value.toString();

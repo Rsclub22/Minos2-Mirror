@@ -193,7 +193,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     if (!isProtected)
     {
-        QTimer::singleShot(1000, this, SLOT(requestSpots()));
+        QTimer::singleShot(2000, this, SLOT(requestSpots()));
         //requestSpots();
     }
 
@@ -218,15 +218,20 @@ ClusterClientFrame::~ClusterClientFrame()
 
 void ClusterClientFrame::on_pushbuttonPressed()
 {
-    MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, ct->uuid);
+    if (ct)
+    {
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, ct->uuid);
+    }
 }
 
 
 void ClusterClientFrame::requestSpots()
 {
 
-    MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, ct->uuid);
-
+    if (ct)
+    {
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, ct->uuid);
+    }
 }
 
 
@@ -639,26 +644,33 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 void ClusterClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
     // if contest is protected ignore
-    if (isProtected)
+    if (!isProtected && ct)
     {
+        //get spot Message from queue
+        for (int i = 0; i < spotMsg.count(); i++)
+        {
+            ClusterMessage msg = spotMsg[i];
+            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage().arg(msg.getLoggerUuid().arg(ct->uuid))));
+
+            // if loggerUuid is empty, message is for all frames
+            if (msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid)
+            {
+                if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
+                {
+                    traceMsg(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
+                    spotQueue += msg.getMessage();
+                }
+            }
+
+        }
+    }
+    else
+    {
+        // protected
+        spotQueue.clear();
         return;
     }
 
-    //get spot Message from queue
-    for (int i = 0; i < spotMsg.count(); i++)
-    {
-        ClusterMessage msg = spotMsg[i];
-
-        // if loggerUuid is empty, message is for all frames
-        if (msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid)
-        {
-            if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
-            {
-                spotQueue += msg.getMessage();
-            }
-        }
-
-    }
 
 
     if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
@@ -675,7 +687,7 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
     for (int i = sqsize -1 ; i > -1; i--)
     {
        addDxSpotToTable(spotQueue[i]);
-       traceMsg("syncSpots " + spotQueue[i]);
+       //traceMsg("syncSpots " + spotQueue[i]);
     }
 
 
@@ -1208,7 +1220,8 @@ void ClusterClientFrame::purgeSpots()
            {
                if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), timeToLive))
                {
-                     dxSpotDataModel->removeRows(idx, 1, QModelIndex());
+                   dxSpotDataModel->removeRows(idx, 1, QModelIndex());
+                   traceMsg(QString("purged spot = %1").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()));
                }
                idx--;
            }

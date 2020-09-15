@@ -1140,7 +1140,7 @@ void ClusterMainWindow::resendAllSpotsToClients(QString cmd)
 
     if (cmd.contains(':'))
     {
-        QStringList cl = cmd.split(':');
+        QStringList cl = cmd.split(':');    // split to extract loggerUuuid
         if (cl.count() == 2)
         {
             if (dxSpotDataModel->rowCount() > 0)
