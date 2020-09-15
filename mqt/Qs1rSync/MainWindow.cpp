@@ -60,6 +60,27 @@ rate.
 
 SupportedSampleRates Gets the supported sample rates
 */
+
+class BandWidth
+{
+public:
+    int bandWidth;
+    int sampleRate;
+};
+
+QVector<BandWidth> bws =
+{
+     {20000, 25000},
+    {40000, 50000},
+    {100000, 125000},
+    {200000, 250000},
+    {400000, 500000},
+    {5000000, 625000},
+    {1000000, 1250000},
+    {1250000, 1562500},
+    {2000000, 2500000}
+};
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -82,15 +103,15 @@ MainWindow::MainWindow(QWidget *parent) :
     bool trackBand = settings.value("trackBand", false).toBool();
     ui->trackBandcb->setChecked(trackBand);
 
-    lastF = "OK\r\n"
+    lastQS1RRx = "OK\r\n"
             "fHz=28123456\r\n"
             "tf=-123456\r\n";
 
-    int fOffset = lastF.indexOf("fHz=");
-    int tfOffset = lastF.indexOf("tf=");
+    int fOffset = lastQS1RRx.indexOf("fHz=");
+    int tfOffset = lastQS1RRx.indexOf("tf=");
     if (fOffset >= 0 && tfOffset >= 0)
     {
-        QString temp = lastF.mid(fOffset + 4, tfOffset - fOffset - 4);
+        QString temp = lastQS1RRx.mid(fOffset + 4, tfOffset - fOffset - 4);
         int l = temp.length();
         while (l > 0 && ((temp[l - 1] == '\r') || (temp[l - 1] == '\n')))
         {
@@ -98,7 +119,7 @@ MainWindow::MainWindow(QWidget *parent) :
             l = temp.length();
         }
         fCentre = temp.toInt();
-        temp = lastF.mid(tfOffset + 3, 100);
+        temp = lastQS1RRx.mid(tfOffset + 3, 100);
         l = temp.length();
         while (l > 0 && ((temp[l - 1] == '\r') || (temp[l - 1] == '\n')))
         {
@@ -108,7 +129,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ftf = temp.toInt();
     }
     double f = (fCentre + ftf);
-    lastF = "fCentre " + QString::number(fCentre) + "\r\n tf " + QString::number(ftf) + " freq " + QLocale::system().toString(f, 'f', 0);
+    lastQS1RRx = "fCentre " + QString::number(fCentre) + "\r\n tf " + QString::number(ftf) + " freq " + QLocale::system().toString(f, 'f', 0);
 
     //    ui->Rig1Label->setText(omni_rig->Rig1()->RigType());
 
@@ -200,7 +221,7 @@ void MainWindow::SyncTimerTimer(  )
     }
     if (qs1rConnected)
     {
-        ui->QS1RFLabel->setText(lastF);
+        ui->QS1RFLabel->setText(lastQS1RRx);
     }
     else
     {
@@ -209,10 +230,15 @@ void MainWindow::SyncTimerTimer(  )
 
     if (n1mmLink.isConnected())
     {
-        freq = convertStrToFreq(n1mmLink.getFrequency());
+        mainRigFreq = convertStrToFreq(n1mmLink.getFrequency());
         ui->Rig1Label->setText(n1mmLink.getRadioName());
+        if (ui->trackRig->isChecked())
+        {
+            on_transfer12Button_clicked();
+        }
+        trackBand();
     }
-    ui->QF1Label->setText(convertFreqToStr(freq));
+    ui->QF1Label->setText(convertFreqToStr(mainRigFreq));
 }
 
 
@@ -259,12 +285,12 @@ void MainWindow::onReadyRead()
         {
             sockbuffer[ retlen ] = 0;
 
-            lastF =  sockbuffer;
-            int fOffset = lastF.indexOf("fHz=");
-            int tfOffset = lastF.indexOf("tf=");
+            lastQS1RRx =  sockbuffer;
+            int fOffset = lastQS1RRx.indexOf("fHz=");
+            int tfOffset = lastQS1RRx.indexOf("tf=");
             if (fOffset >= 0 && tfOffset >= 0)
             {
-                QString temp = lastF.mid(fOffset + 4, tfOffset - fOffset - 4);
+                QString temp = lastQS1RRx.mid(fOffset + 4, tfOffset - fOffset - 4);
                 int l = temp.length();
                 while ((temp[l] == '\r') || (temp[l] == '\n'))
                 {
@@ -272,7 +298,7 @@ void MainWindow::onReadyRead()
                     l = temp.length();
                 }
                 fCentre = temp.toInt();
-                temp = lastF.mid(tfOffset + 3, 100);
+                temp = lastQS1RRx.mid(tfOffset + 3, 100);
                 l = temp.length();
                 while ((temp[l] == '\r') || (temp[l] == '\n'))
                 {
@@ -282,7 +308,7 @@ void MainWindow::onReadyRead()
                 ftf = temp.toInt();
             }
             double f = (fCentre + ftf);
-            lastF = "fCentre " + QString::number(fCentre) + "\r\n tf " + QString::number(ftf) + " freq " + QLocale::system().toString(f, 'f', 0);
+            lastQS1RRx = "fCentre " + QString::number(fCentre) + "\r\n tf " + QString::number(ftf) + " freq " + QLocale::system().toString(f, 'f', 0);
             if (ui->trackQS1R->isChecked())
             {
                 on_transfer21Button_clicked();
@@ -299,7 +325,7 @@ void MainWindow::on_closeButton_clicked()
 
 void MainWindow::on_transfer12Button_clicked()
 {
-    long lFreq = static_cast<long>(freq - transvertOffset);
+    long lFreq = static_cast<long>(mainRigFreq - transvertOffset);
 
     QString mess = ">fHz " + QString::number(fCentre) + "\n";
     mess += ">tf " + QString::number(lFreq - fCentre) + "\n";
@@ -372,25 +398,9 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
             RigDetails &selDetail = rigCache.getDetails(rigSelected);
             ui->Rig1Label->setText(rigSelected.toString());
 
-            if (selState.isDirty())
-            {
-
-
-                mode = selState.radioMode().getValue();
-                freq = selState.radioFreq().getValue();
-                //                   status = selState.status();
-                selState.clearDirty();
-                ui->QF1Label->setText(convertFreqToStr(freq));
-
-                if (ui->trackRig->isChecked())
-                {
-                    on_transfer12Button_clicked();
-                }
-
-            }
             if (selDetail.isDirty())
             {
-                //bandlist = selDetail.bandList();
+                //bandlist = selDetail.bandList();  // bandlist is the bands supported
                 transvertState = selDetail.transverterStatus().getValue();
                 transvertOffset = selDetail.transverterOffset().getValue();
                 if (!transvertState)
@@ -398,6 +408,20 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 selDetail.clearDirty();
 
             }
+            if (selState.isDirty())
+            {
+                mainRigMode = selState.radioMode().getValue();
+                mainRigFreq = selState.radioFreq().getValue();
+
+                selState.clearDirty();
+                ui->QF1Label->setText(convertFreqToStr(mainRigFreq));
+
+                if (ui->trackRig->isChecked())
+                {
+                    on_transfer12Button_clicked();
+                }
+            }
+            trackBand();
         }
         else
         {
@@ -414,6 +438,74 @@ void MainWindow::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const 
 
 }
 //---------------------------------------------------------------------------
+
+void MainWindow::trackBand()
+{
+    if (mainRigFreq == lastMainRigFreq && transvertOffset == lastTransverterOffset && mainRigMode != lastMainRigMode)
+    {
+        return; // nothing to do
+    }
+    lastMainRigFreq = mainRigFreq;
+    lastTransverterOffset = transvertOffset;
+    lastMainRigMode = mainRigMode;
+
+    // mainRigFreq is absolute, i.e. on air frequency
+    // so we use it to find the band
+    // then we offset the band by the transverter offset before telling the QS1R
+
+    BandList &blist = BandList::getBandList();
+    QSharedPointer<BandInfo>  bi;
+    bool bandOK = blist.findBand(mainRigFreq, bi);
+    if (!bandOK)
+    {
+        return;
+    }
+
+    if (!ui->trackBandcb->isChecked())
+    {
+        return;
+    }
+    QSharedPointer<ModeInfo> mi = bi->findMode(mainRigMode);
+    if (!mi)
+    {
+        return;
+    }
+    if (mi == lastBandMode)
+    {
+        return;
+    }
+    lastBandMode = mi;
+
+    double fLow = mi->fLow;
+    double fHigh = mi->fHigh;
+    double bandWidth = fHigh - fLow;
+    double centre = fLow + bandWidth/2;
+
+    // search for nearest matching bandwidth on QS1R
+
+    double sampleRate = 0.0;
+
+    for(int i = 0; i < bws.size(); i++)
+    {
+        if (bws[i].bandWidth >= bandWidth)
+        {
+            sampleRate = bws[i].sampleRate;
+            break;
+        }
+    }
+    if (sampleRate > 0)
+    {
+        long lFreq = static_cast<long>(mainRigFreq - transvertOffset);
+        fCentre = centre - transvertOffset;
+
+        QString mess;
+
+        mess += ">SampleRate " + QString::number(sampleRate);
+        mess += ">fHz " + QString::number(fCentre) + "\n";
+        mess += ">tf " + QString::number(lFreq - fCentre) + "\n";
+
+        ClientSocket1.write( mess.toLatin1().data(), mess.length() );    }
+}
 
 void MainWindow::on_noTrack_clicked()
 {

@@ -8,7 +8,7 @@
 namespace Ui {
 class MainWindow;
 }
-
+class ModeInfo;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -66,18 +66,26 @@ private:
 
     bool muted = false;
     long getQS1RFreq();
-    QString lastF;
+    QString lastQS1RRx;
     int fCentre = 0.0;
     int ftf = 0;
 
     QString state;
-    QString mode;
-    double freq= 0.0;
+    QString mainRigMode;
+    QString lastMainRigMode;
+
+    double mainRigFreq= 0.0;
+    double lastMainRigFreq = 0.0;
+    double lastTransverterOffset = 0.0;
+
+    QSharedPointer<ModeInfo>  lastBandMode;
+
     PubSubName rigSelected;
 
     bool transvertState = false;
     double transvertOffset = 0.0;
 
+    void trackBand();
 };
 
 #endif // MAINWINDOW_H

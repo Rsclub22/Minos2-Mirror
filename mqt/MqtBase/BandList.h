@@ -67,6 +67,8 @@ class BandInfo
 
         QVector<QSharedPointer<ModeInfo> > modes;
 
+        QSharedPointer<ModeInfo> findMode(QString m);
+
         void setType ( const QString &t );
         QString getType();
 

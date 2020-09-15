@@ -33,7 +33,15 @@ QString BandInfo::getType()
 {
     return type;
 }
-
+QSharedPointer<ModeInfo> BandInfo::findMode(QString mstr)
+{
+    for(auto m: modes)
+    {
+        if (m->getType() == mstr)
+            return m;
+    }
+    return QSharedPointer<ModeInfo>();
+}
 void ModeInfo::setType ( const QString &t )
 {
     type = t.toUpper();
