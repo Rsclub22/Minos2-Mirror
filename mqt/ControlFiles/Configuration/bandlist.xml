@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bandlist>
-	<Version date='2020-09-13' version='2.2'/>
+	<Version date='2020-09-15' version='2.2'/>
 <!-- Bands as allowed by UK contests -->
 <Band type='HF'    flow='1810'   fhigh='2000'   unit='K' wlen='160m'   UK='1.8 MHz'  Reg1Test=''        ADIF='160m'   Cabrillo='1800'  Colour='red'>
     <Mode type='CW' flow='1810' fclow1='1810' fchigh1='1840' fhigh='1840'/>
@@ -28,22 +28,29 @@
 </Band>
 <Band type='VHF'   flow='50000'  fhigh='52000'  unit='K' wlen='6m'     UK='50 MHz'   Reg1Test='50 MHz'  ADIF='6m'     Cabrillo='50'    Colour='red'>
     <Mode type='CW' flow='50030' fclow1='50030' fchigh1='50100' fhigh='50100'/>
-    <Mode type='USB' flow='50100' fclow1='50130' fchigh1='50300' fhigh='50300'/>
+    <Mode type='USB' flow='50100' fclow1='50130' fchigh1='50300' fhigh='50300'>
+        <Exclude flow='50105' fhigh='50115' reason='SSB Centre of Activity'/>
+    </Mode>
+    <Mode type='MGM' flow='50300' fclow1='50300' fchigh1='50400' fhigh='50400'/>
+    <Mode type='FT8' flow='50313' fclow1='50313' fchigh1='50316' fhigh='50316'/>
 </Band>
 <Band type='VHF'   flow='70000'  fhigh='70500'  unit='K' wlen='4m'     UK='70 MHz'   Reg1Test='70 MHz'  ADIF='4m'     Cabrillo='70'    Colour='green'>
     <Mode type='CW' flow='70100' fclow1='70100' fchigh1='70250' fhigh='70250'/>
-    <Mode type='USB' flow='70100' fclow1='70100' fchigh1='70250' fhigh='70250'/>
+    <Mode type='USB' flow='70100' fclow1='70100' fchigh1='70250' fhigh='70250'>
+        <Exclude flow='70195' fhigh='70205' reason='SSB Centre of Activity'/>
+    </Mode>
+    <Mode type='MGM' flow='702500' fclow1='70250' fchigh1='70294' fhigh='70294'/>
+    <Mode type='FT8' flow='570100' fclow1='70100' fchigh1='70103' fhigh='70103'/>
 </Band>
 <Band type='VHF'   flow='144000'    fhigh='146000'    unit='K' wlen='2m'     UK='144 MHz'  Reg1Test='145 MHz' ADIF='2m'     Cabrillo='144'   Colour='blue'>
     <Mode type='CW' flow='144000' fclow1='144025' fchigh1='144150' fhigh='144150'>
     </Mode>
     <Mode type='USB' flow='144150' fclow1='144150' fchigh1='144400' fhigh='144400'>
-        <Exclude flow='144173' fhigh='144175' reason='FT8'/>
         <Exclude flow='144295' fhigh='144305' reason=' SSB Centre of Activity'/>
         <Exclude flow='144369' fhigh='144371' reason='MGM MS calling'/>
     </Mode>
     <Mode type='FM' flow='144500' fclow1='144500' fchigh1='144794' fhigh='144794'/>
-    <Mode type='FT8' flow='144174' fclow1='144174' fchigh1='144178' fhigh='144178'/>
+    <Mode type='FT8' flow='144174' fclow1='144174' fchigh1='144177' fhigh='144177'/>
 </Band>
 <Band type='VHF'   flow='430000'    fhigh='440000'    unit='K' wlen='70cm'   UK='432 MHz'  Reg1Test='435 MHz' ADIF='70cm'   Cabrillo='432'   Colour='teal'>
     <Mode type='CW' flow='432000' fclow1='432000' fchigh1='432100' fhigh='432100'/>
@@ -54,11 +61,15 @@
 </Band>
 <Band type='MWave' flow='1240000'   fhigh='1325000'   unit='K' wlen='23cm'   UK='1296 MHz' Reg1Test='1,3 GHz' ADIF='23cm'   Cabrillo='1.2G'  Colour='purple'>
     <Mode type='CW' flow='1296000' fclow1='1296000' fchigh1='1296150' fhigh='1296150'/>
-    <Mode type='USB' flow='1296150' fclow1='1296150' fchigh1='1296800' fhigh='1296800'/>
+    <Mode type='USB' flow='1296150' fclow1='1296150' fchigh1='1296400' fhigh='1296400'/>
 </Band>
-<Band type='MWave' flow='2300'   fhigh='2450'   unit='M' wlen='13cm'   UK='2300 MHz' Reg1Test='2,3 GHz' ADIF='13cm'   Cabrillo='2.3G'  Colour='navy'>
+<Band type='MWave' flow='2300000'   fhigh='2450000'   unit='K' wlen='13cm'   UK='2300 MHz' Reg1Test='2,3 GHz' ADIF='13cm'   Cabrillo='2.3G'  Colour='navy'>
+    <Mode type='CW' flow='2300150' fclow1='2300150' fchigh1='2300200' fclow2='2300700' fchigh2='2300800' fhigh='2300800'/>
+    <Mode type='USB' flow='2300220' fclow1='2300220' fchigh1='2300250' fclow2='2300500' fchigh2='2300600' fhigh='2300600'/>
 </Band>
-<Band type='MWave' flow='3400'   fhigh='3475'   unit='M' wlen='9cm'    UK='3.4 GHz'  Reg1Test='3,4 GHz' ADIF='9cm'    Cabrillo='3.4G'  Colour='black'>
+<Band type='MWave' flow='3400000'   fhigh='3475000'   unit='K' wlen='9cm'    UK='3.4 GHz'  Reg1Test='3,4 GHz' ADIF='9cm'    Cabrillo='3.4G'  Colour='black'>
+<Mode type='CW' flow='3400000' fclow1='3400000' fchigh1='3475000' fhigh='3475000'/>
+<Mode type='USB' flow='3400000' fclow1='3400000' fchigh1='3475000' fhigh='3475000'/>
 </Band>
 <Band type='MWave' flow='5650'   fhigh='5850'   unit='M' wlen='6cm'    UK='5.6 GHz'  Reg1Test='5,7 GHz' ADIF='6cm'    Cabrillo='5.7G'  Colour='red'>
 </Band>
