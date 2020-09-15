@@ -66,17 +66,23 @@ bool freqModeBandPlan::loadExclusionsFromBandList()
         for (QVector<QSharedPointer<ModeInfo> >::iterator m = (*b)->modes.begin(); m != (*b)->modes.end(); m++)
         {
             ModeFreqDetail<double> mfl;
-            if ((*b)->fLow < (*m)->fLow)
+            if ((*b)->fLow < (*m)->fcLow1)
             {
-                addPair(mfl, (*b)->fLow, (*m)->fLow);
+                addPair(mfl, (*b)->fLow, (*m)->fcLow1);
             }
             for (QVector<QSharedPointer<ExclusionInfo> >::iterator e = (*m)->exclusions.begin(); e != (*m)->exclusions.end(); e++)
             {
                 addPair(mfl, (*e)->fLow, (*e)->fHigh);
             }
-            if ((*m)->fHigh < (*b)->fHigh)
+            if ((*m)->fcLow2 > 0.1)
             {
-                addPair(mfl, (*m)->fHigh, (*b)->fHigh);
+                // add the bit between contest segments as an exclusion
+                addPair(mfl, (*m)->fcHigh1, (*m)->fcLow2);
+            }
+            double fcHigh = std::max((*m)->fcHigh1, (*m)->fcHigh2);
+            if (fcHigh < (*b)->fHigh)
+            {
+                addPair(mfl, fcHigh, (*b)->fHigh);
             }
             if (mfl.freq.count())
             {
