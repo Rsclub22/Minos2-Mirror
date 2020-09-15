@@ -28,7 +28,8 @@ class freqModeBandPlan: public QObject
 public:
     freqModeBandPlan();
 
-    bool loadFile(QString filename);
+    bool loadBandsFromBandList();
+    bool loadExclusionsFromBandList();
 
     int confirmMode(QString &band, QString &mode, double freq);
     bool modeExists(QString &band, QString &mode);
@@ -36,11 +37,10 @@ public:
 
 protected:
     QMap<QString, QMap<QString, ModeFreqDetail<double>> > bandModeFreqList;
-    QMap<QString, ModeFreqDetail<double>> modeFreqList;
 
 private:
 
-    bool readFile(QString f);
+//    bool readFile(QString f);
     bool loadedOk;
 
 

@@ -731,7 +731,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
     traceMsg(QString("Rig Init - freq after delay = %1").arg(QString::number(f)));
 
-    if (!checkValidBand(QString::number(f)))
+    if (!BandList::getBandList().checkValidBand(QString::number(f)))
     {
         f = 0;      // received freq not valid
         traceMsg(QString("Rig Init - freq not in valid band"));

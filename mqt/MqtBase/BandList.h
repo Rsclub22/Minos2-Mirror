@@ -26,11 +26,13 @@
 //---------------------------------------------------------------------------
 extern const QString allHF;
 
-class BandInfo;
-
-void loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands);
-bool checkValidBand(QString freq);
-int getBandOffSet(QStringList supportedBands, QString contestBandStr);
+class ExclusionInfo
+{
+public:
+    double fLow = 0.0;
+    double fHigh = 0.0;
+    QString reason;
+};
 
 class ModeInfo
 {
@@ -42,6 +44,9 @@ public:
     double fcHigh1 = 0.0;
     double fcLow2 = 0.0;
     double fcHigh2 = 0.0;
+
+    QVector<QSharedPointer<ExclusionInfo> > exclusions;
+
     void setType ( const QString &t );
     QString getType();
 };
@@ -82,11 +87,15 @@ class BandList
         bool findBand ( long freq, QSharedPointer<BandInfo>  & );
         bool findBand ( double freq, QSharedPointer<BandInfo>  &bi);
 
+        bool checkValidBand(QString freq);
+        void loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands);
+
         static BandList &getBandList();
 
 private:
         bool parseBand ( TiXmlElement * e );
         bool parseMode(QSharedPointer<BandInfo> band, QString unit, TiXmlElement *tix);
+        bool parseExclusion(QSharedPointer<ModeInfo> mode, QString unit, TiXmlElement *e);
 };
 
 #endif

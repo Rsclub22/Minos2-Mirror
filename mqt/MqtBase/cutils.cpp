@@ -590,3 +590,19 @@ QString anchoredPattern(const QString &expression)
            + expression
            + QLatin1String(")\\z");
 }
+int getStringlistOffSet(QStringList supportedBands, QString contestBandStr)
+{
+    // needed because QStringList::indexOf not introduced until 5.13
+    int i = 0;
+    while(i != supportedBands.count())
+    {
+        if (contestBandStr == supportedBands[i])
+        {
+            return i;
+        }
+        i++;
+    }
+
+    return -1;
+}
+

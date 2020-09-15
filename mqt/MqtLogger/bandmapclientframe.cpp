@@ -221,10 +221,10 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
 
-    loadVhfAndUpBands(bands);
+    BandList::getBandList().loadVhfAndUpBands(bands);
 
     modeBandPlan = new checkModeAgainstFreq();
-    if (modeBandPlan->loadFile(MODE_BANDPLAN_FILE))
+    if (modeBandPlan->loadBandsFromBandList())
     {
         traceMsg(QString("Mode frequency bandplan loaded OK"));
         modeBandPlanOk = true;
@@ -238,7 +238,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     }
 
     operatingFreq = new CheckOperatingFreq();
-    if (operatingFreq->loadFile(OPERATING_FREQ_FILE))
+    if (operatingFreq->loadExclusionsFromBandList())
     {
         traceMsg(QString("Operating frequency bandplan loaded OK"));
         operatingFreqPlanOk = true;
@@ -668,7 +668,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         contestUuid = ct->uuid;
         traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->currentBand.getValue();
-        contestBand = getBandOffSet(clusterBands, contestBandStr);
+        contestBand = getStringlistOffSet(clusterBands, contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 

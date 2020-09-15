@@ -156,7 +156,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
 */
     operatingFreq = new CheckOperatingFreq();
-    if (operatingFreq->loadFile("./Configuration/operating_frequencies.json"))
+    if (operatingFreq->loadExclusionsFromBandList())
     {
         traceMsg(QString("RigControl Frame: Operating frequency bandplan loaded OK"));
         operatingFreqPlanOk = true;
@@ -2207,9 +2207,9 @@ bool RigControlFrame::checkFreqIsLegal(const double freq, const QString mode)
 
 
     bandOk = blist.findBand(freq, bi);
-    QString band = bi->uk;
     if (bandOk)
     {
+        QString band = bi->uk;
         return isFreqLegal(freq, band, mode);
     }
 

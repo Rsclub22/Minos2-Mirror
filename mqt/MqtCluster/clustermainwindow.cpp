@@ -95,10 +95,10 @@ void ClusterMainWindow::doStartup()
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 
-    loadVhfAndUpBands(bands);
+    BandList::getBandList().loadVhfAndUpBands(bands);
 
     modeBandPlan = new checkModeAgainstFreq();
-    if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
+    if (modeBandPlan->loadBandsFromBandList())
     {
         trace(QString("Mode frequency bandplan loaded OK"));
 
@@ -1499,7 +1499,7 @@ void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString 
     if (setupCluster->getSendToDXClusterEnabled() && loginSuccess && !freq.isEmpty() && !call.isEmpty())
     {
         trace(QString("SendSpotToDXCluster: sending spot, call %1, freq %2, locator %3").arg(call).arg(freq).arg(loc));
-        if (checkValidBand(freq))
+        if (BandList::getBandList().checkValidBand(freq))
         {
 
 #ifdef TXSPOT

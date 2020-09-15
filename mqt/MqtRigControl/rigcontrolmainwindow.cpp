@@ -120,7 +120,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     rigFactory = new RigFactory(false, this);
 
 
-    loadVhfAndUpBands(bands);
+    BandList::getBandList().loadVhfAndUpBands(bands);
     FreqPresetDialog::readSettings(presetFreq);
 
     setupRadio = new RigSetupDialog(rigFactory, bands);

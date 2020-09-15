@@ -198,29 +198,93 @@ bool BandList::parseMode (QSharedPointer<BandInfo> band, QString unit, TiXmlElem
     QSharedPointer<ModeInfo> mode(new ModeInfo());
     mode->setType ( getAttribute ( e, "type" ) );
 
-    QString temp = getAttribute ( e, "flow" );
+    QString temp;
+    temp = getAttribute ( e, "flow" );
     mode->fLow = temp.toInt();
     temp = getAttribute ( e, "fhigh" );
     mode->fHigh = temp.toInt();
+
+    temp = getAttribute ( e, "fclow1" );
+    mode->fcLow1 = temp.toInt();
+    temp = getAttribute ( e, "fchigh1" );
+    mode->fcHigh1 = temp.toInt();
+
+    temp = getAttribute ( e, "fclow2" );
+    mode->fcLow2 = temp.toInt();
+    temp = getAttribute ( e, "fchigh2" );
+    mode->fcHigh2 = temp.toInt();
+
     if ( unit == "K" )
     {
         mode->fLow *= 1000.0;
         mode->fHigh *= 1000.0;
+        mode->fcLow1 *= 1000.0;
+        mode->fcHigh1 *= 1000.0;
+        mode->fcLow2 *= 1000.0;
+        mode->fcHigh2 *= 1000.0;
     }
     else
         if ( unit == "M" )
         {
             mode->fLow *= 1000000.0;
             mode->fHigh *= 1000000.0;
+            mode->fcLow1 *= 1000000.0;
+            mode->fcHigh1 *= 1000000.0;
+            mode->fcLow2 *= 1000000.0;
+            mode->fcHigh2 *= 1000000.0;
         }
         else
             if ( unit == "G" )
             {
                 mode->fLow *= 1000000000.0;
                 mode->fHigh *= 1000000000.0;
+                mode->fcLow1 *= 1000000000.0;
+                mode->fcHigh1 *= 1000000000.0;
+                mode->fcLow2 *= 1000000000.0;
+                mode->fcHigh2 *= 1000000000.0;
             }
 
+    for ( TiXmlElement * m = e->FirstChildElement(); m; m = m->NextSiblingElement() )
+    {
+        if ( checkElementName ( m, "Exclude" ) )
+        {
+            if ( !parseExclusion( mode, unit, m ) )    // at the moment it always returns true
+            {
+                return false;
+            }
+        }
+    }
+
     band->modes.push_back(mode);
+    return true;
+}
+bool BandList::parseExclusion (QSharedPointer<ModeInfo> mode, QString unit, TiXmlElement *e)
+{
+    QSharedPointer<ExclusionInfo> excl(new ExclusionInfo());
+
+    QString temp = getAttribute ( e, "flow" );
+    excl->fLow = temp.toInt();
+    temp = getAttribute ( e, "fhigh" );
+    excl->fHigh = temp.toInt();
+    if ( unit == "K" )
+    {
+        excl->fLow *= 1000.0;
+        excl->fHigh *= 1000.0;
+    }
+    else
+        if ( unit == "M" )
+        {
+            excl->fLow *= 1000000.0;
+            excl->fHigh *= 1000000.0;
+        }
+        else
+            if ( unit == "G" )
+            {
+                excl->fLow *= 1000000000.0;
+                excl->fHigh *= 1000000000.0;
+            }
+    excl->reason = getAttribute( e, "reason");
+    mode->exclusions.push_back(excl);
     return true;
 }
 bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
@@ -339,30 +403,27 @@ bool BandList::findBand(double freq, QSharedPointer<BandInfo> &bi)
 
 
 
-void loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
+void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 {
-    BandList &blist = BandList::getBandList();
-
-    for (int i = 0; i < blist.bandList.size(); i++)   // just load VHF/UHF bands
+    for (int i = 0; i < bandList.size(); i++)   // just load VHF/UHF bands
     {
         // don't use bands > 10GHz (can't support Freq display)
-        if ( blist.bandList[i]->uk != "24 GHz" && blist.bandList[i]->uk != "47 GHz"
-             && blist.bandList[i]->uk != "76 GHz" && blist.bandList[i]->uk != "120 GHz"
-             && blist.bandList[i]->uk != "134 GHz" && blist.bandList[i]->uk != "248 GHz")
+        if ( bandList[i]->uk != "24 GHz" && bandList[i]->uk != "47 GHz"
+             && bandList[i]->uk != "76 GHz" && bandList[i]->uk != "120 GHz"
+             && bandList[i]->uk != "134 GHz" && bandList[i]->uk != "248 GHz")
 
         {
-            if (blist.bandList[i]->getType().compare("VHF", Qt::CaseInsensitive) == 0
-                    || blist.bandList[i]->getType().compare("MWave", Qt::CaseInsensitive) == 0)
-                bands.append(blist.bandList[i]);
+            if (bandList[i]->getType().compare("VHF", Qt::CaseInsensitive) == 0
+                    || bandList[i]->getType().compare("MWave", Qt::CaseInsensitive) == 0)
+                bands.append(bandList[i]);
         }
     }
 
 }
 
-bool checkValidBand(QString freq)
+bool BandList::checkValidBand(QString freq)
 {
     bool ok = false;
-    BandList &blist = BandList::getBandList();
     QSharedPointer<BandInfo>  bi;
     bool bandOK = false;
     QString sfreq = freq.trimmed();
@@ -371,24 +432,9 @@ bool checkValidBand(QString freq)
 
     if (ok)
     {
-        bandOK = blist.findBand(dfreq, bi);
+        bandOK = findBand(dfreq, bi);
     }
     return bandOK;
-}
-
-int getBandOffSet(QStringList supportedBands, QString contestBandStr)
-{
-    int i = 0;
-    while(i != supportedBands.count())
-    {
-        if (contestBandStr == supportedBands[i])
-        {
-            return i;
-        }
-        i++;
-    }
-
-    return -1;
 }
 
 

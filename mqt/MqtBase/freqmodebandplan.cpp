@@ -11,13 +11,13 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-
+#include "BandList.h"
 #include "freqmodebandplan.h"
 
-#include <QJsonDocument>
-#include <QJsonParseError>
-#include <QJsonObject>
-#include <QJsonArray>
+//#include <QJsonDocument>
+//#include <QJsonParseError>
+//#include <QJsonObject>
+//#include <QJsonArray>
 
 
 // parses a json file to get mode frequencies for each band or "legal" operating frequencies for each band
@@ -29,20 +29,77 @@ freqModeBandPlan::freqModeBandPlan() :
 }
 
 
-bool freqModeBandPlan::loadFile(QString filename)
+bool freqModeBandPlan::loadBandsFromBandList()
 {
-    bool ret = false;
-    ret = readFile(filename);
+    bandModeFreqList.clear();
+    BandList &blist = BandList::getBandList();
+    for (QVector<QSharedPointer<BandInfo> >::iterator b = blist.bandList.begin(); b != blist.bandList.end(); b++)
+    {
+        QMap<QString, ModeFreqDetail<double>> modeFreqList;
+        for (QVector<QSharedPointer<ModeInfo> >::iterator m = (*b)->modes.begin(); m != (*b)->modes.end(); m++)
+        {
+            ModeFreqDetail<double> mfl;
+            QList<double> freqHighLow;
 
-    return ret;
+            freqHighLow.append((*m)->fLow/1000.0);
+            freqHighLow.append((*m)->fHigh/1000.0);
+            mfl.freq.append(freqHighLow);
+
+            modeFreqList.insert((*m)->getType(), mfl);
+        }
+        if (modeFreqList.count())
+        {
+            bandModeFreqList.insert((*b)->name(), modeFreqList);
+        }
+    }
+    return bandModeFreqList.size() > 0;
+}
+
+bool freqModeBandPlan::loadExclusionsFromBandList()
+{
+    bandModeFreqList.clear();
+    BandList &blist = BandList::getBandList();
+    for (QVector<QSharedPointer<BandInfo> >::iterator b = blist.bandList.begin(); b != blist.bandList.end(); b++)
+    {
+        QMap<QString, ModeFreqDetail<double>> modeFreqList;
+        for (QVector<QSharedPointer<ModeInfo> >::iterator m = (*b)->modes.begin(); m != (*b)->modes.end(); m++)
+        {
+            ModeFreqDetail<double> mfl;
+            for (QVector<QSharedPointer<ExclusionInfo> >::iterator e = (*m)->exclusions.begin(); e != (*m)->exclusions.end(); e++)
+            {
+                QList<double> freqHighLow;
+                freqHighLow.append((*e)->fLow/1000.0);
+                freqHighLow.append((*e)->fHigh/1000.0);
+                mfl.freq.append(freqHighLow);
+            }
+            if (mfl.freq.count())
+            {
+                modeFreqList.insert((*m)->getType(), mfl);
+            }
+        }
+        if (modeFreqList.count())
+        {
+            bandModeFreqList.insert((*b)->name(), modeFreqList);
+        }
+    }
+    return bandModeFreqList.size() > 0;
 }
 
 
-
-
+#ifdef RUBBISH
 bool freqModeBandPlan::readFile(QString f)
 {
-
+/*
+ * array of band object - bandModeArray of bandObj
+ *      bandObj - array of modeObj
+ *          modeObj - array of frequency pairs
+ *
+ * each modeobj creates ModeFreqDetail<double> mfl, with a list of frequencies, up to 9 pairs in QList<QList<T>> freq
+ *
+ * modeFreqList is a map of mfl agains mode
+ *
+ * bandModeFreqList is a map of modeFreqList against band
+ */
 
 
     QJsonParseError err;
@@ -90,6 +147,7 @@ bool freqModeBandPlan::readFile(QString f)
 
             for (int i = 0; i < bandModeArray.count(); i++)
             {
+                QMap<QString, ModeFreqDetail<double>> modeFreqList;
 
                 bandObj = bandModeArray[i].toObject();
                 bandlist = bandObj.keys(); // got the band key name
@@ -154,7 +212,7 @@ bool freqModeBandPlan::readFile(QString f)
 
 }
 
-
+#endif
 bool freqModeBandPlan::checkLoadedOk()
 {
     return loadedOk;
