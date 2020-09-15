@@ -16,6 +16,7 @@ public:
     void sendFrequencyRequest(long f);
 
     QString getFrequency();
+    QString getMode();
     QString getRadioName();
 
     bool isConnected();
@@ -29,6 +30,7 @@ private:
     bool connected = false;
     QString currFrequency;
     QString radioName;
+    QString mode;
 
     QString genFreqStanza(long f);
     bool setAddress(QString addr, QHostAddress &host);

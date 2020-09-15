@@ -252,6 +252,10 @@ void N1MMLink::onReceiveUDP()
                {
                     radioName = e->GetText();
                }
+               if ( checkElementName( e, "Mode" ) )
+               {
+                    mode = e->GetText();
+               }
             }
 
         }
@@ -261,6 +265,11 @@ void N1MMLink::onReceiveUDP()
 QString N1MMLink::getFrequency()
 {
     return currFrequency;
+}
+
+QString N1MMLink::getMode()
+{
+    return mode;
 }
 
 QString N1MMLink::getRadioName()

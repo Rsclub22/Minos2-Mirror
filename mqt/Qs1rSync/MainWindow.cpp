@@ -231,6 +231,7 @@ void MainWindow::SyncTimerTimer(  )
     if (n1mmLink.isConnected())
     {
         mainRigFreq = convertStrToFreq(n1mmLink.getFrequency());
+        mainRigMode = n1mmLink.getMode();
         ui->Rig1Label->setText(n1mmLink.getRadioName());
         if (ui->trackRig->isChecked())
         {
@@ -284,6 +285,7 @@ void MainWindow::onReadyRead()
         if ( retlen > 0 )
         {
             sockbuffer[ retlen ] = 0;
+            trace(sockbuffer);
 
             lastQS1RRx =  sockbuffer;
             int fOffset = lastQS1RRx.indexOf("fHz=");
@@ -441,7 +443,7 @@ void MainWindow::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const 
 
 void MainWindow::trackBand()
 {
-    if (mainRigFreq == lastMainRigFreq && transvertOffset == lastTransverterOffset && mainRigMode != lastMainRigMode)
+    if (mainRigFreq == lastMainRigFreq && transvertOffset == lastTransverterOffset && mainRigMode == lastMainRigMode)
     {
         return; // nothing to do
     }
@@ -503,10 +505,11 @@ void MainWindow::trackBand()
 
             QString mess;
 
-            mess += ">SampleRate " + QString::number(sampleRate);
+            mess += ">SampleRate " + QString::number(sampleRate) + "\n";
             mess += ">fHz " + QString::number(fCentre) + "\n";
             mess += ">tf " + QString::number(lFreq - fCentre) + "\n";
 
+            trace(mess);
             ClientSocket1.write( mess.toLatin1().data(), mess.length() );
         }
     }
