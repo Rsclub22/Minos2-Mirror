@@ -8,20 +8,12 @@
 template <class T>
 class ModeFreqDetail
 {
-    //QString band;
-    //QString mode;
 public:
 
     QList<QList<T>> freq;
 
     int count() {return freq.count();}
-
-
-
-
 };
-
-
 
 class freqModeBandPlan: public QObject
 {
@@ -40,12 +32,8 @@ protected:
 
 private:
 
-//    bool readFile(QString f);
     bool loadedOk;
-
-
-
-
+    void addPair(ModeFreqDetail<double> &mfl, double fLow, double fHigh);
 };
 
 #endif // FREQMODEBANDPLAN_H
