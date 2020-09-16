@@ -70,6 +70,7 @@ private:
     QString lastQS1RRx;
     int fCentre = 0.0;
     int ftf = 0;
+    int sampleRate = 0;
 
     QString state;
     QString mainRigMode;

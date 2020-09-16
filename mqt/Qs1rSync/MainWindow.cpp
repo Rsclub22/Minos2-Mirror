@@ -1,12 +1,12 @@
 #include "base_pch.h"
 
 #include <QHostAddress>
-
+#include <QThread>
 #include "MinosRPC.h"
 #include "ConfigFile.h"
 #include "rigutils.h"
 #include "BandList.h"
-
+#include "delayedaction.h"
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "qs_defines.h"
@@ -70,12 +70,12 @@ public:
 
 QVector<BandWidth> bws =
 {
-     {20000, 25000},
+    {20000, 25000},
     {40000, 50000},
     {100000, 125000},
     {200000, 250000},
     {400000, 500000},
-    {5000000, 625000},
+    {500000, 625000},
     {1000000, 1250000},
     {1250000, 1562500},
     {2000000, 2500000}
@@ -249,6 +249,7 @@ void MainWindow::timer2Timeout()
     if (qs1rConnected)
     {
         QString mess = ">UpdateRxFreq\n?fHz\n?tf\n";
+        mess += "?SampleRate\n";
         ClientSocket1.write( mess.toLatin1().data(), mess.length() );
     }
     else if (!ClientSocket1.isOpen())
@@ -294,27 +295,39 @@ void MainWindow::onReadyRead()
 
             int fOffset = lastQS1RRx.indexOf("fHz=");
             int tfOffset = lastQS1RRx.indexOf("tf=");
-            if (fOffset >= 0 && tfOffset >= 0)
+            int srOffset = lastQS1RRx.indexOf("SampleRate=");
+            if (fOffset >= 0 && tfOffset >= 0 && srOffset >= 0)
             {
                 QString temp = lastQS1RRx.mid(fOffset + 4, tfOffset - fOffset - 4);
                 int l = temp.length();
-                while ((temp[l] == '\r') || (temp[l] == '\n'))
+                while (l > 0 && ((temp[l-1] == '\r') || (temp[l-1] == '\n')))
                 {
-                    temp = temp.right(l - 1);
+                    temp = temp.left(l - 1);
                     l = temp.length();
                 }
                 fCentre = temp.toInt();
-                temp = lastQS1RRx.mid(tfOffset + 3, 100);
+
+                temp = lastQS1RRx.mid(tfOffset + 3, srOffset - tfOffset - 4);
                 l = temp.length();
-                while ((temp[l] == '\r') || (temp[l] == '\n'))
+                while (l > 0 && ((temp[l-1] == '\r') || (temp[l-1] == '\n')))
                 {
-                    temp = temp.right( l - 1);
+                    temp = temp.left( l - 1);
                     l = temp.length();
                 }
                 ftf = temp.toInt();
+
+                temp = lastQS1RRx.mid(srOffset + 11, 100);
+                l = temp.length();
+                while (l > 0 && ((temp[l-1] == '\r') || (temp[l-1] == '\n')))
+                {
+                    temp = temp.left( l - 1);
+                    l = temp.length();
+                }
+                sampleRate = static_cast<int>(temp.toDouble());
             }
             double f = (fCentre + ftf);
-            lastQS1RRx = "fCentre " + QString::number(fCentre) + "\r\n tf " + QString::number(ftf) + " freq " + QLocale::system().toString(f, 'f', 0);
+            lastQS1RRx = "fCentre " + QString::number(fCentre) + " Sample Rate "+ QString::number(sampleRate/1000) + "Ksps\r\n"
+                    "tf " + QString::number(ftf) + " freq " + QLocale::system().toString(f, 'f', 0);
             if (ui->trackQS1R->isChecked())
             {
                 on_transfer21Button_clicked();
@@ -415,7 +428,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
             }
             if (selState.isDirty())
             {
-                mainRigMode = selState.radioMode().getValue();
+                mainRigMode = selState.radioMode().getValue().remove(":");
                 mainRigFreq = selState.radioFreq().getValue();
 
                 selState.clearDirty();
@@ -425,8 +438,10 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 {
                     on_transfer12Button_clicked();
                 }
+                delayedAction(this, [=]{
+                    trackBand();
+                }, 50);
             }
-            trackBand();
         }
         else
         {
@@ -446,6 +461,7 @@ void MainWindow::QS1RCentre(double fLow, double fHigh)
 {
     if (qs1rConnected)
     {
+        trace(QString("%1 %2").arg(fLow).arg(fHigh));
         double bandWidth = fHigh - fLow;
         double centre = fLow + bandWidth/2;
 
@@ -468,8 +484,13 @@ void MainWindow::QS1RCentre(double fLow, double fHigh)
 
             QString mess;
 
-            mess += ">SampleRate " + QString::number(sampleRate) + "\n";
-            mess += ">fHz " + QString::number(fCentre) + "\n";
+            mess = ">SampleRate " + QString::number(sampleRate) + "\n";
+            trace(mess);
+            ClientSocket1.write( mess.toLatin1().data(), mess.length() );
+            ClientSocket1.waitForBytesWritten(250);
+            QThread::msleep(500);
+
+            mess = ">fHz " + QString::number(fCentre) + "\n";
             mess += ">tf " + QString::number(lFreq - fCentre) + "\n";
 
             trace(mess);
@@ -486,6 +507,8 @@ void MainWindow::trackBand()
     lastMainRigFreq = mainRigFreq;
     lastTransverterOffset = transvertOffset;
     lastMainRigMode = mainRigMode;
+
+    trace(QString("rig %1 tv %2 mode %3").arg(lastMainRigFreq).arg(lastTransverterOffset).arg(lastMainRigMode));
 
     // mainRigFreq is absolute, i.e. on air frequency
     // so we use it to find the band
@@ -506,14 +529,17 @@ void MainWindow::trackBand()
     QSharedPointer<ModeInfo> mi = bi->findMode(mainRigMode);
     if (mi == lastBandMode && bi == lastBand)
     {
+        trace("band/mode unchanged");
         return;
     }
     if (!mi)
     {
+        trace("band/mode not found");
         QS1RCentre(bi->fLow, bi->fHigh);
     }
     else
     {
+        trace("mode found OK");
         QS1RCentre(mi->fLow, mi->fHigh);
     }
     lastBand = bi;
