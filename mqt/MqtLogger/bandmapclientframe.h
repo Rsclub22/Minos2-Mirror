@@ -313,7 +313,7 @@ private:
     void saveBandmapZoomLevel(int &level);
     int readBandmapZoomLevel();
     void setZoomLevelLabelText(int level);
-    void on_pushbuttonPressed();
+
 protected:
 
 
@@ -366,6 +366,7 @@ private slots:
      void on_readZoomLevelActionSelected();
      void on_newZoomlevel(int level);
      void requestSpots();
+     void on_pushbuttonPressed();
 };
 
 

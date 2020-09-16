@@ -132,7 +132,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     clusterRpc = new Clusterrpc();
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(QString, QString, QString)), this, SLOT(sendSpotToDXCluster(QString, QString, QString)));
-    connect(clusterRpc, SIGNAL(resendSpotToClients(QString, int, QString, int)), this, SLOT(onResendSpotToClients(QString, int, QString, int)));
+    connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, int)), this, SLOT(onResendSpotToClients(int, QString, QString, int)));
 
 
     sendSpotsToClientTimer = new QTimer();
@@ -1107,12 +1107,13 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QString &spotCall)
 }
 
 
-void ClusterMainWindow::onResendSpotToClients(QString cmd, int bandMask, QString loggerUuid, int frameId)
+void ClusterMainWindow::onResendSpotToClients(int frameId, QString loggerUuid, QString cmd, int bandMask)
 {
     ResendSpotCommand spotCmd;
     spotCmd.setCmd(cmd);
     spotCmd.setBandmak(bandMask);
     spotCmd.setUuid(loggerUuid);
+    spotCmd.setFrameId(frameId);
     resendSpotsToClientQueue.append(spotCmd);
 
 }

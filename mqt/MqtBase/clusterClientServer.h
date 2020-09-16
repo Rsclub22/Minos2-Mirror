@@ -41,7 +41,7 @@ public:
 private:
     static ClusterClientServer *clusterClientServer;
     QTimer SyncTimer;
-    QString logUuid;
+
 
     void addSpotQueue(const ClusterMessage spot);
 

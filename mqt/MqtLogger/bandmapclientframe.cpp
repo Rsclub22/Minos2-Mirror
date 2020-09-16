@@ -327,7 +327,7 @@ void BandmapClientFrame::on_pushbuttonPressed()
 {
     if (ct  && contestBand != -1)
     {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
     }
 }
 
@@ -338,7 +338,7 @@ void BandmapClientFrame::requestSpots()
     if (ct && contestBand != -1)
     {
 
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
     }
 }
 
@@ -1023,7 +1023,21 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 {
 
     QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
-    QStringList sl = spot.split(DXSPOT);
+
+    bool resentSpot = false;
+
+    QStringList sl;
+    if (spot.contains(DXSPOT))
+    {
+       sl = spot.split(DXSPOT);
+    }
+    else if (spot.contains(RESENTSPOT))
+    {
+       resentSpot = true;
+       sl = spot.split(RESENTSPOT);
+    }
+
+
     if (sl.count() == 2)
     {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)

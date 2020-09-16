@@ -33,7 +33,7 @@ public:
 signals:
 
     void sendSpotToDXCluster(QString, QString, QString);
-    void resendSpotToClients(QString, int, int, QString);
+    void resendSpotToClients(int, QString, QString, int);
 
 
 private slots:

@@ -114,7 +114,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
 
 
               trace(QString("Cluster RPC: resendspots command to cluster = %1, bandmask = %2, from loggerUuid = %3, frameId %4").arg(cmd).arg(bandMask).arg(logUuid).arg(frameId));
-              emit resendSpotToClients(cmd, bandMask, frameId, logUuid);
+              emit resendSpotToClients(frameId, logUuid, cmd, bandMask);
 
           }
 

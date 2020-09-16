@@ -346,7 +346,7 @@ private slots:
     void clusterListChanged();
     void about();
     void handleStatusTimer();
-    void onResendSpotToClients(QString cmd, int bandmask, QString loggerUuid, int frameId);
+    void onResendSpotToClients(int frameId,  QString loggerUuid, QString cmd, int bandmask );
 
 
 #ifdef TEST_SPOTS
