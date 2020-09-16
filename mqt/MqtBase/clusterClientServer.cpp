@@ -64,16 +64,22 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
         {
             QSharedPointer<RPCParam> psMess;
             QSharedPointer<RPCParam> loggerUuid;
+            QSharedPointer<RPCParam> frameId;
             QString pmess;
             QString uuid;
-            if (args->getStructArgMember(0, rpcConstants::sendClusterSpot, psMess) && args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid))
+            int frame_id;
+            if (args->getStructArgMember(0, rpcConstants::sendClusterSpot, psMess)
+                    && args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid)
+                    && args->getStructArgMember(0, rpcConstants::clusterFrameId, frameId))
             {
 
                 psMess->getString(pmess);
                 loggerUuid->getString(uuid);
+                frameId->getInt(frame_id);
                 trace(QString("ClusterClientServer: on_serverCall - receive cluster spot = %1, uuid = %2").arg(pmess).arg(uuid));
                 ClusterMessage msg;
                 msg.setMessage(pmess);
+                msg.setFrameId(frame_id);
                 msg.setLoggerUuid(uuid);
                 addSpotQueue( msg );
 

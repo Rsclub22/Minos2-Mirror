@@ -117,12 +117,15 @@ public:
     void setBandmak(int bandmask_){bandmask = bandmask_;}
     QString getuuid(){return uuid;}
     void setUuid(QString uuid_){uuid = uuid_;}
+    int getFrameId(){return frameId;}
+    void setFrameId(int frameId_){frameId = frameId_;}
 
 private:
 
     QString cmd;
     int bandmask;
     QString uuid;
+    int frameId;
 };
 
 class ClusterMainWindow : public QMainWindow
@@ -343,7 +346,7 @@ private slots:
     void clusterListChanged();
     void about();
     void handleStatusTimer();
-    void onResendSpotToClients(QString cmd, int bandmask, QString loggerUuid);
+    void onResendSpotToClients(QString cmd, int bandmask, QString loggerUuid, int frameId);
 
 
 #ifdef TEST_SPOTS

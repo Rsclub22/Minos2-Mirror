@@ -54,6 +54,7 @@ static const QString clusterCategory    ("ClusterCategory");
 static const QString clusterReport      ("Report");
 static const QString clusterTXSpotEnableState ("ClusterTXSpotEnableState");
 static const QString clusterBandmask ("ClusterBandmask");
+static const QString clusterFrameId ("ClusterFrameId");
 
 // Chat
 static const QString chatApp            ("mqtChat");

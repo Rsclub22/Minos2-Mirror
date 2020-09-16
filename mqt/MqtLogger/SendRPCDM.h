@@ -14,6 +14,7 @@
 #include "ConfigFile.h"
 #include "RigCache.h"
 #include "RotatorCache.h"
+#include "clustercommon.h"
 
 //---------------------------------------------------------------------------
 class MinosRPCObj;
@@ -61,7 +62,7 @@ public:  		// User declarations
       void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
       //void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );
       void sendSpotToClusterServer(  const QString &freq, const QString &call, const QString &loc );
-      void sendRequestSpotsResentFromClusterServer(const QString &cmd, const int bandMask, const QString &uuid);
+      void sendRequestSpotsResentFromClusterServer(resendFrameId frameId, const QString &cmd, const int bandMask, const QString &uuid);
       void sendKeyerTone(TSingleLogFrame *tslf);
       void sendKeyerTwoTone(TSingleLogFrame *tslf);
       void sendKeyerStop(TSingleLogFrame *tslf);

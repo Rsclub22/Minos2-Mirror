@@ -179,7 +179,7 @@ void TSendDM::sendSpotToClusterServer( const QString &freq, const QString &call,
 }
 
 
-void TSendDM::sendRequestSpotsResentFromClusterServer( const QString &cmd, const int bandMask, const QString &uuid )
+void TSendDM::sendRequestSpotsResentFromClusterServer( resendFrameId id, const QString &cmd, const int bandMask, const QString &uuid )
 {
 
     if (!clusterApp.isEmpty())
@@ -191,9 +191,11 @@ void TSendDM::sendRequestSpotsResentFromClusterServer( const QString &cmd, const
         QSharedPointer<RPCParam>logUuid(new RPCStringParam(uuid ));
         QSharedPointer<RPCParam>resendCmd(new RPCStringParam(cmd));
         QSharedPointer<RPCParam>bandmask(new RPCIntParam(bandMask));
+        QSharedPointer<RPCParam>frameId(new RPCIntParam(id));
 
         st->addMember( sName, rpcConstants::paramName );
         st->addMember( resendCmd, rpcConstants::clusterResendSpotsCmd );
+        st->addMember( frameId, rpcConstants::clusterFrameId ); // cluster or bandmap frame
         st->addMember(bandmask, rpcConstants::clusterBandmask);
         st->addMember(logUuid, rpcConstants::loggerUuid);
 

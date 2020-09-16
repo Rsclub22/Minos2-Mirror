@@ -188,13 +188,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
     //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
-    connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(on_pushbuttonPressed()));
+    connect(ui->resendSpotsTestPb, SIGNAL(pressed()), this, SLOT(on_pushbuttonPressed()));
 
 
     if (!isProtected)
     {
         QTimer::singleShot(2000, this, SLOT(requestSpots()));
-        //requestSpots();
+
     }
 
 
@@ -220,7 +220,7 @@ void ClusterClientFrame::on_pushbuttonPressed()
 {
     if (ct  && contestBand != -1)
     {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, contestBand, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
     }
 }
 
@@ -231,7 +231,7 @@ void ClusterClientFrame::requestSpots()
     if (ct && contestBand != -1)
     {
 
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, contestBand, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
     }
 }
 
@@ -651,10 +651,10 @@ void ClusterClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
         for (int i = 0; i < spotMsg.count(); i++)
         {
             ClusterMessage msg = spotMsg[i];
-            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage()).arg(msg.getLoggerUuid()).arg(ct->uuid));
+            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3, this frameId = %4").arg(msg.getMessage()).arg(msg.getLoggerUuid()).arg(ct->uuid).arg(msg.getFrameId()));
 
             // if loggerUuid is empty, message is for all frames
-            if (msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid)
+            if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid) && (msg.getFrameId() == resendFrameId::CLUSTER_CLIENT || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
             {
                 if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
                 {

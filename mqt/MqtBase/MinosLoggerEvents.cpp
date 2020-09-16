@@ -238,9 +238,9 @@ void MinosLoggerEvents::SendSpotToLog(memoryData::memData spotData)
 {
     emit mle.DxSpotToLog(spotData);
 }
-void MinosLoggerEvents::SendRequestResendSpotsToClusterServer(QString command, int bandmask, QString uuid)
+void MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId frameId, QString command, int bandmask, QString uuid)
 {
-    emit mle.ResendSpotsFromClusterCommand(command, bandmask, uuid);
+    emit mle.ResendSpotsFromClusterCommand(frameId, command, bandmask, uuid);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendSpotToMemory(BaseContestLog *c, memoryData::memData spotData)

@@ -34,7 +34,7 @@ int Clusterrpc::getServerListCount()
 
 //---------------------------------------------------------------------------
 
-void Clusterrpc::sendDXSpot(QString spot, QString uuid)
+void Clusterrpc::sendDXSpot(QString spot, QString uuid, int frameId)
 {
     // We need to send the message to all connected cluster clients, except the spot server
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
@@ -45,6 +45,7 @@ void Clusterrpc::sendDXSpot(QString spot, QString uuid)
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( spot, rpcConstants::sendClusterSpot );
         st->addMember(uuid, rpcConstants::loggerUuid);
+        st->addMember(frameId, rpcConstants::clusterFrameId);
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( (*i).app );
 
@@ -64,6 +65,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
       QSharedPointer<RPCParam> psCall;
       QSharedPointer<RPCParam> psLoc;
       QSharedPointer<RPCParam> loggerUuid;
+      QSharedPointer<RPCParam> clusterFrameId;
       QSharedPointer<RPCParam> resendSpotCmd;
       QSharedPointer<RPCParam> bandmask;
       RPCArgs *args = mro->getCallArgs();
@@ -99,16 +101,20 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
           QString cmd;
           QString logUuid;
           int bandMask;
+          int frameId;
           if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd)
-                   && args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid)
+                  && args->getStructArgMember(0, rpcConstants::clusterFrameId, clusterFrameId)
+                  && args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid)
                    && args->getStructArgMember(0, rpcConstants::clusterBandmask, bandmask))
           {
               resendSpotCmd->getString(cmd);
               loggerUuid->getString(logUuid);
               bandmask->getInt(bandMask);
+              clusterFrameId->getInt(frameId);
 
-              trace(QString("Cluster RPC: resendspots command to cluster = %1, bandmask = %2, from loggerUuid = %£").arg(cmd).arg(bandMask).arg(logUuid));
-              emit resendSpotToClients(cmd, bandMask, logUuid);
+
+              trace(QString("Cluster RPC: resendspots command to cluster = %1, bandmask = %2, from loggerUuid = %3, frameId %4").arg(cmd).arg(bandMask).arg(logUuid).arg(frameId));
+              emit resendSpotToClients(cmd, bandMask, frameId, logUuid);
 
           }
 

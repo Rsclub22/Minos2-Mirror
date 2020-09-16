@@ -158,6 +158,7 @@ const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yel
 const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
 
 // resend clusterspots to client commands
+enum resendFrameId {ALL_CLIENTS = -1, CLUSTER_CLIENT = 0, BANDMAP_CLIENT};
 const QString RESEND_ALL_SPOTS = "resendAll";
 
 
@@ -181,9 +182,13 @@ public:
     void setLoggerUuid(QString uuid){loggerUuid = uuid;}
     QString getLoggerUuid(){return loggerUuid;}
 
+    void setFrameId(int frameId_){frameId = static_cast<resendFrameId>(frameId_);}
+    resendFrameId getFrameId(){return frameId;}
+
 private:
     QString message;
     QString loggerUuid;
+    resendFrameId frameId;
 };
 
 

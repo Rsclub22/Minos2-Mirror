@@ -132,7 +132,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     clusterRpc = new Clusterrpc();
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(QString, QString, QString)), this, SLOT(sendSpotToDXCluster(QString, QString, QString)));
-    connect(clusterRpc, SIGNAL(resendSpotToClients(QString, int, QString)), this, SLOT(onResendSpotToClients(QString, int, QString)));
+    connect(clusterRpc, SIGNAL(resendSpotToClients(QString, int, QString, int)), this, SLOT(onResendSpotToClients(QString, int, QString, int)));
 
 
     sendSpotsToClientTimer = new QTimer();
@@ -1107,7 +1107,7 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QString &spotCall)
 }
 
 
-void ClusterMainWindow::onResendSpotToClients(QString cmd, int bandMask, QString loggerUuid)
+void ClusterMainWindow::onResendSpotToClients(QString cmd, int bandMask, QString loggerUuid, int frameId)
 {
     ResendSpotCommand spotCmd;
     spotCmd.setCmd(cmd);
@@ -1148,7 +1148,7 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
             if (cmd.getBandmask() | dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt())
             {
                 QString spot = createResendSpotToSend(getSpotFromDisplayDb(row));
-                clusterRpc->sendDXSpot(spot, cmd.getuuid());   // send spot and loggeruuid
+                clusterRpc->sendDXSpot(spot, cmd.getuuid(), cmd.getFrameId());   // send spot and loggeruuid
             }
 
         }
@@ -1225,7 +1225,7 @@ void ClusterMainWindow::getSpotsFromSendToClientQueue()
             while (sendSpotsToClientQueue.count() > 0)
             {
                 trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsToClientQueue.count()).arg(sendSpotsToClientQueue[0]));
-                clusterRpc->sendDXSpot(sendSpotsToClientQueue[0], "");      // uuid = space all logs
+                clusterRpc->sendDXSpot(sendSpotsToClientQueue[0], "", resendFrameId::ALL_CLIENTS);      // uuid = space all logs
                 sendSpotsToClientQueue.removeFirst();
             }
         }
