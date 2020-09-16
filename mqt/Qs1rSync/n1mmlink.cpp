@@ -221,9 +221,9 @@ void N1MMLink::onReceiveUDP()
         quint16 port;
         qint64 res = qus->readDatagram(buf.data(), buf.size(), &host, &port);
         QString dg = QString(buf);
-        dg = dg.remove("\r");
+        QString dgs = dg.remove("\r").replace("\n", " ");
 
-        trace("Datagram received from " + host.toString() + " " + dg);
+        trace("Datagram received from " + host.toString() + " " + dgs);
         if (res > 0)
         {
             // Analyse...

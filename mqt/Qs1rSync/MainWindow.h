@@ -8,6 +8,7 @@
 namespace Ui {
 class MainWindow;
 }
+class BandInfo;
 class ModeInfo;
 class MainWindow : public QMainWindow
 {
@@ -78,6 +79,7 @@ private:
     double lastMainRigFreq = 0.0;
     double lastTransverterOffset = 0.0;
 
+    QSharedPointer<BandInfo>  lastBand;
     QSharedPointer<ModeInfo>  lastBandMode;
 
     PubSubName rigSelected;
@@ -86,6 +88,7 @@ private:
     double transvertOffset = 0.0;
 
     void trackBand();
+    void QS1RCentre(double fLow, double fHigh);
 };
 
 #endif // MAINWINDOW_H

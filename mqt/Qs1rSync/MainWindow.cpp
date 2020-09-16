@@ -285,9 +285,13 @@ void MainWindow::onReadyRead()
         if ( retlen > 0 )
         {
             sockbuffer[ retlen ] = 0;
-            trace(sockbuffer);
-
             lastQS1RRx =  sockbuffer;
+
+            if (lastQS1RRx.indexOf("NAK") >= 0 || lastQS1RRx.indexOf("?") >= 0)
+            {
+                trace(lastQS1RRx.remove('\r'));
+            }
+
             int fOffset = lastQS1RRx.indexOf("fHz=");
             int tfOffset = lastQS1RRx.indexOf("tf=");
             if (fOffset >= 0 && tfOffset >= 0)
@@ -315,7 +319,6 @@ void MainWindow::onReadyRead()
             {
                 on_transfer21Button_clicked();
             }
-
         }
     }
 }
@@ -437,52 +440,12 @@ void MainWindow::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const 
 {
     trace( "server callback from " + from + ( err ? ":Error" : ":Normal" ) );
     trace("method is " + mro->getMethodName());
-
 }
 //---------------------------------------------------------------------------
-
-void MainWindow::trackBand()
+void MainWindow::QS1RCentre(double fLow, double fHigh)
 {
-    if (mainRigFreq == lastMainRigFreq && transvertOffset == lastTransverterOffset && mainRigMode == lastMainRigMode)
-    {
-        return; // nothing to do
-    }
-    lastMainRigFreq = mainRigFreq;
-    lastTransverterOffset = transvertOffset;
-    lastMainRigMode = mainRigMode;
-
-    // mainRigFreq is absolute, i.e. on air frequency
-    // so we use it to find the band
-    // then we offset the band by the transverter offset before telling the QS1R
-
-    BandList &blist = BandList::getBandList();
-    QSharedPointer<BandInfo>  bi;
-    bool bandOK = blist.findBand(mainRigFreq, bi);
-    if (!bandOK)
-    {
-        return;
-    }
-
-    if (!ui->trackBandcb->isChecked())
-    {
-        return;
-    }
-    QSharedPointer<ModeInfo> mi = bi->findMode(mainRigMode);
-    if (!mi)
-    {
-        return;
-    }
-    if (mi == lastBandMode)
-    {
-        return;
-    }
-    lastBandMode = mi;
-
     if (qs1rConnected)
     {
-
-        double fLow = mi->fLow;
-        double fHigh = mi->fHigh;
         double bandWidth = fHigh - fLow;
         double centre = fLow + bandWidth/2;
 
@@ -513,6 +476,48 @@ void MainWindow::trackBand()
             ClientSocket1.write( mess.toLatin1().data(), mess.length() );
         }
     }
+}
+void MainWindow::trackBand()
+{
+    if (mainRigFreq == lastMainRigFreq && transvertOffset == lastTransverterOffset && mainRigMode == lastMainRigMode)
+    {
+        return; // nothing to do
+    }
+    lastMainRigFreq = mainRigFreq;
+    lastTransverterOffset = transvertOffset;
+    lastMainRigMode = mainRigMode;
+
+    // mainRigFreq is absolute, i.e. on air frequency
+    // so we use it to find the band
+    // then we offset the band by the transverter offset before telling the QS1R
+
+    BandList &blist = BandList::getBandList();
+    QSharedPointer<BandInfo>  bi;
+    bool bandOK = blist.findBand(mainRigFreq, bi);
+    if (!bandOK)
+    {
+        return;
+    }
+
+    if (!ui->trackBandcb->isChecked())
+    {
+        return;
+    }
+    QSharedPointer<ModeInfo> mi = bi->findMode(mainRigMode);
+    if (mi == lastBandMode && bi == lastBand)
+    {
+        return;
+    }
+    if (!mi)
+    {
+        QS1RCentre(bi->fLow, bi->fHigh);
+    }
+    else
+    {
+        QS1RCentre(mi->fLow, mi->fHigh);
+    }
+    lastBand = bi;
+    lastBandMode = mi;
 }
 
 void MainWindow::on_noTrack_clicked()
