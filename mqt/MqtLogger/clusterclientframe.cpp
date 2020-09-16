@@ -218,9 +218,9 @@ ClusterClientFrame::~ClusterClientFrame()
 
 void ClusterClientFrame::on_pushbuttonPressed()
 {
-    if (ct)
+    if (ct  && contestBand != -1)
     {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, contestBand, ct->uuid);
     }
 }
 
@@ -228,9 +228,10 @@ void ClusterClientFrame::on_pushbuttonPressed()
 void ClusterClientFrame::requestSpots()
 {
 
-    if (ct)
+    if (ct && contestBand != -1)
     {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, ct->uuid);
+
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(RESEND_ALL_SPOTS, contestBand, ct->uuid);
     }
 }
 

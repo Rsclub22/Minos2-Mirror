@@ -179,7 +179,7 @@ void TSendDM::sendSpotToClusterServer( const QString &freq, const QString &call,
 }
 
 
-void TSendDM::sendRequestSpotsResentFromClusterServer( const QString &cmd, const QString &uuid )
+void TSendDM::sendRequestSpotsResentFromClusterServer( const QString &cmd, const int bandMask, const QString &uuid )
 {
 
     if (!clusterApp.isEmpty())
@@ -190,10 +190,13 @@ void TSendDM::sendRequestSpotsResentFromClusterServer( const QString &cmd, const
         QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::clusterResendSpots));
         QSharedPointer<RPCParam>logUuid(new RPCStringParam(uuid ));
         QSharedPointer<RPCParam>resendCmd(new RPCStringParam(cmd));
+        QSharedPointer<RPCParam>bandmask(new RPCIntParam(bandMask));
 
         st->addMember( sName, rpcConstants::paramName );
         st->addMember( resendCmd, rpcConstants::clusterResendSpotsCmd );
+        st->addMember(bandmask, rpcConstants::clusterBandmask);
         st->addMember(logUuid, rpcConstants::loggerUuid);
+
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( clusterApp  );
     }

@@ -132,7 +132,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     clusterRpc = new Clusterrpc();
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(QString, QString, QString)), this, SLOT(sendSpotToDXCluster(QString, QString, QString)));
-    connect(clusterRpc, SIGNAL(resendSpotToClients(QString, QString)), this, SLOT(onResendSpotToClients(QString, QString)));
+    connect(clusterRpc, SIGNAL(resendSpotToClients(QString, int, QString)), this, SLOT(onResendSpotToClients(QString, int, QString)));
 
 
     sendSpotsToClientTimer = new QTimer();
@@ -1107,10 +1107,13 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QString &spotCall)
 }
 
 
-void ClusterMainWindow::onResendSpotToClients(QString cmd, QString loggerUuid)
+void ClusterMainWindow::onResendSpotToClients(QString cmd, int bandMask, QString loggerUuid)
 {
-    QString command = cmd + ':' + loggerUuid;
-    resendSpotsToClientQueue.append(command);
+    ResendSpotCommand spotCmd;
+    spotCmd.setCmd(cmd);
+    spotCmd.setBandmak(bandMask);
+    spotCmd.setUuid(loggerUuid);
+    resendSpotsToClientQueue.append(spotCmd);
 
 }
 
@@ -1123,7 +1126,7 @@ void ClusterMainWindow::handleResendSpotToClientsCmds()
 
         for (int i = 0; i < resendSpotsToClientQueue.count(); i++)
         {
-            if (resendSpotsToClientQueue[i].contains(RESEND_ALL_SPOTS))
+            if (resendSpotsToClientQueue[i].getCmd().contains(RESEND_ALL_SPOTS))
             {
 
                 resendAllSpotsToClients(resendSpotsToClientQueue[i]);
@@ -1135,27 +1138,21 @@ void ClusterMainWindow::handleResendSpotToClientsCmds()
     }
 }
 
-void ClusterMainWindow::resendAllSpotsToClients(QString cmd)
+void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
 {
 
-    if (cmd.contains(':'))
+    if (dxSpotDataModel->rowCount() > 0)
     {
-        QStringList cl = cmd.split(':');    // split to extract loggerUuuid
-        if (cl.count() == 2)
+        for (int row = 0; row < dxSpotDataModel->rowCount(); row ++)
         {
-            if (dxSpotDataModel->rowCount() > 0)
+            if (cmd.getBandmask() | dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt())
             {
-                for (int i = 0; i < dxSpotDataModel->rowCount(); i ++)
-                {
-                    QString spot = createResendSpotToSend(getSpotFromDisplayDb(i));
-                    clusterRpc->sendDXSpot(spot, cl[1]);   // send spot and loggeruuid
-
-                }
+                QString spot = createResendSpotToSend(getSpotFromDisplayDb(row));
+                clusterRpc->sendDXSpot(spot, cmd.getuuid());   // send spot and loggeruuid
             }
+
         }
-
     }
-
 
 }
 

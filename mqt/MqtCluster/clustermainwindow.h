@@ -108,6 +108,23 @@ public:
 
 };
 
+class ResendSpotCommand
+{
+public:
+    QString getCmd(){return cmd;}
+    void setCmd(QString cmd_){cmd = cmd_;}
+    int getBandmask(){return bandmask;}
+    void setBandmak(int bandmask_){bandmask = bandmask_;}
+    QString getuuid(){return uuid;}
+    void setUuid(QString uuid_){uuid = uuid_;}
+
+private:
+
+    QString cmd;
+    int bandmask;
+    QString uuid;
+};
+
 class ClusterMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -203,7 +220,7 @@ private:
     QStringList sendSpotsToClientQueue;
     QTimer* sendSpotsToClientTimer;
 
-    QList<QString> resendSpotsToClientQueue;
+    QList<ResendSpotCommand> resendSpotsToClientQueue;
 
     QString currentNodeName;
     QString currentAddress;
@@ -316,7 +333,7 @@ private:
     void handleResendSpotToClientsCmds();
 
     void getSpotsFromSendToClientQueue();
-    void resendAllSpotsToClients(QString cmd);
+    void resendAllSpotsToClients(ResendSpotCommand cmd);
 
     QString createResendSpotToSend(QString spot);
 
@@ -326,7 +343,7 @@ private slots:
     void clusterListChanged();
     void about();
     void handleStatusTimer();
-    void onResendSpotToClients(QString cmd, QString loggerUuid);
+    void onResendSpotToClients(QString cmd, int bandmask, QString loggerUuid);
 
 
 #ifdef TEST_SPOTS

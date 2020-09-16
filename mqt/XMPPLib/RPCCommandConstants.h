@@ -53,6 +53,7 @@ static const QString clusterResendSpotsCmd    ("MinosClusterResendCmd");
 static const QString clusterCategory    ("ClusterCategory");
 static const QString clusterReport      ("Report");
 static const QString clusterTXSpotEnableState ("ClusterTXSpotEnableState");
+static const QString clusterBandmask ("ClusterBandmask");
 
 // Chat
 static const QString chatApp            ("mqtChat");
