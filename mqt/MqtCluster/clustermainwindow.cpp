@@ -1170,8 +1170,8 @@ QString ClusterMainWindow::getSpotFromDisplayDb(int row)
     QString dxBandMask = dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDMASK_COL_NUM), DataStoredRole).toString();
     QString dxModeStr = dxSpotDataModel->data(dxSpotDataModel->index(row, DXSPOT_MODE_COL_NUM), DataStoredRole).toString();
     QString dxModeMask = dxSpotDataModel->data(dxSpotDataModel->index(row, DXMODEMASK_COL_NUM), DataStoredRole).toString();
-    QString spotCall = dxSpotDataModel->data(dxSpotDataModel->index(row, SPOT_CALL_COL_NUM), DataStoredRole).toString();
-    QString spotLocator = dxSpotDataModel->data(dxSpotDataModel->index(row, SPOTLOC_COL_NUM), DataStoredRole).toString();
+    QString spotCall = dxSpotDataModel->data(dxSpotDataModel->index(row, SPOTTER_CALL_COL_NUM), DataStoredRole).toString();
+    QString spotLocator = dxSpotDataModel->data(dxSpotDataModel->index(row, SPOTTER_LOC_COL_NUM), DataStoredRole).toString();
     QString spotTime = dxSpotDataModel->data(dxSpotDataModel->index(row, TIME_COL_NUM), DataStoredRole).toString();
     //qint64 rxTimeMsecs = dxSpotDataModel->data(dxSpotDataModel->index(row, RXTIME_COL_NUM), DataStoredRole).toLongLong();
     //QDateTime spotDateTime  = QDateTime::fromMSecsSinceEpoch(rxTimeMsecs);

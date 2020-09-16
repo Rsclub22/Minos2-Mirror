@@ -287,7 +287,7 @@ private:
     bool checkDbRowForMatch(qint64 incomingVal, int row, const int colNum);
     bool checkDbRowForMatch(bool incomingVal, int row, const int colNum);
 
-    bool checkSpotMatchonRow(SpotData *spotData, int row);
+
     bool checkspotExists(SpotData *spotData);
 
 private slots:

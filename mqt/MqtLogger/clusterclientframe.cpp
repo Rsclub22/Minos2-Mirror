@@ -650,7 +650,7 @@ void ClusterClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
         for (int i = 0; i < spotMsg.count(); i++)
         {
             ClusterMessage msg = spotMsg[i];
-            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage().arg(msg.getLoggerUuid().arg(ct->uuid))));
+            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage()).arg(msg.getLoggerUuid()).arg(ct->uuid));
 
             // if loggerUuid is empty, message is for all frames
             if (msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid)
@@ -808,34 +808,28 @@ bool ClusterClientFrame::checkspotExists(SpotData *spotData)
         return false;
     }
 
-    for (int r = 0; r < dxSpotDataModel->rowCount(); r++)
+    for (int row = 0; row < dxSpotDataModel->rowCount(); row++)
     {
-        if (checkSpotMatchonRow(spotData, r))
+        if (checkDbRowForMatch(spotData->dxCall, row, DXSPOT_CALL_COL_NUM) )
         {
-            return true;
-            break;
+
+            if (checkDbRowForMatch(spotData->dxFreq, row, FREQ_STR_COL_NUM) &&
+                    checkDbRowForMatch(spotData->spotTime, row, TIME_COL_NUM) &&
+                    checkDbRowForMatch(spotData->dxMode, row, DXSPOT_MODE_COL_NUM) &&
+                    checkDbRowForMatch(spotData->spotterCall, row, SPOTTER_CALL_COL_NUM))
+            {
+                return true;
+
+            }
         }
+
+
     }
 
     return false;
 }
 
 
-bool ClusterClientFrame::checkSpotMatchonRow(SpotData *spotData, int row)
-{
-    bool match = checkDbRowForMatch(spotData->dxCall, row, DXSPOT_CALL_COL_NUM) &&
-            checkDbRowForMatch(spotData->dxFreq, row, FREQ_STR_COL_NUM) &&
-            checkDbRowForMatch(spotData->spotTime, row, TIME_COL_NUM) &&
-            checkDbRowForMatch(spotData->dxMode, row, DXSPOT_MODE_COL_NUM) &&
-            checkDbRowForMatch(spotData->rxTime, row, RXTIME_COL_NUM) &&
-            checkDbRowForMatch(spotData->spotterCall, row, DXSPOT_CALL_COL_NUM);
-
-    return match;
-
-
-
-
-}
 
 bool ClusterClientFrame::checkDbRowForMatch(QString incomingVal, int row, const int colNum)
 {
@@ -1099,7 +1093,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
     if (ct != nullptr)
     {
         contestUuid = ct->uuid;
-        traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
+        traceMsg(QString("Set Contest: ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->contestBands.getValue();
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
@@ -1311,28 +1305,19 @@ void ClusterClientFrame::logActionSelected()
 
 void ClusterClientFrame::memoryActionSelected()
 {
-    //TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    //if (tslf->isMemoryLoaded(ct))
-    //{
-        int curTab = ui->dxSpotTab->currentIndex();
 
-        if (filterProxyModelList[curTab]->rowCount() > 0)
+    int curTab = ui->dxSpotTab->currentIndex();
+
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int currentRow = spotViewList[curTab]->currentIndex().row();
+        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
         {
-            int currentRow = spotViewList[curTab]->currentIndex().row();
-            if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
-            {
-                // check if spot has been sent to memory
-                //if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
-                //{
-                sendSpotToMemory(filterProxyModelList[curTab], currentRow);
-                //}
-
-            }
+            sendSpotToMemory(filterProxyModelList[curTab], currentRow);
 
         }
-    //}
 
-
+    }
 
 }
 
@@ -1527,33 +1512,21 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
 void ClusterClientFrame::dxSpotProxyModelUpdate()
 {
-    //dxSpotProxyModel->setDynamicSortFilter(false);
-    //dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    //dxSpotProxyModel->setDynamicSortFilter(true);
     dxSpotProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::callSignProxyModelUpdate()
 {
-    //callSignProxyModel->setDynamicSortFilter(false);
-   // callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    //callSignProxyModel->setDynamicSortFilter(true);
-    callSignProxyModel->setFilterRegExp("");
+   callSignProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::locatorProxyModelUpdate()
 {
-    //locatorProxyModel->setDynamicSortFilter(false);
-    //locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    //locatorProxyModel->setDynamicSortFilter(true);
     locatorProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::searchProxyModelUpdate()
 {
-    //searchSortProxyModel->setDynamicSortFilter(false);
-   // searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-   // searchSortProxyModel->setDynamicSortFilter(true);
     searchSortProxyModel->setFilterRegExp("");
 }
 
