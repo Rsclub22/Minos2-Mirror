@@ -117,10 +117,10 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case DXBRG_COL_NUM:
                 d = bandmapSpot->dxBrg;
             break;
-            case SPOT_CALL_COL_NUM:
+            case SPOTTER_CALL_COL_NUM:
                 d = bandmapSpot->spotterCall;
             break;
-            case SPOTLOC_COL_NUM:
+            case SPOTTER_LOC_COL_NUM:
                 d = bandmapSpot->spotterLocator;
             break;
             case COMMENT_COL_NUM:
@@ -185,10 +185,10 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case DXSPOT_MODE_COL_NUM:
                 d = bandmapSpot->dxMode;
             break;
-            case SPOT_CALL_COL_NUM:
+            case SPOTTER_CALL_COL_NUM:
                 d = bandmapSpot->spotterCall;
             break;
-            case SPOTLOC_COL_NUM:
+            case SPOTTER_LOC_COL_NUM:
                 d = bandmapSpot->spotterLocator;
             break;
             case COMMENT_COL_NUM:
@@ -290,10 +290,10 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             case DXLOC_WORKED_COL_NUM:
                 bandmapSpot->dxLocatorWorked = value.toBool();
             break;
-            case SPOT_CALL_COL_NUM:
+            case SPOTTER_CALL_COL_NUM:
                 bandmapSpot->spotterCall = value.toString();
                 break;
-            case SPOTLOC_COL_NUM:
+            case SPOTTER_LOC_COL_NUM:
                 bandmapSpot->spotterLocator = value.toString();
                 break;
             case COMMENT_COL_NUM:

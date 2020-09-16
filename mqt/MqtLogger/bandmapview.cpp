@@ -1368,8 +1368,8 @@ void BandmapView::assembleToolTip(int row, QString freq, QString& toolTipMsg)
     {
         distance += " km";
     }
-    QString spotterCallsign =  model()->data(model()->index(row, SPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
-    QString spotterLocator = model()->data(model()->index(row, SPOTLOC_COL_NUM), BMP_DataStoredRole).toString();
+    QString spotterCallsign =  model()->data(model()->index(row, SPOTTER_CALL_COL_NUM), BMP_DataStoredRole).toString();
+    QString spotterLocator = model()->data(model()->index(row, SPOTTER_LOC_COL_NUM), BMP_DataStoredRole).toString();
 
     QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), BMP_DataStoredRole).toString().replace('<', " (").replace('>', ") ");
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();

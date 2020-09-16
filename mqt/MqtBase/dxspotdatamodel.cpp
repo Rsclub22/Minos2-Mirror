@@ -42,6 +42,8 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
             switch (section) {
                 case TIME_COL_NUM:
                     return tr("UTC");
+                case DATE_COL_NUM:
+                    return tr("Date");
                 case FREQ_STR_COL_NUM:
                     return tr("Freq");
                 case DXSPOT_CALL_COL_NUM:
@@ -58,9 +60,9 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                     return tr("Brg");
                 case DXLOC_WORKED_COL_NUM:
                     return tr("Wkd");
-                case SPOT_CALL_COL_NUM:
+                case SPOTTER_CALL_COL_NUM:
                     return tr("Spotter");
-                case SPOTLOC_COL_NUM:
+                case SPOTTER_LOC_COL_NUM:
                     return tr("Loc");
                 case COMMENT_COL_NUM:
                 return tr("Comment");
@@ -179,6 +181,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case TIME_COL_NUM:
                 d = dxSpot->spotTime;
             break;
+            case DATE_COL_NUM:
+                d = dxSpot->spotDate;
+            break;
             case FREQ_STR_COL_NUM:
                 d = removeHundredHzAndHzDigits(dxSpot->dxFreq);
             break;
@@ -206,10 +211,10 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXBRG_COL_NUM:
                 d = dxSpot->dxBrg;
             break;
-            case SPOT_CALL_COL_NUM:
+            case SPOTTER_CALL_COL_NUM:
                 d = dxSpot->spotterCall;
             break;
-            case SPOTLOC_COL_NUM:
+            case SPOTTER_LOC_COL_NUM:
                 d = dxSpot->spotterLocator;
             break;
             case COMMENT_COL_NUM:
@@ -259,10 +264,10 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXBRG_COL_NUM:
                 d = dxSpot->dxBrg;
             break;
-            case SPOT_CALL_COL_NUM:
+            case SPOTTER_CALL_COL_NUM:
                 d = dxSpot->spotterCall;
             break;
-            case SPOTLOC_COL_NUM:
+            case SPOTTER_LOC_COL_NUM:
                 d = dxSpot->spotterLocator;
             break;
             case COMMENT_COL_NUM:
@@ -295,6 +300,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXBANDSTR_COL_NUM:
                 d = dxSpot->dxBandStr;
             break;
+            case DATE_COL_NUM:
+                d = dxSpot->spotDate;
+            break;
 
 
         }
@@ -322,6 +330,9 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             case TIME_COL_NUM :
                 dxSpot->spotTime = value.toString();
             break;
+            case DATE_COL_NUM:
+                dxSpot->spotDate = value.toString();
+            break;
             case FREQ_STR_COL_NUM:
                 dxSpot->dxFreq = value.toString();
             break;
@@ -343,10 +354,10 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             case DXLOC_WORKED_COL_NUM:
                 dxSpot->dxLocatorWorked = value.toBool();
             break;
-            case SPOT_CALL_COL_NUM:
+            case SPOTTER_CALL_COL_NUM:
                 dxSpot->spotterCall = value.toString();
                 break;
-            case SPOTLOC_COL_NUM:
+            case SPOTTER_LOC_COL_NUM:
                 dxSpot->spotterLocator = value.toString();
                 break;
             case COMMENT_COL_NUM:

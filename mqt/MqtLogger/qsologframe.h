@@ -284,6 +284,7 @@ signals:
     void freqChanged(QString);
     void sendSpotToClusterServer(QString, QString, QString);
 
+
 private slots:
     void focusChange(QObject *, bool, QFocusEvent *event);
     void on_CatchupButton_clicked();

@@ -34,19 +34,24 @@ int Clusterrpc::getServerListCount()
 
 //---------------------------------------------------------------------------
 
-void Clusterrpc::sendDXSpot(QString spot)
+void Clusterrpc::sendDXSpot(QString spot, QString uuid)
 {
     // We need to send the message to all connected cluster clients, except the spot server
     for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
     {
+
         trace(QString("SendDxSpot to station = %1").arg((*i).app));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( spot, rpcConstants::sendClusterSpot );
+        st->addMember(uuid, rpcConstants::loggerUuid);
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( (*i).app );
+
     }
 }
+
+
 
 void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
@@ -55,41 +60,65 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
    if ( !err )
    {
       QSharedPointer<RPCParam> psName;
-      QSharedPointer<RPCParam>piValue;
       QSharedPointer<RPCParam> psFreq;
       QSharedPointer<RPCParam> psCall;
       QSharedPointer<RPCParam> psLoc;
+      QSharedPointer<RPCParam> loggerUuid;
+      QSharedPointer<RPCParam> resendSpotCmd;
       RPCArgs *args = mro->getCallArgs();
 
-      QString freq;
-      QString call;
-      QString loc;
-
-
-      if (args->getStructArgMember(0, rpcConstants::txSpotParamFreq, psFreq))
+      QString paraName;
+      args->getStructArgMember(0, rpcConstants::paramName, psName);
+      psName->getString(paraName);
+      if (paraName == rpcConstants::txSpotToCluster)
       {
-          if (psFreq->getString(freq))
+          QString freq;
+          QString call;
+          QString loc;
+
+          if (args->getStructArgMember(0, rpcConstants::txSpotParamFreq, psFreq))
           {
-              trace(QString("Cluster RPC: freq to send to cluster = %1").arg(freq));
+              if (psFreq->getString(freq))
+              {
+                  trace(QString("Cluster RPC: freq to send to cluster = %1").arg(freq));
+              }
           }
+          if (args->getStructArgMember(0, rpcConstants::txSpotParamCallsign, psCall))
+          {
+              if (psCall->getString(call))
+              {
+                  trace(QString("Cluster RPC: callsign to send to cluster = %1").arg(call));
+              }
+          }
+          if (args->getStructArgMember(0, rpcConstants::txSpotParamLocator, psLoc))
+          {
+              if (psLoc->getString(loc))
+              {
+                  trace(QString("Cluster RPC: locator to send to cluster = %1").arg(loc));
+              }
+
+          }
+
+          emit sendSpotToDXCluster(freq, call, loc);
       }
-      if (args->getStructArgMember(0, rpcConstants::txSpotParamCallsign, psCall))
+      else if (paraName == rpcConstants::clusterResendSpots)
       {
-          if (psCall->getString(call))
+          QString cmd;
+          QString logUuid;
+          if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd) &&
+                  args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid))
           {
-              trace(QString("Cluster RPC: callsign to send to cluster = %1").arg(call));
+              resendSpotCmd->getString(cmd);
+              loggerUuid->getString(logUuid);
+
+              trace(QString("Cluster RPC: resendspots command to cluster = %1, from loggerUuid = %2").arg(cmd).arg(logUuid));
+              emit resendSpotToClients(cmd, logUuid);
+
           }
-      }
-      if (args->getStructArgMember(0, rpcConstants::txSpotParamLocator, psLoc))
-      {
-          if (psLoc->getString(loc))
-          {
-              trace(QString("Cluster RPC: locator to send to cluster = %1").arg(loc));
-          }
+
 
       }
 
-      emit sendSpotToDXCluster(freq, call, loc);
 
       mro->clearCallArgs();
       QSharedPointer<RPCParam>st(new RPCParamStruct);

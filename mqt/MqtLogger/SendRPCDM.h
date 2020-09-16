@@ -61,6 +61,7 @@ public:  		// User declarations
       void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
       //void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );
       void sendSpotToClusterServer(  const QString &freq, const QString &call, const QString &loc );
+      void sendRequestSpotsResentFromClusterServer(const QString &cmd, const QString &uuid);
       void sendKeyerTone(TSingleLogFrame *tslf);
       void sendKeyerTwoTone(TSingleLogFrame *tslf);
       void sendKeyerStop(TSingleLogFrame *tslf);
@@ -94,6 +95,8 @@ public:  		// User declarations
       {
           return &rigCache;
       }
+
+
 
 
 

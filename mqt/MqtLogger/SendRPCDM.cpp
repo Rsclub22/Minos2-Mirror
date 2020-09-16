@@ -156,6 +156,7 @@ void TSendDM::sendSpotToClusterServer( const QString &freq, const QString &call,
 
     if (!clusterApp.isEmpty())
     {
+        traceMsg(QString("Send Spot To Cluster Server - call = %1").arg(call));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::txSpotToCluster ));
@@ -170,6 +171,29 @@ void TSendDM::sendSpotToClusterServer( const QString &freq, const QString &call,
         st->addMember( freqStr, rpcConstants::txSpotParamFreq );
         st->addMember( callStr, rpcConstants::txSpotParamCallsign );
         st->addMember( locStr, rpcConstants::txSpotParamLocator );
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( clusterApp  );
+    }
+
+
+}
+
+
+void TSendDM::sendRequestSpotsResentFromClusterServer( const QString &cmd, const QString &uuid )
+{
+
+    if (!clusterApp.isEmpty())
+    {
+        traceMsg(QString("Send Request Spot Resend Command = %1, loggerUuid %2").arg(cmd).arg(uuid));
+        RPCGeneralClient rpc(rpcConstants::clusterMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::clusterResendSpots));
+        QSharedPointer<RPCParam>logUuid(new RPCStringParam(uuid ));
+        QSharedPointer<RPCParam>resendCmd(new RPCStringParam(cmd));
+
+        st->addMember( sName, rpcConstants::paramName );
+        st->addMember( resendCmd, rpcConstants::clusterResendSpotsCmd );
+        st->addMember(logUuid, rpcConstants::loggerUuid);
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( clusterApp  );
     }
@@ -582,7 +606,7 @@ void TSendDM::notifyRotChanges()
                 }
                 if (rotatorCache.rotatorPresetsIsDirty(rotSelected))
                 {
-                    traceMsg(QString("Rotator set presets = %1").arg(rotatorCache.getRotatorPresets(rotSelected)).arg(selStateUuid));
+                    traceMsg(QString("Rotator set presets = %1 - %2").arg(rotatorCache.getRotatorPresets(rotSelected)).arg(selStateUuid));
                     tslf->on_RotatorPresetList(rotatorCache.getRotatorPresets(rotSelected));
                 }
             }
