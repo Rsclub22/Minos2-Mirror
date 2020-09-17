@@ -110,7 +110,7 @@ public:
 
 };
 
-<<<<<<< HEAD
+
 class ResendSpotCommand
 {
 public:
@@ -131,7 +131,7 @@ private:
     int frameId;
 };
 
-=======
+
 
 class ClusterStationInfo
 {
@@ -285,7 +285,7 @@ private:
 
 
 
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
+
 class ClusterMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -495,7 +495,7 @@ private:
     void addSentSpotToDisplayQueue(bool spotStatus, QString reason);
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
-<<<<<<< HEAD
+
     QString getSpotFromDisplayDb(int row);
 
     void handleResendSpotToClientsCmds();
@@ -505,14 +505,14 @@ private:
 
     QString createResendSpotToSend(QString spot);
 
-=======
+
 
     void processNewSpot(SpotData &newSpot);
     int getQrzReply(QString &line);
     int getPrefixReply(QString &line, QString &callsign);
     QString txgeoloc(double *n, double *e, int f, char t);
     int geotoloc(double lat, double longi, QString &gridref);
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
@@ -531,15 +531,15 @@ private slots:
 
 
 
-<<<<<<< HEAD
+
 
 
     void getSpotsToSendToClientQueues();
-=======
+
     void handAskQrzTimer();
 
     void handleAskQrzTimeout();
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
+
 };
 
 #endif // CLUSTERMAINWINDOW_H

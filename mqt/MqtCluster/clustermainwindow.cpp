@@ -320,13 +320,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
 
-<<<<<<< HEAD
 
-=======
-    QString line = "M0DGB CC: 61 IZ: 27 CZ: 14 LL: 52 46 N 1 28 W (M, England-G)";
-    QString callsign = "M0DGB";
-    getPrefixReply(line, callsign);
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
+
+
+    //QString line = "M0DGB CC: 61 IZ: 27 CZ: 14 LL: 52 46 N 1 28 W (M, England-G)";
+    //QString callsign = "M0DGB";
+    //getPrefixReply(line, callsign);
+
 }
 
 /*
@@ -1340,12 +1340,10 @@ int ClusterMainWindow::geotoloc( double lat, double longi, QString &gridref )
 
 QString ClusterMainWindow::txgeoloc( double *n, double *e, int f, char t)
 {
-<<<<<<< HEAD
 
-    trace(QString("UnpackShowDXSpot - %1").arg(txt));
 
-    spotCall = _spotCall;
-=======
+
+
    *e = f * ( *e - ( static_cast< int >  (* e) ) );
    *n = f * ( *n - ( static_cast< int >  (* n) ) );
 
@@ -1355,11 +1353,14 @@ QString ClusterMainWindow::txgeoloc( double *n, double *e, int f, char t)
 
     return res;
 }
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
+
 
 
 int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
 {
+
+    trace(QString("UnpackShowDXSpot - %1").arg(txt));
+
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     dxMsg = txt.split(QRegExp("\\s+"), Qt::SkipEmptyParts);
@@ -1731,11 +1732,11 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         // get current date
         QDate d = QDate::currentDate();
         newSpot.setSpotDate(d.toString("dd-MMM-yyyy"));
-        newSpot.setSpotDateTime( getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
-        if (!newSpot.getSpotDateTime().isValid())
-        {
-           return -1;
-        }
+//        newSpot.setSpotDateTime( getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
+//        if (!newSpot.getSpotDateTime().isValid())
+//        {
+//           return -1;
+//        }
 
         // look for locator
         if (timePos + 1 >= dxMsg.count())  // make sure not out of range

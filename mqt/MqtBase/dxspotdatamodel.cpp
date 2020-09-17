@@ -182,7 +182,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getSpotTime();
             break;
             case DATE_COL_NUM:
-                d = dxSpot->spotDate;
+                d = dxSpot->getSpotDate();
             break;
             case FREQ_STR_COL_NUM:
                 d = removeHundredHzAndHzDigits(dxSpot->getDxFreq());
@@ -219,19 +219,11 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXBRG_COL_NUM:
                 d = dxSpot->getDxBrg();
             break;
-<<<<<<< HEAD
             case SPOTTER_CALL_COL_NUM:
-                d = dxSpot->spotterCall;
-            break;
-            case SPOTTER_LOC_COL_NUM:
-                d = dxSpot->spotterLocator;
-=======
-            case SPOT_CALL_COL_NUM:
                 d = dxSpot->getSpotterCall();
             break;
-            case SPOTLOC_COL_NUM:
+            case SPOTTER_LOC_COL_NUM:
                 d = dxSpot->getSpotterLocator();
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
             break;
             case COMMENT_COL_NUM:
                 d = escapeXML(dxSpot->getSpotComment());
@@ -280,19 +272,11 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXBRG_COL_NUM:
                 d = dxSpot->getDxBrg();
             break;
-<<<<<<< HEAD
             case SPOTTER_CALL_COL_NUM:
-                d = dxSpot->spotterCall;
-            break;
-            case SPOTTER_LOC_COL_NUM:
-                d = dxSpot->spotterLocator;
-=======
-            case SPOT_CALL_COL_NUM:
                 d = dxSpot->getSpotterCall();
             break;
-            case SPOTLOC_COL_NUM:
+            case SPOTTER_LOC_COL_NUM:
                 d = dxSpot->getSpotterLocator();
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
             break;
             case COMMENT_COL_NUM:
                 d = dxSpot->getSpotComment();
@@ -310,7 +294,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getDxBandMask();
             break;
             case DXMODEMASK_COL_NUM:
-                d = dxSpot->getDxModeMask();
+                d = dxSpot->getDxModeMaskStr();
             break;
             case RXTIME_COL_NUM:
                 d = dxSpot->getRxTime();
@@ -325,7 +309,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getDxBandStr();
             break;
             case DATE_COL_NUM:
-                d = dxSpot->spotDate;
+                d = dxSpot->getSpotDate();
             break;
 
 
@@ -355,7 +339,7 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
                 dxSpot->setSpotTime(value.toString());
             break;
             case DATE_COL_NUM:
-                dxSpot->spotDate = value.toString();
+                dxSpot->setSpotDate(value.toString());
             break;
             case FREQ_STR_COL_NUM:
                 dxSpot->setDxFreq(value.toString());
@@ -378,25 +362,17 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             case DXLOC_WORKED_COL_NUM:
                 dxSpot->setDxLocatorWorked(value.toBool());
             break;
-<<<<<<< HEAD
             case SPOTTER_CALL_COL_NUM:
-                dxSpot->spotterCall = value.toString();
-                break;
-            case SPOTTER_LOC_COL_NUM:
-                dxSpot->spotterLocator = value.toString();
-=======
-            case SPOT_CALL_COL_NUM:
                 dxSpot->setSpotterCall(value.toString());
                 break;
-            case SPOTLOC_COL_NUM:
-                dxSpot->setSpotterLocator(value.toString( ));
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
+            case SPOTTER_LOC_COL_NUM:
+                dxSpot->setSpotterLocator(value.toString());
                 break;
             case COMMENT_COL_NUM:
                 dxSpot->setSpotComment(value.toString());
                 break;
             case DXBANDMASK_COL_NUM:
-                dxSpot->setDxModeMask(value.toString());
+                dxSpot->setDxModeMaskStr(value.toString());
             break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 dxSpot->setSentToMemory(value.toBool());

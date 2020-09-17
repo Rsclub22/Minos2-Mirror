@@ -22,7 +22,7 @@ class SpotData
 {
 public:
     SpotData();
-<<<<<<< HEAD
+
     SpotData(qint64 _rxTime, QString _spotTime, QString _spotDate,
              QString _dxFreq, QString _dxBandStr, QString _dxBandMask,
              QString _dxMode, QString _dxModeMaskStr,
@@ -30,9 +30,8 @@ public:
              bool _dxLocatorWorked, QString distance,
              QString bearing, QString _spotterCall,
              QString _spotterLocator, QString _dxPropMode, QString comment);
-=======
+
     SpotData(const SpotData &spd);
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
 
     void operator = (const SpotData& spd);
 
@@ -56,8 +55,8 @@ public:
     void setDxModeStr(const QString dxModeStr_){dxModeStr = dxModeStr_.trimmed();}
     QString getDxModeStr()const {return dxModeStr;}
 
-    void setDxModeMask(const QString dxModeMask_){dxModeMask = dxModeMask_.trimmed();}
-    QString getDxModeMask()const {return dxModeMask;}
+    void setDxModeMaskStr(const QString dxModeMaskStr_){dxModeMaskStr = dxModeMaskStr_.trimmed();}
+    QString getDxModeMaskStr()const {return dxModeMaskStr;}
 
     void setSpotterCall(const QString spotterCall_){spotterCall = spotterCall_.trimmed();}
     QString getSpotterCall()const {return spotterCall;}
@@ -70,9 +69,6 @@ public:
 
     void setSpotDate(const QString spotDate_){spotDate = spotDate_.trimmed();}
     QString getSpotDate()const {return spotDate;}
-
-    void setSpotDateTime(const QDateTime spotDateTime_){spotDateTime = spotDateTime_;}
-    QDateTime getSpotDateTime()const {return spotDateTime;}
 
 
     void setDxLocator(const QString dxLocator_){dxLocator = dxLocator_.trimmed();}
@@ -113,15 +109,11 @@ private:
     qint64 rxTime;
     QString spotTime;
     QString spotDate;
-<<<<<<< HEAD
-=======
-    QDateTime spotDateTime;
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
     QString dxFreq;
     QString dxBandStr;
     QString dxBandMask;
     QString dxModeStr;
-    QString dxModeMask;
+    QString dxModeMaskStr;
     QString dxCall;
     QString dxLocator;
     bool dxLocatorFromQrz;

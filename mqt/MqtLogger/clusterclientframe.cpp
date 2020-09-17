@@ -775,7 +775,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
-<<<<<<< HEAD
+
             SpotData * spotData = new SpotData(rxTime, spotlist[SPOTTIME], spotlist[SPOTDATE],
                                                spotlist[DXFREQ], spotlist[DXBANDSTR], spotlist[DXBANDMASK],
                                                spotlist[DXMODESTR], spotlist[DXMODEMASK],
@@ -784,7 +784,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                                                locWorked, distance,
                                                bearing, spotlist[SPOTCALL],
                                                spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
-=======
+/*
             SpotData* newSpot = new SpotData();
 
             newSpot->setRxTime(rxTime);
@@ -806,7 +806,8 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             newSpot->setSpotComment(spotlist[SPOTCOMMENT]);
 
             dxSpotDataModel->rowData = newSpot;
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
+*/
+
 
             if (resentSpot)
             {
@@ -835,13 +836,13 @@ bool ClusterClientFrame::checkspotExists(SpotData *spotData)
 
     for (int row = 0; row < dxSpotDataModel->rowCount(); row++)
     {
-        if (checkDbRowForMatch(spotData->dxCall, row, DXSPOT_CALL_COL_NUM) )
+        if (checkDbRowForMatch(spotData->getDxCall(), row, DXSPOT_CALL_COL_NUM) )
         {
 
-            if (checkDbRowForMatch(spotData->dxFreq, row, FREQ_STR_COL_NUM) &&
-                    checkDbRowForMatch(spotData->spotTime, row, TIME_COL_NUM) &&
-                    checkDbRowForMatch(spotData->dxMode, row, DXSPOT_MODE_COL_NUM) &&
-                    checkDbRowForMatch(spotData->spotterCall, row, SPOTTER_CALL_COL_NUM))
+            if (checkDbRowForMatch(spotData->getDxFreq(), row, FREQ_STR_COL_NUM) &&
+                    checkDbRowForMatch(spotData->getSpotTime(), row, TIME_COL_NUM) &&
+                    checkDbRowForMatch(spotData->getDxModeStr(), row, DXSPOT_MODE_COL_NUM) &&
+                    checkDbRowForMatch(spotData->getSpotterCall(), row, SPOTTER_CALL_COL_NUM))
             {
                 return true;
 
