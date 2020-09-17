@@ -743,7 +743,7 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
 }
 
 
-// revisit this to improve login process???
+
 
 void ClusterMainWindow::checkStationDetails(QString msg)
 {
@@ -926,13 +926,6 @@ void ClusterMainWindow::parseDX(const QString txt)
                 // look for qrz info
                 else if (getQrzInfo && line.contains("qrz"))
                 {
-<<<<<<< HEAD
-                    trace(QString("Parse Dx - Extracted spot = %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
-                    .arg(dxCall).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
-                    .arg(spotCall).arg(dxLocator).arg(spotLocator).arg(dxPropMode).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
-=======
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
-
                     retCode = getQrzReply(line);
                     if (!qrzInfo.getGotAllData())
                     {
@@ -947,12 +940,6 @@ void ClusterMainWindow::parseDX(const QString txt)
 
                         if (qrzInfo.getCall() == waitingForCallFromQrz)
                         {
-<<<<<<< HEAD
-                            // send spot to clients if spotter isn't this station
-                            trace(QString("ParseDx: Spotter not this station, pass to clients"));
-                            sendSpotsToClientQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
-                                                                   .arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(dxPropMode).arg(setupCluster->getTimeToLive())));
-=======
                             trace(QString("ParseDx - qrz info matches waiting callsign = %1").arg(waitingForCallFromQrz));
                             if (spotListNoQra.contains(qrzInfo.getCall()))
                             {
@@ -982,7 +969,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                             {
                                 trace(QString("ParseDx - Couldn't find call = %1 in queued qrz spotlist").arg(waitingForCallFromQrz));
                             }
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
+
                         }
                         else
                         {
@@ -997,18 +984,6 @@ void ClusterMainWindow::parseDX(const QString txt)
     trace(QString("ParseDx: Finished"));
 }
 
-<<<<<<< HEAD
-                        trace(QString("ParseDx: rxTime = %1").arg(rxTime));
-                        trace(QString("ParseDx: Add spot for display"));
-                        spotsList += (new SpotData(rxTime, spotTime, spotDate,
-                                                      dxFreq, dxBandStr, dxBandMask,
-                                                      dxModeStr, dxModeMask,
-                                                      dxCall, false, dxLocator,
-                                                      false, "",
-                                                      "", spotCall,
-                                                      spotLocator, dxPropMode, spotComment));
-=======
->>>>>>> 8fk_master_beta_2_4_clust_get_qra_from_qrz
 
 
 
