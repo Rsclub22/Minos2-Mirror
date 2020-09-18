@@ -566,7 +566,7 @@ Minos a essayé de lire la fréquence radio,
 mais rien n&apos;a été reçu de la radio.
 
 Vérifiez les connexions et / ou les paramètres.
-Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface. 1ST.</translation>
+Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface.</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1087"/>
@@ -649,7 +649,7 @@ Minos a essayé de lire la fréquence radio,
 mais rien n&apos;a été reçu de la radio.
 
 Vérifiez les connexions et / ou les paramètres.
-Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface. 2ND.</translation>
+Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface.</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1297"/>
