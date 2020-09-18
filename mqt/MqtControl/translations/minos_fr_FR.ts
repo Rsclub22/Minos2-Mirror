@@ -11,7 +11,7 @@
     <message>
         <location filename="../ControlMain.ui" line="27"/>
         <source>PTT Input</source>
-        <translation>Poussoir d&apos;émission sortie entrée</translation>
+        <translation>Poussoir d&apos;émission entrée</translation>
     </message>
     <message>
         <location filename="../ControlMain.ui" line="37"/>
@@ -69,7 +69,7 @@
     <message>
         <location filename="../windowMonitor.ui" line="20"/>
         <source>PTT In</source>
-        <translation>Poussoir d&apos;émission sortie entrée</translation>
+        <translation>Poussoir d&apos;émission entrée</translation>
     </message>
     <message>
         <location filename="../windowMonitor.ui" line="27"/>

@@ -566,7 +566,7 @@ Minos a essayé de lire la fréquence radio,
 mais rien n&apos;a été reçu de la radio.
 
 Vérifiez les connexions et / ou les paramètres.
-Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface. 1ST.</translation>
+Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface.</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1087"/>
@@ -649,7 +649,7 @@ Minos a essayé de lire la fréquence radio,
 mais rien n&apos;a été reçu de la radio.
 
 Vérifiez les connexions et / ou les paramètres.
-Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface. 2ND.</translation>
+Certaines radios / interfaces peuvent nécessiter Force DTR ou Force RTS pour être élevé, pour alimenter l&apos;interface.</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1297"/>
@@ -1154,66 +1154,66 @@ ces définitions radio:
 <context>
     <name>RigSetupForm</name>
     <message>
-        <location filename="../rigsetupform.cpp" line="340"/>
+        <location filename="../rigsetupform.cpp" line="342"/>
         <source>CIV Error</source>
         <translation>Erreur de CIV</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="340"/>
+        <location filename="../rigsetupform.cpp" line="342"/>
         <source> CIV number out of range 0 - FF</source>
         <translation> Numéro CIV hors plage 0 - FF</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="611"/>
+        <location filename="../rigsetupform.cpp" line="613"/>
         <source>Invalid Network Address %1</source>
         <translation>Adresse réseau invalide %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="612"/>
+        <location filename="../rigsetupform.cpp" line="614"/>
         <source>Network Address Entry Error</source>
         <translation>Erreur d&apos;entrée d&apos;adresse réseau</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1384"/>
-        <location filename="../rigsetupform.cpp" line="1566"/>
+        <location filename="../rigsetupform.cpp" line="1386"/>
+        <location filename="../rigsetupform.cpp" line="1568"/>
         <source>Transverter Name Exists</source>
         <translation>Le nom du convertisseur existe</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1385"/>
-        <location filename="../rigsetupform.cpp" line="1567"/>
+        <location filename="../rigsetupform.cpp" line="1387"/>
+        <location filename="../rigsetupform.cpp" line="1569"/>
         <source>Transverter Name: %1, already exists 
 Please enter another name</source>
         <translation>Convertisseur %1 existe déjà,
 utiliser un autre nom SVP</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1480"/>
+        <location filename="../rigsetupform.cpp" line="1482"/>
         <source>You can not remove this transverter - %1, while it is the current radio - %2!</source>
         <translation>Vous ne pouvez pas supprimer ce convertisseur - %1, alors qu&apos;il s&apos;agit de la radio actuelle - %2!</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1489"/>
+        <location filename="../rigsetupform.cpp" line="1491"/>
         <source>Remove Transverter</source>
         <translation>Supprimer le transverter</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1490"/>
+        <location filename="../rigsetupform.cpp" line="1492"/>
         <source>Do you really want to remove transverter - %1?</source>
         <translation>Voulez-vous vraiment supprimer le transverter %1?</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1542"/>
+        <location filename="../rigsetupform.cpp" line="1544"/>
         <source>You can not change band on this transverter - %1, while it is the current radio - %2!</source>
         <translation>Radio actuelle -%2! Invalide de changer bande de transverter %1!</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1682"/>
+        <location filename="../rigsetupform.cpp" line="1684"/>
         <source>Invalid Network Port Number %1</source>
         <translation>Port de réseau numéro invalide %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1683"/>
+        <location filename="../rigsetupform.cpp" line="1685"/>
         <source>Network Port Number out of range</source>
         <translation>Port de réseau numéro hors plage</translation>
     </message>

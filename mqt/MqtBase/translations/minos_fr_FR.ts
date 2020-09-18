@@ -77,7 +77,7 @@
     <message>
         <location filename="../profiles.cpp" line="44"/>
         <source>Station settings file</source>
-        <translation>Fichier de paramètres de Station</translation>
+        <translation>Fichier de paramètres de la station</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="44"/>
@@ -92,12 +92,12 @@
     <message>
         <location filename="../profiles.cpp" line="45"/>
         <source>File containing QTH settings</source>
-        <translation>Fichier de paramètres de QTH</translation>
+        <translation>Fichier contenant les paramètres de QTH</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="46"/>
         <source>Country locators file</source>
-        <translation>Fichier des localisateurs de pays</translation>
+        <translation>Fichier des localisateurs des pays</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="46"/>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../profiles.cpp" line="54"/>
         <source>File containing list pre-loads</source>
-        <translation>Fichier contenant le préchargement de lists</translation>
+        <translation>Fichier contenant le préchargement de listes</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="55"/>
@@ -197,7 +197,7 @@
     <message>
         <location filename="../profiles.cpp" line="91"/>
         <source>WSJTX re-broadcast Enabled</source>
-        <translation>WSJTX rediffusion Activée</translation>
+        <translation>WSJTX rediffusion activée</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="87"/>
@@ -217,14 +217,14 @@
     <message>
         <location filename="../profiles.cpp" line="84"/>
         <source>UDP External Callsign Lookup Address</source>
-        <translatorcomment>Indicatif d&apos;appel  recherche externe (UDP)  Adresse</translatorcomment>
-        <translation>Recherche externe d&apos;Indicatif d&apos;appel: Adresse</translation>
+        <translatorcomment>Indicatif d&apos;appel  recherche externe (UDP)  adresse</translatorcomment>
+        <translation>Recherche externe d&apos;indicatif d&apos;appel: adresse</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="84"/>
         <source>UDP External Callsign Lookup  Address</source>
-        <translatorcomment>Indicatif d&apos;appel  recherche externe (UDP)  Adresse (DUPLICATE)</translatorcomment>
-        <translation>Recherche externe d&apos;Indicatif d&apos;appel: Adresse</translation>
+        <translatorcomment>Indicatif d&apos;appel  recherche externe (UDP)  adresse (DUPLICATE)</translatorcomment>
+        <translation>Recherche externe d&apos;indicatif d&apos;appel: adresse</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="88"/>
@@ -240,7 +240,7 @@
         <location filename="../profiles.cpp" line="85"/>
         <source>UDP External Callsign Lookup  Port</source>
         <translatorcomment>Port (UDP) pour la recherche externe d&apos;Indicatif d&apos;appel</translatorcomment>
-        <translation>Recherche externe d&apos;Indicatif d&apos;appel: Port</translation>
+        <translation>Recherche externe d&apos;indicatif d&apos;appel: port</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="40"/>
@@ -270,7 +270,7 @@
     <message>
         <location filename="../profiles.cpp" line="60"/>
         <source>WSJTX Path to ALL.TXT</source>
-        <translation>Chemin d&apos;accès a ALL.TXT</translation>
+        <translation>Chemin d&apos;accès à ALL.TXT</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="61"/>
@@ -280,7 +280,7 @@
     <message>
         <location filename="../profiles.cpp" line="62"/>
         <source>WSJTX 1 Test Enabled</source>
-        <translation>WSJTX 1 Test  activé</translation>
+        <translation>WSJTX 1 Test activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="64"/>
@@ -350,7 +350,7 @@
     <message>
         <location filename="../profiles.cpp" line="96"/>
         <source>Help file</source>
-        <translation>Fichier d&apos;Aide</translation>
+        <translation>Fichier d&apos;aide</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="97"/>
@@ -360,7 +360,7 @@
     <message>
         <location filename="../profiles.cpp" line="98"/>
         <source>PDF documentation file</source>
-        <translation>Fichier de documentation PDF (En anglais)</translation>
+        <translation>Fichier de documentation PDF (en anglais)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="100"/>
@@ -495,15 +495,14 @@
     <message>
         <location filename="../profiles.cpp" line="130"/>
         <source>Bandmap Follow Radio Mode on Operating Freq Colour Strip</source>
-        <translation>Suivre le mode radio pour la bande de couleur de fréquence</translation>
+        <translation>Suivre mode de radio dans la bande de couleur de fréquence</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="137"/>
         <location filename="../profiles.cpp" line="141"/>
         <location filename="../profiles.cpp" line="142"/>
         <source>hint</source>
-        <translatorcomment>indice??</translatorcomment>
-        <translation>Un soupçon</translation>
+        <translation>allusion</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="161"/>
@@ -663,7 +662,7 @@
     <message>
         <location filename="../profiles.cpp" line="192"/>
         <source>Location Exchange</source>
-        <translation>Échange descriptif</translation>
+        <translation>Échange emplacement</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="192"/>
@@ -713,12 +712,12 @@
     <message>
         <location filename="../profiles.cpp" line="200"/>
         <source>Transmitter Power</source>
-        <translation>Puissance d&apos;Émetteur</translation>
+        <translation>Puissance d&apos;émetteur</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="200"/>
         <source>Transmit Power (Watts)</source>
-        <translation>Puissance d&apos;Émetteur (Watts)</translation>
+        <translation>Puissance d&apos;émetteur (Watts)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="201"/>
@@ -743,12 +742,13 @@
     <message>
         <location filename="../profiles.cpp" line="205"/>
         <source>Antenna Bearing Offset</source>
-        <translation>Décalage d&apos;antenne</translation>
+        <translation>Décalage direction  d&apos;antenne</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="205"/>
         <source>Amount to offset antenna bearings</source>
-        <translation>DUPE? Décalage d&apos;antenne</translation>
+        <translatorcomment>DUPE??</translatorcomment>
+        <translation>Montant à décaler le direction d&apos;antenne</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="206"/>
@@ -840,7 +840,7 @@
     <message>
         <location filename="../ConfigElementFrame.ui" line="81"/>
         <source>Show Advanced</source>
-        <translation>Affichage avancé</translation>
+        <translation>Afficher avancé</translation>
     </message>
     <message>
         <location filename="../ConfigElementFrame.ui" line="92"/>
@@ -992,7 +992,7 @@
     <message>
         <location filename="../profiles.cpp" line="18"/>
         <source>default</source>
-        <translation>Défaut</translation>
+        <translation>défaut</translation>
     </message>
 </context>
 <context>
@@ -1639,7 +1639,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
         <location filename="../MatchTreeFrame.cpp" line="164"/>
         <location filename="../MatchTreeFrame.cpp" line="178"/>
         <source>Rot Heading</source>
-        <translation>Relèvement du rotateur</translation>
+        <translation>Direction du rotateur</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="165"/>

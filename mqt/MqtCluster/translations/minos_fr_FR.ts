@@ -11,7 +11,7 @@
     <message>
         <location filename="../clustermainwindow.ui" line="23"/>
         <source>Cluster Node</source>
-        <translation>Noeud de Cluster</translation>
+        <translation>Nœud de Cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="33"/>
@@ -127,12 +127,12 @@
     <message>
         <location filename="../clustermainwindow.cpp" line="529"/>
         <source>Connect to Node - Disconnect Timeout</source>
-        <translation>Connecter à noeud de Cluster - Délai de déconnexion</translation>
+        <translation>Connecter à nœud de Cluster - Délai de déconnexion</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="565"/>
         <source>Connect to Cluster Node</source>
-        <translation>Connecter à noeud de Cluster</translation>
+        <translation>Connecter à nœud de Cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="566"/>
@@ -389,7 +389,7 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     <message>
         <location filename="../setupdialog.ui" line="193"/>
         <source>Cluster Nodes</source>
-        <translation>Noeuds de Cluster</translation>
+        <translation>Nœuds de Cluster</translation>
     </message>
     <message>
         <location filename="../setupdialog.ui" line="201"/>

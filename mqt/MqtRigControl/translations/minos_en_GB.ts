@@ -1082,65 +1082,65 @@ these radio definitions:
 <context>
     <name>RigSetupForm</name>
     <message>
-        <location filename="../rigsetupform.cpp" line="340"/>
+        <location filename="../rigsetupform.cpp" line="342"/>
         <source>CIV Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="340"/>
+        <location filename="../rigsetupform.cpp" line="342"/>
         <source> CIV number out of range 0 - FF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="611"/>
+        <location filename="../rigsetupform.cpp" line="613"/>
         <source>Invalid Network Address %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="612"/>
+        <location filename="../rigsetupform.cpp" line="614"/>
         <source>Network Address Entry Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1384"/>
-        <location filename="../rigsetupform.cpp" line="1566"/>
+        <location filename="../rigsetupform.cpp" line="1386"/>
+        <location filename="../rigsetupform.cpp" line="1568"/>
         <source>Transverter Name Exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1385"/>
-        <location filename="../rigsetupform.cpp" line="1567"/>
+        <location filename="../rigsetupform.cpp" line="1387"/>
+        <location filename="../rigsetupform.cpp" line="1569"/>
         <source>Transverter Name: %1, already exists 
 Please enter another name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1480"/>
+        <location filename="../rigsetupform.cpp" line="1482"/>
         <source>You can not remove this transverter - %1, while it is the current radio - %2!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1489"/>
+        <location filename="../rigsetupform.cpp" line="1491"/>
         <source>Remove Transverter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1490"/>
+        <location filename="../rigsetupform.cpp" line="1492"/>
         <source>Do you really want to remove transverter - %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1542"/>
+        <location filename="../rigsetupform.cpp" line="1544"/>
         <source>You can not change band on this transverter - %1, while it is the current radio - %2!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1682"/>
+        <location filename="../rigsetupform.cpp" line="1684"/>
         <source>Invalid Network Port Number %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1683"/>
+        <location filename="../rigsetupform.cpp" line="1685"/>
         <source>Network Port Number out of range</source>
         <translation type="unfinished"></translation>
     </message>

@@ -182,13 +182,13 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="153"/>
         <source>Clear All Spots</source>
-        <translation>Effacer tous Spots</translation>
+        <translation>Effacer tous spots</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="480"/>
         <location filename="../bandmapclientframe.cpp" line="632"/>
         <source>Please confirm you want to delete this spot - %1?</source>
-        <translation>Veuillez confirmer que vous souhaitez supprimer cette Spot - %1?</translation>
+        <translation>Veuillez confirmer que vous souhaitez supprimer cette spot - %1?</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="500"/>
@@ -226,7 +226,7 @@
     <message>
         <location filename="../bandmapview.cpp" line="1222"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
-        <translation>%1%2CQ Frequency @ .%3%4%5</translation>
+        <translation>%1%2CQ Fréquence @ .%3%4%5</translation>
     </message>
     <message>
         <location filename="../bandmapview.cpp" line="1253"/>
@@ -270,7 +270,7 @@ Le mode calculé est%9
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="59"/>
         <source>7 MHz</source>
-        <translation>2300 MHz {7 ?}</translation>
+        <translation>7 MHz</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="73"/>
@@ -360,7 +360,7 @@ Le mode calculé est%9
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="382"/>
         <source>Follow Radio Mode Operating Freq Colour Band</source>
-        <translation>Suivre le mode radio pour la bande de couleurs</translation>
+        <translation>Suivre le mode de radio pour la bande de couleurs de fréquence</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="336"/>
@@ -684,7 +684,7 @@ Le mode calculé est%9
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="888"/>
         <source>Please confirm you want to delete callsign %1 ?</source>
-        <translation>Voulez-vous vraiment supprimer &apos;l&apos;Indicatif d&apos;appell %1 ?</translation>
+        <translation>Voulez-vous vraiment supprimer &apos;l&apos;Indicatif d&apos;appel %1 ?</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="912"/>
@@ -830,7 +830,7 @@ Le mode calculé est%9
     <message>
         <location filename="../clusterclientframe.ui" line="272"/>
         <source>Unworked Callsigns</source>
-        <translation>Indicatifs d&apos;appell non travaillé</translation>
+        <translation>Indicatifs d&apos;appel non travaillé</translation>
     </message>
     <message>
         <location filename="../clusterclientframe.ui" line="282"/>
@@ -870,7 +870,7 @@ Le mode calculé est%9
     <message>
         <location filename="../clusterclientframe.cpp" line="110"/>
         <source>Clear &amp;All Spots</source>
-        <translation>Effacer &amp;Tous Spots</translation>
+        <translation>Effacer &amp;Tous spots</translation>
     </message>
     <message>
         <location filename="../clusterclientframe.cpp" line="242"/>
@@ -982,7 +982,7 @@ Le mode calculé est%9
     <message>
         <location filename="../contestdetails.ui" line="326"/>
         <source>Callsign as sent</source>
-        <translation>Indicatif d&apos;appell envoyé</translation>
+        <translation>Indicatif d&apos;appel envoyé</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="344"/>
@@ -992,7 +992,7 @@ Le mode calculé est%9
     <message>
         <location filename="../contestdetails.ui" line="362"/>
         <source>Exchange as sent (Postcode, QTH, etc)</source>
-        <translation>Échange / code / QTH comme envoyé</translation>
+        <translation>Échange comme envoyé (code postal, QTH, etc.)</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="380"/>
@@ -1169,7 +1169,7 @@ Marquer entre Locators de 4 caractères</translation>
     <message>
         <location filename="../contestdetails.cpp" line="37"/>
         <source>PostCode Multipliers</source>
-        <translation>Multiplicateurs PostCode</translation>
+        <translation>Multiplicateurs code postal</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="38"/>
@@ -1269,25 +1269,25 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
 
 TO BE CHECKED CAREFULLY:
 </translatorcomment>
-        <translation>Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.<byte value="xd"/>
-<byte value="xd"/>
-Il existe quatre groupes de base: -<byte value="xd"/>
-<byte value="xd"/>
- * Concours - pour la description, les groupes, les multiplicateurs et la durée d&apos;un concours<byte value="xd"/>
- * Entrée - tous les bits supplémentaires pour une entrée réelle - indicatif, groupe, coordonnées.<byte value="xd"/>
- * Station - Détails de l&apos;installation, antenne, hauteur de l&apos;antenne.<byte value="xd"/>
- * QTH - où se trouve la station, hauteur au-dessus du niveau de la mer, Locator.<byte value="xd"/>
-<byte value="xd"/>
-Pour les utiliser, sélectionnez dans les listes déroulantes ou pour le concours, utilisez le bouton &quot;Calendrier VHF&quot;.<byte value="xd"/>
-Tout groupe défini sur &quot;&lt;aucun&gt;&quot; sera ignoré.<byte value="xd"/>
-<byte value="xd"/>
-Si le paramètre souhaité n&apos;est pas là, appuyez sur le bouton &quot;Modifier&quot; du groupe.<byte value="xd"/>
-<byte value="xd"/>
-Cela ouvre une boîte de dialogue dans laquelle vous pouvez définir un nouveau paramètre, copier un paramètre existant ou supprimer un paramètre existant<byte value="xd"/>
-<byte value="xd"/>
-Cliquez sur le nom du paramètre à gauche pour sélectionner un paramètre existant, puis ses composants sont affichés dans le volet de droite et peuvent être modifiés individuellement.<byte value="xd"/>
-<byte value="xd"/>
-Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris ou des touches fléchées haut / bas.<byte value="xd"/>
+        <translation>Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.
+
+Il existe quatre groupes de base: -
+
+ * Concours - pour la description, les groupes, les multiplicateurs et la durée d&apos;un concours
+ * Entrée - tous les détails supplémentaires pour une entrée réelle - indicatif, groupe, coordonnées.
+ * Station - Détails de l&apos;installation, antenne, hauteur de l&apos;antenne.
+ * QTH - où se trouve la station, hauteur au-dessus du niveau de la mer, Locator.
+
+Pour les utiliser, sélectionnez dans les listes déroulantes ou pour le concours, utilisez le bouton &quot;Calendrier VHF&quot;.
+Tout groupe défini sur &quot;&lt;aucun&gt;&quot; sera ignoré.
+
+Si le paramètre souhaité n&apos;est pas là, appuyez sur le bouton &quot;Modifier&quot; du groupe.
+
+Cela ouvre une boîte de dialogue dans laquelle vous pouvez définir un nouveau paramètre, copier un paramètre existant ou supprimer un paramètre existant
+
+Cliquez sur le nom du paramètre à gauche pour sélectionner un paramètre existant, puis ses composants sont affichés dans le volet de droite et peuvent être modifiés individuellement.
+
+Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris ou des touches fléchées haut / bas.
 </translation>
     </message>
     <message>
@@ -1689,7 +1689,7 @@ Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
     <message>
         <location filename="../LoggerContest.cpp" line="388"/>
         <source>Failed to create Contest file %1 : %2</source>
-        <translation>Créer de fichier r %1 a échoué : %2</translation>
+        <translation>Créer de fichier concours %1 a échoué : %2</translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="417"/>
@@ -1993,7 +1993,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     <message>
         <location filename="../qsologframe.ui" line="88"/>
         <source>Rotator Heading</source>
-        <translation>Relèvement du rotateur</translation>
+        <translation>Direction du rotateur</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="118"/>
@@ -2371,7 +2371,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1639"/>
         <source>Freq out of contest band</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence hors bande du concours</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1807"/>
@@ -2790,7 +2790,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../runbuttonsframe.cpp" line="407"/>
         <source>Restore freq: </source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurer la fréquence: </translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.cpp" line="401"/>
@@ -2994,32 +2994,32 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../ScreenConfigElement.cpp" line="21"/>
         <source>This Contest Match</source>
-        <translation>Trouvé dans cette concours</translation>
+        <translation>Trouver dans cette concours</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="21"/>
         <source>This Contest Matches</source>
-        <translation>Trouvé dans cette concours</translation>
+        <translation>Trouver dans cette concours</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="22"/>
         <source>Other Contest Match</source>
-        <translation>Trouvé dans autre concours</translation>
+        <translation>Trouver dans autre concours</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="22"/>
         <source>Other Contest Matches</source>
-        <translation>Trouvé dans autre concours</translation>
+        <translation>Trouver dans autre concours</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="23"/>
         <source>Archive Match</source>
-        <translation>Trouvé dans les archives</translation>
+        <translation>Trouver dans les archives</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="23"/>
         <source>Archive List Matches</source>
-        <translation>Trouvé dans les archives</translation>
+        <translation>Trouver dans les archives</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="24"/>
@@ -3122,7 +3122,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../ScreenConfigManager.cpp" line="129"/>
         <source>Please give a new name for the layout</source>
-        <translation>Donner un nouveau nom à la mise en page</translation>
+        <translation>Donner un nouveau nom à la mise en page SVP</translation>
     </message>
     <message>
         <location filename="../ScreenConfigManager.cpp" line="133"/>
@@ -3133,7 +3133,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <location filename="../ScreenConfigManager.cpp" line="149"/>
         <location filename="../ScreenConfigManager.cpp" line="165"/>
         <source>new layout</source>
-        <translation>Nouvelle présentation</translation>
+        <translation>nouvelle présentation</translation>
     </message>
 </context>
 <context>
@@ -3315,12 +3315,12 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tcalendarform.ui" line="14"/>
         <source>Select Contest from Calendar</source>
-        <translation>Sélectionner Concours dans le calendrier</translation>
+        <translation>Sélectionner concours dans le calendrier</translation>
     </message>
     <message>
         <location filename="../tcalendarform.ui" line="47"/>
         <source>Select Contest</source>
-        <translation>Sélectionner Concours</translation>
+        <translation>Sélectionner concours</translation>
     </message>
     <message>
         <location filename="../tcalendarform.ui" line="54"/>
@@ -3415,7 +3415,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tcalendarform.cpp" line="183"/>
         <source>Select Contest from BARTG Calendar</source>
-        <translation>Sélectionner Concours dans le calendrier BARTG</translation>
+        <translation>Sélectionner concours dans le calendrier BARTG</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="196"/>
@@ -3425,7 +3425,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tcalendarform.cpp" line="206"/>
         <source>Select Contest from VHF Calendar</source>
-        <translation>Sélectionner Concours dans le calendrier VHF</translation>
+        <translation>Sélectionner concours dans le calendrier VHF</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="219"/>
@@ -3435,7 +3435,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tcalendarform.cpp" line="229"/>
         <source>Select Contest from HF other Calendar</source>
-        <translation>Sélectionner Concours dans le calendrier HF Autre</translation>
+        <translation>Sélectionner concours dans le calendrier HF Autre</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="241"/>
@@ -3445,7 +3445,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tcalendarform.cpp" line="251"/>
         <source>Select Contest from VHF other Calendar</source>
-        <translation>Sélectionner Concours dans le calendrier VHF Autre</translation>
+        <translation>Sélectionner concours dans le calendrier VHF Autre</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="263"/>
@@ -3455,7 +3455,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tcalendarform.cpp" line="273"/>
         <source>Select Contest from Microwave Calendar</source>
-        <translation>Sélectionner Concours dans le calendrier Micro-ondes</translation>
+        <translation>Sélectionner concours dans le calendrier Micro-ondes</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="286"/>
@@ -3662,7 +3662,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tentryoptionsform.cpp" line="41"/>
         <source>Callsign as sent</source>
-        <translation>Indicatif d&apos;appell envoyé</translation>
+        <translation>Indicatif d&apos;appel envoyé</translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="42"/>
@@ -3672,7 +3672,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tentryoptionsform.cpp" line="43"/>
         <source>Exchange/code/QTH as sent</source>
-        <translation>Échange / code / QTH comme envoyé</translation>
+        <translation>Échange/code/QTH comme envoyé</translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="44"/>
@@ -3682,7 +3682,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tentryoptionsform.cpp" line="45"/>
         <source>Transmit Power</source>
-        <translation>Puissance d&apos;Émetteur</translation>
+        <translation>Puissance d&apos;émetteur</translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="46"/>
@@ -3740,7 +3740,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tentryoptionsform.cpp" line="59"/>
         <source>Callsign for Correspondence</source>
-        <translation>Indicatif d&apos;appell pour la correspondance</translation>
+        <translation>Indicatif d&apos;appel pour la correspondance</translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="60"/>
@@ -3918,7 +3918,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tforcelogdlg.ui" line="123"/>
         <source>No District Available</source>
-        <translation>Aucun quartier disponible</translation>
+        <translation>Aucun district disponible</translation>
     </message>
     <message>
         <location filename="../tforcelogdlg.ui" line="130"/>
@@ -4015,7 +4015,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tlogcontainer.cpp" line="368"/>
         <source>&amp;Import Contest...</source>
-        <translation>&amp;Importer concour...</translation>
+        <translation>&amp;Importer concours...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="369"/>
@@ -4270,7 +4270,7 @@ Veuillez choisir un nouveau nom.</translation>
 Please choose a new name.</source>
         <translation>Échec de renommer
 %1
-&#xa0;comme
+comme
 %2
 Veuillez choisir un nouveau nom.</translation>
     </message>
@@ -4659,7 +4659,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     <message>
         <location filename="../tsettingseditdlg.cpp" line="249"/>
         <source>Please give a name for the new %1</source>
-        <translation>Donner un nom à %1</translation>
+        <translation>Donner un nom à %1 SVP</translation>
     </message>
     <message>
         <location filename="../tsettingseditdlg.cpp" line="261"/>
@@ -4685,7 +4685,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     <message>
         <location filename="../tsettingseditdlg.cpp" line="296"/>
         <source>Please give a new name for the %1</source>
-        <translation>Donner un nouveau nom à %1</translation>
+        <translation>Donner un nouveau nom à %1 SVP</translation>
     </message>
 </context>
 <context>

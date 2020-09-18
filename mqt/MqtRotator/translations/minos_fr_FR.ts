@@ -514,24 +514,24 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1174"/>
         <source>Request Bearing</source>
-        <translation>Demander un relèvement</translation>
+        <translation>Demander un direction</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1285"/>
         <source>Bearing Error</source>
-        <translation>Erreur de Relèvement</translation>
+        <translation>Erreur de direction</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1286"/>
         <source>Invalid Bearing
 Please enter %1 - %2</source>
-        <translation>Relèvement non valide
+        <translation>Direction non valide
 Entrer %1 - %2 SVP</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1360"/>
         <source>Rotate to Bearing</source>
-        <translation>Tourner à un relevement</translation>
+        <translation>Tourner à un direction</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1872"/>
@@ -704,7 +704,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2484"/>
         <source>Rotator Comport = %1
 </source>
-        <translation>Port COM (du Rotateur) = %1
+        <translation>Port COM (du rotateur) = %1
 </translation>
     </message>
     <message>
@@ -853,14 +853,12 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../skyscandialog.ui" line="22"/>
         <source>Start Bearing</source>
-        <translatorcomment>Direction?</translatorcomment>
-        <translation>Relèvement de départ</translation>
+        <translation>Direction de départ</translation>
     </message>
     <message>
         <location filename="../skyscandialog.ui" line="36"/>
         <source>End Bearing</source>
-        <translatorcomment>Relèvement?</translatorcomment>
-        <translation>Relèvement finale</translation>
+        <translation>Direction finale</translation>
     </message>
     <message>
         <location filename="../skyscandialog.ui" line="50"/>

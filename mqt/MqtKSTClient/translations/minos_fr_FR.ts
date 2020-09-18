@@ -146,7 +146,7 @@
     <message>
         <location filename="../kstconfigure.ui" line="196"/>
         <source>AirScout</source>
-        <translation>AStest</translation>
+        <translation>AirScout</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="206"/>
