@@ -1,11 +1,5 @@
 #include "WsjtxRadio.hpp"
 
-//#include <cmath>
-//#include <limits>
-
-//#include <QChar>
-//#include <QRegularExpression>
-
 namespace Radio
 {
     static double constexpr MHz_factor {1.e6};

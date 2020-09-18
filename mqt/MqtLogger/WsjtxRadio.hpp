@@ -2,6 +2,7 @@
 #define RADIO_HPP__
 
 #include <QString>
+#include <QLocale>
 
 //
 // Declarations common to radio software.
