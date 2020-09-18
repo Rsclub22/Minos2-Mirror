@@ -10,11 +10,11 @@ namespace Radio
   {
     qRegisterMetaType<Radio::Frequency> ("Frequency");
     qRegisterMetaType<Radio::FrequencyDelta> ("FrequencyDelta");
-    qRegisterMetaType<Radio::Frequencies> ("Frequencies");
+//    qRegisterMetaType<Radio::Frequencies> ("Frequencies");
 
     // This is required to preserve v1.5 "frequencies" setting for
     // backwards compatibility, without it the setting gets trashed
     // by later versions.
-    qRegisterMetaTypeStreamOperators<Radio::Frequencies> ("Frequencies");
+//    qRegisterMetaTypeStreamOperators<Radio::Frequencies> ("Frequencies");
   }
 }

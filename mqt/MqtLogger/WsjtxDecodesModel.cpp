@@ -2,10 +2,10 @@
 
 #include <QStandardItem>
 
-#include "WsjtxRadio.hpp"
 #include "cutils.h"
-
+#include "WsjtxDecode.h"
 #include "WsjtxDecodesModel.hpp"
+
 /*
   We want:
 
@@ -96,6 +96,27 @@ void DecodesModel::add_decode ()
     endResetModel();
 }
 
+// split on first '/' and return the larger portion or the whole if
+// there is no '/'
+static QString base_callsign (QString callsign)
+{
+  auto slash_pos = callsign.indexOf ('/');
+  if (slash_pos >= 0)
+    {
+      auto right_size = callsign.size () - slash_pos - 1;
+      if (right_size>= slash_pos)
+        {
+          callsign = callsign.mid (slash_pos + 1);
+        }
+      else
+        {
+          callsign = callsign.left (slash_pos);
+        }
+    }
+  return callsign.toUpper ();
+}
+
+
 void DecodesModel::de_call (QString const& call)
 {
     // sets up my call
@@ -104,7 +125,7 @@ void DecodesModel::de_call (QString const& call)
         beginResetModel ();
         if (call.size ())
         {
-            base_call_re_.setPattern ("[^A-Z0-9]*" + Radio::base_callsign (call) + "[^A-Z0-9]*");
+            base_call_re_.setPattern ("[^A-Z0-9]*" + base_callsign (call) + "[^A-Z0-9]*");
         }
         else
         {
