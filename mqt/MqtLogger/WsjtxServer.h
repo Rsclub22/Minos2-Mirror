@@ -5,7 +5,6 @@
 #include "WsjtxMessageServer.hpp"
 #include "WsjtxRadio.hpp"
 
-using Frequency = MessageServer::Frequency;
 using port_type = MessageServer::port_type;
 
 class WsjtxServer : public QObject

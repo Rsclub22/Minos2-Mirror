@@ -29,7 +29,6 @@ class MessageServer
 
 public:
   using port_type = quint16;
-  using Frequency = Radio::Frequency;
 
   MessageServer (QObject * parent = nullptr,
                  QString const& version = QString {}, QString const& revision = QString {});

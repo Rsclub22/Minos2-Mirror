@@ -31,9 +31,6 @@ public:
     , port_ {0u}
     , clock_ {new QTimer {this}}
   {
-    // register the required types with Qt
-    Radio::register_types ();
-
     connect (this, &QIODevice::readyRead, this, &MessageServer::impl::pending_datagrams);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect (this, static_cast<void (impl::*) (SocketError)> (&impl::errorOccurred)

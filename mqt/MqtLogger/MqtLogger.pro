@@ -103,7 +103,6 @@ SOURCES += \
     WsjtxNetworkMessage.cpp \
     WsjtxMessageServer.cpp \
     WsjtxRadio.cpp \
-    WsjtxRadioMetaType.cpp \
     Wsjtx_qt_helpers.cpp \
         bandmapclientframe.cpp \
     bandmapcallsignmarker.cpp \
